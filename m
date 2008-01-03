@@ -1,7 +1,7 @@
 From: Arnaldo Carvalho de Melo <acme-H+wXaHxf7aLQT0dZR+AlfA@public.gmane.org>
 Subject: Re: codiff misses changes if inline -> not inlined?
-Date: Thu, 3 Jan 2008 21:29:01 -0200
-Message-ID: <20080103232901.GO29523@ghostprotocols.net>
+Date: Thu, 3 Jan 2008 21:30:32 -0200
+Message-ID: <20080103233032.GP29523@ghostprotocols.net>
 References: <Pine.LNX.4.64.0801031528400.14949@kivilampi-30.cs.helsinki.fi> <20080103151044.GD29523@ghostprotocols.net> <Pine.LNX.4.64.0801031728330.14949@kivilampi-30.cs.helsinki.fi> <20080103165605.GF29523@ghostprotocols.net> <Pine.LNX.4.64.0801040038510.20866@kivilampi-30.cs.helsinki.fi>
 Mime-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1
@@ -59,8 +59,20 @@ p=20
 > still without diff and they're not that interesting after all :-)), b=
 ut
 > I think this is needed as well to complete the change...
+>=20
+> --=20
+>  i.
+>=20
+> --
+> [PATCH] [CODIFF]: Be even more consistent on the summary lines
+>=20
+> Forgotten change similar to the previous patch.
+>=20
+> Signed-off-by: Ilpo J=E4rvinen <ilpo.jarvinen-pxSi+dnQzZMxHbG02/KK1g@public.gmane.org>
 
-Will check that, thanks for reporting! :-)
+Hey, I answered too quickly, didn't noticed the patch, thanks a lot!
+
+Applied.
 
 - Arnaldo
 -
