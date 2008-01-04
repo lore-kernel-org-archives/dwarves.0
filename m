@@ -1,7 +1,7 @@
 From: Arnaldo Carvalho de Melo <acme-H+wXaHxf7aLQT0dZR+AlfA@public.gmane.org>
 Subject: Re: codiff misses changes if inline -> not inlined?
-Date: Thu, 3 Jan 2008 21:35:33 -0200
-Message-ID: <20080103233533.GQ29523@ghostprotocols.net>
+Date: Thu, 3 Jan 2008 22:27:46 -0200
+Message-ID: <20080104002746.GR29523@ghostprotocols.net>
 References: <Pine.LNX.4.64.0801031528400.14949@kivilampi-30.cs.helsinki.fi> <20080103143139.GC29523@ghostprotocols.net> <Pine.LNX.4.64.0801040111530.16761@kivilampi-30.cs.helsinki.fi>
 Mime-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1
@@ -64,8 +64,63 @@ is right now, just a sec :)
 > ip_send_check (in both cases the sizes are constant 0 in -i output!?!=
 ).
 
-I'll check that, perhaps the compiler decided to uninline the functions
-because they were too big?
+Before manually removing inline from the function:
+
+[acme@doppio net-2.6.25]$ pfunct -f ip_ufo_append_data /tmp/ip_output.o=
+=2Eold
+inline int ip_ufo_append_data(struct sock * sk, int (*getfrag)(void *, =
+char *, int, int, int, struct sk_buff *), void * from, int length, int =
+hh_len, int fragheaderlen, int transhdrlen, int mtu, unsigned int flags=
+);
+[acme@doppio net-2.6.25]$
+
+And the compiler is not, at least in my kernel configuration, trying to
+do (un)inlining differently from what is in the source code:
+
+[acme@doppio net-2.6.25]$ pfunct --cc_uninlined /tmp/ip_output.o.old
+[acme@doppio net-2.6.25]$ pfunct --cc_inlined /tmp/ip_output.o.old
+[acme@doppio net-2.6.25]$
+
+[acme@doppio net-2.6.25]$ grep INLIN ../build/net-2.6.25/doppio/.config
+# CONFIG_FORCED_INLINING is not set
+
+[acme@doppio net-2.6.25]$ pfunct -T -f ip_append_data /tmp/ip_output.o.=
+old
+
+Shows that ip_ufo_append_data is being inlined in ip_append_data, takin=
+g
+336 bytes in my config (x86_64).
+
+Then I remove the inline and...
+
+[acme@doppio net-2.6.25]$ codiff /tmp/ip_output.o.old
+/tmp/ip_output.o.new
+/home/acme/git/net-2.6.25/net/ipv4/ip_output.c:
+  dst_output        |  +14
+  ip_send_check     |  +65
+  ip_finish_output2 | +499
+ 3 functions changed, 578 bytes added, diff: +578
+[acme@doppio net-2.6.25]$
+
+Which should have shown ip_ufo_append_data as being uninlined... ah!
+
+[acme@doppio pahole]$ pfunct --cc_inlined /tmp/ip_output.o.new
+ip_ufo_append_data
+
+The compiler decided that even if we remove the 'inline' keyword the
+function is only called from ip_append_data, so it inlines it anyway.
+
+But why we end up using 578 bytes more? Lemme see...
+
+It is a bug:
+
+[acme@doppio pahole]$ size /tmp/ip_output.o.old /tmp/ip_output.o.new
+   text    data     bss     dec     hex filename
+  12262       4       0   12266    2fea /tmp/ip_output.o.old
+  12262       4       0   12266    2fea /tmp/ip_output.o.new
+[acme@doppio pahole]$
+
+Investigating...
 
 - Arnaldo
 -
