@@ -1,47 +1,23 @@
 From: Arnaldo Carvalho de Melo <acme-H+wXaHxf7aLQT0dZR+AlfA@public.gmane.org>
 Subject: Re: Changing the word-size was: Re: eat your own dog food?
-Date: Sat, 12 Jan 2008 16:42:11 -0200
-Message-ID: <20080112184211.GA17675@ghostprotocols.net>
-References: <1199973341.4438.56.camel@localhost> <20080110140635.GG22437@ghostprotocols.net> <20080110163959.GJ22437@ghostprotocols.net> <20080110213909.GS22437@ghostprotocols.net> <1200001276.4443.40.camel@localhost> <20080112152109.GA23567@ghostprotocols.net> <20080112155404.GB23567@ghostprotocols.net> <20080112162808.GC23567@ghostprotocols.net> <20080112172856.GD23567@ghostprotocols.net> <1200161321.31540.10.camel@localhost>
+Date: Sat, 12 Jan 2008 19:36:35 -0200
+Message-ID: <20080112213635.GC17675@ghostprotocols.net>
+References: <20080110133926.GF22437@ghostprotocols.net> <1199973341.4438.56.camel@localhost> <20080110140635.GG22437@ghostprotocols.net> <20080110163959.GJ22437@ghostprotocols.net> <20080110213909.GS22437@ghostprotocols.net> <1200001276.4443.40.camel@localhost> <20080112152109.GA23567@ghostprotocols.net> <20080112155404.GB23567@ghostprotocols.net> <20080112162808.GC23567@ghostprotocols.net> <20080112172856.GD23567@ghostprotocols.net>
 Mime-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Return-path: <dwarves-owner-u79uwXL29TY76Z2rM5mHXA@public.gmane.org>
 Content-Disposition: inline
-In-Reply-To: <1200161321.31540.10.camel@localhost>
+In-Reply-To: <20080112172856.GD23567-f8uhVLnGfZaxAyOMLChx1axOck334EZe@public.gmane.org>
 Sender: dwarves-owner-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
 To: jamal <hadi-fAAogVwAN2Kw5LPnMra/2Q@public.gmane.org>
-Cc: Arnaldo Carvalho de Melo <acme-H+wXaHxf7aLQT0dZR+AlfA@public.gmane.org>, dwarves-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
+Cc: dwarves-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
 List-Id: dwarves@vger.kernel.org
 
-Em Sat, Jan 12, 2008 at 01:08:41PM -0500, jamal escreveu:
-> On Sat, 2008-12-01 at 15:28 -0200, Arnaldo Carvalho de Melo wrote:
-> 
-> > Now what seems to be the last thing to do is to follow typedefs and find
-> > unnamed structs, think about spinlock_t, socket_lock_t, etc.
-> > 
-> 
-> Good stuff Arnaldo - updated local tree. 
-> I should be able to test later today.
-> 
-> Dont know much about cmake, is it possible to check for elfutils version
-> and not depend on build_id if version < xxx?
-> This way i dont have to go out of my way to maintain my own versions of
-> elf utilities. I have to do the patch you sent earlier manually now. I
-> will remove it if you will fix cmake.
+Em Sat, Jan 12, 2008 at 03:28:56PM -0200, Arnaldo Carvalho de Melo escreveu:
+> Now what seems to be the last thing to do is to follow typedefs and find
+> unnamed structs, think about spinlock_t, socket_lock_t, etc.
 
-As I said in the cset commit, I'm no cmake/autoconf guy, but I'll check
-that, after all this is a prime area where these otherwise distracting
-things should help.
- 
-> BTW, while perusing archs i managed i think to gather sufficiently
-> accurate info (;->) on the different alignments; i got lazy at the end,
-> but quiet a few are in the attached txt file incase you find them
-> useful. Double check sparc for example. I think most 64-bit hardware
-> looks consistent; the funnies are in 32-bit archs.
-
-I'll check that, thanks for the research, that may well be the starting
-point for arch descriptions, that if libebl from elfutils doesn't
-already provide that to us, something I haven't checked.
+OK, typedefs are being followed now, now we get to arrays, working on that.
 
 - Arnaldo
 -
