@@ -1,108 +1,125 @@
-From: Arnaldo Carvalho de Melo <acme-H+wXaHxf7aLQT0dZR+AlfA@public.gmane.org>
-Subject: Re: Creating ELF function/file size statistics
-Date: Thu, 31 Jan 2008 10:23:45 -0200
-Message-ID: <20080131122345.GJ1819@ghostprotocols.net>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+From: Felipe Kellermann <felipek-F9QBgdt/En2RpAAqCnN02g@public.gmane.org>
+Subject: [PATCH] Fixes a FIXME relating to a missing elf (libdw) symbol check.
+Date: Thu, 31 Jan 2008 20:34:40 -0200
+Message-ID: <901b45bab1fabf9082744903cb68686d@socksarmor.org>
+Mime-Version: 1.0 (Apple Message framework v624)
+Content-Type: multipart/mixed; boundary=Apple-Mail-1-173381414
 Return-path: <dwarves-owner-u79uwXL29TY76Z2rM5mHXA@public.gmane.org>
-Content-Disposition: inline
 Sender: dwarves-owner-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
-To: Erik Ekman <yarrick-UYDU3/A3LUY@public.gmane.org>
-Cc: dwarves-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
+To: dwarves-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
 List-Id: dwarves@vger.kernel.org
 
-> I am doing some developing in C and want to see ELF size per function,
-> file and directory. Right now I extract the sizes of functions and
-> fields from objdump and use an ugly sed hack to find the file of each
-> function/object, and then a python script that does some matching.
 
-> I read about the DWARF format and it seems it includes the things I
-> need. The output from objdump -W and eu-readelf -w shows that
-> functions and object are tied to a file in some way.
+--Apple-Mail-1-173381414
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain;
+	charset=US-ASCII;
+	format=flowed
 
-> Does any of the existing dwarf programs do this? pdwtags looked as a
-> best fit from reading the OLS paper. I have not fetched the latest
-> source yet due to some workplace firewalls. If no tool does this and
-> it is possible, then I am interested in developing one.
+Hello,
 
-> Please cc me, i am not on the list.
+I was trying to build pahole using git HEAD using the latest Ubuntu 
+(7.10) and noticied that there is a missing check of a symbol and a 
+FIXME tag pointing that.  The attached patch adds a cmake configure 
+(config.h) file and checks the symbol (dwfl_module_build_id).
 
-I had to look up your address on the net and only saw your message today
-because I don't use the newsgroups interface regularly, anyway:
 
-pfunct is the tool, look at this, the top 5 functions per .o file on a
-directory hierarchy:
 
-[acme@doppio pahole]$ find examples -name "*.o" | while read file ; do \
-		echo "---> $file" ; \
-		pfunct --sizes $file | sort -k2 -nr | head -5 ; \ 
-		echo "--------" ; done
----> examples/qsize.o
-operator<<: 164
-operator>>: 83
-q_atomic_decrement: 25
---------
----> examples/prototype1.o
-main: 50
---------
----> examples/qsettings.o
-getPath: 1233
-checkAccess: 762
-globalMutex: 277
-iniChopTrailingSpaces: 259
-unusedCacheFunc: 229
---------
----> examples/multi-cu/main.o
-main: 63
---------
----> examples/multi-cu/a.o
-a_foo_print: 29
---------
----> examples/prototype2.o
-foo: 27
---------
-[acme@doppio pahole]$
+--Apple-Mail-1-173381414
+Content-Transfer-Encoding: 7bit
+Content-Type: application/octet-stream;
+	x-unix-mode=0644;
+	name="dwarves-dwfl_module_build_id-cmake-check.patch"
+Content-Disposition: attachment;
+	filename=dwarves-dwfl_module_build_id-cmake-check.patch
 
-There are more options, some useful, some just for laughs, like
---function_name_len:
+commit b83136498ac3511f1b014527d3f0fc9c50fad8ea
+Author: Felipe Kellermann <felipek-F9QBgdt/En2RpAAqCnN02g@public.gmane.org>
+Date:   Thu Jan 31 20:18:52 2008 -0200
 
------------------------------ 8< -------------------------------------------
+    [DWARVES] Fixes a FIXME relating to a missing elf (libdw) symbol check.
+    
+    Signed-off-by: Felipe Kellermann <felipek-F9QBgdt/En2RpAAqCnN02g@public.gmane.org>
 
-[acme@doppio pahole]$ pfunct --help
-Usage: pfunct [OPTION...] -e [FILE] {[FUNCTION]}
+diff --git a/cmake/modules/FindDWARF.cmake b/cmake/modules/FindDWARF.cmake
+index c72026c..17adc7e 100644
+--- a/cmake/modules/FindDWARF.cmake
++++ b/cmake/modules/FindDWARF.cmake
+@@ -5,6 +5,7 @@
+ #  DWARF_LIBRARIES   - List of libraries when using elf utils.
+ #  DWARF_FOUND       - True if fdo found.
+ 
++INCLUDE(CheckLibraryExists)
+ 
+ if (DWARF_INCLUDE_DIR AND LIBDW_INCLUDE_DIR AND DWARF_LIBRARY AND ELF_LIBRARY)
+ 	# Already in cache, be silent
+@@ -42,6 +43,9 @@ find_library(EBL_LIBRARY
+ if (DWARF_INCLUDE_DIR AND LIBDW_INCLUDE_DIR AND DWARF_LIBRARY AND ELF_LIBRARY AND EBL_LIBRARY)
+ 	set(DWARF_FOUND TRUE)
+ 	set(DWARF_LIBRARIES ${DWARF_LIBRARY} ${ELF_LIBRARY} ${EBL_LIBRARY})
++
++	set(CMAKE_REQUIRED_LIBRARIES ${DWARF_LIBRARIES})
++	check_library_exists(elf dwfl_module_build_id "" HAVE_DWFL_MODULE_BUILD_ID)
+ else (DWARF_INCLUDE_DIR AND LIBDW_INCLUDE_DIR AND DWARF_LIBRARY AND ELF_LIBRARY AND EBL_LIBRARY)
+ 	set(DWARF_FOUND FALSE)
+ 	set(DWARF_LIBRARIES)
+@@ -77,3 +81,4 @@ endif (DWARF_FOUND)
+ 
+ mark_as_advanced(DWARF_INCLUDE_DIR LIBDW_INCLUDE_DIR DWARF_LIBRARY ELF_LIBRARY EBL_LIBRARY)
+ include_directories(${DWARF_INCLUDE_DIR} ${LIBDW_INCLUDE_DIR})
++configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config.h.cmake ${CMAKE_CURRENT_SOURCE_DIR}/config.h)
+diff --git a/config.h.cmake b/config.h.cmake
+new file mode 100644
+index 0000000..1b57acd
+--- /dev/null
++++ b/config.h.cmake
+@@ -0,0 +1,9 @@
++/*
++  Copyright (C) 2007 Arnaldo Carvalho de Melo <acme-H+wXaHxf7aLQT0dZR+AlfA@public.gmane.org>
++
++  This program is free software; you can redistribute it and/or modify it
++  under the terms of version 2 of the GNU General Public License as
++  published by the Free Software Foundation.
++*/
++
++#cmakedefine HAVE_DWFL_MODULE_BUILD_ID
+diff --git a/dwarves.c b/dwarves.c
+index 9a21795..51f23df 100644
+--- a/dwarves.c
++++ b/dwarves.c
+@@ -24,6 +24,7 @@
+ #include <string.h>
+ #include <unistd.h>
+ 
++#include "config.h"
+ #include "list.h"
+ #include "dwarves.h"
+ #include "dutil.h"
+@@ -3486,11 +3487,8 @@ static int cus__load_module(Dwfl_Module *mod, void **userdata __unused,
+ 	size_t cuhl;
+ 	GElf_Addr vaddr;
+ 	const unsigned char *build_id = NULL;
+-	/*
+-	 * FIXME: check how to do this properly using cmake to test for
+-	 * the existence of dwfl_module_build_id in the elfutils libraries.
+-	 */
+-#if 1
++
++#if HAVE_DWFL_MODULE_BUILD_ID
+ 	int build_id_len = dwfl_module_build_id(mod, &build_id, &vaddr);
+ #else
+ 	int build_id_len = 0;
 
-  -c, --class=CLASS          functions that have CLASS pointer parameters
-  -E, --externals            show just external functions
-  -f, --function=FUNCTION    show just FUNCTION
-  -g, --goto_labels          show number of goto labels
-  -G, --cc_uninlined         declared inline, uninlined by compiler
-  -H, --cc_inlined           not declared inline, inlined by compiler
-  -i, --inline_expansions    show inline expansions
-  -I, --inline_expansions_stats   show inline expansions stats
-  -l, --decl_info            show source code info
-  -N, --function_name_len    show size of functions names
-  -p, --nr_parms             show number of parameters
-  -s, --sizes                show size of functions
-  -S, --nr_variables         show number of variables
-  -t, --total_inline_stats   show Multi-CU total inline expansions stats
-  -T, --variables            show variables
-  -V, --verbose              be verbose
+--Apple-Mail-1-173381414
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain;
+	charset=US-ASCII;
+	format=flowed
 
- Input selection options:
-      --debuginfo-path=PATH  Search path for separate debuginfo files
-  -e, --executable=FILE      Find addresses in FILE
-  -k, --kernel               Find addresses in the running kernel
-  -K, --offline-kernel[=RELEASE]   Kernel with all modules
-  -M, --linux-process-map=FILE   Find addresses in files mapped as read from
-                             FILE in Linux /proc/PID/maps format
-      --pid=PID              Find addresses in files mapped into process PID
 
-  -?, --help                 Give this help list
-      --usage                Give a short usage message
 
-Mandatory or optional arguments to long options are also mandatory or optional
-for any corresponding short options.
 
------------------------------ 8< -------------------------------------------
-
-- Arnaldo
+-- 
+Felipe "FK" Kellermann
+felipek-F9QBgdt/En2RpAAqCnN02g@public.gmane.org
+--Apple-Mail-1-173381414--
