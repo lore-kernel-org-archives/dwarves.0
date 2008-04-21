@@ -1,61 +1,94 @@
-From: Arnaldo Carvalho de Melo <acme-H+wXaHxf7aLQT0dZR+AlfA@public.gmane.org>
-Subject: Re: "File has no CTF section."
-Date: Tue, 25 Mar 2008 14:57:49 -0300
-Message-ID: <20080325175749.GE22421@ghostprotocols.net>
-References: <20080325152403.GK3247@iris.iucha.org> <20080325164103.GC22421@ghostprotocols.net> <20080325172413.GN3247@iris.iucha.org>
+From: Dave Rigby <davidr-1LojSYAwM1QXQ3Lr6voeyA@public.gmane.org>
+Subject: [PATCH] Add support for filtering classes based on name
+Date: Mon, 21 Apr 2008 14:22:14 +0000 (UTC)
+Message-ID: <loom.20080421T141540-204@post.gmane.org>
 Mime-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Return-path: <dwarves-owner-u79uwXL29TY76Z2rM5mHXA@public.gmane.org>
-Content-Disposition: inline
-In-Reply-To: <20080325172413.GN3247-8+3tsXFunua1C7ntjtBYng@public.gmane.org>
 Sender: dwarves-owner-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
-To: Florin Iucha <florin-zX39fKdjKLBeoWH0uzbU5w@public.gmane.org>
-Cc: dwarves-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
+To: dwarves-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
 List-Id: dwarves@vger.kernel.org
 
-Em Tue, Mar 25, 2008 at 12:24:14PM -0500, Florin Iucha escreveu:
-> Arnaldo,
-> 
-> Thanks for the quick reply!
-> 
-> On Tue, Mar 25, 2008 at 01:41:03PM -0300, Arnaldo Carvalho de Melo wrote:
-> > > I have three object files: one is 'dwarves.o' from the pahole
-> > > distribution, compiled with 'gcc -g'.  Another is 'foobar.o' from my
-> > > own embedded application, compiled with the same compiler, on the same
-> > > box [1].  The third object file is 'foobar.o' compiled with some
-> > > version of compiler (Metrowerks?) for the embedded platform that we use.
-> > > 
-> > > If I use 'objdump -W' on all three files, I get heaps of information,
-> > > including the structure definitions and other stuff.  Good.
-> > 
-> > can you try with:
-> > 
-> > # binutils
-> > readelf -w i build/pahole
-> > 
-> > # elfutils
-> > eu-readelf -w i build/pahole
-> 
-> Yup.  I get the same (or very similar) information.
-> 
-> > > The most puzzling thing is that two object files, compiled with the
-> > > same compiler on the same machine have different enough DWARF data
-> > > that one works with pahole and one doesn't.
-> > > 
-> > > What can I do to follow through with this?  Contact the elfutils
-> > > maintainers?
-> > 
-> > Possibly, but can you make these two object files available somewhere?
-> > I'd like to take a look...
-> 
-> See the attached file.  If you just compile it with 'gcc -g -c hello.c',
-> pahole works fine on the resulting object file.  If at line 17 you change
-> '#if 0' to '#if 1', pahole will complain about the lack of CTF (sorry,
-> I didn't have time to pull your updates).
+i,
 
-ACK, reproduced here, will investigate, strange indeed.
+While pahole allows you to exclude classes with a specified prefix (using
+--exclude), it doesn't appear to be able to do the opposite - only show
+classes with a specific prefix. I found I needed this for my own use of it,
+so here is a patch to add this functionality. It seems like it could be
+useful for others:
 
-- Arnaldo
+Thanks
+
+Dave Rigby
+
+
+diff --git a/pahole.c b/pahole.c
+index 7053471..e16ac2d 100644
+--- a/pahole.c
++++ b/pahole.c
+@@ -26,6 +26,9 @@ static uint8_t word_size, original_word_size;
+ static char *class__exclude_prefix;
+ static size_t class__exclude_prefix_len;
+ 
++static char *class__include_prefix;
++static size_t class__include_prefix_len;
++
+ static char *cu__exclude_prefix;
+ static size_t cu__exclude_prefix_len;
+ 
+@@ -350,6 +353,20 @@ static struct tag *tag__filter(struct tag *tag, 
+struct cu *cu,
+ 			return NULL;
+ 	}
+ 
++	if (class__include_prefix != NULL) {
++		if (name == NULL) {
++			const struct tag *tdef =
++				cu__find_first_typedef_of_type(cu, tag->id);
++			if (tdef != NULL)
++				name = class__name(tag__class(tdef), cu);
++		}
++
++		if (name != NULL && strncmp(class__include_prefix, name,
++					    class__include_prefix_len) != 0)
++			return NULL;
++	}
++
++
+ 	if (decl_exclude_prefix != NULL &&
+ 	    (tag->decl_file == NULL ||
+ 	     strncmp(decl_exclude_prefix, tag->decl_file,
+@@ -820,6 +837,12 @@ static const struct argp_option pahole__options[] = {
+ 		.doc  = "exclude PREFIXed classes",
+ 	},
+ 	{
++		.name = "prefix_filter",
++		.key  = 'y',
++		.arg  = "PREFIX",
++		.doc  = "include PREFIXed classes",
++	},
++	{
+ 		.name = "cu_exclude",
+ 		.key  = 'X',
+ 		.arg  = "PREFIX",
+@@ -910,6 +933,9 @@ static error_t pahole__options_parser(int key, char *arg,
+ 	case 'x': class__exclude_prefix = arg;
+ 		  class__exclude_prefix_len = strlen(class__exclude_prefix);
+ 							break;
++        case 'y': class__include_prefix = arg;
++                  class__include_prefix_len = strlen(class__include_prefix);
++                                                        break;
+ 	case 'z':
+ 		hole_size_ge = atoi(arg);
+ 		if (!global_verbose)
+
+
+
+
+
+
+
 --
 To unsubscribe from this list: send the line "unsubscribe dwarves" in
 the body of a message to majordomo-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
