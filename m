@@ -1,45 +1,55 @@
-From: Dave Rigby <davidr-1LojSYAwM1QXQ3Lr6voeyA@public.gmane.org>
-Subject: Re: [PATCH] Add support for filtering classes based on name
-Date: Mon, 21 Apr 2008 16:32:52 +0100
-Message-ID: <9420C939-5776-4A75-AB06-9C50466BFBA0@transitive.com>
-References: <loom.20080421T141540-204@post.gmane.org> <20080421152754.GE12221@ghostprotocols.net>
-Mime-Version: 1.0 (Apple Message framework v919.2)
-Content-Type: text/plain; charset=US-ASCII; format=flowed; delsp=yes
-Content-Transfer-Encoding: 7bit
+From: Florin Iucha <florin-zX39fKdjKLBeoWH0uzbU5w@public.gmane.org>
+Subject: Re: "File has no CTF section."
+Date: Thu, 24 Apr 2008 10:25:11 -0500
+Message-ID: <20080424152511.GB19740@iris.iucha.org>
+References: <20080325152403.GK3247@iris.iucha.org> <20080325164103.GC22421@ghostprotocols.net> <20080325172413.GN3247@iris.iucha.org> <20080325175749.GE22421@ghostprotocols.net>
+Mime-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha1;
+	protocol="application/pgp-signature"; boundary="mvpLiMfbWzRoNl4x"
 Return-path: <dwarves-owner-u79uwXL29TY76Z2rM5mHXA@public.gmane.org>
-In-Reply-To: <20080421152754.GE12221-f8uhVLnGfZaxAyOMLChx1axOck334EZe@public.gmane.org>
+Content-Disposition: inline
+In-Reply-To: <20080325175749.GE22421-f8uhVLnGfZaxAyOMLChx1axOck334EZe@public.gmane.org>
 Sender: dwarves-owner-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
 To: Arnaldo Carvalho de Melo <acme-H+wXaHxf7aLQT0dZR+AlfA@public.gmane.org>
 Cc: dwarves-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
 List-Id: dwarves@vger.kernel.org
 
 
-On 21 Apr 2008, at 16:27, Arnaldo Carvalho de Melo wrote:
+--mvpLiMfbWzRoNl4x
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> Em Mon, Apr 21, 2008 at 02:22:14PM +0000, Dave Rigby escreveu:
->> i,
->>
->> While pahole allows you to exclude classes with a specified prefix  
->> (using
->> --exclude), it doesn't appear to be able to do the opposite - only  
->> show
->> classes with a specific prefix. I found I needed this for my own  
->> use of it,
->> so here is a patch to add this functionality. It seems like it  
->> could be
->> useful for others:
->>
->> Thanks
->
-> Thanks a lot! May I add a:
->
-> Signed-off-by: Dave Rigby <davidr-1LojSYAwM1QXQ3Lr6voeyA@public.gmane.org>
->
+On Tue, Mar 25, 2008 at 02:57:49PM -0300, Arnaldo Carvalho de Melo wrote:
+> > See the attached file.  If you just compile it with 'gcc -g -c hello.c',
+> > pahole works fine on the resulting object file.  If at line 17 you chan=
+ge
+> > '#if 0' to '#if 1', pahole will complain about the lack of CTF (sorry,
+> > I didn't have time to pull your updates).
+>=20
+> ACK, reproduced here, will investigate, strange indeed.
 
-Sure, that's fine. I'm new to this git lark, so wasn't aware of that :)
+Pinnnggg!
 
+florin
 
-Dave Rigby
+--=20
+Bruce Schneier expects the Spanish Inquisition.
+      http://geekz.co.uk/schneierfacts/fact/163
+
+--mvpLiMfbWzRoNl4x
+Content-Type: application/pgp-signature
+Content-Disposition: inline
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.4.5 (GNU/Linux)
+
+iD8DBQFIEKZXND0rFCN2b1sRAsiCAKCGPeQskkNiXCaHk7QgHIW7xeVtCwCeKkpP
+F3UCdrrJqhpD7QlZnmLkbYw=
+=iCBN
+-----END PGP SIGNATURE-----
+
+--mvpLiMfbWzRoNl4x--
 --
 To unsubscribe from this list: send the line "unsubscribe dwarves" in
 the body of a message to majordomo-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
