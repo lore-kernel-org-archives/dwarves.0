@@ -1,32 +1,43 @@
-From: Arnaldo Carvalho de Melo <acme-H+wXaHxf7aLQT0dZR+AlfA@public.gmane.org>
-Subject: Re: "File has no CTF section."
-Date: Thu, 24 Apr 2008 12:56:48 -0300
-Message-ID: <20080424155648.GE27147@ghostprotocols.net>
-References: <20080325152403.GK3247@iris.iucha.org> <20080325164103.GC22421@ghostprotocols.net> <20080325172413.GN3247@iris.iucha.org> <20080325175749.GE22421@ghostprotocols.net> <20080424152511.GB19740@iris.iucha.org>
+From: flameeyes-Re5JQEeQqe8AvxtiuMwx3w@public.gmane.org (Diego 'Flameeyes' =?utf-8?Q?Petten=C3=B2?=)
+Subject: Unknown error 18446744073709551615
+Date: Thu, 01 May 2008 02:22:38 +0200
+Message-ID: <m24p9idga9.fsf@gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; boundary="=-=-=";
+	micalg=pgp-sha1; protocol="application/pgp-signature"
 Return-path: <dwarves-owner-u79uwXL29TY76Z2rM5mHXA@public.gmane.org>
-Content-Disposition: inline
-In-Reply-To: <20080424152511.GB19740-8+3tsXFunua1C7ntjtBYng@public.gmane.org>
 Sender: dwarves-owner-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
-To: Florin Iucha <florin-zX39fKdjKLBeoWH0uzbU5w@public.gmane.org>
-Cc: Carvalho de Melo <acme-H+wXaHxf7aLQT0dZR+AlfA@public.gmane.org>, dwarves-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
+To: dwarves-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
 List-Id: dwarves@vger.kernel.org
 
-Em Thu, Apr 24, 2008 at 10:25:11AM -0500, Florin Iucha escreveu:
-> On Tue, Mar 25, 2008 at 02:57:49PM -0300, Arnaldo Carvalho de Melo wrote:
-> > > See the attached file.  If you just compile it with 'gcc -g -c hello.c',
-> > > pahole works fine on the resulting object file.  If at line 17 you change
-> > > '#if 0' to '#if 1', pahole will complain about the lack of CTF (sorry,
-> > > I didn't have time to pull your updates).
-> > 
-> > ACK, reproduced here, will investigate, strange indeed.
-> 
-> Pinnnggg!
+--=-=-=
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-Poooong, sorry for the delay, will try again to fix this today.
 
-- Arnaldo
+I'm not sure what is causing this, but while trying to compare two
+different versions of openrc's rc binary I got this error. I'm running
+dwarves from Git of a day or two ago.
+
+The two files are in http://www.flameeyes.eu/tmp/dwarves-error.tbz2
+
+=2D-=20
+Diego "Flameeyes" Petten=C3=B2
+http://blog.flameeyes.eu/
+
+
+--=-=-=
+Content-Type: application/pgp-signature
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v2.0.9 (GNU/Linux)
+
+iEYEARECAAYFAkgZDU4ACgkQe2h1+2mHVWPcCQCgx1NKa8Rd6pDr/hWO2dj6zwhH
+iNgAnjvnUTxqIxYjlWYgkchwoo9KvQvK
+=ZDWr
+-----END PGP SIGNATURE-----
+--=-=-=--
+
 --
 To unsubscribe from this list: send the line "unsubscribe dwarves" in
 the body of a message to majordomo-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
