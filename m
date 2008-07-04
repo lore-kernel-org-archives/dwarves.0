@@ -1,102 +1,211 @@
 From: Arnaldo Carvalho de Melo <acme-H+wXaHxf7aLQT0dZR+AlfA@public.gmane.org>
-Subject: Re: Errors during a pfunct scan for amarokcollectionscanner and
-	inkscape
-Date: Mon, 16 Jun 2008 15:14:18 -0300
-Message-ID: <20080616181418.GA4471@ghostprotocols.net>
-References: <m2lk18qrlb.fsf@gmail.com> <20080615171327.GC4597@ghostprotocols.net> <20080615180233.GD4597@ghostprotocols.net>
+Subject: pahole --contains explained
+Date: Fri, 4 Jul 2008 17:00:16 -0300
+Message-ID: <20080704200016.GC13396@ghostprotocols.net>
+References: <1215098881.16861.29.camel@edge.interactivedata.com> <20080703170834.GA13056@ghostprotocols.net> <1215158052.16861.43.camel@edge.interactivedata.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Transfer-Encoding: QUOTED-PRINTABLE
+Content-Type: text/plain; charset=us-ascii
 Return-path: <dwarves-owner-u79uwXL29TY76Z2rM5mHXA@public.gmane.org>
 Content-Disposition: inline
-In-Reply-To: <20080615180233.GD4597-f8uhVLnGfZaxAyOMLChx1axOck334EZe@public.gmane.org>
+In-Reply-To: <1215158052.16861.43.camel-udH60D+1cVSKf2Id4j40wZWRH6rljmCt@public.gmane.org>
 Sender: dwarves-owner-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
-To: Diego 'Flameeyes' =?iso-8859-1?Q?Petten=F2?= <flameeyes-Re5JQEeQqe8AvxtiuMwx3w@public.gmane.org>
+To: Dennis Lubert <plasmahh-hi6Y0CQ0nG0@public.gmane.org>
 Cc: dwarves-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
 List-Id: dwarves@vger.kernel.org
 
-Em Sun, Jun 15, 2008 at 03:02:33PM -0300, Arnaldo Carvalho de Melo escr=
-eveu:
-> Em Sun, Jun 15, 2008 at 02:13:27PM -0300, Arnaldo Carvalho de Melo es=
-creveu:
-> > Em Sat, Jun 14, 2008 at 11:43:44AM +0200, Diego 'Flameeyes' Petten=F2=
- escreveu:
-> > >=20
-> > > Hi :)
-> > >=20
-> > > On http://www.flameeyes.eu/tmp/dwarves-again.tbz2 you can find th=
-e
-> > > executables amarokcollectionscanner and inkscape from my workstat=
-ion
-> > > (Gentoo Linux AMD64), they report these errors when scaning them =
-with
-> > > pfunct:
-> > >=20
-> > > flame@enterprise ~ % pfunct /usr/bin/amarokcollectionscanner
-> > > dwarf_expr: unhandled 0x12 DW_OP_ operation
-> > > dwarf_expr: unhandled 0x12 DW_OP_ operation
-> > >=20
-> > > as for inkscape:
-> > >=20
-> > > die__create_new_subroutine_type: DW_TAG_typedef @ <0x6efd> not ha=
-ndled!
->=20
-> Really strange case:
->=20
->  <1><6d90>: Abbrev Number: 5 (DW_TAG_subroutine_type)
->     <6d91>   DW_AT_sibling     : <0x6dba>      =20
->  <2><6d95>: Abbrev Number: 6 (DW_TAG_formal_parameter)
->     <6d96>   DW_AT_type        : <0x50>=20
->  <2><6d9a>: Abbrev Number: 6 (DW_TAG_formal_parameter)
->     <6d9b>   DW_AT_type        : <0x6d9f>      =20
->  <2><6d9f>: Abbrev Number: 11 (DW_TAG_typedef)
->     <6da0>   DW_AT_name        : (indirect string, offset: 0x1a977): =
-CleanupFunc       =20
->     <6da4>   DW_AT_decl_file   : 18    =20
->     <6da5>   DW_AT_decl_line   : 46    =20
->     <6da6>   DW_AT_type        : <0x6a71>      =20
->  <2><6daa>: Abbrev Number: 6 (DW_TAG_formal_parameter)
->     <6dab>   DW_AT_type        : <0x50>=20
->  <2><6daf>: Abbrev Number: 6 (DW_TAG_formal_parameter)
->     <6db0>   DW_AT_type        : <0x6dba>      =20
->  <2><6db4>: Abbrev Number: 6 (DW_TAG_formal_parameter)
->     <6db5>   DW_AT_type        : <0x66c6>
->=20
-> This maps to something like this:
->=20
-> typedef void (*CleanupFunc)(void *mem, void *data);
->=20
-> struct Ops {
->     void (*do_init)();
->     void *(*malloc)(std::size_t size);
->     void *(*malloc_atomic)(std::size_t size);
->     void *(*malloc_uncollectable)(std::size_t size);
->     void *(*malloc_atomic_uncollectable)(std::size_t size);
->     void *(*base)(void *ptr);
->     void (*register_finalizer_ignore_self)(void *base,
->                                            CleanupFunc func, void *da=
-ta,
->                                            CleanupFunc *old_func,
->                                            void **old_data);
->=20
-> Meaning that the typedef was not encoded right away, but postponed ti=
-ll
-> just after its first use, i.e. in the parameter list of
-> register_finalizer_ignore_self, as if it was local to this function.
-> Later on it is again referenced, so its not local, as expected, I'll =
-fix
-> it, have just to check where to insert this typedef.
+Em Fri, Jul 04, 2008 at 09:54:12AM +0200, Dennis Lubert escreveu:
+> Am Donnerstag, den 03.07.2008, 14:08 -0300 schrieb Arnaldo Carvalho de Melo:
+> > > - There could be some glob or regexp style substring match for types.
+> > > >From the --help I thought that -i was for this, but I could not get it
+> > > to match even on substrings... Am I maybe doing something wrong?
 
-=46ixed, I'm now adding the DW_TAG_typedef entries to the compile unit
-where the DW_TAG_subroutine_type is defined.
+> > Regexps not supported yet, just prefixes:
 
-This:
+> > [acme@doppio pahole]$ pahole --sizes --separator=, build/pahole | grep arg
+> > argp_child,32,1
+> > argp,56,0
+> > argp_state,96,1
+> > argp_option,48,2
+> > [acme@doppio pahole]$ pahole --sizes --separator=, --exclude arg build/pahole | grep arg
+> > [acme@doppio pahole]$
 
-dwarf_expr: unhandled 0x12 DW_OP_ operation
+> Ah ok, just overlooked -y/-x ... but then I am a bit confused on what -i
+> means. Giving it parts of the class, prefixes or even the whole name
+> leads to no result here... 
 
-is probably related to pure virtual base classes, this will require a
-bit more work but its something its in my TODO list for quite a while,
-so I may well implement support for location expressions.
+-i == --contains
+
+[acme@doppio pahole]$ pahole -i tag build/pahole 
+parameter
+ftype
+lexblock
+class_member
+array_type
+base_type
+namespace
+[acme@doppio pahole]$
+
+Now lets look at some of these classes:
+
+[acme@doppio pahole]$ pahole -C ftype build/pahole 
+struct ftype {
+	struct tag       tag;            /*     0    64 */
+
+	/* --- cacheline 1 boundary (64 bytes) --- */
+
+	struct list_head parms;          /*    64    16 */
+	uint16_t         nr_parms;       /*    80     2 */
+	uint8_t          unspec_parms;   /*    82     1 */
+
+	/* size: 88, cachelines: 2, members: 4 */
+	/* padding: 5 */
+	/* last cacheline: 24 bytes */
+};
+
+[acme@doppio pahole]$ pahole -C class_member build/pahole
+struct class_member {
+	struct tag       tag;            /*     0    64 */
+
+	/* --- cacheline 1 boundary (64 bytes) --- */
+
+	char *           name;           /*    64     8 */
+	uint32_t         offset;         /*    72     4 */
+	uint8_t          bit_offset;     /*    76     1 */
+	uint8_t          bit_size;       /*    77     1 */
+	uint8_t          bit_hole;       /*    78     1 */
+	uint8_t          bitfield_end:1; /*    79: 7  1 */
+	uint8_t          visited:1;      /*    79: 6  1 */
+	uint8_t          accessibility:2;/*    79: 4  1 */
+	uint8_t          virtuality:2;   /*    79: 2  1 */
+
+	/* XXX 2 bits hole, try to pack */
+
+	uint16_t         hole;           /*    80     2 */
+
+	/* size: 88, cachelines: 2, members: 11 */
+	/* bit holes: 1, sum bit holes: 2 bits */
+	/* padding: 6 */
+	/* last cacheline: 24 bytes */
+};
+
+[acme@doppio pahole]$ pahole -C parameter build/pahole
+struct parameter {
+	struct tag       tag;            /*     0    64 */
+
+	/* --- cacheline 1 boundary (64 bytes) --- */
+
+	char *           name;           /*    64     8 */
+	Dwarf_Off        abstract_origin;/*    72     8 */
+
+	/* size: 80, cachelines: 2, members: 3 */
+	/* last cacheline: 16 bytes */
+};
+
+See? All of these classes (structs) contains the specified class
+(struct) "tag".
+
+And if you specify --recursive together with -i/--contains you'll get
+something more interesting:
+
+[acme@doppio pahole]$ pahole --recursive --contains tag build/pahole 
+parameter
+ftype
+  function
+lexblock
+  function
+class_member
+array_type
+base_type
+namespace
+  type
+    class
+[acme@doppio pahole]$
+
+See? 'class' is-a 'type' is-a 'namespace' is-a 'tag'.
+
+To see it more clearly use --expand_types:
+
+[acme@doppio pahole]$ pahole -C class --expand_types build/pahole
+struct class {
+	struct type {
+		struct namespace {
+			struct tag {
+				struct list_head {
+					struct list_head * next;                         /*     0     8 */
+					struct list_head * prev;                         /*     8     8 */
+				} node; /*     0    16 */
+				struct list_head {
+					struct list_head * next;                         /*    16     8 */
+					struct list_head * prev;                         /*    24     8 */
+				} hash_node; /*    16    16 */
+				/* typedef Dwarf_Off -> GElf_Off -> Elf64_Off -> uint64_t */ long unsigned int type; /*    32     8 */
+				/* typedef Dwarf_Off -> GElf_Off -> Elf64_Off -> uint64_t */ long unsigned int id; /*    40     8 */
+				const char  * decl_file;                                 /*    48     8 */
+				/* typedef uint16_t */ short unsigned int decl_line;     /*    56     2 */
+				/* typedef uint16_t */ short unsigned int tag;           /*    58     2 */
+				/* typedef uint16_t */ short unsigned int refcnt;        /*    60     2 */
+				/* typedef uint16_t */ short unsigned int recursivity_level; /*    62     2 */
+				/* --- cacheline 1 boundary (64 bytes) --- */
+			} tag; /*     0    64 */
+			/* --- cacheline 1 boundary (64 bytes) --- */
+			const char  * name;                                              /*    64     8 */
+			struct list_head {
+				struct list_head * next;                                 /*    72     8 */
+				struct list_head * prev;                                 /*    80     8 */
+			} tags; /*    72    16 */
+			/* typedef uint16_t */ short unsigned int nr_tags;               /*    88     2 */
+		} namespace; /*     0    96 */
+
+		/* XXX last struct has 6 bytes of padding */
+
+		/* --- cacheline 1 boundary (64 bytes) was 32 bytes ago --- */
+		struct list_head {
+			struct list_head * next;                                         /*    96     8 */
+			struct list_head * prev;                                         /*   104     8 */
+		} node; /*    96    16 */
+		/* typedef Dwarf_Off -> GElf_Off -> Elf64_Off -> uint64_t */ long unsigned int  specification; /*   112     8 */
+		/* typedef size_t */ long unsigned int  size;                            /*   120     8 */
+		/* --- cacheline 2 boundary (128 bytes) --- */
+		/* typedef size_t */ long unsigned int  size_diff;                       /*   128     8 */
+		/* typedef uint16_t */ short unsigned int nr_members;                    /*   136     2 */
+		/* typedef uint8_t */ unsigned char      declaration;                    /*   138     1 */
+		/* typedef uint8_t */ unsigned char      definition_emitted:1;           /*   139: 7  1 */
+		/* typedef uint8_t */ unsigned char      fwd_decl_emitted:1;             /*   139: 6  1 */
+		/* typedef uint8_t */ unsigned char      resized:1;                      /*   139: 5  1 */
+	} type; /*     0   144 */
+
+	/* XXX last struct has 4 bytes of padding */
+
+	/* --- cacheline 2 boundary (128 bytes) was 16 bytes ago --- */
+	struct list_head {
+		struct list_head * next;                                                 /*   144     8 */
+		struct list_head * prev;                                                 /*   152     8 */
+	} vtable; /*   144    16 */
+	/* typedef uint16_t */ short unsigned int         nr_vtable_entries;             /*   160     2 */
+	/* typedef uint8_t */ unsigned char              nr_holes;                       /*   162     1 */
+	/* typedef uint8_t */ unsigned char              nr_bit_holes;                   /*   163     1 */
+	/* typedef uint16_t */ short unsigned int         padding;                       /*   164     2 */
+	/* typedef uint8_t */ unsigned char              bit_padding;                    /*   166     1 */
+
+	/* XXX 1 byte hole, try to pack */
+
+	void *                     priv;                                                 /*   168     8 */
+
+	/* size: 176, cachelines: 3, members: 8 */
+	/* sum members: 175, holes: 1, sum holes: 1 */
+	/* paddings: 1, sum paddings: 4 */
+	/* last cacheline: 48 bytes */
+};
+
+Try --expand_pointers at home, say on struct task_struct on the Linux
+kernel 8-)
+
+For the lazy ones:
+
+[acme@doppio pahole]$ pahole -C task_struct --expand_types --expand_pointers vmlinux >
+
+http://oops.ghostprotocols.net/dwarves/pahole/vmlinux-expand_pointers-task_struct.txt
+http://vger.kernel.org/~acme/vmlinux-expand_pointers-task_struct.txt
 
 - Arnaldo
 --
