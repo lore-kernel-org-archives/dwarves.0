@@ -1,45 +1,69 @@
-From: Arnaldo Carvalho de Melo <acme-H+wXaHxf7aLQT0dZR+AlfA@public.gmane.org>
+From: flameeyes-Re5JQEeQqe8AvxtiuMwx3w@public.gmane.org (Diego 'Flameeyes' =?utf-8?Q?Petten=C3=B2?=)
 Subject: Re: Feature request: codiff only considering file basename
-Date: Fri, 24 Oct 2008 11:19:25 -0200
-Message-ID: <20081024131925.GC15444@ghostprotocols.net>
+Date: Sun, 09 Nov 2008 20:17:05 +0100
+Message-ID: <m263mwk8um.fsf@gmail.com>
 References: <m27i7yxhk5.fsf@gmail.com>
+	<20081024131925.GC15444@ghostprotocols.net>
 Mime-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Transfer-Encoding: QUOTED-PRINTABLE
+Content-Type: multipart/signed; boundary="=-=-=";
+	micalg=pgp-sha1; protocol="application/pgp-signature"
 Return-path: <dwarves-owner-u79uwXL29TY76Z2rM5mHXA@public.gmane.org>
-Content-Disposition: inline
-In-Reply-To: <m27i7yxhk5.fsf-Re5JQEeQqe8AvxtiuMwx3w@public.gmane.org>
 Sender: dwarves-owner-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
-To: Diego 'Flameeyes' =?iso-8859-1?Q?Petten=F2?= <flameeyes-Re5JQEeQqe8AvxtiuMwx3w@public.gmane.org>
-Cc: dwarves-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
+To: dwarves-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
 List-Id: dwarves@vger.kernel.org
 
-Em Fri, Oct 24, 2008 at 03:12:58PM +0200, Diego 'Flameeyes' Petten=F2 e=
-screveu:
->=20
-> I found myself today in the situation of using codiff on two binaries
-> built with the same sources, but reorganised around; since I noticed =
-a
-> non-zero difference on codiff, I would have liked to know where the
-> difference would be, but since the source files' path has changed,
-> codiff is showing me too much noise and I can't figure out what chang=
-ed.
->=20
-> Optionally considering the basename of the source files would be very
-> nice way to reduce the noise and only show the important data.
+--=-=-=
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-Can you show an excerpt of the output you would like to see changed?
-=20
-> Thanks!
->=20
-> P.S.: is a new release to be expected? Or git is going to be the only
-> way?
+Arnaldo Carvalho de Melo <acme-H+wXaHxf7aLQT0dZR+AlfA@public.gmane.org>
+writes:
 
-I was expecting to make a release with the CTF encoder, but will try an=
-d
-get one out RSN with what is in git.
+> Can you show an excerpt of the output you would like to see changed?
 
-- Arnaldo
+Sorry for the delay, very long days lately :(
+
+flame@yamato mytmpfs % echo "int foo() { return 1; }" > foo.c
+flame@yamato mytmpfs % gcc -ggdb -c foo.c=20
+flame@yamato mytmpfs % gcc -ggdb -c ./foo.c -o foo2.o
+flame@yamato mytmpfs % codiff foo.o foo2.o
+foo.c:
+  foo |  -11
+ 1 function changed, 11 bytes removed, diff: -11
+
+./foo.c:
+  foo |  +11
+ 1 function changed, 11 bytes added, diff: +11
+
+foo2.o:
+ 2 functions changed, 11 bytes added, 11 bytes removed, diff: +0
+
+This is what I mean as a problem, as a solution I'd check for just the
+basename (so that foo.c and ./foo.c become the same file) or, much more
+complicated but would really be nice, I'd check if all the symbols gone
+From=20one file appeared on another, so that the output would then become:
+
+flame@yamato mytmpfs % codiff foo.o foo2.o
+ File renamed: was foo.c is ./foo.c
+
+But that's going to be hard :P
+
+=2D-=20
+Diego "Flameeyes" Petten=C3=B2
+http://blog.flameeyes.eu/
+
+--=-=-=
+Content-Type: application/pgp-signature
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v2.0.9 (GNU/Linux)
+
+iEYEARECAAYFAkkXNzUACgkQe2h1+2mHVWMobQCgoIjzYfh8eaLbPp7QO1zAF2/W
+iasAoNHDUM/jMIS//ZP+d6uj3R7CknRK
+=+ubl
+-----END PGP SIGNATURE-----
+--=-=-=--
+
 --
 To unsubscribe from this list: send the line "unsubscribe dwarves" in
 the body of a message to majordomo-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
