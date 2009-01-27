@@ -1,62 +1,60 @@
-From: Bart Trojanowski <bart-LIbhotJ4rFdeoWH0uzbU5w@public.gmane.org>
+From: Roland McGrath <roland-H+wXaHxf7aLQT0dZR+AlfA@public.gmane.org>
 Subject: Re: extracting data access from functions
-Date: Tue, 27 Jan 2009 11:26:34 -0500
-Message-ID: <20090127162633.GF18307@jukie.net>
-References: <20090127151124.GA18307@jukie.net> <20090127152724.GB27308@ghostprotocols.net> <20090127155221.GD18307@jukie.net> <20090127160133.GB15877@ghostprotocols.net>
+Date: Tue, 27 Jan 2009 15:07:51 -0800 (PST)
+Message-ID: <20090127230751.8443BFC3C8@magilla.sf.frob.com>
+References: <20090127151124.GA18307@jukie.net>
+	<20090127152724.GB27308@ghostprotocols.net>
+	<20090127155221.GD18307@jukie.net>
+	<20090127160133.GB15877@ghostprotocols.net>
+	<20090127162633.GF18307@jukie.net>
 Mime-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 8BIT
+Content-Transfer-Encoding: 7bit
 Return-path: <dwarves-owner-u79uwXL29TY76Z2rM5mHXA@public.gmane.org>
-Content-Disposition: inline
-In-Reply-To: <20090127160133.GB15877-f8uhVLnGfZaxAyOMLChx1axOck334EZe@public.gmane.org>
+In-Reply-To: Bart Trojanowski's message of  Tuesday, 27 January 2009 11:26:34 -0500 <20090127162633.GF18307-LIbhotJ4rFdeoWH0uzbU5w@public.gmane.org>
 Sender: dwarves-owner-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
-To: Arnaldo Carvalho de Melo <acme-H+wXaHxf7aLQT0dZR+AlfA@public.gmane.org>
-Cc: dwarves-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
+To: Bart Trojanowski <bart-LIbhotJ4rFdeoWH0uzbU5w@public.gmane.org>
+Cc: Arnaldo Carvalho de Melo <acme-H+wXaHxf7aLQT0dZR+AlfA@public.gmane.org>, dwarves-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
 List-Id: dwarves@vger.kernel.org
 
-* Arnaldo Carvalho de Melo <acme-H+wXaHxf7aLQT0dZR+AlfA@public.gmane.org> [090127 11:01]:
-> > > Then... you would need to use libdisasm, that is part of elfutils but is
-> > > still a bit rough, being designed mostly for what you get from the
-> > > binutils utilities disassembly options.
-> > >
-> > > Combinining the above you will be able to do what you want.
-> > 
-> > That sounds interesting, but unfortunately the man pages notes that...
-> > >> The x86-64 architecture is not supported..LP
-> > ... being ia32-only makes it a no go for me.
-> 
-> Forget about the man page, this is very fluid, look at the latest
-> released version, 0.139, on fedorahosted, lemme dig the URL
-> 
-> https://fedorahosted.org/elfutils/
-> 
-> There is now a git tree, check it and, again, forget about the man page
-> :)
+elfutils-devel-TuqUDEhatI7GMZAyRF5v151Ccm5ICvs9@public.gmane.org is the place to post about your
+build issues.  You're just in luck that I happen to be on this list
+too to have noticed.  You probably need a newer automake or something
+and run "autoreconf -f -i"; I'm using 1.10.1 and autoconf-2.63.  (Or
+you can just use the rpm/tarball instead of git, and not run auto*
+yourself.)
 
-Man page has been forgotten :)
+For what you want I suspect that none of our stuff is the way to go
+about it, really.  As acme pointed out, lots of that information is
+lost in compilation and is not really accessible any more.  What we
+can do (and not at all easily any time soon) is rediscover some of it.
+But it's all there in the source, and I'm sure there are
+source-parsing tools that do what you want around to be found (cscope
+maybe? some IDE's features?).
 
-Now, on the topic of elfutils.  I had already upgraded to elfutils 0.138
-from git.  I was unable to get 0.139 (or HEAD) to build on debian/lenny.
+On the (unwritten) list for the future is doing something quite like
+what you asked about.  But it's a far ways off, and, again, it's
+really almost certainly not the right way to skin your particular cat.
 
-automake emits the following warnings:
+What it is I have in mind for the future is a combination of a "smart
+disassembler" that generates DWARF location expressions describing
+instruction operands, with lots of general smarts for hacking location
+expressions.  Then you could disassemble, analyze the DWARF describing
+the containing scope, and match up each instruction operand's location
+expression with the locations of variables in scope.  One target use
+for this is to identify the "hot variables" (or hot struct fields) by
+identifying "hot spots" in the code via profiling etc., and then analyzing
+the locations are used in that code to yield the source constructs that
+correspond.
 
-libdwfl/Makefile.am:78: ZLIB does not appear in AM_CONDITIONAL
-libdwfl/Makefile.am:81: BZLIB does not appear in AM_CONDITIONAL
+I think this will be a fabulous thing.  But it's a long ways off.
+And, it's not at all the most sensible or straightforward approach for
+addressing your case where plain source analysis would be much easier
+and more informative.
 
-configure fails for me with the following error:
 
-checking for special C compiler options needed for large files... no
-checking for _FILE_OFFSET_BITS value needed for large files... no
-./configure: line 4538: syntax error near unexpected token `z,Z,z,gzdirect,gzip'
-./configure: line 4538: `eu_ZIPLIB(z,Z,z,gzdirect,gzip)'
-
-I don't grok what autoconf is trying to tell me here.  Do I need a more
-recent gzip libs or just new autotools?
-
--Bart
-
--- 
-				WebSig: http://www.jukie.net/~bart/sig/
+Thanks,
+Roland
 --
 To unsubscribe from this list: send the line "unsubscribe dwarves" in
 the body of a message to majordomo-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
