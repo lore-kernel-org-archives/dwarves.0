@@ -1,60 +1,85 @@
-From: Roland McGrath <roland-H+wXaHxf7aLQT0dZR+AlfA@public.gmane.org>
-Subject: Re: extracting data access from functions
-Date: Tue, 27 Jan 2009 15:07:51 -0800 (PST)
-Message-ID: <20090127230751.8443BFC3C8@magilla.sf.frob.com>
-References: <20090127151124.GA18307@jukie.net>
-	<20090127152724.GB27308@ghostprotocols.net>
-	<20090127155221.GD18307@jukie.net>
-	<20090127160133.GB15877@ghostprotocols.net>
-	<20090127162633.GF18307@jukie.net>
+From: Arnaldo Carvalho de Melo <acme-H+wXaHxf7aLQT0dZR+AlfA@public.gmane.org>
+Subject: ANNOUNCE: dwarves 1.7
+Date: Fri, 13 Feb 2009 12:01:48 -0200
+Message-ID: <20090213140148.GF5348@ghostprotocols.net>
 Mime-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
 Return-path: <dwarves-owner-u79uwXL29TY76Z2rM5mHXA@public.gmane.org>
-In-Reply-To: Bart Trojanowski's message of  Tuesday, 27 January 2009 11:26:34 -0500 <20090127162633.GF18307-LIbhotJ4rFdeoWH0uzbU5w@public.gmane.org>
+Content-Disposition: inline
 Sender: dwarves-owner-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
-To: Bart Trojanowski <bart-LIbhotJ4rFdeoWH0uzbU5w@public.gmane.org>
-Cc: Arnaldo Carvalho de Melo <acme-H+wXaHxf7aLQT0dZR+AlfA@public.gmane.org>, dwarves-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
+To: dwarves-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
 List-Id: dwarves@vger.kernel.org
 
-elfutils-devel-TuqUDEhatI7GMZAyRF5v151Ccm5ICvs9@public.gmane.org is the place to post about your
-build issues.  You're just in luck that I happen to be on this list
-too to have noticed.  You probably need a newer automake or something
-and run "autoreconf -f -i"; I'm using 1.10.1 and autoconf-2.63.  (Or
-you can just use the rpm/tarball instead of git, and not run auto*
-yourself.)
+Hi,
 
-For what you want I suspect that none of our stuff is the way to go
-about it, really.  As acme pointed out, lots of that information is
-lost in compilation and is not really accessible any more.  What we
-can do (and not at all easily any time soon) is rediscover some of it.
-But it's all there in the source, and I'm sure there are
-source-parsing tools that do what you want around to be found (cscope
-maybe? some IDE's features?).
+	After a year working only on the git repository at:
 
-On the (unwritten) list for the future is doing something quite like
-what you asked about.  But it's a far ways off, and, again, it's
-really almost certainly not the right way to skin your particular cat.
+git://git.kernel.org/pub/scm/linux/kernel/git/acme/pahole
 
-What it is I have in mind for the future is a combination of a "smart
-disassembler" that generates DWARF location expressions describing
-instruction operands, with lots of general smarts for hacking location
-expressions.  Then you could disassemble, analyze the DWARF describing
-the containing scope, and match up each instruction operand's location
-expression with the locations of variables in scope.  One target use
-for this is to identify the "hot variables" (or hot struct fields) by
-identifying "hot spots" in the code via profiling etc., and then analyzing
-the locations are used in that code to yield the source constructs that
-correspond.
+	I'm proud to announce dwarves 1.7, and without much ado, here
+goes a list of changes:
 
-I think this will be a fabulous thing.  But it's a long ways off.
-And, it's not at all the most sensible or straightforward approach for
-addressing your case where plain source analysis would be much easier
-and more informative.
+- A CTF decoder based on work done by David S. Miller
+	CTF stands for Compact C Type Format, a more compact debugging
+	information found in the Solaris world.
 
+- Handle DW_TAG_class_type, that is basically the same as
+  DW_TAG_structure_type.
 
-Thanks,
-Roland
+- Add support for showing classes with a prefix: --prefix_filter/-y
+	Contributed by Dave Rigby
+
+- Add support to DW_TAG_ptr_to_member_type, e.g.:
+
+   - class QSize findSize(const classQGridLayoutPriv *, <ERROR>,
+   + class QSize findSize(const classQGridLayoutPriv *, int QLayoutStruct::*, 
+	
+- Handle typedef definitions in functions
+
+- Print the number of members in a struct/class
+
+- Handle the empty base optimization trick (Zero sized C++ class)
+	- Thanks to Dennis Lubert for mentioning this construct, now
+	  lots of "BRAIN FART ALERT!" are gone
+
+- codiff detect changes in the prototype even when function size doesn't change
+    
+    [acme@doppio pahole]$ codiff -V examples/tag-v6 examples/tag
+    tag.c:
+       | +0 # 42 -> 42, prototype: int (struct tag *self, int bar) ->
+                                   unsigned int (struct tag *self, int bar)
+     1 function changed, diff: +0
+
+- pfunct: Implement --expand_types
+    
+    So that one can get an skeleton from where a function can be
+    reimplemented, or a probe can be written to attach to a tracepoint.
+    
+    Right now it will only expand the types for
+    struct/union/typedef/enumeration types, but it is a good start.
+    
+    $ pfunct --expand_types --function inet6_ioctl ipv6.ko > a.c
+    $ echo "int main(void) { return 0; }" >> a.c
+    $ gcc -Wall -g a.c -o a
+    $ grep ^#include a.c
+    $
+    
+    No errors, no includes.
+
+- Reduce memory consumption by using a strings table that avoids duplication in
+  multi object files such as vmlinux
+
+- Speed up struct search by name
+
+- Several minor bug fixes and infrastructure improvements.
+
+- Initial man page for pahole
+
+	The tarball is at http://fedorapeople.org/~acme/dwarves/.
+
+	Please report problems to this list.
+
+- Arnaldo
 --
 To unsubscribe from this list: send the line "unsubscribe dwarves" in
 the body of a message to majordomo-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
