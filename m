@@ -1,63 +1,61 @@
 From: Arnaldo Carvalho de Melo <acme-H+wXaHxf7aLQT0dZR+AlfA@public.gmane.org>
-Subject: codiff new features
-Date: Tue, 3 Mar 2009 11:09:01 -0300
-Message-ID: <20090303140901.GA22356@ghostprotocols.net>
+Subject: [RFT] Request for testing
+Date: Sun, 15 Mar 2009 00:21:38 -0300
+Message-ID: <20090315032138.GB22651@ghostprotocols.net>
 Mime-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Return-path: <dwarves-owner-u79uwXL29TY76Z2rM5mHXA@public.gmane.org>
 Content-Disposition: inline
 Sender: dwarves-owner-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
-To: Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen-pxSi+dnQzZMxHbG02/KK1g@public.gmane.org>
-Cc: dwarves-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
+To: dwarves-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
 List-Id: dwarves@vger.kernel.org
 
-Hi,
+Hi guys,
 
-	This is just to let you know about some new features in codiff:
+	I'm back working on these tools trying to get the in memory
+representation to be closer to CTF than to DWARF, i.e.:
 
-commit dc5592b84424025171bf6b12d4660de5cfef76a3
-Author: Arnaldo Carvalho de Melo <acme-H+wXaHxf7aLQT0dZR+AlfA@public.gmane.org>
-Date:   Tue Mar 3 10:55:25 2009 -0300
+o  class_member instances will not have bit_size/bit_offset, that will
+   have to be inferred from the base_type with a number of bits less than
+   what it would be in DWARF land
 
-    codiff: Detect changes in padding and the number of holes/bit_holes
-    
-    $ codiff -V /tmp/pahole.old build/pahole
-    /home/acme/git/pahole/pahole.c:
-      struct tag |   +0
-       padding: +2
-        refcnt
-         removed: uint16_t              /*    56( 0)     2( 0) */
-        recursivity_level
-         from:    uint16_t              /*    58( 0)     2( 0) */
-         to:      uint16_t              /*    56( 0)     2(15) */
-        visited
-         added:   uint16_t              /*    56(15)     2( 1) */
-     1 struct changed
-    
-    Size is the same, but now we have padding (2 bytes).
+o the strings for quite a while already are just indexes into a table
+  that will then be compressed when encoding in CTF, and at some point
+  will be loaded from CTF directly, without further processing
 
-commit 585075767171d52240457eaed58e3d1eb4823f7d
-Author: Arnaldo Carvalho de Melo <acme-H+wXaHxf7aLQT0dZR+AlfA@public.gmane.org>
-Date:   Tue Mar 3 10:31:14 2009 -0300
+o The types are being recoded, i.e. cu->types_table, uint16_t entries
+  instead of Dwarf_Off types that have to be looked up on a hash table,
+  etc.
 
-    codiff: improve detection removal and addition of members in structs
-    
-    Consider this case:
-    
-    $ codiff -V /tmp/pahole.old build/pahole
-    /home/acme/git/pahole/pahole.c:
-      struct tag |   +0
-        refcnt
-         removed: uint16_t              /*    56( 0)     2( 0) */
-        recursivity_level
-         from:    uint16_t              /*    58( 0)     2( 0) */
-         to:      uint16_t              /*    56( 0)     2(15) */
-        used
-         added:   uint16_t              /*    56(15)     2( 1) */
-     1 struct changed
-    
-    The number of members is the same and so is the size of the struct, but
-    'refcnt' was removed (in fact renamed to used) and 'used' was added.
+	Right now I'm trying to insert new base types for the bitfields,
+after that we'll be almost there to just dump the in memory
+representation into a CTF file. 
+
+	I intend to use the buildid to name a file in a ~/.pahole/
+ccache like hierarchy so that the next time we try to load a DWARF
+section we instead short circuit to the buildid named file in the cache
+to get much, much faster loading.
+
+	Aside from that there are many more improvements, but as we all
+know if we do too many changes in one go, as bold as we may feel, bugs
+may creep in, so:
+
+	Please, please try what is in the git repo right now, and report
+to this list any regressions.
+
+	I have some regression tests where I process with the previously
+released version lots of CTF and DWARF encoded C and C++ object files
+and then with the new version and finally a diff to see if anything
+went bazoo, and all I can say is that right now all I can see is faster
+processing, a helluva smaller memory footprint and more correct output :-)
+
+	But if you can prove me wrong, I'll do my best to get that
+fixed, and that I guess is a good deal, huh?
+
+	If all goes well I'll tag 1.8 and then get back to getting the
+dwarves CTFicated.
+
+Thanks a lot guys,
 
 - Arnaldo
 --
