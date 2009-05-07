@@ -1,56 +1,48 @@
-From: Arnaldo Carvalho de Melo <acme-H+wXaHxf7aLQT0dZR+AlfA@public.gmane.org>
-Subject: Status of Union
-Date: Fri, 20 Mar 2009 17:22:50 -0300
-Message-ID: <20090320202250.GR30407@ghostprotocols.net>
-References: <20090315032138.GB22651@ghostprotocols.net>
+From: "Diego E." =?UTF-8?Q?=E2=80=9CFlameeyes=E2=80=9D_?=
+	 =?ISO-8859-1?Q?Petten=F2?= <flameeyes-Re5JQEeQqe8AvxtiuMwx3w@public.gmane.org>
+Subject: Yet another pahole crash
+Date: Fri, 08 May 2009 01:29:34 +0200
+Message-ID: <1241738974.21706.5.camel@yamato>
 Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg="pgp-sha1"; protocol="application/pgp-signature"; boundary="=-R4zIy3sSKg27mi4y9jrL"
 Return-path: <dwarves-owner-u79uwXL29TY76Z2rM5mHXA@public.gmane.org>
-Content-Disposition: inline
-In-Reply-To: <20090315032138.GB22651-f8uhVLnGfZaxAyOMLChx1axOck334EZe@public.gmane.org>
 Sender: dwarves-owner-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
 To: dwarves-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
 List-Id: dwarves@vger.kernel.org
 
-Hi Folks,
 
-	Even if just to dump what I have to say, here it goes:
+--=-R4zIy3sSKg27mi4y9jrL
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Converting all the object files in a Linux make allyesconfig build
-leaves us with just these mismatches from what is in the DWARF info and
-what is in the CTF info, for types, for the information gathered by the
-dwarves tools:
+Trying to debug some problems I found a fun crash in pahole. The file
+producing the error is available at
+http://www.flameeyes.eu/tmp/feng.pahole.crasher.20090508.bz2
 
-[acme@emilia allyesconfig]$ l /tmp/ctfdwdiff_allyesconfig/*.diff
--rw-rw-r-- 1 acme acme  7154 Mar 20 15:18 /tmp/ctfdwdiff_allyesconfig/BusLogic.o.diff
--rw-rw-r-- 1 acme acme  1766 Mar 20 15:28 /tmp/ctfdwdiff_allyesconfig/callback.o.diff
--rw-rw-r-- 1 acme acme  1410 Mar 20 15:11 /tmp/ctfdwdiff_allyesconfig/config_roms.o.diff
--rw-rw-r-- 1 acme acme   959 Mar 20 15:17 /tmp/ctfdwdiff_allyesconfig/cxio_hal.o.diff
--rw-rw-r-- 1 acme acme 25555 Mar 20 15:13 /tmp/ctfdwdiff_allyesconfig/DAC960.o.diff
--rw-rw-r-- 1 acme acme  1412 Mar 20 15:16 /tmp/ctfdwdiff_allyesconfig/firedtv-1394.o.diff
--rw-rw-r-- 1 acme acme  1009 Mar 20 15:19 /tmp/ctfdwdiff_allyesconfig/libfcoe.o.diff
-[acme@emilia allyesconfig]$
+Have fun!
 
-The cases can be subsumed to:
+--=20
+Diego Elio Petten=C3=B2 =E2=80=94 =E2=80=9CFlameeyes=E2=80=9D
+http://blog.flameeyes.eu/
 
-1. packed enums, be it in typedefs or directly in the struct member
-declaration.
+If you found a .asc file in this mail and know not what it is,
+it's a GnuPG digital signature: http://www.gnupg.org/
 
-2. CTF doesn't seem to be expressive enough to carry the type of a
-forward declaration, i.e. if its "union foo" or "struct foo" it couldn't
-care less, as this wouldn't help whatever tools at all.
 
-So I'll concentrate on #1 and then get to the merge stuff, then back to
-work on the other sections besides the types section so cherished by
-pahole :-)
+--=-R4zIy3sSKg27mi4y9jrL
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part
 
-As always, whatever reports you may have, I'll do my best to keep this
-project kicking and helpful for people interested in what is here and in
-what can be done once some legwork is in place.
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v2.0.11 (GNU/Linux)
 
-Best Regards,
+iEYEABECAAYFAkoDbt4ACgkQe2h1+2mHVWOukwCcC6+koJtCyBX7Il9DyUkFy/cC
+mFAAn0jek2KA4c66LOiiRVL7qUdbQcin
+=7Em6
+-----END PGP SIGNATURE-----
 
-- Arnaldo
+--=-R4zIy3sSKg27mi4y9jrL--
+
 --
 To unsubscribe from this list: send the line "unsubscribe dwarves" in
 the body of a message to majordomo-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
