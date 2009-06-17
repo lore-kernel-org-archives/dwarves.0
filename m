@@ -1,126 +1,115 @@
-From: Arnaldo Carvalho de Melo <acme-H+wXaHxf7aLQT0dZR+AlfA@public.gmane.org>
-Subject: Re: Yet another pahole crash
-Date: Fri, 8 May 2009 01:12:59 -0300
-Message-ID: <20090508041259.GO12165@ghostprotocols.net>
-References: <1241738974.21706.5.camel@yamato> <20090508035407.GN12165@ghostprotocols.net>
+From: Zack Weinberg <zweinberg-4eJtQOnFJqFBDgjK7y7TUQ@public.gmane.org>
+Subject: Re: Can't persuade pahole to see through forward declarations
+Date: Wed, 17 Jun 2009 10:25:06 -0700
+Message-ID: <20090617102506.34aaf8e2@mozilla.com>
+References: <20090615172409.6f0f322b@mozilla.com>
+	<20090617170217.GB21530@ghostprotocols.net>
 Mime-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: QUOTED-PRINTABLE
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Return-path: <dwarves-owner-u79uwXL29TY76Z2rM5mHXA@public.gmane.org>
-Content-Disposition: inline
-In-Reply-To: <20090508035407.GN12165-f8uhVLnGfZaxAyOMLChx1axOck334EZe@public.gmane.org>
+In-Reply-To: <20090617170217.GB21530-f8uhVLnGfZaxAyOMLChx1axOck334EZe@public.gmane.org>
 Sender: dwarves-owner-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
-To: Diego =?utf-8?B?RS4g4oCcRmxhbWVleWVz4oCdIFBldHRlbsOy?= <flameeyes-Re5JQEeQqe8AvxtiuMwx3w@public.gmane.org>
-Cc: dwarves-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
+To: Arnaldo Carvalho de Melo <acme-H+wXaHxf7aLQT0dZR+AlfA@public.gmane.org>, dwarves-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
 List-Id: dwarves@vger.kernel.org
 
-Em Fri, May 08, 2009 at 12:54:08AM -0300, Arnaldo Carvalho de Melo escr=
-eveu:
-> Em Fri, May 08, 2009 at 01:29:34AM +0200, Diego E. =E2=80=9CFlameeyes=
-=E2=80=9D Petten=C3=B2 escreveu:
-> > Trying to debug some problems I found a fun crash in pahole. The fi=
-le
-> > producing the error is available at
-> > http://www.flameeyes.eu/tmp/feng.pahole.crasher.20090508.bz2
->=20
-> You forgot to mention that this is only when you ask for the anonymou=
-s structs:
->=20
-> [acme@doppio object_samples]$ pahole --anon_include feng.pahole.crash=
-er.20090508
-> <BIG SNIP>
-> typedef struct {
-> 	sock_type                  socktype;        /*     0     4 */
-> 	int                        fd;              /*     4     4 */
-> 	struct sockaddr_storage    local_stg;       /*     8   128 */
-> 	/* --- cacheline 2 boundary (128 bytes) was 8 bytes ago --- */
-> 	struct sockaddr_storage    remote_stg;      /*   136   128 */
-> 	/* --- cacheline 4 boundary (256 bytes) was 8 bytes ago --- */
-> 	struct sockaddr_storage    multicast_stg;   /*   264   128 */
-> 	/* --- cacheline 6 boundary (384 bytes) was 8 bytes ago --- */
-> 	sock_flags                 flags;           /*   392     4 */
->=20
-> 	/* XXX 4 bytes hole, try to pack */
->=20
-> 	char *                     remote_host;     /*   400     8 */
-> 	char *                     local_host;      /*   408     8 */
-> 	in_port_t                  remote_port;     /*   416     2 */
-> 	in_port_t                  local_port;      /*   418     2 */
->=20
-> 	/* XXX 4 bytes hole, try to pack */
->=20
-> 	void *                     ssl;             /*   424     8 */
-> 	void *                     data;            /*   432     8 */
->=20
-> 	/* size: 440, cachelines: 7, members: 12 */
-> 	/* sum members: 432, holes: 2, sum holes: 8 */
-> 	/* last cacheline: 56 bytes */
-> } Sock;
-> Segmentation fault
-> [acme@doppio object_samples]$ pahole -Aa feng.pahole.crasher.20090508
->=20
-> Must be some bug I introduced in the last month or so, investigating.
-> =20
-> > Have fun!
->=20
-> Having.
+Arnaldo Carvalho de Melo <acme-H+wXaHxf7aLQT0dZR+AlfA@public.gmane.org> wrote:
+> Em Mon, Jun 15, 2009 at 05:24:09PM -0700, Zack Weinberg escreveu:
+> > I've been experimenting with your 'pahole' utility to analyze some
+> > of the data structures in Mozilla.  I've run into trouble because
+> > pahole seems to give up when it hits a forward declaration (a type
+> > DIE with DW_AT_declaration=1).  For instance, this is what -E -M
+> > mode prints for one of the classes of interest:
+> > 
+> > class nsFrame : public nsBox, public nsIFrameDebug {
+> > public:
+> > 	/* class nsBox {
+> > 	} <ancestor>; */              /*     0     0 */
+> > 
+> > 	/* XXX 64 bytes hole, try to pack */
+> > 
+> > 	/* --- cacheline 1 boundary (64 bytes) --- */
+> > 	/* class nsIFrameDebug {
+> > 		int ()(void) * *_vptr.nsIFrameDebug; 
+> > 			/*	64     8 */ 
+> > 	} <ancestor>; */ /*    64     8 */
+> > 
+> > 	/* size: 72, cachelines: 2, members: 2 */
+> > 	/* sum members: 8, holes: 1, sum holes: 64 */
+> > 	/* last cacheline: 8 bytes */
+> > };
+> > 
+> > As you can see, because it only sees the forward declaration for
+> > class nsBox, it thinks there's a gigantic hole in this class.  This
+> > makes it very hard to look for real problems.
+> > 
+> > I tried to patch pahole to look through forward declarations
+> > whenever possible (using cus__find_struct_by_name) but could not
+> > get it to work, even after switching the main loop from a load
+> > stealer to an iteration over all CUs after they're all loaded.  I
+> > get gibberish:
+> > 
+> > class nsFrame : public nsBox, public nsIFrameDebug {
+> > public:
+> > 	/* class nsBox : public M-0M-^I^D {
+> > 	public:
+> > 		/* PLDHashNumber      (<ancestor>)(PLDHashTable *,
+> > 		const void  *); */    /*     0     0 */
+> > 	} <ancestor>; */ /*     0     0 */
+> > 	/* XXX 64 bytes hole, try to pack */
+> > ...
+> > 
+> > I'm attaching the code changes I made.  Any advice you could give me
+> > would be greatly appreciated.  Note that there are two other changes
+> > in there -- I had to take out the cmake test for libebl, whatever
+> > that is (nothing fails to link without it), and I also changed -M
+> > mode to not print vtables.
+> 
+> I'm trying to figure this out, but the xulrunner debuginfo file I have
+> doesn't have the nsIFrameDebug class as an ancestor for nsFrame:
 
-Put a bandaid for now, only side effect, obvious for a multi-object fil=
-e like this:
+This is probably because it was configured out.  I am working with a 
+development build, which has all sorts of extra debugging mechanisms
+configured in.
 
-$ readelf -wi feng.pahole.crasher.20090508 | grep DW_TAG_compile_unit |=
- wc -l
-56
+> Anyway, it shows nsBox as a zero sized class, which it isn't. Problem
+> is that if we process _just_ this CU we will never know what is the
+> size for nsBox... but should be doable for multi-CU files where we
+> can try to find another CU with the missing definition.
 
-Is that anonymous structs will be printed for every CU where they are d=
-efined:
+Right, that's what I figured was the problem.
 
-$ pahole --anon_include feng.pahole.crasher.20090508  | grep '} server_=
-config' | wc -l
-18
+> This will require a bit more coding, so that we can first go on
+> discarding CUs till we find class nsFrame, then if we find forward
+> decls in it, we must steal the CU and set it aside, then continue to
+> the other CUs, till we find the one with the class nsBox definition,
+> then process the first CU with nsFrame and when not finding
+> definitions for some of its ancestors, look on the other CU where we
+> found the nsBox definition.
 
-Yes, avoiding duplicates by looking for the same name always was, hum, =
-lame and
-could avoid printing a different struct that has the same name (as
-unlikely/stupid as this may be, its possible), I'll get that properly f=
-ixed
-soon.
+What if the CU that has the nsBox definition has already gone past when
+we hit the one with nsFrame?  It seems to me that this would only work
+for some link orders.
 
-And here is the bandaid, for reference, already commited and pushed, th=
-anks one
-more time for reporting Diego!
+> Look below for a coment explaining the bug in your code.
 
-- Arnaldo
+Thanks!  That makes sense.  Meantime I've written code to post-process
+the incomplete output and fill in the missing classes, though.
 
-[acme@doppio pahole]$ git-diff
-diff --git a/pahole.c b/pahole.c
-index 0ba7dde..1c0eef8 100644
---- a/pahole.c
-+++ b/pahole.c
-@@ -295,6 +295,16 @@ static void print_classes(struct cu *cu)
-                        print_packable_info(pos, cu, id);
-                else if (formatter !=3D NULL)
-                        formatter(pos, cu, id);
-+               /*
-+                * FIXME: No sense in adding an anonymous struct to the=
- list of
-+                * structs already printed, as we look for the name... =
-The
-+                * right fix probably will be to call class__fprintf on=
- a
-+                * in-memory FILE, do a hash, and look it by full conte=
-nts, not
-+                * by name. And this is needed for CTF as well, but its=
- late now
-+                * and I'm sleepy, will leave for later...
-+                */
-+               if (pos->type.namespace.name =3D=3D 0)
-+                       continue;
-=20
-                if (structures__add(pos, cu) =3D=3D NULL) {
-                        fprintf(stderr, "pahole: insufficient memory fo=
-r "
 
+Tangentially, I would really like to be able to pass a *list* of
+structure/class names to -C (or have a separate option that reads a
+list from a file).  The full analysis I'm doing needs to look at 200 or
+so of the thousands of classes in xulrunner; currently I need to run
+pahole once for each, which is really slow.
+
+Also, I wonder if you could see your way clear to adding an alternative
+output format that is easily machine-parseable?
+Approximation-to-C-source format is nice for humans but I've spent the
+past day and a bit writing a sed script to turn it into something that
+I can do programmed analysis on and it was no fun.
+
+zw
 --
 To unsubscribe from this list: send the line "unsubscribe dwarves" in
 the body of a message to majordomo-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
