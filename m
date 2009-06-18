@@ -1,7 +1,7 @@
 From: Arnaldo Carvalho de Melo <acme-H+wXaHxf7aLQT0dZR+AlfA@public.gmane.org>
 Subject: Re: Can't persuade pahole to see through forward declarations
-Date: Wed, 17 Jun 2009 17:56:33 -0300
-Message-ID: <20090617205633.GD21530@ghostprotocols.net>
+Date: Thu, 18 Jun 2009 15:36:34 -0300
+Message-ID: <20090618183634.GE21530@ghostprotocols.net>
 References: <20090615172409.6f0f322b@mozilla.com> <20090617170217.GB21530@ghostprotocols.net> <20090617102506.34aaf8e2@mozilla.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -72,7 +72,10 @@ Em Wed, Jun 17, 2009 at 10:25:06AM -0700, Zack Weinberg escreveu:
 > This is probably because it was configured out.  I am working with a 
 > development build, which has all sorts of extra debugging mechanisms
 > configured in.
-> 
+
+OK, can you please send me a multi-cu file that has the above
+definitions so that I can use it as the test case for this new feature?
+ 
 > > Anyway, it shows nsBox as a zero sized class, which it isn't. Problem
 > > is that if we process _just_ this CU we will never know what is the
 > > size for nsBox... but should be doable for multi-CU files where we
@@ -91,7 +94,10 @@ Em Wed, Jun 17, 2009 at 10:25:06AM -0700, Zack Weinberg escreveu:
 > What if the CU that has the nsBox definition has already gone past when
 > we hit the one with nsFrame?  It seems to me that this would only work
 > for some link orders.
-> 
+
+Yeah, probably requires a two pass strategy, i.e. but perhaps I'm trying
+to optimize this a bit too much, we'll see when I try.
+
 > > Look below for a coment explaining the bug in your code.
 > 
 > Thanks!  That makes sense.  Meantime I've written code to post-process
@@ -104,10 +110,9 @@ Em Wed, Jun 17, 2009 at 10:25:06AM -0700, Zack Weinberg escreveu:
 > so of the thousands of classes in xulrunner; currently I need to run
 > pahole once for each, which is really slow.
 
-Sure, I'll do that, getting the list thru -C and also from a filename,
-then on each CU I'll just try to find every entry in this list, removing
-from the list the ones I find/print and stopping the whole process after
-no more entries are in the list.
+Look at the last commit :-)
+
+http://git.kernel.org/?p=linux/kernel/git/acme/pahole.git;a=commitdiff;h=519d1d3d9691ca94f458853c4710d501fb33720f
  
 > Also, I wonder if you could see your way clear to adding an alternative
 > output format that is easily machine-parseable?
@@ -115,10 +120,7 @@ no more entries are in the list.
 > past day and a bit writing a sed script to turn it into something that
 > I can do programmed analysis on and it was no fun.
 
-What do you suggest? Removing \n and comments (that already can be
-removed thru conf knobs)?
-
-I'm open to whatever changes makes these utilities more useful.
+How would it look like?
 
 - Arnaldo
 --
