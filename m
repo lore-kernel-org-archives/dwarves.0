@@ -1,129 +1,177 @@
-From: Arnaldo Carvalho de Melo <acme-H+wXaHxf7aLQT0dZR+AlfA@public.gmane.org>
-Subject: Re: Fwd: Bug#534529: libdw-dev: missing libebl makes dwarves fail
-	to  build
-Date: Thu, 25 Jun 2009 16:53:57 -0300
-Message-ID: <20090625195357.GE3450@ghostprotocols.net>
-References: <E1MJfVp-0005T4-Sp@hydrogen> <20090625090634.GA6008@localhost.localdomain> <87skho43hz.wl%naesten@gmail.com>
+From: Samuel Bronson <naesten-Re5JQEeQqe8AvxtiuMwx3w@public.gmane.org>
+Subject: pahole regression: -a no longer works?
+Date: Thu, 25 Jun 2009 21:29:28 -0400
+Message-ID: <db65a1cd0906251829p5e10b56fo861728d35ea54fb0@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Return-path: <dwarves-owner-u79uwXL29TY76Z2rM5mHXA@public.gmane.org>
-Content-Disposition: inline
-In-Reply-To: <87skho43hz.wl%naesten-Re5JQEeQqe8AvxtiuMwx3w@public.gmane.org>
 Sender: dwarves-owner-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
-To: Samuel Bronson <naesten-Re5JQEeQqe8AvxtiuMwx3w@public.gmane.org>
-Cc: dwarves-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
+To: dwarves-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
 List-Id: dwarves@vger.kernel.org
 
-Em Thu, Jun 25, 2009 at 01:39:20PM -0400, Samuel Bronson escreveu:
-> Hey. What do you think of the issue discussed in the following two emails?
+I've just noticed that pahole's -a flag does not seem to result in
+typedef'd structs being printed anymore.
 
-I think you should add something similar to what is done to figure out
-if the system is fedora:
+For example, with Debian's dwarves 1.3-1, on a self-compiled libVEX
+from valgrind, I see loads of typedef'd struct types like this one:
 
-                find_path(FEDORA fedora-release /etc)
+typedef struct {
+        IRTypeEnv *                type_env;             /*     0     4 */
+        HReg *                     vregmap;              /*     4     4 */
+        Int                        n_vregmap;            /*     8     4 */
+        HInstrArray *              code;                 /*    12     4 */
+        Int                        vreg_ctr;             /*    16     4 */
 
-And then do that workaround only on debian. If you agree please test it
-and resubmit and I'll apply.
+        /* size: 20, cachelines: 1 */
+        /* last cacheline: 20 bytes */
+} ISelEnv;      /* definitions: 1 */
 
-- Arnaldo
- 
-> Forwarded conversation
-> > Subject: Bug#534529: libdw-dev: missing libebl makes dwarves fail to build
-> > ------------------------
-> >
-> > From: *Samuel Bronson*
-> > Date: Wed, Jun 24, 2009 at 11:20 PM
-> > To: Debian Bug Tracking System
-> >
-> >
-> > Package: libdw-dev
-> > Version: 0.141-2
-> > Severity: normal
-> >
-> > Your solution to #436522 doesn't appear to have totally worked;
-> > "dwarves" does not build from source now, using the latest from
-> > git://git.kernel.org/pub/scm/linux/kernel/git/acme/pahole.git:
-> >
-> > ,----
-> > | naesten@hydrogen:~/hacking/pahole% git status
-> > | # On branch master
-> > | nothing to commit (working directory clean)
-> > | naesten@hydrogen:~/hacking/pahole% cmake -D__LIB=lib
-> > | -- The C compiler identification is GNU
-> > | -- Check for working C compiler: /usr/bin/gcc
-> > | -- Check for working C compiler: /usr/bin/gcc -- works
-> > | -- Detecting C compiler ABI info
-> > | -- Detecting C compiler ABI info - done
-> > | -- Checking availability of DWARF and ELF development libraries
-> > | -- Could NOT find libebl library
-> > | CMake Error at cmake/modules/FindDWARF.cmake:95 (message):
-> > |   Could NOT find some ELF and DWARF libraries, please install the missing
-> > |   packages
-> > | Call Stack (most recent call first):
-> > |   CMakeLists.txt:31 (find_package)
-> > |
-> > |
-> > | -- Configuring incomplete, errors occurred!
-> > `----
-> >
-> >
-> > Any ideas about how to solve this? Maybe it's a bug in dwarves, but
-> > either way it needs fixing...
-> >
-> > -- System Information:
-> > Debian Release: squeeze/sid
-> >  APT prefers testing
-> >  APT policy: (990, 'testing'), (500, 'unstable'), (1, 'experimental')
-> > Architecture: i386 (i686)
-> >
-> > Kernel: Linux 2.6.26-1-686 (SMP w/1 CPU core)
-> > Locale: LANG=en_US.UTF-8, LC_CTYPE=en_US.UTF-8 (charmap=UTF-8)
-> > Shell: /bin/sh linked to /bin/bash
-> >
-> > Versions of packages libdw-dev depends on:
-> > ii  libdw1                        0.141-2    library that provides access
-> > to th
-> > ii  libelf-dev                    0.141-2    libelf1 development libraries
-> > and
-> >
-> > libdw-dev recommends no packages.
-> >
-> > -- no debconf information
-> >
-> >
-> >
-> > ----------
-> > From: *Eugeniy Meshcheryakov*
-> > Date: Thu, Jun 25, 2009 at 5:06 AM
-> > To: Samuel Bronson , 534529-61a8vm9lEZVf4u+23C9RwQ@public.gmane.org
-> >
-> >
-> > Hello,
-> >
-> > dwarves do require modifications, but they can be built with new
-> > elfutils. I just tried to replace find_library statement for EBL_LIBRARY
-> > in cmake/modules/FindDWARF.cmake in pahole sources with this:
-> >    set (EBL_LIBRARY -ldw)
-> > and it compiled fine (without any libebl). Clean solution will be to
-> > remove this EBL_LIBRARY or detect whether shared libdw is used. So I
-> > dont think that it is a bug in elfutils.
-> 
-> 
-> If you agree that this should be fixed in dwarves, I have a change viewable
-> at
-> http://repo.or.cz/w/dwarves/SamB.git?a=commitdiff;h=65d658b86413d10ffbb4a83a917af090d42df310which
-> can be pulled from
-> 
-> git://repo.or.cz/dwarves/SamB.git master
-> 
-> which allows the configuration process to continue even if libebl is not
-> found, on the assumption that the check_library_exists call will sort things
-> out... hmm, looking at it again, I think I misunderstood the purpose of that
-> call. Probably something like this can work, though...
-> --
-> To unsubscribe from this list: send the line "unsubscribe dwarves" in
-> the body of a message to majordomo-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
-> More majordomo info at  http://vger.kernel.org/majordomo-info.html
+but in the latest, I get only the following three:
+
+struct _IRConst {
+        IRConstTag                 tag;                  /*     0     4 */
+        union {
+                Bool               U1;                   /*           1 */
+                UChar              U8;                   /*           1 */
+                UShort             U16;                  /*           2 */
+                UInt               U32;                  /*           4 */
+                ULong              U64;                  /*           8 */
+                Double             F64;                  /*           8 */
+                ULong              F64i;                 /*           8 */
+                UShort             V128;                 /*           2 */
+        } Ico;                                           /*     4     8 */
+
+        /* size: 12, cachelines: 1, members: 2 */
+        /* last cacheline: 12 bytes */
+};
+struct _IRExpr {
+        IRExprTag                  tag;                  /*     0     4 */
+        union {
+                struct {
+                        Int        binder;               /*     4     4 */
+                } Binder;                                /*           4 */
+                struct {
+                        Int        offset;               /*     4     4 */
+                        IRType     ty;                   /*     8     4 */
+                } Get;                                   /*           8 */
+                struct {
+                        IRRegArray * descr;              /*     4     4 */
+                        IRExpr *   ix;                   /*     8     4 */
+                        Int        bias;                 /*    12     4 */
+                } GetI;                                  /*          12 */
+                struct {
+                        IRTemp     tmp;                  /*     4     4 */
+                } RdTmp;                                 /*           4 */
+                struct {
+                        IROp       op;                   /*     4     4 */
+                        IRExpr *   arg1;                 /*     8     4 */
+                        IRExpr *   arg2;                 /*    12     4 */
+                        IRExpr *   arg3;                 /*    16     4 */
+                        IRExpr *   arg4;                 /*    20     4 */
+                } Qop;                                   /*          20 */
+                struct {
+                        IROp       op;                   /*     4     4 */
+                        IRExpr *   arg1;                 /*     8     4 */
+                        IRExpr *   arg2;                 /*    12     4 */
+                        IRExpr *   arg3;                 /*    16     4 */
+                } Triop;                                 /*          16 */
+                struct {
+                        IROp       op;                   /*     4     4 */
+                        IRExpr *   arg1;                 /*     8     4 */
+                        IRExpr *   arg2;                 /*    12     4 */
+                } Binop;                                 /*          12 */
+                struct {
+                        IROp       op;                   /*     4     4 */
+                        IRExpr *   arg;                  /*     8     4 */
+                } Unop;                                  /*           8 */
+                struct {
+                        IREndness  end;                  /*     4     4 */
+                        IRType     ty;                   /*     8     4 */
+                        IRExpr *   addr;                 /*    12     4 */
+                } Load;                                  /*          12 */
+                struct {
+                        IRConst *  con;                  /*     4     4 */
+                } Const;                                 /*           4 */
+                struct {
+                        IRCallee * cee;                  /*     4     4 */
+                        IRType     retty;                /*     8     4 */
+                        IRExpr * * args;                 /*    12     4 */
+                } CCall;                                 /*          12 */
+                struct {
+                        IRExpr *   cond;                 /*     4     4 */
+                        IRExpr *   expr0;                /*     8     4 */
+                        IRExpr *   exprX;                /*    12     4 */
+                } Mux0X;                                 /*          12 */
+        } Iex;                                           /*     4    20 */
+
+        /* size: 24, cachelines: 1, members: 2 */
+        /* last cacheline: 24 bytes */
+};
+struct _IRStmt {
+        IRStmtTag                  tag;                  /*     0     4 */
+        union {
+                struct {
+                } NoOp;                                  /*           0 */
+                struct {
+                        Addr64     addr;                 /*     4     8 */
+                        Int        len;                  /*    12     4 */
+                } IMark;                                 /*          12 */
+                struct {
+                        IRExpr *   base;                 /*     4     4 */
+                        Int        len;                  /*     8     4 */
+                        IRExpr *   nia;                  /*    12     4 */
+                } AbiHint;                               /*          12 */
+                struct {
+                        Int        offset;               /*     4     4 */
+                        IRExpr *   data;                 /*     8     4 */
+                } Put;                                   /*           8 */
+                struct {
+                        IRRegArray * descr;              /*     4     4 */
+                        IRExpr *   ix;                   /*     8     4 */
+                        Int        bias;                 /*    12     4 */
+                        IRExpr *   data;                 /*    16     4 */
+                } PutI;                                  /*          16 */
+                struct {
+                        IRTemp     tmp;                  /*     4     4 */
+                        IRExpr *   data;                 /*     8     4 */
+                } WrTmp;                                 /*           8 */
+                struct {
+                        IREndness  end;                  /*     4     4 */
+                        IRExpr *   addr;                 /*     8     4 */
+                        IRExpr *   data;                 /*    12     4 */
+                } Store;                                 /*          12 */
+                struct {
+                        IRDirty *  details;              /*     4     4 */
+                } Dirty;                                 /*           4 */
+                        IRExpr *   data;                 /*     8     4 */
+                } WrTmp;                                 /*           8 */
+                struct {
+                        IREndness  end;                  /*     4     4 */
+                        IRExpr *   addr;                 /*     8     4 */
+                        IRExpr *   data;                 /*    12     4 */
+                } Store;                                 /*          12 */
+                struct {
+                        IRDirty *  details;              /*     4     4 */
+                } Dirty;                                 /*           4 */
+                struct {
+                        IRMBusEvent event;               /*     4     4 */
+                } MBE;                                   /*           4 */
+                struct {
+                        IRExpr *   guard;                /*     4     4 */
+                        IRJumpKind jk;                   /*     8     4 */
+                        IRConst *  dst;                  /*    12     4 */
+                } Exit;                                  /*          12 */
+        } Ist;                                           /*     4    16 */
+
+        /* size: 20, cachelines: 1, members: 2 */
+        /* last cacheline: 20 bytes */
+};
+
+This should be pretty easy to reproduce, but if not I could provide
+you with an .o file... I'd bisect it myself if it weren't for the fact
+that libebl.a is no longer available on Debian squeeze/sid, which
+means I can't build without patching the cmake :-(
 --
 To unsubscribe from this list: send the line "unsubscribe dwarves" in
 the body of a message to majordomo-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
