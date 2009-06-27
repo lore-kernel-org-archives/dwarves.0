@@ -1,48 +1,60 @@
 From: Arnaldo Carvalho de Melo <acme-H+wXaHxf7aLQT0dZR+AlfA@public.gmane.org>
 Subject: Re: pahole regression: -a no longer works?
-Date: Sat, 27 Jun 2009 12:36:39 -0300
-Message-ID: <20090627153639.GB8508@ghostprotocols.net>
+Date: Sat, 27 Jun 2009 12:50:57 -0300
+Message-ID: <20090627155057.GA3349@ghostprotocols.net>
+References: <db65a1cd0906251829p5e10b56fo861728d35ea54fb0@mail.gmail.com> <20090627144405.GE4981@ghostprotocols.net> <87eit5lm0u.wl%naesten@gmail.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Return-path: <dwarves-owner-u79uwXL29TY76Z2rM5mHXA@public.gmane.org>
 Content-Disposition: inline
+In-Reply-To: <87eit5lm0u.wl%naesten-Re5JQEeQqe8AvxtiuMwx3w@public.gmane.org>
 Sender: dwarves-owner-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
 To: Samuel Bronson <naesten-Re5JQEeQqe8AvxtiuMwx3w@public.gmane.org>
-Cc: dwarves-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
+Cc: dwarves <dwarves-u79uwXL29TY76Z2rM5mHXA@public.gmane.org>
 List-Id: dwarves@vger.kernel.org
 
-Em Thu, Jun 25, 2009 at 09:29:28PM -0400, Samuel Bronson escreveu:
-> I've just noticed that pahole's -a flag does not seem to result in
-> typedef'd structs being printed anymore.
+Em Sat, Jun 27, 2009 at 11:44:01AM -0400, Samuel Bronson escreveu:
+> Oops, I sent this to just Arnaldo the first time... sorry, Arnaldo!
 > 
-> For example, with Debian's dwarves 1.3-1, on a self-compiled libVEX
-> from valgrind, I see loads of typedef'd struct types like this one:
+> On Sat, Jun 27, 2009 at 10:44 AM, Arnaldo Carvalho de
+> Melo<acme-f8uhVLnGfZaxAyOMLChx1axOck334EZe@public.gmane.org> wrote:
 > 
-> typedef struct {
->         IRTypeEnv *                type_env;             /*     0     4 */
->         HReg *                     vregmap;              /*     4     4 */
->         Int                        n_vregmap;            /*     8     4 */
->         HInstrArray *              code;                 /*    12     4 */
->         Int                        vreg_ctr;             /*    16     4 */
+> > What about my suggestion to change the proposed patch to check if it is
+> > running on a debian system and if so to avoid checking for libebl?
 > 
->         /* size: 20, cachelines: 1 */
->         /* last cacheline: 20 bytes */
-> } ISelEnv;      /* definitions: 1 */
-> 
-> but in the latest, I get only the following three:
+> Well, that wouldn't really help me with the bisection, though now that
 
-<SNIP>
+I see, you would have to apply the patch at each bisection point and
+remove it before going forward...
 
-Yeah, that is a regression, I'll fix it, till then just use "pdwtags",
-it will print all the tags, including the structs that have no name.
+But anyway, you don't need to bisect it now, I've fixed it already :)
+Please do a git pull and check if everything is ok now.
+
+> I think about it I could have done that on one of the machines in my
+> school's CS lab, where I had to build the elfutils libraries myself
+> anyway...
  
-> This should be pretty easy to reproduce, but if not I could provide
-> you with an .o file... I'd bisect it myself if it weren't for the fact
-> that libebl.a is no longer available on Debian squeeze/sid, which
-> means I can't build without patching the cmake :-(
+> Anyway, about that idea: Debian hasn't always lacked libebl -- rolling
+> it into libdw is a fairly recent thing, and back when it existed, both
+>  libdw and libebl were provided as static libraries, so on systems
+> that still have it, it will probably be necessary to link it in. Not
+> to mention that having to conditionalize this on the distribution
+> feels kind of icky, especially considering how hard-to-follow the
+> REDHAT/FEDORA conditional already is.
+> 
+> Speaking of the REDHAT/FEDORA conditional,
+> 
+>   (a) why doesn't it have a comment explaining what it's for? -- that
+> is, what is different on redhat/fedora, and what it does to compensate
+> for them
 
-What about my suggestion to change the proposed patch to check if it is
-running on a debian system and if so to avoid checking for libebl?
+I'll add the comment now
+ 
+>   (b) why is it *after* the check for the "dwfl_module_build_id"
+> symbol, so that the REDHAT/FEDORA stuff can't fix up the missing
+> variables and allow the symbol check a chance to run?
+
+lemme check...
 
 - Arnaldo
 --
