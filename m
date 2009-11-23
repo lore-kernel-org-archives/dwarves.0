@@ -1,54 +1,50 @@
-From: Arnaldo Carvalho de Melo <acme-H+wXaHxf7aLQT0dZR+AlfA@public.gmane.org>
-Subject: Re: pahole displays type incorrectly
-Date: Sat, 12 Sep 2009 19:47:31 -0300
-Message-ID: <20090912224731.GD3545@ghostprotocols.net>
-References: <alpine.LSU.2.00.0908171610490.31821@fbirervta.pbzchgretzou.qr> <20090817154228.GI12303@ghostprotocols.net> <20090910203517.GA2289@ghostprotocols.net> <alpine.LSU.2.00.0909120340020.444@obet.zrqbmnf.qr> <20090912132405.GB3545@ghostprotocols.net> <20090912144939.GA14242@ghostprotocols.net>
+From: Mike Snitzer <snitzer-H+wXaHxf7aLQT0dZR+AlfA@public.gmane.org>
+Subject: pahole BRAIN FART ALERT on F12
+Date: Mon, 23 Nov 2009 17:17:03 -0500
+Message-ID: <20091123221703.GA10860@redhat.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Return-path: <dwarves-owner-u79uwXL29TY76Z2rM5mHXA@public.gmane.org>
 Content-Disposition: inline
-In-Reply-To: <20090912144939.GA14242-f8uhVLnGfZaxAyOMLChx1axOck334EZe@public.gmane.org>
 Sender: dwarves-owner-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
-To: Jan Engelhardt <jengelh-nopoi9nDyk+ELgA04lAiVw@public.gmane.org>
+To: Arnaldo de Melo <acme-H+wXaHxf7aLQT0dZR+AlfA@public.gmane.org>
 Cc: dwarves-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
 List-Id: dwarves@vger.kernel.org
 
-Em Sat, Sep 12, 2009 at 11:49:39AM -0300, Arnaldo Carvalho de Melo escreveu:
-> Em Sat, Sep 12, 2009 at 10:24:05AM -0300, Arnaldo Carvalho de Melo escreveu:
-> > Em Sat, Sep 12, 2009 at 03:41:56AM +0200, Jan Engelhardt escreveu:
-> > > 
-> > > On Thursday 2009-09-10 22:35, Arnaldo Carvalho de Melo wrote:
-> > > >
-> > > >Sorry for the delay, should be fixed by the latest commit, please give
-> > > >it a try!
-> > > >
-> > > >http://git.kernel.org/?p=linux/kernel/git/acme/pahole.git;a=commitdiff;h=846927a3f87f730e0ae201b5f0b3b46212a7bb8e
-> > > 
-> > > Yes it does work. The testcase seems to be reducable to just the
-> > > struct without a function, but still with a non-static definition
-> > > (instance) of the struct. I.e. on the file level:
-> > > 
-> > > struct foo {
-> > > 	const char *const z;
-> > > };
-> > > struct foo x;
-> > 
-> > Thanks for testing! I'll update the test case to reduce it.
-> 
-> While running regtest I noticed it is still buggy :-\ It works when you
-> have a "const char *const x"  case, but reverses both "const char *x"
-> and "char *const x", but now parents are visiting, time to go AFK :-)
-> 
-> If anybody feels like looking at the latest commits to see how it
-> should't be done and comes with a patch, I'd appreciate 8-)
+Hi,
 
-Should be ok now. See lest cset, with test cases for:
+I just found out about pahole today.  I'm looking to audit lvm2's data
+structures and pahole is perfect for helping me do so.
 
-const char *x;
-char *const x;
-const char *const x;
+Unfortunately, when I run pahole against lvm2 I'm getting many BRAIN
+FART ALERTs on F12 x86_64 (dwarves-1.7-5.x86_64).  I had a look at your
+OLS 2007 "7 dwarves" paper and figured I'd try your minimalist
+swiss_cheese example, this is what I get:
 
-- Arnaldo
+$ pahole swiss_cheese
+struct cheese {
+        char                       name[17];             /*     0    17 */
+        short int                  age;                  /*     0     2 */
+        char                       type;                 /*     0     1 */
+        int                        calories;             /*     0     4 */
+        short int                  price;                /*     0     2 */
+        int                        barcode[4];           /*     0    16 */
+
+        /* size: 48, cachelines: 1, members: 6 */
+        /* padding: 32 */
+        /* last cacheline: 48 bytes */
+
+        /* BRAIN FART ALERT! 48 != 17 + 0(holes), diff = 31 */
+
+};
+
+When I compare the above to the output listed in your paper it is clear
+pahole is pretty unhappy on F12.  If I do the same on F11 (x86_64) all
+works fine.
+
+Should I open a fedora (F12) bug?
+
+Mike
 --
 To unsubscribe from this list: send the line "unsubscribe dwarves" in
 the body of a message to majordomo-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
