@@ -1,63 +1,168 @@
-From: Mike Snitzer <snitzer-H+wXaHxf7aLQT0dZR+AlfA@public.gmane.org>
-Subject: Re: pahole BRAIN FART ALERT on F12
-Date: Tue, 24 Nov 2009 10:18:49 -0500
-Message-ID: <20091124151848.GA11060@redhat.com>
-References: <20091123221703.GA10860@redhat.com>
- <20091123224921.GA9654@ghostprotocols.net>
- <20091123225615.GD10860@redhat.com>
- <20091124001047.GF15547@ghostprotocols.net>
- <20091124132831.GA31662@redhat.com>
- <20091124145212.GC9654@ghostprotocols.net>
+From: Arnaldo Carvalho de Melo <acme-wEGCiKHe2LqWVfeAwA7xHQ@public.gmane.org>
+Subject: ANOUNCE: pahole & the dwarves 1.8
+Date: Sun, 6 Dec 2009 16:22:36 -0200
+Message-ID: <20091206182236.GB4337@ghostprotocols.net>
 Mime-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Return-path: <dwarves-owner-u79uwXL29TY76Z2rM5mHXA@public.gmane.org>
 Content-Disposition: inline
-In-Reply-To: <20091124145212.GC9654-f8uhVLnGfZaxAyOMLChx1axOck334EZe@public.gmane.org>
 Sender: dwarves-owner-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
-To: Arnaldo de Melo <acme-H+wXaHxf7aLQT0dZR+AlfA@public.gmane.org>
-Cc: dwarves-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
+To: dwarves-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
+Cc: Daniel Gollub <dgollub-l3A5Bk7waGM@public.gmane.org>, Diego 'Flameeyes' =?iso-8859-1?Q?Petten=F2?= <flameeyes-Re5JQEeQqe8AvxtiuMwx3w@public.gmane.org>, Thomas Zimmermann <tdz-Rn4VEauK+AKRv+LV9MX5uipxlwaOVQ5f@public.gmane.org>, Linux Kernel Mailing List <linux-kernel-u79uwXL29TY76Z2rM5mHXA@public.gmane.org>
 List-Id: dwarves@vger.kernel.org
 
-On Tue, Nov 24 2009 at  9:52am -0500,
-Arnaldo de Melo <acme-H+wXaHxf7aLQT0dZR+AlfA@public.gmane.org> wrote:
+After a long time without a new release because I was trying to get the CTF
+support completed, and due to the very strong gravity force in the Linux kernel
+perf tools, here it is 1.8, with lots of performance improvements, bug fixes
+and changes to better use these tools in scripts.
 
-> Em Tue, Nov 24, 2009 at 08:28:31AM -0500, Mike Snitzer escreveu:
-> > On Mon, Nov 23 2009 at  7:10pm -0500,
-> > Arnaldo de Melo <acme-H+wXaHxf7aLQT0dZR+AlfA@public.gmane.org> wrote:
-> > > Em Mon, Nov 23, 2009 at 05:56:15PM -0500, Mike Snitzer escreveu:
-> > > > On Mon, Nov 23 2009 at  5:49pm -0500,
-> > > > Arnaldo de Melo <acme-H+wXaHxf7aLQT0dZR+AlfA@public.gmane.org> wrote:
-> > > > > Em Mon, Nov 23, 2009 at 05:17:03PM -0500, Mike Snitzer escreveu:
-> > > > > > Unfortunately, when I run pahole against lvm2 I'm getting many BRAIN
-> > > > > > FART ALERTs on F12 x86_64 (dwarves-1.7-5.x86_64).  I had a look at your
-> > > > > > OLS 2007 "7 dwarves" paper and figured I'd try your minimalist
-> > > > > > swiss_cheese example, this is what I get:
-> > > > > > $ pahole swiss_cheese
-> > > > > > struct cheese {
-> > > > > >         char                       name[17];             /*     0    17 */
-> > > > > >         short int                  age;                  /*     0     2 */
-> > > > > >         char                       type;                 /*     0     1 */
-> > > <SNIP>
-> > > > > >         /* BRAIN FART ALERT! 48 != 17 + 0(holes), diff = 31 */
-> > > > > > };
-> > > > > You should, I think this is related to some recent elfutils changes that
-> > > > > Mark Wieelard warned me about it but I hadn't time yet to act upon, will
-> > > > > do so tomorrow, thanks for the report!
-> > >  
-> > > > BTW, I did try the latest git version from:
-> > > > git://git.kernel.org/pub/scm/linux/kernel/git/acme/pahole.git
-> > > > It didn't work either.
-> > > 
-> > > Can you try with the attached patch applied against the git repo
-> > > version?
-> > 
-> > Works great, thanks!
-> > 
-> > Would you still like me to file an F12 bug?
-> 
-> Please, as I'll have to go the process for updating the package... :-)
+For full details please take a look at the git changesets, repo available at:
 
-Done, please see RH bz # 540955
+http://git.kernel.org/?p=linux/kernel/git/acme/pahole.git
+
+Tarball available at:
+
+http://fedorapeople.org/~acme/dwarves/dwarves-1.8.tar.bz2
+
+- Arnaldo
+
+pahole:
+
+. Allow list of structs to be passed to pahole.
+
+	E.g.: 'pahole -C str_node,strings'
+
+  Suggested by Zack Weinberg <zweinberg-4eJtQOnFJqFBDgjK7y7TUQ@public.gmane.org>, for scripting.
+
+. Introduce --hex to print offsets and sizes in hexadecimal
+
+codiff:
+
+. Improve detection of removal and addition of members in structs
+
+. Detect changes in padding and the number of holes/bit_holes
+
+pfunct:
+
+. --no_parm_names
+
+    Because CTF doesn't encodes the names of the parameters and I want to
+    test the upcoming CTF function section code in ctftwdiff.
+
+. pfunct --addr
+
+    Using an rbtree to find in which function the given addr is.
+
+libdwarves:
+
+. Greatly reduce the data structures footprint and lookup by recoding
+  the IDs as short integers, that was done to facilitate support for CTF
+  but benefited the core libraries greatly.
+
+. Handle GCC support for vector instructions
+
+    So now it recognizes, as printed by pdwtags:
+
+    908 typedef int __m64 __attribute__ ((__vector_size__ (8))); size: 8
+    909 int         array __attribute__ ((__vector_size__ (8))); size: 8
+    910 int         array __attribute__ ((__vector_size__ (4))); size: 4
+    911 short int   array __attribute__ ((__vector_size__ (2))); size: 2
+    912 char        array __attribute__ ((__vector_size__ (1))); size: 1
+
+. Destructors were added so that no leaks are left if this library is to
+  be used in other tools that don't end the program when done using this lib.
+
+. Allow the tools to pass a callback that is used after loading each object
+  file (CU/Compile Unit), so that we can more quickly find tags and stop
+  the processing sooner, or at least delete the CU if it doesn't have anything
+  needed by the tool. This _greatly_ speeded up most of the tools.
+
+. Tools now can pass a debug format "path", specifying the order it wants to
+  try, so that if a file have both DWARF and CTF, specifying 'ctf,dwarf' will
+  use the CTF info.
+
+. Now the formatting routines are in a separate file, dwarves_fprintf.c. This
+  was done for organizational purposes but also to pave the way for multiple
+  formatting backends, so that we can print, for instance, in CSV the structs,
+  for easier scripting like done by several folks out there.
+
+. Handle volatile typedef bitfields, like:
+
+    struct _GClosure {
+            volatile guint ref_count:15;    /* 0:17  4 */
+            volatile guint meta_marshal:1;  /* 0:16  4 */
+            volatile guint n_guards:1;      /* 0:15  4 */
+
+. Load java 'interfaces' as a struct/class.
+
+. Fix buffer expansion bug, detected thanks to boost that provided things like:
+
+        virtual int undefine(class grammar_helper<boost::spirit::grammar<boost::detail::graph::dot_skipper, boost::spirit::parser_context<boost::spirit::nil, class grammar<boost::detail::graph::dot_skipper, boost::spirit::parser_context<boost::spirit::nil_t> > *); /* linkage=_ZN5boost6spirit4impl14grammar_helperINS0_7grammarINS_6detail5graph11dot_skipperENS0_14parser_contextINS0_5nil_tEEEEES6_NS0_7scannerINS0_10multi_passISt16istream_i */
+
+. Allow optional addr information loading, speeding up some apps that don't
+  use such addresses (or in modes where addrs aren't used) such as pahole.
+
+. Use a obstacks, speeding up apps as measured with the perf tools.
+
+. Support zero sized arrays in the middle of a struct.
+
+. Fix padding calculation in the reorganize routines.
+
+. Fix bitfield demotion in the reorganize routines.
+
+. Support "using" pointing to data members (C++).
+
+. Properly support pointers to const, reported by Jan Engelhardt <jengelh-nopoi9nDyk+ELgA04lAiVw@public.gmane.org>:
+
+. Support more compact DW_AT_data_member_location form, pointed out by Mark
+  Wielaard <mjw-H+wXaHxf7aLQT0dZR+AlfA@public.gmane.org> and reported by Mike Snitzer <snitzer-H+wXaHxf7aLQT0dZR+AlfA@public.gmane.org>
+
+Experimental CTF support:
+
+libdwarves was reorganized so that it can support multiple debugging formats,
+with the first one being supported being the Compact C Type Format that comes
+from the OpenSolaris world.
+
+David S. Miller contributed an initial CTF decoder and from there I wrote an
+encoder.
+
+To test this a regression testing harness (regtest in the sources) that will
+take files with DWARF info and from there encode its contents in CTF in another
+ELF section in the same file (.SUN_ctf).  Then it will decode both the DWARF
+and CTF sections and compare the results for pahole running with some new
+flags that cope with some subtleties in the way CTF encodes things.
+
+  --flat_arrays
+
+	We have just one dimension in CTF, with the total number of entries,
+	in DWARF we can express this, but not in CTF:
+
+	__u8            addr[0][6];    /*   4  0 */
+
+	So --flat_arrays will show it as:
+
+	__u8            addr[0];       /*   4  0 */
+
+  --show_private_classes
+  --fixup_silly_bitfields
+
+	To cope with things like 'char foo:8' that since CTF has only the
+	number of bits, can't be expressed as we don't know if it is a
+	bitfield or just a char without the ':8' suffix.
+
+  --first_obj_only
+
+	Look only at the first object file in a file with multiple object
+	files, like vmlinux. This is because the CTF support is not complete yet,
+	needing the merging of types in multiple object files to be done.
+
+  --classes_as_structs
+
+	CTF has only a type for structs, not for classes like DWARF (DW_TAG_class_type
+	is not present in CTF), so print them all as 'struct'.
+
+Running with the above limitations produce just a few mismatches, related to
+packed structs and enumerations bitfields.
 --
 To unsubscribe from this list: send the line "unsubscribe dwarves" in
 the body of a message to majordomo-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
