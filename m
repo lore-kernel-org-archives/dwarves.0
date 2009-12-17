@@ -1,168 +1,99 @@
-From: Arnaldo Carvalho de Melo <acme-wEGCiKHe2LqWVfeAwA7xHQ@public.gmane.org>
-Subject: ANOUNCE: pahole & the dwarves 1.8
-Date: Sun, 6 Dec 2009 16:22:36 -0200
-Message-ID: <20091206182236.GB4337@ghostprotocols.net>
+From: Herton Ronaldo Krzesinski <herton-4qZELD6Fgxg39yzSjRtAkw@public.gmane.org>
+Subject: Avoid uneeded linking/unused libraries in some dwarves libraries and executables
+Date: Thu, 17 Dec 2009 14:32:33 -0200
+Message-ID: <200912171432.33181.herton@mandriva.com.br>
 Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: Text/Plain;
+  charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <dwarves-owner-u79uwXL29TY76Z2rM5mHXA@public.gmane.org>
-Content-Disposition: inline
 Sender: dwarves-owner-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
-To: dwarves-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
-Cc: Daniel Gollub <dgollub-l3A5Bk7waGM@public.gmane.org>, Diego 'Flameeyes' =?iso-8859-1?Q?Petten=F2?= <flameeyes-Re5JQEeQqe8AvxtiuMwx3w@public.gmane.org>, Thomas Zimmermann <tdz-Rn4VEauK+AKRv+LV9MX5uipxlwaOVQ5f@public.gmane.org>, Linux Kernel Mailing List <linux-kernel-u79uwXL29TY76Z2rM5mHXA@public.gmane.org>
+To: Arnaldo Carvalho de Melo <acme-H+wXaHxf7aLQT0dZR+AlfA@public.gmane.org>
+Cc: dwarves-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
 List-Id: dwarves@vger.kernel.org
 
-After a long time without a new release because I was trying to get the CTF
-support completed, and due to the very strong gravity force in the Linux kernel
-perf tools, here it is 1.8, with lots of performance improvements, bug fixes
-and changes to better use these tools in scripts.
+Hi,
 
-For full details please take a look at the git changesets, repo available at:
+currently mandriva has a packaging script which checks for uneeded linking in
+package built files. For dwarves, it displays:
 
-http://git.kernel.org/?p=linux/kernel/git/acme/pahole.git
+Warning: unused libraries in /usr/lib64/libdwarves_reorganize.so.1.0.0: libdw.so.1
+ libelf.so.1
+ libz.so.1
 
-Tarball available at:
+Warning: unused libraries in /usr/lib64/libdwarves_emit.so.1.0.0: libdw.so.1
+ libelf.so.1
+ libz.so.1
 
-http://fedorapeople.org/~acme/dwarves/dwarves-1.8.tar.bz2
+Warning: unused libraries in /usr/bin/ctracer: libz.so.1
+ libdw.so.1
 
-- Arnaldo
+Warning: unused libraries in /usr/bin/syscse: libdw.so.1
+ libelf.so.1
+ libz.so.1
 
-pahole:
+Warning: unused libraries in /usr/bin/pglobal: libdw.so.1
+ libelf.so.1
+ libz.so.1
 
-. Allow list of structs to be passed to pahole.
+Warning: unused libraries in /usr/bin/pdwtags: libdw.so.1
+ libelf.so.1
+ libz.so.1
 
-	E.g.: 'pahole -C str_node,strings'
+Warning: unused libraries in /usr/bin/prefcnt: libdw.so.1
+ libelf.so.1
+ libz.so.1
 
-  Suggested by Zack Weinberg <zweinberg-4eJtQOnFJqFBDgjK7y7TUQ@public.gmane.org>, for scripting.
+Warning: unused libraries in /usr/bin/pfunct: libz.so.1
+ libdw.so.1
 
-. Introduce --hex to print offsets and sizes in hexadecimal
+Warning: unused libraries in /usr/bin/pahole: libz.so.1
+ libdw.so.1
+ libelf.so.1
 
-codiff:
+Warning: unused libraries in /usr/bin/dtagnames: libdw.so.1
+ libelf.so.1
+ libz.so.1
 
-. Improve detection of removal and addition of members in structs
+Warning: unused libraries in /usr/bin/codiff: libdw.so.1
+ libelf.so.1
+ libz.so.1
 
-. Detect changes in padding and the number of holes/bit_holes
+The patch below fixes the issue (removing uneeded specified libraries and using
+LINK_INTERFACE_LIBRARIES property, see
+http://www.cmake.org/Wiki/CMake_FAQ#Why_are_libraries_linked_to_my_shared_library_included_when_something_links_to_it.3F)
 
-pfunct:
+Signed-off-by: Herton Ronaldo Krzesinski <herton-4qZELD6Fgxg39yzSjRtAkw@public.gmane.org>
 
-. --no_parm_names
+diff -p -up dwarves-1.8/CMakeLists.txt.orig dwarves-1.8/CMakeLists.txt
+--- dwarves-1.8/CMakeLists.txt.orig	2009-06-17 13:05:08.000000000 -0300
++++ dwarves-1.8/CMakeLists.txt	2009-12-17 14:07:19.034269772 -0200
+@@ -38,17 +38,18 @@ set(dwarves_LIB_SRCS dwarves.c dwarves_f
+ 		     dutil.c elf_symtab.c rbtree.c)
+ add_library(dwarves SHARED ${dwarves_LIB_SRCS})
+ set_target_properties(dwarves PROPERTIES VERSION 1.0.0 SOVERSION 1)
++set_target_properties(dwarves PROPERTIES LINK_INTERFACE_LIBRARIES "")
+ target_link_libraries(dwarves ${DWARF_LIBRARIES} ${ZLIB_LIBRARIES})
+ 
+ set(dwarves_emit_LIB_SRCS dwarves_emit.c)
+ add_library(dwarves_emit SHARED ${dwarves_emit_LIB_SRCS})
+ set_target_properties(dwarves_emit PROPERTIES VERSION 1.0.0 SOVERSION 1)
+-target_link_libraries(dwarves_emit ${DWARF_LIBRARIES} dwarves)
++target_link_libraries(dwarves_emit dwarves)
+ 
+ set(dwarves_reorganize_LIB_SRCS dwarves_reorganize.c)
+ add_library(dwarves_reorganize SHARED ${dwarves_reorganize_LIB_SRCS})
+ set_target_properties(dwarves_reorganize PROPERTIES VERSION 1.0.0 SOVERSION 1)
+-target_link_libraries(dwarves_reorganize ${DWARF_LIBRARIES} dwarves)
++target_link_libraries(dwarves_reorganize dwarves)
+ 
+ set(codiff_SRCS codiff.c)
+ add_executable(codiff ${codiff_SRCS})
 
-    Because CTF doesn't encodes the names of the parameters and I want to
-    test the upcoming CTF function section code in ctftwdiff.
 
-. pfunct --addr
-
-    Using an rbtree to find in which function the given addr is.
-
-libdwarves:
-
-. Greatly reduce the data structures footprint and lookup by recoding
-  the IDs as short integers, that was done to facilitate support for CTF
-  but benefited the core libraries greatly.
-
-. Handle GCC support for vector instructions
-
-    So now it recognizes, as printed by pdwtags:
-
-    908 typedef int __m64 __attribute__ ((__vector_size__ (8))); size: 8
-    909 int         array __attribute__ ((__vector_size__ (8))); size: 8
-    910 int         array __attribute__ ((__vector_size__ (4))); size: 4
-    911 short int   array __attribute__ ((__vector_size__ (2))); size: 2
-    912 char        array __attribute__ ((__vector_size__ (1))); size: 1
-
-. Destructors were added so that no leaks are left if this library is to
-  be used in other tools that don't end the program when done using this lib.
-
-. Allow the tools to pass a callback that is used after loading each object
-  file (CU/Compile Unit), so that we can more quickly find tags and stop
-  the processing sooner, or at least delete the CU if it doesn't have anything
-  needed by the tool. This _greatly_ speeded up most of the tools.
-
-. Tools now can pass a debug format "path", specifying the order it wants to
-  try, so that if a file have both DWARF and CTF, specifying 'ctf,dwarf' will
-  use the CTF info.
-
-. Now the formatting routines are in a separate file, dwarves_fprintf.c. This
-  was done for organizational purposes but also to pave the way for multiple
-  formatting backends, so that we can print, for instance, in CSV the structs,
-  for easier scripting like done by several folks out there.
-
-. Handle volatile typedef bitfields, like:
-
-    struct _GClosure {
-            volatile guint ref_count:15;    /* 0:17  4 */
-            volatile guint meta_marshal:1;  /* 0:16  4 */
-            volatile guint n_guards:1;      /* 0:15  4 */
-
-. Load java 'interfaces' as a struct/class.
-
-. Fix buffer expansion bug, detected thanks to boost that provided things like:
-
-        virtual int undefine(class grammar_helper<boost::spirit::grammar<boost::detail::graph::dot_skipper, boost::spirit::parser_context<boost::spirit::nil, class grammar<boost::detail::graph::dot_skipper, boost::spirit::parser_context<boost::spirit::nil_t> > *); /* linkage=_ZN5boost6spirit4impl14grammar_helperINS0_7grammarINS_6detail5graph11dot_skipperENS0_14parser_contextINS0_5nil_tEEEEES6_NS0_7scannerINS0_10multi_passISt16istream_i */
-
-. Allow optional addr information loading, speeding up some apps that don't
-  use such addresses (or in modes where addrs aren't used) such as pahole.
-
-. Use a obstacks, speeding up apps as measured with the perf tools.
-
-. Support zero sized arrays in the middle of a struct.
-
-. Fix padding calculation in the reorganize routines.
-
-. Fix bitfield demotion in the reorganize routines.
-
-. Support "using" pointing to data members (C++).
-
-. Properly support pointers to const, reported by Jan Engelhardt <jengelh-nopoi9nDyk+ELgA04lAiVw@public.gmane.org>:
-
-. Support more compact DW_AT_data_member_location form, pointed out by Mark
-  Wielaard <mjw-H+wXaHxf7aLQT0dZR+AlfA@public.gmane.org> and reported by Mike Snitzer <snitzer-H+wXaHxf7aLQT0dZR+AlfA@public.gmane.org>
-
-Experimental CTF support:
-
-libdwarves was reorganized so that it can support multiple debugging formats,
-with the first one being supported being the Compact C Type Format that comes
-from the OpenSolaris world.
-
-David S. Miller contributed an initial CTF decoder and from there I wrote an
-encoder.
-
-To test this a regression testing harness (regtest in the sources) that will
-take files with DWARF info and from there encode its contents in CTF in another
-ELF section in the same file (.SUN_ctf).  Then it will decode both the DWARF
-and CTF sections and compare the results for pahole running with some new
-flags that cope with some subtleties in the way CTF encodes things.
-
-  --flat_arrays
-
-	We have just one dimension in CTF, with the total number of entries,
-	in DWARF we can express this, but not in CTF:
-
-	__u8            addr[0][6];    /*   4  0 */
-
-	So --flat_arrays will show it as:
-
-	__u8            addr[0];       /*   4  0 */
-
-  --show_private_classes
-  --fixup_silly_bitfields
-
-	To cope with things like 'char foo:8' that since CTF has only the
-	number of bits, can't be expressed as we don't know if it is a
-	bitfield or just a char without the ':8' suffix.
-
-  --first_obj_only
-
-	Look only at the first object file in a file with multiple object
-	files, like vmlinux. This is because the CTF support is not complete yet,
-	needing the merging of types in multiple object files to be done.
-
-  --classes_as_structs
-
-	CTF has only a type for structs, not for classes like DWARF (DW_TAG_class_type
-	is not present in CTF), so print them all as 'struct'.
-
-Running with the above limitations produce just a few mismatches, related to
-packed structs and enumerations bitfields.
+--
+[]'s
+Herton
 --
 To unsubscribe from this list: send the line "unsubscribe dwarves" in
 the body of a message to majordomo-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
