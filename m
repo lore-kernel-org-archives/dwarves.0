@@ -1,26 +1,43 @@
-From: Arnaldo Carvalho de Melo <acme-f8uhVLnGfZaxAyOMLChx1axOck334EZe@public.gmane.org>
-Subject: Re: replaces deprecated elf_getshstrndx with elf_getshdrstrndx
-Date: Tue, 29 Dec 2009 11:38:44 -0200
-Message-ID: <20091229133844.GB20178@ghostprotocols.net>
-References: <b401d2530912282040y1e967a4egd827cc9626da3f7c@mail.gmail.com>
+From: Webmaster <noreply-c67hte604QFWk0Htik3J/w@public.gmane.org>
+Subject: Request for confirmation
+Date: Mon, 4 Jan 2010 17:17:30 -0500
+Message-ID: <e764d57c455581416fd9d9a528165f1f@mail.ebuppies.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Return-path: <dwarves-owner-u79uwXL29TY76Z2rM5mHXA@public.gmane.org>
-Content-Disposition: inline
-In-Reply-To: <b401d2530912282040y1e967a4egd827cc9626da3f7c-JsoAwUIsXosN+BqQ9rBEUg@public.gmane.org>
 Sender: dwarves-owner-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
-To: Rakesh Pandit <rakesh.pandit-Re5JQEeQqe8AvxtiuMwx3w@public.gmane.org>
-Cc: dwarves-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
+To: dwarves-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
 List-Id: dwarves@vger.kernel.org
 
-Em Tue, Dec 29, 2009 at 10:10:38AM +0530, Rakesh Pandit escreveu:
-> Removes irritating warning while compilation.
+Sorry to bother you: we are cleaning up our database and it appears that
+you have previously signed up to eBuppies.com mailinglists and not
+confirmed your subscription.We would like to give you the opportunity to
+re-confirm your subscription. The instructions on how to confirm are below.
+ 
 
-Applied and pushed out!
+  Almost welcome to our newsletter(s) ...
 
-Thanks,
+  Someone, hopefully you, has subscribed your email address to the
+following newsletters:
+  
+  
 
-- Arnaldo
+  If this is correct, please click the following link to confirm your
+subscription.
+  Without this confirmation, you will not receive any newsletters.
+  
+ 
+http://ebuppies.com/emailserv/?p=confirm&uid=dd720bc01a5e6ce8269c4bc636042996
+  
+  If this is not correct, you do not need to do anything, simply delete
+this message.
+
+  Thank you
+  
+    
+
+
 --
 To unsubscribe from this list: send the line "unsubscribe dwarves" in
 the body of a message to majordomo-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
