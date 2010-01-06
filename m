@@ -1,44 +1,49 @@
-From: Webmaster <noreply-c67hte604QFWk0Htik3J/w@public.gmane.org>
-Subject: Request for confirmation
-Date: Mon, 4 Jan 2010 17:17:30 -0500
-Message-ID: <e764d57c455581416fd9d9a528165f1f@mail.ebuppies.com>
+From: Rakesh Pandit <rakesh.pandit-Re5JQEeQqe8AvxtiuMwx3w@public.gmane.org>
+Subject: dwarf_loader.c: Fixed leaked bogon
+Date: Wed, 6 Jan 2010 20:54:59 +0530
+Message-ID: <b401d2531001060724r4a06401fx9cc8a5dbf24518d3@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=ISO-8859-1
 Return-path: <dwarves-owner-u79uwXL29TY76Z2rM5mHXA@public.gmane.org>
 Sender: dwarves-owner-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
 To: dwarves-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
 List-Id: dwarves@vger.kernel.org
 
-Sorry to bother you: we are cleaning up our database and it appears that
-you have previously signed up to eBuppies.com mailinglists and not
-confirmed your subscription.We would like to give you the opportunity to
-re-confirm your subscription. The instructions on how to confirm are below.
- 
+While checking one of big shared objects I found kernel getting
+unhappy and sending SIGKILL. File was 282M libwebkit-1.0.so.2.8.1 from
+webkit project. (Can be obtained from
+http://kojipkgs.fedoraproject.org/packages/webkitgtk/1.1.12/2.fc12/x86_64/webkitgtk-debuginfo-1.1.12-2.fc12.x86_64.rpm
+and extracted via rpm2cpio, file is libwebkit-1.0.so.2.8.1.debug)
 
-  Almost welcome to our newsletter(s) ...
+URL: http://rakesh.fedorapeople.org/misc/0001-dwarf_loader.c-Fixed-leaked-bogon.patch
 
-  Someone, hopefully you, has subscribed your email address to the
-following newsletters:
-  
-  
+-- 
+Rakesh Pandit
+https://fedoraproject.org/wiki/User:Rakesh
+freedom, friends, features, first
 
-  If this is correct, please click the following link to confirm your
-subscription.
-  Without this confirmation, you will not receive any newsletters.
-  
- 
-http://ebuppies.com/emailserv/?p=confirm&uid=dd720bc01a5e6ce8269c4bc636042996
-  
-  If this is not correct, you do not need to do anything, simply delete
-this message.
+From 897af23e9c66a74a27fc7a4b60567bc92163d066 Mon Sep 17 00:00:00 2001
+From: Rakesh Pandit <rakesh-rxtnV0ftBwyoClj4AeEUq9i2O/JbrIOy@public.gmane.org>
+Date: Wed, 6 Jan 2010 20:34:03 +0530
+Subject: [PATCH] dwarf_loader.c: Fixed leaked bogon
 
-  Thank you
-  
-    
+Freed chunks of memory left by obstack. It went beyond kernels
+expectation for libwebkit-1.0.so.2.debug (from
+libwebkit-1.0.so.2.8.1.debug) file and so that it had to send SIGKILL.
 
+Signed-off-by: Rakesh Pandit <rakesh-rxtnV0ftBwyoClj4AeEUq9i2O/JbrIOy@public.gmane.org>
+---
+ dwarf_loader.c |    4 +---
+ 1 files changed, 1 insertions(+), 3 deletions(-)
 
---
-To unsubscribe from this list: send the line "unsubscribe dwarves" in
-the body of a message to majordomo-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
-More majordomo info at  http://vger.kernel.org/majordomo-info.html
+diff --git a/dwarf_loader.c b/dwarf_loader.c
+index 3b58ecb..ce1e4d8 100644
+--- a/dwarf_loader.c
++++ b/dwarf_loader.c
+@@ -2052,9 +2052,7 @@ static int cus__load_module(struct cus *self,
+struct conf_load *conf,
+ 			}
+ 		}
+
+-		if (!cu->extra_dbg_info)
+-			obstack_free(&dcu.obstack, NULL);
