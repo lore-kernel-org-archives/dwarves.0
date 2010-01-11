@@ -1,104 +1,80 @@
-From: Arnaldo Carvalho de Melo <acme-f8uhVLnGfZaxAyOMLChx1axOck334EZe@public.gmane.org>
-Subject: Re: dwarf_loader.c: Fixed leaked bogon
-Date: Wed, 6 Jan 2010 14:44:44 -0200
-Message-ID: <20100106164444.GB18919@ghostprotocols.net>
-References: <b401d2531001060724r4a06401fx9cc8a5dbf24518d3@mail.gmail.com>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+From: Peter Jones <pjones-H+wXaHxf7aLQT0dZR+AlfA@public.gmane.org>
+Subject: [PATCH 2/2] Add scncopy to CMakeLists.txt
+Date: Mon, 11 Jan 2010 15:50:31 -0500
+Message-ID: <1263243031-19401-2-git-send-email-pjones@redhat.com>
+References: <1263243031-19401-1-git-send-email-pjones@redhat.com>
 Return-path: <dwarves-owner-u79uwXL29TY76Z2rM5mHXA@public.gmane.org>
-Content-Disposition: inline
-In-Reply-To: <b401d2531001060724r4a06401fx9cc8a5dbf24518d3-JsoAwUIsXosN+BqQ9rBEUg@public.gmane.org>
+In-Reply-To: <1263243031-19401-1-git-send-email-pjones-H+wXaHxf7aLQT0dZR+AlfA@public.gmane.org>
 Sender: dwarves-owner-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
-To: Rakesh Pandit <rakesh.pandit-Re5JQEeQqe8AvxtiuMwx3w@public.gmane.org>
-Cc: dwarves-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
+To: acme-H+wXaHxf7aLQT0dZR+AlfA@public.gmane.org
+Cc: dwarves-u79uwXL29TY76Z2rM5mHXA@public.gmane.org, Peter Jones <pjones-H+wXaHxf7aLQT0dZR+AlfA@public.gmane.org>
 List-Id: dwarves@vger.kernel.org
 
-Em Wed, Jan 06, 2010 at 08:54:59PM +0530, Rakesh Pandit escreveu:
-> While checking one of big shared objects I found kernel getting
-> unhappy and sending SIGKILL. File was 282M libwebkit-1.0.so.2.8.1 from
-> webkit project. (Can be obtained from
-> http://kojipkgs.fedoraproject.org/packages/webkitgtk/1.1.12/2.fc12/x86_64/webkitgtk-debuginfo-1.1.12-2.fc12.x86_64.rpm
-> and extracted via rpm2cpio, file is libwebkit-1.0.so.2.8.1.debug)
-> 
-> URL: http://rakesh.fedorapeople.org/misc/0001-dwarf_loader.c-Fixed-leaked-bogon.patch
+Add scncopy to the build.
+---
+ CMakeLists.txt         |    6 +++++-
+ MANIFEST               |    3 +++
+ rpm/SPECS/dwarves.spec |    1 +
+ 3 files changed, 9 insertions(+), 1 deletions(-)
 
-What is the exact command line you are using? You cannot destroy that
-obstack if you really will use the extra debugging info that is has
-many pointers that will point to some other info if you destroy it.
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 60e5d1b..3eea4fa 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -83,12 +83,16 @@ set(prefcnt_SRCS prefcnt.c)
+ add_executable(prefcnt ${prefcnt_SRCS})
+ target_link_libraries(prefcnt dwarves)
+ 
++set(scncopy_SRCS scncopy.c elfcreator.c)
++add_executable(scncopy ${scncopy_SRCS})
++target_link_libraries(scncopy dwarves)
++
+ set(syscse_SRCS syscse.c)
+ add_executable(syscse ${syscse_SRCS})
+ target_link_libraries(syscse dwarves)
+ 
+ install(TARGETS codiff ctracer dtagnames pahole pdwtags
+-		pfunct pglobal prefcnt syscse RUNTIME DESTINATION
++		pfunct pglobal prefcnt scncopy syscse RUNTIME DESTINATION
+ 		${CMAKE_INSTALL_PREFIX}/bin)
+ install(TARGETS dwarves LIBRARY DESTINATION ${LIB_INSTALL_DIR})
+ install(TARGETS dwarves dwarves_emit dwarves_reorganize LIBRARY DESTINATION ${LIB_INSTALL_DIR})
+diff --git a/MANIFEST b/MANIFEST
+index 736c9ff..25037eb 100644
+--- a/MANIFEST
++++ b/MANIFEST
+@@ -15,6 +15,8 @@ CMakeLists.txt
+ codiff.c
+ ctracer.c
+ dtagnames.c
++elfcreator.c
++elfcreator.h
+ elf_symtab.c
+ elf_symtab.h
+ gobuffer.c
+@@ -30,6 +32,7 @@ pglobal.c
+ prefcnt.c
+ rbtree.c
+ rbtree.h
++scncopy.c
+ syscse.c
+ strings.c
+ strings.h
+diff --git a/rpm/SPECS/dwarves.spec b/rpm/SPECS/dwarves.spec
+index 94cc0d6..909abee 100644
+--- a/rpm/SPECS/dwarves.spec
++++ b/rpm/SPECS/dwarves.spec
+@@ -77,6 +77,7 @@ rm -rf %{buildroot}
+ %{_bindir}/pfunct
+ %{_bindir}/pglobal
+ %{_bindir}/prefcnt
++%{_bindir}/scncopy
+ %{_bindir}/syscse
+ %{_bindir}/ostra-cg
+ %dir %{_datadir}/dwarves/
+-- 
+1.6.5.2
 
-By default cu->extra_dbg_info is false, it only is true if set
-explicitely by one of the tools, like:
-
-[acme@doppio pahole]$ grep extra_dbg_info *.c
-dwarf_loader.c:	if (cu->extra_dbg_info) {
-dwarf_loader.c:	return cu->extra_dbg_info ?
-dwarf_loader.c:	return cu->extra_dbg_info ? dtag->decl_line : 0;
-dwarf_loader.c:	return cu->extra_dbg_info ? dtag->id : 0;
-dwarf_loader.c:	return cu->extra_dbg_info ? dtag->type : 0;
-dwarf_loader.c:		cu->extra_dbg_info = conf ? conf->extra_dbg_info : 0;
-dwarf_loader.c:		if (!cu->extra_dbg_info)
-dwarves.c:		self->extra_dbg_info = 0;
-pahole.c:		  conf_load.extra_dbg_info = 1;		break;
-pahole.c:		  conf_load.extra_dbg_info = 1;		break;
-pahole.c:		  conf_load.extra_dbg_info = 1;		break;
-pfunct.c:		  conf_load.extra_dbg_info = true;
-pfunct.c:		  conf_load.extra_dbg_info = 1;		 break;
-pfunct.c:		  conf_load.extra_dbg_info = true;
-[acme@doppio pahole]$
-
-pahole and pfunct, and inpahole, assuming it is the one you are using:
-
-                .name = "decl_exclude",
-                .key  = 'D',
-                .arg  = "PREFIX",
-                .doc  = "exclude classes declared in files with PREFIX",
-
-        case 'D': decl_exclude_prefix = arg;
-                  decl_exclude_prefix_len = strlen(decl_exclude_prefix);
-                  conf_load.extra_dbg_info = 1;         break;
-
-                .name = "show_decl_info",
-                .key  = 'I',
-                .doc  = "Show the file and line number where the tags were defined"
-
-        case 'I': conf.show_decl_info = 1;
-                  conf_load.extra_dbg_info = 1;         break;
-
-                .name = "packable",
-                .key  = 'P',
-                .doc  = "show only structs that has holes that can be packed",
-
-        case 'P': show_packable = 1;
-                  conf_load.extra_dbg_info = 1;         break;
-
-
-The only seemingly "strange" case above is --packable, that I bet is
-what you're using, where it needs the extra debug info because for
-anonymous structs it shows in which file and line the struct is, and
-that is only available from the DWARF info.
-
-Can you try the following patch to see if the problem goes away? We may
-want to just enable extra_dbg_info in this case if used with --verbose,
-something like that.
-
-Regards,
-
-- Arnaldo
-
-diff --git a/pahole.c b/pahole.c
-index 5dad6c2..24845cd 100644
---- a/pahole.c
-+++ b/pahole.c
-@@ -1000,8 +1000,7 @@ static error_t pahole__options_parser(int key, char *arg,
- 	case 'm': stats_formatter = nr_methods_formatter; break;
- 	case 'N': formatter = class_name_len_formatter;	break;
- 	case 'n': formatter = nr_members_formatter;	break;
--	case 'P': show_packable	= 1;
--		  conf_load.extra_dbg_info = 1;		break;
-+	case 'P': show_packable	= 1;			break;
- 	case 'p': conf.expand_pointers = 1;		break;
- 	case 'q': conf.emit_stats = 0;
- 		  conf.suppress_comments = 1;
 --
 To unsubscribe from this list: send the line "unsubscribe dwarves" in
 the body of a message to majordomo-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
