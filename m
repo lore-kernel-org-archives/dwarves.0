@@ -1,40 +1,28 @@
-From: Peter Jones <pjones-H+wXaHxf7aLQT0dZR+AlfA@public.gmane.org>
-Subject: [PATCH] scncopy: Fix minor problems with --usage.
-Date: Tue, 12 Jan 2010 13:17:18 -0500
-Message-ID: <1263320238-21124-1-git-send-email-pjones@redhat.com>
+From: Arnaldo Carvalho de Melo <acme-H+wXaHxf7aLQT0dZR+AlfA@public.gmane.org>
+Subject: Re: [PATCH] scncopy: Fix minor problems with --usage.
+Date: Tue, 12 Jan 2010 16:38:02 -0200
+Message-ID: <20100112183802.GB2934@ghostprotocols.net>
+References: <1263320238-21124-1-git-send-email-pjones@redhat.com>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
 Return-path: <dwarves-owner-u79uwXL29TY76Z2rM5mHXA@public.gmane.org>
+Content-Disposition: inline
+In-Reply-To: <1263320238-21124-1-git-send-email-pjones-H+wXaHxf7aLQT0dZR+AlfA@public.gmane.org>
 Sender: dwarves-owner-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
-To: dwarves-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
-Cc: acme-H+wXaHxf7aLQT0dZR+AlfA@public.gmane.org, Peter Jones <pjones-H+wXaHxf7aLQT0dZR+AlfA@public.gmane.org>
+To: Peter Jones <pjones-H+wXaHxf7aLQT0dZR+AlfA@public.gmane.org>
+Cc: dwarves-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
 List-Id: dwarves@vger.kernel.org
 
-- "-s section 0" doesn't really read the same as "-s section0"
-- "--help" is something we should allow
-- usage should say "scncopy" not "pjoc"
----
- scncopy.c |    6 ++++--
- 1 files changed, 4 insertions(+), 2 deletions(-)
+Em Tue, Jan 12, 2010 at 01:17:18PM -0500, Peter Jones escreveu:
+> - "-s section 0" doesn't really read the same as "-s section0"
+> - "--help" is something we should allow
+> - usage should say "scncopy" not "pjoc"
 
-diff --git a/scncopy.c b/scncopy.c
-index 38aaa9a..9acc16d 100644
---- a/scncopy.c
-+++ b/scncopy.c
-@@ -65,8 +65,10 @@ int main(int argc, char *argv[])
- 			n++;
- 			outfile = argv[n];
- 			continue;
--		} else if (!strcmp(argv[n], "-?") || !strcmp(argv[n],"--usage")) {
--			printf("usage: pjoc -s section 0 [[-s section1] ... -s sectionN] -o outfile infile\n");
-+		} else if (!strcmp(argv[n], "-?") ||
-+				!strcmp(argv[n], "--help") ||
-+				!strcmp(argv[n], "--usage")) {
-+			printf("usage: scncopy [-s section0 [[-s section1] ... -s sectionN] | -a ] -o outfile infile\n");
- 			return 0;
- 		} else if (n == argc-1) {
- 			infile = argv[n];
--- 
-1.6.5.2
+Please add a s-o-b line in the next patches.
 
+Thanks, applied and pushed out!
+
+- Arnaldo
 --
 To unsubscribe from this list: send the line "unsubscribe dwarves" in
 the body of a message to majordomo-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
