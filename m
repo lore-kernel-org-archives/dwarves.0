@@ -1,86 +1,110 @@
 From: Rakesh Pandit <rakesh.pandit-Re5JQEeQqe8AvxtiuMwx3w@public.gmane.org>
-Subject: Re: option for printing all matching function names
-Date: Wed, 5 May 2010 20:00:28 +0530
-Message-ID: <y2rb401d2531005050730q130526f0o7fa0950958e3ad92@mail.gmail.com>
-References: <q2qb401d2531005050445wb33461ecnab0f752909fb4a4@mail.gmail.com>
-	 <20100505124401.GG970@ghostprotocols.net>
-	 <20100505131230.GA10363@ghostprotocols.net>
+Subject: [PATCH] pfunct: Introduce '-u'/'--all_units'
+Date: Thu, 6 May 2010 15:57:29 +0530
+Message-ID: <r2tb401d2531005060327hc5cb2acet28a72f429de54518@mail.gmail.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset=ISO-8859-1
-Content-Transfer-Encoding: QUOTED-PRINTABLE
 Return-path: <dwarves-owner-u79uwXL29TY76Z2rM5mHXA@public.gmane.org>
-In-Reply-To: <20100505131230.GA10363-f8uhVLnGfZaxAyOMLChx1axOck334EZe@public.gmane.org>
 Sender: dwarves-owner-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
-To: Arnaldo Carvalho de Melo <acme-f8uhVLnGfZaxAyOMLChx1axOck334EZe@public.gmane.org>
-Cc: dwarves-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
+To: dwarves-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
 List-Id: dwarves@vger.kernel.org
 
-On 5 May 2010 18:42, Arnaldo Carvalho de Melo wrote:
-> Em Wed, May 05, 2010 at 09:44:01AM -0300, Arnaldo Carvalho de Melo es=
-creveu:
-[..]
-> https://bugzilla.redhat.com/show_bug.cgi?id=3D495606
->
-> <quote>
-> Actually this does not results in correct match because corresponding
-> symbool name which we provide it with function arg is mangled. In cas=
-e
-> we want to get a perfect matched we need to provide it de-mangled act=
-ual
-> function name.
->
-> But for C++ say (even in C) we can have more then one function with s=
-ame
-> name. =A0In that case right now it will just print the first match.
-> </quote>
->
-> So what you want is that we traverse all the C++ classes finding whic=
-h
-> ones have methods with that name, which is way more sensible than wha=
-t
-> pfunct, being mostly oriented, so far, to C, does.
->
-> I don't have time right now to devote to this, but what you want is t=
-o:
->
+Link: http://rakesh.fedorapeople.org/misc/0001-pfunct-Introduce-u-all_units.patch
 
-No problem, I will try to get some patches for review ready.
+Reason I am not reusing cus__for_each_cu which in turn uses
+cu_function_iterator is because it would have in my view been more
+unclean way of doing it. To keep things simple and clean I am rather
+using a static function print_all_matches.
 
-> 1. go on CU by CU looking at all structs
-> 2. look at each namespace in them looking for functions with the desi=
-red
-> =A0 name, printing it in some C++ sensible way, perhaps:
->
-> return_type1 class_foo::method_searched(parameter list1); /* mangled =
-name=3DEQWTVARSAE */
-> return_type2 class_foo::method_searched(parameter list2); /* mangled =
-name=3DYTEYRWTQRD */
->
-> etc.
->
-> What I suggested about --all-units still is useful as we can have the
-> functions with the same name in multiple object files in C too, they
-> just have to be static not to cause linking problems.
->
-
-Exactly,
-
-I would consider it as a two step problem. First add --all-units which
-works as you specified in previous reply. Later on work on what you
-suggested in here (on giving output somewhat more sensible C++ way),
-following the very algo you mentioned.
-
-I will first work on former first (--all-units) and then later move to =
-C++ :)
-
-Between thanks for your suggestions.
+May this be reviewed ?
 
 Regards,
 
---=20
+-- 
 Rakesh Pandit
 https://fedoraproject.org/wiki/User:Rakesh
 freedom, friends, features, first
+
+
+From 0d09eb9a521a28cdb184d3b1a2ec440abe7127fb Mon Sep 17 00:00:00 2001
+From: Rakesh Pandit <rakesh-rxtnV0ftBwyoClj4AeEUq9i2O/JbrIOy@public.gmane.org>
+Date: Thu, 6 May 2010 15:40:27 +0530
+Subject: [PATCH] pfunct: Introduce '-u'/'--all_units'
+
+Continue printing all function name matches.
+
+Signed-off-by: Rakesh Pandit <rakesh-rxtnV0ftBwyoClj4AeEUq9i2O/JbrIOy@public.gmane.org>
+---
+ pfunct.c |   25 +++++++++++++++++++++++++
+ 1 files changed, 25 insertions(+), 0 deletions(-)
+
+diff --git a/pfunct.c b/pfunct.c
+index 5664ed2..9a65749 100644
+--- a/pfunct.c
++++ b/pfunct.c
+@@ -31,6 +31,7 @@ static int show_cc_inlined;
+ static int show_cc_uninlined;
+ static char *symtab_name;
+ static bool show_prototypes;
++static bool all_units;
+ static bool expand_types;
+ static struct type_emissions emissions;
+ static uint64_t addr;
+@@ -356,6 +357,22 @@ static void function__show(struct function *self,
+struct cu *cu)
+ 		function__fprintf_stats(tag, cu, &conf, stdout);
+ }
+
++static void print_all_matches(struct cus *self, const char *function_name)
++{
++	struct cu *pos;
++
++	list_for_each_entry(pos, &self->cus, node) {
++		struct cu *cu = pos;
++		struct function *function;
++		uint32_t id;
++		cu__for_each_function(cu, id, function) {
++			if (strcmp(function__name(function, cu), function_name) != 0)
++				continue;
++			function__show(function, cu);
++		}
++	}
++}
++
+ static int cu_function_iterator(struct cu *cu, void *cookie)
+ {
+ 	struct function *function;
+@@ -548,6 +565,11 @@ static const struct argp_option pfunct__options[] = {
+ 		.doc  = "show function prototypes",
+ 	},
+ 	{
++		.key  = 'u',
++		.name = "all_units",
++		.doc  = "show all matches",
++	},
++	{
+ 		.key  = 'S',
+ 		.name = "nr_variables",
+ 		.doc  = "show number of variables",
+@@ -605,6 +627,7 @@ static error_t pfunct__options_parser(int key, char *arg,
+ 	case 'S': formatter = fn_stats_variables_fmtr;	 break;
+ 	case 'p': formatter = fn_stats_nr_parms_fmtr;	 break;
+ 	case 'P': show_prototypes = true;		 break;
++	case 'u': all_units = true;		 	 break;
+ 	case 'g': formatter = fn_stats_labels_fmtr;	 break;
+ 	case 'G': show_cc_uninlined = 1;		 break;
+ 	case 'H': show_cc_inlined = 1;			 break;
+@@ -678,6 +701,8 @@ int main(int argc, char *argv[])
+ 			goto out_cus_delete;
+ 		}
+ 		function__show(f, cu);
++	} else if (all_units && function_name != NULL) {
++		print_all_matches(cus, function_name);
+ 	} else if (show_total_inline_expansion_stats)
+ 		print_total_inline_stats();
+ 	else if (class_name != NULL)
+-- 
+1.6.6.1
 --
 To unsubscribe from this list: send the line "unsubscribe dwarves" in
 the body of a message to majordomo-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
