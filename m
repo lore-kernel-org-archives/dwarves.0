@@ -1,31 +1,46 @@
-From: Arnaldo Carvalho de Melo <acme-H+wXaHxf7aLQT0dZR+AlfA@public.gmane.org>
-Subject: Re: [patch] Don't die when encountering unknown tags, just warn
-Date: Wed, 18 May 2011 13:13:48 -0300
-Message-ID: <20110518161348.GA29043@ghostprotocols.net>
-References: <1301174586.8262.8.camel@springer.wildebeest.org> <1305731220.3497.15.camel@springer.wildebeest.org>
+From: Tom Tromey <tromey-H+wXaHxf7aLQT0dZR+AlfA@public.gmane.org>
+Subject: failure with -gdwarf-4
+Date: Fri, 01 Jul 2011 12:40:04 -0600
+Message-ID: <m3d3htalq3.fsf@fleche.redhat.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain
 Return-path: <dwarves-owner-u79uwXL29TY76Z2rM5mHXA@public.gmane.org>
-Content-Disposition: inline
-In-Reply-To: <1305731220.3497.15.camel-OO0OHOuVXW89n/EXqpbZ8ns8WZQLr0HW@public.gmane.org>
 Sender: dwarves-owner-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
-To: Mark Wielaard <mjw-H+wXaHxf7aLQT0dZR+AlfA@public.gmane.org>
-Cc: dwarves-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
+To: dwarves-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
 List-Id: dwarves@vger.kernel.org
 
-Em Wed, May 18, 2011 at 05:07:00PM +0200, Mark Wielaard escreveu:
-> I would still like to see this patch applied if possible.
-> Please let me know if this is the right way to fix the issue or whether
-> you like some other solution.
-> 
+pahole doesn't understand the new DWARF 4 .debug_types section.
 
-Seems ok, I'll test it and merge if actual test matches visual
-inspection.
+I'm using the F15 GCC, but really any recent-enough GCC will do.
+I compile this:
 
-Sorry for the delay in providing feedback, I broke a finger weeks ago
-and was unable to type.
+    struct s
+    {
+      int x;
+      int y : 5;
+      int z;
+    };
+    struct s i;
 
-- Arnaldo
+    int main()
+    {
+    }
+
+Like so:
+
+    gcc -gdwarf-4 -g -o d d.c
+
+Running pahole gives an error:
+
+    $ pahole --class_name=s ./d
+    tag__recode_dwarf_type: couldn't find 0x1d type for 0x51 (variable)!
+
+It would be nice to have support for this feature in dwarves, as
+.debug_types can greatly reduce the size of the debuginfo in the final
+executable.
+
+Tom
+
 --
 To unsubscribe from this list: send the line "unsubscribe dwarves" in
 the body of a message to majordomo-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
