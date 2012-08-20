@@ -1,47 +1,67 @@
 From: Arnaldo Carvalho de Melo <acme-wEGCiKHe2LqWVfeAwA7xHQ@public.gmane.org>
 Subject: Re: Brain fart alert
-Date: Mon, 20 Aug 2012 14:35:25 -0300
-Message-ID: <20120820173525.GD3046@infradead.org>
+Date: Mon, 20 Aug 2012 15:02:16 -0300
+Message-ID: <20120820180216.GE3046@infradead.org>
 References: <CACHCVZ6oDyFwGbC4EwF_wsR9tCkoych5N6buLhRRLcyaL6iifw@mail.gmail.com>
- <20120815175647.GK2370@infradead.org>
- <20120816195224.GC10277@infradead.org>
- <m3obm5fzhs.fsf@seketeli.org>
 Mime-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Transfer-Encoding: QUOTED-PRINTABLE
+Content-Type: text/plain; charset=us-ascii
 Return-path: <dwarves-owner-u79uwXL29TY76Z2rM5mHXA@public.gmane.org>
 Content-Disposition: inline
-In-Reply-To: <m3obm5fzhs.fsf-fIDRvF7C5exg9hUCZPvPmw@public.gmane.org>
+In-Reply-To: <CACHCVZ6oDyFwGbC4EwF_wsR9tCkoych5N6buLhRRLcyaL6iifw-JsoAwUIsXosN+BqQ9rBEUg@public.gmane.org>
 Sender: dwarves-owner-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
-To: Dodji Seketeli <dodji-fIDRvF7C5exg9hUCZPvPmw@public.gmane.org>
+To: Nicolas <nikos42-Re5JQEeQqe8AvxtiuMwx3w@public.gmane.org>
 Cc: dwarves-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
 List-Id: dwarves@vger.kernel.org
 
-Em Mon, Aug 20, 2012 at 03:45:51PM +0200, Dodji Seketeli escreveu:
-> Arnaldo Carvalho de Melo <acme-wEGCiKHe2LqWVfeAwA7xHQ@public.gmane.org>
-> a =E9crit:
->=20
-> > I need to capture the fact that it is a static const, and investiga=
-te
-> > the C++ structure encoding rules,
->=20
-> The DWARF 4 spec reads in 5.5.6 - Data Member Entries:
->=20
->     The member entry corresponding to a data member that is defined i=
-n a
->     structure, union or class may have either a
->     DW_AT_data_member_location attribute or a DW_AT_data_bit_offset
->     attribute.
->=20
-> It turns out that for DW_TAG_member DIEs representing non-static data
-> members, GCC emits the DW_AT_data_member_location attribute.  If it's
-> not present, I guess you can safely assume the DIE is for a static da=
-ta
+Em Sat, Jul 21, 2012 at 08:22:33PM +0200, Nicolas escreveu:
+> I tried using pahole, but I get a brain fart alert with the file
+> attached (which is an extract from stdio.h). I'm running dwarves 1.10,
+> libdw1 0.152 and g++ 4.6.1, on i386.
+> 
+> Here is what I get:
+> 
+> $ g++ -Wall -g -c brainfart.cpp -o brainfart.o && pahole brainfart.o
+> class ios_base {
+> 	enum _Ios_Openmodeconst    in;                   /*     0     4 */
+> 	typedef enum _Ios_Fmtflags fmtflags;
+> 
+> 	/* size: 1, cachelines: 1, members: 1 */
+> 	/* padding: 65533 */
+> 	/* last cacheline: 1 bytes */
+> 
+> 	/* BRAIN FART ALERT! 1 != 4 + 0(holes), diff = -3 */
 
-Right, unless it is in an union, ok.
+Can you please clone my git tree and try it from there?
 
-> member and that it does not contribute to the size of its enclosing
-> class.
+git clone git://git.kernel.org/pub/scm/devel/pahole/pahole
+cd pahole
+mkdir build
+cd build
+cmake ..
+cd ..
+make -C build
+build/pahole brainfart.o
+
+Now I'm getting:
+
+[acme@sandy pahole]$ build/pahole brainfart.o 
+class ios_base {
+	static enum _Ios_Openmodeconst    in = 8;        /*     0     0 */
+	typedef enum _Ios_Fmtflags fmtflags;
+
+
+	/* size: 1, cachelines: 0, members: 0, static members: 1 */
+	/* last cacheline: 1 bytes */
+};
+[acme@sandy pahole]$
+
+I still need to get the 'const' there, from the fact that it has a
+DW_AT_const_value, that is already captured, just forgot to add the
+'const' there, will do after some errands here.
+
+Also I'll check that the member type is an enum, will lookup the
+enumerator entry that has the DW_AT_const_value and replace that '8'
+with it.
 
 - Arnaldo
 --
