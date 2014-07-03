@@ -1,38 +1,25 @@
-From: Masatake YAMATO <yamato-H+wXaHxf7aLQT0dZR+AlfA@public.gmane.org>
-Subject: [PATCH] Use obstack_zalloc when allocating tag
-Date: Wed, 18 Jun 2014 18:55:31 +0900
-Message-ID: <1403085331-31764-1-git-send-email-yamato@redhat.com>
+From: Arnaldo Carvalho de Melo <acme-H+wXaHxf7aLQT0dZR+AlfA@public.gmane.org>
+Subject: Re: [PATCH] dwarves_fprintf.c: DW_TAG_mutable_type doesn't exist.
+Date: Thu, 3 Jul 2014 12:34:37 -0300
+Message-ID: <20140703153437.GC2745@redhat.com>
+References: <1403082847-15424-1-git-send-email-mjw@redhat.com>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
 Return-path: <dwarves-owner-u79uwXL29TY76Z2rM5mHXA@public.gmane.org>
+Content-Disposition: inline
+In-Reply-To: <1403082847-15424-1-git-send-email-mjw-H+wXaHxf7aLQT0dZR+AlfA@public.gmane.org>
 Sender: dwarves-owner-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
-To: dwarves-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
-Cc: yamato-H+wXaHxf7aLQT0dZR+AlfA@public.gmane.org
+To: Mark Wielaard <mjw-H+wXaHxf7aLQT0dZR+AlfA@public.gmane.org>
+Cc: dwarves-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
 List-Id: dwarves@vger.kernel.org
 
-obstack_alloc was used in __tag__alloc to allocate tag
-object. As the result some fields of the tag object are not
-initialized.
+Em Wed, Jun 18, 2014 at 11:14:07AM +0200, Mark Wielaard escreveu:
+> DW_TAG_mutable_type was a mistake in an early DWARFv3 draft and was removed
+> in the final version. http://dwarfstd.org/ShowIssue.php?issue=050223.1
 
-Signed-off-by: Masatake YAMATO <yamato-H+wXaHxf7aLQT0dZR+AlfA@public.gmane.org>
----
- dwarf_loader.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Thanks, applied.
 
-diff --git a/dwarf_loader.c b/dwarf_loader.c
-index d7709a0..bc04b62 100644
---- a/dwarf_loader.c
-+++ b/dwarf_loader.c
-@@ -369,7 +369,7 @@ static void *__tag__alloc(struct dwarf_cu *dcu, size_t size, bool spec)
- 	if (dtag == NULL)
- 		return NULL;
- 
--	struct tag *tag = obstack_alloc(&dcu->cu->obstack, size);
-+	struct tag *tag = obstack_zalloc(&dcu->cu->obstack, size);
- 
- 	if (tag == NULL)
- 		return NULL;
--- 
-1.9.0
-
+- Arnaldo
 --
 To unsubscribe from this list: send the line "unsubscribe dwarves" in
 the body of a message to majordomo-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
