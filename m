@@ -1,25 +1,26 @@
-From: Arnaldo Carvalho de Melo <acme-H+wXaHxf7aLQT0dZR+AlfA@public.gmane.org>
-Subject: Re: [PATCH] dwarves_fprintf.c: DW_TAG_mutable_type doesn't exist.
-Date: Thu, 3 Jul 2014 12:34:37 -0300
-Message-ID: <20140703153437.GC2745@redhat.com>
-References: <1403082847-15424-1-git-send-email-mjw@redhat.com>
+From: Richard Geary <richardg.work-Re5JQEeQqe8AvxtiuMwx3w@public.gmane.org>
+Subject: Pahole --version reports incorrect version
+Date: Mon, 22 Sep 2014 10:32:40 -0400
+Message-ID: <CAMWPO3VtP13LD-Zq5QQjoN=pb0BHLKdh9kiPykFbo-w4nCt=Dw@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=UTF-8
 Return-path: <dwarves-owner-u79uwXL29TY76Z2rM5mHXA@public.gmane.org>
-Content-Disposition: inline
-In-Reply-To: <1403082847-15424-1-git-send-email-mjw-H+wXaHxf7aLQT0dZR+AlfA@public.gmane.org>
 Sender: dwarves-owner-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
-To: Mark Wielaard <mjw-H+wXaHxf7aLQT0dZR+AlfA@public.gmane.org>
-Cc: dwarves-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
+To: dwarves-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
 List-Id: dwarves@vger.kernel.org
 
-Em Wed, Jun 18, 2014 at 11:14:07AM +0200, Mark Wielaard escreveu:
-> DW_TAG_mutable_type was a mistake in an early DWARFv3 draft and was removed
-> in the final version. http://dwarfstd.org/ShowIssue.php?issue=050223.1
+Hi,
 
-Thanks, applied.
+I'd like to report a bug in the dwarves v1.10 release. When I run "pahole
+--version" the v1.10 release prints out v1.9. Similarly, checking out the
+head and building it also prints out v1.9.
 
-- Arnaldo
+Also, this mailing list isn't well advertised and I haven't found an issue
+tracker.  Please could you add something to the README to help future
+contributors navigate here?
+
+Thanks,
+Richard
 --
 To unsubscribe from this list: send the line "unsubscribe dwarves" in
 the body of a message to majordomo-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
