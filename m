@@ -1,34 +1,47 @@
-From: Arnaldo Carvalho de Melo <acme-DgEjT+Ai2ygdnm+yROfE0A@public.gmane.org>
-Subject: Re: Pahole --version reports incorrect version
-Date: Mon, 22 Sep 2014 11:52:38 -0300
-Message-ID: <20140922145238.GG32694@kernel.org>
-References: <CAMWPO3VtP13LD-Zq5QQjoN=pb0BHLKdh9kiPykFbo-w4nCt=Dw@mail.gmail.com>
+From: Cody Schafer <cody-QpQMm/NnEELQT0dZR+AlfA@public.gmane.org>
+Subject: Re: pahole DW_TAG_mutable_type
+Date: Mon, 27 Apr 2015 19:47:02 -0400
+Message-ID: <CA+E_MsxY9sC2Eh2gSx5U1z7Ay-nPOnC3ZraaLzcopkSvwX6MJg@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=UTF-8
 Return-path: <dwarves-owner-u79uwXL29TY76Z2rM5mHXA@public.gmane.org>
-Content-Disposition: inline
-In-Reply-To: <CAMWPO3VtP13LD-Zq5QQjoN=pb0BHLKdh9kiPykFbo-w4nCt=Dw-JsoAwUIsXosN+BqQ9rBEUg@public.gmane.org>
 Sender: dwarves-owner-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
-To: Richard Geary <richardg.work-Re5JQEeQqe8AvxtiuMwx3w@public.gmane.org>
-Cc: dwarves-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
+To: "Elliott, Robert (Server Storage)" <Elliott-VXdhtT5mjnY@public.gmane.org>, dwarves-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
 List-Id: dwarves@vger.kernel.org
 
-Em Mon, Sep 22, 2014 at 10:32:40AM -0400, Richard Geary escreveu:
-> Hi,
-> 
-> I'd like to report a bug in the dwarves v1.10 release. When I run "pahole
-> --version" the v1.10 release prints out v1.9. Similarly, checking out the
-> head and building it also prints out v1.9.
-> 
-> Also, this mailing list isn't well advertised and I haven't found an issue
-> tracker.  Please could you add something to the README to help future
-> contributors navigate here?
+On Mon, Apr 27, 2015 at 12:25 PM, Elliott, Robert (Server Storage)
+<Elliott-VXdhtT5mjnY@public.gmane.org> wrote:
+>
+> Recent versions of libdwarves have removed DW_TAG_mutable_type, which
+> affects dwarves_fprintf.c.
+>                 http://www.spinics.net/lists/dwarves/msg00121.html
+>
+> This causes an error building pahole, which has a copy of dwarves_fprintf.c:
+>
+>
+> [  8%] Building C object CMakeFiles/dwarves.dir/dwarves_fprintf.o
+> /home/orange/sw/pahole/dwarves_fprintf.c:77:3: error: 'DW_TAG_mutable_type' undeclared here (not in a function)
+>   [DW_TAG_mutable_type]    = "mutable_type",
+>    ^
+> /home/orange/sw/pahole/dwarves_fprintf.c:77:2: error: array index in initializer not of integer type
+>   [DW_TAG_mutable_type]    = "mutable_type",
+>   ^
+> /home/orange/sw/pahole/dwarves_fprintf.c:77:2: error: (near initialization for 'dwarf_tag_names')
+> make[2]: *** [CMakeFiles/dwarves.dir/dwarves_fprintf.o] Error 1
+>
+>
+> Deleting that line seems to fix the problem.
 
-Thanks for your suggestions, I'll try to address them soon, as well as
-comb thru the mailing list and my personal inbox to find what fell thru
-the cracks :-\
 
-- Arnaldo
+I'm not upstream, I'm just some guy with a github repo of pahole :)
+
+Redirecting this to the right mailing list, might already be fixed
+upstream (https://git.kernel.org/cgit/devel/pahole/pahole.git), I
+haven't checked.
+
+Probably a good idea to add the mailing list (and git url) to the
+README to make it more discover-able for folks that find the source
+code in other places.
 --
 To unsubscribe from this list: send the line "unsubscribe dwarves" in
 the body of a message to majordomo-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
