@@ -1,35 +1,67 @@
 From: Jiri Olsa <jolsa-DgEjT+Ai2ygdnm+yROfE0A@public.gmane.org>
-Subject: [RFC/PATCH 0/3] dwarves print: Cacheline accounting fixes
-Date: Tue,  8 Dec 2015 23:47:03 +0100
-Message-ID: <1449614826-2278-1-git-send-email-jolsa@kernel.org>
+Subject: [PATCH 2/3] dwarves print: Pass into struct conf_fprintf class__fprintf_cacheline_boundary
+Date: Tue,  8 Dec 2015 23:47:05 +0100
+Message-ID: <1449614826-2278-3-git-send-email-jolsa@kernel.org>
+References: <1449614826-2278-1-git-send-email-jolsa@kernel.org>
 Return-path: <dwarves-owner-u79uwXL29TY76Z2rM5mHXA@public.gmane.org>
+In-Reply-To: <1449614826-2278-1-git-send-email-jolsa-DgEjT+Ai2ygdnm+yROfE0A@public.gmane.org>
 Sender: dwarves-owner-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
 To: Arnaldo Carvalho de Melo <acme-DgEjT+Ai2ygdnm+yROfE0A@public.gmane.org>
 Cc: Joe Mario <jmario-H+wXaHxf7aLQT0dZR+AlfA@public.gmane.org>, dwarves-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
 List-Id: dwarves@vger.kernel.org
 
-hi,
-hit 2 issues when used pahole
- - sometimes it did not account the hole between variables
- - when using -E to extract inner struct, cacheline boundaries were wrong
+Passing into struct conf_fprintf class__fprintf_cacheline_boundary,
+so the next patch is more easy to read.
 
-with this patchset I was able to get it work on structs
-that I was investigating, but I'm not sure I covered all
-parts or fixed it in proper way.
-
-thanks,
-jirka
-
-
+Signed-off-by: Jiri Olsa <jolsa-H+wXaHxf7aLQT0dZR+AlfA@public.gmane.org>
 ---
-Jiri Olsa (3):
-      dwarves print: Fix holes accounting
-      dwarves print: Pass into struct conf_fprintf class__fprintf_cacheline_boundary
-      dwarves print: Keep global cacheline in struct conf_fprintf
+ dwarves_fprintf.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
- dwarves.h         |  1 +
- dwarves_fprintf.c | 45 ++++++++++++++++++++++++++-------------------
- 2 files changed, 27 insertions(+), 19 deletions(-)
+diff --git a/dwarves_fprintf.c b/dwarves_fprintf.c
+index df80af255c67..2d114210831a 100644
+--- a/dwarves_fprintf.c
++++ b/dwarves_fprintf.c
+@@ -1122,7 +1122,8 @@ static size_t class__fprintf_cacheline_boundary(uint32_t last_cacheline,
+ 						size_t sum, size_t sum_holes,
+ 						uint8_t *newline,
+ 						uint32_t *cacheline,
+-						int indent, FILE *fp)
++						struct conf_fprintf *cconf,
++						FILE *fp)
+ {
+ 	const size_t real_sum = sum + sum_holes;
+ 	size_t printed = 0;
+@@ -1139,7 +1140,7 @@ static size_t class__fprintf_cacheline_boundary(uint32_t last_cacheline,
+ 			++printed;
+ 		}
+ 
+-		printed += fprintf(fp, "%.*s", indent, tabs);
++		printed += fprintf(fp, "%.*s", cconf->indent, tabs);
+ 
+ 		if (cacheline_pos == 0)
+ 			printed += fprintf(fp, "/* --- cacheline %u boundary "
+@@ -1287,7 +1288,7 @@ size_t class__fprintf(struct class *class, const struct cu *cu,
+ 							      sum, sum_holes,
+ 							      &newline,
+ 							      &last_cacheline,
+-							      cconf.indent,
++							      &cconf,
+ 							      fp);
+ 		/*
+ 		 * These paranoid checks doesn't make much sense on
+@@ -1477,7 +1478,7 @@ size_t class__fprintf(struct class *class, const struct cu *cu,
+ 							     sum, sum_holes,
+ 							     &newline,
+ 							     &last_cacheline,
+-							     cconf.indent, fp);
++							     &cconf, fp);
+ 	if (!cconf.show_only_data_members)
+ 		class__vtable_fprintf(class, cu, &cconf, fp);
+ 
+-- 
+2.4.3
+
 --
 To unsubscribe from this list: send the line "unsubscribe dwarves" in
 the body of a message to majordomo-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
