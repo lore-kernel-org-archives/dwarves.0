@@ -1,173 +1,74 @@
-From: "FedEx 2Day" <shane.tracy-NJpjFE9RSmg+5MJxiAk5rg@public.gmane.org>
-Subject: Unable to deliver your item, #00000362569
-Date: Fri, 1 Apr 2016 08:29:44 +0200
-Message-ID: <7fb96e35b9cdd214bbaf3bfb0438dd96@edfirenze.eu>
-Reply-To: "FedEx 2Day" <shane.tracy-NJpjFE9RSmg+5MJxiAk5rg@public.gmane.org>
+From: Tavis Ormandy <taviso-1TlbntoI6+xF6kxbq+BtvQ@public.gmane.org>
+Subject: libdwarves memory leaks in the stealer interface
+Date: Thu, 14 Jul 2016 12:58:07 -0700
+Message-ID: <CABD==127dOrixY6KaHKBnycQV_+h1aMXPgT8h67Tkfka6GboGQ@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed;
-	boundary="b1_869c4f91a3bbd8a30f4c30e573e487ff"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=UTF-8
 Return-path: <dwarves-owner-u79uwXL29TY76Z2rM5mHXA@public.gmane.org>
 Sender: dwarves-owner-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
 To: dwarves-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
 List-Id: dwarves@vger.kernel.org
 
---b1_869c4f91a3bbd8a30f4c30e573e487ff
-Content-Type: text/plain; charset=us-ascii
+Hello, I have a fun project that I'm trying to use libdwarves with,
+but had a couple of questions.
 
-Dear Customer,
+I'm using the "steal" callback interface to search for a specific cu.
+If the cu matches the one I was looking for, I process it and then
+return LSK__STOP_LOADING to abort processing this file. If it's not
+the cu I wanted, I just return LSK__DELETE.
 
-We could not deliver your parcel.
-Delivery Label is attached to this email.
+This seems to do what I want, but leaks memory.
 
-Yours trully,
-Shane Tracy,
-Sr. Support Manager.
+1) LSK__DELETE doesn't seem to clean up the dwarf_cu obstack, I think
+this wasn't intended.
+2) If die__process_and_recode() fails in finalize_cu_immediately(),
+the cu is leaked. This one is definitely a bug :)
 
+I'm not 100% sure if I'm using LSK__STOP_LOADING correctly. It doesn't
+cleanup the cu like LSK__DELETE does, and it doesn't call cus__add()
+like LSK__KEEPIT does, so was the stealer supposed to clean it up?
 
---b1_869c4f91a3bbd8a30f4c30e573e487ff
-Content-Type: application/zip; name="00000362569.zip"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename=00000362569.zip
+If so, how do I clean up the dcu? I think I can pull it out of
+cu->priv, but I think you didn't intend to expose that to callbacks?
 
-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
+The patch I'm using is below.
 
+Thanks for libdwarves, it's a really great library!
 
---b1_869c4f91a3bbd8a30f4c30e573e487ff--
+Tavis.
 
+diff --git a/src/struct/dwarf_loader.c b/src/struct/dwarf_loader.c
+index 163cb51..ba715a9 100644
+--- a/src/struct/dwarf_loader.c
++++ b/src/struct/dwarf_loader.c
+@@ -2169,9 +2169,12 @@ static int finalize_cu_immediately(struct cus
+*cus, struct cu *cu,
+  int lsk = finalize_cu(cus, cu, dcu, conf);
+  switch (lsk) {
+  case LSK__DELETE:
++ obstack_free(&dcu->obstack, NULL);
+  cu__delete(cu);
+  break;
+  case LSK__STOP_LOADING:
++ obstack_free(&dcu->obstack, NULL);
++ cu__delete(cu);
+  break;
+  case LSK__KEEPIT:
+  if (!cu->extra_dbg_info)
+@@ -2304,8 +2307,11 @@ static int cus__load_module(struct cus *cus,
+struct conf_load *conf,
+  cu->priv = &dcu;
+  cu->dfops = &dwarf__ops;
+
+- if (die__process_and_recode(cu_die, cu) != 0)
++ if (die__process_and_recode(cu_die, cu) != 0) {
++ obstack_free(&dcu.obstack, NULL);
++ cu__delete(cu);
+  return DWARF_CB_ABORT;
++ }
+
+  if (finalize_cu_immediately(cus, cu, &dcu, conf)
+     == LSK__STOP_LOADING)
 --
 To unsubscribe from this list: send the line "unsubscribe dwarves" in
 the body of a message to majordomo-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
