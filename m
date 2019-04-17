@@ -1,114 +1,242 @@
-From: Arnaldo Carvalho de Melo <acme@kernel.org>
-Subject: Re: ANNOUNCE: pahole v1.12 (BTF edition)
-Date: Fri, 17 Aug 2018 11:38:25 -0300
-Message-ID: <20180817143825.GA22443@kernel.org>
-References: <20180816200942.GA19939@kernel.org>
- <nycvar.YFH.7.76.1808162328040.2839@n3.vanv.qr>
+From: Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
+Subject: ANNOUNCE: pahole v1.13 (More BTF, __aligned__, __packed__)
+Date: Tue, 16 Apr 2019 21:20:06 -0300
+Message-ID: <20190417002006.GA13028@kernel.org>
 Mime-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Return-path: <linux-kernel-owner@vger.kernel.org>
 Content-Disposition: inline
-In-Reply-To: <nycvar.YFH.7.76.1808162328040.2839@n3.vanv.qr>
 Sender: linux-kernel-owner@vger.kernel.org
-To: Jan Engelhardt <jengelh@inai.de>
-Cc: dwarves@vger.kernel.org, Dodji Seketeli <dodji@redhat.com>, Linux Networking Development Mailing List <netdev@vger.kernel.org>, Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+To: dwarves@vger.kernel.org
+Cc: Andrii Nakryiko <andriin@fb.com>, Alexei Starovoitov <ast@fb.com>, Martin KaFai Lau <kafai@fb.com>, Daniel Borkmann <daniel@iogearbox.net>, Jiri Olsa <jolsa@kernel.org>, Yonghong Song <yhs@fb.com>, Jan Engelhardt <jengelh@inai.de>, Domenico Andreoli <cavok@debian.org>, Matthias Schwarzott <zzam@gentoo.org>, David Seifert <soap@gentoo.org>, Pavel Borzenkov <pavel.borzenkov@gmail.com>, Matthew Wilcox <willy@infradead.org>, Namhyung Kim <namhyung@kernel.org>, Ingo Molnar <mingo@kernel.org>, Mark Wieelard <mjw@redhat.com>, Clark Williams <williams@redhat.com>, Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 List-Id: dwarves@vger.kernel.org
 
-Em Thu, Aug 16, 2018 at 11:49:38PM +0200, Jan Engelhardt escreveu:
-> On Thursday 2018-08-16 22:09, Arnaldo Carvalho de Melo wrote:
-> 
-> >	After a long time without announces, here is pahole 1.12,
-> >available at:
-> >
-> >	https://fedorapeople.org/~acme/dwarves/dwarves-1.12.tar.bz2
-> >
-> >	git://git.kernel.org/pub/scm/devel/pahole/pahole.git	
-> >
-> >	Some distros haven't picked 1.11, that comes with several
-> >goodies, my bad for not having announced it at that time more widely,
-> 
-> Missing announcements can be forgiven. But there are automatic tools 
-> that scrape the web for updates (usually something tries to scan
-> the enclosing directory of the last known URL), so uploads are 
-> essential.
-> Since 1.11 was never uploaded, it did not find its way..
-> (One had to grab a tarball gitweb generated from the tag,
-> but had to know there was a 1.11, too).
-> 
-> 
-> Can we have signatures for the release tarballs?
-> (Only if you think it's worth having.)
+Hi,
 
-Yeah, I think I can create a file with sha256 for the tarball and sign
-it, just like I signed the v1.12 tag:
+	The v1.13 release of pahole and its friends is out, available at
+the usual places:
 
-  https://git.kernel.org/pub/scm/devel/pahole/pahole.git/tag/?h=v1.12
- 
-> >Please report any problems to me, I'll try and get problems fixed.
-> 
-> Here's one (or six):
+Main git repo:
 
-Yeah, C++ has been a second class citizen for all pahole's life, with
-progress being made mostly when I collaborate with folks at the ATLAS
-project at CERN that had tons of C++ code being ported from 32-bit based
-clusters to 64-bit ones.
+  git://git.kernel.org/pub/scm/devel/pahole/pahole.git
 
-I'll try to work some time on the reports below to see if we get a bit
-more progress there.
+Mirror git repo:
 
-> $ cat x.cpp 
-> #include <utility>
-> struct F {
->         template<typename T, typename... A> F(T &, T &&, A &&...x) { }
->         F clone() const && { int q; return F(q, 3, 4); }
->         int xpub() { return xprot(); }
->         protected:
->         int xprot() { return xpriv(); }
->         private:
->         int xpriv() { return 0; }
-> };
-> int z;
-> F f(z,2,3,4);
-> int main()
-> {
->         f.xpub();
->         std::move(f).clone();
-> }
-> 
-> 
-> $ g++-7 x.cpp -c -ggdb3 -Wall && pahole x.o
-> die__process_function: tag not supported 0x2f (template_type_parameter)!
-> //expected: handle type
-> die__process_function: tag not supported 0x4107 (GNU_template_parameter_pack)!
-> //expected: handle type
-> die__process_function: tag not supported 0x4108 (GNU_formal_parameter_pack)!
-> //expected: handle type
-> ftype__recode_dwarf_types: couldn't find 0x321 abstract_origin for 0x397 (formal_parameter)!
-> //expected: handle type
-> ftype__recode_dwarf_types: couldn't find 0x326 abstract_origin for 0x39f (formal_parameter)!
-> ftype__recode_dwarf_types: couldn't find 0x3e0 abstract_origin for 0x447 (formal_parameter)!
-> struct F {
->         class F clone(const class F  *);
-> 	//expected: "struct F clone(const struct F *&&);"
-> 
->         int xpub(class F *);
-> 
-> protected:
-> 
->         int xprot(class F *);
-> 
-> private:
-> 
->         int xpriv(class F *);
-> 
-> //expected: "public:"
-> 
->         void F<int, int, int>(class F *, int &, , , );
-> 	//expected: "void F<int, int, int>(struct F *, int &, int &&, int &&, int &&);
-> 
->         void F<int, int>(class F *, int &, , );
-> 	//expected: "void F<int, int, int>(struct F *, int &, int &&, int &&);
-> 
->         /* size: 1, cachelines: 0, members: 0 */
->         /* last cacheline: 1 bytes */
-> };
+  https://github.com/acmel/dwarves.git
+
+tarball + gpg signature:
+
+  https://fedorapeople.org/~acme/dwarves/dwarves-1.13.tar.xz
+  https://fedorapeople.org/~acme/dwarves/dwarves-1.13.tar.sign
+
+Here is a summary of changes:
+
+- BTF
+
+  - Use of the recently introduced BTF deduplication algorithm present in the
+    Linux kernel's libbpf library, which allows for all the types in a multi
+    compile unit binary such as vmlinux to be compactly stored, without duplicates.
+
+    E.g.: from roughly:
+
+    $ readelf -SW ../build/v5.1-rc4+/vmlinux | grep .debug_info.*PROGBITS
+      [63] .debug_info PROGBITS 0000000000000000 1d80be0 c3c18b9 00 0 0 1
+    $
+    195 MiB
+
+    to:
+
+    $ time pahole --btf_encode ../build/v5.1-rc4+/vmlinux 
+    real    0m19.168s
+    user    0m17.707s         # On a Lenovo t480s (i7-8650U) SSD
+    sys     0m1.337s
+    $
+
+    $ readelf -SW ../build/v5.1-rc4+/vmlinux | grep .BTF.*PROGBITS
+      [78] .BTF        PROGBITS 0000000000000000 27b49f61 1e23c3 00 0 0 1
+    $ 
+    ~2 MiB
+
+  - Introduce a 'btfdiff' utility that prints the output from DWARF and from
+    BTF, comparing the pretty printed outputs, running it on various linux
+    kernel images, such as an allyesconfig for ppc64.
+
+    Running it on the above 5.1-rc4+ vmlinux:
+
+      $ btfdiff ../build/v5.1-rc4+/vmlinux
+      $ 
+
+    No differences from the types generated from the DWARF ELF sections to the
+    ones generated from the BTF ELF section.
+
+  - Add a BTF loader, i.e. 'pahole -F btf' allows pretty printing of structs
+    and unions in the same fashion as with DWARF info, and since BTF is way
+    more compact, using it is much faster than using DWARF.
+
+      $ cat ../build/v5.1-rc4+/vmlinux > /dev/null
+      $ perf stat -e cycles pahole -F btf ../build/v5.1-rc4+/vmlinux  > /dev/null
+      
+       Performance counter stats for 'pahole -F btf ../build/v5.1-rc4+/vmlinux':
+      
+             229,712,692      cycles:u                                                    
+             0.063379597 seconds time elapsed
+             0.056265000 seconds user
+             0.006911000 seconds sys
+      
+      $ perf stat -e cycles pahole -F dwarf ../build/v5.1-rc4+/vmlinux  > /dev/null
+      
+       Performance counter stats for 'pahole -F dwarf ../build/v5.1-rc4+/vmlinux':
+      
+          49,579,679,466      cycles:u                                                    
+            13.063487352 seconds time elapsed
+            12.612512000 seconds user
+             0.426226000 seconds sys
+      $
+
+- Better union support:
+
+  - Allow unions to be specified in pahole in the same fashion as structs
+
+    $ pahole -C thread_union ../build/v5.1-rc4+/net/ipv4/tcp.o
+    union thread_union {
+            struct task_struct task __attribute__((__aligned__(64))); /* 0 11008 */
+            long unsigned int          stack[2048];                   /* 0 16384 */
+    };
+    $
+
+- Infer __attribute__((__packed__)) when structs have no alignment holes
+  and violate basic types (integer, longs, short integer) natural alignment
+  requirements. Several heuristics are used to infer the __packed__
+  attribute, see the changeset log for descriptions.
+
+  $ pahole -F btf -C boot_e820_entry ../build/v5.1-rc4+/vmlinux
+  struct boot_e820_entry {
+          __u64             addr;     /*     0     8 */
+          __u64             size;     /*     8     8 */
+          __u32             type;     /*    16     4 */
+
+	/* size: 20, cachelines: 1, members: 3 */
+	/* last cacheline: 20 bytes */
+  } __attribute__((__packed__));
+  $ 
+
+  $ pahole -F btf -C lzma_header ../build/v5.1-rc4+/vmlinux
+  struct lzma_header {
+          uint8_t                    pos;                  /*     0     1 */
+          uint32_t                   dict_size;            /*     1     4 */
+          uint64_t                   dst_size;             /*     5     8 */
+
+          /* size: 13, cachelines: 1, members: 3 */
+          /* last cacheline: 13 bytes */
+  } __attribute__((__packed__));
+
+- Support DWARF5's DW_AT_alignment, which, together with the __packed__
+  attribute inference algorithms produce output that, when compiled, should
+  produce structures with layouts that match the original source code.
+
+  See it in action with 'struct task_struct', which will also show some of the
+  new information at the struct summary, at the end of the struct:
+
+  $ pahole -C task_struct ../build/v5.1-rc4+/vmlinux | tail -19
+  	/* --- cacheline 103 boundary (6592 bytes) --- */
+  	struct vm_struct   * stack_vm_area;              /*  6592     8 */
+  	refcount_t                 stack_refcount;       /*  6600     4 */
+  
+  	/* XXX 4 bytes hole, try to pack */
+  
+  	void *                     security;             /*  6608     8 */
+  
+  	/* XXX 40 bytes hole, try to pack */
+  
+  	/* --- cacheline 104 boundary (6656 bytes) --- */
+  	struct thread_struct thread __attribute__((__aligned__(64))); /*  6656  4352 */
+  
+  	/* size: 11008, cachelines: 172, members: 207 */
+  	/* sum members: 10902, holes: 16, sum holes: 98 */
+  	/* sum bitfield members: 10 bits, bit holes: 2, sum bit holes: 54 bits */
+  	/* paddings: 3, sum paddings: 14 */
+  	/* forced alignments: 6, forced holes: 1, sum forced holes: 40 */
+  } __attribute__((__aligned__(64)));
+  $
+
+- Add a '--compile' option to 'pfunct' that produces compileable output for the
+  function prototypes in an object file. There are still some bugs but the vast
+  majority of the kernel single compilation unit files the ones produced from a
+  single .c file are working, see the new 'fullcircle' utility that uses this
+  feature.
+
+  Example of it in action:
+
+  $ pfunct --compile=static_key_false ../build/v5.1-rc4+/net/ipv4/tcp.o  
+  typedef _Bool bool;
+  typedef struct {
+  	int                        counter;              /*     0     4 */
+  
+  	/* size: 4, cachelines: 1, members: 1 */
+  	/* last cacheline: 4 bytes */
+  } atomic_t;
+  
+  struct jump_entry;
+  
+  struct static_key_mod;
+  
+  
+  struct static_key {
+  	atomic_t                   enabled;              /*     0     4 */
+  
+  	/* XXX 4 bytes hole, try to pack */
+  
+  	union {
+  		long unsigned int  type;                 /*     8     8 */
+  		struct jump_entry * entries;             /*     8     8 */
+  		struct static_key_mod * next;            /*     8     8 */
+  	};                                               /*     8     8 */
+  
+  	/* size: 16, cachelines: 1, members: 2 */
+  	/* sum members: 12, holes: 1, sum holes: 4 */
+  	/* last cacheline: 16 bytes */
+  };
+  
+  bool static_key_false(struct static_key * key)
+  {
+  	return *(bool *)1;
+  }
+  
+  $
+
+The generation of compilable code from the type information and its use in the
+new tool 'fullcircle, helps validate all the parts of this codebase, finding
+bugs that were lurking forever, go read the csets to find all sorts of curious
+C language features that are rarely seen, like unnamed zero sized bitfields and
+the way people have been using it over the years in a codebase like the linux
+kernel.
+
+Certainly there are several other features, changes and fixes that I forgot to
+mention! Now lemme release this version so that we can use it more extensively
+together with a recent patch merged for 5.2:
+
+  [PATCH bpf-next] kbuild: add ability to generate BTF type info for vmlinux
+
+With it BTF will be always available for all the types of the kernel, which will
+open a pandora box of cool new features that are in the works, and, for people
+already using pahole, will greatly speed up its usage.
+
+Please try to alias it to use btf, i.e.
+
+   alias pahole='pahole -F btf'
+
+Please report any problems you may find with this new version or with the BTF
+loader or any errors in the layout generated/pretty printed.
+
+Thanks to the fine BTF guys at Facebook for the patches and help in testing,
+fixing bugs and getting this out of the door, the stats for this release are:
+
+      Changesets: 157
+
+      113 Arnaldo Carvalho de Melo       Red Hat
+       32 Andrii Nakryiko                Facebook
+       10 Yonghong Song                  Facebook
+        1 Martin Lau                     Facebook
+        1 Domenico Andreoli
+
+- Arnaldo
