@@ -1,7 +1,7 @@
 From: Yulia Kartseva <hex-b10kYP2dOMg@public.gmane.org>
-Subject: [PATCH 1/2] pahole: fix compiler warning
-Date: Thu, 16 Jan 2020 16:59:12 -0800
-Message-ID: <d0b9a8c3bd459fb41f9b4dfb80d5a5972b5c2949.1579221668.git.hex@fb.com>
+Subject: [PATCH 2/2] pahole: fix changelog date in dwarves.spec
+Date: Thu, 16 Jan 2020 16:59:13 -0800
+Message-ID: <e454b36160ba6cdc0fede26ca2ee8fe15314ae99.1579221668.git.hex@fb.com>
 References: <cover.1579221668.git.hex@fb.com>
 Mime-Version: 1.0
 Content-Type: text/plain
@@ -15,22 +15,21 @@ From: Julia Kartseva <hex-b10kYP2dOMg@public.gmane.org>
 
 Signed-off-by: Julia Kartseva <hex-b10kYP2dOMg@public.gmane.org>
 ---
- pahole.c | 2 +-
+ rpm/SPECS/dwarves.spec | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/pahole.c b/pahole.c
-index 829c9ab..7ac49c2 100644
---- a/pahole.c
-+++ b/pahole.c
-@@ -684,8 +684,8 @@ static void print_structs_with_pointer_to(struct cu *cu, uint32_t type)
- 	uint32_t id;
+diff --git a/rpm/SPECS/dwarves.spec b/rpm/SPECS/dwarves.spec
+index 82cb971..6155608 100644
+--- a/rpm/SPECS/dwarves.spec
++++ b/rpm/SPECS/dwarves.spec
+@@ -127,7 +127,7 @@ make install DESTDIR=%{buildroot}
+ %{_libdir}/%{libname}_reorganize.so
  
- 	cu__for_each_struct_or_union(cu, id, pos) {
-+		struct structure *str = NULL;
- 		bool looked = false;
--		struct structure *str;
- 
- 		if (pos->type.namespace.name == 0)
- 			continue;
+ %changelog
+-* Mon 16 Dec 2019 Arnaldo Carvalho de Melo <acme-H+wXaHxf7aLQT0dZR+AlfA@public.gmane.org> - 1.16-1
++* Mon Dec 16 2019 Arnaldo Carvalho de Melo <acme-H+wXaHxf7aLQT0dZR+AlfA@public.gmane.org> - 1.16-1
+ - New release: 1.16
+ - BTF encoder: Preserve and encode exported functions as BTF_KIND_FUNC.
+ - BTF loader: Add support for BTF_KIND_FUNC
 -- 
 2.17.1
