@@ -1,35 +1,51 @@
-From: Yulia Kartseva <hex-b10kYP2dOMg@public.gmane.org>
-Subject: [PATCH 2/2] pahole: fix changelog date in dwarves.spec
-Date: Thu, 16 Jan 2020 16:59:13 -0800
-Message-ID: <e454b36160ba6cdc0fede26ca2ee8fe15314ae99.1579221668.git.hex@fb.com>
+From: Arnaldo Carvalho de Melo <arnaldo.melo-Re5JQEeQqe8AvxtiuMwx3w@public.gmane.org>
+Subject: Re: [PATCH 1/2] pahole: fix compiler warning
+Date: Fri, 17 Jan 2020 13:28:26 -0300
+Message-ID: <20200117162826.GA21253@kernel.org>
 References: <cover.1579221668.git.hex@fb.com>
+ <d0b9a8c3bd459fb41f9b4dfb80d5a5972b5c2949.1579221668.git.hex@fb.com>
 Mime-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
 Return-path: <dwarves-owner-u79uwXL29TY76Z2rM5mHXA@public.gmane.org>
-In-Reply-To: <cover.1579221668.git.hex-b10kYP2dOMg@public.gmane.org>
+Content-Disposition: inline
+In-Reply-To: <d0b9a8c3bd459fb41f9b4dfb80d5a5972b5c2949.1579221668.git.hex-b10kYP2dOMg@public.gmane.org>
 Sender: dwarves-owner-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
-To: dwarves-u79uwXL29TY76Z2rM5mHXA@public.gmane.org, acme-DgEjT+Ai2ygdnm+yROfE0A@public.gmane.org, hex-b10kYP2dOMg@public.gmane.org
+To: Yulia Kartseva <hex-b10kYP2dOMg@public.gmane.org>
+Cc: dwarves-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
 List-Id: dwarves@vger.kernel.org
 
-From: Julia Kartseva <hex-b10kYP2dOMg@public.gmane.org>
+Em Thu, Jan 16, 2020 at 04:59:12PM -0800, Yulia Kartseva escreveu:
+> From: Julia Kartseva <hex-b10kYP2dOMg@public.gmane.org>
+> 
+> Signed-off-by: Julia Kartseva <hex-b10kYP2dOMg@public.gmane.org>
+> ---
+>  pahole.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/pahole.c b/pahole.c
+> index 829c9ab..7ac49c2 100644
+> --- a/pahole.c
+> +++ b/pahole.c
+> @@ -684,8 +684,8 @@ static void print_structs_with_pointer_to(struct cu *cu, uint32_t type)
+>  	uint32_t id;
+>  
+>  	cu__for_each_struct_or_union(cu, id, pos) {
+> +		struct structure *str = NULL;
+>  		bool looked = false;
+> -		struct structure *str;
 
-Signed-off-by: Julia Kartseva <hex-b10kYP2dOMg@public.gmane.org>
----
- rpm/SPECS/dwarves.spec | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I just fixed this one after trying to build it on RHEL7, thanks!
 
-diff --git a/rpm/SPECS/dwarves.spec b/rpm/SPECS/dwarves.spec
-index 82cb971..6155608 100644
---- a/rpm/SPECS/dwarves.spec
-+++ b/rpm/SPECS/dwarves.spec
-@@ -127,7 +127,7 @@ make install DESTDIR=%{buildroot}
- %{_libdir}/%{libname}_reorganize.so
- 
- %changelog
--* Mon 16 Dec 2019 Arnaldo Carvalho de Melo <acme-H+wXaHxf7aLQT0dZR+AlfA@public.gmane.org> - 1.16-1
-+* Mon Dec 16 2019 Arnaldo Carvalho de Melo <acme-H+wXaHxf7aLQT0dZR+AlfA@public.gmane.org> - 1.16-1
- - New release: 1.16
- - BTF encoder: Preserve and encode exported functions as BTF_KIND_FUNC.
- - BTF loader: Add support for BTF_KIND_FUNC
+https://git.kernel.org/pub/scm/devel/pahole/pahole.git/commit/?id=9b09f578b7d1e75cf168e9b3098d4fb17504f26e
+
+- Arnaldo
+  
+>  		if (pos->type.namespace.name == 0)
+>  			continue;
+> -- 
+> 2.17.1
+> 
+
 -- 
-2.17.1
+
+- Arnaldo
