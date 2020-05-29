@@ -1,577 +1,159 @@
-From: Arnaldo Carvalho de Melo <arnaldo.melo-Re5JQEeQqe8AvxtiuMwx3w@public.gmane.org>
-Subject: ANNOUNCE: pahole v1.17 (BTF by default,
- --find_pointers_to/--contains goodies)
-Date: Fri, 13 Mar 2020 17:09:12 -0300
-Message-ID: <20200313200912.GE9917@kernel.org>
+From: Hao Luo <haoluo-hpIqsD4AKlfQT0dZR+AlfA@public.gmane.org>
+Subject: [PATCH] btf_encoder: Teach pahole to store percpu variables in
+ vmlinux BTF.
+Date: Thu, 28 May 2020 18:13:05 -0700
+Message-ID: <20200529011305.35132-1-haoluo@google.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="UTF-8"
 Return-path: <dwarves-owner-u79uwXL29TY76Z2rM5mHXA@public.gmane.org>
-Content-Disposition: inline
 Sender: dwarves-owner-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
-To: dwarves-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
-Cc: Linux Kernel Mailing List <linux-kernel-u79uwXL29TY76Z2rM5mHXA@public.gmane.org>, bpf-u79uwXL29TY76Z2rM5mHXA@public.gmane.org, Jiri Olsa <jolsa-DgEjT+Ai2ygdnm+yROfE0A@public.gmane.org>, Jan Engelhardt <jengelh-9+2X+4sQBs8@public.gmane.org>, Domenico Andreoli <cavok-8fiUuRrzOP0dnm+yROfE0A@public.gmane.org>, Matthias Schwarzott <zzam-aBrp7R+bbdUdnm+yROfE0A@public.gmane.org>, David Seifert <soap-aBrp7R+bbdUdnm+yROfE0A@public.gmane.org>, Pavel Borzenkov <pavel.borzenkov-Re5JQEeQqe8AvxtiuMwx3w@public.gmane.org>, Andrii Nakryiko <andriin-b10kYP2dOMg@public.gmane.org>, Alexei Starovoitov <ast-b10kYP2dOMg@public.gmane.org>, Yonghong Song <yhs-b10kYP2dOMg@public.gmane.org>, Gareth Lloyd <gareth.lloyd-ygUJEDcBm8rQT0dZR+AlfA@public.gmane.org>, Martin Cermak <mcermak-H+wXaHxf7aLQT0dZR+AlfA@public.gmane.org>, Julia Kartseva <hex-b10kYP2dOMg@public.gmane.org>, Clark Williams <williams-H+wXaHxf7aLQT0dZR+AlfA@public.gmane.org>
+To: Arnaldo Carvalho de Melo <arnaldo.melo-Re5JQEeQqe8AvxtiuMwx3w@public.gmane.org>
+Cc: Andrii Nakryiko <andrii.nakryiko-Re5JQEeQqe8AvxtiuMwx3w@public.gmane.org>, Alexei Starovoitov <alexei.starovoitov-Re5JQEeQqe8AvxtiuMwx3w@public.gmane.org>, daniel-FeC+5ew28dpmcu3hnIyYJQ@public.gmane.org, olegrom-hpIqsD4AKlfQT0dZR+AlfA@public.gmane.org, kafai-b10kYP2dOMg@public.gmane.org, dwarves-u79uwXL29TY76Z2rM5mHXA@public.gmane.org, Hao Luo <haoluo-hpIqsD4AKlfQT0dZR+AlfA@public.gmane.org>
 List-Id: dwarves@vger.kernel.org
 
-Hi,
+On SMP systems, the global percpu variables are placed in a speical
+'.data..percpu' section, which is stored in a segment whose initial
+address is set to 0, the addresses of per-CPU variables are relative
+positive addresses[1].
+
+This patch extracts these variables from vmlinux and places them with
+their type information in BTF, so that they can be accessed in BPF.
+
+In a v5.7-rc7 linux kernel, I was able to extract 291 such variables.
+The space overhead is small.
+
+Testing:
+
+Before:
+ $ readelf -SW vmlinux | grep BTF
+ [25] .BTF              PROGBITS        ffffffff821a905c 13a905c 2d2bf8 00   A  0   0  1
+
+After:
+ $ pahole -J vmlinux
+ $ readelf -SW vmlinux  | grep BTF
+ [25] .BTF              PROGBITS        ffffffff821a905c 13a905c 2d4db8 00   A  0   0  1
+
+Common percpu vars can be found in the BTF section.
+
+ $ bpftool btf dump file vmlinux | grep runqueues
+ [14098] VAR 'runqueues' type_id=13725, linkage=global-alloc
+
+ $ bpftool btf dump file vmlinux | grep cpu_stopper
+ [17589] STRUCT 'cpu_stopper' size=72 vlen=5
+ [17609] VAR 'cpu_stopper' type_id=17589, linkage=global-alloc
+
+References:
+ [1] https://lwn.net/Articles/531148/
+Signed-off-by: Hao Luo <haoluo-hpIqsD4AKlfQT0dZR+AlfA@public.gmane.org>
+---
+ btf_encoder.c | 27 +++++++++++++++++++++++++++
+ libbtf.c      | 29 +++++++++++++++++++++++++++++
+ libbtf.h      |  2 ++
+ pahole.c      |  1 +
+ 4 files changed, 59 insertions(+)
+
+diff --git a/btf_encoder.c b/btf_encoder.c
+index df16ba0..f550f34 100644
+--- a/btf_encoder.c
++++ b/btf_encoder.c
+@@ -241,6 +241,33 @@ int cu__encode_btf(struct cu *cu, int verbose)
+ 		}
+ 	}
  
-	The v1.17 release of pahole and its friends is out, available at
-	the usual places:
-
-Main git repo:
-
-   git://git.kernel.org/pub/scm/devel/pahole/pahole.git
-
-Mirror git repo:
-
-   https://github.com/acmel/dwarves.git
-
-tarball + gpg signature:
-
-   https://fedorapeople.org/~acme/dwarves/dwarves-1.17.tar.xz
-   https://fedorapeople.org/~acme/dwarves/dwarves-1.17.tar.bz2
-   https://fedorapeople.org/~acme/dwarves/dwarves-1.17.tar.sign
-
-Best Regards,
-
-- Arnaldo
-
-v1.17 changes:
-
-tl;dr:
-
-BTF loader:
-
-  - Support raw BTF as available in /sys/kernel/btf/vmlinux.
-
-pahole:
-
-  - When the sole argument passed isn't a file, take it as a class name:
-
-     $ pahole sk_buff
-
-  - Do not require a class name to operate without a file name.
-
-      $ pahole          # is equivalent to:
-      $ pahole vmlinux
-
-  - Make --find_pointers_to consider unions:
-
-      $ pahole --find_pointers_to ehci_qh
-
-  - Make --contains and --find_pointers_to honour --unions
-
-      $ pahole --unions --contains inet_sock
-
-  - Add support for finding pointers to void:
-
-     $ pahole --find_pointers_to void
-
-  - Make --contains and --find_pointers_to to work with base types:
-
-      $ pahole --find_pointers_to 'short unsigned int'
-
-  - Make --contains look for more than just unions, structs:
-
-      $ pahole --contains raw_spinlock_t
-
-  - Consider unions when looking for classes containing some class:
-
-      $ pahole --contains tpacket_req
-
-  - Introduce --unions to consider just unions:
-
-      $ pahole --unions --sizes
-      $ pahole --unions --prefix tcp
-      $ pahole --unions --nr_members
-
-  - Fix -m/--nr_methods - Number of functions operating on a type pointer
-
-      $ pahole --nr_methods
-
-man-pages:
-
-  - Add section about --hex + -E to locate offsets deep into sub structs.
-
-  - Add more information about BTF.
-
-  - Add some examples.
-
-----------------------------------
-
-I want the details:
-
-btf loader:
-
-  - Support raw BTF as available in /sys/kernel/btf/vmlinux
-
-    Be it automatically when no -F option is passed and
-    /sys/kernel/btf/vmlinux is available, or when /sys/kernel/btf/vmlinux is
-    passed as the filename to the tool, i.e.:
-
-      $ pahole -C list_head
-      struct list_head {
-            struct list_head *         next;                 /*     0     8 */
-            struct list_head *         prev;                 /*     8     8 */
-
-            /* size: 16, cachelines: 1, members: 2 */
-            /* last cacheline: 16 bytes */
-      };
-      $ strace -e openat pahole -C list_head |& grep /sys/kernel/btf/
-      openat(AT_FDCWD, "/sys/kernel/btf/vmlinux", O_RDONLY) = 3
-      $
-      $ pahole -C list_head /sys/kernel/btf/vmlinux
-      struct list_head {
-            struct list_head *         next;                 /*     0     8 */
-            struct list_head *         prev;                 /*     8     8 */
-
-            /* size: 16, cachelines: 1, members: 2 */
-            /* last cacheline: 16 bytes */
-      };
-      $
-
-    If one wants to grab the matching vmlinux to use its DWARF info instead,
-    which is useful to compare the results with what we have from BTF, for
-    instance, its just a matter of using '-F dwarf'.
-
-    This in turn shows something that at first came as a surprise, but then
-    has a simple explanation:
-
-    For very common data structures, that will probably appear in all of the
-    DWARF CUs (Compilation Units), like 'struct list_head', using '-F dwarf'
-    is faster:
-
-      $ perf stat -e cycles pahole -F btf -C list_head > /dev/null
-
-       Performance counter stats for 'pahole -F btf -C list_head':
-
-              45,722,518      cycles:u
-
-             0.023717300 seconds time elapsed
-
-             0.016474000 seconds user
-             0.007212000 seconds sys
-
-      $ perf stat -e cycles pahole -F dwarf -C list_head > /dev/null
-
-       Performance counter stats for 'pahole -F dwarf -C list_head':
-
-              14,170,321      cycles:u
-
-             0.006668904 seconds time elapsed
-
-             0.005562000 seconds user
-             0.001109000 seconds sys
-
-      $
-
-    But for something that is more specific to a subsystem, the DWARF loader
-    will have to process way more stuff till it gets to that struct:
-
-      $ perf stat -e cycles pahole -F dwarf -C tcp_sock > /dev/null
-
-       Performance counter stats for 'pahole -F dwarf -C tcp_sock':
-
-          31,579,795,238      cycles:u
-
-             8.332272930 seconds time elapsed
-
-             8.032124000 seconds user
-             0.286537000 seconds sys
-
-      $
-
-    While using the BTF loader the time should be constant, as it loads
-    everything from /sys/kernel/btf/vmlinux:
-
-      $ perf stat -e cycles pahole -F btf -C tcp_sock > /dev/null
-
-       Performance counter stats for 'pahole -F btf -C tcp_sock':
-
-              48,823,488      cycles:u
-
-             0.024102760 seconds time elapsed
-
-             0.012035000 seconds user
-             0.012046000 seconds sys
-
-      $
-
-    Above I used '-F btf' just to show that it can be used, but its not
-    really needed, i.e. those are equivalent:
-
-      $ strace -e openat pahole -F btf -C list_head |& grep /sys/kernel/btf/vmlinux
-      openat(AT_FDCWD, "/sys/kernel/btf/vmlinux", O_RDONLY) = 3
-      $ strace -e openat pahole -C list_head |& grep /sys/kernel/btf/vmlinux
-      openat(AT_FDCWD, "/sys/kernel/btf/vmlinux", O_RDONLY) = 3
-      $
-
-    The btf_raw__load() function that ends up being grafted into the
-    preexisting btf_elf routines was based on libbpf's btf_load_raw().
-
-pahole:
-
-  - When the sole argument passed isn't a file, take it as a class name.
-
-    With that it becomes as compact as it gets for kernel data structures,
-    just state the name of the struct and it'll try to find that as a file,
-    not being a file it'll use /sys/kernel/btf/vmlinux and the argument as a
-    list of structs, i.e.:
-
-      $ pahole skb_ext,list_head
-      struct list_head {
-            struct list_head *         next;                 /*     0     8 */
-            struct list_head *         prev;                 /*     8     8 */
-
-            /* size: 16, cachelines: 1, members: 2 */
-            /* last cacheline: 16 bytes */
-      };
-      struct skb_ext {
-            refcount_t                 refcnt;               /*     0     4 */
-            u8                         offset[3];            /*     4     3 */
-            u8                         chunks;               /*     7     1 */
-            char                       data[];               /*     8     0 */
-
-            /* size: 8, cachelines: 1, members: 4 */
-            /* last cacheline: 8 bytes */
-      };
-      $ pahole hlist_node
-      struct hlist_node {
-            struct hlist_node *        next;                 /*     0     8 */
-            struct hlist_node * *      pprev;                /*     8     8 */
-
-            /* size: 16, cachelines: 1, members: 2 */
-            /* last cacheline: 16 bytes */
-      };
-      $
-
-    Of course -C continues to work:
-
-      $ pahole -C inode | tail
-            __u32                      i_fsnotify_mask;      /*   556     4 */
-            struct fsnotify_mark_connector * i_fsnotify_marks; /*   560     8 */
-            struct fscrypt_info *      i_crypt_info;         /*   568     8 */
-            /* --- cacheline 9 boundary (576 bytes) --- */
-            struct fsverity_info *     i_verity_info;        /*   576     8 */
-            void *                     i_private;            /*   584     8 */
-
-            /* size: 592, cachelines: 10, members: 53 */
-            /* last cacheline: 16 bytes */
-      };
-      $
-
-  - Add support for finding pointers to void, e.g.:
-
-      $ pahole --find_pointers_to void --prefix tcp
-      tcp_md5sig_pool: scratch
-      $ pahole tcp_md5sig_pool
-      struct tcp_md5sig_pool {
-            struct ahash_request *     md5_req;              /*     0     8 */
-            void *                     scratch;              /*     8     8 */
-
-            /* size: 16, cachelines: 1, members: 2 */
-            /* last cacheline: 16 bytes */
-      };
-      $
-
-  - Make --contains and --find_pointers_to to work with base types
-
-    I.e. with plain 'int', 'long', 'short int', etc:
-
-      $ pahole --find_pointers_to 'short unsigned int'
-      uv_hub_info_s: socket_to_node
-      uv_hub_info_s: socket_to_pnode
-      uv_hub_info_s: pnode_to_socket
-      vc_data: vc_screenbuf
-      vc_data: vc_translate
-      filter_pred: ops
-      ext4_sb_info: s_mb_offsets
-      $ pahole ext4_sb_info | 'sort unsigned int'
-      bash: sort unsigned int: command not found...
-      ^[^C
-      $
-      $ pahole ext4_sb_info | grep 'sort unsigned int'
-      $ pahole ext4_sb_info | grep 'short unsigned int'
-            short unsigned int         s_mount_state;        /*   160     2 */
-            short unsigned int         s_pad;                /*   162     2 */
-            short unsigned int *       s_mb_offsets;         /*   664     8 */
-      $ pahole --contains 'short unsigned int'
-      apm_info
-      desc_ptr
-      thread_struct
-      mpc_table
-      mpc_intsrc
-      fsnotify_mark_connector
-      <SNIP>
-      sock_fprog
-      blk_mq_hw_ctx
-      skb_shared_info
-      $
-
-  - Make --contains look for more than just unions, structs, look for
-    typedefs, enums and types that descend from 'struct type':
-
-    So now we can do more interesting queries, lets see, what are the data
-    structures that embed a raw spinlock in the linux kernel?
-
-      $ pahole --contains raw_spinlock_t
-      task_struct
-      rw_semaphore
-      hrtimer_cpu_base
-      prev_cputime
-      percpu_counter
-      ratelimit_state
-      perf_event_context
-      task_delay_info
-      <SNIP>
-      lpm_trie
-      bpf_queue_stack
-      $
-
-    Look at the csets comments to see more examples.
-
-  - Make --contains and --find_pointers_to honour --unions
-
-    I.e. when looking for unions or structs that contains/embeds or looking
-    for unions/structs that have pointers to a given type.
-
-    E.g:
-
-      $ pahole --contains inet_sock
-      sctp_sock
-      inet_connection_sock
-      raw_sock
-      udp_sock
-      raw6_sock
-      $ pahole --unions --contains inet_sock
-      $
-
-    We have structs embedding 'struct inet_sock', but no unions doing that.
-
-  - Make --find_pointers_to consider unions
-
-    I.e.:
-
-      $ pahole --find_pointers_to ehci_qh
-      ehci_hcd: qh_scan_next
-      ehci_hcd: async
-      ehci_hcd: dummy
-      $
-
-    Wasn't considering:
-
-      $ pahole -C ehci_shadow
-      union ehci_shadow {
-            struct ehci_qh *           qh;                 /*     0     8 */
-            struct ehci_itd *          itd;                /*     0     8 */
-            struct ehci_sitd *         sitd;               /*     0     8 */
-            struct ehci_fstn *         fstn;               /*     0     8 */
-            __le32 *                   hw_next;            /*     0     8 */
-            void *                     ptr;                /*     0     8 */
-      };
-      $
-
-    Fix it:
-
-      $ pahole --find_pointers_to ehci_qh
-      ehci_hcd: qh_scan_next
-      ehci_hcd: async
-      ehci_hcd: dummy
-      ehci_shadow: qh
-      $
-
-  - Consider unions when looking for classes containing some class:
-
-    I.e.:
-
-      $ pahole --contains tpacket_req
-      tpacket_req_u
-      $
-
-    Wasn't working, but should be considered with --contains/-i:
-
-      $ pahole -C tpacket_req_u
-      union tpacket_req_u {
-            struct tpacket_req         req;                /*     0    16 */
-            struct tpacket_req3        req3;               /*     0    28 */
-      };
-      $
-
-  - Introduce --unions to consider just unions
-
-    Most filters can be used together with it, for instance to see the
-    biggest unions in the kernel:
-
-      $ pahole --unions --sizes | sort -k2 -nr | head
-      thread_union            16384 0
-      swap_header              4096 0
-      fpregs_state             4096 0
-      autofs_v5_packet_union    304 0
-      autofs_packet_union       272 0
-      pptp_ctrl_union           208 0
-      acpi_parse_object         200 0
-      acpi_descriptor           200 0
-      bpf_attr                  120 0
-      phy_configure_opts        112 0
-      $
-
-    Or just some unions that have some specific prefix:
-
-      $ pahole --unions --prefix tcp
-      union tcp_md5_addr {
-            struct in_addr             a4;                 /*     0     4 */
-            struct in6_addr            a6;                 /*     0    16 */
-      };
-      union tcp_word_hdr {
-            struct tcphdr              hdr;                /*     0    20 */
-            __be32                     words[5];           /*     0    20 */
-      };
-      union tcp_cc_info {
-            struct tcpvegas_info       vegas;              /*     0    16 */
-            struct tcp_dctcp_info      dctcp;              /*     0    16 */
-            struct tcp_bbr_info        bbr;                /*     0    20 */
-      };
-      $
-
-    What are the biggest unions in terms of number of members?
-
-      $ pahole --unions --nr_members | sort -k2 -nr | head
-      security_list_options 218
-      aml_resource           36
-      acpi_resource_data     29
-      acpi_operand_object    26
-      iwreq_data             18
-      sctp_params            15
-      ib_flow_spec           14
-      ethtool_flow_union     14
-      pptp_ctrl_union        13
-      bpf_attr               12
-      $
-
-    If you want to script most of the queries can change the separator:
-
-      $ pahole --unions --nr_members -t, | sort -t, -k2 -nr | head
-      security_list_options,218
-      aml_resource,36
-      acpi_resource_data,29
-      acpi_operand_object,26
-      iwreq_data,18
-      sctp_params,15
-      ib_flow_spec,14
-      ethtool_flow_union,14
-      pptp_ctrl_union,13
-      bpf_attr,12
-      $
-
-  - Fix -m/--nr_methods - Number of functions operating on a type pointer
-
-    We had to use the same hack as in pfunct, as implemented in ccf3eebfcd9c
-    ("btf_loader: Add support for BTF_KIND_FUNC"), will hide that 'struct
-    ftype' (aka function prototype) indirection behind the parameter
-    iterator (function__for_each_parameter).
-
-    For now, here is the top 10 Linux kernel data structures in terms of
-    number of functions receiving as one of its parameters a pointer to it,
-    using /sys/kernel/btf/vmlinux to look at all the vmlinux types and
-    functions (the ones visible in kallsyms, but with the parameters and its
-    types):
-
-      $ pahole -m | sort -k2 -nr | head
-      device        955
-      sock          568
-      sk_buff       541
-      task_struct   437
-      inode         421
-      pci_dev       390
-      page          351
-      net_device    347
-      file          315
-      net           312
-      $
-      $ pahole --help |& grep -- -m
-        -m, --nr_methods           show number of methods
-      $
-
-  - Do not require a class name to operate without a file name
-
-    Since we default to operating on the running kernel data structures, we
-    should make the default to, with no options passed, to pretty print all
-    the running kernel data structures, or do what was asked in terms of
-    number of members, size of structs, etc, i.e.:
-
-      # pahole --help |& head
-      Usage: pahole [OPTION...] FILE
-
-        -a, --anon_include         include anonymous classes
-        -A, --nested_anon_include  include nested (inside other structs) anonymous
-                                   classes
-        -B, --bit_holes=NR_HOLES   Show only structs at least NR_HOLES bit holes
-        -c, --cacheline_size=SIZE  set cacheline size to SIZE
-            --classes_as_structs   Use 'struct' when printing classes
-        -C, --class_name=CLASS_NAME   Show just this class
-        -d, --recursive            recursive mode, affects several other flags
-      #
-
-    Continues working as before, but if you do:
-
-      pahole
-
-    It will work just as if you did:
-
-      pahole vmlinux
-
-    and that vmlinux file is the running kernel vmlinux.
-
-    And since the default now is to read BTF info, then it will do all its
-    operations on /sys/kernel/btf/vmlinux, when present, i.e. want to know
-    what are the fattest data structures in the running kernel:
-
-      # pahole -s | sort -k2 -nr | head
-      cmp_data      290904  1
-      dec_data      274520  1
-      cpu_entry_area        217088  0
-      pglist_data   172928  4
-      saved_cmdlines_buffer 131104  1
-      debug_store_buffers   131072  0
-      hid_parser    110848  1
-      hid_local     110608  0
-      zonelist      81936   0
-      e820_table    64004   0
-      #
-
-    How many data structures in the running kernel vmlinux area embbed
-    'struct list_head'?
-
-      # pahole -i list_head | wc -l
-      260
-      #
-
-    Lets see some of those?
-
-      # pahole -C fsnotify_event
-      struct fsnotify_event {
-            struct list_head           list;                 /*     0    16 */
-            struct inode *             inode;                /*    16     8 */
-
-            /* size: 24, cachelines: 1, members: 2 */
-            /* last cacheline: 24 bytes */
-      };
-      # pahole -C audit_chunk
-      struct audit_chunk {
-            struct list_head           hash;                 /*     0    16 */
-            long unsigned int          key;                  /*    16     8 */
-            struct fsnotify_mark *     mark;                 /*    24     8 */
-            struct list_head           trees;                /*    32    16 */
-            int                        count;                /*    48     4 */
-
-            /* XXX 4 bytes hole, try to pack */
-
-            atomic_long_t              refs;                 /*    56     8 */
-            /* --- cacheline 1 boundary (64 bytes) --- */
-            struct callback_head       head;                 /*    64    16 */
-            struct node                owners[];             /*    80     0 */
-
-            /* size: 80, cachelines: 2, members: 8 */
-            /* sum members: 76, holes: 1, sum holes: 4 */
-            /* last cacheline: 16 bytes */
-      };
-      #
++	cu__for_each_variable(cu, core_id, pos) {
++		int btf_var_id;
++		struct variable *var;
++		uint32_t linkage;
++
++		var = tag__variable(pos);
++		/*
++		 * .data..percpu is stored in a segment whose initial address is
++		 * set to 0, the addresses of per-CPU variables are addresses
++		 * relative to 0.
++		 *
++		 * https://lwn.net/Articles/531148/
++		 */
++		if ((int64_t)var->ip.addr <= 0)
++			continue;
++		linkage = variable__scope(var) == VSCOPE_GLOBAL;
++		btf_var_id = btf_elf__add_var_type(btfe, var->ip.tag.type,
++						   var->name, linkage,
++						   type_id_off);
++		if (btf_var_id < 0) {
++			err = -1;
++			printf("error: failed to encode variable '%s'\n",
++			       variable__name(var, cu));
++			goto out;
++		}
++	}
++
+ out:
+ 	if (err)
+ 		btf_elf__delete(btfe);
+diff --git a/libbtf.c b/libbtf.c
+index 2fbce40..de85666 100644
+--- a/libbtf.c
++++ b/libbtf.c
+@@ -613,6 +613,35 @@ int32_t btf_elf__add_func_proto(struct btf_elf *btfe, struct ftype *ftype, uint3
+ 	return type_id;
+ }
+ 
++int32_t btf_elf__add_var_type(struct btf_elf *btfe, uint32_t type,
++			      uint32_t name_off, uint32_t linkage,
++			      uint32_t type_id_off)
++{
++	struct {
++		struct btf_type type;
++		struct btf_var var;
++	} t;
++
++	t.type.name_off = name_off;
++	t.type.info = BTF_INFO_ENCODE(BTF_KIND_VAR, 0, 0);
++	t.type.type = type_id_off + type;
++
++	t.var.linkage = linkage;
++
++	++btfe->type_index;
++	if (gobuffer__add(&btfe->types, &t.type, sizeof(t)) < 0) {
++		btf_elf__log_type(btfe, &t.type, true, true,
++				  "type=%u name=%s Error in adding gobuffer",
++				  t.type.type, btf_elf__name_in_gobuf(btfe, t.type.name_off));
++		return -1;
++	}
++
++	btf_elf__log_type(btfe, &t.type, false, false, "type=%u name=%s",
++			  t.type.type, btf_elf__name_in_gobuf(btfe, t.type.name_off));
++
++	return btfe->type_index;
++}
++
+ static int btf_elf__write(const char *filename, struct btf *btf)
+ {
+ 	GElf_Shdr shdr_mem, *shdr;
+diff --git a/libbtf.h b/libbtf.h
+index f3c8500..d9e723a 100644
+--- a/libbtf.h
++++ b/libbtf.h
+@@ -55,6 +55,8 @@ int32_t btf_elf__add_enum(struct btf_elf *btf, uint32_t name, uint32_t size,
+ int btf_elf__add_enum_val(struct btf_elf *btf, uint32_t name, int32_t value);
+ int32_t btf_elf__add_func_proto(struct btf_elf *btf, struct ftype *ftype,
+ 				uint32_t type_id_off);
++int32_t btf_elf__add_var_type(struct btf_elf *btfe, uint32_t type, uint32_t name_off,
++			      uint32_t linkage, uint32_t type_id_off);
+ void btf_elf__set_strings(struct btf_elf *btf, struct gobuffer *strings);
+ int  btf_elf__encode(struct btf_elf *btf, uint8_t flags);
+ 
+diff --git a/pahole.c b/pahole.c
+index e2a081b..8407db9 100644
+--- a/pahole.c
++++ b/pahole.c
+@@ -1084,6 +1084,7 @@ static error_t pahole__options_parser(int key, char *arg,
+ 	case 'i': find_containers = 1;
+ 		  class_name = arg;			break;
+ 	case 'J': btf_encode = 1;
++		  conf_load.get_addr_info = true;
+ 		  no_bitfield_type_recode = true;	break;
+ 	case 'l': conf.show_first_biggest_size_base_type_member = 1;	break;
+ 	case 'M': conf.show_only_data_members = 1;	break;
+-- 
+2.27.0.rc2.251.g90737beb825-goog
