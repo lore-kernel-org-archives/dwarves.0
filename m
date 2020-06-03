@@ -1,8 +1,8 @@
 From: Arnaldo Carvalho de Melo <acme-DgEjT+Ai2ygdnm+yROfE0A@public.gmane.org>
 Subject: Re: [PATCH v2] btf_encoder: Teach pahole to store percpu variables
  in vmlinux BTF.
-Date: Wed, 3 Jun 2020 15:58:31 -0300
-Message-ID: <20200603185831.GA18375@kernel.org>
+Date: Wed, 3 Jun 2020 15:59:28 -0300
+Message-ID: <20200603185928.GB18375@kernel.org>
 References: <20200603172244.100562-1-haoluo@google.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -32,7 +32,11 @@ Em Wed, Jun 03, 2020 at 10:22:44AM -0700, Hao Luo escreveu:
 > 
 > In a v5.7-rc7 linux kernel, I was able to extract 294 such variables.
 > The space overhead is small.
-> 
+
+Please state what you changed from v1 to v2,
+
+- Arnaldo
+ 
 > Testing:
 > 
 > Before:
@@ -80,11 +84,7 @@ Em Wed, Jun 03, 2020 at 10:22:44AM -0700, Hao Luo escreveu:
 > +#define HASHADDR__BITS 8
 > +#define HASHADDR__SIZE (1UL << HASHADDR__BITS)
 > +#define hashaddr__fn(key) hash_64(key, HASHADDR__BITS)
-
-Yeah, that is in the ctf_encoder.c, I have to move them to a central
-location, so its fair you, for the sake of doing it as fast as possible,
-do it locally.
-
+> +
 > +static struct variable *hashaddr__find_variable(const struct hlist_head hashtable[],
 > +						const uint64_t addr)
 > +{
@@ -153,9 +153,6 @@ do it locally.
 > +	/* search within symtab for percpu variables */
 > +	symtab = elf_symtab__new(NULL, btfe->elf, &btfe->ehdr);
 > +	if (!symtab)
-
-Some error message is in need here?
-
 > +		goto out;
 > +
 > +	elf_symtab__for_each_symbol(symtab, core_id, sym) {
@@ -183,15 +180,8 @@ Some error message is in need here?
 > +		 */
 > +		if (!addr)
 > +			continue;
-
-Perhaps some more verbose debug message here so that we can debug what
-is not being added and why?
-
 > +		var = hashaddr__find_variable(hash_addr, addr);
 > +		if (var == NULL)
-
-Debug message
-
 > +			continue;
 > +
 > +		/* add a BTF_KIND_VAR in btfe->types */
