@@ -1,175 +1,113 @@
-From: Arnaldo Carvalho de Melo <acme-DgEjT+Ai2ygdnm+yROfE0A@public.gmane.org>
-Subject: Re: [PATCH v4] btf_encoder: Teach pahole to store percpu variables
- in vmlinux BTF.
-Date: Tue, 30 Jun 2020 08:59:27 -0300
-Message-ID: <20200630115927.GL29008@kernel.org>
-References: <20200618074853.133675-1-haoluo@google.com>
- <CAEf4BzbE2K7uyJ-2d3N+NLrV5OKS0HMm5vKuxMz5bfZkE_ANzw@mail.gmail.com>
- <CAEf4Bzbiu8G5UK9TDBRFYGwVk4A4QWoLurZsFKhs439gBXaDCg@mail.gmail.com>
+From: Lorenz Bauer <lmb-lDpJ742SOEtZroRs9YW3xA@public.gmane.org>
+Subject: Re: pahole generates invalid BTF for code compiled with recent clang
+Date: Tue, 30 Jun 2020 16:52:16 +0100
+Message-ID: <CACAyw9-pPbTVwQ0AM=1-7SQmFdU6EF127vcqy5pmPqL7gQP3nQ@mail.gmail.com>
+References: <CACAyw9-cinpz=U+8tjV-GMWuth71jrOYLQ05Q7_c34TCeMJxMg@mail.gmail.com>
+ <CAEf4BzbSc-wykq1_62CQwtszO+76rkudz_B=GkzE6ZheMUAusw@mail.gmail.com>
+ <CACAyw98ojwGjQm+Xk+_-B8Ah-hEt-Tgv_LQ1BdH4yBLYgVwpiA@mail.gmail.com> <CAEf4BzYjge6fijFadwuuHf-vr2VUqneT5b0k-GgQSkLMTj=UAA@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="UTF-8"
 Return-path: <dwarves-owner-u79uwXL29TY76Z2rM5mHXA@public.gmane.org>
-Content-Disposition: inline
-In-Reply-To: <CAEf4Bzbiu8G5UK9TDBRFYGwVk4A4QWoLurZsFKhs439gBXaDCg-JsoAwUIsXosN+BqQ9rBEUg@public.gmane.org>
+In-Reply-To: <CAEf4BzYjge6fijFadwuuHf-vr2VUqneT5b0k-GgQSkLMTj=UAA-JsoAwUIsXosN+BqQ9rBEUg@public.gmane.org>
 Sender: dwarves-owner-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
 To: Andrii Nakryiko <andrii.nakryiko-Re5JQEeQqe8AvxtiuMwx3w@public.gmane.org>
-Cc: Hao Luo <haoluo-hpIqsD4AKlfQT0dZR+AlfA@public.gmane.org>, Arnaldo Carvalho de Melo <arnaldo.melo-Re5JQEeQqe8AvxtiuMwx3w@public.gmane.org>, Alexei Starovoitov <alexei.starovoitov-Re5JQEeQqe8AvxtiuMwx3w@public.gmane.org>, Daniel Borkmann <daniel-FeC+5ew28dpmcu3hnIyYJQ@public.gmane.org>, Oleg Rombakh <olegrom-hpIqsD4AKlfQT0dZR+AlfA@public.gmane.org>, Martin Lau <kafai-b10kYP2dOMg@public.gmane.org>, dwarves-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
+Cc: bpf <bpf-u79uwXL29TY76Z2rM5mHXA@public.gmane.org>, dwarves-u79uwXL29TY76Z2rM5mHXA@public.gmane.org, kernel-team <kernel-team-lDpJ742SOEtZroRs9YW3xA@public.gmane.org>
 List-Id: dwarves@vger.kernel.org
 
-Em Mon, Jun 29, 2020 at 01:20:02PM -0700, Andrii Nakryiko escreveu:
-> On Fri, Jun 19, 2020 at 12:58 PM Andrii Nakryiko <andrii.nakryiko-Re5JQEeQqe8AvxtiuMwx3w@public.gmane.org> wrote:
-
-> > On Thu, Jun 18, 2020 at 12:49 AM Hao Luo <haoluo-hpIqsD4AKlfQT0dZR+AlfA@public.gmane.org> wrote:
-> > > +               if (!addr)
-> > > +                       continue;
-> > > +               var = hashaddr__find_variable(hash_addr, addr);
-> > > +               if (var == NULL)
-> > > +                       continue;
-> > > +
-> > > +               /*
-> > > +                * Valididate the variable's name, the same check is also
-> > > +                * performed in bpf verifier.
-> > > +                */
-> > > +               name = variable__name(var, cu);
-> > > +               if (!var->name || !btf_name_valid(name, true)) {
+On Thu, 25 Jun 2020 at 17:56, Andrii Nakryiko <andrii.nakryiko-Re5JQEeQqe8AvxtiuMwx3w@public.gmane.org> wrote:
+>
+> On Thu, Jun 25, 2020 at 2:25 AM Lorenz Bauer <lmb-lDpJ742SOEtZroRs9YW3xA@public.gmane.org> wrote:
 > >
-> > It might be ok to filter them out, but I'd rather try to first
-> > understand why do we get those invalid names in the first place.
-> > Otherwise we might be just papering over the real bug in how we
-> > process symbols/variables in DWARF?
-> 
-> Ok, so I played with it a bit locally. Those variables with empty name
-> or 0 size seem to be due to some bugs in variable__name() and
-> variable__type_size() implementations. If you stick to ELF symbol's
-> elf_sym__name() and elf_sym__size(), you'll get valid sizes.
-> 
-> Arnaldo, could you please take a look at why variable__xxx() impls
-> don't work for some variables? I can repro it locally, e.g.:
-
-I'm looking at it, I think this is that maybe not all variables that are
-in the elf symbol table are encoded in DWARF (maybe some declared in asm
-files?) and thus we will not find its name in the .debug_str.
-
-ctf_loader.c, that was used as the model for btf_loader.c has this:
-
-static const char *ctf__variable_name(const struct variable *var,
-                                      const struct cu *cu)
-{
-        struct ctf *ctf = cu->priv;
-
-        return ctf->symtab->symstrs->d_buf + var->name;
-}
-
-struct debug_fmt_ops ctf__ops = {
-        .name           = "ctf",
-        .function__name = ctf__function_name,
-        .load_file      = ctf__load_file,
-        .variable__name = ctf__variable_name,
-        .strings__ptr   = ctf__strings_ptr,
-        .cu__delete     = ctf__cu_delete,
-};
-
-And then
-
-const char *variable__name(const struct variable *var, const struct cu *cu)
-{
-        if (cu->dfops && cu->dfops->variable__name)
-                return cu->dfops->variable__name(var, cu);
-        return s(cu, var->name);
-}
-
-I.e. btf_loader.c and dwarf_loader.c are using the fallback return that
-assumes all strings are in a single table, the CTF one gets variable
-names from the ELF symtab, as you seem to be doing by using
-elf_sym__name() directly.
-
-I'm reading Hao's patch to see how the variables are being created as
-they are loaded from DWARF, to check this hunch.
-
-- Arnaldo
- 
-> ELF SYM kstat == <empty>, SZ 48 == 0
-> invalid type size for variable '(null)'.
-> invalid variable name '(null)'.
-> 
-> kstat and 48 come from ELF symbol, <empty> and 0 are from
-> variabel__xxx(). And that happens for quite a few variables, actually.
-> 
-> With those fixes, my kernel can be successfully BTF-generated. The
-> number of per-cpu variables jump from 213 with all this filtering to
-> 287 proper variables while using elf_sym__xxx() functions.
-> 
+> > On Wed, 24 Jun 2020 at 18:41, Andrii Nakryiko <andrii.nakryiko-Re5JQEeQqe8AvxtiuMwx3w@public.gmane.org> wrote:
+> > >
+> > > On Wed, Jun 24, 2020 at 4:07 AM Lorenz Bauer <lmb-lDpJ742SOEtZroRs9YW3xA@public.gmane.org> wrote:
+> > > >
+> > > > Hi,
+> > > >
+> > > > If pahole -J is used on an ELF that has BTF info from clang, it
+> > > > produces an invalid
+> > > > output. This is because pahole rewrites the .BTF section (which
+> > > > includes a new string
+> > > > table) but it doesn't touch .BTF.ext at all.
+> > >
+> > > Why do you run `pahole -J` on BPF .o file? Clang already generates
+> > > .BTF (and .BTF.ext, of course) for you.
 > >
-> > > +                       if (verbose)
-> > > +                               printf("invalid variable name '%s'.\n", name);
-> > > +                       continue;
-> > > +               }
-> > > +
-> > > +               /*
-> > > +                * Validate the variable's type, the same check is also
-> > > +                * performed in bpf verifier.
-> > > +                */
-> > > +               type = var->ip.tag.type + type_id_off;
-> > > +               if (type == 0) {
-> > > +                       if (verbose)
-> > > +                               printf("invalid type for variable '%s'.\n", name);
-> > > +                       continue;
+> > You're missing the point. The kernel build system does it. Try the following:
+>
+> Yeah, I clearly am, because "compiling old kernels like 4.19" made me
+> think that we are talking about building kernel, not selftests.
+>
 > >
-> > Again, there might be cases which we want to ignore, but we need to
-> > understand what and why those cases are?
+> > * Get the v4.19 sources
+> > * Make sure that clang --version is 10
+> > * Make sure you have pahole (I used v1.17)
+> > * Build selftests
 > >
-> > > +               }
-> > > +
-> > > +               /*
-> > > +                * Validate the size of the variable's type, the same check is
-> > > +                * also performed in bpf verifier.
-> > > +                */
-> > > +               size = variable__type_size(var, cu);
-> > > +               if (size == 0) {
-> > > +                       if (verbose)
-> > > +                               printf("invalid type size for variable '%s'.\n", name);
-> > > +                       continue;
-> > > +               }
-> > > +
+> > The resulting object files will have bogus .BTF.ext sections due the
+> > bug I have described. Does it make sense to run pahole -J on these?
+> > No, but it still happens.
 > >
-> > The goal here is not to satisfy the verifier, but to generate BTF from
-> > DWARF faithfully. Let's not just ignore "inconvenient" cases and
-> > instead investigate why such cases happen.
+>
+> Yeah, because back in the day Clang didn't know how to generate .BTF,
+> so using pahole to generate .BTF for BPF object files was a solution.
+>
+> > I think it's reasonable to expect to get valid BPF ELFs out of this process.
+>
+> We should probably update Makefile for old kernel selftest to not call
+> pahole -J, if Clang is recent enough and/or if .o file already has
+> .BTF. That shouldn't be hard.
+
+Yeah, I think that would work!
+
+>
 > >
-> > > +               if (verbose)
-> > > +                       printf("symbol '%s' of address 0x%lx encoded\n",
-> > > +                              elf_sym__name(&sym, btfe->symtab), addr);
-> > > +
-> > > +               /* add a BTF_KIND_VAR in btfe->types */
-> > > +               linkage = var->external ? BTF_VAR_GLOBAL_ALLOCATED : BTF_VAR_STATIC;
-> > > +               btf_var_id = btf_elf__add_var_type(btfe, type, var->name, linkage);
-> > > +               if (btf_var_id < 0) {
-> > > +                       err = -1;
-> > > +                       printf("error: failed to encode variable '%s'\n", name);
-> > > +                       break;
-> > > +               }
-> > > +
-> > > +               /*
-> > > +                * add a BTF_VAR_SECINFO in btfe->percpu_secinfo, which will be added into
-> > > +                * btfe->types later when we add BTF_VAR_DATASEC.
-> > > +                */
-> > > +               type = btf_var_id;
-> > > +               offset = addr - btfe->percpu_base_addr;
-> > > +               btf_var_secinfo_id = btf_elf__add_var_secinfo(&btfe->percpu_secinfo,
-> > > +                                                             type, offset, size);
-> > > +               if (btf_var_secinfo_id < 0) {
-> > > +                       err = -1;
-> > > +                       printf("error: failed to encode var secinfo '%s'\n", name);
-> > > +                       break;
-> > > +               }
-> > > +       }
-> > > +
-> > >  out:
-> > >         if (err)
-> > >                 btf_elf__delete(btfe);
+> > >
+> > > pahole -J is supposed to be used for vmlinux, not for clang-compiled
+> > > -target BPF object files.
+> > >
+> > > >
+> > > > To demonstrate, on a recent check out of bpf-next:
+> > > >     $ cp connect4_prog.o connect4_pahole.o
+> > > >     $ pahole -J connect4_pahole.o
+> > > >     $ llvm-objcopy-10 --dump-section .BTF=pahole-btf.bin
+> > > > --dump-section .BTF.ext=pahole-btf-ext.bin connect4_pahole.o
+> > > >     $ llvm-objcopy-10 --dump-section .BTF=btf.bin --dump-section
+> > > > .BTF.ext=btf-ext.bin connect4_prog.o
+> > > >     $ sha1sum *.bin
+> > > >     1b5c7407dd9fd13f969931d32f6b864849e66a68  btf.bin
+> > > >     4c43efcc86d3cd908ddc77c15fc4a35af38d842b  btf-ext.bin
+> > > >     2a60767a3a037de66a8d963110601769fa0f198e  pahole-btf.bin
+> > > >     4c43efcc86d3cd908ddc77c15fc4a35af38d842b  pahole-btf-ext.bin
+> > > >
+> > > > This problem crops up when compiling old kernels like 4.19 which have
+> > > > an extra pahole
+> > > > build step with clang-10.
+> > >
+> > > I was under impression that clang generates .BTF and .BTF.ext only for
+> > > -target BPF. In this case, kernel is compiled for "real" target arch,
+> > > so there shouldn't be .BTF.ext in the first place? If that's not the
+> > > case, then I guess it's a bug in Clang.
 > >
-> > [...]
+> > connect4_prog.o is BPF:
+> >
+> > $ readelf -h connect4_prog.o | grep BPF
+> >   Machine:                           Linux BPF
+> >
+> > Maybe I misunderstand what you're trying to say.
+> >
+>
+> I was talking/thinking about building kernel, you were talking about
+> building BPF object files in selftests. Just to avoid confusion in the
+> future, let's not talk about compiling kernel, when we are talking
+> about compiling selftests.
+
+Point taken :)
+
+Lorenz
 
 -- 
+Lorenz Bauer  |  Systems Engineer
+6th Floor, County Hall/The Riverside Building, SE1 7PB, UK
 
-- Arnaldo
+www.cloudflare.com
