@@ -1,9 +1,8 @@
 From: Arnaldo Carvalho de Melo <acme-DgEjT+Ai2ygdnm+yROfE0A@public.gmane.org>
-Subject: pahole and parsing data: --skip
-Date: Wed, 1 Jul 2020 08:44:21 -0300
-Message-ID: <20200701114421.GR29008@kernel.org>
-References: <e52cf45d-311f-85c7-d358-5592d3666092@redhat.com>
- <20200624173038.GC20203@kernel.org>
+Subject: pahole and parsing data: --seek_bytes, dissecting perf.data files
+Date: Wed, 1 Jul 2020 09:46:16 -0300
+Message-ID: <20200701124616.GS29008@kernel.org>
+References: <20200624173038.GC20203@kernel.org>
  <20200624185748.GA16165@redhat.com>
  <20200624190716.GA4139@redhat.com>
  <a5238972-e36e-3abe-aa14-5dcca58c46fb@redhat.com>
@@ -12,45 +11,54 @@ References: <e52cf45d-311f-85c7-d358-5592d3666092@redhat.com>
  <20200625160326.GA10325@kernel.org>
  <0eae329c-d448-4d04-c240-0850a93278a5@redhat.com>
  <20200701112534.GQ29008@kernel.org>
+ <20200701114421.GR29008@kernel.org>
 Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8bit
 Return-path: <dwarves-owner-u79uwXL29TY76Z2rM5mHXA@public.gmane.org>
 Content-Disposition: inline
-In-Reply-To: <20200701112534.GQ29008-DgEjT+Ai2ygdnm+yROfE0A@public.gmane.org>
+In-Reply-To: <20200701114421.GR29008-DgEjT+Ai2ygdnm+yROfE0A@public.gmane.org>
 Sender: dwarves-owner-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
 To: dwarves-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
-Cc: Joe Lawrence <joe.lawrence-H+wXaHxf7aLQT0dZR+AlfA@public.gmane.org>, Jiri Olsa <jolsa-DgEjT+Ai2ygdnm+yROfE0A@public.gmane.org>, Namhyung Kim <namhyung-DgEjT+Ai2ygdnm+yROfE0A@public.gmane.org>
+Cc: Joe Lawrence <joe.lawrence-H+wXaHxf7aLQT0dZR+AlfA@public.gmane.org>, Jiri Olsa <jolsa-DgEjT+Ai2ygdnm+yROfE0A@public.gmane.org>, Namhyung Kim <namhyung-DgEjT+Ai2ygdnm+yROfE0A@public.gmane.org>, Andrii Nakryiko <andrii.nakryiko-Re5JQEeQqe8AvxtiuMwx3w@public.gmane.org>, Song Liu <songliubraving-b10kYP2dOMg@public.gmane.org>
 List-Id: dwarves@vger.kernel.org
 
-Em Wed, Jul 01, 2020 at 08:25:34AM -0300, Arnaldo Carvalho de Melo escreveu:
-> 	The latest changeset shows what this is about, see its example
-> below, please help testing and suggesting whatever needs you have
-> regarding pretty printing.
-> 
-> 	Now to implement --skip.
+Em Wed, Jul 01, 2020 at 08:44:21AM -0300, Arnaldo Carvalho de Melo escreveu:
+> Em Wed, Jul 01, 2020 at 08:25:34AM -0300, Arnaldo Carvalho de Melo escreveu:
+> > 	The latest changeset shows what this is about, see its example
+> > below, please help testing and suggesting whatever needs you have
+> > regarding pretty printing.
+> > 
+> > 	Now to implement --skip.
 
-Now to implement --seek, this time in bytes, so that we can, for
-instance, pretty print perf.data records, looking at 'perf report -D'
-and getting the offset of the start of a series of 'struct
-perf_event_attr' or 'struct perf_event_header'.
+> Now to implement --seek, this time in bytes, so that we can, for
+> instance, pretty print perf.data records, looking at 'perf report -D'
+> and getting the offset of the start of a series of 'struct
+> perf_event_attr' or 'struct perf_event_header'.
 
-- Arnaldo
+Here it is with more complex examples dissecting perf.data file data
+structures, including BPF related structs:
 
-commit 44af7c02b5d0a7f2b93fab9fda45907cd6fe0827
+commit fe284221448c950d2ba17bce91d19c484d6580a0
 Author: Arnaldo Carvalho de Melo <acme-H+wXaHxf7aLQT0dZR+AlfA@public.gmane.org>
-Date:   Wed Jul 1 08:36:28 2020 -0300
+Date:   Wed Jul 1 09:17:38 2020 -0300
 
-    pahole: Implement --skip, just like dd
+    pahole: Introduce --seek_bytes
+    
+    Works with stdio, will work with files where we'll use plain lseek and
+    allow for pretty printing trailer structs.
+    
+    E.g.:
     
       $ objcopy -O binary --only-section=__versions drivers/scsi/sg.ko versions
       $ pahole -C modversion_info drivers/scsi/sg.ko
       struct modversion_info {
-            long unsigned int          crc;                  /*     0     8 */
-            char                       name[56];             /*     8    56 */
+              long unsigned int          crc;                  /*     0     8 */
+              char                       name[56];             /*     8    56 */
     
-            /* size: 64, cachelines: 1, members: 2 */
+              /* size: 64, cachelines: 1, members: 2 */
       };
-      $ pahole --count 3 -C modversion_info drivers/scsi/sg.ko < versions
+      $ pahole --count 2 -C modversion_info drivers/scsi/sg.ko < versions
       {
             .crc = 0x8dabd84,
             .name = "module_layout",
@@ -59,124 +67,262 @@ Date:   Wed Jul 1 08:36:28 2020 -0300
             .crc = 0x45e4617b,
             .name = "no_llseek",
       },
-      {
-            .crc = 0xa23fae8c,
-            .name = "param_ops_int",
-      },
-      $ pahole --skip 1 --count 2 -C modversion_info drivers/scsi/sg.ko < versions
+      $ pahole --skip 1 --count 1 -C modversion_info drivers/scsi/sg.ko < versions
       {
             .crc = 0x45e4617b,
             .name = "no_llseek",
       },
+    
+    Then the equivalent, skipping sizeof(modversion_info) explicitely:
+    
+      $ pahole --seek_bytes 64 --count 1 -C modversion_info drivers/scsi/sg.ko < versions
       {
-            .crc = 0xa23fae8c,
-            .name = "param_ops_int",
+            .crc = 0x45e4617b,
+            .name = "no_llseek",
       },
       $
+    
+    Using a perf.data file generated by 'perf record':
+    
+      $ perf report -D | head -18
+      # To display the perf.data header info, please use --header/--header-only options.
+      #
+    
+      0x130 [0x20]: event: 79
+      .
+      . ... raw event: size 32 bytes
+      .  0000:  4f 00 00 00 00 00 20 00 1f 00 00 00 00 00 00 00  O..... .........
+      .  0010:  31 30 9b 3c 00 00 00 00 2e 53 f8 0c 52 8c 01 00  10.<.....S�.R...
+    
+      0 0x130 [0x20]: PERF_RECORD_TIME_CONV: unhandled!
+    
+      0x150 [0x28]: event: 73
+      .
+      . ... raw event: size 40 bytes
+      .  0000:  49 00 00 00 00 00 28 00 01 00 00 00 00 00 00 00  I.....(.........
+      .  0010:  50 7e 00 00 00 00 00 00 00 00 00 00 00 00 00 00  P~..............
+      .  0020:  00 00 00 00 00 00 00 00                          ........
+    
+      $ pahole --seek_bytes 0x130 --count 1 -C perf_event_header < perf.data
+      {
+            .type = 0x4f,
+            .misc = 0,
+            .size = 0x20,
+      },
+      $ printf "0x%x\n" 79
+      0x4f
+      $ pahole --seek_bytes 0x150 --count 1 -C perf_event_header < perf.data
+      {
+            .type = 0x49,
+            .misc = 0,
+            .size = 0x28,
+      },
+      $ printf "0x%x\n" 73
+      0x49
+      $
+    
+    Now to use more complex types, again using perf.data files.
+    
+      # perf record -a sleep 1
+      [ perf record: Woken up 1 times to write data ]
+      [ perf record: Captured and wrote 3.834 MB perf.data (31853 samples) ]
+      # perf report -D | grep -m1 -B20 PERF_RECORD_BPF
+      0x6aa0 [0x58]: event: 17
+      .
+      . ... raw event: size 88 bytes
+      .  0020:  5f 37 62 65 34 39 65 33 39 33 34 61 31 32 35 62  _7be49e3934a125b
+      .  0030:  61 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  a...............
+      .  0040:  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+      .  0050:  00 00 00 00 00 00 00 00                          ........
+    
+      0 0 0x6aa0 [0x58]: PERF_RECORD_KSYMBOL addr ffffffffc03e0e90 len 203 type 1 flags 0x0 name bpf_prog_7be49e3934a125ba
+    
+      0x6af8 [0x38]: event: 18
+      .
+      . ... raw event: size 56 bytes
+      .  0000:  12 00 00 00 00 00 38 00 01 00 00 00 11 00 00 00  ......8.........
+      .  0020:  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+      .  0030:  00 00 00 00 00 00 00 00                          ........
+    
+      0 0 0x6af8 [0x38]: PERF_RECORD_BPF_EVENT type 1, flags 0, id 17
+      Binary file (standard input) matches
+      # pahole -C perf_record_bpf_event ~/bin/perf
+      struct perf_record_bpf_event {
+            struct perf_event_header   header;               /*     0     8 */
+            __u16                      type;                 /*     8     2 */
+            __u16                      flags;                /*    10     2 */
+            __u32                      id;                   /*    12     4 */
+            __u8                       tag[8];               /*    16     8 */
+    
+            /* size: 24, cachelines: 1, members: 5 */
+            /* last cacheline: 24 bytes */
+      };
+      # pahole -C perf_record_bpf_event --seek_bytes 0x6af8 --count 1 ~/bin/perf < perf.data
+      {
+            .header = 0x12 0x00 0x00 0x00 0x00 0x00 0x38 0x00,
+            .type = 0x1,
+            .flags = 0,
+            .id = 0x11,
+            .tag = { 0, 0, 0, 0, 0, 0, 0, 0},
+      },
+      # printf "0x%x\n" 18
+      0x12
+      # pahole -C perf_record_ksymbol ~/bin/perf
+      struct perf_record_ksymbol {
+            struct perf_event_header   header;               /*     0     8 */
+            __u64                      addr;                 /*     8     8 */
+            __u32                      len;                  /*    16     4 */
+            __u16                      ksym_type;            /*    20     2 */
+            __u16                      flags;                /*    22     2 */
+            char                       name[256];            /*    24   256 */
+    
+            /* size: 280, cachelines: 5, members: 6 */
+            /* last cacheline: 24 bytes */
+      };
+      # pahole -C perf_record_ksymbol --seek_bytes 0x6aa0 --count 1 ~/bin/perf < perf.data
+      {
+            .header = 0x11 0x00 0x00 0x00 0x00 0x00 0x58 0x00,
+            .addr = 0xffffffffc03e0e90,
+            .len = 0xcb,
+            .ksym_type = 0x1,
+            .flags = 0,
+            .name = "bpf_prog_7be49e3934a125ba",
+      },
+      # printf "0x%x\n" 17
+      0x11
+      #
+    
+    Need to recursively pretty print substructs, but all seems to work with
+    the simple hexdump.
     
     Signed-off-by: Arnaldo Carvalho de Melo <acme-H+wXaHxf7aLQT0dZR+AlfA@public.gmane.org>
 
 diff --git a/dwarves.h b/dwarves.h
-index f224d05b28c3..24f9c7c37843 100644
+index 24f9c7c37843..1b118d03ec15 100644
 --- a/dwarves.h
 +++ b/dwarves.h
-@@ -55,6 +55,7 @@ struct conf_load {
- /** struct conf_fprintf - hints to the __fprintf routines
+@@ -13,6 +13,7 @@
+ #include <obstack.h>
+ #include <dwarf.h>
+ #include <elfutils/libdwfl.h>
++#include <sys/types.h>
+ 
+ #include "dutil.h"
+ #include "list.h"
+@@ -56,6 +57,7 @@ struct conf_load {
   *
   * @count - Just like 'dd', stop pretty printing input after 'count' records
-+ * @skip - Just like 'dd', skip 'count' records when pretty printing input
+  * @skip - Just like 'dd', skip 'count' records when pretty printing input
++ * @seek_bytes - Number of bytes to seek, if stdin only from start, when we have --pretty FILE, then from the end as well with negative numbers
   * @flat_arrays - a->foo[10][2] becomes a->foo[20]
   * @classes_as_structs - class f becomes struct f, CTF doesn't have a "class"
   * @cachelinep - pointer to current cacheline, so that when expanding types we keep track of it,
-@@ -71,6 +72,7 @@ struct conf_fprintf {
+@@ -72,6 +74,7 @@ struct conf_fprintf {
  	uint32_t   base_offset;
  	uint32_t   count;
  	uint32_t   *cachelinep;
-+	uint32_t   skip;
++	off_t	   seek_bytes;
+ 	uint32_t   skip;
  	uint8_t	   indent;
  	uint8_t	   expand_types:1;
- 	uint8_t	   expand_pointers:1;
 diff --git a/man-pages/pahole.1 b/man-pages/pahole.1
-index 7e8207756432..db820cca323f 100644
+index db820cca323f..ad4e92d716cf 100644
 --- a/man-pages/pahole.1
 +++ b/man-pages/pahole.1
-@@ -78,6 +78,10 @@ Set cacheline size to SIZE bytes.
- .B \-\-count=COUNT
- Pretty print the first COUNT records from input.
- 
-+.TP
-+.B \-\-skip=COUNT
-+Skip COUNT input records.
-+
- .TP
- .B \-E, \-\-expand_types
- Expand class members. Useful to find in what member of inner structs where an
-@@ -502,6 +506,16 @@ $ pahole --count 3 -C modversion_info drivers/scsi/sg.ko < versions
+@@ -516,6 +516,14 @@ $ pahole --skip 1 --count 2 -C modversion_info drivers/scsi/sg.ko < versions
        .name = "param_ops_int",
  },
  $
-+$ pahole --skip 1 --count 2 -C modversion_info drivers/scsi/sg.ko < versions
++This is equivalent to:
++
++$ pahole --seek_bytes 64 --count 1 -C modversion_info drivers/scsi/sg.ko < versions
 +{
-+      .crc = 0x45e4617b,
-+      .name = "no_llseek",
-+},
-+{
-+      .crc = 0xa23fae8c,
-+      .name = "param_ops_int",
++	.crc = 0x45e4617b,
++	.name = "no_llseek",
 +},
 +$
  .fi
  .P
  
 diff --git a/pahole.c b/pahole.c
-index 1b84f5c2fa4a..7d8431c64423 100644
+index 7d8431c64423..245a3f2f14f7 100644
 --- a/pahole.c
 +++ b/pahole.c
-@@ -803,6 +803,7 @@ ARGP_PROGRAM_VERSION_HOOK_DEF = dwarves_print_version;
- #define ARGP_just_unions	   309
+@@ -3,7 +3,7 @@
+ 
+   Copyright (C) 2006 Mandriva Conectiva S.A.
+   Copyright (C) 2006 Arnaldo Carvalho de Melo <acme-4qZELD6FgxhWk0Htik3J/w@public.gmane.org>
+-  Copyright (C) 2007-2008 Arnaldo Carvalho de Melo <acme-H+wXaHxf7aLQT0dZR+AlfA@public.gmane.org>
++  Copyright (C) 2007- Arnaldo Carvalho de Melo <acme-H+wXaHxf7aLQT0dZR+AlfA@public.gmane.org>
+ */
+ 
+ #include <argp.h>
+@@ -804,6 +804,7 @@ ARGP_PROGRAM_VERSION_HOOK_DEF = dwarves_print_version;
  #define ARGP_just_structs	   310
  #define ARGP_count		   311
-+#define ARGP_skip		   312
+ #define ARGP_skip		   312
++#define ARGP_seek_bytes		   313
  
  static const struct argp_option pahole__options[] = {
  	{
-@@ -829,6 +830,12 @@ static const struct argp_option pahole__options[] = {
+@@ -836,6 +837,12 @@ static const struct argp_option pahole__options[] = {
  		.arg  = "COUNT",
- 		.doc  = "Print only COUNT input records"
+ 		.doc  = "Skip COUNT input records"
  	},
 +	{
-+		.name = "skip",
-+		.key  = ARGP_skip,
-+		.arg  = "COUNT",
-+		.doc  = "Skip COUNT input records"
++		.name = "seek_bytes",
++		.key  = ARGP_seek_bytes,
++		.arg  = "BYTES",
++		.doc  = "Seek COUNT input records"
 +	},
  	{
  		.name = "find_pointers_to",
  		.key  = 'f',
-@@ -1154,6 +1161,8 @@ static error_t pahole__options_parser(int key, char *arg,
- 		just_structs = true;			break;
- 	case ARGP_count:
+@@ -1163,6 +1170,8 @@ static error_t pahole__options_parser(int key, char *arg,
  		conf.count = atoi(arg);			break;
-+	case ARGP_skip:
-+		conf.skip = atoi(arg);			break;
+ 	case ARGP_skip:
+ 		conf.skip = atoi(arg);			break;
++	case ARGP_seek_bytes:
++		conf.seek_bytes = strtol(arg, NULL, 0);	break;
  	default:
  		return ARGP_ERR_UNKNOWN;
  	}
-@@ -1325,11 +1334,17 @@ static int tag__stdio_fprintf_value(struct tag *type, struct cu *cu, FILE *fp)
- 	int _sizeof = tag__size(type, cu), printed = 0;
- 	void *instance = malloc(_sizeof);
- 	uint32_t count = 0;
-+	uint32_t skip = conf.skip;
+@@ -1329,6 +1338,25 @@ static int tag__fprintf_value(struct tag *type, struct cu *cu, void *instance, i
+ 	return tag__fprintf_hexdump_value(type, cu, instance, _sizeof, fp);
+ }
  
++static int pipe_seek(FILE *fp, off_t offset)
++{
++	char bf[4096];
++	int chunk = sizeof(bf);
++
++	if (chunk > offset)
++		chunk = offset;
++
++	while (fread(bf, chunk, 1, stdin) == 1) {
++		offset -= chunk;
++		if (offset == 0)
++			return 0;
++		if (chunk > offset)
++			chunk = offset;
++	}
++
++	return offset == 0 ? 0 : -1;
++}
++
+ static int tag__stdio_fprintf_value(struct tag *type, struct cu *cu, FILE *fp)
+ {
+ 	int _sizeof = tag__size(type, cu), printed = 0;
+@@ -1339,6 +1367,12 @@ static int tag__stdio_fprintf_value(struct tag *type, struct cu *cu, FILE *fp)
  	if (instance == NULL)
  		return -ENOMEM;
  
- 	while (fread(instance, _sizeof, 1, stdin) == 1) {
-+		if (skip) {
-+			--skip;
-+			continue;
-+		}
++	if (conf.seek_bytes && pipe_seek(stdin, conf.seek_bytes) < 0) {
++		int err = --errno;
++		fprintf(stderr, "Couldn't --seek_bytes %ld\n", conf.seek_bytes);
++		return err;
++	}
 +
- 		printed += tag__fprintf_value(type, cu, instance, _sizeof, fp);
- 		printed += fprintf(fp, ",\n");
- 
+ 	while (fread(instance, _sizeof, 1, stdin) == 1) {
+ 		if (skip) {
+ 			--skip;
