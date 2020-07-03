@@ -1,328 +1,205 @@
-From: Arnaldo Carvalho de Melo <acme-DgEjT+Ai2ygdnm+yROfE0A@public.gmane.org>
-Subject: pahole and parsing data: --seek_bytes, dissecting perf.data files
-Date: Wed, 1 Jul 2020 09:46:16 -0300
-Message-ID: <20200701124616.GS29008@kernel.org>
-References: <20200624173038.GC20203@kernel.org>
- <20200624185748.GA16165@redhat.com>
- <20200624190716.GA4139@redhat.com>
- <a5238972-e36e-3abe-aa14-5dcca58c46fb@redhat.com>
- <20200625113816.GA29008@kernel.org>
- <20200625114129.GB29008@kernel.org>
- <20200625160326.GA10325@kernel.org>
- <0eae329c-d448-4d04-c240-0850a93278a5@redhat.com>
- <20200701112534.GQ29008@kernel.org>
- <20200701114421.GR29008@kernel.org>
+From: Hao Luo <haoluo-hpIqsD4AKlfQT0dZR+AlfA@public.gmane.org>
+Subject: Re: [PATCH v4] btf_encoder: Teach pahole to store percpu variables in
+ vmlinux BTF.
+Date: Fri, 3 Jul 2020 01:13:07 -0700
+Message-ID: <CA+khW7iwOnVacJ4XCNU=0RtT-2T=vX4usLh7LDayOSH97=j1KA@mail.gmail.com>
+References: <20200618074853.133675-1-haoluo@google.com> <CAEf4BzbE2K7uyJ-2d3N+NLrV5OKS0HMm5vKuxMz5bfZkE_ANzw@mail.gmail.com>
+ <CAEf4Bzbiu8G5UK9TDBRFYGwVk4A4QWoLurZsFKhs439gBXaDCg@mail.gmail.com> <20200630115927.GL29008@kernel.org>
 Mime-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="UTF-8"
 Return-path: <dwarves-owner-u79uwXL29TY76Z2rM5mHXA@public.gmane.org>
-Content-Disposition: inline
-In-Reply-To: <20200701114421.GR29008-DgEjT+Ai2ygdnm+yROfE0A@public.gmane.org>
+In-Reply-To: <20200630115927.GL29008-DgEjT+Ai2ygdnm+yROfE0A@public.gmane.org>
 Sender: dwarves-owner-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
-To: dwarves-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
-Cc: Joe Lawrence <joe.lawrence-H+wXaHxf7aLQT0dZR+AlfA@public.gmane.org>, Jiri Olsa <jolsa-DgEjT+Ai2ygdnm+yROfE0A@public.gmane.org>, Namhyung Kim <namhyung-DgEjT+Ai2ygdnm+yROfE0A@public.gmane.org>, Andrii Nakryiko <andrii.nakryiko-Re5JQEeQqe8AvxtiuMwx3w@public.gmane.org>, Song Liu <songliubraving-b10kYP2dOMg@public.gmane.org>
+To: Arnaldo Carvalho de Melo <acme-DgEjT+Ai2ygdnm+yROfE0A@public.gmane.org>
+Cc: Andrii Nakryiko <andrii.nakryiko-Re5JQEeQqe8AvxtiuMwx3w@public.gmane.org>, Arnaldo Carvalho de Melo <arnaldo.melo-Re5JQEeQqe8AvxtiuMwx3w@public.gmane.org>, Alexei Starovoitov <alexei.starovoitov-Re5JQEeQqe8AvxtiuMwx3w@public.gmane.org>, Daniel Borkmann <daniel-FeC+5ew28dpmcu3hnIyYJQ@public.gmane.org>, Oleg Rombakh <olegrom-hpIqsD4AKlfQT0dZR+AlfA@public.gmane.org>, Martin Lau <kafai-b10kYP2dOMg@public.gmane.org>, dwarves-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
 List-Id: dwarves@vger.kernel.org
 
-Em Wed, Jul 01, 2020 at 08:44:21AM -0300, Arnaldo Carvalho de Melo escreveu:
-> Em Wed, Jul 01, 2020 at 08:25:34AM -0300, Arnaldo Carvalho de Melo escreveu:
-> > 	The latest changeset shows what this is about, see its example
-> > below, please help testing and suggesting whatever needs you have
-> > regarding pretty printing.
-> > 
-> > 	Now to implement --skip.
+Some update on my side.
 
-> Now to implement --seek, this time in bytes, so that we can, for
-> instance, pretty print perf.data records, looking at 'perf report -D'
-> and getting the offset of the start of a series of 'struct
-> perf_event_attr' or 'struct perf_event_header'.
+I am sending a v5 based on Andrii's suggestion on using elf_sym__name
+and elf_sym__size. It seems my local build tool has encoded all the
+symbols into DWARF, therefore, I don't see those "(anon)" variables in
+either v4 or v5, as seen by Andrii and Arnaldo. But I did come up with
+a potential concern about the variable's type while writing v5. Right
+now, the btf_id of the variable's type is retrieved as
 
-Here it is with more complex examples dissecting perf.data file data
-structures, including BPF related structs:
+type = var->ip.tag.type + type_id_off;
 
-commit fe284221448c950d2ba17bce91d19c484d6580a0
-Author: Arnaldo Carvalho de Melo <acme-H+wXaHxf7aLQT0dZR+AlfA@public.gmane.org>
-Date:   Wed Jul 1 09:17:38 2020 -0300
+If I understand correctly, this is obtained from DWARF. Since symtab
+doesn't store the symbol's type (please correct me if I'm wrong), even
+if we can get the variable's name and size using elf_sym__name and
+elf_sym__size, we have no way to get the type. I am afraid we may get
+an incorrect type id using var->ip.tag.type.
 
-    pahole: Introduce --seek_bytes
-    
-    Works with stdio, will work with files where we'll use plain lseek and
-    allow for pretty printing trailer structs.
-    
-    E.g.:
-    
-      $ objcopy -O binary --only-section=__versions drivers/scsi/sg.ko versions
-      $ pahole -C modversion_info drivers/scsi/sg.ko
-      struct modversion_info {
-              long unsigned int          crc;                  /*     0     8 */
-              char                       name[56];             /*     8    56 */
-    
-              /* size: 64, cachelines: 1, members: 2 */
-      };
-      $ pahole --count 2 -C modversion_info drivers/scsi/sg.ko < versions
-      {
-            .crc = 0x8dabd84,
-            .name = "module_layout",
-      },
-      {
-            .crc = 0x45e4617b,
-            .name = "no_llseek",
-      },
-      $ pahole --skip 1 --count 1 -C modversion_info drivers/scsi/sg.ko < versions
-      {
-            .crc = 0x45e4617b,
-            .name = "no_llseek",
-      },
-    
-    Then the equivalent, skipping sizeof(modversion_info) explicitely:
-    
-      $ pahole --seek_bytes 64 --count 1 -C modversion_info drivers/scsi/sg.ko < versions
-      {
-            .crc = 0x45e4617b,
-            .name = "no_llseek",
-      },
-      $
-    
-    Using a perf.data file generated by 'perf record':
-    
-      $ perf report -D | head -18
-      # To display the perf.data header info, please use --header/--header-only options.
-      #
-    
-      0x130 [0x20]: event: 79
-      .
-      . ... raw event: size 32 bytes
-      .  0000:  4f 00 00 00 00 00 20 00 1f 00 00 00 00 00 00 00  O..... .........
-      .  0010:  31 30 9b 3c 00 00 00 00 2e 53 f8 0c 52 8c 01 00  10.<.....S�.R...
-    
-      0 0x130 [0x20]: PERF_RECORD_TIME_CONV: unhandled!
-    
-      0x150 [0x28]: event: 73
-      .
-      . ... raw event: size 40 bytes
-      .  0000:  49 00 00 00 00 00 28 00 01 00 00 00 00 00 00 00  I.....(.........
-      .  0010:  50 7e 00 00 00 00 00 00 00 00 00 00 00 00 00 00  P~..............
-      .  0020:  00 00 00 00 00 00 00 00                          ........
-    
-      $ pahole --seek_bytes 0x130 --count 1 -C perf_event_header < perf.data
-      {
-            .type = 0x4f,
-            .misc = 0,
-            .size = 0x20,
-      },
-      $ printf "0x%x\n" 79
-      0x4f
-      $ pahole --seek_bytes 0x150 --count 1 -C perf_event_header < perf.data
-      {
-            .type = 0x49,
-            .misc = 0,
-            .size = 0x28,
-      },
-      $ printf "0x%x\n" 73
-      0x49
-      $
-    
-    Now to use more complex types, again using perf.data files.
-    
-      # perf record -a sleep 1
-      [ perf record: Woken up 1 times to write data ]
-      [ perf record: Captured and wrote 3.834 MB perf.data (31853 samples) ]
-      # perf report -D | grep -m1 -B20 PERF_RECORD_BPF
-      0x6aa0 [0x58]: event: 17
-      .
-      . ... raw event: size 88 bytes
-      .  0020:  5f 37 62 65 34 39 65 33 39 33 34 61 31 32 35 62  _7be49e3934a125b
-      .  0030:  61 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  a...............
-      .  0040:  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-      .  0050:  00 00 00 00 00 00 00 00                          ........
-    
-      0 0 0x6aa0 [0x58]: PERF_RECORD_KSYMBOL addr ffffffffc03e0e90 len 203 type 1 flags 0x0 name bpf_prog_7be49e3934a125ba
-    
-      0x6af8 [0x38]: event: 18
-      .
-      . ... raw event: size 56 bytes
-      .  0000:  12 00 00 00 00 00 38 00 01 00 00 00 11 00 00 00  ......8.........
-      .  0020:  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-      .  0030:  00 00 00 00 00 00 00 00                          ........
-    
-      0 0 0x6af8 [0x38]: PERF_RECORD_BPF_EVENT type 1, flags 0, id 17
-      Binary file (standard input) matches
-      # pahole -C perf_record_bpf_event ~/bin/perf
-      struct perf_record_bpf_event {
-            struct perf_event_header   header;               /*     0     8 */
-            __u16                      type;                 /*     8     2 */
-            __u16                      flags;                /*    10     2 */
-            __u32                      id;                   /*    12     4 */
-            __u8                       tag[8];               /*    16     8 */
-    
-            /* size: 24, cachelines: 1, members: 5 */
-            /* last cacheline: 24 bytes */
-      };
-      # pahole -C perf_record_bpf_event --seek_bytes 0x6af8 --count 1 ~/bin/perf < perf.data
-      {
-            .header = 0x12 0x00 0x00 0x00 0x00 0x00 0x38 0x00,
-            .type = 0x1,
-            .flags = 0,
-            .id = 0x11,
-            .tag = { 0, 0, 0, 0, 0, 0, 0, 0},
-      },
-      # printf "0x%x\n" 18
-      0x12
-      # pahole -C perf_record_ksymbol ~/bin/perf
-      struct perf_record_ksymbol {
-            struct perf_event_header   header;               /*     0     8 */
-            __u64                      addr;                 /*     8     8 */
-            __u32                      len;                  /*    16     4 */
-            __u16                      ksym_type;            /*    20     2 */
-            __u16                      flags;                /*    22     2 */
-            char                       name[256];            /*    24   256 */
-    
-            /* size: 280, cachelines: 5, members: 6 */
-            /* last cacheline: 24 bytes */
-      };
-      # pahole -C perf_record_ksymbol --seek_bytes 0x6aa0 --count 1 ~/bin/perf < perf.data
-      {
-            .header = 0x11 0x00 0x00 0x00 0x00 0x00 0x58 0x00,
-            .addr = 0xffffffffc03e0e90,
-            .len = 0xcb,
-            .ksym_type = 0x1,
-            .flags = 0,
-            .name = "bpf_prog_7be49e3934a125ba",
-      },
-      # printf "0x%x\n" 17
-      0x11
-      #
-    
-    Need to recursively pretty print substructs, but all seems to work with
-    the simple hexdump.
-    
-    Signed-off-by: Arnaldo Carvalho de Melo <acme-H+wXaHxf7aLQT0dZR+AlfA@public.gmane.org>
+So, Andrii, could you please verify whether the encoded VAR's types
+are still correct for those 'anon' variables? I can't verify as my
+build tool doesn't generate such variables. If the encoded type ids
+are still correct, then using sym does do a better job than using
+DWARF.
 
-diff --git a/dwarves.h b/dwarves.h
-index 24f9c7c37843..1b118d03ec15 100644
---- a/dwarves.h
-+++ b/dwarves.h
-@@ -13,6 +13,7 @@
- #include <obstack.h>
- #include <dwarf.h>
- #include <elfutils/libdwfl.h>
-+#include <sys/types.h>
- 
- #include "dutil.h"
- #include "list.h"
-@@ -56,6 +57,7 @@ struct conf_load {
-  *
-  * @count - Just like 'dd', stop pretty printing input after 'count' records
-  * @skip - Just like 'dd', skip 'count' records when pretty printing input
-+ * @seek_bytes - Number of bytes to seek, if stdin only from start, when we have --pretty FILE, then from the end as well with negative numbers
-  * @flat_arrays - a->foo[10][2] becomes a->foo[20]
-  * @classes_as_structs - class f becomes struct f, CTF doesn't have a "class"
-  * @cachelinep - pointer to current cacheline, so that when expanding types we keep track of it,
-@@ -72,6 +74,7 @@ struct conf_fprintf {
- 	uint32_t   base_offset;
- 	uint32_t   count;
- 	uint32_t   *cachelinep;
-+	off_t	   seek_bytes;
- 	uint32_t   skip;
- 	uint8_t	   indent;
- 	uint8_t	   expand_types:1;
-diff --git a/man-pages/pahole.1 b/man-pages/pahole.1
-index db820cca323f..ad4e92d716cf 100644
---- a/man-pages/pahole.1
-+++ b/man-pages/pahole.1
-@@ -516,6 +516,14 @@ $ pahole --skip 1 --count 2 -C modversion_info drivers/scsi/sg.ko < versions
-       .name = "param_ops_int",
- },
- $
-+This is equivalent to:
-+
-+$ pahole --seek_bytes 64 --count 1 -C modversion_info drivers/scsi/sg.ko < versions
-+{
-+	.crc = 0x45e4617b,
-+	.name = "no_llseek",
-+},
-+$
- .fi
- .P
- 
-diff --git a/pahole.c b/pahole.c
-index 7d8431c64423..245a3f2f14f7 100644
---- a/pahole.c
-+++ b/pahole.c
-@@ -3,7 +3,7 @@
- 
-   Copyright (C) 2006 Mandriva Conectiva S.A.
-   Copyright (C) 2006 Arnaldo Carvalho de Melo <acme-4qZELD6FgxhWk0Htik3J/w@public.gmane.org>
--  Copyright (C) 2007-2008 Arnaldo Carvalho de Melo <acme-H+wXaHxf7aLQT0dZR+AlfA@public.gmane.org>
-+  Copyright (C) 2007- Arnaldo Carvalho de Melo <acme-H+wXaHxf7aLQT0dZR+AlfA@public.gmane.org>
- */
- 
- #include <argp.h>
-@@ -804,6 +804,7 @@ ARGP_PROGRAM_VERSION_HOOK_DEF = dwarves_print_version;
- #define ARGP_just_structs	   310
- #define ARGP_count		   311
- #define ARGP_skip		   312
-+#define ARGP_seek_bytes		   313
- 
- static const struct argp_option pahole__options[] = {
- 	{
-@@ -836,6 +837,12 @@ static const struct argp_option pahole__options[] = {
- 		.arg  = "COUNT",
- 		.doc  = "Skip COUNT input records"
- 	},
-+	{
-+		.name = "seek_bytes",
-+		.key  = ARGP_seek_bytes,
-+		.arg  = "BYTES",
-+		.doc  = "Seek COUNT input records"
-+	},
- 	{
- 		.name = "find_pointers_to",
- 		.key  = 'f',
-@@ -1163,6 +1170,8 @@ static error_t pahole__options_parser(int key, char *arg,
- 		conf.count = atoi(arg);			break;
- 	case ARGP_skip:
- 		conf.skip = atoi(arg);			break;
-+	case ARGP_seek_bytes:
-+		conf.seek_bytes = strtol(arg, NULL, 0);	break;
- 	default:
- 		return ARGP_ERR_UNKNOWN;
- 	}
-@@ -1329,6 +1338,25 @@ static int tag__fprintf_value(struct tag *type, struct cu *cu, void *instance, i
- 	return tag__fprintf_hexdump_value(type, cu, instance, _sizeof, fp);
- }
- 
-+static int pipe_seek(FILE *fp, off_t offset)
-+{
-+	char bf[4096];
-+	int chunk = sizeof(bf);
-+
-+	if (chunk > offset)
-+		chunk = offset;
-+
-+	while (fread(bf, chunk, 1, stdin) == 1) {
-+		offset -= chunk;
-+		if (offset == 0)
-+			return 0;
-+		if (chunk > offset)
-+			chunk = offset;
-+	}
-+
-+	return offset == 0 ? 0 : -1;
-+}
-+
- static int tag__stdio_fprintf_value(struct tag *type, struct cu *cu, FILE *fp)
- {
- 	int _sizeof = tag__size(type, cu), printed = 0;
-@@ -1339,6 +1367,12 @@ static int tag__stdio_fprintf_value(struct tag *type, struct cu *cu, FILE *fp)
- 	if (instance == NULL)
- 		return -ENOMEM;
- 
-+	if (conf.seek_bytes && pipe_seek(stdin, conf.seek_bytes) < 0) {
-+		int err = --errno;
-+		fprintf(stderr, "Couldn't --seek_bytes %ld\n", conf.seek_bytes);
-+		return err;
-+	}
-+
- 	while (fread(instance, _sizeof, 1, stdin) == 1) {
- 		if (skip) {
- 			--skip;
+I'm also leaving the basic validations on variable's name and size in
+v5. I think they are needed. It's better having less variables than a
+malformed btf if things go awry.
+
+Hao
+
+On Tue, Jun 30, 2020 at 4:59 AM Arnaldo Carvalho de Melo
+<acme-DgEjT+Ai2ygdnm+yROfE0A@public.gmane.org> wrote:
+>
+> Em Mon, Jun 29, 2020 at 01:20:02PM -0700, Andrii Nakryiko escreveu:
+> > On Fri, Jun 19, 2020 at 12:58 PM Andrii Nakryiko <andrii.nakryiko-Re5JQEeQqe8AvxtiuMwx3w@public.gmane.org> wrote:
+>
+> > > On Thu, Jun 18, 2020 at 12:49 AM Hao Luo <haoluo-hpIqsD4AKlfQT0dZR+AlfA@public.gmane.org> wrote:
+> > > > +               if (!addr)
+> > > > +                       continue;
+> > > > +               var = hashaddr__find_variable(hash_addr, addr);
+> > > > +               if (var == NULL)
+> > > > +                       continue;
+> > > > +
+> > > > +               /*
+> > > > +                * Valididate the variable's name, the same check is also
+> > > > +                * performed in bpf verifier.
+> > > > +                */
+> > > > +               name = variable__name(var, cu);
+> > > > +               if (!var->name || !btf_name_valid(name, true)) {
+> > >
+> > > It might be ok to filter them out, but I'd rather try to first
+> > > understand why do we get those invalid names in the first place.
+> > > Otherwise we might be just papering over the real bug in how we
+> > > process symbols/variables in DWARF?
+> >
+> > Ok, so I played with it a bit locally. Those variables with empty name
+> > or 0 size seem to be due to some bugs in variable__name() and
+> > variable__type_size() implementations. If you stick to ELF symbol's
+> > elf_sym__name() and elf_sym__size(), you'll get valid sizes.
+> >
+> > Arnaldo, could you please take a look at why variable__xxx() impls
+> > don't work for some variables? I can repro it locally, e.g.:
+>
+> I'm looking at it, I think this is that maybe not all variables that are
+> in the elf symbol table are encoded in DWARF (maybe some declared in asm
+> files?) and thus we will not find its name in the .debug_str.
+>
+> ctf_loader.c, that was used as the model for btf_loader.c has this:
+>
+> static const char *ctf__variable_name(const struct variable *var,
+>                                       const struct cu *cu)
+> {
+>         struct ctf *ctf = cu->priv;
+>
+>         return ctf->symtab->symstrs->d_buf + var->name;
+> }
+>
+> struct debug_fmt_ops ctf__ops = {
+>         .name           = "ctf",
+>         .function__name = ctf__function_name,
+>         .load_file      = ctf__load_file,
+>         .variable__name = ctf__variable_name,
+>         .strings__ptr   = ctf__strings_ptr,
+>         .cu__delete     = ctf__cu_delete,
+> };
+>
+> And then
+>
+> const char *variable__name(const struct variable *var, const struct cu *cu)
+> {
+>         if (cu->dfops && cu->dfops->variable__name)
+>                 return cu->dfops->variable__name(var, cu);
+>         return s(cu, var->name);
+> }
+>
+> I.e. btf_loader.c and dwarf_loader.c are using the fallback return that
+> assumes all strings are in a single table, the CTF one gets variable
+> names from the ELF symtab, as you seem to be doing by using
+> elf_sym__name() directly.
+>
+> I'm reading Hao's patch to see how the variables are being created as
+> they are loaded from DWARF, to check this hunch.
+>
+> - Arnaldo
+>
+> > ELF SYM kstat == <empty>, SZ 48 == 0
+> > invalid type size for variable '(null)'.
+> > invalid variable name '(null)'.
+> >
+> > kstat and 48 come from ELF symbol, <empty> and 0 are from
+> > variabel__xxx(). And that happens for quite a few variables, actually.
+> >
+> > With those fixes, my kernel can be successfully BTF-generated. The
+> > number of per-cpu variables jump from 213 with all this filtering to
+> > 287 proper variables while using elf_sym__xxx() functions.
+> >
+> > >
+> > > > +                       if (verbose)
+> > > > +                               printf("invalid variable name '%s'.\n", name);
+> > > > +                       continue;
+> > > > +               }
+> > > > +
+> > > > +               /*
+> > > > +                * Validate the variable's type, the same check is also
+> > > > +                * performed in bpf verifier.
+> > > > +                */
+> > > > +               type = var->ip.tag.type + type_id_off;
+> > > > +               if (type == 0) {
+> > > > +                       if (verbose)
+> > > > +                               printf("invalid type for variable '%s'.\n", name);
+> > > > +                       continue;
+> > >
+> > > Again, there might be cases which we want to ignore, but we need to
+> > > understand what and why those cases are?
+> > >
+> > > > +               }
+> > > > +
+> > > > +               /*
+> > > > +                * Validate the size of the variable's type, the same check is
+> > > > +                * also performed in bpf verifier.
+> > > > +                */
+> > > > +               size = variable__type_size(var, cu);
+> > > > +               if (size == 0) {
+> > > > +                       if (verbose)
+> > > > +                               printf("invalid type size for variable '%s'.\n", name);
+> > > > +                       continue;
+> > > > +               }
+> > > > +
+> > >
+> > > The goal here is not to satisfy the verifier, but to generate BTF from
+> > > DWARF faithfully. Let's not just ignore "inconvenient" cases and
+> > > instead investigate why such cases happen.
+> > >
+> > > > +               if (verbose)
+> > > > +                       printf("symbol '%s' of address 0x%lx encoded\n",
+> > > > +                              elf_sym__name(&sym, btfe->symtab), addr);
+> > > > +
+> > > > +               /* add a BTF_KIND_VAR in btfe->types */
+> > > > +               linkage = var->external ? BTF_VAR_GLOBAL_ALLOCATED : BTF_VAR_STATIC;
+> > > > +               btf_var_id = btf_elf__add_var_type(btfe, type, var->name, linkage);
+> > > > +               if (btf_var_id < 0) {
+> > > > +                       err = -1;
+> > > > +                       printf("error: failed to encode variable '%s'\n", name);
+> > > > +                       break;
+> > > > +               }
+> > > > +
+> > > > +               /*
+> > > > +                * add a BTF_VAR_SECINFO in btfe->percpu_secinfo, which will be added into
+> > > > +                * btfe->types later when we add BTF_VAR_DATASEC.
+> > > > +                */
+> > > > +               type = btf_var_id;
+> > > > +               offset = addr - btfe->percpu_base_addr;
+> > > > +               btf_var_secinfo_id = btf_elf__add_var_secinfo(&btfe->percpu_secinfo,
+> > > > +                                                             type, offset, size);
+> > > > +               if (btf_var_secinfo_id < 0) {
+> > > > +                       err = -1;
+> > > > +                       printf("error: failed to encode var secinfo '%s'\n", name);
+> > > > +                       break;
+> > > > +               }
+> > > > +       }
+> > > > +
+> > > >  out:
+> > > >         if (err)
+> > > >                 btf_elf__delete(btfe);
+> > >
+> > > [...]
+>
+> --
+>
+> - Arnaldo
