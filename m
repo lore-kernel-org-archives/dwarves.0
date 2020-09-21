@@ -2,139 +2,97 @@ Return-Path: <SRS0=ASgQ=C6=vger.kernel.org=dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+X-Spam-Status: No, score=-14.4 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,USER_IN_DEF_DKIM_WL
 	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3BE91C4346E
-	for <linux-dwarves@archiver.kernel.org>; Mon, 21 Sep 2020 18:19:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6E06FC4363C
+	for <linux-dwarves@archiver.kernel.org>; Mon, 21 Sep 2020 19:53:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EC6FD20888
-	for <linux-dwarves@archiver.kernel.org>; Mon, 21 Sep 2020 18:19:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 250762193E
+	for <linux-dwarves@archiver.kernel.org>; Mon, 21 Sep 2020 19:53:54 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IjKsh3MA"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="V3cX9kBm"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727386AbgIUSTm (ORCPT
+        id S1727361AbgIUTxy (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Mon, 21 Sep 2020 14:19:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48912 "EHLO
+        Mon, 21 Sep 2020 15:53:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726456AbgIUSTm (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Mon, 21 Sep 2020 14:19:42 -0400
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FC4CC061755;
-        Mon, 21 Sep 2020 11:19:42 -0700 (PDT)
-Received: by mail-yb1-xb31.google.com with SMTP id x10so10928942ybj.13;
-        Mon, 21 Sep 2020 11:19:42 -0700 (PDT)
+        with ESMTP id S1727197AbgIUTxx (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Mon, 21 Sep 2020 15:53:53 -0400
+Received: from mail-qk1-x749.google.com (mail-qk1-x749.google.com [IPv6:2607:f8b0:4864:20::749])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DF67C061755
+        for <dwarves@vger.kernel.org>; Mon, 21 Sep 2020 12:53:53 -0700 (PDT)
+Received: by mail-qk1-x749.google.com with SMTP id h191so11874663qke.1
+        for <dwarves@vger.kernel.org>; Mon, 21 Sep 2020 12:53:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=OA7OMhVny79rEZ0VyCzVUSE/eCVD3h2nOGxmWDGw6Pc=;
-        b=IjKsh3MA1CB5vWSjGLje0keGrYGDJpyA47/lNF1OBD5GrAJ0sTGozrwKXR0WYyGJIe
-         yRIT1QZvRB2Ovj+j+Pp9rNpYJwSRTaMv39CNpL1nBAbsvxoh+GiseRBycQ+3lgvU9NKv
-         /ErVGUC8YeyRTT0CUu1sQVyho3NY4eKMVuk9luQ2E1jo5m5mvTA6nsOMtaOHbshdMBsz
-         P6T0SGPcL5B2aIRe0pRokYFa73Qd+QlEtKzYgAl3UubRjJTKpI8SPN94oPAIjkolPA57
-         TymMGmyKfdD3Msk4K4funK9PDJDPgh4nCeRziB6xac0REXWSQqqIVSlZGVi19JL0dbtz
-         VZdw==
+        d=google.com; s=20161025;
+        h=sender:date:message-id:mime-version:subject:from:to:cc;
+        bh=QYDxpFkd6x3hO4KFD3r6MMj2VtZkn9zakZWkjUqeaPk=;
+        b=V3cX9kBmIPV40AkjswH30h1iGFKC9m6QKKgsN1ByRO6AhpOJErPAx8yYNAtL2WWA3J
+         7RxLnxAvinE9H3wbgRMxI9BB56GXC4srNA9dwsMmDojUoXRz7HuwNSPLNGsVFoAmR+Lb
+         9o2IYtipOBUD4xdhmy8BwGp2DvLVzQ2RzV8roZHFq1IlFLYiyRd2caBHaQzDpgYGwNRE
+         cK/nvK+QvWIHCvWFnfwtvYEj/M1ZbLpWyGmV/DCdFAtMQ4uQ2JNGp5uB1WqKKvgPNtEA
+         kcQP/YMEyzG/E9zX0IFfKqLV5ZpkllPSnHcBHt3w4z1flLjoPkEQFpBVtqg3AOz89y+W
+         EUzA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=OA7OMhVny79rEZ0VyCzVUSE/eCVD3h2nOGxmWDGw6Pc=;
-        b=LtT+3NjnqS0N+86KzLY8MeZ+B2qsvvodKpWi3H/I/B8ae5F7SkMBobEQI1Zgfkyz0x
-         EqV+zhERmkrGE4b8pXfIHW19z/0oeyCcRQhW9WmIadAkQ2AZv1ro551xw5Nt2rvaROEC
-         QEUUrjqnnHvwoju7yL0c64n64KMcpShRpliPn4FrbTXpDvsyYaVeE9lBOrYvJhXN4cU1
-         ESFO8uk856BS7ERt/FOVGa9flWTYwD1CO1OSE1n7hjX1zf0SxFNno3BaS1gpW24+TezB
-         HF/BDbdCbrImz+SIE7+GQUV0TZWrMjhzBbEHB3GEm/sO1Eb5CZZwkdBaFWNaXfwzj7OV
-         6s+w==
-X-Gm-Message-State: AOAM530UYMHy+DSe3z+UFB+Bc9a/aWPw81jLUjWUjMk27sJ3AXuPwV6d
-        CmjQzbpK3bJeYN2WWKZFxD7F0hYSlqQqOfLt13U=
-X-Google-Smtp-Source: ABdhPJwmUtogJgBwpqGXZrmuNNPLByxgh1x2Wfw+SH8KuzcWrz+Nq5+vysVNiTAIJs/b7vidWPbgVqvQQA2IHJ5uRdI=
-X-Received: by 2002:a25:cbc4:: with SMTP id b187mr1610206ybg.260.1600712381417;
- Mon, 21 Sep 2020 11:19:41 -0700 (PDT)
-MIME-Version: 1.0
-References: <CAPGftE8ipAacAnm9xMHFabXCL-XrCXGmOsX-Nsjvz9wnh3Zx-w@mail.gmail.com>
- <9e99c5301fbbb4f5f601b69816ee1dc9ab0df948.camel@linux.ibm.com>
- <CAEf4Bza9tZ-Jj0dj9Ne0fmxa95t=9XxxJR+Ce=6hDmw_d8uVFA@mail.gmail.com>
- <8cf42e2752e442bb54e988261d8bf3cd22ad00f2.camel@linux.ibm.com>
- <20200909142750.GC3788224@kernel.org> <CAPGftE8jNys9aVfUZW2iE5vB=QWKEmmwwWuWq9ek0ZXp-Aobkg@mail.gmail.com>
-In-Reply-To: <CAPGftE8jNys9aVfUZW2iE5vB=QWKEmmwwWuWq9ek0ZXp-Aobkg@mail.gmail.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Mon, 21 Sep 2020 11:19:30 -0700
-Message-ID: <CAEf4BzYDm3QOOgND9p+LR21bn98QMjE+VYspQSvi4ebG9EdW0g@mail.gmail.com>
-Subject: Re: Problem with endianess of pahole BTF output for vmlinux
-To:     Tony Ambardar <tony.ambardar@gmail.com>
-Cc:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        bpf <bpf@vger.kernel.org>, dwarves@vger.kernel.org
+        h=x-gm-message-state:sender:date:message-id:mime-version:subject:from
+         :to:cc;
+        bh=QYDxpFkd6x3hO4KFD3r6MMj2VtZkn9zakZWkjUqeaPk=;
+        b=XhZrN4vpuqzI/AOsnZ3tglFANAFPcsBt1AaUUngYl5jj+lctxKQCoSrPAr2dmjGkbA
+         IQZkevQoEUhgh9e0w6e/jTdpErryYhq8Q0c5vsP/zy6VhkiNDJAiY1clKfjIHm07SvLM
+         aL8ayfydsEg/2zhKDEsCSitvFfqpi6lvZw8M+YZ288zkJp5A3oH5y7BEmVAU2lH+dOCF
+         QIuw4NaKryfTm3DQ1o/wdT9Twp8QkRUBBjZ0+ws6Ez13OIF11yUqTflWRN+eLqHYcsFI
+         8rNsd3GMKZ6N8h+gDalvskUlbOPZJ987KDT9PzAYl9a4Tbg3TbO1Mo/O7/8ol8yKYl81
+         NYIw==
+X-Gm-Message-State: AOAM533khDxiCEQkkTTVSHFCONx9xphgNXGojcNZtL+lgh5Q0RvQ01n2
+        QnbL5ZYPqAtzFWk3mi403pOJQFMm4Hs=
+X-Google-Smtp-Source: ABdhPJybmAqVngr22DJTIxBbeUfqxrIW7MhO+/LEraSnfLldS5+AGlQ8qIatzAtHqpfTLVP6vKlYpHaR9mk=
+Sender: "haoluo via sendgmr" <haoluo@haoluo.svl.corp.google.com>
+X-Received: from haoluo.svl.corp.google.com ([2620:15c:2cd:202:f693:9fff:fef4:e444])
+ (user=haoluo job=sendgmr) by 2002:ad4:42b3:: with SMTP id e19mr1898822qvr.6.1600718032730;
+ Mon, 21 Sep 2020 12:53:52 -0700 (PDT)
+Date:   Mon, 21 Sep 2020 12:53:08 -0700
+Message-Id: <20200921195310.3070085-1-haoluo@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.28.0.681.g6f77f65b4e-goog
+Subject: [PATCH v2 0/2] pahole: Make encoding percpu vars into BTF optional.
+From:   Hao Luo <haoluo@google.com>
+To:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
+Cc:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        daniel@iogearbox.net, dwarves@vger.kernel.org, yhs@fb.com,
+        Hao Luo <haoluo@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-On Sat, Sep 19, 2020 at 12:58 AM Tony Ambardar <tony.ambardar@gmail.com> wrote:
->
-> On Wed, 9 Sep 2020 at 07:27, Arnaldo Carvalho de Melo
-> <arnaldo.melo@gmail.com> wrote:
-> >
-> > Em Wed, Sep 09, 2020 at 11:02:24AM +0200, Ilya Leoshkevich escreveu:
-> > > On Tue, 2020-09-08 at 13:18 -0700, Andrii Nakryiko wrote:
-> > > > On Mon, Sep 7, 2020 at 9:02 AM Ilya Leoshkevich <iii@linux.ibm.com> wrote:
-> > > > > On Sat, 2020-09-05 at 21:16 -0700, Tony Ambardar wrote:
-> >
-> [...]
-> > > > > > Is this expected? Is DEBUG_INFO_BTF supported in general when
-> > > > > > cross-compiling? How does one generate BTF encoded for the
-> > > > > > target endianness with pahole?
-> >
-> > The BTF loader has support for endianness, its just the encoder that
-> > doesn't :-\
-> >
-> > I.e. pahole can grok a big endian BTF payload on a little endian machine
-> > and vice-versa, just can't cross-build BTF payloads ATM.
-> >
-> > > > Yes, it's expected, unfortunately. Right now cross-compiling to a
-> > > > different endianness isn't supported. You can cross-compile only if
-> > > > target endianness matches host endianness.
-> >
-> > I agree that having this in libbpf is better, it should be done as part
-> > of producing the result of the deduplication phase.
-> >
-> Thanks for confirming this wasn't a case of operator error. My platforms for
-> learning/experimenting with BPF have been small embedded ones, including
-> cross-compiling to different archs, word-size and endianness, which have
-> "helped" me run into multiple problems till now. This one is the first I
-> couldn't work around however...
->
-> [...]
-> > > > I'm working on extending BTF APIs in libbpf at the moment. Switching
-> > > > endianness would be rather easy once all that is done. With these new
-> > > > APIs it will be possible to switch pahole to use libbpf APIs to
-> > > > produce BTF output and support arbitrary endianness as well. Right
-> > > > now, I'd rather avoid implementing this in pahole, libbpf is a much
-> > > > better place for this (and will require ongoing updates if/when we
-> > > > introduce new types and fields to BTF).
-> >
-> > Right, we could do it right after btf_dedup() and before
-> > btf_elf__write(), doing the same process as in btf_loader.c, i.e.
-> > checking if the ELF target arch is different in endianness and doing the
-> > reverse of the loader.
-> >
-> > > > Hope this plan works for you guys.
-> > >
-> > > That sounds really good to me, thanks!
-> >
-> Andrii and Arnaldo, I really appreciate your working on a proper endianness fix.
-> If you have a WIP or staging branch and could use some help please let me know.
->
+v1 -> v2:
+ - Use opt-out instead of opt-in. Rename the flag name to
+   '--skip_encoding_btf_vars'
 
-I have a bunch of code changes locally. I'll clean that up, partition
-libbpf and pahole patches, and post them for review this week. To
-address endianness support, those are the prerequisites. Once those
-changes land, I'll be able to solve endianness issues you are having.
-So just a bit longer till all that is done, sorry for the wait!
+Previous commit f3d9054ba8ff ("btf_encoder: Teach pahole to store
+percpu variables in vmlinux BTF.") introduced a feature in btf_encoder
+that encodes global symbols in BTF. However, this feature is not
+protected by any flag. In order to avoid surprises after Pahole v1.18
+rolls out, add a flag to toggle this feature off.
 
-> Best regards,
-> Tony
+Also as a refactor, introduce '--btf_encode_force' to replace the
+old '--force' and '-j' option that is used to forcefully emit BTF.
+
+Hao Luo (2):
+  btf_encoder: Allow disabling BTF var encoding.
+  btf_encoder: Introduce option '--btf_encode_force'
+
+ btf_encoder.c |  5 ++++-
+ btf_encoder.h |  3 ++-
+ pahole.c      | 22 +++++++++++++++++-----
+ 3 files changed, 23 insertions(+), 7 deletions(-)
+
+-- 
+2.28.0.681.g6f77f65b4e-goog
+
