@@ -1,58 +1,59 @@
-Return-Path: <SRS0=uCwc=DF=vger.kernel.org=dwarves-owner@kernel.org>
+Return-Path: <SRS0=G+aR=DG=vger.kernel.org=dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 73541C2D0A8
-	for <linux-dwarves@archiver.kernel.org>; Mon, 28 Sep 2020 20:27:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1354DC2D0A8
+	for <linux-dwarves@archiver.kernel.org>; Tue, 29 Sep 2020 03:41:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3364B207E8
-	for <linux-dwarves@archiver.kernel.org>; Mon, 28 Sep 2020 20:27:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C3ACD207F7
+	for <linux-dwarves@archiver.kernel.org>; Tue, 29 Sep 2020 03:41:38 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=sartura-hr.20150623.gappssmtp.com header.i=@sartura-hr.20150623.gappssmtp.com header.b="FDm9xHh4"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Q3SS9iZ6"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726500AbgI1U1k (ORCPT
+        id S1727417AbgI2Dli (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Mon, 28 Sep 2020 16:27:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39002 "EHLO
+        Mon, 28 Sep 2020 23:41:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726621AbgI1U1j (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Mon, 28 Sep 2020 16:27:39 -0400
-Received: from mail-ed1-x544.google.com (mail-ed1-x544.google.com [IPv6:2a00:1450:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FEFCC0613CE
-        for <dwarves@vger.kernel.org>; Mon, 28 Sep 2020 13:27:39 -0700 (PDT)
-Received: by mail-ed1-x544.google.com with SMTP id w1so3383676edr.3
-        for <dwarves@vger.kernel.org>; Mon, 28 Sep 2020 13:27:39 -0700 (PDT)
+        with ESMTP id S1727410AbgI2Dli (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Mon, 28 Sep 2020 23:41:38 -0400
+Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A3FFC061755;
+        Mon, 28 Sep 2020 20:41:38 -0700 (PDT)
+Received: by mail-io1-xd2a.google.com with SMTP id v8so3378232iom.6;
+        Mon, 28 Sep 2020 20:41:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sartura-hr.20150623.gappssmtp.com; s=20150623;
+        d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=DF2/eLTFuB8N9fv1SG404jyibEGpFwRqzB5MphuCUCo=;
-        b=FDm9xHh4uzjI+xv+2D4L4CbDtIDiH0fPLhQVCkijHgNOej1fL8YdRGnr0k9p4hEg/e
-         RpD/EV6otStcbWvj7cifdYSnUu3UOnbPB/Bcwd2vlz0MIMabIkHEhkhcoel4PDea3gL/
-         9kZN/okb8dmGGPZngJjIz+J84j7YSkJmPPD/nVF9ClE070EBbsBkMfJJSR6v3D1epUBl
-         3z8CLmGY/RY44YWdA9ZyztooES6kyDRotWGdjK7ZQ6UwYK9jLTBaour30ZCeQLW/uYzc
-         99spm7A/M2gqI5ROE4P9dmcO5z/3xm+m1W8YztsG5UAYTqu3W9Ld8w4UvqDeeyzxSHiU
-         ygrg==
+        bh=5bKbaqa9mc74f6W5QDGnV6VZ3QogiRCN2uLDVFwKcT8=;
+        b=Q3SS9iZ61kdUAxAbVj0J4GesRey9ePiA/PCPZ8AkZJ3fxX0onnab42e4sMVLlG0ZWR
+         M4Tg79+SgXpx4EzaIklFUV2iH+2fruLHraV0FhUUuZmb6WHlCTVSFzCu1gyodxqdj7zM
+         Ct0S6p3fFIxGYrRbv0v/igorGbubQVegoMtpqsKWFII+hDrU1iwhmg7Ed4fdbEo+rA6v
+         ZX24ed9PJbIUBkJ5xHnI7kl0jplbmBiXf+TNfn3ge4cZpwF1xZqHDxyrVOdHXuuzRYAa
+         6L3p/JQuODwrGtT8GcEUsx8p8u0b37M5uIf3N0cFIbLtMwuIP4cVDu424cijsEqWQMEy
+         9/NQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=DF2/eLTFuB8N9fv1SG404jyibEGpFwRqzB5MphuCUCo=;
-        b=az6dL3WT4Eq/cV6GQ6rAHgcHVbFkbVKOkmKfR5RU2h+ps3LYC4JPIOyP8HglJoclVR
-         /gSSPgBdMak8/udiZFFR1wK33L6pGdXSXlinxHHiVXLqJ79ek+6XSJZn9FBMvRF/ZWg4
-         Ve8bXUsbjZkcmGQmmy7/8MwKnIrjl6fQhLb0uW+9zsaIMy/c42P8c5g25iUx4jFU7A9I
-         iMi1xiQqE0CH4T3UiI2hRrgGcd+OwDlIn5L6FFlsU4sIZQLXK5iXEAh/8PzI2z1/IYnh
-         Tomsf5bO04K6TKt5yOZndpmHnX5fKskcRoxYObCblqgc3ExyHe1noWATYHG6F/X+aGjQ
-         N6Ew==
-X-Gm-Message-State: AOAM530qcm8Kgn7lzGTwKft6I8cG+5V75yHGwfzoJMYEuxdrzoVQmXDL
-        atagZCTh+pJ1FRme1ZjRMvPJSThwlgVDCuGhRpW4PA==
-X-Google-Smtp-Source: ABdhPJye/8Mf9eEEdorCA613tHzKBM/brDodk4qDkUtGbl4/OXToAm0ni/zu9Tqrhk385KSgafVT37P6LIir30k313I=
-X-Received: by 2002:a05:6402:64b:: with SMTP id u11mr3617070edx.147.1601324857889;
- Mon, 28 Sep 2020 13:27:37 -0700 (PDT)
+        bh=5bKbaqa9mc74f6W5QDGnV6VZ3QogiRCN2uLDVFwKcT8=;
+        b=sN5E4NZ+h4CN+1b7v0YRTEgK1h7w65sqHIOhut2FEkDsSAi/jxLqyhj/LyNatx9Xqz
+         1EGgnVKinMuS5znjglQf9cUevuiWTTlPLUX+YuAU+TSmufckpljqschOaB+lOzJ+ympM
+         B1T6we2sNDgbID6cM5gIvvfi9aDiE69kzY23iCcg+o/qyWCx5/ohICRTF+nmlcJJXCnA
+         RrIPkWPW9n5Ju4AB7/7cTt6Qh2SCbj08eGFcIL9SUIjxcggGx8rDXUSRw3Z54MMhA41Q
+         pLR93duNDbng0u2YWm92lS7i21nXUdWoiA+rW9PvXxWSd0vy/8fFoVNltbMnnmbc0k0i
+         +/mw==
+X-Gm-Message-State: AOAM532KrSjucJV4jqbHAkKs8mw4WPgNRMW1TF/gVprXT7+YGrfl6vv2
+        ii0IIUL9nB3FwWH4kkIq32nREoO/5PG1CI2UjzGbBAcv1tU=
+X-Google-Smtp-Source: ABdhPJw3WL8GUmuwpND7J/X+Ht7Fc/LFVrcfx/KhDV1qZmjNFRRW5aCfdo5jUA9Nh4tESbGaJtQUQ6C2hgyuPhvUSKc=
+X-Received: by 2002:a5d:840a:: with SMTP id i10mr1055708ion.4.1601350897380;
+ Mon, 28 Sep 2020 20:41:37 -0700 (PDT)
 MIME-Version: 1.0
 References: <CAPGftE8ipAacAnm9xMHFabXCL-XrCXGmOsX-Nsjvz9wnh3Zx-w@mail.gmail.com>
  <9e99c5301fbbb4f5f601b69816ee1dc9ab0df948.camel@linux.ibm.com>
@@ -61,27 +62,37 @@ References: <CAPGftE8ipAacAnm9xMHFabXCL-XrCXGmOsX-Nsjvz9wnh3Zx-w@mail.gmail.com>
  <20200909142750.GC3788224@kernel.org> <CAPGftE8jNys9aVfUZW2iE5vB=QWKEmmwwWuWq9ek0ZXp-Aobkg@mail.gmail.com>
  <CAEf4BzYDm3QOOgND9p+LR21bn98QMjE+VYspQSvi4ebG9EdW0g@mail.gmail.com> <CAEf4Bzb7LZX8Y=qKpO5j3eUYU=tJzvNRYd1CdXXxq8Y-V4=+Vw@mail.gmail.com>
 In-Reply-To: <CAEf4Bzb7LZX8Y=qKpO5j3eUYU=tJzvNRYd1CdXXxq8Y-V4=+Vw@mail.gmail.com>
-From:   Luka Perkov <luka.perkov@sartura.hr>
-Date:   Mon, 28 Sep 2020 22:27:27 +0200
-Message-ID: <CAKQ-crg3qdQ6=STwQd5NrWWdQSpuKQptUMfZU50sYATfkqf1cw@mail.gmail.com>
+From:   Tony Ambardar <tony.ambardar@gmail.com>
+Date:   Mon, 28 Sep 2020 20:41:27 -0700
+Message-ID: <CAPGftE9iVH=eG_FRxSFJC0B3FX8LVdKStfvLbs0gRt8kvMoqJw@mail.gmail.com>
 Subject: Re: Problem with endianess of pahole BTF output for vmlinux
 To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Tony Ambardar <tony.ambardar@gmail.com>,
-        Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
+Cc:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
         Ilya Leoshkevich <iii@linux.ibm.com>,
         bpf <bpf@vger.kernel.org>, dwarves@vger.kernel.org,
         David Marcinkovic <david.marcinkovic@sartura.hr>,
-        Juraj Vijtiuk <juraj.vijtiuk@sartura.hr>,
-        Jakov Petrina <jakov.petrina@sartura.hr>
+        Luka Perkov <luka.perkov@sartura.hr>,
+        Borna Cafuk <borna.cafuk@sartura.hr>,
+        Juraj Vijtiuk <juraj.vijtiuk@sartura.hr>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-Hello Andrii,
+Hello Andrii!
 
-On Mon, Sep 28, 2020 at 10:19 PM Andrii Nakryiko
-<andrii.nakryiko@gmail.com> wrote:
+On Mon, 28 Sep 2020 at 13:19, Andrii Nakryiko <andrii.nakryiko@gmail.com> wrote:
+>
+> On Mon, Sep 21, 2020 at 11:19 AM Andrii Nakryiko
+> <andrii.nakryiko@gmail.com> wrote:
+> >
+> > I have a bunch of code changes locally. I'll clean that up, partition
+> > libbpf and pahole patches, and post them for review this week. To
+> > address endianness support, those are the prerequisites. Once those
+> > changes land, I'll be able to solve endianness issues you are having.
+> > So just a bit longer till all that is done, sorry for the wait!
+> >
+>
 > Question to folks that are working with 32-bit and/or big-endian
 > architectures. Do you guys have an VM image that you'd be able to
 > share with me, such that I can use it with qemu to test patches like
@@ -92,15 +103,22 @@ On Mon, Sep 28, 2020 at 10:19 PM Andrii Nakryiko
 > Linux image (never goes easy or fast for me).
 >
 > So, if you do have something like this, please share. Thank you!
+>
 
-We thought this would be an issue and we have been working on this but
-didn't finalize it yet.
+I can provide 32-bit and 64-bit big-endian system images for running
+on QEMU's malta target. These are built using OpenWRT's build system
+and include a recent stable bpftool (v5.8.x) and v5.4.x kernel. Is
+that sufficient? It would work if manually creating raw or elf-based
+BTF files on a build host, then copying into the QEMU target to test
+parsing with bpftool (linked with the standard libbpf).
 
-We'll speed it up and send you an easy way to replicate the
-development environment.
+For changes to the Linux build system itself (e.g. pahole endian
+options and target endian awareness), you would need to set up a
+standard OpenWRT build environment. I can help with that, or simply
+integrate your patches myself for testing. As you say, nothing to be
+super pumped about...
 
-Luka and Juraj will also share some of our additional findings
-regarding 32bit ARM.
+Let me know what's easiest and how best to get images to you.
 
-Thanks,
-Luka
+Many thanks,
+Tony
