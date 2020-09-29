@@ -2,57 +2,58 @@ Return-Path: <SRS0=G+aR=DG=vger.kernel.org=dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C0F63C47423
-	for <linux-dwarves@archiver.kernel.org>; Tue, 29 Sep 2020 17:34:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B9B60C4727C
+	for <linux-dwarves@archiver.kernel.org>; Tue, 29 Sep 2020 17:57:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6408120C09
-	for <linux-dwarves@archiver.kernel.org>; Tue, 29 Sep 2020 17:34:17 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6732E20702
+	for <linux-dwarves@archiver.kernel.org>; Tue, 29 Sep 2020 17:57:31 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=sartura-hr.20150623.gappssmtp.com header.i=@sartura-hr.20150623.gappssmtp.com header.b="Dj4LZUTZ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ktfVEoCr"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729348AbgI2ReQ (ORCPT
+        id S1728150AbgI2R5b (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Tue, 29 Sep 2020 13:34:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37274 "EHLO
+        Tue, 29 Sep 2020 13:57:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728205AbgI2ReP (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Tue, 29 Sep 2020 13:34:15 -0400
-Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8585C061755
-        for <dwarves@vger.kernel.org>; Tue, 29 Sep 2020 10:34:14 -0700 (PDT)
-Received: by mail-lj1-x241.google.com with SMTP id y4so4701634ljk.8
-        for <dwarves@vger.kernel.org>; Tue, 29 Sep 2020 10:34:14 -0700 (PDT)
+        with ESMTP id S1727360AbgI2R5a (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Tue, 29 Sep 2020 13:57:30 -0400
+Received: from mail-yb1-xb44.google.com (mail-yb1-xb44.google.com [IPv6:2607:f8b0:4864:20::b44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57227C061755;
+        Tue, 29 Sep 2020 10:57:30 -0700 (PDT)
+Received: by mail-yb1-xb44.google.com with SMTP id v60so4265135ybi.10;
+        Tue, 29 Sep 2020 10:57:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sartura-hr.20150623.gappssmtp.com; s=20150623;
+        d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=9gQw31JbN9r1vFvakmg6vqsptjB02uipjQeewjuzCYo=;
-        b=Dj4LZUTZaMoxXiQYp1yCnL13i1u4TjHn4IcRQKlOfLg1BjfZI+RWtxkuo9VQTvLP5P
-         OIs526Qbw18cMojzwKe6n0wAG3nd5eNY1oSuQGok5iuaF9ZPLy1nw5SIFDd9uTZts3TK
-         Qg+Hh/Srm1LUp2HVK4uPp//n03Wp84CTWhOZcCUfDGydGTyW5/mKIo4uflV2jcH/Xnfg
-         Kt4eA0BWDQKXQGemSiLDVndm2inZUjBR2jBugboAvCCg0CQX4KHa0lb6Xgo0XXWhqraV
-         wJdikWnmrC+ekXxxDDkrh9UJhHviERFB8HsNkCR2bY28vv3fBr/FPLKQ3guAXPpa1pUu
-         Fx6g==
+        bh=c1JLeR7hs2t3LNL/VevNbKZmDuYgdRy4GrJ22m1nprA=;
+        b=ktfVEoCrQTNv2jBrN62ca/gFlOgTCwu4OGjndNuVG2G9WpwPixWMWA4QL/s0O089Hv
+         C5xq6wPHMxCmnyPVbeNze5EA7Z/c8LlagPeT6HzWtAagXceFlKu8iu4BebtvsqJDPJNT
+         NpnhbRsNHjB604yDpf/rRXbYntiiJ2RA0IE0ujt7mjvCtvrjmejkV1oeoHgNHwwGef+q
+         +JADaKzv9UVwmRO69KWMCJG8NUN3XbSRFjANOyM05+bYfyI254EdmZcZiHDIm+5CYGD5
+         wEJWwEdHPC7cK7Y9++ylKawAUBb69ha2NpoSmxHVlOrLJqp4takBs3VSVSeDOaO7tPUb
+         kmEg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=9gQw31JbN9r1vFvakmg6vqsptjB02uipjQeewjuzCYo=;
-        b=c/4gQySPUFjNj1A5iDpxazHd86RRot2ShRDynamzU/+ns8nh0n23dqhZ0dA2rHB+oU
-         mm+Q+p9T2TueT1lBACw4v14jNkWIrcHdS4NHVl8PAsS8gu5HsRFTyO2wooBMZHz/0ZBB
-         MEXOohTKBe1HoN/efUBlfrXBogQc3a+3be4kBpXP8Mnqq2k250NeqgrrwLL5RadwWhB6
-         1V2SLTeQ0hX6JOW+IxemdcqA8HvxUZhHtnGQyK3+RM4QFdb6Zr2YrAsyKHyfQAYEZkiZ
-         XBhUqPfOheaCCrt1uSl/Z42b2/9NmjFObDjgtLxrJO/LYJaq1EQJ3WiIdePBA9ArynSz
-         eZ8w==
-X-Gm-Message-State: AOAM531EUPZ7vxBvYzH/uhnI9EkWkjtP1gVZYtqGmVNlhOsHEP49TZ5D
-        G0jTdh56azQ57IfvJVpIRE+OvcujVk2GnQXo8jKY6Q==
-X-Google-Smtp-Source: ABdhPJw9ESoIBe1vVan7K9MFOZ52+odIiwjunnVR36ZIu8Jo3g92sv2VIrYAmYWZNAVbxkIoNCqRD/CEqacb0UFAclk=
-X-Received: by 2002:a2e:89c8:: with SMTP id c8mr1442472ljk.163.1601400853321;
- Tue, 29 Sep 2020 10:34:13 -0700 (PDT)
+        bh=c1JLeR7hs2t3LNL/VevNbKZmDuYgdRy4GrJ22m1nprA=;
+        b=PBlh/rU+hMZG+s9B/7REc+LcqYgZpsHJJkSSkQrnt8Gbp87+vMs249R68QeuxeKYds
+         tVLisLKBw+jDMMiUBOFsZo2CTw/9tQN8doPd29AGhM42yBr0t5m1TUCgifqTBbqxB6mQ
+         fyOrmjeAlJegemXcVTkQLHLkZeg0m3F2fDMNVqCw7T4XwDyLHNFubmbgIeSY/QpfOHzi
+         RUhimd/sozTOMOdryTKpa3cOiOVYpIXEa+NbUFQK7bYhh0jsZUByO0/NYSrfeXlb//t7
+         SGq0FEwvZIeI68kFKnWbAb/0qd39MNiRlUmE6VGtdkhAQFUI7248bCG0/V5P9kNjYt29
+         iVPg==
+X-Gm-Message-State: AOAM531dP02uAd1iUN9WBvege/5plDQyfVHWZH/w5CD6vuqhl2WSDCUY
+        hqGkXx75r5qdV4s9CvSxFm0xphCZ/J66sx9GYV1BQoAymIAY2Q==
+X-Google-Smtp-Source: ABdhPJwUROdk9A8Qwd2tuw08CZKr0R3MuuP8qDXjgB8mVmyxJSCJn4YkSFdFD8d7NoBEab/1tROH0o1RQJpQwHeitmE=
+X-Received: by 2002:a25:33c4:: with SMTP id z187mr7498681ybz.27.1601402248480;
+ Tue, 29 Sep 2020 10:57:28 -0700 (PDT)
 MIME-Version: 1.0
 References: <CAPGftE8ipAacAnm9xMHFabXCL-XrCXGmOsX-Nsjvz9wnh3Zx-w@mail.gmail.com>
  <9e99c5301fbbb4f5f601b69816ee1dc9ab0df948.camel@linux.ibm.com>
@@ -64,58 +65,24 @@ References: <CAPGftE8ipAacAnm9xMHFabXCL-XrCXGmOsX-Nsjvz9wnh3Zx-w@mail.gmail.com>
  <CAPGftE9iVH=eG_FRxSFJC0B3FX8LVdKStfvLbs0gRt8kvMoqJw@mail.gmail.com>
  <CAEf4Bza2D2MQ_F7+vNg7x05JachvJ5bLM3Uyjv+oEx=xna_u4g@mail.gmail.com> <CAPGftE_aD6raGXnjhAM6CCMjB2_9C77Z=Xg-=wMwaduTHCp3Pw@mail.gmail.com>
 In-Reply-To: <CAPGftE_aD6raGXnjhAM6CCMjB2_9C77Z=Xg-=wMwaduTHCp3Pw@mail.gmail.com>
-From:   Juraj Vijtiuk <juraj.vijtiuk@sartura.hr>
-Date:   Tue, 29 Sep 2020 19:36:27 +0200
-Message-ID: <CAOjtDRUvh8vC5Q=9QN4UDCvKSRQTmx4zPhcZ4AB0n3ZXBqg_DQ@mail.gmail.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Tue, 29 Sep 2020 10:57:17 -0700
+Message-ID: <CAEf4BzZHF+KOxSCVeDoKnoLS_U9Qc6rT+tOMy0vA_C8FaFO5yQ@mail.gmail.com>
 Subject: Re: Problem with endianess of pahole BTF output for vmlinux
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Tony Ambardar <tony.ambardar@gmail.com>
+To:     Tony Ambardar <tony.ambardar@gmail.com>
 Cc:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
         Ilya Leoshkevich <iii@linux.ibm.com>,
         bpf <bpf@vger.kernel.org>, dwarves@vger.kernel.org,
         David Marcinkovic <david.marcinkovic@sartura.hr>,
         Luka Perkov <luka.perkov@sartura.hr>,
-        Borna Cafuk <borna.cafuk@sartura.hr>
+        Borna Cafuk <borna.cafuk@sartura.hr>,
+        Juraj Vijtiuk <juraj.vijtiuk@sartura.hr>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-Hello Andrii and Tony,
-
-as Luka mentioned we do not yet have a final version of the testing
-environment that we are working on for ARM32.
-
-However, I previously created an ARM32 little endian QEMU virt image
-that runs Debian, to test issues that we encountered with BPF CO-RE
-programs on ARM32.
-I only managed to get BPF CO-RE programs working with the default
-Debian kernel image, which is version 4.19. I built a custom 5.7
-kernel but it has some issues (none of the BPF programs work), which i
-haven't managed to fix yet.
-I'm not sure if the issue is due to the 5.7 kernel image, or due to
-the QEMU image. Because of that I'm not sure if it will work with
-other kernel versions, but if you are interested in trying to use it,
-it is available at the following Google Drive link:
-https://drive.google.com/drive/folders/1hs80tYhQG76As7_vkj1y7EF-sFXWxep1?usp=sharing
-
-To run the command i use "qemu-system-arm -M virt -m 1024 -kernel
-vmlinuz-4.19.0-10-armmp-lpae -initrd initrd.img-4.19.0-10-armmp-lpae
--append 'root=/dev/vda2' -drive
-if=none,file=qemu-backup.qcow2,format=qcow2,id=hd -device
-virtio-blk-device,drive=hd -netdev user,id=mynet -device
-virtio-net-device,netdev=mynet -nographic".
-
-The logins are root:test and user:user.
-The link has the disk image in qemu-backup.qcow, the 4.19 kernel and
-initrd and a run.sh which has the above mentioned command to run the
-image.
-
-Regards,
-Juraj
-
-
-On Tue, Sep 29, 2020 at 8:48 AM Tony Ambardar <tony.ambardar@gmail.com> wrote:
+On Mon, Sep 28, 2020 at 11:48 PM Tony Ambardar <tony.ambardar@gmail.com> wrote:
 >
 > On Mon, 28 Sep 2020 at 21:15, Andrii Nakryiko <andrii.nakryiko@gmail.com> wrote:
 > >
@@ -137,6 +104,11 @@ On Tue, Sep 29, 2020 at 8:48 AM Tony Ambardar <tony.ambardar@gmail.com> wrote:
 > > as well. Thank you!
 > >
 > Sounds good. However, malta is actually a MIPS platform. I've been using it
+
+I don't care about ARM vs MIPS specifically. Needed 32-bit and
+big-endian, just to test different variations. MIPS works just fine, I
+think.
+
 > a long time because it makes things particularly easy to switch configuration
 > between different word-sizes and endianness.
 >
@@ -163,6 +135,12 @@ On Tue, Sep 29, 2020 at 8:48 AM Tony Ambardar <tony.ambardar@gmail.com> wrote:
 > Meantime, I can package up what I have and send you the details. That
 > would include images for mips32/64 big-endian and arm32/64 little-endian,
 > plus usage examples. Is that still helpful for you?
+
+Yeah, tremendously! After fighting my local qemu setup I managed to
+run malta-be image successfully. Thanks a lot, that saves me lots of
+gray hair. I'll get to testing this hopefully today-tomorrow, will let
+you know if I had any more problems.
+
 >
 > Thanks,
 > Tony
