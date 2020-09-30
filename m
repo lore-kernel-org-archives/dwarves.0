@@ -1,146 +1,125 @@
-Return-Path: <SRS0=G+aR=DG=vger.kernel.org=dwarves-owner@kernel.org>
+Return-Path: <SRS0=Yf7w=DH=vger.kernel.org=dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B9B60C4727C
-	for <linux-dwarves@archiver.kernel.org>; Tue, 29 Sep 2020 17:57:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 66CDDC4727C
+	for <linux-dwarves@archiver.kernel.org>; Wed, 30 Sep 2020 04:28:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6732E20702
-	for <linux-dwarves@archiver.kernel.org>; Tue, 29 Sep 2020 17:57:31 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 24579207C3
+	for <linux-dwarves@archiver.kernel.org>; Wed, 30 Sep 2020 04:28:01 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ktfVEoCr"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="giqHRwxG"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728150AbgI2R5b (ORCPT
+        id S1725320AbgI3E2A (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Tue, 29 Sep 2020 13:57:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40976 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727360AbgI2R5a (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Tue, 29 Sep 2020 13:57:30 -0400
-Received: from mail-yb1-xb44.google.com (mail-yb1-xb44.google.com [IPv6:2607:f8b0:4864:20::b44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57227C061755;
-        Tue, 29 Sep 2020 10:57:30 -0700 (PDT)
-Received: by mail-yb1-xb44.google.com with SMTP id v60so4265135ybi.10;
-        Tue, 29 Sep 2020 10:57:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=c1JLeR7hs2t3LNL/VevNbKZmDuYgdRy4GrJ22m1nprA=;
-        b=ktfVEoCrQTNv2jBrN62ca/gFlOgTCwu4OGjndNuVG2G9WpwPixWMWA4QL/s0O089Hv
-         C5xq6wPHMxCmnyPVbeNze5EA7Z/c8LlagPeT6HzWtAagXceFlKu8iu4BebtvsqJDPJNT
-         NpnhbRsNHjB604yDpf/rRXbYntiiJ2RA0IE0ujt7mjvCtvrjmejkV1oeoHgNHwwGef+q
-         +JADaKzv9UVwmRO69KWMCJG8NUN3XbSRFjANOyM05+bYfyI254EdmZcZiHDIm+5CYGD5
-         wEJWwEdHPC7cK7Y9++ylKawAUBb69ha2NpoSmxHVlOrLJqp4takBs3VSVSeDOaO7tPUb
-         kmEg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=c1JLeR7hs2t3LNL/VevNbKZmDuYgdRy4GrJ22m1nprA=;
-        b=PBlh/rU+hMZG+s9B/7REc+LcqYgZpsHJJkSSkQrnt8Gbp87+vMs249R68QeuxeKYds
-         tVLisLKBw+jDMMiUBOFsZo2CTw/9tQN8doPd29AGhM42yBr0t5m1TUCgifqTBbqxB6mQ
-         fyOrmjeAlJegemXcVTkQLHLkZeg0m3F2fDMNVqCw7T4XwDyLHNFubmbgIeSY/QpfOHzi
-         RUhimd/sozTOMOdryTKpa3cOiOVYpIXEa+NbUFQK7bYhh0jsZUByO0/NYSrfeXlb//t7
-         SGq0FEwvZIeI68kFKnWbAb/0qd39MNiRlUmE6VGtdkhAQFUI7248bCG0/V5P9kNjYt29
-         iVPg==
-X-Gm-Message-State: AOAM531dP02uAd1iUN9WBvege/5plDQyfVHWZH/w5CD6vuqhl2WSDCUY
-        hqGkXx75r5qdV4s9CvSxFm0xphCZ/J66sx9GYV1BQoAymIAY2Q==
-X-Google-Smtp-Source: ABdhPJwUROdk9A8Qwd2tuw08CZKr0R3MuuP8qDXjgB8mVmyxJSCJn4YkSFdFD8d7NoBEab/1tROH0o1RQJpQwHeitmE=
-X-Received: by 2002:a25:33c4:: with SMTP id z187mr7498681ybz.27.1601402248480;
- Tue, 29 Sep 2020 10:57:28 -0700 (PDT)
+        Wed, 30 Sep 2020 00:28:00 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:62728 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725372AbgI3E2A (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Wed, 30 Sep 2020 00:28:00 -0400
+Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
+        by m0001303.ppops.net (8.16.0.42/8.16.0.42) with SMTP id 08U4NUJG002065
+        for <dwarves@vger.kernel.org>; Tue, 29 Sep 2020 21:27:59 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=facebook; bh=FkLdBchCq8g87LClKzExveefLm8EC4fmBFOdd6xscJs=;
+ b=giqHRwxGcjS+HvPIj88znp6e6qst0hisHqrIZkJcuXRFddsG6tPNE4oryROz55//tmWd
+ HMtSfouo2+47q9/VUHIE5yCFGD5jzoXbcLaIIt8St69W9/h5b+qBaHj/XPNDwPt4lQf/
+ FQTOQ8xLcAX17dWZpOUrH9e3xUJLK3TN2YU= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by m0001303.ppops.net with ESMTP id 33tshr5ync-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <dwarves@vger.kernel.org>; Tue, 29 Sep 2020 21:27:59 -0700
+Received: from intmgw005.03.ash8.facebook.com (2620:10d:c085:108::8) by
+ mail.thefacebook.com (2620:10d:c085:11d::6) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1979.3; Tue, 29 Sep 2020 21:27:57 -0700
+Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
+        id C4C282EC77F1; Tue, 29 Sep 2020 21:27:51 -0700 (PDT)
+From:   Andrii Nakryiko <andriin@fb.com>
+To:     <dwarves@vger.kernel.org>
+CC:     <bpf@vger.kernel.org>, Andrii Nakryiko <andriin@fb.com>
+Subject: [PATCH dwarves 00/11] Switch BTF loading and encoding to libbpf APIs
+Date:   Tue, 29 Sep 2020 21:27:31 -0700
+Message-ID: <20200930042742.2525310-1-andriin@fb.com>
+X-Mailer: git-send-email 2.24.1
 MIME-Version: 1.0
-References: <CAPGftE8ipAacAnm9xMHFabXCL-XrCXGmOsX-Nsjvz9wnh3Zx-w@mail.gmail.com>
- <9e99c5301fbbb4f5f601b69816ee1dc9ab0df948.camel@linux.ibm.com>
- <CAEf4Bza9tZ-Jj0dj9Ne0fmxa95t=9XxxJR+Ce=6hDmw_d8uVFA@mail.gmail.com>
- <8cf42e2752e442bb54e988261d8bf3cd22ad00f2.camel@linux.ibm.com>
- <20200909142750.GC3788224@kernel.org> <CAPGftE8jNys9aVfUZW2iE5vB=QWKEmmwwWuWq9ek0ZXp-Aobkg@mail.gmail.com>
- <CAEf4BzYDm3QOOgND9p+LR21bn98QMjE+VYspQSvi4ebG9EdW0g@mail.gmail.com>
- <CAEf4Bzb7LZX8Y=qKpO5j3eUYU=tJzvNRYd1CdXXxq8Y-V4=+Vw@mail.gmail.com>
- <CAPGftE9iVH=eG_FRxSFJC0B3FX8LVdKStfvLbs0gRt8kvMoqJw@mail.gmail.com>
- <CAEf4Bza2D2MQ_F7+vNg7x05JachvJ5bLM3Uyjv+oEx=xna_u4g@mail.gmail.com> <CAPGftE_aD6raGXnjhAM6CCMjB2_9C77Z=Xg-=wMwaduTHCp3Pw@mail.gmail.com>
-In-Reply-To: <CAPGftE_aD6raGXnjhAM6CCMjB2_9C77Z=Xg-=wMwaduTHCp3Pw@mail.gmail.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Tue, 29 Sep 2020 10:57:17 -0700
-Message-ID: <CAEf4BzZHF+KOxSCVeDoKnoLS_U9Qc6rT+tOMy0vA_C8FaFO5yQ@mail.gmail.com>
-Subject: Re: Problem with endianess of pahole BTF output for vmlinux
-To:     Tony Ambardar <tony.ambardar@gmail.com>
-Cc:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        bpf <bpf@vger.kernel.org>, dwarves@vger.kernel.org,
-        David Marcinkovic <david.marcinkovic@sartura.hr>,
-        Luka Perkov <luka.perkov@sartura.hr>,
-        Borna Cafuk <borna.cafuk@sartura.hr>,
-        Juraj Vijtiuk <juraj.vijtiuk@sartura.hr>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-09-30_01:2020-09-29,2020-09-30 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 suspectscore=13
+ adultscore=0 malwarescore=0 spamscore=0 impostorscore=0 priorityscore=1501
+ bulkscore=0 lowpriorityscore=0 phishscore=0 mlxscore=0 mlxlogscore=589
+ clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2009300032
+X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-On Mon, Sep 28, 2020 at 11:48 PM Tony Ambardar <tony.ambardar@gmail.com> wrote:
->
-> On Mon, 28 Sep 2020 at 21:15, Andrii Nakryiko <andrii.nakryiko@gmail.com> wrote:
-> >
-> > On Mon, Sep 28, 2020 at 8:41 PM Tony Ambardar <tony.ambardar@gmail.com> wrote:
-> > >
-> [...]
-> > > I can provide 32-bit and 64-bit big-endian system images for running
-> > > on QEMU's malta target. These are built using OpenWRT's build system
-> > > and include a recent stable bpftool (v5.8.x) and v5.4.x kernel. Is
-> > > that sufficient? It would work if manually creating raw or elf-based
-> > > BTF files on a build host, then copying into the QEMU target to test
-> > > parsing with bpftool (linked with the standard libbpf).
-> >
-> > That would be great! I intend to run them under qemu-system-arm and
-> > supply latest kernel through -kernel option, so kernel itself is not
-> > that critical. Same for bpftool, pahole, etc, I'll just supply them
-> > from my host environment. So please let me know how I can get ahold of
-> > those. Sample qemu invocation command line would be highly appreciated
-> > as well. Thank you!
-> >
-> Sounds good. However, malta is actually a MIPS platform. I've been using it
+This patch set switches pahole to use libbpf-provided BTF loading and enc=
+oding
+APIs. This reduces pahole's own BTF encoding code, speeds up the process,
+reduces amount of RAM needed for DWARF-to-BTF conversion. Also, pahole fi=
+nally
+gets support to generating BTF for cross-compiled ELF binaries with diffe=
+rent
+endianness (patch #11).
 
-I don't care about ARM vs MIPS specifically. Needed 32-bit and
-big-endian, just to test different variations. MIPS works just fine, I
-think.
+Additionally, patch #6 fixes previously missed problem with invalid array
+index type generation.
 
-> a long time because it makes things particularly easy to switch configuration
-> between different word-sizes and endianness.
->
-> I had some malta mips images ready to go, but if you need ARM I'll need
-> to look into building images for big-endian ARM. Big-endian isn't so common
-> in the wild, and I'll need to see if OpenWRT supports these, and how to
-> configure with QEMU's 'armvirt' target if possible...
->
-> > >
-> > > For changes to the Linux build system itself (e.g. pahole endian
-> > > options and target endian awareness), you would need to set up a
-> >
-> > I think that shouldn't be a problem and should be handled
-> > transparently, even in a cross-compilation case, but let's see.
-> >
-> > > standard OpenWRT build environment. I can help with that, or simply
-> > > integrate your patches myself for testing. As you say, nothing to be
-> > > super pumped about...
-> > >
-> > > Let me know what's easiest and how best to get images to you.
-> >
-> > Any way you like and can. Dropbox, Google drive, what have you.
-> >
-> Meantime, I can package up what I have and send you the details. That
-> would include images for mips32/64 big-endian and arm32/64 little-endian,
-> plus usage examples. Is that still helpful for you?
+Patches #7-10 are speeding up DWARF-to-BTF convertion/dedup pretty
+significantly, saving overall about 9 seconds out of current 27 or so.
 
-Yeah, tremendously! After fighting my local qemu setup I managed to
-run malta-be image successfully. Thanks a lot, that saves me lots of
-gray hair. I'll get to testing this hopefully today-tomorrow, will let
-you know if I had any more problems.
+Patch #8 revamps how per-CPU BTF variables are emitted, eliminating repea=
+ted
+and expensive looping over ELF symbols table.
 
->
-> Thanks,
-> Tony
+Patch #10 admittedly has some hacky parts to satisfy CTF use case, but it=
+s
+speed ups are greatest. So I'll understand if it gets dropped, but it wou=
+ld be
+a pity.
+
+More details could be found in respective patches.
+
+Andrii Nakryiko (11):
+  libbpf: update to latest libbpf version
+  btf_encoder: detect BTF encoding errors and exit
+  dwarves: expose and maintain active debug info loader operations
+  btf_loader: use libbpf to load BTF
+  btf_encoder: use libbpf APIs to encode BTF type info
+  btf_encoder: fix emitting __ARRAY_SIZE_TYPE__ as index range type
+  btf_encoder: discard CUs after BTF encoding
+  btf_encoder: revamp how per-CPU variables are encoded
+  dwarf_loader: increase the size of lookup hash map
+  strings: use BTF's string APIs for strings management
+  btf_encoder: support cross-compiled ELF binaries with different
+    endianness
+
+ btf_encoder.c  | 361 +++++++++++++++------------
+ btf_loader.c   | 244 +++++++-----------
+ ctf_encoder.c  |   2 +-
+ dwarf_loader.c |   2 +-
+ dwarves.c      |   8 +
+ lib/bpf        |   2 +-
+ libbtf.c       | 661 +++++++++++++++++++++----------------------------
+ libbtf.h       |  41 ++-
+ libctf.c       |  14 +-
+ libctf.h       |   4 +-
+ pahole.c       |   9 +-
+ strings.c      |  91 +++----
+ strings.h      |  32 +--
+ 13 files changed, 653 insertions(+), 818 deletions(-)
+
+--=20
+2.24.1
+
