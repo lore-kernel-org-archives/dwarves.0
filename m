@@ -8,47 +8,47 @@ X-Spam-Status: No, score=-13.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BFD7BC4741F
-	for <linux-dwarves@archiver.kernel.org>; Wed, 30 Sep 2020 04:28:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E0EA4C4727F
+	for <linux-dwarves@archiver.kernel.org>; Wed, 30 Sep 2020 04:28:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 89D562074B
-	for <linux-dwarves@archiver.kernel.org>; Wed, 30 Sep 2020 04:28:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AA5482074B
+	for <linux-dwarves@archiver.kernel.org>; Wed, 30 Sep 2020 04:28:15 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="aizB9nQY"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="OnQMWHrZ"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725790AbgI3E2M (ORCPT
+        id S1725779AbgI3E2P (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Wed, 30 Sep 2020 00:28:12 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:7658 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725786AbgI3E2M (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Wed, 30 Sep 2020 00:28:12 -0400
-Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 08U4S9BF011182
-        for <dwarves@vger.kernel.org>; Tue, 29 Sep 2020 21:28:11 -0700
+        Wed, 30 Sep 2020 00:28:15 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:44970 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725792AbgI3E2P (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Wed, 30 Sep 2020 00:28:15 -0400
+Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
+        by m0089730.ppops.net (8.16.0.42/8.16.0.42) with SMTP id 08U4Ptcp027925
+        for <dwarves@vger.kernel.org>; Tue, 29 Sep 2020 21:28:14 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=L2yuisBJNOx0vy1ySJ3Ee2fOtCR7/zd+StlKwujDeks=;
- b=aizB9nQY/PdKZhyTIjKizia31Em0Fw4SoloK66gzPEBiICMONQBPj4h+g/cj6K001bu/
- GNunC9kaZVmxN4FPv8CtSbN48AQzM8Po0T+ee4D7ipjGc4H96MqTbjc7A853YLv4G1vK
- GVcKNClolYlMRkxxiU3j8dXY00l7BMffAOY= 
+ bh=SIVW82mMAURBIIG5qba82CuM/+1N1gWvTKffUJQorps=;
+ b=OnQMWHrZzFHKQrYOYT+HmZN8zoL9hWnnw765U/ippqg/d70LqVYRVBFykZ1nZG0XN6hx
+ MZyuOdLHyDw86Y9GndmNYzl4ZA4h1T1eNhLdsN/WXohWo7xsluOIuSVKzf8gB3A49yVa
+ t3lUuxZJV01+XDH6nATLDw4rk3oNc+Doi/U= 
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 33v1ndd3ur-5
+        by m0089730.ppops.net with ESMTP id 33t14yhbw8-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <dwarves@vger.kernel.org>; Tue, 29 Sep 2020 21:28:11 -0700
+        for <dwarves@vger.kernel.org>; Tue, 29 Sep 2020 21:28:14 -0700
 Received: from intmgw004.03.ash8.facebook.com (2620:10d:c085:108::8) by
- mail.thefacebook.com (2620:10d:c085:21d::4) with Microsoft SMTP Server
+ mail.thefacebook.com (2620:10d:c085:21d::7) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Tue, 29 Sep 2020 21:28:00 -0700
+ 15.1.1979.3; Tue, 29 Sep 2020 21:28:12 -0700
 Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id 27E2A2EC77F1; Tue, 29 Sep 2020 21:27:56 -0700 (PDT)
+        id 025802EC77F1; Tue, 29 Sep 2020 21:28:04 -0700 (PDT)
 From:   Andrii Nakryiko <andriin@fb.com>
 To:     <dwarves@vger.kernel.org>
 CC:     <bpf@vger.kernel.org>, Andrii Nakryiko <andriin@fb.com>
-Subject: [PATCH dwarves 02/11] btf_encoder: detect BTF encoding errors and exit
-Date:   Tue, 29 Sep 2020 21:27:33 -0700
-Message-ID: <20200930042742.2525310-3-andriin@fb.com>
+Subject: [PATCH dwarves 06/11] btf_encoder: fix emitting __ARRAY_SIZE_TYPE__ as index range type
+Date:   Tue, 29 Sep 2020 21:27:37 -0700
+Message-ID: <20200930042742.2525310-7-andriin@fb.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20200930042742.2525310-1-andriin@fb.com>
 References: <20200930042742.2525310-1-andriin@fb.com>
@@ -58,44 +58,128 @@ X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
  definitions=2020-09-30_01:2020-09-29,2020-09-30 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 spamscore=0
- mlxlogscore=701 clxscore=1015 priorityscore=1501 bulkscore=0 adultscore=0
- malwarescore=0 lowpriorityscore=0 suspectscore=13 phishscore=0 mlxscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2009300033
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 malwarescore=0
+ lowpriorityscore=0 mlxlogscore=999 priorityscore=1501 phishscore=0
+ spamscore=0 adultscore=0 bulkscore=0 mlxscore=0 clxscore=1015
+ impostorscore=0 suspectscore=15 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2006250000 definitions=main-2009300032
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-Don't silently swallow BTF encoding errors and continue onto next CU. If =
-any
-of CU fails to properly encode BTF, exit with an error message.
+Fix the logic of determining if __ARRAY_SIZE_TYPE__ needs to be emitted.
+Previously, such type could be emitted unnecessarily due to some particul=
+ar CU
+not having an int type in it. That would happen even if there was no arra=
+y
+type in that CU. Fix it by keeping track of 'int' type across CUs and onl=
+y
+emitting __ARRAY_SIZE_TYPE__ if a given CU has array type, but we still
+haven't found 'int' type.
+
+Testing against vmlinux shows that now there are no __ARRAY_SIZE_TYPE__
+integers emitted.
 
 Signed-off-by: Andrii Nakryiko <andriin@fb.com>
 ---
- pahole.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ btf_encoder.c | 30 +++++++++++++++++++++---------
+ 1 file changed, 21 insertions(+), 9 deletions(-)
 
-diff --git a/pahole.c b/pahole.c
-index ee5f2f7f76b0..ed87529ce65d 100644
---- a/pahole.c
-+++ b/pahole.c
-@@ -2363,8 +2363,11 @@ static enum load_steal_kind pahole_stealer(struct =
-cu *cu,
- 		goto filter_it;
+diff --git a/btf_encoder.c b/btf_encoder.c
+index 0a9db2938422..91b68694bca5 100644
+--- a/btf_encoder.c
++++ b/btf_encoder.c
+@@ -147,6 +147,8 @@ static int32_t enumeration_type__encode(struct btf_el=
+f *btfe, struct cu *cu, str
+ 	return type_id;
+ }
 =20
- 	if (btf_encode) {
--		cu__encode_btf(cu, global_verbose, btf_encode_force,
--			       skip_encoding_btf_vars);
-+		if (cu__encode_btf(cu, global_verbose, btf_encode_force,
-+				   skip_encoding_btf_vars)) {
-+			fprintf(stderr, "Encountered error while encoding BTF.\n");
-+			exit(1);
-+		}
- 		return LSK__KEEPIT;
++static bool need_index_type;
++
+ static int tag__encode_btf(struct cu *cu, struct tag *tag, uint32_t core=
+_id, struct btf_elf *btfe,
+ 			   uint32_t array_index_id, uint32_t type_id_off)
+ {
+@@ -179,6 +181,7 @@ static int tag__encode_btf(struct cu *cu, struct tag =
+*tag, uint32_t core_id, str
+ 			return structure_type__encode(btfe, cu, tag, type_id_off);
+ 	case DW_TAG_array_type:
+ 		/* TODO: Encode one dimension at a time. */
++		need_index_type =3D true;
+ 		return btf_elf__add_array(btfe, ref_type_id, array_index_id, array_typ=
+e__nelems(tag));
+ 	case DW_TAG_enumeration_type:
+ 		return enumeration_type__encode(btfe, cu, tag);
+@@ -193,6 +196,7 @@ static int tag__encode_btf(struct cu *cu, struct tag =
+*tag, uint32_t core_id, str
+=20
+ static struct btf_elf *btfe;
+ static uint32_t array_index_id;
++static bool has_index_type;
+=20
+ int btf_encoder__encode()
+ {
+@@ -228,7 +232,6 @@ static struct variable *hashaddr__find_variable(const=
+ struct hlist_head hashtabl
+ int cu__encode_btf(struct cu *cu, int verbose, bool force,
+ 		   bool skip_encoding_vars)
+ {
+-	bool add_index_type =3D false;
+ 	uint32_t type_id_off;
+ 	uint32_t core_id;
+ 	struct function *fn;
+@@ -254,18 +257,26 @@ int cu__encode_btf(struct cu *cu, int verbose, bool=
+ force,
+ 		if (!btfe)
+ 			return -1;
+=20
+-		/* cu__find_base_type_by_name() takes "type_id_t *id" */
+-		type_id_t id;
+-		if (!cu__find_base_type_by_name(cu, "int", &id)) {
+-			add_index_type =3D true;
+-			id =3D cu->types_table.nr_entries;
+-		}
+-		array_index_id =3D id;
++		has_index_type =3D false;
++		need_index_type =3D false;
++		array_index_id =3D 0;
+=20
+ 		if (verbose)
+ 			printf("File %s:\n", btfe->filename);
  	}
 =20
++	if (!has_index_type) {
++		/* cu__find_base_type_by_name() takes "type_id_t *id" */
++		type_id_t id;
++		if (cu__find_base_type_by_name(cu, "int", &id)) {
++			has_index_type =3D true;
++			array_index_id =3D id;
++		} else {
++			has_index_type =3D false;
++			array_index_id =3D cu->types_table.nr_entries;
++		}
++	}
++
+ 	btf_elf__verbose =3D verbose;
+ 	type_id_off =3D btf__get_nr_types(btfe->btf);
+=20
+@@ -279,12 +290,13 @@ int cu__encode_btf(struct cu *cu, int verbose, bool=
+ force,
+ 		}
+ 	}
+=20
+-	if (add_index_type) {
++	if (need_index_type && !has_index_type) {
+ 		struct base_type bt =3D {};
+=20
+ 		bt.name =3D 0;
+ 		bt.bit_size =3D 32;
+ 		btf_elf__add_base_type(btfe, &bt, "__ARRAY_SIZE_TYPE__");
++		has_index_type =3D true;
+ 	}
+=20
+ 	cu__for_each_function(cu, core_id, fn) {
 --=20
 2.24.1
 
