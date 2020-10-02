@@ -2,136 +2,206 @@ Return-Path: <SRS0=yA5M=DJ=vger.kernel.org=dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3C271C4363D
-	for <linux-dwarves@archiver.kernel.org>; Fri,  2 Oct 2020 21:18:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6A9F7C4363D
+	for <linux-dwarves@archiver.kernel.org>; Fri,  2 Oct 2020 21:21:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id F22A820754
-	for <linux-dwarves@archiver.kernel.org>; Fri,  2 Oct 2020 21:18:22 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3845F20796
+	for <linux-dwarves@archiver.kernel.org>; Fri,  2 Oct 2020 21:21:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1601673503;
-	bh=RkkyCCfcybqy+gR3NYRi5cUzkfQF7vmPBHpqohLyWho=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
-	b=s1mNL9CYutnLTidQJWqSk5M1+uaW4XjlB3d6LiwAR1mZoemLsc9AL5P6JM7xmzOck
-	 ZGDqgd+gVdMySas8OVTTMV8Bkmi+2ZC8COvQ3fwk/kVfl2cWpzUQi9o1uiFyWkNSLv
-	 yZ/BZxAl8CrjXkTT8KdaoTmQsj4y/znc6YZW976o=
+	s=default; t=1601673681;
+	bh=JxXwRo2eZLSKELVd1pxzEID/Qqp+oS0AgTh1YeB/Yuc=;
+	h=Date:From:To:Cc:Subject:List-ID:From;
+	b=kU4/Bo1Hxi3kFN2rDIzWQxLjOqsHwr0whZpFJRxpoWFFfXh0hzDGmhnJSSgEzOQFf
+	 s6BdoohNcyjWhkwebjV73SoUP0MHe56tX9ZLKOk/K97MEngeNL5to7jyOMgCVPsgS7
+	 3PzOxAtHOiyrtcEx92gaiknsu/hY9DvocnZzOA7s=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725601AbgJBVSW (ORCPT
+        id S1725613AbgJBVVS (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Fri, 2 Oct 2020 17:18:22 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38282 "EHLO mail.kernel.org"
+        Fri, 2 Oct 2020 17:21:18 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39280 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725283AbgJBVSW (ORCPT <rfc822;dwarves@vger.kernel.org>);
-        Fri, 2 Oct 2020 17:18:22 -0400
+        id S1725283AbgJBVVR (ORCPT <rfc822;dwarves@vger.kernel.org>);
+        Fri, 2 Oct 2020 17:21:17 -0400
 Received: from quaco.ghostprotocols.net (unknown [179.97.37.151])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id DB10E206DD;
-        Fri,  2 Oct 2020 21:18:21 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 27B4D206DD;
+        Fri,  2 Oct 2020 21:21:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1601673502;
-        bh=RkkyCCfcybqy+gR3NYRi5cUzkfQF7vmPBHpqohLyWho=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Aqb4sq2MipDKm1Z2OJZQrJFw2zP7mrom2LO0cYHAkRcpu9oxq7bDNYGAl8N3hVuT3
-         zSSvKByxfw1TD5VZKDEHpZQeDEsvNehTm6K4YJqWOqV/f/oD84WxBiVAGq9tQwmJfU
-         lVD3mY1wwtzMqtBhuKUfgeHic0pPpP+Utoi7kjTE=
+        s=default; t=1601673677;
+        bh=JxXwRo2eZLSKELVd1pxzEID/Qqp+oS0AgTh1YeB/Yuc=;
+        h=Date:From:To:Cc:Subject:From;
+        b=XL1YqCPdOV9OGqikxEAnbmnO+y1uhCzrSaApKVz9YkStseWCuCiuANMXQxWS5nLal
+         MTLyd61unC21UiY9Y7wyB2olrhNM6w+snis+5JeVo7LLAU4WId8YrYdAakObRsX3Y1
+         hCkUGesQ/5biCySp+7VT4FSAO2nJFfLDvkGHcQJg=
 Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id AFDF2403AC; Fri,  2 Oct 2020 18:18:19 -0300 (-03)
-Date:   Fri, 2 Oct 2020 18:18:19 -0300
+        id 47EC8403AC; Fri,  2 Oct 2020 18:21:15 -0300 (-03)
+Date:   Fri, 2 Oct 2020 18:21:15 -0300
 From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Mark Wielaard <mark@klomp.org>
-Cc:     dwarves@vger.kernel.org
-Subject: Re: DWARF5 DW_AT_data_bit_offset
-Message-ID: <20201002211819.GA127275@kernel.org>
-References: <5ee85ca6e3b06b07c83b150912fbcfc1a4c13e19.camel@klomp.org>
+To:     dwarves@vger.kernel.org
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        bpf@vger.kernel.org, Jiri Olsa <jolsa@kernel.org>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        Alan Maguire <alan.maguire@oracle.com>,
+        Hao Luo <haoluo@google.com>, Tom de Vries <tdevries@suse.com>,
+        Jan Engelhardt <jengelh@inai.de>,
+        Domenico Andreoli <cavok@debian.org>,
+        Matthias Schwarzott <zzam@gentoo.org>,
+        David Seifert <soap@gentoo.org>,
+        Pavel Borzenkov <pavel.borzenkov@gmail.com>,
+        Andrii Nakryiko <andriin@fb.com>,
+        Alexei Starovoitov <ast@fb.com>,
+        Martin Cermak <mcermak@redhat.com>
+Subject: ANNOUNCE: pahole v1.18 (raw data pretty printer, BTF global vars)
+Message-ID: <20201002212115.GB127275@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <5ee85ca6e3b06b07c83b150912fbcfc1a4c13e19.camel@klomp.org>
 X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-Em Fri, Oct 02, 2020 at 06:11:06PM +0200, Mark Wielaard escreveu:
-> Hi,
-> 
-> Seems pahole with a recent version of elfutils libdw already handles
-> most DWARF5 encodings. One thing it doesn't handle yet is
-> DW_AT_data_bit_offset (this is actually a DWARF4 thing, but gcc only
-> emits it for -gdwarf-5).
-> 
-> Note that the actual bit offset for the different attributes is defined
-> differently:
-> 
-> DW_AT_bit_offset: The bit offset attribute describes the offset in bits
-> of the high order bit of a value of the given type from the high order
-> bit of the storage unit used to contain that value.
-> 
-> DW_AT_data_bit_offset: the value is an integer constant that specifies
-> the number of bits from the beginning of the containing entity to the
-> beginning of the data member.
-> 
-> If there is a DW_AT_data_bit_offset instead of a
-> DW_AT_data_member_location then there will be no DW_AT_byte_size and no
-> DW_AT_bit_offset.
-> 
-> DWARF5 has some example for big and little endian in D.2.8 C/C++ Bit-
-> Field Examples
-> 
-> dwarf_loader.c already seems to do the right thing for little-endian
-> machines with DW_AT_data_member_location and DW_AT_bit_offset. For
-> DW_AT_data_bit_offset it doesn't have to do this fixup because it is
-> already defined as you would expect.
-> 
-> Example that shows the issue:
-> 
-> $ cat bf.c
-> struct pea
-> {
->   int type;
->   long a:1, b:1, c:1;
-> };
-> 
-> struct pea p;
-> 
-> $ gcc -gdwarf-4 -c bf.c
-> $ ./pahole ./bf.o 
-> struct pea {
-> 	int                        type;                 /*     0     4 */
-> 
-> 	/* Bitfield combined with previous fields */
-> 
-> 	long int                   a:1;                  /*     0:32  8 */
-> 	long int                   b:1;                  /*     0:33  8 */
-> 	long int                   c:1;                  /*     0:34  8 */
-> 
-> 	/* size: 8, cachelines: 1, members: 4 */
-> 	/* bit_padding: 29 bits */
-> 	/* last cacheline: 8 bytes */
-> };
-> $ gcc -gdwarf-5 -c bf.c
-> $ ./pahole ./bf.o 
-> DW_AT_<0xd>=0x21
-> DW_AT_<0xd>=0x21
-> DW_AT_<0xd>=0x21
-> struct pea {
-> 	int                        type;                 /*     0     4 */
-> 	static long int                   a;             /*     0     0 */
-> 	static long int                   b;             /*     0     0 */
-> 	static long int                   c;             /*     0     0 */
-> 
-> 	/* size: 8, cachelines: 1, members: 1, static members: 3 */
-> 	/* padding: 4 */
-> 	/* last cacheline: 8 bytes */
-> };
-> 
-> Note that GCC11 might default to DWARF5.
+Hi,
+ 
+	The v1.18 release of pahole and its friends is out, available at
+the usual places:
 
-Thanks for the detailed report, I'm releasing v1.18 right now, will look
-into that for v1.19.
+Main git repo:
 
-- Arnaldo
+   git://git.kernel.org/pub/scm/devel/pahole/pahole.git
+
+Mirror git repo:
+
+   https://github.com/acmel/dwarves.git
+
+tarball + gpg signature:
+
+   https://fedorapeople.org/~acme/dwarves/dwarves-1.18.tar.xz
+   https://fedorapeople.org/~acme/dwarves/dwarves-1.18.tar.bz2
+   https://fedorapeople.org/~acme/dwarves/dwarves-1.18.tar.sign
+
+Best Regards,
+
+v1.18:
+
+- Use type information to pretty print raw data from stdin, all
+  documented in the man pages, further information in the csets.
+
+  TLDRish: this almost completely deciphers a perf.data file:
+
+  $ pahole ~/bin/perf --header=perf_file_header \
+         -C 'perf_file_attr(range=attrs),perf_event_header(range=data,sizeof,type,type_enum=perf_event_type+perf_user_event_type)' < perf.data
+
+  What the above command line does:
+
+  This will state that a 'struct perf_file_header' is available in BTF or DWARF
+  in the ~/bin/perf file and that at the start of stdin it should be used to decode
+  sizeof(struct perf_file_header) bytes, pretty printing it according to its members.
+
+  Furthermore, that header can be referenced later in the command line, for instance
+  that 'range=data' means that in the header, it expects a 'range' member in 
+  'struct perf_file_header' to be used:
+
+    $ pahole ~/bin/perf --header=perf_file_header < perf.data
+    {
+            .magic = 3622385352885552464,
+            .size = 104,
+            .attr_size = 136,
+            .attrs = {
+                    .offset = 296,
+                    .size = 136,
+            },
+            .data = {
+                    .offset = 432,
+                    .size = 14688,
+            },
+                    .event_types = {
+                    .offset = 0,
+                    .size = 0,
+            },
+            .adds_features = { 376537084, 0, 0, 0 },
+    },
+    $
+
+  That 'range' field is expected to have 'offset' and 'size' fields, so that
+  it can go on decoding a number of 'struct perf_event_header' entries.
+
+  That 'sizeof' in turn expects that in 'struct perf_event_header' there is a
+  'size' field stating how long that particular record is, one can also use
+  'sizeof=some_other_member_name'.
+
+  This supports variable sized records and then the 'type' field expects there
+  is a 'struct perf_event_type' member named 'type' (again, type=something_else
+  may be used. Finally, the value in the 'type' field is used to lookup an entry
+  in the set formed by the two enumerations specified in the 'type_enum=' argument.
+
+  If we look at these enums we'll see that its entries have names that can be,
+  when lowercased, point to structs containing the layout for the variable sized
+  record, which allows it to cast and produce the right pretty printed output.
+
+  I.e. using the kernel BTF info we get:
+
+  $ pahole perf_event_type
+  enum perf_event_type {
+  	PERF_RECORD_MMAP = 1,
+  	PERF_RECORD_LOST = 2,
+  	PERF_RECORD_COMM = 3,
+  	PERF_RECORD_EXIT = 4,
+  	PERF_RECORD_THROTTLE = 5,
+  	PERF_RECORD_UNTHROTTLE = 6,
+  	PERF_RECORD_FORK = 7,
+  	PERF_RECORD_READ = 8,
+  	PERF_RECORD_SAMPLE = 9,
+  	PERF_RECORD_MMAP2 = 10,
+  	PERF_RECORD_AUX = 11,
+  	PERF_RECORD_ITRACE_START = 12,
+  	PERF_RECORD_LOST_SAMPLES = 13,
+  	PERF_RECORD_SWITCH = 14,
+  	PERF_RECORD_SWITCH_CPU_WIDE = 15,
+  	PERF_RECORD_NAMESPACES = 16,
+  	PERF_RECORD_KSYMBOL = 17,
+  	PERF_RECORD_BPF_EVENT = 18,
+  	PERF_RECORD_CGROUP = 19,
+  	PERF_RECORD_TEXT_POKE = 20,
+  	PERF_RECORD_MAX = 21,
+  };
+  $
+
+  That is the same as in ~/bin/perf, and, if we get one of these and ask for
+  that struct:
+
+  $ pahole -C perf_record_mmap ~/bin/perf
+  struct perf_record_mmap {
+  	struct perf_event_header   header;               /*     0     8 */
+  	__u32                      pid;                  /*     8     4 */
+  	__u32                      tid;                  /*    12     4 */
+  	__u64                      start;                /*    16     8 */
+  	__u64                      len;                  /*    24     8 */
+  	__u64                      pgoff;                /*    32     8 */
+  	char                       filename[4096];       /*    40  4096 */
+  
+  	/* size: 4136, cachelines: 65, members: 7 */
+  	/* last cacheline: 40 bytes */
+  };
+  $
+
+  Many other options were introduced to work with this, including --count,
+  --skip, etc, look at the man page for details.
+
+- Store percpu variables in vmlinux BTF. This can be disabled when debugging
+  kernel features being developed to use it.
+
+- pahole now should be segfault free when handling gdb test suit DWARF
+  files, including ADA, FORTRAN, rust and dwp compressed files, the
+  later being just flatly refused, that got left for v1.19.
+
+- Bail out on partial units for now, avoiding segfaults and providing warning
+  to user, hopefully will be addressed in v1.19.
+
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
