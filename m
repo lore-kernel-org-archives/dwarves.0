@@ -1,207 +1,148 @@
-Return-Path: <SRS0=yA5M=DJ=vger.kernel.org=dwarves-owner@kernel.org>
+Return-Path: <SRS0=imNC=DM=vger.kernel.org=dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-3.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6A9F7C4363D
-	for <linux-dwarves@archiver.kernel.org>; Fri,  2 Oct 2020 21:21:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 10A3FC35257
+	for <linux-dwarves@archiver.kernel.org>; Mon,  5 Oct 2020 03:48:43 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3845F20796
-	for <linux-dwarves@archiver.kernel.org>; Fri,  2 Oct 2020 21:21:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1601673681;
-	bh=JxXwRo2eZLSKELVd1pxzEID/Qqp+oS0AgTh1YeB/Yuc=;
-	h=Date:From:To:Cc:Subject:List-ID:From;
-	b=kU4/Bo1Hxi3kFN2rDIzWQxLjOqsHwr0whZpFJRxpoWFFfXh0hzDGmhnJSSgEzOQFf
-	 s6BdoohNcyjWhkwebjV73SoUP0MHe56tX9ZLKOk/K97MEngeNL5to7jyOMgCVPsgS7
-	 3PzOxAtHOiyrtcEx92gaiknsu/hY9DvocnZzOA7s=
+	by mail.kernel.org (Postfix) with ESMTP id 856B6207FF
+	for <linux-dwarves@archiver.kernel.org>; Mon,  5 Oct 2020 03:48:42 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aDUyffpk"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725613AbgJBVVS (ORCPT
+        id S1725852AbgJEDsm (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Fri, 2 Oct 2020 17:21:18 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39280 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725283AbgJBVVR (ORCPT <rfc822;dwarves@vger.kernel.org>);
-        Fri, 2 Oct 2020 17:21:17 -0400
-Received: from quaco.ghostprotocols.net (unknown [179.97.37.151])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 27B4D206DD;
-        Fri,  2 Oct 2020 21:21:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1601673677;
-        bh=JxXwRo2eZLSKELVd1pxzEID/Qqp+oS0AgTh1YeB/Yuc=;
-        h=Date:From:To:Cc:Subject:From;
-        b=XL1YqCPdOV9OGqikxEAnbmnO+y1uhCzrSaApKVz9YkStseWCuCiuANMXQxWS5nLal
-         MTLyd61unC21UiY9Y7wyB2olrhNM6w+snis+5JeVo7LLAU4WId8YrYdAakObRsX3Y1
-         hCkUGesQ/5biCySp+7VT4FSAO2nJFfLDvkGHcQJg=
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 47EC8403AC; Fri,  2 Oct 2020 18:21:15 -0300 (-03)
-Date:   Fri, 2 Oct 2020 18:21:15 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     dwarves@vger.kernel.org
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        bpf@vger.kernel.org, Jiri Olsa <jolsa@kernel.org>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        Alan Maguire <alan.maguire@oracle.com>,
-        Hao Luo <haoluo@google.com>, Tom de Vries <tdevries@suse.com>,
-        Jan Engelhardt <jengelh@inai.de>,
-        Domenico Andreoli <cavok@debian.org>,
-        Matthias Schwarzott <zzam@gentoo.org>,
-        David Seifert <soap@gentoo.org>,
-        Pavel Borzenkov <pavel.borzenkov@gmail.com>,
-        Andrii Nakryiko <andriin@fb.com>,
-        Alexei Starovoitov <ast@fb.com>,
-        Martin Cermak <mcermak@redhat.com>
-Subject: ANNOUNCE: pahole v1.18 (raw data pretty printer, BTF global vars)
-Message-ID: <20201002212115.GB127275@kernel.org>
+        Sun, 4 Oct 2020 23:48:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53414 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725845AbgJEDsm (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Sun, 4 Oct 2020 23:48:42 -0400
+Received: from mail-il1-x142.google.com (mail-il1-x142.google.com [IPv6:2607:f8b0:4864:20::142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F056EC0613CE;
+        Sun,  4 Oct 2020 20:48:41 -0700 (PDT)
+Received: by mail-il1-x142.google.com with SMTP id z5so6554509ilq.5;
+        Sun, 04 Oct 2020 20:48:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to:cc
+         :content-transfer-encoding;
+        bh=dBhgz32sZMbx5kb9JCuOzPqh+A3JaVp4ByVa9zVTLVE=;
+        b=aDUyffpkhi+f6OMwsWXBa+8miiLp17CTkihEpZxCX6ES5oriL4vATRtorKlEFv/F8L
+         4oCeHpl6gE7sNUNLBjJG4ZV7+6hjWxWqfIfkHqmGhtr6e8y6Mk2S09DuKz+00PPNbQ86
+         rHh3e1A9EsDYD585CqdU+/mQjw42/nYjNBvMf5igpW7p+kzQFEz+VAhMUmKt+jpCauTk
+         +TwT66QfhlMl3S9F/mwGJmnXmuGfvf2lJa9uATVulPONeOmUglqX/syy6mEdngLnmGyd
+         UMHxO8eaNXW5LLSkvOZ2Q1pqcJTuQ2Cq1A5Sss/ZztvSZxdp5+8nypxz70Z3I7CUoGAw
+         v7Qg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc
+         :content-transfer-encoding;
+        bh=dBhgz32sZMbx5kb9JCuOzPqh+A3JaVp4ByVa9zVTLVE=;
+        b=KQZOdOsXJ56bttDjiQuK60HRK1Y6C1mqzfxsId37CliT9zGKzkMPODP2vZ8NIpz8qg
+         1E71qogt/4rlJOISHxR7X9CR7lbFrcchXoppQ7wTg7VL7FF9TQNaGN8APVYqpbhwdO+b
+         dOtEi7jZUeOxhMrrr+ika75veRl1zPn6WnGWXTS/Tl2zQLyDtBS42TYS737f3IKzxooL
+         LSz4CJdii/qt5W1Bae12yaHXjnCxyd41cvDDqE2kjB4JD6WGMNHMjbqabefHuq1esDu8
+         Dpv7ZYQQWRJMw4Ae/dp2N5OunIqWNx79jCDoK3M86V//cLX3GR5Mfr9m26wpu85iHek3
+         IfEw==
+X-Gm-Message-State: AOAM532jTCuqezHUHFg/2BarJMJFnE2xeLdHB9qBa3BybXQVKD5N3XXl
+        +OaBt8AiSORTS4iTkLG6hFJk8M97zpNtIkUuyJU=
+X-Google-Smtp-Source: ABdhPJxB1Cy3OzJH699TGu4tVstMbpXMq5mOwJ5CiXtqXwRfalD0JAYcckBiuLUj6J7Fr0EidDJEYEx+3t4Dv2mygNw=
+X-Received: by 2002:a92:cb8c:: with SMTP id z12mr9209889ilo.123.1601869721004;
+ Sun, 04 Oct 2020 20:48:41 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Url:  http://acmel.wordpress.com
+From:   Tony Ambardar <tony.ambardar@gmail.com>
+Date:   Sun, 4 Oct 2020 20:48:32 -0700
+Message-ID: <CAPGftE8-TxfyLKuLDowKKhOo5XtfD1YVO4Gv2+k1HqbL074G=A@mail.gmail.com>
+Subject: Re: [PATCH dwarves 00/11] Switch BTF loading and encoding to libbpf APIs
+To:     andriin@fb.com
+Cc:     bpf@vger.kernel.org, dwarves@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-Hi,
- 
-	The v1.18 release of pahole and its friends is out, available at
-the usual places:
+On Tue, Sep 29, 2020 at 09:27:31PM -0700, Andrii Nakryiko wrote:
+> This patch set switches pahole to use libbpf-provided BTF loading and enc=
+oding
+> APIs. This reduces pahole's own BTF encoding code, speeds up the process,
+> reduces amount of RAM needed for DWARF-to-BTF conversion. Also, pahole fi=
+nally
+> gets support to generating BTF for cross-compiled ELF binaries with diffe=
+rent
+> endianness (patch #11).
+>
+Hello Andrii,
 
-Main git repo:
+After a small hiccup (see below) I managed to build a modified 'pahole' and=
+ test
+cross-compiling from x86_64 to mips 64/32-bit and big/little-endian
+targets. Using
+"bpftool btf dump file /sys/kernel/btf/vmlinux format c" succeeded on
+all targets,
+whereas prior to your changes running on big-endian targets would
+raise an error.
+(Note that the 'bpftool' used a 'libbpf' without any of your changes.)
 
-   git://git.kernel.org/pub/scm/devel/pahole/pahole.git
+Thanks so much for tackling these BTF endianness problems; it's been a grea=
+t
+help for working with embedded systems.
 
-Mirror git repo:
+> Additionally, patch #6 fixes previously missed problem with invalid array
+> index type generation.
+>
+> Patches #7-10 are speeding up DWARF-to-BTF convertion/dedup pretty
+> significantly, saving overall about 9 seconds out of current 27 or so.
+>
+> Patch #8 revamps how per-CPU BTF variables are emitted, eliminating repea=
+ted
+> and expensive looping over ELF symbols table.
+>
+> Patch #10 admittedly has some hacky parts to satisfy CTF use case, but it=
+s
+> speed ups are greatest. So I'll understand if it gets dropped, but it wou=
+ld be
+> a pity.
+>
+Possibly a case of operator error, but I had to skip this patch to
+cleanly build 'pahole',
+and didn't have much chance to look into the compile error:
 
-   https://github.com/acmel/dwarves.git
+  [  1%] Building C object CMakeFiles/bpf.dir/lib/bpf/src/ringbuf.c.o
+  In file included from /home/kodidev/pahole/strings.h:9,
+                   from /usr/include/string.h:432,
+                   from /home/kodidev/pahole/lib/bpf/src/libbpf_common.h:12=
+,
+                   from /home/kodidev/pahole/lib/bpf/src/libbpf.h:20,
+                   from /home/kodidev/pahole/lib/bpf/src/ringbuf.c:20:
+  /home/kodidev/pahole/lib/bpf/src/btf.h:33:11: error: expected =E2=80=98;=
+=E2=80=99
+before =E2=80=98void=E2=80=99
+    33 | LIBBPF_API void btf__free(struct btf *btf);
+        |           ^~~~~
+        |           ;
 
-tarball + gpg signature:
+Kind regards,
+Tony
 
-   https://fedorapeople.org/~acme/dwarves/dwarves-1.18.tar.xz
-   https://fedorapeople.org/~acme/dwarves/dwarves-1.18.tar.bz2
-   https://fedorapeople.org/~acme/dwarves/dwarves-1.18.tar.sign
-
-Best Regards,
-
-v1.18:
-
-- Use type information to pretty print raw data from stdin, all
-  documented in the man pages, further information in the csets.
-
-  TLDRish: this almost completely deciphers a perf.data file:
-
-  $ pahole ~/bin/perf --header=perf_file_header \
-         -C 'perf_file_attr(range=attrs),perf_event_header(range=data,sizeof,type,type_enum=perf_event_type+perf_user_event_type)' < perf.data
-
-  What the above command line does:
-
-  This will state that a 'struct perf_file_header' is available in BTF or DWARF
-  in the ~/bin/perf file and that at the start of stdin it should be used to decode
-  sizeof(struct perf_file_header) bytes, pretty printing it according to its members.
-
-  Furthermore, that header can be referenced later in the command line, for instance
-  that 'range=data' means that in the header, it expects a 'range' member in 
-  'struct perf_file_header' to be used:
-
-    $ pahole ~/bin/perf --header=perf_file_header < perf.data
-    {
-            .magic = 3622385352885552464,
-            .size = 104,
-            .attr_size = 136,
-            .attrs = {
-                    .offset = 296,
-                    .size = 136,
-            },
-            .data = {
-                    .offset = 432,
-                    .size = 14688,
-            },
-                    .event_types = {
-                    .offset = 0,
-                    .size = 0,
-            },
-            .adds_features = { 376537084, 0, 0, 0 },
-    },
-    $
-
-  That 'range' field is expected to have 'offset' and 'size' fields, so that
-  it can go on decoding a number of 'struct perf_event_header' entries.
-
-  That 'sizeof' in turn expects that in 'struct perf_event_header' there is a
-  'size' field stating how long that particular record is, one can also use
-  'sizeof=some_other_member_name'.
-
-  This supports variable sized records and then the 'type' field expects there
-  is a 'struct perf_event_type' member named 'type' (again, type=something_else
-  may be used. Finally, the value in the 'type' field is used to lookup an entry
-  in the set formed by the two enumerations specified in the 'type_enum=' argument.
-
-  If we look at these enums we'll see that its entries have names that can be,
-  when lowercased, point to structs containing the layout for the variable sized
-  record, which allows it to cast and produce the right pretty printed output.
-
-  I.e. using the kernel BTF info we get:
-
-  $ pahole perf_event_type
-  enum perf_event_type {
-  	PERF_RECORD_MMAP = 1,
-  	PERF_RECORD_LOST = 2,
-  	PERF_RECORD_COMM = 3,
-  	PERF_RECORD_EXIT = 4,
-  	PERF_RECORD_THROTTLE = 5,
-  	PERF_RECORD_UNTHROTTLE = 6,
-  	PERF_RECORD_FORK = 7,
-  	PERF_RECORD_READ = 8,
-  	PERF_RECORD_SAMPLE = 9,
-  	PERF_RECORD_MMAP2 = 10,
-  	PERF_RECORD_AUX = 11,
-  	PERF_RECORD_ITRACE_START = 12,
-  	PERF_RECORD_LOST_SAMPLES = 13,
-  	PERF_RECORD_SWITCH = 14,
-  	PERF_RECORD_SWITCH_CPU_WIDE = 15,
-  	PERF_RECORD_NAMESPACES = 16,
-  	PERF_RECORD_KSYMBOL = 17,
-  	PERF_RECORD_BPF_EVENT = 18,
-  	PERF_RECORD_CGROUP = 19,
-  	PERF_RECORD_TEXT_POKE = 20,
-  	PERF_RECORD_MAX = 21,
-  };
-  $
-
-  That is the same as in ~/bin/perf, and, if we get one of these and ask for
-  that struct:
-
-  $ pahole -C perf_record_mmap ~/bin/perf
-  struct perf_record_mmap {
-  	struct perf_event_header   header;               /*     0     8 */
-  	__u32                      pid;                  /*     8     4 */
-  	__u32                      tid;                  /*    12     4 */
-  	__u64                      start;                /*    16     8 */
-  	__u64                      len;                  /*    24     8 */
-  	__u64                      pgoff;                /*    32     8 */
-  	char                       filename[4096];       /*    40  4096 */
-  
-  	/* size: 4136, cachelines: 65, members: 7 */
-  	/* last cacheline: 40 bytes */
-  };
-  $
-
-  Many other options were introduced to work with this, including --count,
-  --skip, etc, look at the man page for details.
-
-- Store percpu variables in vmlinux BTF. This can be disabled when debugging
-  kernel features being developed to use it.
-
-- pahole now should be segfault free when handling gdb test suit DWARF
-  files, including ADA, FORTRAN, rust and dwp compressed files, the
-  later being just flatly refused, that got left for v1.19.
-
-- Bail out on partial units for now, avoiding segfaults and providing warning
-  to user, hopefully will be addressed in v1.19.
-
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+> More details could be found in respective patches.
+>
+> Andrii Nakryiko (11):
+>   libbpf: update to latest libbpf version
+>   btf_encoder: detect BTF encoding errors and exit
+>   dwarves: expose and maintain active debug info loader operations
+>   btf_loader: use libbpf to load BTF
+>   btf_encoder: use libbpf APIs to encode BTF type info
+>   btf_encoder: fix emitting __ARRAY_SIZE_TYPE__ as index range type
+>   btf_encoder: discard CUs after BTF encoding
+>   btf_encoder: revamp how per-CPU variables are encoded
+>   dwarf_loader: increase the size of lookup hash map
+>   strings: use BTF's string APIs for strings management
+>   btf_encoder: support cross-compiled ELF binaries with different
+>     endianness
+>
