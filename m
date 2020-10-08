@@ -5,50 +5,50 @@ X-Spam-Level:
 X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3F495C43467
-	for <linux-dwarves@archiver.kernel.org>; Thu,  8 Oct 2020 23:40:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 44C6FC04EBE
+	for <linux-dwarves@archiver.kernel.org>; Thu,  8 Oct 2020 23:40:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DF35B2224C
-	for <linux-dwarves@archiver.kernel.org>; Thu,  8 Oct 2020 23:40:44 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EB96E2224C
+	for <linux-dwarves@archiver.kernel.org>; Thu,  8 Oct 2020 23:40:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1602200445;
-	bh=ErDp/4tYZqsgyJ3vvQKaeDjhjKuSYEHccHHhLbL8ZrU=;
+	s=default; t=1602200446;
+	bh=5MTlsvC/IvEHIONC0ucJPo7SM1qwJ7+sRmIkddH9TvA=;
 	h=From:To:CC:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=XKz0dMFmxs2d1xYZz5JeIHeV12it8SzQhLPMKiK7/14h1VMT35JAIGBVC6clDljXj
-	 N2a0hbbLGhbtthzZh4qT3xOz7DNgnQjGzQRifDMjtX9FD9iwlMwkcQ6b/OmvUn3BmA
-	 Jx3WtrcmdzN/z0xNHCy1DuifAdxM5i7z2taHDzO8=
+	b=IqeOPx9YLJuhGrzvfaRFtPByM1/I2lfCuUU8Olu8Chg6x2pqw3CyRcjJ8lIefWlPZ
+	 WW+MqbhTUEOX5IEkCNxbuYEYMaSTnnJa6mMlfku0WibGBOMCo2CLm6n1tne2eURD3Y
+	 K8JHMajUXGM2e+kyQCfsj3iv0ruvBTNr2XxRO4r0=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731076AbgJHXko convert rfc822-to-8bit (ORCPT
+        id S1731080AbgJHXkp convert rfc822-to-8bit (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Thu, 8 Oct 2020 19:40:44 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:30982 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1731066AbgJHXko (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Thu, 8 Oct 2020 19:40:44 -0400
-Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 098NeDi2007710
-        for <dwarves@vger.kernel.org>; Thu, 8 Oct 2020 16:40:43 -0700
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 3429h8gvu2-8
+        Thu, 8 Oct 2020 19:40:45 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:12694 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1731074AbgJHXkp (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Thu, 8 Oct 2020 19:40:45 -0400
+Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 098Nefx8027444
+        for <dwarves@vger.kernel.org>; Thu, 8 Oct 2020 16:40:42 -0700
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 3429ggrw6s-3
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <dwarves@vger.kernel.org>; Thu, 08 Oct 2020 16:40:43 -0700
-Received: from intmgw003.03.ash8.facebook.com (2620:10d:c085:108::8) by
- mail.thefacebook.com (2620:10d:c085:11d::4) with Microsoft SMTP Server
+        for <dwarves@vger.kernel.org>; Thu, 08 Oct 2020 16:40:42 -0700
+Received: from intmgw002.08.frc2.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::f) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Thu, 8 Oct 2020 16:40:23 -0700
+ 15.1.1979.3; Thu, 8 Oct 2020 16:40:19 -0700
 Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id CC1A02EC7C76; Thu,  8 Oct 2020 16:40:18 -0700 (PDT)
+        id 7C3F82EC7C76; Thu,  8 Oct 2020 16:40:14 -0700 (PDT)
 From:   Andrii Nakryiko <andrii@kernel.org>
 To:     <dwarves@vger.kernel.org>
 CC:     <bpf@vger.kernel.org>, <kernel-team@fb.com>, <ast@kernel.org>,
         Andrii Nakryiko <andrii@kernel.org>,
         Arnaldo Carvalho de Melo <acme@kernel.org>,
         Andrii Nakryiko <andriin@fb.com>
-Subject: [PATCH v2 dwarves 7/8] strings: use BTF's string APIs for strings management
-Date:   Thu, 8 Oct 2020 16:39:59 -0700
-Message-ID: <20201008234000.740660-8-andrii@kernel.org>
+Subject: [PATCH v2 dwarves 5/8] btf_encoder: revamp how per-CPU variables are encoded
+Date:   Thu, 8 Oct 2020 16:39:57 -0700
+Message-ID: <20201008234000.740660-6-andrii@kernel.org>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20201008234000.740660-1-andrii@kernel.org>
 References: <20201008234000.740660-1-andrii@kernel.org>
@@ -58,11 +58,11 @@ Content-Type: text/plain
 Content-Transfer-Encoding: 8BIT
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
  definitions=2020-10-08_15:2020-10-08,2020-10-08 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 phishscore=0
- clxscore=1034 impostorscore=0 priorityscore=1501 mlxscore=0
- mlxlogscore=999 lowpriorityscore=0 malwarescore=0 suspectscore=38
- bulkscore=0 spamscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2009150000 definitions=main-2010080167
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxlogscore=999
+ priorityscore=1501 bulkscore=0 impostorscore=0 malwarescore=0 mlxscore=0
+ adultscore=0 suspectscore=13 lowpriorityscore=0 phishscore=0 spamscore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2010080167
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
@@ -70,348 +70,472 @@ X-Mailing-List: dwarves@vger.kernel.org
 
 From: Andrii Nakryiko <andriin@fb.com>
 
-Switch strings container to using struct btf and its
-btf__add_str()/btf__find_str() APIs, which do equivalent internal string
-deduplication. This turns out to be a very significantly faster than using
-tsearch functions. To satisfy CTF encoding use case, some hacky string size
-fetching approach is utilized, as libbpf doesn't provide direct API to get
-total string section size and to copy over just strings data section.
+Right now to encode per-CPU variables in BTF, pahole iterates complete vmlinux
+symbol table for each CU. There are 2500 CUs for a typical kernel image.
+Overall, to encode 287 per-CPU variables pahole spends more than 10% of its CPU
+budget, this is incredibly wasteful.
+
+This patch revamps how this is done. Now it pre-processes symbol table once
+before any of per-CU processing starts. It remembers each per-CPU variable
+symbol, including its address, size, and name. Then during processing each CU,
+binary search is used to correlate DWARF variable with per-CPU symbols and
+figure out if variable belongs to per-CPU data section. If the match is found,
+BTF_KIND_VAR is emitted and var_secinfo is recorded, just like before. At the
+very end, after all CUs are processed, BTF_KIND_DATASEC is emitted with sorted
+variables.
+
+This change makes per-CPU variables generation overhead pretty negligible and
+returns back about 10% of CPU usage.
+
+Performance counter stats for './pahole -J /home/andriin/linux-build/default/vmlinux':
 
 BEFORE:
-         22,624.28 msec task-clock                #    1.000 CPUs utilized
-                85      context-switches          #    0.004 K/sec
-                 3      cpu-migrations            #    0.000 K/sec
-           622,545      page-faults               #    0.028 M/sec
-    68,177,206,387      cycles                    #    3.013 GHz                      (24.99%)
-   114,370,031,619      instructions              #    1.68  insn per cycle           (25.01%)
-    26,125,001,179      branches                  # 1154.733 M/sec                    (25.01%)
-       458,861,243      branch-misses             #    1.76% of all branches          (25.00%)
-    24,533,455,967      L1-dcache-loads           # 1084.386 M/sec                    (25.02%)
-       973,500,214      L1-dcache-load-misses     #    3.97% of all L1-dcache hits    (25.05%)
-       338,773,561      LLC-loads                 #   14.974 M/sec                    (25.02%)
-        12,651,196      LLC-load-misses           #    3.73% of all LL-cache hits     (25.00%)
+      19.160149000 seconds user
+       1.304873000 seconds sys
 
-      22.628910615 seconds time elapsed
+         24,114.05 msec task-clock                #    0.999 CPUs utilized
+                83      context-switches          #    0.003 K/sec
+                 0      cpu-migrations            #    0.000 K/sec
+           622,417      page-faults               #    0.026 M/sec
+    72,897,315,125      cycles                    #    3.023 GHz                      (25.02%)
+   127,807,316,959      instructions              #    1.75  insn per cycle           (25.01%)
+    29,087,179,117      branches                  # 1206.234 M/sec                    (25.01%)
+       464,105,921      branch-misses             #    1.60% of all branches          (25.01%)
+    30,252,119,368      L1-dcache-loads           # 1254.543 M/sec                    (25.01%)
+     1,156,336,207      L1-dcache-load-misses     #    3.82% of all L1-dcache hits    (25.05%)
+       343,373,503      LLC-loads                 #   14.240 M/sec                    (25.02%)
+        12,044,977      LLC-load-misses           #    3.51% of all LL-cache hits     (25.01%)
 
-      21.341063000 seconds user
-       1.283763000 seconds sys
+      24.136198321 seconds time elapsed
+
+      22.729693000 seconds user
+       1.384859000 seconds sys
 
 AFTER:
-         18,362.97 msec task-clock                #    1.000 CPUs utilized
-                37      context-switches          #    0.002 K/sec
+      16.781455000 seconds user
+       1.343956000 seconds sys
+
+         23,398.77 msec task-clock                #    1.000 CPUs utilized
+                86      context-switches          #    0.004 K/sec
                  0      cpu-migrations            #    0.000 K/sec
-           626,281      page-faults               #    0.034 M/sec
-    52,480,619,000      cycles                    #    2.858 GHz                      (25.00%)
-   104,736,434,384      instructions              #    2.00  insn per cycle           (25.01%)
-    23,878,428,465      branches                  # 1300.358 M/sec                    (25.01%)
-       252,669,685      branch-misses             #    1.06% of all branches          (25.03%)
-    21,829,390,952      L1-dcache-loads           # 1188.772 M/sec                    (25.04%)
-       638,086,339      L1-dcache-load-misses     #    2.92% of all L1-dcache hits    (25.02%)
-       212,327,435      LLC-loads                 #   11.563 M/sec                    (25.00%)
-        14,578,117      LLC-load-misses           #    6.87% of all LL-cache hits     (25.00%)
+           622,420      page-faults               #    0.027 M/sec
+    68,395,641,468      cycles                    #    2.923 GHz                      (25.05%)
+   114,241,327,034      instructions              #    1.67  insn per cycle           (25.01%)
+    26,330,711,718      branches                  # 1125.303 M/sec                    (25.01%)
+       465,926,869      branch-misses             #    1.77% of all branches          (25.00%)
+    24,662,984,772      L1-dcache-loads           # 1054.029 M/sec                    (25.00%)
+     1,054,052,064      L1-dcache-load-misses     #    4.27% of all L1-dcache hits    (25.00%)
+       340,970,622      LLC-loads                 #   14.572 M/sec                    (25.00%)
+        16,032,297      LLC-load-misses           #    4.70% of all LL-cache hits     (25.03%)
 
-      18.364427347 seconds time elapsed
+      23.402259654 seconds time elapsed
 
-      16.985494000 seconds user
-       1.377959000 seconds sys
+      21.916437000 seconds user
+       1.482826000 seconds sys
 
 Signed-off-by: Andrii Nakryiko <andriin@fb.com>
 ---
- ctf_encoder.c |  2 +-
- libctf.c      | 14 ++++----
- libctf.h      |  4 +--
- strings.c     | 91 +++++++++++++++++++--------------------------------
- strings.h     | 32 +++---------------
- 5 files changed, 49 insertions(+), 94 deletions(-)
+ btf_encoder.c | 248 +++++++++++++++++++++++++++++---------------------
+ libbtf.c      |   6 +-
+ libbtf.h      |   1 +
+ 3 files changed, 148 insertions(+), 107 deletions(-)
 
-diff --git a/ctf_encoder.c b/ctf_encoder.c
-index 3cb455a33098..b761287d4534 100644
---- a/ctf_encoder.c
-+++ b/ctf_encoder.c
-@@ -248,7 +248,7 @@ int cu__encode_ctf(struct cu *cu, int verbose)
- 	if (cu__cache_symtab(cu) < 0)
- 		goto out_delete;
+diff --git a/btf_encoder.c b/btf_encoder.c
+index 2e5df03e040f..2a6455be4c52 100644
+--- a/btf_encoder.c
++++ b/btf_encoder.c
+@@ -17,6 +17,7 @@
+ #include "btf_encoder.h"
  
--	ctf__set_strings(ctf, &strings->gb);
-+	ctf__set_strings(ctf, strings);
+ #include <ctype.h> /* for isalpha() and isalnum() */
++#include <stdlib.h> /* for qsort() and bsearch() */
+ #include <inttypes.h>
  
- 	uint32_t id;
- 	struct tag *pos;
-diff --git a/libctf.c b/libctf.c
-index b7d237fbbd3c..95cbf1ff091e 100644
---- a/libctf.c
-+++ b/libctf.c
-@@ -19,6 +19,7 @@
- #include "ctf.h"
- #include "dutil.h"
- #include "gobuffer.h"
-+#include "strings.h"
- 
- bool ctf__ignore_symtab_function(const GElf_Sym *sym, const char *sym_name)
- {
-@@ -287,7 +288,7 @@ int ctf__load_symtab(struct ctf *ctf)
- 	return ctf->symtab == NULL ? -1 : 0;
+ /*
+@@ -53,18 +54,18 @@ static bool btf_name_valid(const char *p)
+ 	return !*p;
  }
  
--void ctf__set_strings(struct ctf *ctf, struct gobuffer *strings)
-+void ctf__set_strings(struct ctf *ctf, struct strings *strings)
+-static void dump_invalid_symbol(const char *msg, const char *sym, const char *cu,
++static void dump_invalid_symbol(const char *msg, const char *sym,
+ 				int verbose, bool force)
  {
- 	ctf->strings = strings;
- }
-@@ -570,7 +571,7 @@ int ctf__encode(struct ctf *ctf, uint8_t flags)
- 	size = (gobuffer__size(&ctf->types) +
- 		gobuffer__size(&ctf->objects) +
- 		gobuffer__size(&ctf->funcs) +
--		gobuffer__size(ctf->strings));
-+		strings__size(ctf->strings));
- 
- 	ctf->size = sizeof(*hdr) + size;
- 	ctf->buf = malloc(ctf->size);
-@@ -594,13 +595,13 @@ int ctf__encode(struct ctf *ctf, uint8_t flags)
- 	hdr->ctf_type_off = offset;
- 	offset += gobuffer__size(&ctf->types);
- 	hdr->ctf_str_off  = offset;
--	hdr->ctf_str_len  = gobuffer__size(ctf->strings);
-+	hdr->ctf_str_len  = strings__size(ctf->strings);
- 
- 	void *payload = ctf->buf + sizeof(*hdr);
- 	gobuffer__copy(&ctf->objects, payload + hdr->ctf_object_off);
- 	gobuffer__copy(&ctf->funcs, payload + hdr->ctf_func_off);
- 	gobuffer__copy(&ctf->types, payload + hdr->ctf_type_off);
--	gobuffer__copy(ctf->strings, payload + hdr->ctf_str_off);
-+	strings__copy(ctf->strings, payload + hdr->ctf_str_off);
- 
- 	*(char *)(ctf->buf + sizeof(*hdr) + hdr->ctf_str_off) = '\0';
- 	if (flags & CTF_FLAGS_COMPR) {
-@@ -623,11 +624,10 @@ int ctf__encode(struct ctf *ctf, uint8_t flags)
- 	}
- #if 0
- 	printf("\n\ntypes:\n entries: %d\n size: %u"
--		 "\nstrings:\n entries: %u\n size: %u\ncompressed size: %d\n",
-+		 "\nstrings:\n size: %u\ncompressed size: %d\n",
- 	       ctf->type_index,
- 	       gobuffer__size(&ctf->types),
--	       gobuffer__nr_entries(ctf->strings),
--	       gobuffer__size(ctf->strings), size);
-+	       strings__size(ctf->strings), size);
- #endif
- 	int fd = open(ctf->filename, O_RDWR);
- 	if (fd < 0) {
-diff --git a/libctf.h b/libctf.h
-index 071616c72de3..749be8955c52 100644
---- a/libctf.h
-+++ b/libctf.h
-@@ -24,7 +24,7 @@ struct ctf {
- 	struct gobuffer	  objects; /* data/variables */
- 	struct gobuffer	  types;
- 	struct gobuffer	  funcs;
--	struct gobuffer   *strings;
-+	struct strings   *strings;
- 	char		  *filename;
- 	size_t		  size;
- 	int		  swapped;
-@@ -76,7 +76,7 @@ int ctf__add_function(struct ctf *ctf, uint16_t type, uint16_t nr_parms,
- 
- int ctf__add_object(struct ctf *ctf, uint16_t type);
- 
--void ctf__set_strings(struct ctf *ctf, struct gobuffer *strings);
-+void ctf__set_strings(struct ctf *ctf, struct strings *strings);
- int  ctf__encode(struct ctf *ctf, uint8_t flags);
- 
- char *ctf__string(struct ctf *ctf, uint32_t ref);
-diff --git a/strings.c b/strings.c
-index ddb2b1bd85b5..45f8faaeb15d 100644
---- a/strings.c
-+++ b/strings.c
-@@ -15,75 +15,41 @@
- #include <zlib.h>
- 
- #include "dutil.h"
-+#include "lib/bpf/src/libbpf.h"
- 
- struct strings *strings__new(void)
- {
- 	struct strings *strs = malloc(sizeof(*strs));
- 
--	if (strs != NULL) {
--		strs->tree = NULL;
--		gobuffer__init(&strs->gb);
-+	if (!strs)
-+		return NULL;
-+
-+	strs->btf = btf__new_empty();
-+	if (libbpf_get_error(strs->btf)) {
-+		free(strs);
-+		return NULL;
- 	}
- 
- 	return strs;
--
--}
--
--static void do_nothing(void *ptr __unused)
--{
- }
- 
- void strings__delete(struct strings *strs)
- {
- 	if (strs == NULL)
+ 	if (force) {
+ 		if (verbose)
+-			fprintf(stderr, "PAHOLE: Warning: %s, ignored (sym: '%s', cu: '%s').\n",
+-				msg, sym, cu);
++			fprintf(stderr, "PAHOLE: Warning: %s, ignored (sym: '%s').\n",
++				msg, sym);
  		return;
--	tdestroy(strs->tree, do_nothing);
--	__gobuffer__delete(&strs->gb);
-+	btf__free(strs->btf);
- 	free(strs);
+ 	}
+ 
+-	fprintf(stderr, "PAHOLE: Error: %s (sym: '%s', cu: '%s').\n", msg, sym, cu);
+-	fprintf(stderr, "PAHOLE: Error: Use '-j' or '--force' to ignore such symbols and force emit the btf.\n");
++	fprintf(stderr, "PAHOLE: Error: %s (sym: '%s').\n", msg, sym);
++	fprintf(stderr, "PAHOLE: Error: Use '--btf_encode_force' to ignore such symbols and force emit the btf.\n");
  }
  
--static strings_t strings__insert(struct strings *strs, const char *s)
--{
--	return gobuffer__add(&strs->gb, s, strlen(s) + 1);
--}
--
--struct search_key {
--	struct strings *strs;
--	const char *str;
--};
--
--static int strings__compare(const void *a, const void *b)
--{
--	const struct search_key *key = a;
--
--	return strcmp(key->str, key->strs->gb.entries + (unsigned long)b);
--}
--
- strings_t strings__add(struct strings *strs, const char *str)
+ extern struct debug_fmt_ops *dwarves__active_loader;
+@@ -202,6 +203,9 @@ int btf_encoder__encode()
  {
--	unsigned long *s;
- 	strings_t index;
--	struct search_key key = {
--		.strs = strs,
--		.str = str,
--	};
+ 	int err;
  
- 	if (str == NULL)
- 		return 0;
++	if (gobuffer__size(&btfe->percpu_secinfo) != 0)
++		btf_elf__add_datasec_type(btfe, PERCPU_SECTION, &btfe->percpu_secinfo);
++
+ 	err = btf_elf__encode(btfe, 0);
+ 	btf_elf__delete(btfe);
+ 	btfe = NULL;
+@@ -209,24 +213,117 @@ int btf_encoder__encode()
+ 	return err;
+ }
  
--	s = tsearch(&key, &strs->tree, strings__compare);
--	if (s != NULL) {
--		if (*(struct search_key **)s == (void *)&key) { /* Not found, replace with the right key */
--			index = strings__insert(strs, str);
--			if (index != 0)
--				*s = (unsigned long)index;
--			else {
--				tdelete(&key, &strs->tree, strings__compare);
--				return 0;
--			}
--		} else /* Found! */
--			index = *s;
--	} else
-+	index = btf__add_str(strs->btf, str);
-+	if (index < 0)
- 		return 0;
- 
- 	return index;
-@@ -91,21 +57,32 @@ strings_t strings__add(struct strings *strs, const char *str)
- 
- strings_t strings__find(struct strings *strs, const char *str)
- {
--	strings_t *s;
--	struct search_key key = {
--		.strs = strs,
--		.str = str,
--	};
-+	return btf__find_str(strs->btf, str);
+-#define HASHADDR__BITS 8
+-#define HASHADDR__SIZE (1UL << HASHADDR__BITS)
+-#define hashaddr__fn(key) hash_64(key, HASHADDR__BITS)
++#define MAX_PERCPU_VAR_CNT 4096
++
++struct var_info {
++	uint64_t addr;
++	uint32_t sz;
++	const char *name;
++};
++
++static struct var_info percpu_vars[MAX_PERCPU_VAR_CNT];
++static int percpu_var_cnt;
++
++static int percpu_var_cmp(const void *_a, const void *_b)
++{
++	const struct var_info *a = _a;
++	const struct var_info *b = _b;
++
++	if (a->addr == b->addr)
++		return 0;
++	return a->addr < b->addr ? -1 : 1;
++}
++
++static bool percpu_var_exists(uint64_t addr, uint32_t *sz, const char **name)
++{
++	const struct var_info *p;
++	struct var_info key = { .addr = addr };
++
++	p = bsearch(&key, percpu_vars, percpu_var_cnt,
++		    sizeof(percpu_vars[0]), percpu_var_cmp);
++
++	if (!p)
++		return false;
++
++	*sz = p->sz;
++	*name = p->name;
++	return true;
 +}
  
--	if (str == NULL)
--		return 0;
-+/* a horrible and inefficient hack to get string section size out of BTF */
-+strings_t strings__size(const struct strings *strs)
-+{
-+	const struct btf_header *p;
-+	uint32_t sz;
-+
-+	p = btf__get_raw_data(strs->btf, &sz);
-+	if (!p)
-+		return -1;
- 
--	s = tfind(&key, &strs->tree, strings__compare);
--	return s ? *s : 0;
-+	return p->str_len;
- }
- 
--int strings__cmp(const struct strings *strs, strings_t a, strings_t b)
-+/* similarly horrible hack to copy out string section out of BTF */
-+int strings__copy(const struct strings *strs, void *dst)
+-static struct variable *hashaddr__find_variable(const struct hlist_head hashtable[],
+-						const uint64_t addr)
++static int find_all_percpu_vars(struct btf_elf *btfe)
  {
--	return a == b ? 0 : strcmp(strings__ptr(strs, a),
--				   strings__ptr(strs, b));
-+	const struct btf_header *p;
-+	uint32_t sz;
+-	struct variable *variable;
+-	struct hlist_node *pos;
+-	uint16_t bucket = hashaddr__fn(addr);
+-	const struct hlist_head *head = &hashtable[bucket];
+-
+-	hlist_for_each_entry(variable, pos, head, tool_hnode) {
+-		if (variable->ip.addr == addr)
+-			return variable;
++	uint32_t core_id;
++	GElf_Sym sym;
 +
-+	p = btf__get_raw_data(strs->btf, &sz);
-+	if (!p)
-+		return -1;
++	/* cache variables' addresses, preparing for searching in symtab. */
++	percpu_var_cnt = 0;
 +
-+	memcpy(dst, (void *)p + p->str_off, p->str_len);
++	/* search within symtab for percpu variables */
++	elf_symtab__for_each_symbol(btfe->symtab, core_id, sym) {
++		const char *sym_name;
++		uint64_t addr;
++		uint32_t size;
++
++		/* compare a symbol's shndx to determine if it's a percpu variable */
++		if (elf_sym__section(&sym) != btfe->percpu_shndx)
++			continue;
++		if (elf_sym__type(&sym) != STT_OBJECT)
++			continue;
++
++		addr = elf_sym__value(&sym);
++		/*
++		 * Store only those symbols that have allocated space in the percpu section.
++		 * This excludes the following three types of symbols:
++		 *
++		 *  1. __ADDRESSABLE(sym), which are forcely emitted as symbols.
++		 *  2. __UNIQUE_ID(prefix), which are introduced to generate unique ids.
++		 *  3. __exitcall(fn), functions which are labeled as exit calls.
++		 *
++		 * In addition, the variables defined using DEFINE_PERCPU_FIRST are
++		 * also not included, which currently includes:
++		 *
++		 *  1. fixed_percpu_data
++		 */
++		if (!addr)
++			continue;
++
++		sym_name = elf_sym__name(&sym, btfe->symtab);
++		if (!btf_name_valid(sym_name)) {
++			dump_invalid_symbol("Found symbol of invalid name when encoding btf",
++					    sym_name, btf_elf__verbose, btf_elf__force);
++			if (btf_elf__force)
++				continue;
++			return -1;
++		}
++		size = elf_sym__size(&sym);
++		if (!size) {
++			dump_invalid_symbol("Found symbol of zero size when encoding btf",
++					    sym_name, btf_elf__verbose, btf_elf__force);
++			if (btf_elf__force)
++				continue;
++			return -1;
++		}
++
++		if (btf_elf__verbose)
++			printf("Found per-CPU symbol '%s' at address 0x%lx\n", sym_name, addr);
++
++		if (percpu_var_cnt == MAX_PERCPU_VAR_CNT) {
++			fprintf(stderr, "Reached the limit of per-CPU variables: %d\n",
++				MAX_PERCPU_VAR_CNT);
++			return -1;
++		}
++		percpu_vars[percpu_var_cnt].addr = addr;
++		percpu_vars[percpu_var_cnt].sz = size;
++		percpu_vars[percpu_var_cnt].name = sym_name;
++		percpu_var_cnt++;
+ 	}
+ 
+-	return NULL;
++	if (percpu_var_cnt)
++		qsort(percpu_vars, percpu_var_cnt, sizeof(percpu_vars[0]), percpu_var_cmp);
++
++	if (btf_elf__verbose)
++		printf("Found %d per-CPU variables!\n", percpu_var_cnt);
 +	return 0;
  }
-diff --git a/strings.h b/strings.h
-index 01f50efd7adb..522fbf21de0d 100644
---- a/strings.h
-+++ b/strings.h
-@@ -6,13 +6,12 @@
-   Copyright (C) 2008 Arnaldo Carvalho de Melo <acme@redhat.com>
- */
  
--#include "gobuffer.h"
-+#include "lib/bpf/src/btf.h"
- 
- typedef unsigned int strings_t;
- 
- struct strings {
--	void		*tree;
--	struct gobuffer	gb;
-+	struct btf *btf;
- };
- 
- struct strings *strings__new(void);
-@@ -21,33 +20,12 @@ void strings__delete(struct strings *strings);
- 
- strings_t strings__add(struct strings *strings, const char *str);
- strings_t strings__find(struct strings *strings, const char *str);
--
--int strings__cmp(const struct strings *strings, strings_t a, strings_t b);
-+strings_t strings__size(const struct strings *strings);
-+int strings__copy(const struct strings *strings, void *dst);
- 
- static inline const char *strings__ptr(const struct strings *strings, strings_t s)
+ int cu__encode_btf(struct cu *cu, int verbose, bool force,
+@@ -234,13 +331,10 @@ int cu__encode_btf(struct cu *cu, int verbose, bool force,
  {
--	return gobuffer__ptr(&strings->gb, s);
--}
+ 	uint32_t type_id_off;
+ 	uint32_t core_id;
++	struct variable *var;
+ 	struct function *fn;
+ 	struct tag *pos;
+ 	int err = 0;
+-	struct hlist_head hash_addr[HASHADDR__SIZE];
+-	struct variable *var;
+-	bool has_global_var = false;
+-	GElf_Sym sym;
+ 
+ 	if (btfe && strcmp(btfe->filename, cu->filename)) {
+ 		err = btf_encoder__encode();
+@@ -257,6 +351,9 @@ int cu__encode_btf(struct cu *cu, int verbose, bool force,
+ 		if (!btfe)
+ 			return -1;
+ 
++		if (!skip_encoding_vars && find_all_percpu_vars(btfe))
++			goto out;
++
+ 		has_index_type = false;
+ 		need_index_type = false;
+ 		array_index_id = 0;
+@@ -278,6 +375,7 @@ int cu__encode_btf(struct cu *cu, int verbose, bool force,
+ 	}
+ 
+ 	btf_elf__verbose = verbose;
++	btf_elf__force = force;
+ 	type_id_off = btf__get_nr_types(btfe->btf);
+ 
+ 	cu__for_each_type(cu, core_id, pos) {
+@@ -325,12 +423,11 @@ int cu__encode_btf(struct cu *cu, int verbose, bool force,
+ 	if (verbose)
+ 		printf("search cu '%s' for percpu global variables.\n", cu->name);
+ 
+-	/* cache variables' addresses, preparing for searching in symtab. */
+-	for (core_id = 0; core_id < HASHADDR__SIZE; ++core_id)
+-		INIT_HLIST_HEAD(&hash_addr[core_id]);
 -
--static inline const char *strings__entries(const struct strings *strings)
--{
--	return gobuffer__entries(&strings->gb);
--}
+ 	cu__for_each_variable(cu, core_id, pos) {
+-		struct hlist_head *head;
++		uint32_t size, type, linkage, offset;
++		const char *name;
++		uint64_t addr;
++		int id;
+ 
+ 		var = tag__variable(pos);
+ 		if (var->declaration && !var->spec)
+@@ -338,89 +435,37 @@ int cu__encode_btf(struct cu *cu, int verbose, bool force,
+ 		/* percpu variables are allocated in global space */
+ 		if (variable__scope(var) != VSCOPE_GLOBAL && !var->spec)
+ 			continue;
+-		has_global_var = true;
+-		head = &hash_addr[hashaddr__fn(var->ip.addr)];
+-		hlist_add_head(&var->tool_hnode, head);
+-	}
+-	if (!has_global_var) {
+-		if (verbose)
+-			printf("cu has no global variable defined, skip.\n");
+-		goto out;
+-	}
 -
--static inline unsigned int strings__nr_entries(const struct strings *strings)
--{
--	return gobuffer__nr_entries(&strings->gb);
--}
+-	/* search within symtab for percpu variables */
+-	elf_symtab__for_each_symbol(btfe->symtab, core_id, sym) {
+-		uint32_t linkage, type, size, offset;
+-		int32_t btf_var_id, btf_var_secinfo_id;
+-		uint64_t addr;
+-		const char *sym_name;
 -
--static inline strings_t strings__size(const struct strings *strings)
--{
--	return gobuffer__size(&strings->gb);
--}
--
--static inline const char *strings__compress(struct strings *strings,
--					    unsigned int *size)
--{
--	return gobuffer__compress(&strings->gb, size);
-+	return btf__str_by_offset(strings->btf, s);
+-		/* compare a symbol's shndx to determine if it's a percpu variable */
+-		if (elf_sym__section(&sym) != btfe->percpu_shndx)
+-			continue;
+-		if (elf_sym__type(&sym) != STT_OBJECT)
+-			continue;
+ 
+-		addr = elf_sym__value(&sym);
+-		/*
+-		 * Store only those symbols that have allocated space in the percpu section.
+-		 * This excludes the following three types of symbols:
+-		 *
+-		 *  1. __ADDRESSABLE(sym), which are forcely emitted as symbols.
+-		 *  2. __UNIQUE_ID(prefix), which are introduced to generate unique ids.
+-		 *  3. __exitcall(fn), functions which are labeled as exit calls.
+-		 *
+-		 * In addition, the variables defined using DEFINE_PERCPU_FIRST are
+-		 * also not included, which currently includes:
+-		 *
+-		 *  1. fixed_percpu_data
+-		 */
+-		if (!addr)
+-			continue;
+-		var = hashaddr__find_variable(hash_addr, addr);
+-		if (var == NULL)
+-			continue;
++		/* addr has to be recorded before we follow spec */
++		addr = var->ip.addr;
+ 		if (var->spec)
+ 			var = var->spec;
+ 
+-		sym_name = elf_sym__name(&sym, btfe->symtab);
+-		if (!btf_name_valid(sym_name)) {
+-			dump_invalid_symbol("Found symbol of invalid name when encoding btf",
+-					    sym_name, cu->name, verbose, force);
+-			if (force)
+-				continue;
+-			err = -1;
+-			break;
+-		}
+ 		if (var->ip.tag.type == 0) {
+-			dump_invalid_symbol("Found symbol of void type when encoding btf",
+-					    sym_name, cu->name, verbose, force);
+-			if (force)
+-				continue;
+-			err = -1;
+-			break;
+-		}
+-		type = type_id_off + var->ip.tag.type;
+-		size = elf_sym__size(&sym);
+-		if (!size) {
+-			dump_invalid_symbol("Found symbol of zero size when encoding btf",
+-					    sym_name, cu->name, verbose, force);
++			fprintf(stderr, "error: found variable in CU '%s' that has void type\n",
++				cu->name);
+ 			if (force)
+ 				continue;
+ 			err = -1;
+ 			break;
+ 		}
+ 
+-		if (verbose)
+-			printf("symbol '%s' of address 0x%lx encoded\n",
+-			       sym_name, addr);
++		type = var->ip.tag.type + type_id_off;
++		linkage = var->external ? BTF_VAR_GLOBAL_ALLOCATED : BTF_VAR_STATIC;
++		if (!percpu_var_exists(addr, &size, &name))
++			continue; /* not a per-CPU variable */
++
++		if (btf_elf__verbose) {
++			printf("Variable '%s' from CU '%s' at address 0x%lx encoded\n",
++			       name, cu->name, addr);
++		}
+ 
+ 		/* add a BTF_KIND_VAR in btfe->types */
+-		linkage = var->external ? BTF_VAR_GLOBAL_ALLOCATED : BTF_VAR_STATIC;
+-		btf_var_id = btf_elf__add_var_type(btfe, type, sym_name, linkage);
+-		if (btf_var_id < 0) {
++		id = btf_elf__add_var_type(btfe, type, name, linkage);
++		if (id < 0) {
+ 			err = -1;
+-			printf("error: failed to encode variable '%s'\n", sym_name);
++			fprintf(stderr, "error: failed to encode variable '%s' at addr 0x%lx\n",
++			        name, addr);
+ 			break;
+ 		}
+ 
+@@ -428,13 +473,12 @@ int cu__encode_btf(struct cu *cu, int verbose, bool force,
+ 		 * add a BTF_VAR_SECINFO in btfe->percpu_secinfo, which will be added into
+ 		 * btfe->types later when we add BTF_VAR_DATASEC.
+ 		 */
+-		type = btf_var_id;
+ 		offset = addr - btfe->percpu_base_addr;
+-		btf_var_secinfo_id = btf_elf__add_var_secinfo(&btfe->percpu_secinfo,
+-							      type, offset, size);
+-		if (btf_var_secinfo_id < 0) {
++		id = btf_elf__add_var_secinfo(&btfe->percpu_secinfo, id, offset, size);
++		if (id < 0) {
+ 			err = -1;
+-			printf("error: failed to encode var secinfo '%s'\n", sym_name);
++			fprintf(stderr, "error: failed to encode section info for variable '%s' at addr 0x%lx\n",
++			        name, addr);
+ 			break;
+ 		}
+ 	}
+diff --git a/libbtf.c b/libbtf.c
+index 0467f1f2a596..27aa3e5a986e 100644
+--- a/libbtf.c
++++ b/libbtf.c
+@@ -28,6 +28,7 @@
+ #include "elf_symtab.h"
+ 
+ uint8_t btf_elf__verbose;
++uint8_t btf_elf__force;
+ 
+ static int btf_var_secinfo_cmp(const void *a, const void *b)
+ {
+@@ -62,7 +63,6 @@ int btf_elf__load(struct btf_elf *btfe)
+ 	return 0;
  }
  
- #endif /* _STRINGS_H_ */
+-
+ struct btf_elf *btf_elf__new(const char *filename, Elf *elf)
+ {
+ 	struct btf_elf *btfe = zalloc(sizeof(*btfe));
+@@ -771,10 +771,6 @@ int btf_elf__encode(struct btf_elf *btfe, uint8_t flags)
+ {
+ 	struct btf *btf = btfe->btf;
+ 
+-	if (gobuffer__size(&btfe->percpu_secinfo) != 0)
+-		btf_elf__add_datasec_type(btfe, PERCPU_SECTION,
+-					  &btfe->percpu_secinfo);
+-
+ 	/* Empty file, nothing to do, so... done! */
+ 	if (btf__get_nr_types(btf) == 0)
+ 		return 0;
+diff --git a/libbtf.h b/libbtf.h
+index 9b3d396da31f..887b5bc55c8e 100644
+--- a/libbtf.h
++++ b/libbtf.h
+@@ -30,6 +30,7 @@ struct btf_elf {
+ };
+ 
+ extern uint8_t btf_elf__verbose;
++extern uint8_t btf_elf__force;
+ #define btf_elf__verbose_log(fmt, ...) { if (btf_elf__verbose) printf(fmt, __VA_ARGS__); }
+ 
+ #define PERCPU_SECTION ".data..percpu"
 -- 
 2.24.1
 
