@@ -2,126 +2,117 @@ Return-Path: <SRS0=vfrS=DP=vger.kernel.org=dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-7.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 102D7C433DF
-	for <linux-dwarves@archiver.kernel.org>; Thu,  8 Oct 2020 19:32:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 82410C433E7
+	for <linux-dwarves@archiver.kernel.org>; Thu,  8 Oct 2020 23:40:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9FBAE221FE
-	for <linux-dwarves@archiver.kernel.org>; Thu,  8 Oct 2020 19:32:55 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Tulpt3da"
+	by mail.kernel.org (Postfix) with ESMTP id 19B1422242
+	for <linux-dwarves@archiver.kernel.org>; Thu,  8 Oct 2020 23:40:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1602200409;
+	bh=v/lhga+VsSVgk0b4UaLrN2hZzAylPIvnPIyf1YISSXw=;
+	h=From:To:CC:Subject:Date:List-ID:From;
+	b=ooIb74sHpancy6TInT6qwH0hY7mgT42HOaRDqQDIux3h6SOYtFOmWWoLN1UwgwECo
+	 uPKBQx+dzP0rflP0p2NoGOpfI7vOp1iatQwrDd1I/qHz+SCUq4YgBKKkhLJlhGej81
+	 ATXpSI7ONTvCamYOv0f+mIM9r12rIjRhtd55YcfQ=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726831AbgJHTcy (ORCPT
+        id S1727247AbgJHXkI convert rfc822-to-8bit (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Thu, 8 Oct 2020 15:32:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47336 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725616AbgJHTcy (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Thu, 8 Oct 2020 15:32:54 -0400
-Received: from mail-yb1-xb43.google.com (mail-yb1-xb43.google.com [IPv6:2607:f8b0:4864:20::b43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81D98C0613D2;
-        Thu,  8 Oct 2020 12:32:54 -0700 (PDT)
-Received: by mail-yb1-xb43.google.com with SMTP id j76so5402372ybg.3;
-        Thu, 08 Oct 2020 12:32:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=lJiVyF8lYseP3MyH+TqVr5lzl2Yk+yGjrNLl/qjax8s=;
-        b=Tulpt3da9pOfXt/5s3jw4gP1oOIW+5evQJZiLhuAoW7STSQZskoBTnCPgbPF2/qpkD
-         ND89oqm2j2Lehk5Lv/wPjKo9MUqDErcNKsUg6Fyw34LYMce/+BSYRS7eCHreaW1YU/c/
-         u32xJPbx0fKu3o5sy4YRKHfmREimVzI5CUK63nXm8qkj6OqG9hVps+ybfiuPrqxd8jNv
-         I/Ae7gFtS0y02K3DC0jAyApU3yXycbO2dKAOO/6Vr5uz11tgSNdISogYevo2i4gGGfsN
-         W/HJmjDaNmlDrq3Rl+gRtBKtKzP4GEduS9H8Fx2UbtpYYwjMwSOZ+H3wUWilS5kRDyYB
-         9+XQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=lJiVyF8lYseP3MyH+TqVr5lzl2Yk+yGjrNLl/qjax8s=;
-        b=SZGjfEuL3o9KxAkCGiRva5SndMkOsmS9WzKTM8RT80ThZ5ZmyXn3QZpJlIGPmcvJ2n
-         zJ4VJDL3UXBUk0SRlyheyqrr9OD6zw38/6iZqxzmCF/cw3LeBM7+PXVdPhqP190VZ4GD
-         K/Vx5OK9C4Ttvi+dV34kd4z+petREApqcHKQ+gJBvVa38FW+auc3fmiTz2dDvi3D101I
-         BsfBLIRPYVC/TNtqx4ZefhMd19Av2+alyzgmMTq6B44NgNVuZk9NzNl42DNXVzGD9O3n
-         /PyQGrGBcUhPt8iwVDVy/RxVEK8aXhOCLzm0uwVZ81fu2qucIsgraLZY0M1C2FWKmY18
-         DpiQ==
-X-Gm-Message-State: AOAM532Rkbudp/btO5QB+FObKFvuQer6EtybP9JQdH2eZRPlnGaPbBZp
-        v41RpZWtcTLds+DcmG1vQbMtAnBDTtkXk5SNpsg=
-X-Google-Smtp-Source: ABdhPJzveCuqIbrfOzihsGa+eJBpFpC/K/JgLKs4Wp8Fg2VosS6VgsHUq68kAgKxuLQ3YAm7J42UpHj8OFn++jmZRc8=
-X-Received: by 2002:a25:2a4b:: with SMTP id q72mr6980562ybq.27.1602185573415;
- Thu, 08 Oct 2020 12:32:53 -0700 (PDT)
+        Thu, 8 Oct 2020 19:40:08 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:6676 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725909AbgJHXkI (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Thu, 8 Oct 2020 19:40:08 -0400
+Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 098NZ4UK017547
+        for <dwarves@vger.kernel.org>; Thu, 8 Oct 2020 16:40:07 -0700
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com with ESMTP id 3429gp8w62-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <dwarves@vger.kernel.org>; Thu, 08 Oct 2020 16:40:07 -0700
+Received: from intmgw004.08.frc2.facebook.com (2620:10d:c085:208::11) by
+ mail.thefacebook.com (2620:10d:c085:11d::6) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1979.3; Thu, 8 Oct 2020 16:40:05 -0700
+Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
+        id 6BB8C2EC7C76; Thu,  8 Oct 2020 16:40:03 -0700 (PDT)
+From:   Andrii Nakryiko <andrii@kernel.org>
+To:     <dwarves@vger.kernel.org>
+CC:     <bpf@vger.kernel.org>, <kernel-team@fb.com>, <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>
+Subject: [PATCH v2 dwarves 0/8] Switch BTF loading and encoding to libbpf APIs
+Date:   Thu, 8 Oct 2020 16:39:52 -0700
+Message-ID: <20201008234000.740660-1-andrii@kernel.org>
+X-Mailer: git-send-email 2.24.1
 MIME-Version: 1.0
-References: <20200930042742.2525310-1-andriin@fb.com> <20200930042742.2525310-5-andriin@fb.com>
- <20201008180651.GD246083@kernel.org>
-In-Reply-To: <20201008180651.GD246083@kernel.org>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Thu, 8 Oct 2020 12:32:42 -0700
-Message-ID: <CAEf4BzbOUQv0JQqJ=BuTkKz5XFo=ZpiskaXEmeEfsgTD5_eBmw@mail.gmail.com>
-Subject: Re: [PATCH dwarves 04/11] btf_loader: use libbpf to load BTF
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Andrii Nakryiko <andriin@fb.com>, dwarves@vger.kernel.org,
-        bpf <bpf@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+X-FB-Internal: Safe
+Content-Type: text/plain
+Content-Transfer-Encoding: 8BIT
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-10-08_15:2020-10-08,2020-10-08 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
+ spamscore=0 clxscore=1011 bulkscore=0 mlxscore=0 adultscore=0
+ mlxlogscore=489 suspectscore=13 impostorscore=0 phishscore=0
+ malwarescore=0 priorityscore=1501 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2009150000 definitions=main-2010080166
+X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-On Thu, Oct 8, 2020 at 11:59 AM Arnaldo Carvalho de Melo
-<acme@kernel.org> wrote:
->
-> Em Tue, Sep 29, 2020 at 09:27:35PM -0700, Andrii Nakryiko escreveu:
-> > Switch BTF loading to completely use libbpf's own struct btf and related APIs.
-> > BTF encoding is still happening with pahole's own code, so these two code
-> > paths are not sharing anything now. String fetching is happening based on
-> > whether btfe->strings were set to non-NULL pointer by btf_encoder.
->
-> This patch is not applying, since there was a fix in the btf_loader.c
-> file where lexblocks (DWARF concept) wasn't being initialized and then
-> some other tool was segfaulting when trying to traverse an uninitialized
-> list.
->
-> I tried applying this patch by hand, but it seems it needs some
-> massaging before I can use plain vim on it:
->
-> diff --git a/btf_loader.c b/btf_loader.c
-> index 9db76957a7e5..c31ee61060f1 100644
-> --- a/btf_loader.c
-> +++ b/btf_loader.c
-> @@ -46,21 +46,17 @@ static void *tag__alloc(const size_t size)
->  }
-> =20
->  static int btf_elf__load_ftype(struct btf_elf *btfe, struct ftype *proto=
-> , uint32_t tag,
-> -                              uint32_t type, uint16_t vlen, struct btf_param *args, uint32_t=
->  id)
-> +                              const struct btf_type *tp, uint32_t id)
->  {
-> -       int i;
-> +       const struct btf_param *param =3D btf_params(tp);
-> +       int i, vlen =3D btf_vlen(tp);
-> =20
->         proto->tag.tag  =3D tag;
-> -       proto->tag.type =3D type;
-> +       proto->tag.type =3D tp->type;
->         INIT_LIST_HEAD(&proto->parms);
-> =20
-> -       for (i =3D 0; i < vlen; ++i) {
->
->
-> Can you please check?
->
-> The first three patches are already applied an in master, both at
-> kernel.org and its mirror at github.com.
+This patch set switches pahole to use libbpf-provided BTF loading and encoding
+APIs. This reduces pahole's own BTF encoding code, speeds up the process,
+reduces amount of RAM needed for DWARF-to-BTF conversion. Also, pahole finally
+gets support to generating BTF for cross-compiled ELF binaries with different
+endianness (patch #8).
 
-Sure, no problem. I'll rebase the rest and post as v2.
+Additionally, patch #3 fixes previously missed problem with invalid array
+index type generation.
 
->
-> - Arnaldo
->
+Patches #4-7 are speeding up DWARF-to-BTF convertion/dedup pretty
+significantly, saving overall about 9 seconds out of current 27 or so.
 
-[...]
+Patch #5 revamps how per-CPU BTF variables are emitted, eliminating repeated
+and expensive looping over ELF symbols table. The critical detail that took
+few hours of investigation is that when DW_AT_variable has
+DW_AT_specification, variable address (to correlate with symbol's address) has
+to be taken before specification is followed.
+
+More details could be found in respective patches.
+
+v1->v2:
+  - rebase on latest dwarves master and fix var->spec's address problem.
+
+Cc: Arnaldo Carvalho de Melo <acme@kernel.org>
+
+Andrii Nakryiko (8):
+  btf_loader: use libbpf to load BTF
+  btf_encoder: use libbpf APIs to encode BTF type info
+  btf_encoder: fix emitting __ARRAY_SIZE_TYPE__ as index range type
+  btf_encoder: discard CUs after BTF encoding
+  btf_encoder: revamp how per-CPU variables are encoded
+  dwarf_loader: increase the size of lookup hash map
+  strings: use BTF's string APIs for strings management
+  btf_encoder: support cross-compiled ELF binaries with different
+    endianness
+
+ btf_encoder.c  | 370 +++++++++++++++------------
+ btf_loader.c   | 244 +++++++-----------
+ ctf_encoder.c  |   2 +-
+ dwarf_loader.c |   2 +-
+ libbtf.c       | 661 +++++++++++++++++++++----------------------------
+ libbtf.h       |  41 ++-
+ libctf.c       |  14 +-
+ libctf.h       |   4 +-
+ pahole.c       |   2 +-
+ strings.c      |  91 +++----
+ strings.h      |  32 +--
+ 11 files changed, 645 insertions(+), 818 deletions(-)
+
+-- 
+2.24.1
+
