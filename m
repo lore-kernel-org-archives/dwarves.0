@@ -2,159 +2,122 @@ Return-Path: <SRS0=v2jh=DQ=vger.kernel.org=dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EAF85C433DF
-	for <linux-dwarves@archiver.kernel.org>; Fri,  9 Oct 2020 17:59:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0E6AEC433DF
+	for <linux-dwarves@archiver.kernel.org>; Fri,  9 Oct 2020 19:26:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7E8C022277
-	for <linux-dwarves@archiver.kernel.org>; Fri,  9 Oct 2020 17:59:32 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ccI9U5HV"
+	by mail.kernel.org (Postfix) with ESMTP id BB4992227E
+	for <linux-dwarves@archiver.kernel.org>; Fri,  9 Oct 2020 19:26:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1602271583;
+	bh=yS6RKBxqsgnq6nsKoMaegkXKZ1OsoCl7jwv+FXdtnsI=;
+	h=From:To:CC:Subject:Date:List-ID:From;
+	b=qwWlqlt3m99hZZXZ0bVaDltc0qu0MdcxI8mEtWLHjvxzPCZzO13QBmPcDk7VJZ1HT
+	 HvmeH2bqsE32fDt6FZ9/7lWfqxiRVcCDbtRMrHAP4teuITgXmyHLITSM7Bao0H/Qz4
+	 3zFOFe+oPAC2YJ6qKVq/kl7+eGiJ+jSL3R/GKuSo=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390262AbgJIR7c (ORCPT
+        id S1731624AbgJIT0X convert rfc822-to-8bit (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Fri, 9 Oct 2020 13:59:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57900 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730110AbgJIR7c (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Fri, 9 Oct 2020 13:59:32 -0400
-Received: from mail-yb1-xb44.google.com (mail-yb1-xb44.google.com [IPv6:2607:f8b0:4864:20::b44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E60F8C0613D2;
-        Fri,  9 Oct 2020 10:59:31 -0700 (PDT)
-Received: by mail-yb1-xb44.google.com with SMTP id c3so7907382ybl.0;
-        Fri, 09 Oct 2020 10:59:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=wNf+eHAfipT5/lMmEdzU4neAMEwONLyMRP/D8oZqeYc=;
-        b=ccI9U5HVeGRbaZSXduvN+ZDiOV6JW5vJ+mHKHxlkfkneoD3SaAF9BB8oaE/OjDfXBe
-         rubIM8XSX4ex8ekRkAvv0ksB9WZ6rPsOQZVopfLvOXXgYyksnOwmVbk65ngVIBf3MpxF
-         zTRlh8btTZMZx5RSaa55CNvYZbP2Zpk6Lxun1Yw50OsvFeDM39LGV0pQ8gwgeXum78wW
-         s+VWeCMpYKWHotMGdajtHUGzQgZYE3mdWRdkojeW8FfCAK7aOjF85XXvnTj+QxZwkWNC
-         et9j7RAS4AKt+wozDFpYmJpi0tLQjp/08dt+bYcq/8VfbuucpqFOwU+R6dtKlEJP+MZP
-         +6ig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=wNf+eHAfipT5/lMmEdzU4neAMEwONLyMRP/D8oZqeYc=;
-        b=gnzot6OK4nVG++OWzhAwCffTWEhRtfUotEarTsml2A3rGemwRxDUotbtqnlyZhp1ne
-         IAttqZqrG4HJK9JSm4XKZLHSLpA4VDDf0Jxm3V3zdTkgC52lvHxJHzqxnm5PpDxeyVUm
-         45jOV2NTH6vBGOcggzC4+Xvvckz6BkTbyXm/LGijBfP4/7GBFD4ibdu0TAJ+cb17IYJ7
-         MX2jPwL7ZDcAUPol40vytlN5Ae66zPYfsbYfO9FoukqiX6dQbzW8NxfJFV7KiGaC9BRr
-         pYowBUnn8ehWivCBbdFAftqlyKuXhkvxvKtenwWIIRuUi8ARV9VCkWHryaDbeWIR4Fc6
-         wP4Q==
-X-Gm-Message-State: AOAM530A4clv1vCWXq2JYUPsn6hpmTy5NDihoaoUnF1+8HorpuY9N3pJ
-        D7HUdiPlGFSFIwXzgIU2QFXxt08SszjnPPQgrH4=
-X-Google-Smtp-Source: ABdhPJx+CptLJ9+mNy/IFL3G9w38nWHK/rE8NXgCF7u1JDy0WcXvfJhkRN7UVnA27QBrGjahfUm8gWc89r+NvuycE3M=
-X-Received: by 2002:a25:2596:: with SMTP id l144mr18588863ybl.510.1602266371212;
- Fri, 09 Oct 2020 10:59:31 -0700 (PDT)
+        Fri, 9 Oct 2020 15:26:23 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:1242 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S2388639AbgJIT0X (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Fri, 9 Oct 2020 15:26:23 -0400
+Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
+        by m0001303.ppops.net (8.16.0.42/8.16.0.42) with SMTP id 099JN3rO011286
+        for <dwarves@vger.kernel.org>; Fri, 9 Oct 2020 12:26:22 -0700
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by m0001303.ppops.net with ESMTP id 3429jfdfh1-3
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <dwarves@vger.kernel.org>; Fri, 09 Oct 2020 12:26:21 -0700
+Received: from intmgw003.03.ash8.facebook.com (2620:10d:c085:208::11) by
+ mail.thefacebook.com (2620:10d:c085:11d::5) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1979.3; Fri, 9 Oct 2020 12:26:19 -0700
+Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
+        id 0783F2EC7D45; Fri,  9 Oct 2020 12:26:18 -0700 (PDT)
+From:   Andrii Nakryiko <andrii@kernel.org>
+To:     <dwarves@vger.kernel.org>, <acme@kernel.org>
+CC:     <bpf@vger.kernel.org>, <kernel-team@fb.com>, <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>
+Subject: [PATCH dwarves] btf_loader: handle union forward declaration properly
+Date:   Fri, 9 Oct 2020 12:26:07 -0700
+Message-ID: <20201009192607.699835-1-andrii@kernel.org>
+X-Mailer: git-send-email 2.24.1
 MIME-Version: 1.0
-References: <20201008234000.740660-1-andrii@kernel.org> <20201009162243.GD322246@kernel.org>
-In-Reply-To: <20201009162243.GD322246@kernel.org>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Fri, 9 Oct 2020 10:59:20 -0700
-Message-ID: <CAEf4BzZa7WGDpBxHKNvO+SWv2=J2mGyQZuuMTkGWkRWxz+KLgg@mail.gmail.com>
-Subject: Re: [PATCH v2 dwarves 0/8] Switch BTF loading and encoding to libbpf APIs
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Andrii Nakryiko <andrii@kernel.org>, Hao Luo <haoluo@google.com>,
-        Oleg Rombakh <olegrom@google.com>, dwarves@vger.kernel.org,
-        bpf <bpf@vger.kernel.org>, Kernel Team <kernel-team@fb.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Tony Ambardar <tony.ambardar@gmail.com>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        David Marcinkovic <david.marcinkovic@sartura.hr>,
-        Luka Perkov <luka.perkov@sartura.hr>,
-        Borna Cafuk <borna.cafuk@sartura.hr>,
-        Juraj Vijtiuk <juraj.vijtiuk@sartura.hr>
-Content-Type: text/plain; charset="UTF-8"
+X-FB-Internal: Safe
+Content-Type: text/plain
+Content-Transfer-Encoding: 8BIT
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-10-09_12:2020-10-09,2020-10-09 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 clxscore=1015
+ impostorscore=0 malwarescore=0 phishscore=0 bulkscore=0 spamscore=0
+ mlxscore=0 lowpriorityscore=0 mlxlogscore=999 adultscore=0 suspectscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2010090140
+X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-On Fri, Oct 9, 2020 at 9:22 AM Arnaldo Carvalho de Melo <acme@kernel.org> wrote:
->
-> Em Thu, Oct 08, 2020 at 04:39:52PM -0700, Andrii Nakryiko escreveu:
-> > This patch set switches pahole to use libbpf-provided BTF loading and encoding
-> > APIs. This reduces pahole's own BTF encoding code, speeds up the process,
-> > reduces amount of RAM needed for DWARF-to-BTF conversion. Also, pahole finally
-> > gets support to generating BTF for cross-compiled ELF binaries with different
-> > endianness (patch #8).
-> >
-> > Additionally, patch #3 fixes previously missed problem with invalid array
-> > index type generation.
-> >
-> > Patches #4-7 are speeding up DWARF-to-BTF convertion/dedup pretty
-> > significantly, saving overall about 9 seconds out of current 27 or so.
-> >
-> > Patch #5 revamps how per-CPU BTF variables are emitted, eliminating repeated
-> > and expensive looping over ELF symbols table. The critical detail that took
-> > few hours of investigation is that when DW_AT_variable has
-> > DW_AT_specification, variable address (to correlate with symbol's address) has
-> > to be taken before specification is followed.
-> >
-> > More details could be found in respective patches.
-> >
-> > v1->v2:
-> >   - rebase on latest dwarves master and fix var->spec's address problem.
->
-> Thanks, I applied all of them, tested and reproduced the performance
-> gains, great work!
+Differentiate between struct and union forwards. For BTF_KIND_FWD this is
+determined by kflag. So teach btf_loader to use that bit to decide whether
+forward is for union or struct.
 
-Great, thanks a lot, Arnaldo!
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+---
+N.B. This patch is based on top of tmp.libbtf_encoder branch.
 
-Next step is adding BTF to kernel modules, where module's BTF will be
-an "extension" of vmlinux's BTF, with only a minimal set of new types
-used/added in the module, that are not available in vmlinux. This
-should make per-module BTF really tiny.
+Also seems like non-forward declared union has a slightly different
+representation from struct (class). Not sure why it is so, but this change
+doesn't seem to break anything.
+---
 
->
-> I'll do some more testing on encoding a vmlinux for some big endian arch
-> on my x86_64 workstation and then push things publicly.
->
-> If Hao find any issues we can fix in a follow up patch.
->
-> I also added the people involved in the discussion about cross builds
-> failing, please take a look, I'm pushing now to a tmp.libbtf_encoder so
-> that you can test it from there, ok?
->
-> - Arnaldo
->
-> > Cc: Arnaldo Carvalho de Melo <acme@kernel.org>
-> >
-> > Andrii Nakryiko (8):
-> >   btf_loader: use libbpf to load BTF
-> >   btf_encoder: use libbpf APIs to encode BTF type info
-> >   btf_encoder: fix emitting __ARRAY_SIZE_TYPE__ as index range type
-> >   btf_encoder: discard CUs after BTF encoding
-> >   btf_encoder: revamp how per-CPU variables are encoded
-> >   dwarf_loader: increase the size of lookup hash map
-> >   strings: use BTF's string APIs for strings management
-> >   btf_encoder: support cross-compiled ELF binaries with different
-> >     endianness
-> >
-> >  btf_encoder.c  | 370 +++++++++++++++------------
-> >  btf_loader.c   | 244 +++++++-----------
-> >  ctf_encoder.c  |   2 +-
-> >  dwarf_loader.c |   2 +-
-> >  libbtf.c       | 661 +++++++++++++++++++++----------------------------
-> >  libbtf.h       |  41 ++-
-> >  libctf.c       |  14 +-
-> >  libctf.h       |   4 +-
-> >  pahole.c       |   2 +-
-> >  strings.c      |  91 +++----
-> >  strings.h      |  32 +--
-> >  11 files changed, 645 insertions(+), 818 deletions(-)
-> >
-> > --
-> > 2.24.1
-> >
->
-> --
->
-> - Arnaldo
+ btf_loader.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
+
+diff --git a/btf_loader.c b/btf_loader.c
+index 9b5da3a4997a..0cb23967fec3 100644
+--- a/btf_loader.c
++++ b/btf_loader.c
+@@ -134,12 +134,13 @@ static struct type *type__new(uint16_t tag, strings_t name, size_t size)
+ 	return type;
+ }
+ 
+-static struct class *class__new(strings_t name, size_t size)
++static struct class *class__new(strings_t name, size_t size, bool is_union)
+ {
+ 	struct class *class = tag__alloc(sizeof(*class));
++	uint32_t tag = is_union ? DW_TAG_union_type : DW_TAG_structure_type;
+ 
+ 	if (class != NULL) {
+-		type__init(&class->type, DW_TAG_structure_type, name, size);
++		type__init(&class->type, tag, name, size);
+ 		INIT_LIST_HEAD(&class->vtable);
+ 	}
+ 
+@@ -228,7 +229,7 @@ static int create_members(struct btf_elf *btfe, const struct btf_type *tp,
+ 
+ static int create_new_class(struct btf_elf *btfe, const struct btf_type *tp, uint32_t id)
+ {
+-	struct class *class = class__new(tp->name_off, tp->size);
++	struct class *class = class__new(tp->name_off, tp->size, false);
+ 	int member_size = create_members(btfe, tp, &class->type);
+ 
+ 	if (member_size < 0)
+@@ -313,7 +314,7 @@ static int create_new_subroutine_type(struct btf_elf *btfe, const struct btf_typ
+ 
+ static int create_new_forward_decl(struct btf_elf *btfe, const struct btf_type *tp, uint32_t id)
+ {
+-	struct class *fwd = class__new(tp->name_off, 0);
++	struct class *fwd = class__new(tp->name_off, 0, btf_kind(tp));
+ 
+ 	if (fwd == NULL)
+ 		return -ENOMEM;
+-- 
+2.24.1
+
