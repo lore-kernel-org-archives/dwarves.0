@@ -2,88 +2,134 @@ Return-Path: <SRS0=Qilz=D4=vger.kernel.org=dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-9.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 814FFC561F8
-	for <linux-dwarves@archiver.kernel.org>; Wed, 21 Oct 2020 11:29:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 07A5BC388F9
+	for <linux-dwarves@archiver.kernel.org>; Wed, 21 Oct 2020 15:35:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 25E6D21789
-	for <linux-dwarves@archiver.kernel.org>; Wed, 21 Oct 2020 11:29:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1603279744;
-	bh=mb6gxbYo4kXZH1EqgEcFGVGcbOdWMouSl83SoB7CbN8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
-	b=IIvKLfgk4xzcqRijtSmm8/WnNjBedbFgQy5apVhGLIK25V45+yrrojsjy+d1TiJVS
-	 3N3/Okz8ivSeZR4NijBp7dbJvPg2PPfL5xLffZNa/uJS2Xlcfw/KqGa4Gk2yUmrfzT
-	 Ev2nqL1hxx60YizCf3xMh/5gVPs5IonxYhXjJ3yU=
+	by mail.kernel.org (Postfix) with ESMTP id 7EF3B2224E
+	for <linux-dwarves@archiver.kernel.org>; Wed, 21 Oct 2020 15:35:48 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YpQWMZgc"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2442002AbgJUL3D (ORCPT
+        id S2502581AbgJUPfs (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Wed, 21 Oct 2020 07:29:03 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42246 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2442001AbgJUL3D (ORCPT <rfc822;dwarves@vger.kernel.org>);
-        Wed, 21 Oct 2020 07:29:03 -0400
-Received: from quaco.ghostprotocols.net (unknown [179.97.37.151])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7A7E121D43;
-        Wed, 21 Oct 2020 11:29:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1603279742;
-        bh=mb6gxbYo4kXZH1EqgEcFGVGcbOdWMouSl83SoB7CbN8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ouxnjBqFjS90eFacvshDol1iQ1mKPcm8mdUGtt6o6xjXnrAcxak7KD06xczu2vION
-         vKExABZsGdPkIqmLOJLOvkUuSAfhmn0JpL28txIpFix3TUO5QtoAkQu1eFUciRO90t
-         +VY19LKbI2pBbJFrC2a7dt8cbbeHg8oiQotKSaLo=
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 6F434403C2; Wed, 21 Oct 2020 08:29:00 -0300 (-03)
-Date:   Wed, 21 Oct 2020 08:29:00 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Jiri Slaby <jirislaby@kernel.org>
-Cc:     =?iso-8859-1?Q?=C9rico?= Rolim <erico.erc@gmail.com>,
-        dwarves@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Hao Luo <haoluo@google.com>, Andrii Nakryiko <andriin@fb.com>
-Subject: Re: Segfault in pahole 1.18 when building kernel 5.9.1 for arm64
-Message-ID: <20201021112900.GN2342001@kernel.org>
-References: <CAFDeuWM7D-Upi84-JovKa3g8Y_4fjv65jND3--e9u-tER3WmVA@mail.gmail.com>
- <82b757bb-1f49-ab02-2f4b-89577d56fec9@kernel.org>
- <20201020122015.GH2294271@kernel.org>
- <f7246cb6-901e-0bc3-eb18-194d1754da53@kernel.org>
+        Wed, 21 Oct 2020 11:35:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47288 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2502569AbgJUPfr (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Wed, 21 Oct 2020 11:35:47 -0400
+Received: from mail-yb1-xb43.google.com (mail-yb1-xb43.google.com [IPv6:2607:f8b0:4864:20::b43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4979DC0613CE;
+        Wed, 21 Oct 2020 08:35:46 -0700 (PDT)
+Received: by mail-yb1-xb43.google.com with SMTP id l15so2156267ybp.2;
+        Wed, 21 Oct 2020 08:35:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=D5/xCGnHx7slidVcpzEBSRP7yklPajwRiNS892kQv04=;
+        b=YpQWMZgclARfg79AZH8x5LVSx//nNzx+8850kPMje6Trst53hiRgi92+WB/B0LGPW+
+         fpsa7d4KFQmwNNpoV17Uqma21rnuDcbBmiGXVJm+XglGXxVuiVt7ASPHvWlKH1wbdqkX
+         w1171aC7KetdR1nnBIH49Y0qVLzHyFsOXpuqRsV2awl4c19AWtFJGM1CSZ8QeyjR1pt7
+         8ll4rxPPxWYfpCi66htOkgG24VugCmJYx8UEem2arWPBLoqMF7urjto4Yr/qHNxQ039i
+         j/3+xYGB01vxooNkKs/08iEDbjqYBvSgSrpgwve7FMePeaO7JraeJ5W7gloBdGYTaB5V
+         JBoA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=D5/xCGnHx7slidVcpzEBSRP7yklPajwRiNS892kQv04=;
+        b=rh4SIMEoOanxBa4rjoZz3jhd1VXJeNwWn1SKgWS4qG+OoDzSDEAEF+sVYAXK8Uy1BW
+         nFTp0hFtUUD3zINQFE6Xz1SrxCAMnQzLyJuh2stK+bowPd6Tm3Dmp5pvhEu6rQ+9J3uS
+         RlpObpaK8fc0a3lRLrrnDC96PamCDRxhGV99EPP5WOu94fkhUu6C7C6qmMClnFN89TXm
+         kvAvhEbDpokXJJl914hYFnwuSl6u7NFE7NVCWNUiXtE6GAG6sY/9X1xb+gdXk4pUMbcd
+         +JXdlQ3t81cgYmqeLxAiJ4AhHK8UGG/R2zYdbVyxtsFFNUuKJr7TKDVbiFzr1kmDVn7j
+         Unkw==
+X-Gm-Message-State: AOAM531+DNEBqgH2D9m0EcNSWJ3jK0cH2MANLiRV2lFOxPfnyBilQqun
+        lM53RjFWD2OAqh/Z3Ov+2w/s9kOI88nFvso3O4Y=
+X-Google-Smtp-Source: ABdhPJyo+sR7bI5EENrfC2u9qIQ0dZr/cb77WxMoucEGZmSaHzxeEia1oD8Rh9xjeS9Lxpd3CfBIV4tN5v/A/+pmugw=
+X-Received: by 2002:a25:c001:: with SMTP id c1mr5773484ybf.27.1603294545464;
+ Wed, 21 Oct 2020 08:35:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f7246cb6-901e-0bc3-eb18-194d1754da53@kernel.org>
-X-Url:  http://acmel.wordpress.com
+References: <20201009192607.699835-1-andrii@kernel.org>
+In-Reply-To: <20201009192607.699835-1-andrii@kernel.org>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Wed, 21 Oct 2020 08:35:34 -0700
+Message-ID: <CAEf4BzY4k4B5Pc93wSOWD-Hjw=_uoFjfByxc44uXAipV+PV96g@mail.gmail.com>
+Subject: Re: [PATCH dwarves] btf_loader: handle union forward declaration properly
+To:     Andrii Nakryiko <andrii@kernel.org>
+Cc:     dwarves@vger.kernel.org,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        bpf <bpf@vger.kernel.org>, Kernel Team <kernel-team@fb.com>,
+        Alexei Starovoitov <ast@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-Em Wed, Oct 21, 2020 at 08:22:40AM +0200, Jiri Slaby escreveu:
-> On 20. 10. 20, 14:20, Arnaldo Carvalho de Melo wrote:
-> > > Yeah, I observe the very same. I reported it at:
-> > > https://bugzilla.suse.com/show_bug.cgi?id=1177921
+On Fri, Oct 9, 2020 at 12:26 PM Andrii Nakryiko <andrii@kernel.org> wrote:
+>
+> Differentiate between struct and union forwards. For BTF_KIND_FWD this is
+> determined by kflag. So teach btf_loader to use that bit to decide whether
+> forward is for union or struct.
+>
+> Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+> ---
+> N.B. This patch is based on top of tmp.libbtf_encoder branch.
+>
+> Also seems like non-forward declared union has a slightly different
+> representation from struct (class). Not sure why it is so, but this change
+> doesn't seem to break anything.
+> ---
 
-> > Would it be possible to try with
-> > https://git.kernel.org/pub/scm/devel/pahole/pahole.git/commit/?h=tmp.libbtf_encoder
-> > ?
- 
-> Yes, that branch fixes the crashes and the kernel build finishes. The
-> zero-sized symbol error remains.
- 
-> So what should distributions do now -- should we switch to a pahole snapshot
-> for a while?
+Ping on this one, let's include it with upcoming pahole 1.19 as well?
 
-That would do the trick, I just completed my testing and pushed to the
-master branch on kernel.org and github, tests detailed at:
-
-https://git.kernel.org/pub/scm/devel/pahole/pahole.git/commit/?id=040fd7f585c9b9fcf4475d294b3f5ddf78405297
-
-There are some minor bug reports I want to address but my ETA right now
-is the end of this week to release v1.19.
-
-- Arnaldo
+>
+>  btf_loader.c | 9 +++++----
+>  1 file changed, 5 insertions(+), 4 deletions(-)
+>
+> diff --git a/btf_loader.c b/btf_loader.c
+> index 9b5da3a4997a..0cb23967fec3 100644
+> --- a/btf_loader.c
+> +++ b/btf_loader.c
+> @@ -134,12 +134,13 @@ static struct type *type__new(uint16_t tag, strings_t name, size_t size)
+>         return type;
+>  }
+>
+> -static struct class *class__new(strings_t name, size_t size)
+> +static struct class *class__new(strings_t name, size_t size, bool is_union)
+>  {
+>         struct class *class = tag__alloc(sizeof(*class));
+> +       uint32_t tag = is_union ? DW_TAG_union_type : DW_TAG_structure_type;
+>
+>         if (class != NULL) {
+> -               type__init(&class->type, DW_TAG_structure_type, name, size);
+> +               type__init(&class->type, tag, name, size);
+>                 INIT_LIST_HEAD(&class->vtable);
+>         }
+>
+> @@ -228,7 +229,7 @@ static int create_members(struct btf_elf *btfe, const struct btf_type *tp,
+>
+>  static int create_new_class(struct btf_elf *btfe, const struct btf_type *tp, uint32_t id)
+>  {
+> -       struct class *class = class__new(tp->name_off, tp->size);
+> +       struct class *class = class__new(tp->name_off, tp->size, false);
+>         int member_size = create_members(btfe, tp, &class->type);
+>
+>         if (member_size < 0)
+> @@ -313,7 +314,7 @@ static int create_new_subroutine_type(struct btf_elf *btfe, const struct btf_typ
+>
+>  static int create_new_forward_decl(struct btf_elf *btfe, const struct btf_type *tp, uint32_t id)
+>  {
+> -       struct class *fwd = class__new(tp->name_off, 0);
+> +       struct class *fwd = class__new(tp->name_off, 0, btf_kind(tp));
+>
+>         if (fwd == NULL)
+>                 return -ENOMEM;
+> --
+> 2.24.1
+>
