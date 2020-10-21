@@ -7,129 +7,178 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5B0A7C55179
-	for <linux-dwarves@archiver.kernel.org>; Wed, 21 Oct 2020 16:38:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9ECD1C4363A
+	for <linux-dwarves@archiver.kernel.org>; Wed, 21 Oct 2020 19:25:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0318822248
-	for <linux-dwarves@archiver.kernel.org>; Wed, 21 Oct 2020 16:38:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 33C5D24170
+	for <linux-dwarves@archiver.kernel.org>; Wed, 21 Oct 2020 19:25:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1603298293;
-	bh=sKDb+NXa1tgVKJb1me9HmWAbKfzQZxx2q4/FUQH/2Gc=;
+	s=default; t=1603308335;
+	bh=XmGtBDIc8rDQrH+DPZt5CdCuiMuBmj/fWwAZdzc8B3Y=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
-	b=wqZfOQK33oRFHIU6ujnu0Lrk6O6XVWgZUZGGX4j2DhiB1bu56J32Tev7lV+Po7SVH
-	 L1ZfmRARV5tK43ZZ5quEmB0Fg6NVPGW44T2iekRPLMJlQ5pFtGHgMzBoWlNzK3GNTW
-	 2dSGkXGoyEKSM58ZGuL+QaYVdq2Xz1f+FCBcNTQ4=
+	b=dx4kZEuqvCzxXFQKk9MCVeCO5JHr5WzG/xVaGqCqQgsvG1ZXZ8v4vRtBViTCAVJ5R
+	 ZfULqFMohZlymB0KcCTZ/vhaE1xx+FPlGkLLD+MfXEEY9kVFFt8fmqma2ay9U6bdct
+	 3n5DFzwtiWlujdXHpa3hmn93B5q7zf4olVvT37IE=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2503009AbgJUQiM (ORCPT
+        id S2504490AbgJUTZe (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Wed, 21 Oct 2020 12:38:12 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34898 "EHLO mail.kernel.org"
+        Wed, 21 Oct 2020 15:25:34 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42300 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2503008AbgJUQiM (ORCPT <rfc822;dwarves@vger.kernel.org>);
-        Wed, 21 Oct 2020 12:38:12 -0400
+        id S2441904AbgJUTZe (ORCPT <rfc822;dwarves@vger.kernel.org>);
+        Wed, 21 Oct 2020 15:25:34 -0400
 Received: from quaco.ghostprotocols.net (unknown [179.97.37.151])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 2792321D7B;
-        Wed, 21 Oct 2020 16:38:11 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 1737824170;
+        Wed, 21 Oct 2020 19:25:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1603298291;
-        bh=sKDb+NXa1tgVKJb1me9HmWAbKfzQZxx2q4/FUQH/2Gc=;
+        s=default; t=1603308333;
+        bh=XmGtBDIc8rDQrH+DPZt5CdCuiMuBmj/fWwAZdzc8B3Y=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LZ6+g/u/4Wx3BI8ak73zGDTDX3xDfDl7x4PaXO5cjyskT7CbS/r+xXmGEd42tVmSZ
-         h/BYhtXG8mnwmf+xNU+jTNtIKj5L1u59c7OVoyJpkpXu883VRrrJSL2hQb9FfkIBsp
-         T71ZqjLtKCSo0hnV43BtRRbmRINpoSAdB0SCbo7Y=
+        b=TkanMKHvCJdb4SrnL21T/IdHnW9G3ajKYy2gfB+zD8NqWiCeFF7Aek91Pi0wlSDhp
+         GQ2aBuGNjgLRTMOInKjjdlZZjiEFHAgkLZ+fRkKWq3VYJQ2mVomNgmswPa87llMmnk
+         MIHqFw5ylmcDYLJPKoo4LL99uJ7NCivXpc9v8slU=
 Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 02D65403C2; Wed, 21 Oct 2020 13:38:08 -0300 (-03)
-Date:   Wed, 21 Oct 2020 13:38:08 -0300
+        id 5C1EA403C2; Wed, 21 Oct 2020 16:25:30 -0300 (-03)
+Date:   Wed, 21 Oct 2020 16:25:30 -0300
 From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Andrii Nakryiko <andrii@kernel.org>, dwarves@vger.kernel.org,
-        bpf <bpf@vger.kernel.org>, Kernel Team <kernel-team@fb.com>,
-        Alexei Starovoitov <ast@kernel.org>
+To:     Andrii Nakryiko <andrii@kernel.org>
+Cc:     dwarves@vger.kernel.org, bpf@vger.kernel.org, kernel-team@fb.com,
+        ast@kernel.org
 Subject: Re: [PATCH dwarves] btf_loader: handle union forward declaration
  properly
-Message-ID: <20201021163808.GR2342001@kernel.org>
+Message-ID: <20201021192530.GS2342001@kernel.org>
 References: <20201009192607.699835-1-andrii@kernel.org>
- <CAEf4BzY4k4B5Pc93wSOWD-Hjw=_uoFjfByxc44uXAipV+PV96g@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAEf4BzY4k4B5Pc93wSOWD-Hjw=_uoFjfByxc44uXAipV+PV96g@mail.gmail.com>
+In-Reply-To: <20201009192607.699835-1-andrii@kernel.org>
 X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-Em Wed, Oct 21, 2020 at 08:35:34AM -0700, Andrii Nakryiko escreveu:
-> On Fri, Oct 9, 2020 at 12:26 PM Andrii Nakryiko <andrii@kernel.org> wrote:
-> >
-> > Differentiate between struct and union forwards. For BTF_KIND_FWD this is
-> > determined by kflag. So teach btf_loader to use that bit to decide whether
-> > forward is for union or struct.
-> >
-> > Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
-> > ---
-> > N.B. This patch is based on top of tmp.libbtf_encoder branch.
-> >
-> > Also seems like non-forward declared union has a slightly different
-> > representation from struct (class). Not sure why it is so, but this change
-> > doesn't seem to break anything.
-> > ---
-> 
-> Ping on this one, let's include it with upcoming pahole 1.19 as well?
+Em Fri, Oct 09, 2020 at 12:26:07PM -0700, Andrii Nakryiko escreveu:
+> Differentiate between struct and union forwards. For BTF_KIND_FWD this is
+> determined by kflag. So teach btf_loader to use that bit to decide whether
+> forward is for union or struct.
 
-I missed this one, but please consider providing concrete examples, can
-you provide one so that its completely spelled out, like for a 4.9yo
-kid? 8-)
+So, before this patch 'btfdiff vmlinux' comes clean, i.e. pretty
+printing from DWARF matches pretty printing from BTF, after it:
+
+[acme@five pahole]$ btfdiff vmlinux  | wc -l
+1500
+[acme@five pahole]$
+
+One of the differences:
+
+@@ -117457,7 +117457,7 @@ struct wireless_dev {
+
+ 	/* XXX last struct has 1 byte of padding */
+
+-	struct cfg80211_cqm_config * cqm_config;         /*   952     8 */
++	union cfg80211_cqm_config * cqm_config;          /*   952     8 */
+ 	/* --- cacheline 15 boundary (960 bytes) --- */
+ 	struct list_head           pmsr_list;            /*   960    16 */
+ 	spinlock_t                 pmsr_lock;            /*   976     4 */
+[acme@five pahole]$
+
+Looking at the source code:
+
+struct wireless_dev {
+...
+        struct cfg80211_cqm_config *cqm_config;
+...
+}
+
+Also:
+
+ struct nfnl_ct_hook {
+-	struct nf_conn *           (*get_ct)(const struct sk_buff  *, enum ip_conntrack_info *); /*     0     8 */
+-	size_t                     (*build_size)(const struct nf_conn  *); /*     8     8 */
+-	int                        (*build)(struct sk_buff *, struct nf_conn *, enum ip_conntrack_info, u_int16_t, u_int16_t); /*    16     8 */
+-	int                        (*parse)(const struct nlattr  *, struct nf_conn *); /*    24     8 */
+-	int                        (*attach_expect)(const struct nlattr  *, struct nf_conn *, u32, u32); /*    32     8 */
+-	void                       (*seq_adjust)(struct sk_buff *, struct nf_conn *, enum ip_conntrack_info, s32); /*    40     8 */
++	union nf_conn *            (*get_ct)(const struct sk_buff  *, enum ip_conntrack_info *); /*     0     8 */
++	size_t                     (*build_size)(const union nf_conn  *); /*     8     8 */
++	int                        (*build)(struct sk_buff *, union nf_conn *, enum ip_conntrack_info, u_int16_t, u_int16_t); /*    16     8 */
++	int                        (*parse)(const struct nlattr  *, union nf_conn *); /*    24     8 */
++	int                        (*attach_expect)(const struct nlattr  *, union nf_conn *, u32, u32); /*    32     8 */
++	void                       (*seq_adjust)(struct sk_buff *, union nf_conn *, enum ip_conntrack_info, s32); /*    40     8 */1
+
+Looking at the source code:
+
+struct nfnl_ct_hook {
+        struct nf_conn *(*get_ct)(const struct sk_buff *skb,
+                                  enum ip_conntrack_info *ctinfo);
+        size_t (*build_size)(const struct nf_conn *ct);
+        int (*build)(struct sk_buff *skb, struct nf_conn *ct,
+                     enum ip_conntrack_info ctinfo,
+                     u_int16_t ct_attr, u_int16_t ct_info_attr);
+        int (*parse)(const struct nlattr *attr, struct nf_conn *ct);
+        int (*attach_expect)(const struct nlattr *attr, struct nf_conn *ct,
+                             u32 portid, u32 report);
+        void (*seq_adjust)(struct sk_buff *skb, struct nf_conn *ct,
+                           enum ip_conntrack_info ctinfo, s32 off);
+};
 
 - Arnaldo
  
-> >
-> >  btf_loader.c | 9 +++++----
-> >  1 file changed, 5 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/btf_loader.c b/btf_loader.c
-> > index 9b5da3a4997a..0cb23967fec3 100644
-> > --- a/btf_loader.c
-> > +++ b/btf_loader.c
-> > @@ -134,12 +134,13 @@ static struct type *type__new(uint16_t tag, strings_t name, size_t size)
-> >         return type;
-> >  }
-> >
-> > -static struct class *class__new(strings_t name, size_t size)
-> > +static struct class *class__new(strings_t name, size_t size, bool is_union)
-> >  {
-> >         struct class *class = tag__alloc(sizeof(*class));
-> > +       uint32_t tag = is_union ? DW_TAG_union_type : DW_TAG_structure_type;
-> >
-> >         if (class != NULL) {
-> > -               type__init(&class->type, DW_TAG_structure_type, name, size);
-> > +               type__init(&class->type, tag, name, size);
-> >                 INIT_LIST_HEAD(&class->vtable);
-> >         }
-> >
-> > @@ -228,7 +229,7 @@ static int create_members(struct btf_elf *btfe, const struct btf_type *tp,
-> >
-> >  static int create_new_class(struct btf_elf *btfe, const struct btf_type *tp, uint32_t id)
-> >  {
-> > -       struct class *class = class__new(tp->name_off, tp->size);
-> > +       struct class *class = class__new(tp->name_off, tp->size, false);
-> >         int member_size = create_members(btfe, tp, &class->type);
-> >
-> >         if (member_size < 0)
-> > @@ -313,7 +314,7 @@ static int create_new_subroutine_type(struct btf_elf *btfe, const struct btf_typ
-> >
-> >  static int create_new_forward_decl(struct btf_elf *btfe, const struct btf_type *tp, uint32_t id)
-> >  {
-> > -       struct class *fwd = class__new(tp->name_off, 0);
-> > +       struct class *fwd = class__new(tp->name_off, 0, btf_kind(tp));
-> >
-> >         if (fwd == NULL)
-> >                 return -ENOMEM;
-> > --
-> > 2.24.1
-> >
+> Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+> ---
+> N.B. This patch is based on top of tmp.libbtf_encoder branch.
+> 
+> Also seems like non-forward declared union has a slightly different
+> representation from struct (class). Not sure why it is so, but this change
+> doesn't seem to break anything.
+> ---
+> 
+>  btf_loader.c | 9 +++++----
+>  1 file changed, 5 insertions(+), 4 deletions(-)
+> 
+> diff --git a/btf_loader.c b/btf_loader.c
+> index 9b5da3a4997a..0cb23967fec3 100644
+> --- a/btf_loader.c
+> +++ b/btf_loader.c
+> @@ -134,12 +134,13 @@ static struct type *type__new(uint16_t tag, strings_t name, size_t size)
+>  	return type;
+>  }
+>  
+> -static struct class *class__new(strings_t name, size_t size)
+> +static struct class *class__new(strings_t name, size_t size, bool is_union)
+>  {
+>  	struct class *class = tag__alloc(sizeof(*class));
+> +	uint32_t tag = is_union ? DW_TAG_union_type : DW_TAG_structure_type;
+>  
+>  	if (class != NULL) {
+> -		type__init(&class->type, DW_TAG_structure_type, name, size);
+> +		type__init(&class->type, tag, name, size);
+>  		INIT_LIST_HEAD(&class->vtable);
+>  	}
+>  
+> @@ -228,7 +229,7 @@ static int create_members(struct btf_elf *btfe, const struct btf_type *tp,
+>  
+>  static int create_new_class(struct btf_elf *btfe, const struct btf_type *tp, uint32_t id)
+>  {
+> -	struct class *class = class__new(tp->name_off, tp->size);
+> +	struct class *class = class__new(tp->name_off, tp->size, false);
+>  	int member_size = create_members(btfe, tp, &class->type);
+>  
+>  	if (member_size < 0)
+> @@ -313,7 +314,7 @@ static int create_new_subroutine_type(struct btf_elf *btfe, const struct btf_typ
+>  
+>  static int create_new_forward_decl(struct btf_elf *btfe, const struct btf_type *tp, uint32_t id)
+>  {
+> -	struct class *fwd = class__new(tp->name_off, 0);
+> +	struct class *fwd = class__new(tp->name_off, 0, btf_kind(tp));
+>  
+>  	if (fwd == NULL)
+>  		return -ENOMEM;
+> -- 
+> 2.24.1
+> 
 
 -- 
 
