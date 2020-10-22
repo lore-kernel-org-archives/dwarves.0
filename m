@@ -1,122 +1,120 @@
-Return-Path: <SRS0=Qilz=D4=vger.kernel.org=dwarves-owner@kernel.org>
+Return-Path: <SRS0=2HjE=D5=vger.kernel.org=dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	NICE_REPLY_A,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C0966C4363A
-	for <linux-dwarves@archiver.kernel.org>; Wed, 21 Oct 2020 20:15:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DAA7DC388F9
+	for <linux-dwarves@archiver.kernel.org>; Thu, 22 Oct 2020 05:19:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 439AF2417D
-	for <linux-dwarves@archiver.kernel.org>; Wed, 21 Oct 2020 20:15:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8B5FE22460
+	for <linux-dwarves@archiver.kernel.org>; Thu, 22 Oct 2020 05:19:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1603311327;
-	bh=lza32zk4geg5fIRx0MFlGMJDr6NBqZMi1MST+xv7P5Y=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
-	b=CAdojD5L530CsHYbEaYwiswMnPJk9KXQrqQYoCS8KjU4csWpESatN3yukbJe8PPUj
-	 8WCUfUETQKwQTGY/wUB5hNI+Dqfojir/G2Tmm0iakZRxcql9WseGSlnIKrOV+4R7zW
-	 erjxvA+7uQoRAcXn+YifjayrY50vLBddoGdAEwag=
+	s=default; t=1603343977;
+	bh=XHJWvXlyLgxVaRcjXBp2rNn/9eRwSGyCjHnkneXIW6A=;
+	h=Subject:To:Cc:References:From:Date:In-Reply-To:List-ID:From;
+	b=Aeow4k8tEpyCIsbuJsiMD8PjqLbD9D2X2CwytM2jz2BhNk2oiKlzMBenMA8y6MJtn
+	 z/69RLp6P14ZrtS4AZpvqxLGQghgvwIcuVnPnJwyjQzR9MmtAlUoMVV+IzA+30wp/S
+	 7o3Ud+NUSP3Ot+IS5NBiWrnnKtEpZHueCdtIRPkY=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2505261AbgJUUP1 (ORCPT
+        id S2507879AbgJVFTh (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Wed, 21 Oct 2020 16:15:27 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51770 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2505114AbgJUUP0 (ORCPT <rfc822;dwarves@vger.kernel.org>);
-        Wed, 21 Oct 2020 16:15:26 -0400
-Received: from quaco.ghostprotocols.net (unknown [179.97.37.151])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id BF13E2098B;
-        Wed, 21 Oct 2020 20:15:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1603311326;
-        bh=lza32zk4geg5fIRx0MFlGMJDr6NBqZMi1MST+xv7P5Y=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=L1Oob8WORq4yvRbq6p0rcvCHw9b1C+cZ9TeS47OYAiYCmwirX4hcfdkK/yLA/3jYC
-         g9LfEv1TiD59BZpmRT7lQUH15Vfn1EoYYN19agjFEsDymV8R3fOlS1fgNi0gzRfMHl
-         5Pc7Oqx5J0LMotVsXVSZ/KLGBGFLRaHe5oODaU9w=
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 195B4403C2; Wed, 21 Oct 2020 17:15:23 -0300 (-03)
-Date:   Wed, 21 Oct 2020 17:15:23 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Andrii Nakryiko <andrii@kernel.org>, dwarves@vger.kernel.org,
-        bpf <bpf@vger.kernel.org>, Kernel Team <kernel-team@fb.com>,
-        Alexei Starovoitov <ast@kernel.org>
-Subject: Re: [PATCH dwarves] btf_loader: handle union forward declaration
- properly
-Message-ID: <20201021201523.GA2385845@kernel.org>
-References: <20201009192607.699835-1-andrii@kernel.org>
- <20201021192530.GS2342001@kernel.org>
- <CAEf4BzaCXKYOeyTN74Zm1gbjyBSmBCi1XpgvqKn8-E+ZusrGeA@mail.gmail.com>
+        Thu, 22 Oct 2020 01:19:37 -0400
+Received: from mail-ej1-f68.google.com ([209.85.218.68]:44389 "EHLO
+        mail-ej1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2502343AbgJVFTh (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Thu, 22 Oct 2020 01:19:37 -0400
+Received: by mail-ej1-f68.google.com with SMTP id a3so371759ejy.11;
+        Wed, 21 Oct 2020 22:19:35 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=Qns1Di2gUaT1LMZhyFK8HVEVWemvvafkn9xT3plcb9k=;
+        b=oKM+yZdG3NzZSFixUuYA73h1OoDCELbFDWCiUtLvSrXd4WIDiTJMTvyiT8c+oKPQcj
+         KO9VVf+DUQ78OzcA9qYkjRspHQ6U+CBTEsW/Uxz3nZimh+fTymh93GGzd4yF4mSX9503
+         XXvVpMM8YfEJSr3Qb8agA6VmS2yn+jb6/z8AKa5M+HpnOsZQTBgJTQ46G6oL5kRTFJBK
+         JqxzlYQjJytjil3eu7BSVJnBRWCVyRWiwFq4tpD/HP7Ia8PviidpiVjhqZiUv/gYaUCq
+         RgleH1uHT648EkkrsfVPbpVFbbyXl5UV6usLZmPluEGmSjmXrsOj75Qcfi7SZ93hgPAN
+         5wgQ==
+X-Gm-Message-State: AOAM530uM3S/BLZ4vrlWJbFER3mVYWXeJR8pKyhX98NMmHiuGQDeIBBT
+        LuNGrLTj+nrN2KRqPEgWKHvWCslxtBU=
+X-Google-Smtp-Source: ABdhPJyGqvzN3+vi3NgM9307vrZSvygecZqBvhEH2ycWRfrf9vfxouVttJuWCCw/S/aEeqkemfDT9A==
+X-Received: by 2002:a17:906:a00d:: with SMTP id p13mr589698ejy.183.1603343974803;
+        Wed, 21 Oct 2020 22:19:34 -0700 (PDT)
+Received: from ?IPv6:2a0b:e7c0:0:107::49? ([2a0b:e7c0:0:107::49])
+        by smtp.gmail.com with ESMTPSA id j11sm180790ejk.63.2020.10.21.22.19.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 21 Oct 2020 22:19:33 -0700 (PDT)
+Subject: Re: [PATCH dwarves] btf_encoder: ignore zero-sized ELF symbols
+To:     Andrii Nakryiko <andrii@kernel.org>, dwarves@vger.kernel.org,
+        acme@kernel.org
+Cc:     bpf@vger.kernel.org
+References: <20201021155220.1737964-1-andrii@kernel.org>
+From:   Jiri Slaby <jirislaby@kernel.org>
+Message-ID: <9633d29b-887c-46ec-b131-adda8f69d722@kernel.org>
+Date:   Thu, 22 Oct 2020 07:19:32 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.3.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAEf4BzaCXKYOeyTN74Zm1gbjyBSmBCi1XpgvqKn8-E+ZusrGeA@mail.gmail.com>
-X-Url:  http://acmel.wordpress.com
+In-Reply-To: <20201021155220.1737964-1-andrii@kernel.org>
+Content-Type: text/plain; charset=iso-8859-2; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-Em Wed, Oct 21, 2020 at 12:47:30PM -0700, Andrii Nakryiko escreveu:
-> On Wed, Oct 21, 2020 at 12:25 PM Arnaldo Carvalho de Melo <acme@kernel.org> wrote:
-> > > @@ -313,7 +314,7 @@ static int create_new_subroutine_type(struct btf_elf *btfe, const struct btf_typ
-> > >
-> > >  static int create_new_forward_decl(struct btf_elf *btfe, const struct btf_type *tp, uint32_t id)
-> > >  {
-> > > -     struct class *fwd = class__new(tp->name_off, 0);
-> > > +     struct class *fwd = class__new(tp->name_off, 0, btf_kind(tp));
- 
-> *FACEPALM*... This should be btf_kflag(tp) instead. I'll use btfdiff
-> on all my patches from now on, sorry about this!
+On 21. 10. 20, 17:52, Andrii Nakryiko wrote:
+> It's legal for ELF symbol to have size 0, if it's size is unknown or
+> unspecified. Instead of erroring out, just ignore such symbols, as they can't
+> be a valid per-CPU variable anyways.
+> 
+> Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 
-:-)
+Tested-by: Jiri Slaby <jirislaby@kernel.org>
 
-I'll retest when you resubmit.
+> ---
+>   btf_encoder.c | 12 ++++--------
+>   1 file changed, 4 insertions(+), 8 deletions(-)
+> 
+> diff --git a/btf_encoder.c b/btf_encoder.c
+> index 2a6455be4c52..2af1fe447834 100644
+> --- a/btf_encoder.c
+> +++ b/btf_encoder.c
+> @@ -287,6 +287,10 @@ static int find_all_percpu_vars(struct btf_elf *btfe)
+>   		if (!addr)
+>   			continue;
+>   
+> +		size = elf_sym__size(&sym);
+> +		if (!size)
+> +			continue; /* ignore zero-sized symbols */
+> +
+>   		sym_name = elf_sym__name(&sym, btfe->symtab);
+>   		if (!btf_name_valid(sym_name)) {
+>   			dump_invalid_symbol("Found symbol of invalid name when encoding btf",
+> @@ -295,14 +299,6 @@ static int find_all_percpu_vars(struct btf_elf *btfe)
+>   				continue;
+>   			return -1;
+>   		}
+> -		size = elf_sym__size(&sym);
+> -		if (!size) {
+> -			dump_invalid_symbol("Found symbol of zero size when encoding btf",
+> -					    sym_name, btf_elf__verbose, btf_elf__force);
+> -			if (btf_elf__force)
+> -				continue;
+> -			return -1;
+> -		}
+>   
+>   		if (btf_elf__verbose)
+>   			printf("Found per-CPU symbol '%s' at address 0x%lx\n", sym_name, addr);
+> 
 
-One other thing I like to use is 'fullcircle':
 
-
-<SNIP>
-# See how your DW_AT_producer looks like and find the
-# right regexp to get after the GCC version string, this one
-# seems good enough for Red Hat/Fedora/CentOS that look like:
-#
-#   DW_AT_producer    : (indirect string, offset: 0x3583): GNU C89 8.2.1 20181215 (Red Hat 8.2.1-6) -mno-sse -mno-mmx
-#
-# So we need from -mno-sse onwards
-
-CFLAGS=$(readelf -wi $file | grep -w DW_AT_producer | sed -r      's/.*\)( -[[:alnum:]]+.*)+/\1/g')
-
-# Check if we managed to do the sed or if this is something like GNU AS
-[ "${CFLAGS/DW_AT_producer/}" != "${CFLAGS}" ] && exit
-
-${pfunct_bin} --compile $file > $c_output
-gcc $CFLAGS -c -g $c_output -o $o_output
-${codiff_bin} -q -s $file $o_output
-<SNIP>
-
-
-$ pfunct --help |& grep compile
-      --compile[=FUNCTION]   Generate compilable source code with types
-$
-
-It generates code for all functions in a .o that touch its parameters
-and right before those functions it regenerates all the types, so you go
-from type information to C code that gets compiled with the same
-compiler command line setting (obtained from DW_AT_producer for DWARF)
-with type information and then it compares the original type information
-with the one generated from the regenerated "original" source code.
-
-Right now it works only with DWARF, because for it we derive the packed
-attribute (pahole does that for BTF too) but, unlike bpftool btf it
-doesn't add the needed padding for __alignment__ things, and DWARF
-provides that info.
-
-I'll work on that eventually and then fullcircle will do it for both
-DWARF and for BTF.
-
-- Arnaldo
+-- 
+js
+suse labs
