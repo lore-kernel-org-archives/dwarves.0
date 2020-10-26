@@ -2,137 +2,106 @@ Return-Path: <SRS0=a5OZ=EB=vger.kernel.org=dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-20.4 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-4.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D0013C4363A
-	for <linux-dwarves@archiver.kernel.org>; Mon, 26 Oct 2020 22:18:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A1D04C4363A
+	for <linux-dwarves@archiver.kernel.org>; Mon, 26 Oct 2020 22:36:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9B5CF20878
-	for <linux-dwarves@archiver.kernel.org>; Mon, 26 Oct 2020 22:18:28 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="DN9kQFY9"
+	by mail.kernel.org (Postfix) with ESMTP id 42CB620878
+	for <linux-dwarves@archiver.kernel.org>; Mon, 26 Oct 2020 22:36:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1603751791;
+	bh=lyPhOsbG5AKnT7zx/SX67Q1VWDf/roHkze5YxtGPK4I=;
+	h=From:To:Cc:Subject:Date:List-ID:From;
+	b=Wd8U1utGj0GLVhvUawca8VmiVtYWaXGu/csuG4mwSS85Cy0Xf3HnFlLOZpAIPEPCu
+	 HhauTeAEpuy6ryg3Ifg+SwDWXRKMpemLDz4SmGhayp3pwikiLX40d+5pkyAh2hWyi/
+	 OPfq7rlEFQSEyt6AfWtM1QvqQOp3JJali0/Ubgzk=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392812AbgJZWS2 (ORCPT
+        id S2394541AbgJZWga convert rfc822-to-8bit (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Mon, 26 Oct 2020 18:18:28 -0400
-Received: from mail-pl1-f202.google.com ([209.85.214.202]:54263 "EHLO
-        mail-pl1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2392619AbgJZWS2 (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Mon, 26 Oct 2020 18:18:28 -0400
-Received: by mail-pl1-f202.google.com with SMTP id c4so6935828pll.20
-        for <dwarves@vger.kernel.org>; Mon, 26 Oct 2020 15:18:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=sender:date:message-id:mime-version:subject:from:to:cc;
-        bh=Bf+WO1TAsV2HZxGdXF8a8oAKOTovVn61Ori8bgHycsc=;
-        b=DN9kQFY9wBa8UGO7zVjPxkG8dXP4E3LASRpdk0Max3yl/XmGxLZagn3QRbfzSgcURv
-         0TNMTaGH6us1InThp2YrLnLSebl1JEEaQCEW9dpPMmaQmWoHjNqfSZQ+idZdoWMACQdE
-         blHBTqFfxHv9BNHQo1/zsh3m4hacg5qvKqcQmkNnEwBKAK63KULObitQZs7qPgvof6+E
-         1Ze6N+aaAulW4NNEu6t+VDs1uppzMkmKXi/DdZNWGoNEE7/9il2E0FJti+bPWlnFFH6H
-         MK6iMLw3DFsm7QAAQQuq+zPetUdLlFTPaoZwTdC8i+14HdkeacPcPeZujJo8r11Ky86j
-         BS+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:message-id:mime-version:subject:from
-         :to:cc;
-        bh=Bf+WO1TAsV2HZxGdXF8a8oAKOTovVn61Ori8bgHycsc=;
-        b=oohQuJ1TiBpf+kng8Ro7PKOJtM6FMuxD4KryoyBrsA9VLjWidiNsGj3xHIjabCIG6h
-         Go/MRTzfl/L2/3WKNHZmC6AG+uX+ZB9WogrEtFl1msHO2bQ42TUj9MnjsNreRqHgrVZ2
-         UfEclbY4SIwhLtvGPQsrkhQExVgkWLbNyZUV622Gc3P/qyUtrjT0CpYN/DE2gbjsdT6q
-         wuGu17jA4a5S30K0Yqw5MJjPxcFia8hq8zlMhCIGGfTBQ6SOvlEU/Dw5zq5e3+gZeUnj
-         BFzqFLdQYQE3vly5B+yCF1NDBnCQhEteDtiBykHG0csMGsyAyuO+q+R42vNDStQRmZSB
-         MElQ==
-X-Gm-Message-State: AOAM533UF99FOTYD1I5E691aQRHXT5vFhaLCc5O3sDDJVJJMXQSujVKP
-        X72J5/jU6rodjmP/vtg31RLKgi/5Mtk=
-X-Google-Smtp-Source: ABdhPJxKV1eLIaZx5zYK3F0yk/QMjnaWxTTTKapKlniF24tKJFdiXOYM4C5kFIDDEdnwPRjFWf2Rt82WWpA=
-Sender: "haoluo via sendgmr" <haoluo@haoluo.svl.corp.google.com>
-X-Received: from haoluo.svl.corp.google.com ([2620:15c:2cd:202:f693:9fff:fef4:e444])
- (user=haoluo job=sendgmr) by 2002:a62:1ace:0:b029:163:9dce:5496 with SMTP id
- a197-20020a621ace0000b02901639dce5496mr7589463pfa.72.1603750705921; Mon, 26
- Oct 2020 15:18:25 -0700 (PDT)
-Date:   Mon, 26 Oct 2020 15:18:22 -0700
-Message-Id: <20201026221822.29021-1-haoluo@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.29.0.rc1.297.gfa9743e501-goog
-Subject: [PATCH] btf_encoder: Check var type after checking var addr.
-From:   Hao Luo <haoluo@google.com>
-To:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
-Cc:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Jiri Olsa <jolsa@kernel.org>, dwarves@vger.kernel.org,
-        Hao Luo <haoluo@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        Mon, 26 Oct 2020 18:36:30 -0400
+Received: from us-smtp-delivery-44.mimecast.com ([205.139.111.44]:49525 "EHLO
+        us-smtp-delivery-44.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2394534AbgJZWga (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Mon, 26 Oct 2020 18:36:30 -0400
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-162-QSUjQuWVNhqXOqaRy69d0g-1; Mon, 26 Oct 2020 18:36:25 -0400
+X-MC-Unique: QSUjQuWVNhqXOqaRy69d0g-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id CBE988049D7;
+        Mon, 26 Oct 2020 22:36:23 +0000 (UTC)
+Received: from krava.redhat.com (unknown [10.40.192.65])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 33F926EF50;
+        Mon, 26 Oct 2020 22:36:18 +0000 (UTC)
+From:   Jiri Olsa <jolsa@kernel.org>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     dwarves@vger.kernel.org, bpf@vger.kernel.org,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andriin@fb.com>, Yonghong Song <yhs@fb.com>,
+        Hao Luo <haoluo@google.com>,
+        "Frank Ch. Eigler" <fche@redhat.com>,
+        Mark Wielaard <mjw@redhat.com>
+Subject: [RFC 0/3] pahole: Workaround dwarf bug for function encoding
+Date:   Mon, 26 Oct 2020 23:36:14 +0100
+Message-Id: <20201026223617.2868431-1-jolsa@kernel.org>
+MIME-Version: 1.0
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=jolsa@kernel.org
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: kernel.org
+Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=WINDOWS-1252
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-Commit 2e719cc ("btf_encoder: revamp how per-CPU variables are
-encoded") adds percpu_var_exists() to filter out the symbols that
-are not percpu var. However, the check comes after checking the
-var's type. There can be symbols that are of zero type. If we hit
-that, btf_encoder will not work without '--btf_encode_force'.
-So we should check percpu_var_exists before checking var's type.
+hi,
+because of gcc bug [1] we can no longer rely on DW_AT_declaration
+attribute to filter out declarations and end up with just
+one copy of the function in the BTF data.
 
-Tested:
- haoluo@haoluo:~/kernel/tip$ gcc --version
- gcc (GCC) 10.2.0
- Copyright (C) 2020 Free Software Foundation, Inc.
- This is free software; see the source for copying conditions.  There is NO
- warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+It seems this bug is not easy to fix, but regardless if the
+it's coming soon, it's probably good idea not to depend so
+much only on dwarf data and make some extra checks.
 
- Before:
+Thus for function encoding we are now doing following checks:
+  - argument names are defined for the function
+  - there's symbol and address defined for the function
+  - function is generated only once
 
- haoluo@haoluo:~/kernel/tip$ make clean -s
- haoluo@haoluo:~/kernel/tip$ make -j 32 -s
-   LINK     resolve_btfids
- error: found variable in CU 'kernel/bpf/btf.c' that has void type
- Encountered error while encoding BTF.
- FAILED: load BTF from vmlinux: Unknown error -2make: *** [Makefile:1164: vmlinux] Error 255
+These checks ensure that we encode function with defined
+symbol/address and argument names.
 
- After:
+I marked this post as RFC, because with this workaround in
+place we are also encoding assembly functions, which were
+not present when using the previous gcc version.
 
- haoluo@haoluo:~/kernel/tip$ make clean -s
- haoluo@haoluo:~/kernel/tip$ make -j 32 -s
-   LINK     resolve_btfids
- haoluo@haoluo:~/kernel/tip$
+Full functions diff to previous gcc working version:
 
-Fixes: 2e719cc ("btf_encoder: revamp how per-CPU variables are encoded")
-Signed-off-by: Hao Luo <haoluo@google.com>
+  http://people.redhat.com/~jolsa/functions.diff.txt
+
+I'm not sure this does not break some rule for functions in
+BTF data, becuse those assembly functions are not attachable
+by bpf trampolines, so I don't think there's any use for them.
+
+thoughts?
+jirka
+
+
+[1] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=97060
 ---
- btf_encoder.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+Jiri Olsa (3):
+      btf_encoder: Move find_all_percpu_vars in generic config function
+      btf_encoder: Change functions check due to broken dwarf
+      btf_encoder: Include static functions to BTF data
 
-diff --git a/btf_encoder.c b/btf_encoder.c
-index 2a6455b..b5f8f3e 100644
---- a/btf_encoder.c
-+++ b/btf_encoder.c
-@@ -441,9 +441,12 @@ int cu__encode_btf(struct cu *cu, int verbose, bool force,
- 		if (var->spec)
- 			var = var->spec;
- 
-+		if (!percpu_var_exists(addr, &size, &name))
-+			continue; /* not a per-CPU variable */
-+
- 		if (var->ip.tag.type == 0) {
--			fprintf(stderr, "error: found variable in CU '%s' that has void type\n",
--				cu->name);
-+			fprintf(stderr, "error: found variable '%s' in CU '%s' that has void type\n",
-+				name, cu->name);
- 			if (force)
- 				continue;
- 			err = -1;
-@@ -452,8 +455,6 @@ int cu__encode_btf(struct cu *cu, int verbose, bool force,
- 
- 		type = var->ip.tag.type + type_id_off;
- 		linkage = var->external ? BTF_VAR_GLOBAL_ALLOCATED : BTF_VAR_STATIC;
--		if (!percpu_var_exists(addr, &size, &name))
--			continue; /* not a per-CPU variable */
- 
- 		if (btf_elf__verbose) {
- 			printf("Variable '%s' from CU '%s' at address 0x%lx encoded\n",
--- 
-2.29.0.rc1.297.gfa9743e501-goog
+ btf_encoder.c | 221 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-------------------------------------
+ elf_symtab.h  |   8 +++++
+ 2 files changed, 170 insertions(+), 59 deletions(-)
 
