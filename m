@@ -2,96 +2,76 @@ Return-Path: <SRS0=a5OZ=EB=vger.kernel.org=dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-9.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F247DC4363A
-	for <linux-dwarves@archiver.kernel.org>; Mon, 26 Oct 2020 19:49:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 48199C4363A
+	for <linux-dwarves@archiver.kernel.org>; Mon, 26 Oct 2020 19:58:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9C6552076D
-	for <linux-dwarves@archiver.kernel.org>; Mon, 26 Oct 2020 19:49:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E98E1207F7
+	for <linux-dwarves@archiver.kernel.org>; Mon, 26 Oct 2020 19:58:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1603741752;
-	bh=Qh5soC1V3owSlTc6YVtG9RvxHWuFoHm3MmPqENWI3Js=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
-	b=VqI6qIVuA1qgx8tswuCJmrUoxxEYGV+cjWByvbVvc3gk46cOnKVTuuJqJfUZ1IfrG
-	 /yxBydpbo/dH5EXcNOZDViFT4rXEq1scnoSUFMmTuzH0FvF1GDy6ijRhH26PK7JFgj
-	 vGeNCtf9EVPu9WEu7DpQUv842M/rS7f5isFcWc+U=
+	s=default; t=1603742314;
+	bh=G1c/GHL7ZmHdF2Og/fIW0LcbCQmVoyx4HU9WroQTTsI=;
+	h=Date:From:To:Cc:Subject:List-ID:From;
+	b=qbC9kXvrd09k9o+W6Q6NF085CaqEaMpkoAngpOSdwjWPF1MrmAWb2Sgw5L7m6ears
+	 3jV6hoEy6+kkcGClO7+y3Ja37RwlnUfyIXGVkjIaH5TLcjtDQl9lY0UYOn9rdprA5X
+	 4rz2IyViQ5le8U/Djiacuua60UKNuu7zWq3bALfk=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728136AbgJZTtM (ORCPT
+        id S1728761AbgJZT6d (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Mon, 26 Oct 2020 15:49:12 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46372 "EHLO mail.kernel.org"
+        Mon, 26 Oct 2020 15:58:33 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50364 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727198AbgJZTtM (ORCPT <rfc822;dwarves@vger.kernel.org>);
-        Mon, 26 Oct 2020 15:49:12 -0400
+        id S1728205AbgJZT6d (ORCPT <rfc822;dwarves@vger.kernel.org>);
+        Mon, 26 Oct 2020 15:58:33 -0400
 Received: from quaco.ghostprotocols.net (unknown [179.97.37.151])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 859D32076D;
-        Mon, 26 Oct 2020 19:49:11 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 49EEB20795;
+        Mon, 26 Oct 2020 19:58:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1603741751;
-        bh=Qh5soC1V3owSlTc6YVtG9RvxHWuFoHm3MmPqENWI3Js=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XV+64Y75fZiwFQLzFeMET5061dMTe14jwB87aiAINOIl69KBQe0d4PgtyEtuODp3T
-         UnQJoN14PcreBABmB28aDPbpfIn7ZALY9KP9obYKokjHv7XNvMDCCzD8BMEK/yEijw
-         FLZIhdks5bZlgYLFiz1/aMpJi/4lkSp9XeNe0Dyc=
+        s=default; t=1603742312;
+        bh=G1c/GHL7ZmHdF2Og/fIW0LcbCQmVoyx4HU9WroQTTsI=;
+        h=Date:From:To:Cc:Subject:From;
+        b=ID59FThQR/pLcMIQ7KZ6F+2ZCm9P25wENBwluQBpyc5wNmPr8jbYjRMcSy1xRqkQY
+         mTjLL+1TFXq4z8DX7vS+JsE8mppZjoAvM7a8DLpzl0SBoSZU1bhekCqViUpU5T44y4
+         I0ee2FO/hlxnBowOQAjKcBHsaKfxm60BVlev3mUs=
 Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id E1679403C2; Mon, 26 Oct 2020 16:49:08 -0300 (-03)
-Date:   Mon, 26 Oct 2020 16:49:08 -0300
+        id 4D9D0403C2; Mon, 26 Oct 2020 16:58:30 -0300 (-03)
+Date:   Mon, 26 Oct 2020 16:58:30 -0300
 From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Andrii Nakryiko <andrii@kernel.org>
-Cc:     dwarves@vger.kernel.org
-Subject: Re: [PATCH dwarves] cmake: make libbpf's Linux UAPI headers
- available to all binaries
-Message-ID: <20201026194908.GC2449445@kernel.org>
-References: <20201024183653.891042-1-andrii@kernel.org>
+To:     Andrii Nakryiko <andrii@kernel.org>, Hao Luo <haoluo@google.com>
+Cc:     dwarves@vger.kernel.org, Jiri Olsa <jolsa@kernel.org>
+Subject: [PATCH dwarves] cmake: make libbpf's Linux UAPI headers
+Message-ID: <20201026195830.GD2449445@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201024183653.891042-1-andrii@kernel.org>
 X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-Em Sat, Oct 24, 2020 at 11:36:53AM -0700, Andrii Nakryiko escreveu:
-> Now that libbpf is used to implement deduplicated strings container, all of
-> the binaries will need linux/btf.h header to compile properly. libbpf is
-> distributed with its own copies of Linux UAPI headers, so use them during
-> compilation.
+Hi guys,
 
-Thanks, applied.
+	I just stumbled on this, investigating... This is with what is
+in the tmp branch at
+git://git.kernel.org/pub/scm/devel/pahole/pahole.git.
 
-- Arnaldo
- 
-> Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
-> ---
->  CMakeLists.txt | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/CMakeLists.txt b/CMakeLists.txt
-> index 8e9fe4710a0c..84693514e0c8 100644
-> --- a/CMakeLists.txt
-> +++ b/CMakeLists.txt
-> @@ -2,7 +2,9 @@ project(pahole C)
->  cmake_minimum_required(VERSION 2.8.8)
->  cmake_policy(SET CMP0005 NEW)
->  
-> -INCLUDE_DIRECTORIES( ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR} )
-> +INCLUDE_DIRECTORIES(${CMAKE_CURRENT_BINARY_DIR}
-> +		    ${CMAKE_CURRENT_SOURCE_DIR}
-> +		    ${CMAKE_CURRENT_SOURCE_DIR}/lib/bpf/include/uapi)
->  
->  # Try to parse this later, Helio just showed me a KDE4 example to support
->  # x86-64 builds.
-> -- 
-> 2.24.1
-> 
-
--- 
+error: found variable in CU '/home/acme/git/linux/security/selinux/hooks.c' that has void type
+Encountered error while encoding BTF.
+  LD      .tmp_vmlinux.kallsyms1
+  KSYMS   .tmp_vmlinux.kallsyms1.S
+  AS      .tmp_vmlinux.kallsyms1.S
+  LD      .tmp_vmlinux.kallsyms2
+  KSYMS   .tmp_vmlinux.kallsyms2.S
+  AS      .tmp_vmlinux.kallsyms2.S
+  LD      vmlinux
+  BTFIDS  vmlinux
+FAILED: load BTF from vmlinux: Unknown error -2make[1]: *** [/home/acme/git/linux/Makefile:1164: vmlinux] Error 255
+make[1]: Leaving directory '/home/acme/git/build/v5.10.0-rc1+'
+make: *** [Makefile:185: __sub-make] Error 2
 
 - Arnaldo
