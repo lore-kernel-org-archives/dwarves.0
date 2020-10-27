@@ -1,106 +1,135 @@
-Return-Path: <SRS0=Qbgy=EC=vger.kernel.org=dwarves-owner@kernel.org>
+Return-Path: <SRS0=S57e=ED=vger.kernel.org=dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-17.4 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1F529C4363A
-	for <linux-dwarves@archiver.kernel.org>; Tue, 27 Oct 2020 18:03:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3EAD5C55178
+	for <linux-dwarves@archiver.kernel.org>; Wed, 28 Oct 2020 01:48:43 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B7F5F2076D
-	for <linux-dwarves@archiver.kernel.org>; Tue, 27 Oct 2020 18:03:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EF72722202
+	for <linux-dwarves@archiver.kernel.org>; Wed, 28 Oct 2020 01:48:42 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hz8XSB02"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="wOFqmJWQ"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1757453AbgJ0SDJ (ORCPT
+        id S1725896AbgJ1BiV (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Tue, 27 Oct 2020 14:03:09 -0400
-Received: from mail-yb1-f196.google.com ([209.85.219.196]:38103 "EHLO
-        mail-yb1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1824120AbgJ0SDI (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Tue, 27 Oct 2020 14:03:08 -0400
-Received: by mail-yb1-f196.google.com with SMTP id b138so2012820yba.5
-        for <dwarves@vger.kernel.org>; Tue, 27 Oct 2020 11:03:07 -0700 (PDT)
+        Tue, 27 Oct 2020 21:38:21 -0400
+Received: from mail-ed1-f65.google.com ([209.85.208.65]:35516 "EHLO
+        mail-ed1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1833062AbgJ0XzC (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Tue, 27 Oct 2020 19:55:02 -0400
+Received: by mail-ed1-f65.google.com with SMTP id w25so3286867edx.2
+        for <dwarves@vger.kernel.org>; Tue, 27 Oct 2020 16:55:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
+        d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=Cx0zbXitiTb0zVU1e4NiG6RDKCEduJ8kQe2d3Z9/Nyg=;
-        b=hz8XSB02QG2jXmjtV+NtKCg1TVv16TbDn5bA6Ee3FoLFdQej2p29mvgolfxX9rnkg+
-         A1WrP9P0MuektpWnpnetM7v808C0A1i5L86qJEAtp8vB2HD8RdJ/5pKcaF+5nELymW3M
-         IdjuLuvmoNPE7i6UWcit+ghVBez5f/2zYwqkH6Dz8bv4+Xa//lW9nc3jCAjYm8pdk8TD
-         Jw2DxbcO1WnIzomOYQ0gNJAr51zHN52YMcPFuVO1z+UJQhiSayNnD3Qq2P/dlPyw2RNe
-         YLxD0W+kifynlmFuL9AwU5dVM1R2mvIIX2CdOi/H0rgEPU+cSdImv1B51FIU6YPRGRMX
-         nLHA==
+        bh=KltW5WB7nh9FObbMtAxJQyGKMUmzgBf2jMpmw0XbnqA=;
+        b=wOFqmJWQKCHXYXtesyDb2GRVCsde5sIaS6tCQxPY0hkqe7wvf95wmM/WdkfKOwTX6L
+         ldhdtlxJjsKasB3nt/LcLTPi1FAUPZlMkAMejBWZVY13mnKfkeBAXaKaFnUA+XGVYZ+u
+         4TUWKyfRXM4t7C4q/JrA7rxhaFYKqEah5dCPmuqeIUN15oEcipcEUD49yLsZPHHSKCq1
+         rVPcffanWjK0iP1C0wntSlJjxgG8Urjx2RdKvLQm2/dGgTwOYkYmrxOmGM7OGFUo+ydK
+         k6M/6JFSDWrDsgfYH5MBSOHsKs9bAZIOM5sv7i9rGNVFvAMr94IRU9SgJT73cr9QfIyp
+         gp3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=Cx0zbXitiTb0zVU1e4NiG6RDKCEduJ8kQe2d3Z9/Nyg=;
-        b=Z+6UHtjfdFTEOnkPQjgbqu0AyGuC5Suj2GydW37VCIWcUCOYhqUTDDwfQFYyJ0/aVo
-         35tniNpEny6oAIvhGgrHgZrA6ahfcmP0Wa0lZC2UvgksfOEBh5oFE9hHmQamVoApnl7z
-         lFQ8nIuR7w1/jc4AoVhATtetESmsB4dry5woRP1rvMP6hcogNrz7trYV4MSS0SxxiHAN
-         M0fB1n/c0xm2s6/OzJtXouoOE9DIIS6/qXcFYlCY+RlBgJmePfkod4WXrQASghjRP28/
-         2Pm+uLAIfMGuMhJvChSIdq6WWUdN3w40yGWDGumwDJiW9xqaltUbZTxdDVRUIWG5AQfN
-         clEg==
-X-Gm-Message-State: AOAM533HaeLjEZDB31Mes+9jEsE/IKAzJ+PfbaJYNb/8MBHZ/wIzy4NW
-        TmU5QMMuTuo9DBhc76f41233bKm2hk+xX0o8faM=
-X-Google-Smtp-Source: ABdhPJwIX7qBEvtjY4DpfanuiRy4lftDCxb4L05oMppBZoikUboDnUuKO8VcC3/mIgFdz6viN82x8xn08ofyYuXbaHA=
-X-Received: by 2002:a25:b0d:: with SMTP id 13mr5203304ybl.347.1603821787114;
- Tue, 27 Oct 2020 11:03:07 -0700 (PDT)
+        bh=KltW5WB7nh9FObbMtAxJQyGKMUmzgBf2jMpmw0XbnqA=;
+        b=A++4qHlENuR2Mi4SsZlDlrlcBVJWEVnSTy+jHBDuDeS0UEEKCxqLxesfRX0WaQBu/5
+         ORfUWkC3H1KrM6qYOLDP667HI9cQpH9RcT5NuZ0O5a2x4iFB3BH+MOBvligsBEmonG+V
+         lrv/Ia3fxQUDzsbeLmvEs3g6ZVUlSSGCRSUJ1pHDLny9CyrW8Lmxhm6bH43NkPmos/Aw
+         s0wKQxAG3d0zzAlJsYs8XRdK8qUFMsovExhRgx8CDYuN9Vq0qq8DVeQ3Qbbqn50ChyEd
+         4g4QW03a4qPVlkv/2zosIvIJciw/4LtRlei4HEewSwJvXGoTgUWDtwtiKl3zrkT+8fkS
+         I39A==
+X-Gm-Message-State: AOAM53304X3xv8gZ8zRVH9Pi1G4NAOOrHjzBsmDjqs0SlN1NEem0jsZu
+        Tu0sUt7O19DElI2HcUJ5k2IrRqb9iC5sJhop56CPG5HvE4A=
+X-Google-Smtp-Source: ABdhPJxcK6X5g6DskaxzCUWkXWbt0gzFPeJD/e4ZpL4bZzpV5QJmaXtQt+UlTDMbM5AxxWsViaU8yLjULq+7hHa1Ek4=
+X-Received: by 2002:a50:eb8e:: with SMTP id y14mr5055957edr.285.1603842900302;
+ Tue, 27 Oct 2020 16:55:00 -0700 (PDT)
 MIME-Version: 1.0
-References: <20201024183653.891042-1-andrii@kernel.org> <20201026194908.GC2449445@kernel.org>
- <CAEf4BzZ7TwoFJRq0uNs+w5bdXKPoswJzzfcaOn9FNNfTt1Ai7A@mail.gmail.com>
- <20201027112050.GI2449445@kernel.org> <20201027122201.GA2479604@kernel.org>
-In-Reply-To: <20201027122201.GA2479604@kernel.org>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Tue, 27 Oct 2020 11:02:56 -0700
-Message-ID: <CAEf4BzYJi7E2Yr_Ru69-iHd16w9eiBTtUtZfNKd4sFgusTk7tQ@mail.gmail.com>
-Subject: Re: [PATCH dwarves] cmake: make libbpf's Linux UAPI headers available
- to all binaries
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Andrii Nakryiko <andrii@kernel.org>, dwarves@vger.kernel.org,
-        Alexei Starovoitov <ast@kernel.org>
+References: <20201026223617.2868431-1-jolsa@kernel.org> <20201026223617.2868431-2-jolsa@kernel.org>
+ <CAEf4Bzan6=Jjfez17=S55Zu9EQTF_J2dg2DST4v+CfENm8cbUQ@mail.gmail.com>
+In-Reply-To: <CAEf4Bzan6=Jjfez17=S55Zu9EQTF_J2dg2DST4v+CfENm8cbUQ@mail.gmail.com>
+From:   Hao Luo <haoluo@google.com>
+Date:   Tue, 27 Oct 2020 16:54:49 -0700
+Message-ID: <CA+khW7hriWpy9-V9WgdMEv_5814_bzxrZ6we8=525ecanXUjSg@mail.gmail.com>
+Subject: Re: [PATCH 1/3] btf_encoder: Move find_all_percpu_vars in generic
+ config function
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Jiri Olsa <jolsa@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        dwarves@vger.kernel.org, bpf <bpf@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andriin@fb.com>, Yonghong Song <yhs@fb.com>,
+        "Frank Ch. Eigler" <fche@redhat.com>,
+        Mark Wielaard <mjw@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-On Tue, Oct 27, 2020 at 5:22 AM Arnaldo Carvalho de Melo
-<acme@kernel.org> wrote:
+Agree with Andrii. The function name 'config' is too generic and
+'config_per_var' is confusing to me. But the rest looked good. Thanks
+for taking a look at this.
+
+Hao
+
+
+On Tue, Oct 27, 2020 at 4:12 PM Andrii Nakryiko
+<andrii.nakryiko@gmail.com> wrote:
 >
-> Em Tue, Oct 27, 2020 at 08:20:50AM -0300, Arnaldo Carvalho de Melo escreveu:
-> > Em Mon, Oct 26, 2020 at 04:26:22PM -0700, Andrii Nakryiko escreveu:
-> > > On Mon, Oct 26, 2020 at 12:49 PM Arnaldo Carvalho de Melo
-> > > <acme@kernel.org> wrote:
-> > > >
-> > > > Em Sat, Oct 24, 2020 at 11:36:53AM -0700, Andrii Nakryiko escreveu:
-> > > > > Now that libbpf is used to implement deduplicated strings container, all of
-> > > > > the binaries will need linux/btf.h header to compile properly. libbpf is
-> > > > > distributed with its own copies of Linux UAPI headers, so use them during
-> > > > > compilation.
-> > > >
-> > > > Thanks, applied.
-> > > >
-> > >
-> > > Still don't see it at
-> > > https://git.kernel.org/pub/scm/devel/pahole/pahole.git/, did you
-> > > forget to push? This is breaking libbpf and kernel CIs at the moment
-> > > :(
+> On Mon, Oct 26, 2020 at 5:07 PM Jiri Olsa <jolsa@kernel.org> wrote:
 > >
-> > That got delayed due to that 'void variable found' bug that Hao fixed, I
-> > just tested built a kernel with it, rebooting with it, some more testing
-> > and it'll go to the public repo,
+> > Moving find_all_percpu_vars under generic onfig function
+> > that walks over symbols and calls config_percpu_var.
+> >
+> > We will add another config function that needs to go
+> > through all the symbols, so it's better they go through
+> > them just once.
+> >
+> > There's no functional change intended.
+> >
+> > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+> > ---
+> >  btf_encoder.c | 126 ++++++++++++++++++++++++++------------------------
+> >  1 file changed, 66 insertions(+), 60 deletions(-)
+> >
+> > diff --git a/btf_encoder.c b/btf_encoder.c
+> > index 2a6455be4c52..2dd26c904039 100644
+> > --- a/btf_encoder.c
+> > +++ b/btf_encoder.c
+> > @@ -250,7 +250,64 @@ static bool percpu_var_exists(uint64_t addr, uint32_t *sz, const char **name)
+> >         return true;
+> >  }
+> >
+> > -static int find_all_percpu_vars(struct btf_elf *btfe)
+> > +static int config_percpu_var(struct btf_elf *btfe, GElf_Sym *sym)
 >
-> Rebooted, tested usage of /sys/kernel/btf/vmlinux, pushed to the main
-> git.kernel.org and to the mirror at github.
+> I find the "config" name completely misleading. How about
+> "collect_percpu_var" or something along those lines?
 >
-> Thanks, please let me know if now everything is ok with the kernel CIs.
-
-Thanks, Arnaldo! All good now.
-
+> > +{
+> > +       const char *sym_name;
+> > +       uint64_t addr;
+> > +       uint32_t size;
+> > +
 >
-> - Arnaldo
+> [...]
+>
+> > +}
+> > +
+> > +static int config(struct btf_elf *btfe, bool do_percpu_vars)
+>
+> same here, config is generic and misrepresenting what we are doing
+> here. E.g., collect_symbols would probably be more clear.
+>
+> >  {
+> >         uint32_t core_id;
+> >         GElf_Sym sym;
+>
+> [...]
