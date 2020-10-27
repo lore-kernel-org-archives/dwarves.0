@@ -2,70 +2,68 @@ Return-Path: <SRS0=S57e=ED=vger.kernel.org=dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.4 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3EAD5C55178
-	for <linux-dwarves@archiver.kernel.org>; Wed, 28 Oct 2020 01:48:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 28CBFC55178
+	for <linux-dwarves@archiver.kernel.org>; Wed, 28 Oct 2020 01:48:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EF72722202
-	for <linux-dwarves@archiver.kernel.org>; Wed, 28 Oct 2020 01:48:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CD9A622202
+	for <linux-dwarves@archiver.kernel.org>; Wed, 28 Oct 2020 01:48:46 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="wOFqmJWQ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ufANqGIW"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725896AbgJ1BiV (ORCPT
+        id S1725550AbgJ1BiU (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Tue, 27 Oct 2020 21:38:21 -0400
-Received: from mail-ed1-f65.google.com ([209.85.208.65]:35516 "EHLO
-        mail-ed1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1833062AbgJ0XzC (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Tue, 27 Oct 2020 19:55:02 -0400
-Received: by mail-ed1-f65.google.com with SMTP id w25so3286867edx.2
-        for <dwarves@vger.kernel.org>; Tue, 27 Oct 2020 16:55:01 -0700 (PDT)
+        Tue, 27 Oct 2020 21:38:20 -0400
+Received: from mail-yb1-f195.google.com ([209.85.219.195]:42886 "EHLO
+        mail-yb1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1832997AbgJ0XV0 (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Tue, 27 Oct 2020 19:21:26 -0400
+Received: by mail-yb1-f195.google.com with SMTP id a12so2685539ybg.9;
+        Tue, 27 Oct 2020 16:21:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
+        d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=KltW5WB7nh9FObbMtAxJQyGKMUmzgBf2jMpmw0XbnqA=;
-        b=wOFqmJWQKCHXYXtesyDb2GRVCsde5sIaS6tCQxPY0hkqe7wvf95wmM/WdkfKOwTX6L
-         ldhdtlxJjsKasB3nt/LcLTPi1FAUPZlMkAMejBWZVY13mnKfkeBAXaKaFnUA+XGVYZ+u
-         4TUWKyfRXM4t7C4q/JrA7rxhaFYKqEah5dCPmuqeIUN15oEcipcEUD49yLsZPHHSKCq1
-         rVPcffanWjK0iP1C0wntSlJjxgG8Urjx2RdKvLQm2/dGgTwOYkYmrxOmGM7OGFUo+ydK
-         k6M/6JFSDWrDsgfYH5MBSOHsKs9bAZIOM5sv7i9rGNVFvAMr94IRU9SgJT73cr9QfIyp
-         gp3Q==
+        bh=oxvGSPSSphSIY4oZ8UoU8OfzDn8W0Y+8aAkQkd7/l4I=;
+        b=ufANqGIWs9zQlmtAA0WWpw78tzyVtPDWUcYHek5VwtiXQlk+rxR0PwVHnFUYBCavUO
+         N+KLpRl1BDlMjD0/+kN3OE3Tw9PuovvbaJsCLunaoxsqjQAJxAl7bsNlm4rYGUMhe7/r
+         18qOifg5Stum0RIytyMzbdZ4tKN7qE+xN/1dPhVULwGPkgbZO0RBn996hvyHGsTH0+xs
+         SYe7UF8/M2XAM0DUsZU+EErKpeL49qnAAAlG44GYhUOtqtpdJ3NPRyomepybz+hOpN+Q
+         N7gPxiRZ+BW5g3hu7eMfKt+ykAfNC7siHH2Vyq9SQPDi8ps7gugwck8R25WtVb01w2jP
+         HaAA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=KltW5WB7nh9FObbMtAxJQyGKMUmzgBf2jMpmw0XbnqA=;
-        b=A++4qHlENuR2Mi4SsZlDlrlcBVJWEVnSTy+jHBDuDeS0UEEKCxqLxesfRX0WaQBu/5
-         ORfUWkC3H1KrM6qYOLDP667HI9cQpH9RcT5NuZ0O5a2x4iFB3BH+MOBvligsBEmonG+V
-         lrv/Ia3fxQUDzsbeLmvEs3g6ZVUlSSGCRSUJ1pHDLny9CyrW8Lmxhm6bH43NkPmos/Aw
-         s0wKQxAG3d0zzAlJsYs8XRdK8qUFMsovExhRgx8CDYuN9Vq0qq8DVeQ3Qbbqn50ChyEd
-         4g4QW03a4qPVlkv/2zosIvIJciw/4LtRlei4HEewSwJvXGoTgUWDtwtiKl3zrkT+8fkS
-         I39A==
-X-Gm-Message-State: AOAM53304X3xv8gZ8zRVH9Pi1G4NAOOrHjzBsmDjqs0SlN1NEem0jsZu
-        Tu0sUt7O19DElI2HcUJ5k2IrRqb9iC5sJhop56CPG5HvE4A=
-X-Google-Smtp-Source: ABdhPJxcK6X5g6DskaxzCUWkXWbt0gzFPeJD/e4ZpL4bZzpV5QJmaXtQt+UlTDMbM5AxxWsViaU8yLjULq+7hHa1Ek4=
-X-Received: by 2002:a50:eb8e:: with SMTP id y14mr5055957edr.285.1603842900302;
- Tue, 27 Oct 2020 16:55:00 -0700 (PDT)
+        bh=oxvGSPSSphSIY4oZ8UoU8OfzDn8W0Y+8aAkQkd7/l4I=;
+        b=Clzc2df5RGe4iF7DA/W3XEXCd6JDWkXZzmU2a/OLCfQVZ1D4ZF52N+CuyXcYJQzjhT
+         z3hpmGlbOLtHld1r+0dA2XL/iULqraJaJMeWKg+LH624JJ1aLKscO3rz5W0oZtJxgGc7
+         yi7qvwD7SA6lX+G3kbMHaRUj1WtOepKNLsSPjzX6jY1rnE0nHKusDH5kh0ErFpgS28f0
+         /X/CLmxNWHyVAra0Vpn0CBuukbtG0++PyzaYmXhI8TlAs0UV1TLOMOrQz0nuZoDmEEx7
+         gYGoDI8FNb+u7tlQx9RVzyjbv3s0DKAqfh0Sx64L6l3h+jHCiYhQTEgF5oIGl1YC/c27
+         QQBQ==
+X-Gm-Message-State: AOAM531ie/XcT5aTtePAw2aWVTFwW5wa8zicubmyR6XxZBX9pNFJ9nhD
+        PKKJ4x9+LI8V3q/jsu96rMoGKZxNKE4DlAQiB1M=
+X-Google-Smtp-Source: ABdhPJzxAus0jivdIfUAM9pDcHvGgr/Q+U8xN+KNBQDK56TBvUdNcDiSYpf+vBYMAaqOnRBPqkkB8gwkm/JI/EgEZRM=
+X-Received: by 2002:a25:cb10:: with SMTP id b16mr6873017ybg.459.1603840885595;
+ Tue, 27 Oct 2020 16:21:25 -0700 (PDT)
 MIME-Version: 1.0
-References: <20201026223617.2868431-1-jolsa@kernel.org> <20201026223617.2868431-2-jolsa@kernel.org>
- <CAEf4Bzan6=Jjfez17=S55Zu9EQTF_J2dg2DST4v+CfENm8cbUQ@mail.gmail.com>
-In-Reply-To: <CAEf4Bzan6=Jjfez17=S55Zu9EQTF_J2dg2DST4v+CfENm8cbUQ@mail.gmail.com>
-From:   Hao Luo <haoluo@google.com>
-Date:   Tue, 27 Oct 2020 16:54:49 -0700
-Message-ID: <CA+khW7hriWpy9-V9WgdMEv_5814_bzxrZ6we8=525ecanXUjSg@mail.gmail.com>
-Subject: Re: [PATCH 1/3] btf_encoder: Move find_all_percpu_vars in generic
- config function
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Jiri Olsa <jolsa@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
+References: <20201026223617.2868431-1-jolsa@kernel.org> <20201026223617.2868431-4-jolsa@kernel.org>
+In-Reply-To: <20201026223617.2868431-4-jolsa@kernel.org>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Tue, 27 Oct 2020 16:21:14 -0700
+Message-ID: <CAEf4BzYpntU_ikusuwYLn0eBqvmQLt-qaOqECkBODEeSfwnx6w@mail.gmail.com>
+Subject: Re: [PATCH 3/3] btf_encoder: Include static functions to BTF data
+To:     Jiri Olsa <jolsa@kernel.org>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
         dwarves@vger.kernel.org, bpf <bpf@vger.kernel.org>,
         Alexei Starovoitov <ast@kernel.org>,
         Andrii Nakryiko <andriin@fb.com>, Yonghong Song <yhs@fb.com>,
+        Hao Luo <haoluo@google.com>,
         "Frank Ch. Eigler" <fche@redhat.com>,
         Mark Wielaard <mjw@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
@@ -73,63 +71,40 @@ Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-Agree with Andrii. The function name 'config' is too generic and
-'config_per_var' is confusing to me. But the rest looked good. Thanks
-for taking a look at this.
+On Mon, Oct 26, 2020 at 5:07 PM Jiri Olsa <jolsa@kernel.org> wrote:
+>
+> Removing the condition to skip static functions.
+>
+> Getting extra 23k functions on my kernel .config:
+>
+>            nr     .BTF size (bytes)
+>   before:  23291  3342279
+>    after:  46606  4361045
 
-Hao
+almost exactly 2x... such coincidences make me nervous ;)
 
-
-On Tue, Oct 27, 2020 at 4:12 PM Andrii Nakryiko
-<andrii.nakryiko@gmail.com> wrote:
 >
-> On Mon, Oct 26, 2020 at 5:07 PM Jiri Olsa <jolsa@kernel.org> wrote:
-> >
-> > Moving find_all_percpu_vars under generic onfig function
-> > that walks over symbols and calls config_percpu_var.
-> >
-> > We will add another config function that needs to go
-> > through all the symbols, so it's better they go through
-> > them just once.
-> >
-> > There's no functional change intended.
-> >
-> > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
-> > ---
-> >  btf_encoder.c | 126 ++++++++++++++++++++++++++------------------------
-> >  1 file changed, 66 insertions(+), 60 deletions(-)
-> >
-> > diff --git a/btf_encoder.c b/btf_encoder.c
-> > index 2a6455be4c52..2dd26c904039 100644
-> > --- a/btf_encoder.c
-> > +++ b/btf_encoder.c
-> > @@ -250,7 +250,64 @@ static bool percpu_var_exists(uint64_t addr, uint32_t *sz, const char **name)
-> >         return true;
-> >  }
-> >
-> > -static int find_all_percpu_vars(struct btf_elf *btfe)
-> > +static int config_percpu_var(struct btf_elf *btfe, GElf_Sym *sym)
+> The BTF section size increased of about 1MB.
 >
-> I find the "config" name completely misleading. How about
-> "collect_percpu_var" or something along those lines?
+> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+> ---
+>  btf_encoder.c | 3 ---
+>  1 file changed, 3 deletions(-)
 >
-> > +{
-> > +       const char *sym_name;
-> > +       uint64_t addr;
-> > +       uint32_t size;
-> > +
+> diff --git a/btf_encoder.c b/btf_encoder.c
+> index 99b9abe36993..03a4bef11947 100644
+> --- a/btf_encoder.c
+> +++ b/btf_encoder.c
+> @@ -485,9 +485,6 @@ int cu__encode_btf(struct cu *cu, int verbose, bool force,
+>                 int btf_fnproto_id, btf_fn_id;
+>                 const char *name;
 >
-> [...]
+> -               if (!fn->external)
+> -                       continue;
+> -
+>                 /*
+>                  * We need to generate just single BTF instance for the
+>                  * function, while DWARF data contains multiple instances
+> --
+> 2.26.2
 >
-> > +}
-> > +
-> > +static int config(struct btf_elf *btfe, bool do_percpu_vars)
->
-> same here, config is generic and misrepresenting what we are doing
-> here. E.g., collect_symbols would probably be more clear.
->
-> >  {
-> >         uint32_t core_id;
-> >         GElf_Sym sym;
->
-> [...]
