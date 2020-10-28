@@ -2,48 +2,48 @@ Return-Path: <SRS0=S57e=ED=vger.kernel.org=dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-9.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
-	autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4CDD2C388F7
-	for <linux-dwarves@archiver.kernel.org>; Wed, 28 Oct 2020 21:51:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 60534C56201
+	for <linux-dwarves@archiver.kernel.org>; Wed, 28 Oct 2020 21:51:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id F16822064C
-	for <linux-dwarves@archiver.kernel.org>; Wed, 28 Oct 2020 21:51:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1064024724
+	for <linux-dwarves@archiver.kernel.org>; Wed, 28 Oct 2020 21:51:58 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="UDq7ZtYd"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ZnRjzZNq"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727787AbgJ1Vv1 (ORCPT
+        id S1728219AbgJ1Vv5 (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Wed, 28 Oct 2020 17:51:27 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:46146 "EHLO
+        Wed, 28 Oct 2020 17:51:57 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:39485 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727777AbgJ1VvW (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Wed, 28 Oct 2020 17:51:22 -0400
+        by vger.kernel.org with ESMTP id S1728236AbgJ1Vv4 (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Wed, 28 Oct 2020 17:51:56 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1603921880;
+        s=mimecast20190719; t=1603921915;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=kneR4tnwy4pTTLA25Zm/bUt3+Ry5M5dryQBZQKk/NwE=;
-        b=UDq7ZtYdaMjtft7Y84jBe/uuOXwITuhfoTgvniu0TY1PyGS3uLIP2l0GjAxMEhrK/IleuH
-        gtIV8PBzFUNaAAG+H0tRo1uYXsICWkCE1ZuWvX9oByeiBTBafAj4yMXRnO/ChgrKwdgv60
-        L/Exva/LYBL7PWRLDqD1FtQxY+O127Y=
+        bh=Oj76sDv+n8e5Ai31Y4ytmCC6PEC1KnQ4eDa60mSmAIs=;
+        b=ZnRjzZNqnP90yiZdVgeWuId8uUbhXRrZm02afediFLvCJQqQU/efIOA5Z+qMLgypN89Bzq
+        xHClJvtEXGitJUKtYPkXSVrCeain730N+nZAoMmGwijmEQTCMaLfOouaENWUOwdsN5VFep
+        3EAMJRS7B1rNxaCzXhyL5xynyNEhgys=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-255-OE3dl1aqOH-VWbEVVTG89g-1; Wed, 28 Oct 2020 11:49:34 -0400
-X-MC-Unique: OE3dl1aqOH-VWbEVVTG89g-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+ us-mta-74-CEFC6iBkMVyoSuMneV7YlQ-1; Wed, 28 Oct 2020 11:51:23 -0400
+X-MC-Unique: CEFC6iBkMVyoSuMneV7YlQ-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 57CD6760C1;
-        Wed, 28 Oct 2020 15:49:32 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id DB1DC936C93;
+        Wed, 28 Oct 2020 15:51:21 +0000 (UTC)
 Received: from krava (unknown [10.40.192.64])
-        by smtp.corp.redhat.com (Postfix) with SMTP id 61D0960C04;
-        Wed, 28 Oct 2020 15:49:26 +0000 (UTC)
-Date:   Wed, 28 Oct 2020 16:49:25 +0100
+        by smtp.corp.redhat.com (Postfix) with SMTP id 02CC45B4B6;
+        Wed, 28 Oct 2020 15:51:15 +0000 (UTC)
+Date:   Wed, 28 Oct 2020 16:51:14 +0100
 From:   Jiri Olsa <jolsa@redhat.com>
 To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
 Cc:     Jiri Olsa <jolsa@kernel.org>,
@@ -54,84 +54,79 @@ Cc:     Jiri Olsa <jolsa@kernel.org>,
         Hao Luo <haoluo@google.com>,
         "Frank Ch. Eigler" <fche@redhat.com>,
         Mark Wielaard <mjw@redhat.com>
-Subject: Re: [RFC 0/3] pahole: Workaround dwarf bug for function encoding
-Message-ID: <20201028154925.GO2900849@krava>
+Subject: Re: [PATCH 1/3] btf_encoder: Move find_all_percpu_vars in generic
+ config function
+Message-ID: <20201028155114.GQ2900849@krava>
 References: <20201026223617.2868431-1-jolsa@kernel.org>
- <CAEf4Bzav_WF3duq4JYmaPvyUXdREkXJMPAb+ASUxAxq_mqXd5Q@mail.gmail.com>
+ <20201026223617.2868431-2-jolsa@kernel.org>
+ <CAEf4Bzan6=Jjfez17=S55Zu9EQTF_J2dg2DST4v+CfENm8cbUQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAEf4Bzav_WF3duq4JYmaPvyUXdREkXJMPAb+ASUxAxq_mqXd5Q@mail.gmail.com>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
+In-Reply-To: <CAEf4Bzan6=Jjfez17=S55Zu9EQTF_J2dg2DST4v+CfENm8cbUQ@mail.gmail.com>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-On Tue, Oct 27, 2020 at 04:13:46PM -0700, Andrii Nakryiko wrote:
+On Tue, Oct 27, 2020 at 04:12:04PM -0700, Andrii Nakryiko wrote:
 > On Mon, Oct 26, 2020 at 5:07 PM Jiri Olsa <jolsa@kernel.org> wrote:
 > >
-> > hi,
-> > because of gcc bug [1] we can no longer rely on DW_AT_declaration
-> > attribute to filter out declarations and end up with just
-> > one copy of the function in the BTF data.
+> > Moving find_all_percpu_vars under generic onfig function
+> > that walks over symbols and calls config_percpu_var.
 > >
-> > It seems this bug is not easy to fix, but regardless if the
-> > it's coming soon, it's probably good idea not to depend so
-> > much only on dwarf data and make some extra checks.
+> > We will add another config function that needs to go
+> > through all the symbols, so it's better they go through
+> > them just once.
 > >
-> > Thus for function encoding we are now doing following checks:
-> >   - argument names are defined for the function
-> >   - there's symbol and address defined for the function
-> >   - function is generated only once
+> > There's no functional change intended.
 > >
-> > These checks ensure that we encode function with defined
-> > symbol/address and argument names.
+> > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+> > ---
+> >  btf_encoder.c | 126 ++++++++++++++++++++++++++------------------------
+> >  1 file changed, 66 insertions(+), 60 deletions(-)
 > >
-> > I marked this post as RFC, because with this workaround in
-> > place we are also encoding assembly functions, which were
-> > not present when using the previous gcc version.
+> > diff --git a/btf_encoder.c b/btf_encoder.c
+> > index 2a6455be4c52..2dd26c904039 100644
+> > --- a/btf_encoder.c
+> > +++ b/btf_encoder.c
+> > @@ -250,7 +250,64 @@ static bool percpu_var_exists(uint64_t addr, uint32_t *sz, const char **name)
+> >         return true;
+> >  }
 > >
-> > Full functions diff to previous gcc working version:
-> >
-> >   http://people.redhat.com/~jolsa/functions.diff.txt
-> >
-> > I'm not sure this does not break some rule for functions in
-> > BTF data, becuse those assembly functions are not attachable
-> > by bpf trampolines, so I don't think there's any use for them.
+> > -static int find_all_percpu_vars(struct btf_elf *btfe)
+> > +static int config_percpu_var(struct btf_elf *btfe, GElf_Sym *sym)
 > 
-> What will happen if we do try to attach to those assembly functions?
-> Will there be some corruption or crash, or will it just fail and
+> I find the "config" name completely misleading. How about
+> "collect_percpu_var" or something along those lines?
 
-the attach code checks for the __fentry__ nop,
-so it will fail probably with EBUSY
+ok
 
-> return error cleanly? What we actually want in BTF is all the
-> functions that are attachable through BPF trampoline, which is all the
-> functions that ftrace subsystem can attach to, right? So how does
-> ftrace system know what can or cannot be attached to?
+> 
+> > +{
+> > +       const char *sym_name;
+> > +       uint64_t addr;
+> > +       uint32_t size;
+> > +
+> 
+> [...]
+> 
+> > +}
+> > +
+> > +static int config(struct btf_elf *btfe, bool do_percpu_vars)
+> 
+> same here, config is generic and misrepresenting what we are doing
+> here. E.g., collect_symbols would probably be more clear.
 
-not sure, I think it records all the functions with
-__fentry__ calls, perhaps we could take these records
-as base for FUNCs, I'll check
+ook
 
 jirka
 
 > 
-> >
-> > thoughts?
-> > jirka
-> >
-> >
-> > [1] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=97060
-> > ---
-> > Jiri Olsa (3):
-> >       btf_encoder: Move find_all_percpu_vars in generic config function
-> >       btf_encoder: Change functions check due to broken dwarf
-> >       btf_encoder: Include static functions to BTF data
-> >
-> >  btf_encoder.c | 221 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-------------------------------------
-> >  elf_symtab.h  |   8 +++++
-> >  2 files changed, 170 insertions(+), 59 deletions(-)
-> >
+> >  {
+> >         uint32_t core_id;
+> >         GElf_Sym sym;
+> 
+> [...]
 > 
 
