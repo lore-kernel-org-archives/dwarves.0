@@ -1,116 +1,105 @@
-Return-Path: <SRS0=S57e=ED=vger.kernel.org=dwarves-owner@kernel.org>
+Return-Path: <SRS0=f645=EG=vger.kernel.org=dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 76B8CC4363A
-	for <linux-dwarves@archiver.kernel.org>; Wed, 28 Oct 2020 21:54:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 75991C388F9
+	for <linux-dwarves@archiver.kernel.org>; Sat, 31 Oct 2020 22:31:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1EDC2246CD
-	for <linux-dwarves@archiver.kernel.org>; Wed, 28 Oct 2020 21:54:33 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="EnD2awwO"
+	by mail.kernel.org (Postfix) with ESMTP id 2C1082076D
+	for <linux-dwarves@archiver.kernel.org>; Sat, 31 Oct 2020 22:31:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1604183507;
+	bh=khCQxsWMiG5DqjTOXt5+vHGfDAiy0nR7Qzth2Uv/6SA=;
+	h=From:To:Cc:Subject:Date:List-ID:From;
+	b=lzDHOBaW97rTbh4h1tLZrtYxpQn04rijuqcBJPOjo7EopFWd6XxFYMu8wtyENaP7A
+	 djZ0jS4Ojg6BcpGPyc/gDh20M48lzoVjTRJZaBtofLvI+1aAIkHDdBBLWNgFQOnyX8
+	 c7WUOwZwoImsWPOYqAZtWydiKt++fifiS8TPnibs=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728767AbgJ1Vyb (ORCPT
+        id S1725999AbgJaWbr convert rfc822-to-8bit (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Wed, 28 Oct 2020 17:54:31 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:55124 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728777AbgJ1Vya (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Wed, 28 Oct 2020 17:54:30 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1603922069;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=DQ4rNLRqwJzcOeRbgE9JyA2XHU9mU+L4iCdtxMXIb5g=;
-        b=EnD2awwO8l7V6xHbQqbcmawhkZrsJgrpR//4NuEfpAGrPcGBgobjpYfsOlWok5JKrtne9/
-        S9NAU1yyIGt1LF5bwvsdFrPuBTizgG8wnmKf2gJvAAQcq1vJrZj4qoece56NtmsiIiOAQM
-        GFUca9OujluXtPxaGeEK74Bru1wswZM=
+        Sat, 31 Oct 2020 18:31:47 -0400
+Received: from us-smtp-delivery-44.mimecast.com ([205.139.111.44]:40157 "EHLO
+        us-smtp-delivery-44.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725809AbgJaWbq (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Sat, 31 Oct 2020 18:31:46 -0400
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-596-0d2c_orvNyOsPHUQmsdPXQ-1; Wed, 28 Oct 2020 11:53:37 -0400
-X-MC-Unique: 0d2c_orvNyOsPHUQmsdPXQ-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+ us-mta-332-gMbSyiJCNFmTCj5WlHpgoA-1; Sat, 31 Oct 2020 18:31:40 -0400
+X-MC-Unique: gMbSyiJCNFmTCj5WlHpgoA-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 8285C879526;
-        Wed, 28 Oct 2020 15:53:35 +0000 (UTC)
-Received: from krava (unknown [10.40.192.64])
-        by smtp.corp.redhat.com (Postfix) with SMTP id 728AC62A0B;
-        Wed, 28 Oct 2020 15:53:29 +0000 (UTC)
-Date:   Wed, 28 Oct 2020 16:53:28 +0100
-From:   Jiri Olsa <jolsa@redhat.com>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Jiri Olsa <jolsa@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        dwarves@vger.kernel.org, bpf <bpf@vger.kernel.org>,
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 760DB1084D62;
+        Sat, 31 Oct 2020 22:31:38 +0000 (UTC)
+Received: from krava.redhat.com (unknown [10.40.192.83])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 2E16175261;
+        Sat, 31 Oct 2020 22:31:32 +0000 (UTC)
+From:   Jiri Olsa <jolsa@kernel.org>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     dwarves@vger.kernel.org, bpf@vger.kernel.org,
         Alexei Starovoitov <ast@kernel.org>,
         Andrii Nakryiko <andriin@fb.com>, Yonghong Song <yhs@fb.com>,
         Hao Luo <haoluo@google.com>,
         "Frank Ch. Eigler" <fche@redhat.com>,
         Mark Wielaard <mjw@redhat.com>
-Subject: Re: [PATCH 3/3] btf_encoder: Include static functions to BTF data
-Message-ID: <20201028155328.GR2900849@krava>
-References: <20201026223617.2868431-1-jolsa@kernel.org>
- <20201026223617.2868431-4-jolsa@kernel.org>
- <CAEf4BzYpntU_ikusuwYLn0eBqvmQLt-qaOqECkBODEeSfwnx6w@mail.gmail.com>
+Subject: [PATCHv2 0/2] pahole: Workaround dwarf bug for function encoding
+Date:   Sat, 31 Oct 2020 23:31:29 +0100
+Message-Id: <20201031223131.3398153-1-jolsa@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAEf4BzYpntU_ikusuwYLn0eBqvmQLt-qaOqECkBODEeSfwnx6w@mail.gmail.com>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=jolsa@kernel.org
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: kernel.org
+Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=WINDOWS-1252
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-On Tue, Oct 27, 2020 at 04:21:14PM -0700, Andrii Nakryiko wrote:
-> On Mon, Oct 26, 2020 at 5:07 PM Jiri Olsa <jolsa@kernel.org> wrote:
-> >
-> > Removing the condition to skip static functions.
-> >
-> > Getting extra 23k functions on my kernel .config:
-> >
-> >            nr     .BTF size (bytes)
-> >   before:  23291  3342279
-> >    after:  46606  4361045
-> 
-> almost exactly 2x... such coincidences make me nervous ;)
+hi,
+because of gcc bug [1] we can no longer rely on DW_AT_declaration
+attribute to filter out declarations and end up with just
+one copy of the function in the BTF data.
 
-hum, nice.. 'new' functions looked good, I'll make the
-full list to be sure
+It seems this bug is not easy to fix, but regardless if the
+it's coming soon, it's probably good idea not to depend so
+much only on dwarf data and make some extra checks.
 
+Thus for function encoding we are now doing following checks:
+  - argument names are defined for the function
+  - there's symbol and address defined for the function
+  - function address belongs to ftrace locations (new in v2)
+  - function is generated only once
+
+v2 changes:
+  - add check ensuring functions belong to ftrace's mcount
+    locations, this way we ensure to have in BTF only
+    functions available for ftrace - patch 2 changelog
+    describes all details
+  - use collect* function names [Andrii]
+  - use conventional size increase in realloc [Andrii]
+  - drop elf_sym__is_function check
+  - drop patch 3, it's not needed, because we follow ftrace
+    locations
+
+With v2 patchset I'm getting 38334 BTF functions, which is
+reasonable subset of ftrace's available_filter_functions.
+
+thanks,
 jirka
 
-> 
-> >
-> > The BTF section size increased of about 1MB.
-> >
-> > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
-> > ---
-> >  btf_encoder.c | 3 ---
-> >  1 file changed, 3 deletions(-)
-> >
-> > diff --git a/btf_encoder.c b/btf_encoder.c
-> > index 99b9abe36993..03a4bef11947 100644
-> > --- a/btf_encoder.c
-> > +++ b/btf_encoder.c
-> > @@ -485,9 +485,6 @@ int cu__encode_btf(struct cu *cu, int verbose, bool force,
-> >                 int btf_fnproto_id, btf_fn_id;
-> >                 const char *name;
-> >
-> > -               if (!fn->external)
-> > -                       continue;
-> > -
-> >                 /*
-> >                  * We need to generate just single BTF instance for the
-> >                  * function, while DWARF data contains multiple instances
-> > --
-> > 2.26.2
-> >
-> 
+
+[1] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=97060
+---
+Jiri Olsa (2):
+      btf_encoder: Move find_all_percpu_vars in generic collect_symbols
+      btf_encoder: Change functions check due to broken dwarf
+
+ btf_encoder.c | 338 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-----------------------
+ 1 file changed, 283 insertions(+), 55 deletions(-)
 
