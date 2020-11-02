@@ -2,251 +2,96 @@ Return-Path: <SRS0=UIow=EI=vger.kernel.org=dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.4 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+X-Spam-Status: No, score=-3.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0AA94C00A89
-	for <linux-dwarves@archiver.kernel.org>; Mon,  2 Nov 2020 18:29:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8E011C388F9
+	for <linux-dwarves@archiver.kernel.org>; Mon,  2 Nov 2020 21:59:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9036C2225E
-	for <linux-dwarves@archiver.kernel.org>; Mon,  2 Nov 2020 18:29:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2836C22275
+	for <linux-dwarves@archiver.kernel.org>; Mon,  2 Nov 2020 21:59:23 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="VWjnqBTI"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Xb0+RH/m"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726070AbgKBS3g (ORCPT
+        id S1726042AbgKBV7W (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Mon, 2 Nov 2020 13:29:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58490 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725831AbgKBS3g (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Mon, 2 Nov 2020 13:29:36 -0500
-Received: from mail-ed1-x544.google.com (mail-ed1-x544.google.com [IPv6:2a00:1450:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAD49C0617A6
-        for <dwarves@vger.kernel.org>; Mon,  2 Nov 2020 10:29:35 -0800 (PST)
-Received: by mail-ed1-x544.google.com with SMTP id e18so4188472edy.6
-        for <dwarves@vger.kernel.org>; Mon, 02 Nov 2020 10:29:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=OpMCV6DiwA90oIx03s3EMjuhB60pir+cNI+VltB5GH8=;
-        b=VWjnqBTIlGrpPuF2LFgbeKu/sj0wZiKz1w3US24Lq1tK5vaaRd0hO3CZShJkGigzd6
-         h2pIds/m16oOuFMiYOb8zOJYacIoR05iV43irQ81eVBcuGAnmTjJVzKvVtX6ATQl1f1I
-         kpKkEza3WeGI/EHY50TsiwqvPMU+aXxAUz+jwhGdNcMz3r1bZgPji311QHJhOxdI1CBW
-         3kbZPtACoxXXzvN9UWdRcJguAo8xoLf5GX+MieDpKhaBzCM4JBpKeKwDR4CBUzWjTg81
-         DoiT5Ept1roX1wKjcCyasINyrbdbtRaL6/runLOm9WAcVmzXjfQAZfA7sHBDGhfjDair
-         YXUQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=OpMCV6DiwA90oIx03s3EMjuhB60pir+cNI+VltB5GH8=;
-        b=R1RUhzHTgb19BPKS/JH5PJu4nzsWr/fxfHSCz4gTsoioy2Hmm2EwlUGF7RawS67NOa
-         WJoB0eUh9XQFGH2VsIClNsdSnUcUdMCJfZcbvq+7Se/Jo7gsFLnqKtQTa0BIy/zoJHJ+
-         /Qfy9yNOq3tVY03sFSKqu+DUa14PpNrxXOZMj28nrCaZi24E5K/3YXB4aDgj4vrtj695
-         dCEarFm2jsW79pcVmukLzJF8LKOm5Fo51VxarRqZ/tRwL/eAYnBYOHFa3YPVB4jz8wLc
-         0u3r4Vmt9hujT2IlnCH0g0qASDUYjw3NIpmPTStE3caMEzXiCAxX70bq/XK3FEDEwwIO
-         AnDA==
-X-Gm-Message-State: AOAM531eDLHsqiLLG0XAIBTHPoW+j9Pv0lrNP2AdkIMmxd8P4X0G+Azh
-        sU8Kb6C8ltDzDK70Gaqjy6CnfvT/gdEJo1Tn0GIiuQ==
-X-Google-Smtp-Source: ABdhPJxeMAsEsTOEEkH4GYmiXn1rIW4mdT597X8DL0FwXDSaY5ZRiEMF+yTIqat9/8JA+MGqOWEN6L2WR3AZNiEL9F4=
-X-Received: by 2002:aa7:dc12:: with SMTP id b18mr17898467edu.295.1604341774102;
- Mon, 02 Nov 2020 10:29:34 -0800 (PST)
-MIME-Version: 1.0
-References: <20201031223131.3398153-1-jolsa@kernel.org> <20201031223131.3398153-2-jolsa@kernel.org>
-In-Reply-To: <20201031223131.3398153-2-jolsa@kernel.org>
-From:   Hao Luo <haoluo@google.com>
-Date:   Mon, 2 Nov 2020 10:29:22 -0800
-Message-ID: <CA+khW7hRm4xwKKDjdoJkaQADfjANCzy9hpp-xL_T-Two3oNAfA@mail.gmail.com>
-Subject: Re: [PATCH 1/2] btf_encoder: Move find_all_percpu_vars in generic collect_symbols
+        Mon, 2 Nov 2020 16:59:22 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:54531 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725777AbgKBV7U (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Mon, 2 Nov 2020 16:59:20 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1604354359;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=e7KZ89OuP/usK31L4VTuh94nCFsWMsVQyhLdwv5Sf24=;
+        b=Xb0+RH/mS0AMOTi8kkjUClgPD/jLFmNy1HcBvXW2lqSTbduwUajAFKmraj4ywkaNrSCqFP
+        BIzc22q0XV1HqpEwAswHcetOemkkFKPdN0HiFQxwi/oH9PtKIQz5M/b6cXNJU0z/n+eG1H
+        Sv+o32FQcbbVvTyTOIDaU2EWoSx4ErQ=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-428-JCOMhlyPOIapgCiu4Q_VXg-1; Mon, 02 Nov 2020 16:59:16 -0500
+X-MC-Unique: JCOMhlyPOIapgCiu4Q_VXg-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 9806A6D242;
+        Mon,  2 Nov 2020 21:59:14 +0000 (UTC)
+Received: from krava (unknown [10.40.192.162])
+        by smtp.corp.redhat.com (Postfix) with SMTP id 22EB95B4D3;
+        Mon,  2 Nov 2020 21:59:08 +0000 (UTC)
+Date:   Mon, 2 Nov 2020 22:59:08 +0100
+From:   Jiri Olsa <jolsa@redhat.com>
 To:     Jiri Olsa <jolsa@kernel.org>
 Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        dwarves@vger.kernel.org, bpf <bpf@vger.kernel.org>,
+        dwarves@vger.kernel.org, bpf@vger.kernel.org,
         Alexei Starovoitov <ast@kernel.org>,
         Andrii Nakryiko <andriin@fb.com>, Yonghong Song <yhs@fb.com>,
+        Hao Luo <haoluo@google.com>,
         "Frank Ch. Eigler" <fche@redhat.com>,
         Mark Wielaard <mjw@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH 2/2] btf_encoder: Change functions check due to broken
+ dwarf
+Message-ID: <20201102215908.GC3597846@krava>
+References: <20201031223131.3398153-1-jolsa@kernel.org>
+ <20201031223131.3398153-3-jolsa@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201031223131.3398153-3-jolsa@kernel.org>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-This looks good to me. Thanks, Jiri.
+On Sat, Oct 31, 2020 at 11:31:31PM +0100, Jiri Olsa wrote:
+> We need to generate just single BTF instance for the
+> function, while DWARF data contains multiple instances
+> of DW_TAG_subprogram tag.
+> 
+> Unfortunately we can no longer rely on DW_AT_declaration
+> tag (https://gcc.gnu.org/bugzilla/show_bug.cgi?id=97060)
+> 
+> Instead we apply following checks:
+>   - argument names are defined for the function
+>   - there's symbol and address defined for the function
+>   - function is generated only once
+> 
+> Also because we want to follow kernel's ftrace traceable
+> functions, this patchset is adding extra check that the
+> function is one of the ftrace's functions.
+> 
+> All ftrace functions addresses are stored in vmlinux
+> binary within symbols:
+>   __start_mcount_loc
+>   __stop_mcount_loc
 
-Acked-by: Hao Luo <haoluo@google.com>
+hum, for some reason this does not pass through bpf internal
+functions like bpf_iter_bpf_map.. I learned it hard way ;-)
+will check
 
-On Sat, Oct 31, 2020 at 3:31 PM Jiri Olsa <jolsa@kernel.org> wrote:
->
-> Moving find_all_percpu_vars under generic collect_symbols
-> function that walks over symbols and calls collect_percpu_var.
->
-> We will add another collect function that needs to go through
-> all the symbols, so it's better we go through them just once.
->
-> There's no functional change intended.
->
-> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
-> ---
->  btf_encoder.c | 124 +++++++++++++++++++++++++++-----------------------
->  1 file changed, 67 insertions(+), 57 deletions(-)
->
-> diff --git a/btf_encoder.c b/btf_encoder.c
-> index 4c92908beab2..1866bb16a8ba 100644
-> --- a/btf_encoder.c
-> +++ b/btf_encoder.c
-> @@ -250,75 +250,85 @@ static bool percpu_var_exists(uint64_t addr, uint32_t *sz, const char **name)
->         return true;
->  }
->
-> -static int find_all_percpu_vars(struct btf_elf *btfe)
-> +static int collect_percpu_var(struct btf_elf *btfe, GElf_Sym *sym)
->  {
-> -       uint32_t core_id;
-> -       GElf_Sym sym;
-> +       const char *sym_name;
-> +       uint64_t addr;
-> +       uint32_t size;
->
-> -       /* cache variables' addresses, preparing for searching in symtab. */
-> -       percpu_var_cnt = 0;
-> +       /* compare a symbol's shndx to determine if it's a percpu variable */
-> +       if (elf_sym__section(sym) != btfe->percpu_shndx)
-> +               return 0;
-> +       if (elf_sym__type(sym) != STT_OBJECT)
-> +               return 0;
->
-> -       /* search within symtab for percpu variables */
-> -       elf_symtab__for_each_symbol(btfe->symtab, core_id, sym) {
-> -               const char *sym_name;
-> -               uint64_t addr;
-> -               uint32_t size;
-> +       addr = elf_sym__value(sym);
-> +       /*
-> +        * Store only those symbols that have allocated space in the percpu section.
-> +        * This excludes the following three types of symbols:
-> +        *
-> +        *  1. __ADDRESSABLE(sym), which are forcely emitted as symbols.
-> +        *  2. __UNIQUE_ID(prefix), which are introduced to generate unique ids.
-> +        *  3. __exitcall(fn), functions which are labeled as exit calls.
-> +        *
-> +        * In addition, the variables defined using DEFINE_PERCPU_FIRST are
-> +        * also not included, which currently includes:
-> +        *
-> +        *  1. fixed_percpu_data
-> +        */
-> +       if (!addr)
-> +               return 0;
->
-> -               /* compare a symbol's shndx to determine if it's a percpu variable */
-> -               if (elf_sym__section(&sym) != btfe->percpu_shndx)
-> -                       continue;
-> -               if (elf_sym__type(&sym) != STT_OBJECT)
-> -                       continue;
-> +       size = elf_sym__size(sym);
-> +       if (!size)
-> +               return 0; /* ignore zero-sized symbols */
->
-> -               addr = elf_sym__value(&sym);
-> -               /*
-> -                * Store only those symbols that have allocated space in the percpu section.
-> -                * This excludes the following three types of symbols:
-> -                *
-> -                *  1. __ADDRESSABLE(sym), which are forcely emitted as symbols.
-> -                *  2. __UNIQUE_ID(prefix), which are introduced to generate unique ids.
-> -                *  3. __exitcall(fn), functions which are labeled as exit calls.
-> -                *
-> -                * In addition, the variables defined using DEFINE_PERCPU_FIRST are
-> -                * also not included, which currently includes:
-> -                *
-> -                *  1. fixed_percpu_data
-> -                */
-> -               if (!addr)
-> -                       continue;
-> +       sym_name = elf_sym__name(sym, btfe->symtab);
-> +       if (!btf_name_valid(sym_name)) {
-> +               dump_invalid_symbol("Found symbol of invalid name when encoding btf",
-> +                                   sym_name, btf_elf__verbose, btf_elf__force);
-> +               if (btf_elf__force)
-> +                       return 0;
-> +               return -1;
-> +       }
->
-> -               size = elf_sym__size(&sym);
-> -               if (!size)
-> -                       continue; /* ignore zero-sized symbols */
-> +       if (btf_elf__verbose)
-> +               printf("Found per-CPU symbol '%s' at address 0x%lx\n", sym_name, addr);
->
-> -               sym_name = elf_sym__name(&sym, btfe->symtab);
-> -               if (!btf_name_valid(sym_name)) {
-> -                       dump_invalid_symbol("Found symbol of invalid name when encoding btf",
-> -                                           sym_name, btf_elf__verbose, btf_elf__force);
-> -                       if (btf_elf__force)
-> -                               continue;
-> -                       return -1;
-> -               }
-> +       if (percpu_var_cnt == MAX_PERCPU_VAR_CNT) {
-> +               fprintf(stderr, "Reached the limit of per-CPU variables: %d\n",
-> +                       MAX_PERCPU_VAR_CNT);
-> +               return -1;
-> +       }
-> +       percpu_vars[percpu_var_cnt].addr = addr;
-> +       percpu_vars[percpu_var_cnt].sz = size;
-> +       percpu_vars[percpu_var_cnt].name = sym_name;
-> +       percpu_var_cnt++;
->
-> -               if (btf_elf__verbose)
-> -                       printf("Found per-CPU symbol '%s' at address 0x%lx\n", sym_name, addr);
-> +       return 0;
-> +}
-> +
-> +static int collect_symbols(struct btf_elf *btfe, bool collect_percpu_vars)
-> +{
-> +       uint32_t core_id;
-> +       GElf_Sym sym;
->
-> -               if (percpu_var_cnt == MAX_PERCPU_VAR_CNT) {
-> -                       fprintf(stderr, "Reached the limit of per-CPU variables: %d\n",
-> -                               MAX_PERCPU_VAR_CNT);
-> +       /* cache variables' addresses, preparing for searching in symtab. */
-> +       percpu_var_cnt = 0;
-> +
-> +       /* search within symtab for percpu variables */
-> +       elf_symtab__for_each_symbol(btfe->symtab, core_id, sym) {
-> +               if (collect_percpu_vars && collect_percpu_var(btfe, &sym))
->                         return -1;
-> -               }
-> -               percpu_vars[percpu_var_cnt].addr = addr;
-> -               percpu_vars[percpu_var_cnt].sz = size;
-> -               percpu_vars[percpu_var_cnt].name = sym_name;
-> -               percpu_var_cnt++;
->         }
->
-> -       if (percpu_var_cnt)
-> -               qsort(percpu_vars, percpu_var_cnt, sizeof(percpu_vars[0]), percpu_var_cmp);
-> +       if (collect_percpu_vars) {
-> +               if (percpu_var_cnt)
-> +                       qsort(percpu_vars, percpu_var_cnt, sizeof(percpu_vars[0]), percpu_var_cmp);
->
-> -       if (btf_elf__verbose)
-> -               printf("Found %d per-CPU variables!\n", percpu_var_cnt);
-> +               if (btf_elf__verbose)
-> +                       printf("Found %d per-CPU variables!\n", percpu_var_cnt);
-> +       }
->         return 0;
->  }
->
-> @@ -347,7 +357,7 @@ int cu__encode_btf(struct cu *cu, int verbose, bool force,
->                 if (!btfe)
->                         return -1;
->
-> -               if (!skip_encoding_vars && find_all_percpu_vars(btfe))
-> +               if (collect_symbols(btfe, !skip_encoding_vars))
->                         goto out;
->
->                 has_index_type = false;
-> --
-> 2.26.2
->
+jirka
+
