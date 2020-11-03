@@ -1,120 +1,250 @@
-Return-Path: <SRS0=UIow=EI=vger.kernel.org=dwarves-owner@kernel.org>
+Return-Path: <SRS0=0CUe=EJ=vger.kernel.org=dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 27A34C00A89
-	for <linux-dwarves@archiver.kernel.org>; Mon,  2 Nov 2020 22:57:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 09FD2C2D0A3
+	for <linux-dwarves@archiver.kernel.org>; Tue,  3 Nov 2020 17:31:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C3EE222280
-	for <linux-dwarves@archiver.kernel.org>; Mon,  2 Nov 2020 22:57:12 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="XliRkOae"
+	by mail.kernel.org (Postfix) with ESMTP id B5EE3221FB
+	for <linux-dwarves@archiver.kernel.org>; Tue,  3 Nov 2020 17:31:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1604424676;
+	bh=Cm7DrskVIJo9VAZXNPzkz2ZwnUWmZg1K4hX2//kXFrg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
+	b=2FpGhJUx7KR4PLaZiP3X/H7wLrFY56Lys6ieD/2WQPcA2x4zobRTbIoQhGDCPcYDa
+	 9Q91VyX+M2C31DwhA+v9M3H2uKOIOnVv7QKrUG9zEiOZw488IaKDbf7o0XmCTK4hgD
+	 Fn0VjEHtItS80MPsPnvXiDf5cdOH8UUtbJ2+aFsI=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725841AbgKBW5M (ORCPT
+        id S1728524AbgKCRbQ (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Mon, 2 Nov 2020 17:57:12 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:29212 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725829AbgKBW5M (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Mon, 2 Nov 2020 17:57:12 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1604357831;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=xAfRhWimI1jHGTVmCKQhK61uXzAn1vDaUQsK5qSZb3s=;
-        b=XliRkOaeBBHVBIgnnqPeKgtHMp16q736G5RNsa89ogEIhZBLfqc9/YQvJss3GJFUpySy3+
-        QJpKdvlR7MjPJa+WHrceGAWbM46ZMpiaQ+awsVijJw9z+UhNypvInB23RKPEMVWpNsZ7DU
-        H7t+H6YZXDRlAjdo0wWxQliryPRyT90=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-572-2KIihxFDPW636vKdPMkKRg-1; Mon, 02 Nov 2020 17:57:08 -0500
-X-MC-Unique: 2KIihxFDPW636vKdPMkKRg-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Tue, 3 Nov 2020 12:31:16 -0500
+Received: from mail.kernel.org ([198.145.29.99]:50040 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727530AbgKCRbQ (ORCPT <rfc822;dwarves@vger.kernel.org>);
+        Tue, 3 Nov 2020 12:31:16 -0500
+Received: from quaco.ghostprotocols.net (unknown [179.97.37.151])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id A6454801F9A;
-        Mon,  2 Nov 2020 22:57:06 +0000 (UTC)
-Received: from krava (unknown [10.40.192.162])
-        by smtp.corp.redhat.com (Postfix) with SMTP id 7160960CCC;
-        Mon,  2 Nov 2020 22:56:59 +0000 (UTC)
-Date:   Mon, 2 Nov 2020 23:56:58 +0100
-From:   Jiri Olsa <jolsa@redhat.com>
-To:     Jiri Olsa <jolsa@kernel.org>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        dwarves@vger.kernel.org, bpf@vger.kernel.org,
-        Alexei Starovoitov <ast@kernel.org>,
+        by mail.kernel.org (Postfix) with ESMTPSA id 9EC4A206F8;
+        Tue,  3 Nov 2020 17:31:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1604424675;
+        bh=Cm7DrskVIJo9VAZXNPzkz2ZwnUWmZg1K4hX2//kXFrg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=yQFIIgPg+5cxYX4tgBw4pPDSY6ffArj36qiob0biWmYw5F344Luz9bdTZcXEp1KEn
+         uXQw7xcCILNmbN0m/0MYux18hIdpHN5r2LeJ6+cOn5H3U6qsRwph4KdK4q2NW+RGN3
+         MqMhSJLDQBnpzFECGFSQ8ywX3xF/J2F4x49b6T7g=
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 6E67E40452; Tue,  3 Nov 2020 14:31:12 -0300 (-03)
+Date:   Tue, 3 Nov 2020 14:31:12 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Hao Luo <haoluo@google.com>
+Cc:     Jiri Olsa <jolsa@kernel.org>, dwarves@vger.kernel.org,
+        bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
         Andrii Nakryiko <andriin@fb.com>, Yonghong Song <yhs@fb.com>,
-        Hao Luo <haoluo@google.com>,
         "Frank Ch. Eigler" <fche@redhat.com>,
         Mark Wielaard <mjw@redhat.com>
-Subject: Re: [PATCH 2/2] btf_encoder: Change functions check due to broken
- dwarf
-Message-ID: <20201102225658.GD3597846@krava>
+Subject: Re: [PATCH 1/2] btf_encoder: Move find_all_percpu_vars in generic
+ collect_symbols
+Message-ID: <20201103173112.GI151027@kernel.org>
 References: <20201031223131.3398153-1-jolsa@kernel.org>
- <20201031223131.3398153-3-jolsa@kernel.org>
- <20201102215908.GC3597846@krava>
+ <20201031223131.3398153-2-jolsa@kernel.org>
+ <CA+khW7hRm4xwKKDjdoJkaQADfjANCzy9hpp-xL_T-Two3oNAfA@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201102215908.GC3597846@krava>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
+In-Reply-To: <CA+khW7hRm4xwKKDjdoJkaQADfjANCzy9hpp-xL_T-Two3oNAfA@mail.gmail.com>
+X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-On Mon, Nov 02, 2020 at 10:59:08PM +0100, Jiri Olsa wrote:
-> On Sat, Oct 31, 2020 at 11:31:31PM +0100, Jiri Olsa wrote:
-> > We need to generate just single BTF instance for the
-> > function, while DWARF data contains multiple instances
-> > of DW_TAG_subprogram tag.
-> > 
-> > Unfortunately we can no longer rely on DW_AT_declaration
-> > tag (https://gcc.gnu.org/bugzilla/show_bug.cgi?id=97060)
-> > 
-> > Instead we apply following checks:
-> >   - argument names are defined for the function
-> >   - there's symbol and address defined for the function
-> >   - function is generated only once
-> > 
-> > Also because we want to follow kernel's ftrace traceable
-> > functions, this patchset is adding extra check that the
-> > function is one of the ftrace's functions.
-> > 
-> > All ftrace functions addresses are stored in vmlinux
-> > binary within symbols:
-> >   __start_mcount_loc
-> >   __stop_mcount_loc
+Em Mon, Nov 02, 2020 at 10:29:22AM -0800, Hao Luo escreveu:
+> This looks good to me. Thanks, Jiri.
 > 
-> hum, for some reason this does not pass through bpf internal
-> functions like bpf_iter_bpf_map.. I learned it hard way ;-)
-> will check
+> Acked-by: Hao Luo <haoluo@google.com>
 
-so it gets filtered out because it's __init function
-I'll check if the fix below catches all internal functions,
-but I guess we should do something more robust
-
-jirka
-
-
----
-diff --git a/btf_encoder.c b/btf_encoder.c
-index 0a378aa92142..3cd94280c35b 100644
---- a/btf_encoder.c
-+++ b/btf_encoder.c
-@@ -143,7 +143,8 @@ static int filter_functions(struct btf_elf *btfe, struct mcount_symbols *ms)
- 		/* Do not enable .init section functions. */
- 		if (init_filter &&
- 		    func->addr >= ms->init_begin &&
--		    func->addr <  ms->init_end)
-+		    func->addr <  ms->init_end &&
-+		    strncmp("bpf_", func->name, 4))
- 			continue;
+Thanks, applied, will wait for a v2 for the other.
  
- 		/* Make sure function is within mcount addresses. */
+> On Sat, Oct 31, 2020 at 3:31 PM Jiri Olsa <jolsa@kernel.org> wrote:
+> >
+> > Moving find_all_percpu_vars under generic collect_symbols
+> > function that walks over symbols and calls collect_percpu_var.
+> >
+> > We will add another collect function that needs to go through
+> > all the symbols, so it's better we go through them just once.
+> >
+> > There's no functional change intended.
+> >
+> > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+> > ---
+> >  btf_encoder.c | 124 +++++++++++++++++++++++++++-----------------------
+> >  1 file changed, 67 insertions(+), 57 deletions(-)
+> >
+> > diff --git a/btf_encoder.c b/btf_encoder.c
+> > index 4c92908beab2..1866bb16a8ba 100644
+> > --- a/btf_encoder.c
+> > +++ b/btf_encoder.c
+> > @@ -250,75 +250,85 @@ static bool percpu_var_exists(uint64_t addr, uint32_t *sz, const char **name)
+> >         return true;
+> >  }
+> >
+> > -static int find_all_percpu_vars(struct btf_elf *btfe)
+> > +static int collect_percpu_var(struct btf_elf *btfe, GElf_Sym *sym)
+> >  {
+> > -       uint32_t core_id;
+> > -       GElf_Sym sym;
+> > +       const char *sym_name;
+> > +       uint64_t addr;
+> > +       uint32_t size;
+> >
+> > -       /* cache variables' addresses, preparing for searching in symtab. */
+> > -       percpu_var_cnt = 0;
+> > +       /* compare a symbol's shndx to determine if it's a percpu variable */
+> > +       if (elf_sym__section(sym) != btfe->percpu_shndx)
+> > +               return 0;
+> > +       if (elf_sym__type(sym) != STT_OBJECT)
+> > +               return 0;
+> >
+> > -       /* search within symtab for percpu variables */
+> > -       elf_symtab__for_each_symbol(btfe->symtab, core_id, sym) {
+> > -               const char *sym_name;
+> > -               uint64_t addr;
+> > -               uint32_t size;
+> > +       addr = elf_sym__value(sym);
+> > +       /*
+> > +        * Store only those symbols that have allocated space in the percpu section.
+> > +        * This excludes the following three types of symbols:
+> > +        *
+> > +        *  1. __ADDRESSABLE(sym), which are forcely emitted as symbols.
+> > +        *  2. __UNIQUE_ID(prefix), which are introduced to generate unique ids.
+> > +        *  3. __exitcall(fn), functions which are labeled as exit calls.
+> > +        *
+> > +        * In addition, the variables defined using DEFINE_PERCPU_FIRST are
+> > +        * also not included, which currently includes:
+> > +        *
+> > +        *  1. fixed_percpu_data
+> > +        */
+> > +       if (!addr)
+> > +               return 0;
+> >
+> > -               /* compare a symbol's shndx to determine if it's a percpu variable */
+> > -               if (elf_sym__section(&sym) != btfe->percpu_shndx)
+> > -                       continue;
+> > -               if (elf_sym__type(&sym) != STT_OBJECT)
+> > -                       continue;
+> > +       size = elf_sym__size(sym);
+> > +       if (!size)
+> > +               return 0; /* ignore zero-sized symbols */
+> >
+> > -               addr = elf_sym__value(&sym);
+> > -               /*
+> > -                * Store only those symbols that have allocated space in the percpu section.
+> > -                * This excludes the following three types of symbols:
+> > -                *
+> > -                *  1. __ADDRESSABLE(sym), which are forcely emitted as symbols.
+> > -                *  2. __UNIQUE_ID(prefix), which are introduced to generate unique ids.
+> > -                *  3. __exitcall(fn), functions which are labeled as exit calls.
+> > -                *
+> > -                * In addition, the variables defined using DEFINE_PERCPU_FIRST are
+> > -                * also not included, which currently includes:
+> > -                *
+> > -                *  1. fixed_percpu_data
+> > -                */
+> > -               if (!addr)
+> > -                       continue;
+> > +       sym_name = elf_sym__name(sym, btfe->symtab);
+> > +       if (!btf_name_valid(sym_name)) {
+> > +               dump_invalid_symbol("Found symbol of invalid name when encoding btf",
+> > +                                   sym_name, btf_elf__verbose, btf_elf__force);
+> > +               if (btf_elf__force)
+> > +                       return 0;
+> > +               return -1;
+> > +       }
+> >
+> > -               size = elf_sym__size(&sym);
+> > -               if (!size)
+> > -                       continue; /* ignore zero-sized symbols */
+> > +       if (btf_elf__verbose)
+> > +               printf("Found per-CPU symbol '%s' at address 0x%lx\n", sym_name, addr);
+> >
+> > -               sym_name = elf_sym__name(&sym, btfe->symtab);
+> > -               if (!btf_name_valid(sym_name)) {
+> > -                       dump_invalid_symbol("Found symbol of invalid name when encoding btf",
+> > -                                           sym_name, btf_elf__verbose, btf_elf__force);
+> > -                       if (btf_elf__force)
+> > -                               continue;
+> > -                       return -1;
+> > -               }
+> > +       if (percpu_var_cnt == MAX_PERCPU_VAR_CNT) {
+> > +               fprintf(stderr, "Reached the limit of per-CPU variables: %d\n",
+> > +                       MAX_PERCPU_VAR_CNT);
+> > +               return -1;
+> > +       }
+> > +       percpu_vars[percpu_var_cnt].addr = addr;
+> > +       percpu_vars[percpu_var_cnt].sz = size;
+> > +       percpu_vars[percpu_var_cnt].name = sym_name;
+> > +       percpu_var_cnt++;
+> >
+> > -               if (btf_elf__verbose)
+> > -                       printf("Found per-CPU symbol '%s' at address 0x%lx\n", sym_name, addr);
+> > +       return 0;
+> > +}
+> > +
+> > +static int collect_symbols(struct btf_elf *btfe, bool collect_percpu_vars)
+> > +{
+> > +       uint32_t core_id;
+> > +       GElf_Sym sym;
+> >
+> > -               if (percpu_var_cnt == MAX_PERCPU_VAR_CNT) {
+> > -                       fprintf(stderr, "Reached the limit of per-CPU variables: %d\n",
+> > -                               MAX_PERCPU_VAR_CNT);
+> > +       /* cache variables' addresses, preparing for searching in symtab. */
+> > +       percpu_var_cnt = 0;
+> > +
+> > +       /* search within symtab for percpu variables */
+> > +       elf_symtab__for_each_symbol(btfe->symtab, core_id, sym) {
+> > +               if (collect_percpu_vars && collect_percpu_var(btfe, &sym))
+> >                         return -1;
+> > -               }
+> > -               percpu_vars[percpu_var_cnt].addr = addr;
+> > -               percpu_vars[percpu_var_cnt].sz = size;
+> > -               percpu_vars[percpu_var_cnt].name = sym_name;
+> > -               percpu_var_cnt++;
+> >         }
+> >
+> > -       if (percpu_var_cnt)
+> > -               qsort(percpu_vars, percpu_var_cnt, sizeof(percpu_vars[0]), percpu_var_cmp);
+> > +       if (collect_percpu_vars) {
+> > +               if (percpu_var_cnt)
+> > +                       qsort(percpu_vars, percpu_var_cnt, sizeof(percpu_vars[0]), percpu_var_cmp);
+> >
+> > -       if (btf_elf__verbose)
+> > -               printf("Found %d per-CPU variables!\n", percpu_var_cnt);
+> > +               if (btf_elf__verbose)
+> > +                       printf("Found %d per-CPU variables!\n", percpu_var_cnt);
+> > +       }
+> >         return 0;
+> >  }
+> >
+> > @@ -347,7 +357,7 @@ int cu__encode_btf(struct cu *cu, int verbose, bool force,
+> >                 if (!btfe)
+> >                         return -1;
+> >
+> > -               if (!skip_encoding_vars && find_all_percpu_vars(btfe))
+> > +               if (collect_symbols(btfe, !skip_encoding_vars))
+> >                         goto out;
+> >
+> >                 has_index_type = false;
+> > --
+> > 2.26.2
+> >
 
+-- 
+
+- Arnaldo
