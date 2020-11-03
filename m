@@ -2,249 +2,288 @@ Return-Path: <SRS0=0CUe=EJ=vger.kernel.org=dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-6.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 09FD2C2D0A3
-	for <linux-dwarves@archiver.kernel.org>; Tue,  3 Nov 2020 17:31:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6B552C2D0A3
+	for <linux-dwarves@archiver.kernel.org>; Tue,  3 Nov 2020 18:56:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B5EE3221FB
-	for <linux-dwarves@archiver.kernel.org>; Tue,  3 Nov 2020 17:31:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1604424676;
-	bh=Cm7DrskVIJo9VAZXNPzkz2ZwnUWmZg1K4hX2//kXFrg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
-	b=2FpGhJUx7KR4PLaZiP3X/H7wLrFY56Lys6ieD/2WQPcA2x4zobRTbIoQhGDCPcYDa
-	 9Q91VyX+M2C31DwhA+v9M3H2uKOIOnVv7QKrUG9zEiOZw488IaKDbf7o0XmCTK4hgD
-	 Fn0VjEHtItS80MPsPnvXiDf5cdOH8UUtbJ2+aFsI=
+	by mail.kernel.org (Postfix) with ESMTP id 207002074B
+	for <linux-dwarves@archiver.kernel.org>; Tue,  3 Nov 2020 18:56:11 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="pKNrNsIg"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728524AbgKCRbQ (ORCPT
+        id S1727852AbgKCS4K (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Tue, 3 Nov 2020 12:31:16 -0500
-Received: from mail.kernel.org ([198.145.29.99]:50040 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727530AbgKCRbQ (ORCPT <rfc822;dwarves@vger.kernel.org>);
-        Tue, 3 Nov 2020 12:31:16 -0500
-Received: from quaco.ghostprotocols.net (unknown [179.97.37.151])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 9EC4A206F8;
-        Tue,  3 Nov 2020 17:31:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1604424675;
-        bh=Cm7DrskVIJo9VAZXNPzkz2ZwnUWmZg1K4hX2//kXFrg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=yQFIIgPg+5cxYX4tgBw4pPDSY6ffArj36qiob0biWmYw5F344Luz9bdTZcXEp1KEn
-         uXQw7xcCILNmbN0m/0MYux18hIdpHN5r2LeJ6+cOn5H3U6qsRwph4KdK4q2NW+RGN3
-         MqMhSJLDQBnpzFECGFSQ8ywX3xF/J2F4x49b6T7g=
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 6E67E40452; Tue,  3 Nov 2020 14:31:12 -0300 (-03)
-Date:   Tue, 3 Nov 2020 14:31:12 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Hao Luo <haoluo@google.com>
-Cc:     Jiri Olsa <jolsa@kernel.org>, dwarves@vger.kernel.org,
-        bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Tue, 3 Nov 2020 13:56:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32898 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727706AbgKCS4K (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Tue, 3 Nov 2020 13:56:10 -0500
+Received: from mail-yb1-xb41.google.com (mail-yb1-xb41.google.com [IPv6:2607:f8b0:4864:20::b41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F09AC0613D1;
+        Tue,  3 Nov 2020 10:56:10 -0800 (PST)
+Received: by mail-yb1-xb41.google.com with SMTP id c18so2919438ybj.10;
+        Tue, 03 Nov 2020 10:56:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=bJY7WGKB7t34pOHGgzWmhtYgvBjvp3KhjCHKCPGb0xA=;
+        b=pKNrNsIgQLNwjPkOfhHctTdoROV6VPQSQKuKUqDdMYCyVeiVSS8fNvpD5r1lQSPze/
+         JUA5WKYZbpO23qTIafJ7y/Rra12H5/JcwFQhPpk0uyJ10D+fcmMGJKXmhA/VLXiyVI0M
+         wcNQtCry21Xek4wPWuY98WsFOGYglFAb7gMoewNbuzfOownQyZPDpujLCeFTdctoz9ZQ
+         5B2fyySp27l6fsAmhE5+wyJ0jadBFEMZzXqK3soJFPtIy5lfF/47PuW0TlrOVbuFe+Xb
+         ps43HJnb2j88P6fgDCU6F2vElH90iwg6MxAKd1qZltCEdJTdTNtjgkmUZZspRwkKwl+b
+         AXGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=bJY7WGKB7t34pOHGgzWmhtYgvBjvp3KhjCHKCPGb0xA=;
+        b=SFf0GOD4nywANZfyuGGcgO6l0jsD2tllbxwJtuPjPOGYmMPYzV8LFXbkjseUtD293b
+         9NFQvP4d52Mc0LHOTavgiZT75SCa6Mpt4/xFgtJF0heKlSvPYAvHJzCh2K9xv2knArYK
+         hbLMIzDm6VvjG4epvNgD7yKm7s5XFGjI0IcU5K9dWaStJJo1h8FOynAnKeGOpE1cdq6Z
+         PMedMgPgxhXE3a82eRKON74FuWSd6+HruV4IRrRSiYHc4TkMXtygI84lOm6NvkdkGCsq
+         qFSKRThsh0ycKp/01RrAOnZF+cTps0CQjLQSDHpYLXWAjjrPSbcImqZUWw6UqqqksU17
+         fMHw==
+X-Gm-Message-State: AOAM530flElSYPV/Qwn4Ot19tGSVoUJyng2khM9NHhGhw6/ffB4y0+Cy
+        Fak0I8yc8vI5lcltmBWZEb3YSpDdJ8PtYbBqLJg=
+X-Google-Smtp-Source: ABdhPJxEQHFV82ObgeYiQ+S1ZtWJyM3hHPFGHeXNGtKBavynYcsIeWzJYfiLoCjFoqYT06Wi6CnCWO/1qMq8P5R/jcI=
+X-Received: by 2002:a25:c7c6:: with SMTP id w189mr31109160ybe.403.1604429769824;
+ Tue, 03 Nov 2020 10:56:09 -0800 (PST)
+MIME-Version: 1.0
+References: <20201031223131.3398153-1-jolsa@kernel.org> <20201031223131.3398153-3-jolsa@kernel.org>
+In-Reply-To: <20201031223131.3398153-3-jolsa@kernel.org>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Tue, 3 Nov 2020 10:55:58 -0800
+Message-ID: <CAEf4BzYeaiQJ+-NCtCK4wB-2ia3U40RtTWez6c7osCuzpy11Zg@mail.gmail.com>
+Subject: Re: [PATCH 2/2] btf_encoder: Change functions check due to broken dwarf
+To:     Jiri Olsa <jolsa@kernel.org>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        dwarves@vger.kernel.org, bpf <bpf@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
         Andrii Nakryiko <andriin@fb.com>, Yonghong Song <yhs@fb.com>,
+        Hao Luo <haoluo@google.com>,
         "Frank Ch. Eigler" <fche@redhat.com>,
         Mark Wielaard <mjw@redhat.com>
-Subject: Re: [PATCH 1/2] btf_encoder: Move find_all_percpu_vars in generic
- collect_symbols
-Message-ID: <20201103173112.GI151027@kernel.org>
-References: <20201031223131.3398153-1-jolsa@kernel.org>
- <20201031223131.3398153-2-jolsa@kernel.org>
- <CA+khW7hRm4xwKKDjdoJkaQADfjANCzy9hpp-xL_T-Two3oNAfA@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CA+khW7hRm4xwKKDjdoJkaQADfjANCzy9hpp-xL_T-Two3oNAfA@mail.gmail.com>
-X-Url:  http://acmel.wordpress.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-Em Mon, Nov 02, 2020 at 10:29:22AM -0800, Hao Luo escreveu:
-> This looks good to me. Thanks, Jiri.
-> 
-> Acked-by: Hao Luo <haoluo@google.com>
+On Sat, Oct 31, 2020 at 3:32 PM Jiri Olsa <jolsa@kernel.org> wrote:
+>
+> We need to generate just single BTF instance for the
+> function, while DWARF data contains multiple instances
+> of DW_TAG_subprogram tag.
+>
+> Unfortunately we can no longer rely on DW_AT_declaration
+> tag (https://gcc.gnu.org/bugzilla/show_bug.cgi?id=97060)
+>
+> Instead we apply following checks:
+>   - argument names are defined for the function
+>   - there's symbol and address defined for the function
+>   - function is generated only once
+>
+> Also because we want to follow kernel's ftrace traceable
+> functions, this patchset is adding extra check that the
+> function is one of the ftrace's functions.
+>
+> All ftrace functions addresses are stored in vmlinux
+> binary within symbols:
+>   __start_mcount_loc
+>   __stop_mcount_loc
+>
+> During object preparation code we read those addresses,
+> sort them and use them as filter for all detected dwarf
+> functions.
+>
+> We also filter out functions within .init section, ftrace
+> is doing that in runtime.
+>
+> I can still see several differences to ftrace functions in
+> /sys/kernel/debug/tracing/available_filter_functions file:
+>
+>   - available_filter_functions includes modules (7086 functions)
+>   - available_filter_functions includes functions like:
+>       __acpi_match_device.part.0.constprop.0
+>       acpi_ns_check_sorted_list.constprop.0
+>       acpi_os_unmap_generic_address.part.0
+>       acpiphp_check_bridge.part.0
+>
+>     which are not part of dwarf data (1164 functions)
+>   - BTF includes multiple functions like:
+>       __clk_register_clkdev
+>       clk_register_clkdev
+>
+>     which share same code so they appear just as single function
+>     in available_filter_functions, but dwarf keeps track of both
+>     of them (16 functions)
+>
+> With this change I'm getting 38334 BTF functions, which
+> when added above functions to consideration gives same
+> amount of functions in available_filter_functions.
+>
+> The patch still keeps the original function filter condition
+> (that uses current fn->declaration check) in case the object
+> does not contain *_mcount_loc symbol -> object is not vmlinux.
+>
+> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+> ---
+>  btf_encoder.c | 222 +++++++++++++++++++++++++++++++++++++++++++++++++-
+>  1 file changed, 220 insertions(+), 2 deletions(-)
 
-Thanks, applied, will wait for a v2 for the other.
- 
-> On Sat, Oct 31, 2020 at 3:31 PM Jiri Olsa <jolsa@kernel.org> wrote:
-> >
-> > Moving find_all_percpu_vars under generic collect_symbols
-> > function that walks over symbols and calls collect_percpu_var.
-> >
-> > We will add another collect function that needs to go through
-> > all the symbols, so it's better we go through them just once.
-> >
-> > There's no functional change intended.
-> >
-> > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
-> > ---
-> >  btf_encoder.c | 124 +++++++++++++++++++++++++++-----------------------
-> >  1 file changed, 67 insertions(+), 57 deletions(-)
-> >
-> > diff --git a/btf_encoder.c b/btf_encoder.c
-> > index 4c92908beab2..1866bb16a8ba 100644
-> > --- a/btf_encoder.c
-> > +++ b/btf_encoder.c
-> > @@ -250,75 +250,85 @@ static bool percpu_var_exists(uint64_t addr, uint32_t *sz, const char **name)
-> >         return true;
-> >  }
-> >
-> > -static int find_all_percpu_vars(struct btf_elf *btfe)
-> > +static int collect_percpu_var(struct btf_elf *btfe, GElf_Sym *sym)
-> >  {
-> > -       uint32_t core_id;
-> > -       GElf_Sym sym;
-> > +       const char *sym_name;
-> > +       uint64_t addr;
-> > +       uint32_t size;
-> >
-> > -       /* cache variables' addresses, preparing for searching in symtab. */
-> > -       percpu_var_cnt = 0;
-> > +       /* compare a symbol's shndx to determine if it's a percpu variable */
-> > +       if (elf_sym__section(sym) != btfe->percpu_shndx)
-> > +               return 0;
-> > +       if (elf_sym__type(sym) != STT_OBJECT)
-> > +               return 0;
-> >
-> > -       /* search within symtab for percpu variables */
-> > -       elf_symtab__for_each_symbol(btfe->symtab, core_id, sym) {
-> > -               const char *sym_name;
-> > -               uint64_t addr;
-> > -               uint32_t size;
-> > +       addr = elf_sym__value(sym);
-> > +       /*
-> > +        * Store only those symbols that have allocated space in the percpu section.
-> > +        * This excludes the following three types of symbols:
-> > +        *
-> > +        *  1. __ADDRESSABLE(sym), which are forcely emitted as symbols.
-> > +        *  2. __UNIQUE_ID(prefix), which are introduced to generate unique ids.
-> > +        *  3. __exitcall(fn), functions which are labeled as exit calls.
-> > +        *
-> > +        * In addition, the variables defined using DEFINE_PERCPU_FIRST are
-> > +        * also not included, which currently includes:
-> > +        *
-> > +        *  1. fixed_percpu_data
-> > +        */
-> > +       if (!addr)
-> > +               return 0;
-> >
-> > -               /* compare a symbol's shndx to determine if it's a percpu variable */
-> > -               if (elf_sym__section(&sym) != btfe->percpu_shndx)
-> > -                       continue;
-> > -               if (elf_sym__type(&sym) != STT_OBJECT)
-> > -                       continue;
-> > +       size = elf_sym__size(sym);
-> > +       if (!size)
-> > +               return 0; /* ignore zero-sized symbols */
-> >
-> > -               addr = elf_sym__value(&sym);
-> > -               /*
-> > -                * Store only those symbols that have allocated space in the percpu section.
-> > -                * This excludes the following three types of symbols:
-> > -                *
-> > -                *  1. __ADDRESSABLE(sym), which are forcely emitted as symbols.
-> > -                *  2. __UNIQUE_ID(prefix), which are introduced to generate unique ids.
-> > -                *  3. __exitcall(fn), functions which are labeled as exit calls.
-> > -                *
-> > -                * In addition, the variables defined using DEFINE_PERCPU_FIRST are
-> > -                * also not included, which currently includes:
-> > -                *
-> > -                *  1. fixed_percpu_data
-> > -                */
-> > -               if (!addr)
-> > -                       continue;
-> > +       sym_name = elf_sym__name(sym, btfe->symtab);
-> > +       if (!btf_name_valid(sym_name)) {
-> > +               dump_invalid_symbol("Found symbol of invalid name when encoding btf",
-> > +                                   sym_name, btf_elf__verbose, btf_elf__force);
-> > +               if (btf_elf__force)
-> > +                       return 0;
-> > +               return -1;
-> > +       }
-> >
-> > -               size = elf_sym__size(&sym);
-> > -               if (!size)
-> > -                       continue; /* ignore zero-sized symbols */
-> > +       if (btf_elf__verbose)
-> > +               printf("Found per-CPU symbol '%s' at address 0x%lx\n", sym_name, addr);
-> >
-> > -               sym_name = elf_sym__name(&sym, btfe->symtab);
-> > -               if (!btf_name_valid(sym_name)) {
-> > -                       dump_invalid_symbol("Found symbol of invalid name when encoding btf",
-> > -                                           sym_name, btf_elf__verbose, btf_elf__force);
-> > -                       if (btf_elf__force)
-> > -                               continue;
-> > -                       return -1;
-> > -               }
-> > +       if (percpu_var_cnt == MAX_PERCPU_VAR_CNT) {
-> > +               fprintf(stderr, "Reached the limit of per-CPU variables: %d\n",
-> > +                       MAX_PERCPU_VAR_CNT);
-> > +               return -1;
-> > +       }
-> > +       percpu_vars[percpu_var_cnt].addr = addr;
-> > +       percpu_vars[percpu_var_cnt].sz = size;
-> > +       percpu_vars[percpu_var_cnt].name = sym_name;
-> > +       percpu_var_cnt++;
-> >
-> > -               if (btf_elf__verbose)
-> > -                       printf("Found per-CPU symbol '%s' at address 0x%lx\n", sym_name, addr);
-> > +       return 0;
-> > +}
-> > +
-> > +static int collect_symbols(struct btf_elf *btfe, bool collect_percpu_vars)
-> > +{
-> > +       uint32_t core_id;
-> > +       GElf_Sym sym;
-> >
-> > -               if (percpu_var_cnt == MAX_PERCPU_VAR_CNT) {
-> > -                       fprintf(stderr, "Reached the limit of per-CPU variables: %d\n",
-> > -                               MAX_PERCPU_VAR_CNT);
-> > +       /* cache variables' addresses, preparing for searching in symtab. */
-> > +       percpu_var_cnt = 0;
-> > +
-> > +       /* search within symtab for percpu variables */
-> > +       elf_symtab__for_each_symbol(btfe->symtab, core_id, sym) {
-> > +               if (collect_percpu_vars && collect_percpu_var(btfe, &sym))
-> >                         return -1;
-> > -               }
-> > -               percpu_vars[percpu_var_cnt].addr = addr;
-> > -               percpu_vars[percpu_var_cnt].sz = size;
-> > -               percpu_vars[percpu_var_cnt].name = sym_name;
-> > -               percpu_var_cnt++;
-> >         }
-> >
-> > -       if (percpu_var_cnt)
-> > -               qsort(percpu_vars, percpu_var_cnt, sizeof(percpu_vars[0]), percpu_var_cmp);
-> > +       if (collect_percpu_vars) {
-> > +               if (percpu_var_cnt)
-> > +                       qsort(percpu_vars, percpu_var_cnt, sizeof(percpu_vars[0]), percpu_var_cmp);
-> >
-> > -       if (btf_elf__verbose)
-> > -               printf("Found %d per-CPU variables!\n", percpu_var_cnt);
-> > +               if (btf_elf__verbose)
-> > +                       printf("Found %d per-CPU variables!\n", percpu_var_cnt);
-> > +       }
-> >         return 0;
-> >  }
-> >
-> > @@ -347,7 +357,7 @@ int cu__encode_btf(struct cu *cu, int verbose, bool force,
-> >                 if (!btfe)
-> >                         return -1;
-> >
-> > -               if (!skip_encoding_vars && find_all_percpu_vars(btfe))
-> > +               if (collect_symbols(btfe, !skip_encoding_vars))
-> >                         goto out;
-> >
-> >                 has_index_type = false;
-> > --
-> > 2.26.2
-> >
+[...]
 
--- 
+> +static int collect_function(struct btf_elf *btfe, GElf_Sym *sym)
+> +{
+> +       if (elf_sym__type(sym) != STT_FUNC)
+> +               return 0;
+> +       if (!elf_sym__value(sym))
+> +               return 0;
+> +
+> +       if (functions_cnt == functions_alloc) {
+> +               functions_alloc = max(1000, functions_alloc * 3 / 2);
+> +               functions = realloc(functions, functions_alloc * sizeof(*functions));
+> +               if (!functions)
+> +                       return -1;
 
-- Arnaldo
+memory leak right here. You need to use a temporary variable and check
+if for NULL, before overwriting functions.
+
+> +       }
+> +
+> +       functions[functions_cnt].name = elf_sym__name(sym, btfe->symtab);
+> +       functions[functions_cnt].addr = elf_sym__value(sym);
+> +       functions[functions_cnt].generated = false;
+> +       functions[functions_cnt].valid = false;
+> +       functions_cnt++;
+> +       return 0;
+> +}
+> +
+> +static int addrs_cmp(const void *_a, const void *_b)
+> +{
+> +       const unsigned long *a = _a;
+> +       const unsigned long *b = _b;
+> +
+> +       return *a - *b;
+
+this is cute, but is it always correct? instead of thinking how this
+works with overflows, maybe let's keep it simple with
+
+if (*a == *b)
+  return 0;
+return *a < *b ? -1 : 1;
+
+?
+
+> +}
+> +
+> +static int filter_functions(struct btf_elf *btfe, struct mcount_symbols *ms)
+> +{
+> +       bool init_filter = ms->init_begin && ms->init_end;
+> +       unsigned long *addrs, count, offset, i;
+> +       Elf_Data *data;
+> +       GElf_Shdr shdr;
+> +       Elf_Scn *sec;
+> +
+> +       /*
+> +        * Find mcount addressed marked by __start_mcount_loc
+> +        * and __stop_mcount_loc symbols and load them into
+> +        * sorted array.
+> +        */
+> +       sec = elf_getscn(btfe->elf, ms->start_section);
+> +       if (!sec || !gelf_getshdr(sec, &shdr)) {
+> +               fprintf(stderr, "Failed to get section(%lu) header.\n",
+> +                       ms->start_section);
+> +               return -1;
+> +       }
+> +
+> +       offset = ms->start - shdr.sh_addr;
+> +       count  = (ms->stop - ms->start) / 8;
+> +
+> +       data = elf_getdata(sec, 0);
+> +       if (!data) {
+> +               fprintf(stderr, "Failed to section(%lu) data.\n",
+
+typo: failed to get?
+
+> +                       ms->start_section);
+> +               return -1;
+> +       }
+> +
+> +       addrs = malloc(count * sizeof(addrs[0]));
+> +       if (!addrs) {
+> +               fprintf(stderr, "Failed to allocate memory for ftrace addresses.\n");
+> +               return -1;
+> +       }
+> +
+
+[...]
+
+>
+> +#define SET_SYMBOL(__sym, __var)                                               \
+> +       if (!ms->__var && !strcmp(__sym, elf_sym__name(sym, btfe->symtab)))     \
+> +               ms->__var = sym->st_value;                                      \
+> +
+> +static void collect_mcount_symbol(GElf_Sym *sym, struct mcount_symbols *ms)
+> +{
+> +       if (!ms->start &&
+> +           !strcmp("__start_mcount_loc", elf_sym__name(sym, btfe->symtab))) {
+> +               ms->start = sym->st_value;
+> +               ms->start_section = sym->st_shndx;
+> +       }
+> +       SET_SYMBOL("__stop_mcount_loc", stop)
+> +       SET_SYMBOL("__init_begin", init_begin)
+> +       SET_SYMBOL("__init_end", init_end)
+
+please don't use macro here, it doesn't save much code but complicates
+reading it quite significantly
+
+> +}
+> +
+> +#undef SET_SYMBOL
+> +
+>  static int collect_symbols(struct btf_elf *btfe, bool collect_percpu_vars)
+>  {
+> +       struct mcount_symbols ms = { };
+>         uint32_t core_id;
+>         GElf_Sym sym;
+>
+> @@ -320,6 +485,9 @@ static int collect_symbols(struct btf_elf *btfe, bool collect_percpu_vars)
+>         elf_symtab__for_each_symbol(btfe->symtab, core_id, sym) {
+>                 if (collect_percpu_vars && collect_percpu_var(btfe, &sym))
+>                         return -1;
+> +               if (collect_function(btfe, &sym))
+> +                       return -1;
+> +               collect_mcount_symbol(&sym, &ms);
+>         }
+>
+>         if (collect_percpu_vars) {
+> @@ -329,9 +497,34 @@ static int collect_symbols(struct btf_elf *btfe, bool collect_percpu_vars)
+>                 if (btf_elf__verbose)
+>                         printf("Found %d per-CPU variables!\n", percpu_var_cnt);
+>         }
+> +
+> +       if (functions_cnt) {
+> +               qsort(functions, functions_cnt, sizeof(functions[0]), functions_cmp);
+> +               if (ms.start && ms.stop &&
+> +                   filter_functions(btfe, &ms)) {
+
+nit: single line should fit well, no?
+
+> +                       fprintf(stderr, "Failed to filter dwarf functions\n");
+> +                       return -1;
+> +               }
+> +               if (btf_elf__verbose)
+> +                       printf("Found %d functions!\n", functions_valid);
+> +       }
+> +
+>         return 0;
+>  }
+>
+
+[...]
