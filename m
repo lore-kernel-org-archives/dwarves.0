@@ -2,43 +2,42 @@ Return-Path: <SRS0=AxGz=EK=vger.kernel.org=dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 90909C2D0A3
-	for <linux-dwarves@archiver.kernel.org>; Wed,  4 Nov 2020 22:00:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9D031C56201
+	for <linux-dwarves@archiver.kernel.org>; Wed,  4 Nov 2020 22:00:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4019220795
-	for <linux-dwarves@archiver.kernel.org>; Wed,  4 Nov 2020 22:00:57 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 52CDB2080D
+	for <linux-dwarves@archiver.kernel.org>; Wed,  4 Nov 2020 22:00:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1604527257;
-	bh=sI77nl+l0CQHYOhFcxiVHZYsqKEkbATlIjsfEGNofUg=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=x6BQV/XvPNrAx6VoQ5dPhs5nWyQy1Y0pV1UojvYvNX3FViJMKQGYE3xUe7FAyDK6Q
-	 ga0t77PEsHaWQeA9O/1+/0ggA9j3TxBEGRNpk6L6Q7WO8eTgD3z2uE7nszuvoEa/nx
-	 Cao4edxsi0MxtJwdkz8pqhLkDpceT5KASgTmdN5c=
+	s=default; t=1604527259;
+	bh=QQjJmzsuLhJDTKyrpiEHhadBXzJ4raFuJnI2p39LC4c=;
+	h=From:To:Cc:Subject:Date:List-ID:From;
+	b=uMKIG8NYwnuA9OmS3p/z0Iyru8DxuAShnSAj0gMThB49KWP6woe0yYsMY1vpSjk+O
+	 wh/Yws6vGmuc1zsaLf/8HwOEiNsMICGOfwy7P3RElT51Wivsbc5Xh4rch+MgDM3kDH
+	 DfLTLZOZXdQCI4JEdjQksq7eDsE80tqUunlEfxeQ=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732163AbgKDWAw convert rfc822-to-8bit (ORCPT
+        id S1732137AbgKDWA6 convert rfc822-to-8bit (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Wed, 4 Nov 2020 17:00:52 -0500
-Received: from us-smtp-delivery-44.mimecast.com ([205.139.111.44]:20781 "EHLO
+        Wed, 4 Nov 2020 17:00:58 -0500
+Received: from us-smtp-delivery-44.mimecast.com ([205.139.111.44]:20987 "EHLO
         us-smtp-delivery-44.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1732148AbgKDV7p (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Wed, 4 Nov 2020 16:59:45 -0500
+        by vger.kernel.org with ESMTP id S1732046AbgKDV7g (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Wed, 4 Nov 2020 16:59:36 -0500
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-472-AX4qbdulMl-VYbNWM4wnGg-1; Wed, 04 Nov 2020 16:59:38 -0500
-X-MC-Unique: AX4qbdulMl-VYbNWM4wnGg-1
+ us-mta-144-KbrjyP_dOTqHtslNMw_j3g-1; Wed, 04 Nov 2020 16:59:31 -0500
+X-MC-Unique: KbrjyP_dOTqHtslNMw_j3g-1
 Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id B5CD61882FAA;
-        Wed,  4 Nov 2020 21:59:36 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 45F938014C1;
+        Wed,  4 Nov 2020 21:59:29 +0000 (UTC)
 Received: from krava.redhat.com (unknown [10.40.192.71])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 98D6E1002C03;
-        Wed,  4 Nov 2020 21:59:34 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 052221002C03;
+        Wed,  4 Nov 2020 21:59:23 +0000 (UTC)
 From:   Jiri Olsa <jolsa@kernel.org>
 To:     Arnaldo Carvalho de Melo <acme@kernel.org>
 Cc:     dwarves@vger.kernel.org, bpf@vger.kernel.org,
@@ -47,11 +46,9 @@ Cc:     dwarves@vger.kernel.org, bpf@vger.kernel.org,
         Hao Luo <haoluo@google.com>,
         "Frank Ch. Eigler" <fche@redhat.com>,
         Mark Wielaard <mjw@redhat.com>
-Subject: [PATCH 3/3] btf_encoder: Change functions check due to broken dwarf
-Date:   Wed,  4 Nov 2020 22:59:23 +0100
-Message-Id: <20201104215923.4000229-4-jolsa@kernel.org>
-In-Reply-To: <20201104215923.4000229-1-jolsa@kernel.org>
-References: <20201104215923.4000229-1-jolsa@kernel.org>
+Subject: [PATCHv3 0/3] pahole/kernel: Workaround dwarf bug for function encoding
+Date:   Wed,  4 Nov 2020 22:59:20 +0100
+Message-Id: <20201104215923.4000229-1-jolsa@kernel.org>
 MIME-Version: 1.0
 X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
 Authentication-Results: relay.mimecast.com;
@@ -64,386 +61,45 @@ Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-We need to generate just single BTF instance for the
-function, while DWARF data contains multiple instances
-of DW_TAG_subprogram tag.
+hi,
+because of gcc bug [1] we can no longer rely on DW_AT_declaration
+attribute to filter out declarations and end up with just
+one copy of the function in the BTF data.
 
-Unfortunately we can no longer rely on DW_AT_declaration
-tag (https://gcc.gnu.org/bugzilla/show_bug.cgi?id=97060)
+It seems this bug is not easy to fix, but regardless if the
+it's coming soon, it's probably good idea not to depend so
+much only on dwarf data and make some extra checks.
 
-Instead we apply following checks:
+Thus for function encoding we are now doing following checks:
   - argument names are defined for the function
   - there's symbol and address defined for the function
+  - function address belongs to ftrace locations (new in v2)
   - function is generated only once
 
-Also because we want to follow kernel's ftrace traceable
-functions, this patchset is adding extra check that the
-function is one of the ftrace's functions.
+v3 changes:
+  - added Hao's ack for patch 1
+  - fixed realloc memory leak [Andrii]
+  - fixed addrs_cmp function [Andrii]
+  - removed SET_SYMBOL macro [Andrii]
+  - fixed the 'valid' function logic
+  - added .init.bpf.preserve_type check
+  - added iterator functions to new kernel section
+    .init.bpf.preserve_type [Yonghong]
 
-All ftrace functions addresses are stored in vmlinux
-binary within symbols:
-  __start_mcount_loc
-  __stop_mcount_loc
+v2 changes:
+  - add check ensuring functions belong to ftrace's mcount
+    locations, this way we ensure to have in BTF only
+    functions available for ftrace - patch 2 changelog
+    describes all details
+  - use collect* function names [Andrii]
+  - use conventional size increase in realloc [Andrii]
+  - drop elf_sym__is_function check
+  - drop patch 3, it's not needed, because we follow ftrace
+    locations
 
-During object preparation code we read those addresses,
-sort them and use them as filter for all detected dwarf
-functions.
+thanks,
+jirka
 
-We also filter out functions within .init section, ftrace
-is doing that in runtime. At the same time we keep functions
-from .init.bpf.preserve_type, because they are needed in BTF.
 
-I can still see several differences to ftrace functions in
-/sys/kernel/debug/tracing/available_filter_functions file:
-
-  - available_filter_functions includes modules
-  - available_filter_functions includes functions like:
-      __acpi_match_device.part.0.constprop.0
-      acpi_ns_check_sorted_list.constprop.0
-      acpi_os_unmap_generic_address.part.0
-      acpiphp_check_bridge.part.0
-
-    which are not part of dwarf data
-  - BTF includes multiple functions like:
-      __clk_register_clkdev
-      clk_register_clkdev
-
-    which share same code so they appear just as single function
-    in available_filter_functions, but dwarf keeps track of both
-    of them
-
-With this change I'm getting 38353 BTF functions, which
-when added above functions to consideration gives same
-amount of functions in available_filter_functions.
-
-The patch still keeps the original function filter condition
-(that uses current fn->declaration check) in case the object
-does not contain *_mcount_loc symbol -> object is not vmlinux.
-
-Signed-off-by: Jiri Olsa <jolsa@kernel.org>
----
- btf_encoder.c | 261 +++++++++++++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 259 insertions(+), 2 deletions(-)
-
-diff --git a/btf_encoder.c b/btf_encoder.c
-index 1866bb16a8ba..df89b4467e4c 100644
---- a/btf_encoder.c
-+++ b/btf_encoder.c
-@@ -26,6 +26,174 @@
-  */
- #define KSYM_NAME_LEN 128
- 
-+struct symbols {
-+	unsigned long start;
-+	unsigned long stop;
-+	unsigned long init_begin;
-+	unsigned long init_end;
-+	unsigned long init_bpf_begin;
-+	unsigned long init_bpf_end;
-+	unsigned long start_section;
-+};
-+
-+struct elf_function {
-+	const char	*name;
-+	unsigned long	 addr;
-+	bool		 generated;
-+};
-+
-+static struct elf_function *functions;
-+static int functions_alloc;
-+static int functions_cnt;
-+static int functions_valid;
-+
-+static int functions_cmp(const void *_a, const void *_b)
-+{
-+	const struct elf_function *a = _a;
-+	const struct elf_function *b = _b;
-+
-+	return strcmp(a->name, b->name);
-+}
-+
-+static void delete_functions(void)
-+{
-+	free(functions);
-+	functions_alloc = functions_cnt = functions_valid = 0;
-+}
-+
-+#ifndef max
-+#define max(x, y) ((x) < (y) ? (y) : (x))
-+#endif
-+
-+static int collect_function(struct btf_elf *btfe, GElf_Sym *sym)
-+{
-+	struct elf_function *new;
-+
-+	if (elf_sym__type(sym) != STT_FUNC)
-+		return 0;
-+	if (!elf_sym__value(sym))
-+		return 0;
-+
-+	if (functions_cnt == functions_alloc) {
-+		functions_alloc = max(1000, functions_alloc * 3 / 2);
-+		new = realloc(functions, functions_alloc * sizeof(*functions));
-+		if (!new) {
-+			delete_functions();
-+			return -1;
-+		}
-+		functions = new;
-+	}
-+
-+	functions[functions_cnt].name = elf_sym__name(sym, btfe->symtab);
-+	functions[functions_cnt].addr = elf_sym__value(sym);
-+	functions[functions_cnt].generated = false;
-+	functions_cnt++;
-+	return 0;
-+}
-+
-+static int addrs_cmp(const void *_a, const void *_b)
-+{
-+	const unsigned long *a = _a;
-+	const unsigned long *b = _b;
-+
-+	if (*a == *b)
-+		return 0;
-+	return *a < *b ? -1 : 1;
-+}
-+
-+static bool is_init(struct symbols *ms, unsigned long addr)
-+{
-+	return addr >= ms->init_begin && addr < ms->init_end;
-+}
-+
-+static bool is_bpf_init(struct symbols *ms, unsigned long addr)
-+{
-+	return addr >= ms->init_bpf_begin && addr < ms->init_bpf_end;
-+}
-+
-+static int filter_functions(struct btf_elf *btfe, struct symbols *ms)
-+{
-+	unsigned long *addrs, count, offset, i;
-+	Elf_Data *data;
-+	GElf_Shdr shdr;
-+	Elf_Scn *sec;
-+
-+	/*
-+	 * Find mcount addressed marked by __start_mcount_loc
-+	 * and __stop_mcount_loc symbols and load them into
-+	 * sorted array.
-+	 */
-+	sec = elf_getscn(btfe->elf, ms->start_section);
-+	if (!sec || !gelf_getshdr(sec, &shdr)) {
-+		fprintf(stderr, "Failed to get section(%lu) header.\n",
-+			ms->start_section);
-+		return -1;
-+	}
-+
-+	offset = ms->start - shdr.sh_addr;
-+	count  = (ms->stop - ms->start) / 8;
-+
-+	data = elf_getdata(sec, 0);
-+	if (!data) {
-+		fprintf(stderr, "Failed to get section(%lu) data.\n",
-+			ms->start_section);
-+		return -1;
-+	}
-+
-+	addrs = malloc(count * sizeof(addrs[0]));
-+	if (!addrs) {
-+		fprintf(stderr, "Failed to allocate memory for ftrace addresses.\n");
-+		return -1;
-+	}
-+
-+	memcpy(addrs, data->d_buf + offset, count * sizeof(addrs[0]));
-+	qsort(addrs, count, sizeof(addrs[0]), addrs_cmp);
-+
-+	/*
-+	 * Let's got through all collected functions and filter
-+	 * out those that are not in ftrace and init code.
-+	 */
-+	for (i = 0; i < functions_cnt; i++) {
-+		struct elf_function *func = &functions[i];
-+
-+		/*
-+		 * Do not enable .init section functions,
-+		 * but keep .init.bpf.preserve_type functions.
-+		 */
-+		if (is_init(ms, func->addr) && !is_bpf_init(ms, func->addr))
-+			continue;
-+
-+		/* Make sure function is within ftrace addresses. */
-+		if (bsearch(&func->addr, addrs, count, sizeof(addrs[0]), addrs_cmp)) {
-+			/*
-+			 * We iterate over sorted array, so we can easily skip
-+			 * not valid item and move following valid field into
-+			 * its place, and still keep the 'new' array sorted.
-+			 */
-+			if (i != functions_valid)
-+				functions[functions_valid] = functions[i];
-+			functions_valid++;
-+		}
-+	}
-+
-+	free(addrs);
-+	return 0;
-+}
-+
-+static bool should_generate_function(const struct btf_elf *btfe, const char *name)
-+{
-+	struct elf_function *p;
-+	struct elf_function key = { .name = name };
-+
-+	p = bsearch(&key, functions, functions_valid,
-+		    sizeof(functions[0]), functions_cmp);
-+	if (!p || p->generated)
-+		return false;
-+
-+	p->generated = true;
-+	return true;
-+}
-+
- static bool btf_name_char_ok(char c, bool first)
- {
- 	if (c == '_' || c == '.')
-@@ -207,6 +375,7 @@ int btf_encoder__encode()
- 		btf_elf__add_datasec_type(btfe, PERCPU_SECTION, &btfe->percpu_secinfo);
- 
- 	err = btf_elf__encode(btfe, 0);
-+	delete_functions();
- 	btf_elf__delete(btfe);
- 	btfe = NULL;
- 
-@@ -308,8 +477,45 @@ static int collect_percpu_var(struct btf_elf *btfe, GElf_Sym *sym)
- 	return 0;
- }
- 
-+static void collect_symbol(GElf_Sym *sym, struct symbols *ms)
-+{
-+	if (!ms->start &&
-+	    !strcmp("__start_mcount_loc", elf_sym__name(sym, btfe->symtab))) {
-+		ms->start = sym->st_value;
-+		ms->start_section = sym->st_shndx;
-+	}
-+
-+	if (!ms->stop &&
-+	    !strcmp("__stop_mcount_loc", elf_sym__name(sym, btfe->symtab)))
-+		ms->stop = sym->st_value;
-+
-+	if (!ms->init_begin &&
-+	    !strcmp("__init_begin", elf_sym__name(sym, btfe->symtab)))
-+		ms->init_begin = sym->st_value;
-+
-+	if (!ms->init_end &&
-+	    !strcmp("__init_end", elf_sym__name(sym, btfe->symtab)))
-+		ms->init_end = sym->st_value;
-+
-+	if (!ms->init_bpf_begin &&
-+	    !strcmp("__init_bpf_preserve_type_begin", elf_sym__name(sym, btfe->symtab)))
-+		ms->init_bpf_begin = sym->st_value;
-+
-+	if (!ms->init_bpf_end &&
-+	    !strcmp("__init_bpf_preserve_type_end", elf_sym__name(sym, btfe->symtab)))
-+		ms->init_bpf_end = sym->st_value;
-+}
-+
-+static int has_all_symbols(struct symbols *ms)
-+{
-+	return ms->start && ms->stop &&
-+	       ms->init_begin && ms->init_end &&
-+	       ms->init_bpf_begin && ms->init_bpf_end;
-+}
-+
- static int collect_symbols(struct btf_elf *btfe, bool collect_percpu_vars)
- {
-+	struct symbols ms = { };
- 	uint32_t core_id;
- 	GElf_Sym sym;
- 
-@@ -320,6 +526,9 @@ static int collect_symbols(struct btf_elf *btfe, bool collect_percpu_vars)
- 	elf_symtab__for_each_symbol(btfe->symtab, core_id, sym) {
- 		if (collect_percpu_vars && collect_percpu_var(btfe, &sym))
- 			return -1;
-+		if (collect_function(btfe, &sym))
-+			return -1;
-+		collect_symbol(&sym, &ms);
- 	}
- 
- 	if (collect_percpu_vars) {
-@@ -329,9 +538,36 @@ static int collect_symbols(struct btf_elf *btfe, bool collect_percpu_vars)
- 		if (btf_elf__verbose)
- 			printf("Found %d per-CPU variables!\n", percpu_var_cnt);
- 	}
-+
-+	if (functions_cnt && has_all_symbols(&ms)) {
-+		qsort(functions, functions_cnt, sizeof(functions[0]), functions_cmp);
-+		if (filter_functions(btfe, &ms)) {
-+			fprintf(stderr, "Failed to filter dwarf functions\n");
-+			return -1;
-+		}
-+		if (btf_elf__verbose)
-+			printf("Found %d functions!\n", functions_valid);
-+	} else {
-+		if (btf_elf__verbose)
-+			printf("vmlinux not detected, falling back to dwarf data\n");
-+	}
-+
- 	return 0;
- }
- 
-+static bool has_arg_names(struct cu *cu, struct ftype *ftype)
-+{
-+	struct parameter *param;
-+	const char *name;
-+
-+	ftype__for_each_parameter(ftype, param) {
-+		name = dwarves__active_loader->strings__ptr(cu, param->name);
-+		if (name == NULL)
-+			return false;
-+	}
-+	return true;
-+}
-+
- int cu__encode_btf(struct cu *cu, int verbose, bool force,
- 		   bool skip_encoding_vars)
- {
-@@ -407,8 +643,28 @@ int cu__encode_btf(struct cu *cu, int verbose, bool force,
- 		int btf_fnproto_id, btf_fn_id;
- 		const char *name;
- 
--		if (fn->declaration || !fn->external)
--			continue;
-+		/*
-+		 * The functions_valid != 0 means we parsed all necessary
-+		 * kernel symbols and we are using ftrace location filter
-+		 * for functions. If it's not available keep the current
-+		 * dwarf declaration check.
-+		 */
-+		if (functions_valid) {
-+			/*
-+			 * We check following conditions:
-+			 *   - argument names are defined
-+			 *   - there's symbol and address defined for the function
-+			 *   - function address belongs to ftrace locations
-+			 *   - function is generated only once
-+			 */
-+			if (!has_arg_names(cu, &fn->proto))
-+				continue;
-+			if (!should_generate_function(btfe, function__name(fn, cu)))
-+				continue;
-+		} else {
-+			if (fn->declaration || !fn->external)
-+				continue;
-+		}
- 
- 		btf_fnproto_id = btf_elf__add_func_proto(btfe, cu, &fn->proto, type_id_off);
- 		name = dwarves__active_loader->strings__ptr(cu, fn->name);
-@@ -492,6 +748,7 @@ int cu__encode_btf(struct cu *cu, int verbose, bool force,
- 
- out:
- 	if (err) {
-+		delete_functions();
- 		btf_elf__delete(btfe);
- 		btfe = NULL;
- 	}
--- 
-2.26.2
+[1] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=97060
 
