@@ -2,225 +2,95 @@ Return-Path: <SRS0=OQ7q=EL=vger.kernel.org=dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-4.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E9B12C388F7
-	for <linux-dwarves@archiver.kernel.org>; Thu,  5 Nov 2020 19:52:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2D3ACC388F7
+	for <linux-dwarves@archiver.kernel.org>; Thu,  5 Nov 2020 20:29:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8B5B620728
-	for <linux-dwarves@archiver.kernel.org>; Thu,  5 Nov 2020 19:52:49 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BB+C9Lfy"
+	by mail.kernel.org (Postfix) with ESMTP id BDA2E21D46
+	for <linux-dwarves@archiver.kernel.org>; Thu,  5 Nov 2020 20:29:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1604608164;
+	bh=hlUcZZcYM8dgNZ9WjZApTQvBOLn5bzBYS8n+Sxa93uU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
+	b=ORqgO4cTNPfoTtBewMwTyuFqHEYWCXngKGF0lgB1UEklpd2Fv4tSwt6+q/RBg/WcC
+	 A8xNkg8N7n93mX25bihgiY+7ip6B8swLMGyNNEXWZR68mJWafoAvV40RZowV7PGm41
+	 leURr9wv2ZJipgBznKLsWiOjCCMbNt7jhyQ0nr6U=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732222AbgKETwt (ORCPT
+        id S1726729AbgKEU3Y (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Thu, 5 Nov 2020 14:52:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38956 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732220AbgKETws (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Thu, 5 Nov 2020 14:52:48 -0500
-Received: from mail-yb1-xb43.google.com (mail-yb1-xb43.google.com [IPv6:2607:f8b0:4864:20::b43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F1ADC0613CF;
-        Thu,  5 Nov 2020 11:52:47 -0800 (PST)
-Received: by mail-yb1-xb43.google.com with SMTP id s8so217819yba.13;
-        Thu, 05 Nov 2020 11:52:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=oGAvsDHCD21Vv/DRAsTgB5pJSe8OiFDDHdh5DsJ556A=;
-        b=BB+C9Lfy8Ks+tlBFsTgwDyO/hJmxsX6GNZcHKAT3ZWIGeFLNIbCSl0Py9qWGbIO0G7
-         5rIuMi23TT6uNvgLY7Guq9X3K9WGieoT8ZKRyQ/azMCc9aOJOy/T4hfr95bFFrCtJ4kd
-         kvSrg3PsAnQqcrynxi/hc2p6zY+/OnecdMCsoEO218qEgaWJT2G/qug8SwuJvy/jUjcZ
-         OduKhuqY0tvvf1qk98PX+sdUmX+I2YM0ApJFbEAfKjldyeXjX7be9sNFqTlyf314rFkT
-         FhZt9t9wY4i7PR8xrO5h6hMmDermmXC3gv+tBl0ZyHyWeo/o3CGehzhc/pOReOYwrlGJ
-         rHVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=oGAvsDHCD21Vv/DRAsTgB5pJSe8OiFDDHdh5DsJ556A=;
-        b=iTvtJasjcJXyzQHV1SnzSHl7Bz8UzMf2Fl1YPIe6fV4ibUnN1luvKBxqMBT/i5JeIY
-         Bgksq3CGC353scLUDUQ73rdYQk8YvkKc2Wk9V1vReO83j3rknBgHVMTcJO8gDM38uL/7
-         UnBj9ooWYN2pTAnDtoS4J5EzK6mxtukQcpSRy4rxd9DAQc7drdPKPZaL0FzFF0O4Ad7Q
-         g4+ADg3bCgApIBXE1FAG5WUJMGZ3rpsv9jrv2FdzVwkQkHsJoz6+E4u2TnLI29KDgTkI
-         j6b1FGV3+Li0u+NVKaVXVFFadQboE3ojHBItztHN7eekDt3RTSCo8uPaSyQoJIYtQN85
-         kJkQ==
-X-Gm-Message-State: AOAM5309/NG5DKoPgZKPJFB1h405tWaRgheTq6PmWWSsT15SOOkyCq7P
-        PeDp34CsXyL0KsjLC1G9IWeobqK0EmGW0IPwvfc=
-X-Google-Smtp-Source: ABdhPJwWJLZuD3aiEQ1aV6xwHlW/yk0BZy5t6InZRyROeoW2tt+EO99/y9rZP37f18s7kWDulOmbcvflNoR33cxSQCA=
-X-Received: by 2002:a25:cb10:: with SMTP id b16mr5863946ybg.459.1604605966514;
- Thu, 05 Nov 2020 11:52:46 -0800 (PST)
+        Thu, 5 Nov 2020 15:29:24 -0500
+Received: from mail.kernel.org ([198.145.29.99]:39832 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726214AbgKEU3Y (ORCPT <rfc822;dwarves@vger.kernel.org>);
+        Thu, 5 Nov 2020 15:29:24 -0500
+Received: from quaco.ghostprotocols.net (unknown [179.97.37.151])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 49E6520867;
+        Thu,  5 Nov 2020 20:29:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1604608163;
+        bh=hlUcZZcYM8dgNZ9WjZApTQvBOLn5bzBYS8n+Sxa93uU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=w+p/JVPYDs7Dm9acs7bTeM1oUistDp9s2pnL9KbtLfbCq2sw/p9lnzgKP9/THfgwp
+         HqE6uR25F0+7wk4O/MbPmg6yme3pY90d2H6KG1HCmpPW8F6f9KBnCyebOdoaQ34l5R
+         EwjTEUPHjTIuclyeyZb7mCH07MoI3tOAGLwi4vnY=
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 00D72411D1; Thu,  5 Nov 2020 17:29:20 -0300 (-03)
+Date:   Thu, 5 Nov 2020 17:29:20 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Andrii Nakryiko <andrii@kernel.org>, dwarves@vger.kernel.org,
+        bpf <bpf@vger.kernel.org>, Kernel Team <kernel-team@fb.com>
+Subject: Re: [RFC PATCH dwarves] btf: add support for split BTF loading and
+ encoding
+Message-ID: <20201105202920.GJ262228@kernel.org>
+References: <20201105043936.2555804-1-andrii@kernel.org>
+ <20201105114242.GH262228@kernel.org>
+ <CAEf4BzYshEY3K=fqt2iQJaVcZeepcger0C7+uOXNhG=MLC9R-w@mail.gmail.com>
 MIME-Version: 1.0
-References: <20201104215923.4000229-1-jolsa@kernel.org> <20201104215923.4000229-4-jolsa@kernel.org>
-In-Reply-To: <20201104215923.4000229-4-jolsa@kernel.org>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Thu, 5 Nov 2020 11:52:35 -0800
-Message-ID: <CAEf4BzZaUyY0TA_Gq559ojEeT2mHtdc3aUbvB9Q_4u0pZ+WiWQ@mail.gmail.com>
-Subject: Re: [PATCH 3/3] btf_encoder: Change functions check due to broken dwarf
-To:     Jiri Olsa <jolsa@kernel.org>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        dwarves@vger.kernel.org, bpf <bpf@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andriin@fb.com>, Yonghong Song <yhs@fb.com>,
-        Hao Luo <haoluo@google.com>,
-        "Frank Ch. Eigler" <fche@redhat.com>,
-        Mark Wielaard <mjw@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAEf4BzYshEY3K=fqt2iQJaVcZeepcger0C7+uOXNhG=MLC9R-w@mail.gmail.com>
+X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-[
+Em Thu, Nov 05, 2020 at 11:10:14AM -0800, Andrii Nakryiko escreveu:
+> On Thu, Nov 5, 2020 at 3:42 AM Arnaldo Carvalho de Melo <acme@kernel.org> wrote:
+> > Em Wed, Nov 04, 2020 at 08:39:36PM -0800, Andrii Nakryiko escreveu:
+> > > @@ -679,11 +681,11 @@ static int btf_elf__write(const char *filename, struct btf *btf)
+> > >  {
+> > >       GElf_Shdr shdr_mem, *shdr;
+> > >       GElf_Ehdr ehdr_mem, *ehdr;
+> > > -     Elf_Data *btf_elf = NULL;
+> > > +     Elf_Data *btf_data = NULL;
 
-On Wed, Nov 4, 2020 at 2:01 PM Jiri Olsa <jolsa@kernel.org> wrote:
->
-> We need to generate just single BTF instance for the
-> function, while DWARF data contains multiple instances
-> of DW_TAG_subprogram tag.
->
-> Unfortunately we can no longer rely on DW_AT_declaration
-> tag (https://gcc.gnu.org/bugzilla/show_bug.cgi?id=97060)
->
-> Instead we apply following checks:
->   - argument names are defined for the function
->   - there's symbol and address defined for the function
->   - function is generated only once
->
-> Also because we want to follow kernel's ftrace traceable
-> functions, this patchset is adding extra check that the
-> function is one of the ftrace's functions.
->
-> All ftrace functions addresses are stored in vmlinux
-> binary within symbols:
->   __start_mcount_loc
->   __stop_mcount_loc
->
-> During object preparation code we read those addresses,
-> sort them and use them as filter for all detected dwarf
-> functions.
->
-> We also filter out functions within .init section, ftrace
-> is doing that in runtime. At the same time we keep functions
-> from .init.bpf.preserve_type, because they are needed in BTF.
->
-> I can still see several differences to ftrace functions in
-> /sys/kernel/debug/tracing/available_filter_functions file:
->
->   - available_filter_functions includes modules
->   - available_filter_functions includes functions like:
->       __acpi_match_device.part.0.constprop.0
->       acpi_ns_check_sorted_list.constprop.0
->       acpi_os_unmap_generic_address.part.0
->       acpiphp_check_bridge.part.0
->
->     which are not part of dwarf data
->   - BTF includes multiple functions like:
->       __clk_register_clkdev
->       clk_register_clkdev
->
->     which share same code so they appear just as single function
->     in available_filter_functions, but dwarf keeps track of both
->     of them
->
-> With this change I'm getting 38353 BTF functions, which
-> when added above functions to consideration gives same
-> amount of functions in available_filter_functions.
->
-> The patch still keeps the original function filter condition
-> (that uses current fn->declaration check) in case the object
-> does not contain *_mcount_loc symbol -> object is not vmlinux.
->
-> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
-> ---
+> > Can you please split this into two patches, one doing just the rename
+> > of btf_elf to btf_data and then moving to btf__new_empty_split()? Eases
+> > reviewing.
+ 
+> sure, will do in the next version
 
-Logic looks good, but the naming made it harder to understand what's
-going on, had to jump back and forth more than usual.
+Thanks!
+ 
+> > With this split btf code would it be possible to paralelize the encoding
+> > of the modules BTF? I have to check the other patches and how this gets
+> > used in the kernel build process... :-)
+ 
+> Yes, each module's BTF is generated completely independently. See some
+> numbers in [0].
+> 
+>   [0] https://patchwork.kernel.org/project/netdevbpf/patch/20201105045140.2589346-4-andrii@kernel.org/
 
-Otherwise:
+I saw it, very good. I wonder if we could manage to also paralelize the
+processing of DWARF compile units in the BTF encoder, like start
+processing and at the end just figure out how many types were in a CU,
+get the highest type id and bump it to + the number of types in the
+current CU, adjust the types, continue, something like that.
 
-Acked-by: Andrii Nakryiko <andrii@kernel.org>
-
->  btf_encoder.c | 261 +++++++++++++++++++++++++++++++++++++++++++++++++-
->  1 file changed, 259 insertions(+), 2 deletions(-)
->
-> diff --git a/btf_encoder.c b/btf_encoder.c
-> index 1866bb16a8ba..df89b4467e4c 100644
-> --- a/btf_encoder.c
-> +++ b/btf_encoder.c
-> @@ -26,6 +26,174 @@
->   */
->  #define KSYM_NAME_LEN 128
->
-> +struct symbols {
-
-"symbols" is a bit generic name, something like funcs_layout seems to
-convey the meaning a bit more precisely?
-
-
-> +       unsigned long start;
-> +       unsigned long stop;
-
-start/stop mcount, right? mcount part is important is important
-
-> +       unsigned long init_begin;
-> +       unsigned long init_end;
-> +       unsigned long init_bpf_begin;
-> +       unsigned long init_bpf_end;
-> +       unsigned long start_section;
-
-start_section is quite ambiguous. That's the mcount section index, no?
-mcount_sec_idx?
-
-> +};
-> +
-> +struct elf_function {
-> +       const char      *name;
-> +       unsigned long    addr;
-> +       bool             generated;
-> +};
-> +
-
-[...]
-
-> +       /*
-> +        * Let's got through all collected functions and filter
-> +        * out those that are not in ftrace and init code.
-> +        */
-> +       for (i = 0; i < functions_cnt; i++) {
-> +               struct elf_function *func = &functions[i];
-> +
-> +               /*
-> +                * Do not enable .init section functions,
-> +                * but keep .init.bpf.preserve_type functions.
-> +                */
-> +               if (is_init(ms, func->addr) && !is_bpf_init(ms, func->addr))
-> +                       continue;
-> +
-> +               /* Make sure function is within ftrace addresses. */
-> +               if (bsearch(&func->addr, addrs, count, sizeof(addrs[0]), addrs_cmp)) {
-> +                       /*
-> +                        * We iterate over sorted array, so we can easily skip
-> +                        * not valid item and move following valid field into
-> +                        * its place, and still keep the 'new' array sorted.
-> +                        */
-> +                       if (i != functions_valid)
-> +                               functions[functions_valid] = functions[i];
-> +                       functions_valid++;
-> +               }
-> +       }
-
-can we re-assign function_cnt = functions_valid here? and
-functions_valid could be just a local temporary variable?
-
-> +
-> +       free(addrs);
-> +       return 0;
-> +}
-> +
-
-[...]
+- Arnaldo
