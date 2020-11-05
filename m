@@ -2,95 +2,119 @@ Return-Path: <SRS0=OQ7q=EL=vger.kernel.org=dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2D3ACC388F7
-	for <linux-dwarves@archiver.kernel.org>; Thu,  5 Nov 2020 20:29:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 16BC9C388F7
+	for <linux-dwarves@archiver.kernel.org>; Thu,  5 Nov 2020 21:06:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BDA2E21D46
-	for <linux-dwarves@archiver.kernel.org>; Thu,  5 Nov 2020 20:29:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1604608164;
-	bh=hlUcZZcYM8dgNZ9WjZApTQvBOLn5bzBYS8n+Sxa93uU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
-	b=ORqgO4cTNPfoTtBewMwTyuFqHEYWCXngKGF0lgB1UEklpd2Fv4tSwt6+q/RBg/WcC
-	 A8xNkg8N7n93mX25bihgiY+7ip6B8swLMGyNNEXWZR68mJWafoAvV40RZowV7PGm41
-	 leURr9wv2ZJipgBznKLsWiOjCCMbNt7jhyQ0nr6U=
+	by mail.kernel.org (Postfix) with ESMTP id 9D9AD20724
+	for <linux-dwarves@archiver.kernel.org>; Thu,  5 Nov 2020 21:06:02 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JeRbElrB"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726729AbgKEU3Y (ORCPT
+        id S1731899AbgKEVGC (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Thu, 5 Nov 2020 15:29:24 -0500
-Received: from mail.kernel.org ([198.145.29.99]:39832 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726214AbgKEU3Y (ORCPT <rfc822;dwarves@vger.kernel.org>);
-        Thu, 5 Nov 2020 15:29:24 -0500
-Received: from quaco.ghostprotocols.net (unknown [179.97.37.151])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 49E6520867;
-        Thu,  5 Nov 2020 20:29:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1604608163;
-        bh=hlUcZZcYM8dgNZ9WjZApTQvBOLn5bzBYS8n+Sxa93uU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=w+p/JVPYDs7Dm9acs7bTeM1oUistDp9s2pnL9KbtLfbCq2sw/p9lnzgKP9/THfgwp
-         HqE6uR25F0+7wk4O/MbPmg6yme3pY90d2H6KG1HCmpPW8F6f9KBnCyebOdoaQ34l5R
-         EwjTEUPHjTIuclyeyZb7mCH07MoI3tOAGLwi4vnY=
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 00D72411D1; Thu,  5 Nov 2020 17:29:20 -0300 (-03)
-Date:   Thu, 5 Nov 2020 17:29:20 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+        Thu, 5 Nov 2020 16:06:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50384 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726729AbgKEVGC (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Thu, 5 Nov 2020 16:06:02 -0500
+Received: from mail-yb1-xb41.google.com (mail-yb1-xb41.google.com [IPv6:2607:f8b0:4864:20::b41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E13A5C0613CF;
+        Thu,  5 Nov 2020 13:06:01 -0800 (PST)
+Received: by mail-yb1-xb41.google.com with SMTP id f140so2571030ybg.3;
+        Thu, 05 Nov 2020 13:06:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=b8KXKdPdR56J5OIrdXGJjbqwpFhVq0I2wJnMKBptINk=;
+        b=JeRbElrBCF0hrOSxwsYkRFhgEut2lr6u7fFr4npD89eipsgj9sM4sWtf8qdImfDGP9
+         ZlvbS18xlh4jiS8qm9Qa+0VAxbhLS53XdNXG9yWpXrwTr1+2tQT5SoIbya9NR1165VI7
+         vhUhvg9LjqVCaQXC9dBK9X38jBe2SAWTA6IQNrKYzVkQemEcw9MpMkO9VbWlywNItXwr
+         ZGE3rIBhe3yWvW0NVqk0SsVwhQB2/kklorllXJHym1wGGkdYh/J49AjzvBKRdK3GFFp3
+         i93mXC6NuQByfoIG1MqQiKCVqTG3lM22d+nA4GzYh401efmYoM3lSsqlVnDgzHZg7itt
+         /Xsg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=b8KXKdPdR56J5OIrdXGJjbqwpFhVq0I2wJnMKBptINk=;
+        b=Nta1QgIfl3ImCCOTs/pUyBZRoylgTmdyjnWpkhW3plL9nr51WQWnLc7tqFCfHBx02j
+         WnUl0IHHtUdsKI/d/g5cdy7YDepMpIyBrCFW6Fcr7laeJUhBYpStTVMeOqh0eDdWJr9R
+         2K414WR6BSMEvZ1/FRfyh6f0PEU7UlhlRYDWBP/syxdovY7hyveMUNY4l6vXtHhtqnrt
+         JknhuypqKis4S6OogxwSWKjuC3Ty5sJ3RVDiNH4rV2r03Fr/b2FTFfVHcaxF3PDcCeDG
+         sMgY25vv0dXOqLfNVsn3Z1hVLEw9MPvoZqKKar1s7/+pRRq747WvrBdBOTO/PyANZT5x
+         Q/Nw==
+X-Gm-Message-State: AOAM5311joSF20qM2AKcrxvNfylKMB7n3a9yXMG0Dt0CyM7VvcxU4WY3
+        UOBR1+hqI+A63rHaZ0muxsCiO6XCryjt3wVN6jerRBUxUJg=
+X-Google-Smtp-Source: ABdhPJyN+9pRrd6GB1ND48rPtcOMtyNNFi7N5W/bELInvc3NtuvcWma8DZxt8mavE0ov1UuPX069itnedjbWbxc+OT8=
+X-Received: by 2002:a25:b0d:: with SMTP id 13mr6628525ybl.347.1604610361122;
+ Thu, 05 Nov 2020 13:06:01 -0800 (PST)
+MIME-Version: 1.0
+References: <20201105043936.2555804-1-andrii@kernel.org> <20201105114242.GH262228@kernel.org>
+ <CAEf4BzYshEY3K=fqt2iQJaVcZeepcger0C7+uOXNhG=MLC9R-w@mail.gmail.com> <20201105202920.GJ262228@kernel.org>
+In-Reply-To: <20201105202920.GJ262228@kernel.org>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Thu, 5 Nov 2020 13:05:50 -0800
+Message-ID: <CAEf4BzaE=B31fOc_L_ctBi_k9fdUzfHqOkWSDsJqehLJa8YsDw@mail.gmail.com>
+Subject: Re: [RFC PATCH dwarves] btf: add support for split BTF loading and encoding
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
 Cc:     Andrii Nakryiko <andrii@kernel.org>, dwarves@vger.kernel.org,
         bpf <bpf@vger.kernel.org>, Kernel Team <kernel-team@fb.com>
-Subject: Re: [RFC PATCH dwarves] btf: add support for split BTF loading and
- encoding
-Message-ID: <20201105202920.GJ262228@kernel.org>
-References: <20201105043936.2555804-1-andrii@kernel.org>
- <20201105114242.GH262228@kernel.org>
- <CAEf4BzYshEY3K=fqt2iQJaVcZeepcger0C7+uOXNhG=MLC9R-w@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAEf4BzYshEY3K=fqt2iQJaVcZeepcger0C7+uOXNhG=MLC9R-w@mail.gmail.com>
-X-Url:  http://acmel.wordpress.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-Em Thu, Nov 05, 2020 at 11:10:14AM -0800, Andrii Nakryiko escreveu:
-> On Thu, Nov 5, 2020 at 3:42 AM Arnaldo Carvalho de Melo <acme@kernel.org> wrote:
-> > Em Wed, Nov 04, 2020 at 08:39:36PM -0800, Andrii Nakryiko escreveu:
-> > > @@ -679,11 +681,11 @@ static int btf_elf__write(const char *filename, struct btf *btf)
-> > >  {
-> > >       GElf_Shdr shdr_mem, *shdr;
-> > >       GElf_Ehdr ehdr_mem, *ehdr;
-> > > -     Elf_Data *btf_elf = NULL;
-> > > +     Elf_Data *btf_data = NULL;
+On Thu, Nov 5, 2020 at 12:29 PM Arnaldo Carvalho de Melo
+<acme@kernel.org> wrote:
+>
+> Em Thu, Nov 05, 2020 at 11:10:14AM -0800, Andrii Nakryiko escreveu:
+> > On Thu, Nov 5, 2020 at 3:42 AM Arnaldo Carvalho de Melo <acme@kernel.org> wrote:
+> > > Em Wed, Nov 04, 2020 at 08:39:36PM -0800, Andrii Nakryiko escreveu:
+> > > > @@ -679,11 +681,11 @@ static int btf_elf__write(const char *filename, struct btf *btf)
+> > > >  {
+> > > >       GElf_Shdr shdr_mem, *shdr;
+> > > >       GElf_Ehdr ehdr_mem, *ehdr;
+> > > > -     Elf_Data *btf_elf = NULL;
+> > > > +     Elf_Data *btf_data = NULL;
+>
+> > > Can you please split this into two patches, one doing just the rename
+> > > of btf_elf to btf_data and then moving to btf__new_empty_split()? Eases
+> > > reviewing.
+>
+> > sure, will do in the next version
+>
+> Thanks!
+>
+> > > With this split btf code would it be possible to paralelize the encoding
+> > > of the modules BTF? I have to check the other patches and how this gets
+> > > used in the kernel build process... :-)
+>
+> > Yes, each module's BTF is generated completely independently. See some
+> > numbers in [0].
+> >
+> >   [0] https://patchwork.kernel.org/project/netdevbpf/patch/20201105045140.2589346-4-andrii@kernel.org/
+>
+> I saw it, very good. I wonder if we could manage to also paralelize the
+> processing of DWARF compile units in the BTF encoder, like start
+> processing and at the end just figure out how many types were in a CU,
+> get the highest type id and bump it to + the number of types in the
+> current CU, adjust the types, continue, something like that.
 
-> > Can you please split this into two patches, one doing just the rename
-> > of btf_elf to btf_data and then moving to btf__new_empty_split()? Eases
-> > reviewing.
- 
-> sure, will do in the next version
+A big chunk is just DWARF loading. If it's possible to parallelize
+that, it would be a big improvement. To parallelize BTF encoding
+itself, it could be possible to generate each individual CU's types in
+a separate BTF object, and then merge them together. We'd probably
+need a few new APIs (like btf__append_btf() which would add all types
+and strings, renumbering everything on the fly). BTF dedup itself is
+unlikely to be parallelizable easily, I definitely wouldn't dare ;)
+But it's also not a big portion of overall BTF encoding process. DWARF
+parsing and string lookup/addition where by far biggest CPU hogs.
 
-Thanks!
- 
-> > With this split btf code would it be possible to paralelize the encoding
-> > of the modules BTF? I have to check the other patches and how this gets
-> > used in the kernel build process... :-)
- 
-> Yes, each module's BTF is generated completely independently. See some
-> numbers in [0].
-> 
->   [0] https://patchwork.kernel.org/project/netdevbpf/patch/20201105045140.2589346-4-andrii@kernel.org/
-
-I saw it, very good. I wonder if we could manage to also paralelize the
-processing of DWARF compile units in the BTF encoder, like start
-processing and at the end just figure out how many types were in a CU,
-get the highest type id and bump it to + the number of types in the
-current CU, adjust the types, continue, something like that.
-
-- Arnaldo
+>
+> - Arnaldo
