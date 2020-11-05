@@ -2,119 +2,120 @@ Return-Path: <SRS0=OQ7q=EL=vger.kernel.org=dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 16BC9C388F7
-	for <linux-dwarves@archiver.kernel.org>; Thu,  5 Nov 2020 21:06:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 01695C388F7
+	for <linux-dwarves@archiver.kernel.org>; Thu,  5 Nov 2020 22:56:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9D9AD20724
-	for <linux-dwarves@archiver.kernel.org>; Thu,  5 Nov 2020 21:06:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 979972071A
+	for <linux-dwarves@archiver.kernel.org>; Thu,  5 Nov 2020 22:56:29 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JeRbElrB"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Mq5U+wFn"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731899AbgKEVGC (ORCPT
+        id S1731060AbgKEW43 (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Thu, 5 Nov 2020 16:06:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50384 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726729AbgKEVGC (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Thu, 5 Nov 2020 16:06:02 -0500
-Received: from mail-yb1-xb41.google.com (mail-yb1-xb41.google.com [IPv6:2607:f8b0:4864:20::b41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E13A5C0613CF;
-        Thu,  5 Nov 2020 13:06:01 -0800 (PST)
-Received: by mail-yb1-xb41.google.com with SMTP id f140so2571030ybg.3;
-        Thu, 05 Nov 2020 13:06:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=b8KXKdPdR56J5OIrdXGJjbqwpFhVq0I2wJnMKBptINk=;
-        b=JeRbElrBCF0hrOSxwsYkRFhgEut2lr6u7fFr4npD89eipsgj9sM4sWtf8qdImfDGP9
-         ZlvbS18xlh4jiS8qm9Qa+0VAxbhLS53XdNXG9yWpXrwTr1+2tQT5SoIbya9NR1165VI7
-         vhUhvg9LjqVCaQXC9dBK9X38jBe2SAWTA6IQNrKYzVkQemEcw9MpMkO9VbWlywNItXwr
-         ZGE3rIBhe3yWvW0NVqk0SsVwhQB2/kklorllXJHym1wGGkdYh/J49AjzvBKRdK3GFFp3
-         i93mXC6NuQByfoIG1MqQiKCVqTG3lM22d+nA4GzYh401efmYoM3lSsqlVnDgzHZg7itt
-         /Xsg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=b8KXKdPdR56J5OIrdXGJjbqwpFhVq0I2wJnMKBptINk=;
-        b=Nta1QgIfl3ImCCOTs/pUyBZRoylgTmdyjnWpkhW3plL9nr51WQWnLc7tqFCfHBx02j
-         WnUl0IHHtUdsKI/d/g5cdy7YDepMpIyBrCFW6Fcr7laeJUhBYpStTVMeOqh0eDdWJr9R
-         2K414WR6BSMEvZ1/FRfyh6f0PEU7UlhlRYDWBP/syxdovY7hyveMUNY4l6vXtHhtqnrt
-         JknhuypqKis4S6OogxwSWKjuC3Ty5sJ3RVDiNH4rV2r03Fr/b2FTFfVHcaxF3PDcCeDG
-         sMgY25vv0dXOqLfNVsn3Z1hVLEw9MPvoZqKKar1s7/+pRRq747WvrBdBOTO/PyANZT5x
-         Q/Nw==
-X-Gm-Message-State: AOAM5311joSF20qM2AKcrxvNfylKMB7n3a9yXMG0Dt0CyM7VvcxU4WY3
-        UOBR1+hqI+A63rHaZ0muxsCiO6XCryjt3wVN6jerRBUxUJg=
-X-Google-Smtp-Source: ABdhPJyN+9pRrd6GB1ND48rPtcOMtyNNFi7N5W/bELInvc3NtuvcWma8DZxt8mavE0ov1UuPX069itnedjbWbxc+OT8=
-X-Received: by 2002:a25:b0d:: with SMTP id 13mr6628525ybl.347.1604610361122;
- Thu, 05 Nov 2020 13:06:01 -0800 (PST)
+        Thu, 5 Nov 2020 17:56:29 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:42076 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726729AbgKEW43 (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Thu, 5 Nov 2020 17:56:29 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1604616988;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=C+3TCobREZNEd40HyH1ZY7BViufAqVh7MIgfcPDtSbs=;
+        b=Mq5U+wFn7PARA4SKS6Ut9tOogIMFOPAEhRUxMLKea/UtgeXmI8RUsMUtkyswUFYh2aLkOM
+        5d94o21gb8Kv06IhlhY0wqPTQy+vaoS766nkhuZF6MHbtAduGex/8BTIFOuOUA8qNVviJd
+        JQMKHTw+bbJ2vtzaFyhB2qyu4dAXk4o=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-476-0lIZyU9nNem3ZMhLEBaTjQ-1; Thu, 05 Nov 2020 17:56:26 -0500
+X-MC-Unique: 0lIZyU9nNem3ZMhLEBaTjQ-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id CC5CF86ABD6;
+        Thu,  5 Nov 2020 22:56:23 +0000 (UTC)
+Received: from krava (unknown [10.40.192.38])
+        by smtp.corp.redhat.com (Postfix) with SMTP id 371DD1002C03;
+        Thu,  5 Nov 2020 22:56:18 +0000 (UTC)
+Date:   Thu, 5 Nov 2020 23:56:17 +0100
+From:   Jiri Olsa <jolsa@redhat.com>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Jiri Olsa <jolsa@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        dwarves@vger.kernel.org, bpf <bpf@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andriin@fb.com>, Yonghong Song <yhs@fb.com>,
+        Hao Luo <haoluo@google.com>,
+        "Frank Ch. Eigler" <fche@redhat.com>,
+        Mark Wielaard <mjw@redhat.com>
+Subject: Re: [PATCH 3/3] btf_encoder: Change functions check due to broken
+ dwarf
+Message-ID: <20201105225617.GB4112111@krava>
+References: <20201104215923.4000229-1-jolsa@kernel.org>
+ <20201104215923.4000229-4-jolsa@kernel.org>
+ <CAEf4BzZaUyY0TA_Gq559ojEeT2mHtdc3aUbvB9Q_4u0pZ+WiWQ@mail.gmail.com>
 MIME-Version: 1.0
-References: <20201105043936.2555804-1-andrii@kernel.org> <20201105114242.GH262228@kernel.org>
- <CAEf4BzYshEY3K=fqt2iQJaVcZeepcger0C7+uOXNhG=MLC9R-w@mail.gmail.com> <20201105202920.GJ262228@kernel.org>
-In-Reply-To: <20201105202920.GJ262228@kernel.org>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Thu, 5 Nov 2020 13:05:50 -0800
-Message-ID: <CAEf4BzaE=B31fOc_L_ctBi_k9fdUzfHqOkWSDsJqehLJa8YsDw@mail.gmail.com>
-Subject: Re: [RFC PATCH dwarves] btf: add support for split BTF loading and encoding
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Andrii Nakryiko <andrii@kernel.org>, dwarves@vger.kernel.org,
-        bpf <bpf@vger.kernel.org>, Kernel Team <kernel-team@fb.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAEf4BzZaUyY0TA_Gq559ojEeT2mHtdc3aUbvB9Q_4u0pZ+WiWQ@mail.gmail.com>
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-On Thu, Nov 5, 2020 at 12:29 PM Arnaldo Carvalho de Melo
-<acme@kernel.org> wrote:
->
-> Em Thu, Nov 05, 2020 at 11:10:14AM -0800, Andrii Nakryiko escreveu:
-> > On Thu, Nov 5, 2020 at 3:42 AM Arnaldo Carvalho de Melo <acme@kernel.org> wrote:
-> > > Em Wed, Nov 04, 2020 at 08:39:36PM -0800, Andrii Nakryiko escreveu:
-> > > > @@ -679,11 +681,11 @@ static int btf_elf__write(const char *filename, struct btf *btf)
-> > > >  {
-> > > >       GElf_Shdr shdr_mem, *shdr;
-> > > >       GElf_Ehdr ehdr_mem, *ehdr;
-> > > > -     Elf_Data *btf_elf = NULL;
-> > > > +     Elf_Data *btf_data = NULL;
->
-> > > Can you please split this into two patches, one doing just the rename
-> > > of btf_elf to btf_data and then moving to btf__new_empty_split()? Eases
-> > > reviewing.
->
-> > sure, will do in the next version
->
-> Thanks!
->
-> > > With this split btf code would it be possible to paralelize the encoding
-> > > of the modules BTF? I have to check the other patches and how this gets
-> > > used in the kernel build process... :-)
->
-> > Yes, each module's BTF is generated completely independently. See some
-> > numbers in [0].
-> >
-> >   [0] https://patchwork.kernel.org/project/netdevbpf/patch/20201105045140.2589346-4-andrii@kernel.org/
->
-> I saw it, very good. I wonder if we could manage to also paralelize the
-> processing of DWARF compile units in the BTF encoder, like start
-> processing and at the end just figure out how many types were in a CU,
-> get the highest type id and bump it to + the number of types in the
-> current CU, adjust the types, continue, something like that.
+On Thu, Nov 05, 2020 at 11:52:35AM -0800, Andrii Nakryiko wrote:
 
-A big chunk is just DWARF loading. If it's possible to parallelize
-that, it would be a big improvement. To parallelize BTF encoding
-itself, it could be possible to generate each individual CU's types in
-a separate BTF object, and then merge them together. We'd probably
-need a few new APIs (like btf__append_btf() which would add all types
-and strings, renumbering everything on the fly). BTF dedup itself is
-unlikely to be parallelizable easily, I definitely wouldn't dare ;)
-But it's also not a big portion of overall BTF encoding process. DWARF
-parsing and string lookup/addition where by far biggest CPU hogs.
+SNIP
 
->
-> - Arnaldo
+> > +        * Let's got through all collected functions and filter
+> > +        * out those that are not in ftrace and init code.
+> > +        */
+> > +       for (i = 0; i < functions_cnt; i++) {
+> > +               struct elf_function *func = &functions[i];
+> > +
+> > +               /*
+> > +                * Do not enable .init section functions,
+> > +                * but keep .init.bpf.preserve_type functions.
+> > +                */
+> > +               if (is_init(ms, func->addr) && !is_bpf_init(ms, func->addr))
+> > +                       continue;
+> > +
+> > +               /* Make sure function is within ftrace addresses. */
+> > +               if (bsearch(&func->addr, addrs, count, sizeof(addrs[0]), addrs_cmp)) {
+> > +                       /*
+> > +                        * We iterate over sorted array, so we can easily skip
+> > +                        * not valid item and move following valid field into
+> > +                        * its place, and still keep the 'new' array sorted.
+> > +                        */
+> > +                       if (i != functions_valid)
+> > +                               functions[functions_valid] = functions[i];
+> > +                       functions_valid++;
+> > +               }
+> > +       }
+> 
+> can we re-assign function_cnt = functions_valid here? and
+> functions_valid could be just a local temporary variable?
+
+good idea, should be simpler.. will change
+
+and ack to all naming changes above ;-)
+
+thanks,
+jirka
+
+> 
+> > +
+> > +       free(addrs);
+> > +       return 0;
+> > +}
+> > +
+> 
+> [...]
+> 
+
