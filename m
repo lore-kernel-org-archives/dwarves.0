@@ -2,373 +2,232 @@ Return-Path: <SRS0=OQ7q=EL=vger.kernel.org=dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-9.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DBB9EC00A89
-	for <linux-dwarves@archiver.kernel.org>; Thu,  5 Nov 2020 11:42:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ACAD5C388F7
+	for <linux-dwarves@archiver.kernel.org>; Thu,  5 Nov 2020 19:10:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 828AF2071A
-	for <linux-dwarves@archiver.kernel.org>; Thu,  5 Nov 2020 11:42:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1604576568;
-	bh=5VRTwjpmKBu9KB8BMN+QsZm3R0MwdEqWWrsMOe7819Y=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
-	b=Q5301jQN9hDfeWvnB3ZpzVYlg12W8rgeb2NnrLFtv+UTUnrZpIvFufw/kDzbFortZ
-	 sHohCT5pohiopZ3D03zVYaSsaeo1boZf2LmMheV2j0BuAbMCTFmIJOQ4PJKdkHldk4
-	 JCvL1X3Ti7Xpu1dQ8MGy4turLBeBo48DdjNt3A2Q=
+	by mail.kernel.org (Postfix) with ESMTP id 3C3332078E
+	for <linux-dwarves@archiver.kernel.org>; Thu,  5 Nov 2020 19:10:28 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mqTZSqSt"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729887AbgKELms (ORCPT
+        id S1727017AbgKETK0 (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Thu, 5 Nov 2020 06:42:48 -0500
-Received: from mail.kernel.org ([198.145.29.99]:56976 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726665AbgKELmr (ORCPT <rfc822;dwarves@vger.kernel.org>);
-        Thu, 5 Nov 2020 06:42:47 -0500
-Received: from quaco.ghostprotocols.net (unknown [179.97.37.151])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 4B6FC2071A;
-        Thu,  5 Nov 2020 11:42:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1604576565;
-        bh=5VRTwjpmKBu9KB8BMN+QsZm3R0MwdEqWWrsMOe7819Y=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rENQCXuShVZPMGR73KAG6hXzuZLV4Ly5xRK8AaRdBKUMhIy04FKYk7q3bOF9TDWxP
-         nM74Wu7vAJMuYGzWLNyXA54GWqDf8PjQJ59LyqCVB+9C4cXk7w577s5p9sOOTvjAUP
-         XN3fYqTG4d5cNB+jPBSZ25lFwZ1+GjJcWfRriRQQ=
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 04D96411D1; Thu,  5 Nov 2020 08:42:43 -0300 (-03)
-Date:   Thu, 5 Nov 2020 08:42:42 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Andrii Nakryiko <andrii@kernel.org>
-Cc:     dwarves@vger.kernel.org, bpf@vger.kernel.org, kernel-team@fb.com
-Subject: Re: [RFC PATCH dwarves] btf: add support for split BTF loading and
- encoding
-Message-ID: <20201105114242.GH262228@kernel.org>
-References: <20201105043936.2555804-1-andrii@kernel.org>
+        Thu, 5 Nov 2020 14:10:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60596 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726729AbgKETK0 (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Thu, 5 Nov 2020 14:10:26 -0500
+Received: from mail-yb1-xb44.google.com (mail-yb1-xb44.google.com [IPv6:2607:f8b0:4864:20::b44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37768C0613CF;
+        Thu,  5 Nov 2020 11:10:26 -0800 (PST)
+Received: by mail-yb1-xb44.google.com with SMTP id b138so2289641yba.5;
+        Thu, 05 Nov 2020 11:10:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=KJ4/h1YdYd4I+aTdeDT3O49xOtynQ0iW9/9nrkdHlSY=;
+        b=mqTZSqStnElJ0DB99TJ+ZXfMw0LAgrNyxf84zgIS4zMzDV76+C4h4Kmr6z4NuLOm25
+         rB4qmFaHf6Z8l15Vu5zfmAPuz7Y++XoamhpO1+eL5htjNE8xIOMw8zPrithvwJg4QBtJ
+         P/+y74/kUAlyhm0DdHdY+gOyGRKR7vV+CB0GXRKey9s/r6zcrK2svbKvOgQFUnhks4LW
+         qJxVG9u2ZpH+uwEfWAMskDC6mGd+z/up4+DkeDL4orXWJbHCITWXekVxd5hnqFGkKXRg
+         Rkb7yr2ls6/gYT3IELx98pabiR7CL7Oxws+CkCmZoRtvb7Pbe30iYvoqycdyM099o0Zy
+         JdNw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=KJ4/h1YdYd4I+aTdeDT3O49xOtynQ0iW9/9nrkdHlSY=;
+        b=JDvx53kaKvMlrrYvk8+WX2BU7Y4+HUIeNEtoQHEbwYbfa0oKXnI7HB2RgpmeswgBTY
+         ot9/4k9f9IAadK96L7EtvPRQElNd9o0IPgzS9tq4FwLrGPocNVDVvnqwH85NlkbRbHvo
+         bdn2cjA3TaNTSIxjdHDaRyVdri4sVnPgHFl7j3JStPbQmWnqQj8ldv3/xY7oMpcfnZoo
+         LntNQE5zGPQJe6GCzbJxpGCpb310yU5/w1HatUvs/4SLBLT3H4wfV06m1QROq+fp/PpP
+         ZkkTssBQa5pCXTDADMg1ptPnBc8sswfLkiLY7pW3UDvrmJPIEl0MVEejN1cPp2WL3tzS
+         YG7w==
+X-Gm-Message-State: AOAM530P69YIupSf5DqCKcTiIa8AemeLSScSnukVmofWkan2Tue5wX4k
+        /WPoEoyRTSFfhaKFOu6xMKqUNtMz+TBU399CjYtBCalb1yKSLw==
+X-Google-Smtp-Source: ABdhPJzlhxiNo8PRISb3zoqcj9C5zkRRZd/6NiTpBEhxnvnLcm3coEBUWZSlSPmKeQb1R24jRXKRTb460wZsURJs1Wk=
+X-Received: by 2002:a25:cb10:: with SMTP id b16mr5605715ybg.459.1604603425243;
+ Thu, 05 Nov 2020 11:10:25 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201105043936.2555804-1-andrii@kernel.org>
-X-Url:  http://acmel.wordpress.com
+References: <20201105043936.2555804-1-andrii@kernel.org> <20201105114242.GH262228@kernel.org>
+In-Reply-To: <20201105114242.GH262228@kernel.org>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Thu, 5 Nov 2020 11:10:14 -0800
+Message-ID: <CAEf4BzYshEY3K=fqt2iQJaVcZeepcger0C7+uOXNhG=MLC9R-w@mail.gmail.com>
+Subject: Re: [RFC PATCH dwarves] btf: add support for split BTF loading and encoding
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     Andrii Nakryiko <andrii@kernel.org>, dwarves@vger.kernel.org,
+        bpf <bpf@vger.kernel.org>, Kernel Team <kernel-team@fb.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-Em Wed, Nov 04, 2020 at 08:39:36PM -0800, Andrii Nakryiko escreveu:
-> Add support for generating split BTF, in which there is a designated base
-> BTF, containing a base set of types, and a split BTF, which extends main BTF
-> with extra types, that can reference types and strings from the main BTF.
-> 
-> This is going to be used to generate compact BTFs for kernel modules, with
-> vmlinux BTF being a main BTF, which all kernel modules are based off of.
-> 
-> These changes rely on patch set [0] to be present in libbpf submodule.
-> 
->   [0] https://patchwork.kernel.org/project/netdevbpf/list/?series=377859&state=*
-> 
-> Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
-> ---
-> 
-> This is posted before libbpf changes landed to show end-to-end how kernel
-> module BTFs are going to be integrated into the kernel. Once libbpf split BTF
-> support lands, I'll sync it into Github repo and will post a proper v1.
-> 
->  btf_encoder.c | 15 ++++++++-------
->  btf_loader.c  |  2 +-
->  libbtf.c      | 43 +++++++++++++++++++++++++++----------------
->  libbtf.h      |  4 +++-
->  pahole.c      | 23 +++++++++++++++++++++++
->  5 files changed, 62 insertions(+), 25 deletions(-)
-> 
-> diff --git a/btf_encoder.c b/btf_encoder.c
-> index 4c92908beab2..d67e29b9cbee 100644
-> --- a/btf_encoder.c
-> +++ b/btf_encoder.c
-> @@ -12,6 +12,7 @@
->  #include "dwarves.h"
->  #include "libbtf.h"
->  #include "lib/bpf/include/uapi/linux/btf.h"
-> +#include "lib/bpf/src/libbpf.h"
->  #include "hash.h"
->  #include "elf_symtab.h"
->  #include "btf_encoder.h"
-> @@ -343,7 +344,7 @@ int cu__encode_btf(struct cu *cu, int verbose, bool force,
->  	}
->  
->  	if (!btfe) {
-> -		btfe = btf_elf__new(cu->filename, cu->elf);
-> +		btfe = btf_elf__new(cu->filename, cu->elf, base_btf);
->  		if (!btfe)
->  			return -1;
->  
-> @@ -358,22 +359,22 @@ int cu__encode_btf(struct cu *cu, int verbose, bool force,
->  			printf("File %s:\n", btfe->filename);
->  	}
->  
-> +	btf_elf__verbose = verbose;
-> +	btf_elf__force = force;
-> +	type_id_off = btf__get_nr_types(btfe->btf);
-> +
->  	if (!has_index_type) {
->  		/* cu__find_base_type_by_name() takes "type_id_t *id" */
->  		type_id_t id;
->  		if (cu__find_base_type_by_name(cu, "int", &id)) {
->  			has_index_type = true;
-> -			array_index_id = id;
-> +			array_index_id = type_id_off + id;
->  		} else {
->  			has_index_type = false;
-> -			array_index_id = cu->types_table.nr_entries;
-> +			array_index_id = type_id_off + cu->types_table.nr_entries;
->  		}
->  	}
->  
-> -	btf_elf__verbose = verbose;
-> -	btf_elf__force = force;
-> -	type_id_off = btf__get_nr_types(btfe->btf);
-> -
->  	cu__for_each_type(cu, core_id, pos) {
->  		int32_t btf_type_id = tag__encode_btf(cu, pos, core_id, btfe, array_index_id, type_id_off);
->  
-> diff --git a/btf_loader.c b/btf_loader.c
-> index 6ea207ea65b4..ec286f413f36 100644
-> --- a/btf_loader.c
-> +++ b/btf_loader.c
-> @@ -534,7 +534,7 @@ struct debug_fmt_ops btf_elf__ops;
->  int btf_elf__load_file(struct cus *cus, struct conf_load *conf, const char *filename)
->  {
->  	int err;
-> -	struct btf_elf *btfe = btf_elf__new(filename, NULL);
-> +	struct btf_elf *btfe = btf_elf__new(filename, NULL, base_btf);
->  
->  	if (btfe == NULL)
->  		return -1;
-> diff --git a/libbtf.c b/libbtf.c
-> index babf4fe8cd9e..3c52aa0d482b 100644
-> --- a/libbtf.c
-> +++ b/libbtf.c
-> @@ -27,6 +27,7 @@
->  #include "dwarves.h"
->  #include "elf_symtab.h"
->  
-> +struct btf *base_btf;
->  uint8_t btf_elf__verbose;
->  uint8_t btf_elf__force;
->  
-> @@ -52,9 +53,9 @@ int btf_elf__load(struct btf_elf *btfe)
->  	/* free initial empty BTF */
->  	btf__free(btfe->btf);
->  	if (btfe->raw_btf)
-> -		btfe->btf = btf__parse_raw(btfe->filename);
-> +		btfe->btf = btf__parse_raw_split(btfe->filename, btfe->base_btf);
->  	else
-> -		btfe->btf = btf__parse_elf(btfe->filename, NULL);
-> +		btfe->btf = btf__parse_elf_split(btfe->filename, btfe->base_btf);
->  
->  	err = libbpf_get_error(btfe->btf);
->  	if (err)
-> @@ -63,7 +64,7 @@ int btf_elf__load(struct btf_elf *btfe)
->  	return 0;
->  }
->  
-> -struct btf_elf *btf_elf__new(const char *filename, Elf *elf)
-> +struct btf_elf *btf_elf__new(const char *filename, Elf *elf, struct btf *base_btf)
->  {
->  	struct btf_elf *btfe = zalloc(sizeof(*btfe));
->  	GElf_Shdr shdr;
-> @@ -77,7 +78,8 @@ struct btf_elf *btf_elf__new(const char *filename, Elf *elf)
->  	if (btfe->filename == NULL)
->  		goto errout;
->  
-> -	btfe->btf = btf__new_empty();
-> +	btfe->base_btf = base_btf;
-> +	btfe->btf = btf__new_empty_split(base_btf);
->  	if (libbpf_get_error(btfe->btf)) {
->  		fprintf(stderr, "%s: failed to create empty BTF.\n", __func__);
->  		goto errout;
-> @@ -679,11 +681,11 @@ static int btf_elf__write(const char *filename, struct btf *btf)
->  {
->  	GElf_Shdr shdr_mem, *shdr;
->  	GElf_Ehdr ehdr_mem, *ehdr;
-> -	Elf_Data *btf_elf = NULL;
-> +	Elf_Data *btf_data = NULL;
+On Thu, Nov 5, 2020 at 3:42 AM Arnaldo Carvalho de Melo <acme@kernel.org> wrote:
+>
+> Em Wed, Nov 04, 2020 at 08:39:36PM -0800, Andrii Nakryiko escreveu:
+> > Add support for generating split BTF, in which there is a designated base
+> > BTF, containing a base set of types, and a split BTF, which extends main BTF
+> > with extra types, that can reference types and strings from the main BTF.
+> >
+> > This is going to be used to generate compact BTFs for kernel modules, with
+> > vmlinux BTF being a main BTF, which all kernel modules are based off of.
+> >
+> > These changes rely on patch set [0] to be present in libbpf submodule.
+> >
+> >   [0] https://patchwork.kernel.org/project/netdevbpf/list/?series=377859&state=*
+> >
+> > Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+> > ---
+> >
+> > This is posted before libbpf changes landed to show end-to-end how kernel
+> > module BTFs are going to be integrated into the kernel. Once libbpf split BTF
+> > support lands, I'll sync it into Github repo and will post a proper v1.
+> >
+> >  btf_encoder.c | 15 ++++++++-------
+> >  btf_loader.c  |  2 +-
+> >  libbtf.c      | 43 +++++++++++++++++++++++++++----------------
+> >  libbtf.h      |  4 +++-
+> >  pahole.c      | 23 +++++++++++++++++++++++
+> >  5 files changed, 62 insertions(+), 25 deletions(-)
+> >
+> > diff --git a/btf_encoder.c b/btf_encoder.c
+> > index 4c92908beab2..d67e29b9cbee 100644
+> > --- a/btf_encoder.c
+> > +++ b/btf_encoder.c
+> > @@ -12,6 +12,7 @@
+> >  #include "dwarves.h"
+> >  #include "libbtf.h"
+> >  #include "lib/bpf/include/uapi/linux/btf.h"
+> > +#include "lib/bpf/src/libbpf.h"
+> >  #include "hash.h"
+> >  #include "elf_symtab.h"
+> >  #include "btf_encoder.h"
+> > @@ -343,7 +344,7 @@ int cu__encode_btf(struct cu *cu, int verbose, bool force,
+> >       }
+> >
+> >       if (!btfe) {
+> > -             btfe = btf_elf__new(cu->filename, cu->elf);
+> > +             btfe = btf_elf__new(cu->filename, cu->elf, base_btf);
+> >               if (!btfe)
+> >                       return -1;
+> >
+> > @@ -358,22 +359,22 @@ int cu__encode_btf(struct cu *cu, int verbose, bool force,
+> >                       printf("File %s:\n", btfe->filename);
+> >       }
+> >
+> > +     btf_elf__verbose = verbose;
+> > +     btf_elf__force = force;
+> > +     type_id_off = btf__get_nr_types(btfe->btf);
+> > +
+> >       if (!has_index_type) {
+> >               /* cu__find_base_type_by_name() takes "type_id_t *id" */
+> >               type_id_t id;
+> >               if (cu__find_base_type_by_name(cu, "int", &id)) {
+> >                       has_index_type = true;
+> > -                     array_index_id = id;
+> > +                     array_index_id = type_id_off + id;
+> >               } else {
+> >                       has_index_type = false;
+> > -                     array_index_id = cu->types_table.nr_entries;
+> > +                     array_index_id = type_id_off + cu->types_table.nr_entries;
+> >               }
+> >       }
+> >
+> > -     btf_elf__verbose = verbose;
+> > -     btf_elf__force = force;
+> > -     type_id_off = btf__get_nr_types(btfe->btf);
+> > -
+> >       cu__for_each_type(cu, core_id, pos) {
+> >               int32_t btf_type_id = tag__encode_btf(cu, pos, core_id, btfe, array_index_id, type_id_off);
+> >
+> > diff --git a/btf_loader.c b/btf_loader.c
+> > index 6ea207ea65b4..ec286f413f36 100644
+> > --- a/btf_loader.c
+> > +++ b/btf_loader.c
+> > @@ -534,7 +534,7 @@ struct debug_fmt_ops btf_elf__ops;
+> >  int btf_elf__load_file(struct cus *cus, struct conf_load *conf, const char *filename)
+> >  {
+> >       int err;
+> > -     struct btf_elf *btfe = btf_elf__new(filename, NULL);
+> > +     struct btf_elf *btfe = btf_elf__new(filename, NULL, base_btf);
+> >
+> >       if (btfe == NULL)
+> >               return -1;
+> > diff --git a/libbtf.c b/libbtf.c
+> > index babf4fe8cd9e..3c52aa0d482b 100644
+> > --- a/libbtf.c
+> > +++ b/libbtf.c
+> > @@ -27,6 +27,7 @@
+> >  #include "dwarves.h"
+> >  #include "elf_symtab.h"
+> >
+> > +struct btf *base_btf;
+> >  uint8_t btf_elf__verbose;
+> >  uint8_t btf_elf__force;
+> >
+> > @@ -52,9 +53,9 @@ int btf_elf__load(struct btf_elf *btfe)
+> >       /* free initial empty BTF */
+> >       btf__free(btfe->btf);
+> >       if (btfe->raw_btf)
+> > -             btfe->btf = btf__parse_raw(btfe->filename);
+> > +             btfe->btf = btf__parse_raw_split(btfe->filename, btfe->base_btf);
+> >       else
+> > -             btfe->btf = btf__parse_elf(btfe->filename, NULL);
+> > +             btfe->btf = btf__parse_elf_split(btfe->filename, btfe->base_btf);
+> >
+> >       err = libbpf_get_error(btfe->btf);
+> >       if (err)
+> > @@ -63,7 +64,7 @@ int btf_elf__load(struct btf_elf *btfe)
+> >       return 0;
+> >  }
+> >
+> > -struct btf_elf *btf_elf__new(const char *filename, Elf *elf)
+> > +struct btf_elf *btf_elf__new(const char *filename, Elf *elf, struct btf *base_btf)
+> >  {
+> >       struct btf_elf *btfe = zalloc(sizeof(*btfe));
+> >       GElf_Shdr shdr;
+> > @@ -77,7 +78,8 @@ struct btf_elf *btf_elf__new(const char *filename, Elf *elf)
+> >       if (btfe->filename == NULL)
+> >               goto errout;
+> >
+> > -     btfe->btf = btf__new_empty();
+> > +     btfe->base_btf = base_btf;
+> > +     btfe->btf = btf__new_empty_split(base_btf);
+> >       if (libbpf_get_error(btfe->btf)) {
+> >               fprintf(stderr, "%s: failed to create empty BTF.\n", __func__);
+> >               goto errout;
+> > @@ -679,11 +681,11 @@ static int btf_elf__write(const char *filename, struct btf *btf)
+> >  {
+> >       GElf_Shdr shdr_mem, *shdr;
+> >       GElf_Ehdr ehdr_mem, *ehdr;
+> > -     Elf_Data *btf_elf = NULL;
+> > +     Elf_Data *btf_data = NULL;
+>
+> Can you please split this into two patches, one doing just the rename
+> of btf_elf to btf_data and then moving to btf__new_empty_split()? Eases
+> reviewing.
 
-Can you please split this into two patches, one doing just the rename
-of btf_elf to btf_data and then moving to btf__new_empty_split()? Eases
-reviewing.
+sure, will do in the next version
 
-With this split btf code would it be possible to paralelize the encoding
-of the modules BTF? I have to check the other patches and how this gets
-used in the kernel build process... :-)
+>
+> With this split btf code would it be possible to paralelize the encoding
+> of the modules BTF? I have to check the other patches and how this gets
+> used in the kernel build process... :-)
 
-- Arnaldo
+Yes, each module's BTF is generated completely independently. See some
+numbers in [0].
 
->  	Elf_Scn *scn = NULL;
->  	Elf *elf = NULL;
-> -	const void *btf_data;
-> -	uint32_t btf_size;
-> +	const void *raw_btf_data;
-> +	uint32_t raw_btf_size;
->  	int fd, err = -1;
->  	size_t strndx;
->  
-> @@ -735,18 +737,18 @@ static int btf_elf__write(const char *filename, struct btf *btf)
->  			continue;
->  		char *secname = elf_strptr(elf, strndx, shdr->sh_name);
->  		if (strcmp(secname, ".BTF") == 0) {
-> -			btf_elf = elf_getdata(scn, btf_elf);
-> +			btf_data = elf_getdata(scn, btf_data);
->  			break;
->  		}
->  	}
->  
-> -	btf_data = btf__get_raw_data(btf, &btf_size);
-> +	raw_btf_data = btf__get_raw_data(btf, &raw_btf_size);
->  
-> -	if (btf_elf) {
-> +	if (btf_data) {
->  		/* Exisiting .BTF section found */
-> -		btf_elf->d_buf = (void *)btf_data;
-> -		btf_elf->d_size = btf_size;
-> -		elf_flagdata(btf_elf, ELF_C_SET, ELF_F_DIRTY);
-> +		btf_data->d_buf = (void *)raw_btf_data;
-> +		btf_data->d_size = raw_btf_size;
-> +		elf_flagdata(btf_data, ELF_C_SET, ELF_F_DIRTY);
->  
->  		if (elf_update(elf, ELF_C_NULL) >= 0 &&
->  		    elf_update(elf, ELF_C_WRITE) >= 0)
-> @@ -770,12 +772,21 @@ static int btf_elf__write(const char *filename, struct btf *btf)
->  			goto out;
->  		}
->  
-> +		if (write(fd, raw_btf_data, raw_btf_size) != raw_btf_size) {
-> +			fprintf(stderr, "%s: write of %d bytes to '%s' failed: %d!\n",
-> +				__func__, raw_btf_size, tmp_fn, errno);
-> +			goto out;
-> +		}
-> +
->  		snprintf(cmd, sizeof(cmd), "%s --add-section .BTF=%s %s",
->  			 llvm_objcopy, tmp_fn, filename);
-> +		if (system(cmd)) {
-> +			fprintf(stderr, "%s: failed to add .BTF section to '%s': %d!\n",
-> +				__func__, tmp_fn, errno);
-> +			goto out;
-> +		}
->  
-> -		if (write(fd, btf_data, btf_size) == btf_size && !system(cmd))
-> -			err = 0;
-> -
-> +		err = 0;
->  		unlink(tmp_fn);
->  	}
->  
-> diff --git a/libbtf.h b/libbtf.h
-> index 887b5bc55c8e..71f6cecbea93 100644
-> --- a/libbtf.h
-> +++ b/libbtf.h
-> @@ -27,8 +27,10 @@ struct btf_elf {
->  	uint32_t	  percpu_shndx;
->  	uint64_t	  percpu_base_addr;
->  	struct btf	  *btf;
-> +	struct btf	  *base_btf;
->  };
->  
-> +extern struct btf *base_btf;
->  extern uint8_t btf_elf__verbose;
->  extern uint8_t btf_elf__force;
->  #define btf_elf__verbose_log(fmt, ...) { if (btf_elf__verbose) printf(fmt, __VA_ARGS__); }
-> @@ -39,7 +41,7 @@ struct cu;
->  struct base_type;
->  struct ftype;
->  
-> -struct btf_elf *btf_elf__new(const char *filename, Elf *elf);
-> +struct btf_elf *btf_elf__new(const char *filename, Elf *elf, struct btf *base_btf);
->  void btf_elf__delete(struct btf_elf *btf);
->  
->  int32_t btf_elf__add_base_type(struct btf_elf *btf, const struct base_type *bt,
-> diff --git a/pahole.c b/pahole.c
-> index bd9b993777ee..d18092c1212c 100644
-> --- a/pahole.c
-> +++ b/pahole.c
-> @@ -22,12 +22,15 @@
->  #include "dutil.h"
->  #include "ctf_encoder.h"
->  #include "btf_encoder.h"
-> +#include "libbtf.h"
-> +#include "lib/bpf/src/libbpf.h"
->  
->  static bool btf_encode;
->  static bool ctf_encode;
->  static bool first_obj_only;
->  static bool skip_encoding_btf_vars;
->  static bool btf_encode_force;
-> +static const char *base_btf_file;
->  
->  static uint8_t class__include_anonymous;
->  static uint8_t class__include_nested_anonymous;
-> @@ -820,6 +823,7 @@ ARGP_PROGRAM_VERSION_HOOK_DEF = dwarves_print_version;
->  #define ARGP_skip_encoding_btf_vars 317
->  #define ARGP_btf_encode_force	   318
->  #define ARGP_just_packed_structs   319
-> +#define ARGP_btf_base		   320
->  
->  static const struct argp_option pahole__options[] = {
->  	{
-> @@ -1093,6 +1097,12 @@ static const struct argp_option pahole__options[] = {
->  		.key  = ARGP_hex_fmt,
->  		.doc  = "Print offsets and sizes in hexadecimal",
->  	},
-> +	{
-> +		.name = "btf_base",
-> +		.key  = ARGP_btf_base,
-> +		.arg  = "SIZE",
-> +		.doc  = "Path to the base BTF file",
-> +	},
->  	{
->  		.name = "btf_encode",
->  		.key  = 'J',
-> @@ -1234,6 +1244,9 @@ static error_t pahole__options_parser(int key, char *arg,
->  		skip_encoding_btf_vars = true;		break;
->  	case ARGP_btf_encode_force:
->  		btf_encode_force = true;		break;
-> +	case ARGP_btf_base:
-> +		base_btf_file = arg;
-> +		break;
->  	default:
->  		return ARGP_ERR_UNKNOWN;
->  	}
-> @@ -2682,6 +2695,15 @@ int main(int argc, char *argv[])
->  		goto out;
->  	}
->  
-> +	if (base_btf_file) {
-> +		base_btf = btf__parse(base_btf_file, NULL);
-> +		if (libbpf_get_error(base_btf)) {
-> +			fprintf(stderr, "Failed to parse base BTF '%s': %ld\n",
-> +				base_btf_file, libbpf_get_error(base_btf));
-> +			goto out;
-> +		}
-> +	}
-> +
->  	struct cus *cus = cus__new();
->  	if (cus == NULL) {
->  		fputs("pahole: insufficient memory\n", stderr);
-> @@ -2766,6 +2788,7 @@ out_cus_delete:
->  #ifdef DEBUG_CHECK_LEAKS
->  	cus__delete(cus);
->  	structures__delete();
-> +	btf__free(base_btf);
->  #endif
->  out_dwarves_exit:
->  #ifdef DEBUG_CHECK_LEAKS
-> -- 
-> 2.24.1
-> 
+  [0] https://patchwork.kernel.org/project/netdevbpf/patch/20201105045140.2589346-4-andrii@kernel.org/
 
--- 
+>
+> - Arnaldo
+>
 
-- Arnaldo
+[...]
