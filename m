@@ -2,83 +2,109 @@ Return-Path: <SRS0=X0E1=EM=vger.kernel.org=dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A828DC388F2
-	for <linux-dwarves@archiver.kernel.org>; Fri,  6 Nov 2020 05:26:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A1A1EC2D0A3
+	for <linux-dwarves@archiver.kernel.org>; Fri,  6 Nov 2020 22:25:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4CFE020A8B
-	for <linux-dwarves@archiver.kernel.org>; Fri,  6 Nov 2020 05:26:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3DBEC20882
+	for <linux-dwarves@archiver.kernel.org>; Fri,  6 Nov 2020 22:25:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1604640369;
-	bh=YuNxCAhU5igq8xtKY8dIWLWTO3xu3TgDcdvZWSExVVs=;
-	h=From:To:CC:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=cx57NCWiNN+BRQhOc5yO7KIlNXrUQ89ffqwNp7+2HnTxKQp2yxDIdJF85Qf+ARiw+
-	 O4+oZr3MJ0FpwdQ9DF+zNZd8X11dnl3FMU5T1HAj4YZzZ3g3JykgPIWbto9YYcSRqv
-	 HUL4BfVsf34fgVpR7YNbPy9BmDVqP1hKvhnTsorg=
+	s=default; t=1604701527;
+	bh=I73ZrT37HDnrjljWnll65t/Qsa2uBRE/Obd92cnS/0o=;
+	h=From:To:Cc:Subject:Date:List-ID:From;
+	b=VgHxhyVlORcJ6a8551jq2gVc7OnD7JElIrbaUpjgMQVO0gNxRmtIhX/y8YnUdJsaY
+	 bJsjXjW1fL7EIbvXLstJIlTAAqIwP9p76iftACbE/MAyZBGQ8PYLTnZN2kbUh2gnrt
+	 iINPmVA3K4GjJxQF+oCs/TFHE7RsPEGBZn/0fLr0=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726125AbgKFF0I convert rfc822-to-8bit (ORCPT
+        id S1728520AbgKFWZ0 convert rfc822-to-8bit (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Fri, 6 Nov 2020 00:26:08 -0500
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:35942 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726128AbgKFF0I (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Fri, 6 Nov 2020 00:26:08 -0500
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0A65Q6LX008311
-        for <dwarves@vger.kernel.org>; Thu, 5 Nov 2020 21:26:08 -0800
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 34m81m75au-4
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <dwarves@vger.kernel.org>; Thu, 05 Nov 2020 21:26:07 -0800
-Received: from intmgw001.03.ash8.facebook.com (2620:10d:c085:208::11) by
- mail.thefacebook.com (2620:10d:c085:21d::7) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Thu, 5 Nov 2020 21:26:05 -0800
-Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id D3EEE2EC8EF6; Thu,  5 Nov 2020 21:25:57 -0800 (PST)
-From:   Andrii Nakryiko <andrii@kernel.org>
-To:     <dwarves@vger.kernel.org>, <acme@kernel.org>, <bpf@vger.kernel.org>
-CC:     <andrii@kernel.org>, <kernel-team@fb.com>
-Subject: [PATCH dwarves 3/4] libbpf: update libbpf submodlue reference to latest master
-Date:   Thu, 5 Nov 2020 21:25:48 -0800
-Message-ID: <20201106052549.3782099-4-andrii@kernel.org>
-X-Mailer: git-send-email 2.24.1
-In-Reply-To: <20201106052549.3782099-1-andrii@kernel.org>
-References: <20201106052549.3782099-1-andrii@kernel.org>
+        Fri, 6 Nov 2020 17:25:26 -0500
+Received: from us-smtp-delivery-44.mimecast.com ([205.139.111.44]:46718 "EHLO
+        us-smtp-delivery-44.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728031AbgKFWZ0 (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Fri, 6 Nov 2020 17:25:26 -0500
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-256-Q_SoPDJHOBqUc9-tpeBnnQ-1; Fri, 06 Nov 2020 17:25:22 -0500
+X-MC-Unique: Q_SoPDJHOBqUc9-tpeBnnQ-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 832B080364C;
+        Fri,  6 Nov 2020 22:25:19 +0000 (UTC)
+Received: from krava.redhat.com (unknown [10.40.192.10])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 133BE5578B;
+        Fri,  6 Nov 2020 22:25:12 +0000 (UTC)
+From:   Jiri Olsa <jolsa@kernel.org>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     dwarves@vger.kernel.org, bpf@vger.kernel.org,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andriin@fb.com>, Yonghong Song <yhs@fb.com>,
+        Hao Luo <haoluo@google.com>,
+        "Frank Ch. Eigler" <fche@redhat.com>,
+        Mark Wielaard <mjw@redhat.com>
+Subject: [PATCHv4 0/3] pahole/kernel: Workaround dwarf bug for function encoding
+Date:   Fri,  6 Nov 2020 23:25:09 +0100
+Message-Id: <20201106222512.52454-1-jolsa@kernel.org>
 MIME-Version: 1.0
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=jolsa@kernel.org
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: kernel.org
 Content-Transfer-Encoding: 8BIT
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
- definitions=2020-11-06_01:2020-11-05,2020-11-06 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 malwarescore=0
- adultscore=0 mlxlogscore=778 lowpriorityscore=0 clxscore=1034 mlxscore=0
- bulkscore=0 impostorscore=0 phishscore=0 spamscore=0 suspectscore=8
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2011060037
-X-FB-Internal: deliver
+Content-Type: text/plain; charset=WINDOWS-1252
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-Pull in latest libbpf changes, containing split BTF APIs.
+hi,
+because of gcc bug [1] we can no longer rely on DW_AT_declaration
+attribute to filter out declarations and end up with just
+one copy of the function in the BTF data.
 
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
----
- lib/bpf | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+It seems this bug is not easy to fix, but regardless if the
+it's coming soon, it's probably good idea not to depend so
+much only on dwarf data and make some extra checks.
 
-diff --git a/lib/bpf b/lib/bpf
-index ff797cc905d9..5af3d86b5a2c 160000
---- a/lib/bpf
-+++ b/lib/bpf
-@@ -1 +1 @@
--Subproject commit ff797cc905d9c5fe9acab92d2da127342b20f80f
-+Subproject commit 5af3d86b5a2c5fecdc3ab83822d083edd32b4396
--- 
-2.24.1
+Thus for function encoding we are now doing following checks:
+  - argument names are defined for the function
+  - there's symbol and address defined for the function
+  - function address belongs to ftrace locations (new in v2)
+  - function is generated only once
+
+v4 changes:
+  - added acks
+  - renames and change functions_valid to be local var [Andrii]
+  - fixed error path (return err) of collect_symbols
+
+v3 changes:
+  - added Hao's ack for patch 1
+  - fixed realloc memory leak [Andrii]
+  - fixed addrs_cmp function [Andrii]
+  - removed SET_SYMBOL macro [Andrii]
+  - fixed the 'valid' function logic
+  - added .init.bpf.preserve_type check
+  - added iterator functions to new kernel section
+    .init.bpf.preserve_type [Yonghong]
+
+v2 changes:
+  - add check ensuring functions belong to ftrace's mcount
+    locations, this way we ensure to have in BTF only
+    functions available for ftrace - patch 2 changelog
+    describes all details
+  - use collect* function names [Andrii]
+  - use conventional size increase in realloc [Andrii]
+  - drop elf_sym__is_function check
+  - drop patch 3, it's not needed, because we follow ftrace
+    locations
+
+thanks,
+jirka
+
+
+[1] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=97060
 
