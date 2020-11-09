@@ -2,128 +2,140 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-4.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 16B0AC2D0A3
-	for <linux-dwarves@archiver.kernel.org>; Mon,  9 Nov 2020 18:49:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7D9B0C2D0A3
+	for <linux-dwarves@archiver.kernel.org>; Mon,  9 Nov 2020 19:11:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C8129206D8
-	for <linux-dwarves@archiver.kernel.org>; Mon,  9 Nov 2020 18:49:44 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2A8C7206E3
+	for <linux-dwarves@archiver.kernel.org>; Mon,  9 Nov 2020 19:11:08 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Wa2xmZSZ"
+	dkim=pass (1024-bit key) header.d=kernel.org header.i=@kernel.org header.b="dqXDyHLn"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729697AbgKISto (ORCPT
+        id S1730605AbgKITLH (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Mon, 9 Nov 2020 13:49:44 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:35372 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729302AbgKISto (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Mon, 9 Nov 2020 13:49:44 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1604947782;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=lZFlOeNxmwrUeGPa7WxgNjIYpmlrRyXw9qyVKnLpKpc=;
-        b=Wa2xmZSZM1S/OnMsGSalOLJhnS78F4+VXoioJtopJ6NewZMUzFB9Wq0tafQbppkhcko/rw
-        WLwZwCkF3FYxaK40Otgy8QFvsW6uhsbIbLNUe0OPrqEzQ/I7PVHcMebnQ/KOY2J8YcWpS8
-        bKUJkwDCcXw2cUVULFm4/WD7IH/rWR4=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-417-5cQ9s9_4O3ynlpgq2sd7uQ-1; Mon, 09 Nov 2020 13:49:38 -0500
-X-MC-Unique: 5cQ9s9_4O3ynlpgq2sd7uQ-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Mon, 9 Nov 2020 14:11:07 -0500
+Received: from mail.kernel.org ([198.145.29.99]:35078 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730596AbgKITLH (ORCPT <rfc822;dwarves@vger.kernel.org>);
+        Mon, 9 Nov 2020 14:11:07 -0500
+Received: from quaco.ghostprotocols.net (unknown [179.97.37.151])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 17E0C1074653;
-        Mon,  9 Nov 2020 18:49:37 +0000 (UTC)
-Received: from krava (unknown [10.40.192.57])
-        by smtp.corp.redhat.com (Postfix) with SMTP id 3548019D7C;
-        Mon,  9 Nov 2020 18:49:31 +0000 (UTC)
-Date:   Mon, 9 Nov 2020 19:49:30 +0100
-From:   Jiri Olsa <jolsa@redhat.com>
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Jiri Olsa <jolsa@kernel.org>, Yonghong Song <yhs@fb.com>,
-        Song Liu <songliubraving@fb.com>, dwarves@vger.kernel.org,
-        bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andriin@fb.com>, Hao Luo <haoluo@google.com>,
+        by mail.kernel.org (Postfix) with ESMTPSA id 93B55206D8;
+        Mon,  9 Nov 2020 19:11:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1604949066;
+        bh=UVgQldwg+UY2jgndCdRMqklrY1C548QWXrVvtULaecE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=dqXDyHLnt5rdJr4DBmK94lmYoKU3K7JmAveSaUMyZqlgygAkVDKVN6RLglWZhYs7A
+         y9XyLn9sVIvdter+Q7gFtQPnOHHGE9psxbo3lPrU8KFj90t+gcjNWt1SRygWGHvnuq
+         jdGrNUf6/o+LHBRfQ3tfMd4D/isdd25yfhlFG7DQ=
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 4F191411D1; Mon,  9 Nov 2020 16:11:04 -0300 (-03)
+Date:   Mon, 9 Nov 2020 16:11:04 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Jiri Olsa <jolsa@kernel.org>, dwarves@vger.kernel.org,
+        bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andriin@fb.com>, Yonghong Song <yhs@fb.com>,
+        Hao Luo <haoluo@google.com>,
         "Frank Ch. Eigler" <fche@redhat.com>,
         Mark Wielaard <mjw@redhat.com>
-Subject: Re: [PATCH 1/3] bpf: Move iterator functions into special init
- section
-Message-ID: <20201109184930.GA362089@krava>
+Subject: Re: [PATCHv4 0/3] pahole/kernel: Workaround dwarf bug for function
+ encoding
+Message-ID: <20201109191104.GA342737@kernel.org>
 References: <20201106222512.52454-1-jolsa@kernel.org>
- <20201106222512.52454-2-jolsa@kernel.org>
- <20201109180500.GC340169@kernel.org>
- <20201109180655.GD340169@kernel.org>
+ <CAEf4BzZXOyA0gROk2=G1R+m7gHcqTZHpE9L2G_EBCZET3FpzAw@mail.gmail.com>
+ <20201109172911.GA340169@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201109180655.GD340169@kernel.org>
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
+In-Reply-To: <20201109172911.GA340169@kernel.org>
+X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-On Mon, Nov 09, 2020 at 03:06:55PM -0300, Arnaldo Carvalho de Melo wrote:
-> Em Mon, Nov 09, 2020 at 03:05:00PM -0300, Arnaldo Carvalho de Melo escreveu:
-> > Em Fri, Nov 06, 2020 at 11:25:10PM +0100, Jiri Olsa escreveu:
-> > > With upcoming changes to pahole, that change the way how and
-> > > which kernel functions are stored in BTF data, we need a way
-> > > to recognize iterator functions.
-> > > 
-> > > Iterator functions need to be in BTF data, but have no real
-> > > body and are currently placed in .init.text section, so they
-> > > are freed after kernel init and are filtered out of BTF data
-> > > because of that.
-> > > 
-> > > The solution is to place these functions under new section:
-> > >   .init.bpf.preserve_type
-> > > 
-> > > And add 2 new symbols to mark that area:
-> > >   __init_bpf_preserve_type_begin
-> > >   __init_bpf_preserve_type_end
-> > > 
-> > > The code in pahole responsible for picking up the functions will
-> > > be able to recognize functions from this section and add them to
-> > > the BTF data and filter out all other .init.text functions.
-> > 
-> > This isn't applying on torvalds/master:
-> > 
-> > [acme@five linux]$ patch -p1 < /wb/1.patch
-> > patching file include/asm-generic/vmlinux.lds.h
-> > Hunk #2 succeeded at 754 (offset 1 line).
-> > patching file include/linux/bpf.h
-> > Hunk #1 succeeded at 1276 (offset -1 lines).
-> > patching file include/linux/init.h
-> > Hunk #1 FAILED at 52.
-> > 1 out of 1 hunk FAILED -- saving rejects to file include/linux/init.h.rej
-> > [acme@five linux]$
-> > [acme@five linux]$ cat include/linux/init.h.rej
-> > --- include/linux/init.h
-> > +++ include/linux/init.h
-> > @@ -52,6 +52,7 @@
-> >  #define __initconst	__section(.init.rodata)
-> >  #define __exitdata	__section(.exit.data)
-> >  #define __exit_call	__used __section(.exitcall.exit)
-> > +#define __init_bpf_preserve_type __section(.init.bpf.preserve_type)
-> > 
-> >  /*
-> >   * modpost check for section mismatches during the kernel build.
-> > [acme@five linux]$
-> > 
-> > 
-> > I'm fixing it up by hand to try together with pahole's patches.
+Em Mon, Nov 09, 2020 at 02:29:11PM -0300, Arnaldo Carvalho de Melo escreveu:
+> Em Fri, Nov 06, 2020 at 02:56:45PM -0800, Andrii Nakryiko escreveu:
+> > On Fri, Nov 6, 2020 at 2:25 PM Jiri Olsa <jolsa@kernel.org> wrote:
+>  
+> > For the series:
+>  
+> > Acked-by: Andrii Nakryiko <andrii@kernel.org>
 > 
-> Due to:
-> 
-> 33def8498fdde180 ("treewide: Convert macro and uses of __section(foo) to __section("foo")")
+> Thanks, applied, testing now.
 
-ok, I'll send new version for the kernel patch
+Now we have:
 
-thanks,
-jirka
+$ pfunct -F btf /sys/kernel/btf/vmlinux  | wc -l
+38816
+$ pfunct -F btf /sys/kernel/btf/vmlinux  | head
+get_e820_md5
+relocate_restore_code
+resume_play_dead
+bsp_pm_callback
+msr_initialize_bdw
+msr_save_cpuid_features
+pm_check_save_msr
+amd_bus_cpu_online
+update_res
+pci_read
+$
 
+$ pfunct -F btf /sys/kernel/btf/vmlinux -f msr_save_cpuid_features
+int msr_save_cpuid_features(const struct x86_cpu_id  * c);
+$
+$ pfunct -F btf /sys/kernel/btf/vmlinux -f tcp_v4_rcv
+int tcp_v4_rcv(struct sk_buff * skb);
+$
+
+[acme@five ~]$ pfunct -F btf /sys/kernel/btf/vmlinux --class=sk_buff | head
+pskb_expand_head
+skb_put
+audit_list_rules_send
+netlink_ack
+consume_skb
+skb_queue_head
+skb_queue_tail
+netlink_broadcast
+__nlmsg_put
+kfree_skb
+[acme@five ~]$ pfunct -F btf /sys/kernel/btf/vmlinux -f audit_list_rules_send
+int audit_list_rules_send(struct sk_buff * request_skb, int seq);
+[acme@five ~]$ pfunct -F btf /sys/kernel/btf/vmlinux -f netlink_broadcast
+int netlink_broadcast(struct sock * ssk, struct sk_buff * skb, __u32 portid, __u32 group, gfp_t allocation);
+[acme@five ~]$
+
+Seems to work :-)
+
+In a future version I'll make it work with btf and
+/sys/kernel/btf/vmlinux by default if only function names are provided,
+like pahole with types:
+
+[acme@five ~]$ pahole sk_buff_head
+struct sk_buff_head {
+	struct sk_buff *           next;                 /*     0     8 */
+	struct sk_buff *           prev;                 /*     8     8 */
+	__u32                      qlen;                 /*    16     4 */
+	spinlock_t                 lock;                 /*    20     4 */
+
+	/* size: 24, cachelines: 1, members: 4 */
+	/* last cacheline: 24 bytes */
+};
+[acme@five ~]$ pahole list_head
+struct list_head {
+	struct list_head *         next;                 /*     0     8 */
+	struct list_head *         prev;                 /*     8     8 */
+
+	/* size: 16, cachelines: 1, members: 2 */
+	/* last cacheline: 16 bytes */
+};
+[acme@five ~]$
+
+Pushed out.
+
+- Arnaldo
