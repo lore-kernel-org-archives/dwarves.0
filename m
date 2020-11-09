@@ -2,51 +2,59 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D67E1C2D0A3
-	for <linux-dwarves@archiver.kernel.org>; Mon,  9 Nov 2020 18:10:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 16B0AC2D0A3
+	for <linux-dwarves@archiver.kernel.org>; Mon,  9 Nov 2020 18:49:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 873982067C
-	for <linux-dwarves@archiver.kernel.org>; Mon,  9 Nov 2020 18:10:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C8129206D8
+	for <linux-dwarves@archiver.kernel.org>; Mon,  9 Nov 2020 18:49:44 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=kernel.org header.i=@kernel.org header.b="E8Zz/YP+"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Wa2xmZSZ"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729971AbgKISKU (ORCPT
+        id S1729697AbgKISto (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Mon, 9 Nov 2020 13:10:20 -0500
-Received: from mail.kernel.org ([198.145.29.99]:50282 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729956AbgKISKU (ORCPT <rfc822;dwarves@vger.kernel.org>);
-        Mon, 9 Nov 2020 13:10:20 -0500
-Received: from quaco.ghostprotocols.net (unknown [179.97.37.151])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 9 Nov 2020 13:49:44 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:35372 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729302AbgKISto (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Mon, 9 Nov 2020 13:49:44 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1604947782;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=lZFlOeNxmwrUeGPa7WxgNjIYpmlrRyXw9qyVKnLpKpc=;
+        b=Wa2xmZSZM1S/OnMsGSalOLJhnS78F4+VXoioJtopJ6NewZMUzFB9Wq0tafQbppkhcko/rw
+        WLwZwCkF3FYxaK40Otgy8QFvsW6uhsbIbLNUe0OPrqEzQ/I7PVHcMebnQ/KOY2J8YcWpS8
+        bKUJkwDCcXw2cUVULFm4/WD7IH/rWR4=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-417-5cQ9s9_4O3ynlpgq2sd7uQ-1; Mon, 09 Nov 2020 13:49:38 -0500
+X-MC-Unique: 5cQ9s9_4O3ynlpgq2sd7uQ-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id BE08B20678;
-        Mon,  9 Nov 2020 18:10:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1604945419;
-        bh=s5hGFhJEFEyS/iubhwbPqih9soNa+SDqGphzdgD56go=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=E8Zz/YP+Lw7FnxHYyYtqHhCS78dXnEF5DUBUSHFOaOVEIjKwT2hhJYc2ngI62FoEz
-         AKcIrtj56kw+t61rA5jfh1bd6RS+WQ0IpdxRh+Ykkty/VmJCTVhmBwoNQTwV5KdGXo
-         1SMxZ2RGzjTaZR3NUGZkkF/KT0FI8LLf8vQsQb6Q=
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id B8CA1411D1; Mon,  9 Nov 2020 15:10:16 -0300 (-03)
-Date:   Mon, 9 Nov 2020 15:10:16 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Jiri Olsa <jolsa@kernel.org>
-Cc:     Yonghong Song <yhs@fb.com>, Song Liu <songliubraving@fb.com>,
-        dwarves@vger.kernel.org, bpf@vger.kernel.org,
-        Alexei Starovoitov <ast@kernel.org>,
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 17E0C1074653;
+        Mon,  9 Nov 2020 18:49:37 +0000 (UTC)
+Received: from krava (unknown [10.40.192.57])
+        by smtp.corp.redhat.com (Postfix) with SMTP id 3548019D7C;
+        Mon,  9 Nov 2020 18:49:31 +0000 (UTC)
+Date:   Mon, 9 Nov 2020 19:49:30 +0100
+From:   Jiri Olsa <jolsa@redhat.com>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     Jiri Olsa <jolsa@kernel.org>, Yonghong Song <yhs@fb.com>,
+        Song Liu <songliubraving@fb.com>, dwarves@vger.kernel.org,
+        bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
         Andrii Nakryiko <andriin@fb.com>, Hao Luo <haoluo@google.com>,
         "Frank Ch. Eigler" <fche@redhat.com>,
         Mark Wielaard <mjw@redhat.com>
 Subject: Re: [PATCH 1/3] bpf: Move iterator functions into special init
  section
-Message-ID: <20201109181016.GE340169@kernel.org>
+Message-ID: <20201109184930.GA362089@krava>
 References: <20201106222512.52454-1-jolsa@kernel.org>
  <20201106222512.52454-2-jolsa@kernel.org>
  <20201109180500.GC340169@kernel.org>
@@ -55,95 +63,67 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <20201109180655.GD340169@kernel.org>
-X-Url:  http://acmel.wordpress.com
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-Em Mon, Nov 09, 2020 at 03:06:55PM -0300, Arnaldo Carvalho de Melo escreveu:
+On Mon, Nov 09, 2020 at 03:06:55PM -0300, Arnaldo Carvalho de Melo wrote:
+> Em Mon, Nov 09, 2020 at 03:05:00PM -0300, Arnaldo Carvalho de Melo escreveu:
+> > Em Fri, Nov 06, 2020 at 11:25:10PM +0100, Jiri Olsa escreveu:
+> > > With upcoming changes to pahole, that change the way how and
+> > > which kernel functions are stored in BTF data, we need a way
+> > > to recognize iterator functions.
+> > > 
+> > > Iterator functions need to be in BTF data, but have no real
+> > > body and are currently placed in .init.text section, so they
+> > > are freed after kernel init and are filtered out of BTF data
+> > > because of that.
+> > > 
+> > > The solution is to place these functions under new section:
+> > >   .init.bpf.preserve_type
+> > > 
+> > > And add 2 new symbols to mark that area:
+> > >   __init_bpf_preserve_type_begin
+> > >   __init_bpf_preserve_type_end
+> > > 
+> > > The code in pahole responsible for picking up the functions will
+> > > be able to recognize functions from this section and add them to
+> > > the BTF data and filter out all other .init.text functions.
+> > 
+> > This isn't applying on torvalds/master:
+> > 
+> > [acme@five linux]$ patch -p1 < /wb/1.patch
+> > patching file include/asm-generic/vmlinux.lds.h
+> > Hunk #2 succeeded at 754 (offset 1 line).
+> > patching file include/linux/bpf.h
+> > Hunk #1 succeeded at 1276 (offset -1 lines).
+> > patching file include/linux/init.h
+> > Hunk #1 FAILED at 52.
+> > 1 out of 1 hunk FAILED -- saving rejects to file include/linux/init.h.rej
+> > [acme@five linux]$
+> > [acme@five linux]$ cat include/linux/init.h.rej
+> > --- include/linux/init.h
+> > +++ include/linux/init.h
+> > @@ -52,6 +52,7 @@
+> >  #define __initconst	__section(.init.rodata)
+> >  #define __exitdata	__section(.exit.data)
+> >  #define __exit_call	__used __section(.exitcall.exit)
+> > +#define __init_bpf_preserve_type __section(.init.bpf.preserve_type)
+> > 
+> >  /*
+> >   * modpost check for section mismatches during the kernel build.
+> > [acme@five linux]$
+> > 
+> > 
 > > I'm fixing it up by hand to try together with pahole's patches.
- 
-> Due to:
- 
-> 33def8498fdde180 ("treewide: Convert macro and uses of __section(foo) to __section("foo")")
 > 
+> Due to:
+> 
+> 33def8498fdde180 ("treewide: Convert macro and uses of __section(foo) to __section("foo")")
 
-For convenience:
+ok, I'll send new version for the kernel patch
 
- asm-generic/vmlinux.lds.h |   16 +++++++++++++++-
- linux/bpf.h               |    8 +++++++-
- linux/init.h              |    1 +
- 3 files changed, 23 insertions(+), 2 deletions(-)
+thanks,
+jirka
 
----
-
-diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
-index b2b3d81b1535a5ab..f91029b3443bf0d2 100644
---- a/include/asm-generic/vmlinux.lds.h
-+++ b/include/asm-generic/vmlinux.lds.h
-@@ -685,8 +685,21 @@
- 	.BTF_ids : AT(ADDR(.BTF_ids) - LOAD_OFFSET) {			\
- 		*(.BTF_ids)						\
- 	}
-+
-+/*
-+ * .init.bpf.preserve_type
-+ *
-+ * This section store special BPF function and marks them
-+ * with begin/end symbols pair for the sake of pahole tool.
-+ */
-+#define INIT_BPF_PRESERVE_TYPE						\
-+	__init_bpf_preserve_type_begin = .;                             \
-+	*(.init.bpf.preserve_type)                                      \
-+	__init_bpf_preserve_type_end = .;				\
-+	MEM_DISCARD(init.bpf.preserve_type)
- #else
- #define BTF
-+#define INIT_BPF_PRESERVE_TYPE
- #endif
- 
- /*
-@@ -741,7 +754,8 @@
- #define INIT_TEXT							\
- 	*(.init.text .init.text.*)					\
- 	*(.text.startup)						\
--	MEM_DISCARD(init.text*)
-+	MEM_DISCARD(init.text*)						\
-+	INIT_BPF_PRESERVE_TYPE
- 
- #define EXIT_DATA							\
- 	*(.exit.data .exit.data.*)					\
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 2b16bf48aab61a1f..73e8ededde3e9c09 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -1276,10 +1276,16 @@ struct bpf_link *bpf_link_get_from_fd(u32 ufd);
- int bpf_obj_pin_user(u32 ufd, const char __user *pathname);
- int bpf_obj_get_user(const char __user *pathname, int flags);
- 
-+#ifdef CONFIG_DEBUG_INFO_BTF
-+#define BPF_INIT __init_bpf_preserve_type
-+#else
-+#define BPF_INIT __init
-+#endif
-+
- #define BPF_ITER_FUNC_PREFIX "bpf_iter_"
- #define DEFINE_BPF_ITER_FUNC(target, args...)			\
- 	extern int bpf_iter_ ## target(args);			\
--	int __init bpf_iter_ ## target(args) { return 0; }
-+	int BPF_INIT bpf_iter_ ## target(args) { return 0; }
- 
- struct bpf_iter_aux_info {
- 	struct bpf_map *map;
-diff --git a/include/linux/init.h b/include/linux/init.h
-index 7b53cb3092ee9956..a7c71e3b5f9a1d65 100644
---- a/include/linux/init.h
-+++ b/include/linux/init.h
-@@ -52,6 +52,7 @@
- #define __initconst	__section(".init.rodata")
- #define __exitdata	__section(".exit.data")
- #define __exit_call	__used __section(".exitcall.exit")
-+#define __init_bpf_preserve_type __section(".init.bpf.preserve_type")
- 
- /*
-  * modpost check for section mismatches during the kernel build.
