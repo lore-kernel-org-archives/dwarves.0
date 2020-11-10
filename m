@@ -2,140 +2,100 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7D9B0C2D0A3
-	for <linux-dwarves@archiver.kernel.org>; Mon,  9 Nov 2020 19:11:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A1A00C4742C
+	for <linux-dwarves@archiver.kernel.org>; Tue, 10 Nov 2020 23:34:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2A8C7206E3
-	for <linux-dwarves@archiver.kernel.org>; Mon,  9 Nov 2020 19:11:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4EB8521527
+	for <linux-dwarves@archiver.kernel.org>; Tue, 10 Nov 2020 23:34:31 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=kernel.org header.i=@kernel.org header.b="dqXDyHLn"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QF6NRgiQ"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730605AbgKITLH (ORCPT
+        id S1730254AbgKJXeb (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Mon, 9 Nov 2020 14:11:07 -0500
-Received: from mail.kernel.org ([198.145.29.99]:35078 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730596AbgKITLH (ORCPT <rfc822;dwarves@vger.kernel.org>);
-        Mon, 9 Nov 2020 14:11:07 -0500
-Received: from quaco.ghostprotocols.net (unknown [179.97.37.151])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 93B55206D8;
-        Mon,  9 Nov 2020 19:11:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1604949066;
-        bh=UVgQldwg+UY2jgndCdRMqklrY1C548QWXrVvtULaecE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dqXDyHLnt5rdJr4DBmK94lmYoKU3K7JmAveSaUMyZqlgygAkVDKVN6RLglWZhYs7A
-         y9XyLn9sVIvdter+Q7gFtQPnOHHGE9psxbo3lPrU8KFj90t+gcjNWt1SRygWGHvnuq
-         jdGrNUf6/o+LHBRfQ3tfMd4D/isdd25yfhlFG7DQ=
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 4F191411D1; Mon,  9 Nov 2020 16:11:04 -0300 (-03)
-Date:   Mon, 9 Nov 2020 16:11:04 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Jiri Olsa <jolsa@kernel.org>, dwarves@vger.kernel.org,
-        bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andriin@fb.com>, Yonghong Song <yhs@fb.com>,
-        Hao Luo <haoluo@google.com>,
-        "Frank Ch. Eigler" <fche@redhat.com>,
-        Mark Wielaard <mjw@redhat.com>
-Subject: Re: [PATCHv4 0/3] pahole/kernel: Workaround dwarf bug for function
- encoding
-Message-ID: <20201109191104.GA342737@kernel.org>
-References: <20201106222512.52454-1-jolsa@kernel.org>
- <CAEf4BzZXOyA0gROk2=G1R+m7gHcqTZHpE9L2G_EBCZET3FpzAw@mail.gmail.com>
- <20201109172911.GA340169@kernel.org>
+        Tue, 10 Nov 2020 18:34:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33140 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727018AbgKJXea (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Tue, 10 Nov 2020 18:34:30 -0500
+Received: from mail-yb1-xb41.google.com (mail-yb1-xb41.google.com [IPv6:2607:f8b0:4864:20::b41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2DA6C0613D1;
+        Tue, 10 Nov 2020 15:34:30 -0800 (PST)
+Received: by mail-yb1-xb41.google.com with SMTP id n142so161309ybf.7;
+        Tue, 10 Nov 2020 15:34:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=jvY8zPFQuXDlXfroxtiIfAkkDMiHwm0Tpk7ZY7XXrsk=;
+        b=QF6NRgiQqbvV2EB8gr08K2Tq/IO5H/A8I2NkY/4lVRTUU9SfUVrlGFxetcVZ3bY402
+         F/pK+urZult6jT6YUDzumAD0cQJFRT/CsJdzuh0aujhShQi8O8OqHgHvBEUxZuTHeGar
+         oDW2p5mnSEOm40eVkiTIHM+JoesXNDwSXSbAsOQ+7abE+JhCPSP96sytbw7WUA6Dqylw
+         ITAKY7iql6TZ8sEODdHfW8Os4HSjwEmXIRNP0A4zhhpxl4cdwzWPS5tgAOhMpHI3jj+z
+         jmHcUM6/370/htWvKSTbQlMP/A+mnThsBGoRoHwBudXRz+H5NB0H4khnQn1oQWsS9Gpz
+         X/8A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=jvY8zPFQuXDlXfroxtiIfAkkDMiHwm0Tpk7ZY7XXrsk=;
+        b=qGUSABAlBkxpYhBaT+FbORTOXcvzzMrc5FV1pgI8A/CoZlG7vSkH8SWCKajGapkO2o
+         cH5hrg267Xe4rXXixFrD6JWViqKMHBTTVLgFqrD918t8n8By2OZrU4N0ERh/dv2mn856
+         R7gdA6sahQWl1uviBGAk1jMA4+X3PYWxN0HMKAlphTVdamDn2l3tm738JsgxxOtjQjOZ
+         ajrsJFEIA1Lh2lr94ig67ELTbRVriDdszHWWeqdqv6bimFRBfPxXkCUhMt/a89pX9lc0
+         EmUqy/5Th1G9nwvJogSCFlMseLPTJXdUh3IUUZtobgTKroUR77mI+mD4OEXXkeqS+x6/
+         yYSg==
+X-Gm-Message-State: AOAM530/LI4v/sfzOR4k88lArZHgMAglv3JvXB8W99FjO27gphF1ZY8Q
+        6U4rp1imAldN/3gpW/hiNdWH33eLjL5G0dkkfSRzEGEY+Ps=
+X-Google-Smtp-Source: ABdhPJyZo8hZfKz4G48JpndOJ9Hl29u4F4N1qBlPtaimigPGNkyrrmFowr0YQkPnCbhupx1ReEo2+FvlUEvIJnb7bGs=
+X-Received: by 2002:a5b:a87:: with SMTP id h7mr28692535ybq.484.1605051269964;
+ Tue, 10 Nov 2020 15:34:29 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201109172911.GA340169@kernel.org>
-X-Url:  http://acmel.wordpress.com
+References: <20201106052549.3782099-1-andrii@kernel.org>
+In-Reply-To: <20201106052549.3782099-1-andrii@kernel.org>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Tue, 10 Nov 2020 15:34:18 -0800
+Message-ID: <CAEf4BzZGXQaDEwASyaJ39AAZ7TWnbi89pgrwXB5uFi861c9CCA@mail.gmail.com>
+Subject: Re: [PATCH dwarves 0/4] Add split BTF support to pahole
+To:     Andrii Nakryiko <andrii@kernel.org>
+Cc:     dwarves@vger.kernel.org,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        bpf <bpf@vger.kernel.org>, Kernel Team <kernel-team@fb.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-Em Mon, Nov 09, 2020 at 02:29:11PM -0300, Arnaldo Carvalho de Melo escreveu:
-> Em Fri, Nov 06, 2020 at 02:56:45PM -0800, Andrii Nakryiko escreveu:
-> > On Fri, Nov 6, 2020 at 2:25 PM Jiri Olsa <jolsa@kernel.org> wrote:
->  
-> > For the series:
->  
-> > Acked-by: Andrii Nakryiko <andrii@kernel.org>
-> 
-> Thanks, applied, testing now.
+On Thu, Nov 5, 2020 at 9:25 PM Andrii Nakryiko <andrii@kernel.org> wrote:
+>
+> Add ability to generate split BTF (for kernel modules), as well as load split
+> BTF. --btf_base argument is added to specify base BTF for split BTF. This
+> works for both btf_loader and btf_encoder.
 
-Now we have:
+Arnaldo, can you please take a look at these patches? Would be nice to
+get them landed ASAP so that we can start testing out kernel module
+BTFs without locally applying patches first. Thanks!
 
-$ pfunct -F btf /sys/kernel/btf/vmlinux  | wc -l
-38816
-$ pfunct -F btf /sys/kernel/btf/vmlinux  | head
-get_e820_md5
-relocate_restore_code
-resume_play_dead
-bsp_pm_callback
-msr_initialize_bdw
-msr_save_cpuid_features
-pm_check_save_msr
-amd_bus_cpu_online
-update_res
-pci_read
-$
-
-$ pfunct -F btf /sys/kernel/btf/vmlinux -f msr_save_cpuid_features
-int msr_save_cpuid_features(const struct x86_cpu_id  * c);
-$
-$ pfunct -F btf /sys/kernel/btf/vmlinux -f tcp_v4_rcv
-int tcp_v4_rcv(struct sk_buff * skb);
-$
-
-[acme@five ~]$ pfunct -F btf /sys/kernel/btf/vmlinux --class=sk_buff | head
-pskb_expand_head
-skb_put
-audit_list_rules_send
-netlink_ack
-consume_skb
-skb_queue_head
-skb_queue_tail
-netlink_broadcast
-__nlmsg_put
-kfree_skb
-[acme@five ~]$ pfunct -F btf /sys/kernel/btf/vmlinux -f audit_list_rules_send
-int audit_list_rules_send(struct sk_buff * request_skb, int seq);
-[acme@five ~]$ pfunct -F btf /sys/kernel/btf/vmlinux -f netlink_broadcast
-int netlink_broadcast(struct sock * ssk, struct sk_buff * skb, __u32 portid, __u32 group, gfp_t allocation);
-[acme@five ~]$
-
-Seems to work :-)
-
-In a future version I'll make it work with btf and
-/sys/kernel/btf/vmlinux by default if only function names are provided,
-like pahole with types:
-
-[acme@five ~]$ pahole sk_buff_head
-struct sk_buff_head {
-	struct sk_buff *           next;                 /*     0     8 */
-	struct sk_buff *           prev;                 /*     8     8 */
-	__u32                      qlen;                 /*    16     4 */
-	spinlock_t                 lock;                 /*    20     4 */
-
-	/* size: 24, cachelines: 1, members: 4 */
-	/* last cacheline: 24 bytes */
-};
-[acme@five ~]$ pahole list_head
-struct list_head {
-	struct list_head *         next;                 /*     0     8 */
-	struct list_head *         prev;                 /*     8     8 */
-
-	/* size: 16, cachelines: 1, members: 2 */
-	/* last cacheline: 16 bytes */
-};
-[acme@five ~]$
-
-Pushed out.
-
-- Arnaldo
+>
+> Andrii Nakryiko (4):
+>   btf_encoder: fix array index type numbering
+>   libbtf: improve variable naming and error reporting when writing out
+>     BTF
+>   libbpf: update libbpf submodlue reference to latest master
+>   btf: add support for split BTF loading and encoding
+>
+>  btf_encoder.c | 15 ++++++++-------
+>  btf_loader.c  |  2 +-
+>  lib/bpf       |  2 +-
+>  libbtf.c      | 43 +++++++++++++++++++++++++++----------------
+>  libbtf.h      |  4 +++-
+>  pahole.c      | 23 +++++++++++++++++++++++
+>  6 files changed, 63 insertions(+), 26 deletions(-)
+>
+> --
+> 2.24.1
+>
