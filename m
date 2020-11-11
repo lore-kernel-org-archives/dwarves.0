@@ -2,115 +2,295 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.3 required=3.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
-	DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8E489C388F7
-	for <linux-dwarves@archiver.kernel.org>; Wed, 11 Nov 2020 00:39:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C3687C388F9
+	for <linux-dwarves@archiver.kernel.org>; Wed, 11 Nov 2020 11:56:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2CF8D21D40
-	for <linux-dwarves@archiver.kernel.org>; Wed, 11 Nov 2020 00:39:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 52CE1206CA
+	for <linux-dwarves@archiver.kernel.org>; Wed, 11 Nov 2020 11:56:36 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="scrNLD85"
+	dkim=pass (1024-bit key) header.d=kernel.org header.i=@kernel.org header.b="cUcgOl60"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731746AbgKKAjU (ORCPT
+        id S1726494AbgKKL4e (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Tue, 10 Nov 2020 19:39:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43166 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727275AbgKKAjT (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Tue, 10 Nov 2020 19:39:19 -0500
-Received: from mail-qt1-x842.google.com (mail-qt1-x842.google.com [IPv6:2607:f8b0:4864:20::842])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C141C0613D1;
-        Tue, 10 Nov 2020 16:39:19 -0800 (PST)
-Received: by mail-qt1-x842.google.com with SMTP id g15so178220qtq.13;
-        Tue, 10 Nov 2020 16:39:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:user-agent:in-reply-to:references:mime-version
-         :content-transfer-encoding:subject:to:cc:from:message-id;
-        bh=VYGpBgc1MoESrTqe5G/8yvpuLVhdkwv6SHhqO98wwyo=;
-        b=scrNLD856fiumyXSZAaMMylKAXtgzTaBxuSnugJreRoJAmulCchAxrNmPlrxytdsXf
-         h9moCjqcoqHrPV31YpSuVOhSqyxkFheJ4PSH+zsl8VRcIELt3qHP3RWQidqdSh+pyytD
-         xRQzm6XYOMRxhngFEVu1zk5aoR4V1Xge6ciaMFLtL2Ajt6uQvMcSd2cQpY4BHN+5dOUG
-         Ib5U9zmLXuDcD+zKQ+FY09qOHw86ncb5uAe+Jk110W78a+tGHurZ8KwEmoRQsONxJNrh
-         Pn5qKOTmGqubU10jk2CglhXqakioisiNKdFoqtOGH80QAgamtsbPf4bjxYUnzABGitfy
-         WHzQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:user-agent:in-reply-to:references
-         :mime-version:content-transfer-encoding:subject:to:cc:from
-         :message-id;
-        bh=VYGpBgc1MoESrTqe5G/8yvpuLVhdkwv6SHhqO98wwyo=;
-        b=i1Cql8EQ7A4zG1SQkDZdUdTk0QZkvQ0/NJKNvHhl4PkD8r0Kfz3r+dhRAYaNRbHkM2
-         1Vz/gez5hCmZ4BQzc530nXAlfQJdgC5d2KTcX9HuFmWFxlh5AnONxjm9GuUSGUsEiZFI
-         FoB7j26fXkTJSNNvbrRqt1gp2yuXBL1aE7iSxTKuIHPpqdQsA1khEHy516r+1iAEfhcn
-         zTxZbkEqD1hvz35H5DpG3Jl1orZORo3zzPwKsKZS05RrNs4Qq4pI+Er2mZFitM6UNuac
-         wOHo7JQ+9ET1KDSa9gGyw+3eTZKshCFhjP6MrcM6I6PyNz/L7pVNU5uCcq2/jwv/OarP
-         cmcQ==
-X-Gm-Message-State: AOAM533HMZCuvX8Fv/4CLngaQxM+WpjUlPu4Xm0KIV5LmyWuJcJx1Bpb
-        bgJELJjjeS704MyxSgg5YrvReYW3990YSw==
-X-Google-Smtp-Source: ABdhPJyNbcv+8Xlng2UeY+pHn7hiHvVtmvaY4X7hJEYOiA6jWFsg48gMa9sjwgjWH5q6VNLq1Sb5rw==
-X-Received: by 2002:ac8:42d1:: with SMTP id g17mr20542476qtm.191.1605055158576;
-        Tue, 10 Nov 2020 16:39:18 -0800 (PST)
-Received: from [192.168.86.242] ([179.97.37.151])
-        by smtp.gmail.com with ESMTPSA id p12sm484233qkp.88.2020.11.10.16.39.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 10 Nov 2020 16:39:17 -0800 (PST)
-Date:   Tue, 10 Nov 2020 21:38:53 -0300
-User-Agent: K-9 Mail for Android
-In-Reply-To: <CAEf4Bzb9CJeZKxJ=Ppdpsb_1qZ2nSOTmRyk1Lj_wok0sH8NZ_w@mail.gmail.com>
-References: <20201106052549.3782099-1-andrii@kernel.org> <CAEf4BzZGXQaDEwASyaJ39AAZ7TWnbi89pgrwXB5uFi861c9CCA@mail.gmail.com> <348BC25F-0DDF-416E-8659-0C4B09F0A767@gmail.com> <CAEf4Bzb9CJeZKxJ=Ppdpsb_1qZ2nSOTmRyk1Lj_wok0sH8NZ_w@mail.gmail.com>
+        Wed, 11 Nov 2020 06:56:34 -0500
+Received: from mail.kernel.org ([198.145.29.99]:51964 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726316AbgKKL4b (ORCPT <rfc822;dwarves@vger.kernel.org>);
+        Wed, 11 Nov 2020 06:56:31 -0500
+Received: from quaco.ghostprotocols.net (unknown [179.97.37.151])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id B94E1206C0;
+        Wed, 11 Nov 2020 11:56:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1605095790;
+        bh=xmm0DontKjJfDMkWQgae0dgM+uWV8v6hCdBGKAm2aTw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=cUcgOl60++vSVx4iRwcnYvSZL0R9tcfwwaKqAo10PMqqcHKspQt2wPQT3hwhwj84X
+         lCG7u7USorWiSvAvxs6WLNa3Rg4pXHGaOQhLPrCcTi3cIVEnaHqvty/9WLSDpY9w8U
+         5gzezZIHtm1ut5Kz2Dhoot60KZ0jtFR9dGS9gSNo=
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 35A4C411D1; Wed, 11 Nov 2020 08:56:27 -0300 (-03)
+Date:   Wed, 11 Nov 2020 08:56:27 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Andrii Nakryiko <andrii@kernel.org>
+Cc:     dwarves@vger.kernel.org, bpf@vger.kernel.org, kernel-team@fb.com,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>
+Subject: Re: [PATCH dwarves 4/4] btf: add support for split BTF loading and
+ encoding
+Message-ID: <20201111115627.GB355344@kernel.org>
+References: <20201106052549.3782099-1-andrii@kernel.org>
+ <20201106052549.3782099-5-andrii@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH dwarves 0/4] Add split BTF support to pahole
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-CC:     Andrii Nakryiko <andrii@kernel.org>, dwarves@vger.kernel.org,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        bpf <bpf@vger.kernel.org>, Kernel Team <kernel-team@fb.com>
-From:   Arnaldo <arnaldo.melo@gmail.com>
-Message-ID: <334FAF0A-CA0A-448C-8317-235EEB44C7A6@gmail.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201106052549.3782099-5-andrii@kernel.org>
+X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
+Em Thu, Nov 05, 2020 at 09:25:49PM -0800, Andrii Nakryiko escreveu:
+> Add support for generating split BTF, in which there is a designated base
+> BTF, containing a base set of types, and a split BTF, which extends main BTF
+> with extra types, that can reference types and strings from the main BTF.
+ 
+> This is going to be used to generate compact BTFs for kernel modules, with
+> vmlinux BTF being a main BTF, which all kernel modules are based off of.
+ 
+> These changes rely on patch set [0] to be present in libbpf submodule.
+ 
+>   [0] https://patchwork.kernel.org/project/netdevbpf/list/?series=377859&state=*
 
+So, applied and added this:
 
-On November 10, 2020 9:35:25 PM GMT-03:00, Andrii Nakryiko <andrii=2Enakry=
-iko@gmail=2Ecom> wrote:
->On Tue, Nov 10, 2020 at 4:30 PM Arnaldo <arnaldo=2Emelo@gmail=2Ecom> wrot=
-e:
->> On November 10, 2020 8:34:18 PM GMT-03:00, Andrii Nakryiko
-><andrii=2Enakryiko@gmail=2Ecom> wrote:
->> >On Thu, Nov 5, 2020 at 9:25 PM Andrii Nakryiko <andrii@kernel=2Eorg>
->> >wrote:
->> >>
->> >> Add ability to generate split BTF (for kernel modules), as well as
->> >load split
->> >> BTF=2E --btf_base argument is added to specify base BTF for split
->BTF=2E
->> >This
->> >> works for both btf_loader and btf_encoder=2E
->> >
->> >Arnaldo, can you please take a look at these patches? Would be nice
->to
->> >get them landed ASAP so that we can start testing out kernel module
->> >BTFs without locally applying patches first=2E Thanks!
->>
->>
->> I've been working on prepping up v1=2E19, will process these patches
->first thing in the morning, tomorrow,
->>
->
->Thanks! Do you plan to include these changes into v1=2E19 as well?
+diff --git a/man-pages/pahole.1 b/man-pages/pahole.1
+index 4b5e0a1bf5462b28..20ee91fc911d4b39 100644
+--- a/man-pages/pahole.1
++++ b/man-pages/pahole.1
+@@ -185,6 +185,10 @@ Do not encode VARs in BTF.
+ .B \-\-btf_encode_force
+ Ignore those symbols found invalid when encoding BTF.
+ 
++.TP
++.B \-\-btf_base
++Path to the base BTF file, for instance: vmlinux when encoding kernel module BTF information.
++
+ .TP
+ .B \-l, \-\-show_first_biggest_size_base_type_member
+ Show first biggest size base_type member.
 
+---------------
 
-Lemme test it tomorrow morning=2E
+The entry for btf_encode/-J is missing, I'll add in a followup patch.
+
+Also I had to fixup ARGP_btf_base to 321 as I added this, to simplify
+the kernel scripts and Makefiles:
+
+  $ pahole --numeric_version
+  118
+  $
+
+Now to test this all by applying the kernel patches and the encoding
+module BTF, looking at it, etc.
 
 - Arnaldo
---=20
-Sent from my Android device with K-9 Mail=2E Please excuse my brevity=2E
+ 
+> Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+> ---
+>  btf_encoder.c |  3 ++-
+>  btf_loader.c  |  2 +-
+>  libbtf.c      | 10 ++++++----
+>  libbtf.h      |  4 +++-
+>  pahole.c      | 23 +++++++++++++++++++++++
+>  5 files changed, 35 insertions(+), 7 deletions(-)
+> 
+> diff --git a/btf_encoder.c b/btf_encoder.c
+> index b3e47f172bb3..d67e29b9cbee 100644
+> --- a/btf_encoder.c
+> +++ b/btf_encoder.c
+> @@ -12,6 +12,7 @@
+>  #include "dwarves.h"
+>  #include "libbtf.h"
+>  #include "lib/bpf/include/uapi/linux/btf.h"
+> +#include "lib/bpf/src/libbpf.h"
+>  #include "hash.h"
+>  #include "elf_symtab.h"
+>  #include "btf_encoder.h"
+> @@ -343,7 +344,7 @@ int cu__encode_btf(struct cu *cu, int verbose, bool force,
+>  	}
+>  
+>  	if (!btfe) {
+> -		btfe = btf_elf__new(cu->filename, cu->elf);
+> +		btfe = btf_elf__new(cu->filename, cu->elf, base_btf);
+>  		if (!btfe)
+>  			return -1;
+>  
+> diff --git a/btf_loader.c b/btf_loader.c
+> index 6ea207ea65b4..ec286f413f36 100644
+> --- a/btf_loader.c
+> +++ b/btf_loader.c
+> @@ -534,7 +534,7 @@ struct debug_fmt_ops btf_elf__ops;
+>  int btf_elf__load_file(struct cus *cus, struct conf_load *conf, const char *filename)
+>  {
+>  	int err;
+> -	struct btf_elf *btfe = btf_elf__new(filename, NULL);
+> +	struct btf_elf *btfe = btf_elf__new(filename, NULL, base_btf);
+>  
+>  	if (btfe == NULL)
+>  		return -1;
+> diff --git a/libbtf.c b/libbtf.c
+> index b6ddd7599395..3c52aa0d482b 100644
+> --- a/libbtf.c
+> +++ b/libbtf.c
+> @@ -27,6 +27,7 @@
+>  #include "dwarves.h"
+>  #include "elf_symtab.h"
+>  
+> +struct btf *base_btf;
+>  uint8_t btf_elf__verbose;
+>  uint8_t btf_elf__force;
+>  
+> @@ -52,9 +53,9 @@ int btf_elf__load(struct btf_elf *btfe)
+>  	/* free initial empty BTF */
+>  	btf__free(btfe->btf);
+>  	if (btfe->raw_btf)
+> -		btfe->btf = btf__parse_raw(btfe->filename);
+> +		btfe->btf = btf__parse_raw_split(btfe->filename, btfe->base_btf);
+>  	else
+> -		btfe->btf = btf__parse_elf(btfe->filename, NULL);
+> +		btfe->btf = btf__parse_elf_split(btfe->filename, btfe->base_btf);
+>  
+>  	err = libbpf_get_error(btfe->btf);
+>  	if (err)
+> @@ -63,7 +64,7 @@ int btf_elf__load(struct btf_elf *btfe)
+>  	return 0;
+>  }
+>  
+> -struct btf_elf *btf_elf__new(const char *filename, Elf *elf)
+> +struct btf_elf *btf_elf__new(const char *filename, Elf *elf, struct btf *base_btf)
+>  {
+>  	struct btf_elf *btfe = zalloc(sizeof(*btfe));
+>  	GElf_Shdr shdr;
+> @@ -77,7 +78,8 @@ struct btf_elf *btf_elf__new(const char *filename, Elf *elf)
+>  	if (btfe->filename == NULL)
+>  		goto errout;
+>  
+> -	btfe->btf = btf__new_empty();
+> +	btfe->base_btf = base_btf;
+> +	btfe->btf = btf__new_empty_split(base_btf);
+>  	if (libbpf_get_error(btfe->btf)) {
+>  		fprintf(stderr, "%s: failed to create empty BTF.\n", __func__);
+>  		goto errout;
+> diff --git a/libbtf.h b/libbtf.h
+> index 887b5bc55c8e..71f6cecbea93 100644
+> --- a/libbtf.h
+> +++ b/libbtf.h
+> @@ -27,8 +27,10 @@ struct btf_elf {
+>  	uint32_t	  percpu_shndx;
+>  	uint64_t	  percpu_base_addr;
+>  	struct btf	  *btf;
+> +	struct btf	  *base_btf;
+>  };
+>  
+> +extern struct btf *base_btf;
+>  extern uint8_t btf_elf__verbose;
+>  extern uint8_t btf_elf__force;
+>  #define btf_elf__verbose_log(fmt, ...) { if (btf_elf__verbose) printf(fmt, __VA_ARGS__); }
+> @@ -39,7 +41,7 @@ struct cu;
+>  struct base_type;
+>  struct ftype;
+>  
+> -struct btf_elf *btf_elf__new(const char *filename, Elf *elf);
+> +struct btf_elf *btf_elf__new(const char *filename, Elf *elf, struct btf *base_btf);
+>  void btf_elf__delete(struct btf_elf *btf);
+>  
+>  int32_t btf_elf__add_base_type(struct btf_elf *btf, const struct base_type *bt,
+> diff --git a/pahole.c b/pahole.c
+> index bd9b993777ee..d18092c1212c 100644
+> --- a/pahole.c
+> +++ b/pahole.c
+> @@ -22,12 +22,15 @@
+>  #include "dutil.h"
+>  #include "ctf_encoder.h"
+>  #include "btf_encoder.h"
+> +#include "libbtf.h"
+> +#include "lib/bpf/src/libbpf.h"
+>  
+>  static bool btf_encode;
+>  static bool ctf_encode;
+>  static bool first_obj_only;
+>  static bool skip_encoding_btf_vars;
+>  static bool btf_encode_force;
+> +static const char *base_btf_file;
+>  
+>  static uint8_t class__include_anonymous;
+>  static uint8_t class__include_nested_anonymous;
+> @@ -820,6 +823,7 @@ ARGP_PROGRAM_VERSION_HOOK_DEF = dwarves_print_version;
+>  #define ARGP_skip_encoding_btf_vars 317
+>  #define ARGP_btf_encode_force	   318
+>  #define ARGP_just_packed_structs   319
+> +#define ARGP_btf_base		   320
+>  
+>  static const struct argp_option pahole__options[] = {
+>  	{
+> @@ -1093,6 +1097,12 @@ static const struct argp_option pahole__options[] = {
+>  		.key  = ARGP_hex_fmt,
+>  		.doc  = "Print offsets and sizes in hexadecimal",
+>  	},
+> +	{
+> +		.name = "btf_base",
+> +		.key  = ARGP_btf_base,
+> +		.arg  = "SIZE",
+> +		.doc  = "Path to the base BTF file",
+> +	},
+>  	{
+>  		.name = "btf_encode",
+>  		.key  = 'J',
+> @@ -1234,6 +1244,9 @@ static error_t pahole__options_parser(int key, char *arg,
+>  		skip_encoding_btf_vars = true;		break;
+>  	case ARGP_btf_encode_force:
+>  		btf_encode_force = true;		break;
+> +	case ARGP_btf_base:
+> +		base_btf_file = arg;
+> +		break;
+>  	default:
+>  		return ARGP_ERR_UNKNOWN;
+>  	}
+> @@ -2682,6 +2695,15 @@ int main(int argc, char *argv[])
+>  		goto out;
+>  	}
+>  
+> +	if (base_btf_file) {
+> +		base_btf = btf__parse(base_btf_file, NULL);
+> +		if (libbpf_get_error(base_btf)) {
+> +			fprintf(stderr, "Failed to parse base BTF '%s': %ld\n",
+> +				base_btf_file, libbpf_get_error(base_btf));
+> +			goto out;
+> +		}
+> +	}
+> +
+>  	struct cus *cus = cus__new();
+>  	if (cus == NULL) {
+>  		fputs("pahole: insufficient memory\n", stderr);
+> @@ -2766,6 +2788,7 @@ out_cus_delete:
+>  #ifdef DEBUG_CHECK_LEAKS
+>  	cus__delete(cus);
+>  	structures__delete();
+> +	btf__free(base_btf);
+>  #endif
+>  out_dwarves_exit:
+>  #ifdef DEBUG_CHECK_LEAKS
+> -- 
+> 2.24.1
+> 
+
+-- 
+
+- Arnaldo
