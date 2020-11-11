@@ -2,68 +2,50 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C7994C388F9
-	for <linux-dwarves@archiver.kernel.org>; Wed, 11 Nov 2020 20:37:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A88E6C5517A
+	for <linux-dwarves@archiver.kernel.org>; Wed, 11 Nov 2020 20:49:43 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5069020797
-	for <linux-dwarves@archiver.kernel.org>; Wed, 11 Nov 2020 20:37:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3E0C420797
+	for <linux-dwarves@archiver.kernel.org>; Wed, 11 Nov 2020 20:49:43 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Qg48dzHp"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="G12+NWQu"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726150AbgKKUhH (ORCPT
+        id S1725900AbgKKUtn (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Wed, 11 Nov 2020 15:37:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35106 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725971AbgKKUhH (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Wed, 11 Nov 2020 15:37:07 -0500
-Received: from mail-yb1-xb43.google.com (mail-yb1-xb43.google.com [IPv6:2607:f8b0:4864:20::b43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50CA3C0613D1;
-        Wed, 11 Nov 2020 12:37:07 -0800 (PST)
-Received: by mail-yb1-xb43.google.com with SMTP id g6so1923537ybm.7;
-        Wed, 11 Nov 2020 12:37:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=og6jg+WzcwFdyx8K2EaLlWAtE28tBTo2SuQIP+faRHQ=;
-        b=Qg48dzHpn2sznoD8e9PxO7GhO8d+oJjIof7u0afkK/eU+D40AueyXPMQJMe+CTH9QQ
-         hvy0DDSIDv2dky6gNfD/m438gHPVL8t03DUp2Dd11n2vq+q9QAWAa+N3+z3CJP2QLzjx
-         Vo0CDMtEJAVZKhM4bk96B4uC0DMzEq/oZJwmxBd4maUkKCbWNRo24m4gXFXtQloBa0a3
-         CfEcUKw2ijJwIwRwqYtRFbZPw4DiwNb9CkVQL29Pdzw4QDmekJbaiwqDll9ss9xXm8gt
-         nP913Z66S12ZFdrSeI7qX/xJ+Kg+WH+R8H+P8NgLIg0+3YaZJj4e8xk50goa8YftVCmy
-         9mFw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=og6jg+WzcwFdyx8K2EaLlWAtE28tBTo2SuQIP+faRHQ=;
-        b=RlnSerNKUyoZVLmyGoU4LcB34FYm48iP3WvbMeOVaRTikjf4jQlWCATrTU55U6NaU7
-         EL6t1Dd4XqvguSROSpwE78IFTsZ4OPXUa7Sol5JJjYkoUdBJoTE6UBfmsDisN4dhjMNv
-         O+IIafIkP2MohOAqS+KLQJEmFdthBdRB/qjSHZOfoI2GYQP6Dlp27DwXw8WuflIE7YL5
-         FYuloAD5QpKXqd+sI1Z4XxbHp6JPu/rvrtt7OkPt+bTuBydGZXwFpntPMUqSwnwcedUU
-         dTSnJTJVo5+lBDeIwUrg1JmlA3HMxgQzttQ6YenZ4wtSdxt7LZ8Kwrf08iMv6eMXoFV3
-         0PsQ==
-X-Gm-Message-State: AOAM532zGoM78nbFxH15rZxoZHdZAzIxfBDZoSSoakMTihtlTYvxGid4
-        I12rzuCZxFgAFRiQloQr7eq+RsApnylEPdpiQeE=
-X-Google-Smtp-Source: ABdhPJzfReu5zwWiAT1o7vrPdw5jaJXbeVye3aK9wWhHgRwkRBWCAdK/W9HMx1hKkuKy12IXB4qwd+W3B1Xqe+1D5hU=
-X-Received: by 2002:a25:3d7:: with SMTP id 206mr23980844ybd.27.1605127026620;
- Wed, 11 Nov 2020 12:37:06 -0800 (PST)
-MIME-Version: 1.0
-References: <20201106222512.52454-1-jolsa@kernel.org> <20201106222512.52454-4-jolsa@kernel.org>
- <CAEf4BzZqFos1N-cnyAc6nL-=fHFJYn1tf9vNUewfsmSUyK4rQQ@mail.gmail.com>
- <20201111201929.GB619201@krava> <20201111203130.GC619201@krava>
-In-Reply-To: <20201111203130.GC619201@krava>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Wed, 11 Nov 2020 12:36:55 -0800
-Message-ID: <CAEf4BzZ089_ECxY_tFBMUc5c-rwtD9Mw8n7anUsdgpzgoipsPg@mail.gmail.com>
-Subject: Re: [PATCH 3/3] btf_encoder: Change functions check due to broken dwarf
-To:     Jiri Olsa <jolsa@redhat.com>
+        Wed, 11 Nov 2020 15:49:43 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:38338 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725924AbgKKUtm (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Wed, 11 Nov 2020 15:49:42 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1605127781;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=a5gSkztK637nAyE3GfLnnkOXBFv/j+u6ph2hmYGdOqc=;
+        b=G12+NWQuzDCvsPA5sLp7M+O+NmyLSskWS9Iyj2gpC0i1+u4wRI9txFSLenxy7dOBRWHGF1
+        MBxyyexWvc8e1Nd94FQvQfE1vQcyROlRxllh4z/k71T5A2wc2owNgL8ZBvzOduvqV9u31t
+        G0zhUBfRkGcL1Ii6kXkr8ZSY8hA7mHQ=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-334-ceEPUErXOL2CpoF_VK0aWA-1; Wed, 11 Nov 2020 15:49:38 -0500
+X-MC-Unique: ceEPUErXOL2CpoF_VK0aWA-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id B2DB0D3E80;
+        Wed, 11 Nov 2020 20:49:36 +0000 (UTC)
+Received: from krava (unknown [10.40.194.237])
+        by smtp.corp.redhat.com (Postfix) with SMTP id 3638210013D0;
+        Wed, 11 Nov 2020 20:49:31 +0000 (UTC)
+Date:   Wed, 11 Nov 2020 21:49:30 +0100
+From:   Jiri Olsa <jolsa@redhat.com>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
 Cc:     Jiri Olsa <jolsa@kernel.org>,
         Arnaldo Carvalho de Melo <acme@kernel.org>,
         Andrii Nakryiko <andrii@kernel.org>, dwarves@vger.kernel.org,
@@ -72,65 +54,62 @@ Cc:     Jiri Olsa <jolsa@kernel.org>,
         Hao Luo <haoluo@google.com>,
         "Frank Ch. Eigler" <fche@redhat.com>,
         Mark Wielaard <mjw@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH 3/3] btf_encoder: Change functions check due to broken
+ dwarf
+Message-ID: <20201111204930.GD619201@krava>
+References: <20201106222512.52454-1-jolsa@kernel.org>
+ <20201106222512.52454-4-jolsa@kernel.org>
+ <CAEf4BzZqFos1N-cnyAc6nL-=fHFJYn1tf9vNUewfsmSUyK4rQQ@mail.gmail.com>
+ <20201111201929.GB619201@krava>
+ <CAEf4BzZe1owmhqjGCjShYwf892hA0tzp0BEAZ2TR41aFx4eKUw@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAEf4BzZe1owmhqjGCjShYwf892hA0tzp0BEAZ2TR41aFx4eKUw@mail.gmail.com>
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-On Wed, Nov 11, 2020 at 12:31 PM Jiri Olsa <jolsa@redhat.com> wrote:
->
-> On Wed, Nov 11, 2020 at 09:19:29PM +0100, Jiri Olsa wrote:
-> > On Wed, Nov 11, 2020 at 11:59:20AM -0800, Andrii Nakryiko wrote:
-> >
-> > SNIP
-> >
-> > > > +       if (!fl->init_bpf_begin &&
-> > > > +           !strcmp("__init_bpf_preserve_type_begin", elf_sym__name(sym, btfe->symtab)))
-> > > > +               fl->init_bpf_begin = sym->st_value;
-> > > > +
-> > > > +       if (!fl->init_bpf_end &&
-> > > > +           !strcmp("__init_bpf_preserve_type_end", elf_sym__name(sym, btfe->symtab)))
-> > > > +               fl->init_bpf_end = sym->st_value;
-> > > > +}
-> > > > +
-> > > > +static int has_all_symbols(struct funcs_layout *fl)
-> > > > +{
-> > > > +       return fl->mcount_start && fl->mcount_stop &&
-> > > > +              fl->init_begin && fl->init_end &&
-> > > > +              fl->init_bpf_begin && fl->init_bpf_end;
-> > >
-> > > See below for what seems to be the root cause for the immediate problem.
-> > >
-> > > But me, Alexei and Daniel had a discussion offline, and we concluded
-> > > that this special bpf_preserve_init section is probably not the right
-> > > approach overall. We should roll back the bpf patch and instead adjust
-> > > pahole's approach. I think we should just drop the __init check and
-> > > include all the __init functions into BTF. There could be cases where
-> > > we'd need to attach BPF programs to __init functions (e.g., bpf_lsm
-> > > security cases), so having BTFs for those FUNCs are necessary as well.
-> > > Ftrace currently disallows that, but it's only because no user-space
-> > > application has a way to attach probes early enough. This might change
-> > > in the future, so there is no need to invent special mechanisms now
-> > > for bpf_iter function preservation. Let's just include all __init
-> > > functions in BTF. Can you please do that change and check how much
-> > > more functions we get in BTF? Thanks!
-> >
-> > sure, not problem to keep all init functions, will give you the count
->
-> with pahole change below (on top of current master) and kernel
-> without the special init section, I'm getting over ~2000 functions
-> more on my .config:
->
->   $ bpftool btf dump file ./vmlinux | grep 'FUNC ' | wc -l
->   41505
->   $ bpftool btf dump file /sys/kernel/btf/vmlinux | grep 'FUNC ' | wc -l
->   39256
+On Wed, Nov 11, 2020 at 12:26:23PM -0800, Andrii Nakryiko wrote:
 
-That's a very small percentage increase, let's just do this.
+SNIP
 
->
-> jirka
->
->
+> > perhaps your gcc generates DWARF that breaks the way you described
+> > above, but I'd expect to see function with argument without name,
+> > not function without arguments at all
+> >
+> > what gcc version are you on?
+> 
+> 10.2.0, built from sources
+> 
+> >
+> > when you dump debug information, do you see security_inode_getattr
+> > record with no arguments?
+> 
+> Yeah, I think so:
+> 
+> 21158467- <1><2b7e168>: Abbrev Number: 93 (DW_TAG_subprogram)
+> 21158468-    <2b7e169>   DW_AT_external    : 1
+> 21158469-    <2b7e169>   DW_AT_declaration : 1
+> 
+>   ..  BTW, we should probably still ignore DW_AT_declaration: 1, if it's set.
+> 
+> 21158470:    <2b7e169>   DW_AT_linkage_name: (indirect string, offset:
+> 0x120a0a): security_inode_getattr
+> 21158471:    <2b7e16d>   DW_AT_name        : (indirect string, offset:
+> 0x120a0a): security_inode_getattr
+> 21158472-    <2b7e171>   DW_AT_decl_file   : 141
+> 21158473-    <2b7e172>   DW_AT_decl_line   : 346
+> 21158474-    <2b7e174>   DW_AT_decl_column : 5
 
-[...]
+nice.. so how about making extra loop through cu functions
+and collect all distinct functions and for each collect
+most detailed arguments and use this set for final func
+generation
+
+will try to think of some way without extra loop, but can't
+think of any now
+
+jirka
+
