@@ -2,118 +2,81 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.0 required=3.0 tests=BAYES_00,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1EA1DC61DD8
-	for <linux-dwarves@archiver.kernel.org>; Thu, 12 Nov 2020 01:34:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 67992C2D0A3
+	for <linux-dwarves@archiver.kernel.org>; Thu, 12 Nov 2020 15:05:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C3E93206F1
-	for <linux-dwarves@archiver.kernel.org>; Thu, 12 Nov 2020 01:34:04 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=kernel.org header.i=@kernel.org header.b="ig2W3ZFC"
+	by mail.kernel.org (Postfix) with ESMTP id 0868222240
+	for <linux-dwarves@archiver.kernel.org>; Thu, 12 Nov 2020 15:05:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728689AbgKLBeC (ORCPT
+        id S1728274AbgKLPFT convert rfc822-to-8bit (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Wed, 11 Nov 2020 20:34:02 -0500
-Received: from mail.kernel.org ([198.145.29.99]:39130 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728104AbgKLAhi (ORCPT <rfc822;dwarves@vger.kernel.org>);
-        Wed, 11 Nov 2020 19:37:38 -0500
-Received: from quaco.ghostprotocols.net (unknown [179.97.37.151])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 12 Nov 2020 10:05:19 -0500
+Received: from us-smtp-delivery-44.mimecast.com ([207.211.30.44]:56233 "EHLO
+        us-smtp-delivery-44.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728220AbgKLPFS (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Thu, 12 Nov 2020 10:05:18 -0500
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-291-vwG7bqLTMvyOpFV0Wt3oZA-1; Thu, 12 Nov 2020 10:05:11 -0500
+X-MC-Unique: vwG7bqLTMvyOpFV0Wt3oZA-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 93F0A205CB;
-        Thu, 12 Nov 2020 00:36:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1605141377;
-        bh=DOk7cRTHZcbOlKVbRDvxMzJo/3Y4kVTkoZ+PTgYoh3Q=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ig2W3ZFCr2btoWO85apExmU4ulkGa9Mf3rczwlg471zRVQQkqo003tOnYbVwwkgez
-         YGIsxroBwZTt9P/LqurIxs8aYv4yCGqHQj+F4oNg9RMfVu8bZvllGuWUu2q0kPylqt
-         O13PxFJqP+5jbQsMzD3PKh6uZ8+87QBF11AI7NZ8=
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 5A796411D1; Wed, 11 Nov 2020 21:36:15 -0300 (-03)
-Date:   Wed, 11 Nov 2020 21:36:15 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Jiri Olsa <jolsa@redhat.com>, Jiri Olsa <jolsa@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>, dwarves@vger.kernel.org,
-        bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 1729018B9EC1;
+        Thu, 12 Nov 2020 15:05:09 +0000 (UTC)
+Received: from krava.redhat.com (unknown [10.40.194.120])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 4DFCE60C0F;
+        Thu, 12 Nov 2020 15:05:07 +0000 (UTC)
+From:   Jiri Olsa <jolsa@kernel.org>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     dwarves@vger.kernel.org, bpf@vger.kernel.org,
+        Alexei Starovoitov <ast@kernel.org>,
         Andrii Nakryiko <andriin@fb.com>, Yonghong Song <yhs@fb.com>,
-        Hao Luo <haoluo@google.com>,
-        "Frank Ch. Eigler" <fche@redhat.com>,
-        Mark Wielaard <mjw@redhat.com>
-Subject: Re: [PATCH 3/3] btf_encoder: Change functions check due to broken
- dwarf
-Message-ID: <20201112003615.GH380127@kernel.org>
-References: <20201106222512.52454-1-jolsa@kernel.org>
- <20201106222512.52454-4-jolsa@kernel.org>
- <CAEf4BzZqFos1N-cnyAc6nL-=fHFJYn1tf9vNUewfsmSUyK4rQQ@mail.gmail.com>
- <20201111201929.GB619201@krava>
- <20201111203130.GC619201@krava>
- <CAEf4BzZ089_ECxY_tFBMUc5c-rwtD9Mw8n7anUsdgpzgoipsPg@mail.gmail.com>
+        Hao Luo <haoluo@google.com>
+Subject: [RFC 0/3] btf_encoder: Fix functions BTF data generation
+Date:   Thu, 12 Nov 2020 16:05:03 +0100
+Message-Id: <20201112150506.705430-1-jolsa@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAEf4BzZ089_ECxY_tFBMUc5c-rwtD9Mw8n7anUsdgpzgoipsPg@mail.gmail.com>
-X-Url:  http://acmel.wordpress.com
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: kernel.org
+Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=WINDOWS-1252
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-Em Wed, Nov 11, 2020 at 12:36:55PM -0800, Andrii Nakryiko escreveu:
-> On Wed, Nov 11, 2020 at 12:31 PM Jiri Olsa <jolsa@redhat.com> wrote:
-> > On Wed, Nov 11, 2020 at 09:19:29PM +0100, Jiri Olsa wrote:
-> > > On Wed, Nov 11, 2020 at 11:59:20AM -0800, Andrii Nakryiko wrote:
-> > > SNIP
+hi,
+recent btf encoder's changes brakes BTF data for some gcc
+versions. The problem is that some functions can appear
+in dwarf data in some instances without arguments, while
+they are defined with some.
 
-> > > > > +       if (!fl->init_bpf_begin &&
-> > > > > +           !strcmp("__init_bpf_preserve_type_begin", elf_sym__name(sym, btfe->symtab)))
-> > > > > +               fl->init_bpf_begin = sym->st_value;
-> > > > > +
-> > > > > +       if (!fl->init_bpf_end &&
-> > > > > +           !strcmp("__init_bpf_preserve_type_end", elf_sym__name(sym, btfe->symtab)))
-> > > > > +               fl->init_bpf_end = sym->st_value;
-> > > > > +}
-> > > > > +
-> > > > > +static int has_all_symbols(struct funcs_layout *fl)
-> > > > > +{
-> > > > > +       return fl->mcount_start && fl->mcount_stop &&
-> > > > > +              fl->init_begin && fl->init_end &&
-> > > > > +              fl->init_bpf_begin && fl->init_bpf_end;
+I tried the approach I described in my former email and
+basically process all dwarf data first and collect args
+before we generate any BTF function.
 
-> > > > See below for what seems to be the root cause for the immediate problem.
+I had to change LSK__DELETE to LSK__KEEPIT for every
+CU we process, so that might have some implications
+that I still need to check.
 
-> > > > But me, Alexei and Daniel had a discussion offline, and we concluded
-> > > > that this special bpf_preserve_init section is probably not the right
-> > > > approach overall. We should roll back the bpf patch and instead adjust
-> > > > pahole's approach. I think we should just drop the __init check and
-> > > > include all the __init functions into BTF. There could be cases where
-> > > > we'd need to attach BPF programs to __init functions (e.g., bpf_lsm
-> > > > security cases), so having BTFs for those FUNCs are necessary as well.
-> > > > Ftrace currently disallows that, but it's only because no user-space
-> > > > application has a way to attach probes early enough. This might change
-> > > > in the future, so there is no need to invent special mechanisms now
-> > > > for bpf_iter function preservation. Let's just include all __init
-> > > > functions in BTF. Can you please do that change and check how much
-> > > > more functions we get in BTF? Thanks!
+Andrii,
+could you please check this with your gcc?
 
-> > > sure, not problem to keep all init functions, will give you the count
+thanks,
+jirka
 
-> > with pahole change below (on top of current master) and kernel
-> > without the special init section, I'm getting over ~2000 functions
-> > more on my .config:
 
-> >   $ bpftool btf dump file ./vmlinux | grep 'FUNC ' | wc -l
-> >   41505
-> >   $ bpftool btf dump file /sys/kernel/btf/vmlinux | grep 'FUNC ' | wc -l
-> >   39256
+---
+Jiri Olsa (3):
+      btf_encoder: Generate also .init functions
+      btf_encoder: Put function generation code to generate_func
+      btf_encoder: Func generation fix
 
-> That's a very small percentage increase, let's just do this.
+ btf_encoder.c | 177 +++++++++++++++++++++++++++++++++++----------------------------------
+ pahole.c      |   2 +-
+ 2 files changed, 91 insertions(+), 88 deletions(-)
 
-Agreed, if that is the only difference, no point in complicating things
-as before, we end up with unforeseen trouble as we noticed.
-
-- Arnaldo
