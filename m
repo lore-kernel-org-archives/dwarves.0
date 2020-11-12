@@ -2,65 +2,65 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-9.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C5120C2D0E4
-	for <linux-dwarves@archiver.kernel.org>; Thu, 12 Nov 2020 19:37:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 741C2C55ABD
+	for <linux-dwarves@archiver.kernel.org>; Thu, 12 Nov 2020 19:39:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6C7772222F
-	for <linux-dwarves@archiver.kernel.org>; Thu, 12 Nov 2020 19:37:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 153F42224E
+	for <linux-dwarves@archiver.kernel.org>; Thu, 12 Nov 2020 19:39:56 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cxElvG3j"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Sppq0ZOv"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726513AbgKLTh5 (ORCPT
+        id S1726310AbgKLTjz (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Thu, 12 Nov 2020 14:37:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50748 "EHLO
+        Thu, 12 Nov 2020 14:39:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726310AbgKLTh5 (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Thu, 12 Nov 2020 14:37:57 -0500
-Received: from mail-yb1-xb44.google.com (mail-yb1-xb44.google.com [IPv6:2607:f8b0:4864:20::b44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 442CDC0613D1;
-        Thu, 12 Nov 2020 11:37:57 -0800 (PST)
-Received: by mail-yb1-xb44.google.com with SMTP id o71so6161934ybc.2;
-        Thu, 12 Nov 2020 11:37:57 -0800 (PST)
+        with ESMTP id S1726295AbgKLTjy (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Thu, 12 Nov 2020 14:39:54 -0500
+Received: from mail-yb1-xb41.google.com (mail-yb1-xb41.google.com [IPv6:2607:f8b0:4864:20::b41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9B70C0613D1;
+        Thu, 12 Nov 2020 11:39:53 -0800 (PST)
+Received: by mail-yb1-xb41.google.com with SMTP id i186so6451322ybc.11;
+        Thu, 12 Nov 2020 11:39:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=vtLkoa9iAtcoKvRAxfNUbTm4+1oQ+ytkZHUyokgstJ4=;
-        b=cxElvG3juUSp4eDvzLwnELhSzMtlkNS9wKjPRoPk2rkjWEHgMWOzjcfVO3YWP3UshJ
-         7agQoR7fczYpY5gv33ayeLIrzXjpbCdveA0dDYtwkGLIJBK+z9oQdWtjGziumdLRzwIk
-         DCjTl8ba4L3PdBHY6NGQIKYvD9/a4Za5BDoWXyshuNJK0tq5//xrTaXWgO3PzPbVDawZ
-         9CBBtBLJo29h8ayDn7tL17HsMYMYzo85WcGxqy58HO3OkI08/mcmEnrko5ysWCfA0dka
-         UVi7K+7AWV9nipwZ1KPz6btv5c127sqCRFMvflF80lZjNs5T8T53IAUGZrN5BkuFuMq9
-         49YA==
+        bh=UO9DPotWn4by22yehpshPhN+vxo3lDtaNuirFdoJhWo=;
+        b=Sppq0ZOvoAMlmqvODnBlbdaF4xnhLLtRjZ2dPnI1I2fbLczUEktxRbDAQcaOYXzddw
+         yVcfc8HTceLl/XU9eydxBF5Ij5LUj4HtoxKq5T8agwif26OBkaWuumyXTO6I33pYY9VK
+         nLJqNRe13LCKJbs+f25fJHdpDaX/C4uE8z16hJs9rqTbm/NqUA6ewNOgy646T7SpGJp9
+         Rj+ykyqRhzy83dMI46n7wkmHDj9V9zeGX+2tbwoFmM3C2RDxbXR02fEL2nH3qxxmh5Q0
+         MXtsE9HYXsy0ODu3hpcdxHkiF3ULIx7q7CsFpkPi9+xF3T8HMmWAYNDW8jG9eopHgHB2
+         uewQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=vtLkoa9iAtcoKvRAxfNUbTm4+1oQ+ytkZHUyokgstJ4=;
-        b=K2RSXwcO7sbokQd5CgGQdXrJlZ9kt8wQiTN+M0t+IKoDGwIPJvdI5ogqnPD7wjo/xU
-         eHN5SXhoWEPF3svsnT7LkhV+0pRqFxNCwyHmVe2XW2UUJHCXnDh3BgIr+b8pI0j8vkQ4
-         ne7OVaOecq9Xc6fYcnyqhQ5aio3GydtyBOOvTOJUDtpeb4XJA/MAR1xJV30N0Z1FqIQ1
-         Ta1OXuJGvlfLsRYgaI0H9wiFlxBFRX0TZxS2rj3SXIYhBH29tg9MyQOyrnp6isk3g5Jy
-         l0vVXN6/NxqVU3lcojL+cVa1WhJ7SxxdC8khMjo8yitbDpMrxmvRw+H99+KcAc4KxKQh
-         WjmQ==
-X-Gm-Message-State: AOAM532vODbrci0Ci9x3YF+Oqv6dlz3UgnAzFk8u/vYZgOSKI+4O9utI
-        aiRKdjk0mY/cycnt0buRbYoyAsiHx1HmChJgqR2+XTP2MaMGOtoM
-X-Google-Smtp-Source: ABdhPJwKVlR+yFDaUQ338b2RsN1RMVpJXiNBwI7ojXQ0kLP4DSTUgbCXr+63b/XPFcW1USZoKHRKT/LRX56I9XDgzpw=
-X-Received: by 2002:a25:3d7:: with SMTP id 206mr1643837ybd.27.1605209876608;
- Thu, 12 Nov 2020 11:37:56 -0800 (PST)
+        bh=UO9DPotWn4by22yehpshPhN+vxo3lDtaNuirFdoJhWo=;
+        b=Hg048LMqVK2oojtD+11qYroBahOtj6flpQxyxPH73S/bccMqaatk3iGc9hPvKDx0rV
+         3OZTSBf/sUxdFF2ADPIZC9I3yo4rnSPNWpKL4yv8816vvUlrl2ekqyUTxZ/Cz86+VfQJ
+         xqMOf4/esOYA6phuCMrXDdYqlNyzPttyr1fVU/AAGRfo4CwD7xWaOCu4I5EtyfnxOLyK
+         XYPZtCpVha1G4kwSP/3eopB2Sm+KmMWD6iJ1oMiMTRJSlWb3eMBUQjJ01JF+9oiLKyP+
+         bPbMIXb+jeMZ5gvKWg/8o07wMrnewXvy/R9uPjtGbGt6bKfx6tmjhRE3fE+4RAkGBM23
+         HH7Q==
+X-Gm-Message-State: AOAM532Dv0OP27WnEeo70AR/d7LhNE3kTtgX/t/9+vAVeZ4bNVY4TDdH
+        r2rQHBrCmE+9QA4k80WoQs+ulxMHE/6YQzew8Nw=
+X-Google-Smtp-Source: ABdhPJyg3HXI4g2sbcdTWzEXGHsKcgRYsLw921xwoC8N4P3eAPZ7arw5LfQ9S5SkB+u0p9bYEtMBmgfS4P8cBIW2g6I=
+X-Received: by 2002:a25:3d7:: with SMTP id 206mr1656516ybd.27.1605209993100;
+ Thu, 12 Nov 2020 11:39:53 -0800 (PST)
 MIME-Version: 1.0
-References: <20201112150506.705430-1-jolsa@kernel.org> <20201112150506.705430-2-jolsa@kernel.org>
-In-Reply-To: <20201112150506.705430-2-jolsa@kernel.org>
+References: <20201112150506.705430-1-jolsa@kernel.org> <20201112150506.705430-3-jolsa@kernel.org>
+In-Reply-To: <20201112150506.705430-3-jolsa@kernel.org>
 From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Thu, 12 Nov 2020 11:37:45 -0800
-Message-ID: <CAEf4BzbdysbGSvJRBZDN=R82KOSgQ8qm_6TDGMhEP3Pvg1RQSw@mail.gmail.com>
-Subject: Re: [RFC/PATCH 1/3] btf_encoder: Generate also .init functions
+Date:   Thu, 12 Nov 2020 11:39:42 -0800
+Message-ID: <CAEf4BzavQiEAQyeUU3kxHQ5tmwRJev6N_jbqNe=xhJpWyTAQ8Q@mail.gmail.com>
+Subject: Re: [RFC/PATCH 2/3] btf_encoder: Put function generation code to generate_func
 To:     Jiri Olsa <jolsa@kernel.org>
 Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
         dwarves@vger.kernel.org, bpf <bpf@vger.kernel.org>,
@@ -74,37 +74,77 @@ X-Mailing-List: dwarves@vger.kernel.org
 
 On Thu, Nov 12, 2020 at 7:05 AM Jiri Olsa <jolsa@kernel.org> wrote:
 >
-> Currently we skip functions under .init* sections, Removing the .init*
-> section check, BTF now contains also functions from .init* sections.
->
-> Andrii's explanation from email:
->
-> > ...                  I think we should just drop the __init check and
-> > include all the __init functions into BTF. There could be cases where
-> > we'd need to attach BPF programs to __init functions (e.g., bpf_lsm
-> > security cases), so having BTFs for those FUNCs are necessary as well.
-> > Ftrace currently disallows that, but it's only because no user-space
-> > application has a way to attach probes early enough. This might change
-> > in the future, so there is no need to invent special mechanisms now
-> > for bpf_iter function preservation. Let's just include all __init
-> > functions in BTF.
->
-> It's over ~2000 functions on my .config:
->
->    $ bpftool btf dump file ./vmlinux | grep 'FUNC ' | wc -l
->    41505
->    $ bpftool btf dump file /sys/kernel/btf/vmlinux | grep 'FUNC ' | wc -l
->    39256
+> We will use generate_func from another place in following change.
 >
 > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 > ---
-
-Looks good.
-
-Acked-by: Andrii Nakryiko <andrii@kernel.org>
-
->  btf_encoder.c | 43 ++-----------------------------------------
->  1 file changed, 2 insertions(+), 41 deletions(-)
+>  btf_encoder.c | 28 ++++++++++++++++++----------
+>  1 file changed, 18 insertions(+), 10 deletions(-)
 >
+> diff --git a/btf_encoder.c b/btf_encoder.c
+> index d531651b1e9e..efc4f48dbc5a 100644
+> --- a/btf_encoder.c
+> +++ b/btf_encoder.c
+> @@ -351,6 +351,23 @@ static struct btf_elf *btfe;
+>  static uint32_t array_index_id;
+>  static bool has_index_type;
+>
+> +static int generate_func(struct btf_elf *btfe, struct cu *cu,
+> +                        struct function *fn, uint32_t type_id_off)
+> +{
+> +       int btf_fnproto_id, btf_fn_id, err = 0;
 
-[...]
+btf_ prefix for these variables don't contribute anything, I'd just
+drop them here
+
+> +       const char *name;
+> +
+> +       btf_fnproto_id = btf_elf__add_func_proto(btfe, cu, &fn->proto, type_id_off);
+> +       name = dwarves__active_loader->strings__ptr(cu, fn->name);
+> +       btf_fn_id = btf_elf__add_ref_type(btfe, BTF_KIND_FUNC, btf_fnproto_id, name, false);
+> +       if (btf_fnproto_id < 0 || btf_fn_id < 0) {
+> +               err = -1;
+> +               printf("error: failed to encode function '%s'\n", function__name(fn, cu));
+
+return -1;
+
+> +       }
+> +
+> +       return err;
+
+return 0; drop err variable.
+
+> +}
+> +
+>  int btf_encoder__encode()
+>  {
+>         int err;
+> @@ -608,9 +625,6 @@ int cu__encode_btf(struct cu *cu, int verbose, bool force,
+>         }
+>
+>         cu__for_each_function(cu, core_id, fn) {
+> -               int btf_fnproto_id, btf_fn_id;
+> -               const char *name;
+> -
+>                 /*
+>                  * The functions_cnt != 0 means we parsed all necessary
+>                  * kernel symbols and we are using ftrace location filter
+> @@ -634,14 +648,8 @@ int cu__encode_btf(struct cu *cu, int verbose, bool force,
+>                                 continue;
+>                 }
+>
+> -               btf_fnproto_id = btf_elf__add_func_proto(btfe, cu, &fn->proto, type_id_off);
+> -               name = dwarves__active_loader->strings__ptr(cu, fn->name);
+> -               btf_fn_id = btf_elf__add_ref_type(btfe, BTF_KIND_FUNC, btf_fnproto_id, name, false);
+> -               if (btf_fnproto_id < 0 || btf_fn_id < 0) {
+> -                       err = -1;
+> -                       printf("error: failed to encode function '%s'\n", function__name(fn, cu));
+> +               if (generate_func(btfe, cu, fn, type_id_off))
+>                         goto out;
+> -               }
+>         }
+>
+>         if (skip_encoding_vars)
+> --
+> 2.26.2
+>
