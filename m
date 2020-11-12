@@ -2,52 +2,43 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-4.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A88E6C5517A
-	for <linux-dwarves@archiver.kernel.org>; Wed, 11 Nov 2020 20:49:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1EA1DC61DD8
+	for <linux-dwarves@archiver.kernel.org>; Thu, 12 Nov 2020 01:34:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3E0C420797
-	for <linux-dwarves@archiver.kernel.org>; Wed, 11 Nov 2020 20:49:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C3E93206F1
+	for <linux-dwarves@archiver.kernel.org>; Thu, 12 Nov 2020 01:34:04 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="G12+NWQu"
+	dkim=pass (1024-bit key) header.d=kernel.org header.i=@kernel.org header.b="ig2W3ZFC"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725900AbgKKUtn (ORCPT
+        id S1728689AbgKLBeC (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Wed, 11 Nov 2020 15:49:43 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:38338 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725924AbgKKUtm (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Wed, 11 Nov 2020 15:49:42 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1605127781;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=a5gSkztK637nAyE3GfLnnkOXBFv/j+u6ph2hmYGdOqc=;
-        b=G12+NWQuzDCvsPA5sLp7M+O+NmyLSskWS9Iyj2gpC0i1+u4wRI9txFSLenxy7dOBRWHGF1
-        MBxyyexWvc8e1Nd94FQvQfE1vQcyROlRxllh4z/k71T5A2wc2owNgL8ZBvzOduvqV9u31t
-        G0zhUBfRkGcL1Ii6kXkr8ZSY8hA7mHQ=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-334-ceEPUErXOL2CpoF_VK0aWA-1; Wed, 11 Nov 2020 15:49:38 -0500
-X-MC-Unique: ceEPUErXOL2CpoF_VK0aWA-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Wed, 11 Nov 2020 20:34:02 -0500
+Received: from mail.kernel.org ([198.145.29.99]:39130 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728104AbgKLAhi (ORCPT <rfc822;dwarves@vger.kernel.org>);
+        Wed, 11 Nov 2020 19:37:38 -0500
+Received: from quaco.ghostprotocols.net (unknown [179.97.37.151])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id B2DB0D3E80;
-        Wed, 11 Nov 2020 20:49:36 +0000 (UTC)
-Received: from krava (unknown [10.40.194.237])
-        by smtp.corp.redhat.com (Postfix) with SMTP id 3638210013D0;
-        Wed, 11 Nov 2020 20:49:31 +0000 (UTC)
-Date:   Wed, 11 Nov 2020 21:49:30 +0100
-From:   Jiri Olsa <jolsa@redhat.com>
+        by mail.kernel.org (Postfix) with ESMTPSA id 93F0A205CB;
+        Thu, 12 Nov 2020 00:36:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1605141377;
+        bh=DOk7cRTHZcbOlKVbRDvxMzJo/3Y4kVTkoZ+PTgYoh3Q=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ig2W3ZFCr2btoWO85apExmU4ulkGa9Mf3rczwlg471zRVQQkqo003tOnYbVwwkgez
+         YGIsxroBwZTt9P/LqurIxs8aYv4yCGqHQj+F4oNg9RMfVu8bZvllGuWUu2q0kPylqt
+         O13PxFJqP+5jbQsMzD3PKh6uZ8+87QBF11AI7NZ8=
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 5A796411D1; Wed, 11 Nov 2020 21:36:15 -0300 (-03)
+Date:   Wed, 11 Nov 2020 21:36:15 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
 To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Jiri Olsa <jolsa@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
+Cc:     Jiri Olsa <jolsa@redhat.com>, Jiri Olsa <jolsa@kernel.org>,
         Andrii Nakryiko <andrii@kernel.org>, dwarves@vger.kernel.org,
         bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
         Andrii Nakryiko <andriin@fb.com>, Yonghong Song <yhs@fb.com>,
@@ -56,60 +47,73 @@ Cc:     Jiri Olsa <jolsa@kernel.org>,
         Mark Wielaard <mjw@redhat.com>
 Subject: Re: [PATCH 3/3] btf_encoder: Change functions check due to broken
  dwarf
-Message-ID: <20201111204930.GD619201@krava>
+Message-ID: <20201112003615.GH380127@kernel.org>
 References: <20201106222512.52454-1-jolsa@kernel.org>
  <20201106222512.52454-4-jolsa@kernel.org>
  <CAEf4BzZqFos1N-cnyAc6nL-=fHFJYn1tf9vNUewfsmSUyK4rQQ@mail.gmail.com>
  <20201111201929.GB619201@krava>
- <CAEf4BzZe1owmhqjGCjShYwf892hA0tzp0BEAZ2TR41aFx4eKUw@mail.gmail.com>
+ <20201111203130.GC619201@krava>
+ <CAEf4BzZ089_ECxY_tFBMUc5c-rwtD9Mw8n7anUsdgpzgoipsPg@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAEf4BzZe1owmhqjGCjShYwf892hA0tzp0BEAZ2TR41aFx4eKUw@mail.gmail.com>
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
+In-Reply-To: <CAEf4BzZ089_ECxY_tFBMUc5c-rwtD9Mw8n7anUsdgpzgoipsPg@mail.gmail.com>
+X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-On Wed, Nov 11, 2020 at 12:26:23PM -0800, Andrii Nakryiko wrote:
+Em Wed, Nov 11, 2020 at 12:36:55PM -0800, Andrii Nakryiko escreveu:
+> On Wed, Nov 11, 2020 at 12:31 PM Jiri Olsa <jolsa@redhat.com> wrote:
+> > On Wed, Nov 11, 2020 at 09:19:29PM +0100, Jiri Olsa wrote:
+> > > On Wed, Nov 11, 2020 at 11:59:20AM -0800, Andrii Nakryiko wrote:
+> > > SNIP
 
-SNIP
+> > > > > +       if (!fl->init_bpf_begin &&
+> > > > > +           !strcmp("__init_bpf_preserve_type_begin", elf_sym__name(sym, btfe->symtab)))
+> > > > > +               fl->init_bpf_begin = sym->st_value;
+> > > > > +
+> > > > > +       if (!fl->init_bpf_end &&
+> > > > > +           !strcmp("__init_bpf_preserve_type_end", elf_sym__name(sym, btfe->symtab)))
+> > > > > +               fl->init_bpf_end = sym->st_value;
+> > > > > +}
+> > > > > +
+> > > > > +static int has_all_symbols(struct funcs_layout *fl)
+> > > > > +{
+> > > > > +       return fl->mcount_start && fl->mcount_stop &&
+> > > > > +              fl->init_begin && fl->init_end &&
+> > > > > +              fl->init_bpf_begin && fl->init_bpf_end;
 
-> > perhaps your gcc generates DWARF that breaks the way you described
-> > above, but I'd expect to see function with argument without name,
-> > not function without arguments at all
-> >
-> > what gcc version are you on?
-> 
-> 10.2.0, built from sources
-> 
-> >
-> > when you dump debug information, do you see security_inode_getattr
-> > record with no arguments?
-> 
-> Yeah, I think so:
-> 
-> 21158467- <1><2b7e168>: Abbrev Number: 93 (DW_TAG_subprogram)
-> 21158468-    <2b7e169>   DW_AT_external    : 1
-> 21158469-    <2b7e169>   DW_AT_declaration : 1
-> 
->   ..  BTW, we should probably still ignore DW_AT_declaration: 1, if it's set.
-> 
-> 21158470:    <2b7e169>   DW_AT_linkage_name: (indirect string, offset:
-> 0x120a0a): security_inode_getattr
-> 21158471:    <2b7e16d>   DW_AT_name        : (indirect string, offset:
-> 0x120a0a): security_inode_getattr
-> 21158472-    <2b7e171>   DW_AT_decl_file   : 141
-> 21158473-    <2b7e172>   DW_AT_decl_line   : 346
-> 21158474-    <2b7e174>   DW_AT_decl_column : 5
+> > > > See below for what seems to be the root cause for the immediate problem.
 
-nice.. so how about making extra loop through cu functions
-and collect all distinct functions and for each collect
-most detailed arguments and use this set for final func
-generation
+> > > > But me, Alexei and Daniel had a discussion offline, and we concluded
+> > > > that this special bpf_preserve_init section is probably not the right
+> > > > approach overall. We should roll back the bpf patch and instead adjust
+> > > > pahole's approach. I think we should just drop the __init check and
+> > > > include all the __init functions into BTF. There could be cases where
+> > > > we'd need to attach BPF programs to __init functions (e.g., bpf_lsm
+> > > > security cases), so having BTFs for those FUNCs are necessary as well.
+> > > > Ftrace currently disallows that, but it's only because no user-space
+> > > > application has a way to attach probes early enough. This might change
+> > > > in the future, so there is no need to invent special mechanisms now
+> > > > for bpf_iter function preservation. Let's just include all __init
+> > > > functions in BTF. Can you please do that change and check how much
+> > > > more functions we get in BTF? Thanks!
 
-will try to think of some way without extra loop, but can't
-think of any now
+> > > sure, not problem to keep all init functions, will give you the count
 
-jirka
+> > with pahole change below (on top of current master) and kernel
+> > without the special init section, I'm getting over ~2000 functions
+> > more on my .config:
 
+> >   $ bpftool btf dump file ./vmlinux | grep 'FUNC ' | wc -l
+> >   41505
+> >   $ bpftool btf dump file /sys/kernel/btf/vmlinux | grep 'FUNC ' | wc -l
+> >   39256
+
+> That's a very small percentage increase, let's just do this.
+
+Agreed, if that is the only difference, no point in complicating things
+as before, we end up with unforeseen trouble as we noticed.
+
+- Arnaldo
