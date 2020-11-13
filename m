@@ -2,136 +2,255 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2CAB4C2D0E4
-	for <linux-dwarves@archiver.kernel.org>; Fri, 13 Nov 2020 01:13:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 05BAFC388F7
+	for <linux-dwarves@archiver.kernel.org>; Fri, 13 Nov 2020 10:59:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C777621D7F
-	for <linux-dwarves@archiver.kernel.org>; Fri, 13 Nov 2020 01:13:04 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7C0DE20797
+	for <linux-dwarves@archiver.kernel.org>; Fri, 13 Nov 2020 10:59:37 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EN9H2nNO"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="M7oMLIed"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726017AbgKMBNE (ORCPT
+        id S1726237AbgKMK7h (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Thu, 12 Nov 2020 20:13:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46446 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725965AbgKMBNE (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Thu, 12 Nov 2020 20:13:04 -0500
-Received: from mail-yb1-xb43.google.com (mail-yb1-xb43.google.com [IPv6:2607:f8b0:4864:20::b43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BFE6C0613D1;
-        Thu, 12 Nov 2020 17:13:04 -0800 (PST)
-Received: by mail-yb1-xb43.google.com with SMTP id c129so7201483yba.8;
-        Thu, 12 Nov 2020 17:13:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Ti2wDmEiazIuydvYlpnT6iwtcMlYabN02+GjWqOHtYo=;
-        b=EN9H2nNORKf48jcIGzWF0t6m8XhCXPeWSheZuQfX/+Dz0Q5j7IgEYLBl64qGFctInL
-         NECriVabtb4GTReg3PLT7VuoPqNtDixXFe3evtJalIBt7I/ZK03Y3YYRFYkImjncDwta
-         MqahzIkX759TVKKOnpPPXzoSOhG4yy2Tqg8fuNS4n4aBNG0Q8xCgedcnzaeM29/YvyCt
-         Q1X2ROAFNHkhAq3gB6Dz9LTDzR/Zs5Ev4TiF301rk+xNLhn0BDKTCaWZw6CBXj3+2ibK
-         /tbIGROjFGVc0OxkfYZPPVIH1us4f1qBJUN/KkfSsccl3yZZ9Xvh+6WhpeOrpP6QBFQz
-         2OAg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Ti2wDmEiazIuydvYlpnT6iwtcMlYabN02+GjWqOHtYo=;
-        b=nhlTnaJFtv40wGfmKy9KXKFkFzROY507VydVSGNu9BMP6BXS4JpjA5Kr6vcGRUU0jR
-         c2pc9h4KGg/Mv1W8I4rPe/zcW+l1CLyNITV4F1szeEblHaW+ybO0Rdytu5SRaDB8fXo1
-         KKGv3zx5FlT/wAip/tY0YGaImVCg+87DFkYKXOwK2KVlv9Ag7gkNvEiGQZ1OHW+9I4Pj
-         NuRr9mt1G2kKoGAx2czi7/eo9+aau2aq/fQ5UXY/ZtaHCMvki3mcY960jzbCpJTjWvKU
-         i7Lll+NBDXSVED8SlVA7PrwpkTVT2+RKBXEmx7xU2m2l8yKERJBAYqxLUb/xsPDDj71T
-         cr1A==
-X-Gm-Message-State: AOAM533AiPZLyqIeCYcDuY3W6aFXCk+DM7cJgF9rv4nXmKPeXDWzmSh1
-        1QuC+/Gym1TxAV6JVJaB38d6ibUYogQdlmFsJ+Q=
-X-Google-Smtp-Source: ABdhPJzCsN2WTH9vA6jMTVocyLJJVd8gqdMNT0tEwH+x6eCFGQc5vHECZvGTF0nuzHlm0kToZhVeixCL0wI5x4iaURM=
-X-Received: by 2002:a25:3d7:: with SMTP id 206mr3642175ybd.27.1605229983451;
- Thu, 12 Nov 2020 17:13:03 -0800 (PST)
-MIME-Version: 1.0
-References: <20201112150506.705430-1-jolsa@kernel.org> <20201112150506.705430-4-jolsa@kernel.org>
- <CAEf4BzbhojeSdASwt4y4XEtgAF1caYx=-AuwzWJZv7qKgzkroA@mail.gmail.com>
- <20201112211413.GA733055@krava> <CAEf4BzbePw8gksT0MH=hwp4Pv1EV1-MOeiwfoFVR64XWFccTHw@mail.gmail.com>
- <CAADnVQKUYFE0vE3XZB0FPNMxw_+BNpOLJ37QJ+CxLbssDPHFdw@mail.gmail.com>
- <CAEf4BzZhRPVf=qVU7vVrtVaJzvBmsWL3hHYySKczMrrO-1Xotw@mail.gmail.com> <7834ab75-6e08-9f95-4885-d65298011ad8@fb.com>
-In-Reply-To: <7834ab75-6e08-9f95-4885-d65298011ad8@fb.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Thu, 12 Nov 2020 17:12:52 -0800
-Message-ID: <CAEf4BzbZ-4=gh4MAREE=W9=s3-38GL1S7EU8vbMuR6-8kZD26w@mail.gmail.com>
-Subject: Re: [RFC/PATCH 3/3] btf_encoder: Func generation fix
-To:     Yonghong Song <yhs@fb.com>
-Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Jiri Olsa <jolsa@redhat.com>, Jiri Olsa <jolsa@kernel.org>,
+        Fri, 13 Nov 2020 05:59:37 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:43513 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726184AbgKMK7g (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Fri, 13 Nov 2020 05:59:36 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1605265173;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZjjycHZm5P6aSgC39M2XF1jdwdTgRDZX9nIwDyf6yQ0=;
+        b=M7oMLIeddDkjh1XKX7VDRfpfSNaz0KXX5/jjV+cf7AoLgU9KDEt2SY9xHOgGXI3LrI3Tlt
+        RtvVcPnzbOK3/UMy4gKYUDqvWXc44/mUFsI+Vx0GqXDLTLqkCTf7eg6dZBr2RSe7mMRYgl
+        J17JQ4PC9X5WWUY+4RRNlJR5nMbkSKI=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-426-WATDhn_XPbu68-A6hBHICg-1; Fri, 13 Nov 2020 05:59:28 -0500
+X-MC-Unique: WATDhn_XPbu68-A6hBHICg-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 96D218E78B3;
+        Fri, 13 Nov 2020 10:59:26 +0000 (UTC)
+Received: from krava (unknown [10.40.195.79])
+        by smtp.corp.redhat.com (Postfix) with SMTP id AC7A210002A6;
+        Fri, 13 Nov 2020 10:59:24 +0000 (UTC)
+Date:   Fri, 13 Nov 2020 11:59:23 +0100
+From:   Jiri Olsa <jolsa@redhat.com>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Jiri Olsa <jolsa@kernel.org>,
         Arnaldo Carvalho de Melo <acme@kernel.org>,
         dwarves@vger.kernel.org, bpf <bpf@vger.kernel.org>,
         Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andriin@fb.com>, Hao Luo <haoluo@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        Andrii Nakryiko <andriin@fb.com>, Yonghong Song <yhs@fb.com>,
+        Hao Luo <haoluo@google.com>
+Subject: Re: [RFC/PATCH 3/3] btf_encoder: Func generation fix
+Message-ID: <20201113105923.GC753418@krava>
+References: <20201112150506.705430-1-jolsa@kernel.org>
+ <20201112150506.705430-4-jolsa@kernel.org>
+ <CAEf4BzbhojeSdASwt4y4XEtgAF1caYx=-AuwzWJZv7qKgzkroA@mail.gmail.com>
+ <20201112211413.GA733055@krava>
+ <CAEf4BzbePw8gksT0MH=hwp4Pv1EV1-MOeiwfoFVR64XWFccTHw@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAEf4BzbePw8gksT0MH=hwp4Pv1EV1-MOeiwfoFVR64XWFccTHw@mail.gmail.com>
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-On Thu, Nov 12, 2020 at 5:01 PM Yonghong Song <yhs@fb.com> wrote:
->
->
->
-> On 11/12/20 4:30 PM, Andrii Nakryiko wrote:
-> > On Thu, Nov 12, 2020 at 4:19 PM Alexei Starovoitov
-> > <alexei.starovoitov@gmail.com> wrote:
-> >>
-> >> On Thu, Nov 12, 2020 at 4:08 PM Andrii Nakryiko
-> >> <andrii.nakryiko@gmail.com> wrote:
-> >>>
-> >>> So I looked at your vmlinux image. I think we should just keep
-> >>> everything mostly as it it right now (without changes in this patch),
-> >>> but add just two simple checks:
-> >>>
-> >>> 1. Skip if fn->declaration (ignore correctly marked func declarations)
-> >>> 2. Skip if DW_AT_inline: 1 (ignore inlined functions).
-> >>>
-> >>> I'd keep the named arguments check as is, I think it's helpful. 1)
-> >>> will skip stuff that's explicitly marked as declaration. 2) inline
-> >>> check will partially mitigate dropping of fn->external check (and we
-> >>> can't really attach to inlined functions).
-> >>
-> >> I thought DW_AT_inline is an indication that the function was marked "inline"
-> >> in C code. That doesn't mean that the function was actually inlined.
-> >> So I don't think pahole should check that bit.
+On Thu, Nov 12, 2020 at 04:08:02PM -0800, Andrii Nakryiko wrote:
+> On Thu, Nov 12, 2020 at 1:14 PM Jiri Olsa <jolsa@redhat.com> wrote:
 > >
-> > According to DWARF spec, there are 4 possible values:
+> > On Thu, Nov 12, 2020 at 11:54:41AM -0800, Andrii Nakryiko wrote:
 > >
-> > DW_INL_not_inlined = 0            Not declared inline nor inlined by
-> > the compiler
-> > DW_INL_inlined = 1                Not declared inline but inlined by
-> > the compiler
-> > DW_INL_declared_not_inlined = 2   Declared inline but not inlined by
-> > the compiler
-> > DW_INL_declared_inlined = 3       Declared inline and inlined by the compiler
+> > SNIP
 > >
-> > So DW_INL_inlined is supposed to be added to functions that are not
-> > marked inline, but were nevertheless inlined. I saw this for one of
-> > vfs_getattr entries in DWARF, which clearly is not marked inline.
->
-> I looked at llvm source code, llvm only tries to assign DW_INL_inlined
-> and also only at certain conditions. Not sure about gcc. Probably
-> similar. So this field is not reliable, esp. without it does not mean it
-> is not inlined.
+> > > > @@ -624,32 +644,46 @@ int cu__encode_btf(struct cu *cu, int verbose, bool force,
+> > > >                 has_index_type = true;
+> > > >         }
+> > > >
+> > > > -       cu__for_each_function(cu, core_id, fn) {
+> > > > -               /*
+> > > > -                * The functions_cnt != 0 means we parsed all necessary
+> > > > -                * kernel symbols and we are using ftrace location filter
+> > > > -                * for functions. If it's not available keep the current
+> > > > -                * dwarf declaration check.
+> > > > -                */
+> > > > -               if (functions_cnt) {
+> > > > +       /*
+> > > > +        * The functions_cnt != 0 means we parsed all necessary
+> > > > +        * kernel symbols and we are using ftrace location filter
+> > > > +        * for functions. If it's not available keep the current
+> > > > +        * dwarf declaration check.
+> > > > +        */
+> > > > +       if (functions_cnt) {
+> > > > +               cu__for_each_function(cu, core_id, fn) {
+> > > > +                       struct elf_function *p;
+> > > > +                       struct elf_function key = { .name = function__name(fn, cu) };
+> > > > +                       int args_cnt = 0;
+> > > > +
+> > > >                         /*
+> > > > -                        * We check following conditions:
+> > > > -                        *   - argument names are defined
+> > > > -                        *   - there's symbol and address defined for the function
+> > > > -                        *   - function address belongs to ftrace locations
+> > > > -                        *   - function is generated only once
+> > > > +                        * Collect functions that match ftrace filter
+> > > > +                        * and pick the one with proper argument names.
+> > > > +                        * The BTF generation happens at the end in
+> > > > +                        * btf_encoder__encode function.
+> > > >                          */
+> > > > -                       if (!has_arg_names(cu, &fn->proto))
+> > > > +                       p = bsearch(&key, functions, functions_cnt,
+> > > > +                                   sizeof(functions[0]), functions_cmp);
+> > > > +                       if (!p)
+> > > >                                 continue;
+> > > > -                       if (!should_generate_function(btfe, function__name(fn, cu)))
+> > > > +
+> > > > +                       if (!has_arg_names(cu, &fn->proto, &args_cnt))
+> > >
+> > > So I can't unfortunately reproduce that GCC bug with DWARF info. What
+> > > was exactly the symptom? Maybe you can also share readelf -wi dump for
+> > > your problematic vmlinux?
+> >
+> > hum, can't see -wi working for readelf, however I placed my vmlinux
+> > in here:
+> >   http://people.redhat.com/~jolsa/vmlinux.gz
+> >
+> > the symptom is that resolve_btfids will fail kernel build:
+> >
+> >   BTFIDS  vmlinux
+> > FAILED unresolved symbol vfs_getattr
+> >
+> > because BTF data contains multiple FUNC records for same function
+> >
+> > and the problem is that declaration tag itself is missing:
+> >   https://gcc.gnu.org/bugzilla/show_bug.cgi?id=97060
+> > so pahole won't skip them
+> >
+> > the first workaround was to workaround that and go for function
+> > records that have code address attached, but that's buggy as well:
+> >   https://bugzilla.redhat.com/show_bug.cgi?id=1890107
+> >
+> > then after some discussions we ended up using ftrace addresses
+> > as filter for what we want to display.. plus we got static functions
+> > as well
+> >
+> > however for this way we failed to get proper arguments ;-)
+> 
+> Right, I followed along overall, but forgot the details of the initial
+> problem. Thanks for the refresher. See below for my current thoughts
+> on dealing with all this.
+> 
+> >
+> > >
+> > > The reason I'm asking is because I wonder if we should still ignore
+> > > functions if fn->declaration is set. E.g., for the issue we
+> > > investigated yesterday, the function with no arguments has declaration
+> > > set to 1, so just ignoring it would solve the problem. I'm wondering
+> > > if it's enough to do just that instead of doing this whole delayed
+> > > function collection/processing.
+> > >
+> > > Also, I'd imagine the only expected cases where we can override  the
+> > > function (args_cnt > p->args_cnt) would be if p->args_cnt == 0, no?
+> >
+> > I don't know, because originally I'd expect that we would not see
+> > function record with zero args when it actualy has some
+> >
+> > > All other cases are either newly discovered "bogusness" of DWARF (and
+> > > would be good to know about this) or it's a name collision for
+> > > functions. Basically, before we go all the way to rework this again,
+> > > let's see if just skipping declarations would be enough?
+> >
+> > so there's actualy new developement today in:
+> >   https://gcc.gnu.org/bugzilla/show_bug.cgi?id=97060#c14
+> >
+> > gcc might actualy get fixed, so I think we could go back to
+> > using declaration tag and use ftrace as additional filter..
+> > at least this exercise gave us static functions ;-)
+> >
+> > however we still have fedora with disabled disabled CONFIG_DEBUG_INFO_BTF
+> > and will need to wait for that fix to enable that back
+> 
+> Right, we better have a more robust approach not relying on
+> not-yet-released GCC.
+> 
+> >
+> > >
+> > > >                                 continue;
+> > > > -               } else {
+> > > > +
+> > > > +                       if (!p->fn || args_cnt > p->args_cnt) {
+> > > > +                               p->fn = fn;
+> > > > +                               p->cu = cu;
+> > > > +                               p->args_cnt = args_cnt;
+> > > > +                               p->type_id_off = type_id_off;
+> > > > +                       }
+> > > > +               }
+> > > > +       } else {
+> > > > +               cu__for_each_function(cu, core_id, fn) {
+> > > >                         if (fn->declaration || !fn->external)
+> > > >                                 continue;
+> > > > +                       if (generate_func(btfe, cu, fn, type_id_off))
+> > > > +                               goto out;
+> > > >                 }
+> > >
+> > > I'm trending towards disliking this completely different fallback
+> > > mechanism. It saved bpf-next accidentally, but otherwise obscured the
+> > > issue and generally makes testing pahole with artificial binary BTFs
+> > > (from test programs) harder. How about we unify approaches, but just
+> > > use mcount symbols opportunistically, as an additional filter, if it's
+> > > available?
+> >
+> > ok
+> >
+> > >
+> > > With that, testing that we still handle functions with duplicate names
+> > > properly would be trivial (which I suspect we don't and we'll just
+> > > keep the one with more args now, right?) And it makes static functions
+> > > available for non-vmlinux binaries automatically (might be good or
+> > > bad, but still...).
+> >
+> > if we keep just the ftrace filter and rely on declaration tag,
+> > the args checking will go away right?
+> 
+> So I looked at your vmlinux image. I think we should just keep
+> everything mostly as it it right now (without changes in this patch),
+> but add just two simple checks:
+> 
+> 1. Skip if fn->declaration (ignore correctly marked func declarations)
+> 2. Skip if DW_AT_inline: 1 (ignore inlined functions).
+> 
+> I'd keep the named arguments check as is, I think it's helpful. 1)
+> will skip stuff that's explicitly marked as declaration. 2) inline
 
-Can't say I'm surprised...
+ok, that should fix the fail on gccs that still generate
+declaration tag, so you should be fine and our version of
+gcc should continue work as well 
 
->
-> >
-> > But also that DWARF entry had proper args with names, so it would work
-> > fine as well. I don't know, with DWARF it's always some guessing game.
-> > Let's leave DW_AT_inline alone for now.
-> >
-> > Important part is skipping declarations (when they are marked as
-> > such), though I'm not claiming it will solve the problem completely...
-> > :)
-> >
+> check will partially mitigate dropping of fn->external check (and we
+> can't really attach to inlined functions). So will the named args
+> check as well. Then we should do mcount checks, **if** mcount symbols
+> are present (which should always be the case for any reasonable
+> vmlinux image that's supposed to be used with BPF, I think).
+> 
+> So together, it should cover all known issues, I think. And then we'll
+> just have to watch out for any new ones. GCC bugfix is good, but it's
+> too late: the harm is done and there are compilers out there that we
+> should deal with.
+
+hopefuly with this change we can enable BTF back before the gcc fix
+
+thanks,
+jirka
+
