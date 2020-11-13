@@ -4,129 +4,133 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-4.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2D030C4742C
-	for <linux-dwarves@archiver.kernel.org>; Fri, 13 Nov 2020 12:02:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 20F45C388F7
+	for <linux-dwarves@archiver.kernel.org>; Fri, 13 Nov 2020 12:03:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E61792224C
-	for <linux-dwarves@archiver.kernel.org>; Fri, 13 Nov 2020 12:02:52 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CCD5722240
+	for <linux-dwarves@archiver.kernel.org>; Fri, 13 Nov 2020 12:03:25 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=kernel.org header.i=@kernel.org header.b="fDyNBx9v"
+	dkim=pass (1024-bit key) header.d=kernel.org header.i=@kernel.org header.b="Eg1aJI1T"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726591AbgKMMCj (ORCPT
+        id S1726744AbgKMMDZ (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Fri, 13 Nov 2020 07:02:39 -0500
-Received: from mail.kernel.org ([198.145.29.99]:42010 "EHLO mail.kernel.org"
+        Fri, 13 Nov 2020 07:03:25 -0500
+Received: from mail.kernel.org ([198.145.29.99]:34930 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726541AbgKMMCV (ORCPT <rfc822;dwarves@vger.kernel.org>);
-        Fri, 13 Nov 2020 07:02:21 -0500
+        id S1726751AbgKMLpa (ORCPT <rfc822;dwarves@vger.kernel.org>);
+        Fri, 13 Nov 2020 06:45:30 -0500
 Received: from quaco.ghostprotocols.net (unknown [179.97.37.151])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id DF62A22240;
-        Fri, 13 Nov 2020 11:52:33 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 1E70822226;
+        Fri, 13 Nov 2020 11:45:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1605268354;
-        bh=GliJtuwJN0V5MDYoyAHcUQQE0kS6tyklKVBe5yGHC9k=;
+        s=default; t=1605267929;
+        bh=IDE+rE0gb9q30JV8pB6o8G32yO5X9Wx9WZflXw/CgsY=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fDyNBx9vozSfE9ixs/ENLoE0Hapk7Fy19Wmz/BFbFxzUBqAJyjRJggAGc7Wva7OnW
-         UJzG8S7joSgQXEnNVkZd/7prOyH2zDB3ZaxXNmRVgy4oJ0ZznhNzhwb3GhXEH2k32L
-         MuOUNBWGwODoq6Gh5O90bVtTayCuRUFAUH/VhcSI=
+        b=Eg1aJI1TNbhicHBCCwfrz0aNNSTzdfTqySktcf3+az2vgMdr0p7Em+PTh4kyWORF2
+         1lxycNeJTGXP6Niv5kMBo5gwM1y/nApiBFic273fEpbTF4uc45fjCVN2QqHsL6lggw
+         pvmDhUDObH3YBD6ebpCnXOiEAnOAkLqMsClW7r5Y=
 Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id B18ED411D1; Fri, 13 Nov 2020 08:52:31 -0300 (-03)
-Date:   Fri, 13 Nov 2020 08:52:31 -0300
+        id 95BA3411D1; Fri, 13 Nov 2020 08:45:25 -0300 (-03)
+Date:   Fri, 13 Nov 2020 08:45:25 -0300
 From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Jiri Olsa <jolsa@redhat.com>
-Cc:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Jiri Olsa <jolsa@kernel.org>, dwarves@vger.kernel.org,
-        bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andriin@fb.com>, Yonghong Song <yhs@fb.com>,
-        Hao Luo <haoluo@google.com>
-Subject: Re: [RFC/PATCH 3/3] btf_encoder: Func generation fix
-Message-ID: <20201113115231.GC394182@kernel.org>
-References: <20201112150506.705430-1-jolsa@kernel.org>
- <20201112150506.705430-4-jolsa@kernel.org>
- <CAEf4BzbhojeSdASwt4y4XEtgAF1caYx=-AuwzWJZv7qKgzkroA@mail.gmail.com>
- <20201112211413.GA733055@krava>
- <CAEf4BzbePw8gksT0MH=hwp4Pv1EV1-MOeiwfoFVR64XWFccTHw@mail.gmail.com>
- <20201113105923.GC753418@krava>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     dwarves@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+        Kernel Team <kernel-team@fb.com>, Roman Gushchin <guro@fb.com>
+Subject: Re: pahole and libdwarves linking/versioning issues
+Message-ID: <20201113114525.GB394182@kernel.org>
+References: <CAEf4BzYc6sHzGW-mmHSaTgG4zOc8S9Dxegnufbc+myr7wTmRcw@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201113105923.GC753418@krava>
+In-Reply-To: <CAEf4BzYc6sHzGW-mmHSaTgG4zOc8S9Dxegnufbc+myr7wTmRcw@mail.gmail.com>
 X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-Em Fri, Nov 13, 2020 at 11:59:23AM +0100, Jiri Olsa escreveu:
-> On Thu, Nov 12, 2020 at 04:08:02PM -0800, Andrii Nakryiko wrote:
-> > On Thu, Nov 12, 2020 at 1:14 PM Jiri Olsa <jolsa@redhat.com> wrote:
-> > > On Thu, Nov 12, 2020 at 11:54:41AM -0800, Andrii Nakryiko wrote:
-> > > > So I can't unfortunately reproduce that GCC bug with DWARF info. What
-> > > > was exactly the symptom? Maybe you can also share readelf -wi dump for
-> > > > your problematic vmlinux?
+Em Tue, Nov 10, 2020 at 04:14:16PM -0800, Andrii Nakryiko escreveu:
+> Hey Arnaldo,
 
-> > > hum, can't see -wi working for readelf, however I placed my vmlinux
-> > > in here:
-> > >   http://people.redhat.com/~jolsa/vmlinux.gz
+Hi Andrii,
+ 
+> We use pahole pretty extensively here at Facebook, as you might
+> imagine, given it's a required tool to compile Linux kernel with BTF.
+ 
+> There are a few problems we periodically run into, all of which seems
+> to be related to the fact that pahole is just a thin wrapper binary on
+> top of libdwarves shared library.
+ 
+> One very common problem is when we upgrade the dwarves package from
+> one minor version to another one. Typically people would do
+ 
+> yum upgrade dwarves
+ 
+> And that would succeed to update the dwarves package (say 1.13 to
+> 1.16). But when you run
+ 
+> pahole --version
+ 
+> You'll still see 1.13 (and still have 1.13 functionality, of
+> course)... So what happens is that pahole *the binary* was updated,
+> but libdwarves1 package, which is a dependency of dwarves package,
+> wasn't updated. And the actual version string all pretty much all of
+> the functionality is coming from libdwarves1. So users have to
+ 
+> yum upgrade libdwarves1
+ 
+> explicitly. Which is, of course, not an obvious and frustrating experience.
+ 
+> Also, whenever pahole is using some new API from libdwarves and
+> libdwarves is outdated, that results in spectacular failure during
+> dynamic linking time. Which makes sense because libdwarves doesn't
+> maintain API stability per se and is supposed to match 1:1 w/ pahole
+> version. But it all causes real logistics issues.
+ 
+> So I have a few questions:
+> 1. Is there anything on the RPM spec side that could be done to
+> trigger libdwarves1 update when dwarves is updated and keep them in
+> sync down to the minor version?
 
-> > > the symptom is that resolve_btfids will fail kernel build:
+So, there is this in the reference .spec file that is in pahole's git
+repo:
 
-> > >   BTFIDS  vmlinux
-> > > FAILED unresolved symbol vfs_getattr
+[acme@five pahole]$ egrep '^(Requires|Name)' rpm/SPECS/dwarves.spec
+Name: dwarves
+Requires: %{libname}%{libver} = %{version}-%{release}
+Requires: %{libname}%{libver} = %{version}-%{release}
+[acme@five pahole]$ egrep '^(Requires|Name|%package)' rpm/SPECS/dwarves.spec
+Name: dwarves
+Requires: %{libname}%{libver} = %{version}-%{release}
+%package -n %{libname}%{libver}
+%package -n %{libname}%{libver}-devel
+Requires: %{libname}%{libver} = %{version}-%{release}
+[acme@five pahole]$
 
-> > > because BTF data contains multiple FUNC records for same function
+Someone else also reported this recently... Fedora has:
 
-> > > and the problem is that declaration tag itself is missing:
-> > >   https://gcc.gnu.org/bugzilla/show_bug.cgi?id=97060
-> > > so pahole won't skip them
+[acme@five pahole]$ rpm -qR dwarves | grep ^libdwarves1
+libdwarves1 = 1.17-4.fc33
+[acme@five pahole]$
 
-> > > the first workaround was to workaround that and go for function
-> > > records that have code address attached, but that's buggy as well:
-> > >   https://bugzilla.redhat.com/show_bug.cgi?id=1890107
+So it includes both ${version} and %{release}, which should get it in
+lockstep.
 
-> > > then after some discussions we ended up using ftrace addresses
-> > > as filter for what we want to display.. plus we got static functions
-> > > as well
+Having said that I'm not aware of anything using libdwarves and it was
+intended just to share those among the tools that comes in the
+'dwarves' package, so I should have really made it internal, installed
+in /usr/libexec/dwarves/ :-\
 
-> > > however for this way we failed to get proper arguments ;-)
+> 2. If not, can we add an option of statically linking libdwarves into
+> pahole and other tools? That would eliminate all the problems
+> altogether at the expense of a pretty negligible slight increase in
+> the binary sizes.
 
-> > Right, I followed along overall, but forgot the details of the initial
-> > problem. Thanks for the refresher. See below for my current thoughts
-> > on dealing with all this.
-
-I'll add this to the set of regression tests I use with pahole:
-
-[acme@five vfs_gettattr.multiple.btf.entries.jolsa]$ bpftool btf dump file vmlinux | grep -w FUNC | cut -d\' -f2 | sort | uniq -c | sort -nr | head
-      3 __x64_sys_userfaultfd
-      3 __x64_sys_timerfd_settime
-      3 __x64_sys_timerfd_gettime
-      3 __x64_sys_timerfd_create
-      3 __x64_sys_syslog
-      3 __x64_sys_sysfs
-      3 __x64_sys_swapon
-      3 __x64_sys_swapoff
-      3 __x64_sys_socketpair
-      3 __x64_sys_socket
-[acme@five vfs_gettattr.multiple.btf.entries.jolsa]$ pfunct -F btf vmlinux | sort | uniq -c | sort -nr | head
-      3 __x64_sys_userfaultfd
-      3 __x64_sys_timerfd_settime
-      3 __x64_sys_timerfd_gettime
-      3 __x64_sys_timerfd_create
-      3 __x64_sys_syslog
-      3 __x64_sys_sysfs
-      3 __x64_sys_swapon
-      3 __x64_sys_swapoff
-      3 __x64_sys_socketpair
-      3 __x64_sys_socket
-[acme@five vfs_gettattr.multiple.btf.entries.jolsa]$
-
-I.e. the output of those tools need to match and all functions need to
-appear only once.
-
-I'll also use pfunct with -F dwarf to get the same results, probably
-will add these to the 'btfdiff' tool that is in the pahole git repo.
+Yeah, this looks like the way to proceed, i.e. we statically link it
+while keeping the .so around in case someone uses it, while adding some
+warning that that mode is deprecated and is going away.
 
 - Arnaldo
