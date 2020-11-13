@@ -2,106 +2,79 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-4.0 required=3.0 tests=BAYES_00,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E3997C63697
-	for <linux-dwarves@archiver.kernel.org>; Fri, 13 Nov 2020 12:04:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5A5FAC61DD8
+	for <linux-dwarves@archiver.kernel.org>; Fri, 13 Nov 2020 15:12:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id AC46B2224F
-	for <linux-dwarves@archiver.kernel.org>; Fri, 13 Nov 2020 12:04:52 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=kernel.org header.i=@kernel.org header.b="pBTUhCxW"
+	by mail.kernel.org (Postfix) with ESMTP id 9ED2B20A8B
+	for <linux-dwarves@archiver.kernel.org>; Fri, 13 Nov 2020 15:12:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727014AbgKMMEk (ORCPT
+        id S1726662AbgKMPMb convert rfc822-to-8bit (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Fri, 13 Nov 2020 07:04:40 -0500
-Received: from mail.kernel.org ([198.145.29.99]:59464 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726792AbgKMLf5 (ORCPT <rfc822;dwarves@vger.kernel.org>);
-        Fri, 13 Nov 2020 06:35:57 -0500
-Received: from quaco.ghostprotocols.net (unknown [179.97.37.151])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Fri, 13 Nov 2020 10:12:31 -0500
+Received: from us-smtp-delivery-44.mimecast.com ([207.211.30.44]:26895 "EHLO
+        us-smtp-delivery-44.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726520AbgKMPMb (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Fri, 13 Nov 2020 10:12:31 -0500
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-455-CX9hI2wWPtaDmoJzA00chg-1; Fri, 13 Nov 2020 10:12:26 -0500
+X-MC-Unique: CX9hI2wWPtaDmoJzA00chg-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 4A2E1207DE;
-        Fri, 13 Nov 2020 11:35:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1605267330;
-        bh=qbcCBjPXIhbPByN1i3m7Q/cLYiJmaAEjthHF0I0KQcw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=pBTUhCxWyLBkiF7hEGArxYx6PfcZGyNau2LTUy91Q8vLgWJymFyC6XnyIcDPym5bM
-         jy2CwX63z9XF88Iaq6YmxDEVz+xCTM3wtHYhrnJ6Vyr4Iw9e2Pq26gBZQrbUTGs9Do
-         BMg/S0Lv1/HyRqIGAgH8UJ3iT9nwrgiZmC26IeY8=
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 40A99411D1; Fri, 13 Nov 2020 08:35:28 -0300 (-03)
-Date:   Fri, 13 Nov 2020 08:35:28 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Andrii Nakryiko <andrii@kernel.org>, dwarves@vger.kernel.org,
-        bpf <bpf@vger.kernel.org>, Kernel Team <kernel-team@fb.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>
-Subject: Re: [PATCH dwarves 4/4] btf: add support for split BTF loading and
- encoding
-Message-ID: <20201113113528.GA394182@kernel.org>
-References: <20201106052549.3782099-1-andrii@kernel.org>
- <20201106052549.3782099-5-andrii@kernel.org>
- <20201111115627.GB355344@kernel.org>
- <20201111121946.GD355344@kernel.org>
- <CAEf4BzajM3Pg13uTF7cKOWfASvhOPOx85ufcchuDcGLEq8d9fQ@mail.gmail.com>
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 456D2101F021;
+        Fri, 13 Nov 2020 15:12:25 +0000 (UTC)
+Received: from krava.redhat.com (unknown [10.40.195.79])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 3DCFF5D9F1;
+        Fri, 13 Nov 2020 15:12:23 +0000 (UTC)
+From:   Jiri Olsa <jolsa@kernel.org>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     dwarves@vger.kernel.org, bpf@vger.kernel.org,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andriin@fb.com>, Yonghong Song <yhs@fb.com>,
+        Hao Luo <haoluo@google.com>
+Subject: [PATCHv2 0/2] btf_encoder: Fix functions BTF data generation
+Date:   Fri, 13 Nov 2020 16:12:20 +0100
+Message-Id: <20201113151222.852011-1-jolsa@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAEf4BzajM3Pg13uTF7cKOWfASvhOPOx85ufcchuDcGLEq8d9fQ@mail.gmail.com>
-X-Url:  http://acmel.wordpress.com
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=jolsa@kernel.org
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: kernel.org
+Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=WINDOWS-1252
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-Em Wed, Nov 11, 2020 at 10:29:32AM -0800, Andrii Nakryiko escreveu:
-> On Wed, Nov 11, 2020 at 4:19 AM Arnaldo Carvalho de Melo
-> <acme@kernel.org> wrote:
-> >
-> > Em Wed, Nov 11, 2020 at 08:56:27AM -0300, Arnaldo Carvalho de Melo escreveu:
-> > >
-> > > The entry for btf_encode/-J is missing, I'll add in a followup patch.
-> > >
-> > > Also I had to fixup ARGP_btf_base to 321 as I added this, to simplify
-> > > the kernel scripts and Makefiles:
-> > >
-> > >   $ pahole --numeric_version
-> > >   118
-> > >   $
-> >
-> > Added this:
-> >
-> > [acme@five pahole]$ git diff
-> > diff --git a/man-pages/pahole.1 b/man-pages/pahole.1
-> > index 20ee91fc911d4b39..f44c649924383a32 100644
-> > --- a/man-pages/pahole.1
-> > +++ b/man-pages/pahole.1
-> > @@ -181,6 +181,14 @@ the debugging information.
-> >  .B \-\-skip_encoding_btf_vars
-> >  Do not encode VARs in BTF.
-> >
-> > +.TP
-> > +.B \-J, \-\-btf_encode
-> > +Encode BTF information from DWARF, used in the Linux kernel build process when
-> > +CONFIG_DEBUG_INFO_BTF=y is present, introduced in Linux v5.2. Used to implement
-> > +features such as BPF CO-RE (Compile Once - Run Everywhere).
-> > +
-> > +See \fIhttp://vger.kernel.org/bpfconf2019_talks/bpf-core.pdf\fR.
-> 
-> Can you please point to [0] instead? That linked presentation is
-> already a bit out of date and will bitrot much faster. Blog post has
-> at least a chance at being updated with relevant important stuff. Plus
-> it has links both to the bpfconf2019 presentation, as well as some
-> other resources (including your presentation).
-> 
->   [0] https://nakryiko.com/posts/bpf-portability-and-co-re/
+hi,
+recent btf encoder's changes brakes BTF data for some gcc
+versions. The problem is that some functions can appear
+in dwarf data in some instances without arguments, while
+they are defined with some.
 
-Done, thanks for the pinter.
+v2 changes:
+  - drop patch 3 logic and just change conditions
+    based on Andrii's suggestion
+  - drop patch 2
+  - add ack for patch 1
 
-- Arnaldo
+Andrii,
+please check if it's working with your gcc.
+
+thanks,
+jirka
+
+
+---
+Jiri Olsa (2):
+      btf_encoder: Generate also .init functions
+      btf_encoder: Fix function generation
+
+ btf_encoder.c | 67 ++++++++++++-------------------------------------------------------
+ 1 file changed, 12 insertions(+), 55 deletions(-)
+
