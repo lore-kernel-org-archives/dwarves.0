@@ -2,217 +2,234 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9986BC4742C
-	for <linux-dwarves@archiver.kernel.org>; Fri, 13 Nov 2020 21:29:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 74464C55ABD
+	for <linux-dwarves@archiver.kernel.org>; Fri, 13 Nov 2020 21:44:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3378422256
-	for <linux-dwarves@archiver.kernel.org>; Fri, 13 Nov 2020 21:29:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2F0592224F
+	for <linux-dwarves@archiver.kernel.org>; Fri, 13 Nov 2020 21:44:10 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="d5iz8mI7"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DUG4fBsk"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726102AbgKMV3S (ORCPT
+        id S1726248AbgKMVoA (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Fri, 13 Nov 2020 16:29:18 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:50412 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726526AbgKMV3S (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Fri, 13 Nov 2020 16:29:18 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1605302956;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=5Yt4Yf/8RWFm42EEeYFCNqKzy2uiuXfYp7W6ukYao1A=;
-        b=d5iz8mI7piuLPixK+sjrqXlj+EdTVvHpFd2pHBKLsHpr2sHcj3NDLNW0dKkzBXuG8nDTPI
-        HHp3pbZzKeqM8guLcuy3Xj2a3VyD/mTNpaVGc82Ajjw3HTgr7DQD+XCs6E43igKe4stJ4d
-        NVDshwGzWvO485ENOJVr8a3qlJM3hbY=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-218-4f7lXoerNWK7sFSgomwCkQ-1; Fri, 13 Nov 2020 16:29:12 -0500
-X-MC-Unique: 4f7lXoerNWK7sFSgomwCkQ-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 7B00A1006C8B;
-        Fri, 13 Nov 2020 21:29:10 +0000 (UTC)
-Received: from krava (unknown [10.40.195.79])
-        by smtp.corp.redhat.com (Postfix) with SMTP id 11F486115F;
-        Fri, 13 Nov 2020 21:29:07 +0000 (UTC)
-Date:   Fri, 13 Nov 2020 22:29:07 +0100
-From:   Jiri Olsa <jolsa@redhat.com>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+        Fri, 13 Nov 2020 16:44:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43230 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726176AbgKMVn7 (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Fri, 13 Nov 2020 16:43:59 -0500
+Received: from mail-yb1-xb44.google.com (mail-yb1-xb44.google.com [IPv6:2607:f8b0:4864:20::b44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BC02C0613D1;
+        Fri, 13 Nov 2020 13:43:59 -0800 (PST)
+Received: by mail-yb1-xb44.google.com with SMTP id i186so10003710ybc.11;
+        Fri, 13 Nov 2020 13:43:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=dk5SgpQcBf104ZLRUngK2OqCoa8MQkDmaiu6nkFIudw=;
+        b=DUG4fBsk00bGmpSQCWg/1zhCd2siGT6nMph/HZqp+RARExZmo8EPTX6l1g7PIqkpjA
+         kruchgsLjIevzjHWF6dJiQ/3LBwPDNVHXW7USXurv9i0yNq/cYc+3wpLoczQvgx6KnDS
+         kFyN0jDCSKxsrOHhTuholW1tH0eQaY2VCcqoHRCduQxcDXiulN5kE0lRxtPunLShnKRb
+         ZrVSAYdX/3+SVyZVfgopSAf79esSy2SdRwGEEX7vTJhD5XSjm7BSn4NNWS6twGrNKdJ8
+         /QIrh8xPLQmCzanCZJyMrt3MUMuZf1dEcecPyru8LIjJ88J5ZCMuEvTBHplmvnYCSdHA
+         plAw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=dk5SgpQcBf104ZLRUngK2OqCoa8MQkDmaiu6nkFIudw=;
+        b=FF6OJ5C2q9TuhjyHLt99seqzECe9u0nGKos4twoq+r2OtLXCu7KqdH6kqtxLBonG7a
+         yqldCDgq5ZQMrcDAeHm6BXgmao0Ao+VDppopKvpvYBTYDF4UqlJkSgnTd/AZvd9LlMsB
+         j9JzPAnsjCq1omOy/ERw/0ZBenGp/2Htc1sWxgyzyC1wjp3Lrs+Oqj1HR14hWOU6sn3a
+         zLQhdcRR5DSIZjwtUmGs9PzphVgcH7EUYY29CenYz3WPeEPGozdlFmhwVfg8rbb9ICrW
+         oFu+PKG5+EtPfeywPvQ6sZU8hVxZWmYSfYjH9R/VgVY/vn1u/Vih3bP/Odwkw2hjsw5j
+         3Lyg==
+X-Gm-Message-State: AOAM531sz7M981/btahp6joqhCGTaW8Qoqi/K8iYBNWzuXwgoYDCV+xJ
+        vh/+PwLo8Lm+Vs/pQ5QXnVSLOtoR8OusIk3zgtc=
+X-Google-Smtp-Source: ABdhPJzbyo8EJThPH6EplnE6bMDpfjhalWKKW5rw2S83+0Nrla6D648PcMJ7CFk6x0cKiI8N0H+DyV8lCfoI22YlY0o=
+X-Received: by 2002:a25:3d7:: with SMTP id 206mr6381975ybd.27.1605303838284;
+ Fri, 13 Nov 2020 13:43:58 -0800 (PST)
+MIME-Version: 1.0
+References: <20201113151222.852011-1-jolsa@kernel.org> <20201113151222.852011-3-jolsa@kernel.org>
+ <CAEf4Bzb4yu4K+fk33n0Tas78XsKMFw+tofF2o5sOwumBC82u9Q@mail.gmail.com> <20201113212907.GD842058@krava>
+In-Reply-To: <20201113212907.GD842058@krava>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Fri, 13 Nov 2020 13:43:47 -0800
+Message-ID: <CAEf4BzZY9SF2rVNXpUUN=rYJ_jvBy1eq+fcQi+iRdv8dV2OVFQ@mail.gmail.com>
+Subject: Re: [PATCH 2/2] btf_encoder: Fix function generation
+To:     Jiri Olsa <jolsa@redhat.com>
 Cc:     Jiri Olsa <jolsa@kernel.org>,
         Arnaldo Carvalho de Melo <acme@kernel.org>,
         dwarves@vger.kernel.org, bpf <bpf@vger.kernel.org>,
         Alexei Starovoitov <ast@kernel.org>,
         Andrii Nakryiko <andriin@fb.com>, Yonghong Song <yhs@fb.com>,
         Hao Luo <haoluo@google.com>
-Subject: Re: [PATCH 2/2] btf_encoder: Fix function generation
-Message-ID: <20201113212907.GD842058@krava>
-References: <20201113151222.852011-1-jolsa@kernel.org>
- <20201113151222.852011-3-jolsa@kernel.org>
- <CAEf4Bzb4yu4K+fk33n0Tas78XsKMFw+tofF2o5sOwumBC82u9Q@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAEf4Bzb4yu4K+fk33n0Tas78XsKMFw+tofF2o5sOwumBC82u9Q@mail.gmail.com>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-On Fri, Nov 13, 2020 at 12:56:40PM -0800, Andrii Nakryiko wrote:
-> On Fri, Nov 13, 2020 at 7:13 AM Jiri Olsa <jolsa@kernel.org> wrote:
+On Fri, Nov 13, 2020 at 1:29 PM Jiri Olsa <jolsa@redhat.com> wrote:
+>
+> On Fri, Nov 13, 2020 at 12:56:40PM -0800, Andrii Nakryiko wrote:
+> > On Fri, Nov 13, 2020 at 7:13 AM Jiri Olsa <jolsa@kernel.org> wrote:
+> > >
+> > > Current conditions for picking up function records break
+> > > BTF data on some gcc versions.
+> > >
+> > > Some function records can appear with no arguments but with
+> > > declaration tag set, so moving the 'fn->declaration' in front
+> > > of other checks.
+> > >
+> > > Then checking if argument names are present and finally checking
+> > > ftrace filter if it's present. If ftrace filter is not available,
+> > > using the external tag to filter out non external functions.
+> > >
+> > > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+> > > ---
 > >
-> > Current conditions for picking up function records break
-> > BTF data on some gcc versions.
+> > I tested locally, all seems to work fine. Left few suggestions below,
+> > but those could be done in follow ups (or argued to not be done).
 > >
-> > Some function records can appear with no arguments but with
-> > declaration tag set, so moving the 'fn->declaration' in front
-> > of other checks.
+> > Acked-by: Andrii Nakryiko <andrii@kernel.org>
 > >
-> > Then checking if argument names are present and finally checking
-> > ftrace filter if it's present. If ftrace filter is not available,
-> > using the external tag to filter out non external functions.
+> > BTW, for some stats.
 > >
-> > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
-> > ---
-> 
-> I tested locally, all seems to work fine. Left few suggestions below,
-> but those could be done in follow ups (or argued to not be done).
-> 
-> Acked-by: Andrii Nakryiko <andrii@kernel.org>
-> 
-> BTW, for some stats.
-> 
-> BEFORE allowing static funcs:
-> 
-> .BTF ELF section
-> =======================================
-> Data size:      4101624
-> Header size:    24
-> Types size:     2472836
-> Strings size:   1628764
-> 
-> BTF types
-> =======================================
-> Total        2472836 bytes (83310 types)
-> Struct:       920436 bytes (10305 types)
-> FuncProto:    638668 bytes (18869 types)
-> Func:         308304 bytes (25692 types)
-> Enum:         184308 bytes (2293 types)
-> Ptr:          173484 bytes (14457 types)
-> Array:         89064 bytes (3711 types)
-> Union:         81552 bytes (1961 types)
-> Const:         34368 bytes (2864 types)
-> Typedef:       32124 bytes (2677 types)
-> Var:            4688 bytes (293 types)
-> Datasec:        3528 bytes (1 types)
-> Fwd:            1656 bytes (138 types)
-> Volatile:        360 bytes (30 types)
-> Int:             272 bytes (17 types)
-> Restrict:         24 bytes (2 types)
-> 
-> 
-> AFTER allowing static funcs:
-> 
-> .BTF ELF section
-> =======================================
-> Data size:      4930558
-> Header size:    24
-> Types size:     2914016
-> Strings size:   2016518
-> 
-> BTF types
-> =======================================
-> Total        2914016 bytes (108282 types)
-> Struct:       920436 bytes (10305 types)
-> FuncProto:    851528 bytes (24814 types)
-> Func:         536664 bytes (44722 types)
-> Enum:         184308 bytes (2293 types)
-> Ptr:          173484 bytes (14457 types)
-> Array:         89064 bytes (3711 types)
-> Union:         81552 bytes (1961 types)
-> Const:         34368 bytes (2864 types)
-> Typedef:       32124 bytes (2677 types)
-> Var:            4688 bytes (293 types)
-> Datasec:        3528 bytes (1 types)
-> Fwd:            1656 bytes (138 types)
-> Volatile:        360 bytes (30 types)
-> Int:             256 bytes (16 types)
-
-nice, is this tool somewhere in the tree?
-
-> 
-> So 25692 vs 44722 functions, but the increase in func_proto is smaller
-> due to dedup. Good chunk is strings data for all those function and
-> parameter names.
-> 
-> 
-> >  btf_encoder.c | 24 ++++++++++--------------
-> >  1 file changed, 10 insertions(+), 14 deletions(-)
+> > BEFORE allowing static funcs:
 > >
-> > diff --git a/btf_encoder.c b/btf_encoder.c
-> > index d531651b1e9e..de471bc754b1 100644
-> > --- a/btf_encoder.c
-> > +++ b/btf_encoder.c
-> > @@ -612,25 +612,21 @@ int cu__encode_btf(struct cu *cu, int verbose, bool force,
-> >                 const char *name;
+> > .BTF ELF section
+> > =======================================
+> > Data size:      4101624
+> > Header size:    24
+> > Types size:     2472836
+> > Strings size:   1628764
 > >
-> >                 /*
-> > -                * The functions_cnt != 0 means we parsed all necessary
-> > -                * kernel symbols and we are using ftrace location filter
-> > -                * for functions. If it's not available keep the current
-> > -                * dwarf declaration check.
-> > +                * Skip functions that:
-> > +                *   - are marked as declarations
-> > +                *   - do not have full argument names
-> > +                *   - are not in ftrace list (if it's available)
-> > +                *   - are not external (in case ftrace filter is not available)
-> >                  */
-> > +               if (fn->declaration)
-> > +                       continue;
-> > +               if (!has_arg_names(cu, &fn->proto))
-> > +                       continue;
-> >                 if (functions_cnt) {
-> > -                       /*
-> > -                        * We check following conditions:
-> > -                        *   - argument names are defined
-> > -                        *   - there's symbol and address defined for the function
-> > -                        *   - function address belongs to ftrace locations
-> > -                        *   - function is generated only once
-> > -                        */
-> > -                       if (!has_arg_names(cu, &fn->proto))
-> > -                               continue;
-> >                         if (!should_generate_function(btfe, function__name(fn, cu)))
-> 
-> Seeing Arnaldo's confusion, I remember initially I was similarly
-> confused. I think this p->generated = true should be moved out of
-> should_generate_function() and done here explicitly. Let's turn
-> should_generate_function() into find_allowed_function() or something,
-> to encapsulate bsearch. Checking !p || p->generated could be done here
-> explicitly.
+> > BTF types
+> > =======================================
+> > Total        2472836 bytes (83310 types)
+> > Struct:       920436 bytes (10305 types)
+> > FuncProto:    638668 bytes (18869 types)
+> > Func:         308304 bytes (25692 types)
+> > Enum:         184308 bytes (2293 types)
+> > Ptr:          173484 bytes (14457 types)
+> > Array:         89064 bytes (3711 types)
+> > Union:         81552 bytes (1961 types)
+> > Const:         34368 bytes (2864 types)
+> > Typedef:       32124 bytes (2677 types)
+> > Var:            4688 bytes (293 types)
+> > Datasec:        3528 bytes (1 types)
+> > Fwd:            1656 bytes (138 types)
+> > Volatile:        360 bytes (30 types)
+> > Int:             272 bytes (17 types)
+> > Restrict:         24 bytes (2 types)
+> >
+> >
+> > AFTER allowing static funcs:
+> >
+> > .BTF ELF section
+> > =======================================
+> > Data size:      4930558
+> > Header size:    24
+> > Types size:     2914016
+> > Strings size:   2016518
+> >
+> > BTF types
+> > =======================================
+> > Total        2914016 bytes (108282 types)
+> > Struct:       920436 bytes (10305 types)
+> > FuncProto:    851528 bytes (24814 types)
+> > Func:         536664 bytes (44722 types)
+> > Enum:         184308 bytes (2293 types)
+> > Ptr:          173484 bytes (14457 types)
+> > Array:         89064 bytes (3711 types)
+> > Union:         81552 bytes (1961 types)
+> > Const:         34368 bytes (2864 types)
+> > Typedef:       32124 bytes (2677 types)
+> > Var:            4688 bytes (293 types)
+> > Datasec:        3528 bytes (1 types)
+> > Fwd:            1656 bytes (138 types)
+> > Volatile:        360 bytes (30 types)
+> > Int:             256 bytes (16 types)
+>
+> nice, is this tool somewhere in the tree?
 
-ok, that should be more obvious, I'll send new version
+Nope, this is from my personal BTF inspection tool, which I never got
+to open-sourcing, too low on the priority list...
 
-> 
-> >                                 continue;
-> >                 } else {
-> > -                       if (fn->declaration || !fn->external)
-> > +                       if (!fn->external)
-> 
-> Hm.. why didn't you drop this fallback? For non-vmlinux, do you think
-> it's a problem to generate all FUNCs? Mostly theoretical question,
-> though.
+>
+> >
+> > So 25692 vs 44722 functions, but the increase in func_proto is smaller
+> > due to dedup. Good chunk is strings data for all those function and
+> > parameter names.
+> >
+> >
+> > >  btf_encoder.c | 24 ++++++++++--------------
+> > >  1 file changed, 10 insertions(+), 14 deletions(-)
+> > >
+> > > diff --git a/btf_encoder.c b/btf_encoder.c
+> > > index d531651b1e9e..de471bc754b1 100644
+> > > --- a/btf_encoder.c
+> > > +++ b/btf_encoder.c
+> > > @@ -612,25 +612,21 @@ int cu__encode_btf(struct cu *cu, int verbose, bool force,
+> > >                 const char *name;
+> > >
+> > >                 /*
+> > > -                * The functions_cnt != 0 means we parsed all necessary
+> > > -                * kernel symbols and we are using ftrace location filter
+> > > -                * for functions. If it's not available keep the current
+> > > -                * dwarf declaration check.
+> > > +                * Skip functions that:
+> > > +                *   - are marked as declarations
+> > > +                *   - do not have full argument names
+> > > +                *   - are not in ftrace list (if it's available)
+> > > +                *   - are not external (in case ftrace filter is not available)
+> > >                  */
+> > > +               if (fn->declaration)
+> > > +                       continue;
+> > > +               if (!has_arg_names(cu, &fn->proto))
+> > > +                       continue;
+> > >                 if (functions_cnt) {
+> > > -                       /*
+> > > -                        * We check following conditions:
+> > > -                        *   - argument names are defined
+> > > -                        *   - there's symbol and address defined for the function
+> > > -                        *   - function address belongs to ftrace locations
+> > > -                        *   - function is generated only once
+> > > -                        */
+> > > -                       if (!has_arg_names(cu, &fn->proto))
+> > > -                               continue;
+> > >                         if (!should_generate_function(btfe, function__name(fn, cu)))
+> >
+> > Seeing Arnaldo's confusion, I remember initially I was similarly
+> > confused. I think this p->generated = true should be moved out of
+> > should_generate_function() and done here explicitly. Let's turn
+> > should_generate_function() into find_allowed_function() or something,
+> > to encapsulate bsearch. Checking !p || p->generated could be done here
+> > explicitly.
+>
+> ok, that should be more obvious, I'll send new version
+>
+> >
+> > >                                 continue;
+> > >                 } else {
+> > > -                       if (fn->declaration || !fn->external)
+> > > +                       if (!fn->external)
+> >
+> > Hm.. why didn't you drop this fallback? For non-vmlinux, do you think
+> > it's a problem to generate all FUNCs? Mostly theoretical question,
+> > though.
+>
+> because it would probably allowed all static functions,
+> (ftrace data has only static functions that are traceable)
+> and who knows what a can of worms we'd open here ;-)
+>
 
-because it would probably allowed all static functions,
-(ftrace data has only static functions that are traceable)
-and who knows what a can of worms we'd open here ;-)
+Fair enough.
 
-jirka
-
+> jirka
+>
