@@ -2,77 +2,90 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.0 required=3.0 tests=BAYES_00,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 33357C61DD8
-	for <linux-dwarves@archiver.kernel.org>; Mon, 16 Nov 2020 20:26:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DBEA4C2D0E4
+	for <linux-dwarves@archiver.kernel.org>; Tue, 17 Nov 2020 18:09:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id F0421222B9
-	for <linux-dwarves@archiver.kernel.org>; Mon, 16 Nov 2020 20:25:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7E9B02466D
+	for <linux-dwarves@archiver.kernel.org>; Tue, 17 Nov 2020 18:09:47 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=kernel.org header.i=@kernel.org header.b="dIVaPqn5"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732463AbgKPUZj convert rfc822-to-8bit (ORCPT
+        id S1726731AbgKQSJr (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Mon, 16 Nov 2020 15:25:39 -0500
-Received: from us-smtp-delivery-44.mimecast.com ([205.139.111.44]:28545 "EHLO
-        us-smtp-delivery-44.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1732482AbgKPUZj (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Mon, 16 Nov 2020 15:25:39 -0500
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-260-kRS3QUdkMO6OSXSA4vULTg-1; Mon, 16 Nov 2020 15:25:33 -0500
-X-MC-Unique: kRS3QUdkMO6OSXSA4vULTg-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Tue, 17 Nov 2020 13:09:47 -0500
+Received: from mail.kernel.org ([198.145.29.99]:53248 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725808AbgKQSJr (ORCPT <rfc822;dwarves@vger.kernel.org>);
+        Tue, 17 Nov 2020 13:09:47 -0500
+Received: from quaco.ghostprotocols.net (unknown [179.97.37.151])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id D5C6781EE9E;
-        Mon, 16 Nov 2020 20:25:01 +0000 (UTC)
-Received: from krava.redhat.com (unknown [10.40.192.28])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id F232F5D9D3;
-        Mon, 16 Nov 2020 20:24:59 +0000 (UTC)
-From:   Jiri Olsa <jolsa@kernel.org>
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+        by mail.kernel.org (Postfix) with ESMTPSA id 3F5762462E;
+        Tue, 17 Nov 2020 18:09:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1605636586;
+        bh=ba1jxnREVtGGxG5sOJgs3Q5ynpcW1c5uZnFTmBA7y0M=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=dIVaPqn5H0XWWRPqmzSnqm7AXUUBETg8LMEXRJ+uHcSHQ01Ur5F5TUNlRI5aOffLP
+         OovfYwyaUuPrDUAMrPOz0ku3BYTcoj5WaW+hm/TOKEGbVi/V8zULYcZxeewsJOScWl
+         umZA+KjbEEv1trrv1B5MwE2x8j4mgKi8jhIZFnCA=
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id E2FA340E29; Tue, 17 Nov 2020 15:09:43 -0300 (-03)
+Date:   Tue, 17 Nov 2020 15:09:43 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Jiri Olsa <jolsa@kernel.org>
 Cc:     dwarves@vger.kernel.org, bpf@vger.kernel.org,
         Alexei Starovoitov <ast@kernel.org>,
         Andrii Nakryiko <andriin@fb.com>, Yonghong Song <yhs@fb.com>,
         Hao Luo <haoluo@google.com>
-Subject: [PATCH] btf_encoder: Use better fallback message
-Date:   Mon, 16 Nov 2020 21:24:58 +0100
-Message-Id: <20201116202458.1228654-1-jolsa@kernel.org>
+Subject: Re: [PATCH] btf_encoder: Use better fallback message
+Message-ID: <20201117180943.GW614220@kernel.org>
+References: <20201116202458.1228654-1-jolsa@kernel.org>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=jolsa@kernel.org
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: kernel.org
-Content-Transfer-Encoding: 8BIT
-Content-Type: text/plain; charset=WINDOWS-1252
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201116202458.1228654-1-jolsa@kernel.org>
+X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-Using more suitable fallback message for the case when the
-ftrace filter can't be used because of missing symbols.
+Em Mon, Nov 16, 2020 at 09:24:58PM +0100, Jiri Olsa escreveu:
+> Using more suitable fallback message for the case when the
+> ftrace filter can't be used because of missing symbols.
 
-Signed-off-by: Jiri Olsa <jolsa@kernel.org>
----
- btf_encoder.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Thanks, applied.
 
-diff --git a/btf_encoder.c b/btf_encoder.c
-index 4f856cfd5577..592b31e2cdc9 100644
---- a/btf_encoder.c
-+++ b/btf_encoder.c
-@@ -510,7 +510,7 @@ static int collect_symbols(struct btf_elf *btfe, bool collect_percpu_vars)
- 			printf("Found %d functions!\n", functions_cnt);
- 	} else {
- 		if (btf_elf__verbose)
--			printf("vmlinux not detected, falling back to dwarf data\n");
-+			printf("ftrace symbols not detected, falling back to DWARF data\n");
- 		delete_functions();
- 	}
+- Arnaldo
+
  
--- 
-2.26.2
+> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+> ---
+>  btf_encoder.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/btf_encoder.c b/btf_encoder.c
+> index 4f856cfd5577..592b31e2cdc9 100644
+> --- a/btf_encoder.c
+> +++ b/btf_encoder.c
+> @@ -510,7 +510,7 @@ static int collect_symbols(struct btf_elf *btfe, bool collect_percpu_vars)
+>  			printf("Found %d functions!\n", functions_cnt);
+>  	} else {
+>  		if (btf_elf__verbose)
+> -			printf("vmlinux not detected, falling back to dwarf data\n");
+> +			printf("ftrace symbols not detected, falling back to DWARF data\n");
+>  		delete_functions();
+>  	}
+>  
+> -- 
+> 2.26.2
+> 
 
+-- 
+
+- Arnaldo
