@@ -2,90 +2,119 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-7.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DBEA4C2D0E4
-	for <linux-dwarves@archiver.kernel.org>; Tue, 17 Nov 2020 18:09:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E6945C2D0E4
+	for <linux-dwarves@archiver.kernel.org>; Sat, 21 Nov 2020 01:13:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7E9B02466D
-	for <linux-dwarves@archiver.kernel.org>; Tue, 17 Nov 2020 18:09:47 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A5BD620729
+	for <linux-dwarves@archiver.kernel.org>; Sat, 21 Nov 2020 01:13:56 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=kernel.org header.i=@kernel.org header.b="dIVaPqn5"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="o5tL2kEp"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726731AbgKQSJr (ORCPT
+        id S1728060AbgKUBNg (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Tue, 17 Nov 2020 13:09:47 -0500
-Received: from mail.kernel.org ([198.145.29.99]:53248 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725808AbgKQSJr (ORCPT <rfc822;dwarves@vger.kernel.org>);
-        Tue, 17 Nov 2020 13:09:47 -0500
-Received: from quaco.ghostprotocols.net (unknown [179.97.37.151])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 3F5762462E;
-        Tue, 17 Nov 2020 18:09:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1605636586;
-        bh=ba1jxnREVtGGxG5sOJgs3Q5ynpcW1c5uZnFTmBA7y0M=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dIVaPqn5H0XWWRPqmzSnqm7AXUUBETg8LMEXRJ+uHcSHQ01Ur5F5TUNlRI5aOffLP
-         OovfYwyaUuPrDUAMrPOz0ku3BYTcoj5WaW+hm/TOKEGbVi/V8zULYcZxeewsJOScWl
-         umZA+KjbEEv1trrv1B5MwE2x8j4mgKi8jhIZFnCA=
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id E2FA340E29; Tue, 17 Nov 2020 15:09:43 -0300 (-03)
-Date:   Tue, 17 Nov 2020 15:09:43 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+        Fri, 20 Nov 2020 20:13:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47548 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726255AbgKUBNg (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Fri, 20 Nov 2020 20:13:36 -0500
+Received: from mail-yb1-xb44.google.com (mail-yb1-xb44.google.com [IPv6:2607:f8b0:4864:20::b44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F06BEC0613CF;
+        Fri, 20 Nov 2020 17:13:35 -0800 (PST)
+Received: by mail-yb1-xb44.google.com with SMTP id w5so10246402ybj.11;
+        Fri, 20 Nov 2020 17:13:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Ft8L88GT3lAaYaRsAjU61GqzRVoNN74nPtET5KZG9qA=;
+        b=o5tL2kEpR6g56zhEoPucepvOR61Dx4wv+xhmdcf6w5zh3mABeLk6H3jdlNE0Sp5jtW
+         bL03FqwJVN+k/WM0weSByUTCVmhlWVC+8l1bOiKo7h358cw1OxXa2jBc2ebFU8sY/izQ
+         vtWSeyrXbd30kVqvSvCd4Gh+kjdfQ3giQRz5vBV0MIlGOAOb+c6aePIvEPPMjC2AXnj2
+         c9FKS+Vxvi12GNwvegyU7UGMLs8rfjXAuOpE9Ni8kLcBG4XLDxRdU8/H9POtOW82wlq9
+         D84w0v8mydeFdC1MhRnwGgnbdWIg0x1M8wDKkwByKJFZ2GQA3nLROVSI8gk4WcAsR/Y3
+         EpIQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Ft8L88GT3lAaYaRsAjU61GqzRVoNN74nPtET5KZG9qA=;
+        b=jgNLwVgchmUY4EO2Alg63qKLM7YPUfXsYY6/R2cuf0jit/9ER/gMsy64IO0Dx50OkS
+         XFNP5JNjIFCRXBJaugNGvxh7EzGGl8t1YrQsIpSobp5x+0jk+R13xdw4mv/s3MG4Mxha
+         HDjfG0bE1kKPA6iyLGAky0RzVmNAy4IWayfr6x0nxs6o0myuXZpxa4I+UhoFRGJ/083P
+         NJ8nrGHPBj5xWM1Fw1Uz12FGipCvDpJ/DUvyOyylXSxJ9KApofiuX0noZ6cTriQX7oiy
+         FIDd0qI+mvoyE0fWRW1JmsqpqlT9CJ98I/WZHobmwaWPT99lJhfWA5hrG+WHzRmgz+Aa
+         /CdQ==
+X-Gm-Message-State: AOAM531SlTInGzJPCZjWPkeMjSO6pJUUUNLCZy/pr3VyB8QErsZpPxMZ
+        zv+lcY9eghoFxu/zlI62/aUGln3IZTlE4UrK28M=
+X-Google-Smtp-Source: ABdhPJwwqaqbRN6i0wPVejaMV0dSNMrWUUIXY4BjuANd9Dz2IHTHkejz6415Tm+zym1+JSfb10DcU3kWF6aPnlfenYc=
+X-Received: by 2002:a25:e701:: with SMTP id e1mr19844976ybh.510.1605921215168;
+ Fri, 20 Nov 2020 17:13:35 -0800 (PST)
+MIME-Version: 1.0
+References: <20201114223853.1010900-1-jolsa@kernel.org>
+In-Reply-To: <20201114223853.1010900-1-jolsa@kernel.org>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Fri, 20 Nov 2020 17:13:24 -0800
+Message-ID: <CAEf4BzZ-0exZK7skcB_UjyatAx_R=hNqAXKVZ8EXgmSsHmthFg@mail.gmail.com>
+Subject: Re: [PATCHv3 0/2] btf_encoder: Fix functions BTF data generation
 To:     Jiri Olsa <jolsa@kernel.org>
-Cc:     dwarves@vger.kernel.org, bpf@vger.kernel.org,
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        dwarves@vger.kernel.org, bpf <bpf@vger.kernel.org>,
         Alexei Starovoitov <ast@kernel.org>,
         Andrii Nakryiko <andriin@fb.com>, Yonghong Song <yhs@fb.com>,
         Hao Luo <haoluo@google.com>
-Subject: Re: [PATCH] btf_encoder: Use better fallback message
-Message-ID: <20201117180943.GW614220@kernel.org>
-References: <20201116202458.1228654-1-jolsa@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201116202458.1228654-1-jolsa@kernel.org>
-X-Url:  http://acmel.wordpress.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-Em Mon, Nov 16, 2020 at 09:24:58PM +0100, Jiri Olsa escreveu:
-> Using more suitable fallback message for the case when the
-> ftrace filter can't be used because of missing symbols.
+On Sat, Nov 14, 2020 at 2:39 PM Jiri Olsa <jolsa@kernel.org> wrote:
+>
+> hi,
+> recent btf encoder's changes brakes BTF data for some gcc
+> versions. The problem is that some functions can appear
+> in dwarf data in some instances without arguments, while
+> they are defined with some.
 
-Thanks, applied.
+Hey Jiri,
 
-- Arnaldo
+So this approach with __start_mcount_loc/__stop_mcount_loc works for
+vmlinux only, but it doesn't work for kernel modules. For kernel
+modules there is a dedicated "__mcount_loc" section, but no
+__start/__stop symbols. I'm working around for now by making sure
+functions that I need are global, but it would be nice to have this
+working for modules out of the box as well.
 
- 
-> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+If you get a chance to fix this soon, that would be great. If not,
+I'll try to get to this ASAP as well, because it would be nice to have
+this in the same version of pahole that got static function BTFs for
+vmlinux (if Arnaldo doesn't mind, of course).
+
+>
+> v3 changes:
+>   - move 'generated' flag set out of should_generate_function
+>   - rename should_generate_function to find_function
+>   - added ack
+>
+> v2 changes:
+>   - drop patch 3 logic and just change conditions
+>     based on Andrii's suggestion
+>   - drop patch 2
+>   - add ack for patch 1
+>
+> thanks,
+> jirka
+>
+>
 > ---
->  btf_encoder.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/btf_encoder.c b/btf_encoder.c
-> index 4f856cfd5577..592b31e2cdc9 100644
-> --- a/btf_encoder.c
-> +++ b/btf_encoder.c
-> @@ -510,7 +510,7 @@ static int collect_symbols(struct btf_elf *btfe, bool collect_percpu_vars)
->  			printf("Found %d functions!\n", functions_cnt);
->  	} else {
->  		if (btf_elf__verbose)
-> -			printf("vmlinux not detected, falling back to dwarf data\n");
-> +			printf("ftrace symbols not detected, falling back to DWARF data\n");
->  		delete_functions();
->  	}
->  
-> -- 
-> 2.26.2
-> 
-
--- 
-
-- Arnaldo
+> Jiri Olsa (2):
+>       btf_encoder: Generate also .init functions
+>       btf_encoder: Fix function generation
+>
+>  btf_encoder.c | 86 +++++++++++++++++++++-----------------------------------------------------------------
+>  1 file changed, 21 insertions(+), 65 deletions(-)
+>
