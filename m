@@ -2,127 +2,197 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1EEC1C56202
-	for <linux-dwarves@archiver.kernel.org>; Thu, 26 Nov 2020 08:01:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 299F5C2D0E4
+	for <linux-dwarves@archiver.kernel.org>; Fri, 27 Nov 2020 04:05:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A78E22173E
-	for <linux-dwarves@archiver.kernel.org>; Thu, 26 Nov 2020 08:01:54 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C675422228
+	for <linux-dwarves@archiver.kernel.org>; Fri, 27 Nov 2020 04:05:38 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="N6dP4KoO"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hWfCEjlQ"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388568AbgKZIBu (ORCPT
+        id S2389088AbgK0EFX (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Thu, 26 Nov 2020 03:01:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34078 "EHLO
+        Thu, 26 Nov 2020 23:05:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731087AbgKZIBu (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Thu, 26 Nov 2020 03:01:50 -0500
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D46B5C0613D4
-        for <dwarves@vger.kernel.org>; Thu, 26 Nov 2020 00:01:49 -0800 (PST)
-Received: by mail-ej1-x630.google.com with SMTP id hb22so1323921ejb.12
-        for <dwarves@vger.kernel.org>; Thu, 26 Nov 2020 00:01:49 -0800 (PST)
+        with ESMTP id S2389083AbgK0EFX (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Thu, 26 Nov 2020 23:05:23 -0500
+Received: from mail-yb1-xb43.google.com (mail-yb1-xb43.google.com [IPv6:2607:f8b0:4864:20::b43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDF29C0613D1;
+        Thu, 26 Nov 2020 20:05:22 -0800 (PST)
+Received: by mail-yb1-xb43.google.com with SMTP id k65so3366124ybk.5;
+        Thu, 26 Nov 2020 20:05:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=ZqDxFjjS5MpvnBdJ+5fwTceVhkc0Ie223yxhAdMIiZE=;
-        b=N6dP4KoOrmCIEQgZRTdSllaHilt7DFRnwdzWqrUnzlqKGJAy9lcTpLNRCzRHnbvwS8
-         /GxvlJuWLBxbf/bSIUgqZOegOkt7QDCcnHPeFlQygCXfVC7XcV8ZDPrs7ANV0O9EvZTB
-         wKdTvVcVRCgGbMVvH2LZEIGv9Eq8gSRHL6q8jk4n0nUJTRMXNjWtR6e3Kxv+AyQGozug
-         Nx8gsZ045WMiQUlI7Ovv3x4c/Yk3IscBhofMV9Of+BQpReIkjPGKepdh2JNkEzu6iPc4
-         +p3OO3Yj29TQffGYwA98CsDVSppuRPmYc8hIciup5pentmpNgJQOIcZpry6GZgJoFPvK
-         397Q==
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=nk88nMCwtV2wKVRfqKB4l2mUalEozUtlPPFEGyZhWJ8=;
+        b=hWfCEjlQOI5GEvk/BvDBJjvfo1pGG1Pm/+0L/vHHUhy/rsVNF1AvPaTvxBLmt+UN8c
+         /ZHrl7MIzG1YJRi5UTVorBmKC+MruA/K4EyTM9DSCWLVWt/1FxyUSKTFbDHCC25VVvVK
+         nYw8yPR5LsRa6sdLdDKSrf7MKD/LrNeU5d5kSEN/fK0y2ghzfa7mBJHwUh0BKjvFk265
+         Q6Ev++M4pPVAAsosoY6z/ES8FpWePXOcrk2IzEikORiMEb15+g26mgGOxHCF/UTPiH81
+         F0GCXnjVeUvRJnHwOjQjovk7MCbH0So1iIk8QYR5ufn1nvgsBUWmnNO5JYVCehYG8IpV
+         GTvg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=ZqDxFjjS5MpvnBdJ+5fwTceVhkc0Ie223yxhAdMIiZE=;
-        b=fxO/MS5dwx77LgJ3ljSoY8bzn2Tj+X/Ha6jC8nlidTLgW8fAnEofhonGS6zRzAuIKF
-         n9akebH1E101Xr24oY1wpUI94ClyABjyR9Seriyn20nfd9/AgFrPS9+Dz027cB4kPBBP
-         LCeb4sJ1UHVDyps2iGnn3KTd/CIQ9Xsfy/7iaWto45zbZtZFZ6ukWd6ioKI3atUjDa8l
-         Ae/NgNGIzeySheE9xjlvvv4A+dixm5A6L38Lki3ONpJjnGAOC0yobcMmxy2j+TenzDSd
-         wp1NjawDDp5q1i0isLCl1BC4kTm0/GT0PZWwP1Hi11tZuDcbwwXtovEBqHz02RpDccLi
-         z6lA==
-X-Gm-Message-State: AOAM533cTKB0MsfFDaZUBVDvUCfF/KNOJx+gPvDL0mJGTLn56xyXfGER
-        mXNng7iFgk7/YraXjOu6F+UsMZhXm0Ik8w9Kj0z1
-X-Google-Smtp-Source: ABdhPJxNmvZu2DuWSB0EYxyhMUYxIvwh6c7rEXncoJeb2wLzuB1fUdwYXX0UaNTJmFlTnqrtsPGdNkRltshTWDP+q94=
-X-Received: by 2002:a17:906:4698:: with SMTP id a24mr1616048ejr.90.1606377707945;
- Thu, 26 Nov 2020 00:01:47 -0800 (PST)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=nk88nMCwtV2wKVRfqKB4l2mUalEozUtlPPFEGyZhWJ8=;
+        b=gq6zEey0LPzPlPhkfjwB3ej0vNUa9xDm6H2zHm+M6oRa191WBpxbSeXccFFb3ik5u5
+         iXrDdZkN/ruxnO99jPROh5VpiCTKcq1doDQ+xLVGft6OZB6x/n6hWHGmIyQwnYL//Vpd
+         7FBPYwxxmtPaI0vtrPCv3NY3rk51VkFtIKz/BHA66lETIdFZfPqUqFZs1PfA+p6308fs
+         hNkJRZIO9QxXJ+vTAG8djnafAr3OSMqfgAhKaocmw6uQpjIsCoCiN66hr9LzTe/4N5BC
+         bgt5nc883690yr2CcxEoMkexVyOmgNtQr9wFE4DoF3ctvzvX3CsjkZkLHEfmnO16sVAz
+         JhEg==
+X-Gm-Message-State: AOAM533ACCwoWVJldGUQ013F3bF344Fqm17xXe+Tbs2xMQrXQH6xN9Mv
+        sGrTvwKg1aCI+XrOLQoWwk3u8t+GUhCeVsQ3sMQ=
+X-Google-Smtp-Source: ABdhPJxBFKrbuYhxkwpJkVZkXrjZyfi6IJkwzfb0pdI+VGOqinblW/vWEUkRU4HWHjHacL0GwQ8ZshVl91qgFviYuLA=
+X-Received: by 2002:a25:7717:: with SMTP id s23mr9371626ybc.459.1606449922061;
+ Thu, 26 Nov 2020 20:05:22 -0800 (PST)
 MIME-Version: 1.0
-From:   Bill Wendling <morbo@google.com>
-Date:   Thu, 26 Nov 2020 00:01:36 -0800
-Message-ID: <CAGG=3QUjgnA7d+4dWPeu0fHdgfh0Ne6H1VdMLee7bQ+5b-qoCQ@mail.gmail.com>
-Subject: Segfault with LTO'ed Linux
-To:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
-        dwarves@vger.kernel.org
+References: <20201124161919.2152187-1-jolsa@kernel.org> <20201124161919.2152187-2-jolsa@kernel.org>
+In-Reply-To: <20201124161919.2152187-2-jolsa@kernel.org>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Thu, 26 Nov 2020 20:05:11 -0800
+Message-ID: <CAEf4BzbjTYevuOU7L0LoT0wL2Jb4fnb5LRXEwo_V52npGgvd8Q@mail.gmail.com>
+Subject: Re: [PATCH 1/2] btf_encoder: Factor filter_functions function
+To:     Jiri Olsa <jolsa@kernel.org>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        dwarves@vger.kernel.org, bpf <bpf@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andriin@fb.com>, Yonghong Song <yhs@fb.com>,
+        Hao Luo <haoluo@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-I just ran the newest pahole release on the Linux kernel compiled with
-clang plus LTO (link-time optimizations) and got a segmentation fault.
-I placed the vmlinux file at the following URL:
+On Tue, Nov 24, 2020 at 8:22 AM Jiri Olsa <jolsa@kernel.org> wrote:
+>
+> Reorder the filter_functions function so we can add
+> processing of kernel modules in following patch.
+>
+> There's no functional change intended.
+>
+> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+> ---
+>  btf_encoder.c | 57 +++++++++++++++++++++++++++++++++------------------
+>  1 file changed, 37 insertions(+), 20 deletions(-)
+>
+> diff --git a/btf_encoder.c b/btf_encoder.c
+> index c40f059580da..467c4657b2c0 100644
+> --- a/btf_encoder.c
+> +++ b/btf_encoder.c
+> @@ -101,14 +101,17 @@ static int addrs_cmp(const void *_a, const void *_b)
+>         return *a < *b ? -1 : 1;
+>  }
+>
+> -static int filter_functions(struct btf_elf *btfe, struct funcs_layout *fl)
+> +static int get_vmlinux_addrs(struct btf_elf *btfe, struct funcs_layout *fl,
+> +                            unsigned long **paddrs, unsigned long *pcount)
+>  {
+> -       unsigned long *addrs, count, offset, i;
+> -       int functions_valid = 0;
+> +       unsigned long *addrs, count, offset;
+>         Elf_Data *data;
+>         GElf_Shdr shdr;
+>         Elf_Scn *sec;
+>
+> +       if (!fl->mcount_start || !fl->mcount_stop)
+> +               return 0;
+> +
 
-https://drive.google.com/file/d/1KmrUFLBl42U1VZ3elp6zTlpK7rB7o4Jq/view?usp=sharing
+probably better to explicitly assign paddrs and pcount to NULL and 0 here
 
-The DWARF information generated by clang + LTO is definitely different
-from a non-LTO build. We've seen issues with it in the past. This
-however looks like a new issue.
+>         /*
+>          * Find mcount addressed marked by __start_mcount_loc
+>          * and __stop_mcount_loc symbols and load them into
+> @@ -138,7 +141,32 @@ static int filter_functions(struct btf_elf *btfe, struct funcs_layout *fl)
+>         }
+>
+>         memcpy(addrs, data->d_buf + offset, count * sizeof(addrs[0]));
+> +       *paddrs = addrs;
+> +       *pcount = count;
+> +       return 0;
+> +}
+> +
+> +static int setup_functions(struct btf_elf *btfe, struct funcs_layout *fl)
+> +{
+> +       unsigned long *addrs = NULL, count, i;
+> +       int functions_valid = 0;
+> +
+> +       /*
+> +        * Check if we are processing vmlinux image and
+> +        * get mcount data if it's detected.
+> +        */
+> +       if (get_vmlinux_addrs(btfe, fl, &addrs, &count))
+> +               return -1;
+> +
+> +       if (!addrs) {
+> +               if (btf_elf__verbose)
+> +                       printf("ftrace symbols not detected, falling back to DWARF data\n");
+> +               delete_functions();
+> +               return 0;
+> +       }
+> +
+>         qsort(addrs, count, sizeof(addrs[0]), addrs_cmp);
+> +       qsort(functions, functions_cnt, sizeof(functions[0]), functions_cmp);
+>
+>         /*
+>          * Let's got through all collected functions and filter
+> @@ -162,6 +190,9 @@ static int filter_functions(struct btf_elf *btfe, struct funcs_layout *fl)
+>
+>         functions_cnt = functions_valid;
+>         free(addrs);
+> +
+> +       if (btf_elf__verbose)
+> +               printf("Found %d functions!\n", functions_cnt);
+>         return 0;
+>  }
+>
+> @@ -470,11 +501,6 @@ static void collect_symbol(GElf_Sym *sym, struct funcs_layout *fl)
+>                 fl->mcount_stop = sym->st_value;
+>  }
+>
+> -static int has_all_symbols(struct funcs_layout *fl)
+> -{
+> -       return fl->mcount_start && fl->mcount_stop;
+> -}
+> -
+>  static int collect_symbols(struct btf_elf *btfe, bool collect_percpu_vars)
+>  {
+>         struct funcs_layout fl = { };
+> @@ -501,18 +527,9 @@ static int collect_symbols(struct btf_elf *btfe, bool collect_percpu_vars)
+>                         printf("Found %d per-CPU variables!\n", percpu_var_cnt);
+>         }
+>
+> -       if (functions_cnt && has_all_symbols(&fl)) {
+> -               qsort(functions, functions_cnt, sizeof(functions[0]), functions_cmp);
+> -               if (filter_functions(btfe, &fl)) {
+> -                       fprintf(stderr, "Failed to filter dwarf functions\n");
+> -                       return -1;
+> -               }
+> -               if (btf_elf__verbose)
+> -                       printf("Found %d functions!\n", functions_cnt);
+> -       } else {
+> -               if (btf_elf__verbose)
+> -                       printf("ftrace symbols not detected, falling back to DWARF data\n");
+> -               delete_functions();
+> +       if (functions_cnt && setup_functions(btfe, &fl)) {
+> +               fprintf(stderr, "Failed to filter dwarf functions\n");
 
-[Note: I could only share the file with individuals with gmail
-accounts, so I wasn't able to share it with the
-"dwarves@vger.kernel.org" account.]
+DWARF
 
-$ pahole -J -V tmp_vmlinux.btf
-Found per-CPU symbol 'cpu_loops_per_jiffy' at address 0x10000
-Found per-CPU symbol 'pmc_prev_left' at address 0x11330
-Found per-CPU symbol 'perf_nmi_tstamp' at address 0x11530
-Found per-CPU symbol 'bts_ctx' at address 0x12000
-Found per-CPU symbol 'insn_buffer' at address 0x15000
-Found per-CPU symbol 'pt_ctx' at address 0x15008
-Found per-CPU symbol 'kvm_core_conflict' at address 0x150d8
-Found per-CPU symbol 'svm_asid' at address 0x150e8
-Found per-CPU symbol 'current_vcpu' at address 0x150f8
-Found per-CPU symbol 'mmu_lock_acquired_time' at address 0x150f0
-Found per-CPU symbol 'cpu_tsc_khz' at address 0x15100
-Found per-CPU symbol 'current_vcpu' at address 0x15108
-Found per-CPU symbol 'local_vcpu' at address 0x15110
-Found per-CPU symbol 'last_nmi_rip' at address 0x15288
-Found per-CPU symbol 'nmi_cr2' at address 0x15278
-Found per-CPU symbol 'nmi_state' at address 0x15270
-Found per-CPU symbol 'nmi_stats' at address 0x15294
-Found per-CPU symbol 'swallow_nmi' at address 0x152a4
-Found per-CPU symbol 'unhandled_nmi_count' at address 0x15290
-Found per-CPU symbol 'update_debug_stack' at address 0x15280
-Found per-CPU symbol 'cpu_devices' at address 0x15ab0
-Found per-CPU symbol 'bp_per_reg' at address 0x15da0
-Found per-CPU symbol 'cpu_debugreg' at address 0x15dc0
-Found per-CPU symbol 'is_idle' at address 0x15e00
-Found per-CPU symbol 'ssb_state' at address 0x15de8
-Found per-CPU symbol 'in_kernel_fpu' at address 0x15e18
-Found per-CPU symbol 'debug_stack_addr' at address 0x15e60
-Found per-CPU symbol 'samples' at address 0x15ea8
-Found per-CPU symbol 'last_mds_flush' at address 0x15f18
-Found per-CPU symbol 'mds_core_conflict' at address 0x15ed0
-Found per-CPU symbol 'mds_reasons' at address 0x15ee0
-Found per-CPU symbol 'mds_sw_flush_buffer' at address 0x15ed8
-Found per-CPU symbol 'mds_triggers' at address 0x15f00
-Found per-CPU symbol 'mce_next_interval' at address 0x16050
-Found per-CPU symbol 'mce_signaled' at address 0x15fa4
-Found per-CPU symbol 'mce_timer' at address 0x16028
-...
-[1759] FUNC arch_setup_additional_pages type_id=1758
-[1760] FUNC_PROTO (anon) return=381 args=(1750 bprm, 381 uses_interp)
-[1761] FUNC compat_arch_setup_additional_pages type_id=1760
-[1762] FUNC_PROTO (anon) return=381 args=(382 s)
-[1763] FUNC vdso_setup type_id=1762
-[1764] FUNC_PROTO (anon) return=381 args=(void)
-[1765] FUNC init_vdso type_id=1764
-Segmentation fault
-
--bw
+> +               return -1;
+>         }
+>
+>         return 0;
+> --
+> 2.26.2
+>
