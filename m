@@ -2,209 +2,94 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5B491C3E8C5
-	for <linux-dwarves@archiver.kernel.org>; Fri, 27 Nov 2020 17:40:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3ACA2C3E8C5
+	for <linux-dwarves@archiver.kernel.org>; Fri, 27 Nov 2020 20:46:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1BCB121D91
-	for <linux-dwarves@archiver.kernel.org>; Fri, 27 Nov 2020 17:40:47 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D6A7821D7F
+	for <linux-dwarves@archiver.kernel.org>; Fri, 27 Nov 2020 20:46:31 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="b+BfKw+D"
+	dkim=pass (1024-bit key) header.d=kernel.org header.i=@kernel.org header.b="b5UlVBkb"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732123AbgK0Rkr (ORCPT
+        id S1732596AbgK0UkU (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Fri, 27 Nov 2020 12:40:47 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:31118 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1731882AbgK0Rkq (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Fri, 27 Nov 2020 12:40:46 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1606498844;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=KMM3cbq6jyIBPTwItif0SInDuNROtFrwRJTOllhSLHY=;
-        b=b+BfKw+DAuTD/hmNI4PJDa04MRTD5iAPTQdf6zuean/2zx6XCyfTJXebVNWTGxAGRxkCEK
-        2JwdXUZcaJRP7gfS0sCoR3Flch4SjFrzEDDCMt9jwGoWzuThLVC0l1D4RzKB0cX6QZ26Mh
-        4d0Mh2B4Sx/EhjVNRh46H3TZkwewo7k=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-334-sihSX_ocOpSeX09cjrnMSw-1; Fri, 27 Nov 2020 12:40:41 -0500
-X-MC-Unique: sihSX_ocOpSeX09cjrnMSw-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Fri, 27 Nov 2020 15:40:20 -0500
+Received: from mail.kernel.org ([198.145.29.99]:43806 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729363AbgK0UjP (ORCPT <rfc822;dwarves@vger.kernel.org>);
+        Fri, 27 Nov 2020 15:39:15 -0500
+Received: from quaco.ghostprotocols.net (unknown [179.97.37.151])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 51A6C1842145;
-        Fri, 27 Nov 2020 17:40:40 +0000 (UTC)
-Received: from krava (unknown [10.40.194.2])
-        by smtp.corp.redhat.com (Postfix) with SMTP id 633629CA0;
-        Fri, 27 Nov 2020 17:40:38 +0000 (UTC)
-Date:   Fri, 27 Nov 2020 18:40:37 +0100
-From:   Jiri Olsa <jolsa@redhat.com>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Jiri Olsa <jolsa@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        dwarves@vger.kernel.org, bpf <bpf@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
+        by mail.kernel.org (Postfix) with ESMTPSA id AFED821D7F;
+        Fri, 27 Nov 2020 20:39:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1606509554;
+        bh=9umCh7sd7cWMjj78c48xEUF3JxYar/FTlkO7bug0Vag=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=b5UlVBkbnJeIVVntMGGGVFwa7iS04Jbkp+VYmQ2H4S4FrvMeXFEuojwdCeKxUzX5V
+         Nk/m3+LmY5Caxa9LOg9kTvOSXrGLEKm/5exFbhqBb+9n6M/2C5YqW9mtNedVPf4NsJ
+         RtIvOSA8NICp7SSF4EVD+SpnQQpm8gvEPQ4ZUvcs=
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id A64A34079D; Fri, 27 Nov 2020 17:39:12 -0300 (-03)
+Date:   Fri, 27 Nov 2020 17:39:12 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Jiri Olsa <jolsa@redhat.com>
+Cc:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Jiri Olsa <jolsa@kernel.org>, dwarves@vger.kernel.org,
+        bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
         Andrii Nakryiko <andriin@fb.com>, Yonghong Song <yhs@fb.com>,
         Hao Luo <haoluo@google.com>
 Subject: Re: [PATCH 2/2] btf_encoder: Detect kernel module ftrace addresses
-Message-ID: <20201127174037.GB2767982@krava>
+Message-ID: <20201127203912.GQ70905@kernel.org>
 References: <20201124161919.2152187-1-jolsa@kernel.org>
  <20201124161919.2152187-3-jolsa@kernel.org>
  <CAEf4BzbbpLkJth5HYh=a6V1+uPAcPpUTsi=JHQrOeHF5f2xALg@mail.gmail.com>
+ <20201127174037.GB2767982@krava>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAEf4BzbbpLkJth5HYh=a6V1+uPAcPpUTsi=JHQrOeHF5f2xALg@mail.gmail.com>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+In-Reply-To: <20201127174037.GB2767982@krava>
+X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-On Thu, Nov 26, 2020 at 08:18:58PM -0800, Andrii Nakryiko wrote:
-> On Tue, Nov 24, 2020 at 8:22 AM Jiri Olsa <jolsa@kernel.org> wrote:
-> >
-> > Add support to detect kernel module dtrace addresses and use
-> > it as filter for functions.
+Em Fri, Nov 27, 2020 at 06:40:37PM +0100, Jiri Olsa escreveu:
+> On Thu, Nov 26, 2020 at 08:18:58PM -0800, Andrii Nakryiko wrote:
+> > On Tue, Nov 24, 2020 at 8:22 AM Jiri Olsa <jolsa@kernel.org> wrote:
+> > >
+> > > Add support to detect kernel module dtrace addresses and use
+> > > it as filter for functions.
+> > 
+> > typo: dtrace -> ftrace?
 > 
-> typo: dtrace -> ftrace?
+> heh, honest typo I swear ;-)
 
-heh, honest typo I swear ;-)
+f comes after d ;-)
 
-SNIP
+> SNIP
+> > > +       /* get __mcount_loc */
+> > > +       sec = elf_section_by_name(btfe->elf, &btfe->ehdr, &shdr_mcount,
+> > > +                                 "__mcount_loc", NULL);
+> > > +       if (!sec) {
+> > > +               if (btf_elf__verbose) {
+> > > +                       printf("%s: '%s' doesn't have __mcount_loc section\n", __func__,
+> > > +                              btfe->filename);
+> > > +               }
 
-> >
-> >         if (functions_cnt == functions_alloc) {
-> >                 functions_alloc = max(1000, functions_alloc * 3 / 2);
-> > @@ -84,8 +85,17 @@ static int collect_function(struct btf_elf *btfe, GElf_Sym *sym)
-> >                 functions = new;
-> >         }
-> >
-> > +       if (elf_sym__section(sym) != last_idx) {
-> > +               int idx = elf_sym__section(sym);
-> 
-> nit: elf_sym__section() called twice, maybe have sec_idx local variable instead?
+> > nit: unnecessary {} for single-statement if
+ 
+> ah ok, I put it because kernel guys scream with multiline
+> conditions without {}
 
-ugh, right, will fix
+You can keep it like that, or get free from 80 column constraints and
+make it:
 
-> 
-> > +
-> > +               if (!elf_section_by_idx(btfe->elf, &sh, idx))
-> > +                       return 0;
-> 
-> isn't this an error and shouldn't return 0?..
-
-I'm skiping functions without section, I did not want to fail
-all this because of some misplaced symbol
-
-mabe we could warn, but still go on..
-
-> 
-> > +               last_idx = idx;
-> > +       }
-> > +
-> >         functions[functions_cnt].name = elf_sym__name(sym, btfe->symtab);
-> >         functions[functions_cnt].addr = elf_sym__value(sym);
-> > +       functions[functions_cnt].sh_addr = sh.sh_addr;
-> >         functions[functions_cnt].generated = false;
-> >         functions_cnt++;
-> >         return 0;
-> > @@ -146,10 +156,60 @@ static int get_vmlinux_addrs(struct btf_elf *btfe, struct funcs_layout *fl,
-> >         return 0;
-> >  }
-> >
-> > +static int
-> > +get_kmod_addrs(struct btf_elf *btfe, unsigned long **paddrs, unsigned long *pcount)
-> > +{
-> > +       unsigned long *addrs, count;
-> > +       GElf_Shdr shdr_mcount;
-> > +       Elf_Data *data;
-> > +       Elf_Scn *sec;
-> > +
-> > +       /* get __mcount_loc */
-> > +       sec = elf_section_by_name(btfe->elf, &btfe->ehdr, &shdr_mcount,
-> > +                                 "__mcount_loc", NULL);
-> > +       if (!sec) {
-> > +               if (btf_elf__verbose) {
-> > +                       printf("%s: '%s' doesn't have __mcount_loc section\n", __func__,
-> > +                              btfe->filename);
-> > +               }
-> 
-> 
-> nit: unnecessary {} for single-statement if
-
-ah ok, I put it because kernel guys scream with multiline
-conditions without {}
-
-> 
-> > +               return 0;
-> > +       }
-> > +
-> > +       data = elf_getdata(sec, NULL);
-> > +       if (!data) {
-> > +               fprintf(stderr, "Failed to data for __mcount_loc section.\n");
-> > +               return -1;
-> > +       }
-> > +
-> > +       addrs = malloc(data->d_size);
-> > +       if (!addrs) {
-> > +               fprintf(stderr, "Failed to allocate memory for ftrace addresses.\n");
-> > +               return -1;
-> > +       }
-> > +
-> > +       count = data->d_size / sizeof(unsigned long);
-> 
-> not sure this is safe to do, e.g., if we are processing ELF of
-> different bitness (32 vs 64). Maybev we can get the size of an entry
-> from sh_entsize?
-
-it's not filled in, zero in my build
-
-we could get bitness from elf header and use that in here
-and also for vmlinux where it's hardcoded as well
-
-SNIP
-
-> > @@ -174,9 +244,18 @@ static int setup_functions(struct btf_elf *btfe, struct funcs_layout *fl)
-> >          */
-> >         for (i = 0; i < functions_cnt; i++) {
-> >                 struct elf_function *func = &functions[i];
-> > +               /*
-> > +                * For vmlinux image both addrs[x] and functions[x]::addr
-> > +                * values are final address and are comparable.
-> > +                *
-> > +                * For kernel module addrs[x] is final address, but
-> > +                * functions[x]::addr is relative address within section
-> > +                * and needs to be relocated by adding sh_addr.
-> > +                */
-> > +               unsigned long addr = kmod ? func->addr + func->sh_addr : func->addr;
-> >
-> >                 /* Make sure function is within ftrace addresses. */
-> > -               if (bsearch(&func->addr, addrs, count, sizeof(addrs[0]), addrs_cmp)) {
-> > +               if (bsearch(&addr, addrs, count, sizeof(addrs[0]), addrs_cmp)) {
-> >                         /*
-> >                          * We iterate over sorted array, so we can easily skip
-> >                          * not valid item and move following valid field into
-> > diff --git a/dutil.c b/dutil.c
-> > index f7b853f0660d..5ebbd2f9c84c 100644
-> > --- a/dutil.c
-> > +++ b/dutil.c
-> > @@ -196,6 +196,22 @@ Elf_Scn *elf_section_by_name(Elf *elf, GElf_Ehdr *ep,
-> >         return sec;
-> >  }
-> >
-> > +Elf_Scn *elf_section_by_idx(Elf *elf, GElf_Shdr *shp, int idx)
-> 
-> 
-> there is elf_getscn(), which does the same?
-
-great, did not see it
-
-thanks,
-jirka
-
+	if (btf_elf__verbose)
+		printf("%s: '%s' doesn't have __mcount_loc section\n", __func__, btfe->filename);
+ 
+- Arnaldo
