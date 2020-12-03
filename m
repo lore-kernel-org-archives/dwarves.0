@@ -2,94 +2,77 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.0 required=3.0 tests=BAYES_00,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3ACA2C3E8C5
-	for <linux-dwarves@archiver.kernel.org>; Fri, 27 Nov 2020 20:46:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1FCBEC4361B
+	for <linux-dwarves@archiver.kernel.org>; Thu,  3 Dec 2020 22:07:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D6A7821D7F
-	for <linux-dwarves@archiver.kernel.org>; Fri, 27 Nov 2020 20:46:31 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=kernel.org header.i=@kernel.org header.b="b5UlVBkb"
+	by mail.kernel.org (Postfix) with ESMTP id 800012220F
+	for <linux-dwarves@archiver.kernel.org>; Thu,  3 Dec 2020 22:07:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732596AbgK0UkU (ORCPT
+        id S1728177AbgLCWH0 convert rfc822-to-8bit (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Fri, 27 Nov 2020 15:40:20 -0500
-Received: from mail.kernel.org ([198.145.29.99]:43806 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729363AbgK0UjP (ORCPT <rfc822;dwarves@vger.kernel.org>);
-        Fri, 27 Nov 2020 15:39:15 -0500
-Received: from quaco.ghostprotocols.net (unknown [179.97.37.151])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 3 Dec 2020 17:07:26 -0500
+Received: from us-smtp-delivery-44.mimecast.com ([205.139.111.44]:26081 "EHLO
+        us-smtp-delivery-44.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725885AbgLCWH0 (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Thu, 3 Dec 2020 17:07:26 -0500
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-198-XDsYB1DZO82W0KTPJacDUg-1; Thu, 03 Dec 2020 17:06:29 -0500
+X-MC-Unique: XDsYB1DZO82W0KTPJacDUg-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id AFED821D7F;
-        Fri, 27 Nov 2020 20:39:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1606509554;
-        bh=9umCh7sd7cWMjj78c48xEUF3JxYar/FTlkO7bug0Vag=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=b5UlVBkbnJeIVVntMGGGVFwa7iS04Jbkp+VYmQ2H4S4FrvMeXFEuojwdCeKxUzX5V
-         Nk/m3+LmY5Caxa9LOg9kTvOSXrGLEKm/5exFbhqBb+9n6M/2C5YqW9mtNedVPf4NsJ
-         RtIvOSA8NICp7SSF4EVD+SpnQQpm8gvEPQ4ZUvcs=
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id A64A34079D; Fri, 27 Nov 2020 17:39:12 -0300 (-03)
-Date:   Fri, 27 Nov 2020 17:39:12 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Jiri Olsa <jolsa@redhat.com>
-Cc:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Jiri Olsa <jolsa@kernel.org>, dwarves@vger.kernel.org,
-        bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 5B3B21005D4E;
+        Thu,  3 Dec 2020 22:06:28 +0000 (UTC)
+Received: from krava.redhat.com (unknown [10.40.195.70])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 9CFD15D9CA;
+        Thu,  3 Dec 2020 22:06:26 +0000 (UTC)
+From:   Jiri Olsa <jolsa@kernel.org>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     dwarves@vger.kernel.org, bpf@vger.kernel.org,
+        Alexei Starovoitov <ast@kernel.org>,
         Andrii Nakryiko <andriin@fb.com>, Yonghong Song <yhs@fb.com>,
         Hao Luo <haoluo@google.com>
-Subject: Re: [PATCH 2/2] btf_encoder: Detect kernel module ftrace addresses
-Message-ID: <20201127203912.GQ70905@kernel.org>
-References: <20201124161919.2152187-1-jolsa@kernel.org>
- <20201124161919.2152187-3-jolsa@kernel.org>
- <CAEf4BzbbpLkJth5HYh=a6V1+uPAcPpUTsi=JHQrOeHF5f2xALg@mail.gmail.com>
- <20201127174037.GB2767982@krava>
+Subject: [PATCHv2 0/3] btf_encoder: Detect kernel modules
+Date:   Thu,  3 Dec 2020 23:06:22 +0100
+Message-Id: <20201203220625.3704363-1-jolsa@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201127174037.GB2767982@krava>
-X-Url:  http://acmel.wordpress.com
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=jolsa@kernel.org
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: kernel.org
+Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=WINDOWS-1252
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-Em Fri, Nov 27, 2020 at 06:40:37PM +0100, Jiri Olsa escreveu:
-> On Thu, Nov 26, 2020 at 08:18:58PM -0800, Andrii Nakryiko wrote:
-> > On Tue, Nov 24, 2020 at 8:22 AM Jiri Olsa <jolsa@kernel.org> wrote:
-> > >
-> > > Add support to detect kernel module dtrace addresses and use
-> > > it as filter for functions.
-> > 
-> > typo: dtrace -> ftrace?
-> 
-> heh, honest typo I swear ;-)
+hi,
+adding support to detect kernel module and use its
+mcount_loc section data as function filter.
 
-f comes after d ;-)
+v2 changes:
+  - initialize return arguments in get_vmlinux_addrs [Andrii]
+  - use elf_getscn in elf_section_by_idx [Andrii]
+  - use address size from ELF's class for both kmod and vmlinux
 
-> SNIP
-> > > +       /* get __mcount_loc */
-> > > +       sec = elf_section_by_name(btfe->elf, &btfe->ehdr, &shdr_mcount,
-> > > +                                 "__mcount_loc", NULL);
-> > > +       if (!sec) {
-> > > +               if (btf_elf__verbose) {
-> > > +                       printf("%s: '%s' doesn't have __mcount_loc section\n", __func__,
-> > > +                              btfe->filename);
-> > > +               }
+thanks,
+jirka
 
-> > nit: unnecessary {} for single-statement if
- 
-> ah ok, I put it because kernel guys scream with multiline
-> conditions without {}
 
-You can keep it like that, or get free from 80 column constraints and
-make it:
+---
+Jiri Olsa (3):
+      btf_encoder: Factor filter_functions function
+      btf_encoder: Use address size based on ELF's class
+      btf_encoder: Detect kernel module ftrace addresses
 
-	if (btf_elf__verbose)
-		printf("%s: '%s' doesn't have __mcount_loc section\n", __func__, btfe->filename);
- 
-- Arnaldo
+ btf_encoder.c | 179 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++---------------------
+ dutil.c       |  10 ++++++++
+ dutil.h       |   2 ++
+ 3 files changed, 164 insertions(+), 27 deletions(-)
+
