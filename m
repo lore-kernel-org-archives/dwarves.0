@@ -2,80 +2,99 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3D35AC4361A
-	for <linux-dwarves@archiver.kernel.org>; Fri,  4 Dec 2020 21:21:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8C7C8C433FE
+	for <linux-dwarves@archiver.kernel.org>; Fri,  4 Dec 2020 21:24:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E44B122A83
-	for <linux-dwarves@archiver.kernel.org>; Fri,  4 Dec 2020 21:21:16 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 43F0722A85
+	for <linux-dwarves@archiver.kernel.org>; Fri,  4 Dec 2020 21:24:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726075AbgLDVVQ convert rfc822-to-8bit (ORCPT
+        id S1728890AbgLDVY6 (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Fri, 4 Dec 2020 16:21:16 -0500
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:62682 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726021AbgLDVVQ (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Fri, 4 Dec 2020 16:21:16 -0500
-Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0B4LKOmV015563
-        for <dwarves@vger.kernel.org>; Fri, 4 Dec 2020 13:20:36 -0800
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 357tfmrx67-11
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <dwarves@vger.kernel.org>; Fri, 04 Dec 2020 13:20:36 -0800
-Received: from intmgw002.08.frc2.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::d) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Fri, 4 Dec 2020 13:20:18 -0800
-Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id 31E4B2ECAB55; Fri,  4 Dec 2020 13:20:16 -0800 (PST)
-From:   Andrii Nakryiko <andrii@kernel.org>
-To:     <dwarves@vger.kernel.org>, <acme@kernel.org>
-CC:     <andrii@kernel.org>, <kernel-team@fb.com>
-Subject: [PATCH dwarves] rpm: fix changelog date
-Date:   Fri, 4 Dec 2020 13:20:14 -0800
-Message-ID: <20201204212014.2983374-1-andrii@kernel.org>
-X-Mailer: git-send-email 2.24.1
-X-FB-Internal: Safe
-Content-Type: text/plain
-Content-Transfer-Encoding: 8BIT
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Fri, 4 Dec 2020 16:24:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45406 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726627AbgLDVY5 (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Fri, 4 Dec 2020 16:24:57 -0500
+Received: from mail-yb1-xb41.google.com (mail-yb1-xb41.google.com [IPv6:2607:f8b0:4864:20::b41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F6D1C0613D1
+        for <dwarves@vger.kernel.org>; Fri,  4 Dec 2020 13:24:17 -0800 (PST)
+Received: by mail-yb1-xb41.google.com with SMTP id w135so1120572ybg.13
+        for <dwarves@vger.kernel.org>; Fri, 04 Dec 2020 13:24:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=dqtzOY0jRzHswbuk3NCKVui1FUN95X1ufg/ByHbCwiA=;
+        b=UC+9vaK3R0BhS4g0MnXTq+/fQYYzvMB8EC//ClUnY46egpT3eQOgxIhGqYL0jgNmuT
+         Z2OhBQVc+mZTOCD8u63oYVN/aptcvcEWsdKQf73wewYi4TY+46nWNqAsaLmcAzZp6hhf
+         rKx8QI8TvivVTFcmO5aKLZ4WNhqXyoQfYtFuyKWg+YcZpOfTq73XX2akRXt+J9wApPu8
+         MC0lEi9TY2fqfgwV+ZSpBw6WDXxADllzAQMsIXe9DwsswGNZ2mzXcztQhW/xjEVhMh3C
+         rUqwCyjOXXOoq70xG0Cuyr090lnzaqLnRQTjGUNOHN2087r7busjG8st/oB1k8dGlyxE
+         2UXg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=dqtzOY0jRzHswbuk3NCKVui1FUN95X1ufg/ByHbCwiA=;
+        b=Ub4YrPABE3ItfIayGZ+WF9Hqsd0Kivby8G62uPpnQ4eTjpZaGUoYgCbULabKFlMwh1
+         o9xGRerbTSP7VtL3b5VKiwPeyrmY5+/JFox+WhU1v4eZhurMesoIwrsfCFW9BbrZ2J5G
+         lSPeUPqE2yfRkipwctZ11eKuHWjuEhUd6zrHfL6hiLCWasyK3WOShugfIiCxCMouf7M5
+         GhWyY5CW63h++3L46mJBBHcYZVpOPDol12zVj7FYkJqbXDwn+2Rmzm8tlABYdlv/L5pW
+         g4BCMrmNNfCiaFQhxg3t+sBcFEqMoAFQ5J0DcglHuFQuBhthvtwda5rtGRkgB+oKQqkA
+         2T3Q==
+X-Gm-Message-State: AOAM532F7c7NTxTRvsSL79F07RB9vrowpBaxAxRoZ3JweBVyRNdcaH2o
+        8kVruKF5tHXVC1WgyG5hUNuYULcqv23yj9zXrUkvDL1suek=
+X-Google-Smtp-Source: ABdhPJzSdlp4LmjeSvJwJBufIxwjvrUtScWUsPnm7QAiWyf4hk3Y1l68TDRYYZZwZ4qnTwxleWGhLBvVwT/QUIGP/+I=
+X-Received: by 2002:a25:df82:: with SMTP id w124mr8623705ybg.347.1607117056936;
+ Fri, 04 Dec 2020 13:24:16 -0800 (PST)
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
- definitions=2020-12-04_12:2020-12-04,2020-12-04 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 phishscore=0
- lowpriorityscore=0 impostorscore=0 adultscore=0 suspectscore=0
- malwarescore=0 clxscore=1015 spamscore=0 bulkscore=0 mlxlogscore=273
- priorityscore=1501 mlxscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2009150000 definitions=main-2012040121
-X-FB-Internal: deliver
+References: <20201204212014.2983374-1-andrii@kernel.org>
+In-Reply-To: <20201204212014.2983374-1-andrii@kernel.org>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Fri, 4 Dec 2020 13:24:05 -0800
+Message-ID: <CAEf4BzYaLC42R3dTs29ZqvaBOCkdKL0QtY-2vN8HwpOj=Vczcg@mail.gmail.com>
+Subject: Re: [PATCH dwarves] rpm: fix changelog date
+To:     Andrii Nakryiko <andrii@kernel.org>
+Cc:     dwarves@vger.kernel.org,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Kernel Team <kernel-team@fb.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-It causes errors when trying to import 1.19 version.
+On Fri, Dec 4, 2020 at 1:20 PM Andrii Nakryiko <andrii@kernel.org> wrote:
+>
+> It causes errors when trying to import 1.19 version.
+>
+> Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+> ---
+>  rpm/SPECS/dwarves.spec | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/rpm/SPECS/dwarves.spec b/rpm/SPECS/dwarves.spec
+> index 9232002ccd28..693a9da19c82 100644
+> --- a/rpm/SPECS/dwarves.spec
+> +++ b/rpm/SPECS/dwarves.spec
+> @@ -275,7 +275,7 @@ rm -Rf %{buildroot}
+>  * Sat Nov 20 2010 Arnaldo Carvalho de Melo <acme@redhat.com> - 1.9-1
+>  - New release
+>
+> -* Tue Feb 08 2011 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.8-2
+> +* Tue Feb 08 2010 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.8-2
 
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
----
- rpm/SPECS/dwarves.spec | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Arnaldo, would it be possible to re-generate RPM with this fix? I
+currently can't import pahole 1.19 due to this problem.
 
-diff --git a/rpm/SPECS/dwarves.spec b/rpm/SPECS/dwarves.spec
-index 9232002ccd28..693a9da19c82 100644
---- a/rpm/SPECS/dwarves.spec
-+++ b/rpm/SPECS/dwarves.spec
-@@ -275,7 +275,7 @@ rm -Rf %{buildroot}
- * Sat Nov 20 2010 Arnaldo Carvalho de Melo <acme@redhat.com> - 1.9-1
- - New release
- 
--* Tue Feb 08 2011 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.8-2
-+* Tue Feb 08 2010 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.8-2
- - Rebuilt for https://fedoraproject.org/wiki/Fedora_15_Mass_Rebuild
- 
- * Fri Dec  4 2009 Arnaldo Carvalho de Melo <acme@redhat.com> - 1.8-1
--- 
-2.24.1
-
+>  - Rebuilt for https://fedoraproject.org/wiki/Fedora_15_Mass_Rebuild
+>
+>  * Fri Dec  4 2009 Arnaldo Carvalho de Melo <acme@redhat.com> - 1.8-1
+> --
+> 2.24.1
+>
