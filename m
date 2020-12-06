@@ -2,109 +2,114 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EF35CC433FE
-	for <linux-dwarves@archiver.kernel.org>; Fri,  4 Dec 2020 23:14:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C2408C433FE
+	for <linux-dwarves@archiver.kernel.org>; Sun,  6 Dec 2020 17:37:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8CACC2078D
-	for <linux-dwarves@archiver.kernel.org>; Fri,  4 Dec 2020 23:14:49 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 85454230F9
+	for <linux-dwarves@archiver.kernel.org>; Sun,  6 Dec 2020 17:37:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726061AbgLDXOt (ORCPT
+        id S1726641AbgLFRhV (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Fri, 4 Dec 2020 18:14:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34052 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725985AbgLDXOt (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Fri, 4 Dec 2020 18:14:49 -0500
-Received: from mail-yb1-xb42.google.com (mail-yb1-xb42.google.com [IPv6:2607:f8b0:4864:20::b42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9651C0613D1
-        for <dwarves@vger.kernel.org>; Fri,  4 Dec 2020 15:14:08 -0800 (PST)
-Received: by mail-yb1-xb42.google.com with SMTP id r127so6948074yba.10
-        for <dwarves@vger.kernel.org>; Fri, 04 Dec 2020 15:14:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=TN9Rq5K01ZU+C0MyKy1KxysvkMs1xM8xbPIXCT8rM9I=;
-        b=IoCE0bpJoJH61FQoNYotXRUM2CAqWDwD+iD7qzRmIGxsK4NUPPszgtYHB3af0rfAoE
-         2uJVZcqsXojoCxDe1Qpx18+dN4ZoIfb9ZXpoUOcVeLzQGLaNKRJiI26kij6wy8Tc5u+Z
-         XGhX+J4/nPT1xLcOvZKY/ll0I+U/sB1nQDCUorNVh0V2qJG/SrUs3OYmgVhzbGGc6vsG
-         OPUUaPlF5R9iNfhpmGAqbC13v9P78rrQ6WyL01B5CMYM5yt8RmlILwmhmDJojp0UkWSR
-         70MXixdOgMzIBfV9EAmZiO3PxzxsRQZWbiJttPFfHU9iIPR/A8EmM3ExQVRh99hd/eAP
-         fWng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=TN9Rq5K01ZU+C0MyKy1KxysvkMs1xM8xbPIXCT8rM9I=;
-        b=H5Uu9pYMVJBwmqTYlDrfcBaq3jgxVHzW3kf+saBVZhamZhzKmYn2vBIUrvXGIeRpbs
-         mAxfZLpovnixHLx5Hlrzdge6wMSwJIOAbMc3HOZimW22sCsda2x+us3FHjiYWqDQgFlM
-         ht/VIX5tgRdBwYGQVqt+jeWFdctBG6VXVRZQ/AlRAJ1p04MEAWxuNoETTCyBF7bCm+2W
-         osY7vi/4hFoU3b4ZTvEsiygqP5y+775t4DrwWRS6CCsNq7MpKkMJaZrPejL/e4B/kvtF
-         eM+Y+OtVk8Atm19z2yLPiuOrMObsX4rJOT2vvQ/cEnp9wel92yP8wt1pCjiAnNAHdIEU
-         BJQg==
-X-Gm-Message-State: AOAM532HsvnGhXLBqBkQKIF7YJ06m8F1RjjT8ium3iOTVpyvWXdWxn7R
-        mDWCsPcc7Sm8AOHOYiEypZpxNgvXSFsE3OG3CWM=
-X-Google-Smtp-Source: ABdhPJzALLE7/ujAWhnpp16RWfVAz1tFb/wzoYwJEQINMzHcwbqPbuJelmRQTm3iRU0FXZ850b5nmZtNYATM6i7NTyE=
-X-Received: by 2002:a25:6a05:: with SMTP id f5mr5674444ybc.459.1607123648001;
- Fri, 04 Dec 2020 15:14:08 -0800 (PST)
+        Sun, 6 Dec 2020 12:37:21 -0500
+Received: from [83.220.44.62] ([83.220.44.62]:40476 "EHLO beacon.altlinux.org"
+        rhost-flags-FAIL-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726609AbgLFRhV (ORCPT <rfc822;dwarves@vger.kernel.org>);
+        Sun, 6 Dec 2020 12:37:21 -0500
+X-Greylist: delayed 587 seconds by postgrey-1.27 at vger.kernel.org; Sun, 06 Dec 2020 12:37:19 EST
+Received: by beacon.altlinux.org (Postfix, from userid 950)
+        id 293DB481DFB; Sun,  6 Dec 2020 20:26:56 +0300 (MSK)
+From:   Vitaly Chikunov <vt@altlinux.org>
+To:     Arnaldo Carvalho de Melo <acme@redhat.com>, bpf@vger.kernel.org,
+        dwarves@vger.kernel.org
+Cc:     Vitaly Chikunov <vt@altlinux.org>
+Subject: [PATCH] dwarves: Fix compilation on 32-bit architectures
+Date:   Sun,  6 Dec 2020 20:26:17 +0300
+Message-Id: <20201206172617.9751-1-vt@altlinux.org>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-References: <20201204212014.2983374-1-andrii@kernel.org> <20201204230128.GA122569@kernel.org>
-In-Reply-To: <20201204230128.GA122569@kernel.org>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Fri, 4 Dec 2020 15:13:57 -0800
-Message-ID: <CAEf4BzaQAYWiLF+OZt98FTfNvtpj==0wTdpuus_3HHE9fbpegg@mail.gmail.com>
-Subject: Re: [PATCH dwarves] rpm: fix changelog date
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Andrii Nakryiko <andrii@kernel.org>, dwarves@vger.kernel.org,
-        Kernel Team <kernel-team@fb.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-On Fri, Dec 4, 2020 at 3:01 PM Arnaldo Carvalho de Melo <acme@kernel.org> wrote:
->
-> Em Fri, Dec 04, 2020 at 01:20:14PM -0800, Andrii Nakryiko escreveu:
-> > It causes errors when trying to import 1.19 version.
->
-> Thanks, applied, will go thru the fixes from Jiri that you already acked
-> and probably do a quick v1.20.
+Replace `%lx' for addr (uint64_t) with PRIx64. `%ld' for seek_bytes
+(off_t) is replaced with PRIx64 too, likewise in other places it's
+printed.
 
-Quick 1.20 with module static functions works for me even better!
-Please see the RPM spec bug on the other thread, I think we finally
-figured out why libdwarves1 was never upgraded properly.
+Fixes these error messages on i586 and arm-32:
 
->
-> - Arnaldo
->
-> > Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
-> > ---
-> >  rpm/SPECS/dwarves.spec | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/rpm/SPECS/dwarves.spec b/rpm/SPECS/dwarves.spec
-> > index 9232002ccd28..693a9da19c82 100644
-> > --- a/rpm/SPECS/dwarves.spec
-> > +++ b/rpm/SPECS/dwarves.spec
-> > @@ -275,7 +275,7 @@ rm -Rf %{buildroot}
-> >  * Sat Nov 20 2010 Arnaldo Carvalho de Melo <acme@redhat.com> - 1.9-1
-> >  - New release
-> >
-> > -* Tue Feb 08 2011 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.8-2
-> > +* Tue Feb 08 2010 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.8-2
-> >  - Rebuilt for https://fedoraproject.org/wiki/Fedora_15_Mass_Rebuild
-> >
-> >  * Fri Dec  4 2009 Arnaldo Carvalho de Melo <acme@redhat.com> - 1.8-1
-> > --
-> > 2.24.1
-> >
->
-> --
->
-> - Arnaldo
+  btf_encoder.c:445:52: error: format '%lx' expects argument of type 'long unsigned int', but argument 3 has type 'uint64_t'
+  btf_encoder.c:687:54: error: format '%lx' expects argument of type 'long unsigned int', but argument 4 has type 'uint64_t'
+  btf_encoder.c:695:71: error: format '%lx' expects argument of type 'long unsigned int', but argument 4 has type 'uint64_t'
+  btf_encoder.c:708:88: error: format '%lx' expects argument of type 'long unsigned int', but argument 4 has type 'uint64_t'
+  pahole.c:1872:20: error: format '%ld' expects argument of type 'long int', but argument 4 has type 'off_t'
+
+Signed-off-by: Vitaly Chikunov <vt@altlinux.org>
+Cc: bpf@vger.kernel.org
+Cc: dwarves@vger.kernel.org
+---
+ btf_encoder.c | 8 ++++----
+ pahole.c      | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/btf_encoder.c b/btf_encoder.c
+index c40f059..feb1023 100644
+--- a/btf_encoder.c
++++ b/btf_encoder.c
+@@ -442,7 +442,7 @@ static int collect_percpu_var(struct btf_elf *btfe, GElf_Sym *sym)
+ 	}
+ 
+ 	if (btf_elf__verbose)
+-		printf("Found per-CPU symbol '%s' at address 0x%lx\n", sym_name, addr);
++		printf("Found per-CPU symbol '%s' at address 0x%" PRIx64 "\n", sym_name, addr);
+ 
+ 	if (percpu_var_cnt == MAX_PERCPU_VAR_CNT) {
+ 		fprintf(stderr, "Reached the limit of per-CPU variables: %d\n",
+@@ -684,7 +684,7 @@ int cu__encode_btf(struct cu *cu, int verbose, bool force,
+ 		linkage = var->external ? BTF_VAR_GLOBAL_ALLOCATED : BTF_VAR_STATIC;
+ 
+ 		if (btf_elf__verbose) {
+-			printf("Variable '%s' from CU '%s' at address 0x%lx encoded\n",
++			printf("Variable '%s' from CU '%s' at address 0x%" PRIx64 " encoded\n",
+ 			       name, cu->name, addr);
+ 		}
+ 
+@@ -692,7 +692,7 @@ int cu__encode_btf(struct cu *cu, int verbose, bool force,
+ 		id = btf_elf__add_var_type(btfe, type, name, linkage);
+ 		if (id < 0) {
+ 			err = -1;
+-			fprintf(stderr, "error: failed to encode variable '%s' at addr 0x%lx\n",
++			fprintf(stderr, "error: failed to encode variable '%s' at addr 0x%" PRIx64 "\n",
+ 			        name, addr);
+ 			break;
+ 		}
+@@ -705,7 +705,7 @@ int cu__encode_btf(struct cu *cu, int verbose, bool force,
+ 		id = btf_elf__add_var_secinfo(&btfe->percpu_secinfo, id, offset, size);
+ 		if (id < 0) {
+ 			err = -1;
+-			fprintf(stderr, "error: failed to encode section info for variable '%s' at addr 0x%lx\n",
++			fprintf(stderr, "error: failed to encode section info for variable '%s' at addr 0x%" PRIx64 "\n",
+ 			        name, addr);
+ 			break;
+ 		}
+diff --git a/pahole.c b/pahole.c
+index fe8d2cd..4a34ba5 100644
+--- a/pahole.c
++++ b/pahole.c
+@@ -1869,7 +1869,7 @@ static int prototype__stdio_fprintf_value(struct prototype *prototype, struct ty
+ 
+ 		// Since we're reading stdin, we need to account for what we already read
+ 		if (seek_bytes < total_read_bytes) {
+-			fprintf(stderr, "pahole: can't go back in stdin, already read %" PRIu64 " bytes, can't go to position %ld\n",
++			fprintf(stderr, "pahole: can't go back in stdin, already read %" PRIu64 " bytes, can't go to position %#" PRIx64 "\n",
+ 					total_read_bytes, seek_bytes);
+ 			return -ENOMEM;
+ 		}
+-- 
+2.25.4
+
