@@ -2,114 +2,94 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C2408C433FE
-	for <linux-dwarves@archiver.kernel.org>; Sun,  6 Dec 2020 17:37:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 101EAC4361B
+	for <linux-dwarves@archiver.kernel.org>; Mon,  7 Dec 2020 15:45:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 85454230F9
-	for <linux-dwarves@archiver.kernel.org>; Sun,  6 Dec 2020 17:37:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D4A3C23731
+	for <linux-dwarves@archiver.kernel.org>; Mon,  7 Dec 2020 15:45:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726641AbgLFRhV (ORCPT
+        id S1725814AbgLGPpw (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Sun, 6 Dec 2020 12:37:21 -0500
-Received: from [83.220.44.62] ([83.220.44.62]:40476 "EHLO beacon.altlinux.org"
-        rhost-flags-FAIL-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726609AbgLFRhV (ORCPT <rfc822;dwarves@vger.kernel.org>);
-        Sun, 6 Dec 2020 12:37:21 -0500
-X-Greylist: delayed 587 seconds by postgrey-1.27 at vger.kernel.org; Sun, 06 Dec 2020 12:37:19 EST
-Received: by beacon.altlinux.org (Postfix, from userid 950)
-        id 293DB481DFB; Sun,  6 Dec 2020 20:26:56 +0300 (MSK)
-From:   Vitaly Chikunov <vt@altlinux.org>
-To:     Arnaldo Carvalho de Melo <acme@redhat.com>, bpf@vger.kernel.org,
-        dwarves@vger.kernel.org
-Cc:     Vitaly Chikunov <vt@altlinux.org>
-Subject: [PATCH] dwarves: Fix compilation on 32-bit architectures
-Date:   Sun,  6 Dec 2020 20:26:17 +0300
-Message-Id: <20201206172617.9751-1-vt@altlinux.org>
-X-Mailer: git-send-email 2.29.2
+        Mon, 7 Dec 2020 10:45:52 -0500
+Received: from mail.kernel.org ([198.145.29.99]:41870 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725804AbgLGPpw (ORCPT <rfc822;dwarves@vger.kernel.org>);
+        Mon, 7 Dec 2020 10:45:52 -0500
+Date:   Mon, 7 Dec 2020 12:45:20 -0300
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1607355911;
+        bh=aO/krXU+fHLMFIel22duskcphOTHYkgVsU9GL1yexRM=;
+        h=From:To:Cc:Subject:References:In-Reply-To:From;
+        b=hjXEs4Veu8sAHrKA6u71/2cgIzA4Fg73eV9mMSvIr2hiRXDjz8V0be49KYtcnxybj
+         yNrK9nXMqlqUWtOYMupth9MdgpZFvnTWny/TyVczbUFb2+rzg/8sWl/vtGOawpp3jn
+         1zGTFSgNDUhO7LZbfPVN7LV9d8n6FtnNs0I7X4Sr7oQFLQR1m+nefrzuygarKFCHOE
+         qwMKihrVkq0og5MynAVtdeVj6vEehQfITRDSFiADfxkHFqY51fBrahPjLyS7Dhpdw+
+         ETOSU59awxBw9Ybqhm3o396RDDOaKKfWQ06wuChlUs1iKVZq9k0EoZMDOgffC6HG0b
+         2F+UD7FBQqnkQ==
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Jiri Olsa <jolsa@redhat.com>
+Cc:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Jiri Olsa <jolsa@kernel.org>, dwarves@vger.kernel.org,
+        bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andriin@fb.com>, Yonghong Song <yhs@fb.com>,
+        Hao Luo <haoluo@google.com>
+Subject: Re: [PATCH 2/3] btf_encoder: Use address size based on ELF's class
+Message-ID: <20201207154520.GA125383@kernel.org>
+References: <20201203220625.3704363-1-jolsa@kernel.org>
+ <20201203220625.3704363-3-jolsa@kernel.org>
+ <CAEf4BzbdB4DUJ2BKVsVdpcZHunNxb_6FvAWOFt_be=81Jyxmnw@mail.gmail.com>
+ <20201203233750.GG3613628@krava>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201203233750.GG3613628@krava>
+X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-Replace `%lx' for addr (uint64_t) with PRIx64. `%ld' for seek_bytes
-(off_t) is replaced with PRIx64 too, likewise in other places it's
-printed.
+Em Fri, Dec 04, 2020 at 12:37:50AM +0100, Jiri Olsa escreveu:
+> On Thu, Dec 03, 2020 at 03:22:18PM -0800, Andrii Nakryiko wrote:
+> > On Thu, Dec 3, 2020 at 2:08 PM Jiri Olsa <jolsa@kernel.org> wrote:
+> > >
+> > > We can't assume the address size is always size of unsigned
+> > > long, we have to use directly the ELF's address size.
+> > >
+> > > Changing addrs array to __u64 and convert 32 bit address
+> > > values when copying from ELF section.
+> > >
+> > > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+> > > ---
+> > 
+> > It looks ok to me, but I didn't expect that changes would be so
+> > numerous... Makes me wonder if pahole ever supported working with ELF
+> > files of different bitness. I'll defer to Arnaldo to make a call on
+> > whether this is necessary.
+> 
+> so to test this I built 32bit vmlinux and used 64bit pahole
+> to generate BTF data on both vmlinux and modules, which I
+> thought was valid use case
 
-Fixes these error messages on i586 and arm-32:
+It is valid, yeah.
 
-  btf_encoder.c:445:52: error: format '%lx' expects argument of type 'long unsigned int', but argument 3 has type 'uint64_t'
-  btf_encoder.c:687:54: error: format '%lx' expects argument of type 'long unsigned int', but argument 4 has type 'uint64_t'
-  btf_encoder.c:695:71: error: format '%lx' expects argument of type 'long unsigned int', but argument 4 has type 'uint64_t'
-  btf_encoder.c:708:88: error: format '%lx' expects argument of type 'long unsigned int', but argument 4 has type 'uint64_t'
-  pahole.c:1872:20: error: format '%ld' expects argument of type 'long int', but argument 4 has type 'off_t'
+- Arnaldo
+ 
+> jirka
+> 
+> > 
+> > >  btf_encoder.c | 24 +++++++++++++++++-------
+> > >  1 file changed, 17 insertions(+), 7 deletions(-)
+> > >
+> > 
+> > [...]
+> > 
+> 
 
-Signed-off-by: Vitaly Chikunov <vt@altlinux.org>
-Cc: bpf@vger.kernel.org
-Cc: dwarves@vger.kernel.org
----
- btf_encoder.c | 8 ++++----
- pahole.c      | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
-
-diff --git a/btf_encoder.c b/btf_encoder.c
-index c40f059..feb1023 100644
---- a/btf_encoder.c
-+++ b/btf_encoder.c
-@@ -442,7 +442,7 @@ static int collect_percpu_var(struct btf_elf *btfe, GElf_Sym *sym)
- 	}
- 
- 	if (btf_elf__verbose)
--		printf("Found per-CPU symbol '%s' at address 0x%lx\n", sym_name, addr);
-+		printf("Found per-CPU symbol '%s' at address 0x%" PRIx64 "\n", sym_name, addr);
- 
- 	if (percpu_var_cnt == MAX_PERCPU_VAR_CNT) {
- 		fprintf(stderr, "Reached the limit of per-CPU variables: %d\n",
-@@ -684,7 +684,7 @@ int cu__encode_btf(struct cu *cu, int verbose, bool force,
- 		linkage = var->external ? BTF_VAR_GLOBAL_ALLOCATED : BTF_VAR_STATIC;
- 
- 		if (btf_elf__verbose) {
--			printf("Variable '%s' from CU '%s' at address 0x%lx encoded\n",
-+			printf("Variable '%s' from CU '%s' at address 0x%" PRIx64 " encoded\n",
- 			       name, cu->name, addr);
- 		}
- 
-@@ -692,7 +692,7 @@ int cu__encode_btf(struct cu *cu, int verbose, bool force,
- 		id = btf_elf__add_var_type(btfe, type, name, linkage);
- 		if (id < 0) {
- 			err = -1;
--			fprintf(stderr, "error: failed to encode variable '%s' at addr 0x%lx\n",
-+			fprintf(stderr, "error: failed to encode variable '%s' at addr 0x%" PRIx64 "\n",
- 			        name, addr);
- 			break;
- 		}
-@@ -705,7 +705,7 @@ int cu__encode_btf(struct cu *cu, int verbose, bool force,
- 		id = btf_elf__add_var_secinfo(&btfe->percpu_secinfo, id, offset, size);
- 		if (id < 0) {
- 			err = -1;
--			fprintf(stderr, "error: failed to encode section info for variable '%s' at addr 0x%lx\n",
-+			fprintf(stderr, "error: failed to encode section info for variable '%s' at addr 0x%" PRIx64 "\n",
- 			        name, addr);
- 			break;
- 		}
-diff --git a/pahole.c b/pahole.c
-index fe8d2cd..4a34ba5 100644
---- a/pahole.c
-+++ b/pahole.c
-@@ -1869,7 +1869,7 @@ static int prototype__stdio_fprintf_value(struct prototype *prototype, struct ty
- 
- 		// Since we're reading stdin, we need to account for what we already read
- 		if (seek_bytes < total_read_bytes) {
--			fprintf(stderr, "pahole: can't go back in stdin, already read %" PRIu64 " bytes, can't go to position %ld\n",
-+			fprintf(stderr, "pahole: can't go back in stdin, already read %" PRIu64 " bytes, can't go to position %#" PRIx64 "\n",
- 					total_read_bytes, seek_bytes);
- 			return -ENOMEM;
- 		}
 -- 
-2.25.4
 
+- Arnaldo
