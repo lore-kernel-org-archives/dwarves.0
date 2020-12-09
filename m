@@ -2,134 +2,152 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1F9D4C4361B
-	for <linux-dwarves@archiver.kernel.org>; Mon,  7 Dec 2020 15:56:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5B685C4361B
+	for <linux-dwarves@archiver.kernel.org>; Wed,  9 Dec 2020 20:55:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E02FF23731
-	for <linux-dwarves@archiver.kernel.org>; Mon,  7 Dec 2020 15:56:30 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2505B23B99
+	for <linux-dwarves@archiver.kernel.org>; Wed,  9 Dec 2020 20:55:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726489AbgLGP4P (ORCPT
+        id S1728070AbgLIUyo (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Mon, 7 Dec 2020 10:56:15 -0500
-Received: from mail.kernel.org ([198.145.29.99]:47134 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726016AbgLGP4P (ORCPT <rfc822;dwarves@vger.kernel.org>);
-        Mon, 7 Dec 2020 10:56:15 -0500
-Date:   Mon, 7 Dec 2020 12:55:42 -0300
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1607356533;
-        bh=nqDEPecy5hi29ZHs/FJP/bg62yy47PGkG1GdQfuSPks=;
-        h=From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tUAcLQkQGu5wMDjHWx8I+3IE2bX/nAeQ/fa3F/kvuRv/DvZjg50gkvFY0LDUmdT6G
-         tVM5uwk7rHD7ytTipZnF+nHHrzCcsZfaBVmL+xlbnRgx1jz5/zaGWGYsFOdGQmc4KC
-         jzBbg2GsfTQ++WZacFXFHD1bV5EVFCra7OiUvtttzZZRm73ABnHPeYhogULAfFAlcZ
-         R1804TRs8VcvNJXliK4VyHEUBn3w2WdVTppeKEdedoTNjUUfxN47zG4iL01oGJE1wQ
-         xMSbSTKVlPG1dgjJ6ycMKjPe7Q8NcqoiI907dmNO0O5uLN2vLG785YpWYfbrZiGsG4
-         vCCx0u3m8PN/Q==
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Vitaly Chikunov <vt@altlinux.org>
-Cc:     Arnaldo Carvalho de Melo <acme@redhat.com>, bpf@vger.kernel.org,
-        dwarves@vger.kernel.org
-Subject: Re: [PATCH] dwarves: Fix compilation on 32-bit architectures
-Message-ID: <20201207155542.GC125383@kernel.org>
-References: <20201206172617.9751-1-vt@altlinux.org>
+        Wed, 9 Dec 2020 15:54:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39566 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726954AbgLIUyg (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Wed, 9 Dec 2020 15:54:36 -0500
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD70BC0613CF;
+        Wed,  9 Dec 2020 12:53:55 -0800 (PST)
+Received: by mail-yb1-xb36.google.com with SMTP id t13so2492039ybq.7;
+        Wed, 09 Dec 2020 12:53:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=sIdtAqgo/qYzQQgMr74Yx6K7gOdyN5rs5fdPHporako=;
+        b=pa7B1ypTUnL+HVbXCZlmy4SArRz+7F/m7IcmS+gu6U0/E9G3OSLe2bnbHfB4DlB+F5
+         y7e88ATM+Hb/ppsG6FHe/ocUU/S7KeJbVRPjQSh6johPGZYx44Ab63tT4zIwlxRujIVL
+         ZXmsBdaS8kKm8aqSHaDot1xPIdci/r2ELfmAFI+McgwdbMMQC/vY8sPB+YNL6TPyDggu
+         cW8HfCt6KUUL4qH93PXqK7r1aLaYCo9/a+ISFEEaln+zpk93SaQbhzWtKmILFCMcv7zR
+         2n1Gka7dySsuy3LCJHUihdlLn8L3SZXhjlD36aIqSTXAEasBSMgyejLq1qrOpSMrmKWI
+         lnmg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=sIdtAqgo/qYzQQgMr74Yx6K7gOdyN5rs5fdPHporako=;
+        b=pPPf0sgPBha5FfS7V24DWzofxKeumezd/5+9grIc+g+0rUiuj/8gSPSLagUXfP4HIN
+         GttgY2budP4HawWwlQ+EMrM+BnVwh1t4gjZNaotgRzF6YYAg64BIlTKqjZs1p1QKqFpv
+         6b1qdm1KUMHh6nFoO19NA6tWqrET6YFSKFyG063J5+B1HVkaEZBurgl3VwpISzu9Mgyh
+         +Mc6Eam9D5phXSYmTxqmqs+x/Izle0l+IAUBFUotU/Q+b+q2mmt10E/gsCarnrrzq0nw
+         EPRqbHjkUQVd8Y1I9aQhSx+PGcRPIg2n9j2e430fV6URxIQCI0QeigCshzwK6gWy1N3y
+         wxCw==
+X-Gm-Message-State: AOAM5320be/BD4xwiXtfxSWMCPjsAjae2WzYiiRqOe9LPfkd9zxiqvGn
+        1rYnPSjx6+w++K4dld9RVf2AkY/5GG/890BG9c8jnDlOVvnM6A==
+X-Google-Smtp-Source: ABdhPJzRXpI3JJHy6JgWfq6aHZ0AA/xxcQ0vLFSWRMhEzpM9Cg3U2Lpfqh6FpMgbfounjpTNKsn7212MhbL+zvRLvTw=
+X-Received: by 2002:a25:c7c6:: with SMTP id w189mr6339865ybe.403.1607547234901;
+ Wed, 09 Dec 2020 12:53:54 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201206172617.9751-1-vt@altlinux.org>
-X-Url:  http://acmel.wordpress.com
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Wed, 9 Dec 2020 12:53:44 -0800
+Message-ID: <CAEf4BzZWabv_hExaANQyQ71L2JHYqXaT4hFj52w-poWoVYWKqQ@mail.gmail.com>
+Subject: Per-CPU variables in modules and pahole
+To:     bpf <bpf@vger.kernel.org>, dwarves@vger.kernel.org,
+        Jiri Olsa <jolsa@kernel.org>, Hao Luo <haoluo@google.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-Em Sun, Dec 06, 2020 at 08:26:17PM +0300, Vitaly Chikunov escreveu:
-> Replace `%lx' for addr (uint64_t) with PRIx64. `%ld' for seek_bytes
-> (off_t) is replaced with PRIx64 too, likewise in other places it's
-> printed.
-> 
-> Fixes these error messages on i586 and arm-32:
+Hi,
 
-Thanks, I had noticed this when I last did a scratch build on koji and
-was going to fix it, now I don't need to do it, thanks! :-)
+I'm working on supporting per-CPU symbols in BPF/libbpf, and the
+prerequisite for that is BTF data for .data..percpu data section and
+variables inside that.
 
-- Arnaldo
- 
->   btf_encoder.c:445:52: error: format '%lx' expects argument of type 'long unsigned int', but argument 3 has type 'uint64_t'
->   btf_encoder.c:687:54: error: format '%lx' expects argument of type 'long unsigned int', but argument 4 has type 'uint64_t'
->   btf_encoder.c:695:71: error: format '%lx' expects argument of type 'long unsigned int', but argument 4 has type 'uint64_t'
->   btf_encoder.c:708:88: error: format '%lx' expects argument of type 'long unsigned int', but argument 4 has type 'uint64_t'
->   pahole.c:1872:20: error: format '%ld' expects argument of type 'long int', but argument 4 has type 'off_t'
-> 
-> Signed-off-by: Vitaly Chikunov <vt@altlinux.org>
-> Cc: bpf@vger.kernel.org
-> Cc: dwarves@vger.kernel.org
-> ---
->  btf_encoder.c | 8 ++++----
->  pahole.c      | 2 +-
->  2 files changed, 5 insertions(+), 5 deletions(-)
-> 
-> diff --git a/btf_encoder.c b/btf_encoder.c
-> index c40f059..feb1023 100644
-> --- a/btf_encoder.c
-> +++ b/btf_encoder.c
-> @@ -442,7 +442,7 @@ static int collect_percpu_var(struct btf_elf *btfe, GElf_Sym *sym)
->  	}
->  
->  	if (btf_elf__verbose)
-> -		printf("Found per-CPU symbol '%s' at address 0x%lx\n", sym_name, addr);
-> +		printf("Found per-CPU symbol '%s' at address 0x%" PRIx64 "\n", sym_name, addr);
->  
->  	if (percpu_var_cnt == MAX_PERCPU_VAR_CNT) {
->  		fprintf(stderr, "Reached the limit of per-CPU variables: %d\n",
-> @@ -684,7 +684,7 @@ int cu__encode_btf(struct cu *cu, int verbose, bool force,
->  		linkage = var->external ? BTF_VAR_GLOBAL_ALLOCATED : BTF_VAR_STATIC;
->  
->  		if (btf_elf__verbose) {
-> -			printf("Variable '%s' from CU '%s' at address 0x%lx encoded\n",
-> +			printf("Variable '%s' from CU '%s' at address 0x%" PRIx64 " encoded\n",
->  			       name, cu->name, addr);
->  		}
->  
-> @@ -692,7 +692,7 @@ int cu__encode_btf(struct cu *cu, int verbose, bool force,
->  		id = btf_elf__add_var_type(btfe, type, name, linkage);
->  		if (id < 0) {
->  			err = -1;
-> -			fprintf(stderr, "error: failed to encode variable '%s' at addr 0x%lx\n",
-> +			fprintf(stderr, "error: failed to encode variable '%s' at addr 0x%" PRIx64 "\n",
->  			        name, addr);
->  			break;
->  		}
-> @@ -705,7 +705,7 @@ int cu__encode_btf(struct cu *cu, int verbose, bool force,
->  		id = btf_elf__add_var_secinfo(&btfe->percpu_secinfo, id, offset, size);
->  		if (id < 0) {
->  			err = -1;
-> -			fprintf(stderr, "error: failed to encode section info for variable '%s' at addr 0x%lx\n",
-> +			fprintf(stderr, "error: failed to encode section info for variable '%s' at addr 0x%" PRIx64 "\n",
->  			        name, addr);
->  			break;
->  		}
-> diff --git a/pahole.c b/pahole.c
-> index fe8d2cd..4a34ba5 100644
-> --- a/pahole.c
-> +++ b/pahole.c
-> @@ -1869,7 +1869,7 @@ static int prototype__stdio_fprintf_value(struct prototype *prototype, struct ty
->  
->  		// Since we're reading stdin, we need to account for what we already read
->  		if (seek_bytes < total_read_bytes) {
-> -			fprintf(stderr, "pahole: can't go back in stdin, already read %" PRIu64 " bytes, can't go to position %ld\n",
-> +			fprintf(stderr, "pahole: can't go back in stdin, already read %" PRIu64 " bytes, can't go to position %#" PRIx64 "\n",
->  					total_read_bytes, seek_bytes);
->  			return -ENOMEM;
->  		}
-> -- 
-> 2.25.4
-> 
+Turns out, pahole doesn't currently emit any BTF information for such
+variables in kernel modules. And the reason why is quite confusing and
+I can't figure it out myself, so was hoping someone else might be able
+to help.
 
--- 
+To repro, you can take latest bpf-next tree and add this to
+bpf_testmod/bpf_testmod.c inside selftests/bpf:
 
-- Arnaldo
+$ git diff bpf_testmod/bpf_testmod.c
+      diff --git
+a/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
+b/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
+index 2df19d73ca49..b2086b798019 100644
+--- a/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
++++ b/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
+@@ -3,6 +3,7 @@
+ #include <linux/error-injection.h>
+ #include <linux/init.h>
+ #include <linux/module.h>
++#include <linux/percpu-defs.h>
+ #include <linux/sysfs.h>
+ #include <linux/tracepoint.h>
+ #include "bpf_testmod.h"
+@@ -10,6 +11,10 @@
+ #define CREATE_TRACE_POINTS
+ #include "bpf_testmod-events.h"
+
++DEFINE_PER_CPU(int, bpf_testmod_ksym_dummy1) = -1;
++DEFINE_PER_CPU(int, bpf_testmod_ksym_percpu) = 123;
++DEFINE_PER_CPU(int, bpf_testmod_ksym_dummy2) = -1;
++
+ noinline ssize_t
+ bpf_testmod_test_read(struct file *file, struct kobject *kobj,
+                      struct bin_attribute *bin_attr,
+
+1. So the very first issue (that I'm going to ignore for now) is that
+if I just added bpf_testmod_ksym_percpu, it would get addr == 0 and
+would be ignored by the current pahole logic. So we need to fix that
+for modules. Adding dummy1 and dummy2 takes care of this for now,
+bpf_testmod_ksym_percpu has offset 4.
+
+2. Second issue is more interesting. Somehow, when pahole iterates
+over DWARF variables, the address of bpf_testmod_ksym_percpu is
+reported as 0x10e74, not 4. Which totally confuses pahole because
+according to ELF symbols, bpf_testmod_ksym_percpu symbol has value 4.
+I tracked this down to dwarf_getlocation() returning 10e74 as number
+field in expr.
+
+But this seems wrong, because when looking at DWARF:
+
+$ readelf -wi bpf_testmod.ko | grep bpf_testmod_ksym_percpu -B1 -A6
+ <1><fbc5>: Abbrev Number: 97 (DW_TAG_variable)
+    <fbc6>   DW_AT_name        : (indirect string, offset: 0x4afb):
+bpf_testmod_ksym_percpu
+    <fbca>   DW_AT_decl_file   : 5
+    <fbcb>   DW_AT_decl_line   : 15
+    <fbcc>   DW_AT_decl_column : 1
+    <fbcd>   DW_AT_type        : <0xce>
+    <fbd1>   DW_AT_external    : 1
+    <fbd1>   DW_AT_location    : 9 byte block: 3 4 0 0 0 0 0 0 0
+ (DW_OP_addr: 4)
+
+You can see that addr is actually 4.
+
+And ELF symbols agree:
+
+$ readelf -a bpf_testmod.ko | grep bpf_testmod_ksym_percpu
+   102: 0000000000000004     4 OBJECT  GLOBAL DEFAULT   33
+bpf_testmod_ksym_percpu
+
+
+I also can't seem to match 0x10e74 to anything in bpf_testmod.ko, no
+section or anything like that.
+
+So, help! Is this just a libdw bug? If yes, why don't we see it
+anywhere else? If not, what am I missing and how can we make pahole
+emit BTF data for variables in modules?
+
+Thanks!
+
+
+-- Andrii
