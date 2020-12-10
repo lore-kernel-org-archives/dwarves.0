@@ -2,144 +2,175 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 77F7AC433FE
-	for <linux-dwarves@archiver.kernel.org>; Thu, 10 Dec 2020 16:47:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AC211C433FE
+	for <linux-dwarves@archiver.kernel.org>; Thu, 10 Dec 2020 17:03:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4EFDC23B26
-	for <linux-dwarves@archiver.kernel.org>; Thu, 10 Dec 2020 16:47:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 60D65207A2
+	for <linux-dwarves@archiver.kernel.org>; Thu, 10 Dec 2020 17:03:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391159AbgLJQpG (ORCPT
+        id S2389857AbgLJRDJ (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Thu, 10 Dec 2020 11:45:06 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:42212 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2391891AbgLJQor (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Thu, 10 Dec 2020 11:44:47 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1607618601;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=2+HLti2s/wIrYv82ti7bMHxdppCBUMBAOmSNG3h3caw=;
-        b=Bb0rhAgUFVsGSw4SmrSgjhNNMeH7qpdWMRvLp6JnjDir8G4hrCVk8rKEpnyX04076PF0wT
-        lyRWRnOrKqcQCeIpeXMfQ4ETrAHLjvy/PHCZ3zFpiZYJCC9zxKrYDd18A3VQdSbE5lqMj0
-        1FACJSR9njLjBpM9nqfZKMJHfZo4/HQ=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-343-flDf6tVsPTutfE42m786pg-1; Thu, 10 Dec 2020 11:43:19 -0500
-X-MC-Unique: flDf6tVsPTutfE42m786pg-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id F09D915720;
-        Thu, 10 Dec 2020 16:43:17 +0000 (UTC)
-Received: from krava (unknown [10.40.192.193])
-        by smtp.corp.redhat.com (Postfix) with SMTP id 1C3166A252;
-        Thu, 10 Dec 2020 16:43:15 +0000 (UTC)
-Date:   Thu, 10 Dec 2020 17:43:15 +0100
-From:   Jiri Olsa <jolsa@redhat.com>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+        Thu, 10 Dec 2020 12:03:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56292 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732826AbgLJRC5 (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Thu, 10 Dec 2020 12:02:57 -0500
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D51FDC0613D6;
+        Thu, 10 Dec 2020 09:02:16 -0800 (PST)
+Received: by mail-yb1-xb34.google.com with SMTP id k78so5337267ybf.12;
+        Thu, 10 Dec 2020 09:02:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=EaYcvONBqP/ZnqqdQ38xcrKnElwc1CHM/ix5ks0e3Uk=;
+        b=CsPDP5ojpwt4CVXcGL/QMurn5dKSrext3W/8iIps3bwiisECqQQYuIU9h/KvirCijH
+         aTQbIa3M+dsoZOYfvBr/8+0HbxqCDD+42tNbUEpkUCa/QU3PZWOEWqUMsDHwG8PPBkQl
+         B0jbw9mwWSfcpIwzIqm7/3HM71w1RPcHQ3aNw8kE3zPq/Ir0MyRF2UtSmqcWenjZyRVz
+         9DT6+uKUdJLGleSyvM4diU3tjLG6Z6zAZr3M14DQbJak5FKLEMcBtEsL96aQK/NZMDnv
+         vfyjOMgV7DBtoHuy85Y8O5GL66TE0BBdxJn/eodqkYRtjf6caGTJQKNkTnkSNqdM2oMi
+         WvRA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=EaYcvONBqP/ZnqqdQ38xcrKnElwc1CHM/ix5ks0e3Uk=;
+        b=YuPWYbM1YJ7g8u8Bulvz22KNkZcbny77BSGRZemIuiypt0YYK4w7ouaUbgU7y2UBCg
+         mMsrovxIjxQK5VU+rv6F/tMaXzESx8B8mFQ055YZYsx/c1s/9JuEpC7nOQK/F3n1ObkM
+         WbTWDhi7UMOa7ihwEmsIV22lgjxcMy4nurftNs+VH38ByiGDG6EA0j+0ziMECbxADWbz
+         +ndEMY66BmvMJiIIp42uVm4istRlvfrB6er/1RMMOevYw8gy1F7I8GOolIEsnk5ZtpcL
+         qGZr3dn7pfjVzGUXVWmsfCsKww433qBoG1M4lzv2w38gl+iaLF3a0RS9O6qdJlylst5x
+         QllQ==
+X-Gm-Message-State: AOAM531Ww+JVpaAEgpR64s/boVR8+HIsyrml5C2icB6n7DDIY0K9DYG7
+        b6tVUsoIWqcwNdPd7ZqcS3SlVvr6vu7Efvzplr8/f73KicCOdw==
+X-Google-Smtp-Source: ABdhPJyM/295uVE8r+Z9+eQ9iQbSmfOxWH34/+Bh9g885d3jPCiuEAcnMLRUf1WDZEPTFulYfocMroBphmYBoX8MofI=
+X-Received: by 2002:a25:f505:: with SMTP id a5mr11898650ybe.425.1607619735888;
+ Thu, 10 Dec 2020 09:02:15 -0800 (PST)
+MIME-Version: 1.0
+References: <CAEf4BzZWabv_hExaANQyQ71L2JHYqXaT4hFj52w-poWoVYWKqQ@mail.gmail.com>
+ <20201210164315.GA184880@krava>
+In-Reply-To: <20201210164315.GA184880@krava>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Thu, 10 Dec 2020 09:02:05 -0800
+Message-ID: <CAEf4BzaBOoZsSK8yGZBhwFzAADkQKsGt1quV9RvFk_+WZr=Y=Q@mail.gmail.com>
+Subject: Re: Per-CPU variables in modules and pahole
+To:     Jiri Olsa <jolsa@redhat.com>
 Cc:     bpf <bpf@vger.kernel.org>, dwarves@vger.kernel.org,
         Jiri Olsa <jolsa@kernel.org>, Hao Luo <haoluo@google.com>,
         Arnaldo Carvalho de Melo <acme@kernel.org>
-Subject: Re: Per-CPU variables in modules and pahole
-Message-ID: <20201210164315.GA184880@krava>
-References: <CAEf4BzZWabv_hExaANQyQ71L2JHYqXaT4hFj52w-poWoVYWKqQ@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAEf4BzZWabv_hExaANQyQ71L2JHYqXaT4hFj52w-poWoVYWKqQ@mail.gmail.com>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-On Wed, Dec 09, 2020 at 12:53:44PM -0800, Andrii Nakryiko wrote:
-> Hi,
-> 
-> I'm working on supporting per-CPU symbols in BPF/libbpf, and the
-> prerequisite for that is BTF data for .data..percpu data section and
-> variables inside that.
-> 
-> Turns out, pahole doesn't currently emit any BTF information for such
-> variables in kernel modules. And the reason why is quite confusing and
-> I can't figure it out myself, so was hoping someone else might be able
-> to help.
-> 
-> To repro, you can take latest bpf-next tree and add this to
-> bpf_testmod/bpf_testmod.c inside selftests/bpf:
-> 
-> $ git diff bpf_testmod/bpf_testmod.c
->       diff --git
-> a/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
-> b/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
-> index 2df19d73ca49..b2086b798019 100644
-> --- a/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
-> +++ b/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
-> @@ -3,6 +3,7 @@
->  #include <linux/error-injection.h>
->  #include <linux/init.h>
->  #include <linux/module.h>
-> +#include <linux/percpu-defs.h>
->  #include <linux/sysfs.h>
->  #include <linux/tracepoint.h>
->  #include "bpf_testmod.h"
-> @@ -10,6 +11,10 @@
->  #define CREATE_TRACE_POINTS
->  #include "bpf_testmod-events.h"
-> 
-> +DEFINE_PER_CPU(int, bpf_testmod_ksym_dummy1) = -1;
-> +DEFINE_PER_CPU(int, bpf_testmod_ksym_percpu) = 123;
-> +DEFINE_PER_CPU(int, bpf_testmod_ksym_dummy2) = -1;
-> +
->  noinline ssize_t
->  bpf_testmod_test_read(struct file *file, struct kobject *kobj,
->                       struct bin_attribute *bin_attr,
-> 
-> 1. So the very first issue (that I'm going to ignore for now) is that
-> if I just added bpf_testmod_ksym_percpu, it would get addr == 0 and
-> would be ignored by the current pahole logic. So we need to fix that
-> for modules. Adding dummy1 and dummy2 takes care of this for now,
-> bpf_testmod_ksym_percpu has offset 4.
+On Thu, Dec 10, 2020 at 8:43 AM Jiri Olsa <jolsa@redhat.com> wrote:
+>
+> On Wed, Dec 09, 2020 at 12:53:44PM -0800, Andrii Nakryiko wrote:
+> > Hi,
+> >
+> > I'm working on supporting per-CPU symbols in BPF/libbpf, and the
+> > prerequisite for that is BTF data for .data..percpu data section and
+> > variables inside that.
+> >
+> > Turns out, pahole doesn't currently emit any BTF information for such
+> > variables in kernel modules. And the reason why is quite confusing and
+> > I can't figure it out myself, so was hoping someone else might be able
+> > to help.
+> >
+> > To repro, you can take latest bpf-next tree and add this to
+> > bpf_testmod/bpf_testmod.c inside selftests/bpf:
+> >
+> > $ git diff bpf_testmod/bpf_testmod.c
+> >       diff --git
+> > a/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
+> > b/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
+> > index 2df19d73ca49..b2086b798019 100644
+> > --- a/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
+> > +++ b/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
+> > @@ -3,6 +3,7 @@
+> >  #include <linux/error-injection.h>
+> >  #include <linux/init.h>
+> >  #include <linux/module.h>
+> > +#include <linux/percpu-defs.h>
+> >  #include <linux/sysfs.h>
+> >  #include <linux/tracepoint.h>
+> >  #include "bpf_testmod.h"
+> > @@ -10,6 +11,10 @@
+> >  #define CREATE_TRACE_POINTS
+> >  #include "bpf_testmod-events.h"
+> >
+> > +DEFINE_PER_CPU(int, bpf_testmod_ksym_dummy1) = -1;
+> > +DEFINE_PER_CPU(int, bpf_testmod_ksym_percpu) = 123;
+> > +DEFINE_PER_CPU(int, bpf_testmod_ksym_dummy2) = -1;
+> > +
+> >  noinline ssize_t
+> >  bpf_testmod_test_read(struct file *file, struct kobject *kobj,
+> >                       struct bin_attribute *bin_attr,
+> >
+> > 1. So the very first issue (that I'm going to ignore for now) is that
+> > if I just added bpf_testmod_ksym_percpu, it would get addr == 0 and
+> > would be ignored by the current pahole logic. So we need to fix that
+> > for modules. Adding dummy1 and dummy2 takes care of this for now,
+> > bpf_testmod_ksym_percpu has offset 4.
+>
+> I removed that addr zero check in the modules changes but when
+> collecting functions, but it's still there in collect_percpu_var
 
-I removed that addr zero check in the modules changes but when
-collecting functions, but it's still there in collect_percpu_var
+Hao had some reason to skip per-cpu variables with offset 0, maybe he
+can comment on that before we change it.
 
-> 
-> 2. Second issue is more interesting. Somehow, when pahole iterates
-> over DWARF variables, the address of bpf_testmod_ksym_percpu is
-> reported as 0x10e74, not 4. Which totally confuses pahole because
-> according to ELF symbols, bpf_testmod_ksym_percpu symbol has value 4.
-> I tracked this down to dwarf_getlocation() returning 10e74 as number
-> field in expr.
+>
+> >
+> > 2. Second issue is more interesting. Somehow, when pahole iterates
+> > over DWARF variables, the address of bpf_testmod_ksym_percpu is
+> > reported as 0x10e74, not 4. Which totally confuses pahole because
+> > according to ELF symbols, bpf_testmod_ksym_percpu symbol has value 4.
+> > I tracked this down to dwarf_getlocation() returning 10e74 as number
+> > field in expr.
+>
+> in which place do you see that address? when I put displayed
+> address from collect_percpu_var it shows 4
 
-in which place do you see that address? when I put displayed
-address from collect_percpu_var it shows 4
+yes, ELF symbol's value is 4, but when iterating DWARF variables
+(0x10e70 + 4) is returned. It does look like a special handling of
+modules. I missed that libdw does some special things for specifically
+modules. Further debugging yesterday showed that 0x10e70 roughly
+corresponds to the offset of .data..per_cpu if you count all the
+allocatable data sections that come before it. So I think you are
+right. We should probably centralize the logic of kernel module
+detection so that we can handle these module vs non-module differences
+properly.
 
-not sure this is related but looks like similar issue I had to
-solve for modules functions, as described in the changelog:
-(not merged yet)
+>
+> not sure this is related but looks like similar issue I had to
+> solve for modules functions, as described in the changelog:
+> (not merged yet)
+>
+>     btf_encoder: Detect kernel module ftrace addresses
+>
+>     ...
+>     There's one tricky point with kernel modules wrt Elf object,
+>     which we get from dwfl_module_getelf function. This function
+>     performs all possible relocations, including __mcount_loc
+>     section.
+>
+>     So addrs array contains relocated values, which we need take
+>     into account when we compare them to functions values which
+>     are relative to their sections.
+>     ...
+>
+> The 0x10e74 value could be relocated 4.. but it's me guessing,
+> because not sure where you see that address exactly
 
-    btf_encoder: Detect kernel module ftrace addresses
 
-    ...
-    There's one tricky point with kernel modules wrt Elf object,
-    which we get from dwfl_module_getelf function. This function
-    performs all possible relocations, including __mcount_loc
-    section.
+It comes up in cu__encode_btf(), var->ip.addr is not 4, as we expect it to be.
 
-    So addrs array contains relocated values, which we need take
-    into account when we compare them to functions values which
-    are relative to their sections.
-    ...
-
-The 0x10e74 value could be relocated 4.. but it's me guessing,
-because not sure where you see that address exactly
-
-jirka
-
+>
+> jirka
+>
