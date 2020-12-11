@@ -2,80 +2,169 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-7.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 94C71C4361B
-	for <linux-dwarves@archiver.kernel.org>; Thu, 10 Dec 2020 23:51:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E7A02C433FE
+	for <linux-dwarves@archiver.kernel.org>; Fri, 11 Dec 2020 02:57:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 62BA823E54
-	for <linux-dwarves@archiver.kernel.org>; Thu, 10 Dec 2020 23:51:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A8EE623E51
+	for <linux-dwarves@archiver.kernel.org>; Fri, 11 Dec 2020 02:57:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732657AbgLJXus (ORCPT
+        id S2403923AbgLKC5K (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Thu, 10 Dec 2020 18:50:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50668 "EHLO
+        Thu, 10 Dec 2020 21:57:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725891AbgLJXu3 (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Thu, 10 Dec 2020 18:50:29 -0500
-Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E523C0613CF;
-        Thu, 10 Dec 2020 15:49:49 -0800 (PST)
-Received: by mail-yb1-xb2c.google.com with SMTP id l14so6432477ybq.3;
-        Thu, 10 Dec 2020 15:49:49 -0800 (PST)
+        with ESMTP id S2403848AbgLKC4z (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Thu, 10 Dec 2020 21:56:55 -0500
+Received: from mail-yb1-xb41.google.com (mail-yb1-xb41.google.com [IPv6:2607:f8b0:4864:20::b41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6722DC0613CF;
+        Thu, 10 Dec 2020 18:56:15 -0800 (PST)
+Received: by mail-yb1-xb41.google.com with SMTP id j17so6724471ybt.9;
+        Thu, 10 Dec 2020 18:56:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=uaA9pzlExQ0SleG42bO0r3RWL5rb1qRGcmLI39XsQtU=;
-        b=DZ1Tay1fA2N9/F0bktr8bR3Z9tzmxiy6/Fz5aSZkYGyu9f3qTb1jO84tnOV55WWfV6
-         XA6LmJQ2GMVwEvvxXQPRi6X7eUXKPPd7a4DdKKwHQHWfer1NVo/XUeQ12gnZI8Pqpj4i
-         DE5W3ENJHR06gY8ImbDmcBzQfUuU+WDNtp6rXSeWVnvd+xSf/omk1OKs/RtoBJcqYWQZ
-         56GFW2ZEgHfsD1SX0OqFb8+hzG2wzRLrjXfadz5J8fBCTDOsh9mA3QlSAqVBWRDKHBYI
-         ohDrpB7JVLnOx5H2rBAm2+mfw/kIzarvNg5mOetYq79fbtnqVSvZbVtpSqw7/PF0G1xn
-         jOLg==
+        bh=t1OgNsXDqy4RHXMYPMntKp+s7RkYqqk2aQMqq723GrM=;
+        b=PN5U2cPcvywrBEdalt0lmzRKm1F0DjfRJANnq+zAj48xGqlzov6FeWzT2rZpVdTL5H
+         AMQ0kma4ne7xqLfCGBg5G8nQznEqiLBqZSqKSxUfhgF8wYI1wR4MJR3uHXl/kOW5cL1j
+         qZgSTVfHaMnITfqj9DagEn7CZeWVaVQ4FiXhhOnotfxjDz1q+WSIMBHx9++/rdTO3c/T
+         6XZ7VlBIE+GLrL1DDwOFiXQiH8qnppNEKepzx6ufuiuctF3mgkrPY24F/QUDL02fxE+h
+         hTVwFLSpMXe10JZOGs83okr708krgU5hecpgIBPjsSBv/3gASQDLVJq1UguaxWfTLXCM
+         vCWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=uaA9pzlExQ0SleG42bO0r3RWL5rb1qRGcmLI39XsQtU=;
-        b=CDU2Q0OilrIN75qMRGmUXEejjKbs8qAOZKKtAFc29EN7DetVC9lEmoQ0hY7/Gdx5Lv
-         f8RH5C7xzn1yhLU6IsOVBGxmsrjJ1WKTeeBxjfqXAR3JykV9DhpBXN6GTg0l217UFnSg
-         iCzj8zOVB/kZxUCYUX58RLkrDNcnj8Mx8WoxuD/9iGBB77dfO0VJXFjt9PNT964WNont
-         SW0iW0oPlfNypKC35UMQWJWNLDaGQuBwW6ufu9nW+TeHH9o98uT5uIVF24mEV1VGp0ZC
-         KkihbYsOIqxO1sDo/4q/QXpbknnBroVIbpjbvlWFuKJ2CS+UjeG/ycNuqu4ZAH9RVXmV
-         J+6A==
-X-Gm-Message-State: AOAM532nXZpmirrR7Fz7yYV2mj3twai5vqnKDUGJM8/7qo7LRrCXuh/y
-        UFK4P6unBr/MMtka7cSvqlubVwxijBIfCrsK0L24WiJCUbhUpQ==
-X-Google-Smtp-Source: ABdhPJyog2y39LsdkToBbNLR2/CJUY1t2VZfThN5B1RNcLWOw4Jlr4aODRbM2CuD3IX1T7H8C1uFNtpMrPELmzap5bo=
-X-Received: by 2002:a25:6a05:: with SMTP id f5mr14687082ybc.459.1607644188731;
- Thu, 10 Dec 2020 15:49:48 -0800 (PST)
+        bh=t1OgNsXDqy4RHXMYPMntKp+s7RkYqqk2aQMqq723GrM=;
+        b=IYNDp1Jo8xtiq7LqGVAyYKknYLHPvRbGBRMGKZdLdDp1aKYs1uZVb/rhCjn777TlgB
+         b9q6zxvphRlz8tgfpIP/z4+CmOjQCqSCwzSp93M9vtbaagYoii9laHZiJUbYOogPhYqI
+         E81ERRP1UT+ENiOqW2ocSaO2Lp4u+Iuj4pVTlrVG3dq+f05lgxtO54yLL1F8txsH4Hfd
+         aqf55XiJ6r+LZPGQQNBmrI8OhTfDuo7bh8tJ2A64HZfb3vUxaRjy7eVEqXPgX9oIXCPP
+         INp7FEmQSwurvH5N9PqeoIWiaBIz/xjKTvHCr3aFJ9Uo7SJeGfFwo7Rgx3AkvGHPz+4v
+         2Scw==
+X-Gm-Message-State: AOAM5332PZ4pdKNvEyHW7iIOZpA4UJ+ZgCS+nGp7IHVBjLzYDtjkDnLu
+        FZ6ynUXsCGT93Ce9Xl2Oew5P53EEaSL/SA+5EXE=
+X-Google-Smtp-Source: ABdhPJzOQ0jJrRGeKPDJc1Br/Q5LHygCNW2Qd0WvXMP8aBw7tnRZeENJ4/nMayeKIriDm7+WTK7FvcdZ9XIQOJCNWC4=
+X-Received: by 2002:a25:6a05:: with SMTP id f5mr15568107ybc.459.1607655374568;
+ Thu, 10 Dec 2020 18:56:14 -0800 (PST)
 MIME-Version: 1.0
 References: <CAEf4BzZWabv_hExaANQyQ71L2JHYqXaT4hFj52w-poWoVYWKqQ@mail.gmail.com>
  <20201210164315.GA184880@krava> <CAEf4BzaBOoZsSK8yGZBhwFzAADkQKsGt1quV9RvFk_+WZr=Y=Q@mail.gmail.com>
- <20201210234201.GC186916@krava>
-In-Reply-To: <20201210234201.GC186916@krava>
+ <CA+khW7hU1+Ba+33gxyGWgwUyq8sOQthaLu6tUQP_cGWqS46gDw@mail.gmail.com>
+In-Reply-To: <CA+khW7hU1+Ba+33gxyGWgwUyq8sOQthaLu6tUQP_cGWqS46gDw@mail.gmail.com>
 From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Thu, 10 Dec 2020 15:49:38 -0800
-Message-ID: <CAEf4BzbJY5w1nbY7k593wHJcMZwS0mw8mDoCpsH_BdDbLUOYyQ@mail.gmail.com>
+Date:   Thu, 10 Dec 2020 18:56:03 -0800
+Message-ID: <CAEf4BzZHFcc78YXQbrftPtD7dsMfPrS=A3dBJggAVETrJd3NoQ@mail.gmail.com>
 Subject: Re: Per-CPU variables in modules and pahole
-To:     Jiri Olsa <jolsa@redhat.com>
-Cc:     bpf <bpf@vger.kernel.org>, dwarves@vger.kernel.org,
-        Jiri Olsa <jolsa@kernel.org>, Hao Luo <haoluo@google.com>,
+To:     Hao Luo <haoluo@google.com>
+Cc:     Jiri Olsa <jolsa@redhat.com>, bpf <bpf@vger.kernel.org>,
+        dwarves@vger.kernel.org, Jiri Olsa <jolsa@kernel.org>,
         Arnaldo Carvalho de Melo <acme@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-On Thu, Dec 10, 2020 at 3:42 PM Jiri Olsa <jolsa@redhat.com> wrote:
+On Thu, Dec 10, 2020 at 10:29 AM Hao Luo <haoluo@google.com> wrote:
 >
-> On Thu, Dec 10, 2020 at 09:02:05AM -0800, Andrii Nakryiko wrote:
+> On Thu, Dec 10, 2020 at 9:02 AM Andrii Nakryiko
+> <andrii.nakryiko@gmail.com> wrote:
+> >
+> > On Thu, Dec 10, 2020 at 8:43 AM Jiri Olsa <jolsa@redhat.com> wrote:
+> > >
+> > > On Wed, Dec 09, 2020 at 12:53:44PM -0800, Andrii Nakryiko wrote:
+> > > > Hi,
+> > > >
+> > > > I'm working on supporting per-CPU symbols in BPF/libbpf, and the
+> > > > prerequisite for that is BTF data for .data..percpu data section and
+> > > > variables inside that.
+> > > >
+> > > > Turns out, pahole doesn't currently emit any BTF information for such
+> > > > variables in kernel modules. And the reason why is quite confusing and
+> > > > I can't figure it out myself, so was hoping someone else might be able
+> > > > to help.
+> > > >
+> > > > To repro, you can take latest bpf-next tree and add this to
+> > > > bpf_testmod/bpf_testmod.c inside selftests/bpf:
+> > > >
+> > > > $ git diff bpf_testmod/bpf_testmod.c
+> > > >       diff --git
+> > > > a/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
+> > > > b/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
+> > > > index 2df19d73ca49..b2086b798019 100644
+> > > > --- a/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
+> > > > +++ b/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
+> > > > @@ -3,6 +3,7 @@
+> > > >  #include <linux/error-injection.h>
+> > > >  #include <linux/init.h>
+> > > >  #include <linux/module.h>
+> > > > +#include <linux/percpu-defs.h>
+> > > >  #include <linux/sysfs.h>
+> > > >  #include <linux/tracepoint.h>
+> > > >  #include "bpf_testmod.h"
+> > > > @@ -10,6 +11,10 @@
+> > > >  #define CREATE_TRACE_POINTS
+> > > >  #include "bpf_testmod-events.h"
+> > > >
+> > > > +DEFINE_PER_CPU(int, bpf_testmod_ksym_dummy1) = -1;
+> > > > +DEFINE_PER_CPU(int, bpf_testmod_ksym_percpu) = 123;
+> > > > +DEFINE_PER_CPU(int, bpf_testmod_ksym_dummy2) = -1;
+> > > > +
+> > > >  noinline ssize_t
+> > > >  bpf_testmod_test_read(struct file *file, struct kobject *kobj,
+> > > >                       struct bin_attribute *bin_attr,
+> > > >
+> > > > 1. So the very first issue (that I'm going to ignore for now) is that
+> > > > if I just added bpf_testmod_ksym_percpu, it would get addr == 0 and
+> > > > would be ignored by the current pahole logic. So we need to fix that
+> > > > for modules. Adding dummy1 and dummy2 takes care of this for now,
+> > > > bpf_testmod_ksym_percpu has offset 4.
+> > >
+> > > I removed that addr zero check in the modules changes but when
+> > > collecting functions, but it's still there in collect_percpu_var
+> >
+> > Hao had some reason to skip per-cpu variables with offset 0, maybe he
+> > can comment on that before we change it.
+> >
 >
-> SNIP
+> When I initially write that check, I see there are multiple symbols of
+> the same name that associate with a single variable, but there is only
+> one that has a non-zero address. Besides, there are symbols that don't
+> associate to any variable and they have zero address. For example,
+> those defined as __ADDRESSABLE(sym) and __UNIQUE_ID(prefix). They are
+> quite a lot, I remember. So I filtered out the zero address for the
+> purpose of accelerating encoding. I noticed that on x86_64, the first
+> page of the percpu section is reserved, so I deem those symbols that
+> are of normal interest should have positive addresses.
+
+So I just checked my local vmlinux image, and seems like the only one
+with addr == 0 is fixed_percpu_data. Everything else that's detected
+as belonging to .data..percpu section looks sane and has non-zero
+offset.
+
+So I think this might have been the case before we switched to using
+ELF symbols and now it's not? I think I'll just drop this check, will
+post the patch, and would really appreciate if you can test it in your
+environment. Does that sound ok?
+
 >
+> >
+> > >
+> > > >
+> > > > 2. Second issue is more interesting. Somehow, when pahole iterates
+> > > > over DWARF variables, the address of bpf_testmod_ksym_percpu is
+> > > > reported as 0x10e74, not 4. Which totally confuses pahole because
+> > > > according to ELF symbols, bpf_testmod_ksym_percpu symbol has value 4.
+> > > > I tracked this down to dwarf_getlocation() returning 10e74 as number
+> > > > field in expr.
+> > >
+> > > in which place do you see that address? when I put displayed
+> > > address from collect_percpu_var it shows 4
 > >
 > > yes, ELF symbol's value is 4, but when iterating DWARF variables
 > > (0x10e70 + 4) is returned. It does look like a special handling of
@@ -110,20 +199,7 @@ On Thu, Dec 10, 2020 at 3:42 PM Jiri Olsa <jolsa@redhat.com> wrote:
 > >
 > >
 > > It comes up in cu__encode_btf(), var->ip.addr is not 4, as we expect it to be.
->
-> I'm taking section sh_addr for each function and relocate
-> the addr value for kernel modules, check setup_functions
-> function
->
-> I don't see this being somehow centralized, looks simple
-> enough to me for each case
-
-I meant centralized detection of whether we are working with the
-module or vmlinux or something else. setup_functions() currently has
-very specific heuristic for that. So I'd like to extract that or come
-up with some other way that won't be so function specific
-(__start_mcount_loc symbol vs __mcount_loc section).
-
->
-> jirka
->
+> >
+> > >
+> > > jirka
+> > >
