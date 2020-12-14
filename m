@@ -2,85 +2,68 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CC8FBC2BB40
-	for <linux-dwarves@archiver.kernel.org>; Sun, 13 Dec 2020 20:29:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ACA32C2BB40
+	for <linux-dwarves@archiver.kernel.org>; Mon, 14 Dec 2020 13:48:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9116A2396F
-	for <linux-dwarves@archiver.kernel.org>; Sun, 13 Dec 2020 20:29:45 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 54ED5229F0
+	for <linux-dwarves@archiver.kernel.org>; Mon, 14 Dec 2020 13:48:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404918AbgLMU3b (ORCPT
+        id S2389650AbgLNNsI (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Sun, 13 Dec 2020 15:29:31 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:44260 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726063AbgLMU3b (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Sun, 13 Dec 2020 15:29:31 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1607891285;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=qKQo1U5qUlDd3rxooekdaTivKSOdw/fBjhjxAEGtKr0=;
-        b=VIQI/N07wI1qqVyAU7VejuiMKwglnDhU8+erI6RHdoDqu1qujbBiCi6wxXSCZAbQCWTjoz
-        AOx29gDRHdgqmzsdT2Nmcy+bVSVU8vcBYaZoFu2e60271AsM9YNAlTjGAlT/n/qArtCbxw
-        1IYP+rGU/ARapu2DLm3gTZqiWWvZAHg=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-339--VKZLHK1N3SKTy0FI2xzXQ-1; Sun, 13 Dec 2020 15:28:01 -0500
-X-MC-Unique: -VKZLHK1N3SKTy0FI2xzXQ-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 38DF215720;
-        Sun, 13 Dec 2020 20:28:00 +0000 (UTC)
-Received: from krava (unknown [10.40.192.121])
-        by smtp.corp.redhat.com (Postfix) with SMTP id 9EC8016C1F;
-        Sun, 13 Dec 2020 20:27:58 +0000 (UTC)
-Date:   Sun, 13 Dec 2020 21:27:57 +0100
-From:   Jiri Olsa <jolsa@redhat.com>
-To:     Andrii Nakryiko <andrii@kernel.org>
-Cc:     dwarves@vger.kernel.org, acme@kernel.org, bpf@vger.kernel.org,
-        kernel-team@fb.com, Hao Luo <haoluo@google.com>
+        Mon, 14 Dec 2020 08:48:08 -0500
+Received: from mail.kernel.org ([198.145.29.99]:38284 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2406099AbgLNNoM (ORCPT <rfc822;dwarves@vger.kernel.org>);
+        Mon, 14 Dec 2020 08:44:12 -0500
+Date:   Mon, 14 Dec 2020 10:43:43 -0300
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1607953411;
+        bh=7H1l/OZXZjWrQ4sxxJQS8JEP7T6y9WpDSART6dvQ+ec=;
+        h=From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Dt3ebbQmuaupJqAtbUX9FNX4haD7prTtABSBFu6mzjI8iVMjT0wPi4zyF1b2zQ/4a
+         bsiTmFZF1e9Km+/bM65wG3tJRTKXvlkXuf8lv8xq7APMH71xGeOUmGig4WgxlqMdwX
+         WNJaK8WN4c0LrRAstBNE9V/qgj94HW63E99gbSXZy9RMQlRn85uEimBwCOw1MONaJD
+         clEgEYCgwtsSxjwRCwljRqJ0YNsicAO+Pff4u4jmNDKVuBXSAWhC7KK8rkupmVqY96
+         ZAB0kZgIOhuFDl1XlC9RpuJVJ17PHJ5UtNJux+aZ15JX5kKBXCKmI3x3CRi1GHvA9C
+         YDS9Ezg3tPycA==
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Jiri Olsa <jolsa@redhat.com>
+Cc:     Andrii Nakryiko <andrii@kernel.org>, dwarves@vger.kernel.org,
+        bpf@vger.kernel.org, kernel-team@fb.com,
+        Hao Luo <haoluo@google.com>
 Subject: Re: [PATCH dwarves 0/2] Fix pahole to emit kernel module BTF
  variables
-Message-ID: <20201213202757.GA482741@krava>
+Message-ID: <20201214134343.GF238399@kernel.org>
 References: <20201211041139.589692-1-andrii@kernel.org>
+ <20201213202757.GA482741@krava>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201211041139.589692-1-andrii@kernel.org>
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
+In-Reply-To: <20201213202757.GA482741@krava>
+X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-On Thu, Dec 10, 2020 at 08:11:36PM -0800, Andrii Nakryiko wrote:
-> Two bug fixes to make pahole emit correct kernel module BTF variable
-> information.
+Em Sun, Dec 13, 2020 at 09:27:57PM +0100, Jiri Olsa escreveu:
+> On Thu, Dec 10, 2020 at 08:11:36PM -0800, Andrii Nakryiko wrote:
+> > Two bug fixes to make pahole emit correct kernel module BTF variable
+> > information.
+> > 
+> > Cc: Hao Luo <haoluo@google.com>
+> > Cc: Jiri Olsa <jolsa@redhat.com>
+> > 
+> > Andrii Nakryiko (2):
+> >   btf_encoder: fix BTF variable generation for kernel modules
+> >   btf_encoder: fix skipping per-CPU variables at offset 0
 > 
-> Cc: Hao Luo <haoluo@google.com>
-> Cc: Jiri Olsa <jolsa@redhat.com>
-> 
-> Andrii Nakryiko (2):
->   btf_encoder: fix BTF variable generation for kernel modules
->   btf_encoder: fix skipping per-CPU variables at offset 0
+> Acked-by: Jiri Olsa <jolsa@redhat.com>
 
-Acked-by: Jiri Olsa <jolsa@redhat.com>
+Thanks, applied.
 
-jirka
-
-> 
->  btf_encoder.c | 61 +++++++++++++++++++++++++++++++++------------------
->  libbtf.c      |  1 +
->  libbtf.h      |  1 +
->  3 files changed, 42 insertions(+), 21 deletions(-)
-> 
-> -- 
-> 2.24.1
-> 
+- Arnaldo
 
