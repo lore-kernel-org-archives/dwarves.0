@@ -2,164 +2,97 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-23.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,UNWANTED_LANGUAGE_BODY autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BB83EC4361B
-	for <linux-dwarves@archiver.kernel.org>; Tue, 15 Dec 2020 00:53:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8885DC4361B
+	for <linux-dwarves@archiver.kernel.org>; Tue, 15 Dec 2020 01:29:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 830BE224DE
-	for <linux-dwarves@archiver.kernel.org>; Tue, 15 Dec 2020 00:53:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 44EE1221EF
+	for <linux-dwarves@archiver.kernel.org>; Tue, 15 Dec 2020 01:29:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728195AbgLOAwB (ORCPT
+        id S1728067AbgLOB3Y (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Mon, 14 Dec 2020 19:52:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57584 "EHLO
+        Mon, 14 Dec 2020 20:29:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728199AbgLOAvW (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Mon, 14 Dec 2020 19:51:22 -0500
-Received: from mail-ej1-x641.google.com (mail-ej1-x641.google.com [IPv6:2a00:1450:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52C19C0617A6
-        for <dwarves@vger.kernel.org>; Mon, 14 Dec 2020 16:50:42 -0800 (PST)
-Received: by mail-ej1-x641.google.com with SMTP id q22so7469155eja.2
-        for <dwarves@vger.kernel.org>; Mon, 14 Dec 2020 16:50:42 -0800 (PST)
+        with ESMTP id S1726580AbgLOB3O (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Mon, 14 Dec 2020 20:29:14 -0500
+Received: from mail-yb1-xb42.google.com (mail-yb1-xb42.google.com [IPv6:2607:f8b0:4864:20::b42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17E20C061793;
+        Mon, 14 Dec 2020 17:28:34 -0800 (PST)
+Received: by mail-yb1-xb42.google.com with SMTP id u203so17397569ybb.2;
+        Mon, 14 Dec 2020 17:28:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
+        d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=MCqc3+z65fYEZgAOquQ1zB3ZS3hxPLmVKO6YFQJziRA=;
-        b=DA2T+eONjHW/3pSzFTMk0TWeZ7O7V5AhUut8GnbN8fRUD2HTMCuYyjILFThzq8iQ76
-         HJRVz/DpVR+FHIyvNyihkuQFa006sjFXnkaEnoImAI+8vpRb3Y3bhVENNL2a3ETU2EK/
-         M2fNSniV6hXgeQJeWWXItAtk96+3zXiUyKu7iKHC8ZZkbXU/uhuVTfZxbOWAE0eqZbSR
-         qVJWldWGEDkJK/OhMt11mi/VoAt3rOEQfSQdQXs3aUakeA0JtLA6xnwNPLu3Of6+PpPJ
-         HoZk97CuvraI+OJ36af0dPg7OqKPvDRp6vNcQu6QNN68G2ExyOfWZCf165gJfdYwJN/n
-         VZaQ==
+        bh=tG4gNcU9i2iNKiEYjEdTI+569AyOvt13AV3wALhN/mo=;
+        b=j2SaQNpPHRg0iV7Fb1p+8e7aNHnDY8xe3sgUW+fg8vUcmdeuyBp9OQK/oiUSL5CyeQ
+         hiUy80lw7ffA+V9YiXClgATfgAiBJKuRSeJYa4KQ4x9Sd2+TZU1ZAb4jqTtLwLlU7qsM
+         wHC1OpoFLiZUJRZEAVjA7Pca0IEwEdpQ/sdBwmivoPJYjdl8hfOZNLk762LSp2LuC1T1
+         kLPBySL8DKjlwUJ9cnpoJ/OSd518OUo7P6pMF9sHeHf3bZ563MO7NJMbpWjJykR7y7uy
+         TuxE48E1yRGBKZnC5lvxWs0/1ietiEMn/LmaxIYW1fJLpUqv+iCKH/oAYPhgQ7eLNzvG
+         1x+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=MCqc3+z65fYEZgAOquQ1zB3ZS3hxPLmVKO6YFQJziRA=;
-        b=fBd2e1G32d8mhvoZ7tJ+VyD+KaOkcGaUhB5qO0W4lTrA1N0azIi9721Zl9VluCmOOt
-         XCYCH5jcxH8LetJZ6Ho8flupEDCzT+IGA2ibYVFSD+E7k8d0ZMgABac23VsQ5CNe3XDJ
-         so2kI5d6eQVSAshJp6YlcdOlliEUrvUxpBszvo2xTLZ7f/Kop9WkTSo5FT6pSXHkmq/J
-         4ZIwbeswyfQyCqW3BCjE9BOOmhgWWV/uecrZ1iFlqfPqm1++ZPxHHwQ5m15DxC8NJJuR
-         nUfseMgJmD8GxBIDujSzRiCPIGp3xzG1K2AhxM/Z/z23HXboz6C1RDuecBQPlKNhpW7A
-         oukA==
-X-Gm-Message-State: AOAM532E91AJ3Cc+mEkBc61Bs4FnIlEEUyPinEk3TBmXyKf3jCvGYpBf
-        bOFmwF5SGDKT7m7MrIgwdiy8PVJ5w9l4kGQ8l3hfTg==
-X-Google-Smtp-Source: ABdhPJwuCbO9nERiglLYs2Pnc4Pn8Veq9VYIyEn5Ur9mTdswzjImapyV85sCGBC7mmAMhnaE7u9BL00S8Djg4XqUXkM=
-X-Received: by 2002:a17:906:924a:: with SMTP id c10mr24588986ejx.113.1607993440727;
- Mon, 14 Dec 2020 16:50:40 -0800 (PST)
+        bh=tG4gNcU9i2iNKiEYjEdTI+569AyOvt13AV3wALhN/mo=;
+        b=lT4oymFUP1tRVwSoI6P5NTqE0ACClXs5lZhC/qVo4pDtM5611YHLjUDAwJRQi/xQjK
+         85yASOzuw+SkDP2Z0ZbN4KvlGiwUbiWb5H1/Sclb2hvLCJMlYmyBtv5kVeghxKFvMieL
+         BNOZhYVlbjhxruulPTkR6i9Qse0TwpMM3dj98MuNEhn1IanHgBtsXFK0FuaeldNG6PH2
+         ACzqqxChBBjbIfg1rmVDNGq0LxevUq9vVmyGI8R28TqKcIUTFQNFXgZoy61tbvSBEXqW
+         p3ojvIIdiXUeS/J6BIyIyKhcJuzlxPVxsMhOsIVtQxu96gH8iiYAnkwUXytwVH2UVPih
+         a+jg==
+X-Gm-Message-State: AOAM531221JHPMh00dnsOMw1Wjcv0zVyBtHAHdFW/QkIWZ/WMd8IY7jN
+        GrvM9H3IUvNqZYW7rtNSSZn1vrQgyrrLkXHEBdE=
+X-Google-Smtp-Source: ABdhPJx1EON1g23rM4g5exfClm1Q6eM4bhm5ptHpvDxWPNeOzoSTcV9a9ZY0rkb5MTgHDKPXUZVMVh85YC645kJ0qc4=
+X-Received: by 2002:a25:c7c6:: with SMTP id w189mr39879121ybe.403.1607995712900;
+ Mon, 14 Dec 2020 17:28:32 -0800 (PST)
 MIME-Version: 1.0
-References: <20201211041139.589692-1-andrii@kernel.org> <20201211041139.589692-3-andrii@kernel.org>
-In-Reply-To: <20201211041139.589692-3-andrii@kernel.org>
-From:   Hao Luo <haoluo@google.com>
-Date:   Mon, 14 Dec 2020 16:50:29 -0800
-Message-ID: <CA+khW7h2HpmruTCGXTbm59=oRB4qe9uqzH3RbFQkO3coSH0DjQ@mail.gmail.com>
-Subject: Re: [PATCH dwarves 2/2] btf_encoder: fix skipping per-CPU variables
- at offset 0
-To:     Andrii Nakryiko <andrii@kernel.org>
-Cc:     dwarves@vger.kernel.org,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        bpf <bpf@vger.kernel.org>, Kernel Team <kernel-team@fb.com>,
-        Jiri Olsa <jolsa@redhat.com>
+References: <20201211041139.589692-1-andrii@kernel.org> <20201213202757.GA482741@krava>
+ <20201214134343.GF238399@kernel.org>
+In-Reply-To: <20201214134343.GF238399@kernel.org>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Mon, 14 Dec 2020 17:28:22 -0800
+Message-ID: <CAEf4BzbCeeVuZaEkykNpc35+7xRcWtPCbwGpGNwET_5mBBPN7A@mail.gmail.com>
+Subject: Re: [PATCH dwarves 0/2] Fix pahole to emit kernel module BTF variables
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     Jiri Olsa <jolsa@redhat.com>, Andrii Nakryiko <andrii@kernel.org>,
+        dwarves@vger.kernel.org, bpf <bpf@vger.kernel.org>,
+        Kernel Team <kernel-team@fb.com>, Hao Luo <haoluo@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-Andrii, sorry for the late reply. This change looks good. It makes
-much more sense than before.
+On Mon, Dec 14, 2020 at 5:43 AM Arnaldo Carvalho de Melo
+<acme@kernel.org> wrote:
+>
+> Em Sun, Dec 13, 2020 at 09:27:57PM +0100, Jiri Olsa escreveu:
+> > On Thu, Dec 10, 2020 at 08:11:36PM -0800, Andrii Nakryiko wrote:
+> > > Two bug fixes to make pahole emit correct kernel module BTF variable
+> > > information.
+> > >
+> > > Cc: Hao Luo <haoluo@google.com>
+> > > Cc: Jiri Olsa <jolsa@redhat.com>
+> > >
+> > > Andrii Nakryiko (2):
+> > >   btf_encoder: fix BTF variable generation for kernel modules
+> > >   btf_encoder: fix skipping per-CPU variables at offset 0
+> >
+> > Acked-by: Jiri Olsa <jolsa@redhat.com>
+>
+> Thanks, applied.
+>
 
-Thanks,
-Hao
+Thanks, Arnaldo. I'm not seeing them on
+gitolite.kernel.org/pub/scm/devel/pahole/pahole.git, did you push them
+somewhere else?
 
-On Thu, Dec 10, 2020 at 8:11 PM Andrii Nakryiko <andrii@kernel.org> wrote:
->
-> Adjust pahole logic of skipping any per-CPU symbol with offset 0, which is
-> especially bad for kernel modules, because it most certainly skips the very
-> first per-CPU variable.
->
-> Instead, do collect per-CPU ELF symbol with 0 offset, but do extra check for
-> non-kernel module case by verifying that ELF symbol name and DWARF variable
-> name match. Due to the bug of DWARF name of variable sometimes being NULL,
-> this is necessarily too pessimistic check (e.g., on my vmlinux image,
-> fixed_percpu_data variable is still not emitted due to missing DWARF variable
-> name), it allows to emit data for all module per-CPU variables.
->
-> Fixes: f3d9054ba8ff ("btf_encoder: Teach pahole to store percpu variables in vmlinux BTF.")
-> Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
-> ---
->  btf_encoder.c | 40 ++++++++++++++++++++++++----------------
->  1 file changed, 24 insertions(+), 16 deletions(-)
->
-> diff --git a/btf_encoder.c b/btf_encoder.c
-> index a7d484765ce2..1d7817078f89 100644
-> --- a/btf_encoder.c
-> +++ b/btf_encoder.c
-> @@ -412,21 +412,6 @@ static int collect_percpu_var(struct btf_elf *btfe, GElf_Sym *sym)
->                 return 0;
->
->         addr = elf_sym__value(sym);
-> -       /*
-> -        * Store only those symbols that have allocated space in the percpu section.
-> -        * This excludes the following three types of symbols:
-> -        *
-> -        *  1. __ADDRESSABLE(sym), which are forcely emitted as symbols.
-> -        *  2. __UNIQUE_ID(prefix), which are introduced to generate unique ids.
-> -        *  3. __exitcall(fn), functions which are labeled as exit calls.
-> -        *
-> -        * In addition, the variables defined using DEFINE_PERCPU_FIRST are
-> -        * also not included, which currently includes:
-> -        *
-> -        *  1. fixed_percpu_data
-> -        */
-> -       if (!addr)
-> -               return 0;
->
->         size = elf_sym__size(sym);
->         if (!size)
-> @@ -652,7 +637,7 @@ int cu__encode_btf(struct cu *cu, int verbose, bool force,
->
->         cu__for_each_variable(cu, core_id, pos) {
->                 uint32_t size, type, linkage;
-> -               const char *name;
-> +               const char *name, *dwarf_name;
->                 uint64_t addr;
->                 int id;
->
-> @@ -680,6 +665,29 @@ int cu__encode_btf(struct cu *cu, int verbose, bool force,
->                 if (!percpu_var_exists(addr, &size, &name))
->                         continue; /* not a per-CPU variable */
->
-> +               /* A lot of "special" DWARF variables (e.g, __UNIQUE_ID___xxx)
-> +                * have addr == 0, which is the same as, say, valid
-> +                * fixed_percpu_data per-CPU variable. To distinguish between
-> +                * them, additionally compare DWARF and ELF symbol names. If
-> +                * DWARF doesn't provide proper name, pessimistically assume
-> +                * bad variable.
-> +                *
-> +                * Examples of such special variables are:
-> +                *
-> +                *  1. __ADDRESSABLE(sym), which are forcely emitted as symbols.
-> +                *  2. __UNIQUE_ID(prefix), which are introduced to generate unique ids.
-> +                *  3. __exitcall(fn), functions which are labeled as exit calls.
-> +                *
-> +                *  This is relevant only for vmlinux image, as for kernel
-> +                *  modules per-CPU data section has non-zero offset so all
-> +                *  per-CPU symbols have non-zero values.
-> +                */
-> +               if (var->ip.addr == 0) {
-> +                       dwarf_name = variable__name(var, cu);
-> +                       if (!dwarf_name || strcmp(dwarf_name, name))
-> +                               continue;
-> +               }
-> +
->                 if (var->spec)
->                         var = var->spec;
->
-> --
-> 2.24.1
+> - Arnaldo
 >
