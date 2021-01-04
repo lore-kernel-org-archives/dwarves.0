@@ -7,50 +7,50 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 215B3C433E0
-	for <linux-dwarves@archiver.kernel.org>; Sun,  3 Jan 2021 21:32:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5BD69C433DB
+	for <linux-dwarves@archiver.kernel.org>; Mon,  4 Jan 2021 22:17:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D5E1420784
-	for <linux-dwarves@archiver.kernel.org>; Sun,  3 Jan 2021 21:32:49 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 24F5722519
+	for <linux-dwarves@archiver.kernel.org>; Mon,  4 Jan 2021 22:17:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726999AbhACVct (ORCPT
+        id S1726098AbhADWRJ (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Sun, 3 Jan 2021 16:32:49 -0500
-Received: from mail-wm1-f51.google.com ([209.85.128.51]:54047 "EHLO
-        mail-wm1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726924AbhACVct (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Sun, 3 Jan 2021 16:32:49 -0500
-Received: by mail-wm1-f51.google.com with SMTP id k10so16150018wmi.3
-        for <dwarves@vger.kernel.org>; Sun, 03 Jan 2021 13:32:32 -0800 (PST)
+        Mon, 4 Jan 2021 17:17:09 -0500
+Received: from mail-wr1-f49.google.com ([209.85.221.49]:33995 "EHLO
+        mail-wr1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726026AbhADWRI (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Mon, 4 Jan 2021 17:17:08 -0500
+Received: by mail-wr1-f49.google.com with SMTP id q18so33697335wrn.1
+        for <dwarves@vger.kernel.org>; Mon, 04 Jan 2021 14:16:51 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=nrhAGWuW98XlrStxiAx8jDhaVsnLE0K/f58du7zDuIs=;
-        b=oIVaFjwi7uDA0FHXEQARDee8doErn+PC90jmn0WTA5NevaBeAb3xLPprwjipoFxFCn
-         zEvJ62CH8fXbZqOws+i7SP2c7Sm9NTeMamBumzV9yWg6THG6hqeNOn25z20I68TR8eif
-         E0JoensY0IHf+2G2OcrraM+6/mSyJOX+17YZmZjapk344MzAb0Tw04EIp1VW2U+FoVql
-         OW6Eb3341dsA9FUovygYavcyJ0xjmQ5EHcrS+6jfyK36A5FIiFODOX5Sl0Y688Rt8uUI
-         PDnOocMGT9STfPigVBpc425PV4RP8IEbhtVmQp5Qp6374Gz0D9AhchvQRos/krGbFSl1
-         it3w==
-X-Gm-Message-State: AOAM532wxc7KGxM10BlSfuM8jVlphd4MNfBzo0Nx0Z//Vznw8X3QhKlv
-        QIy0IL+d2ZM00xKyti0NJD0yNelXG9KDej1m
-X-Google-Smtp-Source: ABdhPJyr5DOHET2JKROP4/0T5mbFWP9spEpS1U0VyeQjt9E8ju+tKOJ6b2FcibI8BGqmkb6HRplIuQ==
-X-Received: by 2002:a7b:cb09:: with SMTP id u9mr24676821wmj.61.1609709526430;
-        Sun, 03 Jan 2021 13:32:06 -0800 (PST)
+        bh=6CoLUcuX4lM6ijizrchc9AUWAmUj156qoDq8bwkK1CM=;
+        b=KKHg6OdVOXCpyP29ViZk9GoAPmBgJ/z3ZcG03AK0NSbIDgu7fto0XgwUcDJ1SsAi+h
+         kMh6IT7XS8YfG9MmMyGP+jIUJxGzTm41oEKEt4oI5k/1l86vXWPwhpyGBwOLqZbTsLfH
+         /gUf9X7lkl7g5o9s6x9emXAEbCGjfUsKQonJkHgu4jJiUeWsy1RC5PH+FJGz1ORBvp5o
+         SScL/UZhx2NQWv+tY8p3MObBnK4k6GELcaRG4FMi4oTpKBjSsMFJxndRypaWwVm2oLIN
+         UgyvCJmbpb+uxg0SvB1E/3oT0AVrQA//H8053S665txIj6Q/fUgeUJLfMIVFvxugNYVU
+         mbEw==
+X-Gm-Message-State: AOAM533i3PfoSzdvNM6oFN19/XF6vxgs6aSOsHVK4c0Hq5Kg4JQDS9tQ
+        7569TES8nD961bzDDRwFTti6wI7lLzzrTIrf
+X-Google-Smtp-Source: ABdhPJw7LvZ7vp3/6F2zqVcmyq8EhKHSS3Oipmgyj9ZE02Bdvdm20RBdvKGbeoe38hmbbg5lMrYisg==
+X-Received: by 2002:adf:ba8b:: with SMTP id p11mr78797145wrg.328.1609798585467;
+        Mon, 04 Jan 2021 14:16:25 -0800 (PST)
 Received: from localhost ([2a01:4b00:f419:6f00:e2db:6a88:4676:d01b])
-        by smtp.gmail.com with ESMTPSA id c7sm98421250wro.16.2021.01.03.13.32.05
+        by smtp.gmail.com with ESMTPSA id f77sm1091563wmf.42.2021.01.04.14.16.23
         for <dwarves@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 03 Jan 2021 13:32:05 -0800 (PST)
+        Mon, 04 Jan 2021 14:16:24 -0800 (PST)
 From:   Luca Boccassi <bluca@debian.org>
 To:     dwarves@vger.kernel.org
-Subject: [PATCH dwarves v2] libbpf: allow to use packaged version
-Date:   Sun,  3 Jan 2021 21:32:01 +0000
-Message-Id: <20210103213201.829827-1-bluca@debian.org>
+Subject: [PATCH dwarves v3] libbpf: allow to use packaged version
+Date:   Mon,  4 Jan 2021 22:16:22 +0000
+Message-Id: <20210104221622.256663-1-bluca@debian.org>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20210102182201.122619-1-bluca@debian.org>
-References: <20210102182201.122619-1-bluca@debian.org>
+In-Reply-To: <20210103213201.829827-1-bluca@debian.org>
+References: <20210103213201.829827-1-bluca@debian.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -59,27 +59,32 @@ X-Mailing-List: dwarves@vger.kernel.org
 
 Add a new CMake option, LIBBPF_EMBEDDED, to switch between the
 embedded version and the system version (searched via pkg-config)
-of libbpf. Set the system version as the default.
+of libbpf. Set the embedded version as the default.
 
 Signed-off-by: Luca Boccassi <bluca@debian.org>
 ---
 v2: switched default to use embedded version
+v3: add lib/include/bpf -> lib/bpf/src symlink to allow using 'system'
+    style #include everywhere, rather than #ifdefs.
+    Thanks Andrii for the suggestion!
 
- CMakeLists.txt   | 49 +++++++++++++++++++++++++++++++++++-------------
- btf_encoder.c    |  5 +++++
- btf_loader.c     |  4 ++++
- libbtf.c         |  6 ++++++
- libbtf.h         |  4 ++++
- pahole.c         |  4 ++++
- pahole_strings.h |  4 ++++
- strings.c        |  4 ++++
- 8 files changed, 67 insertions(+), 13 deletions(-)
+ CMakeLists.txt   | 43 ++++++++++++++++++++++++++++++-------------
+ btf_encoder.c    |  4 ++--
+ btf_loader.c     |  2 +-
+ lib/include/bpf  |  1 +
+ libbtf.c         |  7 +++----
+ libbtf.h         |  2 +-
+ pahole.c         |  2 +-
+ pahole_strings.h |  2 +-
+ strings.c        |  2 +-
+ 9 files changed, 41 insertions(+), 24 deletions(-)
+ create mode 120000 lib/include/bpf
 
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 857487a..188f334 100644
+index 857487a..eefdebe 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -2,9 +2,23 @@ project(pahole C)
+@@ -2,9 +2,24 @@ project(pahole C)
  cmake_minimum_required(VERSION 2.8.8)
  cmake_policy(SET CMP0005 NEW)
  
@@ -96,16 +101,17 @@ index 857487a..188f334 100644
 -		    ${CMAKE_CURRENT_SOURCE_DIR}/lib/bpf/include/uapi)
 +		    ${CMAKE_CURRENT_SOURCE_DIR})
 +if(NOT LIBBPF_FOUND)
++	# Allows to use 'system' style #include with both embedded and system libbpf
++	INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/lib/include)
 +	INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/lib/bpf/include/uapi)
 +else()
 +	INCLUDE_DIRECTORIES(${LIBBPF_INCLUDE_DIRS})
 +	LINK_DIRECTORIES(${LIBBPF_LIBRARY_DIRS})
-+	ADD_DEFINITIONS(-DLIBBPF_FOUND)
 +endif()
  
  # Try to parse this later, Helio just showed me a KDE4 example to support
  # x86-64 builds.
-@@ -56,7 +70,7 @@ if(GIT_FOUND AND EXISTS "${PROJECT_SOURCE_DIR}/.git")
+@@ -56,7 +71,7 @@ if(GIT_FOUND AND EXISTS "${PROJECT_SOURCE_DIR}/.git")
  		endif()
  	endif()
  endif()
@@ -114,7 +120,7 @@ index 857487a..188f334 100644
  	message(FATAL_ERROR "The submodules were not downloaded! GIT_SUBMODULE was turned off or failed. Please update submodules and try again.")
  endif()
  
-@@ -81,22 +95,31 @@ endif()
+@@ -81,22 +96,24 @@ endif()
  
  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64")
  
@@ -129,8 +135,7 @@ index 857487a..188f334 100644
 +	add_library(bpf OBJECT ${libbpf_sources})
 +	set_property(TARGET bpf PROPERTY POSITION_INDEPENDENT_CODE 1)
 +	target_include_directories(bpf PRIVATE
-+				   ${CMAKE_CURRENT_SOURCE_DIR}/lib/bpf/include
-+				   ${CMAKE_CURRENT_SOURCE_DIR}/lib/bpf/include/uapi)
++				   ${CMAKE_CURRENT_SOURCE_DIR}/lib/bpf/include)
 +endif()
  
  set(dwarves_LIB_SRCS dwarves.c dwarves_fprintf.c gobuffer strings
@@ -146,132 +151,133 @@ index 857487a..188f334 100644
 -target_include_directories(dwarves PRIVATE
 -			   ${CMAKE_CURRENT_SOURCE_DIR}/lib/bpf/include/uapi)
 -target_link_libraries(dwarves ${DWARF_LIBRARIES} ${ZLIB_LIBRARIES})
-+if (NOT LIBBPF_FOUND)
-+	target_include_directories(dwarves PRIVATE
-+				   ${CMAKE_CURRENT_SOURCE_DIR}/lib/bpf/include/uapi)
-+else()
-+	target_include_directories(dwarves PRIVATE ${LIBBPF_INCLUDE_DIRS})
-+endif()
 +target_link_libraries(dwarves ${DWARF_LIBRARIES} ${ZLIB_LIBRARIES} ${LIBBPF_LIBRARIES})
  
  set(dwarves_emit_LIB_SRCS dwarves_emit.c)
  add_library(dwarves_emit SHARED ${dwarves_emit_LIB_SRCS})
 diff --git a/btf_encoder.c b/btf_encoder.c
-index 3339730..c13dc7e 100644
+index 3339730..76e7d43 100644
 --- a/btf_encoder.c
 +++ b/btf_encoder.c
-@@ -11,8 +11,13 @@
+@@ -11,12 +11,12 @@
  
  #include "dwarves.h"
  #include "libbtf.h"
-+#ifdef LIBBPF_FOUND
-+#include <linux/btf.h>
-+#include <bpf/libbpf.h>
-+#else
- #include "lib/bpf/include/uapi/linux/btf.h"
- #include "lib/bpf/src/libbpf.h"
-+#endif
+-#include "lib/bpf/include/uapi/linux/btf.h"
+-#include "lib/bpf/src/libbpf.h"
  #include "hash.h"
  #include "elf_symtab.h"
  #include "btf_encoder.h"
+ 
++#include <linux/btf.h>
++#include <bpf/libbpf.h>
+ #include <ctype.h> /* for isalpha() and isalnum() */
+ #include <stdlib.h> /* for qsort() and bsearch() */
+ #include <inttypes.h>
 diff --git a/btf_loader.c b/btf_loader.c
-index ec286f4..744abc6 100644
+index ec286f4..fa85d06 100644
 --- a/btf_loader.c
 +++ b/btf_loader.c
-@@ -25,7 +25,11 @@
+@@ -20,12 +20,12 @@
+ #include <string.h>
+ #include <limits.h>
+ #include <libgen.h>
++#include <linux/btf.h>
+ #include <zlib.h>
+ 
  #include <gelf.h>
  
  #include "libbtf.h"
-+#ifdef LIBBPF_FOUND
-+#include <linux/btf.h>
-+#else
- #include "lib/bpf/include/uapi/linux/btf.h"
-+#endif
+-#include "lib/bpf/include/uapi/linux/btf.h"
  #include "dutil.h"
  #include "dwarves.h"
  
+diff --git a/lib/include/bpf b/lib/include/bpf
+new file mode 120000
+index 0000000..4c41b71
+--- /dev/null
++++ b/lib/include/bpf
+@@ -0,0 +1 @@
++../bpf/src
+\ No newline at end of file
 diff --git a/libbtf.c b/libbtf.c
-index 16e1d45..840d2a1 100644
+index 16e1d45..3cc2ac5 100644
 --- a/libbtf.c
 +++ b/libbtf.c
-@@ -18,10 +18,16 @@
+@@ -16,12 +16,11 @@
+ #include <sys/stat.h>
+ #include <unistd.h>
  #include <stdarg.h>
- 
- #include "libbtf.h"
-+#ifdef LIBBPF_FOUND
 +#include <linux/btf.h>
 +#include <bpf/btf.h>
 +#include <bpf/libbpf.h>
-+#else
- #include "lib/bpf/include/uapi/linux/btf.h"
- #include "lib/bpf/include/linux/err.h"
- #include "lib/bpf/src/btf.h"
- #include "lib/bpf/src/libbpf.h"
-+#endif
+ 
+ #include "libbtf.h"
+-#include "lib/bpf/include/uapi/linux/btf.h"
+-#include "lib/bpf/include/linux/err.h"
+-#include "lib/bpf/src/btf.h"
+-#include "lib/bpf/src/libbpf.h"
  #include "dutil.h"
  #include "gobuffer.h"
  #include "dwarves.h"
 diff --git a/libbtf.h b/libbtf.h
-index 191f586..c01764e 100644
+index 191f586..0b99767 100644
 --- a/libbtf.h
 +++ b/libbtf.h
-@@ -11,7 +11,11 @@
+@@ -11,7 +11,7 @@
  
  #include <stdbool.h>
  #include <stdint.h>
-+#ifdef LIBBPF_FOUND
+-#include "lib/bpf/src/btf.h"
 +#include <bpf/btf.h>
-+#else
- #include "lib/bpf/src/btf.h"
-+#endif
  
  struct btf_elf {
  	void		  *priv;
 diff --git a/pahole.c b/pahole.c
-index 4a34ba5..cfcf829 100644
+index 4a34ba5..68dd166 100644
 --- a/pahole.c
 +++ b/pahole.c
-@@ -23,7 +23,11 @@
+@@ -16,6 +16,7 @@
+ #include <stdlib.h>
+ #include <string.h>
+ #include <unistd.h>
++#include <bpf/libbpf.h>
+ 
+ #include "dwarves_reorganize.h"
+ #include "dwarves.h"
+@@ -23,7 +24,6 @@
  #include "ctf_encoder.h"
  #include "btf_encoder.h"
  #include "libbtf.h"
-+#ifdef LIBBPF_FOUND
-+#include <bpf/libbpf.h>
-+#else
- #include "lib/bpf/src/libbpf.h"
-+#endif
+-#include "lib/bpf/src/libbpf.h"
  
  static bool btf_encode;
  static bool ctf_encode;
 diff --git a/pahole_strings.h b/pahole_strings.h
-index 522fbf2..8fc0648 100644
+index 522fbf2..657701b 100644
 --- a/pahole_strings.h
 +++ b/pahole_strings.h
-@@ -6,7 +6,11 @@
+@@ -6,7 +6,7 @@
    Copyright (C) 2008 Arnaldo Carvalho de Melo <acme@redhat.com>
  */
  
-+#ifdef LIBBPF_FOUND
+-#include "lib/bpf/src/btf.h"
 +#include <bpf/btf.h>
-+#else
- #include "lib/bpf/src/btf.h"
-+#endif
  
  typedef unsigned int strings_t;
  
 diff --git a/strings.c b/strings.c
-index d37f49d..507aaa1 100644
+index d37f49d..8244c49 100644
 --- a/strings.c
 +++ b/strings.c
-@@ -15,7 +15,11 @@
+@@ -13,9 +13,9 @@
+ #include <stdio.h>
+ #include <string.h>
  #include <zlib.h>
++#include <bpf/libbpf.h>
  
  #include "dutil.h"
-+#ifdef LIBBPF_FOUND
-+#include <bpf/libbpf.h>
-+#else
- #include "lib/bpf/src/libbpf.h"
-+#endif
+-#include "lib/bpf/src/libbpf.h"
  
  struct strings *strings__new(void)
  {
