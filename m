@@ -2,97 +2,135 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1E649C433E0
-	for <linux-dwarves@archiver.kernel.org>; Tue, 12 Jan 2021 18:41:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 672FEC433E0
+	for <linux-dwarves@archiver.kernel.org>; Tue, 12 Jan 2021 19:22:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C94AC2222A
-	for <linux-dwarves@archiver.kernel.org>; Tue, 12 Jan 2021 18:41:05 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2D37423107
+	for <linux-dwarves@archiver.kernel.org>; Tue, 12 Jan 2021 19:22:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406185AbhALSlF convert rfc822-to-8bit (ORCPT
+        id S2406510AbhALTVo (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Tue, 12 Jan 2021 13:41:05 -0500
-Received: from us-smtp-delivery-44.mimecast.com ([205.139.111.44]:39316 "EHLO
-        us-smtp-delivery-44.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2404158AbhALSlF (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Tue, 12 Jan 2021 13:41:05 -0500
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-552-TmcvJLZrPHaMclKdPHvBvQ-1; Tue, 12 Jan 2021 13:40:08 -0500
-X-MC-Unique: TmcvJLZrPHaMclKdPHvBvQ-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 21613107ACF7;
-        Tue, 12 Jan 2021 18:40:07 +0000 (UTC)
-Received: from krava.redhat.com (unknown [10.40.194.156])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id E31DF60BE2;
-        Tue, 12 Jan 2021 18:40:04 +0000 (UTC)
-From:   Jiri Olsa <jolsa@kernel.org>
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     dwarves@vger.kernel.org, bpf@vger.kernel.org,
+        Tue, 12 Jan 2021 14:21:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43670 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2406339AbhALTVg (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Tue, 12 Jan 2021 14:21:36 -0500
+Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6B82C061575;
+        Tue, 12 Jan 2021 11:20:55 -0800 (PST)
+Received: by mail-yb1-xb35.google.com with SMTP id 18so3212290ybx.2;
+        Tue, 12 Jan 2021 11:20:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ZrTMphAgvKGFr3hAFtVF+wajAgM4bFVoddK5qIwsbyc=;
+        b=J6yRObelgfU5yGXUdqTqomuf/z5BR4lUT7iSK6vMilj9Pq5nz9362BCeRX8uLrkKCM
+         Pgr6lxRBB3LsB2aDJmhWIMZxAPT225qnotZnDv/zjUICqsiaqS8MmzgSYlRNP+T80qY1
+         ST9z+qjPe1CJHKlftbvwmWAF4gPdRekb33NdRIMzVr7CwxRdxES4+B6VIQC6t+y6f0mv
+         dSnaYTmK6pDLftjPjcxv+in6ABkqoUbNfk70yQl27kQkU6xP7VJ5wv+Xsqo5a+i5HI6Y
+         nvX3pjkgRDyTee7ZL92iM6xQtZjog/i2I+DH1q7nqCJtppaIJOPAleLWlBNWf5p4dvLJ
+         LeLA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ZrTMphAgvKGFr3hAFtVF+wajAgM4bFVoddK5qIwsbyc=;
+        b=LjJmNzTNXQkvx95Kv6m6qMetM1KP18GAfI6RX9RZoX9NWd2VujfoYLnzXjDmEJPLJr
+         eaHW3NQjvT7DBd+A7J9ihAg76wFwgByPDG2PazdXGLfgxmBKYOmLaaE35kBNU7qZ9m3M
+         k/SV0FJPAsidd549JAN/c6biftVhna2LHy6O3cu4AsbQSm6hOiDVj6pemBDq/nxZRo3a
+         KtLa0tNWz4wvAIVv7eiPjW9KFRVu+s1in0PQ8d2HOgapvLyW5ZFZB/PauNGct+9jZF4l
+         GkUjOyxGGq5JdVHecAcjZxYIZ9innCKv5LzhmQsoOkwPa7S5YsARZnuChplDWwgDLLPk
+         xaMg==
+X-Gm-Message-State: AOAM533T6uCTJ6GEPiw8xJ2UBkdFSVz0q8My7kbl1j/7comE9Bp8KqC4
+        D9/Dk087vz5j+hmwRa+ZlxVKIlj2s4sJVPXnWBI=
+X-Google-Smtp-Source: ABdhPJzAQUHegCWhIDDPhnwHCb0DygblHYglh2gu4mH7P0xO7QvDuAjQ0h/ihd9erYiwJpK9SSyB8u642q8kR6e1Tik=
+X-Received: by 2002:a25:854a:: with SMTP id f10mr1342097ybn.510.1610479255239;
+ Tue, 12 Jan 2021 11:20:55 -0800 (PST)
+MIME-Version: 1.0
+References: <20210112184004.1302879-1-jolsa@kernel.org>
+In-Reply-To: <20210112184004.1302879-1-jolsa@kernel.org>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Tue, 12 Jan 2021 11:20:44 -0800
+Message-ID: <CAEf4BzZc0-csgmOP=eAvSP5uVYkKiYROAWtp8hwJcYA1awhVJw@mail.gmail.com>
+Subject: Re: [PATCH] btf_encoder: Add extra checks for symbol names
+To:     Jiri Olsa <jolsa@kernel.org>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        dwarves@vger.kernel.org, bpf <bpf@vger.kernel.org>,
         Alexei Starovoitov <ast@kernel.org>,
         Andrii Nakryiko <andriin@fb.com>, Yonghong Song <yhs@fb.com>,
         Hao Luo <haoluo@google.com>,
         Sedat Dilek <sedat.dilek@gmail.com>,
         Tom Stellard <tstellar@redhat.com>
-Subject: [PATCH] btf_encoder: Add extra checks for symbol names
-Date:   Tue, 12 Jan 2021 19:40:04 +0100
-Message-Id: <20210112184004.1302879-1-jolsa@kernel.org>
-MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=jolsa@kernel.org
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: kernel.org
-Content-Transfer-Encoding: 8BIT
-Content-Type: text/plain; charset=WINDOWS-1252
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-When processing kernel image build by clang we can
-find some functions without the name, which causes
-pahole to segfault.
+On Tue, Jan 12, 2021 at 10:43 AM Jiri Olsa <jolsa@kernel.org> wrote:
+>
+> When processing kernel image build by clang we can
+> find some functions without the name, which causes
+> pahole to segfault.
+>
+> Adding extra checks to make sure we always have
+> function's name defined before using it.
+>
+> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+> ---
+>  btf_encoder.c | 8 ++++++--
+>  1 file changed, 6 insertions(+), 2 deletions(-)
+>
+> diff --git a/btf_encoder.c b/btf_encoder.c
+> index 333973054b61..17f7a14f2ef0 100644
+> --- a/btf_encoder.c
+> +++ b/btf_encoder.c
+> @@ -72,6 +72,8 @@ static int collect_function(struct btf_elf *btfe, GElf_Sym *sym)
+>
+>         if (elf_sym__type(sym) != STT_FUNC)
+>                 return 0;
+> +       if (!elf_sym__name(sym, btfe->symtab))
+> +               return 0;
 
-Adding extra checks to make sure we always have
-function's name defined before using it.
+elf_sym__name() is called below again, so might be better to just use
+local variable to store result?
 
-Signed-off-by: Jiri Olsa <jolsa@kernel.org>
----
- btf_encoder.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+>
+>         if (functions_cnt == functions_alloc) {
+>                 functions_alloc = max(1000, functions_alloc * 3 / 2);
+> @@ -730,9 +732,11 @@ int cu__encode_btf(struct cu *cu, int verbose, bool force,
+>                 if (!has_arg_names(cu, &fn->proto))
+>                         continue;
+>                 if (functions_cnt) {
+> -                       struct elf_function *func;
+> +                       const char *name = function__name(fn, cu);
+> +                       struct elf_function *func = NULL;
+>
+> -                       func = find_function(btfe, function__name(fn, cu));
+> +                       if (name)
+> +                               func = find_function(btfe, name);
 
-diff --git a/btf_encoder.c b/btf_encoder.c
-index 333973054b61..17f7a14f2ef0 100644
---- a/btf_encoder.c
-+++ b/btf_encoder.c
-@@ -72,6 +72,8 @@ static int collect_function(struct btf_elf *btfe, GElf_Sym *sym)
- 
- 	if (elf_sym__type(sym) != STT_FUNC)
- 		return 0;
-+	if (!elf_sym__name(sym, btfe->symtab))
-+		return 0;
- 
- 	if (functions_cnt == functions_alloc) {
- 		functions_alloc = max(1000, functions_alloc * 3 / 2);
-@@ -730,9 +732,11 @@ int cu__encode_btf(struct cu *cu, int verbose, bool force,
- 		if (!has_arg_names(cu, &fn->proto))
- 			continue;
- 		if (functions_cnt) {
--			struct elf_function *func;
-+			const char *name = function__name(fn, cu);
-+			struct elf_function *func = NULL;
- 
--			func = find_function(btfe, function__name(fn, cu));
-+			if (name)
-+				func = find_function(btfe, name);
- 			if (!func || func->generated)
- 				continue;
- 			func->generated = true;
--- 
-2.26.2
+isn't this a more convoluted way of writing:
 
+name = function__name(fn, cu);
+if (!name)
+    continue;
+
+func = find_function(btfe, name);
+if (!func || func->generated)
+    continue
+
+?
+
+>                         if (!func || func->generated)
+>                                 continue;
+>                         func->generated = true;
+> --
+> 2.26.2
+>
