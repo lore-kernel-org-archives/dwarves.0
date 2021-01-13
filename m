@@ -2,290 +2,210 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+X-Spam-Status: No, score=-17.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,MSGID_FROM_MTA_HEADER,NICE_REPLY_A,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0BAE7C43217
-	for <linux-dwarves@archiver.kernel.org>; Wed, 13 Jan 2021 11:18:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C4254C433DB
+	for <linux-dwarves@archiver.kernel.org>; Wed, 13 Jan 2021 17:21:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CFF58233F9
-	for <linux-dwarves@archiver.kernel.org>; Wed, 13 Jan 2021 11:18:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 77E0923437
+	for <linux-dwarves@archiver.kernel.org>; Wed, 13 Jan 2021 17:21:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727753AbhAMLSN (ORCPT
+        id S1726544AbhAMRVQ (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Wed, 13 Jan 2021 06:18:13 -0500
-Received: from mail.kernel.org ([198.145.29.99]:43202 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726862AbhAMLSM (ORCPT <rfc822;dwarves@vger.kernel.org>);
-        Wed, 13 Jan 2021 06:18:12 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 2A5D723358;
-        Wed, 13 Jan 2021 11:17:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1610536651;
-        bh=+mVQryQ+KKiajXozl7lDQWa8OugeeqlHnpRJXkTgFSw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lNbUXS1GZqRzo5wQNMXdAEGcZh4S0qQVJSMduPfUagPmdUaHHJ90rbq2Vvc7TRiT7
-         fowFACLzVFz29lR3j2AgMMs3as/5/TJgmlD8T1JoTqU2qwrv2om416WZ7vsgvMk290
-         1x/8Mx1RVjLy7zDb1WQkIho0zaPjk2Y5BRpRPDxjETfF4drdEQfTnidGNznk1pfkVu
-         VY2x/nbxA42LFPMfguY0I/qGYZMl1cVU1nH6FHpAzgzj7VqKrJIOcg/Lsp2hObB3T0
-         vDV594A5QwfUn+JPfkE7L0QU+rm1/cjHgmfYVWarmqIjxKwKvaBfDpMAQlE0blLQtU
-         uckCMNX8JavJg==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 07BF5411E9; Wed, 13 Jan 2021 08:18:03 -0300 (-03)
-Date:   Wed, 13 Jan 2021 08:18:03 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Luca Boccassi <bluca@debian.org>
-Cc:     dwarves@vger.kernel.org
-Subject: Re: [PATCH dwarves v3] libbpf: allow to use packaged version
-Message-ID: <20210113111803.GC3816@kernel.org>
-References: <20210103213201.829827-1-bluca@debian.org>
- <20210104221622.256663-1-bluca@debian.org>
+        Wed, 13 Jan 2021 12:21:16 -0500
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:22688 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726379AbhAMRVP (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Wed, 13 Jan 2021 12:21:15 -0500
+Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 10DHKO2l009659;
+        Wed, 13 Jan 2021 09:20:29 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=subject : to : cc :
+ references : from : message-id : date : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=facebook;
+ bh=o9kPxwhqIIkOOL9PbvCIEe3NxVQSS+VVOgD/5FJuGi8=;
+ b=qK1+wRQmIcJI/wut5KzzgisZ703dMxfoFymclYqayNerF+COxnCoKwHem4cZEtLYtD8p
+ NuHV2P5vge+xfgS5rJvvINts5mxqjq1mxguM1VlZMw6tOvzX5Jx3lfZo2udBRK/+xQfi
+ fOUkBxF8o4MIXTwL4kK/LINoLzFtdXL7yTY= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com with ESMTP id 361fpje5vs-7
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Wed, 13 Jan 2021 09:20:29 -0800
+Received: from NAM04-CO1-obe.outbound.protection.outlook.com (100.104.98.9) by
+ o365-in.thefacebook.com (100.104.94.199) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1979.3; Wed, 13 Jan 2021 09:20:23 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=fNV6cmCqVXM1wsUTCJ77sAq/OXAHQ9DIbFYvyPn/ONLFVbOJBwzHg/hI7vWmCrPdWt7xvjZktlHeTnKhXQw3MVMINg13k0H1bXIpczWGBzVektUxCqu8H2v2QYRmDEg3AbUo1WTg1lNg5r5Sr2zy13oMLYkwMqiN+CKkveBW/PrbrGw06MQc9ELpl03Nhq3A8hkR+krG1SnglFodT8wublMDpZ6EzmQJVLA6d7vspkGLsv/vPoTnpWGct4YYWm389yX2pU06L0PwjcWcsDm2CPMbndMyBXbr2dMgqpkwoBgIs48XfkCzE8iQZ99TYkQtPP27fBTAjzbR77U4I49ijA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=o9kPxwhqIIkOOL9PbvCIEe3NxVQSS+VVOgD/5FJuGi8=;
+ b=G85GywFK6lhwWD7F1cdFAjaUdMxOFWEqPXb1zHY55XK/d4BYp2cid17rbhFWOdXGnFxDCC74AdEEMehEN2Mj6zBSRAIp1SX0jT+nX5VNdrPw3zACzTLrGioRbqMX44ZhLGIE/Cs0m7vmemQI2BE+ZTC+NWv1fBHKhTIWrJaR4LCZg3STXmwLQ+YV5A8QRH+6x8L4xalj2eJ1CuVNsj1qOCXUNiJ9SpLrx2cZ03B82WZXxG7kmVQzHM/OEr9IM7DsCyNCcnQcfehbC6UgUf6mFXic0tgmfCxsCXVu8fm/NMPmfRsEDSPt2j0ZI9IQ55hV6BpDbCRsVAiLZzYxf2m82A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
+ header.d=fb.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
+ s=selector2-fb-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=o9kPxwhqIIkOOL9PbvCIEe3NxVQSS+VVOgD/5FJuGi8=;
+ b=WyRhBYiCCW1CmzLII3bgmdlE76u+VGqA8HPJFvK+Qgz5UEOXNTBj7hdVSGTi4B01EC25iP8lohXBSr2/FnRYV9A2L+I596JNeijvz/Gg2NyweJM+hcSzVVBTfyIdiD3L2NNpEpd1CGt40V6gdMY213I/jt1ZaRcKfh+9LWSFMyY=
+Authentication-Results: redhat.com; dkim=none (message not signed)
+ header.d=none;redhat.com; dmarc=none action=none header.from=fb.com;
+Received: from BYAPR15MB4088.namprd15.prod.outlook.com (2603:10b6:a02:c3::18)
+ by BYAPR15MB3048.namprd15.prod.outlook.com (2603:10b6:a03:fc::25) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3742.6; Wed, 13 Jan
+ 2021 17:20:20 +0000
+Received: from BYAPR15MB4088.namprd15.prod.outlook.com
+ ([fe80::9ae:1628:daf9:4b03]) by BYAPR15MB4088.namprd15.prod.outlook.com
+ ([fe80::9ae:1628:daf9:4b03%7]) with mapi id 15.20.3742.012; Wed, 13 Jan 2021
+ 17:20:20 +0000
+Subject: Re: [PATCHv2] btf_encoder: Add extra checks for symbol names
+To:     Jiri Olsa <jolsa@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>
+CC:     <dwarves@vger.kernel.org>, <bpf@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andriin@fb.com>, Hao Luo <haoluo@google.com>,
+        Sedat Dilek <sedat.dilek@gmail.com>,
+        Tom Stellard <tstellar@redhat.com>
+References: <20210113102509.1338601-1-jolsa@kernel.org>
+From:   Yonghong Song <yhs@fb.com>
+Message-ID: <2c933606-5591-cc20-9832-09a2549e9c58@fb.com>
+Date:   Wed, 13 Jan 2021 09:20:17 -0800
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
+ Gecko/20100101 Thunderbird/78.6.1
+In-Reply-To: <20210113102509.1338601-1-jolsa@kernel.org>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [2620:10d:c090:400::5:e777]
+X-ClientProxiedBy: MWHPR20CA0022.namprd20.prod.outlook.com
+ (2603:10b6:300:13d::32) To BYAPR15MB4088.namprd15.prod.outlook.com
+ (2603:10b6:a02:c3::18)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210104221622.256663-1-bluca@debian.org>
-X-Url:  http://acmel.wordpress.com
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from [IPv6:2620:10d:c085:21e1::13f6] (2620:10d:c090:400::5:e777) by MWHPR20CA0022.namprd20.prod.outlook.com (2603:10b6:300:13d::32) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3763.9 via Frontend Transport; Wed, 13 Jan 2021 17:20:19 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 92c4b559-f867-4b87-78be-08d8b7e7814b
+X-MS-TrafficTypeDiagnostic: BYAPR15MB3048:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <BYAPR15MB3048FD7AE7B02782FAF75E40D3A90@BYAPR15MB3048.namprd15.prod.outlook.com>
+X-FB-Source: Internal
+X-MS-Oob-TLC-OOBClassifiers: OLM:1002;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: rjXM8JH+mineqpeXdT36/JfMOevZHU26HgWyLJhIZXSfAa3wFJtIsybSnr8ZmOhx8+Bk3R6yppZ42Qaj8/UzwjTzNsibCcLRSh+6JHL6tioFjnWA2HOnRo2ohPZT/3MHXyAPTgVO0U0wf1NlO1ymYioUPL7OCrI4VQtL48GeFdBy1VQmM1Uvc4dWXRa4g7Z5OVnlFZB/I+DVr+H7CpeLF+K67qHJV+DivU+w/00B1KHndqMhguplDYyvZ7SNYgl2aheciywlRG0GcSUqXaQCj4NhlCKeLv76NdvvwXUCZFcELWkseXUdKyJS/px55vZ12WS13BFm01enE6qKwdkpMpiJsvnuXBYTM9ioopAEl+K0CgVJV9xG79R6HGAvuTF0CTiCG6UDLikUgBz3c6Ld/O2rsZ19o+xEwQjksf2zdGKGtqMweR7Ns4q6HHEjQp46UYlnQWPzanUzTwZmDa6w/KFRWUYJdMFOId+2ZzuafG0=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR15MB4088.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(136003)(396003)(366004)(346002)(376002)(39860400002)(31696002)(54906003)(83380400001)(86362001)(31686004)(8936002)(16526019)(2906002)(186003)(8676002)(316002)(110136005)(6486002)(66556008)(52116002)(4326008)(53546011)(66476007)(66946007)(2616005)(478600001)(5660300002)(36756003)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData: =?Windows-1252?Q?KgqaIYeMste1dxgMK1sANs4rU8HOg9qGcpAjRCvOzDGnhGA3M1Tu5QMy?=
+ =?Windows-1252?Q?/YanTt1iJgvHR0612YRILofq2BQJ67OC+SrgY6zCGI8z45FedYNyRVYi?=
+ =?Windows-1252?Q?Ri/SJKk1aFrj5H0xXC2BKc6ygK817mZ+RkQnPX2rjy4hp+uLfTzGBce9?=
+ =?Windows-1252?Q?zTmTAoNsVSLGthK0t8GgysTuGo4P5e4bQXmG9vvf3PmJ1xPlPXtYxOtu?=
+ =?Windows-1252?Q?LzEgx0OGrGGLjKWkk60ZP1LwiEY3uR75jrIQYeRnAmSvNvB96qXQusRo?=
+ =?Windows-1252?Q?dGRuxQ2xG92K5JL+wbuEDR+JiCCo7HgDTiXwlGor5rnSNQiPpNqOfxii?=
+ =?Windows-1252?Q?Y2v78fGw6IAzyFMBsc66iD3OHwaQmgjPEOGjn6lPVRPD/DLDfgHlqQ7H?=
+ =?Windows-1252?Q?b2spQl25nl3/OgrgIPYLlNDklPbyPRlZMJi9a+SndYHv65P6jvwJOujF?=
+ =?Windows-1252?Q?qcgiyfC4XaeVwCG/Sn6tSMVhdVFRnqGUG3BzIqHhN2dyUOPcwQ199UsE?=
+ =?Windows-1252?Q?ngajuxKDLsluGpyP4v99b2lYmXcBgdQ3ZVbOXu8LbpUf9CvuIVqHtqtW?=
+ =?Windows-1252?Q?P2Sik+aaPBQEWOMNAuns0V1/MNSnIa0GgnGNBm9aZPG/0oeIINFEBN4c?=
+ =?Windows-1252?Q?t0DMFDQ1Q+X8NOFA0eml3+WKY/cc/HtByDonCNGnGA0Yp8P+eYDSO0gC?=
+ =?Windows-1252?Q?aGB2JRSDftLZk9VpIgg8wf4VdTeVnTJ5OjO15OXz0bgZK6r6/RyXtVtd?=
+ =?Windows-1252?Q?QkAsp0qLyiMo9ADVEP5XQOHBRdVEy0chkZSYGuO2HwuFBOYgCth73q7l?=
+ =?Windows-1252?Q?kZvhlLQxvQ/WckPjl3ps4LfF7pnuOfwEOWP2HQzTAf0eqlQVi0Yy+44I?=
+ =?Windows-1252?Q?Cm3YRppg0g7tZUlKTsQba5RNU1TmrSN2oWwi0LUi+a04kp7kmlA63Y0B?=
+ =?Windows-1252?Q?FwNmoH5755x6imAsryxI0Us73UO3pT47FTiw9xHh+tAjI+5aiNWobRFk?=
+ =?Windows-1252?Q?NxTLMrb0oi10UoBwRegR70ifSp5tE6RBte6MUoiqUNGzLRYbemca8fN1?=
+ =?Windows-1252?Q?kPMuhbPHBvc8RikWoSzscFm9h5Qdj0z3/8iDgg=3D=3D?=
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR15MB4088.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Jan 2021 17:20:20.6291
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-Network-Message-Id: 92c4b559-f867-4b87-78be-08d8b7e7814b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: GIBy7bRb0Pj+DM4EIGM0hjdS2Y8WQsq23LPz8mRPCrTZs0ZeltMvuH56seBzEG6V
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR15MB3048
+X-OriginatorOrg: fb.com
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.343,18.0.737
+ definitions=2021-01-13_09:2021-01-13,2021-01-13 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 malwarescore=0
+ lowpriorityscore=0 phishscore=0 clxscore=1011 adultscore=0 spamscore=0
+ priorityscore=1501 mlxscore=0 suspectscore=0 mlxlogscore=999
+ impostorscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2009150000 definitions=main-2101130104
+X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-Em Mon, Jan 04, 2021 at 10:16:22PM +0000, Luca Boccassi escreveu:
-> Add a new CMake option, LIBBPF_EMBEDDED, to switch between the
-> embedded version and the system version (searched via pkg-config)
-> of libbpf. Set the embedded version as the default.
 
-I'm coming back from vacation, will try to check this soon.
 
-Thanks,
+On 1/13/21 2:25 AM, Jiri Olsa wrote:
+> When processing kernel image build by clang we can
+> find some functions without the name, which causes
+> pahole to segfault.
 
-- Arnaldo
- 
-> Signed-off-by: Luca Boccassi <bluca@debian.org>
+Just curious. What kinds of functions gcc generates
+names and clang doesn't?
+
+> 
+> Adding extra checks to make sure we always have
+> function's name defined before using it.
+> 
+> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 > ---
-> v2: switched default to use embedded version
-> v3: add lib/include/bpf -> lib/bpf/src symlink to allow using 'system'
->     style #include everywhere, rather than #ifdefs.
->     Thanks Andrii for the suggestion!
+>    v2 changes:
+>      - reorg the code based on Andrii's suggestion
 > 
->  CMakeLists.txt   | 43 ++++++++++++++++++++++++++++++-------------
->  btf_encoder.c    |  4 ++--
->  btf_loader.c     |  2 +-
->  lib/include/bpf  |  1 +
->  libbtf.c         |  7 +++----
->  libbtf.h         |  2 +-
->  pahole.c         |  2 +-
->  pahole_strings.h |  2 +-
->  strings.c        |  2 +-
->  9 files changed, 41 insertions(+), 24 deletions(-)
->  create mode 120000 lib/include/bpf
+>   btf_encoder.c | 13 +++++++++++--
+>   1 file changed, 11 insertions(+), 2 deletions(-)
 > 
-> diff --git a/CMakeLists.txt b/CMakeLists.txt
-> index 857487a..eefdebe 100644
-> --- a/CMakeLists.txt
-> +++ b/CMakeLists.txt
-> @@ -2,9 +2,24 @@ project(pahole C)
->  cmake_minimum_required(VERSION 2.8.8)
->  cmake_policy(SET CMP0005 NEW)
->  
-> +option(LIBBPF_EMBEDDED "Use the embedded version of libbpf instead of searching it via pkg-config" ON)
-> +if (NOT LIBBPF_EMBEDDED)
-> +	find_package(PkgConfig)
-> +	if(PKGCONFIG_FOUND)
-> +		pkg_check_modules(LIBBPF libbpf>=0.3.0)
-> +	endif()
-> +endif()
-> +
->  INCLUDE_DIRECTORIES(${CMAKE_CURRENT_BINARY_DIR}
-> -		    ${CMAKE_CURRENT_SOURCE_DIR}
-> -		    ${CMAKE_CURRENT_SOURCE_DIR}/lib/bpf/include/uapi)
-> +		    ${CMAKE_CURRENT_SOURCE_DIR})
-> +if(NOT LIBBPF_FOUND)
-> +	# Allows to use 'system' style #include with both embedded and system libbpf
-> +	INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/lib/include)
-> +	INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/lib/bpf/include/uapi)
-> +else()
-> +	INCLUDE_DIRECTORIES(${LIBBPF_INCLUDE_DIRS})
-> +	LINK_DIRECTORIES(${LIBBPF_LIBRARY_DIRS})
-> +endif()
->  
->  # Try to parse this later, Helio just showed me a KDE4 example to support
->  # x86-64 builds.
-> @@ -56,7 +71,7 @@ if(GIT_FOUND AND EXISTS "${PROJECT_SOURCE_DIR}/.git")
->  		endif()
->  	endif()
->  endif()
-> -if(NOT EXISTS "${PROJECT_SOURCE_DIR}/lib/bpf/src/btf.h")
-> +if(NOT LIBBPF_FOUND AND NOT EXISTS "${PROJECT_SOURCE_DIR}/lib/bpf/src/btf.h")
->  	message(FATAL_ERROR "The submodules were not downloaded! GIT_SUBMODULE was turned off or failed. Please update submodules and try again.")
->  endif()
->  
-> @@ -81,22 +96,24 @@ endif()
->  
->  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64")
->  
-> -file(GLOB libbpf_sources "lib/bpf/src/*.c")
-> -add_library(bpf OBJECT ${libbpf_sources})
-> -set_property(TARGET bpf PROPERTY POSITION_INDEPENDENT_CODE 1)
-> -target_include_directories(bpf PRIVATE
-> -			   ${CMAKE_CURRENT_SOURCE_DIR}/lib/bpf/include
-> -			   ${CMAKE_CURRENT_SOURCE_DIR}/lib/bpf/include/uapi)
-> +if (NOT LIBBPF_FOUND)
-> +	file(GLOB libbpf_sources "lib/bpf/src/*.c")
-> +	add_library(bpf OBJECT ${libbpf_sources})
-> +	set_property(TARGET bpf PROPERTY POSITION_INDEPENDENT_CODE 1)
-> +	target_include_directories(bpf PRIVATE
-> +				   ${CMAKE_CURRENT_SOURCE_DIR}/lib/bpf/include)
-> +endif()
->  
->  set(dwarves_LIB_SRCS dwarves.c dwarves_fprintf.c gobuffer strings
->  		     ctf_encoder.c ctf_loader.c libctf.c btf_encoder.c btf_loader.c libbtf.c
->  		     dwarf_loader.c dutil.c elf_symtab.c rbtree.c)
-> -add_library(dwarves SHARED ${dwarves_LIB_SRCS} $<TARGET_OBJECTS:bpf>)
-> +if (NOT LIBBPF_FOUND)
-> +	list(APPEND dwarves_LIB_SRCS $<TARGET_OBJECTS:bpf>)
-> +endif()
-> +add_library(dwarves SHARED ${dwarves_LIB_SRCS})
->  set_target_properties(dwarves PROPERTIES VERSION 1.0.0 SOVERSION 1)
->  set_target_properties(dwarves PROPERTIES INTERFACE_LINK_LIBRARIES "")
-> -target_include_directories(dwarves PRIVATE
-> -			   ${CMAKE_CURRENT_SOURCE_DIR}/lib/bpf/include/uapi)
-> -target_link_libraries(dwarves ${DWARF_LIBRARIES} ${ZLIB_LIBRARIES})
-> +target_link_libraries(dwarves ${DWARF_LIBRARIES} ${ZLIB_LIBRARIES} ${LIBBPF_LIBRARIES})
->  
->  set(dwarves_emit_LIB_SRCS dwarves_emit.c)
->  add_library(dwarves_emit SHARED ${dwarves_emit_LIB_SRCS})
 > diff --git a/btf_encoder.c b/btf_encoder.c
-> index 3339730..76e7d43 100644
+> index 333973054b61..5557c9efd365 100644
 > --- a/btf_encoder.c
 > +++ b/btf_encoder.c
-> @@ -11,12 +11,12 @@
->  
->  #include "dwarves.h"
->  #include "libbtf.h"
-> -#include "lib/bpf/include/uapi/linux/btf.h"
-> -#include "lib/bpf/src/libbpf.h"
->  #include "hash.h"
->  #include "elf_symtab.h"
->  #include "btf_encoder.h"
->  
-> +#include <linux/btf.h>
-> +#include <bpf/libbpf.h>
->  #include <ctype.h> /* for isalpha() and isalnum() */
->  #include <stdlib.h> /* for qsort() and bsearch() */
->  #include <inttypes.h>
-> diff --git a/btf_loader.c b/btf_loader.c
-> index ec286f4..fa85d06 100644
-> --- a/btf_loader.c
-> +++ b/btf_loader.c
-> @@ -20,12 +20,12 @@
->  #include <string.h>
->  #include <limits.h>
->  #include <libgen.h>
-> +#include <linux/btf.h>
->  #include <zlib.h>
->  
->  #include <gelf.h>
->  
->  #include "libbtf.h"
-> -#include "lib/bpf/include/uapi/linux/btf.h"
->  #include "dutil.h"
->  #include "dwarves.h"
->  
-> diff --git a/lib/include/bpf b/lib/include/bpf
-> new file mode 120000
-> index 0000000..4c41b71
-> --- /dev/null
-> +++ b/lib/include/bpf
-> @@ -0,0 +1 @@
-> +../bpf/src
-> \ No newline at end of file
-> diff --git a/libbtf.c b/libbtf.c
-> index 16e1d45..3cc2ac5 100644
-> --- a/libbtf.c
-> +++ b/libbtf.c
-> @@ -16,12 +16,11 @@
->  #include <sys/stat.h>
->  #include <unistd.h>
->  #include <stdarg.h>
-> +#include <linux/btf.h>
-> +#include <bpf/btf.h>
-> +#include <bpf/libbpf.h>
->  
->  #include "libbtf.h"
-> -#include "lib/bpf/include/uapi/linux/btf.h"
-> -#include "lib/bpf/include/linux/err.h"
-> -#include "lib/bpf/src/btf.h"
-> -#include "lib/bpf/src/libbpf.h"
->  #include "dutil.h"
->  #include "gobuffer.h"
->  #include "dwarves.h"
-> diff --git a/libbtf.h b/libbtf.h
-> index 191f586..0b99767 100644
-> --- a/libbtf.h
-> +++ b/libbtf.h
-> @@ -11,7 +11,7 @@
->  
->  #include <stdbool.h>
->  #include <stdint.h>
-> -#include "lib/bpf/src/btf.h"
-> +#include <bpf/btf.h>
->  
->  struct btf_elf {
->  	void		  *priv;
-> diff --git a/pahole.c b/pahole.c
-> index 4a34ba5..68dd166 100644
-> --- a/pahole.c
-> +++ b/pahole.c
-> @@ -16,6 +16,7 @@
->  #include <stdlib.h>
->  #include <string.h>
->  #include <unistd.h>
-> +#include <bpf/libbpf.h>
->  
->  #include "dwarves_reorganize.h"
->  #include "dwarves.h"
-> @@ -23,7 +24,6 @@
->  #include "ctf_encoder.h"
->  #include "btf_encoder.h"
->  #include "libbtf.h"
-> -#include "lib/bpf/src/libbpf.h"
->  
->  static bool btf_encode;
->  static bool ctf_encode;
-> diff --git a/pahole_strings.h b/pahole_strings.h
-> index 522fbf2..657701b 100644
-> --- a/pahole_strings.h
-> +++ b/pahole_strings.h
-> @@ -6,7 +6,7 @@
->    Copyright (C) 2008 Arnaldo Carvalho de Melo <acme@redhat.com>
->  */
->  
-> -#include "lib/bpf/src/btf.h"
-> +#include <bpf/btf.h>
->  
->  typedef unsigned int strings_t;
->  
-> diff --git a/strings.c b/strings.c
-> index d37f49d..8244c49 100644
-> --- a/strings.c
-> +++ b/strings.c
-> @@ -13,9 +13,9 @@
->  #include <stdio.h>
->  #include <string.h>
->  #include <zlib.h>
-> +#include <bpf/libbpf.h>
->  
->  #include "dutil.h"
-> -#include "lib/bpf/src/libbpf.h"
->  
->  struct strings *strings__new(void)
->  {
-> -- 
-> 2.29.2
+> @@ -68,10 +68,14 @@ static int collect_function(struct btf_elf *btfe, GElf_Sym *sym)
+>   	struct elf_function *new;
+>   	static GElf_Shdr sh;
+>   	static int last_idx;
+> +	const char *name;
+>   	int idx;
+>   
+>   	if (elf_sym__type(sym) != STT_FUNC)
+>   		return 0;
+> +	name = elf_sym__name(sym, btfe->symtab);
+> +	if (!name)
+> +		return 0;
+>   
+>   	if (functions_cnt == functions_alloc) {
+>   		functions_alloc = max(1000, functions_alloc * 3 / 2);
+> @@ -94,7 +98,7 @@ static int collect_function(struct btf_elf *btfe, GElf_Sym *sym)
+>   		last_idx = idx;
+>   	}
+>   
+> -	functions[functions_cnt].name = elf_sym__name(sym, btfe->symtab);
+> +	functions[functions_cnt].name = name;
+>   	functions[functions_cnt].addr = elf_sym__value(sym);
+>   	functions[functions_cnt].sh_addr = sh.sh_addr;
+>   	functions[functions_cnt].generated = false;
+> @@ -731,8 +735,13 @@ int cu__encode_btf(struct cu *cu, int verbose, bool force,
+>   			continue;
+>   		if (functions_cnt) {
+>   			struct elf_function *func;
+> +			const char *name;
+> +
+> +			name = function__name(fn, cu);
+> +			if (!name)
+> +				continue;
+>   
+> -			func = find_function(btfe, function__name(fn, cu));
+> +			func = find_function(btfe, name);
+>   			if (!func || func->generated)
+>   				continue;
+>   			func->generated = true;
 > 
-
--- 
-
-- Arnaldo
