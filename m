@@ -2,89 +2,116 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-21.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,
-	USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-14.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B8813C433E6
-	for <linux-dwarves@archiver.kernel.org>; Mon, 18 Jan 2021 16:12:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0E0CBC433DB
+	for <linux-dwarves@archiver.kernel.org>; Tue, 19 Jan 2021 22:14:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 84608222F9
-	for <linux-dwarves@archiver.kernel.org>; Mon, 18 Jan 2021 16:12:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D378522E01
+	for <linux-dwarves@archiver.kernel.org>; Tue, 19 Jan 2021 22:14:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406076AbhARQMn (ORCPT
+        id S1729514AbhASWNn convert rfc822-to-8bit (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Mon, 18 Jan 2021 11:12:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45768 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2406081AbhARQC1 (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Mon, 18 Jan 2021 11:02:27 -0500
-Received: from mail-qv1-xf49.google.com (mail-qv1-xf49.google.com [IPv6:2607:f8b0:4864:20::f49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BED94C061757
-        for <dwarves@vger.kernel.org>; Mon, 18 Jan 2021 08:01:46 -0800 (PST)
-Received: by mail-qv1-xf49.google.com with SMTP id i20so16969778qvk.18
-        for <dwarves@vger.kernel.org>; Mon, 18 Jan 2021 08:01:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=sender:date:message-id:mime-version:subject:from:to:cc;
-        bh=6AJvxUC3f3ekjGpx4m23PwJ8eHqdXCq0waSkIBAPiPQ=;
-        b=KWWIFsI9l/jL3bzBh7CupqwdsM1/X+KzBf5mSfkx+eRTjQV8lMGyl+7xIxvuPzq38Q
-         aP2nHdXI9MCZkU8iVj1l3iF+oYfgs5OKkD7mpz5xyV9qOkBFDqTM7hlSYt9M+kMuj6Ag
-         USmpKNEqmTeoVgpfZmNRfcBSanBEeNKSWviNpnIjFO5WgkP6zsMcllgrdOvDZOp4+Whc
-         oRKVl0A1d9o1dFSuy8luz1Ku6ZR3GgNdkiVjMaBqriAQhq+EJSHdKeqMvY1kaCtwbdFc
-         izE2yuPkuDi4+Vswn+yp8v2INA0WHvlHtVv84dCpSPJG9fZs/K6frAzgg+A3/EHp3e/Q
-         o4oQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:message-id:mime-version:subject:from
-         :to:cc;
-        bh=6AJvxUC3f3ekjGpx4m23PwJ8eHqdXCq0waSkIBAPiPQ=;
-        b=q1FxNBFxw8CkLM4EbEd2DzwbhKQ18D+v79k2G67CRdDIDMbCD8uJU7B9Xl+5n/UUzM
-         Qmu1rAbT5GkwnaqUENTWkmVtM++/mSo/Ekx/JO6okhGetuGQK0hn4R0CoJ8IIrk2lRv1
-         iV7hYR9mBE5NkryatgrQ54OIpC5RRwCNQtLB9HIYgcFFz/R5srf5c1zakhljl8ifg6T/
-         R+Yl7lRze+gLqDxvBcAF3bGL/uZrXb0CuunnmjAXHwzP8/WrMm+80SKVP/pw6V8+53xq
-         Wfke9DGLuyvG2+J9du3UhY02oSgTAlV2uJMKc4oAr+yNTd5hjmPgzMhokU/rzfTiNcXN
-         6hyw==
-X-Gm-Message-State: AOAM5317SpY9IA6aCNfgtXYXgjQxe8mvQPWG/QiqrEUg1Iqa846ekq/M
-        QufUOAol9JnQ8xAoICCTX9hwTD07Vam3RW9JENjxjmk5uIwEQeb3k2S9/akN3c7Rv4YCJ8ycFOP
-        wAA0/8m/oJqbtq3W/eT6AROScmsKSQerROTwVcGVO14r4LBCDdqPQG6dGgzgpEjjB/yO3
-X-Google-Smtp-Source: ABdhPJxffSUGa2Hbs60JFbgCvuZmykbNTsluerNpq7/eVhA5V+FJfBEImm6isKbCN/7v6pvNh5sOaEQzwy0udQ==
-Sender: "gprocida via sendgmr" <gprocida@tef.lon.corp.google.com>
-X-Received: from tef.lon.corp.google.com ([2a00:79e0:d:110:a6ae:11ff:fe11:4f04])
- (user=gprocida job=sendgmr) by 2002:a05:6214:504:: with SMTP id
- v4mr71159qvw.54.1610985705891; Mon, 18 Jan 2021 08:01:45 -0800 (PST)
-Date:   Mon, 18 Jan 2021 16:01:36 +0000
-Message-Id: <20210118160139.1971039-1-gprocida@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.30.0.284.gd98b1dd5eaa7-goog
-Subject: [PATCH 0/3] Small fixes and improvements
-From:   Giuliano Procida <gprocida@google.com>
-To:     dwarves@vger.kernel.org
-Cc:     kernel-team@android.com, maennich@google.com, ast@kernel.org,
-        andrii@kernel.org, bpf@vger.kernel.org, kernel-team@fb.com,
-        Giuliano Procida <gprocida@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        Tue, 19 Jan 2021 17:13:43 -0500
+Received: from us-smtp-delivery-44.mimecast.com ([207.211.30.44]:40392 "EHLO
+        us-smtp-delivery-44.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728514AbhASWNi (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Tue, 19 Jan 2021 17:13:38 -0500
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-273-VsBlFKNbPEOzckn92dA08Q-1; Tue, 19 Jan 2021 17:12:43 -0500
+X-MC-Unique: VsBlFKNbPEOzckn92dA08Q-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 32E5A107ACE6;
+        Tue, 19 Jan 2021 22:12:41 +0000 (UTC)
+Received: from krava.redhat.com (unknown [10.40.195.212])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 075DA9CA0;
+        Tue, 19 Jan 2021 22:12:37 +0000 (UTC)
+From:   Jiri Olsa <jolsa@kernel.org>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andriin@fb.com>
+Cc:     dwarves@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, Yonghong Song <yhs@fb.com>,
+        Hao Luo <haoluo@google.com>, Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        Mark Wielaard <mjw@redhat.com>
+Subject: [PATCH bpf-next 3/3] libbpf: Use string table index from index table if needed
+Date:   Tue, 19 Jan 2021 23:12:20 +0100
+Message-Id: <20210119221220.1745061-4-jolsa@kernel.org>
+In-Reply-To: <20210119221220.1745061-1-jolsa@kernel.org>
+References: <20210119221220.1745061-1-jolsa@kernel.org>
+MIME-Version: 1.0
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=jolsa@kernel.org
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: kernel.org
+Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=WINDOWS-1252
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-Hi.
+For very large ELF objects (with many sections), we could
+get special value SHN_XINDEX (65535) for elf object's string
+table index - e_shstrndx.
 
-1 is a bug fix affecting restrict qualifiers.
-2 avoids leaving debris if objcopy fails.
-3 aligns the BTF section to 16 bytes to avoid misaligned access.
+In such case we need to call elf_getshdrstrndx to get the
+proper string table index.
 
-Regards.
+Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+---
+ tools/lib/bpf/btf.c | 14 ++++++++++++--
+ 1 file changed, 12 insertions(+), 2 deletions(-)
 
-Giuliano Procida (3):
-  btf_encoder: Fix handling of restrict qualifier
-  btf_encoder: Improve error-handling around objcopy
-  btf_encoder: Set .BTF section alignment to 16
-
- libbtf.c | 17 +++++++++++++----
- 1 file changed, 13 insertions(+), 4 deletions(-)
-
+diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
+index 3c3f2bc6c652..4fe987846bc0 100644
+--- a/tools/lib/bpf/btf.c
++++ b/tools/lib/bpf/btf.c
+@@ -863,6 +863,7 @@ static struct btf *btf_parse_elf(const char *path, struct btf *base_btf,
+ 	Elf_Scn *scn = NULL;
+ 	Elf *elf = NULL;
+ 	GElf_Ehdr ehdr;
++	size_t shstrndx;
+ 
+ 	if (elf_version(EV_CURRENT) == EV_NONE) {
+ 		pr_warn("failed to init libelf for %s\n", path);
+@@ -887,7 +888,16 @@ static struct btf *btf_parse_elf(const char *path, struct btf *base_btf,
+ 		pr_warn("failed to get EHDR from %s\n", path);
+ 		goto done;
+ 	}
+-	if (!elf_rawdata(elf_getscn(elf, ehdr.e_shstrndx), NULL)) {
++
++	/*
++	 * Get string table index from extended section index
++	 * table if needed.
++	 */
++	shstrndx = ehdr.e_shstrndx;
++	if (shstrndx == SHN_XINDEX && elf_getshdrstrndx(elf, &shstrndx))
++		goto done;
++
++	if (!elf_rawdata(elf_getscn(elf, shstrndx), NULL)) {
+ 		pr_warn("failed to get e_shstrndx from %s\n", path);
+ 		goto done;
+ 	}
+@@ -902,7 +912,7 @@ static struct btf *btf_parse_elf(const char *path, struct btf *base_btf,
+ 				idx, path);
+ 			goto done;
+ 		}
+-		name = elf_strptr(elf, ehdr.e_shstrndx, sh.sh_name);
++		name = elf_strptr(elf, shstrndx, sh.sh_name);
+ 		if (!name) {
+ 			pr_warn("failed to get section(%d) name from %s\n",
+ 				idx, path);
 -- 
-2.30.0.284.gd98b1dd5eaa7-goog
+2.27.0
 
