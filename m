@@ -2,68 +2,42 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-16.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3A2E0C433E0
-	for <linux-dwarves@archiver.kernel.org>; Wed, 20 Jan 2021 02:04:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F01CAC433E0
+	for <linux-dwarves@archiver.kernel.org>; Wed, 20 Jan 2021 12:39:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D6AEC2245C
-	for <linux-dwarves@archiver.kernel.org>; Wed, 20 Jan 2021 02:04:28 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9CC7D2250E
+	for <linux-dwarves@archiver.kernel.org>; Wed, 20 Jan 2021 12:39:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729170AbhATCEZ (ORCPT
+        id S1726460AbhATMjm (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Tue, 19 Jan 2021 21:04:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33778 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728456AbhATCEU (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Tue, 19 Jan 2021 21:04:20 -0500
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59681C061573;
-        Tue, 19 Jan 2021 18:03:40 -0800 (PST)
-Received: by mail-yb1-xb34.google.com with SMTP id b11so15702413ybj.9;
-        Tue, 19 Jan 2021 18:03:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=DuJpvKb+zGEfODHyENQyTZcMz+avIndrK0WlUpuEiss=;
-        b=UbtV1vS2SbMSOUNYzdTUkzfmLAtMWZhe/QCHTYktPn1HFIezRkWVvcfj+75eCe4ql7
-         HdzpL+PzWOpAkr1dYPkr79347Zn/OS29G4I4utcsLlWh1Cks8ffQfrqhkf4R/g8rSx7T
-         qFFuU5ovqve8mFu2TT4gSiGObQOELd4nMn8VOWFNWmXq96pIb36xTWsaZ3Mhs8rg25pj
-         UqRVwprbw4nXDoOzYxoNqMS8x7HJe1Q2Fz4AJLwwB4lcDK4CMOAYhBiSte6Xfv2xQus0
-         JCHQNvQlBK5pm2povE1cZ1bTOV8VbvAyk+cz1e9Sc51ErdiSRsLyb0f9MVfvq7R6UBkg
-         /IVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=DuJpvKb+zGEfODHyENQyTZcMz+avIndrK0WlUpuEiss=;
-        b=DefnbWaz8eIEwSgZIksZu4uZ7hmkCqXBATJCv1QFW/P1mwLSoQd1jYm7z8rM0w8Xqr
-         3y+fiEX4iTZaGWs78fTndqXIyqVXnUTd/6CTJsi92wObfSr/XbTc1E3X3ThKIPI4tFiB
-         fOPEkTO0vuVGap23hB4BSH+D0LgpyB7oTHQPgBksSlL0bxwBCnqYE5PPkpFZsbjK3dod
-         erlY+jAytpOUi43wqgybodGJuikfioo7veWpjqvHRescnBoA0Db7YT8+/YXIVQjmkh1f
-         enTQst5brc7ZKwEbe/t7V9VWMCKzc28zuAHkJdgEZG/kozJS5JCIZf2KtMSX+Ity90TT
-         /k/w==
-X-Gm-Message-State: AOAM532GPUk+qI9OrNQubvUfIp/mtHQVC9onMHweokY0+NVUe16oApXH
-        w1LpPs7TpUUn4fzX53cwDSqbP+4uFr6GN1N2UHg=
-X-Google-Smtp-Source: ABdhPJyMTxhFMGmVdI3hKqNfsBoFTvfk5n/zhyfZCMV+39Fy6t9BJvT4uQsnVAh2RhG3Bt7CcP8ypjEexqpF5K2wK94=
-X-Received: by 2002:a25:f40e:: with SMTP id q14mr10676148ybd.230.1611108219529;
- Tue, 19 Jan 2021 18:03:39 -0800 (PST)
-MIME-Version: 1.0
-References: <20210119221220.1745061-1-jolsa@kernel.org> <20210119221220.1745061-3-jolsa@kernel.org>
-In-Reply-To: <20210119221220.1745061-3-jolsa@kernel.org>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Tue, 19 Jan 2021 18:03:28 -0800
-Message-ID: <CAEf4BzY323ioVnsDqih5kKo9Q23rOrLV6Lh-Ms+jRqAYJrCgCg@mail.gmail.com>
-Subject: Re: [PATCH 2/3] bpf_encoder: Translate SHN_XINDEX in symbol's
- st_shndx values
-To:     Jiri Olsa <jolsa@kernel.org>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
+        Wed, 20 Jan 2021 07:39:42 -0500
+Received: from mail.kernel.org ([198.145.29.99]:57938 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1731608AbhATLN2 (ORCPT <rfc822;dwarves@vger.kernel.org>);
+        Wed, 20 Jan 2021 06:13:28 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 5272D2250E;
+        Wed, 20 Jan 2021 11:12:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1611141134;
+        bh=WirnMIqg9sdoD42HDZbb17JLEdR68OdowIbN6i1LK7A=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ZJs5vNidFmCeW6AA+2g7IZ2O04HTHwacKOwlJzd6IUhXLPTOAVnfZOs1+rVzxKkJd
+         Bjni9c0uRVTWqFtQUQslKNpXMaxEFOprFeFRjX3T/Br1eyvEQPSAMicd+okZHrAGsD
+         7BGMKYxebTKHVrwro4ri2XOdK+RLD7360KOQS3amqOuJIXVbCnoPywK1RveWpCPZ5V
+         4o2aIgmTPpUtmCQmmNVCqZERgAoMzyUBoApa2KiGN9ziV6syJcO6Y5818SFsa411tB
+         6WhT0e6RbQMuKWXZ/6eEaMDTI70TYrUQZLnYFJGG+aPSThOfI7K2EoYXeHz9Xl22XH
+         HraoRQGklJ2Sg==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 0176940CE2; Wed, 20 Jan 2021 08:12:11 -0300 (-03)
+Date:   Wed, 20 Jan 2021 08:12:11 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Jiri Olsa <jolsa@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Andrii Nakryiko <andriin@fb.com>, dwarves@vger.kernel.org,
         Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
@@ -74,158 +48,112 @@ Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
         KP Singh <kpsingh@chromium.org>,
         Joe Lawrence <joe.lawrence@redhat.com>,
         Mark Wielaard <mjw@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH bpf-next 3/3] libbpf: Use string table index from index
+ table if needed
+Message-ID: <20210120111211.GP12699@kernel.org>
+References: <20210119221220.1745061-1-jolsa@kernel.org>
+ <20210119221220.1745061-4-jolsa@kernel.org>
+ <CAEf4BzZNPJZBfz7Ga9MGvGGYge4MCP1O16JVuFjdzu-bCEQFLQ@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAEf4BzZNPJZBfz7Ga9MGvGGYge4MCP1O16JVuFjdzu-bCEQFLQ@mail.gmail.com>
+X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-On Tue, Jan 19, 2021 at 2:16 PM Jiri Olsa <jolsa@kernel.org> wrote:
->
-> For very large ELF objects (with many sections), we could
-> get special value SHN_XINDEX (65535) for symbol's st_shndx.
->
-> This patch is adding code to detect the optional extended
-> section index table and use it to resolve symbol's section
-> index id needed.
->
-> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
-> ---
->  btf_encoder.c | 18 ++++++++++++++++++
->  elf_symtab.c  | 31 ++++++++++++++++++++++++++++++-
->  elf_symtab.h  |  1 +
->  3 files changed, 49 insertions(+), 1 deletion(-)
->
-> diff --git a/btf_encoder.c b/btf_encoder.c
-> index 5557c9efd365..2ab6815dc2b3 100644
-> --- a/btf_encoder.c
-> +++ b/btf_encoder.c
-> @@ -609,6 +609,24 @@ static int collect_symbols(struct btf_elf *btfe, bool collect_percpu_vars)
->
->         /* search within symtab for percpu variables */
->         elf_symtab__for_each_symbol(btfe->symtab, core_id, sym) {
+Em Tue, Jan 19, 2021 at 05:22:08PM -0800, Andrii Nakryiko escreveu:
+> On Tue, Jan 19, 2021 at 2:15 PM Jiri Olsa <jolsa@kernel.org> wrote:
+> >
+> > For very large ELF objects (with many sections), we could
+> > get special value SHN_XINDEX (65535) for elf object's string
+> > table index - e_shstrndx.
+> >
+> > In such case we need to call elf_getshdrstrndx to get the
+> > proper string table index.
+> >
+> > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+> > ---
+> >  tools/lib/bpf/btf.c | 14 ++++++++++++--
+> >  1 file changed, 12 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
+> > index 3c3f2bc6c652..4fe987846bc0 100644
+> > --- a/tools/lib/bpf/btf.c
+> > +++ b/tools/lib/bpf/btf.c
+> > @@ -863,6 +863,7 @@ static struct btf *btf_parse_elf(const char *path, struct btf *base_btf,
+> >         Elf_Scn *scn = NULL;
+> >         Elf *elf = NULL;
+> >         GElf_Ehdr ehdr;
+> > +       size_t shstrndx;
+> >
+> >         if (elf_version(EV_CURRENT) == EV_NONE) {
+> >                 pr_warn("failed to init libelf for %s\n", path);
+> > @@ -887,7 +888,16 @@ static struct btf *btf_parse_elf(const char *path, struct btf *base_btf,
+> >                 pr_warn("failed to get EHDR from %s\n", path);
+> >                 goto done;
+> >         }
+> > -       if (!elf_rawdata(elf_getscn(elf, ehdr.e_shstrndx), NULL)) {
+> > +
+> > +       /*
+> > +        * Get string table index from extended section index
+> > +        * table if needed.
+> > +        */
+> > +       shstrndx = ehdr.e_shstrndx;
+> > +       if (shstrndx == SHN_XINDEX && elf_getshdrstrndx(elf, &shstrndx))
+> > +               goto done;
+> 
+> just use elf_getshdrstrndx() unconditionally, it works for extended
+> and non-extended numbering (see libbpf.c).
 
-How about we introduce elf_symtab__for_each_symbol variant that uses
-gelf_getsymshndx undercover and returns a real section index as the
-4th macro argument?
+Yeah, we even have this in tools/perf/util/symbol-elf.c:
 
-> +               struct elf_symtab *symtab = btfe->symtab;
-> +
-> +               /*
-> +                * Symbol's st_shndx needs to be translated with the
-> +                * extended section index table.
-> +                */
-> +               if (sym.st_shndx == SHN_XINDEX) {
-> +                       Elf32_Word xndx;
-> +
-> +                       if (!symtab->syms_shndx) {
-> +                               fprintf(stderr, "SHN_XINDEX found, but no symtab shndx section.\n");
-> +                               return -1;
-> +                       }
-> +
-> +                       if (gelf_getsymshndx(symtab->syms, symtab->syms_shndx, core_id, &sym, &xndx))
-> +                               sym.st_shndx = xndx;
+#ifndef HAVE_ELF_GETSHDRSTRNDX_SUPPORT
+static int elf_getshdrstrndx(Elf *elf __maybe_unused, size_t *dst __maybe_unused)
+{
+        pr_err("%s: update your libelf to > 0.140, this one lacks elf_getshdrstrndx().\n", __func__);
+        return -1;
+}
+#endif
 
-This bit makes me really nervous and it looks very unclean, which is
-why I think providing correct section index as part of iterator macro
-is better approach. And all this code would just go away.
+And a feature detection for that:
 
-> +               }
-> +
->                 if (collect_percpu_vars && collect_percpu_var(btfe, &sym))
->                         return -1;
->                 if (collect_function(btfe, &sym))
-> diff --git a/elf_symtab.c b/elf_symtab.c
-> index 741990ea3ed9..c1def0189652 100644
-> --- a/elf_symtab.c
-> +++ b/elf_symtab.c
-> @@ -17,11 +17,13 @@
->
->  struct elf_symtab *elf_symtab__new(const char *name, Elf *elf, GElf_Ehdr *ehdr)
->  {
-> +       size_t index;
-> +
->         if (name == NULL)
->                 name = ".symtab";
->
->         GElf_Shdr shdr;
-> -       Elf_Scn *sec = elf_section_by_name(elf, ehdr, &shdr, name, NULL);
-> +       Elf_Scn *sec = elf_section_by_name(elf, ehdr, &shdr, name, &index);
->
->         if (sec == NULL)
->                 return NULL;
-> @@ -29,6 +31,8 @@ struct elf_symtab *elf_symtab__new(const char *name, Elf *elf, GElf_Ehdr *ehdr)
->         if (gelf_getshdr(sec, &shdr) == NULL)
->                 return NULL;
->
-> +       int xindex = elf_scnshndx(sec);
+[acme@five perf]$ cat tools/build/feature/test-libelf-getshdrstrndx.c 
+// SPDX-License-Identifier: GPL-2.0
+#include <libelf.h>
 
-move this closer to where you check (xindex > 0)? Can you please leave
-a small comment that this returns extended section index table's
-section index (I know, this is horrible), if it exists. It's
-notoriously hard to find anything about libelf's API, especially for
-obscure APIs like this.
+int main(void)
+{
+	size_t dst;
 
-> +
->         struct elf_symtab *symtab = malloc(sizeof(*symtab));
->         if (symtab == NULL)
->                 return NULL;
-> @@ -49,6 +53,31 @@ struct elf_symtab *elf_symtab__new(const char *name, Elf *elf, GElf_Ehdr *ehdr)
->         if (symtab->symstrs == NULL)
->                 goto out_free_name;
->
-> +       /*
-> +        * The .symtab section has optional extended section index
-> +        * table, load its data so it can be used to resolve symbol's
-> +        * section index.
-> +        **/
-> +       if (xindex > 0) {
-> +               GElf_Shdr shdr_shndx;
-> +               Elf_Scn *sec_shndx;
-> +
-> +               sec_shndx = elf_getscn(elf, xindex);
-> +               if (sec_shndx == NULL)
-> +                       goto out_free_name;
-> +
-> +               if (gelf_getshdr(sec_shndx, &shdr_shndx) == NULL)
-> +                       goto out_free_name;
-> +
-> +               /* Extra check to verify it belongs to the .symtab */
-> +               if (index != shdr_shndx.sh_link)
-> +                       goto out_free_name;
+	return elf_getshdrstrndx(0, &dst);
+}
+[acme@five perf]$ 
 
-you can also verify that section type is SHT_SYMTAB_SHNDX
+Your implementation would provide a good fallback tho to avoid requiring
+updating to 0.140 :-)
 
-> +
-> +               symtab->syms_shndx = elf_getdata(elf_getscn(elf, xindex), NULL);
+- Arnaldo
 
-my mind breaks looking at all those shndxs, especially in this case
-where it's not a section number, but rather data. How about we call it
-something like symtab->syms_sec_idx_table or something similar but
-human-comprehensible?
+> > +
+> > +       if (!elf_rawdata(elf_getscn(elf, shstrndx), NULL)) {
+> >                 pr_warn("failed to get e_shstrndx from %s\n", path);
+> >                 goto done;
+> >         }
+> > @@ -902,7 +912,7 @@ static struct btf *btf_parse_elf(const char *path, struct btf *base_btf,
+> >                                 idx, path);
+> >                         goto done;
+> >                 }
+> > -               name = elf_strptr(elf, ehdr.e_shstrndx, sh.sh_name);
+> > +               name = elf_strptr(elf, shstrndx, sh.sh_name);
+> >                 if (!name) {
+> >                         pr_warn("failed to get section(%d) name from %s\n",
+> >                                 idx, path);
+> > --
+> > 2.27.0
+> >
 
-> +               if (symtab->syms_shndx == NULL)
-> +                       goto out_free_name;
-> +       }
-> +
->         symtab->nr_syms = shdr.sh_size / shdr.sh_entsize;
->
->         return symtab;
-> diff --git a/elf_symtab.h b/elf_symtab.h
-> index 359add69c8ab..f9277a48ed4c 100644
-> --- a/elf_symtab.h
-> +++ b/elf_symtab.h
-> @@ -16,6 +16,7 @@ struct elf_symtab {
->         uint32_t  nr_syms;
->         Elf_Data  *syms;
->         Elf_Data  *symstrs;
-> +       Elf_Data  *syms_shndx;
+-- 
 
-please add comment mentioning that it's data of SHT_SYMTAB_SHNDX
-section, it will make it a bit easier to Google what that is
-
->         char      *name;
->  };
->
-> --
-> 2.27.0
->
+- Arnaldo
