@@ -2,161 +2,140 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5CE94C433E0
-	for <linux-dwarves@archiver.kernel.org>; Tue, 19 Jan 2021 23:21:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ABAA8C433E6
+	for <linux-dwarves@archiver.kernel.org>; Wed, 20 Jan 2021 01:23:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3B1A422DD3
-	for <linux-dwarves@archiver.kernel.org>; Tue, 19 Jan 2021 23:21:16 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 65A9923110
+	for <linux-dwarves@archiver.kernel.org>; Wed, 20 Jan 2021 01:23:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726705AbhASXVH (ORCPT
+        id S1726023AbhATBXB (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Tue, 19 Jan 2021 18:21:07 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:25080 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728496AbhASXTA (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Tue, 19 Jan 2021 18:19:00 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1611098251;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=X2pcChHGftd9Kzu4vux4bBucIycf/Pi8Nee8dh6Osj0=;
-        b=NsCF0yk8VqnLeH6rhiMLzPRbvpr3ynMgM8Lg5EYDJCQrcjWRZRnxi5JZom/TPQ3ESOtG4D
-        RBxAoWoql6sphCmP4NgGQIQC8YXz+t0Q0qmCllSwAyNgvV2WEbr3mBqGvuK53bssLqL5rL
-        0aYNBxd+uAFCz63LLYINxj5urQttx4w=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-319-AvmReq3dM-mztp_ixXzDhw-1; Tue, 19 Jan 2021 18:17:30 -0500
-X-MC-Unique: AvmReq3dM-mztp_ixXzDhw-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 067ED15720;
-        Tue, 19 Jan 2021 23:17:28 +0000 (UTC)
-Received: from redhat.com (ovpn-112-133.rdu2.redhat.com [10.10.112.133])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 978266268F;
-        Tue, 19 Jan 2021 23:17:20 +0000 (UTC)
-Date:   Tue, 19 Jan 2021 18:17:18 -0500
-From:   Joe Lawrence <joe.lawrence@redhat.com>
+        Tue, 19 Jan 2021 20:23:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52954 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725811AbhATBXA (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Tue, 19 Jan 2021 20:23:00 -0500
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D703C061573;
+        Tue, 19 Jan 2021 17:22:20 -0800 (PST)
+Received: by mail-yb1-xb2b.google.com with SMTP id p185so6731296ybg.8;
+        Tue, 19 Jan 2021 17:22:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=j3ElYe+i7O8pw4jej0PM4b0x0kTazcaI++/FaEblhCY=;
+        b=ix8yKQeBPvIN+TxWg+ZefuVqMdNihSpIESlQ4WvT70h/gkPWHc07Q2NWWONrbFezzl
+         XseENX3h8+r1AIIBU6k31cp2EayDiuOvMxqnPXVZ7jK5TQlmecdEBLKqOUTGqNuc19ZW
+         Iq0sBh3WKvZdURTdauJkNZKrAiniffWfYcB+nJ+0jf5PSpzBOIuJkf2ejSQsmN9qvszS
+         q/qbbpOK5vEFOq9UOFxeyhQn1W6QKltUXLiibUOQ0equ6AdokmyQYEvruBVWmiUurCvD
+         cjhk5S1si8SmiOI5RrOMSQNasudjJbk0xWlLMVfsilkJy9SJD8vAi41iP6flt38p/o8S
+         PJbQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=j3ElYe+i7O8pw4jej0PM4b0x0kTazcaI++/FaEblhCY=;
+        b=eADRGRmQTPVNOn17vOz7WTmLD4Ew4oN0M3V6h6FMv1hMHzJdOS6Y7VY+jRA/OlnFuo
+         hWMz8hqYYBA0Rai/ganud8lH6fG+dh8rqc/KZkK34ITIjMqSI+P3bFhywLcfbBK8u+uh
+         xypuML4STBuHEDuNwnQIXITqX4pUxwk2j1Iko3JfCUMsXGdMsvf8drIkkI6CPiPpN6t7
+         waKNqHlQfxWaBvwH/M9eLMUvRtPjDqPQAJ7GGfIHMDwaOyg7gUsl2sG7GbGkcqZt1CzK
+         gky5kKH2poD9x1teMSbTJfAzsGDJ6aP8QBOIw7Zi4fEqPu0P4RWa++a/Ea2Lq81rQHBy
+         +Drw==
+X-Gm-Message-State: AOAM533ZnqzEe43kSuybJ0j3Y/GDEMdBL7P852G4rF9xZOa/LuyaMLC9
+        9BKRsXCisRlsaiPeGyANBVxBsAeudt5h8/EhiEs=
+X-Google-Smtp-Source: ABdhPJys6J4AT217bLaNLulXMwM8V25cE2+EiRiJPD8J2Dke0qXNwDAw31yqJrfaQXv0TfFPk+eSNzEwkKXR1hpJRLk=
+X-Received: by 2002:a25:d6d0:: with SMTP id n199mr9827301ybg.27.1611105739391;
+ Tue, 19 Jan 2021 17:22:19 -0800 (PST)
+MIME-Version: 1.0
+References: <20210119221220.1745061-1-jolsa@kernel.org> <20210119221220.1745061-4-jolsa@kernel.org>
+In-Reply-To: <20210119221220.1745061-4-jolsa@kernel.org>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Tue, 19 Jan 2021 17:22:08 -0800
+Message-ID: <CAEf4BzZNPJZBfz7Ga9MGvGGYge4MCP1O16JVuFjdzu-bCEQFLQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 3/3] libbpf: Use string table index from index
+ table if needed
 To:     Jiri Olsa <jolsa@kernel.org>
 Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Andrii Nakryiko <andriin@fb.com>, dwarves@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
         Yonghong Song <yhs@fb.com>, Hao Luo <haoluo@google.com>,
         Martin KaFai Lau <kafai@fb.com>,
         Song Liu <songliubraving@fb.com>,
         John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>, Mark Wielaard <mjw@redhat.com>
-Subject: Re: [PATCH 0/3] dwarves,libbpf: Add support to use optional extended
- section index table
-Message-ID: <20210119231718.GA3173@redhat.com>
-References: <20210119221220.1745061-1-jolsa@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210119221220.1745061-1-jolsa@kernel.org>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
+        KP Singh <kpsingh@chromium.org>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        Mark Wielaard <mjw@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-On Tue, Jan 19, 2021 at 11:12:17PM +0100, Jiri Olsa wrote:
-> hi,
-> kpatch guys hit an issue with pahole over their vmlinux, which
-> contains many (over 100000) sections, pahole crashes.
-> 
+On Tue, Jan 19, 2021 at 2:15 PM Jiri Olsa <jolsa@kernel.org> wrote:
+>
+> For very large ELF objects (with many sections), we could
+> get special value SHN_XINDEX (65535) for elf object's string
+> table index - e_shstrndx.
+>
+> In such case we need to call elf_getshdrstrndx to get the
+> proper string table index.
+>
+> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+> ---
+>  tools/lib/bpf/btf.c | 14 ++++++++++++--
+>  1 file changed, 12 insertions(+), 2 deletions(-)
+>
+> diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
+> index 3c3f2bc6c652..4fe987846bc0 100644
+> --- a/tools/lib/bpf/btf.c
+> +++ b/tools/lib/bpf/btf.c
+> @@ -863,6 +863,7 @@ static struct btf *btf_parse_elf(const char *path, struct btf *base_btf,
+>         Elf_Scn *scn = NULL;
+>         Elf *elf = NULL;
+>         GElf_Ehdr ehdr;
+> +       size_t shstrndx;
+>
+>         if (elf_version(EV_CURRENT) == EV_NONE) {
+>                 pr_warn("failed to init libelf for %s\n", path);
+> @@ -887,7 +888,16 @@ static struct btf *btf_parse_elf(const char *path, struct btf *base_btf,
+>                 pr_warn("failed to get EHDR from %s\n", path);
+>                 goto done;
+>         }
+> -       if (!elf_rawdata(elf_getscn(elf, ehdr.e_shstrndx), NULL)) {
+> +
+> +       /*
+> +        * Get string table index from extended section index
+> +        * table if needed.
+> +        */
+> +       shstrndx = ehdr.e_shstrndx;
+> +       if (shstrndx == SHN_XINDEX && elf_getshdrstrndx(elf, &shstrndx))
+> +               goto done;
 
-FWIW this is probably only going to be problem when building the kernel
-with -f[function|data]-sections and tipping over 65536 sections.  We
-only use these option to determine code deltas, but other users
-(FG-ASLR, LTO?) may need to actually build runtime code.
+just use elf_getshdrstrndx() unconditionally, it works for extended
+and non-extended numbering (see libbpf.c).
 
-> With so many sections, ELF is using extended section index table,
-> which is used to hold values for some of the indexes and extra
-> code is needed to retrieve them.
-> 
-> This patchset adds the support for pahole to properly read string
-> table index and symbol's section index, which are used in btf_encoder.
-> 
-> This patchset also adds support for libbpf to properly parse .BTF
-> section on such object.
-> 
-> This patchset based on previously posted fix [1].
-> 
-
-Hi Jiri,
-
-Thanks for posting a potential fix, here's what I saw when running it:
-
-1-Installed your scratch build:
-
-% rpm -q --whatprovides $(which pahole)
-dwarves-1.19-2.el8.x86_64
-
-
-2-From the kernel build:
-
-  LD      vmlinux.o
-  MODPOST vmlinux.o
-  BTF     .btf.vmlinux.bin.o
-scripts/link-vmlinux.sh: line 127: 1851330 Segmentation fault      (core dumped) LLVM_OBJCOPY=${OBJCOPY} ${PAHOLE} -J ${1}
-objcopy: --change-section-vma .BTF=0x0000000000000000 never used
-objcopy: --change-section-lma .BTF=0x0000000000000000 never used
-objcopy: error: the input file '.btf.vmlinux.bin' is empty
-Failed to generate BTF for vmlinux
-Try to disable CONFIG_DEBUG_INFO_BTF
-make: *** [Makefile:1050: vmlinux] Error 1
-
-
-3-coredump backtrace:
-...
-Core was generated by `pahole -J .tmp_vmlinux.btf'.
-...
-(gdb) bt
-#0  0x00007fc0e81e31c0 in __memcpy_ssse3 () from /lib64/libc.so.6
-#1  0x00007fc0e8b6700a in memcpy (__len=306248, __src=<optimized out>, __dest=0x7fc0e91a0010) at /usr/include/bits/string_fortified.h:34
-#2  get_vmlinux_addrs (btfe=<optimized out>, pcount=<synthetic pointer>, paddrs=<synthetic pointer>, fl=<synthetic pointer>)
-    at /usr/src/debug/dwarves-1.19-2.el8.x86_64/btf_encoder.c:167
-#3  setup_functions (fl=<synthetic pointer>, btfe=<optimized out>) at /usr/src/debug/dwarves-1.19-2.el8.x86_64/btf_encoder.c:251
-#4  collect_symbols (collect_percpu_vars=<optimized out>, btfe=<optimized out>)
-    at /usr/src/debug/dwarves-1.19-2.el8.x86_64/btf_encoder.c:645
-#5  cu__encode_btf (cu=<optimized out>, verbose=0, force=false, skip_encoding_vars=<optimized out>)
-    at /usr/src/debug/dwarves-1.19-2.el8.x86_64/btf_encoder.c:694
-#6  0x000055eb2e4b6cc5 in pahole_stealer (cu=0x55eb2ecbb920, conf_load=<optimized out>)
-    at /usr/src/debug/dwarves-1.19-2.el8.x86_64/pahole.c:2402
-#7  0x00007fc0e8b6d2db in finalize_cu_immediately (conf=0x55eb2e6bc0e0 <conf_load>, dcu=0x7ffd88fda9d0, cu=0x55eb2ecbb920, 
-    cus=0x55eb2ecbb5d0) at /usr/src/debug/dwarves-1.19-2.el8.x86_64/dwarf_loader.c:2477
-#8  cus__load_module (cus=cus@entry=0x55eb2ecbb5d0, conf=0x55eb2e6bc0e0 <conf_load>, mod=mod@entry=0x55eb2ecbb5f0, dw=0x55eb2ecbe6a0, 
-    elf=elf@entry=0x7fc0ad941010, filename=0x7ffd8905b98d ".tmp_vmlinux.btf")
-    at /usr/src/debug/dwarves-1.19-2.el8.x86_64/dwarf_loader.c:2477
-#9  0x00007fc0e8b6d5c5 in cus__process_dwflmod (dwflmod=0x55eb2ecbb5f0, userdata=<optimized out>, name=<optimized out>, 
-    base=<optimized out>, arg=0x7ffd8905ab00) at /usr/src/debug/dwarves-1.19-2.el8.x86_64/dwarf_loader.c:2522
-#10 0x00007fc0e88f9c71 in dwfl_getmodules () from /lib64/libdw.so.1
-#11 0x00007fc0e8b69cdc in cus__process_file (filename=<optimized out>, fd=5, conf=0x55eb2e6bc0e0 <conf_load>, cus=0x55eb2ecbb5d0)
-    at /usr/src/debug/dwarves-1.19-2.el8.x86_64/dwarf_loader.c:2575
-#12 dwarf__load_file (cus=0x55eb2ecbb5d0, conf=0x55eb2e6bc0e0 <conf_load>, filename=<optimized out>)
-    at /usr/src/debug/dwarves-1.19-2.el8.x86_64/dwarf_loader.c:2592
-#13 0x00007fc0e8b5cb82 in cus__load_file (cus=cus@entry=0x55eb2ecbb5d0, conf=conf@entry=0x55eb2e6bc0e0 <conf_load>, 
-    filename=0x7ffd8905b98d ".tmp_vmlinux.btf") at /usr/src/debug/dwarves-1.19-2.el8.x86_64/dwarves.c:1963
-#14 0x00007fc0e8b5ce29 in cus__load_files (cus=0x55eb2ecbb5d0, conf=0x55eb2e6bc0e0 <conf_load>, filenames=0x7ffd8905aea8)
-    at /usr/src/debug/dwarves-1.19-2.el8.x86_64/dwarves.c:2324
-#15 0x000055eb2e4b371e in main (argc=3, argv=0x7ffd8905ae98) at /usr/src/debug/dwarves-1.19-2.el8.x86_64/pahole.c:2760
-
-
-I uploaded a gzipped core file here:
-http://people.redhat.com/~jolawren/coredump.gz
-
-If it's easier to get you setup on a repro system, let me know and I can
-do that.
-
-Thanks,
-
--- Joe
-
+> +
+> +       if (!elf_rawdata(elf_getscn(elf, shstrndx), NULL)) {
+>                 pr_warn("failed to get e_shstrndx from %s\n", path);
+>                 goto done;
+>         }
+> @@ -902,7 +912,7 @@ static struct btf *btf_parse_elf(const char *path, struct btf *base_btf,
+>                                 idx, path);
+>                         goto done;
+>                 }
+> -               name = elf_strptr(elf, ehdr.e_shstrndx, sh.sh_name);
+> +               name = elf_strptr(elf, shstrndx, sh.sh_name);
+>                 if (!name) {
+>                         pr_warn("failed to get section(%d) name from %s\n",
+>                                 idx, path);
+> --
+> 2.27.0
+>
