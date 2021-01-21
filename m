@@ -2,186 +2,98 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-14.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 531B0C433DB
-	for <linux-dwarves@archiver.kernel.org>; Thu, 21 Jan 2021 20:12:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8FE82C433DB
+	for <linux-dwarves@archiver.kernel.org>; Thu, 21 Jan 2021 20:24:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0682A23A56
-	for <linux-dwarves@archiver.kernel.org>; Thu, 21 Jan 2021 20:12:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 39C2023A54
+	for <linux-dwarves@archiver.kernel.org>; Thu, 21 Jan 2021 20:24:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726484AbhAUUMG (ORCPT
+        id S1726204AbhAUUXw convert rfc822-to-8bit (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Thu, 21 Jan 2021 15:12:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41128 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726482AbhAUUIq (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Thu, 21 Jan 2021 15:08:46 -0500
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D32DDC061756;
-        Thu, 21 Jan 2021 12:08:05 -0800 (PST)
-Received: by mail-yb1-xb31.google.com with SMTP id w24so3262255ybi.7;
-        Thu, 21 Jan 2021 12:08:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=M9gSCtwCI+xE4f8ZYH8DQVpM185t7FjYnWXxrvouoqk=;
-        b=UChm+nd4bNLapGQcwGxjAWtIPmBvAVynD2hsIwZkkvKeKK5IOoV1ZqEyywYHLEFg3+
-         fGc96x/pq8+uy3bsHsrIdES4BKk1JWW8bLqVSkRr1KD6hjf22CH44CZ7yCYuQwmxG43r
-         dr8akq6bZsxuG1pIDKyDOx/+eWtfdIAv5nAHAwqEBwkj06rcgsOHBfrHlSh5hgOsHYQ3
-         VrwTNxZnR1cUsvM3QvsRFVd9W2wO/byk/aqGL6uha9R426oqE2B/oxZ51R3tsKMQcWw/
-         QeR/x73OEXfCWqMhmxcXguliu8751gTVUTDmEbFaa1CPtfCxNeFoUelWfA1NCQLVocWQ
-         h8hw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=M9gSCtwCI+xE4f8ZYH8DQVpM185t7FjYnWXxrvouoqk=;
-        b=jELZCcN7PJFzYUVMPNRW6JqNauKGVHzGteYQda1jA6QfmTjNzh5MQ5rsqfl/X7Nzlb
-         jb6jrF4msydD+IyZHSlslWq4HcWT+e7tisKjGu1rM3ckqiylzhuwsRyzqnBcH4LRbQq8
-         UWNJGSK9sHgkKMEpQPaS/GH4CSvcyXq8eeVZyp5drR6sfl9PQarBLsOnBXYhuHmoz4co
-         oVrNr2e2J4mcvrWGuFn43pjNG0/Ggwx0yUx21rA5NaXjq0TBpN+FYSjekvEPdca6mVg8
-         o33CYNOlR/opngOWglqQovPoiuZCusSdjotzNL9cKKugV4VHglq0/MoMUgy4nRkTi3ri
-         elng==
-X-Gm-Message-State: AOAM532fnh7RRXC9uVerX21jwWyVSeve3ZaMmyeV09axNsQ+CkOs6GqA
-        Y6bv3Z62TgkLYsjceklxtHduQnhw2dY6KtxNBgQ=
-X-Google-Smtp-Source: ABdhPJyKpYapMO8/MUzqdd/7AexI/ESRgtodN8GZScSiCDvImTNnHOQtJH6AnnDDSgq6k5XGZHRNPCxTKMTm3dkadkQ=
-X-Received: by 2002:a25:48c7:: with SMTP id v190mr1499762yba.260.1611259685093;
- Thu, 21 Jan 2021 12:08:05 -0800 (PST)
-MIME-Version: 1.0
-References: <20210118160139.1971039-1-gprocida@google.com> <20210118160139.1971039-4-gprocida@google.com>
- <CAEf4BzazvC9H=K_A9KamGTB3iKtjuNxd4hEvwFOnkPdnszo6Bw@mail.gmail.com> <CAGvU0HmE+gs8eNQcXmFrEERHaiGEnMgqxBho4Ny3DLCe6WR55Q@mail.gmail.com>
-In-Reply-To: <CAGvU0HmE+gs8eNQcXmFrEERHaiGEnMgqxBho4Ny3DLCe6WR55Q@mail.gmail.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Thu, 21 Jan 2021 12:07:54 -0800
-Message-ID: <CAEf4BzZQvLofuVHPqu1ybsTVrM9pFRCRSR5UEFdNJq3Ha8=Luw@mail.gmail.com>
-Subject: Re: [PATCH 3/3] btf_encoder: Set .BTF section alignment to 16
-To:     Giuliano Procida <gprocida@google.com>
-Cc:     dwarves@vger.kernel.org, kernel-team@android.com,
-        =?UTF-8?Q?Matthias_M=C3=A4nnich?= <maennich@google.com>,
+        Thu, 21 Jan 2021 15:23:52 -0500
+Received: from us-smtp-delivery-44.mimecast.com ([205.139.111.44]:34266 "EHLO
+        us-smtp-delivery-44.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727237AbhAUUXY (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Thu, 21 Jan 2021 15:23:24 -0500
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-318-YTBr82aLNZ2LImdhKfKboQ-1; Thu, 21 Jan 2021 15:22:24 -0500
+X-MC-Unique: YTBr82aLNZ2LImdhKfKboQ-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id A767F107ACE3;
+        Thu, 21 Jan 2021 20:22:22 +0000 (UTC)
+Received: from krava.redhat.com (unknown [10.40.192.46])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 9124461F55;
+        Thu, 21 Jan 2021 20:22:19 +0000 (UTC)
+From:   Jiri Olsa <jolsa@kernel.org>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
         Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Kernel Team <kernel-team@fb.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andriin@fb.com>
+Cc:     dwarves@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, Yonghong Song <yhs@fb.com>,
+        Hao Luo <haoluo@google.com>, Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        Mark Wielaard <mjw@redhat.com>
+Subject: [PATCH 1/3] elf_symtab: Add support for SHN_XINDEX index to elf_section_by_name
+Date:   Thu, 21 Jan 2021 21:22:01 +0100
+Message-Id: <20210121202203.9346-2-jolsa@kernel.org>
+In-Reply-To: <20210121202203.9346-1-jolsa@kernel.org>
+References: <20210121202203.9346-1-jolsa@kernel.org>
+MIME-Version: 1.0
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=jolsa@kernel.org
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: kernel.org
+Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=WINDOWS-1252
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-On Thu, Jan 21, 2021 at 3:07 AM Giuliano Procida <gprocida@google.com> wrot=
-e:
->
-> Hi.
->
-> On Thu, 21 Jan 2021 at 07:16, Andrii Nakryiko <andrii.nakryiko@gmail.com>=
- wrote:
->>
->> On Mon, Jan 18, 2021 at 8:01 AM Giuliano Procida <gprocida@google.com> w=
-rote:
->> >
->> > This is to avoid misaligned access when memory-mapping ELF sections.
->> >
->> > Signed-off-by: Giuliano Procida <gprocida@google.com>
->> > ---
->> >  libbtf.c | 8 ++++++++
->> >  1 file changed, 8 insertions(+)
->> >
->> > diff --git a/libbtf.c b/libbtf.c
->> > index 7552d8e..2f12d53 100644
->> > --- a/libbtf.c
->> > +++ b/libbtf.c
->> > @@ -797,6 +797,14 @@ static int btf_elf__write(const char *filename, s=
-truct btf *btf)
->> >                         goto unlink;
->> >                 }
->> >
->> > +               snprintf(cmd, sizeof(cmd), "%s --set-section-alignment=
- .BTF=3D16 %s",
->> > +                        llvm_objcopy, filename);
->>
->> does it align inside the ELF file to 16 bytes, or does it request the
->> linker to align it at 16 byte alignment in memory? Given .BTF section
->> is not loadable, trying to understand the implications.
->>
->
-> We have a tool that loads BTF from ELF files. It uses mmap and "parses" t=
-he BTF as structs in memory. The ELF file is mapped with page alignment but=
- the BTF section within it has no alignment at all. Using MSAN (IIRC) we ge=
-t warnings about misaligned accesses. Everything within BTF itself is natur=
-ally aligned, so it makes sense to align the section within ELF as well. Th=
-ere are probably some architectures where this makes the difference between=
- working and SIGBUS.
->
+In case the elf's header e_shstrndx contains SHN_XINDEX,
+we need to call elf_getshdrstrndx to get the proper
+string table index.
 
-Right, ok, thanks for explaining!
+Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+---
+ dutil.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-> I did try to get objcopy to set alignment at the point the section is add=
-ed. However, this didn't work.
->
->>
->>
->> > +               if (system(cmd)) {
->>
->> Also curious, if objcopy emits error (saying that
->> --set-section-alignment argument is not recognized), will that error
->> be shown in stdout? or system() consumes it without redirecting it to
->> stdout?
->>
->
-> I believe it goes to stderr. I would need to check. system() will not con=
-sume this. I'm not keen to write stderr (or stdout) post-processing code in=
- plain C.
->
+diff --git a/dutil.c b/dutil.c
+index 7b667647420f..9e0fdca3ae04 100644
+--- a/dutil.c
++++ b/dutil.c
+@@ -179,13 +179,17 @@ Elf_Scn *elf_section_by_name(Elf *elf, GElf_Ehdr *ep,
+ {
+ 	Elf_Scn *sec = NULL;
+ 	size_t cnt = 1;
++	size_t str_idx;
++
++	if (elf_getshdrstrndx(elf, &str_idx))
++		return NULL;
+ 
+ 	while ((sec = elf_nextscn(elf, sec)) != NULL) {
+ 		char *str;
+ 
+ 		gelf_getshdr(sec, shp);
+-		str = elf_strptr(elf, ep->e_shstrndx, shp->sh_name);
+-		if (!strcmp(name, str)) {
++		str = elf_strptr(elf, str_idx, shp->sh_name);
++		if (str && !strcmp(name, str)) {
+ 			if (index)
+ 				*index = cnt;
+ 			break;
+-- 
+2.27.0
 
-You can use popen() to capture/hide output, this is a better
-alternative to system() in this case. We don't want "expected
-warnings" in kernel build process.
-
->>
->> > +                       /* non-fatal, this is a nice-to-have and it's =
-only supported from LLVM 10 */
->> > +                       fprintf(stderr, "%s: warning: failed to align =
-.BTF section in '%s': %d!\n",
->> > +                               __func__, filename, errno);
->>
->> Probably better to emit this warning only in verbose mode, otherwise
->> lots of people will start complaining that they get some new warnings
->> from pahole.
->>
->
-> It may be better to just use POSIX and ELF APIs directly instead of objco=
-py. This way the section can be added with the right alignment directly. pa=
-hole is already linked against libelf and if we could get rid of the extern=
-al dependency on objcopy it would be a win in more than one way.
-
-This would be great, yes. At some point I remember giving it a try,
-but for some reason I couldn't make libelf flush data and update
-section headers properly. Maybe you'll have better luck. Though I
-think I was trying to mark section loadable, and eventually I probably
-managed to do that, but still abandoned it (it's not enough to mark
-section loadable, you have to assign it to ELF segment as well, which
-libelf doesn't allow to do and you need linker support). Anyways, give
-it a try, it should work.
-
->
->>
->>
->> > +               }
->> > +
->> >                 err =3D 0;
->> >         unlink:
->> >                 unlink(tmp_fn);
->> > --
->> > 2.30.0.284.gd98b1dd5eaa7-goog
->> >
->
->
-> I'll see if I can spend a little time on this idea instead.
->
-> Regards,
-> Giuliano.
