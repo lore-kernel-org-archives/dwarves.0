@@ -2,118 +2,120 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 73FE1C433E0
-	for <linux-dwarves@archiver.kernel.org>; Thu, 21 Jan 2021 21:23:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0C8A4C43381
+	for <linux-dwarves@archiver.kernel.org>; Thu, 21 Jan 2021 23:11:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 39BF723381
-	for <linux-dwarves@archiver.kernel.org>; Thu, 21 Jan 2021 21:23:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CE2C723A5B
+	for <linux-dwarves@archiver.kernel.org>; Thu, 21 Jan 2021 23:11:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726708AbhAUVXR (ORCPT
+        id S1726451AbhAUXLU (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Thu, 21 Jan 2021 16:23:17 -0500
-Received: from mail-lj1-f179.google.com ([209.85.208.179]:42233 "EHLO
-        mail-lj1-f179.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727147AbhAUVVe (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Thu, 21 Jan 2021 16:21:34 -0500
-Received: by mail-lj1-f179.google.com with SMTP id j3so4161741ljb.9
-        for <dwarves@vger.kernel.org>; Thu, 21 Jan 2021 13:20:22 -0800 (PST)
+        Thu, 21 Jan 2021 18:11:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52106 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726410AbhAUXLR (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Thu, 21 Jan 2021 18:11:17 -0500
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 069C9C061756;
+        Thu, 21 Jan 2021 15:10:37 -0800 (PST)
+Received: by mail-yb1-xb32.google.com with SMTP id b11so3697536ybj.9;
+        Thu, 21 Jan 2021 15:10:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=eFFyp0an9z6ceYvBlREfDntyLx+f2WYNnkvqDcimax8=;
+        b=OOIpVw0bE3O1Vq0ocNiUGrrpTs2RhI/CWZ33OFW1vmL7qqs7RDUmcLdQnjsqRZLVTK
+         brlQCK2K1/nMhQUIvwB4e9B1EudfArJJY8Y3qRxFjIvu0IAwZdSb5i2IeeQC7dRM+14x
+         CXP5AFRM7cqGKDOEDCKmCFmCmn/MnFPJ0x/FWa3JxS7akK5Vu3Iq5mvjDr0oJnoc3hg/
+         p28ZtCyQQ0vh8yYluFoMergI9dWbRTrPnS6Od6qxUXVYTcWIB4+3XQyTJ/aJGbxq3vRn
+         n9d12osem3p6B0nlZGY425Io4eOuqbdSE5F6KFWQ+vXf2rM31nMgMBUf+i9YUPlvoYsl
+         0f8A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:user-agent:mime-version;
-        bh=/YkFiJIifV//DHauz/iJG1DU3XiDIvUpHe4FG0xs1Ak=;
-        b=qRkyY8pVwTCYYNeelrRHv4XlX8HxmIBbT/OsvWNtHTIM50mKJi55B7BB4naC5rrbk6
-         zae1cdMtDBf5gbBaxvS11iqr8F1xxdrcgY+X9Rkcegf2KF9N7xcZKKdh3im63QlblH+n
-         ZvEmU50AuropuuhsNK2knqeVsmVgV2uuUIrhs2H7nthUix1QpeJrgimsl37p0OqVXq2L
-         rrUT55MoExpYXSRYHxNp7ZVoKyQ5TSxDDlOjBwrYTdMTNZ1/NGTzlPV+e8lst6/psgJq
-         Dwr2E3MTk89UsU9gmaTJZglBrCl3EGoSsZqTbtMbpOtvpDm5o+D0+yAgyqqfDux0Doif
-         Cr0g==
-X-Gm-Message-State: AOAM530S4paw0+E7b9HVnLZ9jDeHb0ATxcxzZBVqZJhNQul7GF1YPSjG
-        NGm8tV+ZL0fCpKIQkV0jUTA=
-X-Google-Smtp-Source: ABdhPJzEd9yl25zWI10ILU72/MmlXDXHn4Qrnla01zFye4LDsQAqoX5G16/n7OCPQk09eOfiep/Cmg==
-X-Received: by 2002:a2e:9dc3:: with SMTP id x3mr639191ljj.326.1611263996216;
-        Thu, 21 Jan 2021 13:19:56 -0800 (PST)
-Received: from localhost ([2a01:4b00:f419:6f00:7a8e:ed70:5c52:ea3])
-        by smtp.gmail.com with ESMTPSA id p5sm647481lfj.295.2021.01.21.13.19.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Jan 2021 13:19:54 -0800 (PST)
-Message-ID: <76474a3f40605d6df334a03929764faeb6b2ce52.camel@debian.org>
-Subject: Re: [PATCH dwarves] libbpf: allow to use packaged version
-From:   Luca Boccassi <bluca@debian.org>
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     dwarves@vger.kernel.org
-Date:   Thu, 21 Jan 2021 21:19:53 +0000
-In-Reply-To: <20210121203446.GF356537@kernel.org>
-References: <20210102182201.122619-1-bluca@debian.org>
-         <CAEf4Bzb3jtv4+KBRNOzfERWyx_4Wh_m7xRrWcc7nAgoXi+yW-Q@mail.gmail.com>
-         <9809e2cd737edb9c70954b99bdf4ce874844965b.camel@debian.org>
-         <CAEf4BzarBG3HnxTiCpum9i31cTTdqDKWnHeV4zbRrUgs2V1Rpw@mail.gmail.com>
-         <df6bebe13ac5d5a80563f56805dee127ad380401.camel@debian.org>
-         <20210121132902.GA12699@kernel.org>
-         <CAEf4BzZn_dkeWxfAB_ysWgLnAvUUcPoNi0yHbLPkiBWW9Lh5BA@mail.gmail.com>
-         <20210121203446.GF356537@kernel.org>
-Content-Type: multipart/signed; micalg="pgp-sha512";
-        protocol="application/pgp-signature"; boundary="=-3Ee1XfC8Bjmg/i9BQp1D"
-User-Agent: Evolution 3.30.5-1.2 
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=eFFyp0an9z6ceYvBlREfDntyLx+f2WYNnkvqDcimax8=;
+        b=AYb1/w+U1N/nLMd4PStrdx5s/vznG2C/U1I1zOOgSED/qT1DCANjij6NOuXB0mZuD0
+         Cgd8UNXJ46xctjYmQ4JtshiVx/MEFwphxfNSyHX3esujMyDKqogavjsmOYIbzWeQyPrC
+         8jqHCsv3nFyIchPgdplGxgLdvalxCiwSwgZLTzPvOtDadcT+u1ZlWMrghcN2e28UNoBE
+         eb5Diate4/O86NsJ4jcjUZlWggqJgQrh/BZMab9D9LVpCHPcYUvo7tonLXWVOrRQQPr9
+         D2lomE3jKMZA90KRGA6T/Hf8tWJ48tmtuGeLdIkXJDo+5lB6jL2Y27Q5EiKZZb7cXSdz
+         Nn2g==
+X-Gm-Message-State: AOAM532WVV2jCHNNv/fW39F6Bs4nkE7D5AoD0RzFBmmTQRo3hJjgRap5
+        oojjS5rqY3yxCYVf/Eh8h2g8wz/K1oWSUafpqFY=
+X-Google-Smtp-Source: ABdhPJxfhRYoc3vLG8+s7Id7lMX+MJciTJQ/oIDC+EPjZXW4ghHrOJU9GHpJuAnPsA8+0rzATqEslleQhBFISRr98kE=
+X-Received: by 2002:a25:48c7:: with SMTP id v190mr2434566yba.260.1611270636310;
+ Thu, 21 Jan 2021 15:10:36 -0800 (PST)
 MIME-Version: 1.0
+References: <20210121202203.9346-1-jolsa@kernel.org> <20210121202203.9346-2-jolsa@kernel.org>
+In-Reply-To: <20210121202203.9346-2-jolsa@kernel.org>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Thu, 21 Jan 2021 15:10:25 -0800
+Message-ID: <CAEf4BzY5CSNjoe19V4GAbFM1N4o4jM38G6yahAhr5bAaDVcYxA@mail.gmail.com>
+Subject: Re: [PATCH 1/3] elf_symtab: Add support for SHN_XINDEX index to elf_section_by_name
+To:     Jiri Olsa <jolsa@kernel.org>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andriin@fb.com>, dwarves@vger.kernel.org,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Yonghong Song <yhs@fb.com>, Hao Luo <haoluo@google.com>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        Mark Wielaard <mjw@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
+On Thu, Jan 21, 2021 at 12:24 PM Jiri Olsa <jolsa@kernel.org> wrote:
+>
+> In case the elf's header e_shstrndx contains SHN_XINDEX,
+> we need to call elf_getshdrstrndx to get the proper
+> string table index.
+>
+> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+> ---
+>  dutil.c | 8 ++++++--
+>  1 file changed, 6 insertions(+), 2 deletions(-)
+>
+> diff --git a/dutil.c b/dutil.c
+> index 7b667647420f..9e0fdca3ae04 100644
+> --- a/dutil.c
+> +++ b/dutil.c
+> @@ -179,13 +179,17 @@ Elf_Scn *elf_section_by_name(Elf *elf, GElf_Ehdr *ep,
+>  {
+>         Elf_Scn *sec = NULL;
+>         size_t cnt = 1;
+> +       size_t str_idx;
+> +
+> +       if (elf_getshdrstrndx(elf, &str_idx))
+> +               return NULL;
+>
+>         while ((sec = elf_nextscn(elf, sec)) != NULL) {
+>                 char *str;
+>
+>                 gelf_getshdr(sec, shp);
+> -               str = elf_strptr(elf, ep->e_shstrndx, shp->sh_name);
+> -               if (!strcmp(name, str)) {
+> +               str = elf_strptr(elf, str_idx, shp->sh_name);
+> +               if (str && !strcmp(name, str)) {
 
---=-3Ee1XfC8Bjmg/i9BQp1D
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+if (!str) would be an error? should we bail out here?
 
-On Thu, 2021-01-21 at 17:34 -0300, Arnaldo Carvalho de Melo wrote:
-> Em Thu, Jan 21, 2021 at 12:02:53PM -0800, Andrii Nakryiko escreveu:
-> > On Thu, Jan 21, 2021 at 5:29 AM Arnaldo Carvalho de Melo <arnaldo.melo@=
-gmail.com> wrote:
-> > > Em Mon, Jan 04, 2021 at 10:17:36PM +0000, Luca Boccassi escreveu:
-> > > > On Mon, 2021-01-04 at 12:23 -0800, Andrii Nakryiko wrote:
-> > > > > One quick and easy hack would be to put a symlink lib/include/bpf=
- ->
-> > > > > lib/bpf/src into pahole repo. And add -Ilib/include to let compil=
-er
-> > > > > handle <bpf/*.h> properly.
-> > > > Sure, that works for me if it's acceptable as a solution. Sent v3 t=
-hat
-> > > > implements it. Thanks for the suggestion.
-> > >=20
-> > > Andrii, can I have your Reviewed-by or Acked-by for v3?
-> >=20
-> > Well, I still think it's not good and not necessary for pahole. pahole
-> > doesn't run under root. It's not a networking application open to the
-> > world either. So I don't buy security arguments in this case at all.
-> > So no, feel free to push this, but without my ack.
->=20
-> Ok, fair enough, I applied the patch, the default behaviour is the one
-> we like, so should be no problem for us :-)
-
-Thank you!
-
---=20
-Kind regards,
-Luca Boccassi
-
---=-3Ee1XfC8Bjmg/i9BQp1D
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEE6g0RLAGYhL9yp9G8SylmgFB4UWIFAmAJ7/kACgkQSylmgFB4
-UWJoLAf+OZVI6ZTHZ897ecRl74Fy2H2zOPbzRAyBw8xZ6TmlvEOHcUoikknOaGnA
-qrMaBU43nHLLDfJI0GaQInGqSvEAnUTyAXmAUNJCeYM7R3MGZGEKmyRDZNNOK3bO
-o+KUO7KdC4Zy6ETHmCfAwl+uvrF2WNn7lJcVW8Apk7FxzzxK0EUdL9mVid/sT4EX
-39miJpJP9DmWL8hOZ8R+9PC/lW4Rom4EMNGP6cUTo1J1eEGx9kP+KTQKiIZvjpB/
-8lTMFDry6XcICoElAAvq1V9hd93ILUOC/pbpjVPM7GuB2hfTnq47WwUYyCH/7nLn
-xOOp0TuVJXGqEoqq6LFE9EF/hqb8tw==
-=QK92
------END PGP SIGNATURE-----
-
---=-3Ee1XfC8Bjmg/i9BQp1D--
+>                         if (index)
+>                                 *index = cnt;
+>                         break;
+> --
+> 2.27.0
+>
