@@ -2,131 +2,101 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.3 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D66A5C433DB
-	for <linux-dwarves@archiver.kernel.org>; Thu, 21 Jan 2021 11:47:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C86DCC433E0
+	for <linux-dwarves@archiver.kernel.org>; Thu, 21 Jan 2021 13:05:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7972F2395A
-	for <linux-dwarves@archiver.kernel.org>; Thu, 21 Jan 2021 11:47:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 72A53239FD
+	for <linux-dwarves@archiver.kernel.org>; Thu, 21 Jan 2021 13:05:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729092AbhAULrC (ORCPT
+        id S1731168AbhAUNE7 (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Thu, 21 Jan 2021 06:47:02 -0500
-Received: from wildebeest.demon.nl ([212.238.236.112]:41578 "EHLO
-        gnu.wildebeest.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730580AbhAULq6 (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Thu, 21 Jan 2021 06:46:58 -0500
-X-Greylist: delayed 590 seconds by postgrey-1.27 at vger.kernel.org; Thu, 21 Jan 2021 06:46:58 EST
-Received: from librem (ip-213-127-53-73.ip.prioritytelecom.net [213.127.53.73])
-        (using TLSv1.2 with cipher ADH-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by gnu.wildebeest.org (Postfix) with ESMTPSA id F21073000608;
-        Thu, 21 Jan 2021 12:36:22 +0100 (CET)
-Received: by librem (Postfix, from userid 1000)
-        id 61F53C2422; Thu, 21 Jan 2021 12:35:16 +0100 (CET)
-Date:   Thu, 21 Jan 2021 12:35:16 +0100
-From:   Mark Wielaard <mark@klomp.org>
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     dwarves@vger.kernel.org
-Subject: Re: DWARF5 DW_AT_data_bit_offset
-Message-ID: <20210121113516.GA8492@wildebeest.org>
-References: <5ee85ca6e3b06b07c83b150912fbcfc1a4c13e19.camel@klomp.org>
- <20201002211819.GA127275@kernel.org>
+        Thu, 21 Jan 2021 08:04:59 -0500
+Received: from mail.kernel.org ([198.145.29.99]:36956 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1731298AbhAUNEx (ORCPT <rfc822;dwarves@vger.kernel.org>);
+        Thu, 21 Jan 2021 08:04:53 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id A8C55239FD;
+        Thu, 21 Jan 2021 13:04:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1611234251;
+        bh=/JQOMKgFZd+MmDKBnQspohxdXPXaleKHP33NP0PpPco=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=o+bCStibUSXXjKXxfOirKViIt1Px9/Bk+ZRY0KJcm0PDR3lxal1dMvpPgbKGA/oqi
+         Rr54LBSLaPSCBQCBOZehxClmsJFNVOdVHhDfbLEHbi/XOxilWEhdklBaPBNREgkYV0
+         keaYVFQm+IXsOOOenzWllWMJEGw5HZS/ZXC1PK+1EobwPIXOEJNoWGRGl80XN/+7Gs
+         o1in5IHlCcF8SYObrNPG/q39KRvQcgjBTklsqx4HUpAaoUBj4ZsXjkAfvEh9rfqdpj
+         5nMMxSaQJ9EWj6LJJVFFF/1VMgsz9e0/Y0vxjjK7MvM5XqqImsd53wEulbz1ztgrbP
+         nU+eDGKbiC7ow==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 8EF3040513; Thu, 21 Jan 2021 10:04:09 -0300 (-03)
+Date:   Thu, 21 Jan 2021 10:04:09 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Giuliano Procida <gprocida@google.com>,
+        Andrii Nakryiko <andrii@kernel.org>
+Cc:     dwarves@vger.kernel.org, kernel-team@android.com,
+        maennich@google.com, Alexei Starovoitov <ast@kernel.org>,
+        bpf <bpf@vger.kernel.org>, Kernel Team <kernel-team@fb.com>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Subject: Re: [PATCH 1/3] btf_encoder: Fix handling of restrict qualifier
+Message-ID: <20210121130409.GW12699@kernel.org>
+References: <20210118160139.1971039-1-gprocida@google.com>
+ <20210118160139.1971039-2-gprocida@google.com>
+ <CAEf4BzZ-ibm_gmbv+JgZH6mNEmz0OxoF_nD9tymo1tYeE_BAjg@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201002211819.GA127275@kernel.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <CAEf4BzZ-ibm_gmbv+JgZH6mNEmz0OxoF_nD9tymo1tYeE_BAjg@mail.gmail.com>
+X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-Hi,
-
-On Fri, Oct 02, 2020 at 06:18:19PM -0300, Arnaldo Carvalho de Melo wrote:
-> Em Fri, Oct 02, 2020 at 06:11:06PM +0200, Mark Wielaard escreveu:
-> > Seems pahole with a recent version of elfutils libdw already handles
-> > most DWARF5 encodings. One thing it doesn't handle yet is
-> > DW_AT_data_bit_offset (this is actually a DWARF4 thing, but gcc only
-> > emits it for -gdwarf-5).
-> > 
-> > Note that the actual bit offset for the different attributes is defined
-> > differently:
-> > 
-> > DW_AT_bit_offset: The bit offset attribute describes the offset in bits
-> > of the high order bit of a value of the given type from the high order
-> > bit of the storage unit used to contain that value.
-> > 
-> > DW_AT_data_bit_offset: the value is an integer constant that specifies
-> > the number of bits from the beginning of the containing entity to the
-> > beginning of the data member.
-> > 
-> > If there is a DW_AT_data_bit_offset instead of a
-> > DW_AT_data_member_location then there will be no DW_AT_byte_size and no
-> > DW_AT_bit_offset.
-> > 
-> > DWARF5 has some example for big and little endian in D.2.8 C/C++ Bit-
-> > Field Examples
-> > 
-> > dwarf_loader.c already seems to do the right thing for little-endian
-> > machines with DW_AT_data_member_location and DW_AT_bit_offset. For
-> > DW_AT_data_bit_offset it doesn't have to do this fixup because it is
-> > already defined as you would expect.
-> > 
-> > Example that shows the issue:
-> > 
-> > $ cat bf.c
-> > struct pea
-> > {
-> >   int type;
-> >   long a:1, b:1, c:1;
-> > };
-> > 
-> > struct pea p;
-> > 
-> > $ gcc -gdwarf-4 -c bf.c
-> > $ ./pahole ./bf.o 
-> > struct pea {
-> > 	int                        type;                 /*     0     4 */
-> > 
-> > 	/* Bitfield combined with previous fields */
-> > 
-> > 	long int                   a:1;                  /*     0:32  8 */
-> > 	long int                   b:1;                  /*     0:33  8 */
-> > 	long int                   c:1;                  /*     0:34  8 */
-> > 
-> > 	/* size: 8, cachelines: 1, members: 4 */
-> > 	/* bit_padding: 29 bits */
-> > 	/* last cacheline: 8 bytes */
-> > };
-> > $ gcc -gdwarf-5 -c bf.c
-> > $ ./pahole ./bf.o 
-> > DW_AT_<0xd>=0x21
-> > DW_AT_<0xd>=0x21
-> > DW_AT_<0xd>=0x21
-> > struct pea {
-> > 	int                        type;                 /*     0     4 */
-> > 	static long int                   a;             /*     0     0 */
-> > 	static long int                   b;             /*     0     0 */
-> > 	static long int                   c;             /*     0     0 */
-> > 
-> > 	/* size: 8, cachelines: 1, members: 1, static members: 3 */
-> > 	/* padding: 4 */
-> > 	/* last cacheline: 8 bytes */
-> > };
-> > 
-> > Note that GCC11 might default to DWARF5.
+Em Wed, Jan 20, 2021 at 11:07:44PM -0800, Andrii Nakryiko escreveu:
+> On Mon, Jan 18, 2021 at 8:01 AM Giuliano Procida <gprocida@google.com> wrote:
+> >
+> > Fixes: 48efa92933e8 ("btf_encoder: Use libbpf APIs to encode BTF type info")
+> >
+> > Signed-off-by: Giuliano Procida <gprocida@google.com>
+> > ---
 > 
-> Thanks for the detailed report, I'm releasing v1.18 right now, will look
-> into that for v1.19.
+> It's up to the maintainer, but some short commit message would be
+> welcome. Also, it would be nice to have [PATCH dwarves] to distinguish
+> this from patches targeted to bpf/bpf-next tree.
 
-Note that GCC11 indeed just switched to producing DWARF5 by default.
-It is not released yet, but already in stage4 and Fedora will start
-doing a mass-rebuild with it soon to shake out the last remaining bugs.
+Yeah, this one looks obvious so I'll add the comment myself, please do
+it next time.
 
-Cheers,
+- Arnaldo
+ 
+> The fix itself looks good:
+> 
+> Acked-by: Andrii Nakryiko <andrii@kernel.org>
+> 
+> >  libbtf.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/libbtf.c b/libbtf.c
+> > index 16e1d45..3709087 100644
+> > --- a/libbtf.c
+> > +++ b/libbtf.c
+> > @@ -417,7 +417,7 @@ int32_t btf_elf__add_ref_type(struct btf_elf *btfe, uint16_t kind, uint32_t type
+> >                 id = btf__add_const(btf, type);
+> >                 break;
+> >         case BTF_KIND_RESTRICT:
+> > -               id = btf__add_const(btf, type);
+> > +               id = btf__add_restrict(btf, type);
+> >                 break;
+> >         case BTF_KIND_TYPEDEF:
+> >                 id = btf__add_typedef(btf, name, type);
+> > --
+> > 2.30.0.284.gd98b1dd5eaa7-goog
+> >
 
-Mark
+-- 
+
+- Arnaldo
