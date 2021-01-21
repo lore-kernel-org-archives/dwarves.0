@@ -2,103 +2,105 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E7D1BC433E0
-	for <linux-dwarves@archiver.kernel.org>; Thu, 21 Jan 2021 15:03:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DD5BBC433E0
+	for <linux-dwarves@archiver.kernel.org>; Thu, 21 Jan 2021 15:25:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B1651235FF
-	for <linux-dwarves@archiver.kernel.org>; Thu, 21 Jan 2021 15:03:31 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9C16423A03
+	for <linux-dwarves@archiver.kernel.org>; Thu, 21 Jan 2021 15:25:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732289AbhAUPDC (ORCPT
+        id S1732624AbhAUPYv (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Thu, 21 Jan 2021 10:03:02 -0500
-Received: from mail.kernel.org ([198.145.29.99]:41234 "EHLO mail.kernel.org"
+        Thu, 21 Jan 2021 10:24:51 -0500
+Received: from mail.kernel.org ([198.145.29.99]:40508 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730752AbhAUN3r (ORCPT <rfc822;dwarves@vger.kernel.org>);
-        Thu, 21 Jan 2021 08:29:47 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 48754206DC;
-        Thu, 21 Jan 2021 13:29:05 +0000 (UTC)
+        id S1731887AbhAUNYx (ORCPT <rfc822;dwarves@vger.kernel.org>);
+        Thu, 21 Jan 2021 08:24:53 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id DA44D206A3;
+        Thu, 21 Jan 2021 13:24:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1611235745;
-        bh=8zHxd31xZC7Uz9ArBtoZNz80KDb7kSWfXXrW9hgvac4=;
+        s=k20201202; t=1611235453;
+        bh=JqP2Oo4Z9DKZhCgctkjTNeYNZJSQEIKDv2pP1IWf0zE=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YdQ5PU4qhHGHTRyEm55c66y9++UJq3Z7eJrHVd9M5p/Y5fbA0gcwChe03VP1GjaUP
-         0dnXlceTTrTCbwyXp/Xqqkyz8itoZDwTwy+Q6u5fLIYs9I02Fj2Tb69aYF+ih8BdFN
-         7o46wyfzWjVzqPmvT+3/ML2rmfVv8tmHAVk5JHthPVdl+FV/kdVDttCAlMBzWdfRql
-         O9rxszYKU/Zgp43JeIDpRf3PBa0FKrtJgNAERVoGUJLHCqVsjYoeMB1Mjvh/kr22zv
-         BOnLcnkfrftSwAEfv3VgF7mnqW4Uji7C93HShhQ7+pMEBNPfsrGUJZ55e0CKeo/+Xy
-         btpGv+xze1YLg==
+        b=VIZSZUvHtcoqJlB/V7JgohFFpEJyjK4uTzSTyizBLQiVxJ5XGovq84oYLyUlIIaX8
+         F3EIw2VXNSHr6AstmAgmwx78xqhpHOq80k2Mvi8RTQflGCXNRSrYIrvDl3U44VEqzt
+         ZKNWVrKWkpTYQCxMeYAwxt5Eg+tdQBklu1UDB1p88df8kvyDoLAmld7Rybv/btQUUO
+         qy56gZsJnEJQkSiKx/6MIOpsTuMbRa7G65YTQzlf4pIBRtZ5DJBEaSOOn+T6o+Gzxo
+         i5GPMzB5JylIcNNVxoiFhdjD16aNwYa/eQK4orimopkbMUQGeeqDchPpcfxIsdmpsn
+         HhibZk1L3gg8A==
 Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 08D0040513; Thu, 21 Jan 2021 10:29:03 -0300 (-03)
-Date:   Thu, 21 Jan 2021 10:29:02 -0300
+        id CF3DF40513; Thu, 21 Jan 2021 10:24:10 -0300 (-03)
+Date:   Thu, 21 Jan 2021 10:24:10 -0300
 From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Luca Boccassi <bluca@debian.org>
-Cc:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        dwarves@vger.kernel.org
-Subject: Re: [PATCH dwarves] libbpf: allow to use packaged version
-Message-ID: <20210121132902.GA12699@kernel.org>
-References: <20210102182201.122619-1-bluca@debian.org>
- <CAEf4Bzb3jtv4+KBRNOzfERWyx_4Wh_m7xRrWcc7nAgoXi+yW-Q@mail.gmail.com>
- <9809e2cd737edb9c70954b99bdf4ce874844965b.camel@debian.org>
- <CAEf4BzarBG3HnxTiCpum9i31cTTdqDKWnHeV4zbRrUgs2V1Rpw@mail.gmail.com>
- <df6bebe13ac5d5a80563f56805dee127ad380401.camel@debian.org>
+To:     Giuliano Procida <gprocida@google.com>
+Cc:     dwarves@vger.kernel.org, kernel-team@android.com,
+        maennich@google.com, ast@kernel.org, andrii@kernel.org,
+        bpf@vger.kernel.org, kernel-team@fb.com
+Subject: Re: [PATCH dwarves v2 2/3] btf_encoder: Improve error-handling
+ around objcopy
+Message-ID: <20210121132410.GZ12699@kernel.org>
+References: <20210118160139.1971039-1-gprocida@google.com>
+ <20210121113520.3603097-1-gprocida@google.com>
+ <20210121113520.3603097-3-gprocida@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <df6bebe13ac5d5a80563f56805dee127ad380401.camel@debian.org>
+In-Reply-To: <20210121113520.3603097-3-gprocida@google.com>
 X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-Em Mon, Jan 04, 2021 at 10:17:36PM +0000, Luca Boccassi escreveu:
-> On Mon, 2021-01-04 at 12:23 -0800, Andrii Nakryiko wrote:
-> > On Sun, Jan 3, 2021 at 1:30 PM Luca Boccassi <bluca@debian.org>
-> > > > >  #include "dutil.h"
-> > > > > +#ifdef LIBBPF_FOUND
-> > > > > +#include <bpf/libbpf.h>
-> > > > > +#else
-> > > > >  #include "lib/bpf/src/libbpf.h"
-> > > > > +#endif
+Em Thu, Jan 21, 2021 at 11:35:19AM +0000, Giuliano Procida escreveu:
+> * Report the correct filename when objcopy fails.
+> * Unlink the temporary file on error.
 
-> > > > this is horrible, are you sure there is no way to make
-> > > > <bpf/libbpf.h>
-> > > > work for both cases?
+Thanks, applied.
 
-> > > It really is, but unfortunately I don't see other ways that are
-> > > not just as horrible. Suggestions welcome. The only thing I can
-> > > think of, is if libbpf used the same directory hierarchy in-tree
-> > > as it does in the installed tree. Ie: move those headers from
-> > > libbpf/src/foo.h to libbpf/include/bpf/foo.h. Then we would just
-> > > have the - Ilib/bpf/include in CPPFLAGS for the embedded build
-> > > defined in the CMake files, and the sources would only use the
-> > > "system" includes everywhere, without ifdeffery.
+- Arnaldo
 
-> > > Given you maintain libbpf, would that be something you'd accept?
-> > > It's quite a common pattern for libraries to store their public
-> > > headers in a separate directory in the git tree, after all.
  
-> > It's quite risky, as there are plenty of (sometimes private)
-> > integrations that assume such a layout of libbpf, so we'll be
-> > breaking them badly. Makefile-based projects do `make
-> > install_headers` to put *only exported* headers into the desired
-> > location. I'm not sure what's the best way to achieve the same with
-> > Cmake, though.
- 
-> > One quick and easy hack would be to put a symlink lib/include/bpf ->
-> > lib/bpf/src into pahole repo. And add -Ilib/include to let compiler
-> > handle <bpf/*.h> properly.
- 
-> Sure, that works for me if it's acceptable as a solution. Sent v3 that
-> implements it. Thanks for the suggestion.
+> Acked-by: Andrii Nakryiko <andrii@kernel.org>
+> Signed-off-by: Giuliano Procida <gprocida@google.com>
+> ---
+>  libbtf.c | 7 ++++---
+>  1 file changed, 4 insertions(+), 3 deletions(-)
+> 
+> diff --git a/libbtf.c b/libbtf.c
+> index 3709087..7552d8e 100644
+> --- a/libbtf.c
+> +++ b/libbtf.c
+> @@ -786,18 +786,19 @@ static int btf_elf__write(const char *filename, struct btf *btf)
+>  		if (write(fd, raw_btf_data, raw_btf_size) != raw_btf_size) {
+>  			fprintf(stderr, "%s: write of %d bytes to '%s' failed: %d!\n",
+>  				__func__, raw_btf_size, tmp_fn, errno);
+> -			goto out;
+> +			goto unlink;
+>  		}
+>  
+>  		snprintf(cmd, sizeof(cmd), "%s --add-section .BTF=%s %s",
+>  			 llvm_objcopy, tmp_fn, filename);
+>  		if (system(cmd)) {
+>  			fprintf(stderr, "%s: failed to add .BTF section to '%s': %d!\n",
+> -				__func__, tmp_fn, errno);
+> -			goto out;
+> +				__func__, filename, errno);
+> +			goto unlink;
+>  		}
+>  
+>  		err = 0;
+> +	unlink:
+>  		unlink(tmp_fn);
+>  	}
+>  
+> -- 
+> 2.30.0.296.g2bfb1c46d8-goog
+> 
 
-Andrii, can I have your Reviewed-by or Acked-by for v3?
-
-I have it in my local repo and will push publicly later today after I
-perform tests.
+-- 
 
 - Arnaldo
