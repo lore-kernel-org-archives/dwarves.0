@@ -2,123 +2,105 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3680DC4161F
-	for <linux-dwarves@archiver.kernel.org>; Wed, 20 Jan 2021 12:44:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8997BC433DB
+	for <linux-dwarves@archiver.kernel.org>; Thu, 21 Jan 2021 07:08:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id F397423380
-	for <linux-dwarves@archiver.kernel.org>; Wed, 20 Jan 2021 12:44:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 50A732396D
+	for <linux-dwarves@archiver.kernel.org>; Thu, 21 Jan 2021 07:08:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388835AbhATMjv (ORCPT
+        id S1726482AbhAUHIl (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Wed, 20 Jan 2021 07:39:51 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:50047 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1731194AbhATMWJ (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Wed, 20 Jan 2021 07:22:09 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1611145226;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=gf6tgpG1D86q7DyOYmdYlfG+qC7YL0qvxxUztYAzDJs=;
-        b=d7rea8a7yWARXq6eYoNFtI6hL58Ncmpj3c7565UWMWNkK+wTtLt6RzlNMKIoAN6E6HItWX
-        DIhJu0YNE5XooJlqo+mo41XqLTTCtV1UyCE0gCKSbpDy+G59gdJUDVV4y5M1Is3a65sd19
-        F5+wi8X8+A0MX75B5dBO7GLo9a6niqw=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-14-nM4Re3OvMjmSDz1PcyvBrQ-1; Wed, 20 Jan 2021 07:20:24 -0500
-X-MC-Unique: nM4Re3OvMjmSDz1PcyvBrQ-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 2F6421800D41;
-        Wed, 20 Jan 2021 12:20:22 +0000 (UTC)
-Received: from krava (unknown [10.40.194.35])
-        by smtp.corp.redhat.com (Postfix) with SMTP id 173761002382;
-        Wed, 20 Jan 2021 12:20:11 +0000 (UTC)
-Date:   Wed, 20 Jan 2021 13:20:10 +0100
-From:   Jiri Olsa <jolsa@redhat.com>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Jiri Olsa <jolsa@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andriin@fb.com>, dwarves@vger.kernel.org,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        Yonghong Song <yhs@fb.com>, Hao Luo <haoluo@google.com>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        Mark Wielaard <mjw@redhat.com>
-Subject: Re: [PATCH 1/3] elf_symtab: Add support for SHN_XINDEX index to
- elf_section_by_name
-Message-ID: <20210120122010.GA1760208@krava>
-References: <20210119221220.1745061-1-jolsa@kernel.org>
- <20210119221220.1745061-2-jolsa@kernel.org>
- <CAEf4BzYjTu-NbEQcgCXmKormPuQUQip+Qr4Qzr3X3VXPSwreBQ@mail.gmail.com>
+        Thu, 21 Jan 2021 02:08:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41900 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726127AbhAUHIg (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Thu, 21 Jan 2021 02:08:36 -0500
+Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72F1AC0613C1;
+        Wed, 20 Jan 2021 23:07:55 -0800 (PST)
+Received: by mail-yb1-xb2a.google.com with SMTP id r32so1110939ybd.5;
+        Wed, 20 Jan 2021 23:07:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=yhLMqQFqTEGHYVWrpic3uSVoVSQoHHdmSMDigbaYXK4=;
+        b=KX9vAwi7b326SXbGtOcLP4wpHQvNmLZKSHUf+SXEIq93kUJxWGlUtUZC+ACjxll3iC
+         ACnfAn2l+OcoVYmpFLDjYIl9M7LP/PiLlpM+oS3f6S7zV62qgOD9Wl+9RYfDZhHmgrQc
+         5VYzVc2XOwmyEMULH2S8++z/EVRwTekLHnOpVmk59rUF6oZILst4AmJSh1+GS8xTloZ2
+         gpt3GUx8fEG7sTvjrnmk4PmJCnoShln8U0/jNzdTFDwoGB7VaDUdbwPnCFStDyxlI+Oo
+         MC99orLawep9jm09BZOWJyqdLrQjz6HjpVa7cZOi/lLZi0osojDj2XcLRI1DiJc1saNg
+         d4Tg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=yhLMqQFqTEGHYVWrpic3uSVoVSQoHHdmSMDigbaYXK4=;
+        b=EL21KmfxSe+tsqfgKWmW+PPCCKPzXZHyOXUOFnaYRl/jyFLRNNgkJouH6Jf/8Qa6Ah
+         UtZTGPBLePhk43OIm7lItPtcNWLILKzhgHibEzYg9GHLLmlEE/4SYsR6J46LTxO7Eom0
+         BzAJdv9ZDkImal0xDtiSH9ztfhG3heJd1JxOEd/5tePAmHRmE/U+8Kw9jf9Dq7biBCLY
+         3VCFyCNNCdLJHZN/K5P599PzkqToIol78XiZK994cIrnN84d8NkwKQF6LyKpCDv2iAyC
+         rGttgaAE3XMjZ/sxTs0j0o2LR/niVRUyNBzAuL+xhUHaWoGrqeLnJKaJGgpRr91ekQyo
+         kCWA==
+X-Gm-Message-State: AOAM531X5D3Otyht7ign8ozpNTCFRkpLg0zKmnji0PwD2sce0/drBbIZ
+        K+NvENXmB9rgdVElyJrYwiRiuTPNel2jDWcTCdI=
+X-Google-Smtp-Source: ABdhPJwDdfNvWio37bh9r5C96yXxfC1QkMIZdNdSf5N51NZkVgqBNzEcP/fAQXFrvDytCOKibCHDtM6tMWIKxcKED90=
+X-Received: by 2002:a25:f40e:: with SMTP id q14mr19486702ybd.230.1611212874813;
+ Wed, 20 Jan 2021 23:07:54 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAEf4BzYjTu-NbEQcgCXmKormPuQUQip+Qr4Qzr3X3VXPSwreBQ@mail.gmail.com>
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
+References: <20210118160139.1971039-1-gprocida@google.com> <20210118160139.1971039-2-gprocida@google.com>
+In-Reply-To: <20210118160139.1971039-2-gprocida@google.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Wed, 20 Jan 2021 23:07:44 -0800
+Message-ID: <CAEf4BzZ-ibm_gmbv+JgZH6mNEmz0OxoF_nD9tymo1tYeE_BAjg@mail.gmail.com>
+Subject: Re: [PATCH 1/3] btf_encoder: Fix handling of restrict qualifier
+To:     Giuliano Procida <gprocida@google.com>
+Cc:     dwarves@vger.kernel.org, kernel-team@android.com,
+        maennich@google.com, Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
+        Kernel Team <kernel-team@fb.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-On Tue, Jan 19, 2021 at 05:23:00PM -0800, Andrii Nakryiko wrote:
-> On Tue, Jan 19, 2021 at 2:16 PM Jiri Olsa <jolsa@kernel.org> wrote:
-> >
-> > In case the elf's header e_shstrndx contains SHN_XINDEX,
-> > we need to call elf_getshdrstrndx to get the proper
-> > string table index.
-> >
-> > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
-> > ---
-> >  dutil.c | 8 ++++++--
-> >  1 file changed, 6 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/dutil.c b/dutil.c
-> > index 7b667647420f..321f4be6669e 100644
-> > --- a/dutil.c
-> > +++ b/dutil.c
-> > @@ -179,13 +179,17 @@ Elf_Scn *elf_section_by_name(Elf *elf, GElf_Ehdr *ep,
-> >  {
-> >         Elf_Scn *sec = NULL;
-> >         size_t cnt = 1;
-> > +       size_t shstrndx = ep->e_shstrndx;
-> > +
-> > +       if (shstrndx == SHN_XINDEX && elf_getshdrstrndx(elf, &shstrndx))
-> > +               return NULL;
-> >
-> 
-> see comment for patch #3, no need for SHN_XINDEX checks,
-> elf_getshdrstrndx() handles this transparently
+On Mon, Jan 18, 2021 at 8:01 AM Giuliano Procida <gprocida@google.com> wrote:
+>
+> Fixes: 48efa92933e8 ("btf_encoder: Use libbpf APIs to encode BTF type info")
+>
+> Signed-off-by: Giuliano Procida <gprocida@google.com>
+> ---
 
-ok, will change
+It's up to the maintainer, but some short commit message would be
+welcome. Also, it would be nice to have [PATCH dwarves] to distinguish
+this from patches targeted to bpf/bpf-next tree.
 
-jirka
+The fix itself looks good:
 
-> 
-> >         while ((sec = elf_nextscn(elf, sec)) != NULL) {
-> >                 char *str;
-> >
-> >                 gelf_getshdr(sec, shp);
-> > -               str = elf_strptr(elf, ep->e_shstrndx, shp->sh_name);
-> > -               if (!strcmp(name, str)) {
-> > +               str = elf_strptr(elf, shstrndx, shp->sh_name);
-> > +               if (str && !strcmp(name, str)) {
-> >                         if (index)
-> >                                 *index = cnt;
-> >                         break;
-> > --
-> > 2.27.0
-> >
-> 
+Acked-by: Andrii Nakryiko <andrii@kernel.org>
 
+>  libbtf.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/libbtf.c b/libbtf.c
+> index 16e1d45..3709087 100644
+> --- a/libbtf.c
+> +++ b/libbtf.c
+> @@ -417,7 +417,7 @@ int32_t btf_elf__add_ref_type(struct btf_elf *btfe, uint16_t kind, uint32_t type
+>                 id = btf__add_const(btf, type);
+>                 break;
+>         case BTF_KIND_RESTRICT:
+> -               id = btf__add_const(btf, type);
+> +               id = btf__add_restrict(btf, type);
+>                 break;
+>         case BTF_KIND_TYPEDEF:
+>                 id = btf__add_typedef(btf, name, type);
+> --
+> 2.30.0.284.gd98b1dd5eaa7-goog
+>
