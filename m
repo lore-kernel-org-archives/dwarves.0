@@ -8,58 +8,58 @@ X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 00D25C433E0
-	for <linux-dwarves@archiver.kernel.org>; Thu, 21 Jan 2021 07:11:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A4D2FC433E0
+	for <linux-dwarves@archiver.kernel.org>; Thu, 21 Jan 2021 07:18:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BBFA72396F
-	for <linux-dwarves@archiver.kernel.org>; Thu, 21 Jan 2021 07:11:06 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 58C6923788
+	for <linux-dwarves@archiver.kernel.org>; Thu, 21 Jan 2021 07:18:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727067AbhAUHKq (ORCPT
+        id S1727154AbhAUHRn (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Thu, 21 Jan 2021 02:10:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42330 "EHLO
+        Thu, 21 Jan 2021 02:17:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727138AbhAUHKk (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Thu, 21 Jan 2021 02:10:40 -0500
-Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28FCAC061575;
-        Wed, 20 Jan 2021 23:09:57 -0800 (PST)
-Received: by mail-yb1-xb2a.google.com with SMTP id x6so1137423ybr.1;
-        Wed, 20 Jan 2021 23:09:57 -0800 (PST)
+        with ESMTP id S1727059AbhAUHRX (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Thu, 21 Jan 2021 02:17:23 -0500
+Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E597C061575;
+        Wed, 20 Jan 2021 23:16:43 -0800 (PST)
+Received: by mail-yb1-xb2d.google.com with SMTP id k132so1147059ybf.2;
+        Wed, 20 Jan 2021 23:16:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=cqoTzXb3UtyxpYm+0ODqpjRNVDXJe2GzcZiA48o4adE=;
-        b=IfSMvHPRbr0JtSo8IHasxH813VQ0i7zqlDAFsKw37/XrXL/RdvrpRuUt3VuCn7wp61
-         VTSMDhx64N3NUL62KbTg0rGlOrqwWRd8oH+sWT4V8NF303xBqKR/z6nahki0Px2BgzN3
-         r8YGzQEd0/nSreEQ1HozVulyDRlhHs2JQ9ZxrxEcs3SIL5a9JAjxUqkUneuLXsHqCt11
-         MSvAmhJedJogT5xjxu94XCTjptm/ebHDDngS+kBmhhtsiHVXo2LppUa2i5PkCpJNRxPO
-         eBAG/ibplTRU2Qk7KkPnHAmyM3ZfdQ47QO0H1IcrJRNT5lFjGUWdBEv4d/35sBdf4JDo
-         uWkQ==
+        bh=eoURqYvHbCeyxwJAYbqlT7Ea9gNe6O6cmfqiJEuGtAs=;
+        b=mNeg7lBWryJPe3wfSBv+oLHTuxZ7xX5rFXe9W3dijqsX7lkVRLfmC1GTC9BWiC5ZEm
+         /fR48NRlD3BHuuhHzncJVGDyEhQ0SnEiC8g5iPHbY06MvqrfeolTTSo9hfFKoHSti+2V
+         ZbZZAniiLXSd7AAW+/mlkD9m6hstQzsYGcHsSvFZ5DKrOWT0BkPY+gARbghIGOWG5ohW
+         YkXNCHU6IKtf2J240ub0utSDsAD04nhX1Ro51YvixBUHlDDb7eYkxQLQNvqpW6CLDv80
+         4aSs2zz1ySJSZnf2oQEgW7g6HhGXbiz0WXshiKvOM3aRI+0dDeW6Zpa098O33ElJ88QO
+         X0nw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=cqoTzXb3UtyxpYm+0ODqpjRNVDXJe2GzcZiA48o4adE=;
-        b=Av0JQmWc2eAbdO4TR7oNXjzyQnBRG68fgaqKnQ6rtNGHLcBtxZpEj57e1fmCdS4HDE
-         EZaQG83JNA8gLKO43NRYipp2m+M1O27LCLGFIo9DO4hTsGsM7FPVMtzu+2AHLa2YKoyO
-         S4NOChKJ11qM44WVzlxll1FsZC5YfUcijyu79Y7pegtOvJ+qcj80foeQ1c7Pu3fvWWbN
-         ZIkW7oCbsd2D48YsEQ6rmPR1Oa1D3yueoeK8Jp6f9QtRSGMkZb8YN1WWrdMRNCE2lnAW
-         9eh38FCgUXUhZMj7fwzFBNAlOh1q3G32uBsu0LoMTimkmBG2YvE0DotHFDnFcvqV+enh
-         6TBQ==
-X-Gm-Message-State: AOAM5317F5YQ48tMPMuooqHlKPHPsY8PDSAnju3WzNHizoMGmUIKT94x
-        iY1xSaCosbx1JR1HgzXUx5Ih6PrTj/hK+8tnvgM=
-X-Google-Smtp-Source: ABdhPJxRk5PMGPSRemX5rTo3P7g+Se3aunGeRlP7qwPKDVaS728Abdc1/WGnKPXCJBFNCQ9pdaqyAMbEDNj7ioN07CY=
-X-Received: by 2002:a25:a183:: with SMTP id a3mr13911013ybi.459.1611212996419;
- Wed, 20 Jan 2021 23:09:56 -0800 (PST)
+        bh=eoURqYvHbCeyxwJAYbqlT7Ea9gNe6O6cmfqiJEuGtAs=;
+        b=ScZ/NKC2qyDB/gKbBFy40V0djU8h6siPosbdjrSTcFmVoiwnMVPTo6IvdBeX2v4tTx
+         icE/IRS7E2LN1ay09+71gLUM3xHvGAnUfdyPRczhy4UZl2Hs0ChnvcQhrAbXpNqHdbeV
+         JlXBbYjLbIrNSyHZzPoz5MlzllGT4PcnZw7YczJB7Z6WwxBTbC/osfBVxrGQl5WT7Nrg
+         pyMBYiXWHdo5AMCdDTQuWsynsICtPrd7TNcmC1BVryIGoQVY0dO0S9YoI6+Kfsolh6t3
+         i1cp5qFWt8hfEUcESCpnoqBxo70/35VAHUl9GfZqsOu98nZvhLEtBc9cpeNJFbeGfMEi
+         4mIg==
+X-Gm-Message-State: AOAM532bHC5qLews/U3owGnvS9okrAwBEjdpZb3JsW1zM03b4NqVHOuK
+        CAJFoWwTmxPSIGUrm4zi+dxGhqNxY//t8RaiWfpuZ+8o88U=
+X-Google-Smtp-Source: ABdhPJxvNJ3u1k2WifT8nMxTC6lGIKn3IY/dTEV8hOsSiwMoj4+Wj+Rr+qbiLGSHJIEB6Kdm0VK0QvfI1QnG8vy3wRk=
+X-Received: by 2002:a25:854a:: with SMTP id f10mr17469649ybn.510.1611213402492;
+ Wed, 20 Jan 2021 23:16:42 -0800 (PST)
 MIME-Version: 1.0
-References: <20210118160139.1971039-1-gprocida@google.com> <20210118160139.1971039-3-gprocida@google.com>
-In-Reply-To: <20210118160139.1971039-3-gprocida@google.com>
+References: <20210118160139.1971039-1-gprocida@google.com> <20210118160139.1971039-4-gprocida@google.com>
+In-Reply-To: <20210118160139.1971039-4-gprocida@google.com>
 From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Wed, 20 Jan 2021 23:09:45 -0800
-Message-ID: <CAEf4BzbPwkCGhLeHbpS+asrLGs_BqRrqxK_gz-Pfzkgk9tbaAw@mail.gmail.com>
-Subject: Re: [PATCH 2/3] btf_encoder: Improve error-handling around objcopy
+Date:   Wed, 20 Jan 2021 23:16:31 -0800
+Message-ID: <CAEf4BzazvC9H=K_A9KamGTB3iKtjuNxd4hEvwFOnkPdnszo6Bw@mail.gmail.com>
+Subject: Re: [PATCH 3/3] btf_encoder: Set .BTF section alignment to 16
 To:     Giuliano Procida <gprocida@google.com>
 Cc:     dwarves@vger.kernel.org, kernel-team@android.com,
         maennich@google.com, Alexei Starovoitov <ast@kernel.org>,
@@ -72,44 +72,50 @@ X-Mailing-List: dwarves@vger.kernel.org
 
 On Mon, Jan 18, 2021 at 8:01 AM Giuliano Procida <gprocida@google.com> wrote:
 >
-> * Report the correct filename when objcopy fails.
-> * Unlink the temporary file on error.
+> This is to avoid misaligned access when memory-mapping ELF sections.
 >
 > Signed-off-by: Giuliano Procida <gprocida@google.com>
 > ---
-
-Acked-by: Andrii Nakryiko <andrii@kernel.org>
-
->  libbtf.c | 7 ++++---
->  1 file changed, 4 insertions(+), 3 deletions(-)
+>  libbtf.c | 8 ++++++++
+>  1 file changed, 8 insertions(+)
 >
 > diff --git a/libbtf.c b/libbtf.c
-> index 3709087..7552d8e 100644
+> index 7552d8e..2f12d53 100644
 > --- a/libbtf.c
 > +++ b/libbtf.c
-> @@ -786,18 +786,19 @@ static int btf_elf__write(const char *filename, struct btf *btf)
->                 if (write(fd, raw_btf_data, raw_btf_size) != raw_btf_size) {
->                         fprintf(stderr, "%s: write of %d bytes to '%s' failed: %d!\n",
->                                 __func__, raw_btf_size, tmp_fn, errno);
-> -                       goto out;
-> +                       goto unlink;
+> @@ -797,6 +797,14 @@ static int btf_elf__write(const char *filename, struct btf *btf)
+>                         goto unlink;
 >                 }
 >
->                 snprintf(cmd, sizeof(cmd), "%s --add-section .BTF=%s %s",
->                          llvm_objcopy, tmp_fn, filename);
->                 if (system(cmd)) {
->                         fprintf(stderr, "%s: failed to add .BTF section to '%s': %d!\n",
-> -                               __func__, tmp_fn, errno);
-> -                       goto out;
+> +               snprintf(cmd, sizeof(cmd), "%s --set-section-alignment .BTF=16 %s",
+> +                        llvm_objcopy, filename);
+
+does it align inside the ELF file to 16 bytes, or does it request the
+linker to align it at 16 byte alignment in memory? Given .BTF section
+is not loadable, trying to understand the implications.
+
+
+> +               if (system(cmd)) {
+
+Also curious, if objcopy emits error (saying that
+--set-section-alignment argument is not recognized), will that error
+be shown in stdout? or system() consumes it without redirecting it to
+stdout?
+
+> +                       /* non-fatal, this is a nice-to-have and it's only supported from LLVM 10 */
+> +                       fprintf(stderr, "%s: warning: failed to align .BTF section in '%s': %d!\n",
 > +                               __func__, filename, errno);
-> +                       goto unlink;
->                 }
->
+
+Probably better to emit this warning only in verbose mode, otherwise
+lots of people will start complaining that they get some new warnings
+from pahole.
+
+
+> +               }
+> +
 >                 err = 0;
-> +       unlink:
+>         unlink:
 >                 unlink(tmp_fn);
->         }
->
 > --
 > 2.30.0.284.gd98b1dd5eaa7-goog
 >
