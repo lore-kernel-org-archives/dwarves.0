@@ -2,70 +2,45 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNWANTED_LANGUAGE_BODY
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 26B49C433DB
-	for <linux-dwarves@archiver.kernel.org>; Fri, 22 Jan 2021 22:01:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2EEF1C433DB
+	for <linux-dwarves@archiver.kernel.org>; Fri, 22 Jan 2021 22:33:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 00D9523B70
-	for <linux-dwarves@archiver.kernel.org>; Fri, 22 Jan 2021 22:01:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 01A9823AA1
+	for <linux-dwarves@archiver.kernel.org>; Fri, 22 Jan 2021 22:32:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728519AbhAVWAx (ORCPT
+        id S1728360AbhAVWbe (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Fri, 22 Jan 2021 17:00:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40060 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730189AbhAVUGW (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Fri, 22 Jan 2021 15:06:22 -0500
-Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4803C0613D6;
-        Fri, 22 Jan 2021 12:05:40 -0800 (PST)
-Received: by mail-yb1-xb2a.google.com with SMTP id r32so6619378ybd.5;
-        Fri, 22 Jan 2021 12:05:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=yIJeE19Ex412BCh+tXZdyqfHWVAMXMH3ZAW2ZmTwEvs=;
-        b=EHtGF6/TD4BsGrkHJBxIryItSGkMyar7VNULjL950bhJ7Mh2bp2g43eQEkoX80cCjD
-         Jt1sAd7/bb5badTmt81icFDmrkYmgGXtsOUYhX7ytNeVi1ZgdCehzUkSTYJlXfckYPOD
-         9PD0TZPBTGegD1cR+ioo9v5zlxzrqjG3nCK45JgsmfylzMs7HVJfcgzwxTG0wcOER30+
-         +/PvU5KKMLwcW66J++eacO4l5qppcU3C+/7io+An8WGnWHpgFXAI6Q3mEcf/tUyH57b8
-         08bF+7ag+E0cvRsPGtCpkxraJnPU68RRkiNaVjgZfyqdg+KzONT7H0p0UHFNGIztDVd1
-         I8EQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=yIJeE19Ex412BCh+tXZdyqfHWVAMXMH3ZAW2ZmTwEvs=;
-        b=cAuhSwLhcktQD242baBGY/jrQGheACQvnxXgMm/5uTxM6LemKEYDan2Sd6tL8ch8KZ
-         SrYB2UQCxSEXARljiF1coi4oGOGgHCq+PEFEnWB92oC01JrAYGyK6XGIqNlrmOWumjRw
-         MGMXieRXg6vw/XPDo17x/77YVB5+7rJuMXjxmBfxLOO6RzBeOFa+rAf3GFtDvrlFf6P/
-         W51S6+v6VT7s79k72oY3lBo/XRVb6SRmB4eykvlhvG9k/f5RxiSGv8QWdUBdxVUzXOy+
-         HuCxbxPPxsQ1iyei7WoySc8cxp6C2WFtjgEfa1m+HH4sJKQq6pqOylDJUsXRrVISMJJM
-         R53A==
-X-Gm-Message-State: AOAM5330KYsjkW4u+r3yPjUf8tDIwkMrwxSIQg4g+YFPyboDEUYddytK
-        Co1MvgTy0CfZz6wdex+Mrijt3aVt39YRMTZEqNA=
-X-Google-Smtp-Source: ABdhPJzH9EaAVMjy4oznG8MRXKCsklDSK7xJtJFAv5F51i+auk5rZ05L0WLF6kwCNTlgofr+6K0ySUs/6QM8cBv+MZg=
-X-Received: by 2002:a25:9882:: with SMTP id l2mr8206839ybo.425.1611345940074;
- Fri, 22 Jan 2021 12:05:40 -0800 (PST)
-MIME-Version: 1.0
-References: <20210122163920.59177-1-jolsa@kernel.org> <20210122163920.59177-2-jolsa@kernel.org>
-In-Reply-To: <20210122163920.59177-2-jolsa@kernel.org>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Fri, 22 Jan 2021 12:05:28 -0800
-Message-ID: <CAEf4BzZEeuw0LPVHcR_7wvt14jkWZdSa9Rf-cGwpgJ57Rg9qHA@mail.gmail.com>
-Subject: Re: [PATCH 1/2] elf_symtab: Add support for SHN_XINDEX index to elf_section_by_name
+        Fri, 22 Jan 2021 17:31:34 -0500
+Received: from mail.kernel.org ([198.145.29.99]:37462 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730246AbhAVTx0 (ORCPT <rfc822;dwarves@vger.kernel.org>);
+        Fri, 22 Jan 2021 14:53:26 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 485A623AF8;
+        Fri, 22 Jan 2021 19:52:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1611345150;
+        bh=l5450GkD2d24VPxGeghKlaNcRWS1az6jQtFO4T4dK34=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=HcB2AM5+3lJVnv2fn9GOiKzbcwEFVV5fbaF67e4MfnBccr7cIwbWGU/HEBCOYuVxY
+         BB5nOZEGcN5vjogwUbq8wGzDRH9l+1Q/m94PUO9EnZYfnxDbnRvGJH3IlogNnRIwK0
+         xTfLuQBTPU97L88N//X5hmDiThShg5tPP8twdqV+dr3jlpgCI7qNwFJV0rYXZ3sjAQ
+         5V9NSntnEgpJsNYDtIjBPkk3TLXeeI6SuxM+pI7ZL7VMYYbLxY9X2jK2q8bd3VeRuA
+         0wfqS8X9awbhTYHbfSjKijMKXhCfJ9y506DaFthKY37M4A2v3Cytf+1S+ES1a7cGVJ
+         Bx08a37yV7HtA==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 327E640513; Fri, 22 Jan 2021 16:52:28 -0300 (-03)
+Date:   Fri, 22 Jan 2021 16:52:28 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
 To:     Jiri Olsa <jolsa@kernel.org>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
+Cc:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Andrii Nakryiko <andriin@fb.com>, dwarves@vger.kernel.org,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
         Yonghong Song <yhs@fb.com>, Hao Luo <haoluo@google.com>,
         Martin KaFai Lau <kafai@fb.com>,
         Song Liu <songliubraving@fb.com>,
@@ -73,49 +48,263 @@ Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
         KP Singh <kpsingh@chromium.org>,
         Joe Lawrence <joe.lawrence@redhat.com>,
         Mark Wielaard <mjw@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH 2/2] bpf_encoder: Translate SHN_XINDEX in symbol's
+ st_shndx values
+Message-ID: <20210122195228.GB617095@kernel.org>
+References: <20210122163920.59177-1-jolsa@kernel.org>
+ <20210122163920.59177-3-jolsa@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210122163920.59177-3-jolsa@kernel.org>
+X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-On Fri, Jan 22, 2021 at 9:22 AM Jiri Olsa <jolsa@kernel.org> wrote:
->
-> In case the elf's header e_shstrndx contains SHN_XINDEX,
-> we need to call elf_getshdrstrndx to get the proper
-> string table index.
->
+Em Fri, Jan 22, 2021 at 05:39:20PM +0100, Jiri Olsa escreveu:
+> For very large ELF objects (with many sections), we could
+> get special value SHN_XINDEX (65535) for symbol's st_shndx.
+> 
+> This patch is adding code to detect the optional extended
+> section index table and use it to resolve symbol's section
+> index.
+> 
+> Adding elf_symtab__for_each_symbol_index macro that returns
+> symbol's section index and usign it in collect functions.
+
+From a quick look it seems you addressed Andrii's review comments,
+right?
+
+I've merged it locally, but would like to have some detailed set of
+steps on how to test this, so that I can add it to a "Committer testing"
+section in the cset commit log and probably add it to my local set of
+regression tests.
+
+Who originally reported this? Joe? Also can someone provide a Tested-by:
+in addition to mine when I get this detailed set of steps to test?
+
+Thanks,
+
+- Arnaldo
+ 
 > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 > ---
-
-Acked-by: Andrii Nakryiko <andrii@kernel.org>
-
->  dutil.c | 8 +++++++-
->  1 file changed, 7 insertions(+), 1 deletion(-)
->
-> diff --git a/dutil.c b/dutil.c
-> index 7b667647420f..11fb7202049c 100644
-> --- a/dutil.c
-> +++ b/dutil.c
-> @@ -179,12 +179,18 @@ Elf_Scn *elf_section_by_name(Elf *elf, GElf_Ehdr *ep,
+>  btf_encoder.c | 59 +++++++++++++++++++++++++++++++++++++--------------
+>  elf_symtab.c  | 39 +++++++++++++++++++++++++++++++++-
+>  elf_symtab.h  |  2 ++
+>  3 files changed, 83 insertions(+), 17 deletions(-)
+> 
+> diff --git a/btf_encoder.c b/btf_encoder.c
+> index 5557c9efd365..56ee55965093 100644
+> --- a/btf_encoder.c
+> +++ b/btf_encoder.c
+> @@ -63,13 +63,13 @@ static void delete_functions(void)
+>  #define max(x, y) ((x) < (y) ? (y) : (x))
+>  #endif
+>  
+> -static int collect_function(struct btf_elf *btfe, GElf_Sym *sym)
+> +static int collect_function(struct btf_elf *btfe, GElf_Sym *sym,
+> +			    Elf32_Word sym_sec_idx)
 >  {
->         Elf_Scn *sec = NULL;
->         size_t cnt = 1;
-> +       size_t str_idx;
+>  	struct elf_function *new;
+>  	static GElf_Shdr sh;
+> -	static int last_idx;
+> +	static Elf32_Word last_idx;
+>  	const char *name;
+> -	int idx;
+>  
+>  	if (elf_sym__type(sym) != STT_FUNC)
+>  		return 0;
+> @@ -90,12 +90,10 @@ static int collect_function(struct btf_elf *btfe, GElf_Sym *sym)
+>  		functions = new;
+>  	}
+>  
+> -	idx = elf_sym__section(sym);
+> -
+> -	if (idx != last_idx) {
+> -		if (!elf_section_by_idx(btfe->elf, &sh, idx))
+> +	if (sym_sec_idx != last_idx) {
+> +		if (!elf_section_by_idx(btfe->elf, &sh, sym_sec_idx))
+>  			return 0;
+> -		last_idx = idx;
+> +		last_idx = sym_sec_idx;
+>  	}
+>  
+>  	functions[functions_cnt].name = name;
+> @@ -542,14 +540,15 @@ static bool percpu_var_exists(uint64_t addr, uint32_t *sz, const char **name)
+>  	return true;
+>  }
+>  
+> -static int collect_percpu_var(struct btf_elf *btfe, GElf_Sym *sym)
+> +static int collect_percpu_var(struct btf_elf *btfe, GElf_Sym *sym,
+> +			      Elf32_Word sym_sec_idx)
+>  {
+>  	const char *sym_name;
+>  	uint64_t addr;
+>  	uint32_t size;
+>  
+>  	/* compare a symbol's shndx to determine if it's a percpu variable */
+> -	if (elf_sym__section(sym) != btfe->percpu_shndx)
+> +	if (sym_sec_idx != btfe->percpu_shndx)
+>  		return 0;
+>  	if (elf_sym__type(sym) != STT_OBJECT)
+>  		return 0;
+> @@ -585,12 +584,13 @@ static int collect_percpu_var(struct btf_elf *btfe, GElf_Sym *sym)
+>  	return 0;
+>  }
+>  
+> -static void collect_symbol(GElf_Sym *sym, struct funcs_layout *fl)
+> +static void collect_symbol(GElf_Sym *sym, struct funcs_layout *fl,
+> +			   Elf32_Word sym_sec_idx)
+>  {
+>  	if (!fl->mcount_start &&
+>  	    !strcmp("__start_mcount_loc", elf_sym__name(sym, btfe->symtab))) {
+>  		fl->mcount_start = sym->st_value;
+> -		fl->mcount_sec_idx = sym->st_shndx;
+> +		fl->mcount_sec_idx = sym_sec_idx;
+>  	}
+>  
+>  	if (!fl->mcount_stop &&
+> @@ -598,9 +598,36 @@ static void collect_symbol(GElf_Sym *sym, struct funcs_layout *fl)
+>  		fl->mcount_stop = sym->st_value;
+>  }
+>  
+> +static bool elf_sym__get(Elf_Data *syms, Elf_Data *syms_sec_idx_table,
+> +			 int id, GElf_Sym *sym, Elf32_Word *sym_sec_idx)
+> +{
+> +	if (!gelf_getsym(syms, id, sym))
+> +		return false;
 > +
-> +       if (elf_getshdrstrndx(elf, &str_idx))
-> +               return NULL;
->
->         while ((sec = elf_nextscn(elf, sec)) != NULL) {
->                 char *str;
->
->                 gelf_getshdr(sec, shp);
-> -               str = elf_strptr(elf, ep->e_shstrndx, shp->sh_name);
-> +               str = elf_strptr(elf, str_idx, shp->sh_name);
-> +               if (!str)
-> +                       return NULL;
->                 if (!strcmp(name, str)) {
->                         if (index)
->                                 *index = cnt;
-> --
+> +	*sym_sec_idx = sym->st_shndx;
+> +
+> +	if (sym->st_shndx == SHN_XINDEX) {
+> +		if (!syms_sec_idx_table)
+> +			return false;
+> +		if (!gelf_getsymshndx(syms, syms_sec_idx_table,
+> +				      id, sym, sym_sec_idx))
+> +			return false;
+> +	}
+> +
+> +	return true;
+> +}
+> +
+> +#define elf_symtab__for_each_symbol_index(symtab, id, sym, sym_sec_idx)		\
+> +	for (id = 0;								\
+> +	     id < symtab->nr_syms &&						\
+> +	     elf_sym__get(symtab->syms, symtab->syms_sec_idx_table,		\
+> +			  id, &sym, &sym_sec_idx);				\
+> +	     id++)
+> +
+>  static int collect_symbols(struct btf_elf *btfe, bool collect_percpu_vars)
+>  {
+>  	struct funcs_layout fl = { };
+> +	Elf32_Word sym_sec_idx;
+>  	uint32_t core_id;
+>  	GElf_Sym sym;
+>  
+> @@ -608,12 +635,12 @@ static int collect_symbols(struct btf_elf *btfe, bool collect_percpu_vars)
+>  	percpu_var_cnt = 0;
+>  
+>  	/* search within symtab for percpu variables */
+> -	elf_symtab__for_each_symbol(btfe->symtab, core_id, sym) {
+> -		if (collect_percpu_vars && collect_percpu_var(btfe, &sym))
+> +	elf_symtab__for_each_symbol_index(btfe->symtab, core_id, sym, sym_sec_idx) {
+> +		if (collect_percpu_vars && collect_percpu_var(btfe, &sym, sym_sec_idx))
+>  			return -1;
+> -		if (collect_function(btfe, &sym))
+> +		if (collect_function(btfe, &sym, sym_sec_idx))
+>  			return -1;
+> -		collect_symbol(&sym, &fl);
+> +		collect_symbol(&sym, &fl, sym_sec_idx);
+>  	}
+>  
+>  	if (collect_percpu_vars) {
+> diff --git a/elf_symtab.c b/elf_symtab.c
+> index 741990ea3ed9..fad5e0c0ba3c 100644
+> --- a/elf_symtab.c
+> +++ b/elf_symtab.c
+> @@ -17,11 +17,13 @@
+>  
+>  struct elf_symtab *elf_symtab__new(const char *name, Elf *elf, GElf_Ehdr *ehdr)
+>  {
+> +	size_t symtab_index;
+> +
+>  	if (name == NULL)
+>  		name = ".symtab";
+>  
+>  	GElf_Shdr shdr;
+> -	Elf_Scn *sec = elf_section_by_name(elf, ehdr, &shdr, name, NULL);
+> +	Elf_Scn *sec = elf_section_by_name(elf, ehdr, &shdr, name, &symtab_index);
+>  
+>  	if (sec == NULL)
+>  		return NULL;
+> @@ -41,6 +43,12 @@ struct elf_symtab *elf_symtab__new(const char *name, Elf *elf, GElf_Ehdr *ehdr)
+>  	if (symtab->syms == NULL)
+>  		goto out_free_name;
+>  
+> +	/*
+> +	 * This returns extended section index table's
+> +	 * section index, if it exists.
+> +	 */
+> +	int symtab_xindex = elf_scnshndx(sec);
+> +
+>  	sec = elf_getscn(elf, shdr.sh_link);
+>  	if (sec == NULL)
+>  		goto out_free_name;
+> @@ -49,6 +57,35 @@ struct elf_symtab *elf_symtab__new(const char *name, Elf *elf, GElf_Ehdr *ehdr)
+>  	if (symtab->symstrs == NULL)
+>  		goto out_free_name;
+>  
+> +	/*
+> +	 * The .symtab section has optional extended section index
+> +	 * table, load its data so it can be used to resolve symbol's
+> +	 * section index.
+> +	 **/
+> +	if (symtab_xindex > 0) {
+> +		GElf_Shdr shdr_xindex;
+> +		Elf_Scn *sec_xindex;
+> +
+> +		sec_xindex = elf_getscn(elf, symtab_xindex);
+> +		if (sec_xindex == NULL)
+> +			goto out_free_name;
+> +
+> +		if (gelf_getshdr(sec_xindex, &shdr_xindex) == NULL)
+> +			goto out_free_name;
+> +
+> +		/* Extra check to verify it's correct type */
+> +		if (shdr_xindex.sh_type != SHT_SYMTAB_SHNDX)
+> +			goto out_free_name;
+> +
+> +		/* Extra check to verify it belongs to the .symtab */
+> +		if (symtab_index != shdr_xindex.sh_link)
+> +			goto out_free_name;
+> +
+> +		symtab->syms_sec_idx_table = elf_getdata(elf_getscn(elf, symtab_xindex), NULL);
+> +		if (symtab->syms_sec_idx_table == NULL)
+> +			goto out_free_name;
+> +	}
+> +
+>  	symtab->nr_syms = shdr.sh_size / shdr.sh_entsize;
+>  
+>  	return symtab;
+> diff --git a/elf_symtab.h b/elf_symtab.h
+> index 359add69c8ab..2e05ca98158b 100644
+> --- a/elf_symtab.h
+> +++ b/elf_symtab.h
+> @@ -16,6 +16,8 @@ struct elf_symtab {
+>  	uint32_t  nr_syms;
+>  	Elf_Data  *syms;
+>  	Elf_Data  *symstrs;
+> +	/* Data of SHT_SYMTAB_SHNDX section. */
+> +	Elf_Data  *syms_sec_idx_table;
+>  	char	  *name;
+>  };
+>  
+> -- 
 > 2.26.2
->
+> 
+
+-- 
+
+- Arnaldo
