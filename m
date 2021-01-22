@@ -2,45 +2,72 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0E7E5C433E6
-	for <linux-dwarves@archiver.kernel.org>; Fri, 22 Jan 2021 22:39:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3530FC433E0
+	for <linux-dwarves@archiver.kernel.org>; Fri, 22 Jan 2021 22:57:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D1E2223AAC
-	for <linux-dwarves@archiver.kernel.org>; Fri, 22 Jan 2021 22:39:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 05F3523AAC
+	for <linux-dwarves@archiver.kernel.org>; Fri, 22 Jan 2021 22:57:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728199AbhAVWjj (ORCPT
+        id S1728438AbhAVW5c (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Fri, 22 Jan 2021 17:39:39 -0500
-Received: from mail.kernel.org ([198.145.29.99]:35772 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728218AbhAVTqy (ORCPT <rfc822;dwarves@vger.kernel.org>);
-        Fri, 22 Jan 2021 14:46:54 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id C42EB23AF8;
-        Fri, 22 Jan 2021 19:46:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1611344764;
-        bh=LoPSxz6L3iDXqEs2jPt4YU+xS4K6WyCltNO2CZ1Vlec=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rBn7Eo1pVfpt5omsgk6bk0QegCBPnFUPyHKqQAaY7gN3h8oGrOdxpjwTTxOq5apYL
-         UVgy3IbjR8vps8nvQ+Es6sJrvdVCHc7EvrWxGeurdvDIoO+M4mWMycAinePvHto1Oz
-         rHP+w09VJb7QiE6m2h1dayTnAPqB77FBmsgy4QwKQQzstTykQvgv7Tht20FP1DVb+O
-         ldQb/mc/q6HaVJXzAWnCnLH5lI4F7batCdOEj+ucsA7KkDd37jJMz+Tak40ZwVS0cY
-         P3p0K2l1FX/rvCbQiUhVJ9r/z0Q275U41uwET1kIyUKER4U8ZRNmsoucoYMwAZE1YB
-         DGS2BVX5Gb2mg==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 02F3E40513; Fri, 22 Jan 2021 16:45:59 -0300 (-03)
-Date:   Fri, 22 Jan 2021 16:45:59 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Jiri Olsa <jolsa@kernel.org>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Fri, 22 Jan 2021 17:57:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48648 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728476AbhAVW4n (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Fri, 22 Jan 2021 17:56:43 -0500
+Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98E92C06174A;
+        Fri, 22 Jan 2021 14:56:03 -0800 (PST)
+Received: by mail-yb1-xb2d.google.com with SMTP id k132so7041069ybf.2;
+        Fri, 22 Jan 2021 14:56:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=P0ru974B6Q7RoDzmI3kqeFvMXnnLKfdBNCMfCCuAQoc=;
+        b=Dy3XH+z66gPAWI5CiE1jF47tii7PIt2u0jWt0l1d1mQMedGBEj7G7JhEvyT3i0O1yO
+         oBEgVViqSsj0piUDEGmkTBycvCBXeEmnsimtKVPB8TclbnIFh+aRgVRFSEpSJTtw5+uB
+         eesPfdfkMVexptkNMeC+9KY9H2ZWze2h1ZCeYGrgKp58oTD3UfO7Y5pL7Ivgk8PIgJ4T
+         5/G51j1WDjAPgp824+W8SRGzX0IgOacQI22ChB9+LweK4YY25n/0RvcZUF0+HBHDgYAy
+         JU6q5HEjansFuQ2ojT77//s1+e7Z30S/9hTJbIIEF3H9We2hOCvRv0UvAHbnkJujiQwD
+         ge3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=P0ru974B6Q7RoDzmI3kqeFvMXnnLKfdBNCMfCCuAQoc=;
+        b=KhiZQGm8mawm/H5B5vv7/2UgU3DZagIQhvXnQ0ZC6KyB1l4e0DP0KHZZvdMSEm7Pbw
+         nQ8r+e+tJa8vdjlvbjr+NjJZGIFVkW2KdczEUBUCuqCjspZsYO2x5zI9b0e9H4pUx3ZW
+         ZB/rtfExGATnKaidHQGHr5vqDD+FpAWFjy/yDqX91OQg/XPc51+/eAijaoYc5P9/sOwG
+         GW/9dBRmUjg+pGmRZkG9rDwUlfohysKD3GiArYWz1F1/4Jc7Fpcxc5tQb5fOmJPa8HiQ
+         ImS6/UpmHwPcpo0dccaLbpYMkK/Mt4x23H26gava/0nrZ1CaWfGhZXlpKqe2wcvTEtUL
+         A6aQ==
+X-Gm-Message-State: AOAM533z6YVCYLPpGLaiMblPmIi0Zl/cN273JZiMacqZhGV4d5KGzTIM
+        B5DsrRiwTBiKLnS2js7JGXCt89sqg4keizbCMmE=
+X-Google-Smtp-Source: ABdhPJyxyI3w5nhampQQpIxt6t3H3fRoaOerAjdnOfYSALoPKMFIljdbUWvNiE7K9t0IRENryz1WOmeg71PwQaQOBzc=
+X-Received: by 2002:a25:4b86:: with SMTP id y128mr9448441yba.403.1611356162405;
+ Fri, 22 Jan 2021 14:56:02 -0800 (PST)
+MIME-Version: 1.0
+References: <20210121202203.9346-1-jolsa@kernel.org> <20210121202203.9346-3-jolsa@kernel.org>
+ <CAEf4BzZquSn0Th7bpVuM0M4XbTPU5-9jDPPd5RJBS5AH2zqaMA@mail.gmail.com> <20210122204654.GB70760@krava>
+In-Reply-To: <20210122204654.GB70760@krava>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Fri, 22 Jan 2021 14:55:51 -0800
+Message-ID: <CAEf4BzaRrMp1+2dgv_1WrkBt+=KF1BJnN_KGwZKx5gDg7t++Yg@mail.gmail.com>
+Subject: Re: [PATCH 2/3] bpf_encoder: Translate SHN_XINDEX in symbol's
+ st_shndx values
+To:     Jiri Olsa <jolsa@redhat.com>
+Cc:     Jiri Olsa <jolsa@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Andrii Nakryiko <andriin@fb.com>, dwarves@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
         Yonghong Song <yhs@fb.com>, Hao Luo <haoluo@google.com>,
         Martin KaFai Lau <kafai@fb.com>,
         Song Liu <songliubraving@fb.com>,
@@ -48,86 +75,110 @@ Cc:     Alexei Starovoitov <ast@kernel.org>,
         KP Singh <kpsingh@chromium.org>,
         Joe Lawrence <joe.lawrence@redhat.com>,
         Mark Wielaard <mjw@redhat.com>
-Subject: Re: [PATCH 1/2] elf_symtab: Add support for SHN_XINDEX index to
- elf_section_by_name
-Message-ID: <20210122194559.GA617095@kernel.org>
-References: <20210122163920.59177-1-jolsa@kernel.org>
- <20210122163920.59177-2-jolsa@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210122163920.59177-2-jolsa@kernel.org>
-X-Url:  http://acmel.wordpress.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-Em Fri, Jan 22, 2021 at 05:39:19PM +0100, Jiri Olsa escreveu:
-> In case the elf's header e_shstrndx contains SHN_XINDEX,
-> we need to call elf_getshdrstrndx to get the proper
-> string table index.
+On Fri, Jan 22, 2021 at 12:47 PM Jiri Olsa <jolsa@redhat.com> wrote:
+>
+> On Thu, Jan 21, 2021 at 03:32:40PM -0800, Andrii Nakryiko wrote:
+>
+> SNIP
+>
+> > > @@ -598,9 +599,36 @@ static void collect_symbol(GElf_Sym *sym, struct funcs_layout *fl)
+> > >                 fl->mcount_stop = sym->st_value;
+> > >  }
+> > >
+> > > +static bool elf_sym__get(Elf_Data *syms, Elf_Data *syms_sec_idx_table,
+> > > +                        int id, GElf_Sym *sym, Elf32_Word *sym_sec_idx)
+> > > +{
+> > > +       if (!gelf_getsym(syms, id, sym))
+> > > +               return false;
+> > > +
+> > > +       *sym_sec_idx = sym->st_shndx;
+> > > +
+> > > +       if (sym->st_shndx == SHN_XINDEX) {
+> > > +               if (!syms_sec_idx_table)
+> > > +                       return false;
+> > > +               if (!gelf_getsymshndx(syms, syms_sec_idx_table,
+> > > +                                     id, sym, sym_sec_idx))
+> >
+> >
+> > gelf_getsymshndx() is supposed to work even for cases that don't use
+> > extended numbering, so this should work, right?
+> >
+> > if (!gelf_getsymshndx(syms, syms_sec_idx_table, id, sym, sym_sec_idx))
+> >     return false;
+> >
+>
+> it seems you're right, gelf_getsymshndx seem to work for
+> both cases, I'll check
+>
+>
+> > if (sym->st_shndx == SHN_XINDEX)
+> >   *sym_sec_idx = sym->st_shndx;
+>
+> I don't understand this..  gelf_getsymshndx will return both
+> symbol and proper index, no? also sym_sec_idx is already
+> assigned from previou call
 
-Applied, but changed the changelog comment to:
+Reading (some) implementation of gelf_getsymshndx() that I found
+online, it won't set sym_sec_idx, if the symbol *doesn't* use extended
+numbering. But it will still return symbol data. So to return the
+section index in all cases, we need to check again *after* we got
+symbol, and if it's not extended, then set index manually.
 
-------------------------------------------------------------------
-elf_symtab: Handle SHN_XINDEX index in elf_section_by_name()
+>
+> >
+> > return true;
+> >
+> > ?
+> >
+> > > +                       return false;
+> > > +       }
+> > > +
+> > > +       return true;
+> > > +}
+> > > +
+> > > +#define elf_symtab__for_each_symbol_index(symtab, id, sym, sym_sec_idx)                \
+> > > +       for (id = 0, elf_sym__get(symtab->syms, symtab->syms_sec_idx_table,     \
+> > > +                                 id, &sym, &sym_sec_idx);                      \
+> > > +            id < symtab->nr_syms;                                              \
+> > > +            id++, elf_sym__get(symtab->syms, symtab->syms_sec_idx_table,       \
+> > > +                               id, &sym, &sym_sec_idx))
+> >
+> > what do we want to do if elf_sym__get() returns error (false)? We can
+> > either stop or ignore that symbol, right? But currently you are
+> > returning invalid symbol data.
+> >
+> > so either
+> >
+> > for (id = 0; id < symtab->nr_syms && elf_sym__get(symtab->syms,
+> > symtab->syms_sec_idx_table, d, &sym, &sym_sec_idx); id++)
+> >
+> > or
+> >
+> > for (id = 0; id < symtab->nr_syms; id++)
+> >   if (elf_sym__get(symtab->syms, symtab->syms_sec_idx_table, d, &sym,
+> > &sym_sec_idx))
+>
+> if we go ahead with skipping symbols, this one seems good
 
-Use elf_getshdrstrndx() to cover the case where the ELF header
-'e_shstrndx' field contains the special value SHN_XINDEX so that we get
-the proper string table index.
+I think skipping symbols is nicer. If ELF is totally broken, then all
+symbols are going to be ignored anyway. If it's some one-off issue for
+a specific symbol, we'll just ignore it (unfortunately, silently).
 
-This is necessary to handle files with over 65536 sections, such as when
-building the kernel with -f[function|data]-sections.  Other cases may
-include when using FG-ASLR, LTO.
-
-With so many sections, ELF is using extended section index table, which
-is used to hold values for some of the indexes and extra code is needed
-to retrieve them.
-------------------------------------------------------------------
-
-This is from the thread, so that we can have a more comprehensive idea
-of what is this SHN_XINDEX and where it can show up when looking at this
-code 10 years from now (or next month) :-)
-
-Holler if I've messed up something.
-
-Thanks,
-
-- Arnaldo
- 
-> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
-> ---
->  dutil.c | 8 +++++++-
->  1 file changed, 7 insertions(+), 1 deletion(-)
-> 
-> diff --git a/dutil.c b/dutil.c
-> index 7b667647420f..11fb7202049c 100644
-> --- a/dutil.c
-> +++ b/dutil.c
-> @@ -179,12 +179,18 @@ Elf_Scn *elf_section_by_name(Elf *elf, GElf_Ehdr *ep,
->  {
->  	Elf_Scn *sec = NULL;
->  	size_t cnt = 1;
-> +	size_t str_idx;
-> +
-> +	if (elf_getshdrstrndx(elf, &str_idx))
-> +		return NULL;
->  
->  	while ((sec = elf_nextscn(elf, sec)) != NULL) {
->  		char *str;
->  
->  		gelf_getshdr(sec, shp);
-> -		str = elf_strptr(elf, ep->e_shstrndx, shp->sh_name);
-> +		str = elf_strptr(elf, str_idx, shp->sh_name);
-> +		if (!str)
-> +			return NULL;
->  		if (!strcmp(name, str)) {
->  			if (index)
->  				*index = cnt;
-> -- 
-> 2.26.2
-> 
-
--- 
-
-- Arnaldo
+>
+> >
+> >
+> > But the current variant looks broken. Oh, and
+> > elf_symtab__for_each_symbol() is similarly broken, can you please fix
+> > that as well?
+> >
+> > And this new macro should probably be in elf_symtab.h, along the
+> > elf_symtab__for_each_symbol.
+>
+> thanks,
+> jirka
+>
