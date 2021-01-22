@@ -2,98 +2,115 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B780DC10DC1
-	for <linux-dwarves@archiver.kernel.org>; Fri, 22 Jan 2021 17:21:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A4161C433E0
+	for <linux-dwarves@archiver.kernel.org>; Fri, 22 Jan 2021 20:36:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9370C23ABA
-	for <linux-dwarves@archiver.kernel.org>; Fri, 22 Jan 2021 17:21:34 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 58F5123B04
+	for <linux-dwarves@archiver.kernel.org>; Fri, 22 Jan 2021 20:36:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728836AbhAVQs6 convert rfc822-to-8bit (ORCPT
+        id S1729832AbhAVUgB (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Fri, 22 Jan 2021 11:48:58 -0500
-Received: from us-smtp-delivery-44.mimecast.com ([205.139.111.44]:34629 "EHLO
-        us-smtp-delivery-44.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728828AbhAVQlC (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Fri, 22 Jan 2021 11:41:02 -0500
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-510-N9qlE5usPrW3BIiYOoXJhw-1; Fri, 22 Jan 2021 11:39:36 -0500
-X-MC-Unique: N9qlE5usPrW3BIiYOoXJhw-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 674FC107AD26;
-        Fri, 22 Jan 2021 16:39:34 +0000 (UTC)
-Received: from krava.redhat.com (unknown [10.40.192.97])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 4C3855C5E0;
-        Fri, 22 Jan 2021 16:39:31 +0000 (UTC)
-From:   Jiri Olsa <jolsa@kernel.org>
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
+        Fri, 22 Jan 2021 15:36:01 -0500
+Received: from mail.kernel.org ([198.145.29.99]:43544 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728366AbhAVUec (ORCPT <rfc822;dwarves@vger.kernel.org>);
+        Fri, 22 Jan 2021 15:34:32 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 9D8F123B06;
+        Fri, 22 Jan 2021 20:33:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1611347631;
+        bh=SyQP41PwpeKLZope/oUux/+VUUA4Mr4nW64xb8MeMJI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=K95RP+AjLtLOhWYLEX9Zga4StevHNyRJbxy2U9Qw40DifgXUAhdKTOu8U/A2jEGjl
+         yP4j+nm9MD/QXRgd7XTcYB4JPLvmolWxr9/pX3/t3czlrGlX7o2RqL1BfShyHTo/X0
+         PmhrlQxqg8GFPD0Kse1XQmKbz/bNCVBWkGDoMSU9DeZQy6CKFbC1OviDiK9AZIhfaV
+         sAazw51LpGYgDNbYev9QTtlvoc1t7qb2SfNgM4N+5TLaAz3CFoMr0YeRk1bO3vEET3
+         scQBVCnReCvuxwUyGXbEvK7gPT+pCUh4eLp9cgSazKmC6ZSQVtlYXl3xfVwu2LCfEG
+         54N7c06dELO6A==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id D2ECA40513; Fri, 22 Jan 2021 17:33:48 -0300 (-03)
+Date:   Fri, 22 Jan 2021 17:33:48 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Jiri Olsa <jolsa@redhat.com>
+Cc:     Jiri Olsa <jolsa@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andriin@fb.com>
-Cc:     dwarves@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, Yonghong Song <yhs@fb.com>,
-        Hao Luo <haoluo@google.com>, Martin KaFai Lau <kafai@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>, dwarves@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        Yonghong Song <yhs@fb.com>, Hao Luo <haoluo@google.com>,
+        Martin KaFai Lau <kafai@fb.com>,
         Song Liu <songliubraving@fb.com>,
         John Fastabend <john.fastabend@gmail.com>,
         KP Singh <kpsingh@chromium.org>,
         Joe Lawrence <joe.lawrence@redhat.com>,
-        Mark Wielaard <mjw@redhat.com>
-Subject: [PATCH 1/2] elf_symtab: Add support for SHN_XINDEX index to elf_section_by_name
-Date:   Fri, 22 Jan 2021 17:39:19 +0100
-Message-Id: <20210122163920.59177-2-jolsa@kernel.org>
-In-Reply-To: <20210122163920.59177-1-jolsa@kernel.org>
+        Mark Wielaard <mjw@redhat.com>,
+        Yulia Kopkova <ykopkova@redhat.com>
+Subject: Re: [PATCH 2/2] bpf_encoder: Translate SHN_XINDEX in symbol's
+ st_shndx values
+Message-ID: <20210122203348.GC617095@kernel.org>
 References: <20210122163920.59177-1-jolsa@kernel.org>
+ <20210122163920.59177-3-jolsa@kernel.org>
+ <20210122195228.GB617095@kernel.org>
+ <20210122202403.GC35850@krava>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=jolsa@kernel.org
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: kernel.org
-Content-Transfer-Encoding: 8BIT
-Content-Type: text/plain; charset=WINDOWS-1252
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210122202403.GC35850@krava>
+X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-In case the elf's header e_shstrndx contains SHN_XINDEX,
-we need to call elf_getshdrstrndx to get the proper
-string table index.
+Em Fri, Jan 22, 2021 at 09:24:03PM +0100, Jiri Olsa escreveu:
+> On Fri, Jan 22, 2021 at 04:52:28PM -0300, Arnaldo Carvalho de Melo wrote:
+> > Em Fri, Jan 22, 2021 at 05:39:20PM +0100, Jiri Olsa escreveu:
+> > > For very large ELF objects (with many sections), we could
+> > > get special value SHN_XINDEX (65535) for symbol's st_shndx.
+> > > 
+> > > This patch is adding code to detect the optional extended
+> > > section index table and use it to resolve symbol's section
+> > > index.
+> > > 
+> > > Adding elf_symtab__for_each_symbol_index macro that returns
+> > > symbol's section index and usign it in collect functions.
+> > 
+> > From a quick look it seems you addressed Andrii's review comments,
+> > right?
+> 
+> yep, it's described in the cover email
+> 
+> > 
+> > I've merged it locally, but would like to have some detailed set of
+> > steps on how to test this, so that I can add it to a "Committer testing"
+> > section in the cset commit log and probably add it to my local set of
+> > regression tests.
+> 
+> sorry I forgot to mention that:
+> 
+> The test was to run pahole on kernel compiled with:
+>   make KCFLAGS="-ffunction-sections -fdata-sections" -j$(nproc) vmlinux
+> 
+> and ensure FUNC records are generated and match normal
+> build (without above KCFLAGS)
+> 
+> Also bpf selftest passed.
 
-Signed-off-by: Jiri Olsa <jolsa@kernel.org>
----
- dutil.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
-
-diff --git a/dutil.c b/dutil.c
-index 7b667647420f..11fb7202049c 100644
---- a/dutil.c
-+++ b/dutil.c
-@@ -179,12 +179,18 @@ Elf_Scn *elf_section_by_name(Elf *elf, GElf_Ehdr *ep,
- {
- 	Elf_Scn *sec = NULL;
- 	size_t cnt = 1;
-+	size_t str_idx;
-+
-+	if (elf_getshdrstrndx(elf, &str_idx))
-+		return NULL;
+Thanks, I'll come up with some shell script to test that.
  
- 	while ((sec = elf_nextscn(elf, sec)) != NULL) {
- 		char *str;
- 
- 		gelf_getshdr(sec, shp);
--		str = elf_strptr(elf, ep->e_shstrndx, shp->sh_name);
-+		str = elf_strptr(elf, str_idx, shp->sh_name);
-+		if (!str)
-+			return NULL;
- 		if (!strcmp(name, str)) {
- 			if (index)
- 				*index = cnt;
--- 
-2.26.2
+> 
+> > 
+> > Who originally reported this? Joe? Also can someone provide a Tested-by:
+> > in addition to mine when I get this detailed set of steps to test?
+> 
+> oops, it was reported by Yulia Kopkova (just cc-ed)
+> 
+> Joe tested the v2 of the patchset, I'll make a dwarves scratch
+> build with v3 and let them test it
 
+Thanks, and there is a new comment by Andrii that I've found relevant
+about using size_t instead of Elf_something.
+
+- Arnaldo
