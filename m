@@ -4,159 +4,115 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CF943C433E0
-	for <linux-dwarves@archiver.kernel.org>; Fri, 22 Jan 2021 21:17:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 79991C433E0
+	for <linux-dwarves@archiver.kernel.org>; Fri, 22 Jan 2021 21:23:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A631223AF8
-	for <linux-dwarves@archiver.kernel.org>; Fri, 22 Jan 2021 21:17:57 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 40AFA23AF8
+	for <linux-dwarves@archiver.kernel.org>; Fri, 22 Jan 2021 21:23:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730270AbhAVVRg (ORCPT
+        id S1730177AbhAVVW5 (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Fri, 22 Jan 2021 16:17:36 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:42129 "EHLO
+        Fri, 22 Jan 2021 16:22:57 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:31378 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730694AbhAVUse (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Fri, 22 Jan 2021 15:48:34 -0500
+        by vger.kernel.org with ESMTP id S1729636AbhAVUZo (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Fri, 22 Jan 2021 15:25:44 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1611348428;
+        s=mimecast20190719; t=1611347057;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=fHnt09lcoRBbSJf5TRbRYJh5AydVBQH+pUedPgapcmQ=;
-        b=A4TlaQkwoOrrr0KtR8+RZ+nVQv4oSrW+SlOCiU+UTnYRGoHjUlLUpt6wCR0BOJ+IpHISip
-        +OIb0B96WtiLYWVl63QsHGY5ScZ3FJt7BPBxAdND/cVLAClwnE6sh+EL/RSgOkjQDYLO7a
-        SyVVrvLYqoXstTXhLQ+8nl6Yi8pxquo=
+        bh=XzwvF2fSb3OX9OE+OjVvXhaC5ymgR7sWG/hoQvSQubI=;
+        b=ECSDNS8+AlYcVNdvA1uI5qNQ8hJSrr3AywAcwnAxyHLfgattAzlLfDA7ZpzPePKmqknzjN
+        1DdjaHFfApZSk26r9WI4u75G8xetuYEp0UxslWXJ339jerDBhQri3QUELRv/TNpu0vuyI5
+        TZUSxwOOL5GdkeH3YYgOiZh7M674Uoc=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-559-Y9wV4EuqNEqpPX5h4BLliw-1; Fri, 22 Jan 2021 15:47:06 -0500
-X-MC-Unique: Y9wV4EuqNEqpPX5h4BLliw-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+ us-mta-152-fngIOAcvO0mKOGlzcTs_Xg-1; Fri, 22 Jan 2021 15:24:15 -0500
+X-MC-Unique: fngIOAcvO0mKOGlzcTs_Xg-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id C208F802B40;
-        Fri, 22 Jan 2021 20:47:04 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 930A48030A3;
+        Fri, 22 Jan 2021 20:24:13 +0000 (UTC)
 Received: from krava (unknown [10.40.192.97])
-        by smtp.corp.redhat.com (Postfix) with SMTP id 904F660C6D;
-        Fri, 22 Jan 2021 20:46:55 +0000 (UTC)
-Date:   Fri, 22 Jan 2021 21:46:54 +0100
+        by smtp.corp.redhat.com (Postfix) with SMTP id 4073D19C44;
+        Fri, 22 Jan 2021 20:24:04 +0000 (UTC)
+Date:   Fri, 22 Jan 2021 21:24:03 +0100
 From:   Jiri Olsa <jolsa@redhat.com>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Jiri Olsa <jolsa@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     Jiri Olsa <jolsa@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Andrii Nakryiko <andriin@fb.com>, dwarves@vger.kernel.org,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
         Yonghong Song <yhs@fb.com>, Hao Luo <haoluo@google.com>,
         Martin KaFai Lau <kafai@fb.com>,
         Song Liu <songliubraving@fb.com>,
         John Fastabend <john.fastabend@gmail.com>,
         KP Singh <kpsingh@chromium.org>,
         Joe Lawrence <joe.lawrence@redhat.com>,
-        Mark Wielaard <mjw@redhat.com>
-Subject: Re: [PATCH 2/3] bpf_encoder: Translate SHN_XINDEX in symbol's
+        Mark Wielaard <mjw@redhat.com>,
+        Yulia Kopkova <ykopkova@redhat.com>
+Subject: Re: [PATCH 2/2] bpf_encoder: Translate SHN_XINDEX in symbol's
  st_shndx values
-Message-ID: <20210122204654.GB70760@krava>
-References: <20210121202203.9346-1-jolsa@kernel.org>
- <20210121202203.9346-3-jolsa@kernel.org>
- <CAEf4BzZquSn0Th7bpVuM0M4XbTPU5-9jDPPd5RJBS5AH2zqaMA@mail.gmail.com>
+Message-ID: <20210122202403.GC35850@krava>
+References: <20210122163920.59177-1-jolsa@kernel.org>
+ <20210122163920.59177-3-jolsa@kernel.org>
+ <20210122195228.GB617095@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAEf4BzZquSn0Th7bpVuM0M4XbTPU5-9jDPPd5RJBS5AH2zqaMA@mail.gmail.com>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
+In-Reply-To: <20210122195228.GB617095@kernel.org>
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-On Thu, Jan 21, 2021 at 03:32:40PM -0800, Andrii Nakryiko wrote:
-
-SNIP
-
-> > @@ -598,9 +599,36 @@ static void collect_symbol(GElf_Sym *sym, struct funcs_layout *fl)
-> >                 fl->mcount_stop = sym->st_value;
-> >  }
-> >
-> > +static bool elf_sym__get(Elf_Data *syms, Elf_Data *syms_sec_idx_table,
-> > +                        int id, GElf_Sym *sym, Elf32_Word *sym_sec_idx)
-> > +{
-> > +       if (!gelf_getsym(syms, id, sym))
-> > +               return false;
-> > +
-> > +       *sym_sec_idx = sym->st_shndx;
-> > +
-> > +       if (sym->st_shndx == SHN_XINDEX) {
-> > +               if (!syms_sec_idx_table)
-> > +                       return false;
-> > +               if (!gelf_getsymshndx(syms, syms_sec_idx_table,
-> > +                                     id, sym, sym_sec_idx))
+On Fri, Jan 22, 2021 at 04:52:28PM -0300, Arnaldo Carvalho de Melo wrote:
+> Em Fri, Jan 22, 2021 at 05:39:20PM +0100, Jiri Olsa escreveu:
+> > For very large ELF objects (with many sections), we could
+> > get special value SHN_XINDEX (65535) for symbol's st_shndx.
+> > 
+> > This patch is adding code to detect the optional extended
+> > section index table and use it to resolve symbol's section
+> > index.
+> > 
+> > Adding elf_symtab__for_each_symbol_index macro that returns
+> > symbol's section index and usign it in collect functions.
 > 
-> 
-> gelf_getsymshndx() is supposed to work even for cases that don't use
-> extended numbering, so this should work, right?
-> 
-> if (!gelf_getsymshndx(syms, syms_sec_idx_table, id, sym, sym_sec_idx))
->     return false;
-> 
+> From a quick look it seems you addressed Andrii's review comments,
+> right?
 
-it seems you're right, gelf_getsymshndx seem to work for
-both cases, I'll check
-
-
-> if (sym->st_shndx == SHN_XINDEX)
->   *sym_sec_idx = sym->st_shndx;
-
-I don't understand this..  gelf_getsymshndx will return both
-symbol and proper index, no? also sym_sec_idx is already
-assigned from previou call
+yep, it's described in the cover email
 
 > 
-> return true;
-> 
-> ?
-> 
-> > +                       return false;
-> > +       }
-> > +
-> > +       return true;
-> > +}
-> > +
-> > +#define elf_symtab__for_each_symbol_index(symtab, id, sym, sym_sec_idx)                \
-> > +       for (id = 0, elf_sym__get(symtab->syms, symtab->syms_sec_idx_table,     \
-> > +                                 id, &sym, &sym_sec_idx);                      \
-> > +            id < symtab->nr_syms;                                              \
-> > +            id++, elf_sym__get(symtab->syms, symtab->syms_sec_idx_table,       \
-> > +                               id, &sym, &sym_sec_idx))
-> 
-> what do we want to do if elf_sym__get() returns error (false)? We can
-> either stop or ignore that symbol, right? But currently you are
-> returning invalid symbol data.
-> 
-> so either
-> 
-> for (id = 0; id < symtab->nr_syms && elf_sym__get(symtab->syms,
-> symtab->syms_sec_idx_table, d, &sym, &sym_sec_idx); id++)
-> 
-> or
-> 
-> for (id = 0; id < symtab->nr_syms; id++)
->   if (elf_sym__get(symtab->syms, symtab->syms_sec_idx_table, d, &sym,
-> &sym_sec_idx))
+> I've merged it locally, but would like to have some detailed set of
+> steps on how to test this, so that I can add it to a "Committer testing"
+> section in the cset commit log and probably add it to my local set of
+> regression tests.
 
-if we go ahead with skipping symbols, this one seems good
+sorry I forgot to mention that:
+
+The test was to run pahole on kernel compiled with:
+  make KCFLAGS="-ffunction-sections -fdata-sections" -j$(nproc) vmlinux
+
+and ensure FUNC records are generated and match normal
+build (without above KCFLAGS)
+
+Also bpf selftest passed.
+
 
 > 
-> 
-> But the current variant looks broken. Oh, and
-> elf_symtab__for_each_symbol() is similarly broken, can you please fix
-> that as well?
-> 
-> And this new macro should probably be in elf_symtab.h, along the
-> elf_symtab__for_each_symbol.
+> Who originally reported this? Joe? Also can someone provide a Tested-by:
+> in addition to mine when I get this detailed set of steps to test?
 
-thanks,
+oops, it was reported by Yulia Kopkova (just cc-ed)
+
+Joe tested the v2 of the patchset, I'll make a dwarves scratch
+build with v3 and let them test it
+
 jirka
 
