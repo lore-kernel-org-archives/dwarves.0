@@ -2,35 +2,35 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-9.0 required=3.0 tests=BAYES_00,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 65E05C4332E
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 74301C43331
 	for <linux-dwarves@archiver.kernel.org>; Fri, 22 Jan 2021 16:46:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3091B23A84
+	by mail.kernel.org (Postfix) with ESMTP id 5B5D523A79
 	for <linux-dwarves@archiver.kernel.org>; Fri, 22 Jan 2021 16:46:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728487AbhAVQl6 convert rfc822-to-8bit (ORCPT
+        id S1727902AbhAVQlC convert rfc822-to-8bit (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Fri, 22 Jan 2021 11:41:58 -0500
-Received: from us-smtp-delivery-44.mimecast.com ([205.139.111.44]:46763 "EHLO
+        Fri, 22 Jan 2021 11:41:02 -0500
+Received: from us-smtp-delivery-44.mimecast.com ([207.211.30.44]:40114 "EHLO
         us-smtp-delivery-44.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728840AbhAVQlC (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Fri, 22 Jan 2021 11:41:02 -0500
+        by vger.kernel.org with ESMTP id S1728710AbhAVQkv (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Fri, 22 Jan 2021 11:40:51 -0500
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-582-i1eFmC8iMsOS0E3Axc7mCA-1; Fri, 22 Jan 2021 11:39:40 -0500
-X-MC-Unique: i1eFmC8iMsOS0E3Axc7mCA-1
+ us-mta-293-VaGEYQ1jOLC_DYulxn_qRw-1; Fri, 22 Jan 2021 11:39:33 -0500
+X-MC-Unique: VaGEYQ1jOLC_DYulxn_qRw-1
 Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 2E7628066E5;
-        Fri, 22 Jan 2021 16:39:38 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id EDF2B84A5E1;
+        Fri, 22 Jan 2021 16:39:30 +0000 (UTC)
 Received: from krava.redhat.com (unknown [10.40.192.97])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id BC5A65C5FC;
-        Fri, 22 Jan 2021 16:39:34 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 7117971CBF;
+        Fri, 22 Jan 2021 16:39:21 +0000 (UTC)
 From:   Jiri Olsa <jolsa@kernel.org>
 To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
         Alexei Starovoitov <ast@kernel.org>,
@@ -44,11 +44,9 @@ Cc:     dwarves@vger.kernel.org, netdev@vger.kernel.org,
         KP Singh <kpsingh@chromium.org>,
         Joe Lawrence <joe.lawrence@redhat.com>,
         Mark Wielaard <mjw@redhat.com>
-Subject: [PATCH 2/2] bpf_encoder: Translate SHN_XINDEX in symbol's st_shndx values
-Date:   Fri, 22 Jan 2021 17:39:20 +0100
-Message-Id: <20210122163920.59177-3-jolsa@kernel.org>
-In-Reply-To: <20210122163920.59177-1-jolsa@kernel.org>
-References: <20210122163920.59177-1-jolsa@kernel.org>
+Subject: [PATCHv3 0/2] libbpf: Add support to use optional extended section index table
+Date:   Fri, 22 Jan 2021 17:39:18 +0100
+Message-Id: <20210122163920.59177-1-jolsa@kernel.org>
 MIME-Version: 1.0
 X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
 Authentication-Results: relay.mimecast.com;
@@ -61,229 +59,51 @@ Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-For very large ELF objects (with many sections), we could
-get special value SHN_XINDEX (65535) for symbol's st_shndx.
+hi,
+kpatch guys hit an issue with pahole over their vmlinux, which
+contains many (over 100000) sections, pahole crashes.
 
-This patch is adding code to detect the optional extended
-section index table and use it to resolve symbol's section
-index.
+With so many sections, ELF is using extended section index table,
+which is used to hold values for some of the indexes and extra
+code is needed to retrieve them.
 
-Adding elf_symtab__for_each_symbol_index macro that returns
-symbol's section index and usign it in collect functions.
+This patchset adds the support for pahole to properly read string
+table index and symbol's section index, which are used in btf_encoder.
 
-Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+This patchset also adds support for libbpf to properly parse .BTF
+section on such object.
+
+This patchset is based on previously posted fix [1].
+
+v3 changes:
+  - directly bail out for !str in elf_section_by_name [Andrii]
+  - use symbol index in collect_function [Andrii] 
+  - use symbol index in collect_percpu_var
+  - change elf_symtab__for_each_symbol_index, move elf_sym__get
+    to for's condition part
+  - libbpf patch got merged
+
+v2 changes:
+  - many variables renames [Andrii]
+  - use elf_getshdrstrndx() unconditionally [Andrii]
+  - add elf_symtab__for_each_symbol_index macro [Andrii]
+  - add more comments [Andrii]
+  - verify that extended symtab section type is SHT_SYMTAB_SHNDX [Andrii]
+  - fix Joe's crash in dwarves build, wrong sym.st_shndx assignment
+
+thanks,
+jirka
+
+
+[1] https://lore.kernel.org/bpf/20210113102509.1338601-1-jolsa@kernel.org/
 ---
- btf_encoder.c | 59 +++++++++++++++++++++++++++++++++++++--------------
- elf_symtab.c  | 39 +++++++++++++++++++++++++++++++++-
- elf_symtab.h  |  2 ++
- 3 files changed, 83 insertions(+), 17 deletions(-)
+Jiri Olsa (2):
+      elf_symtab: Add support for SHN_XINDEX index to elf_section_by_name
+      bpf_encoder: Translate SHN_XINDEX in symbol's st_shndx values
 
-diff --git a/btf_encoder.c b/btf_encoder.c
-index 5557c9efd365..56ee55965093 100644
---- a/btf_encoder.c
-+++ b/btf_encoder.c
-@@ -63,13 +63,13 @@ static void delete_functions(void)
- #define max(x, y) ((x) < (y) ? (y) : (x))
- #endif
- 
--static int collect_function(struct btf_elf *btfe, GElf_Sym *sym)
-+static int collect_function(struct btf_elf *btfe, GElf_Sym *sym,
-+			    Elf32_Word sym_sec_idx)
- {
- 	struct elf_function *new;
- 	static GElf_Shdr sh;
--	static int last_idx;
-+	static Elf32_Word last_idx;
- 	const char *name;
--	int idx;
- 
- 	if (elf_sym__type(sym) != STT_FUNC)
- 		return 0;
-@@ -90,12 +90,10 @@ static int collect_function(struct btf_elf *btfe, GElf_Sym *sym)
- 		functions = new;
- 	}
- 
--	idx = elf_sym__section(sym);
--
--	if (idx != last_idx) {
--		if (!elf_section_by_idx(btfe->elf, &sh, idx))
-+	if (sym_sec_idx != last_idx) {
-+		if (!elf_section_by_idx(btfe->elf, &sh, sym_sec_idx))
- 			return 0;
--		last_idx = idx;
-+		last_idx = sym_sec_idx;
- 	}
- 
- 	functions[functions_cnt].name = name;
-@@ -542,14 +540,15 @@ static bool percpu_var_exists(uint64_t addr, uint32_t *sz, const char **name)
- 	return true;
- }
- 
--static int collect_percpu_var(struct btf_elf *btfe, GElf_Sym *sym)
-+static int collect_percpu_var(struct btf_elf *btfe, GElf_Sym *sym,
-+			      Elf32_Word sym_sec_idx)
- {
- 	const char *sym_name;
- 	uint64_t addr;
- 	uint32_t size;
- 
- 	/* compare a symbol's shndx to determine if it's a percpu variable */
--	if (elf_sym__section(sym) != btfe->percpu_shndx)
-+	if (sym_sec_idx != btfe->percpu_shndx)
- 		return 0;
- 	if (elf_sym__type(sym) != STT_OBJECT)
- 		return 0;
-@@ -585,12 +584,13 @@ static int collect_percpu_var(struct btf_elf *btfe, GElf_Sym *sym)
- 	return 0;
- }
- 
--static void collect_symbol(GElf_Sym *sym, struct funcs_layout *fl)
-+static void collect_symbol(GElf_Sym *sym, struct funcs_layout *fl,
-+			   Elf32_Word sym_sec_idx)
- {
- 	if (!fl->mcount_start &&
- 	    !strcmp("__start_mcount_loc", elf_sym__name(sym, btfe->symtab))) {
- 		fl->mcount_start = sym->st_value;
--		fl->mcount_sec_idx = sym->st_shndx;
-+		fl->mcount_sec_idx = sym_sec_idx;
- 	}
- 
- 	if (!fl->mcount_stop &&
-@@ -598,9 +598,36 @@ static void collect_symbol(GElf_Sym *sym, struct funcs_layout *fl)
- 		fl->mcount_stop = sym->st_value;
- }
- 
-+static bool elf_sym__get(Elf_Data *syms, Elf_Data *syms_sec_idx_table,
-+			 int id, GElf_Sym *sym, Elf32_Word *sym_sec_idx)
-+{
-+	if (!gelf_getsym(syms, id, sym))
-+		return false;
-+
-+	*sym_sec_idx = sym->st_shndx;
-+
-+	if (sym->st_shndx == SHN_XINDEX) {
-+		if (!syms_sec_idx_table)
-+			return false;
-+		if (!gelf_getsymshndx(syms, syms_sec_idx_table,
-+				      id, sym, sym_sec_idx))
-+			return false;
-+	}
-+
-+	return true;
-+}
-+
-+#define elf_symtab__for_each_symbol_index(symtab, id, sym, sym_sec_idx)		\
-+	for (id = 0;								\
-+	     id < symtab->nr_syms &&						\
-+	     elf_sym__get(symtab->syms, symtab->syms_sec_idx_table,		\
-+			  id, &sym, &sym_sec_idx);				\
-+	     id++)
-+
- static int collect_symbols(struct btf_elf *btfe, bool collect_percpu_vars)
- {
- 	struct funcs_layout fl = { };
-+	Elf32_Word sym_sec_idx;
- 	uint32_t core_id;
- 	GElf_Sym sym;
- 
-@@ -608,12 +635,12 @@ static int collect_symbols(struct btf_elf *btfe, bool collect_percpu_vars)
- 	percpu_var_cnt = 0;
- 
- 	/* search within symtab for percpu variables */
--	elf_symtab__for_each_symbol(btfe->symtab, core_id, sym) {
--		if (collect_percpu_vars && collect_percpu_var(btfe, &sym))
-+	elf_symtab__for_each_symbol_index(btfe->symtab, core_id, sym, sym_sec_idx) {
-+		if (collect_percpu_vars && collect_percpu_var(btfe, &sym, sym_sec_idx))
- 			return -1;
--		if (collect_function(btfe, &sym))
-+		if (collect_function(btfe, &sym, sym_sec_idx))
- 			return -1;
--		collect_symbol(&sym, &fl);
-+		collect_symbol(&sym, &fl, sym_sec_idx);
- 	}
- 
- 	if (collect_percpu_vars) {
-diff --git a/elf_symtab.c b/elf_symtab.c
-index 741990ea3ed9..fad5e0c0ba3c 100644
---- a/elf_symtab.c
-+++ b/elf_symtab.c
-@@ -17,11 +17,13 @@
- 
- struct elf_symtab *elf_symtab__new(const char *name, Elf *elf, GElf_Ehdr *ehdr)
- {
-+	size_t symtab_index;
-+
- 	if (name == NULL)
- 		name = ".symtab";
- 
- 	GElf_Shdr shdr;
--	Elf_Scn *sec = elf_section_by_name(elf, ehdr, &shdr, name, NULL);
-+	Elf_Scn *sec = elf_section_by_name(elf, ehdr, &shdr, name, &symtab_index);
- 
- 	if (sec == NULL)
- 		return NULL;
-@@ -41,6 +43,12 @@ struct elf_symtab *elf_symtab__new(const char *name, Elf *elf, GElf_Ehdr *ehdr)
- 	if (symtab->syms == NULL)
- 		goto out_free_name;
- 
-+	/*
-+	 * This returns extended section index table's
-+	 * section index, if it exists.
-+	 */
-+	int symtab_xindex = elf_scnshndx(sec);
-+
- 	sec = elf_getscn(elf, shdr.sh_link);
- 	if (sec == NULL)
- 		goto out_free_name;
-@@ -49,6 +57,35 @@ struct elf_symtab *elf_symtab__new(const char *name, Elf *elf, GElf_Ehdr *ehdr)
- 	if (symtab->symstrs == NULL)
- 		goto out_free_name;
- 
-+	/*
-+	 * The .symtab section has optional extended section index
-+	 * table, load its data so it can be used to resolve symbol's
-+	 * section index.
-+	 **/
-+	if (symtab_xindex > 0) {
-+		GElf_Shdr shdr_xindex;
-+		Elf_Scn *sec_xindex;
-+
-+		sec_xindex = elf_getscn(elf, symtab_xindex);
-+		if (sec_xindex == NULL)
-+			goto out_free_name;
-+
-+		if (gelf_getshdr(sec_xindex, &shdr_xindex) == NULL)
-+			goto out_free_name;
-+
-+		/* Extra check to verify it's correct type */
-+		if (shdr_xindex.sh_type != SHT_SYMTAB_SHNDX)
-+			goto out_free_name;
-+
-+		/* Extra check to verify it belongs to the .symtab */
-+		if (symtab_index != shdr_xindex.sh_link)
-+			goto out_free_name;
-+
-+		symtab->syms_sec_idx_table = elf_getdata(elf_getscn(elf, symtab_xindex), NULL);
-+		if (symtab->syms_sec_idx_table == NULL)
-+			goto out_free_name;
-+	}
-+
- 	symtab->nr_syms = shdr.sh_size / shdr.sh_entsize;
- 
- 	return symtab;
-diff --git a/elf_symtab.h b/elf_symtab.h
-index 359add69c8ab..2e05ca98158b 100644
---- a/elf_symtab.h
-+++ b/elf_symtab.h
-@@ -16,6 +16,8 @@ struct elf_symtab {
- 	uint32_t  nr_syms;
- 	Elf_Data  *syms;
- 	Elf_Data  *symstrs;
-+	/* Data of SHT_SYMTAB_SHNDX section. */
-+	Elf_Data  *syms_sec_idx_table;
- 	char	  *name;
- };
- 
--- 
-2.26.2
+ btf_encoder.c | 59 +++++++++++++++++++++++++++++++++++++++++++----------------
+ dutil.c       |  8 +++++++-
+ elf_symtab.c  | 39 ++++++++++++++++++++++++++++++++++++++-
+ elf_symtab.h  |  2 ++
+ 4 files changed, 90 insertions(+), 18 deletions(-)
 
