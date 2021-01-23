@@ -2,66 +2,48 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3530FC433E0
-	for <linux-dwarves@archiver.kernel.org>; Fri, 22 Jan 2021 22:57:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7D447C433E0
+	for <linux-dwarves@archiver.kernel.org>; Sat, 23 Jan 2021 18:54:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 05F3523AAC
-	for <linux-dwarves@archiver.kernel.org>; Fri, 22 Jan 2021 22:57:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4E3F422EBE
+	for <linux-dwarves@archiver.kernel.org>; Sat, 23 Jan 2021 18:54:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728438AbhAVW5c (ORCPT
+        id S1726334AbhAWSx2 (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Fri, 22 Jan 2021 17:57:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48648 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728476AbhAVW4n (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Fri, 22 Jan 2021 17:56:43 -0500
-Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98E92C06174A;
-        Fri, 22 Jan 2021 14:56:03 -0800 (PST)
-Received: by mail-yb1-xb2d.google.com with SMTP id k132so7041069ybf.2;
-        Fri, 22 Jan 2021 14:56:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=P0ru974B6Q7RoDzmI3kqeFvMXnnLKfdBNCMfCCuAQoc=;
-        b=Dy3XH+z66gPAWI5CiE1jF47tii7PIt2u0jWt0l1d1mQMedGBEj7G7JhEvyT3i0O1yO
-         oBEgVViqSsj0piUDEGmkTBycvCBXeEmnsimtKVPB8TclbnIFh+aRgVRFSEpSJTtw5+uB
-         eesPfdfkMVexptkNMeC+9KY9H2ZWze2h1ZCeYGrgKp58oTD3UfO7Y5pL7Ivgk8PIgJ4T
-         5/G51j1WDjAPgp824+W8SRGzX0IgOacQI22ChB9+LweK4YY25n/0RvcZUF0+HBHDgYAy
-         JU6q5HEjansFuQ2ojT77//s1+e7Z30S/9hTJbIIEF3H9We2hOCvRv0UvAHbnkJujiQwD
-         ge3g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=P0ru974B6Q7RoDzmI3kqeFvMXnnLKfdBNCMfCCuAQoc=;
-        b=KhiZQGm8mawm/H5B5vv7/2UgU3DZagIQhvXnQ0ZC6KyB1l4e0DP0KHZZvdMSEm7Pbw
-         nQ8r+e+tJa8vdjlvbjr+NjJZGIFVkW2KdczEUBUCuqCjspZsYO2x5zI9b0e9H4pUx3ZW
-         ZB/rtfExGATnKaidHQGHr5vqDD+FpAWFjy/yDqX91OQg/XPc51+/eAijaoYc5P9/sOwG
-         GW/9dBRmUjg+pGmRZkG9rDwUlfohysKD3GiArYWz1F1/4Jc7Fpcxc5tQb5fOmJPa8HiQ
-         ImS6/UpmHwPcpo0dccaLbpYMkK/Mt4x23H26gava/0nrZ1CaWfGhZXlpKqe2wcvTEtUL
-         A6aQ==
-X-Gm-Message-State: AOAM533z6YVCYLPpGLaiMblPmIi0Zl/cN273JZiMacqZhGV4d5KGzTIM
-        B5DsrRiwTBiKLnS2js7JGXCt89sqg4keizbCMmE=
-X-Google-Smtp-Source: ABdhPJyxyI3w5nhampQQpIxt6t3H3fRoaOerAjdnOfYSALoPKMFIljdbUWvNiE7K9t0IRENryz1WOmeg71PwQaQOBzc=
-X-Received: by 2002:a25:4b86:: with SMTP id y128mr9448441yba.403.1611356162405;
- Fri, 22 Jan 2021 14:56:02 -0800 (PST)
-MIME-Version: 1.0
-References: <20210121202203.9346-1-jolsa@kernel.org> <20210121202203.9346-3-jolsa@kernel.org>
- <CAEf4BzZquSn0Th7bpVuM0M4XbTPU5-9jDPPd5RJBS5AH2zqaMA@mail.gmail.com> <20210122204654.GB70760@krava>
-In-Reply-To: <20210122204654.GB70760@krava>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Fri, 22 Jan 2021 14:55:51 -0800
-Message-ID: <CAEf4BzaRrMp1+2dgv_1WrkBt+=KF1BJnN_KGwZKx5gDg7t++Yg@mail.gmail.com>
-Subject: Re: [PATCH 2/3] bpf_encoder: Translate SHN_XINDEX in symbol's
- st_shndx values
-To:     Jiri Olsa <jolsa@redhat.com>
+        Sat, 23 Jan 2021 13:53:28 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:42106 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726315AbhAWSx0 (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Sat, 23 Jan 2021 13:53:26 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1611427920;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=+oLnuKKVFcP+jX7dsGpygkLnCbNNWlvIsEBxJq1BWIw=;
+        b=bbMl4ld7fPElROlT0rXIWcOklW89ipdUEoCKYtHbVvrDGmRTYWSDinyP7xBq4nvlaoaWjb
+        18QXfIgCEGvGUWX8XYL61FXzLyoE6xqTfChywmvC3o/X01bD713SIqT4vjrO3OAoFiAZos
+        zgo6wSPAEN1rt56qWwry+375O1Zv5/g=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-407-RnZdjAXlMzO42_QSCJ_OOA-1; Sat, 23 Jan 2021 13:51:56 -0500
+X-MC-Unique: RnZdjAXlMzO42_QSCJ_OOA-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 06CA4806661;
+        Sat, 23 Jan 2021 18:51:54 +0000 (UTC)
+Received: from krava (unknown [10.40.192.55])
+        by smtp.corp.redhat.com (Postfix) with SMTP id C73AF10016FF;
+        Sat, 23 Jan 2021 18:51:44 +0000 (UTC)
+Date:   Sat, 23 Jan 2021 19:51:43 +0100
+From:   Jiri Olsa <jolsa@redhat.com>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
 Cc:     Jiri Olsa <jolsa@kernel.org>,
         Arnaldo Carvalho de Melo <acme@kernel.org>,
         Alexei Starovoitov <ast@kernel.org>,
@@ -75,110 +57,105 @@ Cc:     Jiri Olsa <jolsa@kernel.org>,
         KP Singh <kpsingh@chromium.org>,
         Joe Lawrence <joe.lawrence@redhat.com>,
         Mark Wielaard <mjw@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH 2/3] bpf_encoder: Translate SHN_XINDEX in symbol's
+ st_shndx values
+Message-ID: <20210123185143.GA117714@krava>
+References: <20210121202203.9346-1-jolsa@kernel.org>
+ <20210121202203.9346-3-jolsa@kernel.org>
+ <CAEf4BzZquSn0Th7bpVuM0M4XbTPU5-9jDPPd5RJBS5AH2zqaMA@mail.gmail.com>
+ <20210122204654.GB70760@krava>
+ <CAEf4BzaRrMp1+2dgv_1WrkBt+=KF1BJnN_KGwZKx5gDg7t++Yg@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAEf4BzaRrMp1+2dgv_1WrkBt+=KF1BJnN_KGwZKx5gDg7t++Yg@mail.gmail.com>
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-On Fri, Jan 22, 2021 at 12:47 PM Jiri Olsa <jolsa@redhat.com> wrote:
->
-> On Thu, Jan 21, 2021 at 03:32:40PM -0800, Andrii Nakryiko wrote:
->
-> SNIP
->
-> > > @@ -598,9 +599,36 @@ static void collect_symbol(GElf_Sym *sym, struct funcs_layout *fl)
-> > >                 fl->mcount_stop = sym->st_value;
-> > >  }
+On Fri, Jan 22, 2021 at 02:55:51PM -0800, Andrii Nakryiko wrote:
+> On Fri, Jan 22, 2021 at 12:47 PM Jiri Olsa <jolsa@redhat.com> wrote:
+> >
+> > On Thu, Jan 21, 2021 at 03:32:40PM -0800, Andrii Nakryiko wrote:
+> >
+> > SNIP
+> >
+> > > > @@ -598,9 +599,36 @@ static void collect_symbol(GElf_Sym *sym, struct funcs_layout *fl)
+> > > >                 fl->mcount_stop = sym->st_value;
+> > > >  }
+> > > >
+> > > > +static bool elf_sym__get(Elf_Data *syms, Elf_Data *syms_sec_idx_table,
+> > > > +                        int id, GElf_Sym *sym, Elf32_Word *sym_sec_idx)
+> > > > +{
+> > > > +       if (!gelf_getsym(syms, id, sym))
+> > > > +               return false;
+> > > > +
+> > > > +       *sym_sec_idx = sym->st_shndx;
+> > > > +
+> > > > +       if (sym->st_shndx == SHN_XINDEX) {
+> > > > +               if (!syms_sec_idx_table)
+> > > > +                       return false;
+> > > > +               if (!gelf_getsymshndx(syms, syms_sec_idx_table,
+> > > > +                                     id, sym, sym_sec_idx))
 > > >
-> > > +static bool elf_sym__get(Elf_Data *syms, Elf_Data *syms_sec_idx_table,
-> > > +                        int id, GElf_Sym *sym, Elf32_Word *sym_sec_idx)
-> > > +{
-> > > +       if (!gelf_getsym(syms, id, sym))
-> > > +               return false;
-> > > +
-> > > +       *sym_sec_idx = sym->st_shndx;
-> > > +
-> > > +       if (sym->st_shndx == SHN_XINDEX) {
-> > > +               if (!syms_sec_idx_table)
-> > > +                       return false;
-> > > +               if (!gelf_getsymshndx(syms, syms_sec_idx_table,
-> > > +                                     id, sym, sym_sec_idx))
+> > >
+> > > gelf_getsymshndx() is supposed to work even for cases that don't use
+> > > extended numbering, so this should work, right?
+> > >
+> > > if (!gelf_getsymshndx(syms, syms_sec_idx_table, id, sym, sym_sec_idx))
+> > >     return false;
+> > >
+> >
+> > it seems you're right, gelf_getsymshndx seem to work for
+> > both cases, I'll check
 > >
 > >
-> > gelf_getsymshndx() is supposed to work even for cases that don't use
-> > extended numbering, so this should work, right?
+> > > if (sym->st_shndx == SHN_XINDEX)
+> > >   *sym_sec_idx = sym->st_shndx;
 > >
-> > if (!gelf_getsymshndx(syms, syms_sec_idx_table, id, sym, sym_sec_idx))
-> >     return false;
-> >
->
-> it seems you're right, gelf_getsymshndx seem to work for
-> both cases, I'll check
->
->
-> > if (sym->st_shndx == SHN_XINDEX)
-> >   *sym_sec_idx = sym->st_shndx;
->
-> I don't understand this..  gelf_getsymshndx will return both
-> symbol and proper index, no? also sym_sec_idx is already
-> assigned from previou call
+> > I don't understand this..  gelf_getsymshndx will return both
+> > symbol and proper index, no? also sym_sec_idx is already
+> > assigned from previou call
+> 
+> Reading (some) implementation of gelf_getsymshndx() that I found
+> online, it won't set sym_sec_idx, if the symbol *doesn't* use extended
+> numbering. But it will still return symbol data. So to return the
 
-Reading (some) implementation of gelf_getsymshndx() that I found
-online, it won't set sym_sec_idx, if the symbol *doesn't* use extended
-numbering. But it will still return symbol data. So to return the
-section index in all cases, we need to check again *after* we got
-symbol, and if it's not extended, then set index manually.
+the latest upstream code seems to set it always,
+but I agree we should be careful
 
->
-> >
-> > return true;
-> >
-> > ?
-> >
-> > > +                       return false;
-> > > +       }
-> > > +
-> > > +       return true;
-> > > +}
-> > > +
-> > > +#define elf_symtab__for_each_symbol_index(symtab, id, sym, sym_sec_idx)                \
-> > > +       for (id = 0, elf_sym__get(symtab->syms, symtab->syms_sec_idx_table,     \
-> > > +                                 id, &sym, &sym_sec_idx);                      \
-> > > +            id < symtab->nr_syms;                                              \
-> > > +            id++, elf_sym__get(symtab->syms, symtab->syms_sec_idx_table,       \
-> > > +                               id, &sym, &sym_sec_idx))
-> >
-> > what do we want to do if elf_sym__get() returns error (false)? We can
-> > either stop or ignore that symbol, right? But currently you are
-> > returning invalid symbol data.
-> >
-> > so either
-> >
-> > for (id = 0; id < symtab->nr_syms && elf_sym__get(symtab->syms,
-> > symtab->syms_sec_idx_table, d, &sym, &sym_sec_idx); id++)
-> >
-> > or
-> >
-> > for (id = 0; id < symtab->nr_syms; id++)
-> >   if (elf_sym__get(symtab->syms, symtab->syms_sec_idx_table, d, &sym,
-> > &sym_sec_idx))
->
-> if we go ahead with skipping symbols, this one seems good
+Mark, any insight in here? thanks
 
-I think skipping symbols is nicer. If ELF is totally broken, then all
-symbols are going to be ignored anyway. If it's some one-off issue for
-a specific symbol, we'll just ignore it (unfortunately, silently).
+> section index in all cases, we need to check again *after* we got
+> symbol, and if it's not extended, then set index manually.
 
->
+hum, then we should use '!=', right?
+
+  if (sym->st_shndx != SHN_XINDEX)
+    *sym_sec_idx = sym->st_shndx;
+
+SNIP
+
+> > > so either
+> > >
+> > > for (id = 0; id < symtab->nr_syms && elf_sym__get(symtab->syms,
+> > > symtab->syms_sec_idx_table, d, &sym, &sym_sec_idx); id++)
+> > >
+> > > or
+> > >
+> > > for (id = 0; id < symtab->nr_syms; id++)
+> > >   if (elf_sym__get(symtab->syms, symtab->syms_sec_idx_table, d, &sym,
+> > > &sym_sec_idx))
 > >
-> >
-> > But the current variant looks broken. Oh, and
-> > elf_symtab__for_each_symbol() is similarly broken, can you please fix
-> > that as well?
-> >
-> > And this new macro should probably be in elf_symtab.h, along the
-> > elf_symtab__for_each_symbol.
->
-> thanks,
-> jirka
->
+> > if we go ahead with skipping symbols, this one seems good
+> 
+> I think skipping symbols is nicer. If ELF is totally broken, then all
+> symbols are going to be ignored anyway. If it's some one-off issue for
+> a specific symbol, we'll just ignore it (unfortunately, silently).
+
+agreed, I'll use this
+
+thanks,
+jirka
+
