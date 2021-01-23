@@ -2,36 +2,48 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.2 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_2 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B7CEDC433DB
-	for <linux-dwarves@archiver.kernel.org>; Sat, 23 Jan 2021 20:22:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DD266C433DB
+	for <linux-dwarves@archiver.kernel.org>; Sat, 23 Jan 2021 21:25:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 775E922D50
-	for <linux-dwarves@archiver.kernel.org>; Sat, 23 Jan 2021 20:22:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A596922BEA
+	for <linux-dwarves@archiver.kernel.org>; Sat, 23 Jan 2021 21:25:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726204AbhAWUWm convert rfc822-to-8bit (ORCPT
+        id S1726223AbhAWVZ0 (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Sat, 23 Jan 2021 15:22:42 -0500
-Received: from wildebeest.demon.nl ([212.238.236.112]:36172 "EHLO
-        gnu.wildebeest.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725932AbhAWUWm (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Sat, 23 Jan 2021 15:22:42 -0500
-Received: from tarox.wildebeest.org (tarox.wildebeest.org [172.31.17.39])
+        Sat, 23 Jan 2021 16:25:26 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:20731 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725932AbhAWVZZ (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Sat, 23 Jan 2021 16:25:25 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1611437038;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=RMCRcAizdGn6fiv942ssgog6YXuljmJW+APZk+ZQJME=;
+        b=CkohH0ZGQ1yAuL12SViVWbWnJv9gmXPfDMu9qlAJB8ruhwba6RbyXDH7EqKuqfhHJuqvyA
+        k3QwaWX4x+flMx4JsAmwHz/eXlbfittVzQd9IUazpMaCps12DusdOxD3F4rdEVe7AGc8Cs
+        /Vpv99149w8/Nm9Ee5OQAGIwFamFdTQ=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-277-D9SZBjIJNOGhkgDJXBZUvg-1; Sat, 23 Jan 2021 16:23:54 -0500
+X-MC-Unique: D9SZBjIJNOGhkgDJXBZUvg-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by gnu.wildebeest.org (Postfix) with ESMTPSA id D029330015C3;
-        Sat, 23 Jan 2021 21:21:57 +0100 (CET)
-Received: by tarox.wildebeest.org (Postfix, from userid 1000)
-        id B6ACD400029C; Sat, 23 Jan 2021 21:21:57 +0100 (CET)
-Message-ID: <51de59d9a4ef0ee544772ea59aae80d50a4930b5.camel@klomp.org>
-Subject: Re: [PATCH 2/3] bpf_encoder: Translate SHN_XINDEX in symbol's
- st_shndx values
-From:   Mark Wielaard <mark@klomp.org>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Jiri Olsa <jolsa@redhat.com>
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id AD93F806661;
+        Sat, 23 Jan 2021 21:23:52 +0000 (UTC)
+Received: from krava (unknown [10.40.192.55])
+        by smtp.corp.redhat.com (Postfix) with SMTP id B702760C5B;
+        Sat, 23 Jan 2021 21:23:42 +0000 (UTC)
+Date:   Sat, 23 Jan 2021 22:23:41 +0100
+From:   Jiri Olsa <jolsa@redhat.com>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
 Cc:     Jiri Olsa <jolsa@kernel.org>,
         Arnaldo Carvalho de Melo <acme@kernel.org>,
         Alexei Starovoitov <ast@kernel.org>,
@@ -43,46 +55,85 @@ Cc:     Jiri Olsa <jolsa@kernel.org>,
         Song Liu <songliubraving@fb.com>,
         John Fastabend <john.fastabend@gmail.com>,
         KP Singh <kpsingh@chromium.org>,
-        Joe Lawrence <joe.lawrence@redhat.com>
-Date:   Sat, 23 Jan 2021 21:21:57 +0100
-In-Reply-To: <CAEf4BzaviAOnNc31vUjWcCK7JvEwc8_nPQTiEpxMFcoTcvNw8w@mail.gmail.com>
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        Mark Wielaard <mjw@redhat.com>
+Subject: Re: [PATCH 2/3] bpf_encoder: Translate SHN_XINDEX in symbol's
+ st_shndx values
+Message-ID: <20210123212341.GC117714@krava>
 References: <20210121202203.9346-1-jolsa@kernel.org>
-         <20210121202203.9346-3-jolsa@kernel.org>
-         <CAEf4BzZquSn0Th7bpVuM0M4XbTPU5-9jDPPd5RJBS5AH2zqaMA@mail.gmail.com>
-         <20210122204654.GB70760@krava>
-         <CAEf4BzaRrMp1+2dgv_1WrkBt+=KF1BJnN_KGwZKx5gDg7t++Yg@mail.gmail.com>
-         <20210123185143.GA117714@krava>
-         <CAEf4BzaviAOnNc31vUjWcCK7JvEwc8_nPQTiEpxMFcoTcvNw8w@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Mailer: Evolution 3.28.5 (3.28.5-10.el7) 
-Mime-Version: 1.0
+ <20210121202203.9346-3-jolsa@kernel.org>
+ <CAEf4BzZquSn0Th7bpVuM0M4XbTPU5-9jDPPd5RJBS5AH2zqaMA@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAEf4BzZquSn0Th7bpVuM0M4XbTPU5-9jDPPd5RJBS5AH2zqaMA@mail.gmail.com>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-Hi,
+On Thu, Jan 21, 2021 at 03:32:40PM -0800, Andrii Nakryiko wrote:
 
-On Sat, 2021-01-23 at 12:07 -0800, Andrii Nakryiko wrote:
-> > the latest upstream code seems to set it always,
-> > but I agree we should be careful
-> 
-> oh, then maybe it's not necessary. I honestly don't even know where
-> the authoritative source code of libelf is, so I just found some
-> random source code with Google.
+SNIP
 
-The elfutils.org libelf implementation can be found here:
-https://sourceware.org/git/?p=elfutils.git;a=tree;f=libelf;hb=HEAD
+> But the current variant looks broken. Oh, and
+> elf_symtab__for_each_symbol() is similarly broken, can you please fix
+> that as well?
 
-There are some other implementations, but some aren't maintained and
-others aren't packaged for any distro (anymore). libelf is a semi-
-standard "SVR4 Unix" library, so you might also find it for some none
-GNU/Linux OSes like Solaris. The ELF specification itself is contained
-in the System V Application Binary Interface (gABI). The libelf library
-itself isn't actually officially part of the specification. But we
-still do try to keep the implementations (source) compatible through
-the generic-abi mailinglist.
+we'll have to change its callers a bit, because of hanging 'else'
+I'll send this separately if that's ok, when I figure out how to
+test ctf code
 
-Cheers,
+jirka
 
-Mark
+
+---
+diff --git a/elf_symtab.h b/elf_symtab.h
+index 489e2b1a3505..6823a8c37ecf 100644
+--- a/elf_symtab.h
++++ b/elf_symtab.h
+@@ -99,10 +99,9 @@ elf_sym__get(Elf_Data *syms, Elf_Data *syms_sec_idx_table,
+  * @index: uint32_t index
+  * @sym: GElf_Sym iterator
+  */
+-#define elf_symtab__for_each_symbol(symtab, index, sym) \
+-	for (index = 0, gelf_getsym(symtab->syms, index, &sym);\
+-	     index < symtab->nr_syms; \
+-	     index++, gelf_getsym(symtab->syms, index, &sym))
++#define elf_symtab__for_each_symbol(symtab, index, sym)		\
++	for (index = 0; index < symtab->nr_syms; index++)	\
++		if (gelf_getsym(symtab->syms, index, &sym))
+ 
+ /**
+  * elf_symtab__for_each_symbol_index - iterate through all the symbols,
+diff --git a/libctf.h b/libctf.h
+index 749be8955c52..ee5412bec77e 100644
+--- a/libctf.h
++++ b/libctf.h
+@@ -90,11 +90,9 @@ char *ctf__string(struct ctf *ctf, uint32_t ref);
+  */
+ #define ctf__for_each_symtab_function(ctf, index, sym)			      \
+ 	elf_symtab__for_each_symbol(ctf->symtab, index, sym)		      \
+-		if (ctf__ignore_symtab_function(&sym,			      \
++		if (!ctf__ignore_symtab_function(&sym,			      \
+ 						elf_sym__name(&sym,	      \
+ 							      ctf->symtab)))  \
+-			continue;					      \
+-		else
+ 
+ /**
+  * ctf__for_each_symtab_object - iterate thru all the symtab objects
+@@ -105,11 +103,9 @@ char *ctf__string(struct ctf *ctf, uint32_t ref);
+  */
+ #define ctf__for_each_symtab_object(ctf, index, sym)			      \
+ 	elf_symtab__for_each_symbol(ctf->symtab, index, sym)		      \
+-		if (ctf__ignore_symtab_object(&sym,			      \
++		if (!ctf__ignore_symtab_object(&sym,			      \
+ 					      elf_sym__name(&sym,	      \
+ 							    ctf->symtab)))    \
+-			continue;					      \
+-		else
+ 
+ 
+ #endif /* _LIBCTF_H */
+
