@@ -2,50 +2,37 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-5.2 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_2 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3637DC433E0
-	for <linux-dwarves@archiver.kernel.org>; Sat, 23 Jan 2021 20:17:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B7CEDC433DB
+	for <linux-dwarves@archiver.kernel.org>; Sat, 23 Jan 2021 20:22:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0C74622DBF
-	for <linux-dwarves@archiver.kernel.org>; Sat, 23 Jan 2021 20:17:16 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 775E922D50
+	for <linux-dwarves@archiver.kernel.org>; Sat, 23 Jan 2021 20:22:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726264AbhAWUQ4 (ORCPT
+        id S1726204AbhAWUWm convert rfc822-to-8bit (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Sat, 23 Jan 2021 15:16:56 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:26976 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726224AbhAWUQz (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Sat, 23 Jan 2021 15:16:55 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1611432928;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=WlLkcbbh75RGPk5JxgfyipxpMbnbZsxB7tUvYuilHNg=;
-        b=OqOTrHqRz1mNdMiuw6KG10bvNi3oUMCy4q325mwAKHuRjZg08/QXhLG0R1niwHS8lzQiI8
-        dKrPKNEvGSnbtfexZmqw02U+Z6rRJugGr7USJ6RY518JXrBhNK/Bl0JH8bM7LHzdLVScKp
-        B1A1Gw/7g0rs8zB868ggA51bZ+O9/PU=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-588-MK3q52p4Oeenwe1ynbkLVQ-1; Sat, 23 Jan 2021 15:15:24 -0500
-X-MC-Unique: MK3q52p4Oeenwe1ynbkLVQ-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+        Sat, 23 Jan 2021 15:22:42 -0500
+Received: from wildebeest.demon.nl ([212.238.236.112]:36172 "EHLO
+        gnu.wildebeest.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725932AbhAWUWm (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Sat, 23 Jan 2021 15:22:42 -0500
+Received: from tarox.wildebeest.org (tarox.wildebeest.org [172.31.17.39])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 285D0801FAE;
-        Sat, 23 Jan 2021 20:15:22 +0000 (UTC)
-Received: from krava (unknown [10.40.192.55])
-        by smtp.corp.redhat.com (Postfix) with SMTP id 3E25B19C44;
-        Sat, 23 Jan 2021 20:15:14 +0000 (UTC)
-Date:   Sat, 23 Jan 2021 21:15:14 +0100
-From:   Jiri Olsa <jolsa@redhat.com>
-To:     Mark Wielaard <mark@klomp.org>
-Cc:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Jiri Olsa <jolsa@kernel.org>,
+        by gnu.wildebeest.org (Postfix) with ESMTPSA id D029330015C3;
+        Sat, 23 Jan 2021 21:21:57 +0100 (CET)
+Received: by tarox.wildebeest.org (Postfix, from userid 1000)
+        id B6ACD400029C; Sat, 23 Jan 2021 21:21:57 +0100 (CET)
+Message-ID: <51de59d9a4ef0ee544772ea59aae80d50a4930b5.camel@klomp.org>
+Subject: Re: [PATCH 2/3] bpf_encoder: Translate SHN_XINDEX in symbol's
+ st_shndx values
+From:   Mark Wielaard <mark@klomp.org>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Jiri Olsa <jolsa@redhat.com>
+Cc:     Jiri Olsa <jolsa@kernel.org>,
         Arnaldo Carvalho de Melo <acme@kernel.org>,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -57,58 +44,45 @@ Cc:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
         John Fastabend <john.fastabend@gmail.com>,
         KP Singh <kpsingh@chromium.org>,
         Joe Lawrence <joe.lawrence@redhat.com>
-Subject: Re: [PATCH 2/3] bpf_encoder: Translate SHN_XINDEX in symbol's
- st_shndx values
-Message-ID: <20210123201514.GB117714@krava>
+Date:   Sat, 23 Jan 2021 21:21:57 +0100
+In-Reply-To: <CAEf4BzaviAOnNc31vUjWcCK7JvEwc8_nPQTiEpxMFcoTcvNw8w@mail.gmail.com>
 References: <20210121202203.9346-1-jolsa@kernel.org>
- <20210121202203.9346-3-jolsa@kernel.org>
- <CAEf4BzZquSn0Th7bpVuM0M4XbTPU5-9jDPPd5RJBS5AH2zqaMA@mail.gmail.com>
- <20210122204654.GB70760@krava>
- <CAEf4BzaRrMp1+2dgv_1WrkBt+=KF1BJnN_KGwZKx5gDg7t++Yg@mail.gmail.com>
- <20210123185143.GA117714@krava>
- <d5e30947541a3571bd111e24b3a28dfb1770556c.camel@klomp.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d5e30947541a3571bd111e24b3a28dfb1770556c.camel@klomp.org>
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
+         <20210121202203.9346-3-jolsa@kernel.org>
+         <CAEf4BzZquSn0Th7bpVuM0M4XbTPU5-9jDPPd5RJBS5AH2zqaMA@mail.gmail.com>
+         <20210122204654.GB70760@krava>
+         <CAEf4BzaRrMp1+2dgv_1WrkBt+=KF1BJnN_KGwZKx5gDg7t++Yg@mail.gmail.com>
+         <20210123185143.GA117714@krava>
+         <CAEf4BzaviAOnNc31vUjWcCK7JvEwc8_nPQTiEpxMFcoTcvNw8w@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Mailer: Evolution 3.28.5 (3.28.5-10.el7) 
+Mime-Version: 1.0
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-On Sat, Jan 23, 2021 at 09:08:15PM +0100, Mark Wielaard wrote:
-> Hi Jiri,
-> 
-> On Sat, 2021-01-23 at 19:51 +0100, Jiri Olsa wrote:
-> > On Fri, Jan 22, 2021 at 02:55:51PM -0800, Andrii Nakryiko wrote:
-> > > 
-> > > > I don't understand this..  gelf_getsymshndx will return both
-> > > > symbol and proper index, no? also sym_sec_idx is already
-> > > > assigned from previou call
-> > > 
-> > > Reading (some) implementation of gelf_getsymshndx() that I found
-> > > online, it won't set sym_sec_idx, if the symbol *doesn't* use
-> > > extended
-> > > numbering. But it will still return symbol data. So to return the
-> > 
+Hi,
+
+On Sat, 2021-01-23 at 12:07 -0800, Andrii Nakryiko wrote:
 > > the latest upstream code seems to set it always,
 > > but I agree we should be careful
-> > 
-> > Mark, any insight in here? thanks
 > 
-> GElf_Sym *
-> gelf_getsymshndx (Elf_Data *symdata, Elf_Data *shndxdata, int ndx,
->                   GElf_Sym *dst, Elf32_Word *dstshndx)
-> 
-> Will always set *dst, but only set *dstshndx if both it and shndxdata
-> are not NULL and no error occurred (the function returns NULL and set
-> libelf_error in case of error).
-> 
-> So as long as shndxdata != NULL you can rely on *dstshndx being set.
-> Otherwise you get the section index from dst->st_shndx.
+> oh, then maybe it's not necessary. I honestly don't even know where
+> the authoritative source code of libelf is, so I just found some
+> random source code with Google.
 
-ok, so it's as Andrii said, I'll make the extra check then
+The elfutils.org libelf implementation can be found here:
+https://sourceware.org/git/?p=elfutils.git;a=tree;f=libelf;hb=HEAD
 
-thanks,
-jirka
+There are some other implementations, but some aren't maintained and
+others aren't packaged for any distro (anymore). libelf is a semi-
+standard "SVR4 Unix" library, so you might also find it for some none
+GNU/Linux OSes like Solaris. The ELF specification itself is contained
+in the System V Application Binary Interface (gABI). The libelf library
+itself isn't actually officially part of the specification. But we
+still do try to keep the implementations (source) compatible through
+the generic-abi mailinglist.
 
+Cheers,
+
+Mark
