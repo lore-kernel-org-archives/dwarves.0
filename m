@@ -2,316 +2,216 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-23.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D1372C433E6
-	for <linux-dwarves@archiver.kernel.org>; Sun, 24 Jan 2021 22:16:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 01FC1C433DB
+	for <linux-dwarves@archiver.kernel.org>; Mon, 25 Jan 2021 12:57:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9F3AA22C9F
-	for <linux-dwarves@archiver.kernel.org>; Sun, 24 Jan 2021 22:16:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9AF17222F9
+	for <linux-dwarves@archiver.kernel.org>; Mon, 25 Jan 2021 12:57:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726597AbhAXWQp convert rfc822-to-8bit (ORCPT
+        id S1728239AbhAYM4s (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Sun, 24 Jan 2021 17:16:45 -0500
-Received: from us-smtp-delivery-44.mimecast.com ([205.139.111.44]:49918 "EHLO
-        us-smtp-delivery-44.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726604AbhAXWQm (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Sun, 24 Jan 2021 17:16:42 -0500
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-366-5AiBYZKkMmqhuJK12LSdWg-1; Sun, 24 Jan 2021 17:15:40 -0500
-X-MC-Unique: 5AiBYZKkMmqhuJK12LSdWg-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id A5ED1192FDA0;
-        Sun, 24 Jan 2021 22:15:38 +0000 (UTC)
-Received: from krava.redhat.com (unknown [10.40.192.64])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 7DCE65B4D1;
-        Sun, 24 Jan 2021 22:15:35 +0000 (UTC)
-From:   Jiri Olsa <jolsa@kernel.org>
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andriin@fb.com>
-Cc:     dwarves@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, Yonghong Song <yhs@fb.com>,
-        Hao Luo <haoluo@google.com>, Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        Mark Wielaard <mjw@redhat.com>
-Subject: [PATCH 2/2] bpf_encoder: Translate SHN_XINDEX in symbol's st_shndx values
-Date:   Sun, 24 Jan 2021 23:15:19 +0100
-Message-Id: <20210124221519.219750-3-jolsa@kernel.org>
-In-Reply-To: <20210124221519.219750-1-jolsa@kernel.org>
-References: <20210124221519.219750-1-jolsa@kernel.org>
+        Mon, 25 Jan 2021 07:56:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52600 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728498AbhAYMyg (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Mon, 25 Jan 2021 07:54:36 -0500
+Received: from mail-vk1-xa2e.google.com (mail-vk1-xa2e.google.com [IPv6:2607:f8b0:4864:20::a2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 940F4C0613D6
+        for <dwarves@vger.kernel.org>; Mon, 25 Jan 2021 04:53:54 -0800 (PST)
+Received: by mail-vk1-xa2e.google.com with SMTP id q66so3064870vke.0
+        for <dwarves@vger.kernel.org>; Mon, 25 Jan 2021 04:53:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=Axap6NCiq5XBgCk4p9bNwKVuQL6Jpya7zeTo4+Oo+k4=;
+        b=Fcm1rglPsZkUHdzqu88sNVHBYxu30GoPy+oeLZBYrmCpPuv9aLNb37rzt+UZuq3nrn
+         n5e2JsHvf9P96jFkFLYOXLDTgRyW7Bg4dXbi8JTS/TYE6cU/uYDxPFaVmGwr5OkukXRF
+         Qs7EjJ40qsS2Hoeq5YX6v8SyYy2jlaEWGzzXZ7ocsmeN2XvWde8Zi/iAMr1IcMf4Qro1
+         VuW+SiEEjn6bL7kJ18fJj4tw3n89e3NuUIqVOKOeVoNeaqS5EPWG+yUNIVsKHVYDBSEs
+         +n6kN23Aav0yKx+R0TSD8eu2iWNqAnfzAKvUWr/bJS5nDP4wUz4+d0AHtMaPjfUDUyGU
+         F9DQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=Axap6NCiq5XBgCk4p9bNwKVuQL6Jpya7zeTo4+Oo+k4=;
+        b=SZFl3l6TlxwL0KQLdR1HOAYrQ6Zcf1ZpNUUbjTiq2cP1eKVHBsVS+lcfLnnzRyhsDv
+         psm4X9jfyifGxJy8L86BGTK92FqdlxqBN8Q56wNEw2C6hvJ5WmkoflbNOtrkQTAKFPFt
+         PJSlsJ0t4fmtztJtIuZKVBp7iJm3yonoGsoslH1NCubzxiiHmyGpc4XPjETRFYm3kTCB
+         n2Muzj7TRUzhbwYxFa7xhbyVON0mSiMt0GiUgjiGXsB4HAO1e6knLfcTvLq74YynPH0O
+         y9fDhdotX6ZGjvk8wUF2ZLJYGT26huNj+ACR5udT58dkesvoUS3mLcfOVUxlGx4F+yPg
+         dLNA==
+X-Gm-Message-State: AOAM533vuip66UBJsSZEryw8NgrCOhLzAdLYto1qtmtZ4UVqNsq3q6Tt
+        LBpCv9jjzOY3VSyk5xniq24ep94T9I1HL9m8RUHK3Q==
+X-Google-Smtp-Source: ABdhPJy5U78QxbteNJ+h0p+7a50sUr+JS79ov4wjs5aIS7CxfEgvaTnqeXb3bnoXQSdy7NRjVELUR4Ln6r+NS2TbmqM=
+X-Received: by 2002:a1f:a643:: with SMTP id p64mr185980vke.15.1611579233303;
+ Mon, 25 Jan 2021 04:53:53 -0800 (PST)
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=jolsa@kernel.org
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: kernel.org
-Content-Transfer-Encoding: 8BIT
-Content-Type: text/plain; charset=WINDOWS-1252
+References: <20210118160139.1971039-1-gprocida@google.com> <20210118160139.1971039-4-gprocida@google.com>
+ <CAEf4BzazvC9H=K_A9KamGTB3iKtjuNxd4hEvwFOnkPdnszo6Bw@mail.gmail.com>
+ <CAGvU0HmE+gs8eNQcXmFrEERHaiGEnMgqxBho4Ny3DLCe6WR55Q@mail.gmail.com> <CAEf4BzZQvLofuVHPqu1ybsTVrM9pFRCRSR5UEFdNJq3Ha8=Luw@mail.gmail.com>
+In-Reply-To: <CAEf4BzZQvLofuVHPqu1ybsTVrM9pFRCRSR5UEFdNJq3Ha8=Luw@mail.gmail.com>
+From:   Giuliano Procida <gprocida@google.com>
+Date:   Mon, 25 Jan 2021 12:53:16 +0000
+Message-ID: <CAGvU0HmsoTSoPP=uJ679i2xH5k9o3iS=NCUyt2eVC63ShzVctw@mail.gmail.com>
+Subject: Re: [PATCH 3/3] btf_encoder: Set .BTF section alignment to 16
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     dwarves@vger.kernel.org, kernel-team@android.com,
+        =?UTF-8?Q?Matthias_M=C3=A4nnich?= <maennich@google.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
+        Kernel Team <kernel-team@fb.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-For very large ELF objects (with many sections), we could
-get special value SHN_XINDEX (65535) for symbol's st_shndx.
+Hi.
 
-This patch is adding code to detect the optional extended
-section index table and use it to resolve symbol's section
-index.
+On Thu, 21 Jan 2021 at 20:08, Andrii Nakryiko <andrii.nakryiko@gmail.com> w=
+rote:
+>
+> On Thu, Jan 21, 2021 at 3:07 AM Giuliano Procida <gprocida@google.com> wr=
+ote:
+> >
+> > Hi.
+> >
+> > On Thu, 21 Jan 2021 at 07:16, Andrii Nakryiko <andrii.nakryiko@gmail.co=
+m> wrote:
+> >>
+> >> On Mon, Jan 18, 2021 at 8:01 AM Giuliano Procida <gprocida@google.com>=
+ wrote:
+> >> >
+> >> > This is to avoid misaligned access when memory-mapping ELF sections.
+> >> >
+> >> > Signed-off-by: Giuliano Procida <gprocida@google.com>
+> >> > ---
+> >> >  libbtf.c | 8 ++++++++
+> >> >  1 file changed, 8 insertions(+)
+> >> >
+> >> > diff --git a/libbtf.c b/libbtf.c
+> >> > index 7552d8e..2f12d53 100644
+> >> > --- a/libbtf.c
+> >> > +++ b/libbtf.c
+> >> > @@ -797,6 +797,14 @@ static int btf_elf__write(const char *filename,=
+ struct btf *btf)
+> >> >                         goto unlink;
+> >> >                 }
+> >> >
+> >> > +               snprintf(cmd, sizeof(cmd), "%s --set-section-alignme=
+nt .BTF=3D16 %s",
+> >> > +                        llvm_objcopy, filename);
+> >>
+> >> does it align inside the ELF file to 16 bytes, or does it request the
+> >> linker to align it at 16 byte alignment in memory? Given .BTF section
+> >> is not loadable, trying to understand the implications.
+> >>
+> >
+> > We have a tool that loads BTF from ELF files. It uses mmap and "parses"=
+ the BTF as structs in memory. The ELF file is mapped with page alignment b=
+ut the BTF section within it has no alignment at all. Using MSAN (IIRC) we =
+get warnings about misaligned accesses. Everything within BTF itself is nat=
+urally aligned, so it makes sense to align the section within ELF as well. =
+There are probably some architectures where this makes the difference betwe=
+en working and SIGBUS.
+> >
+>
+> Right, ok, thanks for explaining!
+>
+> > I did try to get objcopy to set alignment at the point the section is a=
+dded. However, this didn't work.
+> >
+> >>
+> >>
+> >> > +               if (system(cmd)) {
+> >>
+> >> Also curious, if objcopy emits error (saying that
+> >> --set-section-alignment argument is not recognized), will that error
+> >> be shown in stdout? or system() consumes it without redirecting it to
+> >> stdout?
+> >>
+> >
+> > I believe it goes to stderr. I would need to check. system() will not c=
+onsume this. I'm not keen to write stderr (or stdout) post-processing code =
+in plain C.
+> >
+>
+> You can use popen() to capture/hide output, this is a better
+> alternative to system() in this case. We don't want "expected
+> warnings" in kernel build process.
+>
+> >>
+> >> > +                       /* non-fatal, this is a nice-to-have and it'=
+s only supported from LLVM 10 */
+> >> > +                       fprintf(stderr, "%s: warning: failed to alig=
+n .BTF section in '%s': %d!\n",
+> >> > +                               __func__, filename, errno);
+> >>
+> >> Probably better to emit this warning only in verbose mode, otherwise
+> >> lots of people will start complaining that they get some new warnings
+> >> from pahole.
+> >>
+> >
+> > It may be better to just use POSIX and ELF APIs directly instead of obj=
+copy. This way the section can be added with the right alignment directly. =
+pahole is already linked against libelf and if we could get rid of the exte=
+rnal dependency on objcopy it would be a win in more than one way.
+>
+> This would be great, yes. At some point I remember giving it a try,
+> but for some reason I couldn't make libelf flush data and update
+> section headers properly. Maybe you'll have better luck. Though I
+> think I was trying to mark section loadable, and eventually I probably
+> managed to do that, but still abandoned it (it's not enough to mark
+> section loadable, you have to assign it to ELF segment as well, which
+> libelf doesn't allow to do and you need linker support). Anyways, give
+> it a try, it should work.
 
-Adding elf_symtab__for_each_symbol_index macro that returns
-symbol's section index and usign it in collect functions.
+I struggled for a day and a bit and have got this (ELF_F_LAYOUT etc.)
+working. There are some caveats:
 
-Tested by running pahole on kernel compiled with:
-  make KCFLAGS="-ffunction-sections -fdata-sections" -j$(nproc) vmlinux
+1. Laying out only the new / updated sections can leave gaps.
 
-and ensure FUNC records are generated and match normal
-build (without above KCFLAGS).
+In practice, for vmlinux, it's a very small hole. To fix this, I'd
+need to reposition .strtab as well as .BTF and .shstrtab.
 
-Also bpf selftest passed and generated kernel BTF,
-is same as without the patch.
+2. vmlinux increases in size as llvm-objcopy was trimming down .strtab.
 
-Signed-off-by: Jiri Olsa <jolsa@kernel.org>
----
- btf_encoder.c | 33 +++++++++++++++++----------------
- elf_symtab.c  | 41 +++++++++++++++++++++++++++++++++++++++--
- elf_symtab.h  | 29 +++++++++++++++++++++++++++++
- 3 files changed, 85 insertions(+), 18 deletions(-)
+I know very little about this, but I'd guess that the kernel linker
+scripts are leaving strings in .strtab that are not referenced by
+.symtab.
 
-diff --git a/btf_encoder.c b/btf_encoder.c
-index 5557c9efd365..b124ec20a689 100644
---- a/btf_encoder.c
-+++ b/btf_encoder.c
-@@ -63,13 +63,13 @@ static void delete_functions(void)
- #define max(x, y) ((x) < (y) ? (y) : (x))
- #endif
- 
--static int collect_function(struct btf_elf *btfe, GElf_Sym *sym)
-+static int collect_function(struct btf_elf *btfe, GElf_Sym *sym,
-+			    size_t sym_sec_idx)
- {
- 	struct elf_function *new;
- 	static GElf_Shdr sh;
--	static int last_idx;
-+	static size_t last_idx;
- 	const char *name;
--	int idx;
- 
- 	if (elf_sym__type(sym) != STT_FUNC)
- 		return 0;
-@@ -90,12 +90,10 @@ static int collect_function(struct btf_elf *btfe, GElf_Sym *sym)
- 		functions = new;
- 	}
- 
--	idx = elf_sym__section(sym);
--
--	if (idx != last_idx) {
--		if (!elf_section_by_idx(btfe->elf, &sh, idx))
-+	if (sym_sec_idx != last_idx) {
-+		if (!elf_section_by_idx(btfe->elf, &sh, sym_sec_idx))
- 			return 0;
--		last_idx = idx;
-+		last_idx = sym_sec_idx;
- 	}
- 
- 	functions[functions_cnt].name = name;
-@@ -542,14 +540,15 @@ static bool percpu_var_exists(uint64_t addr, uint32_t *sz, const char **name)
- 	return true;
- }
- 
--static int collect_percpu_var(struct btf_elf *btfe, GElf_Sym *sym)
-+static int collect_percpu_var(struct btf_elf *btfe, GElf_Sym *sym,
-+			      size_t sym_sec_idx)
- {
- 	const char *sym_name;
- 	uint64_t addr;
- 	uint32_t size;
- 
- 	/* compare a symbol's shndx to determine if it's a percpu variable */
--	if (elf_sym__section(sym) != btfe->percpu_shndx)
-+	if (sym_sec_idx != btfe->percpu_shndx)
- 		return 0;
- 	if (elf_sym__type(sym) != STT_OBJECT)
- 		return 0;
-@@ -585,12 +584,13 @@ static int collect_percpu_var(struct btf_elf *btfe, GElf_Sym *sym)
- 	return 0;
- }
- 
--static void collect_symbol(GElf_Sym *sym, struct funcs_layout *fl)
-+static void collect_symbol(GElf_Sym *sym, struct funcs_layout *fl,
-+			   size_t sym_sec_idx)
- {
- 	if (!fl->mcount_start &&
- 	    !strcmp("__start_mcount_loc", elf_sym__name(sym, btfe->symtab))) {
- 		fl->mcount_start = sym->st_value;
--		fl->mcount_sec_idx = sym->st_shndx;
-+		fl->mcount_sec_idx = sym_sec_idx;
- 	}
- 
- 	if (!fl->mcount_stop &&
-@@ -601,6 +601,7 @@ static void collect_symbol(GElf_Sym *sym, struct funcs_layout *fl)
- static int collect_symbols(struct btf_elf *btfe, bool collect_percpu_vars)
- {
- 	struct funcs_layout fl = { };
-+	Elf32_Word sym_sec_idx;
- 	uint32_t core_id;
- 	GElf_Sym sym;
- 
-@@ -608,12 +609,12 @@ static int collect_symbols(struct btf_elf *btfe, bool collect_percpu_vars)
- 	percpu_var_cnt = 0;
- 
- 	/* search within symtab for percpu variables */
--	elf_symtab__for_each_symbol(btfe->symtab, core_id, sym) {
--		if (collect_percpu_vars && collect_percpu_var(btfe, &sym))
-+	elf_symtab__for_each_symbol_index(btfe->symtab, core_id, sym, sym_sec_idx) {
-+		if (collect_percpu_vars && collect_percpu_var(btfe, &sym, sym_sec_idx))
- 			return -1;
--		if (collect_function(btfe, &sym))
-+		if (collect_function(btfe, &sym, sym_sec_idx))
- 			return -1;
--		collect_symbol(&sym, &fl);
-+		collect_symbol(&sym, &fl, sym_sec_idx);
- 	}
- 
- 	if (collect_percpu_vars) {
-diff --git a/elf_symtab.c b/elf_symtab.c
-index 741990ea3ed9..77c5dc423c56 100644
---- a/elf_symtab.c
-+++ b/elf_symtab.c
-@@ -17,11 +17,13 @@
- 
- struct elf_symtab *elf_symtab__new(const char *name, Elf *elf, GElf_Ehdr *ehdr)
- {
-+	size_t symtab_index;
-+
- 	if (name == NULL)
- 		name = ".symtab";
- 
- 	GElf_Shdr shdr;
--	Elf_Scn *sec = elf_section_by_name(elf, ehdr, &shdr, name, NULL);
-+	Elf_Scn *sec = elf_section_by_name(elf, ehdr, &shdr, name, &symtab_index);
- 
- 	if (sec == NULL)
- 		return NULL;
-@@ -29,7 +31,7 @@ struct elf_symtab *elf_symtab__new(const char *name, Elf *elf, GElf_Ehdr *ehdr)
- 	if (gelf_getshdr(sec, &shdr) == NULL)
- 		return NULL;
- 
--	struct elf_symtab *symtab = malloc(sizeof(*symtab));
-+	struct elf_symtab *symtab = zalloc(sizeof(*symtab));
- 	if (symtab == NULL)
- 		return NULL;
- 
-@@ -41,6 +43,12 @@ struct elf_symtab *elf_symtab__new(const char *name, Elf *elf, GElf_Ehdr *ehdr)
- 	if (symtab->syms == NULL)
- 		goto out_free_name;
- 
-+	/*
-+	 * This returns extended section index table's
-+	 * section index, if it exists.
-+	 */
-+	int symtab_xindex = elf_scnshndx(sec);
-+
- 	sec = elf_getscn(elf, shdr.sh_link);
- 	if (sec == NULL)
- 		goto out_free_name;
-@@ -49,6 +57,35 @@ struct elf_symtab *elf_symtab__new(const char *name, Elf *elf, GElf_Ehdr *ehdr)
- 	if (symtab->symstrs == NULL)
- 		goto out_free_name;
- 
-+	/*
-+	 * The .symtab section has optional extended section index
-+	 * table, load its data so it can be used to resolve symbol's
-+	 * section index.
-+	 **/
-+	if (symtab_xindex > 0) {
-+		GElf_Shdr shdr_xindex;
-+		Elf_Scn *sec_xindex;
-+
-+		sec_xindex = elf_getscn(elf, symtab_xindex);
-+		if (sec_xindex == NULL)
-+			goto out_free_name;
-+
-+		if (gelf_getshdr(sec_xindex, &shdr_xindex) == NULL)
-+			goto out_free_name;
-+
-+		/* Extra check to verify it's correct type */
-+		if (shdr_xindex.sh_type != SHT_SYMTAB_SHNDX)
-+			goto out_free_name;
-+
-+		/* Extra check to verify it belongs to the .symtab */
-+		if (symtab_index != shdr_xindex.sh_link)
-+			goto out_free_name;
-+
-+		symtab->syms_sec_idx_table = elf_getdata(elf_getscn(elf, symtab_xindex), NULL);
-+		if (symtab->syms_sec_idx_table == NULL)
-+			goto out_free_name;
-+	}
-+
- 	symtab->nr_syms = shdr.sh_size / shdr.sh_entsize;
- 
- 	return symtab;
-diff --git a/elf_symtab.h b/elf_symtab.h
-index 359add69c8ab..489e2b1a3505 100644
---- a/elf_symtab.h
-+++ b/elf_symtab.h
-@@ -16,6 +16,8 @@ struct elf_symtab {
- 	uint32_t  nr_syms;
- 	Elf_Data  *syms;
- 	Elf_Data  *symstrs;
-+	/* Data of SHT_SYMTAB_SHNDX section. */
-+	Elf_Data  *syms_sec_idx_table;
- 	char	  *name;
- };
- 
-@@ -77,6 +79,19 @@ static inline bool elf_sym__is_local_object(const GElf_Sym *sym)
- 	       sym->st_shndx != SHN_UNDEF;
- }
- 
-+static inline bool
-+elf_sym__get(Elf_Data *syms, Elf_Data *syms_sec_idx_table,
-+	     int id, GElf_Sym *sym, Elf32_Word *sym_sec_idx)
-+{
-+	if (!gelf_getsymshndx(syms, syms_sec_idx_table, id, sym, sym_sec_idx))
-+		return false;
-+
-+	if (sym->st_shndx != SHN_XINDEX)
-+		*sym_sec_idx = sym->st_shndx;
-+
-+	return true;
-+}
-+
- /**
-  * elf_symtab__for_each_symbol - iterate thru all the symbols
-  *
-@@ -89,4 +104,18 @@ static inline bool elf_sym__is_local_object(const GElf_Sym *sym)
- 	     index < symtab->nr_syms; \
- 	     index++, gelf_getsym(symtab->syms, index, &sym))
- 
-+/**
-+ * elf_symtab__for_each_symbol_index - iterate through all the symbols,
-+ * that takes extended symbols indexes into account
-+ *
-+ * @symtab: struct elf_symtab instance to iterate
-+ * @index: uint32_t index
-+ * @sym: GElf_Sym iterator
-+ * @sym_sec_idx: symbol's index
-+ */
-+#define elf_symtab__for_each_symbol_index(symtab, id, sym, sym_sec_idx)		\
-+	for (id = 0; id < symtab->nr_syms; id++)				\
-+		if (elf_sym__get(symtab->syms, symtab->syms_sec_idx_table,	\
-+				 id, &sym, &sym_sec_idx))
-+
- #endif /* _ELF_SYMTAB_H_ */
--- 
-2.26.2
+I'll send a short series out for review soon.
 
+Giuliano.
+
+>
+> >
+> >>
+> >>
+> >> > +               }
+> >> > +
+> >> >                 err =3D 0;
+> >> >         unlink:
+> >> >                 unlink(tmp_fn);
+> >> > --
+> >> > 2.30.0.284.gd98b1dd5eaa7-goog
+> >> >
+> >
+> >
+> > I'll see if I can spend a little time on this idea instead.
+> >
+> > Regards,
+> > Giuliano.
+>
+> --
+> To unsubscribe from this group and stop receiving emails from it, send an=
+ email to kernel-team+unsubscribe@android.com.
+>
