@@ -2,63 +2,67 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-21.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+X-Spam-Status: No, score=-26.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,
-	USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no version=3.4.0
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CE079C433E6
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F062BC4332B
 	for <linux-dwarves@archiver.kernel.org>; Tue, 26 Jan 2021 19:32:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9F8DB2311C
+	by mail.kernel.org (Postfix) with ESMTP id D272A23123
 	for <linux-dwarves@archiver.kernel.org>; Tue, 26 Jan 2021 19:32:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729423AbhAZFmy (ORCPT
+        id S1728590AbhAZFm7 (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Tue, 26 Jan 2021 00:42:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55332 "EHLO
+        Tue, 26 Jan 2021 00:42:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728590AbhAYNH6 (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Mon, 25 Jan 2021 08:07:58 -0500
-Received: from mail-wm1-x349.google.com (mail-wm1-x349.google.com [IPv6:2a00:1450:4864:20::349])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7590BC06174A
-        for <dwarves@vger.kernel.org>; Mon, 25 Jan 2021 05:06:36 -0800 (PST)
-Received: by mail-wm1-x349.google.com with SMTP id 5so3670567wmq.0
-        for <dwarves@vger.kernel.org>; Mon, 25 Jan 2021 05:06:36 -0800 (PST)
+        with ESMTP id S1728594AbhAYNIO (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Mon, 25 Jan 2021 08:08:14 -0500
+Received: from mail-wr1-x44a.google.com (mail-wr1-x44a.google.com [IPv6:2a00:1450:4864:20::44a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DADCFC061786
+        for <dwarves@vger.kernel.org>; Mon, 25 Jan 2021 05:06:38 -0800 (PST)
+Received: by mail-wr1-x44a.google.com with SMTP id n18so6153485wrm.8
+        for <dwarves@vger.kernel.org>; Mon, 25 Jan 2021 05:06:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=sender:date:message-id:mime-version:subject:from:to:cc;
-        bh=rvdd/QvafmjAw8kwJuM2WPMcObpLsH4hFPPapXqLuVw=;
-        b=S7ZLKuJE2Nw0VX4gSdpTscLmFP0oSOsFalu+BDYlo+H04JU5zRMmwbpnfcya25COfc
-         J9W8trwf/1gwvDti53XoNWqutktpB9FRu3Fvz4RWnLkn9NqSI0pd9C4Zcei7aottSJGp
-         opmIYefCbdF+BfsI/U52Jc0BxkomJlWn5/rdp4jB7HoWvQhCF68RrQS7EFG2br3DHxZi
-         fpGrlBIpmDDMJC6u+e/ze2HE+nCCPnI0CcwXgYsq5nsprOmCvS29uTGsUUa9wWIPrQee
-         dJphcXYSkLtPKSp4XmzeG4oZW6T0MFK6FegzQnBo+oMPVD1IDKWfgLd63ccRs8BSe5j7
-         enTA==
+        h=sender:date:in-reply-to:message-id:mime-version:references:subject
+         :from:to:cc;
+        bh=gPE7b3/M6uCT5ZEUoYFVzS554jwY/Cx+KLicb2SXbs0=;
+        b=qt1z7TkNoS9LG+sx0K0P2/jQ07smZJ2i7rZJ+/ppPnkhnkD/VRRQKBlBnCwbtrmA0V
+         izVEVH/olwD1HuRV7zRoly2WCQ9PDzLXooovKlvr2DsjBImzmVs6Dgk0ppRAFvPZ81vy
+         BuIbhkeZVS4FQK+JG/afbflq4vkYCfyWEZAyMlpbKdn99ljHtMYvLUZflECLPmC+SEhB
+         zX8gKtdkFMBUn5Ihk/H+kpa9DbpGCYKuA5zBnMN9XiFmx0N0gE91H0eEwgJn+Oy9eCbj
+         HzZg3wVHo7jj9FMk4mTYmmLvL+GVPoteCCrqySCQZBwAOyx0DPI0yCl7J1QRF+tWaw5Q
+         XwQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:message-id:mime-version:subject:from
-         :to:cc;
-        bh=rvdd/QvafmjAw8kwJuM2WPMcObpLsH4hFPPapXqLuVw=;
-        b=l4r3IsJZXIgDZV6pBKKd/95Mm5StHhW5iCIJBXLKpI3Rv1TSmlrHTSDrmqtgEN6tBy
-         r5M7plCN93t1Cx66+88ZvVFuLR0BN11+UVqcbl2V1tm3LrZxZZJl8D5BxFr8EzyIGLB9
-         6SJi/FZkpiIBpwBxN2fzJ8vyu1kt67F9asypHuy7CvJchrxPWvZl3V+HD4YZ2ytZPU3h
-         HtbOtzfj2ao5PliFTzzwRATe80RoRdIINeTOxCfBb292SVzVkGLzFI5Qfy3siVUxnuIG
-         Wcjx/Otd6G3DG/b75qEcG25875dhELIYoC/gs3AJDSwJHje2u6QW/H0Cc9ijf/aJS2Hl
-         uv9g==
-X-Gm-Message-State: AOAM5307PP96zzK5m7Z3J6ZePxOs9xgeG741NNIZvswXC5v3Qr9R9HPr
-        Ecaglq9SFJvOHa55vUdLnWJonBlhxmJFMLZ43kup4zihYoLR/PueAa1nCBKl+qO+4fcWeJJLPZ5
-        NALqiQmD6rOTKtbrN6HuT0HQetgk0nU2RMawLRQSHy5P6nWHYLZ0Meeq4ZZ8e/Vm+7eHO
-X-Google-Smtp-Source: ABdhPJzZ9wQdK3n/uMg8qE3gXor6Gv/nkJNGKknao7LqdRUWRx57fl9nXRn0QuDLbf0Po+yjPljRVYoKyVd6hQ==
+        h=x-gm-message-state:sender:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=gPE7b3/M6uCT5ZEUoYFVzS554jwY/Cx+KLicb2SXbs0=;
+        b=UgeAp2KIfFuiKHUb+Fc3Rouc8B8E9B+h98/uORq2NbkKj8e3T4G+QlDHKoz6cGpDLP
+         1hDF6kqktXRzc7Hq4NvPkjuMx6GiBE20VCUqzvhmLkr3BX665rtcLspozvxHV8KM/eYc
+         CSiuIPf1fQhNwD3TW2vAY6/Py9yqRt9aP/KDV+csxPwVPHzQuUj9yS+UOCoObnG64i5g
+         8uo1fX/ty+5oPiHDwvDlGg+v3AtUj8etvK21yNXG3Kw7sMAp+cQG6sDk8VhS6CCbDMZZ
+         BsBtDH+we09yDyPe/gWLXaymncOr77KBuXK7k6ocXGum5JG513lY9U+mliQF4SttO13w
+         /fbg==
+X-Gm-Message-State: AOAM533kbhpyZIwdqsndtu7wqdsdX1I6/SnzXpPHbUCjKXdRa+dN0Yj4
+        YFtI24VRLMghw4ojAsKP7vrwxNydVChX/rZj6DhTGfXNZgngzPtQOv3HRaCKORb3MTR8gLw5UXY
+        OZkir6NxGjG4oDvDibHC9+QCjLFkbjdKoDEYk12cDZFrkF9EbDo0goHeUCj19qrRSGY2/
+X-Google-Smtp-Source: ABdhPJwqUswTeWhqfYqtt3aXneF0oEqCmZ9xQz2yt3073LrQB25loOFYEchMfmwmuQ6wi3mE576iHo6J2Uyt3w==
 Sender: "gprocida via sendgmr" <gprocida@tef.lon.corp.google.com>
 X-Received: from tef.lon.corp.google.com ([2a00:79e0:d:110:a6ae:11ff:fe11:4f04])
- (user=gprocida job=sendgmr) by 2002:a1c:1f11:: with SMTP id
- f17mr32811wmf.67.1611579995009; Mon, 25 Jan 2021 05:06:35 -0800 (PST)
-Date:   Mon, 25 Jan 2021 13:06:21 +0000
-Message-Id: <20210125130625.2030186-1-gprocida@google.com>
+ (user=gprocida job=sendgmr) by 2002:adf:a11d:: with SMTP id
+ o29mr882505wro.45.1611579997395; Mon, 25 Jan 2021 05:06:37 -0800 (PST)
+Date:   Mon, 25 Jan 2021 13:06:22 +0000
+In-Reply-To: <20210125130625.2030186-1-gprocida@google.com>
+Message-Id: <20210125130625.2030186-2-gprocida@google.com>
 Mime-Version: 1.0
+References: <20210125130625.2030186-1-gprocida@google.com>
 X-Mailer: git-send-email 2.30.0.280.ga3ce27912f-goog
-Subject: [PATCH dwarves 0/4] BTF ELF writing changes
+Subject: [PATCH dwarves 1/4] btf_encoder: Improve ELF error reporting
 From:   Giuliano Procida <gprocida@google.com>
 To:     dwarves@vger.kernel.org
 Cc:     acme@kernel.org, andrii@kernel.org, ast@kernel.org,
@@ -69,47 +73,67 @@ Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-Hi.
+libelf provides an errno/strerror-like facility. This commit updates
+various error messages to include helpful error text.
 
-This follows on from my change to improve the error handling around
-llvm-objcopy in libbtf.c.
+Signed-off-by: Giuliano Procida <gprocida@google.com>
+---
+ libbtf.c | 16 +++++++++++-----
+ 1 file changed, 11 insertions(+), 5 deletions(-)
 
-Note on recipients: Please let me know if I should adjust To or CC.
-
-Note on style: I've generally placed declarations as allowed by C99,
-closest to point of use. Let me know if you'd prefer otherwise.
-
-1. Improve ELF error reporting
-
-2. Add .BTF section using libelf
-
-This shows the minimal amount of code needed to drive libelf. However,
-it leaves layout up to libelf, which is almost certainly not wanted.
-
-As an unexpcted side-effect, vmlinux is larger than before. It seems
-llvm-objcopy likes to trim down .strtab.
-
-3. Manually lay out updated ELF sections
-
-This does full layout of new and updated ELF sections. If the update
-ELF sections were not the last ones in the file by offset, then it can
-leave gaps between sections.
-
-4. Align .BTF section to 8 bytes
-
-This was my original aim.
-
-Regards.
-
-Giuliano Procida (4):
-  btf_encoder: Improve ELF error reporting
-  btf_encoder: Add .BTF section using libelf
-  btf_encoder: Manually lay out updated ELF sections
-  btf_encoder: Align .BTF section to 8 bytes
-
- libbtf.c | 222 +++++++++++++++++++++++++++++++++++++++++++------------
- 1 file changed, 175 insertions(+), 47 deletions(-)
-
+diff --git a/libbtf.c b/libbtf.c
+index 7552d8e..9f76283 100644
+--- a/libbtf.c
++++ b/libbtf.c
+@@ -110,8 +110,8 @@ try_as_raw_btf:
+ 
+ 		btfe->elf = elf_begin(btfe->in_fd, ELF_C_READ_MMAP, NULL);
+ 		if (!btfe->elf) {
+-			fprintf(stderr, "%s: cannot read %s ELF file.\n",
+-				__func__, filename);
++			fprintf(stderr, "%s: cannot read %s ELF file: %s.\n",
++				__func__, filename, elf_errmsg(elf_errno()));
+ 			goto errout;
+ 		}
+ 	}
+@@ -707,13 +707,15 @@ static int btf_elf__write(const char *filename, struct btf *btf)
+ 	}
+ 
+ 	if (elf_version(EV_CURRENT) == EV_NONE) {
+-		fprintf(stderr, "Cannot set libelf version.\n");
++		fprintf(stderr, "Cannot set libelf version: %s.\n",
++			elf_errmsg(elf_errno()));
+ 		goto out;
+ 	}
+ 
+ 	elf = elf_begin(fd, ELF_C_RDWR, NULL);
+ 	if (elf == NULL) {
+-		fprintf(stderr, "Cannot update ELF file.\n");
++		fprintf(stderr, "Cannot update ELF file: %s.\n",
++			elf_errmsg(elf_errno()));
+ 		goto out;
+ 	}
+ 
+@@ -721,7 +723,8 @@ static int btf_elf__write(const char *filename, struct btf *btf)
+ 
+ 	ehdr = gelf_getehdr(elf, &ehdr_mem);
+ 	if (ehdr == NULL) {
+-		fprintf(stderr, "%s: elf_getehdr failed.\n", __func__);
++		fprintf(stderr, "%s: elf_getehdr failed: %s.\n", __func__,
++			elf_errmsg(elf_errno()));
+ 		goto out;
+ 	}
+ 
+@@ -764,6 +767,9 @@ static int btf_elf__write(const char *filename, struct btf *btf)
+ 		if (elf_update(elf, ELF_C_NULL) >= 0 &&
+ 		    elf_update(elf, ELF_C_WRITE) >= 0)
+ 			err = 0;
++		else
++			fprintf(stderr, "%s: elf_update failed: %s.\n",
++				__func__, elf_errmsg(elf_errno()));
+ 	} else {
+ 		const char *llvm_objcopy;
+ 		char tmp_fn[PATH_MAX];
 -- 
 2.30.0.280.ga3ce27912f-goog
 
