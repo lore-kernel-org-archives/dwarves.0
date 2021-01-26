@@ -2,122 +2,113 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-26.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+X-Spam-Status: No, score=-11.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
-	version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 62F98C4332E
-	for <linux-dwarves@archiver.kernel.org>; Tue, 26 Jan 2021 19:32:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 18CBEC433DB
+	for <linux-dwarves@archiver.kernel.org>; Wed, 27 Jan 2021 04:20:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4C44523121
-	for <linux-dwarves@archiver.kernel.org>; Tue, 26 Jan 2021 19:32:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C56D320709
+	for <linux-dwarves@archiver.kernel.org>; Wed, 27 Jan 2021 04:20:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728620AbhAZFnS (ORCPT
+        id S1343636AbhA0EUj (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Tue, 26 Jan 2021 00:43:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55788 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728570AbhAYNJ2 (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Mon, 25 Jan 2021 08:09:28 -0500
-Received: from mail-wm1-x349.google.com (mail-wm1-x349.google.com [IPv6:2a00:1450:4864:20::349])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5561DC061797
-        for <dwarves@vger.kernel.org>; Mon, 25 Jan 2021 05:06:47 -0800 (PST)
-Received: by mail-wm1-x349.google.com with SMTP id o79so3677660wme.9
-        for <dwarves@vger.kernel.org>; Mon, 25 Jan 2021 05:06:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=sender:date:in-reply-to:message-id:mime-version:references:subject
-         :from:to:cc;
-        bh=dHCmE0oVXoubM3rTHyQSPX2MJEXLHemPJUmiQIz1gjE=;
-        b=SFOnqGDYvQ3UMYg+Xxq0/jYMkh+nolREupxeeXaZMo7t5sbzBXzhvyD5ZZrXjZHi56
-         6yyQt6i+aptZKrd6GbcvAUOhf1M5c5fHGYt0F3jPjGCwknFrb8GBxUbScLTCXjZ/Kjsh
-         MG1RbRLYNJ/p1+xjcOOLWENFojsvHpETaL8oUJjGPqL8bz6mNHsJxnZFKh73VkenHEI+
-         h0y5yuf8DTlo2A0ODTBssz1IVUjCPI+B/3N0ZbzHwaeDfCfsm0fM2JW1lnZ28ih3JZx2
-         Ouyq8rBiyKRIr8wv8RIdeICRhz6gxKtkiQgM3aJ9A/RctlU2CNK1yyVVBjL91Mefzs41
-         RZoA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=dHCmE0oVXoubM3rTHyQSPX2MJEXLHemPJUmiQIz1gjE=;
-        b=ZrxQ1ln/2zpMU75VHg+aI/zKRgKMghYVahkLZ5K0vBo2lXkFTRN2mKhInfcEoMkyKr
-         PuPZflgqOIleVbep4mn0UFMdzBRWsa57/VotOf1QF4PsUI9MaG9CPflAhQpaWiKGmEGQ
-         3Nuzw3Xc/KByc0HhDGFwcMfJKYk39sJb6hqPXF/Ll5VW5bW/hsFbKG0lavJzNpZ6cB3r
-         FV5yySPmd8SDhEl97RCOcOR4nbazfFmMNxJN8cW8kwR/NAIPhQX4fAeACUr3o0COVUO+
-         qs+6oh0iCR/8nkh6dgWo7YInNloiMvGtX7uKNTQgItyhlP3SGaHYOUEIlqxBdWf9FVuR
-         Sd6Q==
-X-Gm-Message-State: AOAM533QGe4QKnQ9M6LzBo5udoKvvdxkkzKVW9orE6YcqSRR9qkk8+1r
-        PSsN/CHEIEA5mddOx7Dmh3PMhB03VA1ZKppbAn7tNXp0DwccXs3PLeSAPjVkW+Zl0S+4pOpP4HN
-        HrW7LQwdlJN7SIvuGBltpmvq1ZNIiJkyzwHEfY9c3eF107VLVGsEX7PuNbZTA9QQ07oYK
-X-Google-Smtp-Source: ABdhPJwLbiQP/xW54xaHyoWge2cRYZKMzVdicac9X6ZmG5acd/9J8zAyuqNenerL/j1SSHfRzykZLtvkQw3dOA==
-Sender: "gprocida via sendgmr" <gprocida@tef.lon.corp.google.com>
-X-Received: from tef.lon.corp.google.com ([2a00:79e0:d:110:a6ae:11ff:fe11:4f04])
- (user=gprocida job=sendgmr) by 2002:a1c:e0d4:: with SMTP id
- x203mr49589wmg.160.1611580004135; Mon, 25 Jan 2021 05:06:44 -0800 (PST)
-Date:   Mon, 25 Jan 2021 13:06:25 +0000
-In-Reply-To: <20210125130625.2030186-1-gprocida@google.com>
-Message-Id: <20210125130625.2030186-5-gprocida@google.com>
-Mime-Version: 1.0
-References: <20210125130625.2030186-1-gprocida@google.com>
-X-Mailer: git-send-email 2.30.0.280.ga3ce27912f-goog
-Subject: [PATCH dwarves 4/4] btf_encoder: Align .BTF section to 8 bytes
-From:   Giuliano Procida <gprocida@google.com>
-To:     dwarves@vger.kernel.org
-Cc:     acme@kernel.org, andrii@kernel.org, ast@kernel.org,
-        gprocida@google.com, maennich@google.com, kernel-team@android.com,
+        Tue, 26 Jan 2021 23:20:39 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:29201 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2404840AbhAZT51 (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Tue, 26 Jan 2021 14:57:27 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1611690961;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=qweHmzp0/bOx+ed2pndkJ/15/YgKnfW7IY89o43v8JM=;
+        b=f7e4X7LMsiQZK/xshpPOIbovRJGBWVZqMeWFrBZWS5OYCqdpRHJCMfQ9xGMmvmugj4bmqV
+        tApG1Q3GkcDn1xwYSUbqv9BCJNG+0v6vuv+lrp3T47dkypstsBtVgibaL5b+fgGD9Up6Uv
+        G0A7RMIu8dzNM16IzDrkOOQn53zVddw=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-153-pvalz7IONieyrmKKF4--GA-1; Tue, 26 Jan 2021 14:55:57 -0500
+X-MC-Unique: pvalz7IONieyrmKKF4--GA-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id D9D01192AB7E;
+        Tue, 26 Jan 2021 19:55:45 +0000 (UTC)
+Received: from krava (unknown [10.40.192.149])
+        by smtp.corp.redhat.com (Postfix) with SMTP id 3B2A62BCDB;
+        Tue, 26 Jan 2021 19:55:43 +0000 (UTC)
+Date:   Tue, 26 Jan 2021 20:55:42 +0100
+From:   Jiri Olsa <jolsa@redhat.com>
+To:     Giuliano Procida <gprocida@google.com>
+Cc:     dwarves@vger.kernel.org, acme@kernel.org, andrii@kernel.org,
+        ast@kernel.org, maennich@google.com, kernel-team@android.com,
         kernel-team@fb.com, bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH dwarves 0/4] BTF ELF writing changes
+Message-ID: <20210126195542.GB120879@krava>
+References: <20210125130625.2030186-1-gprocida@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210125130625.2030186-1-gprocida@google.com>
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-This is to avoid misaligned access to BTF type structs when
-memory-mapping ELF sections.
+On Mon, Jan 25, 2021 at 01:06:21PM +0000, Giuliano Procida wrote:
+> Hi.
+> 
+> This follows on from my change to improve the error handling around
+> llvm-objcopy in libbtf.c.
+> 
+> Note on recipients: Please let me know if I should adjust To or CC.
+> 
+> Note on style: I've generally placed declarations as allowed by C99,
+> closest to point of use. Let me know if you'd prefer otherwise.
+> 
+> 1. Improve ELF error reporting
+> 
+> 2. Add .BTF section using libelf
+> 
+> This shows the minimal amount of code needed to drive libelf. However,
+> it leaves layout up to libelf, which is almost certainly not wanted.
+> 
+> As an unexpcted side-effect, vmlinux is larger than before. It seems
+> llvm-objcopy likes to trim down .strtab.
+> 
+> 3. Manually lay out updated ELF sections
+> 
+> This does full layout of new and updated ELF sections. If the update
+> ELF sections were not the last ones in the file by offset, then it can
+> leave gaps between sections.
+> 
+> 4. Align .BTF section to 8 bytes
+> 
+> This was my original aim.
+> 
+> Regards.
+> 
+> Giuliano Procida (4):
+>   btf_encoder: Improve ELF error reporting
+>   btf_encoder: Add .BTF section using libelf
+>   btf_encoder: Manually lay out updated ELF sections
+>   btf_encoder: Align .BTF section to 8 bytes
 
-Signed-off-by: Giuliano Procida <gprocida@google.com>
----
- libbtf.c | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+hi,
+I can't apply this on dwarves git master, which commit is it based on?
 
-diff --git a/libbtf.c b/libbtf.c
-index 4726e16..fa00053 100644
---- a/libbtf.c
-+++ b/libbtf.c
-@@ -755,7 +755,13 @@ static int btf_elf__write(const char *filename, struct btf *btf)
- 	 * This actually happens in practice with vmlinux which has .strtab
- 	 * after .shstrtab, resulting in a (small) hole the size of the original
- 	 * .shstrtab.
-+	 *
-+	 * We'll align .BTF to 8 bytes to cater for all architectures. It'd be
-+	 * nice if we could fetch this value from somewhere. The BTF
-+	 * specification does not discuss alignment and its trailing string
-+	 * table is not currently padded to any particular alignment.
- 	 */
-+	const size_t btf_alignment = 8;
- 
- 	/*
- 	 * First we look if there was already a .BTF section present and
-@@ -848,8 +854,8 @@ static int btf_elf__write(const char *filename, struct btf *btf)
- 	elf_flagdata(btf_data, ELF_C_SET, ELF_F_DIRTY);
- 
- 	/* Update .BTF section in the SHT */
--	size_t new_btf_offset = high_water_mark;
--	size_t new_btf_size = raw_btf_size;
-+	size_t new_btf_offset = roundup(high_water_mark, btf_alignment);
-+	size_t new_btf_size = roundup(raw_btf_size, btf_alignment);
- 	GElf_Shdr btf_shdr_mem;
- 	GElf_Shdr *btf_shdr = gelf_getshdr(btf_scn, &btf_shdr_mem);
- 	if (!btf_shdr) {
-@@ -857,6 +863,7 @@ static int btf_elf__write(const char *filename, struct btf *btf)
- 			__func__, elf_errmsg(elf_errno()));
- 		goto out;
- 	}
-+	btf_shdr->sh_addralign = btf_alignment;
- 	btf_shdr->sh_entsize = 0;
- 	btf_shdr->sh_flags = 0;
- 	if (dot_btf_offset)
--- 
-2.30.0.280.ga3ce27912f-goog
+thanks,
+jirka
+
+> 
+>  libbtf.c | 222 +++++++++++++++++++++++++++++++++++++++++++------------
+>  1 file changed, 175 insertions(+), 47 deletions(-)
+> 
+> -- 
+> 2.30.0.280.ga3ce27912f-goog
+> 
 
