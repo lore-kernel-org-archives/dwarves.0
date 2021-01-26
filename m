@@ -2,226 +2,238 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-26.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 04B52C433E0
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1A062C433E6
 	for <linux-dwarves@archiver.kernel.org>; Tue, 26 Jan 2021 05:43:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CE6A4229C4
+	by mail.kernel.org (Postfix) with ESMTP id E9B3E22ADF
 	for <linux-dwarves@archiver.kernel.org>; Tue, 26 Jan 2021 05:43:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728619AbhAZFnL (ORCPT
+        id S1730536AbhAZFnV (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Tue, 26 Jan 2021 00:43:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55774 "EHLO
+        Tue, 26 Jan 2021 00:43:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728620AbhAYNJU (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Mon, 25 Jan 2021 08:09:20 -0500
-Received: from mail-qv1-xf49.google.com (mail-qv1-xf49.google.com [IPv6:2607:f8b0:4864:20::f49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2757AC06178C
-        for <dwarves@vger.kernel.org>; Mon, 25 Jan 2021 05:06:43 -0800 (PST)
-Received: by mail-qv1-xf49.google.com with SMTP id m1so9096143qvp.0
-        for <dwarves@vger.kernel.org>; Mon, 25 Jan 2021 05:06:43 -0800 (PST)
+        with ESMTP id S1730834AbhAZBuH (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Mon, 25 Jan 2021 20:50:07 -0500
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FA46C0617A9;
+        Mon, 25 Jan 2021 16:28:26 -0800 (PST)
+Received: by mail-yb1-xb34.google.com with SMTP id b11so15100099ybj.9;
+        Mon, 25 Jan 2021 16:28:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=sender:date:in-reply-to:message-id:mime-version:references:subject
-         :from:to:cc;
-        bh=dOg1QiodelMO3s6QTltbxMRrhmZPrGedZT/RtjNu99c=;
-        b=ST28h8YK/Crnldiv/p9MQDP3VykreTpd8muxiNoUUf9g5+fE9n89ABEVaGsA/DmZmM
-         QGLLmEMwgzoT1zm9zXhE2fbBsIYFVHxwCdXWF73Cm7ZflJVLP/IxZAglhmHNz18rY0VR
-         YbWoFf+iky/tjPSyZxqF7OZ1Q9Fb7azOxLiEV2JYdTMdlOBA5/xrmIIxRG3/GYpQo0oe
-         oVk9M1Gulu6CpzXlQZ4RbpzQTV/fYc/qyybOsFKIMJJ5XBmhyhjloCWBEPfiHHIVjCkv
-         b3L0LiAs9jhn1i0FeC3v4egOe61hvfQpBqtHuOGXYBdir4UGnsspTwxdEkpTBuhYz0z6
-         SWYw==
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=ND23aPy8zpGQ99qhXMXe1prkSdeC2noDocOwnTidYzU=;
+        b=o/ythDK4DuFyaDDje0Lhh+YPdmJYIXXRWa5vD2ise5bX45vQV1ffUkh1Dq4GNneWaf
+         OHiZ0HkGKP44jRoATWP6ESdo4h/ZEMOgAmhkdkWobnaeTRzI634BgqzmMY0cUJnO+SFy
+         o24lD7VeuH6y5tmMJ+jq6KBuu9FMTUa24GvmyOXjAlaZQNR3j3suJPPZJ+0qjPIPxp+3
+         Tjj4CG9Ij7/4uyyibZJT72tnuyRmbnovesKNmWaMwC1pviqo3BEGkbP7vcLkas12M3N/
+         nML/Bzde8WNGe9vfke3wetnRI5rkY7DsC4/VgKsGyhUzlFFNWSMO36G92bbUW3z35A5N
+         w1pA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=dOg1QiodelMO3s6QTltbxMRrhmZPrGedZT/RtjNu99c=;
-        b=Yf8RE35OfXXANSpWqzadrtD17urXeB/CxS0VNgUc41eSiHvG7gx5GYLYTfuPvCJHYm
-         GVXD8e3paSIBWpqD0j1exAK6HDZJzO9jurFt2qRUbsWvJPWub7GOZHRptewxaiIqls55
-         ZWZnExHf1kcgpUt5O8Ow/2CGcid0CYzr1UIbOHaR0Td5mpYl81F3ab9gyhXIHgSMYy+A
-         zRuqkXR3Q3QGgaytQ/Nl4JJ/0QXOSs68TMZ+Q7waEAoy3rrE4N4dDVzkrdYyWMCx4SbB
-         N8WJPU7bT2A86ZgS7Xxd2hAxvim5qRcWIHSQA7Ou4KZbk45BP0K7orkkzq8/a0WIi1fF
-         e3Tg==
-X-Gm-Message-State: AOAM5321llsTeQUvO4TxIZnn5gbbqgPi/CYmgIN6SDuTmgP3YX/qv4j7
-        6QgJLqA2Ke4vTztDtTj3DdRaMUcMVI1Zbq5NfJg2N7zJcVXPMwrZGFbsd4KcmLIG6K13DnmLeua
-        53Xtqx1RseWmNC/hMWGTVYaMchllTqm0yEHsOYvnHpJUN+YewLacYBonG/H2wTPUA9PjH
-X-Google-Smtp-Source: ABdhPJxusPLuu8L6cOjZfu56gUEvavUCd/ln5OPZq6PolJbVhPzw4BWDFA5NKBaKijfx+MGp8ONe9qBn4wrRkw==
-Sender: "gprocida via sendgmr" <gprocida@tef.lon.corp.google.com>
-X-Received: from tef.lon.corp.google.com ([2a00:79e0:d:110:a6ae:11ff:fe11:4f04])
- (user=gprocida job=sendgmr) by 2002:a05:6214:913:: with SMTP id
- dj19mr575947qvb.33.1611580001730; Mon, 25 Jan 2021 05:06:41 -0800 (PST)
-Date:   Mon, 25 Jan 2021 13:06:24 +0000
-In-Reply-To: <20210125130625.2030186-1-gprocida@google.com>
-Message-Id: <20210125130625.2030186-4-gprocida@google.com>
-Mime-Version: 1.0
-References: <20210125130625.2030186-1-gprocida@google.com>
-X-Mailer: git-send-email 2.30.0.280.ga3ce27912f-goog
-Subject: [PATCH dwarves 3/4] btf_encoder: Manually lay out updated ELF sections
-From:   Giuliano Procida <gprocida@google.com>
-To:     dwarves@vger.kernel.org
-Cc:     acme@kernel.org, andrii@kernel.org, ast@kernel.org,
-        gprocida@google.com, maennich@google.com, kernel-team@android.com,
-        kernel-team@fb.com, bpf@vger.kernel.org
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=ND23aPy8zpGQ99qhXMXe1prkSdeC2noDocOwnTidYzU=;
+        b=FGg41glkCFSahlMTVmYnUkfGemj1p5gocNh8dapc2XFD7dxfjbJkrnvZxAuGhJeUg6
+         QNiVZwPQ9ehPXYwKMoPfwSAtxlHIoMA11IrYQqz/N1eaONGEtvxWjaBKAeP/86ZbOKb4
+         yJEN0/KaVXg9bxn71UCwgVFvbMb46LIxaTKpp+Q0etwCr+sjjTV112dQiYBJ2CQdAjVq
+         ZnNZ+Bvo/6QL4+SHTLxue/GSXc1TV7gzhCfSaSU6w/tCWXVlkbOmOS8fm9Cg2wwP+txC
+         Ho8VRlLTepbmtJwysv1p9nEBGONiVNfK+mJ9k2CmGyr03zbGOeuTmP6JqwwXlmBFoish
+         G0ZA==
+X-Gm-Message-State: AOAM533xm62zXkqVF8MR+uhjT6Xg7dKMTUyJ3PyJKipiaZ/B8SX+ZW92
+        uCf7+G6698DyHGXhdBijJeDbLpkSgeDwBgYhLRA=
+X-Google-Smtp-Source: ABdhPJxBC7znTdaYeDTd9iTlVEm0Wia5u7iSqG3qiL+UZjWU+vb7pIlvv9dGxFiGKCaH6oBZm9+67ffCkukK1b3/U7w=
+X-Received: by 2002:a25:548:: with SMTP id 69mr4443197ybf.510.1611620904937;
+ Mon, 25 Jan 2021 16:28:24 -0800 (PST)
+MIME-Version: 1.0
+References: <20210118160139.1971039-1-gprocida@google.com> <20210118160139.1971039-4-gprocida@google.com>
+ <CAEf4BzazvC9H=K_A9KamGTB3iKtjuNxd4hEvwFOnkPdnszo6Bw@mail.gmail.com>
+ <CAGvU0HmE+gs8eNQcXmFrEERHaiGEnMgqxBho4Ny3DLCe6WR55Q@mail.gmail.com>
+ <CAEf4BzZQvLofuVHPqu1ybsTVrM9pFRCRSR5UEFdNJq3Ha8=Luw@mail.gmail.com> <CAGvU0HmsoTSoPP=uJ679i2xH5k9o3iS=NCUyt2eVC63ShzVctw@mail.gmail.com>
+In-Reply-To: <CAGvU0HmsoTSoPP=uJ679i2xH5k9o3iS=NCUyt2eVC63ShzVctw@mail.gmail.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Mon, 25 Jan 2021 16:28:14 -0800
+Message-ID: <CAEf4BzZPSEsKn6DiFwffTW81iFPVO329RAnA+bm0NPPiBqnqag@mail.gmail.com>
+Subject: Re: [PATCH 3/3] btf_encoder: Set .BTF section alignment to 16
+To:     Giuliano Procida <gprocida@google.com>
+Cc:     dwarves@vger.kernel.org, kernel-team@android.com,
+        =?UTF-8?Q?Matthias_M=C3=A4nnich?= <maennich@google.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
+        Kernel Team <kernel-team@fb.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-pahole -J needs to do the following to an ELF file:
+On Mon, Jan 25, 2021 at 4:53 AM Giuliano Procida <gprocida@google.com> wrot=
+e:
+>
+> Hi.
+>
+> On Thu, 21 Jan 2021 at 20:08, Andrii Nakryiko <andrii.nakryiko@gmail.com>=
+ wrote:
+> >
+> > On Thu, Jan 21, 2021 at 3:07 AM Giuliano Procida <gprocida@google.com> =
+wrote:
+> > >
+> > > Hi.
+> > >
+> > > On Thu, 21 Jan 2021 at 07:16, Andrii Nakryiko <andrii.nakryiko@gmail.=
+com> wrote:
+> > >>
+> > >> On Mon, Jan 18, 2021 at 8:01 AM Giuliano Procida <gprocida@google.co=
+m> wrote:
+> > >> >
+> > >> > This is to avoid misaligned access when memory-mapping ELF section=
+s.
+> > >> >
+> > >> > Signed-off-by: Giuliano Procida <gprocida@google.com>
+> > >> > ---
+> > >> >  libbtf.c | 8 ++++++++
+> > >> >  1 file changed, 8 insertions(+)
+> > >> >
+> > >> > diff --git a/libbtf.c b/libbtf.c
+> > >> > index 7552d8e..2f12d53 100644
+> > >> > --- a/libbtf.c
+> > >> > +++ b/libbtf.c
+> > >> > @@ -797,6 +797,14 @@ static int btf_elf__write(const char *filenam=
+e, struct btf *btf)
+> > >> >                         goto unlink;
+> > >> >                 }
+> > >> >
+> > >> > +               snprintf(cmd, sizeof(cmd), "%s --set-section-align=
+ment .BTF=3D16 %s",
+> > >> > +                        llvm_objcopy, filename);
+> > >>
+> > >> does it align inside the ELF file to 16 bytes, or does it request th=
+e
+> > >> linker to align it at 16 byte alignment in memory? Given .BTF sectio=
+n
+> > >> is not loadable, trying to understand the implications.
+> > >>
+> > >
+> > > We have a tool that loads BTF from ELF files. It uses mmap and "parse=
+s" the BTF as structs in memory. The ELF file is mapped with page alignment=
+ but the BTF section within it has no alignment at all. Using MSAN (IIRC) w=
+e get warnings about misaligned accesses. Everything within BTF itself is n=
+aturally aligned, so it makes sense to align the section within ELF as well=
+. There are probably some architectures where this makes the difference bet=
+ween working and SIGBUS.
+> > >
+> >
+> > Right, ok, thanks for explaining!
+> >
+> > > I did try to get objcopy to set alignment at the point the section is=
+ added. However, this didn't work.
+> > >
+> > >>
+> > >>
+> > >> > +               if (system(cmd)) {
+> > >>
+> > >> Also curious, if objcopy emits error (saying that
+> > >> --set-section-alignment argument is not recognized), will that error
+> > >> be shown in stdout? or system() consumes it without redirecting it t=
+o
+> > >> stdout?
+> > >>
+> > >
+> > > I believe it goes to stderr. I would need to check. system() will not=
+ consume this. I'm not keen to write stderr (or stdout) post-processing cod=
+e in plain C.
+> > >
+> >
+> > You can use popen() to capture/hide output, this is a better
+> > alternative to system() in this case. We don't want "expected
+> > warnings" in kernel build process.
+> >
+> > >>
+> > >> > +                       /* non-fatal, this is a nice-to-have and i=
+t's only supported from LLVM 10 */
+> > >> > +                       fprintf(stderr, "%s: warning: failed to al=
+ign .BTF section in '%s': %d!\n",
+> > >> > +                               __func__, filename, errno);
+> > >>
+> > >> Probably better to emit this warning only in verbose mode, otherwise
+> > >> lots of people will start complaining that they get some new warning=
+s
+> > >> from pahole.
+> > >>
+> > >
+> > > It may be better to just use POSIX and ELF APIs directly instead of o=
+bjcopy. This way the section can be added with the right alignment directly=
+. pahole is already linked against libelf and if we could get rid of the ex=
+ternal dependency on objcopy it would be a win in more than one way.
+> >
+> > This would be great, yes. At some point I remember giving it a try,
+> > but for some reason I couldn't make libelf flush data and update
+> > section headers properly. Maybe you'll have better luck. Though I
+> > think I was trying to mark section loadable, and eventually I probably
+> > managed to do that, but still abandoned it (it's not enough to mark
+> > section loadable, you have to assign it to ELF segment as well, which
+> > libelf doesn't allow to do and you need linker support). Anyways, give
+> > it a try, it should work.
+>
+> I struggled for a day and a bit and have got this (ELF_F_LAYOUT etc.)
+> working. There are some caveats:
+>
+> 1. Laying out only the new / updated sections can leave gaps.
+>
+> In practice, for vmlinux, it's a very small hole. To fix this, I'd
+> need to reposition .strtab as well as .BTF and .shstrtab.
+>
+> 2. vmlinux increases in size as llvm-objcopy was trimming down .strtab.
+>
+> I know very little about this, but I'd guess that the kernel linker
+> scripts are leaving strings in .strtab that are not referenced by
+> .symtab.
+>
+> I'll send a short series out for review soon.
 
-* add or update the ".BTF" section
-* maybe update the section name string table
-* update the Section Header Table (SHT)
+1. Hm.. I realized I don't get why you need 16-byte alignment. Can you
+comment on why 8 doesn't work?
 
-libelf either takes full control of layout or requires the user to
-specify offset, size and alignment of all new and updated sections and
-headers.
+2. If you care about vmlinux BTF only, I think an easier way to ensure
+proper alignment is to adjust include/asm-generic/vmlinux.lds.h and
+add `. =3D ALIGN(8);` before .BTF (see how we ensure 4-byte alignment
+for .BTF_ids)
 
-To avoid libelf moving program segments in particular, we position the
-".BTF" and section name string table (typically named ".shstrtab")
-sections after all others. The SHT always lives at the end of the file.
+If you have code ready to get rid of llvm-objcopy requirement for
+pahole, please still post, but we'll need to test it very thoroughly
+to ensure there are no regressions before landing in pahole.
 
-Note that the last section in an ELF file is normally the section name
-string table and any ".BTF" section will normally be second last.
-However, if these sections appear earlier, then we'll waste some space
-in the ELF file when we rewrite them.
-
-Signed-off-by: Giuliano Procida <gprocida@google.com>
----
- libbtf.c | 64 ++++++++++++++++++++++++++++++++++++++++++++++++++++++--
- 1 file changed, 62 insertions(+), 2 deletions(-)
-
-diff --git a/libbtf.c b/libbtf.c
-index fb8e043..4726e16 100644
---- a/libbtf.c
-+++ b/libbtf.c
-@@ -742,9 +742,28 @@ static int btf_elf__write(const char *filename, struct btf *btf)
- 	}
- 
- 	/*
--	 * First we check if there is already a .BTF section present.
-+	 * The SHT is at the very end of the ELF and gets re-written in any case.
-+	 *
-+	 * We'll always add or update the .BTF section and when adding have to
-+	 * re-write the section name string table (usually named .shstrtab). In
-+	 * fact, as good citizens, we'll always leave the string table last, in
-+	 * case someone else wants to add a section.
-+	 *
-+	 * However, if .BTF or the section name string table are followed by
-+	 * further sections, we'll not try to be clever about shuffling
-+	 * everything else in the ELF file, we'll just leave some dead space.
-+	 * This actually happens in practice with vmlinux which has .strtab
-+	 * after .shstrtab, resulting in a (small) hole the size of the original
-+	 * .shstrtab.
-+	 */
-+
-+	/*
-+	 * First we look if there was already a .BTF section present and
-+	 * determine the first usable offset in the ELF (for .BTF and the
-+	 * section name table).
- 	 */
- 	elf_getshdrstrndx(elf, &strndx);
-+	size_t high_water_mark = 0;
- 	Elf_Scn *btf_scn = 0;
- 	while ((scn = elf_nextscn(elf, scn)) != NULL) {
- 		shdr = gelf_getshdr(scn, &shdr_mem);
-@@ -753,7 +772,10 @@ static int btf_elf__write(const char *filename, struct btf *btf)
- 		char *secname = elf_strptr(elf, strndx, shdr->sh_name);
- 		if (strcmp(secname, ".BTF") == 0) {
- 			btf_scn = scn;
--			break;
-+		} else if (elf_ndxscn(scn) != strndx) {
-+			size_t limit = shdr->sh_offset + shdr->sh_size;
-+			if (limit > high_water_mark)
-+				high_water_mark = limit;
- 		}
- 	}
- 
-@@ -762,6 +784,12 @@ static int btf_elf__write(const char *filename, struct btf *btf)
- 		fprintf(stderr, "%s: elf_getscn(strndx) failed\n", __func__);
- 		goto out;
- 	}
-+	GElf_Shdr str_shdr_mem;
-+	GElf_Shdr *str_shdr = gelf_getshdr(str_scn, &str_shdr_mem);
-+	if (!str_shdr) {
-+		fprintf(stderr, "%s: elf_getshdr(str_scn) failed\n", __func__);
-+		goto out;
-+	}
- 
- 	size_t dot_btf_offset = 0;
- 	if (btf_scn) {
-@@ -793,6 +821,7 @@ static int btf_elf__write(const char *filename, struct btf *btf)
- 		str_data->d_buf = str_table;
- 		str_data->d_size = new_str_size;
- 		elf_flagdata(str_data, ELF_C_SET, ELF_F_DIRTY);
-+		str_shdr->sh_size = new_str_size;
- 
- 		/* Create a new section */
- 		btf_scn = elf_newscn(elf);
-@@ -812,12 +841,15 @@ static int btf_elf__write(const char *filename, struct btf *btf)
- 	/* (Re)populate the BTF section data */
- 	raw_btf_data = btf__get_raw_data(btf, &raw_btf_size);
- 	btf_data->d_buf = (void *)raw_btf_data;
-+	btf_data->d_off = 0;
- 	btf_data->d_size = raw_btf_size;
- 	btf_data->d_type = ELF_T_BYTE;
- 	btf_data->d_version = EV_CURRENT;
- 	elf_flagdata(btf_data, ELF_C_SET, ELF_F_DIRTY);
- 
- 	/* Update .BTF section in the SHT */
-+	size_t new_btf_offset = high_water_mark;
-+	size_t new_btf_size = raw_btf_size;
- 	GElf_Shdr btf_shdr_mem;
- 	GElf_Shdr *btf_shdr = gelf_getshdr(btf_scn, &btf_shdr_mem);
- 	if (!btf_shdr) {
-@@ -829,6 +861,8 @@ static int btf_elf__write(const char *filename, struct btf *btf)
- 	btf_shdr->sh_flags = 0;
- 	if (dot_btf_offset)
- 		btf_shdr->sh_name = dot_btf_offset;
-+	btf_shdr->sh_offset = new_btf_offset;
-+	btf_shdr->sh_size = new_btf_size;
- 	btf_shdr->sh_type = SHT_PROGBITS;
- 	if (!gelf_update_shdr(btf_scn, btf_shdr)) {
- 		fprintf(stderr, "%s: gelf_update_shdr failed: %s\n",
-@@ -836,6 +870,32 @@ static int btf_elf__write(const char *filename, struct btf *btf)
- 		goto out;
- 	}
- 
-+	/* Update section name string table */
-+	size_t new_str_offset = new_btf_offset + new_btf_size;
-+	str_shdr->sh_offset = new_str_offset;
-+	if (!gelf_update_shdr(str_scn, str_shdr)) {
-+		fprintf(stderr, "gelf_update_shdr failed\n");
-+		goto out;
-+	}
-+
-+	/* Update SHT, allowing for ELF64 alignment */
-+	size_t sht_offset = roundup(new_str_offset + str_shdr->sh_size, 8);
-+	ehdr->e_shoff = sht_offset;
-+	if (!gelf_update_ehdr(elf, ehdr)) {
-+		fprintf(stderr, "gelf_update_ehdr failed\n");
-+		goto out;
-+	}
-+
-+	if (btf_elf__verbose) {
-+		fprintf(stderr, ".BTF [0x%lx, +0x%lx)\n",
-+			btf_shdr->sh_offset, btf_shdr->sh_size);
-+		fprintf(stderr, ".shstrtab [0x%lx, +0x%lx)\n",
-+			str_shdr->sh_offset, str_shdr->sh_size);
-+		fprintf(stderr, "SHT [0x%lx, +%d*0x%x)\n",
-+			ehdr->e_shoff, ehdr->e_shnum, ehdr->e_shentsize);
-+	}
-+
-+	elf_flagelf(elf, ELF_C_SET, ELF_F_LAYOUT);
- 	if (elf_update(elf, ELF_C_NULL) < 0) {
- 		fprintf(stderr, "%s: elf_update (layout) failed: %s\n",
- 			__func__, elf_errmsg(elf_errno()));
--- 
-2.30.0.280.ga3ce27912f-goog
-
+>
+> Giuliano.
+>
+> >
+> > >
+> > >>
+> > >>
+> > >> > +               }
+> > >> > +
+> > >> >                 err =3D 0;
+> > >> >         unlink:
+> > >> >                 unlink(tmp_fn);
+> > >> > --
+> > >> > 2.30.0.284.gd98b1dd5eaa7-goog
+> > >> >
+> > >
+> > >
+> > > I'll see if I can spend a little time on this idea instead.
+> > >
+> > > Regards,
+> > > Giuliano.
+> >
+> > --
+> > To unsubscribe from this group and stop receiving emails from it, send =
+an email to kernel-team+unsubscribe@android.com.
+> >
