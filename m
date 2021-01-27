@@ -2,113 +2,146 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.3 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 18CBEC433DB
-	for <linux-dwarves@archiver.kernel.org>; Wed, 27 Jan 2021 04:20:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0C290C433E0
+	for <linux-dwarves@archiver.kernel.org>; Wed, 27 Jan 2021 04:21:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C56D320709
-	for <linux-dwarves@archiver.kernel.org>; Wed, 27 Jan 2021 04:20:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C18962070C
+	for <linux-dwarves@archiver.kernel.org>; Wed, 27 Jan 2021 04:21:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343636AbhA0EUj (ORCPT
+        id S1343642AbhA0EU7 (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Tue, 26 Jan 2021 23:20:39 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:29201 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2404840AbhAZT51 (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Tue, 26 Jan 2021 14:57:27 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1611690961;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=qweHmzp0/bOx+ed2pndkJ/15/YgKnfW7IY89o43v8JM=;
-        b=f7e4X7LMsiQZK/xshpPOIbovRJGBWVZqMeWFrBZWS5OYCqdpRHJCMfQ9xGMmvmugj4bmqV
-        tApG1Q3GkcDn1xwYSUbqv9BCJNG+0v6vuv+lrp3T47dkypstsBtVgibaL5b+fgGD9Up6Uv
-        G0A7RMIu8dzNM16IzDrkOOQn53zVddw=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-153-pvalz7IONieyrmKKF4--GA-1; Tue, 26 Jan 2021 14:55:57 -0500
-X-MC-Unique: pvalz7IONieyrmKKF4--GA-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id D9D01192AB7E;
-        Tue, 26 Jan 2021 19:55:45 +0000 (UTC)
-Received: from krava (unknown [10.40.192.149])
-        by smtp.corp.redhat.com (Postfix) with SMTP id 3B2A62BCDB;
-        Tue, 26 Jan 2021 19:55:43 +0000 (UTC)
-Date:   Tue, 26 Jan 2021 20:55:42 +0100
-From:   Jiri Olsa <jolsa@redhat.com>
+        Tue, 26 Jan 2021 23:20:59 -0500
+Received: from mail.kernel.org ([198.145.29.99]:49200 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2392490AbhA0Bmz (ORCPT <rfc822;dwarves@vger.kernel.org>);
+        Tue, 26 Jan 2021 20:42:55 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 40B5E2054F;
+        Wed, 27 Jan 2021 01:42:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1611711731;
+        bh=q3fl+AqaHUpl8oSKS49a3q3xuvlYipyvIkNT2pZDOrY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MBGqrUEydgRCZJ+E31IPdkBBQwZdsH3lcJCY4Pqg39e7u0CJOfyDe5++yY4AqbJEF
+         f4eJwi+sl4a4WRTDH/Gu7eumWD0omDzdeOedDHdYAwKyCw4gQB9ksrPm8xHSrDaVVG
+         a7/wxeP0+YtpWkRhCoCrQMozFPL5gMF6Xm4v5z5NtWyMbKSkoqXd7wm/JBVAbLc4Ao
+         4a5ZIHf4461aMICcwGmrKDPCCIi2uF86DQyTSpHUUjL5Hva/C8AZI7ClBAhp8WjWx8
+         EiwOsqigWvb+tP3mqW0RzYD70pPK/6cLSDgjWtt12t3Z5jmnoGA9Of2LTy+afXq+KR
+         Iq5tTj7sYQd2g==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id A90A840513; Tue, 26 Jan 2021 22:42:08 -0300 (-03)
+Date:   Tue, 26 Jan 2021 22:42:08 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
 To:     Giuliano Procida <gprocida@google.com>
-Cc:     dwarves@vger.kernel.org, acme@kernel.org, andrii@kernel.org,
-        ast@kernel.org, maennich@google.com, kernel-team@android.com,
-        kernel-team@fb.com, bpf@vger.kernel.org
+Cc:     Jiri Olsa <jolsa@redhat.com>, dwarves@vger.kernel.org,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Matthias =?iso-8859-1?Q?M=E4nnich?= <maennich@google.com>,
+        kernel-team@android.com, Kernel Team <kernel-team@fb.com>,
+        bpf <bpf@vger.kernel.org>
 Subject: Re: [PATCH dwarves 0/4] BTF ELF writing changes
-Message-ID: <20210126195542.GB120879@krava>
+Message-ID: <20210127014208.GD106434@kernel.org>
 References: <20210125130625.2030186-1-gprocida@google.com>
+ <20210126195542.GB120879@krava>
+ <CAGvU0H=CFBmGeNx_4zJt9ou8r31knPcq0doOi-3p5JqnaQbp7w@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210125130625.2030186-1-gprocida@google.com>
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
+In-Reply-To: <CAGvU0H=CFBmGeNx_4zJt9ou8r31knPcq0doOi-3p5JqnaQbp7w@mail.gmail.com>
+X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-On Mon, Jan 25, 2021 at 01:06:21PM +0000, Giuliano Procida wrote:
+Em Wed, Jan 27, 2021 at 01:10:40AM +0000, Giuliano Procida escreveu:
 > Hi.
 > 
-> This follows on from my change to improve the error handling around
-> llvm-objcopy in libbtf.c.
+> On Tue, 26 Jan 2021 at 19:56, Jiri Olsa <jolsa@redhat.com> wrote:
+> >
+> > On Mon, Jan 25, 2021 at 01:06:21PM +0000, Giuliano Procida wrote:
+> > > Hi.
+> > >
+> > > This follows on from my change to improve the error handling around
+> > > llvm-objcopy in libbtf.c.
+> > >
+> > > Note on recipients: Please let me know if I should adjust To or CC.
+> > >
+> > > Note on style: I've generally placed declarations as allowed by C99,
+> > > closest to point of use. Let me know if you'd prefer otherwise.
+> > >
+> > > 1. Improve ELF error reporting
+> > >
+> > > 2. Add .BTF section using libelf
+> > >
+> > > This shows the minimal amount of code needed to drive libelf. However,
+> > > it leaves layout up to libelf, which is almost certainly not wanted.
+> > >
+> > > As an unexpcted side-effect, vmlinux is larger than before. It seems
+> > > llvm-objcopy likes to trim down .strtab.
+> > >
+> > > 3. Manually lay out updated ELF sections
+> > >
+> > > This does full layout of new and updated ELF sections. If the update
+> > > ELF sections were not the last ones in the file by offset, then it can
+> > > leave gaps between sections.
+> > >
+> > > 4. Align .BTF section to 8 bytes
+> > >
+> > > This was my original aim.
+> > >
+> > > Regards.
+> > >
+> > > Giuliano Procida (4):
+> > >   btf_encoder: Improve ELF error reporting
+> > >   btf_encoder: Add .BTF section using libelf
+> > >   btf_encoder: Manually lay out updated ELF sections
+> > >   btf_encoder: Align .BTF section to 8 bytes
+> >
+> > hi,
+> > I can't apply this on dwarves git master, which commit is it based on?
+> >
 > 
-> Note on recipients: Please let me know if I should adjust To or CC.
+> It's based on:
+> https://www.spinics.net/lists/dwarves/msg00775.html (0/3)
+> https://www.spinics.net/lists/dwarves/msg00774.html (1/3, unrelated fix)
+> https://www.spinics.net/lists/dwarves/msg00773.html (2/3, this is the
+> one you'll need for a clean git am; obsoleted by this new series)
+> (3/3 was abandoned)
 > 
-> Note on style: I've generally placed declarations as allowed by C99,
-> closest to point of use. Let me know if you'd prefer otherwise.
-> 
-> 1. Improve ELF error reporting
-> 
-> 2. Add .BTF section using libelf
-> 
-> This shows the minimal amount of code needed to drive libelf. However,
-> it leaves layout up to libelf, which is almost certainly not wanted.
-> 
-> As an unexpcted side-effect, vmlinux is larger than before. It seems
-> llvm-objcopy likes to trim down .strtab.
-> 
-> 3. Manually lay out updated ELF sections
-> 
-> This does full layout of new and updated ELF sections. If the update
-> ELF sections were not the last ones in the file by offset, then it can
-> leave gaps between sections.
-> 
-> 4. Align .BTF section to 8 bytes
-> 
-> This was my original aim.
-> 
-> Regards.
-> 
-> Giuliano Procida (4):
->   btf_encoder: Improve ELF error reporting
->   btf_encoder: Add .BTF section using libelf
->   btf_encoder: Manually lay out updated ELF sections
->   btf_encoder: Align .BTF section to 8 bytes
+> Arnaldo did say the two commits were applied... but perhaps they
+> haven't been pushed to public master yet.
 
-hi,
-I can't apply this on dwarves git master, which commit is it based on?
+I pushed what I have now, please check if anything is missing.
+
+I'm now working on DWARF4's DW_AT_data_bit_offset, that gcc uses when
+dwarf-5 is asked for, I should have something usable tomorrow and
+hopefully this will be the last stuff to get into 1.20.
+
+dd
 
 thanks,
-jirka
 
+- Arnaldo
+ 
+> > thanks,
+> > jirka
+> >
 > 
->  libbtf.c | 222 +++++++++++++++++++++++++++++++++++++++++++------------
->  1 file changed, 175 insertions(+), 47 deletions(-)
+> You're welcome.
+> Giuliano.
 > 
-> -- 
-> 2.30.0.280.ga3ce27912f-goog
-> 
+> > >
+> > >  libbtf.c | 222 +++++++++++++++++++++++++++++++++++++++++++------------
+> > >  1 file changed, 175 insertions(+), 47 deletions(-)
+> > >
+> > > --
+> > > 2.30.0.280.ga3ce27912f-goog
+> > >
+> >
 
+-- 
+
+- Arnaldo
