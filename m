@@ -2,150 +2,219 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+X-Spam-Status: No, score=-23.2 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL
-	autolearn=ham autolearn_force=no version=3.4.0
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5D965C433DB
-	for <linux-dwarves@archiver.kernel.org>; Wed, 27 Jan 2021 14:39:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 002B0C433E6
+	for <linux-dwarves@archiver.kernel.org>; Wed, 27 Jan 2021 15:10:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1006B207B1
-	for <linux-dwarves@archiver.kernel.org>; Wed, 27 Jan 2021 14:39:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B786C2075A
+	for <linux-dwarves@archiver.kernel.org>; Wed, 27 Jan 2021 15:10:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231635AbhA0Ojq (ORCPT
+        id S1343701AbhA0PKg (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Wed, 27 Jan 2021 09:39:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46204 "EHLO
+        Wed, 27 Jan 2021 10:10:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233455AbhA0OiE (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Wed, 27 Jan 2021 09:38:04 -0500
-Received: from mail-ua1-x92a.google.com (mail-ua1-x92a.google.com [IPv6:2607:f8b0:4864:20::92a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A67C5C061574
-        for <dwarves@vger.kernel.org>; Wed, 27 Jan 2021 06:37:24 -0800 (PST)
-Received: by mail-ua1-x92a.google.com with SMTP id v23so794518uam.8
-        for <dwarves@vger.kernel.org>; Wed, 27 Jan 2021 06:37:24 -0800 (PST)
+        with ESMTP id S1343702AbhA0PKB (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Wed, 27 Jan 2021 10:10:01 -0500
+Received: from mail-vk1-xa33.google.com (mail-vk1-xa33.google.com [IPv6:2607:f8b0:4864:20::a33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 132D4C061574
+        for <dwarves@vger.kernel.org>; Wed, 27 Jan 2021 07:09:17 -0800 (PST)
+Received: by mail-vk1-xa33.google.com with SMTP id u22so559483vke.9
+        for <dwarves@vger.kernel.org>; Wed, 27 Jan 2021 07:09:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=EtILFTNEz8iVTTdeOXdcPp1dQ1vKJAm8qihRs1n7DDI=;
-        b=QOqLhzI4j2bnUkaT+Ka1/dppFIAucuP+/zQQWoRMj+1w88FA3SP+JN19PdNQA/F8i7
-         z5yYhAoiTHOpBDWXgjtI5+K9Pjxp33P2Fbh7jZZq7+rJ7iYnpzgtQZpRB0GsgLTGCMOd
-         cU5mLmhMF+UMnJeNJ4V9xbT6roI02WT9o23oUqYipUCleEuQ7LKksrQnfLHjiMQEP5TH
-         mGVlXzdopA3kTmRqZBhLpqp2eapBXz2wDBmnd4pXRayAuRaOExJt7zfm6weOl8z7Q4y7
-         9UyKIkD8PwPmgcxmwoLgzLGnMUQg8mbbBflsCZsM6UrTd56N/sy994dwrLPr7k6eZCm2
-         iwIQ==
+         :cc:content-transfer-encoding;
+        bh=VWuvj3onwL5E8A+RzsQ7+jyLFxjrQdIWwV4dMSub7rw=;
+        b=wP+y1wLcmwDJf2N6jKTc4y9duxd/vKitk09bwCH7uybKVpXiyRZJ4KF3U74FTjtVj6
+         0AIVqnbxEcG6k76u5VhLHsbFqXJi5dIxK2bL+aKmi/F1G7ZWxgODl4y+J8wfM0vFe2jX
+         P7fKB4EvxnzcPTiAXcB0qpmI01TZ0uyQ4fQY3ZxeH3rOKd0+YPnvC7f/e3QEBwbhGsEC
+         71gTVQQDGcUtn4ZBFCYULLKMhzyd7nh1Foa/sEBccMmHu1Wrj5YOy87UEdqTaraYz02L
+         RR0Ox+Cs0rlrwPZ3Euz6HPn3U8Y12OFIHkYGtNSaVDI/wnhAh3YYdReKmEjOnyW2+nkn
+         5B+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=EtILFTNEz8iVTTdeOXdcPp1dQ1vKJAm8qihRs1n7DDI=;
-        b=P+ULm+5aLoT85kMHE/wa9Z1MxSCPDa4zNe/WDMfKXNi3+iU2Jam7cmtd8xD8MoYNr/
-         FHi1igg+w06sV2Ye1cUuWav2RGtFDTWgbJQtk+IuhCPR/GZZMGCreCYuq7adv/YfoTXn
-         LxZu7kFIhymSugujOFAyn+Bn2X92maQaX1spAgg9gvyS55/XBlkO1SlECoNVdv80Gx6q
-         W6m11Bi+w7YEWPzYgpMRaEFFYCpPaUNMbBeICeOl8eY/6PKdDk5PRKCxC1AKalCHjWRu
-         Q694JFBkNlWOa3GzFy0WfcyiublExI174CkQwZBRg5fpvY0KIQ0ubVzMrrotjabBGSeq
-         324A==
-X-Gm-Message-State: AOAM5338aUznxJHnf5vZ9wifvCRikqKOvsWAtCBVT/7XamRXHeU2NP6p
-        vdq9fjNIpXIShBfXysSgNpJ+QvrAch9FPAhJY7CjgNfz6+yMuA==
-X-Google-Smtp-Source: ABdhPJzxNIzkW73+JYoSNgRoyIz9qs0zBbVPyoONK/ChLmDxMXd9AqMEoQqDlFZQ16yfb5G5vYXIZ/DbUE7v9I52K9Q=
-X-Received: by 2002:ab0:7193:: with SMTP id l19mr7925196uao.84.1611758243453;
- Wed, 27 Jan 2021 06:37:23 -0800 (PST)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=VWuvj3onwL5E8A+RzsQ7+jyLFxjrQdIWwV4dMSub7rw=;
+        b=Z0/mwL3rnn5faU6JwBRNoe6fbFVVwAWmSjdVuCgM6+gUspoU/hJS4swlDMO81PewUj
+         Uu9UQ9QKYVvUVRfMiv/iB2xr5wAiggXEjzzMrHSNM28galSBN6es2mX7uke2+/EEkKzZ
+         s5nHBXFRXKZg6FgPLkQR9R1XjssrveGY7Ply41CYsSkcoqOuUaz+JSB00cUFycZR3QRl
+         wWmC4p3euzOi16Cv/ltNBH0/uAMfZZCEus++APfvP7qQeFlegfwEHMDlx5ZfrzwJLTeU
+         Tv4eWGzStv4IGe2TXd8RxvSBFSXp7bC8/xrWG1BWCDiUghjvetWmREbx60xB89FPMG5L
+         1myw==
+X-Gm-Message-State: AOAM5337U++rTWv8URcpyvzisqkQjsum0jt8Nl+wW46PmOB7aIyTZFh3
+        PUsIj4wU+4/A4j1cIaZJDEjYQJymWPpXrXrJN5wMAw==
+X-Google-Smtp-Source: ABdhPJwWcey/Da92zydDzbiiuQDWwjS9fB/PdUrYSOldcCYGnJjFzLzmH5xbljlMckIrQz+FEYIFfeiI51E8cwGxdOE=
+X-Received: by 2002:ac5:cf1e:: with SMTP id y30mr3375321vke.18.1611760155757;
+ Wed, 27 Jan 2021 07:09:15 -0800 (PST)
 MIME-Version: 1.0
-References: <20210125130625.2030186-1-gprocida@google.com> <20210127140601.GA752795@kernel.org>
-In-Reply-To: <20210127140601.GA752795@kernel.org>
+References: <20210118160139.1971039-1-gprocida@google.com> <20210118160139.1971039-4-gprocida@google.com>
+ <CAEf4BzazvC9H=K_A9KamGTB3iKtjuNxd4hEvwFOnkPdnszo6Bw@mail.gmail.com>
+ <CAGvU0HmE+gs8eNQcXmFrEERHaiGEnMgqxBho4Ny3DLCe6WR55Q@mail.gmail.com> <CAEf4BzZQvLofuVHPqu1ybsTVrM9pFRCRSR5UEFdNJq3Ha8=Luw@mail.gmail.com>
+In-Reply-To: <CAEf4BzZQvLofuVHPqu1ybsTVrM9pFRCRSR5UEFdNJq3Ha8=Luw@mail.gmail.com>
 From:   Giuliano Procida <gprocida@google.com>
-Date:   Wed, 27 Jan 2021 14:36:45 +0000
-Message-ID: <CAGvU0HmeMBHjfEp6Bgkx9RksaW5xo2H83T+VyJZMHQ25Z_Zdyg@mail.gmail.com>
-Subject: Re: [PATCH dwarves 0/4] BTF ELF writing changes
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     dwarves@vger.kernel.org, Andrii Nakryiko <andrii@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
+Date:   Wed, 27 Jan 2021 15:08:38 +0000
+Message-ID: <CAGvU0HkuZ_AW_YTjsdsivWV+wF3kf49ugChzMdRjZnrYzwVB3A@mail.gmail.com>
+Subject: Re: [PATCH 3/3] btf_encoder: Set .BTF section alignment to 16
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     dwarves@vger.kernel.org, kernel-team@android.com,
         =?UTF-8?Q?Matthias_M=C3=A4nnich?= <maennich@google.com>,
-        kernel-team@android.com, Kernel Team <kernel-team@fb.com>,
-        bpf <bpf@vger.kernel.org>
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
+        Kernel Team <kernel-team@fb.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-Hi.
+Hi Andrii.
 
-On Wed, 27 Jan 2021 at 14:06, Arnaldo Carvalho de Melo <acme@kernel.org> wrote:
+On Thu, 21 Jan 2021 at 20:08, Andrii Nakryiko <andrii.nakryiko@gmail.com> w=
+rote:
 >
-> Em Mon, Jan 25, 2021 at 01:06:21PM +0000, Giuliano Procida escreveu:
+> On Thu, Jan 21, 2021 at 3:07 AM Giuliano Procida <gprocida@google.com> wr=
+ote:
+> >
 > > Hi.
 > >
-> > This follows on from my change to improve the error handling around
-> > llvm-objcopy in libbtf.c.
+> > On Thu, 21 Jan 2021 at 07:16, Andrii Nakryiko <andrii.nakryiko@gmail.co=
+m> wrote:
+> >>
+> >> On Mon, Jan 18, 2021 at 8:01 AM Giuliano Procida <gprocida@google.com>=
+ wrote:
+> >> >
+> >> > This is to avoid misaligned access when memory-mapping ELF sections.
+> >> >
+> >> > Signed-off-by: Giuliano Procida <gprocida@google.com>
+> >> > ---
+> >> >  libbtf.c | 8 ++++++++
+> >> >  1 file changed, 8 insertions(+)
+> >> >
+> >> > diff --git a/libbtf.c b/libbtf.c
+> >> > index 7552d8e..2f12d53 100644
+> >> > --- a/libbtf.c
+> >> > +++ b/libbtf.c
+> >> > @@ -797,6 +797,14 @@ static int btf_elf__write(const char *filename,=
+ struct btf *btf)
+> >> >                         goto unlink;
+> >> >                 }
+> >> >
+> >> > +               snprintf(cmd, sizeof(cmd), "%s --set-section-alignme=
+nt .BTF=3D16 %s",
+> >> > +                        llvm_objcopy, filename);
+> >>
+> >> does it align inside the ELF file to 16 bytes, or does it request the
+> >> linker to align it at 16 byte alignment in memory? Given .BTF section
+> >> is not loadable, trying to understand the implications.
+> >>
 > >
-> > Note on recipients: Please let me know if I should adjust To or CC.
+> > We have a tool that loads BTF from ELF files. It uses mmap and "parses"=
+ the BTF as structs in memory. The ELF file is mapped with page alignment b=
+ut the BTF section within it has no alignment at all. Using MSAN (IIRC) we =
+get warnings about misaligned accesses. Everything within BTF itself is nat=
+urally aligned, so it makes sense to align the section within ELF as well. =
+There are probably some architectures where this makes the difference betwe=
+en working and SIGBUS.
 > >
-> > Note on style: I've generally placed declarations as allowed by C99,
-> > closest to point of use. Let me know if you'd prefer otherwise.
-> >
-> > 1. Improve ELF error reporting
 >
-> applied
+> Right, ok, thanks for explaining!
 >
-> > 2. Add .BTF section using libelf
+> > I did try to get objcopy to set alignment at the point the section is a=
+dded. However, this didn't work.
 > >
-> > This shows the minimal amount of code needed to drive libelf. However,
-> > it leaves layout up to libelf, which is almost certainly not wanted.
+> >>
+> >>
+> >> > +               if (system(cmd)) {
+> >>
+> >> Also curious, if objcopy emits error (saying that
+> >> --set-section-alignment argument is not recognized), will that error
+> >> be shown in stdout? or system() consumes it without redirecting it to
+> >> stdout?
+> >>
 > >
-> > As an unexpcted side-effect, vmlinux is larger than before. It seems
-> > llvm-objcopy likes to trim down .strtab.
+> > I believe it goes to stderr. I would need to check. system() will not c=
+onsume this. I'm not keen to write stderr (or stdout) post-processing code =
+in plain C.
+> >
 >
-> We have to test this thoroughly, I'm adding support to gcc's -gdwarf-5
-> DW_AT_data_bit_offset, I think I should get that done and release 1.20,
-> if some bug is still left on that new code, we can just fallback to
-> -gdwarf-4.
+> You can use popen() to capture/hide output, this is a better
+> alternative to system() in this case. We don't want "expected
+> warnings" in kernel build process.
 >
-> Then get back to the last 2 patches in your series, ok?
+> >>
+> >> > +                       /* non-fatal, this is a nice-to-have and it'=
+s only supported from LLVM 10 */
+> >> > +                       fprintf(stderr, "%s: warning: failed to alig=
+n .BTF section in '%s': %d!\n",
+> >> > +                               __func__, filename, errno);
+> >>
+> >> Probably better to emit this warning only in verbose mode, otherwise
+> >> lots of people will start complaining that they get some new warnings
+> >> from pahole.
+> >>
+> >
+> > It may be better to just use POSIX and ELF APIs directly instead of obj=
+copy. This way the section can be added with the right alignment directly. =
+pahole is already linked against libelf and if we could get rid of the exte=
+rnal dependency on objcopy it would be a win in more than one way.
+>
+> This would be great, yes. At some point I remember giving it a try,
+> but for some reason I couldn't make libelf flush data and update
+> section headers properly. Maybe you'll have better luck. Though I
+> think I was trying to mark section loadable, and eventually I probably
+> managed to do that, but still abandoned it (it's not enough to mark
+> section loadable, you have to assign it to ELF segment as well, which
+> libelf doesn't allow to do and you need linker support). Anyways, give
+> it a try, it should work.
 >
 
-That's fine.
+I found 341dfcf8d78eaa3a2dc96dea06f0392eb2978364 ("btf: expose BTF
+info through sysfs") and I now see what you mean.
 
-I've spent a little time digging into what llvm-objcopy (11.0.0) is
-doing. It turns out it will rewrite an ELF file even if you just do
-llvm-objcopy --dump-section .strtab=/dev/null elf_file, and even if
-the file is not writable.
+Alignment of .BTF as produced by the linker script is currently not
+down to pahole at all. The kernel link script has to add .BTF in a
+rather roundabout way because it needs to be added as a loadable
+segment and pahole only adds it as a plain section.
 
-Our AOSP kernels have a lot symbols filtered out of the symbol table
-and perhaps this is what makes such a difference to the size of
-.strtab after llvm-objcopy has done its thing. I will try on a vanilla
-kernel.
+pahole's does this using llvm-objcopy (which I spotted has some
+side-effects on our AOSP vmlinux). On vanilla kernels, while
+llvm-objcopy doesn't rewrite (or at least, resize) .strtab, it does
+renumber sections so that the offset order is monotonic.
 
+We're working with .BTF in userspace and haven't needed .BTF as a
+segment. If I managed to get pahole to make .BTF a loadable segment as
+well, then the linker scripts could be simplified. I'll see if I can
+do this part as well.
+
+Regards,
 Giuliano.
 
-> - Arnaldo
->
-> > 3. Manually lay out updated ELF sections
 > >
-> > This does full layout of new and updated ELF sections. If the update
-> > ELF sections were not the last ones in the file by offset, then it can
-> > leave gaps between sections.
+> >>
+> >>
+> >> > +               }
+> >> > +
+> >> >                 err =3D 0;
+> >> >         unlink:
+> >> >                 unlink(tmp_fn);
+> >> > --
+> >> > 2.30.0.284.gd98b1dd5eaa7-goog
+> >> >
 > >
-> > 4. Align .BTF section to 8 bytes
 > >
-> > This was my original aim.
+> > I'll see if I can spend a little time on this idea instead.
 > >
-> > Regards.
-> >
-> > Giuliano Procida (4):
-> >   btf_encoder: Improve ELF error reporting
-> >   btf_encoder: Add .BTF section using libelf
-> >   btf_encoder: Manually lay out updated ELF sections
-> >   btf_encoder: Align .BTF section to 8 bytes
-> >
-> >  libbtf.c | 222 +++++++++++++++++++++++++++++++++++++++++++------------
-> >  1 file changed, 175 insertions(+), 47 deletions(-)
-> >
-> > --
-> > 2.30.0.280.ga3ce27912f-goog
-> >
+> > Regards,
+> > Giuliano.
 >
 > --
+> To unsubscribe from this group and stop receiving emails from it, send an=
+ email to kernel-team+unsubscribe@android.com.
 >
-> - Arnaldo
