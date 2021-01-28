@@ -2,226 +2,379 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+X-Spam-Status: No, score=-21.3 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2E0D6C433E0
-	for <linux-dwarves@archiver.kernel.org>; Wed, 27 Jan 2021 23:27:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B06AAC433E0
+	for <linux-dwarves@archiver.kernel.org>; Thu, 28 Jan 2021 12:12:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EC20364DD0
-	for <linux-dwarves@archiver.kernel.org>; Wed, 27 Jan 2021 23:27:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5B51164DCC
+	for <linux-dwarves@archiver.kernel.org>; Thu, 28 Jan 2021 12:12:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235968AbhA0X1J (ORCPT
+        id S231151AbhA1MMI (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Wed, 27 Jan 2021 18:27:09 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:42577 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235639AbhA0XYz (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Wed, 27 Jan 2021 18:24:55 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1611789808;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=XUU+ROeZFNZ36N8KcgUEXmIJUynEXm9qXEZ9l8dah6Y=;
-        b=jKMIxn+f9MV93TN6YskNYTlf9ERdThNlWIF2xgBjGw1MZ4JDy/iofVCJnBoFM3ezxIzz1X
-        715uYqUxknP8/CJWotoGAvYh6IYQ+wulPRK56z446A5ln7hPY7b52ivLrHjBOMpa2UHcaU
-        LriP7Qn7NOUXDwT1zUV2kJMznlyckRk=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-481-fnZ2riGoNCaO9mMS5b5A7w-1; Wed, 27 Jan 2021 18:23:24 -0500
-X-MC-Unique: fnZ2riGoNCaO9mMS5b5A7w-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id D1F8B8017DF;
-        Wed, 27 Jan 2021 23:23:22 +0000 (UTC)
-Received: from krava (ovpn-112-48.ams2.redhat.com [10.36.112.48])
-        by smtp.corp.redhat.com (Postfix) with SMTP id 00E235C1BB;
-        Wed, 27 Jan 2021 23:23:20 +0000 (UTC)
-Date:   Thu, 28 Jan 2021 00:23:20 +0100
-From:   Jiri Olsa <jolsa@redhat.com>
-To:     Giuliano Procida <gprocida@google.com>
-Cc:     dwarves@vger.kernel.org, acme@kernel.org, andrii@kernel.org,
-        ast@kernel.org, maennich@google.com, kernel-team@android.com,
-        kernel-team@fb.com, bpf@vger.kernel.org
-Subject: Re: [PATCH dwarves 2/4] btf_encoder: Add .BTF section using libelf
-Message-ID: <20210127232320.GA295637@krava>
-References: <20210125130625.2030186-1-gprocida@google.com>
- <20210125130625.2030186-3-gprocida@google.com>
+        Thu, 28 Jan 2021 07:12:08 -0500
+Received: from mail.kernel.org ([198.145.29.99]:51072 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229852AbhA1MMH (ORCPT <rfc822;dwarves@vger.kernel.org>);
+        Thu, 28 Jan 2021 07:12:07 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 8FFA064DDD;
+        Thu, 28 Jan 2021 12:11:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1611835886;
+        bh=xM5cLiayNryHstVPBnLIE8vTsekX8sgaOfafKEWyEJE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=sg5G3hqWo9K2ecHdM3/OcSeDheIsVA2hweKPv+ObAntbpYthe/CcQY9UhPLZR7A+R
+         gJxsZqa0qG+HTB8Jul9ox9Sc/dtbFh2vj8qlgdscSAEiR1wIGTuEyLb0pJBVcCjoKx
+         7dH26s2+qxwXAGYPkdBsBni8l0wpaVbfW0fzdNBjckutRjiHnXtxfDx5wzHbj/QozY
+         VS8B3SWuMgUoNopKjF+lbe2U++906O8Qf1MoWBr/glCuZwwI2fJ6mZxGNvedL4ECKQ
+         w9UfpEvNbAUh+UGb25YRLzRvXnGSLZef7EHOMpRIOFxFOcmyFAjnN1pQ6tW7bbvTx5
+         VpitcxMN13VdA==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id E3FFF40513; Thu, 28 Jan 2021 09:11:22 -0300 (-03)
+Date:   Thu, 28 Jan 2021 09:11:22 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Mark Wielaard <mark@klomp.org>
+Cc:     Daniel =?iso-8859-1?Q?Berrang=E9?= <berrange@redhat.com>,
+        dwarves@vger.kernel.org
+Subject: [PATCH/RFC] Re: DWARF5 DW_AT_data_bit_offset
+Message-ID: <20210128121122.GA775562@kernel.org>
+References: <5ee85ca6e3b06b07c83b150912fbcfc1a4c13e19.camel@klomp.org>
+ <20201002211819.GA127275@kernel.org>
+ <20210121113516.GA8492@wildebeest.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210125130625.2030186-3-gprocida@google.com>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
+In-Reply-To: <20210121113516.GA8492@wildebeest.org>
+X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-On Mon, Jan 25, 2021 at 01:06:23PM +0000, Giuliano Procida wrote:
-> pahole -J uses libelf directly when updating a .BTF section. However,
-> it uses llvm-objcopy to add .BTF sections. This commit switches to
-> using libelf for both cases.
-> 
-> This eliminates pahole's dependency on llvm-objcopy. One unfortunate
-> side-effect is that vmlinux actually increases in size. It seems that
-> llvm-objcopy modifies the .strtab section, discarding many strings. I
-> speculate that is it discarding strings not referenced from .symtab
-> and updating the references therein.
-> 
-> In this initial version layout is left completely up to libelf which
-> may be OK for non-loadable object files, but is probably no good for
-> things like vmlinux where all the offsets may change. This is
-> addressed in a follow-up commit.
-> 
-> Signed-off-by: Giuliano Procida <gprocida@google.com>
-> ---
->  libbtf.c | 145 ++++++++++++++++++++++++++++++++++++++-----------------
->  1 file changed, 100 insertions(+), 45 deletions(-)
-> 
-> diff --git a/libbtf.c b/libbtf.c
-> index 9f76283..fb8e043 100644
-> --- a/libbtf.c
-> +++ b/libbtf.c
-> @@ -699,6 +699,7 @@ static int btf_elf__write(const char *filename, struct btf *btf)
->  	uint32_t raw_btf_size;
->  	int fd, err = -1;
->  	size_t strndx;
-> +	void *str_table = NULL;
->  
->  	fd = open(filename, O_RDWR);
->  	if (fd < 0) {
-> @@ -741,74 +742,128 @@ static int btf_elf__write(const char *filename, struct btf *btf)
->  	}
->  
->  	/*
-> -	 * First we look if there was already a .BTF section to overwrite.
-> +	 * First we check if there is already a .BTF section present.
->  	 */
-> -
->  	elf_getshdrstrndx(elf, &strndx);
-> +	Elf_Scn *btf_scn = 0;
+Em Thu, Jan 21, 2021 at 12:35:16PM +0100, Mark Wielaard escreveu:
+> On Fri, Oct 02, 2020 at 06:18:19PM -0300, Arnaldo Carvalho de Melo wrote:
+> > Em Fri, Oct 02, 2020 at 06:11:06PM +0200, Mark Wielaard escreveu:
+> > > Seems pahole with a recent version of elfutils libdw already handles
+> > > most DWARF5 encodings. One thing it doesn't handle yet is
+> > > DW_AT_data_bit_offset (this is actually a DWARF4 thing, but gcc only
+> > > emits it for -gdwarf-5).
 
-NULL
+<SNIP>
 
+> > > $ gcc -gdwarf-5 -c bf.c
+> > > $ ./pahole ./bf.o 
+> > > DW_AT_<0xd>=0x21
+> > > DW_AT_<0xd>=0x21
+> > > DW_AT_<0xd>=0x21
+> > > struct pea {
+> > > 	int                        type;                 /*     0     4 */
+> > > 	static long int                   a;             /*     0     0 */
+> > > 	static long int                   b;             /*     0     0 */
+> > > 	static long int                   c;             /*     0     0 */
+> > > 
+> > > 	/* size: 8, cachelines: 1, members: 1, static members: 3 */
+> > > 	/* padding: 4 */
+> > > 	/* last cacheline: 8 bytes */
+> > > };
 
-SNIP
+> > > Note that GCC11 might default to DWARF5.
 
-> -		const char *llvm_objcopy;
-> -		char tmp_fn[PATH_MAX];
-> -		char cmd[PATH_MAX * 2];
-> -
-> -		llvm_objcopy = getenv("LLVM_OBJCOPY");
-> -		if (!llvm_objcopy)
-> -			llvm_objcopy = "llvm-objcopy";
-> -
-> -		/* Use objcopy to add a .BTF section */
-> -		snprintf(tmp_fn, sizeof(tmp_fn), "%s.btf", filename);
-> -		close(fd);
-> -		fd = creat(tmp_fn, S_IRUSR | S_IWUSR);
-> -		if (fd == -1) {
-> -			fprintf(stderr, "%s: open(%s) failed!\n", __func__,
-> -				tmp_fn);
-> +		/* Add ".BTF" to the section name string table */
-> +		Elf_Data *str_data = elf_getdata(str_scn, NULL);
-> +		if (!str_data) {
-> +			fprintf(stderr, "%s: elf_getdata(str_scn) failed: %s\n",
-> +				__func__, elf_errmsg(elf_errno()));
->  			goto out;
->  		}
-> -
-> -		if (write(fd, raw_btf_data, raw_btf_size) != raw_btf_size) {
-> -			fprintf(stderr, "%s: write of %d bytes to '%s' failed: %d!\n",
-> -				__func__, raw_btf_size, tmp_fn, errno);
-> -			goto unlink;
-> +		dot_btf_offset = str_data->d_size;
-> +		size_t new_str_size = dot_btf_offset + 5;
-> +		str_table = malloc(new_str_size);
-> +		if (!str_table) {
-> +			fprintf(stderr, "%s: malloc(%zu) failed: %s\n", __func__,
-> +				new_str_size, elf_errmsg(elf_errno()));
-> +			goto out;
->  		}
-> +		memcpy(str_table, str_data->d_buf, dot_btf_offset);
-> +		memcpy(str_table + dot_btf_offset, ".BTF", 5);
+> > Thanks for the detailed report, I'm releasing v1.18 right now, will look
+> > into that for v1.19.
 
-hum, I wonder this will always copy the final zero byte
+> Note that GCC11 indeed just switched to producing DWARF5 by default.
+> It is not released yet, but already in stage4 and Fedora will start
+> doing a mass-rebuild with it soon to shake out the last remaining bugs.
 
-> +		str_data->d_buf = str_table;
-> +		str_data->d_size = new_str_size;
-> +		elf_flagdata(str_data, ELF_C_SET, ELF_F_DIRTY);
-> +
-> +		/* Create a new section */
-> +		btf_scn = elf_newscn(elf);
-> +		if (!btf_scn) {
-> +			fprintf(stderr, "%s: elf_newscn failed: %s\n",
-> +			__func__, elf_errmsg(elf_errno()));
-> +			goto out;
-> +		}
-> +		btf_data = elf_newdata(btf_scn);
-> +		if (!btf_data) {
-> +			fprintf(stderr, "%s: elf_newdata failed: %s\n",
-> +			__func__, elf_errmsg(elf_errno()));
-> +			goto out;
-> +		}
-> +	}
->  
-> -		snprintf(cmd, sizeof(cmd), "%s --add-section .BTF=%s %s",
-> -			 llvm_objcopy, tmp_fn, filename);
-> -		if (system(cmd)) {
-> -			fprintf(stderr, "%s: failed to add .BTF section to '%s': %d!\n",
-> -				__func__, filename, errno);
-> -			goto unlink;
-> +	/* (Re)populate the BTF section data */
-> +	raw_btf_data = btf__get_raw_data(btf, &raw_btf_size);
-> +	btf_data->d_buf = (void *)raw_btf_data;
+So, 1.20 will have the fix below, please check if what is in:
 
-doesn't this potentially leak btf_data->d_buf?
+https://git.kernel.org/pub/scm/devel/pahole/pahole.git/log/?h=DW_AT_data_bit_offset
 
-> +	btf_data->d_size = raw_btf_size;
-> +	btf_data->d_type = ELF_T_BYTE;
-> +	btf_data->d_version = EV_CURRENT;
-> +	elf_flagdata(btf_data, ELF_C_SET, ELF_F_DIRTY);
-> +
-> +	/* Update .BTF section in the SHT */
-> +	GElf_Shdr btf_shdr_mem;
-> +	GElf_Shdr *btf_shdr = gelf_getshdr(btf_scn, &btf_shdr_mem);
-> +	if (!btf_shdr) {
-> +		fprintf(stderr, "%s: elf_getshdr(btf_scn) failed: %s\n",
-> +			__func__, elf_errmsg(elf_errno()));
-> +		goto out;
-> +	}
-> +	btf_shdr->sh_entsize = 0;
-> +	btf_shdr->sh_flags = 0;
-> +	if (dot_btf_offset)
-> +		btf_shdr->sh_name = dot_btf_offset;
-> +	btf_shdr->sh_type = SHT_PROGBITS;
-> +	if (!gelf_update_shdr(btf_scn, btf_shdr)) {
-> +		fprintf(stderr, "%s: gelf_update_shdr failed: %s\n",
-> +			__func__, elf_errmsg(elf_errno()));
-> +		goto out;
-> +	}
-> +
-> +	if (elf_update(elf, ELF_C_NULL) < 0) {
-> +		fprintf(stderr, "%s: elf_update (layout) failed: %s\n",
-> +			__func__, elf_errmsg(elf_errno()));
-> +		goto out;
-> +	}
-> +
-> +	size_t phnum = 0;
-> +	if (!elf_getphdrnum(elf, &phnum)) {
-> +		for (size_t ix = 0; ix < phnum; ++ix) {
-> +			GElf_Phdr phdr;
-> +			GElf_Phdr *elf_phdr = gelf_getphdr(elf, ix, &phdr);
-> +			size_t filesz = gelf_fsize(elf, ELF_T_PHDR, 1, EV_CURRENT);
-> +			fprintf(stderr, "type: %d %d\n", elf_phdr->p_type, PT_PHDR);
-> +			fprintf(stderr, "offset: %lu %lu\n", elf_phdr->p_offset, ehdr->e_phoff);
-> +			fprintf(stderr, "filesize: %lu %lu\n", elf_phdr->p_filesz, filesz);
+Fixes it for you, the cset with all the tests performed is this one:
 
-looks like s forgotten debug or you're missing
-btf_elf__verbose check for fprintf calls above
+https://git.kernel.org/pub/scm/devel/pahole/pahole.git/commit/?h=DW_AT_data_bit_offset&id=a77f039bb49bc97badf938049245f013fe3de4aa
 
-jirka
+Now looking at https://bugzilla.redhat.com/show_bug.cgi?id=1919965 ...
 
+For convenience:
+
+commit a77f039bb49bc97badf938049245f013fe3de4aa
+Author: Arnaldo Carvalho de Melo <acme@redhat.com>
+Date:   Thu Jan 28 08:51:31 2021 -0300
+
+    dwarf_loader: Support DW_AT_data_bit_offset
+    
+    This appeared in DWARF4 but is supported only in gcc's -gdwarf-5,
+    support it in a way that makes the output be the same for both cases:
+    
+      $ gcc -gdwarf-4 -c examples/dwarf5/bf.c
+      $ pahole bf.o
+      struct pea {
+            long int                   a:1;                  /*     0: 0  8 */
+            long int                   b:1;                  /*     0: 1  8 */
+            long int                   c:1;                  /*     0: 2  8 */
+    
+            /* XXX 29 bits hole, try to pack */
+            /* Bitfield combined with next fields */
+    
+            int                        after_bitfield;       /*     4     4 */
+    
+            /* size: 8, cachelines: 1, members: 4 */
+            /* sum members: 4 */
+            /* sum bitfield members: 3 bits, bit holes: 1, sum bit holes: 29 bits */
+            /* last cacheline: 8 bytes */
+      };
+      $ gcc -gdwarf-5 -c examples/dwarf5/bf.c
+      $ pahole bf.o
+      struct pea {
+            long int                   a:1;                  /*     0: 0  8 */
+            long int                   b:1;                  /*     0: 1  8 */
+            long int                   c:1;                  /*     0: 2  8 */
+    
+            /* XXX 29 bits hole, try to pack */
+            /* Bitfield combined with next fields */
+    
+            int                        after_bitfield;       /*     4     4 */
+    
+            /* size: 8, cachelines: 1, members: 4 */
+            /* sum members: 4 */
+            /* sum bitfield members: 3 bits, bit holes: 1, sum bit holes: 29 bits */
+            /* last cacheline: 8 bytes */
+      };
+      $
+    
+    Now with an integer before the bitfield:
+    
+      $ cat examples/dwarf5/bf.c
+      struct pea {
+            int before_bitfield;
+            long a:1, b:1, c:1;
+            int after_bitfield;
+      } p;
+      $ gcc -gdwarf-4 -c examples/dwarf5/bf.c
+      $ pahole bf.o
+      struct pea {
+            int                        before_bitfield;      /*     0     4 */
+    
+            /* Bitfield combined with previous fields */
+    
+            long int                   a:1;                  /*     0:32  8 */
+            long int                   b:1;                  /*     0:33  8 */
+            long int                   c:1;                  /*     0:34  8 */
+    
+            /* XXX 29 bits hole, try to pack */
+    
+            int                        after_bitfield;       /*     8     4 */
+    
+            /* size: 16, cachelines: 1, members: 5 */
+            /* sum members: 8 */
+            /* sum bitfield members: 3 bits, bit holes: 1, sum bit holes: 29 bits */
+            /* padding: 4 */
+            /* last cacheline: 16 bytes */
+      };
+      $ gcc -gdwarf-5 -c examples/dwarf5/bf.c
+      $ pahole bf.o
+      struct pea {
+            int                        before_bitfield;      /*     0     4 */
+    
+            /* Bitfield combined with previous fields */
+    
+            long int                   a:1;                  /*     0:32  8 */
+            long int                   b:1;                  /*     0:33  8 */
+            long int                   c:1;                  /*     0:34  8 */
+    
+            /* XXX 29 bits hole, try to pack */
+    
+            int                        after_bitfield;       /*     8     4 */
+    
+            /* size: 16, cachelines: 1, members: 5 */
+            /* sum members: 8 */
+            /* sum bitfield members: 3 bits, bit holes: 1, sum bit holes: 29 bits */
+            /* padding: 4 */
+            /* last cacheline: 16 bytes */
+      };
+      $
+    
+    And an array of long integers at the start, before the combination of an
+    integer with a long integer bitfield:
+    
+      $ cat examples/dwarf5/bf.c
+      struct pea {
+            long array[3];
+            int before_bitfield;
+            long a:1, b:1, c:1;
+            int after_bitfield;
+      } p;
+      $ gcc -gdwarf-4 -c examples/dwarf5/bf.c
+      $ pahole bf.o
+      struct pea {
+            long int                   array[3];             /*     0    24 */
+            int                        before_bitfield;      /*    24     4 */
+    
+            /* Bitfield combined with previous fields */
+    
+            long int                   a:1;                  /*    24:32  8 */
+            long int                   b:1;                  /*    24:33  8 */
+            long int                   c:1;                  /*    24:34  8 */
+    
+            /* XXX 29 bits hole, try to pack */
+    
+            int                        after_bitfield;       /*    32     4 */
+    
+            /* size: 40, cachelines: 1, members: 6 */
+            /* sum members: 32 */
+            /* sum bitfield members: 3 bits, bit holes: 1, sum bit holes: 29 bits */
+            /* padding: 4 */
+            /* last cacheline: 40 bytes */
+      };
+      $ gcc -gdwarf-5 -c examples/dwarf5/bf.c
+      $ pahole bf.o
+      struct pea {
+            long int                   array[3];             /*     0    24 */
+            int                        before_bitfield;      /*    24     4 */
+    
+            /* Bitfield combined with previous fields */
+    
+            long int                   a:1;                  /*    24:32  8 */
+            long int                   b:1;                  /*    24:33  8 */
+            long int                   c:1;                  /*    24:34  8 */
+    
+            /* XXX 29 bits hole, try to pack */
+    
+            int                        after_bitfield;       /*    32     4 */
+    
+            /* size: 40, cachelines: 1, members: 6 */
+            /* sum members: 32 */
+            /* sum bitfield members: 3 bits, bit holes: 1, sum bit holes: 29 bits */
+            /* padding: 4 */
+            /* last cacheline: 40 bytes */
+      };
+      $
+    
+    Reported-by: Mark Wielaard <mark@klomp.org>
+    Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+
+diff --git a/dwarf_loader.c b/dwarf_loader.c
+index 8d27e4fc236b9575..ac22c1b0883ddee6 100644
+--- a/dwarf_loader.c
++++ b/dwarf_loader.c
+@@ -776,27 +776,36 @@ static struct class_member *class_member__new(Dwarf_Die *die, struct cu *cu,
+ 
+ 		Dwarf_Attribute attr;
+ 
+-		if (dwarf_attr(die, DW_AT_data_member_location, &attr) != NULL) {
+-			member->byte_offset = __attr_offset(&attr);
++		member->has_bit_offset = dwarf_attr(die, DW_AT_data_bit_offset, &attr) != NULL;
++
++		if (member->has_bit_offset) {
++			member->bit_offset = __attr_offset(&attr);
++			// byte_offset and bitfield_offset will be recalculated later, when
++			// we discover the size of this bitfield base type.
+ 		} else {
+-			member->is_static = !in_union;
++			if (dwarf_attr(die, DW_AT_data_member_location, &attr) != NULL) {
++				member->byte_offset = __attr_offset(&attr);
++			} else {
++				member->is_static = !in_union;
++			}
++
++			/*
++			 * Bit offset calculated here is valid only for byte-aligned
++			 * fields. For bitfields on little-endian archs we need to
++			 * adjust them taking into account byte size of the field,
++			 * which might not be yet known. So we'll re-calculate bit
++			 * offset later, in class_member__cache_byte_size.
++			 */
++			member->bit_offset = member->byte_offset * 8;
++			member->bitfield_offset = attr_numeric(die, DW_AT_bit_offset);
+ 		}
+ 
+-		/*
+-		 * Bit offset calculated here is valid only for byte-aligned
+-		 * fields. For bitfields on little-endian archs we need to
+-		 * adjust them taking into account byte size of the field,
+-		 * which might not be yet known. So we'll re-calculate bit
+-		 * offset later, in class_member__cache_byte_size.
+-		 */
+-		member->bit_offset = member->byte_offset * 8;
+ 		/*
+ 		 * If DW_AT_byte_size is not present, byte size will be
+ 		 * determined later in class_member__cache_byte_size using
+ 		 * base integer/enum type
+ 		 */
+ 		member->byte_size = attr_numeric(die, DW_AT_byte_size);
+-		member->bitfield_offset = attr_numeric(die, DW_AT_bit_offset);
+ 		member->bitfield_size = attr_numeric(die, DW_AT_bit_size);
+ 		member->bit_hole = 0;
+ 		member->bitfield_end = 0;
+@@ -2275,24 +2284,31 @@ static int class_member__cache_byte_size(struct tag *tag, struct cu *cu,
+ 		return 0;
+ 	}
+ 
+-	/*
+-	 * For little-endian architectures, DWARF data emitted by gcc/clang
+-	 * specifies bitfield offset as an offset from the highest-order bit
+-	 * of an underlying integral type (e.g., int) to a highest-order bit
+-	 * of a bitfield. E.g., for bitfield taking first 5 bits of int-backed
+-	 * bitfield, bit offset will be 27 (sizeof(int) - 0 offset - 5 bit
+-	 * size), which is very counter-intuitive and isn't a natural
+-	 * extension of byte offset, which on little-endian points to
+-	 * lowest-order byte. So here we re-adjust bitfield offset to be an
+-	 * offset from lowest-order bit of underlying integral type to
+-	 * a lowest-order bit of a bitfield. This makes bitfield offset
+-	 * a natural extension of byte offset for bitfields and is uniform
+-	 * with how big-endian bit offsets work.
+-	 */
+-	if (cu->little_endian) {
+-		member->bitfield_offset = member->bit_size - member->bitfield_offset - member->bitfield_size;
++	if (!member->has_bit_offset) {
++		/*
++		 * For little-endian architectures, DWARF data emitted by gcc/clang
++		 * specifies bitfield offset as an offset from the highest-order bit
++		 * of an underlying integral type (e.g., int) to a highest-order bit
++		 * of a bitfield. E.g., for bitfield taking first 5 bits of int-backed
++		 * bitfield, bit offset will be 27 (sizeof(int) - 0 offset - 5 bit
++		 * size), which is very counter-intuitive and isn't a natural
++		 * extension of byte offset, which on little-endian points to
++		 * lowest-order byte. So here we re-adjust bitfield offset to be an
++		 * offset from lowest-order bit of underlying integral type to
++		 * a lowest-order bit of a bitfield. This makes bitfield offset
++		 * a natural extension of byte offset for bitfields and is uniform
++		 * with how big-endian bit offsets work.
++		 */
++		if (cu->little_endian)
++			member->bitfield_offset = member->bit_size - member->bitfield_offset - member->bitfield_size;
++
++		member->bit_offset = member->byte_offset * 8 + member->bitfield_offset;
++	} else {
++		// DWARF5 has DW_AT_data_bit_offset, offset in bits from the
++		// start of the container type (struct, class, etc).
++		member->byte_offset = member->bit_offset / 8;
++		member->bitfield_offset = member->bit_offset - member->byte_offset * 8;
+ 	}
+-	member->bit_offset = member->byte_offset * 8 + member->bitfield_offset;
+ 
+ 	/* make sure bitfield offset is non-negative */
+ 	if (member->bitfield_offset < 0) {
+diff --git a/dwarves.h b/dwarves.h
+index 24405b79ac71e686..98caf1abc54d58fa 100644
+--- a/dwarves.h
++++ b/dwarves.h
+@@ -899,6 +899,7 @@ static inline int function__inlined(const struct function *func)
+  * @accessibility - DW_ACCESS_{public,protected,private}
+  * @virtuality - DW_VIRTUALITY_{none,virtual,pure_virtual}
+  * @hole - If there is a hole before the next one (or the end of the struct)
++ * @has_bit_offset: Don't recalcule this, it came from the debug info (DWARF5's DW_AT_data_bit_offset)
+  */
+ struct class_member {
+ 	struct tag	 tag;
+@@ -915,6 +916,7 @@ struct class_member {
+ 	uint32_t	 alignment;
+ 	uint8_t		 visited:1;
+ 	uint8_t		 is_static:1;
++	uint8_t		 has_bit_offset:1;
+ 	uint8_t		 accessibility:2;
+ 	uint8_t		 virtuality:2;
+ 	uint16_t	 hole;
