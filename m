@@ -2,43 +2,44 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.3 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.3 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3D8E0C433DB
-	for <linux-dwarves@archiver.kernel.org>; Thu, 28 Jan 2021 13:49:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 61D75C433DB
+	for <linux-dwarves@archiver.kernel.org>; Thu, 28 Jan 2021 13:55:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D76206146D
-	for <linux-dwarves@archiver.kernel.org>; Thu, 28 Jan 2021 13:49:23 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0E95E6146D
+	for <linux-dwarves@archiver.kernel.org>; Thu, 28 Jan 2021 13:55:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231220AbhA1NtX (ORCPT
+        id S231140AbhA1Nz3 (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Thu, 28 Jan 2021 08:49:23 -0500
-Received: from mail.kernel.org ([198.145.29.99]:40948 "EHLO mail.kernel.org"
+        Thu, 28 Jan 2021 08:55:29 -0500
+Received: from mail.kernel.org ([198.145.29.99]:41528 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231168AbhA1NtW (ORCPT <rfc822;dwarves@vger.kernel.org>);
-        Thu, 28 Jan 2021 08:49:22 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 2AD7B64DD6;
-        Thu, 28 Jan 2021 13:48:41 +0000 (UTC)
+        id S231136AbhA1Nz2 (ORCPT <rfc822;dwarves@vger.kernel.org>);
+        Thu, 28 Jan 2021 08:55:28 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 0A6236146D;
+        Thu, 28 Jan 2021 13:54:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1611841721;
-        bh=jxPJ0qG9WPpvkas9lFLuFsdz8oHGmnXbPvAJlZcudl4=;
+        s=k20201202; t=1611842088;
+        bh=hsAElpHHVBfFqehHkIFubwJF0VRfthPp3XHlbrYin5Q=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YBpfIaPfIQcDabXyRsuMQVrMmXe0BI05ojqQNPmHP8nrZ2GE5Uxp9sh5wJPSoYnK3
-         fQ4B7UACrMGF+XE3vCKs6eqZBMuhnge1+NoZi/S38n571V+9UlveBH5pxDMOQ57Kvf
-         3cywYWPnZfxxXTJ+pN3sp6TQ0tH7qkHQhEV1JhPSB0aVRKzen2iAq6pyX7wBznTXtC
-         9iIK0VT3/zpdkD/YAfVQ77BFiHwrQZsPHJTyINfq+M39ADDCGRw00EUt0tvWtFMbfd
-         RR8QBMs9w5FwhlZLvvgwXIyPlidJrcCC6el6uDiqaCCqUxbHOSkuQBnJcbj3pmiukK
-         ypyyxNqaruRvQ==
+        b=RjxIXSBid0yn6kZj5VS36BhbhtbhKSHsy20lIpL8uDXPsKk7XPYBXG3CSeCQfTE2+
+         PyetFclEPB++Za3PSV8n6HLIkxOxFfza3nCFuby7C6PDobousjA2YbaHNd5QDomJT1
+         1DnWBIB61fNjoBwCH0mLwvKxUMytFkihMU/ZZQDcv3ITCN0i6Z9TtasXKFiEPPd/V7
+         y8KK4UZ/FQuBBVTJoA/WhOryqLYNv5N+iSqFtOCqHlMz/bCfL8+IGMOYh/oCJRzo9g
+         24TNPgBNO1qR6ygu6PA4AyQuC8xsNwxGStOH5mkusBkLED90gG+lF6YxZ3qTjJi7BR
+         ef4M0xgmQCK2Q==
 Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id A2FFA40513; Thu, 28 Jan 2021 10:48:37 -0300 (-03)
-Date:   Thu, 28 Jan 2021 10:48:37 -0300
+        id 366AE40513; Thu, 28 Jan 2021 10:54:45 -0300 (-03)
+Date:   Thu, 28 Jan 2021 10:54:45 -0300
 From:   Arnaldo Carvalho de Melo <acme@kernel.org>
 To:     Daniel =?iso-8859-1?Q?P=2E_Berrang=E9?= <berrange@redhat.com>
 Cc:     Mark Wielaard <mark@klomp.org>, dwarves@vger.kernel.org
 Subject: Re: [PATCH/RFC] Re: DWARF5 DW_AT_data_bit_offset
-Message-ID: <20210128134837.GE775562@kernel.org>
+Message-ID: <20210128135445.GF775562@kernel.org>
 References: <5ee85ca6e3b06b07c83b150912fbcfc1a4c13e19.camel@klomp.org>
  <20201002211819.GA127275@kernel.org>
  <20210121113516.GA8492@wildebeest.org>
@@ -104,7 +105,19 @@ Em Thu, Jan 28, 2021 at 12:54:43PM +0000, Daniel P. Berrangé escreveu:
 > The XDR generated code example I give in that bug *does* appear
 > to be fixed when using your  DW_AT_data_bit_offset branch.
 
-Thanks for checking, I'll double check on my side now, got sidetracked
-in the last hour with perf patch processing :-)
+[acme@five berrange]$ rpcgen  -c admin.x > admin.c
+[acme@five berrange]$ rpcgen  -h admin.x > admin.h
+[acme@five berrange]$ gcc -gdwarf-4 -c `pkg-config --cflags --libs libtirpc`  -o admin.o admin.c
+[acme@five berrange]$ pdwtags --verbose admin.o > pdwtags.dwarf-4.txt
+[acme@five berrange]$ gcc -gdwarf-5 -c `pkg-config --cflags --libs libtirpc`  -o admin.o admin.c
+[acme@five berrange]$ pdwtags --verbose admin.o > pdwtags.dwarf-5.txt
+[acme@five berrange]$ diff -u pdwtags.dwarf-4.txt pdwtags.dwarf-5.txt
+[acme@five berrange]$
+
+I'll go ahead and add a:
+
+Acked-by: "Daniel P. Berrangé" <berrange@redhat.com>
+
+Ok?
 
 - Arnaldo
