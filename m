@@ -2,120 +2,254 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.5 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-23.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 27BEEC433DB
-	for <linux-dwarves@archiver.kernel.org>; Thu, 28 Jan 2021 12:56:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B1A82C433DB
+	for <linux-dwarves@archiver.kernel.org>; Thu, 28 Jan 2021 13:37:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D966564D9D
-	for <linux-dwarves@archiver.kernel.org>; Thu, 28 Jan 2021 12:56:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5A9E864DD9
+	for <linux-dwarves@archiver.kernel.org>; Thu, 28 Jan 2021 13:37:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231618AbhA1M4V (ORCPT
+        id S229684AbhA1Ngr (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Thu, 28 Jan 2021 07:56:21 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:28439 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231465AbhA1M4U (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Thu, 28 Jan 2021 07:56:20 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1611838494;
-        h=from:from:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:in-reply-to:in-reply-to:  references:references;
-        bh=MtBbADQiuUSQfzo63sc+64I9NQT25rWvLSQFMMQtrLU=;
-        b=YcuoUX5/R31/6x7TLxZoArVRR2aS3UMRUPZf8A0TPkTzTYjJOsyJiDBeIvEeuRF+5xhrmX
-        tsZPDyEpJVB+hZHgSS+fc/39Fo87FE3RPunRG99uYzBdPnjTB0I/hbVYIlJ3XOMqeqE0ai
-        fNrzBObZLH0JQcvyDd85kBrUPVGUYk4=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-19-iCTKjoaAPoCMCd_Cp56EsA-1; Thu, 28 Jan 2021 07:54:49 -0500
-X-MC-Unique: iCTKjoaAPoCMCd_Cp56EsA-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id BF36D107ACE6;
-        Thu, 28 Jan 2021 12:54:48 +0000 (UTC)
-Received: from redhat.com (ovpn-115-133.ams2.redhat.com [10.36.115.133])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id E6BAA6064B;
-        Thu, 28 Jan 2021 12:54:46 +0000 (UTC)
-Date:   Thu, 28 Jan 2021 12:54:43 +0000
-From:   Daniel =?utf-8?B?UC4gQmVycmFuZ8Op?= <berrange@redhat.com>
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Mark Wielaard <mark@klomp.org>, dwarves@vger.kernel.org
-Subject: Re: [PATCH/RFC] Re: DWARF5 DW_AT_data_bit_offset
-Message-ID: <20210128125443.GI3832029@redhat.com>
-Reply-To: Daniel =?utf-8?B?UC4gQmVycmFuZ8Op?= <berrange@redhat.com>
-References: <5ee85ca6e3b06b07c83b150912fbcfc1a4c13e19.camel@klomp.org>
- <20201002211819.GA127275@kernel.org>
- <20210121113516.GA8492@wildebeest.org>
- <20210128121122.GA775562@kernel.org>
+        Thu, 28 Jan 2021 08:36:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59792 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231833AbhA1Ngp (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Thu, 28 Jan 2021 08:36:45 -0500
+Received: from mail-vk1-xa2d.google.com (mail-vk1-xa2d.google.com [IPv6:2607:f8b0:4864:20::a2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC47BC061756
+        for <dwarves@vger.kernel.org>; Thu, 28 Jan 2021 05:36:04 -0800 (PST)
+Received: by mail-vk1-xa2d.google.com with SMTP id j67so1319675vkh.11
+        for <dwarves@vger.kernel.org>; Thu, 28 Jan 2021 05:36:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=LP5AX6eRuH8975QLRszVCUh5ptrVOePIFc8DADAlkB8=;
+        b=LYRMHghzoSOxp58mGJyIY1ue4hpWokKmchL8eJYX6S4Yn4yMU0dKgESvkWh6csB7kE
+         /SphyjEzTfDjBhmWE782sRJHp8+uyQ4Jv5FuqlaKaw0nQu1vvtr4gulH1FSLgIiZQvG1
+         DP5G1KezT/aWAHReCBtHxVOIxhf5rXFhWTmOxyVSyyOWzh2QmudlaLenON9XvNgI+DBd
+         aiadumbc2Yh68f+i5L4tVBkxoLF+Iy7p64yZsQYT5TCXeWrkiYNKcce1c1GawNHAdk2y
+         zMkC10lDsruaceuw6dK1Wbz8WIF1TWdKd0r4VgSlpYB5HMw0GKxZGRUoC28uvTM4lk+m
+         DKeg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=LP5AX6eRuH8975QLRszVCUh5ptrVOePIFc8DADAlkB8=;
+        b=dNPFMU/gzWGUHIYnpmCN8IIgbxn0HVHEzBgIGY1IEaXBlrU9zedipoX57iZp3etV6r
+         npMtNMTWOrPuSwspWk6AmejwYGPCo/VKXJR62ilFP6Mep6YjMDQYcjH4wpxXflAdTPAz
+         9HsLe2P7BF5kUSsQgeOyA2iaRld03guJrR5NW1dsSoq2NuUWSuCdTczsMRlD4iUSydzx
+         RLaa6xiN1avhDX7SmLjMfSyngP+MLclj0FuhLtX+XMo2miPV1gH+LtyBhEWWap375SQG
+         iIfuxGhWlEBle8QeCQNmA4ZV+9sn9uC3lopdCfLjmp2UvsxwGb1k0zAKOPGCsc5guUbl
+         E07w==
+X-Gm-Message-State: AOAM5321F461PXVQTXvd2aXfv6EoXSJjItg9j6XVF0RzBbmSMqQdA4Pj
+        uzYm3zUCmDUVZqDLhKlU/5r+8vcH0SKL/Hd6viVefA==
+X-Google-Smtp-Source: ABdhPJzrJl0lv8AQQsCgky1R7C8AuHbMCMlbmTrOsZfyGFP5d11u7TR6HgbgipPzX5FObDNGpSamVvy1XWVjyacKT7E=
+X-Received: by 2002:ac5:cf1e:: with SMTP id y30mr6423523vke.18.1611840963767;
+ Thu, 28 Jan 2021 05:36:03 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20210128121122.GA775562@kernel.org>
-User-Agent: Mutt/1.14.6 (2020-07-11)
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+References: <20210125130625.2030186-1-gprocida@google.com> <20210125130625.2030186-3-gprocida@google.com>
+ <20210127232320.GA295637@krava>
+In-Reply-To: <20210127232320.GA295637@krava>
+From:   Giuliano Procida <gprocida@google.com>
+Date:   Thu, 28 Jan 2021 13:35:27 +0000
+Message-ID: <CAGvU0Hn9CMXmYdm65KUeCUHXw6iHe5QRwKN39trNou3OXD_CZA@mail.gmail.com>
+Subject: Re: [PATCH dwarves 2/4] btf_encoder: Add .BTF section using libelf
+To:     Jiri Olsa <jolsa@redhat.com>
+Cc:     dwarves@vger.kernel.org,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        =?UTF-8?Q?Matthias_M=C3=A4nnich?= <maennich@google.com>,
+        kernel-team@android.com, Kernel Team <kernel-team@fb.com>,
+        bpf <bpf@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-On Thu, Jan 28, 2021 at 09:11:22AM -0300, Arnaldo Carvalho de Melo wrote:
-> Em Thu, Jan 21, 2021 at 12:35:16PM +0100, Mark Wielaard escreveu:
-> > On Fri, Oct 02, 2020 at 06:18:19PM -0300, Arnaldo Carvalho de Melo wrote:
-> > > Em Fri, Oct 02, 2020 at 06:11:06PM +0200, Mark Wielaard escreveu:
-> > > > Seems pahole with a recent version of elfutils libdw already handles
-> > > > most DWARF5 encodings. One thing it doesn't handle yet is
-> > > > DW_AT_data_bit_offset (this is actually a DWARF4 thing, but gcc only
-> > > > emits it for -gdwarf-5).
-> 
-> <SNIP>
-> 
-> > > > $ gcc -gdwarf-5 -c bf.c
-> > > > $ ./pahole ./bf.o 
-> > > > DW_AT_<0xd>=0x21
-> > > > DW_AT_<0xd>=0x21
-> > > > DW_AT_<0xd>=0x21
-> > > > struct pea {
-> > > > 	int                        type;                 /*     0     4 */
-> > > > 	static long int                   a;             /*     0     0 */
-> > > > 	static long int                   b;             /*     0     0 */
-> > > > 	static long int                   c;             /*     0     0 */
-> > > > 
-> > > > 	/* size: 8, cachelines: 1, members: 1, static members: 3 */
-> > > > 	/* padding: 4 */
-> > > > 	/* last cacheline: 8 bytes */
-> > > > };
-> 
-> > > > Note that GCC11 might default to DWARF5.
-> 
-> > > Thanks for the detailed report, I'm releasing v1.18 right now, will look
-> > > into that for v1.19.
-> 
-> > Note that GCC11 indeed just switched to producing DWARF5 by default.
-> > It is not released yet, but already in stage4 and Fedora will start
-> > doing a mass-rebuild with it soon to shake out the last remaining bugs.
-> 
-> So, 1.20 will have the fix below, please check if what is in:
-> 
-> https://git.kernel.org/pub/scm/devel/pahole/pahole.git/log/?h=DW_AT_data_bit_offset
-> 
-> Fixes it for you, the cset with all the tests performed is this one:
-> 
-> https://git.kernel.org/pub/scm/devel/pahole/pahole.git/commit/?h=DW_AT_data_bit_offset&id=a77f039bb49bc97badf938049245f013fe3de4aa
-> 
-> Now looking at https://bugzilla.redhat.com/show_bug.cgi?id=1919965 ...
+Hi.
 
-The XDR generated code example I give in that bug *does* appear
-to be fixed when using your  DW_AT_data_bit_offset branch.
+On Wed, 27 Jan 2021 at 23:23, Jiri Olsa <jolsa@redhat.com> wrote:
+>
+> On Mon, Jan 25, 2021 at 01:06:23PM +0000, Giuliano Procida wrote:
+> > pahole -J uses libelf directly when updating a .BTF section. However,
+> > it uses llvm-objcopy to add .BTF sections. This commit switches to
+> > using libelf for both cases.
+> >
+> > This eliminates pahole's dependency on llvm-objcopy. One unfortunate
+> > side-effect is that vmlinux actually increases in size. It seems that
+> > llvm-objcopy modifies the .strtab section, discarding many strings. I
+> > speculate that is it discarding strings not referenced from .symtab
+> > and updating the references therein.
+> >
+> > In this initial version layout is left completely up to libelf which
+> > may be OK for non-loadable object files, but is probably no good for
+> > things like vmlinux where all the offsets may change. This is
+> > addressed in a follow-up commit.
+> >
+> > Signed-off-by: Giuliano Procida <gprocida@google.com>
+> > ---
+> >  libbtf.c | 145 ++++++++++++++++++++++++++++++++++++++-----------------
+> >  1 file changed, 100 insertions(+), 45 deletions(-)
+> >
+> > diff --git a/libbtf.c b/libbtf.c
+> > index 9f76283..fb8e043 100644
+> > --- a/libbtf.c
+> > +++ b/libbtf.c
+> > @@ -699,6 +699,7 @@ static int btf_elf__write(const char *filename, struct btf *btf)
+> >       uint32_t raw_btf_size;
+> >       int fd, err = -1;
+> >       size_t strndx;
+> > +     void *str_table = NULL;
+> >
+> >       fd = open(filename, O_RDWR);
+> >       if (fd < 0) {
+> > @@ -741,74 +742,128 @@ static int btf_elf__write(const char *filename, struct btf *btf)
+> >       }
+> >
+> >       /*
+> > -      * First we look if there was already a .BTF section to overwrite.
+> > +      * First we check if there is already a .BTF section present.
+> >        */
+> > -
+> >       elf_getshdrstrndx(elf, &strndx);
+> > +     Elf_Scn *btf_scn = 0;
+>
+> NULL
+>
+>
+> SNIP
+>
+> > -             const char *llvm_objcopy;
+> > -             char tmp_fn[PATH_MAX];
+> > -             char cmd[PATH_MAX * 2];
+> > -
+> > -             llvm_objcopy = getenv("LLVM_OBJCOPY");
+> > -             if (!llvm_objcopy)
+> > -                     llvm_objcopy = "llvm-objcopy";
+> > -
+> > -             /* Use objcopy to add a .BTF section */
+> > -             snprintf(tmp_fn, sizeof(tmp_fn), "%s.btf", filename);
+> > -             close(fd);
+> > -             fd = creat(tmp_fn, S_IRUSR | S_IWUSR);
+> > -             if (fd == -1) {
+> > -                     fprintf(stderr, "%s: open(%s) failed!\n", __func__,
+> > -                             tmp_fn);
+> > +             /* Add ".BTF" to the section name string table */
+> > +             Elf_Data *str_data = elf_getdata(str_scn, NULL);
+> > +             if (!str_data) {
+> > +                     fprintf(stderr, "%s: elf_getdata(str_scn) failed: %s\n",
+> > +                             __func__, elf_errmsg(elf_errno()));
+> >                       goto out;
+> >               }
+> > -
+> > -             if (write(fd, raw_btf_data, raw_btf_size) != raw_btf_size) {
+> > -                     fprintf(stderr, "%s: write of %d bytes to '%s' failed: %d!\n",
+> > -                             __func__, raw_btf_size, tmp_fn, errno);
+> > -                     goto unlink;
+> > +             dot_btf_offset = str_data->d_size;
+> > +             size_t new_str_size = dot_btf_offset + 5;
+> > +             str_table = malloc(new_str_size);
+> > +             if (!str_table) {
+> > +                     fprintf(stderr, "%s: malloc(%zu) failed: %s\n", __func__,
+> > +                             new_str_size, elf_errmsg(elf_errno()));
+> > +                     goto out;
+> >               }
+> > +             memcpy(str_table, str_data->d_buf, dot_btf_offset);
+> > +             memcpy(str_table + dot_btf_offset, ".BTF", 5);
+>
+> hum, I wonder this will always copy the final zero byte
 
+It should, as strlen(".BTF") == 4.
 
-Regards,
-Daniel
--- 
-|: https://berrange.com      -o-    https://www.flickr.com/photos/dberrange :|
-|: https://libvirt.org         -o-            https://fstop138.berrange.com :|
-|: https://entangle-photo.org    -o-    https://www.instagram.com/dberrange :|
+> > +             str_data->d_buf = str_table;
+> > +             str_data->d_size = new_str_size;
+> > +             elf_flagdata(str_data, ELF_C_SET, ELF_F_DIRTY);
+> > +
+> > +             /* Create a new section */
+> > +             btf_scn = elf_newscn(elf);
+> > +             if (!btf_scn) {
+> > +                     fprintf(stderr, "%s: elf_newscn failed: %s\n",
+> > +                     __func__, elf_errmsg(elf_errno()));
+> > +                     goto out;
+> > +             }
+> > +             btf_data = elf_newdata(btf_scn);
+> > +             if (!btf_data) {
+> > +                     fprintf(stderr, "%s: elf_newdata failed: %s\n",
+> > +                     __func__, elf_errmsg(elf_errno()));
+> > +                     goto out;
+> > +             }
+> > +     }
+> >
+> > -             snprintf(cmd, sizeof(cmd), "%s --add-section .BTF=%s %s",
+> > -                      llvm_objcopy, tmp_fn, filename);
+> > -             if (system(cmd)) {
+> > -                     fprintf(stderr, "%s: failed to add .BTF section to '%s': %d!\n",
+> > -                             __func__, filename, errno);
+> > -                     goto unlink;
+> > +     /* (Re)populate the BTF section data */
+> > +     raw_btf_data = btf__get_raw_data(btf, &raw_btf_size);
+> > +     btf_data->d_buf = (void *)raw_btf_data;
+>
+> doesn't this potentially leak btf_data->d_buf?
 
+I believe libelf owns the original btf_data->d_buf and it could even
+just be a pointer into mmaped memory,  but I will check.
+
+> > +     btf_data->d_size = raw_btf_size;
+> > +     btf_data->d_type = ELF_T_BYTE;
+> > +     btf_data->d_version = EV_CURRENT;
+> > +     elf_flagdata(btf_data, ELF_C_SET, ELF_F_DIRTY);
+> > +
+> > +     /* Update .BTF section in the SHT */
+> > +     GElf_Shdr btf_shdr_mem;
+> > +     GElf_Shdr *btf_shdr = gelf_getshdr(btf_scn, &btf_shdr_mem);
+> > +     if (!btf_shdr) {
+> > +             fprintf(stderr, "%s: elf_getshdr(btf_scn) failed: %s\n",
+> > +                     __func__, elf_errmsg(elf_errno()));
+> > +             goto out;
+> > +     }
+> > +     btf_shdr->sh_entsize = 0;
+> > +     btf_shdr->sh_flags = 0;
+> > +     if (dot_btf_offset)
+> > +             btf_shdr->sh_name = dot_btf_offset;
+> > +     btf_shdr->sh_type = SHT_PROGBITS;
+> > +     if (!gelf_update_shdr(btf_scn, btf_shdr)) {
+> > +             fprintf(stderr, "%s: gelf_update_shdr failed: %s\n",
+> > +                     __func__, elf_errmsg(elf_errno()));
+> > +             goto out;
+> > +     }
+> > +
+> > +     if (elf_update(elf, ELF_C_NULL) < 0) {
+> > +             fprintf(stderr, "%s: elf_update (layout) failed: %s\n",
+> > +                     __func__, elf_errmsg(elf_errno()));
+> > +             goto out;
+> > +     }
+> > +
+> > +     size_t phnum = 0;
+> > +     if (!elf_getphdrnum(elf, &phnum)) {
+> > +             for (size_t ix = 0; ix < phnum; ++ix) {
+> > +                     GElf_Phdr phdr;
+> > +                     GElf_Phdr *elf_phdr = gelf_getphdr(elf, ix, &phdr);
+> > +                     size_t filesz = gelf_fsize(elf, ELF_T_PHDR, 1, EV_CURRENT);
+> > +                     fprintf(stderr, "type: %d %d\n", elf_phdr->p_type, PT_PHDR);
+> > +                     fprintf(stderr, "offset: %lu %lu\n", elf_phdr->p_offset, ehdr->e_phoff);
+> > +                     fprintf(stderr, "filesize: %lu %lu\n", elf_phdr->p_filesz, filesz);
+>
+> looks like s forgotten debug or you're missing
+> btf_elf__verbose check for fprintf calls above
+
+Oops, forgotten debug.
+
+>
+> jirka
+>
+
+Thanks,
+Giuliano.
