@@ -2,121 +2,153 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-23.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 48C48C433E0
-	for <linux-dwarves@archiver.kernel.org>; Thu,  4 Feb 2021 18:38:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 297E8C433E0
+	for <linux-dwarves@archiver.kernel.org>; Thu,  4 Feb 2021 22:08:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 01D6364E06
-	for <linux-dwarves@archiver.kernel.org>; Thu,  4 Feb 2021 18:38:04 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BE3C064F8C
+	for <linux-dwarves@archiver.kernel.org>; Thu,  4 Feb 2021 22:08:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238738AbhBDShq (ORCPT
+        id S229537AbhBDWI3 (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Thu, 4 Feb 2021 13:37:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50684 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239209AbhBDSf3 (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Thu, 4 Feb 2021 13:35:29 -0500
-Received: from mail-ua1-x933.google.com (mail-ua1-x933.google.com [IPv6:2607:f8b0:4864:20::933])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F3E6C06178C
-        for <dwarves@vger.kernel.org>; Thu,  4 Feb 2021 10:34:48 -0800 (PST)
-Received: by mail-ua1-x933.google.com with SMTP id v23so1269659uam.8
-        for <dwarves@vger.kernel.org>; Thu, 04 Feb 2021 10:34:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=eihxO5r/t34DbPHv1BAApe+ovuE0Dvbi7s4289fXd6g=;
-        b=OctQePZZd+NwZFyoBBtGSzDhOZGgU8kUT3Hs98MiL/unuiolbTutE9oFVWAwkNx7c9
-         Q1LTbSMjigJthSLN+YtX02kXrnk5R1NiPGsNUr0eJN3oRS0dx/YBZcVrUUnPaloTrYKX
-         p8Fmi40IUvq9F39USoH7HGcaWJCUx4lRFsaiD9BjAvfX0vvbcGbO1dukQRg8UvvpgV5A
-         wiuEBN4JxbeRN9sNKVPIZ5QUfMIoygQMJtypxnvS/VPRlutT+eS27cbSnAbvYPvSVk8B
-         +ipG8cvvEKI9Cnna5P3WwLyckjt2W7WW73PEpHulFdeThqFhVMofxSgrGlJcqd3c/0+0
-         tfPw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=eihxO5r/t34DbPHv1BAApe+ovuE0Dvbi7s4289fXd6g=;
-        b=O+iar1T7PB+P3j0MCKOpsf/aUK6YIGxZYjOGewwIvzonbmSB78DMlxH2w8uwARpz+0
-         oX8GmPyIDXum0BmCbqLHw4gBH3qf43nhdopnxHf+OZHzJXYIKNZ6/zoNvH2zHzzfiaja
-         ZR0yNgoJuyVNAzPshpEFLH6TKlCU6hixA5WztEooIZHRhwhhAP8Gd7Qk0jBzdQDnXVLP
-         T5K3IySq4KLvIha7o65P+q0rdWrzTy4TG6FVvp/NZykJOJjnhyYiUFQOxIYsRJZjckKi
-         LCUNYWYSPbxUM6x5AaKDOE5UhityRlTwAYlMmjhuXo1UHhaEnr9G64pazfgfSjQfVXV4
-         Oy2g==
-X-Gm-Message-State: AOAM5303eExYaMi9I0nZxruLnM1qju7Co3qS68MwGW12tCKVyCI63Mh1
-        ABbdsI7XJyKjYlIf95/Ss9wHM2ngs6BOiGd94umYEInJw50=
-X-Google-Smtp-Source: ABdhPJwhIwSb8JQXRdT899QtxY5y0uunhas7rYQuzYOsol4WwQjeL3eBJaT8N21+STAZ94zPsHAFp9MVpQGajTymUYc=
-X-Received: by 2002:a9f:248b:: with SMTP id 11mr528653uar.133.1612463687332;
- Thu, 04 Feb 2021 10:34:47 -0800 (PST)
+        Thu, 4 Feb 2021 17:08:29 -0500
+Received: from mail.kernel.org ([198.145.29.99]:55324 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230118AbhBDWIY (ORCPT <rfc822;dwarves@vger.kernel.org>);
+        Thu, 4 Feb 2021 17:08:24 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id DD6CC64E4A;
+        Thu,  4 Feb 2021 22:07:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1612476464;
+        bh=JA5i5CJqYX81a3kjCG1mjmZB3f3ENVDSQ9kAT86kifY=;
+        h=Date:From:To:Cc:Subject:From;
+        b=aPHM6K9RJwsd4Xt8K0gLDMkCF2WhWg5vRgVcnP9Plm2uEKMrW73/LK7erWyBRdS6d
+         5mo4oXt2gAI5yfA2sucrOo/MfQuM49Q+RNUNcfVlKDp6mXY7Pzt8FiDPa6HCDCcvko
+         vEN2UbhPOQO7d10R6rlla77DkRTIGFQRoWmeO+exUfqAoNIN57I34/bgNmjVgL2D6x
+         Rl/JursclME7xtm2PIL8o4cIN1ljQAB1aOjKHN5xA8UUjobeZuS87Z2ZqPo8RNLdsS
+         srRFTHbTAxd6mD/1hWbZD6rQrNzpvEjkwhPpU7JYwOa9KZ9rhOWwYv/ZJxG/PB3SH2
+         hynBsnCqAPVIg==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 32AD640513; Thu,  4 Feb 2021 19:07:41 -0300 (-03)
+Date:   Thu, 4 Feb 2021 19:07:41 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     dwarves@vger.kernel.org
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        bpf@vger.kernel.org, Jiri Olsa <jolsa@kernel.org>,
+        Jan Engelhardt <jengelh@inai.de>,
+        Domenico Andreoli <cavok@debian.org>,
+        Matthias Schwarzott <zzam@gentoo.org>,
+        Andrii Nakryiko <andriin@fb.com>, Yonghong Song <yhs@fb.com>,
+        Mark Wieelard <mjw@redhat.com>,
+        Paul Moore <paul@paul-moore.com>,
+        Ondrej Mosnacek <omosnace@redhat.com>,
+        Daniel =?iso-8859-1?Q?P=2E_Berrang=E9?= <berrange@redhat.com>,
+        Sedat Dilek <sedat.dilek@gmail.com>,
+        Tom Stellard <tstellar@redhat.com>
+Subject: ANNOUNCE: pahole v1.20 (gcc11 DWARF5's default, lots of ELF
+ sections, BTF)
+Message-ID: <20210204220741.GA920417@kernel.org>
 MIME-Version: 1.0
-References: <20210201172530.1141087-1-gprocida@google.com> <20210201172530.1141087-3-gprocida@google.com>
- <CAEf4BzY_xk2H1Eh9h_WiXbqP3O-afiZnmpWf=MtCrqdJeNW+ag@mail.gmail.com>
-In-Reply-To: <CAEf4BzY_xk2H1Eh9h_WiXbqP3O-afiZnmpWf=MtCrqdJeNW+ag@mail.gmail.com>
-From:   Giuliano Procida <gprocida@google.com>
-Date:   Thu, 4 Feb 2021 18:34:10 +0000
-Message-ID: <CAGvU0HmHR0AXKT2=LyD6HWdr79JM9kWjLTZhajjUJx+p2QB0tA@mail.gmail.com>
-Subject: Re: [PATCH dwarves v2 2/4] btf_encoder: Manually lay out updated ELF sections
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     dwarves@vger.kernel.org,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        =?UTF-8?Q?Matthias_M=C3=A4nnich?= <maennich@google.com>,
-        kernel-team@android.com, Kernel Team <kernel-team@fb.com>,
-        bpf <bpf@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-Hi.
+Hi,
+ 
+	The v1.20 release of pahole and its friends is out, mostly
+addressing problems related to gcc 11 defaulting to DWARF5 for -g,
+available at the usual places:
 
-On Thu, 4 Feb 2021 at 04:13, Andrii Nakryiko <andrii.nakryiko@gmail.com> wrote:
->
-> On Mon, Feb 1, 2021 at 9:26 AM Giuliano Procida <gprocida@google.com> wrote:
-> >
-> > pahole -J needs to do the following to an ELF file:
-> >
-> > * add or update the ".BTF" section
-> > * maybe update the section name string table
-> > * update the Section Header Table (SHT)
-> >
-> > libelf either takes full control of layout or requires the user to
-> > specify offset, size and alignment of all new and updated sections and
-> > headers.
-> >
-> > To avoid libelf moving program segments in particular, we position the
->
-> It's not clear to me what's wrong with libelf handling all the layout.
-> Even if libelf will move program segments around, what's the harm?
-> Does it break anything if we just let libelf do this?
->
+Main git repo:
 
-It doesn't hurt the userspace case I care about. I've no idea what it
-means in terms of vmlinux.
+   git://git.kernel.org/pub/scm/devel/pahole/pahole.git
 
-However, I wrote that text before I discovered that pahole -J isn't
-actually used to modify kernel images.
+Mirror git repo:
 
-One thing I haven't tried is to try to make .BTF loadable but leave
-placement to libelf.
+   https://github.com/acmel/dwarves.git
 
-> > ".BTF" and section name string table (typically named ".shstrtab")
-> > sections after all others. The SHT always lives at the end of the file.
-> >
-> > Note that the last section in an ELF file is normally the section name
-> > string table and any ".BTF" section will normally be second last.
-> > However, if these sections appear earlier, then we'll waste some space
-> > in the ELF file when we rewrite them.
-> >
-> > Signed-off-by: Giuliano Procida <gprocida@google.com>
-> > ---
-> >  libbtf.c | 64 ++++++++++++++++++++++++++++++++++++++++++++++++++++++--
-> >  1 file changed, 62 insertions(+), 2 deletions(-)
-> >
->
-> [...]
+tarball + gpg signature:
+
+   https://fedorapeople.org/~acme/dwarves/dwarves-1.20.tar.xz
+   https://fedorapeople.org/~acme/dwarves/dwarves-1.20.tar.bz2
+   https://fedorapeople.org/~acme/dwarves/dwarves-1.20.tar.sign
+
+Best Regards,
+ 
+ - Arnaldo
+
+v1.20:
+
+BTF encoder:
+
+  - Improve ELF error reporting using elf_errmsg(elf_errno()).
+
+  - Improve objcopy error handling.
+
+  - Fix handling of 'restrict' qualifier, that was being treated as a 'const'.
+
+  - Support SHN_XINDEX in st_shndx symbol indexes, to handle ELF objects with
+    more than 65534 sections, for instance, which happens with kernels built
+    with 'KCFLAGS="-ffunction-sections -fdata-sections", Other cases may
+    include when using FG-ASLR, LTO.
+
+  - Cope with functions without a name, as seen sometimes when building kernel
+    images with some versions of clang, when a SEGFAULT was taking place.
+
+  - Fix BTF variable generation for kernel modules, not skipping variables at
+    offset zero.
+
+  - Fix address size to match what is in the ELF file being processed, to fix using
+    a 64-bit pahole binary to generate BTF for a 32-bit vmlinux image.
+
+  - Use kernel module ftrace addresses when finding which functions to encode,
+    which increases the number of functions encoded.
+
+libbpf:
+
+  - Allow use of packaged version, for distros wanting to dynamically link with
+    the system's libbpf package instead of using the libbpf git submodule shipped
+    in pahole's source code.
+
+DWARF loader:
+
+  - Support DW_AT_data_bit_offset
+
+    This appeared in DWARF4 but is supported only in gcc's -gdwarf-5,
+    support it in a way that makes the output be the same for both cases.
+
+      $ gcc -gdwarf-5 -c examples/dwarf5/bf.c
+      $ pahole bf.o
+      struct pea {
+            long int                   a:1;                  /*     0: 0  8 */
+            long int                   b:1;                  /*     0: 1  8 */
+            long int                   c:1;                  /*     0: 2  8 */
+
+            /* XXX 29 bits hole, try to pack */
+            /* Bitfield combined with next fields */
+
+            int                        after_bitfield;       /*     4     4 */
+
+            /* size: 8, cachelines: 1, members: 4 */
+            /* sum members: 4 */
+            /* sum bitfield members: 3 bits, bit holes: 1, sum bit holes: 29 bits */
+            /* last cacheline: 8 bytes */
+      };
+
+  - DW_FORM_implicit_const in attr_numeric() and attr_offset()
+
+  - Support DW_TAG_GNU_call_site, its the standardized rename of the previously supported
+    DW_TAG_GNU_call_site.
+
+build:
+
+    - Fix compilation on 32-bit architectures.
+
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
