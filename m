@@ -2,71 +2,74 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C0C6AC433E0
-	for <linux-dwarves@archiver.kernel.org>; Thu,  4 Feb 2021 01:32:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 57202C433E0
+	for <linux-dwarves@archiver.kernel.org>; Thu,  4 Feb 2021 02:58:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 817E764F5F
-	for <linux-dwarves@archiver.kernel.org>; Thu,  4 Feb 2021 01:32:16 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0220364F53
+	for <linux-dwarves@archiver.kernel.org>; Thu,  4 Feb 2021 02:58:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234373AbhBDBcA (ORCPT
+        id S233516AbhBDC6s (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Wed, 3 Feb 2021 20:32:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57034 "EHLO
+        Wed, 3 Feb 2021 21:58:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230104AbhBDBb6 (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Wed, 3 Feb 2021 20:31:58 -0500
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95FDBC061573
-        for <dwarves@vger.kernel.org>; Wed,  3 Feb 2021 17:31:18 -0800 (PST)
-Received: by mail-pg1-x534.google.com with SMTP id s23so987204pgh.11
-        for <dwarves@vger.kernel.org>; Wed, 03 Feb 2021 17:31:18 -0800 (PST)
+        with ESMTP id S232956AbhBDC6r (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Wed, 3 Feb 2021 21:58:47 -0500
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C995C061786;
+        Wed,  3 Feb 2021 18:58:07 -0800 (PST)
+Received: by mail-yb1-xb36.google.com with SMTP id i6so1749718ybq.5;
+        Wed, 03 Feb 2021 18:58:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
+        d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=PJqnhB5HVj5MI8qvIgTsWnsv8A6arsvgFZ5dYqMe6qM=;
-        b=m+Eh59y2xsdnp+1LpDbiAgN0Kzvnz4LwOWrCOwMQg3rsSpuXecVX+c1HBeBVr6S2Ao
-         9P3QyLUTCSZfNOALC3KN63xy1dyBzY4lx3oroHYhH8zaJWS2zd87L/lSPLiUIlteDF+a
-         6EbAS21kqksqw6D3A84SVgapYHnnJc7SRlqThvIb35YmuckaDP3XEg5D/rumXJHIHgaK
-         AcbXBhKhX4s8wev9BG72pyRux0z6Px5kp8IxBMAh41/zwu2HF6hqu8JWvt4qExAWP4/X
-         0IXOSI1zLWpIF/kn98J6ibyAYEcZEVj8o0agQb2JlrsDHSJrbWybHuPDVSSxeAp5Ekp/
-         RYSA==
+        bh=0pV/dX7XqYEFbj7sI73k5lNUEukYihH5qvKxzPGQn08=;
+        b=D3geB/+oDH743TIGdN48GjNuZiLQ8ZIHK+HtXzlHaRcozTeBKjcx7u3xXWatX+1up3
+         /CKHkuswBLvfhnruIpsAM1XUs/n5CWEswJAHWkEo+cotPR5+GH3mwlTJlt1FB4cmzFZ5
+         8QbQ60wCES1V4WvT1L/fC05+Q/9bUVcSE8gJQYNpFfuHfTLdUcWutPd3AyWvk55/QxaP
+         8wEq6/d67glSwLYaIGRHuIFx1aA7xN9Xy/bZvrxxeuxjvZoRlOxVwOnggk/ZezsBpKmo
+         ulxoEHMdtDvCOVLWy+GrYHUPHRdDlg6qvcncQevNKZn8L8oirTLQJTjNGqQh7DFHqKGE
+         s5oA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=PJqnhB5HVj5MI8qvIgTsWnsv8A6arsvgFZ5dYqMe6qM=;
-        b=aaklQCRldviG841xFYMBbHk7uVak93G0/IwHn+sYilZxwvdu6qACg6+gYEQK467MCy
-         HJzHd3AZCv2fnNlHD6jTfha/Fli74eXHktOCVca9WPD2pqW5EF5WIoD1H20nxHiOQpxs
-         blHf5nSkui3PNaq+6JyYFys6Wxnd6M4or/S75871Kuj4XNOt1w1Emy5u0oj8id9NsAGf
-         AxH5RbMkTqG4esa4d/FrqbcIpdafakaOwVEBNeGL6I9T4gYafzG63dKzO/WcRiCwUPIf
-         1ZyH42Kc9Uv+1D3UY78R9UzacC7PmoIelqtYU+lyoA4qzM0LY9lpAZrHCl+6EVer/1NP
-         Y+nQ==
-X-Gm-Message-State: AOAM532XILrypFGPicOAtr15ErPsxdyFw37myoPnUowYeRAdVoxlwpMG
-        MZykNCjZsVfe7uWUUUWAijKDkRdYd0NADaeprh26WA==
-X-Google-Smtp-Source: ABdhPJxr3rLB/E1G8S1nW2JPZMVdN7cLT+ZjzmaMOGnRre01XJb9SALC+eAJ6fFfxsy7ER8je1Qa0RSQEYA4XtApfTg=
-X-Received: by 2002:a63:7e10:: with SMTP id z16mr6561848pgc.263.1612402277804;
- Wed, 03 Feb 2021 17:31:17 -0800 (PST)
+        bh=0pV/dX7XqYEFbj7sI73k5lNUEukYihH5qvKxzPGQn08=;
+        b=nqCOXKB/FwwZy0DxNAUZun6t7QbmELKX6PR0Jc0eY/q305kq3G0yPZLnHfNq3Ipku6
+         iNasXKLS8oOjObbdb0Nnn52eESEWQzhJGUxZ4sduISvflYFPbjyfaF7ZjZ4kXxtSjH4V
+         GbCSxFGSrPkj5b/bvB1mlIJ9/MUCBMNpuXoMS18iuLVqB9d3VvtSjWZL8VjwgubB2/D8
+         iHiK7i+4ryrVhPlsZeoDlGhHVCyQJoln6+AMLWMAAznvDh5qq2w4cvzXNdf7DD3cE7qL
+         bpR7unE7BsgIADXMJAKUamp2m0gM7jV+yeaylVas54fcQKbG3YqzJGuBZ1tB0RNcfgZN
+         CWJA==
+X-Gm-Message-State: AOAM5301fA022VmkiIB4gUpbCb68DUnvEHjNBpIa/yNZh+j5/76H+mUu
+        8igH+1OzysgQPkmflyR8J+KEooNbjP+o6baoJdA=
+X-Google-Smtp-Source: ABdhPJxBnkk7SGwQ5sOUAcW+5HbNtkAp9F4b7Fi4C0HlHGimNjkiFHJZDCPYZk4vUWks0ToQPMANu/IFPYZSU7csVY4=
+X-Received: by 2002:a25:f40e:: with SMTP id q14mr9051760ybd.230.1612407486747;
+ Wed, 03 Feb 2021 18:58:06 -0800 (PST)
 MIME-Version: 1.0
 References: <20210115210616.404156-1-ndesaulniers@google.com>
  <CA+icZUVp+JNq89uc_DyWC6zh5=kLtUr7eOxHizfFggnEVGJpqw@mail.gmail.com>
  <7354583d-de40-b6b9-6534-a4f4c038230f@fb.com> <CAKwvOd=5iR0JONwDb6ypD7dzzjOS3Uj0CjcyYqPF48eK4Pi90Q@mail.gmail.com>
  <12b6c2ca-4cf7-4edd-faf2-72e3cb59c00e@fb.com> <20210117201500.GO457607@kernel.org>
-In-Reply-To: <20210117201500.GO457607@kernel.org>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Wed, 3 Feb 2021 17:31:05 -0800
-Message-ID: <CAKwvOdmniAMZD0LiFdr5N8eOwHqNFED2Pd=pwOFF2Y8eSRXUHA@mail.gmail.com>
+ <CAKwvOdmniAMZD0LiFdr5N8eOwHqNFED2Pd=pwOFF2Y8eSRXUHA@mail.gmail.com>
+In-Reply-To: <CAKwvOdmniAMZD0LiFdr5N8eOwHqNFED2Pd=pwOFF2Y8eSRXUHA@mail.gmail.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Wed, 3 Feb 2021 18:57:55 -0800
+Message-ID: <CAEf4Bzbn1app3LZ1oah5ARn81j5RMNxRRHPVAkeY3h_0q7+7fg@mail.gmail.com>
 Subject: Re: [PATCH v5 0/3] Kbuild: DWARF v5 support
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
         Yonghong Song <yhs@fb.com>,
         Andrii Nakryiko <andrii@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>
-Cc:     Sedat Dilek <sedat.dilek@gmail.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Sedat Dilek <sedat.dilek@gmail.com>,
         Masahiro Yamada <masahiroy@kernel.org>,
         Nathan Chancellor <natechancellor@gmail.com>,
         Andrew Morton <akpm@linux-foundation.org>,
@@ -84,54 +87,61 @@ Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-On Sun, Jan 17, 2021 at 12:14 PM Arnaldo Carvalho de Melo
-<acme@kernel.org> wrote:
+On Wed, Feb 3, 2021 at 5:31 PM Nick Desaulniers <ndesaulniers@google.com> wrote:
 >
-> Em Fri, Jan 15, 2021 at 03:43:06PM -0800, Yonghong Song escreveu:
+> On Sun, Jan 17, 2021 at 12:14 PM Arnaldo Carvalho de Melo
+> <acme@kernel.org> wrote:
 > >
+> > Em Fri, Jan 15, 2021 at 03:43:06PM -0800, Yonghong Song escreveu:
+> > >
+> > >
+> > > On 1/15/21 3:34 PM, Nick Desaulniers wrote:
+> > > > On Fri, Jan 15, 2021 at 3:24 PM Yonghong Song <yhs@fb.com> wrote:
+> > > > >
+> > > > >
+> > > > >
+> > > > > On 1/15/21 1:53 PM, Sedat Dilek wrote:
+> > > > > > En plus, I encountered breakage with GCC v10.2.1 and LLVM=1 and
+> > > > > > CONFIG_DEBUG_INFO_DWARF4.
+> > > > > > So might be good to add a "depends on !DEBUG_INFO_BTF" in this combination.
+> > > >
+> > > > Can you privately send me your configs that repro? Maybe I can isolate
+> > > > it to a set of configs?
+> > > >
+> > > > >
+> > > > > I suggested not to add !DEBUG_INFO_BTF to CONFIG_DEBUG_INFO_DWARF4.
+> > > > > It is not there before and adding this may suddenly break some users.
+> > > > >
+> > > > > If certain combination of gcc/llvm does not work for
+> > > > > CONFIG_DEBUG_INFO_DWARF4 with pahole, this is a bug bpf community
+> > > > > should fix.
+> > > >
+> > > > Is there a place I should report bugs?
+> > >
+> > > You can send bug report to Arnaldo Carvalho de Melo <acme@kernel.org>,
+> > > dwarves@vger.kernel.org and bpf@vger.kernel.org.
 > >
-> > On 1/15/21 3:34 PM, Nick Desaulniers wrote:
-> > > On Fri, Jan 15, 2021 at 3:24 PM Yonghong Song <yhs@fb.com> wrote:
-> > > >
-> > > >
-> > > >
-> > > > On 1/15/21 1:53 PM, Sedat Dilek wrote:
-> > > > > En plus, I encountered breakage with GCC v10.2.1 and LLVM=1 and
-> > > > > CONFIG_DEBUG_INFO_DWARF4.
-> > > > > So might be good to add a "depends on !DEBUG_INFO_BTF" in this combination.
-> > >
-> > > Can you privately send me your configs that repro? Maybe I can isolate
-> > > it to a set of configs?
-> > >
-> > > >
-> > > > I suggested not to add !DEBUG_INFO_BTF to CONFIG_DEBUG_INFO_DWARF4.
-> > > > It is not there before and adding this may suddenly break some users.
-> > > >
-> > > > If certain combination of gcc/llvm does not work for
-> > > > CONFIG_DEBUG_INFO_DWARF4 with pahole, this is a bug bpf community
-> > > > should fix.
-> > >
-> > > Is there a place I should report bugs?
-> >
-> > You can send bug report to Arnaldo Carvalho de Melo <acme@kernel.org>,
-> > dwarves@vger.kernel.org and bpf@vger.kernel.org.
+> > I'm coming back from vacation, will try to read the messages and see if
+> > I can fix this.
 >
-> I'm coming back from vacation, will try to read the messages and see if
-> I can fix this.
+> IDK about DWARF v4; that seems to work for me.  I was previously observing
+> https://bugzilla.redhat.com/show_bug.cgi?id=1922698
+> with DWARF v5.  I just re-pulled the latest pahole, rebuilt, and no
+> longer see that warning.
+>
+> I now observe a different set.  I plan on attending "BPF office hours
+> tomorrow morning," but if anyone wants a sneak peak of the errors and
+> how to reproduce:
+> https://gist.github.com/nickdesaulniers/ae8c9efbe4da69b1cf0dce138c1d2781
+>
 
-IDK about DWARF v4; that seems to work for me.  I was previously observing
-https://bugzilla.redhat.com/show_bug.cgi?id=1922698
-with DWARF v5.  I just re-pulled the latest pahole, rebuilt, and no
-longer see that warning.
+Is there another (easy) way to get your patch set without the b4 tool?
+Is your patch set present in some patchworks instance, so that I can
+download it in mbox format, for example?
 
-I now observe a different set.  I plan on attending "BPF office hours
-tomorrow morning," but if anyone wants a sneak peak of the errors and
-how to reproduce:
-https://gist.github.com/nickdesaulniers/ae8c9efbe4da69b1cf0dce138c1d2781
-
-
-(FWIW: some other folks are hitting issues now with kernel's lack of
-DWARF v5 support: https://bugzilla.redhat.com/show_bug.cgi?id=1922707)
--- 
-Thanks,
-~Nick Desaulniers
+>
+> (FWIW: some other folks are hitting issues now with kernel's lack of
+> DWARF v5 support: https://bugzilla.redhat.com/show_bug.cgi?id=1922707)
+> --
+> Thanks,
+> ~Nick Desaulniers
