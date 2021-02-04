@@ -2,187 +2,91 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.5 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0D2E1C433E0
-	for <linux-dwarves@archiver.kernel.org>; Wed,  3 Feb 2021 23:22:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 98016C433DB
+	for <linux-dwarves@archiver.kernel.org>; Thu,  4 Feb 2021 01:07:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CA55F64E06
-	for <linux-dwarves@archiver.kernel.org>; Wed,  3 Feb 2021 23:22:53 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3E04664E0A
+	for <linux-dwarves@archiver.kernel.org>; Thu,  4 Feb 2021 01:07:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232956AbhBCXWx (ORCPT
+        id S233727AbhBDBHN (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Wed, 3 Feb 2021 18:22:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57388 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233213AbhBCXWu (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Wed, 3 Feb 2021 18:22:50 -0500
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C786C061786;
-        Wed,  3 Feb 2021 15:22:10 -0800 (PST)
-Received: by mail-yb1-xb35.google.com with SMTP id i6so1316805ybq.5;
-        Wed, 03 Feb 2021 15:22:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=zr7vSaTWl2UUzsxklXRIHO2cYcnU/+KhZDhjca7ZBiY=;
-        b=F2BLMq1LGvGU4Y/Fa1NxbbMhMNWtMky3X+Lp8w3ynTxFsOgnGCzcfJhJxL/CQR3LGy
-         NfOsT3P5dytcloDaIaD75IxnRm0j4DlgqNXnjULoBrSll1fL/xpmBHUhf3n+fhhr5CZI
-         /LJNpWMuH5O8Mqgz2cvAXvc5ZKkHzX5acjtw4teDnXEDyP4DoyykXl28tybSxt2RnpaY
-         wzPJaLL6HCXF6NOdqycZj9kT80aOFuzK9LhSxSpd5WL2OxL6INvWbGZV+yt+00veyhc3
-         syeh1j7SxEE7HlqL6l5Mr7/f+EP33pOLTt8dMhemutW80VJXnXsKk3mn3Mo67bDba7Me
-         AF6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=zr7vSaTWl2UUzsxklXRIHO2cYcnU/+KhZDhjca7ZBiY=;
-        b=SdOMcr0Hk/h3uHhdT6VZX+ZZpqXoV2Hn0PMfuL2ojlete2LMpeTiG6igLU79yhPEvc
-         KSDLCB3hJRUjcrbpoDlwnXMTWDEvcE8mUFPdheFE5NtoD3HO+wDMnuQNziUfMnspywPZ
-         PjBC4s9IerP4QvVw9k6Mk1DaeHf1CnSMGA9tVlMG7SOW5ctGYGICWNqIfYK5+Kuj7k6L
-         FafEsDckOMzI0y7Y+hwaf9PHnA9aFCg4QDCUrsPv1C3Y41Md/V4o6gkn8ytIgNQ+IQPh
-         Yy7CZA0zO/aTPAdM8rjH1Nl/eGLFjVYXqBhDwlJlaD2eTokuKVZhOPc9r6IMV5bjY646
-         GwcA==
-X-Gm-Message-State: AOAM530xMdL7JHzfBVvOcYiYCan76HzytwT/xgsPZPq9mkOWDVpPYM1a
-        J6ez4kSXYAJJP0Ln4njG+LxelBBBxN/TrnKln7s=
-X-Google-Smtp-Source: ABdhPJzxR3mH6vEsUhgFX2S4VjMemHcCtXs36xdJY7CR8zcV9RYgTIX8tberKYDFItnQbyIOgbXtSdy2BsZfQvr10K0=
-X-Received: by 2002:a25:4b86:: with SMTP id y128mr7841554yba.403.1612394529417;
- Wed, 03 Feb 2021 15:22:09 -0800 (PST)
-MIME-Version: 1.0
-References: <20210112184004.1302879-1-jolsa@kernel.org> <f3790a7d-73bc-d634-5994-d049c7a73eae@redhat.com>
- <20210121133825.GB12699@kernel.org> <CA+icZUVsdcTEJjwpB7=05W5-+roKf66qTwP+M6QJKTnuP6TOVQ@mail.gmail.com>
- <CAEf4BzaVAp=W47KmMsfpj_wuJR-Gvmav=tdKdoHKAC3AW-976w@mail.gmail.com>
- <CA+icZUW6g9=sMD3hj5g+ZXOwE_DxfxO3SX2Tb-bFTiWnQLb_EA@mail.gmail.com>
- <CAEf4BzZ-uU3vkMA1RPt1f2HbgaHoenTxeVadyxuLuFGwN9ntyw@mail.gmail.com>
- <20210128200046.GA794568@kernel.org> <CAEf4BzbXhn2qAwNyDx6Oqaj7+RdBtjnPPLe27=B0-aB9yY+Xmw@mail.gmail.com>
- <CA+icZUUTddV18rhZjaVif0a6BgpWtpj4mP1pyQ9cfh_e2xxvMQ@mail.gmail.com>
- <95233b493fd29b613f5bf3f92419528ce3298c14.camel@klomp.org> <CA+icZUU+XEMnrwgOSRhAaO1bn2p62P6g1KVKGyJfRqxt_jr0Ew@mail.gmail.com>
-In-Reply-To: <CA+icZUU+XEMnrwgOSRhAaO1bn2p62P6g1KVKGyJfRqxt_jr0Ew@mail.gmail.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Wed, 3 Feb 2021 15:21:58 -0800
-Message-ID: <CAEf4Bzay-MS9mKc7N9Kc-eQBv1U5DomOY4VoBW=BQZaqs3f0kg@mail.gmail.com>
-Subject: Re: [RFT] pahole 1.20 RC was Re: [PATCH] btf_encoder: Add extra
- checks for symbol names
-To:     Sedat Dilek <sedat.dilek@gmail.com>
-Cc:     Mark Wielaard <mark@klomp.org>,
+        Wed, 3 Feb 2021 20:07:13 -0500
+Received: from mail.kernel.org ([198.145.29.99]:41958 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232184AbhBDBHN (ORCPT <rfc822;dwarves@vger.kernel.org>);
+        Wed, 3 Feb 2021 20:07:13 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 3659664E0A;
+        Thu,  4 Feb 2021 01:06:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1612400792;
+        bh=YZcUAIbCt2hit811Im9XvKy28/ibVaifI212e7Pjmhc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=RsGlkyRHGqbri37ST8w47sUZ3XmMZYX3fxRP1ZntAXy+F6bfK+XvfOiV3X2ImxMwe
+         OooB2X1OZs1V7DdGfsAFtG/YW/Njx+aeKcRqL0gw8tL4ODOZYn216lWh2Uxd11mPhv
+         mjKnlKMOhPNvTzX7Ey+ypsnVH8qTrizWBDh5trQ6R6qIyXXdAyXybv1AWI85Nl/wBu
+         pYE7E9MpBePW5hU7Bhg2h9eZNRJ6nQ2OgTHHvH5Mdi5M/XQeVlYDsSCRBq53/cBHmQ
+         dbCP38t8NjQKcdUewGW9WuCVCHvANPiVnktkVxsqd1FlzM1nYaJI/Cy3z4MNVRsQV6
+         uV8qtgHkLSz6w==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id BEB1340513; Wed,  3 Feb 2021 22:06:29 -0300 (-03)
+Date:   Wed, 3 Feb 2021 22:06:29 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Sedat Dilek <sedat.dilek@gmail.com>,
+        Mark Wielaard <mark@klomp.org>,
         Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
         Tom Stellard <tstellar@redhat.com>,
         Jiri Olsa <jolsa@kernel.org>, dwarves@vger.kernel.org,
         bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
         Andrii Nakryiko <andriin@fb.com>, Yonghong Song <yhs@fb.com>,
         Hao Luo <haoluo@google.com>,
-        =?UTF-8?Q?Daniel_P=2E_Berrang=C3=A9?= <berrange@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
+        Daniel =?iso-8859-1?Q?P=2E_Berrang=E9?= <berrange@redhat.com>
+Subject: Re: [RFT] pahole 1.20 RC was Re: [PATCH] btf_encoder: Add extra
+ checks for symbol names
+Message-ID: <20210204010629.GB854763@kernel.org>
+References: <CA+icZUVsdcTEJjwpB7=05W5-+roKf66qTwP+M6QJKTnuP6TOVQ@mail.gmail.com>
+ <CAEf4BzaVAp=W47KmMsfpj_wuJR-Gvmav=tdKdoHKAC3AW-976w@mail.gmail.com>
+ <CA+icZUW6g9=sMD3hj5g+ZXOwE_DxfxO3SX2Tb-bFTiWnQLb_EA@mail.gmail.com>
+ <CAEf4BzZ-uU3vkMA1RPt1f2HbgaHoenTxeVadyxuLuFGwN9ntyw@mail.gmail.com>
+ <20210128200046.GA794568@kernel.org>
+ <CAEf4BzbXhn2qAwNyDx6Oqaj7+RdBtjnPPLe27=B0-aB9yY+Xmw@mail.gmail.com>
+ <CA+icZUUTddV18rhZjaVif0a6BgpWtpj4mP1pyQ9cfh_e2xxvMQ@mail.gmail.com>
+ <95233b493fd29b613f5bf3f92419528ce3298c14.camel@klomp.org>
+ <CA+icZUU+XEMnrwgOSRhAaO1bn2p62P6g1KVKGyJfRqxt_jr0Ew@mail.gmail.com>
+ <CAEf4Bzay-MS9mKc7N9Kc-eQBv1U5DomOY4VoBW=BQZaqs3f0kg@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAEf4Bzay-MS9mKc7N9Kc-eQBv1U5DomOY4VoBW=BQZaqs3f0kg@mail.gmail.com>
+X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-On Wed, Feb 3, 2021 at 1:48 PM Sedat Dilek <sedat.dilek@gmail.com> wrote:
->
-> On Wed, Feb 3, 2021 at 11:23 AM Mark Wielaard <mark@klomp.org> wrote:
-> >
-> > Hi,
-> >
-> > On Wed, 2021-02-03 at 10:03 +0100, Sedat Dilek wrote:
-> > > > It all looks to be working fine on my side. There is a compilation
-> > > > error in our libbpf CI when building the latest pahole from sources
-> > > > due to DW_FORM_implicit_const being undefined. I'm updating our VMs to
-> > > > use Ubuntu Focal 20.04, up from Bionic 18.04, and that should
-> > > > hopefully solve the issue due to newer versions of libdw. If you worry
-> > > > about breaking others, though, we might want to add #ifndef guards and
-> > > > re-define DW_FORM_implicit_const as 0x21 explicitly in pahole source
-> > > > code.
-> >
-> > I think that might be a good idea for older setups. But that also means
-> > that the underlying elfutils libdw doesn't support DWARF5, so pahole
-> > itself also wouldn't work (the define would only fix the compile time
-> > issue, not the runtime issue of not being able to parse
-> > DW_FORM_implicit_const). That might not be a problem because such
-> > systems also wouldn't have GCC11 defaulting to DWARF5.
-> >
-> > > > But otherwise, all good from what I can see in my environment.
-> > > > Looking
-> > > > forward to 1.20 release! I'll let you know if, after updating to
-> > > > Ubuntu Focal, any new pahole issues crop up.
-> > > >
-> > >
-> > > Last weekend I did some testing with
-> > > <pahole.git#DW_AT_data_bit_offset> and DWARF-v5 support for the
-> > > Linux-kernel.
-> > >
-> > > The good: I was able to compile :-).
-> > > The bad: My build-log grew up to 1.2GiB and I could not boot in QEMU.
-> > > The ugly: I killed the archive which had all relevant material.
-> >
-> > I think the build-log grew so much because of warnings about unknown
-> > tags. At least when using GCC11 you'll get a couple of standardized
-> > DWARF5 tags instead of the GNU extensions to DWARF4. That should be
-> > solved by:
-> >
-> >    commit d783117162c0212d4f75f6cea185f493d2f244e1
-> >    Author: Mark Wielaard <mark@klomp.org>
-> >    Date:   Sun Jan 31 01:27:31 2021 +0100
-> >
-> >        dwarf_loader: Handle DWARF5 DW_TAG_call_site like DW_TAG_GNU_call_site
-> >
->
-> I had some conversation with Mark directly as I dropped by accident the CC list.
->
-> With latest pahole from Git and CONFIG_DEBUG_INFO_BTF=y I was not able
-> to build with DWARF-v4 and DWARF-v5.
+Em Wed, Feb 03, 2021 at 03:21:58PM -0800, Andrii Nakryiko escreveu:
+> On Wed, Feb 3, 2021 at 1:48 PM Sedat Dilek <sedat.dilek@gmail.com> wrote:
+> > Looks like CONFIG_DEBUG_INFO_BTF=y makes troubles with LLVM/Clang.
+> > Can we have a fix for Linux v5.11-rc6+ to avoid a selection of it when
+> > CC_IS_CLANG=y?
+ 
+> Let's first understand problems and try to fix them, please.
 
-There is hardly anything actionable without all the extra info I've
-asked you before. What's the issue? What's the kernel config? Tool
-versions?
+Yeah, from what I've read this is something only related to clang
+building the kernel with DWARF5, right?
 
->
-> Hope it is OK for you Mark when I quote you:
->
-> > Here I use LLVM/Clang v12.0.0-rc1 with Clang's Integrated Assembler
-> > (make LLVM_IAS=1).
->
-> Note I haven't personally tested llvm with DWARF5. I know some other
-> tools cannot (yet) handle the DWARF5 produced by llvm (for example
-> valgrind, rpm debugedit and dwz don't handle all the forms llvm emits
-> when it produces DWARF5, which aren't emitted by GCC unless requesting
-> split-dwarf). In theory dwarves/pahole should be able to handle it
-> because elfutils libdw (at least versions > 0.172) does handle it. But
-> I don't know if anybody ever tested that. But I believe llvm will by
-> default emit DWARF4, not 5.
->
-> More quotes from Mark:
->
-> I would try to avoid using clang producing DWARF5. It clearly has some
-> incompatibilities with dwarves/pahole. It should work if you don't set
-> DEBUG_INFO_DWARF5. Try GCC 11 (which defaults to -gdwarf-5) or an
-> earlier version (probably at least GCC 8 or higher) using -gdwarf-5
-> explicitly.
->
-> What makes me nerves are reports from Red Hat's CKI reporting:
->
-> 'failed to validate module [something] BTF: -22 '
->
-> This is was from ClangBuiltLinux mailing-list.
+I just delayed to tomorrow releasing pahole 1.20 as its late here and
+there is this discussion going on, what I have is at:
 
-And no link to the issue, of course. If you are hoping for someone to
-try to help and fix issues, please provide extra info. If this is what
-I think it is, that was the problem with kernel rejecting empty BTF
-and it was fixed already in v5.11-fbk6. But who knows, I can only
-guess.
+https://git.kernel.org/pub/scm/devel/pahole/pahole.git/log/?h=tmp.1.20
 
->
-> Looks like CONFIG_DEBUG_INFO_BTF=y makes troubles with LLVM/Clang.
-> Can we have a fix for Linux v5.11-rc6+ to avoid a selection of it when
-> CC_IS_CLANG=y?
+There is one patch more than what I think Sedat tried, that makes a
+Mark's patch for DWARF_TAG_call_site{_parameter} to be applied as well
+when processing inline expansions, which for what is being discussed
+here seems unrelated, just avoids tons of warnings when processing
+vmlinux with gcc 11 in fedora rawhide.
 
-Let's first understand problems and try to fix them, please.
-
->
-> - Sedat -
->
->
-> - Sedat -
+- Arnaldo
