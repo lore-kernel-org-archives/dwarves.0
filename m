@@ -2,91 +2,136 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.5 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-18.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 98016C433DB
-	for <linux-dwarves@archiver.kernel.org>; Thu,  4 Feb 2021 01:07:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C0C6AC433E0
+	for <linux-dwarves@archiver.kernel.org>; Thu,  4 Feb 2021 01:32:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3E04664E0A
-	for <linux-dwarves@archiver.kernel.org>; Thu,  4 Feb 2021 01:07:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 817E764F5F
+	for <linux-dwarves@archiver.kernel.org>; Thu,  4 Feb 2021 01:32:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233727AbhBDBHN (ORCPT
+        id S234373AbhBDBcA (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Wed, 3 Feb 2021 20:07:13 -0500
-Received: from mail.kernel.org ([198.145.29.99]:41958 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232184AbhBDBHN (ORCPT <rfc822;dwarves@vger.kernel.org>);
-        Wed, 3 Feb 2021 20:07:13 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 3659664E0A;
-        Thu,  4 Feb 2021 01:06:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1612400792;
-        bh=YZcUAIbCt2hit811Im9XvKy28/ibVaifI212e7Pjmhc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RsGlkyRHGqbri37ST8w47sUZ3XmMZYX3fxRP1ZntAXy+F6bfK+XvfOiV3X2ImxMwe
-         OooB2X1OZs1V7DdGfsAFtG/YW/Njx+aeKcRqL0gw8tL4ODOZYn216lWh2Uxd11mPhv
-         mjKnlKMOhPNvTzX7Ey+ypsnVH8qTrizWBDh5trQ6R6qIyXXdAyXybv1AWI85Nl/wBu
-         pYE7E9MpBePW5hU7Bhg2h9eZNRJ6nQ2OgTHHvH5Mdi5M/XQeVlYDsSCRBq53/cBHmQ
-         dbCP38t8NjQKcdUewGW9WuCVCHvANPiVnktkVxsqd1FlzM1nYaJI/Cy3z4MNVRsQV6
-         uV8qtgHkLSz6w==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id BEB1340513; Wed,  3 Feb 2021 22:06:29 -0300 (-03)
-Date:   Wed, 3 Feb 2021 22:06:29 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Sedat Dilek <sedat.dilek@gmail.com>,
-        Mark Wielaard <mark@klomp.org>,
-        Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
-        Tom Stellard <tstellar@redhat.com>,
-        Jiri Olsa <jolsa@kernel.org>, dwarves@vger.kernel.org,
-        bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andriin@fb.com>, Yonghong Song <yhs@fb.com>,
-        Hao Luo <haoluo@google.com>,
-        Daniel =?iso-8859-1?Q?P=2E_Berrang=E9?= <berrange@redhat.com>
-Subject: Re: [RFT] pahole 1.20 RC was Re: [PATCH] btf_encoder: Add extra
- checks for symbol names
-Message-ID: <20210204010629.GB854763@kernel.org>
-References: <CA+icZUVsdcTEJjwpB7=05W5-+roKf66qTwP+M6QJKTnuP6TOVQ@mail.gmail.com>
- <CAEf4BzaVAp=W47KmMsfpj_wuJR-Gvmav=tdKdoHKAC3AW-976w@mail.gmail.com>
- <CA+icZUW6g9=sMD3hj5g+ZXOwE_DxfxO3SX2Tb-bFTiWnQLb_EA@mail.gmail.com>
- <CAEf4BzZ-uU3vkMA1RPt1f2HbgaHoenTxeVadyxuLuFGwN9ntyw@mail.gmail.com>
- <20210128200046.GA794568@kernel.org>
- <CAEf4BzbXhn2qAwNyDx6Oqaj7+RdBtjnPPLe27=B0-aB9yY+Xmw@mail.gmail.com>
- <CA+icZUUTddV18rhZjaVif0a6BgpWtpj4mP1pyQ9cfh_e2xxvMQ@mail.gmail.com>
- <95233b493fd29b613f5bf3f92419528ce3298c14.camel@klomp.org>
- <CA+icZUU+XEMnrwgOSRhAaO1bn2p62P6g1KVKGyJfRqxt_jr0Ew@mail.gmail.com>
- <CAEf4Bzay-MS9mKc7N9Kc-eQBv1U5DomOY4VoBW=BQZaqs3f0kg@mail.gmail.com>
+        Wed, 3 Feb 2021 20:32:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57034 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230104AbhBDBb6 (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Wed, 3 Feb 2021 20:31:58 -0500
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95FDBC061573
+        for <dwarves@vger.kernel.org>; Wed,  3 Feb 2021 17:31:18 -0800 (PST)
+Received: by mail-pg1-x534.google.com with SMTP id s23so987204pgh.11
+        for <dwarves@vger.kernel.org>; Wed, 03 Feb 2021 17:31:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=PJqnhB5HVj5MI8qvIgTsWnsv8A6arsvgFZ5dYqMe6qM=;
+        b=m+Eh59y2xsdnp+1LpDbiAgN0Kzvnz4LwOWrCOwMQg3rsSpuXecVX+c1HBeBVr6S2Ao
+         9P3QyLUTCSZfNOALC3KN63xy1dyBzY4lx3oroHYhH8zaJWS2zd87L/lSPLiUIlteDF+a
+         6EbAS21kqksqw6D3A84SVgapYHnnJc7SRlqThvIb35YmuckaDP3XEg5D/rumXJHIHgaK
+         AcbXBhKhX4s8wev9BG72pyRux0z6Px5kp8IxBMAh41/zwu2HF6hqu8JWvt4qExAWP4/X
+         0IXOSI1zLWpIF/kn98J6ibyAYEcZEVj8o0agQb2JlrsDHSJrbWybHuPDVSSxeAp5Ekp/
+         RYSA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=PJqnhB5HVj5MI8qvIgTsWnsv8A6arsvgFZ5dYqMe6qM=;
+        b=aaklQCRldviG841xFYMBbHk7uVak93G0/IwHn+sYilZxwvdu6qACg6+gYEQK467MCy
+         HJzHd3AZCv2fnNlHD6jTfha/Fli74eXHktOCVca9WPD2pqW5EF5WIoD1H20nxHiOQpxs
+         blHf5nSkui3PNaq+6JyYFys6Wxnd6M4or/S75871Kuj4XNOt1w1Emy5u0oj8id9NsAGf
+         AxH5RbMkTqG4esa4d/FrqbcIpdafakaOwVEBNeGL6I9T4gYafzG63dKzO/WcRiCwUPIf
+         1ZyH42Kc9Uv+1D3UY78R9UzacC7PmoIelqtYU+lyoA4qzM0LY9lpAZrHCl+6EVer/1NP
+         Y+nQ==
+X-Gm-Message-State: AOAM532XILrypFGPicOAtr15ErPsxdyFw37myoPnUowYeRAdVoxlwpMG
+        MZykNCjZsVfe7uWUUUWAijKDkRdYd0NADaeprh26WA==
+X-Google-Smtp-Source: ABdhPJxr3rLB/E1G8S1nW2JPZMVdN7cLT+ZjzmaMOGnRre01XJb9SALC+eAJ6fFfxsy7ER8je1Qa0RSQEYA4XtApfTg=
+X-Received: by 2002:a63:7e10:: with SMTP id z16mr6561848pgc.263.1612402277804;
+ Wed, 03 Feb 2021 17:31:17 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAEf4Bzay-MS9mKc7N9Kc-eQBv1U5DomOY4VoBW=BQZaqs3f0kg@mail.gmail.com>
-X-Url:  http://acmel.wordpress.com
+References: <20210115210616.404156-1-ndesaulniers@google.com>
+ <CA+icZUVp+JNq89uc_DyWC6zh5=kLtUr7eOxHizfFggnEVGJpqw@mail.gmail.com>
+ <7354583d-de40-b6b9-6534-a4f4c038230f@fb.com> <CAKwvOd=5iR0JONwDb6ypD7dzzjOS3Uj0CjcyYqPF48eK4Pi90Q@mail.gmail.com>
+ <12b6c2ca-4cf7-4edd-faf2-72e3cb59c00e@fb.com> <20210117201500.GO457607@kernel.org>
+In-Reply-To: <20210117201500.GO457607@kernel.org>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Wed, 3 Feb 2021 17:31:05 -0800
+Message-ID: <CAKwvOdmniAMZD0LiFdr5N8eOwHqNFED2Pd=pwOFF2Y8eSRXUHA@mail.gmail.com>
+Subject: Re: [PATCH v5 0/3] Kbuild: DWARF v5 support
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Yonghong Song <yhs@fb.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>
+Cc:     Sedat Dilek <sedat.dilek@gmail.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Clang-Built-Linux ML <clang-built-linux@googlegroups.com>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Jakub Jelinek <jakub@redhat.com>,
+        Fangrui Song <maskray@google.com>,
+        Caroline Tice <cmtice@google.com>,
+        Nick Clifton <nickc@redhat.com>, dwarves@vger.kernel.org,
+        bpf <bpf@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-Em Wed, Feb 03, 2021 at 03:21:58PM -0800, Andrii Nakryiko escreveu:
-> On Wed, Feb 3, 2021 at 1:48 PM Sedat Dilek <sedat.dilek@gmail.com> wrote:
-> > Looks like CONFIG_DEBUG_INFO_BTF=y makes troubles with LLVM/Clang.
-> > Can we have a fix for Linux v5.11-rc6+ to avoid a selection of it when
-> > CC_IS_CLANG=y?
- 
-> Let's first understand problems and try to fix them, please.
+On Sun, Jan 17, 2021 at 12:14 PM Arnaldo Carvalho de Melo
+<acme@kernel.org> wrote:
+>
+> Em Fri, Jan 15, 2021 at 03:43:06PM -0800, Yonghong Song escreveu:
+> >
+> >
+> > On 1/15/21 3:34 PM, Nick Desaulniers wrote:
+> > > On Fri, Jan 15, 2021 at 3:24 PM Yonghong Song <yhs@fb.com> wrote:
+> > > >
+> > > >
+> > > >
+> > > > On 1/15/21 1:53 PM, Sedat Dilek wrote:
+> > > > > En plus, I encountered breakage with GCC v10.2.1 and LLVM=1 and
+> > > > > CONFIG_DEBUG_INFO_DWARF4.
+> > > > > So might be good to add a "depends on !DEBUG_INFO_BTF" in this combination.
+> > >
+> > > Can you privately send me your configs that repro? Maybe I can isolate
+> > > it to a set of configs?
+> > >
+> > > >
+> > > > I suggested not to add !DEBUG_INFO_BTF to CONFIG_DEBUG_INFO_DWARF4.
+> > > > It is not there before and adding this may suddenly break some users.
+> > > >
+> > > > If certain combination of gcc/llvm does not work for
+> > > > CONFIG_DEBUG_INFO_DWARF4 with pahole, this is a bug bpf community
+> > > > should fix.
+> > >
+> > > Is there a place I should report bugs?
+> >
+> > You can send bug report to Arnaldo Carvalho de Melo <acme@kernel.org>,
+> > dwarves@vger.kernel.org and bpf@vger.kernel.org.
+>
+> I'm coming back from vacation, will try to read the messages and see if
+> I can fix this.
 
-Yeah, from what I've read this is something only related to clang
-building the kernel with DWARF5, right?
+IDK about DWARF v4; that seems to work for me.  I was previously observing
+https://bugzilla.redhat.com/show_bug.cgi?id=1922698
+with DWARF v5.  I just re-pulled the latest pahole, rebuilt, and no
+longer see that warning.
 
-I just delayed to tomorrow releasing pahole 1.20 as its late here and
-there is this discussion going on, what I have is at:
+I now observe a different set.  I plan on attending "BPF office hours
+tomorrow morning," but if anyone wants a sneak peak of the errors and
+how to reproduce:
+https://gist.github.com/nickdesaulniers/ae8c9efbe4da69b1cf0dce138c1d2781
 
-https://git.kernel.org/pub/scm/devel/pahole/pahole.git/log/?h=tmp.1.20
 
-There is one patch more than what I think Sedat tried, that makes a
-Mark's patch for DWARF_TAG_call_site{_parameter} to be applied as well
-when processing inline expansions, which for what is being discussed
-here seems unrelated, just avoids tons of warnings when processing
-vmlinux with gcc 11 in fedora rawhide.
-
-- Arnaldo
+(FWIW: some other folks are hitting issues now with kernel's lack of
+DWARF v5 support: https://bugzilla.redhat.com/show_bug.cgi?id=1922707)
+-- 
+Thanks,
+~Nick Desaulniers
