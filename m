@@ -2,112 +2,139 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-26.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-2.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BC214C433E0
-	for <linux-dwarves@archiver.kernel.org>; Fri,  5 Feb 2021 13:46:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E62BDC433DB
+	for <linux-dwarves@archiver.kernel.org>; Fri,  5 Feb 2021 17:51:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8299F64FBC
-	for <linux-dwarves@archiver.kernel.org>; Fri,  5 Feb 2021 13:46:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A86D664DDE
+	for <linux-dwarves@archiver.kernel.org>; Fri,  5 Feb 2021 17:51:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229705AbhBENq2 (ORCPT
+        id S233554AbhBEQIk (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Fri, 5 Feb 2021 08:46:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43502 "EHLO
+        Fri, 5 Feb 2021 11:08:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230243AbhBENoC (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Fri, 5 Feb 2021 08:44:02 -0500
-Received: from mail-qt1-x849.google.com (mail-qt1-x849.google.com [IPv6:2607:f8b0:4864:20::849])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE03EC061224
-        for <dwarves@vger.kernel.org>; Fri,  5 Feb 2021 05:42:48 -0800 (PST)
-Received: by mail-qt1-x849.google.com with SMTP id d1so5213300qtp.11
-        for <dwarves@vger.kernel.org>; Fri, 05 Feb 2021 05:42:48 -0800 (PST)
+        with ESMTP id S232226AbhBEQGc (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Fri, 5 Feb 2021 11:06:32 -0500
+Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8105C06178A;
+        Fri,  5 Feb 2021 09:48:14 -0800 (PST)
+Received: by mail-il1-x12b.google.com with SMTP id a16so6574787ilq.5;
+        Fri, 05 Feb 2021 09:48:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=sender:date:in-reply-to:message-id:mime-version:references:subject
-         :from:to:cc;
-        bh=tAOVQ3G2eN9dGCWyxwwne5gBaM7loqyQjU9wOYpr/6I=;
-        b=OH+gSvlZu8rebHPUVoqKDmTFHlv+/7sQvcchXxOZT1Jn21iONeHO5qh0iOgXDZWX7q
-         jeC17g6FkVEOtLw2JujRlsXjCBYN14uQ/OGcRwPWafs4nX0OA8kWZjC42AjACQRY3E+O
-         6K/exEZWEsXQ7RObfSoLk6W2LbPGLqRruEHRwzRRiJvTCBgd82+1G8ivxl2sOdOftuJg
-         m2WBkw65oW3/j1LRV1+a1nZkqeU/kLZ7Q1IpGzztRAi0qeh1hjeMjoO8ZWfgx29MYJIa
-         TUwZpYnUIxODrp3LiKHFcqxHFa/CINvN3it27Eev4QLEzWMsmWlQfsjBnm/+Twr7/tdz
-         Qe0w==
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
+         :subject:to:cc;
+        bh=Nzg2Y6oVl+tLUz3k5gFodM3ChMzuciBTFCA8xI93+E4=;
+        b=mzh3bA4P1GVt2poO+pGX1uSo08aLxLImENFo2eSBX4r53MeU/8TValwGQTeFEgDtU7
+         lKHDmzQxxcByjhX2sqUModDOkxjFskCKrRHDVW2JxmsZJ6e46wTYssM2hUibPy3D575B
+         +jiGZSpMJopbVXsVGES4zUpKbTO120TxkYuoCr1N+71+l1IoBgUEYm9J0MAvHIb3xQYN
+         U02XCrB+fqb8iKbZUeZlydA5JBo6bn2lTQbFCFqBghzYs0XSkzuag28jmlcAFPL7pJBs
+         A1emkUP1XvbD0fvgbbf4yBI0E9pfs/zBPtHcjpiQvb6DuSgFfLhXIIDmOpVzHTvXxBxz
+         hfKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=tAOVQ3G2eN9dGCWyxwwne5gBaM7loqyQjU9wOYpr/6I=;
-        b=S406vi7dqdXAXi2PHEpfhpOU7bw0U3/NsoGAsizY1Yh8wu38r1cZreeFQBF+t8iO02
-         n6hFjCj9a9jscaPT6BnSxXghJyB2KKovEpjPnuPNUGhFvkGvc6JXnwX5o4/byD4/Dmdo
-         IKnB9AA726yXx7GPR2KZVJtS6dLlM4WcI1KDc3PrJT47ndG4+BLtyqT1Cqnt0/843LDY
-         LYugkjlypGCA9vnWTynCBza/foZUwOEEkcPYUCzy0vNsj8EA3/Cea/hBOTrPOMGlHstx
-         kumMTYPGBGGJz1ZpI/4qCH2elqTqsQ81ZpjQBW04PyEgNO9bAwdgmqoWh8nfb4ExD8Vs
-         aEHQ==
-X-Gm-Message-State: AOAM531M1e2q+a2lgvzuOGOnMtj3fNVhcvWsEAqTYsDz8SXJhExzVa4q
-        qIIvf9I6oOQaG6eWQLIrtDwzg5zwLCxGSKx20h9bF1RcT5SZYMyEM6ZKb2Ay79z78Kus55JeHFR
-        9HRQGM6mphgPuz3ro0q21F34EEGGQOYgsJEy+D1RP3a3oLxHJPYFR9hVSDY4EclbXbxmk
-X-Google-Smtp-Source: ABdhPJz5wihZxlw8hgR5CE0fmzuZmzIXYPXLcOoH3i+RKhajR348e6cGEOGc6mhYA8VGyVScObuVOOKwC0tm4w==
-Sender: "gprocida via sendgmr" <gprocida@tef.lon.corp.google.com>
-X-Received: from tef.lon.corp.google.com ([2a00:79e0:d:110:656b:9716:1ea:3de6])
- (user=gprocida job=sendgmr) by 2002:a05:6214:a54:: with SMTP id
- ee20mr4390536qvb.16.1612532567845; Fri, 05 Feb 2021 05:42:47 -0800 (PST)
-Date:   Fri,  5 Feb 2021 13:42:21 +0000
-In-Reply-To: <20210205134221.2953163-1-gprocida@google.com>
-Message-Id: <20210205134221.2953163-6-gprocida@google.com>
-Mime-Version: 1.0
-References: <20210201172530.1141087-1-gprocida@google.com> <20210205134221.2953163-1-gprocida@google.com>
-X-Mailer: git-send-email 2.30.0.478.g8a0d178c01-goog
-Subject: [PATCH dwarves v3 5/5] btf_encoder: Align .BTF section to 8 bytes
-From:   Giuliano Procida <gprocida@google.com>
-To:     dwarves@vger.kernel.org
-Cc:     acme@kernel.org, andrii@kernel.org, ast@kernel.org,
-        gprocida@google.com, maennich@google.com, kernel-team@android.com,
-        kernel-team@fb.com, bpf@vger.kernel.org
+        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
+         :from:date:message-id:subject:to:cc;
+        bh=Nzg2Y6oVl+tLUz3k5gFodM3ChMzuciBTFCA8xI93+E4=;
+        b=BB36qj54RZFrwS2IObITEL9B3w8Kn+NRdUCNvQ8ph2yExjztrRUlijrASxDee0ESNE
+         xKHAV26hSKhs5avat208HdfIPBROq6W9+/jIZhDTpNYaI5YAhCuh4dvOIz7d1PwR/x4R
+         87/D8Z3CdKPDp4CiiF26apYY83/jiJboBp5c33c9cq8wHkOagQ/IDbzpYXpVB8Syy7q4
+         DPTT5/o2m9j2QgON7Bau/rdSjRQQexEDY5kel6biKUSR/PY61ZxHcmsxKpkH4vfkWSDb
+         SxMaFWPJxdy4EiXYwkY9qRG8BQpEUEspheokaO+jTxFavRkJGfSPju6F1VDSo0u+8cmF
+         UP4A==
+X-Gm-Message-State: AOAM533soWQgcbQnSbmdvH/BOt+eCHxD7I0CCaGriEEhAfuq+y20khvS
+        nE0YaMv5+DwLd6Wr+wvTLAHIp+zIawZUgMdX8J4=
+X-Google-Smtp-Source: ABdhPJzobqn7E2KduFsjD69vXwZuE2qkuShXvhD42PLKIrCEKwFrkYSvozWmQwUT8xJtc1AHzxZCoN9XFC6rq//XVWg=
+X-Received: by 2002:a92:58ce:: with SMTP id z75mr5018753ilf.209.1612547294004;
+ Fri, 05 Feb 2021 09:48:14 -0800 (PST)
+MIME-Version: 1.0
+References: <20210204220741.GA920417@kernel.org> <CA+icZUVQSojGgnis8Ds5GW-7-PVMZ2w4X5nQKSSkBPf-29NS6Q@mail.gmail.com>
+ <CA+icZUU2xmZ=mhVYLRk7nZBRW0+v+YqBzq18ysnd7xN+S7JHyg@mail.gmail.com>
+ <CA+icZUVyB3qaqq3pwOyJY_F4V6KU9hdF=AJM_D7iEW4QK4Eo6w@mail.gmail.com> <20210205152823.GD920417@kernel.org>
+In-Reply-To: <20210205152823.GD920417@kernel.org>
+Reply-To: sedat.dilek@gmail.com
+From:   Sedat Dilek <sedat.dilek@gmail.com>
+Date:   Fri, 5 Feb 2021 18:48:02 +0100
+Message-ID: <CA+icZUWzMdhuHDkcKMHAd39iMEijk65v2ADcz0=FdODr38sJ4w@mail.gmail.com>
+Subject: Re: ERROR: INT DW_ATE_unsigned_1 Error emitting BTF type
+To:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
+Cc:     dwarves@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        bpf@vger.kernel.org, Jiri Olsa <jolsa@kernel.org>,
+        Jan Engelhardt <jengelh@inai.de>,
+        Domenico Andreoli <cavok@debian.org>,
+        Matthias Schwarzott <zzam@gentoo.org>,
+        Andrii Nakryiko <andriin@fb.com>, Yonghong Song <yhs@fb.com>,
+        Mark Wieelard <mjw@redhat.com>,
+        Paul Moore <paul@paul-moore.com>,
+        Ondrej Mosnacek <omosnace@redhat.com>,
+        =?UTF-8?Q?Daniel_P=2E_Berrang=C3=A9?= <berrange@redhat.com>,
+        Tom Stellard <tstellar@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-This is to avoid misaligned access to BTF type structs when
-memory-mapping ELF objects.
+On Fri, Feb 5, 2021 at 4:28 PM Arnaldo Carvalho de Melo
+<arnaldo.melo@gmail.com> wrote:
+>
+> Em Fri, Feb 05, 2021 at 04:23:59PM +0100, Sedat Dilek escreveu:
+> > On Fri, Feb 5, 2021 at 3:41 PM Sedat Dilek <sedat.dilek@gmail.com> wrote:
+> > >
+> > > On Fri, Feb 5, 2021 at 3:37 PM Sedat Dilek <sedat.dilek@gmail.com> wrote:
+> > > >
+> > > > Hi,
+> > > >
+> > > > when building with pahole v1.20 and binutils v2.35.2 plus Clang
+> > > > v12.0.0-rc1 and DWARF-v5 I see:
+> > > > ...
+> > > > + info BTF .btf.vmlinux.bin.o
+> > > > + [  != silent_ ]
+> > > > + printf   %-7s %s\n BTF .btf.vmlinux.bin.o
+> > > >  BTF     .btf.vmlinux.bin.o
+> > > > + LLVM_OBJCOPY=/opt/binutils/bin/objcopy /opt/pahole/bin/pahole -J
+> > > > .tmp_vmlinux.btf
+> > > > [115] INT DW_ATE_unsigned_1 Error emitting BTF type
+> > > > Encountered error while encoding BTF.
+> > >
+> > > Grepping the pahole sources:
+> > >
+> > > $ git grep DW_ATE
+> > > dwarf_loader.c:         bt->is_bool = encoding == DW_ATE_boolean;
+> > > dwarf_loader.c:         bt->is_signed = encoding == DW_ATE_signed;
+> > >
+> > > Missing DW_ATE_unsigned encoding?
+> > >
+> >
+> > Checked the LLVM sources:
+> >
+> > clang/lib/CodeGen/CGDebugInfo.cpp:    Encoding =
+> > llvm::dwarf::DW_ATE_unsigned_char;
+> > clang/lib/CodeGen/CGDebugInfo.cpp:    Encoding = llvm::dwarf::DW_ATE_unsigned;
+> > clang/lib/CodeGen/CGDebugInfo.cpp:    Encoding =
+> > llvm::dwarf::DW_ATE_unsigned_fixed;
+> > clang/lib/CodeGen/CGDebugInfo.cpp:
+> >   ? llvm::dwarf::DW_ATE_unsigned
+> > ...
+> > lld/test/wasm/debuginfo.test:CHECK-NEXT:                DW_AT_encoding
+> >  (DW_ATE_unsigned)
+> >
+> > So, I will switch from GNU ld.bfd v2.35.2 to LLD-12.
+>
+> Thanks for the research, probably your conclusion is correct, can you go
+> the next step and add that part and check if the end result is the
+> expected one?
+>
 
-Signed-off-by: Giuliano Procida <gprocida@google.com>
----
- libbtf.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+Still building...
 
-diff --git a/libbtf.c b/libbtf.c
-index 9f4abb3..6754a17 100644
---- a/libbtf.c
-+++ b/libbtf.c
-@@ -744,6 +744,14 @@ static int btf_elf__write(const char *filename, struct btf *btf)
- 		goto out;
- 	}
- 
-+	/*
-+	 * We'll align .BTF to 8 bytes to cater for all architectures. It'd be
-+	 * nice if we could fetch this value from somewhere. The BTF
-+	 * specification does not discuss alignment and its trailing string
-+	 * table is not currently padded to any particular alignment.
-+	 */
-+	const size_t btf_alignment = 8;
-+
- 	/*
- 	 * First we check if there is already a .BTF section present.
- 	 */
-@@ -821,6 +829,7 @@ static int btf_elf__write(const char *filename, struct btf *btf)
- 		elf_error("elf_getshdr(btf_scn) failed");
- 		goto out;
- 	}
-+	btf_shdr.sh_addralign = btf_alignment;
- 	btf_shdr.sh_entsize = 0;
- 	btf_shdr.sh_flags = 0;
- 	if (dot_btf_offset)
--- 
-2.30.0.478.g8a0d178c01-goog
+Can you give me a hand on what has to be changed in dwarves/pahole?
 
+I guess switching from ld.bfd to ld.lld will show the same ERROR.
+
+- Sedat -
