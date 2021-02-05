@@ -2,94 +2,96 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-21.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,
+	USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 258F4C433E6
-	for <linux-dwarves@archiver.kernel.org>; Fri,  5 Feb 2021 20:35:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D0AC0C433DB
+	for <linux-dwarves@archiver.kernel.org>; Fri,  5 Feb 2021 21:14:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C9CAC64FC2
-	for <linux-dwarves@archiver.kernel.org>; Fri,  5 Feb 2021 20:35:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 85A7C64E51
+	for <linux-dwarves@archiver.kernel.org>; Fri,  5 Feb 2021 21:14:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233120AbhBESw6 (ORCPT
+        id S233071AbhBEVOS (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Fri, 5 Feb 2021 13:52:58 -0500
-Received: from mail.kernel.org ([198.145.29.99]:45586 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233087AbhBEPEk (ORCPT <rfc822;dwarves@vger.kernel.org>);
-        Fri, 5 Feb 2021 10:04:40 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 4F20B64DE9;
-        Fri,  5 Feb 2021 16:25:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1612542326;
-        bh=wZa558YC1SAZ7XJtB8o9xQzpfnkrZ2VFUyJz20LiKZU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mqpHAakw7ZlUGpi0XalD4Wc7yxsm2VtJdHUpbKGx6CWCwdEnd4SH+GF77k2NesFg4
-         nYNAkcRai83QCBXlZvHEVreJeTIEd7sfzbVhzMvcTsKvwOgY1fGh/esJnx/FuXgbcd
-         yEBh36DB0eWpiGCzEchPp2ypEGxMHXfwiFum3u45UkttDky4D/yIPs2z2qLhcdMRVM
-         Jqn1DTrrPAiIe7cwrjVKycv573tsO8L2jtfxVimDDSoso1CQV0Mh3LFK5kPW4RIfi2
-         +YAjF1OdxjCCibURdFRZsgfV9BKNla+mzPHPiZAjv0ug6+2c1W6GLp86Dr9BjJSi1I
-         4AOsQ0jIyyVsQ==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 247D240513; Fri,  5 Feb 2021 13:25:23 -0300 (-03)
-Date:   Fri, 5 Feb 2021 13:25:23 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
-Cc:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        dwarves@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, Jiri Olsa <jolsa@kernel.org>,
-        Jan Engelhardt <jengelh@inai.de>,
-        Domenico Andreoli <cavok@debian.org>,
-        Matthias Schwarzott <zzam@gentoo.org>,
-        Andrii Nakryiko <andriin@fb.com>, Yonghong Song <yhs@fb.com>,
-        Mark Wieelard <mjw@redhat.com>,
-        Paul Moore <paul@paul-moore.com>,
-        Ondrej Mosnacek <omosnace@redhat.com>,
-        Daniel =?iso-8859-1?Q?P=2E_Berrang=E9?= <berrange@redhat.com>,
-        Sedat Dilek <sedat.dilek@gmail.com>,
-        Tom Stellard <tstellar@redhat.com>
-Subject: Re: ANNOUNCE: pahole v1.20 (gcc11 DWARF5's default, lots of ELF
- sections, BTF)
-Message-ID: <20210205162523.GF920417@kernel.org>
-References: <20210204220741.GA920417@kernel.org>
- <CAEf4BzY-RbXXW-Ajcvq4fziOJ=tMtT7O76SUboHQyULNDkhthw@mail.gmail.com>
- <C359F19F-29BC-4F6D-961A-79BFA47F36A7@gmail.com>
- <CAEf4BzZf_1g13dA1t6rbi1TFttufyGNaU14pPxo9uK-FVArCbQ@mail.gmail.com>
- <BFDC3C1D-F87D-4F82-BDB0-444629C484CE@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <BFDC3C1D-F87D-4F82-BDB0-444629C484CE@gmail.com>
-X-Url:  http://acmel.wordpress.com
+        Fri, 5 Feb 2021 16:14:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52252 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229693AbhBEVMW (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Fri, 5 Feb 2021 16:12:22 -0500
+Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E13BC0617AA
+        for <dwarves@vger.kernel.org>; Fri,  5 Feb 2021 13:10:12 -0800 (PST)
+Received: by mail-pj1-x1049.google.com with SMTP id ob3so4996512pjb.0
+        for <dwarves@vger.kernel.org>; Fri, 05 Feb 2021 13:10:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=sender:date:in-reply-to:message-id:mime-version:references:subject
+         :from:to:cc;
+        bh=PWPQxeCAdhLh3iBL7DE/6gQVuXBKlPLZEtdhRuCjmxw=;
+        b=NVSHL24F+1cvfoWwSWqqObWmcSZ+jmqBVq/c4//iEhKqhjfAp3ck1OyTyQIfo6vOwq
+         IzvZWR1V+fZmIKTRY6keeQrrjFffwzyRbKg3KIWQTXZG0lh7XU9IgpA+YOZv+FIAZcRT
+         Y+vHWkVnhODRGhUCp43s+0N8646L9yGlYSaJMHPWkJcbGyxE6mfFn2GgozQvGnNmv/hx
+         DOC8+qufXNZX+iIhg7SxYhq7Zs8t7mHXlFelstQIOF6k3tYIMUgbiCKZ1vrIn7pt4aLn
+         VPPBnli46CbhzX6rWKn9wdj2s6mcob+dODr4z/GN36VnNl7wnwOxI27Y/AXrcLtdrIDP
+         saug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=PWPQxeCAdhLh3iBL7DE/6gQVuXBKlPLZEtdhRuCjmxw=;
+        b=E2JLEt1cBSEPpk7YYGu2LdiRp9OylbS/aPfDnQsXE2DSpzM/WoivLEE9R8y7fDAIQl
+         Hqr8G/j6sAbTBq/cpS4dIelPsX0denwQbL8gZk/bIyN+EVw98JDE45lp7h1h8Lzcut6O
+         +lS8cyeMOva8badjGKiv/GvBMkQKo3WfeqYv2RZ3nIuCi73xVQZZosU/CSA1Q9Ohgpgl
+         v7vhweBq8uQ6khXC0f8PlWJ6Iv7AWagJ8GnxLr3nIo+99aNyeJ/Y8NzdlwPfJSBVCqfJ
+         YyqE4igO7HBFqk5mbFDXwx6PzsISq6bL6d2NWWzL9uH98c/tbl+tvto2f3x8vKbNb4O4
+         YQ/Q==
+X-Gm-Message-State: AOAM531LFHQV6BEVtlX+3mx8fJgScXZeWQJwJZ9n91ct652ixbEnQ3zi
+        3O9j+bktYa4tA75eraD1bmanjHiIDgH35nzoMIM=
+X-Google-Smtp-Source: ABdhPJxExyVCuSceD3ifRJmPh4e6qYieel8G6WM1s0Z4zTD3g3ANK25YrnpQAQC6Cgtpy/n50ph6dZ0xx7gfZ2oOuns=
+Sender: "ndesaulniers via sendgmr" 
+        <ndesaulniers@ndesaulniers1.mtv.corp.google.com>
+X-Received: from ndesaulniers1.mtv.corp.google.com ([2620:15c:211:202:fce9:1439:f67f:bf26])
+ (user=ndesaulniers job=sendgmr) by 2002:a17:90a:2b8c:: with SMTP id
+ u12mr5684697pjd.98.1612559412019; Fri, 05 Feb 2021 13:10:12 -0800 (PST)
+Date:   Fri,  5 Feb 2021 13:10:10 -0800
+In-Reply-To: <CA+icZUVQSojGgnis8Ds5GW-7-PVMZ2w4X5nQKSSkBPf-29NS6Q@mail.gmail.com>
+Message-Id: <20210205211010.2764627-1-ndesaulniers@google.com>
+Mime-Version: 1.0
+References: <CA+icZUVQSojGgnis8Ds5GW-7-PVMZ2w4X5nQKSSkBPf-29NS6Q@mail.gmail.com>
+X-Mailer: git-send-email 2.30.0.478.g8a0d178c01-goog
+Subject: Re: ERROR: INT DW_ATE_unsigned_1 Error emitting BTF type
+From:   Nick Desaulniers <ndesaulniers@google.com>
+To:     sedat.dilek@gmail.com
+Cc:     andriin@fb.com, arnaldo.melo@gmail.com, berrange@redhat.com,
+        bpf@vger.kernel.org, cavok@debian.org, dwarves@vger.kernel.org,
+        jengelh@inai.de, jolsa@kernel.org, linux-kernel@vger.kernel.org,
+        mjw@redhat.com, omosnace@redhat.com, paul@paul-moore.com,
+        tstellar@redhat.com, yhs@fb.com, zzam@gentoo.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-Em Fri, Feb 05, 2021 at 06:33:43AM -0300, Arnaldo Carvalho de Melo escreveu:
-> On February 5, 2021 4:39:47 AM GMT-03:00, Andrii Nakryiko <andrii.nakryiko@gmail.com> wrote:
-> >On Thu, Feb 4, 2021 at 8:34 PM Arnaldo Carvalho de Melo ><arnaldo.melo@gmail.com> wrote:
-> >> On February 4, 2021 9:01:51 PM GMT-03:00, Andrii Nakryiko
-> ><andrii.nakryiko@gmail.com> wrote:
-> >> >On Thu, Feb 4, 2021 at 2:09 PM Arnaldo Carvalho de
-> >Melo><acme@kernel.org> wrote:
-> >> >>         The v1.20 release of pahole and its friends is out, mostly
-> >> >> addressing problems related to gcc 11 defaulting to DWARF5 for -g,
-> >> >> available at the usual places:
+> Hi,
+> 
+> when building with pahole v1.20 and binutils v2.35.2 plus Clang
+> v12.0.0-rc1 and DWARF-v5 I see:
+> ...
+> + info BTF .btf.vmlinux.bin.o
+> + [  != silent_ ]
+> + printf   %-7s %s\n BTF .btf.vmlinux.bin.o
+>  BTF     .btf.vmlinux.bin.o
+> + LLVM_OBJCOPY=/opt/binutils/bin/objcopy /opt/pahole/bin/pahole -J
+> .tmp_vmlinux.btf
+> [115] INT DW_ATE_unsigned_1 Error emitting BTF type
+> Encountered error while encoding BTF.
 
-> >> >Great, thanks, Arnaldo! Do you plan to build RPMs soon as well?
+Yes, I observe this error, too.
 
-> >> It's in rawhide already, I'll do it for f33, f32 later,
+https://gist.github.com/nickdesaulniers/ae8c9efbe4da69b1cf0dce138c1d2781
 
-> >Do you have a link? I tried to find it, but only see 1.19 so far.
- 
-> https://koji.fedoraproject.org/koji/buildinfo?buildID=1703678
-
-And now for Fedora 33, waiting for karma bumps at:
-
-https://bodhi.fedoraproject.org/updates/FEDORA-2021-804e7a572c
-
-fedpkg buidling for f32 now.
-
-- Arnaldo
+via v9 of my DWARF v5 series, which should help make this easier to
+reproduce:
+https://lore.kernel.org/lkml/CA+icZUW3sg_PkbmKSFMs6EqwQV7=hvKuAgZSsbg=Qr6gTs7RbQ@mail.gmail.com/T/#m45ec7e6df4c4b5e9da034b95d7dfc8e2a0c81dac
