@@ -2,76 +2,75 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	MSGID_FROM_MTA_HEADER,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D0678C433DB
-	for <linux-dwarves@archiver.kernel.org>; Fri,  5 Feb 2021 19:47:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6193DC433E9
+	for <linux-dwarves@archiver.kernel.org>; Fri,  5 Feb 2021 20:05:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7A56A64FBA
-	for <linux-dwarves@archiver.kernel.org>; Fri,  5 Feb 2021 19:47:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 19D7164FB9
+	for <linux-dwarves@archiver.kernel.org>; Fri,  5 Feb 2021 20:05:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233212AbhBESFW (ORCPT
+        id S233233AbhBESWn (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Fri, 5 Feb 2021 13:05:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33576 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233604AbhBESDN (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Fri, 5 Feb 2021 13:03:13 -0500
-Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F49FC061788;
-        Fri,  5 Feb 2021 11:44:57 -0800 (PST)
-Received: by mail-il1-x133.google.com with SMTP id e1so6930749ilu.0;
-        Fri, 05 Feb 2021 11:44:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
-         :subject:to:cc;
-        bh=23rZNWZgZ0YC8A8VG23dmqyIISsVpaEUS46vElqLq5U=;
-        b=ZUpU0kL0Y4Lr+FUEOPz2Wr5cPvNsr5Bhkat+EFKC4DbYzcazgCUnGEbld1gYAWGR+F
-         bcjPPtf8lDmZgSd5qzIOO1h2JrO52cTWqCbYtT++2whYsDyKZr7F+N5MwxGtenXrJFqk
-         m1r6e7ndzUkNfwyyUzoUHW8eB36sC7RxDa0/cWtyWV5GxDQwlo7ViUuws5CZaM+EJGy3
-         Aw/TYWeBm/g6/mjQWCXgi0peNC9DY4VJHbAXaP5H/SEXZYKjD4o83Dk1LWtXz4SoxAxx
-         qxuWKYWmOaFp36qdldnt5riQcPFRb//5kGcl4PS5mXpgeWKh+MUYKWbl9qr+S00WaGwe
-         g0yw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
-         :from:date:message-id:subject:to:cc;
-        bh=23rZNWZgZ0YC8A8VG23dmqyIISsVpaEUS46vElqLq5U=;
-        b=W3abIfH4nkU+V6QNUA3P/E+PX76fHQdtTOvpn7dHv9J5cGhE4lP7U0JbmIEQnNA6mj
-         7egQd6CpfU7bVHE5nt+5J/a5KEhwsN6fv/IX8yybCK6bxuHTfmI+QyxTmxtVG6SDmUkT
-         BF8n/0MmpXm3T/38RJ/BTc1P76fjcd32lb7B58zdjJ4nr1quMzLEBWGMVNKistJaM4I4
-         RtnoRX6S2dRJ5FoSKtU/PUkN+A1t/J04KAxHhv8bz/US8SQN5E3LnyMZUPSLLZdDmY3K
-         a1LHKutm4uLOZKl57L6ZzYMDIDIAWuRW0Dr0yOR1O8GuriXQDw8ZT8eDCjR1c5YAe74S
-         RG+Q==
-X-Gm-Message-State: AOAM530mohVE+GknfxtGjhUW12iwS5F+kPv8Cwnqr4PukW/VjAx2QciQ
-        o4t3eqLiMRqTXkKBZDN2wjInZMhNgxEfZXwLiqLvr/UZ2vF+tA==
-X-Google-Smtp-Source: ABdhPJytWNAcTsu7iBH49xyBGNlFHk2fAVcSQmCiYjrtvoM7qsoUkTrz6FcmEpCd/gDrv1uQ1pl3GRJ3hc5AJznM1u8=
-X-Received: by 2002:a05:6e02:d0:: with SMTP id r16mr5229885ilq.112.1612554296621;
- Fri, 05 Feb 2021 11:44:56 -0800 (PST)
-MIME-Version: 1.0
-References: <20210204220741.GA920417@kernel.org> <CA+icZUVQSojGgnis8Ds5GW-7-PVMZ2w4X5nQKSSkBPf-29NS6Q@mail.gmail.com>
- <CA+icZUU2xmZ=mhVYLRk7nZBRW0+v+YqBzq18ysnd7xN+S7JHyg@mail.gmail.com>
- <CA+icZUVyB3qaqq3pwOyJY_F4V6KU9hdF=AJM_D7iEW4QK4Eo6w@mail.gmail.com>
- <20210205152823.GD920417@kernel.org> <CA+icZUWzMdhuHDkcKMHAd39iMEijk65v2ADcz0=FdODr38sJ4w@mail.gmail.com>
- <CA+icZUXb1j-DrjvFEeeOGuR_pKmD_7_RusxpGQy+Pyhaoa==gA@mail.gmail.com>
- <CA+icZUVZA97V5C3kORqeSiaxRbfGbmzEaxgYf9RUMko4F76=7w@mail.gmail.com>
- <baa7c017-b2cf-b2cd-fbe8-2e021642f2e3@fb.com> <CA+icZUWESAQxWb6fvhOY0CxngLY3z4kOiZS2vPtSD5tDaSve-g@mail.gmail.com>
- <f985c88f-6084-c3ad-922c-ef1f69b12dd6@fb.com>
-In-Reply-To: <f985c88f-6084-c3ad-922c-ef1f69b12dd6@fb.com>
-Reply-To: sedat.dilek@gmail.com
-From:   Sedat Dilek <sedat.dilek@gmail.com>
-Date:   Fri, 5 Feb 2021 20:44:45 +0100
-Message-ID: <CA+icZUXyXFBMb0TY6goLXiKaxpwnigS9kvur=BXmGg9AW17mrg@mail.gmail.com>
+        Fri, 5 Feb 2021 13:22:43 -0500
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:10368 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233445AbhBESVh (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Fri, 5 Feb 2021 13:21:37 -0500
+Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 115K0rG7028899;
+        Fri, 5 Feb 2021 12:03:10 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=subject : to : cc :
+ references : from : message-id : date : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=facebook;
+ bh=bN1FDlIl1Ruv1dZQF8AnKwQPbbQPvEJDDdD9A6jrFuI=;
+ b=S55JuyllC1nq0vrwn6jI24zDAw6r2Wac9nYYN0hQ9tbMcp0VOZFTQsSBmb7ri/mHIjGz
+ M2ioEHHKrpyHSQucbP7f/TCIlMWsb0MdfGlQAbzjVqHBHvB0eUjGLy6rM79sey+1K9IA
+ ZLb4oeUS+IGKjyKw7HVqK3eVqohBQHZA3/E= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 36h2wb31cx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Fri, 05 Feb 2021 12:03:10 -0800
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com (100.104.31.183)
+ by o365-in.thefacebook.com (100.104.35.172) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1979.3; Fri, 5 Feb 2021 12:03:09 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=byjKbdznCUCUmsnS3zPSFShgqv63tX9HpwyE/CcB3LELSyy4tDweFU/tIKcnT0qwY4jr6/Sqk3R/gzs2xLcBmnoArqqrli5sbkN+pSwYIf8r6pS51OtAWmK1bYNVAzYHXJjpxnip18IDyZqrhpaVN2KcYi6Sn3zWYABbl34LcX5WQ5ZhzOmvrqXMNskJG8ZP24GT4CTluWos17o3h9Ix37OqM9ilBiG6FFnvIUqnN6R+xxNhmiQl0Rud130m5gn6lMHBe0sv1vP3j1FRegkCHCtThQeTi/HwErMsLwXHvHtxz4AV1ow6uyw4EZB27kwBWAi5TPnk6zaUi1t27XDAhA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=bN1FDlIl1Ruv1dZQF8AnKwQPbbQPvEJDDdD9A6jrFuI=;
+ b=Eff+SUnvcWecvWxlt0QB7pJX682hWTvwVATOW/XvljiMVs6EjSLNCttCqYbyxEPfXr5hGGtvoS74OEsyZbcFn/37Q+tCKoyjfHcqXBDnxkpx1+i3Ql2592jPnbcu52ekfX4KMWr8+sajHrZ0QeACtYLgT6BktTDGdUQp1kB/NAiXVGEzmRjFfQs9104YBDSejOWqPTaGyxqCWfpjX2kcY40fv0nrcLuj0AIsZ3m0jGq+pjv7EC9xzMSZguUWIxtaZPPTXM6lsK1+uXmcRjdnIlTlGnf3imihiMBO9K6idPZNDM7Te/gM4vXL4uLBsGsjf/bLJdSG5ok5NqNp9cllRQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
+ header.d=fb.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
+ s=selector2-fb-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=bN1FDlIl1Ruv1dZQF8AnKwQPbbQPvEJDDdD9A6jrFuI=;
+ b=CGRAY/gy48LTx6nwBebyNjGJk69aV+zAMIg2mWmsegE8MAoI0MDs/RNu2ovOoclKa0KhVPggkhOK1putcU9OR3UZicH8Sv0RLYbHFVo5kyqu/F54RGDLoAbXb0cqvQy2X3ikf89WIB7vtxyv9KZ/A1QKyuuPxjOEi1qQNDdJ1iE=
+Authentication-Results: redhat.com; dkim=none (message not signed)
+ header.d=none;redhat.com; dmarc=none action=none header.from=fb.com;
+Received: from BYAPR15MB4088.namprd15.prod.outlook.com (2603:10b6:a02:c3::18)
+ by BYAPR15MB2565.namprd15.prod.outlook.com (2603:10b6:a03:14f::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3805.16; Fri, 5 Feb
+ 2021 20:03:08 +0000
+Received: from BYAPR15MB4088.namprd15.prod.outlook.com
+ ([fe80::61d6:781d:e0:ada5]) by BYAPR15MB4088.namprd15.prod.outlook.com
+ ([fe80::61d6:781d:e0:ada5%5]) with mapi id 15.20.3805.028; Fri, 5 Feb 2021
+ 20:03:08 +0000
 Subject: Re: ERROR: INT DW_ATE_unsigned_1 Error emitting BTF type
-To:     Yonghong Song <yhs@fb.com>
-Cc:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
-        dwarves@vger.kernel.org,
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+CC:     <sedat.dilek@gmail.com>,
+        Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
+        <dwarves@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        bpf@vger.kernel.org, Jiri Olsa <jolsa@kernel.org>,
+        <bpf@vger.kernel.org>, Jiri Olsa <jolsa@kernel.org>,
         Jan Engelhardt <jengelh@inai.de>,
         Domenico Andreoli <cavok@debian.org>,
         Matthias Schwarzott <zzam@gentoo.org>,
@@ -79,346 +78,136 @@ Cc:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
         Mark Wieelard <mjw@redhat.com>,
         Paul Moore <paul@paul-moore.com>,
         Ondrej Mosnacek <omosnace@redhat.com>,
-        =?UTF-8?Q?Daniel_P=2E_Berrang=C3=A9?= <berrange@redhat.com>,
-        Tom Stellard <tstellar@redhat.com>,
-        Fangrui Song <maskray@google.com>
-Content-Type: multipart/mixed; boundary="0000000000000842f405ba9c0eb5"
+        =?UTF-8?Q?Daniel_P=2e_Berrang=c3=a9?= <berrange@redhat.com>,
+        Tom Stellard <tstellar@redhat.com>
+References: <20210204220741.GA920417@kernel.org>
+ <CA+icZUVQSojGgnis8Ds5GW-7-PVMZ2w4X5nQKSSkBPf-29NS6Q@mail.gmail.com>
+ <CA+icZUU2xmZ=mhVYLRk7nZBRW0+v+YqBzq18ysnd7xN+S7JHyg@mail.gmail.com>
+ <CA+icZUVyB3qaqq3pwOyJY_F4V6KU9hdF=AJM_D7iEW4QK4Eo6w@mail.gmail.com>
+ <20210205152823.GD920417@kernel.org>
+ <CA+icZUWzMdhuHDkcKMHAd39iMEijk65v2ADcz0=FdODr38sJ4w@mail.gmail.com>
+ <CA+icZUXb1j-DrjvFEeeOGuR_pKmD_7_RusxpGQy+Pyhaoa==gA@mail.gmail.com>
+ <CA+icZUVZA97V5C3kORqeSiaxRbfGbmzEaxgYf9RUMko4F76=7w@mail.gmail.com>
+ <baa7c017-b2cf-b2cd-fbe8-2e021642f2e3@fb.com>
+ <20210205192446.GH920417@kernel.org>
+From:   Yonghong Song <yhs@fb.com>
+Message-ID: <cb743ab8-9a66-a311-ed18-ecabf0947440@fb.com>
+Date:   Fri, 5 Feb 2021 12:03:05 -0800
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
+ Gecko/20100101 Thunderbird/78.7.0
+In-Reply-To: <20210205192446.GH920417@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [2620:10d:c090:400::5:b8ac]
+X-ClientProxiedBy: MWHPR15CA0050.namprd15.prod.outlook.com
+ (2603:10b6:301:4c::12) To BYAPR15MB4088.namprd15.prod.outlook.com
+ (2603:10b6:a02:c3::18)
+MIME-Version: 1.0
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from [IPv6:2620:10d:c085:21c1::11b4] (2620:10d:c090:400::5:b8ac) by MWHPR15CA0050.namprd15.prod.outlook.com (2603:10b6:301:4c::12) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3825.17 via Frontend Transport; Fri, 5 Feb 2021 20:03:07 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: e5af27ae-ebad-42c0-adff-08d8ca110ea3
+X-MS-TrafficTypeDiagnostic: BYAPR15MB2565:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <BYAPR15MB2565EB437AEAF2C98B82BAB1D3B29@BYAPR15MB2565.namprd15.prod.outlook.com>
+X-FB-Source: Internal
+X-MS-Oob-TLC-OOBClassifiers: OLM:6790;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: FsKqqWJACc2BL9QwhjsuumfsHKqKKyKg7eJvChuapgGAmOA+/mKPYmuWuPrTj/PQ2uH8aG3byI4QoMmzrxKorISjcp0Y9MZlkM+vI2i4aPCNNIseLuRuhJvs+OogjMjlksdsmoOlHwdZsUVQPM1Id5v8MeCGgYkEbbc250Vrki3dP41bXtNB3mP8mit0jQ6kLcT1FpSQscMkGwVDDY4j8Wpw1ZzYbrcdtv49YuLJ2byjEUMaU2zNQ+p2QUNL52IzRkzJE9kJan3UdMB7/LAMnqrrms/h7lQeB2acqKSdOLX/B/3DEMnm50FfCiFo36S2PPKSjppk1BVc7gdgxN40ziH0gI4EbdPI9cqej9i3FUXkitJ0cyPealpUF5K+We1H6Q8T/Dg6Drjdp8tgaG6BYzbdAEVJpt4lzGJQfM6W2zd1yVYIsb4+SPjVT+d2zf6vGTCokW1bYbx/h/mx8qa533oQt8pLPhQ2aWH6O3ykSAk9tvO1RL44DoYp6ruWFpS3h95lX6M2KBlocIS9cJiy7/1rVxVgf7BW2r7emqREqtt4yYL5vvqZEws1ddiupzGDrnI4E6fuuyk06NjRRXwSRbibmEMXzKTTLCHSwZaW7K4=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR15MB4088.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(39860400002)(136003)(396003)(346002)(376002)(366004)(54906003)(316002)(478600001)(8936002)(8676002)(31696002)(66556008)(66476007)(5660300002)(2616005)(53546011)(7416002)(86362001)(31686004)(52116002)(66946007)(36756003)(6916009)(6486002)(16526019)(2906002)(186003)(4326008)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData: =?utf-8?B?RGJ1OHltd0dVT3o3UWpEM3o3cm9nOENISFl6dG1sRVJqcjNkS3NSdHM0R3BQ?=
+ =?utf-8?B?SytMdU1KZ3p4UDZkRnJXNStYNWhJVXlyVTEzcENiNXVFbTk0TVpVUUJmWEZs?=
+ =?utf-8?B?MXB5dkdLcCt6dFRHbUdUV2Fwb3VPbVBxdXNiTlZScGQ3NlpKb0diOGVPeEtY?=
+ =?utf-8?B?Tys1b0hqVGRralNLSGpVYzJ6S21BMnVHN0VlNHBXSDJIR3RCY1AwSktkK1Aw?=
+ =?utf-8?B?WEFsY25jOEJPUGs1RXNiZWVXT2lDbmxwVjc0VHpQd0ZnR2dkc2hPR0JIV2JW?=
+ =?utf-8?B?TmFoMVNpdW5ubVhDbi9lODVRSldueVMyZnZhOXZjNWMwbzBKMkdFbUd3QUd5?=
+ =?utf-8?B?cmxTNU96eDlTQVpYa3BneVF2MmRhUThrRXl0bitrT3ZWdGNjMDR2N2NXcXds?=
+ =?utf-8?B?dlE4SjJPNjUzV1BvNFAwN2NvUEcwdWRhaXpZUVpnWWdNaVY1YUE3Skh3Slcr?=
+ =?utf-8?B?aUFTOGs1aTN4b2FFTW54Tis0bTdBNWJ3RXlvYWVLMHNHQ2trNW1iU1E2V2FQ?=
+ =?utf-8?B?OXFqZUM3bi9SendUM3ExV0x6UWxQcUV0OWJBeDdvOThtNXZiZk9vRU1oeHMw?=
+ =?utf-8?B?R05iMUQzME4xQ3lyNGJlSldNK3htenpnSTVaOE9xRGNudHU4cVVPcVRYVU5u?=
+ =?utf-8?B?aG5xYkQrQlV0Z0FSKy9zL0N2d096T1pZQzVZNkJMaFYwRlQ4ZlJkNlZ1Zjhz?=
+ =?utf-8?B?R2ZlOFFESk05S1pldm9hUTd6U2xRdjZ3cStSTUozLzZzRGJ1VFpxT2pGK2Yz?=
+ =?utf-8?B?UXlsd09MdklLQjgyOHpsV3JBVytqaHhPeE90ZlhNazhjZU16cHRUVlh0TkRT?=
+ =?utf-8?B?VlIwenNhUloxNWFhbzVqakN3bGFHTFhwMTZHNEcyKzBjSDdLaDFCQlVReC9R?=
+ =?utf-8?B?cXJBVURFaHlPcHpUUG53SVIvakZ1eFVTNFhQZjNubEZ2Q2c4QzJRL3hxRDFr?=
+ =?utf-8?B?MWFocFd5ZndxRUczMG5HcVJQTU1VL1JCSHRRN3JvS0t2dmczd3QxRjJqVUpY?=
+ =?utf-8?B?N1BzaTRadXViZUE4WXpEOG1CS05xbW84OHRsOWxFbzA5MTJKMzFEZjFYb1cw?=
+ =?utf-8?B?SncwYXN6b2F1V2VQL0hzck1laUF4RzFpYWZQVkhqRkgycUxNYm9MaHlpbVN4?=
+ =?utf-8?B?cEJwc3E0V1c0empWcWgwbmZNT2k3NlRBVXBuaWZ2ODFYM0d1eVZIbFBTRjdM?=
+ =?utf-8?B?UnJqNkcrSkY1c1ZqVFVHRlJvY21oTWZDUTdNWi9YNUNDZHp3cElNK2p3T21Y?=
+ =?utf-8?B?RlNjd1FpNDRmNDZvREtVRUFySHFDQkV4RkRlODEyYnVrQ2tHS2pTNGxtZzg1?=
+ =?utf-8?B?bklYM25Oa1dmb1cwZVJ0dDV6SXp1ZDJ3ZVV4TTNVMEpZVkNvRGpwMllVa1Vp?=
+ =?utf-8?B?RW4zQkp6bklZZExxMXhhWkVMVTdRajJDVUMvUnZxdUs3OXpUemZucG9ROEpH?=
+ =?utf-8?B?VFl3RUNzanZ4T3h1OXh1ekVYOVRoeU5tSW5Bd0FuUU9MZFI4U0VrZVJJbHFu?=
+ =?utf-8?B?WVlRVkdJeXptcUNLLzFHWXBqTVBiS1RnbDBvR0J0RkpCdkVqc0I1dHRldjQ5?=
+ =?utf-8?B?SUNIQzYvMHVGS2U1MURCeXlIOHpXVUlUSVFHSWJ5Vm9nTWRGdnIvU3ZaMEJu?=
+ =?utf-8?B?QitUaGpjMXBWQ2pwaWNiZUVmSDZwbjA3eUJvVnBjNFFpWjdvMUY1WXNxd1My?=
+ =?utf-8?B?dnNRdVp1NEtOdXUvTVB1SlR6bERvZWQ0TVRyakdJRlgySlIrNnYxWGpINFJO?=
+ =?utf-8?B?dkFrNDY2SnVkZkttSDMyb254azBRV2ZtMnFqa3VpWkNOeFl5bCtXa0dQZ3Bn?=
+ =?utf-8?Q?sIMoh2O5OftII2Eb6ZGDGh0jI6UIqFaVH0xds=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: e5af27ae-ebad-42c0-adff-08d8ca110ea3
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR15MB4088.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Feb 2021 20:03:08.3646
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: AopHwESC+Oa0+bRgUUrwsB5hviVT1NZ2Nx1dG6KSVK2LoRJ3MhskwHwR7IWy+I0y
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR15MB2565
+X-OriginatorOrg: fb.com
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.737
+ definitions=2021-02-05_11:2021-02-05,2021-02-05 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
+ spamscore=0 mlxscore=0 malwarescore=0 adultscore=0 clxscore=1015
+ mlxlogscore=999 phishscore=0 bulkscore=0 suspectscore=0 priorityscore=1501
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2102050124
+X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
---0000000000000842f405ba9c0eb5
-Content-Type: text/plain; charset="UTF-8"
 
-On Fri, Feb 5, 2021 at 8:21 PM Yonghong Song <yhs@fb.com> wrote:
->
->
->
-> On 2/5/21 11:15 AM, Sedat Dilek wrote:
-> > On Fri, Feb 5, 2021 at 8:10 PM Yonghong Song <yhs@fb.com> wrote:
-> >>
-> >>
-> >>
-> >> On 2/5/21 11:06 AM, Sedat Dilek wrote:
-> >>> On Fri, Feb 5, 2021 at 7:53 PM Sedat Dilek <sedat.dilek@gmail.com> wrote:
-> >>>>
-> >>>> On Fri, Feb 5, 2021 at 6:48 PM Sedat Dilek <sedat.dilek@gmail.com> wrote:
-> >>>>>
-> >>>>> On Fri, Feb 5, 2021 at 4:28 PM Arnaldo Carvalho de Melo
-> >>>>> <arnaldo.melo@gmail.com> wrote:
-> >>>>>>
-> >>>>>> Em Fri, Feb 05, 2021 at 04:23:59PM +0100, Sedat Dilek escreveu:
-> >>>>>>> On Fri, Feb 5, 2021 at 3:41 PM Sedat Dilek <sedat.dilek@gmail.com> wrote:
-> >>>>>>>>
-> >>>>>>>> On Fri, Feb 5, 2021 at 3:37 PM Sedat Dilek <sedat.dilek@gmail.com> wrote:
-> >>>>>>>>>
-> >>>>>>>>> Hi,
-> >>>>>>>>>
-> >>>>>>>>> when building with pahole v1.20 and binutils v2.35.2 plus Clang
-> >>>>>>>>> v12.0.0-rc1 and DWARF-v5 I see:
-> >>>>>>>>> ...
-> >>>>>>>>> + info BTF .btf.vmlinux.bin.o
-> >>>>>>>>> + [  != silent_ ]
-> >>>>>>>>> + printf   %-7s %s\n BTF .btf.vmlinux.bin.o
-> >>>>>>>>>    BTF     .btf.vmlinux.bin.o
-> >>>>>>>>> + LLVM_OBJCOPY=/opt/binutils/bin/objcopy /opt/pahole/bin/pahole -J
-> >>>>>>>>> .tmp_vmlinux.btf
-> >>>>>>>>> [115] INT DW_ATE_unsigned_1 Error emitting BTF type
-> >>>>>>>>> Encountered error while encoding BTF.
-> >>>>>>>>
-> >>>>>>>> Grepping the pahole sources:
-> >>>>>>>>
-> >>>>>>>> $ git grep DW_ATE
-> >>>>>>>> dwarf_loader.c:         bt->is_bool = encoding == DW_ATE_boolean;
-> >>>>>>>> dwarf_loader.c:         bt->is_signed = encoding == DW_ATE_signed;
-> >>>>>>>>
-> >>>>>>>> Missing DW_ATE_unsigned encoding?
-> >>>>>>>>
-> >>>>>>>
-> >>>>>>> Checked the LLVM sources:
-> >>>>>>>
-> >>>>>>> clang/lib/CodeGen/CGDebugInfo.cpp:    Encoding =
-> >>>>>>> llvm::dwarf::DW_ATE_unsigned_char;
-> >>>>>>> clang/lib/CodeGen/CGDebugInfo.cpp:    Encoding = llvm::dwarf::DW_ATE_unsigned;
-> >>>>>>> clang/lib/CodeGen/CGDebugInfo.cpp:    Encoding =
-> >>>>>>> llvm::dwarf::DW_ATE_unsigned_fixed;
-> >>>>>>> clang/lib/CodeGen/CGDebugInfo.cpp:
-> >>>>>>>     ? llvm::dwarf::DW_ATE_unsigned
-> >>>>>>> ...
-> >>>>>>> lld/test/wasm/debuginfo.test:CHECK-NEXT:                DW_AT_encoding
-> >>>>>>>    (DW_ATE_unsigned)
-> >>>>>>>
-> >>>>>>> So, I will switch from GNU ld.bfd v2.35.2 to LLD-12.
-> >>>>>>
-> >>>>>> Thanks for the research, probably your conclusion is correct, can you go
-> >>>>>> the next step and add that part and check if the end result is the
-> >>>>>> expected one?
-> >>>>>>
-> >>>>>
-> >>>>> Still building...
-> >>>>>
-> >>>>> Can you give me a hand on what has to be changed in dwarves/pahole?
-> >>>>>
-> >>>>> I guess switching from ld.bfd to ld.lld will show the same ERROR.
-> >>>>>
-> >>>>
-> >>>> This builds successfully - untested:
-> >>>>
-> >>>> $ git diff
-> >>>> diff --git a/btf_loader.c b/btf_loader.c
-> >>>> index ec286f413f36..a39edd3362db 100644
-> >>>> --- a/btf_loader.c
-> >>>> +++ b/btf_loader.c
-> >>>> @@ -107,6 +107,7 @@ static struct base_type *base_type__new(strings_t
-> >>>> name, uint32_t attrs,
-> >>>>                  bt->bit_size = size;
-> >>>>                  bt->is_signed = attrs & BTF_INT_SIGNED;
-> >>>>                  bt->is_bool = attrs & BTF_INT_BOOL;
-> >>>> +               bt->is_unsigned = attrs & BTF_INT_UNSIGNED;
-> >>>>                  bt->name_has_encoding = false;
-> >>>>                  bt->float_type = float_type;
-> >>>>          }
-> >>>> diff --git a/ctf.h b/ctf.h
-> >>>> index 25b79892bde3..9e47c3c74677 100644
-> >>>> --- a/ctf.h
-> >>>> +++ b/ctf.h
-> >>>> @@ -100,6 +100,7 @@ struct ctf_full_type {
-> >>>> #define CTF_TYPE_INT_CHAR      0x2
-> >>>> #define CTF_TYPE_INT_BOOL      0x4
-> >>>> #define CTF_TYPE_INT_VARARGS   0x8
-> >>>> +#define CTF_TYPE_INT_UNSIGNED  0x16
-> >>>>
-> >>>> #define CTF_TYPE_FP_ATTRS(VAL)         ((VAL) >> 24)
-> >>>> #define CTF_TYPE_FP_OFFSET(VAL)                (((VAL) >> 16) & 0xff)
-> >>>> diff --git a/dwarf_loader.c b/dwarf_loader.c
-> >>>> index b73d7867e1e6..79d40f183c24 100644
-> >>>> --- a/dwarf_loader.c
-> >>>> +++ b/dwarf_loader.c
-> >>>> @@ -473,6 +473,7 @@ static struct base_type *base_type__new(Dwarf_Die
-> >>>> *die, struct cu *cu)
-> >>>>                  bt->is_bool = encoding == DW_ATE_boolean;
-> >>>>                  bt->is_signed = encoding == DW_ATE_signed;
-> >>>>                  bt->is_varargs = false;
-> >>>> +               bt->is_unsigned = encoding == DW_ATE_unsigned;
-> >>>>                  bt->name_has_encoding = true;
-> >>>>          }
-> >>>>
-> >>>> diff --git a/dwarves.h b/dwarves.h
-> >>>> index 98caf1abc54d..edf32d2e6f80 100644
-> >>>> --- a/dwarves.h
-> >>>> +++ b/dwarves.h
-> >>>> @@ -1261,6 +1261,7 @@ struct base_type {
-> >>>>          uint8_t         is_signed:1;
-> >>>>          uint8_t         is_bool:1;
-> >>>>          uint8_t         is_varargs:1;
-> >>>> +       uint8_t         is_unsigned:1;
-> >>>>          uint8_t         float_type:4;
-> >>>> };
-> >>>>
-> >>>> diff --git a/lib/bpf b/lib/bpf
-> >>>> --- a/lib/bpf
-> >>>> +++ b/lib/bpf
-> >>>> @@ -1 +1 @@
-> >>>> -Subproject commit 5af3d86b5a2c5fecdc3ab83822d083edd32b4396
-> >>>> +Subproject commit 5af3d86b5a2c5fecdc3ab83822d083edd32b4396-dirty
-> >>>> diff --git a/libbtf.c b/libbtf.c
-> >>>> index 9f7628304495..a0661a7bbed9 100644
-> >>>> --- a/libbtf.c
-> >>>> +++ b/libbtf.c
-> >>>> @@ -247,6 +247,8 @@ static const char *
-> >>>> btf_elf__int_encoding_str(uint8_t encoding)
-> >>>>                  return "CHAR";
-> >>>>          else if (encoding == BTF_INT_BOOL)
-> >>>>                  return "BOOL";
-> >>>> +       else if (encoding == BTF_INT_UNSIGNED)
-> >>>> +               return "UNSIGNED";
-> >>>>          else
-> >>>>                  return "UNKN";
-> >>>> }
-> >>>> @@ -379,6 +381,8 @@ int32_t btf_elf__add_base_type(struct btf_elf
-> >>>> *btfe, const struct base_type *bt,
-> >>>>                  encoding = BTF_INT_SIGNED;
-> >>>>          } else if (bt->is_bool) {
-> >>>>                  encoding = BTF_INT_BOOL;
-> >>>> +       } else if (bt->is_unsigned) {
-> >>>> +               encoding = BTF_INT_UNSIGNED;
-> >>>>          } else if (bt->float_type) {
-> >>>>                  fprintf(stderr, "float_type is not supported\n");
-> >>>>                  return -1;
-> >>>>
-> >>>> Additionally - I cannot see it with `git diff`:
-> >>>>
-> >>>> [ lib/bpf/include/uapi/linux/btf.h ]
-> >>>>
-> >>>> /* Attributes stored in the BTF_INT_ENCODING */
-> >>>> #define BTF_INT_SIGNED (1 << 0)
-> >>>> #define BTF_INT_CHAR (1 << 1)
-> >>>> #define BTF_INT_BOOL (1 << 2)
-> >>>> #define BTF_INT_UNSIGNED (1 << 3)
-> >>>>
-> >>>> Comments?
-> >>>>
-> >>>
-> >>> Hmmm...
-> >>>
-> >>> + info BTF .btf.vmlinux.bin.o
-> >>> + [  != silent_ ]
-> >>> + printf   %-7s %s\n BTF .btf.vmlinux.bin.o
-> >>>    BTF     .btf.vmlinux.bin.o
-> >>> + LLVM_OBJCOPY=llvm-objcopy /opt/pahole/bin/pahole -J .tmp_vmlinux.btf
-> >>> [2] INT long unsigned int Error emitting BTF type
-> >>> Encountered error while encoding BTF.
-> >>> + llvm-objcopy --only-section=.BTF --set-section-flags
-> >>> .BTF=alloc,readonly --strip-all .tmp_vmlinux.btf .btf.vmlinux.bin.o
-> >>> ...
-> >>> + info BTFIDS vmlinux
-> >>> + [  != silent_ ]
-> >>> + printf   %-7s %s\n BTFIDS vmlinux
-> >>>    BTFIDS  vmlinux
-> >>> + ./tools/bpf/resolve_btfids/resolve_btfids vmlinux
-> >>> FAILED: load BTF from vmlinux: Invalid argument
-> >>> + on_exit
-> >>> + [ 255 -ne 0 ]
-> >>> + cleanup
-> >>> + rm -f .btf.vmlinux.bin.o
-> >>> + rm -f .tmp_System.map
-> >>> + rm -f .tmp_vmlinux.btf .tmp_vmlinux.kallsyms1
-> >>> .tmp_vmlinux.kallsyms1.S .tmp_vmlinux.kallsyms1.o
-> >>> .tmp_vmlinux.kallsyms2 .tmp_vmlinux.kallsyms2.S .tmp_vmlinux.kallsyms
-> >>> 2.o
-> >>> + rm -f System.map
-> >>> + rm -f vmlinux
-> >>> + rm -f vmlinux.o
-> >>> make[3]: *** [Makefile:1166: vmlinux] Error 255
-> >>>
-> >>> Grepping through linux.git/tools I guess some BTF tools/libs need to
-> >>> know what BTF_INT_UNSIGNED is?
-> >>
-> >> BTF_INT_UNSIGNED needs kernel support. Maybe to teach pahole to
-> >> ignore this for now until kernel infrastructure is ready.
-> >> Not sure whether this information will be useful or not
-> >> for BTF. This needs to be discussed separately.
-> >>
-> >
-> > [ CC Fangrui ]
-> >
-> > How can I teach pahole to ignore BTF_INT_UNSIGNED?
->
-> i mean for the following:
->
-> @@ -379,6 +381,8 @@ int32_t btf_elf__add_base_type(struct btf_elf
-> *btfe, const struct base_type *bt,
->                  encoding = BTF_INT_SIGNED;
->          } else if (bt->is_bool) {
->                  encoding = BTF_INT_BOOL;
-> +       } else if (bt->is_unsigned) {
-> +               encoding = BTF_INT_UNSIGNED;
->          } else if (bt->float_type) {
->                  fprintf(stderr, "float_type is not supported\n");
->                  return -1;
->
-> You can do
->
-> @@ -379,6 +381,8 @@ int32_t btf_elf__add_base_type(struct btf_elf
-> *btfe, const struct base_type *bt,
->                  encoding = BTF_INT_SIGNED;
->          } else if (bt->is_bool) {
->                  encoding = BTF_INT_BOOL;
-> +       } else if (bt->is_unsigned) {
-> +               ; /* ignored for now */
->          } else if (bt->float_type) {
->                  fprintf(stderr, "float_type is not supported\n");
->                  return -1;
->
-> The default encoding is 0 which indicates an unsigned int.
->
 
-With the attached diff I get again:
+On 2/5/21 11:24 AM, Arnaldo Carvalho de Melo wrote:
+> Em Fri, Feb 05, 2021 at 11:10:08AM -0800, Yonghong Song escreveu:
+>> On 2/5/21 11:06 AM, Sedat Dilek wrote:
+>>> On Fri, Feb 5, 2021 at 7:53 PM Sedat Dilek <sedat.dilek@gmail.com> wrote:
+>>> Grepping through linux.git/tools I guess some BTF tools/libs need to
+>>> know what BTF_INT_UNSIGNED is?
+>   
+>> BTF_INT_UNSIGNED needs kernel support. Maybe to teach pahole to
+>> ignore this for now until kernel infrastructure is ready.
+> 
+> Yeah, I thought about doing that.
+> 
+>> Not sure whether this information will be useful or not
+>> for BTF. This needs to be discussed separately.
+> 
+> Maybe search for the rationale for its introduction in DWARF.
 
-+ info BTF .btf.vmlinux.bin.o
-+ [  != silent_ ]
-+ printf   %-7s %s\n BTF .btf.vmlinux.bin.o
- BTF     .btf.vmlinux.bin.o
-+ LLVM_OBJCOPY=llvm-objcopy /opt/pahole/bin/pahole -J .tmp_vmlinux.btf
-[115] INT DW_ATE_unsigned_1 Error emitting BTF type
-Encountered error while encoding BTF.
-+ llvm-objcopy --only-section=.BTF --set-section-flags
-.BTF=alloc,readonly --strip-all .tmp_vmlinux.btf .btf.vmlinux.bin.o
-...
-+ info BTFIDS vmlinux
-+ [  != silent_ ]
-+ printf   %-7s %s\n BTFIDS vmlinux
- BTFIDS  vmlinux
-+ ./tools/bpf/resolve_btfids/resolve_btfids vmlinux
-FAILED: load BTF from vmlinux: Invalid argument
-+ on_exit
+In LLVM, we have:
+   uint8_t BTFEncoding;
+   switch (Encoding) {
+   case dwarf::DW_ATE_boolean:
+     BTFEncoding = BTF::INT_BOOL;
+     break;
+   case dwarf::DW_ATE_signed:
+   case dwarf::DW_ATE_signed_char:
+     BTFEncoding = BTF::INT_SIGNED;
+     break;
+   case dwarf::DW_ATE_unsigned:
+   case dwarf::DW_ATE_unsigned_char:
+     BTFEncoding = 0;
+     break;
 
-Can someone please look at the attached diff?
-Thanks.
+I think DW_ATE_unsigned can be ignored in pahole since
+the default encoding = 0. A simple comment is enough.
 
-- Sedat -
-
-> >
-> > Another tryout might be to use "-fbinutils-version=..." which is
-> > available for LLVM-12 according to Fangrui?
-> > Fangrui, which binutils versions can I pass and how?
->
-> >
-> > Thanks.
-> >
-> > - Sedat -
-> >
-
---0000000000000842f405ba9c0eb5
-Content-Type: text/x-patch; charset="US-ASCII"; 
-	name="BTF_INT_UNSIGNED_ignored-is_unsigned.diff"
-Content-Disposition: attachment; 
-	filename="BTF_INT_UNSIGNED_ignored-is_unsigned.diff"
-Content-Transfer-Encoding: base64
-Content-ID: <f_kksp43f90>
-X-Attachment-Id: f_kksp43f90
-
-ZGlmZiAtLWdpdCBhL2J0Zl9sb2FkZXIuYyBiL2J0Zl9sb2FkZXIuYwppbmRleCBlYzI4NmY0MTNm
-MzYuLmEzOWVkZDMzNjJkYiAxMDA2NDQKLS0tIGEvYnRmX2xvYWRlci5jCisrKyBiL2J0Zl9sb2Fk
-ZXIuYwpAQCAtMTA3LDYgKzEwNyw3IEBAIHN0YXRpYyBzdHJ1Y3QgYmFzZV90eXBlICpiYXNlX3R5
-cGVfX25ldyhzdHJpbmdzX3QgbmFtZSwgdWludDMyX3QgYXR0cnMsCiAJCWJ0LT5iaXRfc2l6ZSA9
-IHNpemU7CiAJCWJ0LT5pc19zaWduZWQgPSBhdHRycyAmIEJURl9JTlRfU0lHTkVEOwogCQlidC0+
-aXNfYm9vbCA9IGF0dHJzICYgQlRGX0lOVF9CT09MOworCQlidC0+aXNfdW5zaWduZWQgPSBhdHRy
-cyAmIEJURl9JTlRfVU5TSUdORUQ7CiAJCWJ0LT5uYW1lX2hhc19lbmNvZGluZyA9IGZhbHNlOwog
-CQlidC0+ZmxvYXRfdHlwZSA9IGZsb2F0X3R5cGU7CiAJfQpkaWZmIC0tZ2l0IGEvY3RmLmggYi9j
-dGYuaAppbmRleCAyNWI3OTg5MmJkZTMuLjllNDdjM2M3NDY3NyAxMDA2NDQKLS0tIGEvY3RmLmgK
-KysrIGIvY3RmLmgKQEAgLTEwMCw2ICsxMDAsNyBAQCBzdHJ1Y3QgY3RmX2Z1bGxfdHlwZSB7CiAj
-ZGVmaW5lIENURl9UWVBFX0lOVF9DSEFSCTB4MgogI2RlZmluZSBDVEZfVFlQRV9JTlRfQk9PTAkw
-eDQKICNkZWZpbmUgQ1RGX1RZUEVfSU5UX1ZBUkFSR1MJMHg4CisjZGVmaW5lIENURl9UWVBFX0lO
-VF9VTlNJR05FRAkweDE2CiAKICNkZWZpbmUgQ1RGX1RZUEVfRlBfQVRUUlMoVkFMKQkJKChWQUwp
-ID4+IDI0KQogI2RlZmluZSBDVEZfVFlQRV9GUF9PRkZTRVQoVkFMKQkJKCgoVkFMKSA+PiAxNikg
-JiAweGZmKQpkaWZmIC0tZ2l0IGEvZHdhcmZfbG9hZGVyLmMgYi9kd2FyZl9sb2FkZXIuYwppbmRl
-eCBiNzNkNzg2N2UxZTYuLjc5ZDQwZjE4M2MyNCAxMDA2NDQKLS0tIGEvZHdhcmZfbG9hZGVyLmMK
-KysrIGIvZHdhcmZfbG9hZGVyLmMKQEAgLTQ3Myw2ICs0NzMsNyBAQCBzdGF0aWMgc3RydWN0IGJh
-c2VfdHlwZSAqYmFzZV90eXBlX19uZXcoRHdhcmZfRGllICpkaWUsIHN0cnVjdCBjdSAqY3UpCiAJ
-CWJ0LT5pc19ib29sID0gZW5jb2RpbmcgPT0gRFdfQVRFX2Jvb2xlYW47CiAJCWJ0LT5pc19zaWdu
-ZWQgPSBlbmNvZGluZyA9PSBEV19BVEVfc2lnbmVkOwogCQlidC0+aXNfdmFyYXJncyA9IGZhbHNl
-OworCQlidC0+aXNfdW5zaWduZWQgPSBlbmNvZGluZyA9PSBEV19BVEVfdW5zaWduZWQ7CiAJCWJ0
-LT5uYW1lX2hhc19lbmNvZGluZyA9IHRydWU7CiAJfQogCmRpZmYgLS1naXQgYS9kd2FydmVzLmgg
-Yi9kd2FydmVzLmgKaW5kZXggOThjYWYxYWJjNTRkLi5lZGYzMmQyZTZmODAgMTAwNjQ0Ci0tLSBh
-L2R3YXJ2ZXMuaAorKysgYi9kd2FydmVzLmgKQEAgLTEyNjEsNiArMTI2MSw3IEBAIHN0cnVjdCBi
-YXNlX3R5cGUgewogCXVpbnQ4X3QJCWlzX3NpZ25lZDoxOwogCXVpbnQ4X3QJCWlzX2Jvb2w6MTsK
-IAl1aW50OF90CQlpc192YXJhcmdzOjE7CisJdWludDhfdAkJaXNfdW5zaWduZWQ6MTsKIAl1aW50
-OF90CQlmbG9hdF90eXBlOjQ7CiB9OwogCmRpZmYgLS1naXQgYS9saWIvYnBmIGIvbGliL2JwZgot
-LS0gYS9saWIvYnBmCisrKyBiL2xpYi9icGYKQEAgLTEgKzEgQEAKLVN1YnByb2plY3QgY29tbWl0
-IDVhZjNkODZiNWEyYzVmZWNkYzNhYjgzODIyZDA4M2VkZDMyYjQzOTYKK1N1YnByb2plY3QgY29t
-bWl0IDVhZjNkODZiNWEyYzVmZWNkYzNhYjgzODIyZDA4M2VkZDMyYjQzOTYtZGlydHkKZGlmZiAt
-LWdpdCBhL2xpYmJ0Zi5jIGIvbGliYnRmLmMKaW5kZXggOWY3NjI4MzA0NDk1Li5mNDdkZTFlY2Qy
-MWUgMTAwNjQ0Ci0tLSBhL2xpYmJ0Zi5jCisrKyBiL2xpYmJ0Zi5jCkBAIC0yNDcsNiArMjQ3LDgg
-QEAgc3RhdGljIGNvbnN0IGNoYXIgKiBidGZfZWxmX19pbnRfZW5jb2Rpbmdfc3RyKHVpbnQ4X3Qg
-ZW5jb2RpbmcpCiAJCXJldHVybiAiQ0hBUiI7CiAJZWxzZSBpZiAoZW5jb2RpbmcgPT0gQlRGX0lO
-VF9CT09MKQogCQlyZXR1cm4gIkJPT0wiOworCWVsc2UgaWYgKGVuY29kaW5nID09IEJURl9JTlRf
-VU5TSUdORUQpCisJCXJldHVybiAiVU5TSUdORUQiOwogCWVsc2UKIAkJcmV0dXJuICJVTktOIjsK
-IH0KQEAgLTM3OSw2ICszODEsOCBAQCBpbnQzMl90IGJ0Zl9lbGZfX2FkZF9iYXNlX3R5cGUoc3Ry
-dWN0IGJ0Zl9lbGYgKmJ0ZmUsIGNvbnN0IHN0cnVjdCBiYXNlX3R5cGUgKmJ0LAogCQllbmNvZGlu
-ZyA9IEJURl9JTlRfU0lHTkVEOwogCX0gZWxzZSBpZiAoYnQtPmlzX2Jvb2wpIHsKIAkJZW5jb2Rp
-bmcgPSBCVEZfSU5UX0JPT0w7CisJfSBlbHNlIGlmIChidC0+aXNfdW5zaWduZWQpIHsKKwkJOyAv
-KiBpZ25vcmVkIGZvciBub3cgKi8KIAl9IGVsc2UgaWYgKGJ0LT5mbG9hdF90eXBlKSB7CiAJCWZw
-cmludGYoc3RkZXJyLCAiZmxvYXRfdHlwZSBpcyBub3Qgc3VwcG9ydGVkXG4iKTsKIAkJcmV0dXJu
-IC0xOwo=
---0000000000000842f405ba9c0eb5--
+> 
+> - ARnaldo
+> 
