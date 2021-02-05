@@ -2,123 +2,93 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7312DC433DB
-	for <linux-dwarves@archiver.kernel.org>; Fri,  5 Feb 2021 22:22:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 35443C433E0
+	for <linux-dwarves@archiver.kernel.org>; Fri,  5 Feb 2021 22:22:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1A3E164EE4
-	for <linux-dwarves@archiver.kernel.org>; Fri,  5 Feb 2021 22:22:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D736764E2C
+	for <linux-dwarves@archiver.kernel.org>; Fri,  5 Feb 2021 22:22:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229839AbhBEWW1 (ORCPT
+        id S229622AbhBEWWc (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Fri, 5 Feb 2021 17:22:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42008 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232607AbhBEOZQ (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Fri, 5 Feb 2021 09:25:16 -0500
-Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEA74C061A2A;
-        Fri,  5 Feb 2021 07:50:49 -0800 (PST)
-Received: by mail-il1-x131.google.com with SMTP id p15so6191118ilq.8;
-        Fri, 05 Feb 2021 07:50:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
-         :subject:to:cc;
-        bh=kiM8WMFjST9dsy9zDah68/XyOF2KBPOv5W+GYkbdeSU=;
-        b=ZhDvtHxZgtHTeY5fyZvbph2aXejeBONUjk0laSyWHs/QDFG5LJ9yIUTaOXQcYVmy1/
-         WS2CJ0uUMJMdBwp2t4lWN2kSj7CHRJYMY0sCM23/kj5OZH6cDxo7YmwkWXjiK02SLu0Z
-         JVwInYdwgJmkye65iGmTfoKn4kplizy4wl5YdYgk0LAsSJbI2La/jY2qjYlo8UZcKqVl
-         Xz2SWjCKHDly+bUkdmUAx7IrxoQw4Yf1lMf1tRarksR+aM9oWtJFFNMumodtfZXEWP2S
-         JUKXCicBRJQOYYWT0+MBQ7+X1QkKoZihCQ3tRVs212ww4K5xzs+SsxWedJpwe70fOl2q
-         smQQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
-         :from:date:message-id:subject:to:cc;
-        bh=kiM8WMFjST9dsy9zDah68/XyOF2KBPOv5W+GYkbdeSU=;
-        b=dR2SwLukGrJS3jjm7A3niy3higIPOv5dRpigFJTzRqWylgLjjZU2awnX0SaP2jlD1I
-         FhznNpVeHuYn4xKafYKbC85LzLDQjUqcHzT8BVRPEHkP33XAYb+ut+vO+Ep7uM1zjNPI
-         j/dfCixLQygnXDvAlUUw4OdqzOfMKD2OOQXvxsFJ1YDHS+3qmjaG0zBr3G/vx/HAav3P
-         dpET5wRoULyaMcBKfP4QAwffJBq23DitHMzLR54tbvEvRNH0nbHif5GuQ37zEp/pj8zN
-         t+Hb/wP+l4KSKCAw46GgHfyaWuCJ2QVYDW6X5WlSz44SX+Omn6q96EQ8w/LG98QROFig
-         2AdA==
-X-Gm-Message-State: AOAM5322IBGtzyH++M+Ag16BaMe5pTjIX1GUJSUr3MrSOo/ZLlDMlup8
-        6QvcF5FZziLZBWhHg+jNH8wpMY+KLLZOI429YA+VJHYCfHTXGYcS
-X-Google-Smtp-Source: ABdhPJw1QvaGYTrK47b0MkpUdbTRZaKI08TYAO8wf7udS7POZDrIiJ5UECvfvMWbmJe7zrApyTMXW7qOfbFwoG8G4Qw=
-X-Received: by 2002:a92:ce46:: with SMTP id a6mr4531229ilr.10.1612538650788;
- Fri, 05 Feb 2021 07:24:10 -0800 (PST)
+        Fri, 5 Feb 2021 17:22:32 -0500
+Received: from mail.kernel.org ([198.145.29.99]:41764 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232630AbhBEO26 (ORCPT <rfc822;dwarves@vger.kernel.org>);
+        Fri, 5 Feb 2021 09:28:58 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id D08C264D92;
+        Fri,  5 Feb 2021 16:06:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1612541205;
+        bh=m0Ived/Gtw9H0h9wzJs3877Bi8G+nGI9iZ9HA2qfSi0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=N19lstyfIjNxGz0mYNCERX8vzhh1nu7jBG58K4mykiqzTPnAy4sUWlGy2fihm8BZi
+         2hvg6JcH/74yAAhr6kGe8CSdh/ZWeu7AyEJ/8qD47xa5QJXEcaBroFOEc+OXUz08Kp
+         qhqV4TzpAkO2qCCq6/smiou/HyIojpMLPsUEmQSznsUqfZar1K0byzoV/LkJWHiyNf
+         GSn6boP/u4Jy3y4I3pqrJKex77yGszmnrQq2B9G46HiUhOHS3NpdMcNFKD1T+gKx66
+         v6VBSmMkbxAta0qgbDwCXodwiEat97uh2Wh2Hy5PeLCJ7Pi/wtO0lNQ74b3RcRPfKe
+         1dLN2PLyiSV1w==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 3750740513; Fri,  5 Feb 2021 13:06:41 -0300 (-03)
+Date:   Fri, 5 Feb 2021 13:06:41 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Chris Murphy <lists@colorremedies.com>
+Cc:     bpf <bpf@vger.kernel.org>, Jiri Olsa <jolsa@kernel.org>,
+        dwarves@vger.kernel.org,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Yonghong Song <yhs@fb.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Clang-Built-Linux ML <clang-built-linux@googlegroups.com>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Jakub Jelinek <jakub@redhat.com>,
+        Fangrui Song <maskray@google.com>,
+        Caroline Tice <cmtice@google.com>,
+        Nick Clifton <nickc@redhat.com>
+Subject: Re: [FIXED] Re: 5:11: in-kernel BTF is malformed
+Message-ID: <20210205160641.GE920417@kernel.org>
+References: <CAJCQCtRHOidM7Vps1JQSpZA14u+B5fR860FwZB=eb1wYjTpqDw@mail.gmail.com>
+ <CAEf4BzZ4oTB0-JizHe1VaCk2V+Jb9jJoTznkgh6CjE5VxNVqbg@mail.gmail.com>
+ <CAJCQCtRw6UWGGvjn0x__godYKYQXXmtyQys4efW2Pb84Q5q8Eg@mail.gmail.com>
+ <20210204010038.GA854763@kernel.org>
+ <CAJCQCtQfgRp78_WSrSHLNUUYNCyOCH=vo10nVZW_cyMjpZiNJg@mail.gmail.com>
+ <CAEf4Bza4XQxpS7VTNWGk6Rz-iUwZemF6+iAVBA_yvrWnV0k8Qg@mail.gmail.com>
+ <CAJCQCtRDJ_uiJcanP_p+y6Kz76c4P-EmndMyfHN5f4rtkgYhjA@mail.gmail.com>
+ <20210204132625.GB910119@kernel.org>
+ <20210204163319.GD910119@kernel.org>
+ <CAJCQCtT-i0Lv2zxUDko3XuiHpUqOnYPeND5LzD=zgrB1-GNvAg@mail.gmail.com>
 MIME-Version: 1.0
-References: <20210204220741.GA920417@kernel.org> <CA+icZUVQSojGgnis8Ds5GW-7-PVMZ2w4X5nQKSSkBPf-29NS6Q@mail.gmail.com>
- <CA+icZUU2xmZ=mhVYLRk7nZBRW0+v+YqBzq18ysnd7xN+S7JHyg@mail.gmail.com>
-In-Reply-To: <CA+icZUU2xmZ=mhVYLRk7nZBRW0+v+YqBzq18ysnd7xN+S7JHyg@mail.gmail.com>
-Reply-To: sedat.dilek@gmail.com
-From:   Sedat Dilek <sedat.dilek@gmail.com>
-Date:   Fri, 5 Feb 2021 16:23:59 +0100
-Message-ID: <CA+icZUVyB3qaqq3pwOyJY_F4V6KU9hdF=AJM_D7iEW4QK4Eo6w@mail.gmail.com>
-Subject: Re: ERROR: INT DW_ATE_unsigned_1 Error emitting BTF type
-To:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
-Cc:     dwarves@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        bpf@vger.kernel.org, Jiri Olsa <jolsa@kernel.org>,
-        Jan Engelhardt <jengelh@inai.de>,
-        Domenico Andreoli <cavok@debian.org>,
-        Matthias Schwarzott <zzam@gentoo.org>,
-        Andrii Nakryiko <andriin@fb.com>, Yonghong Song <yhs@fb.com>,
-        Mark Wieelard <mjw@redhat.com>,
-        Paul Moore <paul@paul-moore.com>,
-        Ondrej Mosnacek <omosnace@redhat.com>,
-        =?UTF-8?Q?Daniel_P=2E_Berrang=C3=A9?= <berrange@redhat.com>,
-        Tom Stellard <tstellar@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJCQCtT-i0Lv2zxUDko3XuiHpUqOnYPeND5LzD=zgrB1-GNvAg@mail.gmail.com>
+X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-On Fri, Feb 5, 2021 at 3:41 PM Sedat Dilek <sedat.dilek@gmail.com> wrote:
->
-> On Fri, Feb 5, 2021 at 3:37 PM Sedat Dilek <sedat.dilek@gmail.com> wrote:
+Em Thu, Feb 04, 2021 at 08:10:52PM -0700, Chris Murphy escreveu:
+> On Thu, Feb 4, 2021 at 9:33 AM Arnaldo Carvalho de Melo <acme@kernel.org> wrote:
 > >
-> > Hi,
-> >
-> > when building with pahole v1.20 and binutils v2.35.2 plus Clang
-> > v12.0.0-rc1 and DWARF-v5 I see:
-> > ...
-> > + info BTF .btf.vmlinux.bin.o
-> > + [  != silent_ ]
-> > + printf   %-7s %s\n BTF .btf.vmlinux.bin.o
-> >  BTF     .btf.vmlinux.bin.o
-> > + LLVM_OBJCOPY=/opt/binutils/bin/objcopy /opt/pahole/bin/pahole -J
-> > .tmp_vmlinux.btf
-> > [115] INT DW_ATE_unsigned_1 Error emitting BTF type
-> > Encountered error while encoding BTF.
->
-> Grepping the pahole sources:
->
-> $ git grep DW_ATE
-> dwarf_loader.c:         bt->is_bool = encoding == DW_ATE_boolean;
-> dwarf_loader.c:         bt->is_signed = encoding == DW_ATE_signed;
->
-> Missing DW_ATE_unsigned encoding?
->
+> > So I think that for the problems related to building the kernel with gcc
+> > 11 in Fedora Rawhide using the default that is now DWARF5, pahole 1.20
+> > is good to go and I'll tag it now.
+> 
+> dwarves-1.20-1.fc34.x86_64
+> libdwarves1-1.20-1.fc34.x86_64
+> 
+> Fixes both "failed to validate module [?????] BTF: -22" type errors,
+> and 'in-kernel BTF is malformed" with qemu-kvm and libvirt.
 
-Checked the LLVM sources:
+Cool! Any fedora user here please give the update some love by bumping
+its karma at:
 
-clang/lib/CodeGen/CGDebugInfo.cpp:    Encoding =
-llvm::dwarf::DW_ATE_unsigned_char;
-clang/lib/CodeGen/CGDebugInfo.cpp:    Encoding = llvm::dwarf::DW_ATE_unsigned;
-clang/lib/CodeGen/CGDebugInfo.cpp:    Encoding =
-llvm::dwarf::DW_ATE_unsigned_fixed;
-clang/lib/CodeGen/CGDebugInfo.cpp:
-  ? llvm::dwarf::DW_ATE_unsigned
-...
-lld/test/wasm/debuginfo.test:CHECK-NEXT:                DW_AT_encoding
- (DW_ATE_unsigned)
+https://bodhi.fedoraproject.org/updates/FEDORA-2021-804e7a572c
 
-So, I will switch from GNU ld.bfd v2.35.2 to LLD-12.
-
-- Sedat -
+- Arnaldo
