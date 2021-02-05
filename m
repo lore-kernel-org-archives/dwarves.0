@@ -2,130 +2,248 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-23.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+X-Spam-Status: No, score=-18.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no
-	version=3.4.0
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0195EC433DB
-	for <linux-dwarves@archiver.kernel.org>; Tue,  9 Feb 2021 15:07:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 26C42C433E0
+	for <linux-dwarves@archiver.kernel.org>; Fri,  5 Feb 2021 00:05:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BBE5264EB8
-	for <linux-dwarves@archiver.kernel.org>; Tue,  9 Feb 2021 15:07:05 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id F3D7A64FB5
+	for <linux-dwarves@archiver.kernel.org>; Fri,  5 Feb 2021 00:05:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232134AbhBIPHF (ORCPT
+        id S231408AbhBEAFf (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Tue, 9 Feb 2021 10:07:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49494 "EHLO
+        Thu, 4 Feb 2021 19:05:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232047AbhBIPG7 (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Tue, 9 Feb 2021 10:06:59 -0500
-Received: from mail-vs1-xe2d.google.com (mail-vs1-xe2d.google.com [IPv6:2607:f8b0:4864:20::e2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2933FC061786
-        for <dwarves@vger.kernel.org>; Tue,  9 Feb 2021 07:06:18 -0800 (PST)
-Received: by mail-vs1-xe2d.google.com with SMTP id o186so9576666vso.1
-        for <dwarves@vger.kernel.org>; Tue, 09 Feb 2021 07:06:18 -0800 (PST)
+        with ESMTP id S231458AbhBEAFd (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Thu, 4 Feb 2021 19:05:33 -0500
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF03BC06178B
+        for <dwarves@vger.kernel.org>; Thu,  4 Feb 2021 16:04:53 -0800 (PST)
+Received: by mail-pg1-x52f.google.com with SMTP id j2so3302404pgl.0
+        for <dwarves@vger.kernel.org>; Thu, 04 Feb 2021 16:04:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=DbTXuOBblU9jPQgm8MRCYvaknfLBOXYdW6zn/C5UsN4=;
-        b=g/Bp8tCC+w+JRa9cSdlGPUAvUtCoqGkBlEfY1+vOAFxvIGs7DjlKloprbuxuxF5h9u
-         Gef1X9bSr41acjjYqEEn/POZS54oqzEyIGXl5EbHqEjBZguUxuFRzcCO5egLwpSxCoMc
-         dk1WYzkGF0G3b6dc2FVDPpzbwxilHHlDVDoL/kLgmswz2m0pUz4Pvcx3Ktb83zxvw4OZ
-         2KnAQSskFdQbV+G/GjXouzw9Ls/cP5stTdUfuxLEfTiIxHj9CE/0C3n8kGuBGxmBSk+S
-         H0jd7NON01AGegEToSoLwVq1BJS84nIx5elUDZDWnMiy550CFlQrmjzYotNYVHeZ05aG
-         xP4w==
+        bh=WuuWQCiwdV87iW0z7KxVY5BTEgeNizYr5qdipOfxXnc=;
+        b=hJu87bCSyR1Kv3ijwZbkKNvs01VCINeDtrWjeRxX0TBc8YFS0tk3FKL/zdwi5VP7td
+         PlI3K7mcZso4bJEOtv2rLoBj6TsGxU5HNATT/olyMpUxY4HRuKpdwLeygD5lQ8xJXyOp
+         8asM747S5Mmf6ZQXTnIFYFS2YDOaPVm7uCVnAZHlVeCEVMxQ/t1wP3+dug/EL2QxGaN6
+         venL6y4MmxsBhkB5uiilZ5lgZBP8TP8wJsjgmE9Nxna2IKtbRPWfJKVmMg86FnHWsU3p
+         boUZ8oswAq6lgYMKhYI1r5M8OCCIaXcU2dNcitOPz+jh/6ehx6tlLGeezWQwGD5UU9Ze
+         SQNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=DbTXuOBblU9jPQgm8MRCYvaknfLBOXYdW6zn/C5UsN4=;
-        b=AArbdvTEiR3K0oJ3gyOwshZecoRDEHttSofK2XIPplJ5x6SIaghrBCJzM/2pKqmYZd
-         F+IO/CV/xbLS2KwCpO4X7dlxJUXw3yXmSYAvfsruU1/nnokxxer6W7tBu4vrSckr2Wxn
-         1tubHT9KOxBJdpzsnxbILR0xPnGrwvoQF/yI8ft6mbYDNvM2Od4sziZaZU4gsJuCmVmw
-         A3b0zAfUOnyyyApxyXeHJXmYuyreeAU2KMr+lWxATN+5+83IKFw4HxzEPUG3zQu5KMxK
-         wX827hJD7qeQFTCSA575Rm1cEs4AuNCz7TkbmZ5ApvjzkJ0eZMh/AcL6aumLlHnzPI3R
-         kPmg==
-X-Gm-Message-State: AOAM530wNmrLFC1nwYGo162NOtn9PcGiRgW+lf5vaO+eAK0QK616y+T1
-        SeThfo6+E2OgNMEwwrCbTaNATmUuB6AGJ0l8OGJcSUzNAI4=
-X-Google-Smtp-Source: ABdhPJxhv1/QRVdi6XCilq9+IFSXqAjlels0Dy9hn4GDFSmN3+hX4k6pNhxQyVDMM4aboLB11aWrWNo+3Q4Gk5bskyQ=
-X-Received: by 2002:a67:1142:: with SMTP id 63mr13478014vsr.24.1612883176546;
- Tue, 09 Feb 2021 07:06:16 -0800 (PST)
+        bh=WuuWQCiwdV87iW0z7KxVY5BTEgeNizYr5qdipOfxXnc=;
+        b=Z/MiGHlkUAV0YSZe5Z0P5BTGRDJ8rHIcmNP0FCLl4KQ2MkxU81sh/ZA0qrWcOA6Ulx
+         55ytsF6x+WIDuFgMB05q3EW6MQlj+/E20aJzp0e1CPNKXUnsUkuv0TPMJcpT+Bm/5pE7
+         x1+Q8OfaMr9519I1rT3wzJcdXGCJJmQym/8e5DwtFjV0BNCISd/t1fR27l72qMsyqUKq
+         I6ltQur1YWZLYvO++roTE3DMmm3yE/tf8wHRAK5Xi7Au3vPg5wY1OjACQG+BxlKTeN5x
+         U5/lKaPxb1wZ57X6IPAp80uKnPLPnKK9XHyR46MCUy2YeZ+79CoS6Uy4Xii0ma0P94uh
+         FzXA==
+X-Gm-Message-State: AOAM533j0+yppmgbQIFebATsxxBuoE1UkO+qCv1+g9hKehASjsmCjs8L
+        ZtA/FZlynJjkk6UxwBEL7PqL8WsLBAv2/wbWdjv+Mg==
+X-Google-Smtp-Source: ABdhPJxiqPOP+t9zseOEfIyIpqMaTUgdxO3foYKfOGifXc4uOhxBTBoT0OVMHzFKRSkn1upcNYcLbnRumZUT3uow9Yg=
+X-Received: by 2002:a62:838d:0:b029:1ba:9b85:2eac with SMTP id
+ h135-20020a62838d0000b02901ba9b852eacmr1917244pfe.36.1612483492832; Thu, 04
+ Feb 2021 16:04:52 -0800 (PST)
 MIME-Version: 1.0
-References: <20210201172530.1141087-1-gprocida@google.com> <20210205134221.2953163-1-gprocida@google.com>
- <20210205134221.2953163-6-gprocida@google.com> <CAEf4Bza+mCKjva7BnChhFugjnE0mHzmfB4XErnmoZtkh6+jBpw@mail.gmail.com>
-In-Reply-To: <CAEf4Bza+mCKjva7BnChhFugjnE0mHzmfB4XErnmoZtkh6+jBpw@mail.gmail.com>
-From:   Giuliano Procida <gprocida@google.com>
-Date:   Tue, 9 Feb 2021 15:05:42 +0000
-Message-ID: <CAGvU0HmnzjGvgaQ8VHfFgEO4n12a+ik7vEh6Fkgj1Z=RvWJM8g@mail.gmail.com>
-Subject: Re: [PATCH dwarves v3 5/5] btf_encoder: Align .BTF section to 8 bytes
+References: <20210115210616.404156-1-ndesaulniers@google.com>
+ <CA+icZUVp+JNq89uc_DyWC6zh5=kLtUr7eOxHizfFggnEVGJpqw@mail.gmail.com>
+ <7354583d-de40-b6b9-6534-a4f4c038230f@fb.com> <CAKwvOd=5iR0JONwDb6ypD7dzzjOS3Uj0CjcyYqPF48eK4Pi90Q@mail.gmail.com>
+ <12b6c2ca-4cf7-4edd-faf2-72e3cb59c00e@fb.com> <20210117201500.GO457607@kernel.org>
+ <CAKwvOdmniAMZD0LiFdr5N8eOwHqNFED2Pd=pwOFF2Y8eSRXUHA@mail.gmail.com>
+ <CAEf4Bzbn1app3LZ1oah5ARn81j5RMNxRRHPVAkeY3h_0q7+7fg@mail.gmail.com>
+ <CAKwvOdmrVdxbEHdOFA8x+Q2yDWOfChZzBc6nR3rdaM8R3LsxfQ@mail.gmail.com> <CAEf4Bzbs5sDTB6w1D4LpKLGjY5sCCUnRUsU84Ccn8DoL352j1g@mail.gmail.com>
+In-Reply-To: <CAEf4Bzbs5sDTB6w1D4LpKLGjY5sCCUnRUsU84Ccn8DoL352j1g@mail.gmail.com>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Thu, 4 Feb 2021 16:04:40 -0800
+Message-ID: <CAKwvOdk-4_Pt=DKFokDpG8L58xj4J-=PPrgSLEZnYs7VJu1jZA@mail.gmail.com>
+Subject: Re: [PATCH v5 0/3] Kbuild: DWARF v5 support
 To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     dwarves@vger.kernel.org,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Yonghong Song <yhs@fb.com>,
         Andrii Nakryiko <andrii@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        =?UTF-8?Q?Matthias_M=C3=A4nnich?= <maennich@google.com>,
-        kernel-team@android.com, Kernel Team <kernel-team@fb.com>,
-        bpf <bpf@vger.kernel.org>
+        Jiri Olsa <jolsa@kernel.org>,
+        Sedat Dilek <sedat.dilek@gmail.com>,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        Clang-Built-Linux ML <clang-built-linux@googlegroups.com>,
+        Fangrui Song <maskray@google.com>, bpf <bpf@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-On Mon, 8 Feb 2021 at 22:30, Andrii Nakryiko <andrii.nakryiko@gmail.com> wrote:
->
-> On Fri, Feb 5, 2021 at 5:42 AM Giuliano Procida <gprocida@google.com> wrote:
-> >
-> > This is to avoid misaligned access to BTF type structs when
-> > memory-mapping ELF objects.
-> >
-> > Signed-off-by: Giuliano Procida <gprocida@google.com>
-> > ---
->
-> I trust you did verify that it actually works in cases where
-> previously .BTF was mis-aligned?
->
+Moving a bunch of folks + lists to BCC.
 
-Yes. :-)
-
-> Acked-by: Andrii Nakryiko <andrii@kernel.org>
+On Thu, Feb 4, 2021 at 3:54 PM Andrii Nakryiko
+<andrii.nakryiko@gmail.com> wrote:
 >
-> >  libbtf.c | 9 +++++++++
-> >  1 file changed, 9 insertions(+)
+> On Wed, Feb 3, 2021 at 7:13 PM Nick Desaulniers <ndesaulniers@google.com> wrote:
 > >
-> > diff --git a/libbtf.c b/libbtf.c
-> > index 9f4abb3..6754a17 100644
-> > --- a/libbtf.c
-> > +++ b/libbtf.c
-> > @@ -744,6 +744,14 @@ static int btf_elf__write(const char *filename, struct btf *btf)
-> >                 goto out;
-> >         }
+> > On Wed, Feb 3, 2021 at 6:58 PM Andrii Nakryiko
+> > <andrii.nakryiko@gmail.com> wrote:
+> > >
+> > > On Wed, Feb 3, 2021 at 5:31 PM Nick Desaulniers <ndesaulniers@google.com> wrote:
+> > > >
+> > > > On Sun, Jan 17, 2021 at 12:14 PM Arnaldo Carvalho de Melo
+> > > > <acme@kernel.org> wrote:
+> > > > >
+> > > > > Em Fri, Jan 15, 2021 at 03:43:06PM -0800, Yonghong Song escreveu:
+> > > > > >
+> > > > > >
+> > > > > > On 1/15/21 3:34 PM, Nick Desaulniers wrote:
+> > > > > > > On Fri, Jan 15, 2021 at 3:24 PM Yonghong Song <yhs@fb.com> wrote:
+> > > > > > > >
+> > > > > > > >
+> > > > > > > >
+> > > > > > > > On 1/15/21 1:53 PM, Sedat Dilek wrote:
+> > > > > > > > > En plus, I encountered breakage with GCC v10.2.1 and LLVM=1 and
+> > > > > > > > > CONFIG_DEBUG_INFO_DWARF4.
+> > > > > > > > > So might be good to add a "depends on !DEBUG_INFO_BTF" in this combination.
+> > > > > > >
+> > > > > > > Can you privately send me your configs that repro? Maybe I can isolate
+> > > > > > > it to a set of configs?
+> > > > > > >
+> > > > > > > >
+> > > > > > > > I suggested not to add !DEBUG_INFO_BTF to CONFIG_DEBUG_INFO_DWARF4.
+> > > > > > > > It is not there before and adding this may suddenly break some users.
+> > > > > > > >
+> > > > > > > > If certain combination of gcc/llvm does not work for
+> > > > > > > > CONFIG_DEBUG_INFO_DWARF4 with pahole, this is a bug bpf community
+> > > > > > > > should fix.
+> > > > > > >
+> > > > > > > Is there a place I should report bugs?
+> > > > > >
+> > > > > > You can send bug report to Arnaldo Carvalho de Melo <acme@kernel.org>,
+> > > > > > dwarves@vger.kernel.org and bpf@vger.kernel.org.
+> > > > >
+> > > > > I'm coming back from vacation, will try to read the messages and see if
+> > > > > I can fix this.
+> > > >
+> > > > IDK about DWARF v4; that seems to work for me.  I was previously observing
+> > > > https://bugzilla.redhat.com/show_bug.cgi?id=1922698
+> > > > with DWARF v5.  I just re-pulled the latest pahole, rebuilt, and no
+> > > > longer see that warning.
+> > > >
+> > > > I now observe a different set.  I plan on attending "BPF office hours
+> > > > tomorrow morning," but if anyone wants a sneak peak of the errors and
+> > > > how to reproduce:
+> > > > https://gist.github.com/nickdesaulniers/ae8c9efbe4da69b1cf0dce138c1d2781
+> > > >
+> > >
+> > > Is there another (easy) way to get your patch set without the b4 tool?
+> > > Is your patch set present in some patchworks instance, so that I can
+> > > download it in mbox format, for example?
 > >
-> > +       /*
-> > +        * We'll align .BTF to 8 bytes to cater for all architectures. It'd be
-> > +        * nice if we could fetch this value from somewhere. The BTF
-> > +        * specification does not discuss alignment and its trailing string
-> > +        * table is not currently padded to any particular alignment.
-> > +        */
-> > +       const size_t btf_alignment = 8;
-> > +
-> >         /*
-> >          * First we check if there is already a .BTF section present.
-> >          */
-> > @@ -821,6 +829,7 @@ static int btf_elf__write(const char *filename, struct btf *btf)
-> >                 elf_error("elf_getshdr(btf_scn) failed");
-> >                 goto out;
-> >         }
-> > +       btf_shdr.sh_addralign = btf_alignment;
-> >         btf_shdr.sh_entsize = 0;
-> >         btf_shdr.sh_flags = 0;
-> >         if (dot_btf_offset)
+> > $ wget https://lore.kernel.org/lkml/20210130004401.2528717-2-ndesaulniers@google.com/raw
+> > -O - | git am
+> > $ wget https://lore.kernel.org/lkml/20210130004401.2528717-3-ndesaulniers@google.com/raw
+> > -O - | git am
+> >
+> > If you haven't tried b4 yet, it's quite nice.  Hard to go back.  Lore
+> > also has mbox.gz links.  Not sure about patchwork.
+> >
+>
+> Ok, I managed to apply that on linux-next, but I can't get past this:
+>
+> ld.lld: error: undefined symbol: pa_trampoline_start
+> >>> referenced by arch/x86/realmode/rm/header.o:(real_mode_header)
+
+Thanks for testing and the report. Do you have a .config you can send
+me to reproduce?
+
+>
+> ld.lld: error: undefined symbol: pa_trampoline_header
+> >>> referenced by arch/x86/realmode/rm/header.o:(real_mode_header)
+>
+> ld.lld: error: undefined symbol: pa_trampoline_pgd
+> >>> referenced by arch/x86/realmode/rm/header.o:(real_mode_header)
+> >>> referenced by trampoline_64.S:142 (/data/users/andriin/linux/arch/x86/realmode/rm/trampoline_64.S:142)
+> >>>               arch/x86/realmode/rm/trampoline_64.o:(startup_32)
+>
+> ld.lld: error: undefined symbol: pa_wakeup_start
+> >>> referenced by arch/x86/realmode/rm/header.o:(real_mode_header)
+>
+> ld.lld: error: undefined symbol: pa_wakeup_header
+> >>> referenced by arch/x86/realmode/rm/header.o:(real_mode_header)
+>
+> ld.lld: error: undefined symbol: pa_machine_real_restart_asm
+> >>> referenced by arch/x86/realmode/rm/header.o:(real_mode_header)
+>
+> ld.lld: error: undefined symbol: pa_startup_32
+> >>> referenced by trampoline_64.S:77 (/data/users/andriin/linux/arch/x86/realmode/rm/trampoline_64.S:77)
+> >>>               arch/x86/realmode/rm/trampoline_64.o:(trampoline_start)
+>
+> ld.lld: error: undefined symbol: pa_tr_flags
+> >>> referenced by trampoline_64.S:124 (/data/users/andriin/linux/arch/x86/realmode/rm/trampoline_64.S:124)
+> >>>               arch/x86/realmode/rm/trampoline_64.o:(startup_32)
+>
+> ld.lld: error: undefined symbol: pa_tr_cr4
+> >>> referenced by trampoline_64.S:138 (/data/users/andriin/linux/arch/x86/realmode/rm/trampoline_64.S:138)
+> >>>               arch/x86/realmode/rm/trampoline_64.o:(startup_32)
+>
+> ld.lld: error: undefined symbol: pa_tr_efer
+> >>> referenced by trampoline_64.S:146 (/data/users/andriin/linux/arch/x86/realmode/rm/trampoline_64.S:146)
+> >>>               arch/x86/realmode/rm/trampoline_64.o:(startup_32)
+> >>> referenced by trampoline_64.S:147 (/data/users/andriin/linux/arch/x86/realmode/rm/trampoline_64.S:147)
+> >>>               arch/x86/realmode/rm/trampoline_64.o:(startup_32)
+>
+> ld.lld: error: undefined symbol: pa_startup_64
+> >>> referenced by trampoline_64.S:161 (/data/users/andriin/linux/arch/x86/realmode/rm/trampoline_64.S:161)
+> >>>               arch/x86/realmode/rm/trampoline_64.o:(startup_32)
+>
+> ld.lld: error: undefined symbol: pa_tr_gdt
+> >>> referenced by arch/x86/realmode/rm/trampoline_64.o:(tr_gdt)
+> >>> referenced by reboot.S:28 (/data/users/andriin/linux/arch/x86/realmode/rm/reboot.S:28)
+> >>>               arch/x86/realmode/rm/reboot.o:(machine_real_restart_asm)
+>
+> ld.lld: error: undefined symbol: pa_machine_real_restart_paging_off
+> >>> referenced by reboot.S:34 (/data/users/andriin/linux/arch/x86/realmode/rm/reboot.S:34)
+> >>>               arch/x86/realmode/rm/reboot.o:(machine_real_restart_asm)
+>
+> ld.lld: error: undefined symbol: pa_machine_real_restart_idt
+> >>> referenced by reboot.S:47 (/data/users/andriin/linux/arch/x86/realmode/rm/reboot.S:47)
+> >>>               arch/x86/realmode/rm/reboot.o:(machine_real_restart_asm)
+>
+> ld.lld: error: undefined symbol: pa_machine_real_restart_gdt
+> >>> referenced by reboot.S:54 (/data/users/andriin/linux/arch/x86/realmode/rm/reboot.S:54)
+> >>>               arch/x86/realmode/rm/reboot.o:(machine_real_restart_asm)
+> >>> referenced by arch/x86/realmode/rm/reboot.o:(machine_real_restart_gdt)
+>
+> ld.lld: error: undefined symbol: pa_wakeup_gdt
+> >>> referenced by arch/x86/realmode/rm/wakeup_asm.o:(wakeup_gdt)
+>   CC      arch/x86/mm/numa_64.o
+>   CC      arch/x86/mm/amdtopology.o
+>   HOSTCC  arch/x86/entry/vdso/vdso2c
+> make[4]: *** [arch/x86/realmode/rm/realmode.elf] Error 1
+> make[3]: *** [arch/x86/realmode/rm/realmode.bin] Error 2
+> make[2]: *** [arch/x86/realmode] Error 2
+> make[2]: *** Waiting for unfinished jobs....
+>
+>
+> Hopefully Arnaldo will have better luck.
+>
+>
+>
+> > >
+> > > >
+> > > > (FWIW: some other folks are hitting issues now with kernel's lack of
+> > > > DWARF v5 support: https://bugzilla.redhat.com/show_bug.cgi?id=1922707)
+> >
+> >
 > > --
-> > 2.30.0.478.g8a0d178c01-goog
-> >
->
-> --
-> To unsubscribe from this group and stop receiving emails from it, send an email to kernel-team+unsubscribe@android.com.
->
+> > Thanks,
+> > ~Nick Desaulniers
+
+
+
+-- 
+Thanks,
+~Nick Desaulniers
