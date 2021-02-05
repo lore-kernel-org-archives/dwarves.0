@@ -2,137 +2,117 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-26.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-2.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D48E1C4332B
-	for <linux-dwarves@archiver.kernel.org>; Fri,  5 Feb 2021 22:44:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 98B88C433E6
+	for <linux-dwarves@archiver.kernel.org>; Sat,  6 Feb 2021 03:07:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B058264FF8
-	for <linux-dwarves@archiver.kernel.org>; Fri,  5 Feb 2021 22:44:16 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 44E1B64FDF
+	for <linux-dwarves@archiver.kernel.org>; Sat,  6 Feb 2021 03:07:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229706AbhBEWno (ORCPT
+        id S232026AbhBFDFa (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Fri, 5 Feb 2021 17:43:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43360 "EHLO
+        Fri, 5 Feb 2021 22:05:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231348AbhBENnW (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Fri, 5 Feb 2021 08:43:22 -0500
-Received: from mail-qk1-x74a.google.com (mail-qk1-x74a.google.com [IPv6:2607:f8b0:4864:20::74a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A599AC06121D
-        for <dwarves@vger.kernel.org>; Fri,  5 Feb 2021 05:42:41 -0800 (PST)
-Received: by mail-qk1-x74a.google.com with SMTP id a75so5794427qkg.16
-        for <dwarves@vger.kernel.org>; Fri, 05 Feb 2021 05:42:41 -0800 (PST)
+        with ESMTP id S232235AbhBFCzl (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Fri, 5 Feb 2021 21:55:41 -0500
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2855C061D7F;
+        Fri,  5 Feb 2021 14:11:55 -0800 (PST)
+Received: by mail-yb1-xb36.google.com with SMTP id s61so8261098ybi.4;
+        Fri, 05 Feb 2021 14:11:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=sender:date:in-reply-to:message-id:mime-version:references:subject
-         :from:to:cc;
-        bh=Jm9Rl/O23yAE3HZ62rmeV5YrYLNhsE5EvtDbKOWTIow=;
-        b=ITUIwpQ8q9tGG4CIbJ0ci2ur/ZJSsEfgdPWAsLObON4aNaUKWMRH5VuROapZFGrYus
-         5fa4bI8iLDZEm6l3nYLFzlHxdrDFx1EUQaNjXPKHot4OYnaoGLNYA1h6JiSpo7jIlsRk
-         9kGukaEg//ID1Nn1O0irdtWgsIy+PqYgGTCvcp4DYU/jZ0z6ALvjbt6mBliklwtDJrP9
-         2bdtZhULisqdwWNw2HrnTW6zNKNpRYi/LKfkYQ2eH5/6iRYGGXS+nw4oYVROKHHzq8+u
-         GBJ+Wo6dJDdLsur/AV9T2DNq+iNqolHUVKv3hNLa9huQZxg88b2FUgzoTsihgXyKgR04
-         HXrw==
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=2wYH4ZTK5z/flvIckrO5N+ZdlqhzmsEspV7Keq9hUBA=;
+        b=oWBXoCkzXi9LuyQb7q1zAAN1rA68maErUKhE9bEPkXayREl9MQX9apAsK0sg4QAc4R
+         pE8duD7oDXgunoFA/Wainaol5ZambqQh7QRYL1J8fD8FtgpzZFOdE1o7lk51ZWmag/kI
+         /31+5AfLYtrCkFvUqZUFE7hSxjBmuUOS7eNe+aGqHY6ee8aZHgHxPS5kAS6QPw68Zk+k
+         P5voEum08DOx3byVb9607rlojaiOLgPixlFHw7jr1yVexZyR/R1C86jfZnFT5j0Xc7Fv
+         wGbLcFhIasE9FuWdzv14fNzdTyVC0u2n+8nkiCZCN3eP3nhBioij9t/+0IAStRvtZJDb
+         xYYw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=Jm9Rl/O23yAE3HZ62rmeV5YrYLNhsE5EvtDbKOWTIow=;
-        b=pWCuty0I14xygb0D4ChDkk4YB8GqasJ3oLh4UNXx6xZ7EoM/UQOM8cpVOA9KizK/y2
-         rKPCbeZef3i1O/1SbfjuMnlqBIwv1cHh5EN0LdryDBAe3HYMRI2IqI2EeeXB+Azp3jpm
-         zUjTfskbay2hqmXxYyIZUDX/ZJAvkj5VvAEr8VedH28Gzx9gXUyLNrF3Y+mDu4T+78xo
-         /oA7cNCFzbyaLEgcUJK+gace8lw+lAUUOblUADvYUHhv5Ck0CndPqOXAXYS0PhFQLkgX
-         nC1jjFW6UaHD4jnXn4WK4i/+ZaVy3TOILyTIvJNQbQD567+sVPZaQJKO0TgpfdExeSOh
-         KVyA==
-X-Gm-Message-State: AOAM533ERWgEcqkqt12HdRIGT9rG7UFW+If5w/fZhfX5PABiQdc9a45j
-        W6tth6GZhSGYoXSKmIg/V2a9aKAzAHpw93EXcsK85qZqrcykMNtgaGFpcYxNmyEvneyLqyVElI6
-        Zq5WesCJqCQWFCd0wHow/wsQrijLyKYugOZoVlK43UEKg13XqawXF/hLhdyGp9tfPyK9W
-X-Google-Smtp-Source: ABdhPJzIz42Mwp/Z6N9/StY2UCNjQr9VPyc9b4cxNS9Y9mkf9ti9vhjfcwqC/1Op+ISWE/P5kp6cce7rWt8WIw==
-Sender: "gprocida via sendgmr" <gprocida@tef.lon.corp.google.com>
-X-Received: from tef.lon.corp.google.com ([2a00:79e0:d:110:656b:9716:1ea:3de6])
- (user=gprocida job=sendgmr) by 2002:a05:6214:906:: with SMTP id
- dj6mr4375856qvb.28.1612532560829; Fri, 05 Feb 2021 05:42:40 -0800 (PST)
-Date:   Fri,  5 Feb 2021 13:42:18 +0000
-In-Reply-To: <20210205134221.2953163-1-gprocida@google.com>
-Message-Id: <20210205134221.2953163-3-gprocida@google.com>
-Mime-Version: 1.0
-References: <20210201172530.1141087-1-gprocida@google.com> <20210205134221.2953163-1-gprocida@google.com>
-X-Mailer: git-send-email 2.30.0.478.g8a0d178c01-goog
-Subject: [PATCH dwarves v3 2/5] btf_encoder: Do not use both structs and
- pointers for the same data
-From:   Giuliano Procida <gprocida@google.com>
-To:     dwarves@vger.kernel.org
-Cc:     acme@kernel.org, andrii@kernel.org, ast@kernel.org,
-        gprocida@google.com, maennich@google.com, kernel-team@android.com,
-        kernel-team@fb.com, bpf@vger.kernel.org
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=2wYH4ZTK5z/flvIckrO5N+ZdlqhzmsEspV7Keq9hUBA=;
+        b=m7z9bn6lt6hMmMwj6mqRX4jptCvZdlKrr1Bz/dy9T3DXt9SiMLy9Jf5DU8KaJOvns5
+         4ZlFVKn8gLdkqZMwjuILRITg+y0irv0hOn5XPenaJClijpxMH62FYr0HN7bVlawCc3ZS
+         8Ky5/ZEpNp2vW7Fjjqx5uKdqukULhQ3lLgh8NziSZdd6ULMqAbGHLrTadl7+UXhe3Kcp
+         aKvn2Qp62Myz0UITTRk9SDnM0xaQL973egde1Jq1CfDZy9MXqqCGprrvXk7JXZ2LTdor
+         2Nl5qE0dmcBin2DDIsVOmvK33LdU8ZQ5QQkvcGfNTWbWiPB7GPC02+EDJYNnPcrJ/hJN
+         LtGA==
+X-Gm-Message-State: AOAM533q8Ri76ioWqhmTYsBZJvFeP4orlKbCHCT2tUgW2/UzOxPQ4ZjS
+        isrhxB+XgKSSXHocGswyVPc+kHhWNaE6GZg8ysq337y/l7LYDA==
+X-Google-Smtp-Source: ABdhPJyYCbGisxBoQhBELxd9IT/XMkHEEAZ56ZRFxuQ9ps6oooojPj6j5F5PwJjPEqTd6RkE4c0FpqD7mTcALl68VW0=
+X-Received: by 2002:a5b:3c4:: with SMTP id t4mr8559145ybp.510.1612563115280;
+ Fri, 05 Feb 2021 14:11:55 -0800 (PST)
+MIME-Version: 1.0
+References: <20210204220741.GA920417@kernel.org> <CAEf4BzY-RbXXW-Ajcvq4fziOJ=tMtT7O76SUboHQyULNDkhthw@mail.gmail.com>
+ <C359F19F-29BC-4F6D-961A-79BFA47F36A7@gmail.com> <CAEf4BzZf_1g13dA1t6rbi1TFttufyGNaU14pPxo9uK-FVArCbQ@mail.gmail.com>
+ <BFDC3C1D-F87D-4F82-BDB0-444629C484CE@gmail.com> <20210205162523.GF920417@kernel.org>
+In-Reply-To: <20210205162523.GF920417@kernel.org>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Fri, 5 Feb 2021 14:11:44 -0800
+Message-ID: <CAEf4BzaXAxOnzkuiOpdMKjQyYHjAN6Td35hDGwbYc9i9aGuj0A@mail.gmail.com>
+Subject: Re: ANNOUNCE: pahole v1.20 (gcc11 DWARF5's default, lots of ELF
+ sections, BTF)
+To:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
+Cc:     dwarves@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, Jiri Olsa <jolsa@kernel.org>,
+        Jan Engelhardt <jengelh@inai.de>,
+        Domenico Andreoli <cavok@debian.org>,
+        Matthias Schwarzott <zzam@gentoo.org>,
+        Andrii Nakryiko <andriin@fb.com>, Yonghong Song <yhs@fb.com>,
+        Mark Wieelard <mjw@redhat.com>,
+        Paul Moore <paul@paul-moore.com>,
+        Ondrej Mosnacek <omosnace@redhat.com>,
+        =?UTF-8?Q?Daniel_P=2E_Berrang=C3=A9?= <berrange@redhat.com>,
+        Sedat Dilek <sedat.dilek@gmail.com>,
+        Tom Stellard <tstellar@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-Many operations in the libelf API return a pointer to a user-provided
-struct (on success) or NULL (on failure).
+On Fri, Feb 5, 2021 at 8:25 AM Arnaldo Carvalho de Melo
+<arnaldo.melo@gmail.com> wrote:
+>
+> Em Fri, Feb 05, 2021 at 06:33:43AM -0300, Arnaldo Carvalho de Melo escreveu:
+> > On February 5, 2021 4:39:47 AM GMT-03:00, Andrii Nakryiko <andrii.nakryiko@gmail.com> wrote:
+> > >On Thu, Feb 4, 2021 at 8:34 PM Arnaldo Carvalho de Melo ><arnaldo.melo@gmail.com> wrote:
+> > >> On February 4, 2021 9:01:51 PM GMT-03:00, Andrii Nakryiko
+> > ><andrii.nakryiko@gmail.com> wrote:
+> > >> >On Thu, Feb 4, 2021 at 2:09 PM Arnaldo Carvalho de
+> > >Melo><acme@kernel.org> wrote:
+> > >> >>         The v1.20 release of pahole and its friends is out, mostly
+> > >> >> addressing problems related to gcc 11 defaulting to DWARF5 for -g,
+> > >> >> available at the usual places:
+>
+> > >> >Great, thanks, Arnaldo! Do you plan to build RPMs soon as well?
+>
+> > >> It's in rawhide already, I'll do it for f33, f32 later,
+>
+> > >Do you have a link? I tried to find it, but only see 1.19 so far.
+>
+> > https://koji.fedoraproject.org/koji/buildinfo?buildID=1703678
+>
+> And now for Fedora 33, waiting for karma bumps at:
+>
+> https://bodhi.fedoraproject.org/updates/FEDORA-2021-804e7a572c
+>
+> fedpkg buidling for f32 now.
+>
+> - Arnaldo
 
-There are a couple of places in btf_elf__write where both structs and
-pointers to the same structs are used. Holding on to the pointers
-raises ownership and lifetime issues unncessarily and the code is
-cleaner with only a single access path for these data.
-
-The code now treats the returned pointers as booleans.
-
-Signed-off-by: Giuliano Procida <gprocida@google.com>
----
- libbtf.c | 14 ++++++--------
- 1 file changed, 6 insertions(+), 8 deletions(-)
-
-diff --git a/libbtf.c b/libbtf.c
-index 7bc49ba..ace8896 100644
---- a/libbtf.c
-+++ b/libbtf.c
-@@ -698,8 +698,7 @@ int32_t btf_elf__add_datasec_type(struct btf_elf *btfe, const char *section_name
- 
- static int btf_elf__write(const char *filename, struct btf *btf)
- {
--	GElf_Shdr shdr_mem, *shdr;
--	GElf_Ehdr ehdr_mem, *ehdr;
-+	GElf_Ehdr ehdr;
- 	Elf_Data *btf_data = NULL;
- 	Elf_Scn *scn = NULL;
- 	Elf *elf = NULL;
-@@ -727,13 +726,12 @@ static int btf_elf__write(const char *filename, struct btf *btf)
- 
- 	elf_flagelf(elf, ELF_C_SET, ELF_F_DIRTY);
- 
--	ehdr = gelf_getehdr(elf, &ehdr_mem);
--	if (ehdr == NULL) {
-+	if (!gelf_getehdr(elf, &ehdr)) {
- 		elf_error("elf_getehdr failed");
- 		goto out;
- 	}
- 
--	switch (ehdr_mem.e_ident[EI_DATA]) {
-+	switch (ehdr.e_ident[EI_DATA]) {
- 	case ELFDATA2LSB:
- 		btf__set_endianness(btf, BTF_LITTLE_ENDIAN);
- 		break;
-@@ -751,10 +749,10 @@ static int btf_elf__write(const char *filename, struct btf *btf)
- 
- 	elf_getshdrstrndx(elf, &strndx);
- 	while ((scn = elf_nextscn(elf, scn)) != NULL) {
--		shdr = gelf_getshdr(scn, &shdr_mem);
--		if (shdr == NULL)
-+		GElf_Shdr shdr;
-+		if (!gelf_getshdr(scn, &shdr))
- 			continue;
--		char *secname = elf_strptr(elf, strndx, shdr->sh_name);
-+		char *secname = elf_strptr(elf, strndx, shdr.sh_name);
- 		if (strcmp(secname, ".BTF") == 0) {
- 			btf_data = elf_getdata(scn, btf_data);
- 			break;
--- 
-2.30.0.478.g8a0d178c01-goog
-
+Ok, imported dwarves-1.20. Had to fix two dates in changelog (in
+spec), day of week didn't match the date, tooling complained about
+that. Also had to undo cmake_build and cmake_install fanciness,
+because apparently we don't have them or the support for it is not
+great. But otherwise everything else looks to be ok.
