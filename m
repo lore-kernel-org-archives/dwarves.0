@@ -2,106 +2,106 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.5 required=3.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
+	DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5848FC4332D
-	for <linux-dwarves@archiver.kernel.org>; Fri,  5 Feb 2021 03:12:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AD54EC433E0
+	for <linux-dwarves@archiver.kernel.org>; Fri,  5 Feb 2021 04:35:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2EAEE64FB9
-	for <linux-dwarves@archiver.kernel.org>; Fri,  5 Feb 2021 03:12:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6BFB464F58
+	for <linux-dwarves@archiver.kernel.org>; Fri,  5 Feb 2021 04:35:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230064AbhBEDMN (ORCPT
+        id S229742AbhBEEfM (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Thu, 4 Feb 2021 22:12:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49078 "EHLO
+        Thu, 4 Feb 2021 23:35:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230194AbhBEDL4 (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Thu, 4 Feb 2021 22:11:56 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B89B9C06178A
-        for <dwarves@vger.kernel.org>; Thu,  4 Feb 2021 19:11:10 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id c12so5967571wrc.7
-        for <dwarves@vger.kernel.org>; Thu, 04 Feb 2021 19:11:10 -0800 (PST)
+        with ESMTP id S229518AbhBEEfI (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Thu, 4 Feb 2021 23:35:08 -0500
+Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8578DC0613D6;
+        Thu,  4 Feb 2021 20:34:27 -0800 (PST)
+Received: by mail-qk1-x730.google.com with SMTP id t63so5809212qkc.1;
+        Thu, 04 Feb 2021 20:34:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=colorremedies-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=I+kAjuceqQaSn6CnDxq1eGCe6jIuci9QzOZjaAOHZZ4=;
-        b=ald/6GB4cU/3OuNhAVzbLnuB6xvz4CPgony9VaCQPVAgc7KGFZXRVKtLWkWvFIcbYd
-         fMoXq9EJebve6kpGLHdl/w0AUUwuW7oacXEQoWjA30ozOJ+x+mVh8qRFxJQF0LJFrDil
-         Akbv/F/+Kbtk1c+wxZK0UJ2dYzsBC1cTWH2j20Ikolmf0u/r1vmv5xeGSTnzIeTgGfqZ
-         xWwPsD4wEGWXILFenXn9Eqzx0EG1rPKqONAh4AqJyPRRWEXCh4X7gS+K07mTjG4RsM7m
-         icO7WbGydnhB1YktuWBYsIdj5nyLNo6LBRRCB2GKBsbx7zUtL6UqbUxa0wHGPy/lYrIe
-         dmnQ==
+        d=gmail.com; s=20161025;
+        h=date:user-agent:in-reply-to:references:mime-version
+         :content-transfer-encoding:subject:to:cc:from:message-id;
+        bh=NOLcDzmq84OpsF0OUOcDHrS75Pek3eO6qwDBNOLFWTM=;
+        b=HJcL399K1cDxGgOSWivkYeAapPU3evPA+sc3gZgiaSdy3thVI4Y16LSPcT6AHe3C0d
+         GBUhN8Kv7yO2cYOoUBfEXdf6dF4RT+0ruX7XGBs0T2oAUwjX8M2VLeN2JH5d8kZF0MCo
+         GXGoIVHyNcOSCKkyZ/dpgxMksWc8xwybO+0UGTZ4/fWXwsp9hrY0LTMhg71i/tpMtEim
+         FMtSAVVrJMlPdA0ASdBZUN2ppVa3xyh9HS+0xbfiJr+i8oOYAwZUjZxOKYbIuOD1o6WR
+         pq/GThN9R1712H5et8MkqtuGtEINGESMOXXGhClbtkyHThBsew4EFoTSMnK0uc5F7FrJ
+         kCIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=I+kAjuceqQaSn6CnDxq1eGCe6jIuci9QzOZjaAOHZZ4=;
-        b=axtc8YJooXu3HcMF3HRw/ycLSLOVlM8VJvYgYnfYVRFuTuejfAdSQ43Zq00v5GIX86
-         ZeWISSEkVjAiy5b4iW09s93b/zdgT5Dmxs4v/AOFqcfQFkqIYahiWlqeY9DlgW8RHwzf
-         wfYt5PYaqPape0zk7w+6JDXqkO2JNt7s0n1zjqoSS8Q+wlPyTf2RlRp+hsom57eA7sj/
-         voVS6SyDNOUKG2Q6pOhO9EtPSSl7teUGRxsp40z5UWvMFLbXa6z74FFukCoj+fJW1fno
-         ZaTUvU6bUT7WB1FVQe7qwGvpPZ5bcoztoD1DrIHMjAOPdkHwQAWX6+zICdlTvhcHQsw8
-         YnQw==
-X-Gm-Message-State: AOAM5335cJNIeT85krngorDAZ/T5260OFZbAP68j2I2QC65ZYM7Xo3YR
-        YhcZglZmWCEtqsaNUsEsCGIQdvE21tQxsHnC13GGMA==
-X-Google-Smtp-Source: ABdhPJxNqWdyIThhWcNYJ7sQC/LTzehMjhlXl+bGyYf5G8tr28thHPvS5ccpVRoPl/gmT6DrKtDpm3RQXJLhoNGKvkw=
-X-Received: by 2002:a5d:6686:: with SMTP id l6mr2478909wru.236.1612494669505;
- Thu, 04 Feb 2021 19:11:09 -0800 (PST)
+        h=x-gm-message-state:date:user-agent:in-reply-to:references
+         :mime-version:content-transfer-encoding:subject:to:cc:from
+         :message-id;
+        bh=NOLcDzmq84OpsF0OUOcDHrS75Pek3eO6qwDBNOLFWTM=;
+        b=H6DS9GkNg+cduPmyX/ocSh4qHY6cQ/rhFtrMkss3netoNBDoUyXWvw69ByCdFjKZ+3
+         KJukm5t/p87pgWhHZOUJuEo7BhdnFGx+sbS/PtiBYgJsrdBnz34ToiIrOG2xqlmKVSao
+         VN/Ofklntbp1K4KUHgMNcWppMKcDl9qdOPub5SWX4Gw626bZvWp9JhUmE9WAftF83PoN
+         fsokqcUu26TL3Eqy7NyP2huMMa336txc8n7UKrYz/1ly+vMUyn6RvTnLGDJxyLNDeG5d
+         /Vtrk02xJqYfCQJLI+nF7UM6Gy1e9HQ6nqqG0y8TlarMm+8PyobUdI3Kz+HC4FjZKnWO
+         d0Xw==
+X-Gm-Message-State: AOAM5319cxtYIByGZCh58OXgZQaSdjRGKWm56QTgxx7rCjZoFuOJsOtN
+        uLfmqD9tyB+UNZPEwzPitaw=
+X-Google-Smtp-Source: ABdhPJzl1quRaNScBCHyO298sF5rSWQjh4wYJrZNpFEbsutRtV9GeHaOufCnHGcM53q3uMHNvDxqBg==
+X-Received: by 2002:a37:a0c6:: with SMTP id j189mr2745942qke.374.1612499665961;
+        Thu, 04 Feb 2021 20:34:25 -0800 (PST)
+Received: from [192.168.86.198] ([179.97.37.151])
+        by smtp.gmail.com with ESMTPSA id z23sm3527081qkb.13.2021.02.04.20.34.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 04 Feb 2021 20:34:25 -0800 (PST)
+Date:   Fri, 05 Feb 2021 01:33:13 -0300
+User-Agent: K-9 Mail for Android
+In-Reply-To: <CAEf4BzY-RbXXW-Ajcvq4fziOJ=tMtT7O76SUboHQyULNDkhthw@mail.gmail.com>
+References: <20210204220741.GA920417@kernel.org> <CAEf4BzY-RbXXW-Ajcvq4fziOJ=tMtT7O76SUboHQyULNDkhthw@mail.gmail.com>
 MIME-Version: 1.0
-References: <CAJCQCtSQLc0VHqO4BY_-YB2OmCNNmHCS6fNdQKmMWGn2v=Jpdw@mail.gmail.com>
- <CAJCQCtRHOidM7Vps1JQSpZA14u+B5fR860FwZB=eb1wYjTpqDw@mail.gmail.com>
- <CAEf4BzZ4oTB0-JizHe1VaCk2V+Jb9jJoTznkgh6CjE5VxNVqbg@mail.gmail.com>
- <CAJCQCtRw6UWGGvjn0x__godYKYQXXmtyQys4efW2Pb84Q5q8Eg@mail.gmail.com>
- <20210204010038.GA854763@kernel.org> <CAJCQCtQfgRp78_WSrSHLNUUYNCyOCH=vo10nVZW_cyMjpZiNJg@mail.gmail.com>
- <CAEf4Bza4XQxpS7VTNWGk6Rz-iUwZemF6+iAVBA_yvrWnV0k8Qg@mail.gmail.com>
- <CAJCQCtRDJ_uiJcanP_p+y6Kz76c4P-EmndMyfHN5f4rtkgYhjA@mail.gmail.com>
- <20210204132625.GB910119@kernel.org> <20210204163319.GD910119@kernel.org>
-In-Reply-To: <20210204163319.GD910119@kernel.org>
-From:   Chris Murphy <lists@colorremedies.com>
-Date:   Thu, 4 Feb 2021 20:10:52 -0700
-Message-ID: <CAJCQCtT-i0Lv2zxUDko3XuiHpUqOnYPeND5LzD=zgrB1-GNvAg@mail.gmail.com>
-Subject: Re: [FIXED] Re: 5:11: in-kernel BTF is malformed
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Chris Murphy <lists@colorremedies.com>, bpf <bpf@vger.kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>, dwarves@vger.kernel.org,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Clang-Built-Linux ML <clang-built-linux@googlegroups.com>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Jakub Jelinek <jakub@redhat.com>,
-        Fangrui Song <maskray@google.com>,
-        Caroline Tice <cmtice@google.com>,
-        Nick Clifton <nickc@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: ANNOUNCE: pahole v1.20 (gcc11 DWARF5's default, lots of ELF sections, BTF)
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>
+CC:     dwarves@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, Jiri Olsa <jolsa@kernel.org>,
+        Jan Engelhardt <jengelh@inai.de>,
+        Domenico Andreoli <cavok@debian.org>,
+        Matthias Schwarzott <zzam@gentoo.org>,
+        Andrii Nakryiko <andriin@fb.com>, Yonghong Song <yhs@fb.com>,
+        Mark Wieelard <mjw@redhat.com>,
+        Paul Moore <paul@paul-moore.com>,
+        Ondrej Mosnacek <omosnace@redhat.com>,
+        =?ISO-8859-1?Q?Daniel_P=2E_Berrang=E9?= <berrange@redhat.com>,
+        Sedat Dilek <sedat.dilek@gmail.com>,
+        Tom Stellard <tstellar@redhat.com>
+From:   Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
+Message-ID: <C359F19F-29BC-4F6D-961A-79BFA47F36A7@gmail.com>
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-On Thu, Feb 4, 2021 at 9:33 AM Arnaldo Carvalho de Melo <acme@kernel.org> wrote:
+
+
+On February 4, 2021 9:01:51 PM GMT-03:00, Andrii Nakryiko <andrii=2Enakryi=
+ko@gmail=2Ecom> wrote:
+>On Thu, Feb 4, 2021 at 2:09 PM Arnaldo Carvalho de Melo><acme@kernel=2Eor=
+g> wrote:
+>>         The v1=2E20 release of pahole and its friends is out, mostly
+>> addressing problems related to gcc 11 defaulting to DWARF5 for -g,
+>> available at the usual places:
 >
-> So I think that for the problems related to building the kernel with gcc
-> 11 in Fedora Rawhide using the default that is now DWARF5, pahole 1.20
-> is good to go and I'll tag it now.
+>Great, thanks, Arnaldo! Do you plan to build RPMs soon as well?
 
-dwarves-1.20-1.fc34.x86_64
-libdwarves1-1.20-1.fc34.x86_64
+It's in rawhide already, I'll do it for f33, f32 later,
 
-Fixes both "failed to validate module [?????] BTF: -22" type errors,
-and 'in-kernel BTF is malformed" with qemu-kvm and libvirt.
+- Arnaldo
 
-Is that expected? Or maybe the second issue was fixed by
-gcc-11.0.0-0.18.fc34.x86_64 [(GCC) 11.0.0 20210130]? This is what I
-get for changing more than one thing at once.
-
---
-Chris Murphy
+--=20
+Sent from my Android device with K-9 Mail=2E Please excuse my brevity=2E
