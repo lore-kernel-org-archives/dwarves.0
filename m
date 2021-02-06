@@ -2,187 +2,193 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-19.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 336B3C433DB
-	for <linux-dwarves@archiver.kernel.org>; Sat,  6 Feb 2021 18:11:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C4280C433E0
+	for <linux-dwarves@archiver.kernel.org>; Sat,  6 Feb 2021 19:14:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E992264E39
-	for <linux-dwarves@archiver.kernel.org>; Sat,  6 Feb 2021 18:11:45 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8A58864E34
+	for <linux-dwarves@archiver.kernel.org>; Sat,  6 Feb 2021 19:14:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230474AbhBFSLa (ORCPT
+        id S229522AbhBFTOj (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Sat, 6 Feb 2021 13:11:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40698 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230473AbhBFSL3 (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Sat, 6 Feb 2021 13:11:29 -0500
-Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74755C06174A;
-        Sat,  6 Feb 2021 10:10:49 -0800 (PST)
-Received: by mail-il1-x131.google.com with SMTP id y17so8929885ili.12;
-        Sat, 06 Feb 2021 10:10:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
-         :subject:to:cc;
-        bh=e4WGUj7LIAI0OsTSONaPK/trDzhQumNZ4RBKCXhXtNA=;
-        b=EWlJKYPpmzu4lvFMsn+FGTy/G8FGCzAKD57m1Xd+SW+MFtndCCWkFUvNnPfvtt3enz
-         aSxazhm4b+vchNhIe14R9A5fGGTd8sJk2exmWFLu31oDUNW7LdGMWGxEW4HO3hojWYAO
-         gHa5oeFsptzOoPPMhXbztdkLJPz6avSIHcdK3auzKcdXQAFqoGbQiXG44emuujamn8ra
-         43xIky8rRlSFdGWAHLPkCsP5QzU/FcwsWP183hBXnDVu5AM0axvc4BKZmXZICBUIvR2c
-         vnk+WYGZ2R/0LQsOZ0KeftSE39x+l9B8koWsir1ZwVZeF7tKJwLrQhXSuUvak3GoAuqF
-         uGUw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
-         :from:date:message-id:subject:to:cc;
-        bh=e4WGUj7LIAI0OsTSONaPK/trDzhQumNZ4RBKCXhXtNA=;
-        b=T+AhBYysYKf8fz7tZVlfOont/gxH0u31UzbM236EUpafsVC+s6hWJcx2UvOr2OdtOD
-         yjWF2bn5BATQpC1hvKN6lVZ71AqbJ2HbJqM0v5OunYoMu3q9er0ImGWUn5WL1ca8cRZM
-         qabXTaS3Aj3GVs0BgDUO/WXACC3Kq8GeyhK12o4WH8sIRa9hpj58u8Z2zQ7DQs3lUmOL
-         dicDLYTOBTlLQ4CjJcq732IdMR3pPCkEAREV3nptmaeMGclFA5yfpP+sNIpa0BJVioPV
-         ZAmItCySz4B5kpiKJRQqRGaxAJSS42e0Rd4XoIwmzq2SnSgqXzkYKpaJhHYaqbZ6yH0Y
-         zGBQ==
-X-Gm-Message-State: AOAM532Qznae4Z0KHilBM9NM0tW00fjdeJ6HMParVho77ty7c8lWMsFx
-        brNzSWGxcx7L05sIjasU77RejNEKTvGvmGS+9OU=
-X-Google-Smtp-Source: ABdhPJxcl1k3Ixfj3ACK8pH/6YNKVtZqw3QAR4YuXPMdXX7iO1JVP34iE53bDUIf9QbK6qpqpCpJlIuoYK1FXOcUplI=
-X-Received: by 2002:a92:ce46:: with SMTP id a6mr9362044ilr.10.1612635048727;
- Sat, 06 Feb 2021 10:10:48 -0800 (PST)
+        Sat, 6 Feb 2021 14:14:39 -0500
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:47632 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S229539AbhBFTOi (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Sat, 6 Feb 2021 14:14:38 -0500
+Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
+        by m0089730.ppops.net (8.16.0.43/8.16.0.43) with SMTP id 116JA1jp010642
+        for <dwarves@vger.kernel.org>; Sat, 6 Feb 2021 11:13:57 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=facebook; bh=8nkK796dxLtHEb7nz1HgKXmF/r8FsM3G9Dj1Fo0n63M=;
+ b=M8SJbr6JDzYsg2QfVqnig2zBAc5gXyVCcDYMIFq/MBDMWuVw/qvwJdXj75kRVMLAD+5e
+ 5H/cYzyYTBtCkFKR0Fz93cpwDeq3Df/UGMFUKwV8iA+daGSbKWDGnt4Pqjae14tN6Cux
+ M87IA9YIGJKq0Dx+F/b3TLai4+hZDJ+7swQ= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by m0089730.ppops.net with ESMTP id 36hqg51fw7-7
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <dwarves@vger.kernel.org>; Sat, 06 Feb 2021 11:13:57 -0800
+Received: from intmgw001.06.ash9.facebook.com (2620:10d:c085:208::f) by
+ mail.thefacebook.com (2620:10d:c085:21d::6) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1979.3; Sat, 6 Feb 2021 11:13:55 -0800
+Received: by devbig003.ftw2.facebook.com (Postfix, from userid 128203)
+        id 011043705E41; Sat,  6 Feb 2021 11:13:50 -0800 (PST)
+From:   Yonghong Song <yhs@fb.com>
+To:     <acme@kernel.org>, <dwarves@vger.kernel.org>
+CC:     <bpf@vger.kernel.org>, <andriin@fb.com>, <mark@klomp.org>,
+        <ndesaulniers@google.com>, <sedat.dilek@gmail.com>
+Subject: [PATCH dwarves] btf_encoder: sanitize non-regular int base type
+Date:   Sat, 6 Feb 2021 11:13:50 -0800
+Message-ID: <20210206191350.830616-1-yhs@fb.com>
+X-Mailer: git-send-email 2.24.1
 MIME-Version: 1.0
-References: <20210205192446.GH920417@kernel.org> <cb743ab8-9a66-a311-ed18-ecabf0947440@fb.com>
- <CA+icZUUcjJASPN8NVgWNp+2h=WO-PT4Su3-yHZpynNHCrHEb-w@mail.gmail.com>
- <d59c2a53-976c-c304-f208-67110bdd728a@fb.com> <CA+icZUVhgnJ9j7dnXxLQi3DcmLrqpZgcAo2wmHJ_OxSQyS6DQg@mail.gmail.com>
- <CA+icZUWFx47jWJsV6tyoS5f18joPLyE8TOeeyVgsk65k9sP2WQ@mail.gmail.com>
- <CA+icZUUj1P_PAj=E8iF=C4m6gYm9zqb+WWbOdoTqemTeGnZbww@mail.gmail.com>
- <CA+icZUWY0zkOb36gxMOuT5-m=vC5_e815gkSEyM45sO+jgcCZg@mail.gmail.com>
- <CA+icZUW+4=WUexA3-qwXSdEY2L4DOhF1pQfw9=Bf2invYF1J2Q@mail.gmail.com>
- <8ff11fa8-46cd-5f20-b988-20e65e122507@fb.com> <20210206162419.GC2851@wildebeest.org>
- <3f5a00ef-1c71-d0da-e9fd-c7f707760f5c@fb.com>
-In-Reply-To: <3f5a00ef-1c71-d0da-e9fd-c7f707760f5c@fb.com>
-Reply-To: sedat.dilek@gmail.com
-From:   Sedat Dilek <sedat.dilek@gmail.com>
-Date:   Sat, 6 Feb 2021 19:10:37 +0100
-Message-ID: <CA+icZUVfTH=yONintyJ+T8kvTrR4Q0gumJYNUCs6Ybraff5Kpg@mail.gmail.com>
-Subject: Re: ERROR: INT DW_ATE_unsigned_1 Error emitting BTF type
-To:     Yonghong Song <yhs@fb.com>
-Cc:     Mark Wieelard <mark@klomp.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
-        dwarves@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        bpf@vger.kernel.org, Jiri Olsa <jolsa@kernel.org>,
-        Jan Engelhardt <jengelh@inai.de>,
-        Domenico Andreoli <cavok@debian.org>,
-        Matthias Schwarzott <zzam@gentoo.org>,
-        Andrii Nakryiko <andriin@fb.com>,
-        Paul Moore <paul@paul-moore.com>,
-        Ondrej Mosnacek <omosnace@redhat.com>,
-        =?UTF-8?Q?Daniel_P=2E_Berrang=C3=A9?= <berrange@redhat.com>,
-        Tom Stellard <tstellar@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.737
+ definitions=2021-02-06_07:2021-02-05,2021-02-06 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxscore=0 adultscore=0
+ priorityscore=1501 malwarescore=0 clxscore=1015 phishscore=0
+ lowpriorityscore=0 bulkscore=0 spamscore=0 mlxlogscore=946 suspectscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2102060136
+X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-On Sat, Feb 6, 2021 at 6:53 PM Yonghong Song <yhs@fb.com> wrote:
->
->
->
-> On 2/6/21 8:24 AM, Mark Wieelard wrote:
-> > Hi,
-> >
-> > On Sat, Feb 06, 2021 at 12:26:44AM -0800, Yonghong Song wrote:
-> >> With the above vmlinux, the issue appears to be handling
-> >> DW_ATE_signed_1, DW_ATE_unsigned_{1,24,40}.
-> >>
-> >> The following patch should fix the issue:
-> >
-> > That doesn't really make sense to me. Why is the compiler emitting a
-> > DW_TAG_base_type that needs to be interpreted according to the
-> > DW_AT_name attribute?
-> >
-> > If the issue is that the size of the base type cannot be expressed in
-> > bytes then the DWARF spec provides the following option:
-> >
-> >      If the value of an object of the given type does not fully occupy
-> >      the storage described by a byte size attribute, the base type
-> >      entry may also have a DW_AT_bit_size and a DW_AT_data_bit_offset
-> >      attribute, both of whose values are integer constant values (see
-> >      Section 2.19 on page 55). The bit size attribute describes the
-> >      actual size in bits used to represent values of the given
-> >      type. The data bit offset attribute is the offset in bits from the
-> >      beginning of the containing storage to the beginning of the
-> >      value. Bits that are part of the offset are padding.  If this
-> >      attribute is omitted a default data bit offset of zero is assumed.
-> >
-> > Would it be possible to use that encoding of those special types?  If
->
-> I agree with you. I do not like comparing me as well. Unfortunately,
-> there is no enough information in dwarf to find out actual information.
-> The following is the dwarf dump with vmlinux (Sedat provided) for
-> DW_ATE_unsigned_1.
->
-> 0x000e97e9:   DW_TAG_base_type
->                  DW_AT_name      ("DW_ATE_unsigned_1")
->                  DW_AT_encoding  (DW_ATE_unsigned)
->                  DW_AT_byte_size (0x00)
->
-> There is no DW_AT_bit_size and DW_AT_bit_offset for base type.
-> AFAIK, these two attributes typically appear in struct/union members
-> together with DW_AT_byte_size.
->
-> Maybe compilers (clang in this case) can emit DW_AT_bit_size = 1
-> and DW_AT_bit_offset = 0/7 (depending on big/little endian) and
-> this case, we just test and get DW_AT_bit_size and it should work.
->
-> But I think BTF does not need this (DW_ATE_unsigned_1) for now.
-> I checked dwarf dump and it is mostly used for some arith operation
-> encoded in dump (in this case, e.g., shift by 1 bit)
->
-> 0x000015cf:   DW_TAG_base_type
->                  DW_AT_name      ("DW_ATE_unsigned_1")
->                  DW_AT_encoding  (DW_ATE_unsigned)
->                  DW_AT_byte_size (0x00)
->
-> 0x00010ed9:         DW_TAG_formal_parameter
->                        DW_AT_location    (DW_OP_lit0, DW_OP_not,
-> DW_OP_convert (0x000015cf) "DW_ATE_unsigned_1", DW_OP_convert
-> (0x000015d4) "DW_ATE_unsigned_8", DW_OP_stack_value)
->                        DW_AT_abstract_origin     (0x00013984 "branch")
->
-> Look at clang frontend, only the following types are encoded with
-> unsigned dwarf type.
->
->    case BuiltinType::UShort:
->    case BuiltinType::UInt:
->    case BuiltinType::UInt128:
->    case BuiltinType::ULong:
->    case BuiltinType::WChar_U:
->    case BuiltinType::ULongLong:
->      Encoding = llvm::dwarf::DW_ATE_unsigned;
->      break;
->
->
-> > not, can we try to come up with some extension that doesn't require
-> > consumers to match magic names?
-> >
+clang with dwarf5 may generate non-regular int base type,
+i.e., not a signed/unsigned char/short/int/longlong/__int128.
+Such base types are often used to describe
+how an actual parameter or variable is generated. For example,
 
-You want me to upload mlx5_core.ko?
+0x000015cf:   DW_TAG_base_type
+                DW_AT_name      ("DW_ATE_unsigned_1")
+                DW_AT_encoding  (DW_ATE_unsigned)
+                DW_AT_byte_size (0x00)
 
-When looking with llvm-dwarf for DW_ATE_unsigned_160:
+0x00010ed9:         DW_TAG_formal_parameter
+                      DW_AT_location    (DW_OP_lit0,
+                                         DW_OP_not,
+                                         DW_OP_convert (0x000015cf) "DW_A=
+TE_unsigned_1",
+                                         DW_OP_convert (0x000015d4) "DW_A=
+TE_unsigned_8",
+                                         DW_OP_stack_value)
+                      DW_AT_abstract_origin     (0x00013984 "branch")
 
-0x00d65616:   DW_TAG_base_type
-               DW_AT_name      ("DW_ATE_unsigned_160")
-               DW_AT_encoding  (DW_ATE_unsigned)
-               DW_AT_byte_size (0x14)
+What it does is with a literal "0", did a "not" operation, and the conver=
+ted to
+one-bit unsigned int and then 8-bit unsigned int.
 
-If you need further information, please let me know.
+Another example,
 
-Thanks.
+0x000e97e4:   DW_TAG_base_type
+                DW_AT_name      ("DW_ATE_unsigned_24")
+                DW_AT_encoding  (DW_ATE_unsigned)
+                DW_AT_byte_size (0x03)
 
-- Sedat -
+0x000f88f8:     DW_TAG_variable
+                  DW_AT_location        (indexed (0x3c) loclist =3D 0x000=
+08fb0:
+                     [0xffffffff82808812, 0xffffffff82808817):
+                         DW_OP_breg0 RAX+0,
+                         DW_OP_convert (0x000e97d5) "DW_ATE_unsigned_64",
+                         DW_OP_convert (0x000e97df) "DW_ATE_unsigned_8",
+                         DW_OP_stack_value,
+                         DW_OP_piece 0x1,
+                         DW_OP_breg0 RAX+0,
+                         DW_OP_convert (0x000e97d5) "DW_ATE_unsigned_64",
+                         DW_OP_convert (0x000e97da) "DW_ATE_unsigned_32",
+                         DW_OP_lit8,
+                         DW_OP_shr,
+                         DW_OP_convert (0x000e97da) "DW_ATE_unsigned_32",
+                         DW_OP_convert (0x000e97e4) "DW_ATE_unsigned_24",
+                         DW_OP_stack_value,
+                         DW_OP_piece 0x3
+                     ......
+
+At one point, a right shift by 8 happens and the result is converted to
+32-bit unsigned int and then to 24-bit unsigned int.
+
+BTF does not need any of these DW_OP_* information and such non-regular i=
+nt
+types will cause libbpf to emit errors.
+Let us sanitize them to generate BTF acceptable to libbpf and kernel.
+
+Cc: Sedat Dilek <sedat.dilek@gmail.com>
+Signed-off-by: Yonghong Song <yhs@fb.com>
+---
+ libbtf.c | 39 ++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 38 insertions(+), 1 deletion(-)
+
+diff --git a/libbtf.c b/libbtf.c
+index 9f76283..93fe185 100644
+--- a/libbtf.c
++++ b/libbtf.c
+@@ -373,6 +373,7 @@ int32_t btf_elf__add_base_type(struct btf_elf *btfe, =
+const struct base_type *bt,
+ 	struct btf *btf =3D btfe->btf;
+ 	const struct btf_type *t;
+ 	uint8_t encoding =3D 0;
++	uint16_t byte_sz;
+ 	int32_t id;
+=20
+ 	if (bt->is_signed) {
+@@ -384,7 +385,43 @@ int32_t btf_elf__add_base_type(struct btf_elf *btfe,=
+ const struct base_type *bt,
+ 		return -1;
+ 	}
+=20
+-	id =3D btf__add_int(btf, name, BITS_ROUNDUP_BYTES(bt->bit_size), encodi=
+ng);
++	/* dwarf5 may emit DW_ATE_[un]signed_{num} base types where
++	 * {num} is not power of 2 and may exceed 128. Such attributes
++	 * are mostly used to record operation for an actual parameter
++	 * or variable.
++	 * For example,
++	 *     DW_AT_location        (indexed (0x3c) loclist =3D 0x00008fb0:
++	 *         [0xffffffff82808812, 0xffffffff82808817):
++	 *             DW_OP_breg0 RAX+0,
++	 *             DW_OP_convert (0x000e97d5) "DW_ATE_unsigned_64",
++	 *             DW_OP_convert (0x000e97df) "DW_ATE_unsigned_8",
++	 *             DW_OP_stack_value,
++	 *             DW_OP_piece 0x1,
++	 *             DW_OP_breg0 RAX+0,
++	 *             DW_OP_convert (0x000e97d5) "DW_ATE_unsigned_64",
++	 *             DW_OP_convert (0x000e97da) "DW_ATE_unsigned_32",
++	 *             DW_OP_lit8,
++	 *             DW_OP_shr,
++	 *             DW_OP_convert (0x000e97da) "DW_ATE_unsigned_32",
++	 *             DW_OP_convert (0x000e97e4) "DW_ATE_unsigned_24",
++	 *             DW_OP_stack_value, DW_OP_piece 0x3
++	 *     DW_AT_name    ("ebx")
++	 *     DW_AT_decl_file       ("/linux/arch/x86/events/intel/core.c")
++	 *
++	 * In the above example, at some point, one unsigned_32 value
++	 * is right shifted by 8 and the result is converted to unsigned_32
++	 * and then unsigned_24.
++	 *
++	 * BTF does not need such DW_OP_* information so let us sanitize
++	 * these non-regular int types to avoid libbpf/kernel complaints.
++	 */
++	byte_sz =3D BITS_ROUNDUP_BYTES(bt->bit_size);
++	if (!byte_sz || (byte_sz & (byte_sz - 1))) {
++		name =3D "sanitized_int";
++		byte_sz =3D 4;
++	}
++
++	id =3D btf__add_int(btf, name, byte_sz, encoding);
+ 	if (id < 0) {
+ 		btf_elf__log_err(btfe, BTF_KIND_INT, name, true, "Error emitting BTF t=
+ype");
+ 	} else {
+--=20
+2.24.1
+
