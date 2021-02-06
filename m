@@ -2,57 +2,56 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-2.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 87F85C433E0
-	for <linux-dwarves@archiver.kernel.org>; Sat,  6 Feb 2021 10:24:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 547B6C433E6
+	for <linux-dwarves@archiver.kernel.org>; Sat,  6 Feb 2021 12:55:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4720F64E66
-	for <linux-dwarves@archiver.kernel.org>; Sat,  6 Feb 2021 10:24:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 23FE664E9D
+	for <linux-dwarves@archiver.kernel.org>; Sat,  6 Feb 2021 12:55:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229554AbhBFKYq (ORCPT
+        id S229986AbhBFMzF (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Sat, 6 Feb 2021 05:24:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53982 "EHLO
+        Sat, 6 Feb 2021 07:55:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbhBFKYp (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Sat, 6 Feb 2021 05:24:45 -0500
-Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 537EEC061788;
-        Sat,  6 Feb 2021 02:24:05 -0800 (PST)
-Received: by mail-io1-xd2a.google.com with SMTP id u20so9860384iot.9;
-        Sat, 06 Feb 2021 02:24:05 -0800 (PST)
+        with ESMTP id S229771AbhBFMzD (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Sat, 6 Feb 2021 07:55:03 -0500
+Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6647FC06174A;
+        Sat,  6 Feb 2021 04:54:21 -0800 (PST)
+Received: by mail-io1-xd30.google.com with SMTP id x21so10109927iog.10;
+        Sat, 06 Feb 2021 04:54:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:reply-to:from:date:message-id
          :subject:to:cc;
-        bh=DrSEeR5XXqjciPqvAEERURwzS3+CTGHiv1S1iJCiwto=;
-        b=k3rLnJajP4OtSJ4mo+L15VXSc16RPcGXO/bTQOhvCRmPyE2P7MvV1xRm+lQ+LmQ/Ss
-         Ck8UUgq8fWWaLcUsvLbKmasGwvXDZT4f1VUbyWFZXMYTDT2RSLAvJRpBaXmtOCx9lxpG
-         z430Hy7qqhZBjVjtcSaHYKAfoNcqmsCiS9YIZiyPeiN7HPoSTgLPRDbBIZQtzh6um5YA
-         jsv5U3CPJGjtpvTxk/D2wzYmvuSUid6PRs75JFudPuVU3zLpeMkW1NnmrIXZENkj9P57
-         Xmy4eCI7EMmT3LYX3MnWagnwKoj7rsPKn/LJh11WWglc7RSX9sRAp3uFPQSTNe0KJsrR
-         BiNQ==
+        bh=pHZf8IJw7vfwU1AqUSW8aNLmUrq94t6dEUlTjXrhvzM=;
+        b=AdCQa+8hBaGCpXRkbGGBmfbwHQSf8oXUkjlxYohnrD4bFFgQlvAVrNbsC0xFrk4wFB
+         qaiO4UNApxFcaRJlAInuOxu7KVhR9JZMa2xSXrIVoej+OXaPrdeXTh6XQqsOAOU0o9YY
+         e7aK9CAnUDX09JVl4KN3goZpUA7UCkbs056SRQpqMwftzcBZobhaCrfJaxDBcJjpRyI2
+         d8s5RvDTiBZNbFWwdoSQj6SVkQMMujXiiRETLMVfsShSwkey5Xy0BCY+zz+njlj8pBWe
+         4f10lmJT0QoRbxNcowtGmBGLcBe85JsmI6E2n4yvgG9PHlIpVM3soXkn23sCW9VzB81k
+         9rZw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
          :from:date:message-id:subject:to:cc;
-        bh=DrSEeR5XXqjciPqvAEERURwzS3+CTGHiv1S1iJCiwto=;
-        b=kVPdQ0cnbRavrzC5+igItNHSVHUmahRJ7T31hhhuPtygy4VYVJq9w4y/foJgkkNgVn
-         flCK3USM323X3/pQnmacFDJDfAMZknGgK1qoWad35juVCHueR/xl4JGNDnOim8c8fdwJ
-         yMtQSaBWi5BNDlSqfZ4INaedDwGvpWcIcMqw0DmGo2czLFz47mcvhHXxFvOL6+V4lh9x
-         uywmNE3jKyk2Ms3qiTAQ9inbJPHDPTOs5We0KKpW84LTcgXNBtokbxyldG/6nS3+tg/s
-         b+2F/bW0Qz5ZkBA4EwKHzeJcIEp1hallnfMky0F2sZ0IeAj2+3pw0FGDc4FdyEzvfcI/
-         OeRg==
-X-Gm-Message-State: AOAM531ogeIKp+npWXRkbXKTZ843sLJEq85JBTKZdGp+BEAY0ehLCqH5
-        Fpq8JlvXikMIIN4yt87YqyEIxvyqfaOaOChJMeo=
-X-Google-Smtp-Source: ABdhPJxCIlVXkCHBMWBO5WsjiZCHJDGOjMEgSBgd5jWHch5ifAX+sDLE9KWVjHuJxptmZvLyGZ9XUDbBIhtzOgAJZPQ=
-X-Received: by 2002:a6b:e006:: with SMTP id z6mr8037925iog.110.1612607044683;
- Sat, 06 Feb 2021 02:24:04 -0800 (PST)
+        bh=pHZf8IJw7vfwU1AqUSW8aNLmUrq94t6dEUlTjXrhvzM=;
+        b=AgGwN1M1NMG95U6TCXfuEccJmEvuOAUt7UX4EHBBzKGCii4PMA5DPK24wJQ9a9Zn8H
+         XXaeco/oifvFzzTiBBdFlNeKTEtaWIAKbo1Gu0QpMpqge0ypRnnimbj1aTR7iGKCTsKq
+         +r5Qtp+YeVEn+YjExkjZe7vpagpjw2kpgHqjEUCeAGZY8SxrE3HYjgbVb3XIO/KSPQDt
+         2fnIVG3O6w9e4SG3urcmXQ/JIoqGVH6uLb6Y8yCwTX9nVVXgOj/WdHwDw1+5pOwESRvA
+         JuLTrOHynQZ21vG2iZQpSpWc/jLs1kxPZ70cthmj/w5fSAqEUQWxA7oHWTTV5B+2GWll
+         ZWdA==
+X-Gm-Message-State: AOAM532gbEB0QJoe5hbcy+9LtmWnsNW913LbBnBQ9/skGhYEpWMod0EC
+        28NDut7o8mY4bNaeBbFZt44hZDMQvTwuXI8UCfw=
+X-Google-Smtp-Source: ABdhPJyQ3APJcttJvD4p976eWFyWkOKanpILSg0Na+usLCGpMOgP8ugflqRKnSL9Q8T5nrIFiuaVJkclvp2XxRr7Yo0=
+X-Received: by 2002:a05:6638:3795:: with SMTP id w21mr9446593jal.65.1612616060773;
+ Sat, 06 Feb 2021 04:54:20 -0800 (PST)
 MIME-Version: 1.0
 References: <20210204220741.GA920417@kernel.org> <CA+icZUVyB3qaqq3pwOyJY_F4V6KU9hdF=AJM_D7iEW4QK4Eo6w@mail.gmail.com>
  <20210205152823.GD920417@kernel.org> <CA+icZUWzMdhuHDkcKMHAd39iMEijk65v2ADcz0=FdODr38sJ4w@mail.gmail.com>
@@ -67,12 +66,14 @@ References: <20210204220741.GA920417@kernel.org> <CA+icZUVyB3qaqq3pwOyJY_F4V6KU9
  <CA+icZUW+4=WUexA3-qwXSdEY2L4DOhF1pQfw9=Bf2invYF1J2Q@mail.gmail.com>
  <8ff11fa8-46cd-5f20-b988-20e65e122507@fb.com> <CA+icZUVwM9VY5huMpbMtGL-rs16JYvBM2MDiebx6taptH3m-Jg@mail.gmail.com>
  <CA+icZUU=qnLmZWsjeU2G=R0sTkx9+6qtG6Cni1xit=-p_vG_Pw@mail.gmail.com>
- <CA+icZUUSTXqACW=0d9k4fC2y8TJEDjQ7WWwnnSR7KxsmC-SJhw@mail.gmail.com> <CA+icZUUOS03BgOoSFdUWP8G61b2wjhAx0bUGNstqS7OTm3+7iQ@mail.gmail.com>
-In-Reply-To: <CA+icZUUOS03BgOoSFdUWP8G61b2wjhAx0bUGNstqS7OTm3+7iQ@mail.gmail.com>
+ <CA+icZUUSTXqACW=0d9k4fC2y8TJEDjQ7WWwnnSR7KxsmC-SJhw@mail.gmail.com>
+ <CA+icZUUOS03BgOoSFdUWP8G61b2wjhAx0bUGNstqS7OTm3+7iQ@mail.gmail.com>
+ <CA+icZUUjy5cR5cq6PqSA0+KDsovqAx-zH9CozH8TpETu9jYYPw@mail.gmail.com> <CA+icZUW2HVWSZiOHvrjXGP-ubL_iWEHy1u6B3zQn=pN-J1FnSQ@mail.gmail.com>
+In-Reply-To: <CA+icZUW2HVWSZiOHvrjXGP-ubL_iWEHy1u6B3zQn=pN-J1FnSQ@mail.gmail.com>
 Reply-To: sedat.dilek@gmail.com
 From:   Sedat Dilek <sedat.dilek@gmail.com>
-Date:   Sat, 6 Feb 2021 11:23:52 +0100
-Message-ID: <CA+icZUUjy5cR5cq6PqSA0+KDsovqAx-zH9CozH8TpETu9jYYPw@mail.gmail.com>
+Date:   Sat, 6 Feb 2021 13:54:09 +0100
+Message-ID: <CA+icZUU6dY-jtZWOJC5Fi2BRGK4jZt_o1JnGH3nmGseUJH4uNg@mail.gmail.com>
 Subject: Re: ERROR: INT DW_ATE_unsigned_1 Error emitting BTF type
 To:     Yonghong Song <yhs@fb.com>
 Cc:     Masahiro Yamada <masahiroy@kernel.org>,
@@ -90,104 +91,20 @@ Cc:     Masahiro Yamada <masahiroy@kernel.org>,
         Ondrej Mosnacek <omosnace@redhat.com>,
         =?UTF-8?Q?Daniel_P=2E_Berrang=C3=A9?= <berrange@redhat.com>,
         Tom Stellard <tstellar@redhat.com>
-Content-Type: multipart/mixed; boundary="0000000000000faae705baa85682"
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
---0000000000000faae705baa85682
-Content-Type: text/plain; charset="UTF-8"
+Some post-mortem:
 
-[ SNIP ]
+LLVM_DWARF_BIN="/opt/llvm-toolchain/bin/llvm-dwarfdump"
 
-> > > > > Please help do a test. I can submit a formal patch tomorrow.
-> > > >
-> > > > Thanks for the patch.
-> > > >
-> > > > Can you attach the diff as Gmail has totally truncated/malformed it?
-> > > >
-> > > > For the Linux breakage - you will need some additional Clang specific patches.
-> > > > Is this Linux 5.11-rcX?
-> > > > The "Blocking bugs" are listed in the first post of "Linux 5.11 release cycle".
-> > > > Hope this helps.
-> > > >
-> > > > This is cool co-working :-).
-> > > >
-> > > > - Sedat -
-> > > >
-> > > > [1] https://github.com/ClangBuiltLinux/linux/issues/1228
-> > >
-> > > With the attached diff and new selfmade pahole looks good here.
-> > >
-> > > Passed (see line-numbers):
-> > >
-> > > 11090:+ info LD .tmp_vmlinux.btf
-> > > 11099:+ info BTF .btf.vmlinux.bin.o
-> > > 11103:+ LLVM_OBJCOPY=llvm-objcopy /opt/pahole/bin/pahole -J .tmp_vmlinux.btf
-> > > 11121:+ info LD .tmp_vmlinux.kallsyms1
-> > > 11139:+ info KSYMS .tmp_vmlinux.kallsyms1.S
-> > > 11145:+ info AS .tmp_vmlinux.kallsyms1.S
-> > > 11160:+ info LD .tmp_vmlinux.kallsyms2
-> > > 11178:+ info KSYMS .tmp_vmlinux.kallsyms2.S
-> > > 11184:+ info AS .tmp_vmlinux.kallsyms2.S
-> > > 11200:+ info LD vmlinux
-> > > 11210:+ info BTFIDS vmlinux
-> > > 11216:+ info SORTTAB vmlinux
-> > >
-> > > Still building linux-kernel...
-> > >
-> > > Will report later if I was able to boot on bare metal.
-> > >
-> >
-> > When running scripts/Makefile.modfinal:
-> >
-> > ...
-> > not supported bit_size 160
-> > Encountered error while encoding BTF.
-> > ...
-> > make[5]: *** [scripts/Makefile.modfinal:59:
-> > drivers/net/ethernet/mellanox/mlx5/core/mlx5_core.ko] Error 1
-> > make[5]: *** Deleting file
-> > 'drivers/net/ethernet/mellanox/mlx5/core/mlx5_core.ko'
-> >
->
-> I added "bit_size 160" to libbtf.c:
->
-> static int bits_to_int_bytes(uint16_t bit_size)
-> {
->        if (bit_size <= 8)
->                return 1;
->        if (bit_size <= 16)
->                return 2;
->        if (bit_size <= 32)
->                return 4;
->        if (bit_size <= 64)
->                return 8;
->        if (bit_size <= 128)
->                return 16;
->        if (bit_size <= 160)
->                return 20;
->        /* BTF supports upto 16byte int (__int128). */
->        return -1;
-> }
->
-> It still breaks with:
->
-> [521367] INT DW_ATE_unsigned_160 Error emitting BTF type
-> Encountered error while encoding BTF.
-> make[5]: *** [scripts/Makefile.modfinal:58:
-> drivers/net/ethernet/mellanox/mlx5/core/mlx5_core.ko] Error 1
-> make[5]: *** Deleting file
-> 'drivers/net/ethernet/mellanox/mlx5/core/mlx5_core.ko'
->
-> Comments?
->
+module="drivers/net/ethernet/mellanox/mlx5/core/mlx5_core.ko"
 
-Indeed there is DW_ATE_unsigned_160:
+Module has DW_ATE_unsigned_160 and DW_ATE_unsigned_1:
 
-$ /opt/llvm-toolchain/bin/llvm-dwarfdump
-drivers/net/ethernet/mellanox/mlx5/core/mlx5_core.o | grep DW_AT_name
-| grep DW_ATE_ | sort -u
+$LLVM_DWARF_BIN $module | grep DW_AT_name | grep DW_ATE_ | sort -u
                DW_AT_name      ("DW_ATE_signed_32")
                DW_AT_name      ("DW_ATE_signed_64")
                DW_AT_name      ("DW_ATE_unsigned_1")
@@ -196,62 +113,22 @@ drivers/net/ethernet/mellanox/mlx5/core/mlx5_core.o | grep DW_AT_name
                DW_AT_name      ("DW_ATE_unsigned_160")
                DW_AT_name      ("DW_ATE_unsigned_32")
                DW_AT_name      ("DW_ATE_unsigned_64")
+
+vmlinux has only DW_ATE_unsigned_1:
+
+$ $LLVM_DWARF_BIN vmlinux | grep DW_AT_name | grep DW_ATE_ | sort -u
+               DW_AT_name      ("DW_ATE_signed_1")
+               DW_AT_name      ("DW_ATE_signed_16")
+               DW_AT_name      ("DW_ATE_signed_32")
+               DW_AT_name      ("DW_ATE_signed_64")
+               DW_AT_name      ("DW_ATE_signed_8")
+               DW_AT_name      ("DW_ATE_unsigned_1")
+               DW_AT_name      ("DW_ATE_unsigned_128")
+               DW_AT_name      ("DW_ATE_unsigned_16")
+               DW_AT_name      ("DW_ATE_unsigned_24")
+               DW_AT_name      ("DW_ATE_unsigned_32")
+               DW_AT_name      ("DW_ATE_unsigned_40")
+               DW_AT_name      ("DW_ATE_unsigned_64")
                DW_AT_name      ("DW_ATE_unsigned_8")
 
-Attached is diff v2 with the "bit_size 160" fix.
-
 - Sedat -
-
---0000000000000faae705baa85682
-Content-Type: text/x-patch; charset="US-ASCII"; 
-	name="DW_ATE_unsigned_1-pahole_1_20-dileks-v2.diff"
-Content-Disposition: attachment; 
-	filename="DW_ATE_unsigned_1-pahole_1_20-dileks-v2.diff"
-Content-Transfer-Encoding: base64
-Content-ID: <f_kktkjr0l0>
-X-Attachment-Id: f_kktkjr0l0
-
-ZGlmZiAtLWdpdCBhL2R3YXJmX2xvYWRlci5jIGIvZHdhcmZfbG9hZGVyLmMKaW5kZXggYjczZDc4
-NjdlMWU2Li5hYmExNDY3OWEwN2UgMTAwNjQ0Ci0tLSBhL2R3YXJmX2xvYWRlci5jCisrKyBiL2R3
-YXJmX2xvYWRlci5jCkBAIC00NjcsOCArNDY3LDE1IEBAIHN0YXRpYyBzdHJ1Y3QgYmFzZV90eXBl
-ICpiYXNlX3R5cGVfX25ldyhEd2FyZl9EaWUgKmRpZSwgc3RydWN0IGN1ICpjdSkKIAogCWlmIChi
-dCAhPSBOVUxMKSB7CiAJCXRhZ19faW5pdCgmYnQtPnRhZywgY3UsIGRpZSk7Ci0JCWJ0LT5uYW1l
-ID0gc3RyaW5nc19fYWRkKHN0cmluZ3MsIGF0dHJfc3RyaW5nKGRpZSwgRFdfQVRfbmFtZSkpOwot
-CQlidC0+Yml0X3NpemUgPSBhdHRyX251bWVyaWMoZGllLCBEV19BVF9ieXRlX3NpemUpICogODsK
-KwkJY29uc3QgY2hhciAqbmFtZSA9IGF0dHJfc3RyaW5nKGRpZSwgRFdfQVRfbmFtZSk7CisJCWJ0
-LT5uYW1lID0gc3RyaW5nc19fYWRkKHN0cmluZ3MsIG5hbWUpOworCQkvKiBEV19BVEVfdW5zaWdu
-ZWRfMSBoYXMgRFdfQVRfYnl0ZV9zaXplID09IDAuCisJCSogc3BlY2lhbGx5IHByb2Nlc3MgaXQu
-CisJCSovCisJCWlmIChzdHJjbXAobmFtZSwgIkRXX0FURV91bnNpZ25lZF8xIikgPT0gMCkKKwkJ
-CWJ0LT5iaXRfc2l6ZSA9IDE7CisJCWVsc2UKKwkJCWJ0LT5iaXRfc2l6ZSA9IGF0dHJfbnVtZXJp
-YyhkaWUsIERXX0FUX2J5dGVfc2l6ZSkgKiA4OwogCQl1aW50NjRfdCBlbmNvZGluZyA9IGF0dHJf
-bnVtZXJpYyhkaWUsIERXX0FUX2VuY29kaW5nKTsKIAkJYnQtPmlzX2Jvb2wgPSBlbmNvZGluZyA9
-PSBEV19BVEVfYm9vbGVhbjsKIAkJYnQtPmlzX3NpZ25lZCA9IGVuY29kaW5nID09IERXX0FURV9z
-aWduZWQ7CmRpZmYgLS1naXQgYS9saWJidGYuYyBiL2xpYmJ0Zi5jCmluZGV4IDlmNzYyODMwNDQ5
-NS4uNDhiYTU3Mzk0MDkwIDEwMDY0NAotLS0gYS9saWJidGYuYworKysgYi9saWJidGYuYwpAQCAt
-MzY3LDEzICszNjcsMzQgQEAgc3RhdGljIHZvaWQgYnRmX2xvZ19mdW5jX3BhcmFtKGNvbnN0IHN0
-cnVjdCBidGZfZWxmICpidGZlLAogCX0KIH0KIAorLyogYnRmIHJlcXVpcmVzIHBvd2VyLW9mLTIg
-Ynl0ZXMsIHlldCBkd2FyZiBtYXkgaGF2ZSBzb21ldGhpbmcgbGlrZQorICogRFdfQVRFX3Vuc2ln
-bmVkXzI0IHdoaWNoIGVuY29kZXMgYXMgMjQgYml0cyAoMyBieXRlcykuCisgKi8KK3N0YXRpYyBp
-bnQgYml0c190b19pbnRfYnl0ZXModWludDE2X3QgYml0X3NpemUpCit7CisgICAgICAgaWYgKGJp
-dF9zaXplIDw9IDgpCisgICAgICAgICAgICAgICByZXR1cm4gMTsKKyAgICAgICBpZiAoYml0X3Np
-emUgPD0gMTYpCisgICAgICAgICAgICAgICByZXR1cm4gMjsKKyAgICAgICBpZiAoYml0X3NpemUg
-PD0gMzIpCisgICAgICAgICAgICAgICByZXR1cm4gNDsKKyAgICAgICBpZiAoYml0X3NpemUgPD0g
-NjQpCisgICAgICAgICAgICAgICByZXR1cm4gODsKKyAgICAgICBpZiAoYml0X3NpemUgPD0gMTI4
-KQorICAgICAgICAgICAgICAgcmV0dXJuIDE2OworICAgICAgIGlmIChiaXRfc2l6ZSA8PSAxNjAp
-CisgICAgICAgICAgICAgICByZXR1cm4gMjA7CisgICAgICAgLyogQlRGIHN1cHBvcnRzIHVwdG8g
-MTZieXRlIGludCAoX19pbnQxMjgpLiAqLworICAgICAgIHJldHVybiAtMTsKK30KKwogaW50MzJf
-dCBidGZfZWxmX19hZGRfYmFzZV90eXBlKHN0cnVjdCBidGZfZWxmICpidGZlLCBjb25zdCBzdHJ1
-Y3QgYmFzZV90eXBlICpidCwKIAkJCSAgICAgICBjb25zdCBjaGFyICpuYW1lKQogewogCXN0cnVj
-dCBidGYgKmJ0ZiA9IGJ0ZmUtPmJ0ZjsKIAljb25zdCBzdHJ1Y3QgYnRmX3R5cGUgKnQ7CiAJdWlu
-dDhfdCBlbmNvZGluZyA9IDA7Ci0JaW50MzJfdCBpZDsKKwlpbnQzMl90IGlkLCBuYnl0ZXM7CiAK
-IAlpZiAoYnQtPmlzX3NpZ25lZCkgewogCQllbmNvZGluZyA9IEJURl9JTlRfU0lHTkVEOwpAQCAt
-Mzg0LDcgKzQwNSwxMyBAQCBpbnQzMl90IGJ0Zl9lbGZfX2FkZF9iYXNlX3R5cGUoc3RydWN0IGJ0
-Zl9lbGYgKmJ0ZmUsIGNvbnN0IHN0cnVjdCBiYXNlX3R5cGUgKmJ0LAogCQlyZXR1cm4gLTE7CiAJ
-fQogCi0JaWQgPSBidGZfX2FkZF9pbnQoYnRmLCBuYW1lLCBCSVRTX1JPVU5EVVBfQllURVMoYnQt
-PmJpdF9zaXplKSwgZW5jb2RpbmcpOworCW5ieXRlcyA9IGJpdHNfdG9faW50X2J5dGVzKGJ0LT5i
-aXRfc2l6ZSk7CisJaWYgKG5ieXRlcyA8IDApIHsKKwkJZnByaW50ZihzdGRlcnIsICJub3Qgc3Vw
-cG9ydGVkIGJpdF9zaXplICVodVxuIiwgYnQtPmJpdF9zaXplKTsKKwkJcmV0dXJuIC0xOworCX0K
-KworCWlkID0gYnRmX19hZGRfaW50KGJ0ZiwgbmFtZSwgbmJ5dGVzLCBlbmNvZGluZyk7CiAJaWYg
-KGlkIDwgMCkgewogCQlidGZfZWxmX19sb2dfZXJyKGJ0ZmUsIEJURl9LSU5EX0lOVCwgbmFtZSwg
-dHJ1ZSwgIkVycm9yIGVtaXR0aW5nIEJURiB0eXBlIik7CiAJfSBlbHNlIHsK
---0000000000000faae705baa85682--
