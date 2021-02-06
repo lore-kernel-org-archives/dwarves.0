@@ -2,56 +2,56 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.7 required=3.0 tests=BAYES_00,BOMB_FREEM,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E8004C433DB
-	for <linux-dwarves@archiver.kernel.org>; Sat,  6 Feb 2021 06:53:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 609DBC433DB
+	for <linux-dwarves@archiver.kernel.org>; Sat,  6 Feb 2021 07:26:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9B25464FC6
-	for <linux-dwarves@archiver.kernel.org>; Sat,  6 Feb 2021 06:53:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 284B964F91
+	for <linux-dwarves@archiver.kernel.org>; Sat,  6 Feb 2021 07:26:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229529AbhBFGxm (ORCPT
+        id S229590AbhBFH0z (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Sat, 6 Feb 2021 01:53:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36764 "EHLO
+        Sat, 6 Feb 2021 02:26:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229492AbhBFGxm (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Sat, 6 Feb 2021 01:53:42 -0500
-Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08A37C06174A;
-        Fri,  5 Feb 2021 22:53:01 -0800 (PST)
-Received: by mail-il1-x12d.google.com with SMTP id y15so7932791ilj.11;
-        Fri, 05 Feb 2021 22:53:01 -0800 (PST)
+        with ESMTP id S229492AbhBFH0y (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Sat, 6 Feb 2021 02:26:54 -0500
+Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1802AC06174A;
+        Fri,  5 Feb 2021 23:26:14 -0800 (PST)
+Received: by mail-io1-xd30.google.com with SMTP id s24so9645122iob.6;
+        Fri, 05 Feb 2021 23:26:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:reply-to:from:date:message-id
          :subject:to:cc;
-        bh=r4icrxi9raT1zE/PwdLZk8O5fKNkw262lBrx+yPfPaI=;
-        b=ey6vNecoVmrlvxuQ7PCWmq8I0MP5+Q3O2ShT5Z9wM/0E+dsiFkbcPGBDOuAknN/8Nz
-         vhSzmKfhy6PXIE92o/ft7dt/IB6ZHCJgz0pAUdadpK6rCjKnW9lh9E31v9eTds5jE6UB
-         TJedhLb6etSlf8juHnijE0cMCcSK34EVRaQeM/A+p5ke/ohKhoyON2MLzuZ8KYrJOjyZ
-         QuVHK1i7+0EZ7QxJZWhwOFryl0TxgJgsADJWItPGipvnOVCpfcXvyDYYZpMwx3/0gmCp
-         +logoF6qt9VfseIuFlAXpqvRDK/lKUv3MLi3P0qmpmuHe7tWMlD8VD+HmzpsEd8FzFiw
-         Ov6g==
+        bh=WAkpmSceCQpOL9g/nb4W8z+4GPryDFavQAvOKJCZ4ec=;
+        b=NwAb6V1G+IFXjDY2j2EcxBPzs6HFWtDkMW2mZRrYx3hC+p/bXbeP+RdECFiLUGbbQV
+         dgwxhv7stlWzl3ZCYfBvptTMbLJdjgklbAY22It9SJlR67PxOQ9xDrtwAMyNqks19o5m
+         iGsY1xKaN2W3l+FKCqLZENSHycmGH/eUc3WxclUWvT/dJX3V9Uugc9XbVBAzXFTIOBCf
+         rWtViqSegeTtKjDJmtyTW2pgOnEWA9mv25ISVhYBprRJUApAIwwZVQnVDjp6diWfM1AC
+         tIaqESU482JRtGdqPQEjf24k3qcRGRKfoA91Ab3nUvWcqxIafO388gfvdHrdBLP8JeQi
+         cDsQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
          :from:date:message-id:subject:to:cc;
-        bh=r4icrxi9raT1zE/PwdLZk8O5fKNkw262lBrx+yPfPaI=;
-        b=fhUqjLllT9NHyJ9b4DMe9nYPcMUfuRfqvcrgd3jbHoi73oabjwfEJYA24KgJmnfW9s
-         kBYeE5QszrbUUEiMdjuQuOC+r6ND77dC3hHc8jnw5qbZ7jNLXUcObv5yTMRr3y7sNFf7
-         RbEOn8xPSy3muJZnHF3ocbAPCzppxHfuEiN+4bdP8hzuWZag5OhqMQz1tj6y9qF45+qr
-         lTSqJFy4Nxl+b0tN1RXCUq+ZGe91PeBc+W+d+iM3k6OK41OEC36oH2Bqv18prwnpDYP3
-         dw609FiJ9oYJjodFNlNqevSXxZVrX40FUaKpFM3XqhXAetTCwxtqB4jBM1dpuKLeLu2U
-         WScQ==
-X-Gm-Message-State: AOAM531ck8cH1piCVK0vZjqUZQzFWvmGMVbao7eJQ9aVm9lWgs3CMKV7
-        x9NVDYnD1WCCCNymTiL9w+h+KEls1M2lLjbqGtymdI36gZLefX+G
-X-Google-Smtp-Source: ABdhPJxzjfFJnn+AU2aNzYKYcpvcS8Ud1TjPVGI4GDfLZZ3ksFE9+Z643kCKx5C2U204SmhxEaL+rSJg6NwQ/Pb3UQM=
-X-Received: by 2002:a92:c5c8:: with SMTP id s8mr7007524ilt.186.1612594381095;
- Fri, 05 Feb 2021 22:53:01 -0800 (PST)
+        bh=WAkpmSceCQpOL9g/nb4W8z+4GPryDFavQAvOKJCZ4ec=;
+        b=W6o/DzpuTNys9wOpjWlnnEsMQu80QZyLbUNT3R12f8gslZFXDcUaRUAASvjCpFguZw
+         RW7hsaeJzXVjGs2we8u6ZpRxO/dqAaBvgFtFwUQ1ohH4S/XunZICyFgi+PANnK4xETON
+         P7h9B51iS9m0VUIzktJ6hGts2dXGaZaQEPayqU0oyhKnrvwV//yU0ynzbkfZJgGEN+J/
+         fLpcU+BvAW6Rj5YNWY+aJZ/vlcoTYU0ATvYQsrgML6GkRQ6aHQBEh4qeVrx4/8yGdskS
+         xxUEJbpdHuZkRkfD3j4fSF4TDikmn+mn0VGRScESTrKW1/Lu4CCK9v2iACVkucjX5QpS
+         Nf/g==
+X-Gm-Message-State: AOAM531nU2g8lnxR+g09b4pBUmc80C/12HOEnpFJOl4jaVF4KSaOQBA+
+        ah4qB7V/sMUHm7wtikDBUhZj7lnEcHrqAbM8wP8=
+X-Google-Smtp-Source: ABdhPJxBD9o8SaZXUd2IGQs70eRnxmjnsa9ro/WLT3SvzYjbuE5LfuJ45b6mWetkQkmLI043G1Ku8Oyjb9KMFs2gvJA=
+X-Received: by 2002:a05:6638:251:: with SMTP id w17mr8479927jaq.138.1612596373526;
+ Fri, 05 Feb 2021 23:26:13 -0800 (PST)
 MIME-Version: 1.0
 References: <20210204220741.GA920417@kernel.org> <CA+icZUVQSojGgnis8Ds5GW-7-PVMZ2w4X5nQKSSkBPf-29NS6Q@mail.gmail.com>
  <CA+icZUU2xmZ=mhVYLRk7nZBRW0+v+YqBzq18ysnd7xN+S7JHyg@mail.gmail.com>
@@ -60,17 +60,14 @@ References: <20210204220741.GA920417@kernel.org> <CA+icZUVQSojGgnis8Ds5GW-7-PVMZ
  <CA+icZUXb1j-DrjvFEeeOGuR_pKmD_7_RusxpGQy+Pyhaoa==gA@mail.gmail.com>
  <CA+icZUVZA97V5C3kORqeSiaxRbfGbmzEaxgYf9RUMko4F76=7w@mail.gmail.com>
  <baa7c017-b2cf-b2cd-fbe8-2e021642f2e3@fb.com> <20210205192446.GH920417@kernel.org>
- <cb743ab8-9a66-a311-ed18-ecabf0947440@fb.com> <CA+icZUUcjJASPN8NVgWNp+2h=WO-PT4Su3-yHZpynNHCrHEb-w@mail.gmail.com>
- <d59c2a53-976c-c304-f208-67110bdd728a@fb.com> <CA+icZUVhgnJ9j7dnXxLQi3DcmLrqpZgcAo2wmHJ_OxSQyS6DQg@mail.gmail.com>
- <CA+icZUWFx47jWJsV6tyoS5f18joPLyE8TOeeyVgsk65k9sP2WQ@mail.gmail.com>
- <CA+icZUUj1P_PAj=E8iF=C4m6gYm9zqb+WWbOdoTqemTeGnZbww@mail.gmail.com> <CA+icZUWY0zkOb36gxMOuT5-m=vC5_e815gkSEyM45sO+jgcCZg@mail.gmail.com>
-In-Reply-To: <CA+icZUWY0zkOb36gxMOuT5-m=vC5_e815gkSEyM45sO+jgcCZg@mail.gmail.com>
+ <cb743ab8-9a66-a311-ed18-ecabf0947440@fb.com>
+In-Reply-To: <cb743ab8-9a66-a311-ed18-ecabf0947440@fb.com>
 Reply-To: sedat.dilek@gmail.com
 From:   Sedat Dilek <sedat.dilek@gmail.com>
-Date:   Sat, 6 Feb 2021 07:52:49 +0100
-Message-ID: <CA+icZUW+4=WUexA3-qwXSdEY2L4DOhF1pQfw9=Bf2invYF1J2Q@mail.gmail.com>
+Date:   Sat, 6 Feb 2021 08:26:02 +0100
+Message-ID: <CA+icZUV98seJrpNcSPvN_Vjc4Znc72zH3czqirnie80BGAQfEQ@mail.gmail.com>
 Subject: Re: ERROR: INT DW_ATE_unsigned_1 Error emitting BTF type
-To:     Yonghong Song <yhs@fb.com>, Masahiro Yamada <masahiroy@kernel.org>
+To:     Yonghong Song <yhs@fb.com>
 Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
         Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
         dwarves@vger.kernel.org,
@@ -90,211 +87,69 @@ Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-On Sat, Feb 6, 2021 at 7:26 AM Sedat Dilek <sedat.dilek@gmail.com> wrote:
+On Fri, Feb 5, 2021 at 9:03 PM Yonghong Song <yhs@fb.com> wrote:
 >
-> On Sat, Feb 6, 2021 at 6:53 AM Sedat Dilek <sedat.dilek@gmail.com> wrote:
-> >
-> > On Sat, Feb 6, 2021 at 6:44 AM Sedat Dilek <sedat.dilek@gmail.com> wrote:
-> > >
-> > > On Sat, Feb 6, 2021 at 4:34 AM Sedat Dilek <sedat.dilek@gmail.com> wrote:
-> > > >
-> > > > On Fri, Feb 5, 2021 at 10:54 PM Yonghong Song <yhs@fb.com> wrote:
-> > > > >
-> > > > >
-> > > > >
-> > > > > On 2/5/21 12:31 PM, Sedat Dilek wrote:
-> > > > > > On Fri, Feb 5, 2021 at 9:03 PM Yonghong Song <yhs@fb.com> wrote:
-> > > > > >>
-> > > > > >>
-> > > > > >>
-> > > > > >> On 2/5/21 11:24 AM, Arnaldo Carvalho de Melo wrote:
-> > > > > >>> Em Fri, Feb 05, 2021 at 11:10:08AM -0800, Yonghong Song escreveu:
-> > > > > >>>> On 2/5/21 11:06 AM, Sedat Dilek wrote:
-> > > > > >>>>> On Fri, Feb 5, 2021 at 7:53 PM Sedat Dilek <sedat.dilek@gmail.com> wrote:
-> > > > > >>>>> Grepping through linux.git/tools I guess some BTF tools/libs need to
-> > > > > >>>>> know what BTF_INT_UNSIGNED is?
-> > > > > >>>
-> > > > > >>>> BTF_INT_UNSIGNED needs kernel support. Maybe to teach pahole to
-> > > > > >>>> ignore this for now until kernel infrastructure is ready.
-> > > > > >>>
-> > > > > >>> Yeah, I thought about doing that.
-> > > > > >>>
-> > > > > >>>> Not sure whether this information will be useful or not
-> > > > > >>>> for BTF. This needs to be discussed separately.
-> > > > > >>>
-> > > > > >>> Maybe search for the rationale for its introduction in DWARF.
-> > > > > >>
-> > > > > >> In LLVM, we have:
-> > > > > >>     uint8_t BTFEncoding;
-> > > > > >>     switch (Encoding) {
-> > > > > >>     case dwarf::DW_ATE_boolean:
-> > > > > >>       BTFEncoding = BTF::INT_BOOL;
-> > > > > >>       break;
-> > > > > >>     case dwarf::DW_ATE_signed:
-> > > > > >>     case dwarf::DW_ATE_signed_char:
-> > > > > >>       BTFEncoding = BTF::INT_SIGNED;
-> > > > > >>       break;
-> > > > > >>     case dwarf::DW_ATE_unsigned:
-> > > > > >>     case dwarf::DW_ATE_unsigned_char:
-> > > > > >>       BTFEncoding = 0;
-> > > > > >>       break;
-> > > > > >>
-> > > > > >> I think DW_ATE_unsigned can be ignored in pahole since
-> > > > > >> the default encoding = 0. A simple comment is enough.
-> > > > > >>
-> > > > > >
-> > > > > > Yonghong Son, do you have a patch/diff for me?
-> > > > >
-> > > > > Looking at error message from log:
-> > > > >
-> > > > >   LLVM_OBJCOPY=/opt/binutils/bin/objcopy /opt/pahole/bin/pahole -J
-> > > > > .tmp_vmlinux.btf
-> > > > > [115] INT DW_ATE_unsigned_1 Error emitting BTF type
-> > > > > Encountered error while encoding BTF.
-> > > > >
-> > > > > Not exactly what is the root cause. Maybe bt->bit_size is not
-> > > > > encoded correctly. Could you put vmlinux (in the above it is
-> > > > > .tmp_vmlinux.btf) somewhere, I or somebody else can investigate
-> > > > > and provide a proper fix.
-> > > > >
-> > > >
-> > > > [ TO: Masahiro ]
-> > > >
-> > > > Thanks for taking care Yonghong - hope this is your first name, if not
-> > > > I am sorry.
-> > > > In case of mixing my first and last name you will make me female -
-> > > > Dilek is a Turkish female first name :-).
-> > > > So, in some cultures you need to be careful.
-> > > >
-> > > > Anyway... back to business and facts.
-> > > >
-> > > > Out of frustration I killed my last build via `make distclean`.
-> > > > The whole day I tested diverse combination of GCC-10 and LLVM-12
-> > > > together with BTF Kconfigs, selfmade pahole, etc.
-> > > >
-> > > > I will do ne run with some little changes:
-> > > >
-> > > > #1: Pass LLVM_IAS=1 to make (means use Clang's Integrated ASsembler -
-> > > > as per Nick this leads to the same error - should be unrelated)
-> > > > #2: I did: DEBUG_INFO_COMPRESSED y -> n
-> > > >
-> > > > #2 I did in case you need vmlinux and I have to upload - I will
-> > > > compress the resulting vmlinux with ZSTD.
-> > > > You need vmlinux or .tmp_vmlinux.btf file?
-> > > > Nick was not allowed from his company to download from a Dropbox link.
-> > > > So, as an alternative I can offer GoogleDrive...
-> > > > ...or bomb into your INBOX :-).
-> > > >
-> > > > Now, why I CCed Masahiro:
-> > > >
-> > > > In case of ERRORs when running `scripts/link-vmlinux.sh` above files
-> > > > will be removed.
-> > > >
-> > > > Last, I found a hack to bypass this - means to keep these files (I
-> > > > need to check old emails).
-> > > >
-> > > > Masahiro, you see a possibility to have a way to keep these files in
-> > > > case of ERRORs without doing hackery?
-> > > >
-> > > > From a previous post in this thread:
-> > > >
-> > > > + info BTF .btf.vmlinux.bin.o
-> > > > + [  != silent_ ]
-> > > > + printf   %-7s %s\n BTF .btf.vmlinux.bin.o
-> > > >  BTF     .btf.vmlinux.bin.o
-> > > > + LLVM_OBJCOPY=llvm-objcopy /opt/pahole/bin/pahole -J .tmp_vmlinux.btf
-> > > > [2] INT long unsigned int Error emitting BTF type
-> > > > Encountered error while encoding BTF.
-> > > > + llvm-objcopy --only-section=.BTF --set-section-flags
-> > > > .BTF=alloc,readonly --strip-all .tmp_vmlinux.btf .btf.vmlinux.bin.o
-> > > > ...
-> > > > + info BTFIDS vmlinux
-> > > > + [  != silent_ ]
-> > > > + printf   %-7s %s\n BTFIDS vmlinux
-> > > >  BTFIDS  vmlinux
-> > > > + ./tools/bpf/resolve_btfids/resolve_btfids vmlinux
-> > > > FAILED: load BTF from vmlinux: Invalid argument
-> > > > + on_exit
-> > > > + [ 255 -ne 0 ]
-> > > > + cleanup
-> > > > + rm -f .btf.vmlinux.bin.o
-> > > > + rm -f .tmp_System.map
-> > > > + rm -f .tmp_vmlinux.btf .tmp_vmlinux.kallsyms1
-> > > > .tmp_vmlinux.kallsyms1.S .tmp_vmlinux.kallsyms1.o
-> > > > .tmp_vmlinux.kallsyms2 .tmp_vmlinux.kallsyms2.S .tmp_vmlinux.kallsyms
-> > > > 2.o
-> > > > + rm -f System.map
-> > > > + rm -f vmlinux
-> > > > + rm -f vmlinux.o
-> > > > make[3]: *** [Makefile:1166: vmlinux] Error 255
-> > > >
-> > > > ^^^ Look here.
-> > > >
-> > >
-> > > With this diff:
-> > >
-> > > $ git diff scripts/link-vmlinux.sh
-> > > diff --git a/scripts/link-vmlinux.sh b/scripts/link-vmlinux.sh
-> > > index eef40fa9485d..40f1b6aae553 100755
-> > > --- a/scripts/link-vmlinux.sh
-> > > +++ b/scripts/link-vmlinux.sh
-> > > @@ -330,7 +330,7 @@ vmlinux_link vmlinux "${kallsymso}" ${btf_vmlinux_bin_o}
-> > > # fill in BTF IDs
-> > > if [ -n "${CONFIG_DEBUG_INFO_BTF}" -a -n "${CONFIG_BPF}" ]; then
-> > >        info BTFIDS vmlinux
-> > > -       ${RESOLVE_BTFIDS} vmlinux
-> > > +       ##${RESOLVE_BTFIDS} vmlinux
-> > > fi
-> > >
-> > > if [ -n "${CONFIG_BUILDTIME_TABLE_SORT}" ]; then
-> > >
-> > > This files are kept - not removed:
-> > >
-> > > $ LC_ALL=C ll .*btf* vmlinux vmlinux.o
-> > > -rwxr-xr-x 1 dileks dileks  31M Feb  6 06:37 .btf.vmlinux.bin.o
-> > > -rwxr-xr-x 1 dileks dileks 348M Feb  6 06:37 .tmp_vmlinux.btf
-> > > -rwxr-xr-x 1 dileks dileks 348M Feb  6 06:37 vmlinux
-> > > -rw-r--r-- 1 dileks dileks 344M Feb  6 06:37 vmlinux.o
-> > >
-> > > Pleas let me know where to upload - Dropbox or GoogleDrive or
-> > > elsewhere and give me a link.
-> > >
-> >
-> >
-> > WOW, ZSTD is great :-).
-> >
-> > $ zstd -19 -T0 -v vmlinux
-> > *** zstd command line interface 64-bits v1.4.8, by Yann Collet ***
-> > Note: 2 physical core(s) detected
-> > vmlinux              : 22.71%   (364466016 => 82784801 bytes, vmlinux.zst)
-> >
-> > $ du -m vmlinux*
-> > 348     vmlinux
-> > 79      vmlinux.zst
-> >
 >
-> Dropbox link:
-> https://www.dropbox.com/sh/kvyh8ps7na0r1h5/AABfyNfDZ2bESse_bo4h05fFa?dl=0
 >
-> I hope this is public available.
+> On 2/5/21 11:24 AM, Arnaldo Carvalho de Melo wrote:
+> > Em Fri, Feb 05, 2021 at 11:10:08AM -0800, Yonghong Song escreveu:
+> >> On 2/5/21 11:06 AM, Sedat Dilek wrote:
+> >>> On Fri, Feb 5, 2021 at 7:53 PM Sedat Dilek <sedat.dilek@gmail.com> wrote:
+> >>> Grepping through linux.git/tools I guess some BTF tools/libs need to
+> >>> know what BTF_INT_UNSIGNED is?
+> >
+> >> BTF_INT_UNSIGNED needs kernel support. Maybe to teach pahole to
+> >> ignore this for now until kernel infrastructure is ready.
+> >
+> > Yeah, I thought about doing that.
+> >
+> >> Not sure whether this information will be useful or not
+> >> for BTF. This needs to be discussed separately.
+> >
+> > Maybe search for the rationale for its introduction in DWARF.
+>
+> In LLVM, we have:
+>    uint8_t BTFEncoding;
+>    switch (Encoding) {
+>    case dwarf::DW_ATE_boolean:
+>      BTFEncoding = BTF::INT_BOOL;
+>      break;
+>    case dwarf::DW_ATE_signed:
+>    case dwarf::DW_ATE_signed_char:
+>      BTFEncoding = BTF::INT_SIGNED;
+>      break;
+>    case dwarf::DW_ATE_unsigned:
+>    case dwarf::DW_ATE_unsigned_char:
+>      BTFEncoding = 0;
+>      break;
+>
+> I think DW_ATE_unsigned can be ignored in pahole since
+> the default encoding = 0. A simple comment is enough.
 >
 
-Inspecting vmlinux with llvm-dwarf:
+For the followers (here: LLVM v12.0.0-rc1):
 
-$ /opt/llvm-toolchain/bin/llvm-dwarfdump vmlinux | grep DW_AT_name |
-grep DW_ATE_ | sort | uniq
-               DW_AT_name      ("DW_ATE_signed_1")
-               DW_AT_name      ("DW_ATE_signed_16")
-               DW_AT_name      ("DW_ATE_signed_32")
-               DW_AT_name      ("DW_ATE_signed_64")
-               DW_AT_name      ("DW_ATE_signed_8")
-               DW_AT_name      ("DW_ATE_unsigned_1")
-               DW_AT_name      ("DW_ATE_unsigned_128")
-               DW_AT_name      ("DW_ATE_unsigned_16")
-               DW_AT_name      ("DW_ATE_unsigned_24")
-               DW_AT_name      ("DW_ATE_unsigned_32")
-               DW_AT_name      ("DW_ATE_unsigned_40")
-               DW_AT_name      ("DW_ATE_unsigned_64")
-               DW_AT_name      ("DW_ATE_unsigned_8")
+[ llvm/lib/Target/BPF/BTFDebug.cpp ]
+
+BTFTypeInt::BTFTypeInt(uint32_t Encoding, uint32_t SizeInBits,
+                       uint32_t OffsetInBits, StringRef TypeName)
+    : Name(TypeName) {
+  // Translate IR int encoding to BTF int encoding.
+  uint8_t BTFEncoding;
+  switch (Encoding) {
+  case dwarf::DW_ATE_boolean:
+    BTFEncoding = BTF::INT_BOOL;
+    break;
+  case dwarf::DW_ATE_signed:
+  case dwarf::DW_ATE_signed_char:
+    BTFEncoding = BTF::INT_SIGNED;
+    break;
+  case dwarf::DW_ATE_unsigned:
+  case dwarf::DW_ATE_unsigned_char:
+    BTFEncoding = 0;
+    break;
+  default:
+    llvm_unreachable("Unknown BTFTypeInt Encoding");
+  }
 
 - Sedat -
