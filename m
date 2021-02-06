@@ -2,81 +2,34 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.2 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 547B6C433E6
-	for <linux-dwarves@archiver.kernel.org>; Sat,  6 Feb 2021 12:55:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 480C1C433E0
+	for <linux-dwarves@archiver.kernel.org>; Sat,  6 Feb 2021 16:26:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 23FE664E9D
-	for <linux-dwarves@archiver.kernel.org>; Sat,  6 Feb 2021 12:55:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0BBC1614A7
+	for <linux-dwarves@archiver.kernel.org>; Sat,  6 Feb 2021 16:26:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229986AbhBFMzF (ORCPT
+        id S229988AbhBFQ0L (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Sat, 6 Feb 2021 07:55:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57932 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229771AbhBFMzD (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Sat, 6 Feb 2021 07:55:03 -0500
-Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6647FC06174A;
-        Sat,  6 Feb 2021 04:54:21 -0800 (PST)
-Received: by mail-io1-xd30.google.com with SMTP id x21so10109927iog.10;
-        Sat, 06 Feb 2021 04:54:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
-         :subject:to:cc;
-        bh=pHZf8IJw7vfwU1AqUSW8aNLmUrq94t6dEUlTjXrhvzM=;
-        b=AdCQa+8hBaGCpXRkbGGBmfbwHQSf8oXUkjlxYohnrD4bFFgQlvAVrNbsC0xFrk4wFB
-         qaiO4UNApxFcaRJlAInuOxu7KVhR9JZMa2xSXrIVoej+OXaPrdeXTh6XQqsOAOU0o9YY
-         e7aK9CAnUDX09JVl4KN3goZpUA7UCkbs056SRQpqMwftzcBZobhaCrfJaxDBcJjpRyI2
-         d8s5RvDTiBZNbFWwdoSQj6SVkQMMujXiiRETLMVfsShSwkey5Xy0BCY+zz+njlj8pBWe
-         4f10lmJT0QoRbxNcowtGmBGLcBe85JsmI6E2n4yvgG9PHlIpVM3soXkn23sCW9VzB81k
-         9rZw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
-         :from:date:message-id:subject:to:cc;
-        bh=pHZf8IJw7vfwU1AqUSW8aNLmUrq94t6dEUlTjXrhvzM=;
-        b=AgGwN1M1NMG95U6TCXfuEccJmEvuOAUt7UX4EHBBzKGCii4PMA5DPK24wJQ9a9Zn8H
-         XXaeco/oifvFzzTiBBdFlNeKTEtaWIAKbo1Gu0QpMpqge0ypRnnimbj1aTR7iGKCTsKq
-         +r5Qtp+YeVEn+YjExkjZe7vpagpjw2kpgHqjEUCeAGZY8SxrE3HYjgbVb3XIO/KSPQDt
-         2fnIVG3O6w9e4SG3urcmXQ/JIoqGVH6uLb6Y8yCwTX9nVVXgOj/WdHwDw1+5pOwESRvA
-         JuLTrOHynQZ21vG2iZQpSpWc/jLs1kxPZ70cthmj/w5fSAqEUQWxA7oHWTTV5B+2GWll
-         ZWdA==
-X-Gm-Message-State: AOAM532gbEB0QJoe5hbcy+9LtmWnsNW913LbBnBQ9/skGhYEpWMod0EC
-        28NDut7o8mY4bNaeBbFZt44hZDMQvTwuXI8UCfw=
-X-Google-Smtp-Source: ABdhPJyQ3APJcttJvD4p976eWFyWkOKanpILSg0Na+usLCGpMOgP8ugflqRKnSL9Q8T5nrIFiuaVJkclvp2XxRr7Yo0=
-X-Received: by 2002:a05:6638:3795:: with SMTP id w21mr9446593jal.65.1612616060773;
- Sat, 06 Feb 2021 04:54:20 -0800 (PST)
-MIME-Version: 1.0
-References: <20210204220741.GA920417@kernel.org> <CA+icZUVyB3qaqq3pwOyJY_F4V6KU9hdF=AJM_D7iEW4QK4Eo6w@mail.gmail.com>
- <20210205152823.GD920417@kernel.org> <CA+icZUWzMdhuHDkcKMHAd39iMEijk65v2ADcz0=FdODr38sJ4w@mail.gmail.com>
- <CA+icZUXb1j-DrjvFEeeOGuR_pKmD_7_RusxpGQy+Pyhaoa==gA@mail.gmail.com>
- <CA+icZUVZA97V5C3kORqeSiaxRbfGbmzEaxgYf9RUMko4F76=7w@mail.gmail.com>
- <baa7c017-b2cf-b2cd-fbe8-2e021642f2e3@fb.com> <20210205192446.GH920417@kernel.org>
- <cb743ab8-9a66-a311-ed18-ecabf0947440@fb.com> <CA+icZUUcjJASPN8NVgWNp+2h=WO-PT4Su3-yHZpynNHCrHEb-w@mail.gmail.com>
- <d59c2a53-976c-c304-f208-67110bdd728a@fb.com> <CA+icZUVhgnJ9j7dnXxLQi3DcmLrqpZgcAo2wmHJ_OxSQyS6DQg@mail.gmail.com>
- <CA+icZUWFx47jWJsV6tyoS5f18joPLyE8TOeeyVgsk65k9sP2WQ@mail.gmail.com>
- <CA+icZUUj1P_PAj=E8iF=C4m6gYm9zqb+WWbOdoTqemTeGnZbww@mail.gmail.com>
- <CA+icZUWY0zkOb36gxMOuT5-m=vC5_e815gkSEyM45sO+jgcCZg@mail.gmail.com>
- <CA+icZUW+4=WUexA3-qwXSdEY2L4DOhF1pQfw9=Bf2invYF1J2Q@mail.gmail.com>
- <8ff11fa8-46cd-5f20-b988-20e65e122507@fb.com> <CA+icZUVwM9VY5huMpbMtGL-rs16JYvBM2MDiebx6taptH3m-Jg@mail.gmail.com>
- <CA+icZUU=qnLmZWsjeU2G=R0sTkx9+6qtG6Cni1xit=-p_vG_Pw@mail.gmail.com>
- <CA+icZUUSTXqACW=0d9k4fC2y8TJEDjQ7WWwnnSR7KxsmC-SJhw@mail.gmail.com>
- <CA+icZUUOS03BgOoSFdUWP8G61b2wjhAx0bUGNstqS7OTm3+7iQ@mail.gmail.com>
- <CA+icZUUjy5cR5cq6PqSA0+KDsovqAx-zH9CozH8TpETu9jYYPw@mail.gmail.com> <CA+icZUW2HVWSZiOHvrjXGP-ubL_iWEHy1u6B3zQn=pN-J1FnSQ@mail.gmail.com>
-In-Reply-To: <CA+icZUW2HVWSZiOHvrjXGP-ubL_iWEHy1u6B3zQn=pN-J1FnSQ@mail.gmail.com>
-Reply-To: sedat.dilek@gmail.com
-From:   Sedat Dilek <sedat.dilek@gmail.com>
-Date:   Sat, 6 Feb 2021 13:54:09 +0100
-Message-ID: <CA+icZUU6dY-jtZWOJC5Fi2BRGK4jZt_o1JnGH3nmGseUJH4uNg@mail.gmail.com>
-Subject: Re: ERROR: INT DW_ATE_unsigned_1 Error emitting BTF type
+        Sat, 6 Feb 2021 11:26:11 -0500
+Received: from wildebeest.demon.nl ([212.238.236.112]:47000 "EHLO
+        gnu.wildebeest.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229522AbhBFQ0K (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Sat, 6 Feb 2021 11:26:10 -0500
+Received: from librem (deer0x15.wildebeest.org [172.31.17.151])
+        (using TLSv1.2 with cipher ADH-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by gnu.wildebeest.org (Postfix) with ESMTPSA id 4216A30278CD;
+        Sat,  6 Feb 2021 17:25:28 +0100 (CET)
+Received: by librem (Postfix, from userid 1000)
+        id BD303C100B; Sat,  6 Feb 2021 17:24:19 +0100 (CET)
+Date:   Sat, 6 Feb 2021 17:24:19 +0100
+From:   Mark Wieelard <mark@klomp.org>
 To:     Yonghong Song <yhs@fb.com>
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+Cc:     sedat.dilek@gmail.com, Masahiro Yamada <masahiroy@kernel.org>,
         Arnaldo Carvalho de Melo <acme@kernel.org>,
         Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
         dwarves@vger.kernel.org,
@@ -86,49 +39,61 @@ Cc:     Masahiro Yamada <masahiroy@kernel.org>,
         Domenico Andreoli <cavok@debian.org>,
         Matthias Schwarzott <zzam@gentoo.org>,
         Andrii Nakryiko <andriin@fb.com>,
-        Mark Wieelard <mjw@redhat.com>,
         Paul Moore <paul@paul-moore.com>,
         Ondrej Mosnacek <omosnace@redhat.com>,
-        =?UTF-8?Q?Daniel_P=2E_Berrang=C3=A9?= <berrange@redhat.com>,
+        Daniel =?iso-8859-1?Q?P=2E_Berrang=E9?= <berrange@redhat.com>,
         Tom Stellard <tstellar@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: ERROR: INT DW_ATE_unsigned_1 Error emitting BTF type
+Message-ID: <20210206162419.GC2851@wildebeest.org>
+References: <20210205192446.GH920417@kernel.org>
+ <cb743ab8-9a66-a311-ed18-ecabf0947440@fb.com>
+ <CA+icZUUcjJASPN8NVgWNp+2h=WO-PT4Su3-yHZpynNHCrHEb-w@mail.gmail.com>
+ <d59c2a53-976c-c304-f208-67110bdd728a@fb.com>
+ <CA+icZUVhgnJ9j7dnXxLQi3DcmLrqpZgcAo2wmHJ_OxSQyS6DQg@mail.gmail.com>
+ <CA+icZUWFx47jWJsV6tyoS5f18joPLyE8TOeeyVgsk65k9sP2WQ@mail.gmail.com>
+ <CA+icZUUj1P_PAj=E8iF=C4m6gYm9zqb+WWbOdoTqemTeGnZbww@mail.gmail.com>
+ <CA+icZUWY0zkOb36gxMOuT5-m=vC5_e815gkSEyM45sO+jgcCZg@mail.gmail.com>
+ <CA+icZUW+4=WUexA3-qwXSdEY2L4DOhF1pQfw9=Bf2invYF1J2Q@mail.gmail.com>
+ <8ff11fa8-46cd-5f20-b988-20e65e122507@fb.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8ff11fa8-46cd-5f20-b988-20e65e122507@fb.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-Some post-mortem:
+Hi,
 
-LLVM_DWARF_BIN="/opt/llvm-toolchain/bin/llvm-dwarfdump"
+On Sat, Feb 06, 2021 at 12:26:44AM -0800, Yonghong Song wrote:
+> With the above vmlinux, the issue appears to be handling
+> DW_ATE_signed_1, DW_ATE_unsigned_{1,24,40}.
+> 
+> The following patch should fix the issue:
 
-module="drivers/net/ethernet/mellanox/mlx5/core/mlx5_core.ko"
+That doesn't really make sense to me. Why is the compiler emitting a
+DW_TAG_base_type that needs to be interpreted according to the
+DW_AT_name attribute?
 
-Module has DW_ATE_unsigned_160 and DW_ATE_unsigned_1:
+If the issue is that the size of the base type cannot be expressed in
+bytes then the DWARF spec provides the following option:
 
-$LLVM_DWARF_BIN $module | grep DW_AT_name | grep DW_ATE_ | sort -u
-               DW_AT_name      ("DW_ATE_signed_32")
-               DW_AT_name      ("DW_ATE_signed_64")
-               DW_AT_name      ("DW_ATE_unsigned_1")
-               DW_AT_name      ("DW_ATE_unsigned_128")
-               DW_AT_name      ("DW_ATE_unsigned_16")
-               DW_AT_name      ("DW_ATE_unsigned_160")
-               DW_AT_name      ("DW_ATE_unsigned_32")
-               DW_AT_name      ("DW_ATE_unsigned_64")
+    If the value of an object of the given type does not fully occupy
+    the storage described by a byte size attribute, the base type
+    entry may also have a DW_AT_bit_size and a DW_AT_data_bit_offset
+    attribute, both of whose values are integer constant values (see
+    Section 2.19 on page 55). The bit size attribute describes the
+    actual size in bits used to represent values of the given
+    type. The data bit offset attribute is the offset in bits from the
+    beginning of the containing storage to the beginning of the
+    value. Bits that are part of the offset are padding.  If this
+    attribute is omitted a default data bit offset of zero is assumed.
 
-vmlinux has only DW_ATE_unsigned_1:
+Would it be possible to use that encoding of those special types?  If
+not, can we try to come up with some extension that doesn't require
+consumers to match magic names?
 
-$ $LLVM_DWARF_BIN vmlinux | grep DW_AT_name | grep DW_ATE_ | sort -u
-               DW_AT_name      ("DW_ATE_signed_1")
-               DW_AT_name      ("DW_ATE_signed_16")
-               DW_AT_name      ("DW_ATE_signed_32")
-               DW_AT_name      ("DW_ATE_signed_64")
-               DW_AT_name      ("DW_ATE_signed_8")
-               DW_AT_name      ("DW_ATE_unsigned_1")
-               DW_AT_name      ("DW_ATE_unsigned_128")
-               DW_AT_name      ("DW_ATE_unsigned_16")
-               DW_AT_name      ("DW_ATE_unsigned_24")
-               DW_AT_name      ("DW_ATE_unsigned_32")
-               DW_AT_name      ("DW_ATE_unsigned_40")
-               DW_AT_name      ("DW_ATE_unsigned_64")
-               DW_AT_name      ("DW_ATE_unsigned_8")
+Thanks,
 
-- Sedat -
+Mark
