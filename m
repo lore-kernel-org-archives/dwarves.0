@@ -2,154 +2,101 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.2 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_2 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 81ADDC433DB
-	for <linux-dwarves@archiver.kernel.org>; Mon,  8 Feb 2021 21:27:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0A9F4C433E0
+	for <linux-dwarves@archiver.kernel.org>; Mon,  8 Feb 2021 22:21:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3186F64E8C
-	for <linux-dwarves@archiver.kernel.org>; Mon,  8 Feb 2021 21:27:05 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B9FEA64E50
+	for <linux-dwarves@archiver.kernel.org>; Mon,  8 Feb 2021 22:21:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234729AbhBHV05 convert rfc822-to-8bit (ORCPT
+        id S230070AbhBHWVr (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Mon, 8 Feb 2021 16:26:57 -0500
-Received: from wildebeest.demon.nl ([212.238.236.112]:41524 "EHLO
-        gnu.wildebeest.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236218AbhBHVZn (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Mon, 8 Feb 2021 16:25:43 -0500
-Received: from tarox.wildebeest.org (tarox.wildebeest.org [172.31.17.39])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by gnu.wildebeest.org (Postfix) with ESMTPSA id 648CE3032F80;
-        Mon,  8 Feb 2021 22:24:45 +0100 (CET)
-Received: by tarox.wildebeest.org (Postfix, from userid 1000)
-        id 0EF694005CCC; Mon,  8 Feb 2021 22:24:45 +0100 (CET)
-Message-ID: <871a6cb9de4fc4551a1ddb91bb467cf7a5bef81b.camel@klomp.org>
-Subject: Re: [PATCH dwarves v2] btf_encoder: sanitize non-regular int base
- type
-From:   Mark Wielaard <mark@klomp.org>
-To:     David Blaikie <blaikie@google.com>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Yonghong Song <yhs@fb.com>,
+        Mon, 8 Feb 2021 17:21:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59658 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229750AbhBHWVp (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Mon, 8 Feb 2021 17:21:45 -0500
+Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6000EC061786;
+        Mon,  8 Feb 2021 14:21:05 -0800 (PST)
+Received: by mail-yb1-xb2c.google.com with SMTP id l8so3831459ybe.12;
+        Mon, 08 Feb 2021 14:21:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=UxtA8BPxdjXqTAvlnB/DG2m6D/YD0cTVpAr2uXYiXX8=;
+        b=cxQdZkFTSZEbleDGDp9H07tSUCcz2lcnEGr7vrbkwq0ZZQ0LFh9AzLBv7Twe6HHJ2o
+         EZ9Q1aQ/ivu45OaocZy0aHhwRvB9rWS1ktgvkz5r/WHPVNitQzfpeNkAW+Fbt8BR1/w6
+         hmBQ87tRTzBWHljdD8m2YYkywS3ERkCy+c1EN4eyv5XjRWySqQA6pwJhhSB5VYl+Z7bD
+         C53nr8qf75UK6bzUkixkLsSpS3ckXSN4N3RZVM5RZOnmaHxRZ91noLDBUBXgZJYUjO5S
+         wpqHdNnsBPj/zVOLibdQ6LVrnYdKI1zHtM61aZONkYbzgm1+G+k/3uSk7PIsdHPT17HI
+         Gpuw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=UxtA8BPxdjXqTAvlnB/DG2m6D/YD0cTVpAr2uXYiXX8=;
+        b=QA4YZrKnk/9nzoTSdktte7m88r8jxBhQuc0DaVAQAo1r+P8czin3cU91FjoM4u+AZ2
+         sKWWSFl1JUBRLaZP+gGBWn0Q0wPQUoUNAUGBZQ03MSU/PoTDX4pUWSy6uAVzcsZZB0ua
+         etIBzHx+3xx9Zyct5FL/Tn+tvNDocdX+BKAL1HzhcCUgUex9nhmib2rPK3R44PRG2Pib
+         wyVhC2utsH7Z8TxkvuTTiOoHkSdEaUeaIcmeS+2sG4pfHiANxrgndcdoKvuJQteH2rCc
+         geowxEBxDm1sxNKLDGA/DfsL17K/jEn3s5Rp+kgzv7RRNwVsfz7mxD4MclsCJhe8wKIg
+         VTOg==
+X-Gm-Message-State: AOAM533P/an8/qSU+IT8/qUKX4EZmUUFS7S80SDCKbxZrusVvGtdcNcA
+        fxqp/q6MHDJblJGz2auK4iy3imAxftAh6yOzIDg=
+X-Google-Smtp-Source: ABdhPJzawkp+O/VG/hVv8oWyfxU+vRtPJiInw7rPaFflKwNfvxrtP7321ZjViTzrhx98oVnVEO2BYFkO+ZlGAD1kZy0=
+X-Received: by 2002:a25:9882:: with SMTP id l2mr26966731ybo.425.1612822864552;
+ Mon, 08 Feb 2021 14:21:04 -0800 (PST)
+MIME-Version: 1.0
+References: <20210201172530.1141087-1-gprocida@google.com> <20210205134221.2953163-1-gprocida@google.com>
+ <20210205134221.2953163-2-gprocida@google.com>
+In-Reply-To: <20210205134221.2953163-2-gprocida@google.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Mon, 8 Feb 2021 14:20:53 -0800
+Message-ID: <CAEf4BzY5d7roXe4uHuK3D-pedwz5Y4RDVcqQECGZ5XPiqk=v1A@mail.gmail.com>
+Subject: Re: [PATCH dwarves v3 1/5] btf_encoder: Funnel ELF error reporting
+ through a macro
+To:     Giuliano Procida <gprocida@google.com>
+Cc:     dwarves@vger.kernel.org,
         Arnaldo Carvalho de Melo <acme@kernel.org>,
-        dwarves@vger.kernel.org, bpf <bpf@vger.kernel.org>,
-        Andrii Nakryiko <andriin@fb.com>,
-        Sedat Dilek <sedat.dilek@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>
-Date:   Mon, 08 Feb 2021 22:24:44 +0100
-In-Reply-To: <CAMXQf9_Qy5tD05ax1vtETnzM9szLxm95JgpHgT0HzjktixMNNQ@mail.gmail.com>
-References: <20210207071726.3969978-1-yhs@fb.com>
-         <a02164334d0e991820eefa45e2df1a8b49f5537e.camel@klomp.org>
-         <CAKwvOdmMPjn-_opboZkVhRpYCUuKFv8G9GtKFAj=wqYRjr-jkA@mail.gmail.com>
-         <CAMXQf9_Qy5tD05ax1vtETnzM9szLxm95JgpHgT0HzjktixMNNQ@mail.gmail.com>
+        Andrii Nakryiko <andrii@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        =?UTF-8?Q?Matthias_M=C3=A4nnich?= <maennich@google.com>,
+        kernel-team@android.com, Kernel Team <kernel-team@fb.com>,
+        bpf <bpf@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Mailer: Evolution 3.28.5 (3.28.5-10.el7) 
-Mime-Version: 1.0
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-Hi David,
+On Fri, Feb 5, 2021 at 5:42 AM Giuliano Procida <gprocida@google.com> wrote:
+>
+> This adds elf_error which prepends error messages with the function
+> and appends a readable ELF error status.
+>
+> Also capitalise ELF consistently in error messages.
+>
+> Signed-off-by: Giuliano Procida <gprocida@google.com>
+> ---
 
-(Nice to have seen you just recently!)
+Acked-by: Andrii Nakryiko <andrii@kernel.org>
 
-On Mon, 2021-02-08 at 12:43 -0800, David Blaikie wrote:
-> DW_OP_convert was added in DWARFv5 and it can be used for type conversions,
-> these are created in the LLVM middle/backend during optimizations, not by
-> the frontend. So the middle/backend doesn't have a way to create canonical
-> DW_TAG_base_types for frontend language integer types - so it creates
-> synthesized ones. So this is intentional/not a particularly quirky thing.
-> 
-> LLVM creates locations incrementally as optimizations are applied - without
-> doing any particular canonicalization/reduction later on (maybe it has some
-> canonicalization/reduction, but not a very wholistic/aggressive approach
-> there) - so it can end up with something that is not the most compact
-> representation.
+>  libbtf.c | 34 +++++++++++++++++++---------------
+>  1 file changed, 19 insertions(+), 15 deletions(-)
+>
+> diff --git a/libbtf.c b/libbtf.c
+> index 9f76283..7bc49ba 100644
+> --- a/libbtf.c
+> +++ b/libbtf.c
+> @@ -27,6 +27,16 @@
+>  #include "dwarves.h"
+>  #include "elf_symtab.h"
+>
 
-But it seems to end up with a bogus representation (see below in the
-original quoted message for an example). The issue isn't really that it
-isn't an optimized constant representation (although it is kind of an
-inefficient one). It is this DW_OP_convert applied to a
-DW_TAG_base_type DIE with a DW_AT_byte_size of zero. Which doesn't
-really make any sense to me. It feels like it is asking the DWARF
-consumer to do a divide by zero here ("now express this value using
-zero bits!"). Could you explain these syntactic "DW_ATE_unsigned_1"
-base_type DIEs? What do they represent? Why do they have a zero size?
-Should they really have a DW_AT_bit_size and a DW_AT_byte_size of 1?
-
-Thanks,
-
-Mark
-
-> On Mon, Feb 8, 2021 at 11:17 AM Nick Desaulniers <ndesaulniers@google.com>
-> wrote:
-> 
-> > On Sun, Feb 7, 2021 at 6:18 AM Mark Wielaard <mark@klomp.org> wrote:
-> > > 
-> > > Hi,
-> > > 
-> > > On Sat, 2021-02-06 at 23:17 -0800, Yonghong Song wrote:
-> > > > clang with dwarf5 may generate non-regular int base type,
-> > > > i.e., not a signed/unsigned char/short/int/longlong/__int128.
-> > > > Such base types are often used to describe
-> > > > how an actual parameter or variable is generated. For example,
-> > > > 
-> > > > 0x000015cf:   DW_TAG_base_type
-> > > >                 DW_AT_name      ("DW_ATE_unsigned_1")
-> > > >                 DW_AT_encoding  (DW_ATE_unsigned)
-> > > >                 DW_AT_byte_size (0x00)
-> > > > 
-> > > > 0x00010ed9:         DW_TAG_formal_parameter
-> > > >                       DW_AT_location    (DW_OP_lit0,
-> > > >                                          DW_OP_not,
-> > > >                                          DW_OP_convert (0x000015cf)
-> > 
-> > "DW_ATE_unsigned_1",
-> > > >                                          DW_OP_convert (0x000015d4)
-> > 
-> > "DW_ATE_unsigned_8",
-> > > >                                          DW_OP_stack_value)
-> > > >                       DW_AT_abstract_origin     (0x00013984 "branch")
-> > > > 
-> > > > What it does is with a literal "0", did a "not" operation, and the
-> > 
-> > converted to
-> > > > one-bit unsigned int and then 8-bit unsigned int.
-> > > 
-> > > Thanks for tracking this down. Do you have any idea why the clang
-> > > compiler emits this? You might be right that it is intended to do what
-> > > you describe it does (but then it would simply encode an unsigned
-> > > constant 1 char in a very inefficient way). But as implemented it
-> > > doesn't seem to make any sense. What would DW_OP_convert of an zero
-> > > sized base type even mean (if it is intended as a 1 bit sized typed,
-> > > then why is there no DW_AT_bit_size)?
-> > 
-> > David,
-> > Any thoughts on the above sequence of DW_OP_ entries?  This is a part
-> > of DWARF I'm unfamiliar with.
-> > 
-> > > 
-> > > So I do think your patch makes sense. clang clearly is emitting
-> > > something bogus. And so some fixup is needed. But maybe we should at
-> > > least give a warning about it, otherwise it might never get fixed.
-> > > 
-> > > BTW. If these bogus base types are only emitted as part of a location
-> > > expression and not as part of an actual function or variable type
-> > > description, then why are we even trying to encode it as a BTF type? It
-> > > might be cheaper to just skip/drop it. But maybe the code setup makes
-> > > it hard to know whether or not such a (bogus) type is actually
-> > > referenced from a function or variable description?
-> > > 
-> > > Cheers,
-> > > 
-> > > Mark
-> > 
-> > 
-> > 
-> > --
-> > Thanks,
-> > ~Nick Desaulniers
-> > 
+[...]
