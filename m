@@ -2,80 +2,61 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+X-Spam-Status: No, score=-16.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5DFADC43381
-	for <linux-dwarves@archiver.kernel.org>; Mon,  8 Feb 2021 19:29:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A8DB1C433E6
+	for <linux-dwarves@archiver.kernel.org>; Mon,  8 Feb 2021 19:57:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2020664E9C
-	for <linux-dwarves@archiver.kernel.org>; Mon,  8 Feb 2021 19:29:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 65A4664EB6
+	for <linux-dwarves@archiver.kernel.org>; Mon,  8 Feb 2021 19:57:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236203AbhBHT2z (ORCPT
+        id S235220AbhBHT4s (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Mon, 8 Feb 2021 14:28:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50786 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236176AbhBHT2p (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Mon, 8 Feb 2021 14:28:45 -0500
-Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7A41C061786;
-        Mon,  8 Feb 2021 11:27:54 -0800 (PST)
-Received: by mail-io1-xd35.google.com with SMTP id u8so16159269ior.13;
-        Mon, 08 Feb 2021 11:27:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
-         :subject:to:cc;
-        bh=80BOdecHNLu1xNb0lwmGU+TDCNoDEQApITw30vcAeAs=;
-        b=DWBkqCMy7Ba5vSvg33V4KGnnmhB77clq/0O8YYzO7bdYF76ZBz3sMW862jIip4DMMu
-         YoxIKs5LnCwN4d5PmAE4zj3Imwi/Fi44spBiTb0iPHpQ8BkSYKnCwmHCStPQcmAgmTEu
-         kgN3E+VEP5VAcRQ9xhwVVoDRCMljnk4Ff4iGZITBa5CPbSrjgHjIOOA8zAT4v1TWvfEq
-         iOdLUiihqQg/oUev5pseGN7wF4/u9j1RLlBD9S+C/3RdmrmDPcjtJqxVWcKvcnsi+UPD
-         Z5vndw1VaNpJbx8LyrjkV6KRVcntsLRX7vycr6osISXtMC6JVnJwEjUIrkLpsXX77H+3
-         MapA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
-         :from:date:message-id:subject:to:cc;
-        bh=80BOdecHNLu1xNb0lwmGU+TDCNoDEQApITw30vcAeAs=;
-        b=rsFoPcuAYC07PZcepM1AJlfbXHLd2cIpIUKI622IGYQXg93pZShz2vNjfLH1eZG9Dt
-         VlMKs+8GKIHs2tYmWz0LbQo5UKWqfo3PqlqvQZFRrg4S7YvfEucKnyH45/0oQ+Gen/kN
-         /HU4NViAk3LdB0PV8A5wIbtye7PhpBsfDNax6zvU0WC1Nb5oveTNLnZSFgIO6YPQ4QLm
-         KFU3JTg1VzkLRXjjWNRStn4yG5CEzTeEy/21pZGsVVuea2PunoThUUP9aPfbkvf46UGd
-         Hbcbj/NQSkOVOoxK64nV4qOpuxdmyeP/gPzPXJMuHNELHiCVGY5inGhXhQ2yuUb6qwzh
-         VYHw==
-X-Gm-Message-State: AOAM530TFSk1RZQBRbA25s9htVP3sNH1ue1OVOdqPp7cCmwfN7qvciFv
-        8wRwh8XVSLY/jhmOzL3fWTAlNmMwlAKBzFAjCjs=
-X-Google-Smtp-Source: ABdhPJzxLeEDRWOJ88B1XzDYIXQqoxtkXjuYm4kyLClahFPrH2jUC+fIvnhLzgW8pvDd6/4d5UkG2IUFoEbKqVpwzyo=
-X-Received: by 2002:a6b:f112:: with SMTP id e18mr16253699iog.57.1612812474086;
- Mon, 08 Feb 2021 11:27:54 -0800 (PST)
-MIME-Version: 1.0
-References: <20210207071726.3969978-1-yhs@fb.com> <CAKwvOdm81yoFXg65XPc=PTOC+P7J9TJuFc3ag9TvFkjGW0iGVg@mail.gmail.com>
-In-Reply-To: <CAKwvOdm81yoFXg65XPc=PTOC+P7J9TJuFc3ag9TvFkjGW0iGVg@mail.gmail.com>
-Reply-To: sedat.dilek@gmail.com
-From:   Sedat Dilek <sedat.dilek@gmail.com>
-Date:   Mon, 8 Feb 2021 20:27:42 +0100
-Message-ID: <CA+icZUX2ZD0zrn7XObm9C-+_AVXU4s-v3pyMvfYkMCS8vcs6Sg@mail.gmail.com>
-Subject: Re: [PATCH dwarves v2] btf_encoder: sanitize non-regular int base type
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Yonghong Song <yhs@fb.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        dwarves@vger.kernel.org, bpf <bpf@vger.kernel.org>,
-        Andrii Nakryiko <andriin@fb.com>,
-        Mark Wielaard <mark@klomp.org>,
+        Mon, 8 Feb 2021 14:56:48 -0500
+Received: from mail.kernel.org ([198.145.29.99]:46772 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S236407AbhBHTz4 (ORCPT <rfc822;dwarves@vger.kernel.org>);
+        Mon, 8 Feb 2021 14:55:56 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 621B964E6C;
+        Mon,  8 Feb 2021 19:55:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1612814104;
+        bh=vi6ZfT7emO1tSAW2LLLmJ9w/td9wx3wGyxvxpKaAURs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=HwtMkTwvMCrHQVKeted33a4afJn4VOjGb/JWqdgymVfyl8mLvBiNmJfjWed60Fxq9
+         197AUy/BVgiWWOvDN71ZHAJZLIfjX8gdaXydfMC70+kLHbMyzRpQizSECmqU7L5pdi
+         oZRq+KNcQ+UW+4/LPktipbJc1umlg/6PY4hbAUjJxHlleVggHGR2EwPiY9OpjGGzMs
+         phmtQSCS4RHiOCd51RJspb7GZYwt7D1f5RY4gDygmjx7am87QYOZEK+Lb76kwekvIq
+         L9uciCd3CL2rdpc9of652oAFP1Ds0ldTXPosG01WTpLUeI5OVjDqxlFkuCxg3rCmUE
+         0WMS/DO0sOI+A==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id ADACF40513; Mon,  8 Feb 2021 16:55:01 -0300 (-03)
+Date:   Mon, 8 Feb 2021 16:55:01 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Sedat Dilek <sedat.dilek@gmail.com>
+Cc:     Yonghong Song <yhs@fb.com>, dwarves@vger.kernel.org,
+        bpf@vger.kernel.org, andriin@fb.com, mark@klomp.org,
+        Nick Desaulniers <ndesaulniers@google.com>,
         Andrii Nakryiko <andrii@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH dwarves v2] btf_encoder: sanitize non-regular int base
+ type
+Message-ID: <20210208195501.GS920417@kernel.org>
+References: <20210207071726.3969978-1-yhs@fb.com>
+ <CA+icZUVwz+OroPfsqtOxAstWGeRxf=KYMUY5LCDPzyPLJFmZmg@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CA+icZUVwz+OroPfsqtOxAstWGeRxf=KYMUY5LCDPzyPLJFmZmg@mail.gmail.com>
+X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-On Mon, Feb 8, 2021 at 8:23 PM Nick Desaulniers <ndesaulniers@google.com> wrote:
->
-> On Sat, Feb 6, 2021 at 11:17 PM Yonghong Song <yhs@fb.com> wrote:
+Em Sun, Feb 07, 2021 at 11:32:00AM +0100, Sedat Dilek escreveu:
+> On Sun, Feb 7, 2021 at 8:17 AM Yonghong Song <yhs@fb.com> wrote:
 > >
 > > clang with dwarf5 may generate non-regular int base type,
 > > i.e., not a signed/unsigned char/short/int/longlong/__int128.
@@ -132,18 +113,32 @@ On Mon, Feb 8, 2021 at 8:23 PM Nick Desaulniers <ndesaulniers@google.com> wrote:
 > > Let us sanitize them to generate BTF acceptable to libbpf and kernel.
 > >
 > > Cc: Sedat Dilek <sedat.dilek@gmail.com>
+> 
+> Thanks for v2.
+> 
+> For both v1 and v2:
+> 
+>    Tested-by: Sedat Dilek <sedat.dilek@gmail.com>
+>    Reported-by: Sedat Dilek <sedat.dilek@gmail.com>
+
+Thanks, applied.
+
+- Arnaldo
+ 
+> My development and testing environment:
+> 
+> 1. Debian/testing AMD64
+> 2. Linux v5.11-rc6+ with custom mostly Clang fixes
+> 3. Debug-Info: BTF + DWARF-v5 enabled
+> 4. Compiler and tools (incl. Clang's Integrated ASsembler IAS):
+> LLVM/Clang v12.0.0-rc1 (make LLVM=1 LLVM_IAS=1)
+> 
+> Build and boot on bare metal.
+> 
+> - Sedat -
+> 
 > > Acked-by: Andrii Nakryiko <andrii@kernel.org>
 > > Signed-off-by: Yonghong Song <yhs@fb.com>
->
-> Thanks for the patch!
->
-> Tested-by: Nick Desaulniers <ndesaulniers@google.com>
->
-
-Cool, thanks for testing Nick.
-
-- Sedat -
-
 > > ---
 > >  libbtf.c | 39 ++++++++++++++++++++++++++++++++++++++-
 > >  1 file changed, 38 insertions(+), 1 deletion(-)
@@ -208,8 +203,7 @@ Cool, thanks for testing Nick.
 > > --
 > > 2.24.1
 > >
->
->
-> --
-> Thanks,
-> ~Nick Desaulniers
+
+-- 
+
+- Arnaldo
