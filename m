@@ -2,65 +2,64 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-13.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 770F1C433E6
-	for <linux-dwarves@archiver.kernel.org>; Thu, 11 Feb 2021 00:00:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 07D2BC433E0
+	for <linux-dwarves@archiver.kernel.org>; Thu, 11 Feb 2021 01:25:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4C7D864E2E
-	for <linux-dwarves@archiver.kernel.org>; Thu, 11 Feb 2021 00:00:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CFAC864EC9
+	for <linux-dwarves@archiver.kernel.org>; Thu, 11 Feb 2021 01:25:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233633AbhBKAAl (ORCPT
+        id S229584AbhBKBZA (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Wed, 10 Feb 2021 19:00:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51902 "EHLO
+        Wed, 10 Feb 2021 20:25:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232565AbhBKAAk (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Wed, 10 Feb 2021 19:00:40 -0500
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B9ABC061574;
-        Wed, 10 Feb 2021 16:00:00 -0800 (PST)
-Received: by mail-yb1-xb36.google.com with SMTP id b187so3840418ybg.9;
-        Wed, 10 Feb 2021 16:00:00 -0800 (PST)
+        with ESMTP id S230073AbhBKBY7 (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Wed, 10 Feb 2021 20:24:59 -0500
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B930AC061574
+        for <dwarves@vger.kernel.org>; Wed, 10 Feb 2021 17:24:18 -0800 (PST)
+Received: by mail-ej1-x636.google.com with SMTP id sa23so7542685ejb.0
+        for <dwarves@vger.kernel.org>; Wed, 10 Feb 2021 17:24:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
+        d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=09Spi/8UU1p/OELTmxfBTiRNhMO6Zc63FG918GZPQAA=;
-        b=EF+LIGXXYc1EUPopzbnCsxWMLbZfgAQTIuqeQpp3sB8Pyj+OahPnlNb+ZPBnnChnKt
-         c/YD28oE/pwEsKrfQ7Fo6aV5E8P1MAChr2xMPMyWOtlMYaDyIi8bRykAMrVVwwLEmF7K
-         YX426O0D6tOdl3uX9pn6MiPA4ggZWJRukyRC65+35rcLJ2DPetU9oUSpAgD8EMiZ9OPI
-         OvDyjvTUDXg0CZLtM4CbXtmItOBFbbPgTc1Ny3kRE1zr1Bb1RnyZlu4Xsn20KbhZAktU
-         yFV5I1ESYt7mZlS57xX/OqvkGemxR2gXCalMCSBgcbUfgrKYIVF3Kagd9qNvgV67664j
-         ENIQ==
+        bh=BEXlHvTyZH7qZYc5/wanJ3+A/tSq4HeD6PPTeuxatvQ=;
+        b=cLnv65VCo0gf7L8/T/AHbaxXsH6azCVGLp+T3O7cWQMoSNJlgbWCX72ExrHMaMQLrZ
+         c+677RaJHFedEBIQTH7iSw6thEpdUn9K2ggCWKXkPUIjApbR0tJeYPVCcA9YiZh/KZdL
+         rJw2qRhBl7QnsNcMoOzdn6l1Y88e/5qC0kzxqejroT4UBgXzYi6CSwQPD+3cB92mOi7X
+         Pti+YQ1nCX/RVYbyeR2FpMB/w74uYffDZm/Uhs1Jf7qXwoys/IzP/he6mVNUesQOHzw5
+         JFZIpqFmfS3YwBoYklrymR4vjpS2cOxMlt6KVkOYqESQOKb/T59qspCMIrLi3h66GVD4
+         Yhvg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=09Spi/8UU1p/OELTmxfBTiRNhMO6Zc63FG918GZPQAA=;
-        b=lmazh8GmiANSp4WEIG1SZSGUiyl455wb6CqRvWNBruwIUErCs9Yz4BAlacI/zBXnSy
-         5RHDA6yOWVK79j3WD1vAdLei6FmLAvHKBETY3JnuQekj/6l+r61Vq6JDRmuSXlpSctnF
-         uo9eF9lkevTCnA6l2lMD2N10TA8kFykXcmmQ3Rxdnl67aAkbEStf17dS0yzDMRy+c4SB
-         OdMDgVUJgiOH8qjYBecB5Tkf/Ad5XNvVQJtzQVu4M4e6FAyyOz71MyY1IdImCa6001Y5
-         tpjx5vlelpZzLnQg6I0Rq94kLupk4owVEoa3GAByrcmdi9m6xHQOp+8082huEFfvAzjs
-         sAjA==
-X-Gm-Message-State: AOAM530M96lZSZ3HtQCu/a7vMGD/qQeFWPsPjbF7MrxKrfY/R8jI87Rx
-        g8l101gvTZqpTrPJY9e+WBhcthFk1pn07ltXxlk=
-X-Google-Smtp-Source: ABdhPJy3QQ0g3KgzsSZKy2VIqOQh4kUKd5sut5vteImfeMSz3vaAa9nl3Gw3Lsrm8MinBBIp9VutBxHBGWhdhh2jP4w=
-X-Received: by 2002:a5b:3c4:: with SMTP id t4mr7326726ybp.510.1613001599552;
- Wed, 10 Feb 2021 15:59:59 -0800 (PST)
+        bh=BEXlHvTyZH7qZYc5/wanJ3+A/tSq4HeD6PPTeuxatvQ=;
+        b=mBO+/Au0VxKtUFzczOPwaIdO/fIEopOoDoGT0oKteIRuFUzInYceaAOthhZTF6cGmr
+         azuPSu/coVaUGJUDyMZrFq3xeYiGzlJNJdcTLCXMaPxvjtKL71cLtVbsU/WMYBmygV9a
+         se3+tyiJat89UXXFoRLslklzxxYyUruARo1KtR65z5x5a41g8ROa5Or8tfjCB3Fq9ms+
+         15X9qek+uuyChodJUHQAsU2I0Rf7SQhLRMhKI4w5SrdpG3H1z8d6zlBN91oq9fqCN5LN
+         KPhhILGy/l98ciOixQyqEpla3rrWOglx47AUs0Z1A7kzluRiwQpH9e76m12wAYvaCIPp
+         bdvw==
+X-Gm-Message-State: AOAM531NcGKkJWZEjP1xJflw9wBfHi8hPQWBJb8sNrDW3szS+zoFPll2
+        JO3Kcfhtx7kVvMn0ZpRg9l/gfeQk2ELIyT+NFy1Bhxtjsw==
+X-Google-Smtp-Source: ABdhPJxQanBnCQHeGmaZqIyjoWVXea2e1I6JlLMEZ4fSc1dg79NNxqhv7Xte+x018jvYraBrDsY7KPHTjndazFlwkTk=
+X-Received: by 2002:a17:906:f24a:: with SMTP id gy10mr5672792ejb.531.1613006657225;
+ Wed, 10 Feb 2021 17:24:17 -0800 (PST)
 MIME-Version: 1.0
-References: <20210210232327.1965876-1-morbo@google.com>
-In-Reply-To: <20210210232327.1965876-1-morbo@google.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Wed, 10 Feb 2021 15:59:48 -0800
-Message-ID: <CAEf4BzYrWe4N28JjM6na=sNvq5214zs5yHra_fCuE1KA24KQ0A@mail.gmail.com>
+References: <20210210232327.1965876-1-morbo@google.com> <CAEf4BzYrWe4N28JjM6na=sNvq5214zs5yHra_fCuE1KA24KQ0A@mail.gmail.com>
+In-Reply-To: <CAEf4BzYrWe4N28JjM6na=sNvq5214zs5yHra_fCuE1KA24KQ0A@mail.gmail.com>
+From:   Bill Wendling <morbo@google.com>
+Date:   Wed, 10 Feb 2021 17:24:06 -0800
+Message-ID: <CAGG=3QW0zuXUcpkcZqnaZS77EABEshhPtUCTr71dDDMuL1oMZQ@mail.gmail.com>
 Subject: Re: [PATCH] dwarf_loader: use a better hashing function
-To:     Bill Wendling <morbo@google.com>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
 Cc:     dwarves@vger.kernel.org, bpf <bpf@vger.kernel.org>,
         Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
@@ -68,76 +67,38 @@ Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-On Wed, Feb 10, 2021 at 3:25 PM Bill Wendling <morbo@google.com> wrote:
+On Wed, Feb 10, 2021 at 4:00 PM Andrii Nakryiko
+<andrii.nakryiko@gmail.com> wrote:
 >
-> This hashing function[1] produces better hash table bucket
-> distributions. The original hashing function always produced zeros in
-> the three least significant bits.
+> On Wed, Feb 10, 2021 at 3:25 PM Bill Wendling <morbo@google.com> wrote:
+> >
+> > This hashing function[1] produces better hash table bucket
+> > distributions. The original hashing function always produced zeros in
+> > the three least significant bits.
+> >
+> > The new hashing funciton gives a modest performance boost.
+> >
+> >       Original      New
+> >        0:11.41       0:11.38
+> >        0:11.36       0:11.34
+> >        0:11.35       0:11.26
+> >       -----------------------
+> >   Avg: 0:11.373      0:11.327
+> >
+> > for a performance improvement of 0.4%.
+> >
+> > [1] From Numerical Recipes, 3rd Ed. 7.1.4 Random Hashes and Random Bytes
+> >
 >
-> The new hashing funciton gives a modest performance boost.
+> Can you please also test with the one libbpf uses internally:
 >
->       Original      New
->        0:11.41       0:11.38
->        0:11.36       0:11.34
->        0:11.35       0:11.26
->       -----------------------
->   Avg: 0:11.373      0:11.327
+> return (val * 11400714819323198485llu) >> (64 - bits);
 >
-> for a performance improvement of 0.4%.
+> ?
 >
-> [1] From Numerical Recipes, 3rd Ed. 7.1.4 Random Hashes and Random Bytes
+> Thanks!
 >
+It's giving me a running time of ~11.11s, which is even better. Would
+you like me to submit a patch?
 
-Can you please also test with the one libbpf uses internally:
-
-return (val * 11400714819323198485llu) >> (64 - bits);
-
-?
-
-Thanks!
-
-> Signed-off-by: Bill Wendling <morbo@google.com>
-> ---
->  hash.h | 25 ++++++++++---------------
->  1 file changed, 10 insertions(+), 15 deletions(-)
->
-> diff --git a/hash.h b/hash.h
-> index d3aa416..ea201ab 100644
-> --- a/hash.h
-> +++ b/hash.h
-> @@ -33,22 +33,17 @@
->
->  static inline uint64_t hash_64(const uint64_t val, const unsigned int bits)
->  {
-> -       uint64_t hash = val;
-> +       uint64_t hash = val * 0x369DEA0F31A53F85UL + 0x255992D382208B61UL;
->
-> -       /*  Sigh, gcc can't optimise this alone like it does for 32 bits. */
-> -       uint64_t n = hash;
-> -       n <<= 18;
-> -       hash -= n;
-> -       n <<= 33;
-> -       hash -= n;
-> -       n <<= 3;
-> -       hash += n;
-> -       n <<= 3;
-> -       hash -= n;
-> -       n <<= 4;
-> -       hash += n;
-> -       n <<= 2;
-> -       hash += n;
-> +       hash ^= hash >> 21;
-> +       hash ^= hash << 37;
-> +       hash ^= hash >>  4;
-> +
-> +       hash *= 0x422E19E1D95D2F0DUL;
-> +
-> +       hash ^= hash << 20;
-> +       hash ^= hash >> 41;
-> +       hash ^= hash <<  5;
->
->         /* High bits are more random, so use them. */
->         return hash >> (64 - bits);
-> --
-> 2.30.0.478.g8a0d178c01-goog
->
+-bw
