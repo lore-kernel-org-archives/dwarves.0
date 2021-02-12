@@ -2,89 +2,108 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+X-Spam-Status: No, score=-21.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=no
-	autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,
+	USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 02982C433E6
-	for <linux-dwarves@archiver.kernel.org>; Fri, 12 Feb 2021 20:16:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 49F5FC433E0
+	for <linux-dwarves@archiver.kernel.org>; Fri, 12 Feb 2021 21:17:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B391C64E00
-	for <linux-dwarves@archiver.kernel.org>; Fri, 12 Feb 2021 20:15:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1B37664DA1
+	for <linux-dwarves@archiver.kernel.org>; Fri, 12 Feb 2021 21:17:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229798AbhBLUPo (ORCPT
+        id S229718AbhBLVQ7 (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Fri, 12 Feb 2021 15:15:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55590 "EHLO
+        Fri, 12 Feb 2021 16:16:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229889AbhBLUPn (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Fri, 12 Feb 2021 15:15:43 -0500
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9787CC0613D6
-        for <dwarves@vger.kernel.org>; Fri, 12 Feb 2021 12:15:02 -0800 (PST)
-Received: by mail-ej1-x62d.google.com with SMTP id hs11so1231721ejc.1
-        for <dwarves@vger.kernel.org>; Fri, 12 Feb 2021 12:15:02 -0800 (PST)
+        with ESMTP id S229497AbhBLVQ5 (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Fri, 12 Feb 2021 16:16:57 -0500
+Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85E03C061756
+        for <dwarves@vger.kernel.org>; Fri, 12 Feb 2021 13:16:17 -0800 (PST)
+Received: by mail-pg1-x549.google.com with SMTP id t196so701421pgb.20
+        for <dwarves@vger.kernel.org>; Fri, 12 Feb 2021 13:16:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=GP+BGOCmcl5vDaPuSGIKIoLlEIFh7CsHpm+wbwTw+H0=;
-        b=QSM9syEdv3i3xsyaviKSUXdkvxqfnDH+YS0+o5NiRfsMk0StqDx/jhb2vER1jJ8ihp
-         7q20MnkxpSOvy+pRHa7gf90Yw5vgZ+iasnraVaLSgxmeUlSmlJcZhpTBmEtHBBA1UTAG
-         2tFJm2w5pxLVYknwGVE69LI/tQA62i3oRy4fiXrfvoef6VJ5yXJ9P1XJvisrN1R7r3G4
-         BO4SyY89OHYJTxpAG0D9WWGUQ7kGQqJu+Ri0GVgG31UG2qo8dq5mUa4+VtVg5CTQ9Z94
-         mpW0K+2cN7+NH/ba50VbzUJczVY5RnGcDqa5oKC0yxgc/ILXBqxapSNa4zUApoU4v16F
-         y2ww==
+        h=sender:date:message-id:mime-version:subject:from:to:cc;
+        bh=VOh44KJfmTHWItSbZ6YbzEnX757pkGjSv9K+QdsDUFA=;
+        b=mM46KnR9UD21nsGulWfi58bH2LSH4d7JEw5d7IzN45GZNtkvLhfb1G7qsjJyQ/HXcf
+         CF0atURZNU+WsBH79QVlzMq9F+AFEZW2AmPEOKwiNqLudegkift5o7BkPvStozMFagQ9
+         /vu7hr4lYx3nuJfzuL3/TRIaXeaYcDBb/b1jQkOU9rYb5vbVyEW+kkDequJGiTrgv8AQ
+         7C60tn28Zw9hEwRczuJ43gUUvcpjsh+D7RTqBX89RLx5leSJf5hlH/0+qeH+cSthMC8x
+         oeL+jCP18Ovu5w36gzyGYKTsDolkgTgMAhR+cLMfbDjcc3vniMeMeFkHXzKHa6BDw0F/
+         Lzvw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=GP+BGOCmcl5vDaPuSGIKIoLlEIFh7CsHpm+wbwTw+H0=;
-        b=fUSchTGWxSHNJSbG0wndiwJf6UdFJo+ySIW1CQZIb1hXtBzb6WLgfQwnUFc4QW3ByD
-         LDJLimhas1GxJVavrkA22pqwHet4ta73ADxUxL1FdI3YUCBsDg6sqvFk5aAK6TRPEvFF
-         ZUAtajzPN+5NBa8d+IMkNalphEMZsOfrngSjxtT6FHTXJI9DsjrFm/TDbEITCinDcEJN
-         Fi9ZyVA7AjCDNSfig6JAL9z8BiJe7KESzHazb0ZAvMakcHoImpQES+vNWpqJPh6915+N
-         YWOM/7XuwBOm+QfNzp76eTB4Dpey8apB+6zN/Rg91RU232N0tPKXv1rXTo/Wn0jRwBhW
-         mztA==
-X-Gm-Message-State: AOAM533l37uUAw03k1OuYZDyCVRx6Fqx6g0mhB2WVi5qvMVhvibpia1t
-        rH0PmVNZcmfgPyLN/R7OtWcdgxvf+9NlbyuHR8f7
-X-Google-Smtp-Source: ABdhPJxmxXHac3rHfZ27/HnXAc8aIrHOb3zswMYO2B74IhPt91f6jDe8jNA021aRjlhMYHk+prF0IV41VbTZO5v0+Js=
-X-Received: by 2002:a17:906:4712:: with SMTP id y18mr4650363ejq.529.1613160900237;
- Fri, 12 Feb 2021 12:15:00 -0800 (PST)
-MIME-Version: 1.0
-References: <20210210232327.1965876-1-morbo@google.com> <20210212080104.2499483-1-morbo@google.com>
- <20210212123721.GE1398414@kernel.org>
-In-Reply-To: <20210212123721.GE1398414@kernel.org>
+        h=x-gm-message-state:sender:date:message-id:mime-version:subject:from
+         :to:cc;
+        bh=VOh44KJfmTHWItSbZ6YbzEnX757pkGjSv9K+QdsDUFA=;
+        b=SNzykPfWeNvFuxcd3IIfA9BHhlqtWZOXUK6RzO5Oo+2l2UN6E4BEqqkC6OnpP2ancg
+         Fs2s+WEwsRt5Nrbb0h2uO6GOPbRznEX2BjIduSQE+De/LEJxQo++0rNLGOl0tSddIpQy
+         l2I7EIz6LWS4WLiU/Gfh4fs6znSIeQXJU9Mw3uaRkx67BSUWB6NTrti/UKMhqy3FcvDZ
+         K3HG2UV71O8cBEG1LE6M9Bd7ap6Lf1/HyGRPwZFNYUQMSkq1ShnGi5NeBX70b8aAOmEE
+         QwFMOtN5uI+EbapOOzqmNDXhlipPagcS5zuEBViJpEQGWDSG+ry9z43QVcZurOTYQmCl
+         8FNA==
+X-Gm-Message-State: AOAM533Ro9l53CR6XxFf+qen/QqxobHlmOd6Y+xHTfxlI+cRIvHzDOLw
+        5HDrnE2PwAcltMFL9WLUx+5GYAtg3buuV5cboGxuD1H+f6B4T43NCVo26nvyjn7/1Aso2zcsdov
+        x6Vf4Iu0wq8Mna9nYm7ucsYdkdlQRQZ26wYhdu6XLcSwRiqp4zHJMM3JXrCU=
+X-Google-Smtp-Source: ABdhPJwjFBYm/SrzWjwdf6KOoyXlDHdExT6QOvlY2l8WLg5cuOgmZ537ZIZ2yxUAmoQWxerAdxvY/ER9eA==
+Sender: "morbo via sendgmr" <morbo@fawn.svl.corp.google.com>
+X-Received: from fawn.svl.corp.google.com ([2620:15c:2cd:202:ed1b:1611:4b90:c2e9])
+ (user=morbo job=sendgmr) by 2002:a17:902:7d8c:b029:e3:1bd0:b20d with SMTP id
+ a12-20020a1709027d8cb02900e31bd0b20dmr4462551plm.63.1613164576881; Fri, 12
+ Feb 2021 13:16:16 -0800 (PST)
+Date:   Fri, 12 Feb 2021 13:16:06 -0800
+Message-Id: <20210212211607.2890660-1-morbo@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.30.0.478.g8a0d178c01-goog
+Subject: [RFC 0/1] Combining CUs into a single hash table
 From:   Bill Wendling <morbo@google.com>
-Date:   Fri, 12 Feb 2021 12:14:49 -0800
-Message-ID: <CAGG=3QXX0Bu_BD6TQXLFLgsnRQceDMmFiiH-_UD9AGt89YU31Q@mail.gmail.com>
-Subject: Re: [PATCH v2] dwarf_loader: use a better hashing function
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Andrii Nakryiko <andrii@kernel.org>, dwarves@vger.kernel.org,
-        bpf <bpf@vger.kernel.org>
+To:     dwarves@vger.kernel.org, bpf@vger.kernel.org
+Cc:     arnaldo.melo@gmail.com, Bill Wendling <morbo@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-On Fri, Feb 12, 2021 at 4:37 AM Arnaldo Carvalho de Melo
-<acme@kernel.org> wrote:
->
-> Em Fri, Feb 12, 2021 at 12:01:04AM -0800, Bill Wendling escreveu:
-> > This hashing function[1] produces better hash table bucket
-> > distributions. The original hashing function always produced zeros in
-> > the three least significant bits. The new hashing function gives a
-> > modest performance boost:
->
-> Some tidbits:
->
-> You forgot to CC Andrii and also to add this, which I'm doing now:
->
-> Suggested-by: Andrii Nakryiko <andrii@kernel.org>
->
-> :-)
->
-Doh! You're right. Sorry about that. Thanks for catching it!
+Hey gang,
 
+I would like your feedback on this patch.
+
+This patch creates one hash table that all CUs share. The impetus for this
+patch is to support clang's LTO (Link-Time Optimizations). Currently, pahole
+can't handle the DWARF data that clang produces, because the CUs may refer to
+tags in other CUs (all of the code having been squozen together).
+
+One solution I found is to process the CUs in two steps:
+
+  1. add the CUs into a single hash table, and
+  2. perform the recoding and finalization steps in a a separate step.
+
+The issue I'm facing with this patch is that it balloons the runtime from
+~11.11s to ~14.27s. It looks like the underlying cause is that some (but not
+all) hash buckets have thousands of entries each. I've bumped up the
+HASHTAGS__BITS from 15 to 16, which helped a little. Bumping it up to 17 or
+above causes a failure.
+
+A couple of things I thought of may help. We could increase the number of
+buckets, which would help with distribution. As I mentioned though, that seemed
+to cause a failure. Another option is to store the bucket entries in a
+non-list, e.g. binary search tree.
+
+I wanted to get your opinions before I trod down one of these roads.
+
+Share and enjoy!
 -bw
+
+Bill Wendling (1):
+  dwarf_loader: have all CUs use a single hash table
+
+ dwarf_loader.c | 45 +++++++++++++++++++++++++++++++++------------
+ 1 file changed, 33 insertions(+), 12 deletions(-)
+
+-- 
+2.30.0.478.g8a0d178c01-goog
+
