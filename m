@@ -2,65 +2,38 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+X-Spam-Status: No, score=-18.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9CBFBC433E0
-	for <linux-dwarves@archiver.kernel.org>; Sat, 13 Feb 2021 19:12:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5E62FC433DB
+	for <linux-dwarves@archiver.kernel.org>; Sun, 14 Feb 2021 02:31:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6168364E3F
-	for <linux-dwarves@archiver.kernel.org>; Sat, 13 Feb 2021 19:12:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 24C6960201
+	for <linux-dwarves@archiver.kernel.org>; Sun, 14 Feb 2021 02:31:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229674AbhBMTMe (ORCPT
+        id S229792AbhBNCbc (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Sat, 13 Feb 2021 14:12:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38206 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229574AbhBMTMd (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Sat, 13 Feb 2021 14:12:33 -0500
-Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA064C061574;
-        Sat, 13 Feb 2021 11:11:52 -0800 (PST)
-Received: by mail-il1-x131.google.com with SMTP id m20so2244166ilj.13;
-        Sat, 13 Feb 2021 11:11:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
-         :subject:to:cc;
-        bh=ZtNVJ92bg/l02P07gRD/ZGUZuQll+Yi5ETrb0GaIN5M=;
-        b=GlBv9LWCMZZunZ2tqLjqnkgsNeHGtOV6Bk6VtlmSxV9BzMNbrwvcXmIIaVduParJOs
-         JU057YsFS1yK+MusDOzneSD4oTLYAmNd50O3IWaMYD43N3VTlOT8ICOiah4Kx0F4O6Qg
-         1KIJSALhhc6PENV4hM85mfqzRI7ROTwGENf3h4qrWuQ0bmp5vH7ZGkzVYqzmBkyRMgO7
-         kIOOqMn535YNVPb3x/vDpRDyazA48GxhFBkeGIj3UgZJhMTYdVNL/ScpB3zvUpr4UYjU
-         qBgj99MMWbx/wgXDnycdz9NKQNyXNA0Wg/eMjXIHRhdr1g6sqF1qOfoUvpIm4D6g23Vr
-         AFmA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
-         :from:date:message-id:subject:to:cc;
-        bh=ZtNVJ92bg/l02P07gRD/ZGUZuQll+Yi5ETrb0GaIN5M=;
-        b=BPQChgShKbmAqtpSLVfs/LXwQH5Q6S6/+34Idek8mDMDmBepFYsdw1alZqtFzmjchZ
-         jIgrSli1iZ58jtL1ZUVN8dug7e4YGSq2ZVZgFRaoNd5EDL2Ywa6SFobK0c3yM3fy2oMl
-         Y+lYNkPEPGNVLilTeNd7q1pVXidbp7ee60VanEM8YTyFiAZ53JkBfTQon0UoPkNHBluT
-         ozj71ozjhGgjfj4nGP5GbkGDiFlzpXpNubsr2F1F/jZ2z01VwGQFCNsXexTHmbq9D3g1
-         mf/DeldAn7g8qfyGpA1zbOH09awet8D0tG2tkZRTJW6PJfZ4k6TZJMoS1DVezI0cfj7z
-         50dg==
-X-Gm-Message-State: AOAM530SAm4zeK++TTVR91gtev6YEXU41oX/v+KQTaCZmLQFoHeG0ljq
-        /eU8/5vHmh9yJ+xiuUp5674Nute+9EVlkU6EqUw=
-X-Google-Smtp-Source: ABdhPJxUaQ1rKAs5RzPoP92UNCvVa5+qzPm25mHbU3Xz+KRd+W/QUEPFfAuLRsVhVy0NnOwl2pPvNc/f5sV/yOPe1dU=
-X-Received: by 2002:a92:ce46:: with SMTP id a6mr7423373ilr.10.1613243511774;
- Sat, 13 Feb 2021 11:11:51 -0800 (PST)
-MIME-Version: 1.0
-References: <20210213164648.1322182-1-jolsa@kernel.org>
-In-Reply-To: <20210213164648.1322182-1-jolsa@kernel.org>
-Reply-To: sedat.dilek@gmail.com
-From:   Sedat Dilek <sedat.dilek@gmail.com>
-Date:   Sat, 13 Feb 2021 20:11:40 +0100
-Message-ID: <CA+icZUWbiN-mibc9MLUOUkAfEuzeSLM+9xiJFqNVd8f+LRVacg@mail.gmail.com>
-Subject: Re: [PATCHv2] btf_encoder: Match ftrace addresses within elf functions
+        Sat, 13 Feb 2021 21:31:32 -0500
+Received: from mail.kernel.org ([198.145.29.99]:40206 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229713AbhBNCbb (ORCPT <rfc822;dwarves@vger.kernel.org>);
+        Sat, 13 Feb 2021 21:31:31 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id E047464E4C;
+        Sun, 14 Feb 2021 02:30:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1613269850;
+        bh=2PXUQYLG1xM67okQCRR7lPd88pelhekCZVO3xslW9fQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=KZ0/tOiJgQG1T9kkCrE814r8jPeog+VWSDu48ITg6KwEFwRdPFe+jRy9knr1dH4jZ
+         AdXZA2Ee11fUq08fWH7y9Dif4hkCYuZfL5w72y9nB2R+7w56o8LHWVPxKzpG6BaCAt
+         6gPGlDN28T0UkBZ3ARJ1olLY8zQd9JjIeA5juo0qM11qUjFK9mYy0x+NsHsvNF53Db
+         EUSiGglfmEOHhrwCwoRudvB4bdl+/hrh0naWh5zQu5r39BAL7Jez7X//OLHg6vlrSP
+         DzaNQaCpQ28XDhdxBNc7vf44SoHvt53oGLr/YNgK72OYqiyh7XdCYqFctU9ds2PwO0
+         TnQkNeJKocCyw==
+Date:   Sat, 13 Feb 2021 19:30:48 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
 To:     Jiri Olsa <jolsa@kernel.org>
 Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
         Alexei Starovoitov <ast@kernel.org>,
@@ -73,119 +46,123 @@ Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
         Song Liu <songliubraving@fb.com>,
         John Fastabend <john.fastabend@gmail.com>,
         KP Singh <kpsingh@chromium.org>,
-        Nathan Chancellor <nathan@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Sedat Dilek <sedat.dilek@gmail.com>
+Subject: Re: [PATCHv2] btf_encoder: Match ftrace addresses within elf
+ functions
+Message-ID: <20210214023048.GA12132@24bbad8f3778>
+References: <20210213164648.1322182-1-jolsa@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210213164648.1322182-1-jolsa@kernel.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-On Sat, Feb 13, 2021 at 5:46 PM Jiri Olsa <jolsa@kernel.org> wrote:
->
+On Sat, Feb 13, 2021 at 05:46:48PM +0100, Jiri Olsa wrote:
 > Currently when processing DWARF function, we check its entrypoint
 > against ftrace addresses, assuming that the ftrace address matches
 > with function's entrypoint.
->
+> 
 > This is not the case on some architectures as reported by Nathan
 > when building kernel on arm [1].
->
+> 
 > Fixing the check to take into account the whole function not
 > just the entrypoint.
->
+> 
 > Most of the is_ftrace_func code was contributed by Andrii.
->
+> 
 > [1] https://lore.kernel.org/bpf/20210209034416.GA1669105@ubuntu-m3-large-x86/
 > Acked-by: Andrii Nakryiko <andrii@kernel.org>
 > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 
-Tested this v2 together with "btf_encoder: sanitize non-regular int
-base type" v2 on top of pahole v1.20
+I did several builds with CONFIG_DEBUG_INFO_BTF enabled (arm64, ppc64le,
+and x86_64) and saw no build errors. I did not do any runtime testing.
 
-Tested-by: Sedat Dilek <sedat.dilek@gmail.com> # Linux v5.11-rc7+ and
-LLVM/Clang v12.0.0-rc1 on x86 (64bit)
-
-- Sedat -
+Tested-by: Nathan Chancellor <nathan@kernel.org>
 
 > ---
 > v2 changes:
 >   - update functions addr directly [Andrii]
->
+> 
 >  btf_encoder.c | 40 ++++++++++++++++++++++++++++++++++++++--
 >  1 file changed, 38 insertions(+), 2 deletions(-)
->
+> 
 > diff --git a/btf_encoder.c b/btf_encoder.c
 > index b124ec20a689..80e896961d4e 100644
 > --- a/btf_encoder.c
 > +++ b/btf_encoder.c
 > @@ -36,6 +36,7 @@ struct funcs_layout {
 >  struct elf_function {
->         const char      *name;
->         unsigned long    addr;
-> +       unsigned long    size;
->         unsigned long    sh_addr;
->         bool             generated;
+>  	const char	*name;
+>  	unsigned long	 addr;
+> +	unsigned long	 size;
+>  	unsigned long	 sh_addr;
+>  	bool		 generated;
 >  };
 > @@ -98,6 +99,7 @@ static int collect_function(struct btf_elf *btfe, GElf_Sym *sym,
->
->         functions[functions_cnt].name = name;
->         functions[functions_cnt].addr = elf_sym__value(sym);
-> +       functions[functions_cnt].size = elf_sym__size(sym);
->         functions[functions_cnt].sh_addr = sh.sh_addr;
->         functions[functions_cnt].generated = false;
->         functions_cnt++;
+>  
+>  	functions[functions_cnt].name = name;
+>  	functions[functions_cnt].addr = elf_sym__value(sym);
+> +	functions[functions_cnt].size = elf_sym__size(sym);
+>  	functions[functions_cnt].sh_addr = sh.sh_addr;
+>  	functions[functions_cnt].generated = false;
+>  	functions_cnt++;
 > @@ -236,6 +238,39 @@ get_kmod_addrs(struct btf_elf *btfe, __u64 **paddrs, __u64 *pcount)
->         return 0;
+>  	return 0;
 >  }
->
+>  
 > +static int is_ftrace_func(struct elf_function *func, __u64 *addrs, __u64 count)
 > +{
-> +       __u64 start = func->addr;
-> +       __u64 addr, end = func->addr + func->size;
+> +	__u64 start = func->addr;
+> +	__u64 addr, end = func->addr + func->size;
 > +
-> +       /*
-> +        * The invariant here is addr[r] that is the smallest address
-> +        * that is >= than function start addr. Except the corner case
-> +        * where there is no such r, but for that we have a final check
-> +        * in the return.
-> +        */
-> +       size_t l = 0, r = count - 1, m;
+> +	/*
+> +	 * The invariant here is addr[r] that is the smallest address
+> +	 * that is >= than function start addr. Except the corner case
+> +	 * where there is no such r, but for that we have a final check
+> +	 * in the return.
+> +	 */
+> +	size_t l = 0, r = count - 1, m;
 > +
-> +       /* make sure we don't use invalid r */
-> +       if (count == 0)
-> +               return false;
+> +	/* make sure we don't use invalid r */
+> +	if (count == 0)
+> +		return false;
 > +
-> +       while (l < r) {
-> +               m = l + (r - l) / 2;
-> +               addr = addrs[m];
+> +	while (l < r) {
+> +		m = l + (r - l) / 2;
+> +		addr = addrs[m];
 > +
-> +               if (addr >= start) {
-> +                       /* we satisfy invariant, so tighten r */
-> +                       r = m;
-> +               } else {
-> +                       /* m is not good enough as l, maybe m + 1 will be */
-> +                       l = m + 1;
-> +               }
-> +       }
+> +		if (addr >= start) {
+> +			/* we satisfy invariant, so tighten r */
+> +			r = m;
+> +		} else {
+> +			/* m is not good enough as l, maybe m + 1 will be */
+> +			l = m + 1;
+> +		}
+> +	}
 > +
-> +       return start <= addrs[r] && addrs[r] < end;
+> +	return start <= addrs[r] && addrs[r] < end;
 > +}
 > +
 >  static int setup_functions(struct btf_elf *btfe, struct funcs_layout *fl)
 >  {
->         __u64 *addrs, count, i;
+>  	__u64 *addrs, count, i;
 > @@ -283,10 +318,11 @@ static int setup_functions(struct btf_elf *btfe, struct funcs_layout *fl)
->                  * functions[x]::addr is relative address within section
->                  * and needs to be relocated by adding sh_addr.
->                  */
-> -               __u64 addr = kmod ? func->addr + func->sh_addr : func->addr;
-> +               if (kmod)
-> +                       func->addr += func->sh_addr;
->
->                 /* Make sure function is within ftrace addresses. */
-> -               if (bsearch(&addr, addrs, count, sizeof(addrs[0]), addrs_cmp)) {
-> +               if (is_ftrace_func(func, addrs, count)) {
->                         /*
->                          * We iterate over sorted array, so we can easily skip
->                          * not valid item and move following valid field into
-> --
+>  		 * functions[x]::addr is relative address within section
+>  		 * and needs to be relocated by adding sh_addr.
+>  		 */
+> -		__u64 addr = kmod ? func->addr + func->sh_addr : func->addr;
+> +		if (kmod)
+> +			func->addr += func->sh_addr;
+>  
+>  		/* Make sure function is within ftrace addresses. */
+> -		if (bsearch(&addr, addrs, count, sizeof(addrs[0]), addrs_cmp)) {
+> +		if (is_ftrace_func(func, addrs, count)) {
+>  			/*
+>  			 * We iterate over sorted array, so we can easily skip
+>  			 * not valid item and move following valid field into
+> -- 
 > 2.29.2
->
+> 
