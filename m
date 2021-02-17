@@ -2,167 +2,97 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-21.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,
+	USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5E62FC433DB
-	for <linux-dwarves@archiver.kernel.org>; Sun, 14 Feb 2021 02:31:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 02395C433E6
+	for <linux-dwarves@archiver.kernel.org>; Wed, 17 Feb 2021 11:09:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 24C6960201
-	for <linux-dwarves@archiver.kernel.org>; Sun, 14 Feb 2021 02:31:49 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CD76D64DEC
+	for <linux-dwarves@archiver.kernel.org>; Wed, 17 Feb 2021 11:09:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229792AbhBNCbc (ORCPT
+        id S231487AbhBQLJR (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Sat, 13 Feb 2021 21:31:32 -0500
-Received: from mail.kernel.org ([198.145.29.99]:40206 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229713AbhBNCbb (ORCPT <rfc822;dwarves@vger.kernel.org>);
-        Sat, 13 Feb 2021 21:31:31 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id E047464E4C;
-        Sun, 14 Feb 2021 02:30:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1613269850;
-        bh=2PXUQYLG1xM67okQCRR7lPd88pelhekCZVO3xslW9fQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KZ0/tOiJgQG1T9kkCrE814r8jPeog+VWSDu48ITg6KwEFwRdPFe+jRy9knr1dH4jZ
-         AdXZA2Ee11fUq08fWH7y9Dif4hkCYuZfL5w72y9nB2R+7w56o8LHWVPxKzpG6BaCAt
-         6gPGlDN28T0UkBZ3ARJ1olLY8zQd9JjIeA5juo0qM11qUjFK9mYy0x+NsHsvNF53Db
-         EUSiGglfmEOHhrwCwoRudvB4bdl+/hrh0naWh5zQu5r39BAL7Jez7X//OLHg6vlrSP
-         DzaNQaCpQ28XDhdxBNc7vf44SoHvt53oGLr/YNgK72OYqiyh7XdCYqFctU9ds2PwO0
-         TnQkNeJKocCyw==
-Date:   Sat, 13 Feb 2021 19:30:48 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Jiri Olsa <jolsa@kernel.org>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andriin@fb.com>,
-        Andrii Nakryiko <andrii@kernel.org>, dwarves@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        Yonghong Song <yhs@fb.com>, Hao Luo <haoluo@google.com>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Sedat Dilek <sedat.dilek@gmail.com>
-Subject: Re: [PATCHv2] btf_encoder: Match ftrace addresses within elf
- functions
-Message-ID: <20210214023048.GA12132@24bbad8f3778>
-References: <20210213164648.1322182-1-jolsa@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210213164648.1322182-1-jolsa@kernel.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        Wed, 17 Feb 2021 06:09:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33672 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230315AbhBQLIz (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Wed, 17 Feb 2021 06:08:55 -0500
+Received: from mail-qv1-xf49.google.com (mail-qv1-xf49.google.com [IPv6:2607:f8b0:4864:20::f49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FDF0C061756
+        for <dwarves@vger.kernel.org>; Wed, 17 Feb 2021 03:08:15 -0800 (PST)
+Received: by mail-qv1-xf49.google.com with SMTP id v1so9707056qvb.2
+        for <dwarves@vger.kernel.org>; Wed, 17 Feb 2021 03:08:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=sender:date:in-reply-to:message-id:mime-version:references:subject
+         :from:to:cc;
+        bh=1modw9BZNdPfxYUaaJFvkvekSj+kTyCztdooD0nRWUs=;
+        b=LhHCcqPhzj/XJuJcrhRF46TXfvRJVjP3CfjE4hJ4cxSDnDGvAFLSs7y37tqEQwDbHK
+         j6UfzwpDHbUxatHGykjkAHuABcIdyHk1uYIQ+0YzDz64oj6HW7c8lW2mCKhZ7FIInMHo
+         o7uC/n6tZOSR26L9vuHw+/Ry29Tk1MnIa8KAY2yJRar4XplcATe7gD0sviZlXT5FkBkj
+         EbaemgSDD/Jtq0WJISpDD0zEKVADZFgPigPw3gkrXfiAhXiVxt5ywYSD2lqqfJGxljqX
+         TfRnBJMEagbt0L5S5R65A3pSFrsQ93/SriNqKacEzS8J4hn0aXsq+mzQnycy0FWn572R
+         A1Eg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=1modw9BZNdPfxYUaaJFvkvekSj+kTyCztdooD0nRWUs=;
+        b=nGWwu+Q4FlsRTqKoQohRGJuXIqjL+LIy4Lp02ciN/eVqCpne7R3poq4v8hLlOcRYK/
+         PFNB64id7s9Z2O0RC2eXga0TN3sUCW/ATPJH/BSEOYwFtb+r/9mJQCNoOWwqxjDiEc3b
+         8YWnIBQhQ6onYgTj8VyjJHv6cilqdW/pS+WfdEfcD2vpbQUmj64ilhC/UxHcvgI67JUX
+         sDNC+SkQihMcRVI6VXbNGCKPyd/e+F7DfVaxC1OcORnw+bFaUKP701bz1VhpIDgYNktI
+         zCIWRXBFJZT9Z1RkZKQMbE4p0liWKPd4YFJhS99Se+84TRuMQo5LixB2wJor7v1MiAGe
+         Pkaw==
+X-Gm-Message-State: AOAM530bm03ToXZR1cRuoLOdgjdW/yJuwOSYo335l75MliNHUPnusMpO
+        ki28vEzH//6QTdwAKXLnGtiOMUHkgmrazy14Y6b4L/XHIiFFcPFXCxPnVoZUMxhezEmGKM75Jl5
+        4ZWNf0ircdpX0FBLxb7Rsw2nQdXIXmm5ETtnqWc39MWKO12QHddlAfwNaFPAxtVAIF+9y
+X-Google-Smtp-Source: ABdhPJxA3OhdA1qH/n1P6vTxIlXqgmv6/w8dYFqzqt9OgedI/MaB2h1mUGi7CP5/HVnhywNSOYJcw+YNAUrUXg==
+Sender: "gprocida via sendgmr" <gprocida@tef.lon.corp.google.com>
+X-Received: from tef.lon.corp.google.com ([2a00:79e0:d:110:61b3:1cb2:c180:c3f])
+ (user=gprocida job=sendgmr) by 2002:ad4:4ba7:: with SMTP id
+ i7mr1958624qvw.34.1613560094469; Wed, 17 Feb 2021 03:08:14 -0800 (PST)
+Date:   Wed, 17 Feb 2021 11:07:59 +0000
+In-Reply-To: <20210205134221.2953163-1-gprocida@google.com>
+Message-Id: <20210217110804.75923-1-gprocida@google.com>
+Mime-Version: 1.0
+References: <20210205134221.2953163-1-gprocida@google.com>
+X-Mailer: git-send-email 2.30.0.478.g8a0d178c01-goog
+Subject: [PATCH dwarves v4 0/5] ELF writing changes
+From:   Giuliano Procida <gprocida@google.com>
+To:     dwarves@vger.kernel.org, acme@kernel.org
+Cc:     andrii@kernel.org, ast@kernel.org, gprocida@google.com,
+        maennich@google.com, kernel-team@android.com, kernel-team@fb.com,
+        bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-On Sat, Feb 13, 2021 at 05:46:48PM +0100, Jiri Olsa wrote:
-> Currently when processing DWARF function, we check its entrypoint
-> against ftrace addresses, assuming that the ftrace address matches
-> with function's entrypoint.
-> 
-> This is not the case on some architectures as reported by Nathan
-> when building kernel on arm [1].
-> 
-> Fixing the check to take into account the whole function not
-> just the entrypoint.
-> 
-> Most of the is_ftrace_func code was contributed by Andrii.
-> 
-> [1] https://lore.kernel.org/bpf/20210209034416.GA1669105@ubuntu-m3-large-x86/
-> Acked-by: Andrii Nakryiko <andrii@kernel.org>
-> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+Arnaldo.
 
-I did several builds with CONFIG_DEBUG_INFO_BTF enabled (arm64, ppc64le,
-and x86_64) and saw no build errors. I did not do any runtime testing.
+Versus v3 I've addressed Andrii's review comments, but some there may
+be some style consistency issues remaining.
 
-Tested-by: Nathan Chancellor <nathan@kernel.org>
+The first three changes are intended to improve code maintenance.
+The fourth remoevs the llvm-objcopy dependency.
+THe fifth aligns the .BTF section.
 
-> ---
-> v2 changes:
->   - update functions addr directly [Andrii]
-> 
->  btf_encoder.c | 40 ++++++++++++++++++++++++++++++++++++++--
->  1 file changed, 38 insertions(+), 2 deletions(-)
-> 
-> diff --git a/btf_encoder.c b/btf_encoder.c
-> index b124ec20a689..80e896961d4e 100644
-> --- a/btf_encoder.c
-> +++ b/btf_encoder.c
-> @@ -36,6 +36,7 @@ struct funcs_layout {
->  struct elf_function {
->  	const char	*name;
->  	unsigned long	 addr;
-> +	unsigned long	 size;
->  	unsigned long	 sh_addr;
->  	bool		 generated;
->  };
-> @@ -98,6 +99,7 @@ static int collect_function(struct btf_elf *btfe, GElf_Sym *sym,
->  
->  	functions[functions_cnt].name = name;
->  	functions[functions_cnt].addr = elf_sym__value(sym);
-> +	functions[functions_cnt].size = elf_sym__size(sym);
->  	functions[functions_cnt].sh_addr = sh.sh_addr;
->  	functions[functions_cnt].generated = false;
->  	functions_cnt++;
-> @@ -236,6 +238,39 @@ get_kmod_addrs(struct btf_elf *btfe, __u64 **paddrs, __u64 *pcount)
->  	return 0;
->  }
->  
-> +static int is_ftrace_func(struct elf_function *func, __u64 *addrs, __u64 count)
-> +{
-> +	__u64 start = func->addr;
-> +	__u64 addr, end = func->addr + func->size;
-> +
-> +	/*
-> +	 * The invariant here is addr[r] that is the smallest address
-> +	 * that is >= than function start addr. Except the corner case
-> +	 * where there is no such r, but for that we have a final check
-> +	 * in the return.
-> +	 */
-> +	size_t l = 0, r = count - 1, m;
-> +
-> +	/* make sure we don't use invalid r */
-> +	if (count == 0)
-> +		return false;
-> +
-> +	while (l < r) {
-> +		m = l + (r - l) / 2;
-> +		addr = addrs[m];
-> +
-> +		if (addr >= start) {
-> +			/* we satisfy invariant, so tighten r */
-> +			r = m;
-> +		} else {
-> +			/* m is not good enough as l, maybe m + 1 will be */
-> +			l = m + 1;
-> +		}
-> +	}
-> +
-> +	return start <= addrs[r] && addrs[r] < end;
-> +}
-> +
->  static int setup_functions(struct btf_elf *btfe, struct funcs_layout *fl)
->  {
->  	__u64 *addrs, count, i;
-> @@ -283,10 +318,11 @@ static int setup_functions(struct btf_elf *btfe, struct funcs_layout *fl)
->  		 * functions[x]::addr is relative address within section
->  		 * and needs to be relocated by adding sh_addr.
->  		 */
-> -		__u64 addr = kmod ? func->addr + func->sh_addr : func->addr;
-> +		if (kmod)
-> +			func->addr += func->sh_addr;
->  
->  		/* Make sure function is within ftrace addresses. */
-> -		if (bsearch(&addr, addrs, count, sizeof(addrs[0]), addrs_cmp)) {
-> +		if (is_ftrace_func(func, addrs, count)) {
->  			/*
->  			 * We iterate over sorted array, so we can easily skip
->  			 * not valid item and move following valid field into
-> -- 
-> 2.29.2
-> 
+Giuliano.
+
+Giuliano Procida (5):
+  btf_encoder: Funnel ELF error reporting through a macro
+  btf_encoder: Do not use both structs and pointers for the same data
+  btf_encoder: Traverse sections using a for-loop
+  btf_encoder: Add .BTF section using libelf
+  btf_encoder: Align .BTF section to 8 bytes
+
+ libbtf.c | 183 ++++++++++++++++++++++++++++++++++---------------------
+ 1 file changed, 114 insertions(+), 69 deletions(-)
+
+-- 
+2.30.0.478.g8a0d178c01-goog
+
