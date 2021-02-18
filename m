@@ -2,149 +2,96 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+X-Spam-Status: No, score=-16.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 176D3C433E0
-	for <linux-dwarves@archiver.kernel.org>; Wed, 17 Feb 2021 18:03:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C9040C433DB
+	for <linux-dwarves@archiver.kernel.org>; Thu, 18 Feb 2021 19:46:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C528964E5B
-	for <linux-dwarves@archiver.kernel.org>; Wed, 17 Feb 2021 18:03:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7355064EAF
+	for <linux-dwarves@archiver.kernel.org>; Thu, 18 Feb 2021 19:46:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234768AbhBQSD1 (ORCPT
+        id S231459AbhBRTp1 (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Wed, 17 Feb 2021 13:03:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37976 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231856AbhBQSDT (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Wed, 17 Feb 2021 13:03:19 -0500
-Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 836AAC061574;
-        Wed, 17 Feb 2021 10:02:38 -0800 (PST)
-Received: by mail-il1-x129.google.com with SMTP id q5so12072540ilc.10;
-        Wed, 17 Feb 2021 10:02:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
-         :subject:to:cc;
-        bh=9phedVN9F6tsus8Z4OUiJzjoyd9QAwQ4EHDKpiG4l0s=;
-        b=fnCxuZNZZIc6MC70hCzch7AYMD5h3GIFy0f1Gs9xp8P06zb3/8axvzz97Ws7pDrH32
-         N71jDEdH0lz8uqNIWEQ9NnOoaCNeC4vcPop2FJwSSkAtYD/fwMJRdkhNVBuv6Hb9n5MI
-         DVzUoS7yDybYsKCPEzBjQtEDqzxT+CjaNFXpWKWMABN4AerE05dTWspLJLW2+rkEoh8V
-         /3n9uByJo5YZAKcEw9AAP9Zm7CD8o2zCez18CLNKyU3eaefi/DsxTBmUTo3m8mSu+iTI
-         /afWQTHKzohD54Ev53cZgU04qB2pLPCoUrUPQltwTBT5EkmgOciGAraq51s7M5qufBi0
-         vovg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
-         :from:date:message-id:subject:to:cc;
-        bh=9phedVN9F6tsus8Z4OUiJzjoyd9QAwQ4EHDKpiG4l0s=;
-        b=UwcDK9vqOI9Vjz4Ny2NHeMc1qLwETvELA6fIcbyV3lwSG6tlSN6VA1el3GFVyIuBg2
-         NMRPot2MLNgkuOGBb7HydIJMTDDsO59NigNc+mTWBO7nRkejSaTftZeEyqsFDHBtoBQh
-         gzyxkoZZWHyLNN9cLO7wUaBRa2jj9GjSwxKVW9y+fDQT1mwYF1pGUC6y9MgPGM4k64G0
-         uwQKHssHXFwMhCsfFpQT1tu7RKjKgon1e/GmX6hTPBQ9buScH1sSIZ70QaXNohMS2b5L
-         FJZsQlDr+RbHAbjbDFC/36vFMSaxef6kaKH/aR13eVUerPjYSuSkp/WXLpc4a+QBPgnf
-         NE2g==
-X-Gm-Message-State: AOAM533eccWz63Suy7rSJLEry/b/7V85FrDcu+Mq5rTGmI2h1lIwMNy7
-        cnl75wWU7y+8t7gJ64lcTDCxcyanOQB9x0r/W20=
-X-Google-Smtp-Source: ABdhPJwQKEnLco30SxSgg73i0bPN5PocjhgmOHX6ErxX1rDT9y7StNtXtxFR7NIi4J4VsFr0wO7fq+ekk9ttWnlMwkw=
-X-Received: by 2002:a92:d8c5:: with SMTP id l5mr210279ilo.209.1613584957842;
- Wed, 17 Feb 2021 10:02:37 -0800 (PST)
+        Thu, 18 Feb 2021 14:45:27 -0500
+Received: from mail.kernel.org ([198.145.29.99]:56220 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231603AbhBRTWY (ORCPT <rfc822;dwarves@vger.kernel.org>);
+        Thu, 18 Feb 2021 14:22:24 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id E69B964EC4;
+        Thu, 18 Feb 2021 19:21:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1613676104;
+        bh=zLKVgenSzSotaAnBU+nW97SOMa5t3aC33QYWtc4lk1Q=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=eR/PJxSYwUGd38LdM4PeDu7FbcU1Kl1q5e1MtbwbSKVyI85VmAOK5GSw5pwCEWXFt
+         Wf665T50vKr5RZhwSrAx9Qj/p9aCgYeAteIzdEuSZAMWhPjKCXP4Xoi7sVQbTeyT1M
+         fptoIAmhljek5laxcpp/6sYzQH7MdQ9bWbIIF42qVKBHtPGhuzNSk7c6BgYxOnYb2g
+         ueB+M1jFsPsD/vx6keg8CCTH4yDJOy9TisbOvf2aW7/35Vv68XN60euJhFnWwy08U8
+         n1koaWegX2re5o6v7LFSVRsnlueLzRGpverUy/wCdA1wQ49BSZ6X+vV7XpS0fzMq0J
+         tQ1ybWhNXxZRw==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 9106540CD9; Thu, 18 Feb 2021 16:21:40 -0300 (-03)
+Date:   Thu, 18 Feb 2021 16:21:40 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Ian Rogers <irogers@google.com>
+Cc:     dwarves@vger.kernel.org
+Subject: Re: [PATCH] Avoid warning when building with NDEBUG
+Message-ID: <YC6+RO9ayyGq45FK@kernel.org>
+References: <20210218175115.2850050-1-irogers@google.com>
 MIME-Version: 1.0
-References: <20210213164648.1322182-1-jolsa@kernel.org> <YC0Pmn0uwhHROsQd@kernel.org>
- <CA+icZUWBfwJ0WKQi7AO_dhcMpFWmo6riwszpmsZLfn1BwH_kyw@mail.gmail.com> <AA8690FE-7C57-4791-881A-DE06B337DF45@gmail.com>
-In-Reply-To: <AA8690FE-7C57-4791-881A-DE06B337DF45@gmail.com>
-Reply-To: sedat.dilek@gmail.com
-From:   Sedat Dilek <sedat.dilek@gmail.com>
-Date:   Wed, 17 Feb 2021 19:02:26 +0100
-Message-ID: <CA+icZUWC-OuV1dJv6PsmbjU7fMSY02RFa8X1LLmJB3xh=W0O_A@mail.gmail.com>
-Subject: Re: [PATCHv2] btf_encoder: Match ftrace addresses within elf functions
-To:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
-Cc:     Jiri Olsa <jolsa@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andriin@fb.com>,
-        Andrii Nakryiko <andrii@kernel.org>, dwarves@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        Yonghong Song <yhs@fb.com>, Hao Luo <haoluo@google.com>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Nathan Chancellor <nathan@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210218175115.2850050-1-irogers@google.com>
+X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-On Wed, Feb 17, 2021 at 2:56 PM Arnaldo Carvalho de Melo
-<arnaldo.melo@gmail.com> wrote:
->
->
->
-> On February 17, 2021 10:40:43 AM GMT-03:00, Sedat Dilek <sedat.dilek@gmail.com> wrote:
-> >On Wed, Feb 17, 2021 at 1:44 PM Arnaldo Carvalho de Melo
-> ><arnaldo.melo@gmail.com> wrote:
-> >>
-> >> Em Sat, Feb 13, 2021 at 05:46:48PM +0100, Jiri Olsa escreveu:
-> >> > Currently when processing DWARF function, we check its entrypoint
-> >> > against ftrace addresses, assuming that the ftrace address matches
-> >> > with function's entrypoint.
-> >> >
-> >> > This is not the case on some architectures as reported by Nathan
-> >> > when building kernel on arm [1].
-> >> >
-> >> > Fixing the check to take into account the whole function not
-> >> > just the entrypoint.
-> >> >
-> >> > Most of the is_ftrace_func code was contributed by Andrii.
-> >>
-> >> Applied locally, will go out after tests,
-> >>
-> >
-> >Hi Arnaldo,
-> >
-> >Is it possible to have a pahole version 1.21 with this patch and the
-> >one from Yonghong Son?
-> >
-> >From my local pahole Git:
-> >
-> >$ git log --oneline --no-merges v1.20..
-> >2f83aefdbddf (for-1.20/btf_encoder-ftrace_elf-clang-jolsa-v2)
-> >btf_encoder: Match ftrace addresses within elf functions
-> >f21eafdfc877 (for-1.20/btf_encoder-sanitized_int-clang-yhs-v2)
-> >btf_encoder: sanitize non-regular int base type
-> >
-> >Both patches fixes all issues seen so far with LLVM/Clang >=
-> >12.0.0-rc1 and DWARF-v5 and BTF (debug-info) and pahole on
-> >Linux/x86_64 and according to Nathan on Linux/arm64.
-> >Yesterday, I tried with LLVM/Clang 13-git from <apt.llvm.org>.
-> >
-> >BTW, Nick's DWARF-v5 patches are pending in <kbuild.git#kbuild> (see
-> >[1]).
-> >
-> >Personally, I can wait until [1] is in Linus Git.
-> >
-> >Please, let me/us know what you are planning.
-> >( I know it is Linux v5.12 merge-window. )
->
-> Sure, next week.
->
+Em Thu, Feb 18, 2021 at 09:51:15AM -0800, Ian Rogers escreveu:
+> The assert macro is compiled out with NDEBUG which can lead to an unused
+> variable warning if the variable is only read in the assert. This is
+> seen just here:
+> 
+> dwarf_loader.c:957:17: error: unused variable 'tag' [-Werror,-Wunused-variable]
+>         const uint16_t tag = dwarf_tag(die);
 
-That's OK with me.
+Thanks Ian, I added:
 
-- Sedat -
+Signed-off-by: Ian Rogers <irogers@google.com>
 
-> - Arnaldo
->
-> >
-> >Regards,
-> >- Sedat -
-> >
-> >[1]
-> >https://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git/log/?h=kbuild
->
-> --
-> Sent from my Android device with K-9 Mail. Please excuse my brevity.
+And CC: dwarves@vger.kernel.org
+
+Please let me know if this is all ok.
+
+- Arnaldo
+
+> ---
+>  dwarf_loader.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/dwarf_loader.c b/dwarf_loader.c
+> index b73d786..22c3a55 100644
+> --- a/dwarf_loader.c
+> +++ b/dwarf_loader.c
+> @@ -954,9 +954,10 @@ static struct lexblock *lexblock__new(Dwarf_Die *die, struct cu *cu)
+>  
+>  static void ftype__init(struct ftype *ftype, Dwarf_Die *die, struct cu *cu)
+>  {
+> +#ifndef NDEBUG
+>  	const uint16_t tag = dwarf_tag(die);
+>  	assert(tag == DW_TAG_subprogram || tag == DW_TAG_subroutine_type);
+> -
+> +#endif
+>  	tag__init(&ftype->tag, cu, die);
+>  	INIT_LIST_HEAD(&ftype->parms);
+>  	ftype->nr_parms	    = 0;
+> -- 
+> 2.30.0.617.g56c4b15f3c-goog
+> 
+
+-- 
+
+- Arnaldo
