@@ -2,133 +2,146 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 00F90C433DB
-	for <linux-dwarves@archiver.kernel.org>; Wed, 10 Mar 2021 20:27:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F0424C433E9
+	for <linux-dwarves@archiver.kernel.org>; Wed, 10 Mar 2021 21:03:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A2C3E64FD2
-	for <linux-dwarves@archiver.kernel.org>; Wed, 10 Mar 2021 20:27:06 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9DEC664FD5
+	for <linux-dwarves@archiver.kernel.org>; Wed, 10 Mar 2021 21:03:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231495AbhCJU0e (ORCPT
+        id S231394AbhCJVDX (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Wed, 10 Mar 2021 15:26:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52626 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229687AbhCJU0B (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Wed, 10 Mar 2021 15:26:01 -0500
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F11AC061574;
-        Wed, 10 Mar 2021 12:26:01 -0800 (PST)
-Received: by mail-yb1-xb35.google.com with SMTP id p186so19281793ybg.2;
-        Wed, 10 Mar 2021 12:26:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ONufA5MfqwwxL6Ms/dM+N1X8h2zLIoC9I/XMghgTWzo=;
-        b=ooVsfrRNF0h2YbIH2/C3sE+h9AFoh1F6bcJU6wUL8jSPizyRtXAX3aPQn66g2xehA7
-         Q/GuV92CURL/Z9PBmxVMHtffev+uckrZ9L2bQt7QdY60x9DfZtktVEvUXKEHaiSIyvHY
-         p3e+D9dsL3TlOLm4Gn3kGmLEGmQseKniGTI0QEK0S0TSA04RNMHBm9hZrMiozYGhFpKl
-         TmMEPJREs+f2QSQrq/ZReMYF/a7U5hoKkrUUbX3UJMAqaLFFWnPh7IygTVYDkprU15ZP
-         h+vm9X7mTe5M/M7PUWu8syikuX5MWzD94vq6P2lH9kuZzWACTwF0bkZrvxZn3pOI533i
-         ruXg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ONufA5MfqwwxL6Ms/dM+N1X8h2zLIoC9I/XMghgTWzo=;
-        b=bvB/wADqiOx+4VLkls1CZwKocF6whRTctt9q2CIYiMkpcJDxXm2hS8tI60RPF/vu8K
-         Y6r3ImppK9Fn/eAt1vBHOEAz5d6ZxZzWp7JcLNNcs0pYIWa3Cmx+idRBuwjZ8GDvX0ES
-         TAnWkZKE1bTVAosUxChL6r9EBwl2NIFZv6xsm2eZyltgy+7Hy6FGZ3GnfKXkYEu6mlt9
-         OMOTM12dUR0tqZsFIkcAhFbtol8V0D/cVTK1omcdgujBZ3jlT7RalIDS/OfaEFfamcxP
-         OnsicbJzR9LOGiCamT0IJFdXxYkmzTY6iq5vg4T/9J4kYcd4ZBRFMVby2rED6MyOQ4gq
-         05Sw==
-X-Gm-Message-State: AOAM531GVwfFq/dE8igH5gTuOpHersD1SNG3fKRr6qBv26kvdOr0Rxp6
-        nV8ObrDTMUzKUp/VDaUR3uub4pgeQPqgyh8+HyY=
-X-Google-Smtp-Source: ABdhPJyH1L+L4u+pwy9n8pOOWvxtrNq+cx3ENraKN9zVzP4hvtIqplVA9t2cYKFTWnqsd68E4wZlU6TYcHF+mQ2sEGA=
-X-Received: by 2002:a25:7d07:: with SMTP id y7mr6509181ybc.425.1615407960310;
- Wed, 10 Mar 2021 12:26:00 -0800 (PST)
-MIME-Version: 1.0
-References: <20210310201550.170599-1-iii@linux.ibm.com>
-In-Reply-To: <20210310201550.170599-1-iii@linux.ibm.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Wed, 10 Mar 2021 12:25:49 -0800
-Message-ID: <CAEf4BzY0++YuU7+a3vSfWWZNLoov7mu7Q1ty4FqqH78gkqgqQw@mail.gmail.com>
+        Wed, 10 Mar 2021 16:03:23 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:4376 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230491AbhCJVDK (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Wed, 10 Mar 2021 16:03:10 -0500
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 12AKZZlo039430;
+        Wed, 10 Mar 2021 16:02:56 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=48427Q3e9u7jiZIek7Xnn7ihN6QjD11lvW1ADGEo7gc=;
+ b=rD+8oJcCR7LvbV8TFrlHamXAYV4bc9q1f3klc0zY8RNi9SYPQc3+AwZB6qbY0nUfO8Hc
+ Da5l1Z2lSpJAp+XhZo3h5tsDRApz4lMLtLa3jOD+kf/vHLQQVvYBgZN1CekSE9wPWu2j
+ I1CHuj+KkvXsNYb5MJWkSaeGBp2/KOhSMBcSoUXmBQ2IUY4WNGRbsFVaI3hOdE3q0sy8
+ Potxh6gAyRsRmpJOucMNcdOjdVYNkgR5QgB0yrmnS+gtUcxK6A5HROc0ruCnkrJ+E8Qc
+ 1NHEuMTu+FKXuLws2mblCpHXA/P/HVGRZLw8nrh1R+odezysKJ38gWy/BpMntNjkqere nA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3774kx9ycm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 10 Mar 2021 16:02:56 -0500
+Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 12AKdqh9059095;
+        Wed, 10 Mar 2021 16:02:56 -0500
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3774kx9ybt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 10 Mar 2021 16:02:56 -0500
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.0.43/8.16.0.43) with SMTP id 12AKvOwS014515;
+        Wed, 10 Mar 2021 21:02:53 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma03ams.nl.ibm.com with ESMTP id 3768t4hap6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 10 Mar 2021 21:02:53 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 12AL2Y6c27591084
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 10 Mar 2021 21:02:35 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 548A8AE04D;
+        Wed, 10 Mar 2021 21:02:50 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D6160AE05A;
+        Wed, 10 Mar 2021 21:02:49 +0000 (GMT)
+Received: from sig-9-145-31-74.uk.ibm.com (unknown [9.145.31.74])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed, 10 Mar 2021 21:02:49 +0000 (GMT)
+Message-ID: <ff68a62e776ce9e459bece7ae87cc53573500a50.camel@linux.ibm.com>
 Subject: Re: [PATCH v4 dwarves] btf: Add support for the floating-point types
-To:     Ilya Leoshkevich <iii@linux.ibm.com>
+From:   Ilya Leoshkevich <iii@linux.ibm.com>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
 Cc:     Arnaldo Carvalho de Melo <acme@redhat.com>,
         Andrii Nakryiko <andrii@kernel.org>, dwarves@vger.kernel.org,
         bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Yonghong Song <yhs@fb.com>, Heiko Carstens <hca@linux.ibm.com>,
         Vasily Gorbik <gor@linux.ibm.com>
+Date:   Wed, 10 Mar 2021 22:02:49 +0100
+In-Reply-To: <CAEf4BzY0++YuU7+a3vSfWWZNLoov7mu7Q1ty4FqqH78gkqgqQw@mail.gmail.com>
+References: <20210310201550.170599-1-iii@linux.ibm.com>
+         <CAEf4BzY0++YuU7+a3vSfWWZNLoov7mu7Q1ty4FqqH78gkqgqQw@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.38.4 (3.38.4-1.fc33) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.761
+ definitions=2021-03-10_12:2021-03-10,2021-03-10 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
+ impostorscore=0 phishscore=0 mlxlogscore=999 clxscore=1015
+ priorityscore=1501 lowpriorityscore=0 bulkscore=0 malwarescore=0
+ adultscore=0 mlxscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2009150000 definitions=main-2103100099
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-On Wed, Mar 10, 2021 at 12:16 PM Ilya Leoshkevich <iii@linux.ibm.com> wrote:
->
-> Some BPF programs compiled on s390 fail to load, because s390
-> arch-specific linux headers contain float and double types.
->
-> Fix as follows:
->
-> - Make the DWARF loader fill base_type.float_type.
->
-> - Introduce the --btf_gen_floats command-line parameter, so that
->   pahole could be used to build both the older and the newer kernels.
->
-> - libbpf introduced the support for the floating-point types in commit
->   986962fade5, so update the libbpf submodule to that version and use
->   the new btf__add_float() function in order to emit the floating-point
->   types when not in the compatibility mode.
->
-> - Make the BTF loader recognize the new BTF kind.
->
-> Example of the resulting entry in the vmlinux BTF:
->
->     [7164] FLOAT 'double' size=8
->
-> when building with:
->
->     LLVM_OBJCOPY=${OBJCOPY} ${PAHOLE} -J ${1} --btf_gen_floats
->
-> Signed-off-by: Ilya Leoshkevich <iii@linux.ibm.com>
-> ---
+On Wed, 2021-03-10 at 12:25 -0800, Andrii Nakryiko wrote:
+> On Wed, Mar 10, 2021 at 12:16 PM Ilya Leoshkevich <iii@linux.ibm.com>
+> wrote:
+> > 
+> > Some BPF programs compiled on s390 fail to load, because s390
+> > arch-specific linux headers contain float and double types.
+> > 
+> > Fix as follows:
+> > 
+> > - Make the DWARF loader fill base_type.float_type.
+> > 
+> > - Introduce the --btf_gen_floats command-line parameter, so that
+> >   pahole could be used to build both the older and the newer
+> > kernels.
+> > 
+> > - libbpf introduced the support for the floating-point types in
+> > commit
+> >   986962fade5, so update the libbpf submodule to that version and
+> > use
+> >   the new btf__add_float() function in order to emit the floating-
+> > point
+> >   types when not in the compatibility mode.
+> > 
+> > - Make the BTF loader recognize the new BTF kind.
+> > 
+> > Example of the resulting entry in the vmlinux BTF:
+> > 
+> >     [7164] FLOAT 'double' size=8
+> > 
+> > when building with:
+> > 
+> >     LLVM_OBJCOPY=${OBJCOPY} ${PAHOLE} -J ${1} --btf_gen_floats
+> > 
+> > Signed-off-by: Ilya Leoshkevich <iii@linux.ibm.com>
+> > ---
+> 
+> So it looks good to me overall, but here's the question about using
+> this --btf-gen-floats flag from link-vmlinux.sh script. If you
+> specify
+> that flag for an old pahole, it will probably error out, right? So
+> that means we'll need to do feature detection for pahole supported
+> features, right?..
 
-So it looks good to me overall, but here's the question about using
-this --btf-gen-floats flag from link-vmlinux.sh script. If you specify
-that flag for an old pahole, it will probably error out, right? So
-that means we'll need to do feature detection for pahole supported
-features, right?..
+I was planning to just bump the version in this check:
 
->
-> v1: https://lore.kernel.org/dwarves/20210306022203.152930-1-iii@linux.ibm.com/
-> v1 -> v2: Introduce libbpf compatibility level command-line parameter.
->           The code should now work for both bpf-next/master and
->           v5.12-rc2.
->
-> v2: https://lore.kernel.org/dwarves/20210308235913.162038-1-iii@linux.ibm.com/
-> v2 -> v3: Use the feature flag (--encode_btf_kind_float) instead of the
->           libbpf version flag.
->
-> v3: https://lore.kernel.org/dwarves/20210310141517.169698-1-iii@linux.ibm.com/
-> v3 -> v4: Rename the flag to --btf_gen_floats.
->
->  btf_loader.c       | 21 +++++++++++++++++++--
->  dwarf_loader.c     | 11 +++++++++++
->  lib/bpf            |  2 +-
->  libbtf.c           | 36 ++++++++++++++++++++++++++++++++++--
->  libbtf.h           |  1 +
->  man-pages/pahole.1 |  5 +++++
->  pahole.c           |  8 ++++++++
->  7 files changed, 79 insertions(+), 5 deletions(-)
->
+    if [ "${pahole_ver}" -lt "116" ]; then
 
-[...]
+But we could also keep allowing 1.16-1.20 and pass the new flag on
+1.21+ only.
+
+What do you think?
+
