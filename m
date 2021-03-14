@@ -2,212 +2,251 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+X-Spam-Status: No, score=-12.5 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,MSGID_FROM_MTA_HEADER,NICE_REPLY_A,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BE7CBC433E6
-	for <linux-dwarves@archiver.kernel.org>; Sun, 14 Mar 2021 08:29:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A154AC433E0
+	for <linux-dwarves@archiver.kernel.org>; Sun, 14 Mar 2021 23:35:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9D44764EC6
-	for <linux-dwarves@archiver.kernel.org>; Sun, 14 Mar 2021 08:29:57 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7868164E87
+	for <linux-dwarves@archiver.kernel.org>; Sun, 14 Mar 2021 23:35:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234579AbhCNI3Y (ORCPT
+        id S229624AbhCNXee (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Sun, 14 Mar 2021 04:29:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33206 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234756AbhCNI25 (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Sun, 14 Mar 2021 04:28:57 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF0ABC061574
-        for <dwarves@vger.kernel.org>; Sun, 14 Mar 2021 00:28:56 -0800 (PST)
-Received: by mail-ed1-x530.google.com with SMTP id w18so13713940edc.0
-        for <dwarves@vger.kernel.org>; Sun, 14 Mar 2021 00:28:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ujBPd6PJmaTlt/8ZbmqrzeOBykDyLePR+osy7yCDN9E=;
-        b=FEjeFBegFLjUheJglzMfzBqKiQEjMhvTGD1xBJIPUGCuqdR8sHC8rd5DfJK74MTrPG
-         uTUMAnOIZm88Vx4CXq+4ZMiLnRzibxKIMAvV36/El9DThb8OJlzU1PTXq3diVDqIvl0I
-         lSqQj3R41CYxo44f9lnmOcPOie+5xA2o/V+pBem9XPF76pM7nlF5pbjoDPf4B2spS+fD
-         URdqm4Amz/NsAICIC/2LUaClyNCI091vuAzGQfWQASJB7zyUUo7Qmuu2UaUrqltP1TTF
-         /FH4hCvESdaYhM2Psf+GNwRUaIDwf5rTHhrpCvwMQ6DwYWp0hZxwIrlUnnhWuU5VJuoY
-         7kSA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ujBPd6PJmaTlt/8ZbmqrzeOBykDyLePR+osy7yCDN9E=;
-        b=ru8VDU3tS3zXqJFcqPzwzxg/KYUKUyNWekDWDvnTUVfHHT2t6t5C4M/KhgF1cjqOaG
-         7ehCzGdGEWT0LqwBixLJThFUMqCDMsSdPqddu651h/3vtd0cYEfCgAErYYThF7oyB8E2
-         Zyye3ybqQ3iOOisfuasUKdJJuuaLVSS24ng1ZFRSzKBrlK+uIwDAVjSYKUmExMYThKUQ
-         p3JaNlWkwvxQoceNvH5fqonNApapEJ6mK2fy2qI88ELKaOy2s+bjrXIXS99B/xzxFapb
-         PscS45gdXHQH7igFBKPn/t1ezPfhAAaA6Du8NDotPhjTzPw+uhE8rIHrfHTYpMTlTc8J
-         VAuA==
-X-Gm-Message-State: AOAM530oOdAJlmlSWicDcn8OVjRR+FADbcPC29xrouwHF84n2Tp9jcWz
-        kEFNf/x9RZ+iBZt3g2XzNI8vQFBYqoYrD9/CyOWa
-X-Google-Smtp-Source: ABdhPJwbESXO0QjAoSYh7IRnYouE/17lOLaH2/gjYCuB6Rlk5C7OclHvtlSNwr6tuqgoUjGa2q8P5BjiMjDoj4s2Bi8=
-X-Received: by 2002:aa7:df14:: with SMTP id c20mr23665812edy.197.1615710535257;
- Sun, 14 Mar 2021 00:28:55 -0800 (PST)
-MIME-Version: 1.0
-References: <20210212211607.2890660-1-morbo@google.com> <CAGG=3QWuxzwKGuYhVu+EfXPFZMNsO7-=NtHbdXAyvcVjvKF3hA@mail.gmail.com>
- <86bcb5c4-b3c8-e41f-96ec-800caf57f585@fb.com>
-In-Reply-To: <86bcb5c4-b3c8-e41f-96ec-800caf57f585@fb.com>
-From:   Bill Wendling <morbo@google.com>
-Date:   Sun, 14 Mar 2021 00:28:44 -0800
-Message-ID: <CAGG=3QUYzMNBwoOY9q739wKDVzuevZSjC=KPBdrQW9fXRCnvjQ@mail.gmail.com>
+        Sun, 14 Mar 2021 19:34:34 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:11890 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229636AbhCNXeJ (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Sun, 14 Mar 2021 19:34:09 -0400
+Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 12ENV0KB011165;
+        Sun, 14 Mar 2021 16:34:06 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=subject : to : cc :
+ references : from : message-id : date : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=facebook;
+ bh=B3hgHzeE6jh3tvO9AwbbqPKnrlUAyoAcKJPF7J6CanQ=;
+ b=kXUYo/6+D7o38y6mka9wkz3vznyFGwcZf0aWpVqjnW/Ecs+PfzGYK7Rwn2ljeevSte0r
+ UVvDYlCOn3GBGBHG094oUCRlYw8cB93luT9CF7qTnoMQLdXsywGE2pDeBVg1PM0hj0HA
+ dblbC/hWvWH4gjB4H5TKiecA7I/n2EK58G4= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 379e11267g-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Sun, 14 Mar 2021 16:34:06 -0700
+Received: from NAM04-BN3-obe.outbound.protection.outlook.com (100.104.31.183)
+ by o365-in.thefacebook.com (100.104.36.101) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Sun, 14 Mar 2021 16:34:05 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=FFGmOf8TVQc/wi5Vj3/X0B6zK9dT5FrAmBrFiSlD3kIBRLLZk23scxmx1zt4DL8unSr8CAJT61YRisBZk707RnSbz8RkIX7yq9tF51BN6s1KnJaAif6SVY+PiHv5oPjWkIGwBF/DiZ555aXke/nCEyV+u9Xszr7uN1AQSCfhvW2QtiGZxWGPWDh1RRYv6w3yfI64qc6D5tKIbvPNmLtCZQ0xLaWQ0Y5MUTNgLYTqCIlVbrbs6CorJ8eU6PRIHdn6VSd0FQI2mjkXzppxA6FOGA/lSoQNYdyx+YBQiK1HvEIdCq2TThWPGtbKp01dwIZoId2ObZzpWZbgtjt4IUQwZw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=B3hgHzeE6jh3tvO9AwbbqPKnrlUAyoAcKJPF7J6CanQ=;
+ b=C1DGT7t7T1ieAPwDSeA96odGliyQ6+XLTNeTQu10poSpsPrJYG9TsnunDPExgdibRsZwcPC0Tft6GHuYK9WlXV3MYg0ofq0TDa0yzmpBSbcnnisxSo6bgfqyZm3m0toU+utqnMp2VIvn552RJ5nBdyX7+6qMmMKBFeVdvF5y4c8nj09jI3TFP5GR6a4r/4+BaMt30Lc6KL0RjrjOn97RAMJajLPq7BNIYkG5NvCegBR8xsrOaAgiA9YaDT1Wu+aWzBBimwyrRs5G+a9BO4jf3aAZ+4rHn33BUPj/mAsw6RLxJr5vU/zfUDAb7KCNW371UpGwL0pKR3vumSGeF//pDw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
+ header.d=fb.com; arc=none
+Authentication-Results: gmail.com; dkim=none (message not signed)
+ header.d=none;gmail.com; dmarc=none action=none header.from=fb.com;
+Received: from SN6PR1501MB2064.namprd15.prod.outlook.com (2603:10b6:805:d::27)
+ by SA1PR15MB4644.namprd15.prod.outlook.com (2603:10b6:806:19f::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3933.31; Sun, 14 Mar
+ 2021 23:34:02 +0000
+Received: from SN6PR1501MB2064.namprd15.prod.outlook.com
+ ([fe80::f433:fd99:f905:8912]) by SN6PR1501MB2064.namprd15.prod.outlook.com
+ ([fe80::f433:fd99:f905:8912%3]) with mapi id 15.20.3933.032; Sun, 14 Mar 2021
+ 23:34:02 +0000
 Subject: Re: [RFC 0/1] Combining CUs into a single hash table
-To:     Yonghong Song <yhs@fb.com>
-Cc:     dwarves@vger.kernel.org, bpf <bpf@vger.kernel.org>,
+To:     Bill Wendling <morbo@google.com>
+CC:     <dwarves@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
         Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
-Content-Type: multipart/mixed; boundary="00000000000083f6da05bd7aec4f"
+References: <20210212211607.2890660-1-morbo@google.com>
+ <CAGG=3QWuxzwKGuYhVu+EfXPFZMNsO7-=NtHbdXAyvcVjvKF3hA@mail.gmail.com>
+ <86bcb5c4-b3c8-e41f-96ec-800caf57f585@fb.com>
+ <CAGG=3QUYzMNBwoOY9q739wKDVzuevZSjC=KPBdrQW9fXRCnvjQ@mail.gmail.com>
+From:   Yonghong Song <yhs@fb.com>
+Message-ID: <f742fd34-27ee-bb48-907b-1d12cb6ff25c@fb.com>
+Date:   Sun, 14 Mar 2021 16:33:58 -0700
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
+ Gecko/20100101 Thunderbird/78.8.1
+In-Reply-To: <CAGG=3QUYzMNBwoOY9q739wKDVzuevZSjC=KPBdrQW9fXRCnvjQ@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [2620:10d:c090:400::5:896c]
+X-ClientProxiedBy: MWHPR04CA0027.namprd04.prod.outlook.com
+ (2603:10b6:300:ee::13) To SN6PR1501MB2064.namprd15.prod.outlook.com
+ (2603:10b6:805:d::27)
+MIME-Version: 1.0
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from [IPv6:2620:10d:c085:21e8::104e] (2620:10d:c090:400::5:896c) by MWHPR04CA0027.namprd04.prod.outlook.com (2603:10b6:300:ee::13) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3933.31 via Frontend Transport; Sun, 14 Mar 2021 23:34:01 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 19b5458f-d507-47ba-6bf0-08d8e741a611
+X-MS-TrafficTypeDiagnostic: SA1PR15MB4644:
+X-Microsoft-Antispam-PRVS: <SA1PR15MB46444E0E788610B3E2F12A04D36D9@SA1PR15MB4644.namprd15.prod.outlook.com>
+X-FB-Source: Internal
+X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: DDhq3+EolZwRwbE7M1OXSC243ydyiqxVyxH5unMuJW6p/a3kR/JAZplu+bmN5O3/MFdHn9raYY889asvaiEMKpfh3zJpdKBF1bX0KUb5dEEcltchBpjZXahis8kAznaB0U1ByIPCnMg/F6hiZ4UpZoFHHW7sYUnVVStPcjcFqrqYUgNgzmFEKp1vABfYkbQ/me5SYPUSPovM9aryZ9OTf49oD7sJwQr9jsAY8N1m8EAm9bju+LIGKwjYrpqbNj/HwzOWgI3B3Eui3gyg6muamuG/lqnLq0llnvIG/62P3P/JYRt90hIAR7atpOYrHfMkmdLuONPpMBFmK2g3nfyQe773uOqR+8KsfSD3nQhdfovCEhtXcPNS7edhUW80m3jFDTN3W0z9DqgLW9rlPCNJJecK2rYJbFs5JuHt3f31LY9/tNCleCKJw57ZhJtFUVvAeY65xDW+vg62936o3xxSv4gwvOyeQNLn6Bgptv5pVn91a+EJC+kXYvgw1+Ho0E4bfOhSzZYJqTjTTkgUWnz2YbCcuL/+f+4PoyNFBhUxyFtoBneU68CxG6YrLc8p4G1UT1P+02fEJirAQlwEL9pJdAKVT159W6p/5aBvTgwcZQWtVrt+5G84zTivDtO7oogtm0P9mHkWXJSb+dmnizBHWg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR1501MB2064.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(136003)(376002)(346002)(39860400002)(396003)(186003)(2616005)(16526019)(6666004)(31686004)(83380400001)(36756003)(2906002)(54906003)(316002)(53546011)(478600001)(5660300002)(6486002)(8936002)(8676002)(66476007)(6916009)(66556008)(86362001)(31696002)(66946007)(4326008)(52116002)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData: =?utf-8?B?eWp4WVQ2Z2VsNkNreTdnUG52ZGpDaUJCbGlhMnBENFJvOXRkMm1HS3VTZXJZ?=
+ =?utf-8?B?UVppNFNNckNhTEI4T05aM3U3bVpkUkhzeUtOWTFwYWljaDErc2pCckU5cXZD?=
+ =?utf-8?B?YVNDd3J4QTMzR1d1YUttTmxmcWtJZU1XQWt5c0hjSzB5eTk5SlFVc1BJNGl4?=
+ =?utf-8?B?VVg1QjU0NVUxNmthbUVzL2JPOEIzVlRJL1lVZ2VKeTBQcmNPT3k3Z3o4RjJB?=
+ =?utf-8?B?MWZSVlQ2VVVaZm5nYTMvV3lhUTNUNDRhNHVEVXBYc2x1dFBpZkozZWFhNmg4?=
+ =?utf-8?B?K1gzaUExN3Z3RFUrUmVXNTV4TXhrVUNrUzR5MURSM2d2N2xkN0VNb1Q4eEYx?=
+ =?utf-8?B?c1pEemN6UzBPZ1REUndJc1VsVnB5NnJmTXFYUnFDc1JQNm91NmRTZkpBN1VI?=
+ =?utf-8?B?ZGlYS1dTbWtVeU9wYVk1bE11c054blVjcjFHemUzN3RjTUNQbjdOblRlaTdm?=
+ =?utf-8?B?U2NBeHJSRllXenlaQk93R1oxYjMyd21UOXd6ZXU1OUJyTGxXd1Z3Ym1OeFBk?=
+ =?utf-8?B?Vi8raUNQQlhKZ0FXbHdDclJUd25RSHZsNVI1VkRrbS9Ccm9HeDZ0enZIM2Nr?=
+ =?utf-8?B?U3NPWWdTUmlDczlLM3lSV3kycjRuMHJ2WFNKWUY0MzZwWVVCK2NnS2Foa3p0?=
+ =?utf-8?B?dlBQM3RzN0pOUm1nK21hejB3dFZNMUJIODRoK0pMZnozakw1c040b3BFcEdN?=
+ =?utf-8?B?ZUhMSE8wUWx0eHErZjUxZE4rVHNyOXJvNDRCTXBkdDFXTFMxRkxKcHdHaGpL?=
+ =?utf-8?B?Z3plUHBrdVcvNHpENytjak5JbEJ0OExLeFNiL0hJT29WZTMrYmtudk90OGlV?=
+ =?utf-8?B?SWlQWDhtWTRMcnVMaWFiTDlrMkdhV3pLZjNncW1reEJXc0ROSitRWXZlSlg5?=
+ =?utf-8?B?bldrWlhhZ0VHekcxbm13L2hiWlRlNnpYck84N09RSCswK1FCT0lLQUVVc2Ns?=
+ =?utf-8?B?ZE9FU0t5Z1JmS2V4SHg5KzhXd0FDYVcvR1E3YnlKS0YzU0RUN0NQY2pKMFZY?=
+ =?utf-8?B?Z3ZkMkU0UjU2SE5RcDA3NXE2WHdmSmUvSndLSzBoZnBSUmZESDZkakdCMWxJ?=
+ =?utf-8?B?dWhNTmo3b3V5TU5ReDF6NlBtZXY3U3RRb3hpUXB2bEV6OXZSUWQ4SU8vZ3cy?=
+ =?utf-8?B?Z1UwSEVhWUkxcUVTeEhmNDhwMnl4WUtvZVp4QzdXMS9uUFdzclhCVDFZSXpQ?=
+ =?utf-8?B?bUdOcTlzaGRwNmNRL3lCdWMwcEhhcG44Vjdzemc3Y2VrOXhreXRaUVJ3VEYy?=
+ =?utf-8?B?Vkx3VG5PSExLaWRjZ1ltY3RjRmlvQzV4VWFDa3lMOHhiMXJWZzRWOFlwcnpM?=
+ =?utf-8?B?emhrbVdjSW1Ddm9IS3JkZ01vc0RZZFlZaDE3MWxuM2ZkT005cCtJMncyNTBU?=
+ =?utf-8?B?NXFERzZyYVhvMW9Rbis3L0FjZzF5ekFpdllDaVlXZ0lycTNWWUtSZExubVFQ?=
+ =?utf-8?B?N2hyWGV4TFM1L0dWdXNLY1VGY2lxc1ZnZnpqTTlWR1JNa25RNXF2SXplOWlz?=
+ =?utf-8?B?aCt3bnAxUitWMEt4S0N3ZFl3MXR4aWtpdXpCWDJnS2ZiMWtiUDVUQ2lLL1l3?=
+ =?utf-8?B?aFpudFFvcVo1a2luekMwaE5sdjQzNUcrbWxSVGJHZWFDOWtKUU9wS0FKcDBH?=
+ =?utf-8?B?bTloYWp0T3owbVFkU2JabmNhSk8vZWJRUGdUTndUYi8zdUs1UE9UaUR4dE1F?=
+ =?utf-8?B?WTdTc3g1Y3pzRHlSdE1UNUc2Q2JSOWNVQkdtWERTWFNpdW1wMEtwYVNlRlRw?=
+ =?utf-8?B?SFN0UC9nSTNNUVEzenRPOG5SZ0ljL2N2am9JZ1VxYmQ5ZVNBUzhrWmJlbzhv?=
+ =?utf-8?B?UzZodFNtUHJLcHoyT3diQT09?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 19b5458f-d507-47ba-6bf0-08d8e741a611
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR1501MB2064.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Mar 2021 23:34:02.2862
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: UakUCptyGPHY5lR6wAlr9SjetL4JV7QKa8LveQ/NfG9u75zVY5X8CPjQZ1ckx7Eg
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR15MB4644
+X-OriginatorOrg: fb.com
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.761
+ definitions=2021-03-14_13:2021-03-12,2021-03-14 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
+ malwarescore=0 adultscore=0 impostorscore=0 suspectscore=0 bulkscore=0
+ mlxlogscore=999 lowpriorityscore=0 spamscore=0 mlxscore=0 phishscore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2103140183
+X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
---00000000000083f6da05bd7aec4f
-Content-Type: text/plain; charset="UTF-8"
 
-On Sat, Mar 13, 2021 at 11:05 PM Yonghong Song <yhs@fb.com> wrote:
-> On 2/23/21 12:44 PM, Bill Wendling wrote:
-> > Bump for exposure.
-> >
-> > On Fri, Feb 12, 2021 at 1:16 PM Bill Wendling <morbo@google.com> wrote:
-> >>
-> >> Hey gang,
-> >>
-> >> I would like your feedback on this patch.
-> >>
-> >> This patch creates one hash table that all CUs share. The impetus for this
-> >> patch is to support clang's LTO (Link-Time Optimizations). Currently, pahole
-> >> can't handle the DWARF data that clang produces, because the CUs may refer to
-> >> tags in other CUs (all of the code having been squozen together).
->
-> Hi, Bill,
->
-> LTO build support is now in linus tree 5.12 rc2 and also merged in
-> latest bpf-next. I tried thin-LTO build and it is fine with latest
-> trunk llvm (llvm13) until it hits pahole and it stuck there (pahole
-> 1.20) probably some kind of infinite loop in pahole as pahole is
-> not ready to handle lto dwarf yet.
->
-> I then applied this patch on top of master pahole (1.20) and pahole
-> seg faulted. I did not debug. Have you hit the same issue?
-> How did you make pahole work with LTO built kernel?
->
-Hi Yonghong,
 
-I haven't tried this very much with top-of-tree Linux, but it's quite
-possible that there's a segfaulting issue I haven't come across yet.
-Make sure that you're using pahole v1.20, because it supports clang's
-penchant for assigning some objects "null" names.
+On 3/14/21 12:28 AM, Bill Wendling wrote:
+> On Sat, Mar 13, 2021 at 11:05 PM Yonghong Song <yhs@fb.com> wrote:
+>> On 2/23/21 12:44 PM, Bill Wendling wrote:
+>>> Bump for exposure.
+>>>
+>>> On Fri, Feb 12, 2021 at 1:16 PM Bill Wendling <morbo@google.com> wrote:
+>>>>
+>>>> Hey gang,
+>>>>
+>>>> I would like your feedback on this patch.
+>>>>
+>>>> This patch creates one hash table that all CUs share. The impetus for this
+>>>> patch is to support clang's LTO (Link-Time Optimizations). Currently, pahole
+>>>> can't handle the DWARF data that clang produces, because the CUs may refer to
+>>>> tags in other CUs (all of the code having been squozen together).
+>>
+>> Hi, Bill,
+>>
+>> LTO build support is now in linus tree 5.12 rc2 and also merged in
+>> latest bpf-next. I tried thin-LTO build and it is fine with latest
+>> trunk llvm (llvm13) until it hits pahole and it stuck there (pahole
+>> 1.20) probably some kind of infinite loop in pahole as pahole is
+>> not ready to handle lto dwarf yet.
+>>
+>> I then applied this patch on top of master pahole (1.20) and pahole
+>> seg faulted. I did not debug. Have you hit the same issue?
+>> How did you make pahole work with LTO built kernel?
+>>
+> Hi Yonghong,
+> 
+> I haven't tried this very much with top-of-tree Linux, but it's quite
+> possible that there's a segfaulting issue I haven't come across yet.
+> Make sure that you're using pahole v1.20, because it supports clang's
+> penchant for assigning some objects "null" names.
+> 
+> This patch is the first step in my attempt to get pahole working with
+> LTO. There's a follow-up patch that I'll attach to this email that
+> gets me through the compilation. It's not been heavily tested or
+> reviewed (it's in my local tree), so caveat emptor. I would love to
+> have people test it to see if it helps or just makes things worse.
 
-This patch is the first step in my attempt to get pahole working with
-LTO. There's a follow-up patch that I'll attach to this email that
-gets me through the compilation. It's not been heavily tested or
-reviewed (it's in my local tree), so caveat emptor. I would love to
-have people test it to see if it helps or just makes things worse.
+I applied you "Combining CUs into a single hash table" patch and
+the attach patch, now pahole does not segfault any more, but I still
+get the following pahole errors:
 
-Cheers!
--bw
+...
+<ERROR(tag__size:1040): 1622 not found!>
+<ERROR(tag__size:1040): 1617 not found!>
+<ERROR(tag__size:1040): 1615 not found!>
+error: found variable 'loaded_vmcss_on_cpu' in CU 
+'/home/yhs/work/bpf-next/arch/x86/kvm/vmx/vmx.c' that has void type
+Encountered error while encoding BTF.
 
-> Thanks!
->
-> Yonghong
->
-> >>
-> >> One solution I found is to process the CUs in two steps:
-> >>
-> >>    1. add the CUs into a single hash table, and
-> >>    2. perform the recoding and finalization steps in a a separate step.
-> >>
-> >> The issue I'm facing with this patch is that it balloons the runtime from
-> >> ~11.11s to ~14.27s. It looks like the underlying cause is that some (but not
-> >> all) hash buckets have thousands of entries each. I've bumped up the
-> >> HASHTAGS__BITS from 15 to 16, which helped a little. Bumping it up to 17 or
-> >> above causes a failure.
-> >>
-> >> A couple of things I thought of may help. We could increase the number of
-> >> buckets, which would help with distribution. As I mentioned though, that seemed
-> >> to cause a failure. Another option is to store the bucket entries in a
-> >> non-list, e.g. binary search tree.
-> >>
-> >> I wanted to get your opinions before I trod down one of these roads.
-> >>
-> >> Share and enjoy!
-> >> -bw
-> >>
-> >> Bill Wendling (1):
-> >>    dwarf_loader: have all CUs use a single hash table
-> >>
-> >>   dwarf_loader.c | 45 +++++++++++++++++++++++++++++++++------------
-> >>   1 file changed, 33 insertions(+), 12 deletions(-)
-> >>
-> >> --
-> >> 2.30.0.478.g8a0d178c01-goog
-> >>
+FYI, I compiled latest bpf-next with the following command:
+    make LLVM=1 LLVM_IAS=1 -j60
+the compiler is locally built with latest upstream llvm-project.
+I am using thin-lto in kernel config.
 
---00000000000083f6da05bd7aec4f
-Content-Type: application/octet-stream; name="pahole.patch"
-Content-Disposition: attachment; filename="pahole.patch"
-Content-Transfer-Encoding: base64
-Content-ID: <f_km8w87va0>
-X-Attachment-Id: f_km8w87va0
+I will take a look at your patch and the issue next week,
+hopefully we can resolve the issue soon. Thanks!
 
-Y29tbWl0IDg2NmZhYzU4Zjg4ZDUwMWNhMjMxMzE4MzA2NzlkMWY5NjYyNWRkYTgKQXV0aG9yOiBC
-aWxsIFdlbmRsaW5nIDxtb3Jib0Bnb29nbGUuY29tPgpEYXRlOiAgIEZyaSBGZWIgMTIgMTQ6MDU6
-MTkgMjAyMSAtMDgwMAoKICAgIGR3YXJmX2xvYWRlcjogcGVyZm9ybSB0aGUgcmVjb2RpbmcgYW5k
-IGZpbmFsaXphdGlvbiBzZXBhcmF0ZWx5CiAgICAKICAgIENsYW5nJ3MgTFRPIHByb2R1Y2VzIERX
-QVJGIGRhdGEgd2hlcmUgYSBDVSBtYXkgcmVmZXIgdG8gdGFncyBpbiBvdGhlcgogICAgQ1UuIFRo
-aXMgbWVhbnMgdGhhdCB3ZSBuZWVkIGFsbCB0YWdzIGZyb20gZXZlcnkgQ1UgYXZhaWxhYmxlIGR1
-cmluZwogICAgcmVjb2RpbmcgYW5kIGZpbmFsaXphdGlvbi4gU28gd2UgZ2F0aGVyIHRoZSB0YWcg
-ZGF0YSBpbiBvbmUgcGhhc2UgYW5kCiAgICB1c2UgaXQgaW4gdGhlIGZvbGxvd2luZyBwaGFzZS4K
-ICAgIAogICAgU2lnbmVkLW9mZi1ieTogQmlsbCBXZW5kbGluZyA8bW9yYm9AZ29vZ2xlLmNvbT4K
-CmRpZmYgLS1naXQgYS9kd2FyZl9sb2FkZXIuYyBiL2R3YXJmX2xvYWRlci5jCmluZGV4IDJiMGQ2
-MTkuLmU4M2IyNDcgMTAwNjQ0Ci0tLSBhL2R3YXJmX2xvYWRlci5jCisrKyBiL2R3YXJmX2xvYWRl
-ci5jCkBAIC0yMjYxLDE0ICsyMjYxLDYgQEAgc3RhdGljIGludCBkaWVfX3Byb2Nlc3MoRHdhcmZf
-RGllICpkaWUsIHN0cnVjdCBjdSAqY3UpCiAJcmV0dXJuIDA7CiB9CiAKLXN0YXRpYyBpbnQgZGll
-X19wcm9jZXNzX2FuZF9yZWNvZGUoRHdhcmZfRGllICpkaWUsIHN0cnVjdCBjdSAqY3UpCi17Ci0J
-aW50IHJldCA9IGRpZV9fcHJvY2VzcyhkaWUsIGN1KTsKLQlpZiAocmV0ICE9IDApCi0JCXJldHVy
-biByZXQ7Ci0JcmV0dXJuIGN1X19yZWNvZGVfZHdhcmZfdHlwZXMoY3UpOwotfQotCiBzdGF0aWMg
-aW50IGNsYXNzX21lbWJlcl9fY2FjaGVfYnl0ZV9zaXplKHN0cnVjdCB0YWcgKnRhZywgc3RydWN0
-IGN1ICpjdSwKIAkJCQkJIHZvaWQgKmNvb2tpZSkKIHsKQEAgLTI0OTgsNiArMjQ5MCwyMCBAQCBz
-dGF0aWMgaW50IGN1c19fbG9hZF9tb2R1bGUoc3RydWN0IGN1cyAqY3VzLCBzdHJ1Y3QgY29uZl9s
-b2FkICpjb25mLAogCQl9CiAJfQogCisJLyoKKwkgKiBDVXMgbWF5IHJlZmVyIHRvIHRhZ3MgYW5k
-IHR5cGVzIGxvY2F0ZWQgaW4gb3RoZXIgQ1VzLiBUbyBzdXBwb3J0CisJICogdGhpcywgd2UgcHJv
-Y2VzcyB0aGUgQ1VzIGluIHR3byBzdGVwcy4KKwkgKgorCSAqICAgLSBDb2xsZWN0IHRoZSBDVXMg
-YW5kIGFkZHMgdGhlaXIgdHlwZXMgYW5kIHRhZ3MgZW50cmllcyBpbnRvCisJICogICAgIGhhc2hl
-cyBzaGFyZWQgYmV0d2VlbiBhbGwgQ1VzLgorCSAqICAgLSBUaGVuIHJlY29kZSBhbmQgZmluYWxp
-emUgdGhlIENVcy4KKwkgKi8KKworCS8qIEEgdGVtcG9yYXJ5IGxpc3Qgb2YgYWxsIENVIG9iamVj
-dHMuICovCisJc3RydWN0IGN1cyAqZGN1cyA9IGN1c19fbmV3KCk7CisJaWYgKGRjdXMgPT0gTlVM
-TCkKKwkJcmV0dXJuIERXQVJGX0NCX0FCT1JUOworCiAJd2hpbGUgKGR3YXJmX25leHRjdShkdywg
-b2ZmLCAmbm9mZiwgJmN1aGwsIE5VTEwsICZwb2ludGVyX3NpemUsCiAJCQkgICAgJm9mZnNldF9z
-aXplKSA9PSAwKSB7CiAJCUR3YXJmX0RpZSBkaWVfbWVtOwpAQCAtMjUyOCwyNCArMjUzNCw0MSBA
-QCBzdGF0aWMgaW50IGN1c19fbG9hZF9tb2R1bGUoc3RydWN0IGN1cyAqY3VzLCBzdHJ1Y3QgY29u
-Zl9sb2FkICpjb25mLAogCQl9CiAJCWN1LT5saXR0bGVfZW5kaWFuID0gZWhkci5lX2lkZW50W0VJ
-X0RBVEFdID09IEVMRkRBVEEyTFNCOwogCi0JCXN0cnVjdCBkd2FyZl9jdSBkY3U7Ci0KLQkJZHdh
-cmZfY3VfX2luaXQoJmRjdSk7Ci0JCWRjdS5jdSA9IGN1OwotCQlkY3UudHlwZV91bml0ID0gdHlw
-ZV9jdSA/ICZ0eXBlX2RjdSA6IE5VTEw7Ci0JCWN1LT5wcml2ID0gJmRjdTsKLQkJY3UtPmRmb3Bz
-ID0gJmR3YXJmX19vcHM7Ci0KLQkJaWYgKGRpZV9fcHJvY2Vzc19hbmRfcmVjb2RlKGN1X2RpZSwg
-Y3UpICE9IDApCisJCXN0cnVjdCBkd2FyZl9jdSAqZGN1ID0gbWFsbG9jKHNpemVvZihzdHJ1Y3Qg
-ZHdhcmZfY3UpKTsKKwkJaWYgKGRjdSA9PSBOVUxMKQogCQkJcmV0dXJuIERXQVJGX0NCX0FCT1JU
-OwogCi0JCWlmIChmaW5hbGl6ZV9jdV9pbW1lZGlhdGVseShjdXMsIGN1LCAmZGN1LCBjb25mKQot
-CQkgICAgPT0gTFNLX19TVE9QX0xPQURJTkcpCisJCWR3YXJmX2N1X19pbml0KGRjdSk7CisJCWRj
-dS0+Y3UgPSBjdTsKKwkJZGN1LT50eXBlX3VuaXQgPSB0eXBlX2N1ID8gJnR5cGVfZGN1IDogTlVM
-TDsKKwkJY3UtPnByaXYgPSBkY3U7CisJCWN1LT5kZm9wcyA9ICZkd2FyZl9fb3BzOworCisJCWN1
-c19fYWRkKGRjdXMsIGN1KTsKKworCQlpZiAoZGllX19wcm9jZXNzKGN1X2RpZSwgY3UpICE9IExT
-S19fS0VFUElUKQogCQkJcmV0dXJuIERXQVJGX0NCX0FCT1JUOwogCiAJCW9mZiA9IG5vZmY7CiAJ
-fQogCisJLyogUmVjb2RlIGFuZCBmaW5hbGl6ZSB0aGUgQ1VzLiAqLworCXN0cnVjdCBjdSAqcG9z
-LCAqbjsKKwlsaXN0X2Zvcl9lYWNoX2VudHJ5X3NhZmUocG9zLCBuLCAmZGN1cy0+Y3VzLCBub2Rl
-KSB7CisJCXN0cnVjdCBjdSAqY3UgPSBwb3M7CisJCXN0cnVjdCBkd2FyZl9jdSAqZGN1ID0gKHN0
-cnVjdCBkd2FyZl9jdSAqKWN1LT5wcml2OworCisJCWlmIChjdV9fcmVjb2RlX2R3YXJmX3R5cGVz
-KGN1KSAhPSBMU0tfX0tFRVBJVCkKKwkJCXJldHVybiBEV0FSRl9DQl9BQk9SVDsKKworCQlpZiAo
-ZmluYWxpemVfY3VfaW1tZWRpYXRlbHkoY3VzLCBjdSwgZGN1LCBjb25mKQorCQkgICAgPT0gTFNL
-X19TVE9QX0xPQURJTkcpCisJCQlyZXR1cm4gRFdBUkZfQ0JfQUJPUlQ7CisJfQorCisJLyogV2Ug
-bm8gbG9uZ2VyIG5lZWQgdGhpcyBsaXN0IG9mIENVIG9iamVjdHMuICovCisJZnJlZShkY3VzKTsK
-KwogCWlmICh0eXBlX2xzayA9PSBMU0tfX0RFTEVURSkKIAkJY3VfX2RlbGV0ZSh0eXBlX2N1KTsK
-IAo=
---00000000000083f6da05bd7aec4f--
+> 
+> Cheers!
+> -bw
+> 
+>> Thanks!
+>>
+>> Yonghong
+>>
+>>>>
+>>>> One solution I found is to process the CUs in two steps:
+>>>>
+>>>>     1. add the CUs into a single hash table, and
+>>>>     2. perform the recoding and finalization steps in a a separate step.
+>>>>
+>>>> The issue I'm facing with this patch is that it balloons the runtime from
+>>>> ~11.11s to ~14.27s. It looks like the underlying cause is that some (but not
+>>>> all) hash buckets have thousands of entries each. I've bumped up the
+>>>> HASHTAGS__BITS from 15 to 16, which helped a little. Bumping it up to 17 or
+>>>> above causes a failure.
+>>>>
+>>>> A couple of things I thought of may help. We could increase the number of
+>>>> buckets, which would help with distribution. As I mentioned though, that seemed
+>>>> to cause a failure. Another option is to store the bucket entries in a
+>>>> non-list, e.g. binary search tree.
+>>>>
+>>>> I wanted to get your opinions before I trod down one of these roads.
+>>>>
+>>>> Share and enjoy!
+>>>> -bw
+>>>>
+>>>> Bill Wendling (1):
+>>>>     dwarf_loader: have all CUs use a single hash table
+>>>>
+>>>>    dwarf_loader.c | 45 +++++++++++++++++++++++++++++++++------------
+>>>>    1 file changed, 33 insertions(+), 12 deletions(-)
+>>>>
+>>>> --
+>>>> 2.30.0.478.g8a0d178c01-goog
+>>>>
