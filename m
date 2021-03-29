@@ -2,38 +2,38 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EE255C433E0
-	for <linux-dwarves@archiver.kernel.org>; Mon, 29 Mar 2021 14:05:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6B2ACC433E0
+	for <linux-dwarves@archiver.kernel.org>; Mon, 29 Mar 2021 17:40:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C84346195B
-	for <linux-dwarves@archiver.kernel.org>; Mon, 29 Mar 2021 14:05:17 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 37C326192E
+	for <linux-dwarves@archiver.kernel.org>; Mon, 29 Mar 2021 17:40:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230161AbhC2OEq (ORCPT
+        id S230420AbhC2RkV (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Mon, 29 Mar 2021 10:04:46 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36160 "EHLO mail.kernel.org"
+        Mon, 29 Mar 2021 13:40:21 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56028 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230305AbhC2OEd (ORCPT <rfc822;dwarves@vger.kernel.org>);
-        Mon, 29 Mar 2021 10:04:33 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id D2C766192F;
-        Mon, 29 Mar 2021 14:04:32 +0000 (UTC)
+        id S229479AbhC2RkI (ORCPT <rfc822;dwarves@vger.kernel.org>);
+        Mon, 29 Mar 2021 13:40:08 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 1FE3061879;
+        Mon, 29 Mar 2021 17:40:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1617026673;
-        bh=eanCySLvVSOTi/DZKGyfv3h7bKEnmVC891tRVgA+bvg=;
+        s=k20201202; t=1617039608;
+        bh=hqDFN1PHX0lC8BFIQouXXkBsfm16cSBycETfzht6mIM=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=EcUurjivwhPbczQ5dVYSeDPrIh6/QqzF7AvsBzVvVO1CbnFcHH4aVh1JmZ0fIaltd
-         ZclSZ7jq6dG/DXmUjqlhMX5guWKEA0Tzw5VydPEAqTRFU7mp6Dg0qWj6h9SP5iFAY1
-         lOWxN1WDaIKvDKoQV/hjjEZTGvXlqvEOGci64uBOrNpqHQ+bVzYKXX4ByBBL3KflN4
-         KI9WmNjDc5gNKv6UHk/bLpbE4dRQt2VHW0atAN9wCZKff7LqyIcop1EWQTsCad95sB
-         pGw25nbXBq/MliaxuP9dai8CuQKdopgXIxAucrqFzcEWKMoRlx/AVv8C/Efk3fcUkU
-         Kr/0M4YT+zLCA==
+        b=rCi8P6odho7l/LP8NExzMcmxCIJ0rhiONSsQSNXfyv4DhyG6He450C/0gsjq0jo1l
+         KY9x24XCjaqJCH6OS/qhffY8fw0JCFcAy+XdCi6+S0EnrIA5s/M2ZYRpvK95rFdEYB
+         aIQ2NwwN1Esz4+H2hih++3Vk4RxMT+OWg7kcIOh9XH+8ofou2UYJQBH0K1FbGn2jQq
+         JfwfFX5NEN7HaPO1nP4TgxG1P7Cis+OZggxB3NrBypwBnZ6fZlxUdvYafNZgj79KCs
+         CWaaX971FmBXMpOSPCgoxsIXtOboDa01NCgS0aDh4iPunxr2rS7gQ41crUr0f5HMSQ
+         4P7/RNmevroKQ==
 Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id E14A240647; Mon, 29 Mar 2021 11:04:30 -0300 (-03)
-Date:   Mon, 29 Mar 2021 11:04:30 -0300
+        id C411640647; Mon, 29 Mar 2021 14:40:05 -0300 (-03)
+Date:   Mon, 29 Mar 2021 14:40:05 -0300
 From:   Arnaldo Carvalho de Melo <acme@kernel.org>
 To:     Yonghong Song <yhs@fb.com>
 Cc:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
@@ -41,45 +41,95 @@ Cc:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
         Andrii Nakryiko <andrii@kernel.org>,
         Bill Wendling <morbo@google.com>, bpf@vger.kernel.org,
         kernel-team@fb.com
-Subject: Re: [PATCH dwarves 3/3] dwarf_loader: add option to merge more dwarf
- cu's into one pahole cu
-Message-ID: <YGHebuveQ1SJ9BHN@kernel.org>
-References: <20210325065316.3121287-1-yhs@fb.com>
- <20210325065332.3122473-1-yhs@fb.com>
- <YF3ynAKXDCE0kDpp@kernel.org>
- <d618edb6-e4c0-a260-905f-e07720746594@fb.com>
- <YF4ltLywXsM3YkSs@kernel.org>
- <74e25d53-1e36-03a0-2de5-bd2d349a4a7f@fb.com>
+Subject: Re: [PATCH dwarves v3 0/3] permit merging all dwarf cu's for clang
+ lto built binary
+Message-ID: <YGIQ9c3Qk+DMa+C7@kernel.org>
+References: <20210328201400.1426437-1-yhs@fb.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <74e25d53-1e36-03a0-2de5-bd2d349a4a7f@fb.com>
+In-Reply-To: <20210328201400.1426437-1-yhs@fb.com>
 X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-Em Fri, Mar 26, 2021 at 04:05:45PM -0700, Yonghong Song escreveu:
-> On 3/26/21 11:19 AM, Arnaldo Carvalho de Melo wrote:
-> > [acme@five pahole]$ fullcircle ./tcp_ipv4.o
-> > /home/acme/bin/fullcircle: line 40: 984531 Segmentation fault      (core dumped) ${codiff_bin} -q -s $file $o_output
-> 
-> The .o file in lto build is not really an elf .o, it is llvm internal
-> ir bitcode.
+Em Sun, Mar 28, 2021 at 01:14:00PM -0700, Yonghong Song escreveu:
+> For vmlinux built with clang thin-lto or lto for latest bpf-next,
+> there exist cross cu debuginfo type references. For example,
+>       compile unit 1:
+>          tag 10:  type A
+>       compile unit 2:
+>          ...
+>            refer to type A (tag 10 in compile unit 1)
+> I only checked a few but have seen type A may be a simple type
+> like "unsigned char" or a complex type like an array of base types.
+> I am using latest llvm trunk and bpf-next. I suspect llvm12 or
+> linus tree >= 5.12 rc2 should be able to exhibit the issue as well.
+> Both thin-lto and lto have the same issues.
 
-This one wasn't from a LTO build, I'll revisit this soon. Testing v3
-now.
+Works, now we're again at:
 
-- Arnaldo
- 
-> > [acme@five pahole]$ pahole --help | grep merge
-> >        --merge_cus            Merge all cus (except possible types_cu)
-> > [acme@five pahole]$
-> > 
-> > 
-> > - Arnaldo
-> > 
+[acme@five pahole]$ time btfdiff vmlinux
+real	0m7.679s
+user	0m7.337s
+sys	0m0.303s
+[acme@five pahole]$ time btfdiff vmlinux.clang.thin.LTO
+--- /tmp/btfdiff.dwarf.Ls059V	2021-03-29 14:36:02.675859035 -0300
++++ /tmp/btfdiff.btf.rxRd6R	2021-03-29 14:36:02.935864663 -0300
+@@ -67255,7 +67255,7 @@ struct cpu_rmap {
+ 	struct {
+ 		u16                index;                /*    16     2 */
+ 		u16                dist;                 /*    18     2 */
+-	} near[0]; /*    16     0 */
++	} near[]; /*    16     0 */
 
--- 
+ 	/* size: 16, cachelines: 1, members: 5 */
+ 	/* last cacheline: 16 bytes */
+@@ -101181,7 +101181,7 @@ struct linux_efi_memreserve {
+ 	struct {
+ 		phys_addr_t        base;                 /*    16     8 */
+ 		phys_addr_t        size;                 /*    24     8 */
+-	} entry[0]; /*    16     0 */
++	} entry[]; /*    16     0 */
+
+ 	/* size: 16, cachelines: 1, members: 4 */
+ 	/* last cacheline: 16 bytes */
+@@ -113516,7 +113516,7 @@ struct netlink_policy_dump_state {
+ 	struct {
+ 		const struct nla_policy  * policy;       /*    16     8 */
+ 		unsigned int       maxtype;              /*    24     4 */
+-	} policies[0]; /*    16     0 */
++	} policies[]; /*    16     0 */
+
+ 	/* size: 16, cachelines: 1, members: 4 */
+ 	/* sum members: 12, holes: 1, sum holes: 4 */
+
+real	0m20.402s
+user	0m19.163s
+sys	0m1.096s
+[acme@five pahole]$
+
+And:
+
+[acme@five pahole]$ ulimit -c 10000000
+[acme@five pahole]$
+[acme@five pahole]$ file tcp_bbr.o
+tcp_bbr.o: ELF 64-bit LSB relocatable, x86-64, version 1 (SYSV), with debug_info, not stripped
+[acme@five pahole]$ readelf -wi tcp_bbr.o | grep DW_AT_producer
+    <d>   DW_AT_producer    : (indirect string, offset: 0x4a97): GNU C89 10.2.1 20200723 (Red Hat 10.2.1-1) -mno-sse -mno-mmx -mno-sse2 -mno-3dnow -mno-avx -m64 -mno-80387 -mno-fp-ret-in-387 -mpreferred-stack-boundary=3 -mskip-rax-setup -mtune=generic -mno-red-zone -mcmodel=kernel -mindirect-branch=thunk-extern -mindirect-branch-register -mrecord-mcount -mfentry -march=x86-64 -g -O2 -std=gnu90 -p -fno-strict-aliasing -fno-common -fshort-wchar -fno-PIE -falign-jumps=1 -falign-loops=1 -fno-asynchronous-unwind-tables -fno-jump-tables -fno-delete-null-pointer-checks -fno-allow-store-data-races -fstack-protector-strong -fno-var-tracking-assignments -fno-strict-overflow -fno-merge-all-constants -fmerge-constants -fstack-check=no -fconserve-stack -fcf-protection=none
+[acme@five pahole]$ fullcircle tcp_bbr.o
+/home/acme/bin/fullcircle: line 38: 3969006 Segmentation fault      (core dumped) ${pfunct_bin} --compile $file > $c_output
+/tmp/fullcircle.4XujnI.c:1435:2: error: unterminated comment
+ 1435 |  /* si
+      |  ^
+/tmp/fullcircle.4XujnI.c:1433:2: error: expected specifier-qualifier-list at end of input
+ 1433 |  u32 *                      saved_syn;            /*  2184     8 */
+      |  ^~~
+codiff: couldn't load debugging info from /tmp/fullcircle.ZOVXGv.o
+/home/acme/bin/fullcircle: line 40: 3969019 Segmentation fault      (core dumped) ${codiff_bin} -q -s $file $o_output
+[acme@five pahole]$
+
+Both seem unrelated to what you've done here, I'm investigating it now.
 
 - Arnaldo
