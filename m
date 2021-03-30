@@ -2,71 +2,309 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-23.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3D610C433E1
-	for <linux-dwarves@archiver.kernel.org>; Tue, 30 Mar 2021 18:25:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 993B3C433C1
+	for <linux-dwarves@archiver.kernel.org>; Tue, 30 Mar 2021 20:09:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EB5F460241
-	for <linux-dwarves@archiver.kernel.org>; Tue, 30 Mar 2021 18:25:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5A6D961959
+	for <linux-dwarves@archiver.kernel.org>; Tue, 30 Mar 2021 20:09:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232793AbhC3SZG (ORCPT
+        id S233298AbhC3UIi (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Tue, 30 Mar 2021 14:25:06 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43940 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232825AbhC3SYg (ORCPT <rfc822;dwarves@vger.kernel.org>);
-        Tue, 30 Mar 2021 14:24:36 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id A28DC619DA;
-        Tue, 30 Mar 2021 18:24:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1617128675;
-        bh=PaVHp3GJPSvfPlmtRMKopTn2d6ryY9y416jYg0mkzlg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=A4QDbP4SVZeH6WS3gPoDVnCXb0i2tivwlzp7ePrSdQE0NWfyzuz5W/MhJJEokQ7Eg
-         jQSpkS3OHYGAOneunyEfc34hIRHY7QY3IU8eM6QaEgiY2Abp8OpicPn1EnwhmBOFoU
-         TVXtp61TB6S6Nb2lmN938ETfbABA4KcrUSqkh4dV7z/4GfG680A+KkxT1bbiL8s9ov
-         yxtzclvwF3aWIijp0rCnLvlqB6cEpvGqFEB/sL1q6XqxRLhdfYumxJgi5YIsA1BMp6
-         YEG8UbSDG5ut9ZXLlc44ZTRrwMxMBmd/lL6txPFyUZpos0WIkK+fHVAnyHVRE6Rffd
-         mlrzUNE5iIszw==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id BC62340647; Tue, 30 Mar 2021 15:24:33 -0300 (-03)
-Date:   Tue, 30 Mar 2021 15:24:33 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
-Cc:     Yonghong Song <yhs@fb.com>, dwarves@vger.kernel.org,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Bill Wendling <morbo@google.com>, bpf@vger.kernel.org,
-        kernel-team@fb.com
-Subject: Re: [PATCH dwarves v3 0/3] permit merging all dwarf cu's for clang
- lto built binary
-Message-ID: <YGNs4QxfGvQozqGS@kernel.org>
-References: <20210328201400.1426437-1-yhs@fb.com>
- <YGIQ9c3Qk+DMa+C7@kernel.org>
- <YGM/Uh61RVExWnTU@kernel.org>
- <YGNpBlf7sLalcFWB@kernel.org>
+        Tue, 30 Mar 2021 16:08:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34532 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233285AbhC3UI2 (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Tue, 30 Mar 2021 16:08:28 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9113C061574
+        for <dwarves@vger.kernel.org>; Tue, 30 Mar 2021 13:08:27 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id hq27so26645963ejc.9
+        for <dwarves@vger.kernel.org>; Tue, 30 Mar 2021 13:08:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=4VAXHfn9dQxBfFXvU1OjkPCS/kAWoQ1l2jM4WMCM4u0=;
+        b=bJWAqBO6f1ZUVALag6L7ET901FctnxqZ9OlmaLXXa1Auy9H5jknIObFimdQvDTSLYt
+         opkxLDix8dTzxm8Km8q/aj1XixWhNV8qWGmCvpqlEIdFcZ7hozWJYIAiEOhdKfFpT5Sk
+         U1zZb/4Z39HJoHOvhrzrE1TpVWZhvqlI7afwVGtlYQ8IydLZSRGyUdLLCFsqBZEl+Lpz
+         Mb7+Si8KdxQBku9gbpvXzcQiZlBWuIisNJLJ6lrxKKvZjcyTOeHlrqtj9mTehRL5HCqK
+         Dn8oZ+3g9qV8CeFeKn/LUIq7+Gj9pSWvoGI8oHNc+S1iwhwRSohFmH5JQRbK1iFwpQQu
+         EDjw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=4VAXHfn9dQxBfFXvU1OjkPCS/kAWoQ1l2jM4WMCM4u0=;
+        b=ZNOqJsqXF2ZSQSzNhDxaWieovqHIsNy0TUlOHtgE4GdHERoTVcC4AGrb6Hz9G3ugrL
+         NDf0Oyim52RZKXW/TO/CI/F1T6bGhwHNfVYshNNuv9vRaEovtWWfDXdP9mPOClM6QZox
+         mekdzJ47sn6NAQzOVVmzM/JP+q9abN1eMWCUQN8rsTNEQbmeIoB+X9e5ABm/oGFT2Vfr
+         RMzRWIljCnCfm+zXRKrIGNVICqHcXZXuclkpSEOv80Qq9oAFy8c2nGOy3fHfwOjnblzJ
+         bZjZbD2eVrh9Ndy520sgq1ANxwE97kr0M+QBUJBfSuU5NOdrIJ0WNFql/h8El63ZnozW
+         mSyg==
+X-Gm-Message-State: AOAM5309NyDVeJqZsrfXB/qlPsx3c3IWBo0AD163VuROztv51epHg8iF
+        BmhjI0RG6kEcmYveR4fGRs2bVwMvNo9cEdm+qDy1
+X-Google-Smtp-Source: ABdhPJw42M2s+TiyvPYMIQNtiV0S6pLgNZOk6ZHKJBgwFXRBT4y41l5eIexwPc/zT1cEiD/tKUvYBcG1l85MJsoxBwc=
+X-Received: by 2002:a17:906:d114:: with SMTP id b20mr34882691ejz.449.1617134906146;
+ Tue, 30 Mar 2021 13:08:26 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YGNpBlf7sLalcFWB@kernel.org>
-X-Url:  http://acmel.wordpress.com
+References: <20210328201400.1426437-1-yhs@fb.com> <20210328201415.1428856-1-yhs@fb.com>
+In-Reply-To: <20210328201415.1428856-1-yhs@fb.com>
+From:   Bill Wendling <morbo@google.com>
+Date:   Tue, 30 Mar 2021 13:08:15 -0700
+Message-ID: <CAGG=3QUxQ+xfY9n8n+5QrTPAR4TDp=_TNfXtnKY32YZXH9WBaA@mail.gmail.com>
+Subject: Re: [PATCH dwarves v3 3/3] dwarf_loader: permit merging all dwarf
+ cu's for clang lto built binary
+To:     Yonghong Song <yhs@fb.com>
+Cc:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
+        dwarves@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
+        kernel-team@fb.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-Em Tue, Mar 30, 2021 at 03:08:06PM -0300, Arnaldo Carvalho de Melo escreveu:
-> [acme@five pahole]$
-> [acme@five pahole]$
-> [acme@five pahole]$ fullcircle tcp_bbr.o
-> [acme@five pahole]$
-> 
-> This one is dealt with, doing some more tests and looking at that
-> array[] versus array[0].
+On Sun, Mar 28, 2021 at 1:14 PM Yonghong Song <yhs@fb.com> wrote:
+>
+> For vmlinux built with clang thin-lto or lto, there exist
+> cross cu type references. For example, the below can happen:
+>   compile unit 1:
+>      tag 10:  type A
+>   compile unit 2:
+>      ...
+>        refer to type A (tag 10 in compile unit 1)
+> I only checked a few but have seen type A may be a simple type
+> like "unsigned char" or a complex type like an array of base types.
+>
+> To resolve this issue, the tag DW_AT_producer of the first
+> DW_TAG_compile_unit is checked. If the binary is built
+> with clang lto, all debuginfo dwarf cu's will be merged
+> into one pahole cu which will resolve the above
+> cross-cu tag reference issue. To test whether a binary
+> is built with clang lto or not, The "clang version"
+> and "-flto" will be checked against DW_AT_producer string
+> for the first 5 debuginfo cu's. The reason is that
+> a few linux files disabled lto for various reasons.
+>
+> Merging cu's will create a single cu with lots of types, tags
+> and functions. For example with clang thin-lto built vmlinux,
+> I saw 9M entries in types table, 5.2M in tags table. The
+> below are pahole wallclock time for different hashbits:
+> command line: time pahole -J vmlinux
+>       # of hashbits            wallclock time in seconds
+>           15                       460
+>           16                       255
+>           17                       131
+>           18                       97
+>           19                       75
+>           20                       69
+>           21                       64
+>           22                       62
+>           23                       58
+>           24                       64
+>
+> The problem is with hashtags__find(), esp. the loop
+>     uint32_t bucket = hashtags__fn(id);
+>     const struct hlist_head *head = hashtable + bucket;
+>     hlist_for_each_entry(tpos, pos, head, hash_node) {
+>             if (tpos->id == id)
+>                     return tpos;
+>     }
+>
+> Say we have 9M types and (1 << 15) buckets, that means each bucket
+> will have roughly 64 elements. So each lookup will traverse
+> the loop 32 iterations on average.
+>
+> If we have 1 << 21 buckets, then each buckets will have 4 elements,
+> and the average number of loop iterations for hashtags__find()
+> will be 2.
+>
+> Note that the number of hashbits 24 makes performance worse
+> than 23. The reason could be that 23 hashbits can cover 8M
+> buckets (close to 9M for the number of entries in types table).
+> Higher number of hash bits allocates more memory and becomes
+> less cache efficient compared to 23 hashbits.
+>
+> This patch picks # of hashbits 21 as the starting value
+> and will try to allocate memory based on that, if memory
+> allocation fails, we will go with less hashbits until
+> we reach hashbits 15 which is the default for
+> non merge-cu case.
+>
+> Signed-off-by: Yonghong Song <yhs@fb.com>
+> ---
+>  dwarf_loader.c | 120 +++++++++++++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 120 insertions(+)
+>
+> diff --git a/dwarf_loader.c b/dwarf_loader.c
+> index aa6372a..a51391e 100644
+> --- a/dwarf_loader.c
+> +++ b/dwarf_loader.c
+> @@ -51,6 +51,7 @@ struct strings *strings;
+>  #endif
+>
+>  static uint32_t hashtags__bits = 15;
+> +static uint32_t max_hashtags__bits = 21;
+>
+>  static uint32_t hashtags__fn(Dwarf_Off key)
+>  {
+> @@ -2484,6 +2485,115 @@ static int cus__load_debug_types(struct cus *cus, struct conf_load *conf,
+>         return 0;
+>  }
+>
+> +static bool cus__merging_cu(Dwarf *dw)
+> +{
+> +       uint8_t pointer_size, offset_size;
+> +       Dwarf_Off off = 0, noff;
+> +       size_t cuhl;
+> +       int cnt = 0;
+> +
+> +       /*
+> +        * Just checking the first cu is not enough.
+> +        * In linux, some C files may have LTO is disabled, e.g.,
+> +        *   e242db40be27  x86, vdso: disable LTO only for vDSO
+> +        *   d2dcd3e37475  x86, cpu: disable LTO for cpu.c
+> +        * Fortunately, disabling LTO for a particular file in a LTO build
+> +        * is rather an exception. Iterating 5 cu's to check whether
+> +        * LTO is used or not should be enough.
+> +        */
+> +       while (dwarf_nextcu(dw, off, &noff, &cuhl, NULL, &pointer_size,
+> +                           &offset_size) == 0) {
+> +               Dwarf_Die die_mem;
+> +               Dwarf_Die *cu_die = dwarf_offdie(dw, off + cuhl, &die_mem);
+> +
+> +               if (cu_die == NULL)
+> +                       break;
+> +
+> +               if (++cnt > 5)
+> +                       break;
+> +
+> +               const char *producer = attr_string(cu_die, DW_AT_producer);
+> +               if (strstr(producer, "clang version") != NULL &&
+> +                   strstr(producer, "-flto") != NULL)
 
-I've pushed what I have to the main repos at kernel.org and github,
-please check, I'll continue from there.
+Instead of checking for flags, which can be a bit brittle, would it
+make more sense to scan the abbreviations to see if there are any
+"sec_offset" encodings used for type attributes to indicate that LTO
+was used?
 
-- Arnaldo
+Thank you for improving on my hacky patch! :-)
+
+-bw
+
+> +                       return true;
+> +
+> +               off = noff;
+> +       }
+> +
+> +       return false;
+> +}
+> +
+> +static int cus__merge_and_process_cu(struct cus *cus, struct conf_load *conf,
+> +                                    Dwfl_Module *mod, Dwarf *dw, Elf *elf,
+> +                                    const char *filename,
+> +                                    const unsigned char *build_id,
+> +                                    int build_id_len,
+> +                                    struct dwarf_cu *type_dcu)
+> +{
+> +       uint8_t pointer_size, offset_size;
+> +       struct dwarf_cu *dcu = NULL;
+> +       Dwarf_Off off = 0, noff;
+> +       struct cu *cu = NULL;
+> +       size_t cuhl;
+> +
+> +       while (dwarf_nextcu(dw, off, &noff, &cuhl, NULL, &pointer_size,
+> +                           &offset_size) == 0) {
+> +               Dwarf_Die die_mem;
+> +               Dwarf_Die *cu_die = dwarf_offdie(dw, off + cuhl, &die_mem);
+> +
+> +               if (cu_die == NULL)
+> +                       break;
+> +
+> +               if (cu == NULL) {
+> +                       cu = cu__new("", pointer_size, build_id, build_id_len,
+> +                                    filename);
+> +                       if (cu == NULL || cu__set_common(cu, conf, mod, elf) != 0)
+> +                               return DWARF_CB_ABORT;
+> +
+> +                       dcu = malloc(sizeof(struct dwarf_cu));
+> +                       if (dcu == NULL)
+> +                               return DWARF_CB_ABORT;
+> +
+> +                       /* Merged cu tends to need a lot more memory.
+> +                        * Let us start with max_hashtags__bits and
+> +                        * go down to find a proper hashtag bit value.
+> +                        */
+> +                       uint32_t default_hbits = hashtags__bits;
+> +                       for (hashtags__bits = max_hashtags__bits;
+> +                            hashtags__bits >= default_hbits;
+> +                            hashtags__bits--) {
+> +                               if (dwarf_cu__init(dcu) == 0)
+> +                                       break;
+> +                       }
+> +                       if (hashtags__bits < default_hbits)
+> +                               return DWARF_CB_ABORT;
+> +
+> +                       dcu->cu = cu;
+> +                       dcu->type_unit = type_dcu;
+> +                       cu->priv = dcu;
+> +                       cu->dfops = &dwarf__ops;
+> +                       cu->language = attr_numeric(cu_die, DW_AT_language);
+> +               }
+> +
+> +               Dwarf_Die child;
+> +               if (dwarf_child(cu_die, &child) == 0) {
+> +                       if (die__process_unit(&child, cu) != 0)
+> +                               return DWARF_CB_ABORT;
+> +               }
+> +
+> +               off = noff;
+> +       }
+> +
+> +       /* process merged cu */
+> +       if (cu__recode_dwarf_types(cu) != LSK__KEEPIT)
+> +               return DWARF_CB_ABORT;
+> +       if (finalize_cu_immediately(cus, cu, dcu, conf)
+> +           == LSK__STOP_LOADING)
+> +               return DWARF_CB_ABORT;
+> +
+> +       return 0;
+> +}
+> +
+>  static int cus__load_module(struct cus *cus, struct conf_load *conf,
+>                             Dwfl_Module *mod, Dwarf *dw, Elf *elf,
+>                             const char *filename)
+> @@ -2518,6 +2628,15 @@ static int cus__load_module(struct cus *cus, struct conf_load *conf,
+>                 }
+>         }
+>
+> +       if (cus__merging_cu(dw)) {
+> +               res = cus__merge_and_process_cu(cus, conf, mod, dw, elf, filename,
+> +                                               build_id, build_id_len,
+> +                                               type_cu ? &type_dcu : NULL);
+> +               if (res)
+> +                       return res;
+> +               goto out;
+> +       }
+> +
+>         while (dwarf_nextcu(dw, off, &noff, &cuhl, NULL, &pointer_size,
+>                             &offset_size) == 0) {
+>                 Dwarf_Die die_mem;
+> @@ -2557,6 +2676,7 @@ static int cus__load_module(struct cus *cus, struct conf_load *conf,
+>                 off = noff;
+>         }
+>
+> +out:
+>         if (type_lsk == LSK__DELETE)
+>                 cu__delete(type_cu);
+>
+> --
+> 2.30.2
+>
