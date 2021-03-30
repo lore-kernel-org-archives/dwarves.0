@@ -2,143 +2,139 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 326E8C433DB
-	for <linux-dwarves@archiver.kernel.org>; Tue, 30 Mar 2021 11:53:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 96956C433E0
+	for <linux-dwarves@archiver.kernel.org>; Tue, 30 Mar 2021 15:11:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0370561982
-	for <linux-dwarves@archiver.kernel.org>; Tue, 30 Mar 2021 11:53:17 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6D9A5619CB
+	for <linux-dwarves@archiver.kernel.org>; Tue, 30 Mar 2021 15:11:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231924AbhC3Lwq (ORCPT
+        id S231650AbhC3PKp (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Tue, 30 Mar 2021 07:52:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39586 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231872AbhC3Lwd (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Tue, 30 Mar 2021 07:52:33 -0400
-Received: from nautica.notk.org (ipv6.notk.org [IPv6:2001:41d0:1:7a93::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D95FC061574
-        for <dwarves@vger.kernel.org>; Tue, 30 Mar 2021 04:52:32 -0700 (PDT)
-Received: by nautica.notk.org (Postfix, from userid 108)
-        id 05134C01D; Tue, 30 Mar 2021 13:52:31 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1617105151; bh=/toK2SJPFBkonP77UYYlqlLGLJM6lLwo2/Bc+OyHfTA=;
+        Tue, 30 Mar 2021 11:10:45 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59052 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231829AbhC3PKN (ORCPT <rfc822;dwarves@vger.kernel.org>);
+        Tue, 30 Mar 2021 11:10:13 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 17674619CA;
+        Tue, 30 Mar 2021 15:10:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1617117013;
+        bh=Ync+P2be63pYubOvM95WOXfKjIPEjUfSlXjmzMMjvyg=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=A1ZLrTaFNfSq1fDfX0r0u5V6tW1OSOgxy6uM5RxV0g1iToWXlQcVI4NfA/6W2NdMx
-         JGw6jxZ7nf5kWnCiBIAaAYXH9I9Pb1i3RJO4e+yusPIGpF3ztJvGe12eqko8LItKH7
-         WKY9bxlM8i3r9aR27kxanBn5vsT65H6x7ruJeOStcvrbAvBSjyjzwi6OoIJ+RgsSWn
-         XzVDavCdWPschCwLAj1BRmBd0D8MelXuF57m/P1KuP0Ayo13dg6He6qnK0bJAW9QL7
-         foFerMRNwjKUEocGGq2/g+VHlIPZhBOrPCsR9fZazcfNuD1q7ej6ibxEkhhqJaWmWo
-         tEbEAkyrEBoYA==
-Received: from odin.codewreck.org (localhost [127.0.0.1])
-        by nautica.notk.org (Postfix) with ESMTPS id 498E4C01A;
-        Tue, 30 Mar 2021 13:52:29 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1617105150; bh=/toK2SJPFBkonP77UYYlqlLGLJM6lLwo2/Bc+OyHfTA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JXHGP+HmjQzVtMN++G1O7tSL7n0Mrr9EtUotNruobImL2ErRgNmqAURqIaeQ220Ow
-         jAECKXMR3FaEHBU10ADq1aTH7Kge5N7oH1y0Ew6SlDsSUbqoikGd0H8YMyun0Yjm0K
-         yInsY/PU5dnFeI8UcTz1UsKPipCpFpe1e7pMMHN5mB6wU4Rd+JXpyAmzN0W0dmqyHQ
-         NcKjp6Nx4HDR/4Uj9DGim5yGN4pPPXX1rsJmhviFDfGX5RjXLszjejVrN7EwikiD60
-         OvOq0cg7Tw8/KH8ECzjQj0D6hIZHw0pZMf+kP6G1qL5OZQxILZmUFIQ5d5iLtHUu4C
-         EMWNEfr4+EGKA==
-Received: from localhost (odin.codewreck.org [local])
-        by odin.codewreck.org (OpenSMTPD) with ESMTPA id fe1a8950;
-        Tue, 30 Mar 2021 11:45:46 +0000 (UTC)
-Date:   Tue, 30 Mar 2021 20:45:31 +0900
-From:   Dominique Martinet <asmadeus@codewreck.org>
-To:     Luca Boccassi <bluca@debian.org>
-Cc:     dwarves@vger.kernel.org, Arnaldo Carvalho de Melo <acme@redhat.com>
-Subject: Re: [PATCH dwarves v3] libbpf: allow to use packaged version
-Message-ID: <YGMPW1JQZcb2vr/W@codewreck.org>
-References: <YGKtSXsLg4HV7eHL@codewreck.org>
- <8cefd2c1cf59c1618365a738677afcb2ab6acd01.camel@debian.org>
- <1ba2e8cdb496248b02fa31ddcccb06c1e4ca3cca.camel@debian.org>
+        b=iZvQJAXgD2Km+7tCTVYtTobEsPu+KzLLeVvMJ7pBFaOufLKO3gVbjPKSkkRlt63wr
+         3ouz4Cd5D9DvS9b0D8yUuX+LrXX5cZFWfishVQU4c8axzuNUkVeHkSw/CSc/qPAt94
+         uGFsGkxgnslkD/AVx5SjoKcByseIql2fSPBx1IoQvYQ5NWF0T1CKXVFuxH9mNEQ7go
+         DPZ0pEWcqAMdX4/6hclFJXWuMXsiN9oH34Ddem9W1dczQWvBewDlkaZq/gm60ry6Jm
+         hJuI6Jef0gDhupiQganaZ+pM/DT4goCSpv9OqqraTak8Njh+gfiG0rpnqYcaKMMWTW
+         MB1zUpuJDHi2A==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id BA5CA40647; Tue, 30 Mar 2021 12:10:10 -0300 (-03)
+Date:   Tue, 30 Mar 2021 12:10:10 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
+Cc:     Yonghong Song <yhs@fb.com>, dwarves@vger.kernel.org,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Bill Wendling <morbo@google.com>, bpf@vger.kernel.org,
+        kernel-team@fb.com
+Subject: Re: [PATCH dwarves v3 0/3] permit merging all dwarf cu's for clang
+ lto built binary
+Message-ID: <YGM/Uh61RVExWnTU@kernel.org>
+References: <20210328201400.1426437-1-yhs@fb.com>
+ <YGIQ9c3Qk+DMa+C7@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1ba2e8cdb496248b02fa31ddcccb06c1e4ca3cca.camel@debian.org>
+In-Reply-To: <YGIQ9c3Qk+DMa+C7@kernel.org>
+X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-Luca Boccassi wrote on Tue, Mar 30, 2021 at 12:06:09PM +0100:
-> > I did not realise it was reverted (if I was pinged and I missed it:
-> > sorry about that) - what was the issue precisely? This has been used on
-> > Ubuntu and Debian for a few months now, no problems reported.
-> > Happy to have a look too if needed.
-
-(FWIW I also have used that patch for alpine linux, and got rebuked for
-expliciting there is a vendored lib when pushing a nixos update so will
-probably need it there as well)
-
-> As far as I can see, on Fedora 33 the only CMake option used is '-
-> DCMAKE_BUILD_TYPE=Release':
+Em Mon, Mar 29, 2021 at 02:40:05PM -0300, Arnaldo Carvalho de Melo escreveu:
+> [acme@five pahole]$ ulimit -c 10000000
+> [acme@five pahole]$
+> [acme@five pahole]$ file tcp_bbr.o
+> tcp_bbr.o: ELF 64-bit LSB relocatable, x86-64, version 1 (SYSV), with debug_info, not stripped
+> [acme@five pahole]$ readelf -wi tcp_bbr.o | grep DW_AT_producer
+>     <d>   DW_AT_producer    : (indirect string, offset: 0x4a97): GNU C89 10.2.1 20200723 (Red Hat 10.2.1-1) -mno-sse -mno-mmx -mno-sse2 -mno-3dnow -mno-avx -m64 -mno-80387 -mno-fp-ret-in-387 -mpreferred-stack-boundary=3 -mskip-rax-setup -mtune=generic -mno-red-zone -mcmodel=kernel -mindirect-branch=thunk-extern -mindirect-branch-register -mrecord-mcount -mfentry -march=x86-64 -g -O2 -std=gnu90 -p -fno-strict-aliasing -fno-common -fshort-wchar -fno-PIE -falign-jumps=1 -falign-loops=1 -fno-asynchronous-unwind-tables -fno-jump-tables -fno-delete-null-pointer-checks -fno-allow-store-data-races -fstack-protector-strong -fno-var-tracking-assignments -fno-strict-overflow -fno-merge-all-constants -fmerge-constants -fstack-check=no -fconserve-stack -fcf-protection=none
+> [acme@five pahole]$ fullcircle tcp_bbr.o
+> /home/acme/bin/fullcircle: line 38: 3969006 Segmentation fault      (core dumped) ${pfunct_bin} --compile $file > $c_output
+> /tmp/fullcircle.4XujnI.c:1435:2: error: unterminated comment
+>  1435 |  /* si
+>       |  ^
+> /tmp/fullcircle.4XujnI.c:1433:2: error: expected specifier-qualifier-list at end of input
+>  1433 |  u32 *                      saved_syn;            /*  2184     8 */
+>       |  ^~~
+> codiff: couldn't load debugging info from /tmp/fullcircle.ZOVXGv.o
+> /home/acme/bin/fullcircle: line 40: 3969019 Segmentation fault      (core dumped) ${codiff_bin} -q -s $file $o_output
+> [acme@five pahole]$
 > 
-> https://src.fedoraproject.org/rpms/dwarves/blob/f33/f/dwarves.spec
-> 
-> On my Debian system, with libbpf-dev installed and after re-instating
-> the patch on an up-to-date master branch of pahole.git, this builds
-> just fine:
+> Both seem unrelated to what you've done here, I'm investigating it now.
 
-I just got home where I have a fedora 33 machine and can confirm it
-works for me on f33 as well.
+The fullcircle one, that crashes at the 'codiff' utility is related to
+the patch that makes dwarf_cu to allocate space for the hash tables, as
+you introduced a destructor for the dwarf_cu hashtables and the dwarf_cu
+that was assigned to cu->priv was a local variable, which wasn't much of
+a problem because we were not freeing it, as it went away at each loop
+iteration, the following patch to that first patch in the series seems
+to cure it, I'm folding it into your patch + a commiter note.
 
-I tried:
- - normal rpmbuild with libbpf + libbpf-devel / libbpf-static installed
- - just libbpf installed
- in both these cases it rebuilds the local libbpf (if the git tree is
- in the tarball it does the submodule checkout, if it's not it
- complains if libbpf wasn't previously checked out but uses it
- properly if it's there)
+- Arnaldo
+
+diff --git a/dwarf_loader.c b/dwarf_loader.c
+index 5a1e860da079e04c..3e7875d4ab577f1b 100644
+--- a/dwarf_loader.c
++++ b/dwarf_loader.c
+@@ -150,6 +150,18 @@ static int dwarf_cu__init(struct dwarf_cu *dcu)
+ 	return 0;
+ }
  
- - just to make sure I've done an extra build from the tarball obtained
-with `fedpkg sources` and applying just the reverted patch manually;
-this also worked as expected.
-
-- I figured it might be a problem on another arch but I don't see
-any failure on koji[1], so can't really test that easily.
-[1] https://koji.fedoraproject.org/koji/packageinfo?packageID=5540
-
- - For completeness I also tried building with fedora's libbpf-devel and
-`-DLIBBPF_EMBEDDED=OFF` without any problem (it will obviously need a
-libbpf update for the float types, but as of 1.20 it works fine with
-libbpf 0.3)
-----------
-diff --git a/rpm/SPECS/dwarves.spec b/rpm/SPECS/dwarves.spec
-index 98433e395b6c..f28bca0fa088 100644
---- a/rpm/SPECS/dwarves.spec
-+++ b/rpm/SPECS/dwarves.spec
-@@ -13,6 +13,7 @@ BuildRequires: gcc
- BuildRequires: cmake >= 2.8.12
- BuildRequires: zlib-devel
- BuildRequires: elfutils-devel >= 0.130
-+BuildRequires: libbpf-devel
++static struct dwarf_cu *dwarf_cu__new(void)
++{
++	struct dwarf_cu *dwarf_cu = zalloc(sizeof(*dwarf_cu));
++
++	if (dwarf_cu != NULL && dwarf_cu__init(dwarf_cu) != 0) {
++		free(dwarf_cu);
++		dwarf_cu = NULL;
++	}
++
++	return dwarf_cu;
++}
++
+ static void dwarf_cu__delete(struct cu *cu)
+ {
+ 	struct dwarf_cu *dcu = cu->priv;
+@@ -2542,21 +2554,20 @@ static int cus__load_module(struct cus *cus, struct conf_load *conf,
+ 		}
+ 		cu->little_endian = ehdr.e_ident[EI_DATA] == ELFDATA2LSB;
  
- %description
- dwarves is a set of tools that use the debugging information inserted in
-@@ -67,7 +68,7 @@ Debugging information processing library development files.
- %setup -q
+-		struct dwarf_cu dcu;
++		struct dwarf_cu *dcu = dwarf_cu__new();
  
- %build
--%cmake -DCMAKE_BUILD_TYPE=Release .
-+%cmake -DCMAKE_BUILD_TYPE=Release -DLIBBPF_EMBEDDED=OFF .
- %cmake_build
+-		if (dwarf_cu__init(&dcu) != 0)
++		if (dcu == NULL)
+ 			return DWARF_CB_ABORT;
  
- %install
-----------
-
-Would appreciate more details if there's anything we can do; my guess is
-that there might have been leftovers from a previous cmake run maybe
-(potentially with previous versions of the patch) and just trying to
-reproduce from a fresh build doesn't get us anywhere... cmake can be
-annoying with its cache sometimes.
-
-
-Thanks,
--- 
-Dominique
+-		dcu.cu = cu;
+-		dcu.type_unit = type_cu ? &type_dcu : NULL;
+-		cu->priv = &dcu;
++		dcu->cu = cu;
++		dcu->type_unit = type_cu ? &type_dcu : NULL;
++		cu->priv = dcu;
+ 		cu->dfops = &dwarf__ops;
+ 
+ 		if (die__process_and_recode(cu_die, cu) != 0)
+ 			return DWARF_CB_ABORT;
+ 
+-		if (finalize_cu_immediately(cus, cu, &dcu, conf)
+-		    == LSK__STOP_LOADING)
++		if (finalize_cu_immediately(cus, cu, dcu, conf) == LSK__STOP_LOADING)
+ 			return DWARF_CB_ABORT;
+ 
+ 		off = noff;
