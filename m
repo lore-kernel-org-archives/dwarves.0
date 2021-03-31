@@ -2,218 +2,89 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F13EFC433E1
-	for <linux-dwarves@archiver.kernel.org>; Wed, 31 Mar 2021 04:31:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EB543C433B4
+	for <linux-dwarves@archiver.kernel.org>; Wed, 31 Mar 2021 13:55:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B6D89619CD
-	for <linux-dwarves@archiver.kernel.org>; Wed, 31 Mar 2021 04:31:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C625960FD8
+	for <linux-dwarves@archiver.kernel.org>; Wed, 31 Mar 2021 13:55:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230291AbhCaEbG (ORCPT
+        id S235755AbhCaNy2 (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Wed, 31 Mar 2021 00:31:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57478 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229852AbhCaEai (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Wed, 31 Mar 2021 00:30:38 -0400
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 477E5C061574;
-        Tue, 30 Mar 2021 21:30:38 -0700 (PDT)
-Received: by mail-yb1-xb30.google.com with SMTP id o66so19762981ybg.10;
-        Tue, 30 Mar 2021 21:30:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=4esu5/8aBEwO8JEPxG1S5eUZ6Mfa6xOvaxBjrBis5jo=;
-        b=NGDXfmF96i8nsiNf+bi/gM7M+dNJBHah5XN8O8c2QqUbQfoQGqizUFTx0GGNqviShy
-         wnZ67UEC6WYJBV3q2C0bsXP/Z+VpYJsyLhYltKAyYvDxf/lQBY/o9zFz83fb+tc4aiHF
-         s/fJ+kGC4KWfPXKqKl54t6S72Zk3oQtH7y1jvkrCnWCntgA2hSFAhkXaU5RWAzM0JNii
-         eclSmxpNABdM6SHq10ts6RRVKjyjcFMTwOo76MvRYsSb8YMNur+IwcJ3dXFEemZXTY2t
-         U6yGozMfmCyPrYIlDmHy9t9jzhJI/NHXJy54R6MYPaYRcKG8aGHqYaqJHseayH1QzhO0
-         9R0Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=4esu5/8aBEwO8JEPxG1S5eUZ6Mfa6xOvaxBjrBis5jo=;
-        b=ih7iV/HLyF8YK3f5MV4v+pGHKM/EjLmrhmyhvbuFd1SrC5qbL30mXE0wrcafhvHh/Q
-         CnQ1GvE+nhaG7eI71MA+GHtaOE+FvIQgLxRgo+QGBXzbZgR0orUfODrofq8Sm+UXW8JX
-         phCm0tpbkqtwytQRA4tofRS0GDzFuf4wNmH/hRt9FVvDbNw8USxmWvrrMDb2tipYVR1q
-         0Hm0elcbarM4xSHnsL6Uiy6izGHtOLJaHLCMUCii5UDxqU1i8M6aTGB2dPxAPCv3p0xs
-         Rw53ub57wft5FKHIyHzrVWZhKKhYRzZueiQCIAPPH5fPp/DS5kSod9DeoWmS26HIA0V0
-         FChw==
-X-Gm-Message-State: AOAM533c8FKYEIVFvtEYevdIYS3e7eqS8CZGraj4l7KjGaJJ9b41mnPm
-        wW1u6QnscNXmNkT0QPov9E58TkOFng17bQ7pwUo=
-X-Google-Smtp-Source: ABdhPJxweHnm+VuaJeNWJzt4Uoef6fHakeC3i3nCligpcWgNv40YeAYWWG9y4YCryDsaKc0B4M8/QCStIEv63y/PruM=
-X-Received: by 2002:a25:c4c5:: with SMTP id u188mr2037199ybf.425.1617165037328;
- Tue, 30 Mar 2021 21:30:37 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210325065316.3121287-1-yhs@fb.com> <20210325065322.3121605-1-yhs@fb.com>
- <CAEf4BzYcfEjeRHD_aVPvJNXqtqR2Uso4Rt+Q4SmCk5+GUoAzEg@mail.gmail.com>
- <55c83f03-1b86-ad79-2bfa-69c8c26fa7d2@fb.com> <YGHd/qO/MwurHcaR@kernel.org>
-In-Reply-To: <YGHd/qO/MwurHcaR@kernel.org>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Tue, 30 Mar 2021 21:30:26 -0700
-Message-ID: <CAEf4BzZR9sfgxwj+6dDh8ohhFH3MdL0BVer9rQbAH3DSME17Lg@mail.gmail.com>
-Subject: Re: [PATCH dwarves 1/3] dwarf_loader: permits flexible HASHTAGS__BITS
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Yonghong Song <yhs@fb.com>,
-        Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
+        Wed, 31 Mar 2021 09:54:28 -0400
+Received: from mail.kernel.org ([198.145.29.99]:53028 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235777AbhCaNyV (ORCPT <rfc822;dwarves@vger.kernel.org>);
+        Wed, 31 Mar 2021 09:54:21 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 68A8C606A5;
+        Wed, 31 Mar 2021 13:54:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1617198860;
+        bh=mlpmYDu/MgPmlL9JJGa4xFueLTSyrRKM59SWYXdWgPo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=p7m2dEc5+l1WmN9RPwRtdmJKTVrjyumk72TWimeufafY0BiPGhih6y1/xagJjhWN+
+         hN5N6n9wayJz+j5mrxE9wMsCI7jF6jWv3u2muv+S4Uua38hKAw1AHuggsMBnV3Ke4M
+         5GgaMxyegSEMxx6FtV8ocl7eyPVwqqD4XIundCSUa6X923cyUnglBHohheoJTxiBau
+         0WjEzs9QNcru9gckaQg0cgJItbZ+QlwPXY9+fn5lfE7bAn4fQ8aFNZT1LAW+ZbB+ge
+         9F/xE1BRD8Fkn9eU4b9xcaQCCecf0sO6HlLnnvwaBsSm2Ly1yXdILo6JaUZzPSKUmO
+         5h7WpNrptDeIQ==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 9D64440647; Wed, 31 Mar 2021 10:54:17 -0300 (-03)
+Date:   Wed, 31 Mar 2021 10:54:17 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Yonghong Song <yhs@fb.com>
+Cc:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
         dwarves@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
         Andrii Nakryiko <andrii@kernel.org>,
-        Bill Wendling <morbo@google.com>, bpf <bpf@vger.kernel.org>,
-        Kernel Team <kernel-team@fb.com>
-Content-Type: text/plain; charset="UTF-8"
+        Bill Wendling <morbo@google.com>, bpf@vger.kernel.org,
+        kernel-team@fb.com
+Subject: Re: [PATCH dwarves v3 0/3] permit merging all dwarf cu's for clang
+ lto built binary
+Message-ID: <YGR/Cc3/39V0kRuj@kernel.org>
+References: <20210328201400.1426437-1-yhs@fb.com>
+ <YGIQ9c3Qk+DMa+C7@kernel.org>
+ <YGM/Uh61RVExWnTU@kernel.org>
+ <YGNpBlf7sLalcFWB@kernel.org>
+ <YGNs4QxfGvQozqGS@kernel.org>
+ <503f852c-a7f4-efb2-5fd3-8431721dd67a@fb.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <503f852c-a7f4-efb2-5fd3-8431721dd67a@fb.com>
+X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-On Mon, Mar 29, 2021 at 7:02 AM Arnaldo Carvalho de Melo
-<acme@kernel.org> wrote:
->
-> Em Fri, Mar 26, 2021 at 04:26:20PM -0700, Yonghong Song escreveu:
-> >
-> >
-> > On 3/26/21 4:13 PM, Andrii Nakryiko wrote:
-> > > On Wed, Mar 24, 2021 at 11:53 PM Yonghong Song <yhs@fb.com> wrote:
-> > > >
-> > > > Currently, types/tags hash table has fixed HASHTAGS__BITS = 15.
-> > > > That means the number of buckets will be 1UL << 15 = 32768.
-> > > > In my experiments, a thin-LTO built vmlinux has roughly 9M entries
-> > > > in types table and 5.2M entries in tags table. So the number
-> > > > of buckets is too less for an efficient lookup. This patch
-> > > > refactored the code to allow the number of buckets to be changed.
-> > > >
-> > > > In addition, currently hashtags__fn(key) return value is
-> > > > assigned to uint16_t. Change to uint32_t as in a later patch
-> > > > the number of hashtag bits can be increased to be more than 16.
-> > > >
-> > > > Signed-off-by: Yonghong Song <yhs@fb.com>
-> > > > ---
-> > > >   dwarf_loader.c | 48 +++++++++++++++++++++++++++++++++++++-----------
-> > > >   1 file changed, 37 insertions(+), 11 deletions(-)
-> > > >
-> > > > diff --git a/dwarf_loader.c b/dwarf_loader.c
-> > > > index c106919..a02ef23 100644
-> > > > --- a/dwarf_loader.c
-> > > > +++ b/dwarf_loader.c
-> > > > @@ -50,7 +50,12 @@ struct strings *strings;
-> > > >   #define DW_FORM_implicit_const 0x21
-> > > >   #endif
-> > > >
-> > > > -#define hashtags__fn(key) hash_64(key, HASHTAGS__BITS)
-> > > > +static uint32_t hashtags__bits = 15;
-> > > > +
-> > > > +uint32_t hashtags__fn(Dwarf_Off key)
-> > > > +{
-> > > > +       return hash_64(key, hashtags__bits);
-> > >
-> > > I vaguely remember pahole patch that updated hash function to use the
-> > > same one as libbpf's hashmap is using. Arnaldo, wasn't that patch
-> > > accepted?
->
-> I guess so:
->
-> https://git.kernel.org/pub/scm/devel/pahole/pahole.git/commit/?id=9fecc77ed82d429fd3fe49ba275465813228e617
+Em Tue, Mar 30, 2021 at 08:20:20PM -0700, Yonghong Song escreveu:
+> On 3/30/21 11:24 AM, Arnaldo Carvalho de Melo wrote:
+> > Em Tue, Mar 30, 2021 at 03:08:06PM -0300, Arnaldo Carvalho de Melo escreveu:
+> > > [acme@five pahole]$ fullcircle tcp_bbr.o
+> > > [acme@five pahole]$
 
-Oh, my bad. I fetched the latest master but didn't notice that I had
-some local changes that conflicted, so my master didn't actually
-update. Sorry about the noise.
+> > > This one is dealt with, doing some more tests and looking at that
+> > > array[] versus array[0].
 
->
-> dwarf_loader: Use a better hashing function, from libbpf
->
-> This hashing function[1] produces better hash table bucket
-> distributions. The original hashing function always produced zeros in
-> the three least significant bits. The new hashing function gives a
-> modest performance boost:
->
->   Original: 0:11.373s
->   New:      0:11.110s
->
-> for a performance improvement of ~2%.
->
-> [1] From the hash function used in libbpf.
->
-> Committer notes:
->
-> Bill found the suboptimality of the hash function being used, Andrii
-> suggested using the libbpf one, which ended up being better.
->
-> Signed-off-by: Bill Wendling <morbo@google.com>
-> Suggested-by: Andrii Nakryiko <andrii@kernel.org>
-> Cc: bpf@vger.kernel.org
-> Cc: dwarves@vger.kernel.org
-> Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
->
-> > > But more to the point, I think hashtags__fn() should probably preserve
-> > > all 64 bits of the hash?
-> >
-> > I don't know the context. If the purpose is to avoid future changes
-> > in case that the hashtags__bits > 32 happens, yes, the change may
-> > make sense.
-> >
-> > >
-> > > > +}
-> > > >
-> > > >   bool no_bitfield_type_recode = true;
-> > > >
-> > > > @@ -102,9 +107,6 @@ static void dwarf_tag__set_spec(struct dwarf_tag *dtag, dwarf_off_ref spec)
-> > > >          *(dwarf_off_ref *)(dtag + 1) = spec;
-> > > >   }
-> > > >
-> > > > -#define HASHTAGS__BITS 15
-> > > > -#define HASHTAGS__SIZE (1UL << HASHTAGS__BITS)
-> > > > -
-> > > >   #define obstack_chunk_alloc malloc
-> > > >   #define obstack_chunk_free free
-> > > >
-> > > > @@ -118,22 +120,41 @@ static void *obstack_zalloc(struct obstack *obstack, size_t size)
-> > > >   }
-> > > >
-> > > >   struct dwarf_cu {
-> > > > -       struct hlist_head hash_tags[HASHTAGS__SIZE];
-> > > > -       struct hlist_head hash_types[HASHTAGS__SIZE];
-> > > > +       struct hlist_head *hash_tags;
-> > > > +       struct hlist_head *hash_types;
-> > > >          struct obstack obstack;
-> > > >          struct cu *cu;
-> > > >          struct dwarf_cu *type_unit;
-> > > >   };
-> > > >
-> > > > -static void dwarf_cu__init(struct dwarf_cu *dcu)
-> > > > +static int dwarf_cu__init(struct dwarf_cu *dcu)
-> > > >   {
-> > > > +       uint64_t hashtags_size = 1UL << hashtags__bits;
-> > >
-> > > I wish pahole could just use libbpf's dynamically resized hashmap,
-> > > instead of hard-coding maximum size like this :(
-> > >
-> > > Arnaldo, libbpf is not going to expose its hashmap as public API, but
-> > > if you'd like to use it, feel free to just copy/paste the code. It
-> > > hasn't change for a while and is unlikely to change (unless some day
-> > > we decide to make more efficient open-addressing implementation).
-> > >
-> > > > +       dcu->hash_tags = malloc(sizeof(struct hlist_head) * hashtags_size);
-> > > > +       if (!dcu->hash_tags)
-> > > > +               return -ENOMEM;
-> > > > +
-> > > > +       dcu->hash_types = malloc(sizeof(struct hlist_head) * hashtags_size);
-> > > > +       if (!dcu->hash_types) {
-> > > > +               free(dcu->hash_tags);
-> > > > +               return -ENOMEM;
-> > > > +       }
-> > > > +
-> > >
-> > > [...]
-> > >
->
-> --
->
-> - Arnaldo
+> > I've pushed what I have to the main repos at kernel.org and github,
+> > please check, I'll continue from there.
+
+> Looks good. Thanks!
+
+> I will try to experiment with an alternative way ([1]) to check whether
+> cross-cu reference happens or not. But at least checking flags
+> approach can be adapted to gcc (if we want after comparing the alternative)
+> since gcc always has flags in dwarf.
+ 
+> [1] https://lore.kernel.org/bpf/d34a3d62-bae8-3a30-26b6-4e5e8efcd0af@fb.com/T/#m1b0b1206091c19a90b15d054aa26239101289f84
+
+I thought about some other method, like adding a ELF note to vmlinux
+stating that this was built with LTO, that would be the fastest way, I
+think. If that note wasn't there, then we would fallback to looking at
+inter CU references, that way we would have the best of both worlds and
+wouldn't incur in per-CU DW_AT_producer overheads with the flags for
+each object file.
+
+- Arnaldo
