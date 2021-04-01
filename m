@@ -5,61 +5,62 @@ X-Spam-Level:
 X-Spam-Status: No, score=-23.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no
+	URIBL_BLOCKED,USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E80A9C433ED
-	for <linux-dwarves@archiver.kernel.org>; Thu,  1 Apr 2021 19:26:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D0110C433ED
+	for <linux-dwarves@archiver.kernel.org>; Thu,  1 Apr 2021 19:26:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B4F3161001
-	for <linux-dwarves@archiver.kernel.org>; Thu,  1 Apr 2021 19:26:49 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 900D4601FD
+	for <linux-dwarves@archiver.kernel.org>; Thu,  1 Apr 2021 19:26:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234606AbhDAT0q (ORCPT
+        id S234798AbhDAT0v (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Thu, 1 Apr 2021 15:26:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52222 "EHLO
+        Thu, 1 Apr 2021 15:26:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234613AbhDAT0m (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Thu, 1 Apr 2021 15:26:42 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 910F2C02FE97
-        for <dwarves@vger.kernel.org>; Thu,  1 Apr 2021 11:50:16 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id b4so4319990lfi.6
-        for <dwarves@vger.kernel.org>; Thu, 01 Apr 2021 11:50:16 -0700 (PDT)
+        with ESMTP id S234724AbhDAT0o (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Thu, 1 Apr 2021 15:26:44 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 245ECC08EA72
+        for <dwarves@vger.kernel.org>; Thu,  1 Apr 2021 11:52:18 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id o126so4390655lfa.0
+        for <dwarves@vger.kernel.org>; Thu, 01 Apr 2021 11:52:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=1KmEagxK+rhdAhvN7uNMepKmJEX8gVa3xuxeYizT0aQ=;
-        b=LJ6w4Y2MjdRR9qq6CmzLbI/1TIGqZxQz3fw/4U4ekFeyWFUGW7JANMOSJun4pZvhZw
-         0IfgNf7PA2cHVO8cvFSNXUgTdqv9CQ9UVLyL5IRijcT9PZjLOC5Wv/+ZW847NudcwHwB
-         s9drZQTiwl72nebslb9YgbCW/5eWip06VuOdPubCKv5xQk2WwlsoC6kUAkCgzGAMLzHR
-         Uy1x8e+xn+aj5Nl703kI8nraLZKOoH9n0Sc23mU2No2drb1zIkUXOquRizeyXAPrrlvN
-         J2rKHihIJNb7dc4Gz1PodvPmohjGOFoYOmg7rEy+cGZEyjej7lTAW8g3FthGnJRfpA/n
-         T+HQ==
+        bh=8Q79yaLa6qiQxBv9b9MkvioXf2LOU6WkhvfG8/Umzb4=;
+        b=HC6Gds+eSDjH+muA5S2kexIFZZzflJIO1bT0aF6AH24Tcz+d1+wm872mnciOF5deng
+         PK5JZXM5T93lfkRPKea99QWrDfzXGBGQzrbfmfIxAJs60/vZNH498A/SnMGx7gla3YwQ
+         uK7L9V+aWiApQaCawfKOkf+pQBYwapPsUJHZ9nvtm33/e0xnxficI/Nd71jpDj0eXCl/
+         T/DJJaeurUeQMFNDnARPkdVbOeQoFcbr3SB+ufTXudVnWtZeG5jTRTx1Kkdze2JE8kkX
+         dYRjmI+jdrpUTFFmlZlvcYCuAgb2fOlQKcWM7aOlLZpqcck4k0hJlLwuE0K6udpgjcvD
+         ETRg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=1KmEagxK+rhdAhvN7uNMepKmJEX8gVa3xuxeYizT0aQ=;
-        b=TcBo9Vux+n5ySb+AagQKEAMLtT/OD7ZrlsAvEVjg9XosQARbiVnRHHPW7B7tuoefC0
-         p4JSz3QjnA/izh9jzMzY9/UIPzj58nhflaYa1fjg9HfsRDZI2xoE8PAa9WAT2Xpa4JS3
-         hLWeuytnNxbVnbzAlQSs3gpQw3biTW8jOso18m+S9hs5abjc8IXMJuSQrs4VZxu9PSg3
-         QgsVFBb0lkA73zkrzN10JZxj3YhBmC6SDAjulJDRqrm8drS5hAl15FYlUmMLewZRSkJJ
-         W7pVT/2U1eSlfSwRTGVF38kjM5a3Z9HKy2ysjVsNVJZJ43JS05DKKod9gi1kXvZNorQf
-         Yu1w==
-X-Gm-Message-State: AOAM531azv9ntfWXNpvwpsKFnkw+L0/OCTYZADRDYrPR4/9in5Flh/g0
-        tgAxqJ93AjLpxVpKssXAz8qnb/sG619Iyf2gI4yRXeeLBu4cig==
-X-Google-Smtp-Source: ABdhPJzvHydJMrRKLEe5lQTcugNGl+V7JelQ4joFmeW58ikkQ+BHMey+pVknxNuG9KflDH1qaMkAGKFZm/ll5ytWc2s=
-X-Received: by 2002:a19:8c19:: with SMTP id o25mr6411654lfd.547.1617303014926;
- Thu, 01 Apr 2021 11:50:14 -0700 (PDT)
+        bh=8Q79yaLa6qiQxBv9b9MkvioXf2LOU6WkhvfG8/Umzb4=;
+        b=oehugYbjIExGdCyEhGgAeuwzNRM4ux5lL356f/LAN8p4PnuLFi2aXzxLYICxFt0DNp
+         jQl9d7SKRSNMmwAEpmq1JAaKvXICSLHluGVmPSIlIzZAsnCTdQiN7LPWiS7Lbl1BC2uP
+         eU8J6PA11qCazee9Bsr8pmbg1Q1vN4lwXXXfjNrl3lGi+Xla++J/FYdudvCBTmtOsx9t
+         aPAbGEWMz1JjumpFrEvKYaX+n6rWMYhF1iuV64mZs+B0hcg8ALb0+IihF7bjvMEAqV8X
+         QgGTnfWzCHWjecnvrq9iN6AKgcbsLHsAp52BFZ/MCoQUcKsSHfvDKfzi1UXKvfvfAdHE
+         w8eA==
+X-Gm-Message-State: AOAM530wMfVkW2GZynKjAtONuV72v/xY45SRVTjTX458Cv54HuUHEsTP
+        EE/jUkVsD01uSnRwX4dnDybLGAvR0KP8S61NgQ6BHA==
+X-Google-Smtp-Source: ABdhPJx9MrQV+dN7F49wOAUNPCOKxeFdRMAvYCyScitDuCU6uGcvX1leOCGXUbV2LcBs62W/8nAQkTIEbGP6xxvaqmA=
+X-Received: by 2002:ac2:538e:: with SMTP id g14mr6185269lfh.543.1617303136216;
+ Thu, 01 Apr 2021 11:52:16 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210401025815.2254256-1-yhs@fb.com>
-In-Reply-To: <20210401025815.2254256-1-yhs@fb.com>
+References: <20210401025815.2254256-1-yhs@fb.com> <20210401025820.2254482-1-yhs@fb.com>
+In-Reply-To: <20210401025820.2254482-1-yhs@fb.com>
 From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Thu, 1 Apr 2021 11:50:03 -0700
-Message-ID: <CAKwvOdka=a-RtLzBdEQm5s570rLSDLfRD4Xf8SxOQHWcTdUz3w@mail.gmail.com>
-Subject: Re: [PATCH dwarves 0/2] dwarf_loader: improve cus__merging_cu()
+Date:   Thu, 1 Apr 2021 11:52:05 -0700
+Message-ID: <CAKwvOd=mzDREDAXCxdFzSWnxC1hNc7udMXc7Lrf50qmJk9zE7Q@mail.gmail.com>
+Subject: Re: [PATCH dwarves 1/2] dwarf_loader: check .debug_abbrev for
+ cross-cu references
 To:     Yonghong Song <yhs@fb.com>
 Cc:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
         dwarves@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
@@ -67,8 +68,7 @@ Cc:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
         Bill Wendling <morbo@google.com>, bpf <bpf@vger.kernel.org>,
         David Blaikie <dblaikie@gmail.com>,
         =?UTF-8?B?RsSBbmctcnXDrCBTw7JuZw==?= <maskray@google.com>,
-        kernel-team@fb.com,
-        clang-built-linux <clang-built-linux@googlegroups.com>
+        kernel-team@fb.com, David Blaikie <blaikie@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
@@ -76,44 +76,125 @@ X-Mailing-List: dwarves@vger.kernel.org
 
 On Wed, Mar 31, 2021 at 7:58 PM Yonghong Song <yhs@fb.com> wrote:
 >
-> Function cus__merging_cu() is introduced in Commit 39227909db3c
-> ("dwarf_loader: Permit merging all DWARF CU's for clang LTO built
-> binary") to test whether cross-cu references may happen.
-> The original implementation anticipates compilation flags
-> in dwarf, but later some concerns about binary size surfaced
-> and the decision is to scan .debug_abbrev as a faster way
-> to check cross-cu references. Also putting a note in vmlinux
-> to indicate whether lto is enabled for built or not can
-> provide a much faster way.
+> Commit 39227909db3c checked compilation flags to see
+> whether the binary is built with lto or not (-flto).
+> Currently, for clang lto build, default setting
+> won't put compilation flags in dwarf due to size
+> concern.
 >
-> This patch set implemented this two approaches, first
-> checking the note (in Patch #2), if not found, then
-> check .debug_abbrev (in Patch #1).
-
-For the series:
-
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-Tested-by: Nick Desaulniers <ndesaulniers@google.com>
-
-(Noting for others on our mailing list:
-https://lore.kernel.org/linux-kbuild/20210401012406.1800957-1-yhs@fb.com/
-is a series of kernel patches required to test this. I had feedback on
-the kernel patches, but this approach in pahole LGTM since I think
-using simple notes in ELF is a good approach).
-
+> David Blaikie suggested in [1] to scan through .debug_abbrev
+> for DW_FORM_ref_addr which should be most faster than
+> scanning through cu's. This patch implemented this
+> suggestion and replaced the previous compilation flag
+> matching approach. Indeed, it seems that the overhead
+> for this approach is indeed managable.
 >
-> Yonghong Song (2):
->   dwarf_loader: check .debug_abbrev for cross-cu references
->   dwarf_loader: check .notes section for lto build info
+> I did some change to measure the overhead of cus_merging_cu():
+>   @@ -2650,7 +2652,15 @@ static int cus__load_module(struct cus *cus, struct conf_load *conf,
+>                   }
+>           }
 >
->  dwarf_loader.c | 76 ++++++++++++++++++++++++++++++++++++--------------
->  1 file changed, 55 insertions(+), 21 deletions(-)
+>   -       if (cus__merging_cu(dw)) {
+>   +       bool do_merging;
+>   +       struct timeval start, end;
+>   +       gettimeofday(&start, NULL);
+>   +       do_merging = cus__merging_cu(dw);
+>   +       gettimeofday(&end, NULL);
+>   +       fprintf(stderr, "%ld %ld -> %ld %ld\n", start.tv_sec, start.tv_usec,
+>   +                       end.tv_sec, end.tv_usec);
+>   +
+>   +       if (do_merging) {
+>                   res = cus__merge_and_process_cu(cus, conf, mod, dw, elf, filename,
+>                                                   build_id, build_id_len,
+>                                                   type_cu ? &type_dcu : NULL);
 >
+> For lto vmlinux, the cus__merging_cu() checking takes
+> 130us over total "pahole -J vmlinux" time 65sec as the function bail out
+> earlier due to detecting a merging cu condition.
+> For non-lto vmlinux, the cus__merging_cu() checking takes
+> ~171368us over total pahole time 36sec, roughly 0.5% overhead.
+>
+>  [1] https://lore.kernel.org/bpf/20210328064121.2062927-1-yhs@fb.com/
+>
+
+It might be a nice little touch to add:
+
+Suggested-by: David Blaikie <blaikie@google.com>
+
+> Signed-off-by: Yonghong Song <yhs@fb.com>
+> ---
+>  dwarf_loader.c | 43 ++++++++++++++++++++++++-------------------
+>  1 file changed, 24 insertions(+), 19 deletions(-)
+>
+> diff --git a/dwarf_loader.c b/dwarf_loader.c
+> index c1ca1a3..bd23751 100644
+> --- a/dwarf_loader.c
+> +++ b/dwarf_loader.c
+> @@ -2503,35 +2503,40 @@ static int cus__load_debug_types(struct cus *cus, struct conf_load *conf,
+>
+>  static bool cus__merging_cu(Dwarf *dw)
+>  {
+> -       uint8_t pointer_size, offset_size;
+>         Dwarf_Off off = 0, noff;
+>         size_t cuhl;
+> -       int cnt = 0;
+>
+> -       /*
+> -        * Just checking the first cu is not enough.
+> -        * In linux, some C files may have LTO is disabled, e.g.,
+> -        *   e242db40be27  x86, vdso: disable LTO only for vDSO
+> -        *   d2dcd3e37475  x86, cpu: disable LTO for cpu.c
+> -        * Fortunately, disabling LTO for a particular file in a LTO build
+> -        * is rather an exception. Iterating 5 cu's to check whether
+> -        * LTO is used or not should be enough.
+> -        */
+> -       while (dwarf_nextcu(dw, off, &noff, &cuhl, NULL, &pointer_size,
+> -                           &offset_size) == 0) {
+> +       while (dwarf_nextcu (dw, off, &noff, &cuhl, NULL, NULL, NULL) == 0) {
+>                 Dwarf_Die die_mem;
+>                 Dwarf_Die *cu_die = dwarf_offdie(dw, off + cuhl, &die_mem);
+>
+>                 if (cu_die == NULL)
+>                         break;
+>
+> -               if (++cnt > 5)
+> -                       break;
+> +               Dwarf_Off offset = 0;
+> +               while (true) {
+> +                       size_t length;
+> +                       Dwarf_Abbrev *abbrev = dwarf_getabbrev (cu_die, offset, &length);
+> +                       if (abbrev == NULL || abbrev == DWARF_END_ABBREV)
+> +                               break;
+>
+> -               const char *producer = attr_string(cu_die, DW_AT_producer);
+> -               if (strstr(producer, "clang version") != NULL &&
+> -                   strstr(producer, "-flto") != NULL)
+> -                       return true;
+> +                       size_t attrcnt;
+> +                       if (dwarf_getattrcnt (abbrev, &attrcnt) != 0)
+> +                               return false;
+> +
+> +                       unsigned int attr_num, attr_form;
+> +                       Dwarf_Off aboffset;
+> +                       size_t j;
+> +                       for (j = 0; j < attrcnt; ++j) {
+> +                               if (dwarf_getabbrevattr (abbrev, j, &attr_num, &attr_form,
+> +                                                        &aboffset))
+> +                                       return false;
+> +                               if (attr_form == DW_FORM_ref_addr)
+> +                                       return true;
+> +                       }
+> +
+> +                       offset += length;
+> +               }
+>
+>                 off = noff;
+>         }
 > --
 > 2.30.2
 >
 
 
---
+-- 
 Thanks,
 ~Nick Desaulniers
