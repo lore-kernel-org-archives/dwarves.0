@@ -2,151 +2,152 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-17.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MSGID_FROM_MTA_HEADER,NICE_REPLY_A,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,MSGID_FROM_MTA_HEADER,
+	NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DA308C433B4
-	for <linux-dwarves@archiver.kernel.org>; Sat,  3 Apr 2021 20:21:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D2F89C433ED
+	for <linux-dwarves@archiver.kernel.org>; Sat,  3 Apr 2021 23:14:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9D92C6127A
-	for <linux-dwarves@archiver.kernel.org>; Sat,  3 Apr 2021 20:21:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 98043611AF
+	for <linux-dwarves@archiver.kernel.org>; Sat,  3 Apr 2021 23:14:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236415AbhDCUVE (ORCPT
+        id S236684AbhDCXOH (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Sat, 3 Apr 2021 16:21:04 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:57504 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231658AbhDCUVE (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Sat, 3 Apr 2021 16:21:04 -0400
-Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 133KGHnu013160;
-        Sat, 3 Apr 2021 13:20:56 -0700
+        Sat, 3 Apr 2021 19:14:07 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:58420 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S236625AbhDCXOG (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Sat, 3 Apr 2021 19:14:06 -0400
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 133NBJsR022986;
+        Sat, 3 Apr 2021 16:13:58 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=subject : to : cc :
  references : from : message-id : date : in-reply-to : content-type :
  content-transfer-encoding : mime-version; s=facebook;
- bh=b4mZimQ9lcQT34IDHn6emeqV+UqnQ+Rx6DUOuI9BNsA=;
- b=WSe/EaMWmyReKnwdBsIJHJqgfrtlQsABlZ7JR3SCYSD9veuhHLGa9Sh62E6WXzk68abr
- wmmGiLjDcTRFB+r9s1qj70xhiN7Ip7ZMRBfXwBCoiz83MtTFmTNvROmN8Bb7KgmpOXdZ
- ZL0WKW3F/PtbGFbNhb91j3EFcto2hBzu944= 
+ bh=5zAGsTrsGN9TODtj20Fj0kYuHfwRF5NJJWFVEKQTAjo=;
+ b=DWNOsjMn4cEVbNq4i54pxVIm/bWsVsNkN88KXUXpQ7ri5boPvf5/KNdt7Z3eXgkkEowM
+ JPIBqPb3EUUq+YAUGCDJqi7kDZbyiKuR6YnBUWY07eILRSOyZBCox3kGjZ0Gz0TVnGvy
+ lDm/5z7UXGO4j2HAAOQ+cLrNnSg7cDv56ds= 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 37pvdnrdrj-1
+        by mx0a-00082601.pphosted.com with ESMTP id 37q0ge862y-14
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Sat, 03 Apr 2021 13:20:56 -0700
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (100.104.31.183)
- by o365-in.thefacebook.com (100.104.36.101) with Microsoft SMTP Server
+        Sat, 03 Apr 2021 16:13:58 -0700
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (100.104.31.183)
+ by o365-in.thefacebook.com (100.104.36.100) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Sat, 3 Apr 2021 13:20:55 -0700
+ 15.1.2176.2; Sat, 3 Apr 2021 16:13:54 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=LiHc3Ma0MPwu8xnxNLY+SD/KelmScXrNJldwvjZNgcYhT6YS7uYbfEAVDa1MgXGve9DXzFWcQkb8f6C2T7JLU9jtlhJD1t7cpxOfDbp3ZoMXe6LqIDDYukCTBjep61M/1wf0jEG0+kyz+er/tpaLfn02uaLu2L3bDYV0qmQMSrOFb2Y+m7joVbCqK/9KNn9Odzvc/pp2raT0SiWwcf4+v4a8FIruz3ogLKTjTH030ge3z6KZjD0Pnkbk/RQkXYR6ZwSBkTzMxNxHp9V6QTcjq+b5Ua6MU9Lmci/F1md+k1ts6O5QQF9HZuKVlEA4mmLT9Slfn3TdXpwnC4e16qbvXA==
+ b=eofafT+QAyQcvIj4NMhUM7TyqhNtP6P/z6ElzuvJkG6Qe69E6D1wL3vX2wlCaGBQfAGkX2a21P4/wq4tlTMGUYh2ajK0kmFrTn4cDr9DkWHw1u8qepnzT+npR7jn6SDMO1cHkOHUXVQAIxV6of2Z8a1RupfzrYOQT7u6jXnFO4blA0kamAgzBilb47biQvS0ERmx2XpgbMVhqWh0vXVUIQ9r0cJS/otDojUO0m6D16q6JohSq4nbjq4yVtw/rCCV6ktojrW/VvFEUHrDVv8IvQ6BSL9RF/oxMtxvyvtVoEJQBZ4+Xb5WTrSP93wwKkvbZkJu5NooySTiOnT7jWkSaA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=b4mZimQ9lcQT34IDHn6emeqV+UqnQ+Rx6DUOuI9BNsA=;
- b=AplMn6ME71tnyu94Y3yVk/Fd3qxbxyRCDADzkbM9RFXP2g4bMD7U/Eo/MSBllDNV7bBys0r5SWElb5vyeWc891ySQgsbyD0aMoAMw4Y97T3KjMGwwHbQkYOP4NimtyJQNhfVoawEIRNpd5n6WEoivUh28/Tm6s+EemcSBof877WXpQAYeslQ81tav5btvYTHFoNNbTZFOGJJIOfSCH+SBt7ob8FZFZi1T+mzInGbkH7UieaX2gIqUBgICmHuHcPUXyh5CE7Aov99mgInpPUaZtpvu0/FzaMhrIUJFA42TGFxN9lOTZMMUhOVyx1hW4f4kEB1JzNuAusQHLU5IiwEAA==
+ bh=5zAGsTrsGN9TODtj20Fj0kYuHfwRF5NJJWFVEKQTAjo=;
+ b=cg3NX6QhnSpvcmnmFqWehGgRJ97CgECLggYOQHUCrYVwqzOmfHHUBdw0x+2Fer7aBbdsvhcHtf2inuyIeFs+zBHXULH6GaM0H0QpWA3VVbWlINAX8hr7SjpokSQgSxwnpyudwDM3LyQ8VFKiL9BeIxgpWLlf4Q93YZjHptecXMPfxXJpiT3d8omMPBmT5PLcQ7Kihbt0Neh5pLTIn/Ud056ipdp872xKyu9RbyHe6FhbiCfYA3jpFTlzHPbsJhKEidULr9rwhHg/5BmzNi3QyQWyFnFmDdh6QAuTd9spzrATbpuWe9Pe2J7o+CwJautqxFZnDMmMjTtpzkd5HLqq3g==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
  header.d=fb.com; arc=none
-Authentication-Results: gmail.com; dkim=none (message not signed)
- header.d=none;gmail.com; dmarc=none action=none header.from=fb.com;
+Authentication-Results: google.com; dkim=none (message not signed)
+ header.d=none;google.com; dmarc=none action=none header.from=fb.com;
 Received: from SN6PR1501MB2064.namprd15.prod.outlook.com (2603:10b6:805:d::27)
- by SA1PR15MB4644.namprd15.prod.outlook.com (2603:10b6:806:19f::16) with
+ by SN6PR1501MB4093.namprd15.prod.outlook.com (2603:10b6:805:63::22) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3999.28; Sat, 3 Apr
- 2021 20:20:52 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3999.27; Sat, 3 Apr
+ 2021 23:13:53 +0000
 Received: from SN6PR1501MB2064.namprd15.prod.outlook.com
  ([fe80::f433:fd99:f905:8912]) by SN6PR1501MB2064.namprd15.prod.outlook.com
  ([fe80::f433:fd99:f905:8912%3]) with mapi id 15.20.3999.032; Sat, 3 Apr 2021
- 20:20:52 +0000
+ 23:13:53 +0000
 Subject: Re: [PATCH dwarves] dwarf_loader: handle DWARF5 DW_OP_addrx properly
-To:     David Blaikie <dblaikie@gmail.com>
+To:     <sedat.dilek@gmail.com>
 CC:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
         <dwarves@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Bill Wendling <morbo@google.com>, bpf <bpf@vger.kernel.org>,
-        <kernel-team@fb.com>, Nick Desaulniers <ndesaulniers@google.com>,
-        Sedat Dilek <sedat.dilek@gmail.com>
+        Bill Wendling <morbo@google.com>, <bpf@vger.kernel.org>,
+        David Blaikie <dblaikie@gmail.com>, <kernel-team@fb.com>,
+        Nick Desaulniers <ndesaulniers@google.com>
 References: <20210403184158.2834387-1-yhs@fb.com>
- <CAENS6EtcOH-Sr0Ct09qzzXb9qBMNyM7Dj9vScffvaz_o=wcvJg@mail.gmail.com>
+ <CA+icZUWLf4W_1u_p4-Rx1OD7h_ydP4Xzv12tMA2HZqj9CCOH0Q@mail.gmail.com>
 From:   Yonghong Song <yhs@fb.com>
-Message-ID: <3661a919-17e8-7511-5f63-5b93ee84fe60@fb.com>
-Date:   Sat, 3 Apr 2021 13:20:48 -0700
+Message-ID: <1f1e08d2-4570-0ba4-0ed4-832fca29fa05@fb.com>
+Date:   Sat, 3 Apr 2021 16:13:50 -0700
 User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
  Gecko/20100101 Thunderbird/78.9.0
-In-Reply-To: <CAENS6EtcOH-Sr0Ct09qzzXb9qBMNyM7Dj9vScffvaz_o=wcvJg@mail.gmail.com>
+In-Reply-To: <CA+icZUWLf4W_1u_p4-Rx1OD7h_ydP4Xzv12tMA2HZqj9CCOH0Q@mail.gmail.com>
 Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [2620:10d:c090:400::5:5ac6]
-X-ClientProxiedBy: MW4PR03CA0206.namprd03.prod.outlook.com
- (2603:10b6:303:b8::31) To SN6PR1501MB2064.namprd15.prod.outlook.com
+X-Originating-IP: [2620:10d:c090:400::5:78ac]
+X-ClientProxiedBy: CO1PR15CA0054.namprd15.prod.outlook.com
+ (2603:10b6:101:1f::22) To SN6PR1501MB2064.namprd15.prod.outlook.com
  (2603:10b6:805:d::27)
-MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from [IPv6:2620:10d:c085:21e1::1466] (2620:10d:c090:400::5:5ac6) by MW4PR03CA0206.namprd03.prod.outlook.com (2603:10b6:303:b8::31) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3999.29 via Frontend Transport; Sat, 3 Apr 2021 20:20:51 +0000
+Received: from [IPv6:2620:10d:c085:21e1::1466] (2620:10d:c090:400::5:78ac) by CO1PR15CA0054.namprd15.prod.outlook.com (2603:10b6:101:1f::22) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3999.27 via Frontend Transport; Sat, 3 Apr 2021 23:13:52 +0000
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 01e8276b-b92d-4344-a61a-08d8f6ddfa68
-X-MS-TrafficTypeDiagnostic: SA1PR15MB4644:
+X-MS-Office365-Filtering-Correlation-Id: 841696a1-0d07-43d6-c769-08d8f6f625d2
+X-MS-TrafficTypeDiagnostic: SN6PR1501MB4093:
 X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <SA1PR15MB46445EF49F030C088A77B697D3799@SA1PR15MB4644.namprd15.prod.outlook.com>
+X-Microsoft-Antispam-PRVS: <SN6PR1501MB40937D8C7268B4F29F6659BFD3799@SN6PR1501MB4093.namprd15.prod.outlook.com>
 X-FB-Source: Internal
-X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
+X-MS-Oob-TLC-OOBClassifiers: OLM:3513;
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 5nAR77tdO+fRRHbP1VNpMmvRb/KIa6zrxPwgiQiquSBiOOECdutAdRk8wNJJTuOP6BLAeWuOF1el7frnC4MO+Z4Loal4UsNtjUZ6+SLpLdR64Q+RZkDZyt9Gm3faTWfbj9B+FA3fAyDQNdjzMcByLcCrBBu1NGywBm3UxJrrMdXtjdXmm0+anw4RSqb3LZch34rKwJeRv2q29akJxcGwv1n0C0H1IWn33yAJM+sMKj+z9XUfZa3rqACIGEmygXnQ8mOfriAedmPM/2xz3zrOaf9VywYzkiLWs988CuSJ0cuzXLA/3P1ukBy0rQ6/Pv03Kqa0J9ZB6zqZZP/4q+aSMA15R9PtEEKc1OotUFi+iAMvAf+twCmIEDsNlDWNPk7PJSEEHEgnb2MZcfyk+rb5La5f3zAi4aHb6j3eQahp/JErRLd3WUcHnHwv90Uc0IPxoHCmUhbumL47ambycA1Ig/v02B6RMQzt9JY10uft5Ygwk+gUkFEITEASrsnHk+jDCELZmO1FHCbsrLEjkyWWwrSMm6Ip7ShSov77NUUVP37dNmJSVuTZg9Q/DoLVN3SGkfWtGO7q72jDjBwkGDIZILJyS9Whd9Wt25X9G30xFck0PnHGUnCUa9P4B6af6MTuavcw1s/mvvH5WL9RU7MdveUNC/DZG53Ljlgmd++C/WTBYYjmrTpYXdjOaJaODmOFagLYujb+0IZzK1TYGgElhOlJri3zaBqoeFMnkmQgKLc=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR1501MB2064.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(346002)(366004)(376002)(136003)(396003)(39860400002)(6666004)(54906003)(38100700001)(66946007)(16526019)(53546011)(186003)(8936002)(66556008)(478600001)(4326008)(66476007)(36756003)(316002)(6916009)(2616005)(2906002)(52116002)(8676002)(83380400001)(6486002)(31696002)(86362001)(5660300002)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData: =?utf-8?B?SjNTZ3dZbW5EQW1qT2tCWkN4aVdPd2hXbnV6dXVHU1NxZkhaVVJ2SE9uZHNa?=
- =?utf-8?B?R0RLK09KZGF0NDc1WHR4d3VzdkZIZ1h4dzhUZForQWU2WHIrM0s4YnpZRnBx?=
- =?utf-8?B?Y25zTEptWFBXR2U4ODdJZGRRdjBUeS9oTjJoam9Fd1IzZWo3SjdYM3hvaGtI?=
- =?utf-8?B?a01LWVcxZDNOeHpidXhyTzVnS3FITTREWXI0d3ZlUTNmaG96cFc3Q28rM0xs?=
- =?utf-8?B?L0FnajhWa3ZSaEpkUTJLVE1Sc2pkWDI4YmJVRTFuUmRURUdERWR3YjhaS01o?=
- =?utf-8?B?RjNVUHA1a3Ixa3piWTA3ejlDNHkwTm1aVHhueU1DcGN1ZTkrUkM2RVcyaS8v?=
- =?utf-8?B?dTJZS1JkbUVDSTBpMG1QcDduUFp5L1VCNzF0SmUxbE9aZlU1WEtyMlhOOVdL?=
- =?utf-8?B?akU1WVQ2OWhuZEt5TlF4VXkxL1ZPZi9XbXR2b3JlR1BRTWR0d1pJN2ZpMWsz?=
- =?utf-8?B?OHVzZDh3WkdHTlVUNEpJRHFtZ2tSWDcrdzAwZnFNUVVTNWtUYzBmQ0NiYkFW?=
- =?utf-8?B?T2pRSUJHWjBiUlJHNksvWGlLRnFOYUNIMlc2WGdGMkNWZGVtOWRQTEYzOTBj?=
- =?utf-8?B?RDNIb05Vd3ZFdlpNYzRSbld2RXdCWEsyVm1nSlliMmdTVXJ6UGRRTmJkdm1N?=
- =?utf-8?B?OU5lYU5aZEJGOXJRdzRRUEhNSmNKalhSVVN3N3ArL2pYSFRod1V3OXBZT25i?=
- =?utf-8?B?K2oxZGczVTF6SDJCalkrSklEbDVUL011bmg3ZHMvVE1lcWlkZXlBWHJHSDNn?=
- =?utf-8?B?M2s0QkFOQ1lBUEdNVGxBNDJ0bWcycWEySXpPb0F2b0lycFdYbG9ZeWlPY21B?=
- =?utf-8?B?Uk9xeHpRN2RtNGszckdNWkYrbHNJTEpwOHBWankxQTlQTlhqK3pBcGZPVEZo?=
- =?utf-8?B?bERUMmpIaHRkRy82RTErMGJwZ01lY01kWXpxWDk3SjNKb1RyUCszZGxOdWg2?=
- =?utf-8?B?RnJTYm9pK3FXb2lFT2ViWVhkUW9wUjNDT3RTNDFUSVllbENsLzUyV1NsMkFr?=
- =?utf-8?B?UTR6SDRxTVB4T0xvd0ZkVi9DTFBnM0NnOGhBMXgwRHl1Q21KUTZWRUVsYnRi?=
- =?utf-8?B?Y3FzWGU4VTJxZnRyc3hLb1VWbXlTSjNpL0JrZE5uczU0TEpkdzNHclhhSnlW?=
- =?utf-8?B?WFIweDlsR1FSQ2VZMGEyMmN2RERzanlVK203TUxZam9nZURvL1RueG5WZy9Y?=
- =?utf-8?B?UnRDZnVTdWN4eWxsUVN2T2FMUlplRjZ1NEdYUEl4dTZFQ000YTRpdTB0YzhL?=
- =?utf-8?B?WVFmZVcrbVVJSzMvNDU4dWNlS0xMSDg0ZGR4NElCRzYrcHBlcGJMNWZ2cWFC?=
- =?utf-8?B?NGg5TCtJank2L2lmOUtvTmtlVnhPcVMyVWRkU2JSMzRDSHpWR0Z2OTdJN2Zw?=
- =?utf-8?B?L2VvVExPZUMyY3JSMkl5T1QvZFVsUi9ScnA0S0RnU3l3YU95bk9xbnJQK3ha?=
- =?utf-8?B?UWFLNHpDUmkraW55K1dwakZLZGNKTExXT0gwcnNlTjJ4Q0RnMzdWOXJnNjJt?=
- =?utf-8?B?QkRtSWNlL1FKOFRSaUJ0QlNZTDBxc2I1aDRqa3JMV2RTVnM0cTJnZTlER09O?=
- =?utf-8?B?akIzbGJSd2JaRXY3SzhFdnRuK2orN0ZaU3hHcFZML1dnYlU1dTZGUEZORjhp?=
- =?utf-8?B?WnB5dmpESHRJUnpGUWNYelpCK1QzVGFzb1gycjdFekZKWUFpZC8yM1FyNFFt?=
- =?utf-8?B?d1VkcnBSYnZXVkp4eEh4MHE3UXAxS1prYU9mKzZpL1Y0MTZUNzlCTDNtWDZu?=
- =?utf-8?B?akw5dXoyY1lYVnhJRjJMUXRYdk9aVkI0RzQ5MXJaYjhwMmFRNGlVL1diN0Nk?=
- =?utf-8?B?UklOOHlIUEVxWVdxaHR1UT09?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 01e8276b-b92d-4344-a61a-08d8f6ddfa68
+X-Microsoft-Antispam-Message-Info: C/scfp/Dp7EFKjwgpDxWlj24EuuJXzAftDgf2I4QtFyq2pmbk5rYPRWfdGG7vH2DIj2zPnosEFsZQPDTxhFLWxA6BGJUiaD/F83mNEEwO9Vhmm87INWXeOm13mK5XS1ikbVStx8xSRZUnUtRXuybUsTpUU7WAsBzVGbNImh8c0Y13z6dNW12v8ttXXB3FkPl1vKb9fpGtz/F0S+TCLc5hhfE7B7iHLZo8zjDIj8DNEfntwu2f9qnyl9p/+0u70HAbS/SM5aBJz4p9adreZyHXdbS/zUz4ynjjbxAFCAD93/1f7ced5hSBycAah1onDx80WP4bMVKUv8g3C4HcUSCBDzwytDLjymhdk2ui0hp2PRBFR0WJItXvY1Orm5YlWKNmB4ll9wHyf27KYFO3vYo9DFsQJ4nfgwHnzteWsqz9JoP+PoZFe4nU55TvQVvD3e54z3RBqU3BfjeNYGxIjFgJbcWcD+gq9iG2zGJQowEXjNEbvOQcIxnbj6kMxVEgebnCoS55f3OWZC+SKrqM9H19nxU2lAmJoR0IaP95uG3CXtOF135fm3mVNlpGc4BQobJy0NH1tiehkfg+I1DJo53m7vxvzU0ZkLybelYfHammOM0weGgoI4DwCsz8IpuPESdR0LpYDZMIaVDjOnCLF1aZcvaTguT8Q8KPqWCPcxdf9M7qckP1HdPH/HwChPAMG+jGQDKKC2WUbi29DoVRD8gI7CUPk6g2ly5R5fFf/bkKL/SUqXwP1boFrSHspWy7s7hPauE0Ave0JQId6ayqbGUpvHCMEgH5qZtPqagp7G7zivPA+DzIDCGJ2gP3/0NeWFQ2PB68+UbpWaI33opOax7LQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR1501MB2064.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(346002)(39860400002)(366004)(376002)(136003)(396003)(54906003)(2616005)(86362001)(8936002)(38100700001)(2906002)(52116002)(6916009)(6486002)(8676002)(186003)(36756003)(16526019)(5660300002)(83380400001)(478600001)(31686004)(4326008)(966005)(53546011)(66946007)(66556008)(316002)(31696002)(66476007)(21314003)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData: =?utf-8?B?Ty9rajlRRXVLb2Z3T002ZjVRUXU4U1pPYy9YVi9QTSszWksxTElMbWtqSUEy?=
+ =?utf-8?B?N2pSMllmeXhQbGVYZG5kRVp5b1dGVk11UU1QZVhKc1drbDZUUE5nWDVjZFdS?=
+ =?utf-8?B?NW1hWkV4YWYrY09rbzJnQ3kyMG5MVkVLUjFDbEVWUS9Tb2tVMC9mSE1PUGVj?=
+ =?utf-8?B?TWcyQnQ2citSdlUvNTg5RFJla2VPUUZDa1RlTmVyd2JnQ2pLYjhRS285MGN4?=
+ =?utf-8?B?V0RiTWZ1QzJWeHBub0doOHBSNTU5K21UQW41ZkhCTjBodkRyME4ybkNpQkEx?=
+ =?utf-8?B?MDRyamsxVnRPMWZxS2tnODdHbWRRRkxSNU9SSFpXdXoyeXJ0TWhTVGY1Y0dS?=
+ =?utf-8?B?UUNndkVZU3Q2UlZ6cEJpd09WVG9BL1dncXhHTm9ZVkxIVWUwRzlFOWY1VWNC?=
+ =?utf-8?B?b29WOEE0eTk1RmZDOGtpNWx6UVJia2MvYmRYNUVxd0xMT2FsRGxTWERVRWN5?=
+ =?utf-8?B?UzRydzluVlNvdHA1TmdQeFlETXJWeW1iZ1I4R3Fnd2pCeGlGd3I1TnZRa1p6?=
+ =?utf-8?B?NlUxekxMS0FZT0JCbGJYOGZvZGZaN3BQWlhPMGUwRFFzL0xPMEFjSS9RTFhI?=
+ =?utf-8?B?c09lK1VtdzBWeFhweUdlSXRxbzc3WmFxZnA1VnNKaTN1REc1bW9OVjZ1NlUx?=
+ =?utf-8?B?TGVWRlBjUGR3TnZUR2JmMGxZRTMzdUVpb0VjNGtIUDJjSzFINUQ5SmVPTW43?=
+ =?utf-8?B?VkREdEFkazN0aVFjVnNnd2RLTmI1UllpdmRLWEx2L0VLWDJWWFV4Mjhsck1w?=
+ =?utf-8?B?ZVBKcUhyQU0vRk1KVzljMW1Ma0JFS0kzNkF5dlgvSHNGRGNMUEM4QlFHWkNE?=
+ =?utf-8?B?Y2hmcHFJSDBlWU8zV2xvQXZLMU9lbnA2L1ovZHVtQnRJZ0drVlU4WlpNUFVp?=
+ =?utf-8?B?VnRKOHE1dFFiNldaRXV2eUZ6ZlQyUmlqam1OaXV0QU1NUE45VkYreDZiTHhY?=
+ =?utf-8?B?Q0hQdHNmMWhnLzQvN2orRHI1WC9mSEhhN1BBbm11bkRkS09pWFJBNjl5U3A1?=
+ =?utf-8?B?UXp5K1I1cUE2S0pWR2lhcFdYc0pxcUkxenVvM1hQeHRnQlFxWk4rRTBMUUJG?=
+ =?utf-8?B?K010NlR0NGdLYzl3VkZ3ZFZsRG40ODkxdXpEaitTWmVZZEhpdEQrSzNEMWVF?=
+ =?utf-8?B?QjR0Q0dreVVpL0hKaGZyejRRRy9WdkpDYU5vdTFlVGN2SEpra1o5S2JCNG52?=
+ =?utf-8?B?OERYSDJsRStEMHgrRHh0ZnhFN296czl0MnVoWVlIM0JnYUpOYnJnV2doSTZM?=
+ =?utf-8?B?K1ZjbkhtRjBWS2hWQWZaWndSbFdIZU1RdGl1TGYyNk9Ea2R4aGMxNDFlMjRJ?=
+ =?utf-8?B?UndNTW02d25XL2tlb0tmZ28vQUIxOTBoK2NGbW0wdlN1M3BpQTBrVmpCNWRz?=
+ =?utf-8?B?ZHFYeStYa0YrQ1F1ZEd0UFRZR3FQdTY3ZythTmpINFFPMHNDd0V0c01SdGl6?=
+ =?utf-8?B?c3J1RTFaSXZjUlR3aUlTeWJGNEY2MXlkbWRieWN4TjVLdDFWdHU4b2NCUGdI?=
+ =?utf-8?B?YzBqRjByQmR1bDhHcjZnNkhnZDN0WS90eHdqbm5RRjUwcnFZdXJBc1E5WDdU?=
+ =?utf-8?B?R1dDczJkUWdjcWY2WSsydVM3WVN4VUxnV2paN1VjZ0hUbVBraEZZeCt4RlZX?=
+ =?utf-8?B?d2J4SnYrUTM2Y1R4anBsblBvazUrbjA0ZFJTS3F5bWFRby82UWJNZVpacWI3?=
+ =?utf-8?B?TjdpaTRvQ0FwSGkrb3BRcWhDbnRPNWpVNHFFbFMzRlY4VHA4QjZNVXB3eGYr?=
+ =?utf-8?B?UjhmYTFZbitjb0ZJMURXMHhmeCtMQXRreHdGdnVlam9EYjBsclVRa2pjYzFl?=
+ =?utf-8?Q?bpJp20OCxg8Lkd8hwaiBBqFOa8SgcHCSR8Tb8=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 841696a1-0d07-43d6-c769-08d8f6f625d2
 X-MS-Exchange-CrossTenant-AuthSource: SN6PR1501MB2064.namprd15.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Apr 2021 20:20:52.4311
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Apr 2021 23:13:53.1972
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: XSGi9wTLzMOeVZEJjUC1v68eGYy3Vn7Z3Z/hswndM5VoC04xgwFUhD20RKuhxiiZ
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR15MB4644
+X-MS-Exchange-CrossTenant-UserPrincipalName: Pa3D1E6FSjVm4VDLmyL7agRgXBlq923zsP2CwrRhyCIbxS97jszPqKJCU/8KEcJT
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR1501MB4093
 X-OriginatorOrg: fb.com
-X-Proofpoint-ORIG-GUID: z530VwRiqqDivbol6zW-8Aiw_dwnbuL4
-X-Proofpoint-GUID: z530VwRiqqDivbol6zW-8Aiw_dwnbuL4
+X-Proofpoint-GUID: ct3GA2KOn_Xc3Dfhlg3v-6fb0pdnKPPF
+X-Proofpoint-ORIG-GUID: ct3GA2KOn_Xc3Dfhlg3v-6fb0pdnKPPF
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.761
- definitions=2021-04-03_09:2021-04-01,2021-04-03 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxlogscore=999
- priorityscore=1501 mlxscore=0 malwarescore=0 adultscore=0
- lowpriorityscore=0 phishscore=0 impostorscore=0 bulkscore=0 clxscore=1015
- suspectscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2103310000 definitions=main-2104030142
+ definitions=2021-04-03_13:2021-04-01,2021-04-03 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 spamscore=0
+ lowpriorityscore=0 mlxscore=0 suspectscore=0 priorityscore=1501
+ adultscore=0 mlxlogscore=999 phishscore=0 malwarescore=0 bulkscore=0
+ impostorscore=0 clxscore=1015 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2103310000 definitions=main-2104030164
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
@@ -154,8 +155,8 @@ X-Mailing-List: dwarves@vger.kernel.org
 
 
 
-On 4/3/21 11:52 AM, David Blaikie wrote:
-> On Sat, Apr 3, 2021 at 11:42 AM Yonghong Song <yhs@fb.com> wrote:
+On 4/3/21 2:42 PM, Sedat Dilek wrote:
+> On Sat, Apr 3, 2021 at 8:42 PM Yonghong Song <yhs@fb.com> wrote:
 >>
 >> Currently, when DWARF5 is enabled in kernel, DEBUG_INFO_BTF
 >> needs to be disabled. I hacked the kernel to enable DEBUG_INFO_BTF
@@ -167,10 +168,83 @@ On 4/3/21 11:52 AM, David Blaikie wrote:
 >>            depends on GCC_VERSION >= 50000 || CC_IS_CLANG
 >>            depends on CC_IS_GCC || $(success,$(srctree)/scripts/test_dwarf5_support.sh $(CC) $(CLANG_FLAGS))
 >>    -       depends on !DEBUG_INFO_BTF
+> 
+> What Linux-kernel is your base?
+
+https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git
+latest one, essentially with top commit:
+   89d69c5d0fbc Merge branch 'sockmap: introduce BPF_SK_SKB_VERDICT and 
+support UDP'
+
+> For linus Git this is correct.
+> [ I have currently kbuild-next stuff in my custom patchset which has
+> for example CONFIG_AS_IS_XXX where XXX is "GNU" means GNU/binutils AS
+> or "LLVM" means LLVM/Clang Integrated ASsembler (IAS). ]
+> 
 >>            help
 >> and tried DWARF5 with latest trunk clang, thin-lto and no lto.
 >> In both cases, I got a few additional failures like:
 >>    $ ./test_progs -n 55/2
+> 
+> What do you mean with "trunk" clang - we have Git now no more SVN :-)?
+
+git: https://github.com/llvm/llvm-project.git
+top commit:
+    commit aaab4441796909e1b9cf4279906a56350c8fade7
+    Author: Jianzhou Zhao <jianzhouzh@google.com>
+    Date:   Mon Mar 29 00:14:16 2021 +0000
+
+     [dfsan] Ignore dfsan origin wrappers when instrumenting code
+> 
+>  From where is that "test_progs" ?
+
+Some information here.
+ 
+https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git/tree/tools/testing/selftests/bpf/README.rst
+
+Typically I do
+   $ make -C tools/testing/selftests/bpf -j60 LLVM=1 LLVM_IAS=1
+and then boot up a qemu with the bpf-next vmlinux and then run
+"test_progs" binary which is located as
+     tools/test/selftests/bpf/test_progs
+
+> 
+> I tried to build:
+> 
+> LLVM_TOOLCHAIN_PATH="/opt/llvm-toolchain/bin"
+> if [ -d ${LLVM_TOOLCHAIN_PATH} ]; then
+>    export PATH="${LLVM_TOOLCHAIN_PATH}:${PATH}"
+> fi
+> 
+> $ echo $PATH
+> /opt/llvm-toolchain/bin:/opt/proxychains-ng/bin:/home/dileks/bin:/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games
+> 
+> $ clang --version
+> dileks clang version 12.0.0 (https://github.com/llvm/llvm-project.git
+> 04ba60cfe598e41084fb848daae47e0ed910fa7d)
+> Target: x86_64-unknown-linux-gnu
+> Thread model: posix
+> InstalledDir: /opt/llvm-toolchain/bin
+> 
+> MAKE="make V=1"
+> MAKE_OPTS="HOSTCC=clang HOSTCXX=clang++ HOSTLD=ld.lld CC=clang
+> LD=ld.lld LLVM=1 LLVM_IAS=1"
+> MAKE_OPTS="$MAKE_OPTS PAHOLE=/opt/pahole/bin/pahole"
+> 
+> $ echo $MAKE $MAKE_OPTS
+> make V=1 HOSTCC=clang HOSTCXX=clang++ HOSTLD=ld.lld CC=clang LD=ld.lld
+> LLVM=1 LLVM_IAS=1 PAHOLE=/opt/pahole/bin/pahole
+> 
+> $ LC_ALL=C $MAKE $MAKE_OPTS -C tools/bpf/ 2&>1 | tee ../make-log_tools-bpf.txt
+> ...is OK.
+> 
+> $ LC_ALL=C $MAKE $MAKE_OPTS -C tools/testing/selftests/bpf/ 2>&1 | tee
+> ../make-log_tools-testing-selftests-bpf.txt
+> ...is broken here.
+> 
+> NOTE: Both make-log_tools-bpf.txt and
+> make-log_tools-testing-selftests-bpf.txt are attached.
+> 
 >>    ...
 >>    libbpf: extern (var ksym) 'bpf_prog_active': failed to find BTF ID in kernel BTF(s).
 >>    libbpf: failed to load object 'kfunc_call_test_subprog'
@@ -187,6 +261,57 @@ On 4/3/21 11:52 AM, David Blaikie wrote:
 >> DW_OP_addrx is actually an index into .debug_addr section starting
 >> from an offset encoded with DW_AT_addr_base in DW_TAG_compile_unit.
 >>
+> 
+> With LLVM toolchain v12.0.0-rc4 I see "DW_OP_addrx".
+> I need a test-case to hit the issue(s) and test this or any other
+> (pahole) patches.
+
+I am using llvm-project repo "main" branch which is the development
+branch.
+
+To test this, you can do:
+    . build vmlinux (say bpf-next branch) with dwarf4
+    . pahole -JV vmlinux >& log.pahole
+    . grep "bpf_prog_active" log.pahole and you will see
+$ grep bpf_prog_active log
+Found per-CPU symbol 'bpf_prog_active' at address 0x1f8350
+Variable 'bpf_prog_active' from CU 
+'/home/yhs/work/bpf-next/kernel/bpf/syscall.c' at address 0x1f8350 encoded
+[601922] VAR bpf_prog_active type=598691 linkage=1
+$ grep " VAR " log.pahole | wc -l
+299
+
+totally 299 BTF variables are encoded.
+
+     . build vmlinux with dwarf5 (without this patch)
+     . pahole -JV vmlinux >& log.pahole
+     . grep "bpf_prog_active" log.pahole and you will see
+$ grep "bpf_prog_active" log.pahole
+Found per-CPU symbol 'bpf_prog_active' at address 0x1f8350
+$ grep " VAR " log.pahole | wc -l
+0
+
+There are o BTF variables are encoded.
+
+With this patch, for dwarf5 again,
+$ pahole -JV vmlinux >& log.pahole2
+$ grep "bpf_prog_active" log.pahole2
+Found per-CPU symbol 'bpf_prog_active' at address 0x1f8350
+Variable 'bpf_prog_active' from CU 
+'/home/yhs/work/bpf-next/kernel/bpf/syscall.c' at address 0x1f8350 encoded
+[602735] VAR bpf_prog_active type=599504 linkage=1
+$ grep " VAR " log.pahole2 | wc -l
+299
+
+I guess this could be fold into some kind of regression test to ensure
+dwarf4 and dwarf5 does not change at lease variable encoding for BTF.
+If they are, we need to investigate.
+
+> 
+> Thanks.
+> 
+> - Sedat -
+> 
 >> For the above 'bpf_prog_active' example, with DWARF4, we have
 >>    0x02281a96:   DW_TAG_variable
 >>                    DW_AT_name      ("bpf_prog_active")
@@ -234,38 +359,6 @@ On 4/3/21 11:52 AM, David Blaikie wrote:
 >> +               if (dwarf_getlocation(&attr, expr, exprlen) == 0) {
 >> +                       /* DW_OP_addrx needs additional lookup for real addr. */
 >> +                       if (*exprlen != 0 && expr[0]->atom == DW_OP_addrx) {
-> 
-> 
-> ^ this change is probably overly narrow. DW_OP_addrx could appear at
-> other locations in a DWARF expression. So whatever code is responsible
-> for doing general evaluation of DWARF expressions should probably be
-> the place to handle this so it can deal with the full generality of
-> expressions, not only this specific case of a DW_OP_addrx as being the
-> first operation in the expression?
-
-We really have a narrow usage here. This code path (DW_OP_addr and 
-DW_OP_addrx) is triggered and later on only used when converting
-dwarf to BTF for certain category of global variables and that is
-why address is needed. The above code is only called for
-DW_TAG_variable.
-
-The previous code to handle DW_OP_addr also only took the first expression.
-
-         if (attr_location(die, &location->expr, &location->exprlen) != 0)
-                 scope = VSCOPE_OPTIMIZED;
-         else if (location->exprlen != 0) {
-                 Dwarf_Op *expr = location->expr;
-                 switch (expr->atom) {
-                 case DW_OP_addr:
-                         scope = VSCOPE_GLOBAL;
-                         *addr = expr[0].number;
-                         break;
-	......
-
-Do you think we could have multiple OPs for an *external* variable location?
-
-> 
->>
 >> +                               Dwarf_Attribute addr_attr;
 >> +                               dwarf_getlocation_attr(&attr, expr[0], &addr_attr);
 >> +
