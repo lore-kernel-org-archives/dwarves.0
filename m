@@ -2,141 +2,336 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-23.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7F5DCC433ED
-	for <linux-dwarves@archiver.kernel.org>; Fri,  2 Apr 2021 19:45:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EF0CFC433B4
+	for <linux-dwarves@archiver.kernel.org>; Sat,  3 Apr 2021 17:08:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 50F3F6115C
-	for <linux-dwarves@archiver.kernel.org>; Fri,  2 Apr 2021 19:45:04 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A92796112E
+	for <linux-dwarves@archiver.kernel.org>; Sat,  3 Apr 2021 17:08:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235938AbhDBTpF (ORCPT
+        id S236910AbhDCRII (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Fri, 2 Apr 2021 15:45:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58166 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231577AbhDBTpE (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Fri, 2 Apr 2021 15:45:04 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB519C0613E6
-        for <dwarves@vger.kernel.org>; Fri,  2 Apr 2021 12:45:02 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id bf3so6389134edb.6
-        for <dwarves@vger.kernel.org>; Fri, 02 Apr 2021 12:45:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=zcF9qgZiHLnN9T4lFl4zcLX2Wynh3BKU27WpuIrGe9g=;
-        b=WFGKBv+jMWcbUwJ1cWdfHLb0/DF/n2BOIOpHBdW4hLryupocuFHoPqhSA/pzqGpJxb
-         cpMbDzL64ycC0tk7LBCki9Oh/v9Z4yx0e6nZ9dJEj8DN7GThFGMEN+Fb6JdxrcGZ9AYK
-         3Bc0sSdY00BPQFyFmzxS+7aHU7rsX5oZP4TqY22jY92CXMAgin8HtEsIX9hMrlTiMbQy
-         vW5E1k557bSAUFsS2t/X0h0BY2Jah9+teeEaUQnR9AVfxOzIA9/dsJNqtAy47khe3oDT
-         exFOnZNJ+fcC7N/WGg18bQSA63gtWpR2ZCzM9wA+VB4yJPxvYUZZuVer+xIRKKv3w00J
-         vfFw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=zcF9qgZiHLnN9T4lFl4zcLX2Wynh3BKU27WpuIrGe9g=;
-        b=lSD1O3chnfBErL/3Avy21js61Y3rbZ+zRW88LtvikdiwSopkKu3tTfxIU7MjA1uO2r
-         zzE3ettAiPcsbswfSJisYXOXIbV2J3Mwr5g/zfwL6JYCTHtQ46zh20RqD8teGlbjGGcD
-         mgNn1k3OsimAZUByFlDxlPpQBKhCeS1xO4vGKs5soUfRY50dajRluzpylvSeqsjwyiXn
-         Z5qpgrupbgTgqJl+ClJVfBatSDkZkZ/FtuPw8EbA7IDojkfIJqen47S2xgfF4bAj1z1d
-         FPUGb1b+PjfCXQxMBhuRw/l75tns5RTEp5VcctD6KVExNNrxKaDrCkgHsuchwcnmIieM
-         cXCQ==
-X-Gm-Message-State: AOAM533xB90pUXAE2qFSbt9keUlpj3QZZPJX4+MsWY6YcYT9YFmvo9Z1
-        fKQ726FYSldL8SDgHnAbHmLVu66EVcI0+y1y/kAs
-X-Google-Smtp-Source: ABdhPJzRxOjjR6cPR+ric1hQGmLt5u+wiRk8yIoMQdqq833wTZGa8QTcm3WpCjZQFs5+oc22Z6afajXFEDbVoYmX1Aw=
-X-Received: by 2002:aa7:db01:: with SMTP id t1mr17341313eds.77.1617392701367;
- Fri, 02 Apr 2021 12:45:01 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210401025815.2254256-1-yhs@fb.com> <CAGG=3QWpcCG7b70oQsRTATgt10acEFS=-Tg9U=DHZ6xoS3GeMA@mail.gmail.com>
- <CAGG=3QUUYn9K7zVQ1UVZ57_FFeiiOexwq_OgDw9VFPJD3fFbVw@mail.gmail.com> <06ba2ed4-2730-9ce8-0665-3c720bc786a3@fb.com>
-In-Reply-To: <06ba2ed4-2730-9ce8-0665-3c720bc786a3@fb.com>
-From:   Bill Wendling <morbo@google.com>
-Date:   Fri, 2 Apr 2021 12:44:50 -0700
-Message-ID: <CAGG=3QXkvwrm_tnsYtJ-gvHw8Emv5xFWeckoPoD4PhEud7v8EA@mail.gmail.com>
-Subject: Re: [PATCH dwarves 0/2] dwarf_loader: improve cus__merging_cu()
+        Sat, 3 Apr 2021 13:08:08 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51712 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S236868AbhDCRIH (ORCPT <rfc822;dwarves@vger.kernel.org>);
+        Sat, 3 Apr 2021 13:08:07 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 76DD061163;
+        Sat,  3 Apr 2021 17:08:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1617469684;
+        bh=Egx97dzuD/LBKZT7rjY+JhBM6Ryi+QIgPiG85NCXdcY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Sd9I71zD1hSyIggKZ0EXBL59UiaxZlkugXTURkg7puRtv0FTR0wIeTLd9mr1kTwgF
+         9vlJwRUx/Y2aO2TMZBNpquPpyMrRkQlQ0L6xEqbGmVMmdhq9qS0/pMkTtfqpXtO+mG
+         aqBM1BJsGBJstowe1u8JhR3J/o9MLMZwMSYEcF1GO+BFnszHHzuDEb2H7SBINU45nu
+         UQ4XBEurELSWDVspLQCXJ0NFspYwR++rMF7T+bbWrxH8QcBoTEYRo3FogAb7dkmxli
+         1xGLaeV5Na32WLyABed4DQhiiSupo9RsJQnxH4pW6ZiVATGzzwTkPbqJlXZPYF61yb
+         95Kw+qtFkxx2w==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 9CB8840647; Sat,  3 Apr 2021 14:08:01 -0300 (-03)
+Date:   Sat, 3 Apr 2021 14:08:01 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
 To:     Yonghong Song <yhs@fb.com>
-Cc:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
-        dwarves@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
-        David Blaikie <dblaikie@gmail.com>,
-        =?UTF-8?B?RsSBbmctcnXDrCBTw7JuZw==?= <maskray@google.com>,
-        kernel-team@fb.com, Nick Desaulniers <ndesaulniers@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Cc:     Arnaldo <arnaldo.melo@gmail.com>,
+        David Blaikie <dblaikie@gmail.com>, dwarves@vger.kernel.org,
+        Alexei Starovoitov <ast@kernel.org>,
+        Bill Wendling <morbo@google.com>, bpf <bpf@vger.kernel.org>,
+        kernel-team@fb.com, Nick Desaulniers <ndesaulniers@google.com>,
+        Jiri Olsa <jolsa@kernel.org>
+Subject: Re: [PATCH dwarves] dwarf_loader: handle subprogram ret type with
+ abstract_origin properly
+Message-ID: <YGig8cHwNoccQwr+@kernel.org>
+References: <e6f77eb7-b1ce-5dc3-3db7-bf67e7edfc0b@fb.com>
+ <CAENS6EsZ5OX9o=Cn5L1jmx8ucR9siEWbGYiYHCUWuZjLyP3E7Q@mail.gmail.com>
+ <1ef31dd8-2385-1da1-2c95-54429c895d8a@fb.com>
+ <CAENS6EsiRsY1JptWJqu2wH=m4fkSiR+zD8JDD5DYke=ZnJOMrg@mail.gmail.com>
+ <YGckYjyfxfNLzc34@kernel.org>
+ <YGcw4iq9QNkFFfyt@kernel.org>
+ <2d55d22b-d136-82b9-6a0f-8b09eeef7047@fb.com>
+ <82dfd420-96f9-aedc-6cdc-bf20042455db@fb.com>
+ <E9072F07-B689-402C-89F6-545B589EF7E4@gmail.com>
+ <d4899252-af75-f284-a684-b33a7a12c840@fb.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <d4899252-af75-f284-a684-b33a7a12c840@fb.com>
+X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-I tried porting the .config we're using to the official branch and
-couldn't replicate the problem. It's probably something local.
+Em Fri, Apr 02, 2021 at 12:41:47PM -0700, Yonghong Song escreveu:
+> 
+> 
+> On 4/2/21 11:08 AM, Arnaldo wrote:
+> > 
+> > 
+> > On April 2, 2021 2:42:21 PM GMT-03:00, Yonghong Song <yhs@fb.com> wrote:
+> > > On 4/2/21 10:23 AM, Yonghong Song wrote:
+> > :> Thanks. I checked out the branch and did some testing with latest
+> > > clang
+> > > > trunk (just pulled in).
+> > > > 
+> > > > With kernel LTO note support, I tested gcc non-lto, and llvm-lto
+> > > mode,
+> > > > it works fine.
+> > > > 
+> > > > Without kernel LTO note support, I tested
+> > > >     gcc non-lto  <=== ok
+> > > >     llvm non-lto  <=== not ok
+> > > >     llvm lto     <=== ok
+> > > > 
+> > > > Surprisingly llvm non-lto vmlinux had the same "tcp_slow_start"
+> > > issue.
+> > > > Some previous version of clang does not have this issue.
+> > > > I double checked the dwarfdump and it is indeed has the same reason
+> > > > for lto vmlinux. I checked abbrev section and there is no cross-cu
+> > > > references.
+> > > > 
+> > > > That means we need to adapt this patch
+> > > >     dwarf_loader: Handle subprogram ret type with abstract_origin
+> > > properly
+> > > > for non merging case as well.
+> > > > The previous patch fixed lto subprogram abstract_origin issue,
+> > > > I will submit a followup patch for this.
+> > > 
+> > > Actually, the change is pretty simple,
+> > > 
+> > > diff --git a/dwarf_loader.c b/dwarf_loader.c
+> > > index 5dea837..82d7131 100644
+> > > --- a/dwarf_loader.c
+> > > +++ b/dwarf_loader.c
+> > > @@ -2323,7 +2323,11 @@ static int die__process_and_recode(Dwarf_Die
+> > > *die, struct cu *cu)
+> > >          int ret = die__process(die, cu);
+> > >          if (ret != 0)
+> > >                  return ret;
+> > > -       return cu__recode_dwarf_types(cu);
+> > > +       ret = cu__recode_dwarf_types(cu);
+> > > +       if (ret != 0)
+> > > +               return ret;
+> > > +
+> > > +       return cu__resolve_func_ret_types(cu);
+> > >   }
+> > > 
+> > > Arnaldo, do you just want to fold into previous patches, or
+> > > you want me to submit a new one?
+> > 
+> > I can take care of that.
+> > 
+> > And I think it's time for to look at Jiri's test suite... :-)
+> > 
+> > It's a holiday here, so I'll take some time to get to this, hopefully I'll tag 1.21 tomorrow tho.
+> 
+> Thanks for taking care of this! Right, 1.21 looks very close.
 
--bw
+So our HEAD now is this:
 
-On Thu, Apr 1, 2021 at 3:00 PM Yonghong Song <yhs@fb.com> wrote:
->
->
->
-> On 4/1/21 1:56 PM, Bill Wendling wrote:
-> > On Thu, Apr 1, 2021 at 12:35 PM Bill Wendling <morbo@google.com> wrote:
-> >>
-> >> On Wed, Mar 31, 2021 at 7:58 PM Yonghong Song <yhs@fb.com> wrote:
-> >>>
-> >>> Function cus__merging_cu() is introduced in Commit 39227909db3c
-> >>> ("dwarf_loader: Permit merging all DWARF CU's for clang LTO built
-> >>> binary") to test whether cross-cu references may happen.
-> >>> The original implementation anticipates compilation flags
-> >>> in dwarf, but later some concerns about binary size surfaced
-> >>> and the decision is to scan .debug_abbrev as a faster way
-> >>> to check cross-cu references. Also putting a note in vmlinux
-> >>> to indicate whether lto is enabled for built or not can
-> >>> provide a much faster way.
-> >>>
-> >>> This patch set implemented this two approaches, first
-> >>> checking the note (in Patch #2), if not found, then
-> >>> check .debug_abbrev (in Patch #1).
-> >>>
-> >>> Yonghong Song (2):
-> >>>    dwarf_loader: check .debug_abbrev for cross-cu references
-> >>>    dwarf_loader: check .notes section for lto build info
-> >>>
-> >>>   dwarf_loader.c | 76 ++++++++++++++++++++++++++++++++++++--------------
-> >>>   1 file changed, 55 insertions(+), 21 deletions(-)
-> >>>
-> >> With this series of patches, the compilation passes for me with
-> >> ThinLTO. You may add this if you like:
-> >>
-> >> Tested-by: Bill Wendling <morbo@google.com>
-> >
-> > I did notice these warnings following the "pahole -J .tmp_vmlinux.btf"
-> > command. I don't know the severity of them, but it might be good to
-> > investigate.
-> >
-> > $ ./tools/bpf/resolve_btfids/resolve_btfids vmlinux
-> >    BTFIDS  vmlinux
-> > WARN: multiple IDs found for 'inode': 355, 8746 - using 355
-> > WARN: multiple IDs found for 'file': 588, 8779 - using 588
-> > WARN: multiple IDs found for 'path': 411, 8780 - using 411
-> > WARN: multiple IDs found for 'seq_file': 1414, 8836 - using 1414
-> > WARN: multiple IDs found for 'vm_area_struct': 538, 8873 - using 538
-> > WARN: multiple IDs found for 'task_struct': 28, 8880 - using 28
-> > WARN: multiple IDs found for 'inode': 355, 9484 - using 355
-> > WARN: multiple IDs found for 'file': 588, 9517 - using 588
-> > WARN: multiple IDs found for 'path': 411, 9518 - using 411
-> > WARN: multiple IDs found for 'seq_file': 1414, 9578 - using 1414
-> > WARN: multiple IDs found for 'vm_area_struct': 538, 9615 - using 538
-> > WARN: multiple IDs found for 'task_struct': 28, 9622 - using 28
-> > WARN: multiple IDs found for 'seq_file': 1414, 12223 - using 1414
-> > WARN: multiple IDs found for 'file': 588, 12237 - using 588
-> > WARN: multiple IDs found for 'path': 411, 12238 - using 411
-> > ...
->
-> I didn't see it with my config. Maybe you can share your config file?
->
-> >
-> > -bw
-> >
+
+commit c03cd5c6ae0cec97d23edcf0a343bbff3df3c96a
+Author: Yonghong Song <yhs@fb.com>
+Date:   Thu Apr 1 16:55:34 2021 -0700
+
+    dwarf_loader: Handle subprogram ret type with abstract_origin properly
+    
+    With latest bpf-next built with clang LTO (thin or full), I hit one test
+    failures:
+    
+      $ ./test_progs -t tcp
+      ...
+      libbpf: extern (func ksym) 'tcp_slow_start': func_proto [23] incompatible with kernel [115303]
+      libbpf: failed to load object 'bpf_cubic'
+      libbpf: failed to load BPF skeleton 'bpf_cubic': -22
+      test_cubic:FAIL:bpf_cubic__open_and_load failed
+      #9/2 cubic:FAIL
+      ...
+    
+    The reason of the failure is due to bpf program 'tcp_slow_start' func
+    signature is different from vmlinux BTF. bpf program uses the following
+    signature:
+    
+      extern __u32 tcp_slow_start(struct tcp_sock *tp, __u32 acked);
+    
+    which is identical to the kernel definition in linux:include/net/tcp.h:
+    
+      u32 tcp_slow_start(struct tcp_sock *tp, u32 acked);
+    
+    While vmlinux BTF definition like:
+    
+      [115303] FUNC_PROTO '(anon)' ret_type_id=0 vlen=2
+              'tp' type_id=39373
+              'acked' type_id=18
+      [115304] FUNC 'tcp_slow_start' type_id=115303 linkage=static
+    
+    The above is dumped with `bpftool btf dump file vmlinux`.
+    
+    You can see the ret_type_id is 0 and this caused the problem.
+    
+    Looking at dwarf, we have:
+    
+    0x11f2ec67:   DW_TAG_subprogram
+                    DW_AT_low_pc    (0xffffffff81ed2330)
+                    DW_AT_high_pc   (0xffffffff81ed235c)
+                    DW_AT_frame_base        ()
+                    DW_AT_GNU_all_call_sites        (true)
+                    DW_AT_abstract_origin   (0x11f2ed66 "tcp_slow_start")
+    ...
+    0x11f2ed66:   DW_TAG_subprogram
+                    DW_AT_name      ("tcp_slow_start")
+                    DW_AT_decl_file ("/home/yhs/work/bpf-next/net/ipv4/tcp_cong.c")
+                    DW_AT_decl_line (392)
+                    DW_AT_prototyped        (true)
+                    DW_AT_type      (0x11f130c2 "u32")
+                    DW_AT_external  (true)
+                    DW_AT_inline    (DW_INL_inlined)
+    
+    We have a subprogram which has an abstract_origin pointing to the
+    subprogram prototype with return type. Current one pass recoding cannot
+    easily resolve this easily since at the time recoding for 0x11f2ec67,
+    the return type in 0x11f2ed66 has not been resolved.
+    
+    To simplify implementation, I just added another pass to go through all
+    functions after recoding pass. This should resolve the above issue.
+    
+    With this patch, among total 250999 functions in vmlinux, 4821 functions
+    needs return type adjustment from type id 0 to correct values. The above
+    failed bpf selftest passed too.
+    
+    Committer testing:
+    
+    Before:
+    
+      $ pfunct tcp_slow_start
+      void tcp_slow_start(struct tcp_sock * tp, u32 acked);
+      $
+      $ pfunct --prototypes /sys/kernel/btf/vmlinux > before
+      $ head before
+      int fb_is_primary_device(struct fb_info * info);
+      int arch_resume_nosmt(void);
+      int relocate_restore_code(void);
+      int arch_hibernation_header_restore(void * addr);
+      int get_e820_md5(struct e820_table * table, void * buf);
+      int arch_hibernation_header_save(void * addr, unsigned int max_size);
+      int pfn_is_nosave(long unsigned int pfn);
+      int swsusp_arch_resume(void);
+      int amd_bus_cpu_online(unsigned int cpu);
+      void pci_enable_pci_io_ecs(void);
+      $
+    
+    After:
+    
+      $ pfunct -F btf ../build/bpf_clang_thin_lto/vmlinux -f tcp_slow_start
+      u32 tcp_slow_start(struct tcp_sock * tp, u32 acked);
+      $
+      $ pfunct -F btf --prototypes ../build/bpf_clang_thin_lto/vmlinux > after
+      $
+      $ head after
+      int fb_is_primary_device(struct fb_info * info);
+      int arch_resume_nosmt(void);
+      int relocate_restore_code(void);
+      int arch_hibernation_header_restore(void * addr);
+      int get_e820_md5(struct e820_table * table, void * buf);
+      int arch_hibernation_header_save(void * addr, unsigned int max_size);
+      int pfn_is_nosave(long unsigned int pfn);
+      int swsusp_arch_resume(void);
+      int amd_bus_cpu_online(unsigned int cpu);
+      void pci_enable_pci_io_ecs(void);
+      $
+      $ diff -u before after | grep ^+ | wc -l
+      1604
+      $
+    
+      $ diff -u before after | grep tcp_slow_start
+      -void tcp_slow_start(struct tcp_sock * tp, u32 acked);
+      +u32 tcp_slow_start(struct tcp_sock * tp, u32 acked);
+      $
+      $ diff -u before after | grep ^[+-] | head
+      --- before    2021-04-02 11:35:15.578160795 -0300
+      +++ after     2021-04-02 11:33:34.204847317 -0300
+      -void set_bf_sort(const struct dmi_system_id  * d);
+      +int set_bf_sort(const struct dmi_system_id  * d);
+      -void raw_pci_write(unsigned int domain, unsigned int bus, unsigned int devfn, int reg, int len, u32 val);
+      -void raw_pci_read(unsigned int domain, unsigned int bus, unsigned int devfn, int reg, int len, u32 * val);
+      +int raw_pci_write(unsigned int domain, unsigned int bus, unsigned int devfn, int reg, int len, u32 val);
+      +int raw_pci_read(unsigned int domain, unsigned int bus, unsigned int devfn, int reg, int len, u32 * val);
+      -void xen_find_device_domain_owner(struct pci_dev * dev);
+      +int xen_find_device_domain_owner(struct pci_dev * dev);
+      $
+    
+    The same results are obtained if using /sys/kernel/btf/vmlinux after
+    rebooting with the kernel built from the ../build/bpf_clang_thin_lto/vmlinux
+    file used in the above 'after' examples.
+    
+    Signed-off-by: Yonghong Song <yhs@fb.com>
+    Tested-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+    Acked-by: David Blaikie <dblaikie@gmail.com>
+    Cc: Alexei Starovoitov <ast@kernel.org>
+    Cc: Bill Wendling <morbo@google.com>
+    Cc: Nick Desaulniers <ndesaulniers@google.com>
+    Cc: bpf@vger.kernel.org
+    Cc: dwarves@vger.kernel.org
+    Cc: kernel-team@fb.com
+    Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+
+diff --git a/dwarf_loader.c b/dwarf_loader.c
+index 026d13789ff912be..5dea8378d7d2a30b 100644
+--- a/dwarf_loader.c
++++ b/dwarf_loader.c
+@@ -2198,6 +2198,34 @@ out:
+ 	return 0;
+ }
+ 
++static int cu__resolve_func_ret_types(struct cu *cu)
++{
++	struct ptr_table *pt = &cu->functions_table;
++	uint32_t i;
++
++	for (i = 0; i < pt->nr_entries; ++i) {
++		struct tag *tag = pt->entries[i];
++
++		if (tag == NULL || tag->type != 0)
++			continue;
++
++		struct function *fn = tag__function(tag);
++		if (!fn->abstract_origin)
++			continue;
++
++		struct dwarf_tag *dtag = tag->priv;
++		struct dwarf_tag *dfunc;
++		dfunc = dwarf_cu__find_tag_by_ref(cu->priv, &dtag->abstract_origin);
++		if (dfunc == NULL) {
++			tag__print_abstract_origin_not_found(tag);
++			return -1;
++		}
++
++		tag->type = dfunc->tag->type;
++	}
++	return 0;
++}
++
+ static int cu__recode_dwarf_types_table(struct cu *cu,
+ 					struct ptr_table *pt,
+ 					uint32_t i)
+@@ -2637,6 +2665,16 @@ static int cus__merge_and_process_cu(struct cus *cus, struct conf_load *conf,
+ 	/* process merged cu */
+ 	if (cu__recode_dwarf_types(cu) != LSK__KEEPIT)
+ 		return DWARF_CB_ABORT;
++
++	/*
++	 * for lto build, the function return type may not be
++	 * resolved due to the return type of a subprogram is
++	 * encoded in another subprogram through abstract_origin
++	 * tag. Let us visit all subprograms again to resolve this.
++	 */
++	if (cu__resolve_func_ret_types(cu) != LSK__KEEPIT)
++		return DWARF_CB_ABORT;
++
+ 	if (finalize_cu_immediately(cus, cu, dcu, conf)
+ 	    == LSK__STOP_LOADING)
+ 		return DWARF_CB_ABORT;
