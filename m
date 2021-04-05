@@ -2,69 +2,67 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-7.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 29830C433ED
-	for <linux-dwarves@archiver.kernel.org>; Mon,  5 Apr 2021 06:57:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 413BDC433B4
+	for <linux-dwarves@archiver.kernel.org>; Mon,  5 Apr 2021 11:04:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DC2BB6139E
-	for <linux-dwarves@archiver.kernel.org>; Mon,  5 Apr 2021 06:57:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1B97B60FE8
+	for <linux-dwarves@archiver.kernel.org>; Mon,  5 Apr 2021 11:04:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232302AbhDEG5e (ORCPT
+        id S232355AbhDELE7 (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Mon, 5 Apr 2021 02:57:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55126 "EHLO
+        Mon, 5 Apr 2021 07:04:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230196AbhDEG5d (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Mon, 5 Apr 2021 02:57:33 -0400
-Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ADACC061756;
-        Sun,  4 Apr 2021 23:57:28 -0700 (PDT)
-Received: by mail-io1-xd2f.google.com with SMTP id v26so11093739iox.11;
-        Sun, 04 Apr 2021 23:57:28 -0700 (PDT)
+        with ESMTP id S233399AbhDELE6 (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Mon, 5 Apr 2021 07:04:58 -0400
+Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4850C061756;
+        Mon,  5 Apr 2021 04:04:52 -0700 (PDT)
+Received: by mail-io1-xd2a.google.com with SMTP id k25so4674396iob.6;
+        Mon, 05 Apr 2021 04:04:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:reply-to:from:date:message-id
          :subject:to:cc;
-        bh=AZHjTjed6u2UeXoYIy7tUATVu3569TKkLAshxZkksoI=;
-        b=igVAo6fnDCTJqwhA37hiBhfl4QnnL9lLQJmr6tUa1idULtAofbfQew/VU158PezfrZ
-         uwrmsgfysCajWKmHaHq6f6mfr+8s2ZEK3nfYdEBZxgBI1JyPprm9O5qW/Nabe7zasYN+
-         QBblSoompmBway4v45vEWWCQcV8PtrXbPChbg8Ss7SPHZIBmJkQqoHDmsscsu/CHP/te
-         1G9hGbejpUGhI7Ph/hbNH5xbU0nSiD/BFxSrBnDFkA5emekkOhPEx6UFcCwXpQBMLCPM
-         vKBCiAQxaeWYMz6HMqfEK9OmqWmGpYnyoL1cu1QcqgWuCp+ztbi4jirgr3K2Gl8+sux6
-         GJeQ==
+        bh=LKcfQyq8DPp4UgPqwpH5DMSMhYuKQItgNTo3FX2vdOY=;
+        b=gCSw90ZXGnQqI20WMRreQs6bbXrW9bRIxSvGs+QuwMlc6NC8DTfVoVOcT/aV+um2X7
+         4OmfbX69V3vAgzgERim11R5o2DWuE3jVPhHVotc9JClwXYV4auMLBcB53QuV727bMRmb
+         54MNgcFBrZgi8Xaxx4EOGU0EwVvlbn5F8f48PIT9gOy772SpIv7xaQFnaSkLS2lXr0XR
+         LFfTdssyiTqUo6u/uX2bzIkvnHacNYbYY9Spr6bxr/BDS52ebhYFDggciyU/0ts046Sv
+         m1Tdo34Vo+mHhyg91tDa6Pfib12Jg7EChajDroMyVivIH79cdI56gWhJw8qTaa8ojvZN
+         HGKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
          :from:date:message-id:subject:to:cc;
-        bh=AZHjTjed6u2UeXoYIy7tUATVu3569TKkLAshxZkksoI=;
-        b=YQqApNZAkW3nA9Uvs4j6ngw1wgCh9gcxheUI7lFPqw1a4Vu9sgkG98Od8u6gry6Yjk
-         Tf0gjJyt3v6IO838gBoVFC9cmbSdnFgAXDAcGm5vz+CLMcMDIqljdxivEoM4ClLsiA+E
-         fhCYyIP9WroQyrfMFLRwH/K4w6+a+J/9bI88x/UO2zxv/i6FSPt83tVIy+1RQ/jmqNLu
-         9BglgGrSqSJ/uVJiVB3/fBAqZItexrmVT0FIO2rCxr8lFZGwzcy28BNxRKzAbSLHoHVJ
-         6gSWpGaL85qoXdZo3rkL94qhwHpwpuQyKvfBtbB1Ng2w1hDXtUY5jFqpiHs7Wp44fgvO
-         XbpA==
-X-Gm-Message-State: AOAM530fDpzuMOTQzw0KJ/RS2x3Hjmq+XJyLjkPz9r+oGaObRkvG4aLA
-        u+Faq2JEtxPOM2HH7Bf1XwZMSu5mTlIoMohfPHY=
-X-Google-Smtp-Source: ABdhPJzfiG69XaV250zUtNJdLxmmGZCs2pVuuAslb3sRFdQqRMhz2WBl+Lm8/VfH9vW7CiEY1KgXm1e+xcsFlShexpY=
-X-Received: by 2002:a5d:9d13:: with SMTP id j19mr19131254ioj.110.1617605847757;
- Sun, 04 Apr 2021 23:57:27 -0700 (PDT)
+        bh=LKcfQyq8DPp4UgPqwpH5DMSMhYuKQItgNTo3FX2vdOY=;
+        b=nyDyowJ5xLJvOSnGShJewnRoAshOKcVYZyBVNrj2lKrrVqI2kQB0wenL2PO8G6Q1as
+         o/nxwD6xC+oBJS5YimdjDd29nHab+3H7Rq1jHKfnfv5YdDktQq3Yd39VviS1TGl6tAoP
+         fICQFOFrhgep4mekN/J3cuD0mYjDAdIyha10YXxA9p8U8Y1CA8Giqth3+M8MNNV7xmAU
+         TKImFFHDb+QY5ZAbBXRJqEJGJRDCaY3vmRwStIc4n6pyG/yA4I71Hcthy1NkgDuSp2ys
+         25tCeGHWtQkxQ8vrTPVu8XaOH59hGIuYFajK7rkP+q3LvE/vAQ1NU94eTR0kETovpcZ5
+         58Hg==
+X-Gm-Message-State: AOAM533M+7FijlhO3WdzOd2t+qOuF+aukN7itmwwjItcvQjgeiuJ4PCy
+        RA+cf2VGi5laAG2ASqVkjVUqqo+S7YZxhisU+cM=
+X-Google-Smtp-Source: ABdhPJzQAaSVM4Gm8crkWmB0TSJ+JxZgmzcvPzYESrybZb8Nf7KMEfiP5l9hp3lZL+dwjCh63mgmQINTlAp6MwIkMXw=
+X-Received: by 2002:a02:b890:: with SMTP id p16mr23003486jam.138.1617620692349;
+ Mon, 05 Apr 2021 04:04:52 -0700 (PDT)
 MIME-Version: 1.0
 References: <20210403184158.2834387-1-yhs@fb.com> <CA+icZUWLf4W_1u_p4-Rx1OD7h_ydP4Xzv12tMA2HZqj9CCOH0Q@mail.gmail.com>
  <6c67f02a-3bc2-625a-3b05-7eb3533044bb@fb.com> <CA+icZUV4fw5GNXFnyOjvajkVFdPhkOrhr3rn5OrAKGujpSrmgQ@mail.gmail.com>
  <CA+icZUWh6YOkCKG72SndqUbQNwG+iottO4=cPyRRVjaHD2=0qw@mail.gmail.com>
  <f706e8b9-77ca-6341-db13-e2a74549576b@fb.com> <CA+icZUVb_J95Gk2Kf0i8waL6TDfJ2n9JrGbNK_dsN1n8HdcoXQ@mail.gmail.com>
- <CA+icZUVp3UTPUS-ZjCOnHbNXxaA7DN=4x_08jc8BExFe4Nf2ZQ@mail.gmail.com>
- <dfc28e40-5ce9-c6df-2e12-7840195ab570@fb.com> <CA+icZUVtzXNxuVtEUwfULa7nivV0VFfJznsRnSZtEh+V=C=RPg@mail.gmail.com>
-In-Reply-To: <CA+icZUVtzXNxuVtEUwfULa7nivV0VFfJznsRnSZtEh+V=C=RPg@mail.gmail.com>
+ <458faf4c-7681-13eb-023d-c51f582bfec6@fb.com> <CA+icZUVcQ+vQjc0VavetA3s6jzNhC20dU4Sa9ApBLNXbY=w5wA@mail.gmail.com>
+In-Reply-To: <CA+icZUVcQ+vQjc0VavetA3s6jzNhC20dU4Sa9ApBLNXbY=w5wA@mail.gmail.com>
 Reply-To: sedat.dilek@gmail.com
 From:   Sedat Dilek <sedat.dilek@gmail.com>
-Date:   Mon, 5 Apr 2021 08:56:53 +0200
-Message-ID: <CA+icZUX8RnBOA0Fg2a_rSYPSt4f65ggZ9HH66FB4dEztAcfzcQ@mail.gmail.com>
+Date:   Mon, 5 Apr 2021 13:04:18 +0200
+Message-ID: <CA+icZUUa_gad43TeUC8Ufz0kMgXMQoFy9a_hwzPwOPZHNfmNeA@mail.gmail.com>
 Subject: Re: [PATCH dwarves] dwarf_loader: handle DWARF5 DW_OP_addrx properly
 To:     Yonghong Song <yhs@fb.com>
 Cc:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
@@ -77,109 +75,87 @@ Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-On Mon, Apr 5, 2021 at 8:17 AM Sedat Dilek <sedat.dilek@gmail.com> wrote:
->
-> On Mon, Apr 5, 2021 at 4:31 AM Yonghong Song <yhs@fb.com> wrote:
-> >
-> >
-> >
-> > On 4/4/21 5:20 PM, Sedat Dilek wrote:
-> > > On Sun, Apr 4, 2021 at 7:25 PM Sedat Dilek <sedat.dilek@gmail.com> wrote:
-> > > [ ... ]
-> > >>>> Yonghong Song as you described your build-environment and checking
-> > >>>> requirements for clang-13 in bpf-next (see [1]), I am unsure if I want
-> > >>>> to upgrade LLVM toolchain to v13-git and use bpf-next as the new
-> > >>>> kernel base.
-> > >>>> Lemme see if I get LLVM/Clang v13-git from Debian/experimental and/or
-> > >>>> <apt.llvm.org>.
-> > >>>
-> > >>> If you want to run bpf-next, clang v13 definitely recommended.
-> > >>> But I think if you use clang v13 to run linus linux, you may
-> > >>> hit DWARF5 DW_OP_addrx as well. But unfortunately you will
-> > >>> may hit a few selftest issues (e.g., BPF_TCP_CLOSE issue).
-> > >>>
-> > >>
-> > >> OK, I started a fresh build with LLVM/Clang v13-git from <apt.llvm.org>...
-> > >>
-> > >> $ /usr/lib/llvm-13/bin/clang --version
-> > >> Debian clang version
-> > >> 13.0.0-++20210404092853+c4c511337247-1~exp1~20210404073605.3891
-> > >> Target: x86_64-pc-linux-gnu
-> > >> Thread model: posix
-> > >> InstalledDir: /usr/lib/llvm-13/bin
-> > >>
-> > >> ...with latest bpf-next as new base.
-> > >>
-> > >> I applied your/this pahole patch "[PATCH dwarves] dwarf_loader: handle
-> > >> DWARF5 DW_OP_addrx properly".
-> > >>
-> > >> Will report later...
-> > >>
-> > >
-> > > Yupp, works.
-> > >
-> > > $ cat /proc/version
-> > > Linux version 5.12.0-rc5-13-amd64-clang13-lto
-> > > (sedat.dilek@gmail.com@iniza) (Debian clang version
-> > > 13.0.0-++20210404092853+c4c511337247-1~exp1~20210404073605.3891, LLD
-> > > 13.0.0) #13~bullseye+dileks1 SMP 2021-04-04
-> > >
-> > > MAKE="make V=1"
-> > > MAKE_OPTS="LLVM=1 LLVM_IAS=1"
-> > > MAKE_OPTS="$MAKE_OPTS PAHOLE=/opt/pahole/bin/pahole"
-> > >
-> > > $ LC_ALL=C $MAKE $MAKE_OPTS -C tools/testing/selftests/bpf/ 2>&1 | tee
-> > > ../make-log_tools-testing-selftests-bpf_llvm-1-llvm_ias-1.txt
-> > >
-> > > dileks@iniza:~/src/linux-kernel/git/tools/testing/selftests/bpf$ sudo
-> > > ./test_progs -n 55/2
-> > > #55/2 subprog:OK
-> > > #55 kfunc_call:OK
-> > > Summary: 1/1 PASSED, 0 SKIPPED, 0 FAILED
-> > >
-> > > My linux-config and
-> > > make-log_tools-testing-selftests-bpf_llvm-1_llvm_ias-1.txt.gz files
-> > > are attached.
-> > >
-> > > Feel free to add my:
-> > >
-> > > Tested-by: Sedat Dilek <sedat.dilek@gmail.com> # LLVM/Clang v13-git (x86-64)
-> >
-> > Great! Thanks for the help to test the pahole/kernel patches.
-> >
->
-> Thank you Yonghong!
->
-> I was able to do so with Linux v5.12-rc6 and some custom patches using
-> LLVM/clang v12.0.0-rc4.
->
-> Please see attachments.
->
-> I applied this commit from bpf-next:
->
-> commit 97a19caf1b1f6a9d4f620a9d51405a1973bd4641
-> "bpf: net: Emit anonymous enum with BPF_TCP_CLOSE value explicitly"
->
-> Link: https://git.kernel.org/bpf/bpf-next/c/97a19caf1b1f6a9d4f620a9d51405a1973bd4641
->
-> Checking vmlinux.h:
->
-> $ grep 'BPF_TCP_CLOSE ' tools/testing/selftests/bpf/tools/include/vmlinux.h
-> 91929:  BPF_TCP_CLOSE = 7,
->
-> Checking with test_progs:
->
-> dileks@iniza:~/src/linux-kernel/git/tools/testing/selftests/bpf$ sudo
-> ./test_progs -n 55/2
-> #55/2 null_check:OK
-> #55 ksyms_btf:OK
-> Summary: 1/1 PASSED, 0 SKIPPED, 0 FAILED
->
-> Can we have this patch from bpf-next for Linus Git?
->
+I hoped to drop "test_core_extern.skel.h"
+tools/testing/selftests/bpf/Makefile as test_cpp.cpp includes it:
 
-I am awfully sorry to have sent the make-log file uncompressed
-(~1.1MiB) to the list.
-Mea culpa.
+$ git grep include tools/testing/selftests/bpf/test_cpp.cpp
+tools/testing/selftests/bpf/test_cpp.cpp:#include "test_core_extern.skel.h"
+
+$ git diff
+diff --git a/tools/testing/selftests/bpf/Makefile
+b/tools/testing/selftests/bpf/Makefile
+index 044bfdcf5b74..a93e4d6ff93c 100644
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -450,7 +450,7 @@ $(OUTPUT)/test_verifier: test_verifier.c
+verifier/tests.h $(BPFOBJ) | $(OUTPUT)
+       $(Q)$(CC) $(CFLAGS) $(filter %.a %.o %.c,$^) $(LDLIBS) -o $@
+
+# Make sure we are able to include and link libbpf against c++.
+-$(OUTPUT)/test_cpp: test_cpp.cpp $(OUTPUT)/test_core_extern.skel.h $(BPFOBJ)
++$(OUTPUT)/test_cpp: test_cpp.cpp $(BPFOBJ)
+       $(call msg,CXX,,$@)
+       $(Q)$(CXX) $(CFLAGS) $^ $(LDLIBS) -o $@
+
+When using g++:
+
+$ llvm-objdump-12 -Dr test_cpp | grep test_core_extern
+   77dd: e8 be 01 00 00                callq   0x79a0
+<_ZL25test_core_extern__destroyP16test_core_extern>
+   7842: e8 59 01 00 00                callq   0x79a0
+<_ZL25test_core_extern__destroyP16test_core_extern>
+00000000000079a0 <_ZL25test_core_extern__destroyP16test_core_extern>:
+   79a3: 74 1a                         je      0x79bf
+<_ZL25test_core_extern__destroyP16test_core_extern+0x1f>
+   79af: 74 05                         je      0x79b6
+<_ZL25test_core_extern__destroyP16test_core_extern+0x16>
+   799e: 74 06                         je      0x79a6
+<_ZL25test_core_extern__destroyP16test_core_extern+0x6>
+   7942: 73 61                         jae     0x79a5
+<_ZL25test_core_extern__destroyP16test_core_extern+0x5>
+   7945: 70 6c                         jo      0x79b3
+<_ZL25test_core_extern__destroyP16test_core_extern+0x13>
+   794b: 70 65                         jo      0x79b2
+<_ZL25test_core_extern__destroyP16test_core_extern+0x12>
+   7954: 73 5f                         jae     0x79b5
+<_ZL25test_core_extern__destroyP16test_core_extern+0x15>
+   79aa: 79 00                         jns     0x79ac
+<_ZL25test_core_extern__destroyP16test_core_extern+0xc>
+
+When using clang++-12:
+
+$ llvm-objdump-12 -Dr test_cpp | grep test_core_extern
+[ empty ]
+
+Last I tried:
+
+selftests-bpf-Makefile-EXTRA_CXXFLAGS-x-c-header.diff
+diff --git a/tools/testing/selftests/bpf/Makefile
+b/tools/testing/selftests/bpf/Makefile
+index 044bfdcf5b74..df07fd9325d0 100644
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -27,6 +27,7 @@ CFLAGS += -g -rdynamic -Wall -O2 $(GENFLAGS)
+$(SAN_CFLAGS)            \
+         -Dbpf_prog_load=bpf_prog_test_load                            \
+         -Dbpf_load_program=bpf_test_load_program
+LDLIBS += -lcap -lelf -lz -lrt -lpthread
++EXTRA_CXXFLAGS := -x c-header
+
+# Order correspond to 'make run_tests' order
+TEST_GEN_PROGS = test_verifier test_tag test_maps test_lru_map
+test_lpm_map test_progs \
+@@ -452,7 +453,7 @@ $(OUTPUT)/test_verifier: test_verifier.c
+verifier/tests.h $(BPFOBJ) | $(OUTPUT)
+# Make sure we are able to include and link libbpf against c++.
+$(OUTPUT)/test_cpp: test_cpp.cpp $(OUTPUT)/test_core_extern.skel.h $(BPFOBJ)
+       $(call msg,CXX,,$@)
+-       $(Q)$(CXX) $(CFLAGS) $^ $(LDLIBS) -o $@
++       $(Q)$(CXX) $(CFLAGS) $(EXTRA_CXXFLAGS) $^ $(LDLIBS) -o $@
+
+# Benchmark runner
+$(OUTPUT)/bench_%.o: benchs/bench_%.c bench.h
+
+NOPE.
 
 - Sedat -
