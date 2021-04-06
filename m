@@ -7,43 +7,44 @@ X-Spam-Status: No, score=-16.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C2DD0C433ED
-	for <linux-dwarves@archiver.kernel.org>; Tue,  6 Apr 2021 13:23:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 86F5DC43460
+	for <linux-dwarves@archiver.kernel.org>; Tue,  6 Apr 2021 16:40:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6F3C2611EE
-	for <linux-dwarves@archiver.kernel.org>; Tue,  6 Apr 2021 13:23:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5CFAB613D8
+	for <linux-dwarves@archiver.kernel.org>; Tue,  6 Apr 2021 16:40:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243726AbhDFNXp (ORCPT
+        id S244251AbhDFQkb (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Tue, 6 Apr 2021 09:23:45 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57912 "EHLO mail.kernel.org"
+        Tue, 6 Apr 2021 12:40:31 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47094 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231781AbhDFNXk (ORCPT <rfc822;dwarves@vger.kernel.org>);
-        Tue, 6 Apr 2021 09:23:40 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id D2B5860C41;
-        Tue,  6 Apr 2021 13:23:31 +0000 (UTC)
+        id S232042AbhDFQkb (ORCPT <rfc822;dwarves@vger.kernel.org>);
+        Tue, 6 Apr 2021 12:40:31 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 2177E613D5;
+        Tue,  6 Apr 2021 16:40:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1617715412;
-        bh=88kvypljFiuRSxbMUrCqhfXv2IGo2pEIq+iYCT3xnZw=;
+        s=k20201202; t=1617727223;
+        bh=dZpsTQ/aOgqzZBZHunx+MULLBc12D2QIBCK44v7h6s0=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=pXg+Db3s8XfZD7GIg4ie7TJ+u2p4DCixCedsGRV4o+6+8kSVS2ZBtRJcdmWTNfj8P
-         HRUuWX67b+4bPXo41+r81o1sgLb/4ND+4st1L+X7ziv95pm1MQAxpCu+NJCoENN7O4
-         vGN5zKFOgVvG/stQGLOXO7NJokO/VjvcV8r+nj5nXu99+xCZugTqYjKndLezqxTCNR
-         naLwCchlv7OfVxVPQCNuqugfj+wxph4UV/nMqVJrDnLi99x9QjQP+LDk0RKAVpb2bL
-         S60gtLuJhwr8eeCZ84Z9pIBDDUvwFrPiiQd0oJY4QsUiX2uvJzALwWFQlpKUuQ1NSg
-         wFY9ojhiIAwJA==
+        b=lDxoRti3lNE01AOFDqGS4hsGWu/uY4xpBl44jY+FaezL1RTI410SVNkIJ4Jz3ouw3
+         eXhTJAVeJMCnyIqAS/wlE+mliCrPgy4zWmxiIFSuqoIuIcIuKymxukVzkV4n1qJ6sJ
+         bYhIglyXVfUdJoujX9Pp5Rp66kTGo1H7yqZ/XO9cb4uMVjTpgTej0QEkRtMmXCZEch
+         bUxK47XOWYIhgiNqbROqF5tDvxedU05C+ai0QFcrGk9zHvDre0TSHUNj6wmV/d8ovo
+         kKtsVlQID7YeKYgWRBSojk7EA1IEVyfyvXEh7MYRre4INK/fzOUIbBgSJl1KWlH1QV
+         FqyG/nrivgTWg==
 Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id E1F9540647; Tue,  6 Apr 2021 10:23:29 -0300 (-03)
-Date:   Tue, 6 Apr 2021 10:23:29 -0300
+        id AB99440647; Tue,  6 Apr 2021 13:40:20 -0300 (-03)
+Date:   Tue, 6 Apr 2021 13:40:20 -0300
 From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Yonghong Song <yhs@fb.com>, Bill Wendling <morbo@google.com>
-Cc:     dwarves@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+To:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
+Cc:     Bill Wendling <morbo@google.com>, Yonghong Song <yhs@fb.com>,
+        dwarves@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
         Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
         David Blaikie <dblaikie@gmail.com>,
         =?utf-8?B?RsSBbmctcnXDrCBTw7JuZw==?= <maskray@google.com>,
         kernel-team@fb.com, Nick Desaulniers <ndesaulniers@google.com>
 Subject: Re: [PATCH dwarves 0/2] dwarf_loader: improve cus__merging_cu()
-Message-ID: <YGxg0WTh+zbnnBCG@kernel.org>
+Message-ID: <YGyO9KzDoxu5zk33@kernel.org>
 References: <20210401025815.2254256-1-yhs@fb.com>
  <CAGG=3QWpcCG7b70oQsRTATgt10acEFS=-Tg9U=DHZ6xoS3GeMA@mail.gmail.com>
  <CAGG=3QUUYn9K7zVQ1UVZ57_FFeiiOexwq_OgDw9VFPJD3fFbVw@mail.gmail.com>
@@ -205,17 +206,6 @@ Em Tue, Apr 06, 2021 at 10:22:37AM -0300, Arnaldo Carvalho de Melo escreveu:
 > 
 > I'll try after a 'make mrproper'
 
-Also:
+Same thing, trying now with gcc.
 
-[acme@five pahole]$ git log --oneline -10
-ae0b7dde1fd50b12 (HEAD -> master) dwarf_loader: Handle DWARF5 DW_OP_addrx properly
-9adb014930f31c66 dwarf_loader: Handle subprogram ret type with abstract_origin properly
-5752d1951d081a80 dwarf_loader: Check .notes section for LTO build info
-209e45424ff4a22d dwarf_loader: Check .debug_abbrev for cross-CU references
-39227909db3cc2c2 dwarf_loader: Permit merging all DWARF CU's for clang LTO built binary
-763475ca1101ccfe dwarf_loader: Factor out common code to initialize a cu
-d0d3fbd4744953e8 dwarf_loader: Permit a flexible HASHTAGS__BITS
-ffe0ef4d73906c18 btf: Add --btf_gen_all flag
-de708b33114d42c2 btf: Add support for the floating-point types
-4b7f8c04d009942b fprintf: Honour conf_fprintf.hex when printing enumerations
-[acme@five pahole]$
+- Arnaldo
