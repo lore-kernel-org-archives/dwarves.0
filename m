@@ -2,69 +2,82 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-18.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
+	USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 953A9C433ED
-	for <linux-dwarves@archiver.kernel.org>; Tue,  6 Apr 2021 18:20:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 31B30C433B4
+	for <linux-dwarves@archiver.kernel.org>; Tue,  6 Apr 2021 18:22:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 67F0D613CC
-	for <linux-dwarves@archiver.kernel.org>; Tue,  6 Apr 2021 18:20:25 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0710F613D5
+	for <linux-dwarves@archiver.kernel.org>; Tue,  6 Apr 2021 18:22:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238118AbhDFSUc (ORCPT
+        id S237779AbhDFSWf (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Tue, 6 Apr 2021 14:20:32 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49262 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237779AbhDFSUc (ORCPT <rfc822;dwarves@vger.kernel.org>);
-        Tue, 6 Apr 2021 14:20:32 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 16580613B8;
-        Tue,  6 Apr 2021 18:20:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1617733224;
-        bh=HwWDY1UBty/z4wmcoQdcjUnhELugmMFyNKQPmbJ1LLo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rMhJwqnjKBfocKJuw+LfP0E/0eS8VR7Dv2bOw6G2XNIJddg+LBT6CtUs6D91GrqbR
-         brLbJ2O6Qo7EmYy490HgPsXtC9i+dkOHnDhVnGxjJy4LJqSMMESmrYTtlNe1VfE1ZB
-         5FUExM2QlE1LWeBeG7KTuMn8AEh1zvleMopUiSa4jVIhv4qImiBfGNQQjQm9gBIdT6
-         /7mIO4sSRNNxmQ9RT5oJSTJ9AtCPzXuAYmCvJEO/DSdq3IPW9q2t2eZPbic+7dnFYh
-         kYhy9JmstxXuDByWut7yZm57s1KXYZxsrleqPK6BZlvqLC4dOHalrAOlJXQQ0jj53m
-         z5DlpXSEXunYQ==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 2C24940647; Tue,  6 Apr 2021 15:20:21 -0300 (-03)
-Date:   Tue, 6 Apr 2021 15:20:21 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+        Tue, 6 Apr 2021 14:22:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38314 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238476AbhDFSWd (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Tue, 6 Apr 2021 14:22:33 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E1BCC06174A
+        for <dwarves@vger.kernel.org>; Tue,  6 Apr 2021 11:22:25 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id j7so3289249plx.2
+        for <dwarves@vger.kernel.org>; Tue, 06 Apr 2021 11:22:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=C0RQ/HPJcBHKXW84UVqze3pyJyNv+txPaAWDVCQCoUQ=;
+        b=LBbkasxXqQ/IqtFb12mMZe/4HfwrWM5ba61wDtVNHGT9ChcWXoj9GAcI1uMeQaPLXt
+         WP6AqdqLnUiyPpHJ4EbQMnXWXa1pFjcQrLK14FV9rBOTAITujyeIajIvZY/LUbtixGNt
+         ekmeLDzRXJPxuQLy+fxIb8RiIvo/5YReLoRlFwRzNA7qan6TQ2uw8p77Io3+1DoFym64
+         x/EVn1IkQo+OLR2eBm4mt8hBX0HU8IRN4i5XLJgTxEfFgpp+jaN2pGBWPWLsKmXNnSDJ
+         idme/zvwO6G8GIZABpg/jPgWfPm6Tp+Ms5OXETBqPoed6wCai/Qsy+feIShlhr5S3jg9
+         QyPQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=C0RQ/HPJcBHKXW84UVqze3pyJyNv+txPaAWDVCQCoUQ=;
+        b=INZzJRUHPnPBtw7mOZsxle4EFONosoHeFw46Or9eRQgZK36YjPRFUvOahWskJgUPjL
+         bJWcqN4rLkFGVjILZITfcq1ha1gpjThJwsCulni0K5Wso+d2iX3MtN4pVbxbCnI1h16x
+         xyzbZmQULEpyoEWHZ85LcFkAaWb+f6QgqWQZ+8u+qdMs72DHMwJSlSV8u9Q91qmasnVM
+         1VKPcmPi/UBd7sZMN9UsOg1vFm7BuOCcbI95Z5SNZwFP75vjnkKPn0ArztlQuFpQvA3e
+         cOibhgbW780REA7k/PFPoh7CUC2Dyh5cJeLC6GbYuWbkA+rGPZIk1bmvrXovfStwqkBc
+         F6oA==
+X-Gm-Message-State: AOAM533WyIiTsknTLnorp6l22pQlrjwaGBWZuiEvGTLoKKcFEtcxzqJw
+        FSld/Us7Bsp2+vpFVFAGYm1wg4XyihSl2dJyYt2xAQ==
+X-Google-Smtp-Source: ABdhPJxsZo1TkJNobBdpsBU4FMHfaHL5sG1OxZFg6v51vjPZR7gTLxw1Ep9EKowyT+MOQk8MxkWCBnBoVz0oEW0Ee2U=
+X-Received: by 2002:a17:90a:1049:: with SMTP id y9mr5457835pjd.173.1617733344337;
+ Tue, 06 Apr 2021 11:22:24 -0700 (PDT)
+MIME-Version: 1.0
+References: <CAGG=3QUUYn9K7zVQ1UVZ57_FFeiiOexwq_OgDw9VFPJD3fFbVw@mail.gmail.com>
+ <06ba2ed4-2730-9ce8-0665-3c720bc786a3@fb.com> <CAGG=3QXkvwrm_tnsYtJ-gvHw8Emv5xFWeckoPoD4PhEud7v8EA@mail.gmail.com>
+ <YGxgnQyBPf5fxQxM@kernel.org> <YGyO9KzDoxu5zk33@kernel.org>
+ <YGySmmmn4J43I0EG@kernel.org> <YGyTco9NvT8Bin8i@kernel.org>
+ <YGyUbX/HRBdGjH3i@kernel.org> <3a6aa243-add9-88a5-b405-85fd8bfbe21d@fb.com>
+ <4eda63d8-f9df-71ab-d625-dcc4df429a89@fb.com> <YGyicDTUkPNhab4K@kernel.org> <CAENS6EvW8+oAa_DfN3LZsHmVkwA2WTb-TrcSf1FLEroyrnQXzQ@mail.gmail.com>
+In-Reply-To: <CAENS6EvW8+oAa_DfN3LZsHmVkwA2WTb-TrcSf1FLEroyrnQXzQ@mail.gmail.com>
+From:   =?UTF-8?B?RsSBbmctcnXDrCBTw7JuZw==?= <maskray@google.com>
+Date:   Tue, 6 Apr 2021 11:22:12 -0700
+Message-ID: <CAFP8O3JzEdRsKXF74yT0A26yCLhRT_s1+CpxRkqSctpEE=+wCg@mail.gmail.com>
+Subject: Re: [PATCH dwarves 0/2] dwarf_loader: improve cus__merging_cu()
 To:     David Blaikie <dblaikie@gmail.com>
 Cc:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
         Yonghong Song <yhs@fb.com>, Bill Wendling <morbo@google.com>,
         Jiri Olsa <jolsa@kernel.org>, dwarves@vger.kernel.org,
         Alexei Starovoitov <ast@kernel.org>,
         Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
-        =?utf-8?B?RsSBbmctcnXDrCBTw7JuZw==?= <maskray@google.com>,
         kernel-team@fb.com, Nick Desaulniers <ndesaulniers@google.com>
-Subject: Re: [PATCH dwarves 0/2] dwarf_loader: improve cus__merging_cu()
-Message-ID: <YGymZcMytvDpqHaK@kernel.org>
-References: <CAGG=3QXkvwrm_tnsYtJ-gvHw8Emv5xFWeckoPoD4PhEud7v8EA@mail.gmail.com>
- <YGxgnQyBPf5fxQxM@kernel.org>
- <YGyO9KzDoxu5zk33@kernel.org>
- <YGySmmmn4J43I0EG@kernel.org>
- <YGyTco9NvT8Bin8i@kernel.org>
- <YGyUbX/HRBdGjH3i@kernel.org>
- <3a6aa243-add9-88a5-b405-85fd8bfbe21d@fb.com>
- <4eda63d8-f9df-71ab-d625-dcc4df429a89@fb.com>
- <YGyicDTUkPNhab4K@kernel.org>
- <CAENS6EvW8+oAa_DfN3LZsHmVkwA2WTb-TrcSf1FLEroyrnQXzQ@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAENS6EvW8+oAa_DfN3LZsHmVkwA2WTb-TrcSf1FLEroyrnQXzQ@mail.gmail.com>
-X-Url:  http://acmel.wordpress.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-Em Tue, Apr 06, 2021 at 11:17:56AM -0700, David Blaikie escreveu:
+On Tue, Apr 6, 2021 at 11:18 AM David Blaikie <dblaikie@gmail.com> wrote:
+>
 > On Tue, Apr 6, 2021 at 11:03 AM Arnaldo Carvalho de Melo
 > <arnaldo.melo@gmail.com> wrote:
 > >
@@ -262,15 +275,18 @@ Em Tue, Apr 06, 2021 at 11:17:56AM -0700, David Blaikie escreveu:
 > >
 > > /me goes back to building clang/llvm HEAD, reducing the number of linker
 > > instances to 1 as I have just 32GB of ram in this Ryzen machine... ;-)
-> 
+>
 > 32GB should be enough for a lot of parallel links - unless you're
 > using ld.bfd - highly advised to switch to gold or lld & then you
 > shuold be able to do a fair number of parallel links without loads of
 > thrashing.
-> 
+>
 >  https://llvm.org/docs/GettingStarted.html#common-problems discusses a
 > few things to try
+>
+>  - Dave
 
-Thanks for the pointer!
-
-- Arnaldo
+In the Linux kernel land I remember ld.lld can use more memory than GNU ld.
+There are some lkp bot reports related to this.
+It may be related to GNU ld not mmaping(?) input files. In any case no
+deep analysis has been performed tracking down the potential issues.
