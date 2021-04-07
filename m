@@ -2,195 +2,235 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+X-Spam-Status: No, score=-12.3 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
-	USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,MSGID_FROM_MTA_HEADER,NICE_REPLY_A,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AACA8C433B4
-	for <linux-dwarves@archiver.kernel.org>; Tue,  6 Apr 2021 18:40:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4BA78C433B4
+	for <linux-dwarves@archiver.kernel.org>; Wed,  7 Apr 2021 14:54:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5871A613B8
-	for <linux-dwarves@archiver.kernel.org>; Tue,  6 Apr 2021 18:40:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2BCDA6136A
+	for <linux-dwarves@archiver.kernel.org>; Wed,  7 Apr 2021 14:54:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237172AbhDFSks (ORCPT
+        id S235841AbhDGOyz (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Tue, 6 Apr 2021 14:40:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42050 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238387AbhDFSja (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Tue, 6 Apr 2021 14:39:30 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10DAAC06174A
-        for <dwarves@vger.kernel.org>; Tue,  6 Apr 2021 11:39:22 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id w28so24278382lfn.2
-        for <dwarves@vger.kernel.org>; Tue, 06 Apr 2021 11:39:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=HQMr+myNry7kMYJRVZWeSVgVa7oM6pbfeSZSl/6u29k=;
-        b=Pejc/BsA8L+TrZPdOwGHEPycuL6xNz5a8xRww8TuUSCgKj81lbNaCMvZ5AezmAQOo3
-         iHffyxnvTmFH7xH1zeco1pel6rsL9/SLE7+vYfV8Q2byaIXSP/WyDIdz4/JhkoV6E8ao
-         C196PK+sW2SGOEDgD4CihqKsl+i2l6NvINN+hzneYJZhSlabo9suuKlOcZ/teKY+epXk
-         kIrWCtpa0jSvxVILeR85ZnCyHpvG4AZhXKnFjw+GO3gN/C1spLIA7WFl6kUWAMxToRRh
-         SaeHhHZntayiEUo9dRoaT4nPrF2Hy/fyJdSa6aJCTo3TUuTtNphN9MjO2NCNY3GDLRf8
-         vZDw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=HQMr+myNry7kMYJRVZWeSVgVa7oM6pbfeSZSl/6u29k=;
-        b=jUaWtobJJ37+sybOxQ0bryKwljUiHUOJpb8JoE8dEm+TEKp4CUGUlymE7s7EE1eSO3
-         KFExXagIx/pxdtBjvX6GTCNPwuJbuYOha0LnLe+YZDGvRihurXr1WxHrZ1eSpdZzOXNm
-         v+Ss6a1/0H8kNmXC8OQstPJK1kVpjw4P6cXpd3iGjRl+A8WQ4JcLEJ4VCSsUna48bH4x
-         tgkfSh+jRPmmMl8r/9/eGu6WfMA34c8DrYhI92HjwqrK28j/2mPdKftfUuqP9tB3EOHH
-         eefrmaBNoJlsCwfu2pgNh0Ram4QWOOAQZgrz+Dg04BdQGJtD4KeXxzCFSB8LAsflirUF
-         OnCw==
-X-Gm-Message-State: AOAM533eX3tOoVZZL8TkXGO6mK7xGEHW8EX3Kzp8z5JCrrzWtXKJOxI7
-        QkllWY1FSqNJboeBflGMuQOpfXKV8Ydi97yvtTDOXw==
-X-Google-Smtp-Source: ABdhPJwfF8QTg6t910CMAqJ9lPp1gWVxBDXydZblUn3PzjSJ4R76U4j8NWJdIQODLYvQGTNNGH20bVl5J4NuLLVRId0=
-X-Received: by 2002:a19:8c19:: with SMTP id o25mr22129544lfd.547.1617734360307;
- Tue, 06 Apr 2021 11:39:20 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210403184158.2834387-1-yhs@fb.com> <CA+icZUVxpkCJVnibqm3+OYdfdh5U=eU_u7pPKUZMoPm3XzZWPQ@mail.gmail.com>
-In-Reply-To: <CA+icZUVxpkCJVnibqm3+OYdfdh5U=eU_u7pPKUZMoPm3XzZWPQ@mail.gmail.com>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Tue, 6 Apr 2021 11:39:09 -0700
-Message-ID: <CAKwvOdn+ScOD=LyU+4CxL6AOpfjXuzzQD-=TuM9ER-Q8Wposuw@mail.gmail.com>
-Subject: Re: Usage of CXX in tools directory
-To:     Sedat Dilek <sedat.dilek@gmail.com>
-Cc:     Masahiro Yamada <masahiroy@kernel.org>, Yonghong Song <yhs@fb.com>,
-        Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
-        David Blaikie <dblaikie@gmail.com>,
-        Bill Wendling <morbo@google.com>,
-        Nathan Chancellor <nathan@kernel.org>,
+        Wed, 7 Apr 2021 10:54:55 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:48682 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230426AbhDGOyt (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Wed, 7 Apr 2021 10:54:49 -0400
+Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 137Er2sL026976;
+        Wed, 7 Apr 2021 07:54:35 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=subject : to : cc :
+ references : from : message-id : date : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=facebook;
+ bh=Yb9FO5/CgNo9H3FVqgaZ4NASU+H86GLmes5VcdzKTUg=;
+ b=ZXKR0jbByzLFU/stQn13p5ZlUZgDToCirJoGPjmgwhTCycgkiC7awRG3YaQuq2nvvwIx
+ wwUH355gOp+CegAYT4yStuzDb6eUxyivesj47w1Up1QLZk2xUmM5CJbGTcPuiqNqvYYs
+ Ci455L64fh/3WcsPj4ETsGc8GjwAagmtBS4= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 37sew1r0ak-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Wed, 07 Apr 2021 07:54:34 -0700
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (100.104.31.183)
+ by o365-in.thefacebook.com (100.104.35.175) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Wed, 7 Apr 2021 07:54:30 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=EOy9uCcZaXwzT+SnFGGIkzom8J/DM1sH34sYwTejSst08l4gTteJIJVenuu32P/bm6M+cBZ1kciGGa+HBcy9Zr56xDOLwFnhpWVsbqFNsjIvZyIjzgbOLRQQH30YYOyD3MBLBIPvQGS74D5HtPRJAQNES5l9zTal21lWF5UHYw4hR49krBMVlnx0dli4wVPUemV8UH6tkmg45vXdAJb94WxXCtgg5GJ/pbgb1dPNGUFh8+oSRbT1RtIG1BGkHToHEfEWM5n9J8t7Un9widBI0+sYgqnl7ee2gIBwg2nflSn4w8yEPdRGkV6xLWUbzqDFkPWALmzHEJYZvDh5z6cVgg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Yb9FO5/CgNo9H3FVqgaZ4NASU+H86GLmes5VcdzKTUg=;
+ b=HRGH4hWCvGuM31trfq+LQU7MgjNIeAdxkLnlhBehH+u9r77OhUXt+cnPdJl8/ijedAMoD2LrYecsq+BFEBBemAKyVN4Ikr3WwoKjELglLQkdPrAKcr6jySbgEZMDmA7fhVTmIjSCiNmF1Q6hu/zLl3+6I/bbPxo9CVsWI8QRC5o7BX+wCB++4W2zvmqGqLx4y/CfpCNCI5FLH2o98no4Iv7chzJ3GiqOf3f1aIpAKlXnX2ZwutAxpZQvNqi2Dbv2ORAIDY8HchRe1XSanhF1613ToE62g33WQKln2jCLAsBlSChP2z6H6z3fzhxzBcJbzT7q6S0XE2b8RtTxWBSQAQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
+ header.d=fb.com; arc=none
+Authentication-Results: kernel.org; dkim=none (message not signed)
+ header.d=none;kernel.org; dmarc=none action=none header.from=fb.com;
+Received: from SN6PR1501MB2064.namprd15.prod.outlook.com (2603:10b6:805:d::27)
+ by SA1PR15MB4659.namprd15.prod.outlook.com (2603:10b6:806:19e::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3999.27; Wed, 7 Apr
+ 2021 14:54:29 +0000
+Received: from SN6PR1501MB2064.namprd15.prod.outlook.com
+ ([fe80::f433:fd99:f905:8912]) by SN6PR1501MB2064.namprd15.prod.outlook.com
+ ([fe80::f433:fd99:f905:8912%3]) with mapi id 15.20.3999.033; Wed, 7 Apr 2021
+ 14:54:29 +0000
+Subject: Re: [PATCH dwarves] dwarf_loader: handle subprogram ret type with
+ abstract_origin properly
+To:     Arnaldo <arnaldo.melo@gmail.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>
+CC:     David Blaikie <dblaikie@gmail.com>, <dwarves@vger.kernel.org>,
         Alexei Starovoitov <ast@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>, Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>, dwarves@vger.kernel.org,
-        bpf <bpf@vger.kernel.org>, kernel-team@fb.com,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        Clang-Built-Linux ML <clang-built-linux@googlegroups.com>
-Content-Type: text/plain; charset="UTF-8"
+        Bill Wendling <morbo@google.com>, bpf <bpf@vger.kernel.org>,
+        <kernel-team@fb.com>, Nick Desaulniers <ndesaulniers@google.com>,
+        Jiri Olsa <jolsa@kernel.org>
+References: <20210401213620.3056084-1-yhs@fb.com>
+ <e6f77eb7-b1ce-5dc3-3db7-bf67e7edfc0b@fb.com>
+ <CAENS6EsZ5OX9o=Cn5L1jmx8ucR9siEWbGYiYHCUWuZjLyP3E7Q@mail.gmail.com>
+ <1ef31dd8-2385-1da1-2c95-54429c895d8a@fb.com>
+ <CAENS6EsiRsY1JptWJqu2wH=m4fkSiR+zD8JDD5DYke=ZnJOMrg@mail.gmail.com>
+ <YGckYjyfxfNLzc34@kernel.org> <YGcw4iq9QNkFFfyt@kernel.org>
+ <2d55d22b-d136-82b9-6a0f-8b09eeef7047@fb.com>
+ <82dfd420-96f9-aedc-6cdc-bf20042455db@fb.com>
+ <E9072F07-B689-402C-89F6-545B589EF7E4@gmail.com>
+From:   Yonghong Song <yhs@fb.com>
+Message-ID: <be7079b4-718c-e4a7-dff4-56543e5854a6@fb.com>
+Date:   Wed, 7 Apr 2021 07:54:26 -0700
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
+ Gecko/20100101 Thunderbird/78.9.0
+In-Reply-To: <E9072F07-B689-402C-89F6-545B589EF7E4@gmail.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [2620:10d:c090:400::5:3758]
+X-ClientProxiedBy: MW4PR03CA0134.namprd03.prod.outlook.com
+ (2603:10b6:303:8c::19) To SN6PR1501MB2064.namprd15.prod.outlook.com
+ (2603:10b6:805:d::27)
+MIME-Version: 1.0
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from [IPv6:2620:10d:c085:21d6::10dc] (2620:10d:c090:400::5:3758) by MW4PR03CA0134.namprd03.prod.outlook.com (2603:10b6:303:8c::19) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4020.17 via Frontend Transport; Wed, 7 Apr 2021 14:54:28 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 753875ad-c3db-46f9-6d77-08d8f9d50b9f
+X-MS-TrafficTypeDiagnostic: SA1PR15MB4659:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <SA1PR15MB46598D0C2A35CBC4997988CBD3759@SA1PR15MB4659.namprd15.prod.outlook.com>
+X-FB-Source: Internal
+X-MS-Oob-TLC-OOBClassifiers: OLM:1265;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: QUGo7TooArPj9Dmnt8i807v24c+e+ca7CqfSD9ijknpzxq1xBPyEMCwRm8bOFGw26N40v0wrAN0l/P6DdlLF/SE82smmRhs+6BWn86PhEpGB/If97hDqqq0+gtn2pDsTCUYz9PBYfm2w3JRa4n6VHer9ymBv38sTD40IEklreJTB7v7yUDcf2M7CBR34iymsoqVHzstnjZaIc65UlirqP+gckRgvH0MmCvfq2v6QcndAkUmN8CmMdOI17UpSSXC1vX5ExW3EhyI7qhqHt8H55FEiVqKM2L5MXulEH4Tvl8uzbg13NCZex4Co0Evvw1Krts1xFzzp+vKDpd0v89eKxxe5ab0qBvbAqKxlMvD8Sny9g2FEbluSCVSpteIkK+LeKOKD/9LzeczBBtRUpn1PbPV786NTM7j38QX1k1D/Zs9PRaJfS7BF19gqM9P/IosZUSUmAd54sfvW+ZIMHLgcXkdx8T3LlzjxCCDvlT02uD2oAMtfuelR3Tty6h1HRP05kVYkZT7n+vtXm2Ek8wPaW1UYOFFbmvq2WM9B4eBhYuiYcaG6IvFKW6B/vpUC03V7qdYdtOHoclqY8+VQmv89iqeMOZO+3NR1VOG9k+94nOJEtw4Mx+JD9qvjS9vMouhr+w8J4fFCXDypWn9YfpQXGHeqWg9++f/PZFAnAvBLfWGsL1JdcZDswTN1jgt9PWlFYvpiT7YBS5M6w3fDjPDvTwdgWfXPuJnu6TvQkFt8CjU=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR1501MB2064.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(136003)(346002)(376002)(39860400002)(366004)(396003)(54906003)(86362001)(8936002)(66476007)(2906002)(478600001)(31686004)(31696002)(52116002)(5660300002)(316002)(38100700001)(110136005)(186003)(66946007)(66556008)(16526019)(2616005)(4326008)(36756003)(8676002)(53546011)(6486002)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData: =?utf-8?B?eHdQbUl1NWo0QzNUVHZKNVBVaUh2QjRsbWZ3UDJsejk3WjBQVEdFM3c4T1Qw?=
+ =?utf-8?B?alhSckc1VkJvdHZtQ3lXUFM2YW5pSnVOUVVyWHpod0U0THN2ZWN6cStSZDFI?=
+ =?utf-8?B?dlFYWjIyRUJ1TVdHVFZReGQ4dkRvMTBoRER0aUVzR3NFV2Rla3dmbGUzajgy?=
+ =?utf-8?B?YWFKUkF2cnh1UFZsaldoWExFTnBBQUg3MUltc21kdEkvUTRJb1lReTEvVm05?=
+ =?utf-8?B?ckQ0NmxQdkhrbW1BM1FRQWJwaW03MFZyVlkwZnhmZTZES3d1V2lkM2tJRSth?=
+ =?utf-8?B?QzNleUhKR1pKWHkyZzk0dW92Zit3SG5FSEZwc242b09Wd0xGbHhOcVNnbmp2?=
+ =?utf-8?B?S2lQbDdReFpMd1F0dFo0eUxNbkx6alJEdURxek1Wcithd0JiQnJrQTcvK0pN?=
+ =?utf-8?B?RXBFaWd6Z1U2Z2w2OE5UWDRCYU5UM3M4bzhQM2FLM0xLRFNBZ0xJOUJBMVRn?=
+ =?utf-8?B?SjVLWWpCUHBGMW5HMlZGZjVGbUhIenpDSCs5OS9EWEhWajJQNE9UbFo4Y1VL?=
+ =?utf-8?B?Qy95ZzA0Y2oyUWxTRlJBTHB2NnNLUkpHQnNpUG50TEwxRUFEeWZ3enBTS2lw?=
+ =?utf-8?B?NGpzaTRRV2VFb3dZeXZPL29la21NNitnYVg4cGVnN0pEajdZOER2MXlwenF4?=
+ =?utf-8?B?VDZWaFBKMUtmcFpVQi9QdndUeFE4Q09XK0Z0VUxIQjFIVEl5YzY1QWl5c0JB?=
+ =?utf-8?B?eko1S1Z1VktXL1VObERzSllNL3A2VGNnQmdMb0xBdjFyd1VUUXY3MTJkdW9m?=
+ =?utf-8?B?UFhhT21CV0dIS3Fnd2JtalRiQXdNZU8xSUZnSjdFZW1IUkxmWE4rcTVBM3Ni?=
+ =?utf-8?B?ZzgzNXJ6YVo5VmJvSzMyR3pYWlM0dnpzbDlwbUpNYTA2RlQwemc1QWhENGtJ?=
+ =?utf-8?B?TnRFMm40ekpLdWZhNlNQWVlPQ29rY2NWdVpYUjlIUXV6bGFrUTNaOXAxa2Fw?=
+ =?utf-8?B?ckdyKzhEWjU5Y25PT0ZvZ0U4a0l3OGhJQ2JLYUxHamlXd09SVnpmM0paQnNM?=
+ =?utf-8?B?STlRRGRTVVg5NUFucEo1dlJNSytFMyt4aks3NmxkZytzdmduTm55a0NLLy9B?=
+ =?utf-8?B?bEpCNjRUcjdhS3pOYTNKcmYyNW83RHQ5SzF1dHp2cWcyclI1Szk0bFhnendB?=
+ =?utf-8?B?bGZBRng4TDhCUGhicUtHcERKcWlGTFF0NnhSNlNjSFZQZFdNUk9xVTlIeTVo?=
+ =?utf-8?B?QzU0ajAzcGxKRisySG9qM1pSQkhvQkVBdkZDdWI5bXpRZWlya1dSWWFKOThE?=
+ =?utf-8?B?QU1iYnFtQ3orbG5hME12QjU1WmpEVXZQU2NiTXhXZmMveGdiQkZPZzhBQlUr?=
+ =?utf-8?B?ZVVZUGllcHZwL2tlQkxxVERWemlCRUp2M1pCMmZPTEd3M1ErSHUvSzFnNE5x?=
+ =?utf-8?B?WUEycUNtUk9vMG9xUTk1bE5KTHdQdzluQ21MTmNDS1V1MDNsdHk5Wi9tUWNu?=
+ =?utf-8?B?dlNuQjZlMldmcGR1NEtqTUJ5Qk1NRHJxSlNYWHAvdm9tQTBRN2ZkcS81K2FQ?=
+ =?utf-8?B?Vm56ODhFa2Z4SHQrV00rNEQ4bW1qRnR1Y0pOVXlNeHVKaklmSnNmaGpYN3p4?=
+ =?utf-8?B?TFRaQTRyaGpFZms3UmpTemRHVCtORnN1RER1dEF5ZEplSDQ3RklYWklGdEtD?=
+ =?utf-8?B?ZTRzSWN1aTNtVHV5UEhoSElLd2V1aTNSbjB4dGxkMENNNUpEWlBsMTRSTkox?=
+ =?utf-8?B?KzhmVmh4N3NsdVU5N0d5Z1BTVnFidSt2SWVURVR5bXZNSGZSQjlCYjFHeENx?=
+ =?utf-8?B?cHU5TnlFN2wyVjlyY1JRSmRUQ0pDR1B6WkhaUjhKMlIvN2JjUWdad01RTHBp?=
+ =?utf-8?Q?4CRgFWucEiyoFcN/MK8LKs+cIUNZoQYZjJqBc=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 753875ad-c3db-46f9-6d77-08d8f9d50b9f
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR1501MB2064.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Apr 2021 14:54:29.2582
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Rr1wimQm2GKHEGwB+ny/qbqLafJ+DN4NkoHYuzgYG3AM9Mcpd3xOpFKs4J87V0/G
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR15MB4659
+X-OriginatorOrg: fb.com
+X-Proofpoint-GUID: GfZeIWTsPJ08mkTjFnk2BJjbSu45yRXl
+X-Proofpoint-ORIG-GUID: GfZeIWTsPJ08mkTjFnk2BJjbSu45yRXl
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
+ definitions=2021-04-07_08:2021-04-07,2021-04-07 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
+ impostorscore=0 suspectscore=0 clxscore=1015 phishscore=0
+ lowpriorityscore=0 spamscore=0 malwarescore=0 mlxscore=0 mlxlogscore=999
+ adultscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2104060000 definitions=main-2104070106
+X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-On Sun, Apr 4, 2021 at 8:00 AM Sedat Dilek <sedat.dilek@gmail.com> wrote:
->
-> [ Please CC me I am not subscribed to all mailing-lists ]
-> [ Please CC some more folks if you like ]
->
-> Hi,
->
-> when dealing/experimenting with BPF together with pahole/dwarves and
-> dwarf-v5 and clang-lto I fell over that there is usage of CXX in tools
-> directory.
-> Especially,  I wanted to build and run test_progs from BPF selftests.
-> One BPF selftest called "test_cpp" used GNU/g++ (and even /usr/bin/ld)
-> and NOT LLVM/clang++.
->
-> For details see the linux-bpf/dwarves thread "[PATCH dwarves]
-> dwarf_loader: handle DWARF5 DW_OP_addrx properly" in [1].
->
-> Lemme check:
->
-> $ git grep CXX tools/
-> tools/build/Build.include:cxx_flags = -Wp,-MD,$(depfile) -Wp,-MT,$@
-> $(CXXFLAGS) -D"BUILD_STR(s)=\#s" $(CXXFLAGS_$(basetarget).o)
-> $(CXXFLAGS_$(obj))
-> tools/build/Makefile.build:quiet_cmd_cxx_o_c = CXX      $@
-> tools/build/Makefile.build:      cmd_cxx_o_c = $(CXX) $(cxx_flags) -c -o $@ $<
-> tools/build/Makefile.feature:  feature-$(1) := $(shell $(MAKE)
-> OUTPUT=$(OUTPUT_FEATURES) CC="$(CC)" CXX="$(CXX)"
-> CFLAGS="$(EXTRA_CFLAGS) $(FEATURE_CHECK_CFLAGS-$(1))"
-> CXXFLAGS="$(EXTRA_CXXFLAGS) $(FEATURE_CHECK_CXXFLAGS-$(1))"
-> LDFLAGS="$(LDFLAGS) $(FEATURE_CHECK_LDFLAGS-$(1))" -C $(feature_dir)
-> $(OUTPUT_FEATURES)test-$1.bin >/dev/nu
-> ll 2>/dev/null && echo 1 || echo 0)
-> tools/build/feature/Makefile:__BUILDXX = $(CXX) $(CXXFLAGS) -MD -Wall
-> -Werror -o $@ $(patsubst %.bin,%.cpp,$(@F)) $(LDFLAGS)
-> ...
-> tools/perf/Makefile.config:USE_CXX = 0
-> tools/perf/Makefile.config:        CXXFLAGS +=
-> -DHAVE_LIBCLANGLLVM_SUPPORT -I$(shell $(LLVM_CONFIG) --includedir)
-> tools/perf/Makefile.config:        $(call detected,CONFIG_CXX)
-> tools/perf/Makefile.config:     USE_CXX = 1
-> tools/perf/Makefile.perf:export srctree OUTPUT RM CC CXX LD AR CFLAGS
-> CXXFLAGS V BISON FLEX AWK
-> tools/perf/Makefile.perf:ifeq ($(USE_CXX), 1)
-> tools/perf/util/Build:perf-$(CONFIG_CXX) += c++/
-> ...
-> tools/scripts/Makefile.include:$(call allow-override,CXX,$(CROSS_COMPILE)g++)
-> ...
-> tools/testing/selftests/bpf/Makefile:CXX ?= $(CROSS_COMPILE)g++
-> tools/testing/selftests/bpf/Makefile:   $(call msg,CXX,,$@)
-> tools/testing/selftests/bpf/Makefile:   $(Q)$(CXX) $(CFLAGS) $^ $(LDLIBS) -o $@
->
-> The problem is if you pass LLVM=1 there is no clang(++) assigned to
-> CXX automagically.
->
-> [2] says:
->
-> LLVM has substitutes for GNU binutils utilities. Kbuild supports
-> LLVM=1 to enable them.
->
-> make LLVM=1
-> They can be enabled individually. The full list of the parameters:
->
-> make CC=clang LD=ld.lld AR=llvm-ar NM=llvm-nm STRIP=llvm-strip \
->   OBJCOPY=llvm-objcopy OBJDUMP=llvm-objdump READELF=llvm-readelf \
->   HOSTCC=clang HOSTCXX=clang++ HOSTAR=llvm-ar HOSTLD=ld.lld
->
-> [ EndOfQuote  ]
->
-> So you need to pass CXX=clang++ manually when playing in tools directory:
-
-Yes, CXX is not set by LLVM=1 in the top level Makefile.  CXX is not
-exported by the top level Makefile.  I suspect that
-tools/scripts/Mafefile.include (and possible
-testing/selftests/bpf/Makefile) needs to check for LLVM=1 and set
-CXX=clang++ explicitly.
-
->
-> MAKE="make V=1
-> MAKE_OPTS="HOSTCC=clang HOSTCXX=clang++ HOSTLD=ld.lld CC=clang
-> CXX=clang++ LD=ld.lld LLVM=1 LLVM_IAS=1"
-> MAKE_OPTS="MAKE_OPTS $PAHOLE=/opt/pahole/bin/pahole"
->
-> $ LC_ALL=C $MAKE $MAKE_OPTS -C tools/testing/selftests/bpf/ clean
-> $ LC_ALL=C $MAKE $MAKE_OPTS -C tools/testing/selftests/bpf/
->
-> Unsure, if tools needs a special treatment in things of CXX or LLVM=1
-> needs to be enhanced with CCX=clang++.
-> If we have HOSTCXX why not have a CXX in toplevel Makefile?
->
-> In "tools: Factor Clang, LLC and LLVM utils definitions" (see [3]) I
-> did some factor-ing.
->
-> For the records: Here Linus Git is my base.
->
-> Ideas?
->
-> Thanks.
->
-> Regards,
-> - Sedat -
->
-> P.S.: Just a small note: I know there is less usage of CXX code in the
-> linux-kernel.
->
-> [1] https://lore.kernel.org/bpf/CA+icZUWh6YOkCKG72SndqUbQNwG+iottO4=cPyRRVjaHD2=0qw@mail.gmail.com/T/#m22907f838d2d27be24e8959a53473a62f21cecea
-> [2] https://www.kernel.org/doc/html/latest/kbuild/llvm.html#llvm-utilities
-> [3] https://git.kernel.org/linus/211a741cd3e124bffdc13ee82e7e65f204e53f60
 
 
+On 4/2/21 11:08 AM, Arnaldo wrote:
+> 
+> 
+> On April 2, 2021 2:42:21 PM GMT-03:00, Yonghong Song <yhs@fb.com> wrote:
+>> On 4/2/21 10:23 AM, Yonghong Song wrote:
+> :> Thanks. I checked out the branch and did some testing with latest
+>> clang
+>>> trunk (just pulled in).
+>>>
+>>> With kernel LTO note support, I tested gcc non-lto, and llvm-lto
+>> mode,
+>>> it works fine.
+>>>
+>>> Without kernel LTO note support, I tested
+>>>     gcc non-lto  <=== ok
+>>>     llvm non-lto  <=== not ok
+>>>     llvm lto     <=== ok
+>>>
+>>> Surprisingly llvm non-lto vmlinux had the same "tcp_slow_start"
+>> issue.
+>>> Some previous version of clang does not have this issue.
+>>> I double checked the dwarfdump and it is indeed has the same reason
+>>> for lto vmlinux. I checked abbrev section and there is no cross-cu
+>>> references.
+>>>
+>>> That means we need to adapt this patch
+>>>     dwarf_loader: Handle subprogram ret type with abstract_origin
+>> properly
+>>> for non merging case as well.
+>>> The previous patch fixed lto subprogram abstract_origin issue,
+>>> I will submit a followup patch for this.
+>>
+>> Actually, the change is pretty simple,
+>>
+>> diff --git a/dwarf_loader.c b/dwarf_loader.c
+>> index 5dea837..82d7131 100644
+>> --- a/dwarf_loader.c
+>> +++ b/dwarf_loader.c
+>> @@ -2323,7 +2323,11 @@ static int die__process_and_recode(Dwarf_Die
+>> *die, struct cu *cu)
+>>          int ret = die__process(die, cu);
+>>          if (ret != 0)
+>>                  return ret;
+>> -       return cu__recode_dwarf_types(cu);
+>> +       ret = cu__recode_dwarf_types(cu);
+>> +       if (ret != 0)
+>> +               return ret;
+>> +
+>> +       return cu__resolve_func_ret_types(cu);
+>>   }
+>>
+>> Arnaldo, do you just want to fold into previous patches, or
+>> you want me to submit a new one?
+> 
+> I can take care of that.
 
--- 
-Thanks,
-~Nick Desaulniers
+Arnaldo, just in case that you missed it, please remember
+to fold the above changes to the patch:
+    [PATCH dwarves] dwarf_loader: handle subprogram ret type with 
+abstract_origin properly
+Thanks!
+
+> 
+> And I think it's time for to look at Jiri's test suite... :-)
+> 
+> It's a holiday here, so I'll take some time to get to this, hopefully I'll tag 1.21 tomorrow tho.
+> 
+> Cheers,
+> 
+> - Arnaldo
+> 
