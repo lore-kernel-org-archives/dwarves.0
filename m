@@ -2,114 +2,160 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A71A5C433B4
-	for <linux-dwarves@archiver.kernel.org>; Fri,  9 Apr 2021 13:52:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C2684C433B4
+	for <linux-dwarves@archiver.kernel.org>; Mon, 12 Apr 2021 15:08:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7CED861178
-	for <linux-dwarves@archiver.kernel.org>; Fri,  9 Apr 2021 13:52:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9358261287
+	for <linux-dwarves@archiver.kernel.org>; Mon, 12 Apr 2021 15:08:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232615AbhDINwV (ORCPT
+        id S240317AbhDLPIe (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Fri, 9 Apr 2021 09:52:21 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45172 "EHLO mail.kernel.org"
+        Mon, 12 Apr 2021 11:08:34 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38050 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232642AbhDINwV (ORCPT <rfc822;dwarves@vger.kernel.org>);
-        Fri, 9 Apr 2021 09:52:21 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 4F59561108;
-        Fri,  9 Apr 2021 13:52:08 +0000 (UTC)
+        id S237526AbhDLPId (ORCPT <rfc822;dwarves@vger.kernel.org>);
+        Mon, 12 Apr 2021 11:08:33 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 8F108611F0;
+        Mon, 12 Apr 2021 15:08:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1617976328;
-        bh=NFIRdHtpQ7HiIC9Gv8NFS7wN7NNJeQnF2jjJGj2F7aE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Om3IGO+XAfxPIpaJe+PncrqeBnM0qYlogQBI2pL1uWo1ua/3C4xXlkaLFJNIPK+1b
-         0LYO8932ZkYJpRE8P79fo+3XgehjxJnrokCg7tJxaZHM51BwXI6mIhG9nhJbpu1btt
-         feybS2I4CnoPOLsXPYKLTI7t6SvNGe1lnxCW3dbQ35FnVMhkXi4cvh4yPaIj2gTIhj
-         X177xCFW6LLHPhUC0USkG55z+UucN9xpQmHPZaixH1+0qFNDzi7W0jdOROzfMcTYHK
-         X3HBFo2v7PM3yUR4Oh+rFZo+zK4INf7bhuBU4yCA8hk1sHgXZGToAhWOaQeVCYJVO/
-         zqC769Be0P9cA==
+        s=k20201202; t=1618240095;
+        bh=yEYZUKPaHR793ZDhmZ+P1vlAN1MGuDfGKGZ/vHIAn3Q=;
+        h=Date:From:To:Cc:Subject:From;
+        b=K3Zdpb3zv2ms3Q7FD6i2Sv3atrOd3gtXVtLnczlukv1pjpMlW+rGc0C/jBoHa0Cdb
+         KiZdEu9/2ES3dZSuydULJoVbPW0DqxdBUaQn0D6g7GubujH/gHpzUoTMrZseVKfiTJ
+         sQHgbKEtK/n+L7vDqz76Is5G0B/LzClBD+C9bnLZp1rPxq3qPLyDhPpQ8Bg0dbaFOp
+         e6w/g2vtSzTZ1AL7yg1v2YEefQTRHhVvV8CCKaO593zpFAja2i/EyxxAQDJTeHZlof
+         ubYtmxZsy+/7rPmQ4YIw9zyFN7MybZuMeW1TzuopXEKNgkDaBEtUvH9RtaTkSmDMRK
+         MstQHuloq83+g==
 Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id BF3D540647; Fri,  9 Apr 2021 10:52:05 -0300 (-03)
-Date:   Fri, 9 Apr 2021 10:52:05 -0300
+        id 0B4D040647; Mon, 12 Apr 2021 12:08:13 -0300 (-03)
+Date:   Mon, 12 Apr 2021 12:08:12 -0300
 From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Yonghong Song <yhs@fb.com>
-Cc:     Arnaldo <arnaldo.melo@gmail.com>,
-        David Blaikie <dblaikie@gmail.com>, dwarves@vger.kernel.org,
-        Alexei Starovoitov <ast@kernel.org>,
-        Bill Wendling <morbo@google.com>, bpf <bpf@vger.kernel.org>,
-        kernel-team@fb.com, Nick Desaulniers <ndesaulniers@google.com>,
-        Jiri Olsa <jolsa@kernel.org>
-Subject: Re: [RFT] prepping up pahole 1.21, wanna test it? was Re: [PATCH
- dwarves] dwarf_loader: handle subprogram ret type with abstract_origin
- properly
-Message-ID: <YHBcBXNATDOg+mYr@kernel.org>
-References: <CAENS6EsiRsY1JptWJqu2wH=m4fkSiR+zD8JDD5DYke=ZnJOMrg@mail.gmail.com>
- <YGckYjyfxfNLzc34@kernel.org>
- <YGcw4iq9QNkFFfyt@kernel.org>
- <2d55d22b-d136-82b9-6a0f-8b09eeef7047@fb.com>
- <82dfd420-96f9-aedc-6cdc-bf20042455db@fb.com>
- <E9072F07-B689-402C-89F6-545B589EF7E4@gmail.com>
- <be7079b4-718c-e4a7-dff4-56543e5854a6@fb.com>
- <YG3RpVgLC9UEUrb8@kernel.org>
- <YG3SYoNWqb8DlP61@kernel.org>
- <7cdd9179-df5e-bdb5-ab36-983acddcbc1c@fb.com>
+To:     dwarves@vger.kernel.org
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        bpf@vger.kernel.org, Jiri Olsa <jolsa@kernel.org>,
+        Jan Engelhardt <jengelh@inai.de>,
+        Domenico Andreoli <cavok@debian.org>,
+        Matthias Schwarzott <zzam@gentoo.org>,
+        Andrii Nakryiko <andriin@fb.com>, Yonghong Song <yhs@fb.com>,
+        Mark Wieelard <mjw@redhat.com>,
+        =?utf-8?B?RsSBbmctcnXDrCBTw7JuZw==?= <maskray@google.com>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Bill Wendling <morbo@google.com>,
+        David Blaikie <dblaikie@gmail.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Sedat Dilek <sedat.dilek@gmail.com>
+Subject: ANNOUNCE: pahole v1.21 (clang's LTO edition, BTF floats)
+Message-ID: <YHRiXNX1JUF2Az0A@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <7cdd9179-df5e-bdb5-ab36-983acddcbc1c@fb.com>
 X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-Em Wed, Apr 07, 2021 at 03:53:32PM -0700, Yonghong Song escreveu:
-> 
-> 
-> On 4/7/21 8:40 AM, Arnaldo Carvalho de Melo wrote:
-> > Em Wed, Apr 07, 2021 at 12:37:09PM -0300, Arnaldo Carvalho de Melo escreveu:
-> > > Em Wed, Apr 07, 2021 at 07:54:26AM -0700, Yonghong Song escreveu:
-> > > > Arnaldo, just in case that you missed it, please remember
-> > > > to fold the above changes to the patch:
-> > > >     [PATCH dwarves] dwarf_loader: handle subprogram ret type with
-> > > > abstract_origin properly
-> > > > Thanks!
-> > > 
-> > > Its there, I did it Sunday, IIRC:
-> > > 
-> > > https://git.kernel.org/pub/scm/devel/pahole/pahole.git/commit/?h=tmp.master&id=9adb014930f31c66608fa39a35ccea2daa5586ad
-> > 
-> > So I pushed it all to the master branch, hopefully some more people may
-> > feel encouraged to give it a try for the various things it fixes since
-> > 1.20:
-> > 
-> > [acme@quaco pahole]$ git log --oneline v1.20..
-> > ae0b7dde1fd50b12 (HEAD -> master, origin/tmp.master, origin/master, origin/HEAD, github/master, five/master, acme.korg/tmp.master, acme.korg/master) dwarf_loader: Handle DWARF5 DW_OP_addrx properly
-> > 9adb014930f31c66 dwarf_loader: Handle subprogram ret type with abstract_origin properly
-> > 5752d1951d081a80 dwarf_loader: Check .notes section for LTO build info
-> > 209e45424ff4a22d dwarf_loader: Check .debug_abbrev for cross-CU references
-> > 39227909db3cc2c2 dwarf_loader: Permit merging all DWARF CU's for clang LTO built binary
-> > 763475ca1101ccfe dwarf_loader: Factor out common code to initialize a cu
-> > d0d3fbd4744953e8 dwarf_loader: Permit a flexible HASHTAGS__BITS
-> > ffe0ef4d73906c18 btf: Add --btf_gen_all flag
-> > de708b33114d42c2 btf: Add support for the floating-point types
-> > 4b7f8c04d009942b fprintf: Honour conf_fprintf.hex when printing enumerations
-> > f2889ff163726336 Avoid warning when building with NDEBUG
-> > 8e1f8c904e303d5d btf_encoder: Match ftrace addresses within ELF functions
-> > 9fecc77ed82d429f dwarf_loader: Use a better hashing function, from libbpf
-> > 0125de3a4c055cdf btf_encoder: Funnel ELF error reporting through a macro
-> > 7d8e829f636f47ab btf_encoder: Sanitize non-regular int base type
-> > [acme@quaco pahole]$
-> 
-> I tested with llvm-project "main" branch and latest bpf-next.
-> clang non-lto, dwarf4/5: okay
-> clang thin-lto, dwarf4/5: okay
-> gcc (8.4.1, non-lto, default dwarf4): okay
-> 
-> So pahole looks good. Thanks!
+Hi,
+ 
+	The v1.21 release of pahole and its friends is out, this time it's
+about using clang to build the kernel with LTO, some DWARF5 fixes, supporting
+floating types in the BTF encoder for s/390 sake and some misc fixes and
+improvements. Ah, it should also be faster due to switching to using libbpf's
+hashing routines.
 
-Thanks a lot, in time for a friday release! :-)
+Main git repo:
 
-- Arnaldo
+   git://git.kernel.org/pub/scm/devel/pahole/pahole.git
+
+Mirror git repo:
+
+   https://github.com/acmel/dwarves.git
+
+tarball + gpg signature:
+
+   https://fedorapeople.org/~acme/dwarves/dwarves-1.21.tar.xz
+   https://fedorapeople.org/~acme/dwarves/dwarves-1.21.tar.bz2
+   https://fedorapeople.org/~acme/dwarves/dwarves-1.21.tar.sign
+
+	Thanks a lot to all the contributors and distro packagers, you're on the
+CC list, I appreciate a lot the work you put into these tools,
+
+Best Regards,
+ 
+ - Arnaldo
+
+DWARF loader:
+
+- Handle DWARF5 DW_OP_addrx properly
+
+  Part of the effort to support the subset of DWARF5 that is generated when building the kernel.
+
+- Handle subprogram ret type with abstract_origin properly
+
+  Adds a second pass to resolve abstract origin DWARF description of functions to aid
+  the BTF encoder in getting the right return type.
+
+- Check .notes section for LTO build info
+
+  When LTO is used, currently only with clang, we need to do extra steps to handle references
+  from one object (compile unit, aka CU) to another, a way for DWARF to avoid duplicating
+  information.
+
+- Check .debug_abbrev for cross-CU references
+
+  When the kernel build process doesn't add an ELF note in vmlinux indicating that LTO was
+  used and thus intra-CU references are present and thus we need to use a more expensive
+  way to resolve types and (again) thus to encode BTF, we need to look at DWARF's .debug_abbrev
+  ELF section to figure out if such intra-CU references are present.
+
+- Permit merging all DWARF CU's for clang LTO built binary
+
+  Allow not trowing away previously supposedly self contained compile units
+  (objects, aka CU, aka Compile Units) as they have type descriptions that will
+  be used in later CUs.
+
+- Permit a flexible HASHTAGS__BITS
+
+  So that we can use a more expensive algorithm when we need to keep previously processed
+  compile units that will then be referenced by later ones to resolve types.
+
+- Use a better hashing function, from libbpf
+
+  Enabling patch to combine compile units when using LTO.
+
+BTF encoder:
+
+- Add --btf_gen_all flag
+
+  A new command line to allow asking for the generation of all BTF encodings, so that we
+  can stop adding new command line options to enable new encodings in the kernel Makefile.
+
+- Match ftrace addresses within ELF functions
+
+  To cope with differences in how DWARF and ftrace describes function boundaries.
+
+- Funnel ELF error reporting through a macro
+
+  To use libelf's elf_error() function, improving error messages.
+
+- Sanitize non-regular int base type
+
+  Cope with clang with dwarf5 non-regular int base types, tricky stuff, see yhs
+  full explanation in the relevant cset.
+
+- Add support for the floating-point types
+
+  S/390 has floats'n'doubles in its arch specific linux headers, cope with that.
+
+Pretty printer:
+
+- Honour conf_fprintf.hex when printing enumerations
+
+  If the user specifies --hex in the command line, honour it when printing enumerations.
+
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
