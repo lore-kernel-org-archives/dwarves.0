@@ -2,160 +2,145 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C2684C433B4
-	for <linux-dwarves@archiver.kernel.org>; Mon, 12 Apr 2021 15:08:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 477F8C433B4
+	for <linux-dwarves@archiver.kernel.org>; Tue, 13 Apr 2021 13:42:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9358261287
-	for <linux-dwarves@archiver.kernel.org>; Mon, 12 Apr 2021 15:08:16 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 16E2161042
+	for <linux-dwarves@archiver.kernel.org>; Tue, 13 Apr 2021 13:42:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240317AbhDLPIe (ORCPT
+        id S229783AbhDMNmd (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Mon, 12 Apr 2021 11:08:34 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38050 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237526AbhDLPId (ORCPT <rfc822;dwarves@vger.kernel.org>);
-        Mon, 12 Apr 2021 11:08:33 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 8F108611F0;
-        Mon, 12 Apr 2021 15:08:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1618240095;
-        bh=yEYZUKPaHR793ZDhmZ+P1vlAN1MGuDfGKGZ/vHIAn3Q=;
-        h=Date:From:To:Cc:Subject:From;
-        b=K3Zdpb3zv2ms3Q7FD6i2Sv3atrOd3gtXVtLnczlukv1pjpMlW+rGc0C/jBoHa0Cdb
-         KiZdEu9/2ES3dZSuydULJoVbPW0DqxdBUaQn0D6g7GubujH/gHpzUoTMrZseVKfiTJ
-         sQHgbKEtK/n+L7vDqz76Is5G0B/LzClBD+C9bnLZp1rPxq3qPLyDhPpQ8Bg0dbaFOp
-         e6w/g2vtSzTZ1AL7yg1v2YEefQTRHhVvV8CCKaO593zpFAja2i/EyxxAQDJTeHZlof
-         ubYtmxZsy+/7rPmQ4YIw9zyFN7MybZuMeW1TzuopXEKNgkDaBEtUvH9RtaTkSmDMRK
-         MstQHuloq83+g==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 0B4D040647; Mon, 12 Apr 2021 12:08:13 -0300 (-03)
-Date:   Mon, 12 Apr 2021 12:08:12 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     dwarves@vger.kernel.org
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        bpf@vger.kernel.org, Jiri Olsa <jolsa@kernel.org>,
-        Jan Engelhardt <jengelh@inai.de>,
-        Domenico Andreoli <cavok@debian.org>,
-        Matthias Schwarzott <zzam@gentoo.org>,
-        Andrii Nakryiko <andriin@fb.com>, Yonghong Song <yhs@fb.com>,
-        Mark Wieelard <mjw@redhat.com>,
-        =?utf-8?B?RsSBbmctcnXDrCBTw7JuZw==?= <maskray@google.com>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        Bill Wendling <morbo@google.com>,
-        David Blaikie <dblaikie@gmail.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Sedat Dilek <sedat.dilek@gmail.com>
-Subject: ANNOUNCE: pahole v1.21 (clang's LTO edition, BTF floats)
-Message-ID: <YHRiXNX1JUF2Az0A@kernel.org>
+        Tue, 13 Apr 2021 09:42:33 -0400
+Received: from mail-wm1-f47.google.com ([209.85.128.47]:53074 "EHLO
+        mail-wm1-f47.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229705AbhDMNmc (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Tue, 13 Apr 2021 09:42:32 -0400
+Received: by mail-wm1-f47.google.com with SMTP id y204so7377646wmg.2
+        for <dwarves@vger.kernel.org>; Tue, 13 Apr 2021 06:42:12 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version;
+        bh=3I9/OJ9lGHycnotK9q1ufN0/X8H6Kn8tf7WcuJ5BgFA=;
+        b=pOQlu7f6Q7eiHTHGB4wB5d3FAOMuC6tIBu/Qn+QJnfI/4lc5MrZTZ71qM6+bYr/7O9
+         a3hGrFkhT/HqQhtJvw1dCidBhbeBDYggjhrzC8ItPL427kLgOn2Esff+XShoRnWtco3O
+         vh0DZAQ+D1iRnVwLmOoRzxVkYOUoDZl6KJpTg9LZbi9cjM9ad1uC/4cofJpYg5vPIoko
+         ewwIcXQhrRpVEXAY5yZZdbquRjFi3EcyZ8p5MB3N4oyTkP5tu+to9w0AdftguL6vmJmX
+         LkXeiy2a8UX62abTQDjYz4IFeyOtsw9LahGgSdBqJWfvBXwnCJxRWc5hnak49vrWLYJC
+         GVCA==
+X-Gm-Message-State: AOAM531lJeCRPJpdd3JFCClLSnNcGodifPOTgM4pq9hj0rT16rwOoYBZ
+        n2GB5BWqzSFqSNYDtMLLS88=
+X-Google-Smtp-Source: ABdhPJzxKYMmgyjfJZgzfKEG39Vve9oy7HNlWYIhgACLW3duOhTpppoIag0LlmVYiRG/H7le0Uph/g==
+X-Received: by 2002:a05:600c:189e:: with SMTP id x30mr108707wmp.44.1618321331753;
+        Tue, 13 Apr 2021 06:42:11 -0700 (PDT)
+Received: from localhost ([2a01:4b00:f419:6f00:7a8e:ed70:5c52:ea3])
+        by smtp.gmail.com with ESMTPSA id b6sm21587062wrv.12.2021.04.13.06.42.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Apr 2021 06:42:10 -0700 (PDT)
+Message-ID: <ca59c536e2dc66f6cb02f57d40b65702f7414ea9.camel@debian.org>
+Subject: Re: [PATCH dwarves v3] libbpf: allow to use packaged version
+From:   Luca Boccassi <bluca@debian.org>
+To:     Dominique Martinet <asmadeus@codewreck.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     dwarves@vger.kernel.org, Arnaldo Carvalho de Melo <acme@redhat.com>
+Date:   Tue, 13 Apr 2021 14:42:09 +0100
+In-Reply-To: <YGPK5WxS51eVKguU@codewreck.org>
+References: <20210104221622.256663-1-bluca@debian.org>
+         <YGKtSXsLg4HV7eHL@codewreck.org> <YGM/x6Ohchorg2cf@kernel.org>
+         <YGPK5WxS51eVKguU@codewreck.org>
+Content-Type: multipart/signed; micalg="pgp-sha512";
+        protocol="application/pgp-signature"; boundary="=-hY6bviASSnjj48kGY28T"
+User-Agent: Evolution 3.30.5-1.2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-Hi,
- 
-	The v1.21 release of pahole and its friends is out, this time it's
-about using clang to build the kernel with LTO, some DWARF5 fixes, supporting
-floating types in the BTF encoder for s/390 sake and some misc fixes and
-improvements. Ah, it should also be faster due to switching to using libbpf's
-hashing routines.
 
-Main git repo:
+--=-hY6bviASSnjj48kGY28T
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-   git://git.kernel.org/pub/scm/devel/pahole/pahole.git
+On Wed, 2021-03-31 at 10:05 +0900, Dominique Martinet wrote:
+> Arnaldo Carvalho de Melo wrote on Tue, Mar 30, 2021 at 12:12:07PM -0300:
+> > > I can understand reverting due to other pressure to get a release out
+> > > but most distros (including fedora) frown upon vendoring code so I th=
+ink
+> > > it would be good to have back ultimately.
+> > >=20
+> > > Did you or someone else (Luca?) ever take the time to look at it?
+> >=20
+> > Not yet, I'm right now working on it, testing patches to support clang'=
+s
+> > thin-LTO being used to build the kernel, so busy with it.
+>=20
+> Thanks
+>=20
+>=20
+> > > I don't see what would be so different with fedora to make this
+> > > unfixable, I'd be happy taking a look if nobody has so far.
+> >=20
+> > Please do.
+>=20
+> As said in my previous mail (in reply to Luca's), I cannot reproduce on
+> fedora 33 so I'm not sure where to look at.
+> Was the problem specific to one architecture (I only tried x86_64), or
+> maybe the build dir was tainted by a previous run of cmake with another
+> version of the patch? (if rpmbuild, build dir somehow included in the
+> tarball?)
+>=20
+> Looking at the timing the libbpf version should have been identical but
+> it's possible that system wasn't up to date or some other version change
+> since Feb?
+>=20
+> Either way I would appreciate if you could confirm you still have the
+> problem when you have a moment, and if so provide a bit more details on
+> your setup.
+>=20
+>=20
+> > > Would you take the patch back in if I somehow fix rpmbuild with a lib=
+bpf
+> > > package installed on fedora33?
+> >=20
+> > Sure. I had it merged, as, IIRC, it was a opt-in procedure.
+>=20
+> Yes, strictly opt-in and shouldn't affect developers or people building
+> from git without explicitly requiring to use the system's version.
+>=20
 
-Mirror git repo:
+Hello Arnaldo,
 
-   https://github.com/acmel/dwarves.git
+Any update on this?
 
-tarball + gpg signature:
+Thanks!
 
-   https://fedorapeople.org/~acme/dwarves/dwarves-1.21.tar.xz
-   https://fedorapeople.org/~acme/dwarves/dwarves-1.21.tar.bz2
-   https://fedorapeople.org/~acme/dwarves/dwarves-1.21.tar.sign
+--=20
+Kind regards,
+Luca Boccassi
 
-	Thanks a lot to all the contributors and distro packagers, you're on the
-CC list, I appreciate a lot the work you put into these tools,
+--=-hY6bviASSnjj48kGY28T
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part
 
-Best Regards,
- 
- - Arnaldo
+-----BEGIN PGP SIGNATURE-----
 
-DWARF loader:
+iQIzBAABCgAdFiEErCSqx93EIPGOymuRKGv37813JB4FAmB1n7EACgkQKGv37813
+JB6e/hAAxXNcOc8pMPMh/Vnn5oXUbMH7aqX2ChS3ijVC5gRlsXEYauthchr5i1yb
+yd5lPSOxH4teSa40nXhQ4KVGWpuVkeQ5QU/fG36OEs0ysXo8X0PC0pPoho44ZjLx
+URLkLUXFXabGWRy7opxtbUhEqN021sDI4038x7eEMiTP0lGMwQ3n7jn043d/xIHL
+crGn67tR5hQY0hco4rXBPf1AeB6xsxcwXP5L5H189oKiEVvob8G23EhShvt6fgyt
+CI5djR/wVqPnrvihBkq2PH9t7c4wzLtkJDAVG8XczZcMdLYZyRM5bBA4C0HR6m5+
+gYp4hn3VUFWessr0of+A8rY9tp9T0+1f+CfCnm+Vv3u/Bcr24cstf61nS/3w5p1J
+YGkPzC6B8jNV/GfiB9O0FxjRQK+t8YMoJP6MNZHVtUEStmaHRVCBaIkInueFPMiH
+5w03czEdvl4MfqF4jU1eo/78iEhZwZ/Uuu5b/kgFnuFXjBCXLKxR79gBNRUDh9uw
+QyPZAOwm7GCPfj18XdSAb0Ao9+yONadW4mcmCt4oNIrB49w0Vqd0TcLcthlLJJO3
+dFwhmm1OaXJBHBndtNwIFFo222gQr9WHbIgWiG8k9P6dIr1yVbd0dGSOkjJ670BE
+mRGshIKYajFH0DvtaHktDyT9wjCDvuh5SJj7wfE3mGEFpJLsBxU=
+=iVLk
+-----END PGP SIGNATURE-----
 
-- Handle DWARF5 DW_OP_addrx properly
-
-  Part of the effort to support the subset of DWARF5 that is generated when building the kernel.
-
-- Handle subprogram ret type with abstract_origin properly
-
-  Adds a second pass to resolve abstract origin DWARF description of functions to aid
-  the BTF encoder in getting the right return type.
-
-- Check .notes section for LTO build info
-
-  When LTO is used, currently only with clang, we need to do extra steps to handle references
-  from one object (compile unit, aka CU) to another, a way for DWARF to avoid duplicating
-  information.
-
-- Check .debug_abbrev for cross-CU references
-
-  When the kernel build process doesn't add an ELF note in vmlinux indicating that LTO was
-  used and thus intra-CU references are present and thus we need to use a more expensive
-  way to resolve types and (again) thus to encode BTF, we need to look at DWARF's .debug_abbrev
-  ELF section to figure out if such intra-CU references are present.
-
-- Permit merging all DWARF CU's for clang LTO built binary
-
-  Allow not trowing away previously supposedly self contained compile units
-  (objects, aka CU, aka Compile Units) as they have type descriptions that will
-  be used in later CUs.
-
-- Permit a flexible HASHTAGS__BITS
-
-  So that we can use a more expensive algorithm when we need to keep previously processed
-  compile units that will then be referenced by later ones to resolve types.
-
-- Use a better hashing function, from libbpf
-
-  Enabling patch to combine compile units when using LTO.
-
-BTF encoder:
-
-- Add --btf_gen_all flag
-
-  A new command line to allow asking for the generation of all BTF encodings, so that we
-  can stop adding new command line options to enable new encodings in the kernel Makefile.
-
-- Match ftrace addresses within ELF functions
-
-  To cope with differences in how DWARF and ftrace describes function boundaries.
-
-- Funnel ELF error reporting through a macro
-
-  To use libelf's elf_error() function, improving error messages.
-
-- Sanitize non-regular int base type
-
-  Cope with clang with dwarf5 non-regular int base types, tricky stuff, see yhs
-  full explanation in the relevant cset.
-
-- Add support for the floating-point types
-
-  S/390 has floats'n'doubles in its arch specific linux headers, cope with that.
-
-Pretty printer:
-
-- Honour conf_fprintf.hex when printing enumerations
-
-  If the user specifies --hex in the command line, honour it when printing enumerations.
-
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+--=-hY6bviASSnjj48kGY28T--
