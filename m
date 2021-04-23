@@ -2,145 +2,332 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 477F8C433B4
-	for <linux-dwarves@archiver.kernel.org>; Tue, 13 Apr 2021 13:42:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E3EBEC433B4
+	for <linux-dwarves@archiver.kernel.org>; Fri, 23 Apr 2021 21:37:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 16E2161042
-	for <linux-dwarves@archiver.kernel.org>; Tue, 13 Apr 2021 13:42:15 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B39A761158
+	for <linux-dwarves@archiver.kernel.org>; Fri, 23 Apr 2021 21:37:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229783AbhDMNmd (ORCPT
+        id S244032AbhDWViP (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Tue, 13 Apr 2021 09:42:33 -0400
-Received: from mail-wm1-f47.google.com ([209.85.128.47]:53074 "EHLO
-        mail-wm1-f47.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229705AbhDMNmc (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Tue, 13 Apr 2021 09:42:32 -0400
-Received: by mail-wm1-f47.google.com with SMTP id y204so7377646wmg.2
-        for <dwarves@vger.kernel.org>; Tue, 13 Apr 2021 06:42:12 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:user-agent:mime-version;
-        bh=3I9/OJ9lGHycnotK9q1ufN0/X8H6Kn8tf7WcuJ5BgFA=;
-        b=pOQlu7f6Q7eiHTHGB4wB5d3FAOMuC6tIBu/Qn+QJnfI/4lc5MrZTZ71qM6+bYr/7O9
-         a3hGrFkhT/HqQhtJvw1dCidBhbeBDYggjhrzC8ItPL427kLgOn2Esff+XShoRnWtco3O
-         vh0DZAQ+D1iRnVwLmOoRzxVkYOUoDZl6KJpTg9LZbi9cjM9ad1uC/4cofJpYg5vPIoko
-         ewwIcXQhrRpVEXAY5yZZdbquRjFi3EcyZ8p5MB3N4oyTkP5tu+to9w0AdftguL6vmJmX
-         LkXeiy2a8UX62abTQDjYz4IFeyOtsw9LahGgSdBqJWfvBXwnCJxRWc5hnak49vrWLYJC
-         GVCA==
-X-Gm-Message-State: AOAM531lJeCRPJpdd3JFCClLSnNcGodifPOTgM4pq9hj0rT16rwOoYBZ
-        n2GB5BWqzSFqSNYDtMLLS88=
-X-Google-Smtp-Source: ABdhPJzxKYMmgyjfJZgzfKEG39Vve9oy7HNlWYIhgACLW3duOhTpppoIag0LlmVYiRG/H7le0Uph/g==
-X-Received: by 2002:a05:600c:189e:: with SMTP id x30mr108707wmp.44.1618321331753;
-        Tue, 13 Apr 2021 06:42:11 -0700 (PDT)
-Received: from localhost ([2a01:4b00:f419:6f00:7a8e:ed70:5c52:ea3])
-        by smtp.gmail.com with ESMTPSA id b6sm21587062wrv.12.2021.04.13.06.42.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Apr 2021 06:42:10 -0700 (PDT)
-Message-ID: <ca59c536e2dc66f6cb02f57d40b65702f7414ea9.camel@debian.org>
-Subject: Re: [PATCH dwarves v3] libbpf: allow to use packaged version
-From:   Luca Boccassi <bluca@debian.org>
-To:     Dominique Martinet <asmadeus@codewreck.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     dwarves@vger.kernel.org, Arnaldo Carvalho de Melo <acme@redhat.com>
-Date:   Tue, 13 Apr 2021 14:42:09 +0100
-In-Reply-To: <YGPK5WxS51eVKguU@codewreck.org>
-References: <20210104221622.256663-1-bluca@debian.org>
-         <YGKtSXsLg4HV7eHL@codewreck.org> <YGM/x6Ohchorg2cf@kernel.org>
-         <YGPK5WxS51eVKguU@codewreck.org>
-Content-Type: multipart/signed; micalg="pgp-sha512";
-        protocol="application/pgp-signature"; boundary="=-hY6bviASSnjj48kGY28T"
-User-Agent: Evolution 3.30.5-1.2 
+        Fri, 23 Apr 2021 17:38:15 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:29230 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229488AbhDWViP (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Fri, 23 Apr 2021 17:38:15 -0400
+Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 13NLQF3M016883
+        for <dwarves@vger.kernel.org>; Fri, 23 Apr 2021 14:37:38 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=facebook; bh=JMwRiruzwLjUfp1BmuQQf6DxklxeQP2VsoaRvXsf3x0=;
+ b=P2tTTPr/stbTV16hH1JKuQJfEX5PI2B8O53GRU0mDUU8VtRyS7VvoZT5sEP4/f/3GqJK
+ O1anUdEr4GzEZvjSlesUU9FP5TSBh0uq4fN7Hmrh1Q6q6oQkn/KZrq1ZFIGyyBH+NPBJ
+ q7mWMjAA1rJ5vOgUrR79oGPctxEEPyQpfjs= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com with ESMTP id 383an2967c-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <dwarves@vger.kernel.org>; Fri, 23 Apr 2021 14:37:38 -0700
+Received: from intmgw001.37.frc1.facebook.com (2620:10d:c085:108::4) by
+ mail.thefacebook.com (2620:10d:c085:21d::7) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Fri, 23 Apr 2021 14:37:36 -0700
+Received: by devbig005.ftw2.facebook.com (Postfix, from userid 6611)
+        id 4979929429AD; Fri, 23 Apr 2021 14:37:28 -0700 (PDT)
+From:   Martin KaFai Lau <kafai@fb.com>
+To:     <dwarves@vger.kernel.org>
+CC:     Arnaldo Carvalho de Melo <acme@kernel.org>, <bpf@vger.kernel.org>,
+        <kernel-team@fb.com>, Andrii Nakryiko <andrii@kernel.org>
+Subject: [PATCH dwarves] btf: Generate btf for functions in the .BTF_ids section
+Date:   Fri, 23 Apr 2021 14:37:28 -0700
+Message-ID: <20210423213728.3538141-1-kafai@fb.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: Y7zm5Pj8DJkMaM6wojy8j0vtz4dq0H8c
+X-Proofpoint-GUID: Y7zm5Pj8DJkMaM6wojy8j0vtz4dq0H8c
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
+ definitions=2021-04-23_13:2021-04-23,2021-04-23 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 bulkscore=0
+ mlxlogscore=999 clxscore=1011 malwarescore=0 suspectscore=0 phishscore=0
+ adultscore=0 spamscore=0 lowpriorityscore=0 impostorscore=0
+ priorityscore=1501 mlxscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2104060000 definitions=main-2104230144
+X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
+BTF is currently generated for functions that are in ftrace list
+or extern.
 
---=-hY6bviASSnjj48kGY28T
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+A recent use case also needs BTF generated for functions included in
+allowlist.  In particular, the kernel
+commit e78aea8b2170 ("bpf: tcp: Put some tcp cong functions in allowlist =
+for bpf-tcp-cc")
+allows bpf program to directly call a few tcp cc kernel functions.  Those
+functions are specified under an ELF section .BTF_ids.  The symbols
+in this ELF section is like __BTF_ID__func__<kernel_func>__[digit]+.
+For example, __BTF_ID__func__cubictcp_init__1.  Those kernel
+functions are currently allowed only if CONFIG_DYNAMIC_FTRACE is
+set to ensure they are in the ftrace list but this kconfig dependency
+is unnecessary.
 
-On Wed, 2021-03-31 at 10:05 +0900, Dominique Martinet wrote:
-> Arnaldo Carvalho de Melo wrote on Tue, Mar 30, 2021 at 12:12:07PM -0300:
-> > > I can understand reverting due to other pressure to get a release out
-> > > but most distros (including fedora) frown upon vendoring code so I th=
-ink
-> > > it would be good to have back ultimately.
-> > >=20
-> > > Did you or someone else (Luca?) ever take the time to look at it?
-> >=20
-> > Not yet, I'm right now working on it, testing patches to support clang'=
-s
-> > thin-LTO being used to build the kernel, so busy with it.
->=20
-> Thanks
->=20
->=20
-> > > I don't see what would be so different with fedora to make this
-> > > unfixable, I'd be happy taking a look if nobody has so far.
-> >=20
-> > Please do.
->=20
-> As said in my previous mail (in reply to Luca's), I cannot reproduce on
-> fedora 33 so I'm not sure where to look at.
-> Was the problem specific to one architecture (I only tried x86_64), or
-> maybe the build dir was tainted by a previous run of cmake with another
-> version of the patch? (if rpmbuild, build dir somehow included in the
-> tarball?)
->=20
-> Looking at the timing the libbpf version should have been identical but
-> it's possible that system wasn't up to date or some other version change
-> since Feb?
->=20
-> Either way I would appreciate if you could confirm you still have the
-> problem when you have a moment, and if so provide a bit more details on
-> your setup.
->=20
->=20
-> > > Would you take the patch back in if I somehow fix rpmbuild with a lib=
-bpf
-> > > package installed on fedora33?
-> >=20
-> > Sure. I had it merged, as, IIRC, it was a opt-in procedure.
->=20
-> Yes, strictly opt-in and shouldn't affect developers or people building
-> from git without explicitly requiring to use the system's version.
->=20
+pahole can generate BTF for those kernel functions if it knows they
+are in the allowlist.  This patch is to capture those symbols
+in the .BTF_ids section and generate BTF for them.
 
-Hello Arnaldo,
+Cc: Andrii Nakryiko <andrii@kernel.org>
+Signed-off-by: Martin KaFai Lau <kafai@fb.com>
+---
+ btf_encoder.c | 136 +++++++++++++++++++++++++++++++++++++++++++++++---
+ libbtf.c      |  10 ++++
+ libbtf.h      |   2 +
+ 3 files changed, 142 insertions(+), 6 deletions(-)
 
-Any update on this?
-
-Thanks!
-
+diff --git a/btf_encoder.c b/btf_encoder.c
+index 80e896961d4e..48c183915ddd 100644
+--- a/btf_encoder.c
++++ b/btf_encoder.c
+@@ -106,6 +106,121 @@ static int collect_function(struct btf_elf *btfe, G=
+Elf_Sym *sym,
+ 	return 0;
+ }
+=20
++#define BTF_ID_FUNC_PREFIX "__BTF_ID__func__"
++#define BTF_ID_FUNC_PREFIX_LEN (sizeof(BTF_ID_FUNC_PREFIX) - 1)
++
++static char **listed_functions;
++static int listed_functions_alloc;
++static int listed_functions_cnt;
++
++static void delete_listed_functions(void)
++{
++	int i;
++
++	for (i =3D 0; i < listed_functions_cnt; i++)
++		free(listed_functions[i]);
++
++	free(listed_functions);
++	/* In case btf_encoder__encode() will be called multiple times */
++	listed_functions_alloc =3D 0;
++	listed_functions_cnt =3D 0;
++	listed_functions =3D NULL;
++}
++
++static int listed_function_cmp(const void *_a, const void *_b)
++{
++	const char *a =3D *(const char **)_a;
++	const char *b =3D *(const char **)_b;
++
++	return strcmp(a, b);
++}
++
++static bool is_listed_func(const char *name)
++{
++	return !!bsearch(&name, listed_functions, listed_functions_cnt,
++			 sizeof(*listed_functions), listed_function_cmp);
++}
++
++static int collect_listed_functions(struct btf_elf *btfe, GElf_Sym *sym,
++				    size_t sym_sec_idx)
++{
++	int len, digits =3D 0, underscores =3D 0;
++	const char *name;
++	char *func_name;
++
++	if (!btfe->btf_ids_shndx ||
++	    btfe->btf_ids_shndx !=3D sym_sec_idx)
++		return 0;
++
++	/* The kernel function in the btf id list will have symbol like:
++	 * __BTF_ID__func__<kernel_func_name>__[digit]+
++	 */
++	name =3D elf_sym__name(sym, btfe->symtab);
++	if (strncmp(name, BTF_ID_FUNC_PREFIX, BTF_ID_FUNC_PREFIX_LEN))
++		return 0;
++
++	name +=3D BTF_ID_FUNC_PREFIX_LEN;
++
++	/* name: <kernel_func_name>__[digit]+
++	 * Strip the ending __[digit]+
++	 */
++	for (len =3D strlen(name); len && underscores !=3D 2; len--) {
++		char c =3D name[len - 1];
++
++		if (c =3D=3D '_') {
++			if (!digits)
++				return 0;
++			underscores++;
++		} else if (isdigit(c)) {
++			if (underscores)
++				return 0;
++			digits++;
++		} else {
++			return 0;
++		}
++	}
++
++	if (!len)
++		return 0;
++
++	func_name =3D strndup(name, len);
++	if (!func_name) {
++		fprintf(stderr,
++			"Failed to alloc memory for listed function %s%s\n",
++			BTF_ID_FUNC_PREFIX, name);
++		return -1;
++	}
++
++	if (is_listed_func(func_name)) {
++		/* already captured */
++		free(func_name);
++		return 0;
++	}
++
++	/* grow listed_functions */
++	if (listed_functions_cnt =3D=3D listed_functions_alloc) {
++		char **new;
++
++		listed_functions_alloc =3D max(100,
++					     listed_functions_alloc * 3 / 2);
++		new =3D realloc(listed_functions,
++			      listed_functions_alloc * sizeof(*listed_functions));
++		if (!new) {
++			fprintf(stderr,
++				"Failed to alloc memory for listed function %s%s\n",
++				BTF_ID_FUNC_PREFIX, name);
++			free(func_name);
++			return -1;
++		}
++		listed_functions =3D new;
++	}
++
++	listed_functions[listed_functions_cnt++] =3D func_name;
++	qsort(listed_functions, listed_functions_cnt,
++	      sizeof(*listed_functions), listed_function_cmp);
++	return 0;
++}
++
+ static int addrs_cmp(const void *_a, const void *_b)
+ {
+ 	const __u64 *a =3D _a;
+@@ -294,14 +409,15 @@ static int setup_functions(struct btf_elf *btfe, st=
+ruct funcs_layout *fl)
+ 		kmod =3D true;
+ 	}
+=20
+-	if (!addrs) {
++	if (!addrs && !listed_functions_cnt) {
+ 		if (btf_elf__verbose)
+-			printf("ftrace symbols not detected, falling back to DWARF data\n");
++			printf("ftrace symbols and btf listed functions are not detected, fal=
+ling back to DWARF data\n");
+ 		delete_functions();
+ 		return 0;
+ 	}
+=20
+-	qsort(addrs, count, sizeof(addrs[0]), addrs_cmp);
++	if (addrs)
++		qsort(addrs, count, sizeof(addrs[0]), addrs_cmp);
+ 	qsort(functions, functions_cnt, sizeof(functions[0]), functions_cmp);
+=20
+ 	/*
+@@ -321,8 +437,12 @@ static int setup_functions(struct btf_elf *btfe, str=
+uct funcs_layout *fl)
+ 		if (kmod)
+ 			func->addr +=3D func->sh_addr;
+=20
+-		/* Make sure function is within ftrace addresses. */
+-		if (is_ftrace_func(func, addrs, count)) {
++		/*
++		 * Make sure function is within ftrace addresses or
++		 * is a listed function in the .BTF_ids section.
++		 */
++		if (is_ftrace_func(func, addrs, count) ||
++		    is_listed_func(func->name)) {
+ 			/*
+ 			 * We iterate over sorted array, so we can easily skip
+ 			 * not valid item and move following valid field into
+@@ -533,6 +653,7 @@ int btf_encoder__encode()
+=20
+ 	err =3D btf_elf__encode(btfe, 0);
+ 	delete_functions();
++	delete_listed_functions();
+ 	btf_elf__delete(btfe);
+ 	btfe =3D NULL;
+=20
+@@ -650,6 +771,8 @@ static int collect_symbols(struct btf_elf *btfe, bool=
+ collect_percpu_vars)
+ 			return -1;
+ 		if (collect_function(btfe, &sym, sym_sec_idx))
+ 			return -1;
++		if (collect_listed_functions(btfe, &sym, sym_sec_idx))
++			return -1;
+ 		collect_symbol(&sym, &fl, sym_sec_idx);
+ 	}
+=20
+@@ -764,7 +887,8 @@ int cu__encode_btf(struct cu *cu, int verbose, bool f=
+orce,
+ 		 *   - are marked as declarations
+ 		 *   - do not have full argument names
+ 		 *   - are not in ftrace list (if it's available)
+-		 *   - are not external (in case ftrace filter is not available)
++		 *   - are not in the .BTF_ids section
++		 *   - are not external (in case ftrace and .BTF_ids filter are not av=
+ailable)
+ 		 */
+ 		if (fn->declaration)
+ 			continue;
+diff --git a/libbtf.c b/libbtf.c
+index c2360ff1f804..d9729bd4680d 100644
+--- a/libbtf.c
++++ b/libbtf.c
+@@ -168,6 +168,16 @@ try_as_raw_btf:
+ 		return btfe;
+ 	}
+=20
++	sec =3D elf_section_by_name(btfe->elf, &btfe->ehdr, &shdr,
++				  BTF_IDS_SECTION, NULL);
++	if (!sec) {
++		if (btf_elf__verbose)
++			printf("%s: '%s' doesn't have '%s' section\n", __func__,
++			       btfe->filename, BTF_IDS_SECTION);
++	} else {
++		btfe->btf_ids_shndx =3D elf_ndxscn(sec);
++	}
++
+ 	/* find percpu section's shndx */
+ 	sec =3D elf_section_by_name(btfe->elf, &btfe->ehdr, &shdr, PERCPU_SECTI=
+ON,
+ 				  NULL);
+diff --git a/libbtf.h b/libbtf.h
+index c7cbe6e17ee7..6caaac306f77 100644
+--- a/libbtf.h
++++ b/libbtf.h
+@@ -24,6 +24,7 @@ struct btf_elf {
+ 	uint8_t		  wordsize;
+ 	bool		  is_big_endian;
+ 	bool		  raw_btf; // "/sys/kernel/btf/vmlinux"
++	uint32_t	  btf_ids_shndx;
+ 	uint32_t	  percpu_shndx;
+ 	uint64_t	  percpu_base_addr;
+ 	uint64_t	  percpu_sec_sz;
+@@ -38,6 +39,7 @@ extern uint8_t btf_elf__force;
+ extern bool btf_gen_floats;
+=20
+ #define PERCPU_SECTION ".data..percpu"
++#define BTF_IDS_SECTION ".BTF_ids"
+=20
+ struct cu;
+ struct base_type;
 --=20
-Kind regards,
-Luca Boccassi
+2.30.2
 
---=-hY6bviASSnjj48kGY28T
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEErCSqx93EIPGOymuRKGv37813JB4FAmB1n7EACgkQKGv37813
-JB6e/hAAxXNcOc8pMPMh/Vnn5oXUbMH7aqX2ChS3ijVC5gRlsXEYauthchr5i1yb
-yd5lPSOxH4teSa40nXhQ4KVGWpuVkeQ5QU/fG36OEs0ysXo8X0PC0pPoho44ZjLx
-URLkLUXFXabGWRy7opxtbUhEqN021sDI4038x7eEMiTP0lGMwQ3n7jn043d/xIHL
-crGn67tR5hQY0hco4rXBPf1AeB6xsxcwXP5L5H189oKiEVvob8G23EhShvt6fgyt
-CI5djR/wVqPnrvihBkq2PH9t7c4wzLtkJDAVG8XczZcMdLYZyRM5bBA4C0HR6m5+
-gYp4hn3VUFWessr0of+A8rY9tp9T0+1f+CfCnm+Vv3u/Bcr24cstf61nS/3w5p1J
-YGkPzC6B8jNV/GfiB9O0FxjRQK+t8YMoJP6MNZHVtUEStmaHRVCBaIkInueFPMiH
-5w03czEdvl4MfqF4jU1eo/78iEhZwZ/Uuu5b/kgFnuFXjBCXLKxR79gBNRUDh9uw
-QyPZAOwm7GCPfj18XdSAb0Ao9+yONadW4mcmCt4oNIrB49w0Vqd0TcLcthlLJJO3
-dFwhmm1OaXJBHBndtNwIFFo222gQr9WHbIgWiG8k9P6dIr1yVbd0dGSOkjJ670BE
-mRGshIKYajFH0DvtaHktDyT9wjCDvuh5SJj7wfE3mGEFpJLsBxU=
-=iVLk
------END PGP SIGNATURE-----
-
---=-hY6bviASSnjj48kGY28T--
