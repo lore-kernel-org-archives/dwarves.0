@@ -2,126 +2,132 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-16.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 43915C433ED
-	for <linux-dwarves@archiver.kernel.org>; Mon, 26 Apr 2021 23:26:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 83988C433B4
+	for <linux-dwarves@archiver.kernel.org>; Tue, 27 Apr 2021 11:38:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1D08C610FC
-	for <linux-dwarves@archiver.kernel.org>; Mon, 26 Apr 2021 23:26:26 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5363060FE8
+	for <linux-dwarves@archiver.kernel.org>; Tue, 27 Apr 2021 11:38:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232235AbhDZX1H (ORCPT
+        id S235982AbhD0LjU (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Mon, 26 Apr 2021 19:27:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53146 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232022AbhDZX1G (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Mon, 26 Apr 2021 19:27:06 -0400
-Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2048C061574;
-        Mon, 26 Apr 2021 16:26:22 -0700 (PDT)
-Received: by mail-yb1-xb33.google.com with SMTP id 130so23227084ybd.10;
-        Mon, 26 Apr 2021 16:26:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=A2SiQIyo4hvRrgZvT9+3elzY2NurWPOQ84hTpTx/mOI=;
-        b=qSvchFfBqTvPetH+6AbfQTtL3URnd4+U3V2aLgfVYrg1MiRIOITthJcS8SUYRJQOOu
-         NGGSCERCRCzxK6/k5n5vdefwXA+bwRzz+t6GvImtA6rLRYjX/lrkiPH6qZjbJHiUHMdS
-         t0Pyxqc3SdVYZ3tBCBlSL5fHhrrdP9WsjqSKWFJHkWyA8u74JDz3igrf33bLBewC27ai
-         Z91ofW55kffitvHjotb6WuQWtbfG9ES5q1AGgyJF6yrZMrsUHSH9fivc+Py05vjuOT4W
-         hy2u6S5+OAyMGRIeLCSwtisLkYwM8Khh44wDa6xiPXfWl8injZXsLhO8SAc7125qRm18
-         ErCg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=A2SiQIyo4hvRrgZvT9+3elzY2NurWPOQ84hTpTx/mOI=;
-        b=M4eD+EEL+MxJoH4/BIQ34BdrCv90i4h4I15/D7Q4MMmF7lm0WtGoLFYLRai44JRqq/
-         IBDbryB/YDk8Bh26P//4vkTqnDzmLgqKAA9c9Ha20K5fnDg2ig+TtbtFV4ze+bNH+MB4
-         S/TLhaseF67ISuP0+hA3PKfm29DL6ypK0MzCAWVDhut0lk5674aTV7/aUmkdhdKzLP2L
-         Wvs68fkdsaOejPUbTIRgO1I8hGwanalZ41nF63Cv0VkYron60U7fG4L1d2A4WySvnh4R
-         Rrw0cxiJ1+adQC6u40umcrPjHwI6gFOmfnkFp6KXqA5htd0ENbyU0pWaVgijTbsvjSp3
-         zdCQ==
-X-Gm-Message-State: AOAM531Txi/dKpr/w/qP7s291/N4fmoY8J2tS31ZjUlt6hq7dsfQpij+
-        76mkxrHpWraWfg3dED+m3G/gquQg9zn2WW1oh40=
-X-Google-Smtp-Source: ABdhPJzn2RP5+aJ17mulwvz8Ouj6oUBRo//R6AMFHhjue1v8ToKT8O+GHcVnlYS5PDbBgUm9YL3F4en8T7qI7yqoyOw=
-X-Received: by 2002:a25:3357:: with SMTP id z84mr28144598ybz.260.1619479581915;
- Mon, 26 Apr 2021 16:26:21 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210423213728.3538141-1-kafai@fb.com>
-In-Reply-To: <20210423213728.3538141-1-kafai@fb.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Mon, 26 Apr 2021 16:26:11 -0700
-Message-ID: <CAEf4BzY16ziMkOMdNGNjQOmiACF3E5nFn2LhtUUQbo-y-AP7Tg@mail.gmail.com>
-Subject: Re: [PATCH dwarves] btf: Generate btf for functions in the .BTF_ids section
-To:     Martin KaFai Lau <kafai@fb.com>, Jiri Olsa <jolsa@kernel.org>
-Cc:     dwarves@vger.kernel.org,
+        Tue, 27 Apr 2021 07:39:20 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:37369 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S238012AbhD0LjN (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Tue, 27 Apr 2021 07:39:13 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1619523508;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=hnFEYH2ir5X1i0lkoWLMXh/bSKWjZ05zbFcheXKiHLo=;
+        b=fMuz+xVIyrS8gVrXQdraxJ2eBrNu7i7Y613v6Qz+eu6lesfJNjw7i7BVW0Lk/mHjQI/taG
+        3Xii7jthGqs4Y0gOaVvu4JdAC/OGAv8ZaTPun/laR4QzmFxGKYvidyPP7wcgdh92FL54gc
+        rNzh2PeaDON8c6IiU89pIiUiO1MRfnE=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-265-dG4WkvbnO2q6rE-GMwNdBg-1; Tue, 27 Apr 2021 07:38:24 -0400
+X-MC-Unique: dG4WkvbnO2q6rE-GMwNdBg-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 37BD480ED8B;
+        Tue, 27 Apr 2021 11:38:23 +0000 (UTC)
+Received: from krava (unknown [10.40.192.237])
+        by smtp.corp.redhat.com (Postfix) with SMTP id 6835F62AF7;
+        Tue, 27 Apr 2021 11:38:21 +0000 (UTC)
+Date:   Tue, 27 Apr 2021 13:38:20 +0200
+From:   Jiri Olsa <jolsa@redhat.com>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Martin KaFai Lau <kafai@fb.com>, Jiri Olsa <jolsa@kernel.org>,
+        dwarves@vger.kernel.org,
         Arnaldo Carvalho de Melo <acme@kernel.org>,
         bpf <bpf@vger.kernel.org>, Kernel Team <kernel-team@fb.com>,
         Andrii Nakryiko <andrii@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH dwarves] btf: Generate btf for functions in the .BTF_ids
+ section
+Message-ID: <YIf3rHTLqW7yZxFJ@krava>
+References: <20210423213728.3538141-1-kafai@fb.com>
+ <CAEf4BzY16ziMkOMdNGNjQOmiACF3E5nFn2LhtUUQbo-y-AP7Tg@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAEf4BzY16ziMkOMdNGNjQOmiACF3E5nFn2LhtUUQbo-y-AP7Tg@mail.gmail.com>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-On Fri, Apr 23, 2021 at 2:37 PM Martin KaFai Lau <kafai@fb.com> wrote:
->
-> BTF is currently generated for functions that are in ftrace list
-> or extern.
->
-> A recent use case also needs BTF generated for functions included in
-> allowlist.  In particular, the kernel
-> commit e78aea8b2170 ("bpf: tcp: Put some tcp cong functions in allowlist for bpf-tcp-cc")
-> allows bpf program to directly call a few tcp cc kernel functions.  Those
-> functions are specified under an ELF section .BTF_ids.  The symbols
-> in this ELF section is like __BTF_ID__func__<kernel_func>__[digit]+.
-> For example, __BTF_ID__func__cubictcp_init__1.  Those kernel
-> functions are currently allowed only if CONFIG_DYNAMIC_FTRACE is
-> set to ensure they are in the ftrace list but this kconfig dependency
-> is unnecessary.
->
-> pahole can generate BTF for those kernel functions if it knows they
-> are in the allowlist.  This patch is to capture those symbols
-> in the .BTF_ids section and generate BTF for them.
->
-> Cc: Andrii Nakryiko <andrii@kernel.org>
-> Signed-off-by: Martin KaFai Lau <kafai@fb.com>
-> ---
+On Mon, Apr 26, 2021 at 04:26:11PM -0700, Andrii Nakryiko wrote:
+> On Fri, Apr 23, 2021 at 2:37 PM Martin KaFai Lau <kafai@fb.com> wrote:
+> >
+> > BTF is currently generated for functions that are in ftrace list
+> > or extern.
+> >
+> > A recent use case also needs BTF generated for functions included in
+> > allowlist.  In particular, the kernel
+> > commit e78aea8b2170 ("bpf: tcp: Put some tcp cong functions in allowlist for bpf-tcp-cc")
+> > allows bpf program to directly call a few tcp cc kernel functions.  Those
+> > functions are specified under an ELF section .BTF_ids.  The symbols
+> > in this ELF section is like __BTF_ID__func__<kernel_func>__[digit]+.
+> > For example, __BTF_ID__func__cubictcp_init__1.  Those kernel
+> > functions are currently allowed only if CONFIG_DYNAMIC_FTRACE is
+> > set to ensure they are in the ftrace list but this kconfig dependency
+> > is unnecessary.
+> >
+> > pahole can generate BTF for those kernel functions if it knows they
+> > are in the allowlist.  This patch is to capture those symbols
+> > in the .BTF_ids section and generate BTF for them.
+> >
+> > Cc: Andrii Nakryiko <andrii@kernel.org>
+> > Signed-off-by: Martin KaFai Lau <kafai@fb.com>
+> > ---
+> 
+> I wonder if we just record all functions how bad that would be. Jiri,
+> do you remember from the time you were experimenting with static
+> functions how much more functions we'd be recording if we didn't do
+> ftrace filtering?
 
-I wonder if we just record all functions how bad that would be. Jiri,
-do you remember from the time you were experimenting with static
-functions how much more functions we'd be recording if we didn't do
-ftrace filtering?
+hum, I can't find that.. but should be just matter of removing
+that is_ftrace_func check
 
->  btf_encoder.c | 136 +++++++++++++++++++++++++++++++++++++++++++++++---
->  libbtf.c      |  10 ++++
->  libbtf.h      |   2 +
->  3 files changed, 142 insertions(+), 6 deletions(-)
->
-> diff --git a/btf_encoder.c b/btf_encoder.c
-> index 80e896961d4e..48c183915ddd 100644
-> --- a/btf_encoder.c
-> +++ b/btf_encoder.c
-> @@ -106,6 +106,121 @@ static int collect_function(struct btf_elf *btfe, GElf_Sym *sym,
->         return 0;
->  }
->
-> +#define BTF_ID_FUNC_PREFIX "__BTF_ID__func__"
-> +#define BTF_ID_FUNC_PREFIX_LEN (sizeof(BTF_ID_FUNC_PREFIX) - 1)
-> +
-> +static char **listed_functions;
-> +static int listed_functions_alloc;
-> +static int listed_functions_cnt;
+if we decided to do that, maybe we could add some bit indicating
+that the function is traceable? it would save us check with
+available_filter_functions file
 
-maybe just use struct btf as a container of strings, which is what you
-need here? You can do btf__add_str() and btf__find_str(), which are
-both fast and memory-efficient, and you won't have to manage all the
-memory and do sorting, etc, etc.
+jirka
 
-[...]
+> 
+> >  btf_encoder.c | 136 +++++++++++++++++++++++++++++++++++++++++++++++---
+> >  libbtf.c      |  10 ++++
+> >  libbtf.h      |   2 +
+> >  3 files changed, 142 insertions(+), 6 deletions(-)
+> >
+> > diff --git a/btf_encoder.c b/btf_encoder.c
+> > index 80e896961d4e..48c183915ddd 100644
+> > --- a/btf_encoder.c
+> > +++ b/btf_encoder.c
+> > @@ -106,6 +106,121 @@ static int collect_function(struct btf_elf *btfe, GElf_Sym *sym,
+> >         return 0;
+> >  }
+> >
+> > +#define BTF_ID_FUNC_PREFIX "__BTF_ID__func__"
+> > +#define BTF_ID_FUNC_PREFIX_LEN (sizeof(BTF_ID_FUNC_PREFIX) - 1)
+> > +
+> > +static char **listed_functions;
+> > +static int listed_functions_alloc;
+> > +static int listed_functions_cnt;
+> 
+> maybe just use struct btf as a container of strings, which is what you
+> need here? You can do btf__add_str() and btf__find_str(), which are
+> both fast and memory-efficient, and you won't have to manage all the
+> memory and do sorting, etc, etc.
+> 
+> [...]
+> 
+
