@@ -2,115 +2,212 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.5 required=3.0 tests=BAYES_00,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A0CA1C433B4
-	for <linux-dwarves@archiver.kernel.org>; Sat,  1 May 2021 22:24:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 955B7C433B4
+	for <linux-dwarves@archiver.kernel.org>; Mon,  3 May 2021 08:59:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 73A8D61466
-	for <linux-dwarves@archiver.kernel.org>; Sat,  1 May 2021 22:24:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 697AB60240
+	for <linux-dwarves@archiver.kernel.org>; Mon,  3 May 2021 08:59:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231656AbhEAWYu (ORCPT
+        id S232929AbhECJAl (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Sat, 1 May 2021 18:24:50 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:46006 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231593AbhEAWYu (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Sat, 1 May 2021 18:24:50 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1619907839;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=+MedoDODyMEto3dKCGmECCaYVpeBj8F55MahbTKAz34=;
-        b=ADx6katHOogtOUAfJYqYkOKmE6xgCP1iLzc3YsAElMsE/XesdetWkGPxoe7j5lJ31dSEs3
-        L3Akq3FnszCGJtFiTfyW3sdNXWqUgH+bThAeLM+QVXToTOfpjP33Kp3pfXl01eJpaPeVpu
-        4AyEKKcPe8B/Z5qrhhJi/q69ouxmUic=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-248-Mca2dzhaOTikoG9ICueiBQ-1; Sat, 01 May 2021 18:23:56 -0400
-X-MC-Unique: Mca2dzhaOTikoG9ICueiBQ-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id D06C0501FE;
-        Sat,  1 May 2021 22:23:54 +0000 (UTC)
-Received: from krava (unknown [10.40.192.65])
-        by smtp.corp.redhat.com (Postfix) with SMTP id 25FA0501DD;
-        Sat,  1 May 2021 22:23:52 +0000 (UTC)
-Date:   Sun, 2 May 2021 00:23:52 +0200
-From:   Jiri Olsa <jolsa@redhat.com>
-To:     Martin KaFai Lau <kafai@fb.com>
-Cc:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Jiri Olsa <jolsa@kernel.org>, dwarves@vger.kernel.org,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        bpf <bpf@vger.kernel.org>, Kernel Team <kernel-team@fb.com>,
-        Andrii Nakryiko <andrii@kernel.org>
-Subject: Re: [PATCH dwarves] btf: Generate btf for functions in the .BTF_ids
- section
-Message-ID: <YI3U+Ffh9O1VFsOW@krava>
-References: <20210423213728.3538141-1-kafai@fb.com>
- <CAEf4BzY16ziMkOMdNGNjQOmiACF3E5nFn2LhtUUQbo-y-AP7Tg@mail.gmail.com>
- <YIf3rHTLqW7yZxFJ@krava>
- <20210501001653.x3b4rk4vk4iqv3n7@kafai-mbp.dhcp.thefacebook.com>
+        Mon, 3 May 2021 05:00:41 -0400
+Received: from mail-ed1-f42.google.com ([209.85.208.42]:45718 "EHLO
+        mail-ed1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231531AbhECJAl (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Mon, 3 May 2021 05:00:41 -0400
+Received: by mail-ed1-f42.google.com with SMTP id d14so5383803edc.12;
+        Mon, 03 May 2021 01:59:47 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language;
+        bh=ylNixxPElN4FOLfZxMBmuRN5VwI+oDqntB6I0UOtU8A=;
+        b=k7SLplqDezicLt8YgTF6HXDf5V7Y6CIk8I7NNVKUQ3XtVYBl1CCECEG+0QV7Cl+oNT
+         Ex9yLwkwqv1kJTbBNH29pbKg6nzqGg0CyFfPv088aIsEvIpzdhElKnkE0lF+Y2d4qmJ/
+         7hkun4r8Llw6CmMWPoUK5alfTlv79nKujM725jlOINU8dIgKSmKginzaRhU9mx2Bg6+a
+         f39Sa3uKMy3N0DJAgeCJ16Yul8gFgyreHctBgVTwE9NBiNAQCDpKNrkQ/3SdM4wJ+lqb
+         wVbad8eAWMwCzbIo1VR6kxB9qB8tOaT5mUhfs5FJ74dGsxyK+44iOMoJFvOLxTaXoCQX
+         EClA==
+X-Gm-Message-State: AOAM533T0v24xPFXL0vFGLeIEsJwELygdMXRSrX9MIiH8UDZgQVC4QmB
+        ebDMlhcPNMqOHiVH3NYO7nzVEpR7l9o4FQ==
+X-Google-Smtp-Source: ABdhPJx/VVHKuVSufgVvuNjBbHQVncDD1fuAh+kpFIXqB7Q71x1EYP/w33M7SvD6vcFqXHWyN9TA+g==
+X-Received: by 2002:a05:6402:b88:: with SMTP id cf8mr18803891edb.227.1620032386776;
+        Mon, 03 May 2021 01:59:46 -0700 (PDT)
+Received: from ?IPv6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
+        by smtp.gmail.com with ESMTPSA id c12sm13207764edx.54.2021.05.03.01.59.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 03 May 2021 01:59:46 -0700 (PDT)
+Subject: Re: linux-next failing build due to missing cubictcp_state symbol
+From:   Jiri Slaby <jirislaby@kernel.org>
+To:     =?UTF-8?Q?Michal_Such=c3=a1nek?= <msuchanek@suse.de>,
+        Jiri Olsa <jolsa@redhat.com>
+Cc:     Yonghong Song <yhs@fb.com>, linux-kernel@vger.kernel.org,
+        Martin KaFai Lau <kafai@fb.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Song Liu <songliubraving@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, Jiri Olsa <jolsa@kernel.org>,
+        Jesper Dangaard Brouer <brouer@redhat.com>,
+        dwarves@vger.kernel.org, Arnaldo Carvalho de Melo <acme@redhat.com>
+References: <316e86f9-35cc-36b0-1594-00a09631c736@fb.com>
+ <20210423175528.GF6564@kitsune.suse.cz>
+ <20210425111545.GL15381@kitsune.suse.cz>
+ <20210426113215.GM15381@kitsune.suse.cz>
+ <20210426121220.GN15381@kitsune.suse.cz>
+ <20210426121401.GO15381@kitsune.suse.cz>
+ <49f84147-bf32-dc59-48e0-f89241cf6264@fb.com> <YIbkR6z6mxdNSzGO@krava>
+ <YIcRlHQWWKbOlcXr@krava> <20210427121237.GK6564@kitsune.suse.cz>
+ <20210430174723.GP15381@kitsune.suse.cz>
+ <3d148516-0472-8f0a-085b-94d68c5cc0d5@suse.com>
+ <6c14f3c8-7474-9f3f-b4a6-2966cb19e1ed@kernel.org>
+ <4e051459-8532-7b61-c815-f3435767f8a0@kernel.org>
+Message-ID: <cbaf50c3-c85d-9239-0b37-c88e8cbed8c8@kernel.org>
+Date:   Mon, 3 May 2021 10:59:44 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.9.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210501001653.x3b4rk4vk4iqv3n7@kafai-mbp.dhcp.thefacebook.com>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
+In-Reply-To: <4e051459-8532-7b61-c815-f3435767f8a0@kernel.org>
+Content-Type: multipart/mixed;
+ boundary="------------730411CEEE03A22CBB5BD79E"
+Content-Language: en-US
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-On Fri, Apr 30, 2021 at 05:16:53PM -0700, Martin KaFai Lau wrote:
-> On Tue, Apr 27, 2021 at 01:38:20PM +0200, Jiri Olsa wrote:
-> > On Mon, Apr 26, 2021 at 04:26:11PM -0700, Andrii Nakryiko wrote:
-> > > On Fri, Apr 23, 2021 at 2:37 PM Martin KaFai Lau <kafai@fb.com> wrote:
-> > > >
-> > > > BTF is currently generated for functions that are in ftrace list
-> > > > or extern.
-> > > >
-> > > > A recent use case also needs BTF generated for functions included in
-> > > > allowlist.  In particular, the kernel
-> > > > commit e78aea8b2170 ("bpf: tcp: Put some tcp cong functions in allowlist for bpf-tcp-cc")
-> > > > allows bpf program to directly call a few tcp cc kernel functions.  Those
-> > > > functions are specified under an ELF section .BTF_ids.  The symbols
-> > > > in this ELF section is like __BTF_ID__func__<kernel_func>__[digit]+.
-> > > > For example, __BTF_ID__func__cubictcp_init__1.  Those kernel
-> > > > functions are currently allowed only if CONFIG_DYNAMIC_FTRACE is
-> > > > set to ensure they are in the ftrace list but this kconfig dependency
-> > > > is unnecessary.
-> > > >
-> > > > pahole can generate BTF for those kernel functions if it knows they
-> > > > are in the allowlist.  This patch is to capture those symbols
-> > > > in the .BTF_ids section and generate BTF for them.
-> > > >
-> > > > Cc: Andrii Nakryiko <andrii@kernel.org>
-> > > > Signed-off-by: Martin KaFai Lau <kafai@fb.com>
-> > > > ---
-> > > 
-> > > I wonder if we just record all functions how bad that would be. Jiri,
-> > > do you remember from the time you were experimenting with static
-> > > functions how much more functions we'd be recording if we didn't do
-> > > ftrace filtering?
-> > 
-> > hum, I can't find that.. but should be just matter of removing
-> > that is_ftrace_func check
-> In my kconfig, by ignoring is_ftrace_func(),
-> number of FUNC: 40643 vs 46225
+This is a multi-part message in MIME format.
+--------------730411CEEE03A22CBB5BD79E
+Content-Type: text/plain; charset=iso-8859-2; format=flowed
+Content-Transfer-Encoding: 8bit
+
+CCing pahole people.
+
+On 03. 05. 21, 9:59, Jiri Slaby wrote:
+> On 03. 05. 21, 8:11, Jiri Slaby wrote:
+>>>>>>> looks like vfs_truncate did not get into BTF data,
+>>>>>>> I'll try to reproduce
+>>>
+>>> _None_ of the functions are generated by pahole -J from debuginfo on 
+>>> ppc64. debuginfo appears to be correct. Neither pahole -J fs/open.o 
+>>> works correctly. collect_functions in dwarves seems to be defunct on 
+>>> ppc64... "functions" array is bogus (so find_function -- the bsearch 
+>>> -- fails).
+>>
+>> It's not that bogus. I forgot an asterisk:
+>>> #0  find_function (btfe=0x100269f80, name=0x10024631c "stream_open") 
+>>> at /usr/src/debug/dwarves-1.21-1.1.ppc64/btf_encoder.c:350
+>>> (gdb) p (*functions)@84
+>>> $5 = {{name = 0x7ffff68e0922 ".__se_compat_sys_ftruncate", addr = 
+>>> 75232, size = 72, sh_addr = 65536, generated = false}, {
+>>>     name = 0x7ffff68e019e ".__se_compat_sys_open", addr = 80592, size 
+>>> = 216, sh_addr = 65536, generated = false}, {
+>>>     name = 0x7ffff68e0076 ".__se_compat_sys_openat", addr = 80816, 
+>>> size = 232, sh_addr = 65536, generated = false}, {
+>>>     name = 0x7ffff68e0908 ".__se_compat_sys_truncate", addr = 74304, 
+>>> size = 100, sh_addr = 65536, generated = false}, {
+>> ...
+>>>     name = 0x7ffff68e0808 ".stream_open", addr = 65824, size = 72, 
+>>> sh_addr = 65536, generated = false}, {
+>> ...
+>>>     name = 0x7ffff68e0751 ".vfs_truncate", addr = 73392, size = 544, 
+>>> sh_addr = 65536, generated = false}}
+>>
+>> The dot makes the difference, of course. The question is why is it 
+>> there? I keep looking into it. Only if someone has an immediate idea...
 > 
-> I would say skip the ftrace filtering instead of my current patch.  Thoughts?
+> Well, .vfs_truncate is in .text (and contains an ._mcount call). And 
+> vfs_truncate is in .opd (w/o an ._mcount call). Since setup_functions 
+> excludes all functions without the ._mcount call, is_ftrace_func later 
+> returns false for such functions and they are filtered before the BTF 
+> processing.
 > 
+> Technically, get_vmlinux_addrs looks at a list of functions between 
+> __start_mcount_loc and __stop_mcount_loc and considers only the listed.
+> 
+> I don't know what the correct fix is (exclude .opd functions from the 
+> filter?). Neither why cross compiler doesn't fail, nor why ebi v2 avoids 
+> this too.
 
-I tested on arm and got 25022 vs 55812 ;-)
-and of course it fixes the compilation issue with cubictcp_state
+Attaching a patch for pahole which fixes the issue, but I have no idea 
+whether it is the right fix at all.
 
-I checked the pahole changelog and the original idea was to have only
-traceable functions in BTF, but we need more than that now, so I'm ok
-to skip the ftrace filter
+> regards,-- 
+js
+suse labs
 
-jirka
+--------------730411CEEE03A22CBB5BD79E
+Content-Type: text/x-patch; charset=UTF-8;
+ name="ppc64-opd-fix.patch"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment;
+ filename="ppc64-opd-fix.patch"
 
+From: Jiri Slaby <jslaby@suse.cz>
+Subject: ppc64: .opd section fix
+Patch-mainline: submitted 2021/05/03
+
+Functions in the .opd section should be considered valid too. Otherwise,
+pahole cannot produce a .BTF section from vmlinux and kernel build
+fails on ppc64.
+---
+ btf_encoder.c |   18 +++++++++++++++++-
+ 1 file changed, 17 insertions(+), 1 deletion(-)
+
+--- a/btf_encoder.c
++++ b/btf_encoder.c
+@@ -31,6 +31,8 @@ struct funcs_layout {
+ 	unsigned long mcount_start;
+ 	unsigned long mcount_stop;
+ 	unsigned long mcount_sec_idx;
++	unsigned long opd_start;
++	unsigned long opd_stop;
+ };
+ 
+ struct elf_function {
+@@ -271,11 +273,24 @@ static int is_ftrace_func(struct elf_fun
+ 	return start <= addrs[r] && addrs[r] < end;
+ }
+ 
++static int is_opd_func(struct elf_function *func, struct funcs_layout *fl)
++{
++	return fl->opd_start <= func->addr && func->addr < fl->opd_stop;
++}
++
+ static int setup_functions(struct btf_elf *btfe, struct funcs_layout *fl)
+ {
+ 	__u64 *addrs, count, i;
+ 	int functions_valid = 0;
+ 	bool kmod = false;
++	GElf_Shdr shdr;
++	Elf_Scn *sec;
++
++	sec = elf_section_by_name(btfe->elf, &btfe->ehdr, &shdr, ".opd", NULL);
++	if (sec) {
++		fl->opd_start = shdr.sh_addr;
++		fl->opd_stop = shdr.sh_addr + shdr.sh_size;
++	}
+ 
+ 	/*
+ 	 * Check if we are processing vmlinux image and
+@@ -322,7 +337,8 @@ static int setup_functions(struct btf_el
+ 			func->addr += func->sh_addr;
+ 
+ 		/* Make sure function is within ftrace addresses. */
+-		if (is_ftrace_func(func, addrs, count)) {
++		if (is_opd_func(func, fl) ||
++				is_ftrace_func(func, addrs, count)) {
+ 			/*
+ 			 * We iterate over sorted array, so we can easily skip
+ 			 * not valid item and move following valid field into
+
+--------------730411CEEE03A22CBB5BD79E--
