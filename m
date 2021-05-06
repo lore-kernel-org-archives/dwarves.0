@@ -2,160 +2,203 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-16.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-	version=3.4.0
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,MSGID_FROM_MTA_HEADER,
+	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1F8FEC433B4
-	for <linux-dwarves@archiver.kernel.org>; Thu,  6 May 2021 13:16:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A3EFDC433B4
+	for <linux-dwarves@archiver.kernel.org>; Thu,  6 May 2021 19:59:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C66A0613CD
-	for <linux-dwarves@archiver.kernel.org>; Thu,  6 May 2021 13:16:53 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 71E3961157
+	for <linux-dwarves@archiver.kernel.org>; Thu,  6 May 2021 19:59:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233773AbhEFNRu (ORCPT
+        id S229663AbhEFUAS (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Thu, 6 May 2021 09:17:50 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:60152 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233070AbhEFNRu (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Thu, 6 May 2021 09:17:50 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1620307011;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=aFyoCh/Cvv5uFlEu/CTPouwkWlGfZVHzYvmAxhYjM4o=;
-        b=Tq4etUMlv9rWYGwy9kI5cjv3WwB15vNRm49Wql4asSLCGzzz9uaBQPwlNUaXlIFn+AdiaY
-        xJawyPBEdlUqnHXPaPTdguIQyE0q6VJU78bpEA0rF/TzefrkIDTQA190Oeibe0tZnrT9/d
-        fenSHH3aEsanSELP9xE6HOoe3RWg0KI=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-587-luWD0peDPHCz8cVEamg4ww-1; Thu, 06 May 2021 09:16:49 -0400
-X-MC-Unique: luWD0peDPHCz8cVEamg4ww-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id C931F1008063;
-        Thu,  6 May 2021 13:16:44 +0000 (UTC)
-Received: from krava (unknown [10.40.193.227])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id C6728620DE;
-        Thu,  6 May 2021 13:16:36 +0000 (UTC)
-Date:   Thu, 6 May 2021 15:16:35 +0200
-From:   Jiri Olsa <jolsa@redhat.com>
-To:     Martin KaFai Lau <kafai@fb.com>
-Cc:     Jiri Slaby <jirislaby@kernel.org>,
-        Michal =?iso-8859-1?Q?Such=E1nek?= <msuchanek@suse.de>,
-        Yonghong Song <yhs@fb.com>, linux-kernel@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
+        Thu, 6 May 2021 16:00:18 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:8926 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229710AbhEFUAR (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Thu, 6 May 2021 16:00:17 -0400
+Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 146Jt9DV016890;
+        Thu, 6 May 2021 12:59:15 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=date : from : to : cc :
+ subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=facebook; bh=oY+vHk6WUyrMkUkHYiUrDiJC4vtrKNETN/QNR6bIxkQ=;
+ b=Knu6EnQb8JLF3WEeAE/Jli01j5PYd/zdC7DbK9tDV7HspRq44mPpKdIUl3zWW6a15lip
+ dQF4adotTOfFI46FQBepSh1IrjehCvMzCgrQoFG7TZrs0i1TjudbHWLEDTRyjyiwlx3D
+ l38U7KY6d6rU/eZUk/bIgJog/2OgTo6iuJA= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com with ESMTP id 38cmq08w8y-17
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Thu, 06 May 2021 12:59:15 -0700
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (100.104.98.9) by
+ o365-in.thefacebook.com (100.104.94.199) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Thu, 6 May 2021 12:59:13 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Rj/Lyb3dkYMXjWsF7f7ZnbTP+ONNr2yMWpXXybTS0fYiS+wQr68J1LJtjqD9m/sphlG5ylea6teSsz73FraJR3Ma+e4RD2vx1jEC2jg5fAPo9OLKKyYXQTlKQVdGAfmMONt3X3Fx4roTvET8uXAI5Ocp6/mWeuvuQECOsbhFTgMicOmnRcI0TrE1zkMHM9tCHohwhz+jRNxAGN/GTf2xacF49WBlbkufxVUuqjZ1DsBMXwiekzMkfMhKIBl28q03udo/BnA/FoboKOEV+UF8XcWqUMprCS8lxa9pew/LY6U2s6+K17AjasDzFkjZJTpbRZWlaFKAGhaKsS6qnm92ng==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=oY+vHk6WUyrMkUkHYiUrDiJC4vtrKNETN/QNR6bIxkQ=;
+ b=e/Wns7ieLS3PnYqoiWfIIdekOTpr6vTk20dB630bRUC8D1mHtrSrKJzhGd2ZY4z2SObdB11ppGbSXQqB6W0yaa6hM8TMXjyJ8EP9T6JyktfVDWdH3QCEiziT7bpvVSkIGQfMugO4KZm4/uUPjRiZSj15mBqPBeSG2W2F2KsDgY7fj3BRzPx1msytpUA5j2O9uleAbH3FeRtaFFR3S/jrU6BxJZ8O3uwz3jWM4a4hkyiKDGv7MPRRK+fl68igOoAN6rCf1s3ZQjzknrY+CAFX90W1lu6nO8qJOmwjXuD73V87wRceVpd4rjI5wPvPkx/r5Wwi99NWmdZIBEoqTxs/PA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
+ header.d=fb.com; arc=none
+Authentication-Results: redhat.com; dkim=none (message not signed)
+ header.d=none;redhat.com; dmarc=none action=none header.from=fb.com;
+Received: from BY5PR15MB3571.namprd15.prod.outlook.com (2603:10b6:a03:1f6::32)
+ by BYAPR15MB4119.namprd15.prod.outlook.com (2603:10b6:a02:cd::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4108.26; Thu, 6 May
+ 2021 19:59:12 +0000
+Received: from BY5PR15MB3571.namprd15.prod.outlook.com
+ ([fe80::718a:4142:4c92:732f]) by BY5PR15MB3571.namprd15.prod.outlook.com
+ ([fe80::718a:4142:4c92:732f%6]) with mapi id 15.20.4108.028; Thu, 6 May 2021
+ 19:59:12 +0000
+Date:   Thu, 6 May 2021 12:59:10 -0700
+From:   Martin KaFai Lau <kafai@fb.com>
+To:     Jiri Olsa <jolsa@redhat.com>
+CC:     <dwarves@vger.kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        <bpf@vger.kernel.org>, <kernel-team@fb.com>,
         Andrii Nakryiko <andrii@kernel.org>,
-        Song Liu <songliubraving@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, Jiri Olsa <jolsa@kernel.org>,
-        Jesper Dangaard Brouer <brouer@redhat.com>,
-        dwarves@vger.kernel.org, Arnaldo Carvalho de Melo <acme@redhat.com>
-Subject: Re: linux-next failing build due to missing cubictcp_state symbol
-Message-ID: <YJPsM0McnVgsHS15@krava>
-References: <YIcRlHQWWKbOlcXr@krava>
- <20210427121237.GK6564@kitsune.suse.cz>
- <20210430174723.GP15381@kitsune.suse.cz>
- <3d148516-0472-8f0a-085b-94d68c5cc0d5@suse.com>
- <6c14f3c8-7474-9f3f-b4a6-2966cb19e1ed@kernel.org>
- <4e051459-8532-7b61-c815-f3435767f8a0@kernel.org>
- <cbaf50c3-c85d-9239-0b37-c88e8cbed8c8@kernel.org>
- <YI/LgjLxo9VCN/d+@krava>
- <8c3cbd22-eb26-ea8b-c8bb-35a629d6d2d8@kernel.org>
- <20210506053152.e5rnv44zsitob3sn@kafai-mbp.dhcp.thefacebook.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+        Jiri Olsa <jolsa@kernel.org>
+Subject: Re: [PATCH dwarves] btf: Remove ftrace filter
+Message-ID: <20210506195910.qtaz2h3xpbeeojoj@kafai-mbp.dhcp.thefacebook.com>
+References: <20210506015824.2335125-1-kafai@fb.com>
+ <YJPr4ykRPCCQ4s0P@krava>
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20210506053152.e5rnv44zsitob3sn@kafai-mbp.dhcp.thefacebook.com>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+In-Reply-To: <YJPr4ykRPCCQ4s0P@krava>
+X-Originating-IP: [2620:10d:c090:400::5:7865]
+X-ClientProxiedBy: MW4PR03CA0027.namprd03.prod.outlook.com
+ (2603:10b6:303:8f::32) To BY5PR15MB3571.namprd15.prod.outlook.com
+ (2603:10b6:a03:1f6::32)
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from kafai-mbp.dhcp.thefacebook.com (2620:10d:c090:400::5:7865) by MW4PR03CA0027.namprd03.prod.outlook.com (2603:10b6:303:8f::32) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4108.25 via Frontend Transport; Thu, 6 May 2021 19:59:11 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: fe16878b-62d5-4ca6-922f-08d910c96b30
+X-MS-TrafficTypeDiagnostic: BYAPR15MB4119:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <BYAPR15MB41192228A57A40053D0AA3C9D5589@BYAPR15MB4119.namprd15.prod.outlook.com>
+X-FB-Source: Internal
+X-MS-Oob-TLC-OOBClassifiers: OLM:4125;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Y/v0j1FfyVdRmnOXcPWJP7f+uglclVIkvgbMW+mS6OnFW9BSFNR0sz6+vhHUpJshrXKYfMr6UJt27rTl5k27DsiN3hLFaHvBsi74GH6DJ1xijGnncihL7438cIJRCAsEKmz8JlxapbAwN6SIq9SeiN8uF8tkiY5ufu59MgH4ZWdV0QDeHYflxJgY6tLHcCdKmy4jQIdCZVuZ8Mvo+8h1EN7oHmWql2PoaLfF8mpF7ktyepvc2wOusbzFgPbtckd5zCV2npPhm+L+CfR4xkG2VBTapteZI9GKHsKBwOAraBmGZqgzlRkmY316pMe9SDNxs4ZZCzBPl6dxrFZVNEfJ/OxT6YknKLKhH+MhhvaOuuOQWrk+B1bQZsy1qFfThdKlfDNBINw5FyVsG8XmhUlmOu4VAtRWHP92HcZ4WsbOEEVEhZ97wbhr9Fjv+hBjwZ+lLvxjSTEt/5PlJCwV1cfMMIsSUor3t45AQAc2YfPj+gvvd2ZSBmrLgOgmU+ysswrba+3CozdZt6OvEjwqrjFDwnfNxn6KdxmeS4TrIlumexCKdXWdmp3Yj0sh6rQg9mlh0bvaxY62I5MhC1f2QcWgQK3cIMv29N0gnbLvTUtsZTTULc3UrlOqfwAK9KWZ4hM5AHeLX1ABMgY5kSNDaZzMLeLvkWw61HEwKYMzD0QD8yU=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR15MB3571.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(346002)(39860400002)(366004)(136003)(376002)(396003)(7696005)(6916009)(316002)(8936002)(16526019)(6506007)(52116002)(8676002)(66556008)(478600001)(966005)(66946007)(66476007)(2906002)(83380400001)(4326008)(5660300002)(86362001)(9686003)(54906003)(1076003)(186003)(38100700002)(55016002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?HFb73GjnOcMcf4VHEtGxmrKPnaUshhZk+qdxqpsdKbS6AyhfksDPA1vp+mCT?=
+ =?us-ascii?Q?dQhLvyCggZVrcauTSsiDqjfIzmUl1a8Ab1aE0MJqgrQGgasHO+16DYVVLhvj?=
+ =?us-ascii?Q?zt3sKIAI2QtQ06qlCQmHDgRm/Qvj4wGac59YLjKQ87xPiM8YI+29aUX45awX?=
+ =?us-ascii?Q?59b5P38zZ4eNTW/Y45xxnoc2txYoDz6Un3ZnCCzGYv6c9+IpIrn5HxEKU2nG?=
+ =?us-ascii?Q?HKz8z0I7jn0uS3Dks7PUCab303n6UsG5i7sMhojloH8XlHhShVnSRE7GpoQ1?=
+ =?us-ascii?Q?AW+OYDParVmTEMhoKzByIiitpSZ42Usg1jEzVA4NO0/vy8uXHnAhD8qHfE9s?=
+ =?us-ascii?Q?TAnG52JR3teDDyhXnhAYBD7ZG+WfQc7IsaqOgBl9nZS0MpuT6+aRhpMQry2j?=
+ =?us-ascii?Q?R4G+gI72YglBOA2NxqJcOuKp57DzWbeXM6Kdh5nLzyrs+K5ynRkGWQKZeJtU?=
+ =?us-ascii?Q?p4TZkQaRlNi4jexiLVQ4T82UqoWwndixxsTU6rHNSpP7QeOoWGlkRg1RP9Uf?=
+ =?us-ascii?Q?h0Wu+zLRnQY/D/ZGu2THIIFlgk4IyDKL4+XO6z8ya4YFhsDdmmdDHZYMduD8?=
+ =?us-ascii?Q?supIn1QJo6SZyqQUMzYU857DeBnil8Be4ASBXOtvPwaji147JRwAQFVw9B3U?=
+ =?us-ascii?Q?KfoRq6OerrnE9ipM1cgvofWEg5Pqxw3s3rVj7ziaxxRZeIh7q88g59UKpF48?=
+ =?us-ascii?Q?3fVk2+SaChDa4WqWsUu+huTKTS9QDx8+WyWICZ+i9UK21mmnIuXCBAdOGK0v?=
+ =?us-ascii?Q?gBAqahfVtkhh7Aw8gazNpgaHpM+LNaHyP40TE27KDJzRuDHKKkSvDCFLSIsG?=
+ =?us-ascii?Q?DQ29QrON+CHtygiOOUGRRTACbX6qdnt9CPTy5MLK9cZAGMGyrjalhVhapQgA?=
+ =?us-ascii?Q?OHV7ON5qocTT52hwFs/sOj/4DgnrngiLOYBWOYfFmNvc/p2vT3wGKYgHTokA?=
+ =?us-ascii?Q?WOvxvwejazxpZ/jUzby5oxVJsc+Fe2WiRF3J4Y3mOkjjkhf+u8cbVKPWG8pI?=
+ =?us-ascii?Q?UPywnssvyKykpJCCmvCsmipRaxqzoyWHMWcV8PxIMWF7O+J+VruAgwzjiUne?=
+ =?us-ascii?Q?9o8qVN1moHTKtvgLjiWuT61e7nHF2btKoXuZHoyo1wjSwOK4OJmYNxl+KaVb?=
+ =?us-ascii?Q?VNzYdwHER7U5lKSFqdR5DhJPGD5DQT7Fg6EUHb0dJBQMFBGxSjjEyCmgj00K?=
+ =?us-ascii?Q?WQpSB9lYMQ7k2Af1OhPRHnHw7pfz/KkW+6jPWD+7eBlkKv6kk+7WAzSwVP4L?=
+ =?us-ascii?Q?V/1WMYphvMOnrdXLqWTePKQkAwEVw3NG/6FdWC9coR7W+HwE/O1Rya8whf6H?=
+ =?us-ascii?Q?q2+xCzWp7H8cMbPWFi1DsBLwZWgKhUQo1fnBtaW9Z0KgMA=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: fe16878b-62d5-4ca6-922f-08d910c96b30
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR15MB3571.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 May 2021 19:59:12.4770
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: RzAo7XQ1CWdi+cymniO9Xv+MbpsKQjDjYGvQlPe9J7+pb3RUN8ce9hDJ63D44dnX
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR15MB4119
+X-OriginatorOrg: fb.com
+X-Proofpoint-GUID: aAu-Vs4QD2Z01g6F0OxiP4Y_xOyR29Ix
+X-Proofpoint-ORIG-GUID: aAu-Vs4QD2Z01g6F0OxiP4Y_xOyR29Ix
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
+ definitions=2021-05-06_10:2021-05-06,2021-05-06 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxscore=0 bulkscore=0
+ suspectscore=0 clxscore=1015 mlxlogscore=950 priorityscore=1501
+ lowpriorityscore=0 adultscore=0 spamscore=0 phishscore=0 malwarescore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2104060000 definitions=main-2105060138
+X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-On Wed, May 05, 2021 at 10:31:52PM -0700, Martin KaFai Lau wrote:
-> On Tue, May 04, 2021 at 08:41:47AM +0200, Jiri Slaby wrote:
-> > On 03. 05. 21, 12:08, Jiri Olsa wrote:
-> > > On Mon, May 03, 2021 at 10:59:44AM +0200, Jiri Slaby wrote:
-> > > > CCing pahole people.
-> > > > 
-> > > > On 03. 05. 21, 9:59, Jiri Slaby wrote:
-> > > > > On 03. 05. 21, 8:11, Jiri Slaby wrote:
-> > > > > > > > > > > looks like vfs_truncate did not get into BTF data,
-> > > > > > > > > > > I'll try to reproduce
-> > > > > > > 
-> > > > > > > _None_ of the functions are generated by pahole -J from
-> > > > > > > debuginfo on ppc64. debuginfo appears to be correct. Neither
-> > > > > > > pahole -J fs/open.o works correctly. collect_functions in
-> > > > > > > dwarves seems to be defunct on ppc64... "functions" array is
-> > > > > > > bogus (so find_function -- the bsearch -- fails).
-> > > > > > 
-> > > > > > It's not that bogus. I forgot an asterisk:
-> > > > > > > #0  find_function (btfe=0x100269f80, name=0x10024631c
-> > > > > > > "stream_open") at
-> > > > > > > /usr/src/debug/dwarves-1.21-1.1.ppc64/btf_encoder.c:350
-> > > > > > > (gdb) p (*functions)@84
-> > > > > > > $5 = {{name = 0x7ffff68e0922 ".__se_compat_sys_ftruncate", addr
-> > > > > > > = 75232, size = 72, sh_addr = 65536, generated = false}, {
-> > > > > > >      name = 0x7ffff68e019e ".__se_compat_sys_open", addr = 80592,
-> > > > > > > size = 216, sh_addr = 65536, generated = false}, {
-> > > > > > >      name = 0x7ffff68e0076 ".__se_compat_sys_openat", addr =
-> > > > > > > 80816, size = 232, sh_addr = 65536, generated = false}, {
-> > > > > > >      name = 0x7ffff68e0908 ".__se_compat_sys_truncate", addr =
-> > > > > > > 74304, size = 100, sh_addr = 65536, generated = false}, {
-> > > > > > ...
-> > > > > > >      name = 0x7ffff68e0808 ".stream_open", addr = 65824, size =
-> > > > > > > 72, sh_addr = 65536, generated = false}, {
-> > > > > > ...
-> > > > > > >      name = 0x7ffff68e0751 ".vfs_truncate", addr = 73392, size =
-> > > > > > > 544, sh_addr = 65536, generated = false}}
-> > > > > > 
-> > > > > > The dot makes the difference, of course. The question is why is it
-> > > > > > there? I keep looking into it. Only if someone has an immediate
-> > > > > > idea...
-> > > > > 
-> > > > > Well, .vfs_truncate is in .text (and contains an ._mcount call). And
-> > > > > vfs_truncate is in .opd (w/o an ._mcount call). Since setup_functions
-> > > > > excludes all functions without the ._mcount call, is_ftrace_func later
-> > > > > returns false for such functions and they are filtered before the BTF
-> > > > > processing.
-> > > > > 
-> > > > > Technically, get_vmlinux_addrs looks at a list of functions between
-> > > > > __start_mcount_loc and __stop_mcount_loc and considers only the listed.
-> > > > > 
-> > > > > I don't know what the correct fix is (exclude .opd functions from the
-> > > > > filter?). Neither why cross compiler doesn't fail, nor why ebi v2 avoids
-> > > > > this too.
-> > > > 
-> > > > Attaching a patch for pahole which fixes the issue, but I have no idea
-> > > > whether it is the right fix at all.
-> > > 
-> > > hi,
-> > > we're considering to disable ftrace filter completely,
-> > > I guess that would solve this issue for ppc as well
-> > > 
-> > >    https://lore.kernel.org/bpf/20210501001653.x3b4rk4vk4iqv3n7@kafai-mbp.dhcp.thefacebook.com/
+On Thu, May 06, 2021 at 03:15:15PM +0200, Jiri Olsa wrote:
+> On Wed, May 05, 2021 at 06:58:24PM -0700, Martin KaFai Lau wrote:
+> > BTF is currently generated for functions that are in ftrace list
+> > or extern.
 > > 
-> > Right, the attached patch fixes it for me too.
-> Ah, I just noticed the attachment while replying an earlier message in
-> this thread.
+> > A recent use case also needs BTF generated for functions included in
+> > allowlist.  In particular, the kernel
+> > commit e78aea8b2170 ("bpf: tcp: Put some tcp cong functions in allowlist for bpf-tcp-cc")
+> > allows bpf program to directly call a few tcp cc kernel functions. Those
+> > kernel functions are currently allowed only if CONFIG_DYNAMIC_FTRACE
+> > is set to ensure they are in the ftrace list but this kconfig dependency
+> > is unnecessary.
+> > 
+> > Those kernel functions are specified under an ELF section .BTF_ids.
+> > There was an earlier attempt [0] to add another filter for the functions in
+> > the .BTF_ids section.  That discussion concluded that the ftrace filter
+> > should be removed instead.
+> > 
+> > This patch is to remove the ftrace filter and its related functions.
+> > 
+> > Number of BTF FUNC with and without is_ftrace_func():
+> > My kconfig in x86: 40643 vs 46225
+> > Jiri reported on arm: 25022 vs 55812
+> > 
+> > [0]: https://lore.kernel.org/dwarves/20210423213728.3538141-1-kafai@fb.com/
+> > 
+> > Cc: Andrii Nakryiko <andrii@kernel.org>
+> > Cc: Jiri Olsa <jolsa@kernel.org>
+> > Signed-off-by: Martin KaFai Lau <kafai@fb.com>
+> > ---
+> >  btf_encoder.c | 272 +-------------------------------------------------
+> >  1 file changed, 5 insertions(+), 267 deletions(-)
+> > 
+> > diff --git a/btf_encoder.c b/btf_encoder.c
+> > index 80e896961d4e..55c5f8e30cac 100644
+> > --- a/btf_encoder.c
+> > +++ b/btf_encoder.c
+> > @@ -27,17 +27,8 @@
+> >   */
+> >  #define KSYM_NAME_LEN 128
+> >  
+> > -struct funcs_layout {
+> > -	unsigned long mcount_start;
+> > -	unsigned long mcount_stop;
+> > -	unsigned long mcount_sec_idx;
+> > -};
+> > -
+> >  struct elf_function {
+> >  	const char	*name;
+> > -	unsigned long	 addr;
+> > -	unsigned long	 size;
+> > -	unsigned long	 sh_addr;
+> >  	bool		 generated;
+> >  };
+> >  
+> > @@ -98,250 +89,11 @@ static int collect_function(struct btf_elf *btfe, GElf_Sym *sym,
+> >  	}
+> >  
 > 
-> Please feel free to add SOB to mine or
-> repost yours and toss mine.  Either way works for me.
-> 
-
-I think this patch is missing the same removal I just commented
-on your patch.. either way is ok for me
-
-jirka
-
+> we could also remove sym_sec_idx/last_idx right?
+> it's there for the sh.sh_addr, which got removed
+Right, I will remove them.
