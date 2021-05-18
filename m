@@ -2,152 +2,281 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 439D5C43461
-	for <linux-dwarves@archiver.kernel.org>; Tue, 18 May 2021 14:07:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D9DBAC433ED
+	for <linux-dwarves@archiver.kernel.org>; Tue, 18 May 2021 18:30:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2667961209
-	for <linux-dwarves@archiver.kernel.org>; Tue, 18 May 2021 14:07:57 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BE0FA60D07
+	for <linux-dwarves@archiver.kernel.org>; Tue, 18 May 2021 18:30:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349798AbhEROJO (ORCPT
+        id S245010AbhERScI (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Tue, 18 May 2021 10:09:14 -0400
-Received: from mail-wr1-f44.google.com ([209.85.221.44]:41675 "EHLO
-        mail-wr1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349797AbhEROJM (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Tue, 18 May 2021 10:09:12 -0400
-Received: by mail-wr1-f44.google.com with SMTP id d11so10377813wrw.8
-        for <dwarves@vger.kernel.org>; Tue, 18 May 2021 07:07:54 -0700 (PDT)
+        Tue, 18 May 2021 14:32:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53842 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244333AbhERScI (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Tue, 18 May 2021 14:32:08 -0400
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06CD4C061573
+        for <dwarves@vger.kernel.org>; Tue, 18 May 2021 11:30:50 -0700 (PDT)
+Received: by mail-yb1-xb2e.google.com with SMTP id b13so13219034ybk.4
+        for <dwarves@vger.kernel.org>; Tue, 18 May 2021 11:30:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=gT1Om+9Oxz9v3Kicz9MxdnPqZZ8ANN1BKJjnttbWbnM=;
+        b=c1sV3F11d84HhsaLU+ETHA4Y8QYXj+qk7Yjf3O8X1Sbv8oz3GFDQGZ8Kwqf5w6JNb4
+         hsz8FXKLviAgLfaPbnlx+lzq/95a79f1qbRCR+7nq8VzvVgiJBg9O3vdQK1XM7IfUu3w
+         LlnNthzYYxq5vbvnUIqBQZDphctrzciKknIQioVn1MnloPQeGKHKQYhwCY394kGLt698
+         Xbs3yggkIaZu+7YKqs1hlrWnYHtPIwarflw64E7uAaWG+cDaveOD6R0cFtMY4mQ7lw29
+         dLU6PgvqW2Ui5Efn9sKG59YJNcQXI2SRNMW8nar7n7+vr52VnCcaMuQ2Jr5kLhLHiCOy
+         7IWg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:user-agent:mime-version;
-        bh=Lyn+GgfBHEIpdulB3Ve3nVUh8ILqBghcjEz9FXoWM8E=;
-        b=bAkasyXTLAojS+ly3/sfbwqdapislN9p1WG4JHOSh08ce4Amslz9O1sdFHi19Ub0un
-         2CkiohqGYS8XEj7IwVrJnZR3/zVTBausklNUC6SH918OJCOcD/QFPGUvMGT+y0bPXHsj
-         3+qIz5sHcD8jtLro24gVxYhe/Y254CPNeWfez1fffcb9V+aqJvBDJuEpZmi8MYXsyFuu
-         Oo3Qw/pAlzv/UK10n0xnRr5AKY/Du46i0a7plPkG0wL1geDa18Klj+1/IMdckFWLBRp+
-         S30McyUvRXr+aHGJfgMBTxaIuuJbP/of8NEGDgSOaHQwzwrAM8GRLp+3kQWJcnbPaya3
-         iMTQ==
-X-Gm-Message-State: AOAM530yYFlVxSG1ehpsl7mSPaCHx58zb8EHWlzyRo/NpAmu6fxqeI5z
-        XCAYjGPi2BfHNWUaO6UA9Kk=
-X-Google-Smtp-Source: ABdhPJxf5XfiXCALZqBxOBuaDEERVCN8zyMiMF9XRL5cn+XULzFlYk5hXsnXkqzt0ACaNuHiYtB/nA==
-X-Received: by 2002:a5d:500b:: with SMTP id e11mr7274890wrt.209.1621346873323;
-        Tue, 18 May 2021 07:07:53 -0700 (PDT)
-Received: from localhost ([2a01:4b00:f41a:3600:360b:9754:2e3a:c344])
-        by smtp.gmail.com with ESMTPSA id y2sm3230228wmq.45.2021.05.18.07.07.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 May 2021 07:07:52 -0700 (PDT)
-Message-ID: <056f75e00fe796e3a9d634ec03afdf0a416fd9a0.camel@debian.org>
-Subject: Re: [PATCH dwarves v3] libbpf: allow to use packaged version
-From:   Luca Boccassi <bluca@debian.org>
-To:     Dominique Martinet <asmadeus@codewreck.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     dwarves@vger.kernel.org, Arnaldo Carvalho de Melo <acme@redhat.com>
-Date:   Tue, 18 May 2021 15:07:50 +0100
-In-Reply-To: <ca59c536e2dc66f6cb02f57d40b65702f7414ea9.camel@debian.org>
-References: <20210104221622.256663-1-bluca@debian.org>
-         <YGKtSXsLg4HV7eHL@codewreck.org> <YGM/x6Ohchorg2cf@kernel.org>
-         <YGPK5WxS51eVKguU@codewreck.org>
-         <ca59c536e2dc66f6cb02f57d40b65702f7414ea9.camel@debian.org>
-Content-Type: multipart/signed; micalg="pgp-sha512";
-        protocol="application/pgp-signature"; boundary="=-7cNmpc9y6m8yH9KN906l"
-User-Agent: Evolution 3.30.5-1.2 
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=gT1Om+9Oxz9v3Kicz9MxdnPqZZ8ANN1BKJjnttbWbnM=;
+        b=tXvJDxYzVJCe2HlyZb3cKMmfVyk+25Di2UIYDVpVXpRHxtZi4TxNgmJ80GRXY9srhl
+         7gIEhHkUs6dbGQCgtEjvcxcqfKltqmZe14BgLKMUKvbozQzOJByJdJ9ek9ZkL1Y061qd
+         782RtmvJL0sYMO00dpJGowZBVvmia5qKcBhniZ3UHyQ7wDCT14FLfklpPNQ6sWtiv0Yx
+         uf9M6fDDcLl6SVPVSGsrIYUwjCCWajZaLS5wReywLkqWUXplIaH/FY9gxN5ZcgmnaMas
+         H75yZXTpmzgakfkwcHjHv677FvHqx8z7FovE58GscgnTW3m7Wxx/gan41nTufF09RrRE
+         4o5Q==
+X-Gm-Message-State: AOAM533lgV756UXySXvn8raZsNO1urQQyjIcKugK4XQW62FsDdeqN1Um
+        +IOfau6l8AOvddYMxDK2ejRYv7p+gNEpr+V1Ry+cvdRb
+X-Google-Smtp-Source: ABdhPJyhptd8ANJhCzpGGBOrnMwvuJv/nSapkKAjQychFDs4Owwm8DR1EMZNcQemWlTGoVMVCFVr5Ajja4qsNSJ+Q8M=
+X-Received: by 2002:a25:7246:: with SMTP id n67mr9450363ybc.510.1621362649206;
+ Tue, 18 May 2021 11:30:49 -0700 (PDT)
 MIME-Version: 1.0
+References: <a249699a-7c6c-4d4a-71b0-87981c8d229e@linux.alibaba.com>
+ <YKKA64WWqYN3P7YJ@kernel.org> <c3520803-77af-cc34-000a-de4ba6334bcb@linux.alibaba.com>
+ <YKO34fq6P8G9IyMD@kernel.org>
+In-Reply-To: <YKO34fq6P8G9IyMD@kernel.org>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Tue, 18 May 2021 11:30:38 -0700
+Message-ID: <CAEf4Bzazh4RNCY3rGRRXfO2wJ7DSiMx8w+61B_hjhu9FrOffpQ@mail.gmail.com>
+Subject: Re: [PATCH] btf: Add --btf_prefix flag
+To:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
+Cc:     chengshuyi <chengshuyi@linux.alibaba.com>, dwarves@vger.kernel.org,
+        wenan.mao@linux.alibaba.com, Jiri Olsa <jolsa@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
+On Tue, May 18, 2021 at 5:49 AM Arnaldo Carvalho de Melo
+<arnaldo.melo@gmail.com> wrote:
+>
+> Em Tue, May 18, 2021 at 05:02:26PM +0800, chengshuyi escreveu:
+> >
+> > On 2021/5/17 10:42PM, Arnaldo Carvalho de Melo wrote:
+> > > Em Mon, May 17, 2021 at 08:06:30PM +0800, =E7=A8=8B=E4=B9=A6=E6=84=8F=
+ escreveu:
+> > > > To solve problems similar to _RH_KABI_REPLACE, _RH_KABI_REPLACE mak=
+es many
+> > > Can you explain what is _RH_KABI_REPLACE, why it is needed so that
+> > > people unfamiliar with it can make sense of your patch?
+> >
+> > The _RH_KABI_REPLACE(_orig, _new) macros perserve size alignment and ka=
+bi
+> > agreement between _orig and _new.Below is the definition of this macro:
+> >
+> > # define _RH_KABI_REPLACE(_orig, _new)         \
+> >      union {                        \
+> >          _new;                    \
+> >          struct {                \
+> >              _orig;                \
+> >          } __UNIQUE_ID(rh_kabi_hide);        \
+> >          __RH_KABI_CHECK_SIZE_ALIGN(_orig, _new);    \
+> >      }
+> >
+> >
+> > __UNIQUE_ID uses the __COUNTER__ macro, and the __COUNTER__ macro is
+> > automatically incremented by 1 every time it is precompiled. Therefore,=
+ in
+> > different compilation units, the same structure has different names.Her=
+e is
+> > a concrete example:
+> >
+> > struct acpi_dev_node {
+> >      union {
+> >          struct acpi_device *companion;
+> >          struct {
+> >              void *handle;
+> >          } __UNIQUE_ID_rh_kabi_hide29;
+> >          union {        };
+> >      };
+> > };
+> > struct acpi_dev_node {
+> >      union {
+> >          struct acpi_device *companion;
+> >          struct {
+> >              void *handle;
+> >          } __UNIQUE_ID_rh_kabi_hide31;
+> >          union {        };
+> >      };
+> > };
+> >
+> > Finally, it will cause the btf algorithm to de-duplication efficiency i=
+s not
+> > high, and time-consuming.
+> >
+> > >
+> > > Also why "btf_prefix" when this is related to this other feature? Can
+> > > you find a better name?
+> >
+> > "btf_prefix" means that if two strings have the same prefix, treat them=
+ as
+>
+> I understood what is its purpose, but pahole is not just about DWARF
+> and BTF, it has an admittedly unmaintained CTF encoder that predates BTF
+> and was even used as an starting point for the BTF encoder, so using BTF
+> isn't appropriate, perhaps --common_prefix? Or even --kabi_prefix to
+> make it even more explicit?
+>
 
---=-7cNmpc9y6m8yH9KN906l
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
++1 for --kabi_prefix
 
-On Tue, 2021-04-13 at 14:42 +0100, Luca Boccassi wrote:
-> On Wed, 2021-03-31 at 10:05 +0900, Dominique Martinet wrote:
-> > Arnaldo Carvalho de Melo wrote on Tue, Mar 30, 2021 at 12:12:07PM -0300=
-:
-> > > > I can understand reverting due to other pressure to get a release o=
-ut
-> > > > but most distros (including fedora) frown upon vendoring code so I =
-think
-> > > > it would be good to have back ultimately.
-> > > >=20
-> > > > Did you or someone else (Luca?) ever take the time to look at it?
-> > >=20
-> > > Not yet, I'm right now working on it, testing patches to support clan=
-g's
-> > > thin-LTO being used to build the kernel, so busy with it.
-> >=20
-> > Thanks
-> >=20
-> >=20
-> > > > I don't see what would be so different with fedora to make this
-> > > > unfixable, I'd be happy taking a look if nobody has so far.
-> > >=20
-> > > Please do.
-> >=20
-> > As said in my previous mail (in reply to Luca's), I cannot reproduce on
-> > fedora 33 so I'm not sure where to look at.
-> > Was the problem specific to one architecture (I only tried x86_64), or
-> > maybe the build dir was tainted by a previous run of cmake with another
-> > version of the patch? (if rpmbuild, build dir somehow included in the
-> > tarball?)
-> >=20
-> > Looking at the timing the libbpf version should have been identical but
-> > it's possible that system wasn't up to date or some other version chang=
-e
-> > since Feb?
-> >=20
-> > Either way I would appreciate if you could confirm you still have the
-> > problem when you have a moment, and if so provide a bit more details on
-> > your setup.
-> >=20
-> >=20
-> > > > Would you take the patch back in if I somehow fix rpmbuild with a l=
-ibbpf
-> > > > package installed on fedora33?
-> > >=20
-> > > Sure. I had it merged, as, IIRC, it was a opt-in procedure.
-> >=20
-> > Yes, strictly opt-in and shouldn't affect developers or people building
-> > from git without explicitly requiring to use the system's version.
-> >=20
->=20
-> Hello Arnaldo,
->=20
-> Any update on this?
->=20
-> Thanks!
-
-Gentle ping. Anything we can do to help?
-
---=20
-Kind regards,
-Luca Boccassi
-
---=-7cNmpc9y6m8yH9KN906l
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEErCSqx93EIPGOymuRKGv37813JB4FAmCjyjYACgkQKGv37813
-JB7efQ/8CBJtMkvtRVeeP9x8bxeNZAsvczKnDaFTcMZ1sEvFj/WmDN+rYVRDeLSF
-5kDFHIF9gMcU/FzsdFaM8cW5cjJaRHspJM1gLPMPfKa+amR/xHgzXjBX/Lc1CAln
-wn2dYstVVMHrM9vi5OAQ5PUQlm3bqQ51FtFP6WEkr+RL43muy8kg+ZY3PVUFVZmB
-ogAzqLxmDvmL5PEwddQNv/uZuCN/IdVa1u9w7qXQuO0BIT7lJMuupEBlGBNcxJbJ
-H/GGqf7wIDandzb7QVdl21dNnlCkkhFqftHlK8RCaBt7CzZ6OaJ6F7OH1+8HCQj4
-iIg4gEeyMz5B/umn6+BDu49ffKY3qq1kqMQZoQB3zAGLcGLqS6XGo7SBGW57zlA6
-408s626jiRp4SnLznWHcGcThiYvuTirUcKz5iJgq41V86z+OW6tks/DHbg7+4znc
-BkC4O14PYwlsODSBK+2bwUyfetIQONENNMx2+fDb/nE45spiKdL1HBcqOLes3tuO
-2Ib3KO94SumnUmfYOzrZ3YDU+KM/esQUOypeXO+jwZIflM7qsUYjhjXr7K9foqx6
-8JC2fqg9hUDWI/2cF9DYoyCByF+ol3yiZyRKawXU4VrMNLmw8VzV4gcgnN4Hw8mU
-2+vIZUjyrN63rUgLZEiYXxOButdID06WkcmGlunK9TR9RRY1ukA=
-=JF4k
------END PGP SIGNATURE-----
-
---=-7cNmpc9y6m8yH9KN906l--
+> - Arnaldo
+>
+> > the same string.From the above example,if btf_prefix is
+> > __UNIQUE_ID_rh_kabi_hide, then __UNIQUE_ID_rh_kabi_hide29 and
+> > __UNIQUE_ID_rh_kabi_hide31 are equal.Maybe "btf_kabi_prefix_string" is
+> > better
+> >
+> > > You also forgot to update the man page at man-pages/pahole.1.
+> > >
+> > > - Arnaldo
+> >
+> > Yes i forgot.
+> >
+> > > > structures have different names, resulting in a
+> > > > particularly large vmlinux btf. For example, running ./pahole -J
+> > > > vmlinux-3.10.0-1160.el7.x86_64 without --btf_prefix flag,
+> > > > the running time is:
+> > > >                  real 8m28.912s
+> > > >                  user 8m27.271s
+> > > >                  sys 0m1.471s
+> > > > And the size of the generated btf segment is 30678240 bytes.
+> > > >
+> > > > After adding the patch, running ./pahole
+> > > > --btf_prefix=3D__UNIQUE_ID_rh_kabi_hide -J vmlinux-3.10.0-1160.el7.=
+x86_64. The
+> > > > running
+> > > > time of the command is:
+> > > >                  real 0m19.634s
+> > > >                  user 0m18.457s
+> > > >                  sys 0m1.169s
+> > > > The size of the generated btf segment is 3117719 bytes.
+> > > >
+> > > > Thanks.
+> > > >
+> > > > Signed-off-by: chengshuyi<chengshuyi@linux.alibaba.com>
+> > > > ---
+> > > >   pahole.c         | 10 ++++++++++
+> > > >   pahole_strings.h |  2 ++
+> > > >   strings.c        |  9 +++++++--
+> > > >   3 files changed, 19 insertions(+), 2 deletions(-)
+> > > >
+> > > > diff --git a/pahole.c b/pahole.c
+> > > > index dc40ccf..0b4f4ca 100644
+> > > > --- a/pahole.c
+> > > > +++ b/pahole.c
+> > > > @@ -24,6 +24,7 @@
+> > > >   #include "btf_encoder.h"
+> > > >   #include "libbtf.h"
+> > > >   #include "lib/bpf/src/libbpf.h"
+> > > > +#include "pahole_strings.h"
+> > > >
+> > > >   static bool btf_encode;
+> > > >   static bool ctf_encode;
+> > > > @@ -855,6 +856,7 @@ ARGP_PROGRAM_VERSION_HOOK_DEF =3D dwarves_print=
+_version;
+> > > >   #define ARGP_btf_gen_floats       322
+> > > >   #define ARGP_btf_gen_all       323
+> > > >   #define ARGP_with_flexible_array   324
+> > > > +#define ARGP_btf_prefix   325
+> > > >
+> > > >   static const struct argp_option pahole__options[] =3D {
+> > > >       {
+> > > > @@ -1140,6 +1142,12 @@ static const struct argp_option pahole__opti=
+ons[] =3D {
+> > > >           .doc  =3D "Path to the base BTF file",
+> > > >       },
+> > > >       {
+> > > > +        .name =3D "btf_prefix",
+> > > > +        .key =3D ARGP_btf_prefix,
+> > > > +        .arg =3D "STRING",
+> > > > +        .doc =3D "Strings with the same prefix are considered the =
+same.",
+> > > > +    },
+> > > > +    {
+> > > >           .name =3D "btf_encode",
+> > > >           .key  =3D 'J',
+> > > >           .doc  =3D "Encode as BTF", @@ -1297,6 +1305,8 @@ static
+> > > > error_t pahole__options_parser(int key, char *arg,
+> > > > btf_encode_force =3D true;        break;      case ARGP_btf_base:
+> > > >     base_btf_file =3D arg;            break; +    case
+> > > > ARGP_btf_prefix: +        btf_prefix =3D arg;        break;      ca=
+se
+> > > > ARGP_numeric_version:          print_numeric_version =3D true;
+> > > > break;      case ARGP_btf_gen_floats: diff --git a/pahole_strings.h
+> > > > b/pahole_strings.h index 522fbf2..bf3dc7c 100644 ---
+> > > > a/pahole_strings.h +++ b/pahole_strings.h @@ -14,6 +14,8 @@ struct
+> > > > strings {      struct btf *btf;  }; +extern const char *btf_prefix;
+> > > > +  struct strings *strings__new(void);  void strings__delete(struct
+> > > > strings *strings); diff --git a/strings.c b/strings.c index
+> > > > d37f49d..911ce25 100644 --- a/strings.c +++ b/strings.c @@ -16,6
+> > > > +16,9 @@  #include "dutil.h"
+> > > >   #include "lib/bpf/src/libbpf.h"
+> > > > +#include "libbtf.h"
+> > > Why do you need to add this new include? I guess you meant including
+> > > pahole_strings.h to get the forward declaration for 'btf_prefix'?
+> >
+> > It is of no use, I forgot to delete it.
+> >
+> > > > +
+> > > > +const char *btf_prefix;
+> > > >
+> > > >   struct strings *strings__new(void)
+> > > >   {
+> > > > @@ -47,8 +50,10 @@ strings_t strings__add(struct strings *strs, con=
+st char
+> > > > *str)
+> > > >
+> > > >       if (str =3D=3D NULL)
+> > > >           return 0;
+> > > > -
+> > > > -    index =3D btf__add_str(strs->btf, str);
+> > > > +    if(btf_prefix && strncmp(str,btf_prefix,strlen(btf_prefix))=3D=
+=3D0)
+> > > Please also follow the existing coding style, i.e. use a space after
+> > > 'if' and also after the commas.
+> > >
+> > > - Arnaldo
+> > >
+> >
+> > Okay, I know. If you want to receive this patch, I will send a complete
+> > patch later.
+> >
+> > > > +        index =3D btf__add_str(strs->btf, btf_prefix);
+> > > > +    else
+> > > > +        index =3D btf__add_str(strs->btf, str);
+> > > >       if (index < 0)
+> > > >           return 0;
+> > > >
+> > > > --
+> > > > 1.8.3.1
+> > > >
+> > > >
+>
+> --
+>
+> - Arnaldo
