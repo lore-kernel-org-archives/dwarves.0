@@ -2,34 +2,54 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7489DC43460
-	for <linux-dwarves@archiver.kernel.org>; Thu, 20 May 2021 12:09:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 916E7C433ED
+	for <linux-dwarves@archiver.kernel.org>; Thu, 20 May 2021 12:18:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5A8D66108C
-	for <linux-dwarves@archiver.kernel.org>; Thu, 20 May 2021 12:09:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6F50A61186
+	for <linux-dwarves@archiver.kernel.org>; Thu, 20 May 2021 12:18:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241824AbhETMK3 (ORCPT
+        id S232064AbhETMUT (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Thu, 20 May 2021 08:10:29 -0400
-Received: from out30-54.freemail.mail.aliyun.com ([115.124.30.54]:57469 "EHLO
-        out30-54.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S240952AbhETMKI (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Thu, 20 May 2021 08:10:08 -0400
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R771e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e01424;MF=chengshuyi@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0UZVkgs8_1621512524;
-Received: from B-39YZML7H-2200.local(mailfrom:chengshuyi@linux.alibaba.com fp:SMTPD_---0UZVkgs8_1621512524)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Thu, 20 May 2021 20:08:45 +0800
-Subject: Re: [PATCH v2] pahole: Add --kabi_prefix flag
-To:     Jiri Olsa <jolsa@redhat.com>
+        Thu, 20 May 2021 08:20:19 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:30639 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231808AbhETMTx (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Thu, 20 May 2021 08:19:53 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1621513111;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=QX5XLtg1vtigHl8P5T36QOe4CoZL1USlmhJHy1Y8Wzk=;
+        b=SldXVKh38Z6qCPyU4aiXvV8DFWKx5ZbrRlkr0fJySfwdd+09T4sZ5XsTFd44f2087R63Jy
+        D4jr9K21YyzN8LUBt0NwCcv9wLk2BRVF75Lr6obJjjygRkW1hngkXMZekv6PlxSqz1+jgY
+        eRv/+KaIvyUT/iZvXB/QEuQjs/uh10g=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-213-7neSnZf6PWeSbnbZpqdDhg-1; Thu, 20 May 2021 08:18:25 -0400
+X-MC-Unique: 7neSnZf6PWeSbnbZpqdDhg-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 6B622803621;
+        Thu, 20 May 2021 12:18:24 +0000 (UTC)
+Received: from krava (unknown [10.40.194.160])
+        by smtp.corp.redhat.com (Postfix) with SMTP id 0D9AB19C59;
+        Thu, 20 May 2021 12:18:22 +0000 (UTC)
+Date:   Thu, 20 May 2021 14:18:21 +0200
+From:   Jiri Olsa <jolsa@redhat.com>
+To:     Shuyi Cheng <chengshuyi@linux.alibaba.com>
 Cc:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
         Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
         dwarves@vger.kernel.org, wenan.mao@linux.alibaba.com,
         Jiri Olsa <jolsa@kernel.org>
+Subject: Re: [PATCH v2] pahole: Add --kabi_prefix flag
+Message-ID: <YKZTjViH1uJoMSyI@krava>
 References: <a249699a-7c6c-4d4a-71b0-87981c8d229e@linux.alibaba.com>
  <YKKA64WWqYN3P7YJ@kernel.org>
  <c3520803-77af-cc34-000a-de4ba6334bcb@linux.alibaba.com>
@@ -39,234 +59,74 @@ References: <a249699a-7c6c-4d4a-71b0-87981c8d229e@linux.alibaba.com>
  <YKVv57HsgJYmCTFi@krava>
  <30cc773d-779f-9440-2f79-1fd642287cc4@linux.alibaba.com>
  <YKZMwmFVcYTTvEDW@krava>
-From:   Shuyi Cheng <chengshuyi@linux.alibaba.com>
-Message-ID: <ebbd7ace-f3ab-d104-c36c-788f4c169bbd@linux.alibaba.com>
-Date:   Thu, 20 May 2021 20:08:44 +0800
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
- Gecko/20100101 Thunderbird/78.10.2
+ <ebbd7ace-f3ab-d104-c36c-788f4c169bbd@linux.alibaba.com>
 MIME-Version: 1.0
-In-Reply-To: <YKZMwmFVcYTTvEDW@krava>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ebbd7ace-f3ab-d104-c36c-788f4c169bbd@linux.alibaba.com>
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-
-
-On 5/20/21 7:49 PM, Jiri Olsa wrote:
-> On Thu, May 20, 2021 at 06:27:48PM +0800, Shuyi Cheng wrote:
->>
->>
->> On 5/20/21 4:07 AM, Jiri Olsa wrote:
->>> On Wed, May 19, 2021 at 10:44:44AM +0800, Shuyi Cheng wrote:
->>>> To solve problems similar to _RH_KABI_REPLACE. The _RH_KABI_REPLACE(_orig,
->>>> _new) macros perserve size alignment and kabi agreement between _orig and
->>>> _new.Below is the definition of this macro:
->>>>
->>>> # define _RH_KABI_REPLACE(_orig, _new)            \
->>>>       union {                        \
->>>>           _new;                    \
->>>>           struct {                \
->>>>               _orig;                \
->>>>           } __UNIQUE_ID(rh_kabi_hide);        \
->>>>           __RH_KABI_CHECK_SIZE_ALIGN(_orig, _new);    \
->>>>       }
->>>
->>> hi,
->>> that macro sounds familiar ;-) I think this should be already
->>> solved directly in the header file by this one:
->>>
->>>     https://gitlab.com/cki-project/kernel-ark/-/commit/331be9c5a436057ee852075c102d9d90a9046a30
->>>
->>> jirka
->>>
->>
->> Well, this patch solves this problem very well from the kernel level. But
->> there are many mirrors [here](http://debuginfo.centos.org/7/x86_64/) that
->> still have this problem. And these mirrors support ebpf, so it is very
->> important to effectively extract the btf segment from these mirrors. :-)
+On Thu, May 20, 2021 at 08:08:44PM +0800, Shuyi Cheng wrote:
 > 
-> hum, the link shows 3.10.* centos kernel, right?
-> AFAIK there's no BTF support in those kernels..
 > 
-> but maybe I'm missing some backporting channel,
-> could you please point me to related sources?
+> On 5/20/21 7:49 PM, Jiri Olsa wrote:
+> > On Thu, May 20, 2021 at 06:27:48PM +0800, Shuyi Cheng wrote:
+> > > 
+> > > 
+> > > On 5/20/21 4:07 AM, Jiri Olsa wrote:
+> > > > On Wed, May 19, 2021 at 10:44:44AM +0800, Shuyi Cheng wrote:
+> > > > > To solve problems similar to _RH_KABI_REPLACE. The _RH_KABI_REPLACE(_orig,
+> > > > > _new) macros perserve size alignment and kabi agreement between _orig and
+> > > > > _new.Below is the definition of this macro:
+> > > > > 
+> > > > > # define _RH_KABI_REPLACE(_orig, _new)            \
+> > > > >       union {                        \
+> > > > >           _new;                    \
+> > > > >           struct {                \
+> > > > >               _orig;                \
+> > > > >           } __UNIQUE_ID(rh_kabi_hide);        \
+> > > > >           __RH_KABI_CHECK_SIZE_ALIGN(_orig, _new);    \
+> > > > >       }
+> > > > 
+> > > > hi,
+> > > > that macro sounds familiar ;-) I think this should be already
+> > > > solved directly in the header file by this one:
+> > > > 
+> > > >     https://gitlab.com/cki-project/kernel-ark/-/commit/331be9c5a436057ee852075c102d9d90a9046a30
+> > > > 
+> > > > jirka
+> > > > 
+> > > 
+> > > Well, this patch solves this problem very well from the kernel level. But
+> > > there are many mirrors [here](http://debuginfo.centos.org/7/x86_64/) that
+> > > still have this problem. And these mirrors support ebpf, so it is very
+> > > important to effectively extract the btf segment from these mirrors. :-)
+> > 
+> > hum, the link shows 3.10.* centos kernel, right?
+> > AFAIK there's no BTF support in those kernels..
+> > 
+> > but maybe I'm missing some backporting channel,
+> > could you please point me to related sources?
+> > 
+> > jirka
+> > 
 > 
-> jirka
-> 
+> Yes, it is the centos kernel of version 3.10. This version of the centos
+> kernel supports ebpf. As far as I think, BTF features don't depend on the
+> kernel much. Only when using the STRUCT OPS feature does the kernel support
+> BTF, see [here](https://github.com/libbpf/libbpf/blob/57375504c6c9766d23f178c40f71bf5e8df9363d/src/libbpf.c#L2549)
+> and [here](https://www.spinics.net/lists/netdev/msg637060.html). Therefore,
+> in the 3.10 version of the Centos kernel, with the help of the vmlinux btf
+> segment, libbpf CO-RE can be easily supported.
 
-Yes, it is the centos kernel of version 3.10. This version of the centos 
-kernel supports ebpf. As far as I think, BTF features don't depend on 
-the kernel much. Only when using the STRUCT OPS feature does the kernel 
-support BTF, see 
-[here](https://github.com/libbpf/libbpf/blob/57375504c6c9766d23f178c40f71bf5e8df9363d/src/libbpf.c#L2549) 
-and [here](https://www.spinics.net/lists/netdev/msg637060.html). 
-Therefore, in the 3.10 version of the Centos kernel, with the help of 
-the vmlinux btf segment, libbpf CO-RE can be easily supported.
+ok, so you're generating BTF for centos 3.10 kernel?
 
+I think that fix would be easy kernel backport, but I guess
+we can go with pahole option just as well, if backport is
+not an option for you
 
->>
->>>>
->>>>
->>>> __UNIQUE_ID uses the __COUNTER__ macro, and the __COUNTER__ macro is
->>>> automatically incremented by 1 every time it is precompiled. Therefore, in
->>>> different compilation units, the same structure has different names.Here is
->>>> a concrete example:
->>>>
->>>> struct acpi_dev_node {
->>>>       union {
->>>>           struct acpi_device *companion;
->>>>           struct {
->>>>               void *handle;
->>>>           } __UNIQUE_ID_rh_kabi_hide29;
->>>>           union {        };
->>>>       };
->>>> };
->>>> struct acpi_dev_node {
->>>>       union {
->>>>           struct acpi_device *companion;
->>>>           struct {
->>>>               void *handle;
->>>>           } __UNIQUE_ID_rh_kabi_hide31;
->>>>           union {        };
->>>>       };
->>>> };
->>>>
->>>> Finally, it will cause the btf algorithm to de-duplication efficiency is not
->>>> high, and time-consuming. For example, running ./pahole -J
->>>> vmlinux-3.10.0-1160.el7.x86_64 without --kabi_prefix flag, the running time
->>>> is:
->>>>                   real 8m28.912s
->>>>                   user 8m27.271s
->>>>                   sys 0m1.471s
->>>> And the size of the generated btf segment is 30678240 bytes.
->>>>
->>>> After adding the patch, running ./pahole
->>>> --kabi_prefix=__UNIQUE_ID_rh_kabi_hide -J vmlinux-3.10.0-1160.el7.x86_64.
->>>> The running time of the command is:
->>>>                   real 0m19.634s
->>>>                   user 0m18.457s
->>>>                   sys 0m1.169s
->>>> And the size of the generated btf segment is 3117719 bytes.
->>>>
->>>> ---
->>>>
->>>> v1:https://lore.kernel.org/dwarves/CAEf4Bzazh4RNCY3rGRRXfO2wJ7DSiMx8w+61B_hjhu9FrOffpQ@mail.gmail.com
->>>> v1->v2:
->>>> --Change btf_prefix to --kabi_prefix.
->>>> --Add man page.
->>>> --Add space after if and comma.
->>>>
->>>>    man-pages/pahole.1 |  4 ++++
->>>>    pahole.c           | 10 ++++++++++
->>>>    pahole_strings.h   |  2 ++
->>>>    strings.c          |  9 ++++++++-
->>>>    4 files changed, 24 insertions(+), 1 deletion(-)
->>>>
->>>> diff --git a/man-pages/pahole.1 b/man-pages/pahole.1
->>>> index a10738f..2659fe6 100644
->>>> --- a/man-pages/pahole.1
->>>> +++ b/man-pages/pahole.1
->>>> @@ -340,6 +340,10 @@ Show a traditional string version, i.e.: "v1.18".
->>>>    Show a numeric only version, suitable for use in Makefiles and scripts
->>>> where
->>>>    one wants to know what if the installed version has some feature, i.e.: 118
->>>> instead of "v1.18".
->>>>
->>>> +.TP
->>>> +.B \-\-kabi_prefix=STRING
->>>> +When the prefix of the string is STRING, treat the string as STRING.
->>>> +
->>>>    .SH NOTES
->>>>
->>>>    To enable the generation of debugging information in the Linux kernel build
->>>> diff --git a/pahole.c b/pahole.c
->>>> index dc40ccf..6a700d9 100644
->>>> --- a/pahole.c
->>>> +++ b/pahole.c
->>>> @@ -24,6 +24,7 @@
->>>>    #include "btf_encoder.h"
->>>>    #include "libbtf.h"
->>>>    #include "lib/bpf/src/libbpf.h"
->>>> +#include "pahole_strings.h"
->>>>
->>>>    static bool btf_encode;
->>>>    static bool ctf_encode;
->>>> @@ -855,6 +856,7 @@ ARGP_PROGRAM_VERSION_HOOK_DEF = dwarves_print_version;
->>>>    #define ARGP_btf_gen_floats	   322
->>>>    #define ARGP_btf_gen_all	   323
->>>>    #define ARGP_with_flexible_array   324
->>>> +#define ARGP_kabi_prefix   325
->>>>
->>>>    static const struct argp_option pahole__options[] = {
->>>>    	{
->>>> @@ -1140,6 +1142,12 @@ static const struct argp_option pahole__options[] = {
->>>>    		.doc  = "Path to the base BTF file",
->>>>    	},
->>>>    	{
->>>> +		.name = "kabi_prefix",
->>>> +		.key = ARGP_kabi_prefix,
->>>> +		.arg = "STRING",
->>>> +		.doc = "When the prefix of the string is STRING, treat the string as
->>>> STRING.",
->>>> +	},
->>>> +	{
->>>>    		.name = "btf_encode",
->>>>    		.key  = 'J',
->>>>    		.doc  = "Encode as BTF",
->>>> @@ -1297,6 +1305,8 @@ static error_t pahole__options_parser(int key, char
->>>> *arg,
->>>>    		btf_encode_force = true;		break;
->>>>    	case ARGP_btf_base:
->>>>    		base_btf_file = arg;			break;
->>>> +	case ARGP_kabi_prefix:
->>>> +		kabi_prefix = arg;		break;
->>>>    	case ARGP_numeric_version:
->>>>    		print_numeric_version = true;		break;
->>>>    	case ARGP_btf_gen_floats:
->>>> diff --git a/pahole_strings.h b/pahole_strings.h
->>>> index 522fbf2..a836ba8 100644
->>>> --- a/pahole_strings.h
->>>> +++ b/pahole_strings.h
->>>> @@ -14,6 +14,8 @@ struct strings {
->>>>    	struct btf *btf;
->>>>    };
->>>>
->>>> +extern const char *kabi_prefix;
->>>> +
->>>>    struct strings *strings__new(void);
->>>>
->>>>    void strings__delete(struct strings *strings);
->>>> diff --git a/strings.c b/strings.c
->>>> index d37f49d..d1a54ec 100644
->>>> --- a/strings.c
->>>> +++ b/strings.c
->>>> @@ -17,6 +17,8 @@
->>>>    #include "dutil.h"
->>>>    #include "lib/bpf/src/libbpf.h"
->>>>
->>>> +const char *kabi_prefix;
->>>> +
->>>>    struct strings *strings__new(void)
->>>>    {
->>>>    	struct strings *strs = malloc(sizeof(*strs));
->>>> @@ -48,7 +50,12 @@ strings_t strings__add(struct strings *strs, const char
->>>> *str)
->>>>    	if (str == NULL)
->>>>    		return 0;
->>>>
->>>> -	index = btf__add_str(strs->btf, str);
->>>> +	if (kabi_prefix &&
->>>> +		strncmp(str, kabi_prefix, strlen(kabi_prefix)) == 0)
->>>> +		index = btf__add_str(strs->btf, kabi_prefix);
->>>> +	else
->>>> +		index = btf__add_str(strs->btf, str);
->>>> +		
->>>>    	if (index < 0)
->>>>    		return 0;
->>>>
->>>> -- 
->>>> 1.8.3.1
->>>>
->>
+jirka
+
