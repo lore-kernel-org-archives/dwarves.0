@@ -2,133 +2,245 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.5 required=3.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
-	DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4E849C433B4
-	for <linux-dwarves@archiver.kernel.org>; Wed, 19 May 2021 21:37:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9C740C433B4
+	for <linux-dwarves@archiver.kernel.org>; Thu, 20 May 2021 10:29:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1B319600CD
-	for <linux-dwarves@archiver.kernel.org>; Wed, 19 May 2021 21:37:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7CE14613AC
+	for <linux-dwarves@archiver.kernel.org>; Thu, 20 May 2021 10:29:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229674AbhESVjK (ORCPT
+        id S236677AbhETKbN (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Wed, 19 May 2021 17:39:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54468 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229464AbhESVjK (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Wed, 19 May 2021 17:39:10 -0400
-Received: from mail-qv1-xf2d.google.com (mail-qv1-xf2d.google.com [IPv6:2607:f8b0:4864:20::f2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3D99C061574
-        for <dwarves@vger.kernel.org>; Wed, 19 May 2021 14:37:49 -0700 (PDT)
-Received: by mail-qv1-xf2d.google.com with SMTP id o59so7628991qva.1
-        for <dwarves@vger.kernel.org>; Wed, 19 May 2021 14:37:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:user-agent:in-reply-to:references:mime-version
-         :content-transfer-encoding:subject:to:cc:from:message-id;
-        bh=ECC59+OwV4NExtKLfok3DW5DINXnc3oxWwmG+JpoWDM=;
-        b=RIjyHfzhZxYtgJjV7q5/YzeIUayBlxFJ+xeU+e/+ImEj46QHecXttaYEG3P9x5NzH3
-         QOJvlzQexxTfhAmr6lRfCKMV9GH0KBi9PsXHw9uFHIY5j4g+Fg7HTt2tJeL8+zSdPjjN
-         by/7sLa2HjaMCNRbaiE8YgXel9WPbkeustMfcQoliCgJUzfDLTMgy9DK550D/RLQQicl
-         OnnL5/kyq8qPIZ367TtDqNTezZGY3SJvrCwFPkEdvQD0gu99EBUkL6e7SiqrG4eX7FBP
-         5GLVy95S1K/JT8WUNoOi1l1lmc366Agglln5mSzDhuuRBLLMfkeSeWR+yxG0VkGL82zL
-         n6ZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:user-agent:in-reply-to:references
-         :mime-version:content-transfer-encoding:subject:to:cc:from
-         :message-id;
-        bh=ECC59+OwV4NExtKLfok3DW5DINXnc3oxWwmG+JpoWDM=;
-        b=b+cCwww7xy4h3/nBGRpw09r0D2uz7dZVT8c3/FZrYlblKU6H6sGajINPPc3U5qyyIP
-         Mzt4u9hfibVNmEVyZ1FTuguyVqI3aMPzM3mhQR+gqf4EH+W9XwnT2X855VGHhD7bDT6H
-         kPAEF42pTrH1NXn6v6cnizFi8GgTshXORW8ojIXt+Jzff9TDMI5ahC4ymfPEyiR+EaQb
-         O/S10sNjo+F4x4lviTWCb5zlHLB0gTFNXgcNcEAu1m9ciNi+ICk12IXkMHyvk/NClhU3
-         Pp2ZeqVjYqmg8ehj+zsfByIifLv/C/J1a57llVlg9LwfrRS6M0vGGQw+ET+nBdsjA6Jk
-         lrpw==
-X-Gm-Message-State: AOAM533nMmt//Q7Z+PIcWrk08nZWR0+a9zoIAxV51KipS4znZPKcuAxI
-        GvE7hVWnqbzC9T7vNdFVa3I=
-X-Google-Smtp-Source: ABdhPJwJ7DneifBwHxx3vqw/3SjvEQvbeFbcWNWke/p6frvD03OOn1LJRxjIMFGdtMgm+M4eCH5GxA==
-X-Received: by 2002:a0c:9ad4:: with SMTP id k20mr1950880qvf.57.1621460269106;
-        Wed, 19 May 2021 14:37:49 -0700 (PDT)
-Received: from [192.168.86.185] ([179.97.37.151])
-        by smtp.gmail.com with ESMTPSA id b17sm429676qtb.78.2021.05.19.14.37.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 May 2021 14:37:48 -0700 (PDT)
-Date:   Wed, 19 May 2021 18:36:50 -0300
-User-Agent: K-9 Mail for Android
-In-Reply-To: <YKWAlm5KO4S9HBmn@krava>
-References: <a249699a-7c6c-4d4a-71b0-87981c8d229e@linux.alibaba.com> <YKKA64WWqYN3P7YJ@kernel.org> <c3520803-77af-cc34-000a-de4ba6334bcb@linux.alibaba.com> <YKO34fq6P8G9IyMD@kernel.org> <CAEf4Bzazh4RNCY3rGRRXfO2wJ7DSiMx8w+61B_hjhu9FrOffpQ@mail.gmail.com> <ec80d351-ac2f-5c48-c339-c2c503d36d68@linux.alibaba.com> <YKVv57HsgJYmCTFi@krava> <5D76A4F3-6F5A-4061-A274-34FFE5CBA338@gmail.com> <YKWAlm5KO4S9HBmn@krava>
-MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+        Thu, 20 May 2021 06:31:13 -0400
+Received: from out30-45.freemail.mail.aliyun.com ([115.124.30.45]:48829 "EHLO
+        out30-45.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S236716AbhETK3M (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Thu, 20 May 2021 06:29:12 -0400
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R111e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04395;MF=chengshuyi@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0UZVBzqP_1621506468;
+Received: from B-39YZML7H-2200.local(mailfrom:chengshuyi@linux.alibaba.com fp:SMTPD_---0UZVBzqP_1621506468)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Thu, 20 May 2021 18:27:49 +0800
 Subject: Re: [PATCH v2] pahole: Add --kabi_prefix flag
 To:     Jiri Olsa <jolsa@redhat.com>
-CC:     Shuyi Cheng <chengshuyi@linux.alibaba.com>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+Cc:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
         dwarves@vger.kernel.org, wenan.mao@linux.alibaba.com,
         Jiri Olsa <jolsa@kernel.org>
-From:   Arnaldo <arnaldo.melo@gmail.com>
-Message-ID: <658F1703-ACA6-4BE5-913E-ADC0C403B568@gmail.com>
+References: <a249699a-7c6c-4d4a-71b0-87981c8d229e@linux.alibaba.com>
+ <YKKA64WWqYN3P7YJ@kernel.org>
+ <c3520803-77af-cc34-000a-de4ba6334bcb@linux.alibaba.com>
+ <YKO34fq6P8G9IyMD@kernel.org>
+ <CAEf4Bzazh4RNCY3rGRRXfO2wJ7DSiMx8w+61B_hjhu9FrOffpQ@mail.gmail.com>
+ <ec80d351-ac2f-5c48-c339-c2c503d36d68@linux.alibaba.com>
+ <YKVv57HsgJYmCTFi@krava>
+From:   Shuyi Cheng <chengshuyi@linux.alibaba.com>
+Message-ID: <30cc773d-779f-9440-2f79-1fd642287cc4@linux.alibaba.com>
+Date:   Thu, 20 May 2021 18:27:48 +0800
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
+ Gecko/20100101 Thunderbird/78.10.2
+MIME-Version: 1.0
+In-Reply-To: <YKVv57HsgJYmCTFi@krava>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
 
 
-On May 19, 2021 6:18:14 PM GMT-03:00, Jiri Olsa <jolsa@redhat=2Ecom> wrote=
-:
->On Wed, May 19, 2021 at 05:23:31PM -0300, Arnaldo wrote:
->>=20
->>=20
->> On May 19, 2021 5:07:03 PM GMT-03:00, Jiri Olsa <jolsa@redhat=2Ecom>
->wrote:
->> >On Wed, May 19, 2021 at 10:44:44AM +0800, Shuyi Cheng wrote:
->> >> To solve problems similar to _RH_KABI_REPLACE=2E The
->> >_RH_KABI_REPLACE(_orig,
->> >> _new) macros perserve size alignment and kabi agreement between
->_orig
->> >and
->> >> _new=2EBelow is the definition of this macro:
->> >>=20
->> >> # define _RH_KABI_REPLACE(_orig, _new)            \
->> >>     union {                        \
->> >>         _new;                    \
->> >>         struct {                \
->> >>             _orig;                \
->> >>         } __UNIQUE_ID(rh_kabi_hide);        \
->> >>         __RH_KABI_CHECK_SIZE_ALIGN(_orig, _new);    \
->> >>     }
->> >
->> >hi,
->> >that macro sounds familiar ;-) I think this should be already
->> >solved directly in the header file by this one:
->> >
+On 5/20/21 4:07 AM, Jiri Olsa wrote:
+> On Wed, May 19, 2021 at 10:44:44AM +0800, Shuyi Cheng wrote:
+>> To solve problems similar to _RH_KABI_REPLACE. The _RH_KABI_REPLACE(_orig,
+>> _new) macros perserve size alignment and kabi agreement between _orig and
+>> _new.Below is the definition of this macro:
 >>
->>https://gitlab=2Ecom/cki-project/kernel-ark/-/commit/331be9c5a436057ee85=
-2075c102d9d90a9046a30
->> >
->>=20
->> But this means newer kernels will not have that issue, so perhaps we
->should just document this?
->
->I don't think there's released kernel with this issue
->
->>=20
->> Or would it be worth the effort of having a --ignore_prefix option
->for the people using all the kernels where this is applicable to and
->leave the option lingering there just in case?
->
->this is specific to rh kernels and fixed by that patch above,
->I wouldn't expect seeing it again
+>> # define _RH_KABI_REPLACE(_orig, _new)            \
+>>      union {                        \
+>>          _new;                    \
+>>          struct {                \
+>>              _orig;                \
+>>          } __UNIQUE_ID(rh_kabi_hide);        \
+>>          __RH_KABI_CHECK_SIZE_ALIGN(_orig, _new);    \
+>>      }
+> 
+> hi,
+> that macro sounds familiar ;-) I think this should be already
+> solved directly in the header file by this one:
+> 
+>    https://gitlab.com/cki-project/kernel-ark/-/commit/331be9c5a436057ee852075c102d9d90a9046a30
+> 
+> jirka
+> 
 
-Cool, case closed then :-)=20
->
->jirka
+Well, this patch solves this problem very well from the kernel level. 
+But there are many mirrors [here](http://debuginfo.centos.org/7/x86_64/) 
+that still have this problem. And these mirrors support ebpf, so it is 
+very important to effectively extract the btf segment from these 
+mirrors. :-)
 
---=20
-Sent from my Android device with K-9 Mail=2E Please excuse my brevity=2E
+>>
+>>
+>> __UNIQUE_ID uses the __COUNTER__ macro, and the __COUNTER__ macro is
+>> automatically incremented by 1 every time it is precompiled. Therefore, in
+>> different compilation units, the same structure has different names.Here is
+>> a concrete example:
+>>
+>> struct acpi_dev_node {
+>>      union {
+>>          struct acpi_device *companion;
+>>          struct {
+>>              void *handle;
+>>          } __UNIQUE_ID_rh_kabi_hide29;
+>>          union {        };
+>>      };
+>> };
+>> struct acpi_dev_node {
+>>      union {
+>>          struct acpi_device *companion;
+>>          struct {
+>>              void *handle;
+>>          } __UNIQUE_ID_rh_kabi_hide31;
+>>          union {        };
+>>      };
+>> };
+>>
+>> Finally, it will cause the btf algorithm to de-duplication efficiency is not
+>> high, and time-consuming. For example, running ./pahole -J
+>> vmlinux-3.10.0-1160.el7.x86_64 without --kabi_prefix flag, the running time
+>> is:
+>>                  real 8m28.912s
+>>                  user 8m27.271s
+>>                  sys 0m1.471s
+>> And the size of the generated btf segment is 30678240 bytes.
+>>
+>> After adding the patch, running ./pahole
+>> --kabi_prefix=__UNIQUE_ID_rh_kabi_hide -J vmlinux-3.10.0-1160.el7.x86_64.
+>> The running time of the command is:
+>>                  real 0m19.634s
+>>                  user 0m18.457s
+>>                  sys 0m1.169s
+>> And the size of the generated btf segment is 3117719 bytes.
+>>
+>> ---
+>>
+>> v1:https://lore.kernel.org/dwarves/CAEf4Bzazh4RNCY3rGRRXfO2wJ7DSiMx8w+61B_hjhu9FrOffpQ@mail.gmail.com
+>> v1->v2:
+>> --Change btf_prefix to --kabi_prefix.
+>> --Add man page.
+>> --Add space after if and comma.
+>>
+>>   man-pages/pahole.1 |  4 ++++
+>>   pahole.c           | 10 ++++++++++
+>>   pahole_strings.h   |  2 ++
+>>   strings.c          |  9 ++++++++-
+>>   4 files changed, 24 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/man-pages/pahole.1 b/man-pages/pahole.1
+>> index a10738f..2659fe6 100644
+>> --- a/man-pages/pahole.1
+>> +++ b/man-pages/pahole.1
+>> @@ -340,6 +340,10 @@ Show a traditional string version, i.e.: "v1.18".
+>>   Show a numeric only version, suitable for use in Makefiles and scripts
+>> where
+>>   one wants to know what if the installed version has some feature, i.e.: 118
+>> instead of "v1.18".
+>>
+>> +.TP
+>> +.B \-\-kabi_prefix=STRING
+>> +When the prefix of the string is STRING, treat the string as STRING.
+>> +
+>>   .SH NOTES
+>>
+>>   To enable the generation of debugging information in the Linux kernel build
+>> diff --git a/pahole.c b/pahole.c
+>> index dc40ccf..6a700d9 100644
+>> --- a/pahole.c
+>> +++ b/pahole.c
+>> @@ -24,6 +24,7 @@
+>>   #include "btf_encoder.h"
+>>   #include "libbtf.h"
+>>   #include "lib/bpf/src/libbpf.h"
+>> +#include "pahole_strings.h"
+>>
+>>   static bool btf_encode;
+>>   static bool ctf_encode;
+>> @@ -855,6 +856,7 @@ ARGP_PROGRAM_VERSION_HOOK_DEF = dwarves_print_version;
+>>   #define ARGP_btf_gen_floats	   322
+>>   #define ARGP_btf_gen_all	   323
+>>   #define ARGP_with_flexible_array   324
+>> +#define ARGP_kabi_prefix   325
+>>
+>>   static const struct argp_option pahole__options[] = {
+>>   	{
+>> @@ -1140,6 +1142,12 @@ static const struct argp_option pahole__options[] = {
+>>   		.doc  = "Path to the base BTF file",
+>>   	},
+>>   	{
+>> +		.name = "kabi_prefix",
+>> +		.key = ARGP_kabi_prefix,
+>> +		.arg = "STRING",
+>> +		.doc = "When the prefix of the string is STRING, treat the string as
+>> STRING.",
+>> +	},
+>> +	{
+>>   		.name = "btf_encode",
+>>   		.key  = 'J',
+>>   		.doc  = "Encode as BTF",
+>> @@ -1297,6 +1305,8 @@ static error_t pahole__options_parser(int key, char
+>> *arg,
+>>   		btf_encode_force = true;		break;
+>>   	case ARGP_btf_base:
+>>   		base_btf_file = arg;			break;
+>> +	case ARGP_kabi_prefix:
+>> +		kabi_prefix = arg;		break;
+>>   	case ARGP_numeric_version:
+>>   		print_numeric_version = true;		break;
+>>   	case ARGP_btf_gen_floats:
+>> diff --git a/pahole_strings.h b/pahole_strings.h
+>> index 522fbf2..a836ba8 100644
+>> --- a/pahole_strings.h
+>> +++ b/pahole_strings.h
+>> @@ -14,6 +14,8 @@ struct strings {
+>>   	struct btf *btf;
+>>   };
+>>
+>> +extern const char *kabi_prefix;
+>> +
+>>   struct strings *strings__new(void);
+>>
+>>   void strings__delete(struct strings *strings);
+>> diff --git a/strings.c b/strings.c
+>> index d37f49d..d1a54ec 100644
+>> --- a/strings.c
+>> +++ b/strings.c
+>> @@ -17,6 +17,8 @@
+>>   #include "dutil.h"
+>>   #include "lib/bpf/src/libbpf.h"
+>>
+>> +const char *kabi_prefix;
+>> +
+>>   struct strings *strings__new(void)
+>>   {
+>>   	struct strings *strs = malloc(sizeof(*strs));
+>> @@ -48,7 +50,12 @@ strings_t strings__add(struct strings *strs, const char
+>> *str)
+>>   	if (str == NULL)
+>>   		return 0;
+>>
+>> -	index = btf__add_str(strs->btf, str);
+>> +	if (kabi_prefix &&
+>> +		strncmp(str, kabi_prefix, strlen(kabi_prefix)) == 0)
+>> +		index = btf__add_str(strs->btf, kabi_prefix);
+>> +	else
+>> +		index = btf__add_str(strs->btf, str);
+>> +		
+>>   	if (index < 0)
+>>   		return 0;
+>>
+>> -- 
+>> 1.8.3.1
+>>
