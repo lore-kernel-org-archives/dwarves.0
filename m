@@ -2,239 +2,125 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.2 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_SANE_1
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-17.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E4380C433ED
-	for <linux-dwarves@archiver.kernel.org>; Fri, 21 May 2021 01:44:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 63EAAC2B9F7
+	for <linux-dwarves@archiver.kernel.org>; Mon, 24 May 2021 23:43:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BE7B16135C
-	for <linux-dwarves@archiver.kernel.org>; Fri, 21 May 2021 01:44:23 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3FB416140F
+	for <linux-dwarves@archiver.kernel.org>; Mon, 24 May 2021 23:43:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237624AbhEUBpp (ORCPT
+        id S230024AbhEXXos convert rfc822-to-8bit (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Thu, 20 May 2021 21:45:45 -0400
-Received: from out30-132.freemail.mail.aliyun.com ([115.124.30.132]:45630 "EHLO
-        out30-132.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S237548AbhEUBpo (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Thu, 20 May 2021 21:45:44 -0400
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R111e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e01424;MF=chengshuyi@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0UZYUzDN_1621561460;
-Received: from B-39YZML7H-2200.local(mailfrom:chengshuyi@linux.alibaba.com fp:SMTPD_---0UZYUzDN_1621561460)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Fri, 21 May 2021 09:44:20 +0800
-From:   Shuyi Cheng <chengshuyi@linux.alibaba.com>
-Subject: [PATCH v3] pahole: Add --kabi_prefix flag
-To:     Jiri Olsa <jolsa@redhat.com>
-Cc:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
-        dwarves@vger.kernel.org, wenan.mao@linux.alibaba.com,
-        Jiri Olsa <jolsa@kernel.org>
-References: <a249699a-7c6c-4d4a-71b0-87981c8d229e@linux.alibaba.com>
- <YKKA64WWqYN3P7YJ@kernel.org>
- <c3520803-77af-cc34-000a-de4ba6334bcb@linux.alibaba.com>
- <YKO34fq6P8G9IyMD@kernel.org>
- <CAEf4Bzazh4RNCY3rGRRXfO2wJ7DSiMx8w+61B_hjhu9FrOffpQ@mail.gmail.com>
- <ec80d351-ac2f-5c48-c339-c2c503d36d68@linux.alibaba.com>
- <YKZ/ZFRAQenJs0hB@krava>
-Message-ID: <482e5543-d7da-7bed-098d-cc879d8db253@linux.alibaba.com>
-Date:   Fri, 21 May 2021 09:44:20 +0800
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
- Gecko/20100101 Thunderbird/78.10.2
+        Mon, 24 May 2021 19:44:48 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:25644 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S230465AbhEXXoC (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Mon, 24 May 2021 19:44:02 -0400
+Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
+        by m0001303.ppops.net (8.16.0.43/8.16.0.43) with SMTP id 14ONXgqx022299
+        for <dwarves@vger.kernel.org>; Mon, 24 May 2021 16:42:33 -0700
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by m0001303.ppops.net with ESMTP id 38rjj21fha-3
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <dwarves@vger.kernel.org>; Mon, 24 May 2021 16:42:33 -0700
+Received: from intmgw001.05.ash9.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::4) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Mon, 24 May 2021 16:42:32 -0700
+Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
+        id 303B82EDBCCE; Mon, 24 May 2021 16:42:30 -0700 (PDT)
+From:   Andrii Nakryiko <andrii@kernel.org>
+To:     <dwarves@vger.kernel.org>, <acme@kernel.org>,
+        <bpf@vger.kernel.org>, <jolsa@kernel.org>
+CC:     <andrii@kernel.org>, <kernel-team@fb.com>
+Subject: [PATCH dwarves] btf_encoder: fix and complete filtering out zero-sized per-CPU variables
+Date:   Mon, 24 May 2021 16:42:22 -0700
+Message-ID: <20210524234222.278676-1-andrii@kernel.org>
+X-Mailer: git-send-email 2.30.2
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: ID2w1IOMZbRfBu3BK6sCBoInh_Xb8nGh
+X-Proofpoint-GUID: ID2w1IOMZbRfBu3BK6sCBoInh_Xb8nGh
+Content-Transfer-Encoding: 8BIT
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-In-Reply-To: <YKZ/ZFRAQenJs0hB@krava>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
+ definitions=2021-05-24_11:2021-05-24,2021-05-24 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
+ phishscore=0 malwarescore=0 mlxlogscore=999 spamscore=0 bulkscore=0
+ impostorscore=0 priorityscore=1501 mlxscore=0 suspectscore=0 adultscore=0
+ clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2104190000 definitions=main-2105240142
+X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-To solve problems similar to _RH_KABI_REPLACE. The 
-_RH_KABI_REPLACE(_orig, _new) macros perserve size alignment and kabi 
-agreement between _orig and _new.Below is the definition of this macro:
+btf_encoder is ignoring zero-sized per-CPU ELF symbols, but the same has to be
+done for DWARF variables when matching them with ELF symbols. This is due to
+zero-sized DWARF variables matching unrelated (non-zero-sized) variable that
+happens to be allocated at the exact same address, leading to a lot of
+confusion in BTF.
 
-# define _RH_KABI_REPLACE(_orig, _new)            \
-     union {                        \
-         _new;                    \
-         struct {                \
-             _orig;                \
-         } __UNIQUE_ID(rh_kabi_hide);        \
-         __RH_KABI_CHECK_SIZE_ALIGN(_orig, _new);    \
-     }
+See [0] for when this causes big problems.
 
+  [0] https://lore.kernel.org/bpf/CAEf4BzZ0-sihSL-UAm21JcaCCY92CqfNxycHRZYXcoj8OYb=wA@mail.gmail.com/
 
-__UNIQUE_ID uses the __COUNTER__ macro, and the __COUNTER__ macro is 
-automatically incremented by 1 every time it is precompiled. Therefore, 
-in different compilation units, the same structure has different 
-names.Here is a concrete example:
-
-struct acpi_dev_node {
-     union {
-         struct acpi_device *companion;
-         struct {
-             void *handle;
-         } __UNIQUE_ID_rh_kabi_hide29;
-         union {        };
-     };
-};
-struct acpi_dev_node {
-     union {
-         struct acpi_device *companion;
-         struct {
-             void *handle;
-         } __UNIQUE_ID_rh_kabi_hide31;
-         union {        };
-     };
-};
-
-Finally, it will cause the btf algorithm to de-duplication efficiency is 
-not high, and time-consuming. For example, running ./pahole -J 
-vmlinux-3.10.0-1160.el7.x86_64 without --kabi_prefix flag, the running 
-time is:
-                 real 8m28.912s
-                 user 8m27.271s
-                 sys 0m1.471s
-And the size of the generated btf segment is 30678240 bytes.
-
-After adding the patch, running ./pahole 
---kabi_prefix=__UNIQUE_ID_rh_kabi_hide -J 
-vmlinux-3.10.0-1160.el7.x86_64. The running time of the command is:
-                 real 0m19.634s
-                 user 0m18.457s
-                 sys 0m1.169s
-And the size of the generated btf segment is 3117719 bytes.
-
-Acked-by: Jiri Olsa <jolsa@redhat.com>
-Cc: Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
-Cc: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: Wenan Mao <wenan.mao@linux.alibaba.com>
-Signed-off-by: Shuyi Cheng <chengshuyi@linux.alibaba.com>
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
+ btf_encoder.c | 13 ++++++++++---
+ 1 file changed, 10 insertions(+), 3 deletions(-)
 
-v1: 
-https://lore.kernel.org/dwarves/a249699a-7c6c-4d4a-71b0-87981c8d229e@linux.alibaba.com/
-v1->v2:
--- Change btf_prefix to --kabi_prefix.
--- Add man page.
--- Add space after if and comma.
-
-v2: 
-https://lore.kernel.org/dwarves/ec80d351-ac2f-5c48-c339-c2c503d36d68@linux.alibaba.com/
-v2->v3:
--- Keep the '=' indentation.
--- Remove extra whitespace.
-
-  man-pages/pahole.1 |  4 ++++
-  pahole.c           | 10 ++++++++++
-  pahole_strings.h   |  2 ++
-  strings.c          |  9 ++++++++-
-  4 files changed, 24 insertions(+), 1 deletion(-)
-
-diff --git a/man-pages/pahole.1 b/man-pages/pahole.1
-index a10738f..2659fe6 100644
---- a/man-pages/pahole.1
-+++ b/man-pages/pahole.1
-@@ -340,6 +340,10 @@ Show a traditional string version, i.e.: "v1.18".
-  Show a numeric only version, suitable for use in Makefiles and scripts 
-where
-  one wants to know what if the installed version has some feature, 
-i.e.: 118 instead of "v1.18".
-
-+.TP
-+.B \-\-kabi_prefix=STRING
-+When the prefix of the string is STRING, treat the string as STRING.
+diff --git a/btf_encoder.c b/btf_encoder.c
+index c711f124b31e..672b9943a4e2 100644
+--- a/btf_encoder.c
++++ b/btf_encoder.c
+@@ -538,6 +538,7 @@ int cu__encode_btf(struct cu *cu, int verbose, bool force,
+ 	cu__for_each_variable(cu, core_id, pos) {
+ 		uint32_t size, type, linkage;
+ 		const char *name, *dwarf_name;
++		const struct tag *tag;
+ 		uint64_t addr;
+ 		int id;
+ 
+@@ -550,6 +551,7 @@ int cu__encode_btf(struct cu *cu, int verbose, bool force,
+ 
+ 		/* addr has to be recorded before we follow spec */
+ 		addr = var->ip.addr;
++		dwarf_name = variable__name(var, cu);
+ 
+ 		/* DWARF takes into account .data..percpu section offset
+ 		 * within its segment, which for vmlinux is 0, but for kernel
+@@ -582,11 +584,9 @@ int cu__encode_btf(struct cu *cu, int verbose, bool force,
+ 		 *  modules per-CPU data section has non-zero offset so all
+ 		 *  per-CPU symbols have non-zero values.
+ 		 */
+-		if (var->ip.addr == 0) {
+-			dwarf_name = variable__name(var, cu);
++		if (var->ip.addr == 0)
+ 			if (!dwarf_name || strcmp(dwarf_name, name))
+ 				continue;
+-		}
+ 
+ 		if (var->spec)
+ 			var = var->spec;
+@@ -600,6 +600,13 @@ int cu__encode_btf(struct cu *cu, int verbose, bool force,
+ 			break;
+ 		}
+ 
++		tag = cu__type(cu, var->ip.tag.type);
++		if (tag__size(tag, cu) == 0) {
++			if (btf_elf__verbose)
++				fprintf(stderr, "Ignoring zero-sized per-CPU variable '%s'...\n", dwarf_name ?: "<missing name>");
++			continue;
++		}
 +
-  .SH NOTES
-
-  To enable the generation of debugging information in the Linux kernel 
-build
-diff --git a/pahole.c b/pahole.c
-index dc40ccf..f2406e4 100644
---- a/pahole.c
-+++ b/pahole.c
-@@ -24,6 +24,7 @@
-  #include "btf_encoder.h"
-  #include "libbtf.h"
-  #include "lib/bpf/src/libbpf.h"
-+#include "pahole_strings.h"
-
-  static bool btf_encode;
-  static bool ctf_encode;
-@@ -855,6 +856,7 @@ ARGP_PROGRAM_VERSION_HOOK_DEF = dwarves_print_version;
-  #define ARGP_btf_gen_floats	   322
-  #define ARGP_btf_gen_all	   323
-  #define ARGP_with_flexible_array   324
-+#define ARGP_kabi_prefix   325
-
-  static const struct argp_option pahole__options[] = {
-  	{
-@@ -1140,6 +1142,12 @@ static const struct argp_option pahole__options[] = {
-  		.doc  = "Path to the base BTF file",
-  	},
-  	{
-+		.name = "kabi_prefix",
-+		.key  = ARGP_kabi_prefix,
-+		.arg  = "STRING",
-+		.doc  = "When the prefix of the string is STRING, treat the string as 
-STRING.",
-+	},
-+	{
-  		.name = "btf_encode",
-  		.key  = 'J',
-  		.doc  = "Encode as BTF",
-@@ -1297,6 +1305,8 @@ static error_t pahole__options_parser(int key, 
-char *arg,
-  		btf_encode_force = true;		break;
-  	case ARGP_btf_base:
-  		base_btf_file = arg;			break;
-+	case ARGP_kabi_prefix:
-+		kabi_prefix = arg;		break;
-  	case ARGP_numeric_version:
-  		print_numeric_version = true;		break;
-  	case ARGP_btf_gen_floats:
-diff --git a/pahole_strings.h b/pahole_strings.h
-index 522fbf2..a836ba8 100644
---- a/pahole_strings.h
-+++ b/pahole_strings.h
-@@ -14,6 +14,8 @@ struct strings {
-  	struct btf *btf;
-  };
-
-+extern const char *kabi_prefix;
-+
-  struct strings *strings__new(void);
-
-  void strings__delete(struct strings *strings);
-diff --git a/strings.c b/strings.c
-index d37f49d..d5eb3a1 100644
---- a/strings.c
-+++ b/strings.c
-@@ -17,6 +17,8 @@
-  #include "dutil.h"
-  #include "lib/bpf/src/libbpf.h"
-
-+const char *kabi_prefix;
-+
-  struct strings *strings__new(void)
-  {
-  	struct strings *strs = malloc(sizeof(*strs));
-@@ -48,7 +50,12 @@ strings_t strings__add(struct strings *strs, const 
-char *str)
-  	if (str == NULL)
-  		return 0;
-
--	index = btf__add_str(strs->btf, str);
-+	if (kabi_prefix &&
-+		strncmp(str, kabi_prefix, strlen(kabi_prefix)) == 0)
-+		index = btf__add_str(strs->btf, kabi_prefix);
-+	else
-+		index = btf__add_str(strs->btf, str);
-+
-  	if (index < 0)
-  		return 0;
-
+ 		type = var->ip.tag.type + type_id_off;
+ 		linkage = var->external ? BTF_VAR_GLOBAL_ALLOCATED : BTF_VAR_STATIC;
+ 
 -- 
-1.8.3.1
-
+2.30.2
 
