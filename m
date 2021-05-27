@@ -2,46 +2,45 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-11.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 560BAC4707F
-	for <linux-dwarves@archiver.kernel.org>; Tue, 25 May 2021 19:58:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D39A2C47089
+	for <linux-dwarves@archiver.kernel.org>; Thu, 27 May 2021 14:55:14 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3340961401
-	for <linux-dwarves@archiver.kernel.org>; Tue, 25 May 2021 19:58:26 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B59816128D
+	for <linux-dwarves@archiver.kernel.org>; Thu, 27 May 2021 14:55:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233039AbhEYT7z (ORCPT
+        id S236629AbhE0O4r (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Tue, 25 May 2021 15:59:55 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55708 "EHLO mail.kernel.org"
+        Thu, 27 May 2021 10:56:47 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38138 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233037AbhEYT7z (ORCPT <rfc822;dwarves@vger.kernel.org>);
-        Tue, 25 May 2021 15:59:55 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 4EA9A6124C;
-        Tue, 25 May 2021 19:58:25 +0000 (UTC)
+        id S229793AbhE0O4q (ORCPT <rfc822;dwarves@vger.kernel.org>);
+        Thu, 27 May 2021 10:56:46 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 5F5F6611AE;
+        Thu, 27 May 2021 14:55:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1621972705;
-        bh=Meb9fHb3cskKYSqvNm4niTiFoKH3HRKPqKs6sNi+ehE=;
+        s=k20201202; t=1622127313;
+        bh=h1ngFTq9Zb/SdBnGTwA4Kdpzfw4n5hmVIPGwvKay894=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kmK8dqVIfYG86VyswdRWAYQBiKJW1uLi7K6dACnVnit0bz1bTBbsc/UsVOC6oY4pO
-         YV/TWurygReCKU79DazYRRJLx5o4NuFg/baRcZHumblOAq3bYetOfz+M9DGyfDJVjG
-         PRYbsTHerJWcfBnnH3W0LcXB6zUEUGoXwEWlEY/rRYNVaaY7zoOWXRmB9dp/Woh3p0
-         U1Dy4Rg4wDTr18nHlSKUI8dcoPJG/6kBb9WxIQI+TZqFMpWvExEUPcOzCL6vtqWqAf
-         KTGuoMDz8g0LiN0mce+eSLQuQqJXkUn+RqyfOPXxE5Djmea+k1BLxgvyETZ7Ugv/XE
-         X6ZMxI9CXo0Vw==
+        b=Eo0+vHf+CWES7JSqq5j9FsitfdsmnmmoaHObOBp9VHAR5qYMu1Bs4PX2KhUeWPCpZ
+         AwhSbBrRvZCLXaZGyv55Kfql/HH4I2S3vcquYHYimZjIJxmJixg3LgTaiRWtkDLl5U
+         hV/tyF5tQWNhZc9SsBih0unJL3Puxv0xqLIQ7EIO9mhfRiZfj5ABPENFg9X/fb4unw
+         vcuk7rJRhLbDs/bXbMp3dpxTWG0OE4HSOMOX9Q+UnkkeQlp7dyf1CzRkFQg3qB6x55
+         qiCcbMuavjpY/TCDNMvewyMzsejJ2ocizy9ROCTZy6CPrbHUlLKU/cWbyFDMRj76zl
+         ucS7Un5P6ZjhQ==
 Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id D56624011C; Tue, 25 May 2021 16:58:22 -0300 (-03)
-Date:   Tue, 25 May 2021 16:58:22 -0300
+        id 36F144011C; Thu, 27 May 2021 11:55:10 -0300 (-03)
+Date:   Thu, 27 May 2021 11:55:10 -0300
 From:   Arnaldo Carvalho de Melo <acme@kernel.org>
 To:     Andrii Nakryiko <andrii@kernel.org>
 Cc:     dwarves@vger.kernel.org, bpf@vger.kernel.org, jolsa@kernel.org,
         kernel-team@fb.com
 Subject: Re: [PATCH dwarves] btf_encoder: fix and complete filtering out
  zero-sized per-CPU variables
-Message-ID: <YK1W3gpVp0m2LSvb@kernel.org>
+Message-ID: <YK+yzpPKVhNvm7/n@kernel.org>
 References: <20210524234222.278676-1-andrii@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -58,33 +57,12 @@ Em Mon, May 24, 2021 at 04:42:22PM -0700, Andrii Nakryiko escreveu:
 > zero-sized DWARF variables matching unrelated (non-zero-sized) variable that
 > happens to be allocated at the exact same address, leading to a lot of
 > confusion in BTF.
-
-I've been following this, just didn't got to process it, will do it
-soon.
-
-- Arnaldo
  
 > See [0] for when this causes big problems.
-> 
+ 
 >   [0] https://lore.kernel.org/bpf/CAEf4BzZ0-sihSL-UAm21JcaCCY92CqfNxycHRZYXcoj8OYb=wA@mail.gmail.com/
-> 
-> Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
-> ---
->  btf_encoder.c | 13 ++++++++++---
->  1 file changed, 10 insertions(+), 3 deletions(-)
-> 
-> diff --git a/btf_encoder.c b/btf_encoder.c
-> index c711f124b31e..672b9943a4e2 100644
-> --- a/btf_encoder.c
+
 > +++ b/btf_encoder.c
-> @@ -538,6 +538,7 @@ int cu__encode_btf(struct cu *cu, int verbose, bool force,
->  	cu__for_each_variable(cu, core_id, pos) {
->  		uint32_t size, type, linkage;
->  		const char *name, *dwarf_name;
-> +		const struct tag *tag;
->  		uint64_t addr;
->  		int id;
->  
 > @@ -550,6 +551,7 @@ int cu__encode_btf(struct cu *cu, int verbose, bool force,
 >  
 >  		/* addr has to be recorded before we follow spec */
@@ -107,23 +85,21 @@ soon.
 >  		if (var->spec)
 >  			var = var->spec;
 > @@ -600,6 +600,13 @@ int cu__encode_btf(struct cu *cu, int verbose, bool force,
->  			break;
->  		}
->  
-> +		tag = cu__type(cu, var->ip.tag.type);
-> +		if (tag__size(tag, cu) == 0) {
-> +			if (btf_elf__verbose)
-> +				fprintf(stderr, "Ignoring zero-sized per-CPU variable '%s'...\n", dwarf_name ?: "<missing name>");
-> +			continue;
-> +		}
-> +
->  		type = var->ip.tag.type + type_id_off;
->  		linkage = var->external ? BTF_VAR_GLOBAL_ALLOCATED : BTF_VAR_STATIC;
->  
-> -- 
-> 2.30.2
-> 
 
--- 
+I just changed the above hunk to be:
+
+@@ -583,7 +585,6 @@ int cu__encode_btf(struct cu *cu, int verbose, bool force,
+                 *  per-CPU symbols have non-zero values.
+                 */
+                if (var->ip.addr == 0) {
+-                       dwarf_name = variable__name(var, cu);
+                        if (!dwarf_name || strcmp(dwarf_name, name))
+                                continue;
+                }
+
+
+Which is shorter and keeps the {} around a multi line if block, ok?
+
+Thanks, applied!
 
 - Arnaldo
