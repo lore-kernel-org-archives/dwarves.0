@@ -2,155 +2,127 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.5 required=3.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
+	DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 23E6CC4707F
-	for <linux-dwarves@archiver.kernel.org>; Thu, 27 May 2021 16:54:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BBDCAC4707F
+	for <linux-dwarves@archiver.kernel.org>; Thu, 27 May 2021 19:06:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 06A13613CA
-	for <linux-dwarves@archiver.kernel.org>; Thu, 27 May 2021 16:54:53 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8E922613DC
+	for <linux-dwarves@archiver.kernel.org>; Thu, 27 May 2021 19:06:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234910AbhE0Q40 (ORCPT
+        id S229732AbhE0THu (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Thu, 27 May 2021 12:56:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54126 "EHLO
+        Thu, 27 May 2021 15:07:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234487AbhE0Q40 (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Thu, 27 May 2021 12:56:26 -0400
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22B98C061574;
-        Thu, 27 May 2021 09:54:52 -0700 (PDT)
-Received: by mail-yb1-xb36.google.com with SMTP id r7so1568496ybs.10;
-        Thu, 27 May 2021 09:54:52 -0700 (PDT)
+        with ESMTP id S230078AbhE0THu (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Thu, 27 May 2021 15:07:50 -0400
+Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C23B2C061574;
+        Thu, 27 May 2021 12:06:15 -0700 (PDT)
+Received: by mail-qk1-x729.google.com with SMTP id q10so1747920qkc.5;
+        Thu, 27 May 2021 12:06:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=/b+QDKRCvkdmEo44u5UFShewK4OXzLmQT14NjfQF8mM=;
-        b=Gx5kyyT2g7cjTWhrgI/v1xNiuhMCo4OJB/oGhDQVq2S+vEPpM7F0351zgRidXT07KL
-         SZTR9sx8AJuDssXMiojE/M56FPCEPqXyVcpzie6MbaZmU+TKIvtkGok+T2WQieO1oUZX
-         2BEDuv6qnwmKpFJ9kysoMuKeuGk74j7jlBi83q4Dq2yWXK7vLcb6dZtmUeFsYYWtBtkW
-         4wJ8yRETzTuqyQbSYZ+1Giq8TmEwlbRYkVdehFPZYngQ/SCnl8lmCjr37u4G5FaOTDGU
-         1/5OJJ7OBavXRI3bHj8LKjQRiLQ601tE+LjhiI+yuBZb4pOe3VESkJ2vAiX0fHS56tsL
-         vZRw==
+        h=date:user-agent:in-reply-to:references:mime-version
+         :content-transfer-encoding:subject:to:cc:from:message-id;
+        bh=h7vvVXSySNhPv8SRj++Jueyu0vH2GO6PLTFcEgK20MY=;
+        b=U8Gi6Wzci5VoP+H4EOizvAqR6dNZ+DoVaeq1Uq7cfguZBVSILyXszXK5XffdUNjmcI
+         pwZJUeGO2DhWAJEM+uWZvegONdhctRWi/Ak56MdS0jKcV5Vf9y0r/AqzAyL0Wj5jVnGM
+         EyDPaoCWA0v+aoiEhhOhqKfkg1j2ItA5aZ2lvOxR739kQ8pgHUVgSCVDAEz7+SineI5N
+         FcjQkSQBN38PQ5ST/Zko06DJiF9SSjJf5eAgjgJy+jvQNY2rpP/wkdrhT6afV+eykdCl
+         flp17N8capjJ7NXyugn1CDAcdPwNg9Lr2LYexzVJTRSTKQFaPVX7R3HRHGfhFi9wg/FQ
+         hEHw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=/b+QDKRCvkdmEo44u5UFShewK4OXzLmQT14NjfQF8mM=;
-        b=H5KcJlfL16ubhb3Kf4oV1YddoMYnFmVyyYnXeaY6Ox7cIl5a9XR3lHIItg+pyOZ9fm
-         ZxXsVOIN6dq4tLglZYpybOuxQ2gizXt6HImes29a67SwSoISTvpBLRQbmA+Vn2WCnXle
-         wRQNF8JGsCuqwDfg4tA+maI8il6bz1RM3cQmXqYpYJOnPd7UB4ZJyh7V0T13wSFlrnmH
-         6DY9Q/wFY4GNMhdpeeRn9GmAp5RhGJpZfzebCKnwHAfONIp576mWU1eM4hUuhoZVHQ5K
-         a+dRgPay3AUQXREMg7AVXAv6p2nFcwDJCDPczNa4QOOQ/whI2U1WEl9HxWkDrrgZGWcw
-         CIiA==
-X-Gm-Message-State: AOAM531UP8PUYYWuJkFdfPxZkaP4q0RQbeZX33webReeUkwi0AwtZS2E
-        jDlyDp37th2TJQMwLEaIo5NhYC30KWsxz3amNl0=
-X-Google-Smtp-Source: ABdhPJwpFxDCvjoKBgQsSj1wJtHkhfT+dJlLc9Yc/yMBz3fQOR2R7y8/yjQ+v6UO+8zbFdlbjAOEsruLlqZ5l9SKFQE=
-X-Received: by 2002:a25:1455:: with SMTP id 82mr6152662ybu.403.1622134491327;
- Thu, 27 May 2021 09:54:51 -0700 (PDT)
+        h=x-gm-message-state:date:user-agent:in-reply-to:references
+         :mime-version:content-transfer-encoding:subject:to:cc:from
+         :message-id;
+        bh=h7vvVXSySNhPv8SRj++Jueyu0vH2GO6PLTFcEgK20MY=;
+        b=L+4YVNfbCI3DbvqPjgXuldhgeXpac/xNjOmegN/I3RVrtZI+bmFCpZe7fEcsRd9GMp
+         0EtPeC0k/xRtyp39Xh//aEe5LxSRPdpk1oIqt/IbCZLhgcCqsik3sniuo+iXQdRrRmb7
+         xXpDj5iEpvSMfnW6kfrawaibfy0Un3VkkRN/cmVh+DPh+3cYafGwNsKf86g4gmnDvxYJ
+         W5X1eE4fR41oYdK/h0JGWoC8i9TkGN64S22k2J1IXFnkR1Qs2/bU4J/1ZvKS7F1KLnlH
+         Ccr0+hiNAU3wE2kAsy6Lfwi5CGgOn0klfvDK/3hb7KvX9mOI/+qSRVdM0yFDliUJ7biU
+         eTpg==
+X-Gm-Message-State: AOAM533RDLQxmy2mBNZ5LQylcuUZ845bCkDYkpvauxPs0khk/FiMs1sF
+        wexF98/dK1vExZ9cTmGDTnc=
+X-Google-Smtp-Source: ABdhPJw9cn2gOXNXRSurLPjhEPvEhRJanzaNjulRQPT4fe6oXhd6y2FLNhMAXrXqDHCvPHGQWX5TRQ==
+X-Received: by 2002:a05:620a:1334:: with SMTP id p20mr5093151qkj.7.1622142374916;
+        Thu, 27 May 2021 12:06:14 -0700 (PDT)
+Received: from [172.16.141.208] ([187.68.192.38])
+        by smtp.gmail.com with ESMTPSA id s16sm1829451qtq.67.2021.05.27.12.06.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 27 May 2021 12:06:14 -0700 (PDT)
+Date:   Thu, 27 May 2021 16:04:58 -0300
+User-Agent: K-9 Mail for Android
+In-Reply-To: <CAEf4BzaTP_jULKMN_hx6ZOqwESOmsR6_HxWW-LnrA5xwRNtSWg@mail.gmail.com>
+References: <YK+41f972j25Z1QQ@kernel.org> <CAEf4BzaTP_jULKMN_hx6ZOqwESOmsR6_HxWW-LnrA5xwRNtSWg@mail.gmail.com>
 MIME-Version: 1.0
-References: <YK+41f972j25Z1QQ@kernel.org>
-In-Reply-To: <YK+41f972j25Z1QQ@kernel.org>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Thu, 27 May 2021 09:54:40 -0700
-Message-ID: <CAEf4BzaTP_jULKMN_hx6ZOqwESOmsR6_HxWW-LnrA5xwRNtSWg@mail.gmail.com>
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 Subject: Re: [RFT] Testing 1.22
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Andrii Nakryiko <andrii@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
-        =?UTF-8?Q?Michal_Such=C3=A1nek?= <msuchanek@suse.de>,
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>
+CC:     Andrii Nakryiko <andrii@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
+        =?ISO-8859-1?Q?Michal_Such=E1nek?= <msuchanek@suse.de>,
         dwarves@vger.kernel.org, bpf <bpf@vger.kernel.org>,
         Kernel Team <kernel-team@fb.com>,
         Michael Petlan <mpetlan@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
+From:   Arnaldo <arnaldo.melo@gmail.com>
+Message-ID: <4615C288-2CFD-483E-AB98-B14A33631E2F@gmail.com>
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-On Thu, May 27, 2021 at 8:20 AM Arnaldo Carvalho de Melo
-<acme@kernel.org> wrote:
->
-> Hi guys,
->
->         Its important to have 1.22 out of the door ASAP, so please clone
-> what is in tmp.master and report your results.
->
 
-Hey Arnaldo,
 
-If we are going to make pahole 1.22 a new mandatory minimal version of
-pahole, I think we should take a little bit of time and fix another
-problematic issue and clean up Kbuild significantly.
+On May 27, 2021 1:54:40 PM GMT-03:00, Andrii Nakryiko <andrii=2Enakryiko@g=
+mail=2Ecom> wrote:
+>On Thu, May 27, 2021 at 8:20 AM Arnaldo Carvalho de Melo
+><acme@kernel=2Eorg> wrote:
+>>
+>> Hi guys,
+>>
+>>         Its important to have 1=2E22 out of the door ASAP, so please
+>clone
+>> what is in tmp=2Emaster and report your results=2E
+>>
+>
+>Hey Arnaldo,
+>
+>If we are going to make pahole 1=2E22 a new mandatory minimal version of
+>pahole, I think we should take a little bit of time and fix another
+>problematic issue and clean up Kbuild significantly=2E
+>
+>We discussed this before, it would be great to have an ability to dump
+>generated BTF into a separate file instead of modifying vmlinux image
+>in place=2E I'd say let's try to push for [0] to land as a temporary
+>work around to buy us a bit of time to implement this feature=2E Then,
+>when pahole 1=2E22 is released and packaged into major distros, we can
+>follow up in kernel with Kbuild clean ups and making pahole 1=2E22
+>mandatory=2E
+>
+>What do you think? If anyone agrees, please consider chiming in on the
+>above thread ([0])=2E
 
-We discussed this before, it would be great to have an ability to dump
-generated BTF into a separate file instead of modifying vmlinux image
-in place. I'd say let's try to push for [0] to land as a temporary
-work around to buy us a bit of time to implement this feature. Then,
-when pahole 1.22 is released and packaged into major distros, we can
-follow up in kernel with Kbuild clean ups and making pahole 1.22
-mandatory.
+There's multiple fixes that affects lots of stakeholders, so I'm more incl=
+ined to release 1=2E22 sooner rather than later=2E
 
-What do you think? If anyone agrees, please consider chiming in on the
-above thread ([0]).
+If anyone has cycles right now to work on that detached BTF feature, relea=
+sing 1=2E23 as soon as that feature is complete and tested shouldn't be a p=
+roblem=2E
 
-  [0] https://lore.kernel.org/bpf/20210526080741.GW30378@techsingularity.net/
+Then 1=2E23 the mandatory minimal version=2E
 
->         To make it super easy:
->
-> [acme@quaco pahole]$ cd /tmp
-> [acme@quaco tmp]$ git clone git://git.kernel.org/pub/scm/devel/pahole/pahole.git
-> Cloning into 'pahole'...
-> remote: Enumerating objects: 6510, done.
-> remote: Total 6510 (delta 0), reused 0 (delta 0), pack-reused 6510
-> Receiving objects: 100% (6510/6510), 1.63 MiB | 296.00 KiB/s, done.
-> Resolving deltas: 100% (4550/4550), done.
-> [acme@quaco tmp]$ cd pahole/
-> [acme@quaco pahole]$ git checkout origin/tmp.master
-> Note: switching to 'origin/tmp.master'.
->
-> You are in 'detached HEAD' state. You can look around, make experimental
-> changes and commit them, and you can discard any commits you make in this
-> state without impacting any branches by switching back to a branch.
->
-> If you want to create a new branch to retain commits you create, you may
-> do so (now or later) by using -c with the switch command. Example:
->
->   git switch -c <new-branch-name>
->
-> Or undo this operation with:
->
->   git switch -
->
-> Turn off this advice by setting config variable advice.detachedHead to false
->
-> HEAD is now at 0d17503db0580a66 btf_encoder: fix and complete filtering out zero-sized per-CPU variables
-> [acme@quaco pahole]$ git log --oneline -5
-> 0d17503db0580a66 (HEAD, origin/tmp.master) btf_encoder: fix and complete filtering out zero-sized per-CPU variables
-> fb418f9d8384d3a9 dwarves: Make handling of NULL by destructos consistent
-> f049fe9ebf7aa9c2 dutil: Make handling of NULL by destructos consistent
-> 1512ab8ab6fe76a9 pahole: Make handling of NULL by destructos consistent
-> 1105b7dad2d0978b elf_symtab: Use zfree() where applicable
-> [acme@quaco pahole]$ mkdir build
-> [acme@quaco pahole]$ cd build
-> [acme@quaco build]$ cmake ..
-> <SNIP>
-> -- Build files have been written to: /tmp/pahole/build
-> [acme@quaco build]$ cd ..
-> [acme@quaco pahole]$ make -j8 -C build
-> make: Entering directory '/tmp/pahole/build'
-> <SNIP>
-> [100%] Built target pahole
-> make[1]: Leaving directory '/tmp/pahole/build'
-> make: Leaving directory '/tmp/pahole/build'
-> [acme@quaco pahole]$
->
-> Then make sure build/pahole is in your path and try your workloads.
->
-> Jiri, Michael, if you could run your tests with this, that would be awesome,
->
-> Thanks in advance!
->
-> - Arnaldo
+Wdyt?
+
+- Arnaldo
+
+
+--=20
+Sent from my Android device with K-9 Mail=2E Please excuse my brevity=2E
