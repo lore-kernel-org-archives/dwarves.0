@@ -2,191 +2,201 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.5 required=3.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
-	DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-17.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 50D8EC4707F
-	for <linux-dwarves@archiver.kernel.org>; Thu, 27 May 2021 21:58:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6F65CC47087
+	for <linux-dwarves@archiver.kernel.org>; Fri, 28 May 2021 06:24:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1B522613D4
-	for <linux-dwarves@archiver.kernel.org>; Thu, 27 May 2021 21:58:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3796B613D1
+	for <linux-dwarves@archiver.kernel.org>; Fri, 28 May 2021 06:24:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235063AbhE0WAX (ORCPT
+        id S230099AbhE1G0S (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Thu, 27 May 2021 18:00:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37424 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229822AbhE0WAW (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Thu, 27 May 2021 18:00:22 -0400
-Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F383C061574;
-        Thu, 27 May 2021 14:58:48 -0700 (PDT)
-Received: by mail-qt1-x831.google.com with SMTP id c15so1380464qte.6;
-        Thu, 27 May 2021 14:58:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:user-agent:in-reply-to:references:mime-version
-         :content-transfer-encoding:subject:to:cc:from:message-id;
-        bh=hyfdK0ASIZyZEeSnI5fyrk9s/8te09CW3fcAUhkMzJ0=;
-        b=OIyfbgSJJn7fa37WVR9wGjQ6hDZ1pkzCoj39/TTKfYulXmMM3Lu5W2TFAoTG3/csfk
-         WdboosSwnSnShhfu13GE3b+y7KVlNVGq09pZp428UHHqfJYhddjLLyKWUJ/RnI0adjb8
-         40uHLxyNlPGmwHAJ1MImE4OkIhRksOfaaUChb9gPV1PsPOGcIqCVFnONTjIkY6nIjFDw
-         K566+zIoJ7d8OXqXahNSxuqsdGtZPkxyh/7ecBns6w5OTthNa+kdz/5s6DtEASaaOvf5
-         H+2MOubrn3OCl1YhwEH2T3Wq+ppcJ1RJNuAWHWUgdkta6rnOqx2EtcnIikuIvV55QBgD
-         PK4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:user-agent:in-reply-to:references
-         :mime-version:content-transfer-encoding:subject:to:cc:from
-         :message-id;
-        bh=hyfdK0ASIZyZEeSnI5fyrk9s/8te09CW3fcAUhkMzJ0=;
-        b=ExybKipqXGwRiDmeKA080X5ERoFF/lNabNwgG4I2K1PNwvqnfLtqTJbjvXYZeBstbt
-         SIk1m5Q9Vhl93+DmmfbWDhRodOF7UuGYUgNPwaXpUdQh+L8Ky2JqdstzopBMqu5r1TId
-         2IDtVpaR+nzBQKYGKkmJoYUWZBSjFo3ldVA7aSpVWeakPtC5jMBLTy7jFb2KUCMXRPCA
-         VmvUBbxU1pKgJso9hcmCcD4wqkZydIsCB8OQDaxGYKiAspNmFOHfGK3aux5qHUSq0vYy
-         9JQ3ySpKzwgeyaDXnqeTyrrwMf2oMbOyGOOhtcTmzWzVqiAkAxEPpM7D8TIMTcu7Tskx
-         r9nA==
-X-Gm-Message-State: AOAM533OwPpkdAMlQ40ZJkNL/dO9pMl/TErQgU0rvH10MRAOU2EU4gcr
-        RI5orbX54o5KZXTUItBg2es=
-X-Google-Smtp-Source: ABdhPJxoBhcdf16VKAqC7dvneyBluqdnqwgWTiX13uiHLtdOB0UvUF9mS1qXSMHwuqGp9k9LQSypUA==
-X-Received: by 2002:ac8:7083:: with SMTP id y3mr654009qto.129.1622152726967;
-        Thu, 27 May 2021 14:58:46 -0700 (PDT)
-Received: from [192.168.86.185] ([179.97.37.151])
-        by smtp.gmail.com with ESMTPSA id p11sm2330306qtl.82.2021.05.27.14.58.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 27 May 2021 14:58:46 -0700 (PDT)
-Date:   Thu, 27 May 2021 18:57:31 -0300
-User-Agent: K-9 Mail for Android
-In-Reply-To: <YLAKUbjrdYio+ncV@krava>
-References: <YK+41f972j25Z1QQ@kernel.org> <CAEf4BzaTP_jULKMN_hx6ZOqwESOmsR6_HxWW-LnrA5xwRNtSWg@mail.gmail.com> <4615C288-2CFD-483E-AB98-B14A33631E2F@gmail.com> <CAEf4BzaQmv1+1bPF=1aO3dcmNu2Mx0EFhK+ZU6UFsMjv3v6EZA@mail.gmail.com> <4901AF88-0354-428B-9305-2EDC6F75C073@gmail.com> <CAEf4BzZk8bcSZ9hmFAmgjbrQt0Yj1usCHmuQTfU-pwZkYQgztA@mail.gmail.com> <YLAKUbjrdYio+ncV@krava>
+        Fri, 28 May 2021 02:26:18 -0400
+Received: from smtp-out2.suse.de ([195.135.220.29]:38708 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229753AbhE1G0R (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Fri, 28 May 2021 02:26:17 -0400
+Received: from imap.suse.de (imap-alt.suse-dmz.suse.de [192.168.254.47])
+        (using TLSv1.2 with cipher ECDHE-ECDSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id A03F91FD2E;
+        Fri, 28 May 2021 06:24:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1622183082; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=7O16xmQehx80n7fVVBeuMQ81Au9qauhcCf9P3KVa6HM=;
+        b=dGed2PMDS6s5Tjfp2/y9GXu3gsBolu2eTmGGc1lndrnGRe/9lu9xconJyR/NWp+vFTyHia
+        ogcHIXMAiR/mnZBv7Z+x6U2SHwqKo8mXjsmntR9KL/ABoDbN3Ic0Nq80OTIoqsRafLvdhD
+        aP4owL9u2LALkxnsBpQ0pUzQjhF319Q=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1622183082;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=7O16xmQehx80n7fVVBeuMQ81Au9qauhcCf9P3KVa6HM=;
+        b=djEs2zWPnsnI0YOR+Ds9bPwCWxyQOF1MFxYLghSYNHo0acdrwkzj7uJBsLeo0xP6RBe6aa
+        iAxG7WR/wwDO51AA==
+Received: from director2.suse.de (director2.suse-dmz.suse.de [192.168.254.72])
+        by imap.suse.de (Postfix) with ESMTPSA id 8570611A98;
+        Fri, 28 May 2021 06:24:42 +0000 (UTC)
+Date:   Fri, 28 May 2021 08:24:41 +0200
+From:   Michal =?iso-8859-1?Q?Such=E1nek?= <msuchanek@suse.de>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     Andrii Nakryiko <andrii@kernel.org>, dwarves@vger.kernel.org,
+        bpf@vger.kernel.org, jolsa@kernel.org, kernel-team@fb.com
+Subject: Re: [PATCH dwarves] btf_encoder: fix and complete filtering out
+ zero-sized per-CPU variables
+Message-ID: <20210528062441.GJ8544@kitsune.suse.cz>
+References: <20210524234222.278676-1-andrii@kernel.org>
+ <YK+yzpPKVhNvm7/n@kernel.org>
+ <YK+zkOOAUzFYsLBy@kernel.org>
+ <20210527152758.GI8544@kitsune.suse.cz>
+ <YK+8/lg7ZUJIH7Kv@kernel.org>
+ <YK/NLcM9ww2eXlmT@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [RFT] Testing 1.22
-To:     Jiri Olsa <jolsa@redhat.com>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>
-CC:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        =?ISO-8859-1?Q?Michal_Such=E1nek?= <msuchanek@suse.de>,
-        dwarves@vger.kernel.org, bpf <bpf@vger.kernel.org>,
-        Kernel Team <kernel-team@fb.com>,
-        Michael Petlan <mpetlan@redhat.com>
-From:   Arnaldo <arnaldo.melo@gmail.com>
-Message-ID: <337EEBAA-2ADD-4A46-BC6F-69FC38083668@gmail.com>
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YK/NLcM9ww2eXlmT@kernel.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
+On Thu, May 27, 2021 at 01:47:41PM -0300, Arnaldo Carvalho de Melo wrote:
+> Em Thu, May 27, 2021 at 12:38:38PM -0300, Arnaldo Carvalho de Melo escreveu:
+> > Em Thu, May 27, 2021 at 05:27:58PM +0200, Michal Suchánek escreveu:
+> > > Hello,
+> > > 
+> > > On Thu, May 27, 2021 at 11:58:24AM -0300, Arnaldo Carvalho de Melo wrote:
+> > > > Em Thu, May 27, 2021 at 11:55:10AM -0300, Arnaldo Carvalho de Melo escreveu:
+> > > > > Em Mon, May 24, 2021 at 04:42:22PM -0700, Andrii Nakryiko escreveu:
+> > > > > > btf_encoder is ignoring zero-sized per-CPU ELF symbols, but the same has to be
+> > > > > > done for DWARF variables when matching them with ELF symbols. This is due to
+> > > > > > zero-sized DWARF variables matching unrelated (non-zero-sized) variable that
+> > > > > > happens to be allocated at the exact same address, leading to a lot of
+> > > > > > confusion in BTF.
+> > > > >  
+> > > > > > See [0] for when this causes big problems.
+> > > > >  
+> > > > > >   [0] https://lore.kernel.org/bpf/CAEf4BzZ0-sihSL-UAm21JcaCCY92CqfNxycHRZYXcoj8OYb=wA@mail.gmail.com/
+> > > > 
+> > > > I also added this:
+> > > > 
+> > > > Reported-by: Michal Suchánek <msuchanek@suse.de>
+> > > > 
+> > > > Michal, so you tested this patch and verified it fixed the problem? If
+> > > > so please let me know so that I also add:
+> > > 
+> > > This is the first time I see this patch.
+> > > 
+> > > Given that linux-next does not build for me at the moment
+> > > I don't think I will test it soon.
+> > 
+> > Ok, I'm test building with torvalds/master, will try with linux-next
+> > afterwards,
+> 
+> I build and booted torvalds/master, all seems to work, now moving to
+> linux-next.
 
+[    9s] /usr/bin/qemu-kvm -nodefaults -no-reboot -nographic -vga none -cpu host -object rng-random,filename=/dev/random,id=rng0 -device virtio-rng-pci,rng=rng0 -runas qemu -net none -kernel /var/cache/obs/worker/root_2/.mount/boot/kernel -initrd /var/cache/obs/worker/root_2/.mount/boot/initrd -append root=/dev/disk/by-id/virtio-0 rootfstype=ext4 rootflags=noatime ext4.allow_unsupported=1 mitigations=off panic=1 quiet no-kvmclock elevator=noop nmi_watchdog=0 rw rd.driver.pre=binfmt_misc console=ttyS0 init=/.build/build -m 8192 -drive file=/var/cache/obs/worker/root_2/root,format=raw,if=none,id=disk,cache=unsafe -device virtio-blk-pci,drive=disk,serial=0 -drive file=/var/cache/obs/worker/root_2/swap,format=raw,if=none,id=swap,cache=unsafe -device virtio-blk-pci,drive=swap,serial=1 -serial stdio -chardev socket,id=monitor,server,nowait,path=/var/cache/obs/worker/root_2/root.qemu/monitor -mon chardev=monitor,mode=readline -smp 8
+[    9s] c[?7l[2J[0mSeaBIOS (version rel-1.14.0-0-g155821a-rebuilt.opensuse.org)
+[   15s] Booting from ROM..c[?7l[2J### VM INTERACTION END ###
+[   15s] 2nd stage started in virtual machine
+[   15s] machine type: x86_64
+[   15s] Linux version: 5.13.0-rc3-next-2[    5.210478] sysrq: Changing Loglevel
+[   15s] 0210526-2.g3bd43[    5.211566] sysrq: Loglevel set to 4
+[   15s] 9f-vanilla #1 SMP Thu May 27 18:27:17 UTC 2021 (3bd439f)
+[   15s] Increasing log level from now on...
+[   15s] Enable sysrq operations
+[   15s] Setting up swapspace version 1, size = 2 GiB (2097147904 bytes)
+[   15s] no label, UUID=6e22796c-6df5-4859-a291-24acde2e92e5
+[   15s] swapon: /dev/vdb: found signature [pagesize=4096, signature=swap]
+[   15s] swapon: /dev/vdb: pagesize=4096, swapsize=2097152000, devsize=2097152000
+[   15s] swapon /dev/vdb
+[   15s] WARNING: udev not running, creating extra device nodes
+[   15s] logging output to //.build.log...
 
-On May 27, 2021 6:08:33 PM GMT-03:00, Jiri Olsa <jolsa@redhat=2Ecom> wrote=
-:
->On Thu, May 27, 2021 at 01:41:13PM -0700, Andrii Nakryiko wrote:
->> On Thu, May 27, 2021 at 12:57 PM Arnaldo <arnaldo=2Emelo@gmail=2Ecom>
->wrote:
->> >
->> >
->> >
->> > On May 27, 2021 4:14:17 PM GMT-03:00, Andrii Nakryiko
-><andrii=2Enakryiko@gmail=2Ecom> wrote:
->> > >On Thu, May 27, 2021 at 12:06 PM Arnaldo <arnaldo=2Emelo@gmail=2Ecom=
->
->> > >wrote:
->> > >>
->> > >>
->> > >>
->> > >> On May 27, 2021 1:54:40 PM GMT-03:00, Andrii Nakryiko
->> > ><andrii=2Enakryiko@gmail=2Ecom> wrote:
->> > >> >On Thu, May 27, 2021 at 8:20 AM Arnaldo Carvalho de Melo
->> > >> ><acme@kernel=2Eorg> wrote:
->> > >> >>
->> > >> >> Hi guys,
->> > >> >>
->> > >> >>         Its important to have 1=2E22 out of the door ASAP, so
->please
->> > >> >clone
->> > >> >> what is in tmp=2Emaster and report your results=2E
->> > >> >>
->> > >> >
->> > >> >Hey Arnaldo,
->> > >> >
->> > >> >If we are going to make pahole 1=2E22 a new mandatory minimal
->version
->> > >of
->> > >> >pahole, I think we should take a little bit of time and fix
->another
->> > >> >problematic issue and clean up Kbuild significantly=2E
->> > >> >
->> > >> >We discussed this before, it would be great to have an ability
->to
->> > >dump
->> > >> >generated BTF into a separate file instead of modifying vmlinux
->> > >image
->> > >> >in place=2E I'd say let's try to push for [0] to land as a
->temporary
->> > >> >work around to buy us a bit of time to implement this feature=2E
->Then,
->> > >> >when pahole 1=2E22 is released and packaged into major distros,
->we can
->> > >> >follow up in kernel with Kbuild clean ups and making pahole
->1=2E22
->> > >> >mandatory=2E
->> > >> >
->> > >> >What do you think? If anyone agrees, please consider chiming in
->on
->> > >the
->> > >> >above thread ([0])=2E
->> > >>
->> > >> There's multiple fixes that affects lots of stakeholders, so I'm
->more
->> > >inclined to release 1=2E22 sooner rather than later=2E
->> > >>
->> > >> If anyone has cycles right now to work on that detached BTF
->feature,
->> > >releasing 1=2E23 as soon as that feature is complete and tested
->shouldn't
->> > >be a problem=2E
->> > >>
->> > >> Then 1=2E23 the mandatory minimal version=2E
->> > >>
->> > >> Wdyt?
->> > >
->> > >If we make 1=2E22 mandatory there will be no good reason to make
->1=2E23
->> > >mandatory again=2E So I will have absolutely no inclination to work
->on
->> > >this, for example=2E So we are just wasting a chance to clean up the
->> > >Kbuild story w=2Er=2Et=2E pahole=2E And we are talking about just a =
-few
->days
->> > >at most, while we do have a reasonable work around on the kernel
->side=2E
->> >
->> > So there were patches for stop using objcopy, which we thought
->could uncover some can of worms, were there patches for the detached
->BTF  file?
->>=20
->> No, there weren't, if I remember correctly=2E What's the concern,
->> though? That detached BTF file isn't even an ELF, so it's
->> btf__get_raw_data() and write it to the file=2E Done=2E
->
->heya,
->I probably overlooked this, but are there more details about that
->detached BTF file feature somewhere?=20
+next-20210527 does not build becuase of missing symbol but next-20210526 built with the patched pahole boots.
 
+Tested-by: Michal Suchánek <msuchanek@suse.de>
 
-Look in the dwarves mailing list archives at lore, but it's just a new opt=
-ion to ask for the BTF data to be written to a file instead of to an ELF se=
-ction, that will simplify the series of steps in the kernel building proces=
-s=2E
+Thanks
 
-I'll cook a patch early tomorrow=2E
-
-- Arnaldo
-
---=20
-Sent from my Android device with K-9 Mail=2E Please excuse my brevity=2E
+Michal
+>  
+> > Thanks,
+> > 
+> > - Arnaldo
+> >  
+> > > Thanks
+> > > 
+> > > Michal
+> > > 
+> > > > 
+> > > > Tested-by: Michal Suchánek <msuchanek@suse.de>
+> > > > 
+> > > > Thanks,
+> > > > 
+> > > > - Arnaldo
+> > > >  
+> > > > > > +++ b/btf_encoder.c
+> > > > > > @@ -550,6 +551,7 @@ int cu__encode_btf(struct cu *cu, int verbose, bool force,
+> > > > > >  
+> > > > > >  		/* addr has to be recorded before we follow spec */
+> > > > > >  		addr = var->ip.addr;
+> > > > > > +		dwarf_name = variable__name(var, cu);
+> > > > > >  
+> > > > > >  		/* DWARF takes into account .data..percpu section offset
+> > > > > >  		 * within its segment, which for vmlinux is 0, but for kernel
+> > > > > > @@ -582,11 +584,9 @@ int cu__encode_btf(struct cu *cu, int verbose, bool force,
+> > > > > >  		 *  modules per-CPU data section has non-zero offset so all
+> > > > > >  		 *  per-CPU symbols have non-zero values.
+> > > > > >  		 */
+> > > > > > -		if (var->ip.addr == 0) {
+> > > > > > -			dwarf_name = variable__name(var, cu);
+> > > > > > +		if (var->ip.addr == 0)
+> > > > > >  			if (!dwarf_name || strcmp(dwarf_name, name))
+> > > > > >  				continue;
+> > > > > > -		}
+> > > > > >  
+> > > > > >  		if (var->spec)
+> > > > > >  			var = var->spec;
+> > > > > > @@ -600,6 +600,13 @@ int cu__encode_btf(struct cu *cu, int verbose, bool force,
+> > > > > 
+> > > > > I just changed the above hunk to be:
+> > > > > 
+> > > > > @@ -583,7 +585,6 @@ int cu__encode_btf(struct cu *cu, int verbose, bool force,
+> > > > >                  *  per-CPU symbols have non-zero values.
+> > > > >                  */
+> > > > >                 if (var->ip.addr == 0) {
+> > > > > -                       dwarf_name = variable__name(var, cu);
+> > > > >                         if (!dwarf_name || strcmp(dwarf_name, name))
+> > > > >                                 continue;
+> > > > >                 }
+> > > > > 
+> > > > > 
+> > > > > Which is shorter and keeps the {} around a multi line if block, ok?
+> > > > > 
+> > > > > Thanks, applied!
+> > > > > 
+> > > > > - Arnaldo
+> > > > 
+> > > > -- 
+> > > > 
+> > > > - Arnaldo
+> > 
+> > -- 
+> > 
+> > - Arnaldo
+> 
+> -- 
+> 
+> - Arnaldo
