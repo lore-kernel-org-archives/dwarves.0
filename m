@@ -2,201 +2,285 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.7 required=3.0 tests=BAYES_00,
+	DKIM_ADSP_CUSTOM_MED,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6F65CC47087
-	for <linux-dwarves@archiver.kernel.org>; Fri, 28 May 2021 06:24:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D33D5C4708C
+	for <linux-dwarves@archiver.kernel.org>; Fri, 28 May 2021 20:03:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3796B613D1
-	for <linux-dwarves@archiver.kernel.org>; Fri, 28 May 2021 06:24:45 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B079B6108E
+	for <linux-dwarves@archiver.kernel.org>; Fri, 28 May 2021 20:03:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230099AbhE1G0S (ORCPT
+        id S229635AbhE1UEx (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Fri, 28 May 2021 02:26:18 -0400
-Received: from smtp-out2.suse.de ([195.135.220.29]:38708 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229753AbhE1G0R (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Fri, 28 May 2021 02:26:17 -0400
-Received: from imap.suse.de (imap-alt.suse-dmz.suse.de [192.168.254.47])
-        (using TLSv1.2 with cipher ECDHE-ECDSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id A03F91FD2E;
-        Fri, 28 May 2021 06:24:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1622183082; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=7O16xmQehx80n7fVVBeuMQ81Au9qauhcCf9P3KVa6HM=;
-        b=dGed2PMDS6s5Tjfp2/y9GXu3gsBolu2eTmGGc1lndrnGRe/9lu9xconJyR/NWp+vFTyHia
-        ogcHIXMAiR/mnZBv7Z+x6U2SHwqKo8mXjsmntR9KL/ABoDbN3Ic0Nq80OTIoqsRafLvdhD
-        aP4owL9u2LALkxnsBpQ0pUzQjhF319Q=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1622183082;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=7O16xmQehx80n7fVVBeuMQ81Au9qauhcCf9P3KVa6HM=;
-        b=djEs2zWPnsnI0YOR+Ds9bPwCWxyQOF1MFxYLghSYNHo0acdrwkzj7uJBsLeo0xP6RBe6aa
-        iAxG7WR/wwDO51AA==
-Received: from director2.suse.de (director2.suse-dmz.suse.de [192.168.254.72])
-        by imap.suse.de (Postfix) with ESMTPSA id 8570611A98;
-        Fri, 28 May 2021 06:24:42 +0000 (UTC)
-Date:   Fri, 28 May 2021 08:24:41 +0200
-From:   Michal =?iso-8859-1?Q?Such=E1nek?= <msuchanek@suse.de>
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Andrii Nakryiko <andrii@kernel.org>, dwarves@vger.kernel.org,
-        bpf@vger.kernel.org, jolsa@kernel.org, kernel-team@fb.com
-Subject: Re: [PATCH dwarves] btf_encoder: fix and complete filtering out
- zero-sized per-CPU variables
-Message-ID: <20210528062441.GJ8544@kitsune.suse.cz>
-References: <20210524234222.278676-1-andrii@kernel.org>
- <YK+yzpPKVhNvm7/n@kernel.org>
- <YK+zkOOAUzFYsLBy@kernel.org>
- <20210527152758.GI8544@kitsune.suse.cz>
- <YK+8/lg7ZUJIH7Kv@kernel.org>
- <YK/NLcM9ww2eXlmT@kernel.org>
+        Fri, 28 May 2021 16:04:53 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38116 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229482AbhE1UEw (ORCPT <rfc822;dwarves@vger.kernel.org>);
+        Fri, 28 May 2021 16:04:52 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 8AB67613B5;
+        Fri, 28 May 2021 20:03:17 +0000 (UTC)
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 9B64E4011C; Fri, 28 May 2021 17:03:14 -0300 (-03)
+Received: from imap.gmail.com [64.233.190.109]
+        by quaco with IMAP (fetchmail-6.4.16)
+        for <acme@localhost> (single-drop); Fri, 28 May 2021 16:47:07 -0300 (-03)
+Received: from quaco.ghostprotocols.net ([179.97.37.151]) by smtp.gmail.com
+ with ESMTPSA id x9sm3887986qto.33.2021.05.28.12.45.36 (version=TLS1_3
+ cipher=TLS_AES_256_GCM_SHA384 bits=256/256); Fri, 28 May 2021 12:45:36 -0700
+ (PDT)
+From:   Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
+X-Google-Original-From: Arnaldo Carvalho de Melo <acme@kernel.org>
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000) id
+ D1D934011C; Fri, 28 May 2021 16:45:31 -0300 (-03)
+Date:   Fri, 28 May 2021 16:45:31 -0300
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Arnaldo <arnaldo.melo@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Michal =?iso-8859-1?Q?Such=E1nek?= <msuchanek@suse.de>,
+        dwarves@vger.kernel.org, bpf <bpf@vger.kernel.org>,
+        Kernel Team <kernel-team@fb.com>,
+        Michael Petlan <mpetlan@redhat.com>
+Subject: Re: [RFT] Testing 1.22
+Message-ID: <YLFIW9fd9ZqbR3B9@kernel.org>
+References: <YK+41f972j25Z1QQ@kernel.org>
+ <CAEf4BzaTP_jULKMN_hx6ZOqwESOmsR6_HxWW-LnrA5xwRNtSWg@mail.gmail.com>
+ <4615C288-2CFD-483E-AB98-B14A33631E2F@gmail.com>
+ <CAEf4BzaQmv1+1bPF=1aO3dcmNu2Mx0EFhK+ZU6UFsMjv3v6EZA@mail.gmail.com>
+ <4901AF88-0354-428B-9305-2EDC6F75C073@gmail.com>
+ <CAEf4BzZk8bcSZ9hmFAmgjbrQt0Yj1usCHmuQTfU-pwZkYQgztA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YK/NLcM9ww2eXlmT@kernel.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <CAEf4BzZk8bcSZ9hmFAmgjbrQt0Yj1usCHmuQTfU-pwZkYQgztA@mail.gmail.com>
+X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-On Thu, May 27, 2021 at 01:47:41PM -0300, Arnaldo Carvalho de Melo wrote:
-> Em Thu, May 27, 2021 at 12:38:38PM -0300, Arnaldo Carvalho de Melo escreveu:
-> > Em Thu, May 27, 2021 at 05:27:58PM +0200, Michal Suchánek escreveu:
-> > > Hello,
-> > > 
-> > > On Thu, May 27, 2021 at 11:58:24AM -0300, Arnaldo Carvalho de Melo wrote:
-> > > > Em Thu, May 27, 2021 at 11:55:10AM -0300, Arnaldo Carvalho de Melo escreveu:
-> > > > > Em Mon, May 24, 2021 at 04:42:22PM -0700, Andrii Nakryiko escreveu:
-> > > > > > btf_encoder is ignoring zero-sized per-CPU ELF symbols, but the same has to be
-> > > > > > done for DWARF variables when matching them with ELF symbols. This is due to
-> > > > > > zero-sized DWARF variables matching unrelated (non-zero-sized) variable that
-> > > > > > happens to be allocated at the exact same address, leading to a lot of
-> > > > > > confusion in BTF.
-> > > > >  
-> > > > > > See [0] for when this causes big problems.
-> > > > >  
-> > > > > >   [0] https://lore.kernel.org/bpf/CAEf4BzZ0-sihSL-UAm21JcaCCY92CqfNxycHRZYXcoj8OYb=wA@mail.gmail.com/
-> > > > 
-> > > > I also added this:
-> > > > 
-> > > > Reported-by: Michal Suchánek <msuchanek@suse.de>
-> > > > 
-> > > > Michal, so you tested this patch and verified it fixed the problem? If
-> > > > so please let me know so that I also add:
-> > > 
-> > > This is the first time I see this patch.
-> > > 
-> > > Given that linux-next does not build for me at the moment
-> > > I don't think I will test it soon.
-> > 
-> > Ok, I'm test building with torvalds/master, will try with linux-next
-> > afterwards,
-> 
-> I build and booted torvalds/master, all seems to work, now moving to
-> linux-next.
+Em Thu, May 27, 2021 at 01:41:13PM -0700, Andrii Nakryiko escreveu:
+> On Thu, May 27, 2021 at 12:57 PM Arnaldo <arnaldo.melo@gmail.com> wrote:
+> > On May 27, 2021 4:14:17 PM GMT-03:00, Andrii Nakryiko <andrii.nakryiko@gmail.com> wrote:
+> > >If we make 1.22 mandatory there will be no good reason to make 1.23
+> > >mandatory again. So I will have absolutely no inclination to work on
+> > >this, for example. So we are just wasting a chance to clean up the
+> > >Kbuild story w.r.t. pahole. And we are talking about just a few days
+> > >at most, while we do have a reasonable work around on the kernel side.
 
-[    9s] /usr/bin/qemu-kvm -nodefaults -no-reboot -nographic -vga none -cpu host -object rng-random,filename=/dev/random,id=rng0 -device virtio-rng-pci,rng=rng0 -runas qemu -net none -kernel /var/cache/obs/worker/root_2/.mount/boot/kernel -initrd /var/cache/obs/worker/root_2/.mount/boot/initrd -append root=/dev/disk/by-id/virtio-0 rootfstype=ext4 rootflags=noatime ext4.allow_unsupported=1 mitigations=off panic=1 quiet no-kvmclock elevator=noop nmi_watchdog=0 rw rd.driver.pre=binfmt_misc console=ttyS0 init=/.build/build -m 8192 -drive file=/var/cache/obs/worker/root_2/root,format=raw,if=none,id=disk,cache=unsafe -device virtio-blk-pci,drive=disk,serial=0 -drive file=/var/cache/obs/worker/root_2/swap,format=raw,if=none,id=swap,cache=unsafe -device virtio-blk-pci,drive=swap,serial=1 -serial stdio -chardev socket,id=monitor,server,nowait,path=/var/cache/obs/worker/root_2/root.qemu/monitor -mon chardev=monitor,mode=readline -smp 8
-[    9s] c[?7l[2J[0mSeaBIOS (version rel-1.14.0-0-g155821a-rebuilt.opensuse.org)
-[   15s] Booting from ROM..c[?7l[2J### VM INTERACTION END ###
-[   15s] 2nd stage started in virtual machine
-[   15s] machine type: x86_64
-[   15s] Linux version: 5.13.0-rc3-next-2[    5.210478] sysrq: Changing Loglevel
-[   15s] 0210526-2.g3bd43[    5.211566] sysrq: Loglevel set to 4
-[   15s] 9f-vanilla #1 SMP Thu May 27 18:27:17 UTC 2021 (3bd439f)
-[   15s] Increasing log level from now on...
-[   15s] Enable sysrq operations
-[   15s] Setting up swapspace version 1, size = 2 GiB (2097147904 bytes)
-[   15s] no label, UUID=6e22796c-6df5-4859-a291-24acde2e92e5
-[   15s] swapon: /dev/vdb: found signature [pagesize=4096, signature=swap]
-[   15s] swapon: /dev/vdb: pagesize=4096, swapsize=2097152000, devsize=2097152000
-[   15s] swapon /dev/vdb
-[   15s] WARNING: udev not running, creating extra device nodes
-[   15s] logging output to //.build.log...
+> > So there were patches for stop using objcopy, which we thought could
+> > uncover some can of worms, were there patches for the detached BTF
+> > file?
+ 
+> No, there weren't, if I remember correctly. What's the concern,
+> though? That detached BTF file isn't even an ELF, so it's
+> btf__get_raw_data() and write it to the file. Done.
 
-next-20210527 does not build becuase of missing symbol but next-20210526 built with the patched pahole boots.
+See patch below, lightly tested, now working on making pahole accept raw
+BTF files out of /sys/kernel/btf/
 
-Tested-by: Michal Suchánek <msuchanek@suse.de>
+Please test, and if works as expected, try to bolt this into the kbuild
+process, as intended.
 
-Thanks
+- Arnaldo
 
-Michal
->  
-> > Thanks,
-> > 
-> > - Arnaldo
-> >  
-> > > Thanks
-> > > 
-> > > Michal
-> > > 
-> > > > 
-> > > > Tested-by: Michal Suchánek <msuchanek@suse.de>
-> > > > 
-> > > > Thanks,
-> > > > 
-> > > > - Arnaldo
-> > > >  
-> > > > > > +++ b/btf_encoder.c
-> > > > > > @@ -550,6 +551,7 @@ int cu__encode_btf(struct cu *cu, int verbose, bool force,
-> > > > > >  
-> > > > > >  		/* addr has to be recorded before we follow spec */
-> > > > > >  		addr = var->ip.addr;
-> > > > > > +		dwarf_name = variable__name(var, cu);
-> > > > > >  
-> > > > > >  		/* DWARF takes into account .data..percpu section offset
-> > > > > >  		 * within its segment, which for vmlinux is 0, but for kernel
-> > > > > > @@ -582,11 +584,9 @@ int cu__encode_btf(struct cu *cu, int verbose, bool force,
-> > > > > >  		 *  modules per-CPU data section has non-zero offset so all
-> > > > > >  		 *  per-CPU symbols have non-zero values.
-> > > > > >  		 */
-> > > > > > -		if (var->ip.addr == 0) {
-> > > > > > -			dwarf_name = variable__name(var, cu);
-> > > > > > +		if (var->ip.addr == 0)
-> > > > > >  			if (!dwarf_name || strcmp(dwarf_name, name))
-> > > > > >  				continue;
-> > > > > > -		}
-> > > > > >  
-> > > > > >  		if (var->spec)
-> > > > > >  			var = var->spec;
-> > > > > > @@ -600,6 +600,13 @@ int cu__encode_btf(struct cu *cu, int verbose, bool force,
-> > > > > 
-> > > > > I just changed the above hunk to be:
-> > > > > 
-> > > > > @@ -583,7 +585,6 @@ int cu__encode_btf(struct cu *cu, int verbose, bool force,
-> > > > >                  *  per-CPU symbols have non-zero values.
-> > > > >                  */
-> > > > >                 if (var->ip.addr == 0) {
-> > > > > -                       dwarf_name = variable__name(var, cu);
-> > > > >                         if (!dwarf_name || strcmp(dwarf_name, name))
-> > > > >                                 continue;
-> > > > >                 }
-> > > > > 
-> > > > > 
-> > > > > Which is shorter and keeps the {} around a multi line if block, ok?
-> > > > > 
-> > > > > Thanks, applied!
-> > > > > 
-> > > > > - Arnaldo
-> > > > 
-> > > > -- 
-> > > > 
-> > > > - Arnaldo
-> > 
-> > -- 
-> > 
-> > - Arnaldo
-> 
-> -- 
-> 
-> - Arnaldo
+commit b579a18a1ea0ee84b90b5302f597dda2edf2f61b
+Author: Arnaldo Carvalho de Melo <acme@redhat.com>
+Date:   Fri May 28 16:41:30 2021 -0300
+
+    pahole: Allow encoding BTF into a detached file
+    
+    Previously the newly encoded BTF info was stored into a ELF section in
+    the file where the DWARF info was obtained, but it is useful to just
+    dump it into a separate file, do it.
+    
+    Requested-by: Andrii Nakryiko <andrii@kernel.org>
+    Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+
+diff --git a/btf_encoder.c b/btf_encoder.c
+index 033c927b537dad1e..bc3ac72968cea826 100644
+--- a/btf_encoder.c
++++ b/btf_encoder.c
+@@ -21,6 +21,14 @@
+ #include <stdlib.h> /* for qsort() and bsearch() */
+ #include <inttypes.h>
+ 
++#include <sys/types.h>
++#include <sys/stat.h>
++#include <fcntl.h>
++
++#include <unistd.h>
++
++#include <errno.h>
++
+ /*
+  * This corresponds to the same macro defined in
+  * include/linux/kallsyms.h
+@@ -267,14 +275,62 @@ static struct btf_elf *btfe;
+ static uint32_t array_index_id;
+ static bool has_index_type;
+ 
+-int btf_encoder__encode()
++static int btf_encoder__dump(struct btf *btf, const char *filename)
++{
++	uint32_t raw_btf_size;
++	const void *raw_btf_data;
++	int fd, err;
++
++	/* Empty file, nothing to do, so... done! */
++	if (btf__get_nr_types(btf) == 0)
++		return 0;
++
++	if (btf__dedup(btf, NULL, NULL)) {
++		fprintf(stderr, "%s: btf__dedup failed!\n", __func__);
++		return -1;
++	}
++
++	raw_btf_data = btf__get_raw_data(btf, &raw_btf_size);
++	if (raw_btf_data == NULL) {
++                fprintf(stderr, "%s: btf__get_raw_data failed!\n", __func__);
++		return -1;
++	}
++
++	fd = open(filename, O_WRONLY | O_CREAT);
++	if (fd < 0) {
++                fprintf(stderr, "%s: Couldn't open %s for writing the raw BTF info: %s\n", __func__, filename, strerror(errno));
++		return -1;
++	}
++	err = write(fd, raw_btf_data, raw_btf_size);
++	if (err < 0)
++                fprintf(stderr, "%s: Couldn't open %s for writing the raw BTF info: %s\n", __func__, filename, strerror(errno));
++
++	close(fd);
++
++	if (err != raw_btf_size) {
++                fprintf(stderr, "%s: Could only write %d bytes to %s of raw BTF info out of %d, aborting\n", __func__, err, filename, raw_btf_size);
++		unlink(filename);
++		err = -1;
++	} else {
++		/* go from bytes written == raw_btf_size to an indication that all went fine */
++		err = 0;
++	}
++
++	return err;
++}
++
++int btf_encoder__encode(const char *filename)
+ {
+ 	int err;
+ 
+ 	if (gobuffer__size(&btfe->percpu_secinfo) != 0)
+ 		btf_elf__add_datasec_type(btfe, PERCPU_SECTION, &btfe->percpu_secinfo);
+ 
+-	err = btf_elf__encode(btfe, 0);
++	if (filename == NULL)
++		err = btf_elf__encode(btfe, 0);
++	else
++		err = btf_encoder__dump(btfe->btf, filename);
++
+ 	delete_functions();
+ 	btf_elf__delete(btfe);
+ 	btfe = NULL;
+@@ -412,7 +468,7 @@ static bool has_arg_names(struct cu *cu, struct ftype *ftype)
+ }
+ 
+ int cu__encode_btf(struct cu *cu, int verbose, bool force,
+-		   bool skip_encoding_vars)
++		   bool skip_encoding_vars, const char *detached_btf_filename)
+ {
+ 	uint32_t type_id_off;
+ 	uint32_t core_id;
+@@ -425,7 +481,7 @@ int cu__encode_btf(struct cu *cu, int verbose, bool force,
+ 	btf_elf__force = force;
+ 
+ 	if (btfe && strcmp(btfe->filename, cu->filename)) {
+-		err = btf_encoder__encode();
++		err = btf_encoder__encode(detached_btf_filename);
+ 		if (err)
+ 			goto out;
+ 
+diff --git a/btf_encoder.h b/btf_encoder.h
+index 46fb2312fc0eea9b..bfc6085092028adc 100644
+--- a/btf_encoder.h
++++ b/btf_encoder.h
+@@ -11,9 +11,9 @@
+ 
+ struct cu;
+ 
+-int btf_encoder__encode();
++int btf_encoder__encode(const char *filename);
+ 
+ int cu__encode_btf(struct cu *cu, int verbose, bool force,
+-		   bool skip_encoding_vars);
++		   bool skip_encoding_vars, const char *detached_btf_filename);
+ 
+ #endif /* _BTF_ENCODER_H_ */
+diff --git a/man-pages/pahole.1 b/man-pages/pahole.1
+index 2659fe6f231405d8..6e7ded59595f5ea7 100644
+--- a/man-pages/pahole.1
++++ b/man-pages/pahole.1
+@@ -189,6 +189,10 @@ features such as BPF CO-RE (Compile Once - Run Everywhere).
+ 
+ See \fIhttps://nakryiko.com/posts/bpf-portability-and-co-re/\fR.
+ 
++.TP
++.B \-j, \-\-btf_encode_detached=FILENAME
++Same thing as -J/--btf_encode, but storing the raw BTF info into a separate file.
++
+ .TP
+ .B \-\-btf_encode_force
+ Ignore those symbols found invalid when encoding BTF.
+diff --git a/pahole.c b/pahole.c
+index 24659e2969c8fb85..1cbff6175b60af51 100644
+--- a/pahole.c
++++ b/pahole.c
+@@ -26,6 +26,7 @@
+ #include "lib/bpf/src/libbpf.h"
+ #include "pahole_strings.h"
+ 
++static char *detached_btf_filename;
+ static bool btf_encode;
+ static bool ctf_encode;
+ static bool first_obj_only;
+@@ -1152,6 +1153,12 @@ static const struct argp_option pahole__options[] = {
+ 		.key  = 'J',
+ 		.doc  = "Encode as BTF",
+ 	},
++	{
++		.name = "btf_encode_detached",
++		.key  = 'j',
++		.arg  = "FILENAME",
++		.doc  = "Encode as BTF in a detached file",
++	},
+ 	{
+ 		.name = "skip_encoding_btf_vars",
+ 		.key  = ARGP_skip_encoding_btf_vars,
+@@ -1223,6 +1230,7 @@ static error_t pahole__options_parser(int key, char *arg,
+ 		  conf_load.extra_dbg_info = 1;		break;
+ 	case 'i': find_containers = 1;
+ 		  class_name = arg;			break;
++	case 'j': detached_btf_filename = arg; // fallthru
+ 	case 'J': btf_encode = 1;
+ 		  conf_load.get_addr_info = true;
+ 		  no_bitfield_type_recode = true;	break;
+@@ -2458,7 +2466,7 @@ static enum load_steal_kind pahole_stealer(struct cu *cu,
+ 
+ 	if (btf_encode) {
+ 		if (cu__encode_btf(cu, global_verbose, btf_encode_force,
+-				   skip_encoding_btf_vars)) {
++				   skip_encoding_btf_vars, detached_btf_filename)) {
+ 			fprintf(stderr, "Encountered error while encoding BTF.\n");
+ 			exit(1);
+ 		}
+@@ -2872,7 +2880,7 @@ try_sole_arg_as_class_names:
+ 	header = NULL;
+ 
+ 	if (btf_encode) {
+-		err = btf_encoder__encode();
++		err = btf_encoder__encode(detached_btf_filename);
+ 		if (err) {
+ 			fputs("Failed to encode BTF\n", stderr);
+ 			goto out_cus_delete;
