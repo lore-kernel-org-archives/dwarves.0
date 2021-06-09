@@ -2,98 +2,109 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-6.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D5024C47095
-	for <linux-dwarves@archiver.kernel.org>; Wed,  9 Jun 2021 04:10:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A1FB9C48BCF
+	for <linux-dwarves@archiver.kernel.org>; Wed,  9 Jun 2021 16:07:14 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B245D60240
-	for <linux-dwarves@archiver.kernel.org>; Wed,  9 Jun 2021 04:10:25 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 82324613AC
+	for <linux-dwarves@archiver.kernel.org>; Wed,  9 Jun 2021 16:07:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230117AbhFIEMS (ORCPT
+        id S233137AbhFIQJI (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Wed, 9 Jun 2021 00:12:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42782 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229910AbhFIEMS (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Wed, 9 Jun 2021 00:12:18 -0400
-Received: from nautica.notk.org (ipv6.notk.org [IPv6:2001:41d0:1:7a93::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B53AC061574
-        for <dwarves@vger.kernel.org>; Tue,  8 Jun 2021 21:10:24 -0700 (PDT)
-Received: by nautica.notk.org (Postfix, from userid 108)
-        id 32A0EC01E; Wed,  9 Jun 2021 06:10:22 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1623211822; bh=lfgk+zx17cbxRrKTuWbKSU//4jZ5idn35zLvcnKr7x4=;
+        Wed, 9 Jun 2021 12:09:08 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47266 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229740AbhFIQJI (ORCPT <rfc822;dwarves@vger.kernel.org>);
+        Wed, 9 Jun 2021 12:09:08 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 97EDE61377;
+        Wed,  9 Jun 2021 16:07:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1623254833;
+        bh=dsWbfpFp9RRvAcp4ppUs877KPYIdLY/pNdDE95P+UBY=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=itXMpco0FFWndgwHyOE8cCmD16EReko+Ooft+QtfqCIA5yfCGAVZKqaAxMushxeeq
-         7vtt9M6q5sTK/qSgqQL34JHCVZKUo2zqp5UVtwDaH8+B3kK/jGvIjvh/BySZ9DnLwr
-         ngMrfr0wOMf5r/hVeYQrVHj2yC/eF/1iuS9yZHYeG+qG5alxvGYgVEIiZPeUP543JV
-         aq9myC4V4sSpADMF6j0nYAAORpOaqnwsw/kJxqjk6dfC5A7t5LLcRkijUhCFOiDAR0
-         S72PjW6ZHL+M0LQb0L+cMrg4ZqlMcdachyCiasU6XSZMZmJbAwU9f55JqlPmNDXkBr
-         72zQOBI6KUcXg==
-Received: from odin.codewreck.org (localhost [127.0.0.1])
-        by nautica.notk.org (Postfix) with ESMTPS id 4E35DC01A;
-        Wed,  9 Jun 2021 06:10:20 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1623211821; bh=lfgk+zx17cbxRrKTuWbKSU//4jZ5idn35zLvcnKr7x4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Ukr/0gxBymGrlZ/wB/Zdc3gMAZM8ppwdph9hYI+I60JaSf2UU6HuPIU8e6Mf7bokc
-         gpWDxIFpbDOqPzwutduv4K+VimN5jwA+agaXOr4VQNaG09SXdGkLZJxiWJiZj92d5S
-         aID7BIoDygT6JNxDBYJuRIEtX0cd69a9iJx7eNC8NXuiD0lSQO+YK5PQIE1aeyrdhg
-         AozNm3E4kz4As1SI9caaBk07/Daotnro3C1V+84Vuhq1l3s0TDat0alkHEwk8j6E3g
-         PdHHdx56icNhBcxLaH5EVgZ9rm7Hm8qXgOoEyFjEzydXVR/WLdmNamh4JOaRNrUpt6
-         Y4yL776KV9f3A==
-Received: from localhost (odin.codewreck.org [local])
-        by odin.codewreck.org (OpenSMTPD) with ESMTPA id 98789ca2;
-        Wed, 9 Jun 2021 04:10:17 +0000 (UTC)
-Date:   Wed, 9 Jun 2021 13:10:01 +0900
-From:   Dominique Martinet <asmadeus@codewreck.org>
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>
-Cc:     Luca Boccassi <bluca@debian.org>, dwarves@vger.kernel.org
-Subject: Re: [PATCH dwarves v3] libbpf: allow to use packaged version
-Message-ID: <YMA/GSmX0ZDoGEZg@codewreck.org>
-References: <20210104221622.256663-1-bluca@debian.org>
- <YGKtSXsLg4HV7eHL@codewreck.org>
- <YGM/x6Ohchorg2cf@kernel.org>
- <YGPK5WxS51eVKguU@codewreck.org>
- <ca59c536e2dc66f6cb02f57d40b65702f7414ea9.camel@debian.org>
- <056f75e00fe796e3a9d634ec03afdf0a416fd9a0.camel@debian.org>
+        b=jw50CjkH/6iYchOEq7ARoz1L545rtAzLuI2/vovpKU6l9HoCGNdAYRb3l8+gzQ4xP
+         CsAr1On/sUxvB5bqwmC18gMAB+MAjj3gac3zh4fKgHGnNpKPlsmudL7nG/vO4zXVIW
+         3rQV3CXGB4dPUF5Vn28lpwLDmR5KXvz/i+wWpai85m1wVg4STpakAvA3Fa5m09II1a
+         MnCE9/7hQfl86SVlQFetgDG9hBQp62AYb/ZWFgujZuHPsXABvGYx4CvzUVvpPmNOKV
+         zHK6Att9pwNRZqMduHLAUVqoTEwjP/41BvoMGwmS3NFCZOyDS99Yj/QHWBADmgF7Lh
+         xCK31SYMWnX0w==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id C463C40B1A; Wed,  9 Jun 2021 13:07:10 -0300 (-03)
+Date:   Wed, 9 Jun 2021 13:07:10 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Luca Boccassi <bluca@debian.org>
+Cc:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        dwarves@vger.kernel.org
+Subject: Re: [PATCH dwarves] libbpf: allow to use packaged version
+Message-ID: <YMDnLoL3H7bo3HOv@kernel.org>
+References: <20210102182201.122619-1-bluca@debian.org>
+ <CAEf4Bzb3jtv4+KBRNOzfERWyx_4Wh_m7xRrWcc7nAgoXi+yW-Q@mail.gmail.com>
+ <9809e2cd737edb9c70954b99bdf4ce874844965b.camel@debian.org>
+ <CAEf4BzarBG3HnxTiCpum9i31cTTdqDKWnHeV4zbRrUgs2V1Rpw@mail.gmail.com>
+ <20210115152915.GA457607@kernel.org>
+ <c3a211f0bef8aed1c097f13f0a178f838dc5f520.camel@debian.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <056f75e00fe796e3a9d634ec03afdf0a416fd9a0.camel@debian.org>
+In-Reply-To: <c3a211f0bef8aed1c097f13f0a178f838dc5f520.camel@debian.org>
+X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-Hello Arnaldo,
-
-Luca Boccassi wrote on Tue, May 18, 2021 at 03:07:50PM +0100:
-> On Tue, 2021-04-13 at 14:42 +0100, Luca Boccassi wrote:
->>>>> Would you take the patch back in if I somehow fix rpmbuild with a libbpf
->>>>> package installed on fedora33?
->>>> 
->>>> Sure. I had it merged, as, IIRC, it was a opt-in procedure.
->>> 
->>> Yes, strictly opt-in and shouldn't affect developers or people building
->>> from git without explicitly requiring to use the system's version.
->> 
->> Any update on this?
+Em Fri, Jan 15, 2021 at 03:40:34PM +0000, Luca Boccassi escreveu:
+> On Fri, 2021-01-15 at 12:29 -0300, Arnaldo Carvalho de Melo wrote:
+> > Em Mon, Jan 04, 2021 at 12:23:25PM -0800, Andrii Nakryiko escreveu:
+> > > On Sun, Jan 3, 2021 at 1:30 PM Luca Boccassi <bluca@debian.org> wrote:
+> > > > On Sun, 2021-01-03 at 11:10 -0800, Andrii Nakryiko wrote:
+> > > > > On Sat, Jan 2, 2021 at 10:25 AM Luca Boccassi <bluca@debian.org>
+> > > > > wrote:
+> > > > > > Add a new CMake option, LIBBPF_EMBEDDED, to switch between the
+> > > > > > embedded version and the system version (searched via pkg-config)
+> > > > > > of libbpf. Set the system version as the default.
+> > > > > > 
+> > > > > 
+> > > > > There's been a lot of arguments about libbpf as a submodule, so I
+> > > > > don't think we need to go about pros and cons again, but I just
+> > > > > wanted
+> > > > > to cast my vote against doing this at all. Having pahole built with
+> > > > > libbpf statically (only) was a great thing for me so far with
+> > > > > iterating quickly and adopting new APIs without overcomplicating the
+> > > > > source code with all sorts of feature detection code. Without it,
+> > > > > adopting libbpf's faster string deduplication, BTF writing APIs,
+> > > > > module/split BTFs, etc, etc, would be much bigger PITA and/or would
+> > > > > prolong such changes. To the point that I personally wouldn't bother
+> > > > > with some of them at all. Distro maintainers obviously don't care
+> > > > > about such inconveniences for developers, but it's a real factor in
+> > > > > determining what kind of functionality is implemented in pahole, so I
+> > > > > hope Arnaldo won't dismiss this without thinking about this
+> > > > > carefully.
+> > 
+> > Hey, having tools/perf/ and tools/lib/perf, tools/lib/bpf, etc all in
+> > one place is really nice :-)
+> > 
+> > > > You know very well that it's not about caring or not caring :-) There
+> > > > are simply conflicting interests, and both sides are valid.
+> >  
+> > > I didn't mean it in a negative way. Different priorities and interests
+> > > is a better way to put it, sure.
+> > 
+> > I think the default should be submodules as we're still very much in
+> > flux, adding new features, etc.
+> > 
+> > Disto maintainers can make sure they know what they're doing when making
+> > tools use libbpf as a separate package.
 > 
-> Gentle ping. Anything we can do to help?
+> Sure, v3 has the option as default-disabled already, not a problem at
+> all.
 
-I know we're being annoying, but would really appreciate if you could
-find some time to look at this again.
+Does this mean that if I have libbpf-devel installed in my system the
+default build will _not_ link with it?
 
-I couldn't reproduce any build failure in various combinaisons on fedora
-so would either need more input from you on how to reproduce or maybe it
-was just a flake?
-Either way please let us know if there's anything we can do.
+I have libbpf-devel installed in my machine but, by default, I _don't_
+want pahole to build with it, libbpf-devel is there for other needs.
 
-Thanks,
--- 
-Dominique
+- Arnaldo
