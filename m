@@ -2,227 +2,296 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 57AB3C48BE0
-	for <linux-dwarves@archiver.kernel.org>; Fri, 11 Jun 2021 20:09:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9F5FFC48BE0
+	for <linux-dwarves@archiver.kernel.org>; Fri, 11 Jun 2021 22:17:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 43F3D613DE
-	for <linux-dwarves@archiver.kernel.org>; Fri, 11 Jun 2021 20:09:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 80D8461181
+	for <linux-dwarves@archiver.kernel.org>; Fri, 11 Jun 2021 22:17:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231273AbhFKULf (ORCPT
+        id S229985AbhFKWTq (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Fri, 11 Jun 2021 16:11:35 -0400
-Received: from mail-yb1-f182.google.com ([209.85.219.182]:41785 "EHLO
-        mail-yb1-f182.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230312AbhFKULe (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Fri, 11 Jun 2021 16:11:34 -0400
-Received: by mail-yb1-f182.google.com with SMTP id q21so5947913ybg.8;
-        Fri, 11 Jun 2021 13:09:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=G/KK1UkJoUDfQz9VUZNipcPN0tXnhdyhUBVyjUBjLDE=;
-        b=jyf/fach7pCHoFlg55mWK1l94NOFYGXJNA3pcfBBHw7MjiWiGEqnYVYZiqgddvzxUn
-         xj5u6W1Zhuc2H3cZfFFyUEdrGygz1rku/HzOv8G8MezSuWrKA9aY0nQiFmqGe6o8xzog
-         p6frvitZeYGLHgP4up8xDELDxZ9odbu5LsRLOmPPsW3kuyu1HU4FE4O0mj4oUZ/DTtHn
-         LFr2YQ9+74GYMy7CEidpQMHV9YK/+rXmZ4qAQ5YAByZRgcFDFmTawqkBjieoBORzt/eB
-         GaAKzi/eGO90puOzo2on2ajw7X7U+33xTLBnDoU7mYmCIeoUtbyisPyHo1WCtrKMb5AR
-         xoKg==
+        Fri, 11 Jun 2021 18:19:46 -0400
+Received: from mail-wm1-f49.google.com ([209.85.128.49]:38477 "EHLO
+        mail-wm1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229777AbhFKWTp (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Fri, 11 Jun 2021 18:19:45 -0400
+Received: by mail-wm1-f49.google.com with SMTP id t4-20020a1c77040000b029019d22d84ebdso9439751wmi.3;
+        Fri, 11 Jun 2021 15:17:32 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=G/KK1UkJoUDfQz9VUZNipcPN0tXnhdyhUBVyjUBjLDE=;
-        b=NxkDROXrEB8B4kbKXoiaGKFWWCKbL8e7E6yV3BC/hGG/M5NROkl/Y70R8SKWSIiacR
-         H2xEZy/19sdk4CwitAZ5cMma6cuYhza8+kc+g9eHbYtEeD/OviElVmVAt2H1GFjTFLLe
-         DfK0Eu/RMgQ0Oc5drLxbA2WIi4qfTRfE8dgjghPis1mgOwGnXOQgXH9nD/uWDZL/E6iW
-         pjV4AR/RuWHE9LAbKCkbcbrHiYBxhpkWNq1GBHKUnKbBODKEr11wezYARiI5xy/qCL2h
-         dtZeZL0cgDBPaaAG0LLjjB1N/Ge9Dc/NeDZ3fvTd+g+Ezeq9VdGPWagyNpBnHTblTZME
-         Ctjg==
-X-Gm-Message-State: AOAM530Nj+4qq1pAXQC4pz0uijWcZXssA50lIM25h8nyuyb8sYet9RVM
-        3jFBl6rWnw/wisA873v9X6eaGa0AxCHXRPDkktc=
-X-Google-Smtp-Source: ABdhPJzCmnyiT9W+7Y1XLIqL6aviwLODbIKZ4H7nNrod5w/gbtIBkkSmAjwNF2MzfrMWIg5GHDcjYJHDS7m0DgG1yr8=
-X-Received: by 2002:a25:ba06:: with SMTP id t6mr8135994ybg.459.1623442104718;
- Fri, 11 Jun 2021 13:08:24 -0700 (PDT)
-MIME-Version: 1.0
-References: <cover.1623091959.git.deepakkumar.mishra@arm.com>
- <70cb7cb534af9850dc5fe3c4b9f4366ce7dc6316.1623091959.git.deepakkumar.mishra@arm.com>
- <YMJMdQvCWHd5J0M1@kernel.org> <CAEf4BzZEmLbKtUMkbV4+3rDFrSwP9Eu-tO_GvYRgRvdsQqrWTQ@mail.gmail.com>
- <YMPA1T0Cuo7xw/Sp@kernel.org>
-In-Reply-To: <YMPA1T0Cuo7xw/Sp@kernel.org>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Fri, 11 Jun 2021 13:08:13 -0700
-Message-ID: <CAEf4BzYwf0fO5Y9pVKPg3TOwMcq-HneG-BGU8M+oAjMyhXBwQA@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] CMakeLists.txt: enable SHARED and STATIC lib creation
-To:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
-Cc:     Luca Boccassi <bluca@debian.org>,
-        Deepak Kumar Mishra <deepakkumar.mishra@arm.com>,
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version;
+        bh=q28/zhdS3ZOpv0uHECMF52ivM61tod9qoq4YBGF2uGg=;
+        b=FYXSkAr5w5HxEq0pj+YCDZJFmpR/8A0Yg8gwj2siVOwTDh6gBR7JBHLCsR65ZteUVh
+         /NZde94eij/dvILt5JUfT3kX9U7ET9Q3BYYhEIv0TJz7L+SlagoteA36nvniXXULYzXj
+         udk6Bc2/LJYxOdyIyG9fbeh9XU1eGMvoWeYTeESSVDiHPooJtOlTpCxBVMwCSGtNayrb
+         dIcN0OkwT1Iibhs2MxhB8xHhYVfkbjyf1xwvS56UJ+RTixqAVhpyRLSD7eKsXSm15UeR
+         W/S4S2lpUZlRjv/Uy+qwrbGbLWUz8nH2K6IwN5HMD4oXoHNz354GsOB8SFTyVg973MEw
+         aXcw==
+X-Gm-Message-State: AOAM53040NW+maHyKTwQ9x3PgUWQhoZm4nUDiWo/o6RyC7G4dGhnPRb0
+        bRStse6UmlWfuLQd/ZRkexM=
+X-Google-Smtp-Source: ABdhPJwnLN3/jliwarNg2VSkjmbO+kFKO1bSrjAA6SNVIaC/YB3pE3ArFOno0xD1tgrZRCULdZKu7g==
+X-Received: by 2002:a7b:c19a:: with SMTP id y26mr22043138wmi.132.1623449851696;
+        Fri, 11 Jun 2021 15:17:31 -0700 (PDT)
+Received: from localhost ([2a01:4b00:f41a:3600:df86:cebc:8870:2184])
+        by smtp.gmail.com with ESMTPSA id i15sm8232907wmq.23.2021.06.11.15.17.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Jun 2021 15:17:30 -0700 (PDT)
+Message-ID: <9b4bcb2372f00c9ffa1b3d5d30a84755d8a3896c.camel@debian.org>
+Subject: Re: [PATCH v2 1/2] CMakeLists.txt: enable SHARED and STATIC lib
+ creation
+From:   Luca Boccassi <bluca@debian.org>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
+Cc:     Deepak Kumar Mishra <deepakkumar.mishra@arm.com>,
         dwarves@vger.kernel.org, Qais Yousef <qais.yousef@arm.com>,
         Jiri Olsa <jolsa@kernel.org>, siudin@fb.com,
         bpf <bpf@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Date:   Fri, 11 Jun 2021 23:17:29 +0100
+In-Reply-To: <CAEf4BzYwf0fO5Y9pVKPg3TOwMcq-HneG-BGU8M+oAjMyhXBwQA@mail.gmail.com>
+References: <cover.1623091959.git.deepakkumar.mishra@arm.com>
+         <70cb7cb534af9850dc5fe3c4b9f4366ce7dc6316.1623091959.git.deepakkumar.mishra@arm.com>
+         <YMJMdQvCWHd5J0M1@kernel.org>
+         <CAEf4BzZEmLbKtUMkbV4+3rDFrSwP9Eu-tO_GvYRgRvdsQqrWTQ@mail.gmail.com>
+         <YMPA1T0Cuo7xw/Sp@kernel.org>
+         <CAEf4BzYwf0fO5Y9pVKPg3TOwMcq-HneG-BGU8M+oAjMyhXBwQA@mail.gmail.com>
+Content-Type: multipart/signed; micalg="pgp-sha512";
+        protocol="application/pgp-signature"; boundary="=-lWMhlaSJ+kovHpe6J6vg"
+User-Agent: Evolution 3.38.3-1 
+MIME-Version: 1.0
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
+
+--=-lWMhlaSJ+kovHpe6J6vg
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+On Fri, 2021-06-11 at 13:08 -0700, Andrii Nakryiko wrote:
 On Fri, Jun 11, 2021 at 1:00 PM Arnaldo Carvalho de Melo
 <arnaldo.melo@gmail.com> wrote:
->
+>=20
 > Em Fri, Jun 11, 2021 at 12:34:13PM -0700, Andrii Nakryiko escreveu:
 > > On Thu, Jun 10, 2021 at 10:31 AM Arnaldo Carvalho de Melo
 > > <arnaldo.melo@gmail.com> wrote:
-> > >
-> > > Em Tue, Jun 08, 2021 at 12:50:13AM +0530, Deepak Kumar Mishra escreve=
-u:
-> > > > CMakeLists.txt does not allow creation of static library and link a=
-pplications
+> > >=20
+> > > Em Tue, Jun 08, 2021 at 12:50:13AM +0530, Deepak Kumar Mishra
+> > > escreveu:
+> > > > CMakeLists.txt does not allow creation of static library and
+> > > > link applications
 > > > > accordingly.
-> > > >
-> > > > Creation of SHARED and STATIC should be allowed using -DBUILD_SHARE=
-D_LIBS
-> > > > If -DBUILD_SHARED_LIBS option is not supplied, CMakeLists.txt sets =
-it to ON.
-> > > >
+> > > >=20
+> > > > Creation of SHARED and STATIC should be allowed using -
+> > > > DBUILD_SHARED_LIBS
+> > > > If -DBUILD_SHARED_LIBS option is not supplied, CMakeLists.txt
+> > > > sets it to ON.
+> > > >=20
 > > > > Ex:
 > > > > cmake -D__LIB=3Dlib -DBUILD_SHARED_LIBS=3DOFF ..
 > > > > cmake -D__LIB=3Dlib -DBUILD_SHARED_LIBS=3DON ..
-> > >
-> > > Had to do some fixups due to a previous patch touching CMakeLists.txt=
-,
+> > >=20
+> > > Had to do some fixups due to a previous patch touching
+> > > CMakeLists.txt,
 > > > please check below.
-> > >
+> > >=20
 > > > I tested it and added some performance notes.
-> >
+> >=20
 > > Hey Arnaldo, Deepak,
-> >
-> > I think this commit actually breaks libbpf's CI (see [0]) and my local
+> >=20
+> > I think this commit actually breaks libbpf's CI (see [0]) and my
+> > local
 > > setup as well (see output below). It seems like now we are using
-> > system-wide libbpf headers, while still building local libbpf sources.
-> > This is pretty bad because system-wide headers might be too old or
+> > system-wide libbpf headers, while still building local libbpf
+> > sources.
+> > This is pretty bad because system-wide headers might be too old
+> > or
 > > just missing.
->
+>=20
 > I can't check this right now, but isn't this related to this one
 > instead?
 
 Heh, I beat you by 5 minutes ;)
 
->
-> commit ae2581647e84948810ba209f3891359dd4540110 (quaco/master, quaco/HEAD=
-, acme/tmp.master)
-> Author: Luca Boccassi <bluca@debian.org>
-> Date:   Mon Jan 4 22:16:22 2021 +0000
->
->     libbpf: Allow to use packaged version
->
->     Add a new CMake option, LIBBPF_EMBEDDED, to switch between the embedd=
-ed
->     version and the system version (searched via pkg-config) of libbpf. S=
-et
->     the embedded version as the default.
->
->  -------
->
-> I can't look at this right now, will try probably tomorrow.
->
-> Andrii, I would love to be able to stage this somewhere, like I did with
-> tmp.master, so that it could go thru your CI before I moved to master,
-> is that possible?
 
-Yes, absolutely, we can pick whatever branch and use that to checkout
-and build pahole. It would be great, though, if you can keep an eye on
-kernel CI and/or libbpf CI breakages when you are pushing new changes
-to pahole. That would save everyone time and will shorten the downtime
-for our CIs.
+Hi,
 
-Here are the links where all the builds can be seen in real-time:
+This should not be the case - the local paths are added to CMake and
+should win, unless something is going wrong - which is of course
+possible. A quick build of the current tip of the master branch would
+seem to confirm things are working - building with -
+DLIBBPF_EMBEDDED=3Doff (which does force to use the system library, and
+defaults to on) the build fails, while building without any options on
+a new tree the build succeeds.
 
-  - kernel CI: https://travis-ci.com/github/kernel-patches/bpf/pull_request=
-s
-  - libbpf CI: https://travis-ci.com/github/libbpf/libbpf
+I'll fetch the script and try to reproduce, as it might be using other
+options - I assume it's this one, right?
 
+https://github.com/libbpf/libbpf/blob/master/travis-ci/vmtest/build_pahole.=
+sh
 
-Let me know which branch we should hard-code for staging.
+> >=20
+> > commit ae2581647e84948810ba209f3891359dd4540110 (quaco/master,
+> > quaco/HEAD, acme/tmp.master)
+> > Author: Luca Boccassi <bluca@debian.org>
+> > Date:=C2=A0=C2=A0 Mon Jan 4 22:16:22 2021 +0000
+> >=20
+> > =C2=A0=C2=A0=C2=A0 libbpf: Allow to use packaged version
+> >=20
+> > =C2=A0=C2=A0=C2=A0 Add a new CMake option, LIBBPF_EMBEDDED, to switch b=
+etween the
+> > embedded
+> > =C2=A0=C2=A0=C2=A0 version and the system version (searched via pkg-con=
+fig) of
+> > libbpf. Set
+> > =C2=A0=C2=A0=C2=A0 the embedded version as the default.
+> >=20
+> > =C2=A0-------
+> >=20
+> > I can't look at this right now, will try probably tomorrow.
+> >=20
+> > Andrii, I would love to be able to stage this somewhere, like I did
+> > with
+> > tmp.master, so that it could go thru your CI before I moved to
+> > master,
+> > is that possible?
+>=20
+> Yes, absolutely, we can pick whatever branch and use that to checkout
+> and build pahole. It would be great, though, if you can keep an eye
+> on
+> kernel CI and/or libbpf CI breakages when you are pushing new changes
+> to pahole. That would save everyone time and will shorten the
+> downtime
+> for our CIs.
+>=20
+> Here are the links where all the builds can be seen in real-time:
+>=20
+> =C2=A0 - kernel CI:=20
+> https://travis-ci.com/github/kernel-patches/bpf/pull_requests
+> =C2=A0 - libbpf CI: https://travis-ci.com/github/libbpf/libbpf
+>=20
+>=20
+> Let me know which branch we should hard-code for staging.
+>=20
+> >=20
+> > - Arnaldo
+> >=20
+> > > Is it possible to make sure that we always use local libbpf
+> > > headers
+> > > when building pahole with libbpf built from sources (the default
+> > > case,
+> > > right?). It's also important to use UAPI headers distributed with
+> > > libbpf when building libbpf itself, I don't know if that's what
+> > > is
+> > > done right now or not.
+> > >=20
+> > > Note how libbpf CI case shows that system-wide bpf/btf.h is not
+> > > available at all because we don't have system-wide libbpf
+> > > installed.
+> > > In my local case, you can see that my system-wide header is
+> > > outdated
+> > > and doesn't have BTF_LITTLE_ENDIAN/BTF_BIG_ENDIAN constants
+> > > defined in
+> > > libbpf.h.
+> > >=20
+> > > BTW, I tried -D__LIB=3Dlib -DBUILD_SHARED_LIBS=3DOFF options and they
+> > > didn't help. Maybe I'm doing something wrong.
+> > >=20
+> > > =C2=A0 [0]=20
+> > > https://travis-ci.com/github/kernel-patches/bpf/builds/228673352
+> > >=20
+> > >=20
+> > > $ make -j60
+> > > -- Setting BUILD_SHARED_LIBS =3D ON
+> > > -- Checking availability of DWARF and ELF development libraries
+> > > -- Checking availability of DWARF and ELF development libraries -
+> > > done
+> > > -- Configuring done
+> > > -- Generating done
+> > > -- Build files have been written to:
+> > > /home/andriin/local/pahole/build
+> > >=20
+> > > ....
+> > >=20
+> > > /home/andriin/local/pahole/btf_encoder.c:900:28: error:
+> > > =E2=80=98BTF_LITTLE_ENDIAN=E2=80=99 undeclared (first use in this fun=
+ction)
+> > > =C2=A0=C2=A0 btf__set_endianness(btf, BTF_LITTLE_ENDIAN);
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0 ^
+> > > /home/andriin/local/pahole/btf_encoder.c:900:28: note: each
+> > > undeclared
+> > > identifier is reported only once for each function it appears in
+> > > /home/andriin/local/pahole/btf_encoder.c:903:28: error:
+> > > =E2=80=98BTF_BIG_ENDIAN=E2=80=99 undeclared (first use in this functi=
+on)
+> > > =C2=A0=C2=A0 btf__set_endianness(btf, BTF_BIG_ENDIAN);
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0 ^
+> > > ...
+> > >=20
+> > >=20
+> > > >=20
+> > > > Thanks!
+> > > >=20
+> > > > - Arnaldo
+> > > >=20
+> > > > commit aa2027708659f172780f85698f14303c7de6a1d2
+> > > > Author: Deepak Kumar Mishra <deepakkumar.mishra@arm.com>
+> > > > Date:=C2=A0=C2=A0 Tue Jun 8 00:50:13 2021 +0530
+> > > >=20
+> > > > =C2=A0=C2=A0=C2=A0 CMakeLists.txt: Enable SHARED and STATIC lib cre=
+ation
+> > > >=20
+> > > > =C2=A0=C2=A0=C2=A0 CMakeLists.txt does not allow creation of static=
+ library
+> > > > and link applications
+> > > > =C2=A0=C2=A0=C2=A0 accordingly.
+> > > >=20
+> > > > =C2=A0=C2=A0=C2=A0 Creation of SHARED and STATIC should be allowed =
+using -
+> > > > DBUILD_SHARED_LIBS
+> > > > =C2=A0=C2=A0=C2=A0 If -DBUILD_SHARED_LIBS option is not supplied,
+> > > > CMakeLists.txt sets it to ON.
+> > > >=20
+> > > > =C2=A0=C2=A0=C2=A0 Ex:
+> > > >=20
+> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 $ cmake -D__LIB=3Dlib -DBUILD_SHARED=
+_LIBS=3DOFF ..
+> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 $ cmake -D__LIB=3Dlib -DBUILD_SHARED=
+_LIBS=3DON ..
+> > > >=20
+> > >=20
+> > > [...]
+> >=20
+> > --
+> >=20
+> > - Arnaldo
 
->
-> - Arnaldo
->
-> > Is it possible to make sure that we always use local libbpf headers
-> > when building pahole with libbpf built from sources (the default case,
-> > right?). It's also important to use UAPI headers distributed with
-> > libbpf when building libbpf itself, I don't know if that's what is
-> > done right now or not.
-> >
-> > Note how libbpf CI case shows that system-wide bpf/btf.h is not
-> > available at all because we don't have system-wide libbpf installed.
-> > In my local case, you can see that my system-wide header is outdated
-> > and doesn't have BTF_LITTLE_ENDIAN/BTF_BIG_ENDIAN constants defined in
-> > libbpf.h.
-> >
-> > BTW, I tried -D__LIB=3Dlib -DBUILD_SHARED_LIBS=3DOFF options and they
-> > didn't help. Maybe I'm doing something wrong.
-> >
-> >   [0] https://travis-ci.com/github/kernel-patches/bpf/builds/228673352
-> >
-> >
-> > $ make -j60
-> > -- Setting BUILD_SHARED_LIBS =3D ON
-> > -- Checking availability of DWARF and ELF development libraries
-> > -- Checking availability of DWARF and ELF development libraries - done
-> > -- Configuring done
-> > -- Generating done
-> > -- Build files have been written to: /home/andriin/local/pahole/build
-> >
-> > ....
-> >
-> > /home/andriin/local/pahole/btf_encoder.c:900:28: error:
-> > =E2=80=98BTF_LITTLE_ENDIAN=E2=80=99 undeclared (first use in this funct=
-ion)
-> >    btf__set_endianness(btf, BTF_LITTLE_ENDIAN);
-> >                             ^
-> > /home/andriin/local/pahole/btf_encoder.c:900:28: note: each undeclared
-> > identifier is reported only once for each function it appears in
-> > /home/andriin/local/pahole/btf_encoder.c:903:28: error:
-> > =E2=80=98BTF_BIG_ENDIAN=E2=80=99 undeclared (first use in this function=
-)
-> >    btf__set_endianness(btf, BTF_BIG_ENDIAN);
-> >                             ^
-> > ...
-> >
-> >
-> > >
-> > > Thanks!
-> > >
-> > > - Arnaldo
-> > >
-> > > commit aa2027708659f172780f85698f14303c7de6a1d2
-> > > Author: Deepak Kumar Mishra <deepakkumar.mishra@arm.com>
-> > > Date:   Tue Jun 8 00:50:13 2021 +0530
-> > >
-> > >     CMakeLists.txt: Enable SHARED and STATIC lib creation
-> > >
-> > >     CMakeLists.txt does not allow creation of static library and link=
- applications
-> > >     accordingly.
-> > >
-> > >     Creation of SHARED and STATIC should be allowed using -DBUILD_SHA=
-RED_LIBS
-> > >     If -DBUILD_SHARED_LIBS option is not supplied, CMakeLists.txt set=
-s it to ON.
-> > >
-> > >     Ex:
-> > >
-> > >       $ cmake -D__LIB=3Dlib -DBUILD_SHARED_LIBS=3DOFF ..
-> > >       $ cmake -D__LIB=3Dlib -DBUILD_SHARED_LIBS=3DON ..
-> > >
-> >
-> > [...]
->
-> --
->
-> - Arnaldo
+--=20
+Kind regards,
+Luca Boccassi
+
+--=-lWMhlaSJ+kovHpe6J6vg
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEE6g0RLAGYhL9yp9G8SylmgFB4UWIFAmDD4PkACgkQSylmgFB4
+UWJS5Qf+OdvJcBEkSr/F1Y8HFfWpyMZCaY2JW77iQUlomo+0ZhY/88RxDA9A0ue0
+/iH0oFrO55Ea9phgwXhl5e3FvXA1gSjdGl7KisNBQX3ysuKiFqupeFi3I8uGHM+X
+un1DeItJGwomry+vdpeaCr9vI06rtPp8f77PAY/MBAqmTj69BoNal7LAF72DBYV8
+nPr617+6oPpIWjS8mjBR0rMXxi7+Gn0BiiNx4SSi73+F/4XsQo/pHiCDaWwD8EK8
+weq85X/MOsgj7b0egvhybcI1iWJBayh4uBd51Jb5nXsab1P0W0MteMxdxYigbMVp
+bXTW/5qXxLo02aeSsN0ymTGDgsgFag==
+=fK4h
+-----END PGP SIGNATURE-----
+
+--=-lWMhlaSJ+kovHpe6J6vg--
