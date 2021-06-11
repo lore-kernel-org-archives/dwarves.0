@@ -2,195 +2,162 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8D815C48BD1
-	for <linux-dwarves@archiver.kernel.org>; Fri, 11 Jun 2021 23:07:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DE598C48BE5
+	for <linux-dwarves@archiver.kernel.org>; Fri, 11 Jun 2021 23:42:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6EFA1613EE
-	for <linux-dwarves@archiver.kernel.org>; Fri, 11 Jun 2021 23:07:54 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C9105613A9
+	for <linux-dwarves@archiver.kernel.org>; Fri, 11 Jun 2021 23:42:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230281AbhFKXJw (ORCPT
+        id S230352AbhFKXou (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Fri, 11 Jun 2021 19:09:52 -0400
-Received: from mail-wr1-f50.google.com ([209.85.221.50]:39627 "EHLO
-        mail-wr1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230232AbhFKXJw (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Fri, 11 Jun 2021 19:09:52 -0400
-Received: by mail-wr1-f50.google.com with SMTP id l2so7599003wrw.6;
-        Fri, 11 Jun 2021 16:07:45 -0700 (PDT)
+        Fri, 11 Jun 2021 19:44:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35180 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230349AbhFKXou (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Fri, 11 Jun 2021 19:44:50 -0400
+Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F06DCC061574
+        for <dwarves@vger.kernel.org>; Fri, 11 Jun 2021 16:42:35 -0700 (PDT)
+Received: by mail-yb1-xb2d.google.com with SMTP id c14so6604198ybk.3
+        for <dwarves@vger.kernel.org>; Fri, 11 Jun 2021 16:42:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=zc+oJaGzyOSolAmOr0AtAODuJ5sQzTx5Mzcu0w6Qhy4=;
+        b=Jjt6J9o9s+FggL+zvYj29XgceS/om4/tsgFALzEE7UQdnmgUtrK//ooVuA+EYLsQfp
+         gVjU3VnFpgfKtWM3jxVeRUA4DrqwTd3BqGaOTK1zYM1dFS14fP/nXzKxMpGsWH5yflNs
+         Ud8g0ZyKJaJLPnaR3S1sSZFjaV8SSy3BefXGxihTF+tmq3kT0v11D/ZjZhEwl9E0tYhC
+         qQhrnWHtMAfasJrBz+Cy0c+x5ELESwnU1BpW6wSA0bq12EWHaxE4VrklRLhJJdG0sGVe
+         LcGhci8A/+1/ZYIvijr4+BqPoUe25dopf0qPBlAmPFTPnJGAxJ3PBlVpw+eIIDR4JAJ1
+         NwQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:user-agent:mime-version;
-        bh=UBBOkc9o734y28P+O9GPSYXenZ3BfhRXqmmB5JSahao=;
-        b=IY8SCLBXm3eAPK6HoFLylHL1zdBlTZTTEWlfJIWUTkswzKwqALx9wb4o4ub+ZmAMEs
-         R57e9arPFvjdE2x2rwCDmPKrH26WLlmd2eDht3LDo3TOapjl72EqEixlbzP6p7BcE5O4
-         xMEvXsi9t5f+xMqIX3hXhM7f0a/BZuwf25MnWhKBx5w32AmAGMjZ3bmV1d1UlM0dLCt7
-         4jAYKmm75Jwfd8YA00v/cLKBSKx1YeFfX/Q29nlvacMSR2lVPi2cjWjXG+b0pD/Vu/73
-         5EzbsiqkT5TWMhn8dbAGX2/IgyO26H7yJ98lur8QRIae+Nnj/WWy/940oAZ/fzwklQWA
-         hhig==
-X-Gm-Message-State: AOAM533ScLTYVl1f1QXdju0X0fGAywqARrzxfvfv7gvl3kblrM4VEvVi
-        8FlVtmxiYLco1GBy/z7DDDip1Y291GzqSQ==
-X-Google-Smtp-Source: ABdhPJy7knEyPi25GvfvM6eB7+Xq3hl+OulYK9wmuOV+AE9CBBXZ3D/OoD9oXYwK6fjbANtUeWQtVQ==
-X-Received: by 2002:adf:9c93:: with SMTP id d19mr6312208wre.17.1623452864445;
-        Fri, 11 Jun 2021 16:07:44 -0700 (PDT)
-Received: from localhost ([2a01:4b00:f41a:3600:df86:cebc:8870:2184])
-        by smtp.gmail.com with ESMTPSA id s1sm14042833wmj.8.2021.06.11.16.07.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Jun 2021 16:07:43 -0700 (PDT)
-Message-ID: <4ec3aa68d7f608dd6f389e3ef192b5f86c71e93b.camel@debian.org>
-Subject: Re: [PATCH v2 1/2] CMakeLists.txt: enable SHARED and STATIC lib
- creation
-From:   Luca Boccassi <bluca@debian.org>
-To:     dwarves@vger.kernel.org
-Cc:     Dominique Martinet <asmadeus@codewreck.org>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
-        Deepak Kumar Mishra <deepakkumar.mishra@arm.com>,
-        Qais Yousef <qais.yousef@arm.com>,
-        Jiri Olsa <jolsa@kernel.org>, siudin@fb.com,
-        bpf <bpf@vger.kernel.org>
-Date:   Sat, 12 Jun 2021 00:07:42 +0100
-In-Reply-To: <YMPpfzNCSE8DxvOA@codewreck.org>
-References: <cover.1623091959.git.deepakkumar.mishra@arm.com>
-         <70cb7cb534af9850dc5fe3c4b9f4366ce7dc6316.1623091959.git.deepakkumar.mishra@arm.com>
-         <YMJMdQvCWHd5J0M1@kernel.org>
-         <CAEf4BzZEmLbKtUMkbV4+3rDFrSwP9Eu-tO_GvYRgRvdsQqrWTQ@mail.gmail.com>
-         <YMPA1T0Cuo7xw/Sp@kernel.org>
-         <CAEf4BzYwf0fO5Y9pVKPg3TOwMcq-HneG-BGU8M+oAjMyhXBwQA@mail.gmail.com>
-         <9b4bcb2372f00c9ffa1b3d5d30a84755d8a3896c.camel@debian.org>
-         <49ebd74aac20b3896996c3b1fdcc14e35c7a05ec.camel@debian.org>
-         <8471df5c1e5aa52bedb032b2fcb3b6ce7722de6b.camel@debian.org>
-         <YMPpfzNCSE8DxvOA@codewreck.org>
-Content-Type: multipart/signed; micalg="pgp-sha512";
-        protocol="application/pgp-signature"; boundary="=-8soL2UZdMzAlbXbzUxW/"
-User-Agent: Evolution 3.38.3-1 
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=zc+oJaGzyOSolAmOr0AtAODuJ5sQzTx5Mzcu0w6Qhy4=;
+        b=KGdGlpSUGGnNeCna8N4PoMCxGijtbe4UqselV4IofU5UdYH8NVXMJgDZKNBKROQv14
+         DK9yM9W2jcbFCEAO6FY/SLVARAH93Bj31mmlTpNsjNR+D03FycBnJsMWdSSSkgKzY9VL
+         p+5ThPD3yFJVOIcXjxopEa+ujYr5Pz8DhdVNHiD+2Tu6JIiVnKYNkUHFVUoL3vz+3Wu/
+         /QeBl8tdpgoz9wa/63TueYH8WhtsCJJE6Hd1bGw1+UmecyrspbuU/IOZJlyEDNKRNaCD
+         F0GjV782b1PuaMkLb8cI2jQkaXZ0Fija3AhAAXAHd+IsjPLPLxRhk9jT20h7zCgSzXAY
+         7KgQ==
+X-Gm-Message-State: AOAM533IDN6EWt5cYBLBwF9ZM+MYU8EKJelG/h7El+PS0gfp+tWSOYLP
+        7ppkos/XRrpuNzQH0xH2hh5kZznD052qGb2Y9sgzQ9k9KJyN/g==
+X-Google-Smtp-Source: ABdhPJzl6CHwW/p9mSyEJypIaSQCIJkSdYlt5GFiG4qLOnsv/1bocftgr/7QgVybvXijBuoJuXAfyV0fitvASXozJZ4=
+X-Received: by 2002:a5b:f05:: with SMTP id x5mr8977218ybr.425.1623454955216;
+ Fri, 11 Jun 2021 16:42:35 -0700 (PDT)
 MIME-Version: 1.0
+References: <20210611230126.57713-1-bluca@debian.org>
+In-Reply-To: <20210611230126.57713-1-bluca@debian.org>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Fri, 11 Jun 2021 16:42:24 -0700
+Message-ID: <CAEf4BzYTSd1PvreyK8gsdL6=XPPqELQpz7DYAc-B=cH7L0QDKQ@mail.gmail.com>
+Subject: Re: [PATCH dwarves] Add missing lib/include/bpf -> ../bpf/src symlink
+To:     Luca Boccassi <bluca@debian.org>
+Cc:     dwarves@vger.kernel.org,
+        Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
+On Fri, Jun 11, 2021 at 4:03 PM Luca Boccassi <bluca@debian.org> wrote:
+>
+> The original "libbpf: allow to use packaged version" had a symlink
+> as suggested during review:
+>
+> https://www.spinics.net/lists/dwarves/msg00738.html
+>
+> git show 82749180b23d3c9c060108bc290ae26507fc324e -- lib/include
+> commit 82749180b23d3c9c060108bc290ae26507fc324e
+> Author: Luca Boccassi <bluca@debian.org>
+> Date:   Mon Jan 4 22:16:22 2021 +0000
+>
+>     libbpf: allow to use packaged version
+>
+>     Add a new CMake option, LIBBPF_EMBEDDED, to switch between the
+>     embedded version and the system version (searched via pkg-config)
+>     of libbpf. Set the embedded version as the default.
+>
+>     Signed-off-by: Luca Boccassi <bluca@debian.org>
+>     Cc: dwarves@vger.kernel.org
+>     Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+>
+> diff --git a/lib/include/bpf b/lib/include/bpf
+> new file mode 120000
+> index 0000000..4c41b71
+> --- /dev/null
+> +++ b/lib/include/bpf
+> @@ -0,0 +1 @@
+> +../bpf/src
+> \ No newline at end of file
+>
+> This patch was reverted, and then re-added manually.
+> But the re-add dropped the symlink, which causes the system bpf/btf.h
+> to be picked up instead of the local one. Re-add it.
+>
+> Signed-off-by: Luca Boccassi <bluca@debian.org>
+> ---
 
---=-8soL2UZdMzAlbXbzUxW/
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+This fixes the issue for me in my local setup:
 
-On Sat, 2021-06-12 at 07:53 +0900, Dominique Martinet wrote:
-> Luca Boccassi wrote on Fri, Jun 11, 2021 at 11:45:25PM +0100:
-> > Actually that was my mistake, used the wrong build tree (sorry,
-> > it's
-> > late!). I can however reproduce the issue in a chroot running the
-> > libbpf CI script. Still looking.
->=20
-> with the ci script I get
->=20
-> $ /usr/lib64/ccache/cc -DDWARVES_MAJOR_VERSION=3D1 -
-> DDWARVES_MINOR_VERSION=3D21 -D_GNU_SOURCE -Ddwarves_EXPORTS -
-> I/path/to/pahole/build -I/path/to/pahole -
-> I/path/to/pahole/lib/include -I/path/to/pahole/lib/bpf/include/uapi -
-> D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=3D64 -O2 -g -DNDEBUG -fPIC -MD
-> -MT CMakeFiles/dwarves.dir/btf_encoder.c.o -MF
-> CMakeFiles/dwarves.dir/btf_encoder.c.o.d -o
-> CMakeFiles/dwarves.dir/btf_encoder.c.o -c
-> /path/to/pahole/btf_encoder.c
-> /path/to/pahole/btf_encoder.c: In function =E2=80=98btf_encoder__add_floa=
-t=E2=80=99:
-> /path/to/pahole/btf_encoder.c:224:22: warning: implicit declaration
-> of function =E2=80=98btf__add_float=E2=80=99; did you mean =E2=80=98btf__=
-add_var=E2=80=99? [-
-> Wimplicit-function-declaration]
-> =C2=A0 224 |=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 int32_t id =
-=3D btf__add_float(encoder->btf, name,
-> BITS_ROUNDUP_BYTES(bt->bit_size));
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0 ^~~~~~~~~~~~~~
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0 btf__add_var
->=20
->=20
->=20
-> with btf__add_float defined in .../pahole/lib/bpf/src/btf.h
-> and btf_encoder.c including linux/btf.h
->=20
->=20
-> changing btf_loader.c to include bpf/btf.h instead fixes the issue
-> for me:
->=20
-> diff --git a/btf_loader.c b/btf_loader.c
-> index 75ec674b3b3e..272c73bca7fe 100644
-> --- a/btf_loader.c
-> +++ b/btf_loader.c
-> @@ -20,7 +20,7 @@
-> =C2=A0#include <string.h>
-> =C2=A0#include <limits.h>
-> =C2=A0#include <libgen.h>
-> -#include <linux/btf.h>
-> +#include <bpf/btf.h>
-> =C2=A0#include <bpf/libbpf.h>
-> =C2=A0#include <zlib.h>
+Acked-by: Andrii Nakryiko <andrii@kernel.org>
 
-I've just sent a patch - the issue is that the original commit included
-a symlink lib/include/bpf -> ../bpf/src as suggested by Andrii here:
 
-https://www.spinics.net/lists/dwarves/msg00738.html
+Arnaldo,
 
-git show 82749180b23d3c9c060108bc290ae26507fc324e -- lib/include
-    commit 82749180b23d3c9c060108bc290ae26507fc324e
-    Author: Luca Boccassi <bluca@debian.org>
-    Date:   Mon Jan 4 22:16:22 2021 +0000
-   =20
-        libbpf: allow to use packaged version
-   =20
-        Add a new CMake option, LIBBPF_EMBEDDED, to switch between the
-        embedded version and the system version (searched via pkg-config)
-        of libbpf. Set the embedded version as the default.
-   =20
-        Signed-off-by: Luca Boccassi <bluca@debian.org>
-        Cc: dwarves@vger.kernel.org
-        Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
-   =20
-    diff --git a/lib/include/bpf b/lib/include/bpf
-    new file mode 120000
-    index 0000000..4c41b71
-    --- /dev/null
-    +++ b/lib/include/bpf
-    @@ -0,0 +1 @@
-    +../bpf/src
-    \ No newline at end of file
+Locally I have still another issue, which I don't believe is related
+to Luca's changes. I get this error:
 
-When the patch was reverted and re-added, the symlink was dropped.
+$ make -j60
+[ 25%] Built target bpf
+[ 26%] Building C object CMakeFiles/dwarves.dir/btf_encoder.c.o
+In file included from /usr/include/sys/stat.h:106:0,
+                 from /home/andriin/local/pahole/btf_encoder.c:24:
+/usr/include/bits/stat.h:106:31: error: expected identifier or =E2=80=98(=
+=E2=80=99
+before =E2=80=98[=E2=80=99 token
+     __syscall_slong_t __unused[3];
+                               ^
+/usr/include/bits/stat.h:164:31: error: expected identifier or =E2=80=98(=
+=E2=80=99
+before =E2=80=98[=E2=80=99 token
+     __syscall_slong_t __unused[3];
+                               ^
+make[2]: *** [CMakeFiles/dwarves.dir/btf_encoder.c.o] Error 1
+make[1]: *** [CMakeFiles/dwarves.dir/all] Error 2
+make: *** [all] Error 2
 
-It stayed in my local tree, and I completely missed it - that's why the
-build was working fine for me! D'oh!
-Adding the symlink back fixes the build with the libbpf CI script. I
-would be grateful if folks who are seeing the issue could apply the
-patch (or create the symlink) and confirm whether it fixes the problem
-or not. Thanks!
 
---=20
-Kind regards,
-Luca Boccassi
+I think it's some new interplay with dutil.h header defining its own
 
---=-8soL2UZdMzAlbXbzUxW/
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part
+#define __unused __attribute__ ((unused))
 
------BEGIN PGP SIGNATURE-----
+Given __unused is used in vmlinux.h and /usr/include/bits/stat.h as
+field names, I think it would be better to rename __unused macro
+within pahole source code to avoid such confusing problems.
 
-iQEzBAABCgAdFiEE6g0RLAGYhL9yp9G8SylmgFB4UWIFAmDD7L4ACgkQSylmgFB4
-UWKrJQgAl4Q0Y6gRGPqSydzQr5byoICSzzetlIltEHnM6pK6DZVeGkh0Uz0ioujr
-nxGVK56cCCpKdWsj/AgcbSihCkDg5PNBlvIux7AmYrcPcQvMXmJXboz+5FEWP3Px
-b42UCiKkThTsNqvZ8CVueLwfj7maj7GATMo08UW/0WchCUnXMQRRXWCoPHNfT2zl
-or4dlrLHOho31IfrLZGtcBOXlk59CEPYTFk5gNiMcOuirNbsAPPFegbTwWK1yYtk
-od3Cu3WYJ+hPitywDCiZL0S546kIQ4TtHLsBKRH8WC0p8oXoQwBHjCth6FutVuwM
-lIJmHnYyEnC6NbbdidQbIFSPNEBNEA==
-=iHCA
------END PGP SIGNATURE-----
 
---=-8soL2UZdMzAlbXbzUxW/--
+>  lib/include/bpf | 1 +
+>  1 file changed, 1 insertion(+)
+>  create mode 120000 lib/include/bpf
+>
+> diff --git a/lib/include/bpf b/lib/include/bpf
+> new file mode 120000
+> index 0000000..4c41b71
+> --- /dev/null
+> +++ b/lib/include/bpf
+> @@ -0,0 +1 @@
+> +../bpf/src
+> \ No newline at end of file
+> --
+> 2.30.2
+>
