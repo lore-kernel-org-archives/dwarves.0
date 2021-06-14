@@ -2,81 +2,90 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 96C4AC48BE8
-	for <linux-dwarves@archiver.kernel.org>; Sun, 13 Jun 2021 13:47:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6F66EC2B9F4
+	for <linux-dwarves@archiver.kernel.org>; Mon, 14 Jun 2021 18:34:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 687A461153
-	for <linux-dwarves@archiver.kernel.org>; Sun, 13 Jun 2021 13:47:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 31CFC611EE
+	for <linux-dwarves@archiver.kernel.org>; Mon, 14 Jun 2021 18:34:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231920AbhFMNts (ORCPT
+        id S232994AbhFNSg6 (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Sun, 13 Jun 2021 09:49:48 -0400
-Received: from mail-wr1-f45.google.com ([209.85.221.45]:42809 "EHLO
-        mail-wr1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231747AbhFMNts (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Sun, 13 Jun 2021 09:49:48 -0400
-Received: by mail-wr1-f45.google.com with SMTP id c5so11375920wrq.9
-        for <dwarves@vger.kernel.org>; Sun, 13 Jun 2021 06:47:47 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=SsV6m+6Fn86C7TWz5DK2bUOOI3kv6Z2newO7qAn0PiQ=;
-        b=CjHzHsas+XAR69oOthtC/MV7LxGmbAUQoFJrVtz+PcYVNw1aElVPXitlxtpsopyCeA
-         0763Epbhne1Re/0pnUchHmf0n6wcWdYkpfG7RHf4cb4yAprd8/vNB9zwPiu23e8T6QPF
-         2UbDTsou7Z0XsbN0+Cn+ORI7bDGHOSUHTCY8OOzwEFjibqT6R/qr66gHgIu3DDknX5/R
-         VIg1zQ33mGdwgJ/qCaluxD4cXugY5Js9xEHpieFQtN3B3Zs+BDM8BKXbg0WjqZG7AxXT
-         yKfErNSpoXIj/nNaU992GtxiqdyFT8DfizQJknclN7kK+8JF49AZqwmUDOztZTplQ3VJ
-         OXyQ==
-X-Gm-Message-State: AOAM532G++RPKsLY/LUbPDwnM8vauXrcZdtBkN63EnQK9n56yfk9yJqg
-        fPt5UwOc4j40z7Uc1nk4GZld9n8kN2PmdQ==
-X-Google-Smtp-Source: ABdhPJxk5OsEVoYjgmJ3KRR4unn4lUWnOzF/UvkzzjCZwVSdPsQzLwzDhnPtJzddBwjpwxHWX2ZLcQ==
-X-Received: by 2002:a5d:46c4:: with SMTP id g4mr14572655wrs.308.1623592066409;
-        Sun, 13 Jun 2021 06:47:46 -0700 (PDT)
-Received: from localhost ([2a01:4b00:f41a:3600:df86:cebc:8870:2184])
-        by smtp.gmail.com with ESMTPSA id n13sm15302391wrg.75.2021.06.13.06.47.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 13 Jun 2021 06:47:45 -0700 (PDT)
-From:   Luca Boccassi <bluca@debian.org>
-To:     dwarves@vger.kernel.org
-Cc:     arnaldo.melo@gmail.com
-Subject: [PATCH dwarves 2/2] libbpf: bump dependency to >= 0.4.0
-Date:   Sun, 13 Jun 2021 14:47:06 +0100
-Message-Id: <20210613134706.26933-2-bluca@debian.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210613134706.26933-1-bluca@debian.org>
+        Mon, 14 Jun 2021 14:36:58 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51236 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232802AbhFNSg6 (ORCPT <rfc822;dwarves@vger.kernel.org>);
+        Mon, 14 Jun 2021 14:36:58 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 3D5C0611CE;
+        Mon, 14 Jun 2021 18:34:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1623695695;
+        bh=TrGPNh3IQQEM5DznM6w4yUAyGwjjOFFcE8HgnxN9I3k=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=O/7WWmcZQ4s8o6DADN37AMGjrqDqSzqC2+K2lcNqgmOtQtklnGCxTnSmbtJCGvmlX
+         h+7wUpdtFYMzH7/5w2xnLT3GBqJ24dC2fmWt5dy+NCHbDwHkgTncM4Ka7WimLZH7HZ
+         g1nGFMIlqfgOrvazY7PCQ8VuCS8uk3hmpnOGOu6PFkT3Cp7lHrnNGBSnGozZZ4Kn+0
+         /kD0XawOljR33FNLkTvpDQD4CXSyeYrQ5TREMcmwsDzLv1IO8EDKKWgnOuINskK+AM
+         P5XxJ9CF+27oBBscfi2Y5fvdLC3IHD6VBJY8sNORjzfVUSHOoeOgSi9OwZ3zDqYiE4
+         keDq1MqKBx+Qw==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 1292840B1A; Mon, 14 Jun 2021 15:34:53 -0300 (-03)
+Date:   Mon, 14 Jun 2021 15:34:53 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Luca Boccassi <bluca@debian.org>
+Cc:     dwarves@vger.kernel.org, arnaldo.melo@gmail.com
+Subject: Re: [PATCH dwarves 1/2] libbpf: if LIBBPF_EMBEDDED=OFF and
+ libbpf-dev/pkgconfig is not available, fail the build
+Message-ID: <YMehTcngoc2d6fSg@kernel.org>
 References: <20210613134706.26933-1-bluca@debian.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210613134706.26933-1-bluca@debian.org>
+X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-Required for the new API btf__add_float()
+Em Sun, Jun 13, 2021 at 02:47:05PM +0100, Luca Boccassi escreveu:
+> If using the system library was explicitly requested, ensure it is present
+> and fail the build if it is not, rather than falling back to the
+> embedded version (same for pkg-config).
 
-Signed-off-by: Luca Boccassi <bluca@debian.org>
----
- CMakeLists.txt | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 0f967d1..a8c0af8 100644
---- a/CMakeLists.txt
-+++ b/CMakeLists.txt
-@@ -6,7 +6,7 @@ option(LIBBPF_EMBEDDED "Use the embedded version of libbpf instead of searching
- if (NOT LIBBPF_EMBEDDED)
- 	find_package(PkgConfig REQUIRED)
- 	if(PKGCONFIG_FOUND)
--		pkg_check_modules(LIBBPF REQUIRED libbpf>=0.3.0)
-+		pkg_check_modules(LIBBPF REQUIRED libbpf>=0.4.0)
- 	endif()
- endif()
+Thanks, applied and tested both patches,
+
+- Arnaldo
  
--- 
-2.30.2
+> Signed-off-by: Luca Boccassi <bluca@debian.org>
+> ---
+>  CMakeLists.txt | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/CMakeLists.txt b/CMakeLists.txt
+> index 669ea59..0f967d1 100644
+> --- a/CMakeLists.txt
+> +++ b/CMakeLists.txt
+> @@ -4,9 +4,9 @@ cmake_policy(SET CMP0005 NEW)
+>  
+>  option(LIBBPF_EMBEDDED "Use the embedded version of libbpf instead of searching it via pkg-config" ON)
+>  if (NOT LIBBPF_EMBEDDED)
+> -	find_package(PkgConfig)
+> +	find_package(PkgConfig REQUIRED)
+>  	if(PKGCONFIG_FOUND)
+> -		pkg_check_modules(LIBBPF libbpf>=0.3.0)
+> +		pkg_check_modules(LIBBPF REQUIRED libbpf>=0.3.0)
+>  	endif()
+>  endif()
+>  
+> -- 
+> 2.30.2
+> 
 
+-- 
+
+- Arnaldo
