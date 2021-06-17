@@ -2,137 +2,102 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CBB61C2B9F4
-	for <linux-dwarves@archiver.kernel.org>; Thu, 17 Jun 2021 04:26:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 686F8C2B9F4
+	for <linux-dwarves@archiver.kernel.org>; Thu, 17 Jun 2021 14:48:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9A2A861159
-	for <linux-dwarves@archiver.kernel.org>; Thu, 17 Jun 2021 04:26:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 444F5613CA
+	for <linux-dwarves@archiver.kernel.org>; Thu, 17 Jun 2021 14:48:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229565AbhFQE2s (ORCPT
+        id S231854AbhFQOu7 (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Thu, 17 Jun 2021 00:28:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41516 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229546AbhFQE2r (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Thu, 17 Jun 2021 00:28:47 -0400
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34337C061574;
-        Wed, 16 Jun 2021 21:26:38 -0700 (PDT)
-Received: by mail-yb1-xb34.google.com with SMTP id i4so6274042ybe.2;
-        Wed, 16 Jun 2021 21:26:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=7vajil0LwVWhtg4ci7rYI9ZTuF5RlNqwdJCGUIVMam4=;
-        b=siMq/0LLPT7ZYeJXjnhFlPQd6OzkBa9Qi0z/WLbEM6eR8FT2zjlxXhYFV4Xnzl0g6b
-         xXr8YxHAJ+q86pp64SRPM4Dz6Yu1/cX50WMwzE7obYQ/8A2nmfM9+O5Omoxj66fPOJWT
-         dszFvW8v2EEdDV8FmfaWMOwOl0CociYArLyhyehaAwpbXR0C4J0M0tVyzt273zfe+91I
-         ZdBX3JRDq27CtPXB+0/6EM+hJLWeCX6hXZ3Ri/BHvhhQrAYwl4qJc5Jt9xPrwmjVPub3
-         Zh67NJf7ogllNCBHV8ssUo2cD3zagn+TJvh3pRHhsXQ732m+u7B0W1BOALLwrWOgYUwV
-         kuAQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=7vajil0LwVWhtg4ci7rYI9ZTuF5RlNqwdJCGUIVMam4=;
-        b=eVQKsjXNXGJcuEKzgNIqG/HdLcAShy4lYgVtcd5RR5ztLsXeFTUtpnnVoOBPGiW91u
-         PrXTMLyePGBF8m5p4+srB6ouroAFjTlBOevwJsKapynomLpVRv8ZH4qanPO8OzJdfmjZ
-         hB9+ZaQIr4cGbH1pGkaVe+1VBJRZ1VQhEh49sfzKceNwwIn0m+ED7jSi77Lnlydr/ZqB
-         vaVO+xhwNBpuXCjdOZM0V8/7smfqPjbNM+mq7YkOYMHIk6ksYCmOIxOAqPEZxvoIRWO+
-         0wym6h/84jC84mjHLa8PXeDrV48Kf84Xo84kem/F0CviQsd3tznEAdXrNAl6c2PdXInU
-         q63g==
-X-Gm-Message-State: AOAM533S8ITA9D8/+jV+l5OyNO51Dmgf2c9ZcEaIh/gAJdt3u12aoCrx
-        5b8gdbkBxJCgEh8+CPbMoo9iUgOQeX96wIfKvXM=
-X-Google-Smtp-Source: ABdhPJwH/6Oe2m9ohQDYdSNDYXV9AI6aXlOmAiu7cJM/WVqR1b2wWsgR+Iar93hwYSKJhCbu7Gv2nn7FK6aZDt3ILuA=
-X-Received: by 2002:a25:aa66:: with SMTP id s93mr3901969ybi.260.1623903997472;
- Wed, 16 Jun 2021 21:26:37 -0700 (PDT)
-MIME-Version: 1.0
-References: <CAEf4BzZnZN2mt4+5F-00ggO9YHWrL3Jru_u3Qt2JJ+SMkHwg+w@mail.gmail.com>
- <YMoRBvTdD0qzjYf4@kernel.org> <CAEf4BzZ7KDcsViCY8MbUZuWu2BdkjymkgJtyVUMBrCaiimUCxQ@mail.gmail.com>
- <YMpCDuEO/mItxdR7@kernel.org> <CAEf4BzYn31_93G_f924HR8dSW=oGqyFaneRa0fo5Btcg-Y2xJg@mail.gmail.com>
- <YMqURLBNxKgNpjTN@kernel.org>
-In-Reply-To: <YMqURLBNxKgNpjTN@kernel.org>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Wed, 16 Jun 2021 21:26:26 -0700
-Message-ID: <CAEf4BzZR-q6Bjm1QWZ77EPH7YzoC-BSM8tCc2VFQo6CRg3ZZrA@mail.gmail.com>
+        Thu, 17 Jun 2021 10:50:59 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54960 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231759AbhFQOu6 (ORCPT <rfc822;dwarves@vger.kernel.org>);
+        Thu, 17 Jun 2021 10:50:58 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id B7BED613E9;
+        Thu, 17 Jun 2021 14:48:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1623941330;
+        bh=diSD2DV+ZMSbg7QBx9qRA4lRHgK0oR6VJQGUEUYjj4A=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=opkK5Rty+mv8NbdpPEsQjyN1t2JTj02HtkNefuZ+uC7DScdpkGrr5n/rpVvBj4A6J
+         7ms+c9cBkuL/gkovXTfd4q32/TIWyLrXi74Kni3OiJcgWybEgut/QS74Kupa3QUjfU
+         WnbesIrb7O3zuhJKssszI2bJzb4BrGQN5di3JBxTe3M3jsNJOQ4M9u9fXyAOEbDML3
+         Nv+OVALG83VMOIOy2nHXwQamP7oE0326KB0XGcQu71SBf+RIShcxfuhQBEUEHp1IVz
+         M43v4ofF8KRvLsXEM+7/WMThsAVvqxmSJlTyNjsrPhaiEIW2IXdzZ+kXfgtwkyy2ue
+         e4GthMF48EH/A==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id DDE7140B1A; Thu, 17 Jun 2021 11:48:47 -0300 (-03)
+Date:   Thu, 17 Jun 2021 11:48:47 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Yonghong Song <yhs@fb.com>, bpf <bpf@vger.kernel.org>,
+        dwarves@vger.kernel.org, siudin@fb.com
 Subject: Re: latest pahole breaks libbpf CI and let's talk about staging
-To:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
-Cc:     bpf <bpf@vger.kernel.org>, dwarves@vger.kernel.org, siudin@fb.com
-Content-Type: text/plain; charset="UTF-8"
+Message-ID: <YMtgz+hcE/7iO7Ux@kernel.org>
+References: <CAEf4BzZnZN2mt4+5F-00ggO9YHWrL3Jru_u3Qt2JJ+SMkHwg+w@mail.gmail.com>
+ <YMoRBvTdD0qzjYf4@kernel.org>
+ <YMopYxHgmoNVd3Yl@kernel.org>
+ <YMph3VeKA1Met65X@kernel.org>
+ <CAEf4BzZmBbkU1WWLEsZG1yVMdt7CDcuHhRF8uoLqeamhef3bVQ@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAEf4BzZmBbkU1WWLEsZG1yVMdt7CDcuHhRF8uoLqeamhef3bVQ@mail.gmail.com>
+X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-On Wed, Jun 16, 2021 at 5:16 PM Arnaldo Carvalho de Melo
-<arnaldo.melo@gmail.com> wrote:
->
-> Em Wed, Jun 16, 2021 at 03:38:38PM -0700, Andrii Nakryiko escreveu:
-> > On Wed, Jun 16, 2021 at 11:25 AM Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com> wrote:
-> > > Em Wed, Jun 16, 2021 at 10:40:45AM -0700, Andrii Nakryiko escreveu:
-> > > > On Wed, Jun 16, 2021 at 7:56 AM Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com> wrote:
-> > > > > Em Tue, Jun 15, 2021 at 04:30:03PM -0700, Andrii Nakryiko escreveu:
-> > > > > > Hey Arnaldo,
->
-> > > > > > Seems like de3a7f912559 ("btf_encoder: Reduce the size of encode_cu()
-> > > > > > by moving function encoding to separate method") break two selftests
-> > > > > > in libbpf CI (see [0]). Please take a look. I suspect some bad BTF,
-> > > > > > because both tests rely on kernel BTF info.
->
-> > > > > > You've previously asked about staging pahole changes. Did you make up
-> > > > > > your mind about branch names and the process overall? Seems like a
-> > > > > > good chance to bring this up ;-P
->
-> > > > > >   [0] https://travis-ci.com/github/libbpf/libbpf/jobs/514329152
->
-> > > > > Ok, please add tmp.master as the staging branch, I'll move things to
-> > > > > master only after it passing thru CI.
-> > > >
-> > > > So I'm thinking about what's the best setup to catch pahole staging
-> > > > problems, but not break main libbpf CI and kernel-patches CI flows.
->
-> > > > How about we keep all the existing CI jobs to use pahole's master.
->
-> > > Agreed.
->
-> > > > Then add a separate job to do full kernel build with pahole built from
-> > > > staging branch. And mark it as non-critical (or whatever the
-> > > > terminology), so it doesn't mark the build red. I'd do that as a cron
-> > > > job that runs every day. That way if you don't have anything urgent,
-> > > > next day you'll get staging tested automatically. If you need to test
-> > > > right now, there is a way to re-trigger previous build and it will
-> > > > re-fetch latest staging (so there is a way for you to proactively
-> > > > test).
->
-> > > > Basically, I want broken staging pahole to not interrupt anything we
-> > > > are doing. WDYT?
->
-> > > Sounds like a plan, please hand hold me on this, I'm not versed on
-> > > github.
->
-> > I'll set up everything from my side, and then we'll just setup proper
-> > access rights for you to be able to trigger builds. We are migrating
-> > everything from Travis CI to Github Actions, and I'm not yet too
-> > familiar with Github Actions, so I might need a few iterations.
->
-> Ok dokey
+Em Wed, Jun 16, 2021 at 03:36:54PM -0700, Andrii Nakryiko escreveu:
+> On Wed, Jun 16, 2021 at 1:41 PM Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com> wrote:
+> > And if I use pahole's BTF loader I find the info about that function:
+> >
+> > [acme@seventh linux]$ strace -e openat -o /tmp/bla pfunct -F btf tcp_cong_avoid_ai  ; grep vmlinux /tmp/bla
+> > void tcp_cong_avoid_ai(struct tcp_sock * tp, u32 w, u32 acked);
+> > openat(AT_FDCWD, "/sys/kernel/btf/vmlinux", O_RDONLY) = 3
+> >
+> > So this should be unrelated to the breakage you noticed in the CI.
+> >
+> > I'm trying to to reproduce the CI breakage by building the kernel and
+> > running selftests after a reboot.
+> >
+> > I suspect I'm missing something, can you see what it is?
+> 
+> Oh, I didn't realize initially what it is. This is not kernel-related,
+> you are right. You just need newer Clang. Can you please use nightly
+> version or build from sources? Basically, your Clang is too old and it
+> doesn't generate BTF information for extern functions in BPF code.
 
-Please see https://github.com/libbpf/libbpf/pull/325, Sergey is
-setting up staging pahole testing.
+Oh well, I thought that that clang was new enough, the system being
+Fedora rawhide:
 
->
-> > BTW, while you are investigating pahole regression, can you please
-> > revert the offending commit and push it to master to make out CIs
-> > green again?
->
-> Sure, just did it. Lets see if makes things green again.
+[acme@seventh ~]$ clang -v |& head -1
+clang version 12.0.0 (https://github.com/llvm/llvm-project 87369c626114ae17f4c637635c119e6de0856a9a)
 
-It did, thanks!
+I'm now building the single-repo main...
 
->
-> - Arnaldo
+Would you consider a patch for libbpf that would turn this:
+
+> > > libbpf: failed to find BTF for extern 'tcp_cong_avoid_ai' [27] section: -2
+> > > Error: failed to open BPF object file: No such file or directory
+> > > make: *** [Makefile:460: /mnt/linux/tools/testing/selftests/bpf/bpf_cubic.skel.h] Error 255
+> > > make: *** Deleting file '/mnt/linux/tools/testing/selftests/bpf/bpf_cubic.skel.h'
+> > > make: Leaving directory '/mnt/linux/tools/testing/selftests/bpf'
+
+Into:
+
+libbpf: failed to find BTF for extern 'tcp_cong_avoid_ai' [27] section: -2
+HINT: Please update your clang/llvm toolchain to at least cset abcdef123456
+HINT: That is where clang started generating BTF information for extern functions in BPF code.
+
+?
+
+:-)
+
+- Arnaldo
