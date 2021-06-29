@@ -2,163 +2,171 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5FBD3C49361
-	for <linux-dwarves@archiver.kernel.org>; Fri, 18 Jun 2021 17:21:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 288EBC11F66
+	for <linux-dwarves@archiver.kernel.org>; Tue, 29 Jun 2021 08:13:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3B87E613EB
-	for <linux-dwarves@archiver.kernel.org>; Fri, 18 Jun 2021 17:21:05 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0358261DC2
+	for <linux-dwarves@archiver.kernel.org>; Tue, 29 Jun 2021 08:13:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232981AbhFRRXN (ORCPT
+        id S232330AbhF2IQA (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Fri, 18 Jun 2021 13:23:13 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34156 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230499AbhFRRXN (ORCPT <rfc822;dwarves@vger.kernel.org>);
-        Fri, 18 Jun 2021 13:23:13 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id B60F4611CD;
-        Fri, 18 Jun 2021 17:21:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1624036863;
-        bh=+Jg/bfxNuGBmNHrK+MRsqTgFzVE+q+JmRTexmJwVyWg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RKam7Y1M05dH9OH6xEF5PVqpdIE1n/Beq8rf4VMgLnzexQXixdGNKHxt6+XkSFJtH
-         5Z4Ydug6Rm522DpuFZ+nGv7OMvyswv010rHxbF1fZwOpwutnyULLdKN8+gY0nyMpU0
-         319ar+aHvI7FrVQSrrSPrSjyuPIWVhRnjLnoUutmwuWM+IgLJzBmO9hd72kNkFwcmB
-         T4qt1TI007gzIMauluWLi7jfixKb1TXLtYY+Eg9K6pVHQ4IeBNUA8qpNSO36JdhZ2S
-         sQJPY+61iktVMlWFHALWv5bqWI/FF9nAcvSqCLD30nfx/z3s3va3E462BPuLoEbbAP
-         gHNWfrhCf++hw==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 6C42340B1A; Fri, 18 Jun 2021 14:21:00 -0300 (-03)
-Date:   Fri, 18 Jun 2021 14:21:00 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
-        Yonghong Song <yhs@fb.com>, bpf <bpf@vger.kernel.org>,
-        dwarves@vger.kernel.org, siudin@fb.com
-Subject: Re: latest pahole breaks libbpf CI and let's talk about staging
-Message-ID: <YMzV/C2A0PAHsLuD@kernel.org>
-References: <CAEf4BzZnZN2mt4+5F-00ggO9YHWrL3Jru_u3Qt2JJ+SMkHwg+w@mail.gmail.com>
- <YMoRBvTdD0qzjYf4@kernel.org>
- <YMopYxHgmoNVd3Yl@kernel.org>
- <YMph3VeKA1Met65X@kernel.org>
- <CAEf4BzZmBbkU1WWLEsZG1yVMdt7CDcuHhRF8uoLqeamhef3bVQ@mail.gmail.com>
- <YMtgz+hcE/7iO7Ux@kernel.org>
- <CAEf4BzbK4jN7c8aa05xGyLm_FJKgywW8Ju8dA11VAJ9Nx8drVQ@mail.gmail.com>
- <YMuzAfK6vwbeN3XX@kernel.org>
- <CAEf4BzZWq21zP+1C4=qqWGQ3WUXK-pvt+rWpcsh_971qAw4Wzw@mail.gmail.com>
+        Tue, 29 Jun 2021 04:16:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46212 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232308AbhF2IP7 (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Tue, 29 Jun 2021 04:15:59 -0400
+Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38608C061574
+        for <dwarves@vger.kernel.org>; Tue, 29 Jun 2021 01:13:33 -0700 (PDT)
+Received: by mail-yb1-xb2a.google.com with SMTP id k184so16206948ybf.12
+        for <dwarves@vger.kernel.org>; Tue, 29 Jun 2021 01:13:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=HSRkwcfpxM1IZpmCbQHGkcLOYXhFHTSaRUmoqTURhyk=;
+        b=FSN/GihMSrMt2wuccpI75xOKIdmM3okwZIujQujERo2K8MCGafTp7K1iZfkB1mP/KW
+         jBlw9hMxio00lXjI6a2hzeTNGPWgSzWnuT6IM4ANXBJwDgvjBFDE7ebQA2/6t494TXL5
+         67erkoDJx2aeAG8AuLn9I+ay3A/YlLKnO8Oz4BCXXcqug7v2YJO3ZPp7y3BWkh3t7mGN
+         eHGJVUYjjmyFYeSZ3JOjAD40nn5mJsvZQ02x7oCwc5Bf9pASEPMBmyRf6nY16YHRFV4x
+         ZLB+gvBXebEmRxlX2qCroaolr6wf2ogpbspvVug4wNFodV0xRyb0mhmfofDxXjyzDcIE
+         9X+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=HSRkwcfpxM1IZpmCbQHGkcLOYXhFHTSaRUmoqTURhyk=;
+        b=hEKhTHJNNQboABi7jzAtzddzPBjCeOb7cGJRm+oowP5f6JaXwFLZVD3yvKt0Digrlq
+         5NIvBqCgor8qx18Lv8JKlnTmHf7CHjayOTMxSbXn6b2QTwDxLG2A76Dvbq3hTrpRah+G
+         GzSbxbYWmwTx6LOOaO1Meuuj6Nas6HOyhNKBgRVmnZDHTss0yCVTbDPhmhQv0s0gb67A
+         lewgk0LFMf310AEG0vI/Mqo/2zK8PLzYgQhqnGQami/tyFsSqHB5fJgTEK6eO2ybmbxG
+         2TiLfSof3zn9fFGWK+oGmhHPXrFf7Ltkz50w46wkccsX8YDEqgsSKIe7DHA0yuCHbMgu
+         hKVg==
+X-Gm-Message-State: AOAM531OeYPxi5d7cJmNCtPv0NRyNjrofkS9dJaMIbtX+ojR/0VtkgPW
+        vW8CxLpzNvRq3UPwn4UDum/jhcvucNZgOYVxy7Ym7M0yZpE=
+X-Google-Smtp-Source: ABdhPJwsbXAfU1Siq35ZGnJjCPTJHsLRcfIArX9Xwax/4UlSLVVAP0dblY8foDaQnQ4qAZzaPenCkWrpqJ1q3wbz0kM=
+X-Received: by 2002:a25:b2a7:: with SMTP id k39mr9379631ybj.146.1624954412408;
+ Tue, 29 Jun 2021 01:13:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAEf4BzZWq21zP+1C4=qqWGQ3WUXK-pvt+rWpcsh_971qAw4Wzw@mail.gmail.com>
-X-Url:  http://acmel.wordpress.com
+From:   Bernd Buschinski <b.buschinski@googlemail.com>
+Date:   Tue, 29 Jun 2021 10:13:38 +0200
+Message-ID: <CACN-hLVoz2tWrtgDLabOv6S1-H_8RD2fh8SV6EnADF1ikMxrmw@mail.gmail.com>
+Subject: pahole vs isatty
+To:     dwarves@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-Em Thu, Jun 17, 2021 at 02:52:57PM -0700, Andrii Nakryiko escreveu:
-> On Thu, Jun 17, 2021 at 1:39 PM Arnaldo Carvalho de Melo
-> <arnaldo.melo@gmail.com> wrote:
-> >
-> > Em Thu, Jun 17, 2021 at 01:00:11PM -0700, Andrii Nakryiko escreveu:
-> > > On Thu, Jun 17, 2021 at 7:48 AM Arnaldo Carvalho de Melo
-> > > <arnaldo.melo@gmail.com> wrote:
-> > > >
-> > > > Em Wed, Jun 16, 2021 at 03:36:54PM -0700, Andrii Nakryiko escreveu:
-> > > > > On Wed, Jun 16, 2021 at 1:41 PM Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com> wrote:
-> > > > > > And if I use pahole's BTF loader I find the info about that function:
-> > > > > >
-> > > > > > [acme@seventh linux]$ strace -e openat -o /tmp/bla pfunct -F btf tcp_cong_avoid_ai  ; grep vmlinux /tmp/bla
-> > > > > > void tcp_cong_avoid_ai(struct tcp_sock * tp, u32 w, u32 acked);
-> > > > > > openat(AT_FDCWD, "/sys/kernel/btf/vmlinux", O_RDONLY) = 3
-> > > > > >
-> > > > > > So this should be unrelated to the breakage you noticed in the CI.
-> > > > > >
-> > > > > > I'm trying to to reproduce the CI breakage by building the kernel and
-> > > > > > running selftests after a reboot.
-> > > > > >
-> > > > > > I suspect I'm missing something, can you see what it is?
-> > > > >
-> > > > > Oh, I didn't realize initially what it is. This is not kernel-related,
-> > > > > you are right. You just need newer Clang. Can you please use nightly
-> > > > > version or build from sources? Basically, your Clang is too old and it
-> > > > > doesn't generate BTF information for extern functions in BPF code.
-> > > >
-> > > > Oh well, I thought that that clang was new enough, the system being
-> > > > Fedora rawhide:
-> > > >
-> > > > [acme@seventh ~]$ clang -v |& head -1
-> > > > clang version 12.0.0 (https://github.com/llvm/llvm-project 87369c626114ae17f4c637635c119e6de0856a9a)
-> > > >
-> > > > I'm now building the single-repo main...
-> > > >
-> > > > Would you consider a patch for libbpf that would turn this:
-> > > >
-> > > > > > > libbpf: failed to find BTF for extern 'tcp_cong_avoid_ai' [27] section: -2
-> > > > > > > Error: failed to open BPF object file: No such file or directory
-> > > > > > > make: *** [Makefile:460: /mnt/linux/tools/testing/selftests/bpf/bpf_cubic.skel.h] Error 255
-> > > > > > > make: *** Deleting file '/mnt/linux/tools/testing/selftests/bpf/bpf_cubic.skel.h'
-> > > > > > > make: Leaving directory '/mnt/linux/tools/testing/selftests/bpf'
-> > > >
-> > > > Into:
-> > > >
-> > > > libbpf: failed to find BTF for extern 'tcp_cong_avoid_ai' [27] section: -2
-> > > > HINT: Please update your clang/llvm toolchain to at least cset abcdef123456
-> > > > HINT: That is where clang started generating BTF information for extern functions in BPF code.
-> > > >
-> > > > ?
-> > > >
-> > > > :-)
-> > >
-> > > I'd rather not :)
-> >
-> > Not even a "please update clang?"
-> >
-> 
-> It could be old clang, it could also be because BPF program wasn't
-> built with BTF (i.e., you didn't specify -g during clang invocation),
-> it could probably be due to some other problems as well.
+Hello,
 
-Perhaps:
+I am using pahole 1.21 and I recently noticed that I no longer have
+any pahole output in several scripts.
 
-"Please look at http://bla.html/known-reasons-for-failure.html?
 
-Perhaps we could even ask the Cilium people to take care of that since
-they have such wonderful, detailed docs? 8-)
+Using (on the command line):
 
-I understand that it is indeed difficult (albeit I find it valid/useful)
-to give useful information about the myriad ways this can blown up, but
-reducing to some degree the difficulties of testing libbpf, etc, is
-something I think is important.
- 
-> I don't want libbpf to turn into a library that's constantly trying to
-> guess possible problems. It will become a complete mess to maintain.
-> And when it will still be wrong sometimes, causing more harm than
-> being helpful. Especially for relatively uncommon problems like this.
-> 
-> Those people who are trying to use features like BPF unstable helpers
-> (calling whitelisted kernel functions), should know that they need
-> Clang of some version and build with BTF. We have that also mentioned
-> in selftest/bpf/README.rst. I'd rather not duplicate all that in
-> libbpf code as well.
+$ pahole -V -E -C my_struct /path/to/my/debug.o
 
-Perhaps then just say:
+works fine and gives the expected output.
 
-"Please run: cat tools/testing/selftest/bpf/README.rst"
 
-8-)
+But
 
-This could be in the makefile, no need to bother libbpf with that.
+$ parallel -j 1 pahole -V -E -C my_struct ::: /path/to/my/debug.o
 
-You're working on this daily, some people do it from time to time, but
-nah, I'll stop here, felt just that I had to say it fwiw.
+gives nothing, no stderr, no stdout and ret code 0.
 
-- Arnaldo
- 
-> > "-2" and "Error 255" doesn't seem that helpful :-\
-> 
-> But "failed to find BTF for extern 'tcp_cong_avoid_ai'" is pretty
-> helpful. -2 is for more involved debugging, if necessary.
+After testing some versions, it works fine in 1.17 and no longer works in 1.18.
+
+-> Git Bisect
+$ git bisect start
+$ git bisect good v1.17
+$ git bisect bad v1.18
+Bisecting: 54 revisions left to test after this (roughly 6 steps)
+[0a97d6c143fcc92a335e532a991e1e1c62c9bd3e] pahole: Factor out parsing
+class prototypes
+$ git bisect bad
+Bisecting: 26 revisions left to test after this (roughly 5 steps)
+[a5bb31b86fbe53624165ecdf1bd18a19ac224b7c] pahole: Fix --skip for
+variable sized records
+$ git bisect bad
+Bisecting: 13 revisions left to test after this (roughly 4 steps)
+[fe284221448c950d2ba17bce91d19c484d6580a0] pahole: Introduce --seek_bytes
+$ git bisect bad
+Bisecting: 6 revisions left to test after this (roughly 3 steps)
+[a231d00f8d08825ea1c9937cf5c932883ad28ecc] pahole: Print comma at the
+end of field name + field value
+$ git bisect bad
+Bisecting: 2 revisions left to test after this (roughly 2 steps)
+[cc65946e3068f7b68a0aa437261c748c20445986] dwarves: Adopt
+tag__is_base_type() from ctrace.c
+$ git bisect bad
+Bisecting: 0 revisions left to test after this (roughly 1 step)
+[d8079c6d373a5754164ecd784844ce2622d782b8] pahole: Hex dump a type
+from stdio when it isn't a tty
+$ git bisect bad
+Bisecting: 0 revisions left to test after this (roughly 0 steps)
+[38109ab45fe0307dd21b96a866c1f9b62df64fd4] spec: Fix date
+$ git bisect good
+d8079c6d373a5754164ecd784844ce2622d782b8 is the first bad commit
+commit d8079c6d373a5754164ecd784844ce2622d782b8
+Author: Arnaldo Carvalho de Melo <acme@redhat.com>
+Date:   Wed Jun 24 09:08:17 2020 -0300
+
+    pahole: Hex dump a type from stdio when it isn't a tty
+
+    For now the only aspect of the type that is considered is its size, so
+    one line each sizeof(type) will be hex dumped, e.g.:
+
+      $ objcopy -O binary --only-section=.altinstructions
+~/git/build/v5.7-rc2+/vmlinux .altinstructions
+      $ ls -la .altinstructions
+      -rwxrwxr-x. 1 acme acme 18551 Jun 24 09:09 .altinstructions
+      $ pahole -C alt_instr ~/git/build/v5.7-rc2+/vmlinux
+      struct alt_instr {
+            s32                        instr_offset;         /*     0     4 */
+            s32                        repl_offset;          /*     4     4 */
+            u16                        cpuid;                /*     8     2 */
+            u8                         instrlen;             /*    10     1 */
+            u8                         replacementlen;       /*    11     1 */
+            u8                         padlen;               /*    12     1 */
+
+            /* size: 13, cachelines: 1, members: 6 */
+            /* last cacheline: 13 bytes */
+      } __attribute__((__packed__));
+      $ pahole -C alt_instr ~/git/build/v5.7-rc2+/vmlinux <
+.altinstructions  | head
+      0x90 0xe6 0xe0 0xff 0x73 0x48 0x00 0x00 0x70 0x00 0x05 0x05 0x00,
+      0x83 0xe6 0xe0 0xff 0x6b 0x48 0x00 0x00 0x29 0x01 0x05 0x05 0x00,
+      0x2a 0x72 0xc5 0xfe 0x63 0x48 0x00 0x00 0xeb 0x00 0x02 0x00 0x00,
+      0x22 0x72 0xc5 0xfe 0x56 0x48 0x00 0x00 0x91 0x00 0x05 0x05 0x05,
+      0x0c 0x73 0xc5 0xfe 0x4e 0x48 0x00 0x00 0xeb 0x00 0x02 0x00 0x00,
+      0x04 0x73 0xc5 0xfe 0x41 0x48 0x00 0x00 0x91 0x00 0x02 0x00 0x00,
+      0x72 0x73 0xc5 0xfe 0x34 0x48 0x00 0x00 0xf3 0x00 0x2b 0x2b 0x29,
+      0xca 0x73 0xc5 0xfe 0x52 0x48 0x00 0x00 0xec 0x00 0x18 0x18 0x16,
+      0xbd 0x73 0xc5 0xfe 0x5d 0x48 0x00 0x00 0xed 0x00 0x18 0x05 0x16,
+      0xd3 0x7a 0xc5 0xfe 0x55 0x48 0x00 0x00 0x34 0x01 0x03 0x03 0x03,
+      $
+
+    Suggested-by: Joe Lawrence <joe.lawrence@redhat.com>
+    Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+
+ pahole.c | 48 ++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 48 insertions(+)
+
+
+
+It seems the output is now only available if it is a real tty, which
+doesn't work for my scripts.
+So, just as a question: Is this change really intentional?
+Is there any easy way to restore the old behavior?
+
+FYI: my scripts are using perl and python, I do no really favor
+changing them, but if there is no other way.. I will do it :)
+
+-- Bernd
