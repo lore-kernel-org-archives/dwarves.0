@@ -2,95 +2,143 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-20.3 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
-	UNPARSEABLE_RELAY,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-21.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 77DE7C4338F
-	for <linux-dwarves@archiver.kernel.org>; Sun,  8 Aug 2021 11:37:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 02DFBC4338F
+	for <linux-dwarves@archiver.kernel.org>; Thu, 12 Aug 2021 19:00:43 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5746E61055
-	for <linux-dwarves@archiver.kernel.org>; Sun,  8 Aug 2021 11:37:16 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CD3B0610A3
+	for <linux-dwarves@archiver.kernel.org>; Thu, 12 Aug 2021 19:00:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229613AbhHHLhe (ORCPT
+        id S234435AbhHLTBH (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Sun, 8 Aug 2021 07:37:34 -0400
-Received: from out30-57.freemail.mail.aliyun.com ([115.124.30.57]:57589 "EHLO
-        out30-57.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229608AbhHHLhe (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Sun, 8 Aug 2021 07:37:34 -0400
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R801e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04423;MF=joseph.qi@linux.alibaba.com;NM=1;PH=DS;RN=3;SR=0;TI=SMTPD_---0UiISsFc_1628422633;
-Received: from B-D1K7ML85-0059.local(mailfrom:joseph.qi@linux.alibaba.com fp:SMTPD_---0UiISsFc_1628422633)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Sun, 08 Aug 2021 19:37:14 +0800
-Subject: Re: [PATCH] pahole: correct libbpf git url
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
-Cc:     dwarves@vger.kernel.org
-References: <1628244763-1113-1-git-send-email-joseph.qi@linux.alibaba.com>
- <YQ2Chd/j62NCY2NX@kernel.org>
- <CAEf4BzaNV7bkdDoO4HhcwRO+aY5M=9xxwsTWabUDjt-HzXRVMg@mail.gmail.com>
-From:   Joseph Qi <joseph.qi@linux.alibaba.com>
-Message-ID: <ff4863e6-5b9b-d0c7-5e8c-368b640e2ebe@linux.alibaba.com>
-Date:   Sun, 8 Aug 2021 19:37:13 +0800
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
- Gecko/20100101 Thunderbird/78.12.0
+        Thu, 12 Aug 2021 15:01:07 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58934 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234360AbhHLTBH (ORCPT <rfc822;dwarves@vger.kernel.org>);
+        Thu, 12 Aug 2021 15:01:07 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id B325A6108C;
+        Thu, 12 Aug 2021 19:00:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1628794841;
+        bh=LbGxag264q1au+ypBR68KeJ96CavOmvOn/yV93Yx6M4=;
+        h=Date:From:To:Cc:Subject:From;
+        b=dFPLtrr6W/I4tC4s8pqJm2NaGuf4vR9SYQhVSevMeEhlpWmI2iFGs1bu6pgDE4X1K
+         VDAkmgs6dSDHWULzPnEljGZx627X8PHsuasYBY1XnCTafwhj+xGS65hTXUD9sO4g7X
+         1d67OrYFwrR44u2kyMVa9fs7tOlxoOQZfihTSW03iJCNnfbGUo7xw2hc6mXmmCZQCP
+         F67KGD9urZqUjGCfqJqAFI0q0xisvf0sf87P9jjrCc1HEGu8yw1VceajfBHRWPbidz
+         NvMY2be2kLehkmHOCn4PV4bbraO3rqHDKX11i3wOW9QeKIkSYCPyKKFneefPtTixfP
+         AxW7kT0S70zww==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 9967B403F2; Thu, 12 Aug 2021 16:00:38 -0300 (-03)
+Date:   Thu, 12 Aug 2021 16:00:38 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Luca Boccassi <bluca@debian.org>
+Cc:     Frank Heckenbach <f.heckenbach@fh-soft.de>, dwarves@vger.kernel.org
+Subject: pahole: Problems with lib/include/bpf symlink in a tarball with
+ --transform
+Message-ID: <YRVv1iAX48euE5MO@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <CAEf4BzaNV7bkdDoO4HhcwRO+aY5M=9xxwsTWabUDjt-HzXRVMg@mail.gmail.com>
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
+Hi Luca,
 
+	When I generate a tarball I'm not being able to build, as it
+can't find bpf/btf.h, for instance, see this cset where I tried to fix
+it:
 
-On 8/7/21 5:11 AM, Andrii Nakryiko wrote:
-> On Fri, Aug 6, 2021 at 11:42 AM Arnaldo Carvalho de Melo
-> <arnaldo.melo@gmail.com> wrote:
->>
->> Em Fri, Aug 06, 2021 at 06:12:43PM +0800, Joseph Qi escreveu:
->>> Otherwise it will encounter the following error:
->>> fatal: unable to access 'https://github.com/libbpf/libbpf/': Encountered end of file
->>> fatal: clone of 'https://github.com/libbpf/libbpf' into submodule path '/home/workspace/pahole/lib/bpf' failed
->>>
->>> Also update README to add step 'make'.
->>
->> You forgot to add Andrii, the author of the patch you're fixing, to the
->> CC list, please do it next time.
-> 
-> Heh, thanks! Don't worry, I'm subscribed to dwarves@vger, so I saw this anyways.
-> 
->>
->> - Arnaldo
->>
->>> Fixes: 21507cd3e97b ("pahole: add libbpf as submodule under lib/bpf")
->>> Signed-off-by: Joseph Qi <joseph.qi@linux.alibaba.com>
->>> ---
->>>  .gitmodules | 2 +-
->>>  README      | 3 ++-
->>>  2 files changed, 3 insertions(+), 2 deletions(-)
->>>
->>> diff --git a/.gitmodules b/.gitmodules
->>> index 6be99dc..8be5eb6 100644
->>> --- a/.gitmodules
->>> +++ b/.gitmodules
->>> @@ -1,3 +1,3 @@
->>>  [submodule "lib/bpf"]
->>>       path = lib/bpf
->>> -     url = https://github.com/libbpf/libbpf
->>> +     url = https://github.com/libbpf/libbpf.git
-> 
-> This doesn't hurt, but as Arnaldo pointed out, it seems to work just
-> fine as is. Not sure how you ran into this problem... And why did it
-> append the final '/' (still don't know if that's the reason)?
-> 
+commit 00cb89fb9af0355b8b4b64e26d3afa2348efb80d (HEAD -> next, five/next)
+Author: Arnaldo Carvalho de Melo <acme@redhat.com>
+Date:   Thu Aug 12 15:29:28 2021 -0300
 
-I just follow the README and have got the problem.
-I'll try to figure it why I can't pass in my environment.
+    MANIFEST: Add lib/include/bpf
 
-Thanks,
-Joseph
+    The tarball wasn't working without this file:
+
+      [ 32%] Building C object CMakeFiles/dwarves.dir/btf_encoder.c.o
+      /tmp/dwarves-1.22/btf_encoder.c:18:10: fatal error: bpf/btf.h: No such file or directory
+       #include <bpf/btf.h>
+                ^~~~~~~~~~~
+      compilation terminated.
+
+    Cc: Luca Boccassi <bluca@debian.org>
+    Fixes: 82756ea3eaf1f6e7 ("libbpf: Fixup patch to allow to use packaged version")
+    Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+
+diff --git a/MANIFEST b/MANIFEST
+index 67f382e6f8f9..88f6193d5bc0 100644
+--- a/MANIFEST
++++ b/MANIFEST
+@@ -68,3 +68,4 @@ libctf.c
+ libctf.h
+ regtest
+ lib/bpf/
++lib/include/bpf
+[acme@seventh pahole]$
+
+But this doesn't help as well, as to prepare the tarball I use
+tar --transform option (see README.tarball), and with lib/include/bpf
+(the symlink pointing to ../bpf/src) we end up with:
+
+[acme@seventh pahole]$ tar xvf ~/rpmbuild/SOURCES/dwarves-1.22.tar.xz | tail
+dwarves-1.22/lib/bpf/include/linux/compiler.h
+dwarves-1.22/lib/bpf/include/linux/list.h
+dwarves-1.22/lib/bpf/include/linux/kernel.h
+dwarves-1.22/lib/bpf/include/linux/err.h
+dwarves-1.22/lib/bpf/CHECKPOINT-COMMIT
+dwarves-1.22/lib/bpf/LICENSE
+dwarves-1.22/lib/bpf/LICENSE.BSD-2-Clause
+dwarves-1.22/lib/bpf/README.md
+dwarves-1.22/lib/bpf/BPF-CHECKPOINT-COMMIT
+dwarves-1.22/lib/include/bpf
+[acme@seventh pahole]$ ls -la dwarves-1.22/lib/include/
+total 8
+drwxr-xr-x. 2 acme acme 4096 Aug 12 15:54 .
+drwxr-xr-x. 4 acme acme 4096 Aug 12 15:54 ..
+lrwxrwxrwx. 1 acme acme   23 Jun 18 17:56 bpf -> dwarves-1.22/../bpf/src
+[acme@seventh pahole]$
+
+Without the 'tar --transform' that is, on a checked out git repo:
+
+⬢[acme@toolbox pahole]$ ls -la lib/include/bpf
+lrwxrwxrwx. 1 acme acme 10 Aug 11 08:55 lib/include/bpf -> ../bpf/src
+⬢[acme@toolbox pahole]$ ls -la lib/bpf/src
+total 892
+drwxr-xr-x. 1 acme acme    692 Aug  5 16:12 .
+drwxr-xr-x. 1 acme acme    280 Jun 14 15:51 ..
+<SNIP>
+-rw-r--r--. 1 acme acme 123802 Jun 14 15:51 btf.c
+-rw-r--r--. 1 acme acme  40953 Jun 14 15:51 btf_dump.c
+-rw-r--r--. 1 acme acme  11796 Jun 14 15:51 btf.h
+<SNIP>
+⬢[acme@toolbox pahole]$
+
+The problem is described in this old Debian ticket:
+
+https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=775247
+
+I'm now trying to figure out what Frank meant when referring to that
+"S" flag.
+
+This is all on the 'next' branch, but I guess it affects master as well:
+
+https://git.kernel.org/pub/scm/devel/pahole/pahole.git/log/?h=next
+
+libbpf-devel has it on /usr/include/bpf/btf.h so its all ok there, but
+when building it from the tarball I'm stuck with that symlink trick not
+working ;-\
+
+I have to figure out what is this 'S' flag (local symlinks, etc) or stop
+using this --transform mechanism to have the dwarves-${version} top
+level directory added when generating the tarball :-\
+
+- Arnaldo
