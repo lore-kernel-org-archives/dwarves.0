@@ -2,88 +2,132 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BC6E8C433F5
-	for <linux-dwarves@archiver.kernel.org>; Mon, 27 Sep 2021 20:40:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 84205C433EF
+	for <linux-dwarves@archiver.kernel.org>; Mon, 27 Sep 2021 20:59:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9113B610FC
-	for <linux-dwarves@archiver.kernel.org>; Mon, 27 Sep 2021 20:40:15 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6198761058
+	for <linux-dwarves@archiver.kernel.org>; Mon, 27 Sep 2021 20:59:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236529AbhI0Ulx (ORCPT
+        id S236897AbhI0VAy (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Mon, 27 Sep 2021 16:41:53 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49772 "EHLO mail.kernel.org"
+        Mon, 27 Sep 2021 17:00:54 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35278 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236008AbhI0Ulw (ORCPT <rfc822;dwarves@vger.kernel.org>);
-        Mon, 27 Sep 2021 16:41:52 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 7469561074;
-        Mon, 27 Sep 2021 20:40:14 +0000 (UTC)
+        id S236800AbhI0VAx (ORCPT <rfc822;dwarves@vger.kernel.org>);
+        Mon, 27 Sep 2021 17:00:53 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 285DB60F41;
+        Mon, 27 Sep 2021 20:59:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1632775214;
-        bh=imJS+qvkvG0sboLoVEFe01IdzYd32VMnqJ0csQGrtSM=;
+        s=k20201202; t=1632776355;
+        bh=J9GwwOqbDTb3GFzzouVtkGrRIyt3XCZwvORUUDmymuQ=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=WUyQUIt/SmJytNJTBSlsmjth0p7wpBi6WDdP8h5oIi9Q0DGnsrXJ88vz2VYYGY+GM
-         droVe1hHzpuCEi199bwcRbzgjajYu/PAGt7ct0xrUkqQpkFP2yAEBtgL8KogSv4Ri5
-         PJU/7mlf5UCaDfnC+XyPoFcerDFQcakusRRBIvmIKI5ZicertPTJ1ToFvI9pdbTA3g
-         HXYtq7ZusRWDgNa8WmhhiPrEhnEg+mkzHRu2yz4u/zCFkB7X3LTJFTHh+0l1TAaEDP
-         WiBL5rMahTXxMYnIx5TOcl3C9jCQvrnW2cMJwiI7RwFC5MgC2YmhLhcMehP67wnde1
-         NNhxj1uZ55djw==
+        b=DUNFBzor5T7UYGvrP5XofBZkpf+gJQ8iOPWznVreV5s9wtTFEJLfNn/kvPC3yWoCx
+         wy8Oec8BuHq3yZQWXty/TfGsI7AGLDSnXJiImgergt9M596dNXx1YLCruj2Oo70lRy
+         IL/Nmj+W15uiyxYKFGRbF6ngFUTGnbqndycF64/RrtWi0rRYx5jUXNuI3tGLLEXimZ
+         qGYPEF0EOJOyrUuiY+r+1S4eGZhXOO6AXwUQ7nvvOW1T3KBaglht30/n5XZ+b+nYJH
+         PGuW3sNYy1LnIuIUf/37q3vodtsfj8riSgRH57zy0SNTcZ2si0QPEY/l0gkVQ/I8nU
+         YJJlT+xQjX2gg==
 Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id E7CB0410A1; Mon, 27 Sep 2021 17:40:09 -0300 (-03)
-Date:   Mon, 27 Sep 2021 17:40:09 -0300
+        id 5BD29410A1; Mon, 27 Sep 2021 17:59:12 -0300 (-03)
+Date:   Mon, 27 Sep 2021 17:59:12 -0300
 From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Yonghong Song <yhs@fb.com>
-Cc:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
-        dwarves@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+To:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
+Cc:     Yonghong Song <yhs@fb.com>, dwarves@vger.kernel.org,
+        Alexei Starovoitov <ast@kernel.org>,
         Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
         Daniel Borkmann <daniel@iogearbox.net>, kernel-team@fb.com
 Subject: Re: [PATCH dwarves v2 0/2] generate BTF_KIND_TAG types from
  DW_TAG_LLVM_annotation dwarf tags
-Message-ID: <YVIsKZTWlDugv3Yz@kernel.org>
+Message-ID: <YVIwoJHMd0gkRf2O@kernel.org>
 References: <20210922021321.2286360-1-yhs@fb.com>
+ <YVIsKZTWlDugv3Yz@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20210922021321.2286360-1-yhs@fb.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YVIsKZTWlDugv3Yz@kernel.org>
 X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-Em Tue, Sep 21, 2021 at 07:13:21PM -0700, Yonghong Song escreveu:
-> LLVM has implemented btf_tag attribute ([1]) which intended
-> to provide a "string" tag for struct/union or its member, var,
-> a func or its parameter. Such a "string" tag will be encoded
-> in dwarf. For non-BPF target like x86_64, pahole needs to
-> convert those dwarf btf_tag annotations to BTF so kernel
-> can utilize these "string" tags for bpf program verification, etc.
->         
-> Patch 1 enhanced dwarf_loader to encode DW_TAG_LLVM_annotation
-> tags into internal data structure and Patch 2 will encode
-> such information to BTF with BTF_KIND_TAGs.
+Em Mon, Sep 27, 2021 at 05:40:09PM -0300, Arnaldo Carvalho de Melo escreveu:
+> Em Tue, Sep 21, 2021 at 07:13:21PM -0700, Yonghong Song escreveu:
+> > LLVM has implemented btf_tag attribute ([1]) which intended
+> > to provide a "string" tag for struct/union or its member, var,
+> > a func or its parameter. Such a "string" tag will be encoded
+> > in dwarf. For non-BPF target like x86_64, pahole needs to
+> > convert those dwarf btf_tag annotations to BTF so kernel
+> > can utilize these "string" tags for bpf program verification, etc.
+> >         
+> > Patch 1 enhanced dwarf_loader to encode DW_TAG_LLVM_annotation
+> > tags into internal data structure and Patch 2 will encode
+> > such information to BTF with BTF_KIND_TAGs.
+> > 
+> >  [1] https://reviews.llvm.org/D106614
 > 
->  [1] https://reviews.llvm.org/D106614
+> Applied both locally, now building HEAD llvm/clang to test everything,
 
-Applied both locally, now building HEAD llvm/clang to test everything,
+⬢[acme@toolbox pahole]$ pahole -JV t.o
+Found per-CPU symbol 'g' at address 0x0
+Found 1 per-CPU variables!
+Found 1 functions!
+File t.o:
+[1] INT int size=4 nr_bits=32 encoding=SIGNED
+[2] PTR (anon) type_id=3
+[3] STRUCT t size=8
+	a type_id=1 bitfield_size=1 bits_offset=0
+	b type_id=1 bitfield_size=0 bits_offset=32
+[4] TAG tag1 type_id=3 component_idx=0
+[5] TAG tag2 type_id=3 component_idx=1
+[6] TAG tag1 type_id=3 component_idx=-1
+[7] TAG tag2 type_id=3 component_idx=-1
+[8] FUNC_PROTO (anon) return=1 args=(2 a1, 1 a2)
+[9] FUNC foo type_id=8
+[10] TAG tag2 type_id=9 component_idx=1
+[11] TAG tag1 type_id=9 component_idx=-1
+search cu 't.c' for percpu global variables.
+Variable 'g' from CU 't.c' at address 0x0 encoded
+[12] VAR g type=1 linkage=1
+[13] TAG tag1 type_id=12 component_idx=-1
+[14] DATASEC .data..percpu size=4 vlen=1
+	type=12 offset=0 size=4
+⬢[acme@toolbox pahole]$ pahole -JV --skip_encoding_btf_tag t.o
+Found per-CPU symbol 'g' at address 0x0
+Found 1 per-CPU variables!
+Found 1 functions!
+File t.o:
+[1] INT int size=4 nr_bits=32 encoding=SIGNED
+[2] PTR (anon) type_id=3
+[3] STRUCT t size=8
+	a type_id=1 bitfield_size=1 bits_offset=0
+	b type_id=1 bitfield_size=0 bits_offset=32
+[4] FUNC_PROTO (anon) return=1 args=(2 a1, 1 a2)
+[5] FUNC foo type_id=4
+search cu 't.c' for percpu global variables.
+Variable 'g' from CU 't.c' at address 0x0 encoded
+[6] VAR g type=1 linkage=1
+[7] DATASEC .data..percpu size=4 vlen=1
+	type=6 offset=0 size=4
+⬢[acme@toolbox pahole]$ clang -v
+clang version 14.0.0 (https://github.com/llvm/llvm-project f7e82e4fa849376ea9226220847a098dc92d74a0)
+Target: x86_64-unknown-linux-gnu
+Thread model: posix
+InstalledDir: /usr/local/bin
+Found candidate GCC installation: /usr/lib/gcc/x86_64-redhat-linux/11
+Selected GCC installation: /usr/lib/gcc/x86_64-redhat-linux/11
+Candidate multilib: .;@m64
+Candidate multilib: 32;@m32
+Selected multilib: .;@m64
+⬢[acme@toolbox pahole]$
 
-- Arnaldo
- 
-> Changelog:
->   v1 -> v2:
->     - handle returning error cases for btf_encoder__add_tag().
-> 
-> Yonghong Song (2):
->   dwarf_loader: parse dwarf tag DW_TAG_LLVM_annotation
->   btf_encoder: generate BTF_KIND_TAG from llvm annotations
-> 
->  btf_encoder.c  | 63 ++++++++++++++++++++++++++++++++++++-
->  dwarf_loader.c | 85 ++++++++++++++++++++++++++++++++++++++++++++++----
->  dwarves.h      | 10 ++++++
->  pahole.c       |  8 +++++
->  4 files changed, 159 insertions(+), 7 deletions(-)
-> 
-> -- 
-> 2.30.2
+And the usual:
 
--- 
+⬢[acme@toolbox pahole]$ pahole -J vmlinux
+⬢[acme@toolbox pahole]$ btfdiff vmlinux
+⬢[acme@toolbox pahole]$
+
+So applied, pushing out to the tmp.master branch so that libbpf's CI can
+have a go at it, then after the next run I'll push to master, thanks!
 
 - Arnaldo
