@@ -2,32 +2,34 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 60B2DC433FE
-	for <linux-dwarves@archiver.kernel.org>; Mon, 18 Oct 2021 13:16:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AEF9BC433EF
+	for <linux-dwarves@archiver.kernel.org>; Mon, 18 Oct 2021 13:16:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3D4116103C
-	for <linux-dwarves@archiver.kernel.org>; Mon, 18 Oct 2021 13:16:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 89D7C60F44
+	for <linux-dwarves@archiver.kernel.org>; Mon, 18 Oct 2021 13:16:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230526AbhJRNSa (ORCPT
+        id S231310AbhJRNSb (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Mon, 18 Oct 2021 09:18:30 -0400
-Received: from foss.arm.com ([217.140.110.172]:37234 "EHLO foss.arm.com"
+        Mon, 18 Oct 2021 09:18:31 -0400
+Received: from foss.arm.com ([217.140.110.172]:37242 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229833AbhJRNS3 (ORCPT <rfc822;dwarves@vger.kernel.org>);
-        Mon, 18 Oct 2021 09:18:29 -0400
+        id S229833AbhJRNSb (ORCPT <rfc822;dwarves@vger.kernel.org>);
+        Mon, 18 Oct 2021 09:18:31 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B0A20101E;
-        Mon, 18 Oct 2021 06:16:18 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DF856106F;
+        Mon, 18 Oct 2021 06:16:19 -0700 (PDT)
 Received: from e126130.arm.com (unknown [10.57.54.178])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id E57D73F73D;
-        Mon, 18 Oct 2021 06:16:17 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 01E613F73D;
+        Mon, 18 Oct 2021 06:16:18 -0700 (PDT)
 From:   Douglas RAILLARD <douglas.raillard@arm.com>
 To:     acme@redhat.com
 Cc:     dwarves@vger.kernel.org, douglas.raillard@arm.com
-Subject: [PATCH v2 0/3] Infer BTF alignment 
-Date:   Mon, 18 Oct 2021 14:16:18 +0100
-Message-Id: <20211018131621.212628-1-douglas.raillard@arm.com>
+Subject: [PATCH v2 1/3] fprintf: Fix nested struct printing
+Date:   Mon, 18 Oct 2021 14:16:19 +0100
+Message-Id: <20211018131621.212628-2-douglas.raillard@arm.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20211018131621.212628-1-douglas.raillard@arm.com>
+References: <20211018131621.212628-1-douglas.raillard@arm.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -36,49 +38,83 @@ X-Mailing-List: dwarves@vger.kernel.org
 
 From: Douglas Raillard <douglas.raillard@arm.com>
 
-Infer alignment of struct members when loading BTF, so that using the
-header dumped by pahole results in the same offsets. This is useful for
-debugging tools to be able to access pointers to structs of possibly
-private types. One such example are kernel modules bolting traceevents
-on existing upstream tracepoints, which typically expose "top-level"
-struct pointers (e.g. struct cfs_rq) to allow maximum flexibility.
+This code:
 
-Changes since v1:
-* Split alignment patch into refactor and new code.
-* Test with fullcircle on vmlinux and .o of kernel tree:
-    
-  export PATH=pahole/build:$PATH
-  for f in {kernel,drivers,arch,block,crypto,certs,fs,init,ipc,lib,mm,net,sound,virt}/**.o; do
-     echo $f
-     pahole/fullcircle $f
-  done
+    struct X {
+       struct {
+       } __attribute__((foo)) x __attribute__((bar));
+    }
 
-  This did not produce any error but neither did it on pahole master
-  branch, since I assume it reads DWARF by default.
+Was wrongly printed as:
 
-  Trying with "pfunct -F btf" on object files seemed to yield empty
-  sources:
+    struct X {
+       struct {
+       } x __attribute__((foo)) __attribute__((bar));
+    }
 
-    pfunct: file 'kernel/sched/fair.o' has no btf type information.
+This unfortunately matters a lot, since "bar" is suppose to apply to
+"x", but "foo" to typeof(x). In the wrong form, both apply to "x",
+leading to e.g. incorrect layout for __aligned__ attribute.
 
-  Running pfunct on vmlinux worked, but fullcircle seems to have bailed
-  out before getting to pfunct. When commenting out the bailouts, I
-  managed to get pfunct to work, but the header generated with --compile
-  contains one duplicate type, and lots of broken inlined functions
-  (e.g. "return 0;" in a func returning a struct).
-  
+Signed-off-by: Douglas Raillard <douglas.raillard@arm.com>
+---
+ dwarves_fprintf.c | 22 ++++++++++++++++++----
+ 1 file changed, 18 insertions(+), 4 deletions(-)
 
-Douglas Raillard (3):
-  fprintf: Fix nested struct printing
-  btf_loader.c: Refactor class__fixup_btf_bitfields
-  btf_loader.c: Infer alignment info
-
- btf_loader.c      | 65 ++++++++++++++++++++++++++++++++++++-----------
- dwarves.c         |  2 +-
- dwarves.h         |  2 ++
- dwarves_fprintf.c | 22 +++++++++++++---
- 4 files changed, 71 insertions(+), 20 deletions(-)
-
+diff --git a/dwarves_fprintf.c b/dwarves_fprintf.c
+index c35868a..1c1d949 100644
+--- a/dwarves_fprintf.c
++++ b/dwarves_fprintf.c
+@@ -787,7 +787,7 @@ print_default:
+ 					   (type->tag == DW_TAG_class_type &&
+ 					    !tconf.classes_as_structs) ? "class" : "struct",
+ 					   tconf.type_spacing - 7,
+-					   type__name(ctype), name);
++					   type__name(ctype), name ?: "");
+ 		} else {
+ 			struct class *cclass = tag__class(type);
+ 
+@@ -802,7 +802,7 @@ print_default:
+ 		ctype = tag__type(type);
+ 
+ 		if (type__name(ctype) != NULL && !expand_types) {
+-			printed += fprintf(fp, "union %-*s %s", tconf.type_spacing - 6, type__name(ctype), name);
++			printed += fprintf(fp, "union %-*s %s", tconf.type_spacing - 6, type__name(ctype), name ?: "");
+ 		} else {
+ 			tconf.type_spacing -= 8;
+ 			printed += union__fprintf(ctype, cu, &tconf, fp);
+@@ -812,7 +812,7 @@ print_default:
+ 		ctype = tag__type(type);
+ 
+ 		if (type__name(ctype) != NULL)
+-			printed += fprintf(fp, "enum %-*s %s", tconf.type_spacing - 5, type__name(ctype), name);
++			printed += fprintf(fp, "enum %-*s %s", tconf.type_spacing - 5, type__name(ctype), name ?: "");
+ 		else
+ 			printed += enumeration__fprintf(type, &tconf, fp);
+ 		break;
+@@ -863,7 +863,21 @@ static size_t class_member__fprintf(struct class_member *member, bool union_memb
+ 	if (member->is_static)
+ 		printed += fprintf(fp, "static ");
+ 
+-	printed += type__fprintf(type, cu, name, &sconf, fp);
++	/* For struct-like constructs, the name of the member cannot be
++	 * conflated with the name of its type, otherwise __attribute__ are
++	 * printed in the wrong order.
++	 */
++	if (tag__is_union(type) || tag__is_struct(type) ||
++	    tag__is_enumeration(type)) {
++		printed += type__fprintf(type, cu, NULL, &sconf, fp);
++		if (name) {
++			if (!type__name(tag__type(type)))
++				printed += fprintf(fp, " ");
++			printed += fprintf(fp, "%s", name);
++		}
++	} else {
++		printed += type__fprintf(type, cu, name, &sconf, fp);
++	}
+ 
+ 	if (member->is_static) {
+ 		if (member->const_value != 0)
 -- 
 2.25.1
 
