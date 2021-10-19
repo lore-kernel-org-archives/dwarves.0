@@ -2,25 +2,25 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A052AC433EF
-	for <linux-dwarves@archiver.kernel.org>; Tue, 19 Oct 2021 16:03:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 42E3FC433EF
+	for <linux-dwarves@archiver.kernel.org>; Tue, 19 Oct 2021 17:29:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8980261355
-	for <linux-dwarves@archiver.kernel.org>; Tue, 19 Oct 2021 16:03:05 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2A95D61355
+	for <linux-dwarves@archiver.kernel.org>; Tue, 19 Oct 2021 17:29:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232144AbhJSQFR (ORCPT
+        id S232613AbhJSRbm (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Tue, 19 Oct 2021 12:05:17 -0400
-Received: from foss.arm.com ([217.140.110.172]:51094 "EHLO foss.arm.com"
+        Tue, 19 Oct 2021 13:31:42 -0400
+Received: from foss.arm.com ([217.140.110.172]:52264 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231559AbhJSQFP (ORCPT <rfc822;dwarves@vger.kernel.org>);
-        Tue, 19 Oct 2021 12:05:15 -0400
+        id S231226AbhJSRbm (ORCPT <rfc822;dwarves@vger.kernel.org>);
+        Tue, 19 Oct 2021 13:31:42 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4E5F713A1;
-        Tue, 19 Oct 2021 09:03:02 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CC95BD6E;
+        Tue, 19 Oct 2021 10:29:28 -0700 (PDT)
 Received: from [10.57.55.219] (unknown [10.57.55.219])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 80DF33F694;
-        Tue, 19 Oct 2021 09:03:01 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id F197F3F694;
+        Tue, 19 Oct 2021 10:29:27 -0700 (PDT)
 Subject: Re: [PATCH] CMakeLists.txt: Add STATIC_LINK option
 To:     Arnaldo Carvalho de Melo <acme@kernel.org>
 Cc:     acme@redhat.com, dwarves@vger.kernel.org
@@ -29,8 +29,8 @@ References: <20211015101008.486302-1-douglas.raillard@arm.com>
  <YWmOOP0/fF2BEd/s@kernel.org> <7718fdaa-a8ec-c86d-e5e6-149db8659529@arm.com>
  <YW7jRGV9Ny1KFEtO@kernel.org>
 From:   Douglas Raillard <douglas.raillard@arm.com>
-Message-ID: <05c4904d-7987-f31d-5f67-26e01430478a@arm.com>
-Date:   Tue, 19 Oct 2021 17:03:14 +0100
+Message-ID: <ececd809-672a-c922-0e24-745c8eaf2e43@arm.com>
+Date:   Tue, 19 Oct 2021 18:29:41 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.13.0
 MIME-Version: 1.0
@@ -122,25 +122,102 @@ On 10/19/21 4:24 PM, Arnaldo Carvalho de Melo wrote:
 > I'll try with this later, thing is, I want to build on the CI for pahole
 > that Andrii put in place in the libbpf repo, so we need to check how to
 > build this static build.
+
+I tried to make it work on Ubuntu and came up with that. It is quite stinky
+and does not result in a fully static build, but it's probably as close we can
+get to it using glibc, and it does not segfault:
+
+>>> ldd pahole                                                        
+         linux-vdso.so.1 (0x00007ffd9b7e2000)
+         libdl.so.2 => /lib/x86_64-linux-gnu/libdl.so.2 (0x00007f049a55e000)
+         libpthread.so.0 => /lib/x86_64-linux-gnu/libpthread.so.0 (0x00007f049a53b000)
+         libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007f049a349000)
+         /lib/ld64.so.1 => /lib64/ld-linux-x86-64.so.2 (0x00007f049a584000)
+
+
+Subject: [PATCH] CMakeLists.txt: Allow pseudo-static build on Ubuntu
+
+Allow STATIC_LINK=ON on Ubuntu by:
+
+     * providing libebl
+     * avoiding a trailing -Wl,-Bstatic that makes the resulting binary
+       segfault
+     * dynamically link to libdl. Static linking to that lib would impose
+       that the same glibc version used for linking is present on the
+       runtime system, which is not very safe and would mislead into
+       thinking the binary is safe to use everywhere.
+
+Apart from that, all the other libraries are statically linked to the
+executable.
+
+Note: the user might need a symlink /lib/ld64.so.1 => /lib64/ld-linux-x86-64.so.2
+The ld option --dynamic-linker=file is supposed to allow fixing that,
+but it's unfortunately ignored when used with -static.
+---
+  CMakeLists.txt                | 18 ++++++++++++++++--
+  cmake/modules/FindDWARF.cmake |  8 ++++++++
+  2 files changed, 24 insertions(+), 2 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index ba467bf..adb6d74 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -2,6 +2,11 @@ project(pahole C)
+  cmake_minimum_required(VERSION 2.8.12)
+  cmake_policy(SET CMP0005 NEW)
   
-Ok, I had a quick look and it seems to be Ubuntu/Debian based with github actions.
-libdwfl seems to have some sort of hard dependency on dlopen in
-__libdwfl_debuginfod_init. I'll give a go at the musl-gcc (musl-tools on Ubuntu)
-to see if we can get a working static bin.
++execute_process(COMMAND lsb_release -si
++  OUTPUT_VARIABLE LINUX_DISTRO
++  OUTPUT_STRIP_TRAILING_WHITESPACE
++)
++
+  option(LIBBPF_EMBEDDED "Use the embedded version of libbpf instead of searching it via pkg-config" ON)
+  if (NOT LIBBPF_EMBEDDED)
+  	find_package(PkgConfig REQUIRED)
+@@ -127,7 +132,12 @@ endif()
+  add_library(dwarves ${dwarves_LIB_SRCS})
+  set_target_properties(dwarves PROPERTIES VERSION 1.0.0 SOVERSION 1)
+  set_target_properties(dwarves PROPERTIES INTERFACE_LINK_LIBRARIES "")
+-target_link_libraries(dwarves ${DWARF_LIBRARIES} ${ZLIB_LIBRARIES} ${LIBBPF_LIBRARIES} ${ARGP_LIBRARY} ${OBSTACK_LIBRARY} ${BZ2_LIBRARY} ${LZMA_LIBRARY})
++target_link_libraries(dwarves ${DWARF_LIBRARIES} ${ZLIB_LIBRARIES} ${LIBBPF_LIBRARIES} ${ARGP_LIBRARY} ${OBSTACK_LIBRARY} ${BZ2_LIBRARY} ${LZMA_LIBRARY} ${EBL_LIBRARY})
++# On non-musl systems, we need to link to libdl in order to get
++# dlopen/dlclose/dlsym, as required by libdwfl and libebl
++if (LINUX_DISTRO STREQUAL "Ubuntu")
++  target_link_libraries(dwarves dl)
++endif()
+  
+  set(dwarves_emit_LIB_SRCS dwarves_emit.c)
+  add_library(dwarves_emit ${dwarves_emit_LIB_SRCS})
+@@ -201,4 +211,8 @@ install(FILES lib/Makefile lib/ctracer_relay.c lib/ctracer_relay.h lib/linux.bla
+  # Avoid having a trailing -Wl,-Bdynamic that will make some linkers think we
+  # need to link against a DSO for the libc.
+  get_property(TARGETS DIRECTORY PROPERTY BUILDSYSTEM_TARGETS)
+-set_target_properties(${TARGETS} PROPERTIES LINK_SEARCH_END_STATIC ${STATIC_LINK})
++# If we use a trailing -Wl,-Bstatic on ubuntu, the binary will segfault for some
++# reasons ...
++if (NOT LINUX_DISTRO STREQUAL "Ubuntu")
++  set_target_properties(${TARGETS} PROPERTIES LINK_SEARCH_END_STATIC ${STATIC_LINK})
++endif()
+diff --git a/cmake/modules/FindDWARF.cmake b/cmake/modules/FindDWARF.cmake
+index 1b4ac49..cd1f265 100644
+--- a/cmake/modules/FindDWARF.cmake
++++ b/cmake/modules/FindDWARF.cmake
+@@ -27,6 +27,14 @@ find_path(LIBDW_INCLUDE_DIR elfutils/libdw.h
+  	~/usr/local/include
+  )
+  
++# This does not seem to be necessary on Alpine Linux
++if (LINUX_DISTRO STREQUAL "Ubuntu")
++  find_library(EBL_LIBRARY
++    NAMES ebl
++    PATHS /usr/lib /usr/local/lib /usr/lib64 /usr/local/lib64 ~/usr/local/lib ~/usr/local/lib64
++  )
++endif()
++
+  find_library(DWARF_LIBRARY
+  	NAMES dw dwarf
+  	PATHS /usr/lib /usr/local/lib /usr/lib64 /usr/local/lib64 ~/usr/local/lib ~/usr/local/lib64
+-- 
+2.25.1
 
-Douglas
-
->   
->>
->> [1] pahole static binaries:
->> https://github.com/ARM-software/lisa/pull/1740/files
->>>
->>> But now out to lunch.
->>>
->>> - Arnaldo
->>>
->> Cheer,
->> Douglas
->> IMPORTANT NOTICE: The contents of this email and any attachments are confidential and may also be privileged. If you are not the intended recipient, please notify the sender immediately and do not disclose the contents to any other person, use it for any purpose, or store or copy the information in any medium. Thank you.
-> 
 
