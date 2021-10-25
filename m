@@ -2,183 +2,148 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A315AC433EF
-	for <linux-dwarves@archiver.kernel.org>; Fri, 22 Oct 2021 00:31:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5395CC433EF
+	for <linux-dwarves@archiver.kernel.org>; Mon, 25 Oct 2021 08:53:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7484A61373
-	for <linux-dwarves@archiver.kernel.org>; Fri, 22 Oct 2021 00:31:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 36A0E6054E
+	for <linux-dwarves@archiver.kernel.org>; Mon, 25 Oct 2021 08:53:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231518AbhJVAd6 (ORCPT
+        id S232217AbhJYI4H (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Thu, 21 Oct 2021 20:33:58 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35468 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229512AbhJVAd5 (ORCPT <rfc822;dwarves@vger.kernel.org>);
-        Thu, 21 Oct 2021 20:33:57 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 876B36135E;
-        Fri, 22 Oct 2021 00:31:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1634862700;
-        bh=2sgGrHYtL7Eq8Xme/mfVWxohHstOzr4ocQUqh4pQdiI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=OIwAFs7s3KmfQY6sWjRT15zC7rfV3r0gLNrKniI4YDJ9HAe+ZJuB6k9f50I05+erO
-         bqIfOmlXBFBM5EX7PFN5wjyoclg1cxNpmz5IKCerdSU+MnDUjCz3npzsidydSva4Y6
-         Q/wxgvNyMy2ve7jCRP3EUCDwRs1hnjaPcfaPjSqlIe6EY6dkW+QG8mY2It6Jccwj65
-         NwN3TslVGdyA11fnvu908YjdIhNl8IvsDhvqJCyH0czd+myLwauiI2rXalampkMolA
-         RkOOWOhj6JRH3lf7QQu528kpSirKZKz7VffhEGdGbhIeu+/P7svk9KQtsvsqBodNvP
-         lY9waQOlclZTg==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 0B318410A1; Thu, 21 Oct 2021 21:31:37 -0300 (-03)
-Date:   Thu, 21 Oct 2021 21:31:36 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Douglas RAILLARD <douglas.raillard@arm.com>
-Cc:     acme@redhat.com, dwarves@vger.kernel.org
-Subject: Re: [PATCH v2 3/3] btf_loader.c: Infer alignment info
-Message-ID: <YXIGaA1SYSx37EEV@kernel.org>
-References: <20211018131621.212628-1-douglas.raillard@arm.com>
- <20211018131621.212628-4-douglas.raillard@arm.com>
+        Mon, 25 Oct 2021 04:56:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47246 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232268AbhJYIz7 (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Mon, 25 Oct 2021 04:55:59 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38B00C061767
+        for <dwarves@vger.kernel.org>; Mon, 25 Oct 2021 01:53:37 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id g10so15375849edj.1
+        for <dwarves@vger.kernel.org>; Mon, 25 Oct 2021 01:53:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:subject:message-id:mime-version
+         :content-disposition;
+        bh=3aeqM6a7frSKQ5JtRWlHZsq2StUqg3WxWQ5cI4NmLbs=;
+        b=hmm/NqTECjLRU22KIo86xbQOF5mXx8pN3R0BQIV7FCsW8CD1fNYaQVvHtP0YxZ4oiB
+         MXGUCoRE1jpsZmF4lhFpmiyZtg0Wy7Uu29u3MC/Cb0ScuixuDlbkIjbvxAnRIpNrC2Iz
+         IEFuAFbXmsc06jM5JPu6GdcGrbJ7YDst2mhtOHdqvWyU3xw3wPZ3Jj62NcjNkV/Y6lSJ
+         U/spAiWh2QnjbC1arqUPTBJbpcXW3YJEDLoyX/glAQH1aVdBM+GWYvr8aybkH+bNBRWl
+         yxx+dkbAKrgA6JgcJWViTqRe76cGAfNo/c57eliylZgjki9nWTirMxuWYRk3L5v4LN9F
+         IciQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:subject:message-id
+         :mime-version:content-disposition;
+        bh=3aeqM6a7frSKQ5JtRWlHZsq2StUqg3WxWQ5cI4NmLbs=;
+        b=zQY70lSuilLj5cuG6BoS4u8QyfYNtabgSjG0H2scRc3M7JR3MRUl3udPyD4u/VIt67
+         vKAHCFSuFj8YxkQqa++pmvq+oVllOni6jQU1pmOFkTMyiJVDhKJH+muOG9FPJXeXQ2fz
+         B4M29zje1w0e7PqyIh9yJyapVWy/8lO0CYmO/+6/OKUsPvhEbIXTczCueO6FZC9Pu2rt
+         0tBMNyE9Hzkm1ErpVps2oAhNsnHe40KNbB6tcrN+j1Fa7rQDKMd3R8yoX5fm72MDnGXR
+         3HNlj87QJc179IOsrmQaYTbP1vUncGRtp0SgiK8A7+qYvXr5F7YYczELcfHKl8sfMLjS
+         9GjA==
+X-Gm-Message-State: AOAM531WZUxutuclVDy79cC+gH1kucQbG7wexHEaJfXOnEkQW/IilDAE
+        N28J2YtPsOz8a4Sy/hKSCPG4qf3FJWfD6+aadFg=
+X-Google-Smtp-Source: ABdhPJyzQaJR0qyoNH3gNacOIeKpuC0OyFsxhQr7KDJ6RZv7qB79ZKtKuU0bfPPDSIXjTXm9Iuo0LQ==
+X-Received: by 2002:a17:906:25d7:: with SMTP id n23mr21504895ejb.322.1635152013975;
+        Mon, 25 Oct 2021 01:53:33 -0700 (PDT)
+Received: from m4.home ([2a0b:f4c2:2::42])
+        by smtp.gmail.com with ESMTPSA id s24sm8770739edy.38.2021.10.25.01.53.33
+        for <dwarves@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 25 Oct 2021 01:53:33 -0700 (PDT)
+Sender: Domenico Andreoli <domenico.andreoli.it@gmail.com>
+Received: from cavok by m4.home with local (Exim 4.94.2)
+        (envelope-from <cavok@m4>)
+        id 1mevjV-0001Fa-KW
+        for dwarves@vger.kernel.org; Mon, 25 Oct 2021 10:53:29 +0200
+Date:   Mon, 25 Oct 2021 10:53:29 +0200
+From:   Domenico Andreoli <domenico.andreoli@linux.com>
+To:     dwarves@vger.kernel.org
+Subject: [PATCH] Minor manpage fixes
+Message-ID: <YXZwiaXX/jMKooQm@m4>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ZVaSuO64qUlUNftt"
 Content-Disposition: inline
-In-Reply-To: <20211018131621.212628-4-douglas.raillard@arm.com>
-X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-Em Mon, Oct 18, 2021 at 02:16:21PM +0100, Douglas RAILLARD escreveu:
-> From: Douglas Raillard <douglas.raillard@arm.com>
-> 
-> BTF does not carry alignment information, but it carries the offset in
-> structs. This allows inferring the original alignment, yielding a C
-> header dump that is not identical to the original C code, but is
-> guaranteed to lead to the same memory layout.
-> 
-> This allows using the output of pahole in another program to poke at
-> memory, with the assurance that we will not read garbage.
-> 
-> Note: Since the alignment is inferred from the offset, it sometimes
-> happens that the offset was already correctly aligned, which means the
-> inferred alignment will be smaller than in the original source. This
-> does not impact the ability to read existing structs, but it could
-> impact creating such struct if other client code expects higher
-> alignment than the one exposed in the generated header.
 
-this one makes btfdiff fail, example:
+--ZVaSuO64qUlUNftt
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
+Signed-off-by: Domenico Andreoli <domenico.andreoli@linux.com>
+---
+ man-pages/pahole.1 |    7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-@@ -125578,7 +125640,7 @@ struct xt_entry_match {
- 			struct xt_match * match;         /*     8     8 */
- 		} kernel;                                /*     0    16 */
- 		__u16              match_size;           /*     0     2 */
--	} u;                                             /*     0    32 */
-+	} u;            /*     0    32 */
- 	unsigned char              data[];               /*    32     0 */
+Index: b/man-pages/pahole.1
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+--- a/man-pages/pahole.1
++++ b/man-pages/pahole.1
+@@ -100,7 +100,8 @@ or file URLs (e.g.: file://class_list.tx
+ .B \-c, \-\-cacheline_size=3DSIZE
+ Set cacheline size to SIZE bytes.
+=20
+-.TP \-\-sort
++.TP
++.B \-\-sort
+ Sort the output by type name, maybe this will grow to allow sorting by oth=
+er
+ criteria.
+=20
+@@ -792,7 +793,7 @@ $ pahole ~/bin/perf --header=3Dperf_file_h
+ 		.size =3D 88,
+ 	},
+ 	.id =3D 13,
+-	.path =3D "/machine.slice/machine-qemu\x2d1\x2drhel6.sandy.scope",
++	.path =3D "/machine.slice/machine-qemu\\x2d1\\x2drhel6.sandy.scope",
+ },
+ $=20
+ .fi
+@@ -805,7 +806,7 @@ $ pahole ~/bin/perf --header=3Dperf_file_h
+ .P
+ This uses ~/bin/perf to get the type definitions, the defines 'struct perf=
+_file_header' as the header,
+ then seeks '$header.data.offset' bytes from the start of the file, and con=
+siders '$header.data.size' bytes
+-worth of such records. The filter expression may omit a common prefix, in =
+this case it could additonally be
++worth of such records. The filter expression may omit a common prefix, in =
+this case it could additionally be
+ equivalently written as both 'filter=3Dtype=3D=3DCGROUP' or the 'filter=3D=
+' can also be omitted, getting as compact
+ as 'type=3D=3DCGROUP':
+ .P
 
- 	/* size: 32, cachelines: 1, members: 2 */
+--=20
+rsa4096: 3B10 0CA1 8674 ACBA B4FE  FCD2 CE5B CF17 9960 DE13
+ed25519: FFB4 0CC3 7F2E 091D F7DA  356E CC79 2832 ED38 CB05
 
-Why the change in the generated source code comment alignment?
+--ZVaSuO64qUlUNftt
+Content-Type: application/pgp-signature; name="signature.asc"
 
-There are some other differences, I'll check tomorrow.
+-----BEGIN PGP SIGNATURE-----
 
-- Arnaldo
- 
-> Signed-off-by: Douglas Raillard <douglas.raillard@arm.com>
-> ---
->  btf_loader.c | 36 ++++++++++++++++++++++++++++++++++++
->  dwarves.c    |  2 +-
->  dwarves.h    |  2 ++
->  3 files changed, 39 insertions(+), 1 deletion(-)
-> 
-> diff --git a/btf_loader.c b/btf_loader.c
-> index 9c2daee..2885252 100644
-> --- a/btf_loader.c
-> +++ b/btf_loader.c
-> @@ -471,10 +471,37 @@ static int btf__load_sections(struct btf *btf, struct cu *cu)
->  	return btf__load_types(btf, cu);
->  }
->  
-> +static uint32_t class__infer_alignment(uint32_t byte_offset,
-> +				       uint32_t natural_alignment,
-> +				       uint32_t smallest_offset)
-> +{
-> +	uint32_t alignment = 0;
-> +	uint32_t offset_delta = byte_offset - smallest_offset;
-> +
-> +	if (offset_delta) {
-> +		if (byte_offset % 2 == 0) {
-> +			/* Find the power of 2 immediately higher than
-> +			 * offset_delta
-> +			 */
-> +			alignment = 1 << (8 * sizeof(offset_delta) -
-> +					      __builtin_clz(offset_delta));
-> +		} else {
-> +			alignment = 0;
-> +		}
-> +	}
-> +
-> +	/* Natural alignment, nothing to do */
-> +	if (alignment <= natural_alignment || alignment == 1)
-> +		alignment = 0;
-> +
-> +	return alignment;
-> +}
-> +
->  static int class__fixup_btf_bitfields(struct tag *tag, struct cu *cu)
->  {
->  	struct class_member *pos;
->  	struct type *tag_type = tag__type(tag);
-> +	uint32_t smallest_offset = 0;
->  
->  	type__for_each_data_member(tag_type, pos) {
->  		struct tag *type = tag__strip_typedefs_and_modifiers(&pos->tag, cu);
-> @@ -508,8 +535,17 @@ static int class__fixup_btf_bitfields(struct tag *tag, struct cu *cu)
->  				pos->byte_offset = pos->bit_offset / 8;
->  			}
->  		}
-> +
-> +		pos->alignment = class__infer_alignment(pos->byte_offset,
-> +							tag__natural_alignment(type, cu),
-> +							smallest_offset);
-> +		smallest_offset = pos->byte_offset + pos->byte_size;
->  	}
->  
-> +	tag_type->alignment = class__infer_alignment(tag_type->size,
-> +						     tag__natural_alignment(tag, cu),
-> +						     smallest_offset);
-> +
->  	return 0;
->  }
->  
-> diff --git a/dwarves.c b/dwarves.c
-> index b6f2489..bb8af5b 100644
-> --- a/dwarves.c
-> +++ b/dwarves.c
-> @@ -1515,7 +1515,7 @@ void class__find_holes(struct class *class)
->  
->  static size_t type__natural_alignment(struct type *type, const struct cu *cu);
->  
-> -static size_t tag__natural_alignment(struct tag *tag, const struct cu *cu)
-> +size_t tag__natural_alignment(struct tag *tag, const struct cu *cu)
->  {
->  	size_t natural_alignment = 1;
->  
-> diff --git a/dwarves.h b/dwarves.h
-> index 30d33fa..c2fea0a 100644
-> --- a/dwarves.h
-> +++ b/dwarves.h
-> @@ -1002,6 +1002,8 @@ struct type {
->  
->  void __type__init(struct type *type);
->  
-> +size_t tag__natural_alignment(struct tag *tag, const struct cu *cu);
-> +
->  static inline struct class *type__class(const struct type *type)
->  {
->  	return (struct class *)type;
-> -- 
-> 2.25.1
+iQIzBAABCgAdFiEE0znebYyV6RAN/q8htwRzp/vsqYEFAmF2cIUACgkQtwRzp/vs
+qYGuCRAAvAamU8PLj+LFMYtWBR98lDDiLYNjvz2mepRxEAc0o6NR6J7/YbFek9zY
+MdYxpJYiA5jlJlZ6RIjxK3cIgoZkzb3wz6nUsJJ74eKi/O4eG8iRIWCf6G2FrqH6
+WM0Q222iMzwDmEJIu1WHbSWW5xd5vVz9USWp2gNECV3zJAiTWhcdmb6r5iE+ct0e
+060U4GVRLGD9NCUXyc7lmzO3oZw8DleF0xnk+vs81DQ4hADcp9r6E49QZydXAI1G
+wOfrw3Q+PCqT7bl8HVYjvrWmsR/Iw8AibA6tS27SrdF+hpkavYzzTo/huTt9X36I
+NyaxfmlBsStdelu4nt37WWGfOzidkoKQPfHAiyzAv23w68GmkP7GFX2ZiyMc6hYf
+i8dbdofMkqTGhW1VN+TrHn8DppQgnx1Kpl+omjLNOVrmI4E4mGlP1mKS743H83qX
+oDl+GLRhGg1lM/nxXmYzswrwySO7J9IWMdLY0JcACJ8Fmgt8uLASfjMaumcI/fFY
+2wlYSzZXzQGBIP4fIhrZgaqB6ntjJXrsoOGNZrHI5cPDT5Si3iFEpDqX37V5BPyb
+P/vV9NPtZmpUBS4Ggj9pEscNI/sfqq2SDuOrHWFus27dDnnT9JuLTx8K7qtHxpLp
+2TNVivzYDAoHlOn7ociyPwPu7rk6V/Kf+sPZxCobWosKZ7BQ+aM=
+=0BPW
+-----END PGP SIGNATURE-----
 
--- 
-
-- Arnaldo
+--ZVaSuO64qUlUNftt--
