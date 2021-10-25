@@ -2,106 +2,257 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EE7E1C433F5
-	for <linux-dwarves@archiver.kernel.org>; Mon, 25 Oct 2021 17:07:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8F188C433F5
+	for <linux-dwarves@archiver.kernel.org>; Mon, 25 Oct 2021 23:02:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C6E8D60EE3
-	for <linux-dwarves@archiver.kernel.org>; Mon, 25 Oct 2021 17:07:52 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7262860232
+	for <linux-dwarves@archiver.kernel.org>; Mon, 25 Oct 2021 23:02:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234303AbhJYRKL (ORCPT
+        id S234603AbhJYXEt (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Mon, 25 Oct 2021 13:10:11 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60222 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235132AbhJYRI1 (ORCPT <rfc822;dwarves@vger.kernel.org>);
-        Mon, 25 Oct 2021 13:08:27 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id BFA0B6023B;
-        Mon, 25 Oct 2021 17:06:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1635181564;
-        bh=6Lq/yt2q+SSv1UzKyCiFXICPTgTxRt3qBiibYLvdh+g=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ttTF//8JQDpyW4HEb1ih5So19TzSOP8c9wDVvhKVbHSR8GY+XV4bdM9lgyUaDTdv3
-         Uxfkqzii3Bxc9ZxOpY/hRK5po7pPuS+h1PplfeqAGNvHfbCZOhSO017MIazlDvgmtu
-         rDme6usMv3L+3xx1AQ4GxxaQO2temmqZJmkQh1TT/0TdCeOjYA/vOYzS4n/WpGRzIB
-         hKTyRRjY6fQdZwRJwY9E21mkOFku0BTTWPi93suv64upiAgvYFj+OvdlUB/PYpvVlx
-         rR9ur8QBOPp8onGB7EBDXXseAnDBzybqrdolT3DzPJ0rrx2CVzTS2lxCWFaA8RTFkR
-         OMMF+1hkwQ8Ig==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 751DE410A1; Mon, 25 Oct 2021 14:06:02 -0300 (-03)
-Date:   Mon, 25 Oct 2021 14:06:02 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Douglas RAILLARD <douglas.raillard@arm.com>
-Cc:     acme@redhat.com, dwarves@vger.kernel.org
-Subject: Re: [PATCH v2 3/3] btf_loader.c: Infer alignment info
-Message-ID: <YXbj+gukL1fZx/Gb@kernel.org>
-References: <20211018131621.212628-1-douglas.raillard@arm.com>
- <20211018131621.212628-4-douglas.raillard@arm.com>
- <YXIGaA1SYSx37EEV@kernel.org>
+        Mon, 25 Oct 2021 19:04:49 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:26174 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234415AbhJYXEt (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Mon, 25 Oct 2021 19:04:49 -0400
+Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 19PMic54006800
+        for <dwarves@vger.kernel.org>; Mon, 25 Oct 2021 16:02:26 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : content-type : content-transfer-encoding :
+ mime-version; s=facebook; bh=GJxcjDpboT/z5ZFkETewbIMI32iTXzDMkoypypbpCGU=;
+ b=LRFw6dMQ2GNuS013yNOJ/ciD33xq2y93YAjiqwHreJN2Hh5AW3LPaiWpqKoHuSUIR8Q3
+ XD7Y3+vNSNebmsQvYcexjPmfkdIs6bqxXofPwfkWk/bFf0iOjdQ0HPnTxdCcasb+t2ml
+ GiJ/RpbuCCwulJLRXGHwsrf3vD+dHAhrj8k= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com with ESMTP id 3bx4gn8k2u-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <dwarves@vger.kernel.org>; Mon, 25 Oct 2021 16:02:26 -0700
+Received: from intmgw002.06.ash9.facebook.com (2620:10d:c085:208::f) by
+ mail.thefacebook.com (2620:10d:c085:11d::6) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.14; Mon, 25 Oct 2021 16:02:24 -0700
+Received: by devbig309.ftw3.facebook.com (Postfix, from userid 128203)
+        id 1F7D6181A2B6; Mon, 25 Oct 2021 16:02:20 -0700 (PDT)
+From:   Yonghong Song <yhs@fb.com>
+To:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
+        <dwarves@vger.kernel.org>
+CC:     Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>, <bpf@vger.kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>
+Subject: [PATCH dwarves] btf: rename btf_tag to btf_decl_tag
+Date:   Mon, 25 Oct 2021 16:02:20 -0700
+Message-ID: <20211025230220.3250968-1-yhs@fb.com>
+X-Mailer: git-send-email 2.30.2
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-FB-Source: Intern
+X-Proofpoint-GUID: GKkeB_ODe8VIyn-tr9sVPfuEX7Rp2QOr
+X-Proofpoint-ORIG-GUID: GKkeB_ODe8VIyn-tr9sVPfuEX7Rp2QOr
+Content-Transfer-Encoding: quoted-printable
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YXIGaA1SYSx37EEV@kernel.org>
-X-Url:  http://acmel.wordpress.com
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.182.1,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
+ definitions=2021-10-25_07,2021-10-25_02,2020-04-07_01
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxscore=0
+ lowpriorityscore=0 malwarescore=0 mlxlogscore=999 phishscore=0
+ adultscore=0 bulkscore=0 impostorscore=0 spamscore=0 priorityscore=1501
+ suspectscore=0 clxscore=1011 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2110150000 definitions=main-2110250130
+X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-Em Thu, Oct 21, 2021 at 09:31:36PM -0300, Arnaldo Carvalho de Melo escreveu:
-> Em Mon, Oct 18, 2021 at 02:16:21PM +0100, Douglas RAILLARD escreveu:
-> > From: Douglas Raillard <douglas.raillard@arm.com>
-> > 
-> > BTF does not carry alignment information, but it carries the offset in
-> > structs. This allows inferring the original alignment, yielding a C
-> > header dump that is not identical to the original C code, but is
-> > guaranteed to lead to the same memory layout.
-> > 
-> > This allows using the output of pahole in another program to poke at
-> > memory, with the assurance that we will not read garbage.
-> > 
-> > Note: Since the alignment is inferred from the offset, it sometimes
-> > happens that the offset was already correctly aligned, which means the
-> > inferred alignment will be smaller than in the original source. This
-> > does not impact the ability to read existing structs, but it could
-> > impact creating such struct if other client code expects higher
-> > alignment than the one exposed in the generated header.
-> 
-> this one makes btfdiff fail, example:
-> 
-> 
-> @@ -125578,7 +125640,7 @@ struct xt_entry_match {
->  			struct xt_match * match;         /*     8     8 */
->  		} kernel;                                /*     0    16 */
->  		__u16              match_size;           /*     0     2 */
-> -	} u;                                             /*     0    32 */
-> +	} u;            /*     0    32 */
->  	unsigned char              data[];               /*    32     0 */
-> 
->  	/* size: 32, cachelines: 1, members: 2 */
-> 
-> Why the change in the generated source code comment alignment?
+Kernel commit ([1]) renamed btf_tag to btf_decl_tag
+for uapi btf.h and libbpf api's. The reason is a new
+clang attribute, btf_type_tag, is introduced ([2]).
+Renaming btf_tag to btf_decl_tag makes it easier to
+distinghish from btf_type_tag.
 
-Since this is inferred and DWARF has the alignment info explicitely, we
-can't really compare, so I'll stick this to btfdiff.
+I also pulled in latest libbpf repo since it
+contains renamed libbpf api function btf__add_decl_tag().
 
-diff --git a/btfdiff b/btfdiff
-index 77543630d1965b5e..cbdf65285cd90f62 100755
---- a/btfdiff
-+++ b/btfdiff
-@@ -33,6 +33,7 @@ ${pahole_bin} -F dwarf \
- 	      --show_private_classes $dwarf_input > $dwarf_output
- ${pahole_bin} -F btf \
- 	      --sort \
-+	      --suppress_aligned_attribute \
- 	      --suppress_packed \
- 	      $btf_input > $btf_output
- 
- 
-> There are some other differences, I'll check tomorrow.
+  [1] https://lore.kernel.org/bpf/20211012164838.3345699-1-yhs@fb.com/
+  [2] https://reviews.llvm.org/D111199
 
-I got sidetracked, will try to reduce the differences somehow, but
-probably as patches on top of yours, to test this the best is to use
-fullcircle from BTF info, which I'll also look into as I think you
-reported issues with pfunct's --compile option.
+Signed-off-by: Yonghong Song <yhs@fb.com>
+---
+ btf_encoder.c  | 16 ++++++++--------
+ dwarf_loader.c |  6 +++---
+ dwarves.h      |  2 +-
+ lib/bpf        |  2 +-
+ pahole.c       | 12 ++++++------
+ 5 files changed, 19 insertions(+), 19 deletions(-)
 
-- Arnaldo
+diff --git a/btf_encoder.c b/btf_encoder.c
+index c341f95..968af92 100644
+--- a/btf_encoder.c
++++ b/btf_encoder.c
+@@ -141,7 +141,7 @@ static const char * const btf_kind_str[NR_BTF_KINDS] =
+=3D {
+ 	[BTF_KIND_VAR]          =3D "VAR",
+ 	[BTF_KIND_DATASEC]      =3D "DATASEC",
+ 	[BTF_KIND_FLOAT]        =3D "FLOAT",
+-	[BTF_KIND_TAG]          =3D "TAG",
++	[BTF_KIND_DECL_TAG]     =3D "DECL_TAG",
+ };
+=20
+ static const char *btf__printable_name(const struct btf *btf, uint32_t off=
+set)
+@@ -645,20 +645,20 @@ static int32_t btf_encoder__add_datasec(struct btf_en=
+coder *encoder, const char
+ 	return id;
+ }
+=20
+-static int32_t btf_encoder__add_tag(struct btf_encoder *encoder, const cha=
+r *value, uint32_t type,
+-				    int component_idx)
++static int32_t btf_encoder__add_decl_tag(struct btf_encoder *encoder, cons=
+t char *value, uint32_t type,
++					 int component_idx)
+ {
+ 	struct btf *btf =3D encoder->btf;
+ 	const struct btf_type *t;
+ 	int32_t id;
+=20
+-	id =3D btf__add_tag(btf, value, type, component_idx);
++	id =3D btf__add_decl_tag(btf, value, type, component_idx);
+ 	if (id > 0) {
+ 		t =3D btf__type_by_id(btf, id);
+ 		btf_encoder__log_type(encoder, t, false, true, "type_id=3D%u component_i=
+dx=3D%d",
+ 				      t->type, component_idx);
+ 	} else {
+-		btf__log_err(btf, BTF_KIND_TAG, value, true, "component_idx=3D%d Error e=
+mitting BTF type",
++		btf__log_err(btf, BTF_KIND_DECL_TAG, value, true, "component_idx=3D%d Er=
+ror emitting BTF type",
+ 			     component_idx);
+ 	}
+=20
+@@ -1267,7 +1267,7 @@ static int btf_encoder__encode_cu_variables(struct bt=
+f_encoder *encoder, struct
+ 		}
+=20
+ 		list_for_each_entry(annot, &var->annots, node) {
+-			int tag_type_id =3D btf_encoder__add_tag(encoder, annot->value, id, ann=
+ot->component_idx);
++			int tag_type_id =3D btf_encoder__add_decl_tag(encoder, annot->value, id=
+, annot->component_idx);
+ 			if (tag_type_id < 0) {
+ 				fprintf(stderr, "error: failed to encode tag '%s' to variable '%s' wit=
+h component_idx %d\n",
+ 					annot->value, name, annot->component_idx);
+@@ -1438,7 +1438,7 @@ int btf_encoder__encode_cu(struct btf_encoder *encode=
+r, struct cu *cu)
+ 		btf_type_id =3D type_id_off + core_id;
+ 		ns =3D tag__namespace(pos);
+ 		list_for_each_entry(annot, &ns->annots, node) {
+-			tag_type_id =3D btf_encoder__add_tag(encoder, annot->value, btf_type_id=
+, annot->component_idx);
++			tag_type_id =3D btf_encoder__add_decl_tag(encoder, annot->value, btf_ty=
+pe_id, annot->component_idx);
+ 			if (tag_type_id < 0) {
+ 				fprintf(stderr, "error: failed to encode tag '%s' to %s '%s' with comp=
+onent_idx %d\n",
+ 					annot->value, pos->tag =3D=3D DW_TAG_structure_type ? "struct" : "uni=
+on",
+@@ -1490,7 +1490,7 @@ int btf_encoder__encode_cu(struct btf_encoder *encode=
+r, struct cu *cu)
+ 		}
+=20
+ 		list_for_each_entry(annot, &fn->annots, node) {
+-			tag_type_id =3D btf_encoder__add_tag(encoder, annot->value, btf_fn_id, =
+annot->component_idx);
++			tag_type_id =3D btf_encoder__add_decl_tag(encoder, annot->value, btf_fn=
+_id, annot->component_idx);
+ 			if (tag_type_id < 0) {
+ 				fprintf(stderr, "error: failed to encode tag '%s' to func %s with comp=
+onent_idx %d\n",
+ 					annot->value, name, annot->component_idx);
+diff --git a/dwarf_loader.c b/dwarf_loader.c
+index 48e1bf0..fc7490e 100644
+--- a/dwarf_loader.c
++++ b/dwarf_loader.c
+@@ -866,12 +866,12 @@ static int add_llvm_annotation(Dwarf_Die *die, int co=
+mponent_idx, struct conf_lo
+ 	struct llvm_annotation *annot;
+ 	const char *name;
+=20
+-	if (conf->skip_encoding_btf_tag)
++	if (conf->skip_encoding_btf_decl_tag)
+ 		return 0;
+=20
+-	/* Only handle btf_tag annotation for now. */
++	/* Only handle btf_decl_tag annotation for now. */
+ 	name =3D attr_string(die, DW_AT_name, conf);
+-	if (strcmp(name, "btf_tag") !=3D 0)
++	if (strcmp(name, "btf_decl_tag") !=3D 0)
+ 		return 0;
+=20
+ 	annot =3D zalloc(sizeof(*annot));
+diff --git a/dwarves.h b/dwarves.h
+index 30d33fa..8e293bd 100644
+--- a/dwarves.h
++++ b/dwarves.h
+@@ -58,7 +58,7 @@ struct conf_load {
+ 	bool			ignore_inline_expansions;
+ 	bool			ignore_labels;
+ 	bool			ptr_table_stats;
+-	bool			skip_encoding_btf_tag;
++	bool			skip_encoding_btf_decl_tag;
+ 	uint8_t			hashtable_bits;
+ 	uint8_t			max_hashtable_bits;
+ 	uint16_t		kabi_prefix_len;
+diff --git a/lib/bpf b/lib/bpf
+index 980777c..f05791d 160000
+--- a/lib/bpf
++++ b/lib/bpf
+@@ -1 +1 @@
+-Subproject commit 980777cc16db75d5628a537c892aefc2640bb242
++Subproject commit f05791d8cfcbbf9092b4099b9d011bb72e241ef8
+diff --git a/pahole.c b/pahole.c
+index 80271b5..23e1256 100644
+--- a/pahole.c
++++ b/pahole.c
+@@ -1124,7 +1124,7 @@ ARGP_PROGRAM_VERSION_HOOK_DEF =3D dwarves_print_versi=
+on;
+ #define ARGP_sort_output	   328
+ #define ARGP_hashbits		   329
+ #define ARGP_devel_stats	   330
+-#define ARGP_skip_encoding_btf_tag 331
++#define ARGP_skip_encoding_btf_decl_tag 331
+=20
+ static const struct argp_option pahole__options[] =3D {
+ 	{
+@@ -1496,9 +1496,9 @@ static const struct argp_option pahole__options[] =3D=
+ {
+ 		.doc  =3D "Print internal data structures stats",
+ 	},
+ 	{
+-		.name =3D "skip_encoding_btf_tag",
+-		.key  =3D ARGP_skip_encoding_btf_tag,
+-		.doc  =3D "Do not encode TAGs in BTF."
++		.name =3D "skip_encoding_btf_decl_tag",
++		.key  =3D ARGP_skip_encoding_btf_decl_tag,
++		.doc  =3D "Do not encode DECL_TAGs in BTF."
+ 	},
+ 	{
+ 		.name =3D NULL,
+@@ -1648,8 +1648,8 @@ static error_t pahole__options_parser(int key, char *=
+arg,
+ 		conf_load.hashtable_bits =3D atoi(arg);	break;
+ 	case ARGP_devel_stats:
+ 		conf_load.ptr_table_stats =3D true;	break;
+-	case ARGP_skip_encoding_btf_tag:
+-		conf_load.skip_encoding_btf_tag =3D true;	break;
++	case ARGP_skip_encoding_btf_decl_tag:
++		conf_load.skip_encoding_btf_decl_tag =3D true;	break;
+ 	default:
+ 		return ARGP_ERR_UNKNOWN;
+ 	}
+--=20
+2.30.2
+
