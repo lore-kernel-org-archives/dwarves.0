@@ -2,135 +2,338 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EA983C43217
-	for <linux-dwarves@archiver.kernel.org>; Wed, 27 Oct 2021 23:08:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C8926C433F5
+	for <linux-dwarves@archiver.kernel.org>; Thu, 28 Oct 2021 09:31:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CE8F0610CB
-	for <linux-dwarves@archiver.kernel.org>; Wed, 27 Oct 2021 23:08:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B0C0060E78
+	for <linux-dwarves@archiver.kernel.org>; Thu, 28 Oct 2021 09:31:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230229AbhJ0XLI (ORCPT
+        id S229850AbhJ1JeD (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Wed, 27 Oct 2021 19:11:08 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:29796 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S230232AbhJ0XLH (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Wed, 27 Oct 2021 19:11:07 -0400
-Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
-        by m0001303.ppops.net (8.16.1.2/8.16.1.2) with SMTP id 19RLfaPL002423
-        for <dwarves@vger.kernel.org>; Wed, 27 Oct 2021 16:08:41 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=facebook;
- bh=mRfG9ZTu3I6BiGRcCEkwvNsDMruNfQNKCtrp7lwQXcQ=;
- b=nkApurSLwZMQrm1B4osTXg+3OkoQTbbGiGZOrrtFsIfIf6oyHJe9YE5AsrglYctRv+ag
- NJUABLLfoUorAd547yZjFfjfSI/dWD/5C42ij5zpvimtts00Po+yjBEpkQkfelgBKLKy
- j1i1x8hAsyVSGrQJBCbaOjj6HnIAJUtows0= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by m0001303.ppops.net with ESMTP id 3by7psws7j-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <dwarves@vger.kernel.org>; Wed, 27 Oct 2021 16:08:41 -0700
-Received: from intmgw001.06.ash9.facebook.com (2620:10d:c085:108::4) by
- mail.thefacebook.com (2620:10d:c085:11d::6) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.14; Wed, 27 Oct 2021 16:08:39 -0700
-Received: by devbig309.ftw3.facebook.com (Postfix, from userid 128203)
-        id 3097F19948E7; Wed, 27 Oct 2021 16:08:34 -0700 (PDT)
-From:   Yonghong Song <yhs@fb.com>
-To:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
-        <dwarves@vger.kernel.org>
-CC:     Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>, <bpf@vger.kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>
-Subject: [PATCH dwarves 2/2] btf_encoder: generate BTF_KIND_DECL_TAGs for typedef btf_decl_tag attributes
-Date:   Wed, 27 Oct 2021 16:08:34 -0700
-Message-ID: <20211027230834.2466282-1-yhs@fb.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20211027230822.2465100-1-yhs@fb.com>
-References: <20211027230822.2465100-1-yhs@fb.com>
+        Thu, 28 Oct 2021 05:34:03 -0400
+Received: from foss.arm.com ([217.140.110.172]:52730 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229835AbhJ1JeD (ORCPT <rfc822;dwarves@vger.kernel.org>);
+        Thu, 28 Oct 2021 05:34:03 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 35E631FB;
+        Thu, 28 Oct 2021 02:31:36 -0700 (PDT)
+Received: from [10.57.46.169] (unknown [10.57.46.169])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 44DF73F5A1;
+        Thu, 28 Oct 2021 02:31:35 -0700 (PDT)
+Subject: Re: [PATCH v2 3/3] btf_loader.c: Infer alignment info
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     acme@redhat.com, dwarves@vger.kernel.org
+References: <20211018131621.212628-1-douglas.raillard@arm.com>
+ <20211018131621.212628-4-douglas.raillard@arm.com>
+ <YXIGaA1SYSx37EEV@kernel.org> <YXbj+gukL1fZx/Gb@kernel.org>
+ <550aad99-12b3-c594-9fb4-354b62cbaa5b@arm.com> <YXm69PIYcYckUVzP@kernel.org>
+From:   Douglas Raillard <douglas.raillard@arm.com>
+Message-ID: <985d273b-9c3e-0c5c-bf86-e73b8d2f6007@arm.com>
+Date:   Thu, 28 Oct 2021 10:31:33 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-FB-Source: Intern
-X-Proofpoint-GUID: My3EMnmG0swkJHaom4xSZ6vyV4Xl0qMH
-X-Proofpoint-ORIG-GUID: My3EMnmG0swkJHaom4xSZ6vyV4Xl0qMH
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.182.1,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
- definitions=2021-10-27_06,2021-10-26_01,2020-04-07_01
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 bulkscore=0
- malwarescore=0 impostorscore=0 mlxlogscore=823 lowpriorityscore=0
- suspectscore=0 spamscore=0 phishscore=0 mlxscore=0 clxscore=1015
- priorityscore=1501 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2110150000 definitions=main-2110270128
-X-FB-Internal: deliver
+In-Reply-To: <YXm69PIYcYckUVzP@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-Emit BTF BTF_KIND_DECL_TAGs for btf_decl_tag attributes attached to
-typedef declarations. The following is a simple example:
-  $ cat t.c
-    #define __tag1 __attribute__((btf_decl_tag("tag1")))
-    #define __tag2 __attribute__((btf_decl_tag("tag2")))
-    typedef struct { int a; int b; } __t __tag1 __tag2;
-    __t g;
-  $ clang -O2 -g -c t.c
-  $ pahole -JV t.o
-    btf_encoder__new: 't.o' doesn't have '.data..percpu' section
-    Found 0 per-CPU variables!
-    File t.o:
-    [1] TYPEDEF __t type_id=3D2
-    [2] STRUCT (anon) size=3D8
-            a type_id=3D3 bits_offset=3D0
-            b type_id=3D3 bits_offset=3D32
-    [3] INT int size=3D4 nr_bits=3D32 encoding=3DSIGNED
-    [4] DECL_TAG tag1 type_id=3D1 component_idx=3D-1
-    [5] DECL_TAG tag2 type_id=3D1 component_idx=3D-1
+On 10/27/21 9:47 PM, Arnaldo Carvalho de Melo wrote:
+> Em Tue, Oct 26, 2021 at 04:03:57PM +0100, Douglas Raillard escreveu:
+>> On 10/25/21 6:06 PM, Arnaldo Carvalho de Melo wrote:
+>>> Em Thu, Oct 21, 2021 at 09:31:36PM -0300, Arnaldo Carvalho de Melo escreveu:
+>>>> Em Mon, Oct 18, 2021 at 02:16:21PM +0100, Douglas RAILLARD escreveu:
+>>>>> From: Douglas Raillard <douglas.raillard@arm.com>
+> 
+>>>>> BTF does not carry alignment information, but it carries the offset in
+>>>>> structs. This allows inferring the original alignment, yielding a C
+>>>>> header dump that is not identical to the original C code, but is
+>>>>> guaranteed to lead to the same memory layout.
+> 
+>>>>> This allows using the output of pahole in another program to poke at
+>>>>> memory, with the assurance that we will not read garbage.
+> 
+>>>>> Note: Since the alignment is inferred from the offset, it sometimes
+>>>>> happens that the offset was already correctly aligned, which means the
+>>>>> inferred alignment will be smaller than in the original source. This
+>>>>> does not impact the ability to read existing structs, but it could
+>>>>> impact creating such struct if other client code expects higher
+>>>>> alignment than the one exposed in the generated header.
+> 
+>>>> this one makes btfdiff fail, example:
+> 
+>>>> @@ -125578,7 +125640,7 @@ struct xt_entry_match {
+>>>>    			struct xt_match * match;         /*     8     8 */
+>>>>    		} kernel;                                /*     0    16 */
+>>>>    		__u16              match_size;           /*     0     2 */
+>>>> -	} u;                                             /*     0    32 */
+>>>> +	} u;            /*     0    32 */
+>>>>    	unsigned char              data[];               /*    32     0 */
+>>>>
+>>>>    	/* size: 32, cachelines: 1, members: 2 */
+>>>>
+>>>> Why the change in the generated source code comment alignment?
+> 
+> The one above I fixed today, an old bug that gets exercised when you inferred
+> alignment for types.
+> 
+>>> Since this is inferred and DWARF has the alignment info explicitely, we
+>>> can't really compare, so I'll stick this to btfdiff.
+> <SNIP>
+>>> I got sidetracked, will try to reduce the differences somehow, but
+>>> probably as patches on top of yours, to test this the best is to use
+>>> fullcircle from BTF info, which I'll also look into as I think you
+>>> reported issues with pfunct's --compile option.
+>   
+>> Thanks, let me know when you get something working on this front.
+> 
+> So, what is now in the 'next' branch (an alias for the tmp.master branch
+> that is tested in the libbpf CI) produces:
+> 
+>    --- /tmp/btfdiff.dwarf.8098nf   2021-10-27 17:29:02.788601053 -0300
+>    +++ /tmp/btfdiff.btf.eTagYI     2021-10-27 17:29:02.994606515 -0300
+>    @@ -107,7 +107,7 @@ struct Qdisc {
+>            /* XXX 24 bytes hole, try to pack */
+>     
+>            /* --- cacheline 2 boundary (128 bytes) --- */
+>    -       struct sk_buff_head        gso_skb __attribute__((__aligned__(64))); /*   128    24 */
+>    +       struct sk_buff_head        gso_skb __attribute__((__aligned__(32))); /*   128    24 */
+>            struct qdisc_skb_head      q;                    /*   152    24 */
+>            struct gnet_stats_basic_packed bstats;           /*   176    16 */
+>            /* --- cacheline 3 boundary (192 bytes) --- */
+>    
+> The one above is a bit difficult to solve, perhaps we can use an
+> heuristic for kernel files and assume this is dependend on the
+> typical cacheline sizes? As it in the kernel sources is:
+> 
+>            struct sk_buff_head     gso_skb ____cacheline_aligned_in_smp;
+> 
+> I.e. if it is a multiple of both 64, then we use it instead of 32?
+>    
+>    @@ -117,18 +117,18 @@ struct Qdisc {
+>            struct Qdisc *             next_sched;           /*   224     8 */
+>            struct sk_buff_head        skb_bad_txq;          /*   232    24 */
+>            /* --- cacheline 4 boundary (256 bytes) --- */
+>    -       spinlock_t                 busylock __attribute__((__aligned__(64))); /*   256     4 */
+>    +       spinlock_t                 busylock;             /*   256     4 */
+> 
+> Originally:
+> 
+>          spinlock_t              busylock ____cacheline_aligned_in_smp;
 
-Signed-off-by: Yonghong Song <yhs@fb.com>
----
- btf_encoder.c | 12 +++++++++---
- 1 file changed, 9 insertions(+), 3 deletions(-)
+Sounds like a good idea, I can't think of another reason for large alignments anyway.
+Larger power of 2 alignments are harmless anyway so we might as well try to guess.
+I'll prepare a v3 with that update.
 
-diff --git a/btf_encoder.c b/btf_encoder.c
-index 40f6aa3..2f1f4ae 100644
---- a/btf_encoder.c
-+++ b/btf_encoder.c
-@@ -1437,19 +1437,25 @@ int btf_encoder__encode_cu(struct btf_encoder *en=
-coder, struct cu *cu)
- 	}
-=20
- 	cu__for_each_type(cu, core_id, pos) {
-+		const char *tag_name =3D "typedef";
- 		struct namespace *ns;
-=20
--		if (pos->tag !=3D DW_TAG_structure_type && pos->tag !=3D DW_TAG_union_=
-type)
-+		if (pos->tag !=3D DW_TAG_structure_type && pos->tag !=3D DW_TAG_union_=
-type &&
-+		    pos->tag !=3D DW_TAG_typedef)
- 			continue;
-=20
-+		if (pos->tag =3D=3D DW_TAG_structure_type)
-+			tag_name =3D "struct";
-+		else if (pos->tag =3D=3D DW_TAG_union_type)
-+			tag_name =3D "union";
-+
- 		btf_type_id =3D type_id_off + core_id;
- 		ns =3D tag__namespace(pos);
- 		list_for_each_entry(annot, &ns->annots, node) {
- 			tag_type_id =3D btf_encoder__add_decl_tag(encoder, annot->value, btf_=
-type_id, annot->component_idx);
- 			if (tag_type_id < 0) {
- 				fprintf(stderr, "error: failed to encode tag '%s' to %s '%s' with co=
-mponent_idx %d\n",
--					annot->value, pos->tag =3D=3D DW_TAG_structure_type ? "struct" : "u=
-nion",
--					namespace__name(ns), annot->component_idx);
-+					annot->value, tag_name, namespace__name(ns), annot->component_idx);
- 				goto out;
- 			}
- 		}
---=20
-2.30.2
+> 
+> But since it is already naturally aligned (232 + 24 = 256), we can't
+> infer it from what BTF carries.
+> 
+>            spinlock_t                 seqlock;              /*   260     4 */
+>    -       struct callback_head       rcu __attribute__((__aligned__(8))); /*   264    16 */
+>    +       struct callback_head       rcu;                  /*   264    16 */
+> 
+> Ditto
+>     
+>            /* XXX 40 bytes hole, try to pack */
+>     
+>            /* --- cacheline 5 boundary (320 bytes) --- */
+>    -       long int                   privdata[] __attribute__((__aligned__(64))); /*   320     0 */
+>    +       long int                   privdata[];           /*   320     0 */
+> 
+> But this one should've been inferred, right?
+
+Assuming you talk about offset 320 aligned on 64, we cannot infer a specific alignment since
+5 * 64 = 320.
+
+If you mean the number of forced alignments, I'm not surprised that BTF finds less forced alignments,
+as each some of the technically forced alignments (in the original source) also happens to be already
+satisfied by the normal layout, so we don't infer anything special.
+
+- Douglas
+
+>            /* size: 320, cachelines: 5, members: 27 */
+>            /* sum members: 256, holes: 2, sum holes: 64 */
+>    -       /* forced alignments: 4, forced holes: 2, sum forced holes: 64 */
+>    +       /* forced alignments: 1, forced holes: 1, sum forced holes: 24 */
+>     } __attribute__((__aligned__(64)));
+> 
+> 
+> Here both match, what was inferred for BTF is what DWARF produces, even
+> with the source code having no explicit annotation for the type.
+> 
+>> I also made the following Python script to validate the algorithm, assuming
+>> the compiler will emit a layout according to natural alignment:
+> 
+> Cool, I'll try and read it carefully.
+> 
+> - Arnaldo
+>   
+>> #! /usr/bin/env python3
+>>
+>> import itertools
+>> import math
+>>
+>> class Member:
+>>      def __init__(self, size, alignment=None):
+>>          self.size = size
+>>          self.alignment = size if alignment is None else alignment
+>>
+>>          assert self.alignment >= self.size
+>>
+>>      def __repr__(self):
+>>          return f'Member(size={self.size}, alignment={self.alignment})'
+>>
+>>
+>> def align(x, n):
+>>      r = x % n
+>>      padding = n - r if r else 0
+>>      return x + padding
+>>
+>>
+>> def next_power_of_2(x):
+>>      return 2 ** math.ceil(math.log2(x)) if x else 1
+>>
+>>
+>> def powers_of_2(from_, up_to):
+>>      for i in itertools.count():
+>>          x = 1 << i
+>>          if x < from_:
+>>              continue
+>>          elif x <= up_to:
+>>              yield x
+>>          else:
+>>              return
+>>
+>> class Struct:
+>>      def __init__(self, members, alignment=None):
+>>          members = list(members)
+>>
+>>          self.members = members
+>>          self.alignment = alignment
+>>          self.offsets = self._compute_offsets(members)
+>>          self.size = self._compute_size(members, self.offsets, alignment)
+>>
+>>
+>>      def __str__(self):
+>>          members = ',\n    '.join(
+>>              f'offset={offset}: {member}'
+>>              for member, offset in self.members_offset
+>>          )
+>>          return f'Struct(\n    {members}\n)'
+>>
+>>      @classmethod
+>>      def from_offsets(cls, members, offsets):
+>>          def compute(acc, member_spec):
+>>              _, smallest_offset = acc
+>>              member, offset = member_spec
+>>
+>>              delta = offset - smallest_offset
+>>              size = member.size
+>>
+>>              # Get power of 2 that is strictly higher than delta
+>>              alignment = next_power_of_2(delta + 1)
+>>
+>>              # Minimum is natural alignment
+>>              if alignment < size:
+>>                  alignment = size
+>>
+>>              member = Member(
+>>                  size=size,
+>>                  # Rather than using member.alignment to get the original
+>>                  # alignment, infer it only from the offset
+>>                  alignment=alignment,
+>>              )
+>>              return (member, offset + size)
+>>
+>>          accs = itertools.accumulate(
+>>              zip(members, offsets),
+>>              compute,
+>>              initial=(Member(0), 0),
+>>          )
+>>          members, _ = zip(*itertools.islice(accs, 1, None))
+>>
+>>          return cls(
+>>              members=members,
+>>          )
+>>
+>>      @staticmethod
+>>      def _compute_offsets(members):
+>>          def compute(acc, member):
+>>              _, smallest_offset = acc
+>>
+>>              offset = align(smallest_offset, member.alignment)
+>>              next_offset = offset + member.size
+>>              return (offset, next_offset)
+>>
+>>          offsets = itertools.accumulate(
+>>              members,
+>>              compute,
+>>              initial=(0, 0),
+>>          )
+>>          offsets, _ = zip(*itertools.islice(offsets, 1, None))
+>>          return offsets
+>>
+>>      @property
+>>      def members_offset(self):
+>>          return list(zip(self.members, self.offsets))
+>>
+>>      @staticmethod
+>>      def _compute_size(members, offsets, alignment):
+>>          alignment = alignment or 1
+>>          last = offsets[-1] + members[-1].size
+>>          return align(last, alignment)
+>>
+>>
+>> def test_align_infer(struct):
+>>
+>>      # Reconstruct a struct by inferring alignment from offsets
+>>      s2 = struct.from_offsets(struct.members, struct.offsets)
+>>
+>>      errors = []
+>>      for (m1, o1), (m2, o2) in zip(
+>>          struct.members_offset,
+>>          s2.members_offset,
+>>      ):
+>>          if o1 != o2:
+>>              errors.append(
+>>                  f'Wrong offset for {m1} (offset={o1}): {m2} (offset={o2})'
+>>              )
+>>
+>>      if errors:
+>>          print()
+>>          print(struct)
+>>          print(s2)
+>>          for error in errors:
+>>              print(error)
+>>
+>> # s1 = Struct(
+>> #     [
+>> #         Member(4),
+>> #         Member(2),
+>> #         Member(8),
+>> #     ]
+>> # )
+>> # print(s1.members_offset)
+>>
+>> members = [
+>>      Member(size, alignment)
+>>      for size in powers_of_2(1, 128)
+>>      for alignment in powers_of_2(size, 256)
+>> ]
+>>
+>> for nr_members in range(1, 4):
+>>      for _members in itertools.permutations(members, nr_members):
+>>          struct = Struct(list(_members))
+>>          print(struct)
+>>          res = test_align_infer(struct)
+>>
+>>
+>>> - Arnaldo
+>>>
+> 
 
