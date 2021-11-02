@@ -2,122 +2,134 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 72F2CC433F5
-	for <linux-dwarves@archiver.kernel.org>; Thu, 28 Oct 2021 14:13:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6F00CC433EF
+	for <linux-dwarves@archiver.kernel.org>; Tue,  2 Nov 2021 02:59:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 59AC660238
-	for <linux-dwarves@archiver.kernel.org>; Thu, 28 Oct 2021 14:13:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5946960EE3
+	for <linux-dwarves@archiver.kernel.org>; Tue,  2 Nov 2021 02:59:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230258AbhJ1OP2 (ORCPT
+        id S232544AbhKBDBf (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Thu, 28 Oct 2021 10:15:28 -0400
-Received: from foss.arm.com ([217.140.110.172]:55632 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231213AbhJ1OP2 (ORCPT <rfc822;dwarves@vger.kernel.org>);
-        Thu, 28 Oct 2021 10:15:28 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0A8DA1FB;
-        Thu, 28 Oct 2021 07:13:01 -0700 (PDT)
-Received: from [10.57.46.169] (unknown [10.57.46.169])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 951AD3F70D;
-        Thu, 28 Oct 2021 07:12:58 -0700 (PDT)
-Subject: Re: [PATCH v3 6/6] btf_loader.c: Use cacheline size to infer
- alignment
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     acme@redhat.com, dwarves@vger.kernel.org
-References: <20211028122710.881181-1-douglas.raillard@arm.com>
- <20211028122710.881181-7-douglas.raillard@arm.com>
- <YXqknmflB1WS8rnE@kernel.org>
-From:   Douglas Raillard <douglas.raillard@arm.com>
-Message-ID: <0aaf2336-a7e6-992b-4f9e-ffdfd09254ef@arm.com>
-Date:   Thu, 28 Oct 2021 15:12:56 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        Mon, 1 Nov 2021 23:01:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55698 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232608AbhKBDBX (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Mon, 1 Nov 2021 23:01:23 -0400
+Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E432BC061766;
+        Mon,  1 Nov 2021 19:58:49 -0700 (PDT)
+Received: by mail-yb1-xb2a.google.com with SMTP id o12so49570701ybk.1;
+        Mon, 01 Nov 2021 19:58:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=xUSHsL1SJ8QuFDluus8hF/ursJeTPEAe3GL/4QDN0t4=;
+        b=oHIKzS1bB1hECBgxroX5WqLbEXt1LknDIGqz72MYC4XTEqOufaCJ6dOesdico26qA5
+         0TX1ccDTeNA56ZPgkLlapTq0IVf/TxCeXmxU5H8lm4asocVsjeMKU8oG3HBFgQwHxhwZ
+         2REscNLG+6owbPdeKUhottQN1WIBqbiY3zlxTMW2LQe+mxAbzqJawEB7CaFHY0duIoEE
+         Y2/Zwhz0KhR0Bmu01NaxNwBPeIPkAkOvOR0SCnN15D9bZCRzEgAYwgI1Yzu2SIZcsLZ4
+         cJ3Mrh4CzSuH3U5oxqynVmfjo5ebmDb+e3q80uJnS2GTUQ98P3HxwX2EdO8BJpVSHwQ1
+         PkJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=xUSHsL1SJ8QuFDluus8hF/ursJeTPEAe3GL/4QDN0t4=;
+        b=YRjgGvHV5eEFrt4kxVJneumcGw+Sz0INbK5R904tvTPtm9CbEQF5C1fMHX0Mw8brS0
+         VXXtUyukaicSk74MTYuqJ2+PuIfmazXxLaHRzRkQr5+x4JyyLKSbMljrMioDf7aKDU7a
+         k2kGnafPeEFyikvjDS6bAuJmAYSCcnIhw0LRcp5shYyFusDaTNMJQ+g+Tnsk05cV6HRF
+         xnpixX0XvHo2HMmq5wKGCO+AJkHjfsHDYn8mMpXEqbghdcABFzyv9IpwgfBM9rC1pmli
+         1zYCStKFUUG7dcUzaWwvbVOFsFKrmQDYIIdOhl2YucuD2xNCUYNeSNEUgtcp9dsmE9vq
+         qkEg==
+X-Gm-Message-State: AOAM530kuxXQ/yPGBKYthe0pKvnmuxaBHqjwXm1F3+O2HkYHXygR8WXa
+        YviNPz1u5A34hkK+XZH+A/FX1MNhWqEZtYHPH6w=
+X-Google-Smtp-Source: ABdhPJyEjVLYSfeu/gvFmkLa+noSxw7oHKKg49/3CFzVRkIkyPu/avOKQsVznNhu7YXSuNO50qebv9ZVayyDeyxFs54=
+X-Received: by 2002:a25:cc4c:: with SMTP id l73mr34881668ybf.114.1635821929220;
+ Mon, 01 Nov 2021 19:58:49 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <YXqknmflB1WS8rnE@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20211027230822.2465100-1-yhs@fb.com> <20211027230834.2466282-1-yhs@fb.com>
+In-Reply-To: <20211027230834.2466282-1-yhs@fb.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Mon, 1 Nov 2021 19:58:38 -0700
+Message-ID: <CAEf4BzaOuwJtLkEhLcnN4_GjG+qVBUF63ywPkAsZdC2FjxmJuQ@mail.gmail.com>
+Subject: Re: [PATCH dwarves 2/2] btf_encoder: generate BTF_KIND_DECL_TAGs for
+ typedef btf_decl_tag attributes
+To:     Yonghong Song <yhs@fb.com>
+Cc:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
+        dwarves@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Kernel Team <kernel-team@fb.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-On 10/28/21 2:24 PM, Arnaldo Carvalho de Melo wrote:
-> Em Thu, Oct 28, 2021 at 01:27:10PM +0100, Douglas RAILLARD escreveu:
->> From: Douglas Raillard <douglas.raillard@arm.com>
->>
->> When the alignment is larger than natural, it is very likely that the
->> source code was using the cacheline size. Therefore, use the cacheline
->> size when it would only result in increasing the alignment.
-> 
-> --- /tmp/btfdiff.dwarf.pXdgRU   2021-10-28 10:22:11.738200232 -0300
-> +++ /tmp/btfdiff.btf.bkDkdf     2021-10-28 10:22:11.925205061 -0300
-> @@ -107,7 +107,7 @@ struct Qdisc {
->          /* XXX 24 bytes hole, try to pack */
-> 
->          /* --- cacheline 2 boundary (128 bytes) --- */
-> -       struct sk_buff_head        gso_skb __attribute__((__aligned__(64))); /*   128    24 */
-> +       struct sk_buff_head        gso_skb __attribute__((__aligned__(32))); /*   128    24 */
->          struct qdisc_skb_head      q;                    /*   152    24 */
->          struct gnet_stats_basic_packed bstats;           /*   176    16 */
->          /* --- cacheline 3 boundary (192 bytes) --- */
-> 
-> This one is gone with heuristic, thanks for accepting my suggestion and
-> coding it this fast!
+On Wed, Oct 27, 2021 at 4:08 PM Yonghong Song <yhs@fb.com> wrote:
+>
+> Emit BTF BTF_KIND_DECL_TAGs for btf_decl_tag attributes attached to
+> typedef declarations. The following is a simple example:
+>   $ cat t.c
+>     #define __tag1 __attribute__((btf_decl_tag("tag1")))
+>     #define __tag2 __attribute__((btf_decl_tag("tag2")))
+>     typedef struct { int a; int b; } __t __tag1 __tag2;
+>     __t g;
+>   $ clang -O2 -g -c t.c
+>   $ pahole -JV t.o
+>     btf_encoder__new: 't.o' doesn't have '.data..percpu' section
+>     Found 0 per-CPU variables!
+>     File t.o:
+>     [1] TYPEDEF __t type_id=2
+>     [2] STRUCT (anon) size=8
+>             a type_id=3 bits_offset=0
+>             b type_id=3 bits_offset=32
+>     [3] INT int size=4 nr_bits=32 encoding=SIGNED
+>     [4] DECL_TAG tag1 type_id=1 component_idx=-1
+>     [5] DECL_TAG tag2 type_id=1 component_idx=-1
+>
+> Signed-off-by: Yonghong Song <yhs@fb.com>
+> ---
+>  btf_encoder.c | 12 +++++++++---
+>  1 file changed, 9 insertions(+), 3 deletions(-)
+>
+> diff --git a/btf_encoder.c b/btf_encoder.c
+> index 40f6aa3..2f1f4ae 100644
+> --- a/btf_encoder.c
+> +++ b/btf_encoder.c
+> @@ -1437,19 +1437,25 @@ int btf_encoder__encode_cu(struct btf_encoder *encoder, struct cu *cu)
+>         }
+>
+>         cu__for_each_type(cu, core_id, pos) {
+> +               const char *tag_name = "typedef";
+>                 struct namespace *ns;
+>
+> -               if (pos->tag != DW_TAG_structure_type && pos->tag != DW_TAG_union_type)
+> +               if (pos->tag != DW_TAG_structure_type && pos->tag != DW_TAG_union_type &&
+> +                   pos->tag != DW_TAG_typedef)
+>                         continue;
+>
+> +               if (pos->tag == DW_TAG_structure_type)
+> +                       tag_name = "struct";
+> +               else if (pos->tag == DW_TAG_union_type)
+> +                       tag_name = "union";
 
-Thanks for the quick review !
- From my manual checks, I could basically not find any __aligned__(32) anymore
-after this patch as expected. The main difference with dwarf left are missing
-__aligned__ when the member was already aligned, but it should be harmless and
-there is nothing we can do about that unless BTF is augmented.
+nit: switch instead of these two related sets of if/else blocks would be cleaner
 
-> 
-> Applied.
-> 
-> I'm pushing it out to the 'next' branch, please work from there, I'll
-> move it to 'master' when it passes libbpf's CI tests.
 
-noted, I rebased on "next", sorry for the repeated patches.
-
-- Douglas
-
-> 
-> - Arnaldo
->   
->> Signed-off-by: Douglas Raillard <douglas.raillard@arm.com>
->> ---
->>   btf_loader.c | 10 ++++++++++
->>   1 file changed, 10 insertions(+)
->>
->> diff --git a/btf_loader.c b/btf_loader.c
->> index e500eae..7a5b16f 100644
->> --- a/btf_loader.c
->> +++ b/btf_loader.c
->> @@ -476,6 +476,7 @@ static uint32_t class__infer_alignment(const struct conf_load *conf,
->>   				       uint32_t natural_alignment,
->>   				       uint32_t smallest_offset)
->>   {
->> +	uint16_t cacheline_size = conf->conf_fprintf->cacheline_size;
->>   	uint32_t alignment = 0;
->>   	uint32_t offset_delta = byte_offset - smallest_offset;
->>   
->> @@ -494,6 +495,15 @@ static uint32_t class__infer_alignment(const struct conf_load *conf,
->>   	/* Natural alignment, nothing to do */
->>   	if (alignment <= natural_alignment || alignment == 1)
->>   		alignment = 0;
->> +	/* If the offset is compatible with being aligned on the cacheline size
->> +	 * and this would only result in increasing the alignment, use the
->> +	 * cacheline size as it is safe and quite likely to be what was in the
->> +	 * source.
->> +	 */
->> +	else if (alignment < cacheline_size &&
->> +		 cacheline_size % alignment == 0 &&
->> +		 byte_offset % cacheline_size == 0)
->> +		alignment = cacheline_size;
->>   
->>   	return alignment;
->>   }
->> -- 
->> 2.25.1
-> 
-
+> +
+>                 btf_type_id = type_id_off + core_id;
+>                 ns = tag__namespace(pos);
+>                 list_for_each_entry(annot, &ns->annots, node) {
+>                         tag_type_id = btf_encoder__add_decl_tag(encoder, annot->value, btf_type_id, annot->component_idx);
+>                         if (tag_type_id < 0) {
+>                                 fprintf(stderr, "error: failed to encode tag '%s' to %s '%s' with component_idx %d\n",
+> -                                       annot->value, pos->tag == DW_TAG_structure_type ? "struct" : "union",
+> -                                       namespace__name(ns), annot->component_idx);
+> +                                       annot->value, tag_name, namespace__name(ns), annot->component_idx);
+>                                 goto out;
+>                         }
+>                 }
+> --
+> 2.30.2
+>
