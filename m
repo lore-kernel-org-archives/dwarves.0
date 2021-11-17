@@ -2,101 +2,98 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C3714C433EF
-	for <linux-dwarves@archiver.kernel.org>; Tue, 16 Nov 2021 14:09:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 07B76C433F5
+	for <linux-dwarves@archiver.kernel.org>; Wed, 17 Nov 2021 20:22:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9C3A061391
-	for <linux-dwarves@archiver.kernel.org>; Tue, 16 Nov 2021 14:09:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D09E061AF0
+	for <linux-dwarves@archiver.kernel.org>; Wed, 17 Nov 2021 20:22:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237079AbhKPOMv (ORCPT
+        id S238324AbhKQUZU (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Tue, 16 Nov 2021 09:12:51 -0500
-Received: from foss.arm.com ([217.140.110.172]:45696 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233147AbhKPOMs (ORCPT <rfc822;dwarves@vger.kernel.org>);
-        Tue, 16 Nov 2021 09:12:48 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 521716D;
-        Tue, 16 Nov 2021 06:09:51 -0800 (PST)
-Received: from [10.57.29.165] (unknown [10.57.29.165])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D8D5E3F766;
-        Tue, 16 Nov 2021 06:09:46 -0800 (PST)
-Subject: Re: [PATCH v1 0/2] Anonymous inner struct
-To:     acme@redhat.com
-Cc:     dwarves@vger.kernel.org
-References: <20211019100724.325570-1-douglas.raillard@arm.com>
-From:   Douglas Raillard <douglas.raillard@arm.com>
-Message-ID: <5bf579b2-aafc-2ce2-7c84-e06eb2b4d78c@arm.com>
-Date:   Tue, 16 Nov 2021 14:09:44 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        Wed, 17 Nov 2021 15:25:20 -0500
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:6058 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234385AbhKQUZU (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Wed, 17 Nov 2021 15:25:20 -0500
+Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1AHJtxHe006600
+        for <dwarves@vger.kernel.org>; Wed, 17 Nov 2021 12:22:21 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=facebook; bh=Zp0Gf8ZNbrE5NlUxP487cDri93l4JpDQ2k5yjUTsX64=;
+ b=lbxPLogDCWKUl5+dK+pUJEYbJr4FHE+nsbyBrc03DF3GB/ulZcYgO9tMqo3w/jW8R6qO
+ HpEjDCIVO8USf+WfM0jcRn1CXcCJ1HyAVN/yaQiGqHZq3kZ2Djxa82GFCWaa0I2zQRnM
+ +Vi1m5Mmz5mD67/LdRWn4gij0meTd9Gr0wE= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 3ccyjw44uj-7
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <dwarves@vger.kernel.org>; Wed, 17 Nov 2021 12:22:21 -0800
+Received: from intmgw002.06.ash9.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::d) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.14; Wed, 17 Nov 2021 12:22:17 -0800
+Received: by devbig309.ftw3.facebook.com (Postfix, from userid 128203)
+        id 3379028FBA11; Wed, 17 Nov 2021 12:22:14 -0800 (PST)
+From:   Yonghong Song <yhs@fb.com>
+To:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
+        <dwarves@vger.kernel.org>
+CC:     Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>, <bpf@vger.kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>
+Subject: [PATCH dwarves 0/4] btf: support btf_type_tag attribute
+Date:   Wed, 17 Nov 2021 12:22:14 -0800
+Message-ID: <20211117202214.3268824-1-yhs@fb.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-In-Reply-To: <20211019100724.325570-1-douglas.raillard@arm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-FB-Source: Intern
+X-Proofpoint-ORIG-GUID: P2tFeIz-LGEAahE_PIpOfMHQM1zLp6l3
+X-Proofpoint-GUID: P2tFeIz-LGEAahE_PIpOfMHQM1zLp6l3
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
+ definitions=2021-11-17_07,2021-11-17_01,2020-04-07_01
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 malwarescore=0
+ priorityscore=1501 impostorscore=0 suspectscore=0 phishscore=0
+ lowpriorityscore=0 spamscore=0 adultscore=0 mlxlogscore=726 mlxscore=0
+ clxscore=1015 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2111170091
+X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-Hi Arnaldo,
+btf_type_tag is a new llvm type attribute which is used similar
+to kernel __user/__rcu attributes. The format of btf_type_tag looks like
+  __attribute__((btf_type_tag("tag1")))
+For the case where the attribute applied to a pointee like
+  #define __tag1 __attribute__((btf_type_tag("tag1")))
+  #define __tag2 __attribute__((btf_type_tag("tag2")))
+  int __tag1 * __tag1 __tag2 *g;
+the information will be encoded in dwarf.
 
-Any opinion on this series ?
+In BTF, the attribute is encoded as a new kind
+BTF_KIND_TYPE_TAG and latest bpf-next supports it.
 
-Cheers,
-Douglas
+The patch added support in pahole, specifically
+converts llvm dwarf btf_type_tag attributes to
+BTF types. Please see individual patches for details.
 
-On 10/19/21 11:07 AM, Douglas RAILLARD wrote:
-> From: Douglas Raillard <douglas.raillard@arm.com>
-> 
-> Add an --inner_anonymous pahole CLI option to make inner
-> struct/enum/union anonymous. This allows turning this:
-> 
->      struct foo { ... };
->      struct bar {
->          struct foo {
->           ....
->          } a;
->      };
->      
-> into this:
-> 
->      struct foo { ... };
->      struct bar {
->          struct /* foo */ {
->           ....
->          } a;
->      };
-> 
-> This avoids any conflict between the two definitions of struct foo. The
-> case arises when dumping multiple types at once with -E, all depending
-> on a same inner struct:
-> 
->      struct bar {
->          struct foo {
->           ....
->          } a;
->      };
->      struct bar2 {
->          struct foo {
->           ....
->          } b;
->      };
-> 
-> 
-> On top of that, struct foo could already be defined in a public header
-> already imported in the compilation unit, leading to a redefinition
-> error, while another nested struct is private and would still need -E
-> for the type to be usable.
-> 
-> Douglas Raillard (2):
->    fprintf: Allow making struct/enum/union anonymous
->    pahole.c: Add --inner_anonymous option
-> 
->   dwarves.h         |  4 +++-
->   dwarves_emit.c    |  2 +-
->   dwarves_fprintf.c | 52 ++++++++++++++++++++++++++++++-----------------
->   pahole.c          |  8 ++++++++
->   4 files changed, 45 insertions(+), 21 deletions(-)
-> 
+Yonghong Song (4):
+  libbpf: sync with latest libbpf repo
+  dutil: move DW_TAG_LLVM_annotation definition to dutil.h
+  dwarf_loader: support btf_type_tag attribute
+  btf_encoder: support btf_type_tag attribute
+
+ btf_encoder.c  |   7 +++
+ dutil.h        |   4 ++
+ dwarf_loader.c | 120 ++++++++++++++++++++++++++++++++++++++++++++++---
+ dwarves.h      |  38 +++++++++++++++-
+ lib/bpf        |   2 +-
+ pahole.c       |   8 ++++
+ 6 files changed, 170 insertions(+), 9 deletions(-)
+
+--=20
+2.30.2
 
