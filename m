@@ -2,411 +2,372 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7DD98C433EF
-	for <linux-dwarves@archiver.kernel.org>; Wed, 17 Nov 2021 20:25:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 29549C433EF
+	for <linux-dwarves@archiver.kernel.org>; Thu, 18 Nov 2021 13:01:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 57E9F61353
-	for <linux-dwarves@archiver.kernel.org>; Wed, 17 Nov 2021 20:25:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 087946124B
+	for <linux-dwarves@archiver.kernel.org>; Thu, 18 Nov 2021 13:01:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237438AbhKQU2d (ORCPT
+        id S233007AbhKRNEz (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Wed, 17 Nov 2021 15:28:33 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:46284 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S238992AbhKQU20 (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Wed, 17 Nov 2021 15:28:26 -0500
-Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
-        by m0089730.ppops.net (8.16.1.2/8.16.1.2) with SMTP id 1AHJtUsh009261
-        for <dwarves@vger.kernel.org>; Wed, 17 Nov 2021 12:25:27 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=facebook;
- bh=rlsB+2sYYvNa0qWae9aqtDtrDrqj25lNdAXoen1qTew=;
- b=evR2IOzpejN7FajcRT1bvnq58WYK88SEQwygBUPPe8QkdKoVnhNbjTrtxQL2Ad3cKlnx
- X89Z4g2c7pJFk152tmFTlWFH/qojXc55e0cpgbjysQij5qsj8efL2TdMs2V9mJOQJvg8
- VA+Io9woLvK43O2VoD14169Uq3i+SiOgfGk= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by m0089730.ppops.net with ESMTP id 3cd1gnkfvn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <dwarves@vger.kernel.org>; Wed, 17 Nov 2021 12:25:27 -0800
-Received: from intmgw002.25.frc3.facebook.com (2620:10d:c085:208::f) by
- mail.thefacebook.com (2620:10d:c085:11d::4) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.14; Wed, 17 Nov 2021 12:25:25 -0800
-Received: by devbig309.ftw3.facebook.com (Postfix, from userid 128203)
-        id 1398828FBA80; Wed, 17 Nov 2021 12:22:29 -0800 (PST)
-From:   Yonghong Song <yhs@fb.com>
-To:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
-        <dwarves@vger.kernel.org>
-CC:     Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>, <bpf@vger.kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>
-Subject: [PATCH dwarves 3/4] dwarf_loader: support btf_type_tag attribute
-Date:   Wed, 17 Nov 2021 12:22:29 -0800
-Message-ID: <20211117202229.3270304-1-yhs@fb.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20211117202214.3268824-1-yhs@fb.com>
+        Thu, 18 Nov 2021 08:04:55 -0500
+Received: from mail.kernel.org ([198.145.29.99]:52732 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S244901AbhKRNDS (ORCPT <rfc822;dwarves@vger.kernel.org>);
+        Thu, 18 Nov 2021 08:03:18 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 1FA0661ACE;
+        Thu, 18 Nov 2021 13:00:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1637240418;
+        bh=rPFIFMzNqj05EK7tG2aka+cq8uPNRJjC3b4OfyD6+w0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=M+1BZ4J0qqOynj3igXIhSGEAdF5cLmba38W82Xnoi1BkRgilhKz8AD6rgDkHn4y0o
+         PwQ6+1Fc+So6Wit/pS/V5klyjoZCFyiKFIXTyIVX3d1wfUXEfDiFwgHukLqxRnOGH+
+         8SEY0+QHI85SOkfoBZDI04kV88S22ehi2zJ92Wga94UPiiX6rLqrM60QrR5MlP4IOU
+         2/lkiBEUz/wb9CyMzlGym9GmJtRpDljOkrf/9ODOeg4u2jsSOhoCtFVfKJjdo8sDne
+         RKII8poVu1IOTLHOk5OohnmnEEKRgCovAw5Pby4RRjcR5mT6R0uNqcjOb7Cw1HJfAp
+         bR5jeS97ts50w==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 1DB3F4088E; Thu, 18 Nov 2021 10:00:14 -0300 (-03)
+Date:   Thu, 18 Nov 2021 10:00:14 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Yonghong Song <yhs@fb.com>
+Cc:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
+        dwarves@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
+        Daniel Borkmann <daniel@iogearbox.net>, kernel-team@fb.com
+Subject: Re: [PATCH dwarves 3/4] dwarf_loader: support btf_type_tag attribute
+Message-ID: <YZZOXq0mL7YW5IhC@kernel.org>
 References: <20211117202214.3268824-1-yhs@fb.com>
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-FB-Source: Intern
-X-Proofpoint-GUID: YuKddbsCwlioRO3ifc79xUHdOPcYAk7N
-X-Proofpoint-ORIG-GUID: YuKddbsCwlioRO3ifc79xUHdOPcYAk7N
-Content-Transfer-Encoding: quoted-printable
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+ <20211117202229.3270304-1-yhs@fb.com>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
- definitions=2021-11-17_07,2021-11-17_01,2020-04-07_01
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 clxscore=1015
- impostorscore=0 lowpriorityscore=0 suspectscore=0 adultscore=0 mlxscore=0
- phishscore=0 spamscore=0 mlxlogscore=999 priorityscore=1501 bulkscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2111170091
-X-FB-Internal: deliver
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211117202229.3270304-1-yhs@fb.com>
+X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-LLVM patches ([1] for clang, [2] and [3] for BPF backend)
-added support for btf_type_tag attributes. The following is
-an example:
-  [$ ~] cat t.c
-  #define __tag1 __attribute__((btf_type_tag("tag1")))
-  #define __tag2 __attribute__((btf_type_tag("tag2")))
-  int __tag1 * __tag1 __tag2 *g __attribute__((section(".data..percpu")));
-  [$ ~] clang -O2 -g -c t.c
-  [$ ~] llvm-dwarfdump --debug-info t.o
-  t.o:    file format elf64-x86-64
-  ...
-  0x0000001e:   DW_TAG_variable
-                  DW_AT_name      ("g")
-                  DW_AT_type      (0x00000033 "int **")
-                  DW_AT_external  (true)
-                  DW_AT_decl_file ("/home/yhs/t.c")
-                  DW_AT_decl_line (3)
-                  DW_AT_location  (DW_OP_addr 0x0)
-  0x00000033:   DW_TAG_pointer_type
-                  DW_AT_type      (0x0000004b "int *")
-  0x00000038:     DW_TAG_LLVM_annotation
-                    DW_AT_name    ("btf_type_tag")
-                    DW_AT_const_value     ("tag1")
-  0x00000041:     DW_TAG_LLVM_annotation
-                    DW_AT_name    ("btf_type_tag")
-                    DW_AT_const_value     ("tag2")
-  0x0000004a:     NULL
-  0x0000004b:   DW_TAG_pointer_type
-                  DW_AT_type      (0x0000005a "int")
-  0x00000050:     DW_TAG_LLVM_annotation
-                    DW_AT_name    ("btf_type_tag")
-                    DW_AT_const_value     ("tag1")
-  0x00000059:     NULL
-  0x0000005a:   DW_TAG_base_type
-                  DW_AT_name      ("int")
-                  DW_AT_encoding  (DW_ATE_signed)
-                  DW_AT_byte_size (0x04)
-  0x00000061:   NULL
+Em Wed, Nov 17, 2021 at 12:22:29PM -0800, Yonghong Song escreveu:
+> This patch implemented dwarf_loader support. If a pointer type
+> contains DW_TAG_LLVM_annotation tags, a new type
+> btf_type_tag_ptr_type will be created which will store
+> the pointer tag itself and all DW_TAG_LLVM_annotation tags.
+> During recoding stage, the type chain will be formed properly
+> based on the above example.
+> 
+> An option "--skip_encoding_btf_type_tag" is added to disable
+> this new functionality.
+> 
+>   [1] https://reviews.llvm.org/D111199
+>   [2] https://reviews.llvm.org/D113222
+>   [3] https://reviews.llvm.org/D113496
 
-From the above example, you can see that DW_TAG_pointer_type
-may contain one or more DW_TAG_LLVM_annotation btf_type_tag tags.
-If DW_TAG_LLVM_annotation tags are present inside
-DW_TAG_pointer_type, for BTF encoding, pahole will need
-to follow [3] to generate a type chain like
-  var -> ptr -> tag2 -> tag1 -> ptr -> tag1 -> int
+You forgot to add your S-o-B and to add this entry to
+man-pages/pahole.1, I'm fixing both cases, bellow is a followup
+patch, I'll add one as well for the recently added
+--skip_encoding_btf_decl_tag.
 
-This patch implemented dwarf_loader support. If a pointer type
-contains DW_TAG_LLVM_annotation tags, a new type
-btf_type_tag_ptr_type will be created which will store
-the pointer tag itself and all DW_TAG_LLVM_annotation tags.
-During recoding stage, the type chain will be formed properly
-based on the above example.
+- Arnaldo
 
-An option "--skip_encoding_btf_type_tag" is added to disable
-this new functionality.
+commit 9c3101db76acf364607d90adb3052e34d81fa1bd
+Author: Arnaldo Carvalho de Melo <acme@redhat.com>
+Date:   Thu Nov 18 09:56:35 2021 -0300
 
-  [1] https://reviews.llvm.org/D111199
-  [2] https://reviews.llvm.org/D113222
-  [3] https://reviews.llvm.org/D113496
----
- dwarf_loader.c | 116 +++++++++++++++++++++++++++++++++++++++++++++++--
- dwarves.h      |  33 +++++++++++++-
- pahole.c       |   8 ++++
- 3 files changed, 153 insertions(+), 4 deletions(-)
+    man pages: Add missing --skip_encoding_btf_type_tag entry
+    
+    In the past we saw the value of being able to disable specific features
+    due to problems in in its implementation, allowing users to use a subset
+    of functionality, without the problematic one.
+    
+    Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
 
-diff --git a/dwarf_loader.c b/dwarf_loader.c
-index 1b07a62..5b2bebb 100644
---- a/dwarf_loader.c
-+++ b/dwarf_loader.c
-@@ -1206,6 +1206,88 @@ static struct tag *die__create_new_tag(Dwarf_Die *di=
-e, struct cu *cu)
- 	return tag;
- }
-=20
-+static struct btf_type_tag_ptr_type *die__create_new_btf_type_tag_ptr_type=
-(Dwarf_Die *die, struct cu *cu)
-+{
-+	struct btf_type_tag_ptr_type *tag;
+diff --git a/man-pages/pahole.1 b/man-pages/pahole.1
+index edcf58b8ca5814a3..f9f64b67945b45cb 100644
+--- a/man-pages/pahole.1
++++ b/man-pages/pahole.1
+@@ -197,6 +197,10 @@ the debugging information.
+ .B \-\-skip_encoding_btf_vars
+ Do not encode VARs in BTF.
+ 
++.TP
++.B \-\-skip_encoding_btf_type_tag
++Do not encode type tags in BTF.
 +
-+	tag  =3D tag__alloc_with_spec(cu, sizeof(struct btf_type_tag_ptr_type));
-+	if (tag =3D=3D NULL)
-+		return NULL;
-+
-+	tag__init(&tag->tag, cu, die);
-+	tag->tag.has_btf_type_tag =3D true;
-+	INIT_LIST_HEAD(&tag->tags);
-+	return tag;
-+}
-+
-+static struct btf_type_tag_type *die__create_new_btf_type_tag_type(Dwarf_D=
-ie *die, struct cu *cu,
-+								   struct conf_load *conf)
-+{
-+	struct btf_type_tag_type *tag;
-+
-+	tag  =3D tag__alloc_with_spec(cu, sizeof(struct btf_type_tag_type));
-+	if (tag =3D=3D NULL)
-+		return NULL;
-+
-+	tag__init(&tag->tag, cu, die);
-+	tag->value =3D attr_string(die, DW_AT_const_value, conf);
-+	return tag;
-+}
-+
-+static struct tag *die__create_new_pointer_tag(Dwarf_Die *die, struct cu *=
-cu,
-+					       struct conf_load *conf)
-+{
-+	struct btf_type_tag_ptr_type *tag =3D NULL;
-+	struct btf_type_tag_type *annot;
-+	Dwarf_Die *cdie, child;
-+	const char *name;
-+	uint32_t id;
-+
-+	/* If no child tags or skipping btf_type_tag encoding, just create a new =
-tag
-+	 * and return
-+	 */
-+	if (!dwarf_haschildren(die) || dwarf_child(die, &child) !=3D 0 ||
-+	    conf->skip_encoding_btf_type_tag)
-+		return tag__new(die, cu);
-+
-+	/* Otherwise, check DW_TAG_LLVM_annotation child tags */
-+	cdie =3D &child;
-+	do {
-+		if (dwarf_tag(cdie) =3D=3D DW_TAG_LLVM_annotation) {
-+			/* Only check btf_type_tag annotations */
-+			name =3D attr_string(cdie, DW_AT_name, conf);
-+			if (strcmp(name, "btf_type_tag") !=3D 0)
-+				continue;
-+
-+			if (tag =3D=3D NULL) {
-+				/* Create a btf_type_tag_ptr type. */
-+				tag =3D die__create_new_btf_type_tag_ptr_type(die, cu);
-+				if (!tag)
-+					return NULL;
-+			}
-+
-+			/* Create a btf_type_tag type for this annotation. */
-+			annot =3D die__create_new_btf_type_tag_type(cdie, cu, conf);
-+			if (annot =3D=3D NULL)
-+				return NULL;
-+
-+			if (cu__table_add_tag(cu, &annot->tag, &id) < 0)
-+				return NULL;
-+
-+			struct dwarf_tag *dtag =3D annot->tag.priv;
-+			dtag->small_id =3D id;
-+			cu__hash(cu, &annot->tag);
-+
-+			/* For a list of DW_TAG_LLVM_annotation like tag1 -> tag2 -> tag3,
-+			 * the tag->tags contains tag3 -> tag2 -> tag1.
-+			 */
-+			list_add(&annot->node, &tag->tags);
-+		}
-+	} while (dwarf_siblingof(cdie, cdie) =3D=3D 0);
-+
-+	return tag ? &tag->tag : tag__new(die, cu);
-+}
-+
- static struct tag *die__create_new_ptr_to_member_type(Dwarf_Die *die,
- 						      struct cu *cu)
- {
-@@ -1903,12 +1985,13 @@ static struct tag *__die__process_tag(Dwarf_Die *di=
-e, struct cu *cu,
- 	case DW_TAG_const_type:
- 	case DW_TAG_imported_declaration:
- 	case DW_TAG_imported_module:
--	case DW_TAG_pointer_type:
- 	case DW_TAG_reference_type:
- 	case DW_TAG_restrict_type:
- 	case DW_TAG_unspecified_type:
- 	case DW_TAG_volatile_type:
- 		tag =3D die__create_new_tag(die, cu);		break;
-+	case DW_TAG_pointer_type:
-+		tag =3D die__create_new_pointer_tag(die, cu, conf);	break;
- 	case DW_TAG_ptr_to_member_type:
- 		tag =3D die__create_new_ptr_to_member_type(die, cu); break;
- 	case DW_TAG_enumeration_type:
-@@ -2192,6 +2275,26 @@ static void lexblock__recode_dwarf_types(struct lexb=
-lock *tag, struct cu *cu)
- 	}
- }
-=20
-+static void dwarf_cu__recode_btf_type_tag_ptr(struct btf_type_tag_ptr_type=
- *tag,
-+					      uint32_t pointee_type)
-+{
-+	struct btf_type_tag_type *annot;
-+	struct dwarf_tag *annot_dtag;
-+	struct tag *prev_tag;
-+
-+	/* If tag->tags contains tag3 -> tag2 -> tag1, the final type chain
-+	 * looks like:
-+	 *   pointer -> tag3 -> tag2 -> tag1 -> pointee
-+	 */
-+	prev_tag =3D &tag->tag;
-+	list_for_each_entry(annot, &tag->tags, node) {
-+		annot_dtag =3D annot->tag.priv;
-+		prev_tag->type =3D annot_dtag->small_id;
-+		prev_tag =3D &annot->tag;
-+	}
-+	prev_tag->type =3D pointee_type;
-+}
-+
- static int tag__recode_dwarf_type(struct tag *tag, struct cu *cu)
- {
- 	struct dwarf_tag *dtag =3D tag->priv;
-@@ -2301,7 +2404,10 @@ static int tag__recode_dwarf_type(struct tag *tag, s=
-truct cu *cu)
- 	}
-=20
- 	if (dtag->type.off =3D=3D 0) {
--		tag->type =3D 0; /* void */
-+		if (tag->tag !=3D DW_TAG_pointer_type || !tag->has_btf_type_tag)
-+			tag->type =3D 0; /* void */
-+		else
-+			dwarf_cu__recode_btf_type_tag_ptr(tag__btf_type_tag_ptr(tag), 0);
- 		return 0;
- 	}
-=20
-@@ -2313,7 +2419,11 @@ check_type:
- 		return 0;
- 	}
- out:
--	tag->type =3D dtype->small_id;
-+	if (tag->tag !=3D DW_TAG_pointer_type || !tag->has_btf_type_tag)
-+		tag->type =3D dtype->small_id;
-+	else
-+		dwarf_cu__recode_btf_type_tag_ptr(tag__btf_type_tag_ptr(tag), dtype->sma=
-ll_id);
-+
- 	return 0;
- }
-=20
-diff --git a/dwarves.h b/dwarves.h
-index 0d3e204..4425d3c 100644
---- a/dwarves.h
-+++ b/dwarves.h
-@@ -63,6 +63,7 @@ struct conf_load {
- 	bool			ptr_table_stats;
- 	bool			skip_encoding_btf_decl_tag;
- 	bool			skip_missing;
-+	bool			skip_encoding_btf_type_tag;
- 	uint8_t			hashtable_bits;
- 	uint8_t			max_hashtable_bits;
- 	uint16_t		kabi_prefix_len;
-@@ -413,6 +414,7 @@ struct tag {
- 	uint16_t	 tag;
- 	bool		 visited;
- 	bool		 top_level;
-+	bool		 has_btf_type_tag;
- 	uint16_t	 recursivity_level;
- 	void		 *priv;
- };
-@@ -533,7 +535,8 @@ static inline int tag__is_tag_type(const struct tag *ta=
-g)
- 	       tag->tag =3D=3D DW_TAG_restrict_type ||
- 	       tag->tag =3D=3D DW_TAG_subroutine_type ||
- 	       tag->tag =3D=3D DW_TAG_unspecified_type ||
--	       tag->tag =3D=3D DW_TAG_volatile_type;
-+	       tag->tag =3D=3D DW_TAG_volatile_type ||
-+	       tag->tag =3D=3D DW_TAG_LLVM_annotation;
- }
-=20
- static inline const char *tag__decl_file(const struct tag *tag,
-@@ -606,6 +609,34 @@ struct llvm_annotation {
- 	struct list_head	node;
- };
-=20
-+/** struct btf_type_tag_type - representing a btf_type_tag annotation
-+ *
-+ * @tag   - DW_TAG_LLVM_annotation tag
-+ * @value - btf_type_tag value string
-+ * @node  - list_head node
-+ */
-+struct btf_type_tag_type {
-+	struct tag		tag;
-+	const char		*value;
-+	struct list_head	node;
-+};
-+
-+/** The struct btf_type_tag_ptr_type - type containing both pointer type a=
-nd
-+ *  its btf_type_tag annotations
-+ *
-+ * @tag  - pointer type tag
-+ * @tags - btf_type_tag annotations for the pointer type
-+ */
-+struct btf_type_tag_ptr_type {
-+	struct tag		tag;
-+	struct list_head 	tags;
-+};
-+
-+static inline struct btf_type_tag_ptr_type *tag__btf_type_tag_ptr(struct t=
-ag *tag)
-+{
-+	return (struct btf_type_tag_ptr_type *)tag;
-+}
-+
- /** struct namespace - base class for enums, structs, unions, typedefs, etc
-  *
-  * @tags - class_member, enumerators, etc
-diff --git a/pahole.c b/pahole.c
-index 5fc1cca..f3a51cb 100644
---- a/pahole.c
-+++ b/pahole.c
-@@ -1126,6 +1126,7 @@ ARGP_PROGRAM_VERSION_HOOK_DEF =3D dwarves_print_versi=
-on;
- #define ARGP_devel_stats	   330
- #define ARGP_skip_encoding_btf_decl_tag 331
- #define ARGP_skip_missing          332
-+#define ARGP_skip_encoding_btf_type_tag 333
-=20
- static const struct argp_option pahole__options[] =3D {
- 	{
-@@ -1506,6 +1507,11 @@ static const struct argp_option pahole__options[] =
-=3D {
- 		.key  =3D ARGP_skip_missing,
- 		.doc =3D "skip missing types passed to -C rather than stop",
- 	},
-+	{
-+		.name =3D "skip_encoding_btf_type_tag",
-+		.key  =3D ARGP_skip_encoding_btf_type_tag,
-+		.doc  =3D "Do not encode TAGs in BTF."
-+	},
- 	{
- 		.name =3D NULL,
- 	}
-@@ -1658,6 +1664,8 @@ static error_t pahole__options_parser(int key, char *=
-arg,
- 		conf_load.skip_encoding_btf_decl_tag =3D true;	break;
- 	case ARGP_skip_missing:
- 		conf_load.skip_missing =3D true;          break;
-+	case ARGP_skip_encoding_btf_type_tag:
-+		conf_load.skip_encoding_btf_type_tag =3D true;	break;
- 	default:
- 		return ARGP_ERR_UNKNOWN;
- 	}
---=20
-2.30.2
+ .TP
+ .B \-j, \-\-jobs=N
+ Run N jobs in parallel. Defaults to number of online processors + 10% (like
 
+
+
+> ---
+>  dwarf_loader.c | 116 +++++++++++++++++++++++++++++++++++++++++++++++--
+>  dwarves.h      |  33 +++++++++++++-
+>  pahole.c       |   8 ++++
+>  3 files changed, 153 insertions(+), 4 deletions(-)
+> 
+> diff --git a/dwarf_loader.c b/dwarf_loader.c
+> index 1b07a62..5b2bebb 100644
+> --- a/dwarf_loader.c
+> +++ b/dwarf_loader.c
+> @@ -1206,6 +1206,88 @@ static struct tag *die__create_new_tag(Dwarf_Die *die, struct cu *cu)
+>  	return tag;
+>  }
+>  
+> +static struct btf_type_tag_ptr_type *die__create_new_btf_type_tag_ptr_type(Dwarf_Die *die, struct cu *cu)
+> +{
+> +	struct btf_type_tag_ptr_type *tag;
+> +
+> +	tag  = tag__alloc_with_spec(cu, sizeof(struct btf_type_tag_ptr_type));
+> +	if (tag == NULL)
+> +		return NULL;
+> +
+> +	tag__init(&tag->tag, cu, die);
+> +	tag->tag.has_btf_type_tag = true;
+> +	INIT_LIST_HEAD(&tag->tags);
+> +	return tag;
+> +}
+> +
+> +static struct btf_type_tag_type *die__create_new_btf_type_tag_type(Dwarf_Die *die, struct cu *cu,
+> +								   struct conf_load *conf)
+> +{
+> +	struct btf_type_tag_type *tag;
+> +
+> +	tag  = tag__alloc_with_spec(cu, sizeof(struct btf_type_tag_type));
+> +	if (tag == NULL)
+> +		return NULL;
+> +
+> +	tag__init(&tag->tag, cu, die);
+> +	tag->value = attr_string(die, DW_AT_const_value, conf);
+> +	return tag;
+> +}
+> +
+> +static struct tag *die__create_new_pointer_tag(Dwarf_Die *die, struct cu *cu,
+> +					       struct conf_load *conf)
+> +{
+> +	struct btf_type_tag_ptr_type *tag = NULL;
+> +	struct btf_type_tag_type *annot;
+> +	Dwarf_Die *cdie, child;
+> +	const char *name;
+> +	uint32_t id;
+> +
+> +	/* If no child tags or skipping btf_type_tag encoding, just create a new tag
+> +	 * and return
+> +	 */
+> +	if (!dwarf_haschildren(die) || dwarf_child(die, &child) != 0 ||
+> +	    conf->skip_encoding_btf_type_tag)
+> +		return tag__new(die, cu);
+> +
+> +	/* Otherwise, check DW_TAG_LLVM_annotation child tags */
+> +	cdie = &child;
+> +	do {
+> +		if (dwarf_tag(cdie) == DW_TAG_LLVM_annotation) {
+> +			/* Only check btf_type_tag annotations */
+> +			name = attr_string(cdie, DW_AT_name, conf);
+> +			if (strcmp(name, "btf_type_tag") != 0)
+> +				continue;
+> +
+> +			if (tag == NULL) {
+> +				/* Create a btf_type_tag_ptr type. */
+> +				tag = die__create_new_btf_type_tag_ptr_type(die, cu);
+> +				if (!tag)
+> +					return NULL;
+> +			}
+> +
+> +			/* Create a btf_type_tag type for this annotation. */
+> +			annot = die__create_new_btf_type_tag_type(cdie, cu, conf);
+> +			if (annot == NULL)
+> +				return NULL;
+> +
+> +			if (cu__table_add_tag(cu, &annot->tag, &id) < 0)
+> +				return NULL;
+> +
+> +			struct dwarf_tag *dtag = annot->tag.priv;
+> +			dtag->small_id = id;
+> +			cu__hash(cu, &annot->tag);
+> +
+> +			/* For a list of DW_TAG_LLVM_annotation like tag1 -> tag2 -> tag3,
+> +			 * the tag->tags contains tag3 -> tag2 -> tag1.
+> +			 */
+> +			list_add(&annot->node, &tag->tags);
+> +		}
+> +	} while (dwarf_siblingof(cdie, cdie) == 0);
+> +
+> +	return tag ? &tag->tag : tag__new(die, cu);
+> +}
+> +
+>  static struct tag *die__create_new_ptr_to_member_type(Dwarf_Die *die,
+>  						      struct cu *cu)
+>  {
+> @@ -1903,12 +1985,13 @@ static struct tag *__die__process_tag(Dwarf_Die *die, struct cu *cu,
+>  	case DW_TAG_const_type:
+>  	case DW_TAG_imported_declaration:
+>  	case DW_TAG_imported_module:
+> -	case DW_TAG_pointer_type:
+>  	case DW_TAG_reference_type:
+>  	case DW_TAG_restrict_type:
+>  	case DW_TAG_unspecified_type:
+>  	case DW_TAG_volatile_type:
+>  		tag = die__create_new_tag(die, cu);		break;
+> +	case DW_TAG_pointer_type:
+> +		tag = die__create_new_pointer_tag(die, cu, conf);	break;
+>  	case DW_TAG_ptr_to_member_type:
+>  		tag = die__create_new_ptr_to_member_type(die, cu); break;
+>  	case DW_TAG_enumeration_type:
+> @@ -2192,6 +2275,26 @@ static void lexblock__recode_dwarf_types(struct lexblock *tag, struct cu *cu)
+>  	}
+>  }
+>  
+> +static void dwarf_cu__recode_btf_type_tag_ptr(struct btf_type_tag_ptr_type *tag,
+> +					      uint32_t pointee_type)
+> +{
+> +	struct btf_type_tag_type *annot;
+> +	struct dwarf_tag *annot_dtag;
+> +	struct tag *prev_tag;
+> +
+> +	/* If tag->tags contains tag3 -> tag2 -> tag1, the final type chain
+> +	 * looks like:
+> +	 *   pointer -> tag3 -> tag2 -> tag1 -> pointee
+> +	 */
+> +	prev_tag = &tag->tag;
+> +	list_for_each_entry(annot, &tag->tags, node) {
+> +		annot_dtag = annot->tag.priv;
+> +		prev_tag->type = annot_dtag->small_id;
+> +		prev_tag = &annot->tag;
+> +	}
+> +	prev_tag->type = pointee_type;
+> +}
+> +
+>  static int tag__recode_dwarf_type(struct tag *tag, struct cu *cu)
+>  {
+>  	struct dwarf_tag *dtag = tag->priv;
+> @@ -2301,7 +2404,10 @@ static int tag__recode_dwarf_type(struct tag *tag, struct cu *cu)
+>  	}
+>  
+>  	if (dtag->type.off == 0) {
+> -		tag->type = 0; /* void */
+> +		if (tag->tag != DW_TAG_pointer_type || !tag->has_btf_type_tag)
+> +			tag->type = 0; /* void */
+> +		else
+> +			dwarf_cu__recode_btf_type_tag_ptr(tag__btf_type_tag_ptr(tag), 0);
+>  		return 0;
+>  	}
+>  
+> @@ -2313,7 +2419,11 @@ check_type:
+>  		return 0;
+>  	}
+>  out:
+> -	tag->type = dtype->small_id;
+> +	if (tag->tag != DW_TAG_pointer_type || !tag->has_btf_type_tag)
+> +		tag->type = dtype->small_id;
+> +	else
+> +		dwarf_cu__recode_btf_type_tag_ptr(tag__btf_type_tag_ptr(tag), dtype->small_id);
+> +
+>  	return 0;
+>  }
+>  
+> diff --git a/dwarves.h b/dwarves.h
+> index 0d3e204..4425d3c 100644
+> --- a/dwarves.h
+> +++ b/dwarves.h
+> @@ -63,6 +63,7 @@ struct conf_load {
+>  	bool			ptr_table_stats;
+>  	bool			skip_encoding_btf_decl_tag;
+>  	bool			skip_missing;
+> +	bool			skip_encoding_btf_type_tag;
+>  	uint8_t			hashtable_bits;
+>  	uint8_t			max_hashtable_bits;
+>  	uint16_t		kabi_prefix_len;
+> @@ -413,6 +414,7 @@ struct tag {
+>  	uint16_t	 tag;
+>  	bool		 visited;
+>  	bool		 top_level;
+> +	bool		 has_btf_type_tag;
+>  	uint16_t	 recursivity_level;
+>  	void		 *priv;
+>  };
+> @@ -533,7 +535,8 @@ static inline int tag__is_tag_type(const struct tag *tag)
+>  	       tag->tag == DW_TAG_restrict_type ||
+>  	       tag->tag == DW_TAG_subroutine_type ||
+>  	       tag->tag == DW_TAG_unspecified_type ||
+> -	       tag->tag == DW_TAG_volatile_type;
+> +	       tag->tag == DW_TAG_volatile_type ||
+> +	       tag->tag == DW_TAG_LLVM_annotation;
+>  }
+>  
+>  static inline const char *tag__decl_file(const struct tag *tag,
+> @@ -606,6 +609,34 @@ struct llvm_annotation {
+>  	struct list_head	node;
+>  };
+>  
+> +/** struct btf_type_tag_type - representing a btf_type_tag annotation
+> + *
+> + * @tag   - DW_TAG_LLVM_annotation tag
+> + * @value - btf_type_tag value string
+> + * @node  - list_head node
+> + */
+> +struct btf_type_tag_type {
+> +	struct tag		tag;
+> +	const char		*value;
+> +	struct list_head	node;
+> +};
+> +
+> +/** The struct btf_type_tag_ptr_type - type containing both pointer type and
+> + *  its btf_type_tag annotations
+> + *
+> + * @tag  - pointer type tag
+> + * @tags - btf_type_tag annotations for the pointer type
+> + */
+> +struct btf_type_tag_ptr_type {
+> +	struct tag		tag;
+> +	struct list_head 	tags;
+> +};
+> +
+> +static inline struct btf_type_tag_ptr_type *tag__btf_type_tag_ptr(struct tag *tag)
+> +{
+> +	return (struct btf_type_tag_ptr_type *)tag;
+> +}
+> +
+>  /** struct namespace - base class for enums, structs, unions, typedefs, etc
+>   *
+>   * @tags - class_member, enumerators, etc
+> diff --git a/pahole.c b/pahole.c
+> index 5fc1cca..f3a51cb 100644
+> --- a/pahole.c
+> +++ b/pahole.c
+> @@ -1126,6 +1126,7 @@ ARGP_PROGRAM_VERSION_HOOK_DEF = dwarves_print_version;
+>  #define ARGP_devel_stats	   330
+>  #define ARGP_skip_encoding_btf_decl_tag 331
+>  #define ARGP_skip_missing          332
+> +#define ARGP_skip_encoding_btf_type_tag 333
+>  
+>  static const struct argp_option pahole__options[] = {
+>  	{
+> @@ -1506,6 +1507,11 @@ static const struct argp_option pahole__options[] = {
+>  		.key  = ARGP_skip_missing,
+>  		.doc = "skip missing types passed to -C rather than stop",
+>  	},
+> +	{
+> +		.name = "skip_encoding_btf_type_tag",
+> +		.key  = ARGP_skip_encoding_btf_type_tag,
+> +		.doc  = "Do not encode TAGs in BTF."
+> +	},
+>  	{
+>  		.name = NULL,
+>  	}
+> @@ -1658,6 +1664,8 @@ static error_t pahole__options_parser(int key, char *arg,
+>  		conf_load.skip_encoding_btf_decl_tag = true;	break;
+>  	case ARGP_skip_missing:
+>  		conf_load.skip_missing = true;          break;
+> +	case ARGP_skip_encoding_btf_type_tag:
+> +		conf_load.skip_encoding_btf_type_tag = true;	break;
+>  	default:
+>  		return ARGP_ERR_UNKNOWN;
+>  	}
+> -- 
+> 2.30.2
+
+-- 
+
+- Arnaldo
