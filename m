@@ -2,160 +2,140 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 48910C433EF
-	for <linux-dwarves@archiver.kernel.org>; Wed,  8 Dec 2021 11:55:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3B012C433F5
+	for <linux-dwarves@archiver.kernel.org>; Wed,  8 Dec 2021 13:55:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231929AbhLHL6k (ORCPT
+        id S234437AbhLHN6f (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Wed, 8 Dec 2021 06:58:40 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:47024 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231862AbhLHL6j (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Wed, 8 Dec 2021 06:58:39 -0500
+        Wed, 8 Dec 2021 08:58:35 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:44482 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229490AbhLHN6f (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Wed, 8 Dec 2021 08:58:35 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A4411B8206F
-        for <dwarves@vger.kernel.org>; Wed,  8 Dec 2021 11:55:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3BAE8C341C3;
-        Wed,  8 Dec 2021 11:55:05 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 1A8D2CE218E;
+        Wed,  8 Dec 2021 13:55:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24D69C00446;
+        Wed,  8 Dec 2021 13:54:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638964505;
-        bh=MVzXyYhof199XLEIIemoauAqh4qIgLekkbCyD9na5Hg=;
+        s=k20201202; t=1638971698;
+        bh=cEDXQeIeYpoFUpOU3IKFkwMae+ywV8Wwm9nSxohi4e8=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fGR43sLPDuBGzNgGxSpIq91g3xSx0kny5sSm1QW4XgjK8Be+lJJGrhoSd+KfJe9T9
-         qxfwDnPTaXdH2X+CDMu0vaOqCK2EUAPDrxSmxwMH8Amk1RSJLBDFHwZWQEVHHJI6P+
-         SW6lD6OjPlu92bvOvdYO6+Xb+Kjv1ezMuahrf6qN7uiRcoSrAE8mNEjIpoWMZd9rd7
-         5AG9lOHGnE4x+bC4lAWSzwP+IKhAPEt+M4mMh+5YBSrKwEYXaziFXetiv+UonsZFPz
-         g2mz1FAMeZTXGlnu3Ug88qYYrthLW9Ou4yv/z8UmcUwE3EqpjTaR9EAN1GCvFI37YC
-         zgNJnGfIo39dw==
+        b=qPxTF68+tOufg86FtiXdDh2k7dM6fG7kz0Qr1ovf6kNnW40gP4C9FDhcXbDBS42rZ
+         KxE1IIakvaH5rXiRomelB3WV7wfqa8ZBVoszH5d6iFxf/5RnZjTkNgX2Ig6uDX7uUK
+         MvNUG1uS0dBMnVN238iAyUKureBuNSX4UhX3Yrnn5zK/yCBJvR29pWlE3ZXdswTvYY
+         QxUhV7V2+Qv6RveyOMzZTtiupO9/HtHf5TOpacPyc2V69Yvk7eCoxK0z6vc2ufuj1F
+         GL5rCNafkkdJ5tiAh1p/ERr4BcWbS0LfmyOcQ9qylXhkf1DU7MwtxVhSt/bQxaYhrn
+         wrN7XCzwjrZuw==
 Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 44C20406C1; Wed,  8 Dec 2021 08:55:02 -0300 (-03)
-Date:   Wed, 8 Dec 2021 08:55:02 -0300
+        id 34465406C1; Wed,  8 Dec 2021 10:54:56 -0300 (-03)
+Date:   Wed, 8 Dec 2021 10:54:56 -0300
 From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Douglas RAILLARD <douglas.raillard@arm.com>
-Cc:     acme@redhat.com, dwarves@vger.kernel.org
-Subject: Re: [PATCH v2 0/6] improve expanded header
-Message-ID: <YbCdFkVyuSO6330g@kernel.org>
-References: <20211207173151.2283946-1-douglas.raillard@arm.com>
+To:     dwarves@vger.kernel.org
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        bpf@vger.kernel.org, Jiri Olsa <jolsa@kernel.org>,
+        Jan Engelhardt <jengelh@inai.de>,
+        Domenico Andreoli <domenico.andreoli@linux.com>,
+        Matthias Schwarzott <zzam@gentoo.org>,
+        Yonghong Song <yhs@fb.com>,
+        Douglas RAILLARD <douglas.raillard@arm.com>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Matteo Croce <mcroce@microsoft.com>
+Subject: ANNOUNCE: pahole v1.23 (BTF tags and alignment inference)
+Message-ID: <YbC5MC+h+PkDZten@kernel.org>
+References: <YSQSZQnnlIWAQ06v@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211207173151.2283946-1-douglas.raillard@arm.com>
+In-Reply-To: <YSQSZQnnlIWAQ06v@kernel.org>
 X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-Em Tue, Dec 07, 2021 at 05:31:45PM +0000, Douglas RAILLARD escreveu:
-> From: Douglas Raillard <douglas.raillard@arm.com>
-> 
-> Improve headers generated with -E in a few ways:
-> 
->   * Print each type only once, to avoid redefinitions
-> 
->   * --forward_decl: Generate forward declaration for struct and union so
->     that uses of pointers will work.
-> 
->   * --expanded_prefix: Allow prefixing names of types added by -E (all
->     the ones not explicitly requested with -C) so they can be namespaced
->     manually. This is important in order to be able to mix
->     pahole-generated headers with existing headers without clash or
->     maintenance.
-
-Looks good from a very quick first view, I'll cut 1.23 today as the BPF
-guys need a release with the new BTF tag feature and then will review
-this patchset.
-
-So I've applied so far only the reverts, since yesterday I had flipped
-next to master.
-
-- Arnaldo
+Hi,
  
-> 
-> types.txt:
-> 
->   t1
->   t4
-> 
-> Original printed type with "-C types.txt -E":
-> 
->   struct t1 {
->     struct t2 *a;
->     struct t3 {
->       int a;
->     } b;
->   };
-> 
->   struct t4 {
->     struct t3 {
->       int a;
->     } a;
->   };
-> 
-> After this series and with
-> "-C types.txt -E --expanded_prefix __pahole --forward_decl":
-> 
->   struct t1
->   struct t2;
->   struct t3;
-> 
->   struct t1 {
->     struct t2 *a;
->     struct __pahole_t3 {
->       int a;
->     } b;
->   };
-> 
->   struct t4 {
->     struct __pahole_t3 a;
->   };
-> 
-> 
-> This header can be freely mixed with any other header as long as they
-> don't define t1 or t4 (if there is a clash, then pahole is not necessary
-> and the user can just use the header in the first place).
-> 
-> TODOs:
-> 
->   * Define types on their first use even when they are first used as
->     pointers. Currently, if a type is only used as pointer it will never
->     get defined, which will still compile thanks to --forward_decl but
->     won't allow easy use of the values.
-> 
->   * The prefix system allocates memory to rename types and never frees
->     it. I don't think it's a big issue for now as it's done inside
->     pahole.c and type names are likely necessary until the end of the
->     process anyway, but it makes valgrind angry and could therefore mask
->     other problems. There is another implementation of prefix that
->     modifies dwarves_fprintf.c instead of changing the name but it was
->     very invasive and impossible to check if prefixable spots were
->     missed.
-> 
-> 
-> This series is to be applied on the "next" branch as it includes reverts
-> of the --inner_anonymous series, which is dropped since it could not
-> cope with recursive types.
-> 
-> 
-> Douglas Raillard (6):
->   Revert "fprintf: Allow making struct/enum/union anonymous"
->   Revert "pahole.c: Add --inner_anonymous option"
->   fprintf: Print types only once
->   pahole.c: Add prefix to expanded type names
->   pahole.c: Add --expanded_prefix option
->   pahole.c: Add --forward_decl option
-> 
->  dwarves.h          | 12 ++++--
->  dwarves_emit.c     |  2 +-
->  dwarves_fprintf.c  | 77 +++++++++++++++++-------------------
->  man-pages/pahole.1 |  8 ++--
->  pahole.c           | 98 ++++++++++++++++++++++++++++++++++------------
->  5 files changed, 121 insertions(+), 76 deletions(-)
-> 
-> -- 
-> 2.25.1
+	The v1.23 release of pahole and its friends is out, this time
+the main new features are the ability to encode BTF tags, to carry
+attributes to the kernel BPF verifier for further checks and the
+inference of struct member unnatural alignment (__attribute__(__aligned__(N)))
+to help in generating compileable headers matching the original type
+layout from BTF data.
 
--- 
+Main git repo:
+
+   git://git.kernel.org/pub/scm/devel/pahole/pahole.git
+
+Mirror git repo:
+
+   https://github.com/acmel/dwarves.git
+
+tarball + gpg signature:
+
+   https://fedorapeople.org/~acme/dwarves/dwarves-1.23.tar.xz
+   https://fedorapeople.org/~acme/dwarves/dwarves-1.23.tar.bz2
+   https://fedorapeople.org/~acme/dwarves/dwarves-1.23.tar.sign
+
+	Thanks a lot to all the contributors and distro packagers, you're on the
+CC list, I appreciate a lot the work you put into these tools,
+
+Best Regards,
 
 - Arnaldo
+
+DWARF loader:
+
+- Read DW_TAG_LLVM_annotation tags, associating it with variables, functions,
+  types. So far this is only being used by the BTF encoder, but the pretty
+  printer should use this as well in a future release, printing these
+  attributes when available.
+
+- Initial support for DW_TAG_skeleton_unit, so far just suggest looking up a
+  matching .dwo file to be used instead. Automagically doing this is in the
+  plans for a future release.
+
+- Fix heap overflow when accessing variable specification.
+
+BTF encoder:
+
+- Support the new BTF type tag attribute, encoding DW_TAG_LLVM_annotation DWARF
+  tags as BTF_KIND_TYPE_TAG and BTF_KIND_DECL_TAG.
+
+  This allows __attribute__((btf_type_tag("tag1"))) to be used for variables,
+  functions, typedefs, so that contextual information can be stored in BTF and
+  used by the kernel BPF verifier for more checks.
+
+  The --skip_encoding_btf_type_tag option can be used to suppress this.
+
+- Fix handling of percpu symbols on s390.
+
+BTF loader:
+
+- Use cacheline size to infer alignment.
+
+btfdiff:
+
+- Now that the BTF loader infers struct member alingment, and as that is just
+  an heuristic, suppress printing the alignment when pretty printing from BTF
+  info like is done when printing from DWARF.
+
+pahole:
+
+- Add --skip_missing so that we don't stop when not finding one of the types passed
+  to -C.
+
+Pretty printer:
+
+- Fix __attribute__((__aligned__(N)) printing alignment for struct members.
+
+- Fix nested __attribute__(__aligned__(N)) struct printing order, so that
+  rebuilding from the printed source circles back to the original source code
+  alignment semantics.
+
+Build:
+
+- No need to download libbpf source when using the system library (libbpf-devel).
+
+- Make python optional
