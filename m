@@ -2,44 +2,44 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B1037C433EF
-	for <linux-dwarves@archiver.kernel.org>; Tue, 14 Dec 2021 14:02:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DC028C433F5
+	for <linux-dwarves@archiver.kernel.org>; Tue, 14 Dec 2021 14:06:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230320AbhLNOCu (ORCPT
+        id S234776AbhLNOGR (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Tue, 14 Dec 2021 09:02:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54504 "EHLO
+        Tue, 14 Dec 2021 09:06:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230310AbhLNOCt (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Tue, 14 Dec 2021 09:02:49 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 472D7C06173F
-        for <dwarves@vger.kernel.org>; Tue, 14 Dec 2021 06:02:49 -0800 (PST)
+        with ESMTP id S234713AbhLNOGR (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Tue, 14 Dec 2021 09:06:17 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAAE3C061574
+        for <dwarves@vger.kernel.org>; Tue, 14 Dec 2021 06:06:16 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D907D6150C
-        for <dwarves@vger.kernel.org>; Tue, 14 Dec 2021 14:02:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 007E8C34607;
-        Tue, 14 Dec 2021 14:02:48 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 960D6B819BD
+        for <dwarves@vger.kernel.org>; Tue, 14 Dec 2021 14:06:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1CECEC34601;
+        Tue, 14 Dec 2021 14:06:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639490568;
-        bh=4f+f4aYmvblEwl1lnv3yQ7WuYCGftCPabuxSxWvMaVQ=;
+        s=k20201202; t=1639490774;
+        bh=wOTw2/tGkQIE81yrPWHn5r7Z5Xsqbnx8GZQpwEp1i/8=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=uBGPbCkegQ6HBl9Qup73tyA5s8Bx7ZRoeR9MWxYonz9RRF/oDRrL7vk/4PGc5cruL
-         ycRncJyvTyovPjzTcq5ptgRqitpEtih64ySBcMfs8uOGKspVfrB8mSAjG5zSckBG3u
-         7IAkBh4P/HAXEHIo/NmFj/qJQl/mRpRxA/+9wvu244bebU3tJ9e+oRChXgJQKHJVHx
-         O//n/3jNAw10SPpBe1hIR9S5YLTuHbu9cMtBvpcc9HecTlfgjKmqKpgYehzzlAk1z7
-         4HpUZ7O4s7Rdv6CNyos22cGxzaH0xzgBT2ExW0z2jEcyG6kVuEKOI2elr0yo+KiRnr
-         goUXykOXpYQPQ==
+        b=ZyXl0SUd9PTJYOw1jdESVOH1bYRWzsvZDFz5s2D/Xgo6JB7HNoXVO1errQlG+noiY
+         7Mz/2fHTMzBFRf7IbqlQ4omTi1xe1XHHxWfimcDD0pV4DSrq3/dVIdVyfSdZrG8vKt
+         cFMdBUpDbol9dK0oa7pmfbLh1Wa3IJiJcDCwJYLvpQRpLJpvUeawJ5qJPOhO1ZmAaO
+         2OyP05PI4py4hN9TEGI+P0eZvz/9dd+qHXXJ1gCWbFu+Xjyhmz0WpuaH1hU0YbRrL7
+         kJDy88Ti9/eeDwZvHzHOtvDvNR279uJBoJrFrm7ytC4Ypz7aZ03Xo34uRcY2itiSil
+         eF6YA3GH253Sg==
 Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 03E07405D8; Tue, 14 Dec 2021 11:02:44 -0300 (-03)
-Date:   Tue, 14 Dec 2021 11:02:44 -0300
+        id 7B5DC405D8; Tue, 14 Dec 2021 11:06:12 -0300 (-03)
+Date:   Tue, 14 Dec 2021 11:06:12 -0300
 From:   Arnaldo Carvalho de Melo <acme@kernel.org>
 To:     Douglas RAILLARD <douglas.raillard@arm.com>
 Cc:     acme@redhat.com, dwarves@vger.kernel.org
 Subject: Re: [PATCH v2 3/6] fprintf: Print types only once
-Message-ID: <YbikBKrz3HW8QE/X@kernel.org>
+Message-ID: <Ybik1ExxhsM0DyDA@kernel.org>
 References: <20211207173151.2283946-1-douglas.raillard@arm.com>
  <20211207173151.2283946-4-douglas.raillard@arm.com>
 MIME-Version: 1.0
@@ -55,16 +55,17 @@ Em Tue, Dec 07, 2021 at 05:31:48PM +0000, Douglas RAILLARD escreveu:
 > From: Douglas Raillard <douglas.raillard@arm.com>
 > 
 > Use (struct tag).visited member to track what type has been printed
-
-This doesn't match the patch, where you ended up using a new tar.printed
-field, have you tried with .visited and ended up finding out .printed
-was needed?
-
-- Arnaldo
-
 > already to avoid printing it twice. This allows producing a valid C
 > header along with --expand_types.
-> 
+
+And here you changed the default, i.e. it is useful to have the current
+--expand_types behaviour of expanding types as it traverse containers,
+so I think this needs another option to ask for this new
+behaviour, I think we can have that as --expand_types_once that would be
+used instead of --expand_types, ok?
+
+- Arnaldo
+ 
 > Signed-off-by: Douglas Raillard <douglas.raillard@arm.com>
 > ---
 >  dwarves.h         |  3 ++-
