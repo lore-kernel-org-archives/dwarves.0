@@ -2,35 +2,35 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D1657C433EF
-	for <linux-dwarves@archiver.kernel.org>; Tue, 14 Dec 2021 17:54:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 11302C433EF
+	for <linux-dwarves@archiver.kernel.org>; Tue, 14 Dec 2021 18:23:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236099AbhLNRym (ORCPT
+        id S231978AbhLNSXA (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Tue, 14 Dec 2021 12:54:42 -0500
-Received: from foss.arm.com ([217.140.110.172]:33910 "EHLO foss.arm.com"
+        Tue, 14 Dec 2021 13:23:00 -0500
+Received: from foss.arm.com ([217.140.110.172]:34566 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231778AbhLNRym (ORCPT <rfc822;dwarves@vger.kernel.org>);
-        Tue, 14 Dec 2021 12:54:42 -0500
+        id S229916AbhLNSW7 (ORCPT <rfc822;dwarves@vger.kernel.org>);
+        Tue, 14 Dec 2021 13:22:59 -0500
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9458D6D;
-        Tue, 14 Dec 2021 09:54:41 -0800 (PST)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2A5EB6D;
+        Tue, 14 Dec 2021 10:22:59 -0800 (PST)
 Received: from [10.57.66.99] (unknown [10.57.66.99])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C98C63F5A1;
-        Tue, 14 Dec 2021 09:54:40 -0800 (PST)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 38BD43F5A1;
+        Tue, 14 Dec 2021 10:22:57 -0800 (PST)
 Subject: Re: [PATCH v2 3/6] fprintf: Print types only once
 To:     Arnaldo Carvalho de Melo <acme@kernel.org>
 Cc:     acme@redhat.com, dwarves@vger.kernel.org
 References: <20211207173151.2283946-1-douglas.raillard@arm.com>
  <20211207173151.2283946-4-douglas.raillard@arm.com>
- <YbikBKrz3HW8QE/X@kernel.org>
+ <Ybik1ExxhsM0DyDA@kernel.org>
 From:   Douglas Raillard <douglas.raillard@arm.com>
-Message-ID: <3731f762-1508-1a07-d898-712694c05a84@arm.com>
-Date:   Tue, 14 Dec 2021 17:54:49 +0000
+Message-ID: <ab236940-f164-7b94-00bc-a1c685597b9a@arm.com>
+Date:   Tue, 14 Dec 2021 18:23:07 +0000
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.14.0
 MIME-Version: 1.0
-In-Reply-To: <YbikBKrz3HW8QE/X@kernel.org>
+In-Reply-To: <Ybik1ExxhsM0DyDA@kernel.org>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -38,27 +38,24 @@ Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-On 12/14/21 2:02 PM, Arnaldo Carvalho de Melo wrote:
+On 12/14/21 2:06 PM, Arnaldo Carvalho de Melo wrote:
 > Em Tue, Dec 07, 2021 at 05:31:48PM +0000, Douglas RAILLARD escreveu:
 >> From: Douglas Raillard <douglas.raillard@arm.com>
 >>
 >> Use (struct tag).visited member to track what type has been printed
-> 
-> This doesn't match the patch, where you ended up using a new tar.printed
-> field, have you tried with .visited and ended up finding out .printed
-> was needed?
-> 
-
-Indeed I forgot to update the commit message. I initially used "visited" but
-decided to add a new member instead as "visited" is already used by other tools
-for other purposes that should probably not impact printing. We can revert
-to "visited" easily if needed.
-
-> - Arnaldo
-> 
 >> already to avoid printing it twice. This allows producing a valid C
 >> header along with --expand_types.
->>
+> 
+> And here you changed the default, i.e. it is useful to have the current
+> --expand_types behaviour of expanding types as it traverse containers,
+> so I think this needs another option to ask for this new
+> behaviour, I think we can have that as --expand_types_once that would be
+> used instead of --expand_types, ok?
+
+Changed it to have --expand_types_once in the next version I'll send.
+  
+> - Arnaldo
+>   
 >> Signed-off-by: Douglas Raillard <douglas.raillard@arm.com>
 >> ---
 >>   dwarves.h         |  3 ++-
