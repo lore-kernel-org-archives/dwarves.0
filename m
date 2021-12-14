@@ -2,53 +2,53 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2899BC433EF
-	for <linux-dwarves@archiver.kernel.org>; Tue, 14 Dec 2021 19:14:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 233A4C433EF
+	for <linux-dwarves@archiver.kernel.org>; Tue, 14 Dec 2021 19:19:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230115AbhLNTOH (ORCPT
+        id S229704AbhLNTTe (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Tue, 14 Dec 2021 14:14:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43714 "EHLO
+        Tue, 14 Dec 2021 14:19:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230038AbhLNTOH (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Tue, 14 Dec 2021 14:14:07 -0500
-Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 033A0C061574
-        for <dwarves@vger.kernel.org>; Tue, 14 Dec 2021 11:14:07 -0800 (PST)
-Received: by mail-qt1-x833.google.com with SMTP id p19so19374207qtw.12
-        for <dwarves@vger.kernel.org>; Tue, 14 Dec 2021 11:14:06 -0800 (PST)
+        with ESMTP id S229671AbhLNTTe (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Tue, 14 Dec 2021 14:19:34 -0500
+Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0527C061574
+        for <dwarves@vger.kernel.org>; Tue, 14 Dec 2021 11:19:33 -0800 (PST)
+Received: by mail-qk1-x72b.google.com with SMTP id 193so17743893qkh.10
+        for <dwarves@vger.kernel.org>; Tue, 14 Dec 2021 11:19:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=date:from:to:cc:subject:user-agent:in-reply-to:references
          :message-id:mime-version:content-transfer-encoding;
-        bh=0Ac/hz3C9T5rtwuvgzh3/KBuz46fntSFbDp10hSLg4k=;
-        b=lr5Lt+MqqSVwQmwUAFVmhmrDOydW5apxfhtU9lMh6L1VQ1Dsk+HA1vrmmXfgmp1MY2
-         WKv1mDk9BHQ+TT7OzR7tr2Jo2eW3FLsF9LY6+mwRL7XwuYYgDI1l0CV3vxpqxKpQbiPB
-         uIKjL0avVh8cAsUNuEPhwdmMwqUQw+/GKZPAI9H68TdY3VoofuePddtCbQuD51Pgub9v
-         Q4KHAAQz4D1okEpi6bAhoMfYpMEQtYenehNFOBel88tNQUaRYdcNgHaWHS22aIYdDZT5
-         BM3Q2B3QnFFJRfS6P/MiPFcyyGbIIdEaySv+iAO4D1d1cHPfhGuES3XJFztklrIFCN2v
-         kHNQ==
+        bh=ZTjBHh7WjD4/qJp92bP3U+n98FvJv27oL5fkf8fjmU0=;
+        b=qilF24vevlkPB6eAa+aKuYGUwfYadKl0tI8mHL1jNdPp4IYJCzq/p7a6aNoe9ZLvVW
+         34kfm/OhQCuiLG5dIKuPFjUy323Ow7pfoKSGKw5m4xACdZIcxAriw/PsC5+Mb4Dwq/70
+         pcnBPwN1g1FObrx4n0mXB5dqUIPCmrF+QNrEJ4+n5RXJtKBo0Ef1aQ0xFW7jpyQ7bqYF
+         Zl7Td6GUAVAasGmBSqWK28bsV9z7GiMMftWVvoz/uaPA/rmo0j7e+IC9j8TwrmQVsL1t
+         H/5hs20aEWRckwy7HbMYDE/WrzO129Ft/WVf3kltegVJgP9eBWm1fQx+nnXQRSfruMUG
+         Z1xw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:user-agent:in-reply-to
          :references:message-id:mime-version:content-transfer-encoding;
-        bh=0Ac/hz3C9T5rtwuvgzh3/KBuz46fntSFbDp10hSLg4k=;
-        b=ofVJ/vwC8EPc99LCzCdTPE7uMzwqRqnCeW3pNOsn7HZAExRnbCJ7qlPeovXr4pvtOH
-         H6PzOYQBnj2cQaoP14LMXpL9Sw4R+S4aGCaoCNnn8UH++NZKeN8YkCGktbTOfDVGzIgJ
-         ZBiojS8HzWWUMueNMqOmdy6kOv5U9bFmR9sRFt2Cejk6jauG4bSnzREcl2z5wXCk4DZx
-         e2a6ZCEo5CfnvolympJTYWyCAKykyVT/0QYdIHrItSBCIuFeruk8+QFVb64HWbuJXkVx
-         JwywZaakJ1DGrJkg6+uym+e6lbJvbrcTTyrmBHuyPAmhbqxarzt4S9pjQo0hnBiAPLOB
-         cENg==
-X-Gm-Message-State: AOAM531FkHhwgeC8O7hHvkSXsVGiGWg6bturVxnhGKTrJ+vngE3Q4H8d
-        STGR6WBGUssKVZeU3u38qdo=
-X-Google-Smtp-Source: ABdhPJy5x8vKmRsU/fg8ixX3dbFb+zIwj5xZfElTHbBRTGH74EANV/8XPnXlA1z8nnGbS9Pp/ZZn/Q==
-X-Received: by 2002:ac8:5c54:: with SMTP id j20mr8150051qtj.438.1639509245947;
-        Tue, 14 Dec 2021 11:14:05 -0800 (PST)
+        bh=ZTjBHh7WjD4/qJp92bP3U+n98FvJv27oL5fkf8fjmU0=;
+        b=h7XQ8qfeaIaYdT/awkjxU9f6oBKHvT+GQx0w2fsktQTv/Frc7RqgRSx8IgvGRiAwDB
+         1pUJ+QUVYZPdUhbIL5WkV2kXzYMFsQNUiwbUpsUGJgodfxkwsn/Yd5GAW5qnss/tFGnC
+         6UjjP5NmJOu4lCGSA3wW7wvqXzsUNHs4VZmcg83KMb77ZDdNMouB9ebM2bwGxQBV/7yQ
+         /74xszg9FtuIon+BS8E7A3vuTDySFe29j/9ME/ARAWwFnuP9ef9h7kPT2MXcvuTkKo4R
+         KYqY4bhtO92l0mShJI8FBEe+SMAG0VIKd7B9vEu23f+KduquaGAkcfnvvgMZxmODJAst
+         mNdw==
+X-Gm-Message-State: AOAM5313eq9rD1XVKNFjyyquePAS+0jDcuB0G2xjbJu82zYrUU2Ja0vJ
+        cLCd3f9Esh2BtkfIyRhKVXc=
+X-Google-Smtp-Source: ABdhPJyMoayY0gZ7sbwKqk+vEkl94RtBv5GmGAkBAg6iUww7UB4bQmgJ0rccLDmVn1RrWm7oKQNyPw==
+X-Received: by 2002:a05:620a:4507:: with SMTP id t7mr5918722qkp.655.1639509572946;
+        Tue, 14 Dec 2021 11:19:32 -0800 (PST)
 Received: from [127.0.0.1] ([187.72.67.185])
-        by smtp.gmail.com with ESMTPSA id s20sm624522qtc.75.2021.12.14.11.14.04
+        by smtp.gmail.com with ESMTPSA id w63sm461141qkd.88.2021.12.14.11.19.31
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Dec 2021 11:14:05 -0800 (PST)
-Date:   Tue, 14 Dec 2021 16:13:25 -0300
+        Tue, 14 Dec 2021 11:19:32 -0800 (PST)
+Date:   Tue, 14 Dec 2021 16:18:57 -0300
 From:   Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
 To:     Douglas Raillard <douglas.raillard@arm.com>,
         Arnaldo Carvalho de Melo <acme@kernel.org>
@@ -57,7 +57,7 @@ Subject: Re: [PATCH v2 4/6] pahole.c: Add prefix to expanded type names
 User-Agent: K-9 Mail for Android
 In-Reply-To: <a5b3b85e-1332-c244-08fb-8e51e9ab0fb4@arm.com>
 References: <20211207173151.2283946-1-douglas.raillard@arm.com> <20211207173151.2283946-5-douglas.raillard@arm.com> <YbiwfOPqiuZE7SUX@kernel.org> <a5b3b85e-1332-c244-08fb-8e51e9ab0fb4@arm.com>
-Message-ID: <8F9601B0-7CB9-41C6-9907-764A9CF1BF19@gmail.com>
+Message-ID: <3A9ACBF4-4FFE-4A19-B8D6-EDA8033B05AD@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain;
  charset=utf-8
@@ -142,6 +142,12 @@ o
 >I don't really like it either but the alternative is something like that:
 >https://github=2Ecom/douglas-raillard-arm/pahole/commit/a3d4e224b2a0cb819=
 6db0f8536bd77f976e364ca
+
+A quick look at the above hints at passing con_fprintf + a buffer + size t=
+o either return the type name or use the buffer to concatenate the prefix +=
+ the type name, with the type_name() return being the only result to use=2E
+
+- Arnaldo
 >
 >The worst is not the size of the patch, it's the inability to check that =
 it's actually complete=2E
@@ -151,17 +157,8 @@ lt in a broken header=2E
 >
 >One way to make the substitution safer is to completely ban direct access=
  to the name and force
->to go through an accessor that would apply the prefix,=20
-
-
-I like this, and we have tag__name(), I'm AFK now, will check if it fits=
-=2E
-
-Looking at your patch in te link you just provided
-
-- Arnaldo
-
-> but this leads to either memory management
+>to go through an accessor that would apply the prefix, but this leads to =
+either memory management
 >issue or inefficiency (as we would need to return copies so the caller ca=
 n free it)=2E
 >
