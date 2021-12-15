@@ -2,36 +2,41 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C4D39C433F5
-	for <linux-dwarves@archiver.kernel.org>; Tue, 14 Dec 2021 21:56:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2EC26C433EF
+	for <linux-dwarves@archiver.kernel.org>; Wed, 15 Dec 2021 14:56:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237323AbhLNV4Z (ORCPT
+        id S243556AbhLOO4Y (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Tue, 14 Dec 2021 16:56:25 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:34232 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234861AbhLNV4Y (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Tue, 14 Dec 2021 16:56:24 -0500
+        Wed, 15 Dec 2021 09:56:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56424 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237581AbhLOO4Y (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Wed, 15 Dec 2021 09:56:24 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69B46C061574;
+        Wed, 15 Dec 2021 06:56:24 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3988FB81D49;
-        Tue, 14 Dec 2021 21:56:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 926BFC34600;
-        Tue, 14 Dec 2021 21:56:19 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0A0E261926;
+        Wed, 15 Dec 2021 14:56:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45D04C34606;
+        Wed, 15 Dec 2021 14:56:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639518981;
-        bh=MzBJWW9p6mkqRrejapuPq5D9phAL3P9paARsZzc8en0=;
+        s=k20201202; t=1639580183;
+        bh=q+PAwVA3hA+XAhkskemgn4L0uXS+xZdMC81JEaAee+U=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=V9hPiNKzH3rQ0n3lqhI+Iy6b6MAmyYBW3/x42pDKmwQhi2xOJPhI4PuqLPyHDT9HP
-         K+mIhhu0yjiQOfurpq4z3drzmNL/9IfxKvXZ/b8EVKrTWToTQaxLdww5kHA90cbWl6
-         e1C+Y+UJZD7S851Wf1YzKOB89L9HDegC+GqZdTd1uEgROZYZadg2WGCCB/0qtrvBfF
-         nnGy5MZqTEn757tdixtOxZmoJKQvbM3C+Ct2pxHox7dLRhEX3mqd38W2FhI44BnGvM
-         NDQcC1jJv5ewUI588pY4YgcpzH5LqYNYfbAFl0QGI2Z3C6eQCtQiHrUnxP2KUKkkY1
-         LMHDCgBplGJKg==
-Date:   Tue, 14 Dec 2021 14:56:16 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+        b=B/iDNpR6h+hL0e1YRBM881u2j27FMncSdty5BhYRunWFI0uML8+Yr4JjUH75DFFOI
+         1r2G1MDosuXV/qyo8ZYJSvMuSEdF0yZHubAYSbXqCeVvgCQuBDUv/6VjiIno3rDdtY
+         ODWiEa2O/1N5YOcTGAeldswmqvC5/GKtbhXGn25QKXgHP41Ew27vi12CRW6Xygs+Un
+         FCk+n2E0vkPhD1E6WyNGI7PmUlXRd+IJW0qyvSuH4kjIX1N+EnTQFYNtjXfCmlvIFt
+         wpV2s+K9uIsg0OtN+hbwl8IghINcrlLJ/+wtmZGh665ibD6eZ5X3YsSqQ27ui/uE0L
+         1h19IxIbsZtZw==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id C81C6405D8; Wed, 15 Dec 2021 11:56:19 -0300 (-03)
+Date:   Wed, 15 Dec 2021 11:56:19 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Nathan Chancellor <nathan@kernel.org>
 Cc:     dwarves@vger.kernel.org,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         bpf@vger.kernel.org, Jiri Olsa <jolsa@kernel.org>,
@@ -43,36 +48,48 @@ Cc:     dwarves@vger.kernel.org,
         Ilya Leoshkevich <iii@linux.ibm.com>,
         Matteo Croce <mcroce@microsoft.com>
 Subject: Re: ANNOUNCE: pahole v1.23 (BTF tags and alignment inference)
-Message-ID: <YbkTAPn3EEu6BUYR@archlinux-ax161>
+Message-ID: <YboCE3zig9papNQW@kernel.org>
 References: <YSQSZQnnlIWAQ06v@kernel.org>
  <YbC5MC+h+PkDZten@kernel.org>
+ <YbkTAPn3EEu6BUYR@archlinux-ax161>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YbC5MC+h+PkDZten@kernel.org>
+In-Reply-To: <YbkTAPn3EEu6BUYR@archlinux-ax161>
+X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-Hi Arnaldo,
+Em Tue, Dec 14, 2021 at 02:56:16PM -0700, Nathan Chancellor escreveu:
+> Hi Arnaldo,
+> 
+> On Wed, Dec 08, 2021 at 10:54:56AM -0300, Arnaldo Carvalho de Melo wrote:
+> > - Initial support for DW_TAG_skeleton_unit, so far just suggest looking up a
+> >   matching .dwo file to be used instead. Automagically doing this is in the
+> >   plans for a future release.
+> 
+> This change [1] appears to break building on older distributions for me,
+> which I use in containers for access to older versions of GCC. I see the
+> error with Debian Stretch and Ubuntu Xenial, which have an older
+> libelf-dev.  Is this expected? I don't mind sticking with 1.22 for
+> those, I just want to be sure!
 
-On Wed, Dec 08, 2021 at 10:54:56AM -0300, Arnaldo Carvalho de Melo wrote:
-> - Initial support for DW_TAG_skeleton_unit, so far just suggest looking up a
->   matching .dwo file to be used instead. Automagically doing this is in the
->   plans for a future release.
+Nope, not expected, I'll reproduce here, fix and push, thanks for the
+report.
 
-This change [1] appears to break building on older distributions for me,
-which I use in containers for access to older versions of GCC. I see the
-error with Debian Stretch and Ubuntu Xenial, which have an older
-libelf-dev.  Is this expected? I don't mind sticking with 1.22 for
-those, I just want to be sure!
+- Arnaldo
+ 
+> /tmp/dwarves-1.23/dwarf_loader.c: In function 'die__process':
+> /tmp/dwarves-1.23/dwarf_loader.c:2529:13: error: 'DW_TAG_skeleton_unit' undeclared (first use in this function)
+>   if (tag == DW_TAG_skeleton_unit) {
+>              ^
+> 
+> [1]: https://git.kernel.org/pub/scm/devel/pahole/pahole.git/commit/?id=0135ccd632796ab3aff65b7c99b374c4682c2bcf
+> 
+> Cheers,
+> Nathan
 
-/tmp/dwarves-1.23/dwarf_loader.c: In function 'die__process':
-/tmp/dwarves-1.23/dwarf_loader.c:2529:13: error: 'DW_TAG_skeleton_unit' undeclared (first use in this function)
-  if (tag == DW_TAG_skeleton_unit) {
-             ^
+-- 
 
-[1]: https://git.kernel.org/pub/scm/devel/pahole/pahole.git/commit/?id=0135ccd632796ab3aff65b7c99b374c4682c2bcf
-
-Cheers,
-Nathan
+- Arnaldo
