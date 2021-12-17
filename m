@@ -2,93 +2,251 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2EC26C433EF
-	for <linux-dwarves@archiver.kernel.org>; Wed, 15 Dec 2021 14:56:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 46D20C433F5
+	for <linux-dwarves@archiver.kernel.org>; Fri, 17 Dec 2021 18:40:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243556AbhLOO4Y (ORCPT
+        id S233958AbhLQSkm (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Wed, 15 Dec 2021 09:56:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56424 "EHLO
+        Fri, 17 Dec 2021 13:40:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237581AbhLOO4Y (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Wed, 15 Dec 2021 09:56:24 -0500
+        with ESMTP id S230063AbhLQSkl (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Fri, 17 Dec 2021 13:40:41 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69B46C061574;
-        Wed, 15 Dec 2021 06:56:24 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 788D0C061574
+        for <dwarves@vger.kernel.org>; Fri, 17 Dec 2021 10:40:41 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0A0E261926;
-        Wed, 15 Dec 2021 14:56:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45D04C34606;
-        Wed, 15 Dec 2021 14:56:23 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 82D906239D
+        for <dwarves@vger.kernel.org>; Fri, 17 Dec 2021 18:40:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C693C36AE1;
+        Fri, 17 Dec 2021 18:40:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639580183;
-        bh=q+PAwVA3hA+XAhkskemgn4L0uXS+xZdMC81JEaAee+U=;
+        s=k20201202; t=1639766439;
+        bh=GgRfAnf5uebbPMn0kx+4pLr8BYPvIxM5RIS0/K36F3Y=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=B/iDNpR6h+hL0e1YRBM881u2j27FMncSdty5BhYRunWFI0uML8+Yr4JjUH75DFFOI
-         1r2G1MDosuXV/qyo8ZYJSvMuSEdF0yZHubAYSbXqCeVvgCQuBDUv/6VjiIno3rDdtY
-         ODWiEa2O/1N5YOcTGAeldswmqvC5/GKtbhXGn25QKXgHP41Ew27vi12CRW6Xygs+Un
-         FCk+n2E0vkPhD1E6WyNGI7PmUlXRd+IJW0qyvSuH4kjIX1N+EnTQFYNtjXfCmlvIFt
-         wpV2s+K9uIsg0OtN+hbwl8IghINcrlLJ/+wtmZGh665ibD6eZ5X3YsSqQ27ui/uE0L
-         1h19IxIbsZtZw==
+        b=qTwEkTKIU1pHLORnhwEtZsoOxkIgBcnjmSNa9uCD31vj6P48v2F06v4IqkN2S7dBb
+         MzT8Mr3gEkYWe3Qif2JRLHnnpveqAhLjl6BjW1fMHzYURwIW24KikRRbdFc7VX+6Dd
+         F1CVkIZy2CZ0EGd2xUVlwGr2kbhKm0I8RyGLWZGPglQxfpi5IyXv8NCmDLpXxQLjJ7
+         a0zvqUMl/iNlBvYPD1mHL0KadctXdtMttRFqHe+v14VMAMqb/x7i4pS1ywcikVVdl8
+         zbX1cxrjSW5AsDG7MW7xGQEzvpN7pPTvB/d/WR1pcZrUUiNwZN/ztcftKL3/nxw0qH
+         FqMB0uNyG2csg==
 Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id C81C6405D8; Wed, 15 Dec 2021 11:56:19 -0300 (-03)
-Date:   Wed, 15 Dec 2021 11:56:19 -0300
+        id 5A41740B92; Fri, 17 Dec 2021 15:40:36 -0300 (-03)
+Date:   Fri, 17 Dec 2021 15:40:36 -0300
 From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     dwarves@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        bpf@vger.kernel.org, Jiri Olsa <jolsa@kernel.org>,
-        Jan Engelhardt <jengelh@inai.de>,
-        Domenico Andreoli <domenico.andreoli@linux.com>,
-        Matthias Schwarzott <zzam@gentoo.org>,
-        Yonghong Song <yhs@fb.com>,
-        Douglas RAILLARD <douglas.raillard@arm.com>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        Matteo Croce <mcroce@microsoft.com>
-Subject: Re: ANNOUNCE: pahole v1.23 (BTF tags and alignment inference)
-Message-ID: <YboCE3zig9papNQW@kernel.org>
-References: <YSQSZQnnlIWAQ06v@kernel.org>
- <YbC5MC+h+PkDZten@kernel.org>
- <YbkTAPn3EEu6BUYR@archlinux-ax161>
+To:     Douglas Raillard <douglas.raillard@arm.com>
+Cc:     acme@redhat.com, dwarves@vger.kernel.org
+Subject: Re: [PATCH v2 3/6] fprintf: Print types only once
+Message-ID: <YbzZpNTQ7+xgLigm@kernel.org>
+References: <20211207173151.2283946-1-douglas.raillard@arm.com>
+ <20211207173151.2283946-4-douglas.raillard@arm.com>
+ <Ybik1ExxhsM0DyDA@kernel.org>
+ <ab236940-f164-7b94-00bc-a1c685597b9a@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YbkTAPn3EEu6BUYR@archlinux-ax161>
+In-Reply-To: <ab236940-f164-7b94-00bc-a1c685597b9a@arm.com>
 X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-Em Tue, Dec 14, 2021 at 02:56:16PM -0700, Nathan Chancellor escreveu:
-> Hi Arnaldo,
+Em Tue, Dec 14, 2021 at 06:23:07PM +0000, Douglas Raillard escreveu:
+> On 12/14/21 2:06 PM, Arnaldo Carvalho de Melo wrote:
+> > Em Tue, Dec 07, 2021 at 05:31:48PM +0000, Douglas RAILLARD escreveu:
+> > > From: Douglas Raillard <douglas.raillard@arm.com>
+> > > 
+> > > Use (struct tag).visited member to track what type has been printed
+> > > already to avoid printing it twice. This allows producing a valid C
+> > > header along with --expand_types.
+> > 
+> > And here you changed the default, i.e. it is useful to have the current
+> > --expand_types behaviour of expanding types as it traverse containers,
+> > so I think this needs another option to ask for this new
+> > behaviour, I think we can have that as --expand_types_once that would be
+> > used instead of --expand_types, ok?
 > 
-> On Wed, Dec 08, 2021 at 10:54:56AM -0300, Arnaldo Carvalho de Melo wrote:
-> > - Initial support for DW_TAG_skeleton_unit, so far just suggest looking up a
-> >   matching .dwo file to be used instead. Automagically doing this is in the
-> >   plans for a future release.
-> 
-> This change [1] appears to break building on older distributions for me,
-> which I use in containers for access to older versions of GCC. I see the
-> error with Debian Stretch and Ubuntu Xenial, which have an older
-> libelf-dev.  Is this expected? I don't mind sticking with 1.22 for
-> those, I just want to be sure!
+> Changed it to have --expand_types_once in the next version I'll send.
 
-Nope, not expected, I'll reproduce here, fix and push, thanks for the
-report.
+Ok, just one other nit, to make the patch smaller, please just use
+continue:
 
-- Arnaldo
- 
-> /tmp/dwarves-1.23/dwarf_loader.c: In function 'die__process':
-> /tmp/dwarves-1.23/dwarf_loader.c:2529:13: error: 'DW_TAG_skeleton_unit' undeclared (first use in this function)
->   if (tag == DW_TAG_skeleton_unit) {
->              ^
-> 
-> [1]: https://git.kernel.org/pub/scm/devel/pahole/pahole.git/commit/?id=0135ccd632796ab3aff65b7c99b374c4682c2bcf
-> 
-> Cheers,
-> Nathan
+diff --git a/pahole.c b/pahole.c
+index f3a51cb2fe74afd2..b8beb71ae2c6a0b0 100644
+--- a/pahole.c
++++ b/pahole.c
+@@ -2964,6 +2964,9 @@ out_btf:
+                        goto dump_it;
+                }
+
++               if (class && class->printed)
++                       continue;
++
+                if (class)
+                        class__find_holes(tag__class(class));
+                if (reorganize) {
+
+> > - Arnaldo
+> > > Signed-off-by: Douglas Raillard <douglas.raillard@arm.com>
+> > > ---
+> > >   dwarves.h         |  3 ++-
+> > >   dwarves_fprintf.c | 22 ++++++++++++++++------
+> > >   pahole.c          | 34 ++++++++++++++++++----------------
+> > >   3 files changed, 36 insertions(+), 23 deletions(-)
+> > > 
+> > > diff --git a/dwarves.h b/dwarves.h
+> > > index 52d162d..fc5b3fa 100644
+> > > --- a/dwarves.h
+> > > +++ b/dwarves.h
+> > > @@ -413,6 +413,7 @@ struct tag {
+> > >   	type_id_t	 type;
+> > >   	uint16_t	 tag;
+> > >   	bool		 visited;
+> > > +	bool		 printed;
+> > >   	bool		 top_level;
+> > >   	bool		 has_btf_type_tag;
+> > >   	uint16_t	 recursivity_level;
+> > > @@ -1370,7 +1371,7 @@ static inline const char *enumerator__name(const struct enumerator *enumerator)
+> > >   void enumeration__delete(struct type *type);
+> > >   void enumeration__add(struct type *type, struct enumerator *enumerator);
+> > > -size_t enumeration__fprintf(const struct tag *tag_enum,
+> > > +size_t enumeration__fprintf(struct tag *tag_enum,
+> > >   			    const struct conf_fprintf *conf, FILE *fp);
+> > >   int dwarves__init(void);
+> > > diff --git a/dwarves_fprintf.c b/dwarves_fprintf.c
+> > > index c5921d7..2c5dce6 100644
+> > > --- a/dwarves_fprintf.c
+> > > +++ b/dwarves_fprintf.c
+> > > @@ -278,8 +278,8 @@ size_t typedef__fprintf(const struct tag *tag, const struct cu *cu,
+> > >   {
+> > >   	struct type *type = tag__type(tag);
+> > >   	const struct conf_fprintf *pconf = conf ?: &conf_fprintf__defaults;
+> > > -	const struct tag *tag_type;
+> > > -	const struct tag *ptr_type;
+> > > +	struct tag *tag_type;
+> > > +	struct tag *ptr_type;
+> > >   	char bf[512];
+> > >   	int is_pointer = 0;
+> > >   	size_t printed;
+> > > @@ -394,13 +394,14 @@ out:
+> > >   	return type->max_tag_name_len;
+> > >   }
+> > > -size_t enumeration__fprintf(const struct tag *tag, const struct conf_fprintf *conf, FILE *fp)
+> > > +size_t enumeration__fprintf(struct tag *tag, const struct conf_fprintf *conf, FILE *fp)
+> > >   {
+> > >   	struct type *type = tag__type(tag);
+> > >   	struct enumerator *pos;
+> > >   	int max_entry_name_len = enumeration__max_entry_name_len(type);
+> > >   	size_t printed = fprintf(fp, "enum%s%s {\n", type__name(type) ? " " : "", type__name(type) ?: "");
+> > >   	int indent = conf->indent;
+> > > +	tag->printed = 1;
+> > >   	if (indent >= (int)sizeof(tabs))
+> > >   		indent = sizeof(tabs) - 1;
+> > > @@ -651,10 +652,14 @@ static size_t type__fprintf(struct tag *type, const struct cu *cu,
+> > >   	size_t printed = 0;
+> > >   	int expand_types = conf->expand_types;
+> > >   	int suppress_offset_comment = conf->suppress_offset_comment;
+> > > +	bool type_printed;
+> > >   	if (type == NULL)
+> > >   		goto out_type_not_found;
+> > > +	type_printed = type->printed;
+> > > +	type->printed = 1;
+> > > +
+> > >   	if (conf->expand_pointers) {
+> > >   		int nr_indirections = 0;
+> > > @@ -794,7 +799,7 @@ print_default:
+> > >   	case DW_TAG_structure_type:
+> > >   		ctype = tag__type(type);
+> > > -		if (type__name(ctype) != NULL && !expand_types) {
+> > > +		if (type__name(ctype) != NULL && (!expand_types || type_printed)) {
+> > >   			printed += fprintf(fp, "%s %-*s %s",
+> > >   					   (type->tag == DW_TAG_class_type &&
+> > >   					    !tconf.classes_as_structs) ? "class" : "struct",
+> > > @@ -813,7 +818,7 @@ print_default:
+> > >   	case DW_TAG_union_type:
+> > >   		ctype = tag__type(type);
+> > > -		if (type__name(ctype) != NULL && !expand_types) {
+> > > +		if (type__name(ctype) != NULL && (!expand_types || type_printed)) {
+> > >   			printed += fprintf(fp, "union %-*s %s", tconf.type_spacing - 6, type__name(ctype), name ?: "");
+> > >   		} else {
+> > >   			tconf.type_spacing -= 8;
+> > > @@ -823,7 +828,7 @@ print_default:
+> > >   	case DW_TAG_enumeration_type:
+> > >   		ctype = tag__type(type);
+> > > -		if (type__name(ctype) != NULL)
+> > > +		if (type__name(ctype) != NULL || type_printed)
+> > >   			printed += fprintf(fp, "enum %-*s %s", tconf.type_spacing - 5, type__name(ctype), name ?: "");
+> > >   		else
+> > >   			printed += enumeration__fprintf(type, &tconf, fp);
+> > > @@ -1000,6 +1005,8 @@ static size_t union__fprintf(struct type *type, const struct cu *cu,
+> > >   	uint32_t initial_union_cacheline;
+> > >   	uint32_t cacheline = 0; /* This will only be used if this is the outermost union */
+> > > +	type__tag(type)->printed = 1;
+> > > +
+> > >   	if (indent >= (int)sizeof(tabs))
+> > >   		indent = sizeof(tabs) - 1;
+> > > @@ -1394,6 +1401,8 @@ static size_t __class__fprintf(struct class *class, const struct cu *cu,
+> > >   				 type__name(type) ?: "");
+> > >   	int indent = cconf.indent;
+> > > +	class__tag(class)->printed = 1;
+> > > +
+> > >   	if (indent >= (int)sizeof(tabs))
+> > >   		indent = sizeof(tabs) - 1;
+> > > @@ -1856,6 +1865,7 @@ size_t tag__fprintf(struct tag *tag, const struct cu *cu,
+> > >   	size_t printed = 0;
+> > >   	struct conf_fprintf tconf;
+> > >   	const struct conf_fprintf *pconf = conf;
+> > > +	tag->printed = 1;
+> > >   	if (conf == NULL) {
+> > >   		tconf = conf_fprintf__defaults;
+> > > diff --git a/pahole.c b/pahole.c
+> > > index f3a51cb..42ba110 100644
+> > > --- a/pahole.c
+> > > +++ b/pahole.c
+> > > @@ -2964,22 +2964,24 @@ out_btf:
+> > >   			goto dump_it;
+> > >   		}
+> > > -		if (class)
+> > > -			class__find_holes(tag__class(class));
+> > > -		if (reorganize) {
+> > > -			if (class && tag__is_struct(class))
+> > > -				do_reorg(class, cu);
+> > > -		} else if (find_containers)
+> > > -			print_containers(cu, class_id, 0);
+> > > -		else if (find_pointers_in_structs)
+> > > -			print_structs_with_pointer_to(cu, class_id);
+> > > -		else if (class) {
+> > > -			/*
+> > > -			 * We don't need to print it for every compile unit
+> > > -			 * but the previous options need
+> > > -			 */
+> > > -			tag__fprintf(class, cu, &conf, stdout);
+> > > -			putchar('\n');
+> > > +		if (!class->printed) {
+> > > +			if (class)
+> > > +				class__find_holes(tag__class(class));
+> > > +			if (reorganize) {
+> > > +				if (class && tag__is_struct(class))
+> > > +					do_reorg(class, cu);
+> > > +			} else if (find_containers)
+> > > +				print_containers(cu, class_id, 0);
+> > > +			else if (find_pointers_in_structs)
+> > > +				print_structs_with_pointer_to(cu, class_id);
+> > > +			else if (class) {
+> > > +				/*
+> > > +				 * We don't need to print it for every compile unit
+> > > +				 * but the previous options need
+> > > +				 */
+> > > +				tag__fprintf(class, cu, &conf, stdout);
+> > > +				putchar('\n');
+> > > +			}
+> > >   		}
+> > >   	}
+> > > -- 
+> > > 2.25.1
+> > 
 
 -- 
 
