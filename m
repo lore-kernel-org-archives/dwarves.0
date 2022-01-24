@@ -2,192 +2,288 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7A05EC4332F
-	for <linux-dwarves@archiver.kernel.org>; Mon, 24 Jan 2022 19:22:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E775AC4321E
+	for <linux-dwarves@archiver.kernel.org>; Mon, 24 Jan 2022 21:47:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348636AbiAXTWr (ORCPT
+        id S1353899AbiAXVqn (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Mon, 24 Jan 2022 14:22:47 -0500
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:41244 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1348761AbiAXTTk (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Mon, 24 Jan 2022 14:19:40 -0500
-Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 20OHVhEc011666
-        for <dwarves@vger.kernel.org>; Mon, 24 Jan 2022 11:19:40 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=facebook;
- bh=DCMSFmJbLQ91HXUrcnvneW49VuxbN1I/B/x+Vf9XN4I=;
- b=fuYiE24Uak5kCzqB41Stc/0o9yge+QwpsCtjPlD4L6CJUlNwdEamEmMhStwJkws9/3AU
- XKTENW5yAFzlRX1wYUOFqQaEZGonbhJDTNd80lINi90DX54pOEfXD3u11Bb9GrCzcOHt
- z0F+jdk+UqGar1HKEmbTzsup8RzePwMdMPA= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3dswcptan7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <dwarves@vger.kernel.org>; Mon, 24 Jan 2022 11:19:39 -0800
-Received: from twshared7634.08.ash8.facebook.com (2620:10d:c085:108::4) by
- mail.thefacebook.com (2620:10d:c085:21d::7) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Mon, 24 Jan 2022 11:19:39 -0800
-Received: by devvm1744.ftw0.facebook.com (Postfix, from userid 460691)
-        id 2D8F42AE343E; Mon, 24 Jan 2022 11:19:22 -0800 (PST)
-From:   Kui-Feng Lee <kuifeng@fb.com>
-To:     <dwarves@vger.kernel.org>, <arnaldo.melo@gmail.com>
-CC:     <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
-        Kui-Feng Lee <kuifeng@fb.com>
-Subject: [PATCH dwarves v2 1/3] dwarf_loader: Receive per-thread data on worker threads.
-Date:   Mon, 24 Jan 2022 11:18:56 -0800
-Message-ID: <20220124191858.1601255-2-kuifeng@fb.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220124191858.1601255-1-kuifeng@fb.com>
-References: <20220124191858.1601255-1-kuifeng@fb.com>
+        Mon, 24 Jan 2022 16:46:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50082 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1450063AbiAXVTl (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Mon, 24 Jan 2022 16:19:41 -0500
+Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56F25C06127D
+        for <dwarves@vger.kernel.org>; Mon, 24 Jan 2022 12:13:49 -0800 (PST)
+Received: by mail-il1-x129.google.com with SMTP id x3so214251ilm.3
+        for <dwarves@vger.kernel.org>; Mon, 24 Jan 2022 12:13:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=muIlGK7UGSHsmiZXBnqQJlhzGz4pKwXporPdHYLKUJw=;
+        b=BYQf2L17GFihur95boNA/PZD+zjA74GwdrKZMdFm+KJC92lPLDMp2NsvjqsqQepnHR
+         cggpsJC9wZQloUN7L3VsNRh8axg4r5zwcXvuM53YC6QqHktgu7/fWA/fVRc9Z5BxnldI
+         u2Kqbj4Q43YymptzCGiSEkRaJAPw10AFHOeCgWqqAklunmQWDO/BE6J4aMvF9DvsHCUq
+         JhHZrQrzx4zppGTnAN+d6sBe/jA4VDMppVJ51yf8FM7tnv/lvTssuJLw2zFyO1Z1x1OO
+         coztFT1+utf8dLlFE3ta+IEL+/qJutSvZI754uuay3O7fqE4OjWItJepK9bWKfPDa6WC
+         Sslw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=muIlGK7UGSHsmiZXBnqQJlhzGz4pKwXporPdHYLKUJw=;
+        b=8KeK37T2kKGGndHBy6fglSYiQMDQnr8SefAoGpJ0pB6SKv/sFA61zaSphvWhV1gjOD
+         sZlqJlyXvhOuV1MWaZY7aSO/GEKwURnJALkvwN9jt8Yqwqd6+eOArEHJ775Tcib5h6BJ
+         haDC1Xah1EJJt/s4geGF7Slo/B4oY30LlcIjpDtAi8WPXIp7L4Ecupl4msQfeXeWMFMR
+         Xn0/kN1BoEE2EO/IUTeJFDtb2N4jaUUbyao228tbstxiXIPpHhzWQbW0zvvZJvASB6+W
+         c+t4/oBxjQOprw/ZPlDfzPTKb7mBdykw/iBmqZLPn8wwRXTRoB95BitKwDoTbPL7D3fM
+         VJ7Q==
+X-Gm-Message-State: AOAM531JKtMdTZ2VIExqhG9magujC6cS0XrPyZ0hFyD9++0aYNAJJE/N
+        1caZO23XPLrOFtNWC5igg2b/BulHJQE6TvzEGFY=
+X-Google-Smtp-Source: ABdhPJy0BgObTPb/8SOtJO2ApCbI8aIpvAxVfrFKDTiuwNuHCn80XgWYLkVjNMwqcWKGGN9M9iuTKf4whV8nwtCz1RM=
+X-Received: by 2002:a92:db0b:: with SMTP id b11mr9513687iln.98.1643055228604;
+ Mon, 24 Jan 2022 12:13:48 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-GUID: e1myEvEug5-PDxn0IJfkWKbI6C4ciKrA
-X-Proofpoint-ORIG-GUID: e1myEvEug5-PDxn0IJfkWKbI6C4ciKrA
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-24_09,2022-01-24_02,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=fb_outbound_notspam policy=fb_outbound score=0 phishscore=0
- malwarescore=0 spamscore=0 clxscore=1015 lowpriorityscore=0
- impostorscore=0 suspectscore=0 mlxscore=0 adultscore=0 mlxlogscore=999
- bulkscore=0 priorityscore=1501 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2201110000 definitions=main-2201240127
-X-FB-Internal: deliver
+References: <20220124191858.1601255-1-kuifeng@fb.com> <20220124191858.1601255-4-kuifeng@fb.com>
+In-Reply-To: <20220124191858.1601255-4-kuifeng@fb.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Mon, 24 Jan 2022 12:13:37 -0800
+Message-ID: <CAEf4BzaZSw7kG-ohiff-MDgFMR5BpZB-4VZotO2M2y=tYyooQg@mail.gmail.com>
+Subject: Re: [PATCH dwarves v2 3/3] pahole: Use per-thread btf instances to
+ avoid mutex locking.
+To:     Kui-Feng Lee <kuifeng@fb.com>
+Cc:     dwarves@vger.kernel.org,
+        Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-Add arguments to steal and thread_exit callbacks of conf_load to
-receive per-thread data.
+On Mon, Jan 24, 2022 at 11:19 AM Kui-Feng Lee <kuifeng@fb.com> wrote:
+>
+> Create an instance of btf for each worker thread, and add type info to
+> the local btf instance in the steal-function of pahole without mutex
+> acquiring.  Once finished with all worker threads, merge all
+> per-thread btf instances to the primary btf instance.
+>
+> Signed-off-by: Kui-Feng Lee <kuifeng@fb.com>
+> ---
 
-Signed-off-by: Kui-Feng Lee <kuifeng@fb.com>
----
- btf_loader.c   | 2 +-
- ctf_loader.c   | 2 +-
- dwarf_loader.c | 4 ++--
- dwarves.h      | 5 +++--
- pahole.c       | 3 ++-
- pdwtags.c      | 3 ++-
- pfunct.c       | 4 +++-
- 7 files changed, 14 insertions(+), 9 deletions(-)
+BTW, I've already synced your btf__add_btf() optimization to Github,
+so you can bump pahole libbpf submodule reference in the next
+revision. You'll get a bunch of deprecation warnings, so it would be
+great to fix those at the same time.
 
-diff --git a/btf_loader.c b/btf_loader.c
-index 7a5b16ff393e..b61cadd55127 100644
---- a/btf_loader.c
-+++ b/btf_loader.c
-@@ -624,7 +624,7 @@ static int cus__load_btf(struct cus *cus, struct conf=
-_load *conf, const char *fi
- 	 * The app stole this cu, possibly deleting it,
- 	 * so forget about it
- 	 */
--	if (conf && conf->steal && conf->steal(cu, conf))
-+	if (conf && conf->steal && conf->steal(cu, conf, NULL))
- 		return 0;
-=20
- 	cus__add(cus, cu);
-diff --git a/ctf_loader.c b/ctf_loader.c
-index 7c34739afdce..de6d4dbfce97 100644
---- a/ctf_loader.c
-+++ b/ctf_loader.c
-@@ -722,7 +722,7 @@ int ctf__load_file(struct cus *cus, struct conf_load =
-*conf,
- 	 * The app stole this cu, possibly deleting it,
- 	 * so forget about it
- 	 */
--	if (conf && conf->steal && conf->steal(cu, conf))
-+	if (conf && conf->steal && conf->steal(cu, conf, NULL))
- 		return 0;
-=20
- 	cus__add(cus, cu);
-diff --git a/dwarf_loader.c b/dwarf_loader.c
-index e30b03c1c541..bf9ea3765419 100644
---- a/dwarf_loader.c
-+++ b/dwarf_loader.c
-@@ -2686,7 +2686,7 @@ static int cu__finalize(struct cu *cu, struct conf_=
-load *conf)
- {
- 	cu__for_all_tags(cu, class_member__cache_byte_size, conf);
- 	if (conf && conf->steal) {
--		return conf->steal(cu, conf);
-+		return conf->steal(cu, conf, NULL);
- 	}
- 	return LSK__KEEPIT;
- }
-@@ -2930,7 +2930,7 @@ static void *dwarf_cus__process_cu_thread(void *arg=
-)
- 			goto out_abort;
- 	}
-=20
--	if (dcus->conf->thread_exit && dcus->conf->thread_exit() !=3D 0)
-+	if (dcus->conf->thread_exit && dcus->conf->thread_exit(dcus->conf, NULL=
-) !=3D 0)
- 		goto out_abort;
-=20
- 	return (void *)DWARF_CB_OK;
-diff --git a/dwarves.h b/dwarves.h
-index 52d162d67456..9a8e4de8843a 100644
---- a/dwarves.h
-+++ b/dwarves.h
-@@ -48,8 +48,9 @@ struct conf_fprintf;
-  */
- struct conf_load {
- 	enum load_steal_kind	(*steal)(struct cu *cu,
--					 struct conf_load *conf);
--	int			(*thread_exit)(void);
-+					 struct conf_load *conf,
-+					 void *thr_data);
-+	int			(*thread_exit)(struct conf_load *conf, void *thr_data);
- 	void			*cookie;
- 	char			*format_path;
- 	int			nr_jobs;
-diff --git a/pahole.c b/pahole.c
-index f3a51cb2fe74..f3eeaaca4cdf 100644
---- a/pahole.c
-+++ b/pahole.c
-@@ -2799,7 +2799,8 @@ out:
- static struct type_instance *header;
-=20
- static enum load_steal_kind pahole_stealer(struct cu *cu,
--					   struct conf_load *conf_load)
-+					   struct conf_load *conf_load,
-+					   void *thr_data)
- {
- 	int ret =3D LSK__DELETE;
-=20
-diff --git a/pdwtags.c b/pdwtags.c
-index 2b5ba1bf6745..8b1d6f1c96cb 100644
---- a/pdwtags.c
-+++ b/pdwtags.c
-@@ -72,7 +72,8 @@ static int cu__emit_tags(struct cu *cu)
- }
-=20
- static enum load_steal_kind pdwtags_stealer(struct cu *cu,
--					    struct conf_load *conf_load __maybe_unused)
-+					    struct conf_load *conf_load __maybe_unused,
-+					    void *thr_data __maybe_unused)
- {
- 	cu__emit_tags(cu);
- 	return LSK__DELETE;
-diff --git a/pfunct.c b/pfunct.c
-index 5485622e639b..314915b774f4 100644
---- a/pfunct.c
-+++ b/pfunct.c
-@@ -489,7 +489,9 @@ int elf_symtabs__show(char *filenames[])
- 	return EXIT_SUCCESS;
- }
-=20
--static enum load_steal_kind pfunct_stealer(struct cu *cu, struct conf_lo=
-ad *conf_load __maybe_unused)
-+static enum load_steal_kind pfunct_stealer(struct cu *cu,
-+					   struct conf_load *conf_load __maybe_unused,
-+					   void *thr_data __maybe_unused)
- {
-=20
- 	if (function_name) {
---=20
-2.30.2
+>  btf_encoder.c |   5 +++
+>  btf_encoder.h |   2 +
+>  pahole.c      | 114 +++++++++++++++++++++++++++++++++++++++++++++++---
+>  3 files changed, 116 insertions(+), 5 deletions(-)
+>
+> diff --git a/btf_encoder.c b/btf_encoder.c
+> index 9d015f304e92..56a76f5d7275 100644
+> --- a/btf_encoder.c
+> +++ b/btf_encoder.c
+> @@ -1529,3 +1529,8 @@ int btf_encoder__encode_cu(struct btf_encoder *encoder, struct cu *cu)
+>  out:
+>         return err;
+>  }
+> +
+> +struct btf *btf_encoder__btf(struct btf_encoder *encoder)
+> +{
+> +       return encoder->btf;
+> +}
+> diff --git a/btf_encoder.h b/btf_encoder.h
+> index f133b0d7674d..0f0eee84df74 100644
+> --- a/btf_encoder.h
+> +++ b/btf_encoder.h
+> @@ -29,4 +29,6 @@ struct btf_encoder *btf_encoders__first(struct list_head *encoders);
+>
+>  struct btf_encoder *btf_encoders__next(struct btf_encoder *encoder);
+>
+> +struct btf *btf_encoder__btf(struct btf_encoder *encoder);
+> +
+>  #endif /* _BTF_ENCODER_H_ */
+> diff --git a/pahole.c b/pahole.c
+> index f3eeaaca4cdf..93b844f97c38 100644
+> --- a/pahole.c
+> +++ b/pahole.c
+> @@ -2798,6 +2798,73 @@ out:
+>
+>  static struct type_instance *header;
+>
+> +struct thread_data {
+> +       struct btf *btf;
+> +       struct btf_encoder *encoder;
+> +};
+> +
+> +static int pahole_threads_prepare(struct conf_load *conf, int nr_threads, void **thr_data)
+> +{
+> +       int i;
+> +       struct thread_data *threads = calloc(sizeof(struct thread_data), nr_threads);
+> +
+> +       for (i = 0; i < nr_threads; i++)
+> +               thr_data[i] = threads + i;
+> +
+> +       return 0;
+> +}
+> +
+> +static int pahole_thread_exit(struct conf_load *conf, void *thr_data)
+> +{
+> +       struct thread_data *thread = thr_data;
+> +
+> +       if (thread == NULL)
+> +               return 0;
+> +
+> +       /*
+> +        * Here we will call btf__dedup() here once we extend
+> +        * btf__dedup().
+> +        */
+> +
+> +       return 0;
+> +}
+> +
+> +static int pahole_threads_collect(struct conf_load *conf, int nr_threads, void **thr_data,
+> +                                 int error)
+> +{
+> +       struct thread_data **threads = (struct thread_data **)thr_data;
+> +       int i;
+> +       int err = 0;
+> +
+> +       if (error)
+> +               goto out;
+> +
+> +       for (i = 0; i < nr_threads; i++) {
+> +               /*
+> +                * Merge content of the btf instances of worker
+> +                * threads to the btf instance of the primary
+> +                * btf_encoder.
+> +                */
+> +               if (!threads[i]->btf || threads[i]->encoder == btf_encoder)
+> +                       continue; /* The primary btf_encoder */
+> +               err = btf__add_btf(btf_encoder__btf(btf_encoder), threads[i]->btf);
 
+You've ignored my question and suggestion to move btf__add_btf() into
+pahole_thread_exit. Can you please comment on why it's not a good
+idea, if you insist on not doing that?
+
+> +               if (err < 0)
+> +                       goto out;
+> +               btf_encoder__delete(threads[i]->encoder);
+> +               threads[i]->encoder = NULL;
+> +       }
+> +       err = 0;
+> +
+> +out:
+> +       for (i = 0; i < nr_threads; i++) {
+> +               if (threads[i]->encoder && threads[i]->encoder != btf_encoder)
+> +                       btf_encoder__delete(threads[i]->encoder);
+> +       }
+> +       free(threads[0]);
+> +
+> +       return err;
+> +}
+> +
+>  static enum load_steal_kind pahole_stealer(struct cu *cu,
+>                                            struct conf_load *conf_load,
+>                                            void *thr_data)
+> @@ -2819,8 +2886,8 @@ static enum load_steal_kind pahole_stealer(struct cu *cu,
+>
+>         if (btf_encode) {
+>                 static pthread_mutex_t btf_lock = PTHREAD_MUTEX_INITIALIZER;
+> +               struct btf_encoder *encoder;
+>
+> -               pthread_mutex_lock(&btf_lock);
+>                 /*
+>                  * FIXME:
+>                  *
+> @@ -2828,21 +2895,55 @@ static enum load_steal_kind pahole_stealer(struct cu *cu,
+>                  * point we'll have cu->elf setup...
+>                  */
+>                 if (!btf_encoder) {
+> -                       btf_encoder = btf_encoder__new(cu, detached_btf_filename, conf_load->base_btf, skip_encoding_btf_vars,
+> -                                                      btf_encode_force, btf_gen_floats, global_verbose);
+> +                       pthread_mutex_lock(&btf_lock);
+> +                       if (!btf_encoder) {
+
+are you trying to minimize lock contention here with !btf_encoder
+check outside and inside locked area? Why? It just adds more code
+nesting and this locking can't be a real bottleneck. We are talking
+about a very few threads being initialized. Please keep it simple,
+lock, check !btf_encode and goto unlock, if it's already set.
+Otherwise proceed to initialization.
+
+> +                               /*
+> +                                * btf_encoder is the primary encoder.
+> +                                * And, it is used by the thread
+> +                                * create it.
+> +                                */
+> +                               btf_encoder = btf_encoder__new(cu, detached_btf_filename,
+> +                                                              conf_load->base_btf,
+> +                                                              skip_encoding_btf_vars,
+> +                                                              btf_encode_force,
+> +                                                              btf_gen_floats, global_verbose);
+> +                               if (btf_encoder && thr_data) {
+> +                                       struct thread_data *thread = (struct thread_data *)thr_data;
+> +
+> +                                       thread->encoder = btf_encoder;
+> +                                       thread->btf = btf_encoder__btf(btf_encoder);
+
+Can you summarize the relationship between thr_data, btf_encode and
+thread->encoder? I'm re-reading this code (including `if (thr_data)`
+piece below) over and over and can't figure out why the initialization
+pattern is so complicated.
+
+> +                               }
+> +                       }
+> +                       pthread_mutex_unlock(&btf_lock);
+>                         if (btf_encoder == NULL) {
+>                                 ret = LSK__STOP_LOADING;
+>                                 goto out_btf;
+>                         }
+>                 }
+>
+> -               if (btf_encoder__encode_cu(btf_encoder, cu)) {
+> +               if (thr_data) {
+> +                       struct thread_data *thread = (struct thread_data *)thr_data;
+> +
+> +                       if (thread->encoder == NULL) {
+> +                               thread->encoder =
+> +                                       btf_encoder__new(cu, detached_btf_filename,
+> +                                                        NULL,
+> +                                                        skip_encoding_btf_vars,
+> +                                                        btf_encode_force,
+> +                                                        btf_gen_floats,
+> +                                                        global_verbose);
+> +                               thread->btf = btf_encoder__btf(thread->encoder);
+> +                       }
+> +                       encoder = thread->encoder;
+> +               } else
+> +                       encoder = btf_encoder;
+> +
+> +               if (btf_encoder__encode_cu(encoder, cu)) {
+>                         fprintf(stderr, "Encountered error while encoding BTF.\n");
+>                         exit(1);
+>                 }
+>                 ret = LSK__DELETE;
+>  out_btf:
+> -               pthread_mutex_unlock(&btf_lock);
+>                 return ret;
+>         }
+>  #if 0
+> @@ -3207,6 +3308,9 @@ int main(int argc, char *argv[])
+>         memset(tab, ' ', sizeof(tab) - 1);
+>
+>         conf_load.steal = pahole_stealer;
+> +       conf_load.thread_exit = pahole_thread_exit;
+> +       conf_load.threads_prepare = pahole_threads_prepare;
+> +       conf_load.threads_collect = pahole_threads_collect;
+>
+>         // Make 'pahole --header type < file' a shorter form of 'pahole -C type --count 1 < file'
+>         if (conf.header_type && !class_name && prettify_input) {
+> --
+> 2.30.2
+>
