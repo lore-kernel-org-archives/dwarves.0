@@ -2,56 +2,58 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 66A40C4332F
-	for <linux-dwarves@archiver.kernel.org>; Mon, 24 Jan 2022 19:22:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 07091C433F5
+	for <linux-dwarves@archiver.kernel.org>; Mon, 24 Jan 2022 19:22:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345366AbiAXTWk (ORCPT
+        id S1347818AbiAXTWm (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Mon, 24 Jan 2022 14:22:40 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:23632 "EHLO
+        Mon, 24 Jan 2022 14:22:42 -0500
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:45604 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1348641AbiAXTTW (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Mon, 24 Jan 2022 14:19:22 -0500
+        by vger.kernel.org with ESMTP id S1348698AbiAXTTd (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Mon, 24 Jan 2022 14:19:33 -0500
 Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
-        by m0089730.ppops.net (8.16.1.2/8.16.1.2) with ESMTP id 20OHVkoT020241
-        for <dwarves@vger.kernel.org>; Mon, 24 Jan 2022 11:19:21 -0800
+        by m0089730.ppops.net (8.16.1.2/8.16.1.2) with ESMTP id 20OHVlvr020293
+        for <dwarves@vger.kernel.org>; Mon, 24 Jan 2022 11:19:32 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : content-type : content-transfer-encoding :
- mime-version; s=facebook; bh=q2FfadR7zXuPDhV0DSMIvgVpo3Cs6cFsDqz81WQ/YT8=;
- b=TdiyvOqtIrRkiGmDBHoJyn1QQt92vtznnFJqg1CDnvxlgGN8iehBwDNu02Qv+6ZklPGu
- svLwx5ugGPaEnYcplr7VxqG7hRmBzLSYfbBBIBNqKJ7q40+umsrfZHqWYouFKz0uoH1R
- +DHDARg5TAJkSjqSXsu4zRzITbnG2Lzi7Wg= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by m0089730.ppops.net (PPS) with ESMTPS id 3dsk2q575j-2
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=ibCKQH0cx7z0cP/kqbpB8YU59O69ng0IzcDg0hIKdGQ=;
+ b=U2Or/4bzrpMiFvPb9LwsA843S1F8Y3Ef0mWVXf6bglXK+vIfUahdIdt19JNi2gWObukT
+ gtU+Q2TkpzgDIV4ijgiwxuPm5gnfC4Q85arzqZOJfwYGANdimyxTwt8cAFAOBz85N0+E
+ Lfd8lzgl1Kw+vkxp1ZCus1xmhMtOFaMxULo= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by m0089730.ppops.net (PPS) with ESMTPS id 3dsk2q575s-10
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <dwarves@vger.kernel.org>; Mon, 24 Jan 2022 11:19:21 -0800
-Received: from twshared3115.02.ash8.facebook.com (2620:10d:c085:208::f) by
- mail.thefacebook.com (2620:10d:c085:11d::5) with Microsoft SMTP Server
+        for <dwarves@vger.kernel.org>; Mon, 24 Jan 2022 11:19:32 -0800
+Received: from twshared14140.35.frc1.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Mon, 24 Jan 2022 11:19:19 -0800
+ 15.1.2308.21; Mon, 24 Jan 2022 11:19:31 -0800
 Received: by devvm1744.ftw0.facebook.com (Postfix, from userid 460691)
-        id 3F9132AE341A; Mon, 24 Jan 2022 11:19:10 -0800 (PST)
+        id 70BBA2AE3446; Mon, 24 Jan 2022 11:19:24 -0800 (PST)
 From:   Kui-Feng Lee <kuifeng@fb.com>
 To:     <dwarves@vger.kernel.org>, <arnaldo.melo@gmail.com>
 CC:     <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
         Kui-Feng Lee <kuifeng@fb.com>
-Subject: [PATCH dwarves 0/3] Parallelize BTF type info generating of pahole
-Date:   Mon, 24 Jan 2022 11:18:55 -0800
-Message-ID: <20220124191858.1601255-1-kuifeng@fb.com>
+Subject: [PATCH dwarves v2 2/3] dwarf_loader: Prepare and pass per-thread data to worker threads.
+Date:   Mon, 24 Jan 2022 11:18:57 -0800
+Message-ID: <20220124191858.1601255-3-kuifeng@fb.com>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220124191858.1601255-1-kuifeng@fb.com>
+References: <20220124191858.1601255-1-kuifeng@fb.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: dtpSZGFmszA90locDpCja8ioGkB0zzqg
-X-Proofpoint-ORIG-GUID: dtpSZGFmszA90locDpCja8ioGkB0zzqg
-Content-Transfer-Encoding: quoted-printable
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
-MIME-Version: 1.0
+X-Proofpoint-GUID: VjVgOf8UzPCahxqFdxcXrlmSeyAZPwrJ
+X-Proofpoint-ORIG-GUID: VjVgOf8UzPCahxqFdxcXrlmSeyAZPwrJ
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
  definitions=2022-01-24_09,2022-01-24_02,2021-12-02_01
 X-Proofpoint-Spam-Details: rule=fb_outbound_notspam policy=fb_outbound score=0 impostorscore=0
  spamscore=0 bulkscore=0 mlxscore=0 suspectscore=0 adultscore=0
- lowpriorityscore=0 clxscore=1015 malwarescore=0 mlxlogscore=571
+ lowpriorityscore=0 clxscore=1015 malwarescore=0 mlxlogscore=961
  priorityscore=1501 phishscore=0 classifier=spam adjust=0 reason=mlx
  scancount=1 engine=8.12.0-2201110000 definitions=main-2201240127
 X-FB-Internal: deliver
@@ -59,41 +61,193 @@ Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-Creating an instance of btf for each worker thread allows
-steal-function provided by pahole to add type info on multiple threads
-without a lock.  The main thread merges the results of worker threads
-to the primary instance.
+Add interfaces to allow users of dwarf_loader to prepare and pass
+per-thread data to steal-functions running on worker threads.
 
-Copying data from per-thread btf instances to the primary instance is
-expensive now.  However, there is a patch landed at the bpf-next
-repository. [1] With the patch for bpf-next and this patch, they drop
-total runtime to 5.4s from 6.0s with "-j4" on my device to generate
-BTF for Linux.
+Signed-off-by: Kui-Feng Lee <kuifeng@fb.com>
+---
+ dwarf_loader.c | 58 +++++++++++++++++++++++++++++++++++++++-----------
+ dwarves.h      |  4 ++++
+ 2 files changed, 49 insertions(+), 13 deletions(-)
 
-V2 fixes typo and syntax according the comments got from v1.
-It also divides part 1 of v1 into part 1 & 2.
-
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git/commit=
-/?id=3Dd81283d27266
-[v1] https://lore.kernel.org/dwarves/20220120010817.2803482-1-kuifeng@fb.co=
-m/
-
-Kui-Feng Lee (3):
-  dwarf_loader: Receive per-thread data on worker threads.
-  dwarf_loader: Prepare and pass per-thread data to worker threads.
-  pahole: Use per-thread btf instances to avoid mutex locking.
-
- btf_encoder.c  |   5 +++
- btf_encoder.h  |   2 +
- btf_loader.c   |   2 +-
- ctf_loader.c   |   2 +-
- dwarf_loader.c |  58 ++++++++++++++++++------
- dwarves.h      |   9 +++-
- pahole.c       | 117 ++++++++++++++++++++++++++++++++++++++++++++++---
- pdwtags.c      |   3 +-
- pfunct.c       |   4 +-
- 9 files changed, 177 insertions(+), 25 deletions(-)
-
+diff --git a/dwarf_loader.c b/dwarf_loader.c
+index bf9ea3765419..ed415d2db11f 100644
+--- a/dwarf_loader.c
++++ b/dwarf_loader.c
+@@ -2682,18 +2682,18 @@ static int class_member__cache_byte_size(struct t=
+ag *tag, struct cu *cu,
+ 	return 0;
+ }
+=20
+-static int cu__finalize(struct cu *cu, struct conf_load *conf)
++static int cu__finalize(struct cu *cu, struct conf_load *conf, void *thr=
+_data)
+ {
+ 	cu__for_all_tags(cu, class_member__cache_byte_size, conf);
+ 	if (conf && conf->steal) {
+-		return conf->steal(cu, conf, NULL);
++		return conf->steal(cu, conf, thr_data);
+ 	}
+ 	return LSK__KEEPIT;
+ }
+=20
+-static int cus__finalize(struct cus *cus, struct cu *cu, struct conf_loa=
+d *conf)
++static int cus__finalize(struct cus *cus, struct cu *cu, struct conf_loa=
+d *conf, void *thr_data)
+ {
+-	int lsk =3D cu__finalize(cu, conf);
++	int lsk =3D cu__finalize(cu, conf, thr_data);
+ 	switch (lsk) {
+ 	case LSK__DELETE:
+ 		cu__delete(cu);
+@@ -2862,7 +2862,13 @@ struct dwarf_cus {
+ 	struct dwarf_cu	    *type_dcu;
+ };
+=20
+-static int dwarf_cus__create_and_process_cu(struct dwarf_cus *dcus, Dwar=
+f_Die *cu_die, uint8_t pointer_size)
++struct dwarf_thread {
++	struct dwarf_cus	*dcus;
++	void			*data;
++};
++
++static int dwarf_cus__create_and_process_cu(struct dwarf_cus *dcus, Dwar=
+f_Die *cu_die,
++					    uint8_t pointer_size, void *thr_data)
+ {
+ 	/*
+ 	 * DW_AT_name in DW_TAG_compile_unit can be NULL, first seen in:
+@@ -2884,7 +2890,7 @@ static int dwarf_cus__create_and_process_cu(struct =
+dwarf_cus *dcus, Dwarf_Die *c
+ 	cu->dfops =3D &dwarf__ops;
+=20
+ 	if (die__process_and_recode(cu_die, cu, dcus->conf) !=3D 0 ||
+-	    cus__finalize(dcus->cus, cu, dcus->conf) =3D=3D LSK__STOP_LOADING)
++	    cus__finalize(dcus->cus, cu, dcus->conf, thr_data) =3D=3D LSK__STOP=
+_LOADING)
+ 		return DWARF_CB_ABORT;
+=20
+        return DWARF_CB_OK;
+@@ -2918,7 +2924,8 @@ out_unlock:
+=20
+ static void *dwarf_cus__process_cu_thread(void *arg)
+ {
+-	struct dwarf_cus *dcus =3D arg;
++	struct dwarf_thread *dthr =3D arg;
++	struct dwarf_cus *dcus =3D dthr->dcus;
+ 	uint8_t pointer_size, offset_size;
+ 	Dwarf_Die die_mem, *cu_die;
+=20
+@@ -2926,11 +2933,13 @@ static void *dwarf_cus__process_cu_thread(void *a=
+rg)
+ 		if (cu_die =3D=3D NULL)
+ 			break;
+=20
+-		if (dwarf_cus__create_and_process_cu(dcus, cu_die, pointer_size) =3D=3D=
+ DWARF_CB_ABORT)
++		if (dwarf_cus__create_and_process_cu(dcus, cu_die,
++						     pointer_size, dthr->data) =3D=3D DWARF_CB_ABORT)
+ 			goto out_abort;
+ 	}
+=20
+-	if (dcus->conf->thread_exit && dcus->conf->thread_exit(dcus->conf, NULL=
+) !=3D 0)
++	if (dcus->conf->thread_exit &&
++	    dcus->conf->thread_exit(dcus->conf, dthr->data) !=3D 0)
+ 		goto out_abort;
+=20
+ 	return (void *)DWARF_CB_OK;
+@@ -2941,10 +2950,25 @@ out_abort:
+ static int dwarf_cus__threaded_process_cus(struct dwarf_cus *dcus)
+ {
+ 	pthread_t threads[dcus->conf->nr_jobs];
++	struct dwarf_thread dthr[dcus->conf->nr_jobs];
++	void *thread_data[dcus->conf->nr_jobs];
++	int res;
+ 	int i;
+=20
++	if (dcus->conf->threads_prepare) {
++		res =3D dcus->conf->threads_prepare(dcus->conf, dcus->conf->nr_jobs, t=
+hread_data);
++		if (res !=3D 0)
++			return res;
++	} else
++		memset(thread_data, 0, sizeof(void *) * dcus->conf->nr_jobs);
++
+ 	for (i =3D 0; i < dcus->conf->nr_jobs; ++i) {
+-		dcus->error =3D pthread_create(&threads[i], NULL, dwarf_cus__process_c=
+u_thread, dcus);
++		dthr[i].dcus =3D dcus;
++		dthr[i].data =3D thread_data[i];
++
++		dcus->error =3D pthread_create(&threads[i], NULL,
++					     dwarf_cus__process_cu_thread,
++					     &dthr[i]);
+ 		if (dcus->error)
+ 			goto out_join;
+ 	}
+@@ -2960,6 +2984,13 @@ out_join:
+ 			dcus->error =3D (long)res;
+ 	}
+=20
++	if (dcus->conf->threads_collect) {
++		res =3D dcus->conf->threads_collect(dcus->conf, dcus->conf->nr_jobs,
++						  thread_data, dcus->error);
++		if (dcus->error =3D=3D 0)
++			dcus->error =3D res;
++	}
++
+ 	return dcus->error;
+ }
+=20
+@@ -2976,7 +3007,8 @@ static int __dwarf_cus__process_cus(struct dwarf_cu=
+s *dcus)
+ 		if (cu_die =3D=3D NULL)
+ 			break;
+=20
+-		if (dwarf_cus__create_and_process_cu(dcus, cu_die, pointer_size) =3D=3D=
+ DWARF_CB_ABORT)
++		if (dwarf_cus__create_and_process_cu(dcus, cu_die,
++						     pointer_size, NULL) =3D=3D DWARF_CB_ABORT)
+ 			return DWARF_CB_ABORT;
+=20
+ 		dcus->off =3D noff;
+@@ -3070,7 +3102,7 @@ static int cus__merge_and_process_cu(struct cus *cu=
+s, struct conf_load *conf,
+ 	if (cu__resolve_func_ret_types(cu) !=3D LSK__KEEPIT)
+ 		goto out_abort;
+=20
+-	if (cus__finalize(cus, cu, conf) =3D=3D LSK__STOP_LOADING)
++	if (cus__finalize(cus, cu, conf, NULL) =3D=3D LSK__STOP_LOADING)
+ 		goto out_abort;
+=20
+ 	return 0;
+@@ -3102,7 +3134,7 @@ static int cus__load_module(struct cus *cus, struct=
+ conf_load *conf,
+ 	}
+=20
+ 	if (type_cu !=3D NULL) {
+-		type_lsk =3D cu__finalize(type_cu, conf);
++		type_lsk =3D cu__finalize(type_cu, conf, NULL);
+ 		if (type_lsk =3D=3D LSK__KEEPIT) {
+ 			cus__add(cus, type_cu);
+ 		}
+diff --git a/dwarves.h b/dwarves.h
+index 9a8e4de8843a..de152f9b64cf 100644
+--- a/dwarves.h
++++ b/dwarves.h
+@@ -71,6 +71,10 @@ struct conf_load {
+ 	const char		*kabi_prefix;
+ 	struct btf		*base_btf;
+ 	struct conf_fprintf	*conf_fprintf;
++	int			(*threads_prepare)(struct conf_load *conf, int nr_threads,
++						   void **thr_data);
++	int			(*threads_collect)(struct conf_load *conf, int nr_threads,
++						   void **thr_data, int error);
+ };
+=20
+ /** struct conf_fprintf - hints to the __fprintf routines
 --=20
 2.30.2
 
