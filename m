@@ -2,56 +2,56 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7E3D6C28CF5
-	for <linux-dwarves@archiver.kernel.org>; Wed, 26 Jan 2022 19:56:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CC5C1C28CF5
+	for <linux-dwarves@archiver.kernel.org>; Wed, 26 Jan 2022 19:58:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244622AbiAZT4B (ORCPT
+        id S229507AbiAZT6k (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Wed, 26 Jan 2022 14:56:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50612 "EHLO
+        Wed, 26 Jan 2022 14:58:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244644AbiAZT4A (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Wed, 26 Jan 2022 14:56:00 -0500
-Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEB8CC06161C;
-        Wed, 26 Jan 2022 11:56:00 -0800 (PST)
-Received: by mail-il1-x12a.google.com with SMTP id y17so668351ilm.1;
-        Wed, 26 Jan 2022 11:56:00 -0800 (PST)
+        with ESMTP id S229494AbiAZT6k (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Wed, 26 Jan 2022 14:58:40 -0500
+Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9097BC06173B;
+        Wed, 26 Jan 2022 11:58:39 -0800 (PST)
+Received: by mail-il1-x129.google.com with SMTP id i14so626738ila.11;
+        Wed, 26 Jan 2022 11:58:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=d6RO97B9TBlJ2OjwiMWS9dWxSyZSPIaBo5bOwKMtyAw=;
-        b=Bl02IxqJjTHiHHl9IoB6VqFZyd3eAqeb5UnD11SJFevjMmKeMZeIl4+u7ywiimsb4s
-         OvXLBGcE6T21XdR4MBVoBFzmUOgQ06p/0/3o2ZzUBa1GShZVq6rAwj9jqsMYA40shD69
-         Yp5gSr7kAOfyrRqrL8Amg4vqkFN3sfF3EgcO96or+Uq6xAxfaXBAZ7vnVipvpuyQOszG
-         uZl1ASzLQlFViUjXTJ2Ot2h8BQkO+MH4B5PejgGG8vjuGbRNk05Sguc3MSeTrBbdh7nM
-         PoeT2Rxz2jC2mBleb4pRXwuYtVi+NeSrs3eeiLi3FwK1v4X132lC/Ny+HaZW6ylm7qHS
-         hwtg==
+        bh=jxQFkds46Y2ifZWhEndwMrXN0P9DVV4itU3txOVyclQ=;
+        b=Q/kDTPp8P2pb+DlyuHzNItcqG3nCZlzdPicfcs2wENfrT5zUrywd8XCbimiNPBzpUR
+         6rly7TYa5iaLJ2UapYd7w1SnxAlkVLFn/rvEOrL8Xz0W2hTlRB89+jwCwoC9NSDhKQl4
+         owO1p0FK6e90jCk88TTQ5i4iLwb/lzuomP02pe5YPJdrG6j1L/HawP1HK5FTKoaOZfgE
+         JB8g07Zz2xKVi7cCn4pooZUU98dXWe4BMDe/5tefUCRy8rxuRfMRuIHQkeruBk5kIvzA
+         Uqsa/eZmnFmu2rsDLEyyNPmCNS2UdQOZF9FLpQyR/V0QQ0T1GDUqjnK2TykN/3qkY9hq
+         M2Xg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=d6RO97B9TBlJ2OjwiMWS9dWxSyZSPIaBo5bOwKMtyAw=;
-        b=cLQ5PLDjw4RZVlh0KEEfxkD968m5Dtvj+56NNm2rnjTWCb13OeWPEc/nNYjQsvnTnH
-         qggzPte/CitIZ5JGvfn1rViCkArak3HIg/EyN00D/nF7Z7XkPbc+5TkzbpVcil3bO5sG
-         CIoTF/t9ol8fZ0UCNG2nDnKa9yErd8vSkrg/RSPzIfIERLklP0eoxBi3hiffL+UkXc0k
-         +s74rHyu7yCMdw2/iHxFEEk4oyqppsD585MpEJv56jV8QX+wjmEMP3PWvgXiLCRcW5mO
-         lrc7kaBBMcCQau4salW3sFbTGASO6d7835zFmDg7LDfNpGlaWpmQoa2PHJgW8qS//YbH
-         sPFw==
-X-Gm-Message-State: AOAM53345/aeqUr1S2iapS0TFf3MYrw9qGjOggwwvlTvaSA0wz8nyZYF
-        Wb6Mur5XQeuL2usYOy2TQJRosM/501WzwInHElY=
-X-Google-Smtp-Source: ABdhPJyP+7trMSyA28gfCiZpZL1IkKGYWSwwKU0ZoUquMvPN88No3O9wC8y3RfIvzPmZJ40XRn67Uf7vMxBcpmvsDCg=
-X-Received: by 2002:a05:6e02:2163:: with SMTP id s3mr470667ilv.252.1643226960163;
- Wed, 26 Jan 2022 11:56:00 -0800 (PST)
+        bh=jxQFkds46Y2ifZWhEndwMrXN0P9DVV4itU3txOVyclQ=;
+        b=ij63W5z3NtFdvGLvTtZ4YtEEiIkfl+ICFodFrXE3WV+v2AioO9o5ljA8uQ4voXIbs9
+         ngehx8wNboFvdYAa0vTgUh46/+IdOAHEXQgiihUtVJHCw+/fgPqti0FvXQsCYQILzK0y
+         Qz7nHB8ez8k3g/vOjfD8gGvKHScBF0iA3YOvIPhKUBbZWLZB3DUp54i+Z74stg4Xjc8Z
+         6B8GH2JZf1WrXUGrZU1DhE3cEROWNOysiC/IuvJ9j91jKTKsaOCHxWCtWWavynNc4aUd
+         FMvkIgi1+74w3nYq7QEOvA3WdtQAtcjQuXdl76w7/WBTRaCHe5Yayyqb1zeYxbQXldWe
+         uMmw==
+X-Gm-Message-State: AOAM533Apyz+pZpY7Q9jzSqdiMay8XLxAjE+Vw96uG0On3cpPG/GH/ej
+        rtMImNoqcjee4JMXx7XN6ITw5b24fkHFgu/mzBM=
+X-Google-Smtp-Source: ABdhPJxEjBhHLzKYRCKg6pDSylE7LEMtBPmMP3p3s0ScfXwtfsPd7BqVk4WBd9Ky28Va89CSI6/5Fck89EjIME7pmeo=
+X-Received: by 2002:a05:6e02:190e:: with SMTP id w14mr472581ilu.71.1643227118636;
+ Wed, 26 Jan 2022 11:58:38 -0800 (PST)
 MIME-Version: 1.0
-References: <20220126192039.2840752-1-kuifeng@fb.com> <20220126192039.2840752-3-kuifeng@fb.com>
-In-Reply-To: <20220126192039.2840752-3-kuifeng@fb.com>
+References: <20220126192039.2840752-1-kuifeng@fb.com> <20220126192039.2840752-4-kuifeng@fb.com>
+In-Reply-To: <20220126192039.2840752-4-kuifeng@fb.com>
 From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Wed, 26 Jan 2022 11:55:49 -0800
-Message-ID: <CAEf4Bzaxft_sk9PnzEJZJET6rZMsJq8moJD0VE6B2OhhUDUfoQ@mail.gmail.com>
-Subject: Re: [PATCH dwarves v4 2/4] dwarf_loader: Prepare and pass per-thread
- data to worker threads.
+Date:   Wed, 26 Jan 2022 11:58:27 -0800
+Message-ID: <CAEf4BzYwOWJsfYMOLPt+cX=AB2pFSbcesH-6q_O-AqVT8=CnsQ@mail.gmail.com>
+Subject: Re: [PATCH dwarves v4 3/4] pahole: Use per-thread btf instances to
+ avoid mutex locking.
 To:     Kui-Feng Lee <kuifeng@fb.com>
 Cc:     dwarves@vger.kernel.org,
         Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
@@ -63,19 +63,30 @@ Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-On Wed, Jan 26, 2022 at 11:20 AM Kui-Feng Lee <kuifeng@fb.com> wrote:
+On Wed, Jan 26, 2022 at 11:21 AM Kui-Feng Lee <kuifeng@fb.com> wrote:
 >
-> Add interfaces to allow users of dwarf_loader to prepare and pass
-> per-thread data to steal-functions running on worker threads.
+> Create an instance of btf for each worker thread, and add type info to
+> the local btf instance in the steal-function of pahole without mutex
+> acquiring.  Once finished with all worker threads, merge all
+> per-thread btf instances to the primary btf instance.
 >
 > Signed-off-by: Kui-Feng Lee <kuifeng@fb.com>
 > ---
 
+There are still unnecessary casts and missing {} in the else branch,
+but I'll let Arnaldo decide or fix it up.
+
+Once this lands, can you please send kernel patch to use -j if pahole
+support it during the kernel build? See scripts/pahole-version.sh and
+scripts/link-vmlinux.sh for how pahole is set up and used in the
+kernel. Thanks!
+
 Acked-by: Andrii Nakryiko <andrii@kernel.org>
 
->  dwarf_loader.c | 59 +++++++++++++++++++++++++++++++++++++++-----------
->  dwarves.h      |  4 ++++
->  2 files changed, 50 insertions(+), 13 deletions(-)
+>  btf_encoder.c |   5 ++
+>  btf_encoder.h |   2 +
+>  pahole.c      | 125 ++++++++++++++++++++++++++++++++++++++++++++++----
+>  3 files changed, 124 insertions(+), 8 deletions(-)
 >
 
 [...]
