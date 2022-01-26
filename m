@@ -2,43 +2,43 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A0D9DC63684
-	for <linux-dwarves@archiver.kernel.org>; Wed, 26 Jan 2022 19:20:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CBD77C2BA4C
+	for <linux-dwarves@archiver.kernel.org>; Wed, 26 Jan 2022 19:20:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236295AbiAZTU5 (ORCPT
+        id S244420AbiAZTU5 (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
         Wed, 26 Jan 2022 14:20:57 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:9036 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S244420AbiAZTU4 (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Wed, 26 Jan 2022 14:20:56 -0500
-Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 20QEbajZ030505
-        for <dwarves@vger.kernel.org>; Wed, 26 Jan 2022 11:20:56 -0800
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:11970 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S244418AbiAZTU5 (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Wed, 26 Jan 2022 14:20:57 -0500
+Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
+        by m0001303.ppops.net (8.16.1.2/8.16.1.2) with ESMTP id 20QE3UgB004778
+        for <dwarves@vger.kernel.org>; Wed, 26 Jan 2022 11:20:57 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=+kc4rQhT4tPlc7CqNrz2x2QeF/3+h/B1ovpyPdykdiI=;
- b=hlERDwZimgXL8sCBNqSHd8tXs1y6WDc+GwHG95Zf/56wZlwBe1AWYGAlIxaRxcF7Xy8m
- TU/aUi3aqI+mB77tnyQNFXtTNivEV1TllBuWka7blShgEWUjY9dmKS3biSjVSWPkcCWt
- ZxdHFPqnh6H0OSbDjgRTtAwMpPWlAgoZMh8= 
+ bh=kOzyqO/MbhURvOVT/R7eq5BEaZfp4ec5ZULV1e+NT8g=;
+ b=XbfbUBsrO67h2pzMzlF996fwsFEAWClGNG9QQJaB9KK2IZEnrBcHbDSLaN2ix3Qcmp9y
+ byHLVx+VH+voG9LwDhhWrckSccNLP27BY+L4MyQl0fPaMibtWyyZVTES31olRJznZ8ZG
+ 4tZ6bc9ytOnkBjjde1QqayChMYp5joGcAAU= 
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3dtgsva2py-4
+        by m0001303.ppops.net (PPS) with ESMTPS id 3dtmrx0dyk-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
         for <dwarves@vger.kernel.org>; Wed, 26 Jan 2022 11:20:56 -0800
-Received: from twshared29821.14.frc2.facebook.com (2620:10d:c085:208::f) by
- mail.thefacebook.com (2620:10d:c085:11d::5) with Microsoft SMTP Server
+Received: from twshared29821.14.frc2.facebook.com (2620:10d:c085:108::4) by
+ mail.thefacebook.com (2620:10d:c085:21d::5) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Wed, 26 Jan 2022 11:20:54 -0800
+ 15.1.2308.21; Wed, 26 Jan 2022 11:20:55 -0800
 Received: by devvm1744.ftw0.facebook.com (Postfix, from userid 460691)
-        id 745C62C7F86D; Wed, 26 Jan 2022 11:20:47 -0800 (PST)
+        id 09D1D2C7F8A3; Wed, 26 Jan 2022 11:20:52 -0800 (PST)
 From:   Kui-Feng Lee <kuifeng@fb.com>
 To:     <dwarves@vger.kernel.org>, <arnaldo.melo@gmail.com>
 CC:     <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
         <bpf@vger.kernel.org>, Kui-Feng Lee <kuifeng@fb.com>
-Subject: [PATCH dwarves v4 2/4] dwarf_loader: Prepare and pass per-thread data to worker threads.
-Date:   Wed, 26 Jan 2022 11:20:37 -0800
-Message-ID: <20220126192039.2840752-3-kuifeng@fb.com>
+Subject: [PATCH dwarves v4 4/4] libbpf: Update libbpf to a new revision.
+Date:   Wed, 26 Jan 2022 11:20:39 -0800
+Message-ID: <20220126192039.2840752-5-kuifeng@fb.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220126192039.2840752-1-kuifeng@fb.com>
 References: <20220126192039.2840752-1-kuifeng@fb.com>
@@ -46,209 +46,138 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: 6U5DSbnPH53fF6qEKQb5ER8iw6U8waI6
-X-Proofpoint-GUID: 6U5DSbnPH53fF6qEKQb5ER8iw6U8waI6
+X-Proofpoint-GUID: yG250YxzPlw2eyBIFVi_rzNdtUQ-Ospo
+X-Proofpoint-ORIG-GUID: yG250YxzPlw2eyBIFVi_rzNdtUQ-Ospo
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
  definitions=2022-01-26_07,2022-01-26_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=fb_outbound_notspam policy=fb_outbound score=0 mlxlogscore=957
- malwarescore=0 phishscore=0 priorityscore=1501 clxscore=1015
- impostorscore=0 lowpriorityscore=0 mlxscore=0 bulkscore=0 suspectscore=0
- adultscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2201260115
+X-Proofpoint-Spam-Details: rule=fb_outbound_notspam policy=fb_outbound score=0 phishscore=0
+ mlxlogscore=999 impostorscore=0 adultscore=0 clxscore=1015
+ priorityscore=1501 mlxscore=0 spamscore=0 suspectscore=0 malwarescore=0
+ bulkscore=0 lowpriorityscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2201110000 definitions=main-2201260115
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-Add interfaces to allow users of dwarf_loader to prepare and pass
-per-thread data to steal-functions running on worker threads.
+Replace deprecated APIs with new ones.
 
 Signed-off-by: Kui-Feng Lee <kuifeng@fb.com>
 ---
- dwarf_loader.c | 59 +++++++++++++++++++++++++++++++++++++++-----------
- dwarves.h      |  4 ++++
- 2 files changed, 50 insertions(+), 13 deletions(-)
+ btf_encoder.c | 20 ++++++++++----------
+ btf_loader.c  |  2 +-
+ lib/bpf       |  2 +-
+ 3 files changed, 12 insertions(+), 12 deletions(-)
 
-diff --git a/dwarf_loader.c b/dwarf_loader.c
-index bf9ea3765419..151bc836c787 100644
---- a/dwarf_loader.c
-+++ b/dwarf_loader.c
-@@ -2682,18 +2682,18 @@ static int class_member__cache_byte_size(struct t=
-ag *tag, struct cu *cu,
- 	return 0;
- }
-=20
--static int cu__finalize(struct cu *cu, struct conf_load *conf)
-+static int cu__finalize(struct cu *cu, struct conf_load *conf, void *thr=
-_data)
+diff --git a/btf_encoder.c b/btf_encoder.c
+index 56a76f5d7275..fa29824f11fb 100644
+--- a/btf_encoder.c
++++ b/btf_encoder.c
+@@ -172,7 +172,7 @@ __attribute ((format (printf, 5, 6)))
+ static void btf__log_err(const struct btf *btf, int kind, const char *na=
+me,
+ 			 bool output_cr, const char *fmt, ...)
  {
- 	cu__for_all_tags(cu, class_member__cache_byte_size, conf);
- 	if (conf && conf->steal) {
--		return conf->steal(cu, conf, NULL);
-+		return conf->steal(cu, conf, thr_data);
- 	}
- 	return LSK__KEEPIT;
- }
+-	fprintf(stderr, "[%u] %s %s", btf__get_nr_types(btf) + 1,
++	fprintf(stderr, "[%u] %s %s", btf__type_cnt(btf),
+ 		btf_kind_str[kind], name ?: "(anon)");
 =20
--static int cus__finalize(struct cus *cus, struct cu *cu, struct conf_loa=
-d *conf)
-+static int cus__finalize(struct cus *cus, struct cu *cu, struct conf_loa=
-d *conf, void *thr_data)
- {
--	int lsk =3D cu__finalize(cu, conf);
-+	int lsk =3D cu__finalize(cu, conf, thr_data);
- 	switch (lsk) {
- 	case LSK__DELETE:
- 		cu__delete(cu);
-@@ -2862,7 +2862,13 @@ struct dwarf_cus {
- 	struct dwarf_cu	    *type_dcu;
- };
+ 	if (fmt && *fmt) {
+@@ -203,7 +203,7 @@ static void btf_encoder__log_type(const struct btf_en=
+coder *encoder, const struc
+ 	out =3D err ? stderr : stdout;
 =20
--static int dwarf_cus__create_and_process_cu(struct dwarf_cus *dcus, Dwar=
-f_Die *cu_die, uint8_t pointer_size)
-+struct dwarf_thread {
-+	struct dwarf_cus	*dcus;
-+	void			*data;
-+};
-+
-+static int dwarf_cus__create_and_process_cu(struct dwarf_cus *dcus, Dwar=
-f_Die *cu_die,
-+					    uint8_t pointer_size, void *thr_data)
- {
- 	/*
- 	 * DW_AT_name in DW_TAG_compile_unit can be NULL, first seen in:
-@@ -2884,7 +2890,7 @@ static int dwarf_cus__create_and_process_cu(struct =
-dwarf_cus *dcus, Dwarf_Die *c
- 	cu->dfops =3D &dwarf__ops;
+ 	fprintf(out, "[%u] %s %s",
+-		btf__get_nr_types(btf), btf_kind_str[kind],
++		btf__type_cnt(btf) - 1, btf_kind_str[kind],
+ 		btf__printable_name(btf, t->name_off));
 =20
- 	if (die__process_and_recode(cu_die, cu, dcus->conf) !=3D 0 ||
--	    cus__finalize(dcus->cus, cu, dcus->conf) =3D=3D LSK__STOP_LOADING)
-+	    cus__finalize(dcus->cus, cu, dcus->conf, thr_data) =3D=3D LSK__STOP=
-_LOADING)
- 		return DWARF_CB_ABORT;
+ 	if (fmt && *fmt) {
+@@ -449,10 +449,10 @@ static int btf_encoder__add_field(struct btf_encode=
+r *encoder, const char *name,
+ 	int err;
 =20
-        return DWARF_CB_OK;
-@@ -2918,7 +2924,8 @@ out_unlock:
+ 	err =3D btf__add_field(btf, name, type, offset, bitfield_size);
+-	t =3D btf__type_by_id(btf, btf__get_nr_types(btf));
++	t =3D btf__type_by_id(btf, btf__type_cnt(btf) - 1);
+ 	if (err) {
+ 		fprintf(stderr, "[%u] %s %s's field '%s' offset=3D%u bit_size=3D%u typ=
+e=3D%u Error emitting field\n",
+-			btf__get_nr_types(btf), btf_kind_str[btf_kind(t)],
++			btf__type_cnt(btf) - 1, btf_kind_str[btf_kind(t)],
+ 			btf__printable_name(btf, t->name_off),
+ 			name, offset, bitfield_size, type);
+ 	} else {
+@@ -899,9 +899,9 @@ static int btf_encoder__write_raw_file(struct btf_enc=
+oder *encoder)
+ 	const void *raw_btf_data;
+ 	int fd, err;
 =20
- static void *dwarf_cus__process_cu_thread(void *arg)
- {
--	struct dwarf_cus *dcus =3D arg;
-+	struct dwarf_thread *dthr =3D arg;
-+	struct dwarf_cus *dcus =3D dthr->dcus;
- 	uint8_t pointer_size, offset_size;
- 	Dwarf_Die die_mem, *cu_die;
-=20
-@@ -2926,11 +2933,13 @@ static void *dwarf_cus__process_cu_thread(void *a=
-rg)
- 		if (cu_die =3D=3D NULL)
- 			break;
-=20
--		if (dwarf_cus__create_and_process_cu(dcus, cu_die, pointer_size) =3D=3D=
- DWARF_CB_ABORT)
-+		if (dwarf_cus__create_and_process_cu(dcus, cu_die,
-+						     pointer_size, dthr->data) =3D=3D DWARF_CB_ABORT)
- 			goto out_abort;
+-	raw_btf_data =3D btf__get_raw_data(encoder->btf, &raw_btf_size);
++	raw_btf_data =3D btf__raw_data(encoder->btf, &raw_btf_size);
+ 	if (raw_btf_data =3D=3D NULL) {
+-		fprintf(stderr, "%s: btf__get_raw_data failed!\n", __func__);
++		fprintf(stderr, "%s: btf__raw_data failed!\n", __func__);
+ 		return -1;
  	}
 =20
--	if (dcus->conf->thread_exit && dcus->conf->thread_exit(dcus->conf, NULL=
-) !=3D 0)
-+	if (dcus->conf->thread_exit &&
-+	    dcus->conf->thread_exit(dcus->conf, dthr->data) !=3D 0)
- 		goto out_abort;
-=20
- 	return (void *)DWARF_CB_OK;
-@@ -2941,10 +2950,26 @@ out_abort:
- static int dwarf_cus__threaded_process_cus(struct dwarf_cus *dcus)
- {
- 	pthread_t threads[dcus->conf->nr_jobs];
-+	struct dwarf_thread dthr[dcus->conf->nr_jobs];
-+	void *thread_data[dcus->conf->nr_jobs];
-+	int res;
- 	int i;
-=20
-+	if (dcus->conf->threads_prepare) {
-+		res =3D dcus->conf->threads_prepare(dcus->conf, dcus->conf->nr_jobs, t=
-hread_data);
-+		if (res !=3D 0)
-+			return res;
-+	} else {
-+		memset(thread_data, 0, sizeof(void *) * dcus->conf->nr_jobs);
-+	}
-+
- 	for (i =3D 0; i < dcus->conf->nr_jobs; ++i) {
--		dcus->error =3D pthread_create(&threads[i], NULL, dwarf_cus__process_c=
-u_thread, dcus);
-+		dthr[i].dcus =3D dcus;
-+		dthr[i].data =3D thread_data[i];
-+
-+		dcus->error =3D pthread_create(&threads[i], NULL,
-+					     dwarf_cus__process_cu_thread,
-+					     &dthr[i]);
- 		if (dcus->error)
- 			goto out_join;
- 	}
-@@ -2960,6 +2985,13 @@ out_join:
- 			dcus->error =3D (long)res;
- 	}
-=20
-+	if (dcus->conf->threads_collect) {
-+		res =3D dcus->conf->threads_collect(dcus->conf, dcus->conf->nr_jobs,
-+						  thread_data, dcus->error);
-+		if (dcus->error =3D=3D 0)
-+			dcus->error =3D res;
-+	}
-+
- 	return dcus->error;
- }
-=20
-@@ -2976,7 +3008,8 @@ static int __dwarf_cus__process_cus(struct dwarf_cu=
-s *dcus)
- 		if (cu_die =3D=3D NULL)
- 			break;
-=20
--		if (dwarf_cus__create_and_process_cu(dcus, cu_die, pointer_size) =3D=3D=
- DWARF_CB_ABORT)
-+		if (dwarf_cus__create_and_process_cu(dcus, cu_die,
-+						     pointer_size, NULL) =3D=3D DWARF_CB_ABORT)
- 			return DWARF_CB_ABORT;
-=20
- 		dcus->off =3D noff;
-@@ -3070,7 +3103,7 @@ static int cus__merge_and_process_cu(struct cus *cu=
-s, struct conf_load *conf,
- 	if (cu__resolve_func_ret_types(cu) !=3D LSK__KEEPIT)
- 		goto out_abort;
-=20
--	if (cus__finalize(cus, cu, conf) =3D=3D LSK__STOP_LOADING)
-+	if (cus__finalize(cus, cu, conf, NULL) =3D=3D LSK__STOP_LOADING)
- 		goto out_abort;
-=20
- 	return 0;
-@@ -3102,7 +3135,7 @@ static int cus__load_module(struct cus *cus, struct=
- conf_load *conf,
- 	}
-=20
- 	if (type_cu !=3D NULL) {
--		type_lsk =3D cu__finalize(type_cu, conf);
-+		type_lsk =3D cu__finalize(type_cu, conf, NULL);
- 		if (type_lsk =3D=3D LSK__KEEPIT) {
- 			cus__add(cus, type_cu);
+@@ -976,7 +976,7 @@ static int btf_encoder__write_elf(struct btf_encoder =
+*encoder)
  		}
-diff --git a/dwarves.h b/dwarves.h
-index 9a8e4de8843a..de152f9b64cf 100644
---- a/dwarves.h
-+++ b/dwarves.h
-@@ -71,6 +71,10 @@ struct conf_load {
- 	const char		*kabi_prefix;
- 	struct btf		*base_btf;
- 	struct conf_fprintf	*conf_fprintf;
-+	int			(*threads_prepare)(struct conf_load *conf, int nr_threads,
-+						   void **thr_data);
-+	int			(*threads_collect)(struct conf_load *conf, int nr_threads,
-+						   void **thr_data, int error);
- };
+ 	}
 =20
- /** struct conf_fprintf - hints to the __fprintf routines
+-	raw_btf_data =3D btf__get_raw_data(btf, &raw_btf_size);
++	raw_btf_data =3D btf__raw_data(btf, &raw_btf_size);
+=20
+ 	if (btf_data) {
+ 		/* Existing .BTF section found */
+@@ -1043,10 +1043,10 @@ int btf_encoder__encode(struct btf_encoder *encod=
+er)
+ 		btf_encoder__add_datasec(encoder, PERCPU_SECTION);
+=20
+ 	/* Empty file, nothing to do, so... done! */
+-	if (btf__get_nr_types(encoder->btf) =3D=3D 0)
++	if (btf__type_cnt(encoder->btf) =3D=3D 1)
+ 		return 0;
+=20
+-	if (btf__dedup(encoder->btf, NULL, NULL)) {
++	if (btf__dedup(encoder->btf, NULL)) {
+ 		fprintf(stderr, "%s: btf__dedup failed!\n", __func__);
+ 		return -1;
+ 	}
+@@ -1403,7 +1403,7 @@ void btf_encoder__delete(struct btf_encoder *encode=
+r)
+=20
+ int btf_encoder__encode_cu(struct btf_encoder *encoder, struct cu *cu)
+ {
+-	uint32_t type_id_off =3D btf__get_nr_types(encoder->btf);
++	uint32_t type_id_off =3D btf__type_cnt(encoder->btf) - 1;
+ 	struct llvm_annotation *annot;
+ 	int btf_type_id, tag_type_id;
+ 	uint32_t core_id;
+diff --git a/btf_loader.c b/btf_loader.c
+index b61cadd55127..b5d444643adf 100644
+--- a/btf_loader.c
++++ b/btf_loader.c
+@@ -399,7 +399,7 @@ static int btf__load_types(struct btf *btf, struct cu=
+ *cu)
+ 	uint32_t type_index;
+ 	int err;
+=20
+-	for (type_index =3D 1; type_index <=3D btf__get_nr_types(btf); type_ind=
+ex++) {
++	for (type_index =3D 1; type_index < btf__type_cnt(btf); type_index++) {
+ 		const struct btf_type *type_ptr =3D btf__type_by_id(btf, type_index);
+ 		uint32_t type =3D btf_kind(type_ptr);
+=20
+diff --git a/lib/bpf b/lib/bpf
+index 94a49850c5ee..393a058d061d 160000
+--- a/lib/bpf
++++ b/lib/bpf
+@@ -1 +1 @@
+-Subproject commit 94a49850c5ee61ea02dfcbabf48013391e8cecdf
++Subproject commit 393a058d061d49d5c3055fa9eefafb4c0c31ccc3
 --=20
 2.30.2
 
