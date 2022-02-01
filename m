@@ -2,173 +2,203 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 89797C433F5
-	for <linux-dwarves@archiver.kernel.org>; Fri, 28 Jan 2022 20:57:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CCFEDC433F5
+	for <linux-dwarves@archiver.kernel.org>; Tue,  1 Feb 2022 06:56:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240562AbiA1U5G (ORCPT
+        id S232383AbiBAG42 (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Fri, 28 Jan 2022 15:57:06 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:40058 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239235AbiA1U5G (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Fri, 28 Jan 2022 15:57:06 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4CA8161E4E;
-        Fri, 28 Jan 2022 20:57:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62D6AC340E7;
-        Fri, 28 Jan 2022 20:57:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643403425;
-        bh=zeo1UHi+IGexbC9aOX2A85Rq3v6bRqkaULGFEtkJBVU=;
-        h=Date:From:To:Cc:Subject:From;
-        b=He0JHEF5lY65gJ/G0/GwjOaBkX7EXoHEn8kT7HAfSpQS+XLPg0igdgKIU8RzxxthZ
-         +YIYpmapeIrQ+WLuE/K1e5AI1CmM4UMZvYFOXoPrdYQwKod2iwfr2yAsiGr6qqT3/A
-         9Iny3V0RSC6sI0/DFMq6SijdtdEE4YZsEO1Y7XrRhR3L2PT74/shunYrd84ZK6HO+r
-         4uLapB2yjQzvFhbMhfNEnPn2y25OJw7yHSgwjR9LtZsJ8yt64o/Oj8JK1J9ZC4TC8k
-         pyU8hRp2MGPyq0/P+QWxu4Fpi5jaz9bWI2tkb4ooNhBuAOwse8PKy5Op0UehHzXP87
-         YIxNOrhLXvn+Q==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id BE66F40C99; Fri, 28 Jan 2022 17:55:02 -0300 (-03)
-Date:   Fri, 28 Jan 2022 17:55:02 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Douglas Raillard <douglas.raillard@arm.com>
-Cc:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Kui-Feng Lee <kuifeng@fb.com>, dwarves@vger.kernel.org,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>, bpf@vger.kernel.org
-Subject: [PATCH 1/1] fprintf: Fix division by zero for uninitialized
- conf_fprintf->cacheline_size field
-Message-ID: <YfRYJjhvyT2OROqS@kernel.org>
+        Tue, 1 Feb 2022 01:56:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35212 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231231AbiBAG41 (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Tue, 1 Feb 2022 01:56:27 -0500
+Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C41C2C061714;
+        Mon, 31 Jan 2022 22:56:27 -0800 (PST)
+Received: by mail-il1-x130.google.com with SMTP id o10so13521481ilh.0;
+        Mon, 31 Jan 2022 22:56:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=efmXgSHow+DrqHYcYhOYUkAMNZE0Nqdd6w1KvEV5vEc=;
+        b=jmFnOFyNLjMA14trFefq4Nbfm7XUNFBFNiDVR03PmIm+qevygDCMvXEslBtlPoGQJR
+         AHBiFwB250ATZVFU/8ix03lXQoMpWT9xjMVPYha2g38HFwApvBaQZt6VkvPgRIopwpAo
+         6Vp00GfpqMAMWUziFK/Qxr7HctR+D0Ctb/Gf+8iEihmFV9qgO+dXv87f2xLnDtCZdmrE
+         QiX3XGFMekz7BXeHvTTzeraX5hQkjMmFyQDnXv3cOaCTsSU/tjU052Up5xCaUkBySYgj
+         1vn0pNImqME2151KQ8uyrCNvObGhMEoa6DiKTJRxIQgV/I6lwkAOJxizaw8CtYJXPesJ
+         ghbw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=efmXgSHow+DrqHYcYhOYUkAMNZE0Nqdd6w1KvEV5vEc=;
+        b=lMi3zEep4jlQsD69schP3133oMyBrFjgy8/+adpibERCMn636te/tWHmMgF3+YSeEf
+         aHDJOfRn4YTY4wAoNmmsA222YOVLijANJFwj99RShgeITvJoVTLwEAeSbzXgxC45eGnk
+         TPOpl2n13pOXoENBLjTsZwKK2doFZp+8yHe13b5kVWJErNwPX7ajZq76M2i0Gfz8gba6
+         IHIpi838KPI2MHgofjyi5Gxf/NLT4L1P2J//8oC7htjBBhFqOOyCyGRKajYK0eETUaLz
+         dkraORHPMqLOxhwHQQoHZZ08SzJgdnjQ9ZYstoEZLboQdrXJu95BVP4+wM8KbhOnmRiA
+         sU6A==
+X-Gm-Message-State: AOAM5327A+x/NrBh5ENxIcDBQ63wiLBJVGgyTKemLsVRWkdwGCW/uU10
+        degVrJsm4O60rNOr/VSFtA30DyE8COXpIt8j98s=
+X-Google-Smtp-Source: ABdhPJwU0qLA1fiEv5ZJFv+f43vg0gAX41c6ZeNKQ+HkuvcZ4HQJ4f05YB26g3wkjusgCeRTpWUcRtDwuVMhp6Mlark=
+X-Received: by 2002:a05:6e02:2163:: with SMTP id s3mr13530641ilv.252.1643698587108;
+ Mon, 31 Jan 2022 22:56:27 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20220126192039.2840752-1-kuifeng@fb.com> <20220126192039.2840752-4-kuifeng@fb.com>
+ <CAEf4BzYwOWJsfYMOLPt+cX=AB2pFSbcesH-6q_O-AqVT8=CnsQ@mail.gmail.com>
+ <YfL8kjM30uHN3qxs@kernel.org> <YfRJGJ35SQCy+98H@kernel.org>
+In-Reply-To: <YfRJGJ35SQCy+98H@kernel.org>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Mon, 31 Jan 2022 22:56:16 -0800
+Message-ID: <CAEf4BzZJzbRZAKgg=Kjg+G2AmD8-H_Pk9j26umicDVAtyWes+g@mail.gmail.com>
+Subject: Re: [PATCH dwarves v4 3/4] pahole: Use per-thread btf instances to
+ avoid mutex locking.
+To:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
+Cc:     Mark Wielaard <mjw@redhat.com>, Kui-Feng Lee <kuifeng@fb.com>,
+        dwarves@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-Hi Douglas,
+On Fri, Jan 28, 2022 at 11:52 AM Arnaldo Carvalho de Melo
+<arnaldo.melo@gmail.com> wrote:
+>
+> Em Thu, Jan 27, 2022 at 05:12:02PM -0300, Arnaldo Carvalho de Melo escrev=
+eu:
+> > Em Wed, Jan 26, 2022 at 11:58:27AM -0800, Andrii Nakryiko escreveu:
+> > > On Wed, Jan 26, 2022 at 11:21 AM Kui-Feng Lee <kuifeng@fb.com> wrote:
+> > > > Create an instance of btf for each worker thread, and add type info=
+ to
+> > > > the local btf instance in the steal-function of pahole without mute=
+x
+> > > > acquiring.  Once finished with all worker threads, merge all
+> > > > per-thread btf instances to the primary btf instance.
+>
+> > > There are still unnecessary casts and missing {} in the else branch,
+> > > but I'll let Arnaldo decide or fix it up.
+>
+> So its just one unneeded cast as thr_data here is just a 'void *':
+>
+> diff --git a/pahole.c b/pahole.c
+> index 8c0a982f05c9ae3d..39e18804100dbfda 100644
+> --- a/pahole.c
+> +++ b/pahole.c
+> @@ -2924,7 +2924,7 @@ static enum load_steal_kind pahole_stealer(struct c=
+u *cu,
+>                  * avoids copying the data collected by the first thread.
+>                  */
+>                 if (thr_data) {
+> -                       struct thread_data *thread =3D (struct thread_dat=
+a *)thr_data;
+> +                       struct thread_data *thread =3D thr_data;
+>
+>                         if (thread->encoder =3D=3D NULL) {
+>                                 thread->encoder =3D
+>
+>
+> This other is needed as it is a "void **":
+>
+> @@ -2832,7 +2832,7 @@ static int pahole_thread_exit(struct conf_load *con=
+f, void *thr_data)
+>  static int pahole_threads_collect(struct conf_load *conf, int nr_threads=
+, void **thr_data,
+>                                   int error)
+>  {
+> -       struct thread_data **threads =3D (struct thread_data **)thr_data;
+> +       struct thread_data **threads =3D thr_data;
+>         int i;
+>         int err =3D 0;
+>
+>
+> Removing it:
+>
+> /var/home/acme/git/pahole/pahole.c: In function =E2=80=98pahole_threads_c=
+ollect=E2=80=99:
+> /var/home/acme/git/pahole/pahole.c:2835:40: warning: initialization of =
+=E2=80=98struct thread_data **=E2=80=99 from incompatible pointer type =E2=
+=80=98void **=E2=80=99 [-Wincompatible-pointer-types]
+>  2835 |         struct thread_data **threads =3D thr_data;
+>       |                                        ^~~~~~~~
+>
+>
+> And I did some more profiling, now the focus should go to elfutils:
+>
+> =E2=AC=A2[acme@toolbox pahole]$ perf report --no-children -s dso --call-g=
+raph none 2> /dev/null | head -20
+> # To display the perf.data header info, please use --header/--header-only=
+ options.
+> #
+> #
+> # Total Lost Samples: 0
+> #
+> # Samples: 27K of event 'cycles:u'
+> # Event count (approx.): 27956766207
+> #
+> # Overhead  Shared Object
+> # ........  ...................
+> #
+>     46.70%  libdwarves.so.1.0.0
+>     39.84%  libdw-0.186.so
+>      9.70%  libc-2.33.so
+>      2.14%  libpthread-2.33.so
+>      1.47%  [unknown]
+>      0.09%  ld-2.33.so
+>      0.06%  libelf-0.186.so
+>      0.00%  libcrypto.so.1.1.1l
+>      0.00%  libk5crypto.so.3.1
+> =E2=AC=A2[acme@toolbox pahole]$
+>
+> $ perf report -g graph,0.5,2 --stdio --no-children -s dso --dso libdw-0.1=
+86.so
+>
 
-	While testing the BTF encoder parallelization work done by
-Kui-Feng Lee, I noticed this problem.
+[...]
 
-	The whole tree is at the 'next' branch in my git repo.
+>
+> #
+> # (Tip: If you have debuginfo enabled, try: perf report -s sym,srcline)
+> #
+>
+> This find_attr thing needs improvements, its a linear search AFAIK, some
+> hashtable could do wonders, I guess.
+>
+> Mark, was this considered at some point?
 
-	Please check and consider providing a Reviewed-by or Acked-by,
+This would be a great improvement, yes!
 
-Thanks,
+But strange that you didn't see any BTF-related functions, are you
+sure you profiled the entire DWARF to BTF conversion process? BTF
+encoding is not dominant, but noticeable anyways (e.g., adding unique
+strings to BTF is relatively expensive still).
 
-- Arnaldo
+>
+> =E2=AC=A2[acme@toolbox pahole]$ rpm -q elfutils-libs
+> elfutils-libs-0.186-1.fc34.x86_64
+>
+> Andrii https://github.com/libbpf/libbpf/actions/workflows/pahole.yml is
+> in failure mode for 3 days, and only yesterday I pushed these changes,
+> seems unrelated to pahole:
+>
+> Tests exit status: 1
+> Test Results:
+>              bpftool: PASS
+>           test_progs: FAIL (returned 1)
+>  test_progs-no_alu32: FAIL (returned 1)
+>        test_verifier: PASS
+>             shutdown: CLEAN
+> Error: Process completed with exit code 1.
+>
+> Can you please check?
 
-----
+Yes, it's not related to pahole. This is the BPF selftests issue which
+I already fixed last week, but didn't get a chance to sync everything
+to Github repo before leaving for a short vacation. I'll do another
+sync tonight and it should be all green again.
 
-tldr;
-
-  gdb pfunct
-  (gdb) run --compile tcp.o
-  Program received signal SIGFPE, Arithmetic exception.
-  0x00007ffff7f18551 in class__fprintf_cacheline_boundary (conf=0x7fffffffda10, offset=0, fp=0x7ffff7e17520 <_IO_2_1_stdout_>) at /var/home/acme/git/pahole/dwarves_fprintf.c:1319
-  1319		uint32_t cacheline = offset / conf->cacheline_size;
-  (gdb) bt
-  #0  0x00007ffff7f18551 in class__fprintf_cacheline_boundary (conf=0x7fffffffda10, offset=0, fp=0x7ffff7e17520 <_IO_2_1_stdout_>) at /var/home/acme/git/pahole/dwarves_fprintf.c:1319
-  #1  0x00007ffff7f16af2 in class_member__fprintf (member=0x45de10, union_member=false, type=0x45dfb0, cu=0x435a40, conf=0x7fffffffda10, fp=0x7ffff7e17520 <_IO_2_1_stdout_>) at /var/home/acme/git/pahole/dwarves_fprintf.c:869
-  #2  0x00007ffff7f1717b in struct_member__fprintf (member=0x45de10, type=0x45dfb0, cu=0x435a40, conf=0x7fffffffda10, fp=0x7ffff7e17520 <_IO_2_1_stdout_>) at /var/home/acme/git/pahole/dwarves_fprintf.c:983
-  #3  0x00007ffff7f1945c in __class__fprintf (class=0x45dcc0, cu=0x435a40, conf=0x7fffffffdbb0, fp=0x7ffff7e17520 <_IO_2_1_stdout_>) at /var/home/acme/git/pahole/dwarves_fprintf.c:1583
-  #4  0x00007ffff7f1a6bd in tag__fprintf (tag=0x45dcc0, cu=0x435a40, conf=0x7fffffffdc70, fp=0x7ffff7e17520 <_IO_2_1_stdout_>) at /var/home/acme/git/pahole/dwarves_fprintf.c:1906
-  #5  0x00007ffff7fbf022 in type__emit (tag=0x45dcc0, cu=0x435a40, prefix=0x0, suffix=0x0, fp=0x7ffff7e17520 <_IO_2_1_stdout_>) at /var/home/acme/git/pahole/dwarves_emit.c:333
-  #6  0x00007ffff7fbed3d in tag__emit_definitions (tag=0x6b21e0, cu=0x435a40, emissions=0x408300 <emissions>, fp=0x7ffff7e17520 <_IO_2_1_stdout_>) at /var/home/acme/git/pahole/dwarves_emit.c:265
-  #7  0x00007ffff7fbef45 in type__emit_definitions (tag=0x6b20c0, cu=0x435a40, emissions=0x408300 <emissions>, fp=0x7ffff7e17520 <_IO_2_1_stdout_>) at /var/home/acme/git/pahole/dwarves_emit.c:315
-  #8  0x00007ffff7fbed15 in tag__emit_definitions (tag=0x6b3b40, cu=0x435a40, emissions=0x408300 <emissions>, fp=0x7ffff7e17520 <_IO_2_1_stdout_>) at /var/home/acme/git/pahole/dwarves_emit.c:264
-  #9  0x00007ffff7fbef45 in type__emit_definitions (tag=0x6b31d0, cu=0x435a40, emissions=0x408300 <emissions>, fp=0x7ffff7e17520 <_IO_2_1_stdout_>) at /var/home/acme/git/pahole/dwarves_emit.c:315
-  #10 0x00007ffff7fbed15 in tag__emit_definitions (tag=0x4cb920, cu=0x435a40, emissions=0x408300 <emissions>, fp=0x7ffff7e17520 <_IO_2_1_stdout_>) at /var/home/acme/git/pahole/dwarves_emit.c:264
-  #11 0x00007ffff7fbef45 in type__emit_definitions (tag=0x4cb7d0, cu=0x435a40, emissions=0x408300 <emissions>, fp=0x7ffff7e17520 <_IO_2_1_stdout_>) at /var/home/acme/git/pahole/dwarves_emit.c:315
-  #12 0x0000000000403592 in function__emit_type_definitions (func=0x738ad0, cu=0x435a40, fp=0x7ffff7e17520 <_IO_2_1_stdout_>) at /var/home/acme/git/pahole/pfunct.c:353
-  #13 0x0000000000403670 in function__show (func=0x738ad0, cu=0x435a40) at /var/home/acme/git/pahole/pfunct.c:371
-  #14 0x00000000004038e9 in cu_function_iterator (cu=0x435a40, cookie=0x0) at /var/home/acme/git/pahole/pfunct.c:404
-  #15 0x00007ffff7f1296b in cus__for_each_cu (cus=0x4369e0, iterator=0x403869 <cu_function_iterator>, cookie=0x0, filter=0x0) at /var/home/acme/git/pahole/dwarves.c:1919
-  #16 0x000000000040432a in main (argc=3, argv=0x7fffffffe1f8) at /var/home/acme/git/pahole/pfunct.c:776
-  (gdb) p conf->cacheline_size
-  $2 = 0
-
-We need to pass a conf_fprintf pointer to the chain starting with
-function__emit_type_definitions(), i.e. dwarves_emit.c needs to receive
-the printing configuration instead of, right at type__emit() synthesize
-a conf_fprintf without initializing conf_fprintf->cacheline_size which
-ends up in a division by zero.
-
-But to fix this quicker just add a helper that checks if it is zero and
-uses the conf_fprintf__defaults.cacheline_size field that is being
-initialized by all tools via:
-
-  dwarves__resolve_cacheline_size(&conf_load, 0);
-
-Fixes: 772725a77d3323c6 ("dwarves_fprintf: Move cacheline_size into struct conf_fprintf")
-Cc: Douglas Raillard <douglas.raillard@arm.com>
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
----
- dwarves_fprintf.c | 28 ++++++++++++++++++++++++----
- 1 file changed, 24 insertions(+), 4 deletions(-)
-
-diff --git a/dwarves_fprintf.c b/dwarves_fprintf.c
-index c5921d77d326579a..5d4329b718a7f65b 100644
---- a/dwarves_fprintf.c
-+++ b/dwarves_fprintf.c
-@@ -148,10 +148,30 @@ static struct conf_fprintf conf_fprintf__defaults = {
- 
- const char tabs[] = "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t";
- 
-+/*
-+ * In dwarves_emit.c we can call type__emit() using a locally setup conf_fprintf for which
-+ * the conf->cacheline_size member is not setup and is thus zero, so check for that and
-+ * use the default one for that case.
-+ *
-+ * We really need to make the *_emit*() methods to receive a conf_fprintf pointer for
-+ * which conf->cacheline_size is set, all tools call:
-+ *
-+ *   dwarves__resolve_cacheline_size(&conf_load, 0);
-+ *
-+ * To have a conf_load/conf_fprintf with that resolved, but that is not being passed to
-+ * the *_emit*() routines, duh.
-+ *
-+ * Fixing this properly will entail a series of patches, so to fix this problem
-+ * more quickly add this helper.
-+ */
-+static uint16_t conf_fprintf__cacheline_size(const struct conf_fprintf *conf)
-+{
-+	return conf->cacheline_size ?: conf_fprintf__defaults.cacheline_size;
-+}
- 
- size_t tag__nr_cachelines(const struct conf_fprintf *conf, const struct tag *tag, const struct cu *cu)
- {
--	return (tag__size(tag, cu) + conf->cacheline_size - 1) / conf->cacheline_size;
-+	return (tag__size(tag, cu) + conf_fprintf__cacheline_size(conf) - 1) / conf_fprintf__cacheline_size(conf);
- }
- 
- static const char *tag__accessibility(const struct tag *tag)
-@@ -1316,11 +1336,11 @@ static size_t class__fprintf_cacheline_boundary(struct conf_fprintf *conf,
- 						FILE *fp)
- {
- 	int indent = conf->indent;
--	uint32_t cacheline = offset / conf->cacheline_size;
-+	uint32_t cacheline = offset / conf_fprintf__cacheline_size(conf);
- 	size_t printed = 0;
- 
- 	if (cacheline > *conf->cachelinep) {
--		const uint32_t cacheline_pos = offset % conf->cacheline_size;
-+		const uint32_t cacheline_pos = offset % conf_fprintf__cacheline_size(conf);
- 		const uint32_t cacheline_in_bytes = offset - cacheline_pos;
- 
- 		if (cacheline_pos == 0)
-@@ -1762,7 +1782,7 @@ static size_t __class__fprintf(struct class *class, const struct cu *cu,
- 		}
- 		printed += fprintf(fp, " */\n");
- 	}
--	cacheline = (cconf.base_offset + type->size) % conf->cacheline_size;
-+	cacheline = (cconf.base_offset + type->size) % conf_fprintf__cacheline_size(conf);
- 	if (cacheline != 0)
- 		printed += fprintf(fp, "%.*s/* last cacheline: %u bytes */\n",
- 				   cconf.indent, tabs,
--- 
-2.34.1
-
+>
+> - Arnaldo
