@@ -2,199 +2,165 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C8BB9C433F5
-	for <linux-dwarves@archiver.kernel.org>; Wed,  2 Feb 2022 00:16:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9A9D9C433F5
+	for <linux-dwarves@archiver.kernel.org>; Fri,  4 Mar 2022 11:38:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243246AbiBBAQg (ORCPT
+        id S233461AbiCDLjU (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Tue, 1 Feb 2022 19:16:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48466 "EHLO
+        Fri, 4 Mar 2022 06:39:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243178AbiBBAQf (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Tue, 1 Feb 2022 19:16:35 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3C51C061714;
-        Tue,  1 Feb 2022 16:16:34 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B430DB82FDC;
-        Wed,  2 Feb 2022 00:16:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26694C340E9;
-        Wed,  2 Feb 2022 00:16:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643760992;
-        bh=B7fkvLlyyPJefhPM/sjI7DHmR1jImbJstKCoGfEeUTU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mBFX593LEwW01QZhVtsF9RmP+U3E90Qb/cwDEZAcuv4Tp/r9DEZTqRSygU6UwHg1K
-         +QkNqdfesubzUb55YGY/TQOGNO6s9Lw7Aizl6HqfU0hiMwRr/POCIaqAT1naF5E+D6
-         rOXKEAGArbmSU910MqLILV5IOlWTVm4Hh/PZeTXyfQ3TbU5RvDwFa14MBL6xZ5e84h
-         QzT8ZQmGB9aKwCJKQAlPt1nY3d5YTSBqP1LrdGNH38+SfUagi2J1rOXoveeNDBlD7U
-         IYOQeWKOPA4CLIHuJVqraLmvDRqt6/gVselNk0JjcI7jYHKIAr8+58aGJPf71IBPZF
-         yIfh4f065HNiA==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id DC74940466; Tue,  1 Feb 2022 21:16:29 -0300 (-03)
-Date:   Tue, 1 Feb 2022 21:16:29 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
-        Mark Wielaard <mjw@redhat.com>, Kui-Feng Lee <kuifeng@fb.com>,
-        dwarves@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>
-Subject: Re: [PATCH dwarves v4 3/4] pahole: Use per-thread btf instances to
- avoid mutex locking.
-Message-ID: <YfnNXZPFRra3kmhb@kernel.org>
-References: <20220126192039.2840752-1-kuifeng@fb.com>
- <20220126192039.2840752-4-kuifeng@fb.com>
- <CAEf4BzYwOWJsfYMOLPt+cX=AB2pFSbcesH-6q_O-AqVT8=CnsQ@mail.gmail.com>
- <YfL8kjM30uHN3qxs@kernel.org>
- <YfRJGJ35SQCy+98H@kernel.org>
- <CAEf4BzZJzbRZAKgg=Kjg+G2AmD8-H_Pk9j26umicDVAtyWes+g@mail.gmail.com>
+        with ESMTP id S236264AbiCDLjT (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Fri, 4 Mar 2022 06:39:19 -0500
+Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 860F574629;
+        Fri,  4 Mar 2022 03:38:30 -0800 (PST)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.west.internal (Postfix) with ESMTP id C24063200F76;
+        Fri,  4 Mar 2022 06:38:29 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Fri, 04 Mar 2022 06:38:30 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kkourt.io; h=cc
+        :cc:content-transfer-encoding:date:date:from:from:in-reply-to
+        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
+         s=mesmtp; bh=Gy3tSBO8IHs1mjjECvdkiou/qGkQa3BE2jjRgMF+fhg=; b=uG
+        By56qClk9Qno8wSiIRwWXnvRpWfmRvPxPUa/mhb5EHlD6GsVXZWx10O8RSBFERfR
+        k8aAT6p388NuiYfwtm0EZ+pC5CQo+iAaqUpnfYlzv1AOyQzHVZX+6jIIiIHVYhRA
+        5suk535PVlI30Q0FgqLoW2BXvRTjtLHtw1ou/5lIs=
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :from:from:in-reply-to:message-id:mime-version:reply-to:sender
+        :subject:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender
+        :x-me-sender:x-sasl-enc; s=fm2; bh=Gy3tSBO8IHs1mjjECvdkiou/qGkQa
+        3BE2jjRgMF+fhg=; b=BvkQDo/LydqMR+lLvt1PtFmqpdaVM7qYLXnX4+0vHabmo
+        yOCF7Kx7YKEmZQb9zpX6Gttau4H42wJqeZuNDSCwOW6vlwLzRhHZUz+Wtspjooie
+        id+8HgUNNHBDwW85gimvqr8yF8K+1SRkdidr+Ht2E/p0ILBCu7tscBL4cMMb20Km
+        8TwVqp1NFuvFFaVPkVIXFznsgCCA+hYIGjBtgUfW/SYu7hfXUV13oMh73goBI7Hu
+        PySrABNdwdlAj5U6SDaKs6v5Ur99ZRwF4ZNoQhcvZuuaZn2ufWkfjPCcmnmFH+m9
+        ygZKwUHBuFUth8VTgfqBEKgZrIgMEiZZI8dSL21GQ==
+X-ME-Sender: <xms:NfohYtgh8UUXOv_B8IvXSJorBieibNs7_hM3QXaXlFh5K33QkAdbWA>
+    <xme:NfohYiCVKTdsmeFSnfAiR4L2cw3tSqHaNozB1dyaZFwLsD2kZCtQ-nZ5MV_k8aog8
+    STlPiMh6GhTlhdRrw>
+X-ME-Received: <xmr:NfohYtGWjwlzi1vrOoZUFcxWWDKrqH94edwLM_Bde3Xs5L84XWJg9P5J_lhPpPuEuEE0X5pWMtntw3hAPPxRIwK71QxH>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddruddtkedgfedtucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhephffvufffkffoggfgsedtkeertdertddtnecuhfhrohhmpehkkhhouhhrthes
+    khhkohhurhhtrdhiohenucggtffrrghtthgvrhhnpeelkeeffeejleeihfehgeeltdevle
+    ffgfffleevuefhhedtieevudejuefgudehieenucffohhmrghinhepshhouhhrtggvfigr
+    rhgvrdhorhhgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
+    homhepkhhkohhurhhtsehkkhhouhhrthdrihho
+X-ME-Proxy: <xmx:NfohYiRpMp-HLyThVxmKTN5Difl3LjzGTYa8O_x9IXXB42LZk-RxxQ>
+    <xmx:NfohYqzgYHSKmjWmKx0YkLSxI6yhui_Yk01QiOFN472yANX7S_GBFw>
+    <xmx:NfohYo7NkF6T9KTc4JaRloJspw7BFP8Zqkn6rfb3fKBx1_lwctm00w>
+    <xmx:NfohYu8WhO0YLgEqtuVARkCGG1Gfqpw_BskOYcqtM6fPIvVd-h79Pw>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 4 Mar 2022 06:38:29 -0500 (EST)
+Received: by kkourt.io (Postfix, from userid 1000)
+        id C11A22541AC9; Fri,  4 Mar 2022 12:38:27 +0100 (CET)
+From:   kkourt@kkourt.io
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     dwarves@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Kornilios Kourtis <kornilios@isovalent.com>
+Subject: [PATCH] pahole: avoid segfault when parsing a problematic file
+Date:   Fri,  4 Mar 2022 12:38:21 +0100
+Message-Id: <20220304113821.2366328-1-kkourt@kkourt.io>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAEf4BzZJzbRZAKgg=Kjg+G2AmD8-H_Pk9j26umicDVAtyWes+g@mail.gmail.com>
-X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-Em Mon, Jan 31, 2022 at 10:56:16PM -0800, Andrii Nakryiko escreveu:
-> On Fri, Jan 28, 2022 at 11:52 AM Arnaldo Carvalho de Melo
-> <arnaldo.melo@gmail.com> wrote:
-> >
-> > Em Thu, Jan 27, 2022 at 05:12:02PM -0300, Arnaldo Carvalho de Melo escreveu:
-> > > Em Wed, Jan 26, 2022 at 11:58:27AM -0800, Andrii Nakryiko escreveu:
-> > > > On Wed, Jan 26, 2022 at 11:21 AM Kui-Feng Lee <kuifeng@fb.com> wrote:
-> > > > > Create an instance of btf for each worker thread, and add type info to
-> > > > > the local btf instance in the steal-function of pahole without mutex
-> > > > > acquiring.  Once finished with all worker threads, merge all
-> > > > > per-thread btf instances to the primary btf instance.
-> >
-> > > > There are still unnecessary casts and missing {} in the else branch,
-> > > > but I'll let Arnaldo decide or fix it up.
-> >
-> > So its just one unneeded cast as thr_data here is just a 'void *':
-> >
-> > diff --git a/pahole.c b/pahole.c
-> > index 8c0a982f05c9ae3d..39e18804100dbfda 100644
-> > --- a/pahole.c
-> > +++ b/pahole.c
-> > @@ -2924,7 +2924,7 @@ static enum load_steal_kind pahole_stealer(struct cu *cu,
-> >                  * avoids copying the data collected by the first thread.
-> >                  */
-> >                 if (thr_data) {
-> > -                       struct thread_data *thread = (struct thread_data *)thr_data;
-> > +                       struct thread_data *thread = thr_data;
-> >
-> >                         if (thread->encoder == NULL) {
-> >                                 thread->encoder =
-> >
-> >
-> > This other is needed as it is a "void **":
-> >
-> > @@ -2832,7 +2832,7 @@ static int pahole_thread_exit(struct conf_load *conf, void *thr_data)
-> >  static int pahole_threads_collect(struct conf_load *conf, int nr_threads, void **thr_data,
-> >                                   int error)
-> >  {
-> > -       struct thread_data **threads = (struct thread_data **)thr_data;
-> > +       struct thread_data **threads = thr_data;
-> >         int i;
-> >         int err = 0;
-> >
-> >
-> > Removing it:
-> >
-> > /var/home/acme/git/pahole/pahole.c: In function ‘pahole_threads_collect’:
-> > /var/home/acme/git/pahole/pahole.c:2835:40: warning: initialization of ‘struct thread_data **’ from incompatible pointer type ‘void **’ [-Wincompatible-pointer-types]
-> >  2835 |         struct thread_data **threads = thr_data;
-> >       |                                        ^~~~~~~~
-> >
-> >
-> > And I did some more profiling, now the focus should go to elfutils:
-> >
-> > ⬢[acme@toolbox pahole]$ perf report --no-children -s dso --call-graph none 2> /dev/null | head -20
-> > # To display the perf.data header info, please use --header/--header-only options.
-> > #
-> > #
-> > # Total Lost Samples: 0
-> > #
-> > # Samples: 27K of event 'cycles:u'
-> > # Event count (approx.): 27956766207
-> > #
-> > # Overhead  Shared Object
-> > # ........  ...................
-> > #
-> >     46.70%  libdwarves.so.1.0.0
-> >     39.84%  libdw-0.186.so
-> >      9.70%  libc-2.33.so
-> >      2.14%  libpthread-2.33.so
-> >      1.47%  [unknown]
-> >      0.09%  ld-2.33.so
-> >      0.06%  libelf-0.186.so
-> >      0.00%  libcrypto.so.1.1.1l
-> >      0.00%  libk5crypto.so.3.1
-> > ⬢[acme@toolbox pahole]$
-> >
-> > $ perf report -g graph,0.5,2 --stdio --no-children -s dso --dso libdw-0.186.so
-> >
-> 
-> [...]
-> 
-> >
-> > #
-> > # (Tip: If you have debuginfo enabled, try: perf report -s sym,srcline)
-> > #
-> >
-> > This find_attr thing needs improvements, its a linear search AFAIK, some
-> > hashtable could do wonders, I guess.
-> >
-> > Mark, was this considered at some point?
-> 
-> This would be a great improvement, yes!
-> 
-> But strange that you didn't see any BTF-related functions, are you
-> sure you profiled the entire DWARF to BTF conversion process? BTF
-> encoding is not dominant, but noticeable anyways (e.g., adding unique
-> strings to BTF is relatively expensive still).
+From: Kornilios Kourtis <kornilios@isovalent.com>
 
-It appears under the 
+When trying to use btf encoding for an apparently problematic kernel file,
+pahole segfaults. As can be seen below [1], the problem is that we are trying to
+dereference a NULL decoder.
 
-> >     46.70%  libdwarves.so.1.0.0
+Fix this by checking the return value of dwfl_getmodules which [2] whill return
+-1 on errors or an offset if one of the modules did not return DWARF_CB_OK. (In
+this specific case, it was __cus__load_debug_types that returnd
+DWARF_CB_ABORT.)
 
-line, since we statically link libbpf. So yeah, it was unfortunate the
-way I presented the profiling output, I was just trying to point to what
-I think is the low hanging fruit, i.e. optimizing find_attr routines in
-libdw-0.186.so.
+Also, ensure that we get a reasonable error by setting errno in
+cus__load_files(). Otherwise, we get a "No such file or directory" error which
+might be confusing.
+
+After tha patch:
+$ ./pahole -J vmlinux-5.3.18-24.102-default.debug
+pahole: vmlinux-5.3.18-24.102-default.debug: Unknown error -22
+
+[1]:
+$ gdb -q --args ./pahole -J vmlinux-5.3.18-24.102-default.debug
+Reading symbols from ./pahole...
+(gdb) r
+Starting program: /tmp/pahole/build/pahole -J vmlinux-5.3.18-24.102-default.debug
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib/x86_64-linux-gnu/libthread_db.so.1".
+
+Program received signal SIGSEGV, Segmentation fault.
+0x00007ffff7f4000e in gobuffer__size (gb=0x18) at /tmp/pahole/gobuffer.h:39
+39              return gb->index;
+(gdb) bt
+(gdb) frame 1
+1042            if (gobuffer__size(&encoder->percpu_secinfo) != 0)
+(gdb) list
+1037
+1038    int btf_encoder__encode(struct btf_encoder *encoder)
+1039    {
+1040            int err;
+1041
+1042            if (gobuffer__size(&encoder->percpu_secinfo) != 0)
+1043                    btf_encoder__add_datasec(encoder, PERCPU_SECTION);
+1044
+1045            /* Empty file, nothing to do, so... done! */
+1046            if (btf__get_nr_types(encoder->btf) == 0)
+(gdb) print encoder
+$1 = (struct btf_encoder *) 0x0
+
+[2] https://sourceware.org/git/?p=elfutils.git;a=blob;f=libdwfl/libdwfl.h;h=f98f1d525d94bc7bcfc7c816890de5907ee4bd6d;hb=HEAD#l200
+
+Signed-off-by: Kornilios Kourtis <kornilios@isovalent.com>
+---
+ dwarf_loader.c | 5 ++++-
+ dwarves.c      | 5 ++++-
+ 2 files changed, 8 insertions(+), 2 deletions(-)
+
+diff --git a/dwarf_loader.c b/dwarf_loader.c
+index e30b03c..fecf711 100644
+--- a/dwarf_loader.c
++++ b/dwarf_loader.c
+@@ -3235,7 +3235,10 @@ static int cus__process_file(struct cus *cus, struct conf_load *conf, int fd,
+ 	};
  
-> >
-> > ⬢[acme@toolbox pahole]$ rpm -q elfutils-libs
-> > elfutils-libs-0.186-1.fc34.x86_64
-> >
-> > Andrii https://github.com/libbpf/libbpf/actions/workflows/pahole.yml is
-> > in failure mode for 3 days, and only yesterday I pushed these changes,
-> > seems unrelated to pahole:
-> >
-> > Tests exit status: 1
-> > Test Results:
-> >              bpftool: PASS
-> >           test_progs: FAIL (returned 1)
-> >  test_progs-no_alu32: FAIL (returned 1)
-> >        test_verifier: PASS
-> >             shutdown: CLEAN
-> > Error: Process completed with exit code 1.
-> >
-> > Can you please check?
-> 
-> Yes, it's not related to pahole. This is the BPF selftests issue which
-> I already fixed last week, but didn't get a chance to sync everything
-> to Github repo before leaving for a short vacation. I'll do another
-> sync tonight and it should be all green again.
+ 	/* Process the one or more modules gleaned from this file. */
+-	dwfl_getmodules(dwfl, cus__process_dwflmod, &parms, 0);
++	int err = dwfl_getmodules(dwfl, cus__process_dwflmod, &parms, 0);
++	if (err) {
++		return -1;
++	}
+ 
+ 	// We can't call dwfl_end(dwfl) here, as we keep pointers to strings
+ 	// allocated by libdw that will be freed at dwfl_end(), so leave this for
+diff --git a/dwarves.c b/dwarves.c
+index 81fa47b..c5935ec 100644
+--- a/dwarves.c
++++ b/dwarves.c
+@@ -2391,8 +2391,11 @@ int cus__load_files(struct cus *cus, struct conf_load *conf,
+ 	int i = 0;
+ 
+ 	while (filenames[i] != NULL) {
+-		if (cus__load_file(cus, conf, filenames[i]))
++		int err = cus__load_file(cus, conf, filenames[i]);
++		if (err) {
++			errno = err;
+ 			return -++i;
++		}
+ 		++i;
+ 	}
+ 
+-- 
+2.25.1
 
-I'll check tomorrow.
-
-Going green I'll do some more tests and work towards releasing 1.24.
-
-- Arnaldo
