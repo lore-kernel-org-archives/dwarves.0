@@ -2,223 +2,243 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C8EADC433EF
-	for <linux-dwarves@archiver.kernel.org>; Wed,  9 Mar 2022 19:25:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CA49DC433F5
+	for <linux-dwarves@archiver.kernel.org>; Thu, 10 Mar 2022 00:14:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234002AbiCIT0G (ORCPT
+        id S238468AbiCJAPw (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Wed, 9 Mar 2022 14:26:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46738 "EHLO
+        Wed, 9 Mar 2022 19:15:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237869AbiCITZ5 (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Wed, 9 Mar 2022 14:25:57 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FE134D244;
-        Wed,  9 Mar 2022 11:24:57 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 002CE61946;
-        Wed,  9 Mar 2022 19:24:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B57CC340E8;
-        Wed,  9 Mar 2022 19:24:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646853896;
-        bh=GvosrddkShiAOjkzMTCCY4CHUr5jl7TCtyB0MWngh2k=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RlMaQD5h/rIXEMhyS9zNch0tGam8paK0rySqa4+f/Bk3B6y7ylElfx3Qr5CP5ASVA
-         4lrDnDVbPtaI2PmarxD2B2n/YrdRikHIgyFUQGXRmBUZxfmHav3aF2y7Wo9hFpJ5f2
-         kxoO2vArXbfOKbJy8Q/W5cd7Ws4XuhDog5Rm5YiOSFTVvkfs9zroG+65KNUM5+VIR9
-         UA+cyixRZgo62krGtuaRKI2TkfQT4KpLyJB7rrrrYD9soCFbZKuJ1ZzvnVr7ZcYW0I
-         z0VUnz1OOF9maANSVU6pa6sWWWyVy8tKJnN6iTTYKLVmTuUfxkYn2ucExDVEwgv7Tk
-         NMXyQTIj4e2bA==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 87E57403C8; Wed,  9 Mar 2022 16:24:53 -0300 (-03)
-Date:   Wed, 9 Mar 2022 16:24:53 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+        with ESMTP id S234684AbiCJAPw (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Wed, 9 Mar 2022 19:15:52 -0500
+Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A518895A1F;
+        Wed,  9 Mar 2022 16:14:52 -0800 (PST)
+Received: by mail-io1-xd2f.google.com with SMTP id c23so4719197ioi.4;
+        Wed, 09 Mar 2022 16:14:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Kbyu1uV2m5L+XViR0pijhS8ZvG9cenw+nQ5Pce/Gws0=;
+        b=jNHnk1p3lsp8D75iQ5td/UI+9hJs6S2nDoXsByISshOK6JQ9Uaw/BgkvqjGoAiAu/s
+         m8ccXIoueZ9XCyB+byyS4YMxEaSrcGeHBVsyGkDAuSXl9Veiej8P19533SwfH+MC3W3L
+         s9xd+NWtD+kjcqWQN8fDSXjvQ2wfiJ6cKQyp3uoqGA1P7D8+MtqGBElggkmMr4IkV1Z1
+         fcyoXNRCOJ1goDSWlieu3i4Zn8nbigbtzXpRj53bwWqlVGuwg0cN8y+V+y90BBc9LCTb
+         Y7JHDwF6Bd40hfmLqXbsiJ6GW5Fik2suEOqnVrqPUep57PNyUDB8HNg7+1xBXQICnHWZ
+         J+Pg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Kbyu1uV2m5L+XViR0pijhS8ZvG9cenw+nQ5Pce/Gws0=;
+        b=k4r3iPAq4ndt1khKbj/H4khZ9jblQNNh8DCzJFVhS/hWlwSnYh2W0TUbzzhJwaR9ca
+         KHzzlmYvncW629uz0a7TRcavSGINZfraIfh99sG0+lgqvLuXIxs55V4LXQP+Y/iKMUpC
+         8mQAiYQpYowuB0GyfhCXc8cKaYENckWb4Ba8eg216SR2XmX0bMUgIGe0tcnhKNNNucXc
+         5B//uuMGQ1gfqNk6UhvApnfNmtei2CCSHCboDmuVi5CaaBmukmssfeZA9YUQw59pAuMw
+         X4gbHfPvKiZcNtKyfvlMdaCAa7etSN/yIEj0hVcEDE0A0GKdKPFfJYBccOkIK4t/JG3V
+         qtUw==
+X-Gm-Message-State: AOAM532MTG4O43LgZ1g5UiOMnYbz6EiXLb4ZO3odJTRKAo7NEni2vluE
+        IH1RK4JZnW4csAMB5MdQ4gGgAMafYp04GOGXKH4=
+X-Google-Smtp-Source: ABdhPJxc2sxMIPiw6e0zkV+IuuN3xEGMPaAjBr+ZSSQAEH7APjlOcJYAauNTuiUBG6qKf94E2Z8VvdTKL5Oor7vo/Ys=
+X-Received: by 2002:a05:6638:22c3:b0:30a:2226:e601 with SMTP id
+ j3-20020a05663822c300b0030a2226e601mr1713401jat.237.1646871291688; Wed, 09
+ Mar 2022 16:14:51 -0800 (PST)
+MIME-Version: 1.0
+References: <20220126192039.2840752-1-kuifeng@fb.com> <20220126192039.2840752-2-kuifeng@fb.com>
+ <CAEf4BzarN4L8U+hLnvZrNg0CR-oQr25OFs_W_tfW3aAHGAVFWw@mail.gmail.com>
+ <YfJudZmSS1yTkeP/@kernel.org> <CAEf4Bza8xB+yFb4qGPvM7YwvHCb1zQ8yosGbKj63vcRM7d9aLg@mail.gmail.com>
+ <Yij/BSPgMl8/HEhg@kernel.org>
+In-Reply-To: <Yij/BSPgMl8/HEhg@kernel.org>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Wed, 9 Mar 2022 16:14:40 -0800
+Message-ID: <CAEf4BzZX8Q5MPt62+68nRoQNPe=3jnVkcEMMJwPzoU51YCBszg@mail.gmail.com>
+Subject: Re: [PATCH dwarves v4 1/4] dwarf_loader: Receive per-thread data on
+ worker threads.
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
 Cc:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
         Kui-Feng Lee <kuifeng@fb.com>, dwarves@vger.kernel.org,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>
-Subject: Re: [PATCH dwarves v4 1/4] dwarf_loader: Receive per-thread data on
- worker threads.
-Message-ID: <Yij/BSPgMl8/HEhg@kernel.org>
-References: <20220126192039.2840752-1-kuifeng@fb.com>
- <20220126192039.2840752-2-kuifeng@fb.com>
- <CAEf4BzarN4L8U+hLnvZrNg0CR-oQr25OFs_W_tfW3aAHGAVFWw@mail.gmail.com>
- <YfJudZmSS1yTkeP/@kernel.org>
- <CAEf4Bza8xB+yFb4qGPvM7YwvHCb1zQ8yosGbKj63vcRM7d9aLg@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAEf4Bza8xB+yFb4qGPvM7YwvHCb1zQ8yosGbKj63vcRM7d9aLg@mail.gmail.com>
-X-Url:  http://acmel.wordpress.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-Em Tue, Mar 08, 2022 at 03:45:03PM -0800, Andrii Nakryiko escreveu:
-> On Thu, Jan 27, 2022 at 11:22 AM Arnaldo Carvalho de Melo
-> <arnaldo.melo@gmail.com> wrote:
-> >
-> > Em Wed, Jan 26, 2022 at 11:55:25AM -0800, Andrii Nakryiko escreveu:
-> > > On Wed, Jan 26, 2022 at 11:20 AM Kui-Feng Lee <kuifeng@fb.com> wrote:
-> > > >
-> > > > Add arguments to steal and thread_exit callbacks of conf_load to
-> > > > receive per-thread data.
-> > > >
-> > > > Signed-off-by: Kui-Feng Lee <kuifeng@fb.com>
-> > > > ---
+On Wed, Mar 9, 2022 at 11:24 AM Arnaldo Carvalho de Melo
+<acme@kernel.org> wrote:
+>
+> Em Tue, Mar 08, 2022 at 03:45:03PM -0800, Andrii Nakryiko escreveu:
+> > On Thu, Jan 27, 2022 at 11:22 AM Arnaldo Carvalho de Melo
+> > <arnaldo.melo@gmail.com> wrote:
 > > >
-> > > Please carry over acks you got on previous revisions, unless you did
-> > > some drastic changes to already acked patches.
-> >
-> > Yes, please do so.
-> >
-> > I'll collect them this time, no need to resend.
-> >
-> 
-> Hey, Arnaldo!
-> 
-> Any idea when these patches will make it into master branch? I see
-> they are in tmp.master right now.
-
-I did some minor fixups to the cset comment and to the code in the
-'pahole --compile' new feature at the head of it and pushed all up,
-please check.
-
-- Arnaldo
- 
-> > - Arnaldo
-> >
-> > > Acked-by: Andrii Nakryiko <andrii@kernel.org>
+> > > Em Wed, Jan 26, 2022 at 11:55:25AM -0800, Andrii Nakryiko escreveu:
+> > > > On Wed, Jan 26, 2022 at 11:20 AM Kui-Feng Lee <kuifeng@fb.com> wrote:
+> > > > >
+> > > > > Add arguments to steal and thread_exit callbacks of conf_load to
+> > > > > receive per-thread data.
+> > > > >
+> > > > > Signed-off-by: Kui-Feng Lee <kuifeng@fb.com>
+> > > > > ---
+> > > >
+> > > > Please carry over acks you got on previous revisions, unless you did
+> > > > some drastic changes to already acked patches.
 > > >
-> > > >  btf_loader.c   | 2 +-
-> > > >  ctf_loader.c   | 2 +-
-> > > >  dwarf_loader.c | 4 ++--
-> > > >  dwarves.h      | 5 +++--
-> > > >  pahole.c       | 3 ++-
-> > > >  pdwtags.c      | 3 ++-
-> > > >  pfunct.c       | 4 +++-
-> > > >  7 files changed, 14 insertions(+), 9 deletions(-)
-> > > >
-> > > > diff --git a/btf_loader.c b/btf_loader.c
-> > > > index 7a5b16ff393e..b61cadd55127 100644
-> > > > --- a/btf_loader.c
-> > > > +++ b/btf_loader.c
-> > > > @@ -624,7 +624,7 @@ static int cus__load_btf(struct cus *cus, struct conf_load *conf, const char *fi
-> > > >          * The app stole this cu, possibly deleting it,
-> > > >          * so forget about it
-> > > >          */
-> > > > -       if (conf && conf->steal && conf->steal(cu, conf))
-> > > > +       if (conf && conf->steal && conf->steal(cu, conf, NULL))
-> > > >                 return 0;
-> > > >
-> > > >         cus__add(cus, cu);
-> > > > diff --git a/ctf_loader.c b/ctf_loader.c
-> > > > index 7c34739afdce..de6d4dbfce97 100644
-> > > > --- a/ctf_loader.c
-> > > > +++ b/ctf_loader.c
-> > > > @@ -722,7 +722,7 @@ int ctf__load_file(struct cus *cus, struct conf_load *conf,
-> > > >          * The app stole this cu, possibly deleting it,
-> > > >          * so forget about it
-> > > >          */
-> > > > -       if (conf && conf->steal && conf->steal(cu, conf))
-> > > > +       if (conf && conf->steal && conf->steal(cu, conf, NULL))
-> > > >                 return 0;
-> > > >
-> > > >         cus__add(cus, cu);
-> > > > diff --git a/dwarf_loader.c b/dwarf_loader.c
-> > > > index e30b03c1c541..bf9ea3765419 100644
-> > > > --- a/dwarf_loader.c
-> > > > +++ b/dwarf_loader.c
-> > > > @@ -2686,7 +2686,7 @@ static int cu__finalize(struct cu *cu, struct conf_load *conf)
-> > > >  {
-> > > >         cu__for_all_tags(cu, class_member__cache_byte_size, conf);
-> > > >         if (conf && conf->steal) {
-> > > > -               return conf->steal(cu, conf);
-> > > > +               return conf->steal(cu, conf, NULL);
-> > > >         }
-> > > >         return LSK__KEEPIT;
-> > > >  }
-> > > > @@ -2930,7 +2930,7 @@ static void *dwarf_cus__process_cu_thread(void *arg)
-> > > >                         goto out_abort;
-> > > >         }
-> > > >
-> > > > -       if (dcus->conf->thread_exit && dcus->conf->thread_exit() != 0)
-> > > > +       if (dcus->conf->thread_exit && dcus->conf->thread_exit(dcus->conf, NULL) != 0)
-> > > >                 goto out_abort;
-> > > >
-> > > >         return (void *)DWARF_CB_OK;
-> > > > diff --git a/dwarves.h b/dwarves.h
-> > > > index 52d162d67456..9a8e4de8843a 100644
-> > > > --- a/dwarves.h
-> > > > +++ b/dwarves.h
-> > > > @@ -48,8 +48,9 @@ struct conf_fprintf;
-> > > >   */
-> > > >  struct conf_load {
-> > > >         enum load_steal_kind    (*steal)(struct cu *cu,
-> > > > -                                        struct conf_load *conf);
-> > > > -       int                     (*thread_exit)(void);
-> > > > +                                        struct conf_load *conf,
-> > > > +                                        void *thr_data);
-> > > > +       int                     (*thread_exit)(struct conf_load *conf, void *thr_data);
-> > > >         void                    *cookie;
-> > > >         char                    *format_path;
-> > > >         int                     nr_jobs;
-> > > > diff --git a/pahole.c b/pahole.c
-> > > > index f3a51cb2fe74..f3eeaaca4cdf 100644
-> > > > --- a/pahole.c
-> > > > +++ b/pahole.c
-> > > > @@ -2799,7 +2799,8 @@ out:
-> > > >  static struct type_instance *header;
-> > > >
-> > > >  static enum load_steal_kind pahole_stealer(struct cu *cu,
-> > > > -                                          struct conf_load *conf_load)
-> > > > +                                          struct conf_load *conf_load,
-> > > > +                                          void *thr_data)
-> > > >  {
-> > > >         int ret = LSK__DELETE;
-> > > >
-> > > > diff --git a/pdwtags.c b/pdwtags.c
-> > > > index 2b5ba1bf6745..8b1d6f1c96cb 100644
-> > > > --- a/pdwtags.c
-> > > > +++ b/pdwtags.c
-> > > > @@ -72,7 +72,8 @@ static int cu__emit_tags(struct cu *cu)
-> > > >  }
-> > > >
-> > > >  static enum load_steal_kind pdwtags_stealer(struct cu *cu,
-> > > > -                                           struct conf_load *conf_load __maybe_unused)
-> > > > +                                           struct conf_load *conf_load __maybe_unused,
-> > > > +                                           void *thr_data __maybe_unused)
-> > > >  {
-> > > >         cu__emit_tags(cu);
-> > > >         return LSK__DELETE;
-> > > > diff --git a/pfunct.c b/pfunct.c
-> > > > index 5485622e639b..314915b774f4 100644
-> > > > --- a/pfunct.c
-> > > > +++ b/pfunct.c
-> > > > @@ -489,7 +489,9 @@ int elf_symtabs__show(char *filenames[])
-> > > >         return EXIT_SUCCESS;
-> > > >  }
-> > > >
-> > > > -static enum load_steal_kind pfunct_stealer(struct cu *cu, struct conf_load *conf_load __maybe_unused)
-> > > > +static enum load_steal_kind pfunct_stealer(struct cu *cu,
-> > > > +                                          struct conf_load *conf_load __maybe_unused,
-> > > > +                                          void *thr_data __maybe_unused)
-> > > >  {
-> > > >
-> > > >         if (function_name) {
-> > > > --
-> > > > 2.30.2
-> > > >
+> > > Yes, please do so.
+> > >
+> > > I'll collect them this time, no need to resend.
+> > >
 > >
-> > --
+> > Hey, Arnaldo!
 > >
-> > - Arnaldo
+> > Any idea when these patches will make it into master branch? I see
+> > they are in tmp.master right now.
+>
+> I did some minor fixups to the cset comment and to the code in the
+> 'pahole --compile' new feature at the head of it and pushed all up,
+> please check.
+>
 
--- 
+I did check locally with latest pahole master, and it seems like
+something is wrong with generated BTF. I get three selftests failure
+if I use latest pahole compiled from master.
 
-- Arnaldo
+Kui-Feng, please take a look when you get a chance. Arnaldo, please
+hold off from releasing a new version for now.
+
+
+> - Arnaldo
+>
+> > > - Arnaldo
+> > >
+> > > > Acked-by: Andrii Nakryiko <andrii@kernel.org>
+> > > >
+> > > > >  btf_loader.c   | 2 +-
+> > > > >  ctf_loader.c   | 2 +-
+> > > > >  dwarf_loader.c | 4 ++--
+> > > > >  dwarves.h      | 5 +++--
+> > > > >  pahole.c       | 3 ++-
+> > > > >  pdwtags.c      | 3 ++-
+> > > > >  pfunct.c       | 4 +++-
+> > > > >  7 files changed, 14 insertions(+), 9 deletions(-)
+> > > > >
+> > > > > diff --git a/btf_loader.c b/btf_loader.c
+> > > > > index 7a5b16ff393e..b61cadd55127 100644
+> > > > > --- a/btf_loader.c
+> > > > > +++ b/btf_loader.c
+> > > > > @@ -624,7 +624,7 @@ static int cus__load_btf(struct cus *cus, struct conf_load *conf, const char *fi
+> > > > >          * The app stole this cu, possibly deleting it,
+> > > > >          * so forget about it
+> > > > >          */
+> > > > > -       if (conf && conf->steal && conf->steal(cu, conf))
+> > > > > +       if (conf && conf->steal && conf->steal(cu, conf, NULL))
+> > > > >                 return 0;
+> > > > >
+> > > > >         cus__add(cus, cu);
+> > > > > diff --git a/ctf_loader.c b/ctf_loader.c
+> > > > > index 7c34739afdce..de6d4dbfce97 100644
+> > > > > --- a/ctf_loader.c
+> > > > > +++ b/ctf_loader.c
+> > > > > @@ -722,7 +722,7 @@ int ctf__load_file(struct cus *cus, struct conf_load *conf,
+> > > > >          * The app stole this cu, possibly deleting it,
+> > > > >          * so forget about it
+> > > > >          */
+> > > > > -       if (conf && conf->steal && conf->steal(cu, conf))
+> > > > > +       if (conf && conf->steal && conf->steal(cu, conf, NULL))
+> > > > >                 return 0;
+> > > > >
+> > > > >         cus__add(cus, cu);
+> > > > > diff --git a/dwarf_loader.c b/dwarf_loader.c
+> > > > > index e30b03c1c541..bf9ea3765419 100644
+> > > > > --- a/dwarf_loader.c
+> > > > > +++ b/dwarf_loader.c
+> > > > > @@ -2686,7 +2686,7 @@ static int cu__finalize(struct cu *cu, struct conf_load *conf)
+> > > > >  {
+> > > > >         cu__for_all_tags(cu, class_member__cache_byte_size, conf);
+> > > > >         if (conf && conf->steal) {
+> > > > > -               return conf->steal(cu, conf);
+> > > > > +               return conf->steal(cu, conf, NULL);
+> > > > >         }
+> > > > >         return LSK__KEEPIT;
+> > > > >  }
+> > > > > @@ -2930,7 +2930,7 @@ static void *dwarf_cus__process_cu_thread(void *arg)
+> > > > >                         goto out_abort;
+> > > > >         }
+> > > > >
+> > > > > -       if (dcus->conf->thread_exit && dcus->conf->thread_exit() != 0)
+> > > > > +       if (dcus->conf->thread_exit && dcus->conf->thread_exit(dcus->conf, NULL) != 0)
+> > > > >                 goto out_abort;
+> > > > >
+> > > > >         return (void *)DWARF_CB_OK;
+> > > > > diff --git a/dwarves.h b/dwarves.h
+> > > > > index 52d162d67456..9a8e4de8843a 100644
+> > > > > --- a/dwarves.h
+> > > > > +++ b/dwarves.h
+> > > > > @@ -48,8 +48,9 @@ struct conf_fprintf;
+> > > > >   */
+> > > > >  struct conf_load {
+> > > > >         enum load_steal_kind    (*steal)(struct cu *cu,
+> > > > > -                                        struct conf_load *conf);
+> > > > > -       int                     (*thread_exit)(void);
+> > > > > +                                        struct conf_load *conf,
+> > > > > +                                        void *thr_data);
+> > > > > +       int                     (*thread_exit)(struct conf_load *conf, void *thr_data);
+> > > > >         void                    *cookie;
+> > > > >         char                    *format_path;
+> > > > >         int                     nr_jobs;
+> > > > > diff --git a/pahole.c b/pahole.c
+> > > > > index f3a51cb2fe74..f3eeaaca4cdf 100644
+> > > > > --- a/pahole.c
+> > > > > +++ b/pahole.c
+> > > > > @@ -2799,7 +2799,8 @@ out:
+> > > > >  static struct type_instance *header;
+> > > > >
+> > > > >  static enum load_steal_kind pahole_stealer(struct cu *cu,
+> > > > > -                                          struct conf_load *conf_load)
+> > > > > +                                          struct conf_load *conf_load,
+> > > > > +                                          void *thr_data)
+> > > > >  {
+> > > > >         int ret = LSK__DELETE;
+> > > > >
+> > > > > diff --git a/pdwtags.c b/pdwtags.c
+> > > > > index 2b5ba1bf6745..8b1d6f1c96cb 100644
+> > > > > --- a/pdwtags.c
+> > > > > +++ b/pdwtags.c
+> > > > > @@ -72,7 +72,8 @@ static int cu__emit_tags(struct cu *cu)
+> > > > >  }
+> > > > >
+> > > > >  static enum load_steal_kind pdwtags_stealer(struct cu *cu,
+> > > > > -                                           struct conf_load *conf_load __maybe_unused)
+> > > > > +                                           struct conf_load *conf_load __maybe_unused,
+> > > > > +                                           void *thr_data __maybe_unused)
+> > > > >  {
+> > > > >         cu__emit_tags(cu);
+> > > > >         return LSK__DELETE;
+> > > > > diff --git a/pfunct.c b/pfunct.c
+> > > > > index 5485622e639b..314915b774f4 100644
+> > > > > --- a/pfunct.c
+> > > > > +++ b/pfunct.c
+> > > > > @@ -489,7 +489,9 @@ int elf_symtabs__show(char *filenames[])
+> > > > >         return EXIT_SUCCESS;
+> > > > >  }
+> > > > >
+> > > > > -static enum load_steal_kind pfunct_stealer(struct cu *cu, struct conf_load *conf_load __maybe_unused)
+> > > > > +static enum load_steal_kind pfunct_stealer(struct cu *cu,
+> > > > > +                                          struct conf_load *conf_load __maybe_unused,
+> > > > > +                                          void *thr_data __maybe_unused)
+> > > > >  {
+> > > > >
+> > > > >         if (function_name) {
+> > > > > --
+> > > > > 2.30.2
+> > > > >
+> > >
+> > > --
+> > >
+> > > - Arnaldo
+>
+> --
+>
+> - Arnaldo
