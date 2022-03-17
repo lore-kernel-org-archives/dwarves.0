@@ -2,88 +2,85 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A03ADC433FE
-	for <linux-dwarves@archiver.kernel.org>; Thu, 17 Mar 2022 05:20:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DE505C433EF
+	for <linux-dwarves@archiver.kernel.org>; Thu, 17 Mar 2022 15:19:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229543AbiCQFVa (ORCPT
+        id S234275AbiCQPUt (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Thu, 17 Mar 2022 01:21:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39326 "EHLO
+        Thu, 17 Mar 2022 11:20:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229626AbiCQFV3 (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Thu, 17 Mar 2022 01:21:29 -0400
-Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDB521C7F34;
-        Wed, 16 Mar 2022 22:10:04 -0700 (PDT)
-Received: by mail-io1-xd34.google.com with SMTP id l18so4770057ioj.2;
-        Wed, 16 Mar 2022 22:10:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:message-id:in-reply-to:references:subject
-         :mime-version:content-transfer-encoding;
-        bh=4gmqQuGPJjduKOS0VKqwRnrZDQWThVwCU1BkVJb0qyo=;
-        b=Kj2UPnhuFkvSepvlkYKvXv2ZUjCsy5i/IffG2LpzPTKjkzuAHCaFB4kaXzskR2GBe+
-         86Gw8hG7UWTwnhP6alZ4jxeT9sMiD6M7iLFys4X/GAfr6d0p+pN8XQC7LWlZx+LQJtt6
-         FVdo32fCE0Vcw7fdOi8vVjWZljmPmL1KeNQCAh0gm/0o9IFv0eq6qCzU5xb4P39+3g9b
-         P8pjY8E4o86ZEDvxhiFuoQaQ9sPbuw66PfVTFu9Xdh8ZOPwA/oOAfsp4rNgUZsz5a0iV
-         l9LBhcmjWa2dXHX/Jda9xn6kWa+RISEpoIELncShEuOPxDZeig3o0yh7+o3E8WjSp8SQ
-         aAkQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:message-id:in-reply-to
-         :references:subject:mime-version:content-transfer-encoding;
-        bh=4gmqQuGPJjduKOS0VKqwRnrZDQWThVwCU1BkVJb0qyo=;
-        b=HHNqjYJ1fj84ysIkANNrfKmBkDhFzwSW3ajpdSBsraC2Hpqm9ccxHMIj7ZDnk8BvEy
-         yhV6z852hPG7mYiFGQicAHr7P6mVN2LB0ZGTzMtd71N7JHQ7O1zvRENEtUJROd++sOzJ
-         7d8hzP4kTqMzQd/4TuFgQoXyO1RgBxmv6dqkFZCjhclT/w+wGWhiRUiYtsUIVPVDYHoT
-         1kh/7fyyybLRf3uoPjKmVoINh8j+4LGZpgDiVbkJ/nZgpCcH9BvIi7L7G3WMJc8DKD65
-         Y1Ueta79a2r6Y15t3xiQkTpQYKGon/arhsijXC5Bn7+qlxxqFOVH0bEIaCD4Ma0Jy1wy
-         iIVA==
-X-Gm-Message-State: AOAM530Hn2bZLQzVkmrRd6+xI2xgv2ZYBvRQOTgvMweMMmEqfl7xr8XF
-        rTtlEC4oukbsObN/4UOhWKYxnt/05ZmvuA==
-X-Google-Smtp-Source: ABdhPJxreZTx1bq4zpOUlBaoGH8PpCAEnIjro23cSjqxSmVghWu8UgVgnUCsUsCTVYxPvAEMjt8Y1Q==
-X-Received: by 2002:a02:2406:0:b0:317:1aea:c8a4 with SMTP id f6-20020a022406000000b003171aeac8a4mr1233329jaa.65.1647493206983;
-        Wed, 16 Mar 2022 22:00:06 -0700 (PDT)
-Received: from localhost ([99.197.200.79])
-        by smtp.gmail.com with ESMTPSA id b6-20020a056602000600b006494b91cecdsm644342ioa.0.2022.03.16.22.00.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Mar 2022 22:00:06 -0700 (PDT)
-Date:   Wed, 16 Mar 2022 21:59:59 -0700
-From:   John Fastabend <john.fastabend@gmail.com>
-To:     kkourt@kkourt.io, Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     dwarves@vger.kernel.org, bpf@vger.kernel.org,
+        with ESMTP id S231173AbiCQPUs (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Thu, 17 Mar 2022 11:20:48 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 631D2157589;
+        Thu, 17 Mar 2022 08:19:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E8402B81E90;
+        Thu, 17 Mar 2022 15:19:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AB9FC340E9;
+        Thu, 17 Mar 2022 15:19:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647530369;
+        bh=BpENNq9c5j2eyXFaAKoDXCluzS14HqF6oKhXkk1xNV8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=P7chehQi6B2mXVHEu6AUIO7CjWwaazsnQdQg5nI6FxXjwkkhQjZofbJbLKHkvskt0
+         122kv5DNsp0BuIYU48Ej8wFLQHRq/PwPwIOiWUSyaK/5p9OwB96CqL/mLOVuIoE1Mw
+         mm8WhcgQ+DnAgVzRE8AlSoor7tBS5WKeDZpeDNu9vuznoygMfS8xLWxRctJYo2BO0i
+         36WVhenXsi+gWNxi6IBHsGSflBEnZ3fbQmSfK9zySmZtmJtPWLfnrrnuQCFs+HLY4b
+         i3MfiQQCPrzg6VE1Q//tjl3SrOnmSjeiya6b5lw9mIJ8kShLdKfONDCVLk0eckiNF7
+         enG6KrZ+yEmOw==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id D674740407; Thu, 17 Mar 2022 12:19:25 -0300 (-03)
+Date:   Thu, 17 Mar 2022 12:19:25 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     John Fastabend <john.fastabend@gmail.com>
+Cc:     kkourt@kkourt.io, dwarves@vger.kernel.org, bpf@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         Kornilios Kourtis <kornilios@isovalent.com>
-Message-ID: <6232c04f3c9d2_487f20860@john.notmuch>
-In-Reply-To: <20220316132338.3226871-1-kkourt@kkourt.io>
+Subject: Re: [PATCH 2/2] dwarves: cus__load_files: set errno if load fails
+Message-ID: <YjNRfXt8ZAAgHxSJ@kernel.org>
 References: <YjHjLkYBk/XfXSK0@tinh>
- <20220316132338.3226871-1-kkourt@kkourt.io>
-Subject: RE: [PATCH 1/2] pahole: avoid segfault when parsing bogus file
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 7bit
+ <20220316132354.3226908-1-kkourt@kkourt.io>
+ <6232c089bbaf2_487f208db@john.notmuch>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6232c089bbaf2_487f208db@john.notmuch>
+X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-kkourt@ wrote:
-> From: Kornilios Kourtis <kornilios@isovalent.com>
+Em Wed, Mar 16, 2022 at 10:00:57PM -0700, John Fastabend escreveu:
+> kkourt@ wrote:
+> > From: Kornilios Kourtis <kornilios@isovalent.com>
+> > 
+> > This patch improves the error seen by the user by setting errno in
+> > cus__load_files(). Otherwise, we get a "No such file or directory" error
+> > which might be confusing.
+> > 
+> > Before the patch, using a bogus file:
+> > $ ./pahole -J ./vmlinux-5.3.18-24.102-default.debug
+> > pahole: ./vmlinux-5.3.18-24.102-default.debug: No such file or directory
+> > $ ls ./vmlinux-5.3.18-24.102-default.debug
+> > /home/kkourt/src/hubble-fgs/vmlinux-5.3.18-24.102-default.debug
+> > 
+> > After the patch:
+> > $ ./pahole -J ./vmlinux-5.3.18-24.102-default.debug
+> > pahole: ./vmlinux-5.3.18-24.102-default.debug: Unknown error -22
+> > 
+> > Which is not very helpful, but less confusing.
+> > 
+> > Signed-off-by: Kornilios Kourtis <kornilios@isovalent.com>
+> > ---
 > 
-> When trying to use btf encoding for an apparently problematic kernel
-> file, pahole segfaults. As can be seen below [1], the problem is that we
-> are trying to dereference a NULL decoder.
+> With the err to -err fix Arnaldo proposed.
 > 
-> Fix this by checking the return value of dwfl_getmodules which [2] whill
-> return -1 on errors or an offset if one of the modules did not return
-> DWARF_CB_OK. (In this specific case, it was __cus__load_debug_types that
-> returned DWARF_CB_ABORT.)
-> 
+> Acked-by: John Fastabend <john.fastabend@gmail.com>
 
-[...]
- 
-> [2] https://sourceware.org/git/?p=elfutils.git;a=blob;f=libdwfl/libdwfl.h;h=f98f1d525d94bc7bcfc7c816890de5907ee4bd6d;hb=HEAD#l200
+Thanks, did the ammendment and collected your Acked-by,
 
-Thanks for the reference and fix.
-
-Acked-by: John Fastabend <john.fastabend@gmail.com>
+- Arnaldo
