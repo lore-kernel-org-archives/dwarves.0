@@ -2,84 +2,93 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 26C78C433F5
-	for <linux-dwarves@archiver.kernel.org>; Wed, 16 Mar 2022 20:55:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5EE1EC433EF
+	for <linux-dwarves@archiver.kernel.org>; Thu, 17 Mar 2022 05:16:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345914AbiCPU5J (ORCPT
+        id S229459AbiCQFRj (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Wed, 16 Mar 2022 16:57:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58144 "EHLO
+        Thu, 17 Mar 2022 01:17:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344217AbiCPU5J (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Wed, 16 Mar 2022 16:57:09 -0400
-Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4405DB91;
-        Wed, 16 Mar 2022 13:55:54 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id DE7985C0094;
-        Wed, 16 Mar 2022 16:55:51 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Wed, 16 Mar 2022 16:55:51 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kkourt.io; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=mesmtp; bh=G3OtiOQY8nhGOQhzRFrCBxUr4ceMCbICwiB
-        AU9ewMYo=; b=KFYR6cFQhPH2h30o0mQoW1Mrt3Cnyri4T3aBFiEoBYQ7wcFUzc0
-        39wC0ABJ0rjXHtOUPFG1ZFIc5Sfm933fGT9XffZgr+kiNgXwWPiwnOCNVKuN6Wqn
-        ndRBdDUrQfs23x8D3QaDi4MgNx0eM/UfJpntBSK++Ph0uyGpVgrjrVBQ=
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=G3OtiOQY8nhGOQhzR
-        FrCBxUr4ceMCbICwiBAU9ewMYo=; b=UdVzep+2lewk2ku3GgUSxWeEfu7u4+YgZ
-        hN0QEIBZg+dQOJthmI1k4t4UliDby/Ub6zvIvApHafRksN/fQGTDEWiJoUKx+fxj
-        8bqxMBaN0AJIXU/MgFA6/mWoJY94xfxl3MYR0w/ON97K9XvA1LJkkymJD9RyP+k+
-        lEB/L1ph6esSlCyyW995kf6BIa9GQSAyfrMuhrt6rwB7BDRz5vSar0KXZYOIAXo8
-        vpJDqTs8InV920h4BYbOqTePAIpARZlU4x4tIoLdBqyeDHztgqNrzDHeJ5SQ+Z77
-        RaXOrZZ+9rujNDcbJqBu7SHMmd/v35RQfAbcDNOpbDCzlSKA1m3SA==
-X-ME-Sender: <xms:104yYnMdz5R_-Llat6E2FDg4wWTSGD8TNcFjpxtDboS0jswrpp1zkw>
-    <xme:104yYh_4nphR-jDgZRdI2bgZUNigI8vfSkn1aVbeSr33HVZZeCOoecKRtNCqjB7HV
-    rvkI4RF3ubT0uhtnA>
-X-ME-Received: <xmr:104yYmTXj2R5Fi1TStTwJszdT3kJmaMXLVMUbJ0zx2iFRDwjhq2zvcz6wrd0Ls5-OamYnssDu9v5zRucID24yzY9Jpme>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudefvddgudeflecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecunecujfgurhepfffhvffukfhfgggtuggjsehttd
-    ertddttddvnecuhfhrohhmpefmohhrnhhilhhiohhsucfmohhurhhtihhsuceokhhkohhu
-    rhhtsehkkhhouhhrthdrihhoqeenucggtffrrghtthgvrhhnpeevhfdtleehhffhkeeufe
-    egffdtueefheegveffledtueegtedvieeutedtueeugfenucevlhhushhtvghrufhiiigv
-    pedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehkkhhouhhrtheskhhkohhurhhtrdhioh
-X-ME-Proxy: <xmx:104yYrv51Zn0EXv0twrbZr4kORy26fW4E_bEy_9o2gj5QqJcBiTQKw>
-    <xmx:104yYvcaIV3z0fc_b5etRBQvaYNt_wmIPjWKbXXSUVvcLAIB1IKuBA>
-    <xmx:104yYn0B7fNM71qG0oSkqLSYrTCXrdHYTt1xV_kxLDcD2--VP5chTg>
-    <xmx:104yYr45M2X6og59r-AMadGzcSHFZXDxy7t4Aa76ohWeGFVGQk1o-g>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 16 Mar 2022 16:55:51 -0400 (EDT)
-Received: by kkourt.io (Postfix, from userid 1000)
-        id 016822541B5C; Wed, 16 Mar 2022 21:55:48 +0100 (CET)
-Date:   Wed, 16 Mar 2022 21:55:48 +0100
-From:   Kornilios Kourtis <kkourt@kkourt.io>
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+        with ESMTP id S229560AbiCQFRg (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Thu, 17 Mar 2022 01:17:36 -0400
+Received: from mail-io1-f50.google.com (mail-io1-f50.google.com [209.85.166.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A9731965F2;
+        Wed, 16 Mar 2022 22:02:23 -0700 (PDT)
+Received: by mail-io1-f50.google.com with SMTP id c23so4749921ioi.4;
+        Wed, 16 Mar 2022 22:02:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:message-id:in-reply-to:references:subject
+         :mime-version:content-transfer-encoding;
+        bh=mRFTBxOIFW33ZtPG6y2XY2NAl8iMh7CqfapUitnicL4=;
+        b=FnHjHgPOZl/wY/z34OHqyxGcYGBMPiVHGkrHl22pUcMEQC3anB/iYobf+B/3rmQ3Xl
+         IHrRP1NWpd8YqY3TlZAxe1BObTKe24wiKD5yNSROF2LeYxfX0bd/FxQ3sl4L1af2of/8
+         96OkeYfoerBZN5tAHaZvQYENZRuG0ROW8HxkbhU8CDl1W/H/pCZ7yEEhxqLEZ8lPlDlr
+         kZMhM2Xao/z0wNRwO3gzHquI0+hODTTKuc6n3wcNyvehhcFmQOtANT2ML6RbQvy2PBjw
+         iAb49tOsndwXdlQZ/8Sv5CvDlcBCvLyrKNL9b9nJjZAsxQMc4GY+UcpTa1fFkAm7vyfv
+         9vyg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:message-id:in-reply-to
+         :references:subject:mime-version:content-transfer-encoding;
+        bh=mRFTBxOIFW33ZtPG6y2XY2NAl8iMh7CqfapUitnicL4=;
+        b=ufbS3OYwMP5/u5jhdhEztF+aO+FqGJSms637tg2Fi6Z0Sbz9u+CoEQ/3CVgLYGd6Fm
+         Cyw3QRQtvnw3KZcfE/lqq1PyWPyKDsTLmk5pj45O9cPKs1A8YG1ALejc4qHxeiImV/hd
+         jXpcCnKj89pQl51NbvI+7EatFedbEk5HL4g33tNzItIz40ZxD7+OkyMV77PRWc2fpmUV
+         nTjot9F3TWki6Ng30hyaHUuXhFuaNNgWCxCeJtDsdgGNkDOBEOfRYdqvmh5SfpQLNV2p
+         1pv8o7KWk6YqsppuEp5wlMKsLq+ZVzip6gevl57lPYb1do2kJUxzVbPafN1iXkpKfCxo
+         IxSA==
+X-Gm-Message-State: AOAM531wTpbPiFfNJG0orEx824rxs9+D/LyKvwPloGCZTDtevMV6cm9A
+        D18PfyJf2e3c78ZXa42pt+w=
+X-Google-Smtp-Source: ABdhPJyF6iXPkgdTMW9NQ/ygaG/HrsR+B393GuoHUwAi+WOCzttxjVmJFKs+7dlPQC9jZBIQ0A59oA==
+X-Received: by 2002:a05:6638:16d6:b0:31a:2592:a5cf with SMTP id g22-20020a05663816d600b0031a2592a5cfmr1261074jat.232.1647493266740;
+        Wed, 16 Mar 2022 22:01:06 -0700 (PDT)
+Received: from localhost ([99.197.200.79])
+        by smtp.gmail.com with ESMTPSA id f1-20020a056e020b4100b002c68e176293sm2334226ilu.87.2022.03.16.22.01.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Mar 2022 22:01:06 -0700 (PDT)
+Date:   Wed, 16 Mar 2022 22:00:57 -0700
+From:   John Fastabend <john.fastabend@gmail.com>
+To:     kkourt@kkourt.io, Arnaldo Carvalho de Melo <acme@kernel.org>
 Cc:     dwarves@vger.kernel.org, bpf@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         Kornilios Kourtis <kornilios@isovalent.com>
-Subject: Re: [PATCH 2/2] dwarves: cus__load_files: set errno if load fails
-Message-ID: <YjJO1HrKlf4CiZQD@tinh>
+Message-ID: <6232c089bbaf2_487f208db@john.notmuch>
+In-Reply-To: <20220316132354.3226908-1-kkourt@kkourt.io>
 References: <YjHjLkYBk/XfXSK0@tinh>
  <20220316132354.3226908-1-kkourt@kkourt.io>
- <YjJNt0GpA5fAm8PQ@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YjJNt0GpA5fAm8PQ@kernel.org>
+Subject: RE: [PATCH 2/2] dwarves: cus__load_files: set errno if load fails
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-On Wed, Mar 16, 2022 at 05:51:03PM -0300, Arnaldo Carvalho de Melo wrote:
-> Agreed? I'll fix it up here and apply if so.
+kkourt@ wrote:
+> From: Kornilios Kourtis <kornilios@isovalent.com>
+> 
+> This patch improves the error seen by the user by setting errno in
+> cus__load_files(). Otherwise, we get a "No such file or directory" error
+> which might be confusing.
+> 
+> Before the patch, using a bogus file:
+> $ ./pahole -J ./vmlinux-5.3.18-24.102-default.debug
+> pahole: ./vmlinux-5.3.18-24.102-default.debug: No such file or directory
+> $ ls ./vmlinux-5.3.18-24.102-default.debug
+> /home/kkourt/src/hubble-fgs/vmlinux-5.3.18-24.102-default.debug
+> 
+> After the patch:
+> $ ./pahole -J ./vmlinux-5.3.18-24.102-default.debug
+> pahole: ./vmlinux-5.3.18-24.102-default.debug: Unknown error -22
+> 
+> Which is not very helpful, but less confusing.
+> 
+> Signed-off-by: Kornilios Kourtis <kornilios@isovalent.com>
+> ---
 
-Agreed, thanks!
+With the err to -err fix Arnaldo proposed.
 
-cheers,
-Kornilios.
+Acked-by: John Fastabend <john.fastabend@gmail.com>
