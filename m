@@ -2,84 +2,136 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 14E31C433EF
-	for <linux-dwarves@archiver.kernel.org>; Mon, 21 Mar 2022 21:08:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 37D5EC433EF
+	for <linux-dwarves@archiver.kernel.org>; Mon, 21 Mar 2022 23:17:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229825AbiCUVKL (ORCPT
+        id S232570AbiCUXTW (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Mon, 21 Mar 2022 17:10:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47318 "EHLO
+        Mon, 21 Mar 2022 19:19:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229680AbiCUVKK (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Mon, 21 Mar 2022 17:10:10 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49C8735AAE;
-        Mon, 21 Mar 2022 14:08:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F292EB819C7;
-        Mon, 21 Mar 2022 21:08:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8BD0CC340E8;
-        Mon, 21 Mar 2022 21:08:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647896921;
-        bh=9R1HG55IiLHxyMr19TMRy4BRam3sXhg+kNYxQxoAbh8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=I3x57HGCa67NtNtZwQlzlwJXxltfZ0cQgqWK3OHIlbgfsLD5YWabP/d/NrepNX0kr
-         SrzpkMfxDcfiC/xkgm0r17emmX8TZSueJgFvslLUQTt0Qn3EgxJpN3hjrtVtkAJ8Qk
-         /I6+yI7nMoVi3lVNiHIGxPsqypc513JyGWK9WeoTkanZXsv4WOh27Txzfx2kkJ+0AO
-         kiBUL5TO57IxE/aS7Y6vK/LDr55UHzt2GgfTiq12Sbbr+oQYiOhQETv2mzEx0ajtEB
-         wuRhJcHLW3wiLbbJnBYsDBpIaXDg594lprkUskWlwO1Ga81aV8ZMPNmxvpon01tQdC
-         ICiUMsJpepk2Q==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 32D7F40407; Mon, 21 Mar 2022 18:08:39 -0300 (-03)
-Date:   Mon, 21 Mar 2022 18:08:39 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Kui-Feng Lee <kuifeng@fb.com>
-Cc:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>, dwarves@vger.kernel.org,
-        bpf@vger.kernel.org
-Subject: Re: [PATCH dwarves v4 1/4] dwarf_loader: Receive per-thread data on
- worker threads.
-Message-ID: <YjjpV5rzYgBZIuBg@kernel.org>
-References: <20220126192039.2840752-1-kuifeng@fb.com>
- <20220126192039.2840752-2-kuifeng@fb.com>
- <CAEf4BzarN4L8U+hLnvZrNg0CR-oQr25OFs_W_tfW3aAHGAVFWw@mail.gmail.com>
- <YfJudZmSS1yTkeP/@kernel.org>
- <CAEf4Bza8xB+yFb4qGPvM7YwvHCb1zQ8yosGbKj63vcRM7d9aLg@mail.gmail.com>
- <Yij/BSPgMl8/HEhg@kernel.org>
- <CAEf4BzZX8Q5MPt62+68nRoQNPe=3jnVkcEMMJwPzoU51YCBszg@mail.gmail.com>
- <CAEf4BzYxOgNjC+nFJGY_wpnOZZ-Jik=15L0aSq3Uxbiamc0h+w@mail.gmail.com>
- <c9c436a6935bb39e4135d4f0d7efd1ecc49d660b.camel@fb.com>
+        with ESMTP id S232588AbiCUXTJ (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Mon, 21 Mar 2022 19:19:09 -0400
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1994233F200
+        for <dwarves@vger.kernel.org>; Mon, 21 Mar 2022 16:08:49 -0700 (PDT)
+Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 22LKLcTo012749
+        for <dwarves@vger.kernel.org>; Mon, 21 Mar 2022 16:08:48 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=facebook; bh=A5mFWjzCyKMsTRKV+clxJaBVVs8thbKXnjcrxhLbiRo=;
+ b=W78pU7iFBeDFovulV0AWKgDw3DhWPLqHx5S3HgX4SwKL0Sbn4Qs9hqjQMfDsJIk36bkc
+ kKIRGzgPli9nF4Jcv93TBf4KoClKfl3JmBLEP5Yg+5QXYQp2J9Xix8BeL0u2UdGs+cpz
+ 44oXbyF7Nkxkt7peF79ZdF97uZ/pHJKeIxs= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3ewd0tnras-4
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <dwarves@vger.kernel.org>; Mon, 21 Mar 2022 16:08:48 -0700
+Received: from twshared10432.40.frc1.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::4) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Mon, 21 Mar 2022 16:08:46 -0700
+Received: by devbig931.frc1.facebook.com (Postfix, from userid 460691)
+        id AE60615EE572; Mon, 21 Mar 2022 16:08:41 -0700 (PDT)
+From:   Kui-Feng Lee <kuifeng@fb.com>
+To:     <arnaldo.melo@gmail.com>, <dwarves@vger.kernel.org>,
+        <ast@kernel.org>, <andrii@kernel.org>, <daniel@iogearbox.net>
+CC:     Kui-Feng Lee <kuifeng@fb.com>
+Subject: [PATCH dwarves] pahole, btf_encoder: Collect info of per-cpu varaibles from threads.
+Date:   Mon, 21 Mar 2022 16:08:37 -0700
+Message-ID: <20220321230837.855572-1-kuifeng@fb.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c9c436a6935bb39e4135d4f0d7efd1ecc49d660b.camel@fb.com>
-X-Url:  http://acmel.wordpress.com
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: JqrjLuio8_xVJBFamX1QZLJ87xNNKQ7I
+X-Proofpoint-GUID: JqrjLuio8_xVJBFamX1QZLJ87xNNKQ7I
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-03-21_10,2022-03-21_01,2022-02-23_01
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-Em Mon, Mar 21, 2022 at 07:06:06PM +0000, Kui-Feng Lee escreveu:
-> On Wed, 2022-03-09 at 16:18 -0800, Andrii Nakryiko wrote:
-> > On Wed, Mar 9, 2022 at 4:14 PM Andrii Nakryiko <andrii.nakryiko@gmail.com> wrote:
-> > > I did check locally with latest pahole master, and it seems like
-> > > something is wrong with generated BTF. I get three selftests
-> > > failure
-> > > if I use latest pahole compiled from master.
+Collect the information of per-cpu variables from encoders of worker
+threads to the primary encoder.
 
-> > > Kui-Feng, please take a look when you get a chance. Arnaldo, please
-> > > hold off from releasing a new version for now.
- 
-> I just figure out the root cuase.
-> It caused by missing info from percpu_secinfo when collecting data from
-> threads.  The encoder stores it separatedly from struct btf, and we
-> have separated different encoders for threads.  They are not merged
-> together.  I will fixed it ASAP.
+btf_encoder store per-cpu info separately, not in btf.  Previously, it
+merged only btf types generated by worker threads.  So, some of the
+per-cpu info was missing.
 
-Cool, looking forward to the fix.
+Signed-off-by: Kui-Feng Lee <kuifeng@fb.com>
+---
+ btf_encoder.c | 21 +++++++++++++++++++++
+ btf_encoder.h |  2 ++
+ pahole.c      |  2 +-
+ 3 files changed, 24 insertions(+), 1 deletion(-)
 
-- Arnaldo
+diff --git a/btf_encoder.c b/btf_encoder.c
+index fa29824..1a42094 100644
+--- a/btf_encoder.c
++++ b/btf_encoder.c
+@@ -606,6 +606,27 @@ static int32_t btf_encoder__add_var_secinfo(struct b=
+tf_encoder *encoder, uint32_
+ 	return gobuffer__add(&encoder->percpu_secinfo, &si, sizeof(si));
+ }
+=20
++int32_t btf_encoder__add_encoder(struct btf_encoder *encoder, struct btf=
+_encoder *other)
++{
++	struct gobuffer *var_secinfo_buf =3D &other->percpu_secinfo;
++	size_t sz =3D gobuffer__size(var_secinfo_buf);
++	uint16_t nr_var_secinfo =3D sz / sizeof(struct btf_var_secinfo);
++	uint32_t type_id;
++	uint32_t next_type_id =3D btf__type_cnt(encoder->btf);
++	int32_t i, id;
++	struct btf_var_secinfo *vsi;
++
++	for (i =3D 0; i < nr_var_secinfo; i++) {
++		vsi =3D (struct btf_var_secinfo *)var_secinfo_buf->entries + i;
++		type_id =3D next_type_id + vsi->type - 1; /* Type ID starts from 1 */
++		id =3D btf_encoder__add_var_secinfo(encoder, type_id, vsi->offset, vsi=
+->size);
++		if (id < 0)
++			return id;
++	}
++
++	return btf__add_btf(encoder->btf, other->btf);
++}
++
+ static int32_t btf_encoder__add_datasec(struct btf_encoder *encoder, con=
+st char *section_name)
+ {
+ 	struct gobuffer *var_secinfo_buf =3D &encoder->percpu_secinfo;
+diff --git a/btf_encoder.h b/btf_encoder.h
+index 0f0eee8..339fae2 100644
+--- a/btf_encoder.h
++++ b/btf_encoder.h
+@@ -31,4 +31,6 @@ struct btf_encoder *btf_encoders__next(struct btf_encod=
+er *encoder);
+=20
+ struct btf *btf_encoder__btf(struct btf_encoder *encoder);
+=20
++int btf_encoder__add_encoder(struct btf_encoder *encoder, struct btf_enc=
+oder *other);
++
+ #endif /* _BTF_ENCODER_H_ */
+diff --git a/pahole.c b/pahole.c
+index f7c7966..a909b22 100644
+--- a/pahole.c
++++ b/pahole.c
+@@ -2867,7 +2867,7 @@ static int pahole_threads_collect(struct conf_load =
+*conf, int nr_threads, void *
+                 */
+ 		if (!threads[i]->btf || threads[i]->encoder =3D=3D btf_encoder)
+ 			continue; /* The primary btf_encoder */
+-		err =3D btf__add_btf(btf_encoder__btf(btf_encoder), threads[i]->btf);
++		err =3D btf_encoder__add_encoder(btf_encoder, threads[i]->encoder);
+ 		if (err < 0)
+ 			goto out;
+ 		btf_encoder__delete(threads[i]->encoder);
+--=20
+2.30.2
+
