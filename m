@@ -2,89 +2,76 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4B4DDC433EF
-	for <linux-dwarves@archiver.kernel.org>; Wed,  4 May 2022 19:43:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 84948C433F5
+	for <linux-dwarves@archiver.kernel.org>; Wed, 11 May 2022 22:02:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377594AbiEDTqi (ORCPT
+        id S237101AbiEKWC5 (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Wed, 4 May 2022 15:46:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47978 "EHLO
+        Wed, 11 May 2022 18:02:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347480AbiEDTqg (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Wed, 4 May 2022 15:46:36 -0400
-Received: from mail-oa1-x2d.google.com (mail-oa1-x2d.google.com [IPv6:2001:4860:4864:20::2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAA7119C10
-        for <dwarves@vger.kernel.org>; Wed,  4 May 2022 12:42:59 -0700 (PDT)
-Received: by mail-oa1-x2d.google.com with SMTP id 586e51a60fabf-ed8a3962f8so2249013fac.4
-        for <dwarves@vger.kernel.org>; Wed, 04 May 2022 12:42:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=QXq0FXkqxCaM/dCQ09BFAGCLDO3MEzAwUavtBOZoJNk=;
-        b=OXXkru8RnDOhqGQkCSIiPJJFVhmo2TkJq68wKcfe+0dZh9kXxQpaB+1oVaQQvKiPHb
-         q2T9cCT9EEMG4qfRk57CHEkv8q9uvPid9nNkU4/ABI3brlY9/7CIhDz83DeWYOajx1zr
-         0kaXwP1BUAe8r2GEHUxwf33sJDAMYL+D+AUtG7wCKOj4P4KNdlKjHme1R6pZ1rWw04sV
-         oD/GNK9Gnl8ebKG9DD0EqQ9nvkVTHm+0GngNarIGOxpKZCpqPeBVcndNbZIrAyBw8pY8
-         rjtjnmbGwY3aFXQG+ERgaXz1dLMY1oMkd18R7ackUlHf0z7F/8NLMJ9QqO2aPEioDs6U
-         RuZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=QXq0FXkqxCaM/dCQ09BFAGCLDO3MEzAwUavtBOZoJNk=;
-        b=4FCfNAMKcqQExZuRKZ8zk1LatlAvfoE2t+Ta1NixMYFYPn3djRAEd510c7BxLnpB15
-         fuQ0ebTJS6OnHTQgoaRMDzND+0kvB3hDtvEcb+Kw6hb0Jd2zto1CinsWEnTYnvTGDSGL
-         6KzOkUwH82uKbof2o7HLsAhbaAesG/PBH1diTFtzp1Zq92sJdRArfaNLUWsv75TbYKZn
-         sqguruptb7mA6Vg9gDeHpnhWxvMbDFSZtnQVonT/6RY3jXVXqv1wga5yOiif1WMRYneY
-         Pd/yZ+uGFv6xkz8AORkjkyN1xU0/Y1g+lnK28jPgL/XgqlAn+mp3qfQzvWdqjUACUcC8
-         rqLw==
-X-Gm-Message-State: AOAM533N5SXwVZubvqLoSIeF191gWpeYMrAb7VenIqp2YsmqSuNY56/u
-        wLZVUS4YADX+R6rEP5DtK1M=
-X-Google-Smtp-Source: ABdhPJxku6p5X8JpdYmb4J49AtoCF2Rm2WYLQx98UxwQDtgVXUI8SoYQ576BNygAwwTodOjwRY8BLA==
-X-Received: by 2002:a05:6870:b527:b0:ed:9cbd:e04a with SMTP id v39-20020a056870b52700b000ed9cbde04amr582826oap.41.1651693379093;
-        Wed, 04 May 2022 12:42:59 -0700 (PDT)
-Received: from tx3000mach.io (static.220.238.itcsa.net. [190.15.220.238])
-        by smtp.gmail.com with ESMTPSA id q17-20020a9d6651000000b006060322127dsm5381446otm.77.2022.05.04.12.42.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 May 2022 12:42:58 -0700 (PDT)
-From:   Martin Reboredo <yakoyoku@gmail.com>
-To:     arnaldo.melo@gmail.com, dwarves@vger.kernel.org
-Cc:     ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net
-Subject: Re: [PATCH] pahole: Implement cu_exclude_lang flag
-Date:   Wed,  4 May 2022 16:42:50 -0300
-Message-Id: <20220504194250.29344-1-yakoyoku@gmail.com>
-X-Mailer: git-send-email 2.36.0
-In-Reply-To: <YnFDItzfx2JD7Gw7@kernel.org>
-References: <YnFDItzfx2JD7Gw7@kernel.org>
+        with ESMTP id S231907AbiEKWC4 (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Wed, 11 May 2022 18:02:56 -0400
+Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BA74BE3B
+        for <dwarves@vger.kernel.org>; Wed, 11 May 2022 15:02:55 -0700 (PDT)
+Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
+        by m0089730.ppops.net (8.17.1.5/8.17.1.5) with ESMTP id 24BJg6ZU009576
+        for <dwarves@vger.kernel.org>; Wed, 11 May 2022 15:02:54 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=facebook; bh=BpSYOXyg6wnT7RS6o6SrXwZrXLpUQf9GZTa0R/0RJu4=;
+ b=FpVDJBxjffDE1AKMe7I0CIntf6qDOAVSVC2PEWPQh3vJ6TGEA1Ty7Wrt4WTe07EAqlop
+ 7+si63cvXFCNU+h4fYrsTfrWc+clN8Blzo6yteK3OPRTzqwRqUsNlccs1yURUzSAbbKr
+ YJbDN0/1mEUeaq8MAl1CEdlJz0425EhhCr0= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by m0089730.ppops.net (PPS) with ESMTPS id 3fyx1h91jq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <dwarves@vger.kernel.org>; Wed, 11 May 2022 15:02:54 -0700
+Received: from twshared8307.18.frc3.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::5) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 11 May 2022 15:02:53 -0700
+Received: by devbig309.ftw3.facebook.com (Postfix, from userid 128203)
+        id C9078A2C7776; Wed, 11 May 2022 15:02:43 -0700 (PDT)
+From:   Yonghong Song <yhs@fb.com>
+To:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
+        <dwarves@vger.kernel.org>
+CC:     Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>, <bpf@vger.kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>
+Subject: [PATCH dwarves 1/2] libbpf: Sync with latest libbpf repo
+Date:   Wed, 11 May 2022 15:02:43 -0700
+Message-ID: <20220511220243.525215-1-yhs@fb.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-GUID: -Z4yLEIysyjS4h5o9-nLRbLM1Z8ZBWFy
+X-Proofpoint-ORIG-GUID: -Z4yLEIysyjS4h5o9-nLRbLM1Z8ZBWFy
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-11_07,2022-05-11_01,2022-02-23_01
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
->Em Thu, Apr 21, 2022 at 11:47:15AM -0300, Martin Reboredo escreveu:
->> Exclude compilation units that have the language id equal to the one
->> from the --cu_exclude_lang=LANG flag.
->> 
->> Required by Rust Linux builds due to failing BTF checks product of
->> things like rustc's struct reordering.
->
->Sorry, when I saw this patch I already had committed a similar one, can
->you please take a look?
->
->Its in the "next" branch at:
->
->https://git.kernel.org/pub/scm/devel/pahole/pahole.git/commit/?h=next
+Sync up to commit 87dff0a2c775 (vmtest: allow building foreign debian roo=
+tfs).
 
-I've saw said patches and performed local testing with a Rust-for-Linux
-kernel, both in Qemu and bare metal, the kernel and it was working as
-expected, bpftool could eject a proper header
+Signed-off-by: Yonghong Song <yhs@fb.com>
+---
+ lib/bpf | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-$ bpftool btf dump file /sys/kernel/btf/vmlinux format c > vmlinux.h
+diff --git a/lib/bpf b/lib/bpf
+index 393a058..87dff0a 160000
+--- a/lib/bpf
++++ b/lib/bpf
+@@ -1 +1 @@
+-Subproject commit 393a058d061d49d5c3055fa9eefafb4c0c31ccc3
++Subproject commit 87dff0a2c775c5943ca9233e69c81a25f2ed1a77
+--=20
+2.30.2
 
-and I could do BTF test from a guide by Aniket Bhattacharyea in
-containiq.com (https://www.containiq.com/post/btf-bpf-type-format).
-
-So yeah, I can say that this patch was effectively superseeded by the
-patch series at next. Thanks for your attention though.
