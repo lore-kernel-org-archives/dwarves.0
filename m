@@ -2,166 +2,187 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 479D7C433EF
-	for <linux-dwarves@archiver.kernel.org>; Thu, 12 May 2022 05:18:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4941BC433EF
+	for <linux-dwarves@archiver.kernel.org>; Thu, 12 May 2022 22:49:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349498AbiELFSt (ORCPT
+        id S1359284AbiELWti (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Thu, 12 May 2022 01:18:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54652 "EHLO
+        Thu, 12 May 2022 18:49:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347454AbiELFSs (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Thu, 12 May 2022 01:18:48 -0400
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92841195BE3
-        for <dwarves@vger.kernel.org>; Wed, 11 May 2022 22:18:47 -0700 (PDT)
-Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24BMwgcZ003877
-        for <dwarves@vger.kernel.org>; Wed, 11 May 2022 22:18:46 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=facebook;
- bh=OqbokM0XZQXaK8PMlyrVgwJ4FoKHUwrR+8GqjPJei5o=;
- b=OvSs08CPxcLBqWQIb3TskoqBr35tXOvKJA5hlWTeub+o1k0LL2yZeRHh+xzYuJERmt73
- RoSeNqiXGwK4C113UoVUxuz8LJ7OzuQhZeGvfnt3t7Dc+Of3YTNVrKnFE5k3UFiEqokK
- bBNdLSwzWFGg2uP/USsulKQhlyLzUjoAGCw= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3g04pmr7nw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <dwarves@vger.kernel.org>; Wed, 11 May 2022 22:18:46 -0700
-Received: from twshared4937.07.ash9.facebook.com (2620:10d:c085:108::4) by
- mail.thefacebook.com (2620:10d:c085:21d::5) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 11 May 2022 22:18:08 -0700
-Received: by devbig309.ftw3.facebook.com (Postfix, from userid 128203)
-        id C3FB2A2FE44B; Wed, 11 May 2022 22:18:04 -0700 (PDT)
-From:   Yonghong Song <yhs@fb.com>
-To:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
-        <dwarves@vger.kernel.org>
-CC:     Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>, <bpf@vger.kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>
-Subject: [PATCH dwarves v2 2/2] btf_encoder: Normalize array index type for parallel dwarf loading case
-Date:   Wed, 11 May 2022 22:18:04 -0700
-Message-ID: <20220512051804.2653507-1-yhs@fb.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220512051759.2652236-1-yhs@fb.com>
-References: <20220512051759.2652236-1-yhs@fb.com>
+        with ESMTP id S1359306AbiELWtg (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Thu, 12 May 2022 18:49:36 -0400
+Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DFE12854A6;
+        Thu, 12 May 2022 15:49:35 -0700 (PDT)
+Received: by mail-il1-x134.google.com with SMTP id l15so4576064ilh.3;
+        Thu, 12 May 2022 15:49:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ENMBU/SUx1kqBZ6B9y2Wkt9q5CDmGboIAvjJKQ3EDI4=;
+        b=H0+KRJrEuECxhYhCWCEsN5DAWeWL8NWdOVkEbaHLVpSHQp3sS22xrzI/WXnO0A+JsQ
+         loP8PrEo4AGkc52ctJ+/GlVx1LmXHBC9cl8nKNbBNDexhQ6BgyeuAuOxAzLaRMqD1J61
+         UrvdjI6ZsJWSEhG6gsEY8oksZwoLrCboFAld6quQzqUt8irYhVzNOrCH7vs0eIb/9LcH
+         yqf6v4NW9UqTWA/8GMZ7jMbvzsSxNfaYt+YLAtVpxlQb8J5upJXdrN3b0nKKMNJ/cHwH
+         3Z0oGays/jlRw2ok8jejDPdQ05rFXggmRWqssy78v+bb4zluuTtKFtTk0rRDf2Lt1Xjs
+         +7Ig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ENMBU/SUx1kqBZ6B9y2Wkt9q5CDmGboIAvjJKQ3EDI4=;
+        b=ZB8vOuYW+0rKhkjc4VFRW5xTs1gZBbvuQDdHOixkuUQ0a+JKbtnQS0W9o/o7TzT0yA
+         zAbOqG4cN0PBdFs16V8uLiSlyp+Qy3/+mtm/K7E0gAFwZ8TUGLfN+8Q4pgVXz1QvF7K6
+         FprYNM+QVktb8C4qbdXUE3OvUvX2aZGYHKXbyHZ5GHpgB+ZUgchZoFhfaG2UKxF7baUP
+         cMZHwjNoWQjwzpOyL+PPiTalzbaQkVfCOibSibK/wiAha5rBijg6lDxYx0xkeu12Ewtu
+         pyyRDpcpKFyEttl5KtiAg5WW4navBTpE2i9K4McTCHnTgLbDVJ8vmPT2PsSEJ9Ijq/b8
+         KAXA==
+X-Gm-Message-State: AOAM531Ed2gczKZzXAZNzDvXNPSOTTYUmm4slJHMpjSql27B9HlJ3IfK
+        pRDMZRXQnHaIKFr0nfz1xrJfBEctKDgpDuKhzKUlkZmM
+X-Google-Smtp-Source: ABdhPJwS/AyowFSoijOIGMBlQxWt2q/jZUJq4ZjmbEbbp172ZlWEOHPoRhu6a3FTwwtH09FRbihbTACMgsTAzFGhxoY=
+X-Received: by 2002:a05:6e02:1d8d:b0:2cf:2112:2267 with SMTP id
+ h13-20020a056e021d8d00b002cf21122267mr1126500ila.239.1652395774708; Thu, 12
+ May 2022 15:49:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: c4oh1DaXlS7VG322cbGQ7QjdlWH6cQnd
-X-Proofpoint-GUID: c4oh1DaXlS7VG322cbGQ7QjdlWH6cQnd
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-11_07,2022-05-11_01,2022-02-23_01
+References: <20220511220243.525215-1-yhs@fb.com> <20220511220249.525908-1-yhs@fb.com>
+ <CAEf4BzZgby0RDcXXwHtB+zxof3Gmgn+EUnbeEyYOshb7dfbzyA@mail.gmail.com> <366cdcf9-3f94-6ac0-aebb-ceda500ab89a@fb.com>
+In-Reply-To: <366cdcf9-3f94-6ac0-aebb-ceda500ab89a@fb.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Thu, 12 May 2022 15:49:23 -0700
+Message-ID: <CAEf4Bzbf1uPqJ+BzQLtvS3ye=Xv1Gbo8n1uOkc8iZ3RDNDUhyg@mail.gmail.com>
+Subject: Re: [PATCH dwarves 2/2] btf_encoder: Normalize array index type for
+ parallel dwarf loading case
+To:     Yonghong Song <yhs@fb.com>
+Cc:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
+        dwarves@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Kernel Team <kernel-team@fb.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-With latest llvm15 built kernel (make -j LLVM=3D1), I hit the following
-error when build selftests (make -C tools/testing/selftests/bpf -j LLVM=3D=
-1):
-  In file included from skeleton/pid_iter.bpf.c:3:
-  .../selftests/bpf/tools/build/bpftool/vmlinux.h:84050:9: error: unknown=
- type name
-       '__builtin_va_list___2'; did you mean '__builtin_va_list'?
-  typedef __builtin_va_list___2 va_list___2;
-          ^~~~~~~~~~~~~~~~~~~~~
-          __builtin_va_list
-  note: '__builtin_va_list' declared here
-  In file included from skeleton/profiler.bpf.c:3:
-  .../selftests/bpf/tools/build/bpftool/vmlinux.h:84050:9: error: unknown=
- type name
-       '__builtin_va_list__ _2'; did you mean '__builtin_va_list'?
-  typedef __builtin_va_list___2 va_list___2;
-          ^~~~~~~~~~~~~~~~~~~~~
-          __builtin_va_list
-  note: '__builtin_va_list' declared here
+On Wed, May 11, 2022 at 9:13 PM Yonghong Song <yhs@fb.com> wrote:
+>
+>
+>
+> On 5/11/22 5:32 PM, Andrii Nakryiko wrote:
+> > On Wed, May 11, 2022 at 3:02 PM Yonghong Song <yhs@fb.com> wrote:
+> >>
+> >> With latest llvm15 built kernel (make -j LLVM=1), I hit the following
+> >> error when build selftests (make -C tools/testing/selftests/bpf -j LLVM=1):
+> >>    In file included from skeleton/pid_iter.bpf.c:3:
+> >>    .../selftests/bpf/tools/build/bpftool/vmlinux.h:84050:9: error: unknown type name
+> >>         '__builtin_va_list___2'; did you mean '__builtin_va_list'?
+> >>    typedef __builtin_va_list___2 va_list___2;
+> >>            ^~~~~~~~~~~~~~~~~~~~~
+> >>            __builtin_va_list
+> >>    note: '__builtin_va_list' declared here
+> >>    In file included from skeleton/profiler.bpf.c:3:
+> >>    .../selftests/bpf/tools/build/bpftool/vmlinux.h:84050:9: error: unknown type name
+> >>         '__builtin_va_list__ _2'; did you mean '__builtin_va_list'?
+> >>    typedef __builtin_va_list___2 va_list___2;
+> >>            ^~~~~~~~~~~~~~~~~~~~~
+> >>            __builtin_va_list
+> >>    note: '__builtin_va_list' declared here
+> >>
+> >> The error can be easily explained with after-dedup vmlinux btf:
+> >>    [21] INT 'int' size=4 bits_offset=0 nr_bits=32 encoding=SIGNED
+> >>    [2300] STRUCT '__va_list_tag' size=24 vlen=4
+> >>          'gp_offset' type_id=2 bits_offset=0
+> >>          'fp_offset' type_id=2 bits_offset=32
+> >>          'overflow_arg_area' type_id=32 bits_offset=64
+> >>          'reg_save_area' type_id=32 bits_offset=128
+> >>    [2308] TYPEDEF 'va_list' type_id=2309
+> >>    [2309] TYPEDEF '__builtin_va_list' type_id=2310
+> >>    [2310] ARRAY '(anon)' type_id=2300 index_type_id=21 nr_elems=1
+> >>
+> >>    [5289] PTR '(anon)' type_id=2308
+> >>    [158520] STRUCT 'warn_args' size=32 vlen=2
+> >>          'fmt' type_id=14 bits_offset=0
+> >>          'args' type_id=2308 bits_offset=64
+> >>    [27299] INT '__ARRAY_SIZE_TYPE__' size=4 bits_offset=0 nr_bits=32 encoding=(none)
+> >>    [34590] TYPEDEF '__builtin_va_list' type_id=34591
+> >>    [34591] ARRAY '(anon)' type_id=2300 index_type_id=27299 nr_elems=1
+> >>
+> >> The typedef __builtin_va_list is a builtin type for the compiler.
+> >> In the above case, two typedef __builtin_va_list are generated.
+> >> The reason is due to different array index_type_id. This happened
+> >> when pahole is running with more than one jobs when parsing dwarf
+> >> and generating btfs.
+> >>
+> >> Function btf_encoder__encode_cu() is used to do btf encoding for
+> >> each cu. The function will try to find an "int" type for the cu
+> >> if it is available, otherwise, it will create a special type
+> >> with name __ARRAY_SIZE_TYPE__. For example,
+> >>    file1: yes 'int' type
+> >>    file2: no 'int' type
+> >>
+> >> In serial mode, file1 is processed first, followed by file2.
+> >> both will have 'int' type as the array index type since file2
+> >> will inherit the index type from file1.
+> >>
+> >> In parallel mode though, arrays in file1 will have index type 'int',
+> >> and arrays in file2 wil have index type '__ARRAY_SIZE_TYPE__'.
+> >> This will prevent some legitimate dedup and may have generated
+> >> vmlinux.h having compilation error.
+> >>
+> >
+> > I think it is two separate problems.
+> >
+> > 1. Maybe instead of this generating __ARRAY_SIZE_TYPE__ we should
+> > generate proper 'int' type?
+>
+> This should work. Will post v2 with this.
+>
+> >
+> > 2. __builtin_va_list___2 shouldn't have happened, it's libbpf bug.
+> > Libbpf handles __builtin_va_list specially (see
+> > btf_dump_is_blacklisted()), so we need to fix libbpf to not get
+> > confused if there are two __builtin_va_list copies in BTF.
+>
+> I checked code. the libbpf prevents generating
+>     typedef <...> __builtin_va_list
+> since __builtin_va_list is a builtin type.
+>
+> Here, due to __ARRAY_SIZE_TYPE__ problem, the following are generated
+> in vmlinux.h.
+>
+> typedef __builtin_va_list va_list;
+> typedef __builtin_va_list___2 va_list___2;
+>
+> since __builtin_va_list appears twice in the BTF.
+> But due to the libbpf implementation to skip
+>     typedef <...> __builtin_va_list
+>
+> We don't have __builtin_va_list___2 defined and this
+> caused compilation error.
+>
+> Although we could workaround the issue in libbpf
+> such that if the typedef is in the format of
+>    typedef __builtin_va_list<...> <other_type>
+> we should just emit
+>    typedef __builtin_va_list <other_type>
+>
+> But fixing the issue in pahole is much better since
+> we won't have va_list___2 any more.
 
-The error can be easily explained with after-dedup vmlinux btf:
-  [21] INT 'int' size=3D4 bits_offset=3D0 nr_bits=3D32 encoding=3DSIGNED
-  [2300] STRUCT '__va_list_tag' size=3D24 vlen=3D4
-        'gp_offset' type_id=3D2 bits_offset=3D0
-        'fp_offset' type_id=3D2 bits_offset=3D32
-        'overflow_arg_area' type_id=3D32 bits_offset=3D64
-        'reg_save_area' type_id=3D32 bits_offset=3D128
-  [2308] TYPEDEF 'va_list' type_id=3D2309
-  [2309] TYPEDEF '__builtin_va_list' type_id=3D2310
-  [2310] ARRAY '(anon)' type_id=3D2300 index_type_id=3D21 nr_elems=3D1
+Sounds good, let's do it in pahole, thanks!
 
-  [5289] PTR '(anon)' type_id=3D2308
-  [158520] STRUCT 'warn_args' size=3D32 vlen=3D2
-        'fmt' type_id=3D14 bits_offset=3D0
-        'args' type_id=3D2308 bits_offset=3D64
-  [27299] INT '__ARRAY_SIZE_TYPE__' size=3D4 bits_offset=3D0 nr_bits=3D32=
- encoding=3D(none)
-  [34590] TYPEDEF '__builtin_va_list' type_id=3D34591
-  [34591] ARRAY '(anon)' type_id=3D2300 index_type_id=3D27299 nr_elems=3D=
-1
-
-Note that two array index_type_id's are different so the va_list and __bu=
-iltin_va_list
-will have two versions in the BTF. With this, vmlinux.h contains the foll=
-owing code,
-  typedef __builtin_va_list va_list;
-  typedef __builtin_va_list___2 va_list___2;
-Since __builtin_va_list is a builtin type for the compiler,
-libbpf does not generate
-  typedef <...> __builtin_va_list
-and this caused __builtin_va_list___2 is not defined and hence compilatio=
-n error.
-This happened when pahole is running with more than one jobs when parsing=
- dwarf
-and generating btfs.
-
-Function btf_encoder__encode_cu() is used to do btf encoding for
-each cu. The function will try to find an "int" type for the cu
-if it is available, otherwise, it will create a special type
-with name __ARRAY_SIZE_TYPE__. For example,
-  file1: yes 'int' type
-  file2: no 'int' type
-
-In serial mode, file1 is processed first, followed by file2.
-both will have 'int' type as the array index type since file2
-will inherit the index type from file1.
-
-In parallel mode though, arrays in file1 will have index type 'int',
-and arrays in file2 wil have index type '__ARRAY_SIZE_TYPE__'.
-This will prevent some legitimate dedup and may have generated
-vmlinux.h having compilation error.
-
-This patch fixed the issue by creating an 'int' type as the
-array index type, so all array index type should be the same
-for all cu's even in parallel mode.
-
-Signed-off-by: Yonghong Song <yhs@fb.com>
----
- btf_encoder.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-Changelog:
-  v1 -> v2:
-   - change creation of array index type to be 'int' type,
-     the same as the type encoder tries to search in the current
-     types.
-
-diff --git a/btf_encoder.c b/btf_encoder.c
-index 1a42094..9e708e4 100644
---- a/btf_encoder.c
-+++ b/btf_encoder.c
-@@ -1460,7 +1460,8 @@ int btf_encoder__encode_cu(struct btf_encoder *enco=
-der, struct cu *cu)
-=20
- 		bt.name =3D 0;
- 		bt.bit_size =3D 32;
--		btf_encoder__add_base_type(encoder, &bt, "__ARRAY_SIZE_TYPE__");
-+		bt.is_signed =3D true;
-+		btf_encoder__add_base_type(encoder, &bt, "int");
- 		encoder->has_index_type =3D true;
- 	}
-=20
---=20
-2.30.2
-
+>
+> >
+> >> This patch fixed the issue by normalizing all array_index types
+> >> to be the first array_index type in the whole btf.
+> >>
+> >> Signed-off-by: Yonghong Song <yhs@fb.com>
+> >> ---
+> >>   btf_encoder.c | 24 +++++++++++++++++++++---
+> >>   btf_encoder.h |  2 +-
+> >>   pahole.c      |  2 +-
+> >>   3 files changed, 23 insertions(+), 5 deletions(-)
+> >>
+> >
+> > [...]
