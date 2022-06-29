@@ -2,118 +2,118 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 70094C43334
-	for <linux-dwarves@archiver.kernel.org>; Wed, 29 Jun 2022 20:00:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5989DC433EF
+	for <linux-dwarves@archiver.kernel.org>; Wed, 29 Jun 2022 21:44:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230326AbiF2UAh (ORCPT
+        id S229925AbiF2Vo4 (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Wed, 29 Jun 2022 16:00:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37030 "EHLO
+        Wed, 29 Jun 2022 17:44:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230027AbiF2UAg (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Wed, 29 Jun 2022 16:00:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 444C7647C;
-        Wed, 29 Jun 2022 13:00:36 -0700 (PDT)
+        with ESMTP id S229720AbiF2Vo4 (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Wed, 29 Jun 2022 17:44:56 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAD073818E;
+        Wed, 29 Jun 2022 14:44:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D34BD620CE;
-        Wed, 29 Jun 2022 20:00:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 197DCC34114;
-        Wed, 29 Jun 2022 20:00:35 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 60987617A3;
+        Wed, 29 Jun 2022 21:44:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9ADB3C34114;
+        Wed, 29 Jun 2022 21:44:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656532835;
-        bh=u23t306HkozwMNEu7DKxfvaxMabsbXvH7Mg7T49T4U4=;
+        s=k20201202; t=1656539094;
+        bh=X7x/N79wD1zUoaZQkdzD8DGsjyqC+AIFRBPcxQZXsRU=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tr2IQgOP7x1jI8Rt9l9piZOUqOIu6518+p+08GWxBnQ07VDI5GilUb+yac6KwUAcd
-         bPXVjYD84GSrA2pcJfsXmIkBiG/5fMc5SXLJJuR3qM+eQnY+1yKN+DYVtPsM+6wb4D
-         ZpbhEkC2b38VLTFtAbJ9HzlVebaeILpqS+hdYmeJzjDRuib3RjSaVB5sb3yiEZbB2T
-         uc56wDIys50eoiz8nnctL5+XNdWdW0EEYuK7o46EvaYNjElTThmkUHUcoX+RCXydzD
-         xY3ODqz78X/+XKEBHs7HY0kbTZoSoCqZJtAF6jceaRXEt/9/3F/DRWix3LFCwYxt9R
-         4gSE0GN6W3hJg==
+        b=sN59foP31R2pQrlR1fszVlsARfxfR15zI1g9R0loua+nKESZcJz/9OgPD51B+QecX
+         uerZC8KiWw5g9b1rTBFzQlGJJoeTOfybxnrzJbyqp6MN8WQALorUM+O1Z28g5SLPGQ
+         QR2mxLCm6JgwH8zqTWNjfymkzAbtAWKHj8tSN0NoubW3C4SZVUr3/osMDVHoNdvfys
+         RhN4axzezFfwV5Wkyr6A8t1EGj4SADnligIsjwKnFW8K+sx6t/zNwwJDRlObOBfkDT
+         Q5ASjEfKNTU2uP6IxMH/9HugJa8H6YQKNhtZKzB+KEUbObNSr5U/OY0/CYvfwomcqA
+         ww/DTwvRLGa6g==
 Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 577644096F; Wed, 29 Jun 2022 17:00:32 -0300 (-03)
-Date:   Wed, 29 Jun 2022 17:00:32 -0300
+        id 4EC8E4096F; Wed, 29 Jun 2022 18:44:52 -0300 (-03)
+Date:   Wed, 29 Jun 2022 18:44:52 -0300
 From:   Arnaldo Carvalho de Melo <acme@kernel.org>
 To:     Yonghong Song <yhs@fb.com>
 Cc:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
         dwarves@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
         Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
         Daniel Borkmann <daniel@iogearbox.net>, kernel-team@fb.com
-Subject: Re: [PATCH dwarves v3 2/2] btf: Support BTF_KIND_ENUM64
-Message-ID: <YryvYNjbDFWDHtvY@kernel.org>
+Subject: Re: [PATCH dwarves v3 0/2] btf: support BTF_KIND_ENUM64
+Message-ID: <YrzH1ABPYmKSEogS@kernel.org>
 References: <20220629071213.3178592-1-yhs@fb.com>
- <20220629071224.3180594-1-yhs@fb.com>
- <YrykE1zgKXvKaAgx@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YrykE1zgKXvKaAgx@kernel.org>
+In-Reply-To: <20220629071213.3178592-1-yhs@fb.com>
 X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-Em Wed, Jun 29, 2022 at 04:12:19PM -0300, Arnaldo Carvalho de Melo escreveu:
-> Em Wed, Jun 29, 2022 at 12:12:24AM -0700, Yonghong Song escreveu:
-> > BTF_KIND_ENUM64 is supported with latest libbpf, which
-> > supports 64-bit enum values. Latest libbpf also supports
-> > signedness for enum values. Add enum64 support in
-> > dwarf-to-btf conversion.
-> > 
-> > The following is an example of new encoding which covers
-> > signed/unsigned enum64/enum variations.
-> 
-> So, testing this with torvalds/master I'm getting:
-> 
-> FAILED: load BTF from vmlinux: Invalid argument
-> make[1]: *** [/var/home/acme/git/linux/Makefile:1164: vmlinux] Error 255
-> make[1]: *** Deleting file 'vmlinux'
-> make[1]: Leaving directory '/var/home/acme/git/build/v5.19-rc4+'
-> make: *** [Makefile:219: __sub-make] Error 2
-> 
-> real	8m12.396s
-> user	183m18.009s
-> sys	44m27.085s
-> ⬢[acme@toolbox linux]$ find . -name "*.c" | xargs grep "load BTF from vmlinux"
-> ⬢[acme@toolbox linux]$ find . -name "*.c" | xargs grep "load BTF from"
-> ./tools/bpf/bpftool/btf.c:			p_err("failed to load BTF from %s: %s",
-> ./tools/bpf/resolve_btfids/main.c:		pr_err("FAILED: load BTF from %s: %s\n",
-> ./tools/testing/selftests/bpf/prog_tests/resolve_btfids.c:		  "Failed to load BTF from btf_data.o\n"))
-> ⬢[acme@toolbox linux]$ vim ./tools/bpf/resolve_btfids/main.c
-> 
-> Which is:
-> 
->         btf = btf__parse_split(obj->btf ?: obj->path, base_btf);
->         err = libbpf_get_error(btf);
->         if (err) {
->                 pr_err("FAILED: load BTF from %s: %s\n",
->                         obj->btf ?: obj->path, strerror(-err));
->                 goto out;
->         }
-> 
-> I.e. tools/lib/bpf in torvalds/master doesn´t support BTF_KIND_ENUM64,
-> right? So to build it with a new pahole one needs to ask for
-> --skip_encoding_btf_enum64? How to do this automagically? I.e. its a
-> matter of checking if the in-kernel libbpf has support for it and if not
-> use --skip_encoding_btf_enum64?
-> 
-> I'm now going to try with bpf-next/master
+Em Wed, Jun 29, 2022 at 12:12:13AM -0700, Yonghong Song escreveu:
+> Add support for enum64. For 64-bit enumerator value,
+> previously, the value is truncated into 32bit, e.g.,
+> for the following enum in linux uapi bpf.h,
+>   enum {
+>         BPF_F_INDEX_MASK                = 0xffffffffULL,
+>         BPF_F_CURRENT_CPU               = BPF_F_INDEX_MASK,
+>   /* BPF_FUNC_perf_event_output for sk_buff input context. */
+>         BPF_F_CTXLEN_MASK               = (0xfffffULL << 32),
+>   };    
 
-Yeah, works with bpf-next:
+Applied, added the entry for skip generating enums to the man page,
+added support to the pahole BTF loader, used the new pahole to build
+bpf-next/master, all seems ok, pushing to next on git.kernel.org so that
+the libbpf github CI can give it a go.
 
-⬢[acme@toolbox bpf-next]$ pdwtags -F btf ../build/bpf-next/vmlinux | grep -A5 -B5 BPF_F_CTXLEN_MASK
+To build with torvalds/master one has to add --skip_encoding_btf_enum64,
+I think, haven't tested with it, without it isn't working, libbpf
+complains at that btfids tool.
 
-/* 28548 */
-enum {
-	BPF_F_INDEX_MASK  = 4294967295,
-	BPF_F_CURRENT_CPU = 4294967295,
-	BPF_F_CTXLEN_MASK = 4503595332403200,
-} __attribute__((__packed__)); /* size: 8 */
+Please check/test what is in there now:
 
-/* 28549 */
-enum {
-	BPF_F_GET_BRANCH_RECORDS_SIZE = 1,
-⬢[acme@toolbox bpf-next]$
+  git://git.kernel.org/pub/scm/devel/pahole/pahole.git next
+  https://git.kernel.org/pub/scm/devel/pahole/pahole.git/log/?h=next
+
+Unless someone screams I plan pushing out a new release, update fedora
+packages, etc early next week its overdue by now.
+
+- Arnaldo
+ 
+> BPF_F_CTXLEN_MASK will be encoded with 0 with BTF_KIND_ENUM
+> after pahole dwarf-to-btf conversion.
+> With this patch, the BPF_F_CTXLEN_MASK will be encoded properly
+> with BTF_KIND_ENUM64.
+> 
+> This patch is on top of tmp.master since tmp.master has not
+> been sync'ed with master branch yet.
+> 
+> Changelogs:
+>   v2 -> v3:
+>     - pass struct type/conf_load pointers to btf_encoder__add_enum[_value]
+>       to make code easier to understand.
+>   v1 -> v2:
+>     - Add flag --skip_encoding_btf_enum64 to disable newly-added functionality.
+> 
+> Yonghong Song (2):
+>   libbpf: Sync with latest libbpf repo
+>   btf: Support BTF_KIND_ENUM64
+> 
+>  btf_encoder.c     | 67 +++++++++++++++++++++++++++++++++++------------
+>  btf_encoder.h     |  2 +-
+>  dwarf_loader.c    | 12 +++++++++
+>  dwarves.h         |  4 ++-
+>  dwarves_fprintf.c |  6 ++++-
+>  lib/bpf           |  2 +-
+>  pahole.c          | 10 ++++++-
+>  7 files changed, 81 insertions(+), 22 deletions(-)
+> 
+> -- 
+> 2.30.2
+
+-- 
+
+- Arnaldo
