@@ -2,103 +2,159 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 36E63C433EF
-	for <linux-dwarves@archiver.kernel.org>; Wed, 29 Jun 2022 13:16:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EAB5DCCA481
+	for <linux-dwarves@archiver.kernel.org>; Wed, 29 Jun 2022 16:30:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232499AbiF2NQZ (ORCPT
+        id S231244AbiF2QaS (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Wed, 29 Jun 2022 09:16:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50156 "EHLO
+        Wed, 29 Jun 2022 12:30:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232700AbiF2NQY (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Wed, 29 Jun 2022 09:16:24 -0400
+        with ESMTP id S230112AbiF2QaQ (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Wed, 29 Jun 2022 12:30:16 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 395D027B1C;
-        Wed, 29 Jun 2022 06:16:24 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3E3526133;
+        Wed, 29 Jun 2022 09:30:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F1FC9B821C3;
-        Wed, 29 Jun 2022 13:16:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95813C34114;
-        Wed, 29 Jun 2022 13:16:21 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 61357B8259F;
+        Wed, 29 Jun 2022 16:30:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE542C34114;
+        Wed, 29 Jun 2022 16:30:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656508581;
-        bh=6IU1XrSYARkGipC60LKfAg+b+o4r72bV4w14yxcxkxw=;
+        s=k20201202; t=1656520213;
+        bh=AXg0rQTH6cfiLfGA2s439ZXOD7bBos7PTUh5qH7Ael4=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mSLXPFYnZhAgn70ObSDbnWGCQIW+sXL6Vx1seEwPvobuwLCjrCpu0QzDAHsxG5SOl
-         y11US1LqHYZcgUVGiX+QNmExqMHa98yf+3xYX4JqwIXaGZ7Y1lgrFZCa8dWiLK0dur
-         7QCgvyttEvQElGhqm0qPTN/5IgRkJAi3/YLRweR4Wc6I+lnTro59z/2utHNjKhhK7T
-         NRq4+ysdcJ13kDPNLw18J3+h0IPiXHprAt4WZmmxlZDd8hBl6a4rzX2Q7KhhsMFnaw
-         02/UhygGD6A/YGmRJ2UOd6Xu4UTQNJqtBGRkV3Ax0bMWqvSpkkmRZS7vunE9AJq5sl
-         0/7jdbExFF+cA==
+        b=agt1AzqIAOQtC80ZRW1qdVfU7gc5aJJ7U5XbzjVT7T9MesuUr4Bz+bEN3brc8MxPR
+         veaUzU7j2XJ/mYNrAgRrFeWy5PMrzXFHGYGFYW4qWpe3IK2/uWL0VT7Q3liKAh9u1D
+         kzEVHkg9yt/yZRq0U9D0irXzi+/hI2sXNqTv9f5GHswoY31tOlGssMByWILBSL+pD/
+         7CM3RQXFkgM0EG8CYOGkWIpRnPi5xjFvIEODESqUFLIjtXS0clnn5KyxxkhLDSnPLC
+         wK3NVW8CRWoo1KxeaSmPeyYKDYl/TVyE8TcMVScSaILr+OMq6kTFKwywhBE3WQ2/NH
+         tNu3vh1v4u6wg==
 Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 5B5814096F; Wed, 29 Jun 2022 10:16:18 -0300 (-03)
-Date:   Wed, 29 Jun 2022 10:16:18 -0300
+        id 377904096F; Wed, 29 Jun 2022 13:30:10 -0300 (-03)
+Date:   Wed, 29 Jun 2022 13:30:10 -0300
 From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Yonghong Song <yhs@fb.com>
-Cc:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
+To:     Jiri Olsa <olsajiri@gmail.com>
+Cc:     Yonghong Song <yhs@fb.com>,
+        Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
         dwarves@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
         Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
         Daniel Borkmann <daniel@iogearbox.net>, kernel-team@fb.com
-Subject: Re: [PATCH dwarves v3 0/2] btf: support BTF_KIND_ENUM64
-Message-ID: <YrxQoivj32s+h34F@kernel.org>
-References: <20220629071213.3178592-1-yhs@fb.com>
+Subject: Re: [PATCH dwarves v2 0/2] btf: support BTF_KIND_ENUM64
+Message-ID: <Yrx+Ehpc71/6WHVT@kernel.org>
+References: <20220615230306.851750-1-yhs@fb.com>
+ <YrrPOFzYAGHm0oht@krava>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220629071213.3178592-1-yhs@fb.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YrrPOFzYAGHm0oht@krava>
 X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-Em Wed, Jun 29, 2022 at 12:12:13AM -0700, Yonghong Song escreveu:
-> Add support for enum64. For 64-bit enumerator value,
-> previously, the value is truncated into 32bit, e.g.,
-> for the following enum in linux uapi bpf.h,
->   enum {
->         BPF_F_INDEX_MASK                = 0xffffffffULL,
->         BPF_F_CURRENT_CPU               = BPF_F_INDEX_MASK,
->   /* BPF_FUNC_perf_event_output for sk_buff input context. */
->         BPF_F_CTXLEN_MASK               = (0xfffffULL << 32),
->   };    
+Em Tue, Jun 28, 2022 at 11:51:52AM +0200, Jiri Olsa escreveu:
+> On Wed, Jun 15, 2022 at 04:03:06PM -0700, Yonghong Song wrote:
+> > Add support for enum64. For 64-bit enumerator value,
+> > previously, the value is truncated into 32bit, e.g.,
+> > for the following enum in linux uapi bpf.h,
+> >   enum {
+> >         BPF_F_INDEX_MASK                = 0xffffffffULL,
+> >         BPF_F_CURRENT_CPU               = BPF_F_INDEX_MASK,
+> >   /* BPF_FUNC_perf_event_output for sk_buff input context. */
+> >         BPF_F_CTXLEN_MASK               = (0xfffffULL << 32),
+> >   };
+> > 
+> > BPF_F_CTXLEN_MASK will be encoded with 0 with BTF_KIND_ENUM
+> > after pahole dwarf-to-btf conversion.
+> > With this patch, the BPF_F_CTXLEN_MASK will be encoded properly
+> > with BTF_KIND_ENUM64.
 > 
-> BPF_F_CTXLEN_MASK will be encoded with 0 with BTF_KIND_ENUM
-> after pahole dwarf-to-btf conversion.
-> With this patch, the BPF_F_CTXLEN_MASK will be encoded properly
-> with BTF_KIND_ENUM64.
+> yep, tried this on latest vmlinux and got:
 > 
-> This patch is on top of tmp.master since tmp.master has not
-> been sync'ed with master branch yet.
+> [705813] ENUM64 (anon) size=8
+>         BPF_F_INDEX_MASK val=4294967295
+>         BPF_F_CURRENT_CPU val=4294967295
+>         BPF_F_CTXLEN_MASK val=4503595332403200
 > 
-> Changelogs:
->   v2 -> v3:
->     - pass struct type/conf_load pointers to btf_encoder__add_enum[_value]
->       to make code easier to understand.
+> which is correct
+> 
+> Tested-by: Jiri Olsa <jolsa@kernel.org>
 
-Yeah, that is more clear indeed.
+I'm testing with v3:
+
+⬢[acme@toolbox pahole]$ pahole -JV vmlinux-v5.18-rc7+ | grep -B10 -A5 BPF_F_CTXLEN_MASK
+	BPF_FUNC_xdp_get_buff_len val=188
+	BPF_FUNC_xdp_load_bytes val=189
+	BPF_FUNC_xdp_store_bytes val=190
+	BPF_FUNC_copy_from_user_task val=191
+	BPF_FUNC_skb_set_tstamp val=192
+	BPF_FUNC_ima_file_hash val=193
+	__BPF_FUNC_MAX_ID val=194
+[672880] ENUM64 (anon) size=8
+	BPF_F_INDEX_MASK val=4294967295
+	BPF_F_CURRENT_CPU val=4294967295
+	BPF_F_CTXLEN_MASK val=4503595332403200
+[672881] ENUM (anon) size=4
+	BPF_F_GET_BRANCH_RECORDS_SIZE val=1
+[672882] ARRAY (anon) type_id=672304 index_type_id=18 nr_elems=4
+[672883] STRUCT (anon) size=16
+	tp_name type_id=672266 bits_offset=0
+
+But:
+
+⬢[acme@toolbox pahole]$ pdwtags -F btf vmlinux-v5.18-rc7+ | grep -B10 -A5 BPF_F_CTXLEN_MASK
+BTF: idx: 4173, Unknown kind 19
+BTF: idx: 4975, Unknown kind 19
+BTF: idx: 6673, Unknown kind 19
+BTF: idx: 27413, Unknown kind 19
+BTF: idx: 30626, Unknown kind 19
+BTF: idx: 30829, Unknown kind 19
+BTF: idx: 38040, Unknown kind 19
+BTF: idx: 56969, Unknown kind 19
+BTF: idx: 83004, Unknown kind 19
+⬢[acme@toolbox pahole]$
+
+Ok, I need to update pahole's BTF loader to support:
+
+lib/bpf/src/btf.h:#define BTF_KIND_ENUM64		19	/* Enum for up-to 64bit values */
+
+
+Working on it now.
+
+Jiri, can I keep your Tested-by for v3?
 
 - Arnaldo
 
->   v1 -> v2:
->     - Add flag --skip_encoding_btf_enum64 to disable newly-added functionality.
+> jirka
 > 
-> Yonghong Song (2):
->   libbpf: Sync with latest libbpf repo
->   btf: Support BTF_KIND_ENUM64
-> 
->  btf_encoder.c     | 67 +++++++++++++++++++++++++++++++++++------------
->  btf_encoder.h     |  2 +-
->  dwarf_loader.c    | 12 +++++++++
->  dwarves.h         |  4 ++-
->  dwarves_fprintf.c |  6 ++++-
->  lib/bpf           |  2 +-
->  pahole.c          | 10 ++++++-
->  7 files changed, 81 insertions(+), 22 deletions(-)
-> 
-> -- 
-> 2.30.2
+> > 
+> > This patch is on top of tmp.master since tmp.master has not
+> > been sync'ed with master branch yet.
+> > 
+> > Changelogs:
+> >   v1 -> v2:
+> >     - Add flag --skip_encoding_btf_enum64 to disable newly-added functionality.
+> > 
+> > Yonghong Song (2):
+> >   libbpf: Sync with latest libbpf repo
+> >   btf: Support BTF_KIND_ENUM64
+> > 
+> >  btf_encoder.c     | 65 +++++++++++++++++++++++++++++++++++------------
+> >  btf_encoder.h     |  2 +-
+> >  dwarf_loader.c    | 12 +++++++++
+> >  dwarves.h         |  4 ++-
+> >  dwarves_fprintf.c |  6 ++++-
+> >  lib/bpf           |  2 +-
+> >  pahole.c          | 10 +++++++-
+> >  7 files changed, 80 insertions(+), 21 deletions(-)
+> > 
+> > -- 
+> > 2.30.2
+> > 
 
 -- 
 
