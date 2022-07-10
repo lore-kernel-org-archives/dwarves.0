@@ -2,189 +2,87 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1C481C43334
-	for <linux-dwarves@archiver.kernel.org>; Wed,  6 Jul 2022 15:53:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5B17FC433EF
+	for <linux-dwarves@archiver.kernel.org>; Sun, 10 Jul 2022 13:44:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234251AbiGFPxp (ORCPT
+        id S229606AbiGJNoD (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Wed, 6 Jul 2022 11:53:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50450 "EHLO
+        Sun, 10 Jul 2022 09:44:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232239AbiGFPxc (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Wed, 6 Jul 2022 11:53:32 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 630D217585;
-        Wed,  6 Jul 2022 08:51:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1096AB81DD4;
-        Wed,  6 Jul 2022 15:51:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B149C3411C;
-        Wed,  6 Jul 2022 15:51:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657122715;
-        bh=QrvSEGjTk/SEFZ9JaHW1BcDV3Bs+gSOERlbtFXdLTCk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ns7o9rSManQtptMRyQOeWgLnfOnPkvdAiQk0HzthhvA1t+2WDSj1AlQXzT5C6UehK
-         n/iYy9H8nDNI9hJgopoKrFVajIwsgoa7dDhD11Ug8HNyKoLkwzjMm31fASEYTPUvX7
-         VZ1/WifbTQycLE8bmbGn4wBtrr2cIexNW7nX0u1UC3GxiazE8oSGHRBHBFoUOK2JA1
-         mNFYgYMbB6O9itQ1NtS7kYld2+R9SgBsPh0suJs+eHQaWfT5UID1XLk5x4+gNHZfey
-         pByAzBTH/NXKrJqyEXkT4atiRgQJx8c7wNAOU7KynyHXdRDMSF/UATpA+JuY8ZQaXJ
-         0hDqK8YZFN+2A==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 8A3214096F; Wed,  6 Jul 2022 12:51:53 -0300 (-03)
-Date:   Wed, 6 Jul 2022 12:51:53 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Yonghong Song <yhs@fb.com>, Jiri Olsa <olsajiri@gmail.com>,
-        dwarves@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Kernel Team <kernel-team@fb.com>
-Subject: Re: [PATCH] btf_loader: support BTF_KIND_ENUM64 was Re: [PATCH
- dwarves v2 0/2] btf: support BTF_KIND_ENUM64
-Message-ID: <YsWvmRKaCbjf0XXB@kernel.org>
-References: <20220615230306.851750-1-yhs@fb.com>
- <YrrPOFzYAGHm0oht@krava>
- <Yrx+Ehpc71/6WHVT@kernel.org>
- <YryELT6OadpiJki/@kernel.org>
- <CAEf4BzananDqBJyfu8n3VATNULd5ZgY2GrEYGvGSS_5dMW3mpw@mail.gmail.com>
+        with ESMTP id S229469AbiGJNoD (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Sun, 10 Jul 2022 09:44:03 -0400
+Received: from nautica.notk.org (ipv6.notk.org [IPv6:2001:41d0:1:7a93::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1619D62D0
+        for <dwarves@vger.kernel.org>; Sun, 10 Jul 2022 06:44:02 -0700 (PDT)
+Received: by nautica.notk.org (Postfix, from userid 108)
+        id CBEB6C01B; Sun, 10 Jul 2022 15:44:00 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
+        t=1657460640; bh=OASAahjnDhA/tWXiM2GUIH+FN6szgKvtfnAIS827eaU=;
+        h=Date:From:To:Subject:From;
+        b=n02Y+nQpH5+V7g3QuEEUuvHcpyoi0iD1SCehaXbu35SaaOuKQwCE+hT2lJkmf3i1j
+         p4KiwXqFWiU8Z17T/9BmMgdwTgYTfgkrmkbYzRWaNiiofPCoN4JzlSh9/TubHqhzoH
+         rKrJQPF2HmLNcxpQhvlrdaDFPNhQW3PeVgvxaFQui6SwoVfV67fzBzA1Fj5HvD183W
+         8k0IxqsOxiL3/x/kxakw3GJnrDsueJ7eaqmVwe4/UJFBQ4wgoyYA8ZBD3jLsRbxllG
+         MAcUQjgTgogCa1+gX+VQNC1F8RPge+q4u00/4lcKk8GJTVm5P9sI97/0dD+mm1Ic1S
+         lOhu9SSq41tew==
+Received: from odin.codewreck.org (localhost [127.0.0.1])
+        by nautica.notk.org (Postfix) with ESMTPS id B2922C009;
+        Sun, 10 Jul 2022 15:43:59 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
+        t=1657460640; bh=OASAahjnDhA/tWXiM2GUIH+FN6szgKvtfnAIS827eaU=;
+        h=Date:From:To:Subject:From;
+        b=n02Y+nQpH5+V7g3QuEEUuvHcpyoi0iD1SCehaXbu35SaaOuKQwCE+hT2lJkmf3i1j
+         p4KiwXqFWiU8Z17T/9BmMgdwTgYTfgkrmkbYzRWaNiiofPCoN4JzlSh9/TubHqhzoH
+         rKrJQPF2HmLNcxpQhvlrdaDFPNhQW3PeVgvxaFQui6SwoVfV67fzBzA1Fj5HvD183W
+         8k0IxqsOxiL3/x/kxakw3GJnrDsueJ7eaqmVwe4/UJFBQ4wgoyYA8ZBD3jLsRbxllG
+         MAcUQjgTgogCa1+gX+VQNC1F8RPge+q4u00/4lcKk8GJTVm5P9sI97/0dD+mm1Ic1S
+         lOhu9SSq41tew==
+Received: from localhost (odin.codewreck.org [local])
+        by odin.codewreck.org (OpenSMTPD) with ESMTPA id 4f5f4bec;
+        Sun, 10 Jul 2022 13:43:57 +0000 (UTC)
+Date:   Sun, 10 Jul 2022 22:43:42 +0900
+From:   Dominique Martinet <asmadeus@codewreck.org>
+To:     dwarves@vger.kernel.org, Arnaldo Carvalho de Melo <acme@kernel.org>
+Subject: pahole split BTF support broken on 32bit builds?
+Message-ID: <YsrXjggSxfe2U7Oz@codewreck.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAEf4BzananDqBJyfu8n3VATNULd5ZgY2GrEYGvGSS_5dMW3mpw@mail.gmail.com>
-X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-Em Tue, Jul 05, 2022 at 09:28:05PM -0700, Andrii Nakryiko escreveu:
-> On Wed, Jun 29, 2022 at 9:56 AM Arnaldo Carvalho de Melo
-> <acme@kernel.org> wrote:
-> >
-> > Em Wed, Jun 29, 2022 at 01:30:10PM -0300, Arnaldo Carvalho de Melo escreveu:
-> > > ⬢[acme@toolbox pahole]$ pdwtags -F btf vmlinux-v5.18-rc7+ | grep -B10 -A5 BPF_F_CTXLEN_MASK
-> > > BTF: idx: 4173, Unknown kind 19
-> > > BTF: idx: 4975, Unknown kind 19
-> > > BTF: idx: 6673, Unknown kind 19
-> > > BTF: idx: 27413, Unknown kind 19
-> > > BTF: idx: 30626, Unknown kind 19
-> > > BTF: idx: 30829, Unknown kind 19
-> > > BTF: idx: 38040, Unknown kind 19
-> > > BTF: idx: 56969, Unknown kind 19
-> > > BTF: idx: 83004, Unknown kind 19
-> > > ⬢[acme@toolbox pahole]$
-> > >
-> > > Ok, I need to update pahole's BTF loader to support:
-> > >
-> > > lib/bpf/src/btf.h:#define BTF_KIND_ENUM64             19      /* Enum for up-to 64bit values */
-> > >
-> > >
-> > > Working on it now.
-> >
-> > ⬢[acme@toolbox pahole]$ pdwtags -F btf vmlinux-v5.18-rc7+ | grep -B5 -A5 BPF_F_CTXLEN_MASK
-> >
-> > /* 27413 */
-> > enum {
-> >         BPF_F_INDEX_MASK  = 4294967295,
-> >         BPF_F_CURRENT_CPU = 4294967295,
-> >         BPF_F_CTXLEN_MASK = 4503595332403200,
-> > } __attribute__((__packed__)); /* size: 8 */
-> >
-> > /* 27414 */
-> > enum {
-> >         BPF_F_GET_BRANCH_RECORDS_SIZE = 1,
-> > ⬢[acme@toolbox pahole]$
-> >
-> > Quick patch here, please Ack, if possible:
-> >
-> 
-> two minor nits, but looks good overall:
-> 
-> Acked-by: Andrii Nakryiko <andrii@kernel.org>
+Hi Arnaldo,
 
-Thanks for reviewing it!
- 
-> > diff --git a/btf_loader.c b/btf_loader.c
-> > index b5d444643adf30b1..e57ecce2cde26e4e 100644
-> > --- a/btf_loader.c
-> > +++ b/btf_loader.c
-> > @@ -312,6 +312,49 @@ out_free:
-> >         return -ENOMEM;
-> >  }
-> >
-> > +static struct enumerator *enumerator__new64(const char *name, uint64_t value)
-> > +{
-> > +       struct enumerator *en = tag__alloc(sizeof(*en));
-> > +
-> > +       if (en != NULL) {
-> > +               en->name = name;
-> > +               en->value = value; // Value is already 64-bit, as this is used with DWARF as well
-> > +               en->tag.tag = DW_TAG_enumerator;
-> > +       }
-> > +
-> > +       return en;
-> > +}
-> > +
-> > +static int create_new_enumeration64(struct cu *cu, const struct btf_type *tp, uint32_t id)
-> > +{
-> > +       struct btf_enum64 *ep = btf_enum64(tp);
-> > +       uint16_t i, vlen = btf_vlen(tp);
-> > +       struct type *enumeration = type__new(DW_TAG_enumeration_type,
-> > +                                            cu__btf_str(cu, tp->name_off),
-> > +                                            tp->size ? tp->size * 8 : (sizeof(int) * 8));
-> 
-> tp->size should always be valid, so this fall back to sizeof(int)
-> isn't necessary
+I noticed nixos had to disable BTF for 5.15+ builds -- split BTF for
+modules got in 5.11 and that's the first kernel after this so it matches
+up.
 
-This was just a copy from the create_new_enumeration() one, will remove
-it there as well as a prep patch, then not have it in the 64-bit
-version.
- 
-> > +
-> > +       if (enumeration == NULL)
-> > +               return -ENOMEM;
-> > +
-> > +       for (i = 0; i < vlen; i++) {
-> > +               const char *name = cu__btf_str(cu, ep[i].name_off);
-> > +               uint64_t value = ((uint64_t)ep[i].val_hi32) << 32 | ep[i].val_lo32;
-> 
-> use btf_enum64_value() defined in libbpf's btf.h header
+I could reproduce by just building any kernel with ARCH=i386 and using a
+32bit pahole
 
-Great, will pick that
- 
-> > +               struct enumerator *enumerator = enumerator__new64(name, value);
-> > +
-> > +               if (enumerator == NULL)
-> > +                       goto out_free;
-> > +
-> > +               enumeration__add(enumeration, enumerator);
-> > +       }
-> > +
-> > +       cu__add_tag_with_id(cu, &enumeration->namespace.tag, id);
-> > +
-> > +       return 0;
-> > +out_free:
-> > +       enumeration__delete(enumeration);
-> > +       return -ENOMEM;
-> > +}
-> > +
-> >  static int create_new_subroutine_type(struct cu *cu, const struct btf_type *tp, uint32_t id)
-> >  {
-> >         struct ftype *proto = tag__alloc(sizeof(*proto));
-> > @@ -419,6 +462,9 @@ static int btf__load_types(struct btf *btf, struct cu *cu)
-> >                 case BTF_KIND_ENUM:
-> >                         err = create_new_enumeration(cu, type_ptr, type_index);
-> >                         break;
-> > +               case BTF_KIND_ENUM64:
-> > +                       err = create_new_enumeration64(cu, type_ptr, type_index);
-> > +                       break;
-> >                 case BTF_KIND_FWD:
-> >                         err = create_new_forward_decl(cu, type_ptr, type_index);
-> >                         break;
+$ LD_LIBRARY_PATH=/tmp/pahole/build /tmp/pahole/build/pahole -J --btf_base vmlinux arch/x86/crypto/aesni-intel.ko
+Failed to parse base BTF 'vmlinux': -22
 
--- 
+$  file /tmp/pahole/build/pahole 
+/tmp/pahole/build/pahole: ELF 32-bit LSB executable, Intel 80386, version 1 (SYSV), dynamically linked, interpreter /nix/store/pp1yzf2flqnjm02jnjcgxhx015bhmi9j-glibc-2.34-210/lib/ld-linux.so.2, for GNU/Linux 2.6.32, with debug_info, not stripped
 
-- Arnaldo
+
+(64bit pahole works with the same input, and interestingly the 32bit
+pahole works with a 64bit kernel/modules -- I can reproduce on either
+5.15 or current master as long as it's built with ARCH=i686 though)
+
+
+If cross-compiling pahole to i686 is a pain the issue apparently is
+reproductible with native armhf builds as well according to comments on
+the nixos PR:
+https://github.com/NixOS/nixpkgs/pull/178256
+
+I'm not attaching a config, a minimal .config with just BTF and module
+BTF was enough for me (allnoconfig adjusted to get these)
+
+
+Please let me know if you need any more information,
+--
+Dominique
