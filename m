@@ -2,81 +2,108 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 13DC6C433EF
-	for <linux-dwarves@archiver.kernel.org>; Mon, 11 Jul 2022 01:28:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B9791CCA47B
+	for <linux-dwarves@archiver.kernel.org>; Mon, 11 Jul 2022 09:29:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229660AbiGKB2p (ORCPT
+        id S231784AbiGKJ3t (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Sun, 10 Jul 2022 21:28:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33110 "EHLO
+        Mon, 11 Jul 2022 05:29:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229629AbiGKB2l (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Sun, 10 Jul 2022 21:28:41 -0400
-Received: from nautica.notk.org (ipv6.notk.org [IPv6:2001:41d0:1:7a93::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF0C46300
-        for <dwarves@vger.kernel.org>; Sun, 10 Jul 2022 18:28:38 -0700 (PDT)
-Received: by nautica.notk.org (Postfix, from userid 108)
-        id 12CE1C009; Mon, 11 Jul 2022 03:28:36 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1657502916; bh=HP7nKKlqoiBKXuPznu2Y5Fb39qptoLhakG6ggdpKWgg=;
-        h=Date:From:To:Subject:References:In-Reply-To:From;
-        b=gTvKkO2OiqWiKd9b5dez3FcGzQo/GkCjpzIcgRf2sPiHcVx9ut02QFwP8/pQv++ps
-         dnnmvQe5RaMt6KG5R/1xr9dL6eVYLPfF+AmJ5HFy1cNNgVhJzpyqgqh0R9628Drr3l
-         WFLBxTW6c98DubTmC6IM48BeGIUKGeFCptzn91NRCFKBtfBRayNIptZLaxWvPB9MWz
-         wd2wOguU0yWdehn11yMvV8DEwejwR9UJ8CL7wliaXZuSS41UHWdSkMQJWQYgnHPo15
-         b5Pviz9QJMs4f7/iRvQt8say+hjxPLXSdYkEpn/AsxemQj3KwpsBTTfuS70UoMeY8M
-         /ddyQi/iwGP1g==
-Received: from odin.codewreck.org (localhost [127.0.0.1])
-        by nautica.notk.org (Postfix) with ESMTPS id D4A61C009;
-        Mon, 11 Jul 2022 03:28:34 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1657502915; bh=HP7nKKlqoiBKXuPznu2Y5Fb39qptoLhakG6ggdpKWgg=;
-        h=Date:From:To:Subject:References:In-Reply-To:From;
-        b=Ljlh+ozv1AvL+6REXEBN+rKpZ8ZjQ/DOmGcafE6AoqVnVsTmXj+e9EgCenMScjJZ8
-         1XrrcJVBVgcw3iLsZrsjKlNv78Eg9il++FC57HcPHSqI6N8/pUEfqRdvBSwEIOQbD6
-         gqPXqvlsoKnlwhJ7mTrHmNwPuf664uAGubGqwPaaftCDTNHdmIQlfPlvPORJaa3vqH
-         0vvYCbpMWwK8eaTDOuX2TiKXZ6Xy5tOIlNne7ZWljAj2IFOMpQwMTKEVR/I8Us/Rq5
-         kXuv6UZGvInc4nNSvsmtZj0h82v5o+DFhC3nNU3ldw4tnH8rICpKbLouhzlUxagbhX
-         jzElW7rwcTD7Q==
-Received: from localhost (odin.codewreck.org [local])
-        by odin.codewreck.org (OpenSMTPD) with ESMTPA id fe896943;
-        Mon, 11 Jul 2022 01:28:31 +0000 (UTC)
-Date:   Mon, 11 Jul 2022 10:28:16 +0900
-From:   Dominique Martinet <asmadeus@codewreck.org>
-To:     dwarves@vger.kernel.org, Arnaldo Carvalho de Melo <acme@kernel.org>
-Subject: Re: pahole split BTF support broken on 32bit builds?
-Message-ID: <Yst8sOnzw+YZRRkE@codewreck.org>
-References: <YsrXjggSxfe2U7Oz@codewreck.org>
+        with ESMTP id S232614AbiGKJ3U (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Mon, 11 Jul 2022 05:29:20 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16EE26B275;
+        Mon, 11 Jul 2022 02:16:22 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id ss3so1730936ejc.11;
+        Mon, 11 Jul 2022 02:16:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:date:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=eTTFKgH7hQtkU//+CmCIZWi4/NIjeedPCrqlPOr90W0=;
+        b=XsHyUDFbnP3JUpUBo6IGZB42A+qynNMNTRaQ/PqHgOsAVE9ICzuqSQ+dPcRn5soSrT
+         GXwyfgmLLC15MccjDYbPhtf5U+H9GbpDgvv1qWaUhzyFwnwELCHl0hdWMRMZ3GR1Sv7/
+         6Wnj5yPHTbxVzcIL6X5UHdgO/D1cKuMFwt2WlvXBIwLP0QB0ZGBKhya/QmWSpRIZhTp6
+         Zdvbb6q/DRMJZhA7dNdied/FH1tKWPfStMeqlFBS3OsqQzvkFiFoovdMe3eHvRsUrtKA
+         4YtDuAANgveMffp6+gwprp/wiF5aondeK4RuIgheN45AQ5wE/8/oziGoOpy4kF/15EaC
+         NZRQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=eTTFKgH7hQtkU//+CmCIZWi4/NIjeedPCrqlPOr90W0=;
+        b=XxkfvavMfkThwiPe8hwBZkC13rFsbA5DdmoJPCztCIvy+OQDL6PKwHrXZisUg1Xwl8
+         g5ulc8oZFC1bDnxmXh0efTQyMKRFY7Mod6L8vjkHdIzmyy9JPv10rzAJG88Qy351K2o0
+         kcXkVx/3M3A7wvaRjWyPU528BN77QbhAEOok6LdYiEpzRHfzRecd3DVf+FAGNKbKmSpe
+         JrmrYr8e4TLqYPB3oZVMnuYFf4laNymYMHU69t53HpX64NQakNEpuc0ACJha3gtp6xJy
+         sQbat/SrOCpwhGWJ2MfM8IooeQgptQr+L4jDLsS7xua+KlwXkQLQlE707KdTaAIw2WBB
+         rIHQ==
+X-Gm-Message-State: AJIora+OmEeLZxpo22r57HNXsTLhxPUIGVqVLgRKk299/Pl2XT+xLy+u
+        QakVBOo6KQu3cDdeAMjEqlY=
+X-Google-Smtp-Source: AGRyM1vyTdIavT8V7fN4xYPLAmk+pYeFH25gLXVUvcFm5e5YYgzRTa32QNKf7AhSCgFocjJwX5XFgw==
+X-Received: by 2002:a17:907:6818:b0:72b:5bac:c3a3 with SMTP id qz24-20020a170907681800b0072b5bacc3a3mr2444303ejc.139.1657530980872;
+        Mon, 11 Jul 2022 02:16:20 -0700 (PDT)
+Received: from krava ([151.14.22.253])
+        by smtp.gmail.com with ESMTPSA id 17-20020a170906211100b006fefd1d5c2bsm2495099ejt.148.2022.07.11.02.16.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Jul 2022 02:16:20 -0700 (PDT)
+From:   Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date:   Mon, 11 Jul 2022 11:16:18 +0200
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     Yonghong Song <yhs@fb.com>,
+        Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
+        dwarves@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
+        Daniel Borkmann <daniel@iogearbox.net>, kernel-team@fb.com
+Subject: Re: [PATCH dwarves v3 0/2] btf: support BTF_KIND_ENUM64
+Message-ID: <YsvqYhbee6WpBckl@krava>
+References: <20220629071213.3178592-1-yhs@fb.com>
+ <YrzH1ABPYmKSEogS@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YsrXjggSxfe2U7Oz@codewreck.org>
+In-Reply-To: <YrzH1ABPYmKSEogS@kernel.org>
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-Dominique Martinet wrote on Sun, Jul 10, 2022 at 10:43:42PM +0900:
-> I could reproduce by just building any kernel with ARCH=i386 and using a
-> 32bit pahole
+On Wed, Jun 29, 2022 at 06:44:52PM -0300, Arnaldo Carvalho de Melo wrote:
+> Em Wed, Jun 29, 2022 at 12:12:13AM -0700, Yonghong Song escreveu:
+> > Add support for enum64. For 64-bit enumerator value,
+> > previously, the value is truncated into 32bit, e.g.,
+> > for the following enum in linux uapi bpf.h,
+> >   enum {
+> >         BPF_F_INDEX_MASK                = 0xffffffffULL,
+> >         BPF_F_CURRENT_CPU               = BPF_F_INDEX_MASK,
+> >   /* BPF_FUNC_perf_event_output for sk_buff input context. */
+> >         BPF_F_CTXLEN_MASK               = (0xfffffULL << 32),
+> >   };    
 > 
-> $ LD_LIBRARY_PATH=/tmp/pahole/build /tmp/pahole/build/pahole -J --btf_base vmlinux arch/x86/crypto/aesni-intel.ko
-> Failed to parse base BTF 'vmlinux': -22
+> Applied, added the entry for skip generating enums to the man page,
+> added support to the pahole BTF loader, used the new pahole to build
+> bpf-next/master, all seems ok, pushing to next on git.kernel.org so that
+> the libbpf github CI can give it a go.
 > 
-> $  file /tmp/pahole/build/pahole 
-> /tmp/pahole/build/pahole: ELF 32-bit LSB executable, Intel 80386, version 1 (SYSV), dynamically linked, interpreter /nix/store/pp1yzf2flqnjm02jnjcgxhx015bhmi9j-glibc-2.34-210/lib/ld-linux.so.2, for GNU/Linux 2.6.32, with debug_info, not stripped
+> To build with torvalds/master one has to add --skip_encoding_btf_enum64,
+> I think, haven't tested with it, without it isn't working, libbpf
+> complains at that btfids tool.
+> 
+> Please check/test what is in there now:
+> 
+>   git://git.kernel.org/pub/scm/devel/pahole/pahole.git next
+>   https://git.kernel.org/pub/scm/devel/pahole/pahole.git/log/?h=next
+> 
+> Unless someone screams I plan pushing out a new release, update fedora
+> packages, etc early next week its overdue by now.
 
-Some more infos: this actually just got fixed by mistake when I changed
-libbpf build to use elfutils instead of the old libelf
+I used this new pahole in kernel build and it looks ok,
+but I'm getting following warning:
 
-That was a side-product of the 0.8.0 upgrade which took a bit of time to
-get merged, as that wouldn't build anymore with old libelf (can't
-remember what, something missing)...
+  BTFIDS  vmlinux
+WARN: resolve_btfids: unresolved symbol mptcp_sock
 
-So, well, I guess it's probably not worth looking too far as that's
-unlikely to be a problem again, and I'm not sure if libelf is still
-maintained.
+might be specific to my .config, I'll check and let you know
 
-
-Sorry for the noise.
---
-Dominique
+jirka
