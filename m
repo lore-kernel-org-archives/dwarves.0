@@ -2,108 +2,114 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0DF66C00140
-	for <linux-dwarves@archiver.kernel.org>; Wed, 10 Aug 2022 19:00:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 33AFAC28D13
+	for <linux-dwarves@archiver.kernel.org>; Mon, 22 Aug 2022 23:28:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230006AbiHJTAG (ORCPT
+        id S237790AbiHVX2w (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Wed, 10 Aug 2022 15:00:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60442 "EHLO
+        Mon, 22 Aug 2022 19:28:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbiHJTAF (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Wed, 10 Aug 2022 15:00:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C6598D3DC;
-        Wed, 10 Aug 2022 12:00:05 -0700 (PDT)
+        with ESMTP id S232335AbiHVX2v (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Mon, 22 Aug 2022 19:28:51 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2479C491E1;
+        Mon, 22 Aug 2022 16:28:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CA8F961474;
-        Wed, 10 Aug 2022 19:00:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7F39C433D6;
-        Wed, 10 Aug 2022 19:00:03 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 7D902CE17B5;
+        Mon, 22 Aug 2022 23:28:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6C12C433D6;
+        Mon, 22 Aug 2022 23:28:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660158004;
-        bh=kpkug43r/mu6B8UwPvE9lX1MDYhE5WZMwEJOzV0s2nk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gfIKauT77/6xqs2jULvclokXA9kxZ04Ke6/lkqGqehimp1QROt55oHqnetfyQiC/H
-         DOSlMcBNCkOUcU3Cqq+x0NTmUS0SpLo7rI4FbLRzp4AyNATjd+N2SnZklxMi0dzIiu
-         iWSI4htilaUYj0RZRR8ZzXGm0KAvRPRMXPeFzVRv7ZLi4toE2CMi76s/EKHayWjP3I
-         HuMdadm/ZqIf5vVkAIJGDVTo/X5/1/QzjUolT+/cRhbq3stt+Xg2i8FxbZ0a4TeYJf
-         0tAEWNiSgogaxXFkvASBuem87CjniKgk2Y97aTJOAKJA3k1yj61ixj2Tow7TPpgtec
-         oRjOx0YAovElQ==
+        s=k20201202; t=1661210925;
+        bh=C/y0LdNNtXlAXGOZEQmwPtIqwbi52QXUTWsRN7pX07A=;
+        h=Date:From:To:Cc:Subject:From;
+        b=jICwVmT6DYQqVa5Cj5HHJgCacwtl+0ar9ft25BxUIwCF55sAC35ZbjmfOXs1R99+p
+         RjH5UPUx45+EtsWZeNbw9lMyuFZ8ZqtJx5avzag/Qrdw19ZDQ1RHZEuuyddbxoqhqy
+         Z25ysyItBCCKtEE+KlNb3qwVpscA+9VUSQYI1xtmsGfH3qUv+y+lvnzGUyw4a6O0cc
+         6kMmHONGf+s2CYIt78nZbc0A+U0JyN/WT9Qc7f01G/4+sahwkLuVlRxIUqhzzhkqzR
+         /rJ0UbuYZ1EISXySNv6JJvbXe/3VJTpnq9KADty3JzvUyYFB40lyHRqA+OTVBOZBFk
+         oqp0uN16zHdcw==
 Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 0C0D84035A; Wed, 10 Aug 2022 16:00:00 -0300 (-03)
-Date:   Wed, 10 Aug 2022 15:59:59 -0300
+        id 0AF7B404A1; Mon, 22 Aug 2022 20:28:43 -0300 (-03)
+Date:   Mon, 22 Aug 2022 20:28:42 -0300
 From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Yonghong Song <yhs@fb.com>,
-        Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
-        dwarves@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
-        Daniel Borkmann <daniel@iogearbox.net>, kernel-team@fb.com
-Subject: Re: [PATCH dwarves] dwarf_loader: encode char type as signed
-Message-ID: <YvQAL+8Ah5J0hWAg@kernel.org>
-References: <20220807175309.4186342-1-yhs@fb.com>
- <CAEf4BzZJdqxOS_8VLX73z94GCUBVW4k6hKo3WGHyv4n-jQ-niQ@mail.gmail.com>
- <CAEf4BzYaWboRjHqewen71QZhvQyvtkeE5N43y=NvE+igw4RXYw@mail.gmail.com>
+To:     dwarves@vger.kernel.org
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Alibek Omarov <a1ba.omarov@gmail.com>,
+        Kornilios Kourtis <kornilios@isovalent.com>,
+        Kui-Feng Lee <kuifeng@fb.com>, Yonghong Song <yhs@fb.com>,
+        bpf@vger.kernel.org, Jiri Olsa <jolsa@kernel.org>
+Subject: ANNOUNCE: pahole v1.24 (Faster BTF encoding, 64-bit BTF enum entries)
+Message-ID: <YwQRKkmWqsf/Du6A@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAEf4BzYaWboRjHqewen71QZhvQyvtkeE5N43y=NvE+igw4RXYw@mail.gmail.com>
 X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-Em Mon, Aug 08, 2022 at 03:52:38PM -0700, Andrii Nakryiko escreveu:
-> On Mon, Aug 8, 2022 at 3:52 PM Andrii Nakryiko
-> <andrii.nakryiko@gmail.com> wrote:
-> >
-> > On Sun, Aug 7, 2022 at 10:53 AM Yonghong Song <yhs@fb.com> wrote:
-> > >
-> > > Currently, the pahole treats 'char' or 'signed char' type
-> > > as unsigned in BTF generation. The following is an example,
-> > >   $ cat t.c
-> > >   signed char a;
-> > >   char b;
-> > >   $ clang -O2 -g -c t.c
-> > >   $ pahole -JV t.o
-> > >   ...
-> > >   [1] INT signed char size=1 nr_bits=8 encoding=(none)
-> > >   [2] INT char size=1 nr_bits=8 encoding=(none)
-> > > In the above encoding '(none)' implies unsigned type.
-> > >
-> > > But if the same program is compiled with bpf target,
-> > >   $ clang -target bpf -O2 -g -c t.c
-> > >   $ bpftool btf dump file t.o
-> > >   [1] INT 'signed char' size=1 bits_offset=0 nr_bits=8 encoding=SIGNED
-> > >   [2] VAR 'a' type_id=1, linkage=global
-> > >   [3] INT 'char' size=1 bits_offset=0 nr_bits=8 encoding=SIGNED
-> > >   [4] VAR 'b' type_id=3, linkage=global
-> > >   [5] DATASEC '.bss' size=0 vlen=2
-> > >           type_id=2 offset=0 size=1 (VAR 'a')
-> > >           type_id=4 offset=0 size=1 (VAR 'b')
-> > > the 'char' and 'signed char' are encoded as SIGNED integers.
-> > >
-> > > Encode 'char' and 'signed char' as SIGNED should be a right to
-> > > do and it will be consistent with bpf implementation.
-> > >
-> > > With this patch,
-> > >   $ pahole -JV t.o
-> > >   ...
-> > >   [1] INT signed char size=1 nr_bits=8 encoding=SIGNED
-> > >   [2] INT char size=1 nr_bits=8 encoding=SIGNED
-> > >
-> > > Signed-off-by: Yonghong Song <yhs@fb.com>
-> > > ---
-> >
-> > LGTM.
-> 
-> Acked-by: Andrii Nakryiko <andrii@kernel.org>
+Hi,
+  
+	The v1.24 release of pahole and its friends is out, with faster
+BTF generation by parallelizing the encoding part in addition to the
+previoulsy parallelized DWARF loading, support for 64-bit BTF enumeration
+entries, signed BTF encoding of 'char', exclude/select DWARF loading
+based on the language that generated the objects, etc.
 
-Thanks, tested before/after, applied.
+Main git repo:
 
-Pushing out next for CI testing.
+   git://git.kernel.org/pub/scm/devel/pahole/pahole.git
 
-- Arnaldo
+Mirror git repo:
+
+   https://github.com/acmel/dwarves.git
+
+tarball + gpg signature:
+
+   https://fedorapeople.org/~acme/dwarves/dwarves-1.24.tar.xz
+   https://fedorapeople.org/~acme/dwarves/dwarves-1.24.tar.bz2
+   https://fedorapeople.org/~acme/dwarves/dwarves-1.24.tar.sign
+
+	Thanks a lot to all the contributors and distro packagers, you're on the
+CC list, I appreciate a lot the work you put into these tools,
+
+Best Regards,
+
+BTF encoder:
+
+- Add support to BTF_KIND_ENUM64 to represent enumeration entries with
+  more than 32 bits.
+
+- Support multithreaded encoding, in addition to DWARF multithreaded
+  loading, speeding up the process.
+
+  Selected just like DWARF multithreaded loading, using the 'pahole -j'
+  option.
+
+- Encode 'char' type as signed.
+
+BTF Loader:
+
+- Add support to BTF_KIND_ENUM64.
+
+pahole:
+
+- Introduce --lang and --lang_exclude to specify the language the
+  DWARF compile units were originated from to use or filter.
+
+  Use case is to exclude Rust compile units while aspects of the
+  DWARF generated for it get sorted out in a way that the kernel
+  BPF verifier don't refuse loading the BTF generated from them.
+
+- Introduce --compile to generate compilable code in a similar fashion to:
+
+   bpftool btf dump file vmlinux format c > vmlinux.h
+
+  As with 'bpftool', this will notice type shadowing, i.e. multiple types
+  with the same name and will disambiguate by adding a suffix.
+
+- Don't segfault when processing bogus files.
