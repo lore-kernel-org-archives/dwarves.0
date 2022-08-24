@@ -2,225 +2,246 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0BFBDC00140
-	for <linux-dwarves@archiver.kernel.org>; Wed, 24 Aug 2022 18:00:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C1C08C3F6B0
+	for <linux-dwarves@archiver.kernel.org>; Wed, 24 Aug 2022 22:50:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240558AbiHXSAD (ORCPT
+        id S230422AbiHXWui (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Wed, 24 Aug 2022 14:00:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40976 "EHLO
+        Wed, 24 Aug 2022 18:50:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240500AbiHXR7i (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Wed, 24 Aug 2022 13:59:38 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADAE48277C;
-        Wed, 24 Aug 2022 10:59:08 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id x14-20020a17090a8a8e00b001fb61a71d99so2447112pjn.2;
-        Wed, 24 Aug 2022 10:59:08 -0700 (PDT)
+        with ESMTP id S230410AbiHXWuh (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Wed, 24 Aug 2022 18:50:37 -0400
+Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF087255B2;
+        Wed, 24 Aug 2022 15:50:25 -0700 (PDT)
+Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-11c5ee9bf43so22713658fac.5;
+        Wed, 24 Aug 2022 15:50:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:references:in-reply-to
-         :mime-version:from:to:cc;
-        bh=RZtJ7WFv27iGcxpx2iAvk1B4DM+wxHBEH/r6GSdGfcg=;
-        b=Dbb8/yAXgGCJrsKLzLiips2OEaqFfOFGImmgWB0bSe1srHeYpkPAPQ99rBio9fXvDq
-         EyCbVf3pzxsT6jT5FNMs6cLu4Oqu2CLSCyjzurb+w7eBHELmm7Z96/wzb23jUYy0D418
-         gynhFZwTmew7uY0orm7Mm5mk+4KIXU1L4St35a+cuYzZxRq3pmpoAX9hf4xNfGMP3qbe
-         h2ckez8fyPRt4hIGbmFvYso72lVNP0/mEGSef6OGyTC83JC6sgDNEYJ0ctxmA9iT95MF
-         L9O6vdUoMZxCc337A8y2Hc8QvOeH6zVSjnaQA3JT6P05xl6hZQn4qT0LpqIoG3wdvxYL
-         dp2g==
+        h=content-transfer-encoding:in-reply-to:from:cc:to:references
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=cVr7EjOeuA4Iq3LSWg/NF5BMsUxiamTOQ8MK4OLgi5A=;
+        b=nNyX2ow2/eL3/m+b7YveC0PUvcu85t8FAYoQJeyo4pjFYC3BgnBhVcgha0RiomkhL4
+         cJRyVAIJjicbo5rq5Cb8BNyLEB1x2QYc1d0HK53hgnlfylXv6nxtkoI9PBl/iFnH4fkp
+         r41NDgYtm3H03TKqRNafdKJFEP8Fd6BdbHdcZ4mVfANk3ZdAJNnTh3uV4gFQnDWNEu9t
+         32txW8NLHmKSBWBdCTaNHA60csUGyrmnxRwl8svG2qEcDMj4PC5vl2eIKl/u3ddAJbWW
+         D6IQuxLUvB4VbbP611dSbKyDnYpgY/jiHnDDy9hy7yM8GXHJ+28/mFjjKzYUoeG9nfS1
+         U/xA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:references:in-reply-to
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=RZtJ7WFv27iGcxpx2iAvk1B4DM+wxHBEH/r6GSdGfcg=;
-        b=LHeXZlD7QG4HeyLM2CcHrZMuA675akIH2nnJ4WXXu5YpSiWbc+O21WceMkF96f4EaX
-         ehq8Hw1tByXgv/D+k+ZEpDotEs0Fm7Lw73zjiZbtQQuHdFHbUqx7c8+Mn4DJxvwH86fT
-         LzbJLJTSLtnUXuSdGposc0Mg00gN7TU//ryc1yXHJJuh4Uf1VF0uvHqv3xLi1kic9oF1
-         TI5hbrBH58oEn+XVIcCCohWOPblwKcEbAYa6JZGcIi/4qK5LVggLhXNTM396uQXOm3xH
-         kPEvsnYzHWcwWABKlN0uYGzbqpC+8NfuD0dKLsc02ZDxFKWXm/eQmKjsqHPahlcP8vjs
-         4GeA==
-X-Gm-Message-State: ACgBeo0bXdeS0+2399tezSV3AS06Yv2lhke20SzAEmXHejSpVx7HO49J
-        gl4G0g+xMVM7VfRe4qfRNI3CeuhD5Ln6W146+K4=
-X-Google-Smtp-Source: AA6agR4qaETV2m0oQP5t4+1BAaQRYaYBghErY31KDOWChcOlRELmJZkRoAmfNfBeKaqkd+3n+P2L7HTT+qXx/SwyB1Q=
-X-Received: by 2002:a17:90b:1b0a:b0:1fb:8027:ead with SMTP id
- nu10-20020a17090b1b0a00b001fb80270eadmr291143pjb.185.1661363947908; Wed, 24
- Aug 2022 10:59:07 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:from:cc:to:references
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=cVr7EjOeuA4Iq3LSWg/NF5BMsUxiamTOQ8MK4OLgi5A=;
+        b=L2e6HVGwSmQpDVK8VtoA31xJtqLPD6zf2/C0yPD4Pb3RQktDg1BpdZ6FTo7NOQZO1u
+         lhNyEP37p7AB6zBfae9N5iQoxvmNrChYHKq0bkoTvQxpNfDHz1uj9riQ6enaQqXViEBw
+         UiTGOAlEXJU9mazx2YRH1bw5y/NzPa6lRIb52Grd2VYp0PW7jwGVVjm4uSZpRCLqLfGU
+         ouGn7MeiNUGh0VarDm8uutb0AK/m0Y8IHOlOQ3DlVp2V5OnxX7XHK7c8XC0m/f/AG2oS
+         l2/65+1FkG32cGOWQCikOh9GgEWrIge692CN3PpgNdEPQTFG+vfUNhB4fiE3femlmHrx
+         c6Vw==
+X-Gm-Message-State: ACgBeo2JY+N2hmP4a1pqO3eLGLwbmo0R+eGEb2K5x4kExFxY+zuurk2E
+        auFgRP4Z6a21DAGmPrbiAEI=
+X-Google-Smtp-Source: AA6agR4iB0qmWLoxnq0qCvKQTADtks334bZv3oLhLSmgujmQ+lM4RVGM1qXSyQY3ytjuSDPFVxFYGQ==
+X-Received: by 2002:a05:6870:1601:b0:108:2d92:5494 with SMTP id b1-20020a056870160100b001082d925494mr4848157oae.109.1661381425274;
+        Wed, 24 Aug 2022 15:50:25 -0700 (PDT)
+Received: from [192.168.54.90] (static.220.238.itcsa.net. [190.15.220.238])
+        by smtp.gmail.com with ESMTPSA id ay19-20020a056808301300b00342e8bd2299sm4298699oib.6.2022.08.24.15.50.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 24 Aug 2022 15:50:24 -0700 (PDT)
+Message-ID: <538ebda0-0f8a-ebae-f02f-c8f8736ca12b@gmail.com>
+Date:   Wed, 24 Aug 2022 19:50:39 -0300
 MIME-Version: 1.0
-Received: by 2002:a05:7022:612:b0:43:c853:4cf0 with HTTP; Wed, 24 Aug 2022
- 10:59:06 -0700 (PDT)
-In-Reply-To: <YwZcuCj49wMkr18W@kernel.org>
-References: <YwQRKkmWqsf/Du6A@kernel.org> <YwZQ0UkLsoa+6VyY@dev-arch.thelio-3990X>
- <YwZcuCj49wMkr18W@kernel.org>
-From:   Luna Jernberg <droidbittin@gmail.com>
-Date:   Wed, 24 Aug 2022 19:59:06 +0200
-Message-ID: <CADo9pHi+120JrR2y0Zg5z=iaZsytDR3++P2YcuL9NmfLs1ydKw@mail.gmail.com>
-Subject: Re: ANNOUNCE: pahole v1.24 (Faster BTF encoding, 64-bit BTF enum entries)
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>, droidbittin@gmail.com
-Cc:     Nathan Chancellor <nathan@kernel.org>, dwarves@vger.kernel.org,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: ANNOUNCE: pahole v1.24 (Faster BTF encoding, 64-bit BTF enum
+ entries)
+Content-Language: en-US
+References: <YwQRKkmWqsf/Du6A@kernel.org>
+ <CADo9pHhW9w+ciNbQr+7u4mezuQ1USyh0k2Wshy=wkdEcxRiDLA@mail.gmail.com>
+ <YwY2mFuJP10dehRx@kernel.org>
+ <CADo9pHheRprMRAZkcxcALRv7gi8r+_CpNBP+LB4rt0n-_ZMQ4Q@mail.gmail.com>
+ <YwY3qEa2gFsPg2jz@kernel.org>
+ <CADo9pHhcw2+WEYfD=hJ-o67fw9Uf+ERS8xo2SHApNQgPwGCmBA@mail.gmail.com>
+To:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
+        Luna Jernberg <droidbittin@gmail.com>
+Cc:     dwarves@vger.kernel.org,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Alibek Omarov <a1ba.omarov@gmail.com>,
         Kornilios Kourtis <kornilios@isovalent.com>,
         Kui-Feng Lee <kuifeng@fb.com>, Yonghong Song <yhs@fb.com>,
         bpf@vger.kernel.org, Jiri Olsa <jolsa@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+From:   Martin Reboredo <yakoyoku@gmail.com>
+In-Reply-To: <CADo9pHhcw2+WEYfD=hJ-o67fw9Uf+ERS8xo2SHApNQgPwGCmBA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-Great :)
+On 8/24/22 11:38, Luna Jernberg wrote:
+> https://forum.endeavouros.com/t/failed-to-start-load-kernel-modules-on-boot-after-system-update-nvidia/30584/17?u=sradjoker
+> 
+> On 8/24/22, Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com> wrote:
+>> Em Wed, Aug 24, 2022 at 04:36:18PM +0200, Luna Jernberg escreveu:
+>>> The Nvidia driver breaks
+>>
+>> How? What are the messages?
+>>
+>> Here is a test on an Archlinux container:
+>>
+>> [perfbuilder@758097c04011 dwarves-1.24]$ pahole --version
+>> v1.24
+>> [perfbuilder@758097c04011 dwarves-1.24]$ cat /etc/os-release
+>> NAME="Arch Linux"
+>> PRETTY_NAME="Arch Linux"
+>> ID=arch
+>> BUILD_ID=rolling
+>> VERSION_ID=TEMPLATE_VERSION_ID
+>> ANSI_COLOR="38;2;23;147;209"
+>> HOME_URL="https://archlinux.org/"
+>> DOCUMENTATION_URL="https://wiki.archlinux.org/"
+>> SUPPORT_URL="https://bbs.archlinux.org/"
+>> BUG_REPORT_URL="https://bugs.archlinux.org/"
+>> LOGO=archlinux-logo
+>> [perfbuilder@758097c04011 dwarves-1.24]$ pahole list_head
+>> struct list_head {
+>> 	struct list_head *         next;                 /*     0     8 */
+>> 	struct list_head *         prev;                 /*     8     8 */
+>>
+>> 	/* size: 16, cachelines: 1, members: 2 */
+>> 	/* last cacheline: 16 bytes */
+>> };
+>> [perfbuilder@758097c04011 dwarves-1.24]$ pahole --sizes | sort -k2 -nr |
+>> head
+>> rcu_state	300608	7
+>> cmp_data	290904	1
+>> dec_data	274520	1
+>> cpu_entry_area	241664	0
+>> kvm	190016	6
+>> pglist_data	173440	6
+>> ZSTD_DCtx_s	161480	6
+>> saved_cmdlines_buffer	131104	1
+>> debug_store_buffers	131072	0
+>> hid_parser	110848	1
+>> [perfbuilder@758097c04011 dwarves-1.24]$
+>>
+>>> On 8/24/22, Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com> wrote:
+>>>> Em Wed, Aug 24, 2022 at 03:23:29PM +0200, Luna Jernberg escreveu:
+>>>>> This package breaks on Arch Linux at the moment and if you are using
+>>>>> Arch
+>>>>> its recommended that you downgrade to 1.23
+>>>>
+>>>> Breaks in what sense? Can you please provide details?
+>>>>
+>>>> - Arnaldo
+>>>>
+>>>>> On Tue, Aug 23, 2022 at 1:59 AM Arnaldo Carvalho de Melo
+>>>>> <acme@kernel.org>
+>>>>> wrote:
+>>>>>
+>>>>>> Hi,
+>>>>>>
+>>>>>>         The v1.24 release of pahole and its friends is out, with
+>>>>>> faster
+>>>>>> BTF generation by parallelizing the encoding part in addition to the
+>>>>>> previoulsy parallelized DWARF loading, support for 64-bit BTF
+>>>>>> enumeration
+>>>>>> entries, signed BTF encoding of 'char', exclude/select DWARF loading
+>>>>>> based on the language that generated the objects, etc.
+>>>>>>
+>>>>>> Main git repo:
+>>>>>>
+>>>>>>    git://git.kernel.org/pub/scm/devel/pahole/pahole.git
+>>>>>>
+>>>>>> Mirror git repo:
+>>>>>>
+>>>>>>    https://github.com/acmel/dwarves.git
+>>>>>>
+>>>>>> tarball + gpg signature:
+>>>>>>
+>>>>>>    https://fedorapeople.org/~acme/dwarves/dwarves-1.24.tar.xz
+>>>>>>    https://fedorapeople.org/~acme/dwarves/dwarves-1.24.tar.bz2
+>>>>>>    https://fedorapeople.org/~acme/dwarves/dwarves-1.24.tar.sign
+>>>>>>
+>>>>>>         Thanks a lot to all the contributors and distro packagers,
+>>>>>> you're
+>>>>>> on the
+>>>>>> CC list, I appreciate a lot the work you put into these tools,
+>>>>>>
+>>>>>> Best Regards,
+>>>>>>
+>>>>>> BTF encoder:
+>>>>>>
+>>>>>> - Add support to BTF_KIND_ENUM64 to represent enumeration entries
+>>>>>> with
+>>>>>>   more than 32 bits.
+>>>>>>
+>>>>>> - Support multithreaded encoding, in addition to DWARF multithreaded
+>>>>>>   loading, speeding up the process.
+>>>>>>
+>>>>>>   Selected just like DWARF multithreaded loading, using the 'pahole
+>>>>>> -j'
+>>>>>>   option.
+>>>>>>
+>>>>>> - Encode 'char' type as signed.
+>>>>>>
+>>>>>> BTF Loader:
+>>>>>>
+>>>>>> - Add support to BTF_KIND_ENUM64.
+>>>>>>
+>>>>>> pahole:
+>>>>>>
+>>>>>> - Introduce --lang and --lang_exclude to specify the language the
+>>>>>>   DWARF compile units were originated from to use or filter.
+>>>>>>
+>>>>>>   Use case is to exclude Rust compile units while aspects of the
+>>>>>>   DWARF generated for it get sorted out in a way that the kernel
+>>>>>>   BPF verifier don't refuse loading the BTF generated from them.
+>>>>>>
+>>>>>> - Introduce --compile to generate compilable code in a similar
+>>>>>> fashion
+>>>>>> to:
+>>>>>>
+>>>>>>    bpftool btf dump file vmlinux format c > vmlinux.h
+>>>>>>
+>>>>>>   As with 'bpftool', this will notice type shadowing, i.e. multiple
+>>>>>> types
+>>>>>>   with the same name and will disambiguate by adding a suffix.
+>>>>>>
+>>>>>> - Don't segfault when processing bogus files.
+>>>>>>
+>>>>
+>>>> --
+>>>>
+>>>> - Arnaldo
+>>>>
+>>
+>> --
+>>
+>> - Arnaldo
+>>
 
-On 8/24/22, Arnaldo Carvalho de Melo <acme@kernel.org> wrote:
-> Em Wed, Aug 24, 2022 at 09:24:49AM -0700, Nathan Chancellor escreveu:
->> Hi Arnaldo,
->>
->> On Mon, Aug 22, 2022 at 08:28:42PM -0300, Arnaldo Carvalho de Melo wrote:
->> > Hi,
->> >
->> > 	The v1.24 release of pahole and its friends is out, with faster
->> > BTF generation by parallelizing the encoding part in addition to the
->> > previoulsy parallelized DWARF loading, support for 64-bit BTF
->> > enumeration
->> > entries, signed BTF encoding of 'char', exclude/select DWARF loading
->> > based on the language that generated the objects, etc.
->>
->> <snip>
->>
->> > - Introduce --lang and --lang_exclude to specify the language the
->> >   DWARF compile units were originated from to use or filter.
->>
->> This appears to break building pahole with older versions of libdw (?).
->> I build container images with older versions of compilers for easy
->> matrix testing and my gcc-5 and gcc-6 images (based off Ubuntu Xenial
->> and Debian Stretch respectively) fail to build.
->
-> I do it for perf, should have done it for pahole :-\
->
-> So I'll have to come up with a patch that checks if those are defined
-> and if not, define it :-\ Ooops, its an enumeration :-\ I'll have to
-> check how to fix this, thanks for the report!
->
-> Will rebuild it with the containers I have to see if there are other
-> cases.
->
-> - Arnaldo
->
->>     $ podman run --rm -ti -v
->> $TMP_FOLDER/dwarves-1.24.tar.xz:/tmp/dwarves-1.24.tar.xz:ro
->> docker.io/ubuntu:xenial
->>     # apt update
->>     # apt install build-essential cmake libdw-dev libelf-dev xz-utils
->> zlib1g-dev
->>     # cd $(mktemp -d)
->>     # tar -xJf /tmp/dwarves-1.24.tar.xz
->>     # mkdir build
->>     # cd build
->>     # cmake -DBUILD_SHARED_LIBS=OFF -D__LIB=lib ../dwarves-1.24
->>     # make -j$(nproc)
->>     ...
->>     /tmp/tmp.pQ2GsHbGAx/dwarves-1.24/dwarves.c: In function
->> 'lang__str2int':
->>     /tmp/tmp.pQ2GsHbGAx/dwarves-1.24/dwarves.c:2093:3: error:
->> 'DW_LANG_BLISS' undeclared (first use in this function)
->>       [DW_LANG_BLISS]   = "bliss",
->>        ^
->>     /tmp/tmp.pQ2GsHbGAx/dwarves-1.24/dwarves.c:2093:3: note: each
->> undeclared identifier is reported only once for each function it appears
->> in
->>     /tmp/tmp.pQ2GsHbGAx/dwarves-1.24/dwarves.c:2093:3: error: array index
->> in initializer not of integer type
->>     /tmp/tmp.pQ2GsHbGAx/dwarves-1.24/dwarves.c:2093:3: note: (near
->> initialization for 'languages')
->>     /tmp/tmp.pQ2GsHbGAx/dwarves-1.24/dwarves.c:2100:3: error:
->> 'DW_LANG_C_plus_plus_03' undeclared (first use in this function)
->>       [DW_LANG_C_plus_plus_03] = "c++03",
->>        ^
->>     /tmp/tmp.pQ2GsHbGAx/dwarves-1.24/dwarves.c:2100:3: error: array index
->> in initializer not of integer type
->>     /tmp/tmp.pQ2GsHbGAx/dwarves-1.24/dwarves.c:2100:3: note: (near
->> initialization for 'languages')
->>     /tmp/tmp.pQ2GsHbGAx/dwarves-1.24/dwarves.c:2105:3: error:
->> 'DW_LANG_Dylan' undeclared (first use in this function)
->>       [DW_LANG_Dylan]   = "dylan",
->>        ^
->>     /tmp/tmp.pQ2GsHbGAx/dwarves-1.24/dwarves.c:2105:3: error: array index
->> in initializer not of integer type
->>     /tmp/tmp.pQ2GsHbGAx/dwarves-1.24/dwarves.c:2105:3: note: (near
->> initialization for 'languages')
->>     /tmp/tmp.pQ2GsHbGAx/dwarves-1.24/dwarves.c:2114:3: error:
->> 'DW_LANG_Julia' undeclared (first use in this function)
->>       [DW_LANG_Julia]   = "julia",
->>        ^
->>     /tmp/tmp.pQ2GsHbGAx/dwarves-1.24/dwarves.c:2114:3: error: array index
->> in initializer not of integer type
->>     /tmp/tmp.pQ2GsHbGAx/dwarves-1.24/dwarves.c:2114:3: note: (near
->> initialization for 'languages')
->>     /tmp/tmp.pQ2GsHbGAx/dwarves-1.24/dwarves.c:2116:3: error:
->> 'DW_LANG_Modula3' undeclared (first use in this function)
->>       [DW_LANG_Modula3]  = "modula3",
->>        ^
->>     /tmp/tmp.pQ2GsHbGAx/dwarves-1.24/dwarves.c:2116:3: error: array index
->> in initializer not of integer type
->>     /tmp/tmp.pQ2GsHbGAx/dwarves-1.24/dwarves.c:2116:3: note: (near
->> initialization for 'languages')
->>     /tmp/tmp.pQ2GsHbGAx/dwarves-1.24/dwarves.c:2119:3: error:
->> 'DW_LANG_OCaml' undeclared (first use in this function)
->>       [DW_LANG_OCaml]   = "ocaml",
->>        ^
->>     /tmp/tmp.pQ2GsHbGAx/dwarves-1.24/dwarves.c:2119:3: error: array index
->> in initializer not of integer type
->>     /tmp/tmp.pQ2GsHbGAx/dwarves-1.24/dwarves.c:2119:3: note: (near
->> initialization for 'languages')
->>     /tmp/tmp.pQ2GsHbGAx/dwarves-1.24/dwarves.c:2120:3: error:
->> 'DW_LANG_OpenCL' undeclared (first use in this function)
->>       [DW_LANG_OpenCL]  = "opencl",
->>        ^
->>     /tmp/tmp.pQ2GsHbGAx/dwarves-1.24/dwarves.c:2120:3: error: array index
->> in initializer not of integer type
->>     /tmp/tmp.pQ2GsHbGAx/dwarves-1.24/dwarves.c:2120:3: note: (near
->> initialization for 'languages')
->>     /tmp/tmp.pQ2GsHbGAx/dwarves-1.24/dwarves.c:2122:3: error:
->> 'DW_LANG_PLI' undeclared (first use in this function)
->>       [DW_LANG_PLI]   = "pli",
->>        ^
->>     /tmp/tmp.pQ2GsHbGAx/dwarves-1.24/dwarves.c:2122:3: error: array index
->> in initializer not of integer type
->>     /tmp/tmp.pQ2GsHbGAx/dwarves-1.24/dwarves.c:2122:3: note: (near
->> initialization for 'languages')
->>     /tmp/tmp.pQ2GsHbGAx/dwarves-1.24/dwarves.c:2124:3: error:
->> 'DW_LANG_RenderScript' undeclared (first use in this function)
->>       [DW_LANG_RenderScript]  = "renderscript",
->>        ^
->>     /tmp/tmp.pQ2GsHbGAx/dwarves-1.24/dwarves.c:2124:3: error: array index
->> in initializer not of integer type
->>     /tmp/tmp.pQ2GsHbGAx/dwarves-1.24/dwarves.c:2124:3: note: (near
->> initialization for 'languages')
->>     /tmp/tmp.pQ2GsHbGAx/dwarves-1.24/dwarves.c:2125:3: error:
->> 'DW_LANG_Rust' undeclared (first use in this function)
->>       [DW_LANG_Rust]   = "rust",
->>        ^
->>     /tmp/tmp.pQ2GsHbGAx/dwarves-1.24/dwarves.c:2125:3: error: array index
->> in initializer not of integer type
->>     /tmp/tmp.pQ2GsHbGAx/dwarves-1.24/dwarves.c:2125:3: note: (near
->> initialization for 'languages')
->>     /tmp/tmp.pQ2GsHbGAx/dwarves-1.24/dwarves.c:2126:3: error:
->> 'DW_LANG_Swift' undeclared (first use in this function)
->>       [DW_LANG_Swift]   = "swift",
->>        ^
->>     /tmp/tmp.pQ2GsHbGAx/dwarves-1.24/dwarves.c:2126:3: error: array index
->> in initializer not of integer type
->>     /tmp/tmp.pQ2GsHbGAx/dwarves-1.24/dwarves.c:2126:3: note: (near
->> initialization for 'languages')
->>     CMakeFiles/dwarves.dir/build.make:62: recipe for target
->> 'CMakeFiles/dwarves.dir/dwarves.c.o' failed
->>     ...
->>
->> If there is any additional information I can provide or patches I can
->> test, please let me know!
->>
->> Cheers,
->> Nathan
->
-> --
->
-> - Arnaldo
->
+Can you try a build of the kernel or the by passing the
+--skip_encoding_btf_enum64 to scripts/pahole-flags.sh?
+
+Here's a patch for either in tree scripts/pahole-flags.sh or
+/usr/lib/modules/5.19.3-arch1-1/build/scripts/pahole-flags.sh
+
+diff --git a/scripts/pahole-flags.sh b/scripts/pahole-flags.sh
+index 0d99ef17e4a528..1f1f1d397c399a 100755
+--- a/scripts/pahole-flags.sh
++++ b/scripts/pahole-flags.sh
+@@ -19,5 +19,9 @@ fi
+ if [ "${pahole_ver}" -ge "122" ]; then
+ 	extra_paholeopt="${extra_paholeopt} -j"
+ fi
++if [ "${pahole_ver}" -ge "124" ]; then
++	# see PAHOLE_HAS_LANG_EXCLUDE
++	extra_paholeopt="${extra_paholeopt} --skip_encoding_btf_enum64"
++fi
+
+ echo ${extra_paholeopt}
+
+- Martin Rodriguez Reboredo
