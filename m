@@ -2,246 +2,272 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C1C08C3F6B0
-	for <linux-dwarves@archiver.kernel.org>; Wed, 24 Aug 2022 22:50:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EDCAEC04AA5
+	for <linux-dwarves@archiver.kernel.org>; Thu, 25 Aug 2022 13:19:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230422AbiHXWui (ORCPT
+        id S232805AbiHYNTQ (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Wed, 24 Aug 2022 18:50:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53168 "EHLO
+        Thu, 25 Aug 2022 09:19:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230410AbiHXWuh (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Wed, 24 Aug 2022 18:50:37 -0400
-Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF087255B2;
-        Wed, 24 Aug 2022 15:50:25 -0700 (PDT)
-Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-11c5ee9bf43so22713658fac.5;
-        Wed, 24 Aug 2022 15:50:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:cc:to:references
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=cVr7EjOeuA4Iq3LSWg/NF5BMsUxiamTOQ8MK4OLgi5A=;
-        b=nNyX2ow2/eL3/m+b7YveC0PUvcu85t8FAYoQJeyo4pjFYC3BgnBhVcgha0RiomkhL4
-         cJRyVAIJjicbo5rq5Cb8BNyLEB1x2QYc1d0HK53hgnlfylXv6nxtkoI9PBl/iFnH4fkp
-         r41NDgYtm3H03TKqRNafdKJFEP8Fd6BdbHdcZ4mVfANk3ZdAJNnTh3uV4gFQnDWNEu9t
-         32txW8NLHmKSBWBdCTaNHA60csUGyrmnxRwl8svG2qEcDMj4PC5vl2eIKl/u3ddAJbWW
-         D6IQuxLUvB4VbbP611dSbKyDnYpgY/jiHnDDy9hy7yM8GXHJ+28/mFjjKzYUoeG9nfS1
-         U/xA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:cc:to:references
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=cVr7EjOeuA4Iq3LSWg/NF5BMsUxiamTOQ8MK4OLgi5A=;
-        b=L2e6HVGwSmQpDVK8VtoA31xJtqLPD6zf2/C0yPD4Pb3RQktDg1BpdZ6FTo7NOQZO1u
-         lhNyEP37p7AB6zBfae9N5iQoxvmNrChYHKq0bkoTvQxpNfDHz1uj9riQ6enaQqXViEBw
-         UiTGOAlEXJU9mazx2YRH1bw5y/NzPa6lRIb52Grd2VYp0PW7jwGVVjm4uSZpRCLqLfGU
-         ouGn7MeiNUGh0VarDm8uutb0AK/m0Y8IHOlOQ3DlVp2V5OnxX7XHK7c8XC0m/f/AG2oS
-         l2/65+1FkG32cGOWQCikOh9GgEWrIge692CN3PpgNdEPQTFG+vfUNhB4fiE3femlmHrx
-         c6Vw==
-X-Gm-Message-State: ACgBeo2JY+N2hmP4a1pqO3eLGLwbmo0R+eGEb2K5x4kExFxY+zuurk2E
-        auFgRP4Z6a21DAGmPrbiAEI=
-X-Google-Smtp-Source: AA6agR4iB0qmWLoxnq0qCvKQTADtks334bZv3oLhLSmgujmQ+lM4RVGM1qXSyQY3ytjuSDPFVxFYGQ==
-X-Received: by 2002:a05:6870:1601:b0:108:2d92:5494 with SMTP id b1-20020a056870160100b001082d925494mr4848157oae.109.1661381425274;
-        Wed, 24 Aug 2022 15:50:25 -0700 (PDT)
-Received: from [192.168.54.90] (static.220.238.itcsa.net. [190.15.220.238])
-        by smtp.gmail.com with ESMTPSA id ay19-20020a056808301300b00342e8bd2299sm4298699oib.6.2022.08.24.15.50.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 24 Aug 2022 15:50:24 -0700 (PDT)
-Message-ID: <538ebda0-0f8a-ebae-f02f-c8f8736ca12b@gmail.com>
-Date:   Wed, 24 Aug 2022 19:50:39 -0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: ANNOUNCE: pahole v1.24 (Faster BTF encoding, 64-bit BTF enum
- entries)
-Content-Language: en-US
-References: <YwQRKkmWqsf/Du6A@kernel.org>
- <CADo9pHhW9w+ciNbQr+7u4mezuQ1USyh0k2Wshy=wkdEcxRiDLA@mail.gmail.com>
- <YwY2mFuJP10dehRx@kernel.org>
- <CADo9pHheRprMRAZkcxcALRv7gi8r+_CpNBP+LB4rt0n-_ZMQ4Q@mail.gmail.com>
- <YwY3qEa2gFsPg2jz@kernel.org>
- <CADo9pHhcw2+WEYfD=hJ-o67fw9Uf+ERS8xo2SHApNQgPwGCmBA@mail.gmail.com>
-To:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
-        Luna Jernberg <droidbittin@gmail.com>
+        with ESMTP id S235527AbiHYNTP (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Thu, 25 Aug 2022 09:19:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 966311F2EC;
+        Thu, 25 Aug 2022 06:19:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 22F6F61C5B;
+        Thu, 25 Aug 2022 13:19:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 351C2C433C1;
+        Thu, 25 Aug 2022 13:19:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661433552;
+        bh=Doz3ezlqfeqxYWxbtclE+8mYKYewVuoDgunLUW/MsQ8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ZUcW+PuhPLvtpjMapLfy+MUsNIuauzt5UXxpJevRdGCcWK0RD+deaulSvhx7cIzbS
+         KnVZTvMhAjRT/qLxWR66iVSvpWfgtpRhsGSdvtpqh17AMxXKxBaF3U2PCdxjZsgdul
+         TGz5DPXGb6r8hltcAxVYfZrX/5d+7CFCu+/QSVEw7Sd9vEYjuAdo+/DTp2PHMfK30p
+         CQjOlLzisyuYbxfsdxGlnNXFmg8rkHgztf4aevqTv3+SYrdiYRa1sUH6p6gyRzCGYF
+         2+mNguW25AoIwKGfp/8ysKEgL1hHKsto+qSVE/x+Bawa+h63trsHBqOk2ev58IaUDK
+         orNTMsqf7K7dA==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 8F12D404A1; Thu, 25 Aug 2022 10:19:08 -0300 (-03)
+Date:   Thu, 25 Aug 2022 10:19:08 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Nathan Chancellor <nathan@kernel.org>
 Cc:     dwarves@vger.kernel.org,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Alibek Omarov <a1ba.omarov@gmail.com>,
         Kornilios Kourtis <kornilios@isovalent.com>,
         Kui-Feng Lee <kuifeng@fb.com>, Yonghong Song <yhs@fb.com>,
-        bpf@vger.kernel.org, Jiri Olsa <jolsa@kernel.org>
-From:   Martin Reboredo <yakoyoku@gmail.com>
-In-Reply-To: <CADo9pHhcw2+WEYfD=hJ-o67fw9Uf+ERS8xo2SHApNQgPwGCmBA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+        Luna Jernberg <droidbittin@gmail.com>, bpf@vger.kernel.org,
+        Jiri Olsa <jolsa@kernel.org>
+Subject: [PATCH] core: Conditionally define language encodings entries)
+Message-ID: <Ywd2zJA63QCkd3RL@kernel.org>
+References: <YwQRKkmWqsf/Du6A@kernel.org>
+ <YwZQ0UkLsoa+6VyY@dev-arch.thelio-3990X>
+ <YwZcuCj49wMkr18W@kernel.org>
+ <YwZl9xaRplsFkWXb@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YwZl9xaRplsFkWXb@kernel.org>
+X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-On 8/24/22 11:38, Luna Jernberg wrote:
-> https://forum.endeavouros.com/t/failed-to-start-load-kernel-modules-on-boot-after-system-update-nvidia/30584/17?u=sradjoker
+Em Wed, Aug 24, 2022 at 02:55:03PM -0300, Arnaldo Carvalho de Melo escreveu:
+> Yeah, recent enough distros are all building ok, I'll try and add some
+> fallback for old distros.
 > 
-> On 8/24/22, Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com> wrote:
->> Em Wed, Aug 24, 2022 at 04:36:18PM +0200, Luna Jernberg escreveu:
->>> The Nvidia driver breaks
->>
->> How? What are the messages?
->>
->> Here is a test on an Archlinux container:
->>
->> [perfbuilder@758097c04011 dwarves-1.24]$ pahole --version
->> v1.24
->> [perfbuilder@758097c04011 dwarves-1.24]$ cat /etc/os-release
->> NAME="Arch Linux"
->> PRETTY_NAME="Arch Linux"
->> ID=arch
->> BUILD_ID=rolling
->> VERSION_ID=TEMPLATE_VERSION_ID
->> ANSI_COLOR="38;2;23;147;209"
->> HOME_URL="https://archlinux.org/"
->> DOCUMENTATION_URL="https://wiki.archlinux.org/"
->> SUPPORT_URL="https://bbs.archlinux.org/"
->> BUG_REPORT_URL="https://bugs.archlinux.org/"
->> LOGO=archlinux-logo
->> [perfbuilder@758097c04011 dwarves-1.24]$ pahole list_head
->> struct list_head {
->> 	struct list_head *         next;                 /*     0     8 */
->> 	struct list_head *         prev;                 /*     8     8 */
->>
->> 	/* size: 16, cachelines: 1, members: 2 */
->> 	/* last cacheline: 16 bytes */
->> };
->> [perfbuilder@758097c04011 dwarves-1.24]$ pahole --sizes | sort -k2 -nr |
->> head
->> rcu_state	300608	7
->> cmp_data	290904	1
->> dec_data	274520	1
->> cpu_entry_area	241664	0
->> kvm	190016	6
->> pglist_data	173440	6
->> ZSTD_DCtx_s	161480	6
->> saved_cmdlines_buffer	131104	1
->> debug_store_buffers	131072	0
->> hid_parser	110848	1
->> [perfbuilder@758097c04011 dwarves-1.24]$
->>
->>> On 8/24/22, Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com> wrote:
->>>> Em Wed, Aug 24, 2022 at 03:23:29PM +0200, Luna Jernberg escreveu:
->>>>> This package breaks on Arch Linux at the moment and if you are using
->>>>> Arch
->>>>> its recommended that you downgrade to 1.23
->>>>
->>>> Breaks in what sense? Can you please provide details?
->>>>
->>>> - Arnaldo
->>>>
->>>>> On Tue, Aug 23, 2022 at 1:59 AM Arnaldo Carvalho de Melo
->>>>> <acme@kernel.org>
->>>>> wrote:
->>>>>
->>>>>> Hi,
->>>>>>
->>>>>>         The v1.24 release of pahole and its friends is out, with
->>>>>> faster
->>>>>> BTF generation by parallelizing the encoding part in addition to the
->>>>>> previoulsy parallelized DWARF loading, support for 64-bit BTF
->>>>>> enumeration
->>>>>> entries, signed BTF encoding of 'char', exclude/select DWARF loading
->>>>>> based on the language that generated the objects, etc.
->>>>>>
->>>>>> Main git repo:
->>>>>>
->>>>>>    git://git.kernel.org/pub/scm/devel/pahole/pahole.git
->>>>>>
->>>>>> Mirror git repo:
->>>>>>
->>>>>>    https://github.com/acmel/dwarves.git
->>>>>>
->>>>>> tarball + gpg signature:
->>>>>>
->>>>>>    https://fedorapeople.org/~acme/dwarves/dwarves-1.24.tar.xz
->>>>>>    https://fedorapeople.org/~acme/dwarves/dwarves-1.24.tar.bz2
->>>>>>    https://fedorapeople.org/~acme/dwarves/dwarves-1.24.tar.sign
->>>>>>
->>>>>>         Thanks a lot to all the contributors and distro packagers,
->>>>>> you're
->>>>>> on the
->>>>>> CC list, I appreciate a lot the work you put into these tools,
->>>>>>
->>>>>> Best Regards,
->>>>>>
->>>>>> BTF encoder:
->>>>>>
->>>>>> - Add support to BTF_KIND_ENUM64 to represent enumeration entries
->>>>>> with
->>>>>>   more than 32 bits.
->>>>>>
->>>>>> - Support multithreaded encoding, in addition to DWARF multithreaded
->>>>>>   loading, speeding up the process.
->>>>>>
->>>>>>   Selected just like DWARF multithreaded loading, using the 'pahole
->>>>>> -j'
->>>>>>   option.
->>>>>>
->>>>>> - Encode 'char' type as signed.
->>>>>>
->>>>>> BTF Loader:
->>>>>>
->>>>>> - Add support to BTF_KIND_ENUM64.
->>>>>>
->>>>>> pahole:
->>>>>>
->>>>>> - Introduce --lang and --lang_exclude to specify the language the
->>>>>>   DWARF compile units were originated from to use or filter.
->>>>>>
->>>>>>   Use case is to exclude Rust compile units while aspects of the
->>>>>>   DWARF generated for it get sorted out in a way that the kernel
->>>>>>   BPF verifier don't refuse loading the BTF generated from them.
->>>>>>
->>>>>> - Introduce --compile to generate compilable code in a similar
->>>>>> fashion
->>>>>> to:
->>>>>>
->>>>>>    bpftool btf dump file vmlinux format c > vmlinux.h
->>>>>>
->>>>>>   As with 'bpftool', this will notice type shadowing, i.e. multiple
->>>>>> types
->>>>>>   with the same name and will disambiguate by adding a suffix.
->>>>>>
->>>>>> - Don't segfault when processing bogus files.
->>>>>>
->>>>
->>>> --
->>>>
->>>> - Arnaldo
->>>>
->>
->> --
->>
->> - Arnaldo
->>
 
-Can you try a build of the kernel or the by passing the
---skip_encoding_btf_enum64 to scripts/pahole-flags.sh?
+Ok, now it builds everywhere:
 
-Here's a patch for either in tree scripts/pahole-flags.sh or
-/usr/lib/modules/5.19.3-arch1-1/build/scripts/pahole-flags.sh
+[perfbuilder@five ~]$ export BUILD_TARBALL=http://192.168.86.14/pahole/dwarves-1.25.tar.xz
+[perfbuilder@five ~]$ export BUILD_CMD=buildcmd.sh
+[perfbuilder@five ~]$ dm -X
+     1	     4.07 almalinux:8                   : Ok   gcc (GCC) 8.5.0 20210514 (Red Hat 8.5.0-4) , clang version 12.0.1 (Red Hat 12.0.1-4.module_el8.5.0+1025+93159d6c)
+     2	     4.07 almalinux:9                   : Ok   gcc (GCC) 11.2.1 20220127 (Red Hat 11.2.1-9) , clang version 13.0.1 (Red Hat 13.0.1-1.el9)
+     3	     4.87 alpine:3.12                   : Ok   gcc (Alpine 9.3.0) 9.3.0 , Alpine clang version 10.0.0 (https://gitlab.alpinelinux.org/alpine/aports.git 7445adce501f8473efdb93b17b5eaf2f1445ed4c)
+     4	     5.47 alpine:3.13                   : Ok   gcc (Alpine 10.2.1_pre1) 10.2.1 20201203 , Alpine clang version 10.0.1 
+     5	     5.47 alpine:3.14                   : Ok   gcc (Alpine 10.3.1_git20210424) 10.3.1 20210424 , Alpine clang version 11.1.0
+     6	     5.27 alpine:3.15                   : Ok   gcc (Alpine 10.3.1_git20211027) 10.3.1 20211027 , Alpine clang version 12.0.1
+     7	     5.87 alpine:3.16                   : Ok   gcc (Alpine 11.2.1_git20220219) 11.2.1 20220219 , Alpine clang version 13.0.1
+     8	     5.68 alpine:edge                   : Ok   gcc (Alpine 11.2.1_git20220219) 11.2.1 20220219 , Alpine clang version 14.0.6
+     9	     3.27 alt:p8                        : Ok   x86_64-alt-linux-gcc (GCC) 5.3.1 20151207 (ALT p8 5.3.1-alt3.M80P.1) 
+    10	     3.77 alt:p9                        : Ok   x86_64-alt-linux-gcc (GCC) 8.4.1 20200305 (ALT p9 8.4.1-alt0.p9.1) , clang version 10.0.0 
+    11	     4.17 alt:p10                       : Ok   x86_64-alt-linux-gcc (GCC) 10.3.1 20210703 (ALT Sisyphus 10.3.1-alt2) , clang version 11.0.1
+    12	     4.48 alt:sisyphus                  : Ok   x86_64-alt-linux-gcc (GCC) 12.1.1 20220518 (ALT Sisyphus 12.1.1-alt1) , ALT Linux Team clang version 13.0.1
+    13	     3.77 amazonlinux:2                 : Ok   gcc (GCC) 7.3.1 20180712 (Red Hat 7.3.1-15) , clang version 11.1.0 (Amazon Linux 2 11.1.0-1.amzn2.0.2)
+    14	     4.07 amazonlinux:devel             : Ok   gcc (GCC) 11.3.1 20220421 (Red Hat 11.3.1-2) , clang version 12.0.1 (Fedora 12.0.1-1.amzn2022)
+    15	     5.38 archlinux:base                : Ok   gcc (GCC) 12.1.1 20220730 , clang version 14.0.6
+    16	     3.97 centos:8                      : Ok   gcc (GCC) 8.4.1 20200928 (Red Hat 8.4.1-1) , clang version 11.0.1 (Red Hat 11.0.1-1.module_el8.4.0+966+2995ef20)
+    17	     4.17 centos:stream                 : Ok   gcc (GCC) 8.5.0 20210514 (Red Hat 8.5.0-15) , clang version 14.0.0 (Red Hat 14.0.0-1.module_el8.7.0+1142+5343df54)
+    18	     4.67 clearlinux:latest             : Ok   gcc (Clear Linux OS for Intel Architecture) 12.1.1 20220811 releases/gcc-12.1.0-341-g28a7b5df3b 
+    19	     4.07 debian:9                      : Ok   gcc (Debian 6.3.0-18+deb9u1) 6.3.0 20170516 
+    20	     4.27 debian:10                     : Ok   gcc (Debian 8.3.0-6) 8.3.0 , Debian clang version 11.0.1-2~deb10u1
+    21	     4.07 debian:11                     : Ok   gcc (Debian 10.2.1-6) 10.2.1 20210110 , Debian clang version 11.0.1-2
+    22	     4.57 debian:experimental           : Ok   gcc (Debian 12.1.0-7) 12.1.0 , Debian clang version 14.0.6-2
+    23	     3.57 fedora:22                     : Ok   gcc (GCC) 5.3.1 20160406 (Red Hat 5.3.1-6) 
+    24	     4.07 fedora:24                     : Ok   gcc (GCC) 6.3.1 20161221 (Red Hat 6.3.1-1) 
+    25	     3.87 fedora:25                     : Ok   gcc (GCC) 6.4.1 20170727 (Red Hat 6.4.1-1) 
+    26	     4.07 fedora:26                     : Ok   gcc (GCC) 7.3.1 20180130 (Red Hat 7.3.1-2) 
+    27	     3.67 fedora:27                     : Ok   gcc (GCC) 7.3.1 20180712 (Red Hat 7.3.1-6) 
+    28	     3.98 fedora:28                     : Ok   gcc (GCC) 8.3.1 20190223 (Red Hat 8.3.1-2) 
+    29	     3.87 fedora:29                     : Ok   gcc (GCC) 8.3.1 20190223 (Red Hat 8.3.1-2) 
+    30	     4.77 fedora:30                     : Ok   gcc (GCC) 9.3.1 20200408 (Red Hat 9.3.1-2) 
+    31	     4.07 fedora:31                     : Ok   gcc (GCC) 9.3.1 20200408 (Red Hat 9.3.1-2) , clang version 9.0.1 (Fedora 9.0.1-4.fc31)
+    32	     4.07 fedora:32                     : Ok   gcc (GCC) 10.3.1 20210422 (Red Hat 10.3.1-1) , clang version 10.0.1 (Fedora 10.0.1-3.fc32)
+    33	     3.97 fedora:33                     : Ok   gcc (GCC) 10.3.1 20210422 (Red Hat 10.3.1-1) , clang version 11.0.0 (Fedora 11.0.0-3.fc33)
+    34	     4.37 fedora:34                     : Ok   gcc (GCC) 11.3.1 20220421 (Red Hat 11.3.1-2) , clang version 12.0.1 (Fedora 12.0.1-1.fc34)
+    35	     4.07 fedora:35                     : Ok   gcc (GCC) 11.3.1 20220421 (Red Hat 11.3.1-2) , clang version 13.0.0 (Fedora 13.0.0-3.fc35)
+    36	     4.37 fedora:36                     : Ok   gcc (GCC) 12.1.1 20220507 (Red Hat 12.1.1-1) , clang version 14.0.0 (Fedora 14.0.0-1.fc36)
+    37	     4.77 fedora:37                     : Ok   gcc (GCC) 12.1.1 20220628 (Red Hat 12.1.1-3) , clang version 14.0.5 (Fedora 14.0.5-6.fc37)
+    38	     7.77 fedora:38                     : Ok   gcc (GCC) 12.1.1 20220810 (Red Hat 12.1.1-4) , clang version 14.0.5 (Fedora 14.0.5-6.fc38)
+    39	     4.97 fedora:rawhide                : Ok   gcc (GCC) 12.1.1 20220810 (Red Hat 12.1.1-4) , clang version 14.0.5 (Fedora 14.0.5-6.fc38)
+    40	     4.37 gentoo-stage3:latest          : Ok   gcc (Gentoo 11.2.0 p1) 11.2.0 , clang version 13.0.0
+    41	     4.77 manjaro:base                  : Ok   gcc (GCC) 11.1.0 , clang version 13.0.0
+    42	     3.87 opensuse:15.0                 : Ok   gcc (SUSE Linux) 7.4.1 20190905 [gcc-7-branch revision 275407] 
+    43	     3.57 opensuse:15.1                 : Ok   gcc (SUSE Linux) 7.5.0 
+    44	     3.87 opensuse:15.2                 : Ok   gcc (SUSE Linux) 7.5.0 , clang version 9.0.1 
+    45	     5.31 opensuse:15.3                 : Ok   gcc (SUSE Linux) 7.5.0 , clang version 11.0.1
+    46	     3.77 opensuse:15.4                 : Ok   gcc (SUSE Linux) 7.5.0 , clang version 13.0.1
+    47	     4.68 opensuse:tumbleweed           : Ok   gcc (SUSE Linux) 12.1.1 20220629 [revision 7811663964aa7e31c3939b859bbfa2e16919639f] , clang version 14.0.6
+    48	     4.27 oraclelinux:8                 : Ok   gcc (GCC) 8.5.0 20210514 (Red Hat 8.5.0-4.0.1) , clang version 12.0.1 (Red Hat 12.0.1-4.0.1.module+el8.5.0+20428+2b4ecd47)
+    49	     3.96 oraclelinux:9                 : Ok   gcc (GCC) 11.2.1 20220127 (Red Hat 11.2.1-9.4.0.2) , clang version 13.0.1 (Red Hat 13.0.1-1.0.1.el9)
+    50	     3.87 rockylinux:8                  : Ok   gcc (GCC) 8.5.0 20210514 (Red Hat 8.5.0-10) , clang version 13.0.1 (Red Hat 13.0.1-2.module+el8.6.0+987+d36ea6a1)
+    51	     4.07 rockylinux:9                  : Ok   gcc (GCC) 11.2.1 20220127 (Red Hat 11.2.1-9) , clang version 13.0.1 (Red Hat 13.0.1-1.el9)
+    52	     3.47 ubuntu:16.04                  : Ok   gcc (Ubuntu 5.4.0-6ubuntu1~16.04.12) 5.4.0 20160609 
+    53	     3.57 ubuntu:18.04                  : Ok   gcc (Ubuntu 7.5.0-3ubuntu1~18.04) 7.5.0 
+    54	     4.28 ubuntu:20.04                  : Ok   gcc (Ubuntu 9.4.0-1ubuntu1~20.04.1) 9.4.0 
+    55	     4.17 ubuntu:21.04                  : Ok   gcc (Ubuntu 10.3.0-1ubuntu1) 10.3.0 , Ubuntu clang version 12.0.0-3ubuntu1~21.04.2
+    56	     3.97 ubuntu:21.10                  : Ok   gcc (Ubuntu 11.2.0-7ubuntu2) 11.2.0 , Ubuntu clang version 13.0.0-2
+    57	     4.27 ubuntu:22.04                  : Ok   gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0 , Ubuntu clang version 14.0.0-1ubuntu1
+    58	     4.37 ubuntu:22.10                  : Ok   gcc (Ubuntu 11.3.0-5ubuntu1) 11.3.0 , Ubuntu clang version 14.0.6-2
+[perfbuilder@five ~]$
 
-diff --git a/scripts/pahole-flags.sh b/scripts/pahole-flags.sh
-index 0d99ef17e4a528..1f1f1d397c399a 100755
---- a/scripts/pahole-flags.sh
-+++ b/scripts/pahole-flags.sh
-@@ -19,5 +19,9 @@ fi
- if [ "${pahole_ver}" -ge "122" ]; then
- 	extra_paholeopt="${extra_paholeopt} -j"
- fi
-+if [ "${pahole_ver}" -ge "124" ]; then
-+	# see PAHOLE_HAS_LANG_EXCLUDE
-+	extra_paholeopt="${extra_paholeopt} --skip_encoding_btf_enum64"
-+fi
+With this patch:
 
- echo ${extra_paholeopt}
+From c3eac0a3591a36f6590691a21434241d67a3fa89 Mon Sep 17 00:00:00 2001
+From: Arnaldo Carvalho de Melo <acme@redhat.com>
+Date: Thu, 25 Aug 2022 10:01:49 -0300
+Subject: [PATCH 1/1] core: Conditionally define language encodings
 
-- Martin Rodriguez Reboredo
+It it defined in an enumeration on dwarf.h, so doing it here as defines
+doesn't clash with it and makes this file to build with older distros.
+
+Reported-by: Nathan Chancellor <nathan@kernel.org>
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+---
+ dwarves.c | 112 ++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 112 insertions(+)
+
+diff --git a/dwarves.c b/dwarves.c
+index db1dcf5904bc98fe..394a8155325484fc 100644
+--- a/dwarves.c
++++ b/dwarves.c
+@@ -2085,6 +2085,118 @@ int cus__load_file(struct cus *cus, struct conf_load *conf,
+ 
+ #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be_array(arr))
+ 
++#ifndef DW_LANG_C89
++#define DW_LANG_C89		0x0001
++#endif
++#ifndef DW_LANG_C
++#define DW_LANG_C		0x0002
++#endif
++#ifndef DW_LANG_Ada83
++#define DW_LANG_Ada83		0x0003
++#endif
++#ifndef DW_LANG_C_plus_plus
++#define DW_LANG_C_plus_plus	0x0004
++#endif
++#ifndef DW_LANG_Cobol74
++#define DW_LANG_Cobol74		0x0005
++#endif
++#ifndef DW_LANG_Cobol85
++#define DW_LANG_Cobol85		0x0006
++#endif
++#ifndef DW_LANG_Fortran77
++#define DW_LANG_Fortran77	0x0007
++#endif
++#ifndef DW_LANG_Fortran90
++#define DW_LANG_Fortran90	0x0008
++#endif
++#ifndef DW_LANG_Pascal83
++#define DW_LANG_Pascal83	0x0009
++#endif
++#ifndef DW_LANG_Modula2
++#define DW_LANG_Modula2		0x000a
++#endif
++#ifndef DW_LANG_Java
++#define DW_LANG_Java		0x000b
++#endif
++#ifndef DW_LANG_C99
++#define DW_LANG_C99		0x000c
++#endif
++#ifndef DW_LANG_Ada95
++#define DW_LANG_Ada95		0x000d
++#endif
++#ifndef DW_LANG_Fortran95
++#define DW_LANG_Fortran95	0x000e
++#endif
++#ifndef DW_LANG_PLI
++#define DW_LANG_PLI		0x000f
++#endif
++#ifndef DW_LANG_ObjC
++#define DW_LANG_ObjC		0x0010
++#endif
++#ifndef DW_LANG_ObjC_plus_plus
++#define DW_LANG_ObjC_plus_plus	0x0011
++#endif
++#ifndef DW_LANG_UPC
++#define DW_LANG_UPC		0x0012
++#endif
++#ifndef DW_LANG_D
++#define DW_LANG_D		0x0013
++#endif
++#ifndef DW_LANG_Python
++#define DW_LANG_Python		0x0014
++#endif
++#ifndef DW_LANG_OpenCL
++#define DW_LANG_OpenCL		0x0015
++#endif
++#ifndef DW_LANG_Go
++#define DW_LANG_Go		0x0016
++#endif
++#ifndef DW_LANG_Modula3
++#define DW_LANG_Modula3		0x0017
++#endif
++#ifndef DW_LANG_Haskell
++#define DW_LANG_Haskell		0x0018
++#endif
++#ifndef DW_LANG_C_plus_plus_03
++#define DW_LANG_C_plus_plus_03	0x0019
++#endif
++#ifndef DW_LANG_C_plus_plus_11
++#define DW_LANG_C_plus_plus_11	0x001a
++#endif
++#ifndef DW_LANG_OCaml
++#define DW_LANG_OCaml		0x001b
++#endif
++#ifndef DW_LANG_Rust
++#define DW_LANG_Rust		0x001c
++#endif
++#ifndef DW_LANG_C11
++#define DW_LANG_C11		0x001d
++#endif
++#ifndef DW_LANG_Swift
++#define DW_LANG_Swift		0x001e
++#endif
++#ifndef DW_LANG_Julia
++#define DW_LANG_Julia		0x001f
++#endif
++#ifndef DW_LANG_Dylan
++#define DW_LANG_Dylan		0x0020
++#endif
++#ifndef DW_LANG_C_plus_plus_14
++#define DW_LANG_C_plus_plus_14	0x0021
++#endif
++#ifndef DW_LANG_Fortran03
++#define DW_LANG_Fortran03	0x0022
++#endif
++#ifndef DW_LANG_Fortran08
++#define DW_LANG_Fortran08	0x0023
++#endif
++#ifndef DW_LANG_RenderScript
++#define DW_LANG_RenderScript	0x0024
++#endif
++#ifndef DW_LANG_BLISS
++#define DW_LANG_BLISS		0x0025
++#endif
++
+ int lang__str2int(const char *lang)
+ {
+ 	static const char *languages[] = {
+-- 
+2.37.2
+
