@@ -2,291 +2,388 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DBD63ECAAA3
-	for <linux-dwarves@archiver.kernel.org>; Fri, 26 Aug 2022 18:54:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A0B30ECAAD6
+	for <linux-dwarves@archiver.kernel.org>; Fri, 26 Aug 2022 18:54:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345305AbiHZSyI (ORCPT
+        id S1345350AbiHZSyP (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Fri, 26 Aug 2022 14:54:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45002 "EHLO
+        Fri, 26 Aug 2022 14:54:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345315AbiHZSxu (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Fri, 26 Aug 2022 14:53:50 -0400
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2FC5E8689;
-        Fri, 26 Aug 2022 11:49:26 -0700 (PDT)
-Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27QIDu0O006711;
-        Fri, 26 Aug 2022 18:49:23 GMT
+        with ESMTP id S1345378AbiHZSx5 (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Fri, 26 Aug 2022 14:53:57 -0400
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E2AEF2C82;
+        Fri, 26 Aug 2022 11:49:35 -0700 (PDT)
+Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27QIDjs8025982;
+        Fri, 26 Aug 2022 18:49:31 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references :
  content-transfer-encoding : content-type : mime-version; s=corp-2022-7-12;
- bh=MiBn9Rg/Wt0I5XMvmyEXs0xBCJsWWOGWqe4hTbmDj/g=;
- b=DQrekDFl37q2cRrj8ch1aCPP9GiqPdHFdtRy9zYQLdEhv4ludc5PSJ5v8TsC+eDlu2k2
- SV4uf1COI+ljxt0DuqL6o2C3TzCWvmr0Xp374vy+c843gF27oQ91wgyOzr8GyBA1U9F8
- WhL0zrNil+rzwrwQ0NxYwiMclfFACb75BqEJzdSmFYpmhmILwafpz/5zPvQ8Ot0Sjzkr
- 2cUINq5+5X8zLSOH/Ilmj6ETJgw03sDhAUxu8qr16lS86g+qqg9LqdtvUND86BFV2qek
- Kwchx+dmdFXchB8ub2jYd4+NvoLiHyBs64wUcUtPnwMrz1sCbzipWTJkh1IshZCACwYp SQ== 
-Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3j55p28j6n-1
+ bh=2CC2vTW+p33cEfrXC9oOJ4lF/EDb7hgO9hM1oeIz/1I=;
+ b=RRzBLKfYx/LJCnnYT2dIltMRIC5QQeRcHPpW2g5b2O+DEkoTQQvbtXqobvcUIF4oVAYp
+ GAsqhsDEoCbA5mTrpQUdiK645Gjsz2QkcRdu/koCaYJqJSo4mboQFGXlAD3TAVIVz65W
+ SCJITA4cVmtN39ol2QQF83U0goNeYNFbq0VFpxMe1AelDL8s9ahydXAdm6+yD+PE3pnh
+ q74XmgbljvgxnKFIAg7lKKYaYeZ5jNzv1r4hjw2ti/ChduMDxITgoQjh/DUZB7PF4y1X
+ QnrmheVv9KfEECUjoRyBy1EpjpPFMNHbMQvWFEBC/EOtiYnLkY8ldw5px47laZkrSpJT 8A== 
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3j4w25t7gx-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 26 Aug 2022 18:49:23 +0000
-Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 27QGohKi033607;
-        Fri, 26 Aug 2022 18:49:21 GMT
-Received: from nam12-mw2-obe.outbound.protection.outlook.com (mail-mw2nam12lp2047.outbound.protection.outlook.com [104.47.66.47])
-        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3j5n6r8kft-1
+        Fri, 26 Aug 2022 18:49:31 +0000
+Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 27QGYPpU018831;
+        Fri, 26 Aug 2022 18:49:30 GMT
+Received: from nam12-dm6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2176.outbound.protection.outlook.com [104.47.59.176])
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3j5n59fb1e-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 26 Aug 2022 18:49:21 +0000
+        Fri, 26 Aug 2022 18:49:30 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=f17KRdz68/mdjbQ2RinoI945KnsF46PAFcCnADB4xNoYGVg86dD6oPrqiUJmgF7GN1XvpXpttQgAbLmHt4GMwkAXUma1fvb0qOU2j12QaadrG4ChecOhMakvgROa45SZ5ErCKI6Rdc/UGOZxisk+eIzCDRqiist4ax1H/VeRjxhcsAK0Jg+iEXr1CZpxlmiFb0He3Q9LSjwpHhvF2YV/oz0TOE9cxGwdysYRupviSw9u/Y4vNF9//kPArZizyD9cZCSHxiNDj5/wrsJBwXhbBm/tcbPpk90S3qWOpMFU10sAxxsrsdT/VlL73StOUsT0JG1at9fByZj0PYbHG7p+jA==
+ b=gWrAMNK7Yh8Abmk1YflRqhWTKUNu7n9OUeq9oKdIGt+//7fAEUGA+h4eKSIRjjkKSa+bYfuq1YenCO8BCpL7xu7aaNh7phORroPlJxOEQqydo9zrKtH9s7C3Wxss290FoUvmFkRyDAwnSdd5vXsrofNeliBvKQMjcBJO8+XF0kn7SCGx81kwQu/GAO3pfHDyBTZC3V+iOWd5Wefi1APn3assuoy5OlWvddvVw1oDThu2fT+DKJK23WjhRvAarSkxokzUycpOo4o99FfCNCyhq3zToijItWYGZ03u67+pQbDM9IFTLAO1Y9ShWhnwrxgSvCq2Gxmc0EI1hBcULlNj4g==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=MiBn9Rg/Wt0I5XMvmyEXs0xBCJsWWOGWqe4hTbmDj/g=;
- b=CY9Lz6eWqcAorpDFo9B5M15TV2yEMl10EX365Kzz1G2/hu5C+2srR4fBy2AlvETSUHXasaaCnmVnnSSQTuscse6I6SBJQTHBp2QOYKGI1mA533J79WA6MT96afbAfa3qB/vT2koDTCnn7Msxkc2q+pR47e4qfXTgLN9g8Zo7CoLTpEah30mHcTDLCIGopzYUH2Lo2qc0eYWgiComjTHB9dq5s6hEblSTR+eNSIm0bhqKT6+Zqf8AQ8d/KvegzVv8vwLtPxLIQddlujspZpGlBdXB46/mFzxqd2DvpB7g08BNiFx/y3Yy1BI9qagT8LEih0n7IpFI9lQaPwnftAoPbw==
+ bh=2CC2vTW+p33cEfrXC9oOJ4lF/EDb7hgO9hM1oeIz/1I=;
+ b=emJoaWLehMIU0OP5iqlvI1fhLbs6K4AXgE8WUXyIFC6UG/RS+1MAOsvmHCethPjFRWY8xY6DcTZZ8jWUwwurdUJ4o/3lwoFvLgb4c+v9o4SBP0Y3ZCRVLFkRh8ImceNKc2lG38qSTnBC+LI4njqI/Ptl/Gqtoh+Pk5iFl3KsjOGuOTb2n2Mx3I5JjqD0xuymGX8D2lf2v+qST3kD96fK2e4Y8hzF6TcjdeYmQlI+Jxm6R3rsDuQsItaHTM7CGJzn83hir9TcbCgVShOpUc+fiDi33jmaQS5HlgoKQb+EYFMN/bSHX6biu5Eo1Vi6Mrs+NH9Ie4OcMq+AeM31nQZUtA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
  dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=MiBn9Rg/Wt0I5XMvmyEXs0xBCJsWWOGWqe4hTbmDj/g=;
- b=VEuTRmE6aR+ENDqs9g3h6rWpuEv20eRCHVLcP/gG5uTJzmPWH55nh2eZrO7J9tAfJ9UhEVKYQR4B686IgtEl6M8nq9D1FucZcwgRoTX79o3kldbtBHkSEbWNK77hKEtB1wN7aEV8k2VvsfkiCL4urqLlVnc6H5ld21aLcALWyjo=
+ bh=2CC2vTW+p33cEfrXC9oOJ4lF/EDb7hgO9hM1oeIz/1I=;
+ b=ReVFVhRO8DcS4efv+Bj5rxpdvnj35VQ/yc7PCT3bwLve11lvOt0FWWlFm92xV2HkKWe8W5jDh9N30RNqxXCl0qYC7Ch3NHKlx01drPIyjqgbuFAxA/gHRk2eklIOJSDs98xeMNq4b/ioYpVAatjk1GGc2ZA6ERgcqQaAaT4mMTE=
 Received: from CH2PR10MB4166.namprd10.prod.outlook.com (2603:10b6:610:78::20)
- by SN7PR10MB6331.namprd10.prod.outlook.com (2603:10b6:806:271::15) with
+ by SN6PR10MB2558.namprd10.prod.outlook.com (2603:10b6:805:48::19) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5566.15; Fri, 26 Aug
- 2022 18:49:19 +0000
+ 2022 18:49:28 +0000
 Received: from CH2PR10MB4166.namprd10.prod.outlook.com
  ([fe80::44ed:9862:9a69:6da5]) by CH2PR10MB4166.namprd10.prod.outlook.com
  ([fe80::44ed:9862:9a69:6da5%6]) with mapi id 15.20.5566.016; Fri, 26 Aug 2022
- 18:49:19 +0000
+ 18:49:28 +0000
 From:   Stephen Brennan <stephen.s.brennan@oracle.com>
 To:     dwarves@vger.kernel.org
 Cc:     bpf@vger.kernel.org, Arnaldo Carvalho de Melo <acme@kernel.org>,
         stephen.s.brennan@oracle.com, alan.maguire@oracle.com
-Subject: [PATCH dwarves 3/7] btf_encoder: cache all ELF section info
-Date:   Fri, 26 Aug 2022 11:49:07 -0700
-Message-Id: <20220826184911.168442-4-stephen.s.brennan@oracle.com>
+Subject: [PATCH dwarves 7/7] btf_encoder: allow encoding all variables
+Date:   Fri, 26 Aug 2022 11:49:11 -0700
+Message-Id: <20220826184911.168442-8-stephen.s.brennan@oracle.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220826184911.168442-1-stephen.s.brennan@oracle.com>
 References: <20220826184911.168442-1-stephen.s.brennan@oracle.com>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: DM6PR13CA0064.namprd13.prod.outlook.com
- (2603:10b6:5:134::41) To CH2PR10MB4166.namprd10.prod.outlook.com
+X-ClientProxiedBy: SA9PR11CA0003.namprd11.prod.outlook.com
+ (2603:10b6:806:6e::8) To CH2PR10MB4166.namprd10.prod.outlook.com
  (2603:10b6:610:78::20)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 83aa6262-d75b-46ab-98d2-08da8793af31
-X-MS-TrafficTypeDiagnostic: SN7PR10MB6331:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3d4f2229-12d5-4fbb-e3a0-08da8793b43b
+X-MS-TrafficTypeDiagnostic: SN6PR10MB2558:EE_
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: uwEBc67Haj1e5AOgO+tsagRG0fFgoVUll8I64yHNgVGXtjcQrwSCIV6c8uri2VdZAvS3yUdoFOYbgOKVUYAFkgOH90ak6SZKQpv9A+oBCVgiO6Bw4lwz5MbglkwUFXo7lDmxezAXTlvLMaxNE2kmwcVEzYvaRjPtlLfF+gA1HsbIEdOh1s5u85j69hpAs3q1jgk+wgH2itBe5QBCnkIdB1F+fVY0LWvOEmSlO7zOcjJsB6ZxD/lziKZh8goE5pNulKOcUkYH+TnoKwbA73/3ioTvBrs3xDODHrVj8CjCtDeMK0Wx7OXAg+J0wRoAuYF5dVfaUBm+53JQiAuAVcBEaWv/sKS0w1QoNAygTtJuxf7WptDAetNU5Mo0IbO6YmyGrpCQHpkn1msRo7j2AsQWE/ujsyaQM10TFJCN00fbFYG1EZo4YqlQRmYktt7mQTJUN/ptugEiiv4CzvCWoDKNu0pROwVfITdQFlIvjwj7fkeGtO86MevjvARY844PXxmeoqovIgUXiYIWsbtWoxCjybIUyC+xYtkhyvPt/kR8FUSd0SNJTCiyj6HxQOMCRxy63v/nByeMfpvu+f0764dCipNdW28US9p03n2lqz0t4s2mB6ezQ9p32AfzLALXrGy/gUaetpOD2rAmvN8op2+VAe1BvAVAU/yGBTUUUKSd/VEMN3QreqRBb/G7c/qD4FYizQy3OV8sWtn2/laMMravFA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH2PR10MB4166.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(366004)(396003)(39860400002)(346002)(136003)(376002)(107886003)(6506007)(478600001)(26005)(6486002)(41300700001)(6666004)(83380400001)(2616005)(2906002)(186003)(1076003)(5660300002)(8936002)(316002)(6512007)(6916009)(4326008)(8676002)(103116003)(66946007)(66476007)(66556008)(38100700002)(86362001)(36756003);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: OtfP3KdYskNPLbzL5FB5aIdtd/88GSlqYOJ/iirIk/0AMNt7ogg0OZ08iu12OYcfYC5RAAbJzxPe2FmYScXeOBzLlu3Z6PDy6h0b/vhmTJp9pXHKX4Gjw0x7fsY3dMyrc7pvHPFP8eTRdXOkKaTSfkmU4isAIlLa3zOxD4Jt2UZ13BDuCVNYh7AhwaoVBOCgkccdvgnczeThBtma+9k3PYiPJyFzNvfTnO6Cm7yBAQ34tO0b5NvpBD82AKjenmulTfIbrOjPmiqRhnDQ15kjX6tC0N6xh7xrOMx92gRI/Qodb9RddDoWIj/IkgHwLHdw5pC1I/r2rsnWwG+9frYJcmFsKdxoVoPd5jGZsAUMWlxGiiYzyGTTxTvFgHZb7LWjGZUyL1vXOPgqWFULHXTjigkQY6/KP12iUU3x7YqYPQQDO1h2jTrKbqePAS79gAGHRjRtWShvtN1j1G5gBHWAdTVUa/zu1dBdSEZWXbFklQdFXHCkq5uhKZui5ehl/PA2tqN2mMFISZp1fdRQJlvoxzJaazTxzEzluFvFWO75Jn5yG9hV/eCOPpxKFse4/JJ8uF6XowwaUIW3JJHsZH95s2ygyrS61aq7QnHIHVRH7qWsR2DeycS5xI09PivfLwLXXzmevYpftNBeotGEe1J3V3KB69YMAUxB/K3ETUNx9jz6rTVT++QTJfrMxSt208zUzspyFY1ZQ4TfwlSYpoZ8xg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH2PR10MB4166.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(346002)(396003)(39860400002)(376002)(366004)(136003)(316002)(41300700001)(6916009)(6506007)(6666004)(6512007)(26005)(478600001)(6486002)(66946007)(8676002)(66476007)(4326008)(66556008)(8936002)(5660300002)(2906002)(38100700002)(36756003)(86362001)(103116003)(1076003)(2616005)(186003)(83380400001)(107886003);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?b6sFVo8TmRPeOt1Y4uxcJZM4WgSmFH8aX2vDOnhTjKL1usJASaeH3NRFtKuB?=
- =?us-ascii?Q?i/NQDZF0Ezap1ordFljXtnXJcWbd5sayAf7XNl3+oWW63cYxeVTyVMSiF4IN?=
- =?us-ascii?Q?a+Ts4ufrx/7pxCm0l98Psope5V/eSBItDcmzFTnKAILBZ7ivJQWBeh6tz/q/?=
- =?us-ascii?Q?nMBnVNJRF8dSt2aK2TVuccM849ojZ9NJc6Pz/rDuF+VP9sHKxdeB7cPJnlE+?=
- =?us-ascii?Q?bCJfJlXu6W26h3ouRyiIZUaDVGr/LZaLENz9Gi4e4BrBeVU19GvMjmro8aUB?=
- =?us-ascii?Q?uPf4hsem9d86WADbhgjEH4rK74P3Lcxu6yxEDPzMf4LpOc13Y8PDWpYt0+/i?=
- =?us-ascii?Q?i4i7RReEKkmc7pLnm3YGn1g6ImHbN6tynFR5FXEHciBJGy1Rg6xTzjep56X4?=
- =?us-ascii?Q?WJB/ZVFpMBPyN8kwp1euGVAg/yFmAnosVP3A9F0XaZ9vSGKca7UxhWGiQYYJ?=
- =?us-ascii?Q?0f3tRIOcnWf0VQRmznw3OU5ZCwriGCmcPKN7PCHUYA+300+prgV8Ca1BzC6/?=
- =?us-ascii?Q?PQivCSHabavOqLPWVgATunNETGh048S91MBfiAq3hEPRxjLX9CfX5Zl8/eRV?=
- =?us-ascii?Q?UrindPNrxL4P1Ct+PsGHRzekz94t+qR1NEAYre0W+uLEPXLyCmaM9ttuAps6?=
- =?us-ascii?Q?35P0RzYvFpDaT+kTOYrPwOsBIJN5w2gPy2RJ/H3as+bGdNaPOTtrr9e7a3QB?=
- =?us-ascii?Q?ks5GIr7GbwoYRinNzPlMBrKK2EfMnaUUlZeOZ5LYqwFi4dQDXqywI/07JYqw?=
- =?us-ascii?Q?f9j5HFCTfmOXwtjyzq5X+Lc7GcoctWzypzwglLeA0CHUYWXMiLiYTZUomXrY?=
- =?us-ascii?Q?NwBgzr3x4oNGew+4QZPMy1hvcUwZlgsXwaOTyV8pA/OeFp5uVaieldCXyKly?=
- =?us-ascii?Q?+gDkLh6Ax7Iv9O/20jUcFts5m9mJq6NI7qNOb7xTM2Jz75FJGcpxpW7jIdPE?=
- =?us-ascii?Q?B1/g0yyYEE8zgrfQ+gwdQMIirdTX28QER0fxkbPqV00VyTSN+Q9ULgh7NB64?=
- =?us-ascii?Q?ToENImaWphuaifb7mH/qU8zPHO2e1fqM1O4nSatMzCiNhrRQLnHyOuthH0Ws?=
- =?us-ascii?Q?IxI/SnYYjNZaVf9VP7WtFXQH79iabKXqLz5zYKCVta2Vl0LXiCoxhh0G8GH/?=
- =?us-ascii?Q?yAuiig7QiB5Qe26Kd4eOV7Dx+40fUbgpNxevxgsaFUnZk3pxz872TcmFGelG?=
- =?us-ascii?Q?VRc2OSE7yHECgyEORqwpf6SW8qF1gVO+EDOic2BrqDi2n/72YZt7VFEz9liL?=
- =?us-ascii?Q?C4rV20Ak4k+SB+KCX9aivQWmVPb4k2SgXLyhLowW4ZbU4mjkLAq0/YfdJhi4?=
- =?us-ascii?Q?I9F2ibnMs1e0FomCbxF81+TMMqrjU1IVgaHZVqYsc5LUDa1BBZgmxqMzvdS2?=
- =?us-ascii?Q?peUQGStA7TKY/U7j/cn6mad3RT2E+ESXPNKQpB4g/sKXVispJ3AnxROWlgJ+?=
- =?us-ascii?Q?vl/AiP3U8a3Kwhu08IQvBqkdT2BSJSHFf92UF1OANRupQtCnLH4STqDNpnhH?=
- =?us-ascii?Q?WN/p6W0VgIJcnaDv/yJPW66IGXDOwKfrEUkKMsLZ7xdy0Ef4eM7STSZsdX3Q?=
- =?us-ascii?Q?ubB7UD3xDDvD/BgAfo+MQAW/3I64YtLCMoSK4UMn136oB8jutluXy+nvMGrm?=
- =?us-ascii?Q?1g=3D=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?7DnVPxIn1SkAouOpBaaGIO2ikROSq7kIzJmz2KDlMk7yWb2nyumcMzwlgFuB?=
+ =?us-ascii?Q?ONjECpMtbAId0QSgADExt3U3DCkspR770/yRVsTT0K3tGmYQxcWvlAtMXtc7?=
+ =?us-ascii?Q?Y8/4GbBi6ptPc08QZCl0VV0yKDEQZhpnXuOOELFODXKoUKat9XNpqu45B9uI?=
+ =?us-ascii?Q?Tbv6eBALcBz++2IzElSOuEcj3QSbnkNzlkqQQRvoZZw0In4/h5EnvDA2HWnt?=
+ =?us-ascii?Q?3B235AzlNEX7BjQ5gffPWElW2pGGRgMsnQC+K//2Q73mFdwEU5WU9nfnas8T?=
+ =?us-ascii?Q?dxefKx1JACu3ekYjhIEJ2jmmTy+0/w092qQPuYxGvzDJAAvVfkvL3vYAiY81?=
+ =?us-ascii?Q?UiD1f5JcuJXEALNB4mPi52gX738xRYO9qGN4Cb9lwH3RT8S7aPhcXmM/9zwk?=
+ =?us-ascii?Q?sFqRMJPxMCT+Ph/h2x7YtxPHIOyueV1Uj1rTBUZ28ytNLOB2KLkTxD3Xd+2T?=
+ =?us-ascii?Q?3/dEDnyToRMQ0XCQAXYIK+cab7LbRGdtDMyvpUrQ/wOjeDughasf4V93rjYU?=
+ =?us-ascii?Q?t49We6WJOsi8M5hp9CiXSlf78b+YQ+A/I18GVUs/yFN4wRsQYysNfbQyY5e9?=
+ =?us-ascii?Q?CvCkIeRM3DP/EBENk0wVKr//9JhLxe4KnLzIhkfLfBLXtTZODIOmMr3wnuBV?=
+ =?us-ascii?Q?vqvzMsvfgmKNVzk7q8mVVYFiJtGGn6EEZUnwJ4SngJcf4oH5GXvcRxOV/lUD?=
+ =?us-ascii?Q?vZqr2tSC1kzzp6e8iNBotnxkyXS+qli/X6msFZTZ0hU1Hn9DKewP0/3NQURB?=
+ =?us-ascii?Q?MavHksmgdvKIjzF/FuFDzX41rhJWnLne1Hd+35iIVNG8WeHGMIzI+pjJHVME?=
+ =?us-ascii?Q?ct+6wsevzOBPHG6ZEpA5WkX1CkOBBHoSpUfnPpnnTfyggmhyQQlMBIDg7Svs?=
+ =?us-ascii?Q?Pmiu5JLRTHTkNrMRMmWVcr8SikhOp2M7ACp3NykN1cIykirf/a/VBYUcG/Es?=
+ =?us-ascii?Q?/lq3ZXAXA1RTF+sOd2koeMRFXMZv2S3RtB/rKLGdCDQFdJw8bw6/Ma8jD7l5?=
+ =?us-ascii?Q?KQLbr2rKGUDeBbtu7bA1duQKWDzuxbWkw0KQdTEz3PYapN3Yj3tiMaCzUawt?=
+ =?us-ascii?Q?oKOhCiU7OxRX7gF/nNp58kljgiR8JeXno8c5E4r0fvqWyb2ALa52evwKgj3V?=
+ =?us-ascii?Q?GZPMw98cEmIepxhPYLRlAyqE8Axy2CASfPo/weoGsAQKYl4hduvb/kI7G2Jw?=
+ =?us-ascii?Q?d+q0LtLEDqJcfRZMCw7gxgIKZYnxjbiqwPO24a2P5irvvRnlIK/gtNq1Qt0l?=
+ =?us-ascii?Q?d5q1WvxypZbcFKrx7oXmNTWe+oESDCqwl5t61wzqAueP7azM1scRNZZLW5mE?=
+ =?us-ascii?Q?Vc3oIEbEZeYquhokeYhWWtcrCrMKenoRJbdRkKsnGQEsGtVaxCHFWrYGVACS?=
+ =?us-ascii?Q?hDBuYYci/ZknQYbWBeMIvCfOGb5ZMgNnyqpvMNcOhKrwNkfPbFfZ/5joWByj?=
+ =?us-ascii?Q?188n/8uwF1i9eNfMC9S6VYcoU4ot1MVgQAmIflM5lfkDoinaoNjdLZo7UHk7?=
+ =?us-ascii?Q?8orC7F2qWdvHS0ZnlhDwd8WTKbvwiTCCAF+OhtmYcPsJHAwOni1pmrvOAgMl?=
+ =?us-ascii?Q?UMvV0Rl04UfTDi4TgYZTvBx+yiEh3HDI2TuBVs0mQfRBqFvIsfHBTF4OQ1lg?=
+ =?us-ascii?Q?+w=3D=3D?=
 X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 83aa6262-d75b-46ab-98d2-08da8793af31
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3d4f2229-12d5-4fbb-e3a0-08da8793b43b
 X-MS-Exchange-CrossTenant-AuthSource: CH2PR10MB4166.namprd10.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Aug 2022 18:49:19.6645
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Aug 2022 18:49:28.1987
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: IYkQA4XxP2FV3r7LLBHKhhygrCx5VoZHhULg04PTsi0NN2ZrurDHKnwwd6eteXU62E5LlPP9CvlHcWUjIfM0zi49Q4WpD0gtAVrQUyQz4YA=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR10MB6331
+X-MS-Exchange-CrossTenant-UserPrincipalName: dw6vGimUT4eDFOxXDdomMfMSvXIqoXSEfQ7tvohSp3qfMa234pyaD+K9Jes4jdxi9yq188kLLpe0AFnFRD1RXZadi9BBJgpW1/GiY0MKiEk=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR10MB2558
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
  definitions=2022-08-26_10,2022-08-25_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 phishscore=0 spamscore=0
- bulkscore=0 adultscore=0 mlxscore=0 malwarescore=0 mlxlogscore=999
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 mlxscore=0 spamscore=0
+ adultscore=0 phishscore=0 bulkscore=0 malwarescore=0 suspectscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2207270000
  definitions=main-2208260075
-X-Proofpoint-ORIG-GUID: LulBbNsz_oGTeN82gs023lg6NWHdij5V
-X-Proofpoint-GUID: LulBbNsz_oGTeN82gs023lg6NWHdij5V
+X-Proofpoint-ORIG-GUID: dP31m1Wq5nuoRTMZmLvSq4wlZPaooyYI
+X-Proofpoint-GUID: dP31m1Wq5nuoRTMZmLvSq4wlZPaooyYI
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-To handle outputting all variables generally, we'll need to store more
-section data. Create a table of ELF sections so we can refer to all the
-cached data.
+Add the --encode_all_btf_vars option, which conflicts with
+--skip_encoding_btf_vars, and will enable encoding all variables which
+have a corresponding STT_OBJECT match in the ELF symbol table. Rework
+the btf_encoder_new() signature to include a single enum to specify
+which kinds of variables are allowed, and add the necessary logic to
+select variables.
 
 Signed-off-by: Stephen Brennan <stephen.s.brennan@oracle.com>
 ---
- btf_encoder.c | 68 +++++++++++++++++++++++++++++++++------------------
- 1 file changed, 44 insertions(+), 24 deletions(-)
+ btf_encoder.c      | 22 +++++++++++++---------
+ btf_encoder.h      |  8 +++++++-
+ man-pages/pahole.1 |  6 +++++-
+ pahole.c           | 31 +++++++++++++++++++++++++------
+ 4 files changed, 50 insertions(+), 17 deletions(-)
 
 diff --git a/btf_encoder.c b/btf_encoder.c
-index bf59962..f67738a 100644
+index 1804500..eabc8d2 100644
 --- a/btf_encoder.c
 +++ b/btf_encoder.c
-@@ -38,6 +38,7 @@ struct elf_function {
- };
- 
- #define MAX_VAR_CNT 4096
-+#define MAX_ELF_SEC_CNT    128
- 
- struct var_info {
- 	uint64_t    addr;
-@@ -45,6 +46,13 @@ struct var_info {
- 	uint32_t    sz;
- };
- 
-+struct elf_secinfo {
-+	uint64_t    addr;
-+	const char *name;
-+	uint64_t    sz;
-+	bool        include;
-+};
-+
- struct btf_encoder {
- 	struct list_head  node;
- 	struct btf        *btf;
-@@ -60,12 +68,12 @@ struct btf_encoder {
- 			  gen_floats,
- 			  is_rel;
+@@ -61,7 +61,6 @@ struct btf_encoder {
+ 	struct elf_symtab *symtab;
+ 	bool		  has_index_type,
+ 			  need_index_type,
+-			  skip_encoding_vars,
+ 			  raw_output,
+ 			  verbose,
+ 			  force,
+@@ -70,6 +69,7 @@ struct btf_encoder {
  	uint32_t	  array_index_id;
-+	struct elf_secinfo secinfo[MAX_ELF_SEC_CNT];
-+	size_t             seccnt;
+ 	struct elf_secinfo secinfo[MAX_ELF_SEC_CNT];
+ 	size_t             seccnt;
++	enum btf_var_option encode_vars;
  	struct {
- 		struct var_info vars[MAX_VAR_CNT];
+ 		struct var_info *vars;
  		int		var_cnt;
- 		uint32_t	percpu_shndx;
--		uint64_t	percpu_base_addr;
--		uint64_t	percpu_sec_sz;
- 	} variables;
- 	struct {
- 		struct elf_function *entries;
-@@ -1167,12 +1175,13 @@ static int btf_encoder__collect_percpu_var(struct btf_encoder *encoder, GElf_Sym
- 	if (encoder->verbose)
- 		printf("Found per-CPU symbol '%s' at address 0x%" PRIx64 "\n", sym_name, addr);
+@@ -1198,24 +1198,25 @@ static int btf_encoder__collect_var(struct btf_encoder *encoder, GElf_Sym *sym,
+ 	return 0;
+ }
  
--	/* Make sure addr is section-relative. For kernel modules (which are
--	 * ET_REL files) this is already the case. For vmlinux (which is an
--	 * ET_EXEC file) we need to subtract the section address.
-+	/* Make sure addr is absolute, so that we can compare it to DWARF
-+	 * absolute addresses. We can compute to section-relative addresses
-+	 * when necessary.
- 	 */
--	if (!encoder->is_rel)
--		addr -= encoder->variables.percpu_base_addr;
-+	if (encoder->is_rel && sym->st_shndx < encoder->seccnt) {
-+		addr += encoder->secinfo[sym->st_shndx].addr;
-+	}
- 
- 	if (encoder->variables.var_cnt == MAX_VAR_CNT) {
- 		fprintf(stderr, "Reached the limit of per-CPU variables: %d\n",
-@@ -1238,6 +1247,7 @@ static int btf_encoder__encode_cu_variables(struct btf_encoder *encoder, struct
+-static int btf_encoder__collect_symbols(struct btf_encoder *encoder, bool collect_percpu_vars)
++static int btf_encoder__collect_symbols(struct btf_encoder *encoder)
+ {
+ 	uint32_t sym_sec_idx;
  	uint32_t core_id;
- 	struct tag *pos;
- 	int err = -1;
-+	struct elf_secinfo *pcpu_scn = &encoder->secinfo[encoder->variables.percpu_shndx];
+ 	GElf_Sym sym;
++	bool collect_vars = (encoder->encode_vars != BTF_VAR_NONE);
  
- 	if (encoder->variables.percpu_shndx == 0 || !encoder->symtab)
- 		return 0;
-@@ -1265,14 +1275,9 @@ static int btf_encoder__encode_cu_variables(struct btf_encoder *encoder, struct
- 		addr = var->ip.addr;
- 		dwarf_name = variable__name(var);
+ 	/* cache variables' addresses, preparing for searching in symtab. */
+ 	encoder->variables.var_cnt = 0;
  
--		/* Make sure addr is section-relative. DWARF, unlike ELF,
--		 * always contains virtual symbol addresses, so subtract
--		 * the section address unconditionally.
--		 */
--		if (addr < encoder->variables.percpu_base_addr ||
--		    addr >= encoder->variables.percpu_base_addr + encoder->variables.percpu_sec_sz)
-+		/* Make sure addr is in the percpu section */
-+		if (addr < pcpu_scn->addr || addr >= pcpu_scn->addr + pcpu_scn->sz)
- 			continue;
--		addr -= encoder->variables.percpu_base_addr;
+ 	/* search within symtab for percpu variables */
+ 	elf_symtab__for_each_symbol_index(encoder->symtab, core_id, sym, sym_sec_idx) {
+-		if (collect_percpu_vars && btf_encoder__collect_var(encoder, &sym, sym_sec_idx))
++		if (collect_vars && btf_encoder__collect_var(encoder, &sym, sym_sec_idx))
+ 			return -1;
+ 		if (btf_encoder__collect_function(encoder, &sym))
+ 			return -1;
+ 	}
  
- 		if (!btf_encoder__percpu_var_exists(encoder, addr, &size, &name))
- 			continue; /* not a per-CPU variable */
-@@ -1347,7 +1352,7 @@ static int btf_encoder__encode_cu_variables(struct btf_encoder *encoder, struct
- 		 * add a BTF_VAR_SECINFO in encoder->percpu_secinfo, which will be added into
- 		 * encoder->types later when we add BTF_VAR_DATASEC.
- 		 */
--		id = btf_encoder__add_var_secinfo(encoder, id, addr, size);
-+		id = btf_encoder__add_var_secinfo(encoder, id, addr - pcpu_scn->addr, size);
- 		if (id < 0) {
- 			fprintf(stderr, "error: failed to encode section info for variable '%s' at addr 0x%" PRIx64 "\n",
- 			        name, addr);
-@@ -1411,20 +1416,35 @@ struct btf_encoder *btf_encoder__new(struct cu *cu, const char *detached_filenam
- 			goto out;
- 		}
+-	if (collect_percpu_vars) {
++	if (collect_vars) {
+ 		if (encoder->variables.var_cnt)
+ 			qsort(encoder->variables.vars, encoder->variables.var_cnt, sizeof(encoder->variables.vars[0]), var_cmp);
  
--		/* find percpu section's shndx */
-+		/* index the ELF sections for later lookup */
+@@ -1375,7 +1376,7 @@ out:
+ 	return err;
+ }
  
- 		GElf_Shdr shdr;
--		Elf_Scn *sec = elf_section_by_name(cu->elf, &shdr, PERCPU_SECTION, NULL);
-+		size_t shndx;
-+		if (elf_getshdrnum(cu->elf, &encoder->seccnt))
-+			goto out_delete;
-+		if (encoder->seccnt >= MAX_ELF_SEC_CNT) {
-+			fprintf(stderr, "%s: reached limit of ELF sections\n", __func__);
-+			goto out_delete;
-+		}
+-struct btf_encoder *btf_encoder__new(struct cu *cu, const char *detached_filename, struct btf *base_btf, bool skip_encoding_vars, bool force, bool gen_floats, bool verbose)
++struct btf_encoder *btf_encoder__new(struct cu *cu, const char *detached_filename, struct btf *base_btf, enum btf_var_option vars, bool force, bool gen_floats, bool verbose)
+ {
+ 	struct btf_encoder *encoder = zalloc(sizeof(*encoder));
  
--		if (!sec) {
--			if (encoder->verbose)
--				printf("%s: '%s' doesn't have '%s' section\n", __func__, cu->filename, PERCPU_SECTION);
--		} else {
--			encoder->variables.percpu_shndx     = elf_ndxscn(sec);
--			encoder->variables.percpu_base_addr = shdr.sh_addr;
--			encoder->variables.percpu_sec_sz    = shdr.sh_size;
-+		for (shndx = 0; shndx < encoder->seccnt; shndx++) {
-+			const char *secname = NULL;
-+			Elf_Scn *sec = elf_section_by_idx(cu->elf, &shdr, shndx, &secname);
-+			if (!sec)
-+				goto out_delete;
-+			encoder->secinfo[shndx].addr = shdr.sh_addr;
-+			encoder->secinfo[shndx].sz = shdr.sh_size;
-+			encoder->secinfo[shndx].name = secname;
-+
-+			if (strcmp(secname, PERCPU_SECTION) == 0) {
-+				encoder->variables.percpu_shndx = shndx;
+@@ -1391,11 +1392,11 @@ struct btf_encoder *btf_encoder__new(struct cu *cu, const char *detached_filenam
+ 
+ 		encoder->force		 = force;
+ 		encoder->gen_floats	 = gen_floats;
+-		encoder->skip_encoding_vars = skip_encoding_vars;
+ 		encoder->verbose	 = verbose;
+ 		encoder->has_index_type  = false;
+ 		encoder->need_index_type = false;
+ 		encoder->array_index_id  = 0;
++		encoder->encode_vars	 = vars;
+ 
+ 		GElf_Ehdr ehdr;
+ 
+@@ -1445,17 +1446,20 @@ struct btf_encoder *btf_encoder__new(struct cu *cu, const char *detached_filenam
+ 			encoder->secinfo[shndx].addr = shdr.sh_addr;
+ 			encoder->secinfo[shndx].sz = shdr.sh_size;
+ 			encoder->secinfo[shndx].name = secname;
++			if (encoder->encode_vars == BTF_VAR_ALL)
 +				encoder->secinfo[shndx].include = true;
-+			}
+ 
+ 			if (strcmp(secname, PERCPU_SECTION) == 0) {
+ 				encoder->variables.percpu_shndx = shndx;
+-				encoder->secinfo[shndx].include = true;
++				if (encoder->encode_vars != BTF_VAR_NONE)
++					encoder->secinfo[shndx].include = true;
+ 			}
  		}
  
-+		if (!encoder->variables.percpu_shndx && encoder->verbose)
-+			printf("%s: '%s' doesn't have '%s' section\n", __func__, cu->filename, PERCPU_SECTION);
-+
- 		if (btf_encoder__collect_symbols(encoder, !encoder->skip_encoding_vars))
+ 		if (!encoder->variables.percpu_shndx && encoder->verbose)
+ 			printf("%s: '%s' doesn't have '%s' section\n", __func__, cu->filename, PERCPU_SECTION);
+ 
+-		if (btf_encoder__collect_symbols(encoder, !encoder->skip_encoding_vars))
++		if (btf_encoder__collect_symbols(encoder))
  			goto out_delete;
  
+ 		if (encoder->verbose)
+@@ -1615,7 +1619,7 @@ int btf_encoder__encode_cu(struct btf_encoder *encoder, struct cu *cu, struct co
+ 		}
+ 	}
+ 
+-	if (!encoder->skip_encoding_vars)
++	if (encoder->encode_vars != BTF_VAR_NONE)
+ 		err = btf_encoder__encode_cu_variables(encoder, cu, type_id_off);
+ out:
+ 	return err;
+diff --git a/btf_encoder.h b/btf_encoder.h
+index a65120c..e03c7cc 100644
+--- a/btf_encoder.h
++++ b/btf_encoder.h
+@@ -16,7 +16,13 @@ struct btf;
+ struct cu;
+ struct list_head;
+ 
+-struct btf_encoder *btf_encoder__new(struct cu *cu, const char *detached_filename, struct btf *base_btf, bool skip_encoding_vars, bool force, bool gen_floats, bool verbose);
++enum btf_var_option {
++	BTF_VAR_NONE,
++	BTF_VAR_PERCPU,
++	BTF_VAR_ALL,
++};
++
++struct btf_encoder *btf_encoder__new(struct cu *cu, const char *detached_filename, struct btf *base_btf, enum btf_var_option vars, bool force, bool gen_floats, bool verbose);
+ void btf_encoder__delete(struct btf_encoder *encoder);
+ 
+ int btf_encoder__encode(struct btf_encoder *encoder);
+diff --git a/man-pages/pahole.1 b/man-pages/pahole.1
+index bb88e2f..d21af0a 100644
+--- a/man-pages/pahole.1
++++ b/man-pages/pahole.1
+@@ -207,7 +207,11 @@ the debugging information.
+ 
+ .TP
+ .B \-\-skip_encoding_btf_vars
+-Do not encode VARs in BTF.
++.TQ
++.B \-\-encode_all_btf_vars
++By default, VARs are encoded only for percpu variables. These options allow
++to skip encoding them, or to encode all variables regardless of whether they are
++percpu. These options are mutually exclusive.
+ 
+ .TP
+ .B \-\-skip_encoding_btf_decl_tag
+diff --git a/pahole.c b/pahole.c
+index e87d9a4..1f86ffb 100644
+--- a/pahole.c
++++ b/pahole.c
+@@ -4,6 +4,7 @@
+   Copyright (C) 2006 Mandriva Conectiva S.A.
+   Copyright (C) 2006 Arnaldo Carvalho de Melo <acme@mandriva.com>
+   Copyright (C) 2007- Arnaldo Carvalho de Melo <acme@redhat.com>
++  Copyright (c) 2022 Oracle and/or its affiliates.
+ */
+ 
+ #include <argp.h>
+@@ -37,7 +38,7 @@ static bool ctf_encode;
+ static bool sort_output;
+ static bool need_resort;
+ static bool first_obj_only;
+-static bool skip_encoding_btf_vars;
++static enum btf_var_option encode_btf_vars = BTF_VAR_PERCPU;
+ static bool btf_encode_force;
+ static const char *base_btf_file;
+ 
+@@ -1221,6 +1222,7 @@ ARGP_PROGRAM_VERSION_HOOK_DEF = dwarves_print_version;
+ #define ARGP_languages		   335
+ #define ARGP_languages_exclude	   336
+ #define ARGP_skip_encoding_btf_enum64 337
++#define ARGP_encode_all_btf_vars   338
+ 
+ static const struct argp_option pahole__options[] = {
+ 	{
+@@ -1532,7 +1534,12 @@ static const struct argp_option pahole__options[] = {
+ 	{
+ 		.name = "skip_encoding_btf_vars",
+ 		.key  = ARGP_skip_encoding_btf_vars,
+-		.doc  = "Do not encode VARs in BTF."
++		.doc  = "Do not encode any VARs in BTF (default: only percpu)."
++	},
++	{
++		.name = "encode_all_btf_vars",
++		.key  = ARGP_encode_all_btf_vars,
++		.doc  = "Encode all VARs in BTF (default: only percpu)."
+ 	},
+ 	{
+ 		.name = "btf_encode_force",
+@@ -1757,8 +1764,6 @@ static error_t pahole__options_parser(int key, char *arg,
+ 		conf.range = arg;			break;
+ 	case ARGP_header_type:
+ 		conf.header_type = arg;			break;
+-	case ARGP_skip_encoding_btf_vars:
+-		skip_encoding_btf_vars = true;		break;
+ 	case ARGP_btf_encode_force:
+ 		btf_encode_force = true;		break;
+ 	case ARGP_btf_base:
+@@ -1795,6 +1800,20 @@ static error_t pahole__options_parser(int key, char *arg,
+ 		languages.str = arg;			break;
+ 	case ARGP_skip_encoding_btf_enum64:
+ 		conf_load.skip_encoding_btf_enum64 = true;	break;
++	case ARGP_skip_encoding_btf_vars:
++		if (encode_btf_vars != BTF_VAR_PERCPU) {
++			fprintf(stderr, "error: --encode_all_btf_vars and --skip_encoding_btf_vars are mutually exclusive\n");
++			return ARGP_HELP_SEE;
++		}
++		encode_btf_vars = BTF_VAR_NONE;
++		break;
++	case ARGP_encode_all_btf_vars:
++		if (encode_btf_vars != BTF_VAR_PERCPU) {
++			fprintf(stderr, "error: --encode_all_btf_vars and --skip_encoding_btf_vars are mutually exclusive\n");
++			return ARGP_HELP_SEE;
++		}
++		encode_btf_vars = BTF_VAR_ALL;
++		break;
+ 	default:
+ 		return ARGP_ERR_UNKNOWN;
+ 	}
+@@ -3034,7 +3053,7 @@ static enum load_steal_kind pahole_stealer(struct cu *cu,
+ 			 * And, it is used by the thread
+ 			 * create it.
+ 			 */
+-			btf_encoder = btf_encoder__new(cu, detached_btf_filename, conf_load->base_btf, skip_encoding_btf_vars,
++			btf_encoder = btf_encoder__new(cu, detached_btf_filename, conf_load->base_btf, encode_btf_vars,
+ 						       btf_encode_force, btf_gen_floats, global_verbose);
+ 			if (btf_encoder && thr_data) {
+ 				struct thread_data *thread = thr_data;
+@@ -3064,7 +3083,7 @@ static enum load_steal_kind pahole_stealer(struct cu *cu,
+ 				thread->encoder =
+ 					btf_encoder__new(cu, detached_btf_filename,
+ 							 NULL,
+-							 skip_encoding_btf_vars,
++							 encode_btf_vars,
+ 							 btf_encode_force,
+ 							 btf_gen_floats,
+ 							 global_verbose);
 -- 
 2.34.1
 
