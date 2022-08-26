@@ -2,132 +2,172 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0AF63ECAAD6
-	for <linux-dwarves@archiver.kernel.org>; Fri, 26 Aug 2022 16:53:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 916E0ECAAA6
+	for <linux-dwarves@archiver.kernel.org>; Fri, 26 Aug 2022 17:01:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344763AbiHZQxC (ORCPT
+        id S1344911AbiHZRBi (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Fri, 26 Aug 2022 12:53:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57388 "EHLO
+        Fri, 26 Aug 2022 13:01:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245701AbiHZQxB (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Fri, 26 Aug 2022 12:53:01 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D15BB84;
-        Fri, 26 Aug 2022 09:52:59 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id C8453CE3097;
-        Fri, 26 Aug 2022 16:52:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82C0CC433D6;
-        Fri, 26 Aug 2022 16:52:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661532775;
-        bh=Y/uzqAIh1YcNPax6RpqdWo4bFq80gveYSsLUPXyiOXI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Rhta6UATMURxluUg/NlWzY+ixrgJdnYbSk3hUq0vXNzAcTjxEB8uPnDmMvGc2T2vy
-         b0zvK+jwmy/v8YJFu2VAFZX8oWH89uyVzgP3roCDdXcKuIx0lo0L2Bn1ZyU7hY7Uoi
-         cfkwpAnqa70l4NJpCBDOzia74cCBSBvMJDh1kAUBUK0gTCwXJGwHvsxyWWlo1A5LF7
-         zGIePKVwy41B2BM87SwkL8Y9rluSUgI9ECacG46TCC+vrHtoQYulofLRLkPcH9jNBF
-         TysOa60zZqQerFnNySPOW71mOOB+0M0u07wxtsBnUuWTUOh7BdJI/faOS0/Oij6vpl
-         K7X+FlA7g7w/w==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 30529404A1; Fri, 26 Aug 2022 13:52:53 -0300 (-03)
-Date:   Fri, 26 Aug 2022 13:52:53 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+        with ESMTP id S1344885AbiHZRBa (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Fri, 26 Aug 2022 13:01:30 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5685FC9252;
+        Fri, 26 Aug 2022 10:01:12 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id c93so2837992edf.5;
+        Fri, 26 Aug 2022 10:01:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc;
+        bh=wq8jdm4bP0A9xllLOljSR/UzZ9NQZ4MdSdqlcWi+tl4=;
+        b=LVYVm4XJEwP2xRcVO9d7aUhhzSCHH/awe42loIJk2T8uAG/ME+jW311T8oZiXGf52V
+         PLqCGnQV+WxQvH1VRYx1/2M4gXa7xYi9Is6UpzoabMVXjraRFj7QvvnHpgXG1GNpa4GA
+         kc+SvtAWdhysH4xHEfh+jcIQlw0tpZ/JhxraGiCD+Avo4Cho7hPhAH+YvUpG2sK/eOfw
+         meMvuIABkI2156xeSw6j3mJXSdGclkzEAjDkstoVK/McpW2hNKslF+YqWyx82v1eXgds
+         ilbCsCXEY+v9JAQDv7jKTAyzCbJ4m/7J79P/XkqqceLpnxIDnouDO1QZS+3SYTzsKFRH
+         lC5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc;
+        bh=wq8jdm4bP0A9xllLOljSR/UzZ9NQZ4MdSdqlcWi+tl4=;
+        b=EHgMncgo1OG2lj4n1y+7YpQMiYcCcfAX9vpr7sKUHBRv4rTcH6SFHsl1OqLrdNWhHO
+         kkDbhEXdb9yH27QVZ7aAYi5YNypuKUs2pc689U9Dz+nts9DIphKrt/IjDYNT/NhyxuGu
+         ZeXHJ6EAn1+k0a3/bgOv0ABXUC7PZQusBDjwzJkoOQi6y3/xuN1VHwx3MBi+hLqB1y81
+         5YSLDW8WilO+dMfxhVuG+oaBT5TDf671oCkLyyJOfeXV9zUxiSBCEj+jwRbGgijo7ic3
+         PxhHJb83/Ldb6LSsphTFoTKGQRT928HwySMI8aM+08vmw/cPviXdr0jHDSFyfaOHXFyB
+         9k6Q==
+X-Gm-Message-State: ACgBeo1LRdBaz1cg2C/kHbXs/Hllqco6BfjqpUX+SpvXQy3oqinXxadA
+        Fwwrstvijd7d/wYA3BSzMjI=
+X-Google-Smtp-Source: AA6agR7VDBqsCdHYhb9GwvCMme0bFNwZvjX+54Goug/DvgfOz4XBBTFlI3gPpugwHGSjqmwoNCRWNQ==
+X-Received: by 2002:a05:6402:500d:b0:440:9bc5:d0c1 with SMTP id p13-20020a056402500d00b004409bc5d0c1mr7493950eda.202.1661533270515;
+        Fri, 26 Aug 2022 10:01:10 -0700 (PDT)
+Received: from krava ([193.85.244.190])
+        by smtp.gmail.com with ESMTPSA id l3-20020a1709065a8300b007341663d7ddsm1112644ejq.96.2022.08.26.10.01.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 26 Aug 2022 10:01:10 -0700 (PDT)
+From:   Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date:   Fri, 26 Aug 2022 19:01:08 +0200
 To:     Yonghong Song <yhs@fb.com>
-Cc:     Vitaly Chikunov <vt@altlinux.org>,
+Cc:     Jiri Olsa <olsajiri@gmail.com>, Vitaly Chikunov <vt@altlinux.org>,
         Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
         dwarves@vger.kernel.org, bpf <bpf@vger.kernel.org>,
         Martin Reboredo <yakoyoku@gmail.com>
 Subject: Re: pahole v1.24: FAILED: load BTF from vmlinux: Invalid argument
-Message-ID: <Ywj6ZcqWsz8Au6qO@kernel.org>
+Message-ID: <Ywj8VBH3Ud6493/z@krava>
 References: <20220825163538.vajnsv3xcpbhl47v@altlinux.org>
  <CA+JHD904e2TPpz1ybsaaqD+qMTDcueXu4nVcmotEPhxNfGN+Gw@mail.gmail.com>
  <20220825171620.cioobudss6ovyrkc@altlinux.org>
  <20220826025220.cxfwwpem2ycpvrmm@altlinux.org>
  <20220826025944.hd7htqqwljhse6ht@altlinux.org>
- <00cb99bd-bd17-3ff6-9008-92861518aff8@fb.com>
+ <YwjQDBovX+cX/JDJ@krava>
+ <800bde36-6cb2-d482-0cdb-b3d6005b41da@fb.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <00cb99bd-bd17-3ff6-9008-92861518aff8@fb.com>
-X-Url:  http://acmel.wordpress.com
+In-Reply-To: <800bde36-6cb2-d482-0cdb-b3d6005b41da@fb.com>
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-Em Fri, Aug 26, 2022 at 09:47:59AM -0700, Yonghong Song escreveu:
+On Fri, Aug 26, 2022 at 09:51:54AM -0700, Yonghong Song wrote:
 > 
 > 
-> On 8/25/22 7:59 PM, Vitaly Chikunov wrote:
-> > On Fri, Aug 26, 2022 at 05:52:20AM +0300, Vitaly Chikunov wrote:
-> > > Arnaldo,
-> > > 
-> > > On Thu, Aug 25, 2022 at 08:16:20PM +0300, Vitaly Chikunov wrote:
-> > > > On Thu, Aug 25, 2022 at 01:47:59PM -0300, Arnaldo Carvalho de Melo wrote:
-> > > > > On Thu, Aug 25, 2022, 1:35 PM Vitaly Chikunov <vt@altlinux.org> wrote:
-> > > > > > 
-> > > > > > I also noticed that after upgrading pahole to v1.24 kernel build (tested on
-> > > > > > v5.18.19, v5.15.63, sorry for not testing on mainline) fails with:
-> > > > > > 
-> > > > > >      BTFIDS  vmlinux
-> > > > > >    + ./tools/bpf/resolve_btfids/resolve_btfids vmlinux
-> > > > > >    FAILED: load BTF from vmlinux: Invalid argument
-> > > > > > 
-> > > > > > Perhaps, .tmp_vmlinux.btf is generated incorrectly? Downgrading dwarves to
-> > > > > > v1.23 resolves the issue.
-> > > > > > 
-> > > > > 
-> > > > > Can you try this, from Martin Reboredo (Archlinux):
-> > > > > 
-> > > > > Can you try a build of the kernel or the by passing the
-> > > > > --skip_encoding_btf_enum64 to scripts/pahole-flags.sh?
-> > > > > 
-> > > > > Here's a patch for either in tree scripts/pahole-flags.sh or
-> > > > > /usr/lib/modules/5.19.3-arch1-1/build/scripts/pahole-flags.sh
+> On 8/26/22 6:52 AM, Jiri Olsa wrote:
+> > On Fri, Aug 26, 2022 at 05:59:44AM +0300, Vitaly Chikunov wrote:
+> > > On Fri, Aug 26, 2022 at 05:52:20AM +0300, Vitaly Chikunov wrote:
+> > > > Arnaldo,
 > > > > 
-> > > > This patch helped and kernel builds successfully after applying it.
-> > > > (Didn't notice this suggestion in release discussion thread.)
+> > > > On Thu, Aug 25, 2022 at 08:16:20PM +0300, Vitaly Chikunov wrote:
+> > > > > On Thu, Aug 25, 2022 at 01:47:59PM -0300, Arnaldo Carvalho de Melo wrote:
+> > > > > > On Thu, Aug 25, 2022, 1:35 PM Vitaly Chikunov <vt@altlinux.org> wrote:
+> > > > > > > 
+> > > > > > > I also noticed that after upgrading pahole to v1.24 kernel build (tested on
+> > > > > > > v5.18.19, v5.15.63, sorry for not testing on mainline) fails with:
+> > > > > > > 
+> > > > > > >      BTFIDS  vmlinux
+> > > > > > >    + ./tools/bpf/resolve_btfids/resolve_btfids vmlinux
+> > > > > > >    FAILED: load BTF from vmlinux: Invalid argument
+> > > > > > > 
+> > > > > > > Perhaps, .tmp_vmlinux.btf is generated incorrectly? Downgrading dwarves to
+> > > > > > > v1.23 resolves the issue.
+> > > > > > > 
+> > > > > > 
+> > > > > > Can you try this, from Martin Reboredo (Archlinux):
+> > > > > > 
+> > > > > > Can you try a build of the kernel or the by passing the
+> > > > > > --skip_encoding_btf_enum64 to scripts/pahole-flags.sh?
+> > > > > > 
+> > > > > > Here's a patch for either in tree scripts/pahole-flags.sh or
+> > > > > > /usr/lib/modules/5.19.3-arch1-1/build/scripts/pahole-flags.sh
+> > > > > 
+> > > > > This patch helped and kernel builds successfully after applying it.
+> > > > > (Didn't notice this suggestion in release discussion thread.)
+> > > > 
+> > > > Even thought it now compiles with this patch, it does not boot
+> > > > afterwards (in virtme-like env), witch such console messages:
 > > > 
-> > > Even thought it now compiles with this patch, it does not boot
-> > > afterwards (in virtme-like env), witch such console messages:
+> > > I'm talking here about 5.15.62. Yes, proposed patch does not apply there
+> > > (since there is no `scripts/pahole-flags.sh`), but I updated
+> > > `scripts/link-vmlinux.sh` with the similar `if` to append
+> > > `--skip_encoding_btf_enum64` which lets then compilation pass.
+> > > 
+> > > Thanks,
+> > > 
+> > > > 
+> > > >    [    0.767649] Run /init as init process
+> > > >    [    0.770858] BPF:[593] ENUM perf_event_task_context
+> > > >    [    0.771262] BPF:size=4 vlen=4
+> > > >    [    0.771511] BPF:
+> > > >    [    0.771680] BPF:Invalid btf_info kind_flag
+> > > >    [    0.772016] BPF:
 > > 
-> > I'm talking here about 5.15.62. Yes, proposed patch does not apply there
-> > (since there is no `scripts/pahole-flags.sh`), but I updated
-> > `scripts/link-vmlinux.sh` with the similar `if` to append
-> > `--skip_encoding_btf_enum64` which lets then compilation pass.
+> > I can see the same on 5.15, it looks like the libbpf change that
+> > pahole is compiled with is setting the type's kflag for values < 0:
+> > (which is the case for perf_event_task_context enum first value)
+> > 
+> >    dffbbdc2d988 libbpf: Add enum64 parsing and new enum64 public API
+> > 
+> > but IIUC kflag should stay zero for normal enum otherwise the btf meta
+> > verifier screams
 > 
-> Right, pahole v1.24 supports enum64 to correctly encode
-> some big 64bit values in BTF. But enum64 is only supported
-> in recent kernels. For old kernels, --skip_encoding_btf_enum64
-> is the way to workaround the issue.
+> This is deliberate so we can have sign bit set properly for 32bit enum.
+> To avoid this behavior, the correct way is to turn off enum64 support
+> in pahole with flag --skip_encoding_btf_enum64.
 
-Check Jiri response, this doesn't seem to be enough.
+I used that as well, it wouldn't compile without
 
-- Arnaldo
+the error is during the boot where the standard enum has kflag set
 
-> > Thanks,
+jirka
+
+> 
 > > 
-> > > 
-> > >    [    0.767649] Run /init as init process
-> > >    [    0.770858] BPF:[593] ENUM perf_event_task_context
-> > >    [    0.771262] BPF:size=4 vlen=4
-> > >    [    0.771511] BPF:
-> > >    [    0.771680] BPF:Invalid btf_info kind_flag
-> > >    [    0.772016] BPF:
-> > >    [    0.772016]
-> > >    [    0.772288] failed to validate module [9pnet] BTF: -22
-> > >    init_module '9pnet.ko' error -1
-> > >    [    0.785515] 9p: Unknown symbol p9_client_getattr_dotl (err -2)
-> > >    [    0.786005] 9p: Unknown symbol p9_client_wstat (err -2)
-> > >    [    0.786438] 9p: Unknown symbol p9_client_open (err -2)
-> > >    [    0.786863] 9p: Unknown symbol p9_client_rename (err -2)
-> > >    [    0.787307] 9p: Unknown symbol p9_client_remove (err -2)
-> > >    [    0.787749] 9p: Unknown symbol p9_client_renameat (err -2)
-> [...]
-
--- 
-
-- Arnaldo
+> > if I compile pahole with the libbpf change below I can boot 5.15 kernel
+> > normally
+> > 
+> > Yonghong, any idea?
+> > 
+> > thanks,
+> > jirka
+> > 
+> > 
+> > ---
+> > diff --git a/src/btf.c b/src/btf.c
+> > index 2d14f1a52d7a..53d7516e4b89 100644
+> > --- a/src/btf.c
+> > +++ b/src/btf.c
+> > @@ -2151,10 +2151,6 @@ int btf__add_enum_value(struct btf *btf, const char *name, __s64 value)
+> >   	t = btf_last_type(btf);
+> >   	btf_type_inc_vlen(t);
+> > -	/* if negative value, set signedness to signed */
+> > -	if (value < 0)
+> > -		t->info = btf_type_info(btf_kind(t), btf_vlen(t), true);
+> > -
+> >   	btf->hdr->type_len += sz;
+> >   	btf->hdr->str_off += sz;
+> >   	return 0;
