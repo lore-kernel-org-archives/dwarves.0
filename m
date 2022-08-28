@@ -2,109 +2,114 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 271FCECAAD5
-	for <linux-dwarves@archiver.kernel.org>; Sun, 28 Aug 2022 14:29:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 98DD8ECAAD2
+	for <linux-dwarves@archiver.kernel.org>; Sun, 28 Aug 2022 17:01:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229683AbiH1O3W (ORCPT
+        id S229910AbiH1RBw (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Sun, 28 Aug 2022 10:29:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53860 "EHLO
+        Sun, 28 Aug 2022 13:01:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229661AbiH1O3V (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Sun, 28 Aug 2022 10:29:21 -0400
-Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84A0E1D304;
-        Sun, 28 Aug 2022 07:29:20 -0700 (PDT)
-Received: by mail-oi1-x22a.google.com with SMTP id s199so7746292oie.3;
-        Sun, 28 Aug 2022 07:29:20 -0700 (PDT)
+        with ESMTP id S229585AbiH1RBt (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Sun, 28 Aug 2022 13:01:49 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC7A92870B;
+        Sun, 28 Aug 2022 10:01:48 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id og21so11563858ejc.2;
+        Sun, 28 Aug 2022 10:01:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=3avCbfvZdoE1ib3BBn4Yj1SFoc8ZfcI+yju4hXTdg8w=;
-        b=hDnACDUvVLjbdaNT5D/WFt+OMyo51EnTEsYmkoYYSXjoDOwUZ3Dyoj2r9FuiMXWmre
-         /nVi8b5AJvOtpyZB2q0xHSESOznsbeLmQCgdp1mc1ETDpYqD3pB16oA+mDVtC+lRxXY0
-         jE/DPiFTKfs9eyfn89zEQByQmv32+0a2vfpPJhykp6Fay9rhan5Ox9Acj1uYRTG7fi2/
-         qZgxhPDbs1V2MkTAclskZGC8bweH8yDqKiESgzxwImsXLTy1ZjSMzfJeHJW6uJ4/RFbg
-         PPxopp+NYEeFtBtvFzTbSlsiHqX3DvRMGQcCVa5KhcCTdeqjH7tMW8mF0jgatcU6fyjP
-         fDug==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc;
+        bh=I82QXomtImz0v3LtMkfEZ6Cz0zXgW/iwVN1tJ8E+Xw8=;
+        b=TwaY/bcc20FWlguIBx4z6o0ufaEPX9aQcQHk6417acqqY0BUYpKZz33c9iOAtv1H1i
+         hZ5zVvHcnZYyjmBuMUSxP5Bwhkc/Ldftw6RrjdbyOIwoMkFe7QGJ26tDMPAv4uHeRXkh
+         l7vzpLvN9iPu1zgooJrrpQdiikWI7tiRzclUVeQUr+S2gmTaCGwpTHT/nmWvlV7tJb8B
+         CcJXbKFDsgcbGmQyxoJjgdsg7LAZ1ic7BXiFHgjTuU7vHUHIxEOYWGV41zK5FgP+Bzb4
+         f4mrW8b3Gq0SbE0UkC52/NsT0iMCg1K96hmrzgNDx8uzK51X2TDa8sk5hFY+NQWNE0y2
+         Fgxg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=3avCbfvZdoE1ib3BBn4Yj1SFoc8ZfcI+yju4hXTdg8w=;
-        b=cxLe+b2k66NjVZcTaxiiPuMet7ynfjFBprl5g+TTzsYYA9bZYST36ePunftl55zSzp
-         a/j4Q2790afGxsFK0KDqAkHr/a/Dj2jMCjzG4wa5yXe2Sz8NLxYc6y4z12+OlFAwu3aY
-         iGpM8+v47kY2zcRCEfUrNE4QKeEvTp4erJhfWM50SCiB3O3GFNy6frF8li5IvCASdzqj
-         wgPtLGOroYQBGVi+1BpBXo4T+o8q7BLuGYVLbociifH+ppzhDK5uR6ce5yUTe19EBYSb
-         k3aOH6Z2xbYwTyNBg0C1TB2fCK3jBadBu21B6sX/nDYRuQ7XEtVTcQ8mB1GMzRwz+wtE
-         useQ==
-X-Gm-Message-State: ACgBeo2LV/GgZoBBFep4mHfn2MBeBE/12Z4HjFkuv72QXH4dA0qrwRWY
-        65ZeTDtSXkroE7aJKpnWZoM=
-X-Google-Smtp-Source: AA6agR6sZ8/0DWNP9brI9oAK91gSvRP1pMGJzrptEBvQ4knNPrkwfvbFrj+vZVdTWJfhQFoT2VmkgA==
-X-Received: by 2002:a05:6808:1d9:b0:344:a080:7e83 with SMTP id x25-20020a05680801d900b00344a0807e83mr5738894oic.86.1661696959894;
-        Sun, 28 Aug 2022 07:29:19 -0700 (PDT)
-Received: from [192.168.54.90] (static.220.238.itcsa.net. [190.15.220.238])
-        by smtp.gmail.com with ESMTPSA id q22-20020a056870e61600b0011c65559b04sm4795065oag.34.2022.08.28.07.29.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 28 Aug 2022 07:29:19 -0700 (PDT)
-Message-ID: <b783998f-366b-5643-7347-3cf47269ffc8@gmail.com>
-Date:   Sun, 28 Aug 2022 11:29:35 -0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: ANNOUNCE: pahole v1.24 (Faster BTF encoding, 64-bit BTF enum
- entries)
-Content-Language: en-US
-To:     Jiri Olsa <olsajiri@gmail.com>
-Cc:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc;
+        bh=I82QXomtImz0v3LtMkfEZ6Cz0zXgW/iwVN1tJ8E+Xw8=;
+        b=q0JOHn8Is4e4Kb8JAHoLC1607aa9FONZZdzlY03nR5a+C6U8hHBbusREnybf6YX+qc
+         57vjUe1uOttVf4wjuPsW09a7h/+31iKNH7gSoXD/mTGErbFtzFnu4aryDZGamg+LIbyy
+         YnTngzs6o049u7uqXTjyCq52zchfCd3a6vvewH+7vzVMP5lxPFT8RLfLY3ZO+QgJ7yYF
+         FDPtgESrvT28UOt7IpENF1DXXldfzpPXaoN/TwTA9gKYPwsqru/fy/vEwMB99IkIOubE
+         iDRRJwQCUywGatqvvJeYddU6A/fy4k6LrmzqMgT56aIlQqpfdvyx/OHVeoG7JQSY6EAT
+         MO9Q==
+X-Gm-Message-State: ACgBeo2UcSMRUw4GxRxbRA8zy3wYVIgnDjYDIuJ8ZtCnVx+JkQWboO02
+        AS3WyELmDePVCqOVM4EoKNs=
+X-Google-Smtp-Source: AA6agR4nvQ60lGTjoXUtIfvbz5ymDjuX5Q18t3n23YIM7u73nSHKrOtu/Z2/mxbD2NiT1GgDo9jOwA==
+X-Received: by 2002:a17:907:8687:b0:730:7c7b:b9ce with SMTP id qa7-20020a170907868700b007307c7bb9cemr10891306ejc.656.1661706107310;
+        Sun, 28 Aug 2022 10:01:47 -0700 (PDT)
+Received: from krava ([83.240.60.103])
+        by smtp.gmail.com with ESMTPSA id t23-20020a05640203d700b00440ced0e117sm4564637edw.58.2022.08.28.10.01.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 28 Aug 2022 10:01:47 -0700 (PDT)
+From:   Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date:   Sun, 28 Aug 2022 19:01:44 +0200
+To:     Martin Rodriguez Reboredo <yakoyoku@gmail.com>
+Cc:     Jiri Olsa <olsajiri@gmail.com>,
+        Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
         Luna Jernberg <droidbittin@gmail.com>, dwarves@vger.kernel.org,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Alibek Omarov <a1ba.omarov@gmail.com>,
         Kornilios Kourtis <kornilios@isovalent.com>,
         Kui-Feng Lee <kuifeng@fb.com>, Yonghong Song <yhs@fb.com>,
         bpf@vger.kernel.org
+Subject: Re: ANNOUNCE: pahole v1.24 (Faster BTF encoding, 64-bit BTF enum
+ entries)
+Message-ID: <YwufePAAfJESjOyi@krava>
 References: <YwQRKkmWqsf/Du6A@kernel.org>
  <CADo9pHhW9w+ciNbQr+7u4mezuQ1USyh0k2Wshy=wkdEcxRiDLA@mail.gmail.com>
  <YwY2mFuJP10dehRx@kernel.org>
  <CADo9pHheRprMRAZkcxcALRv7gi8r+_CpNBP+LB4rt0n-_ZMQ4Q@mail.gmail.com>
  <YwY3qEa2gFsPg2jz@kernel.org>
  <CADo9pHhcw2+WEYfD=hJ-o67fw9Uf+ERS8xo2SHApNQgPwGCmBA@mail.gmail.com>
- <538ebda0-0f8a-ebae-f02f-c8f8736ca12b@gmail.com> <YwsbYX3g5dvaRABt@krava>
-From:   Martin Rodriguez Reboredo <yakoyoku@gmail.com>
-In-Reply-To: <YwsbYX3g5dvaRABt@krava>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+ <538ebda0-0f8a-ebae-f02f-c8f8736ca12b@gmail.com>
+ <YwsbYX3g5dvaRABt@krava>
+ <b783998f-366b-5643-7347-3cf47269ffc8@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b783998f-366b-5643-7347-3cf47269ffc8@gmail.com>
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-On 8/28/22 04:38, Jiri Olsa wrote:
-> On Wed, Aug 24, 2022 at 07:50:39PM -0300, Martin Reboredo wrote:
->> On 8/24/22 11:38, Luna Jernberg wrote:
->>> https://forum.endeavouros.com/t/failed-to-start-load-kernel-modules-on-boot-after-system-update-nvidia/30584/17?u=sradjoker
->>>
->>> On 8/24/22, Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com> wrote:
->>>> Em Wed, Aug 24, 2022 at 04:36:18PM +0200, Luna Jernberg escreveu:
+On Sun, Aug 28, 2022 at 11:29:35AM -0300, Martin Rodriguez Reboredo wrote:
+> On 8/28/22 04:38, Jiri Olsa wrote:
+> > On Wed, Aug 24, 2022 at 07:50:39PM -0300, Martin Reboredo wrote:
+> >> On 8/24/22 11:38, Luna Jernberg wrote:
+> >>> https://forum.endeavouros.com/t/failed-to-start-load-kernel-modules-on-boot-after-system-update-nvidia/30584/17?u=sradjoker
+> >>>
+> >>> On 8/24/22, Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com> wrote:
+> >>>> Em Wed, Aug 24, 2022 at 04:36:18PM +0200, Luna Jernberg escreveu:
+> > 
+> > SNIP
+> > 
+> >>
+> >> Can you try a build of the kernel or the by passing the
+> >> --skip_encoding_btf_enum64 to scripts/pahole-flags.sh?
+> > 
+> > Martin,
+> > could you please send formal patch this?
+> > 
+> > thanks,
+> > jirka
 > 
-> SNIP
-> 
->>
->> Can you try a build of the kernel or the by passing the
->> --skip_encoding_btf_enum64 to scripts/pahole-flags.sh?
-> 
-> Martin,
-> could you please send formal patch this?
-> 
-> thanks,
-> jirka
+> Sure, sure! Though it might take a bit of time due to being my first
+> contribution submitted by me (I've already contributed through the Rust
+> patches though), I'll add Kconfig entries for this, one for the
+> availability to skip the enum64 encoding and another for toggle the
+> flag. Stay tuned.
 
-Sure, sure! Though it might take a bit of time due to being my first
-contribution submitted by me (I've already contributed through the Rust
-patches though), I'll add Kconfig entries for this, one for the
-availability to skip the enum64 encoding and another for toggle the
-flag. Stay tuned.
+hm, but we actually need that just for 5.15 or whatever stable version
+is using latest pahole but does not have support for enum64
 
-- Martin Rodriguez Reboredo
+please check Documentation/process/stable-kernel-rules.rst
+
+jirka
