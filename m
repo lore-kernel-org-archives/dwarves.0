@@ -2,188 +2,192 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BD63CECAAA1
-	for <linux-dwarves@archiver.kernel.org>; Tue, 30 Aug 2022 15:14:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 63C3DC38145
+	for <linux-dwarves@archiver.kernel.org>; Wed,  7 Sep 2022 19:08:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229720AbiH3POu (ORCPT
+        id S229563AbiIGTH2 (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Tue, 30 Aug 2022 11:14:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33528 "EHLO
+        Wed, 7 Sep 2022 15:07:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229796AbiH3POt (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Tue, 30 Aug 2022 11:14:49 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A03DC6E;
-        Tue, 30 Aug 2022 08:14:45 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id fy31so22425654ejc.6;
-        Tue, 30 Aug 2022 08:14:45 -0700 (PDT)
+        with ESMTP id S229567AbiIGTH0 (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Wed, 7 Sep 2022 15:07:26 -0400
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F0A7A9256;
+        Wed,  7 Sep 2022 12:07:25 -0700 (PDT)
+Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 287IScYN003028;
+        Wed, 7 Sep 2022 19:07:02 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : in-reply-to : references : date : message-id : content-type :
+ mime-version; s=corp-2022-7-12;
+ bh=GUjyhkQO+2Mc2TjhhyExFK/tZBS7h5B1F1z1arSNzZo=;
+ b=EdMF94Ca7cBRn6RjYUxglu0SGambqzAbz5Esgoy0D+AI7JYNXoLFzwiJwpuCC1j1uXS3
+ GT/KubCGVkQVAzw++x/T/9qyZUdVrEjCgo86xtZCFM3eFBm8LzrCVXaIEA0kr1cParyL
+ EaLfQW/6IX6LLV4tvjRg+BuqnIdq78IyhXvkCi67puddE1VLWopEJnrMLOf2Xcnkf4rP
+ w1+7H/4sIQqrqskWB1HyYF+tYSjpxR/mmx+YmGV/mjJAzpscD4DtcIF+CYGWJOOMZw9j
+ z8K8tVCl4ddlciEISAvZD/kYAmj60vjUxUemICDzKrowFzOGIWZDzBSwmxgieWQ4lHFi yQ== 
+Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3jbxhsstky-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 07 Sep 2022 19:07:02 +0000
+Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 287IFuZC021226;
+        Wed, 7 Sep 2022 19:07:01 GMT
+Received: from nam12-dm6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2177.outbound.protection.outlook.com [104.47.59.177])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3jbwcasch7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 07 Sep 2022 19:07:01 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=dRG8pOTvkfW5CY+NK5iZytaGOIHVWBeuc7otomSNVcH9X9GfJIr5Hs8p3uuBGzU+8XeshE1IN3VTFCRvssfSke1blA1WvemeGMHippojCNDMZwMFzjrTljH/x2I/YeusKPPBnGiWdxSoyI1sRgafI2Q6bYHV4ONHvCLGb3AFOiJddb2rz1nBFzJj22JjHVehSceXLbCjvdWu+RMhnVuSsS2i7kV1uEOXlsoDq1J+VxhdZKfTf3+riQRFnqKQ3e7Ezo3RK5eOgAF+nYOwPWEPwOwIKGNUbHESO/psF8rBjPz7GVi6xZq7m4Ng82F1XowdPya8PSiwk75dkGzrYAAZTw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=GUjyhkQO+2Mc2TjhhyExFK/tZBS7h5B1F1z1arSNzZo=;
+ b=NP+rDgqaTTW3zpop5Qw8RnYxcojXUf/ey1SMwX4if9oXCGXV0T+zq6sP4LojoVxvuh4XDB9GqywlGbpjH6YuZ9EBss9ZdOsMknTcl/3/ownClUT30xoijFfqPDVq6Yz5AsQ4XfHw1Cn7myfUoAEwpgZ5vGaoY2dVtycZdGfKfOXTlTFOt3osT3R7iC6nkFoBTgRhantpHXaG0F9z9sW9wyivXGeZj8Oc0b+gjO3103vUudtoc/HRJzPvWcXE2dWr0UGy9oTVrS5mECEqE81e9TzvpGadEeTcrEkis59Q8j6STYrYxuMKikDjZOEmT2DmCHqa+uAukzh3BHf3I8+kqQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=w78Op6E5EuNFAMF7+a+1TxFn1y6Nd4iLcTWfFOX96PU=;
-        b=eTc5Ctjs1SZnEra5J8DQ/TxN9mxmfp5xa7KGV2mnNn+qNIrYkPV4dgkoDqkqlO9AQQ
-         FivWFG7isDsVPbORdYlQ6txbgXmHNwi7mW7oYfKU/J7obCR9aZRw64J8EKQ2Z/VABGRx
-         IjULF8qtcoWK4NJnfl1I55iQTW5fCwc8e5VR8VpF2Md4eZ04dePO/OE4ki1d0htR9iD4
-         y2H/pkma+XvaW+wr8hw9a36/zuBPCR4ReO0nkmIqE/DuibWiUIahJKozlfOOVr0VYGHL
-         NcsVXi1UYavtsBZvk33NJXdpyf3v+PijSog5loYxM1C8su7s2ru1Lb8Yo2FzFvqPqQn8
-         o8Wg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=w78Op6E5EuNFAMF7+a+1TxFn1y6Nd4iLcTWfFOX96PU=;
-        b=HWoIa0eIB5EA4qYB8tDko6DPWfZMHLeHTu4nh4yAcchPOcqDwmYIDD13qXh4YcsPFE
-         Z0quG7ChT2yKQLfUrjEwcxHoHtMw4yd/y3S+QUyFkoWwpm2zkyjOa4jOU0JnOAbGcvZC
-         gq0VCIj9j8B998K+CVroFUK/PUi998ZZRnGAN7TfFDS2Nmm0EOuh3C1XDwB2ri+imEbF
-         3Um9K0OdqGa96ostCw6871Fcz3ArAU2jqASBenjbuyb/SgDizu1UEO2L2NDPxuHYHdBo
-         mbR02dXiF7xsSQykJIKnRcz0s0JlA47voCN3IMnPeM8WdNGg/Avt2IodDtsDefhZnmIA
-         YPYg==
-X-Gm-Message-State: ACgBeo2KRSFK039VI6s1gSRnHqPQe6Es6mfQ0dXZ2FC4/TxQi8Wcf671
-        4/su/j3E5biYrln4ejTS0UMOcSxbuJA9E6Xn/bTq8ptl
-X-Google-Smtp-Source: AA6agR4t9c5nkIlACYpay1xL/RNeq7p8AXGmXBKzS0c/vowoef+IRnnXGk3RtBHWIyP/KN2vAFzvJF7u+FzZacSAJow=
-X-Received: by 2002:a17:907:2c74:b0:741:657a:89de with SMTP id
- ib20-20020a1709072c7400b00741657a89demr8890765ejc.58.1661872483740; Tue, 30
- Aug 2022 08:14:43 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220826184911.168442-1-stephen.s.brennan@oracle.com>
-In-Reply-To: <20220826184911.168442-1-stephen.s.brennan@oracle.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Tue, 30 Aug 2022 08:14:32 -0700
-Message-ID: <CAADnVQKbK__y8GOD4LqaX0aCgT+rtC5aw54-02mSZj1-U6_mgw@mail.gmail.com>
-Subject: Re: [PATCH dwarves 0/7] Add support for generating BTF for all variables
-To:     Stephen Brennan <stephen.s.brennan@oracle.com>,
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=GUjyhkQO+2Mc2TjhhyExFK/tZBS7h5B1F1z1arSNzZo=;
+ b=MHXcuxtKbig9hUJr8VzhNWEe3sLX+CBf/KMMAUAXdaBzAO6Xxwa1nVECP+Mf1IK8MO6EKOolrn73gYJ56vJo9Jvb+lKhsXGKXIImc3IbLZqinwH3laFrofQvOxROOsVyMDgtdgSzr24V4ydsA/U2mpWejVZP8NQeSu6tOw/8o/M=
+Received: from CH2PR10MB4166.namprd10.prod.outlook.com (2603:10b6:610:78::20)
+ by CH0PR10MB5180.namprd10.prod.outlook.com (2603:10b6:610:db::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.14; Wed, 7 Sep
+ 2022 19:07:00 +0000
+Received: from CH2PR10MB4166.namprd10.prod.outlook.com
+ ([fe80::44ed:9862:9a69:6da5]) by CH2PR10MB4166.namprd10.prod.outlook.com
+ ([fe80::44ed:9862:9a69:6da5%5]) with mapi id 15.20.5588.018; Wed, 7 Sep 2022
+ 19:07:00 +0000
+From:   Stephen Brennan <stephen.s.brennan@oracle.com>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
         Jiri Olsa <jolsa@kernel.org>,
         Andrii Nakryiko <andrii@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>
 Cc:     dwarves@vger.kernel.org, bpf <bpf@vger.kernel.org>,
         Arnaldo Carvalho de Melo <acme@kernel.org>,
         Alan Maguire <alan.maguire@oracle.com>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH dwarves 0/7] Add support for generating BTF for all
+ variables
+In-Reply-To: <CAADnVQKbK__y8GOD4LqaX0aCgT+rtC5aw54-02mSZj1-U6_mgw@mail.gmail.com>
+References: <20220826184911.168442-1-stephen.s.brennan@oracle.com>
+ <CAADnVQKbK__y8GOD4LqaX0aCgT+rtC5aw54-02mSZj1-U6_mgw@mail.gmail.com>
+Date:   Wed, 07 Sep 2022 12:06:57 -0700
+Message-ID: <87sfl3j966.fsf@oracle.com>
+Content-Type: text/plain
+X-ClientProxiedBy: BY3PR10CA0011.namprd10.prod.outlook.com
+ (2603:10b6:a03:255::16) To CH2PR10MB4166.namprd10.prod.outlook.com
+ (2603:10b6:610:78::20)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 92bdb1c6-b66f-44ec-4f2b-08da91042403
+X-MS-TrafficTypeDiagnostic: CH0PR10MB5180:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: RXgIUnLFhfgswk4UvoWSysyoZnPIoTScofRYrJcF6gT4iBisVppZgGpHwP3Y53QVcMyLAz5GUf2Uvt9OJiw4yS+63LhYhAU7zkWCaq+sMCA3vu5PkSe8EeShn4yE3AYT8OwLhlV1Bp3ZHFBUNfGHPBUwk3nkbXWnZiKI9xBaU2UzT9GVfDVPrw1tYwNBA52Wqm1tJaioGig2xcTMYUOPivFwynZfso/Lq9PXHbZqbM2UKkn/gtZbXK1fQuTw2k4WY8px4+k/7+wb7FHJGsAtc75uXXoyqhVrWygTsxXBMOLwZhB1LZGnne4tWSi60PAQnimtbn4KVjbaWzyCo6GKWC3533tEbw5ZFmYyBPnU768H0LTqVuOEzai+VDOVOYCMh5gaRQkR+O82dHWUCySkDUCcLE/uun5xMyTNIbHq2Gv21kMf9QZ5M0auyd2T9qx9hUN7rMS2JaLgFjmnVhQdUL3G7vyWH8DNRlRSsSxmHjf91HTeQTGfmNXgk6RMxPrnaQtvzsu3cwycj9DmxUXXBYRSqiHtw1L/B0oCqxk/HMgERiRwisZWBl0w32GsEVapq/a3CGo38r6WkpTUJVWLfDZm47lMgR++Sy2IS8OlD6Av0aS2lWO6EJZ60RstkWBEi6wsC7K/fAYC+rQkYrrfmcVkJc8UGwEvnJvGH73FqH8mFsjjjhw+rSiMuIVWPmFSolaRsfHcmgWvA21AMCQEPw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH2PR10MB4166.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(376002)(346002)(136003)(39860400002)(366004)(396003)(6666004)(2616005)(186003)(8936002)(83380400001)(2906002)(5660300002)(41300700001)(53546011)(26005)(107886003)(36756003)(86362001)(6486002)(6512007)(6506007)(478600001)(38100700002)(110136005)(54906003)(4326008)(8676002)(66476007)(66556008)(66946007)(316002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?piGfvj6J53hdNAOUOfZ4NRgh/h5d8mEveMAeYq9Q7nYFBK58oS/1Z8uoCj11?=
+ =?us-ascii?Q?Ou9DaTEP/yw5ZgE/AU6mZ6vgnNyvpYEM5qSSSxxt09VbdWixmsCRFBjWTqwD?=
+ =?us-ascii?Q?QOr1/wF2/Nt7WjvE4FRaJXzlaDKlKjE3ALwPRlP72fiL/vac0GC/EEK6LD/G?=
+ =?us-ascii?Q?sS51gxV4cvhGILn9/EuVhQL+KqCF1Rsy9tUTAfU/+kAtGKQgTpesM9YRUgVX?=
+ =?us-ascii?Q?IUKzmne6midoL1nQFPo0o61z4GKWGAK7pZDYqTknYqLFk3TwBwKcfJemAowB?=
+ =?us-ascii?Q?fB2kkheAaqKAM87VX4052rK367dFi89OZXxKsyY0MkdgrYGLGf/8IPPjpEdq?=
+ =?us-ascii?Q?XPFFsDfPkVITqaiAaxcX/Vdo//vLVzViP75wR4NUOQnBcvjwln6uWOv3P5X5?=
+ =?us-ascii?Q?loOiVP/rvZTE6wFTuu6MhIGSpc0Nnpra9wLB7Oh56O6okx+I46fZSKfTUGFA?=
+ =?us-ascii?Q?8L+/pyrL6IAerELkgm+pwH/laCsa0HP5zAc3LCfP/8CfRKMql354RJqfktPu?=
+ =?us-ascii?Q?74c9TKYj3LwDgA04aZI7rWTQz2bOiyUmSUKj03cYinBFrdE/sZg6jHS1Zsrw?=
+ =?us-ascii?Q?fVQPP4yq1noRrT0kB3VcGpaSvhYicRqhMAavoPAhk7H2h5SWTSMFTpBUizuu?=
+ =?us-ascii?Q?/t/EGpufgErX1fCvtfrVm6P4uy4jh/hZ71TnItbi8NeFJsi0s66wTBFAu8J3?=
+ =?us-ascii?Q?Se2+62QEncZ8qO5e0+jGVuLcgKMJIfb4j5on4ShTz/fw1ncU89YaQve5k+fY?=
+ =?us-ascii?Q?B19isOKAxG8MYb1O6FIgNz8ra94GlTC8qYiLKAcGvc7ctOnW/zIAnwdPzfdZ?=
+ =?us-ascii?Q?zoKiLoPIgeY6/wmYB6BrAI5bNk/knKlUaL4ylFR3pMYPjtgWkg6cc/6Dy0Sb?=
+ =?us-ascii?Q?TVvHIIqXAHROAsdcWAmsdpK19KF87xM1xIPoMKkfSR7WfvXy6/E66TBcopEo?=
+ =?us-ascii?Q?N6n0Pb7MT/U8nW4hQbK7j0J0puS/Y4iAnScoCBHmC/Pv95kuqpCxRGMWgBHf?=
+ =?us-ascii?Q?QanhHysQPIBu0GfwmR5yucTWvZoI6PK68H1cW6if+FxLzdoL6wv4CnX2dj8F?=
+ =?us-ascii?Q?ZcZhHXuTuD9IIiVZXI83NVxWpoK0gmaKESvirXLmGH1IMSOTpHlu0855PR40?=
+ =?us-ascii?Q?iI9kPR/eVsPPd+qCmSzjwCEiYT/m0QC6T8eYq/zF+WT6xElrdwV6azFT/+9Q?=
+ =?us-ascii?Q?1FHCbZgDRf/iHu99tcZTym0y/wLRCjCoVKQtcPoYW/3VpRcYiop1U9ePhoSW?=
+ =?us-ascii?Q?xVdikP0iCo5A/KjAL8v29NI50Dwm9zgQJ1m4D7j1Pa7z3587Y2kpqFT/lhNm?=
+ =?us-ascii?Q?NrrJ9LvF2counWFmM5uXcpsZKbrm8CD5vhd+KBSw/w6h+5PNMWqiIU3xBCdb?=
+ =?us-ascii?Q?zHM0kaB4Ilk03KYHmCQD/HtXEMlD7+z3eEochZ4HgnQVYuaaD8a4IcGSgiM1?=
+ =?us-ascii?Q?riAd0vQ738tv1OlgF0i7CME9Y/CZ3BLUbGyRu//cmQtlkugSODSFYrNh1eba?=
+ =?us-ascii?Q?tR3es0lEO81Nb1cYsIBYjnQbunOkpNI7tmPliT077Vlm4y4HNGFgFaOSmuUu?=
+ =?us-ascii?Q?v2yaalsRRIo5m9qSY7GaNA32uf0lxZK/39fBPYGNs69XYuSfSin1R4HGFFs6?=
+ =?us-ascii?Q?kA=3D=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 92bdb1c6-b66f-44ec-4f2b-08da91042403
+X-MS-Exchange-CrossTenant-AuthSource: CH2PR10MB4166.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Sep 2022 19:06:59.9720
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 6WV3CemKXYwsafOP995zk9hFplPo7N8NOyn9779ZVWaKcoyXtlyRSX7QHgxdqe3bfMiBf4dVPoKbDAsHVQ3SVX6PgT6z0LornO257WuVicU=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR10MB5180
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-07_10,2022-09-07_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 mlxlogscore=796
+ phishscore=0 mlxscore=0 spamscore=0 malwarescore=0 suspectscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2209070071
+X-Proofpoint-GUID: 9kSyJERn0LN--uUkUy7cxFC1hhyWbOcg
+X-Proofpoint-ORIG-GUID: 9kSyJERn0LN--uUkUy7cxFC1hhyWbOcg
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-On Fri, Aug 26, 2022 at 11:54 AM Stephen Brennan
-<stephen.s.brennan@oracle.com> wrote:
+Alexei Starovoitov <alexei.starovoitov@gmail.com> writes:
+> On Fri, Aug 26, 2022 at 11:54 AM Stephen Brennan
+> <stephen.s.brennan@oracle.com> wrote:
+[...]
+>> Future Work
+>> -----------
+>>
+>> If this proves acceptable, I'd like to follow-up with a kernel patch to
+>> add a configuration option (default=n) for generating BTF with all
+>> variables, which distributions could choose to enable or not.
+>>
+>> There was previous discussion[3] about leveraging split BTF or building
+>> additional kernel modules to contain the extra variables. I believe with
+>> this patch series, it is possible to do that. However, I'd argue that
+>> simpler is better here: the advantage for using BTF is having it all
+>> available in the kernel/module image. Storing extra BTF on the
+>> filesystem would break that advantage, and at that point, you'd be
+>> better off using a debuginfo format like CTF, which is lightweight and
+>> expected to be found on the filesystem.
 >
-> Hello everyone,
->
-> BTF offers some exciting new possibilities beyond its original intent;
-> one of these is making the kernel more self-describing for debug tools.
-> Kallsyms contains symbol table data, and ORC (for x86_64) contains
-> information to help unwind stacks. Now, BTF can provide type information
-> for functions and variables. Taken together, this data is enough to
-> power the basic (read-only) functions of a postmortem or live debugger,
-> without falling back on the heavier debugging information formats like
-> DWARF. What's more, all of these data sources are contained within the
-> kernel image itself, and are thus available on live systems and within
-> crash dumps, without consulting any external debug information files.
->
-> However, currently BTF generation emits information only for percpu
-> variables. This patch series removes that limitation, allowing
-> generating BTF for all variables, thus providing complete type
-> information for debuggers.
->
-> Of course, generating additional BTF means that more data must be stored
-> in the kernel image, and that may not be okay for everyone. Thus, the
-> new behavior must be explicitly enabled by a flag.
->
-> Testing
-> -------
->
-> To verify this change and illustrate the additional space required, I
-> built v5.19-rc7 on x86_defconfig, with the following additionally
-> enabled:
->
-> enable DEBUG_INFO_DWARF4
-> enable BPF_SYSCALL
-> enable DEBUG_INFO_BTF
->
-> I then ran pahole to generate BTF from the built vmlinux in three
-> configurations, and recorded the size of the BTF for each:
->
-> 1) using the current master branch
->    size: 5505315 bytes
-> 2) using this patched version, without enabling --encode_all_btf_vars
->    size: 5505315 bytes
-> 3) using this patched version, with --encode_all_btf_vars enabled
->    size: 6811291 bytes
->
-> A total increase of 1.25 MiB, or a 23.7% increase. This is definitely
-> notable, but not unreasonable for many use cases such as desktop or
-> server applications. I also verified that the data generated by cases 1
-> and 2 are byte-for-byte identical: that is, there are no changes to the
-> generated BTF unless --encode_all_btf_vars is enabled.
->
-> I also verified that the output variables makes sense. I created an
-> application which parses the output BTF and dumps the
-> declarations (BTF_KIND_VAR and BTF_KIND_FUNC), and then diffed its
-> output between configuration 2 and 3. I'm happy to provide a link to
-> that diff (it's of course too big to include in the email).
->
-> End-to-end test
-> ---------------
->
-> To show this is not just theory, I've created an end-to-end test which
-> combines BTF generated via this patch series, along with a kernel patch
-> necessary to expose the kallsyms data [1], and a branch of the drgn
-> debugger[2] which implements kallsyms and BTF parsing. Core dumps
-> generated on the resulting kernel can be loaded by the drgn debugger,
-> and the it can read out variables from the dump with full type
-> information without needing to consult a DWARF debuginfo file.
->
-> Future Work
-> -----------
->
-> If this proves acceptable, I'd like to follow-up with a kernel patch to
-> add a configuration option (default=n) for generating BTF with all
-> variables, which distributions could choose to enable or not.
->
-> There was previous discussion[3] about leveraging split BTF or building
-> additional kernel modules to contain the extra variables. I believe with
-> this patch series, it is possible to do that. However, I'd argue that
-> simpler is better here: the advantage for using BTF is having it all
-> available in the kernel/module image. Storing extra BTF on the
-> filesystem would break that advantage, and at that point, you'd be
-> better off using a debuginfo format like CTF, which is lightweight and
-> expected to be found on the filesystem.
+> With all or nothing approach the distros would have a hard choice
+> to make whether to enable that kconfig, increase BTF and consume
+> extra memory without any obvious reason or just don't do it.
+> Majority probably is not going to enable it.
+> So the feature will become a single vendor only and with
+> inevitable bit-rot.
 
-With all or nothing approach the distros would have a hard choice
-to make whether to enable that kconfig, increase BTF and consume
-extra memory without any obvious reason or just don't do it.
-Majority probably is not going to enable it.
-So the feature will become a single vendor only and with
-inevitable bit-rot.
+I'd intend to support it even if just a single distribution enabled it.
+But I do see your concern.
 
-Whereas with split BTF and extra kernel module approach
-we can enable BTF with all global vars by default.
-The extra module will be shipped by all distros and tools
-like bpftrace might start using it.
+> Whereas with split BTF and extra kernel module approach
+> we can enable BTF with all global vars by default.
+> The extra module will be shipped by all distros and tools
+> like bpftrace might start using it.
 
->
-> [1]: https://lore.kernel.org/lkml/20220517000508.777145-3-stephen.s.brennan@oracle.com/T/
->      (The above series is already in the 6.0 RC's)
-> [2]: https://github.com/brenns10/drgn/tree/kallsyms_plus_btf
-> [3]: https://lore.kernel.org/bpf/586a6288-704a-f7a7-b256-e18a675927df@oracle.com/
->
-> Stephen Brennan (7):
->   dutil: return ELF section name when looked up by index
->   btf_encoder: Rename percpu structures to variables
->   btf_encoder: cache all ELF section info
->   btf_encoder: make the variable array dynamic
->   btf_encoder: record ELF section for collected variables
->   btf_encoder: collect all variables
->   btf_encoder: allow encoding all variables
->
->  btf_encoder.c      | 196 +++++++++++++++++++++++++++------------------
->  btf_encoder.h      |   8 +-
->  dutil.c            |  10 ++-
->  dutil.h            |   2 +-
->  man-pages/pahole.1 |   6 +-
->  pahole.c           |  31 +++++--
->  6 files changed, 165 insertions(+), 88 deletions(-)
->
-> --
-> 2.34.1
->
+Split BTF is currently limited to a single base BTF file. We'd need more
+patches for pahole to support multiple --btf_base files: e.g.
+vmlinux.btf and vmlinux-variables.btf. There's also the question of
+modules: presumably we wouldn't try to have "$MODULE" and
+"$MODULE-btf-extra" modules due to the added complexity. I doubt the
+space savings would be worth it.
+
+I can look into these concerns, but if possible I would like to proceed
+with this series, as it is a separate concern from the exact mechanism
+by which we include extra BTF into the kernel.
+
+Thanks,
+Stephen
