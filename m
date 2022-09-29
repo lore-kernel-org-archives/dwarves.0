@@ -2,46 +2,46 @@ Return-Path: <dwarves-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 37AF7C433FE
-	for <linux-dwarves@archiver.kernel.org>; Thu, 29 Sep 2022 12:51:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 12CDEC433FE
+	for <linux-dwarves@archiver.kernel.org>; Thu, 29 Sep 2022 19:33:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235065AbiI2Mu7 (ORCPT
+        id S229535AbiI2Td0 (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Thu, 29 Sep 2022 08:50:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35876 "EHLO
+        Thu, 29 Sep 2022 15:33:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235345AbiI2Mu5 (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Thu, 29 Sep 2022 08:50:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51F726E8B6
-        for <dwarves@vger.kernel.org>; Thu, 29 Sep 2022 05:50:56 -0700 (PDT)
+        with ESMTP id S229524AbiI2TdZ (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Thu, 29 Sep 2022 15:33:25 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17EC513571F
+        for <dwarves@vger.kernel.org>; Thu, 29 Sep 2022 12:33:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E29A261143
-        for <dwarves@vger.kernel.org>; Thu, 29 Sep 2022 12:50:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B094C433D7;
-        Thu, 29 Sep 2022 12:50:55 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7A348B8267A
+        for <dwarves@vger.kernel.org>; Thu, 29 Sep 2022 19:33:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7DCEC433D6;
+        Thu, 29 Sep 2022 19:33:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664455855;
-        bh=YkdJW6sGl3/yyp90fxqW9ewgXvihPXB7u6pEj+dLOTc=;
+        s=k20201202; t=1664480000;
+        bh=Gqk6mkG07MRkaEibbAqYt/HrTW67QOd61oH6wR8xIkc=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=poyAygyTNDt5F7Wrh7OcuUJ5J9gaPZsFIlzCVvFjLHYuTAQJtBE0anT98vOwccXY9
-         0W3G0fxGODuatK5uTahrjz4GlTzu2yjcqiAAIYut9spLP1FbvEZmm77IDxPFGs14Lm
-         RdrbZdZ7wnqc9JUoD+unOEE2KfvRwLiOxmQK/bjWzVtGVUcjhxqdqaa65svGvpQOBt
-         e9hHGF0x1pLSMjv9ErsGdqzOpdk9uwCO1L2ijA6FtxPPd2n9UyNjCO1JyDJKiJ5G6m
-         eVEYFIf3UxZkqhZdo3JsB7/TzZTweB7tVHh7bTfKzbyn1rSp+XhE9gMZLcwJqkHMvA
-         7itX86bN9pkSg==
+        b=t9HdWQg/Q0Ta9SRyfuor7UzCFDIDJRjxrkloLcS8Kh3hW2KhKjwUAAVl6xGNxNB7W
+         +cxRJnZjDTl6lsImGKVh2NassxV7aBc4iNzKmHF2afKD4rRBrC5lsDW2Ydpz8amAsV
+         9kaY2spyWnTzmtWlXeog7TikoMmNxnQHLfFwHnGQHKPp/fWc6VxUpLf0WVxLbh3B5E
+         /W0Uu0E97FxciOiyhktNculPX5nPPSmiNOGmWb05GpzF7eNSB39SLBxQADffVCYouj
+         zQQib3bXpkS1VSDx2qBzO/ik97Hx63BBRwlWMVIxMTqqC0hsaH4XgBrChnbUa1N2b8
+         TaTW1yvA0PbMg==
 Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 2649D405F0; Thu, 29 Sep 2022 09:50:52 -0300 (-03)
-Date:   Thu, 29 Sep 2022 09:50:52 -0300
+        id 329F84062C; Thu, 29 Sep 2022 16:33:17 -0300 (-03)
+Date:   Thu, 29 Sep 2022 16:33:17 -0300
 From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Nathan Chancellor <nathan@kernel.org>, Yonghong Song <yhs@fb.com>
+To:     Yonghong Song <yhs@fb.com>, Nathan Chancellor <nathan@kernel.org>
 Cc:     Nick Desaulniers <ndesaulniers@google.com>,
         dwarves@vger.kernel.org, llvm@lists.linux.dev
 Subject: Re: BTF: A fix and more work to do :Re: die__process_unit:
  DW_TAG_label (0xa) @ <0x7b> not handled!
-Message-ID: <YzWUrGNyTo1G2IFP@kernel.org>
+Message-ID: <YzXy/birngORHLEd@kernel.org>
 References: <YzNHYoI4EZOQdCQ0@dev-arch.thelio-3990X>
  <YzNKEhM+H/X0xUK3@kernel.org>
  <YzNWBxJTKDRBNNDa@dev-arch.thelio-3990X>
@@ -49,8 +49,9 @@ References: <YzNHYoI4EZOQdCQ0@dev-arch.thelio-3990X>
  <YzRnfz0sVpX8CzeL@dev-arch.thelio-3990X>
  <YzWSzXKcm6rSWOC5@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 In-Reply-To: <YzWSzXKcm6rSWOC5@kernel.org>
 X-Url:  http://acmel.wordpress.com
 Precedence: bulk
@@ -61,112 +62,129 @@ Em Thu, Sep 29, 2022 at 09:42:53AM -0300, Arnaldo Carvalho de Melo escreveu:
 > Em Wed, Sep 28, 2022 at 08:25:51AM -0700, Nathan Chancellor escreveu:
 > > On Wed, Sep 28, 2022 at 10:42:53AM -0300, Arnaldo Carvalho de Melo wrote:
 > > > Can you please provide the vmlinux file where this takes place?
-
+> > 
 > > Sure thing, it is compressed to save some bandwidth while downloading:
-
+> > 
 > > https://1drv.ms/u/s!AsQNYeB-IEbqnnzsULjM1pXmOlI5?e=qHKjuW
-
+> 
 > So, fixed the case reported, DW_TAG_label outside a DW_TAG_lexblock, on
-> asm DW_TAG_compile_unit DWARF containers, ...
+> asm DW_TAG_compile_unit DWARF containers, now I noticed that pahole
+> suports encoding BTF_KIND_TAG (18) but not _decoding_ those, so off I go
+> to work on it on btf_loader.c, looking at what btf_encoder.c does.
+> 
+> Good that you got me this vmlinux built by clang 15 :-)
+> 
+> Now we can BTF encode a vmlinux (-J) using all the CPUs in the system
+> (-j), and then we end up with a kernel with BTF_KIND_TAG that can't be
+> properly grokked by pahole when loading from BTF:
+> 
+> ⬢[acme@toolbox pahole]$ pahole -j -J vmlinux-pahole-warnings
+> ⬢[acme@toolbox pahole]$ pahole -F btf vmlinux-pahole-warnings  > pahole-pretty-printed-from-btf
+> BTF: idx: 277, Unknown kind 18
+> BTF: idx: 281, Unknown kind 18
+> BTF: idx: 331, Unknown kind 18
+> BTF: idx: 689, Unknown kind 18
+> BTF: idx: 692, Unknown kind 18
+> 
+> For instance:
+> 
+> ⬢[acme@toolbox pahole]$ pahole -C __sifields -F btf vmlinux-pahole-warnings
+> BTF: idx: 277, Unknown kind 18
+> BTF: idx: 281, Unknown kind 18
+> BTF: idx: 331, Unknown kind 18
+> BTF: idx: 689, Unknown kind 18
+> <BIG SNIP>
+> BTF: idx: 128403, Unknown kind 18
+> BTF: idx: 128409, Unknown kind 18
+> union __sifields {
+> 	struct {
+> 		__kernel_pid_t     _pid;               /*     0     4 */
+> 		__kernel_uid32_t   _uid;               /*     4     4 */
+> 	} _kill;                                       /*     0     8 */
+> 	struct {
+> 		__kernel_timer_t   _tid;               /*     0     4 */
+> 		int                _overrun;           /*     4     4 */
+> 		sigval_t           _sigval;            /*     8     8 */
+> 		int                _sys_private;       /*    16     4 */
+> 	} _timer;                                      /*     0    24 */
+> 	struct {
+> 		__kernel_pid_t     _pid;               /*     0     4 */
+> 		__kernel_uid32_t   _uid;               /*     4     4 */
+> 		sigval_t           _sigval;            /*     8     8 */
+> 	} _rt;                                         /*     0    16 */
+> 	struct {
+> 		__kernel_pid_t     _pid;               /*     0     4 */
+> 		__kernel_uid32_t   _uid;               /*     4     4 */
+> 		int                _status;            /*     8     4 */
+> 
+> 		/* XXX 4 bytes hole, try to pack */
+> 
+> 		__kernel_clock_t   _utime;             /*    16     8 */
+> 		__kernel_clock_t   _stime;             /*    24     8 */
+> 	} _sigchld;                                    /*     0    32 */
+> 	struct {
+> 		<ERROR            > _addr;             /*     0     8 */
 
-Forgot the patch:
+So this shares a type with several other fields/variables/whatever and
+then:
 
-From f01e5f3a849558b8ed6b310686d10738f4c2f3bf Mon Sep 17 00:00:00 2001
-From: Arnaldo Carvalho de Melo <acme@redhat.com>
-Date: Thu, 29 Sep 2022 09:43:16 -0300
-Subject: [PATCH 1/1] dwarf_loader: Support DW_TAG_label outside
- DW_TAG_lexblock
+ [  cb57]      member               abbrev: 6
+               name                 (strx2) "sival_ptr"
+               type                 (ref4) [  cb62]
+               decl_file            (data1) siginfo.h (153)
+               decl_line            (data1) 10
+               data_member_location (data1) 0
+ [  cb62]    pointer_type         abbrev: 80
+ [  cb63]      lo_user+0x1f80       abbrev: 51
+               name                 (strx1) "btf_type_tag"
+               const_value          (strx1) "user"
 
-This happens with asm CUs, noticed when building the Linux kernel with
-clang 15, where we have, for instance:
 
-  Contents of the .debug_info section:
+This is with eu-readelf from elfutils, binutils readelf gets confused,
+unsure about the equivalent for llvm, lets see:
 
-    Compilation Unit @ offset 0x0:
-     Length:        0x1df (32-bit)
-     Version:       5
-     Unit Type:     DW_UT_compile (1)
-     Abbrev Offset: 0x0
-     Pointer Size:  8
-   <0><c>: Abbrev Number: 1 (DW_TAG_compile_unit)
-      <d>   DW_AT_stmt_list   : 0x0
-      <11>   DW_AT_ranges      : 0xc
-      <15>   DW_AT_name        : arch/x86/kernel/verify_cpu.S
-      <32>   DW_AT_comp_dir    : /home/nathan/cbl/src/linux
-      <4d>   DW_AT_producer    : ClangBuiltLinux clang version 16.0.0 (https://github.com/llvm/llvm-project 7e22179d38c438fedb0d9bb0cff1585843bd7082)
-      <c2>   DW_AT_language    : 32769    (MIPS assembler)
-   <1><c4>: Abbrev Number: 2 (DW_TAG_label)
-      <c5>   DW_AT_name        : startup_64
-      <d0>   DW_AT_decl_file   : 0x0
-      <d4>   DW_AT_decl_line   : 0x364
-      <d8>   DW_AT_low_pc      : 0xffffffff81000000
-   <1><e0>: Abbrev Number: 2 (DW_TAG_label)
-      <e1>   DW_AT_name        : secondary_startup_64
-      <f6>   DW_AT_decl_file   : 0x0
-      <fa>   DW_AT_decl_line   : 0x399
-      <fe>   DW_AT_low_pc      : 0xffffffff81000060
-   <1><106>: Abbrev Number: 2 (DW_TAG_label)
-      <107>   DW_AT_name        : secondary_startup_64_no_verify
-      <126>   DW_AT_decl_file   : 0x0
-      <12a>   DW_AT_decl_line   : 0x39f
-      <12e>   DW_AT_low_pc      : 0xffffffff81000065
-   <1><136>: Abbrev Number: 2 (DW_TAG_label)
-      <137>   DW_AT_name        : verify_cpu
-      <142>   DW_AT_decl_file   : 0x0
-      <146>   DW_AT_decl_line   : 0x430
-      <14a>   DW_AT_low_pc      : 0xffffffff81000150
-  <SNIP>
+llvm-dwarfdump gets:
 
-Reported-by: Nathan Chancellor <nathan@kernel.org>
-Cc: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Yonghong Song <yhs@fb.com>
-Link: https://lore.kernel.org/dwarves/YzWSzXKcm6rSWOC5@kernel.org
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
----
- dwarf_loader.c | 16 ++++++++++++++--
- 1 file changed, 14 insertions(+), 2 deletions(-)
+0x0000cb57:     DW_TAG_member
+                  DW_AT_name    ("sival_ptr")
+                  DW_AT_type    (0x0000cb62 "void *")
+                  DW_AT_decl_file       ("/home/nathan/cbl/src/linux/./include/uapi/asm-generic/siginfo.h")
+                  DW_AT_decl_line       (10)
+                  DW_AT_data_member_location    (0x00)
 
-diff --git a/dwarf_loader.c b/dwarf_loader.c
-index 631bbd434eb2a4e6..28a912ec725a6e68 100644
---- a/dwarf_loader.c
-+++ b/dwarf_loader.c
-@@ -1485,7 +1485,12 @@ static struct tag *die__create_new_label(Dwarf_Die *die,
- 	if (label == NULL)
- 		return NULL;
- 
--	lexblock__add_label(lexblock, label);
-+	if (lexblock != NULL) {
-+		// asm CUs have labels and they will be in the cu top level tag list
-+		// See die__process_unit()
-+		lexblock__add_label(lexblock, label);
-+	}
-+
- 	return &label->ip.tag;
- }
- 
-@@ -2037,6 +2042,12 @@ static struct tag *__die__process_tag(Dwarf_Die *die, struct cu *cu,
- 		 */
- 		tag = &unsupported_tag;
- 		break;
-+	case DW_TAG_label:
-+		if (conf->ignore_labels)
-+			tag = &unsupported_tag; // callers will assume conf->ignore_labels is true
-+		else // We can have labels in asm CUs, no lexblock
-+			tag = die__create_new_label(die, NULL, cu, conf);
-+		break;
- 	}
- 
- 	if (tag != NULL)
-@@ -2055,7 +2066,8 @@ static int die__process_unit(Dwarf_Die *die, struct cu *cu, struct conf_load *co
- 		if (tag == &unsupported_tag) {
- 			// XXX special case DW_TAG_dwarf_procedure, appears when looking at a recent ~/bin/perf
- 			// Investigate later how to properly support this...
--			if (dwarf_tag(die) != DW_TAG_dwarf_procedure)
-+			if (dwarf_tag(die) != DW_TAG_dwarf_procedure &&
-+			    dwarf_tag(die) != DW_TAG_label) // conf->ignore_labels == true, see die__process_tag()
- 				tag__print_not_supported(dwarf_tag(die));
- 			continue;
- 		}
--- 
-2.37.3
+looks saner, a void pointer, probably with an attribute of btf_type_tag
+(DW_TAG_llvm-something, IIRC):
 
+0x0000cb62:   DW_TAG_pointer_type
+
+0x0000cb63:     DW_TAG_LLVM_annotation
+                  DW_AT_name    ("btf_type_tag")
+                  DW_AT_const_value     ("user")
+
+0x0000cb66:     NULL
+
+None of these tools seem to be grokking this nicely, Yonghong?
+
+⬢[acme@toolbox pahole]$ llvm-dwarfdump --version
+LLVM (http://llvm.org/):
+  LLVM version 14.0.0git
+  Optimized build.
+  Default target: x86_64-unknown-linux-gnu
+  Host CPU: znver3
+⬢[acme@toolbox pahole]$ cat /etc/fedora-release
+Fedora release 36 (Thirty Six)
+⬢[acme@toolbox pahole]$
+
+
+I.e. sival_ptr is a:
+
+typedef union sigval {
+        int sival_int;
+        void __user *sival_ptr;
+} sigval_t;
+
+So I would expect that sival_ptr pointed to a void * with an
+intermediate DW_TAG_LLVM_annotation? What is the semantics? How all
+these tools need to grok this?
+
+- Arnaldo
