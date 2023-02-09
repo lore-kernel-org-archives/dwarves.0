@@ -2,101 +2,110 @@ Return-Path: <dwarves-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8152BC05027
-	for <linux-dwarves@archiver.kernel.org>; Wed,  8 Feb 2023 20:44:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E0453C61DA4
+	for <linux-dwarves@archiver.kernel.org>; Thu,  9 Feb 2023 13:09:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232172AbjBHUoE (ORCPT
+        id S229752AbjBINJb (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Wed, 8 Feb 2023 15:44:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51998 "EHLO
+        Thu, 9 Feb 2023 08:09:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230411AbjBHUoD (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Wed, 8 Feb 2023 15:44:03 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA3A62202B;
-        Wed,  8 Feb 2023 12:44:02 -0800 (PST)
+        with ESMTP id S229517AbjBINJa (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Thu, 9 Feb 2023 08:09:30 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 969D45EA28;
+        Thu,  9 Feb 2023 05:09:27 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 541E2617DF;
-        Wed,  8 Feb 2023 20:44:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79363C433D2;
-        Wed,  8 Feb 2023 20:44:01 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4224AB82127;
+        Thu,  9 Feb 2023 13:09:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2A7BC433D2;
+        Thu,  9 Feb 2023 13:09:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675889041;
-        bh=M98Xx0IDGaJKfJA6ZFChxFO2lcRSmqFOfKAhi5+IxeE=;
-        h=Date:From:To:Cc:Subject:From;
-        b=nCXK+S60jzML3Y2CifQGwbAKUSzfhrOQUCBUEY/fGKF1sS2oey2mRwy9tOuOTBclr
-         2IQePvlLlCkh+LmFsxkoxOI68DBx4htISYSxeyVN/KYsVpSTFg5jC8zR0OS/muBGZd
-         ne9VGU7/kumku0FXyoAuLpYPZliGOeKiBMf/5rcH0qNnr5uFwTH7HyPSAzuXHcevL0
-         OSN73pCvzDmOeY6uOAYLdp9TzH3WWISMKMhxCeK+1IiK5hjrUwJdBQVJemrYytK8+A
-         RGV7UVj6mCOKz6S6tgQrcoXnQ6vx+bKHocGM32RYZlNOm3l7FFcB8BDcgcNIOB6BPS
-         yZnbRAzIKW7Xg==
+        s=k20201202; t=1675948164;
+        bh=fRkg4DLe+EKVVu/qynoeCc8KbWGF0veU+2MQmBMbWOM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MbHeJ1O/LlHBmaDwl/NyeXkfwVgPUiRDB9qwqAs5g4LsRiPdimD7O8a9tHdKfQIMY
+         TJAjTPf5uKGtZOd1Pwa4FCs3e7kziUEE4/k10RGuQT9dNkVC0Z+JegV7et3efzNd3R
+         rAk5ALcDV4RNT6pQfRy91pB8X5chPlTHH/l4Wlav/5wx9Ty12VpVGe+WMUqoy80gf8
+         4G0C435mkq9Ci7HFQ5QeOFfo9LvX9qu44mn3R9R46zXDziAdGjJCBXQgwoEqROWuA1
+         LvaOmeA2oKF9o8ZTEoQ5B88N6s6K/dKSSnAX1+vgtC+n35P38hUxu/SOvbr1eDWW3G
+         415ux217FkeyA==
 Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 9B625405BE; Wed,  8 Feb 2023 17:43:58 -0300 (-03)
-Date:   Wed, 8 Feb 2023 17:43:58 -0300
+        id 72825405BE; Thu,  9 Feb 2023 10:09:22 -0300 (-03)
+Date:   Thu, 9 Feb 2023 10:09:22 -0300
 From:   Arnaldo Carvalho de Melo <acme@kernel.org>
 To:     Alan Maguire <alan.maguire@oracle.com>
-Cc:     bpf@vger.kernel.org, dwarves@vger.kernel.org,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Eduard Zingerman <eddyz87@gmail.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Kui-Feng Lee <sinquersw@gmail.com>,
-        Martin KaFai Lau <martin.lau@kernel.org>,
-        Song Liu <songliubraving@fb.com>,
-        Stanislav Fomichev <sdf@google.com>,
-        Timo Beckers <timo@incline.eu>, Yonghong Song <yhs@fb.com>
-Subject: [pahole PATCH 1/1] CMakeList.txt: Bump version to the upcoming 1.25
- release, not out of the door yet
-Message-ID: <Y+QJjonvzpOsTRqi@kernel.org>
+Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>, bpf@vger.kernel.org,
+        Jiri Olsa <jolsa@kernel.org>, dwarves@vger.kernel.org
+Subject: Re: [PATCH bpf-next] bpf: add
+ --skip_encoding_btf_inconsistent_proto, --btf_gen_optimized to pahole flags
+ for v1.25
+Message-ID: <Y+Twgi+Y1ZfOgsJT@kernel.org>
+References: <1675790102-23037-1-git-send-email-alan.maguire@oracle.com>
+ <Y+PL18hvJ7WwncGR@kernel.org>
+ <Y+PS01eC1i75nBM0@kernel.org>
+ <3c021d56-8818-2464-f7e0-889e769c0311@oracle.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <3c021d56-8818-2464-f7e0-889e769c0311@oracle.com>
+X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-This is just for CIs to be able to, building from master, add optimized
-functions with consistent prototypes when encoding BTF.
+Em Wed, Feb 08, 2023 at 05:17:02PM +0000, Alan Maguire escreveu:
+> From: Alan Maguire <alan.maguire@oracle.com>
+> Date: Thu, 2 Feb 2023 12:26:20 +0000
+> Subject: [PATCH bpf-next] bpf: add --skip_encoding_btf_inconsistent_proto,
+>  --btf_gen_optimized to pahole flags for v1.25
+> 
+> v1.25 of pahole supports filtering out functions with multiple
+> inconsistent function prototypes or optimized-out parameters
+> from the BTF representation.  These present problems because
+> there is no additional info in BTF saying which inconsistent
+> prototype matches which function instance to help guide
+> attachment, and functions with optimized-out parameters can
+> lead to incorrect assumptions about register contents.
+> 
+> So for now, filter out such functions while adding BTF
+> representations for functions that have "."-suffixes
+> (foo.isra.0) but not optimized-out parameters.
+> 
+> This patch assumes changes in [1] land and pahole is bumped
+> to v1.25.
+> 
+> [1] https://lore.kernel.org/bpf/1675790102-23037-1-git-send-email-alan.maguire@oracle.com/
+> 
+> Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+> ---
+>  scripts/pahole-flags.sh | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/scripts/pahole-flags.sh b/scripts/pahole-flags.sh
+> index 1f1f1d3..728d551 100755
+> --- a/scripts/pahole-flags.sh
+> +++ b/scripts/pahole-flags.sh
+> @@ -23,5 +23,8 @@ if [ "${pahole_ver}" -ge "124" ]; then
+>  	# see PAHOLE_HAS_LANG_EXCLUDE
+>  	extra_paholeopt="${extra_paholeopt} --lang_exclude=rust"
+>  fi
+> +if [ "${pahole_ver}" -ge "125" ]; then
+> +	extra_paholeopt="${extra_paholeopt} --skip_encoding_btf_inconsistent_proto --btf_gen_optimized"
+> +fi
+>  
+>  echo ${extra_paholeopt}
+> -- 
+> 1.8.3.1
 
-Requested-by: Alan Maguire <alan.maguire@oracle.com>
-Cc: Andrii Nakryiko <andrii@kernel.org>
-Cc: Daniel Borkmann <daniel@iogearbox.net>
-Cc: Eduard Zingerman <eddyz87@gmail.com>
-Cc: Hao Luo <haoluo@google.com>
-Cc: Jiri Olsa <jolsa@kernel.org>
-Cc: John Fastabend <john.fastabend@gmail.com>
-Cc: KP Singh <kpsingh@chromium.org>
-Cc: Kui-Feng Lee <sinquersw@gmail.com>
-Cc: Martin KaFai Lau <martin.lau@kernel.org>
-Cc: Song Liu <songliubraving@fb.com>
-Cc: Stanislav Fomichev <sdf@google.com>
-Cc: Timo Beckers <timo@incline.eu>
-Cc: Yonghong Song <yhs@fb.com>
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
----
- CMakeLists.txt | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 1cd82ad6e748132a..2036ac0760e8ee99 100644
---- a/CMakeLists.txt
-+++ b/CMakeLists.txt
-@@ -54,9 +54,9 @@ if (NOT DEFINED BUILD_SHARED_LIBS)
- endif (NOT DEFINED BUILD_SHARED_LIBS)
- 
- # Just for grepping, DWARVES_VERSION isn't used anywhere anymore
--# add_definitions(-D_GNU_SOURCE -DDWARVES_VERSION="v1.24")
-+# add_definitions(-D_GNU_SOURCE -DDWARVES_VERSION="v1.25")
- add_definitions(-D_GNU_SOURCE -DDWARVES_MAJOR_VERSION=1)
--add_definitions(-D_GNU_SOURCE -DDWARVES_MINOR_VERSION=24)
-+add_definitions(-D_GNU_SOURCE -DDWARVES_MINOR_VERSION=25)
- find_package(DWARF REQUIRED)
- find_package(ZLIB REQUIRED)
- find_package(argp REQUIRED)
--- 
-2.39.1
+I applied the patch and it works as advertised using what is in pahole's
+'next' branch, that should go to 'master' later today.
 
+Tested-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+
+- Arnaldo
