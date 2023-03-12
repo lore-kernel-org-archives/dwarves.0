@@ -2,124 +2,77 @@ Return-Path: <dwarves-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C5BFFC61DA3
-	for <linux-dwarves@archiver.kernel.org>; Sat,  4 Mar 2023 02:14:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EE0E4C6FD1F
+	for <linux-dwarves@archiver.kernel.org>; Sun, 12 Mar 2023 00:03:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229447AbjCDCOC (ORCPT
+        id S229469AbjCLAD6 (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Fri, 3 Mar 2023 21:14:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33492 "EHLO
+        Sat, 11 Mar 2023 19:03:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbjCDCOC (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Fri, 3 Mar 2023 21:14:02 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D8F0E052
-        for <dwarves@vger.kernel.org>; Fri,  3 Mar 2023 18:14:00 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7C509618CB
-        for <dwarves@vger.kernel.org>; Sat,  4 Mar 2023 02:14:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A67B0C433EF;
-        Sat,  4 Mar 2023 02:13:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677896039;
-        bh=k4jDNwsbolpm8D7ILaVQxjvmM/270Ysx6C4B5I8wQg4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=WUYamMbKrrqJP3Ua0DUEDHvjwnwYxqnL+UNiey8+XnAW5TygrypK8lKDqdunrmUry
-         kwh9JND76qVgbn+S5AaIBaN7aEVJV7e1yS5epe+aKv5WvSj0leOns+vbCjqqZAywXX
-         KMHOzslZ0WUiOa8XwlMBFwAmb+Td0AaOspDkWa+IiLLH8Tv8PqawK+5PwOvF6co/7V
-         mrd+n4wWMImhjRwFaeYth3vN2c01H0yKa1XDxTn6fAZpT80x6z5PtS/TtDGyVBF7B4
-         9txnimkDxu0wNn3I37QG9+7PQWNZGv0GDF7KD5s8OSGHo75FWu/5y0k4ilvS1+A1U7
-         15XqkXBHo5pOA==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id EE5554049F; Fri,  3 Mar 2023 23:13:56 -0300 (-03)
-Date:   Fri, 3 Mar 2023 23:13:56 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Eduard Zingerman <eddyz87@gmail.com>
-Cc:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
-        dwarves@vger.kernel.org
-Subject: Re: [question] dwarves/pahole testing
-Message-ID: <ZAKpZGSHTvsS4r8E@kernel.org>
-References: <92b71fbfc8d768103d533d3b0edded0bd6750b0f.camel@gmail.com>
- <Y/5jGjgCdQpUe1Ak@kernel.org>
- <62cd4979a4080f3529f1bdf61639c6feb490af01.camel@gmail.com>
+        with ESMTP id S229450AbjCLAD5 (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Sat, 11 Mar 2023 19:03:57 -0500
+Received: from nautica.notk.org (ipv6.notk.org [IPv6:2001:41d0:1:7a93::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E6404B813
+        for <dwarves@vger.kernel.org>; Sat, 11 Mar 2023 16:03:55 -0800 (PST)
+Received: by nautica.notk.org (Postfix, from userid 108)
+        id 250DBC01D; Sun, 12 Mar 2023 01:04:21 +0100 (CET)
+Received: from odin.codewreck.org (localhost [127.0.0.1])
+        by nautica.notk.org (Postfix) with ESMTPS id 30CE5C009;
+        Sun, 12 Mar 2023 01:04:17 +0100 (CET)
+Received: from localhost (odin.codewreck.org [local])
+        by odin.codewreck.org (OpenSMTPD) with ESMTPA id b637b8ca;
+        Sun, 12 Mar 2023 00:03:47 +0000 (UTC)
+Date:   Sun, 12 Mar 2023 09:03:32 +0900
+From:   Dominique Martinet <asmadeus@codewreck.org>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     Martin =?utf-8?B?TGnFoWth?= <mliska@suse.cz>,
+        Yonghong Song <yhs@meta.com>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Yonghong Song <yhs@fb.com>, dwarves@vger.kernel.org,
+        Nick Clifton <nickc@redhat.com>,
+        Alan Maguire <alan.maguire@oracle.com>
+Subject: Re: pahole 1.25 plans was: Re: Encountered error while encoding BTF
+ due to Unsupported DW_TAG_unspecified_type(0x3b)
+Message-ID: <ZA0W1NoajMGYCNke@codewreck.org>
+References: <166780df-a8ca-6dfb-88e9-9e489efc6bf7@meta.com>
+ <Y0QK1nmVjqr95od1@kernel.org>
+ <Y0R7uu3s/imnvPzM@kernel.org>
+ <Y0R+U8i8mDPkOAw7@kernel.org>
+ <002daef3-ce5e-e6f1-ec12-fe5f64ae2632@meta.com>
+ <Y0VzbkffTg2TJ5i3@kernel.org>
+ <ee52054a-bd76-2817-33c4-ffae00e72fb9@meta.com>
+ <Y0Wk5i0Zz2saSKK3@kernel.org>
+ <68e2ee74-e0b7-35a8-33bb-b957df65327b@suse.cz>
+ <Y9fSJG7oddQtgG5V@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <62cd4979a4080f3529f1bdf61639c6feb490af01.camel@gmail.com>
-X-Url:  http://acmel.wordpress.com
+In-Reply-To: <Y9fSJG7oddQtgG5V@kernel.org>
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-Em Sat, Mar 04, 2023 at 03:31:16AM +0200, Eduard Zingerman escreveu:
-> On Tue, 2023-02-28 at 17:24 -0300, Arnaldo Carvalho de Melo wrote:
-> > Em Thu, Feb 23, 2023 at 10:47:55PM +0200, Eduard Zingerman escreveu:
-> > > Hello Dwarves community,
-> > > 
-> > > I have a set of changes that add support for "btf_type_tag" attached to the
-> > > hosting type, as discussed in [1]. I'd like to test these changes before
-> > > submitting via this mailing list. I have some local tests for the feature
-> > > itself and I checked that kernel build / BPF selftests work as expected.
-> > > Are there any additional tests I can run?
-> > > Maybe some manual testing procedures?
-> > 
-> > You may want to test using 'btfdiff vmlinux' after encoding BTF from
-> > DWARF.
-> 
-> Hi Arnaldo,
-> 
-> Thank you for the recommendation.
-> 
-> I've noticed that with my config this method might get a bit
-> non-deterministic because of the following two data structures:
-> 
-> drivers/net/ethernet/intel/e1000/e1000_param.c:
-> struct e1000_option {
->     ...
->     union {
->         ...
->         struct {
->             int nr;
->             const struct e1000_opt_list { int i; char *str; } *p;
->             ^^^^^
->                  this const is not present below
->         } l;
->     } arg;
-> };
-> 
-> drivers/net/ethernet/intel/e1000e/param.c:
-> struct e1000_option {
->     ...
->     union {
->         ...
->         struct {
->             int nr;
->             struct e1000_opt_list { int i; char *str; } *p;
->         } l;
->     } arg;
-> };
-> 
-> Both are present in the BTF.
+Hi Arnaldo,
 
-Ok, and you are linking those two drivers statically, so it gets into
-vmlinux, which is something I had never tried.
- 
-> As far as I understand, which one would be picked by
-> "pahole -F btf --sort" depends on exact order of types in the BTF,
-> because:
-> - `pahole.c:type__compare_members_types()` does not compare fields for
->   inline structures;
-> - `pahole.c:type__compare_members_types()` ignores qualifiers;
-> - hence, `pahole.c:resort_add()` considers these types identical.
+Arnaldo Carvalho de Melo wrote on Mon, Jan 30, 2023 at 11:20:20AM -0300:
+> I hoped to finish the work on split dwarf (.dwz) before cutting a new
+> version, but I'm postponing it to 1.26, so just cherry-picked some
+> patches from the 'next' branch and I'm doing some more tests before
+> cutting a new version.
 > 
-> I can try to modify the comparison function to address both points
-> and thus generate both versions of the `struct e1000_option` in the output.
-> Is it worth doing?
+> But then there is also the series by Alan Maguire that needs to get into
+> 1.25, so I'll try and check the current status of that thread and test
+> it.
 
-I think so, comparing what we get from DWARF with what we get from BTF
-showed to be useful so far, even with some insurmountable differences,
-those options in btfdiff to change the output.
+(I think the patches from Alan Maguire got in?)
 
-- Arnaldo
+nixos has had to upgrade pahole to a version from git for binutils 2.40,
+and there are some incompatibilities with the linux 6.3-rc1 build at the
+very least so a new tag would be well appreciated for cleaning this all
+up.
+What's the current plan?
+
+Cheers,
+-- 
+Dominique Martinet | Asmadeus
