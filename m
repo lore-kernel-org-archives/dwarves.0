@@ -2,296 +2,196 @@ Return-Path: <dwarves-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A497DC6FD19
-	for <linux-dwarves@archiver.kernel.org>; Mon, 13 Mar 2023 20:32:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 79FE6C6FD19
+	for <linux-dwarves@archiver.kernel.org>; Mon, 13 Mar 2023 23:35:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230096AbjCMUcz (ORCPT
+        id S229694AbjCMXfo (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Mon, 13 Mar 2023 16:32:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55150 "EHLO
+        Mon, 13 Mar 2023 19:35:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230081AbjCMUcx (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Mon, 13 Mar 2023 16:32:53 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F177822022;
-        Mon, 13 Mar 2023 13:32:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7360BB81219;
-        Mon, 13 Mar 2023 20:32:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA3BBC433D2;
-        Mon, 13 Mar 2023 20:32:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678739569;
-        bh=1gB3poui4BqCnHv7cEkvND7JTUJSPypXb08N9fpERMc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LBf2u+XYYHo6rxxnjtS7hFaqmqkHC1SSkjQpQCBq+ymzhoc57444REAAFQYqPoEJB
-         NHkRDGhSJJHU5sjj46k5UR1fk143WMv5pKKbFv4i8vDcdVknNZBvubWL54bOkpSoL9
-         NjbQ9o+8yAWUH6tL0I6Lwd0Web+ZQQKAIc06KHaIuAhn8uMAmFTH4HFz3p7HrxURq8
-         2eVW+HeP1KwTRBT6/oZg9lpG6pqjEak+Zs+lRFx4r+sRO8COjKr97YbyxAclNsjf+C
-         F2ppLR5sU3esOw6+Iyz5qRevR7IIn5F8amgqGM7jmSy9AP2kA4Zx8ru8+JESrtZAXl
-         hfc3HdsxH6pEw==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 1ED464049F; Mon, 13 Mar 2023 17:32:46 -0300 (-03)
-Date:   Mon, 13 Mar 2023 17:32:46 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Eduard Zingerman <eddyz87@gmail.com>
-Cc:     dwarves@vger.kernel.org, arnaldo.melo@gmail.com,
-        bpf@vger.kernel.org, kernel-team@fb.com, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, yhs@fb.com,
-        jose.marchesi@oracle.com, david.faust@oracle.com
+        with ESMTP id S229684AbjCMXfn (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Mon, 13 Mar 2023 19:35:43 -0400
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58BAC848F0;
+        Mon, 13 Mar 2023 16:35:41 -0700 (PDT)
+Received: by mail-lj1-x236.google.com with SMTP id f16so14292431ljq.10;
+        Mon, 13 Mar 2023 16:35:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678750539;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=E7Ozr/dKw0VzyxgOBsFMtcGJgOPj4b0Gs2zXpszZekM=;
+        b=W89XNdlieQtt3EVATdurl4QZopyCQbDTLpUtPb6rPMc7uU6y5ZixpyiAwB0WghX+c9
+         CWqqnrfvt0v+LILDrN8SpJqIjuxxwV5kUlH7+Ei8lRMX7J/2mpmfpxuPrvoooFlVX2do
+         NVoU8IWRC8yTSUFImG+Ro1kLOzXMgsiludRdJ2DVMml7TrNkogyJyvBT5BGOMaE+l8Qb
+         9NbBcdbIRhJi9zIJH2Q0Voe4x3reozZtWIjHhGeNsHzgFjL1jKuNZ+OU/Oo6WllSm3ap
+         Z8JYSUk+bMv2XwEZDVHg7XYYr6EUj1GgDWnKLVaD73SWgNaKvjHukTqdJpaLsI3IrGuh
+         0mog==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678750539;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=E7Ozr/dKw0VzyxgOBsFMtcGJgOPj4b0Gs2zXpszZekM=;
+        b=YB3io4RthLDEQNWNhrw3heA/yqd1lgtUBSN70yu0cEBBYrjCh19MuYfEt+kPYlGUrz
+         m7NYxooB9hCUHSk+j3BZHu07KHTKlWB0PSrQOj2oXBP+hYefDEci+zojK5nq2LxGzBvI
+         tCgFBJhRoUvMNhrzzQ56/4NSOFZ1p9Td1jt1k3OGaMzE2hwigHl5BtMvQc8ei1nq07QP
+         eVRjyIqW8r3+B1xGmBjPQOcCt25/QYargdZIyUUi9ogMbvl2pYODvWVYDbvoV+2nU7lp
+         qpjJJDwSnDDdi337GnZir/ImGba1VFEU6cnXMtYvcy0AJ8zCw8o9UKUtCDd+iiQ5rUnC
+         Mp6A==
+X-Gm-Message-State: AO0yUKUgZq1KCIguB3fffYPYlc/HP4qDPjWC2vQMakietm8v1hgFOZ43
+        dWEygLa8NocCZhrm6X3im2I=
+X-Google-Smtp-Source: AK7set+OP0WxayPsD5LNtgJ2l7wAQ5WW95pMz/BVrY1yeu5GecjRZNHstqkvCkrky/X+IuosQthzZg==
+X-Received: by 2002:a05:651c:2326:b0:295:93c8:496f with SMTP id bi38-20020a05651c232600b0029593c8496fmr10018385ljb.9.1678750539359;
+        Mon, 13 Mar 2023 16:35:39 -0700 (PDT)
+Received: from [192.168.1.94] (host-176-36-0-241.b024.la.net.ua. [176.36.0.241])
+        by smtp.gmail.com with ESMTPSA id k5-20020a2e8885000000b00295989df708sm195395lji.28.2023.03.13.16.35.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Mar 2023 16:35:38 -0700 (PDT)
+Message-ID: <2232e368e55eb401bde45ce1b20fb710e379ae9c.camel@gmail.com>
 Subject: Re: [PATCH dwarves 0/1] Support for new btf_type_tag encoding
-Message-ID: <ZA+Ibs4GBwv5mHPC@kernel.org>
+From:   Eduard Zingerman <eddyz87@gmail.com>
+To:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
+Cc:     dwarves@vger.kernel.org, bpf@vger.kernel.org, kernel-team@fb.com,
+        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        yhs@fb.com, jose.marchesi@oracle.com, david.faust@oracle.com
+Date:   Tue, 14 Mar 2023 01:35:37 +0200
+In-Reply-To: <ZA+Ibs4GBwv5mHPC@kernel.org>
 References: <20230313021744.406197-1-eddyz87@gmail.com>
+         <ZA+Ibs4GBwv5mHPC@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4-0ubuntu1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230313021744.406197-1-eddyz87@gmail.com>
-X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-Em Mon, Mar 13, 2023 at 04:17:43AM +0200, Eduard Zingerman escreveu:
-> In recent discussion in BPF mailing list ([1]) participants agreed to
-> add a new DWARF representation for "btf_type_tag" annotations.
-> 
-> Existing representation is DW_TAG_LLVM_annotation object attached as a
-> child to a DW_TAG_pointer_type. It means that "btf_type_tag"
-> annotation is attached to a pointee type.
-> 
-> New representation is DW_TAG_LLVM_annotation object attached as a
-> child to *any* type. It means that "btf_type_tag" annotation is
-> attached to the parent type.
-> 
-> Here is an example:
-> 
->     int __attribute__((btf_type_tag("tag1"))) *g;
-> 
-> And corresponding DWARF:
-> 
->     0x0000001e:   DW_TAG_variable
->                     DW_AT_name      ("g")
->                     DW_AT_type      (0x00000029 "int *")
-> 
->     0x00000029:   DW_TAG_pointer_type
->                     DW_AT_type      (0x00000032 "int")
-> 
->     0x0000002e:     DW_TAG_LLVM_annotation
->                       DW_AT_name    ("btf_type_tag")
->                       DW_AT_const_value     ("tag1")
-> 
->     0x00000032:   DW_TAG_base_type
->                     DW_AT_name      ("int")
-> 
-> 
-> This patch adds logic necessary to handle such annotations in the
-> pahole tool. Examples like below are supported:
-> 
->   #define __tag(val) __attribute__((btf_type_tag("__" #val)))
-> 
->   struct      alpha {};
->   union       bravo {};
->   enum        charlie { X };
->   typedef int delta;
-> 
->   struct echo {
->     int          * __tag(a)  a;
->     int            __tag(b) *b;
->     int            __tag(c)  c;
->     void           __tag(d) *d;
->     void           __tag(e) *e;
->     struct alpha   __tag(f)  f;
->     union  bravo   __tag(g)  g;
->     enum   charlie __tag(h)  h;
->     delta          __tag(i)  i;
->     int __tag(j_result) (__tag(j) *j)(int __tag(j_param));
->   } g;
-> 
-> Implementation details
-> ----------------------
-> 
-> Although this was not discussed in the mailing list, the proposed
-> implementation acts in a following way (for compatibility reasons):
-> - both forms could be present in the debug info;
-> - if any annotations corresponding to the new form are present in the
->   debug info, annotations corresponding to the old form are ignored.
+On Mon, 2023-03-13 at 17:32 -0300, Arnaldo Carvalho de Melo wrote:
+[...]
+> >   @ -72998,8 +73022,8 @ struct sock {
+> >           /* --- cacheline 19 boundary (1216 bytes) --- */
+> >           int                        (*sk_backlog_rcv)(struct sock *, s=
+truct sk_buff *); /*  1216     8 */
+> >           void                       (*sk_destruct)(struct sock *); /* =
+ 1224     8 */
+> >   -       rcu *                      sk_reuseport_cb;      /*  1232    =
+ 8 */
+> >   -       rcu *                      sk_bpf_storage;       /*  1240    =
+ 8 */
+> >   +       <ERROR                    > sk_reuseport_cb;     /*  1232    =
+ 8 */
+> >   +       <ERROR                    > sk_bpf_storage;      /*  1240    =
+ 8 */
+> >=20
+> > (Also DWARF names refer to TYPE_TAG, not actual type name, fixed in pah=
+ole-new).
+> >=20
+> > Warn #1: pahole-next complains about unexpected child tags generated
+> > by clang, e.g.:
+> >=20
+> >   die__create_new_tag: unspecified_type WITH children!
+> >   die__create_new_base_type: DW_TAG_base_type WITH children!
 
-agreed
- 
-> Because the new form of type tags could be applied to any type it is
-> somewhat invasive from implementation point of view:
+Hi Arnaldo,
+=20
+> Sure, we can remove those if the children is the expected one, leaving
+> the warning maybe for debug sessions.
 
-Can you please see if you can break this patch into a series so that it
-helps with reviewing and bisection?
+Yes, I handle it in the pahole-new. Warnings are not reported for
+DW_TAG_LLVM_annotation children when these are applicable.
 
-> - Types `struct btf_type_tag_type` and `struct llvm_annotation` are
->   consolidated as a single type `struct llvm_annotation`, in order to
->   reside in a single `annots` list associated with struct/union/enum
->   or typedef.
-> - The `annots` list, used to hold references to annotation objects,
->   is put directly in `struct tag`.
-> - At the load phase it is not yet known whether new or old form is
->   used for type tags encoding, so `struct llvm_annotation` objects are
->   not added to the types table.
-> - The recode phase now consists of several steps:
->   - depending on the results of the load phase, `struct llvm_annotation`
->     objects corresponding to either old or new representations are
->     added to the types table;
->   - `tag__recode_dwarf_type()` is executed as usual, but it also
->     collects information about type tags;
->   - references to types that have type tag annotations are updated to
->     point to the first annotation object.
-> 
-> Corresponding clang changes are tracked in [6].
-> 
-> Testing
-> -------
-> 
-> To verify the changes I used the following:
-> - Tools:
->   - "LLVM-main"   :: LLVM at revision [3];
->   - "LLVM-new"    :: LLVM at revision [3] with patches [6] applied;
->   - "gcc"         :: GCC version 11.3 (no support for btf_type_tag annotations);
->   - "pahole-next" :: dwarves at revision [4];
->   - "pahole-new"  :: dwarves at revision [4] + this patch,
->   - "kernel"      :: Linux Kernel bpf-next branch at revision [5]
-> - test cases:
->   - kernel build;
->   - kernel BPF test cases build, BPF tests execution
->     (test_verifier, test_progs, test_progs-no_alu32, test_maps);
->   - btfdiff script (suggested by Arnaldo, [2]).
-> - tool combinations (kernel compiler / clang for BPF tests / pahole version):
->   - LLVM-main / LLVM-main / pahole-new
->     - kernel build : ok
->     - bpf tests    : ok
->     - btfdiff      : ok (modulo diff #1, see below)
->   - gcc       / LLVM-main / pahole-new
->     - kernel build : ok
->     - bpf tests    : ok
->     - btfdiff      : ok
->   - LLVM-new  / LLVM-new  / pahole-next
->     - kernel build : ok with warnings (see warn #1 below)
->     - bpf tests    : ok
->     - btfdiff      : fails (see diff #2 below)
->   - LLVM-new  / LLVM-new  / pahole-new
->     - kernel build : ok
->     - bpf tests    : ok
->     - btfdiff      : ok (modulo diff #1, see below)
->   - gcc       / LLVM-new  / pahole-new
->     - kernel build : ok
->     - bpf tests    : ok
->     - btfdiff      : ok
-> 
-> Note on BPF tests: test case `verif_scale_loop6` fails for all
-> configurations above and 'LLVM-main / LLVM-main / pahole-next',
-> thus I consider this issue as unrelated.
-> 
-> Diff #1: Difference in flexible printing, several occurrences as below:
-> 
->   @ -10531,7 +10531,7 @ struct bpf_cand_cache {
->           struct {
->                   const struct btf  * btf;                 /*    16     8 */
->                   u32                id;                   /*    24     4 */
->   -       } cands[0]; /*    16     0 */
->   +       } cands[]; /*    16     0 */
->    
->           /* size: 16, cachelines: 1, members: 5 */
->           /* last cacheline: 16 bytes */
-> 
-> Diff #2: pahole-next does not know how to print type name for types
-> with type tags, when reading from BTF:
-> 
->   @ -72998,8 +73022,8 @ struct sock {
->           /* --- cacheline 19 boundary (1216 bytes) --- */
->           int                        (*sk_backlog_rcv)(struct sock *, struct sk_buff *); /*  1216     8 */
->           void                       (*sk_destruct)(struct sock *); /*  1224     8 */
->   -       rcu *                      sk_reuseport_cb;      /*  1232     8 */
->   -       rcu *                      sk_bpf_storage;       /*  1240     8 */
->   +       <ERROR                    > sk_reuseport_cb;     /*  1232     8 */
->   +       <ERROR                    > sk_bpf_storage;      /*  1240     8 */
-> 
-> (Also DWARF names refer to TYPE_TAG, not actual type name, fixed in pahole-new).
-> 
-> Warn #1: pahole-next complains about unexpected child tags generated
-> by clang, e.g.:
-> 
->   die__create_new_tag: unspecified_type WITH children!
->   die__create_new_base_type: DW_TAG_base_type WITH children!
+>=20
+> Thanks for the detailed implementation notes, references and tests
+> performed, please consider breaking it up into smaller pieces or
+> ellaborate on why you think can't be done.
 
-Sure, we can remove those if the children is the expected one, leaving
-the warning maybe for debug sessions.
 
-Thanks for the detailed implementation notes, references and tests
-performed, please consider breaking it up into smaller pieces or
-ellaborate on why you think can't be done.
+I can split the patch into several parts,
+it would be a bit stretched, though:
+1. change in btf_loader / dwarves_fprintf to correctly print names for
+   types with type tags;
+2. consolidation of `struct btf_type_tag_type` and `struct llvm_annotation`=
+;
+3. the logic to handle "btf:type_tags";
+4. support for "void __tag*" as unspecified type.
 
-Thanks!
+Part #3 would still be quite big, +500 LoC or something like this.
+Will submit v2 today or tomorrow.
 
-- Arnaldo
- 
-> 
-> Performance impact
-> ------------------
-> 
-> The update to `struct tag` might raise concerns regarding memory
-> usage, additional steps in recode phase might raise concerns regarding
-> execution time. Below is statistics collected for Kernel BTF
-> generation.
-> 
-> LLVM-new / LLVM-new / pahole-new:
-> 
-> $ /usr/bin/time -v pahole -J --btf_gen_floats -j --lang_exclude=rust .tmp_vmlinux.btf
->     ...
-> 	User time (seconds): 22.29
-> 	System time (seconds): 0.47
-> 	Percent of CPU this job got: 483%
->     ...
-> 	Maximum resident set size (kbytes): 714524
->     ...
-> 
-> LLVM-new / LLVM-new / pahole-next:
-> 
-> $ /usr/bin/time -v pahole -J --btf_gen_floats -j --lang_exclude=rust .tmp_vmlinux.btf
->     ...
-> 	User time (seconds): 20.96
-> 	System time (seconds): 0.44
-> 	Percent of CPU this job got: 473%
->     ...
-> 	Maximum resident set size (kbytes): 700848
->     ...
-> 
-> Links & revisions
-> -----------------
-> 
-> [1] Mailing list discussion regarding `btf:type_tag`
->     https://lore.kernel.org/bpf/87r0w9jjoq.fsf@oracle.com/
-> [2] Suggestion to use btfdiff
->     https://lore.kernel.org/dwarves/ZAKpZGSHTvsS4r8E@kernel.org/T/#mddbfe661e339485fb2b0e706b31329b46bf61bda
-> [3] f759275c1c8e ("[AMDGPU] Regenerate sdwa-peephole.ll")
-> [4] a9498899109d ("dwarf_loader: Support for btf:type_tag")
-> [5] 49b5300f1f8f ("Merge branch 'Support stashing local kptrs with bpf_kptr_xchg'")
-> [6] LLVM changes to generate btf:type_tag, revisions stack:
->     https://reviews.llvm.org/D143966
->     https://reviews.llvm.org/D143967
->     https://reviews.llvm.org/D145891
-> 
-> Eduard Zingerman (1):
->   dwarf_loader: Support for btf:type_tag
-> 
->  btf_encoder.c     |  13 +-
->  btf_loader.c      |  15 +-
->  dwarf_loader.c    | 763 +++++++++++++++++++++++++++++++++++++---------
->  dwarves.c         |   1 +
->  dwarves.h         |  68 +++--
->  dwarves_fprintf.c |  13 +
->  6 files changed, 693 insertions(+), 180 deletions(-)
-> 
-> -- 
-> 2.39.1
-> 
+Thanks,
+Eduard
 
--- 
+>=20
+> Thanks!
+>=20
+> - Arnaldo
+> =20
+> >=20
+> > Performance impact
+> > ------------------
+> >=20
+> > The update to `struct tag` might raise concerns regarding memory
+> > usage, additional steps in recode phase might raise concerns regarding
+> > execution time. Below is statistics collected for Kernel BTF
+> > generation.
+> >=20
+> > LLVM-new / LLVM-new / pahole-new:
+> >=20
+> > $ /usr/bin/time -v pahole -J --btf_gen_floats -j --lang_exclude=3Drust =
+.tmp_vmlinux.btf
+> >     ...
+> > 	User time (seconds): 22.29
+> > 	System time (seconds): 0.47
+> > 	Percent of CPU this job got: 483%
+> >     ...
+> > 	Maximum resident set size (kbytes): 714524
+> >     ...
+> >=20
+> > LLVM-new / LLVM-new / pahole-next:
+> >=20
+> > $ /usr/bin/time -v pahole -J --btf_gen_floats -j --lang_exclude=3Drust =
+.tmp_vmlinux.btf
+> >     ...
+> > 	User time (seconds): 20.96
+> > 	System time (seconds): 0.44
+> > 	Percent of CPU this job got: 473%
+> >     ...
+> > 	Maximum resident set size (kbytes): 700848
+> >     ...
+> >=20
+> > Links & revisions
+> > -----------------
+> >=20
+> > [1] Mailing list discussion regarding `btf:type_tag`
+> >     https://lore.kernel.org/bpf/87r0w9jjoq.fsf@oracle.com/
+> > [2] Suggestion to use btfdiff
+> >     https://lore.kernel.org/dwarves/ZAKpZGSHTvsS4r8E@kernel.org/T/#mddb=
+fe661e339485fb2b0e706b31329b46bf61bda
+> > [3] f759275c1c8e ("[AMDGPU] Regenerate sdwa-peephole.ll")
+> > [4] a9498899109d ("dwarf_loader: Support for btf:type_tag")
+> > [5] 49b5300f1f8f ("Merge branch 'Support stashing local kptrs with bpf_=
+kptr_xchg'")
+> > [6] LLVM changes to generate btf:type_tag, revisions stack:
+> >     https://reviews.llvm.org/D143966
+> >     https://reviews.llvm.org/D143967
+> >     https://reviews.llvm.org/D145891
+> >=20
+> > Eduard Zingerman (1):
+> >   dwarf_loader: Support for btf:type_tag
+> >=20
+> >  btf_encoder.c     |  13 +-
+> >  btf_loader.c      |  15 +-
+> >  dwarf_loader.c    | 763 +++++++++++++++++++++++++++++++++++++---------
+> >  dwarves.c         |   1 +
+> >  dwarves.h         |  68 +++--
+> >  dwarves_fprintf.c |  13 +
+> >  6 files changed, 693 insertions(+), 180 deletions(-)
+> >=20
+> > --=20
+> > 2.39.1
+> >=20
+>=20
 
-- Arnaldo
