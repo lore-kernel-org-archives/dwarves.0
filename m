@@ -2,194 +2,87 @@ Return-Path: <dwarves-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7695AC761AF
-	for <linux-dwarves@archiver.kernel.org>; Tue, 28 Mar 2023 12:41:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C75FBC6FD18
+	for <linux-dwarves@archiver.kernel.org>; Tue, 28 Mar 2023 13:40:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232744AbjC1Ml1 (ORCPT
+        id S232256AbjC1NkQ (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Tue, 28 Mar 2023 08:41:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54902 "EHLO
+        Tue, 28 Mar 2023 09:40:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232743AbjC1MlV (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Tue, 28 Mar 2023 08:41:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBA6EAD08;
-        Tue, 28 Mar 2023 05:41:00 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2ABD461756;
-        Tue, 28 Mar 2023 12:40:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 349F9C433EF;
-        Tue, 28 Mar 2023 12:40:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680007257;
-        bh=CQ4IVV781DkJukhgUnV5I5MiXxgHEAr0yze5wUMQGD0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jSTD76emm4A5eKALdBIaQ3QiObyvc/EMlMJt1TRimdv0s8YTuRll6/Rq9kQR3XDjw
-         sqMkhpkSleRPEYmdPECEutj2gCeiENx0CmU5HMvyTzt6j3Ia7MUB3xVKmCqrYhA8A9
-         1v/P1oFza2mt/o1UowBVxbRT1fC1Cqbzqn62LJ5/mXwU6/MqO897VtuLWvbYTiKa8G
-         K3qAjdom1k9nS5yK3xMKWA6n/Q8bbJn7c98vqe91bCXhX8rlmEWAY1a2kMbFh5xMJP
-         9QNtVNpgGxMlYzcB5dOekgE6GS7qsfU1kWQAFNvfcnt2Jfia5tRFShgeKmOrdbpYpt
-         v83NWk1SnFYsA==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id A0F324052D; Tue, 28 Mar 2023 09:40:54 -0300 (-03)
-Date:   Tue, 28 Mar 2023 09:40:54 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Eduard Zingerman <eddyz87@gmail.com>
-Cc:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
-        dwarves@vger.kernel.org, bpf@vger.kernel.org, kernel-team@fb.com,
+        with ESMTP id S230263AbjC1NkP (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Tue, 28 Mar 2023 09:40:15 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14E967DB3;
+        Tue, 28 Mar 2023 06:40:13 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id i5so50093496eda.0;
+        Tue, 28 Mar 2023 06:40:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680010811;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=JLvUIdsE77WPnmyAOUBKh7R4ujLXvQXFucKTylQ06w8=;
+        b=KPqtpDKbsQatpBrH7pMhXg/w9V2HPSO9K3/WuKavv9FXcYaV4VAS/7S7RyDs2x8L6o
+         tMvcmASclMixCnBPypIvXRrfzPGzcutZzjck2os1TFmPFhqMPhzWL4NDRH0y/cbrQOD6
+         Ksxg7zkEDnz0PZ5zGeamP6drEerVT6DNQNnREYpiE2mrR5flTX6ksm/CiZmYDOCoDPc4
+         n2jE1u6gdxfI8NTKMFTrOrxuy9JFI4Mkk2WQeEvMq53XzO1x0MclhaT+Qo4qpsj1zCq1
+         Go8SKJaaWPQoS756jYe5t+94Q5WguAnQznI9yaOnY0v65CnDigAQBhrxHyxCFkZrQfFI
+         L3uA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680010811;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=JLvUIdsE77WPnmyAOUBKh7R4ujLXvQXFucKTylQ06w8=;
+        b=aNh5PhHeMDqFsmv11D/194ddUmATMExce+Mx9LOvHZkCHOGJ5/1V3v0VKoRMblktmr
+         enDRzmp1FeMGiTMZiq5jKYandx/O5VJAQyIl97zwGMTco4MhOzyUDmRme3uPhiKh0gg7
+         SA45tLvhhX1EUlogolqDw3bd+ZUN8qof1R5XXs5Tevrwb9040on7Lct9vB4RJGJUFTVb
+         XkNXzL0HI1gcpCBn433Z1qoEQG8yQzjdVMIQJPR7kbULs47HfNjf1mbQi16TV+jgLAGb
+         apX0ZVbX/PEiFwnIFjmou9IXlaUPzjtEV4xcrjbEhvpMALQfIutx7Hn53hmCO74mGrcj
+         9BpQ==
+X-Gm-Message-State: AO0yUKXmccEkPeUHz/MUJpg36crV1/ouGbEaI04g4j8oeDjz7tLkzQ/Q
+        Sv5buqTACbxybCaef4+S2ek=
+X-Google-Smtp-Source: AK7set/6dlovLUOqBBDlkUHpAp11a1m9flDKxP9+DbhBERu/m/neoxFwZuGc02xyl4u5msLMbifqwg==
+X-Received: by 2002:a05:6402:944:b0:4ad:f811:e267 with SMTP id h4-20020a056402094400b004adf811e267mr21822273edz.12.1680010811476;
+        Tue, 28 Mar 2023 06:40:11 -0700 (PDT)
+Received: from [192.168.1.95] (host-176-36-0-241.b024.la.net.ua. [176.36.0.241])
+        by smtp.gmail.com with ESMTPSA id m1-20020a50c181000000b005024faae65esm941393edf.10.2023.03.28.06.40.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Mar 2023 06:40:10 -0700 (PDT)
+Message-ID: <7a27dae4640f3e84507773f3763924c1d5d7244a.camel@gmail.com>
+Subject: Re: [PATCH dwarves v2 1/5] fprintf: Correct names for types with
+ btf_type_tag attribute
+From:   Eduard Zingerman <eddyz87@gmail.com>
+To:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
+Cc:     dwarves@vger.kernel.org, bpf@vger.kernel.org, kernel-team@fb.com,
         ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
         yhs@fb.com, jose.marchesi@oracle.com, david.faust@oracle.com,
         alan.maguire@oracle.com
-Subject: Re: [PATCH dwarves v2 1/5] fprintf: Correct names for types with
- btf_type_tag attribute
-Message-ID: <ZCLgVrwpb3fhnnE7@kernel.org>
+Date:   Tue, 28 Mar 2023 16:40:08 +0300
+In-Reply-To: <ZCLgVrwpb3fhnnE7@kernel.org>
 References: <20230314230417.1507266-1-eddyz87@gmail.com>
- <20230314230417.1507266-2-eddyz87@gmail.com>
- <ZCGCBF5iYxCtBQKh@kernel.org>
- <b89f55694845d9d8784fe02700f184ff1de83e2e.camel@gmail.com>
+         <20230314230417.1507266-2-eddyz87@gmail.com> <ZCGCBF5iYxCtBQKh@kernel.org>
+         <b89f55694845d9d8784fe02700f184ff1de83e2e.camel@gmail.com>
+         <ZCLgVrwpb3fhnnE7@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4-0ubuntu1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <b89f55694845d9d8784fe02700f184ff1de83e2e.camel@gmail.com>
-X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-Em Mon, Mar 27, 2023 at 03:10:22PM +0300, Eduard Zingerman escreveu:
-> On Mon, 2023-03-27 at 08:46 -0300, Arnaldo Carvalho de Melo wrote:
-> > Em Wed, Mar 15, 2023 at 01:04:13AM +0200, Eduard Zingerman escreveu:
-> > > The following example contains a structure field annotated with
-> > > btf_type_tag attribute:
-> > > 
-> > >     #define __tag1 __attribute__((btf_type_tag("tag1")))
-> > > 
-> > >     struct st {
-> > >       int __tag1 *a;
-> > >     } g;
-> > > 
-> > > It is not printed correctly by `pahole -F dwarf` command:
-> > > 
-> > >     $ clang -g -c test.c -o test.o
-> > >     pahole -F dwarf test.o
-> > >     struct st {
-> > >     	tag1 *                     a;                    /*     0     8 */
-> > >     	...
-> > >     };
-> > > 
-> > > Note the type for variable `a`: `tag1` is printed instead of `int`.
-> > > This commit teaches `type__fprintf()` and `__tag_name()` logic to skip
-> > > `DW_TAG_LLVM_annotation` objects that are used to encode type tags.
-> > 
-> > I'm applying this now to make progress on this front, but longer term we
-> > should printf it too, as we want the output to match the original source
-> > code as much as possible from the type information.
-> 
-> Understood, thank you.
-> 
-> Also, I want to give a heads-up about ongoing discussion in:
-> https://reviews.llvm.org/D143967
-> 
-> The gist of the discussion is that for the code like:
-> 
->   volatile __tag("foo") int;
->   
-> Kernel expects BTF to be:
-> 
->   __tag("foo") -> volatile -> int
->   
-> And I encode it in DWARF as:
-> 
->   volatile       -> int
->     __tag("foo")
->     
-> But GCC guys argue that DWARF should be like this:
-> 
->   volatile       -> int
->                       __tag("foo")
-> 
-> So, to get the BTF to a form acceptable for kernel some additional
-> pahole modifications might be necessary. (I will work on a prototype
-> for such modifications this week).
-> 
-> Maybe put this patch-set on-hold until that is resolved?
+On Tue, 2023-03-28 at 09:40 -0300, Arnaldo Carvalho de Melo wrote:
+[...]
+> > Maybe put this patch-set on-hold until that is resolved?
+>=20
+> Ok, so I'll apply just the first two, to get btfdiff a down to those
+> zero sized arrays when processing clang generated DWARF for a recent
+> kernel, see below.
+>=20
+> Ok?
 
-Ok, so I'll apply just the first two, to get btfdiff a down to those
-zero sized arrays when processing clang generated DWARF for a recent
-kernel, see below.
+Sure, thank you!
 
-Ok?
-
-- A rnaldo
-
-⬢[acme@toolbox pahole]$ git log --oneline -5
-b43651673676c1dc (HEAD -> master) btf_loader: A hack for BTF import of btf_type_tag attributes
-e7fb771f2649fc1b fprintf: Correct names for types with btf_type_tag attribute
-4d17096076b2351f (quaco/master, quaco/HEAD, github/tmp.master, github/next, acme/tmp.master, acme/next) btf_encoder: Compare functions via prototypes not parameter names
-82730394195276ac fprintf: Support skipping modifier
-d184aaa125ea40ff fprintf: Generalize function prototype print to support passing conf
-⬢[acme@toolbox pahole]$
-
-⬢[acme@toolbox pahole]$ btfdiff ../vmlinux-clang-pahole-1.25+rust
-die__process_class: tag not supported 0x2f (template_type_parameter)!
-die__process_class: tag not supported 0x33 (variant_part)!
---- /tmp/btfdiff.dwarf.EiDOTz	2023-03-28 09:38:09.283942846 -0300
-+++ /tmp/btfdiff.btf.rWM9v6	2023-03-28 09:38:09.624952028 -0300
-@@ -14496,7 +14496,7 @@ struct bpf_cand_cache {
- 	struct {
- 		const struct btf  * btf;                 /*    16     8 */
- 		u32                id;                   /*    24     4 */
--	} cands[0]; /*    16     0 */
-+	} cands[]; /*    16     0 */
-
- 	/* size: 16, cachelines: 1, members: 5 */
- 	/* last cacheline: 16 bytes */
-@@ -18310,7 +18310,7 @@ struct btf_id_set8 {
- 	struct {
- 		u32                id;                   /*     8     4 */
- 		u32                flags;                /*    12     4 */
--	} pairs[0]; /*     8     0 */
-+	} pairs[]; /*     8     0 */
-
- 	/* size: 8, cachelines: 1, members: 3 */
- 	/* last cacheline: 8 bytes */
-@@ -27765,7 +27765,7 @@ struct cpu_rmap {
- 	struct {
- 		u16                index;                /*    16     2 */
- 		u16                dist;                 /*    18     2 */
--	} near[0]; /*    16     0 */
-+	} near[]; /*    16     0 */
-
- 	/* size: 16, cachelines: 1, members: 5 */
- 	/* last cacheline: 16 bytes */
-@@ -73931,7 +73931,7 @@ struct linux_efi_memreserve {
- 	struct {
- 		phys_addr_t        base;                 /*    16     8 */
- 		phys_addr_t        size;                 /*    24     8 */
--	} entry[0]; /*    16     0 */
-+	} entry[]; /*    16     0 */
-
- 	/* size: 16, cachelines: 1, members: 4 */
- 	/* last cacheline: 16 bytes */
-@@ -84345,7 +84345,7 @@ struct netlink_policy_dump_state {
- 	struct {
- 		const struct nla_policy  * policy;       /*    16     8 */
- 		unsigned int       maxtype;              /*    24     4 */
--	} policies[0]; /*    16     0 */
-+	} policies[]; /*    16     0 */
-
- 	/* size: 16, cachelines: 1, members: 4 */
- 	/* sum members: 12, holes: 1, sum holes: 4 */
-@@ -139178,7 +139178,7 @@ struct uv_rtc_timer_head {
- 		/* XXX 4 bytes hole, try to pack */
-
- 		u64                expires;              /*    24     8 */
--	} cpu[0]; /*    16     0 */
-+	} cpu[]; /*    16     0 */
-
- 	/* size: 16, cachelines: 1, members: 4 */
- 	/* sum members: 12, holes: 1, sum holes: 4 */
-⬢[acme@toolbox pahole]$
+[...]
