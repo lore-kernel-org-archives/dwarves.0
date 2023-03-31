@@ -2,39 +2,39 @@ Return-Path: <dwarves-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 37AA7C6FD18
-	for <linux-dwarves@archiver.kernel.org>; Fri, 31 Mar 2023 12:14:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2A46AC76196
+	for <linux-dwarves@archiver.kernel.org>; Fri, 31 Mar 2023 12:21:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232111AbjCaMOp (ORCPT
+        id S232359AbjCaMVs (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Fri, 31 Mar 2023 08:14:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54640 "EHLO
+        Fri, 31 Mar 2023 08:21:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232098AbjCaMOn (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Fri, 31 Mar 2023 08:14:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAE681DFB2;
-        Fri, 31 Mar 2023 05:14:42 -0700 (PDT)
+        with ESMTP id S232369AbjCaMV0 (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Fri, 31 Mar 2023 08:21:26 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E77520D89;
+        Fri, 31 Mar 2023 05:20:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8562F6287A;
-        Fri, 31 Mar 2023 12:14:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 855E4C433D2;
-        Fri, 31 Mar 2023 12:14:41 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 99D42B82EF2;
+        Fri, 31 Mar 2023 12:20:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B503C433EF;
+        Fri, 31 Mar 2023 12:20:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680264881;
-        bh=aVZf/XrJJHV2m+r63DZrMTx0gyiGjL25k+dDKUwAHkg=;
+        s=k20201202; t=1680265244;
+        bh=TfbE6wzLk2TKNH81FTvCD5+wH6CX9qCYuzTsOvwGjAQ=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=aE922uonF/7WRWrJeKn6iKOvlCfXRfex9uaJGpuAkyvwmTJRjsQ6i7d/nci30QGnm
-         VNT53NrL4vBcOxeu6CNj7NU6LBuTmzTvUO0MXi87TlXI4iI3iZL/2c32j26M4ZCca5
-         c2Wa/03xxVZnqDxPGJvYY3q8BisavVMuvSBMuYL2w/kOOP3smZf1ElCNuGhVmftymb
-         DAnmTeGHNOFkF6otRnHIDpKOd7s3Sibm9roAy4mZHJhl1f5poX4LENQG6pNAR9AEP7
-         04pDqrYSyq5SEZCAUTpbzvXmUEIstkJsTx/UxqSypafvc6togrYQHNDjP8kX/Cf3rg
-         2U0pNbSrzMbWg==
+        b=gmWnEDLc2B3+vtE8YUR/PfNvCHDO6mCkYG9aZQWNxw+B5IRKfqv/Tv3lWe4KlM5O8
+         iBpZ1I35jWqE2J7X6yRPUv9OFr7G5720RZw2jvlrlF12edK2dd8bPbdJsi2UOB6CKc
+         Ho42C9664h/qpPEl+JDRPlvtiuo7P/v6vgvQTlCrJFW7lSMVWv8FomO70N97R35ewn
+         6g/v2aVHpTX7/40xYCncc/qdCdqqEvoeaLAWkGqpD+xgPSL2YXD/GseRR8GPSN9NdS
+         Yi/Qcz699Pgp3/fjEr/4ZCqj+OfLQkuz2qBCqJHGRKZy3FB7WqEJICDjbrY/pR8ZXP
+         wnqY+zPrT8VAA==
 Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 50EE24052D; Fri, 31 Mar 2023 09:14:39 -0300 (-03)
-Date:   Fri, 31 Mar 2023 09:14:39 -0300
+        id 2BDC94052D; Fri, 31 Mar 2023 09:20:42 -0300 (-03)
+Date:   Fri, 31 Mar 2023 09:20:42 -0300
 From:   Arnaldo Carvalho de Melo <acme@kernel.org>
 To:     Eduard Zingerman <eddyz87@gmail.com>
 Cc:     dwarves@vger.kernel.org, arnaldo.melo@gmail.com,
@@ -42,178 +42,84 @@ Cc:     dwarves@vger.kernel.org, arnaldo.melo@gmail.com,
         daniel@iogearbox.net, andrii@kernel.org, yhs@fb.com
 Subject: Re: [PATCH dwarves] fprintf: Fix `*` not being printed for pointers
  with btf_type_tag
-Message-ID: <ZCbOr4pwrX7JVnCZ@kernel.org>
+Message-ID: <ZCbQGhtWWJ5q2P+a@kernel.org>
 References: <20230330212700.697124-1-eddyz87@gmail.com>
  <ZCbOdWCKKzLlprIs@kernel.org>
+ <ZCbOr4pwrX7JVnCZ@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZCbOdWCKKzLlprIs@kernel.org>
+In-Reply-To: <ZCbOr4pwrX7JVnCZ@kernel.org>
 X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-Em Fri, Mar 31, 2023 at 09:13:41AM -0300, Arnaldo Carvalho de Melo escreveu:
-> Em Fri, Mar 31, 2023 at 12:27:00AM +0300, Eduard Zingerman escreveu:
-> > Recent change to fprintf (see below) causes incorrect `type_fprintf()`
-> > behavior for pointers annotated with btf_type_tag, for example:
-> > 
-> >     $ cat tag-test.c
-> >     #define __t __attribute__((btf_type_tag("t1")))
-> > 
-> >     struct foo {
-> >       int __t *a;
-> >     } g;
-> > 
-> >     $ clang -g -c tag-test.c -o tag-test.o && \
-> >       pahole -J tag-test.o && pahole --sort -F dwarf tag-test.o
-> >     struct foo {
-> >     	int                        a;                    /*     0     8 */
-> >     	...
-> >     };
-> > 
-> > Note that `*` is missing in the pahole output.
-> > The issue is caused by `goto next_type` that jumps over the
-> > `tag__name()` that is responsible for pointer printing.
-> > 
-> > As agreed in [1] `type__fprintf()` is modified to skip type tags for
-> > now and would be modified to emit type tags later.
-> > 
-> > The change in `__tag__name()` is necessary to avoid the following behavior:
-> > 
-> >     $ cat tag-test.c
-> >     #define __t __attribute__((btf_type_tag("t1")))
-> > 
-> >     struct foo {
-> >       int __t *a;
-> >       int __t __t *b;
-> >     } g;
-> > 
-> >     $ clang -g -c tag-test.c -o tag-test.o && \
-> >       pahole -J tag-test.o && pahole --sort -F dwarf tag-test.o
-> >     struct foo {
-> >     	int  *                     a;                    /*     0     8 */
-> >     	int   *                    b;                    /*     8     8 */
-> >             ...
-> >     };
-> > 
-> > Note the extra space before `*` for field `b`.
-> > 
-> > The issue was reported and tracked down to the root cause by
-> > Arnaldo Carvalho de Melo.
-> > 
-> > Links:
-> > [1] https://lore.kernel.org/dwarves/20230314230417.1507266-1-eddyz87@gmail.com/T/#md82b04f66867434524beec746138951f26a3977e
-> > 
-> > Fixes: e7fb771f2649 ("fprintf: Correct names for types with btf_type_tag attribute")
-> > Reported-by: Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
-> > Link: https://lore.kernel.org/dwarves/20230314230417.1507266-1-eddyz87@gmail.com/T/#mc630bcd474ddd64c70d237edd4e0590dc048d63d
-> > Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
-> > ---
-> >  dwarves_fprintf.c | 37 +++++++++++++++++++++++++++++--------
-> >  1 file changed, 29 insertions(+), 8 deletions(-)
-> > 
-> > diff --git a/dwarves_fprintf.c b/dwarves_fprintf.c
-> > index 1e6147a..818db2d 100644
-> > --- a/dwarves_fprintf.c
-> > +++ b/dwarves_fprintf.c
-> > @@ -572,7 +572,6 @@ static const char *__tag__name(const struct tag *tag, const struct cu *cu,
-> >  	case DW_TAG_restrict_type:
-> >  	case DW_TAG_atomic_type:
-> >  	case DW_TAG_unspecified_type:
-> > -	case DW_TAG_LLVM_annotation:
-> >  		type = cu__type(cu, tag->type);
-> >  		if (type == NULL && tag->type != 0)
-> >  			tag__id_not_found_snprintf(bf, len, tag->type);
-> > @@ -618,6 +617,13 @@ static const char *__tag__name(const struct tag *tag, const struct cu *cu,
-> >  	case DW_TAG_variable:
-> >  		snprintf(bf, len, "%s", variable__name(tag__variable(tag)));
-> >  		break;
-> > +	case DW_TAG_LLVM_annotation:
-> > +		type = cu__type(cu, tag->type);
-> > +		if (type == NULL && tag->type != 0)
-> > +			tag__id_not_found_snprintf(bf, len, tag->type);
-> > +		else if (!tag__has_type_loop(tag, type, bf, len, NULL))
-> > +			__tag__name(type, cu, bf, len, conf);
-> > +		break;
-> >  	default:
-> >  		snprintf(bf, len, "%s%s", tag__prefix(cu, tag->tag, pconf),
-> >  			 type__name(tag__type(tag)) ?: "");
-> > @@ -677,6 +683,22 @@ static size_t type__fprintf_stats(struct type *type, const struct cu *cu,
-> >  	return printed;
-> >  }
-> >  
-> > +static type_id_t skip_llvm_annotations(const struct cu *cu, type_id_t id)
-> > +{
-> > +	struct tag *type;
-> > +
-> > +	for (;;) {
-> > +		if (id == 0)
-> > +			break;
-> > +		type = cu__type(cu, id);
-> > +		if (type == NULL || type->tag != DW_TAG_LLVM_annotation || type->type == id)
-> > +			break;
-> > +		id = type->type;
-> > +	}
-> > +
-> > +	return id;
-> > +}
+Em Fri, Mar 31, 2023 at 09:14:39AM -0300, Arnaldo Carvalho de Melo escreveu:
+> > This part I didn't understand, do you see any possibility of a
+> > DW_TAG_LLVM_annotation pointing to another DW_TAG_LLVM_annotation?
 > 
-> This part I didn't understand, do you see any possibility of a
-> DW_TAG_LLVM_annotation pointing to another DW_TAG_LLVM_annotation?
+> I _think_ its a noop, so will test your patch as-is, thanks!
 
-I _think_ its a noop, so will test your patch as-is, thanks!
+Tested, now we're left with normalizing base type names generated by
+clang and gcc, things like:
 
-- Arnaldo
- 
-> - Arnaldo
-> 
-> > +
-> >  static size_t union__fprintf(struct type *type, const struct cu *cu,
-> >  			     const struct conf_fprintf *conf, FILE *fp);
-> >  
-> > @@ -778,19 +800,17 @@ inner_struct:
-> >  
-> >  next_type:
-> >  	switch (type->tag) {
-> > -	case DW_TAG_pointer_type:
-> > -		if (type->type != 0) {
-> > +	case DW_TAG_pointer_type: {
-> > +		type_id_t ptype_id = skip_llvm_annotations(cu, type->type);
-> > +
-> > +		if (ptype_id != 0) {
-> >  			int n;
-> > -			struct tag *ptype = cu__type(cu, type->type);
-> > +			struct tag *ptype = cu__type(cu, ptype_id);
-> >  			if (ptype == NULL)
-> >  				goto out_type_not_found;
-> >  			n = tag__has_type_loop(type, ptype, NULL, 0, fp);
-> >  			if (n)
-> >  				return printed + n;
-> > -			if (ptype->tag == DW_TAG_LLVM_annotation) {
-> > -				type = ptype;
-> > -				goto next_type;
-> > -			}
-> >  			if (ptype->tag == DW_TAG_subroutine_type) {
-> >  				printed += ftype__fprintf(tag__ftype(ptype),
-> >  							  cu, name, 0, 1,
-> > @@ -811,6 +831,7 @@ next_type:
-> >  			}
-> >  		}
-> >  		/* Fall Thru */
-> > +	}
-> >  	default:
-> >  print_default:
-> >  		printed += fprintf(fp, "%-*s %s", tconf.type_spacing,
-> > -- 
-> > 2.40.0
-> > 
-> 
-> -- 
-> 
-> - Arnaldo
+--- /tmp/gcc    2023-03-31 09:16:34.100006650 -0300
++++ /tmp/clang  2023-03-31 09:16:26.211789489 -0300
+@@ -96,8 +96,8 @@
 
--- 
+        /* XXX 4 bytes hole, try to pack */
+
+-       long unsigned int          state;                /*   216     8 */
+-       long unsigned int          state2;               /*   224     8 */
++       unsigned long              state;                /*   216     8 */
++       unsigned long              state2;               /*   224     8 */
+        struct Qdisc *             next_sched;           /*   232     8 */
+        struct sk_buff_head        skb_bad_txq;          /*   240    24 */
+
+@@ -112,7 +112,7 @@
+        /* XXX 40 bytes hole, try to pack */
+
+        /* --- cacheline 6 boundary (384 bytes) --- */
+-       long int                   privdata[];           /*   384     0 */
++       long                       privdata[];           /*   384     0 */
+
+        /* size: 384, cachelines: 6, members: 28 */
+        /* sum members: 260, holes: 4, sum holes: 124 */
+@@ -145,19 +145,19 @@
+        /* XXX 4 bytes hole, try to pack */
+
+        struct netdev_queue *      (*select_queue)(struct Qdisc *, struct tcmsg *); /*     8     8 */
+-       int                        (*graft)(struct Qdisc *, long unsigned int, struct Qdisc *, struct Qdisc * *, struct netlink_ext_ack *); /*    16     8 */
++       int                        (*graft)(struct Qdisc *, unsigned long, struct Qdisc *, struct Qdisc * *, struct netlink_ext_ack *); /*    16     8 */
+-       struct Qdisc *             (*leaf)(struct Qdisc *, long unsigned int); /*    24     8 */
++       struct Qdisc *             (*leaf)(struct Qdisc *, unsigned long); /*    24     8 */
+-       void                       (*qlen_notify)(struct Qdisc *, long unsigned int); /*    32     8 */
++       void                       (*qlen_notify)(struct Qdisc *, unsigned long); /*    32     8 */
+-       long unsigned int          (*find)(struct Qdisc *, u32); /*    40     8 */
++       unsigned long              (*find)(struct Qdisc *, u32); /*    40     8 */
+-       int                        (*change)(struct Qdisc *, u32, u32, struct nlattr * *, long unsigned int *, struct netlink_ext_ack *); /*    48     8 */
++       int                        (*change)(struct Qdisc *, u32, u32, struct nlattr * *, unsigned long *, struct netlink_ext_ack *); /*    48     8 */
+-       int                        (*delete)(struct Qdisc *, long unsigned int, struct netlink_ext_ack *); /*    56     8 */
++       int                        (*delete)(struct Qdisc *, unsigned long, struct netlink_ext_ack *); /*    56     8 */
+        /* --- cacheline 1 boundary (64 bytes) --- */
+        void                       (*walk)(struct Qdisc *, struct qdisc_walker *); /*    64     8 */
+-       struct tcf_block *         (*tcf_block)(struct Qdisc *, long unsigned int, struct netlink_ext_ack *); /*    72     8 */
++       struct tcf_block *         (*tcf_block)(struct Qdisc *, unsigned long, struct netlink_ext_ack *); /*    72     8 */
+-       long unsigned int          (*bind_tcf)(struct Qdisc *, long unsigned int, u32); /*    80     8 */
++       unsigned long              (*bind_tcf)(struct Qdisc *, unsigned long, u32); /*    80     8 */
+-       void                       (*unbind_tcf)(struct Qdisc *, long unsigned int); /*    88     8 */
++       void                       (*unbind_tcf)(struct Qdisc *, unsigned long); /*    88     8 */
+-       int                        (*dump)(struct Qdisc *, long unsigned int, struct sk_buff *, struct tcmsg *); /*    96     8 */
++       int                        (*dump)(struct Qdisc *, unsigned long, struct sk_buff *, struct tcmsg *); /*    96     8 */
+-       int                        (*dump_stats)(struct Qdisc *, long unsigned int, struct gnet_dump *); /*   104     8 */
++       int                        (*dump_stats)(struct Qdisc *, unsigned long, struct gnet_dump *); /*   104     8 */
+
+        /* size: 112, cachelines: 2, members: 14 */
+        /* sum members: 108, holes: 1, sum holes: 4 */
+@@ -227,21 +227,21 @@
+
+This was affected somehow by these LLVM_annotation patches, I'll try to
+handle this later.
 
 - Arnaldo
