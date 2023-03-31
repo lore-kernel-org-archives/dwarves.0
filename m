@@ -2,124 +2,105 @@ Return-Path: <dwarves-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2A46AC76196
-	for <linux-dwarves@archiver.kernel.org>; Fri, 31 Mar 2023 12:21:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7C23DC76196
+	for <linux-dwarves@archiver.kernel.org>; Fri, 31 Mar 2023 13:35:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232359AbjCaMVs (ORCPT
+        id S231566AbjCaNf6 (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Fri, 31 Mar 2023 08:21:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33210 "EHLO
+        Fri, 31 Mar 2023 09:35:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232369AbjCaMV0 (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Fri, 31 Mar 2023 08:21:26 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E77520D89;
-        Fri, 31 Mar 2023 05:20:49 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 99D42B82EF2;
-        Fri, 31 Mar 2023 12:20:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B503C433EF;
-        Fri, 31 Mar 2023 12:20:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680265244;
-        bh=TfbE6wzLk2TKNH81FTvCD5+wH6CX9qCYuzTsOvwGjAQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gmWnEDLc2B3+vtE8YUR/PfNvCHDO6mCkYG9aZQWNxw+B5IRKfqv/Tv3lWe4KlM5O8
-         iBpZ1I35jWqE2J7X6yRPUv9OFr7G5720RZw2jvlrlF12edK2dd8bPbdJsi2UOB6CKc
-         Ho42C9664h/qpPEl+JDRPlvtiuo7P/v6vgvQTlCrJFW7lSMVWv8FomO70N97R35ewn
-         6g/v2aVHpTX7/40xYCncc/qdCdqqEvoeaLAWkGqpD+xgPSL2YXD/GseRR8GPSN9NdS
-         Yi/Qcz699Pgp3/fjEr/4ZCqj+OfLQkuz2qBCqJHGRKZy3FB7WqEJICDjbrY/pR8ZXP
-         wnqY+zPrT8VAA==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 2BDC94052D; Fri, 31 Mar 2023 09:20:42 -0300 (-03)
-Date:   Fri, 31 Mar 2023 09:20:42 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Eduard Zingerman <eddyz87@gmail.com>
-Cc:     dwarves@vger.kernel.org, arnaldo.melo@gmail.com,
-        bpf@vger.kernel.org, kernel-team@fb.com, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, yhs@fb.com
+        with ESMTP id S231311AbjCaNf5 (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Fri, 31 Mar 2023 09:35:57 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32C7A1BF62;
+        Fri, 31 Mar 2023 06:35:56 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id h11so21927605lfu.8;
+        Fri, 31 Mar 2023 06:35:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680269754; x=1682861754;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=eCjDt0K/wxKPEs3etH2BLFmP4xafFAuBbzgtVkfgkAE=;
+        b=M7mPyE/SOi8es9IIkwXRDnBPNHkG9Y0TVaETA8Kn6T5ge0VJ7Hsvh/YVhd2Es8dMHN
+         klVgJeLnpS+t/ou17pZZO+UR+qM+VLOPvaUx2WGtMC1BiupN53ca7DTgTxu3iQlXoyTo
+         tgJc6ulLZme2POoRkGTKW6sQx/rI34iYylA/X9ai5RSy7iIa96X6OM6eOs2sUpxtOTqd
+         ByOCOzg/tmlkJ/BHWp2XZd7YE4wEGpTf6kW7Tckr3gsWhyG1tIMClPqB8eNK4QLan8oA
+         rxfEOPCidIYr8OyR9xdfUJcs4rHGyEyaEiQHvX1DyOZisgRkdsl54/8FXVqH/Ow57P/p
+         uugw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680269754; x=1682861754;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=eCjDt0K/wxKPEs3etH2BLFmP4xafFAuBbzgtVkfgkAE=;
+        b=YljIGYgjeZAwRKp4AqA/lSafxVMoG+qE2jUCsAKxK4Z0PHHBHJkYhkdTEme7YCDfgx
+         3XFuKHIClURo2gZFVjAg6RqvJYbm6d/zIzruuWd82RCIXNDJgNvq2QFfygFdFFLF2DeV
+         FrhLSq+Ltpz+qbPJXPrJs70xHHpwgho/9sHOccQnX8rzhPkzZ5LLH4OYrDO6lhrBgbHw
+         5x3aVNvVb0VxeWIMuNW+8HfAydszQbl+gwOIdiY/cbcKKq6nvckyD3Q3sKvw9WSevSSo
+         be2xQcfvZ9HyedOG0hkWGlTknKZVqTif+AOSroDA7SkiNBHPqkEaXFKsu4tZIuxALExF
+         jXSw==
+X-Gm-Message-State: AAQBX9f68mcWg2SLTUhtzmhXINbT/mfpfpb7v8FkbOY8m/ZKek25MCXA
+        hgOs0Hm4I62hGsGROgJoBtxd5L2p37cN2g==
+X-Google-Smtp-Source: AKy350ajX3COQpqd1eF85arl9Ccm3D7guWM/EOHZ3XV69uE5Z+FU0TGkY1MxfNn9J95JEeLIUsUMiQ==
+X-Received: by 2002:ac2:46ea:0:b0:4ea:e789:25b with SMTP id q10-20020ac246ea000000b004eae789025bmr3043263lfo.30.1680269754288;
+        Fri, 31 Mar 2023 06:35:54 -0700 (PDT)
+Received: from [192.168.1.95] (host-176-36-0-241.b024.la.net.ua. [176.36.0.241])
+        by smtp.gmail.com with ESMTPSA id x11-20020a19f60b000000b004eaf2291dcdsm385179lfe.102.2023.03.31.06.35.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 31 Mar 2023 06:35:53 -0700 (PDT)
+Message-ID: <f044179e39ec9e7665232eb5abad959ef5e19119.camel@gmail.com>
 Subject: Re: [PATCH dwarves] fprintf: Fix `*` not being printed for pointers
  with btf_type_tag
-Message-ID: <ZCbQGhtWWJ5q2P+a@kernel.org>
+From:   Eduard Zingerman <eddyz87@gmail.com>
+To:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
+Cc:     dwarves@vger.kernel.org, bpf@vger.kernel.org, kernel-team@fb.com,
+        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, yhs@fb.com
+Date:   Fri, 31 Mar 2023 16:35:52 +0300
+In-Reply-To: <ZCbOdWCKKzLlprIs@kernel.org>
 References: <20230330212700.697124-1-eddyz87@gmail.com>
- <ZCbOdWCKKzLlprIs@kernel.org>
- <ZCbOr4pwrX7JVnCZ@kernel.org>
+         <ZCbOdWCKKzLlprIs@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4-0ubuntu1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZCbOr4pwrX7JVnCZ@kernel.org>
-X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-Em Fri, Mar 31, 2023 at 09:14:39AM -0300, Arnaldo Carvalho de Melo escreveu:
-> > This part I didn't understand, do you see any possibility of a
-> > DW_TAG_LLVM_annotation pointing to another DW_TAG_LLVM_annotation?
-> 
-> I _think_ its a noop, so will test your patch as-is, thanks!
+On Fri, 2023-03-31 at 09:13 -0300, Arnaldo Carvalho de Melo wrote:
+> [...]
+> > =20
+> > +static type_id_t skip_llvm_annotations(const struct cu *cu, type_id_t =
+id)
+> > +{
+> > +	struct tag *type;
+> > +
+> > +	for (;;) {
+> > +		if (id =3D=3D 0)
+> > +			break;
+> > +		type =3D cu__type(cu, id);
+> > +		if (type =3D=3D NULL || type->tag !=3D DW_TAG_LLVM_annotation || typ=
+e->type =3D=3D id)
+> > +			break;
+> > +		id =3D type->type;
+> > +	}
+> > +
+> > +	return id;
+> > +}
+>=20
+> This part I didn't understand, do you see any possibility of a
+> DW_TAG_LLVM_annotation pointing to another DW_TAG_LLVM_annotation?
 
-Tested, now we're left with normalizing base type names generated by
-clang and gcc, things like:
+Not at the moment, but it is no illegal, it is possible to write
+something like this:
 
---- /tmp/gcc    2023-03-31 09:16:34.100006650 -0300
-+++ /tmp/clang  2023-03-31 09:16:26.211789489 -0300
-@@ -96,8 +96,8 @@
+    #define __t1 __attribute__((btf_type_tag("t1")))
+    #define __t2 __attribute__((btf_type_tag("t2")))
+   =20
+    int __t1 __t2 *g;
+   =20
+And to get BTF like ptr --> __t2 --> __t1 --> int.
 
-        /* XXX 4 bytes hole, try to pack */
-
--       long unsigned int          state;                /*   216     8 */
--       long unsigned int          state2;               /*   224     8 */
-+       unsigned long              state;                /*   216     8 */
-+       unsigned long              state2;               /*   224     8 */
-        struct Qdisc *             next_sched;           /*   232     8 */
-        struct sk_buff_head        skb_bad_txq;          /*   240    24 */
-
-@@ -112,7 +112,7 @@
-        /* XXX 40 bytes hole, try to pack */
-
-        /* --- cacheline 6 boundary (384 bytes) --- */
--       long int                   privdata[];           /*   384     0 */
-+       long                       privdata[];           /*   384     0 */
-
-        /* size: 384, cachelines: 6, members: 28 */
-        /* sum members: 260, holes: 4, sum holes: 124 */
-@@ -145,19 +145,19 @@
-        /* XXX 4 bytes hole, try to pack */
-
-        struct netdev_queue *      (*select_queue)(struct Qdisc *, struct tcmsg *); /*     8     8 */
--       int                        (*graft)(struct Qdisc *, long unsigned int, struct Qdisc *, struct Qdisc * *, struct netlink_ext_ack *); /*    16     8 */
-+       int                        (*graft)(struct Qdisc *, unsigned long, struct Qdisc *, struct Qdisc * *, struct netlink_ext_ack *); /*    16     8 */
--       struct Qdisc *             (*leaf)(struct Qdisc *, long unsigned int); /*    24     8 */
-+       struct Qdisc *             (*leaf)(struct Qdisc *, unsigned long); /*    24     8 */
--       void                       (*qlen_notify)(struct Qdisc *, long unsigned int); /*    32     8 */
-+       void                       (*qlen_notify)(struct Qdisc *, unsigned long); /*    32     8 */
--       long unsigned int          (*find)(struct Qdisc *, u32); /*    40     8 */
-+       unsigned long              (*find)(struct Qdisc *, u32); /*    40     8 */
--       int                        (*change)(struct Qdisc *, u32, u32, struct nlattr * *, long unsigned int *, struct netlink_ext_ack *); /*    48     8 */
-+       int                        (*change)(struct Qdisc *, u32, u32, struct nlattr * *, unsigned long *, struct netlink_ext_ack *); /*    48     8 */
--       int                        (*delete)(struct Qdisc *, long unsigned int, struct netlink_ext_ack *); /*    56     8 */
-+       int                        (*delete)(struct Qdisc *, unsigned long, struct netlink_ext_ack *); /*    56     8 */
-        /* --- cacheline 1 boundary (64 bytes) --- */
-        void                       (*walk)(struct Qdisc *, struct qdisc_walker *); /*    64     8 */
--       struct tcf_block *         (*tcf_block)(struct Qdisc *, long unsigned int, struct netlink_ext_ack *); /*    72     8 */
-+       struct tcf_block *         (*tcf_block)(struct Qdisc *, unsigned long, struct netlink_ext_ack *); /*    72     8 */
--       long unsigned int          (*bind_tcf)(struct Qdisc *, long unsigned int, u32); /*    80     8 */
-+       unsigned long              (*bind_tcf)(struct Qdisc *, unsigned long, u32); /*    80     8 */
--       void                       (*unbind_tcf)(struct Qdisc *, long unsigned int); /*    88     8 */
-+       void                       (*unbind_tcf)(struct Qdisc *, unsigned long); /*    88     8 */
--       int                        (*dump)(struct Qdisc *, long unsigned int, struct sk_buff *, struct tcmsg *); /*    96     8 */
-+       int                        (*dump)(struct Qdisc *, unsigned long, struct sk_buff *, struct tcmsg *); /*    96     8 */
--       int                        (*dump_stats)(struct Qdisc *, long unsigned int, struct gnet_dump *); /*   104     8 */
-+       int                        (*dump_stats)(struct Qdisc *, unsigned long, struct gnet_dump *); /*   104     8 */
-
-        /* size: 112, cachelines: 2, members: 14 */
-        /* sum members: 108, holes: 1, sum holes: 4 */
-@@ -227,21 +227,21 @@
-
-This was affected somehow by these LLVM_annotation patches, I'll try to
-handle this later.
-
-- Arnaldo
+> [...]
