@@ -2,171 +2,153 @@ Return-Path: <dwarves-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B2D05C761A6
-	for <linux-dwarves@archiver.kernel.org>; Fri, 31 Mar 2023 18:33:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CD293C7619A
+	for <linux-dwarves@archiver.kernel.org>; Sat,  8 Apr 2023 18:55:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231722AbjCaSdg (ORCPT
+        id S229452AbjDHSzq (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Fri, 31 Mar 2023 14:33:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39528 "EHLO
+        Sat, 8 Apr 2023 14:55:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230064AbjCaSdf (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Fri, 31 Mar 2023 14:33:35 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED1EF22225;
-        Fri, 31 Mar 2023 11:33:30 -0700 (PDT)
+        with ESMTP id S229448AbjDHSzp (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Sat, 8 Apr 2023 14:55:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAD0D93C1;
+        Sat,  8 Apr 2023 11:55:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 99AFDB83178;
-        Fri, 31 Mar 2023 18:33:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10286C433EF;
-        Fri, 31 Mar 2023 18:33:28 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 537F060C3A;
+        Sat,  8 Apr 2023 18:55:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C9EEC4339B;
+        Sat,  8 Apr 2023 18:55:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680287608;
-        bh=cdFn6TaWj35ikXCjd2E20Kx3QiQjP05Y+AIr3+gd0/g=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DYsdUnvxpvigPnDjGCqSnNS37ItsQZcgKQ2Qd+whEyJ/R25oX/mgHGJfmH9H6lN+g
-         PXjTL7xsbAcwbvmCDYFTmTmYyBs/bG4Q79lBxsAuatMU6bpe7vwoweG7MaScYQpZnt
-         KTbYzuV5fMuSyvK4DfXkWL95VEkACtiVxYcBi9DpTJmV3nCv2JzaiETbHamYVTY2j2
-         OW/Hwm52CVrF5o8ucNzbutPkB/VazE+NpgjhwcgL2VQVnbX+YtvVJBryw1JhL9kQeJ
-         TnD00VPB/y2B6m8ctd9rzdX5tgKXczAmURxRWEJGn3yeCBN8dhpl5P8ckrKtihNmeO
-         lI3EIiYWpmWcg==
+        s=k20201202; t=1680980142;
+        bh=lh3grPdy6EB2X5Jq3Oc6U3TqpizfIftGvgsJOhiCeA0=;
+        h=Date:From:To:Cc:Subject:From;
+        b=bnwPo/ofXmZzW79/jKVNSnd2DQYNay9ibBKql+JdmJkaghCHIqOkzlYvoh2K1i5It
+         hItcj4ySVpDCyT9Q4vghUOetqdX9qVDdnTzuqDo9WFs4Zobv20NSavS1tnvEn8S2+o
+         v68adhcKKGkLymgMffEEK3/SzONPemNrzWxCLjCdHs9Il8/xyRtx2ucE1GK2AEEVvH
+         /CpchsKqYC/7ofFfjBUkoP39H1aAj6Auw+FSJMPEx5j79NeyecHqHdwpQOj4wL/3Ql
+         NVDpc0dtexm6xYteVbRBOwMbciwh4XBpkj2q56zBBFzy80ur5SzcWwrVZzNcI3hCF7
+         wdDEEaHd9o0Sw==
 Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 998964052D; Fri, 31 Mar 2023 15:33:25 -0300 (-03)
-Date:   Fri, 31 Mar 2023 15:33:25 -0300
+        id A7591403EB; Sat,  8 Apr 2023 15:55:39 -0300 (-03)
+Date:   Sat, 8 Apr 2023 15:55:39 -0300
 From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Eduard Zingerman <eddyz87@gmail.com>
-Cc:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
-        dwarves@vger.kernel.org, bpf@vger.kernel.org, kernel-team@fb.com,
-        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, yhs@fb.com
-Subject: Re: [PATCH dwarves] fprintf: Fix `*` not being printed for pointers
- with btf_type_tag
-Message-ID: <ZCcndelzoRrKSg/Q@kernel.org>
-References: <20230330212700.697124-1-eddyz87@gmail.com>
- <ZCbOdWCKKzLlprIs@kernel.org>
- <ZCbOr4pwrX7JVnCZ@kernel.org>
- <ZCbQGhtWWJ5q2P+a@kernel.org>
- <7728af3d77339ea4a333ca4ad9654953c4c2c5cd.camel@gmail.com>
+To:     dwarves@vger.kernel.org
+Cc:     Alan Maguire <alan.maguire@oracle.com>,
+        David Lamparter <equinox@diac24.net>,
+        Eduard Zingerman <eddyz87@gmail.com>,
+        Sedat Dilek <sedat.dilek@gmail.com>,
+        Domenico Andreoli <cavok@debian.org>,
+        Jan Engelhardt <jengelh@inai.de>,
+        Matthias Schwarzott <zzam@gentoo.org>,
+        Michael Petlan <mpetlan@redhat.com>,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+Subject: ANNOUNCE: pahole v1.25 (Unspecified type, Atomic types, BTF for
+ optimized functions)
+Message-ID: <ZDG4qxirpIfmbiip@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <7728af3d77339ea4a333ca4ad9654953c4c2c5cd.camel@gmail.com>
 X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-Em Fri, Mar 31, 2023 at 05:12:31PM +0300, Eduard Zingerman escreveu:
-> On Fri, 2023-03-31 at 09:20 -0300, Arnaldo Carvalho de Melo wrote:
-> > Em Fri, Mar 31, 2023 at 09:14:39AM -0300, Arnaldo Carvalho de Melo escreveu:
-> > > > This part I didn't understand, do you see any possibility of a
-> > > > DW_TAG_LLVM_annotation pointing to another DW_TAG_LLVM_annotation?
-> > > 
-> > > I _think_ its a noop, so will test your patch as-is, thanks!
-> > 
-> > Tested, now we're left with normalizing base type names generated by
-> > clang and gcc, things like:
-> > 
-> > --- /tmp/gcc    2023-03-31 09:16:34.100006650 -0300
-> > +++ /tmp/clang  2023-03-31 09:16:26.211789489 -0300
-> > @@ -96,8 +96,8 @@
-> > 
-> >         /* XXX 4 bytes hole, try to pack */
-> > 
-> > -       long unsigned int          state;                /*   216     8 */
-> > -       long unsigned int          state2;               /*   224     8 */
-> > +       unsigned long              state;                /*   216     8 */
-> > +       unsigned long              state2;               /*   224     8 */
-> >         struct Qdisc *             next_sched;           /*   232     8 */
-> >         struct sk_buff_head        skb_bad_txq;          /*   240    24 */
-> > 
-> > @@ -112,7 +112,7 @@
-> >         /* XXX 40 bytes hole, try to pack */
-> > 
-> >         /* --- cacheline 6 boundary (384 bytes) --- */
-> > -       long int                   privdata[];           /*   384     0 */
-> > +       long                       privdata[];           /*   384     0 */
-> > 
-> >         /* size: 384, cachelines: 6, members: 28 */
-> >         /* sum members: 260, holes: 4, sum holes: 124 */
-> > @@ -145,19 +145,19 @@
-> >         /* XXX 4 bytes hole, try to pack */
-> > 
-> >         struct netdev_queue *      (*select_queue)(struct Qdisc *, struct tcmsg *); /*     8     8 */
-> > -       int                        (*graft)(struct Qdisc *, long unsigned int, struct Qdisc *, struct Qdisc * *, struct netlink_ext_ack *); /*    16     8 */
-> > +       int                        (*graft)(struct Qdisc *, unsigned long, struct Qdisc *, struct Qdisc * *, struct netlink_ext_ack *); /*    16     8 */
-> > -       struct Qdisc *             (*leaf)(struct Qdisc *, long unsigned int); /*    24     8 */
-> > +       struct Qdisc *             (*leaf)(struct Qdisc *, unsigned long); /*    24     8 */
-> > -       void                       (*qlen_notify)(struct Qdisc *, long unsigned int); /*    32     8 */
-> > +       void                       (*qlen_notify)(struct Qdisc *, unsigned long); /*    32     8 */
-> > -       long unsigned int          (*find)(struct Qdisc *, u32); /*    40     8 */
-> > +       unsigned long              (*find)(struct Qdisc *, u32); /*    40     8 */
-> > -       int                        (*change)(struct Qdisc *, u32, u32, struct nlattr * *, long unsigned int *, struct netlink_ext_ack *); /*    48     8 */
-> > +       int                        (*change)(struct Qdisc *, u32, u32, struct nlattr * *, unsigned long *, struct netlink_ext_ack *); /*    48     8 */
-> > -       int                        (*delete)(struct Qdisc *, long unsigned int, struct netlink_ext_ack *); /*    56     8 */
-> > +       int                        (*delete)(struct Qdisc *, unsigned long, struct netlink_ext_ack *); /*    56     8 */
-> >         /* --- cacheline 1 boundary (64 bytes) --- */
-> >         void                       (*walk)(struct Qdisc *, struct qdisc_walker *); /*    64     8 */
-> > -       struct tcf_block *         (*tcf_block)(struct Qdisc *, long unsigned int, struct netlink_ext_ack *); /*    72     8 */
-> > +       struct tcf_block *         (*tcf_block)(struct Qdisc *, unsigned long, struct netlink_ext_ack *); /*    72     8 */
-> > -       long unsigned int          (*bind_tcf)(struct Qdisc *, long unsigned int, u32); /*    80     8 */
-> > +       unsigned long              (*bind_tcf)(struct Qdisc *, unsigned long, u32); /*    80     8 */
-> > -       void                       (*unbind_tcf)(struct Qdisc *, long unsigned int); /*    88     8 */
-> > +       void                       (*unbind_tcf)(struct Qdisc *, unsigned long); /*    88     8 */
-> > -       int                        (*dump)(struct Qdisc *, long unsigned int, struct sk_buff *, struct tcmsg *); /*    96     8 */
-> > +       int                        (*dump)(struct Qdisc *, unsigned long, struct sk_buff *, struct tcmsg *); /*    96     8 */
-> > -       int                        (*dump_stats)(struct Qdisc *, long unsigned int, struct gnet_dump *); /*   104     8 */
-> > +       int                        (*dump_stats)(struct Qdisc *, unsigned long, struct gnet_dump *); /*   104     8 */
-> > 
-> >         /* size: 112, cachelines: 2, members: 14 */
-> >         /* sum members: 108, holes: 1, sum holes: 4 */
-> > @@ -227,21 +227,21 @@
-> > 
-> > This was affected somehow by these LLVM_annotation patches, I'll try to
-> > handle this later. 
-> 
-> Are you sure it is related to LLVM_annotation patches?
+Hi,
+  
+	The v1.25 release of pahole and its friends is out, fixing the
+handling of DW_TAG_unspecified type in assembly functions that came with
+binutils 2.40, allowing the BTF encoding of optimized functions (ending in
+.constprop, .isra), excluding from BTF optimized functions not following
+the calling convention, support for DW_TAG_atomic_type, support the
+DW_TAG_LLVM_annotation BTF equivalent (BTF_KIND_TYPE_TAG) on the BTF
+loader and for now suppressing it when pretty printing, etc.
 
-My bad, was just a hunch, this is not btfdiff, where it uses just one
-vmlinux, comparing its DWARF and BTF infos, this is a diff for two
-vmlinux produced by different compilers (gcc and clang) for a mostly
-equal .config file (modulo the ones that depend on being built by clang,
-etc).
+Main git repo:
 
-So a normalization or names is interesting, but has to be opt in, when
-someone wants to do what I did, compare BTF or DWARF from produced by
-different compilers, which is useful, like in this case, where I noticed
-the problem by using this technique.
+   git://git.kernel.org/pub/scm/devel/pahole/pahole.git
 
-I'll queue this up for after 1.25 is produced.
+Mirror git repo:
+
+   https://github.com/acmel/dwarves.git
+
+tarball + gpg signature:
+
+   https://fedorapeople.org/~acme/dwarves/dwarves-1.25.tar.xz
+   https://fedorapeople.org/~acme/dwarves/dwarves-1.25.tar.bz2
+   https://fedorapeople.org/~acme/dwarves/dwarves-1.25.tar.sign
+
+	For 1.26 the immediate plan is to fixup the merge conflicts with
+the branch that adds support for dwz compressed DWARF files that is
+available at:
+
+  https://git.kernel.org/pub/scm/devel/pahole/pahole.git/commit/?h=alt_dwarf
+
+	Thanks a lot to all the contributors and distro packagers, you're on the
+CC list, I appreciate a lot the work you put into these tools,
+
+Best Regards,
 
 - Arnaldo
 
-> I tried (4d17096 "btf_encoder: Compare functions via prototypes not parameter names")
-> and see the same behavior.
-> 
-> Looking at the DWARF, itself gcc and clang use different names for these types:
-> 
-> gcc:
-> 0x0000002b:   DW_TAG_base_type
->                 DW_AT_byte_size (0x08)
->                 DW_AT_encoding  (DW_ATE_unsigned)
->                 DW_AT_name      ("long unsigned int")
-> 
-> clang:
-> 0x000000f7:   DW_TAG_base_type
->                 DW_AT_name      ("unsigned long")
->                 DW_AT_encoding  (DW_ATE_unsigned)
->                 DW_AT_byte_size (0x08)
-> 
-> And the base type names are copied to BTF as is. Looks like some
-> normalization is necessary either in dwarf_loader.c:base_type__new()
-> or in fprintf.
-> 
-> Thanks,
-> Eduard
+DWARF loader:
 
--- 
+- Support for DW_TAG_unspecified_type more generally, that in binutils 2.40 is used
+  for assembly functions, resulting in BTF encoding problems when building the Linux
+  kernel.
 
-- Arnaldo
+- Make sure struct member offsets are in ascending order. This is part of the set of
+  changes to support encoding BTF for Rust for use with the Linux kernel, where the
+  BTF verifier considers invalid offset unordered struct members.
+
+- Support C atomic types (DW_TAG_atomic_type), that are not used in the Linux kernel but
+  is present in user space components such as Open VSwitch.
+
+BTF loader:
+
+- Initial support for DW_TAG_LLVM_annotation, used for BTF type tags, to encode things
+  like __rcu, __user annotations in the Linux kernel. This is still in flux with changes
+  in how these are encoded that resulted from the discussion to support this in gcc in
+  addition to in clang, where it was first designed.
+
+BTF encoder:
+
+- Exclude functions with the same name (static functions in different CUs),
+  inconsistent prototypes or not following calling convention.
+
+- Allow generation of BTF for optimized functions, those that end with a .isra*
+  suffix (inter procedural scalar replacement of aggregates) or .constprop*
+  (constant propagation).
+
+Pretty printer:
+
+- For now the DW_TAG_LLVM_annotation tags are being suppressed, so the output from
+  BTF and DWARF matches, further work is planned to support it so that the output
+  matches the original source code and can be recompilable, resulting in the same
+  DWARF info.
+
+- Support C atomic types, allowing the generation of source code that can be
+  compiled with resulting DWARF info matching the original source code.
+
+pahole:
+
+- Support --lang=/--lang_exclude=asm, the DW_LANG_ define for assembly is out
+  of order, special case it to support asking for CUs written in assembly to be
+  selected or excluded.
+
+- Support suppressing the atomic type modifiers/attributes.
+
+- Allow filtering out functions optimized by the compiler, where the calling convention isn't
+  the one expected by BPF or arguments are optimized out.
+
+- Support --compile from DWARF in addition to from BTF, this allows user space components
+  such as Open VSwitch to use pahole to generate compilable code for its data structures.
+
+btfdiff:
+
+- Exclude RUST CUs, as those are not yet being BTF encoded.
+
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
