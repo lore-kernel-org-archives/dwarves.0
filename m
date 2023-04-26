@@ -2,153 +2,111 @@ Return-Path: <dwarves-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CD293C7619A
-	for <linux-dwarves@archiver.kernel.org>; Sat,  8 Apr 2023 18:55:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B996DC77B60
+	for <linux-dwarves@archiver.kernel.org>; Wed, 26 Apr 2023 05:52:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229452AbjDHSzq (ORCPT
+        id S239457AbjDZFwM (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Sat, 8 Apr 2023 14:55:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50838 "EHLO
+        Wed, 26 Apr 2023 01:52:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbjDHSzp (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Sat, 8 Apr 2023 14:55:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAD0D93C1;
-        Sat,  8 Apr 2023 11:55:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 537F060C3A;
-        Sat,  8 Apr 2023 18:55:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C9EEC4339B;
-        Sat,  8 Apr 2023 18:55:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680980142;
-        bh=lh3grPdy6EB2X5Jq3Oc6U3TqpizfIftGvgsJOhiCeA0=;
-        h=Date:From:To:Cc:Subject:From;
-        b=bnwPo/ofXmZzW79/jKVNSnd2DQYNay9ibBKql+JdmJkaghCHIqOkzlYvoh2K1i5It
-         hItcj4ySVpDCyT9Q4vghUOetqdX9qVDdnTzuqDo9WFs4Zobv20NSavS1tnvEn8S2+o
-         v68adhcKKGkLymgMffEEK3/SzONPemNrzWxCLjCdHs9Il8/xyRtx2ucE1GK2AEEVvH
-         /CpchsKqYC/7ofFfjBUkoP39H1aAj6Auw+FSJMPEx5j79NeyecHqHdwpQOj4wL/3Ql
-         NVDpc0dtexm6xYteVbRBOwMbciwh4XBpkj2q56zBBFzy80ur5SzcWwrVZzNcI3hCF7
-         wdDEEaHd9o0Sw==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id A7591403EB; Sat,  8 Apr 2023 15:55:39 -0300 (-03)
-Date:   Sat, 8 Apr 2023 15:55:39 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     dwarves@vger.kernel.org
-Cc:     Alan Maguire <alan.maguire@oracle.com>,
-        David Lamparter <equinox@diac24.net>,
-        Eduard Zingerman <eddyz87@gmail.com>,
-        Sedat Dilek <sedat.dilek@gmail.com>,
-        Domenico Andreoli <cavok@debian.org>,
-        Jan Engelhardt <jengelh@inai.de>,
-        Matthias Schwarzott <zzam@gentoo.org>,
-        Michael Petlan <mpetlan@redhat.com>,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-Subject: ANNOUNCE: pahole v1.25 (Unspecified type, Atomic types, BTF for
- optimized functions)
-Message-ID: <ZDG4qxirpIfmbiip@kernel.org>
+        with ESMTP id S239477AbjDZFwJ (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Wed, 26 Apr 2023 01:52:09 -0400
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83D6735A6
+        for <dwarves@vger.kernel.org>; Tue, 25 Apr 2023 22:51:22 -0700 (PDT)
+Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33PME1EX026745
+        for <dwarves@vger.kernel.org>; Tue, 25 Apr 2023 22:50:44 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : content-type : content-transfer-encoding :
+ mime-version; s=facebook; bh=tJnajU+Jz86XuoMF0oxH1SvcFv814dqn6gmj/gVMaGc=;
+ b=nncXmkGjR2361DgturLu+ILuT/xWgiIXNH2c6mjXkCy31sKR1lie9xImWvD4C34W1jlE
+ qM9mXHsu+uO/DeK+hCWYToxO1bYrB7sYopzuMcN0yFMrs1P1mOh5fwaJFcK/Xr4P5kE8
+ 0cfl1hHncVD6+Gx+uJ8x4qQuivy8hModfEw= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3q6qfkt1ve-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <dwarves@vger.kernel.org>; Tue, 25 Apr 2023 22:50:44 -0700
+Received: from twshared21760.39.frc1.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Tue, 25 Apr 2023 22:50:42 -0700
+Received: by devbig309.ftw3.facebook.com (Postfix, from userid 128203)
+        id BFA441E3161DB; Tue, 25 Apr 2023 22:50:30 -0700 (PDT)
+From:   Yonghong Song <yhs@fb.com>
+To:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
+        <dwarves@vger.kernel.org>
+CC:     Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>, <bpf@vger.kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Eduard Zingerman <eddyz87@gmail.com>, <kernel-team@fb.com>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Subject: [PATCH dwarves] btf_encoder: Fix a dwarf type DW_ATE_unsigned_1024 to btf encoding issue
+Date:   Tue, 25 Apr 2023 22:50:30 -0700
+Message-ID: <20230426055030.3743074-1-yhs@fb.com>
+X-Mailer: git-send-email 2.34.1
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-GUID: YHxJ40Vd1QAPn1VoScmaRlJXmw1E6ivs
+X-Proofpoint-ORIG-GUID: YHxJ40Vd1QAPn1VoScmaRlJXmw1E6ivs
+Content-Transfer-Encoding: quoted-printable
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Url:  http://acmel.wordpress.com
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-26_02,2023-04-25_01,2023-02-09_01
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-Hi,
-  
-	The v1.25 release of pahole and its friends is out, fixing the
-handling of DW_TAG_unspecified type in assembly functions that came with
-binutils 2.40, allowing the BTF encoding of optimized functions (ending in
-.constprop, .isra), excluding from BTF optimized functions not following
-the calling convention, support for DW_TAG_atomic_type, support the
-DW_TAG_LLVM_annotation BTF equivalent (BTF_KIND_TYPE_TAG) on the BTF
-loader and for now suppressing it when pretty printing, etc.
+Nick Desaulniers reported an issue ([1]) where an 128-byte sized type
+(DW_ATE_unsigned_1024) cannot be encoded into BTF with failure message
+likes below:
+  $ pahole -J reduced.o
+  [2] INT DW_ATE_unsigned_1024 Error emitting BTF type
+  Encountered error while encoding BTF.
+See [1] for how to reproduce the issue.
 
-Main git repo:
+The failure is due to currently BTF int type only supports upto 16
+bytes (__int128) and in this case the dwarf int type is 128-byte.
 
-   git://git.kernel.org/pub/scm/devel/pahole/pahole.git
+The DW_ATE_unsigned_1024 is not a normal type for variable/func
+declaration etc. It is used in DW_AT_location. There are two
+ways to resolve this issue.
+  (1). If btf encoding is expected, remove all dwarf int types
+       where btf encoding will failure, e.g., non-power-of-2
+       bytes, or greater than 16 bytes.
+  (2). do a sanitization in btf_encoder ([2]).
 
-Mirror git repo:
+This patch uses method (2) since it is a simple fix in btf_encoder.
+I checked my local built vmlinux with latest
+bpf-next. There is only one instance of DW_ATE_unsigned_24 (used in
+DW_AT_location) so I expect irregular int types should be very rare.
 
-   https://github.com/acmel/dwarves.git
+  [1] https://github.com/libbpf/libbpf/pull/680
+  [2] commit 7d8e829f636f ("btf_encoder: Sanitize non-regular int base type=
+")
 
-tarball + gpg signature:
+Signed-off-by: Yonghong Song <yhs@fb.com>
+---
+ btf_encoder.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-   https://fedorapeople.org/~acme/dwarves/dwarves-1.25.tar.xz
-   https://fedorapeople.org/~acme/dwarves/dwarves-1.25.tar.bz2
-   https://fedorapeople.org/~acme/dwarves/dwarves-1.25.tar.sign
+diff --git a/btf_encoder.c b/btf_encoder.c
+index 65f6e71..1aa0ad0 100644
+--- a/btf_encoder.c
++++ b/btf_encoder.c
+@@ -394,7 +394,7 @@ static int32_t btf_encoder__add_base_type(struct btf_en=
+coder *encoder, const str
+ 	 * these non-regular int types to avoid libbpf/kernel complaints.
+ 	 */
+ 	byte_sz =3D BITS_ROUNDUP_BYTES(bt->bit_size);
+-	if (!byte_sz || (byte_sz & (byte_sz - 1))) {
++	if (!byte_sz || (byte_sz & (byte_sz - 1)) || byte_sz > 16) {
+ 		name =3D "__SANITIZED_FAKE_INT__";
+ 		byte_sz =3D 4;
+ 	}
+--=20
+2.34.1
 
-	For 1.26 the immediate plan is to fixup the merge conflicts with
-the branch that adds support for dwz compressed DWARF files that is
-available at:
-
-  https://git.kernel.org/pub/scm/devel/pahole/pahole.git/commit/?h=alt_dwarf
-
-	Thanks a lot to all the contributors and distro packagers, you're on the
-CC list, I appreciate a lot the work you put into these tools,
-
-Best Regards,
-
-- Arnaldo
-
-DWARF loader:
-
-- Support for DW_TAG_unspecified_type more generally, that in binutils 2.40 is used
-  for assembly functions, resulting in BTF encoding problems when building the Linux
-  kernel.
-
-- Make sure struct member offsets are in ascending order. This is part of the set of
-  changes to support encoding BTF for Rust for use with the Linux kernel, where the
-  BTF verifier considers invalid offset unordered struct members.
-
-- Support C atomic types (DW_TAG_atomic_type), that are not used in the Linux kernel but
-  is present in user space components such as Open VSwitch.
-
-BTF loader:
-
-- Initial support for DW_TAG_LLVM_annotation, used for BTF type tags, to encode things
-  like __rcu, __user annotations in the Linux kernel. This is still in flux with changes
-  in how these are encoded that resulted from the discussion to support this in gcc in
-  addition to in clang, where it was first designed.
-
-BTF encoder:
-
-- Exclude functions with the same name (static functions in different CUs),
-  inconsistent prototypes or not following calling convention.
-
-- Allow generation of BTF for optimized functions, those that end with a .isra*
-  suffix (inter procedural scalar replacement of aggregates) or .constprop*
-  (constant propagation).
-
-Pretty printer:
-
-- For now the DW_TAG_LLVM_annotation tags are being suppressed, so the output from
-  BTF and DWARF matches, further work is planned to support it so that the output
-  matches the original source code and can be recompilable, resulting in the same
-  DWARF info.
-
-- Support C atomic types, allowing the generation of source code that can be
-  compiled with resulting DWARF info matching the original source code.
-
-pahole:
-
-- Support --lang=/--lang_exclude=asm, the DW_LANG_ define for assembly is out
-  of order, special case it to support asking for CUs written in assembly to be
-  selected or excluded.
-
-- Support suppressing the atomic type modifiers/attributes.
-
-- Allow filtering out functions optimized by the compiler, where the calling convention isn't
-  the one expected by BPF or arguments are optimized out.
-
-- Support --compile from DWARF in addition to from BTF, this allows user space components
-  such as Open VSwitch to use pahole to generate compilable code for its data structures.
-
-btfdiff:
-
-- Exclude RUST CUs, as those are not yet being BTF encoded.
-
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
