@@ -2,341 +2,235 @@ Return-Path: <dwarves-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6710AC77B75
-	for <linux-dwarves@archiver.kernel.org>; Wed, 24 May 2023 00:19:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 803ADC7EE29
+	for <linux-dwarves@archiver.kernel.org>; Wed, 24 May 2023 00:19:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238998AbjEXATH (ORCPT
+        id S239000AbjEXATJ (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Tue, 23 May 2023 20:19:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41184 "EHLO
+        Tue, 23 May 2023 20:19:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235421AbjEXATG (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Tue, 23 May 2023 20:19:06 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CD17E9;
-        Tue, 23 May 2023 17:19:04 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id 2adb3069b0e04-4f4b2bc1565so158226e87.2;
-        Tue, 23 May 2023 17:19:04 -0700 (PDT)
+        with ESMTP id S235421AbjEXATI (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Tue, 23 May 2023 20:19:08 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A7B8E5;
+        Tue, 23 May 2023 17:19:06 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id 2adb3069b0e04-4f4b0a0b557so169652e87.1;
+        Tue, 23 May 2023 17:19:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684887542; x=1687479542;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=8DfxdAAQYs2VAIh9xJpyKwb1PUb3uIqWqqZXeSZ/bj0=;
-        b=eu1rbVbxGuhv7xcGnJXa2Dpv4hhauIB1XYWL770lDf+oRX4p8ZcD9bj2cjqkzG28WW
-         QeTKd+gCyyJ03SE5bJzUGcrtF/iXcbAbyAPRJm3gVNCuYrW5RsIqJFtzILV+VR1Ea0oO
-         Jlg+nlSbrNQ5LlOaodFMaU35YijuP60BPohl3NkwE9w5qBWyf7hEcF0hxOjLNvwzfWL8
-         N33aDTI4XkIFZVNj7N1Bm0MVn4jOp67Wp/IaACmZzBhIt+q+3jmrFlJ/3nyy3PJl5R0t
-         RgjZ9uXGJZwJjKwgCplwen/RCavfPWAhrOboRPOWeVBFG9NdJXqdSfD2vHhOo+c0ppG8
-         +lOQ==
+        d=gmail.com; s=20221208; t=1684887545; x=1687479545;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3PVls7WLZ+o5X609MxSrgrx/lhV1Dg8H/O/RxemEgeU=;
+        b=I+5LQIxZOz4vKSihxNvsKjJKTZIA8nQOnzpBhbF+SsdkFD94BHXGBky7YcqcJF2D5d
+         Pv4ip419cWgPeUN+5cwUgFSFE4i1jrltMoaUrgfClHngGlYhKiY5cCsf5eVf7/m2bEhn
+         pFybadc4n6y4VGrT/o2wCsNnUaAU1VH0ZxBRdkMhl1jUagSx/5g1HbiSQ+stysZq3e2H
+         8twBkGo05+CEMEv4j1/W52eZYfGWqTHtZbqmFkj1QGHRndNPFH2u6rQw7CDncE3CQHAA
+         ipqXJ5oyLdMRpn5ae0t82vnJb79OQJycxcUTF653nY5/v6ZRXqZlZodc3sBapYqBudkS
+         ptEw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684887542; x=1687479542;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=8DfxdAAQYs2VAIh9xJpyKwb1PUb3uIqWqqZXeSZ/bj0=;
-        b=TnGtMUMZeAnoL6XisZ+/XvfzB06jtds/taPVUcG6UXYFG2PwefZa+RFByIibdYOyYx
-         BMhWVOtF9I8SUKt6hv8+5Ils5MwoZABxBOHeHeFjsD6Rj2xgrnk2B+OILud32pFJZdMf
-         ROCcz+JUZvOMsHelNFxS0WguNvhlUwUHPDsaAD554BAZp5n6yb1h/VpkqOBo+E7nhajV
-         oqiLhl5lCCagzm8SdDhUyer9Hu2hyE0FpTxpNUfm0E7JfE9JZQdDwR2kF6XSlV1VNSXq
-         1kzFVLNK5jioLCMiIuR8pMJPBrAfX9HYEvT+pSl//uWGzZ/oHwgAL/13q+J7usI5D1B0
-         NhRQ==
-X-Gm-Message-State: AC+VfDzE6g8HHso870EMcv9ojnh6DWHoT/nxSll//jvahnj2vDdAgkxK
-        8AbvR4SoAb6H0TlxICiiFRZ0ywYNR4slwQ==
-X-Google-Smtp-Source: ACHHUZ4x+qIzZNnYRYSQ2GpnC1Q76T2A76gAraFtkWZmSb8bs1TzEb4JkxmSaxnEqyz/6GOeYVNeEg==
-X-Received: by 2002:ac2:52ad:0:b0:4f3:87d7:f7a4 with SMTP id r13-20020ac252ad000000b004f387d7f7a4mr4863031lfm.62.1684887541759;
-        Tue, 23 May 2023 17:19:01 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1684887545; x=1687479545;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=3PVls7WLZ+o5X609MxSrgrx/lhV1Dg8H/O/RxemEgeU=;
+        b=auMWMU01rpqsqtRxeqGlUsUh5lM0qCBUl9XPQ/uNQBk2dqFGo45rF+kpzb9xDq5Nly
+         2ixSjYMrhVDsvWbn7HcPqnm/SYFNkYOzjo9G/N1LsF1lSo9e11MPMdrGks1qAMuvsYzw
+         ZI6u7XeyfyJTdRxftvhnpwqAYbn6DDDuWba8MysgVJEcTIPKufgpeYCzSR5lMXK52ubQ
+         EBpma+r4S0qpRvmoQPogU472HBnUilmirJmNc+42t4MR9WnRLuJlH5Aa6rvTvpBEpco0
+         /DNvbDBFZxrG9jLbus1E9PuNvDRUmGoIiqQIWe3SHmSaiTHA/pOcpfIDXMpm3PBnnca4
+         PXcg==
+X-Gm-Message-State: AC+VfDz5ibMqKZKS9EBn9lTER62NVbDQ8H9+6jHCPAeemgvs3sNMF1g+
+        fe7eCdhZooS6PoGRr9kuVw/hF5SA0z7LeQ==
+X-Google-Smtp-Source: ACHHUZ4iuE8vaarUiACTbL3k5aFVWDvnx+eeq5qra+TXJl2LIXuMeu4WLado65u+kJevCoexT/kutw==
+X-Received: by 2002:ac2:4354:0:b0:4f3:91a2:279 with SMTP id o20-20020ac24354000000b004f391a20279mr4002291lfl.61.1684887544536;
+        Tue, 23 May 2023 17:19:04 -0700 (PDT)
 Received: from bigfoot.. (host-176-36-0-241.b024.la.net.ua. [176.36.0.241])
-        by smtp.gmail.com with ESMTPSA id w7-20020a19c507000000b004f138ab93c7sm1487305lfe.264.2023.05.23.17.19.00
+        by smtp.gmail.com with ESMTPSA id w7-20020a19c507000000b004f138ab93c7sm1487305lfe.264.2023.05.23.17.19.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 May 2023 17:19:01 -0700 (PDT)
+        Tue, 23 May 2023 17:19:04 -0700 (PDT)
 From:   Eduard Zingerman <eddyz87@gmail.com>
 To:     dwarves@vger.kernel.org, arnaldo.melo@gmail.com
 Cc:     bpf@vger.kernel.org, kernel-team@fb.com, ast@kernel.org,
         daniel@iogearbox.net, andrii@kernel.org, yhs@fb.com,
         jemarch@gnu.org, david.faust@oracle.com, mykolal@fb.com,
         Eduard Zingerman <eddyz87@gmail.com>
-Subject: [PATCH v3 dwarves 0/6] Support for new btf_type_tag encoding
-Date:   Wed, 24 May 2023 03:18:19 +0300
-Message-Id: <20230524001825.2688661-1-eddyz87@gmail.com>
+Subject: [PATCH v3 dwarves 2/6] dwarf_loader: Track unspecified types in a separate list
+Date:   Wed, 24 May 2023 03:18:21 +0300
+Message-Id: <20230524001825.2688661-3-eddyz87@gmail.com>
 X-Mailer: git-send-email 2.40.1
+In-Reply-To: <20230524001825.2688661-1-eddyz87@gmail.com>
+References: <20230524001825.2688661-1-eddyz87@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-In recent discussion in BPF mailing list ([1], look for Solution #2)
-participants agreed to add a new DWARF representation for
-"btf_type_tag" annotations.
+In recent discussion in BPF mailing list ([1]) participants agreed to
+add a new DWARF representation for "btf_type_tag" annotations.
+The agreed representation of void pointers uses unspecified types.
+For example, consider the following C code:
 
-Existing representation is DW_TAG_LLVM_annotation object attached as a
-child to a DW_TAG_pointer_type. It means that "btf_type_tag"
-annotation is attached to a pointee type.
+    struct alpha {
+      void __attribute__((btf_type_tag("__alpha_a"))) *a;
+    } g;
 
-New representation is DW_TAG_LLVM_annotation object attached as a
-child to *any* type. It means that "btf_type_tag" annotation is
-attached to the parent type.
+And corresponding DWARF:
 
-For example, for the following C code:
+0x29:   DW_TAG_structure_type
+          DW_AT_name      ("alpha")
 
-    int __attribute__((btf_type_tag("tag1"))) *g;
+0x2e:     DW_TAG_member
+            DW_AT_name    ("a")
+            DW_AT_type    (0x38 "void *")
 
-CLANG generates the following DWARF (1):
+0x38:   DW_TAG_pointer_type
+          DW_AT_type      (0x41 "void")
 
-    0x0000001e:   DW_TAG_variable
-                    DW_AT_name      ("g")
-                    DW_AT_type      (0x00000029 "int *")
+0x41:   DW_TAG_unspecified_type
+          DW_AT_name      ("void")
 
-    0x00000029:   DW_TAG_pointer_type
-                    DW_AT_type      (0x00000032 "int")
+0x43:     DW_TAG_LLVM_annotation
+            DW_AT_name    ("btf:type_tag")
+            DW_AT_const_value     ("__alpha_a")
 
-    0x0000002e:     DW_TAG_LLVM_annotation
-                      DW_AT_name    ("btf_type_tag")
-                      DW_AT_const_value     ("tag1")
-
-    0x00000032:   DW_TAG_base_type
-                    DW_AT_name      ("int")
-
-However, using the new representation scheme DWARF looks as follows (2):
-
-    0x0000001e:   DW_TAG_variable
-                    DW_AT_name  ("g")
-                    DW_AT_type  (0x00000029 "int *")
-    
-    0x00000029:   DW_TAG_pointer_type
-                    DW_AT_type  (0x00000032 "int")
-    
-    0x00000032:   DW_TAG_base_type
-                    DW_AT_name  ("int")
-                    DW_AT_encoding  (DW_ATE_signed)
-                    DW_AT_byte_size (0x04)
-    
-    0x00000036:     DW_TAG_LLVM_annotation
-                      DW_AT_name    ("btf:type_tag")
-                      DW_AT_const_value ("tag1")
-    
-Note that in (1) DW_TAG_LLVM_annotation is a child of
-DW_TAG_pointer_type, but in (2) it is a child of DW_TAG_base_type.
-
-This patch adds logic necessary to handle such annotations in the
-pahole tool. Examples like below are supported:
-
-  #define __tag(val) __attribute__((btf_type_tag("__" #val)))
-
-  struct      alpha {};
-  union       bravo {};
-  enum        charlie { X };
-  typedef int delta;
-
-  struct echo {
-    int          * __tag(a)  a;
-    int            __tag(b) *b;
-    int            __tag(c)  c;
-    void           __tag(d) *d;
-    void           __tag(e) *e;
-    struct alpha   __tag(f)  f;
-    union  bravo   __tag(g)  g;
-    enum   charlie __tag(h)  h;
-    delta          __tag(i)  i;
-    int __tag(j_result) (__tag(j) *j)(int __tag(j_param));
-  } g;
-  
-Implementation details
-----------------------
-
-Although this was not discussed in the mailing list, the proposed
-implementation acts in a following way (for compatibility reasons):
-- both forms could be present in the debug info;
-- if any annotations corresponding to the new form are present in the
-  debug info, annotations corresponding to the old form are ignored.
-
-The v3 of this patch-set includes changes suggested in discussion [2],
-which simplifies the implementation. Here is an overview for each
-patch in the patch-set:
-
-1. "dwarves.h: expose ptr_table interface"
-   Makes struct ptr_table related functions accessible from
-   dwarves.h header.
-
-2. "dwarf_loader: Track unspecified types in a separate list"
-   [1] suggests that new type tags encoding for the following case:
-
-     void __attribute__((btf_type_tag("tag1"))) *g;
-
-   Creates a DIE of kind DW_TAG_unspecified_type with name "void"
-   and attaches DW_TAG_LLVM_annotation children to it.
-
-   The later patches would rely on identity of this unspecified type
-   instance for recoding, thus this patch introduces special tag type
-   to represent DW_TAG_unspecified_type DIEs in the object model.
-
-3. "dwarf_loader: handle btf_type_tag w/o special pointer type"
-   Changes the way type tags are encoded in the dwarves.h object model:
-   - special pointer type btf_type_tag_ptr_type is removed;
-   - field struct btf_type_tag_type::node is removed, instances of
-     btf_type_tag_type no longer form a list, instead links between
-     types are tracked via btf_type_tag_type::tag.type fields, as it
-     is done for derived types (e.g. DW_TAG_const_type).
-
-4. "dwarf_loader: support btf:type_tag DW_TAG_LLVM_annotation"
-   Adds support for new type tags encoding, this includes:
-   - Changes to visit child DIEs of the following types:
-     - DW_TAG_unspecified_type
-     - DW_TAG_base_type
-     - DW_TAG_typedef
-     - DW_TAG_array_type
-     - DW_TAG_subroutine_type
-     - DW_TAG_enumeration_type
-     - DW_TAG_structure_type
-     In order to collect DW_TAG_LLVM_annotation's.
-   - Changes in recode phase.
-
-5. "dwarf_loader: move type tags before CVR qualifiers when necessary"
-   
-   Kernel expects type tags to precede CVR qualifiers in BTF.
-   However, DWARF encoding format agreed with GCC team in [3.2]
-   does not allow to attach DW_TAG_LLVM_annotation tags to qualifiers.
-   
-   Hence, this patch, which adds a post-processing step that converts
-   type chains like CONST -> VOLATILE -> TYPE_TAG -> ...
-   to TYPE_TAG -> CONST -> VOLATILE -> ...
-
-6. "btf_encoder: skip type tags for VAR entry types"
-   
-   Kernel does not expect VAR entries to have types starting from
-   BTF_TYPE_TAG. Before introduction of support for 'btf:type_tag'
-   such situations were not possible, as TYPE_TAG entries were always
-   preceded by PTR entries.
-   
-   This patch changes BTF VAR generation code to skip any BTF_TYPE_TAG
-   entries for VAR type.
-
-Corresponding CLANG changes are tracked in [3], refer to [3.2] for
-some encoding examples.
-
-Testing
--------
-
-To verify the changes I used the following:
-- Tools:
-  - "LLVM-main"   :: LLVM at revision [4];
-  - "LLVM-new"    :: LLVM at revision [4] with patches [3] applied;
-  - "gcc"         :: GCC version 11.3 (no support for btf_type_tag annotations);
-  - "pahole-next" :: dwarves at revision [5];
-  - "pahole-new"  :: dwarves at revision [5] + this patch-set,
-  - "kernel"      :: Linux Kernel bpf-next branch at revision [6] with CI patch [7].
-- test cases:
-  - kernel build;
-  - kernel BPF test cases build, BPF tests execution
-    (test_verifier, test_progs, test_progs-no_alu32, test_maps);
-  - btfdiff script (suggested by Arnaldo, [8]).
-- tool combinations (kernel compiler / clang for BPF tests / pahole version):
-  - LLVM-main / LLVM-main / pahole-new
-    - kernel build : ok
-    - bpf tests    : ok
-    - btfdiff      : ok (modulo diff #1, see below)
-  - gcc       / LLVM-main / pahole-new
-    - kernel build : ok
-    - bpf tests    : ok
-    - btfdiff      : ok but dwarf dump sometimes segfaults
-  - LLVM-new  / LLVM-new  / pahole-next
-    - kernel build : ok (modulo warn #1, see below)
-    - bpf tests    : ok
-    - btfdiff      : ok (modulo diff #1, see below)
-  - LLVM-new  / LLVM-new  / pahole-new
-    - kernel build : ok
-    - bpf tests    : ok
-    - btfdiff      : ok (modulo diff #1, see below)
-  - gcc       / LLVM-new  / pahole-new
-    - kernel build : ok
-    - bpf tests    : ok
-    - btfdiff      : ok
-
-Diff #1: Difference in flexible array printing, several occurrences as below:
-
-  @ -10531,7 +10531,7 @ struct bpf_cand_cache {
-          struct {
-                  const struct btf  * btf;                 /*    16     8 */
-                  u32                id;                   /*    24     4 */
-  -       } cands[0]; /*    16     0 */
-  +       } cands[]; /*    16     0 */
-   
-Warn #1: pahole-next complains about unexpected child tags generated
-         by clang, e.g.:
-
-  die__create_new_tag: unspecified_type WITH children!
-  die__create_new_base_type: DW_TAG_base_type WITH children!
-
-Changelog
----------
-
-V2 -> V3:
-- Suggestion [2] from Arnaldo to represent type tags as separate
-  derived types is applied. As a consequence, V3 rewrites V2 almost
-  completely.
-- "dwarf_loader: move type tags before CVR qualifiers when necessary"
-  is added after discussion in [3.2].
-- "btf_encoder: skip type tags for VAR entry types" 
-  is added after additional testing (I'm not sure why this was not an
-  issue for V2).
-
-V1 -> V2:
-- The patch is split in 5 parts to (hopefully) simplify the review:
-  - #1, #2: two simple patches for fprintf and btf_loader to fix printing
-    issue for types annotated by BTF type tags;
-  - #3:  merges `struct llvm_annotation` and `struct btf_type_tag_type`
-    as a preparatory step;
-  - #4: introduces `struct unspecified_type` as a preparatory step;
-  - #5: main logic for `btf:type_tag` support, this once can't
-    be split further w/o parts losing some functionality for kernel
-    build and/or bpf tests.
-- `reallocarray()` in `push_btf_type_tag_mapping()` is replaced by
-  `realloc()` (suggested by Alan);
-- The sequence `free(dcu->hash_tags); free(dcu->hash_types);` added in
-  V1 is removed from `dwarf_cu__delete()`. It was a fix for some
-  valgrind errors reported for `pahole -F dwarf`, but this is
-  unrelated and the fix is incomplete.
-
-Links & revisions
------------------
+This is a preparatory patch for new type tags representation support,
+specifically it adds `struct unspecified_type` and a new `cu` field
+`struct cu::unspecified_types`. These would be used in a subsequent
+patch to recode type tags attached to DW_TAG_unspecified_type
+as in the example above.
 
 [1] Mailing list discussion regarding `btf:type_tag`
     Various approaches are discussed, Solution #2 is accepted
     https://lore.kernel.org/bpf/87r0w9jjoq.fsf@oracle.com/
-[2] Suggestion to treat DW_TAG_llvm_annotation as a derived tag
-    https://lore.kernel.org/bpf/ZCVygOn0+zKFEqW2@kernel.org/
-[3] LLVM changes to generate btf:type_tag, revisions stack:
-    [3.1] https://reviews.llvm.org/D143966
-    [3.2] https://reviews.llvm.org/D143967 - this one has a number of examples
-                                             in the description.
-    [3.3] https://reviews.llvm.org/D145891
-[4] LLVM revision
-    commit ec77d1f3d9fc ("[lldb] Simplify predicates of find_if in BroadcastManager")
-[5] Dwarves revision:
-    commit 31bc0d741057 ("dwarf_loader: DW_TAG_subroutine_type may have a DW_AT_byte_size")
-[6] Kernel revision:
-    commit df21139441b0 ("tracing: fprobe: Initialize ret valiable to fix smatch error")
-[7] Kernel CI patch:
-    https://github.com/kernel-patches/vmtest/commit/2d732ac4e06631d11f4326989eea28d695efb7f5
-[8] Suggestion to use btfdiff
-    https://lore.kernel.org/dwarves/ZAKpZGSHTvsS4r8E@kernel.org/T/#mddbfe661e339485fb2b0e706b313
-[V1] https://lore.kernel.org/dwarves/2232e368e55eb401bde45ce1b20fb710e379ae9c.camel@gmail.com/T/
-[V2] https://lore.kernel.org/dwarves/20230314230417.1507266-1-eddyz87@gmail.com/
 
-Eduard Zingerman (6):
-  dwarves.h: expose ptr_table interface
-  dwarf_loader: Track unspecified types in a separate list
-  dwarf_loader: handle btf_type_tag w/o special pointer type
-  dwarf_loader: support btf:type_tag DW_TAG_LLVM_annotation
-  dwarf_loader: move type tags before CVR qualifiers when necessary
-  btf_encoder: skip type tags for VAR entry types
+Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
+---
+ dwarf_loader.c | 36 ++++++++++++++++++++++++++++++++++--
+ dwarves.c      |  1 +
+ dwarves.h      | 17 +++++++++++++++++
+ 3 files changed, 52 insertions(+), 2 deletions(-)
 
- btf_encoder.c  |  30 +-
- dwarf_loader.c | 731 ++++++++++++++++++++++++++++++++++++++++---------
- dwarves.c      |   7 +-
- dwarves.h      |  34 +--
- 4 files changed, 655 insertions(+), 147 deletions(-)
-
+diff --git a/dwarf_loader.c b/dwarf_loader.c
+index ccf3194..dfed334 100644
+--- a/dwarf_loader.c
++++ b/dwarf_loader.c
+@@ -165,14 +165,19 @@ static struct dwarf_cu *dwarf_cu__new(struct cu *cu)
+ 	return dwarf_cu;
+ }
+ 
++static void unspecified_type__delete(struct cu *cu, struct unspecified_type *utype);
++
+ static void dwarf_cu__delete(struct cu *cu)
+ {
+ 	if (cu == NULL || cu->priv == NULL)
+ 		return;
+ 
+ 	struct dwarf_cu *dcu = cu->priv;
++	struct list_head *pos, *n;
+ 
+ 	// dcu->hash_tags & dcu->hash_types are on cu->obstack
++	list_for_each_safe(pos, n, &cu->unspecified_types)
++		unspecified_type__delete(cu, container_of(pos, struct unspecified_type, node));
+ 	cu__free(cu, dcu);
+ 	cu->priv = NULL;
+ }
+@@ -1386,6 +1391,33 @@ static struct tag *die__create_new_tag(Dwarf_Die *die, struct cu *cu)
+ 	return tag;
+ }
+ 
++static struct tag *die__create_new_unspecified_type(Dwarf_Die *die, struct cu *cu,
++						    struct conf_load *conf)
++{
++	struct unspecified_type *tag;
++
++	tag = tag__alloc_with_spec(cu, sizeof(struct unspecified_type));
++	if (tag == NULL)
++		return NULL;
++
++	tag__init(&tag->tag, cu, die);
++	INIT_LIST_HEAD(&tag->node);
++
++	tag->name = attr_string(die, DW_AT_name, conf);
++
++	list_add(&tag->node, &cu->unspecified_types);
++
++	return &tag->tag;
++}
++
++static void unspecified_type__delete(struct cu *cu, struct unspecified_type *utype)
++{
++	struct dwarf_tag *dtag = utype->tag.priv;
++
++	cu__free(cu, dtag);
++	cu__free(cu, utype);
++}
++
+ static struct btf_type_tag_ptr_type *die__create_new_btf_type_tag_ptr_type(Dwarf_Die *die, struct cu *cu)
+ {
+ 	struct btf_type_tag_ptr_type *tag;
+@@ -2186,10 +2218,10 @@ static struct tag *__die__process_tag(Dwarf_Die *die, struct cu *cu,
+ 	case DW_TAG_volatile_type:
+ 	case DW_TAG_atomic_type:
+ 		tag = die__create_new_tag(die, cu);		break;
+-	case DW_TAG_unspecified_type:
+-		tag = die__create_new_tag(die, cu);		break;
+ 	case DW_TAG_pointer_type:
+ 		tag = die__create_new_pointer_tag(die, cu, conf);	break;
++	case DW_TAG_unspecified_type:
++		tag = die__create_new_unspecified_type(die, cu, conf); break;
+ 	case DW_TAG_ptr_to_member_type:
+ 		tag = die__create_new_ptr_to_member_type(die, cu); break;
+ 	case DW_TAG_enumeration_type:
+diff --git a/dwarves.c b/dwarves.c
+index ed5c348..f989250 100644
+--- a/dwarves.c
++++ b/dwarves.c
+@@ -681,6 +681,7 @@ struct cu *cu__new(const char *name, uint8_t addr_size,
+ 		cu->dfops	= NULL;
+ 		INIT_LIST_HEAD(&cu->tags);
+ 		INIT_LIST_HEAD(&cu->tool_list);
++		INIT_LIST_HEAD(&cu->unspecified_types);
+ 
+ 		cu->addr_size = addr_size;
+ 		cu->extra_dbg_info = 0;
+diff --git a/dwarves.h b/dwarves.h
+index 54771d1..509ffbc 100644
+--- a/dwarves.h
++++ b/dwarves.h
+@@ -246,6 +246,7 @@ struct cu {
+ 	struct list_head node;
+ 	struct list_head tags;
+ 	struct list_head tool_list;	/* To be used by tools such as ctracer */
++	struct list_head unspecified_types;
+ 	struct ptr_table types_table;
+ 	struct ptr_table functions_table;
+ 	struct ptr_table tags_table;
+@@ -686,6 +687,22 @@ static inline struct btf_type_tag_type *tag__btf_type_tag(struct tag *tag)
+ 	return (struct btf_type_tag_type *)tag;
+ }
+ 
++/** struct unspecified_type - representation of DW_TAG_unspecified_type.
++ *
++ *  @name   - DW_AT_name associated with this tag
++ *  @node   - a node for cu::unspecified_types list
++ */
++struct unspecified_type {
++	struct tag		tag;
++	const char		*name;
++	struct list_head	node;
++};
++
++static inline struct unspecified_type *tag__unspecified_type(struct tag *tag)
++{
++	return (struct unspecified_type *)tag;
++}
++
+ /** struct namespace - base class for enums, structs, unions, typedefs, etc
+  *
+  * @tags - class_member, enumerators, etc
 -- 
 2.40.1
 
