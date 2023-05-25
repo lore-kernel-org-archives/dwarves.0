@@ -2,141 +2,226 @@ Return-Path: <dwarves-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D1C74C77B75
-	for <linux-dwarves@archiver.kernel.org>; Wed, 24 May 2023 00:19:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3D921C77B7C
+	for <linux-dwarves@archiver.kernel.org>; Thu, 25 May 2023 00:13:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239003AbjEXATO (ORCPT
+        id S229680AbjEYAN0 (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Tue, 23 May 2023 20:19:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41238 "EHLO
+        Wed, 24 May 2023 20:13:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239002AbjEXATN (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Tue, 23 May 2023 20:19:13 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BC3BB5;
-        Tue, 23 May 2023 17:19:12 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id 2adb3069b0e04-4f3a99b9177so158674e87.1;
-        Tue, 23 May 2023 17:19:12 -0700 (PDT)
+        with ESMTP id S229452AbjEYANZ (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Wed, 24 May 2023 20:13:25 -0400
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 383C699;
+        Wed, 24 May 2023 17:13:23 -0700 (PDT)
+Received: by mail-lj1-x22b.google.com with SMTP id 38308e7fff4ca-2af30d10d8fso18724741fa.0;
+        Wed, 24 May 2023 17:13:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684887550; x=1687479550;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bX78X+TocVn/zKt9C0hLkh5a3KlpHhV1wjnJY0oQNcU=;
-        b=VcMTV56TxhaDiAy+XfQOVGaVC2ecPB089tEVv5Webj7fvrCQdLf1WX2+taZx0GDYDO
-         5D/EDZ5kzRM/fqbl4pkO3mkedsvzYNa9JLrOxKMzsV/DkHq1whsgyYdsSnrpdmojJEH0
-         mJJAo/QV/yvLdZD1tR0p6TyF28+dLV4VvsLbiFzaulc6I+BKAR8tDQ+k6/lyfDXrbrru
-         5a8zXRASziyBiXUf7IjwKe3BZmZk96/mgLVDiKSM1G19uOgYmz1bn0j6nRpFJ7efRXYx
-         T23P80mebfcz62vUMvVDy1XG9K/EoPo9m/9WR4OvIRaW4MMc/HoN94SPR0QOLCqposXv
-         X2Kw==
+        d=gmail.com; s=20221208; t=1684973601; x=1687565601;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=QE7Cfa2VCFKJJcihENPedECPunVcflrVmXn8Dojkfv4=;
+        b=QxPXGYDlIzpIyzo1d03zqjjmV8ghT4EzPJp2+uXHJkKT2fxI/mYFE0C6Y36fhP5r+v
+         28JVyQrXUpcniUEuw6GFHfKSqLKvAR2f0/m6/hb12SpIr9neSsG9yuB91It9Szk0Hsk0
+         xkFspkCjGcFxVsn2G9rYojaxOcwyiXhRiWn+GRqHEU/mmOAFnAnOT7Jbp4LQSHB8PcTt
+         6/XomWD6vGTb0fnaXW7rbmv1PHrlawzInpHCNNK8cWFUK0ZhJW9anFrE//iCVfMB2KhG
+         aJ0c+v3jTKeUUk5uYYcHWAcCVKojqLMCqIqPxnWP+8rk2V6iysntEPNpM/siZnHRoAfY
+         BOmQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684887550; x=1687479550;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=bX78X+TocVn/zKt9C0hLkh5a3KlpHhV1wjnJY0oQNcU=;
-        b=MCG5s5UCHizdsVmSryyW7T+c2Q9BmdVjELt95C5LJS/SfXb9WRdIhbKi4eM2KHSZrr
-         DitvTF8nUgh1W4Dppru/H/JHC3m8ZkO30EtiXe3iMlGqK6Jeb1uBwsJtIpkMuxUExj26
-         N/AlD2ETwN4dPugn6GjqslMw1WxhwFw1r7kCyC/29i8/6v5G7WSEfR/xdQwWxWbZ+DOY
-         +3HTVWDaWsuK6LQHsnMExXXZHLq4PWTlxvi3RkX0ib7Tp5tw6rwo2mlFMm6JoGgdGkns
-         oqG6CkfCtnz5i+uKv0emstDOB3nHD2gHkqMinWXXd6awQ94hliYW7EqzM/gpIOoly6Da
-         RfIg==
-X-Gm-Message-State: AC+VfDxL0nx0vqii7i3CYhoMJ1EglmB5180ZPKUjCSkOJ1kDrfScoQlk
-        D/K7/SzU6VVgZ/R1lGHRWO07vRFyN/4P8A==
-X-Google-Smtp-Source: ACHHUZ6LuhtMEw/3uPPEIKlbWU4HOVK9LhHK8L1EbRnC5vt5v0bDC2nF2DtLG9o+A9kghwkFbfkMyA==
-X-Received: by 2002:a05:6512:3902:b0:4ef:ef11:e29d with SMTP id a2-20020a056512390200b004efef11e29dmr4226394lfu.68.1684887550051;
-        Tue, 23 May 2023 17:19:10 -0700 (PDT)
-Received: from bigfoot.. (host-176-36-0-241.b024.la.net.ua. [176.36.0.241])
-        by smtp.gmail.com with ESMTPSA id w7-20020a19c507000000b004f138ab93c7sm1487305lfe.264.2023.05.23.17.19.08
+        d=1e100.net; s=20221208; t=1684973601; x=1687565601;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=QE7Cfa2VCFKJJcihENPedECPunVcflrVmXn8Dojkfv4=;
+        b=RdpT+vn6EYiRaXm3lpI44qdGXzMdYGs6hdAGApjm6yWeRqd7imAD+HV567coydCmyp
+         9UWKt4oRDwTGf1QA3Zor9CFKT7L/6js22OYZ4TNtcRbWHk+io0jYSbnjJkE39/+iAVJy
+         p1ylDJKupWgfVFxGfBpGbswHtinFtzQGdzic0N1KC8/iaketZbtd7DxAYO5E5uZdWdG9
+         ss+yLZloN1fIAsfBbEjXJyb0jk6gF3sfcXLkFm7BtqxmyyBxMa4VZr9BLsXeIbFOkmV3
+         /4wWmQP5IBGclMuApSyeJytNoOJdoO0GVtHrjPxHZKzFertCvJ/8WtBkRYt0bRJucYWt
+         xDlQ==
+X-Gm-Message-State: AC+VfDwYSSkNQ/trn/23BIZOpg6l9nNV3vd/I/MFJ0MYTWG5PLSc43o0
+        /y0jZ/9uufcGdg42GHpBSkGMlBr6dIYoyg==
+X-Google-Smtp-Source: ACHHUZ5S+KcQCk5EUKNl3mIsEneNx6lFx+LoaZf4vbDwoikUDUYhdHBXUg/TNSzKt9ZuRdR7CcoTxg==
+X-Received: by 2002:a05:651c:446:b0:2ac:7904:e38f with SMTP id g6-20020a05651c044600b002ac7904e38fmr495808ljg.12.1684973600927;
+        Wed, 24 May 2023 17:13:20 -0700 (PDT)
+Received: from [192.168.1.95] (host-176-36-0-241.b024.la.net.ua. [176.36.0.241])
+        by smtp.gmail.com with ESMTPSA id w21-20020a2e9bd5000000b002ac7978f0a6sm7425ljj.100.2023.05.24.17.13.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 May 2023 17:19:09 -0700 (PDT)
+        Wed, 24 May 2023 17:13:20 -0700 (PDT)
+Message-ID: <85637acda6983eac1787abbb07ef18c618b4193b.camel@gmail.com>
+Subject: Re: [PATCH v3 dwarves 0/6] Support for new btf_type_tag encoding
 From:   Eduard Zingerman <eddyz87@gmail.com>
 To:     dwarves@vger.kernel.org, arnaldo.melo@gmail.com
 Cc:     bpf@vger.kernel.org, kernel-team@fb.com, ast@kernel.org,
         daniel@iogearbox.net, andrii@kernel.org, yhs@fb.com,
-        jemarch@gnu.org, david.faust@oracle.com, mykolal@fb.com,
-        Eduard Zingerman <eddyz87@gmail.com>
-Subject: [PATCH v3 dwarves 6/6] btf_encoder: skip type tags for VAR entry types
-Date:   Wed, 24 May 2023 03:18:25 +0300
-Message-Id: <20230524001825.2688661-7-eddyz87@gmail.com>
-X-Mailer: git-send-email 2.40.1
+        jemarch@gnu.org, david.faust@oracle.com, mykolal@fb.com
+Date:   Thu, 25 May 2023 03:13:18 +0300
 In-Reply-To: <20230524001825.2688661-1-eddyz87@gmail.com>
 References: <20230524001825.2688661-1-eddyz87@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4-0ubuntu1 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-Kernel does not expect VAR entries to have types starting from
-BTF_TYPE_TAG. Specifically, the code like below will be rejected:
+On Wed, 2023-05-24 at 03:18 +0300, Eduard Zingerman wrote:
+[...]=20
+>   - gcc       / LLVM-main / pahole-new
+>     - kernel build : ok
+>     - bpf tests    : ok
+>     - btfdiff      : ok but dwarf dump sometimes segfaults
 
-  struct rq __percpu runqueues;
-  ...
-  rq = (struct rq *)bpf_per_cpu_ptr(&runqueues, cpu);
-  ... rq->cpu ...     // rq type is now PTR_TO_BTF_ID
+Regarding this segfault. I can reproduce it using pahole 'next' branch
+if btfdiff is executed several times. So, the proposed patch-set is
+not the cause.
 
-The access to 'rq->cpu' would be checked by a call to
-kernel/bpf/btf.c:btf_struct_access() which invokes btf_struct_walk(),
-using rq's type as a starting point. The btf_struct_walk() wants the
-first type in a chain to be STRUCT or UNION and does not skip modifiers.
+Specifically, it happens when the following command is executed:
 
-Before introduction of support for 'btf:type_tag' such situations were
-not possible, as TYPE_TAG entries were always preceded by PTR entries.
+  pahole -F dwarf --flat_arrays --sort ... vmlinux
 
-Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
----
- btf_encoder.c | 30 +++++++++++++++++++++++++++++-
- 1 file changed, 29 insertions(+), 1 deletion(-)
+With the following stack trace:
 
-diff --git a/btf_encoder.c b/btf_encoder.c
-index 65f6e71..300d9c2 100644
---- a/btf_encoder.c
-+++ b/btf_encoder.c
-@@ -1498,6 +1498,19 @@ static bool ftype__has_arg_names(const struct ftype *ftype)
- 	return true;
+  Thread 1 "pahole" received signal SIGSEGV, Segmentation fault.
+  0x00007ffff7f819ad in __rb_erase_color (node=3D0x7fffd4045830, parent=3D0=
+x0, root=3D0x5555555672d8 <structures.tree>) at /home/eddy/work/dwarves-for=
+k/rbtree.c:134
+  134			if (parent->rb_left =3D=3D node)
+  (gdb) bt
+  #0  0x00007ffff7f819ad in __rb_erase_color (node=3D0x7fffd4045830, parent=
+=3D0x0, root=3D0x5555555672d8 <structures.tree>) at /home/eddy/work/dwarves=
+-fork/rbtree.c:134
+  #1  0x00007ffff7f82014 in rb_erase (node=3D0x7fff21ae5b80, root=3D0x55555=
+55672d8 <structures.tree>) at /home/eddy/work/dwarves-fork/rbtree.c:275
+  #2  0x0000555555559c3d in __structures__delete () at /home/eddy/work/dwar=
+ves-fork/pahole.c:440
+  #3  0x0000555555559c70 in structures__delete () at /home/eddy/work/dwarve=
+s-fork/pahole.c:448
+  #4  0x0000555555560bb6 in main (argc=3D13, argv=3D0x7fffffffdcd8) at /hom=
+e/eddy/work/dwarves-fork/pahole.c:3584
+
+I tried random testing the rb_tree implementation and can reliably
+reproduce the error using the diff at the end of the email.
+E.g. it happens for test sequence (using add/delete functions adapted
+to work on int values instead of 'struct structure'):
+
+  60 4 24 34 15 2 80 26 82 67 92 77 9.
+
+Will figure out a fix for rb_erase code tomorrow.
+
+--- testing code for rb_erase ---
+
+diff --git a/pahole.c b/pahole.c
+index 6fc4ed6..6c60c9e 100644
+--- a/pahole.c
++++ b/pahole.c
+@@ -8,6 +8,7 @@
+=20
+ #include <argp.h>
+ #include <assert.h>
++#include <signal.h>
+ #include <stdio.h>
+ #include <dwarf.h>
+ #include <elfutils/version.h>
+@@ -3408,10 +3409,97 @@ out_free:
+ 	return ret;
  }
- 
-+static type_id_t skip_btf_type_tags(struct cu *cu, type_id_t id)
+=20
++struct test_struct {
++	struct rb_node rb_node;
++	int val;
++};
++
++static struct rb_root test_tree =3D RB_ROOT;
++static struct test_struct structs[100] =3D {};
++static int free_struct_idx =3D 0;
++static int num_tries =3D 0;
++
++static void test_add(int val)
 +{
-+	for (;;) {
-+		struct tag *tag = cu__type(cu, id);
++        struct rb_node **p =3D &test_tree.rb_node;
++        struct rb_node *parent =3D NULL;
++	struct test_struct *str;
 +
-+		if (tag == NULL || tag->tag != DW_TAG_LLVM_annotation)
-+			break;
-+		id = tag->type;
-+	}
++        while (*p !=3D NULL) {
++		int rc;
 +
-+	return id;
++                parent =3D *p;
++                str =3D rb_entry(parent, struct test_struct, rb_node);
++		rc =3D str->val - val;
++
++		if (rc > 0)
++                        p =3D &(*p)->rb_left;
++                else if (rc < 0)
++                        p =3D &(*p)->rb_right;
++		else {
++			return;
++		}
++        }
++
++	str =3D &structs[free_struct_idx++];
++	str->val =3D val;
++
++	rb_link_node(&str->rb_node, parent, p);
++        rb_insert_color(&str->rb_node, &test_tree);
++
++	return;
 +}
 +
- static int btf_encoder__encode_cu_variables(struct btf_encoder *encoder)
++static void test_delete()
++{
++	struct rb_node *next =3D rb_first(&test_tree);
++
++	while (next) {
++		struct test_struct *pos =3D rb_entry(next, struct test_struct, rb_node);
++		next =3D rb_next(&pos->rb_node);
++		rb_erase(&pos->rb_node, &structures__tree);
++	}
++}
++
++void test_erase_once()
++{
++	test_tree =3D RB_ROOT;
++	free_struct_idx =3D 0;
++	bzero(structs, sizeof(structs));
++	int size =3D rand() % 16;
++	for (int i =3D 0; i < size; ++i) {
++		int val =3D rand() % 100;
++		test_add(val);
++	}
++	test_delete();
++	++num_tries;
++}
++
++static void sigsegv_handler(int nSignum, siginfo_t* si, void* vcontext) {
++	fprintf(stderr, "SIGSEGV after %d iters: [%d]", num_tries, free_struct_id=
+x);
++	for (int i =3D 0; i < free_struct_idx; ++i)
++		fprintf(stderr, " %d", structs[i].val);
++	fprintf(stderr, "\n");
++	exit(1);
++}
++
+ int main(int argc, char *argv[])
  {
- 	struct cu *cu = encoder->cu;
-@@ -1583,7 +1596,22 @@ static int btf_encoder__encode_cu_variables(struct btf_encoder *encoder)
- 			continue;
- 		}
- 
--		type = var->ip.tag.type + encoder->type_id_off;
-+		/* Kernel does not expect VAR entries to have types starting from BTF_TYPE_TAG.
-+		 * Specifically, the code like below will be rejected:
-+		 *
-+		 *   struct rq __percpu runqueues;
-+		 *   ...
-+		 *   rq = (struct rq *)bpf_per_cpu_ptr(&runqueues, cpu);
-+		 *   ... rq->cpu ...     // rq type is now PTR_TO_BTF_ID
-+		 *
-+		 * The access to 'rq->cpu' would be checked by a call to
-+		 * kernel/bpf/btf.c:btf_struct_access() which invokes btf_struct_walk(),
-+		 * using rq's type as a starting point. The btf_struct_walk() wants the
-+		 * first type in a chain to be STRUCT or UNION and does not skip modifiers.
-+		 *
-+		 * Thus, call skip_btf_type_tags() here.
-+		 */
-+		type = skip_btf_type_tags(cu, var->ip.tag.type) + encoder->type_id_off;
- 		linkage = var->external ? BTF_VAR_GLOBAL_ALLOCATED : BTF_VAR_STATIC;
- 
- 		if (encoder->verbose) {
--- 
-2.40.1
-
+ 	int err, remaining, rc =3D EXIT_FAILURE;
+=20
++	int seed =3D clock();
++	fprintf(stderr, "seed =3D %d\n", seed);
++	srand(seed);
++	struct sigaction action =3D {};
++	action.sa_flags =3D SA_SIGINFO;
++	action.sa_sigaction =3D sigsegv_handler;
++	sigaction(SIGSEGV, &action, NULL);
++	for (int i =3D 0; i < 1000 * 1000; ++i) {
++		test_erase_once();
++	}
++	fprintf(stderr, "done\n");
++	return 0;
++
+ 	if (argp_parse(&pahole__argp, argc, argv, 0, &remaining, NULL)) {
+ 		argp_help(&pahole__argp, stderr, ARGP_HELP_SEE, argv[0]);
+ 		goto out;
