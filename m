@@ -2,190 +2,93 @@ Return-Path: <dwarves-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 11227C77B7E
-	for <linux-dwarves@archiver.kernel.org>; Fri, 26 May 2023 00:00:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CA820C77B7E
+	for <linux-dwarves@archiver.kernel.org>; Fri, 26 May 2023 00:07:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234918AbjEZAAt (ORCPT
+        id S231691AbjEZAHI (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Thu, 25 May 2023 20:00:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34824 "EHLO
+        Thu, 25 May 2023 20:07:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233951AbjEZAAr (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Thu, 25 May 2023 20:00:47 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31F419C;
-        Thu, 25 May 2023 17:00:45 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id 2adb3069b0e04-4f4bd608cf4so84151e87.1;
-        Thu, 25 May 2023 17:00:45 -0700 (PDT)
+        with ESMTP id S233108AbjEZAHG (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Thu, 25 May 2023 20:07:06 -0400
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B27A1B6;
+        Thu, 25 May 2023 17:06:33 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id 38308e7fff4ca-2af2db78b38so1407251fa.3;
+        Thu, 25 May 2023 17:06:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685059243; x=1687651243;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=n9kWBvWIUbg78256b1umES+hb4psNSbCISwF5e8PRTo=;
-        b=AaFoMPOp9UKOiR2IQLAt35sRqkhW6KSi6PQP9FMKDqQnLJUvSs3dawUn6T98PZeBvX
-         +dYzBv405Y+dH7hWEl+xL1Rs+rN3IPrzITh/LXpc/4RmWXteNtPV2BvNn/+jAaWE9vjL
-         3tVyJp2TO9D9ucGjwuQjeW08rxqfFrhH71olxdINuPfG9uRncRItVGso6IQ93tXdHoU+
-         /J6limNIsMyAir18iXt+7AijAlEp6Sv9oiw1qcrXlh0UmEZ9dHeDDJ8+lc8ztfJvlYAg
-         UUC3tuhlaQZmueOUVB45PbiMpdt+5MXbDPne3uj9HkDyEApwkGFzTXoYqn6CvFdnBXbI
-         scDA==
+        d=gmail.com; s=20221208; t=1685059591; x=1687651591;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=woiW5Ajm0zMRf2vXy6/dR+uwgVdveYlW7RtIiuWEMPg=;
+        b=lsvKSzO8bz+bVVqt/7ilX2Flg1ZpEznsfqCxILp+bHWh9pu02v/j83gkTOWVRMEGAo
+         OA25VeDTA6RnGrC1BHTfwSDbvX8kkGQHOOUqybcJdwuw1WLGSohUD6SVfXjjhvs6jKaK
+         ZEdJ4xQLabfauhjjmRsp+zplQaGeqhqiUvf6LYU2chNmgRUA5Tm8sFNFVxoCeiehQh+o
+         OMDvCSg7FDTtCNGtnl55vNzgaESIqM1IoTjxKxbKVRDCklUI3Y2xjhqROXXQ+qImZWGZ
+         q3c+IscnbRJk2AGwsKek4s6G2EVeD8CsryowQGRlgWAvNUpS7iE/kQsc+37NUKNPXg4p
+         DfFA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685059243; x=1687651243;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=n9kWBvWIUbg78256b1umES+hb4psNSbCISwF5e8PRTo=;
-        b=Q/DLK2WoYQ2sjuHOBjmBa68jdKaZQVqRjRpW99ViLwKOig5Adb8UlW0mCXFpSburqy
-         mnj2cNSGLx2Br3Cuq/fo2S/9Uau6CV622XS3F1nLkfSTyxsWsi5h4pLzThLRV/Xim3IS
-         MDIkS7LRP3l3wP1gzIsdlYUZTEC+0+t69TpntPfN3UzlSphtT8VN8czkuhCEopwzr+Vm
-         GOT1ovKK0b97kg4xlPwpJAExw493QbpkcMGTpwNXQT77uuzliHJDFUExfkrnN1ydZNe3
-         AJ06VMT03ZZOCpsVoTIJU92ygBzN0TEZtdhOape39VnJxRNDWDYLprKIF5za2Ccr+Kfn
-         lvYA==
-X-Gm-Message-State: AC+VfDySEZE0AkD3kTSK0Tw1tYLDjo7H+fjB2Fh+A1+W64k0WhRY++oQ
-        gui8kkLnCsT1BmIj+2GUYhXBo6t/B/JoiQ==
-X-Google-Smtp-Source: ACHHUZ7cc/6xqPOqeZrL9U6UpddxF5CaRnK81xF5I5kl8Ccmnqv8BjxQxfETa7+LwfY0YWkuVGBh+w==
-X-Received: by 2002:ac2:5183:0:b0:4f4:6189:1d0 with SMTP id u3-20020ac25183000000b004f4618901d0mr5184342lfi.7.1685059242933;
-        Thu, 25 May 2023 17:00:42 -0700 (PDT)
-Received: from bigfoot.. (host-176-36-0-241.b024.la.net.ua. [176.36.0.241])
-        by smtp.gmail.com with ESMTPSA id r2-20020a19ac42000000b004f38717ca34sm383761lfc.97.2023.05.25.17.00.41
+        d=1e100.net; s=20221208; t=1685059591; x=1687651591;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=woiW5Ajm0zMRf2vXy6/dR+uwgVdveYlW7RtIiuWEMPg=;
+        b=OmdbIK7u8ekkmGAnoKS8zpwBc8obsVoU08Tr2bwuZWwNWl5fWNtRAaFqn+9Ks39tEP
+         +uiDVAXU1etJCsEvwEDY6WcdHWMxCGtnkdOASxSxxAJOf45CKtflG5Xp9IcbreNGBGgD
+         rNn+tKVhiHeDjEjPx+lCPOyNd9cqct2EKAu2ShkS/AVzbnuSBFMIjAa833jZNGgLCvAy
+         vnH1q4vtJOtJ7wohfFH45e51PnaRoI8XLOaJEeJwXsnbG9lW+6yF/1UvAV6ezrJhAGox
+         bo1BrziRFghnAFrMuq9r5Bu1/5CZFDt4sruGJg1q9d9gGIZ0pWx2VwL99wtnkZaKKycy
+         IE3Q==
+X-Gm-Message-State: AC+VfDyqgPRiAXLQKMxtzTdjqEz9nW+pifj+u31jjQBRuoiEO2w40tpe
+        kd5tgCDoQ5DZft7rekmEmsgMxRfH0kSRWA==
+X-Google-Smtp-Source: ACHHUZ4FmLEDANlrwQoO5XMpqceDq+pS4UgPm4lrMe9GoPFhcCmWD6IUA+KCTifqblKPZF0SOd9/0g==
+X-Received: by 2002:a2e:84d0:0:b0:2a8:c82f:2996 with SMTP id q16-20020a2e84d0000000b002a8c82f2996mr70718ljh.43.1685059590564;
+        Thu, 25 May 2023 17:06:30 -0700 (PDT)
+Received: from [192.168.1.95] (host-176-36-0-241.b024.la.net.ua. [176.36.0.241])
+        by smtp.gmail.com with ESMTPSA id h17-20020a2e3a11000000b002adab10a1fdsm443602lja.117.2023.05.25.17.06.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 May 2023 17:00:42 -0700 (PDT)
+        Thu, 25 May 2023 17:06:30 -0700 (PDT)
+Message-ID: <36e7531791a2b9d0513e5a883acdad0930260d73.camel@gmail.com>
+Subject: Re: [PATCH v3 dwarves 0/6] Support for new btf_type_tag encoding
 From:   Eduard Zingerman <eddyz87@gmail.com>
 To:     dwarves@vger.kernel.org, arnaldo.melo@gmail.com
 Cc:     bpf@vger.kernel.org, kernel-team@fb.com, ast@kernel.org,
         daniel@iogearbox.net, andrii@kernel.org, yhs@fb.com,
-        mykolal@fb.com, Eduard Zingerman <eddyz87@gmail.com>
-Subject: [PATCH dwarves] pahole: avoid adding same struct structure to two rb trees
-Date:   Fri, 26 May 2023 02:59:49 +0300
-Message-Id: <20230525235949.2978377-1-eddyz87@gmail.com>
-X-Mailer: git-send-email 2.40.1
+        jemarch@gnu.org, david.faust@oracle.com, mykolal@fb.com
+Date:   Fri, 26 May 2023 03:06:28 +0300
+In-Reply-To: <85637acda6983eac1787abbb07ef18c618b4193b.camel@gmail.com>
+References: <20230524001825.2688661-1-eddyz87@gmail.com>
+         <85637acda6983eac1787abbb07ef18c618b4193b.camel@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4-0ubuntu1 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-When pahole is executed in '-F dwarf --sort' mode there are two places
-where 'struct structure' instance could be added to the rb_tree:
+On Thu, 2023-05-25 at 03:13 +0300, Eduard Zingerman wrote:
+[...]
+> +static void test_delete()
+> +{
+> +	struct rb_node *next =3D rb_first(&test_tree);
+> +
+> +	while (next) {
+> +		struct test_struct *pos =3D rb_entry(next, struct test_struct, rb_node=
+);
+> +		next =3D rb_next(&pos->rb_node);
+> +		rb_erase(&pos->rb_node, &structures__tree);
+                                        ^^^^^^^
+                                        Should be &test_tree
 
-The first is triggered from the following call stack:
+I made a mistake in this test code.
+When correct tree is passed to rb_erase() test passes w/o segfaults.
+The original issue is caused by the same 'struct structures' instance
+being added to an rb_tree twice, posted a separate patch with a fix to
+the mailing list.
 
-  print_classes()
-    structures__add()
-      __structures__add()
-        (adds to global pahole.c:structures__tree)
-
-The second is triggered from the following call stack:
-
-  print_ordered_classes()
-    resort_classes()
-      resort_add()
-        (adds to local rb_tree instance)
-
-Both places use the same 'struct structure::rb_node' field, so if both
-code pathes are executed the final state of the 'structures__tree'
-might be inconsistent.
-
-For example, this could be observed when DEBUG_CHECK_LEAKS build flag
-is set. Here is the command line snippet that eventually leads to a
-segfault:
-
-  $ for i in $(seq 1 100); do \
-      echo $i; \
-      pahole -F dwarf --flat_arrays --sort --jobs vmlinux > /dev/null \
-             || break; \
-    done
-
-GDB shows the following stack trace:
-
-  Thread 1 "pahole" received signal SIGSEGV, Segmentation fault.
-  0x00007ffff7f819ad in __rb_erase_color (node=0x7fffd4045830, parent=0x0, root=0x5555555672d8 <structures.tree>) at /home/eddy/work/dwarves-fork/rbtree.c:134
-  134			if (parent->rb_left == node)
-  (gdb) bt
-  #0  0x00007ffff7f819ad in __rb_erase_color (node=0x7fffd4045830, parent=0x0, root=0x5555555672d8 <structures.tree>) at /home/eddy/work/dwarves-fork/rbtree.c:134
-  #1  0x00007ffff7f82014 in rb_erase (node=0x7fff21ae5b80, root=0x5555555672d8 <structures.tree>) at /home/eddy/work/dwarves-fork/rbtree.c:275
-  #2  0x0000555555559c3d in __structures__delete () at /home/eddy/work/dwarves-fork/pahole.c:440
-  #3  0x0000555555559c70 in structures__delete () at /home/eddy/work/dwarves-fork/pahole.c:448
-  #4  0x0000555555560bb6 in main (argc=13, argv=0x7fffffffdcd8) at /home/eddy/work/dwarves-fork/pahole.c:3584
-
-This commit modifies resort_classes() to re-use 'structures__tree' and
-to reset 'rb_node' fields before adding structure instances to the
-tree for a second time.
-
-Lock/unlock structures_lock to be consistent with structures_add() and
-structures__delete() code.
-
-Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
----
- pahole.c | 41 ++++++++++++++++++++++++++++-------------
- 1 file changed, 28 insertions(+), 13 deletions(-)
-
-diff --git a/pahole.c b/pahole.c
-index 6fc4ed6..576733f 100644
---- a/pahole.c
-+++ b/pahole.c
-@@ -621,9 +621,9 @@ static void print_classes(struct cu *cu)
- 	}
- }
- 
--static void __print_ordered_classes(struct rb_root *root)
-+static void __print_ordered_classes(void)
- {
--	struct rb_node *next = rb_first(root);
-+	struct rb_node *next = rb_first(&structures__tree);
- 
- 	while (next) {
- 		struct structure *st = rb_entry(next, struct structure, rb_node);
-@@ -660,24 +660,39 @@ static void resort_add(struct rb_root *resorted, struct structure *str)
- 	rb_insert_color(&str->rb_node, resorted);
- }
- 
--static void resort_classes(struct rb_root *resorted, struct list_head *head)
-+static void resort_classes(void)
- {
- 	struct structure *str;
- 
--	list_for_each_entry(str, head, node)
--		resort_add(resorted, str);
-+	pthread_mutex_lock(&structures_lock);
-+
-+	/* The need_resort flag is set by type__compare_members()
-+	 * within the following call stack:
-+	 *
-+	 *   print_classes()
-+	 *     structures__add()
-+	 *       __structures__add()
-+	 *         type__compare()
-+	 *
-+	 * The call to structures__add() registers 'struct structures'
-+	 * instances in both 'structures__tree' and 'structures__list'.
-+	 * In order to avoid adding same node to the tree twice reset
-+	 * both the 'structures__tree' and 'str->rb_node'.
-+	 */
-+	structures__tree = RB_ROOT;
-+	list_for_each_entry(str, &structures__list, node) {
-+		bzero(&str->rb_node, sizeof(str->rb_node));
-+		resort_add(&structures__tree, str);
-+	}
-+
-+	pthread_mutex_unlock(&structures_lock);
- }
- 
- static void print_ordered_classes(void)
- {
--	if (!need_resort) {
--		__print_ordered_classes(&structures__tree);
--	} else {
--		struct rb_root resorted = RB_ROOT;
--
--		resort_classes(&resorted, &structures__list);
--		__print_ordered_classes(&resorted);
--	}
-+	if (need_resort)
-+		resort_classes();
-+	__print_ordered_classes();
- }
- 
- 
--- 
-2.40.1
-
+> +	}
+> +}
+[...]
