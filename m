@@ -2,93 +2,216 @@ Return-Path: <dwarves-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CA820C77B7E
-	for <linux-dwarves@archiver.kernel.org>; Fri, 26 May 2023 00:07:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 33F17C7EE2D
+	for <linux-dwarves@archiver.kernel.org>; Fri,  2 Jun 2023 13:42:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231691AbjEZAHI (ORCPT
+        id S234451AbjFBNmb (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Thu, 25 May 2023 20:07:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37258 "EHLO
+        Fri, 2 Jun 2023 09:42:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233108AbjEZAHG (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Thu, 25 May 2023 20:07:06 -0400
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B27A1B6;
-        Thu, 25 May 2023 17:06:33 -0700 (PDT)
-Received: by mail-lj1-x22a.google.com with SMTP id 38308e7fff4ca-2af2db78b38so1407251fa.3;
-        Thu, 25 May 2023 17:06:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685059591; x=1687651591;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=woiW5Ajm0zMRf2vXy6/dR+uwgVdveYlW7RtIiuWEMPg=;
-        b=lsvKSzO8bz+bVVqt/7ilX2Flg1ZpEznsfqCxILp+bHWh9pu02v/j83gkTOWVRMEGAo
-         OA25VeDTA6RnGrC1BHTfwSDbvX8kkGQHOOUqybcJdwuw1WLGSohUD6SVfXjjhvs6jKaK
-         ZEdJ4xQLabfauhjjmRsp+zplQaGeqhqiUvf6LYU2chNmgRUA5Tm8sFNFVxoCeiehQh+o
-         OMDvCSg7FDTtCNGtnl55vNzgaESIqM1IoTjxKxbKVRDCklUI3Y2xjhqROXXQ+qImZWGZ
-         q3c+IscnbRJk2AGwsKek4s6G2EVeD8CsryowQGRlgWAvNUpS7iE/kQsc+37NUKNPXg4p
-         DfFA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685059591; x=1687651591;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=woiW5Ajm0zMRf2vXy6/dR+uwgVdveYlW7RtIiuWEMPg=;
-        b=OmdbIK7u8ekkmGAnoKS8zpwBc8obsVoU08Tr2bwuZWwNWl5fWNtRAaFqn+9Ks39tEP
-         +uiDVAXU1etJCsEvwEDY6WcdHWMxCGtnkdOASxSxxAJOf45CKtflG5Xp9IcbreNGBGgD
-         rNn+tKVhiHeDjEjPx+lCPOyNd9cqct2EKAu2ShkS/AVzbnuSBFMIjAa833jZNGgLCvAy
-         vnH1q4vtJOtJ7wohfFH45e51PnaRoI8XLOaJEeJwXsnbG9lW+6yF/1UvAV6ezrJhAGox
-         bo1BrziRFghnAFrMuq9r5Bu1/5CZFDt4sruGJg1q9d9gGIZ0pWx2VwL99wtnkZaKKycy
-         IE3Q==
-X-Gm-Message-State: AC+VfDyqgPRiAXLQKMxtzTdjqEz9nW+pifj+u31jjQBRuoiEO2w40tpe
-        kd5tgCDoQ5DZft7rekmEmsgMxRfH0kSRWA==
-X-Google-Smtp-Source: ACHHUZ4FmLEDANlrwQoO5XMpqceDq+pS4UgPm4lrMe9GoPFhcCmWD6IUA+KCTifqblKPZF0SOd9/0g==
-X-Received: by 2002:a2e:84d0:0:b0:2a8:c82f:2996 with SMTP id q16-20020a2e84d0000000b002a8c82f2996mr70718ljh.43.1685059590564;
-        Thu, 25 May 2023 17:06:30 -0700 (PDT)
-Received: from [192.168.1.95] (host-176-36-0-241.b024.la.net.ua. [176.36.0.241])
-        by smtp.gmail.com with ESMTPSA id h17-20020a2e3a11000000b002adab10a1fdsm443602lja.117.2023.05.25.17.06.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 May 2023 17:06:30 -0700 (PDT)
-Message-ID: <36e7531791a2b9d0513e5a883acdad0930260d73.camel@gmail.com>
-Subject: Re: [PATCH v3 dwarves 0/6] Support for new btf_type_tag encoding
-From:   Eduard Zingerman <eddyz87@gmail.com>
-To:     dwarves@vger.kernel.org, arnaldo.melo@gmail.com
-Cc:     bpf@vger.kernel.org, kernel-team@fb.com, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, yhs@fb.com,
-        jemarch@gnu.org, david.faust@oracle.com, mykolal@fb.com
-Date:   Fri, 26 May 2023 03:06:28 +0300
-In-Reply-To: <85637acda6983eac1787abbb07ef18c618b4193b.camel@gmail.com>
-References: <20230524001825.2688661-1-eddyz87@gmail.com>
-         <85637acda6983eac1787abbb07ef18c618b4193b.camel@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4-0ubuntu1 
+        with ESMTP id S234300AbjFBNmQ (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Fri, 2 Jun 2023 09:42:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F6651B9
+        for <dwarves@vger.kernel.org>; Fri,  2 Jun 2023 06:42:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0AF2A64FCA
+        for <dwarves@vger.kernel.org>; Fri,  2 Jun 2023 13:42:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A50DC433EF;
+        Fri,  2 Jun 2023 13:42:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685713334;
+        bh=zaE02NfX7bLXKaa9G5ZoEsah1tr8ZNKmGq6A3lxAvX0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=oB531SMPVv9XLbj2Zt8MOpxbF2nrf+cO7G5TedeQiX+tUWj9GnghN6NpMBfRCE+Md
+         mM4cu6y5T/gF+jAvcjnSDhQBoOPxODMdcLvKkrxto2p6sQsdrKFYJUg11xZJKQSZQG
+         gswWJhbl/d/cMcKZ6DBYDh7bTwukXa8TGjOOPFHNHw+TWdnlh+DHaKAQzj1XGZG+T4
+         amh0h2YzpJDJKRHlzvrP2OaMH1xdsiKazK+jRPHgWXqoETHkjsxgFF2JqOpUATQEQl
+         s/Xw8DVbvhdYgl6fpNdh9VpF9tycgW2XbLIS7Lm/0VipsBN8E7a9Teu/Axg2FJFg/V
+         GfmobGmR7xBjg==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 882E940692; Fri,  2 Jun 2023 10:42:11 -0300 (-03)
+Date:   Fri, 2 Jun 2023 10:42:11 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Eduard Zingerman <eddyz87@gmail.com>
+Cc:     dwarves@vger.kernel.org, arnaldo.melo@gmail.com,
+        bpf@vger.kernel.org, kernel-team@fb.com, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, yhs@fb.com, mykolal@fb.com
+Subject: Re: [PATCH dwarves] pahole: avoid adding same struct structure to
+ two rb trees
+Message-ID: <ZHnxsyjDaPQ7gGUP@kernel.org>
+References: <20230525235949.2978377-1-eddyz87@gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230525235949.2978377-1-eddyz87@gmail.com>
+X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-On Thu, 2023-05-25 at 03:13 +0300, Eduard Zingerman wrote:
-[...]
-> +static void test_delete()
-> +{
-> +	struct rb_node *next =3D rb_first(&test_tree);
+Em Fri, May 26, 2023 at 02:59:49AM +0300, Eduard Zingerman escreveu:
+> When pahole is executed in '-F dwarf --sort' mode there are two places
+> where 'struct structure' instance could be added to the rb_tree:
+> 
+> The first is triggered from the following call stack:
+> 
+>   print_classes()
+>     structures__add()
+>       __structures__add()
+>         (adds to global pahole.c:structures__tree)
+> 
+> The second is triggered from the following call stack:
+> 
+>   print_ordered_classes()
+>     resort_classes()
+>       resort_add()
+>         (adds to local rb_tree instance)
+> 
+> Both places use the same 'struct structure::rb_node' field, so if both
+> code pathes are executed the final state of the 'structures__tree'
+> might be inconsistent.
+> 
+> For example, this could be observed when DEBUG_CHECK_LEAKS build flag
+> is set. Here is the command line snippet that eventually leads to a
+> segfault:
+> 
+>   $ for i in $(seq 1 100); do \
+>       echo $i; \
+>       pahole -F dwarf --flat_arrays --sort --jobs vmlinux > /dev/null \
+>              || break; \
+>     done
+> 
+> GDB shows the following stack trace:
+> 
+>   Thread 1 "pahole" received signal SIGSEGV, Segmentation fault.
+>   0x00007ffff7f819ad in __rb_erase_color (node=0x7fffd4045830, parent=0x0, root=0x5555555672d8 <structures.tree>) at /home/eddy/work/dwarves-fork/rbtree.c:134
+>   134			if (parent->rb_left == node)
+>   (gdb) bt
+>   #0  0x00007ffff7f819ad in __rb_erase_color (node=0x7fffd4045830, parent=0x0, root=0x5555555672d8 <structures.tree>) at /home/eddy/work/dwarves-fork/rbtree.c:134
+>   #1  0x00007ffff7f82014 in rb_erase (node=0x7fff21ae5b80, root=0x5555555672d8 <structures.tree>) at /home/eddy/work/dwarves-fork/rbtree.c:275
+>   #2  0x0000555555559c3d in __structures__delete () at /home/eddy/work/dwarves-fork/pahole.c:440
+>   #3  0x0000555555559c70 in structures__delete () at /home/eddy/work/dwarves-fork/pahole.c:448
+>   #4  0x0000555555560bb6 in main (argc=13, argv=0x7fffffffdcd8) at /home/eddy/work/dwarves-fork/pahole.c:3584
+> 
+> This commit modifies resort_classes() to re-use 'structures__tree' and
+> to reset 'rb_node' fields before adding structure instances to the
+> tree for a second time.
+> 
+> Lock/unlock structures_lock to be consistent with structures_add() and
+> structures__delete() code.
+> 
+> Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
+> ---
+>  pahole.c | 41 ++++++++++++++++++++++++++++-------------
+>  1 file changed, 28 insertions(+), 13 deletions(-)
+> 
+> diff --git a/pahole.c b/pahole.c
+> index 6fc4ed6..576733f 100644
+> --- a/pahole.c
+> +++ b/pahole.c
+> @@ -621,9 +621,9 @@ static void print_classes(struct cu *cu)
+>  	}
+>  }
+>  
+> -static void __print_ordered_classes(struct rb_root *root)
+> +static void __print_ordered_classes(void)
+>  {
+> -	struct rb_node *next = rb_first(root);
+> +	struct rb_node *next = rb_first(&structures__tree);
+>  
+>  	while (next) {
+>  		struct structure *st = rb_entry(next, struct structure, rb_node);
+> @@ -660,24 +660,39 @@ static void resort_add(struct rb_root *resorted, struct structure *str)
+>  	rb_insert_color(&str->rb_node, resorted);
+>  }
+>  
+> -static void resort_classes(struct rb_root *resorted, struct list_head *head)
+> +static void resort_classes(void)
+>  {
+>  	struct structure *str;
+>  
+> -	list_for_each_entry(str, head, node)
+> -		resort_add(resorted, str);
+> +	pthread_mutex_lock(&structures_lock);
 > +
-> +	while (next) {
-> +		struct test_struct *pos =3D rb_entry(next, struct test_struct, rb_node=
-);
-> +		next =3D rb_next(&pos->rb_node);
-> +		rb_erase(&pos->rb_node, &structures__tree);
-                                        ^^^^^^^
-                                        Should be &test_tree
+> +	/* The need_resort flag is set by type__compare_members()
+> +	 * within the following call stack:
+> +	 *
+> +	 *   print_classes()
+> +	 *     structures__add()
+> +	 *       __structures__add()
+> +	 *         type__compare()
+> +	 *
+> +	 * The call to structures__add() registers 'struct structures'
+> +	 * instances in both 'structures__tree' and 'structures__list'.
+> +	 * In order to avoid adding same node to the tree twice reset
+> +	 * both the 'structures__tree' and 'str->rb_node'.
+> +	 */
+> +	structures__tree = RB_ROOT;
+> +	list_for_each_entry(str, &structures__list, node) {
+> +		bzero(&str->rb_node, sizeof(str->rb_node));
 
-I made a mistake in this test code.
-When correct tree is passed to rb_erase() test passes w/o segfaults.
-The original issue is caused by the same 'struct structures' instance
-being added to an rb_tree twice, posted a separate patch with a fix to
-the mailing list.
+Why is this bzero needed?
+
+> +		resort_add(&structures__tree, str);
+
+resort_add will call rb_link_node(&str->rb_node, parent, p); and it, in
+turn:
+
+static inline void rb_link_node(struct rb_node * node, struct rb_node * parent,
+                                struct rb_node ** rb_link)
+{
+        node->rb_parent_color = (unsigned long )parent;
+        node->rb_left = node->rb_right = NULL;
+
+        *rb_link = node;
+}
+
+And:
+
+struct rb_node
+{
+        unsigned long  rb_parent_color;
+#define RB_RED          0
+#define RB_BLACK        1
+        struct rb_node *rb_right;
+        struct rb_node *rb_left;
+} __attribute__((aligned(sizeof(long))))
+
+So all the fields are being initialized in the operation right after the
+bzero(), no?
+
+- Arnaldo
 
 > +	}
-> +}
-[...]
+> +
+> +	pthread_mutex_unlock(&structures_lock);
+>  }
+>  
+>  static void print_ordered_classes(void)
+>  {
+> -	if (!need_resort) {
+> -		__print_ordered_classes(&structures__tree);
+> -	} else {
+> -		struct rb_root resorted = RB_ROOT;
+> -
+> -		resort_classes(&resorted, &structures__list);
+> -		__print_ordered_classes(&resorted);
+> -	}
+> +	if (need_resort)
+> +		resort_classes();
+> +	__print_ordered_classes();
+>  }
+>  
+>  
+> -- 
+> 2.40.1
+> 
+
+-- 
+
+- Arnaldo
