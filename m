@@ -2,144 +2,91 @@ Return-Path: <dwarves-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9A173C7EE23
-	for <linux-dwarves@archiver.kernel.org>; Mon,  5 Jun 2023 18:54:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 453B0EB64DB
+	for <linux-dwarves@archiver.kernel.org>; Thu, 15 Jun 2023 03:32:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229683AbjFESyf (ORCPT
+        id S237771AbjFODcu (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Mon, 5 Jun 2023 14:54:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56714 "EHLO
+        Wed, 14 Jun 2023 23:32:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229630AbjFESyf (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Mon, 5 Jun 2023 14:54:35 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 733D4CD
-        for <dwarves@vger.kernel.org>; Mon,  5 Jun 2023 11:54:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0295D628B8
-        for <dwarves@vger.kernel.org>; Mon,  5 Jun 2023 18:54:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C220C433EF;
-        Mon,  5 Jun 2023 18:54:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685991273;
-        bh=mdiqgPX74+jDozdh4MToyKbW1D4NW8k7WAOrKXhZeeI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HMwGJE/BttY4rKr9UQgT+B5z1lRGtrRPpWoN5X4fe5muUmBmpsNJpMDoMqI96p8iE
-         +ggdBImcVC6D3MUSI5YcC/5lp97hCYI4gMmXa9jvnmjb/rcKHliitcwD0ryCWCKxUb
-         s/arEJVHkwvZbh3Qpo73/qqKc5HWKDZDUy+QR5JlQ1wYiGt/Fq98nAWfNNCLs2ILpr
-         ye3irNY+m3XwgNT4t9qKtRcFrPjTeKF2TEpf6wfof3T75vo975LvqUA3KxkwWG8uCJ
-         kE3WFPA7J2I6sQMJDe4+fkk8fXmPVCSkeokbbg1G3TX09I2uV2ahnemjxk0JAacT15
-         N0xrcupZIS58w==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 9C90140692; Mon,  5 Jun 2023 15:54:30 -0300 (-03)
-Date:   Mon, 5 Jun 2023 15:54:30 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Eduard Zingerman <eddyz87@gmail.com>
-Cc:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
-        dwarves@vger.kernel.org, bpf@vger.kernel.org, kernel-team@fb.com,
-        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        yhs@fb.com, mykolal@fb.com
-Subject: Re: [PATCH dwarves] pahole: avoid adding same struct structure to
- two rb trees
-Message-ID: <ZH4vZjaQnCGOzY/w@kernel.org>
-References: <20230525235949.2978377-1-eddyz87@gmail.com>
- <ZHnxsyjDaPQ7gGUP@kernel.org>
- <a15b83ebc750df7edd84b76d30a72c50e016e80f.camel@gmail.com>
- <ZHovRW1G0QZwBSOW@kernel.org>
- <c9c1e04b10f0a13a3af9e980d04ce08d3304ac3a.camel@gmail.com>
- <ZH3nalodXmup6pEF@kernel.org>
- <2b4372428cd1e56de3b79791160cdd3afdc7df6a.camel@gmail.com>
+        with ESMTP id S237527AbjFODct (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Wed, 14 Jun 2023 23:32:49 -0400
+Received: from nautica.notk.org (ipv6.notk.org [IPv6:2001:41d0:1:7a93::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 941FC2120;
+        Wed, 14 Jun 2023 20:32:47 -0700 (PDT)
+Received: by nautica.notk.org (Postfix, from userid 108)
+        id 11AECC01C; Thu, 15 Jun 2023 05:32:44 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
+        t=1686799964; bh=N6MSuSr/Z+c4Myf1l9nZ+6OfeRcjQCkkQvJttGYCi4E=;
+        h=Date:From:To:Subject:From;
+        b=YKQsdXKtCTJNHQlS9+KNz5hULLjP8qoiZdIUnHpNRFBbZwo4ZYT+3AnXtWsU/f0E3
+         stAGvPoy3KzlcoJvboa508zbCUGWikUiFUwj2Tye4ig1+0kS9y3f6D8lR+4wAUgun8
+         SuUe30yRo9z/Fx6StgQW0+4nOLiNW241P7QCJJ0WGNDn+jqqw1YG+4ssh2KLmJWuYE
+         vKrFjm2xbG9uEdn5+Ley9EwHozaSsI8Pz05g6ro/X3mEAA9pEBaS7eswzDGxZxxF/L
+         spbUCvt/bEXzhQEcP/XWzoBI2XEVH7U/x3vS3lJa1NV7lU1viFYya4ANLSZ688wX17
+         Zyy13/X/ozFjg==
+Received: from odin.codewreck.org (localhost [127.0.0.1])
+        by nautica.notk.org (Postfix) with ESMTPS id 99E67C01A;
+        Thu, 15 Jun 2023 05:32:42 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
+        t=1686799963; bh=N6MSuSr/Z+c4Myf1l9nZ+6OfeRcjQCkkQvJttGYCi4E=;
+        h=Date:From:To:Subject:From;
+        b=iy2h8xlQwaXiLXlHpjCSXGm0taP5J2xluPSy6vZHw9OgQDpyG/VlMVwvLln2oR62P
+         m0b4Bl7XbtdEyfttTrDnqGa/MytVUYOFPyed0DXZGrA+KoVz5sBLozG9xd1X1nW0+m
+         FqZiEBlODuQ/9AxrlHEAyADU1bZbvJpMAQayMQA1d4jVOxKxXq6IbyorTWlI1O8rsd
+         +pnoEVnG8+ud4oHzz1c2SEQgvicq1EczQpgkun2KRM+MWI51IpbJtIL2nCA+pjSj2v
+         mjaVWl/yaCTvEzzixrYQGI+mdee06Epc6wsvOr4aERblVOIV1k2kZKhKmOiYLe2Ozg
+         hG5IOxcbanJpA==
+Received: from localhost (odin.codewreck.org [local])
+        by odin.codewreck.org (OpenSMTPD) with ESMTPA id 9d2c3fca;
+        Thu, 15 Jun 2023 03:32:39 +0000 (UTC)
+Date:   Thu, 15 Jun 2023 12:32:24 +0900
+From:   Dominique Martinet <asmadeus@codewreck.org>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        dwarves@vger.kernel.org, bpf@vger.kernel.org
+Subject: ppc64le vmlinuz is huge when building with BTF
+Message-ID: <ZIqGSJDaZObKjLnN@codewreck.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <2b4372428cd1e56de3b79791160cdd3afdc7df6a.camel@gmail.com>
-X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-Em Mon, Jun 05, 2023 at 05:39:19PM +0300, Eduard Zingerman escreveu:
-> On Mon, 2023-06-05 at 10:47 -0300, Arnaldo Carvalho de Melo wrote:
-> > Em Fri, Jun 02, 2023 at 09:08:51PM +0300, Eduard Zingerman escreveu:
-> > > On Fri, 2023-06-02 at 15:04 -0300, Arnaldo Carvalho de Melo wrote:
-> > > > Em Fri, Jun 02, 2023 at 04:52:40PM +0300, Eduard Zingerman escreveu:
-> > > > > Right, you are correct.
-> > > > > The 'structures__tree = RB_ROOT' part is still necessary, though.
-> > > > > If you are ok with overall structure of the patch I can resend it w/o bzero().
-> > 
-> > > > Humm, so basically this boils down to the following patch?
-> > 
-> > > > +++ b/pahole.c
-> > > > @@ -674,7 +674,12 @@ static void print_ordered_classes(void)
-> > > >  		__print_ordered_classes(&structures__tree);
-> > > >  	} else {
-> > > >  		struct rb_root resorted = RB_ROOT;
-> > > > -
-> > > > +#ifdef DEBUG_CHECK_LEAKS
-> > > > +		// We'll delete structures from structures__tree, since we're
-> > > > +		// adding them to ther resorted list, better not keep
-> > > > +		// references there.
-> > > > +		structures__tree = RB_ROOT;
-> > > > +#endif
-> >  
-> > > But __structures__delete iterates over structures__tree,
-> > > so it won't delete anything if code like this, right?
-> >  
-> > > >  		resort_classes(&resorted, &structures__list);
-> > > >  		__print_ordered_classes(&resorted);
-> > > >  	}
-> > 
-> > Yeah, I tried to be minimalistic, my version avoids the crash, but
-> > defeats the DEBUG_CHECK_LEAKS purpose :-\
-> > 
-> > How about:
-> > 
-> > diff --git a/pahole.c b/pahole.c
-> > index 6fc4ed6a721b97ab..e843999fde2a8a37 100644
-> > --- a/pahole.c
-> > +++ b/pahole.c
-> > @@ -673,10 +673,10 @@ static void print_ordered_classes(void)
-> >  	if (!need_resort) {
-> >  		__print_ordered_classes(&structures__tree);
-> >  	} else {
-> > -		struct rb_root resorted = RB_ROOT;
-> > +		structures__tree = RB_ROOT;
-> >  
-> > -		resort_classes(&resorted, &structures__list);
-> > -		__print_ordered_classes(&resorted);
-> > +		resort_classes(&structures__tree, &structures__list);
-> > +		__print_ordered_classes(&structures__tree);
-> >  	}
-> >  }
-> >  
-> 
-> That would work, but I still think that there is no need to replicate call
-> to __print_ordered_classes, as long as the same list is passed as an argument,
-> e.g.:
-> 
-> @@ -670,14 +671,11 @@ static void resort_classes(struct rb_root *resorted, struct list_head *head)
->  
->  static void print_ordered_classes(void)
->  {
-> -       if (!need_resort) {
-> -               __print_ordered_classes(&structures__tree);
-> -       } else {
-> -               struct rb_root resorted = RB_ROOT;
-> -
-> -               resort_classes(&resorted, &structures__list);
-> -               __print_ordered_classes(&resorted);
-> +       if (need_resort) {
-> +               structures__tree = RB_ROOT;
-> +               resort_classes(&structures__tree, &structures__list);
->         }
-> +       __print_ordered_classes(&structures__tree);
->  }
+Hi,
 
-Right, that can be done as a follow up patch, further simplifying the
-code.
+coming from alpine: https://gitlab.alpinelinux.org/alpine/aports/-/issues/12563
 
-I'm just trying to have each patch as small as possible.
+alice noticed the kernel packages got quite bigger, in particular for
+ppc64le I've confirmed that the vmlinuz file size jump when building
+with BTF:
+currently released package with BTF:
+https://dl-cdn.alpinelinux.org/alpine/edge/main/ppc64le/linux-lts-6.1.33-r0.apk
+272M	boot/vmlinuz-lts
 
-- Arnaldo
+test build without BTF:
+https://gitlab.alpinelinux.org/martinetd/aports/-/jobs/1049335
+44M	boot/vmlinuz-lts
+
+
+Is that a known issue?
+We'll probably just turn off BTF for the ppc64le build for now, but it
+might be worth checking.
+
+
+While I have your attention, even the x86_64 package grew much bigger
+than I thought it would, the installed modules directory go from 90MB to
+108MB gzipped); it's a 18% increase (including kernel: 103->122MB) which
+is more than what I'd expect out of BTF.
+Most users don't care about BTF so it'd be great if they could be built
+and installed separately (debug package all over again..) or limiting
+the growth a bit more if possible.
+I haven't tried yet but at this point ikheaders is probably worth
+considering instead..
+Perhaps we're missing some stripping option or something?
+
+
+Thanks!
+-- 
+Dominique Martinet | Asmadeus
