@@ -2,132 +2,112 @@ Return-Path: <dwarves-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 66579EB64DB
-	for <linux-dwarves@archiver.kernel.org>; Thu, 15 Jun 2023 15:21:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D7342EB64D9
+	for <linux-dwarves@archiver.kernel.org>; Thu, 15 Jun 2023 20:35:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344734AbjFOPVV (ORCPT
+        id S229684AbjFOUfs (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Thu, 15 Jun 2023 11:21:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54346 "EHLO
+        Thu, 15 Jun 2023 16:35:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230500AbjFOPVU (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Thu, 15 Jun 2023 11:21:20 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A73B12E;
-        Thu, 15 Jun 2023 08:21:18 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id 2adb3069b0e04-4f62cf9755eso10612790e87.1;
-        Thu, 15 Jun 2023 08:21:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686842476; x=1689434476;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:to:from:subject:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GZGTBGF0vX5H+cBn/kub68kDoPw51WDE6/g4hKhy20Y=;
-        b=r4EC4w7/hLiXXodN+vKFdcpd3m6kuBmapXE1AOZ6UcODUUTNVzMmph/aqZ9g+LHKUE
-         EdXsIoE6Ls5mnlOrsmCD4NlfyrOjxzYScYm8sC3mWUL1Gs8T+MXQ/gVice3fQ4fG5erc
-         cNB1kK6dMFSJ2AKVENHLwCmccTRZ74ietR4NH+gBOVeQ2fZw/tcQGHN5FX4NlQ/W0QHO
-         wT8vqebLC/N+KLrubvrPKCK5+EWqqTWIhH+knrayrc1ELV8AAX8AlyCvi3UNOQh/OJuS
-         AvffhwZptYWY5xgb/XqbMEbJewi89360Pg5ucZzksey9tgotY5oqNlsK+QC4BF5RTDRa
-         5a+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686842476; x=1689434476;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:to:from:subject:message-id:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=GZGTBGF0vX5H+cBn/kub68kDoPw51WDE6/g4hKhy20Y=;
-        b=c30Kx2UUIex1cMGyFWvX7SBP85h0hzrtRz4Y4luZONdKPmmWJjAnngZfoBgPOnzTS9
-         vnS0aP4H4DVEgYAU9j1jDCbbFotx4KLNzCSQRzNgUYlnyR+HJz3+BnZEG5J8T7/fyoYq
-         cpQvt0K98/CNX8fFzMjk8qvWIVIuv68yteG6zF+7hLoD+uUCT4c3E0sxuoYUiWfhBeG2
-         HD6D51hpUqHpd/+cagvo9wxw0NMsFMfIZI7XmggLCqfwZth5XK8rkv0oUnM0nquH6uv/
-         5nj4DOWcd6MbaTw4b7WSAIqFFoHl/ZhHpGmL8DFfAzeWUqDlaVA5JqNpwKvoNySdCjkW
-         doAw==
-X-Gm-Message-State: AC+VfDxZCSvGACcNrwWfCOd3iEOgbWrORWSZaYJxjaN/0rwPTi2x6TC8
-        tAG1pIEH7ivHdOmjixOVEUQA5WYY8i0=
-X-Google-Smtp-Source: ACHHUZ5swJgtHHCiscBDnu3XBnMgyD+DMNaqAeOlJnpWSzZVzCbi2gRUZcpL3gpmA/8ttmCY4rWXFA==
-X-Received: by 2002:a19:440a:0:b0:4e9:cfd2:e2d with SMTP id r10-20020a19440a000000b004e9cfd20e2dmr10245992lfa.65.1686842476163;
-        Thu, 15 Jun 2023 08:21:16 -0700 (PDT)
-Received: from [192.168.1.95] (host-176-36-0-241.b024.la.net.ua. [176.36.0.241])
-        by smtp.gmail.com with ESMTPSA id v13-20020a056512048d00b004f84706d761sm177758lfq.20.2023.06.15.08.21.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Jun 2023 08:21:15 -0700 (PDT)
-Message-ID: <e2620d326d60acb4e5fbd31a1bc9391b14395dcc.camel@gmail.com>
-Subject: Re: ppc64le vmlinuz is huge when building with BTF
-From:   Eduard Zingerman <eddyz87@gmail.com>
-To:     Dominique Martinet <asmadeus@codewreck.org>,
+        with ESMTP id S237874AbjFOUfk (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Thu, 15 Jun 2023 16:35:40 -0400
+Received: from nautica.notk.org (ipv6.notk.org [IPv6:2001:41d0:1:7a93::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08E072D42;
+        Thu, 15 Jun 2023 13:35:11 -0700 (PDT)
+Received: by nautica.notk.org (Postfix, from userid 108)
+        id 2C2F4C009; Thu, 15 Jun 2023 22:34:50 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
+        t=1686861290; bh=WpIlT/MtwdTeRSa4KBTSMhTQOk6iylMdBwTAP9v18XQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=PGSaYcv3hT/raOlkPrYtvT2M1Ux3RZje6fO94mMnPRM781DGWravc77iRwYt3Ae/w
+         8jSSqcBgHVAML3vcGIUFW2SUZrYiq6SfxjEouXS+wu/nWt1DLswZa1Pe39aekFY2t5
+         QpXmUYGJj8k4y3oNNecEDdDkLXAw+bGYpnlxyyZZ63ODOKVrXWAkS4jm02AtSx5hRF
+         Hn+bGYKSE8X66q43XtGAiM8mZOpwRu678URznaibIN6eXPo6IetqnnW0MzW1yFxfeg
+         BMvQY9INCgVu2NS8F6NwOy+nR61qEs9fqdddYmX02/0gPPgGEyNf2SfRrFK4iVH35G
+         CadRMS5H9GHvg==
+Received: from odin.codewreck.org (localhost [127.0.0.1])
+        by nautica.notk.org (Postfix) with ESMTPS id D8BC2C009;
+        Thu, 15 Jun 2023 22:34:47 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
+        t=1686861289; bh=WpIlT/MtwdTeRSa4KBTSMhTQOk6iylMdBwTAP9v18XQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=SBKYwy62kIW86alsmahxyYI1PZyX65sxYHV1uo76gzwZpETcYu7Xr6vbhyJp6TIH0
+         4KFoe5+A3BXczDbLCxLs5qYX2e0UyXKvYdW8bzrJtsPPQ0FgkzMHt80NzVKC0TyqVQ
+         WxgEpLxfFYxwlUO3RGNLfzeOIZk3HLkw97cHMtiLL+49bL8biuP1qpitHIV6/kvuIj
+         JOuIW4hDzDEJt8xI58rmB6WcBthOghuy8IB/NA8kpSFRcp1VIvtAuwD2HP0LvuEhYM
+         a2LmbrqAlBi8bKSosXA8cU7zUKdIJpa84D28PSsgkkKoqw3mC02ea/hq8ZGWl4X3cj
+         e+uOUKhmm+Uew==
+Received: from localhost (odin.codewreck.org [local])
+        by odin.codewreck.org (OpenSMTPD) with ESMTPA id 2051621f;
+        Thu, 15 Jun 2023 20:34:44 +0000 (UTC)
+Date:   Fri, 16 Jun 2023 05:34:29 +0900
+From:   Dominique Martinet <asmadeus@codewreck.org>
+To:     Alan Maguire <alan.maguire@oracle.com>
+Cc:     Jiri Olsa <olsajiri@gmail.com>,
         Arnaldo Carvalho de Melo <acme@kernel.org>,
         dwarves@vger.kernel.org, bpf@vger.kernel.org
-Date:   Thu, 15 Jun 2023 18:21:14 +0300
-In-Reply-To: <8d6c094ec12c32e4166299f4a89be7fa4d0f9360.camel@gmail.com>
+Subject: Re: ppc64le vmlinuz is huge when building with BTF
+Message-ID: <ZIt11crcIjfyeygA@codewreck.org>
 References: <ZIqGSJDaZObKjLnN@codewreck.org>
-         <8d6c094ec12c32e4166299f4a89be7fa4d0f9360.camel@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4-0ubuntu1 
+ <ZIrONqGJeATpbg3Y@krava>
+ <ZIr7aaVpOaP8HjbZ@codewreck.org>
+ <6b26dfef-016c-43df-07f5-c2f88157d1dc@oracle.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <6b26dfef-016c-43df-07f5-c2f88157d1dc@oracle.com>
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-On Thu, 2023-06-15 at 18:15 +0300, Eduard Zingerman wrote:
-> On Thu, 2023-06-15 at 12:32 +0900, Dominique Martinet wrote:
-> > Hi,
-> >=20
-> > coming from alpine: https://gitlab.alpinelinux.org/alpine/aports/-/issu=
-es/12563
-> >=20
-> > alice noticed the kernel packages got quite bigger, in particular for
-> > ppc64le I've confirmed that the vmlinuz file size jump when building
-> > with BTF:
-> > currently released package with BTF:
-> > https://dl-cdn.alpinelinux.org/alpine/edge/main/ppc64le/linux-lts-6.1.3=
-3-r0.apk
-> > 272M	boot/vmlinuz-lts
->=20
-> Hi Dominique,
->=20
-> I've just checked the linked apk and it looks like DWARF sections are
-> not stripped and take most of the space, e.g.:
->=20
-> $ llvm-objdump --headers boot/vmlinuz-lts | grep \.debug \
->   | gawk '{ sum +=3D strtonum("0x"$3); } END { print sum; }' | numfmt --t=
-o iec
-> 228M
->=20
-> Compare this to BTF sections size:
->=20
-> $ llvm-objdump --headers boot/vmlinuz-lts | grep BTF \
->   | gawk '{ sum +=3D strtonum("0x"$3); } END { print sum; }' | numfmt --t=
-o iec
-> 3,9M
 
-Heh, Alan answered while I was looking into it, sorry for the spam.
+Alan Maguire wrote on Thu, Jun 15, 2023 at 03:31:49PM +0100:
+> However the problem I suspect is this:
+> 
+>  51 .debug_info   0a488b55  0000000000000000  0000000000000000  026f8d20
+>  2**0
+>                   CONTENTS, READONLY, DEBUGGING
+> [...]
+> 
+> The debug info hasn't been stripped, so I suspect the packaging spec
+> file or equivalent - in perhaps trying to preserve the .BTF section -
+> is preserving debug info too. DWARF needs to be there at BTF
+> generation time in vmlinux but is usually stripped for non-debug
+> packages.
 
->=20
-> >=20
-> > test build without BTF:
-> > https://gitlab.alpinelinux.org/martinetd/aports/-/jobs/1049335
-> > 44M	boot/vmlinuz-lts
-> >=20
-> >=20
-> > Is that a known issue?
-> > We'll probably just turn off BTF for the ppc64le build for now, but it
-> > might be worth checking.
-> >=20
-> >=20
-> > While I have your attention, even the x86_64 package grew much bigger
-> > than I thought it would, the installed modules directory go from 90MB t=
-o
-> > 108MB gzipped); it's a 18% increase (including kernel: 103->122MB) whic=
-h
-> > is more than what I'd expect out of BTF.
-> > Most users don't care about BTF so it'd be great if they could be built
-> > and installed separately (debug package all over again..) or limiting
-> > the growth a bit more if possible.
-> > I haven't tried yet but at this point ikheaders is probably worth
-> > considering instead..
-> > Perhaps we're missing some stripping option or something?
-> >=20
-> >=20
-> > Thanks!
->=20
+Thanks Alan and Eduard!
+I guess I should have checked that first, it helps.
 
+We're not stripping anything in vmlinuz for other archs -- the linker
+script already should be including only the bare minimum to decompress
+itself (+compressed useful bits), so I guess it's a Kbuild issue for the
+arch.
+We can add a strip but I unfortunately have no way of testing ppc build,
+I'll ask around the build linux-kbuild and linuxppc-dev lists if that's
+expected; it shouldn't be that bad now that's figured out.
+
+
+> FYI we're aiming to make BTF module-loadable via CONFIG_DEBUG_INFO_BTF=m
+> in the future, I'm hoping to get an RFC patch out for that soon once
+> other BTF-related issues are sorted. Hope this helps
+
+Oh, that's interesting -- I assume that'll only change the 'built-in'
+BTF info? Or will that also split BTF info in other modules as
+e.g. modfoo_btf.ko?
+For x86_64 the size increase of vmlinuz itself is rather acceptable
+(<2MB), but the sheer amount of modules (the -lts package has over 3k
+modules...) means that even a small size increase for each module ends
+up taking proportionally a high amount of space (+20MB from 90MB), so
+being able to package separately would be appreciated (alpine likes
+splitting optional features in subpackages)
+Packaging-wise I'm not sure it'd make sense to keep the overhead in
+other modules and just split the 'main' btf infos.
+
+Otoh even if it doesn't help with packaging, having a smaller vmlinuz
+means faster boot and lower kernel memory footprint (I think *2?) for
+people who don't need it, so I think it's a good idea and we'll probably
+enable it once it becomes available. Thanks for the heads up!
+
+-- 
+Dominique Martinet | Asmadeus
