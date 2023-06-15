@@ -2,115 +2,93 @@ Return-Path: <dwarves-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 27A6CEB64DB
-	for <linux-dwarves@archiver.kernel.org>; Thu, 15 Jun 2023 08:39:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6D594EB64D9
+	for <linux-dwarves@archiver.kernel.org>; Thu, 15 Jun 2023 11:59:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244919AbjFOIjl (ORCPT
+        id S1344437AbjFOL7D (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Thu, 15 Jun 2023 04:39:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59222 "EHLO
+        Thu, 15 Jun 2023 07:59:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244971AbjFOIjY (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Thu, 15 Jun 2023 04:39:24 -0400
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 930FB272E;
-        Thu, 15 Jun 2023 01:39:22 -0700 (PDT)
-Received: by mail-lj1-x231.google.com with SMTP id 38308e7fff4ca-2b203891b2cso23205821fa.3;
-        Thu, 15 Jun 2023 01:39:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686818361; x=1689410361;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=UYPoBgKpff/N5vL2NYQromt5SJIv0kpE1F1g2CtiMe4=;
-        b=K0mZGj+B9ju6bB+0Qnh6eiSvjANCsLZ0CLFLBr3swByr1+Tc0JtsD+9bHaqzQpR8oj
-         h8fmUwy5bYXCo21mG2erVHK7RZ2v+iQ5YWF78S7MxPOUrQsjHhOeajT8I4xKy9nERPm4
-         bfOAFczKEZNW9Ok3+Ph9wKztaxQfDmFccaIgn3GqbEf0tdcD4hzMEn4v65MwBQdlJEiB
-         fSjAS1kE3KLquHrPude4U23PurDLZdnJRe82eWaCZgkRNXSLZzt6x09LiT1HVMgFTkPN
-         r2jyD/p2Z+FkDc53LBig+w74l3VC9JXOvj+8Lgm7zlHNwvs7wJg7znHqveKgWfC1K5UO
-         WTIw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686818361; x=1689410361;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UYPoBgKpff/N5vL2NYQromt5SJIv0kpE1F1g2CtiMe4=;
-        b=iZ+ui+X4T3UgPTbH0j/TmWNgD4P+t4IcOfID8dVdL8kvZUO2I5O13Q252q8SeUgRMr
-         mmbhi8IjO6LjrjNzlq4hF7kvn5nXv+1AIzO8/9T3IhBQuCNgju3uGGbwhX497okn0dsx
-         EctQEfHB1P/UbJmrID9gu6Iz5jCRZbcighUFvoI8AmPiGIznx32E+GkG4vSijcPTnThK
-         cflWGtHuBtvR06vxrb1KAZOp+iRDHUiU1IMyqJAPJ20kYaONcNBPgaHT0lt1peM4xbR7
-         kxH8rdCQep+Vau5CGsCZctaKIYTQqgTAsSjHE5vi5MIADm7mxnhcyMTnwNAQvCMii+vt
-         hMFA==
-X-Gm-Message-State: AC+VfDwirdgGueQBBSj+6Fd1dTRB54nX+c3ljKN7BNgl5wVzawW6fYMu
-        WOTWcev6rMVLciKXqcChNJODPII3DBV4Mw==
-X-Google-Smtp-Source: ACHHUZ5ZN0KtTs6SA22L/Cs2r6tPgcsC5B3hsEh0GmIwaUcffQD+gUbnbGV5gcL3/ktPD6mQz/D9Yw==
-X-Received: by 2002:a2e:9b8f:0:b0:2ad:c1ec:fa3 with SMTP id z15-20020a2e9b8f000000b002adc1ec0fa3mr8863129lji.20.1686818360423;
-        Thu, 15 Jun 2023 01:39:20 -0700 (PDT)
-Received: from krava (2001-1ae9-1c2-4c00-726e-c10f-8833-ff22.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:726e:c10f:8833:ff22])
-        by smtp.gmail.com with ESMTPSA id c2-20020a5d5282000000b002fae7408544sm20394348wrv.108.2023.06.15.01.39.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Jun 2023 01:39:19 -0700 (PDT)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Thu, 15 Jun 2023 10:39:18 +0200
-To:     Dominique Martinet <asmadeus@codewreck.org>
+        with ESMTP id S239640AbjFOL6n (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Thu, 15 Jun 2023 07:58:43 -0400
+X-Greylist: delayed 30055 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 15 Jun 2023 04:53:40 PDT
+Received: from nautica.notk.org (nautica.notk.org [91.121.71.147])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A73FA44AD;
+        Thu, 15 Jun 2023 04:53:40 -0700 (PDT)
+Received: by nautica.notk.org (Postfix, from userid 108)
+        id 13B33C01B; Thu, 15 Jun 2023 13:52:30 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
+        t=1686829950; bh=Ygsqj9MEfuFdkw/AFoPE5PZdn8YrnScjzyhGoq4eJ18=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=y7khILg/b/enYQLLHeQg8SPG/xnLQik7XxgoYrDwvKVu5eP4v0nwN62wXM1kw3cgk
+         Y9a1d3HSHqPlhbYDyD2/5hqqMz8uI58EVs7gVjxqEvj+Atmd83qZa03hhQmPquxuJU
+         C9OrqCcbCQ7da+KVypEsZaKKWx5GXglhoPW+0GxRngL5iJ0NPeN6DV5Cu5AQh3MaXc
+         LUQhsHNiuRWGb2AVWHJ8BAOOOx+ViRihKAgK3yqx5jY2bXkGPAHI/tKbp95UT9t4OC
+         +tIbqyXRzwppxlKtQ1dXIzRBY86wmMPqpDMUCnWWWa1wNUQzTTjbeGDDF1H+Ssugre
+         EJIDxoeG8dSig==
+Received: from odin.codewreck.org (localhost [127.0.0.1])
+        by nautica.notk.org (Postfix) with ESMTPS id 5EB54C009;
+        Thu, 15 Jun 2023 13:52:27 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
+        t=1686829948; bh=Ygsqj9MEfuFdkw/AFoPE5PZdn8YrnScjzyhGoq4eJ18=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gg6xLe7a98MNe3IuaLQuZwSdehS1VaB84y/m01aAvWOp4akZGT5Rxj+3k+wOgSRrS
+         4/xQruEchEwFhurzk4lP2hLukTOypJNKM8ps5St/LxfE0VZgmXXfNkYsJm5WYOGGq5
+         9PWNBVI+TrHJmQ7TLuncyS1KmyRhJ/NN8h/bQvInX6sgvsoB5I4sFX/eBlx94ErDyu
+         NwhSxnassKRgQONpacEFerZZsI7aIiUwM4755I7jAOuBvdnIAChKj4x2yO0SlUG63v
+         Qi/gf4IqV/dxZbYO510T6y90wWnIWezttK1GwX8uuC8b5DE/cIY4DT/RMrYaJgCura
+         cgSzw4MFIU4Ng==
+Received: from localhost (odin.codewreck.org [local])
+        by odin.codewreck.org (OpenSMTPD) with ESMTPA id be358d16;
+        Thu, 15 Jun 2023 11:52:24 +0000 (UTC)
+Date:   Thu, 15 Jun 2023 20:52:09 +0900
+From:   Dominique Martinet <asmadeus@codewreck.org>
+To:     Jiri Olsa <olsajiri@gmail.com>
 Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
         dwarves@vger.kernel.org, bpf@vger.kernel.org
 Subject: Re: ppc64le vmlinuz is huge when building with BTF
-Message-ID: <ZIrONqGJeATpbg3Y@krava>
+Message-ID: <ZIr7aaVpOaP8HjbZ@codewreck.org>
 References: <ZIqGSJDaZObKjLnN@codewreck.org>
+ <ZIrONqGJeATpbg3Y@krava>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <ZIqGSJDaZObKjLnN@codewreck.org>
+In-Reply-To: <ZIrONqGJeATpbg3Y@krava>
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-On Thu, Jun 15, 2023 at 12:32:24PM +0900, Dominique Martinet wrote:
-> Hi,
+Jiri Olsa wrote on Thu, Jun 15, 2023 at 10:39:18AM +0200:
+> > coming from alpine: https://gitlab.alpinelinux.org/alpine/aports/-/issues/12563
 > 
-> coming from alpine: https://gitlab.alpinelinux.org/alpine/aports/-/issues/12563
+> it's probably burried somewhere in that discussion, but do you have
+> kernel version (or commit) where that increase happened?
 
-hi,
-it's probably burried somewhere in that discussion, but do you have
-kernel version (or commit) where that increase happened?
+Unfortunately not -- we've just tried on the 6.1.33 that's the current
+alpine lts kernel, but I cannot say since when this started because
+we've just enabled BTF recently.
 
-also link for used config would be great
+Alpine also doesn't seem to keep old versions of apk files on its
+mirrors so while it probably has been happening since it got enabled I
+don't know how to check, and the commit enabling BTF has been done
+without a MR so there's no test log that'd allow seeing the package size
+either :/
 
-thanks,
-jirka
+> also link for used config would be great
 
-> 
-> alice noticed the kernel packages got quite bigger, in particular for
-> ppc64le I've confirmed that the vmlinuz file size jump when building
-> with BTF:
-> currently released package with BTF:
-> https://dl-cdn.alpinelinux.org/alpine/edge/main/ppc64le/linux-lts-6.1.33-r0.apk
-> 272M	boot/vmlinuz-lts
-> 
-> test build without BTF:
-> https://gitlab.alpinelinux.org/martinetd/aports/-/jobs/1049335
-> 44M	boot/vmlinuz-lts
-> 
-> 
-> Is that a known issue?
-> We'll probably just turn off BTF for the ppc64le build for now, but it
-> might be worth checking.
-> 
-> 
-> While I have your attention, even the x86_64 package grew much bigger
-> than I thought it would, the installed modules directory go from 90MB to
-> 108MB gzipped); it's a 18% increase (including kernel: 103->122MB) which
-> is more than what I'd expect out of BTF.
-> Most users don't care about BTF so it'd be great if they could be built
-> and installed separately (debug package all over again..) or limiting
-> the growth a bit more if possible.
-> I haven't tried yet but at this point ikheaders is probably worth
-> considering instead..
-> Perhaps we're missing some stripping option or something?
-> 
-> 
-> Thanks!
-> -- 
-> Dominique Martinet | Asmadeus
-> 
+alpine has two configs which both exhibit the issue (raw file link on
+commit before removing BTF):
+https://gitlab.alpinelinux.org/alpine/aports/-/raw/749ee7117e1437b7ab3ef2590f7f2e3558fda3ef/main/linux-lts/virt.ppc64le.config
+Size difference for linux-virt: 219 MiB -> 47 MiB
+https://gitlab.alpinelinux.org/alpine/aports/-/raw/749ee7117e1437b7ab3ef2590f7f2e3558fda3ef/main/linux-lts/lts.ppc64le.config
+Size difference for linux-lts: 306 MiB -> 74 MiB
+
+
+We just disabled BTF for this arch for now, I honestly won't have time
+to dig further short term as I'm not that involved in this issue and
+day job is busy right now.
+
+Thanks,
+-- 
+Dominique
