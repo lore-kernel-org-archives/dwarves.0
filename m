@@ -2,98 +2,99 @@ Return-Path: <dwarves-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7D3B3EB64D8
-	for <linux-dwarves@archiver.kernel.org>; Fri, 16 Jun 2023 11:07:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BD97AEB64D8
+	for <linux-dwarves@archiver.kernel.org>; Fri, 16 Jun 2023 12:00:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345167AbjFPLH2 (ORCPT
+        id S230505AbjFPMAs (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Fri, 16 Jun 2023 07:07:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59230 "EHLO
+        Fri, 16 Jun 2023 08:00:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344880AbjFPLHC (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Fri, 16 Jun 2023 07:07:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16EE4195
-        for <dwarves@vger.kernel.org>; Fri, 16 Jun 2023 04:03:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 95D6E61CDB
-        for <dwarves@vger.kernel.org>; Fri, 16 Jun 2023 11:03:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B03CC433C8;
-        Fri, 16 Jun 2023 11:03:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686913404;
-        bh=K3lFwyOnVKe+TMdTvX27i4bzBi+CYkU0SDSmg004bso=;
-        h=Date:From:Subject:To:Cc:References:In-Reply-To:From;
-        b=dQayLtCOyPqzP2H1hF4KitPWW/+uNGDZJ1aD7SYu4gFeE3ZHAtwwiBdB/B87hZrKG
-         YDZ5KkNAP8/lXLyFDd5YkbSyhVqw+JqmEPc+7ZvoKlpZLca9X+eYIkbIFLirZqvAnt
-         KIa/Mu/ZJh+wh34K+cvjlQ0CvGvGSF+R5MApYS8ZcnTmFLc7vRwEwRxNB+1BXmv3xN
-         YjxGPq/P8G+rnYxYNiZaE1bcyh+8nrsPxLXcRZXufcNwF5SxX3AiQ+RwOetQvww38G
-         K+AOoh0b115OU+XpyuX6Ozj2Z3fMb1zxTOUq9nQWKcGvA3jxKD89QNj7f+eh8Uj+jE
-         yMEYM5KMxRqUw==
-Date:   Fri, 16 Jun 2023 16:28:53 +0530
-From:   Naveen N Rao <naveen@kernel.org>
+        with ESMTP id S1344945AbjFPMAc (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Fri, 16 Jun 2023 08:00:32 -0400
+Received: from nautica.notk.org (nautica.notk.org [91.121.71.147])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA3E230DE;
+        Fri, 16 Jun 2023 05:00:29 -0700 (PDT)
+Received: by nautica.notk.org (Postfix, from userid 108)
+        id 55FEBC01E; Fri, 16 Jun 2023 14:00:28 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
+        t=1686916828; bh=9nXHLN7zJI9BQgtDSekrm26F4Nn7MWhpt5Ufa49rKNo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LSROzQYN44p1XDf+2jDK6y4IO+3f84MA/dZJKYHr/Cqke4E9x6H2YPKhtGMhlCiZf
+         LSKh++s9q3FU7h0aEDztd10ZE2W75uaQsM4r/9BvrClupAMJKAofKd6nzdevebCjhf
+         4amk4tPgKykV3nN1KUnogIjqrxpsdASaoVwvVZ52uZhTGhVJI5ZO9eNNiZLOhSDB2w
+         mdf0utjm8Fpmf0hLmbmieJlQInSH0labOum3GfIeuErQm91oADQabdiOJyT9BFeCfX
+         6n1Jkgm79netQvtAUsFIoub+YqcdPkYvsk3utgbLcQ68NtWqW/IfGqSNhmuWjqzhwG
+         c+IAb/cGE9JQQ==
+Received: from odin.codewreck.org (localhost [127.0.0.1])
+        by nautica.notk.org (Postfix) with ESMTPS id 6809CC009;
+        Fri, 16 Jun 2023 14:00:24 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
+        t=1686916826; bh=9nXHLN7zJI9BQgtDSekrm26F4Nn7MWhpt5Ufa49rKNo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Ji86U9fWl3Vj1x1scsw7OZ+YWz25a+oPE23lpIo3uvIsNAv0eul8TQ3nO5I+IVFZ0
+         4oKbGD02L0ekFYO+F9FSLV4fVyO8bshdUTJFvbhW2eUDoebMR1kfOLFaZrrRxR+QWy
+         ibQOnn1tkHyvDs9+qtJm4L6aQMuW3Niqn713S1K3vE/4VNkj2yviH2j3N62y9h1/j7
+         xBEVx0tvTgvtQq+dW8HhZYxSPV2vZueokHZuZHnYHiGiHadIvJhD1Mzsvyekp62u+1
+         6y7dRsPpz4JKx+n98Q9kabbcRWbiR/EdIVhkvQTTbAIifCLBzbnBkXpZ8+greeNbxR
+         X7ORaZOt40+WA==
+Received: from localhost (odin.codewreck.org [local])
+        by odin.codewreck.org (OpenSMTPD) with ESMTPA id 82db0a7a;
+        Fri, 16 Jun 2023 12:00:21 +0000 (UTC)
+Date:   Fri, 16 Jun 2023 21:00:06 +0900
+From:   Dominique Martinet <asmadeus@codewreck.org>
+To:     Naveen N Rao <naveen@kernel.org>
+Cc:     Alan Maguire <alan.maguire@oracle.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        bpf@vger.kernel.org, dwarves@vger.kernel.org,
+        Jiri Olsa <olsajiri@gmail.com>, linuxppc-dev@lists.ozlabs.org
 Subject: Re: ppc64le vmlinuz is huge when building with BTF
-To:     Alan Maguire <alan.maguire@oracle.com>,
-        Dominique Martinet <asmadeus@codewreck.org>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>, bpf@vger.kernel.org,
-        dwarves@vger.kernel.org, Jiri Olsa <olsajiri@gmail.com>,
-        linuxppc-dev@lists.ozlabs.org
-References: <ZIqGSJDaZObKjLnN@codewreck.org> <ZIrONqGJeATpbg3Y@krava>
-        <ZIr7aaVpOaP8HjbZ@codewreck.org>
-        <6b26dfef-016c-43df-07f5-c2f88157d1dc@oracle.com>
-        <ZIt11crcIjfyeygA@codewreck.org>
-In-Reply-To: <ZIt11crcIjfyeygA@codewreck.org>
+Message-ID: <ZIxOxj0Y-kay22Oh@codewreck.org>
+References: <ZIqGSJDaZObKjLnN@codewreck.org>
+ <ZIrONqGJeATpbg3Y@krava>
+ <ZIr7aaVpOaP8HjbZ@codewreck.org>
+ <6b26dfef-016c-43df-07f5-c2f88157d1dc@oracle.com>
+ <ZIt11crcIjfyeygA@codewreck.org>
+ <1686912543.c6zqyw5s4x.naveen@kernel.org>
 MIME-Version: 1.0
-User-Agent: astroid/0.16.0 (https://github.com/astroidmail/astroid)
-Message-Id: <1686912543.c6zqyw5s4x.naveen@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <1686912543.c6zqyw5s4x.naveen@kernel.org>
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-[Cc linuxppc-dev]
+Naveen N Rao wrote on Fri, Jun 16, 2023 at 04:28:53PM +0530:
+> > We're not stripping anything in vmlinuz for other archs -- the linker
+> > script already should be including only the bare minimum to decompress
+> > itself (+compressed useful bits), so I guess it's a Kbuild issue for the
+> > arch.
+> 
+> For a related discussion, see:
+> http://lore.kernel.org/CAK18DXZKs2PNmLndeGYqkPxmrrBR=6ca3bhyYCj=GhyA7dHfAQ@mail.gmail.com
 
-Dominique Martinet wrote:
->=20
-> Alan Maguire wrote on Thu, Jun 15, 2023 at 03:31:49PM +0100:
->> However the problem I suspect is this:
->>=20
->>  51 .debug_info   0a488b55  0000000000000000  0000000000000000  026f8d20
->>  2**0
->>                   CONTENTS, READONLY, DEBUGGING
->> [...]
->>=20
->> The debug info hasn't been stripped, so I suspect the packaging spec
->> file or equivalent - in perhaps trying to preserve the .BTF section -
->> is preserving debug info too. DWARF needs to be there at BTF
->> generation time in vmlinux but is usually stripped for non-debug
->> packages.
->=20
-> Thanks Alan and Eduard!
-> I guess I should have checked that first, it helps.
->=20
-> We're not stripping anything in vmlinuz for other archs -- the linker
-> script already should be including only the bare minimum to decompress
-> itself (+compressed useful bits), so I guess it's a Kbuild issue for the
-> arch.
+Thanks, I didn't know that ppc64le boots straight into vmlinux, as 'make
+install' somehow installs something called 'vmlinuz-lts' (-lts coming
+out of localversion afaiu, but vmlinuz would come from the build
+scripts) ; this is somewhat confusing as vmlinuz on other archs is a
+compressed/pre-processed binary so I'd expect it to at least be
+stripped...
 
-For a related discussion, see:
-http://lore.kernel.org/CAK18DXZKs2PNmLndeGYqkPxmrrBR=3D6ca3bhyYCj=3DGhyA7dH=
-fAQ@mail.gmail.com
+> > We can add a strip but I unfortunately have no way of testing ppc build,
+> > I'll ask around the build linux-kbuild and linuxppc-dev lists if that's
+> > expected; it shouldn't be that bad now that's figured out.
+> 
+> Stripping vmlinux would indeed be the way to go. As mentioned in the above
+> link, fedora also packages a strip'ed vmlinux for ppc64le:
+> https://src.fedoraproject.org/rpms/kernel/blob/4af17bffde7a1eca9ab164e5de0e391c277998a4/f/kernel.spec#_1797
 
-> We can add a strip but I unfortunately have no way of testing ppc build,
-> I'll ask around the build linux-kbuild and linuxppc-dev lists if that's
-> expected; it shouldn't be that bad now that's figured out.
+It feels somewhat wrong to add a strip just for ppc64le after make
+install, but I guess we probably ought to do the same...
+I don't have any hardware to test booting the result though, I'll submit
+an update and ask for someone to test when it's done.
+(bit busy but that doesn't take long, will do that tomorrow morning
+before I forget)
 
-Stripping vmlinux would indeed be the way to go. As mentioned in the=20
-above link, fedora also packages a strip'ed vmlinux for ppc64le:
-https://src.fedoraproject.org/rpms/kernel/blob/4af17bffde7a1eca9ab164e5de0e=
-391c277998a4/f/kernel.spec#_1797
-
-
-- Naveen
-
+Thanks!
+-- 
+Dominique Martinet | Asmadeus
