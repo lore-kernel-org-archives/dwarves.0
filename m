@@ -2,107 +2,67 @@ Return-Path: <dwarves-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5B26CEB64D8
-	for <linux-dwarves@archiver.kernel.org>; Fri, 16 Jun 2023 17:14:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0A2CCEB64D9
+	for <linux-dwarves@archiver.kernel.org>; Thu, 29 Jun 2023 14:42:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346075AbjFPROo (ORCPT
+        id S230330AbjF2OmA (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Fri, 16 Jun 2023 13:14:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54294 "EHLO
+        Thu, 29 Jun 2023 10:42:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346150AbjFPROj (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Fri, 16 Jun 2023 13:14:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F72FC5
-        for <dwarves@vger.kernel.org>; Fri, 16 Jun 2023 10:14:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 98EBD631A0
-        for <dwarves@vger.kernel.org>; Fri, 16 Jun 2023 17:14:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8460BC433C8;
-        Fri, 16 Jun 2023 17:14:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686935668;
-        bh=PIy0eDkU+XgEcCqTGXTVNJA4eA/en2aswew83heoDgU=;
-        h=Date:From:Subject:To:Cc:References:In-Reply-To:From;
-        b=XKIcZxmE596EiYRv9HwErM0ngEbBPgMxzwFYkMIN0/WGjLUUkdukYBBM81CfUsSGp
-         6Vx76e77RzA5ARjRpW3v5KKT2rFsuNWDV1MgTSBd4EVLvl22velq9dM6l476Q5pbIx
-         S25ot0Ho+BKVsk5acJ5lgqBu7VCY8qk9GQG1hQwN1y/JRQhhVTkY0vpBfILE1z+L97
-         MraaV+CEv+Abii8aT2ETMZfnuH/p0SgOsXiNPCziORvxLdh+mmKANyCAy/93fnp5g3
-         L4bL2xcx+KWNS25gL8aC/gANJkbQpPDdbHfsctKRIoz9a+r/plAvMa6/V29oobbjtS
-         y5/CnpyCJ2n6g==
-Date:   Fri, 16 Jun 2023 22:42:40 +0530
-From:   Naveen N Rao <naveen@kernel.org>
-Subject: Re: ppc64le vmlinuz is huge when building with BTF
-To:     Dominique Martinet <asmadeus@codewreck.org>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Alan Maguire <alan.maguire@oracle.com>, bpf@vger.kernel.org,
-        dwarves@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        Jiri Olsa <olsajiri@gmail.com>
-References: <ZIqGSJDaZObKjLnN@codewreck.org> <ZIrONqGJeATpbg3Y@krava>
-        <ZIr7aaVpOaP8HjbZ@codewreck.org>
-        <6b26dfef-016c-43df-07f5-c2f88157d1dc@oracle.com>
-        <ZIt11crcIjfyeygA@codewreck.org> <1686912543.c6zqyw5s4x.naveen@kernel.org>
-        <ZIxOxj0Y-kay22Oh@codewreck.org>
-In-Reply-To: <ZIxOxj0Y-kay22Oh@codewreck.org>
+        with ESMTP id S229920AbjF2Ol7 (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Thu, 29 Jun 2023 10:41:59 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 741731724
+        for <dwarves@vger.kernel.org>; Thu, 29 Jun 2023 07:41:58 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id a640c23a62f3a-992b2249d82so76111766b.1
+        for <dwarves@vger.kernel.org>; Thu, 29 Jun 2023 07:41:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=isovalent.com; s=google; t=1688049717; x=1690641717;
+        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=VFKUSHvydnmwLfHL2dvTDOlRV+qT8pyhLrBahYOSl0E=;
+        b=SgFTV6dfVWVQuBYhOrP094wWv8xJDwdE3UUxtfTtwwDaCDgTRcQCAlW3js9W1PEQxM
+         1BvhfjMQKZOtgBfvljjtbDEB99wHP/oB7cRcm0xBiivKEvpynv+hRTLHdB1lDaosFGSX
+         HxsLtcJW/Ft8II9qLYkOAu0wXwajjFOcEhgg4+gR2FV2YF85OtrOpePi+tXFAJ8EKCtj
+         A7MivJCB8C54r5k3Ag9hpSPg0a3BRYgfxe1q85pNklldPZeJ699UevsoHdBkjPKaAI8/
+         MH7IUQj8WRBjgCiIC4WBHQ23JvstvkJ8ZfCYo10BknNLH9wWwcNFx6MLHq98KelyYNqG
+         LRgQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688049717; x=1690641717;
+        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=VFKUSHvydnmwLfHL2dvTDOlRV+qT8pyhLrBahYOSl0E=;
+        b=kGgEbseksyjddUo/aS0J06mfyXl4kyjmB64J26BrOaR/YURnmLQRliITFEfWisVxPs
+         Pz3+5FaRccm2gcP8wWGBp2giPBTxgzUs5agx1JUD/ged98amz1V0poG101sxjtzYEaz8
+         Fq4Tp3k313+9byrbSQ5FD0mnSM4aVKrWs79BujMmRo7v3XeYE2wXNxbZGg+SGZ2bnwlv
+         JCuPmZcxLlO0LbQy38iImW/uCRLHpXwh7nZ78h1xT+TkyKYMm0aq8ZzolHkcJ5tEb36W
+         XbABiJvOlxTDjB6LVuMIQyRjFf1VU9KMNcXdeSNFJILdmEP7gUNUY0kcLAFKlQm17yMx
+         UL1Q==
+X-Gm-Message-State: AC+VfDyconsGwjJhxp64wTcDYnG7MJTy3LxwllzpbMdpxQe8joX47XpA
+        mAqJEC7PujhUdrN0pYVoZnUO0dhNCDZe8KBuunsYTg==
+X-Google-Smtp-Source: ACHHUZ5PpwlHihEBJKr/6GC1KVa4vlHk4QBMXqPo11p9tPg+6bn1TUW1aOxy520w5iR6PiV5HhJfJWj6cOCcGQqUbtY=
+X-Received: by 2002:a17:907:318c:b0:987:e230:690 with SMTP id
+ xe12-20020a170907318c00b00987e2300690mr33924666ejb.57.1688049716985; Thu, 29
+ Jun 2023 07:41:56 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: astroid/0.16.0 (https://github.com/astroidmail/astroid)
-Message-Id: <1686935137.j96zp0hcg9.naveen@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
+From:   Lorenz Bauer <lmb@isovalent.com>
+Date:   Thu, 29 Jun 2023 15:41:46 +0100
+Message-ID: <CAN+4W8junMrqMTQJ1cy-5fhd9FFsASWOndRPaprspKXMXShJYQ@mail.gmail.com>
+Subject: PSA: Ubuntu pahole creates buggy BTF
+To:     bpf <bpf@vger.kernel.org>, dwarves@vger.kernel.org,
+        Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-Dominique Martinet wrote:
-> Naveen N Rao wrote on Fri, Jun 16, 2023 at 04:28:53PM +0530:
->> > We're not stripping anything in vmlinuz for other archs -- the linker
->> > script already should be including only the bare minimum to decompress
->> > itself (+compressed useful bits), so I guess it's a Kbuild issue for t=
-he
->> > arch.
->>=20
->> For a related discussion, see:
->> http://lore.kernel.org/CAK18DXZKs2PNmLndeGYqkPxmrrBR=3D6ca3bhyYCj=3DGhyA=
-7dHfAQ@mail.gmail.com
->=20
-> Thanks, I didn't know that ppc64le boots straight into vmlinux, as 'make
-> install' somehow installs something called 'vmlinuz-lts' (-lts coming
-> out of localversion afaiu, but vmlinuz would come from the build
-> scripts) ; this is somewhat confusing as vmlinuz on other archs is a
-> compressed/pre-processed binary so I'd expect it to at least be
-> stripped...
+Just a quick FYI for anyone else struggling with weird BTF on recent
+Ubuntu releases, it seems like their pahole is broken due to an
+incorrect backport.
 
-As far as I can tell, kernel's install script doesn't give out that=20
-name, so 'vmlinuz' is likely coming from the distro's=20
-/[s]bin/installkernel script. It probably needs an override to retain=20
-'vmlinux'.=20
+The upstream issue is here:
+https://bugs.launchpad.net/ubuntu/+source/dwarves/+bug/2025370
 
->=20
->> > We can add a strip but I unfortunately have no way of testing ppc buil=
-d,
->> > I'll ask around the build linux-kbuild and linuxppc-dev lists if that'=
-s
->> > expected; it shouldn't be that bad now that's figured out.
->>=20
->> Stripping vmlinux would indeed be the way to go. As mentioned in the abo=
-ve
->> link, fedora also packages a strip'ed vmlinux for ppc64le:
->> https://src.fedoraproject.org/rpms/kernel/blob/4af17bffde7a1eca9ab164e5d=
-e0e391c277998a4/f/kernel.spec#_1797
->=20
-> It feels somewhat wrong to add a strip just for ppc64le after make
-> install, but I guess we probably ought to do the same...
-> I don't have any hardware to test booting the result though, I'll submit
-> an update and ask for someone to test when it's done.
-> (bit busy but that doesn't take long, will do that tomorrow morning
-> before I forget)
-
-Thanks! You're right that it's likely just powerpc that is different=20
-here. It sure would be nice if we can iron out issues with our zImage.
-
-
-- Naveen
-
+Best
+Lorenz
