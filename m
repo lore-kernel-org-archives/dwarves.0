@@ -2,74 +2,80 @@ Return-Path: <dwarves-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 27B5AEB64DC
-	for <linux-dwarves@archiver.kernel.org>; Thu, 29 Jun 2023 15:15:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3C498EB64DD
+	for <linux-dwarves@archiver.kernel.org>; Mon,  3 Jul 2023 10:22:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232251AbjF2PPg (ORCPT
+        id S229976AbjGCKWX (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Thu, 29 Jun 2023 11:15:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47482 "EHLO
+        Mon, 3 Jul 2023 06:22:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231638AbjF2PPf (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Thu, 29 Jun 2023 11:15:35 -0400
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42F3D1BD1;
-        Thu, 29 Jun 2023 08:15:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:MIME-Version:Date:Message-ID:From:References:To:Subject:Sender:
-        Reply-To:Cc:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-        bh=JyvFeXPxz6Be0T6oJyIK/ZexPeUDpqw2K2D+Uj5LllY=; b=adSAk2pGb6Y58ZgDJHKsT2CWo6
-        T5sPGcWD4mS1Eo4v1PUR75FaTNp3KfqwZjlW0pGlwEKhEMwfhxnG8DTm2LGVHGkKxY6dLEIQ0jaDs
-        KGleVj2s+DWJ5ObIU4okuZRatV99ybBntczEHuNeU9lrJwrQjfoeERFF5Y1r5xS/AZYDtDRs05FvQ
-        fJRRuW3NwneBSwzEwvr8z8CkeqypzwyveZ5puc6oNtc0jW6fqda9O+BAtWRbb9s0haLIE2vlq/6G1
-        dOkNIEvbsvDOF2qKtoz7JdF2E85QH10Zg0uVrANJYK+Tad7JpmGIpaCrKlEZHbqkw+uB+I7RQzUms
-        NegOCIrQ==;
-Received: from sslproxy06.your-server.de ([78.46.172.3])
-        by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1qEtMp-0004dN-DH; Thu, 29 Jun 2023 17:15:31 +0200
-Received: from [85.1.206.226] (helo=linux.home)
-        by sslproxy06.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1qEtMp-000Kbo-2g; Thu, 29 Jun 2023 17:15:31 +0200
+        with ESMTP id S229727AbjGCKWW (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Mon, 3 Jul 2023 06:22:22 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0608AB8
+        for <dwarves@vger.kernel.org>; Mon,  3 Jul 2023 03:22:21 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-991fe70f21bso497400766b.3
+        for <dwarves@vger.kernel.org>; Mon, 03 Jul 2023 03:22:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=isovalent.com; s=google; t=1688379739; x=1690971739;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=unqcElCbSbz/KEz3tHCnOGA+1HlEI/erWDnqqETONqQ=;
+        b=Jhnz677l0fZ4iq/NsN3FykPeJVv/5KTyQQc4oU8H1FPdCgz0Q3pTBFlXZ3z7HPGihv
+         QLM/4vPPlsmpJNXHYfo7z2fQFW/Wq+SjPKKuTysqEzBWXivZX2PifUllYW5zztB1CV6+
+         1xrigfRKd0D0qlQ9Wm7z6ADq6ZUjPHGB3ThaE7mHThbJvtBjRy1rc9T9+Dmv20HDxl73
+         0qwzc+Qyq+s160Kd+GSpAoabCrO5wbOJUxe9EGFrWZuV16zETMp0bh5iJ2ohLlO4riMX
+         aBcLUNbQJojnp745+ZuSi2cea9OeMOtYB09v5SIdwKJrA2DRIjpyH8vFSnpajcGeYMda
+         uSJA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688379739; x=1690971739;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=unqcElCbSbz/KEz3tHCnOGA+1HlEI/erWDnqqETONqQ=;
+        b=UoLKKviZEXqcU3sBTCnaULslql6vdH4oA7Q6CEGB80dzjuyhN00u8SNidJHEKP/K/v
+         flscGz4ijP6r964K5S6NGmPHRPYxRE2+5u9QMbLWzrvwLMimDcslAsrnmeyi4WBSzdLZ
+         5h4aEB1uCy97o/VyomZWxILqB8qDKh5ftmbwt/fTE9dXNerhww5zyTzL0p/TeW4AYNzl
+         mpCRJtscULhMgxg+erUHq04aUQReC2ovNYE43WsBUHjJF5j2WpkGFWB1EiRoa6hvTmAW
+         fL3rwG4BBXjNPnGA709Tfb8WzoPVMbu8CvTuriP6RWnwsIKARiPz+r9rG/8Kb7w9Lpnl
+         Ftuw==
+X-Gm-Message-State: AC+VfDxw7DfEVFVGXQU6SQmTiS66byzeKPy108revf3rb0EU9+u7YYSx
+        UICf9UzqadfMlTDt/tyM0NLMhc3rsC4HrvuEHvxYmA==
+X-Google-Smtp-Source: ACHHUZ47dr4fst2/lpHmqBiNeSYZl6uU6lPdH+cI1OOKc8eSLR9/3/ddokI5Mo+6nikJ7zZBtaiuo6D+qD6raJVaXyI=
+X-Received: by 2002:a17:906:f9d5:b0:96f:f19b:887a with SMTP id
+ lj21-20020a170906f9d500b0096ff19b887amr6216107ejb.56.1688379739559; Mon, 03
+ Jul 2023 03:22:19 -0700 (PDT)
+MIME-Version: 1.0
+References: <CAN+4W8junMrqMTQJ1cy-5fhd9FFsASWOndRPaprspKXMXShJYQ@mail.gmail.com>
+ <aaf6220c-dddf-ee5f-37a2-e16bd580c0a7@iogearbox.net> <CADWks+YaTqLbmADDzeJC4WvfMtLCEzYw_+qibEMbM-Q6JGJHMg@mail.gmail.com>
+In-Reply-To: <CADWks+YaTqLbmADDzeJC4WvfMtLCEzYw_+qibEMbM-Q6JGJHMg@mail.gmail.com>
+From:   Lorenz Bauer <lmb@isovalent.com>
+Date:   Mon, 3 Jul 2023 11:22:08 +0100
+Message-ID: <CAN+4W8gotgUJ5hHz5oc+smQcL8A2FG=M5AxWCEef+9Ze4eR-Mg@mail.gmail.com>
 Subject: Re: PSA: Ubuntu pahole creates buggy BTF
-To:     Lorenz Bauer <lmb@isovalent.com>, bpf <bpf@vger.kernel.org>,
+To:     Dimitri John Ledkov <dimitri.ledkov@canonical.com>
+Cc:     Daniel Borkmann <daniel@iogearbox.net>, bpf <bpf@vger.kernel.org>,
         dwarves@vger.kernel.org,
         Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
-        Dimitri John Ledkov <dimitri.ledkov@canonical.com>,
         Domenico Andreoli <cavok@debian.org>
-References: <CAN+4W8junMrqMTQJ1cy-5fhd9FFsASWOndRPaprspKXMXShJYQ@mail.gmail.com>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <aaf6220c-dddf-ee5f-37a2-e16bd580c0a7@iogearbox.net>
-Date:   Thu, 29 Jun 2023 17:15:30 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
-MIME-Version: 1.0
-In-Reply-To: <CAN+4W8junMrqMTQJ1cy-5fhd9FFsASWOndRPaprspKXMXShJYQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.8/26954/Thu Jun 29 09:29:58 2023)
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-[ Also Cc'ing Dimitri / Domenico ]
+On Thu, Jun 29, 2023 at 4:17=E2=80=AFPM Dimitri John Ledkov
+<dimitri.ledkov@canonical.com> wrote:
+>
+> Hi,
+>
+> Yes it is. This was fixed in Mantic already, and it is due to be SRUed to=
+ jammy soon. Apologies for the delays.
 
-On 6/29/23 4:41 PM, Lorenz Bauer wrote:
-> Just a quick FYI for anyone else struggling with weird BTF on recent
-> Ubuntu releases, it seems like their pahole is broken due to an
-> incorrect backport.
-> 
-> The upstream issue is here:
-> https://bugs.launchpad.net/ubuntu/+source/dwarves/+bug/2025370
+Thanks for the quick follow up. Do you have a link where the update
+can be tracked? What should I look out for?
 
-(for ctx, original issue was here: https://github.com/cilium/ebpf/issues/1081)
-
-Thanks,
-Daniel
+Thanks
+Lorenz
