@@ -2,130 +2,170 @@ Return-Path: <dwarves-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 60BDDC04E69
-	for <linux-dwarves@archiver.kernel.org>; Tue,  1 Aug 2023 18:29:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 609D3C0015E
+	for <linux-dwarves@archiver.kernel.org>; Tue,  1 Aug 2023 21:45:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231415AbjHAS3J (ORCPT
+        id S230141AbjHAVpz (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Tue, 1 Aug 2023 14:29:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44996 "EHLO
+        Tue, 1 Aug 2023 17:45:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229642AbjHAS3G (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Tue, 1 Aug 2023 14:29:06 -0400
-Received: from mail-qv1-xf34.google.com (mail-qv1-xf34.google.com [IPv6:2607:f8b0:4864:20::f34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C62E212D;
-        Tue,  1 Aug 2023 11:28:50 -0700 (PDT)
-Received: by mail-qv1-xf34.google.com with SMTP id 6a1803df08f44-63d35aa5419so30071946d6.1;
-        Tue, 01 Aug 2023 11:28:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1690914529; x=1691519329;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PtwD8hbxm1AtsZOcMHnXCSOew9XSoWb+JTcTwLos1Fs=;
-        b=P+7iAYvCCSqWKBNXVaT6WGybYQ/ARxrhBokLesOVnd9UjhS91gAJfIzkDsvoGNIuh8
-         1Oyx6Vt+iz9A64G7GY9aI9y8EH4UouviCEQYE9nqXgrClTiopzi8lmL8wxSfQXWKSpWR
-         A0qkB6AjKhTqBBy/ZuI7CBYVwzkBdVzztUUeAPdyOxCmVdU1GuXZ6SVz9ieSRNic8xcQ
-         yToZ9WkhA52ASzrHqK07TQbgLA2F7toN8jNrDy7OGoV5YCCD3WE660ttOB7YVovqqzHB
-         L0wm8D7+qwW7KbaGMjlC+7zqueg7q+Ko+ogL/Q3cEW/3IeefK74O1SgGxJCiBvTtJoVX
-         oklQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690914529; x=1691519329;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=PtwD8hbxm1AtsZOcMHnXCSOew9XSoWb+JTcTwLos1Fs=;
-        b=kJgLf69Vvx3ZAU4ZnomvP3eTVTujbO0xasqsOsupD2A/60HRYTD1C6SswuZhs8Ka0R
-         TYiGyMlReprp4C35gJ5eHoeK7faca8A7cct5sKgdTySaawyyRmpFrY4HMDSQyAT42U2D
-         XCV2MqZPLlH6R8O8E8qKmz6dhGJdQ4XpoTrttQJi1hACpV5RNIQF2DMb9h18LgT/s7RT
-         7INq7Xd0tOttTVfaoPH/roVE2ie7ixU3JfgGBAwN4x1Z0alu295XbbCD1l3mYODXWykY
-         Q5MKOwOtz9DSDkRTX0Yy12atziRqoj2KyYlS52TS657vrDidJbv/ctVYfQpfAZEVHzG8
-         52ow==
-X-Gm-Message-State: ABy/qLZvzAxKjPO4kyg9Qs/LlL+XTcoiYOmChZV9d4x3LWEsBQvAMom9
-        nurvF1mC0TLvNDWdsEyjWbtiT/qmuJLLvYGYew8=
-X-Google-Smtp-Source: APBJJlHlZRM2lI39c0SQhtQBdkjZ4yWBlSlfHuz5pw61JZ1xQGwvIFkqPdWqJLrybYgiJ3Jng5tX2bcpetRl4dNlyxU=
-X-Received: by 2002:a05:6214:12c1:b0:635:ed4c:50a with SMTP id
- s1-20020a05621412c100b00635ed4c050amr11293006qvv.28.1690914529285; Tue, 01
- Aug 2023 11:28:49 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230726102534.9ebc4678ad2c9395cc9be196@kernel.org>
- <ZMDvmLdZSLi2QqB+@krava> <20230726200716.609d8433a7292eead95e7330@kernel.org>
- <6f0da094-5b49-954b-21e9-93f8c8cecc3f@oracle.com> <20230727093814.23681b2b0ac73aa89f368ae8@kernel.org>
- <20230727105102.509161e1f57fd0b49e98b844@kernel.org> <c5accb4d-21d1-d8d9-85a0-263177a06208@oracle.com>
- <20230801100148.defdc4c41833054c56c53bf0@kernel.org> <bba3b423-8e38-ade3-7ce7-23b1be454d1f@oracle.com>
- <CA+JHD93Liq95RvfChifmnE7E9mKR42_W7rtpqgY9KAgYyGTZwQ@mail.gmail.com>
-In-Reply-To: <CA+JHD93Liq95RvfChifmnE7E9mKR42_W7rtpqgY9KAgYyGTZwQ@mail.gmail.com>
-From:   Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
-Date:   Tue, 1 Aug 2023 15:28:38 -0300
-Message-ID: <CA+JHD93MiFyJEP+1K7dAey+2d8v-az6qqwAKBgUzk9USXmmbzg@mail.gmail.com>
-Subject: Fwd: [RESEND] BTF is not generated for gcc-built kernel with the
- latest pahole
-To:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
-        Alan Maguire <alan.maguire@oracle.com>
-Cc:     "cc: Jiri Olsa" <olsajiri@gmail.com>,
+        with ESMTP id S229985AbjHAVpy (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Tue, 1 Aug 2023 17:45:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDC1F1FDA
+        for <dwarves@vger.kernel.org>; Tue,  1 Aug 2023 14:45:53 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7351A615F0
+        for <dwarves@vger.kernel.org>; Tue,  1 Aug 2023 21:45:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7E1EC433C7;
+        Tue,  1 Aug 2023 21:45:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1690926352;
+        bh=th5yMAU2KwHTD6LjAWZ63ZkGdv8QP6Zc8H1jcvGmWLM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=DW75pWII7lpsGauEoYgiEETF8b6fXZFMOpdaGr0yoDBTuNzcXq/6/NAQa2YjhyNjL
+         8TJ1gXjcKt6YamAosw40Kj4H/O5/OswGNhPWpFyS63eemXgiBBk8kqQfYi740Hyqtq
+         Ome8o1qyxpO6jwn/KwSF1MNgUFWJg8fk3SU75quoup29JZXbsWqY5MNTb406Vn3vBb
+         EbAmsWHzEV65tRXYzjN8VMH0pgQfM1XmAgwUhoYNLocdZEkBNLfIXACLr7ec8n8md6
+         fIKsrFaY/1Nsyd7IObZKPk/PHrOdJGIdjqyXl37qeBj+KNMSN6ojyYw58IlrUKmaOB
+         UARjZpHZhW/Lw==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id E67E64012D; Tue,  1 Aug 2023 18:45:49 -0300 (-03)
+Date:   Tue, 1 Aug 2023 18:45:49 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Alan Maguire <alan.maguire@oracle.com>
+Cc:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
+        Jiri Olsa <olsajiri@gmail.com>,
         Arnaldo Carvalho de Melo <acme@redhat.com>,
-        dwarves@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
-        bpf <bpf@vger.kernel.org>, Yonghong Song <yhs@fb.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        Yonghong Song <yhs@fb.com>, dwarves@vger.kernel.org,
+        bpf@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>
+Subject: Re: [RESEND] BTF is not generated for gcc-built kernel with the
+ latest pahole
+Message-ID: <ZMl9DaOadsdMi36c@kernel.org>
+References: <20230726102534.9ebc4678ad2c9395cc9be196@kernel.org>
+ <ZMDvmLdZSLi2QqB+@krava>
+ <20230726200716.609d8433a7292eead95e7330@kernel.org>
+ <6f0da094-5b49-954b-21e9-93f8c8cecc3f@oracle.com>
+ <20230727093814.23681b2b0ac73aa89f368ae8@kernel.org>
+ <20230727105102.509161e1f57fd0b49e98b844@kernel.org>
+ <c5accb4d-21d1-d8d9-85a0-263177a06208@oracle.com>
+ <20230801100148.defdc4c41833054c56c53bf0@kernel.org>
+ <bba3b423-8e38-ade3-7ce7-23b1be454d1f@oracle.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <bba3b423-8e38-ade3-7ce7-23b1be454d1f@oracle.com>
+X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-Sorry, replied only to Alan :-\
-
-- Arnaldo
-
----------- Forwarded message ---------
-From: Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
-Date: Tue, Aug 1, 2023 at 3:26=E2=80=AFPM
-Subject: Re: [RESEND] BTF is not generated for gcc-built kernel with
-the latest pahole
-To: Alan Maguire <alan.maguire@oracle.com>
-
-
-On Tue, Aug 1, 2023 at 2:37=E2=80=AFPM Alan Maguire <alan.maguire@oracle.co=
-m> wrote:
+Em Tue, Aug 01, 2023 at 06:36:49PM +0100, Alan Maguire escreveu:
 > On 01/08/2023 02:01, Masami Hiramatsu (Google) wrote:
 > > On Mon, 31 Jul 2023 16:45:24 +0100
 > > Alan Maguire <alan.maguire@oracle.com> wrote:
+> > 
+> >> On 27/07/2023 02:51, Masami Hiramatsu (Google) wrote:
+> >>> On Thu, 27 Jul 2023 09:38:14 +0900
+> >>> Masami Hiramatsu (Google) <mhiramat@kernel.org> wrote:
+> >>>
+> >>>>> Yep, BPF generation is more selective about what it emits in 1.25 to
+> >>>>> avoid cases where a kernel function signature is ambiguous (multiple
+> >>>>> functions of the same name with different signatures) or where it has
+> >>>>> unexpected register use. You can observe this via pahole's --verbose
+> >>>>> option (a lot of outut is emitted):
+> >>>>>
+> >>>>> In a built kernel directory (where unstripped vmlinux is present):
+> >>>>> $ PAHOLE_FLAGS=$(./scripts/pahole_flags)
+> >>>>> $ PAHOLE=/usr/local/bin/pahole
+> >>>>> $ pahole --verbose -J $PAHOLE_FLAGS vmlinux > /tmp/pahole.out
+> >>>>
+> >>>> So this will generate BTF from vmlinux DWARF info.
+> >>>>
+> >>>>> If you want to investigate why a function has been left out, look for
+> >>>>> "skipping" verbose output like this:
+> >>>>>
+> >>>>> skipping addition of 'access_error'(access_error) due to multiple
+> >>>>> inconsistent function prototypes
+> >>>>> skipping addition of
+> >>>>> 'acpi_ex_convert_to_object_type_string'(acpi_ex_convert_to_object_type_string.isra.0)
+> >>>>> due to unexpected register used for parameter
+> >>>>
+> >>>> Ah, that's nice. Let me try.
+> >>>
+> >>> $ pahole --version 
+> >>> v1.23
+> >>>
+> >>
+> >> shouldn't this be v1.25? Is it possible pahole is picking up the wrong
+> >> libdwarves? what does "ldd pahole" say?
+> > 
+> > Here it is.
+> > $ ldd pahole 
+> > 	linux-vdso.so.1 (0x00007ffd6b1e2000)
+> > 	libdwarves_reorganize.so.1 => /opt/local/pahole/libdwarves_reorganize.so.1 (0x00007f1ddaad9000)
+> > 	libdwarves.so.1 => /opt/local/pahole/libdwarves.so.1 (0x00007f1ddaa72000)
+> > 	libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007f1dda82a000)
+> > 	libdw.so.1 => /usr/local/lib/x86_64-linux-gnu/libdw.so.1 (0x00007f1dda78c000)
+> > 	libelf.so.1 => /usr/local/lib/x86_64-linux-gnu/libelf.so.1 (0x00007f1dda771000)
+> > 	libz.so.1 => /lib/x86_64-linux-gnu/libz.so.1 (0x00007f1dda753000)
+> > 	/lib64/ld-linux-x86-64.so.2 (0x00007f1ddaaef000)
+> > 	libdl.so.2 => /lib/x86_64-linux-gnu/libdl.so.2 (0x00007f1dda74e000)
+> > 	liblzma.so.5 => /lib/x86_64-linux-gnu/liblzma.so.5 (0x00007f1dda723000)
+> > 	libpthread.so.0 => /lib/x86_64-linux-gnu/libpthread.so.0 (0x00007f1dda71e000)
+> > 
+> > Maybe libdwarvers is not related, I could build pahole v1.23 and v1.22 without
+> > sync the submodule.
+> > 
+> > I also confirmed the same issue on Ubuntu 22.04's combination, which
+> > update pahole from v1.22 to v1.25 recently. (but gcc is still v11.3)
+> > 
+> >             gcc-11.3 | clang-16.0
+> > ---------------------------+---------------- 
+> > v1.22          OK         OK
+> > (ubuntu)
+> > v1.22          OK         OK
+> > (local)
+> > v1.23          NG         OK
+> > (local)
+> > v1.24          NG         -
+> > (local)
+> > v1.25          NG         -
+> > (ubuntu)
+> > v1.25          NG         OK
+> > (local)
+> > 
+> > So, as far as I checked, there is something wrong between v1.22 and v1.23
+> > which is also related to gcc-11.3.
+> > 
+> 
+> One thing that is notable about gcc 11 is that I believe it's the first
+> gcc release to emit DWARF5 by default. I wonder if it's possible that
+> the kernel emitted DWARF5, but pahole was built with libraries that
+> didn't support it yet? Not sure how that fits with the fact that
 
-> >> Unfortunately (or fortunately?) I haven't been able to reproduce so fa=
-r
-> >> I'm afraid. I used your config and built gcc 13 from source; everythin=
-g
-> >> worked as expected, with no warnings or missing functions (aside from
-> >> the ones skipped due to inconsistent prototypes etc).
-> >
-> > Yeah, so I think gcc-11.3 is suspicious too (and it seems fixed in gcc-=
-13).
+To check that please tweak:
 
-See below, but this one is interesting, gcc-13 works with
-CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=3Dy?
-
-> >> One other thing I can think of - is it possible libdw[arf]/libelf
-> >> versions might be having an effect here? I'm using libdwarf.so.1.2,
-> >> libdw-0.188, libelf-0.188. I can try and match yours. Thanks!
-> >
-> > Both libdw/libelf are 0.181. I didn't install libdwarf.
-> > Hmm, I should update the libdw (elfutils) too.
->
-> That might help. Thanks!
-
-Probably he needs to tweak these CONFIG_ entries:
-
-=E2=AC=A2[acme@toolbox perf-tools]$ grep DWARF ../build/v6.2-rc5+/.config
-CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=3Dy
+⬢[acme@toolbox perf-tools-next]$ grep DWARF ../build/v6.2-rc5+/.config
+CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
 # CONFIG_DEBUG_INFO_DWARF4 is not set
 # CONFIG_DEBUG_INFO_DWARF5 is not set
-=E2=AC=A2[acme@toolbox perf-tools]$
+⬢[acme@toolbox perf-tools-next]$
 
-And make it use CONFIG_DEBUG_INFO_DWARF4=3Dy,
-CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=3Dn
-
-For DWARF5 I need to forward port what I have in:
-
-https://git.kernel.org/pub/scm/devel/pahole/pahole.git/log/?h=3DWIP-importe=
-d-unit
+i.e. disable CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT and enable
+CONFIG_DEBUG_INFO_DWARF4.
 
 - Arnaldo
+
+> pahole v1.22 works though. If you have a chance, it might be worth
+> experimenting with your kernel .config to specify DWARF4 to see if
+> that makes a difference.
+> 
+> You can check DWARF version associated with CUs with
+> 
+> readelf --debug-dump=info vmlinux |grep -A 2 'Compilation Unit'
