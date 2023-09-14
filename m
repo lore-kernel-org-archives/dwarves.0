@@ -2,196 +2,194 @@ Return-Path: <dwarves-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E5B02C001E0
-	for <linux-dwarves@archiver.kernel.org>; Wed,  2 Aug 2023 14:29:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D6749EE021E
+	for <linux-dwarves@archiver.kernel.org>; Thu, 14 Sep 2023 03:44:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232607AbjHBO3n (ORCPT
+        id S234031AbjINDoU (ORCPT
         <rfc822;linux-dwarves@archiver.kernel.org>);
-        Wed, 2 Aug 2023 10:29:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35392 "EHLO
+        Wed, 13 Sep 2023 23:44:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232566AbjHBO3m (ORCPT
-        <rfc822;dwarves@vger.kernel.org>); Wed, 2 Aug 2023 10:29:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 367BE1718
-        for <dwarves@vger.kernel.org>; Wed,  2 Aug 2023 07:29:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B2C18619B3
-        for <dwarves@vger.kernel.org>; Wed,  2 Aug 2023 14:29:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB308C433C7;
-        Wed,  2 Aug 2023 14:29:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1690986580;
-        bh=KiALrlTTBGNNxJjAlkg0zUW9vHnN2Eiaz/7lLcW5vYs=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=GShPERietaHbHGT0Lx+YQV+5FgcFEHKF6ri4G31+WVlKc7VF25fAz3vobQrwXC5A9
-         zShL257h2czDCWas9+KkUzsW4aHRjjqX5MVdAnMrmCGTUC38HaR/iW73Wy8bvd+Cqz
-         q/44xwY8tj6F8JV7h+2Nc8Q6oNA6oUudfBgzMkNiXWg0IaxuvKPdleo5xixLi8Rqov
-         bplkx2Q3p/nWPMkQ5cZ7ymYeQn1+AJwx83z8gVMh8Dy+4UsYGQzUbOHF4InUq1O4Rg
-         Htg7YViB0PISDSfaq7Iython6xeogc6gJRHGV16BSlYN1SWxDMJtYvR2Wollt1NirH
-         N322bKQJq8e2w==
-Date:   Wed, 2 Aug 2023 23:29:35 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Alan Maguire <alan.maguire@oracle.com>,
-        "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
-        Jiri Olsa <olsajiri@gmail.com>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Yonghong Song <yhs@fb.com>, dwarves@vger.kernel.org,
-        bpf@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>
-Subject: Re: [RESEND] BTF is not generated for gcc-built kernel with the
- latest pahole
-Message-Id: <20230802232935.58be8f5d778efabf2a90fd00@kernel.org>
-In-Reply-To: <ZMl9DaOadsdMi36c@kernel.org>
-References: <20230726102534.9ebc4678ad2c9395cc9be196@kernel.org>
-        <ZMDvmLdZSLi2QqB+@krava>
-        <20230726200716.609d8433a7292eead95e7330@kernel.org>
-        <6f0da094-5b49-954b-21e9-93f8c8cecc3f@oracle.com>
-        <20230727093814.23681b2b0ac73aa89f368ae8@kernel.org>
-        <20230727105102.509161e1f57fd0b49e98b844@kernel.org>
-        <c5accb4d-21d1-d8d9-85a0-263177a06208@oracle.com>
-        <20230801100148.defdc4c41833054c56c53bf0@kernel.org>
-        <bba3b423-8e38-ade3-7ce7-23b1be454d1f@oracle.com>
-        <ZMl9DaOadsdMi36c@kernel.org>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+        with ESMTP id S229876AbjINDoT (ORCPT
+        <rfc822;dwarves@vger.kernel.org>); Wed, 13 Sep 2023 23:44:19 -0400
+X-Greylist: delayed 416 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 13 Sep 2023 20:44:15 PDT
+Received: from vmicros1.altlinux.org (vmicros1.altlinux.org [194.107.17.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 26869193;
+        Wed, 13 Sep 2023 20:44:15 -0700 (PDT)
+Received: from imap.altlinux.org (imap.altlinux.org [194.107.17.38])
+        by vmicros1.altlinux.org (Postfix) with ESMTP id 69B0472C8D3;
+        Thu, 14 Sep 2023 06:37:17 +0300 (MSK)
+Received: from altlinux.org (sole.flsd.net [185.75.180.6])
+        by imap.altlinux.org (Postfix) with ESMTPSA id 5BC0A36D00B7;
+        Thu, 14 Sep 2023 06:37:17 +0300 (MSK)
+Date:   Thu, 14 Sep 2023 06:37:17 +0300
+From:   Vitaly Chikunov <vt@altlinux.org>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        dwarves@vger.kernel.org, bpf@vger.kernel.org
+Cc:     "Dmitry V. Levin" <ldv@altlinux.org>
+Subject: Re: pahole 1.25 SIGSEGV when building kernel (-j when cores > 81)
+Message-ID: <20230914033717.mbb2cn2rukndtvlw@altlinux.org>
+References: <20230705020040.bqhtd3yxpntk44q5@altlinux.org>
+ <ZKwK049Hg7taAxv9@kernel.org>
+ <20230710200002.ca4okot5rrvewqvb@altlinux.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=koi8-r
+Content-Disposition: inline
+In-Reply-To: <20230710200002.ca4okot5rrvewqvb@altlinux.org>
 Precedence: bulk
 List-ID: <dwarves.vger.kernel.org>
 X-Mailing-List: dwarves@vger.kernel.org
 
-On Tue, 1 Aug 2023 18:45:49 -0300
-Arnaldo Carvalho de Melo <acme@kernel.org> wrote:
+Arnaldo,
 
-> Em Tue, Aug 01, 2023 at 06:36:49PM +0100, Alan Maguire escreveu:
-> > On 01/08/2023 02:01, Masami Hiramatsu (Google) wrote:
-> > > On Mon, 31 Jul 2023 16:45:24 +0100
-> > > Alan Maguire <alan.maguire@oracle.com> wrote:
+On Mon, Jul 10, 2023 at 11:00:02PM +0300, Vitaly Chikunov wrote:
+> On Mon, Jul 10, 2023 at 10:42:43AM -0300, Arnaldo Carvalho de Melo wrote:
+> > Em Wed, Jul 05, 2023 at 05:00:40AM +0300, Vitaly Chikunov escreveu:
 > > > 
-> > >> On 27/07/2023 02:51, Masami Hiramatsu (Google) wrote:
-> > >>> On Thu, 27 Jul 2023 09:38:14 +0900
-> > >>> Masami Hiramatsu (Google) <mhiramat@kernel.org> wrote:
-> > >>>
-> > >>>>> Yep, BPF generation is more selective about what it emits in 1.25 to
-> > >>>>> avoid cases where a kernel function signature is ambiguous (multiple
-> > >>>>> functions of the same name with different signatures) or where it has
-> > >>>>> unexpected register use. You can observe this via pahole's --verbose
-> > >>>>> option (a lot of outut is emitted):
-> > >>>>>
-> > >>>>> In a built kernel directory (where unstripped vmlinux is present):
-> > >>>>> $ PAHOLE_FLAGS=$(./scripts/pahole_flags)
-> > >>>>> $ PAHOLE=/usr/local/bin/pahole
-> > >>>>> $ pahole --verbose -J $PAHOLE_FLAGS vmlinux > /tmp/pahole.out
-> > >>>>
-> > >>>> So this will generate BTF from vmlinux DWARF info.
-> > >>>>
-> > >>>>> If you want to investigate why a function has been left out, look for
-> > >>>>> "skipping" verbose output like this:
-> > >>>>>
-> > >>>>> skipping addition of 'access_error'(access_error) due to multiple
-> > >>>>> inconsistent function prototypes
-> > >>>>> skipping addition of
-> > >>>>> 'acpi_ex_convert_to_object_type_string'(acpi_ex_convert_to_object_type_string.isra.0)
-> > >>>>> due to unexpected register used for parameter
-> > >>>>
-> > >>>> Ah, that's nice. Let me try.
-> > >>>
-> > >>> $ pahole --version 
-> > >>> v1.23
-> > >>>
-> > >>
-> > >> shouldn't this be v1.25? Is it possible pahole is picking up the wrong
-> > >> libdwarves? what does "ldd pahole" say?
-> > > 
-> > > Here it is.
-> > > $ ldd pahole 
-> > > 	linux-vdso.so.1 (0x00007ffd6b1e2000)
-> > > 	libdwarves_reorganize.so.1 => /opt/local/pahole/libdwarves_reorganize.so.1 (0x00007f1ddaad9000)
-> > > 	libdwarves.so.1 => /opt/local/pahole/libdwarves.so.1 (0x00007f1ddaa72000)
-> > > 	libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007f1dda82a000)
-> > > 	libdw.so.1 => /usr/local/lib/x86_64-linux-gnu/libdw.so.1 (0x00007f1dda78c000)
-> > > 	libelf.so.1 => /usr/local/lib/x86_64-linux-gnu/libelf.so.1 (0x00007f1dda771000)
-> > > 	libz.so.1 => /lib/x86_64-linux-gnu/libz.so.1 (0x00007f1dda753000)
-> > > 	/lib64/ld-linux-x86-64.so.2 (0x00007f1ddaaef000)
-> > > 	libdl.so.2 => /lib/x86_64-linux-gnu/libdl.so.2 (0x00007f1dda74e000)
-> > > 	liblzma.so.5 => /lib/x86_64-linux-gnu/liblzma.so.5 (0x00007f1dda723000)
-> > > 	libpthread.so.0 => /lib/x86_64-linux-gnu/libpthread.so.0 (0x00007f1dda71e000)
-> > > 
-> > > Maybe libdwarvers is not related, I could build pahole v1.23 and v1.22 without
-> > > sync the submodule.
-> > > 
-> > > I also confirmed the same issue on Ubuntu 22.04's combination, which
-> > > update pahole from v1.22 to v1.25 recently. (but gcc is still v11.3)
-> > > 
-> > >             gcc-11.3 | clang-16.0
-> > > ---------------------------+---------------- 
-> > > v1.22          OK         OK
-> > > (ubuntu)
-> > > v1.22          OK         OK
-> > > (local)
-> > > v1.23          NG         OK
-> > > (local)
-> > > v1.24          NG         -
-> > > (local)
-> > > v1.25          NG         -
-> > > (ubuntu)
-> > > v1.25          NG         OK
-> > > (local)
-> > > 
-> > > So, as far as I checked, there is something wrong between v1.22 and v1.23
-> > > which is also related to gcc-11.3.
-> > > 
+> > > After updating Dwarves to v1.25 we are getting SIGSEGV while building
+> > > kernel on 32-bit x86 architecture. It looks like this:
 > > 
-> > One thing that is notable about gcc 11 is that I believe it's the first
-> > gcc release to emit DWARF5 by default. I wonder if it's possible that
-> > the kernel emitted DWARF5, but pahole was built with libraries that
-> > didn't support it yet? Not sure how that fits with the fact that
+> > 128 cores, 32-bit system? Interesting :-)
 > 
-> To check that please tweak:
+> This is just AMD Zen in 32-bit personality.
+
+This started to reappear for v6.5 on armv7hf with 64 cores (Cortex-A72
+aarch64 which supports linux32 personality) even with your proposed
+patch. But with different error messages:
+
+    BTF     .btf.vmlinux.bin.o
+  [24982] STRUCT super_block's field 's_bdev' offset=1120 bit_size=0 type=25296 Error emitting field
+  Encountered error while encoding BTF.
+    LD      .tmp_vmlinux.kallsyms1
+    NM      .tmp_vmlinux.kallsyms1.syms
+    KSYMS   .tmp_vmlinux.kallsyms1.S
+    AS      .tmp_vmlinux.kallsyms1.S
+    LD      .tmp_vmlinux.kallsyms2
+    NM      .tmp_vmlinux.kallsyms2.syms
+    KSYMS   .tmp_vmlinux.kallsyms2.S
+    AS      .tmp_vmlinux.kallsyms2.S
+    LD      vmlinux
+    BTFIDS  vmlinux
+  libbpf: failed to find '.BTF' ELF section in vmlinux
+  FAILED: load BTF from vmlinux: No data available
+
+With V=1:
+
+  + info BTF .btf.vmlinux.bin.o
+  + printf '  %-7s %s\n' BTF .btf.vmlinux.bin.o
+    BTF     .btf.vmlinux.bin.o
+  + LLVM_OBJCOPY=objcopy
+  + pahole -J --btf_gen_floats -j --lang_exclude=rust --skip_encoding_btf_inconsistent_proto --btf_gen_optimized .tmp_vmlinux.btf
+  [26109] STRUCT kiocb's field 'ki_waitq' offset=256 bit_size=0 type=26179 Error emitting field
+  Encountered error while encoding BTF.
+
+Restricting -j to 32 helped, though.
+
+Thanks,
+
+
+
 > 
-> ⬢[acme@toolbox perf-tools-next]$ grep DWARF ../build/v6.2-rc5+/.config
-> CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
-> # CONFIG_DEBUG_INFO_DWARF4 is not set
-> # CONFIG_DEBUG_INFO_DWARF5 is not set
-> ⬢[acme@toolbox perf-tools-next]$
-> 
-> i.e. disable CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT and enable
-> CONFIG_DEBUG_INFO_DWARF4.
-
-Hm, with CONFIG_DEBUG_INFO_DWARF4, no warning were shown.
-
-  LD      .tmp_vmlinux.btf
-  BTF     .btf.vmlinux.bin.o
-  LD      .tmp_vmlinux.kallsyms1
-
-And
-
-/ # strings /sys/kernel/btf/vmlinux | wc -l
-89921
-/ # strings /sys/kernel/btf/vmlinux | grep -w kfree
-kfree
-
-It seems the BTF is correctly generated. (with DWARF5, the number of symbols
-are about 30000.)
-Maybe we should check the pahole version and choose the DWARF4 if BTF is selected.
-
-Thank you!
-
-> 
-> - Arnaldo
-> 
-> > pahole v1.22 works though. If you have a chance, it might be worth
-> > experimenting with your kernel .config to specify DWARF4 to see if
-> > that makes a difference.
+> >  
+> > >     BTF     .btf.vmlinux.bin.o
+> > >   scripts/link-vmlinux.sh: line 111: 395728 Segmentation fault      LLVM_OBJCOPY="${OBJCOPY}" ${PAHOLE} -J ${PAHOLE_FLAGS} ${1}
+> > >     LD      .tmp_vmlinux.kallsyms1
+> > >     NM      .tmp_vmlinux.kallsyms1.syms
+> > >     KSYMS   .tmp_vmlinux.kallsyms1.S
+> > >     AS      .tmp_vmlinux.kallsyms1.S
+> > >     LD      .tmp_vmlinux.kallsyms2
+> > >     NM      .tmp_vmlinux.kallsyms2.syms
+> > >     KSYMS   .tmp_vmlinux.kallsyms2.S
+> > >     AS      .tmp_vmlinux.kallsyms2.S
+> > >     LD      vmlinux
+> > >     BTFIDS  vmlinux
+> > >   libbpf: failed to find '.BTF' ELF section in vmlinux
+> > >   FAILED: load BTF from vmlinux: No data available
+> > > 
+> > > What crashes is this command:
+> > > 
+> > >   pahole -J --btf_gen_floats -j --lang_exclude=rust .tmp_vmlinux.btf
+> > > 
+> > > I found that cause of the crash is that build box having 128 cores. By
+> > > experiment I found that with -j81 pahole works OK, but with -j82 or
+> > > greater it crashes.
+> > > 
+> > >   $ gdb -q --args pahole -J --btf_gen_floats -j111 --lang_exclude=rust .tmp_vmlinux.btf
+> > >   Thread 15 "pahole" received signal SIGSEGV, Segmentation fault.
+> > >   [Switching to Thread 0xda5ffb40 (LWP 3102466)]
+> > >   0xf7f3c944 in btf_encoder__btf (encoder=0x0) at /usr/src/debug/dwarves-1.25/btf_encoder.c:1890
+> > >   1890            return encoder->btf;
+> > >   (gdb) bt
+> > >   #0  0xf7f3c944 in btf_encoder__btf (encoder=0x0) at /usr/src/debug/dwarves-1.25/btf_encoder.c:1890
+> > >   #1  0x5655c25d in pahole_stealer (cu=0xd9a01f80, conf_load=0x565640c0 <conf_load>, thr_data=0x56567c18) at /usr/src/debug/dwarves-1.25/pahole.c:3100
+> > >   #2  0xf7f452d7 in cu__finalize (cu=cu@entry=0xd9a01f80, conf=0x565640c0 <conf_load>, thr_data=thr_data@entry=0x56567c18)
+> > >       at /usr/src/debug/dwarves-1.25/dwarf_loader.c:3001
+> > >   #3  0xf7f4541d in cus__finalize (thr_data=0x56567c18, conf=<optimized out>, cu=0xd9a01f80, cus=0x565651c0) at /usr/src/debug/dwarves-1.25/dwarf_loader.c:3008
+> > >   #4  dwarf_cus__create_and_process_cu (dcus=dcus@entry=0xffffd19c, cu_die=cu_die@entry=0xda5ff38c, pointer_size=<optimized out>, thr_data=0x56567c18)
+> > >       at /usr/src/debug/dwarves-1.25/dwarf_loader.c:3207
+> > >   #5  0xf7f461af in dwarf_cus__process_cu_thread (arg=0xffffcbf8) at /usr/src/debug/dwarves-1.25/dwarf_loader.c:3250
+> > >   #6  0xf7db4258 in start_thread (arg=<optimized out>) at pthread_create.c:444
+> > >   #7  0xf7e3a878 in clone3 () from /lib/libc.so.6
+> > >   (gdb) p encoder
+> > >   $1 = (struct btf_encoder *) 0x0
+> > >   (gdb) f 1
+> > >   #1  0x5655c25d in pahole_stealer (cu=0xd9a01f80, conf_load=0x565640c0 <conf_load>, thr_data=0x56567c18) at /usr/src/debug/dwarves-1.25/pahole.c:3100
+> > >   3100                                    thread->btf = btf_encoder__btf(thread->encoder);
+> > >   (gdb) list -2
+> > >   3093                                    thread->encoder =
+> > >   3094                                            btf_encoder__new(cu, detached_btf_filename,
+> > >   3095                                                             NULL,
+> > >   3096                                                             skip_encoding_btf_vars,
+> > >   3097                                                             btf_encode_force,
+> > >   3098                                                             btf_gen_floats,
+> > >   3099                                                             global_verbose);
+> > >   3100                                    thread->btf = btf_encoder__btf(thread->encoder);
+> > >   3101                            }
+> > >   3102                            encoder = thread->encoder;
+> > > 
+> > > I think that return value of btf_encoder__new is not checked. But did
+> > > not investigate further why is this happening. It would be great to have
+> > > this fixed.
 > > 
-> > You can check DWARF version associated with CUs with
+> > Can you try with this minimal patch? Maybe we can with some more work
+> > auto-limit the number of threads or make the threads without a
+> > btf_encoder be processed at the end, reusing the main btf_encoder, but
+> > this first patch would at least help diagnosing the problem more
+> > quickly.
+> 
+> With this patch applied and run on 20 core:
+> 
+>   builder@i586:kernel-source-6.3$ pahole -J --btf_gen_floats -j111 --lang_exclude=rust .tmp_vmlinux.btf
+>   Not enough memory to instantiate new BTF encoder.
+>   HINT: Maybe reduce the -j/--jobs command line value?.
+>   ... 40 times this message ....
+>   Not enough memory to instantiate new BTF encoder.
+>   HINT: Maybe reduce the -j/--jobs command line value?.
+>   builder@i586:kernel-source-6.3$ echo $?
+>   0
+> 
+> Thanks,
+> 
 > > 
-> > readelf --debug-dump=info vmlinux |grep -A 2 'Compilation Unit'
-
-
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> > - Arnaldo
+> > 
+> > diff --git a/pahole.c b/pahole.c
+> > index e843999fde2a8a37..887b3403dcff18c0 100644
+> > --- a/pahole.c
+> > +++ b/pahole.c
+> > @@ -3097,6 +3097,15 @@ static enum load_steal_kind pahole_stealer(struct cu *cu,
+> >  							 btf_encode_force,
+> >  							 btf_gen_floats,
+> >  							 global_verbose);
+> > +				if (thread->encoder == NULL) {
+> > +					fprintf(stderr, "Not enough memory to instantiate new BTF encoder.\n");
+> > +
+> > +					if (conf_load->nr_jobs > 1)
+> > +						fprintf(stderr, "HINT: Maybe reduce the -j/--jobs command line value?.\n");
+> > +
+> > +					ret = LSK__STOP_LOADING;
+> > +					goto out_btf;
+> > +				}
+> >  				thread->btf = btf_encoder__btf(thread->encoder);
+> >  			}
+> >  			encoder = thread->encoder;
