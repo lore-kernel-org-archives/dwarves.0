@@ -1,66 +1,56 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jAW5Pwr9"
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 008FD1B6
-	for <dwarves@vger.kernel.org>; Thu, 23 Nov 2023 22:03:13 -0800 (PST)
-Received: by mail-lf1-x131.google.com with SMTP id 2adb3069b0e04-50aafe59afaso432315e87.0
-        for <dwarves@vger.kernel.org>; Thu, 23 Nov 2023 22:03:13 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FEiwAo9M"
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0994199B
+	for <dwarves@vger.kernel.org>; Fri, 24 Nov 2023 07:23:55 -0800 (PST)
+Received: by mail-lf1-x133.google.com with SMTP id 2adb3069b0e04-507f63fcbf6so612192e87.1
+        for <dwarves@vger.kernel.org>; Fri, 24 Nov 2023 07:23:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1700805792; x=1701410592; darn=vger.kernel.org;
-        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=dN9hmoElnLF9ipROuQ+BbKpggtoXWJ7cqYzJ6lCfJJw=;
-        b=jAW5Pwr98rLisSTucc6XW7a8WZg78mLWBu3ep0t99r+GmKcVbOcFeDl8aYNIWn0L6L
-         /KxgBRqWIO3i8Rmykk6KsEpo+FpRgoZMuchOA3lz+i9xMzxuR5AWW8PS5i68Hmh/Pp8s
-         O2TODwKnWlkku06iClVW/xGYZFjRlEJeHQpHLX9WdKrzF9M/x3Ngld/CgbflOcHI5mQm
-         k41rxANXA7XlnTgqdI9oO1TDpW3TfMaaNM0ZHfr7fU+DXdO7TNimPHpaGH/Yfm+MpA2x
-         E6+egjHOgBYW7aoy6e/aQF6uumCZoB5M0U/sEI4VdLdXagYnr6Ev2LqNa0Atsi96841j
-         7sVQ==
+        d=gmail.com; s=20230601; t=1700839434; x=1701444234; darn=vger.kernel.org;
+        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=lLg9HWlYulqYCcjeNqmvjIgBrlHKQRsinReE+7muSu8=;
+        b=FEiwAo9McbadHfz9w7mgnARLvjEVVZQq71CV1GL0yTkdfIonP0D2iJc3snQfM8RZpY
+         r0rLCSmCcP/eRL4rLAfWpBHqY7e6xbC+dru9hRvkIUz01SwknoIgltmNGb8QUwJBKj1P
+         7DP5VgrP4MIrI8+Hair6Bl8TiM+bd+HgEooPz0A2UJkcHmd8eGGQ0t6FGIWFneyG2ZjX
+         NweqEHyOQEfM5hXPZdu5k6kmNas+iovmM74Q3nP3IK5/CGeiD7RijjkoW+YHjOh3TN49
+         eSxDLSHYsVCWUV0OhjB+SS2mLhrrdieAlfMlGWuRPRRRtNPrMfO3aBf5FVsXyq5gqRUf
+         9Kdg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700805792; x=1701410592;
-        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=dN9hmoElnLF9ipROuQ+BbKpggtoXWJ7cqYzJ6lCfJJw=;
-        b=p1QKDsbHGkIaCGT99turYNqcDTeoRVDhcq2qEzs4mg921XBuvmlREHqXNlbgsRzyCw
-         DngMEZlDg148qbKFi1Dn1J47NGfqwelT48lxYc0leRooeyAuorvnDZ/kgrRFjbfQvgcV
-         UQecfmSYsmyWZWROx9CF+XG9Ajm05iN5AzkdAA0i0XjKB+X2kxnmC1fphBItjbweEifz
-         OvOxBV+xnkAAH3aIoKnpKqOySS5BNnzm7FAkM4Ke+DlkT9n76qdfbmFQBUBgNUJgyPTs
-         99DKXLYsDmXub/ALVtfxYMJiMVP/kf5b0+tdHRJ+5edo1PWs1uXhUKv0UWgxULJTBF9D
-         oZnQ==
-X-Gm-Message-State: AOJu0Ywr1U56cYpcnT4w2dfXjzOXB6gY1UR85i4yZ9fNkAZp7r20em9V
-	YqQgBKTOEXnp6XapdYL2nyD9GyPmn4htwh9oGa643vo=
-X-Google-Smtp-Source: AGHT+IFiDFEsc+xkZY6TyhaEvOwhMQIVvGGLIiLXowq8UWd35AfenIkLnQ/M973vQIq3OdBkGesxIk6aeHJh5eg0o48=
-X-Received: by 2002:a05:6512:b8f:b0:504:2dbd:dd5d with SMTP id
- b15-20020a0565120b8f00b005042dbddd5dmr926351lfv.3.1700805791277; Thu, 23 Nov
- 2023 22:03:11 -0800 (PST)
+        d=1e100.net; s=20230601; t=1700839434; x=1701444234;
+        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=lLg9HWlYulqYCcjeNqmvjIgBrlHKQRsinReE+7muSu8=;
+        b=bPH65MmenY4lnJh/reSR3L2riX8wkCLxI2/PDLUcsKm7QnW5cVHcAIU+HaxtHE/Rqf
+         JtTI5aZfKUe6My0PQnROpk8z+mH2g/bixgPPiXVTpyR9dxrMe+XJwV7J9Y7LCheS5l+j
+         0cvQqIb4blURdbyzYFPFOw2DeZWZMEeLOyINS7hp/Y4ekGaWhJe/AGBiwfwhXOj0rECX
+         xCsskDgkHgXsrSoLbdCS9wnuPNHg+OaDnpR92jcCvYB1iz5cxbGSsy3FEp0EENhwz9BQ
+         VcP/SqKmKDIx3d4hDhVSj9/bZsP3oYtTK1uf8Cz0QleOLbf6b9u7S8pDpO3dTlh2Cg+N
+         fnDg==
+X-Gm-Message-State: AOJu0Yzn7H9LXbMJIn5rN1slC0/9OXWFi/J69JaJ1eOi5MX/mz/QCOvO
+	akYzA104AZLIyn6e8ystxadroaBTK0OYMGmaIABBzsR8DQ==
+X-Google-Smtp-Source: AGHT+IESllwjbD8EN2gAX1zqy7v1uF8wj7i2/GK3pR7o5L02GYE5P0UlanknlpiYMq/N+4mFu7xU7MzSBTnCWc6Hptk=
+X-Received: by 2002:a05:6512:e86:b0:507:9d5c:62e3 with SMTP id
+ bi6-20020a0565120e8600b005079d5c62e3mr2124084lfb.5.1700839433370; Fri, 24 Nov
+ 2023 07:23:53 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CA+4=ZENfu6M3UCfdMfie0oW96y7rfu6pkW25jmp343HeL_gztw@mail.gmail.com>
-In-Reply-To: <CA+4=ZENfu6M3UCfdMfie0oW96y7rfu6pkW25jmp343HeL_gztw@mail.gmail.com>
 From: Joe Flowers <flowers.joseph@gmail.com>
-Date: Fri, 24 Nov 2023 01:03:00 -0500
-Message-ID: <CA+4=ZEPUgCT97cATbd630V5pi1Eha1-nRELu_yC5NwBGcjkUxg@mail.gmail.com>
-Subject: Fwd: pahole v1.18 introduced a bug that hangs a product-line build
-To: dwarves@vger.kernel.org
-Content-Type: multipart/mixed; boundary="00000000000007a2d7060adfb5c1"
-
---00000000000007a2d7060adfb5c1
-Content-Type: multipart/alternative; boundary="00000000000007a2d5060adfb5bf"
-
---00000000000007a2d5060adfb5bf
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
----------- Forwarded message ---------
-From: Joe Flowers <joe.flowers@nofreewill.com>
-Date: Fri, Nov 24, 2023 at 12:59=E2=80=AFAM
+Date: Fri, 24 Nov 2023 10:23:42 -0500
+Message-ID: <CA+4=ZEMrYL7zyZm1OOyBO-M-xNf+X2sZDTFWhUM1wW9NprURGQ@mail.gmail.com>
 Subject: pahole v1.18 introduced a bug that hangs a product-line build
-To: <dwarves@vger.kernel.org>
+To: dwarves@vger.kernel.org
+Content-Type: multipart/mixed; boundary="0000000000003fb1c7060ae78aa2"
 
+--0000000000003fb1c7060ae78aa2
+Content-Type: multipart/alternative; boundary="0000000000003fb1c6060ae78aa0"
+
+--0000000000003fb1c6060ae78aa0
+Content-Type: text/plain; charset="UTF-8"
 
 Hello,
 
@@ -70,8 +60,7 @@ pahole.c since, including the latest. We are using Ubuntu 22.04.3 for
 builds.
 
 The attached file
-"modified-v1.17-pahole.c-that-works-with-dwarves-v1.18-and-EMCMFirmware-bui=
-lds_Nov-22-2023-04.tar.bz2"
+"modified-v1.17-pahole.c-that-works-with-dwarves-v1.18-and-EMCMFirmware-builds_Nov-22-2023-04.tar.bz2"
 contains pahole.c v1.17 that has been merged with as many pahole.c v1.18
 changes as I could so far and still successfully build our product.
 
@@ -88,42 +77,33 @@ Thank you!
 
 Joe
 
---00000000000007a2d5060adfb5bf
+--0000000000003fb1c6060ae78aa0
 Content-Type: text/html; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-<div dir=3D"ltr"><br><br><div class=3D"gmail_quote"><div dir=3D"ltr" class=
-=3D"gmail_attr">---------- Forwarded message ---------<br>From: <strong cla=
-ss=3D"gmail_sendername" dir=3D"auto">Joe Flowers</strong> <span dir=3D"auto=
-">&lt;<a href=3D"mailto:joe.flowers@nofreewill.com">joe.flowers@nofreewill.=
-com</a>&gt;</span><br>Date: Fri, Nov 24, 2023 at 12:59=E2=80=AFAM<br>Subjec=
-t: pahole v1.18 introduced a bug that hangs a product-line build<br>To:  &l=
-t;<a href=3D"mailto:dwarves@vger.kernel.org">dwarves@vger.kernel.org</a>&gt=
-;<br></div><br><br><div dir=3D"ltr">Hello,<br><br>We have a product build t=
-hat hangs at the same place every time because of a change introduced in pa=
-hole.c v1.18. The hang occurs in all versions of pahole.c since, including =
-the latest. We are using Ubuntu 22.04.3 for builds.<br><br>The attached fil=
-e &quot;modified-v1.17-pahole.c-that-works-with-dwarves-v1.18-and-EMCMFirmw=
-are-builds_Nov-22-2023-04.tar.bz2&quot; contains pahole.c v1.17 that has be=
-en merged with as many pahole.c v1.18 changes as I could so far and still s=
-uccessfully build our product.<br><br>If you diff between that modified v1.=
-17 pahole.c and a pristine unchanged v1.18 pahole.c file, the bug introduct=
-ion is somewhere in that difference.<br><br>I have attached the file &quot;=
-pahole.c-v1.18-pristine-original-unchanged.rar&quot; for convenience.<br><b=
-r>Please help me find the root cause of this hang and a fix for pahole or a=
- workaround for all future versions of pahole.<br><br>Thank you!<br><br>Joe=
-<br><div><br></div></div>
-</div></div>
+<div dir=3D"ltr">Hello,<br><br>We have a product build that hangs at the sa=
+me place every time because of a change introduced in pahole.c v1.18. The h=
+ang occurs in all versions of pahole.c since, including the latest. We are =
+using Ubuntu 22.04.3 for builds.<br><br>The attached file &quot;modified-v1=
+.17-pahole.c-that-works-with-dwarves-v1.18-and-EMCMFirmware-builds_Nov-22-2=
+023-04.tar.bz2&quot; contains pahole.c v1.17 that has been merged with as m=
+any pahole.c v1.18 changes as I could so far and still successfully build o=
+ur product.<br><br>If you diff between that modified v1.17 pahole.c and a p=
+ristine unchanged v1.18 pahole.c file, the bug introduction is somewhere in=
+ that difference.<br><br>I have attached the file &quot;pahole.c-v1.18-pris=
+tine-original-unchanged.rar&quot; for convenience.<br><br>Please help me fi=
+nd the root cause of this hang and a fix for pahole or a workaround for all=
+ future versions of pahole.<br><br>Thank you!<br><br>Joe<br><br></div>
 
---00000000000007a2d5060adfb5bf--
---00000000000007a2d7060adfb5c1
-Content-Type: application/bzip2; 
+--0000000000003fb1c6060ae78aa0--
+--0000000000003fb1c7060ae78aa2
+Content-Type: application/x-compressed; 
 	name="modified-v1.17-pahole.c-that-works-with-dwarves-v1.18-and-EMCMFirmware-builds_Nov-22-2023-04.tar.bz2"
 Content-Disposition: attachment; 
 	filename="modified-v1.17-pahole.c-that-works-with-dwarves-v1.18-and-EMCMFirmware-builds_Nov-22-2023-04.tar.bz2"
 Content-Transfer-Encoding: base64
-Content-ID: <f_lpc7pskl0>
-X-Attachment-Id: f_lpc7pskl0
+Content-ID: <f_lpcrve1c0>
+X-Attachment-Id: f_lpcrve1c0
 
 QlpoOTFBWSZTWWlzCEUAVZv/g/w0HCB//////////v////9AACAAAAhgWJ7z6AAfQACfRfYGvQHq
 Pt97evd13tt893vvs76u997vu+A83n0eKr6A3265QaYaGh7vt4ufffb57b30eivTwhQD77y7XkAf
@@ -418,14 +398,14 @@ wEiEcHbsRWgAtJAC8NvqileuLgb+AWF6SXJwhaQOMaSSZlFHVwHkrx+r+7qLofZh8F1ullgvYJQA
 Ml4ShaXTOGSpo0GAYFkNSEaR+CvR02IwwNaoq6WgLDoBRscTq6T4LBEQohVCodwCxBDwjAQkGEQJ
 BkYnQ+sUf9wSyJf3fxzJFLwUDxgYKrJIQhEOPHKVVFlD2/s/55Z9f68zv+zVC2sxuDrVH8ujCqak
 COk6gNFG4Rv/i7kinChINLmEIoA=
---00000000000007a2d7060adfb5c1
-Content-Type: application/rar; 
+--0000000000003fb1c7060ae78aa2
+Content-Type: application/x-compressed; 
 	name="pahole.c-v1.18-pristine-original-unchanged.rar"
 Content-Disposition: attachment; 
 	filename="pahole.c-v1.18-pristine-original-unchanged.rar"
 Content-Transfer-Encoding: base64
-Content-ID: <f_lpc7pskr1>
-X-Attachment-Id: f_lpc7pskr1
+Content-ID: <f_lpcrve1i1>
+X-Attachment-Id: f_lpcrve1i1
 
 UmFyIRoHAQC10T6SEQEFDRgMAQP/koGAAIeUgYAAP+wvtGsCAz6ZEgDMMiCABQAgZ2l0L2R3YXJ2
 ZXMtdjEuMTgvQ01ha2VMaXN0cy50eHQiAgCxPzet0LFuH5W5mWcIBB/CkbethLVNNxf/KrotXQ7s
@@ -782,4 +762,4 @@ JL0y7nqeCXkezRwbX9mTwb0eZ1K14sXuqeqt1Fqp/HozfATv1tXXfqpwgqbEqHu5LlM1odEkx6Yj
 pAmNHBwlDeU1ECq6SOhpzYxBywmBTlRy6UgdZhw92a8Vs4roUTS3DzWi+hn4q8Xge3dUCWBH563T
 3SAnZwD6kxaZMaX6fEKy/+6NRK7xK4xhetfseyXLIi00ShjKqh7r71yVDztXRkzLyGiya/ZMfg5V
 MdAllDuMEMu2ucrrLX/xsEFtTK9qRNimmJwdd1ZRAwUEAA==
---00000000000007a2d7060adfb5c1--
+--0000000000003fb1c7060ae78aa2--
