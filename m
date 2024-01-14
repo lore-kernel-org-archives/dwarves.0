@@ -1,94 +1,86 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from gnu.wildebeest.org (gnu.wildebeest.org [45.83.234.184])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E936F358AA;
-	Fri,  5 Jan 2024 19:13:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JrFWCUSW"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0EB9C433C7;
-	Fri,  5 Jan 2024 19:13:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1704481996;
-	bh=TuxsHZPh+jbfgxImCTm71c5GyVdW17unYFAC6L4xxiI=;
-	h=From:Date:Subject:To:Cc:From;
-	b=JrFWCUSW2E4tRnzwwDquw1A+SwIN/7ErdY9UvtNhlpkhKwTNOBKtnqNmSn6JenF8i
-	 DPW1oPh8+jTyFCiC0b4IgljMTI4vFPBra0KQl7W0+i4y00vyK5lYMNhAjr5gmbD++O
-	 IX+16X3Lh3tdODgYB9jxIkOHwvfXTHJWtHp6Q/LAKSoj97YNWqw1mZs+HH0QnQImXQ
-	 6EtdPlLzRT2rieESyqbe+LmIf741E03rgundm0X3z4FTKue90lVW6Wwec05pjzS513
-	 asD4Axef+hrgUO3bz6XmY821dZaHQmAQcqHK15fmYBqSysUswWk5Mx8xblhDV3iDCC
-	 0KCFjNI01ACqQ==
-From: Nathan Chancellor <nathan@kernel.org>
-Date: Fri, 05 Jan 2024 12:13:04 -0700
-Subject: [PATCH] lib/Kconfig.debug: Disable CONFIG_DEBUG_INFO_BTF for
- Hexagon
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F5452C1B7
+	for <dwarves@vger.kernel.org>; Sun, 14 Jan 2024 22:37:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=klomp.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=klomp.org
+Received: by gnu.wildebeest.org (Postfix, from userid 1000)
+	id 10D24302BBEA; Sun, 14 Jan 2024 23:29:30 +0100 (CET)
+Date: Sun, 14 Jan 2024 23:29:30 +0100
+From: Mark Wielaard <mark@klomp.org>
+To: Dimitri John Ledkov <dimitri.ledkov@canonical.com>
+Cc: dwarves@vger.kernel.org, elfutils-devel@sourceware.org, acme@kernel.org
+Subject: Re: Porting pahole from dwarf_next_unit() to dwarf_get_units()
+Message-ID: <20240114222930.GC14151@gnu.wildebeest.org>
+References: <CADWks+b06hpoBJpVdtd4HXdC0w24hObq0WOGCdfMGkpC7k=2vQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240105-hexagon-disable-btf-v1-1-ddab073e7f74@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAL9UmGUC/x3MQQqAIBBG4avErBvQKIquEi00f2sgLDRCiO6et
- PwW7z2UEAWJxuqhiFuSHKFA1xUtmwkrWFwxNapplVYdb8hmPQI7ScbuYHt51kC/GNu7zg9UyjP
- CS/6v0/y+H4xK7h1lAAAA
-To: akpm@linux-foundation.org
-Cc: ndesaulniers@google.com, acme@kernel.org, dwarves@vger.kernel.org, 
- llvm@lists.linux.dev, linux-hexagon@vger.kernel.org, 
- linux-kernel@vger.kernel.org, patches@lists.linux.dev, 
- kernel test robot <lkp@intel.com>, Brian Cain <bcain@quicinc.com>, 
- Nathan Chancellor <nathan@kernel.org>
-X-Mailer: b4 0.13-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1657; i=nathan@kernel.org;
- h=from:subject:message-id; bh=TuxsHZPh+jbfgxImCTm71c5GyVdW17unYFAC6L4xxiI=;
- b=owGbwMvMwCUmm602sfCA1DTG02pJDKkzQk5HJ8ROCf97a3ar7/Tfrxy0Nt5e+fPP3jaWO4c+y
- vxXSlgk3VHKwiDGxSArpshS/Vj1uKHhnLOMN05NgpnDygQyhIGLUwAm4vyEkeGpa0zO3M1h7lek
- uvbtamWwNOt8mhnYHmizpnTu3D03WnMZ/goEafGf8ikQfrxT5HuggOF3V1sNSxtdW70Ck12ZW/b
- zsgAA
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CADWks+b06hpoBJpVdtd4HXdC0w24hObq0WOGCdfMGkpC7k=2vQ@mail.gmail.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
 
-pahole, which generates BTF, relies on elfutils to process DWARF debug
-info. Because kernel modules are relocatable files, elfutils needs to
-resolve relocations when processing the DWARF .debug sections.
+Hi Dimitri,
 
-Hexagon is not supported in binutils or elfutils, so elfutils is unable
-to process relocations in kernel modules, causing pahole to crash during
-BTF generation.
+Sorry, this arrived before my vacation and then the new year happened.
 
-Do not allow CONFIG_DEBUG_INFO_BTF to be selected for Hexagon until it
-is supported in elfutils, so that there are no more cryptic build
-failures during BTF generation.
+On Tue, Dec 05, 2023 at 01:03:01PM +0000, Dimitri John Ledkov wrote:
+> Currently pahole warns and does nothing upon hitting
+> DW_TAG_skeleton_unit as implemented at
+> https://git.kernel.org/pub/scm/devel/pahole/pahole.git/commit/?id=0135ccd632796ab3aff65b7c99b374c4682c2bcf
+> 
+> In elfutils, a while back a new API got added that aids with discovery
+> and processing of such tags -
+> https://sourceware.org/git/?p=elfutils.git;a=commitdiff;h=79f0e623dcde4b042bb72f636a2211d67d5c0ade
+> 
+> It seems to me if pahole is ported from using dwarf_next_unit() to
+> instead use dwarf_get_units() native support can be added for
+> split-dwarf (dwo) files.
+> 
+> I am trying to write such a port, but it is proving to be very
+> difficult. I am entirely unfamiliar with neither pahole nor libdw nor
+> the dwarf file format. Thus it is very confusing when both pahole and
+> dwarf library use very similar type names and structs. For example
+> libdw has struct Dwarf_CU and pahole has unrelated dwarf_cu struct.
+> 
+> What are the differences between dwarf_nextcu(), dwarf_next_unit(),
+> dwarf_get_units() and when should one use each one of them? (or nest
+> them?)
 
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/oe-kbuild-all/202312192107.wMIKiZWw-lkp@intel.com/
-Suggested-by: Nick Desaulniers <ndesaulniers@google.com>
-Acked-by: Brian Cain <bcain@quicinc.com>
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- lib/Kconfig.debug | 2 ++
- 1 file changed, 2 insertions(+)
+The dwarf_nextcu was the original way to iterate over the CUs from
+.debug_info. Then dwarf_next_unit was added when type units could come
+from a .debug_types section. Both functions use and return offsets to
+iterate through the section and then get the CU DIE using dwarf_offdie
+(or dwarf_offdie_types). This requires the user to know beforehand
+where to DIE data is stored (in the .debug_info or .debug_types
+section).  For type units one also needs to use the type offset to
+create the actual type DIE. In DWARF5 DIEs can come from even more
+data locations. And there are also skeleton units which require the
+user to find the associated split compile unit DIE (which would come
+from a different file).
+    
+The new dwarf_get_units function simplifies iterating over the units
+in a DWARF file. It doesn't require the user to know where the DIE
+data is stored, it will automagically iterate over all know data
+sources (sections) returning the Dwarf_CU and the associated Dwarf_Die
+if requested. If the user requests to know the associated "subdie" it
+will also be resolved.
+    
+A subdie is either a type DIE for a type unit or a split unit DIE for
+a skeleton unit. The same (and some more) info about DWARF_CUs can
+also be gotten through the dwarf_cu_info function.
 
-diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-index 4405f81248fb..1b939f5583eb 100644
---- a/lib/Kconfig.debug
-+++ b/lib/Kconfig.debug
-@@ -378,6 +378,8 @@ config DEBUG_INFO_BTF
- 	depends on !GCC_PLUGIN_RANDSTRUCT || COMPILE_TEST
- 	depends on BPF_SYSCALL
- 	depends on !DEBUG_INFO_DWARF5 || PAHOLE_VERSION >= 121
-+	# pahole uses elfutils, which does not have support for Hexagon relocations
-+	depends on !HEXAGON
- 	help
- 	  Generate deduplicated BTF type information from DWARF debug info.
- 	  Turning this on expects presence of pahole tool, which will convert
+You should either use dwarf_nextcu or dwarf_next_unit with
+dwarf_offdie to get the (top-level) DIE. Or use dwarf_get_units and
+possibly dwarf_cu_info. In general you shouldn't mix them.
 
----
-base-commit: 610a9b8f49fbcf1100716370d3b5f6f884a2835a
-change-id: 20240105-hexagon-disable-btf-1ee7cab7d5f8
+Hope this helps and let me know if you need more info.
 
-Best regards,
--- 
-Nathan Chancellor <nathan@kernel.org>
+Cheers,
 
+Mark
