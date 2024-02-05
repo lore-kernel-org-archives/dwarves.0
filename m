@@ -1,86 +1,91 @@
-Received: from gnu.wildebeest.org (gnu.wildebeest.org [45.83.234.184])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F5452C1B7
-	for <dwarves@vger.kernel.org>; Sun, 14 Jan 2024 22:37:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=klomp.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=klomp.org
-Received: by gnu.wildebeest.org (Postfix, from userid 1000)
-	id 10D24302BBEA; Sun, 14 Jan 2024 23:29:30 +0100 (CET)
-Date: Sun, 14 Jan 2024 23:29:30 +0100
-From: Mark Wielaard <mark@klomp.org>
-To: Dimitri John Ledkov <dimitri.ledkov@canonical.com>
-Cc: dwarves@vger.kernel.org, elfutils-devel@sourceware.org, acme@kernel.org
-Subject: Re: Porting pahole from dwarf_next_unit() to dwarf_get_units()
-Message-ID: <20240114222930.GC14151@gnu.wildebeest.org>
-References: <CADWks+b06hpoBJpVdtd4HXdC0w24hObq0WOGCdfMGkpC7k=2vQ@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9AD25812A
+	for <dwarves@vger.kernel.org>; Mon,  5 Feb 2024 19:21:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1707160897; cv=none; b=KhhIPpYlUSbFNFroWk4SupzknaJfJFCFXEBGf9wB7HDQqD8cXuzPOJaIX5+4sHgU0FkGBg0S0WaasyezoVSNn5ttqhiH+eguks8sAHA9L9x3GRxXDWLZR+F+t9e2fcOUC8vyBmySiGeNCZzfTm2ZEtuEYP9GDQfVn1NA4DT6rDo=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1707160897; c=relaxed/simple;
+	bh=ynjD7gPV6rI+uAvCwaBtqFOXsk7HH+5Xbr5YFNAThKs=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=DW2e0IPCZHIElz9u6reJDKP89NtVUqGE34Q/DF40ZY90UWAfI+2LLY2EsGTjKFW/F9czLyU0Valnt4VB2hksMwyn0T1Mb4zvg2bvMp4tf3r8cYVTolDXtnM3MC1OxfiAbOsNI944OpzqH25n57YDzmlPLacFZxB5Zuc0EqCq41M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hNSnDhIl; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hNSnDhIl"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3579C433C7;
+	Mon,  5 Feb 2024 19:21:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1707160896;
+	bh=ynjD7gPV6rI+uAvCwaBtqFOXsk7HH+5Xbr5YFNAThKs=;
+	h=Date:From:To:Cc:Subject:From;
+	b=hNSnDhIljjVAk8IGxGuZvNZOmjs7pZZaHaj/QfkogGl85BYXOvMnjBlaoMMk29uim
+	 EDPDIPqfYTo88QH8ciGEudW1g1n0jDMXO3MOJbEy6Crl3xAiz6edAnvgX/AZXUdG2E
+	 K2BZwxA9Scs+oIBLQ2x++PalINfUY5jHrLSwkDv/8WCFbfg8mNoJYKK4sDePD1SZ3K
+	 6kUqTVRJSnp25Z1Uv3kaDai49gnk7jpJbcwy4d2rd0pfHLbyT8UZP4rD0+R14zYskJ
+	 12+Xxps+oalh/dzJt7SxXPmF69kHdeDmqFDEOVc5MbHQmP8x/AUyQGQEvynnGrxVFV
+	 S6hBULNBgDykA==
+Date: Mon, 5 Feb 2024 16:21:32 -0300
+From: Arnaldo Carvalho de Melo <acme@kernel.org>
+To: Alan Maguire <alan.maguire@oracle.com>
+Cc: Eduard Zingerman <eddyz87@gmail.com>, dwarves@vger.kernel.org
+Subject: [PATCH 1/1] pahole: Make sure the features string is NUL terminated
+Message-ID: <ZcE1PJ8MPXzVb3mJ@x1>
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CADWks+b06hpoBJpVdtd4HXdC0w24hObq0WOGCdfMGkpC7k=2vQ@mail.gmail.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
+Content-Transfer-Encoding: 8bit
 
-Hi Dimitri,
+To address this compiler warning:
 
-Sorry, this arrived before my vacation and then the new year happened.
+  /home/acme/git/pahole/pahole.c: In function ‘parse_btf_features’:
+  /home/acme/git/pahole/pahole.c:1353:9: warning: ‘strncpy’ specified bound 1024 equals destination size [-Wstringop-truncation]
+   1353 |         strncpy(f, features, sizeof(f));
+        |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-On Tue, Dec 05, 2023 at 01:03:01PM +0000, Dimitri John Ledkov wrote:
-> Currently pahole warns and does nothing upon hitting
-> DW_TAG_skeleton_unit as implemented at
-> https://git.kernel.org/pub/scm/devel/pahole/pahole.git/commit/?id=0135ccd632796ab3aff65b7c99b374c4682c2bcf
-> 
-> In elfutils, a while back a new API got added that aids with discovery
-> and processing of such tags -
-> https://sourceware.org/git/?p=elfutils.git;a=commitdiff;h=79f0e623dcde4b042bb72f636a2211d67d5c0ade
-> 
-> It seems to me if pahole is ported from using dwarf_next_unit() to
-> instead use dwarf_get_units() native support can be added for
-> split-dwarf (dwo) files.
-> 
-> I am trying to write such a port, but it is proving to be very
-> difficult. I am entirely unfamiliar with neither pahole nor libdw nor
-> the dwarf file format. Thus it is very confusing when both pahole and
-> dwarf library use very similar type names and structs. For example
-> libdw has struct Dwarf_CU and pahole has unrelated dwarf_cu struct.
-> 
-> What are the differences between dwarf_nextcu(), dwarf_next_unit(),
-> dwarf_get_units() and when should one use each one of them? (or nest
-> them?)
+  $ gcc -v |& tail -1
+  gcc version 13.2.1 20231205 (Red Hat 13.2.1-6) (GCC)
+  $
 
-The dwarf_nextcu was the original way to iterate over the CUs from
-.debug_info. Then dwarf_next_unit was added when type units could come
-from a .debug_types section. Both functions use and return offsets to
-iterate through the section and then get the CU DIE using dwarf_offdie
-(or dwarf_offdie_types). This requires the user to know beforehand
-where to DIE data is stored (in the .debug_info or .debug_types
-section).  For type units one also needs to use the type offset to
-create the actual type DIE. In DWARF5 DIEs can come from even more
-data locations. And there are also skeleton units which require the
-user to find the associated split compile unit DIE (which would come
-from a different file).
-    
-The new dwarf_get_units function simplifies iterating over the units
-in a DWARF file. It doesn't require the user to know where the DIE
-data is stored, it will automagically iterate over all know data
-sources (sections) returning the Dwarf_CU and the associated Dwarf_Die
-if requested. If the user requests to know the associated "subdie" it
-will also be resolved.
-    
-A subdie is either a type DIE for a type unit or a split unit DIE for
-a skeleton unit. The same (and some more) info about DWARF_CUs can
-also be gotten through the dwarf_cu_info function.
+When building in Release mode, for instance by using the buildcmd.sh
+script.
 
-You should either use dwarf_nextcu or dwarf_next_unit with
-dwarf_offdie to get the (top-level) DIE. Or use dwarf_get_units and
-possibly dwarf_cu_info. In general you shouldn't mix them.
+Cc: Alan Maguire <alan.maguire@oracle.com>
+Cc: Eduard Zingerman <eddyz87@gmail.com>
+Fixes: 7bc9b9975545ab53 ("pahole: Add --btf_features support")
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+---
+ pahole.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Hope this helps and let me know if you need more info.
+diff --git a/pahole.c b/pahole.c
+index 768a2feb338a2f3c..0e079ae19f231a5a 100644
+--- a/pahole.c
++++ b/pahole.c
+@@ -1338,7 +1338,7 @@ static void show_supported_btf_features(FILE *output)
+ static void parse_btf_features(const char *features, bool strict)
+ {
+ 	char *saveptr = NULL, *s, *feature_name;
+-	char f[BTF_MAX_FEATURE_STR];
++	char f[BTF_MAX_FEATURE_STR + 1];
+ 
+ 	init_btf_features();
+ 
+@@ -1350,7 +1350,7 @@ static void parse_btf_features(const char *features, bool strict)
+ 		return;
+ 	}
+ 
+-	strncpy(f, features, sizeof(f));
++	strncpy(f, features, BTF_MAX_FEATURE_STR)[BTF_MAX_FEATURE_STR] = '\0';
+ 	s = f;
+ 	while ((feature_name = strtok_r(s, ",", &saveptr)) != NULL) {
+ 		struct btf_feature *feature = find_btf_feature(feature_name);
+-- 
+2.43.0
 
-Cheers,
-
-Mark
