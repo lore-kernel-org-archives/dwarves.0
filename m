@@ -1,152 +1,242 @@
-Received: from gnu.wildebeest.org (gnu.wildebeest.org [45.83.234.184])
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF0A6383B6;
-	Fri,  9 Feb 2024 13:34:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.83.234.184
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707485693; cv=none; b=H8ve+7UhYDOxBwDIEJJ/3uFEujCpxjF5XsnwbSj+dL1NeBuhJvOoTAkxFKWkBPiR/WC20BASSCbL+a4vHTAsOFc8k15leWSgA3qiuD//EGUbTWwUX0QfODksknmTIhKlrd+XGslUs4moNlpQXonLJq5lHh81Z0jHxQLZcf4DvCw=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707485693; c=relaxed/simple;
-	bh=YwE9cHhKhhBpSsDZCL92ttY6c2YwtUIaImHuL6O8huA=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=SQkrgQMWKwkrISQmPg+TCojPtN4sKxtbYcdS1wc/dIcNGhijnhdhLVRLSyCCbtzFFV26Ow80RbeEKkIr4MVsWLQsU7HWEmYTilpZj/8LCZe1BDBL7YXz4JTmol03b9kPojb64fp/6GQGFzRCyRqYhiYsTXEs1HOl+ioOay7i/IM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=klomp.org; spf=pass smtp.mailfrom=klomp.org; arc=none smtp.client-ip=45.83.234.184
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=klomp.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=klomp.org
-Received: from r6.localdomain (82-217-174-174.cable.dynamic.v4.ziggo.nl [82.217.174.174])
-	(using TLSv1.2 with cipher ADH-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by gnu.wildebeest.org (Postfix) with ESMTPSA id 7FBE73000673;
-	Fri,  9 Feb 2024 14:34:41 +0100 (CET)
-Received: by r6.localdomain (Postfix, from userid 1000)
-	id 1D4363404FF; Fri,  9 Feb 2024 14:34:40 +0100 (CET)
-Message-ID: <6498586d7d0ed112e6c44be98d439abc549653c7.camel@klomp.org>
-Subject: Re: [bcachefs:header_cleanup 21/51] /bin/bash: line 1: 19420
- Segmentation fault LLVM_OBJCOPY="llvm-objcopy" pahole -J --btf_gen_floats
- -j --lang_exclude=rust --skip_encoding_btf_inconsistent_proto
- --btf_gen_optimized --btf_base vmlinux drivers/misc/eep...
-From: Mark Wielaard <mark@klomp.org>
-To: Arnaldo Carvalho de Melo <acme@kernel.org>, Brian Cain
- <bcain@quicinc.com>
-Cc: Nathan Chancellor <nathan@kernel.org>, Yujie Liu <yujie.liu@intel.com>, 
- Nick Desaulniers <ndesaulniers@google.com>, Kent Overstreet
- <kent.overstreet@linux.dev>, kernel test robot <lkp@intel.com>,
- "llvm@lists.linux.dev" <llvm@lists.linux.dev>, 
- "oe-kbuild-all@lists.linux.dev" <oe-kbuild-all@lists.linux.dev>,
- "linux-hexagon@vger.kernel.org" <linux-hexagon@vger.kernel.org>,
- "dwarves@vger.kernel.org" <dwarves@vger.kernel.org>, Sid Manning
- <sidneym@quicinc.com>
-Date: Fri, 09 Feb 2024 14:34:39 +0100
-In-Reply-To: <ZZXHTawRETL4XNmc@kernel.org>
-References: <20231219205348.wvvxyicaatmljxm2@moria.home.lan>
-	 <CAKwvOdmrvwdbFrtzsOjoLJJZ1pDZOBWBiEb=Mx5bCHuKU2wPzQ@mail.gmail.com>
-	 <20231219210454.GA540439@dev-arch.thelio-3990X>
-	 <ZYKWxl9oQXODIoNe@yujie-X299>
-	 <20231227224338.GA267659@dev-arch.thelio-3990X>
-	 <ZY2EUr+EYzyro3NH@kernel.org>
-	 <20231228173404.GA412881@dev-arch.thelio-3990X>
-	 <ZZQ6CpBnqpBgxSgp@kernel.org> <20240102175342.GH26453@gnu.wildebeest.org>
-	 <SN6PR02MB42057525427B47481F1934D5B860A@SN6PR02MB4205.namprd02.prod.outlook.com>
-	 <ZZXHTawRETL4XNmc@kernel.org>
-Autocrypt: addr=mark@klomp.org; prefer-encrypt=mutual;
- keydata=mQINBFxDPtIBEAC8xePaWvq5cDMBYtrpdmR20YX5xrDXUeHgueSVE9Mw8yCan2Cq1Ac1jHYnXxp4Jj3q4tIS9Jq2oAbqxyvBMdJYqEz4z709eDnYBacZQcGqojLh3HI2P7lmmKxkL8rS3Q3Ug05mYT+MwgmRvIO1+kwQTcq1AeB9z9/zikgY1Jv1R86gH8G84OPbJUowdE/mT3pQ+2UQnarCVPJ3WJtZNDXPRzskk0t5h+Mg5RtX+COoHfsvWHiEUTmHMfynw49GG/YF6jLSVzMlKMz3jdOePIArpm2BNUu8DvEn9at6daKR4Ah+ujDd08l9j8wFhJnenn/9+ENjm9kOGQWOmH/fEIOlMAATVdZEfHVfAWbgICPSrPyi+v3ACE4uEoaw85LgbAAbhzdswlLezLxS7LLTpfDZUFZfkho1MSGXaCQ475/iVAeuxi61B2VcmH4lOSH7HYNkMY8ggGk2/WG35eq8PZme8PvXUmLu+f2jzy9XFekIr+/Ks2TchCTYCw6bhSLPa19HapCxvWXgNcYzZ8jULqBXsAfj4NnzBTn6u5nsJ1reA8GoO9vLaQf3LDgr+UY/z+6N474lAVfr0eIdWzkWPvX8fcBCfiB944rPr+Q50RUfc9ngIKP4JsflhXTn601aL4r6qkCcBVqO/eRhb4vCAUo7csemTKzI/05ooGfQtZ3O5QARAQABtB5NYXJrIFdpZWxhYXJkIDxtYXJrQGtsb21wLm9yZz6JAlEEEwEKADsCGwEFCwkIBwIGFQoJCAsCBBYCAwECHgECF4AWIQTsPP6I9soHiHdPXB0apEvmSd52CgUCXE37mQIZAQAKCRAapEvmSd52CuO9D/9Fi6LOrU+iYHjfIk+wT8jyhF1YNATnooa5W7y/4QlXOIyKmkXM/0faH1hZNGf4qVK4dBUewuhALMEzudkXEhzudg9KpB9SaHZNR5DZ+YHo204zJ84P+aJa7F8FOScbNAiG4
-	pFGC7sQxvtAz0skM0yLsdhNg2tM8lM3n9e/rO4EK7aR55ojzE9pCWhRSx/AKYT7545KzXuCRTky8fRcI8YeNNLPIseoV3QPkf7qNi6YXl0yUHV5gQMCWqgbfdHAljd2+N1RZvdzfEOLVPLX4/dgxb36i9OKkuCAHLoL2UXfzcAElltHQundNi/xYzSizzEYBeIbVrbuqiJP1zmiPUKxHibkU3ThZZUbonKRNVPQe1hO47Cxyj1RxXl6Nt9uda3W9ow6Kr96Bjs3WVBSqsuohqaAlAxC6RccslrEw/7N7l8S423LJI6ZV+FvyJzmSAqkLNz/tuFSMj76uH4s1dLbRv8K4fcw1vZgqy/4jIhBFycn29hMNvImKbMnLDwC7K92lBGQ6hp75/0Hf1qHOpDaiyV9Qqzr3sTOMXJiYm3ac5bDqJb9Mi5YPNB2OD3w3bDMGT5+eWjmw9RiYT5gNjY6nZhDiQS/PtIc6l3i2GaBjSdurwj47TlCWALj3ZiiEKiybanK5/YXdVXGchLnoNkxeI1YcANZhX60FWEyaHZsa7QbTWFyayBXaWVsYWFyZCA8bWp3QGdudS5vcmc+iQJOBBMBCgA4FiEE7Dz+iPbKB4h3T1wdGqRL5knedgoFAlxN+lMCGwEFCwkIBwIGFQoJCAsCBBYCAwECHgECF4AACgkQGqRL5knedgo1bhAArI7kReYq4YtaxS8Pxb5MdPxiQVtvfkbycWCZ4owzPeEIkJqcbadNUiGSqCRR2xeT4kuzFZWILiZfBTwHwFM/bXRDK/FOn7F8aqUAV1tq2W70Z7BUpTwpAv7Xm5YvsfbTBZmllJltEiIrKIzULCtRKKVXgtOKg0sd/W2aXwyl+OX+PVzu4mXXNEkO10J7VpnCvjyaJNeKgeJYQLizSWdEf7i6RX31yC29+GsSqikaOHdfxJMM+bo/x/aCuYlgDB+OQ6LZzpXZO0C8B5SMgMfZaK1rxDtUtViajSyOFJ4Ig6
-	bcgc5qDCLnk407oEN1yBWps867uN/Bi4Dk+xh691feGsyq95DvPis2Ut+0X0/Wi/uLg3uu/X5EcNHynwht7KaGCLeuOZKxvzfeudNeyKFX34HtFyE/2k9LR0mFX8XnXQGBD9psOxcd2K8Rku9BjjKDZ/vf53sMh5vxUNo+zkd+5dLZWPnLrhkfQrepDBP+Tc/6W0VSZCP5/nKX6GjPwmELtZj4jGf33tgfNMJrmxGUjpDxtiJc7OroNC4he3F5AF4RNRa5VvHs6ah57swVvKyJmLH5mxxKIn39PspOhzVxSbkWNPLS+km2InPum+fmYKQL6IrHcqt/ecrR7o9GRgI0cJjLJ+wv93ti+gxsUWPbAUBaJPk24omIpQafFT/YAEW0Hk1hcmsgV2llbGFhcmQgPG1qd0ByZWRoYXQuY29tPokCTgQTAQoAOBYhBOw8/oj2ygeId09cHRqkS+ZJ3nYKBQJcTfqnAhsBBQsJCAcCBhUKCQgLAgQWAgMBAh4BAheAAAoJEBqkS+ZJ3nYK6JIP/jGq2adAkk1IPsVx7X5argCXaI5o3aTG+N6BPMvizGY4CyqTBmYAg3qRPWN4U+wxNFgzQ3nPfptJK6EDBAY4Lw+kKR4o8o5zPyjAjbc9/be5bvTwMFmMbzWxGWoJ4ch9W+wD4W+W8ssnJDbVi5Btp7kKyUgg3KP7oUQpxZ9MTgmKEmPuce9zOQ78q+LIPbkhI9zCS/1VCHkeVyn+TrnACoHx7sKgJoOwjVlcbW3S0sdCuaGg3+VLI3v3IpQ56UXIX6RVeLX9zVDZnAq72Age4HHcxjX97j16iL5ZhZRc24J5tpSkJgHt+RASOKHJGPIivCqKbQKhYc1G4MbFbGzclaLTXya3Q4ekFzo4ohd2ga7mgjG0SJ+aIU5wCYxEUDsqJLm+uH/nbQzXTxIoQhH5yub4OhW88z6LpwPGhLvzS2SuPJIXAlbGyrH70/uRZWkwKF/8mQjMCsLEYkZ
-	9DRB815rUTc9CJkkeOlPXQUbxr2fDAgi0j3yAUxlrC7jESO/zUJrICbxChYAx9KMWG/2PsKbrGAAMKiC7+q6mY09Q63F/g1DEF2sb+bguMdWc7SEj64jFUf9wJ+vjU1F321Bkh/QWMABv6n+7EFkwnNkylCR5H1boOHO03TNT0jyLbBECR7/Mtpwt46c4+n9EPCmQyvdU3MVPORvZge1hzvuvfo22uQENBFxDuhkBCAC19Q021v7kTuwYKwEmbqQC5wvmbEMT4ldvQ8gWCUIFL9kTxM67IF0annsys+rrAyqqFUTq2onVmgjciu9upl6uDdV3wivCBEDN9ZLZAVHTSviiXDhnHUSg6EhCdZKhal9DKAi+vGSLSe14e2Kfoe4c6R0yDVI+Dn0OfUhlMXu2NoDSFLAdHsDHSCrE6xKO+BNgL2MPuMeXLhNitNIVrykoZMkFrUMcMsHrvrk05ah87RQO1e2ljenn8qxPRLdOVWc0TJiosjiy04vwDAYNUCPDL5W2Mp2bv2AeTPCzF1qkDnGKZEqV2peWKCPB608lS1icw5oKtOl50PSgzTdaLVRXABEBAAGJAjYEGAEKACAWIQTsPP6I9soHiHdPXB0apEvmSd52CgUCXEO6GQIbDAAKCRAapEvmSd52Cpy8D/9tq4BQ3VwrDNCxycALqWvZSPv/AgsT6hRvQsLc6Yp0FEtz+frFPLWt7bylMrzKItpsr0G2FofWw0yNyHNYPmGlCi+SrWLJnUTEm5TZgwT+9kLt/mJ4B0J1gHkknXSo91S84DPaik9CH0GmXIQyPANkDDlmp9W/Hk8oKxxvCx+SSsZ6ANXakcNVg/w4MhDW2HowW4sBvtltOFSgPRs9zISiNw//GYjeYrdOOnieMhszwpjQuK5XYnDhwiSap2D8nQlD/VpAa2CvE/fOFV2CJyKZfE0J8v5DZOU+SUwnty1f52ZA1s/OCysaK1LLdCXz3bQiybQZhobcAneBVZFl
-	Nzf6xpR+pGtw3OVSyLQo4LSQf4lFszNy8FfE+BJ1/yUWFBjljLwIHd4IW7Y17PugAc19fQ23krOIc3O4qsuYzqdhzYzqGbPvf7fY3Tz0BNcW5885KEQJH7VJJLqpf3EELhmkLBONYiF10iggFSmn8WSQWbXm0kGRETvAzf+FYcJsKDu9QASDRNck8J20ZJGVLbZNdP+VuLOXCDAkSGIxi91TLi6bY0Mb2yNRgAq6cnIJUTAbcnw05BLxRW+e8AS3HodjZHWzAMDPpZn5TFfJOXdDhdeePVGgkypxwnbeyTT3OjUEh37vr+XIgrTMpz+ZNpHxLr4bJatQEVK3H6Q3ZbQkMbkBDQRcQ7q3AQgAqSM4Wx4QvvCIf8is+57mLJhceB2kLt3VR67UFZC0ywcr5V0pvTuu2U1oUB+BVYC/A9UdnvWTyDef3xTCx0hAiiFhlMe6CkODOalmxI+KwPxD276+70tcxd8vR2FJviDQKw96f2hlLAnxR47GUp3cPfIgVfkvIXnXLMUJQvBhXeXqgYhOcAplI677n/zTeFjBtd/JqtyDoJ0De1odEyC+ZZD/Jo5q80Sydhvb99BHQMgLTJTJPW1iRV2AK4xfBjxOMwqml9Lx4HRIpV/IHs3MTyhEpEA+I/eKpO6UxApHWHZ76Zm8BL8RwnfFaXjMueRhIGMFtJnLuNFc5mOLXa3uhwARAQABiQNsBBgBCgAgFiEE7Dz+iPbKB4h3T1wdGqRL5knedgoFAlxDurcCGwIBQAkQGqRL5knedgrAdCAEGQEKAB0WIQQSdoqWeVmQEHoNL9/8V+PMrNmaeAUCXEO6twAKCRD8V+PMrNmaeEvuB/92qMj2mQN3CXRQUTlmzVNUJLJAwzjRDoSt3kqDrACJ2N8JLSxWFeHmEmrrmFPUmXfBUkT+F2W+OrsJlUtwepuTYROgLNZebFQdjB38oqsj8RMKb5ikWntRUka2xhSDRBa0IlpxHBWLHS8nEx1x4
-	HB4uYRK3IpWShAVmWk7jiATGJLFYJGVo4TBfM27zCty8/GQN/3A2DAJ2OJbiJ12ByTgzztGdhJ69H/QUltkK7eJUGMjPwhpmp07lrolyUurbzaLMQow4SLo/ZIxa0nPC+AoMSk06teichCZwIyiU/70S0c/uL3RFhnTbgWcdQkAVpWdkwFqIES4xG5QLUu85/WT7lMQALJKKuOOpbOeKvyLV16Oo70OTms/LbmXU9+bjCjz7QISuzhI4rua0onjQzBaRXFYkfCjBudWaEpy/wP5wk6QlqxLkeZNCk0TswksLxQjyO2XgBcOnrSsQIEJ7VICG9PDvtVzbrSBYMjoDo58AyniEMVANyUnFYl1YBlFt506PDh86ZEqlpbbReAsYfEuBQdBfJhWph9WZgJDVtEHUAxaiqisvNEbz4xRIAsxX/OxnQMdD09Xs50yvl38ERIadacejtQnAIYeEaUBsgQk3rt0+g9lm6trD7P4FXYhUD9vml6/n8TGB3UJi3lKpX41GSUC1y+oPna8p+EEmrm3BbB4fgnIkfYiEDNogvm2pe7nzUP7sNnE8RcyYcjUoEQ0Uo+HB6fk6NeBGKqaIKVexCcExnWKHvl0DZzGydvKx41nyzFI1sueg34LcWwpGHXzJyhmpjhNe1GOKtVGHCGKhKhppK4ntUZISciGh38wvKuFDohHO3JVZ9AhyRWKTuynzLarBpmvu11TDbv0lfnZcghlWWHNlx8x8DdaEuFWXZTDuVXqGclmeV2hS0LomX33LCB4n0XkZtC9LsmTIsr+ZdVCAXUeX/pJONNxNF8G47lZLLgLWF9beuHWp3u1Io31fzh44TZxm1Z31wCZjOrsL9bvy3xHyDFaDL+/7i6TXsSxtqTXuQENBFxDu6IBCACgVJJnY8zh8uHn8d/E7p4j+9ueTvTHMRYOS0kkGhHBC7JmxCw6/EvbnbTsI0CQeyIJHlmPIqDVgRVjijcTWacd3vIdazzH9sqs65
-	nl49yMnA23tIya4VWlbHC3J4x/LL84A4GaJO/FVF2vv6hVg3IGbopp5KX+pr6s56TiWddSDqMgjb7rSzjWuNyRK75ToctL7Y/Zn6st3ZioO7LXq3ghkWf8JR7ZaUFIY6P1qS5heiCHP0PxQJSrtpYzH3rKJoHpIkjxnsB/sD0C05cAdlzXBTUVTNLY+DPlQ7FeRkG+VK91briG4tvQ8ohhEiC9HuJu1AKMNWBZ9qeUwsXaJvNzABEBAAGJAjYEGAEKACAWIQTsPP6I9soHiHdPXB0apEvmSd52CgUCXEO7ogIbIAAKCRAapEvmSd52Ch8ZD/9wKuIlaRMSB1AMCwhGPaqXZahrJ649Y0jI4JqpFKv2/U5hKHOG7bihRAeEj7pZzhlgBrkZg1SBdZ3vHs1ufElnfe5RQApdDm93daU5SP29iEivJQxKjF91EfEffl0trxxztBipI5/2D+kaS8cnNVfzo5ZEWy/cd6AShvRVHM7Y2QHc+mlaZhYhBvTtwC6avXNnG55WYgobGENeAwkyD072JF3XrxFb+XkcKxla9yRdWdHxJd5PYJqsKM+nVeJM226OwOyU235gfIhIP6pfGqF9UVH0uFoCYkVkUSjVd96Q+Cj0kdhTOrtLW1OY11d9TBxje42GOtc7X9Zzx1nhwU8rCCErF9/uJIJKlq7I08rMX3rFDTtizwN7g7ZBkDDiZO+BIKQPt/awA9NM+tda02hyfQokBBi+v8b/iKifKIfUaqPDo1PA5uxljdluyX8AXIotKjJXF6Elsiz7bVpcIc0ZXOOFr9ylmtZm51YNmOzDNznEBmol2oBZfsk2G55/QgShHmKUnvzKANBGfnfS/a/K7Hv4sfZAb58Prl6OmQSrkmhzFry/4BNLKq+nd4s8VXkJPpx3Ogf3DoIynqpNF0bwf52U5IgJSNcJN/HrAwhaG1W+Y3LDe7S19M0cUzftEUeq3Jd89hoijC72tdba+BRfW0ncfvEcsk9
-	QifSU1tvZxQ==
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.50.3 (3.50.3-1.fc39) 
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 254B91F5F6
+	for <dwarves@vger.kernel.org>; Tue, 13 Feb 2024 18:33:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.165.32
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1707849217; cv=fail; b=BuYEZJkjaCByTnx6xeWR344NXrLmZtYzKckr3X2NdP+9yWINXXWKB+cLprPO1N52T+YDyeUoQHekYb8ktQvelgxbdati7gxkjxUgfHkOScq7Ek+HAaZqhDRDRPdRCWIWSUrTe+A5uXmC+ofHnC4S5WpKzsVKsJzoGrYvvLYPsZ4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1707849217; c=relaxed/simple;
+	bh=yL7ZlPYnAQFsFa7OidOXPkndTn/o+LKGDd0oTmXLL84=;
+	h=Message-ID:Date:From:Subject:To:Cc:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=GdtcVxZ8uu6EU/84g75RcPjhfUHdDpL9WsUHfbqzek1OA35Po1H1l0aYIU+YSjWAKXliiJs+9AIU1dmACIWwMCbWu052IhQy3eDAopDpo/3WK9L2eTIAB0YDDysHUIlZRa2Ci6abGDrgoIW5gAYANE2XlJLItCtWGYB9OLw+Nwg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=Mq/DPmUc; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=W8OpUwQi; arc=fail smtp.client-ip=205.220.165.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="Mq/DPmUc";
+	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="W8OpUwQi"
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 41DI9DQD026320;
+	Tue, 13 Feb 2024 18:33:25 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
+ from : subject : to : cc : references : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=corp-2023-11-20;
+ bh=lJZaQjuZwGAI6qfndCjYNREkRYbgEZNb1iqPIPRiZC8=;
+ b=Mq/DPmUc6vgqW2dqgednoA30uvfUTy7YZ24ik0W4/uc5jvG7qur71LeEJQ1ZX01VoSNm
+ dbiQR5ivJKdHGsS6R23qaEqVxUUpkXuk2Pv/E1htTttXvOSYXMpC3n3u+J1v/3JP0aRa
+ fCJU3UpROKQLVEMbfS83D5Hw792Mod0+Vlcu4q0eEVZ6hkEohMUezISBPIKznls3JfEM
+ z6sjbMBSCfbb0cVyXk5DV9Dkckk67+1XvCqNmC2ilU9rPsmEF60zlQ3MxYIEWHmGeG0r
+ zspiKuIJF/yDPBL4/y9bs6lm+kuM2rnX9pHWQWy4bZQwFP1vvbN5cJrQ+dVtJ/9Y3xiV mQ== 
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3w8cxr84su-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 13 Feb 2024 18:33:24 +0000
+Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 41DI8WWK024638;
+	Tue, 13 Feb 2024 18:33:23 GMT
+Received: from nam11-co1-obe.outbound.protection.outlook.com (mail-co1nam11lp2168.outbound.protection.outlook.com [104.47.56.168])
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3w5yke1wwk-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 13 Feb 2024 18:33:23 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=HenSUDhzkUCy5Cycrk7RpsPB9uWZeJU4Og6tYXldC2rwedqONvgx1wVzn4ilKa+e/fSJ6nI7R489hmTzsQ1NxDYY0h8BTLc8KmI1TuOxcRKm7rCuC/C7yWTG50poQV22TvLTMunlWiNRj2dpP3w9e2fETBOWRbE20Mxm1wYxBhM72vj6Z+lJktQUFnRIrlrNWOr7H/3rFKvIPjZO0lYoeaR+QuzdxQymimke6PB2skduzxSqbJgKnBup5bGt1RA0A0OAmYeN4O8/OpI/T0NN8xVF+AuCsTLil7YE2tQVlJIwjkQVGtQU1gw/+K66IrZTSASWzdx6LwIF7TQD+zToVQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=lJZaQjuZwGAI6qfndCjYNREkRYbgEZNb1iqPIPRiZC8=;
+ b=fZQGnRkxTfvdgLMrnrv5HHLg3VVZ8V+vd3gi8dBmQyGr4PcEJdN5uEAGtyPE4ZeUoacVyTUzECa73vpTqOpCDWf0pXkqYvFdsBqsL/zIfzwvU1Ch707icBg7V/l3cYny0QSOTy0LtSgIc4LQISM5ahVo+YXMnL+EGuT4vffYsrA8gx5dxNLn2Ls1XZ2ThmTDnc3OpTLAfftUmOYM3EVNWHZgOWEhr2DECvg+EhCfSB3tYfo6dUfbs32IU/de39nLQTlVnJBAs6w5wCLxt9OTco0X7nwIZGqClxOBOOp592MARcfic0WJESoaGHCXxTPmmYy07Vwz8Xz/CvyWL2275w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=lJZaQjuZwGAI6qfndCjYNREkRYbgEZNb1iqPIPRiZC8=;
+ b=W8OpUwQi1PVkX8Xy7gytZmsRJzTTf33KqVPVsaLEZ1CJyyA3V2P/FZYiRWPfrft1cQEhswUn7TnilY+ZX7rMrDYasRulWJmiYUBJwjnS87FJ1SlXmoemAyspcSA1h9jp/ISp6TIVNienK3Dw4/tijpA9fHk/is61GtABv+gutxY=
+Received: from BLAPR10MB5267.namprd10.prod.outlook.com (2603:10b6:208:30e::22)
+ by CH3PR10MB6716.namprd10.prod.outlook.com (2603:10b6:610:146::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7270.27; Tue, 13 Feb
+ 2024 18:33:20 +0000
+Received: from BLAPR10MB5267.namprd10.prod.outlook.com
+ ([fe80::b3b:c19f:bbba:7f70]) by BLAPR10MB5267.namprd10.prod.outlook.com
+ ([fe80::b3b:c19f:bbba:7f70%7]) with mapi id 15.20.7292.022; Tue, 13 Feb 2024
+ 18:33:20 +0000
+Message-ID: <9b67e055-23d7-4067-8db6-765ef459f79a@oracle.com>
+Date: Tue, 13 Feb 2024 18:33:17 +0000
+User-Agent: Mozilla Thunderbird
+From: Alan Maguire <alan.maguire@oracle.com>
+Subject: Re: Encoding BTF information from DWARF causes "has void type" error.
+To: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc: Arnaldo Carvalho de Melo <acme@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
+        dwarves@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>
+References: <20240206120226.6r7n4vQ3@linutronix.de> <ZcI3TVlOYuQfCWv2@x1>
+ <ZcJA-mrVh5qmkxfV@x1> <e009cb74-feba-47c9-9d5d-b99517261017@oracle.com>
+ <15bd5441-9e34-426b-9715-df43beedf1c8@oracle.com>
+ <20240207123021.zCd9dUk2@linutronix.de>
+Content-Language: en-GB
+In-Reply-To: <20240207123021.zCd9dUk2@linutronix.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: AS4P189CA0007.EURP189.PROD.OUTLOOK.COM
+ (2603:10a6:20b:5d7::18) To BLAPR10MB5267.namprd10.prod.outlook.com
+ (2603:10b6:208:30e::22)
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Spam-Flag: NO
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BLAPR10MB5267:EE_|CH3PR10MB6716:EE_
+X-MS-Office365-Filtering-Correlation-Id: 40794421-8ece-431e-ef5e-08dc2cc240d3
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 
+	xkU78UllFT/mYnSQ/Aer0g8l8vCrKdwkrqNbCd7YBbuHi3NKtk8RmxeAKJ8BAZXWPafz2Aym7EUh36GMKgfOvwTwJN9ho3rPsLOAdEdRbj/f9sD9GaQzolLz78cukyM5AKE3vHFBI6smVQvWI+Z7iA3rAUBNpQbDuz3eyEfE49pazJ9HB2+z6Th2r0bdRNXuWIc/ybPp62bRARhhDSVnEylBbt2MMmK+RhZd0JXXWemxjz7yOAMKli5ZWNc0ZM+o0DGyBTDdzc61a0bIUpUeUPP02AU93KzS9nv4fqwetXGQJb2tjgMAer904M6YhayzRHnRoywwRITijrecyz6vI3eADRn4qg1/kdb2oXcMjQZCDpPT42vZnzQpb+dioOgyHD9HxA5eNZlQtbukqY/c3RASBLK4MubopfYaov8QlUm3urd0g4lLnF+/ejAQgN7yHBtr/MS1b8wyOruh1fX54XfuV9hLw70cgX2i1SHGxqJvnYwe9/bCwwX2T9HtHc2jqqNtocDsDaqdXvOnWC0YsAhpalqafq+NariVsRQMl7A=
+X-Forefront-Antispam-Report: 
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BLAPR10MB5267.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(396003)(39860400002)(366004)(136003)(346002)(376002)(230922051799003)(451199024)(186009)(64100799003)(1800799012)(6506007)(31696002)(86362001)(6512007)(38100700002)(966005)(41300700001)(31686004)(44832011)(66476007)(66946007)(2906002)(478600001)(6666004)(6486002)(53546011)(54906003)(2616005)(5660300002)(36756003)(8936002)(66556008)(316002)(6916009)(8676002)(4326008);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: 
+	=?utf-8?B?WDBjYWJ6cGJWRWhtZVpRWW12QzAvTy85VFNqeXhCbVNtRGV5bk5vQzdicldO?=
+ =?utf-8?B?YXdCNm1iQXcxV1BXNWNOWU8vaGtFTDgxZHh2V3FWTzh0UmNFQzJQYzB4eU83?=
+ =?utf-8?B?ZGtNRCtCNGs4alBQZzRNR05Od2FiUHFVM01BOGpCTFI2QUc2T1dRV1JXemNh?=
+ =?utf-8?B?NDZTVWkxMzJyTXU2MWNIT0FYZ3lBWW9NSmdvdTBnUzhpSmtWZE1UbFhuRHVs?=
+ =?utf-8?B?VEc3eVB0QzVzRmpzMjZzSy82MFJmWVprWGF3VElhV2JCQ2ZFejFoU0VJemJo?=
+ =?utf-8?B?c3RJZmh0RkE1aVUwQjlYTzhqakVMb2NlcDNybVhVUkxXVkR3M0lkSXo5cDB2?=
+ =?utf-8?B?TEJHREhyRzZOR2RHL210VG1qNWtmNHpwQlNsTGo3NDh0dm8vQmZGclRuWFVD?=
+ =?utf-8?B?N2lKK0Q4cStubmNVV1ZMQWxCaHl6aG9jSEdKUU8xWnUxd05QMnRWK0owdEhP?=
+ =?utf-8?B?dzJzaUc3Z1hncnRJMjBaZnA1bkRybnVBdXY4dWpIOW52K3ZDMmpZSlcvL1Bk?=
+ =?utf-8?B?cEVNQ0ZPeDFBZVl6eXR5eDhCU0YzbklBK1lQL0x2NVdTQ3FUSFkza2FtUUxx?=
+ =?utf-8?B?VnJGNGQ0UkV0ZTMwZ1ZvK0pRVmk1eDM1b2pIdndwamlhNENhLzhjbEJTeDJI?=
+ =?utf-8?B?SEZxRHJGZ1RhdGRuby8xV3NrY3NwcVM2QlpUWTdRVlg0allJUFFFbVFWcG9C?=
+ =?utf-8?B?Z2ljczZEL1lUczVTWTl6L0FlbGdrNm1SVGdUV0NCWnVXcERjTGR6akxJRG02?=
+ =?utf-8?B?YlVOT2VnV0RpU2lNVnNpODhNUFN2MUJERERpeDlTa0NpNWVUd1BnUGtzTWFt?=
+ =?utf-8?B?ZWlpN0dzc1JXZThwZ0JEaFA1SmgzSFgrbUdjb2ltSnBwSHdaeGFjOVU0Wno4?=
+ =?utf-8?B?clZETnppNkxGUDJKUEdDUkhNQi9TZGp3aURsSVhJem0rSU5ySGY3djBiV2RK?=
+ =?utf-8?B?OUhZZ2wzTWt0b053ZlFpMFFyTUxWbzJENW5jOWJUK0s0NWtjUGRwOW1WR1pK?=
+ =?utf-8?B?c1pQT0pLVm8va3NMd0dHWE40d0xlTzYzN2Y5QUMyMHFzWHFtMnNOalZyVXhJ?=
+ =?utf-8?B?NGU4WG5aSWVRa2ZOK290MW4reFlGTWVHZ29IS0lLakVRb0V6czVOUXFLYzRC?=
+ =?utf-8?B?S1pGOWhnZzFndWcvM3JSQzVXeE5JNFZydXFYeUUzYmNBNUR3MDFCOWZqZHJ3?=
+ =?utf-8?B?NWJORGJvd1c2QkdhV1ZITVBiWmVYemtlZnFTWkcvclV3M2xJbmZHWWU1cDlM?=
+ =?utf-8?B?eWtPNUJONzZENmtJUmtNazJWTWJkTUc2dmEvd2RJMGh6TXhjR2Nwc25IeTBB?=
+ =?utf-8?B?d3BMUHJ6cUh3M3pxNGg1MzdxYTgrUjh0R2dYNFZtbTloOFdXeEhmS1p5WFd1?=
+ =?utf-8?B?YjU1MWFKM1laclprTVVVWDExbDd2NWh3MWVTaEN0SmRqNFp5QUJua1lucWJq?=
+ =?utf-8?B?dU9KQTlhcm9KSElFMmt1T2hyRHJ6SGFVRE9tNmhORU0wbzRyZldTSUZtZjZq?=
+ =?utf-8?B?dW5oMzUzSDh3ZUkzR3ZiZmhRemlnSjhlR0NGcmpOcUJyejJOQ2pySWcrUkxE?=
+ =?utf-8?B?bGMwalA0Mk9HMGIyN0ljMXRxZFF6aThFNU9QQVpIeStZdzFGM0JhVGRUR0NG?=
+ =?utf-8?B?Tk43Tm9ZTmNnQ3poM0lpbDVORGpab2xHUUpoeHYvVEZ1QU9lSXNBSkNPZHVa?=
+ =?utf-8?B?V1h4S2pQWk55ditYcUsrRDdJajgxMTcrdkNDeFpiWXcrSUVvUDgzek5oYlI4?=
+ =?utf-8?B?c2RFeS9zdXA4SSs0cGFsYU5Bb2pOWm5JOTdmN3ByamVPbnNvV3ZybkNPZkdU?=
+ =?utf-8?B?Qkl4cUx0NndjTXEzOXBxWkQ5dncrNEZ6L1kzUFhaNTgvelprNTVLTTZ0RmhP?=
+ =?utf-8?B?aTVJV09ueVI5MnY3Qmp2ck1JSExtWEpQSEVXcnBvZDVscmdJdk5OUEpldGd0?=
+ =?utf-8?B?Ulh4L1kwM2hmUjhabkI1eGtmMGlkbUdiSzFsNkFxWDVEOFBndWZYMXJ0WExo?=
+ =?utf-8?B?dXZxdndONWtDbkN5VmZicmNvVmRJU1dHdmJIY1VqdEFGYWJqQ3djMnRyTVcw?=
+ =?utf-8?B?WkN1N1RtRDhuMmZ2cWdNVUFIMkhZakplL1NQcG1OcWUxM2FkZFU3TmIrQjIy?=
+ =?utf-8?B?dkh2T0xtZDhPUU8wdndoRXk1Y25CNytuODZiRmdUbnA3NG90NWcwQmJ5MzFF?=
+ =?utf-8?Q?NO+0453qSHwB68UMsgSMaC8=3D?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: 
+	fMwu2Srk+2qt7Etvo26HWZdlrcQXjQp8OqVg/GrZkzO842OPIaI+tMRAu2RbLgcQd7NKvMplx7Kkm6/R0SDFoHtpaQnK9dR6LPkb3hNXwtp5r63DuNr2FD4tPEV89h0SE7aq+lGgqBnvqSDlAvJf1yywG9J5vVQM7R+meY/8uJojGjYBwYKuoIwZfVrEaPj13JnOmvMwh42dCDmz+Ttilog4k1fm8p2cFFvAUfsNfBah9PiAYTkmTf6gXHVW5ZXuOHXa2OPFfD2RDrYJxifergRa3bjGBklq3lFRvWmKxiVcYi9s7LXC8u+P4JsPO8H+ORtMV30C2XOCvmoB/vGhsNb+clDhOy7Cum3MK/iUr1srOJsjri9fEboAC9k6anuJoYpO+/9hm7pi+J6G+XBc9c9Uui6hRNRZFLQqKESPGHlkMbJbAIbv4vc5xpSyXUE76bm+xiNv2EobEkQ2Pu+pIoNIO6zd2FtKO8LPjXm6jbVf2klyNNBHAAPjUSGyPlQ5vIU4K01DCA167YaE2JapiWQlNCIuEdEnlANqHD0jIhCh4DRUEE6ySDfA39YNgXflw8MoM5GNb0LSw3DZ+H5zNPrVI7vPAG7nLr6F3ewSv8Q=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 40794421-8ece-431e-ef5e-08dc2cc240d3
+X-MS-Exchange-CrossTenant-AuthSource: BLAPR10MB5267.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Feb 2024 18:33:20.4938
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: p8nqDhgzpZugykbGWi79WGak58HELHUlYSNAPl9Duorqmetz/cIGrw+o+8fWjCejjlT7PPTy/gdNtjGBglaayQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR10MB6716
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-02-13_10,2024-02-12_03,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 bulkscore=0
+ mlxlogscore=999 malwarescore=0 mlxscore=0 spamscore=0 suspectscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2311290000 definitions=main-2402130146
+X-Proofpoint-GUID: kRS7l8E3Aa5WVfQA58jOmngq5KPcZ2Tb
+X-Proofpoint-ORIG-GUID: kRS7l8E3Aa5WVfQA58jOmngq5KPcZ2Tb
 
-Hi,
+On 07/02/2024 12:30, Sebastian Andrzej Siewior wrote:
+> On 2024-02-07 11:03:15 [+0000], Alan Maguire wrote:
+>> On 07/02/2024 10:01, Alan Maguire wrote:
+>>> The problem is the conditional check above; I can't see why it needs to
+>>> be guarded here. We never want to do an address-based lookup for a
+>>> variable and not have it be the same variable name as we have from DWARF
+>>> - which is the one we're trying to encode, right? The following fixes
+>>> the issue for me, can you try this out if you get a chance? I might be
+>>> missing something about that check so other folks please do weigh in if
+>>> something looks broken. Thanks!
+> 
+> So the former patch worked.
+> 
+>> apologies, but my suggested fix is wrong I believe.  When tested with
+>> vmlinux BTF generation, around 100 per-cpu variables disappeared.
+>> I believe the fix should instead be (deliberately leaving in
+>> verbose output to help debug future issues):
+> 
+> no worries.
+> 
+> …
+>> This works for both vmlinux generation and the problem you ran into.
+> 
+> the .o file was a reduced testcase. It works with the "complete" file
+> here, too. However once that file is merged into vmlinux.o I get the error
+> again:
+> | $ pahole -J --btf_gen_floats -j --lang_exclude=rust pahole-tc2/skbuff.o
+> | $ pahole -J --btf_gen_floats -j --lang_exclude=rust pahole-tc2/vmlinux.o --btf_encode_force
+> | error: found variable 'napi_alloc_cache' in CU 'net/core/skbuff.c' that has void type
+> | error: found variable 'napi_alloc_cache' in CU 'net/core/skbuff.c' that has void type
+> | error: found variable 'napi_alloc_cache' in CU 'net/core/skbuff.c' that has void type
+> | error: found variable 'napi_alloc_cache' in CU 'net/core/skbuff.c' that has void type
+> 
+> The -V output is huge and I don't really know what to look at. The
+> skbuff.o skipped __UNIQUE_ID_guard826 and a few "NULLs" and the address
+> for __UNIQUE_ID_guard826 was 0. In the vmlinux.o the address for
+> __UNIQUE_ID_guard826 is 19440.
+>
 
-On Wed, 2024-01-03 at 17:45 -0300, Arnaldo Carvalho de Melo wrote:
-> Em Wed, Jan 03, 2024 at 05:25:11PM +0000, Brian Cain escreveu:
-> > > From: Mark Wielaard <mark@klomp.org>
-> > > To: Arnaldo Carvalho de Melo <acme@kernel.org>
-> > >=20
-> > > > Mark, do you know about work on elfutils to support:
->=20
-> > > > =E2=AC=A2[acme@toolbox hexagon-randconfig-r005-20220913-pahole-cras=
-h]$ llvm-
-> > > dwarfdump at24.ko | head -22
-> > > > at24.ko:        file format elf32-hexagon
->=20
-> > > That seems to identify itself as an EM_QDSP6 (QUALCOMM DSP6) 32bit EL=
-F
-> > > file. Neither binutils not elfutils seems to know how to resolve
-> > > EM_QDSP6 specific relocations. Normally that wouldn't be necessary,
-> > > but sadly kernel modules are still ET_REL files, so eu-readelf/readel=
-f
-> > > needs relocations resolved to process the DWARF .debug sections.
->=20
-> > > This seems to need Qualcomm to upstream support for this processor
-> > > type to bintuils and elfutils.
-> =20
-> > We can take a look at this.  But - please forgive my inexperience here
-> > -- do the corresponding tools such as llvm-readelf not suffice here?
-> > Would it be welcome for us to change pahole to support those if it
-> > doesn't already?
->=20
-> pahole uses the DWARF library that comes with elfutils, so the changes
-> that were made to the DWARF library used by llvm-readelf would have to
-> be done to elfutils' DWARF library for pahole to be able to process
-> these files.
->=20
-> IANAL to say if you can copy code across these these codebases.
+Thanks for trying this out! From what I can see, when the individual
+objects are linked we no longer have the offset 0 that triggers the name
+comparison. On the other side though, if we are not selective in doing
+these name comparisons, we lose encoding of a fair few legitimate
+per-cpu variables in vmlinux BTF.  So the question is how to thread the
+needle in ensuring that the matches are accurate for cases like the
+above while also ensuring we don't leave any legitimate variables out.
+I don't have a good answer to that yet I'm afraid.
 
-Literally copying code over between those codebases is probably not
-going to work anyway. But it shouldn't be too hard to get just the
-support for handling ET_REL kernel modules in elfutils.
+I think the problem of missing variables when the check is unselective
+_may_ boil down to cases where the DWARF name is NULL (due to it using
+an abstract origin reference); in such cases we cannot name-match and
+such variables would be skipped.  We have some code in dwarf_loader.c
+that attempts to merge abstract origin references and their referents
+such that the name is filled in for the abstract origin-based variables,
+but it may be that we are missing a corner case somewhere. I'll dig
+into this further on Friday, but if anyone else has time to do some
+analysis here that would be great! Thanks!
 
-Basically you'll have to add a new backend and at least implement the
-reloc_simple_type callback (this is the one that tells elfutils which
-relocations are "simple" and how they can be resolved between .debug
-sections). An example to follow might be the initial LoongArch backend
-support:
-https://sourceware.org/cgit/elfutils/commit?id=3D13a4d1279c5b7847049ca3045d=
-04f2705c45ce31
-This one is just ~200 lines long, and the reloc_simple_types callback
-is bigger than most, often arches have just really simple relocations
-without any need for add/sub support. e.g the aarch backend simply has
-support for 16, 32 and 64 offsets without any additional addsub addend:
+Alan
 
-/* Check for the simple reloc types.  */
-Elf_Type
-aarch64_reloc_simple_type (Ebl *ebl __attribute__ ((unused)), int type,
-                           int *addsub __attribute__ ((unused)))=20
-{
-  switch (type)
-    {
-    case R_AARCH64_ABS64:
-      return ELF_T_XWORD;
-    case R_AARCH64_ABS32:
-      return ELF_T_WORD;
-    case R_AARCH64_ABS16:
-      return ELF_T_HALF;
-   =20
-    default:
-      return ELF_T_NUM;
-    }
-}
 
-The only relocations that are really relevant here are those that are
-used for the .debug sections.
-
-Then follow the CONTRIBUTING guide to submit the new (partial) port:
-https://sourceware.org/cgit/elfutils/tree/CONTRIBUTING
-
-Cheers,
-
-Mark
+> I uploaded the two .o at
+> 	https://breakpoint.cc/pahole-tc2.tar.xz
+> 
+> it decompresses to 1.1GiB.
+> 
+>> The explanation is that prior to this, we get an adjusted value for
+>> "addr" to do per-cpu variable lookup, where we subtract the per-cpu base
+>> address. We should also use that adjusted address to check for a zero
+>> address in the test to see if we need to use names to resolve per-cpu
+>> variable identity. The problem was the __UNIQUE_ID variable had a
+>> non-zero var->ip.addr value but its value relative to the per-cpu base
+>> was 0. With the adjusted value, we do the name matching and skip the
+>> encoding as intended I believe.
+>>
+>> Alan
+> 
+> Sebastian
