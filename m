@@ -1,60 +1,70 @@
-Received: from c.mail.sonic.net (c.mail.sonic.net [64.142.111.80])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E5801E4AE;
-	Tue, 27 Feb 2024 06:52:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=64.142.111.80
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07F58135A5C
+	for <dwarves@vger.kernel.org>; Tue, 27 Feb 2024 12:59:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709016744; cv=none; b=r2Pg7mDacyK/GEWZ08OucnXwP7FrHc15fVtsmvv26iE70/xm7+unOT9L2w6lnl/OW47r8p4i8UuwtX/LYghRR8VfEWjwysrBAq+kkbjKYEVF0zsz4nI0CKozF1gGSIkTXch+p1MLy+dby8EwQSXY5dHjynw0RuV2MOXHo99RAKs=
+	t=1709038758; cv=none; b=TikNGRoqlnCr74Gkqn8EXzhXmnGR2nVIO4zxDgiORaE14mraT7wA88zuBdqAljj0iD4pMPKCgTRwRYjc6DE4NvIzobunT1alOWeTOqRNoOqKxbwEK105KxiUbUYiZ1n0tmLNVfYQ6TBeVYw3iskxNDC7DrEJqzXlhaAwZjpOV1w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709016744; c=relaxed/simple;
-	bh=bIkL3j1SUti+mxRknWXsGzjEHfZ++LfAOrCAj6OvBfk=;
-	h=From:To:Date:MIME-Version:Subject:Message-ID:Content-type; b=O64syhZNym7LsxdYksAm38oa0a2YTW3ieA6kxEYsnFLdWsf3tVZuE0ICQuwtNdUlyXTjXzZENAw3HG9SN6bfXyWz18E5aWMtsrKQg8OrX08nGXk2rkSNHsdy89GSTCBq00cBqTbHHgt4pZbI2VdqVt2ZKUGBrDQhBvckrZLrlQc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sonic.net; spf=pass smtp.mailfrom=sonic.net; dkim=pass (2048-bit key) header.d=sonic.net header.i=@sonic.net header.b=aIzL09UB; arc=none smtp.client-ip=64.142.111.80
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sonic.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sonic.net
+	s=arc-20240116; t=1709038758; c=relaxed/simple;
+	bh=7rLno4AMgmdX9NrFrIafIrfyLoMbv8d4hMs9n535+YM=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=i1bmSoTe8r6KLB5S+luu7tmSMsdtMacVDwQrE0n3wNkzKqMFc/9iNsZb/HkJSkFHYFYyO7gYCbYbAgES5KLx7Ni3jaUA4zlFe8FQhrzCrVaUpG1C48Asij8szu1skkUcFXLdmyWUZM8RKLbsduAJeVRTSUTrpTlXUiNQ8Solrf4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=X5fHQ2Wo; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sonic.net header.i=@sonic.net header.b="aIzL09UB"
-Received: from [192.168.1.94] (45-23-117-7.lightspeed.livnmi.sbcglobal.net [45.23.117.7])
-	(authenticated bits=0)
-	by c.mail.sonic.net (8.16.1/8.16.1) with ESMTPSA id 41R6qJT0030968
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-	Mon, 26 Feb 2024 22:52:21 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sonic.net; s=net23;
-	t=1709016742; bh=bIkL3j1SUti+mxRknWXsGzjEHfZ++LfAOrCAj6OvBfk=;
-	h=From:To:Date:MIME-Version:Subject:Message-ID:From:Subject;
-	b=aIzL09UBo6WZuOOi05cac9INBg4UZ2lS0I5Er43k8oWia8XW3LuR0k43cJAlUJequ
-	 C7ep900tsEVbjXDROo3D2Q/Kkg37trB5y7gBz7y/duBhZoz6rd7h3Cxg6p74G1x5mU
-	 Fj5PgtgpB40cm6X0hzqr/eDQhbDfEtCknrIt97z44aQ9hB47E0vR3p7RjaitqQVmO5
-	 jxgDNPFLsGvpUFTaG4g6M9HIWo+P529+7qoPwLm5aL6DpOMoBetIGu/nTXUmqC3blJ
-	 qRAF2l7yQSlagk2bZ/6ctg9BDKArKzNdn8FPO2UShOMuagVryll30OrxJaP1LeNpcK
-	 SEncqoL4Z4GCA==
-From: delyan@sonic.net
-To: devicetree-spec+unsubscribe@vger.kernel.org,
-        devicetree-spec@vger.kernel.org, dmaengine+subscribe@vger.kernel.org,
-        dmaengine+unsubscribe@vger.kernel.org, dmaengine@vger.kernel.org,
-        dwarves+subscribe@vger.kernel.org, dwarves+unsubscribe@vger.kernel.org,
-        dwarves@vger.kernel.org, ecryptfs+subscribe@vger.kernel.org,
-        ecryptfs+unsubscribe@vger.kernel.org, ecryptfs@vger.kernel.org,
-        fio+subscribe@vger.kernel.org, fio+unsubscribe@vger.kernel.org,
-        fio@vger.kernel.org, fstests+subscribe@vger.kernel.org
-Date: Tue, 27 Feb 2024 01:52:18 -0500
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="X5fHQ2Wo"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45B15C433F1;
+	Tue, 27 Feb 2024 12:59:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1709038757;
+	bh=7rLno4AMgmdX9NrFrIafIrfyLoMbv8d4hMs9n535+YM=;
+	h=Date:From:To:Cc:Subject:From;
+	b=X5fHQ2WowHSJeRZJJl7YWbal1k7kwoyGeNAmChUge4naW4K0STeJzqAtMVDi81qnD
+	 I+nuzW0tFI4vO50YvfKYImFNSHd0irH8rCT9RkbI03RDvfmK+vJ+7PZTwVjR3U6JOf
+	 fPj4VUCYNLWLZpafKxnIH6njnBQsnPSj57kcoMcrqQ3FJCiJGFFPfeqMr32IpGyO9Q
+	 Gm3Vsr1w5fGabKuqqg5/zaUVHk/yk+zjszB01+7LF/NGeWqXHQyOJHGGkFZ4y7oKzc
+	 Oxjr/NPB/rNM3dUlHXCfxGwvA3unl/dsMt6Zpi9eq+Y/FqHU2ykFgpvi15Jw+S5hVU
+	 RHaoB8emUeF5w==
+Date: Tue, 27 Feb 2024 09:59:14 -0300
+From: Arnaldo Carvalho de Melo <acme@kernel.org>
+To: Jiri Olsa <jolsa@kernel.org>, Alan Maguire <alan.maguire@oracle.com>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Viktor Malik <vmalik@redhat.com>
+Cc: dwarves@vger.kernel.org
+Subject: HEADS UP: pahole 1.26 to be released soon
+Message-ID: <Zd3cooJ1HgnuC1aV@x1>
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: subscribe
-Message-ID: <65DD86A2.17414.445FAC2F@delyan.sonic.net>
-Priority: normal
-X-mailer: Pegasus Mail for Windows (4.80.1028)
-Content-type: text/plain; charset=US-ASCII
-Content-transfer-encoding: 7BIT
-Content-description: Mail message body
-X-Sonic-CAuth: UmFuZG9tSVaRmDnAe7qtFHsZVmHzmJDjNevSWY0HV8jKPtCRUAwJ+TCTxvo2u3K9QUnWHsh5kPTFmtp1BqTK3JZAz6HvHW69
-X-Sonic-ID: C;Cr9LwDzV7hGbeC5nR+6Zsg== M;+qk9wTzV7hGbeC5nR+6Zsg==
-X-Spam-Flag: Unknown
-X-Sonic-Spam-Details: not scanned (too big) by cerberusd
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-subscribe
+Hi,
+
+	I'm prepping up pahole 1.26, the noticeable thing for BTF
+encoding are Alan's patches (--btf_features, --btf_features_strict and
+--supported_btf_features).
+
+	There was a fix for BTF loading, namely the signedness of
+enumerations, but that isn't used when building the kernel, just when
+pretty printing from BTF.
+
+	I also have a few fixes and new features in the pretty printing
+code, but again, that isn't involved when building the kernel.
+
+	If you have time, please do some tests and report results.
+
+	You can find it in the usual places:
+
+git://git.kernel.org/pub/scm/devel/pahole/pahole.git
+https://github.com/acmel/dwarves.git
+
+	In the master branch.
+
+Thanks a lot!
+
+- Arnaldo
