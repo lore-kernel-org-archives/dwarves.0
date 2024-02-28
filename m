@@ -1,158 +1,109 @@
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2087.outbound.protection.outlook.com [40.107.243.87])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA6BD1DDF6;
-	Wed, 28 Feb 2024 03:22:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.243.87
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709090523; cv=fail; b=hCK/tzQxuEMRbIAHDbh46NI01Y/S6HX/tE+2oemWL6tnbcTzmrwpKLdCjAA8dGPMpNi/pM53K8zXR13mWo4HtHCSjDZ3hAyceU131KntB7HKgA16Ca/PjHeL5S9cwG6xdJfdI0egRg0B0Yj0Oa1wHw7yOMd+5dTrMzAFPLU/bn4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709090523; c=relaxed/simple;
-	bh=hKj4q2l2PGGIvSud1glPqlswPjvKMvatHvDNE7vRE5k=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=goUH1/hiAMPhp5GUDsvRtLEQOCiWsaWUnpW1JjZEl4iuvaEHbse5habKMmLwoKIlTeB3SovT8NuXguiq9g1CZapuXIBYozh0j1sPyU+lwB3aOumv1Lso7QXq8eo48eDfgXP/CvLE5DBWes2C+6CigHtRSC4YfkMa7PZV1GtNva8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=awlaztJw; arc=fail smtp.client-ip=40.107.243.87
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CAE82D059
+	for <dwarves@vger.kernel.org>; Wed, 28 Feb 2024 08:30:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1709109037; cv=none; b=prRs1CA50dg0PGPf1fF7QjJoGWrUF+t2GiMVtl9KL7ez6cKVbsp098QLSLbAhfjFnKQGian4V6ZwugKiLs71E4YIMPMTKkKz22EeFCq8xI3Bdrv8D+MYZcsc0HRlAHXTJDFEkzByBz5NoNPjLjwWbs1DA88uamZHGQbLPvSosV0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1709109037; c=relaxed/simple;
+	bh=R5cGOZnxszKyJjhjjeZIaDfhQwURzKy6lkmUw2oxAk0=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=atgue1elJppMl2I7rUHuyH1c8G360RAFWjyat4yJerpBJoi8ZpQaLiOQp5NOHub4wv1X9BhxAwhTlWMxiLENkm6SSb/5kfSYS9agTuiSfcXrR2XJ5t/BPbOj778AWW67qfTVRH+yGt01vwfq6ZVtoEYHTJ51C9DohIOttLOaMGw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=G3YMT92+; arc=none smtp.client-ip=209.85.218.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="awlaztJw"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=GUrSrUCGfewfTs1P7XLQnixchJkbXCHvVQuZqmGdeCJRNeBv/mvmp334V3IT9yCmJLpIknaRXnpRYCVpHQpC66S3wGQa5Ikfukf6F3AyFabk2+jEZGue2FBH4RqGy/23gpnP7dzWcGu2fT6gPJHoTWCklLr4h9z4oDdGztXdXZYaKWTYCbT8sdrqivYwloU0l6RT/k8dM9u7+8RUxCvYkC+VO6j/7l44m6ycsW5TQa6Y7dfDqhvwdlXFuigx16CmC00GKeHzQYqCZG8RSXerc4Vmjcv86xS1G4ZTFFI4Q7hHycsFf0DjQAWAknT74wcf59tF/7ok/IvHplG1+ysiDQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=bezVDwze1jNdYdh4gVQ8p+M2LuMHe9XNn7yr3MTQVV4=;
- b=eWNgLTTKWlwgD0SW+dDPzyRKsNS4C0xKJSw8OyDD6mnPAFtUQAf5LFAI2B8iNCc9dOrTNHGrdytz9QB5wMC4ChP2KKUYr4USy/J5bem4Pa1mFX0hVbrkBQEi189hHi9lJ6mf2wymoOPw2TUmMWy3pSs3FrBfraWecsdyxZzoD4sfZYUtiMEx5IsbLEeXqPNB02KTeI1PiLrt7jcxEi+0i8clZ0IJBWqr7Z6BIy6ZY8zmOqXwTaTchBMmkuWJS35AAyHWdl/4zncZw1LrcdyiVJhDqfoAqFet+EjlUtaFpDcvMXC81A+sS7+hZEHYIej2Bl0vB+87KUKAEMY1Svp4rA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.118.233) smtp.rcpttodomain=redhat.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=bezVDwze1jNdYdh4gVQ8p+M2LuMHe9XNn7yr3MTQVV4=;
- b=awlaztJwi3veePDPnUX0iiPq+86sn9klNFFSMPnxHNtv5KlQ6dFmBd5Ov8xXv2nS+l3gBT+3teMrMQjT7butwLaBIJwfz16SZZgw8icWiY0tPMKfLuATB/IZJ2gkAbjeFz0/VeAnBI5Xd6+pOQv0Nce6ofw0YpzwuXJq2090xwvi4mGk6kz02ncOzvnghB2/DqVKL/BojaMk3xMt5V862aAgdUMuD6h9Mh3bWNBeoRNrvQXVtABKSVWr2Kxyd3hJYDAl3J3IwdWLz+CnX8g99wKjlZ/imidsjp5zy680Rs5+sYJxMI08mhdXOI2uAN9HWsaKDlFKe801XPedxIuJsw==
-Received: from CH0PR03CA0362.namprd03.prod.outlook.com (2603:10b6:610:119::9)
- by MN2PR12MB4407.namprd12.prod.outlook.com (2603:10b6:208:260::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7316.39; Wed, 28 Feb
- 2024 03:21:58 +0000
-Received: from SA2PEPF000015CC.namprd03.prod.outlook.com
- (2603:10b6:610:119:cafe::69) by CH0PR03CA0362.outlook.office365.com
- (2603:10b6:610:119::9) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7292.49 via Frontend
- Transport; Wed, 28 Feb 2024 03:21:58 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.233)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.118.233 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.118.233; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.118.233) by
- SA2PEPF000015CC.mail.protection.outlook.com (10.167.241.202) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.7292.25 via Frontend Transport; Wed, 28 Feb 2024 03:21:58 +0000
-Received: from drhqmail201.nvidia.com (10.126.190.180) by mail.nvidia.com
- (10.127.129.6) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Tue, 27 Feb
- 2024 19:21:44 -0800
-Received: from drhqmail201.nvidia.com (10.126.190.180) by
- drhqmail201.nvidia.com (10.126.190.180) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1258.12; Tue, 27 Feb 2024 19:21:44 -0800
-Received: from blueforge.nvidia.com (10.127.8.13) by mail.nvidia.com
- (10.126.190.180) with Microsoft SMTP Server id 15.2.1258.12 via Frontend
- Transport; Tue, 27 Feb 2024 19:21:44 -0800
-From: John Hubbard <jhubbard@nvidia.com>
-To: Arnaldo Carvalho de Melo <acme@redhat.com>
-CC: Alexei Starovoitov <ast@kernel.org>, <bpf@vger.kernel.org>, LKML
-	<linux-kernel@vger.kernel.org>, <dwarves@vger.kernel.org>, John Hubbard
-	<jhubbard@nvidia.com>
-Subject: [PATCH] fix linux kernel BTF builds: increase max percpu variables by 10x
-Date: Tue, 27 Feb 2024 19:21:42 -0800
-Message-ID: <20240228032142.396719-1-jhubbard@nvidia.com>
-X-Mailer: git-send-email 2.44.0
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="G3YMT92+"
+Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-a3e552eff09so571892266b.3
+        for <dwarves@vger.kernel.org>; Wed, 28 Feb 2024 00:30:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1709109034; x=1709713834; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=B2YlgjklJrBhnMAENh7ZKDw9YoM05O49K6IqtbGR67I=;
+        b=G3YMT92+Pa+UqU91/nyT2uJW0Cc4/QsUAds0aecThtbT9O+zmWgjXUA6jFKCHPh9Dh
+         AouyACAcYECTlH2VYGhcQ1WbcMLItKHBvW8RV4JIpWQ/jAIq1x7A2ux0S2FprRBx19oL
+         ElgIc7YRucibC5ik7k9/fMF7DfH0JqHIQN5WpAtSilZwqSl484Jr1tb1MtDbH2ThZ4ZQ
+         7TQNTzAJgLXmR/UEJyif7z9LfIYUsuSDajrEywcNzHjMCMm50mAaEB+sy7u0M6/FEld6
+         ygOVhhcT1zYwSG/u0R1v4FTbr3dAxqXJbdgSgn+ISfj4D1yRmmE6CBUgSCIYP5CCQFQP
+         Cthg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1709109034; x=1709713834;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=B2YlgjklJrBhnMAENh7ZKDw9YoM05O49K6IqtbGR67I=;
+        b=lIl0nqleK+d3u+T3Hv9TJAIDr/ITRuGpTWcVUdk3CwPk2H+VDKfUS+CaeqoYCMCbqj
+         5Ngl1aT1lJQi4t0NlREQVGElSGs54mNx+0a3bSKnr1yGPeiShk3wSuwvxG+z/dvlqn9M
+         bOyISLaKIg5yPU/juX7k/lhY0fAseb3/xV0WWffW8tO4a0e9aTYa7hYqSvV+2Jp0Dup0
+         vPjLyr0aurflOlewZVctg+sICZrHTg/0xXNv4BK88Cjo/sPPe/BbFFNU2YqngIxC1ZXT
+         HBzRg1fLxfkAQJeTwGp4rm/5xKPk2KtTGrk7X6wBKyYK7/ALnnoGGP0oxICyWFJbNFKP
+         E/3g==
+X-Forwarded-Encrypted: i=1; AJvYcCX3aabQs41/HOOrkloTlw66IcjiGzpRCrgsO+lno95eeuQFt1nz96YDuPfPmG7c+9zDZbhVxHzsIEdgeMbXxwVFHciZj1tTdg==
+X-Gm-Message-State: AOJu0Yw2aW2fjbo9d8/4h4RCoyG6NEA3AC7PFyVNAmQFGTFb9eGFsN/4
+	LCVX4dEXYvq5+BnAJtfPw70tX5rxlKzAyd3yYwvLFmbMD0VY9dDfR4NMJvEO
+X-Google-Smtp-Source: AGHT+IGfeAQYWoVjlAXx6qqK6PWT02Haj0EUZqZAt+F/UOiwZfwjjkCYe2k504Na44PPoR57EBp+QA==
+X-Received: by 2002:a17:906:f9d4:b0:a43:4c31:c4f1 with SMTP id lj20-20020a170906f9d400b00a434c31c4f1mr5486390ejb.11.1709109034013;
+        Wed, 28 Feb 2024 00:30:34 -0800 (PST)
+Received: from krava (2001-1ae9-1c2-4c00-726e-c10f-8833-ff22.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:726e:c10f:8833:ff22])
+        by smtp.gmail.com with ESMTPSA id di15-20020a170906730f00b00a432899c28dsm1584188ejc.123.2024.02.28.00.30.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Feb 2024 00:30:33 -0800 (PST)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Wed, 28 Feb 2024 09:30:31 +0100
+To: Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc: Alan Maguire <alan.maguire@oracle.com>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Viktor Malik <vmalik@redhat.com>, dwarves@vger.kernel.org
+Subject: Re: HEADS UP: pahole 1.26 to be released soon
+Message-ID: <Zd7vJyjGjzmXW4R0@krava>
+References: <Zd3cooJ1HgnuC1aV@x1>
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-NVConfidentiality: public
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-NV-OnPremToCloud: ExternallySecured
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SA2PEPF000015CC:EE_|MN2PR12MB4407:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6fbafc3c-f241-4d51-e54e-08dc380c6c24
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	hEyHgzYOvgy87RODtfl0p1tk6ZMhNWBbvnnmJq7gDBgPqegWcL1kAzd3iJHsT+FJZIhsu3Ag02F7A99tkvpIWE10dVl9LIxATpe8S0ptmeou9Oz6EhmSvm7vxpYUP2sH0U6A3xlY54QdgZMn3alq6yEmTWQ4HRamwenlPWHt0IOpIhZ6e145EKzzpxfdu0mXaRy/heHO75P3VJmK31gniKN9YPSZSoXV9TW7H4gzLmlkk7tLDKNKh8aditmzHciTH1jFkADW6dVZ1oeZEb7N4WtzU15/BWA8WEMO6eCCr4FXvMAcGGzgGb8TrY0iJfkCLvuLtsbNK7beD0zyHtUCY2JJrJW22KM3pE1zYXW1OPfxQx+UHUNr3XBfOWUTDnql/x15TTba7J3Dt4C2vO6Jlbrm93zHJe7n7i1Iz+nWFSp+JoOYrziBtYW4h7SQDstA0mEw1rYj0vCPXM5r7Hwap1O4Ct7sSdkA3K9Wdjl6UFnDmtSjKHDCqmHlNqm4PO4jnJQtTI4EvfeN5fPUyBLPrnvFII5dge3uImLNOKU3eNh5CdJJVFk3y97xQcF9jUZPu+stg8oNaJDlTqxQIRDXuH78efGraMyRY1arzotZ1lgGvlFj9EDmX5IPLBRs8ItFnGYYwS6+k20IhQLTkZ0+CO7Dp3phj22F4f+lALkK2tInEiMYF5mjL/HQD30aqlW4Gg+PxOLKC/0G3p+NAw8CH7R4ltMiOIcaQy+pmZS9s5WYG56CPJFl7rfAEBvvYTBK
-X-Forefront-Antispam-Report:
-	CIP:216.228.118.233;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge2.nvidia.com;CAT:NONE;SFS:(13230031)(36860700004)(82310400014);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Feb 2024 03:21:58.3638
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6fbafc3c-f241-4d51-e54e-08dc380c6c24
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.233];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	SA2PEPF000015CC.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4407
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Zd3cooJ1HgnuC1aV@x1>
 
-When building the Linux kernel with a distro .config, most or even all
-possible kernel modules are built. This adds up to 4500+ modules, and
-based on my testing, this causes the pahole utility to run out of space,
-which shows up like this (CONFIG_DEBUG_INFO_BTF=y is required in order
-to reproduce this):
+On Tue, Feb 27, 2024 at 09:59:14AM -0300, Arnaldo Carvalho de Melo wrote:
+> Hi,
+> 
+> 	I'm prepping up pahole 1.26, the noticeable thing for BTF
+> encoding are Alan's patches (--btf_features, --btf_features_strict and
+> --supported_btf_features).
+> 
+> 	There was a fix for BTF loading, namely the signedness of
+> enumerations, but that isn't used when building the kernel, just when
+> pretty printing from BTF.
+> 
+> 	I also have a few fixes and new features in the pretty printing
+> code, but again, that isn't involved when building the kernel.
+> 
+> 	If you have time, please do some tests and report results.
+> 
+> 	You can find it in the usual places:
+> 
+> git://git.kernel.org/pub/scm/devel/pahole/pahole.git
+> https://github.com/acmel/dwarves.git
+> 
+> 	In the master branch.
 
-  LD      .tmp_vmlinux.btf
-  BTF     .btf.vmlinux.bin.o
-Reached the limit of per-CPU variables: 4096
-...repeated many times...
-Reached the limit of per-CPU variables: 4096
-  LD      .tmp_vmlinux.kallsyms1
-  NM      .tmp_vmlinux.kallsyms1.syms
-  KSYMS   .tmp_vmlinux.kallsyms1.S
-  AS      .tmp_vmlinux.kallsyms1.S
-  LD      .tmp_vmlinux.kallsyms2
-  NM      .tmp_vmlinux.kallsyms2.syms
-  KSYMS   .tmp_vmlinux.kallsyms2.S
-  AS      .tmp_vmlinux.kallsyms2.S
-  LD      vmlinux
-  BTFIDS  vmlinux
-libbpf: failed to find '.BTF' ELF section in vmlinux
-FAILED: load BTF from vmlinux: No data available
-make[2]: *** [scripts/Makefile.vmlinux:37: vmlinux] Error 255
-make[2]: *** Deleting file 'vmlinux'
-make[1]: *** [/kernel_work/linux-people/Makefile:1162: vmlinux] Error 2
-make: *** [Makefile:240: __sub-make] Error 2
+hi,
+tested on top of my setup and it looks good
 
-Increasing MAX_PERCPU_VAR_CNT by 10x avoids running out of space, and
-allows the build to succeed.
+I hoped the kfuncs decl tag would get in, but AFAICS there was
+no new version of the patches.. I'll ping Daniel about that
 
-Signed-off-by: John Hubbard <jhubbard@nvidia.com>
----
- btf_encoder.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+thanks,
+jirka
 
-diff --git a/btf_encoder.c b/btf_encoder.c
-index fd04008..d9f4e80 100644
---- a/btf_encoder.c
-+++ b/btf_encoder.c
-@@ -50,7 +50,7 @@ struct elf_function {
- 	struct btf_encoder_state state;
- };
- 
--#define MAX_PERCPU_VAR_CNT 4096
-+#define MAX_PERCPU_VAR_CNT 40960
- 
- struct var_info {
- 	uint64_t    addr;
--- 
-2.44.0
-
+> 
+> Thanks a lot!
+> 
+> - Arnaldo
