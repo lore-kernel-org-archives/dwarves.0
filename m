@@ -1,66 +1,67 @@
-Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
+Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CAE82D059
-	for <dwarves@vger.kernel.org>; Wed, 28 Feb 2024 08:30:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EBCC33CC2;
+	Wed, 28 Feb 2024 09:20:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709109037; cv=none; b=prRs1CA50dg0PGPf1fF7QjJoGWrUF+t2GiMVtl9KL7ez6cKVbsp098QLSLbAhfjFnKQGian4V6ZwugKiLs71E4YIMPMTKkKz22EeFCq8xI3Bdrv8D+MYZcsc0HRlAHXTJDFEkzByBz5NoNPjLjwWbs1DA88uamZHGQbLPvSosV0=
+	t=1709112019; cv=none; b=JA6ajDYLnumDVkDbGheCiWkUS+CKBsCl+uCRqn1GkqVh+QAGJWZcoV1zOeJkox0xyEqNioyiCidyXPKvQA6ReoBNIj8djMnK1BiLd27cucVqgj8xhe4cqZc2kJVgissqdhA2Mjdprhfhr5AmRhty9Jt//gQzYcVfm/gOSKWG26Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709109037; c=relaxed/simple;
-	bh=R5cGOZnxszKyJjhjjeZIaDfhQwURzKy6lkmUw2oxAk0=;
+	s=arc-20240116; t=1709112019; c=relaxed/simple;
+	bh=v2eiHuL62WCXQs7hcAtCym9lIkCchgxpESbrCei0pbA=;
 	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=atgue1elJppMl2I7rUHuyH1c8G360RAFWjyat4yJerpBJoi8ZpQaLiOQp5NOHub4wv1X9BhxAwhTlWMxiLENkm6SSb/5kfSYS9agTuiSfcXrR2XJ5t/BPbOj778AWW67qfTVRH+yGt01vwfq6ZVtoEYHTJ51C9DohIOttLOaMGw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=G3YMT92+; arc=none smtp.client-ip=209.85.218.50
+	 Content-Type:Content-Disposition:In-Reply-To; b=VvRbD2U8k/GbVaNY6ODrYqkFbhDm1ydBwZtZCzDDCe5ak8OoQBB9WWGqbUZJkLfoVclh5n8AjI4T37f7unWfzCJk0cZUPXd9upPZFoTRBWlSZzEe8mpYkaVsnpVQP2VUADxbtNu+yskDuhH8Tp36NctZbZpOw7aA5uSRtv6lbNI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NOYOpJgq; arc=none smtp.client-ip=209.85.208.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="G3YMT92+"
-Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-a3e552eff09so571892266b.3
-        for <dwarves@vger.kernel.org>; Wed, 28 Feb 2024 00:30:35 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NOYOpJgq"
+Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-565ef8af2f5so3860635a12.3;
+        Wed, 28 Feb 2024 01:20:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1709109034; x=1709713834; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1709112016; x=1709716816; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=B2YlgjklJrBhnMAENh7ZKDw9YoM05O49K6IqtbGR67I=;
-        b=G3YMT92+Pa+UqU91/nyT2uJW0Cc4/QsUAds0aecThtbT9O+zmWgjXUA6jFKCHPh9Dh
-         AouyACAcYECTlH2VYGhcQ1WbcMLItKHBvW8RV4JIpWQ/jAIq1x7A2ux0S2FprRBx19oL
-         ElgIc7YRucibC5ik7k9/fMF7DfH0JqHIQN5WpAtSilZwqSl484Jr1tb1MtDbH2ThZ4ZQ
-         7TQNTzAJgLXmR/UEJyif7z9LfIYUsuSDajrEywcNzHjMCMm50mAaEB+sy7u0M6/FEld6
-         ygOVhhcT1zYwSG/u0R1v4FTbr3dAxqXJbdgSgn+ISfj4D1yRmmE6CBUgSCIYP5CCQFQP
-         Cthg==
+        bh=MMWQD7UAFsp9KchPLx3P8oI21qYIe7rr+n1htkt7OGE=;
+        b=NOYOpJgqlfXsp1NviA5b58FjGtoZFiLLPZ83p12jcAolpm5eNLtyoPZyNWWPa+cxsh
+         3fnXVmy0KFs2ESN/8bF4WZSYNh1mJ/uziHXHG2T57U4Bu8dXOBMoNNiJHybSLngH7zCF
+         kYRDGXuItJ0Ien2s5OBUMJwnF8T3SpRhBjLx795PYWl16C5HKWqvACAUNn+H9D7Ap+PW
+         iN0I23QryATIATDgXIFOkDNg6xOg8nP2PoGuh8v77CQTdat61pI2/YrOd6d5Tk5ucNdP
+         6RyazRzjo2E/cg58OfM6gfB40PeStnHytSFyeVFcHpcRUzabV1+7otTV9ZKKxbladzxg
+         TufQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709109034; x=1709713834;
+        d=1e100.net; s=20230601; t=1709112016; x=1709716816;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=B2YlgjklJrBhnMAENh7ZKDw9YoM05O49K6IqtbGR67I=;
-        b=lIl0nqleK+d3u+T3Hv9TJAIDr/ITRuGpTWcVUdk3CwPk2H+VDKfUS+CaeqoYCMCbqj
-         5Ngl1aT1lJQi4t0NlREQVGElSGs54mNx+0a3bSKnr1yGPeiShk3wSuwvxG+z/dvlqn9M
-         bOyISLaKIg5yPU/juX7k/lhY0fAseb3/xV0WWffW8tO4a0e9aTYa7hYqSvV+2Jp0Dup0
-         vPjLyr0aurflOlewZVctg+sICZrHTg/0xXNv4BK88Cjo/sPPe/BbFFNU2YqngIxC1ZXT
-         HBzRg1fLxfkAQJeTwGp4rm/5xKPk2KtTGrk7X6wBKyYK7/ALnnoGGP0oxICyWFJbNFKP
-         E/3g==
-X-Forwarded-Encrypted: i=1; AJvYcCX3aabQs41/HOOrkloTlw66IcjiGzpRCrgsO+lno95eeuQFt1nz96YDuPfPmG7c+9zDZbhVxHzsIEdgeMbXxwVFHciZj1tTdg==
-X-Gm-Message-State: AOJu0Yw2aW2fjbo9d8/4h4RCoyG6NEA3AC7PFyVNAmQFGTFb9eGFsN/4
-	LCVX4dEXYvq5+BnAJtfPw70tX5rxlKzAyd3yYwvLFmbMD0VY9dDfR4NMJvEO
-X-Google-Smtp-Source: AGHT+IGfeAQYWoVjlAXx6qqK6PWT02Haj0EUZqZAt+F/UOiwZfwjjkCYe2k504Na44PPoR57EBp+QA==
-X-Received: by 2002:a17:906:f9d4:b0:a43:4c31:c4f1 with SMTP id lj20-20020a170906f9d400b00a434c31c4f1mr5486390ejb.11.1709109034013;
-        Wed, 28 Feb 2024 00:30:34 -0800 (PST)
+        bh=MMWQD7UAFsp9KchPLx3P8oI21qYIe7rr+n1htkt7OGE=;
+        b=HouydlVj6Db825ZJJW4zKsTdmH44snCiOqCeggP89KkSSEuf4o0dgsFZM7xZDo9Vpr
+         c38zYGR4nO4guy+TOutBipnTB/lHa1hGJ8epzjdsnQjwR5rXz68jHfCj4hpObpepGPb5
+         uqlXHnUZBqiw5ExujcNtOLECHyI5rjXHgN3aOIWPGKQ5CnXWe+xDxjYIGiGbqlrMPDbM
+         GRj9qNAdSKlAfx/JiPxyDhBE0ZjUVS/WTM7TPSU/oqQ44BTQb28koZ3GYayTVjJn1UVD
+         DkTE4ouAUk3KL19rwyGCpRMUqeayEQxgCbsZGWHNeDH5Yq8Yr4wvok1fVGcLWv+9BI4Z
+         VYeA==
+X-Forwarded-Encrypted: i=1; AJvYcCWvfqlYaVlwsQTIctJvEQ/7+EGz7sy8qCUkzjlE3md7FOaYJmwGiCoik6B5pa2QkT6KrXdSzlhVHOeC85rU4BuVXj3ycZiCsa8JOdSKeNucquNDBrJQnfMZ+dKbF5HwbMffcJkHMJf5lDxIobNNaL4tvRHyA+HIxehTkA==
+X-Gm-Message-State: AOJu0YyrcVIxrHkvLDvzrRuYOoHyjj5zPTSqn2SOcAnKatAjrcLTi1c7
+	x3mAJrLD1S2tR91ERUBQ3L0a7p3xWSSJn/w4gYKTAoSuYPH9LILI
+X-Google-Smtp-Source: AGHT+IFMqeyTM1Fz8XS/CKmvJQyp3KmW3GKHKd3rNDuQ3QkpR1QTAbKMMsbOlG73ALffL7AbF66auQ==
+X-Received: by 2002:a17:906:13db:b0:a42:f40e:3ac0 with SMTP id g27-20020a17090613db00b00a42f40e3ac0mr8087879ejc.6.1709112016441;
+        Wed, 28 Feb 2024 01:20:16 -0800 (PST)
 Received: from krava (2001-1ae9-1c2-4c00-726e-c10f-8833-ff22.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:726e:c10f:8833:ff22])
-        by smtp.gmail.com with ESMTPSA id di15-20020a170906730f00b00a432899c28dsm1584188ejc.123.2024.02.28.00.30.33
+        by smtp.gmail.com with ESMTPSA id fj15-20020a1709069c8f00b00a42ea946917sm1626181ejc.130.2024.02.28.01.20.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Feb 2024 00:30:33 -0800 (PST)
+        Wed, 28 Feb 2024 01:20:16 -0800 (PST)
 From: Jiri Olsa <olsajiri@gmail.com>
 X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Wed, 28 Feb 2024 09:30:31 +0100
-To: Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc: Alan Maguire <alan.maguire@oracle.com>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Viktor Malik <vmalik@redhat.com>, dwarves@vger.kernel.org
-Subject: Re: HEADS UP: pahole 1.26 to be released soon
-Message-ID: <Zd7vJyjGjzmXW4R0@krava>
-References: <Zd3cooJ1HgnuC1aV@x1>
+Date: Wed, 28 Feb 2024 10:20:14 +0100
+To: John Hubbard <jhubbard@nvidia.com>
+Cc: Arnaldo Carvalho de Melo <acme@redhat.com>,
+	Alexei Starovoitov <ast@kernel.org>, bpf@vger.kernel.org,
+	LKML <linux-kernel@vger.kernel.org>, dwarves@vger.kernel.org
+Subject: Re: [PATCH] fix linux kernel BTF builds: increase max percpu
+ variables by 10x
+Message-ID: <Zd76zrhA4LAwA_WF@krava>
+References: <20240228032142.396719-1-jhubbard@nvidia.com>
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
@@ -69,41 +70,68 @@ List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Zd3cooJ1HgnuC1aV@x1>
+In-Reply-To: <20240228032142.396719-1-jhubbard@nvidia.com>
 
-On Tue, Feb 27, 2024 at 09:59:14AM -0300, Arnaldo Carvalho de Melo wrote:
-> Hi,
+On Tue, Feb 27, 2024 at 07:21:42PM -0800, John Hubbard wrote:
+> When building the Linux kernel with a distro .config, most or even all
+> possible kernel modules are built. This adds up to 4500+ modules, and
+> based on my testing, this causes the pahole utility to run out of space,
+> which shows up like this (CONFIG_DEBUG_INFO_BTF=y is required in order
+> to reproduce this):
 > 
-> 	I'm prepping up pahole 1.26, the noticeable thing for BTF
-> encoding are Alan's patches (--btf_features, --btf_features_strict and
-> --supported_btf_features).
+>   LD      .tmp_vmlinux.btf
+>   BTF     .btf.vmlinux.bin.o
+> Reached the limit of per-CPU variables: 4096
+> ...repeated many times...
+> Reached the limit of per-CPU variables: 4096
+>   LD      .tmp_vmlinux.kallsyms1
+>   NM      .tmp_vmlinux.kallsyms1.syms
+>   KSYMS   .tmp_vmlinux.kallsyms1.S
+>   AS      .tmp_vmlinux.kallsyms1.S
+>   LD      .tmp_vmlinux.kallsyms2
+>   NM      .tmp_vmlinux.kallsyms2.syms
+>   KSYMS   .tmp_vmlinux.kallsyms2.S
+>   AS      .tmp_vmlinux.kallsyms2.S
+>   LD      vmlinux
+>   BTFIDS  vmlinux
+> libbpf: failed to find '.BTF' ELF section in vmlinux
+> FAILED: load BTF from vmlinux: No data available
+> make[2]: *** [scripts/Makefile.vmlinux:37: vmlinux] Error 255
+> make[2]: *** Deleting file 'vmlinux'
+> make[1]: *** [/kernel_work/linux-people/Makefile:1162: vmlinux] Error 2
+> make: *** [Makefile:240: __sub-make] Error 2
 > 
-> 	There was a fix for BTF loading, namely the signedness of
-> enumerations, but that isn't used when building the kernel, just when
-> pretty printing from BTF.
-> 
-> 	I also have a few fixes and new features in the pretty printing
-> code, but again, that isn't involved when building the kernel.
-> 
-> 	If you have time, please do some tests and report results.
-> 
-> 	You can find it in the usual places:
-> 
-> git://git.kernel.org/pub/scm/devel/pahole/pahole.git
-> https://github.com/acmel/dwarves.git
-> 
-> 	In the master branch.
+> Increasing MAX_PERCPU_VAR_CNT by 10x avoids running out of space, and
+> allows the build to succeed.
 
-hi,
-tested on top of my setup and it looks good
+do you have an actual count of percpu variables for your config?
+10x seems a lot to me
 
-I hoped the kfuncs decl tag would get in, but AFAICS there was
-no new version of the patches.. I'll ping Daniel about that
+this might be a workaround, but we should make encoder->percpu.vars
+dynamically allocated like we do for functions
 
-thanks,
 jirka
 
 > 
-> Thanks a lot!
+> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
+> ---
+>  btf_encoder.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> - Arnaldo
+> diff --git a/btf_encoder.c b/btf_encoder.c
+> index fd04008..d9f4e80 100644
+> --- a/btf_encoder.c
+> +++ b/btf_encoder.c
+> @@ -50,7 +50,7 @@ struct elf_function {
+>  	struct btf_encoder_state state;
+>  };
+>  
+> -#define MAX_PERCPU_VAR_CNT 4096
+> +#define MAX_PERCPU_VAR_CNT 40960
+>  
+>  struct var_info {
+>  	uint64_t    addr;
+> -- 
+> 2.44.0
+> 
+> 
