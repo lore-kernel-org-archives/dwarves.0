@@ -1,307 +1,143 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2051.outbound.protection.outlook.com [40.107.244.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 728BA5E08C;
-	Wed, 28 Feb 2024 19:39:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709149165; cv=none; b=T/qc6Wj/dBqZq+Ehs1pRmAKqCNPuBwcDKUtad5l44GSF3nittbX5CrjXGRli5EvYsUbUzvXIV4f0lZLmaHEQpTTFwlz2tQBhPQVQs6vId6/NcTIbYP7oY+KFaexJ1T7L7NQCd/LF5+abZP42rHsN/ZLzdmo8RUOnZW4ghIU7pwM=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709149165; c=relaxed/simple;
-	bh=gFHujCPhXxiKRFVHgKtx1CZM8LTurcNBRJLLjFO5tro=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=EKNYEGh9Sze/hFVvsjLKReBuUlTZ4iCId6R/uWpFS5J/a+LhG0oRmKA9mucyplaH9/5rNLr+L0sstdC8XOWdkWbDrmLn9tnceEoUzyf9jxRWkD0f3X8XBpN2dNNspWEjyX9VRmKCSyRdF8mf3o0uS9GBZOC5VZBd4YnMTtVQ3EQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JJjVfSii; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2937B13D309;
+	Wed, 28 Feb 2024 23:21:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.244.51
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1709162500; cv=fail; b=X5vxot4usuQO+19s+DJpY2G5P5mnLHQuRdWSqdsSr7IfMbpwfvha04hQxGALm3UNz/BmCTGv/jxQ45TE/sIleFQB3fEnTPsn2ae1MnII4r/Kc1dBecOnRJQYyfHzNCEW0M8z8v8T68IEGNfPlgBDeYCadSH/xK2QIgRnYQnc35M=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1709162500; c=relaxed/simple;
+	bh=/nrRsoAlUFqtQ4d025Dp/rXre/CmFEjsHk/2TP7kohc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=NzeToGahjbQ/C12wtFA+xDnD07gRLNDyxp/tj5XKmMrwddrznnZwzNwGEG4gkhYFggeQyvKafFW2w0rBDpVAuqGNN0L3jN/FTGV5Rwono8S8fIo5skcyu6ZAbL/YXssUz7z9B8wukOb+VFyXN3k/8qKC8689Lt7iKseNpWFPdNY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=WmL+yyCg; arc=fail smtp.client-ip=40.107.244.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JJjVfSii"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DA20C433F1;
-	Wed, 28 Feb 2024 19:39:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709149165;
-	bh=gFHujCPhXxiKRFVHgKtx1CZM8LTurcNBRJLLjFO5tro=;
-	h=Date:From:To:Cc:Subject:From;
-	b=JJjVfSiiEwXxcn1BwJ/l6j32/p53Yb5rJKllPhc6i1rXgHPREu0NZAPMWNmxgrbHN
-	 wf1E0qX7PIFErQGr0CkPS9PygeNtGKdCt4pbA5NwdIoDm4We7N9vhjPq1JLx/uQpdV
-	 EZU6coEAxmr1GkBbl+OBVVpnNhSuJV7XJbmMphcGoL6rYy2BChnX1d3jD5QDVWwoz/
-	 0WWNNQDM61QH2ibJ5GBnFyRr+zTsxxy2PnwMOPWDywJ7Vp3fI7coi/eMdtMNgBCU/X
-	 h16sD+UMqdTRq+rnlH+Q+4ni4Bqld6uxQgkNgYPgRwqBi7fXQ/mZpdSCSdesY9SLT4
-	 6EaAPLl/DoCxw==
-Date: Wed, 28 Feb 2024 16:39:21 -0300
-From: Arnaldo Carvalho de Melo <acme@kernel.org>
-To: dwarves@vger.kernel.org
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	bpf@vger.kernel.org, Alan Maguire <alan.maguire@oracle.com>,
-	Andrii Nakryiko <andrii@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
-	Jan Engelhardt <jengelh@inai.de>,
-	Domenico Andreoli <domenico.andreoli@linux.com>,
-	Matthias Schwarzott <zzam@gentoo.org>,
-	Viktor Malik <vmalik@redhat.com>,
-	Eduard Zingerman <eddyz87@gmail.com>, J B <jb.1234abcd@gmail.com>
-Subject: ANNOUNCE: pahole v1.26 (more holes, --bpf_features, --contains_enum)
-Message-ID: <YbC5MC+h+PkDZten@kernel.org>
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="WmL+yyCg"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=KAvZWnI1Gyyco+SUPZ+k4bxF6yPbUbsITqt65chS4EQWkoqAEkZKcZ0I42Q/y45lgmtsKn7NfhCqA5VpDfGCkiqDpIT919WH+tOc6hdZDcRK9+9kUYFVLZgCypJL14tM1+RyqGbhFmO2smY0IG4B1XO1jj/w5PNKBU23iC4QAVqHdNp9QKd/tb8MxM38HMlwxKCXLzqgnfeNEASsCpme4Qw61c3NF5N/MS66zJp2qAKU/7BPPR0PUYZVt+xE7H3WeB6X6UgjlCnnrxZNEEYvXhTRJPnbyTyAn1X0dBX26XpNiR0I2Rv8ofnnywEzdOOSVKwuyAcEJdEWPrY8rGrwgA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=OP30zesC4LFpuf/rau2OWwK4E2s3EAqdEH9eyabtqmM=;
+ b=LKhkCjUk2LOB1I8ipLBgb1MlVsCoi2sjO1+M6ls40rsFfn2IOuraJ21oNF5EqsAKwkVOkZthJCCa/6IHxSSXfuw9qXtozlRp8Om/C/CR+glqcp52crQYx0UGanYyYSC/LZgIjAbQ/uCo3j5XRTo7wRAgs22xHzcqz/LUFXSbbNKncBqOTvNv+bSPlyiT5NvVPRRCEP8ywoMxWb/7VDe3d01EA6jVM44aAnlhoMh+bzzJBkOc85QGwJgx4iEYVx9JXSmt3iYO0s3M1m7AI4iV7Tq060D3auFQhEgbE9+e6maNuIlo6sK4MWl+OK+k1wmMHS/djCEz18uafyi9gfJsKg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.160) smtp.rcpttodomain=oracle.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=OP30zesC4LFpuf/rau2OWwK4E2s3EAqdEH9eyabtqmM=;
+ b=WmL+yyCgu0CrNnhMISp+8hMY/3888s7SlJ8yo1/bAO9buZi4uuTL/8aBXjl8GZiCfutmx9mbtwXvaqhHYOJXmPZQ341Z1sp2bJPK3kquJXwbFV/XMJeHYt1RLko2wfucSQRnCs02KvPBPbR2/ONboxnNBN9/syFus/Y4nthx4BkLZkvhDeV+YlkwcCZfMOqlTqM2mhziugrAzYCiBupyekYGg8Hyw/gc7/uagy2ycl/yU1evpXn5Zf+M2oTNfO3ek9iP4oYNEfvqZTmVjBChDLN7t0H+NLlYmvHL+OoJnfB2ls3KLHFExJSLfqNcp2I4HFe/7Zt114fO6aotFxdYsQ==
+Received: from BY3PR05CA0006.namprd05.prod.outlook.com (2603:10b6:a03:254::11)
+ by PH7PR12MB8122.namprd12.prod.outlook.com (2603:10b6:510:2b7::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7316.41; Wed, 28 Feb
+ 2024 23:21:33 +0000
+Received: from SJ5PEPF000001D0.namprd05.prod.outlook.com
+ (2603:10b6:a03:254:cafe::a8) by BY3PR05CA0006.outlook.office365.com
+ (2603:10b6:a03:254::11) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7339.30 via Frontend
+ Transport; Wed, 28 Feb 2024 23:21:33 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ SJ5PEPF000001D0.mail.protection.outlook.com (10.167.242.52) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7292.25 via Frontend Transport; Wed, 28 Feb 2024 23:21:33 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Wed, 28 Feb
+ 2024 15:21:17 -0800
+Received: from [10.110.48.28] (10.126.231.35) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1258.12; Wed, 28 Feb
+ 2024 15:21:17 -0800
+Message-ID: <983b98db-79c0-4178-b88f-61f39d147cf7@nvidia.com>
+Date: Wed, 28 Feb 2024 15:21:16 -0800
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Url: http://acmel.wordpress.com
-Message-ID: <20240228193921.JWQp1Mc2M47ffhgIjnHKh8538u4uztVKuznlck9Pk9E@z>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] fix linux kernel BTF builds: increase max percpu
+ variables by 10x
+Content-Language: en-US
+To: Alan Maguire <alan.maguire@oracle.com>, Jiri Olsa <olsajiri@gmail.com>
+CC: Arnaldo Carvalho de Melo <acme@redhat.com>, Alexei Starovoitov
+	<ast@kernel.org>, <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+	<dwarves@vger.kernel.org>
+References: <20240228032142.396719-1-jhubbard@nvidia.com>
+ <Zd76zrhA4LAwA_WF@krava> <856564cf-fba4-4473-bfa9-e9b03115abd1@oracle.com>
+From: John Hubbard <jhubbard@nvidia.com>
+In-Reply-To: <856564cf-fba4-4473-bfa9-e9b03115abd1@oracle.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: rnnvmail201.nvidia.com (10.129.68.8) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SJ5PEPF000001D0:EE_|PH7PR12MB8122:EE_
+X-MS-Office365-Filtering-Correlation-Id: c12c5228-d677-4339-aa9d-08dc38b40080
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	CyoZow8D8PG8Tf/YvnPgARkOImjm9qIwkziPkc1aWRdMism/j+Y50XLLDtScrRBSaAyXLUCroppp/ijqun4cmEH5DE55PY/7sPzbqyi0kv9EqfvjFouaSp7IdsoY9Fh4rorzcXoXN66mL6qmAGZ5HWztrqSNPEhios2p4cpBTxdl9nBVBMNue0SiSVkG/hr27CaZKjqZnxGgC2pzHlC2Q5XxnufxzYxk4GIN/JrB4TdFbSrYXnDrpTETv3hC6nbIStbtPQzcaMQGB8INSJKaXTyuIqrJgK34swIk+kF+5qDI/DRAYp109Shwb0IQVR17P+bDIgvDmvU7TTMr3+290T1B029M9yw2gotlgVMop1hI7GM9Cod8vHSq4FKkg6WxjMIPc/uuI+YcCpbl9h+E1CE5w4AWIZEU5KQIOtH/z7xrAczGiwwl4S/QXxfZZ+ssZmcvGvXoFDtBSynmezu5ppKUPHJs8f71KZshjqO5vqRQ4YgpLtut+XPDn12H6w+BKFbVauNDjeI3SXq+WE6i/Sa5Hovgyv+8xs5gVwKxvXpWLAGMMF0ewPoBqXJyHYApD8k+w2zOrtGYR2U6+HEyujKuBtGHuNdKM33IJ4P2GltPqC3he/fCyBeOssIwiZq4osM6w76v9+Xi6B4dF0V8pyLmpB6sJlyylM7D3egMmJHTVrsqFyrMw2wewzJPV1KM/O4ypIxSCtx2nd/l0RKp+/P5pJbdWtBic5+1HDGsmerTCKvi9PLs3wLbif5hghcm
+X-Forefront-Antispam-Report:
+	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230031)(36860700004)(82310400014);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Feb 2024 23:21:33.2218
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: c12c5228-d677-4339-aa9d-08dc38b40080
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	SJ5PEPF000001D0.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB8122
 
-Hi,
- 
-	The v1.26 release of pahole and its friends is out, showing more
-holes (the ones in contained types) the ability to express the BTF
-features to encode, to simplify the addition of new BTF features in the
-Linux kernel build infrastructure, a way to find the enumeration with
-some enumerator and various fixes.
+On 2/28/24 04:04, Alan Maguire wrote:
+> On 28/02/2024 09:20, Jiri Olsa wrote:
+>> On Tue, Feb 27, 2024 at 07:21:42PM -0800, John Hubbard wrote:
+...
+>> do you have an actual count of percpu variables for your config?
 
-Main git repo:
+That's a very reasonable question...
 
-   git://git.kernel.org/pub/scm/devel/pahole/pahole.git
+>> 10x seems a lot to me
 
-Mirror git repo:
+Me too. This was a "make the problem go away now please" type of "fix". :)
 
-   https://github.com/acmel/dwarves.git
+>>
+>> this might be a workaround, but we should make encoder->percpu.vars
+>> dynamically allocated like we do for functions
 
-tarball + gpg signature:
+Yes, that's a much better design imho.
 
-   https://fedorapeople.org/~acme/dwarves/dwarves-1.26.tar.xz
-   https://fedorapeople.org/~acme/dwarves/dwarves-1.26.tar.bz2
-   https://fedorapeople.org/~acme/dwarves/dwarves-1.26.tar.sign
+>>
+>> jirka
+>>
+> 
+> Good idea Jiri; John would you mind trying the attached patch? Thanks!
 
-	Thanks a lot to all the contributors and distro packagers, you're on the
-CC list, I appreciate a lot the work you put into these tools,
+It works perfectly for me. For that patch, please feel free to add:
 
-Best Regards,
+Tested-by: John Hubbard <jhubbard@nvidia.com>
 
-- Arnaldo
 
-pahole:
+thanks,
+-- 
+John Hubbard
+NVIDIA
 
-- When expanding types using 'pahole -E' do it for union and struct typedefs and for enums too.
-
-  E.g: that 'state' field in 'struct module':
-
-    $ pahole module | head
-    struct module {
-            enum module_state          state;                /*     0     4 */
-
-            /* XXX 4 bytes hole, try to pack */
-
-            struct list_head           list;                 /*     8    16 */
-            char                       name[56];             /*    24    56 */
-            /* --- cacheline 1 boundary (64 bytes) was 16 bytes ago --- */
-            struct module_kobject      mkobj;                /*    80    96 */
-            /* --- cacheline 2 boundary (128 bytes) was 48 bytes ago --- */
-    $
-
-  now gets expanded:
-
-    $ pahole -E module | head
-    struct module {
-            enum module_state {
-                    MODULE_STATE_LIVE     = 0,
-                    MODULE_STATE_COMING   = 1,
-                    MODULE_STATE_GOING    = 2,
-                    MODULE_STATE_UNFORMED = 3,
-            } state; /*     0     4 */
-
-            /* XXX 4 bytes hole, try to pack */
-
-    $
-
-- Print number of holes, bit holes and bit paddings in class member types.
-
-  Doing this recursively to show how much waste a complex data structure has
-  is something that still needs to be done, there were the low hanging fruits
-  on the path to having that feature.
-
-  For instance, for 'struct task_struct' in the Linux kernel we get this
-  extra info:
-
-    --- task_struct.before.c      2024-02-09 11:38:39.249638750 -0300
-    +++ task_struct.after.c       2024-02-09 16:19:34.221134835 -0300
-    @@ -29,6 +29,12 @@
-
-          /* --- cacheline 2 boundary (128 bytes) --- */
-          struct sched_entity        se;                   /*   128   256 */
-    +
-    +     /* XXX last struct has 3 holes */
-    +
-          /* --- cacheline 6 boundary (384 bytes) --- */
-          struct sched_rt_entity     rt;                   /*   384    48 */
-          struct sched_dl_entity     dl;                   /*   432   224 */
-    +
-    +       /* XXX last struct has 1 bit hole */
-    +
-          /* --- cacheline 10 boundary (640 bytes) was 16 bytes ago --- */
-          const struct sched_class  * sched_class;         /*   656     8 */
-          struct rb_node             core_node;            /*   664    24 */
-    @@ -100,6 +103,9 @@
-          /* --- cacheline 35 boundary (2240 bytes) was 16 bytes ago --- */
-          struct list_head           tasks;                /*  2256    16 */
-          struct plist_node          pushable_tasks;       /*  2272    40 */
-    +
-    +     /* XXX last struct has 1 hole */
-    +
-          /* --- cacheline 36 boundary (2304 bytes) was 8 bytes ago --- */
-          struct rb_node             pushable_dl_tasks;    /*  2312    24 */
-          struct mm_struct *         mm;                   /*  2336     8 */
-    @@ -172,6 +178,9 @@
-          /* XXX last struct has 4 bytes of padding */
-
-          struct vtime               vtime;                /*  2744    48 */
-    +
-    +     /* XXX last struct has 1 hole */
-    +
-          /* --- cacheline 43 boundary (2752 bytes) was 40 bytes ago --- */
-          atomic_t                   tick_dep_mask;        /*  2792     4 */
-
-    @@ -396,9 +405,12 @@
-          /* --- cacheline 145 boundary (9280 bytes) --- */
-          struct thread_struct       thread __attribute__((__aligned__(64))); /*  9280  4416 */
-
-    +       /* XXX last struct has 1 hole, 1 bit hole */
-    +
-          /* size: 13696, cachelines: 214, members: 262 */
-          /* sum members: 13518, holes: 21, sum holes: 162 */
-          /* sum bitfield members: 82 bits, bit holes: 2, sum bit holes: 46 bits */
-          /* member types with holes: 4, total: 6, bit holes: 2, total: 2 */
-          /* paddings: 6, sum paddings: 49 */
-          /* forced alignments: 2, forced holes: 2, sum forced holes: 88 */
-     };
-
-- Introduce --contains_enumerator=ENUMERATOR_NAME:
-
-  E.g.:
-
-      $ pahole --contains_enumerator S_VERSION
-      enum file_time_flags {
-             S_ATIME   = 1,
-             S_MTIME   = 2,
-             S_CTIME   = 4,
-             S_VERSION = 8,
-      }
-      $
-
-  The shorter form --contains_enum is also accepted.
-
-- Fix pretty printing when using DWARF, where sometimes the class (-C) and a specified "type_enum",
-  may not be present on the same CU, so wait till both are found.
-
-  Now this example that reads the 'struct perf_event_header' and 'enum perf_event_type'
-  from the DWARF info in ~/bin/perf to pretty print records in the perf.data file works
-  just like when using type info from BTF in ~/bin/perf:
-
-      $ pahole -F dwarf -V ~/bin/perf \
-                --header=perf_file_header \
-                --seek_bytes '$header.data.offset' \
-                --size_bytes='$header.data.size' \
-                -C 'perf_event_header(sizeof,type,type_enum=perf_event_type,filter=type==PERF_RECORD_MMAP2)' \
-                --prettify perf.data --count 1
-      pahole: sizeof_operator for 'perf_event_header' is 'size'
-      pahole: type member for 'perf_event_header' is 'type'
-      pahole: type enum for 'perf_event_header' is 'perf_event_type'
-      pahole: filter for 'perf_event_header' is 'type==PERF_RECORD_MMAP2'
-      pahole: seek bytes evaluated from --seek_bytes=$header.data.offset is 0x3f0
-      pahole: size bytes evaluated from --size_bytes=$header.data.size is 0xd10
-      // type=perf_event_header, offset=0xc20, sizeof=8, real_sizeof=112
-      {
-            .header = {
-                    .type = PERF_RECORD_MMAP2,
-                    .misc = 2,
-                    .size = 112,
-            },
-            .pid = 1533617,
-            .tid = 1533617,
-            .start = 94667542700032,
-            .len = 90112,
-            .pgoff = 16384,{
-                    .maj = 0,
-                    .min = 33,
-                    .ino = 35914923,
-                    .ino_generation = 26870,
-            },{
-                    .build_id_size = 0,
-                    .__reserved_1 = 0,
-                    .__reserved_2 = 0,
-                    .build_id = { 33, 0, 0, 0, -85, 4, 36, 2, 0, 0, 0, 0, -10, 104, 0, 0, 0, 0, 0, 0 },
-            },
-            .prot = 5,
-            .flags = 2,
-            .filename = "/usr/bin/ls",
-      },
-      $
-
-DWARF loader:
-
-- Add support for DW_TAG_constant, first seen in Go DWARF.
-
-- Fix loading DW_TAG_subroutine_type generated by the Go compiler, where it may
-  have a DW_AT_byte_size. Go DWARF. And pretty print it as if
-  it was from C, this helped in writing BPF programs to attach to Go binaries, using
-  uprobes.
-
-BTF loader:
-
-- Fix loading of 32-bit signed enums.
-
-BTF encoder:
-
-- Add 'pahole --btf_features' to allow consumers to specify an opt-in set of
-  features they want to use in BTF encoding.
-
-  Supported features are a comma-separated combination of
-
-          encode_force    Ignore invalid symbols when encoding BTF.
-          var             Encode variables using BTF_KIND_VAR in BTF.
-          float           Encode floating-point types in BTF.
-          decl_tag        Encode declaration tags using BTF_KIND_DECL_TAG.
-          type_tag        Encode type tags using BTF_KIND_TYPE_TAG.
-          enum64          Encode enum64 values with BTF_KIND_ENUM64.
-          optimized_func  Encode representations of optimized functions
-                          with suffixes like ".isra.0" etc
-          consistent_func Avoid encoding inconsistent static functions.
-                          These occur when a parameter is optimized out
-                          in some CUs and not others, or when the same
-                          function name has inconsistent BTF descriptions
-                          in different CUs.
-
-  Specifying "--btf_features=all" is the equivalent to setting all of the
-  above.  If pahole does not know about a feature specified in
-  --btf_features it silently ignores it.
-
-  The --btf_features can either be specified via a single comma-separated
-  list
-          --btf_features=enum64,float
-
-  ...or via multiple --btf_features values
-
-          --btf_features=enum64 --btf_features=float
-
-  These properties allow us to use the --btf_features option in the kernel
-  scripts/pahole_flags.sh script to specify the desired set of BTF
-  features.
-
-  If a feature named in --btf_features is not present in the version of
-  pahole used, BTF encoding will not complain.  This is desired because it
-  means we no longer have to tie new features to a specific pahole
-  version.
-
-  Use --btf_features_strict to change that behaviour and bail out if one of
-  the requested features isn't present.
-
-  To see the supported features, use:
-
-    $ pahole --supported_btf_features
-    encode_force,var,float,decl_tag,type_tag,enum64,optimized_func,consistent_func
-    $
-
-btfdiff:
-
-- Parallelize loading BTF and DWARF, speeding up a bit.
-
-- Do type expansion to cover "private" types and enumerations.
