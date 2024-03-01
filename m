@@ -1,162 +1,172 @@
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2057.outbound.protection.outlook.com [40.107.93.57])
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A60E43612E;
-	Thu, 29 Feb 2024 18:16:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.93.57
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709230596; cv=fail; b=J4WA9rvgzER4zpBXsnimSIXZFvHeynVZTYwyTKBVHd88+Z7reByR4QB0MkgzM5hOmywPLo9NsMmZiO0k8jZA/j1eiBj7N+luxAmkHN5I7chc+dsm3QRCzUmMRDboCuGOApy+f440p5BkAIXc0AYpFAHjPHRoq861loOWAH7gnCo=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709230596; c=relaxed/simple;
-	bh=N5vLpdRP6KkXNaoD8Sf2j5und+8KQ4Fu6kM50k5bxGs=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=BJP2nLZNXMe20ueFJCbURL1REFOn+rgHX2aK3VLee42G1CE2QAvtr2En9S1WRZvAC8xxBJ23ZQ/6s7P53EloQtbJ00/lt/TjExiqbsLY2DBdxOemd0xk6+ENtGPb5jMxtFqoB1cYZzO5QZgFGUSeOQdk1cKbdwg/tzfFTX+d678=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=TuAnxGh2; arc=fail smtp.client-ip=40.107.93.57
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4E5033CD0;
+	Fri,  1 Mar 2024 12:41:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1709296879; cv=none; b=uvrEsb6x6uJzdHl5Roxi9NGmv0C43rruUz7uXSe7k8VJ0Wlnt5JR/IrDeeIbPAMtcGZYTzE0Pjy744PPrtysWkMHeKKYKo2NaE75L/mb/MPG697iQ2xPmS823hNZ0OGpz9uH7ZttRMK0XALu5AC+FkF4BAN1GBupuBDMPbVeX6g=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1709296879; c=relaxed/simple;
+	bh=69onZc66xrLRSD3WoR+/WOMKzOxHL7TXZv4ExZMuNk8=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=JVzz0X0ujevWQ0EQNLAIHYGAL4fcT0NZVkdmTO/nKm190oVrXLeuAs1S8pfai6+sluaGLOzgGZb/qFOpCzsZhNlTqDM+IiGCxoFNvCIwExJtcj7gK/Fzbi37Lf0vK/jxUXr0t2Xl9UIqYajSBflzWm/SOciluZVV88ui6kWYaZM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=ki/APkJq; arc=none smtp.client-ip=205.220.165.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="TuAnxGh2"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=jSq3uaGaopB3b/XXB+kqu13xPYTUdpQQkK1EyCU7lJJvViaQt0K8Y04/bQJS/FyDgXZ/vh0NoO6lMOOE8N5fhwwTFmSPBCr7v3GgmTJReAhCTY89RtR46LNOTX45fe1rz/HO13k54BlTR3Y/9dEjszLIulh7bpqJfhnbG4t3VioeL7eH6rP0F6uHr0PevzAFJSYu6Nn0uHwsDXdRAtAGLdyK9p4nki/oC7wlTWg112vgH+li9qweaSvuKPEnw1QCohOYW2u45xioObJLrDnUnVknai0KUQJatrMFVZDlqY3CJzG5oFyJ4EfeuMlfieWeNdhWxqJXaA/MGN4FFsIuUw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=sEO0KVT3IgM3+d6YYeHW0lcQptgN2LfLd0x+2bYGoj0=;
- b=N6zuNifLZPywEoR3l9v41COJpAWWfiLpQrtHS9NvXMpKGZgM31iWtNfmyDZ0hw+aIPMMY6T1GMrKwuNPrQqP6MqgF3PcSeZMtt/7KkKkpgVk9tPZLqkEzXhR6o3zq/30ndrplWLnLig51HcvZTVtp+tKN2lSO00aTR7jDUjToRpNBgryvLXfSLMQqKwEezECPvgd2WLf6GsxANPJS0fxUOYgJSup+dhTyXaFfOvy060GpXcPFrLasRtNhxV3x81c7nxCAiKVJgzgBVikIvIv+t6+X9goB3n9V2XCmCyZhHZphD+eDTx57/YO/XUIBlrCp/6ztZpf9RkV3ovDUHVPRg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=sEO0KVT3IgM3+d6YYeHW0lcQptgN2LfLd0x+2bYGoj0=;
- b=TuAnxGh2ULqH1AC/Plp4bSi6M0NPTnrbOuzzfopvvd34zPRd0IbW6ovwqNv6bZAhNbOrlittD4UiS4el9KDAR9uQ9dek66HhTq/cWDJCt6gUJUCdySO91q3Py0i8J7x1HQRjOi4Yl8G69DjpgAPIX+TO0KZAneEqfIWpvo1E2SIqHpIeFJ6AP0H8htg9cLynkQwfN51BkNQWQ/o/93MXLZiqdmPjNuwjF4RrscAW5kHxkz1tFX1gnc8I5wrSBBcG/k6y7Pkknxr/yEy7rFpsL6t+c9Qe92Y7+fl7GaCtsXEMOHGERkN9OHfmKsi/OXLV1LDKpUIhauAirGVXnunXog==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from DM6PR12MB4140.namprd12.prod.outlook.com (2603:10b6:5:221::13)
- by DM4PR12MB6496.namprd12.prod.outlook.com (2603:10b6:8:bd::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7316.34; Thu, 29 Feb
- 2024 18:16:29 +0000
-Received: from DM6PR12MB4140.namprd12.prod.outlook.com
- ([fe80::6848:122d:93ad:24c]) by DM6PR12MB4140.namprd12.prod.outlook.com
- ([fe80::6848:122d:93ad:24c%6]) with mapi id 15.20.7316.039; Thu, 29 Feb 2024
- 18:16:29 +0000
-Message-ID: <f248cf92-038c-480f-b077-f7d56ebc55bc@nvidia.com>
-Date: Thu, 29 Feb 2024 10:15:23 -0800
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] fix linux kernel BTF builds: increase max percpu
- variables by 10x
-Content-Language: en-US
-To: Alan Maguire <alan.maguire@oracle.com>, Jiri Olsa <olsajiri@gmail.com>
-Cc: Arnaldo Carvalho de Melo <acme@redhat.com>,
- Alexei Starovoitov <ast@kernel.org>, bpf@vger.kernel.org,
- LKML <linux-kernel@vger.kernel.org>, dwarves@vger.kernel.org
-References: <20240228032142.396719-1-jhubbard@nvidia.com>
- <Zd76zrhA4LAwA_WF@krava> <856564cf-fba4-4473-bfa9-e9b03115abd1@oracle.com>
- <983b98db-79c0-4178-b88f-61f39d147cf7@nvidia.com>
- <34157878-c480-44bb-91d6-9024da329998@oracle.com>
-From: John Hubbard <jhubbard@nvidia.com>
-In-Reply-To: <34157878-c480-44bb-91d6-9024da329998@oracle.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SJ0PR13CA0070.namprd13.prod.outlook.com
- (2603:10b6:a03:2c4::15) To DM6PR12MB4140.namprd12.prod.outlook.com
- (2603:10b6:5:221::13)
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="ki/APkJq"
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 42194huA008252;
+	Fri, 1 Mar 2024 12:41:11 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding;
+ s=corp-2023-11-20; bh=lq7kmBtUzU0NA4rp5KvxjlrcWodwjmXVQdynPSQTg7Y=;
+ b=ki/APkJqtOfhI5rIwWMEjNGOZyrfHCl+3Qh3Tb9kvOg7xO6TmraaeAF6NyhJ/uly4g+f
+ UuZAYio0DojjTGhSbqA9RcnES9IUUJKUmElXM/7PlS+94TaW+CRvaIgbY1Uq3TW+rKCG
+ iEpcolZPM+pA4V7TZXnHM5H9E4d84kara7/u23E1nbN5r6gX4fvtlExIbroGLD9vZ2Km
+ SQJw8MMX55hJXVKwLoHWIQSpyYPG2jP0MUwOa7s61Qr2q1oYz2D8LuXKdHGjUCAAahsE
+ VcwD8j6fEecRctFlWADR5aHw7XXeCpoXvhkd2RuDenIfYx1w7N+36Z9sYiYhR0wOwjOg eA== 
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3wf90vgs3y-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 01 Mar 2024 12:41:11 +0000
+Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 421BQSKQ009594;
+	Fri, 1 Mar 2024 12:41:09 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3wjrqmrn96-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 01 Mar 2024 12:41:09 +0000
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 421Cef8P021741;
+	Fri, 1 Mar 2024 12:41:09 GMT
+Received: from bpf.uk.oracle.com (dhcp-10-175-184-138.vpn.oracle.com [10.175.184.138])
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3wjrqmrn83-1;
+	Fri, 01 Mar 2024 12:41:09 +0000
+From: Alan Maguire <alan.maguire@oracle.com>
+To: acme@redhat.com
+Cc: dwarves@vger.kernel.org, bpf@vger.kernel.org,
+        Alan Maguire <alan.maguire@oracle.com>,
+        John Hubbard <jhubbard@nvidia.com>, Jiri Olsa <olsajiri@gmail.com>
+Subject: [PATCH dwarves] btf_encoder: dynamically allocate the vars array for percpu variables
+Date: Fri,  1 Mar 2024 12:41:06 +0000
+Message-Id: <20240301124106.735693-1-alan.maguire@oracle.com>
+X-Mailer: git-send-email 2.39.3
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6PR12MB4140:EE_|DM4PR12MB6496:EE_
-X-MS-Office365-Filtering-Correlation-Id: aa29883e-45d9-468a-f510-08dc39528c9a
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	/CsjFyDfoD8hANedOWVf6ibmo90aaXuxOWtZg5ldAg4q5k/uv92aVRUl0XU+I3TqR0+3AH5u/HIw/H+6lq2t8VuQwGDr3m3ay224vpKH3sRm3ZA9ZLPBOvC8NYo+HVvyYXxjQUFUbGeVEdLXJsRvNrcYRJDv9Zmimi9ALVwzqYfBK8HvO1vUCf2gy9321fx0VrKdplrbHZrX9Qd1NX2LgWdZhso3d9P6n+ftMfplj9LPPaoo3pKgHepaZ1h2m/XcP+bLv3VFePHzvYsRxnw0TBXVY65rdyhFoBJbgj7eQZA4Y69dRy2//Z2VAKawjleAU8CBTIBxeZks/1nCxjsdVdx4hEpFy0yDKQLKYUAUfBISEuLhq5FXi/tMafYHeAwF+8Lc4TffmGb7WSGDSL+u1vitxiu2CAlLkOTP3siRgbOU8Aa8x0fbAAALckrMm8cQUn8LC4xyIklXcYbfKGNtnsXVz+FMeKpYtVxYx7BdFERki6rBprqGkUwWTSliyJXmeULRaekNmYMeM5FCAiqx96TQcT/395ElWVKds3lGUty8NLa1T4osqoVeu5sr6jcODr8BDrQtnewdfGcpSxzXb73miLRvgM/16GW6qxKNp89h4D6P9MVZZxQ7gAcrmib0OfsLrOIj1exgYu4MweUpfQ==
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB4140.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?OXdpU2pYVFQ1YTBkbForSUhHVlp0cHVhcVBrZ0VlQ3NxdFRqSnhJWjBReGxZ?=
- =?utf-8?B?TWpHdlE0N3drZGtqK0dBZXhqSEV2eUVNVGdCaXlBVXQzOE1oRzRVcUVOVlN1?=
- =?utf-8?B?RWw5MXAxak5LQXdEWEpWWE43d3dTUHFFYzNVNGFLQkJnWTlMU3dMTUFudHNt?=
- =?utf-8?B?TTNpVGxQZTJHMmJwb2FBMk5OZm80OUZoTWRtOXJVVW1CNFFkOHQrWnNDQ1VJ?=
- =?utf-8?B?cnpYZEZQbFlLUWRzZ1JFMUZvd0R0cm93c04ydUdTa2JYMk5uSDNwVkpQd2JK?=
- =?utf-8?B?QW9INHJxYXpUaXBxV1YxdTA4TUJncnNDNTRCV3lRTXAxcnB6MldycUdGQkht?=
- =?utf-8?B?Q3NmMjFsTm01UUNkeGZNUk9HMWMxTjBRY1NhbU5mYnRXNTNjNFliVHN3MGhy?=
- =?utf-8?B?d2Rqc2poOEwxYUd6SDFRVEVwSDFqSHZIWjJyY0JQWi9aWVBuWDl6VEhuK0Mx?=
- =?utf-8?B?QkNKa0d4SDNiaGVhQ2lyR0NLcFptVjd4TGcydTI2Q3U4aW9DR01nLzVuOXVR?=
- =?utf-8?B?bUdUdCtSQ2xmRktTRituSFZZZkNxRHRweEN3dmVWTlhLMmhsRlFqSFpRWjUr?=
- =?utf-8?B?b0ZZMWp0TVNVejVWVzlFYVYyUW5EOW5NOHVJbmZYcVFQc1EvRWhFbVREQ3BR?=
- =?utf-8?B?dGRjR25JdzgyZzd4YTFVbm0ybGhqVmJaQzl2bjNvR1pLM1JFRVMzd2NQcFUx?=
- =?utf-8?B?VmtTWnlGbUFwUkFCTVd3YWJROURLc3h2Tnd0TnNrQXFkTk44WDh0a0JpSmdi?=
- =?utf-8?B?cWRrb0pqdnhveG14YktUT2dWM1dPM1hzWlpXeXVnVFdaR0dnWDBDQ0E5TjUx?=
- =?utf-8?B?QnA0bVNRb1BKdUNEK3hRMDFQK2JaZmd5TmNVM1c5dExQT1hVT1RTaDAxd1Q3?=
- =?utf-8?B?cTdvVXpWQ0tCY1FxbVgxSndYaTgrQjJleXk0MEVWUXQrVnlXQ3RCVjcxM1Bq?=
- =?utf-8?B?WWZURFZ0dmFSN21zUHdyUEFmWjJFd0ora0JwTmpqa1YzYjNOK21GbThqaWFQ?=
- =?utf-8?B?VnJFWDVmNUMxUXhGQVRBVEdNaGxLb1cwdSswNzFZQlRTb1FrakFGUFB0U1po?=
- =?utf-8?B?ZFlwSVd2N2o5N1NSUjE3MXBkdGU0c2ZBT0doYXRJTzYxSXFodEJJRW90ZFor?=
- =?utf-8?B?ZFNnVjYzS05GWGUrT0xFNHVMTm1JYjBMVlVTdUJMN1daM2VJWjRpMnowanpr?=
- =?utf-8?B?QTl0eDNOOVRwRS9zSlYwNDFtOURPT1YvWTVPeElkRENCeHlqdVU5aTFZUzR1?=
- =?utf-8?B?MWZkWVZwcHpNc096TUczbDFOYXpnRmtzbGRPNFVTald6dlZTdllodzFpaDBj?=
- =?utf-8?B?bTRZU3ZvUDl3ZjlFY0FHQUFxcUc3WWQvMFJ3UmpLNGl0T2dZajNydVg4cGZT?=
- =?utf-8?B?TlhlZkFpOVdDK3lremljanZlalA3emlhaUNBWWVwbVdTMjhuTWVWM2ZjS1N6?=
- =?utf-8?B?enBQM2oxL2lxaGFncEt5VXluOFJhSmtaeWtHa1BqaUJtQkc0WG9lSXlIRS84?=
- =?utf-8?B?eTNQcWRnRE04RVhGaTJoTmtkQ01tbmNIN2ZnSGdOcitva2k0TURWWmZ5L3Z1?=
- =?utf-8?B?RGJhUk81WUxJVDAyMW9rZ0hGSzRyVDVxVkRpYzUraVpOQmN3VWZlTnUxaUZz?=
- =?utf-8?B?Sm81RHFZQXNHaVp4ODJYMjFBeFM1OUUzTlZXS2dmOE03YkhwN1NaVldEQmRC?=
- =?utf-8?B?bEV1R1hhYVg4ZUhtajVnRUYvcTd5NnlkUEVMaFB1WXhTQVZXSVYyczFrZkJL?=
- =?utf-8?B?d2NrMVBxc0taNGE3ZVpDV3pvaGFhL2VoMWpHUDU3cWZrY2N1cFJqemRQMUMw?=
- =?utf-8?B?MGlvSWc5RjllZDdKakN0d2pjYnAzaXI1Q3FIUm9CWHFMUGJJMVp3SUcrQ1U4?=
- =?utf-8?B?OE1KdVNicERjbGxQSnVpbzcwZ3ByYXhXTzNKNHRtbkZLUHlkVHJKUTVVYTNI?=
- =?utf-8?B?aVRpRjlvdTJoU3FXUXkrUmN1WEpFbCtyZURqdWw2QTdwelJaaXNEOXNrSzVK?=
- =?utf-8?B?cllQRVVWQUNORmUyRzFjazJKMU1mR2RjbWZ5b2RueFBrTnlJUkdCdnJCQ3Nn?=
- =?utf-8?B?TnVkVHIxVUpDL2IvRkNDWnh1RnpXSWE1RVpMak5zdk83bXoraldmdEdTOEc3?=
- =?utf-8?B?c1M0ZGU0cTJJWG1PcFBRdjhNVEExTWZJRGhMdXYybDFBR1A3TU5ZaVdRY1Vo?=
- =?utf-8?B?ZlE9PQ==?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: aa29883e-45d9-468a-f510-08dc39528c9a
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB4140.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Feb 2024 18:16:29.0415
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: f+DpI3CDQ/nkskHjg5RkH7oKeNvJspyc+5IIeUNYh/u/egRjLfknPU6P4dru+xTMX4vN4zBtYCQ7KhcsJ1cXPw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6496
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-03-01_12,2024-03-01_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 bulkscore=0 suspectscore=0
+ spamscore=0 phishscore=0 malwarescore=0 mlxscore=0 mlxlogscore=999
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2311290000
+ definitions=main-2403010106
+X-Proofpoint-GUID: s2bF-R6fGuRUSs4chM6FQNzDiWQYqW8V
+X-Proofpoint-ORIG-GUID: s2bF-R6fGuRUSs4chM6FQNzDiWQYqW8V
 
-> ...
-> Running
-> 
-> bpftool btf dump file vmlinux |grep "] VAR"
-> 
+Use consistent method across allocating function and per-cpu variable
+representations, based around (re)allocating the arrays based on demand.
+This avoids issues where the number of per-CPU variables exceeds the
+hardcoded limit.
 
-$ bpftool btf dump file vmlinux |grep "] VAR" | wc -l
-4852
+Reported-by: John Hubbard <jhubbard@nvidia.com>
+Suggested-by: Jiri Olsa <olsajiri@gmail.com>
+Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+Tested-by: John Hubbard <jhubbard@nvidia.com>
+---
+ btf_encoder.c | 38 +++++++++++++++++++++++++++++---------
+ 1 file changed, 29 insertions(+), 9 deletions(-)
 
-$ bpftool btf dump file vmlinux |grep "] VAR" | tail -5
-[136994] VAR '_alloc_tag_cntr.9' type_id=703, linkage=static
-[137003] VAR '_alloc_tag_cntr.5' type_id=703, linkage=static
-[137004] VAR '_alloc_tag_cntr.7' type_id=703, linkage=static
-[137005] VAR '_alloc_tag_cntr.17' type_id=703, linkage=static
-[137018] VAR '_alloc_tag_cntr.14' type_id=703, linkage=static
-
-> ...should give us a sense of what's going on. I only see 375 per-cpu
-> variables when I do this so maybe there's something
-> kernel-config-specific that might explain why you have so many more?
-
-Yes, as mentioned earlier, this is specifically due to the .config.
-The .config is a huge distro configuration that has a lot of modules
-enabled.
-
-
-thanks,
+diff --git a/btf_encoder.c b/btf_encoder.c
+index fd04008..a43d702 100644
+--- a/btf_encoder.c
++++ b/btf_encoder.c
+@@ -50,8 +50,6 @@ struct elf_function {
+ 	struct btf_encoder_state state;
+ };
+ 
+-#define MAX_PERCPU_VAR_CNT 4096
+-
+ struct var_info {
+ 	uint64_t    addr;
+ 	const char *name;
+@@ -80,8 +78,9 @@ struct btf_encoder {
+ 			  is_rel;
+ 	uint32_t	  array_index_id;
+ 	struct {
+-		struct var_info vars[MAX_PERCPU_VAR_CNT];
++		struct var_info *vars;
+ 		int		var_cnt;
++		int		allocated;
+ 		uint32_t	shndx;
+ 		uint64_t	base_addr;
+ 		uint64_t	sec_sz;
+@@ -983,6 +982,16 @@ static int functions_cmp(const void *_a, const void *_b)
+ #define max(x, y) ((x) < (y) ? (y) : (x))
+ #endif
+ 
++static void *reallocarray_grow(void *ptr, int *nmemb, size_t size)
++{
++	int new_nmemb = max(1000, *nmemb * 3 / 2);
++	void *new = realloc(ptr, new_nmemb * size);
++
++	if (new)
++		*nmemb = new_nmemb;
++	return new;
++}
++
+ static int btf_encoder__collect_function(struct btf_encoder *encoder, GElf_Sym *sym)
+ {
+ 	struct elf_function *new;
+@@ -995,8 +1004,9 @@ static int btf_encoder__collect_function(struct btf_encoder *encoder, GElf_Sym *
+ 		return 0;
+ 
+ 	if (encoder->functions.cnt == encoder->functions.allocated) {
+-		encoder->functions.allocated = max(1000, encoder->functions.allocated * 3 / 2);
+-		new = realloc(encoder->functions.entries, encoder->functions.allocated * sizeof(*encoder->functions.entries));
++		new = reallocarray_grow(encoder->functions.entries,
++					&encoder->functions.allocated,
++					sizeof(*encoder->functions.entries));
+ 		if (!new) {
+ 			/*
+ 			 * The cleanup - delete_functions is called
+@@ -1439,10 +1449,17 @@ static int btf_encoder__collect_percpu_var(struct btf_encoder *encoder, GElf_Sym
+ 	if (!encoder->is_rel)
+ 		addr -= encoder->percpu.base_addr;
+ 
+-	if (encoder->percpu.var_cnt == MAX_PERCPU_VAR_CNT) {
+-		fprintf(stderr, "Reached the limit of per-CPU variables: %d\n",
+-			MAX_PERCPU_VAR_CNT);
+-		return -1;
++	if (encoder->percpu.var_cnt == encoder->percpu.allocated) {
++		struct var_info *new;
++
++		new = reallocarray_grow(encoder->percpu.vars,
++					&encoder->percpu.allocated,
++					sizeof(*encoder->percpu.vars));
++		if (!new) {
++			fprintf(stderr, "Failed to allocate memory for variables\n");
++			return -1;
++		}
++		encoder->percpu.vars = new;
+ 	}
+ 	encoder->percpu.vars[encoder->percpu.var_cnt].addr = addr;
+ 	encoder->percpu.vars[encoder->percpu.var_cnt].sz = size;
+@@ -1720,6 +1737,9 @@ void btf_encoder__delete(struct btf_encoder *encoder)
+ 	encoder->functions.allocated = encoder->functions.cnt = 0;
+ 	free(encoder->functions.entries);
+ 	encoder->functions.entries = NULL;
++	encoder->percpu.allocated = encoder->percpu.var_cnt = 0;
++	free(encoder->percpu.vars);
++	encoder->percpu.vars = NULL;
+ 
+ 	free(encoder);
+ }
 -- 
-John Hubbard
-NVIDIA
+2.39.3
 
