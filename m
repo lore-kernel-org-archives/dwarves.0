@@ -1,73 +1,66 @@
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CEEA386;
-	Fri,  1 Mar 2024 14:15:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60A896BFDE;
+	Fri,  1 Mar 2024 15:24:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709302504; cv=none; b=j2U/bpRz2ZqwETqMMt1DnS6rzZYFOKXBQMlNyVfV9X+GLg1jHeubIFu8bCd6S500YxQ6aCrrTIoBzhHxjOyoxwrMjuK/1r2VKMqc4p4fMa2p6KWbI12gQxmo/sMAsa7lHuoEpYbCgzUgQB19o+WyFbhz+wM5yzqEw2TFsbZ/TWU=
+	t=1709306674; cv=none; b=F9NxyOsV5ncyDL6YhT15cfYEoQRFYAuu7RBmeZ08zq+tDa2Zvd2Vv8M57nBTcsixR/kU3ts2erHKl+03T+ob2uTNTIPB3o541vadSXhV0JyelbRsL8ed/VKmSjQ02NuCuVtjX2TX/SoYObFIYnTvHjTtSQzOvnROO0E5ldWRjVk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709302504; c=relaxed/simple;
-	bh=uNMW83LNJ2amnFUbvjiWJQyAEGNgW0Olyi94J6gfEOs=;
+	s=arc-20240116; t=1709306674; c=relaxed/simple;
+	bh=33/sPwUCVGJBaZBqwstRiFLOxGbB42pYs5Iiv3cqK7o=;
 	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nvFwvtot3Fjjm6zK5pFc1UR8+qexGsGIC2hypAVG6/JqmWWX4E3yCT8q3L6BE0SCpmipsGOpnIZfy8JaXgSilNYro/ZAQrg0Qf+R+VZclJpJJ9vVHXrO+ZB0r9C95KWvOt3ucaWHlfc9WSZ8RrOCK2kXhfowyeNMtWXi+ha8M4U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=M+Zj0+d7; arc=none smtp.client-ip=209.85.128.47
+	 Content-Type:Content-Disposition:In-Reply-To; b=M/dceocY31wK/Lujs3v3xj358Ms1Jz5jazV3/jZFIvLXbyg3QBbc5axi1vJ8hZMlaSuCpya4AAfbEuRDhAnxL6hn+7cR6cDyZxHZq6lCu2zAxRqWD71LYMjyprww5Ob0xTMgQO23s9qmxsbS+B47puqdB97Q3UBAgKE9AB2qGkI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=e+RP8+ky; arc=none smtp.client-ip=209.85.218.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="M+Zj0+d7"
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-412c83a8259so5056325e9.2;
-        Fri, 01 Mar 2024 06:15:01 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="e+RP8+ky"
+Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-a4429c556efso372364666b.0;
+        Fri, 01 Mar 2024 07:24:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1709302500; x=1709907300; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1709306670; x=1709911470; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=n0oUCf6IAisxelJxCU2JYLXA6npjdC01/hvoCHou+0k=;
-        b=M+Zj0+d7QIULJtkxzY2IYZxasw1Y2b05yrNKOViUQKzfTey22MuHzNZzSN8mDxZ9IH
-         yxD4Y6IBHg8adGyxdKKYpBTkRS/rxdWi4pQsukBuzkTkQJD0ygmpE/x9N3EfXZRSY7xQ
-         +A4KqXGrwdJmRCgIacm8co2qYAnWeOA+7FhqB1Aiq7gkJb63x1VRYui8YjQF22Or5sNB
-         14Fw0WRBJJSaQKUBWfwGphXBfGWhRyzxMVukf1Z4n5OjDFFuCPxT0d7hZCCwRP5fLI/0
-         2mEoC8b+IIrSckwBNdQ5G/UeflsOUXZbfI2rIaBdvEhwcSwBd4pbUGxUR0GagEZZ0CLy
-         0qRw==
+        bh=brg+65tHP59HmD9Vnjm4p9WorCcCtyt7c+xm8JLyK9c=;
+        b=e+RP8+ky0ywyO7Yv8Tr7Zxg+YDbxHh8f3GD1ilDFkRajKosOa59kt6vUgCdZHRn3I/
+         OBqWXpnH77u3ljyLTJczh+f531nw3gvcpiP3x11IEh+z5EgzJQYT+1zzLQntkHLgpUEb
+         u1tQs31pDjWIYnecTfLoVk/QT3IIyXEv8MzPPydBGQ/9JCfmVWvkHBw9H7/ziR2hnLPK
+         FdUzciWgjQC7xjDiJBo/h/NrMeU5FYQhQ1BS66HpPq/To7I58BhtpG+r1mY2FnVfhU4b
+         9dSTMCEBh3vMxApBZHwzIxedBN9N/jy+SVpwy+Gn3CtjgV5hG96oRHp47HcUuY8XuUXn
+         XY3w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709302500; x=1709907300;
+        d=1e100.net; s=20230601; t=1709306670; x=1709911470;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=n0oUCf6IAisxelJxCU2JYLXA6npjdC01/hvoCHou+0k=;
-        b=O3e0+w31Mgk+m4M8zirZ7YHQqvo21pbFlCuOyf0UvL4FIBAtO5Iq9G8rPDGHabSU7v
-         qAbjcKLO6dIGR1ZOXVuEXQNhNsBQSFOucrnxyTa8hXYWLyUBywBatFpCOaX1bLAdJRVl
-         A0o3F47C1r/lVQVmViDmhDwuH9TMcvQmD8M3cBV66XhjS550R/gJcoLxccmMC8MgmUWa
-         uEbdRHNu5pDNAwR53BBUSprbmwDdSulJBKx8V0OHnyOdlbiwh+VxeDUUFutfz9OfBlVw
-         o1YW1ovB4HQn+qhelvBI8LlcNEOBqXkeHTxqTYvmDWX6/K5gdVfgADdVu5RwTNRDVgg+
-         Zx5A==
-X-Forwarded-Encrypted: i=1; AJvYcCU/u+a+lM/jmufJA1SGNamvV0Ec6xH1dQ4DRudlvxR7KoZbl0mSMJ8tSOC0rgSBaBVSZKg9pEO3TOjLSwJWb48PiCujFj3NHe86jx9owkSluRYMnGvF1EdcCzHICuNlyP70E6qHNmleCDn5jc/pw4bh5kPMIWS5td+WVQ==
-X-Gm-Message-State: AOJu0YzbQpzYCSXiouMfU4im5pkLpGx0XMcm0xUF/0wypWyWhY2NoYLJ
-	nQbqExTUieGzOipiaPSpYtjcZrUQooQLfxJLHKLgQkhLO9aGciIS
-X-Google-Smtp-Source: AGHT+IEf6QUcADO0SVa0VNze/d3gfBDz4XgiCRrsEP4Mtdzlu5/Pp+jwbT52L8f+i0X0rsp+pwOYmQ==
-X-Received: by 2002:a05:600c:4691:b0:412:c809:5421 with SMTP id p17-20020a05600c469100b00412c8095421mr1539241wmo.2.1709302500276;
-        Fri, 01 Mar 2024 06:15:00 -0800 (PST)
+        bh=brg+65tHP59HmD9Vnjm4p9WorCcCtyt7c+xm8JLyK9c=;
+        b=ep1ldovrCPP0N+tAJjgFZCRn/Ur4D5jJuJnWl3d2E6soF84lvk8hibAvdqPV166e+p
+         VwwThh/DuKJCAgCiUxhPgLgXm6oa2Ncz+F6ONwEW1szFh9mJ6MdgS5YqjhOtFAXJN3Ce
+         vQFb45Tqk1zYVdfqlmq0maxubfo0spvEfk0jAcTXr5oNQN5x8WkrXbA1mWLA7AqibTxg
+         It1EXYGAn6sSrR7Eohe9UgcPC4flj4LTinSPfiy60a7ZDAOig4EUlgrFp9dFI5kBek2y
+         z/HS7xIXPKo4M0vD5LWrzIDjufoDdQLcb6yxjjE7h9XVfWPM+dCsZLcwe4ok33XzRu1O
+         G9KQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXLLp4RycvBUKFy/s8B+Mu3HKGW4O5tV7O/40dAolsaGQ9U4Umg29Pvob89M3pwRerodTQDaLvXP9IQGicDi0+XnuTJQOnNxlctLv/14tNdAB32xz/ftyDSgjeabA==
+X-Gm-Message-State: AOJu0YxJ2UPYuYwybQWSSVNNAKcTfYH6BiKdFHkBXmIZfolJHgR+ob2f
+	57QLX4YnmC0E25/F3f6URvAtJK4cGNU0LPD3ZAFZDDqHdr5Gwn84
+X-Google-Smtp-Source: AGHT+IGdIg1Fx/66nR8+ZiIAK3H+G2ZRWvuAhhWWmjqq3C/K278FtYNFGDreQe+XJHjJbBgQv/xGFg==
+X-Received: by 2002:a17:906:2c57:b0:a43:ff8c:6d9c with SMTP id f23-20020a1709062c5700b00a43ff8c6d9cmr1866346ejh.56.1709306669484;
+        Fri, 01 Mar 2024 07:24:29 -0800 (PST)
 Received: from krava (2001-1ae9-1c2-4c00-726e-c10f-8833-ff22.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:726e:c10f:8833:ff22])
-        by smtp.gmail.com with ESMTPSA id m9-20020a05600c3b0900b0041294d015fbsm5634372wms.40.2024.03.01.06.14.59
+        by smtp.gmail.com with ESMTPSA id ot7-20020a170906ccc700b00a43c3e5e008sm1786296ejb.205.2024.03.01.07.24.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Mar 2024 06:14:59 -0800 (PST)
+        Fri, 01 Mar 2024 07:24:29 -0800 (PST)
 From: Jiri Olsa <olsajiri@gmail.com>
 X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Fri, 1 Mar 2024 15:14:58 +0100
-To: John Hubbard <jhubbard@nvidia.com>
-Cc: Alan Maguire <alan.maguire@oracle.com>, Jiri Olsa <olsajiri@gmail.com>,
-	Arnaldo Carvalho de Melo <acme@redhat.com>,
-	Alexei Starovoitov <ast@kernel.org>, bpf@vger.kernel.org,
-	LKML <linux-kernel@vger.kernel.org>, dwarves@vger.kernel.org
-Subject: Re: [PATCH] fix linux kernel BTF builds: increase max percpu
- variables by 10x
-Message-ID: <ZeHi4qz8HqDSCC4H@krava>
-References: <20240228032142.396719-1-jhubbard@nvidia.com>
- <Zd76zrhA4LAwA_WF@krava>
- <856564cf-fba4-4473-bfa9-e9b03115abd1@oracle.com>
- <983b98db-79c0-4178-b88f-61f39d147cf7@nvidia.com>
- <34157878-c480-44bb-91d6-9024da329998@oracle.com>
- <f248cf92-038c-480f-b077-f7d56ebc55bc@nvidia.com>
+Date: Fri, 1 Mar 2024 16:24:27 +0100
+To: Alan Maguire <alan.maguire@oracle.com>
+Cc: acme@redhat.com, dwarves@vger.kernel.org, bpf@vger.kernel.org,
+	John Hubbard <jhubbard@nvidia.com>, Jiri Olsa <olsajiri@gmail.com>
+Subject: Re: [PATCH dwarves] btf_encoder: dynamically allocate the vars array
+ for percpu variables
+Message-ID: <ZeHzK52IeDx2aZfP@krava>
+References: <20240301124106.735693-1-alan.maguire@oracle.com>
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
@@ -76,35 +69,113 @@ List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <f248cf92-038c-480f-b077-f7d56ebc55bc@nvidia.com>
+In-Reply-To: <20240301124106.735693-1-alan.maguire@oracle.com>
 
-On Thu, Feb 29, 2024 at 10:15:23AM -0800, John Hubbard wrote:
-> > ...
-> > Running
-> > 
-> > bpftool btf dump file vmlinux |grep "] VAR"
-> > 
+On Fri, Mar 01, 2024 at 12:41:06PM +0000, Alan Maguire wrote:
+> Use consistent method across allocating function and per-cpu variable
+> representations, based around (re)allocating the arrays based on demand.
+> This avoids issues where the number of per-CPU variables exceeds the
+> hardcoded limit.
 > 
-> $ bpftool btf dump file vmlinux |grep "] VAR" | wc -l
-> 4852
-> 
-> $ bpftool btf dump file vmlinux |grep "] VAR" | tail -5
-> [136994] VAR '_alloc_tag_cntr.9' type_id=703, linkage=static
-> [137003] VAR '_alloc_tag_cntr.5' type_id=703, linkage=static
-> [137004] VAR '_alloc_tag_cntr.7' type_id=703, linkage=static
-> [137005] VAR '_alloc_tag_cntr.17' type_id=703, linkage=static
-> [137018] VAR '_alloc_tag_cntr.14' type_id=703, linkage=static
-> 
-> > ...should give us a sense of what's going on. I only see 375 per-cpu
-> > variables when I do this so maybe there's something
-> > kernel-config-specific that might explain why you have so many more?
-> 
-> Yes, as mentioned earlier, this is specifically due to the .config.
-> The .config is a huge distro configuration that has a lot of modules
-> enabled.
+> Reported-by: John Hubbard <jhubbard@nvidia.com>
+> Suggested-by: Jiri Olsa <olsajiri@gmail.com>
+> Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+> Tested-by: John Hubbard <jhubbard@nvidia.com>
 
-could you share your .config? I tried with fedora .config and got 396
-per cpu variables, I wonder where this is coming from
+Acked/Tested-by: Jiri Olsa <jolsa@kernel.org>
 
 thanks,
 jirka
+
+> ---
+>  btf_encoder.c | 38 +++++++++++++++++++++++++++++---------
+>  1 file changed, 29 insertions(+), 9 deletions(-)
+> 
+> diff --git a/btf_encoder.c b/btf_encoder.c
+> index fd04008..a43d702 100644
+> --- a/btf_encoder.c
+> +++ b/btf_encoder.c
+> @@ -50,8 +50,6 @@ struct elf_function {
+>  	struct btf_encoder_state state;
+>  };
+>  
+> -#define MAX_PERCPU_VAR_CNT 4096
+> -
+>  struct var_info {
+>  	uint64_t    addr;
+>  	const char *name;
+> @@ -80,8 +78,9 @@ struct btf_encoder {
+>  			  is_rel;
+>  	uint32_t	  array_index_id;
+>  	struct {
+> -		struct var_info vars[MAX_PERCPU_VAR_CNT];
+> +		struct var_info *vars;
+>  		int		var_cnt;
+> +		int		allocated;
+>  		uint32_t	shndx;
+>  		uint64_t	base_addr;
+>  		uint64_t	sec_sz;
+> @@ -983,6 +982,16 @@ static int functions_cmp(const void *_a, const void *_b)
+>  #define max(x, y) ((x) < (y) ? (y) : (x))
+>  #endif
+>  
+> +static void *reallocarray_grow(void *ptr, int *nmemb, size_t size)
+> +{
+> +	int new_nmemb = max(1000, *nmemb * 3 / 2);
+> +	void *new = realloc(ptr, new_nmemb * size);
+> +
+> +	if (new)
+> +		*nmemb = new_nmemb;
+> +	return new;
+> +}
+> +
+>  static int btf_encoder__collect_function(struct btf_encoder *encoder, GElf_Sym *sym)
+>  {
+>  	struct elf_function *new;
+> @@ -995,8 +1004,9 @@ static int btf_encoder__collect_function(struct btf_encoder *encoder, GElf_Sym *
+>  		return 0;
+>  
+>  	if (encoder->functions.cnt == encoder->functions.allocated) {
+> -		encoder->functions.allocated = max(1000, encoder->functions.allocated * 3 / 2);
+> -		new = realloc(encoder->functions.entries, encoder->functions.allocated * sizeof(*encoder->functions.entries));
+> +		new = reallocarray_grow(encoder->functions.entries,
+> +					&encoder->functions.allocated,
+> +					sizeof(*encoder->functions.entries));
+>  		if (!new) {
+>  			/*
+>  			 * The cleanup - delete_functions is called
+> @@ -1439,10 +1449,17 @@ static int btf_encoder__collect_percpu_var(struct btf_encoder *encoder, GElf_Sym
+>  	if (!encoder->is_rel)
+>  		addr -= encoder->percpu.base_addr;
+>  
+> -	if (encoder->percpu.var_cnt == MAX_PERCPU_VAR_CNT) {
+> -		fprintf(stderr, "Reached the limit of per-CPU variables: %d\n",
+> -			MAX_PERCPU_VAR_CNT);
+> -		return -1;
+> +	if (encoder->percpu.var_cnt == encoder->percpu.allocated) {
+> +		struct var_info *new;
+> +
+> +		new = reallocarray_grow(encoder->percpu.vars,
+> +					&encoder->percpu.allocated,
+> +					sizeof(*encoder->percpu.vars));
+> +		if (!new) {
+> +			fprintf(stderr, "Failed to allocate memory for variables\n");
+> +			return -1;
+> +		}
+> +		encoder->percpu.vars = new;
+>  	}
+>  	encoder->percpu.vars[encoder->percpu.var_cnt].addr = addr;
+>  	encoder->percpu.vars[encoder->percpu.var_cnt].sz = size;
+> @@ -1720,6 +1737,9 @@ void btf_encoder__delete(struct btf_encoder *encoder)
+>  	encoder->functions.allocated = encoder->functions.cnt = 0;
+>  	free(encoder->functions.entries);
+>  	encoder->functions.entries = NULL;
+> +	encoder->percpu.allocated = encoder->percpu.var_cnt = 0;
+> +	free(encoder->percpu.vars);
+> +	encoder->percpu.vars = NULL;
+>  
+>  	free(encoder);
+>  }
+> -- 
+> 2.39.3
+> 
