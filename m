@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E8EE15B98E;
-	Tue,  2 Apr 2024 19:40:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CB9A15B962;
+	Tue,  2 Apr 2024 19:40:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712086823; cv=none; b=nhQMf+Ag3ahPPABNCMyjdaxjtyviVEAbSee01gScUr1cfkaILopgmdoZZyxnBBL0ll/28ff+SMBD2+xlp5xX/uBkyXNG1vFko550VDcL4Evt3CE+wXWv9fgJccHGhLs1EuwvPoXTiov+pxhut8M/BgeeU4VPATt0vwTE3i0plOE=
+	t=1712086826; cv=none; b=NTUw8Jf3MiC4/XQ8gmGmKDcam9AdebKMA99ij/L6nRqZFzVS4JACRm4Z70auQYMAb3T8RoJJKcF78oIaJO1bMy6xriKpx1teJf+SeRxHEDxK3d7AJRD5CTnb+6bvW0a25UE3qDG6K8Ei1at7c+tI38l4styMIJfaOwq9Gww3x/w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712086823; c=relaxed/simple;
-	bh=iIj9NPKKmIV9Tf8oLFA45D5NzZabIyrWNxvk3SoSwNg=;
+	s=arc-20240116; t=1712086826; c=relaxed/simple;
+	bh=w7hwgkzrUbZqiWKsRGTQDtzfq+Myzi8KNFzNsNgtgO0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=mwdWXV/+MWJR0K04YRPTIq4wX4Vdr2Lu9IYpohITljkpan74iyKvAYX0k0Oh7InaT1U1f83wGkDQZAHaybtXWFIlFJ64h2E+H5bKNcuY03giKNfH+FSrwU7RotVywktXn6aLFrLeGXRFKA1NPDfhYyJFmW2apgNQqvGO9UckUiA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FKjS965U; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version:Content-Type; b=W/Qy8f3vuGblxPdqqBuU/m53GpB4YLeCpm2+qhJ+ikujPS6hVmj5p1uXPJqJQiO1aWjc9+iTBLARKZmgU7uVWNxToAusOTjg3SeM94AO82NXsMLE3HScxkGxo1qrRdgnEuxLtz0DP4Xw+y9BmU5IaCK+uvtANujp49wMD57bfOE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G+KpeLBV; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FKjS965U"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B97FC433B2;
-	Tue,  2 Apr 2024 19:40:21 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G+KpeLBV"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED66BC433A6;
+	Tue,  2 Apr 2024 19:40:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712086823;
-	bh=iIj9NPKKmIV9Tf8oLFA45D5NzZabIyrWNxvk3SoSwNg=;
+	s=k20201202; t=1712086826;
+	bh=w7hwgkzrUbZqiWKsRGTQDtzfq+Myzi8KNFzNsNgtgO0=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=FKjS965U0mnVNi029HQdRri+aCWSOWl38NZVzY9XUzQKRYsxoI/nbHl8+ieXAXAOZ
-	 wFbm0YOt69BG8kXhWu4AZ2MPniDz1TqINeoPzKs7y80mhQ71QgUihKUx3yw4rlad1q
-	 Bcmq3l56pC+KI1ANhV8siFjpAh0VXVpaxmNUUpyoVT2g6STu5cBb607urMQ6QHmHjY
-	 Giqfl/BZi2u/mYCfgxqjYsoMhrIIm75p0f37ExMztKAwjdUZ3fS2Dt12+CB3sV1js/
-	 zOecP1rKb4jBjxOUX002yfP80VAoe8msg8nWtCyOBDCsniBrj85/s0Q8HrtO8+gY0t
-	 a6lRwKvQ1iiLw==
+	b=G+KpeLBVUYfQfZp1yvN1Nk7P0uOif6M+IEaHUXR+MgdUi/0XEjC3UaEnVLQyOtdsy
+	 TIhXW690ZIl6y6emAjzg2LX69dXD27umnzTAF1PMFsjlgR4VgSRdhCWDCUKFYgR1te
+	 7XEpVWMWnBqaBJ37CIxfz3nuSEPAQ/NnGrqRiQ5keCx7sP+ROozwtFIuqKf2FWZ3y5
+	 XePv0iUKfzQ3qONEEEi8jXD1G4HR45oi84r3t7ecTPdTUj7+6ie8MIht/yRSqtrwGY
+	 O3IHZSQPjucBJgLfUA44OlJNrNkfD5x0Q0ahM3RcyPTjygwT6Y0lhVA3p2ILIgsRAl
+	 Ih4O7R9qK09tA==
 From: Arnaldo Carvalho de Melo <acme@kernel.org>
 To: dwarves@vger.kernel.org
 Cc: Jiri Olsa <jolsa@kernel.org>,
@@ -36,9 +36,9 @@ Cc: Jiri Olsa <jolsa@kernel.org>,
 	Alan Maguire <alan.maguire@oracle.com>,
 	Kui-Feng Lee <kuifeng@fb.com>,
 	=?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Subject: [PATCH 11/12] pahole: Encode BTF serially in a reproducible build
-Date: Tue,  2 Apr 2024 16:39:44 -0300
-Message-ID: <20240402193945.17327-12-acme@kernel.org>
+Subject: [PATCH 12/12] tests: Add a BTF reproducible generation test
+Date: Tue,  2 Apr 2024 16:39:45 -0300
+Message-ID: <20240402193945.17327-13-acme@kernel.org>
 X-Mailer: git-send-email 2.44.0
 In-Reply-To: <20240402193945.17327-1-acme@kernel.org>
 References: <20240402193945.17327-1-acme@kernel.org>
@@ -53,132 +53,12 @@ Content-Transfer-Encoding: 8bit
 
 From: Arnaldo Carvalho de Melo <acme@redhat.com>
 
-Now we will ask the cus instance for the next processable CU, i.e. one
-that is loaded and is in the same CU order as in the original DWARF
-file, under the BTF lock.
-
-With this we can go on loading the DWARF file in parallel and only
-serialize the BTF encoding, keeping that order, with this the BTF ids
-end up the same both for a serial encoding:
-
-And here are some numbers with a Release build:
-
-  $ cat buildcmd.sh
-  mkdir build
-  cd build
-  cmake -DCMAKE_BUILD_TYPE=Release ..
-  cd ..
-  make -j $(getconf _NPROCESSORS_ONLN) -C build
-  $ rm -rf build
-  $ ./buildcmd.sh
-
-Its an Intel Hybrid system, and migrates to/from efficiency/perfomance
-cores:
-
-  $ getconf _NPROCESSORS_ONLN
-  28
-  $ grep -m1 'model name' /proc/cpuinfo
-  model name	: Intel(R) Core(TM) i7-14700K
-  $
-
-8 performance cores (16 threads), 12 efficiency cores.
-
-Serial encoding:
-
-  $ time perf stat -e cycles -r5 pahole --btf_encode_detached=vmlinux.btf.serial vmlinux
-
-   Performance counter stats for 'pahole --btf_encode_detached=vmlinux.btf.serial vmlinux' (5 runs):
-
-      13,313,169,305      cpu_atom/cycles:u/      ( +- 30.61% )  (0.00%)
-      27,985,776,096      cpu_core/cycles:u/      ( +-  0.17% )  (100.00%)
-
-             5.18276 +- 0.00952 seconds time elapsed  ( +-  0.18% )
-
-  real	0m25.937s
-  user	0m25.337s
-  sys	0m0.533s
-  $
-
-Parallel, but non-reproducible:
-
-  $ time perf stat -e cycles -r5 pahole -j --btf_encode_detached=vmlinux.btf.parallel vmlinux
-
-   Performance counter stats for 'pahole -j --btf_encode_detached=vmlinux.btf.parallel vmlinux' (5 runs):
-
-      65,781,092,442      cpu_atom/cycles:u/      ( +-  0.99% )  (42.99%)
-      88,578,827,055      cpu_core/cycles:u/      ( +-  0.90% )  (60.93%)
-
-              1.8529 +- 0.0159 seconds time elapsed  ( +-  0.86% )
-
-  real	0m9.293s
-  user	1m21.599s
-  sys	0m11.348s
-  $
-
-Now what we want, a reproducible build done using parallel DWARF loading
-+ CUs-ordered-as-in-vmlinux serial BTF encoding:
-
-  $ time perf stat -e cycles -r5 pahole -j --reproducible_build --btf_encode_detached=vmlinux.btf.parallel.reproducible_build vmlinux
-
-   Performance counter stats for 'pahole -j --reproducible_build --btf_encode_detached=vmlinux.btf.parallel.reproducible_build vmlinux' (5 runs):
-
-      21,255,687,225      cpu_atom/cycles:u/      ( +-  0.76% )  (35.06%)
-      33,852,263,760      cpu_core/cycles:u/      ( +-  0.24% )  (72.70%)
-
-              2.3632 +- 0.0164 seconds time elapsed  ( +-  0.69% )
-
-  real	0m11.840s
-  user	0m35.952s
-  sys	0m1.534s
-  $
-
-Fastest is off course the unreproducible, fully parallel DWARF loading/
-BTF encoding at 1.8529 +- 0.0159 seconds, but doing a reproducible build
-in 2.3632 +- 0.0164 seconds is better than completely disabling -j/full
-serial at 5.18276 +- 0.00952 seconds.
-
-Comparing the BTF generated:
-
-  $ bpftool btf dump file vmlinux.btf.serial > output.vmlinux.btf.serial
-  $ bpftool btf dump file vmlinux.btf.parallel > output.vmlinux.btf.parallel
-  $ bpftool btf dump file vmlinux.btf.parallel.reproducible > output.vmlinux.btf.parallel.reproducible
-
-  $ wc -l output.vmlinux.btf.serial output.vmlinux.btf.parallel output.vmlinux.btf.parallel.reproducible
-    313404 output.vmlinux.btf.serial
-    314345 output.vmlinux.btf.parallel
-    313404 output.vmlinux.btf.parallel.reproducible
-    941153 total
-  $
-
-Non reproducible parallel BTF encoding:
-
-  $ diff -u output.vmlinux.btf.serial output.vmlinux.btf.parallel | head
-  --- output.vmlinux.btf.serial	2024-04-02 11:11:56.665027947 -0300
-  +++ output.vmlinux.btf.parallel	2024-04-02 11:12:38.490895460 -0300
-  @@ -1,1708 +1,2553 @@
-   [1] INT 'long unsigned int' size=8 bits_offset=0 nr_bits=64 encoding=(none)
-  -[2] CONST '(anon)' type_id=1
-  -[3] VOLATILE '(anon)' type_id=2
-  -[4] ARRAY '(anon)' type_id=1 index_type_id=21 nr_elems=2
-  -[5] PTR '(anon)' type_id=8
-  -[6] CONST '(anon)' type_id=5
-  -[7] INT 'char' size=1 bits_offset=0 nr_bits=8 encoding=(none)
-  $
-
-Reproducible:
-
-  $ diff -u output.vmlinux.btf.serial output.vmlinux.btf.parallel.reproducible
-  $
-
-And using a test script that I'll add to a nascent repository of
-regression tests:
-
   $ time tests/reproducible_build.sh vmlinux
   Parallel reproducible DWARF Loading/Serial BTF encoding: Ok
 
-  real	1m13.844s
-  user	3m3.601s
-  sys	0m9.049s
+  real  1m13.844s
+  user  3m3.601s
+  sys   0m9.049s
   $
 
 If the number of threads started by pahole is different than what was
@@ -187,233 +67,77 @@ output of 'bpftool btf dump' differs from the BTF encoded totally
 serially to one of the detached BTF encoded using reproducible DWARF
 loading/BTF encoding.
 
-In verbose mode:
-
-  $ time VERBOSE=1 tests/reproducible_build.sh vmlinux
-  Parallel reproducible DWARF Loading/Serial BTF encoding:
-  serial encoding...
-  1 threads encoding
-  1 threads started
-  diff from serial encoding:
-  -----------------------------
-  2 threads encoding
-  2 threads started
-  diff from serial encoding:
-  -----------------------------
-  3 threads encoding
-  3 threads started
-  diff from serial encoding:
-  -----------------------------
-  4 threads encoding
-  4 threads started
-  diff from serial encoding:
-  -----------------------------
-  5 threads encoding
-  5 threads started
-  diff from serial encoding:
-  -----------------------------
-  6 threads encoding
-  6 threads started
-   diff from serial encoding:
-  -----------------------------
-  7 threads encoding
-  7 threads started
-  diff from serial encoding:
-  -----------------------------
-  8 threads encoding
-  8 threads started
-  diff from serial encoding:
-  -----------------------------
-  9 threads encoding
-  9 threads started
-  diff from serial encoding:
-  -----------------------------
-  10 threads encoding
-  10 threads started
-  diff from serial encoding:
-  -----------------------------
-  11 threads encoding
-  11 threads started
-  diff from serial encoding:
-  -----------------------------
-  12 threads encoding
-  12 threads started
-  diff from serial encoding:
-  -----------------------------
-  13 threads encoding
-  13 threads started
-  diff from serial encoding:
-  -----------------------------
-  14 threads encoding
-  14 threads started
-  diff from serial encoding:
-  -----------------------------
-  15 threads encoding
-  15 threads started
-  diff from serial encoding:
-  -----------------------------
-  16 threads encoding
-  16 threads started
-  diff from serial encoding:
-  -----------------------------
-  17 threads encoding
-  17 threads started
-  diff from serial encoding:
-  -----------------------------
-  18 threads encoding
-  18 threads started
-  diff from serial encoding:
-  -----------------------------
-  19 threads encoding
-  19 threads started
-  diff from serial encoding:
-  -----------------------------
-  20 threads encoding
-  20 threads started
-  diff from serial encoding:
-  -----------------------------
-  21 threads encoding
-  21 threads started
-  diff from serial encoding:
-  -----------------------------
-  22 threads encoding
-  22 threads started
-  diff from serial encoding:
-  -----------------------------
-  23 threads encoding
-  23 threads started
-  diff from serial encoding:
-  -----------------------------
-  24 threads encoding
-  24 threads started
-  diff from serial encoding:
-  -----------------------------
-  25 threads encoding
-  25 threads started
-  diff from serial encoding:
-  -----------------------------
-  26 threads encoding
-  26 threads started
-  diff from serial encoding:
-  -----------------------------
-  27 threads encoding
-  27 threads started
-  diff from serial encoding:
-  -----------------------------
-  28 threads encoding
-  28 threads started
-  diff from serial encoding:
-  -----------------------------
-  Ok
-
-  real	1m14.800s
-  user	3m4.315s
-  sys	0m8.977s
-  $
-
 Cc: Alan Maguire <alan.maguire@oracle.com>
 Cc: Kui-Feng Lee <kuifeng@fb.com>
 Cc: Thomas Weißschuh <linux@weissschuh.net>
 Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
 ---
- pahole.c | 51 ++++++++++++++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 50 insertions(+), 1 deletion(-)
+ tests/reproducible_build.sh | 56 +++++++++++++++++++++++++++++++++++++
+ 1 file changed, 56 insertions(+)
+ create mode 100755 tests/reproducible_build.sh
 
-diff --git a/pahole.c b/pahole.c
-index fcb4360f11debeb9..6c7e73835b3e9139 100644
---- a/pahole.c
-+++ b/pahole.c
-@@ -31,6 +31,7 @@
- 
- static struct btf_encoder *btf_encoder;
- static char *detached_btf_filename;
-+struct cus *cus;
- static bool btf_encode;
- static bool ctf_encode;
- static bool sort_output;
-@@ -3324,11 +3325,32 @@ static enum load_steal_kind pahole_stealer(struct cu *cu,
- 			encoder = btf_encoder;
- 		}
- 
-+		// Since we don't have yet a way to parallelize the BTF encoding, we
-+		// need to ask the loader for the next CU that we can process, one
-+		// that is loaded and is in order, if the next one isn't yet loaded,
-+		// then return to let the DWARF loader thread to load the next one,
-+		// eventually all will get processed, even if when all DWARF loading
-+		// threads finish.
-+		if (conf_load->reproducible_build) {
-+			ret = LSK__KEEPIT; // we're not processing the cu passed to this
-+					  // function, so keep it.
-+			cu = cus__get_next_processable_cu(cus);
-+			if (cu == NULL)
-+				goto out_btf;
-+		}
+diff --git a/tests/reproducible_build.sh b/tests/reproducible_build.sh
+new file mode 100755
+index 0000000000000000..9c72d548c2a21136
+--- /dev/null
++++ b/tests/reproducible_build.sh
+@@ -0,0 +1,56 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0-only
++#
++# Test if BTF generated serially matches reproducible parallel DWARF loading + serial BTF encoding
++# Arnaldo Carvalho de Melo <acme@redhat.com> (C) 2024-
 +
- 		ret = btf_encoder__encode_cu(encoder, cu, conf_load);
- 		if (ret < 0) {
- 			fprintf(stderr, "Encountered error while encoding BTF.\n");
- 			exit(1);
- 		}
++vmlinux=$1
++outdir=$(mktemp -d /tmp/reproducible_build.sh.XXXXXX)
 +
-+		if (conf_load->reproducible_build) {
-+			ret = LSK__KEEPIT; // we're not processing the cu passed to this function, so keep it.
-+			// Equivalent to LSK__DELETE since we processed this
-+			cus__remove(cus, cu);
-+			cu__delete(cu);
-+		}
- out_btf:
- 		if (!thr_data) // See comment about reproducibe_build above
- 			pthread_mutex_unlock(&btf_lock);
-@@ -3632,6 +3654,27 @@ out_free:
- 	return ret;
- }
- 
-+static int cus__flush_reproducible_build(struct cus *cus, struct btf_encoder *encoder, struct conf_load *conf_load)
-+{
-+	int err = 0;
++echo -n "Parallel reproducible DWARF Loading/Serial BTF encoding: "
 +
-+	while (true) {
-+		struct cu *cu = cus__get_next_processable_cu(cus);
++test -n "$VERBOSE" && printf "\nserial encoding...\n"
 +
-+		if (cu == NULL)
-+			break;
++pahole --btf_encode_detached=$outdir/vmlinux.btf.serial $vmlinux
++bpftool btf dump file $outdir/vmlinux.btf.serial > $outdir/bpftool.output.vmlinux.btf.serial
 +
-+		err = btf_encoder__encode_cu(encoder, cu, conf_load);
-+		if (err < 0)
-+			break;
++nr_proc=$(getconf _NPROCESSORS_ONLN)
 +
-+		cus__remove(cus, cu);
-+		cu__delete(cu);
-+	}
++for threads in $(seq $nr_proc) ; do
++	test -n "$VERBOSE" && echo $threads threads encoding
++	pahole -j$threads --reproducible_build --btf_encode_detached=$outdir/vmlinux.btf.parallel.reproducible $vmlinux &
++	pahole=$!
++	# HACK: Wait a bit for pahole to start its threads
++	sleep 0.3s
++	# PID part to remove ps output headers
++	nr_threads_started=$(ps -L -C pahole | grep -v PID | wc -l)
 +
-+	return err;
-+}
++	if [ $threads -gt 1 ] ; then
++		((nr_threads_started -= 1))
++	fi
 +
- int main(int argc, char *argv[])
- {
- 	int err, remaining, rc = EXIT_FAILURE;
-@@ -3692,7 +3735,7 @@ int main(int argc, char *argv[])
- 		}
- 	}
- 
--	struct cus *cus = cus__new();
-+	cus = cus__new();
- 	if (cus == NULL) {
- 		fputs("pahole: insufficient memory\n", stderr);
- 		goto out_dwarves_exit;
-@@ -3797,6 +3840,12 @@ try_sole_arg_as_class_names:
- 	header = NULL;
- 
- 	if (btf_encode && btf_encoder) { // maybe all CUs were filtered out and thus we don't have an encoder?
-+		if (conf_load.reproducible_build &&
-+		    cus__flush_reproducible_build(cus, btf_encoder, &conf_load) < 0) {
-+			fprintf(stderr, "Encountered error while encoding BTF.\n");
-+			exit(1);
-+		}
++	if [ $threads != $nr_threads_started ] ; then
++		echo "ERROR: pahole asked to start $threads encoding threads, started $nr_threads_started"
++		exit 1;
++	fi
 +
- 		err = btf_encoder__encode(btf_encoder);
- 		if (err) {
- 			fputs("Failed to encode BTF\n", stderr);
++	# ps -L -C pahole | grep -v PID | nl
++	test -n "$VERBOSE" && echo $nr_threads_started threads started
++	wait $pahole
++	rm -f $outdir/bpftool.output.vmlinux.btf.parallel.reproducible
++	bpftool btf dump file $outdir/vmlinux.btf.parallel.reproducible > $outdir/bpftool.output.vmlinux.btf.parallel.reproducible
++	test -n "$VERBOSE" && echo "diff from serial encoding:"
++	diff -u $outdir/bpftool.output.vmlinux.btf.serial $outdir/bpftool.output.vmlinux.btf.parallel.reproducible > $outdir/diff
++	if [ -s $outdir/diff ] ; then
++		echo "ERROR: BTF generated from DWARF in parallel is different from the one generated in serial!"
++		exit 1
++	fi
++	test -n "$VERBOSE" && echo -----------------------------
++done
++
++rm $outdir/*
++rmdir $outdir
++
++echo "Ok"
++
++exit 0
 -- 
 2.44.0
 
