@@ -1,44 +1,47 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A1F515B962;
-	Tue,  2 Apr 2024 19:39:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A868D15B96C;
+	Tue,  2 Apr 2024 19:39:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712086795; cv=none; b=hgcrL7IAJibCQ/secgKSm5Z9zWQVjl/MMVqvUBWU+ZEKvF7RV1CqMUQCRmDa+ofk8jqdcdQh54iKLwn0Se0GQCiXy9l2qc7N20nbKcr6ifmbGVOkgOzmIDrAlzvoHCHW4xuzygicIX0mMH2yM5HYMOa+h6++o+8bhraYRKNYTC8=
+	t=1712086797; cv=none; b=P99CmhQ5K/9pPAD+U4d+safa5mRxWIk+fq3KHMSMONqwRRwb8cP6q/upoG8OQJr8kqPoH5m5i3T0cZqY/PpnkIJBvrCCRJSarNYoxvh+O/YoFvMWe6InfTivBnEAnIQpx8dE1AyGqGom70DJJ40m+tQ2S9Qy+B0d2G2nOUVCWeI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712086795; c=relaxed/simple;
-	bh=8dApHdSNyHftwwFY/JAFmeUZUoZSAM0rdqqv2yPJntE=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=oyNN/dNSGNn6KXtLy3OdyO/lLISjwYm78utcG3QiqfrmyuQ6R0tMwmFj01ctIY6Jd1oD77y8DYAn1RWYHyLAzWrZxPy9+rlkU8qq5DouYCqTPKu7gfmfcdP3KLRc3saQ66SFcBN0GxE9iPgO1p3VSXZWORdF1SPXE1cMHqr62fc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ln4Bl6GD; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1712086797; c=relaxed/simple;
+	bh=ST7KWbTW5vEgaJZoKatfLIs/wAQGXKcwIytfLAFU1Jc=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Wc7fM/4G4FIm5YgwFPYYo1OmLs8uZQFzULHSV45FBJxJ0KqjcUpyxei/k38RMdsCd4J4u+64ijYie/bgG8fyxG2aVSkRvW+BW7S3X3b6Tu/tK6EbYmHP9zBssAJ63eW5AHDDbp4TwxHop/Q/nGQgIq9tk22nDaHfzaXlbjYYha0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TtvCejYp; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ln4Bl6GD"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5096C43390;
-	Tue,  2 Apr 2024 19:39:52 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TtvCejYp"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 593FAC433F1;
+	Tue,  2 Apr 2024 19:39:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712086794;
-	bh=8dApHdSNyHftwwFY/JAFmeUZUoZSAM0rdqqv2yPJntE=;
-	h=From:To:Cc:Subject:Date:From;
-	b=Ln4Bl6GDps6Q/KCVLVsg/D+dEkBB8RrsH6ZtPFiLHHQUU2K6lOpsxHZk4HQIaEGDA
-	 wfdkbswYc90aapJopJWgn8ACDsdAR22Oi8wkNkUJ1B3Ucois6e0pmaJtEAkeKNwko4
-	 evMhzEJCvYQN6+wpEkDYEg9qZHFnTVUreRDAa9oTA474ngSDsPBnmGosl54tt2qm+C
-	 ef0Bq0bIDmdRZfeBzTWbLnB7ITRXUr3TUi1bG37fDrCWaLFPBPriUOzQVatCwrCIpI
-	 1y7KGq59LY6IdDmKQJSRbQR0QaWjb2pMbgjoWgDW4QCXNbOP29JUcp7cvLhAcsaqHp
-	 84UOFH+LaVT6w==
+	s=k20201202; t=1712086797;
+	bh=ST7KWbTW5vEgaJZoKatfLIs/wAQGXKcwIytfLAFU1Jc=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=TtvCejYpI1Y+rUbjKpCNbN0/PHt6K+fzdzm9aqrxsnY3obXACPgGX9q+WqpZ8GjhR
+	 Bq8/nKSE4ZNzUlnMgMtJru6USKDxYkpph7UAYaRT+BQjT17W/CR5Zj6oRPlrpQMg+2
+	 R1g2vkmA/UKWrn39Ul2e9YwkZ8Fc57xaF+3/nqALzfIf4gBS2uERuTqKetGRcxlDWS
+	 4h10K0e7p7yFl/TBjpyCPAEdsFNQkxrkp3JJTzZjOZiEtT0AzWrr7X1IXprhlzJrvj
+	 27OocBXE7Md6+UnTfrPiBsgEMDN3Oomrilb77lMDVS3oUtEmji9Enf/AFFyjCjiQcr
+	 vZTG9zhfamsJQ==
 From: Arnaldo Carvalho de Melo <acme@kernel.org>
 To: dwarves@vger.kernel.org
 Cc: Jiri Olsa <jolsa@kernel.org>,
 	Clark Williams <williams@redhat.com>,
 	Kate Carcia <kcarcia@redhat.com>,
 	bpf@vger.kernel.org,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Arnaldo Carvalho de Melo <acme@redhat.com>,
 	Alan Maguire <alan.maguire@oracle.com>,
 	Kui-Feng Lee <kuifeng@fb.com>,
 	=?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Subject: [RFC/PATCHES 00/12] pahole: Reproducible parallel DWARF loading/serial BTF encoding
-Date: Tue,  2 Apr 2024 16:39:33 -0300
-Message-ID: <20240402193945.17327-1-acme@kernel.org>
+Subject: [PATCH 01/12] core: Allow asking for a reproducible build
+Date: Tue,  2 Apr 2024 16:39:34 -0300
+Message-ID: <20240402193945.17327-2-acme@kernel.org>
 X-Mailer: git-send-email 2.44.0
+In-Reply-To: <20240402193945.17327-1-acme@kernel.org>
+References: <20240402193945.17327-1-acme@kernel.org>
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
@@ -48,75 +51,77 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Hi,
+From: Arnaldo Carvalho de Melo <acme@redhat.com>
 
-	This allows us to have reproducible builds while keeping the
-DWARF loading phase in parallel, achieving a noticeable speedup as
-showed in the commit log messages:
+This is initially about BTF encoding, we want to load DWARF and encode
+BTF from it in a way that is reproducible, i.e. no matter how many
+threads we use for the loading/encoding process, the output will be the
+same, i.e. the BTF ids produced will be the same for all builds.
 
-On a:
+This first path just adds the conf_load field and allows it to be asked
+for with the '--reproducible_build' option in pahole.
 
-  model name    : Intel(R) Core(TM) i7-14700K
+At some point we'll use with --btf_features=+reproducible_build or
+'--btf_features=default --btf_features=reproducible_build' to keep the
+default set of BTF features and be able to use this in the Linux kernel
+build system without doing an extra pahole version check for the
+availability of --reproducible_build with pahole versions that already
+support --btf_features and thus would ignore "reproducible_build".
 
-  8 performance cores (16 threads), 12 efficiency cores.
+Cc: Alan Maguire <alan.maguire@oracle.com>
+Cc: Kui-Feng Lee <kuifeng@fb.com>
+Cc: Thomas Weißschuh <linux@weissschuh.net>
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+---
+ dwarves.h | 1 +
+ pahole.c  | 8 ++++++++
+ 2 files changed, 9 insertions(+)
 
-Serial encoding:
-
-  $ perf stat -e cycles -r5 pahole --btf_encode_detached=vmlinux.btf.serial vmlinux
-             5.18276 +- 0.00952 seconds time elapsed  ( +-  0.18% )
-
-Parallel, but non-reproducible:
-
-  $ perf stat -e cycles -r5 pahole -j --btf_encode_detached=vmlinux.btf.parallel vmlinux
-              1.8529 +- 0.0159 seconds time elapsed  ( +-  0.86% )
-
-reproducible build done using parallel DWARF loading + CUs-ordered-as-in-vmlinux serial BTF encoding:
-
-  $ perf stat -e cycles -r5 pahole -j --reproducible_build --btf_encode_detached=vmlinux.btf.parallel.reproducible_build vmlinux
-              2.3632 +- 0.0164 seconds time elapsed  ( +-  0.69% )
-
-Please take a look, its in the 'next' branch at:
-
-  https://git.kernel.org/pub/scm/devel/pahole/pahole.git
-  https://git.kernel.org/pub/scm/devel/pahole/pahole.git/log/?h=next
-
-There is a new tool to do regression testing on this feature:
-
-  https://git.kernel.org/pub/scm/devel/pahole/pahole.git/commit/?h=next&id=c751214c19bf8591bf8e4abdc677cbadee08f630
-  
-And here a more detailed set of tests using it:
-
-  https://git.kernel.org/pub/scm/devel/pahole/pahole.git/commit/?h=next&id=4451467ca16a6e31834f6f98661c63587ce556f7
-
-Working on libbpf to allow for parallel reproducible BTF encoding is the
-next step.
-
-Thanks a lot,
-
-- Arnaldo
-
-Arnaldo Carvalho de Melo (12):
-  core: Allow asking for a reproducible build
-  pahole: Disable BTF multithreaded encoded when doing reproducible builds
-  dwarf_loader: Separate creating the cu/dcu pair from processing it
-  dwarf_loader: Introduce dwarf_cus__process_cu()
-  dwarf_loader: Create the cu/dcu pair in dwarf_cus__nextcu()
-  dwarf_loader: Remove unused 'thr_data' arg from dwarf_cus__create_and_process_cu()
-  core: Add unlocked cus__add() variant
-  core: Add cus__remove(), counterpart of cus__add()
-  dwarf_loader: Add the cu to the cus list early, remove on LSK_DELETE
-  core/dwarf_loader: Add functions to set state of CU processing
-  pahole: Encode BTF serially in a reproducible build
-  tests: Add a BTF reproducible generation test
-
- dwarf_loader.c              | 73 +++++++++++++++++++++++---------
- dwarves.c                   | 58 ++++++++++++++++++++++++-
- dwarves.h                   | 17 ++++++++
- pahole.c                    | 84 +++++++++++++++++++++++++++++++++++--
- tests/reproducible_build.sh | 56 +++++++++++++++++++++++++
- 5 files changed, 264 insertions(+), 24 deletions(-)
- create mode 100755 tests/reproducible_build.sh
-
+diff --git a/dwarves.h b/dwarves.h
+index 2393a6c3dc836f39..4dfaa01a00f782d9 100644
+--- a/dwarves.h
++++ b/dwarves.h
+@@ -87,6 +87,7 @@ struct conf_load {
+ 	bool			skip_encoding_btf_vars;
+ 	bool			btf_gen_floats;
+ 	bool			btf_encode_force;
++	bool			reproducible_build;
+ 	uint8_t			hashtable_bits;
+ 	uint8_t			max_hashtable_bits;
+ 	uint16_t		kabi_prefix_len;
+diff --git a/pahole.c b/pahole.c
+index 0b9c2de74f146a4d..96e153432fa212a5 100644
+--- a/pahole.c
++++ b/pahole.c
+@@ -1235,6 +1235,7 @@ ARGP_PROGRAM_VERSION_HOOK_DEF = dwarves_print_version;
+ #define ARGP_supported_btf_features 342
+ #define ARGP_btf_features_strict 343
+ #define ARGP_contains_enumerator 344
++#define ARGP_reproducible_build 345
+ 
+ /* --btf_features=feature1[,feature2,..] allows us to specify
+  * a list of requested BTF features or "all" to enable all features.
+@@ -1819,6 +1820,11 @@ static const struct argp_option pahole__options[] = {
+ 		.arg = "FEATURE_LIST_STRICT",
+ 		.doc = "Specify supported BTF features in FEATURE_LIST_STRICT or 'all' for all supported features.  Unlike --btf_features, unrecognized features will trigger an error."
+ 	},
++	{
++		.name = "reproducible_build",
++		.key = ARGP_reproducible_build,
++		.doc = "Generate reproducile BTF output"
++	},
+ 	{
+ 		.name = NULL,
+ 	}
+@@ -1997,6 +2003,8 @@ static error_t pahole__options_parser(int key, char *arg,
+ 		conf_load.btf_gen_optimized = true;		break;
+ 	case ARGP_skip_encoding_btf_inconsistent_proto:
+ 		conf_load.skip_encoding_btf_inconsistent_proto = true; break;
++	case ARGP_reproducible_build:
++		conf_load.reproducible_build = true;	break;
+ 	case ARGP_btf_features:
+ 		parse_btf_features(arg, false);		break;
+ 	case ARGP_supported_btf_features:
 -- 
 2.44.0
 
