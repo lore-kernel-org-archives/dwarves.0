@@ -1,185 +1,152 @@
-Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
+Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E69675816;
-	Thu,  4 Apr 2024 09:42:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D1DF745D9;
+	Thu,  4 Apr 2024 09:42:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712223750; cv=none; b=XTE/YfE2vgNEcwjfKOMvg38Jg9d5o97WIHs5yXGdvl1GixxJVIcDreWtnX4Kd8TeB00YCH2T8SSYQSuEHikHTEDR8+CjMyhT8NbDAu3MIBFAZR9lmd0MtNWPkfwQShUTdlX8MB/Tb2jv14sCV4bYtrVfriYNxxhiZjo79Z0e51U=
+	t=1712223759; cv=none; b=I+QtzUQAfVCpmlezEGdgWRhuIEQFZnUwKGZZ2VPTKufelrq6/1WiHnA0v+PW7Klg3is8r+KX/lujDkqIHzGI1EvQRRnXQwUuqacIReUVhdnqvqisKR1I8zLNmLYjwv6vHG01t8MbBsxiglt4nZ+Gj8S/3qKy7XhaSaaYpx2nXcs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712223750; c=relaxed/simple;
-	bh=1FzNf2cJWe/czz5tnVBjAmFTW5hziKsjDBAr0YxGBG8=;
+	s=arc-20240116; t=1712223759; c=relaxed/simple;
+	bh=Nv4tCPNjY9Kj6wER2y+WlKSvitQzvSKZvQWf7/8PMCw=;
 	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=o5udJGAgxI93G5Z3Ba2H7iz5eBWCpfWuiuZhLycRjWIjw3Y/6JC94CfHE6AdnIbRassdMxQ2KEO4CXwvs7hWE7C6A4mNC+oEN9a/rBBYzpNeRcYNAa/H67RZRp2r+waY3DJiLOxl+8b6kNor0XY6n/5Jx7Wc+pqoyeguXvBy7pI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bmSds30s; arc=none smtp.client-ip=209.85.221.51
+	 Content-Type:Content-Disposition:In-Reply-To; b=Q2tNTMlMzsiN3T2uipDDlb97RyYkqbVoPalv2HRQbfztsx15hAuI52FF6Q9xyX2gjUvVwb5cI3NjxGkymEoECkAjH2vu5vCjzsZryZpz/ApQ4yY0axVajyUOJM38fxbKTDly3U6XEBfSuMGewCofeD2cM+YgfCxTqiC+EYmJdDU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=T0ZH589w; arc=none smtp.client-ip=209.85.167.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bmSds30s"
-Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-343cd236779so108389f8f.3;
-        Thu, 04 Apr 2024 02:42:28 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="T0ZH589w"
+Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-516c5c39437so962401e87.1;
+        Thu, 04 Apr 2024 02:42:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712223747; x=1712828547; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=C2mwQ4cIpCk9JgTJJOoZdjhLATYTInjRRedpQUJfEPQ=;
-        b=bmSds30spmgvMA5IWBfnNxnI1p62iw2OcxZK2PdPLFFC4lAO2DVUe+2/oLkqD+LfZi
-         h6lDH4FDuSFsL/N7V31ldPE2iP7qTyOKD2Oy5va39PFFvEwtGUajOGipb+h5vM9/JSAR
-         4CWVkztnX+0HPtOHxKG5Z1OIhavyuzE6x81k5uUwcMPA6i6BoQe1ez8WjdPKr33Gx7kf
-         V7oR+DE4lM4CbyFVUAcdNEFytCj2OoF1F8wtwflIljvsSbwY5UCb67pDcDve11S8s8J0
-         7EOuH7wuplFKAEUSfIwtmN8KiU0pIF2hOu2A683/WxD5K3lbjESb/CJFSZwcrLJ8/jnF
-         v5gg==
+        d=gmail.com; s=20230601; t=1712223755; x=1712828555; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=s3fkohgRC0tlP/pIjLvttE4gpA+YPfkqpdX/jo6hDkc=;
+        b=T0ZH589w+zMNkxxdxOgEfDxrYUkNmoLGCBv5iUqPOaY8prMAc66mAn4t2cfc13JC8L
+         K5lcmzdOBjqATHFOn9wfON/r03WWp83uv5kCwAChM7DQ9DB+Uk1JWUgtoQplY4W5/zkm
+         qXleiMjt8kE/gG15hGor3Oiw8zKOTptnOb086pU3j4eE6sRphrDpCBpjRZFPKohr2urb
+         ZGqG1n/2DtT2A61OX/CpoE3rWMWPu0Xz5ScvvA0Z4XkmYRnsXCJ//h0A8AAF+NQR+B5I
+         S81ZhfETuTFebptohT7VWCVZnhjHoIceXOv3UYpMIZOU9f55KIefv4qI3ddGV0eI5URy
+         b5UA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712223747; x=1712828547;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=C2mwQ4cIpCk9JgTJJOoZdjhLATYTInjRRedpQUJfEPQ=;
-        b=d4HHwdV+BkZoefM5GyjRa9jDQQPel7vUQ3s/OJmuneQeMDfZHuwmwI2ZL/d6xGK1NO
-         4cxWCxwaFMbH34F2tpdcv6Sqh8JylVh/hzPbhatLufwORmpl9ks0Isw8FmjPhWuoz2Rc
-         sSFfq5wZS/Cx5TZz4jx3y0l62Dqu7joDSal9/6p2KVolsQN81WIcJ5NFWvmUDHaxD9S6
-         Zd8D9mWpcYffiYQ65UPRORU44qGW25Q2zEEtWBS/sMoITitOav+/ccHT6qN/W9Z9aTwr
-         5DFNHB87Psdu58y/+UPiROdvrpnTwwCk6B0z8DNyXO7CbUWmJbqjJlmpY6BioeKYShT1
-         2CnQ==
-X-Forwarded-Encrypted: i=1; AJvYcCX6/ktVqBqNINFZU0uKkI0N+Gs514mOlyCoOLROUx78TvRkWbLoqvHDzY9HG6EBZs98XTRj+qAuu9Sxcktb5q0ECqiV
-X-Gm-Message-State: AOJu0YzEP6ZhfD3m4/wwETxqo9ADaH179G6UduRJr83ezMegOsqxb8wC
-	SiAcH5PnJYNC8rnZiWe9/jwzCQHPTMUvRvUeMNV/YsM4RYwRxrMW
-X-Google-Smtp-Source: AGHT+IHyNbZBSdT3xpb//jGzQ8QHtGoEXODBfmLn3SsJsA6nZ4UqB5tr7F7PpqhINA9aWcbzFJl6+Q==
-X-Received: by 2002:a5d:5451:0:b0:343:7653:ad14 with SMTP id w17-20020a5d5451000000b003437653ad14mr1870963wrv.30.1712223747162;
-        Thu, 04 Apr 2024 02:42:27 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1712223755; x=1712828555;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=s3fkohgRC0tlP/pIjLvttE4gpA+YPfkqpdX/jo6hDkc=;
+        b=L6R0/1qKb7O1e18UIMnNGWGRazHgd8xEgMg3mCM6XICcnKr5QR0pkwizEJ3YfC4HRx
+         qgZgxcPP/PcgvEKlDlkx1Q6pZxf4so5kDwdfSXuq/GlsCss4lomvJ+EGKVTQ852Tpm+8
+         x3MEL/MtiFAb94hUl+5xo3BdLUEfSJ5T5bGF8QS1KBifmn8FBXzCDGKA9zlLsb2kMjAN
+         NcguoCzOlZ9SbitipmFJ5px6JE9gMgUqEt3ZVU0Os9Iy0Tu7xY+3EWd10yLps+mu2R7q
+         y0lAoA3V4c6j+3rxUFGIcDT1JNsHH6jnLVPR4xEfC6tk31pgHZYF6ePM46Zz3Fa1MK0U
+         91wQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUJnam77g89aroWE09CDbNuBe/0uLrSWVJgPiIENU8/7L5zpml637KObac3Ukcab9Jrj7Wh2Y0dALu2judQz4T7TDiO
+X-Gm-Message-State: AOJu0YwNYxvdJzq5PrDPii14QsFNjIKgpHLm3AOR6ncMRTBucssvMjg9
+	HIfGf6fShmNZ4PXVphz/OBvGHC/W40fUnSBoHstsBB8Pfs8Ekn+Q
+X-Google-Smtp-Source: AGHT+IHIMr1RDjHUEkNCWpraC7YSqGwLktZL5WZFHppUeAvCoC26dqBgykVpIuC64tCC3D0ZnL0s1w==
+X-Received: by 2002:a05:6512:2f2:b0:516:b148:6d6 with SMTP id m18-20020a05651202f200b00516b14806d6mr1568680lfq.50.1712223754890;
+        Thu, 04 Apr 2024 02:42:34 -0700 (PDT)
 Received: from krava (2001-1ae9-1c2-4c00-726e-c10f-8833-ff22.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:726e:c10f:8833:ff22])
-        by smtp.gmail.com with ESMTPSA id r10-20020a05600c35ca00b0041622c88852sm2078530wmq.16.2024.04.04.02.42.26
+        by smtp.gmail.com with ESMTPSA id g9-20020a05600c000900b00414674a1a40sm2026082wmc.45.2024.04.04.02.42.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 Apr 2024 02:42:26 -0700 (PDT)
+        Thu, 04 Apr 2024 02:42:34 -0700 (PDT)
 From: Jiri Olsa <olsajiri@gmail.com>
 X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Thu, 4 Apr 2024 11:42:24 +0200
+Date: Thu, 4 Apr 2024 11:42:32 +0200
 To: Arnaldo Carvalho de Melo <acme@kernel.org>
 Cc: dwarves@vger.kernel.org, Clark Williams <williams@redhat.com>,
 	Kate Carcia <kcarcia@redhat.com>, bpf@vger.kernel.org,
+	Arnaldo Carvalho de Melo <acme@redhat.com>,
 	Alan Maguire <alan.maguire@oracle.com>,
 	Kui-Feng Lee <kuifeng@fb.com>,
 	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
-Subject: Re: [RFC/PATCHES 00/12] pahole: Reproducible parallel DWARF
- loading/serial BTF encoding
-Message-ID: <Zg52AE0QByIT_07A@krava>
+Subject: Re: [PATCH 03/12] dwarf_loader: Separate creating the cu/dcu pair
+ from processing it
+Message-ID: <Zg52CPcTJHqzB0A7@krava>
 References: <20240402193945.17327-1-acme@kernel.org>
+ <20240402193945.17327-4-acme@kernel.org>
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20240402193945.17327-1-acme@kernel.org>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20240402193945.17327-4-acme@kernel.org>
 
-On Tue, Apr 02, 2024 at 04:39:33PM -0300, Arnaldo Carvalho de Melo wrote:
-> Hi,
+On Tue, Apr 02, 2024 at 04:39:36PM -0300, Arnaldo Carvalho de Melo wrote:
+> From: Arnaldo Carvalho de Melo <acme@redhat.com>
 > 
-> 	This allows us to have reproducible builds while keeping the
-> DWARF loading phase in parallel, achieving a noticeable speedup as
-> showed in the commit log messages:
+> We will need it so that we add the dcu to a list in the same order as
+> the CUs are in the DWARF file (vmlinux mostly).
 > 
-> On a:
+> Cc: Alan Maguire <alan.maguire@oracle.com>
+> Cc: Kui-Feng Lee <kuifeng@fb.com>
+> Cc: Thomas Weiﬂschuh <linux@weissschuh.net>
+> Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+> ---
+>  dwarf_loader.c | 24 +++++++++++++++++++-----
+>  1 file changed, 19 insertions(+), 5 deletions(-)
 > 
->   model name    : Intel(R) Core(TM) i7-14700K
-> 
->   8 performance cores (16 threads), 12 efficiency cores.
-> 
-> Serial encoding:
-> 
->   $ perf stat -e cycles -r5 pahole --btf_encode_detached=vmlinux.btf.serial vmlinux
->              5.18276 +- 0.00952 seconds time elapsed  ( +-  0.18% )
-> 
-> Parallel, but non-reproducible:
-> 
->   $ perf stat -e cycles -r5 pahole -j --btf_encode_detached=vmlinux.btf.parallel vmlinux
->               1.8529 +- 0.0159 seconds time elapsed  ( +-  0.86% )
-> 
-> reproducible build done using parallel DWARF loading + CUs-ordered-as-in-vmlinux serial BTF encoding:
-> 
->   $ perf stat -e cycles -r5 pahole -j --reproducible_build --btf_encode_detached=vmlinux.btf.parallel.reproducible_build vmlinux
->               2.3632 +- 0.0164 seconds time elapsed  ( +-  0.69% )
+> diff --git a/dwarf_loader.c b/dwarf_loader.c
+> index 1dffb3f433cb7c8e..125e361ef2bf3f7b 100644
+> --- a/dwarf_loader.c
+> +++ b/dwarf_loader.c
+> @@ -3207,8 +3207,7 @@ struct dwarf_thread {
+>  	void			*data;
+>  };
+>  
+> -static int dwarf_cus__create_and_process_cu(struct dwarf_cus *dcus, Dwarf_Die *cu_die,
+> -					    uint8_t pointer_size, void *thr_data)
+> +static struct dwarf_cu *dwarf_cus__create_cu(struct dwarf_cus *dcus, Dwarf_Die *cu_die, uint8_t pointer_size)
+>  {
+>  	/*
+>  	 * DW_AT_name in DW_TAG_compile_unit can be NULL, first seen in:
+> @@ -3218,17 +3217,32 @@ static int dwarf_cus__create_and_process_cu(struct dwarf_cus *dcus, Dwarf_Die *c
+>  	const char *name = attr_string(cu_die, DW_AT_name, dcus->conf);
+>  	struct cu *cu = cu__new(name ?: "", pointer_size, dcus->build_id, dcus->build_id_len, dcus->filename, dcus->conf->use_obstack);
+>  	if (cu == NULL || cu__set_common(cu, dcus->conf, dcus->mod, dcus->elf) != 0)
+> -		return DWARF_CB_ABORT;
+> +		return NULL;
+>  
+>  	struct dwarf_cu *dcu = dwarf_cu__new(cu);
+>  
+> -	if (dcu == NULL)
+> -		return DWARF_CB_ABORT;
+> +	if (dcu == NULL) {
+> +		cu__delete(cu);
 
-hm, got it even faster than paralel build ;-) but it's within the
-1 second deviation, I guess it shows better on bigger kernels
-
-reproducible_build:
-
-	[root@krava linux-qemu]# perf stat -e cycles -r 3 -- /home/jolsa/kernel/bpf/pahole/build/pahole -j --reproducible_build --btf_encode_detached=btf.2 ./vmlinux
-
-	 Performance counter stats for '/home/jolsa/kernel/bpf/pahole/build/pahole -j --reproducible_build --btf_encode_detached=btf.2 ./vmlinux' (3 runs):
-
-	   295,519,117,258      cycles                                                                  ( +- 19.48% )
-
-		      9.43 +- 1.02 seconds time elapsed  ( +- 10.84% )
-
-paralel build:
-
-	[root@krava linux-qemu]# perf stat -e cycles -r 3 -- /home/jolsa/kernel/bpf/pahole/build/pahole -j  --btf_encode_detached=btf.2 ./vmlinux
-
-	 Performance counter stats for '/home/jolsa/kernel/bpf/pahole/build/pahole -j --btf_encode_detached=btf.2 ./vmlinux' (3 runs):
-
-	   391,320,973,331      cycles                                                                  ( +- 19.19% )
-
-		     9.851 +- 0.695 seconds time elapsed  ( +-  7.06% )
-
-1 cpu:
-
-	[root@krava linux-qemu]# perf stat -e cycles -r 3 -- /home/jolsa/kernel/bpf/pahole/build/pahole --btf_encode_detached=btf.2 ./vmlinux
-
-	 Performance counter stats for '/home/jolsa/kernel/bpf/pahole/build/pahole --btf_encode_detached=btf.2 ./vmlinux' (3 runs):
-
-	   208,492,342,135      cycles                                                                  ( +- 19.43% )
-
-		    16.761 +- 0.644 seconds time elapsed  ( +-  3.84% )
+hm, I dont see cu__delete being called before, why do we need that?
 
 jirka
 
-> 
-> Please take a look, its in the 'next' branch at:
-> 
->   https://git.kernel.org/pub/scm/devel/pahole/pahole.git
->   https://git.kernel.org/pub/scm/devel/pahole/pahole.git/log/?h=next
-> 
-> There is a new tool to do regression testing on this feature:
-> 
->   https://git.kernel.org/pub/scm/devel/pahole/pahole.git/commit/?h=next&id=c751214c19bf8591bf8e4abdc677cbadee08f630
->   
-> And here a more detailed set of tests using it:
-> 
->   https://git.kernel.org/pub/scm/devel/pahole/pahole.git/commit/?h=next&id=4451467ca16a6e31834f6f98661c63587ce556f7
-> 
-> Working on libbpf to allow for parallel reproducible BTF encoding is the
-> next step.
-> 
-> Thanks a lot,
-> 
-> - Arnaldo
-> 
-> Arnaldo Carvalho de Melo (12):
->   core: Allow asking for a reproducible build
->   pahole: Disable BTF multithreaded encoded when doing reproducible builds
->   dwarf_loader: Separate creating the cu/dcu pair from processing it
->   dwarf_loader: Introduce dwarf_cus__process_cu()
->   dwarf_loader: Create the cu/dcu pair in dwarf_cus__nextcu()
->   dwarf_loader: Remove unused 'thr_data' arg from dwarf_cus__create_and_process_cu()
->   core: Add unlocked cus__add() variant
->   core: Add cus__remove(), counterpart of cus__add()
->   dwarf_loader: Add the cu to the cus list early, remove on LSK_DELETE
->   core/dwarf_loader: Add functions to set state of CU processing
->   pahole: Encode BTF serially in a reproducible build
->   tests: Add a BTF reproducible generation test
-> 
->  dwarf_loader.c              | 73 +++++++++++++++++++++++---------
->  dwarves.c                   | 58 ++++++++++++++++++++++++-
->  dwarves.h                   | 17 ++++++++
->  pahole.c                    | 84 +++++++++++++++++++++++++++++++++++--
->  tests/reproducible_build.sh | 56 +++++++++++++++++++++++++
->  5 files changed, 264 insertions(+), 24 deletions(-)
->  create mode 100755 tests/reproducible_build.sh
-> 
+> +		return NULL;
+> +	}
+>  
+>  	dcu->type_unit = dcus->type_dcu;
+>  	cu->priv = dcu;
+>  	cu->dfops = &dwarf__ops;
+>  
+> +	return dcu;
+> +}
+> +
+> +static int dwarf_cus__create_and_process_cu(struct dwarf_cus *dcus, Dwarf_Die *cu_die,
+> +					    uint8_t pointer_size, void *thr_data)
+> +{
+> +	struct dwarf_cu *dcu = dwarf_cus__create_cu(dcus, cu_die, pointer_size);
+> +
+> +	if (dcu == NULL)
+> +		return DWARF_CB_ABORT;
+> +
+> +	struct cu *cu = dcu->cu;
+> +
+>  	if (die__process_and_recode(cu_die, cu, dcus->conf) != 0 ||
+>  	    cus__finalize(dcus->cus, cu, dcus->conf, thr_data) == LSK__STOP_LOADING)
+>  		return DWARF_CB_ABORT;
 > -- 
 > 2.44.0
 > 
