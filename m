@@ -1,116 +1,136 @@
-Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com [209.85.128.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E90041304BE;
-	Tue,  9 Apr 2024 15:01:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00376156F51;
+	Tue,  9 Apr 2024 18:45:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712674875; cv=none; b=BiGQ8EUlTZDNrYyVZ/iXLcjiupBE3gUXHlDvdgnKIE/xWFSexOK6e+w5EMrcqufWeqZ1FLLqPNm6xLXmeedk3KlLB6JSw0BSgfPy4tL1/wGb40FlB3OLbBEFC7k7VDFQgZfinPNgKaQxTGRMG++yLePp4TRpkmn/XX4OuXGHrpM=
+	t=1712688330; cv=none; b=OG9+ucRqhXGhW1YRfucFWmzGgNw4dfX/9iDACKZnLPFeO5vkJY9CKqmRqta2lbAMWHWcZwv8eJh2WkhWWJ0sJGYj2t3DevTtllH73L7gUy2dixf9rzgLIfSax3MKyKGFRFQRFDobiD5Ezt+2ZduRTSom73yuXwjyKM56Mjq6MCc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712674875; c=relaxed/simple;
-	bh=vvh2iqJh/NSgdAgq4/uQT9xxSsXZC31Rr8+l3FGnk+k=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=NJjBfwHchgLhiG3pbGOZK+Bw4OHtB2H5Q4SpluFrC/3jaq7Zs6RTX+XpNKnk764pXuCWFBoU/5e7wRjgO00qLqrsHlaG+XU3H1P4zXUyjtajSEei51YcIMfDnH+EOo8YhM2Nd4SgxCKx8Ba7tlmUMPksmaRiYsKXb5/jgkRHAVQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hn0ixwuM; arc=none smtp.client-ip=209.85.128.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1712688330; c=relaxed/simple;
+	bh=OqRRleEazBKgy7g4SN8piFb0+JbzzEDs+bjiofoNIcA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BdY+C7dWXseWfEJHsYIs/TNVO+Mvdd4d+djkgV3y0TWkoF0VWqNIe436lBoVPeo6WDsiQkKDORnchxzfsbc2VOU46RioB0tQC4Y1PaZH2w2MM9PLV2sfCwSiCbLgefAIgFkk+KHM8kGdV+5uNVhN8QMjxA6Rk3b6XmOEcZm68no=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pdkMXkFO; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hn0ixwuM"
-Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-6181237230dso21961767b3.2;
-        Tue, 09 Apr 2024 08:01:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712674873; x=1713279673; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=tmmdlsZje12lMa0yGPgNyI6lY9y+jIiMGHCHxRVjqxU=;
-        b=hn0ixwuMdm1dMEfva6bmLu+JXnRBqYwZYb96gcyiVAphxRu+LFblnfBebNuanV/snJ
-         5iD/Hz8//bfq5gYHmTfE4FYDOTqh7cRLpidUgfOJ0JzvVQAOm19YSNerrRH8L52kn+Hs
-         BjXcQUdlmlECQmt/jxojKeEjxuZGVJPhIGRtLK+0R/HWnNCdksxcge5bdZuGQTJDfA8T
-         +HTH1LfOGggmN3e2XR1FPo+ghGuiH+4EKTmGiX+8u6L4zpzXnLA+/HMz/iRU91jlz2+f
-         KxHG5IiS/CzBmdgxkhadjELMJYmyJd8S57LE56jpHe9mLyiTWB0HMUOfsND7hGud9eJ4
-         VHdw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712674873; x=1713279673;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=tmmdlsZje12lMa0yGPgNyI6lY9y+jIiMGHCHxRVjqxU=;
-        b=o6guAiVJsDrX1g6bZ8qaeGHMEoEa/tb/FTi2RpSv2SO4WYKEy3CEuWjP7BNFHBhmTc
-         9vcAdWyxUNKWX4D+D7rdpVTvU9r8hZF6tacyu3+PergczwHWOUavSvmviISNN2CGl6nw
-         uj+t+FxLozvv+x0uVToq94OLP1FSi7wINOYYRVJdCvFbQNAa5owPn8D1SgYiVcI67aQ9
-         Vna8w+ZVh+ftgz83yBgGlhBjsjJyKqXLQM/Si8rpU9Snt9H6DNNm/Pev3t9Vq6Nl4VQh
-         LW0SyFyZ2cGfMgefPkdt8uOKa1LEguY1WlN/fHlnBJz3Z4dPMhbBPOOl7QF6QE7yt+Eo
-         JhoQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXQ9z+MALJwGKvUi0R/TCFGBKkx+5EPMkwJWTdlfIcTGuDXe5grTgiTQvjG4FCXsJcMfAlobE37OpzKHIUmst0yS1TZRsBQfkQJZOHVyvRJmyVBRoqA9kECjfK3Mw==
-X-Gm-Message-State: AOJu0Yw8KiMDUbgQr2KFTUE4pvuw9DcbEBIYQ7/2ophz7npgl538+fIS
-	NAlh4Y6cOc6h/VOEfIBHUWx5O2aFnxAthz0CQvbMmwmakhsY1QGSYA2lQqaSXv8=
-X-Google-Smtp-Source: AGHT+IFkZkrfoiPDCosGWxWQTNjgHMBd/OjOW3H9BGCy6XtCZg5HSmeE+l+wCG+KU+YK9kwGUCmmrA==
-X-Received: by 2002:a5b:392:0:b0:dc6:be64:cfd1 with SMTP id k18-20020a5b0392000000b00dc6be64cfd1mr10865577ybp.36.1712674872628;
-        Tue, 09 Apr 2024 08:01:12 -0700 (PDT)
-Received: from [192.168.100.206] ([89.28.99.140])
-        by smtp.gmail.com with ESMTPSA id fo6-20020a0569022d0600b00dcdb3dffa3dsm1757503ybb.39.2024.04.09.08.01.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Apr 2024 08:01:12 -0700 (PDT)
-Message-ID: <7a08fb6a8c37e58a56121c8536b9ab68405c049d.camel@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pdkMXkFO"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22D17C43390;
+	Tue,  9 Apr 2024 18:45:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1712688329;
+	bh=OqRRleEazBKgy7g4SN8piFb0+JbzzEDs+bjiofoNIcA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=pdkMXkFOnjxh1GfaaR9GL5oVUZhSEepCVs0qM+JXQZN7dwn8AAMOe4xX2G9ND2LZ/
+	 2JOzeORd/qiKu5kTHN+mNfYI56qMboPlhm4iIfc4/tLo4eoQy9rLSZuWtuJ9vgX1HS
+	 iC+bkC2rkoHIANVfqMsCf3DbJOkA7cNLug+kRy71eX5vv5zPY0adLB6DQKg7AG74mB
+	 zj+hn0onANmBVwArdNYIncN0ld455Ka7owZyd4KXAG71v/0jnmG+G38fIdVEM9dtNM
+	 ePGDAxWjeIyYUn8YYyJ5FbfGUepXtTWmvuNa+Avr2+THFyR9TjDqblGjgF16EPL9W2
+	 KzmkdrPeRkb7A==
+Date: Tue, 9 Apr 2024 15:45:26 -0300
+From: Arnaldo Carvalho de Melo <acme@kernel.org>
+To: Eduard Zingerman <eddyz87@gmail.com>
+Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+	Alan Maguire <alan.maguire@oracle.com>, dwarves@vger.kernel.org,
+	Jiri Olsa <jolsa@kernel.org>, Clark Williams <williams@redhat.com>,
+	Kate Carcia <kcarcia@redhat.com>, bpf <bpf@vger.kernel.org>,
+	Kui-Feng Lee <kuifeng@fb.com>,
+	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
 Subject: Re: [RFC/PATCHES 00/12] pahole: Reproducible parallel DWARF
  loading/serial BTF encoding
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Alan Maguire <alan.maguire@oracle.com>, Arnaldo Carvalho de Melo
- <acme@kernel.org>, dwarves@vger.kernel.org, Jiri Olsa <jolsa@kernel.org>, 
- Clark Williams <williams@redhat.com>, Kate Carcia <kcarcia@redhat.com>, bpf
- <bpf@vger.kernel.org>, Kui-Feng Lee <kuifeng@fb.com>, Thomas
- =?ISO-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
-Date: Tue, 09 Apr 2024 18:01:08 +0300
-In-Reply-To: <CAADnVQKnkGVL3Snaa-E+EpG536rauWZmn_kZsgQK-oaESfjjQg@mail.gmail.com>
+Message-ID: <ZhWMxu8Xq1oAUAoC@x1>
 References: <20240402193945.17327-1-acme@kernel.org>
-	 <747816d2edd61a075d200ffa5da680d2cc2d6854.camel@gmail.com>
-	 <64bfcf02-030d-471a-871a-e7490d74ca28@oracle.com>
-	 <db6480e9378f59c367b03f7455372caf7b593348.camel@gmail.com>
-	 <CAADnVQKnkGVL3Snaa-E+EpG536rauWZmn_kZsgQK-oaESfjjQg@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.52.0 
+ <747816d2edd61a075d200ffa5da680d2cc2d6854.camel@gmail.com>
+ <64bfcf02-030d-471a-871a-e7490d74ca28@oracle.com>
+ <db6480e9378f59c367b03f7455372caf7b593348.camel@gmail.com>
+ <CAADnVQKnkGVL3Snaa-E+EpG536rauWZmn_kZsgQK-oaESfjjQg@mail.gmail.com>
+ <7a08fb6a8c37e58a56121c8536b9ab68405c049d.camel@gmail.com>
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7a08fb6a8c37e58a56121c8536b9ab68405c049d.camel@gmail.com>
 
-On Tue, 2024-04-09 at 07:56 -0700, Alexei Starovoitov wrote:
-[...]
+On Tue, Apr 09, 2024 at 06:01:08PM +0300, Eduard Zingerman wrote:
+> On Tue, 2024-04-09 at 07:56 -0700, Alexei Starovoitov wrote:
+> [...]
+ 
+> > I would actually go with sorted BTF, since it will probably
+> > make diff-ing of BTFs practical. Will be easier to track changes
 
-> I would actually go with sorted BTF, since it will probably
-> make diff-ing of BTFs practical. Will be easier to track changes
-> from one kernel version to another. vmlinux.h will become
-> a bit more sorted too and normal diff vmlinux_6_1.h vmlinux_6_2.h
-> will be possible.
-> Or am I misunderstanding the sorting concept?
+What kind of diff-ing of BTFs from different kernels are you interested
+in?
 
-You understand the concept correctly, here is a sample:
+in pahole's repository we have btfdiff, that will, given a vmlinux with
+both DWARF and BTF use pahole to pretty print all types, expanded, and
+then compare the two outputs, which should produce the same results from
+BTF and DWARF. Ditto for DWARF from a vmlinux compared to a detached BTF
+file.
 
-  [1] INT '_Bool' size=3D1 bits_offset=3D0 nr_bits=3D8 encoding=3DBOOL
-  [2] INT '__int128' size=3D16 bits_offset=3D0 nr_bits=3D128 encoding=3DSIG=
-NED
-  [3] INT '__int128 unsigned' size=3D16 bits_offset=3D0 nr_bits=3D128 encod=
-ing=3D(none)
-  [4] INT 'char' size=3D1 bits_offset=3D0 nr_bits=3D8 encoding=3D(none)
-  [5] INT 'int' size=3D4 bits_offset=3D0 nr_bits=3D32 encoding=3DSIGNED
-  [6] INT 'long int' size=3D8 bits_offset=3D0 nr_bits=3D64 encoding=3DSIGNE=
-D
-  [7] INT 'long long int' size=3D8 bits_offset=3D0 nr_bits=3D64 encoding=3D=
-SIGNED
-  ...
-  [15085] STRUCT 'arch_elf_state' size=3D0 vlen=3D0
-  [15086] STRUCT 'arch_vdso_data' size=3D0 vlen=3D0
-  [15087] STRUCT 'bpf_run_ctx' size=3D0 vlen=3D0
-  [15088] STRUCT 'dev_archdata' size=3D0 vlen=3D0
-  [15089] STRUCT 'dyn_arch_ftrace' size=3D0 vlen=3D0
-  [15090] STRUCT 'fscrypt_dummy_policy' size=3D0 vlen=3D0
-  ...
- =20
-(Sort by kind, than by vlen, than by name because sorting by name is a
- bit costly, then by member properties)
+And also now we have another regression test script that will produce
+the output from 'btftool btf dump' for the BTF generated from DWARF in
+serial mode, and then compare that with the output from 'bpftool btf
+dump' for reproducible encodings done using -j 1 ...
+number-of-processors-on-the-machine. All have to match, all types, all
+BTF ids.
 
+We can as well use something like btfdiff to compare the output from
+'pahole --expand_types --sort' for two BTFs for two different kernels,
+to see what are the new types and the changes to types in both.
+
+What else do you want to compare? To be able to match we would have to
+somehow have ranges for each DWARF CU so that when encoding and then
+deduplicating we would have space in the ID space for new types to fill
+in while keeping the old types IDs matching the same types in the new
+vmlinux.
+
+While ordering all types we would have to have ID space available from
+each of the BTF kinds, no?
+
+I haven't looked at Eduard's patches, is that what it is done?
+
+> > from one kernel version to another. vmlinux.h will become
+> > a bit more sorted too and normal diff vmlinux_6_1.h vmlinux_6_2.h
+> > will be possible.
+> > Or am I misunderstanding the sorting concept?
+ 
+> You understand the concept correctly, here is a sample:
+ 
+>   [1] INT '_Bool' size=1 bits_offset=0 nr_bits=8 encoding=BOOL
+>   [2] INT '__int128' size=16 bits_offset=0 nr_bits=128 encoding=SIGNED
+>   [3] INT '__int128 unsigned' size=16 bits_offset=0 nr_bits=128 encoding=(none)
+>   [4] INT 'char' size=1 bits_offset=0 nr_bits=8 encoding=(none)
+>   [5] INT 'int' size=4 bits_offset=0 nr_bits=32 encoding=SIGNED
+>   [6] INT 'long int' size=8 bits_offset=0 nr_bits=64 encoding=SIGNED
+>   [7] INT 'long long int' size=8 bits_offset=0 nr_bits=64 encoding=SIGNED
+
+The above: so far so good, probably there will not be something that
+will push what is now BTF id 6 to become 7 in a new vmlinux, but can we
+say the same for the more dynamic parts, like the list of structs?
+
+A struct can vanish, that abstraction not being used anymore in the
+kernel, so its BTF id will vacate and all of the next struct IDs will
+"fall down" and gets its IDs decremented, no?
+
+If these difficulties are present as I mentioned, then rebuilding from
+the BTF data with something like the existing 'pahole --expand_types
+--sort' from the BTF from kernel N to compare with the same output for
+kernel N + 1 should be enough to see what changed from one kernel to the
+next one?
+
+- Arnaldo
+
+>   ...
+>   [15085] STRUCT 'arch_elf_state' size=0 vlen=0
+>   [15086] STRUCT 'arch_vdso_data' size=0 vlen=0
+>   [15087] STRUCT 'bpf_run_ctx' size=0 vlen=0
+>   [15088] STRUCT 'dev_archdata' size=0 vlen=0
+>   [15089] STRUCT 'dyn_arch_ftrace' size=0 vlen=0
+>   [15090] STRUCT 'fscrypt_dummy_policy' size=0 vlen=0
+>   ...
+>   
+> (Sort by kind, than by vlen, than by name because sorting by name is a
+>  bit costly, then by member properties)
