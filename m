@@ -1,230 +1,172 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4ABE7157E9F;
-	Tue,  9 Apr 2024 19:57:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C9FA3BB2E;
+	Fri, 12 Apr 2024 20:36:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712692641; cv=none; b=emfuSiIV7VA6/fx48Dh0tMOU8iPXwIiKLrguAtykIGykM8ig1BWQf7o+zrLqfbAkKWUvHmqvhCn8HwEFtSpZLk7JGWFS+3bP3KNC2WDA/2KsNOL+ij0B+jTGl19jO4cyIEmaPOC0+IKoRbp0pX3q6tjk9PmhDhw1tbgAZ5Sgfkk=
+	t=1712954177; cv=none; b=d8S/yodYWVK6cz5dDuBBeSEoikPjIKjd1rq3U0VkexbAPkVV5gFV/flGoKnFTyMLE6K7AzmPk49gS7vzoGERFrgNaHQbd8wsVhxntRLwurdQQ+e4pHD2cAJsJYqtLMa70LyvuV0dhVJm/XZU+k1S2IHkyWAlM72OaWQIfEeIDN0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712692641; c=relaxed/simple;
-	bh=vgFGRfe+ULBd+BBGQV7nLcml8meckTIDiJZ9FgZUWyc=;
+	s=arc-20240116; t=1712954177; c=relaxed/simple;
+	bh=k8xBTPWqQx8XZxK5YQHMGvl3pQ7HksQIrKX1/vpHkTY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=P9/NbCU2qJfhKMA2SyOgyGWJ21ylWR7gvU6uysCENtcxKWBerj5LPDwHeEGc+kHpKD6Gog3mqPQN7na2NJ4KCfrdaWAXHxx2NooIE6gg++FLDjxday2OzzESJ8pT1muHjrYT07mSagXGnBx8ZOfC3aSpvvDZH4diOVL9CLj5MSA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Fynft/bD; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=EXWpd57oA7ypuZuShr5z5EHtF+/IWE8dygGVgkTIAB60rrJwpN3seYSYRAWhUJxaNGHwzuHqTHcnZJKUAuXCLShPN6p/rDxj+qoO/RD2nk8OYcofh+tqaFlCri2uhCuBPxAG2nbRvv4NWmf62B+fh4k4mMofjWkQEYVr/eFMjdM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LW2bHdl7; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Fynft/bD"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7969EC43601;
-	Tue,  9 Apr 2024 19:57:20 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LW2bHdl7"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 864FAC113CC;
+	Fri, 12 Apr 2024 20:36:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712692640;
-	bh=vgFGRfe+ULBd+BBGQV7nLcml8meckTIDiJZ9FgZUWyc=;
+	s=k20201202; t=1712954177;
+	bh=k8xBTPWqQx8XZxK5YQHMGvl3pQ7HksQIrKX1/vpHkTY=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Fynft/bDC8a5cT1kpFmFPlQHMlm/Y8uiA4k/1rVPwdWg+T7YeyA/st4y7cse6qAEB
-	 RFSZbS7MnAru04XPnZIREOq6GqPfbNkjPd+PQzAkLhACnIgRWRZ47PMyKw5Z/AXeRu
-	 BK8IAydHDa13gsLM1/Va0s5pfZv0CPjc8vwrAkNgjgrID5NoT8xxQQmEDUYIjM/JOi
-	 s3PdDtdiTySXYcYFnHuJzpl0gZuN3f3RAo+5advobVGug6UqBHaJa/3/ET4Ff37+al
-	 20iqhwm2YwRhJp04JsW5cd84AxXj05ADSQiL3QWRMD33MzWsnlonWU0cIiIERUTnmA
-	 NPV+hO7OlVYtQ==
-Date: Tue, 9 Apr 2024 16:57:17 -0300
+	b=LW2bHdl70vlXye8NHCoZmJs2hYChxck4zxiCiOnbqhUJoClK741+SpHGai+JHw3lh
+	 SFGaWbl3hOGHympsH+M3H5KaIa5d1qjmca1RNRz3d5SkFc2KkrP5IRzG5xmJ8bH6Av
+	 b+7EJmADz0yazy6oGBIFqooV+5sFBcFxh1CBpew3bJtvRiimqlqOQuelB9Rwd57DN8
+	 ykrQ8X8x7eXtY5n2JVY/GIDY8LTaI0sP+eBMIn0mezFsPAsYLKWOlmYWnBgRIQpDpi
+	 s3Ii595wuiuPR4f71xHN72HhpXBwiNxRU43YKcb1uSrXCoS5kV8w2k1jjWlkrBaq6m
+	 Rb5iH42XmUgKw==
+Date: Fri, 12 Apr 2024 17:36:13 -0300
 From: Arnaldo Carvalho de Melo <acme@kernel.org>
-To: Eduard Zingerman <eddyz87@gmail.com>
-Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-	Alan Maguire <alan.maguire@oracle.com>, dwarves@vger.kernel.org,
-	Jiri Olsa <jolsa@kernel.org>, Clark Williams <williams@redhat.com>,
-	Kate Carcia <kcarcia@redhat.com>, bpf <bpf@vger.kernel.org>,
+To: Alan Maguire <alan.maguire@oracle.com>
+Cc: dwarves@vger.kernel.org, Jiri Olsa <jolsa@kernel.org>,
+	Clark Williams <williams@redhat.com>,
+	Kate Carcia <kcarcia@redhat.com>, bpf@vger.kernel.org,
 	Kui-Feng Lee <kuifeng@fb.com>,
 	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
 Subject: Re: [RFC/PATCHES 00/12] pahole: Reproducible parallel DWARF
  loading/serial BTF encoding
-Message-ID: <ZhWdneZRZrHg-kZ4@x1>
+Message-ID: <ZhmbPVj62mMK1NZq@x1>
 References: <20240402193945.17327-1-acme@kernel.org>
- <747816d2edd61a075d200ffa5da680d2cc2d6854.camel@gmail.com>
- <64bfcf02-030d-471a-871a-e7490d74ca28@oracle.com>
- <db6480e9378f59c367b03f7455372caf7b593348.camel@gmail.com>
- <CAADnVQKnkGVL3Snaa-E+EpG536rauWZmn_kZsgQK-oaESfjjQg@mail.gmail.com>
- <7a08fb6a8c37e58a56121c8536b9ab68405c049d.camel@gmail.com>
- <ZhWMxu8Xq1oAUAoC@x1>
- <1314495ccf0d31babf408eb539fa2eba70e404a0.camel@gmail.com>
+ <d9ebf954-bfac-4819-993b-bbf59c69285a@oracle.com>
+ <82928441-d185-4165-85ff-425350953e80@oracle.com>
+ <ZhQBpAGIDU_koQnp@x1>
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <1314495ccf0d31babf408eb539fa2eba70e404a0.camel@gmail.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ZhQBpAGIDU_koQnp@x1>
 
-On Tue, Apr 09, 2024 at 10:29:18PM +0300, Eduard Zingerman wrote:
-> On Tue, 2024-04-09 at 15:45 -0300, Arnaldo Carvalho de Melo wrote:
-> > On Tue, Apr 09, 2024 at 06:01:08PM +0300, Eduard Zingerman wrote:
-> > > On Tue, 2024-04-09 at 07:56 -0700, Alexei Starovoitov wrote:
-> > > [...]
-> >  
-> > > > I would actually go with sorted BTF, since it will probably
-> > > > make diff-ing of BTFs practical. Will be easier to track changes
-> > 
-> > What kind of diff-ing of BTFs from different kernels are you interested
-> > in?
-> > 
-> > in pahole's repository we have btfdiff, that will, given a vmlinux with
-> > both DWARF and BTF use pahole to pretty print all types, expanded, and
-> > then compare the two outputs, which should produce the same results from
-> > BTF and DWARF. Ditto for DWARF from a vmlinux compared to a detached BTF
-> > file.
-> > 
-> > And also now we have another regression test script that will produce
-> > the output from 'btftool btf dump' for the BTF generated from DWARF in
-> > serial mode, and then compare that with the output from 'bpftool btf
-> > dump' for reproducible encodings done using -j 1 ...
-> > number-of-processors-on-the-machine. All have to match, all types, all
-> > BTF ids.
-> > 
-> > We can as well use something like btfdiff to compare the output from
-> > 'pahole --expand_types --sort' for two BTFs for two different kernels,
-> > to see what are the new types and the changes to types in both.
-> > 
-> > What else do you want to compare? To be able to match we would have to
-> > somehow have ranges for each DWARF CU so that when encoding and then
-> > deduplicating we would have space in the ID space for new types to fill
-> > in while keeping the old types IDs matching the same types in the new
-> > vmlinux.
+On Mon, Apr 08, 2024 at 11:39:32AM -0300, Arnaldo Carvalho de Melo wrote:
+> On Mon, Apr 08, 2024 at 01:00:59PM +0100, Alan Maguire wrote:
+> > On 04/04/2024 09:58, Alan Maguire wrote:
+> > > Program terminated with signal SIGSEGV, Segmentation fault.
+> > > #0  0x00007f8c8260a58c in ptr_table__entry (pt=0x7f8c60001e70, id=77)
+> > >     at /home/almagui/src/dwarves/dwarves.c:612
+> > > 612		return id >= pt->nr_entries ? NULL : pt->entries[id];
+> > > [Current thread is 1 (Thread 0x7f8c65400700 (LWP 624441))]
+> > > (gdb) print *(struct ptr_table *)0x7f8c60001e70
+> > > $1 = {entries = 0x0, nr_entries = 2979, allocated_entries = 4096}
+> > > (gdb)
 > 
-> As far as I understand Alexei, he means diffing two vmlinux.h files
-> generated for different kernel versions. The vmlinux.h is generated by
-> bpftool using command `bpftool btf dump file <binary-file> format c`.
-> The output is topologically sorted to satisfy C compiler, but ordering
-> is not total, so vmlinux.h content may vary from build to build if BTF
-> type order differs.
-> 
-> Thus, any kind of stable BTF type ordering would make vmlinux.h stable.
-> On the other hand, topological ordering used by bpftool
-> (the algorithm is in the libbpf, actually) might be extended with
-> additional rules to make the ordering total.
-
-Interesting, the other tool that is in the pahole repo is 'fullcircle',
-that given a .o file will generate a compileable file (a vmlinux.h say)
-and then build it again to generate DWARF and then compare the original
-DWARF with the new onbe.
- 
-> > While ordering all types we would have to have ID space available from
-> > each of the BTF kinds, no?
+> > > So it looks like the ptr_table has 2979 entries but entries is NULL;
+> > > could there be an issue where CU initialization is not yet complete
+> > > for some threads (it also happens very early in processing)? Can you
+> > > reproduce this failure at your end? Thanks!
+>  
+> > the following (when applied on top of the series) resolves the
+> > segmentation fault for me:
+>  
+> > diff --git a/pahole.c b/pahole.c
+> > index 6c7e738..5ff0eaf 100644
+> > --- a/pahole.c
+> > +++ b/pahole.c
+> > @@ -3348,8 +3348,8 @@ static enum load_steal_kind pahole_stealer(struct
+> > cu *cu,
+> >                 if (conf_load->reproducible_build) {
+> >                         ret = LSK__KEEPIT; // we're not processing the
+> > cu passed to this function, so keep it.
+> > -                        // Equivalent to LSK__DELETE since we processed
+> > this
+> > -                       cus__remove(cus, cu);
+> > -                       cu__delete(cu);
+> >                 }
+> >  out_btf:
+> >                 if (!thr_data) // See comment about reproducibe_build above
 > > 
-> > I haven't looked at Eduard's patches, is that what it is done?
 > 
-> No, I don't reserve any ID space, the output of 
-> `bpftool btf dump file <binary-file> format raw` is not suitable for
-> diffing w/o post-processing if some types are added or removed in the
-> middle.
+> Yeah, Jiri also pointed out this call to cu__delete() was new, I was
+> trying to avoid having unprocessed 'struct cu' using too much memory, so
+> after processing it, delete them, but as you found out there are
+> references to that memory...
+> 
+> > In other words, the problem is we remove/delete CUs when finished with
+> > them in each thread (when BTF is generated).  However because the
+> > save/add_saved_funcs stashes CU references in the associated struct
+> > function * (to allow prototype comparison for the same function in
+> > different CUs), we end up with stale CU references and in this case the
+> > freed/nulled ptr_table caused an issue. As far as I can see we need to
+> > retain CUs until all BTF has been merged from threads.
+>  
+> > With the fix in place, I'm seeing less then 100msec difference between
+> > reproducible/non-reproducible vmlinux BTF generation; that's great!
+> 
+> Excellent!
+> 
+> I'll remove it and add a note crediting you with the removal and having
+> the explanation about why its not possibe to delete it at that point
+> (references to the associated 'struct function').
+
+So I removed that cus__remove + cu__delete and also the other one at the
+flush operation, leaving all cleaning up to cus__delete() time:
+
+⬢[acme@toolbox pahole]$ git diff
+diff --git a/dwarves.c b/dwarves.c
+index fbc8d8aa0060b7d0..1ec259f50dbd3778 100644
+--- a/dwarves.c
++++ b/dwarves.c
+@@ -489,8 +489,12 @@ struct cu *cus__get_next_processable_cu(struct cus *cus)
+                        cu->state = CU__PROCESSING;
+                        goto found;
+                case CU__PROCESSING:
+-                       // This will only happen when we get to parallel
+-                       // reproducible BTF encoding, libbpf dedup work needed here.
++                       // This will happen when we get to parallel
++                       // reproducible BTF encoding, libbpf dedup work needed
++                       // here. The other possibility is when we're flushing
++                       // the DWARF processed CUs when the parallel DWARF
++                       // loading stoped and we still have CUs to encode to
++                       // BTF because of ordering requirements.
+                        continue;
+                case CU__UNPROCESSED:
+                        // The first entry isn't loaded, signal the
+diff --git a/pahole.c b/pahole.c
+index 6c7e73835b3e9139..77772bb42bb443ce 100644
+--- a/pahole.c
++++ b/pahole.c
+@@ -3347,9 +3347,9 @@ static enum load_steal_kind pahole_stealer(struct cu *cu,
  
-> I simply add a function to compare two BTF types and a pass that sorts
-> all BTF types before finalizing BTF generation.
+                if (conf_load->reproducible_build) {
+                        ret = LSK__KEEPIT; // we're not processing the cu passed to this function, so keep it.
+-                       // Equivalent to LSK__DELETE since we processed this
+-                       cus__remove(cus, cu);
+-                       cu__delete(cu);
++                       // Kinda equivalent to LSK__DELETE since we processed this, but we can't delete it
++                       // as we stash references to entries in CUs for 'struct function' in btf_encoder__add_saved_funcs()
++                       // and btf_encoder__save_func(), so we can't delete them here. - Alan Maguire
+                }
+ out_btf:
+                if (!thr_data) // See comment about reproducibe_build above
+@@ -3667,9 +3667,6 @@ static int cus__flush_reproducible_build(struct cus *cus, struct btf_encoder *en
+                err = btf_encoder__encode_cu(encoder, cu, conf_load);
+                if (err < 0)
+                        break;
+-
+-               cus__remove(cus, cu);
+-               cu__delete(cu);
+⬢[acme@toolbox pahole]$
 
-Ok, so I see that the BTF ids for the types will change, its the
-vmlinux.h that is to be compared.
 
-root@x1:~# pahole -F btf --compile | tail -12
-struct ncsi_aen_handler {
-	unsigned char              type;                 /*     0     1 */
+It ends up taking a bit more time on this 14700K with 32Gb, I'll later
+try to remove that need to keep everything in memory and also double
+check this hunch that this is due to keeping everyuthing in memory.
 
-	/* XXX 3 bytes hole, try to pack */
+Can I take this (with the above patch, that is a bit bigger than yours)
+as a Tested-by + Reviewed-by you?
 
-	int                        payload;              /*     4     4 */
-	int                        (*handler)(struct ncsi_dev_priv *, struct ncsi_aen_pkt_hdr *); /*     8     8 */
-
-	/* size: 16, cachelines: 1, members: 3 */
-	/* sum members: 13, holes: 1, sum holes: 3 */
-	/* last cacheline: 16 bytes */
-};
-root@x1:~# pahole -F btf --compile > a.c ; echo 'int main(void) { struct ncsi_aen_handler b = { 1, } ; return b.type ; } ' >> a.c ; gcc -g -o bla -c a.c
-root@x1:~# pahole --expand_types ncsi_aen_handler > from_kernel_btf
-root@x1:~# pahole --expand_types -C ncsi_aen_handler bla > from_bla_dwarf
-root@x1:~# diff -u from_kernel_btf from_bla_dwarf
-root@x1:~#
-
-The above is for a super simple struct, no expansions even, now for:
-
-root@x1:~# pahole -F btf --compile > a.c ; echo 'int main(void) { struct task_struct b = { .prio = 12345, } ; return b.prio ; } ' >> a.c ; gcc -g -o bla -c a.c
-root@x1:~# pahole --suppress_aligned_attribute --expand_types -C task_struct bla > from_bla_dwarf
-root@x1:~# pahole --suppress_aligned_attribute --expand_types task_struct > from_kernel_btf
-root@x1:~# diff -u from_kernel_btf from_bla_dwarf
-root@x1:~#
-
-I suppressed the align attribute as right now the output from pahole
-when it finds the __attribute__ alignment present in DWARF is slightly
-different, but equivalent (barring bugs) to when it infers the alignment
-and adds it to BTF data, that has no alignment info other than the
-member offsets (DWARF has both the member offsets to infer the alignment
-_and_ attributes when they are present in the source code, sometimes
-even duplicated, which probably is the reason for the difference in
-output (albeit the end result should be equivalent)).
-
-root@x1:~# pahole --expand_types task_struct | wc -l
-1254
-root@x1:~# pahole --expand_types task_struct | tail
-	/* XXX last struct has 1 hole, 1 bit hole */
-
-	/* size: 13696, cachelines: 214, members: 265 */
-	/* sum members: 13522, holes: 20, sum holes: 158 */
-	/* sum bitfield members: 83 bits, bit holes: 2, sum bit holes: 45 bits */
-	/* member types with holes: 4, total: 6, bit holes: 2, total: 2 */
-	/* paddings: 6, sum paddings: 49 */
-	/* forced alignments: 2, forced holes: 2, sum forced holes: 88 */
-};
-
-root@x1:~#
-
-I.e. the original BTF doesn't have to be sorted (well, it will keep the
-order DWARF does, which, in turn, is another desire of reproducible
-builds, it will not have the same output for two kernel releases, but
-should be as close as possible) pahole (--sort or --compile) or bpftool
-can do it either by plain sorting the types (pahole --sort, used by
-btfdiff to compara output from DWARF to output from BTF) or by
-generating a compilable source code (pahole --compile, aka
-"topologically sorted to satisfy C compiler").
- 
-> > > > from one kernel version to another. vmlinux.h will become
-> > > > a bit more sorted too and normal diff vmlinux_6_1.h vmlinux_6_2.h
-> > > > will be possible.
-> > > > Or am I misunderstanding the sorting concept?
-  
-> > > You understand the concept correctly, here is a sample:
-  
-> > >   [1] INT '_Bool' size=1 bits_offset=0 nr_bits=8 encoding=BOOL
-> > >   [2] INT '__int128' size=16 bits_offset=0 nr_bits=128 encoding=SIGNED
-> > >   [3] INT '__int128 unsigned' size=16 bits_offset=0 nr_bits=128 encoding=(none)
-> > >   [4] INT 'char' size=1 bits_offset=0 nr_bits=8 encoding=(none)
-> > >   [5] INT 'int' size=4 bits_offset=0 nr_bits=32 encoding=SIGNED
-> > >   [6] INT 'long int' size=8 bits_offset=0 nr_bits=64 encoding=SIGNED
-> > >   [7] INT 'long long int' size=8 bits_offset=0 nr_bits=64 encoding=SIGNED
-
-> > The above: so far so good, probably there will not be something that
-> > will push what is now BTF id 6 to become 7 in a new vmlinux, but can we
-> > say the same for the more dynamic parts, like the list of structs?
- 
-> > A struct can vanish, that abstraction not being used anymore in the
-> > kernel, so its BTF id will vacate and all of the next struct IDs will
-> > "fall down" and gets its IDs decremented, no?
- 
-> Yes, this would happen.
-
-We're on the same page.
-
-> > If these difficulties are present as I mentioned, then rebuilding from
-> > the BTF data with something like the existing 'pahole --expand_types
-> > --sort' from the BTF from kernel N to compare with the same output for
-> > kernel N + 1 should be enough to see what changed from one kernel to the
-> > next one?
- 
-> Yes, this is an option.
-
-Agreed. What I tried in my series was to do as little as possible to
-make the serial output be the same as whatever level of paralelism we
-have while making the whole process to cost as close to the
-unconstrained parallelism that we had in place, i.e. to get a
-reproducible build at the lowest cost in terms of code churn (the more
-code we touch, the more chances we have of new bugs to be introduced)
-and of CPU cycles/memory use, etc.
-
-- Arnaldo
+- Arnald
