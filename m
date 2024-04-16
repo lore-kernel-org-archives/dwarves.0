@@ -1,161 +1,173 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 414211E87C;
-	Mon, 15 Apr 2024 17:33:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 813CE3B78D;
+	Tue, 16 Apr 2024 14:37:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713202383; cv=none; b=RosBIj0q146YWKucnpeAIEelKOt7qShZlTLetzFA6iSH9dfyw71f/JATXIDy+PxzRYOXGoAZ92pgZNKSN+4yXoSxdAmGNhpGv1LxbvtIEPnmTOADB9akedxVhdn5sPXgb3NZ8LvDqffTJiCK9aU8/PISlc942H05IXgZwcusRkY=
+	t=1713278255; cv=none; b=c6HO9zYHDIaN+Eu87OeFEXemzZNwrBYhvccSdtCJq8Eotdi0+zs5pBDtXrjS9fxydKaz8V4pS3f6+MWFnPWDrCFvq6VJ9asSk3Ux2847mRiXKpjaPWWLWYU9eUV/Mu6b2WrFESUpTLc7qs0eN9ZhJN7ig/m7JWe28rVohJuOBPw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713202383; c=relaxed/simple;
-	bh=xBu1qnr/1Vp4oD2YC13jV4bIWy8ruL6tad1zpwJtvFE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mJn1qVuITgm3v60i6u/X+xy3ksszfnMtodCHp6q9YdbyyGmTThIVWYcsAMAaLaHhgFBNQxjD6WvO/e2RyQ8yidBbaHcw61ya12ZbylWXLB/4pu/hFGuw2eM7F/CeDCCj3NOEocVnShXdZhdLmd5tY1J61PPhA7CL+XJjkp4AvbA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Dgk5Tb8j; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1713278255; c=relaxed/simple;
+	bh=/J3FmCK0rgHy8ybrr1I6D1P3XG2Sc9Qx2HMYTGkJUpE=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=uZ3F0ZvQ4zKW+g1PUjdqjxXtg+sl6TwO5FH50sNE3rQ7i1Beo228R5U9OQdunhfcHUpjB4XH4H8inso9oR1brZEph7rfJKqH4NSKg/eNkJJmG0Fts6jsRypg13Gge2P4tQTcYW8EALaEjzU82YUztHaLcRqIUGrPdlpBIZfanDY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=HgLLvV9k; arc=none smtp.client-ip=205.220.165.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Dgk5Tb8j"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 906D5C113CC;
-	Mon, 15 Apr 2024 17:33:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1713202383;
-	bh=xBu1qnr/1Vp4oD2YC13jV4bIWy8ruL6tad1zpwJtvFE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Dgk5Tb8jwPbPuOZQ/puwwZ4cal6/naYzjc7PZHpPZRfzMymJetJFvzZQQOfLlf8ly
-	 wiH4StRLu6QIHdN1bsJh0eD9/IWeVfdjfwYjUBbjilgYJuZ+W/fCX/7WBub5NuhZ7M
-	 N9TFW9IEjmd2r8GwTA1bzmIPJB7OGCPRUleLKp34Q8XgUdzfVs3qXgyI5QEpbZtu5N
-	 fGDgET5/v/uHX8etcfZTW1PSWDS1Hg5JYvqzIpjG/4YCNtyfDvKinhftli70EtFeqi
-	 21irHnk3YVsRxvM4gA3eriUF6jPFh7G8DhMZiPSaSGayGYam5jqeBuIme/QhKaNNFe
-	 4XF9vvI3QWakw==
-Date: Mon, 15 Apr 2024 14:33:00 -0300
-From: Arnaldo Carvalho de Melo <acme@kernel.org>
-To: Alan Maguire <alan.maguire@oracle.com>
-Cc: dwarves@vger.kernel.org, Jiri Olsa <jolsa@kernel.org>,
-	Clark Williams <williams@redhat.com>,
-	Kate Carcia <kcarcia@redhat.com>, bpf@vger.kernel.org,
-	Arnaldo Carvalho de Melo <acme@redhat.com>,
-	Kui-Feng Lee <kuifeng@fb.com>,
-	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
-Subject: Re: [PATCH 12/12] tests: Add a BTF reproducible generation test
-Message-ID: <Zh1kzIf4C4Z8bOsb@x1>
-References: <20240412211604.789632-1-acme@kernel.org>
- <20240412211604.789632-13-acme@kernel.org>
- <3817fa6d-122f-4cbc-92be-616355ec04c2@oracle.com>
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="HgLLvV9k"
+Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 43GEPMD8025111;
+	Tue, 16 Apr 2024 14:37:26 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding; s=corp-2023-11-20;
+ bh=SXm+sgYR3oh/NqyZEk8C2yicgyKUlGU4WPY/VEMWVbE=;
+ b=HgLLvV9k0R37n8mxODvvCvh/DOaAvBcjdQsYP+mhb5Lvlnp2BRhYuYN2YC3lMWGXyYwb
+ ad4M/1XsDrI0LzdzREsDpmwk78uKPsKubWmXwHtA9Bd9HOzk2q504wUXBuB3YJ5Kz8Ml
+ J5Rt24k4FKAhZBzvi056o3khBUs9v04t8VKKym1PFUb1f4zzbT/YE6tc/5s6JudN04vu
+ alAmfCZY9AmL/yB/xqvv9KpOYkTMoE52goeJNFq4hY3ydv2q9wDLJuOWlPdUy/pk/SZ+
+ D8dgHaKiRxPIZuIlR7IuX2uMmS5ZuaxXFdLX4x+y3XVFFcC0IRQVOJ7xCRxlBnY7V/k6 QA== 
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3xfhxbnb62-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 16 Apr 2024 14:37:26 +0000
+Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 43GEQhau029216;
+	Tue, 16 Apr 2024 14:37:25 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3xfgg7an68-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 16 Apr 2024 14:37:25 +0000
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 43GEbMeq029885;
+	Tue, 16 Apr 2024 14:37:24 GMT
+Received: from bpf.uk.oracle.com (dhcp-10-175-210-77.vpn.oracle.com [10.175.210.77])
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 3xfgg7an1y-2;
+	Tue, 16 Apr 2024 14:37:24 +0000
+From: Alan Maguire <alan.maguire@oracle.com>
+To: acme@kernel.org
+Cc: dwarves@vger.kernel.org, jolsa@kernel.org, williams@redhat.com,
+        kcarcia@redhat.com, bpf@vger.kernel.org, kuifeng@fb.com,
+        linux@weissschuh.net, Alan Maguire <alan.maguire@oracle.com>
+Subject: [PATCH dwarves 1/3] pahole: allow --btf_features to not participate in "all"
+Date: Tue, 16 Apr 2024 15:37:16 +0100
+Message-Id: <20240416143718.2857981-2-alan.maguire@oracle.com>
+X-Mailer: git-send-email 2.39.3
+In-Reply-To: <20240416143718.2857981-1-alan.maguire@oracle.com>
+References: <20240416143718.2857981-1-alan.maguire@oracle.com>
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <3817fa6d-122f-4cbc-92be-616355ec04c2@oracle.com>
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-04-16_10,2024-04-16_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 spamscore=0
+ mlxlogscore=999 phishscore=0 mlxscore=0 malwarescore=0 bulkscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2404010000 definitions=main-2404160089
+X-Proofpoint-ORIG-GUID: j3KX_LqGoGmcjXYHvHlEiernDMu6SJIW
+X-Proofpoint-GUID: j3KX_LqGoGmcjXYHvHlEiernDMu6SJIW
 
-On Mon, Apr 15, 2024 at 11:26:44AM +0100, Alan Maguire wrote:
-> On 12/04/2024 22:16, Arnaldo Carvalho de Melo wrote:
-> > From: Arnaldo Carvalho de Melo <acme@redhat.com>
-> > 
-> >   $ time tests/reproducible_build.sh vmlinux
-> >   Parallel reproducible DWARF Loading/Serial BTF encoding: Ok
-> > 
-> >   real  1m13.844s
-> >   user  3m3.601s
-> >   sys   0m9.049s
-> >   $
-> > 
-> > If the number of threads started by pahole is different than what was
-> > requests via its -j command line option, it will fail as well as if the
-> > output of 'bpftool btf dump' differs from the BTF encoded totally
-> > serially to one of the detached BTF encoded using reproducible DWARF
-> > loading/BTF encoding.
-> > 
-> > Cc: Alan Maguire <alan.maguire@oracle.com>
-> > Cc: Kui-Feng Lee <kuifeng@fb.com>
-> > Cc: Thomas Weißschuh <linux@weissschuh.net>
-> > Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
-> > ---
-> >  tests/reproducible_build.sh | 56 +++++++++++++++++++++++++++++++++++++
-> >  1 file changed, 56 insertions(+)
-> >  create mode 100755 tests/reproducible_build.sh
-> > 
-> 
-> great to have a test for this! a few small things below but
-> for the series
-> 
-> Reviewed-by: Alan Maguire <alan.maguire@oracle.com>
-> Tested-by: Alan Maguire <alan.maguire@oracle.com>
-> 
-> > diff --git a/tests/reproducible_build.sh b/tests/reproducible_build.sh
-> > new file mode 100755
-> > index 0000000000000000..9c72d548c2a21136
-> > --- /dev/null
-> > +++ b/tests/reproducible_build.sh
-> > @@ -0,0 +1,56 @@
-> > +#!/bin/bash
-> > +# SPDX-License-Identifier: GPL-2.0-only
-> > +#
-> > +# Test if BTF generated serially matches reproducible parallel DWARF loading + serial BTF encoding
-> > +# Arnaldo Carvalho de Melo <acme@redhat.com> (C) 2024-
-> > +
-> > +vmlinux=$1
-> 
-> nit: might be worth having a usage check/error for the vmlinux binary here.
-> 
-> > +outdir=$(mktemp -d /tmp/reproducible_build.sh.XXXXXX)
-> > +
-> > +echo -n "Parallel reproducible DWARF Loading/Serial BTF encoding: "
-> > +
-> > +test -n "$VERBOSE" && printf "\nserial encoding...\n"
-> > +
-> > +pahole --btf_encode_detached=$outdir/vmlinux.btf.serial $vmlinux
-> 
-> suggestion here; what about adding --btf_features=all as this would mean
-> we'd be encoding all the standard kernel features? we'd need to do the
-> same below in the thread loop. without that we're missing out on a few
-> features that the kernel builds use in BTF encoding, and we probably
-> want to ensure that we're testing as close to a real kernel BTF encoding
-> scenario as possible.
+Specifying --btf_features=all enables all supported BTF features.
+However there are some features that are non-standard, so we should
+support a way to use them in --btf_features but not participate in
+the set of features enabled by "--btf_features=all".  As part of this,
+also support all used in a list of --btf_features, i.e.
 
-⬢[acme@toolbox pahole]$ time tests/reproducible_build.sh vmlinux
-Parallel reproducible DWARF Loading/Serial BTF encoding: Ok
+--btf_features=all,nonstandard_feature
 
-real	1m24.903s
-user	3m8.143s
-sys	0m47.329s
-⬢[acme@toolbox pahole]$ 
-⬢[acme@toolbox pahole]$ time VERBOSE=1 tests/reproducible_build.sh vmlinux
-Parallel reproducible DWARF Loading/Serial BTF encoding: 
-serial encoding...
-1 threads encoding
-1 threads started
-diff from serial encoding:
------------------------------
-2 threads encoding
-2 threads started
-diff from serial encoding:
------------------------------
-3 threads encoding
-3 threads started
-^X^C
+Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+---
+ man-pages/pahole.1 |  2 +-
+ pahole.c           | 36 +++++++++++++++++++++++-------------
+ 2 files changed, 24 insertions(+), 14 deletions(-)
 
-diff --git a/tests/reproducible_build.sh b/tests/reproducible_build.sh
-index b821e28e7ce7bf8c..8cc36fe4c75e8b75 100755
---- a/tests/reproducible_build.sh
-+++ b/tests/reproducible_build.sh
-@@ -22,14 +22,14 @@ echo -n "Parallel reproducible DWARF Loading/Serial BTF encoding: "
+diff --git a/man-pages/pahole.1 b/man-pages/pahole.1
+index 2be165d..2c08e97 100644
+--- a/man-pages/pahole.1
++++ b/man-pages/pahole.1
+@@ -290,7 +290,7 @@ Allow using all the BTF features supported by pahole.
  
- test -n "$VERBOSE" && printf "\nserial encoding...\n"
+ .TP
+ .B \-\-btf_features=FEATURE_LIST
+-Encode BTF using the specified feature list, or specify 'all' for all features supported.  This option can be used as an alternative to unsing multiple BTF-related options. Supported features are
++Encode BTF using the specified feature list, or specify 'all' for all standard features supported.  This option can be used as an alternative to unsing multiple BTF-related options. Supported standard features are
  
--pahole --btf_encode_detached=$outdir/vmlinux.btf.serial $vmlinux
-+pahole --btf_features=all --btf_encode_detached=$outdir/vmlinux.btf.serial $vmlinux
- bpftool btf dump file $outdir/vmlinux.btf.serial > $outdir/bpftool.output.vmlinux.btf.serial
+ .nf
+ 	encode_force       Ignore invalid symbols when encoding BTF; for example
+diff --git a/pahole.c b/pahole.c
+index 77772bb..890ef81 100644
+--- a/pahole.c
++++ b/pahole.c
+@@ -1266,23 +1266,26 @@ ARGP_PROGRAM_VERSION_HOOK_DEF = dwarves_print_version;
+  * BTF encoding apply; we encode type/decl tags, do not encode
+  * floats, etc.  This ensures backwards compatibility.
+  */
+-#define BTF_FEATURE(name, alias, default_value)			\
+-	{ #name, #alias, &conf_load.alias, default_value }
++#define BTF_FEATURE(name, alias, default_value, enable_for_all)		\
++	{ #name, #alias, &conf_load.alias, default_value, enable_for_all }
  
- nr_proc=$(getconf _NPROCESSORS_ONLN)
+ struct btf_feature {
+ 	const char      *name;
+ 	const char      *option_alias;
+ 	bool		*conf_value;
+ 	bool		default_value;
++	bool		enable_for_all;	/* some nonstandard features may not
++					 * be enabled for --btf_features=all
++					 */
+ } btf_features[] = {
+-	BTF_FEATURE(encode_force, btf_encode_force, false),
+-	BTF_FEATURE(var, skip_encoding_btf_vars, true),
+-	BTF_FEATURE(float, btf_gen_floats, false),
+-	BTF_FEATURE(decl_tag, skip_encoding_btf_decl_tag, true),
+-	BTF_FEATURE(type_tag, skip_encoding_btf_type_tag, true),
+-	BTF_FEATURE(enum64, skip_encoding_btf_enum64, true),
+-	BTF_FEATURE(optimized_func, btf_gen_optimized, false),
+-	BTF_FEATURE(consistent_func, skip_encoding_btf_inconsistent_proto, false),
++	BTF_FEATURE(encode_force, btf_encode_force, false, true),
++	BTF_FEATURE(var, skip_encoding_btf_vars, true, true),
++	BTF_FEATURE(float, btf_gen_floats, false, true),
++	BTF_FEATURE(decl_tag, skip_encoding_btf_decl_tag, true, true),
++	BTF_FEATURE(type_tag, skip_encoding_btf_type_tag, true, true),
++	BTF_FEATURE(enum64, skip_encoding_btf_enum64, true, true),
++	BTF_FEATURE(optimized_func, btf_gen_optimized, false, true),
++	BTF_FEATURE(consistent_func, skip_encoding_btf_inconsistent_proto, false, true),
+ };
  
- for threads in $(seq $nr_proc) ; do
- 	test -n "$VERBOSE" && echo $threads threads encoding
--	pahole -j$threads --reproducible_build --btf_encode_detached=$outdir/vmlinux.btf.parallel.reproducible $vmlinux &
-+	pahole -j$threads --reproducible_build --btf_features=all --btf_encode_detached=$outdir/vmlinux.btf.parallel.reproducible $vmlinux &
- 	pahole=$!
- 	# HACK: Wait a bit for pahole to start its threads
- 	sleep 0.3s
+ #define BTF_MAX_FEATURE_STR	1024
+@@ -1350,8 +1353,10 @@ static void parse_btf_features(const char *features, bool strict)
+ 	if (strcmp(features, "all") == 0) {
+ 		int i;
+ 
+-		for (i = 0; i < ARRAY_SIZE(btf_features); i++)
+-			enable_btf_feature(&btf_features[i]);
++		for (i = 0; i < ARRAY_SIZE(btf_features); i++) {
++			if (btf_features[i].enable_for_all)
++				enable_btf_feature(&btf_features[i]);
++		}
+ 		return;
+ 	}
+ 
+@@ -1361,7 +1366,12 @@ static void parse_btf_features(const char *features, bool strict)
+ 		struct btf_feature *feature = find_btf_feature(feature_name);
+ 
+ 		if (!feature) {
+-			if (strict) {
++			/* --btf_features=all,nonstandard_feature should be
++			 * allowed.
++			 */
++			if (strcmp(feature_name, "all") == 0) {
++				parse_btf_features(feature_name, strict);
++			} else if (strict) {
+ 				fprintf(stderr, "Feature '%s' in '%s' is not supported.  Supported BTF features are:\n",
+ 					feature_name, features);
+ 				show_supported_btf_features(stderr);
+-- 
+2.39.3
+
