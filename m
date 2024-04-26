@@ -1,101 +1,113 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24E8C1534E8;
-	Thu, 25 Apr 2024 14:19:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44A4D23758;
+	Fri, 26 Apr 2024 20:26:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714054779; cv=none; b=YmTuPFMGyvUjN3OBhUn1edaR3RPCOkOr0msfNF59c6uS5Df0+CrZNdL4gmCw+G1w8+Ntxa6fvS1q2UjKABt4/V5SokZdWI0DbD/3c+v1ju/3LWiM9Z+HLvq9kxtiUZmdjYfsxlh3g83erFsLAxFDSdMVlkOyLN1fHmsTmgJPx28=
+	t=1714163215; cv=none; b=a71BKdQ8sEilZq77qvs1/l/oiQg59IbrzvCtAYilRwTlD3k9EUHGW/6h6UoYsPRFLfyL/6IQPjgbB7N2PbbMe9ayZPdXCh4Yw4HjaTR43yhcEjDbwNjRb03FuDc6RndhoXpCszTvlGRgLqTct3H6vEdDNkP5ZaeKoH4Jeitytg4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714054779; c=relaxed/simple;
-	bh=/p9KNiZsQmUy2Vg1gCseczfp5v4YrwJ/YoZmbXRfjlM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=W/op640+jShSC3PNBgUnAH2aoaiGuiGDJSgASJQZp8UVhkIWNjXe85UtLqVLO24HEXvaGt0kDQp3FI8dqeBnk5fNz3cyWbOI3N0nf5a9EncTsZZngJ6BlVfB3GVSvZaPiZoaVtjLqo3gl9VQCdIj1MOdluZw5JHkaArjmzjDvWM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=D4hhdS0/; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1714163215; c=relaxed/simple;
+	bh=sBL0lHa/6TxOBgAj88VqXwSY9DXfZG/N6Owp9d6kwKg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Hdp0KmmXULMHR0BHpWKLCLxT/lvWZgvkKHx6ZyL+h/+Ve7taexxVTzATacPy0ycogJi81oy4znMU3m+1qAwch9X1VpmeJoaVlxf8KJguKYf4f0xv2Ye2RC5+oPiPW5ukPqGMC5xmmIKW7GUX/n9T3sMt0b7rPBBDWyoswMKN2Ug=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WXN3cOMh; arc=none smtp.client-ip=209.85.215.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="D4hhdS0/"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CABE7C113CC;
-	Thu, 25 Apr 2024 14:19:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1714054778;
-	bh=/p9KNiZsQmUy2Vg1gCseczfp5v4YrwJ/YoZmbXRfjlM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=D4hhdS0/b8PEImEW9wO7Wi7f3tlGDUzstMXArg1CBC74HHRft4nYhaBBqyVlHiD3l
-	 YPvemyjkH3xUKJ7wipySSG8rCtb1gdTRt3CyCuw8pFLInxcVsTgtnSDZBukJ4Ce5Jx
-	 RU3mE7uAu5BlIPhlKIccvwSx1HMdBpxwG8OVsO1uuaYEYNfUJtT1mKwKipGwDXS6wH
-	 Q1EIdEDL74SANwrMYjqMavxCzS+oh2lRaQZExt7nPhFUeKxEVSWJaO6vghFX8Kvha9
-	 ZSftxvt1ndqXVgMmj5k4FBMozfe2AUfx/3xEsjHuSNxEMewrGidljpi46ny29R+NW4
-	 HWXlEeKXjw0Yg==
-Date: Thu, 25 Apr 2024 11:19:34 -0300
-From: Arnaldo Carvalho de Melo <acme@kernel.org>
-To: Xin Liu <liuxin350@huawei.com>
-Cc: alan.maguire@oracle.com, andrii@kernel.org, arnaldo.melo@gmail.com,
-	ast@kernel.org, bpf@vger.kernel.org, daniel@iogearbox.net,
-	dwarves@vger.kernel.org, kernel-team@fb.com,
-	ndesaulniers@google.com, yonghong.song@linux.dev, yanan@huawei.com,
-	wuchangye@huawei.com, xiesongyang@huawei.com,
-	kongweibin2@huawei.com, zhangmingyi5@huawei.com,
-	liwei883@huawei.com
-Subject: Re: [PATCH dwarves] btf_encoder: Fix dwarf int type with
- greater-than-16 byte issue
-Message-ID: <ZipmdsxjENtoRRkG@x1>
-References: <686d2f65-0d6d-43e6-83fe-a9eb2eb6149e@oracle.com>
- <20240425134340.750289-1-liuxin350@huawei.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WXN3cOMh"
+Received: by mail-pg1-f169.google.com with SMTP id 41be03b00d2f7-5ce6b5e3c4eso1515861a12.2;
+        Fri, 26 Apr 2024 13:26:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1714163213; x=1714768013; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=cLAP3onENSZmeADJpTAKc8XaP1Ji/omSoZg9Du9ItUc=;
+        b=WXN3cOMhE74ObpZypixaQFfSeZIBNvr7LyhtyyAQj5OR9dmZK+dSEk+Biao5TbMCad
+         H5KIq/lpnTJzakynYKDg7bG28ejgLsb/jIvXiencNQ5WIwNzyyob+iUa3V2QsJuMU2p9
+         TEtJnedSpKKan43Xc2ILkNkecVG58bu+dOMeq7yEtbdZHJva7tF1G7BB0kaNNkIxBJ8I
+         xWe13eEFIg5zv6vsdAQYB7Oz3JYX9rHk41o99CQo5cioPwBE3Bjiv9vqVehYgxVKFL7a
+         Ijir+2m6NaYFQHpkQnooJtUo/ubkSw8sIT16i3mooKo3Niib/Lz8GHJKzVO1P/HT0ABB
+         3GrQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1714163213; x=1714768013;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=cLAP3onENSZmeADJpTAKc8XaP1Ji/omSoZg9Du9ItUc=;
+        b=uTtippTkzd4TPtwhoUbv8RVl1ZA27OfhWqPqe8KilbUdtSRd8znOLxa/W/rPv8k3Vw
+         3Brmg1d1VqKKiut3MO0Ul0RGtb8i0nY0uutaRctBTFVSv105MFw4pziy+RZmVg5gLnUI
+         V3V8bqJlVxDpup4sgBA03foUpC8qYKEqAX1RoYniN1S/Rc6ILs7rb95j4FXCF1Z51Ajn
+         sQqVNkh2U2bf1F+4ZFjAFE+ryQ9oHreu9zujAPKXGYmyzHwN9QzwZNH6b3KsK7tJuFaO
+         3ShHKHLr5Bjrp6JS9/6u8B+2YBk1SNocvMoFhr4EyE5DEuCvVURPH88XXe56CayX3o9h
+         QQVw==
+X-Forwarded-Encrypted: i=1; AJvYcCWDvvClOTlUdlh24E2k0FpzTxlGsh76suO7+/eOxwOqrKpd6puphkN2pqh8DsrVv8lC+jPQu3+2z3fX8NOAkbQRzdyg
+X-Gm-Message-State: AOJu0YwW4ly0JY18qDoiJGrct3Kg+ZwfkbNHM4h9ji+RzGgrVVLFrOkw
+	WKRxoOYfLkj6OALjefwtZALvXCGOMOpfDskM/9GmJ87kB8rXvhQ/7f732uQaKB38kMNqUGa+LRW
+	DtXnDNKT/SYQ3IQbDDXjD3pcz/Xc=
+X-Google-Smtp-Source: AGHT+IGkZopnjXMdXeNoDwsAAih0OjIRrltqd608cKvuvsN/ZG4zEtGsxB24AcySLoVSL6CTGwXlWRyuT9seudRabvs=
+X-Received: by 2002:a17:90a:e646:b0:2a2:4192:dfc1 with SMTP id
+ ep6-20020a17090ae64600b002a24192dfc1mr4004350pjb.14.1714163213482; Fri, 26
+ Apr 2024 13:26:53 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240425134340.750289-1-liuxin350@huawei.com>
+References: <20240419205747.1102933-1-acme@kernel.org> <20240419205747.1102933-3-acme@kernel.org>
+In-Reply-To: <20240419205747.1102933-3-acme@kernel.org>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Fri, 26 Apr 2024 13:26:40 -0700
+Message-ID: <CAEf4Bzb0pyc_0AuP3O6wekpR3YcfEkk5bPGOOmS6_yJ3G5bKwQ@mail.gmail.com>
+Subject: Re: [PATCH 2/2] pahole: Allow asking for extra features using the '+'
+ prefix in --btf_features
+To: Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc: dwarves@vger.kernel.org, Jiri Olsa <jolsa@kernel.org>, 
+	Clark Williams <williams@redhat.com>, Kate Carcia <kcarcia@redhat.com>, bpf@vger.kernel.org, 
+	Arnaldo Carvalho de Melo <acme@redhat.com>, Alan Maguire <alan.maguire@oracle.com>, Daniel Xu <dxu@dxuuu.xyz>, 
+	Eduard Zingerman <eddyz87@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Apr 25, 2024 at 09:43:40PM +0800, Xin Liu wrote:
-> On Wed, 24 Apr 2024 15:35:38 -0700 Yonghong Song <yonghong.song@linux.dev> wrote:
-> > Nick Desaulniers and Xin Liu separately reported that int type might
-> > have greater-than-16 byte size ([1] and [2]). More specifically, the
-> > reported int type sizes are 1024 and 64 bytes.
-> > 
-> > The libbpf and bpf program does not really support any int type greater
-> > than 16 bytes. Therefore, with current pahole, btf encoding will fail
-> > with greater-than-16 byte int types.
-> > 
-> > Since for now bpf does not support '> 16' bytes int type, the simplest
-> > way is to sanitize such types, similar to existing conditions like
-> > '!byte_sz' and 'byte_sz & (byte_sz - 1)'. This way, pahole won't
-> > call libbpf with an unsupported int type size. The patch [3] was
-> > proposed before. Now I resubmitted this patch as there are another
-> > failure due to the same issue.
-> > 
-> >   [1] https://github.com/libbpf/libbpf/pull/680
-> >   [2] https://lore.kernel.org/bpf/20240422144538.351722-1-liuxin350@huawei.com/
-> >   [3] https://lore.kernel.org/bpf/20230426055030.3743074-1-yhs@fb.com/
-> > 
-> > Cc: Xin Liu <liuxin350@huawei.com>
-> > Cc: Alan Maguire <alan.maguire@oracle.com>
-> > Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
-> 
-> Reviewed-by: Xin Liu <liuxin350@huawei.com>
+On Fri, Apr 19, 2024 at 1:58=E2=80=AFPM Arnaldo Carvalho de Melo
+<acme@kernel.org> wrote:
+>
+> From: Arnaldo Carvalho de Melo <acme@redhat.com>
+>
+> Instead of the somewhat confusing:
+>
+>   --btf_features=3Dall,reproducible_build
+>
+> That means "'all' the standard BTF features plus the 'reproducible_build'
+> extra BTF feature", use + directly, making it more compact:
+>
+>   --btf_features=3D+reproducible_build
+>
 
-Thanks, applied to next,
+for older paholes that don't yet know about + syntax, but support
+--btf_features, will this effectively disable all features or how will
+it work?
 
-- Arnaldo
- 
-> > ---
-> >  btf_encoder.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/btf_encoder.c b/btf_encoder.c
-> > index e1e3529..19e9d90 100644
-> > --- a/btf_encoder.c
-> > +++ b/btf_encoder.c
-> > @@ -393,7 +393,7 @@ static int32_t btf_encoder__add_base_type(struct btf_encoder *encoder, const str
-> >  	 * these non-regular int types to avoid libbpf/kernel complaints.
-> >  	 */
-> >  	byte_sz = BITS_ROUNDUP_BYTES(bt->bit_size);
-> > -	if (!byte_sz || (byte_sz & (byte_sz - 1))) {
-> > +	if (!byte_sz || (byte_sz & (byte_sz - 1)) || byte_sz > 16) {
-> >  		name = "__SANITIZED_FAKE_INT__";
-> >  		byte_sz = 4;
-> >  	}
+I'm thinking from the perspective of using +reproducible_build
+unconditionally in kernel's build scripts, will it regress something
+for current pahole versions?
+
+> In the future we may want the '-' counterpart as a way to _remove_ some
+> of the standard set of BTF features.
+>
+> Cc: Alan Maguire <alan.maguire@oracle.com>
+> Cc: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+> Cc: Daniel Xu <dxu@dxuuu.xyz>
+> Cc: Eduard Zingerman <eddyz87@gmail.com>
+> Cc: Jiri Olsa <jolsa@kernel.org>
+> Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+> ---
+>  man-pages/pahole.1          | 6 ++++++
+>  pahole.c                    | 6 ++++++
+>  tests/reproducible_build.sh | 2 +-
+>  3 files changed, 13 insertions(+), 1 deletion(-)
+>
+
+[...]
