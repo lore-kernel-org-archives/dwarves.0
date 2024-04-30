@@ -1,147 +1,99 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 735C813AD32;
-	Mon, 29 Apr 2024 18:48:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB0931272AB
+	for <dwarves@vger.kernel.org>; Tue, 30 Apr 2024 09:55:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714416517; cv=none; b=o79GbM7WuOy7jErHWLyllyCiFm2ufLlnoKjo6K5MYP3XYrhRDtMcrAq1qqwa7/F3dYy4ZdJIPUnVNczNOjlGMBF6Q7IdwQ0WtriuHznTBgiawvHnY0FCFrbEuFWzTdNlTyE9YkXpmbdGZ/e1pYwMouoF/y4mstBc27QhC0XYeX0=
+	t=1714470919; cv=none; b=uGdL9Xfbuix3uHUcP03nT2/6CS9LOTDEcKav2c0lDALH991mHJy1NZFDJFCN9CfjP6iGSYLRckcsEw2KhS32NcMGT7k+jlS9ZPu8txnhsZzCtTHH0m2KFF4r7vZvLG8nWbUNlL13+9VfKb75IYf/tee4XEgUNeolMkfF5vRj5Ao=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714416517; c=relaxed/simple;
-	bh=oIK9vUB1IDrrwPp8n2Cg14Jhx6oivr8vl18Nj4VwbKw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dmY99Jh/As4HNTm1sgDYXSHiVzBrfM8GBqb7+MA8vsKQnL17ecy4TrQOj/Kn8Yc8/LTB/hQmNoMIYriC6qLvJQjuYWJflIGZZJV5LPO0QqW+fKmKrc6o5W/1VOFKMP4WQKteIn52thVA1RbT2XOVbrrV5OtYXqwAPa9rrYtNz5s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KVFc224x; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1714470919; c=relaxed/simple;
+	bh=Ar+NiVYDv87jOX83SfIscytEyIQ5YOb/cpGZQiIFtgc=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=OS3haFYJf+11Gg4ol7BVwMRLalRn0TX19rxEtTT6WkydZacst8Metg1XefXUacVXAuMZDdAVi0MhwaOU5eNiK/cf31+hTFUqUzA77vlxhIGfSSkEYUigkjrPnsVf6OixgkZTQJAUkb+memNVN6SkCavIMNW+tlQLb/wnDvO0acI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=obgM8/kd; arc=none smtp.client-ip=205.220.177.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KVFc224x"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8329DC4AF1D;
-	Mon, 29 Apr 2024 18:48:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1714416517;
-	bh=oIK9vUB1IDrrwPp8n2Cg14Jhx6oivr8vl18Nj4VwbKw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=KVFc224xm5qBnnNoFcvInYC8d8z0WDqGxROYTmypChsZ4dLidDZ51StFuu2hxTi9M
-	 I0MPMX87Qr70fWjba70yPB1Ti640Q4oSbg+KKRykoSyS1lcnHyLOXq4gm14X2IHGIH
-	 0HFoRyTfqij4jbeLpVqhZ4YjMX588fmXMYrIRxIdNPIqwLAutCEUdnFJjZVd7sfiy0
-	 /uinSFjS88afyG6RUuFQFbcI3BtbRsVNfuonnV8odYY8AXVM4HZueXNKw4z3xvLDMp
-	 tnV76VPTm/+BjaMnWOQ/hRxx2bVcgZol6+7bY8GqluRFNhNtV6Xs0W+3D/SHc4fuI2
-	 PSA74B1qzYJKw==
-Date: Mon, 29 Apr 2024 15:48:33 -0300
-From: Arnaldo Carvalho de Melo <acme@kernel.org>
-To: Alan Maguire <alan.maguire@oracle.com>
-Cc: Andrii Nakryiko <andrii.nakryiko@gmail.com>, dwarves@vger.kernel.org,
-	Jiri Olsa <jolsa@kernel.org>, Clark Williams <williams@redhat.com>,
-	Kate Carcia <kcarcia@redhat.com>, bpf@vger.kernel.org,
-	Arnaldo Carvalho de Melo <acme@redhat.com>,
-	Daniel Xu <dxu@dxuuu.xyz>, Eduard Zingerman <eddyz87@gmail.com>
-Subject: Re: [PATCH 2/2] pahole: Allow asking for extra features using the
- '+' prefix in --btf_features
-Message-ID: <Zi_rgQckDDFP7P72@x1>
-References: <20240419205747.1102933-1-acme@kernel.org>
- <20240419205747.1102933-3-acme@kernel.org>
- <CAEf4Bzb0pyc_0AuP3O6wekpR3YcfEkk5bPGOOmS6_yJ3G5bKwQ@mail.gmail.com>
- <ZiwS0_O_CTesvjLC@x1>
- <d9e3a7ab-9799-42b0-9c6f-1809a0527867@oracle.com>
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="obgM8/kd"
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 43U1hptx006302;
+	Tue, 30 Apr 2024 09:55:11 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding;
+ s=corp-2023-11-20; bh=fhORhLUg1retItGlxZ1ptr/rUtnJj/eo5AvpYFo/1xQ=;
+ b=obgM8/kdWBg5sLM0ZaKAtZZSr/vOmIDXCNEVfW4vRSvBdfZ4864L1YMrw+olG59Le6ej
+ XpqMHfw6bsuTVnWoFSc2FVw/p9b6MelBo4tkazzMg+KbC8ZFIY6pGTzpTemU+UWv2VI/
+ gtf0QfV9kk+Qxlc9y4DG9K3BB/fqj78B9Jb8BGzMnByUy8uBIIs7ETivGbcUCsYT6y2J
+ KVFgDYrzR9syjjhFpdE1RSgb1FWz0vEy7Fm1uSC08kT/XuzIyv3m/VA1+CkmyzFBbZ8Q
+ Tne9AED9Hij6/gjnJ05QU0ryRIH//clide+RH+0UeD2ytlpnEeqCeQnP8bezUDB5cxuP Bg== 
+Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3xrr54cnjv-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 30 Apr 2024 09:55:10 +0000
+Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 43U8dK4O016807;
+	Tue, 30 Apr 2024 09:55:10 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3xrqtdncuq-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 30 Apr 2024 09:55:10 +0000
+Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 43U9t9ce035788;
+	Tue, 30 Apr 2024 09:55:09 GMT
+Received: from bpf.uk.oracle.com (dhcp-10-175-176-177.vpn.oracle.com [10.175.176.177])
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3xrqtdncmx-1;
+	Tue, 30 Apr 2024 09:55:09 +0000
+From: Alan Maguire <alan.maguire@oracle.com>
+To: acme@kernel.org
+Cc: andrii.nakryiko@gmail.com, dwarves@vger.kernel.org, jolsa@kernel.org,
+        williams@redhat.com, kcarcia@redhat.com, dxu@dxuuu.xyz,
+        eddyz87@gmail.com, Alan Maguire <alan.maguire@oracle.com>
+Subject: [PATCH dwarves] Documentation/pahole: describe expected use of 'default'
+Date: Tue, 30 Apr 2024 10:55:01 +0100
+Message-Id: <20240430095501.1959359-1-alan.maguire@oracle.com>
+X-Mailer: git-send-email 2.39.3
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <d9e3a7ab-9799-42b0-9c6f-1809a0527867@oracle.com>
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1011,Hydra:6.0.650,FMLib:17.11.176.26
+ definitions=2024-04-30_04,2024-04-29_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 malwarescore=0
+ phishscore=0 spamscore=0 bulkscore=0 suspectscore=0 adultscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2404010000 definitions=main-2404300071
+X-Proofpoint-ORIG-GUID: HP-VJ9mb2spsdz0tX5pfoyW5qJQeCdIZ
+X-Proofpoint-GUID: HP-VJ9mb2spsdz0tX5pfoyW5qJQeCdIZ
 
-On Mon, Apr 29, 2024 at 12:16:18PM +0100, Alan Maguire wrote:
-> On 26/04/2024 21:47, Arnaldo Carvalho de Melo wrote:
-> > On Fri, Apr 26, 2024 at 01:26:40PM -0700, Andrii Nakryiko wrote:
-> >> On Fri, Apr 19, 2024 at 1:58 PM Arnaldo Carvalho de Melo <acme@kernel.org> wrote:
-> >> for older paholes that don't yet know about + syntax, but support
-> >> --btf_features, will this effectively disable all features or how will
-> >> it work?
-> >>
-> >> I'm thinking from the perspective of using +reproducible_build
-> >> unconditionally in kernel's build scripts, will it regress something
-> >> for current pahole versions?
-> > 
-> > Well, I think it will end up being discarded just like "all" or
-> > "default", no? I.e. those were keywords not grokked by older pahole
-> > versions, so ignored as we're not using --btf_features_strict, right?
+the 'default' --btf_features option is useful for testing the latest
+set of standard features used for BTF encoding, but will not be used
+in the kernel Makefile.btf.  It functions as a useful shortcut for
+testing the latest set of standard features.  Describe this in the manual
+page.
 
-> > Alan?
+Suggested-by: Arnaldo Carvalho de Melo <acme@kernel.org>
+Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+---
+ man-pages/pahole.1 | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/man-pages/pahole.1 b/man-pages/pahole.1
+index e3c58e0..19bf197 100644
+--- a/man-pages/pahole.1
++++ b/man-pages/pahole.1
+@@ -290,7 +290,7 @@ Allow using all the BTF features supported by pahole.
  
-> Yep, it would just be ignored, so wouldn't have the desired behaviour
-> of enabling defaults + reproducible build option.
+ .TP
+ .B \-\-btf_features=FEATURE_LIST
+-Encode BTF using the specified feature list, or specify 'default' for all standard features supported.  This option can be used as an alternative to unsing multiple BTF-related options. Supported standard features are
++Encode BTF using the specified feature list, or specify 'default' for all standard features supported.  This option can be used as an alternative to using multiple BTF-related options, and 'default' represents the standard set of BTF features that are in use for kernel BTF generation, so is useful as a shortcut for testing the latest set of standard features.  However kernel builds will call out specific features rather than using 'default' to ensure that the desired features are enabled regardless of pahole version and associated 'default' set.  Supported standard features are
  
-> > But then we're not yet using --btf_features in scripts/Makefile.btf,
-> > right?
+ .nf
+ 	encode_force       Ignore invalid symbols when encoding BTF; for example
+-- 
+2.39.3
 
-> > But as Daniel pointed out and Alan (I think) agreed, for things like
-> > scripts we probably end up using the most verbose thing as:
-
-> > 	--btf_features=default,reproducible_build
-
-> > to mean a set (the default set of BTF options) + an optional/extra
-> > feature (reproducibe_build), that for people not used to the + syntax
-> > may be more descriptive (I really think that both are confusing for
-> > beginners knowing nothing about BTF and its evolution, etc).
-
-> > Alan, also we released 1.26 with "all" meaning what we now call
-> > "default", so we need to keep both meaning the same thing, right?
-
-> I might be missing something here, but I think we should always call out
-
-No you're not, I was just talking about what Daniel pointed out, that
-when using a script using 'default,extra_feature' is more descriptive
-than '+extra_feature', but you're right, for the kernel we go on adding
-the features we need and older pahole versions will just ignore those.
-
-The explanation you gave on this message is interesting to clarify when
-'default' should be used and perhaps also use the kernel build process
-needs/use of a list of features, etc. It would be good to have it in the
-man page, can you provide a formal patch doing that?
-
-Thanks,
-
-- Arnaldo
-
-> explicitly the set of features we want in the kernel Makefile.btf
-> (something like [1]). The reason for this is that the concept of what is
-> "default" may evolve over time; for example it's going to include
-> Daniel's kfunc definitions for soon. That's a good thing, but it could
-> conceivably cause problems down the line. Consider a newer pahole - with
-> a newer set of defaults - running on an older kernel. In that case, we
-> could end up encoding BTF features we don't want.  By contrast, if we
-> always call out the full set of BTF features we want via
-> --btf_features=feature1,feature2 etc we'll always get the expected set.
-> Plus for folks consulting the code, it's much clearer which BTF features
-> are in use when they look at the Makefiles for a particular kernel.
-> So my sense of the value of "default" is as a shortcut for testing the
-> latest and greatest set of BTF feature encoding, but not for use in the
-> kernel tree Makefiles. Thanks!
-> 
-> Alan
-> 
-> [1]
-> https://lore.kernel.org/bpf/20240424154806.3417662-7-alan.maguire@oracle.com/
-> 
-> > - Arnaldo
-> >  
-> >>> In the future we may want the '-' counterpart as a way to _remove_ some
-> >>> of the standard set of BTF features.
-> >>>
-> >>> Cc: Alan Maguire <alan.maguire@oracle.com>
-> >>> Cc: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-> >>> Cc: Daniel Xu <dxu@dxuuu.xyz>
-> >>> Cc: Eduard Zingerman <eddyz87@gmail.com>
-> >>> Cc: Jiri Olsa <jolsa@kernel.org>
-> >>> Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
-> >>> ---
-> >>>  man-pages/pahole.1          | 6 ++++++
-> >>>  pahole.c                    | 6 ++++++
-> >>>  tests/reproducible_build.sh | 2 +-
-> >>>  3 files changed, 13 insertions(+), 1 deletion(-)
-> >>>
-> >>
-> >> [...]
