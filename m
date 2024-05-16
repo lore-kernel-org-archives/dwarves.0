@@ -1,239 +1,143 @@
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE9FA146D60
-	for <dwarves@vger.kernel.org>; Wed,  1 May 2024 18:02:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.165.32
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714586581; cv=fail; b=mPdZ+IdHrrfDUid1rhdUsqQmXXRZfi46/7SnglfWxWBHXDB5DIbpwvqH+RlGxDuzDFvKwjzNA7tgsRbWVk/IUj6/Mij8FA32sA2pJ6f/FBTsUHTz48CcwUY8G48H2XYop916rx1zFiwUq5AsdzGS1tA2U5v//Kl81qmv5p85h0w=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714586581; c=relaxed/simple;
-	bh=nJ8cE/oSa91sMpf27OK4GcCs4gFOwXP4tdtzIDNIkKA=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=LGfiM7ZXFlaeFkk5LK1nO4dw9yHe+D3fT7opn6Bu8QPHWwfDLfrsIWT3Pqwm2UHAyELssbGCAUoaap0xM+lXh7W2v3I30JGRUVQOfBIpULaosG+kF0b6UDEEkWvayDMtRYEnWAwwFnLV5BCP11bPQ1FZ+a5NxXbYxq+DFSMcjsE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=WdxCqxXD; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=z1gs8YaW; arc=fail smtp.client-ip=205.220.165.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E259514374C;
+	Thu, 16 May 2024 09:36:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.52
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1715852191; cv=none; b=hV7DTVR9LgWsh34aUBKfqHMGazqyTr1KoVQZVJvgPoHjA7v1mWeLORGIrmMoQfhaCnVHwO4Uz8Jhmg2rzb88VSzfAasiNiQyszOK3sWrdZoF4MLQMV5Ejkr0DBQ0NH95Ns1gQ/vX2nXMW0jydc5Lyig+o4/afALteDHrorpJ1Sc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1715852191; c=relaxed/simple;
+	bh=J6sD28lgfKh27e2j9CLxVNjQggPRio4KaVElzKmuzCw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=TZJ5R5Qo6domSEGlBqlX9ea0jgjW11jwO1oh3V65PoB4doAq3si3Zl3HkmmPblgdKN+EAGtOwdXLrJANilmkcUjgNZC4nI1ff+HH2R9UuQfyvGs8aGPiCHLqKwWgRfsGrAdjpZS6ZXVDQ+H0cQIL4VX4spvxsX3oW/+GTRc9zho=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fMMZSXSN; arc=none smtp.client-ip=209.85.208.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="WdxCqxXD";
-	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="z1gs8YaW"
-Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 441ARosh014732;
-	Wed, 1 May 2024 18:02:49 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=corp-2023-11-20;
- bh=YuI2hQEVjtS9WhRB8NI3hNy7gSx41TDP+JhJaP8lajI=;
- b=WdxCqxXDdwcw/xA+EjP8XrVaqbqAlaET9TooNah600wsHMAwPyyaWHWIS97IulbGh+sb
- rj1vUsWNHGTpV/BUxxugVYECHAKQogfSKYbhO1IEUAbx/G4q80vlBCRQ4mzEvu0Uq3a6
- J50Uj9si8oZKnOFqSSvSz9aV0q1cKffeFI6ar/cvMdp1Mq1xt4MhRJZzBk+sHWtehguG
- ZaPhik29RGh9RLdyDGChDUOCnoVyhwyKT1J+VyAQro8R48Wx9zY4iLHU2fx7+IVJqoNI
- AgIjPmbJS6FFtDbBvRRRxyKUTXZxT6QNG8XIdzApenBUWip93aI7DrS0E/HNOUQoiInD ZQ== 
-Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3xrs8cqpa3-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 01 May 2024 18:02:44 +0000
-Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 441GRYXm011449;
-	Wed, 1 May 2024 18:02:44 GMT
-Received: from nam12-bn8-obe.outbound.protection.outlook.com (mail-bn8nam12lp2169.outbound.protection.outlook.com [104.47.55.169])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3xrqt9kyqk-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 01 May 2024 18:02:44 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=dHMs02kZ/EBJRNHzhgWdBtzYi5pMqmz6C7YSRcbOVMltzoWuX1kKiasLiC5HnABVshRF5ZklhGB5cMaEj/Lgd2q4xEHQpQB3tF0ashQr8nLmwdNTFgOL7JzyHclZrU28LFaGh+V0X4PzOJ/p8RrdBR4tCXRaabQP+xy/1Q6G58NCr3lZ53BoIjsi/2jQXHiIaQywt2RPcI9PYp8Ho3lVaV1GODj5eCUso3dby0Itb1c0SqSKZKp2WMdb2fQsgf6DLbz3JkYrGZTbeQdBXDEsFQP7PwETbcdoHto7t7MyzLAeA8e+BJ+e7Wm/JeI07luPYm6jowE6QXui8xClrdUSAg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=YuI2hQEVjtS9WhRB8NI3hNy7gSx41TDP+JhJaP8lajI=;
- b=aLp7XpXuc5PwUiQxTF7Ishf5ekaHlU76RL2qaDfPbasbbBQef9t3X9KxcJ2jTGJv85hnUsTD5HDd61VL16W/IcGSUhBc5D6QJcF8C8RMgAsIWmMqtnn4OjSvZNZlsBIwcnTgsD5IyaL5WhgSqV9uzkWWnuIJTIoDR9XtL+4Z6E+Pe6abrM6gjMct7Dzy1bOwjFep6ruT+ks5DnUyDj2zi5iBsaKWdfS/DZy4NUgKphX9PKuz05IbrRVbnSPowtAVPbJhp4zFQtV8RVsnFp18RDPo2iuJEu4oNRodPDxyyEOhbpGPqw9QqskGjR4J4KC73GlQc2W2wa2Arq2LPJxOIQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fMMZSXSN"
+Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-5723edf0ae5so2799256a12.0;
+        Thu, 16 May 2024 02:36:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=YuI2hQEVjtS9WhRB8NI3hNy7gSx41TDP+JhJaP8lajI=;
- b=z1gs8YaWcdi4XQjc1LlxP3sFN1kLj/2LUJ32pHylrRNnA2z5Emylzg3FVOJfrwIeI9Ri1pDSwF2yHa6QzGJxbkV+sCzohwBVPAumz9EyBKK/xtrTbow0LbERPloRh33qX2GXr03nTbpEkboBoRb3jmT3JsuW8v5R+wQmiVHczZY=
-Received: from BLAPR10MB5267.namprd10.prod.outlook.com (2603:10b6:208:30e::22)
- by DM4PR10MB6720.namprd10.prod.outlook.com (2603:10b6:8:110::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7544.28; Wed, 1 May
- 2024 18:02:41 +0000
-Received: from BLAPR10MB5267.namprd10.prod.outlook.com
- ([fe80::372c:5fce:57c3:6a03]) by BLAPR10MB5267.namprd10.prod.outlook.com
- ([fe80::372c:5fce:57c3:6a03%4]) with mapi id 15.20.7519.031; Wed, 1 May 2024
- 18:02:41 +0000
-Message-ID: <3e83bcaa-94d8-4a43-90ec-b21486367862@oracle.com>
-Date: Wed, 1 May 2024 19:02:36 +0100
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH dwarves] Documentation/pahole: describe expected use of
- 'default'
+        d=gmail.com; s=20230601; t=1715852188; x=1716456988; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=hvXv+pGqbfkwd6X1s9SxJ9Fq0l86c61XKwIlx/950E4=;
+        b=fMMZSXSNrkwdx6XFr8ci++sBH50hbGoOS8jiQgJ7WrpXjtKptvS6trjmK1rQ3HDtJD
+         tgXMTjXCr62om4vatG1He1vIW+QuyTB081IBJ5Ojk7o71TyvSMNGef0OAKZ61oWJz8Yy
+         bByrm68rhqkx+Tf3U3y6sEQs/UEIOMBAPDPPOd8nSWdTkMj2Ni/PCeV42LXIvpUOYeIt
+         sqxkQtFY7ekQb2imeUfHpakc9qUoK+aIiX/310M4U2fvYDR4uhWWV4rzqXlNDaj7qJMI
+         txJWwgzGMFUmXJVCgRjKPreuaeJEbCxfluVlRzgCARYZ56QkQ0OXTAhLI38DeRKq4vgl
+         poAw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1715852188; x=1716456988;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=hvXv+pGqbfkwd6X1s9SxJ9Fq0l86c61XKwIlx/950E4=;
+        b=bWHrK3mHJpcfg2RTACaSyXondmjIXUIfn5ujgfoj5Q6wkzbCqyInBx54hyk8v5rwPV
+         lW4KZPCLYHfsKorQh+rlOnwrPzwVryGHHKbTw/8SwUy0VAMQ/Zk0pNsCDJWi0vI/1Jlr
+         4SOq0pimejG2bphx30hlYI/DB0TofQeAbv401PZbQjGxAQWiGKGAF8swl5pMdTqP1jo0
+         GxsyaBd6YLTkTrsOddHFWYxvtpTB0PE1y6oyAuiKzv5CtXHXfTuT25r1rXdbnVqGDH7Z
+         MzAIyu78waLKeT7Dc1LhM9AgPeyK9ktlW0yze88ZG2sON1+azGEM2mFyVGQ1eola1ECf
+         1VtA==
+X-Forwarded-Encrypted: i=1; AJvYcCV05EJHKB8KyubZWc5Cp77UQZ5HzIsdfT2QQwE5ma1Tn0kwT/pHfaAEozaHwqNvu4KJ7cizqupxmMmH7Wh8/TqDjPAsuvODQFJFg1NpkS1m8se2Qnp0mFUMj7pdC6MmtbZa
+X-Gm-Message-State: AOJu0YwfwHUxAR0Mw1iyxQrJuTIW+40PkDVmVz9OUI2ReOcS0HYlt7b8
+	yaEOSrzpanP+9nROC948EzsvtTP52QLVhlrgskXYmdjhKLxr/ygF
+X-Google-Smtp-Source: AGHT+IHHV69RLJNpaBjl5GbwCsRINJCGP6ZRDgLVz7LqC3L1sToOsa41I3DZilJuFLG+fWtHkZZEFA==
+X-Received: by 2002:a50:aada:0:b0:572:7b08:d497 with SMTP id 4fb4d7f45d1cf-5734d5c17acmr13034438a12.17.1715852187856;
+        Thu, 16 May 2024 02:36:27 -0700 (PDT)
+Received: from localhost (77-162-229-73.fixed.kpn.net. [77.162.229.73])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5733c2c7de4sm10127159a12.63.2024.05.16.02.36.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 May 2024 02:36:27 -0700 (PDT)
+Sender: Domenico Andreoli <domenico.andreoli.it@gmail.com>
+Date: Thu, 16 May 2024 11:36:25 +0200
+From: Domenico Andreoli <domenico.andreoli@linux.com>
 To: Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc: andrii.nakryiko@gmail.com, dwarves@vger.kernel.org, jolsa@kernel.org,
-        williams@redhat.com, kcarcia@redhat.com, dxu@dxuuu.xyz,
-        eddyz87@gmail.com
-References: <20240430095501.1959359-1-alan.maguire@oracle.com>
- <ZjEEkDmfb9Az5PHh@x1>
-Content-Language: en-GB
-From: Alan Maguire <alan.maguire@oracle.com>
-In-Reply-To: <ZjEEkDmfb9Az5PHh@x1>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: LO6P123CA0048.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:310::15) To BLAPR10MB5267.namprd10.prod.outlook.com
- (2603:10b6:208:30e::22)
+Cc: dwarves@vger.kernel.org,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	bpf@vger.kernel.org, Alan Maguire <alan.maguire@oracle.com>,
+	Andrii Nakryiko <andrii@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
+	Jan Engelhardt <jengelh@inai.de>,
+	Matthias Schwarzott <zzam@gentoo.org>,
+	Viktor Malik <vmalik@redhat.com>,
+	Eduard Zingerman <eddyz87@gmail.com>, J B <jb.1234abcd@gmail.com>
+Subject: Re: ANNOUNCE: pahole v1.26 (more holes, --bpf_features,
+ --contains_enum)
+Message-ID: <ZkXTmTvII2PDqVvx@localhost>
+References: <YbC5MC+h+PkDZten@kernel.org>
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BLAPR10MB5267:EE_|DM4PR10MB6720:EE_
-X-MS-Office365-Filtering-Correlation-Id: d416cd36-4795-47ea-0af8-08dc6a08e47f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230031|1800799015|376005|366007;
-X-Microsoft-Antispam-Message-Info: 
-	=?utf-8?B?Sml6MEIxbTdycllJT1FwVzBQWFRSeTg0Z1dUZ1BrMEdNbWlTb1EvQ3VYZldm?=
- =?utf-8?B?NG1KeVVJazJyTlFDUEs2enJmZG02NkZqQzV2cnZOVFh5TVlHdUo2SGhPT05u?=
- =?utf-8?B?djFwdk9DcVBFVXhDWXJqbGVPb1p5cThURkxRL1lrK2l3UlJ1bTl6SlI5OGRL?=
- =?utf-8?B?RzhidTFSeEFuWk9CY2NoY1M5dE1FQjIrL2t3aHRCWWhVdEduOGY0UVRLS1Mv?=
- =?utf-8?B?VXludDZRd3BvREppK1lKMnJ5cGd5RGNuQ1J2ZmNpNFp2WlJRTlQzSU5la0U5?=
- =?utf-8?B?VGZ4MGxNZlV5eENSeS9WZFhUQmpuanc4VmtUUHlBa0J4SjQ5R3FVTktMRHkx?=
- =?utf-8?B?cExIZzVRTElwZGl1WFJaOG9CMi9RTFhaVmNpdzFuN2MyWWZwaW1HM2lPdVhn?=
- =?utf-8?B?ZlhhN3QzTklrUUxnREpWMmQzQWpVMHZqZ05sTGdacllJZHROZnZ0MGVBRXlm?=
- =?utf-8?B?aWM1emVIZm8wMmFob3JMcFgvcWJ6REJJUXlTOEZUL0t1M0VzTythWkorRG9Z?=
- =?utf-8?B?cHBnMENLZUhLS0o1NTByc0NLMlgxeHo0M2c1Zm53MFNzSDY2VmhJcTlGcUxi?=
- =?utf-8?B?WEptajNWNSt5ODdId3RBNlVDdCtMUVlaSW1ucVhDQVRtVUdKdUxabE1Pem1T?=
- =?utf-8?B?V2dEeitSN28wNHkwYmdldUhWb0YzV05zTlEydXFlWDh2dzdzMGNCSnZ2dDJ0?=
- =?utf-8?B?b2Iwcm9veFJHN0d5Q2N5QUFEUjgvL0ZROENrS1MwVEhwTUdsQ3IxRTg2YnpW?=
- =?utf-8?B?bHByaTZ3MWh6S0ptZ3NjRVhZZWUrdHQ4ZmJaMnByMk1nNGpQWXJHSE5VcmtP?=
- =?utf-8?B?bVgyTVlxY1NwazlMMEFMNFRpcXZRS3RJRGhiWVJ2MWU3ejN0Y1hqNEpTYU44?=
- =?utf-8?B?NG9aYzBVdk1QZjVJRUlKb2VBcDllQk16dUVmZEN2M2FZMTRLZHdBRlNaa0Ry?=
- =?utf-8?B?bmxzd1kvV3YxcHlYLzNYTEtETExUTTl0M2V5UUtDbmxHOWczM05aWUxwTFhD?=
- =?utf-8?B?WkQyOWtCNHc3M25keU9qcVRtVUM5SDcyREpNVlJxK05qakYvc1hTL1dvcStn?=
- =?utf-8?B?cjFjRWZqemFqMzlERkpMVGxObGJTejFLZ1hSejBRUkxSYU4vKzE2T04xQVBu?=
- =?utf-8?B?UTdNbmVpMnZaNEZMYm02eVlrNURQTmRmeVVPaWM0TCsyNmpBUFBGeEFjRnh5?=
- =?utf-8?B?RE5jSDNQOVJXejk2dUJGczJ2ZW42RUdmaW1xcS9RUUNzZFllUDkxU0hPRTlM?=
- =?utf-8?B?UCswWXMzNkFNdDBCcnJqaFM5M0hKU3dGUWZhbjNjcHJnSVdkY0JqZVBRdVZk?=
- =?utf-8?B?cnJZM2FSUVlhcTlrMzhwVnU0TzhRZ1lMNVMvZloweEIyNDF4TmN2WFBidG91?=
- =?utf-8?B?RXc4SHZvbFRzOEtCQ20yZXFnb1M0NUcyN3VsZUxackdMaUlQcDEvajhWT1pI?=
- =?utf-8?B?NWVkQTJsNjBXRTdDU1JCSU5Ca1M0N2dCeExrS0V6N1JQK2NXdVhBWWluMDNI?=
- =?utf-8?B?VVNYUzA5a1lCUTJxL3Z2bnlRdFEwRnZQUkxvK2x3VGpQWEg2bW5zbkpzOGlF?=
- =?utf-8?B?cFNBamZ5djFkUWF2b1Q4bjY5TnE0U0FSUjNScDdRbjlPdE83Nk80ZC9yY1ly?=
- =?utf-8?Q?b/5/Cjqj1+UQhGwnpnA1Mb9jWkcjWLVNtbEi+2gOtjx0=3D?=
-X-Forefront-Antispam-Report: 
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BLAPR10MB5267.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(1800799015)(376005)(366007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: 
-	=?utf-8?B?ZEpyWEx2dzJtaVRMWlRtNVZ4M3VoTkhhMW11dHdudXJjak1ucHh1bmVnQW9X?=
- =?utf-8?B?QWVrRGExZ1FCUmpSV2RGUVBWdkpkdGxyZE9QVUtmN2dua0NVYTVsa1l0aXJG?=
- =?utf-8?B?NWhwS0hXZ3ZidWowaWlXZ0VNcmlCQUFpMW56S251eXgyL3cvNEhLNWlZdWQ5?=
- =?utf-8?B?N1FLSzUwQUNLS3MwLzZSU0FLZ3EwZzJRcHA5L0dib09BdTFhTVFRNjUveTdn?=
- =?utf-8?B?WjlVOWFxYkpsdFFTWmVzQjV1RXhKUDczUXA2Qm91eUtsMjdlUWc3aE42cmsr?=
- =?utf-8?B?U0FtNnNmR0JCYlBMVjZGMUF2QiszeWc3UnBsWVdaK3NUQytGZzRQZ1RaTGZ1?=
- =?utf-8?B?aWhxVnRpZGlYY1V2em5seHEzSm83Qmsra0pqSmVMU2h0UklQbXpIbmtCc291?=
- =?utf-8?B?UlRIZUx0dDF0OXBnMTJocHFHSWZUUTh3YVQ1Q2MxczJ1UlJCaDNlVmRydHRs?=
- =?utf-8?B?L2Q4RTNwN0ptdGRuRDZ2NGdtTEQ3d3k4UUlkVFpHNC84d0tMZWlOTDJqOW43?=
- =?utf-8?B?Z1dFT2k3U3NMU1FuV0VLZ3VhREpGUURmWGk5dmd6U1dWb0lZR25OSlNwT21K?=
- =?utf-8?B?dzIxemM3a2ZUaWlMa1J4NGNkRE8zOXkzM3J5RG1IS2dJcGVuSEw4enZPRE1N?=
- =?utf-8?B?U2V5Vi9GcUcwVW9jY0M3Z2pJYm00ckJYeVFmcW42Z3plbGR0bWVxZk9oQTV4?=
- =?utf-8?B?dWVoVUZvMVJLSzFPcWVYaHNHc0dJZFVteEFRT215Skw2MUE4akczenc5WDVL?=
- =?utf-8?B?NnUwMjZRU1VOZUp4S2h5UHJiVGVGYmo0ZkwreGxJRWZvMHlxR0hobDkwcDBy?=
- =?utf-8?B?NW85WEdyQVI1emxuNDZMN3JEVHl1bE14L2hLbURUMThrK1RYbGNLVDVteTdV?=
- =?utf-8?B?UjFPRCt2M1hPcHZhWXorMFBiRTZwYmFKMmxnUzVCQUhWTkZLalgyVG51SHZ2?=
- =?utf-8?B?Sk9ZSS9HZnFwVUNUb05mVVdsRVJ3SEpxZWlseGUxekRsVG13N2VXMU51QnhG?=
- =?utf-8?B?emthV0JCL2lEdlNybWMxVU5jWVBBUUJKTFp0SDBuaFpJeHdzeFR2b25uOEtJ?=
- =?utf-8?B?eTZDS3lwTkI0V1BlbXczdnhNV3BTaUp0Y2tBK3lWb2tVQ1lrcENnZlY5M2dR?=
- =?utf-8?B?RjNtRkpKdVR1cVhPMHllV29FU1dnT3g2b0pNc29wZXdoUE9HL05pSlhTYkx6?=
- =?utf-8?B?N3BqaTIvNzJtM1BCandVOFJmS3pNZzd0bnRRK2QwT0NlWE1PYm1kRXhuQ1lx?=
- =?utf-8?B?eC9lK0tQVkZiVTlTQlZEU3o5Nnp0TXV2cEdGR0pzekYxcnlheFZkc0V5WWxp?=
- =?utf-8?B?TVZGaWMrZksyZ0JzMFd0Y29wTkxqNkhaalFYVFkxMlkrcW1rZG00b1RKMWk4?=
- =?utf-8?B?MWFEL3BRV3lmS1gzZTVDb0ZibWlZRHlMS0FMd3cvSTBwZC9tR2QzVWltUktO?=
- =?utf-8?B?YjZPKzJDb3Y4aUlqdFVLUGZXNG42L2Ztb0k3Y3RNTGpMSEowTFVLanZNbndY?=
- =?utf-8?B?QUE4akJvRDdPeDlkZDNGNGhhVjh2anBRdDdsSjFNV1AyUnhUUWx1NTVQZ1Q0?=
- =?utf-8?B?Qjc1WmJSK3NybVVybk9iVnBTU3Z6SWxLNDc4RzB3ZWZ1dWxFZzBYUG96WTFj?=
- =?utf-8?B?Nko5czNqSEwvWEFBcW8yd1NobE9OaG1pUElCaDdzZUE0YllVandXcWNNczRK?=
- =?utf-8?B?ZmhLb0VFT2FiYTZWdU9JRmkzZlkrSmttdkFvc05FSnliTXJiMDRGa3pLdHBV?=
- =?utf-8?B?bVlJWkp6b20vZXZnWXhvcWE5V1UzdE5mNEhEaWM0VnBFcmJFeHNMbDJraGdp?=
- =?utf-8?B?di9HTi9VU3NuL0lPakM1L3AzVytLVEpMSUE0anArbytQU2Z4R2xqbHBwaG9J?=
- =?utf-8?B?ZDRya3htR1FWbTBvYldGYlBXWWtUM0dTb1JEQUFoQ3JhOVM4N2JqNlk4eVpv?=
- =?utf-8?B?Y0ZIVjFVYnFuUUFGVmhUd01UL2wvUW5UcmVaNVdza0tRZjBqZGpYelF0bTBP?=
- =?utf-8?B?NUVuV0FZdmE2RmJ6QmJBSjl6Yk5nMWlqeWtTWHZjS2tYMStVazlJenZLSlR1?=
- =?utf-8?B?UGZBOTVTQ2R6YytObGMxY1NMK1BkWDFFM3l5bnU5NjNHZjhMVWt1QXBEV3Jq?=
- =?utf-8?B?ZTBGS1g1MytlTlpYcUpHM2R2c3JxTnQ2NlhlSnA4eGg0YWl4MWk2NFBuYjVi?=
- =?utf-8?Q?cHCy1lIq+z98ivPu/uXEW/8=3D?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: 
-	TTKtVh6FLJCGvpe+nQRgtdQ0g30HAzn3NCLtsh0CFAH3UgudfLT09igsfeaVONswm1Vr9Y40Dceiwu7yZrPycy+umSjUUvYPwdC1Bv2xB2w4bldznekLRkNt687JfE0yMmHjuxcqyTkeFXbkq9/wu10of4qxLuOML4GqZdMw3d9C6i5q5D94K7v7YvSVnO/8xExjAJ0rCVdfAza+hGqYCsbd7zODIkh1NoUjwt8a/TaduO0yXwz/llqFtXDmNWn20Ls4RHKeN288LZRq35tiHNAApZSP8UDeTJ43WTT4WCe6+FT6+O3hfmClGwkx8thcVlXVI84+PnFv/H9Ia1bLb76a9RumACxbsGOn0tgFz/G3FKBWYbMZgY8IiP0bsjlXKEnQQ3OpjIxAYVjIq0Xt91mhCq4qyphyAnki06775tM4OZLbZ0kHXuDM7tB8zWHAq3v/eik89DZvYn+aZuRAT6TNhWv6lL+sPwG/httkkQ6COFm+43H4EiUROJyduUb0pkjUeE/A+SZZKOVr8c138lYy3kh/T5Wa86PQz/CjgkWN9oJI+Rmy4CiloDmVaeioT0QOl+ugecXe/wMMjj/tNtbwRa3of/xlUq4Z//LMzCI=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d416cd36-4795-47ea-0af8-08dc6a08e47f
-X-MS-Exchange-CrossTenant-AuthSource: BLAPR10MB5267.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 May 2024 18:02:40.9563
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: wSVvllRtmExscZWM22yQeHOrZjhlRkbfed/IjepKCrlS6QyhoIil0GxqbRseVMEN6BiVBlO0B+QQ3C7qhA1Zlw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR10MB6720
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1011,Hydra:6.0.650,FMLib:17.11.176.26
- definitions=2024-05-01_16,2024-04-30_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 malwarescore=0
- adultscore=0 mlxscore=0 suspectscore=0 phishscore=0 spamscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2404010000 definitions=main-2405010126
-X-Proofpoint-GUID: 71yqvGk-aa8hM9UcuBuSUhPOGQg84_t7
-X-Proofpoint-ORIG-GUID: 71yqvGk-aa8hM9UcuBuSUhPOGQg84_t7
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="sY/nlHJyYy4WYvdJ"
+Content-Disposition: inline
+In-Reply-To: <YbC5MC+h+PkDZten@kernel.org>
 
-On 30/04/2024 15:47, Arnaldo Carvalho de Melo wrote:
-> On Tue, Apr 30, 2024 at 10:55:01AM +0100, Alan Maguire wrote:
->> the 'default' --btf_features option is useful for testing the latest
->> set of standard features used for BTF encoding, but will not be used
->> in the kernel Makefile.btf.  It functions as a useful shortcut for
->> testing the latest set of standard features.  Describe this in the manual
->> page.
-> 
-> Thanks, applied!
-> 
-> FYI: all this is now on the master branch, it sat for a good time on the
-> 'next' branch, got tested by multiple people and by the libbpf CI at
-> github.
-> 
-> Plans now are to get the kfunc stuff as the last feature for 1.26.
->
 
-sounds good! I just sent the patch to bpf-next to move to using
---btf_features for pahole v1.26 and later [1]
+--sY/nlHJyYy4WYvdJ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Alan
+On Wed, Feb 28, 2024 at 04:39:21PM -0300, Arnaldo Carvalho de Melo wrote:
+> Hi,
+> =20
+> 	The v1.26 release of pahole and its friends is out, showing more
+> holes (the ones in contained types) the ability to express the BTF
+> features to encode, to simplify the addition of new BTF features in the
+> Linux kernel build infrastructure, a way to find the enumeration with
+> some enumerator and various fixes.
+>=20
+> Main git repo:
+>=20
+>    git://git.kernel.org/pub/scm/devel/pahole/pahole.git
+>=20
+> Mirror git repo:
+>=20
+>    https://github.com/acmel/dwarves.git
+>=20
+> tarball + gpg signature:
+>=20
+>    https://fedorapeople.org/~acme/dwarves/dwarves-1.26.tar.xz
+>    https://fedorapeople.org/~acme/dwarves/dwarves-1.26.tar.bz2
+>    https://fedorapeople.org/~acme/dwarves/dwarves-1.26.tar.sign
 
-[1]
-https://lore.kernel.org/bpf/20240501175035.2476830-1-alan.maguire@oracle.com/
+Which key do you use to sign this?          ^^^^^^^^^^^^^^^^^^^^^
 
-> - Arnaldo
->  
->> Suggested-by: Arnaldo Carvalho de Melo <acme@kernel.org>
->> Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
->> ---
->>  man-pages/pahole.1 | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/man-pages/pahole.1 b/man-pages/pahole.1
->> index e3c58e0..19bf197 100644
->> --- a/man-pages/pahole.1
->> +++ b/man-pages/pahole.1
->> @@ -290,7 +290,7 @@ Allow using all the BTF features supported by pahole.
->>  
->>  .TP
->>  .B \-\-btf_features=FEATURE_LIST
->> -Encode BTF using the specified feature list, or specify 'default' for all standard features supported.  This option can be used as an alternative to unsing multiple BTF-related options. Supported standard features are
->> +Encode BTF using the specified feature list, or specify 'default' for all standard features supported.  This option can be used as an alternative to using multiple BTF-related options, and 'default' represents the standard set of BTF features that are in use for kernel BTF generation, so is useful as a shortcut for testing the latest set of standard features.  However kernel builds will call out specific features rather than using 'default' to ensure that the desired features are enabled regardless of pahole version and associated 'default' set.  Supported standard features are
->>  
->>  .nf
->>  	encode_force       Ignore invalid symbols when encoding BTF; for example
->> -- 
->> 2.39.3
+>=20
+> 	Thanks a lot to all the contributors and distro packagers, you're on the
+> CC list, I appreciate a lot the work you put into these tools,
+>=20
+> Best Regards,
+
+--=20
+rsa4096: 3B10 0CA1 8674 ACBA B4FE  FCD2 CE5B CF17 9960 DE13
+ed25519: FFB4 0CC3 7F2E 091D F7DA  356E CC79 2832 ED38 CB05
+
+--sY/nlHJyYy4WYvdJ
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEIhioiE2Z74CX+BiELwJgSGECT1EFAmZF05UACgkQLwJgSGEC
+T1HmwBAAsxEaGM+xrNDoTEWojFRH8sL3fd/gaegb0oUzRl/+F+EoYjinB6N8UpZe
+3wrWYPJLAdb5jZDfhei8uJWS3hsKFd0nD6orh1enkTuTmLUYwD2BLzgfrDnK0A+R
+rPt4IUg1kqPPKrBsJaSQG0eDug8bbZjzyl0Qv4ae5aPzdcDQutQYxOHJNFPItZrx
+XS7tKd3IckX88ikebhd0lYSN9rTxPpLRFqNq1Ukp6BlsT+jDQ7G5kSHkRtJSaAfs
+dcwW4qDG736TBS9q7FqI2q/aPy/bGaXqFIjVhIdYGzYLMcc2A/73FmFHd+aGKHL/
+VkhH6x6txarHWjldeTmRx4Vcb5VJ9Nuq4xMW0MhJ4B6cfUtbsGxVbfMP/wUevm7y
+D3jszUDMcP5v84p4bQkNLExR+kfUB/ttx7LDS7Zy9VlmrgpdKfVyyTmp1EvlsAC8
+ArcgxIFD/v9tR4ReLMAmoBx0kDcvICW3uhoxjJ12+QJk+hYNR91pvVQFqOjyd8dJ
+cOSd2irL+yMUQkilcbWDHXyxAu3GfdBo36/eCWwJH1ap072HNAxUhoCKq3BU9zNB
+UHEP7qbfyEEWYKIrVrkTczZJ6KuorBui3OXiIyz1bM7uiPtTgbr3PE0kQj1KLa6j
+GwNnVIG16UWd6Rp/CmLxZeGewuWbLyb0Q0wmd4EqA5zerZLarwc=
+=z3uI
+-----END PGP SIGNATURE-----
+
+--sY/nlHJyYy4WYvdJ--
