@@ -1,143 +1,89 @@
-Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
+Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E259514374C;
-	Thu, 16 May 2024 09:36:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD5D0EC7
+	for <dwarves@vger.kernel.org>; Thu, 23 May 2024 19:25:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715852191; cv=none; b=hV7DTVR9LgWsh34aUBKfqHMGazqyTr1KoVQZVJvgPoHjA7v1mWeLORGIrmMoQfhaCnVHwO4Uz8Jhmg2rzb88VSzfAasiNiQyszOK3sWrdZoF4MLQMV5Ejkr0DBQ0NH95Ns1gQ/vX2nXMW0jydc5Lyig+o4/afALteDHrorpJ1Sc=
+	t=1716492357; cv=none; b=ajU45y9iXpLjJKIzApOwOaPSM5dPBdy9Lq8zQ2i87ocJPRLtzBqfUZsR6N2ccenUgOL2QUHnWEb4MNShxcuJlbT7eFSL5TNHTse8mdJO63nHWR6YVrEBKqylFrVQx/2xu9a2DPAaBYAN8jCEdO09n7BZ4JQ9h1ZDMFFztFhIixE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715852191; c=relaxed/simple;
-	bh=J6sD28lgfKh27e2j9CLxVNjQggPRio4KaVElzKmuzCw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TZJ5R5Qo6domSEGlBqlX9ea0jgjW11jwO1oh3V65PoB4doAq3si3Zl3HkmmPblgdKN+EAGtOwdXLrJANilmkcUjgNZC4nI1ff+HH2R9UuQfyvGs8aGPiCHLqKwWgRfsGrAdjpZS6ZXVDQ+H0cQIL4VX4spvxsX3oW/+GTRc9zho=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fMMZSXSN; arc=none smtp.client-ip=209.85.208.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1716492357; c=relaxed/simple;
+	bh=0eply8emQzw4j5xxI/w6puwPJ56OOd91d1sNaqAbV/o=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=NbEMhv6k3CoObbvbgztT3JPF74Nysl0J0yy9zb4kkoy4++lel6LMXmIyZqEdG4m6X69FBOiAIBlvIemo4GH8TBtcRO1KpWm+Se403Mmj19FoJz5YwBOQKoIws7DvzNEjLobuqAV7UtWwnWJJtuv6TAG8zmvoTDVlvi20zN+Qv4U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=2B3y3xxd; arc=none smtp.client-ip=209.85.167.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fMMZSXSN"
-Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-5723edf0ae5so2799256a12.0;
-        Thu, 16 May 2024 02:36:29 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="2B3y3xxd"
+Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-52388d9ca98so12235738e87.0
+        for <dwarves@vger.kernel.org>; Thu, 23 May 2024 12:25:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1715852188; x=1716456988; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=hvXv+pGqbfkwd6X1s9SxJ9Fq0l86c61XKwIlx/950E4=;
-        b=fMMZSXSNrkwdx6XFr8ci++sBH50hbGoOS8jiQgJ7WrpXjtKptvS6trjmK1rQ3HDtJD
-         tgXMTjXCr62om4vatG1He1vIW+QuyTB081IBJ5Ojk7o71TyvSMNGef0OAKZ61oWJz8Yy
-         bByrm68rhqkx+Tf3U3y6sEQs/UEIOMBAPDPPOd8nSWdTkMj2Ni/PCeV42LXIvpUOYeIt
-         sqxkQtFY7ekQb2imeUfHpakc9qUoK+aIiX/310M4U2fvYDR4uhWWV4rzqXlNDaj7qJMI
-         txJWwgzGMFUmXJVCgRjKPreuaeJEbCxfluVlRzgCARYZ56QkQ0OXTAhLI38DeRKq4vgl
-         poAw==
+        d=google.com; s=20230601; t=1716492354; x=1717097154; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=0eply8emQzw4j5xxI/w6puwPJ56OOd91d1sNaqAbV/o=;
+        b=2B3y3xxdy9LAyJepws3nbvPZbhBS9wVW8gAaA5Bo3RG0GpYu5BnmGqBve9Xxh+iRRv
+         rsXjh3dNr8vtbQOz0V9LCjq0Yo+s8tL24JBzDrjIdtP45sWva8/NoGBzurnUXlEGqNjI
+         O8cAzK3PHS2U8ko3frT3m3BY6V2/rawT995n8WW9tvUnVQF8Q4iYbCjljNjHizjRzi0U
+         BwMFYt8BOXJSH64idbRl/ZFCtUYz1QQCssj0WRHK1zKUF5iod1KgvrlJDuKYZA5egsdM
+         4nKdMYzXvqNtDQkP/AWSBvwvLKrAgnYZLy9XPVm8oyhEJA5Tw/cC/Ras0NHMRB3dHX9R
+         jOvA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715852188; x=1716456988;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=hvXv+pGqbfkwd6X1s9SxJ9Fq0l86c61XKwIlx/950E4=;
-        b=bWHrK3mHJpcfg2RTACaSyXondmjIXUIfn5ujgfoj5Q6wkzbCqyInBx54hyk8v5rwPV
-         lW4KZPCLYHfsKorQh+rlOnwrPzwVryGHHKbTw/8SwUy0VAMQ/Zk0pNsCDJWi0vI/1Jlr
-         4SOq0pimejG2bphx30hlYI/DB0TofQeAbv401PZbQjGxAQWiGKGAF8swl5pMdTqP1jo0
-         GxsyaBd6YLTkTrsOddHFWYxvtpTB0PE1y6oyAuiKzv5CtXHXfTuT25r1rXdbnVqGDH7Z
-         MzAIyu78waLKeT7Dc1LhM9AgPeyK9ktlW0yze88ZG2sON1+azGEM2mFyVGQ1eola1ECf
-         1VtA==
-X-Forwarded-Encrypted: i=1; AJvYcCV05EJHKB8KyubZWc5Cp77UQZ5HzIsdfT2QQwE5ma1Tn0kwT/pHfaAEozaHwqNvu4KJ7cizqupxmMmH7Wh8/TqDjPAsuvODQFJFg1NpkS1m8se2Qnp0mFUMj7pdC6MmtbZa
-X-Gm-Message-State: AOJu0YwfwHUxAR0Mw1iyxQrJuTIW+40PkDVmVz9OUI2ReOcS0HYlt7b8
-	yaEOSrzpanP+9nROC948EzsvtTP52QLVhlrgskXYmdjhKLxr/ygF
-X-Google-Smtp-Source: AGHT+IHHV69RLJNpaBjl5GbwCsRINJCGP6ZRDgLVz7LqC3L1sToOsa41I3DZilJuFLG+fWtHkZZEFA==
-X-Received: by 2002:a50:aada:0:b0:572:7b08:d497 with SMTP id 4fb4d7f45d1cf-5734d5c17acmr13034438a12.17.1715852187856;
-        Thu, 16 May 2024 02:36:27 -0700 (PDT)
-Received: from localhost (77-162-229-73.fixed.kpn.net. [77.162.229.73])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5733c2c7de4sm10127159a12.63.2024.05.16.02.36.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 May 2024 02:36:27 -0700 (PDT)
-Sender: Domenico Andreoli <domenico.andreoli.it@gmail.com>
-Date: Thu, 16 May 2024 11:36:25 +0200
-From: Domenico Andreoli <domenico.andreoli@linux.com>
-To: Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc: dwarves@vger.kernel.org,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	bpf@vger.kernel.org, Alan Maguire <alan.maguire@oracle.com>,
-	Andrii Nakryiko <andrii@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
-	Jan Engelhardt <jengelh@inai.de>,
-	Matthias Schwarzott <zzam@gentoo.org>,
-	Viktor Malik <vmalik@redhat.com>,
-	Eduard Zingerman <eddyz87@gmail.com>, J B <jb.1234abcd@gmail.com>
-Subject: Re: ANNOUNCE: pahole v1.26 (more holes, --bpf_features,
- --contains_enum)
-Message-ID: <ZkXTmTvII2PDqVvx@localhost>
-References: <YbC5MC+h+PkDZten@kernel.org>
+        d=1e100.net; s=20230601; t=1716492354; x=1717097154;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=0eply8emQzw4j5xxI/w6puwPJ56OOd91d1sNaqAbV/o=;
+        b=tbkMjFPo0lWBkIzhG/EcZZ3GEOV5nJSuflmUcGQ9fPG9krp4rv3Dw6Y6Adr/Qvdpir
+         +O3j8C0sJu9PZq3X0SKWqsSWKChVSRZm5W0MLQxomOs3vPlKHEntFGHpB87t3HTIy7nu
+         cRHCwIOiTMvnJzOIFm5IA5VCJCY3nwTGvkTRY5gcWyElAhc3hERJO6vE/5QftxOp4c3j
+         TCbR93qWQrehg3Cq0mjJxsa6GSPnFqTuPQijXu1jtx8zCZEVyJUljWoDLymX03xFGVL4
+         73QkDV5Sn7XStl7J6yk1giS/2l+SRycjHEHzX0Mi7kvJbuxQ70Aila5Ka2YrBBNPimP6
+         3bKA==
+X-Gm-Message-State: AOJu0YzyD9vGyfyDysGcvQIh1UgEmupsltlHMf/TAnbQl02P85ki3tEn
+	U4mkQpsrc4KFP9WSo90Rg7XyhDGdu5PORRUSnyWFpYAxCqSdkwMPafCGD8g9dUezEfMJG3XFLjX
+	wSuusXvX9tv3WLvpoxLwUrNbfIIR7DMhYOIxsKS6yxGzZSjPYU4QG
+X-Google-Smtp-Source: AGHT+IHGa26FY6pr/Jp2x26ChVt5ZIMJP0PkClQ1bGxF+yBkcM4MUxXNk6wttP+mRc8VKEolX32Ol/nQgXGjJSvv7NI=
+X-Received: by 2002:ac2:5dc1:0:b0:522:8352:ff29 with SMTP id
+ 2adb3069b0e04-5296736bb86mr35159e87.42.1716492353587; Thu, 23 May 2024
+ 12:25:53 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="sY/nlHJyYy4WYvdJ"
-Content-Disposition: inline
-In-Reply-To: <YbC5MC+h+PkDZten@kernel.org>
+From: Giuliano Procida <gprocida@google.com>
+Date: Thu, 23 May 2024 20:25:17 +0100
+Message-ID: <CAGvU0H=MvKi=fk6K1M7O+OoGdnNzweXE1m=18yv2DHoPbRVASg@mail.gmail.com>
+Subject: pahole -J non-determinism and reproducible builds
+To: Alan Maguire <alan.maguire@oracle.com>, Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc: dwarves@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
+Hi.
 
---sY/nlHJyYy4WYvdJ
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+(edited repost due to unfortunate HTML email).
 
-On Wed, Feb 28, 2024 at 04:39:21PM -0300, Arnaldo Carvalho de Melo wrote:
-> Hi,
-> =20
-> 	The v1.26 release of pahole and its friends is out, showing more
-> holes (the ones in contained types) the ability to express the BTF
-> features to encode, to simplify the addition of new BTF features in the
-> Linux kernel build infrastructure, a way to find the enumeration with
-> some enumerator and various fixes.
->=20
-> Main git repo:
->=20
->    git://git.kernel.org/pub/scm/devel/pahole/pahole.git
->=20
-> Mirror git repo:
->=20
->    https://github.com/acmel/dwarves.git
->=20
-> tarball + gpg signature:
->=20
->    https://fedorapeople.org/~acme/dwarves/dwarves-1.26.tar.xz
->    https://fedorapeople.org/~acme/dwarves/dwarves-1.26.tar.bz2
->    https://fedorapeople.org/~acme/dwarves/dwarves-1.26.tar.sign
+Until the reproducible BTF changes land in a new pahole version, and for
+anyone stuck on older versions, pahole -J -j typically produces
+non-deterministic BTF.
 
-Which key do you use to sign this?          ^^^^^^^^^^^^^^^^^^^^^
+For Android, we are converging to hermetic, reproducible builds. .BTF
+sections are a significant difference we see. I have trivial patches to
+pass -j1 instead of -j for the older versions we are using (1.23 and 1.25).
 
->=20
-> 	Thanks a lot to all the contributors and distro packagers, you're on the
-> CC list, I appreciate a lot the work you put into these tools,
->=20
-> Best Regards,
+Trivial patches:
+https://android-review.googlesource.com/q/Ibd72ac638faa1826f6655b336cc7001591ea70f1
 
---=20
-rsa4096: 3B10 0CA1 8674 ACBA B4FE  FCD2 CE5B CF17 9960 DE13
-ed25519: FFB4 0CC3 7F2E 091D F7DA  356E CC79 2832 ED38 CB05
+Gaining determinism for the older versions means giving up some performance.
+About a factor of 2.1 in our case (or an extra 10s on vmlinux).
 
---sY/nlHJyYy4WYvdJ
-Content-Type: application/pgp-signature; name="signature.asc"
+Do others want performance or determinism, should I send patches to LKML
+and the stable list?
 
------BEGIN PGP SIGNATURE-----
+Off-topic: pahole -J -j9 is faster than -j on my machine with 36
+cores, by another
+factor of 2. This is v1.25. -j1 18.7s, -j9 4.5s, -j 8.9s.
 
-iQIzBAABCgAdFiEEIhioiE2Z74CX+BiELwJgSGECT1EFAmZF05UACgkQLwJgSGEC
-T1HmwBAAsxEaGM+xrNDoTEWojFRH8sL3fd/gaegb0oUzRl/+F+EoYjinB6N8UpZe
-3wrWYPJLAdb5jZDfhei8uJWS3hsKFd0nD6orh1enkTuTmLUYwD2BLzgfrDnK0A+R
-rPt4IUg1kqPPKrBsJaSQG0eDug8bbZjzyl0Qv4ae5aPzdcDQutQYxOHJNFPItZrx
-XS7tKd3IckX88ikebhd0lYSN9rTxPpLRFqNq1Ukp6BlsT+jDQ7G5kSHkRtJSaAfs
-dcwW4qDG736TBS9q7FqI2q/aPy/bGaXqFIjVhIdYGzYLMcc2A/73FmFHd+aGKHL/
-VkhH6x6txarHWjldeTmRx4Vcb5VJ9Nuq4xMW0MhJ4B6cfUtbsGxVbfMP/wUevm7y
-D3jszUDMcP5v84p4bQkNLExR+kfUB/ttx7LDS7Zy9VlmrgpdKfVyyTmp1EvlsAC8
-ArcgxIFD/v9tR4ReLMAmoBx0kDcvICW3uhoxjJ12+QJk+hYNR91pvVQFqOjyd8dJ
-cOSd2irL+yMUQkilcbWDHXyxAu3GfdBo36/eCWwJH1ap072HNAxUhoCKq3BU9zNB
-UHEP7qbfyEEWYKIrVrkTczZJ6KuorBui3OXiIyz1bM7uiPtTgbr3PE0kQj1KLa6j
-GwNnVIG16UWd6Rp/CmLxZeGewuWbLyb0Q0wmd4EqA5zerZLarwc=
-=z3uI
------END PGP SIGNATURE-----
-
---sY/nlHJyYy4WYvdJ--
+Regards,
+Giuliano.
