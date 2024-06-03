@@ -1,71 +1,73 @@
-Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3CFFAD59;
-	Fri, 31 May 2024 21:46:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72B7F7E574;
+	Mon,  3 Jun 2024 09:02:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717191966; cv=none; b=XAob3Q3u22Zewn8BKEeWnqONDm+bijdNIKgAoQB1DcRQCfsGdXltodwCZtTJpEFMIaOW53ZHEJZqoODu0rAM4GsVq6dPT7vbYLEZXLuFycdGlsg/mPsq7M9vIe4Cp3SpV3TBTlBlY9w9SV8aPCgtPaOmllhFZ+xVV0WL0xZYKLg=
+	t=1717405371; cv=none; b=YsP47F/gNLEhGGxFGKBOzFSmH4I6XQyN+hl2pLqJLl1sqqV9GDlXaxANqOChA3dCej+R98M+AOaQfhz1e3+sZnjgBjH+lHu8DFFHhvvgPlFPastdFN0dlNkEO0u9Zd2VVEOBGrybdNAFT/b2vy+HLkyQkHBAsIaa38t+9bVymRQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717191966; c=relaxed/simple;
-	bh=ZjA8oPmZyDECwwKJFVv43qINjPxwNOSDwZJRySfeg2w=;
+	s=arc-20240116; t=1717405371; c=relaxed/simple;
+	bh=SPF5vYq2Bz+QLSYK2fjeqR2QfYX3fA8jp9temU6aHno=;
 	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=c8zrfYZmqj1Rj8LzIWzU9rCMGuVGUkjO7U/RYNmo2CeF6k+wN6LK8iKxGawUPry2dhnrpbULUDvU7GpAS6K0OUt3dqeXw7df8hYoFMmLA8jdp7Ftz9QWELXg9kBhU3wFzYtrPbH0ACXDqUUeKFkxH69T5A2GZ8u/+geEtDelekU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=i43m9lvD; arc=none smtp.client-ip=209.85.210.176
+	 Content-Type:Content-Disposition:In-Reply-To; b=fn1PiYTwZvXGBTNoA3P14p0wYLWxEexvUpbeMFg9DY0VT51DfACkrhZeZqwYoZ8hbv8cbux03ezX4NvphStuhZdSyEmDNZ2kl8a+oL3Y1/hjX2Wxx8aLUicESlykie4pQ3v87qXw1h7b58vMpkICsziYjMWz0TupUJMqo1M9FB8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cwrmYOFd; arc=none smtp.client-ip=209.85.214.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="i43m9lvD"
-Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-7022e0cd0aeso2364909b3a.0;
-        Fri, 31 May 2024 14:46:04 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cwrmYOFd"
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-1f63642ab8aso20946575ad.3;
+        Mon, 03 Jun 2024 02:02:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1717191964; x=1717796764; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1717405369; x=1718010169; darn=vger.kernel.org;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :mime-version:references:message-id:subject:cc:to:date:from:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=zcrBBXgHOmFVI6f9mb8pRs9nIzUb9Bryjka7xFk1bkA=;
-        b=i43m9lvDXTUztF6lsVQphjuDNTuFzUFxjyNoKBD3wvw2+PXP27ghsdYiGtwqzROhGY
-         EJbATfYI+LubvDqJ6ZJHeClJOC1Zv47DVR0lJfAqEX1q/a7gK457kJ+VK9AITuTNcFt9
-         ulXi4mC9sp81pbLMUKyai4SAT50VZBJimc+IRj2enIGM6S8FAqILQxRuKV9gLjWsTfE3
-         Uo/h2eGOR4Qtjc2P4JxSn+NCuG8MF08l0qrXi5tudrOSk5oF4vVw4oAD6NTEkasFTLye
-         G3Z9DrV6PaeZAMbRtoNwJ+KkIlgzHANtIOe6ToDxgLpXAUVr4fQl1IBz4aqkpOX80s1z
-         FqAg==
+        bh=ycgHEhOjcNcyqbebTXKq5zR8iqQL1GlvtGGEcGSK7PM=;
+        b=cwrmYOFdKo70At1YXDmhL4d6Z/Z71Op3/+3z5Mzj8nfpYqXfPXzHpXj+shnd4Xu+PV
+         0vmpi1ESfPHfCucEsHoDx+9JpGonpfPLW96G/4nMa8igCmyiOATgN8/9YNJWIREpcG0x
+         Q5VDVnQ440sqdSWPjRA3AJhd5RSUucnfCUdtHFRhmfj26uZD7l59w6WDXvmjsuIG5MWR
+         MK/T4WRB+cF+xGrtJDyM7ZdZDUtTY6i+SVtQv5fkPQHfdrkt0DZHXXWAFAslR/tHsbzz
+         Qta7pnj0W7jYuRQAPUsxfFie9NToBhTMwN3fyV/7zMsh0Xj393fWGbgT6BDT/jnKOD3F
+         rwVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717191964; x=1717796764;
+        d=1e100.net; s=20230601; t=1717405369; x=1718010169;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :mime-version:references:message-id:subject:cc:to:date:from
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zcrBBXgHOmFVI6f9mb8pRs9nIzUb9Bryjka7xFk1bkA=;
-        b=bZQIHhRMKqYFqVSKcSizGwXk+CdiF4ZR9Uxu7OM0nu2vL84PJwrYJtxqDKn3yOI374
-         hqd5y90keheh/+hiFfRdYtyD4hVdxl9P4HdpN2Y0Z/Z4dxPbPS2lXpdIIq6fkmRmgm3s
-         THGp3SWa25Mh6HgZrJ1CSw7qfputPGdBWU3NY/oMhVO/yU/CvxVEi4I1ljbhQtTZ75z4
-         fGLzIGubg8JwkYZ1m5QdBZsinku4VdNZ9Fcv0zy9HLtG5O4uSFN4griJbavgz4nmqlOl
-         KoM4p8qT/AcLhzMiLeqjTcOMYo57PVd7tSiYFvrCyeA/sPAF5TkLe+QGiyJu75AfIbE8
-         +Blg==
-X-Forwarded-Encrypted: i=1; AJvYcCX/F518OHimNXOGrsNmaPI2AnPcaTpf/SyA0ty86MMm1C014nKb2mp9eWbqaFU7LBi+D7kNBKJEi+EnsX3xGG7OeC919g0eAORShzMFR4GcO/Q+IVhF1R0MPPaeOg==
-X-Gm-Message-State: AOJu0Yw3wj9PhOKKQFUHSdSZyP6PM7Gttib6oMVm25Vhwtx7DB8MbEHT
-	H7PQgQPtzy3iJZ7p/W0m20ozEAy5vaSFnQv/UTO0TcjyRjqgrIg7
-X-Google-Smtp-Source: AGHT+IFVgVHFgqVrjkcdArPs3Bgi1rf/PkY2Ccv2YdMUO/aBIqd01H2OR+HA3J6NFUC+l9gBYGdSHw==
-X-Received: by 2002:a05:6a21:7888:b0:1af:a2fa:e666 with SMTP id adf61e73a8af0-1b26f17d61emr3424203637.10.1717191963914;
-        Fri, 31 May 2024 14:46:03 -0700 (PDT)
+        bh=ycgHEhOjcNcyqbebTXKq5zR8iqQL1GlvtGGEcGSK7PM=;
+        b=ucTugdNTGZhN5dHRhWJ6TeFssTvECX5kGCEX5jY+auNhsLEOYbAbitC0kmvUDOGscV
+         ah4TYgGvQOD5JGNXrN+E8pkhgqZJ8sZvdhva8T4uAFq0IgGEq2m42DHhhACdppdFRDmN
+         j51qV1LEK1GLJ6movdK1CpEpe3MYfjlbSVePjAnWOTQb5EQG0+ccBCLDCcwl2imDG4x9
+         q171P4WfxYDHacf+k7P0Kqw9cJA934oEndem9bPVPWmBi94jHMM3LN50cuw/O/1uk+cy
+         PzeBb7cJGcOg2nXH3ps/HtjJVxDkvC7l8h9OImDUZ++SQQBKXeWZsRUxxDJR2QlI9b5u
+         yM3w==
+X-Forwarded-Encrypted: i=1; AJvYcCUcHUp2XL3bQIEWN/0jiyShMe7J105Dae92PRQpqKDbJf+EnWvyxEOOLBqY9BXanZdFehxOQHLJUwqGyhuyJssK6F7hiN5S3vexU8Sk5YBsdI+JaoJ8l0jNLLx3+g==
+X-Gm-Message-State: AOJu0YypiQjrS9wQTdT6J58JuMT1ol+XD+uWGDkDGMojnlXjlNsFG9p6
+	N8QTKmNQUeriB17pwSP2TywUi5Of2PHgNFRU9HqRAFJnzh9of/AjLRsxYvXu
+X-Google-Smtp-Source: AGHT+IHzD5inovb4qNPKvPSlfnNlJbDGhW5W8hn/VnXRHFTT/jB7glR/nIXeXS7plt0oxorQ7MEFGw==
+X-Received: by 2002:a17:902:fcc8:b0:1f4:bcef:e970 with SMTP id d9443c01a7336-1f6370cda21mr66036885ad.55.1717405368412;
+        Mon, 03 Jun 2024 02:02:48 -0700 (PDT)
 Received: from kodidev-ubuntu (69-172-146-21.cable.teksavvy.com. [69.172.146.21])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7024f5ad7f7sm917906b3a.52.2024.05.31.14.46.03
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1f6358079bdsm58163865ad.263.2024.06.03.02.02.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 31 May 2024 14:46:03 -0700 (PDT)
+        Mon, 03 Jun 2024 02:02:47 -0700 (PDT)
 From: Tony Ambardar <tony.ambardar@gmail.com>
 X-Google-Original-From: Tony Ambardar <Tony.Ambardar@gmail.com>
-Date: Fri, 31 May 2024 14:46:01 -0700
-To: Arnaldo Carvalho de Melo <acme@kernel.org>
+Date: Mon, 3 Jun 2024 02:02:45 -0700
+To: Jiri Olsa <olsajiri@gmail.com>
 Cc: Hengqi Chen <hengqi.chen@gmail.com>, bpf@vger.kernel.org,
 	dwarves@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>
+	Andrii Nakryiko <andrii@kernel.org>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>
 Subject: Re: Problem with BTF generation on mips64el
-Message-ID: <ZlpFGShLFgj4IngZ@kodidev-ubuntu>
+Message-ID: <Zl2GtXy7+Xfr66lX@kodidev-ubuntu>
 References: <ZlkoM6/PSxVcGM6X@kodidev-ubuntu>
  <CAEyhmHT_1N3xwLO2BwVK97ebrABJv52d5dWxzvuNNcF-OF5gKw@mail.gmail.com>
- <ZlmrQqQSJyNH7fVF@kodidev-ubuntu>
- <Zln1kZnu2Xxeyngj@x1>
+ <ZlmGoT9KiYLZd91S@krava>
+ <Zlm2UNWHrGtRROGS@kodidev-ubuntu>
+ <Zlnc_Kkd2o6ADgkO@krava>
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
@@ -75,108 +77,181 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <Zln1kZnu2Xxeyngj@x1>
+In-Reply-To: <Zlnc_Kkd2o6ADgkO@krava>
 
-On Fri, May 31, 2024 at 01:06:41PM -0300, Arnaldo Carvalho de Melo wrote:
-> On Fri, May 31, 2024 at 03:49:38AM -0700, Tony Ambardar wrote:
-> > Hello Hengqi,
+On Fri, May 31, 2024 at 04:21:48PM +0200, Jiri Olsa wrote:
+> On Fri, May 31, 2024 at 04:36:48AM -0700, Tony Ambardar wrote:
+> > Hi Jiri,
 > > 
-> > On Fri, May 31, 2024 at 10:17:53AM +0800, Hengqi Chen wrote:
-> > > Hi Tony,
+> > On Fri, May 31, 2024 at 10:13:21AM +0200, Jiri Olsa wrote:
+> > > On Fri, May 31, 2024 at 10:17:53AM +0800, Hengqi Chen wrote:
+> > > > Hi Tony,
+> > > > 
+> > > > On Fri, May 31, 2024 at 9:30 AM Tony Ambardar <tony.ambardar@gmail.com> wrote:
+> > > > >
+> > > > > Hello,
+> > > > >
+> > > > > For some time now I'm seeing multiple issues during BTF generation while
+> > > > > building recent kernels targeting mips64el, and would appreciate some help
+> > > > > to understand and fix the problems.
+> > > > >
+> > > > > Some relate to resolve_btfids:
+> > > > >
+> > > > > >   LD      vmlinux
+> > > > > >   BTFIDS  vmlinux
+> > > > > > WARN: resolve_btfids: unresolved symbol bpf_verify_pkcs7_signature
+> > > > > > WARN: resolve_btfids: unresolved symbol bpf_session_cookie
+> > > > > > WARN: resolve_btfids: unresolved symbol bpf_lookup_user_key
+> > > > > > WARN: resolve_btfids: unresolved symbol bpf_lookup_system_key
+> > > > > > WARN: resolve_btfids: unresolved symbol bpf_key_put
+> > > > > > WARN: resolve_btfids: unresolved symbol bpf_iter_task_next
+> > > > > > WARN: resolve_btfids: unresolved symbol bpf_iter_css_task_new
+> > > > > > WARN: resolve_btfids: unresolved symbol bpf_get_file_xattr
+> > > > > > WARN: resolve_btfids: unresolved symbol bpf_ct_insert_entry
+> > > > > > WARN: resolve_btfids: unresolved symbol bpf_cgroup_release
+> > > > > > WARN: resolve_btfids: unresolved symbol bpf_cgroup_from_id
+> > > > > > WARN: resolve_btfids: unresolved symbol bpf_cgroup_acquire
+> > > > > > WARN: resolve_btfids: unresolved symbol bpf_arena_free_pages
+> > > > > >   NM      System.map
+> > > > > >   SORTTAB vmlinux
+> > > > > >   OBJCOPY vmlinux.32
+> > > > >
+> > > > > These do not appear to be #ifdef-related and have similar past reports [1].
 > > > 
-> > > On Fri, May 31, 2024 at 9:30 AM Tony Ambardar <tony.ambardar@gmail.com> wrote:
-> > > >
-> > > > Hello,
-> > > >
-> > > > For some time now I'm seeing multiple issues during BTF generation while
-> > > > building recent kernels targeting mips64el, and would appreciate some help
-> > > > to understand and fix the problems.
-> > > >
-> > > SNIP
-> > > >
-> > > > >   CC [M]  net/ipv6/netfilter/nft_fib_ipv6.mod.o
-> > > > >   CC [M]  net/ipv6/netfilter/ip6t_REJECT.mod.o
-> > > > >   CC [M]  net/psample/psample.mod.o
-> > > > >   LD [M]  crypto/cmac.ko
-> > > > >   BTF [M] crypto/cmac.ko
-> > > > > die__process: DW_TAG_compile_unit, DW_TAG_type_unit, DW_TAG_partial_unit
-> > > > > or DW_TAG_skeleton_unit expected got member (0xd)!
+> > > I can reproduce the warning just for bpf_session_cookie,
+> > > which has fix in progress:
+> > >   https://lore.kernel.org/bpf/20240531071557.MvfIqkn7@linutronix.de/T/#t
+> > 
+> > I gather there are different root causes for these warnings. From the link,
+> > the issue with bpf_session_cookie seems related to conditional compilation,
+> > which have come up before on the mailing list IIRC.
+> > 
+> > In comparison, consider my above warning for bpf_key_put, which is defined
+> > in kernel/trace/bpf_trace.c. This kfunc is guarded by CONFIG_KEY, which is
+> > enabled in my config and so not the issue. I can in fact see the global
+> > text symbol for bpf_key_put in bpf_trace.o, but not in vmlinux.
 > 
-> Can you check the kernel CONFIG_ variables related to DEBUG information
-> and post them here? I have this on fedora:
+> yes, that would be a problem, the resolve_btfids goes through the BTF
+> lists and needs to resolve the function in vmlinux, when it's not there,
+> it will output the warning above
 > 
-> [acme@nine linux]$ grep CONFIG_DEBUG_INFO /boot/config-5.14.0-362.18.1.el9_3.x86_64 
-> CONFIG_DEBUG_INFO=y
-> # CONFIG_DEBUG_INFO_REDUCED is not set
-> # CONFIG_DEBUG_INFO_COMPRESSED is not set
-> # CONFIG_DEBUG_INFO_SPLIT is not set
-> CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
-> # CONFIG_DEBUG_INFO_DWARF4 is not set
-> # CONFIG_DEBUG_INFO_DWARF5 is not set
-> CONFIG_DEBUG_INFO_BTF=y
-> CONFIG_DEBUG_INFO_BTF_MODULES=y
-> [acme@nine linux]$
+> > 
+> > So I suspect the warnings might come from linker or optimization problems,
+> > or perhaps even an issue related to the __bpf_kfunc annotation. WDYT?
 > 
-> If you have CONFIG_DEBUG_INFO_SPLIT, CONFIG_DEBUG_INFO_COMPRESSED or
-> CONFIG_DEBUG_INFO_REDUCED set to 'y', please try with the values in the
-> fedora config.
-> 
-> - Arnaldo
+> I can reproduce now resolve_btfids warnings:
 > 
 
-OK, I have those 3 settings as expected on bpf/master branch:
+That's great to hear! Did you also use mips64el? And were you able to see
+the various "die__proc:" errors from pahole during BTF generation?
 
-kodidev:~/linux$ grep CONFIG_DEBUG_INFO .config
-CONFIG_DEBUG_INFO=y
-# CONFIG_DEBUG_INFO_NONE is not set
-# CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT is not set
-CONFIG_DEBUG_INFO_DWARF4=y
-# CONFIG_DEBUG_INFO_DWARF5 is not set
-# CONFIG_DEBUG_INFO_REDUCED is not set
-CONFIG_DEBUG_INFO_COMPRESSED_NONE=y
-# CONFIG_DEBUG_INFO_COMPRESSED_ZLIB is not set
-# CONFIG_DEBUG_INFO_SPLIT is not set
-CONFIG_DEBUG_INFO_BTF=y
-CONFIG_DEBUG_INFO_BTF_MODULES=y
+>   LD      vmlinux
+>   BTFIDS  vmlinux
+> WARN: resolve_btfids: unresolved symbol bpf_verify_pkcs7_signature
+> WARN: resolve_btfids: unresolved symbol bpf_session_is_return
+> WARN: resolve_btfids: unresolved symbol bpf_session_cookie
+> WARN: resolve_btfids: unresolved symbol bpf_lookup_user_key
+> WARN: resolve_btfids: unresolved symbol bpf_lookup_system_key
+> WARN: resolve_btfids: unresolved symbol bpf_key_put
+> WARN: resolve_btfids: unresolved symbol bpf_iter_task_next
+> WARN: resolve_btfids: unresolved symbol bpf_iter_css_task_new
+> WARN: resolve_btfids: unresolved symbol bpf_get_file_xattr
+> WARN: resolve_btfids: unresolved symbol bpf_ct_insert_entry
+> WARN: resolve_btfids: unresolved symbol bpf_cgroup_release
+> WARN: resolve_btfids: unresolved symbol bpf_cgroup_from_id
+> WARN: resolve_btfids: unresolved symbol bpf_cgroup_acquire
+> WARN: resolve_btfids: unresolved symbol bpf_arena_free_pages
+> 
+> when I call bpf_key_put to make it 'used' it stays in vmlinux, so I wonder
+> the __bpf_kfunc flags do not work properly on this cross compile chain..
+> and linker just optimize it away?
 
-I also attached the full .config in my original mail if you think other
-config options might be suspect.
+Yes, I verified the problem occurs during link-time garbage cleaning, when
+LTO is enabled through e.g. LD_DEAD_CODE_DATA_ELIMINATION=y.
 
-Is there anything else I can check? What do you make of the many pahole
-"die__process:" warnings? Could it be related to your comment here:
-https://github.com/acmel/dwarves/issues/45#issuecomment-1974004606
+> 
+> #define __bpf_kfunc __used noinline
+> 
 
-Thanks,
+After researching, I believe this isn't a mips problem specifically, rather
+the __bpf_kfunc tag only partly works. It appears the __used macro works at
+the compiler and IR-level but is ignored by the linker. I have a working
+fix that also handles the linker level, so I'll post the patches shortly.
+
+Unfortunately, that still leaves the pahole errors generating BTF, which
+are serious as they seem to break module loading.
+
+> thanks,
+> jirka
+
+Cheers,
 Tony
-
-> > > The issue seems to be related to elfutils. Have you tried build from
-> > > the latest elfutils source ?
-> > > I saw the latest MIPS backend in elfutils already implemented the
-> > > reloc_simple_type hook.
+> 
 > > 
-> > Good idea. I tried rebuilding elfutils from the latest upstream commit:
-> > https://sourceware.org/git/?p=elfutils.git;a=commit;h=935ee131cf7c87296df9412b7e3370085e7c7508
-> > 
-> > I then linked this elfutils with pahole built from the latest pahole/next:
-> > https://git.kernel.org/pub/scm/devel/pahole/pahole.git/commit/?h=next&id=a9ae414fef421bdeb13ff7ffe13271e1e4f58993
-> > 
-> > I also confirmed resolve_btfids links to the new elfutils, and then rebuilt
-> > the kernel with the same config. Unfortunately, the warnings/errors from
-> > resolve_btfids and pahole still occur.
-> > 
-> > > SNIP
-> > > >
-> > > > I'd be grateful if some of the BTF/pahole experts could please review this
-> > > > issue and share next steps or other details I might provide.
-> > > >
-> > > > Thanks,
-> > > > Tony Ambardar
-> > > >
-> > > > Link: https://lore.kernel.org/all/202401211357.OCX9yllM-lkp@intel.com/ [1]
-> > > > Link: https://github.com/acmel/dwarves/issues/45 [2]
 > > > 
-> > > Cheers,
-> > > Hengqi
+> > > > >
+> > > > > I also see many pahole failures during BTF encoding of modules, such as:
+> > > > >
+> > > > > >   CC [M]  net/ipv6/netfilter/nft_fib_ipv6.mod.o
+> > > > > >   CC [M]  net/ipv6/netfilter/ip6t_REJECT.mod.o
+> > > > > >   CC [M]  net/psample/psample.mod.o
+> > > > > >   LD [M]  crypto/cmac.ko
+> > > > > >   BTF [M] crypto/cmac.ko
+> > > > > > die__process: DW_TAG_compile_unit, DW_TAG_type_unit, DW_TAG_partial_unit
+> > > > > > or DW_TAG_skeleton_unit expected got member (0xd)!
+> > > > 
+> > > > The issue seems to be related to elfutils. Have you tried build from
+> > > > the latest elfutils source ?
+> > > > I saw the latest MIPS backend in elfutils already implemented the
+> > > > reloc_simple_type hook.
+> > > 
+> > > hi,
+> > > +1, could you also check the pahole version you used?
 > > 
-> > Thanks for the suggestion,
+> > No luck I'm afraid with using the latest elfutils as suggested.
+> > 
+> > I used pahole v1.26 in my original testing for this bug report, as noted
+> > below (might have been buried a bit).
+> > 
+> > > 
+> > > jirka
+> > > 
+> > > SNIP
+> > >
+> > > > > Details of the git commit and build environment are as follows:
+> > > > >
+> > > > > > $ git log -1 --oneline  bpf/master
+> > > > > > 9dfdb706e164 (bpf/master) selftests/bpf: fix inet_csk_accept prototype in
+> > > > > > test_sk_storage_tracing.c
+> > > > > >
+> > > > > > $ lsb_release -a
+> > > > > > Description:    Ubuntu 22.04.4 LTS
+> > > > > >
+> > > > > > $ cat gcc-compile.txt
+> > > > > > ARCH=mips CROSS_COMPILE=mips64el-linux-gnuabi64- CC="ccache ${CROSS_COMPILE}gcc" make -j6
+> > > > > >
+> > > > > > $ mips64el-linux-gnuabi64-gcc --version
+> > > > > > mips64el-linux-gnuabi64-gcc (Ubuntu 10.3.0-1ubuntu1) 10.3.0
+> > > > > >
+> > > > > > $ mips64el-linux-gnuabi64-ld --version
+> > > > > > GNU ld (GNU Binutils for Ubuntu) 2.38
+> > > > > >
+> > > > > > $ pahole --version
+> > > > > > v1.26
+> > > 
+> > > SNIP
+> > >
+> > > > > I'd be grateful if some of the BTF/pahole experts could please review this
+> > > > > issue and share next steps or other details I might provide.
+> > > > >
+> > > > > Thanks,
+> > > > > Tony Ambardar
+> > > > >
+> > > > > Link: https://lore.kernel.org/all/202401211357.OCX9yllM-lkp@intel.com/ [1]
+> > > > > Link: https://github.com/acmel/dwarves/issues/45 [2]
+> > > > 
+> > > > Cheers,
+> > > > Hengqi
+> > 
+> > Thanks,
 > > Tony
