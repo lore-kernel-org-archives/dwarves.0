@@ -1,45 +1,48 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C14B12F5A1;
-	Mon,  3 Jun 2024 14:56:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3911128382;
+	Mon,  3 Jun 2024 17:40:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717426603; cv=none; b=sdn/eQRP5mDzLxIZ4PmlJvkwHV1ctr9/6UIKiQ1DeVbkya/gElKbO6CRhUoOK2gzCKauU6OxWLKupNVr/TZDua4aXwOVELnxIXdIKBhklOsrPnJ96uWB5qEVH2yqeRni1r3JP5tG97LnvAqVCWXqCcfb4k1L6QGt3VrQGP995MQ=
+	t=1717436451; cv=none; b=BRAkxfIDWvZKj8Xsz15yHPYzGBfp9OSKIHEf2HxrqsDgbGv5URRDy3xngAlkINMN9tu1tHGn76RPvA7H50BBaZ0FrCgCN8HcUt/fE9fk7Fs4m0B0YIoB2YF30hWLzWphF1ngEejkDRq+vbCE6J4rq3wyTTYNlccThxR82pRLrZE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717426603; c=relaxed/simple;
-	bh=fPLUJUlGwF38wCqoBnKBmPkiZFf5zPi1v8G/WIUkZjE=;
+	s=arc-20240116; t=1717436451; c=relaxed/simple;
+	bh=7Jt6JTJ5Fqe/ytKcty54fXO/iBTOFNE3jTW5wrQPTQA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BPi19WkvvmtSJUFj0i1ozyoQzOE8A+R/haNO8SSmNkf0GQP4PaJm+t2i14EKzdHGD4Ss5BlWOFzDES/9Am41tOsaU0YqYfDRluwKkTJg2LL1iYNOM9DeoyTQrarIW/9v5ZB554gzNucx7rDXATgwcGRUaMlkmAknjy/3DyhjRFU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WPFxzNCV; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=hP78ngCHgbtjxSwVmlSp99qfQG7OaU2GGMCLdP15AX4V6lRqyKc2bEC96K8SeuYSZs4iFu3dgYjSMh4sEbn+YpfzDQZ1WLBd4yOV+FhVv/vLaROb07nA6UKNWmSnXsNX0od2kV4SPOayWboc9foXRomXUXrKbwJSiSKJ+uaFf+8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=t99PUu0x; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WPFxzNCV"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE9EAC2BD10;
-	Mon,  3 Jun 2024 14:56:42 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="t99PUu0x"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0D14C2BD10;
+	Mon,  3 Jun 2024 17:40:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1717426603;
-	bh=fPLUJUlGwF38wCqoBnKBmPkiZFf5zPi1v8G/WIUkZjE=;
+	s=k20201202; t=1717436450;
+	bh=7Jt6JTJ5Fqe/ytKcty54fXO/iBTOFNE3jTW5wrQPTQA=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=WPFxzNCV1N+28ga9JSAVcTTOcBQh1AHn0lDQ4efk1QRW1bRJ4tO1xr/jnfLTfa16E
-	 UL3ZcxDWtwMYEIy1KgmIDfsEE+NE/spDGSejYlk4Ot9eiKtULym8CZvjMbA1uYAFja
-	 fDgk0mq9jBpuryk1Pmwb5/XyLSgXlxXKkMC+PS5YwFPuFBpKUMLy4sQJEViWqzVjJW
-	 tMoYDzFEaafPiVWprT0rc3KQhGm7MRvdOjqBQYpvjB5SuZtw2uVk5BeN2cLkH9Su4i
-	 PXNW15Z+Il8BSv5SBdZFI0ETwM6Uz/0ftzwvfZqA2s3Dr/M8W5fTQbls7mXKtCwT6i
-	 KKqsZWwLkpC5g==
-Date: Mon, 3 Jun 2024 11:56:39 -0300
+	b=t99PUu0xlGEHtX88oAXT01QIJuw+f1ykbAUSojgd6lCcR4Ns/E8xRS4D/OoE9MTfP
+	 KfaYsZVnkyjkDAcidufDOGGwAjOPxAD/lg2Tn0cW4cmIl5k8gPZuzzioERVQr3gCZp
+	 bOj4Y7goHi61AfspEVit7FYdpRUShK900uIjRcZrC4zzJ2eOBbZ7rBZNyRdN/yS1VS
+	 jPgsjKlW1Xr4ybONpq3VTOUue4AYndoDxmFyA+ERynYMDE6RWpBiNMKrlyOhgIYGxX
+	 cdIvd7yXBRvdYkrwdNaeJDwEeCI14KE9deNzKMIDKRiqo6bPfPOH4tv25QHfY0u/4A
+	 dGAAe4SGRrjYg==
+Date: Mon, 3 Jun 2024 14:40:45 -0300
 From: Arnaldo Carvalho de Melo <acme@kernel.org>
 To: Tony Ambardar <tony.ambardar@gmail.com>
-Cc: Hengqi Chen <hengqi.chen@gmail.com>, bpf@vger.kernel.org,
-	dwarves@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+Cc: Mark Wielaard <mjw@redhat.com>, Hengqi Chen <hengqi.chen@gmail.com>,
+	bpf@vger.kernel.org, dwarves@vger.kernel.org,
+	Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	Andrii Nakryiko <andrii@kernel.org>
-Subject: Re: Problem with BTF generation on mips64el
-Message-ID: <Zl3Zp5r9m6X_i_J4@x1>
+Subject: elfutils DWARF problem was: Re: Problem with BTF generation on
+ mips64el
+Message-ID: <Zl4AHfG6Gg5Htdgc@x1>
 References: <ZlkoM6/PSxVcGM6X@kodidev-ubuntu>
  <CAEyhmHT_1N3xwLO2BwVK97ebrABJv52d5dWxzvuNNcF-OF5gKw@mail.gmail.com>
  <ZlmrQqQSJyNH7fVF@kodidev-ubuntu>
  <Zln1kZnu2Xxeyngj@x1>
  <Zl2m4RP7BwhZ0J6l@kodidev-ubuntu>
+ <Zl3Zp5r9m6X_i_J4@x1>
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
@@ -49,63 +52,104 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <Zl2m4RP7BwhZ0J6l@kodidev-ubuntu>
+In-Reply-To: <Zl3Zp5r9m6X_i_J4@x1>
 
-On Mon, Jun 03, 2024 at 04:20:01AM -0700, Tony Ambardar wrote:
-> On Fri, May 31, 2024 at 01:06:41PM -0300, Arnaldo Carvalho de Melo wrote:
-> > On Fri, May 31, 2024 at 03:49:38AM -0700, Tony Ambardar wrote:
-> > > On Fri, May 31, 2024 at 10:17:53AM +0800, Hengqi Chen wrote:
-> > > > On Fri, May 31, 2024 at 9:30 AM Tony Ambardar <tony.ambardar@gmail.com> wrote:
-> > > > > For some time now I'm seeing multiple issues during BTF generation while
-> > > > > building recent kernels targeting mips64el, and would appreciate some help
-> > > > > to understand and fix the problems.
+On Mon, Jun 03, 2024 at 11:56:43AM -0300, Arnaldo Carvalho de Melo wrote:
+> So the vmlinux seems to have its BTF section successfully generated,
+> lemme check the .ko files.
 
-> > > > SNIP
+⬢[acme@toolbox repro_die__process]$ pahole -F dwarf netdevsim.ko  | wc -l
+die__process: DW_TAG_compile_unit, DW_TAG_type_unit, DW_TAG_partial_unit or DW_TAG_skeleton_unit expected got member (0xd)!
+11448
+⬢[acme@toolbox repro_die__process]$ pahole -F btf netdevsim.ko  | wc -l
+libbpf: Invalid BTF string section
+pahole: file 'netdevsim.ko' has no btf type information.
+0
+⬢[acme@toolbox repro_die__process]$
 
-> > > > > >   CC [M]  net/ipv6/netfilter/nft_fib_ipv6.mod.o
-> > > > > >   CC [M]  net/ipv6/netfilter/ip6t_REJECT.mod.o
-> > > > > >   CC [M]  net/psample/psample.mod.o
-> > > > > >   LD [M]  crypto/cmac.ko
-> > > > > >   BTF [M] crypto/cmac.ko
-> > > > > > die__process: DW_TAG_compile_unit, DW_TAG_type_unit, DW_TAG_partial_unit
-> > > > > > or DW_TAG_skeleton_unit expected got member (0xd)!
+We manage to load a lot of DWARF types but then we hit that warning, no
+BTF encoded.
 
-> > Can you check the kernel CONFIG_ variables related to DEBUG information
-> > and post them here? I have this on fedora:
+Humm,
 
-> > [acme@nine linux]$ grep CONFIG_DEBUG_INFO /boot/config-5.14.0-362.18.1.el9_3.x86_64 
-> > CONFIG_DEBUG_INFO=y
-> > # CONFIG_DEBUG_INFO_REDUCED is not set
-> > # CONFIG_DEBUG_INFO_COMPRESSED is not set
-> > # CONFIG_DEBUG_INFO_SPLIT is not set
-> > CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
-> > # CONFIG_DEBUG_INFO_DWARF4 is not set
-> > # CONFIG_DEBUG_INFO_DWARF5 is not set
-> > CONFIG_DEBUG_INFO_BTF=y
-> > CONFIG_DEBUG_INFO_BTF_MODULES=y
-> > [acme@nine linux]$
+⬢[acme@toolbox repro_die__process]$ eu-readelf -winfo netdevsim.ko | wc -l
+0
+⬢[acme@toolbox repro_die__process]$ readelf -wi netdevsim.ko | wc -l
+779837
+⬢[acme@toolbox repro_die__process]$
 
-> > If you have CONFIG_DEBUG_INFO_SPLIT, CONFIG_DEBUG_INFO_COMPRESSED or
-> > CONFIG_DEBUG_INFO_REDUCED set to 'y', please try with the values in the
-> > fedora config.
+It seems this is some problem with elfutils...
 
-> One more useful observation: the pahole BTF generation problems appear only
-> for mips64. If I build the same config for mips32be I see none of those
-> "die__process: errors" from pahole and the processed modules load properly.
+After I added:
 
-> I also tried running pahole under gdb to look further, but lack knowledge
-> of pahole and libdw internals, so couldn't narrow things down to a pahole,
-> elfutils or compiler-output problem.
-> 
-> To help troubleshoot further, I packaged my base vmlinux, some module .ko
-> files showing problems, and a reproducer script. I've uploaded the tarball
-> here:
-> 
-> https://www.dropbox.com/scl/fi/3ce22fi2q861wqvbq9mwy/repro_die__process.tar.xz?rlkey=ev494phabmfl5qe55xrn1jh3t&st=vrp5mxhh&dl=0
+⬢[acme@toolbox pahole]$ git diff
+diff --git a/dwarf_loader.c b/dwarf_loader.c
+index f59477b44dfea026..b832c93cc2194eaf 100644
+--- a/dwarf_loader.c
++++ b/dwarf_loader.c
+@@ -2847,8 +2847,8 @@ static int die__process(Dwarf_Die *die, struct cu *cu, struct conf_load *conf)
+        }
+ 
+        if (tag != DW_TAG_compile_unit && tag != DW_TAG_type_unit) {
+-               fprintf(stderr, "%s: DW_TAG_compile_unit, DW_TAG_type_unit, DW_TAG_partial_unit or DW_TAG_skeleton_unit expected got %s (0x%x)!\n",
+-                       __FUNCTION__, dwarf_tag_name(tag), tag);
++               fprintf(stderr, "%s: DW_TAG_compile_unit, DW_TAG_type_unit, DW_TAG_partial_unit or DW_TAG_skeleton_unit expected got %s (0x%x) @ %llx!\n",
++                       __FUNCTION__, dwarf_tag_name(tag), tag, (unsigned long long)dwarf_dieoffset(die));
+                return -EINVAL;
+        }
+ 
+⬢[acme@toolbox pahole]$
 
-So, with that vmlinux, on a Fedora 39 x86_64 notebook:
+We get:
 
-⬢[acme@toolbox repro_die__process]$ readelf -wi vmlinux | head -45
+⬢[acme@toolbox repro_die__process]$ pahole -F dwarf netdevsim.ko > /dev/null
+die__process: DW_TAG_compile_unit, DW_TAG_type_unit, DW_TAG_partial_unit or DW_TAG_skeleton_unit expected got member (0xd) @ 529de!
+⬢[acme@toolbox repro_die__process]$
+
+And if we look at binutils' readeld DWARF dump we get:
+
+⬢[acme@toolbox repro_die__process]$ readelf -wi netdevsim.ko | grep '<529de>' -B5 -A8
+  Compilation Unit @ offset 0x529d3:
+   Length:        0x2132e (32-bit)
+   Version:       4
+   Abbrev Offset: 0x1d0e
+   Pointer Size:  8
+ <0><529de>: Abbrev Number: 108 (DW_TAG_compile_unit)
+    <529df>   DW_AT_producer    : (indirect string, offset: 0x41389): GNU C11 13.3.0 -G 0 -mel -mno-check-zero-division -mabi=64 -mno-abicalls -msoft-float -march=mips64r2 -msym32 -mlong-calls -mllsc -mips64r2 -mno-shared -g -gdwarf-4 -O2 -std=gnu11 -p -fshort-wchar -funsigned-char -fno-common -fno-strict-aliasing -fno-pic -ffreestanding -fstack-check=no -fno-asynchronous-unwind-tables -fno-delete-null-pointer-checks -fno-allow-store-data-races -fstack-protector -fno-stack-clash-protection -fstrict-flex-arrays=3 -fno-strict-overflow -fstack-check=no -fconserve-stack
+    <529e3>   DW_AT_language    : 12	(ANSI C99)
+    <529e4>   DW_AT_name        : (indirect string, offset: 0x44ce0): drivers/net/netdevsim/ethtool.c
+    <529e8>   DW_AT_comp_dir    : (indirect string, offset: 0x3f407): /home/kodidev/linux
+    <529ec>   DW_AT_low_pc      : 0x5270
+    <529f4>   DW_AT_high_pc     : 0x65c
+    <529fc>   DW_AT_stmt_list   : 0x709d
+ <1><52a00>: Abbrev Number: 57 (DW_TAG_base_type)
+⬢[acme@toolbox repro_die__process]$ readelf -wi netdevsim.ko | grep '<529de>' -B5 -A8
+
+And at that <529de> die it _is_ a DW_TAG_compile_unit, and we managed to
+process two other DW_TAG_compile_units up to that point:
+
+⬢[acme@toolbox repro_die__process]$ readelf -wi netdevsim.ko | grep -w DW_TAG_compile_unit
+ <0><b>: Abbrev Number: 188 (DW_TAG_compile_unit)
+ <0><26c16>: Abbrev Number: 188 (DW_TAG_compile_unit)
+ <0><529de>: Abbrev Number: 108 (DW_TAG_compile_unit)
+ <0><73d10>: Abbrev Number: 204 (DW_TAG_compile_unit)
+ <0><a43a8>: Abbrev Number: 160 (DW_TAG_compile_unit)
+ <0><c7e66>: Abbrev Number: 110 (DW_TAG_compile_unit)
+ <0><e8f21>: Abbrev Number: 158 (DW_TAG_compile_unit)
+ <0><10c525>: Abbrev Number: 115 (DW_TAG_compile_unit)
+ <0><12da49>: Abbrev Number: 167 (DW_TAG_compile_unit)
+ <0><1546b9>: Abbrev Number: 140 (DW_TAG_compile_unit)
+ <0><17656a>: Abbrev Number: 1 (DW_TAG_compile_unit)
+⬢[acme@toolbox repro_die__process]$
+
+
+And eu-readelf also doesn't work for that mips vmlinux:
+
+⬢[acme@toolbox repro_die__process]$ file vmlinux 
+vmlinux: ELF 64-bit LSB executable, MIPS, MIPS64 rel2 version 1 (SYSV), statically linked, BuildID[sha1]=19c8dafc6aa33a2e63b87487dfb10bf215bdf3a3, with debug_info, not stripped
+⬢[acme@toolbox repro_die__process]$ eu-readelf -winfo vmlinux 
+⬢[acme@toolbox repro_die__process]$ eu-readelf -winfo+ vmlinux 
+⬢[acme@toolbox repro_die__process]$ readelf -wi vmlinux | head -30
 Contents of the .debug_info section:
 
   Compilation Unit @ offset 0:
@@ -136,321 +180,191 @@ Contents of the .debug_info section:
  <1><42>: Abbrev Number: 0
   Compilation Unit @ offset 0x43:
    Length:        0x22ed9 (32-bit)
-   Version:       4
-   Abbrev Offset: 0x26
-   Pointer Size:  8
- <0><4e>: Abbrev Number: 192 (DW_TAG_compile_unit)
-    <50>   DW_AT_producer    : (indirect string, offset: 0x8147): GNU C11 13.3.0 -G 0 -mel -mno-check-zero-division -mabi=64 -mno-abicalls -msoft-float -march=mips64r2 -msym32 -mllsc -mips64r2 -mno-shared -g -gdwarf-4 -O2 -std=gnu11 -p -fshort-wchar -funsigned-char -fno-common -fno-strict-aliasing -fno-pic -ffreestanding -fstack-check=no -fno-asynchronous-unwind-tables -fno-delete-null-pointer-checks -fno-allow-store-data-races -fstack-protector -fno-stack-clash-protection -fstrict-flex-arrays=3 -fno-strict-overflow -fstack-check=no -fconserve-stack -ffunction-sections -fdata-sections
-    <54>   DW_AT_language    : 12	(ANSI C99)
-    <55>   DW_AT_name        : (indirect string, offset: 0xce66): init/main.c
-    <59>   DW_AT_comp_dir    : (indirect string, offset: 0x18): /home/kodidev/linux
-    <5d>   DW_AT_ranges      : 0x1350
-    <61>   DW_AT_low_pc      : 0
-    <69>   DW_AT_stmt_list   : 0x80
- <1><6d>: Abbrev Number: 91 (DW_TAG_base_type)
-    <6e>   DW_AT_byte_size   : 8
-    <6f>   DW_AT_encoding    : 7	(unsigned)
-    <70>   DW_AT_name        : (indirect string, offset: 0xb1c7): long unsigned int
 ⬢[acme@toolbox repro_die__process]$
 
-⬢[acme@toolbox repro_die__process]$ time pahole -F dwarf vmlinux | wc -l
-84377
+Couldn't find a way to ask eu-readelf for more verbose output, where we
+could perhaps get some clue as to why it produces nothing while binutils
+readelf manages to grok it, Mark, do you know some other way to ask
+eu-readelf to produce more debug output?
 
-real	0m10.992s
-user	0m9.526s
-sys	0m1.445s
-⬢[acme@toolbox repro_die__process]$
+I'm unsure if the netdevsim.ko file was left in a semi encoded BTF state
+that then made eu-readelf to not be able to process it while pahole,
+that uses eltuils' libraries, was able to process the first two CUs for
+a kernel module and all the CUs for the vmlinux file :-\
 
-No warnings, 84377 lines of types printed from DWARF that file, which is
-comparable to the BTF in it:
+Mark, the whole thread is available at:
 
-⬢[acme@toolbox repro_die__process]$ time pahole -F btf vmlinux | wc -l
-83994
+https://lore.kernel.org/all/Zl3Zp5r9m6X_i_J4@x1/T/#u
 
-real	0m0.121s
-user	0m0.095s
-sys	0m0.031s
-⬢[acme@toolbox repro_die__process]$
-
-There are a few diffs from types generated from DWARF to those generated
-from BTF (unexpected ones, that is) as noticed by btfdiff (found in the
-pahole git repo), that its just some print ordering issue:
-
-⬢[acme@toolbox repro_die__process]$ btfdiff vmlinux 
---- /tmp/btfdiff.dwarf.oX71hp	2024-06-03 11:42:32.228618100 -0300
-+++ /tmp/btfdiff.btf.u762WM	2024-06-03 11:42:18.042748246 -0300
-@@ -10027,6 +10027,24 @@ struct bio_map_data {
- };
- struct bio_post_read_ctx {
- 	struct bio *               bio;                                                  /*     0     8 */
-+	struct work_struct {
-+		/* typedef atomic_long_t -> atomic64_t */ struct {
-+			/* typedef s64 -> __s64 */ long long int counter;                /*     8     8 */
-+		} data; /*     8     8 */
-+		struct list_head {
-+			struct list_head * next;                                         /*    16     8 */
-+			struct list_head * prev;                                         /*    24     8 */
-+		} entry; /*    16    16 */
-+		/* typedef work_func_t */ void               (*func)(struct work_struct *); /*    32     8 */
-+	} work; /*     8    32 */
-+	unsigned int               cur_step;                                             /*    40     4 */
-+	unsigned int               enabled_steps;                                        /*    44     4 */
-+
-+	/* size: 48, cachelines: 1, members: 4 */
-+	/* last cacheline: 48 bytes */
-+};
-+struct bio_post_read_ctx {
-+	struct bio *               bio;                                                  /*     0     8 */
- 	struct f2fs_sb_info *      sbi;                                                  /*     8     8 */
- 	struct work_struct {
- 		/* typedef atomic_long_t -> atomic64_t */ struct {
-@@ -10049,24 +10067,6 @@ struct bio_post_read_ctx {
- 	/* sum members: 57, holes: 1, sum holes: 3 */
- 	/* padding: 4 */
- };
--struct bio_post_read_ctx {
--	struct bio *               bio;                                                  /*     0     8 */
--	struct work_struct {
--		/* typedef atomic_long_t -> atomic64_t */ struct {
--			/* typedef s64 -> __s64 */ long long int counter;                /*     8     8 */
--		} data; /*     8     8 */
--		struct list_head {
--			struct list_head * next;                                         /*    16     8 */
--			struct list_head * prev;                                         /*    24     8 */
--		} entry; /*    16    16 */
--		/* typedef work_func_t */ void               (*func)(struct work_struct *); /*    32     8 */
--	} work; /*     8    32 */
--	unsigned int               cur_step;                                             /*    40     4 */
--	unsigned int               enabled_steps;                                        /*    44     4 */
--
--	/* size: 48, cachelines: 1, members: 4 */
--	/* last cacheline: 48 bytes */
--};
- struct bio_set {
- 	struct kmem_cache *        bio_slab;                                             /*     0     8 */
- 	unsigned int               front_pad;                                            /*     8     4 */
-@@ -43044,6 +43044,17 @@ struct dma_block {
- 	/* last cacheline: 16 bytes */
- };
- struct dma_chan {
-+	int                        lock;                                                 /*     0     4 */
-+
-+	/* XXX 4 bytes hole, try to pack */
-+
-+	const char  *              device_id;                                            /*     8     8 */
-+
-+	/* size: 16, cachelines: 1, members: 2 */
-+	/* sum members: 12, holes: 1, sum holes: 4 */
-+	/* last cacheline: 16 bytes */
-+};
-+struct dma_chan {
- 	struct dma_device *        device;                                               /*     0     8 */
- 	struct device *            slave;                                                /*     8     8 */
- 	/* typedef dma_cookie_t -> s32 -> __s32 */ int                        cookie;    /*    16     4 */
-@@ -43071,17 +43082,6 @@ struct dma_chan {
- 	/* sum members: 108, holes: 1, sum holes: 4 */
- 	/* last cacheline: 48 bytes */
- };
--struct dma_chan {
--	int                        lock;                                                 /*     0     4 */
--
--	/* XXX 4 bytes hole, try to pack */
--
--	const char  *              device_id;                                            /*     8     8 */
--
--	/* size: 16, cachelines: 1, members: 2 */
--	/* sum members: 12, holes: 1, sum holes: 4 */
--	/* last cacheline: 16 bytes */
--};
- struct dma_chan_dev {
- 	struct dma_chan *          chan;                                                 /*     0     8 */
- 	struct device {
-@@ -125786,12 +125786,11 @@ struct perf_aux_event {
- 		/* typedef __u16 */ short unsigned int misc;                             /*     4     2 */
- 		/* typedef __u16 */ short unsigned int size;                             /*     6     2 */
- 	} header; /*     0     8 */
--	/* typedef u64 -> __u64 */ long long unsigned int     offset;                    /*     8     8 */
--	/* typedef u64 -> __u64 */ long long unsigned int     size;                      /*    16     8 */
--	/* typedef u64 -> __u64 */ long long unsigned int     flags;                     /*    24     8 */
-+	/* typedef u32 -> __u32 */ unsigned int               pid;                       /*     8     4 */
-+	/* typedef u32 -> __u32 */ unsigned int               tid;                       /*    12     4 */
- 
--	/* size: 32, cachelines: 1, members: 4 */
--	/* last cacheline: 32 bytes */
-+	/* size: 16, cachelines: 1, members: 3 */
-+	/* last cacheline: 16 bytes */
- };
- struct perf_aux_event {
- 	struct perf_event_header {
-@@ -125799,11 +125798,12 @@ struct perf_aux_event {
- 		/* typedef __u16 */ short unsigned int misc;                             /*     4     2 */
- 		/* typedef __u16 */ short unsigned int size;                             /*     6     2 */
- 	} header; /*     0     8 */
--	/* typedef u32 -> __u32 */ unsigned int               pid;                       /*     8     4 */
--	/* typedef u32 -> __u32 */ unsigned int               tid;                       /*    12     4 */
-+	/* typedef u64 -> __u64 */ long long unsigned int     offset;                    /*     8     8 */
-+	/* typedef u64 -> __u64 */ long long unsigned int     size;                      /*    16     8 */
-+	/* typedef u64 -> __u64 */ long long unsigned int     flags;                     /*    24     8 */
- 
--	/* size: 16, cachelines: 1, members: 3 */
--	/* last cacheline: 16 bytes */
-+	/* size: 32, cachelines: 1, members: 4 */
-+	/* last cacheline: 32 bytes */
- };
- struct perf_bpf_event {
- 	struct bpf_prog *          prog;                                                 /*     0     8 */
-@@ -163037,10 +163037,11 @@ struct syscall_tp_t {
- 
- 	/* XXX 4 bytes hole, try to pack */
- 
--	long unsigned int          args[6];                                              /*    16    48 */
-+	long unsigned int          ret;                                                  /*    16     8 */
- 
--	/* size: 64, cachelines: 1, members: 3 */
--	/* sum members: 60, holes: 1, sum holes: 4 */
-+	/* size: 24, cachelines: 1, members: 3 */
-+	/* sum members: 20, holes: 1, sum holes: 4 */
-+	/* last cacheline: 24 bytes */
- };
- struct syscall_tp_t {
- 	struct trace_entry {
-@@ -163053,11 +163054,10 @@ struct syscall_tp_t {
- 
- 	/* XXX 4 bytes hole, try to pack */
- 
--	long unsigned int          ret;                                                  /*    16     8 */
-+	long unsigned int          args[6];                                              /*    16    48 */
- 
--	/* size: 24, cachelines: 1, members: 3 */
--	/* sum members: 20, holes: 1, sum holes: 4 */
--	/* last cacheline: 24 bytes */
-+	/* size: 64, cachelines: 1, members: 3 */
-+	/* sum members: 60, holes: 1, sum holes: 4 */
- };
- struct syscall_trace_enter {
- 	struct trace_entry {
-⬢[acme@toolbox repro_die__process]$ 
-
-But if we do it manually and without expanding types as btfdiff does:
-
-⬢[acme@toolbox repro_die__process]$ pahole -F btf -C dma_chan vmlinux 
-struct dma_chan {
-	struct dma_device *        device;               /*     0     8 */
-	struct device *            slave;                /*     8     8 */
-	dma_cookie_t               cookie;               /*    16     4 */
-	dma_cookie_t               completed_cookie;     /*    20     4 */
-	int                        chan_id;              /*    24     4 */
-
-	/* XXX 4 bytes hole, try to pack */
-
-	struct dma_chan_dev *      dev;                  /*    32     8 */
-	const char  *              name;                 /*    40     8 */
-	char *                     dbg_client_name;      /*    48     8 */
-	struct list_head           device_node;          /*    56    16 */
-	/* --- cacheline 1 boundary (64 bytes) was 8 bytes ago --- */
-	struct dma_chan_percpu *   local;                /*    72     8 */
-	int                        client_count;         /*    80     4 */
-	int                        table_count;          /*    84     4 */
-	struct dma_router *        router;               /*    88     8 */
-	void *                     route_data;           /*    96     8 */
-	void *                     private;              /*   104     8 */
-
-	/* size: 112, cachelines: 2, members: 15 */
-	/* sum members: 108, holes: 1, sum holes: 4 */
-	/* last cacheline: 48 bytes */
-};
-
-⬢[acme@toolbox repro_die__process]$ pahole -F dwarf -C dma_chan vmlinux 
-struct dma_chan {
-	int                        lock;                 /*     0     4 */
-
-	/* XXX 4 bytes hole, try to pack */
-
-	const char  *              device_id;            /*     8     8 */
-
-	/* size: 16, cachelines: 1, members: 2 */
-	/* sum members: 12, holes: 1, sum holes: 4 */
-	/* last cacheline: 16 bytes */
-};
-
-⬢[acme@toolbox repro_die__process]$
-
-⬢[acme@toolbox perf-tools]$ git grep 'struct dma_chan {'
-arch/mips/include/asm/mach-au1x00/au1000_dma.h:struct dma_chan {
-include/linux/dmaengine.h:struct dma_chan {
-kernel/dma.c:struct dma_chan {
-⬢[acme@toolbox perf-tools]$
-
-So we have this 'struct dma_chan' in the common kernel in include/linux/dmaengine.h
-
-struct dma_chan {
-        struct dma_device *device;
-        struct device *slave;
-        dma_cookie_t cookie;
-        dma_cookie_t completed_cookie;
-
-        /* sysfs */
-        int chan_id;
-        struct dma_chan_dev *dev;
-        const char *name;       
-#ifdef CONFIG_DEBUG_FS
-        char *dbg_client_name;
-#endif
-
-        struct list_head device_node;
-        struct dma_chan_percpu __percpu *local;
-        int client_count;       
-        int table_count;
-
-        /* DMA router */
-        struct dma_router *router;
-        void *route_data;
-
-        void *private;
-};
-
-
-And also this one in kernel/dma.c
-
-struct dma_chan {
-        int  lock;
-        const char *device_id;
-};
-
-If we don't specify the name but grep for it:
-
-⬢[acme@toolbox repro_die__process]$ pahole -F btf vmlinux | grep 'struct dma_chan {' -A5
-struct dma_chan {
-	struct dma_device *        device;               /*     0     8 */
-	struct device *            slave;                /*     8     8 */
-	dma_cookie_t               cookie;               /*    16     4 */
-	dma_cookie_t               completed_cookie;     /*    20     4 */
-	int                        chan_id;              /*    24     4 */
---
-struct dma_chan {
-	int                        lock;                 /*     0     4 */
-
-	/* XXX 4 bytes hole, try to pack */
-
-	const char  *              device_id;            /*     8     8 */
-⬢[acme@toolbox repro_die__process]$ pahole -F dwarf vmlinux | grep 'struct dma_chan {' -A5
-struct dma_chan {
-	int                        lock;                 /*     0     4 */
-
-	/* XXX 4 bytes hole, try to pack */
-
-	const char  *              device_id;            /*     8     8 */
-
---
-struct dma_chan {
-	struct dma_device *        device;               /*     0     8 */
-	struct device *            slave;                /*     8     8 */
-	dma_cookie_t               cookie;               /*    16     4 */
-	dma_cookie_t               completed_cookie;     /*    20     4 */
-	int                        chan_id;              /*    24     4 */
-⬢[acme@toolbox repro_die__process]$
-
-So the vmlinux seems to have its BTF section successfully generated,
-lemme check the .ko files.
+Now tryint to look at elfutils source to see if I can figure out
+something there..
 
 - Arnaldo
+
+⬢[acme@toolbox repro_die__process]$ ltrace eu-readelf -winfo netdevsim.ko
+<SNIP>
+strlen(".gdb_index")                                                                 = 10
+strncmp(".mdebug.abi64", ".gdb_index", 10)                                           = 6
+elf_nextscn(0x55fddd480470, 0x55fddd4820e8, 10, 103)                                 = 0x55fddd4821b8
+gelf_getshdr(0x55fddd4821b8, 0x7fff00974910, 0x55fddd480538, 0x55fddd4831f8)         = 0x7fff00974910
+elf_strptr(0x55fddd480470, 54, 349, 0x55fddd4831f8)                                  = 0x7f0970925879
+strlen(".note.GNU-stack")                                                            = 15
+strncmp(".note.GNU-stack", ".debug_abbrev", 13)                                      = 10
+strncmp(".note.GNU-stack", ".gnu.debuglto_", 14)                                     = 7
+strlen(".debug_addr")                                                                = 11
+strncmp(".note.GNU-stack", ".debug_addr", 11)                                        = 10
+strncmp(".note.GNU-stack", ".gnu.debuglto_", 14)                                     = 7
+strlen(".debug_aranges")                                                             = 14
+strncmp(".note.GNU-stack", ".debug_aranges", 14)                                     = 10
+strncmp(".note.GNU-stack", ".gnu.debuglto_", 14)                                     = 7
+strlen(".debug_frame")                                                               = 12
+strncmp(".note.GNU-stack", ".debug_frame", 12)                                       = 10
+strncmp(".note.GNU-stack", ".gnu.debuglto_", 14)                                     = 7
+strlen(".debug_info")                                                                = 11
+strncmp(".note.GNU-stack", ".debug_info", 11)                                        = 10
+strncmp(".note.GNU-stack", ".gnu.debuglto_", 14)                                     = 7
+strlen(".debug_types")                                                               = 12
+strncmp(".note.GNU-stack", ".debug_types", 12)                                       = 10
+strncmp(".note.GNU-stack", ".gnu.debuglto_", 14)                                     = 7
+strlen(".debug_line")                                                                = 11
+strncmp(".note.GNU-stack", ".debug_line", 11)                                        = 10
+strncmp(".note.GNU-stack", ".gnu.debuglto_", 14)                                     = 7
+strlen(".debug_loc")                                                                 = 10
+strncmp(".note.GNU-stack", ".debug_loc", 10)                                         = 10
+strncmp(".note.GNU-stack", ".gnu.debuglto_", 14)                                     = 7
+strlen(".debug_loclists")                                                            = 15
+strncmp(".note.GNU-stack", ".debug_loclists", 15)                                    = 10
+strncmp(".note.GNU-stack", ".gnu.debuglto_", 14)                                     = 7
+strlen(".debug_pubnames")                                                            = 15
+strncmp(".note.GNU-stack", ".debug_pubnames", 15)                                    = 10
+strncmp(".note.GNU-stack", ".gnu.debuglto_", 14)                                     = 7
+strlen(".debug_str")                                                                 = 10
+strncmp(".note.GNU-stack", ".debug_str", 10)                                         = 10
+strncmp(".note.GNU-stack", ".gnu.debuglto_", 14)                                     = 7
+strlen(".debug_line_str")                                                            = 15
+strncmp(".note.GNU-stack", ".debug_line_str", 15)                                    = 10
+strncmp(".note.GNU-stack", ".gnu.debuglto_", 14)                                     = 7
+strlen(".debug_str_offsets")                                                         = 18
+strncmp(".note.GNU-stack", ".debug_str_offsets", 18)                                 = 10
+strncmp(".note.GNU-stack", ".gnu.debuglto_", 14)                                     = 7
+strlen(".debug_macinfo")                                                             = 14
+strncmp(".note.GNU-stack", ".debug_macinfo", 14)                                     = 10
+strncmp(".note.GNU-stack", ".gnu.debuglto_", 14)                                     = 7
+strlen(".debug_macro")                                                               = 12
+strncmp(".note.GNU-stack", ".debug_macro", 12)                                       = 10
+strncmp(".note.GNU-stack", ".gnu.debuglto_", 14)                                     = 7
+strlen(".debug_ranges")                                                              = 13
+strncmp(".note.GNU-stack", ".debug_ranges", 13)                                      = 10
+strncmp(".note.GNU-stack", ".gnu.debuglto_", 14)                                     = 7
+strlen(".debug_rnglists")                                                            = 15
+strncmp(".note.GNU-stack", ".debug_rnglists", 15)                                    = 10
+strncmp(".note.GNU-stack", ".gnu.debuglto_", 14)                                     = 7
+strlen(".eh_frame")                                                                  = 9
+strncmp(".note.GNU-stack", ".eh_frame", 9)                                           = 9
+strncmp(".note.GNU-stack", ".gnu.debuglto_", 14)                                     = 7
+strlen(".eh_frame_hdr")                                                              = 13
+strncmp(".note.GNU-stack", ".eh_frame_hdr", 13)                                      = 9
+strncmp(".note.GNU-stack", ".gnu.debuglto_", 14)                                     = 7
+strlen(".gcc_except_table")                                                          = 17
+strncmp(".note.GNU-stack", ".gcc_except_table", 17)                                  = 7
+strncmp(".note.GNU-stack", ".gnu.debuglto_", 14)                                     = 7
+strlen(".gdb_index")                                                                 = 10
+strncmp(".note.GNU-stack", ".gdb_index", 10)                                         = 7
+strncmp(".note.GNU-stack", ".gnu.debuglto_", 14)                                     = 7
+elf_nextscn(0x55fddd480470, 0x55fddd4821b8, 14, 103)                                 = 0x55fddd482288
+gelf_getshdr(0x55fddd482288, 0x7fff00974910, 0x55fddd480538, 0x55fddd4831f8)         = 0x7fff00974910
+elf_nextscn(0x55fddd480470, 0x55fddd482288, 0x55fddd480470, 0x55fddd4831f8)          = 0x55fddd482358
+gelf_getshdr(0x55fddd482358, 0x7fff00974910, 0x55fddd480538, 0x55fddd4831f8)         = 0x7fff00974910
+elf_nextscn(0x55fddd480470, 0x55fddd482358, 0x55fddd480470, 0x55fddd4831f8)          = 0x55fddd482428
+gelf_getshdr(0x55fddd482428, 0x7fff00974910, 0x55fddd480538, 0x55fddd4831f8)         = 0x7fff00974910
+elf_nextscn(0x55fddd480470, 0x55fddd482428, 0x55fddd480470, 0x55fddd4831f8)          = 0x55fddd4824f8
+gelf_getshdr(0x55fddd4824f8, 0x7fff00974910, 0x55fddd480538, 0x55fddd4831f8)         = 0x7fff00974910
+elf_nextscn(0x55fddd480470, 0x55fddd4824f8, 0x55fddd480470, 0x55fddd4831f8)          = 0x55fddd4825c8
+gelf_getshdr(0x55fddd4825c8, 0x7fff00974910, 0x55fddd480538, 0x55fddd4831f8)         = 0x7fff00974910
+elf_nextscn(0x55fddd480470, 0x55fddd4825c8, 0x55fddd480470, 0x55fddd4831f8)          = 0x55fddd482698
+gelf_getshdr(0x55fddd482698, 0x7fff00974910, 0x55fddd480538, 0x55fddd4831f8)         = 0x7fff00974910
+elf_nextscn(0x55fddd480470, 0x55fddd482698, 0x55fddd480470, 0x55fddd4831f8)          = 0x55fddd482768
+gelf_getshdr(0x55fddd482768, 0x7fff00974910, 0x55fddd480538, 0x55fddd4831f8)         = 0x7fff00974910
+elf_nextscn(0x55fddd480470, 0x55fddd482768, 0x55fddd480470, 0x55fddd4831f8)          = 0x55fddd482838
+gelf_getshdr(0x55fddd482838, 0x7fff00974910, 0x55fddd480538, 0x55fddd4831f8)         = 0x7fff00974910
+elf_nextscn(0x55fddd480470, 0x55fddd482838, 0x55fddd480470, 0x55fddd4831f8)          = 0x55fddd482908
+gelf_getshdr(0x55fddd482908, 0x7fff00974910, 0x55fddd480538, 0x55fddd4831f8)         = 0x7fff00974910
+elf_nextscn(0x55fddd480470, 0x55fddd482908, 0x55fddd480470, 0x55fddd4831f8)          = 0x55fddd4829d8
+gelf_getshdr(0x55fddd4829d8, 0x7fff00974910, 0x55fddd480538, 0x55fddd4831f8)         = 0x7fff00974910
+elf_nextscn(0x55fddd480470, 0x55fddd4829d8, 0x55fddd480470, 0x55fddd4831f8)          = 0x55fddd482aa8
+gelf_getshdr(0x55fddd482aa8, 0x7fff00974910, 0x55fddd480538, 0x55fddd4831f8)         = 0x7fff00974910
+elf_nextscn(0x55fddd480470, 0x55fddd482aa8, 0x55fddd480470, 0x55fddd4831f8)          = 0x55fddd482b78
+gelf_getshdr(0x55fddd482b78, 0x7fff00974910, 0x55fddd480538, 0x55fddd4831f8)         = 0x7fff00974910
+elf_nextscn(0x55fddd480470, 0x55fddd482b78, 0x55fddd480470, 0x55fddd4831f8)          = 0x55fddd482c48
+gelf_getshdr(0x55fddd482c48, 0x7fff00974910, 0x55fddd480538, 0x55fddd4831f8)         = 0x7fff00974910
+elf_nextscn(0x55fddd480470, 0x55fddd482c48, 0x55fddd480470, 0x55fddd4831f8)          = 0x55fddd482d18
+gelf_getshdr(0x55fddd482d18, 0x7fff00974910, 0x55fddd480538, 0x55fddd4831f8)         = 0x7fff00974910
+elf_nextscn(0x55fddd480470, 0x55fddd482d18, 0x55fddd480470, 0x55fddd4831f8)          = 0x55fddd482de8
+gelf_getshdr(0x55fddd482de8, 0x7fff00974910, 0x55fddd480538, 0x55fddd4831f8)         = 0x7fff00974910
+elf_nextscn(0x55fddd480470, 0x55fddd482de8, 0x55fddd480470, 0x55fddd4831f8)          = 0x55fddd482eb8
+gelf_getshdr(0x55fddd482eb8, 0x7fff00974910, 0x55fddd480538, 0x55fddd4831f8)         = 0x7fff00974910
+elf_strptr(0x55fddd480470, 54, 513, 0x55fddd4831f8)                                  = 0x7f097092591d
+strlen(".BTF")                                                                       = 4
+strncmp(".BTF", ".debug_abbrev", 13)                                                 = -34
+strlen(".debug_addr")                                                                = 11
+strncmp(".BTF", ".debug_addr", 11)                                                   = -34
+strlen(".debug_aranges")                                                             = 14
+strncmp(".BTF", ".debug_aranges", 14)                                                = -34
+strlen(".debug_frame")                                                               = 12
+strncmp(".BTF", ".debug_frame", 12)                                                  = -34
+strlen(".debug_info")                                                                = 11
+strncmp(".BTF", ".debug_info", 11)                                                   = -34
+strlen(".debug_types")                                                               = 12
+strncmp(".BTF", ".debug_types", 12)                                                  = -34
+strlen(".debug_line")                                                                = 11
+strncmp(".BTF", ".debug_line", 11)                                                   = -34
+strlen(".debug_loc")                                                                 = 10
+strncmp(".BTF", ".debug_loc", 10)                                                    = -34
+strlen(".debug_loclists")                                                            = 15
+strncmp(".BTF", ".debug_loclists", 15)                                               = -34
+strlen(".debug_pubnames")                                                            = 15
+strncmp(".BTF", ".debug_pubnames", 15)                                               = -34
+strlen(".debug_str")                                                                 = 10
+strncmp(".BTF", ".debug_str", 10)                                                    = -34
+strlen(".debug_line_str")                                                            = 15
+strncmp(".BTF", ".debug_line_str", 15)                                               = -34
+strlen(".debug_str_offsets")                                                         = 18
+strncmp(".BTF", ".debug_str_offsets", 18)                                            = -34
+strlen(".debug_macinfo")                                                             = 14
+strncmp(".BTF", ".debug_macinfo", 14)                                                = -34
+strlen(".debug_macro")                                                               = 12
+strncmp(".BTF", ".debug_macro", 12)                                                  = -34
+strlen(".debug_ranges")                                                              = 13
+strncmp(".BTF", ".debug_ranges", 13)                                                 = -34
+strlen(".debug_rnglists")                                                            = 15
+strncmp(".BTF", ".debug_rnglists", 15)                                               = -34
+strlen(".eh_frame")                                                                  = 9
+strncmp(".BTF", ".eh_frame", 9)                                                      = -35
+strlen(".eh_frame_hdr")                                                              = 13
+strncmp(".BTF", ".eh_frame_hdr", 13)                                                 = -35
+strlen(".gcc_except_table")                                                          = 17
+strncmp(".BTF", ".gcc_except_table", 17)                                             = -37
+strlen(".gdb_index")                                                                 = 10
+strncmp(".BTF", ".gdb_index", 10)                                                    = -37
+elf_nextscn(0x55fddd480470, 0x55fddd482eb8, 10, 103)                                 = 0x55fddd482f88
+gelf_getshdr(0x55fddd482f88, 0x7fff00974910, 0x55fddd480538, 0x55fddd4831f8)         = 0x7fff00974910
+elf_nextscn(0x55fddd480470, 0x55fddd482f88, 0x55fddd480470, 0x55fddd4831f8)          = 0x55fddd483058
+gelf_getshdr(0x55fddd483058, 0x7fff00974910, 0x55fddd480538, 0x55fddd4831f8)         = 0x7fff00974910
+elf_nextscn(0x55fddd480470, 0x55fddd483058, 0x55fddd480470, 0x55fddd4831f8)          = 0x55fddd483128
+gelf_getshdr(0x55fddd483128, 0x7fff00974910, 0x55fddd480538, 0x55fddd4831f8)         = 0x7fff00974910
+elf_nextscn(0x55fddd480470, 0x55fddd483128, 0x55fddd480470, 0x55fddd4831f8)          = 0
+dwfl_end(0, 165, 0x55fddd480538, 0x55fddd4831f8)                                     = 0
+free(nil)                                                                            = <void>
+free(nil)                                                                            = <void>
+free(nil)                                                                            = <void>
+free(nil)                                                                            = <void>
+free(nil)                                                                            = <void>
+free(nil)                                                                            = <void>
+free(nil)                                                                            = <void>
+free(0x55fddd47eef0)                                                                 = <void>
+<... dwfl_getmodules resumed> )                                                      = 0
+dwfl_end(0x55fddd47ea90, 0x55fddd47eee0, 0x55fddd47e, 1)                             = 6
+close(3)                                                                             = 0
+__cxa_finalize(0x55fddbe44780, 10, 0, 0x7fff00974ee0)                                = 1
++++ exited (status 0) +++
+⬢[acme@toolbox repro_die__process]$ 
