@@ -1,64 +1,68 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp.gentoo.org (woodpecker.gentoo.org [140.211.166.183])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC5A86D1A9
-	for <dwarves@vger.kernel.org>; Thu,  6 Jun 2024 20:10:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97EAB14285;
+	Fri,  7 Jun 2024 07:03:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=140.211.166.183
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717704651; cv=none; b=A0CyaN/9tsCrIjRgmuNrdVgvvleP7fhYUHD0lE9Lx9OUdohEM2Nd9RoyfLFXmKBP9b0KImREPJud8cw7pQNxRew+oKAUHMh3h3brHr+YMcV6lqkalUTUVqqaePiK+v33IqfgaSnxlNY1KICnr8X4SDvFoKEFkMCP8Be6zdOtUg0=
+	t=1717743802; cv=none; b=aAbWZUk5xWSUKbgvim9ul5aI/2N/GwxpNPG0iQRNFaNROge15cT05CUaqfrod8rk3i5LDNI57+aLOe3PlV1XEHlEiWEdzPQiOV9iREvgQvyMpubNhjaq1FzVbzxuZOqQBxVzbnGjMcpiTCcIHuEYFd3DhX5bjFTN82J62E0B+Mc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717704651; c=relaxed/simple;
-	bh=lBSNUoV1j/53T+ygJOw2tzPnZi9a0vwEIm3cBfKtYAU=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=d0BANebHOq/SRdJp19c7GBcrgfBmg1e7z0dc2sw6FkJxl6WGtJ9hlR6wzo4IG5WyI/zYDFf5Yi0Q+OixqRK2fK+KwzRx/WDaMgVyrDUChdzgWAdwuhL7trbCOAtBz0OgHUIkjHJAJFdWxCIp2z5j5XBjwUcYzMLLmdIE12DicgM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Q757GuIU; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Q757GuIU"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0CD7C2BD10;
-	Thu,  6 Jun 2024 20:10:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1717704650;
-	bh=lBSNUoV1j/53T+ygJOw2tzPnZi9a0vwEIm3cBfKtYAU=;
-	h=Date:From:To:Cc:Subject:From;
-	b=Q757GuIUO9GwHE3Kv+8f71mXjg7OUnbi4ES0NWJKDZoX9sxLT0g7RNqMQROO6tBFJ
-	 KhtQesCH4oqyNguPHtiguc8oX0CL8OuiAYf7iL9SbE3cxVTwM+0jq9UJLIl539gGpT
-	 eClAa+huhfXo+GOZl5Tmj9GFpWozDArZ+VPzetuG/qqLxKsblLoHoeKJ/YIkHZYA3R
-	 gcpZcwJEAqZ30rYDLoJt7EAw5S1BXZtFuqXFz3mMFm4amStYOjDuzzUEdqQu9/N2xS
-	 v5iQ3InjwSh1/JzUGIoWRUmZp82bj5cpTFFhVGMFrmYb0n7FnHJK4b5lXVtqUfSNPv
-	 d9JboKa/kRfZg==
-Date: Thu, 6 Jun 2024 17:10:46 -0300
-From: Arnaldo Carvalho de Melo <acme@kernel.org>
-To: dwarves@vger.kernel.org
-Cc: Jiri Olsa <jolsa@kernel.org>, Daniel Xu <dxu@dxuuu.xyz>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Alan Maguire <alan.maguire@oracle.com>,
-	Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-	Matthias Schwarzott <zzam@gentoo.org>
-Subject: RFT: Prepping up pahole 1.27
-Message-ID: <ZmIXxgbfIJGWmXer@x1>
+	s=arc-20240116; t=1717743802; c=relaxed/simple;
+	bh=wO2PzPoCQezCTD7afEp5BVpC169bwHolDmN76PUgCNM=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=PKRc05veqdXNfCfAo0xsmFSS8+1wPqnhJdjIuJytJoUdensVufFKDI/3vTxvWAdiDM+jG6vBpaDSdwA5iMYecdgC5be47LYrD7N6nqjFe/Y+gVmn541eLVwPGN6TqZyYg3/DsOsINFb4z0b+dMbDyye9hwx9tWtZCcmcM6jGROk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gentoo.org; spf=pass smtp.mailfrom=gentoo.org; arc=none smtp.client-ip=140.211.166.183
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gentoo.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gentoo.org
+Message-ID: <f3fb90a2-5822-4cb9-ba5a-023f74f2e806@gentoo.org>
+Date: Fri, 7 Jun 2024 09:03:14 +0200
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+From: Matthias Schwarzott <zzam@gentoo.org>
+Subject: Re: ANNOUNCE: pahole v1.26 (more holes, --bpf_features,
+ --contains_enum)
+To: Domenico Andreoli <domenico.andreoli@linux.com>,
+ Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc: dwarves@vger.kernel.org,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ bpf@vger.kernel.org, Alan Maguire <alan.maguire@oracle.com>,
+ Andrii Nakryiko <andrii@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
+ Jan Engelhardt <jengelh@inai.de>, Viktor Malik <vmalik@redhat.com>,
+ Eduard Zingerman <eddyz87@gmail.com>, J B <jb.1234abcd@gmail.com>
+References: <YbC5MC+h+PkDZten@kernel.org> <ZkXTmTvII2PDqVvx@localhost>
+Content-Language: en-GB, de-DE
+In-Reply-To: <ZkXTmTvII2PDqVvx@localhost>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hi,
+Am 16.05.24 um 11:36 schrieb Domenico Andreoli:
+> On Wed, Feb 28, 2024 at 04:39:21PM -0300, Arnaldo Carvalho de Melo wrote:
+>> Hi,
+>>   
+>> 	The v1.26 release of pahole and its friends is out, showing more
+[...]
+>>
+>> tarball + gpg signature:
+>>
+>>     https://fedorapeople.org/~acme/dwarves/dwarves-1.26.tar.xz
+>>     https://fedorapeople.org/~acme/dwarves/dwarves-1.26.tar.bz2
+>>     https://fedorapeople.org/~acme/dwarves/dwarves-1.26.tar.sign
+> 
+> Which key do you use to sign this?          ^^^^^^^^^^^^^^^^^^^^^
 
-	I just pushed what will be in v1.27 to the 'next' branch at:
+Hi!
 
-https://git.kernel.org/pub/scm/devel/pahole/pahole.git next
+I found the matching key in git on kernel.org:
 
-	The changes file for what will be in this release, mostly
-reproducible builds and tags for kfuncs:
+https://git.kernel.org/pub/scm/docs/kernel/pgpkeys.git/plain/keys/D65016F35352AA40.asc
 
-https://git.kernel.org/pub/scm/devel/pahole/pahole.git/tree/changes-v1.27?h=next
+The gentoo package uses this key for verification now.
 
-	I plan to move it to 'master' and release it later today, so if
-anyone could please do some more testing on it, that would be awesome,
+Regards
+Matthias
 
-Thanks!
-
-- Arnaldo
