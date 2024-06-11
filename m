@@ -1,183 +1,118 @@
-Received: from gnu.wildebeest.org (gnu.wildebeest.org [45.83.234.184])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B45AE24211;
-	Tue, 11 Jun 2024 13:17:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.83.234.184
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42CC9BA34;
+	Tue, 11 Jun 2024 21:26:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718111839; cv=none; b=Soloz5apJNClxyAK4R3MgiqEk3f/SUCnDtV/aP+Jbd9RvgG/+s8SrnX3udMQ+97IofDs4UT8XAUiMxMN+kED6ZVmbFb0wLOcyXXgManbt8lIaG17lIOJsTzA/90u3KIBkQa4PBUBcX8TDUwEdK94HFKlPhvCU9lnCJr0BAq7ReI=
+	t=1718141218; cv=none; b=HHzPaJ0mM57PqMHPgp97rmVYG0LCnllk0BlGINoiMj24Ao6Hza0rYTWJYDTMZXRlP7oqA/bxiNkxqdyaW7Qrb/HddKms6WtneFJ1RoHNu6ecTMO2PQaWkyD97wyeoZ/Hq9L0jxtK0alf9kPbifOFa2D3R/E+02FHfKqQM602QCU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718111839; c=relaxed/simple;
-	bh=5+59LrSb7Ibb4x5W9jMwmIoeMLtYtBTLpbfJ3J7cwV0=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=AO89JYoZb7o74bTDsjxlklNzvxuIrV+n8MVJfWgIjugNGBWG+3aDADheA3K53HbgAp/MID/OhEOt24ZlN75iQQwBeygsuX5l2LNh+Ypkq7SVCy9VZfOp6G46LCEZGQn5HeFNtm8SpSVdA1+YNsuFJHSQEvbWmku9iHfGa+016Dg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=klomp.org; spf=pass smtp.mailfrom=klomp.org; arc=none smtp.client-ip=45.83.234.184
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=klomp.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=klomp.org
-Received: from r6.localdomain (82-217-174-174.cable.dynamic.v4.ziggo.nl [82.217.174.174])
-	(using TLSv1.2 with cipher ADH-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by gnu.wildebeest.org (Postfix) with ESMTPSA id F3797302764B;
-	Tue, 11 Jun 2024 15:07:29 +0200 (CEST)
-Received: by r6.localdomain (Postfix, from userid 1000)
-	id 769A63404B1; Tue, 11 Jun 2024 15:07:29 +0200 (CEST)
-Message-ID: <45651efb5698e8247e5d056aed7ac522a04b1056.camel@klomp.org>
-Subject: Re: elfutils DWARF problem was: Re: Problem with BTF generation on
- mips64el
-From: Mark Wielaard <mark@klomp.org>
-To: Tony Ambardar <tony.ambardar@gmail.com>, Arnaldo Carvalho de Melo
-	 <acme@kernel.org>, Ying Huang <ying.huang@oss.cipunited.com>
-Cc: elfutils-devel@sourceware.org, Hengqi Chen <hengqi.chen@gmail.com>, 
- bpf@vger.kernel.org, dwarves@vger.kernel.org, Alexei Starovoitov
- <ast@kernel.org>,  Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko
- <andrii@kernel.org>
-Date: Tue, 11 Jun 2024 15:07:29 +0200
-In-Reply-To: <Zmfwhn6inA2m1ftm@kodidev-ubuntu>
-References: <ZlkoM6/PSxVcGM6X@kodidev-ubuntu>
-	 <CAEyhmHT_1N3xwLO2BwVK97ebrABJv52d5dWxzvuNNcF-OF5gKw@mail.gmail.com>
-	 <ZlmrQqQSJyNH7fVF@kodidev-ubuntu> <Zln1kZnu2Xxeyngj@x1>
-	 <Zl2m4RP7BwhZ0J6l@kodidev-ubuntu> <Zl3Zp5r9m6X_i_J4@x1>
-	 <Zl4AHfG6Gg5Htdgc@x1> <20240603191833.GD4421@gnu.wildebeest.org>
-	 <Zl6OTJXw0LH6uWIN@kodidev-ubuntu> <Zmfwhn6inA2m1ftm@kodidev-ubuntu>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.52.1 (3.52.1-1.fc40) 
+	s=arc-20240116; t=1718141218; c=relaxed/simple;
+	bh=l/slOwUbIQjq2IvyCrFSxlG82jUdCK9N4vGo107GLYY=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=mKwBg000o1g6LNgmBCJPMnmBaQp6BRwsCcYZeK+QSfG3osHJpxYi8ry8vczOUimElCNHTmAjBku1PAxFUHtp4qPP+Gwo/f/kV91Fpw7LmCyyv7Pvdbg23zxcyHDu3hQ3NCS9sBIagUzkskzO0v3JbGeeoAFa0C6daPXiJoFww+M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dt37lus7; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dt37lus7"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31733C2BD10;
+	Tue, 11 Jun 2024 21:26:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1718141216;
+	bh=l/slOwUbIQjq2IvyCrFSxlG82jUdCK9N4vGo107GLYY=;
+	h=Date:From:To:Cc:Subject:From;
+	b=dt37lus7snItxzKmWYgcdGBV42ZD/gGxHjIdjOx8ffwSExMY8uRmTB4dZc0uz7vGl
+	 HO5uPbatJv06//E91ULoMem1+EJxuL4yuAwn08gY+DOG1FCaKVjirKlI1sKULcXUJO
+	 me4452LoQSXYMfrQAREX6xF4sICrP4640QzXKTN9m+DtHSneE7Iu2OqcjSc3wYNSXC
+	 ZIslyrX1bewsd8oTTPtY4JTokLz++c8BvDES3dSVLjW+1jt+5xBe+CdmljumekzVVa
+	 elkXDNisXWslp/luWgx5q7MoCZyki898hdstg3DZxzExec8sXr1T4bIOA8NW5x1wKc
+	 MyFxmGbBj9klQ==
+Date: Tue, 11 Jun 2024 18:26:53 -0300
+From: Arnaldo Carvalho de Melo <acme@kernel.org>
+To: dwarves@vger.kernel.org
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	bpf@vger.kernel.org, Alan Maguire <alan.maguire@oracle.com>,
+	Jiri Olsa <jolsa@kernel.org>, Jan Engelhardt <jengelh@inai.de>,
+	Matthias Schwarzott <zzam@gentoo.org>,
+	Viktor Malik <vmalik@redhat.com>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Jan Alexander Steffens <heftig@archlinux.org>,
+	Domenico Andreoli <cavok@debian.org>,
+	Dominique Leuenberger <dimstar@opensuse.org>,
+	Daniel Xu <dxu@dxuuu.xyz>, Yonghong Song <yonghong.song@linux.dev>
+Subject: ANNOUNCE: pahole v1.27 (reproducible builds, BTF kfuncs)
+Message-ID: <ZmjBHWw-Q5hKBiwA@x1>
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Spam-Flag: NO
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Url: http://acmel.wordpress.com
 
 Hi,
+ 
+	The v1.27 release of pahole and its friends is out, supporting
+parallel reproducible builds and encoding kernel kfuncs in BTF, allowing
+tools such as bpftrace to enumerate the available kfuncs and obtain its
+function signatures and return types.
 
-Adding elfutils-devel to CC to keep everyone up to date on the state of
-the patches.
+Main git repo:
 
-On Mon, 2024-06-10 at 23:36 -0700, Tony Ambardar wrote:
-> On Mon, Jun 03, 2024 at 08:47:24PM -0700, Tony Ambardar wrote:
-> > On Mon, Jun 03, 2024 at 09:18:33PM +0200, Mark Wielaard wrote:
-> > > On Mon, Jun 03, 2024 at 02:40:45PM -0300, Arnaldo Carvalho de Melo wr=
-ote:
-> > > > Couldn't find a way to ask eu-readelf for more verbose output, wher=
-e we
-> > > > could perhaps get some clue as to why it produces nothing while bin=
-utils
-> > > > readelf manages to grok it, Mark, do you know some other way to ask
-> > > > eu-readelf to produce more debug output?
-> > > >=20
-> > > > I'm unsure if the netdevsim.ko file was left in a semi encoded BTF =
-state
-> > > > that then made eu-readelf to not be able to process it while pahole=
-,
-> > > > that uses eltuils' libraries, was able to process the first two CUs=
- for
-> > > > a kernel module and all the CUs for the vmlinux file :-\
-> > > >=20
-> > > > Mark, the whole thread is available at:
-> > > >=20
-> > > > https://lore.kernel.org/all/Zl3Zp5r9m6X_i_J4@x1/T/#u
-> > >=20
-> > > I haven't looked at the vmlinux file. But for the .ko file the issue
-> > > is that the elfutils MIPS backend isn't complete. Specifically MIPS
-> > > relocations aren't recognized (and so cannot be applied). There are
-> > > some pending patches which try to fix that:
-> > >=20
-> > > https://patchwork.sourceware.org/project/elfutils/list/?series=3D3160=
-1
-> >=20
-> > Earlier in the thread, Hengqi Chen pointed out the latest elfutils back=
-end
-> > work for MIPS, and I locally rebuilt elfutils and then pahole from thei=
-r
-> > respective next/main branches. For elfutils, main (935ee131cf7c) includ=
-es
-> >=20
-> >   e259f126 Support Mips architecture
-> >   f2acb069 stack: Fix stack unwind failure on mips
-> >   db33cb0c backends: Add register_info, return_value_location, core_not=
-e mips
-> >=20
-> > which partially applies the patchwork series but leaves out the support=
- for
-> > readelf, strip, and elflint.
-> >=20
-> > I believe this means the vmlinux and .ko files I shared are OK, or is t=
-here
-> > more backend work needed for MIPS?
-> >=20
-> > The bits missing in eu-readelf would explain the blank output both Arna=
-ldo
-> > and I see from "$ eu-readelf -winfo vmlinux". I tried rebuilding with t=
-he
-> > patchwork readelf patch locally but ran into merge conflicts.
->=20
-> A short update, starting with answering my own question.
->=20
-> No, apparently the above commits *do not* complete the backend work. Ying
-> Huang submitted additional related patches since March 5: [1][2]
->=20
->     strip: Adapt src/strip -o -f on mips
->     readelf: Adapt src/readelf -h/-S/-r/-w/-l/-d/-a on mips
->     elflint: adapt src/elflint --gnu src/nm on mips
->     test: Add mips in run-allregs.sh and run-readelf-mixed-corenote.sh
->=20
-> Despite the titles, these patches do include core backend changes for MIP=
-S.
-> I resolved the various merge conflicts [3], rebuilt elfutils, and reteste=
-d
-> kernel builds to now find:
->=20
->   - pahole is able to read DWARF[45] info and create .BTF for modules
->   - resolve_btfids can successfully patch .BTF_ids in modules
->   - kernel successfully loads modules with BTF and kfuncs (tested 6.6 LTS=
-)
->=20
-> Huzzah!
->=20
->=20
-> Ying:
->=20
-> Thank you for developing these MIPS patches. In your view, are the MIPS
-> changes now complete, or do you plan further updates that might improve o=
-r
-> impact parsing DWARF debug/reloc info in apps like pahole?
->=20
->=20
-> Mark:
->=20
-> Given that BTF usage on Linux/MIPS is basically broken without these
-> patches, could I request some of your review time for them to be merged? =
-If
-> it's helpful, my branch [3] includes all patches with conflicts fixed, an=
-d
-> I also successfully ran the elfutils self-tests (including MIPS from Ying=
-).
-> Please feel free to add for these patches:
->=20
->     Tested-by: Tony Ambardar <Tony.Ambardar@gmail.com>
+   https://git.kernel.org/pub/scm/devel/pahole/pahole.git
 
-Yes, I would very much like to integrate the rest of these patches. But
-I keep running out of time. The main issues were that, as you noticed,
-the patches mix backend and frontend tool changes a bit. I don't have
-access to a MIPS system to test them on. There are a couple of
-different MIPS abis (I believe all combinations of 32/64 bit and
-big/little endianness), but people have only tested on mips64le (maybe
-that is the only relevant one these days?) And finally the way MIPS
-represents relocations is slightly different than any other ELF
-architecture does. So we have to translate that somewhere to make the
-standards functions work. I have to convince myself that doing that in
-elf_getdata as the patches do is the right place.
+Mirror git repo:
 
-> Many thanks everyone for your help,
-> Tony
->=20
-> [1]: https://patchwork.sourceware.org/project/elfutils/list/?series=3D316=
-01
-> [2]: https://patchwork.sourceware.org/project/elfutils/list/?series=3D343=
-10
-> [3]:
-> https://github.com/guidosarducci/elfutils/commits/main-fix-mips-support-r=
-eloc/
+   https://github.com/acmel/dwarves.git
 
+tarball + gpg signature:
+
+   https://fedorapeople.org/~acme/dwarves/dwarves-1.27.tar.xz
+   https://fedorapeople.org/~acme/dwarves/dwarves-1.27.tar.bz2
+   https://fedorapeople.org/~acme/dwarves/dwarves-1.27.tar.sign
+
+	Thanks a lot to all the contributors and distro packagers, you're on the
+CC list, I appreciate a lot the work you put into these tools,
+
+Best Regards,
+
+- Arnaldo
+
+BTF encoder:
+
+- Inject kfunc decl tags into BTF from the BTF IDs ELF section in the Linux
+  kernel vmlinux file.
+
+  This allows tools such as bpftools and pfunct to enumerate the available kfuncs
+  and to gets its function signature, the type of its return and of its
+  arguments. See the example in the BTF loader changes description, below.
+
+- Support parallel reproducible builds, where it doesn't matter how many
+  threads are used, the end BTF encoding result is the same.
+
+- Sanitize unsupported DWARF int type with greater-than-16 byte, as BTF doesn't
+  support it.
+
+BTF loader:
+
+- Initial support for BTF_KIND_DECL_TAG:
+
+  $ pfunct --prototypes -F btf vmlinux.btf.decl_tag,decl_tag_kfuncs | grep ^bpf_kfunc | head
+  bpf_kfunc void cubictcp_init(struct sock * sk);
+  bpf_kfunc void cubictcp_cwnd_event(struct sock * sk, enum tcp_ca_event event);
+  bpf_kfunc void cubictcp_cong_avoid(struct sock * sk, u32 ack, u32 acked);
+  bpf_kfunc u32 cubictcp_recalc_ssthresh(struct sock * sk);
+  bpf_kfunc void cubictcp_state(struct sock * sk, u8 new_state);
+  bpf_kfunc void cubictcp_acked(struct sock * sk, const struct ack_sample  * sample);
+  bpf_kfunc int bpf_iter_css_new(struct bpf_iter_css * it, struct cgroup_subsys_state * start, unsigned int flags);
+  bpf_kfunc struct cgroup_subsys_state * bpf_iter_css_next(struct bpf_iter_css * it);
+  bpf_kfunc void bpf_iter_css_destroy(struct bpf_iter_css * it);
+  bpf_kfunc s64 bpf_map_sum_elem_count(const struct bpf_map  * map);
+  $ pfunct --prototypes -F btf vmlinux.btf.decl_tag,decl_tag_kfuncs | grep ^bpf_kfunc | wc -l
+  116
+  $
+
+pretty printing:
+
+- Fix hole discovery with inheritance in C++.
