@@ -1,35 +1,41 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42CC9BA34;
-	Tue, 11 Jun 2024 21:26:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from submarine.notk.org (62-210-214-84.rev.poneytelecom.eu [62.210.214.84])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 43F2B2F2C;
+	Tue, 11 Jun 2024 21:47:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.210.214.84
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718141218; cv=none; b=HHzPaJ0mM57PqMHPgp97rmVYG0LCnllk0BlGINoiMj24Ao6Hza0rYTWJYDTMZXRlP7oqA/bxiNkxqdyaW7Qrb/HddKms6WtneFJ1RoHNu6ecTMO2PQaWkyD97wyeoZ/Hq9L0jxtK0alf9kPbifOFa2D3R/E+02FHfKqQM602QCU=
+	t=1718142465; cv=none; b=DuPJsQDKaZsIOQrYNOyAgmle0pGE4shgOoyQD0TcQedJ48RR6BaxxdxCsF+DYsBpMoBcX5RjzZqcWRWP97MWnD43gk7t/VNjKu2A2hHAuf34TIRf7AAVxVuKH3jWq3gYidXS8QdzGEJxX5m1qLd22HMZjXLKeTGLP2qejhJ4XPY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718141218; c=relaxed/simple;
-	bh=l/slOwUbIQjq2IvyCrFSxlG82jUdCK9N4vGo107GLYY=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=mKwBg000o1g6LNgmBCJPMnmBaQp6BRwsCcYZeK+QSfG3osHJpxYi8ry8vczOUimElCNHTmAjBku1PAxFUHtp4qPP+Gwo/f/kV91Fpw7LmCyyv7Pvdbg23zxcyHDu3hQ3NCS9sBIagUzkskzO0v3JbGeeoAFa0C6daPXiJoFww+M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dt37lus7; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1718142465; c=relaxed/simple;
+	bh=2I1tHmbp82p4i0lqosKETBKEgxq2gJiVR+S18NV8Cm0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZRsw5zdA3tBTYy6Rk2yKXcrcV02va45T9ggjjPuXRO3fpS/tcInP3weds2skw34VH8CEkC1RHKhNkHa73QZ0pu/J1sN+EwVV8Lcb04SM8z6RebcJC5l+wh/t9MR5415LOZztce0nAevNF2ZeSV+5hhgRuRvUGz35mQeCTRGoTLE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codewreck.org; spf=pass smtp.mailfrom=codewreck.org; dkim=pass (2048-bit key) header.d=codewreck.org header.i=@codewreck.org header.b=jQlQvzNU; arc=none smtp.client-ip=62.210.214.84
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codewreck.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=codewreck.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dt37lus7"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31733C2BD10;
-	Tue, 11 Jun 2024 21:26:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1718141216;
-	bh=l/slOwUbIQjq2IvyCrFSxlG82jUdCK9N4vGo107GLYY=;
-	h=Date:From:To:Cc:Subject:From;
-	b=dt37lus7snItxzKmWYgcdGBV42ZD/gGxHjIdjOx8ffwSExMY8uRmTB4dZc0uz7vGl
-	 HO5uPbatJv06//E91ULoMem1+EJxuL4yuAwn08gY+DOG1FCaKVjirKlI1sKULcXUJO
-	 me4452LoQSXYMfrQAREX6xF4sICrP4640QzXKTN9m+DtHSneE7Iu2OqcjSc3wYNSXC
-	 ZIslyrX1bewsd8oTTPtY4JTokLz++c8BvDES3dSVLjW+1jt+5xBe+CdmljumekzVVa
-	 elkXDNisXWslp/luWgx5q7MoCZyki898hdstg3DZxzExec8sXr1T4bIOA8NW5x1wKc
-	 MyFxmGbBj9klQ==
-Date: Tue, 11 Jun 2024 18:26:53 -0300
-From: Arnaldo Carvalho de Melo <acme@kernel.org>
-To: dwarves@vger.kernel.org
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	dkim=pass (2048-bit key) header.d=codewreck.org header.i=@codewreck.org header.b="jQlQvzNU"
+Received: from gaia.codewreck.org (localhost [127.0.0.1])
+	by submarine.notk.org (Postfix) with ESMTPS id 0CA8A14C1E1;
+	Tue, 11 Jun 2024 23:38:20 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org;
+	s=2; t=1718141905;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=SkG8r/ezxubJtJGFN02+piiW7O8HV16/3VEHvWIhVI4=;
+	b=jQlQvzNUsGTH+DR/bkCcW0PnaMBJwKoabsSR6kw739Mo3ilOcI6cZr/cbQ4bLvsdW/gasF
+	BP3GYfX+2GI6z2ws04M633S9Mvu0srnlFCDOdJ2MrtTsYISWQQ6fcn2xOd7Wrl/A5Vaz3g
+	Bb3UKBm6NQtcjucNLcpfDC+vMX+HoYZ2Ae4c3GMONmxE+l28D8SkLz/AiuA+ywXF1RZbnE
+	aSiAJx86N9kcGdyqQ4AW6xQrSUFRqKANxA5VwYh5Oyub8kSkCIxoZUYFtkt3orweVisTsA
+	QQEQByz+fSfGSquI0iXratb0jS5HwgRjzYlXFp2/gTFNp/9WZqJxGK4LJOygwA==
+Received: from localhost (gaia.codewreck.org [local])
+	by gaia.codewreck.org (OpenSMTPD) with ESMTPA id 18dd1f79;
+	Tue, 11 Jun 2024 21:38:17 +0000 (UTC)
+Date: Wed, 12 Jun 2024 06:38:02 +0900
+From: Dominique Martinet <asmadeus@codewreck.org>
+To: Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc: dwarves@vger.kernel.org,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
 	bpf@vger.kernel.org, Alan Maguire <alan.maguire@oracle.com>,
 	Jiri Olsa <jolsa@kernel.org>, Jan Engelhardt <jengelh@inai.de>,
 	Matthias Schwarzott <zzam@gentoo.org>,
@@ -39,80 +45,38 @@ Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
 	Domenico Andreoli <cavok@debian.org>,
 	Dominique Leuenberger <dimstar@opensuse.org>,
 	Daniel Xu <dxu@dxuuu.xyz>, Yonghong Song <yonghong.song@linux.dev>
-Subject: ANNOUNCE: pahole v1.27 (reproducible builds, BTF kfuncs)
-Message-ID: <ZmjBHWw-Q5hKBiwA@x1>
+Subject: Re: ANNOUNCE: pahole v1.27 (reproducible builds, BTF kfuncs)
+Message-ID: <ZmjDuv_zuhA3Xp2m@codewreck.org>
+References: <ZmjBHWw-Q5hKBiwA@x1>
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-X-Url: http://acmel.wordpress.com
+In-Reply-To: <ZmjBHWw-Q5hKBiwA@x1>
 
 Hi,
- 
-	The v1.27 release of pahole and its friends is out, supporting
-parallel reproducible builds and encoding kernel kfuncs in BTF, allowing
-tools such as bpftrace to enumerate the available kfuncs and obtain its
-function signatures and return types.
 
-Main git repo:
+Arnaldo Carvalho de Melo wrote on Tue, Jun 11, 2024 at 06:26:53PM -0300:
+> 	The v1.27 release of pahole and its friends is out, supporting
+> parallel reproducible builds and encoding kernel kfuncs in BTF, allowing
+> tools such as bpftrace to enumerate the available kfuncs and obtain its
+> function signatures and return types.
+> 
+> Main git repo:
+> 
+>    https://git.kernel.org/pub/scm/devel/pahole/pahole.git
 
-   https://git.kernel.org/pub/scm/devel/pahole/pahole.git
+It looks like the v1.27 tag has not been pushed to the git repos (either
+this or github), we're using git snapshots for nixpkgs, so it'd be great
+if a tag could be pushed out.
+(I think some release monitoring tools left and right also use tags,
+even if that's less important if you Cc other distro maintainers... I
+just happened to see the mail on bpf@vger.)
 
-Mirror git repo:
-
-   https://github.com/acmel/dwarves.git
-
-tarball + gpg signature:
-
-   https://fedorapeople.org/~acme/dwarves/dwarves-1.27.tar.xz
-   https://fedorapeople.org/~acme/dwarves/dwarves-1.27.tar.bz2
-   https://fedorapeople.org/~acme/dwarves/dwarves-1.27.tar.sign
-
-	Thanks a lot to all the contributors and distro packagers, you're on the
-CC list, I appreciate a lot the work you put into these tools,
-
-Best Regards,
-
-- Arnaldo
-
-BTF encoder:
-
-- Inject kfunc decl tags into BTF from the BTF IDs ELF section in the Linux
-  kernel vmlinux file.
-
-  This allows tools such as bpftools and pfunct to enumerate the available kfuncs
-  and to gets its function signature, the type of its return and of its
-  arguments. See the example in the BTF loader changes description, below.
-
-- Support parallel reproducible builds, where it doesn't matter how many
-  threads are used, the end BTF encoding result is the same.
-
-- Sanitize unsupported DWARF int type with greater-than-16 byte, as BTF doesn't
-  support it.
-
-BTF loader:
-
-- Initial support for BTF_KIND_DECL_TAG:
-
-  $ pfunct --prototypes -F btf vmlinux.btf.decl_tag,decl_tag_kfuncs | grep ^bpf_kfunc | head
-  bpf_kfunc void cubictcp_init(struct sock * sk);
-  bpf_kfunc void cubictcp_cwnd_event(struct sock * sk, enum tcp_ca_event event);
-  bpf_kfunc void cubictcp_cong_avoid(struct sock * sk, u32 ack, u32 acked);
-  bpf_kfunc u32 cubictcp_recalc_ssthresh(struct sock * sk);
-  bpf_kfunc void cubictcp_state(struct sock * sk, u8 new_state);
-  bpf_kfunc void cubictcp_acked(struct sock * sk, const struct ack_sample  * sample);
-  bpf_kfunc int bpf_iter_css_new(struct bpf_iter_css * it, struct cgroup_subsys_state * start, unsigned int flags);
-  bpf_kfunc struct cgroup_subsys_state * bpf_iter_css_next(struct bpf_iter_css * it);
-  bpf_kfunc void bpf_iter_css_destroy(struct bpf_iter_css * it);
-  bpf_kfunc s64 bpf_map_sum_elem_count(const struct bpf_map  * map);
-  $ pfunct --prototypes -F btf vmlinux.btf.decl_tag,decl_tag_kfuncs | grep ^bpf_kfunc | wc -l
-  116
-  $
-
-pretty printing:
-
-- Fix hole discovery with inheritance in C++.
+Thanks,
+-- 
+Dominique Martinet | Asmadeus
