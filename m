@@ -1,39 +1,34 @@
-Received: from submarine.notk.org (62-210-214-84.rev.poneytelecom.eu [62.210.214.84])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 43F2B2F2C;
-	Tue, 11 Jun 2024 21:47:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.210.214.84
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EBF49475;
+	Tue, 11 Jun 2024 22:52:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718142465; cv=none; b=DuPJsQDKaZsIOQrYNOyAgmle0pGE4shgOoyQD0TcQedJ48RR6BaxxdxCsF+DYsBpMoBcX5RjzZqcWRWP97MWnD43gk7t/VNjKu2A2hHAuf34TIRf7AAVxVuKH3jWq3gYidXS8QdzGEJxX5m1qLd22HMZjXLKeTGLP2qejhJ4XPY=
+	t=1718146336; cv=none; b=qSuf0jDINXTC4qualrKGiqlgiGM+PTqPWJlF1F0AqF6+3mE57x5N2u25kFqv46C73kBNTL9ioKeINAXdy3/pvxfMXC/1TTm2/qhuiB07ARK9s7fu0O3rl3x1rCGfG4Kk3zLspGTKRD+5K1OYytwvVx5NhQUEBLkoI88XjUxWR3I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718142465; c=relaxed/simple;
-	bh=2I1tHmbp82p4i0lqosKETBKEgxq2gJiVR+S18NV8Cm0=;
+	s=arc-20240116; t=1718146336; c=relaxed/simple;
+	bh=zW6zU8woHSujRDru/K7WaWs9kXaIVX09P/gjbKgambA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZRsw5zdA3tBTYy6Rk2yKXcrcV02va45T9ggjjPuXRO3fpS/tcInP3weds2skw34VH8CEkC1RHKhNkHa73QZ0pu/J1sN+EwVV8Lcb04SM8z6RebcJC5l+wh/t9MR5415LOZztce0nAevNF2ZeSV+5hhgRuRvUGz35mQeCTRGoTLE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codewreck.org; spf=pass smtp.mailfrom=codewreck.org; dkim=pass (2048-bit key) header.d=codewreck.org header.i=@codewreck.org header.b=jQlQvzNU; arc=none smtp.client-ip=62.210.214.84
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codewreck.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=codewreck.org
+	 Content-Type:Content-Disposition:In-Reply-To; b=U6+5Oqr8Tu3vuoOOTQHwJN5pltX8Li0Xzv2Pw6yiG6jo8gxinxbsc2tV9iyK/JzNU/f118aVr39g1ubW6LshDeMfToAFy8kzB7Opi+jEAzhcdmY532hyStUAhJkw9k5pSrVzIUH7ZGMOtjPc7iGo+SoKW19mhxuipSrKkWjIzkM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iQgWri4u; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=codewreck.org header.i=@codewreck.org header.b="jQlQvzNU"
-Received: from gaia.codewreck.org (localhost [127.0.0.1])
-	by submarine.notk.org (Postfix) with ESMTPS id 0CA8A14C1E1;
-	Tue, 11 Jun 2024 23:38:20 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org;
-	s=2; t=1718141905;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=SkG8r/ezxubJtJGFN02+piiW7O8HV16/3VEHvWIhVI4=;
-	b=jQlQvzNUsGTH+DR/bkCcW0PnaMBJwKoabsSR6kw739Mo3ilOcI6cZr/cbQ4bLvsdW/gasF
-	BP3GYfX+2GI6z2ws04M633S9Mvu0srnlFCDOdJ2MrtTsYISWQQ6fcn2xOd7Wrl/A5Vaz3g
-	Bb3UKBm6NQtcjucNLcpfDC+vMX+HoYZ2Ae4c3GMONmxE+l28D8SkLz/AiuA+ywXF1RZbnE
-	aSiAJx86N9kcGdyqQ4AW6xQrSUFRqKANxA5VwYh5Oyub8kSkCIxoZUYFtkt3orweVisTsA
-	QQEQByz+fSfGSquI0iXratb0jS5HwgRjzYlXFp2/gTFNp/9WZqJxGK4LJOygwA==
-Received: from localhost (gaia.codewreck.org [local])
-	by gaia.codewreck.org (OpenSMTPD) with ESMTPA id 18dd1f79;
-	Tue, 11 Jun 2024 21:38:17 +0000 (UTC)
-Date: Wed, 12 Jun 2024 06:38:02 +0900
-From: Dominique Martinet <asmadeus@codewreck.org>
-To: Arnaldo Carvalho de Melo <acme@kernel.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iQgWri4u"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F9A0C2BD10;
+	Tue, 11 Jun 2024 22:52:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1718146335;
+	bh=zW6zU8woHSujRDru/K7WaWs9kXaIVX09P/gjbKgambA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=iQgWri4u6xC3HNFBoO/QuYYWFChrygZbVKuv12KI9ErGVk3EQAXeM52KI4G3skTdk
+	 I6t7XH5t+RlsvvUtph0omUYesTHgCbxYfwWB5CsnQOtHXiOLLTLcZhhxVN+W5CBm+X
+	 uLnXM+G0LIl9d/4rnPoVWgjTYz6nfVS0FcEhXAit3uF1VQHC+3N0TcY3ywrRuF0w4D
+	 +HhRq3ZZhgUJF5SIOaKU2Or2/RPuhbOWaXZuH2aDyF7XSreHbNzoFOzuCyj19Je6/D
+	 WstjxNOPzpzHrFP/v8e9oeOHWZeY51zo99Idh1k+d3Vf1u8CKfn9j8P0PKuWAb4PRE
+	 Vra45qppC9E+g==
+Date: Tue, 11 Jun 2024 19:52:12 -0300
+From: Arnaldo Carvalho de Melo <acme@kernel.org>
+To: Dominique Martinet <asmadeus@codewreck.org>
 Cc: dwarves@vger.kernel.org,
 	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
 	bpf@vger.kernel.org, Alan Maguire <alan.maguire@oracle.com>,
@@ -46,37 +41,47 @@ Cc: dwarves@vger.kernel.org,
 	Dominique Leuenberger <dimstar@opensuse.org>,
 	Daniel Xu <dxu@dxuuu.xyz>, Yonghong Song <yonghong.song@linux.dev>
 Subject: Re: ANNOUNCE: pahole v1.27 (reproducible builds, BTF kfuncs)
-Message-ID: <ZmjDuv_zuhA3Xp2m@codewreck.org>
+Message-ID: <ZmjVHKLTP4_hnzug@x1>
 References: <ZmjBHWw-Q5hKBiwA@x1>
+ <ZmjDuv_zuhA3Xp2m@codewreck.org>
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZmjBHWw-Q5hKBiwA@x1>
+In-Reply-To: <ZmjDuv_zuhA3Xp2m@codewreck.org>
 
-Hi,
+On Wed, Jun 12, 2024 at 06:38:02AM +0900, Dominique Martinet wrote:
+> It looks like the v1.27 tag has not been pushed to the git repos (either
+> this or github), we're using git snapshots for nixpkgs, so it'd be great
+> if a tag could be pushed out.
 
-Arnaldo Carvalho de Melo wrote on Tue, Jun 11, 2024 at 06:26:53PM -0300:
-> 	The v1.27 release of pahole and its friends is out, supporting
-> parallel reproducible builds and encoding kernel kfuncs in BTF, allowing
-> tools such as bpftrace to enumerate the available kfuncs and obtain its
-> function signatures and return types.
-> 
-> Main git repo:
-> 
->    https://git.kernel.org/pub/scm/devel/pahole/pahole.git
+Done.
 
-It looks like the v1.27 tag has not been pushed to the git repos (either
-this or github), we're using git snapshots for nixpkgs, so it'd be great
-if a tag could be pushed out.
-(I think some release monitoring tools left and right also use tags,
-even if that's less important if you Cc other distro maintainers... I
-just happened to see the mail on bpf@vger.)
+https://git.kernel.org/pub/scm/devel/pahole/pahole.git/tag/?h=v1.27
+https://github.com/acmel/dwarves/releases/tag/v1.27
 
-Thanks,
--- 
-Dominique Martinet | Asmadeus
+> (I think some release monitoring tools left and right also use tags,
+> even if that's less important if you Cc other distro maintainers... I
+> just happened to see the mail on bpf@vger.)
+
+May I add your e-mail here:
+
+acme@x1:~/git/pahole$ cat PKG-MAINTAINERS 
+# Please let me know if I should remove/update/add more distro package maintainers here
+# I'm keeping this so that I CC them when releasing new versions, thanks!
+
+Jan Alexander Steffens <heftig@archlinux.org>
+Domenico Andreoli <cavok@debian.org>
+Matthias Schwarzott <zzam@gentoo.org>
+Dominique Leuenberger <dimstar@opensuse.org>
+acme@x1:~/git/pahole$
+
+So that on the next release I CC you?
+
+Thanks for reporting!
+
+- Arnaldo
