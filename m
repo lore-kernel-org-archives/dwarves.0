@@ -1,128 +1,183 @@
-Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from gnu.wildebeest.org (gnu.wildebeest.org [45.83.234.184])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 599F2172BD5;
-	Tue, 11 Jun 2024 07:51:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B45AE24211;
+	Tue, 11 Jun 2024 13:17:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.83.234.184
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718092281; cv=none; b=na6yV0dj/VuLVAr/kyZYY34jE50uWQa+bGZfCyLgSrv6qkzQQTyT+lGvlBW8B2As+IBEPrQxwVIQUonGgzJagnw+wOPfIQvlNcC4haIk6jCNN4aeXRUfR3C1CICjHJ6h6NaQWsO2RZEA8QSDcmF5tdCED7Uuthj1hTPSfcpMo1k=
+	t=1718111839; cv=none; b=Soloz5apJNClxyAK4R3MgiqEk3f/SUCnDtV/aP+Jbd9RvgG/+s8SrnX3udMQ+97IofDs4UT8XAUiMxMN+kED6ZVmbFb0wLOcyXXgManbt8lIaG17lIOJsTzA/90u3KIBkQa4PBUBcX8TDUwEdK94HFKlPhvCU9lnCJr0BAq7ReI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718092281; c=relaxed/simple;
-	bh=mnR/TXWNSKYBo1dIPf7CZ8BaFrrRv1WSzGL6q8wujvA=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tT7itlz51lwevbVa/37jzAaLxd8PdrDt4OHhNrcLF/CBDeG1i0rdcgS8CddqiNYUWwV71mcFuL6E2NDjVB9+WXVzYzlfI73xjbTrxNEijoA4Y3cgMOCmx30nyqdpz1Fnf92bQRmIgm/dwS88OBDFwL4jh05UUPedbiwO0NXQMY4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IlWpwhmo; arc=none smtp.client-ip=209.85.210.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IlWpwhmo"
-Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-704313fa830so1814842b3a.3;
-        Tue, 11 Jun 2024 00:51:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1718092279; x=1718697079; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=B5dpfcWBVzZkrjYUVKPs0kakADGkyRUU122R+dHdta4=;
-        b=IlWpwhmod0gj30IHYYxMt5qSI/PM6py1NhMafpZ9/vB1nUiMh/N4y/HeGD/Ohn8p80
-         D4o1O8XzGHX7BJBF2Ibp9tT0fyf8JigdtCDx2PHviBlf4GgNuH6jhmOPw4gQLWLllPG6
-         tLZWU1KLI4h1K53ah+pxrveAj62jTMbH2DMkBLplW81BynaMqbH5c+kPvhKNQy3FoxFG
-         lC84aHOJpOWi/XgZ88Oib0EA2HixCLMOipHT3UwrOzu5abcAI0ZNHODYIV6wU2fO2s8o
-         9g/cmQ77WDp8j+8KqwYOB/AjMoGeuvKE3rbDJSMdmw1K+opR8SePW2MTMFKlsQGgG2uX
-         T1eg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718092279; x=1718697079;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=B5dpfcWBVzZkrjYUVKPs0kakADGkyRUU122R+dHdta4=;
-        b=FpcVqCn7Qn4fGPfU0rzN7i87+AQMNUAr7+fMx4r52MBYF9KC09vJlUr+w8w1CXZ/aG
-         NpbSI8op3vjCsCBOk88WAQVH0MbB4A5V6uxF77/PEh/RPwxNzZGbYQ3sDidDpmzMP98i
-         maJefJKQp1PBoL0V2tyeuoEjVDzjMhOLit+Azg5t3mMZiSjMNIWM7T+pKcNYiKH+CDEg
-         FXTxw7SOJ/XdjgOLXYFeUJcKESpqwn9UtCKHjkBji4/AbytmuiArIm96aIBpqhBOuq66
-         AOBUvC60b9+SePyJya7X5WgIHPd+DNM5bukCFtnhG2xMhbK2v8shkB2s5oHvIJfwGRk9
-         TTKQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUz5KpuEHofqawAEW3jB01BhE5Cqmj4VvUq9vMAqLjYoXKrMGLeOkxdgjASoBzHRsw/5j/xBYfd8RvJ4q8hLuwERThs7r+hRIKJXhrdecem+VBgqJc6GSibEw42eQ==
-X-Gm-Message-State: AOJu0YySqWcmXHc9fyx5lSQcbSDYdZkQw0pFkJJIR3w46AlHBt0hcKJM
-	6fB5edRcMmNv5XpmgeqnVkrU1VujpNz5dSdolJUcAiybLJsmrKL5
-X-Google-Smtp-Source: AGHT+IFLutzyaa3H+suoM7wf8H86WUDxg3mOl4rOpoLaLlOM4GLritf1m4KGdowZsvvO2KGSBj862Q==
-X-Received: by 2002:a05:6a00:b81:b0:704:2d64:747 with SMTP id d2e1a72fcca58-7042d64088dmr8377849b3a.7.1718092279428;
-        Tue, 11 Jun 2024 00:51:19 -0700 (PDT)
-Received: from kodidev-ubuntu (69-172-146-21.cable.teksavvy.com. [69.172.146.21])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-70423f4a849sm5174072b3a.153.2024.06.11.00.51.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Jun 2024 00:51:18 -0700 (PDT)
-From: Tony Ambardar <tony.ambardar@gmail.com>
-X-Google-Original-From: Tony Ambardar <Tony.Ambardar@gmail.com>
-Date: Tue, 11 Jun 2024 00:51:16 -0700
-To: Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc: Mark Wielaard <mjw@redhat.com>, Hengqi Chen <hengqi.chen@gmail.com>,
-	Mark Wielaard <mark@klomp.org>,
-	Ying Huang <ying.huang@oss.cipunited.com>, bpf@vger.kernel.org,
-	dwarves@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>
+	s=arc-20240116; t=1718111839; c=relaxed/simple;
+	bh=5+59LrSb7Ibb4x5W9jMwmIoeMLtYtBTLpbfJ3J7cwV0=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=AO89JYoZb7o74bTDsjxlklNzvxuIrV+n8MVJfWgIjugNGBWG+3aDADheA3K53HbgAp/MID/OhEOt24ZlN75iQQwBeygsuX5l2LNh+Ypkq7SVCy9VZfOp6G46LCEZGQn5HeFNtm8SpSVdA1+YNsuFJHSQEvbWmku9iHfGa+016Dg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=klomp.org; spf=pass smtp.mailfrom=klomp.org; arc=none smtp.client-ip=45.83.234.184
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=klomp.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=klomp.org
+Received: from r6.localdomain (82-217-174-174.cable.dynamic.v4.ziggo.nl [82.217.174.174])
+	(using TLSv1.2 with cipher ADH-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by gnu.wildebeest.org (Postfix) with ESMTPSA id F3797302764B;
+	Tue, 11 Jun 2024 15:07:29 +0200 (CEST)
+Received: by r6.localdomain (Postfix, from userid 1000)
+	id 769A63404B1; Tue, 11 Jun 2024 15:07:29 +0200 (CEST)
+Message-ID: <45651efb5698e8247e5d056aed7ac522a04b1056.camel@klomp.org>
 Subject: Re: elfutils DWARF problem was: Re: Problem with BTF generation on
  mips64el
-Message-ID: <ZmgB9FtYADbF1jn+@kodidev-ubuntu>
+From: Mark Wielaard <mark@klomp.org>
+To: Tony Ambardar <tony.ambardar@gmail.com>, Arnaldo Carvalho de Melo
+	 <acme@kernel.org>, Ying Huang <ying.huang@oss.cipunited.com>
+Cc: elfutils-devel@sourceware.org, Hengqi Chen <hengqi.chen@gmail.com>, 
+ bpf@vger.kernel.org, dwarves@vger.kernel.org, Alexei Starovoitov
+ <ast@kernel.org>,  Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko
+ <andrii@kernel.org>
+Date: Tue, 11 Jun 2024 15:07:29 +0200
+In-Reply-To: <Zmfwhn6inA2m1ftm@kodidev-ubuntu>
 References: <ZlkoM6/PSxVcGM6X@kodidev-ubuntu>
- <CAEyhmHT_1N3xwLO2BwVK97ebrABJv52d5dWxzvuNNcF-OF5gKw@mail.gmail.com>
- <ZlmrQqQSJyNH7fVF@kodidev-ubuntu>
- <Zln1kZnu2Xxeyngj@x1>
- <Zl2m4RP7BwhZ0J6l@kodidev-ubuntu>
- <Zl3Zp5r9m6X_i_J4@x1>
- <Zl4AHfG6Gg5Htdgc@x1>
- <20240603191833.GD4421@gnu.wildebeest.org>
- <Zl6OTJXw0LH6uWIN@kodidev-ubuntu>
- <Zmfwhn6inA2m1ftm@kodidev-ubuntu>
+	 <CAEyhmHT_1N3xwLO2BwVK97ebrABJv52d5dWxzvuNNcF-OF5gKw@mail.gmail.com>
+	 <ZlmrQqQSJyNH7fVF@kodidev-ubuntu> <Zln1kZnu2Xxeyngj@x1>
+	 <Zl2m4RP7BwhZ0J6l@kodidev-ubuntu> <Zl3Zp5r9m6X_i_J4@x1>
+	 <Zl4AHfG6Gg5Htdgc@x1> <20240603191833.GD4421@gnu.wildebeest.org>
+	 <Zl6OTJXw0LH6uWIN@kodidev-ubuntu> <Zmfwhn6inA2m1ftm@kodidev-ubuntu>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.52.1 (3.52.1-1.fc40) 
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Zmfwhn6inA2m1ftm@kodidev-ubuntu>
+X-Spam-Flag: NO
 
-On Mon, Jun 10, 2024 at 11:36:54PM -0700, Tony Ambardar wrote:
+Hi,
+
+Adding elfutils-devel to CC to keep everyone up to date on the state of
+the patches.
+
+On Mon, 2024-06-10 at 23:36 -0700, Tony Ambardar wrote:
 > On Mon, Jun 03, 2024 at 08:47:24PM -0700, Tony Ambardar wrote:
-> 
-> [snip]
-> 
-> Arnaldo:
-> 
-> Your stepping through DWARF/reloc diagnostics earlier was helpful. Thanks!
-> I reran your tests with the updated elfutils and latest pahole (pre-1.27),
-> and then found:
-> 
->   - everything that worked before, still works
->   - your observations from "btfdiff vmlinux" and 'struct dma_chan' persist
->   - we now see expected output from "eu-readelf -winfo netdevsim.ko"
-> 
-> Regarding pahole, DWARF parsing and BTF generation now works:
-> (with no more die__process: error messages seen)
-> 
->     kodidev:~/linux$ pahole -F dwarf netdevsim.ko |wc -l
->     14504
-> 
-> but strangely pahole still doesn't read its own generated BTF:
-> 
->     kodidev:~/linux$ pahole -F btf netdevsim.ko
->     libbpf: Invalid BTF string section
->     pahole: file 'netdevsim.ko' has no btf type information.
+> > On Mon, Jun 03, 2024 at 09:18:33PM +0200, Mark Wielaard wrote:
+> > > On Mon, Jun 03, 2024 at 02:40:45PM -0300, Arnaldo Carvalho de Melo wr=
+ote:
+> > > > Couldn't find a way to ask eu-readelf for more verbose output, wher=
+e we
+> > > > could perhaps get some clue as to why it produces nothing while bin=
+utils
+> > > > readelf manages to grok it, Mark, do you know some other way to ask
+> > > > eu-readelf to produce more debug output?
+> > > >=20
+> > > > I'm unsure if the netdevsim.ko file was left in a semi encoded BTF =
+state
+> > > > that then made eu-readelf to not be able to process it while pahole=
+,
+> > > > that uses eltuils' libraries, was able to process the first two CUs=
+ for
+> > > > a kernel module and all the CUs for the vmlinux file :-\
+> > > >=20
+> > > > Mark, the whole thread is available at:
+> > > >=20
+> > > > https://lore.kernel.org/all/Zl3Zp5r9m6X_i_J4@x1/T/#u
+> > >=20
+> > > I haven't looked at the vmlinux file. But for the .ko file the issue
+> > > is that the elfutils MIPS backend isn't complete. Specifically MIPS
+> > > relocations aren't recognized (and so cannot be applied). There are
+> > > some pending patches which try to fix that:
+> > >=20
+> > > https://patchwork.sourceware.org/project/elfutils/list/?series=3D3160=
+1
+> >=20
+> > Earlier in the thread, Hengqi Chen pointed out the latest elfutils back=
+end
+> > work for MIPS, and I locally rebuilt elfutils and then pahole from thei=
+r
+> > respective next/main branches. For elfutils, main (935ee131cf7c) includ=
+es
+> >=20
+> >   e259f126 Support Mips architecture
+> >   f2acb069 stack: Fix stack unwind failure on mips
+> >   db33cb0c backends: Add register_info, return_value_location, core_not=
+e mips
+> >=20
+> > which partially applies the patchwork series but leaves out the support=
+ for
+> > readelf, strip, and elflint.
+> >=20
+> > I believe this means the vmlinux and .ko files I shared are OK, or is t=
+here
+> > more backend work needed for MIPS?
+> >=20
+> > The bits missing in eu-readelf would explain the blank output both Arna=
+ldo
+> > and I see from "$ eu-readelf -winfo vmlinux". I tried rebuilding with t=
+he
+> > patchwork readelf patch locally but ran into merge conflicts.
+>=20
+> A short update, starting with answering my own question.
+>=20
+> No, apparently the above commits *do not* complete the backend work. Ying
+> Huang submitted additional related patches since March 5: [1][2]
+>=20
+>     strip: Adapt src/strip -o -f on mips
+>     readelf: Adapt src/readelf -h/-S/-r/-w/-l/-d/-a on mips
+>     elflint: adapt src/elflint --gnu src/nm on mips
+>     test: Add mips in run-allregs.sh and run-readelf-mixed-corenote.sh
+>=20
+> Despite the titles, these patches do include core backend changes for MIP=
+S.
+> I resolved the various merge conflicts [3], rebuilt elfutils, and reteste=
+d
+> kernel builds to now find:
+>=20
+>   - pahole is able to read DWARF[45] info and create .BTF for modules
+>   - resolve_btfids can successfully patch .BTF_ids in modules
+>   - kernel successfully loads modules with BTF and kfuncs (tested 6.6 LTS=
+)
+>=20
+> Huzzah!
+>=20
+>=20
+> Ying:
+>=20
+> Thank you for developing these MIPS patches. In your view, are the MIPS
+> changes now complete, or do you plan further updates that might improve o=
+r
+> impact parsing DWARF debug/reloc info in apps like pahole?
+>=20
+>=20
+> Mark:
+>=20
+> Given that BTF usage on Linux/MIPS is basically broken without these
+> patches, could I request some of your review time for them to be merged? =
+If
+> it's helpful, my branch [3] includes all patches with conflicts fixed, an=
+d
+> I also successfully ran the elfutils self-tests (including MIPS from Ying=
+).
+> Please feel free to add for these patches:
+>=20
+>     Tested-by: Tony Ambardar <Tony.Ambardar@gmail.com>
 
-After staring at this I realized that this is split BTF and we needed to
-issue "pahole -F btf --btf_base vmlinux netdevsim.ko", which does work.
-Unfortunately, the libbpf error message is a bit cryptic; perhaps a future
-update could mention "--btf_base"?
+Yes, I would very much like to integrate the rest of these patches. But
+I keep running out of time. The main issues were that, as you noticed,
+the patches mix backend and frontend tool changes a bit. I don't have
+access to a MIPS system to test them on. There are a couple of
+different MIPS abis (I believe all combinations of 32/64 bit and
+big/little endianness), but people have only tested on mips64le (maybe
+that is the only relevant one these days?) And finally the way MIPS
+represents relocations is slightly different than any other ELF
+architecture does. So we have to translate that somewhere to make the
+standards functions work. I have to convince myself that doing that in
+elf_getdata as the patches do is the right place.
 
->     
-> [snip]
-> 
 > Many thanks everyone for your help,
 > Tony
-> 
-> [1]: https://patchwork.sourceware.org/project/elfutils/list/?series=31601
-> [2]: https://patchwork.sourceware.org/project/elfutils/list/?series=34310
+>=20
+> [1]: https://patchwork.sourceware.org/project/elfutils/list/?series=3D316=
+01
+> [2]: https://patchwork.sourceware.org/project/elfutils/list/?series=3D343=
+10
 > [3]:
-> https://github.com/guidosarducci/elfutils/commits/main-fix-mips-support-reloc/
+> https://github.com/guidosarducci/elfutils/commits/main-fix-mips-support-r=
+eloc/
+
