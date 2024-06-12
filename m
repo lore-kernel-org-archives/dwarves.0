@@ -1,258 +1,225 @@
-Received: from lf-1-17.ptr.blmpb.com (lf-1-17.ptr.blmpb.com [103.149.242.17])
+Received: from lf-2-31.ptr.blmpb.com (lf-2-31.ptr.blmpb.com [101.36.218.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC466F4FA
-	for <dwarves@vger.kernel.org>; Wed, 12 Jun 2024 03:24:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.149.242.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60CA717C77
+	for <dwarves@vger.kernel.org>; Wed, 12 Jun 2024 03:43:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=101.36.218.31
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718162688; cv=none; b=adtwBU2gC4Rhi6dk21qeYAPlrtC1bes9pp47lHko+Ep1zNAs2i9986XOXHfM0qbj5yM8beRTPO/9nfG6BhczBnLez7YOQphDdWAn0b1T0WOxRy4HM+VeMf6EyiWKvLbyaEvIHgwjJH3LCPEf+O6OTDiCKdtk7SE29Q7pMiIFNaw=
+	t=1718163836; cv=none; b=bzqsEXhYzlJ13XR4ZSCir64Gy8kGzBglapwtoUAUtH9zpd6k6+QlFTeqyxEYdNdqlc977Pii7ObrWuniLAR9y92OJA3qg9Ar6JpJVGszNmwJ2i5ieJyvLmhs3elvd5ugHXC6JVcuGtRlWjl9dy9JSqpBFBIWbRnLQ/IjBmCSGL8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718162688; c=relaxed/simple;
-	bh=kgp3NkghzOefzkOS2KGRWV5D4StUnIyV3p4BlRfFHw0=;
-	h=Mime-Version:Content-Type:In-Reply-To:Cc:Date:Subject:Message-Id:
-	 References:To:From; b=JznsCmLKeKBVuwq4zRZezHdFgjaD61j+JLR3pbMNJs+CvodHbqxgIgXdMnn2EI1otfdghlBkebnxhPQsudowtB6fKoIH6yQWNxEXH8yEKoKsbnw0qgNG0OVL71qZdRWM1bOllmnj9XHymU/GlUWI42C9x098+X7fp1yTp2/D/vo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=oss.cipunited.com; spf=pass smtp.mailfrom=oss.cipunited.com; dkim=pass (2048-bit key) header.d=oss.cipunited.com header.i=@oss.cipunited.com header.b=NXfTc8Ip; arc=none smtp.client-ip=103.149.242.17
+	s=arc-20240116; t=1718163836; c=relaxed/simple;
+	bh=FwF1UaqgrhfczoyQT/y5NSk2yXrqzEmGBW4VPrvUML0=;
+	h=References:In-Reply-To:Cc:Subject:Content-Type:From:To:Message-Id:
+	 Mime-Version:Date; b=ikIfR+wS5R3scCEdewtn9wprYuZ8GErXUs0p7Zlmc7e88ZQf398n+45j6gylUYmwIvx/WmZ731IGGqAvi/GU9bWInkUhvrnZu3JJhnZ17LvC1WGbOsAR9lS92KzCHj4POwVuLE0tg2kfkNS4TEGjrs0cUDQpif99kSXINtZ5afI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=oss.cipunited.com; spf=pass smtp.mailfrom=oss.cipunited.com; dkim=pass (2048-bit key) header.d=oss.cipunited.com header.i=@oss.cipunited.com header.b=sXhdsb0q; arc=none smtp.client-ip=101.36.218.31
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=oss.cipunited.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.cipunited.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oss.cipunited.com header.i=@oss.cipunited.com header.b="NXfTc8Ip"
+	dkim=pass (2048-bit key) header.d=oss.cipunited.com header.i=@oss.cipunited.com header.b="sXhdsb0q"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
- s=feishu2303200042; d=oss.cipunited.com; t=1718159947;
+ s=feishu2303200042; d=oss.cipunited.com; t=1718163080;
   h=from:subject:mime-version:from:date:message-id:subject:to:cc:
  reply-to:content-type:mime-version:in-reply-to:message-id;
- bh=2+Fz/PQ5wZ//fbujJB00EmLF+iGqzP4nPBqg4JDrJs8=;
- b=NXfTc8Ipnvwzl7oFbtcU5yVSZ7GLFeU6JGCAt/gNfx29bMHSVeaFbGgIP1P4Smckhsu7iD
- f2qeQ5Zs7qgVgVXu6vMP8YMya542pfcFRYO8B+EQzenMZtJ/BgOJ0WYOn7Gn/sltedK9b7
- zIRs1HxeNkEGPvtY034P85C3boMLYKdMAjpXFbT8JQLmvf3/g9lC29kRwKMfeXVJowEx5z
- lUISiBsJLFO+Jdjd0kMlp4p2rWQP2aKwG54CfyBUL9QWeUFUcvKfDdIFwHExNK7xFHUBXI
- C+DxxhDLX5bRwyLEGS7oF2GPb5FoEkjnJx40z/ppRkzNgGtexFtQiYElHp29ow==
+ bh=EVosu311fBMed9WBoPhL6812x0u8hWHXJfxE8L3RCug=;
+ b=sXhdsb0q8O1gvTeuKaRLVafROVvClovULxlg2ZWCRJhf569O+fl3F2o97gHSIQ0KggUJAb
+ WckcI3+PEQwJfr0wb7ncXLZBfO/msoLOiK3CCkt67hc2/n7FwaAhG7zOWF01EuCMVIKD3n
+ 0qykpeMALyqqr/SjStxCd7erig0cXspIB4FdQLxGOmn15hfElTEmiSsGtFE9UOfmai16uk
+ g3ZtvuFqk9/RGSGEMpJUoQEkXymHllFpAf9OfjB+QWwHtnw2/2xROmn4mRR5VXhoocgC7j
+ GW71lxe0+zViLD6DU3Zhk9gLBqlZZ+36XVK1I+B7P7JCrlK6oa8DRULR3E4c3w==
+Received: from [192.168.8.113] ([171.15.156.97]) by smtp.feishu.cn with ESMTPS; Wed, 12 Jun 2024 11:31:08 +0800
+References: <ZlkoM6/PSxVcGM6X@kodidev-ubuntu> <CAEyhmHT_1N3xwLO2BwVK97ebrABJv52d5dWxzvuNNcF-OF5gKw@mail.gmail.com> <ZlmrQqQSJyNH7fVF@kodidev-ubuntu> <Zln1kZnu2Xxeyngj@x1> <Zl2m4RP7BwhZ0J6l@kodidev-ubuntu> <Zl3Zp5r9m6X_i_J4@x1> <Zl4AHfG6Gg5Htdgc@x1> <20240603191833.GD4421@gnu.wildebeest.org> <Zl6OTJXw0LH6uWIN@kodidev-ubuntu> <Zmfwhn6inA2m1ftm@kodidev-ubuntu> <45651efb5698e8247e5d056aed7ac522a04b1056.camel@klomp.org>
+X-Lms-Return-Path: <lba+26669167d+a03706+vger.kernel.org+ying.huang@oss.cipunited.com>
+In-Reply-To: <45651efb5698e8247e5d056aed7ac522a04b1056.camel@klomp.org>
+Content-Transfer-Encoding: quoted-printable
+Cc: <elfutils-devel@sourceware.org>, "Hengqi Chen" <hengqi.chen@gmail.com>, 
+	<bpf@vger.kernel.org>, <dwarves@vger.kernel.org>, 
+	"Alexei Starovoitov" <ast@kernel.org>, 
+	"Daniel Borkmann" <daniel@iogearbox.net>, 
+	"Andrii Nakryiko" <andrii@kernel.org>
+Subject: Re: elfutils DWARF problem was: Re: Problem with BTF generation on mips64el
+Content-Type: text/plain; charset=UTF-8
+X-Original-From: Ying Huang <ying.huang@oss.cipunited.com>
+From: "Ying Huang" <ying.huang@oss.cipunited.com>
+To: "Mark Wielaard" <mark@klomp.org>, 
+	"Tony Ambardar" <tony.ambardar@gmail.com>, 
+	"Arnaldo Carvalho de Melo" <acme@kernel.org>
+Message-Id: <541a70f7-6342-4369-8191-d6916c38d358@oss.cipunited.com>
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-In-Reply-To: <Zmfwhn6inA2m1ftm@kodidev-ubuntu>
-Cc: "Mark Wielaard" <mjw@redhat.com>, "Hengqi Chen" <hengqi.chen@gmail.com>, 
-	<bpf@vger.kernel.org>, <dwarves@vger.kernel.org>, 
-	"Alexei Starovoitov" <ast@kernel.org>, 
-	"Daniel Borkmann" <daniel@iogearbox.net>, 
-	"Andrii Nakryiko" <andrii@kernel.org>
-Date: Wed, 12 Jun 2024 10:39:02 +0800
-User-Agent: Mozilla Thunderbird
 Content-Language: en-US
-X-Lms-Return-Path: <lba+266690a4b+78e30c+vger.kernel.org+ying.huang@oss.cipunited.com>
-X-Original-From: Ying Huang <ying.huang@oss.cipunited.com>
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: elfutils DWARF problem was: Re: Problem with BTF generation on mips64el
-Message-Id: <9b6e3f83-07a6-47fe-a033-8b94e53c98f2@oss.cipunited.com>
-References: <ZlkoM6/PSxVcGM6X@kodidev-ubuntu> <CAEyhmHT_1N3xwLO2BwVK97ebrABJv52d5dWxzvuNNcF-OF5gKw@mail.gmail.com> <ZlmrQqQSJyNH7fVF@kodidev-ubuntu> <Zln1kZnu2Xxeyngj@x1> <Zl2m4RP7BwhZ0J6l@kodidev-ubuntu> <Zl3Zp5r9m6X_i_J4@x1> <Zl4AHfG6Gg5Htdgc@x1> <20240603191833.GD4421@gnu.wildebeest.org> <Zl6OTJXw0LH6uWIN@kodidev-ubuntu> <Zmfwhn6inA2m1ftm@kodidev-ubuntu>
-Received: from [192.168.8.113] ([171.15.156.97]) by smtp.feishu.cn with ESMTPS; Wed, 12 Jun 2024 10:39:06 +0800
-To: "Tony Ambardar" <tony.ambardar@gmail.com>, 
-	"Mark Wielaard" <mark@klomp.org>, 
-	"Arnaldo Carvalho de Melo" <acme@kernel.org>
-From: "Ying Huang" <ying.huang@oss.cipunited.com>
+User-Agent: Mozilla Thunderbird
+Date: Wed, 12 Jun 2024 11:31:05 +0800
 
-Hi Tony,
+Hi Mark,
 
-Thanks for your fix about the conflict and test about the whole patch.
+Regarding the current questions, I have a few points that needed to be expl=
+ained.
 
-Now, there is currently one test case that has not been added, which is
 
-tests/run-backtrace-core-mips.sh.
-Thanks,
-Ying
-=E5=9C=A8 2024/6/11 14:36, Tony Ambardar =E5=86=99=E9=81=93:
-> On Mon, Jun 03, 2024 at 08:47:24PM -0700, Tony Ambardar wrote:
->> Hi Mark,
->>
->> On Mon, Jun 03, 2024 at 09:18:33PM +0200, Mark Wielaard wrote:
->>> On Mon, Jun 03, 2024 at 02:40:45PM -0300, Arnaldo Carvalho de Melo wrot=
-e:
->>>> Couldn't find a way to ask eu-readelf for more verbose output, where w=
-e
->>>> could perhaps get some clue as to why it produces nothing while binuti=
-ls
->>>> readelf manages to grok it, Mark, do you know some other way to ask
->>>> eu-readelf to produce more debug output?
+=E5=9C=A8 2024/6/11 21:07, Mark Wielaard =E5=86=99=E9=81=93:
+> Hi,
+>
+> Adding elfutils-devel to CC to keep everyone up to date on the state of
+> the patches.
+>
+> On Mon, 2024-06-10 at 23:36 -0700, Tony Ambardar wrote:
+>> On Mon, Jun 03, 2024 at 08:47:24PM -0700, Tony Ambardar wrote:
+>>> On Mon, Jun 03, 2024 at 09:18:33PM +0200, Mark Wielaard wrote:
+>>>> On Mon, Jun 03, 2024 at 02:40:45PM -0300, Arnaldo Carvalho de Melo wro=
+te:
+>>>>> Couldn't find a way to ask eu-readelf for more verbose output, where =
+we
+>>>>> could perhaps get some clue as to why it produces nothing while binut=
+ils
+>>>>> readelf manages to grok it, Mark, do you know some other way to ask
+>>>>> eu-readelf to produce more debug output?
+>>>>>
+>>>>> I'm unsure if the netdevsim.ko file was left in a semi encoded BTF st=
+ate
+>>>>> that then made eu-readelf to not be able to process it while pahole,
+>>>>> that uses eltuils' libraries, was able to process the first two CUs f=
+or
+>>>>> a kernel module and all the CUs for the vmlinux file :-\
+>>>>>
+>>>>> Mark, the whole thread is available at:
+>>>>>
+>>>>> https://lore.kernel.org/all/Zl3Zp5r9m6X_i_J4@x1/T/#u
+>>>> I haven't looked at the vmlinux file. But for the .ko file the issue
+>>>> is that the elfutils MIPS backend isn't complete. Specifically MIPS
+>>>> relocations aren't recognized (and so cannot be applied). There are
+>>>> some pending patches which try to fix that:
 >>>>
->>>> I'm unsure if the netdevsim.ko file was left in a semi encoded BTF sta=
-te
->>>> that then made eu-readelf to not be able to process it while pahole,
->>>> that uses eltuils' libraries, was able to process the first two CUs fo=
+>>>> https://patchwork.sourceware.org/project/elfutils/list/?series=3D31601
+>>> Earlier in the thread, Hengqi Chen pointed out the latest elfutils back=
+end
+>>> work for MIPS, and I locally rebuilt elfutils and then pahole from thei=
 r
->>>> a kernel module and all the CUs for the vmlinux file :-\
->>>>
->>>> Mark, the whole thread is available at:
->>>>
->>>> https://lore.kernel.org/all/Zl3Zp5r9m6X_i_J4@x1/T/#u
->>> I haven't looked at the vmlinux file. But for the .ko file the issue
->>> is that the elfutils MIPS backend isn't complete. Specifically MIPS
->>> relocations aren't recognized (and so cannot be applied). There are
->>> some pending patches which try to fix that:
+>>> respective next/main branches. For elfutils, main (935ee131cf7c) includ=
+es
 >>>
->>> https://patchwork.sourceware.org/project/elfutils/list/?series=3D31601
->> Earlier in the thread, Hengqi Chen pointed out the latest elfutils backe=
+>>>   e259f126 Support Mips architecture
+>>>   f2acb069 stack: Fix stack unwind failure on mips
+>>>   db33cb0c backends: Add register_info, return_value_location, core_not=
+e mips
+>>>
+>>> which partially applies the patchwork series but leaves out the support=
+ for
+>>> readelf, strip, and elflint.
+>>>
+>>> I believe this means the vmlinux and .ko files I shared are OK, or is t=
+here
+>>> more backend work needed for MIPS?
+>>>
+>>> The bits missing in eu-readelf would explain the blank output both Arna=
+ldo
+>>> and I see from "$ eu-readelf -winfo vmlinux". I tried rebuilding with t=
+he
+>>> patchwork readelf patch locally but ran into merge conflicts.
+>> A short update, starting with answering my own question.
+>>
+>> No, apparently the above commits *do not* complete the backend work. Yin=
+g
+>> Huang submitted additional related patches since March 5: [1][2]
+>>
+>>     strip: Adapt src/strip -o -f on mips
+>>     readelf: Adapt src/readelf -h/-S/-r/-w/-l/-d/-a on mips
+>>     elflint: adapt src/elflint --gnu src/nm on mips
+>>     test: Add mips in run-allregs.sh and run-readelf-mixed-corenote.sh
+>>
+>> Despite the titles, these patches do include core backend changes for MI=
+PS.
+>> I resolved the various merge conflicts [3], rebuilt elfutils, and retest=
+ed
+>> kernel builds to now find:
+>>
+>>   - pahole is able to read DWARF[45] info and create .BTF for modules
+>>   - resolve_btfids can successfully patch .BTF_ids in modules
+>>   - kernel successfully loads modules with BTF and kfuncs (tested 6.6 LT=
+S)
+>>
+>> Huzzah!
+>>
+>>
+>> Ying:
+>>
+>> Thank you for developing these MIPS patches. In your view, are the MIPS
+>> changes now complete, or do you plan further updates that might improve =
+or
+>> impact parsing DWARF debug/reloc info in apps like pahole?
+>>
+>>
+>> Mark:
+>>
+>> Given that BTF usage on Linux/MIPS is basically broken without these
+>> patches, could I request some of your review time for them to be merged?=
+ If
+>> it's helpful, my branch [3] includes all patches with conflicts fixed, a=
 nd
->> work for MIPS, and I locally rebuilt elfutils and then pahole from their
->> respective next/main branches. For elfutils, main (935ee131cf7c) include=
-s
+>> I also successfully ran the elfutils self-tests (including MIPS from Yin=
+g).
+>> Please feel free to add for these patches:
 >>
->>   e259f126 Support Mips architecture
->>   f2acb069 stack: Fix stack unwind failure on mips
->>   db33cb0c backends: Add register_info, return_value_location, core_note=
- mips
->>
->> which partially applies the patchwork series but leaves out the support =
-for
->> readelf, strip, and elflint.
->>
->> I believe this means the vmlinux and .ko files I shared are OK, or is th=
-ere
->> more backend work needed for MIPS?
->>
->> The bits missing in eu-readelf would explain the blank output both Arnal=
-do
->> and I see from "$ eu-readelf -winfo vmlinux". I tried rebuilding with th=
-e
->> patchwork readelf patch locally but ran into merge conflicts.
->>
->> CCing Ying Huang for any more insight.
->>
->> Thanks,
+>>     Tested-by: Tony Ambardar <Tony.Ambardar@gmail.com>
+> Yes, I would very much like to integrate the rest of these patches. But
+> I keep running out of time. The main issues were that, as you noticed,
+> the patches mix backend and frontend tool changes a bit.=20
+
+The reason about the mixture and title is that only by fixing the acquisiti=
+on of relocation information can 'strip' and 'readelf -w' work normally.
+
+Now it seems really confusing, so I want to do some changes based on your o=
+pinions, change the titles or reorganize these patches to make them look mo=
+re logical.
+
+> I don't have
+> access to a MIPS system to test them on. There are a couple of
+> different MIPS abis (I believe all combinations of 32/64 bit and
+> big/little endianness), but people have only tested on mips64le (maybe
+> that is the only relevant one these days?)=20
+
+I have tested other mips abi before, I will test it agagin and attach the r=
+esults of 'make check' with and without patch.
+
+And add a description of mips abi support in the commit message.
+
+> And finally the way MIPS
+> represents relocations is slightly different than any other ELF
+> architecture does. So we have to translate that somewhere to make the
+> standards functions work. I have to convince myself that doing that in
+> elf_getdata as the patches do is the right place.
+
+
+The controversial problem was the location of the code, the code was to cha=
+nge the original relocation info to ensure mips can obtain the correct inde=
+x value and symble index.
+
+Or we did not modify the original data, we modify the way to obtain the ind=
+ex value and symble index at funtion 'gelf_getrela' in file 'libelf/gelf_ge=
+trela.c','libelf/gelf_getrel.c','libelf/gelf_update_rela.c','libelf/gelf_up=
+date_rel.c'.
+
+Where the function 'gelf_getrela' is called=EF=BC=8Cmodify the relocation i=
+nfo that has been obtained .
+
+What do you think of this?
+
+
+Thanks,
+
+Ying
+
+>
+>> Many thanks everyone for your help,
 >> Tony
-> Hello all,
->
-> A short update, starting with answering my own question.
->
-> No, apparently the above commits *do not* complete the backend work. Ying
-> Huang submitted additional related patches since March 5: [1][2]
->
->     strip: Adapt src/strip -o -f on mips
->     readelf: Adapt src/readelf -h/-S/-r/-w/-l/-d/-a on mips
->     elflint: adapt src/elflint --gnu src/nm on mips
->     test: Add mips in run-allregs.sh and run-readelf-mixed-corenote.sh
->
-> Despite the titles, these patches do include core backend changes for MIP=
-S.
-> I resolved the various merge conflicts [3], rebuilt elfutils, and reteste=
-d
-> kernel builds to now find:
->
->   - pahole is able to read DWARF[45] info and create .BTF for modules
->   - resolve_btfids can successfully patch .BTF_ids in modules
->   - kernel successfully loads modules with BTF and kfuncs (tested 6.6 LTS=
-)
->
-> Huzzah!
->
->
-> Ying:
->
-> Thank you for developing these MIPS patches. In your view, are the MIPS
-> changes now complete, or do you plan further updates that might improve o=
-r
-> impact parsing DWARF debug/reloc info in apps like pahole?
->
->
-> Mark:
->
-> Given that BTF usage on Linux/MIPS is basically broken without these
-> patches, could I request some of your review time for them to be merged? =
-If
-> it's helpful, my branch [3] includes all patches with conflicts fixed, an=
-d
-> I also successfully ran the elfutils self-tests (including MIPS from Ying=
-).
-> Please feel free to add for these patches:
->
->     Tested-by: Tony Ambardar <Tony.Ambardar@gmail.com>
->
->
-> Arnaldo:
->
-> Your stepping through DWARF/reloc diagnostics earlier was helpful. Thanks=
-!
-> I reran your tests with the updated elfutils and latest pahole (pre-1.27)=
-,
-> and then found:
->
->   - everything that worked before, still works
->   - your observations from "btfdiff vmlinux" and 'struct dma_chan' persis=
-t
->   - we now see expected output from "eu-readelf -winfo netdevsim.ko"
->
-> Regarding pahole, DWARF parsing and BTF generation now works:
-> (with no more die__process: error messages seen)
->
->     kodidev:~/linux$ pahole -F dwarf netdevsim.ko |wc -l
->     14504
->
-> but strangely pahole still doesn't read its own generated BTF:
->
->     kodidev:~/linux$ pahole -F btf netdevsim.ko
->     libbpf: Invalid BTF string section
->     pahole: file 'netdevsim.ko' has no btf type information.
->
-> Poking inside a little further:
->    =20
->     kodidev:~/linux$ ltrace -S pahole -F btf netdevsim.ko
->     [...]
->     argp_parse(0x563d47da42a0, 4, 0x7ffd5e552698, 0 <unfinished ...>
->     SYS_318(0x7fc385bf84d8, 8, 1, 0x7fc385ce9908)    =3D 8
->     SYS_brk(0)                                       =3D 0x563d47e37000
->     SYS_brk(0x563d47e58000)                          =3D 0x563d47e58000
->     <... argp_parse resumed> )                       =3D 0
->     dwarves__init(0x20000, 0, -4096, 213)            =3D 0
->     dwarves__resolve_cacheline_size(0x563d47da40c0, 0, 24, 213) =3D 64
->     cus__new(5, 0, 64, 213)                          =3D 0x563d47e372a0
->     memset(0x563d47da44c0, ' ', 127)                 =3D 0x563d47da44c0
->     strlen("/sys/kernel/btf/")                       =3D 16
->     strncmp("netdevsim.ko", "/sys/kernel/btf/", 16)  =3D 63
->     cus__load_files(0x563d47e372a0, 0x563d47da40c0, 0x7ffd5e5526b0,
->     0x563d47da40c0 <unfinished ...>
->     SYS_openat(0xffffff9c, 0x7ffd5e554603, 0x80000, 0) =3D 3
->     SYS_newfstatat(3, 0x7fc385baf44f, 0x7ffd5e552210, 4096) =3D 0
->     SYS_read(3, "\177ELF\002\001\001", 4096)         =3D 4096
->     SYS_close(3)                                     =3D 0
->     SYS_openat(0xffffff9c, 0x7ffd5e554603, 0x80000, 0) =3D 3
->     SYS_fcntl(3, 1, 0, 0x7fc3859de2f0)               =3D 1
->     SYS_newfstatat(3, 0x7fc385baf44f, 0x7ffd5e5521f0, 4096) =3D 0
->     SYS_pread(3, 0x7ffd5e5521f0, 64, 0)              =3D 64
->     SYS_pread(3, 0x563d47e3e470, 3520, 0x4f60c8)     =3D 3520
->     SYS_pread(3, 0x563d47e3f240, 525, 0x4f5eb8)      =3D 525
->     SYS_pread(3, 0x563d47e3f460, 0x45dd, 0x2b1fb6)   =3D 0x45dd
->     SYS_write(2, "libbpf: Invalid BTF string secti"..., 35libbpf: Invalid=
- BTF
->     string section
->     ) =3D 35
->     SYS_close(3)                                     =3D 0
->     <... cus__load_files resumed> )                  =3D 0xffffffff
->     access("netdevsim.ko", 4 <unfinished ...>
->     SYS_access("netdevsim.ko", 04)                   =3D 0
->     <... access resumed> )                           =3D 0
->     fprintf(0x7fc385bf26a0, "pahole: file '%s' has no %s type"...,
->     "netdevsim.ko", "btf" <unfinished ...>
->     SYS_write(2, "pahole: file 'netdevsim.ko' has "..., 57pahole: file
->     'netdevsim.ko' has no btf type information.
->     ) =3D 57
->     <... fprintf resumed> )                          =3D 57
->     SYS_exit_group(1 <no return ...>
->     +++ exited (status 1) +++
->
-> Could you help investigate this further? Maybe a libbpf issue? For the
-> record, I also tried building pahole with embedded libbpf 1.4.3 without
-> any change. (side note: please make pahole --version also cover libbpf)
->
->
-> Many thanks everyone for your help,
-> Tony
->
-> [1]: https://patchwork.sourceware.org/project/elfutils/list/?series=3D316=
-01
-> [2]: https://patchwork.sourceware.org/project/elfutils/list/?series=3D343=
-10
-> [3]:
-> https://github.com/guidosarducci/elfutils/commits/main-fix-mips-support-r=
-eloc/
+>>
+>> [1]: https://patchwork.sourceware.org/project/elfutils/list/?series=3D31=
+601
+>> [2]: https://patchwork.sourceware.org/project/elfutils/list/?series=3D34=
+310
+>> [3]:
+>> https://github.com/guidosarducci/elfutils/commits/main-fix-mips-support-=
+reloc/
