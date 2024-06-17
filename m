@@ -1,80 +1,116 @@
-Received: from out-180.mta1.migadu.com (out-180.mta1.migadu.com [95.215.58.180])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 149073A8F0
-	for <dwarves@vger.kernel.org>; Sun, 16 Jun 2024 22:09:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F8F511CAB;
+	Mon, 17 Jun 2024 19:39:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718575772; cv=none; b=UNjrHJHNcyd+3V8pHHPjsZ4tTqZlW32wmQkgpnKTK20inRAVnMWl/6mgsSR8W3iro7OZNCwprNddlv91oIC+5C4h4f7VG4fZAgOGoUFOr5MGHwQS8E0N2AfAmvHa840rKcoUlz+DZ+hKD7gjPJ97pvOMs5FsZnHJr64YQE7rKFo=
+	t=1718653180; cv=none; b=BYv4XG9mI+Gwi1PluslOApsOYiRxFFrU+q1fLTdA/dWcA2jTZeFdaUgfBxJwrn73tAmhOdllAU0sfW56BXJ04uPAby80eh1Bs4/0JoT8Pv65BIjkxGidv0VFNIOp7VBwy8MjimV9yWUdIL/YbsGZh5X7V7UF9D+DXLYh8w75dfA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718575772; c=relaxed/simple;
-	bh=6NdjMpRbCorVDzTf+tv5ntUpOr+ZGwg+5nnmIYuX3KA=;
-	h=Message-Id:To:From:Date:Subject; b=mdaYttFXkr3gy9aagl0uJJPK1cXjNKtDmwdWriEDY+H8FFZ04m9yeJA0UiZqovKg/SZCRWgf6Cvky1OavpJtyD/xIa8aztegpEt7r7zATbMDcLqhMEcRIjLXeYxiVgM/xVcXR0AUZ8D5IJLMIDTHS+RK5TxY0sYbKQ3GEMPW0gY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ayaya.dev; spf=pass smtp.mailfrom=ayaya.dev; dkim=pass (1024-bit key) header.d=ayaya.dev header.i=@ayaya.dev header.b=E3r3C1Sm; arc=none smtp.client-ip=95.215.58.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ayaya.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ayaya.dev
+	s=arc-20240116; t=1718653180; c=relaxed/simple;
+	bh=sZeX0jdyzcEU32N2339kQ4SjZz3qMfD5FduuPaOf1Ls=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=kv1VwJpxED5lmgr35dkXURdpMf9kIYTwaomf6Y0lVIKHcqXpsCR4vnS9KiBnur+vRHMveUJj4k5ZKP+52EnXK26zUMF80JLimJm3dMnOvZdLHbGFd1OmInr3oNkjybPTOdKVN7hs6JA42syM5vIceary4VwG3DTmj+ppNxeRde8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=edYDSTcR; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ayaya.dev header.i=@ayaya.dev header.b="E3r3C1Sm"
-X-Envelope-To: dwarves@vger.kernel.org
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ayaya.dev; s=key1;
-	t=1718575766;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc; bh=EkBCbZVHicXwnZt+1VESzZ9sVVXURcrUDvjPTpM/Yzc=;
-	b=E3r3C1Smxi99P4FfKxj/Jy6nm0/ZIfkw8lpkJQIDIqnId5S/vsiJK1Wwhpzrv1QKNuBnl4
-	XPlogQ3aSua35RtvwRBm3a5HDCyXM5hRdjdhLfkj4DGRomL16PVAun9ZgDlIFfXhxgJBWT
-	clJJqLvX1wdhvFfpKwXTLl9ntRgvDEY=
-Message-Id: <D21S9HZD9HNX.IW2QSGGOHM66@ayaya.dev>
-To: <dwarves@vger.kernel.org>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: "psykose" <alice@ayaya.dev>
-Date: Sun, 16 Jun 2024 22:01:21 +0000
-Subject: [PATCH] core: make ptr_table__add do exponential allocation instead
- of incrementing
-X-Migadu-Flow: FLOW_OUT
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="edYDSTcR"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 627F7C2BD10;
+	Mon, 17 Jun 2024 19:39:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1718653180;
+	bh=sZeX0jdyzcEU32N2339kQ4SjZz3qMfD5FduuPaOf1Ls=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=edYDSTcRTUpPUVFYaGYGmXm/s/NRaBpsDKA2QOlyfSWCRPQ9iwNxITLi81r4kr1oH
+	 CCF1Fk41YvvJpiN3i2VjBSXZ9rwL6DG6rAr6CZLysWNzpDoDbo88ch9ZQTiYUV9cbG
+	 xU8bIMS1iM7JGd3HJF6yI2HDgcAu+UxypHTtZwNT70Cw9c7WFlnBAVug1V0ivqT55O
+	 tkFeY1vxsuxp9SW76cfOtdv8GeV924MUtDUIf3PgCH9w1k3f8IM2HH8CexZqKH1w0G
+	 i2V34m46Zq1o8HpXETEsu8FYBHglLpCrBOzHUfw1qr3F67ZrfSwpsrKhcVn+LT1VTA
+	 4gPH5mQUMRrUA==
+Date: Mon, 17 Jun 2024 16:39:36 -0300
+From: Arnaldo Carvalho de Melo <acme@kernel.org>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: dwarves@vger.kernel.org,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	bpf@vger.kernel.org, Alan Maguire <alan.maguire@oracle.com>,
+	Jiri Olsa <jolsa@kernel.org>, Jan Engelhardt <jengelh@inai.de>,
+	Matthias Schwarzott <zzam@gentoo.org>,
+	Viktor Malik <vmalik@redhat.com>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Jan Alexander Steffens <heftig@archlinux.org>,
+	Domenico Andreoli <cavok@debian.org>,
+	Dominique Leuenberger <dimstar@opensuse.org>,
+	Daniel Xu <dxu@dxuuu.xyz>, Yonghong Song <yonghong.song@linux.dev>,
+	llvm@lists.linux.dev
+Subject: Re: ANNOUNCE: pahole v1.27 (reproducible builds, BTF kfuncs)
+Message-ID: <ZnCQ-Psf_WswMk1W@x1>
+References: <ZmjBHWw-Q5hKBiwA@x1>
+ <20240613214019.GA1423015@thelio-3990X>
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240613214019.GA1423015@thelio-3990X>
 
-when building the linux kernel with btf info, a pahole invocation such as
+On Thu, Jun 13, 2024 at 02:40:19PM -0700, Nathan Chancellor wrote:
+> Hi Arnaldo,
+> 
+> On Tue, Jun 11, 2024 at 06:26:53PM -0300, Arnaldo Carvalho de Melo wrote:
+> > 	The v1.27 release of pahole and its friends is out, supporting
+> > parallel reproducible builds and encoding kernel kfuncs in BTF, allowing
+> > tools such as bpftrace to enumerate the available kfuncs and obtain its
+> > function signatures and return types.
+> 
+> After commit f632e75 ("dwarf_loader: Add the cu to the cus list early,
+> remove on LSK_DELETE"), I (and others[1]) notice a crash when running
+> pahole on modules built with Clang when CONFIG_LTO_CLANG is enabled:
+> 
+>   $ curl -LSso .config https://gitlab.archlinux.org/archlinux/packaging/packages/linux/-/raw/main/config
+> 
+>   $ scripts/config -d LTO_NONE -e LTO_CLANG_THIN
+> 
+>   $ make -skj"$(nproc)" ARCH=x86_64 LLVM=1 olddefconfig vmlinux crypto/cast_common.ko
+>   make[3]: *** [scripts/Makefile.modfinal:59: crypto/cast_common.ko] Error 139
+> 
+> I've isolated this to the following commands using the files available
+> at [2] (these were built with LLVM 18 but I could reproduce it with LLVM
+> 17 and LLVM 19, so it appears to impact a number of versions):
+> 
+>   $ tar -tf clang-lto-pahole-1.27-crash.tar.zst
+>   clang-lto-pahole-1.27-crash/
+>   clang-lto-pahole-1.27-crash/cast_common.mod.o
+>   clang-lto-pahole-1.27-crash/module.lds
+>   clang-lto-pahole-1.27-crash/cast_common.o
+>   clang-lto-pahole-1.27-crash/cast_common.ko.bak
+>   clang-lto-pahole-1.27-crash/vmlinux
+>   clang-lto-pahole-1.27-crash/cast_common.ko
+> 
+>   $ tar -axf clang-lto-pahole-1.27-crash.tar.zst
+> 
+>   $ cd clang-lto-pahole-1.27-crash
+> 
+>   $ LLVM_OBJCOPY="llvm-objcopy" pahole-1.26 -J -j --btf_features=encode_force,var,float,enum64,decl_tag,type_tag,optimized_func,consistent_func --lang_exclude=rust --btf_base vmlinux cast_common.ko
+> 
+>   $ cp cast_common.ko{.bak,}
+> 
+>   $ LLVM_OBJCOPY="llvm-objcopy" pahole-1.27 -J -j --btf_features=encode_force,var,float,enum64,decl_tag,type_tag,optimized_func,consistent_func --lang_exclude=rust --btf_base vmlinux cast_common.ko
+>   fish: Job 1, '...' terminated by signal SIGSEGV (Address boundary error)
+> 
+> If there is any more information I can provide or patches I can test, I
+> am more than happy to do so.
 
-pahole -J --btf_gen_floats -j '--lang_exclude=rust'
---skip_encoding_btf_inconsistent_proto
---btf_gen_optimized .tmp_vmlinux.btf
+I reproduced the problem by just running 'pahole cast_common.ko", so
+this isn't even related to the BTF parts, its about the DWARF loader,
+I'm on it, thanks for the detailed report and for providing the files.
 
-is ran.
-
-the vmlinux symbol list is extremely large- so this allocated_entry
-size grows in small 2048 increments each time, and runs realloc.
-outside of glibc (with e.g. musl's malloc-ng allocator, or the llvm
-scudo allocator), this seems to be a particularly expensive operation
-that ends up repeatedly memcpy'ing the memory into the new realloc over
-and over again.
-
-on my hardware, this exponential realloc strategy makes the pahole
-invocation on vmlinux.o go from 60 seconds to 25 due to significantly
-lower reallocation pressure.
-
-Signed-off-by: psykose <alice@ayaya.dev>
----
- dwarves.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/dwarves.c b/dwarves.c
-index 1ec259f..dc72d65 100644
---- a/dwarves.c
-+++ b/dwarves.c
-@@ -566,7 +566,7 @@ static int ptr_table__add(struct ptr_table *pt, void *ptr, uint32_t *idxp)
- 	const uint32_t rc = pt->nr_entries;
+- Arnaldo
  
- 	if (nr_entries > pt->allocated_entries) {
--		uint32_t allocated_entries = pt->allocated_entries + 2048;
-+		uint32_t allocated_entries = pt->allocated_entries < 2048 ? 2048 : pt->allocated_entries * 2;;
- 		void *entries = realloc(pt->entries,
- 					sizeof(void *) * allocated_entries);
- 		if (entries == NULL)
-
-base-commit: 3e265dac5ec85b956c664464072196c37d2af4f3
--- 
-2.45.2
+> [1]: https://gitlab.archlinux.org/archlinux/packaging/packages/pahole/-/issues/1
+> [2]: https://1drv.ms/u/s!AsQNYeB-IEbqqC2F28JuLy__Q7Vd?e=KsraMU
+> 
+> Cheers,
+> Nathan
+> 
