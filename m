@@ -1,32 +1,32 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C23615A869;
-	Tue, 18 Jun 2024 13:51:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACF3E143722;
+	Tue, 18 Jun 2024 14:30:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718718710; cv=none; b=R8fWqDX5BL3rimibW1MSIeoNhJEMqc0yjZLrUrQ/gcANjtOXdvdl8Hp1Jqra6OHBYsj+Qy/JtyId8cjkLRxEh5WNheBNEf+sWa67qxU+euGB9xaeCwPw0w7BhjahB2756njg5FzFfO2mCgX0rvDat01qucEmGoVJWDnNsp/zFG8=
+	t=1718721011; cv=none; b=cQmlTUYCTXJo7U/673hVBLBvJIK1X02+QzOazjSXzEjk9QLf9P9eW/92groFWKt4Sjqib8SuciEv0LEAOKFeVCKoEWPuJiY+oYTwaE7lHfkTDa+UKTFFzyzbHxrWbqfs4IpW062y75hz6YPKe5brW8sfsMgdazILz2a8I2ZX8vc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718718710; c=relaxed/simple;
-	bh=jZTXzxlFYVfRFo7ptSoHB/sfDeGp2NsucUm1L+1pbAM=;
+	s=arc-20240116; t=1718721011; c=relaxed/simple;
+	bh=TM69GXsRpsgu4g/uBzlfWRyyvsHdvl4/BPKSHavtFl8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ffqqRToS0XMNYLvjmPPO++50r+G9Q+uBvBo39z0rFjQTh4lxSMAF9nAyO2TigTcmk3wfKPzBkBSwECakd3AewC6En4mujMdUu5Vnt+PJWagzruh3Y/OzQX3OQcM59S2oUBM5lbb1HE4iYDZS6FVL6sNcg9DXK86uhWvMoyZsDNc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jWyawfa6; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=OImGMp6GWmOMjzeM7fV/UzSz5pNkqD9EOuW/hHMGcRpYyQ84BPeuC1Ilw3UoImIBf6AcHyjop0k4Al14cmJQpAZQJdmtxb+ZnrZtC3zk1U3v14bgDHskV3hBsIdFT45j9QpEG1siWJ9xYlGtShX1YtG8sY+YO7szFLMj1MpsxlY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YtcHG/1U; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jWyawfa6"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F178C4AF1D;
-	Tue, 18 Jun 2024 13:51:48 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YtcHG/1U"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98B0DC4AF1C;
+	Tue, 18 Jun 2024 14:30:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1718718709;
-	bh=jZTXzxlFYVfRFo7ptSoHB/sfDeGp2NsucUm1L+1pbAM=;
+	s=k20201202; t=1718721011;
+	bh=TM69GXsRpsgu4g/uBzlfWRyyvsHdvl4/BPKSHavtFl8=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=jWyawfa6btzKXEdvhC+UgMCuUE7OfMHTqIc3wsT7ajozNZVzUq5AZ4uVnERVajBSb
-	 AkYqGy6iKPoC6hIuFT33xTfmMh2d9OAFR1z2ohFFhMVi3XADJgUZqQ9rFFRD0HpURq
-	 hB5T4FbOPUkEulizkqo6OomC7SbwaXThQRWC6ZVIFgjfCAyXZDEhB02N6t9Joc6Ofc
-	 AFbQBTGUvlSzps6DjOmuWHLdfDp6UIy/u6B6STVTAIK0YVNoyS2x6ofoLQWzsBk/gb
-	 OHmUqCem7/YsWsq9HT2p8sqZNaSzfmLR4R39shMxgiiFdiwFPuDLh8cIDTGkX0845G
-	 P25Wnzz7v1Y8g==
-Date: Tue, 18 Jun 2024 10:51:44 -0300
+	b=YtcHG/1US+LXxj3l6SMLVJDzIvDPYcd5xzwXFJl62sApms7zHFBElbICEOXMEuaef
+	 uFv/gOnzwgjrKSlDEp1SPjTynSXii5lZ8dpZ5d1ld/14Ty4V9nSY/lSGxyixS1Q6XE
+	 k2m59fxmhUMS3x5SOvdWzHJwhXm5tP3X+/0TX/ytr8K1KizQtEo5hQL6oTDR/YiJ/O
+	 vjVJjBDmr4Txh3qlM3C2mc1jmAlSOb9jcmmEQlAoX92iE1rFl4UzVKTORTYjpjeZCR
+	 hJV9+aU+KHJF00By89j2iBlXJDfaUipJM/k2q1VdDiPXpB9TR13jLZdguF0Dd+TIar
+	 A9CQawUYpRDMQ==
+Date: Tue, 18 Jun 2024 11:30:07 -0300
 From: Arnaldo Carvalho de Melo <acme@kernel.org>
 To: Nathan Chancellor <nathan@kernel.org>
 Cc: dwarves@vger.kernel.org,
@@ -41,129 +41,59 @@ Cc: dwarves@vger.kernel.org,
 	Dominique Leuenberger <dimstar@opensuse.org>,
 	Daniel Xu <dxu@dxuuu.xyz>, Yonghong Song <yonghong.song@linux.dev>,
 	llvm@lists.linux.dev
-Subject: Re: [PATCH/RFT] Re: ANNOUNCE: pahole v1.27 (reproducible builds, BTF
- kfuncs)
-Message-ID: <ZnGQ8CDRaMBIj5R5@x1>
+Subject: [PATCH fyi 1/1] dwarf_loader: Add missing cus__add(cus, cu) to
+ cus__merge_and_process_cu()
+Message-ID: <ZnGZ71a4E29kPrvS@x1>
 References: <ZmjBHWw-Q5hKBiwA@x1>
  <20240613214019.GA1423015@thelio-3990X>
  <ZnCQ-Psf_WswMk1W@x1>
  <ZnCWRMfRDMHqSxBb@x1>
  <20240617210810.GA1877676@thelio-3990X>
+ <ZnGQ8CDRaMBIj5R5@x1>
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240617210810.GA1877676@thelio-3990X>
+In-Reply-To: <ZnGQ8CDRaMBIj5R5@x1>
 
-On Mon, Jun 17, 2024 at 02:08:10PM -0700, Nathan Chancellor wrote:
-> On Mon, Jun 17, 2024 at 05:02:12PM -0300, Arnaldo Carvalho de Melo wrote:
-> > Can you try with the one liner below? We remove it from the cus list
-> > unconditionally, and since we alloc space with zalloc/calloc in
-> > cu__new() and missed initializing that list_head (cu->node) we ended up
-> > hitting list_del with a zeroed 'struct list_head' :-\
-> > 
-> > I'll try and get this cast_common.ko checked into a test repo for pahole
-> > so that this gets regression tested.
-> > 
-> > Please test this patch so that we see if this is the only problem and
-> > your kernel build with clang completes successfully.
-> 
-> Thanks, I rebuilt pahole with the following diff and both my build and
-> the other configuration I tested for this regression successfully
-> complete.
-> 
-> Tested-by: Nathan Chancellor <nathan@kernel.org>
+Just FYI, I added this on top of the previous one initializing cu->node.
 
-Great, I just added this:
+Tested with that cast_common.ko and the vmlinux you made available.
 
-From 6a2b27c0f512619b0e7a769a18a0fb05bb3789a5 Mon Sep 17 00:00:00 2001
-From: Arnaldo Carvalho de Melo <acme@redhat.com>
-Date: Tue, 18 Jun 2024 10:37:30 -0300
-Subject: [PATCH 1/1] core: Initialize cu->node with INIT_LIST_HEAD()
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+- Arnaldo
 
-In cu__new() zalloc() is used defensively, and that helped catch this
-problem where we assume that a cu us in the cus list of cu instances,
-but that is not the case when we use cus__merge_and_process_cu(), for
-instance when loading files created by clang with LTO, as reported by
-Peter Jung and narrowed down by Nathan Chancellor.
+---
 
-If we use INIT_LIST_HEAD() in cu__new() to initialize cu->node, which is
-what we do with other lists and nodes there, then the unconditional
-removal using list_del_init() will be a no-op and removing something not
-on the cus list of cu instances will not cause problems, just keep an
-unconsistent cus->nr_entries field.
+In cus__finalize() if cu__finalize() returns LSK__DELETE, i.e. if the
+tool processing the cu is done with it, we will assume that it is in the
+cus list of cu instances, remove it and then delete it.
 
-So lets just have this fix in first, keeping Nathan's Tested-by and then
-do the a bit more involved fix of either adding that cu to the cus list
-or checking at removal time if it is there.
+This was not being done by cus__merge_and_process_cu(), used when
+merging all DWARF CUs into a single 'struct cu', such as when processing
+binaries generated by clang using LTO. Add the missing cus__add() to
+keep cus->nr_entries consistent.
 
-  Program received signal SIGSEGV, Segmentation fault.
-  0x00007ffff7f1e13e in __list_del (prev=0x0, next=0x0) at /home/acme/git/pahole/list.h:106
-  106		next->prev = prev;
-  (gdb) bt
-  #0  0x00007ffff7f1e13e in __list_del (prev=0x0, next=0x0) at /home/acme/git/pahole/list.h:106
-  #1  0x00007ffff7f1e176 in list_del_init (entry=0x417980) at /home/acme/git/pahole/list.h:165
-  #2  0x00007ffff7f1f8f9 in __cus__remove (cus=0x4142a0, cu=0x417980) at /home/acme/git/pahole/dwarves.c:527
-  #3  0x00007ffff7f1f92b in cus__remove (cus=0x4142a0, cu=0x417980) at /home/acme/git/pahole/dwarves.c:533
-  #4  0x00007ffff7f3d01c in cus__finalize (cus=0x4142a0, cu=0x417980, conf=0x4133c0 <conf_load>, thr_data=0x0)
-      at /home/acme/git/pahole/dwarf_loader.c:3040
-  #5  0x00007ffff7f3e05c in cus__merge_and_process_cu (cus=0x4142a0, conf=0x4133c0 <conf_load>, mod=0x415cf0, dw=0x416110, elf=0x414380,
-      filename=0x7fffffffe3f7 "cast_common.ko", build_id=0x416680 "\265D\371U\213\373u|\037\250\242\032\271\365⒜]y\023", build_id_len=20,
-      type_dcu=0x0) at /home/acme/git/pahole/dwarf_loader.c:3482
-  #6  0x00007ffff7f3e218 in cus__load_module (cus=0x4142a0, conf=0x4133c0 <conf_load>, mod=0x415cf0, dw=0x416110, elf=0x414380,
-      filename=0x7fffffffe3f7 "cast_common.ko") at /home/acme/git/pahole/dwarf_loader.c:3521
-  #7  0x00007ffff7f3e396 in cus__process_dwflmod (dwflmod=0x415cf0, userdata=0x415d00, name=0x415ea0 "cast_common.ko", base=65536,
-      arg=0x7fffffffde40) at /home/acme/git/pahole/dwarf_loader.c:3581
-  #8  0x00007ffff7eb4609 in dwfl_getmodules (dwfl=0x414300, callback=0x7ffff7f3e2ec <cus__process_dwflmod>, arg=0x7fffffffde40, offset=0)
-      at ../libdwfl/dwfl_getmodules.c:86
-  #9  0x00007ffff7f3e4c5 in cus__process_file (cus=0x4142a0, conf=0x4133c0 <conf_load>, fd=3, filename=0x7fffffffe3f7 "cast_common.ko")
-      at /home/acme/git/pahole/dwarf_loader.c:3647
-  #10 0x00007ffff7f3e5cd in dwarf__load_file (cus=0x4142a0, conf=0x4133c0 <conf_load>, filename=0x7fffffffe3f7 "cast_common.ko")
-      at /home/acme/git/pahole/dwarf_loader.c:3684
-  #11 0x00007ffff7f232df in cus__load_file (cus=0x4142a0, conf=0x4133c0 <conf_load>, filename=0x7fffffffe3f7 "cast_common.ko")
-      at /home/acme/git/pahole/dwarves.c:2134
-  #12 0x00007ffff7f23e8b in cus__load_files (cus=0x4142a0, conf=0x4133c0 <conf_load>, filenames=0x7fffffffe0f0)
-      at /home/acme/git/pahole/dwarves.c:2637
-  #13 0x000000000040aec0 in main (argc=2, argv=0x7fffffffe0e8) at /home/acme/git/pahole/pahole.c:3805
-  (gdb) fr 1
-  #1  0x00007ffff7f1e176 in list_del_init (entry=0x417980) at /home/acme/git/pahole/list.h:165
-  165		__list_del(entry->prev, entry->next);
-  (gdb) p entry
-  $1 = (struct list_head *) 0x417980
-  (gdb) p entry->next
-  $2 = (struct list_head *) 0x0
-  (gdb) p entry->prev
-  $3 = (struct list_head *) 0x0
-
-Closes: https://github.com/acmel/dwarves/issues/53
-Closes: https://gitlab.archlinux.org/archlinux/packaging/packages/pahole/-/issues/1
-Tested-by: Nathan Chancellor <nathan@kernel.org>
-Link: https://lore.kernel.org/all/20240617210810.GA1877676@thelio-3990X
 Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
 ---
- dwarves.c | 1 +
+ dwarf_loader.c | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/dwarves.c b/dwarves.c
-index 1ec259f50dbd3778..823a01524a12bb37 100644
---- a/dwarves.c
-+++ b/dwarves.c
-@@ -739,6 +739,7 @@ struct cu *cu__new(const char *name, uint8_t addr_size,
- 		cu->dfops	= NULL;
- 		INIT_LIST_HEAD(&cu->tags);
- 		INIT_LIST_HEAD(&cu->tool_list);
-+		INIT_LIST_HEAD(&cu->node);
+diff --git a/dwarf_loader.c b/dwarf_loader.c
+index b832c93cc2194eaf..3caf32457f42ec2e 100644
+--- a/dwarf_loader.c
++++ b/dwarf_loader.c
+@@ -3452,6 +3452,7 @@ static int cus__merge_and_process_cu(struct cus *cus, struct conf_load *conf,
+ 			cu->priv = dcu;
+ 			cu->dfops = &dwarf__ops;
+ 			cu->language = attr_numeric(cu_die, DW_AT_language);
++			cus__add(cus, cu);
+ 		}
  
- 		cu->addr_size = addr_size;
- 		cu->extra_dbg_info = 0;
+ 		Dwarf_Die child;
 -- 
 2.45.0
 
