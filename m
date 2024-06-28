@@ -1,40 +1,45 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7E3F1E89A
-	for <dwarves@vger.kernel.org>; Fri, 28 Jun 2024 13:59:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from submarine.notk.org (62-210-214-84.rev.poneytelecom.eu [62.210.214.84])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4288B4CB37
+	for <dwarves@vger.kernel.org>; Fri, 28 Jun 2024 19:45:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.210.214.84
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719583199; cv=none; b=NmHrpSjClph+kIlW9mvDqCZbM5vqFnJ5YGPc5us12kDnF4c997rWPRiSitVsflnYypn+3qhm2DO2HnvkqD1dDK3yqIc+BZ2SxXeb94ixGpv5iefUthr5lysR4dXtdlB1ruDsQwjaVe8NK4Q08IY66l1l6A0pWl9Gb5C6oh6NBCQ=
+	t=1719603924; cv=none; b=gz1Jm1RyL4lidrHkAsw95sGddSxdTT4Pnc9x0jvjzW5ML7tIrXrc1sVNLGZ4jBggwSHqNfhW6k/Q2PTbfqxmvRgdNY1P89DWhfrTLgGRxBQcfmGQEkFHAQuimZWSMvIkFka8K4Acw7BhyGzMSo60zGlA0P27f2ok62DJW3ZFVgw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719583199; c=relaxed/simple;
-	bh=AblTWyQZR/zMRMY20qVwANorSZmfB04jlY51ZFWR/RI=;
+	s=arc-20240116; t=1719603924; c=relaxed/simple;
+	bh=hZGBx+PvmTHqID4dmuk0cfCn9lDsyUr7HrElVUAGxUY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=I+M7jch4dZo0MFszxlZONBQQka7BYKNB5jGSI1MqU6RDtoD41mPtW+119ZAauNEMR+2355rCdOAdV5lAsid3lV5JkALsUozmKI/86ie8RDvRUIwiyGzXqqBfUlR8S0uZJNLKXMGPzmAfDQvuhZbaakL1k91IPPc/F8+NXxIKTdU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G5/IKUyK; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=KYFHaj5C8/QL3Fi5KPJPnOKZVxPlOde22vrfACReKA0FFJnhGoIOqj5pbj8gzjhcs+TIYg38Ny0469JnMYi5tSnTrvHvB5c31lwB7RwsZUob/oRFpotADY3Mh9SP2rhLQufxi3iw9p4F3kPWrznw/7GAAgUtrSAsefwlPcvMdgU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codewreck.org; spf=pass smtp.mailfrom=codewreck.org; dkim=pass (2048-bit key) header.d=codewreck.org header.i=@codewreck.org header.b=VkbWCEz3; arc=none smtp.client-ip=62.210.214.84
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codewreck.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=codewreck.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G5/IKUyK"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5D54C2BBFC;
-	Fri, 28 Jun 2024 13:59:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719583199;
-	bh=AblTWyQZR/zMRMY20qVwANorSZmfB04jlY51ZFWR/RI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=G5/IKUyKhUOUfoU5jHS8mvnazn1tN3kBG0Lotnw6GidHqab1b86EbY8q5toGYsY32
-	 iDb/BW1ztYgN9hJYI05EqfR9bX19YWbIpwVcuJnO41LaJ3Kw7/2JtWtgFm9cap2cjn
-	 Jl8DOfVMQT01et6w+8zHVOh7LHFNuAURCpX3ucA5t0BFHbI35BkJRVkzadlnFLY2tl
-	 puOCbqOmfHtgr8GQqNt8RmNr5LeOKk1Qptw88x/yNyvOtZPxKA/oSjNv1gil6TNCVI
-	 5KTahy7H8xCt2huRuwjjmpgDyzOJ6MMIG65FCooSXCjK1iADo5jtOEwuJEH1p+DO2j
-	 baDlsNw9tXU3A==
-Date: Fri, 28 Jun 2024 10:59:54 -0300
-From: Arnaldo Carvalho de Melo <acme@kernel.org>
+	dkim=pass (2048-bit key) header.d=codewreck.org header.i=@codewreck.org header.b="VkbWCEz3"
+Received: from gaia.codewreck.org (localhost [127.0.0.1])
+	by submarine.notk.org (Postfix) with ESMTPS id A2C3614C1E1;
+	Fri, 28 Jun 2024 21:45:10 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org;
+	s=2; t=1719603913;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=HVVtYU4+94CI7+Jicwx4MhygHjwXDqGByecJep+cB0Y=;
+	b=VkbWCEz3+rxOI5Ss0HIF/nm9mPfKqOa5ydoatcY70jeewOXcU9a4Apq2QR5/Hvt8h+jNuV
+	A8MewEjKSzAIINj0LvVl2cWLYEdNdem5JArRfu1AeVul+SwVbSCGoSq/nC87i541ETI/Oj
+	iIW6AVkHkxf7lcO7yahVhjSz/TwxbPW4IATIb6/ROFQpJvYtj30nKpVIW/XCc3ZLiCVPpv
+	UqgTe+qTgM832gQTSS9hJE6n5SUlDIp7NZyUYuLHEIrCkQO4PF55LFHAJhuDe7r/XaVzW7
+	lk+caujbm7UGhNQj6IGAKVRMdHxxXqWH7IHzonos22JKuMoZlO7FNIQQXdIhDg==
+Received: from localhost (gaia.codewreck.org [local])
+	by gaia.codewreck.org (OpenSMTPD) with ESMTPA id 146c351e;
+	Fri, 28 Jun 2024 19:45:03 +0000 (UTC)
+Date: Sat, 29 Jun 2024 04:44:48 +0900
+From: Dominique Martinet <asmadeus@codewreck.org>
 To: Alan Maguire <alan.maguire@oracle.com>
-Cc: Dominique Martinet <asmadeus@codewreck.org>, andrii.nakryiko@gmail.com,
-	dwarves@vger.kernel.org, jolsa@kernel.org, williams@redhat.com,
-	kcarcia@redhat.com, dxu@dxuuu.xyz, eddyz87@gmail.com
+Cc: acme@kernel.org, andrii.nakryiko@gmail.com, dwarves@vger.kernel.org,
+	jolsa@kernel.org, williams@redhat.com, kcarcia@redhat.com,
+	dxu@dxuuu.xyz, eddyz87@gmail.com
 Subject: Re: [PATCH dwarves] pahole: enable --reproducible_build when
  SOURCE_DATE_EPOCH is set
-Message-ID: <Zn7B2ioa62DC_SAK@x1>
+Message-ID: <Zn8SsFuSAG2qPgzC@codewreck.org>
 References: <20240626032253.3406460-1-asmadeus@codewreck.org>
  <c1414fb5-f7a8-4cb4-9c27-9c0c9b431f28@oracle.com>
  <ZnydwHhgCbUbkm44@codewreck.org>
@@ -46,81 +51,11 @@ List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 In-Reply-To: <1213004a-c75a-4882-bd51-47d458c67e04@oracle.com>
 
-On Fri, Jun 28, 2024 at 09:31:17AM +0100, Alan Maguire wrote:
-> On 27/06/2024 18:25, Alan Maguire wrote:
-> > On 27/06/2024 00:01, Dominique Martinet wrote:
-> >> Alan Maguire wrote on Wed, Jun 26, 2024 at 03:29:37PM +0100:
-> >>> On 26/06/2024 04:22, Dominique Martinet wrote:
-> >>>> The SOURCE_DATE_EPOCH environment variable is used in reproducible
-> >>>> builds to set build timestamps and is generally synonymous with
-> >>>> reproducible builds: instead of making users figure out how to pass
-> >>>> pahole flags (e.g. explicitly setting PAHOLE_FLAGS in linux) just assume
-> >>>> that the user wants a reproducible build if this variable is set.
-
-> >>> From the kernel perspective it looks like as a result of [1]
-> >>> [1] https://patchwork.kernel.org/project/linux-kbuild/patch/1443741332.2730.75.camel@decadent.org.ukOB/
-> >>> the setting of SOURCE_DATE_EPOCH will be converted into
-> >>> KBUILD_BUILD_TIMESTAMP; I thought the plan was to add the
-> >>> BTF feature flag explicitly if KBUILD_BUILD_TIMESTAMP was set?
-
-> >> Hmm, that patch (2015) never got in apparently?...
-> >> And I don't see anythiing that'd make pahole output reproducible if
-> >> either variables are set in the kernel either right now; we still build
-> > 
-> > I can send a patch for this to bpf-next if it's needed. But it'd be good
-> > to figure out the right approach first, more below...
-> > 
-> >> plenty of older kernels so even if such a patch gets in I'd rather this
-> >> is checked in pahole than kbuild.
-
-> > I'm not sure that's the right answer though - there's a bunch of
-> > existing infrastructure in the kernel tree that relies on
-> > KBUILD_BUILD_TIMESTAMP, so to integrate properly with the existing
-> > kbuild infrastructure around reproducible builds feels like the right
-> > direction to me. It's a bit more work, but not too much. Arnaldo may
-> > disagree of course, and he's the maintainer so it's his decision - this
-> > is just my personal take.
-> > 
-> > We've tried to explicitly enable flags in pahole Makefile.btf so that
-> > it's obvious from pahole invocations which features are wanted, and to
-> > get that support on older kernels it would just be a matter of
-> > backporting the
-> > 
-> > if > 1.26
-> > 	use --btf_features
-> > 
-> > ...patch, and a patch for adding the reproducible build option to stable
-> > kernels. Similar has been done in the past for other pahole features.
-> > 
-> > All that's needed here for bpf-next tree is I think is the below 3-line
-> > addition:
-> > 
-> > diff --git a/scripts/Makefile.btf b/scripts/Makefile.btf
-> > index b75f09f3f424..40bb72662967 100644
-> > --- a/scripts/Makefile.btf
-> > +++ b/scripts/Makefile.btf
-> > @@ -21,6 +21,10 @@ else
-> >  # Switch to using --btf_features for v1.26 and later.
-> >  pahole-flags-$(call test-ge, $(pahole-ver), 126)  = -j
-> > --btf_features=encode_force,var,float,enum64,decl_tag,type_tag,optimized_func,consistent_func,decl_tag_kfuncs
-> > 
-> > +ifneq ($(KBUILD_BUILD_TIMESTAMP),)
-> > +pahole-flags-$(call test-ge, $(pahole-ver), 126) +=
-> > --btf_features=reproducible_build
-> > +endif
-> > +
-> >  ifneq ($(KBUILD_EXTMOD),)
-> >  module-pahole-flags-$(call test-ge, $(pahole-ver), 126) +=
-> > --btf_features=distilled_base
-> >  endif
-> > 
-> > 
-> > Can you test at your end if that does the right thing? Thanks!
-> 
+Alan Maguire wrote on Fri, Jun 28, 2024 at 09:31:17AM +0100:
 > FWIW I verified that with the above change, and
 > 
 > export KBUILD_BUILD_TIMESTAMP=$(date -I)
@@ -129,10 +64,54 @@ On Fri, Jun 28, 2024 at 09:31:17AM +0100, Alan Maguire wrote:
 > reproducible BTF in vmlinux; .btf.vmlinux.bin.o is identical across
 > multiple kernel builds.
 
-This sounds reasonable, pahole doesn't have to look at something so
-specific for a particular use case (the kernel) while using what pahole
-would look (KBUILD_BUILD_TIMESTAMP) but in the kernel build scripts,
-that in turn uses the prefered, self-documenting way of asking for some
-specific BTF feature (--btf_features).
+Sorry for the lack of reply, I didn't have time to test until now, and I
+have no idea how to override the kernel config in nixos so the checking
+build through nix build took all night.
+I've now also confirmed this works including for modules BTF & linux
+"package" build on nixos on master.
 
-- Arnaldo
+However from there I built a random kernel module and have also
+confirmed they don't set KBUILD_BUILD_TIMESTAMP for external modules --
+from a quick look it's not part of the default flags defined as
+buildFlags here[1] because each modules' SOURCE_DATE_EPOCH isn't
+available at this level (and I have no idea how to call a command at
+this level), the configurePhase where it's set only applies to the
+kernel itself and not the gazillion of modules.
+[1] https://github.com/NixOS/nixpkgs/blob/master/pkgs/os-specific/linux/kernel/manual-config.nix
+
+Add to that that nixos is supporting a dozen of kernels -- all mainlines
+stable versions but also a dozen of variants (rt, whatever xanmod and
+zen are, and if you look for things like mobile-nixos you'll also get
+much older and not update sunxi and other embedded trees) I definitely
+won't put the effort to backport equivalent patches to all these kernels
+
+
+I wanted the patch for alpine as well but I honestly don't have the time
+to do the same confirmation work there; if they have any external
+modules I don't see the flag being set either, at least they don't have
+so many kernels.
+(but unlike nixos the kernel build "framework" code isn't shared and I
+know of at least one out of tree embedded kernel that doesn't set
+KBUILD_BUILD_TIMESTAMP and only has SOURCE_DATE_EPOCH...)
+
+
+So:
+ - in theory, sure; this patch works. I say we can do this independantly
+of any other effort. The propere way of setting reproducible build in
+the kernel is not SOURCE_DATE_EPOCH but KBUILD_BUILD_TIMESTAMP and
+handling it at kernel makefile level is sound.
+ - in practice, (nixos hat) some modules won't set it but will only have
+SOURCE_DATE_EPOCH available, and there are trees that won't be updated
+for years (and that's being optimistic), so our local patch in pahole is
+here to stay for a while and the benefits far outweight the rebasing
+work.
+ - (alpine hat) alpine doesn't seem to care as much about
+reproducibility (the nixos patch wasn't in and nobody complained so far),
+undecided at this point. Makefile.btf patch is probably good enough, but
+since I'm maintaining the patch anyway it's no extra work to add it
+there, undecided at this point.
+
+
+Thanks,
+-- 
+Dominique Martinet | Asmadeus
