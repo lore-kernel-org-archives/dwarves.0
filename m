@@ -1,143 +1,106 @@
 Received: from submarine.notk.org (62-210-214-84.rev.poneytelecom.eu [62.210.214.84])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61BF0DDC0
-	for <dwarves@vger.kernel.org>; Sun,  7 Jul 2024 08:50:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5889F79D2
+	for <dwarves@vger.kernel.org>; Sun,  7 Jul 2024 22:51:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.210.214.84
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720342257; cv=none; b=PDfqr9+8SmJbUuc6HgQqKb6FiOJWTb8RlNITf6TdnqiM+j8ncM5d8t1fKqpTHD7FT/OHweuQa2BOwwRClSM6MjrGJPO7KBFESIpXjo3t3VG1NgtG65rqacOBob9mSYfH+BSirgyq3yoiZWHnW7RxShfBSo33ldnToVUoZaRbM3A=
+	t=1720392679; cv=none; b=cbqIr9H6lL5SC6i3LZYzxX0FEnhvSLc6zrHqyOQ6CeGTMmnDek4zvvHRlUS9U6Uq6hrJY+boahvk20wZyQh+7lWM3QG7C4vMSCgUKemvrpa3Cy18QJ3KQ0Z033Rjk2oG/h9tt0AkKJaSPqATMFXh0WvxXuo9ptWNMojeHW7N/ks=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720342257; c=relaxed/simple;
-	bh=vargsny2C6H0na9ykxzYu4whs6ohS8fIq6WM0+MP+xI=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=KaAyCaQFEk3Y2L6mXRijiz8r2PcyXvNPzxsxJy021k2DYL8N5DtM1KiGqGrTjqZrYWW1KLiWUfh4en7RLXvNsXvM7cVA2Ic/gBykAlaKVxo9Ps52Sw3dahaF+GuPtS+Okvryhyp4zbIeI3FK8lsXWO1XYFxEq4QLqLrk0qJSY+A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codewreck.org; spf=pass smtp.mailfrom=codewreck.org; dkim=pass (2048-bit key) header.d=codewreck.org header.i=@codewreck.org header.b=JJwJzKpB; arc=none smtp.client-ip=62.210.214.84
+	s=arc-20240116; t=1720392679; c=relaxed/simple;
+	bh=G8OZUXvfPlIDS05ANhJXR0Tpt3mzVf7bUqpKjuh+tNs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=TQDM5zq1rl+WIsAcaw/HcpbUTzyxak9dev5S7fJARbsCu4RFgoNckzDLITMkMp8BPfkN2RzDEeoFDoSB637ZDKR0pP/FGLS8rvzoiop8wjMnUhyTwgZiDh9n3ZvNRZHaAH4dcS3pTmsk5UZNWaDDE/cbL45CQ1xW+KQSduxALNg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codewreck.org; spf=pass smtp.mailfrom=codewreck.org; dkim=pass (2048-bit key) header.d=codewreck.org header.i=@codewreck.org header.b=hkaqEHxt; arc=none smtp.client-ip=62.210.214.84
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codewreck.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=codewreck.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=codewreck.org header.i=@codewreck.org header.b="JJwJzKpB"
+	dkim=pass (2048-bit key) header.d=codewreck.org header.i=@codewreck.org header.b="hkaqEHxt"
 Received: from gaia.codewreck.org (localhost [127.0.0.1])
-	by submarine.notk.org (Postfix) with ESMTPS id F15D514C1E1;
-	Sun,  7 Jul 2024 10:50:42 +0200 (CEST)
+	by submarine.notk.org (Postfix) with ESMTPS id C1F2714C1E1;
+	Mon,  8 Jul 2024 00:51:11 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org;
-	s=2; t=1720342245;
+	s=2; t=1720392674;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=tU1hGq5AwFBJkPdXAQ4rVTrSxm/oTvGD/FChlMYZw88=;
-	b=JJwJzKpBa8llODdeP7LTmEBREhB6hMbujHfYKzoDcv0U0bdxxBE3heY0B75PtdXRgpAy1Q
-	HPA3jSMLAVfcN8xQQH+1pequ6G9YxuEptzHJTIMUAWjPwJSM9Dup/UVxUF/1c+3+kPBaOO
-	kRp+AwBU3GotABaTokTjviLevDFMwuqAJswKDOqt1KVnhawYceRgRb5wwdXuQdb4WZg/HZ
-	/4wBiaRx5d6tvqF2nbbcjmPtrH0W79RDlpbc82yS5dnMQ71vWMW4HvvPLspXHZhC00ZMLI
-	7JG0B9e5k2dCDnEapAo/IJsNYb9fDf62B2zE8ZJbHBa76EcpizRPXMIW2GrGgw==
-Received: from gaia.codewreck.org (localhost.lan [::1])
-	by gaia.codewreck.org (OpenSMTPD) with ESMTP id d64e22d5;
-	Sun, 7 Jul 2024 08:50:41 +0000 (UTC)
+	 in-reply-to:in-reply-to:references:references;
+	bh=pJUe8MqoULh2j72e+cpU0nXqp3S6yFTG9ewoBycxqKw=;
+	b=hkaqEHxtW9I6D+1ThALQ5Hvm4rWj7vkG/dI0kyPQIaxdi90OSHPBceGAdTg9JAcZn9b9Sn
+	bhpv0McfRDShjT2TI4ypzJ4FdOePK+zLhamL4+9yqQuJOpYE375NCNe9jSMJBUJ+AC2mzC
+	VSYylIdtMukF8se9HPG2Z1m4PzkxKmgLFZhDUnZiAaVWDE3nkxeAFAxPxv4odFr/oKlU3x
+	KC1Gvs/UdNl2b66if1KgOuf/byKmkXIEMYMjjd26t01EESD++IecGR9qZbE1oTHZHdQxqn
+	N+4XHuEYcfxc3zzEemE6uEi2iI7u8Pl00EebEMsDYypRDYHDHmvahh1FKyeW0Q==
+Received: from localhost (gaia.codewreck.org [local])
+	by gaia.codewreck.org (OpenSMTPD) with ESMTPA id aa7c8532;
+	Sun, 7 Jul 2024 22:51:10 +0000 (UTC)
+Date: Mon, 8 Jul 2024 07:50:55 +0900
 From: Dominique Martinet <asmadeus@codewreck.org>
-To: Alan Maguire <alan.maguire@oracle.com>,
-	acme@kernel.org
-Cc: andrii.nakryiko@gmail.com,
-	dwarves@vger.kernel.org,
-	jolsa@kernel.org,
-	williams@redhat.com,
-	kcarcia@redhat.com,
-	dxu@dxuuu.xyz,
-	eddyz87@gmail.com,
-	Dominique Martinet <asmadeus@codewreck.org>
-Subject: [PATCH dwarves v3] pahole: enable --reproducible_build when SOURCE_DATE_EPOCH is set
-Date: Sun,  7 Jul 2024 17:50:36 +0900
-Message-ID: <20240707085036.562784-1-asmadeus@codewreck.org>
-X-Mailer: git-send-email 2.45.1
+To: Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
+Cc: Alan Maguire <alan.maguire@oracle.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+	dwarves@vger.kernel.org, Jiri Olsa <jolsa@kernel.org>,
+	Clark Williams <williams@redhat.com>,
+	Kate Carcia <kcarcia@redhat.com>, Daniel Xu <dxu@dxuuu.xyz>,
+	Eddy Z <eddyz87@gmail.com>
+Subject: Re: [PATCH dwarves v3] pahole: enable --reproducible_build when
+ SOURCE_DATE_EPOCH is set
+Message-ID: <Zosbz-oFqmCZELNW@codewreck.org>
+References: <20240707085036.562784-1-asmadeus@codewreck.org>
+ <CA+JHD93-znUmWbsmiAR+Ved7U6m0JrGAq8aqQq6qRmT_osP0aQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CA+JHD93-znUmWbsmiAR+Ved7U6m0JrGAq8aqQq6qRmT_osP0aQ@mail.gmail.com>
 
-The SOURCE_DATE_EPOCH environment variable is used in reproducible
-builds to set build timestamps and is generally synonymous with
-reproducible builds: instead of making users figure out how to pass
-pahole flags (e.g. explicitly setting PAHOLE_FLAGS in linux) just assume
-that the user wants a reproducible build if this variable is set,
-printing a debug message in verbose mode.
+Thanks for the reply!
 
-The impact on build time appears to be minimal enough even if we
-incorrectly make this decision (on a Ryzen 7 7735HS):
-$ hyperfine 'sh pahole-test -j --reproducible_build' 'sh pahole-test -j1' 'sh pahole-test -j' -p 'cp .tmp_vmlinux.orig .tmp_vmlinux.btf' -m 4
-Benchmark 1: sh pahole-test -j --reproducible_build
-  Time (mean ± σ):      3.991 s ±  0.045 s    [User: 7.223 s, System: 3.741 s]
-  Range (min … max):    3.950 s …  4.042 s    4 runs
+This can wait until you're back to work, no worry about latency.
 
-Benchmark 2: sh pahole-test -j1
-  Time (mean ± σ):      7.083 s ±  0.095 s    [User: 4.805 s, System: 2.242 s]
-  Range (min … max):    6.964 s …  7.191 s    4 runs
+Arnaldo Carvalho de Melo wrote on Sun, Jul 07, 2024 at 11:12:06AM -0300:
+> I'm in vacation, but it occurred to me that a
+> 
+> --set_from_env SOURCE_DATE_EPOCH=reproducible_build
+> 
+> Meaning: if variable SOURCE_DATE_EPOCH
+>  Is set, set the boolean command line reproducible_build.
 
-Benchmark 3: sh pahole-test -j
-  Time (mean ± σ):      3.858 s ±  0.089 s    [User: 13.447 s, System: 7.078 s]
-  Range (min … max):    3.763 s …  3.978 s    4 runs
+(I understood this as a new command line option to set any btf feature
+from env, if the above option is passed to pahole)
 
-Summary
-  sh pahole-test -j ran
-    1.03 ± 0.03 times faster than sh pahole-test -j --reproducible_build
-    1.84 ± 0.05 times faster than sh pahole-test -j1
+From my position there are two faces to this:
+- for new kernels, a change in Kbuild to add som flag would definitely
+work.
+The patch to set --btf_features=reproducible_build to pahole from Kbuild
+if KBUILD_BUILD_TIMESTAMP is set got shot down by Masahiro Yamada, but
+hopefully something will be worked out eventually...
 
-Where pahole-test is the pahole command of the linux build (minus -j):
-LLVM_OBJCOPY=objcopy pahole -J --btf_gen_floats --lang_exclude=rust --skip_encoding_btf_inconsistent_proto --btf_gen_optimized .tmp_vmlinux.btf "$@"
+- for nixos/old kernels, the current pahole version produces
+reproducible output if SOURCE_DATE_EPOCH is set (because someone patched
+it to default to -j1 in this case in our tree), and now the reproducible
+build option exists I'd like to upstream something more appropriate
+that'll "just work" without worrying about old kernel trees and adding
+new explicit pahole arguments there.
 
-And .tmp_vmlinux.orig was the .tmp_vmlinux.btf binary before being
-processed:
-ld -m elf_x86_64 -z noexecstack --no-warn-rwx-segments --emit-relocs --discard-none -z max-page-size=0x200000 --build-id=sha1 --orphan-handling=warn --script=./arch/x86/kernel/vmlinux.lds -o .tmp_vmlinux.btf --whole-archive vmlinux.a .vmlinux.export.o init/version-timestamp.o --no-whole-archive --start-group --end-group
+So adding a new switch to set a flag from env probably won't help me
+much, but a new env var like PAHOLE_BTF_FEATURES (PAHOLE_FLAGS is
+used/overwritten by Kbuild...) that would just call into the
+--btf-feature parsing code, e.g. exporting
+PAHOLE_BTF_FEATURES=+reproducible_build would toggle the option) would
+probably work for me.
+(Have to be careful that this is not the same as --reproducible-build,
+so perhaps something else might be better... but regardless it'll
+probably work out for linux kernel builds)
 
-Signed-off-by: Dominique Martinet <asmadeus@codewreck.org>
----
-v2 -> v3:
- - added message about the env var to man page.
- - fixed typo / style of comment in code
+It's less convenient than having SOURCE_DATE_EPOCH just "make it work",
+but at least there'll be a single place to edit that'll work on all
+older kernels for a given distro.
+(and the "just work" side of things might come for newer kernels at some
+point for distros that care less...)
 
-v1 -> v2:
- - added message in verbose mode if setting reproducible build through
-   this.
-
- man-pages/pahole.1 |  3 +++
- pahole.c           | 11 +++++++++++
- 2 files changed, 14 insertions(+)
-
-diff --git a/man-pages/pahole.1 b/man-pages/pahole.1
-index f0605935a9f1..d9c2c1ac6912 100644
---- a/man-pages/pahole.1
-+++ b/man-pages/pahole.1
-@@ -327,6 +327,9 @@ If one wants to add an extra feature to the set of standard ones, the '+' prefix
- \-\-btf_features=+reproducible_build will add all default features plus the 'reproducible_build' extra
- feature.
- 
-+Alternatively, reproducible_build will also be enabled if the SOURCE_DATE_EPOCH environment variable
-+is set, as that is commonly set in build systems that aim for reproducible builds.
-+
- .TP
- .B \-\-btf_features_strict
- Identical to \-\-btf_features above, but pahole will exit if it encounters an unrecognized feature.
-diff --git a/pahole.c b/pahole.c
-index c866095c8be6..7724980ff106 100644
---- a/pahole.c
-+++ b/pahole.c
-@@ -3705,6 +3705,17 @@ int main(int argc, char *argv[])
- 		goto out;
- 	}
- 
-+	/*
-+	 * SOURCE_DATE_EPOCH being set means whoever called us likely tries
-+	 * to do a reproducible build. The setting only impacts btf_encode code
-+	 * so only check in this case to avoid needless messages.
-+	 */
-+	if (btf_encode && getenv("SOURCE_DATE_EPOCH")) {
-+		if (!conf_load.reproducible_build && global_verbose)
-+			printf("pahole: auto-enabling reproducible build (SOURCE_DATE_EPOCH set)\n");
-+		conf_load.reproducible_build = true;
-+	}
-+
- 	if (languages.str && parse_languages())
- 		return rc;
- 
+What do you think?
 -- 
-2.45.1
-
+Dominique Martinet | Asmadeus
