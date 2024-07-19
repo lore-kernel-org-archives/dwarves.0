@@ -1,139 +1,183 @@
-Received: from mail-oo1-f42.google.com (mail-oo1-f42.google.com [209.85.161.42])
+Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6043A158A00
-	for <dwarves@vger.kernel.org>; Tue, 16 Jul 2024 18:44:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 198173D984
+	for <dwarves@vger.kernel.org>; Fri, 19 Jul 2024 06:53:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721155443; cv=none; b=o9bWtyrwA01viASzT+LC6VCNhehF8xLS6nALE9tAPIZ4wuZrVmmgl+9FC4/dvgMrq1UGM162eDgNy2QGB+YJWafWNz8J2KHkKiJr4g235PjseA/Ul/sMxjC1gKGs1TIqTjTxYRcZRdUjMmqNQzlBaUmraBlajMyhKcnOpdbvlnA=
+	t=1721372011; cv=none; b=mo/huYGsrChO1kgr5Ur4E79NrL/ogPevAfx3NE5mFJa/PIbs5xJj9BUaMRj6cL3gM04Yk9K1tQCz+nqVo9wRIL/yL2nWsalOZklUH0g9qL6Ntfkmd2nivO/07HDn7Imc44s6FYgNjWsj23jptDNCamaUyeOSVT3HoW8km7owSm0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721155443; c=relaxed/simple;
-	bh=n+MRqrx6uATKYYShdW+uv5r6Ud9LgS/aUbPGcBD4FTM=;
-	h=From:Date:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=LZOAeRzB1RN0z55eO2r9wKSXh4Kp2Ca7M2hTQAcql9G/WLhSD+ADyehvlxIOoRGX9oU/yT8ENdouCjeVlUSmnd+NAtfNDKiPLMGo+axJRQ8LeXRucK8envF9MfoxnWr7CWrjeHG5v1UBPRWhh+jsZQnL6b2YabcdGBHQ8Ntwr5o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ph+trt6x; arc=none smtp.client-ip=209.85.161.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+	s=arc-20240116; t=1721372011; c=relaxed/simple;
+	bh=+NF7lyH6wzQHAgYPTJuoRRZkoilrPFhxIn+M1yX/YSc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=SAWk91cAm2OnOQ8aePSH2NGlr7S1fq3H3XUFKBy/rGFeol1FvHHUtM1B/olo/DpsJwViuxFuDArFnPtPtqyFX4OtvCKOz7q6kWkEYg5l01INZnvPRGMIGh5SwBcO8zNoyWmQkdsaB6dLcvb8QFfbqPuhHIZrngxry4d48lIRuo0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dI82V3TT; arc=none smtp.client-ip=209.85.208.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ph+trt6x"
-Received: by mail-oo1-f42.google.com with SMTP id 006d021491bc7-5c7b6c6a581so67348eaf.0
-        for <dwarves@vger.kernel.org>; Tue, 16 Jul 2024 11:44:02 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dI82V3TT"
+Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-5a3458bf7cfso184359a12.0
+        for <dwarves@vger.kernel.org>; Thu, 18 Jul 2024 23:53:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1721155441; x=1721760241; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-disposition:mime-version
-         :message-id:subject:cc:to:date:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7A1zxHYzSRHpPVYTcGX3J7Rgk0ZGg1jiOKquf1+pLRk=;
-        b=Ph+trt6xW83B3nqRykSxi/NqpAhSj4DIZbCpvneCm3osVwIzMiJSpWzC72Rjn79/Gt
-         kTEo0Rjw2hYwDpVwwn0m1cUQO1/tYDTW0AOLetWGP+aPD85zc0DVKIB1Ey6AWsKDbI6Z
-         8czNl065RBuc5c633A8txjYcLYsMmDZ74rVuak3EkaN3KUo4aS6cUTckAy2R9IT4dRgW
-         Bc6WZhAWELsIlGQTSQ95Pom2VieBwRooUd0WbyM6BkFeE5v1AWdgR0a1pRGTPaCHBwMk
-         aZ7/KuKwvOGU4mMP8W+8wjyPUpAVTURNviXIfmd11OXY+YPeWztI81gCqDwj7wCZxFOn
-         Vecg==
+        d=gmail.com; s=20230601; t=1721372007; x=1721976807; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ve2zmDgR8NqDN9e/0nEF/Sc7kafzlKzWUbA59XmkcFU=;
+        b=dI82V3TTEwfjDvw0m6KaV+jEuaJ32CN/MxFqCdnHbfCwVtF/5Jp5rCiB/l+QY5Q8Sw
+         18XiAWfXTKuq1h5P4lmrqHXMIA+kalk0DaXvAzF3aFH+3bw2kleXcU94/EBj5MTi2IIu
+         dH7V6lpjsAfwnd7yDMsWmqYeUUHtfIW87M/6de5AN6xxAxjFvwVsVX840S/RU/fzB3V4
+         j1sxrUOgPEExHuTlTcjsxvYO59Vi3n1s40xUUmEPdyFxrvm19cT7/szPbgW7ZkMdyaT5
+         SC5F+98xwZxlLa9EcP2uK4btr9OkkT9ewXC2PIGm1qGp+PRSB/0jqj42y2dJfbWtmrxN
+         BKsA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721155441; x=1721760241;
-        h=content-transfer-encoding:content-disposition:mime-version
-         :message-id:subject:cc:to:date:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1721372007; x=1721976807;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=7A1zxHYzSRHpPVYTcGX3J7Rgk0ZGg1jiOKquf1+pLRk=;
-        b=tIQm5FIRV2UVCCyLwCFzG09Zq+7ayK8MxdvnEGPM5U8r+gcV5jaQ7jY6fpEFvpFdkc
-         QKvdDxSyA/P3pW4SQt2rCUKS+kWfEL+BETremVLEbCZQeMW5rukB9Z95rr3AgcYgYDlY
-         BV6kLAw4nM3AbKnY1sUCISezH/1xgA4wKnViBkUSICJ2rnrYH/MkVoyzeeLhFQ+e3NoX
-         TPVeHmHXXd2gydAfHNXFosyc3X9Cm6m+bwtPm6IcCgH2wwkHJPQ8z8MtWZE7igP0Minn
-         /F3QVuI4kRjYcq12psUrmztHVozWmk8OMd+uHhFa5JL9Rs7LPd2kqxRZYwGMf2703F42
-         B/nQ==
-X-Gm-Message-State: AOJu0YxF/4ISjLzlCC1TrGvymQz/64bdGBaKqEjh2zFB2OxBIo8vBMID
-	iMxOboYQ3B1hAxI+Uc4vows/CCHGCb1ep6aboBDeb2hsKTZZNnMgZmsgJA==
-X-Google-Smtp-Source: AGHT+IEzNWexTH4gzHCZaXx8iNvr75rY03FMhqOT0wVZ+OIOCw8/Fp9BPWKXUA2Sf6T77pLEtblFqw==
-X-Received: by 2002:a05:6358:471b:b0:19f:4967:4e8f with SMTP id e5c5f4694b2df-1ac903df6c6mr349615955d.22.1721155441006;
-        Tue, 16 Jul 2024 11:44:01 -0700 (PDT)
-Received: from localhost ([190.15.121.82])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-78e32b6bbdasm4279861a12.19.2024.07.16.11.44.00
+        bh=ve2zmDgR8NqDN9e/0nEF/Sc7kafzlKzWUbA59XmkcFU=;
+        b=vh1EylA+cnNQzV/NFE7mMt7j0RICXBdW7jSkdDPsgTd4bI1U4EESfP+vouuSnnrum8
+         KUMvnsyzPVo1R5tWXETo3jbk8Gk0kjKffI51cN1KBqCHRSxIHBZ85VcnOGOyuvnbeBmi
+         Ew9xTjwlX4ooKaEffjVg5Xvamp48rpATSmwCVvIWjQN19fAkH7mK5ND19FIwqcaWcsd2
+         m690Ranyw+lb+Rs+L0hnWpKcbiKdZmjnoiawJdg8nL02UVmo8qzrZmnQMAZe4GptmJNg
+         JhekVTmqbD2xYkcsS+8Uh0XgBKPcqogHnxEgt7Hp3GYw36E0xZD9PLovF1nKeMgfNUHm
+         2eCg==
+X-Forwarded-Encrypted: i=1; AJvYcCWKIc4G5+qZAtKrsBnqSYxKjTSNhBBX3i+HT27zi3VXnRZNKSPzwBAe2VhP3x96+eLgxvu0SwjDk7E+bYaaIygqEiIeVfzxZA==
+X-Gm-Message-State: AOJu0Yykt7zbjTQIFBPo3HuANeDVmuQnRnjOd+378MahrU7Y3RVpyQCd
+	VIiiCk/kgrJVef8Rg8/r/vuL07eGHLoenT/jfX+WFgqjg16szDFEDLqanAxnthY=
+X-Google-Smtp-Source: AGHT+IHfV51FEzaN/N7wfsyhrdDnsDkNtP/HLl7ERic9qJsJk8WJJ/GjiHcurcwosIaFrCzvWUX9Pw==
+X-Received: by 2002:a50:cd19:0:b0:5a0:f8a2:9cf4 with SMTP id 4fb4d7f45d1cf-5a0f8b1dfadmr3243276a12.25.1721372006995;
+        Thu, 18 Jul 2024 23:53:26 -0700 (PDT)
+Received: from localhost (77-162-229-73.fixed.kpn.net. [77.162.229.73])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5a30a4d6fadsm630749a12.6.2024.07.18.23.53.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Jul 2024 11:44:00 -0700 (PDT)
-From: Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
-X-Google-Original-From: Arnaldo Carvalho de Melo <acme@redhat.com>
-Date: Tue, 16 Jul 2024 15:43:57 -0300
-To: Matthias Schwarzott <zzam@gentoo.org>
-Cc: dwarves@vger.kernel.org
-Subject: [PATCH 1/1] dwarf_loader: Hash DW_TAG_enumerator entries
-Message-ID: <Zpa_bfGXfR1rFV2e@x1>
+        Thu, 18 Jul 2024 23:53:26 -0700 (PDT)
+Sender: Domenico Andreoli <domenico.andreoli.it@gmail.com>
+Date: Fri, 19 Jul 2024 08:53:24 +0200
+From: Domenico Andreoli <cavok@debian.org>
+To: Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc: Ben Hutchings <ben@decadent.org.uk>, 1076564@bugs.debian.org,
+	dwarves@vger.kernel.org
+Subject: Re: Bug#1076564: pahole BTF processing seems flaky on powerpc
+Message-ID: <ZpoNZHIYuERg49N1@localhost>
+References: <172133976964.70930.13662511677581571913.reportbug@deadeye.wl.decadent.org.uk>
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="/5XBgT0oFmGrBoLE"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <172133976964.70930.13662511677581571913.reportbug@deadeye.wl.decadent.org.uk>
 
-As they are referenced by DW_TAG_imported_declaration, as we can see
-from these warnings:
 
-  ⬢[acme@toolbox zzam@gentoo.org]$ pdwtags popup.cpp.o > /dev/null
-  die__process_class: tag not supported 0x2f (template_type_parameter)!
-  die__process_class: tag not supported 0x30 (template_value_parameter)!
-  die__process_class: tag not supported 0x4107 (GNU_template_parameter_pack)!
-  die__process_function: tag not supported 0x4108 (GNU_formal_parameter_pack)!
-  tag__recode_dwarf_type: couldn't find 0x5706e type for 0xedb9 (imported_declaration)!
-  tag__recode_dwarf_type: couldn't find 0x57074 type for 0xedc1 (imported_declaration)!
-  tag__recode_dwarf_type: couldn't find 0x5707a type for 0xedc9 (imported_declaration)!
-  namespace__recode_dwarf_types: couldn't find 0x5706e type for 0xedb9 (imported_declaration)!
-  namespace__recode_dwarf_types: couldn't find 0x57074 type for 0xedc1 (imported_declaration)!
-  namespace__recode_dwarf_types: couldn't find 0x5707a type for 0xedc9 (imported_declaration)!
-  ⬢[acme@toolbox zzam@gentoo.org]$
+--/5XBgT0oFmGrBoLE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Looking at the DWARF info for one of those types not found:
+Hi Arnaldo,
 
-  ⬢[acme@toolbox zzam@gentoo.org]$ readelf -wi popup.cpp.o | grep -w edb9 -A5
-   <2><edb9>: Abbrev Number: 14 (DW_TAG_imported_declaration)
-      <edba>   DW_AT_decl_file   : 64
-      <edbb>   DW_AT_decl_line   : 100
-      <edbc>   DW_AT_decl_column : 20
-      <edbd>   DW_AT_import      : <0x5706e>	[Abbrev Number: 51 (DW_TAG_enumerator)]
-   <2><edc1>: Abbrev Number: 14 (DW_TAG_imported_declaration)
-  ⬢[acme@toolbox zzam@gentoo.org]$
+On Thu, Jul 18, 2024 at 11:56:09PM +0200, Ben Hutchings wrote:
+> Package: pahole
+> Version: 1.27-1
+> Severity: normal
+> X-Debbugs-Cc: debian-kernel@lists.debian.org
+>=20
+> Several kernel builds on powerpc have failed recently:
+>=20
+> 6.8.12-1:    https://buildd.debian.org/status/fetch.php?pkg=3Dlinux&arch=
+=3Dpowerpc&ver=3D6.8.12-1&stamp=3D1717234422&raw=3D1
+> 6.9.9-1:     https://buildd.debian.org/status/fetch.php?pkg=3Dlinux&arch=
+=3Dpowerpc&ver=3D6.9.9-1&stamp=3D1720906547&raw=3D1
+> 6.10-1~exp1: https://buildd.debian.org/status/fetch.php?pkg=3Dlinux&arch=
+=3Dpowerpc&ver=3D6.10-1%7Eexp1&stamp=3D1721287862&raw=3D1
+>=20
+> Note, these log files are up to 270 MB in size and should be
+> downloaded; at least Firefox becomes unresponsive when trying to
+> display them.
+>=20
+> For each of these, the failure seems to start with an error from
+> pahole such as:
+>=20
+>     [102044] ARRAY (anon) type_id=3D99491 index_type_id=3D14 nr_elems=3D1=
+2 Error emitting BTF type
+>     Encountered error while encoding BTF.
 
-And then:
+Does the above error ring any bell?
 
-  ⬢[acme@toolbox zzam@gentoo.org]$ readelf -wi popup.cpp.o | grep -w 5706e -A3
-   <3><5706e>: Abbrev Number: 51 (DW_TAG_enumerator)
-      <5706f>   DW_AT_name        : (indirect string, offset: 0xaec05): _S_single
-      <57073>   DW_AT_const_value : 0
-   <3><57074>: Abbrev Number: 51 (DW_TAG_enumerator)
-  ⬢[acme@toolbox zzam@gentoo.org]$
+Is there anything I can do to help?
 
-So we need to hash those DW_TAG_enumerator and not just the
-DW_TAG_enumerator_type containing them.
+>=20
+> This does *not* happen consistently.  Compare these successful
+> builds:
+>=20
+> 6.8.12-1:    https://buildd.debian.org/status/fetch.php?pkg=3Dlinux&arch=
+=3Dpowerpc&ver=3D6.8.12-1&stamp=3D1717278092&raw=3D1
+> - This same version failed to build on the first try.
+> 6.9.7-1:     https://buildd.debian.org/status/fetch.php?pkg=3Dlinux&arch=
+=3Dpowerpc&ver=3D6.9.7-1&stamp=3D1719538806&raw=3D1
+> - Earlier and later 6.9.x versions failed to build.
+>=20
+> Both pahole versions 1.26-1 and 1.27-1 have been used in both
+> successful and failing builds.
+>=20
+> Ben.
+>=20
+> -- System Information:
+> Debian Release: trixie/sid
+>   APT prefers unstable-debug
+>   APT policy: (500, 'unstable-debug'), (500, 'stable-updates'), (500, 'st=
+able-security'), (500, 'oldstable-updates'), (500, 'oldstable-security'), (=
+500, 'oldoldstable-updates'), (500, 'oldoldstable'), (500, 'unstable'), (50=
+0, 'stable'), (500, 'oldstable'), (1, 'experimental')
+> Architecture: amd64 (x86_64)
+> Foreign Architectures: i386
+>=20
+> Kernel: Linux 6.9.9-amd64 (SMP w/12 CPU threads; PREEMPT)
+> Locale: LANG=3Den_GB.UTF-8, LC_CTYPE=3Den_GB.UTF-8 (charmap=3DUTF-8), LAN=
+GUAGE not set
+> Shell: /bin/sh linked to /usr/bin/dash
+> Init: systemd (via /run/systemd/system)
+> LSM: AppArmor: enabled
+>=20
+> Versions of packages pahole depends on:
+> ii  libbpf1     1:1.4.3-1
+> ii  libc6       2.39-4
+> ii  libdw1t64   0.191-2
+> ii  libelf1t64  0.191-2
+> ii  zlib1g      1:1.3.dfsg+really1.3.1-1
+>=20
+> pahole recommends no packages.
+>=20
+> pahole suggests no packages.
+>=20
+> -- debconf-show failed
 
-This way tag__recode_dwarf_type() and namespace__recode_dwarf_types()
-will find them when looking them up using dwarf_cu__find_type_by_ref().
+--=20
+rsa4096: 3B10 0CA1 8674 ACBA B4FE  FCD2 CE5B CF17 9960 DE13
+ed25519: FFB4 0CC3 7F2E 091D F7DA  356E CC79 2832 ED38 CB05
 
-This was found first on the stratagus codebase (C++) at
-https://github.com/Wargus/stratagus.git.
+--/5XBgT0oFmGrBoLE
+Content-Type: application/pgp-signature; name="signature.asc"
 
-This didn't generate any difference in output from pahole, not
-influenced BTF generation as tested using tests/reproducible_build.sh.
+-----BEGIN PGP SIGNATURE-----
 
-Reported-by: Matthias Schwarzott <zzam@gentoo.org>
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
----
- dwarf_loader.c | 1 +
- 1 file changed, 1 insertion(+)
+iQIzBAABCgAdFiEEIhioiE2Z74CX+BiELwJgSGECT1EFAmaaDWAACgkQLwJgSGEC
+T1G1+Q/+LcDGT/BEDOp/47JrvMrbEGXxr3YNXneBWeB62FoHCDtRjTCNkJh4Ml4M
+3PJSovR5Lw4qHlNbPgmadZ9T06MPTKXkr7m5tTiHQssKEzCFyXHwF/IG1oo4Kjpa
+sfHfs8n6mo6pB88Z0ygC43oRhhiXkQdEMpwYvo/Iqd3tLEQpwFosvBwhvFNAgWa/
+S5+PQUpLnlTtSEeYlPE7+HTSmqy7iutwzxrWE53vLsE22dYRWNRCN7IZqop3Fv+1
+90l9XFXuct/uR0hzFutFY8yAyDSHRSnctMNtp5m8uXb3RF5PhBPFrBjLbVy+HWKE
+miW7bm8L3KiNUvrRY+g82mlpqaXicYTKCGFty40Qa2Sy7pim2WzUj8pual1uHfP6
+bx1w6W70LaZ5XGIjJgSGJhkOt7doURgso/U56F02R/cc5E2Y/eio5Usr2oj6cHPg
+PtxrHsVsH3pBclKJ+wWU3i3Qf4Ml1nvo96eSY32M2PEP37bLxhzZ36Qv26PGhznU
+gdw2z04gqVneCz2Hy74jXeNjU7GTGmAUtrDMtmd55yHymByFkmQIgOn+w26+NcZg
+uMJ9VXADI+8EwX23Wh+z8K7Ao32S06x7ul6WWfFqImNoEAILfZWuzMouj9fZzIWd
+SWwsguY0qPfr8FnHRCD7WJgJHqWsHku3jLjRJrZIP+Bh7Y05/vI=
+=7d7f
+-----END PGP SIGNATURE-----
 
-diff --git a/dwarf_loader.c b/dwarf_loader.c
-index 2d49960120b56f78..d914b91c1f375f7f 100644
---- a/dwarf_loader.c
-+++ b/dwarf_loader.c
-@@ -1776,6 +1776,7 @@ static struct tag *die__create_new_enumeration(Dwarf_Die *die, struct cu *cu, st
- 			goto out_delete;
- 
- 		enumeration__add(enumeration, enumerator);
-+		cu__hash(cu, &enumerator->tag);
- 	} while (dwarf_siblingof(die, die) == 0);
- out:
- 	return &enumeration->namespace.tag;
--- 
-2.45.0
-
+--/5XBgT0oFmGrBoLE--
