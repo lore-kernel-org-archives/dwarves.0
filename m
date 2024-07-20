@@ -1,96 +1,65 @@
-Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from maynard.decadent.org.uk (maynard.decadent.org.uk [65.21.191.19])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B7A61803D
-	for <dwarves@vger.kernel.org>; Sat, 20 Jul 2024 07:48:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73CC617FD
+	for <dwarves@vger.kernel.org>; Sat, 20 Jul 2024 19:41:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.21.191.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721461686; cv=none; b=pXFJCn/YweG1BLnpzwL47cpSVG1UqcgQU1UsJybYCJueruQGxQpMmQkup72YjOu/V7fM+D/qY+fFgn6dA1G+jpPjz0RBo7QX55ThOq+96CBjZEN5dGrf7pJtHVQn1wbIbefuLEaBxYbe3rORulD0e7Vl5b6inzL3vJUcO21N+V8=
+	t=1721504464; cv=none; b=VW/kqQCvt3VN8Iv8dXiBIrRuc9riuhyMQRLXa4rEePBMvKu0eWPslSjIKqRP0YoeICntDTG+dHiOoSjtuANiDoyYvhW63HuCBLv7xXDoFrkNec54JGTEcHI82dxyjz8dcTItugQFONxbQoJdmzd+jk33GAupVnmcC0bz/cenSto=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721461686; c=relaxed/simple;
-	bh=smGmlUND38rtjYwyfn5ims6qt/SlEk7JiVoF9F+sSOY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=csgWiOiDs+2WxVvEt4q6k7OmqlJ05O4FOP6pX5B3rPAqz7LA0kLqE4YYfdbyHmLhnr2xrnZKz+ppTELygFPTuSL6TIOGn+1v4fZ3V1oxTSv6kg7g2xyKr9rzs1EKDoEx4j8fYNsL2FD0T97CJ6hDOF9EKu8mfsipnjw/NPEgdWc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BKws4qGe; arc=none smtp.client-ip=209.85.218.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BKws4qGe"
-Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-a77c25beae1so230561466b.2
-        for <dwarves@vger.kernel.org>; Sat, 20 Jul 2024 00:48:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1721461683; x=1722066483; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ckhLCqtsXhfpSx4MQggebOAn/oSN1vgSwziib3tpzp0=;
-        b=BKws4qGe61S910I3Ai5Nl9Nr+jBu9j6tjKMplsV0ggsxda3GsRVk8Jm+UzzcJfNgau
-         Wo+Q2163kUUOu1osT3CSLEEp3qg+bcK+afV9bAmQaj0P+maKGKBclmT8TWhp96YpmhG+
-         IaeU6ovDhswtlau1YWoNToEjCi2zt8/PbywkKIE3IYZEkKvyseDVnBie0oNy29GD+4PN
-         9VNS4MaTFRr9gEp6rw2MOzt/6axIDmvvmk0Tdi5cKZ0Im5Fqv9NkRLrc35BY+kYaQdtJ
-         +MJgizUQ3siHgiqEgj+SwlzdXGWSe5UaBOmW2H0tjePe1xEnjVWKtvYEFts5lqpTl+Q6
-         qWuQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721461683; x=1722066483;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ckhLCqtsXhfpSx4MQggebOAn/oSN1vgSwziib3tpzp0=;
-        b=FU7dxkzGcl4mn3z3PEGNpOEO6N6vSLWwZTEzjUQmK33hhzeL45nUk3wR9zEiow6o6A
-         amzCnUK+S3GxCnGYvGCpBs6oHwaqV62T30UG7NyOF3clTZHsGMzbyT5+uDRg2g8mBFlv
-         T7DVHIEELUJgyFMVIWzHewj13rTrYw1TbJ4Vjg+8ARP8/CwO/HO2lTac7JFwHU4e2mIm
-         99C1m+DyoxmTIN2nGJCDXknLMUfobSk1UwLVHD9QcFVCD5fzOSZWqvt13Pr/y/JNh67n
-         9jCD6sprmDKCQZ3gOB4muf52F4KEFFtSHjmW9Etpl7gW+KI/UB/+to1ZSODyJsbtkI7S
-         XqJw==
-X-Forwarded-Encrypted: i=1; AJvYcCVhoH24j3kydkB1Ic7nkKpTKIzmtf2i5T6PuwjR2y3VswYrASL7FeuUn9mBx/KhnoL9yAFqk95rNMalmZdqmNrhVcmK1uoiTw==
-X-Gm-Message-State: AOJu0Yy3Syq9lvWjHjSpNW+/4i99VhIJlw/+bsVRhhl+1k0oDQ9JmsPT
-	9Io2H0YsG8/S6RRP4j35HA2Es8GfhTh9QvdzoHMK3VU7LemQQt/F0D59f2P4E+Gt3g==
-X-Google-Smtp-Source: AGHT+IG/jqG427HFJMA9eZgfpG+AED7Ungemnxwcqa2T7KQBEVkdmg4slXknNttPNhyXy8GPvwOGwg==
-X-Received: by 2002:a17:907:869f:b0:a6f:b11b:8ac5 with SMTP id a640c23a62f3a-a7a4c01c13cmr48905666b.30.1721461682420;
-        Sat, 20 Jul 2024 00:48:02 -0700 (PDT)
-Received: from macchia.lan (77-162-229-73.fixed.kpn.net. [77.162.229.73])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a7a3c8bebd6sm123815166b.138.2024.07.20.00.48.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 20 Jul 2024 00:48:01 -0700 (PDT)
-Sender: Domenico Andreoli <domenico.andreoli.it@gmail.com>
-Date: Sat, 20 Jul 2024 09:47:59 +0200
-From: Domenico Andreoli <cavok@debian.org>
-To: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-Cc: Domenico Andreoli <cavok@debian.org>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	debian-kernel@lists.debian.org, debian-powerpc@lists.debian.org,
-	Alan Maguire <alan.maguire@oracle.com>,
-	Jiri Olsa <jolsa@kernel.org>, Ben Hutchings <ben@decadent.org.uk>,
-	1076564@bugs.debian.org, dwarves@vger.kernel.org
+	s=arc-20240116; t=1721504464; c=relaxed/simple;
+	bh=6OokwOB0KZEjLGWK5b5EJ6UD1y5PVXG12su13OGSgSM=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=Rhpdz77g6woYTy5QhgRSnZO92eKtJaBUo0HjQNjtGcTgujUfMEkYa0tgGHCQNhFkFHSVXEAK+RtqBcvcsjLesyFy9UkC33d/RMCOISV4Ijx+S8vhEchDSEDS30ESyAy2wOKuBfK/+hmcU5v1fWvI2jyYkOosz4zTlnZB1Lh6gOM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=decadent.org.uk; spf=pass smtp.mailfrom=decadent.org.uk; arc=none smtp.client-ip=65.21.191.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=decadent.org.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=decadent.org.uk
+Received: from 213.219.177.86.adsl.dyn.edpnet.net ([213.219.177.86] helo=deadeye)
+	by maynard with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <ben@decadent.org.uk>)
+	id 1sVFcS-0004uX-3C;
+	Sat, 20 Jul 2024 19:19:48 +0000
+Received: from ben by deadeye with local (Exim 4.98)
+	(envelope-from <ben@decadent.org.uk>)
+	id 1sVFaI-00000000bxy-0Cwl;
+	Sat, 20 Jul 2024 21:17:34 +0200
+Message-ID: <29e9f0c18895cd881a239aa5791bee5a74c2d31e.camel@decadent.org.uk>
 Subject: Re: Bug#1076564: pahole BTF processing seems flaky on powerpc
-Message-ID: <Zptrr4YbzLQ7rk4b@macchia.lan>
-References: <172133976964.70930.13662511677581571913.reportbug@deadeye.wl.decadent.org.uk>
- <ZpoNZHIYuERg49N1@localhost>
- <Zpq6vEB3G1UlAeGR@x1>
- <ZprYtq5UQ1KDMw_v@localhost>
- <9bbcd88a1a0ae844d546468a3d68d3d60b9e3b13.camel@physik.fu-berlin.de>
+From: Ben Hutchings <ben@decadent.org.uk>
+To: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, Domenico
+ Andreoli <cavok@debian.org>, Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc: debian-kernel@lists.debian.org, debian-powerpc@lists.debian.org, Alan
+ Maguire <alan.maguire@oracle.com>, Jiri Olsa <jolsa@kernel.org>,
+ 1076564@bugs.debian.org,  dwarves@vger.kernel.org
+Date: Sat, 20 Jul 2024 21:17:25 +0200
+In-Reply-To: <9bbcd88a1a0ae844d546468a3d68d3d60b9e3b13.camel@physik.fu-berlin.de>
+References: 
+	<172133976964.70930.13662511677581571913.reportbug@deadeye.wl.decadent.org.uk>
+	 <ZpoNZHIYuERg49N1@localhost> <Zpq6vEB3G1UlAeGR@x1>
+	 <ZprYtq5UQ1KDMw_v@localhost>
+	 <9bbcd88a1a0ae844d546468a3d68d3d60b9e3b13.camel@physik.fu-berlin.de>
+Content-Type: multipart/signed; micalg="pgp-sha512";
+	protocol="application/pgp-signature"; boundary="=-ADHgBYldkGpImOCBWOBx"
+User-Agent: Evolution 3.52.3-1 
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="h+63LGDZRa1hEPrt"
-Content-Disposition: inline
-In-Reply-To: <9bbcd88a1a0ae844d546468a3d68d3d60b9e3b13.camel@physik.fu-berlin.de>
+X-SA-Exim-Connect-IP: 213.219.177.86
+X-SA-Exim-Mail-From: ben@decadent.org.uk
+X-SA-Exim-Scanned: No (on maynard); SAEximRunCond expanded to false
 
 
---h+63LGDZRa1hEPrt
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+--=-ADHgBYldkGpImOCBWOBx
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Sat, Jul 20, 2024 at 09:16:24AM +0200, John Paul Adrian Glaubitz wrote:
+On Sat, 2024-07-20 at 09:16 +0200, John Paul Adrian Glaubitz wrote:
 > Hi Domenico,
-
-Hi!
-
+>=20
 > On Fri, 2024-07-19 at 23:20 +0200, Domenico Andreoli wrote:
 > > > > Is there anything I can do to help?
 > > >=20
@@ -118,42 +87,42 @@ nt_func --lang_exclude=3Drust .tmp_vmlinux.btf
 >=20
 > I have seen the bug myself and I wanted to debug it, but the attempt was
 > foiled by the fact that the disk on perotto is full (again).
->=20
+
+I had a go yesterday and ran into the same problem.  I couldn't
+reproduce with a small kernel config (allnoconfig + BPF + DEBUG_INFO +
+DEBUG_INFO_BTF) and there wasn't enough disk space to build even one of
+the Debian kernel flavours.
+
 > Will take care of it and let you know when it's (some hours).
 
-That's great, thank you.
+Thank you!
 
->=20
-> Adrian
->=20
-> --=20
->  .''`.  John Paul Adrian Glaubitz
-> : :' :  Debian Developer
-> `. `'   Physicist
->   `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
+Ben.
 
 --=20
-rsa4096: 3B10 0CA1 8674 ACBA B4FE  FCD2 CE5B CF17 9960 DE13
-ed25519: FFB4 0CC3 7F2E 091D F7DA  356E CC79 2832 ED38 CB05
+Ben Hutchings
+This sentence contradicts itself - no actually it doesn't.
 
---h+63LGDZRa1hEPrt
+
+--=-ADHgBYldkGpImOCBWOBx
 Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEXyHpY5ym8Wu46kuocP5AkLatxCcFAmaba68ACgkQcP5AkLat
-xCc10g/9FEXJvxGdhM0ThTj2+p9002npnN+s9CaQSLGSBNOwB74J/3g+Y9OuTkzy
-47PnkmWxCP7BvDGuxLPBcCV/K4LWe3qRKfDyUepFeSlo7ch/T5GJlroIpnH/qRNA
-LuNJGmLHBn8b66kD5R0VkAehCIGab8UBYL+QVEegWmIqWiPf0id7mvp/nikb/OTo
-LNudOdwv7lYMbIkasfJ8hyGurKlOJRC9gZSc2s7XNY+38cNFM4YzDogMP4aQ/46c
-gLuMq8Oze9PrHTWcRkV0NqblbXVHWqvU48BjuOK/UhxVgASSXnamZWPvfcNJ2oiK
-6NgRpU0Ntv+38Gtb8DuC++RECVyrFVZatvhQq65Jxj+usDbmTeKCYfNAaxct/+RQ
-t5w3EYeZfzODRn+afrJE2HZ9nnQZImKL8y29sFePMFvjAYvim8PRSnwsGbrQlvP/
-xMcg+PzoMOWjIFvn5Gl/WETiTA3AfqDaRhy2pqNzBBPV0nkqTaN1UdHb6AY2JFbb
-lt7kbXD9MyhHElP2zaDtgahjADondaEeBHEm8ytj5Sx1Wi/lFyW43M41JQSjcRDk
-tvqhd6LKP8pyOBAUaDm/IBKlnR8jDyibTzSgfvOMoePq+nBsd7Yc97Vy0lFJxCPi
-vM4XkcdCa/BW6K7X+jYmmE++ncyRgbYw5HUN4D3w/7PwuEuFuFM=
-=vyDN
+iQIzBAABCgAdFiEErCspvTSmr92z9o8157/I7JWGEQkFAmacDUUACgkQ57/I7JWG
+EQm5qxAAuaQNjxh62uvDriYEEgLNDeWTlAuTb9MST2d1CnxHw0aMiD4B9R+zXR+W
+3fbPhv0hRuOolB3tGz/nHzuqtRZscelYXEO7J9nXiS+zrNfeP/sobFHStSm+ChBC
+xW+Zo8Sxm/2CEwhBgq3PNpC/vkX6MeF4Ng/0WkQskYuopyfbi7nvNMmA+pJLiV/k
+gntKZXK6eoIjtIA2WqIV0vVPaGAiodlz5s37GPLVaokAYgmUiyK7uzqE9VMMCyWZ
+uATK9MGKJ0xGZUoyPXW4IyPJgfaLgwjmaIspDHdSHKZOnZZEhXZ5gipKVUGixKBa
+uHlyF/MkWdUKkasgS/Z0YSg5NCUWs/hH84UQDRTnTnUWGEAC0rbox8X/AIdW0IoQ
+/qA82f1EZ2oO5hy5gb09yPAxT5bH2HWLFurL14pRfp5japk0t+QmbyCTqf5MLSme
+HY21/Z8SgigJM46nr9dnqA1PPZHdpNJucsamv/kMROhNayp034xmk84opEurJbhd
+vrjJpcxzNyWAQ2cYCkxF/d+p9G6GOyfkLs7cvz+onXzxbLS1xOZ4w0san1m1wxd4
+klbhnroIGi97GqHpozwKIQ7C4fmhHiJpuZy/TXNKMi7jeIv3pkr50z5LVTkpqyuJ
+9SGuGMGRULT+aA8M/p8roxIhUJ5aa0Fl0qctXnOq4sCeUZh7MiU=
+=GXpj
 -----END PGP SIGNATURE-----
 
---h+63LGDZRa1hEPrt--
+--=-ADHgBYldkGpImOCBWOBx--
