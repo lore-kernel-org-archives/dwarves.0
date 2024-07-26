@@ -1,65 +1,39 @@
-Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B042A19A289;
-	Thu, 25 Jul 2024 12:48:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F262179957;
+	Fri, 26 Jul 2024 12:31:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721911733; cv=none; b=pKvCHjvb83PWb6GibrDacrel5meFcGmGWZLkDUSyqQLq6PdAsZ2Nuf6lheUJlwszIISo3k9tOeM0QQ0P21ISBNuubVQqe3uZ3DJDMC6FHXMpL3izWMnLPF3Rbk+2t2HOzCRwY2qvqTJyS1zELigBPBMDSFVcK8a/qGmVwCCHQNA=
+	t=1721997120; cv=none; b=nXgu9FVLuQ08v1Feg5p2hL07ly7fIYBuBIdZ+6OiBCeftdYOPUJ9RggsCYr+0H5OvKlpROZfSqqBFTsmKfxqqV4I+yUPf7JoWjDCcQ2Nnf7uW/EM6IXzTTQdd3qnr9tuTPVra+jIHxI6ZfeOsH7vTFIO6yXKGyv3o78yaA3hrsQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721911733; c=relaxed/simple;
-	bh=xvUmv/V5XpbZDV3hoLQplCvV5YwOW60LYQUs7hz1w+k=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=K9lqJ7V9uPbbwdUdWyU1g7bgafNOKvjt3mWfmIL/7VoTZo1Objpvsc78PBgJng8idltNejV4ENaYi+zV+BS09BMyU5ndIaMwo8AoWRZEsDzjKjzShwPaBwJrEwEVQIQ7JhpwZcxInPclBkTXTKobqohNIphoiZYhW4YjoldIUAg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=c2gb1h1B; arc=none smtp.client-ip=209.85.218.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1721997120; c=relaxed/simple;
+	bh=wQ86fZI4MKfiHv5LgeOss1b5Y45NUDvJVHe9t4v2g08=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lIXd0TyXWIu6LL9ep9DyvREE6HP8Sxjtz3GCRC8RcIqiJ3LubSm+6PIN/D6QAWDJdPiA/zbRu79wmKYGqObvs0EATGsYpz/HyI6673QW76PA3R3G1n/3pVfqJ293nlrGBSlAezRjSmSDaEI/RLqPQABkVqs7M/BrrZDcMvz8S3U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=B9vY95o1; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="c2gb1h1B"
-Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-a7a9a7af0d0so66164166b.3;
-        Thu, 25 Jul 2024 05:48:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1721911730; x=1722516530; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=jxVK/86EyhdF5peNq0CDNZyt485zqN4rxGsUWvCjMK0=;
-        b=c2gb1h1BT0PpLwjS0dyGfz0yjWLfhNd3+C8BcGTl7gYKVQex9Hx3gV7wfk6cB720NR
-         qL0zL0HTBIWfBvbXB2iWezGymO5PUuLjIPdusor1QYNoZBvRK/XPtG0OKyUeOqBbjLQh
-         9O9a54Guw2sUtoS4WYDjfCrCw368Q0FSGXoFCHUjQwuVqIGOtqvgx0YxPeWblzPxJSaI
-         ngr1x7kgQrPitF6J1pCho5ypNwg2WxjFLFpA6qVWMBsjC/MW4F/dceH2U/OKfeS6ptym
-         j110sS+kLAL7P/gsjSDxySifpIi6X5RKU45VuSYR5Nrbj762AnN2VsZY24n0F/+DMk+5
-         INXQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721911730; x=1722516530;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jxVK/86EyhdF5peNq0CDNZyt485zqN4rxGsUWvCjMK0=;
-        b=NlMr4F4YdGmXFC0+YM2+LWU4X1jqFy8JMj1mPG2J5ORTyS/UIEXVMXGIrvPkfMsYER
-         X0ZiY4OmFK0DHCW7uMX3GJZdYNjMcrgsMOIul3hVgjZ7ynD4wqFMY/XRrhBbKSoqYTzL
-         p+Teo3Xzd9YiJVpKG2jJ/r7zOAhiZb6X/KNQ5K/jjEbvGySMgXHTxIy8gZq5mJBslm/X
-         xtfbuRhmHYwujCZrc40qQgV1fLkL1DSZlaaVpfps0XDOsDhqv8A0dwQi3spyMwY8NkVN
-         1qfzMyGdGVmwkoyymPqRvBbHG7Rq1RdzoqFGu5NykchrgLs3OQSZwhGZ4iI0PWW1zHUS
-         UCvg==
-X-Forwarded-Encrypted: i=1; AJvYcCW2dPHfYCGD+BBno/KnMcxxUK5oFsRMG3QkbnQeaFPAr1weEvyK70yZRkB6LdKZ30FGdNI0/aYDjFHNAprnoPF6RPh8COxs1prchoURFPvsep41ATF/30wORjf9dA==
-X-Gm-Message-State: AOJu0YwE24BWfwDzcm7+NQhr+dRIrHLUnmEuu1BhMkIlpvPPofPXryAt
-	yJW6ynRAF7zq2iwyLTrgW61X5SQEoSItU50F4KrNOcONm6H4jDsLgawoRQ==
-X-Google-Smtp-Source: AGHT+IEWfW0bolIktzt9ynOAmtbVKjj+Z2e31FprNPes2lx22CnhuNtFYbMjd19i8BHcmxQX55hnAA==
-X-Received: by 2002:a17:906:6a1c:b0:a79:8318:288f with SMTP id a640c23a62f3a-a7acb477e3fmr160724266b.16.1721911729541;
-        Thu, 25 Jul 2024 05:48:49 -0700 (PDT)
-Received: from krava (2001-1ae9-1c2-4c00-726e-c10f-8833-ff22.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:726e:c10f:8833:ff22])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a7acab23654sm70420166b.32.2024.07.25.05.48.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Jul 2024 05:48:48 -0700 (PDT)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Thu, 25 Jul 2024 14:48:46 +0200
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="B9vY95o1"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53B36C32782;
+	Fri, 26 Jul 2024 12:31:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1721997119;
+	bh=wQ86fZI4MKfiHv5LgeOss1b5Y45NUDvJVHe9t4v2g08=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=B9vY95o1PuEMIfHqflv598ilUBKTkZVWSPQbZ6uWVhKKkoNNj2vjZFLnqBHLOsjVJ
+	 YtguBWZ6GAIGILBofT+J2okh4vEg5apPsohAu6rcpELiV0JGslHBGhZgWyCMRh6NVL
+	 EA3BZQ6z87+c7mpdjMRPbrO/2RwM2yStMVxwz5XVq1Ah4Iv9EGhwAWFKCckR8wRmy1
+	 cstCuC+5gh0rjMdZuXeybi3IhQ3EqaTgkbR3avK03NyZVH1kqnSzgWpRS8kbw5HC83
+	 D0O6dhRCUV3BsoGCgyOVY27Hp25+EtqNcqwOCBbKfHCIa9OKzXfHcmmh5YxQ2Co4+N
+	 nSdrg0CZP9Gvw==
+Date: Fri, 26 Jul 2024 09:31:55 -0300
+From: Arnaldo Carvalho de Melo <acme@kernel.org>
 To: Alan Maguire <alan.maguire@oracle.com>
-Cc: acme@kernel.org, cavok@debian.org, ben@decadent.org.uk,
+Cc: cavok@debian.org, jolsa@kernel.org, ben@decadent.org.uk,
 	dwarves@vger.kernel.org, bpf@vger.kernel.org
 Subject: Re: [PATCH dwarves] btf_encoder: log libbpf errors when they cause
  encoding errors
-Message-ID: <ZqJJrpL2eBJblTtz@krava>
+Message-ID: <ZqOXO1ltZoueQQ_f@x1>
 References: <20240725075520.1281905-1-alan.maguire@oracle.com>
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
@@ -77,13 +51,10 @@ On Thu, Jul 25, 2024 at 08:55:20AM +0100, Alan Maguire wrote:
 > negative.  Nearly all use cases of btf__log_err() happen as a
 > result of a libbpf-returned error, pass 0 for the exceptions.
 
-the more info the better ;-) lgtm
+Thanks, applied.
 
-Reviewed-by: Jiri Olsa <jolsa@kernel.org>
-
-jirka
-
-> 
+- Arnaldo
+ 
 > Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
 > ---
 >  btf_encoder.c | 45 +++++++++++++++++++++++++--------------------
@@ -236,4 +207,3 @@ jirka
 >  
 > -- 
 > 2.43.5
-> 
