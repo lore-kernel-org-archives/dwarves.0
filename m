@@ -1,41 +1,56 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9893194C6E;
-	Fri,  9 Aug 2024 13:51:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F987174EE4;
+	Fri,  9 Aug 2024 14:38:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723211469; cv=none; b=pMI/oujZbuyxwez8N9EjWI+7jJJpiWZCVUkVlDq6scrIraTF84qjGcwKlKs35RcnLUqlq0I/RRe0LQW0sPCMRP7oGHAUVO3z7MmPy7hMLifcNAPNOVvrPWzTRFDam4P4QY3Q5Lc4QUe053m8KBC9jPRTlfwTcaHOZ0auUOuxYbk=
+	t=1723214320; cv=none; b=ejiPDowmgLQSHUJ/yPkmlLQt6fe4SVQBk4zqjMesNJ+TAseXYWbSzaJ1nJWD1eUq17h/iaFpZP3z4DGqZ7SnEIwdfWZhpOZawrNjVsmCX1jNZ2xHHiZor+Q5HBlNFgxsxmk+jzEw7vUoOZy8OfiP/6o2p6zp/Loatt/REA2lCWE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723211469; c=relaxed/simple;
-	bh=CyjY19UrCD8k4E/bhM/4gegyA6UyPxmNSklMb+WYJSc=;
+	s=arc-20240116; t=1723214320; c=relaxed/simple;
+	bh=mDATvSkRsXbgAhxacIlfhhmdhJATPWwkckScaSsEUzA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=B9SOjbMbfj5YncGC8s4ZUH6OPTHRiv4BwR06jGQ+EJRELI5r49m0fRmzy7RaIPwdyTKXfBRRC8UfMy0p9dPFE6CXA92OZ7UeO2B0wlaB/5PkH2BOCAdAR/HR6C3uaigVVXIW7Hqs4T/1hwAY69dxsm5YVaZ0mZkvKJbu+9YWv9M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jTh0VkYT; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jTh0VkYT"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1F45C32782;
-	Fri,  9 Aug 2024 13:51:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1723211469;
-	bh=CyjY19UrCD8k4E/bhM/4gegyA6UyPxmNSklMb+WYJSc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=jTh0VkYTqNSZZ3O5zLfZ8B8VcjHtcabsC4npYBY6ZBic3Drpdi/54GyxERCoLNxgG
-	 Ii+W7e69bMVHMl2SIIzRypRx932o2WFBlPgEw9ITD6WJaZ9BJvQ7iJJzV+Cu5a9yWW
-	 Yoj9Arq5b5kGyTW1t7OcP7DZUCZHEp+o0oCv1RvLRUFqDB6Gi6B619/g0mo+yYkZp5
-	 Z5vwb7KT8AvQxIm3290fSJL4chKmECFUR8mqTjjZiDTdXaQrcRD7HcDYBFJiOMZNfD
-	 MflZMWzIeNy2Py6L8VUOUqFYkaK3LUwwXQCjIr4gfur8Lfg9EfpzFuTNMufCP6JeYI
-	 kk2dm591yCXbQ==
-Date: Fri, 9 Aug 2024 10:51:06 -0300
-From: Arnaldo Carvalho de Melo <acme@kernel.org>
-To: Alan Maguire <alan.maguire@oracle.com>
-Cc: Matthew Maurer <mmaurer@google.com>, rust-for-linux@vger.kernel.org,
-	dwarves@vger.kernel.org, aliceryhl@google.com
-Subject: Re: [PATCH v2] pahole: Apply CU-level filters early in loading
-Message-ID: <ZrYeyjyuHiJyj7Xf@x1>
-References: <20240801185054.2518383-1-mmaurer@google.com>
- <25bc65c9-e28e-48cd-b5a9-f603d846ae51@oracle.com>
- <ZrYPVQwJePB-nyO2@x1>
+	 Content-Type:Content-Disposition:In-Reply-To; b=OpY52om5DyP1fYQoZ49DLRPNXUA2eOXOtTngPHJelt87w18B5Ern8iR5MZLxrR5DW9W2Q1Rrobb2CnltrhORTmD4YdT5JRaH7bOIzgl+xQdSMd150nFTBSJp/4mFbuPKFgKklUVoCdERUAEUkbxJ4sRqPvzRhyo6ZkS0UC+Zslw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fomichev.me; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.214.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fomichev.me
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-1fd6ed7688cso22041335ad.3;
+        Fri, 09 Aug 2024 07:38:38 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1723214317; x=1723819117;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qo3fv4BxOyXeAzF6cs39PLejyyZBfrHLSuD8oQr5eIM=;
+        b=MpWTwFK3iXJgQLlf/MeH4PU1tQEcMcJvcITWpp01uhQfaZB6hLIrxLHNkpWsL/bIQl
+         7QEXZ9zu0pD+Kd1zdbi/eigddIRrhwleSc5UuZbO90wwngdDUzXjYKOUhEL8iXo7toJt
+         cO2lHDg31f0gDppjhkIBgMwunwLXvrP1ATk26HdkjP3lGAfkwMtJBOnAoYpvxbHwqDLm
+         jWuAR+m0Sd3c29Lgx4HgG6QpVMh6cn3cQRxerEiUExdh7QtW/KoHzQC5YBH/yvz1b7I5
+         vnLEfA4qqQRKTL+Mawo9qeNlt+BwQm+p2ohF4FFvDionW9rfUZiv7TuSIwmUuI8Cv3SB
+         Xufw==
+X-Forwarded-Encrypted: i=1; AJvYcCXP4m/bQZicM4KEP06lMIgVFZ7WEfnQ6sDnFAy9v8UZe71xQJHnT66ek39jdboZmhItbP9RBjigLNTBZMm/u8z0PI4vJrBdjywTWWB6HeKMY8QRjK6MXK9xsT+xCw==
+X-Gm-Message-State: AOJu0Yzhe0qGLtvEODfhd1+qGVf11a0KbOR1/d2ToqUI5wPsK9rWUqRo
+	cMwUpPxiGI/BkrLzOhe9f82qx+e7vKBbBgaEYF4JbXR8vbWkOfSmQgmH8us=
+X-Google-Smtp-Source: AGHT+IFkJPt6sr/F+3RRWmW5AvyckH95Q3MwPCzTmXcr5UFJhzo2H+pqMgp1VmNTBGegNwyUjdlEKg==
+X-Received: by 2002:a17:903:2288:b0:1fb:67e0:2e0a with SMTP id d9443c01a7336-200ae5d7771mr19025975ad.48.1723214317474;
+        Fri, 09 Aug 2024 07:38:37 -0700 (PDT)
+Received: from localhost ([2601:646:9e00:f56e:73b6:7410:eb24:cba4])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1ff59293a90sm143146595ad.235.2024.08.09.07.38.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Aug 2024 07:38:37 -0700 (PDT)
+Date: Fri, 9 Aug 2024 07:38:36 -0700
+From: Stanislav Fomichev <sdf@fomichev.me>
+To: Xin Liu <liuxin350@huawei.com>
+Cc: alan.maguire@oracle.com, andrii@kernel.org, arnaldo.melo@gmail.com,
+	ast@kernel.org, bpf@vger.kernel.org, daniel@iogearbox.net,
+	dwarves@vger.kernel.org, kernel-team@fb.com,
+	ndesaulniers@google.com, yonghong.song@linux.dev, yanan@huawei.com,
+	wuchangye@huawei.com, xiesongyang@huawei.com,
+	kongweibin2@huawei.com, zhangmingyi5@huawei.com,
+	liwei883@huawei.com, tianmuyang@huawei.com
+Subject: Re: Is there any current plan for ipvlan to support AF_XDP?
+Message-ID: <ZrYp7CHx44-6hPN7@mini-arch>
+References: <20240809024627.2193378-1-liuxin350@huawei.com>
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
@@ -44,59 +59,18 @@ List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZrYPVQwJePB-nyO2@x1>
+In-Reply-To: <20240809024627.2193378-1-liuxin350@huawei.com>
 
-On Fri, Aug 09, 2024 at 09:45:13AM -0300, Arnaldo Carvalho de Melo wrote:
-> On Tue, Aug 06, 2024 at 01:10:03PM +0100, Alan Maguire wrote:
-> > On 01/08/2024 19:50, Matthew Maurer wrote:
-> > > Without this, even with `--lang_exclude=rust` set, running on `vmlinux`
-> > > with `CONFIG_RUST` enabled will lead to errors like:
-> > > die__process_function: tag not supported 0x2f (template_type_parameter)!
-> > > because the filtering doesn't happen until finalization, but unsupported
-> > > tags are reported during loading.
-> > > 
-> > > As an added bonus, this should speed up processing of large objects with
-> > > filtered CUs, as their details will no longer be walked.
-> > > 
-> > > Signed-off-by: Matthew Maurer <mmaurer@google.com>
-> > 
-> > LGTM, thanks!
-> > 
-> > Reviewed-by: Alan Maguire <alan.maguire@oracle.com>
-> > Tested-by: Alan Maguire <alan.maguire@oracle.com>
+On 08/09, Xin Liu wrote:
+> Hi, all:
+> we want to use the AF_XDP capability in ipvlan driver. However, the current
+> mainline does not support use AF_XDP in ipvlan. Has the community discussed
+> the use of AF_XDP in ipvlan? 
 > 
-> Thanks, I just split it into two patches, one adding the new early
-> filtering facility and with the second making then use of this new
-> facility in pahole:
+> I can't seem to find any discussion on the mailing list.
 > 
-> ⬢[acme@toolbox pahole]$ git log --oneline -5
-> fbcca0f6c2fbeb52 (HEAD -> master) pahole: Do --languages_exclude CU filtering earlier
-> 1f8d83d16d6d6dfa dwarf_loader: Allow filtering CUs  early in loading
+> Thanks!
 
-Tested building a kernel with CONFIG_RUST, no warnings (that
-template_type_param wouldn't appear anyway as I added initial support
-for it, at least for creating some structs out of its DWARF info, so no
-more warnings), but:
-
-⬢[acme@toolbox linux]$ pahole -C '<kernel::str::RawFormatter as core::fmt::Write>::{vtable_type}' ../build/rust-kernel/rust/kernel.o 
-die__process_class: tag not supported 0x33 (variant_part) at <14f43>!
-struct <kernel::str::RawFormatter as core::fmt::Write>::{vtable_type} {
-	() *                       drop_in_place __attribute__((__aligned__(8))); /*     0     8 */
-	usize                      size __attribute__((__aligned__(8))); /*     8     8 */
-	usize                      align __attribute__((__aligned__(8))); /*    16     8 */
-	() *                       __method3 __attribute__((__aligned__(8))); /*    24     8 */
-	() *                       __method4 __attribute__((__aligned__(8))); /*    32     8 */
-	() *                       __method5 __attribute__((__aligned__(8))); /*    40     8 */
-
-	/* size: 48, cachelines: 1, members: 6 */
-	/* forced alignments: 6 */
-	/* last cacheline: 48 bytes */
-} __attribute__((__aligned__(8)));
-
-⬢[acme@toolbox linux]$
-
-That DW_TAG_variant_part warning would show up without this series, so
-seems to be working as expected :-)
-
-- Arnaldo
+I don't think it has been discussed. Probably because there is no
+straightforward way to make zerocopy work. Copy mode should probably
+work already?
