@@ -1,62 +1,66 @@
-Received: from mail-oo1-f50.google.com (mail-oo1-f50.google.com [209.85.161.50])
+Received: from mail-ot1-f54.google.com (mail-ot1-f54.google.com [209.85.210.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 036157D401
-	for <dwarves@vger.kernel.org>; Fri, 23 Aug 2024 21:28:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2676E80C02
+	for <dwarves@vger.kernel.org>; Fri, 23 Aug 2024 21:28:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724448521; cv=none; b=VynL1A2KqDLOP2p9VwUxRSVYRgsz0jT7RfXJW5xgF9wgqLN3dIwkJSP7XtMOIKuD9PXA1rco69j1wvVPtLgbRIrwy2veAOZxlI2HZ88g5BEJJ/gmv7BDDPSKtskG3YGwRSucHJO++L8rNGXiIQEBmeY7vzWjZRPuQyAwt5XcCgw=
+	t=1724448522; cv=none; b=jj7wKPKwcgJo4b5MCTLvUZ2qg+OGa6KfFgl5WmfVjjMUvt07MdokhlUKCrenZGX/3ssxrbZkEUvHWA3J6T53fNmzwJC1x0iIjXTsrtzox3GoDjeRSNoqLOXtYFhSc2h1wzzhqW90ScTUjNaAOzyhrH3YovnHAwLjJlqP9sEUfSQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724448521; c=relaxed/simple;
-	bh=R3xTIYzj/4qKUh6HAoZaOMKrkAWhzz0jYm6T9tTQFS0=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=q8VLBrN1Ow61XLTFlFxN7a8ja9YNiR0XOJT1EbRJyl8ccyhIxfdf0ER3fm5Scr3HEUSZbtyT8bAnGw9nCg6alXzdISt17lXSY3FxCo8hfReDBvDBnE7Mhq6Nfa/Ei6Ca7RTL7kmnbvoXY5k/wzNWVGGYeZggBUsq608RD2hNC9A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=obs.cr; spf=none smtp.mailfrom=obs.cr; dkim=pass (2048-bit key) header.d=obs-cr.20230601.gappssmtp.com header.i=@obs-cr.20230601.gappssmtp.com header.b=xxh/ZIB3; arc=none smtp.client-ip=209.85.161.50
+	s=arc-20240116; t=1724448522; c=relaxed/simple;
+	bh=NfsxLQcVeMS6U0wUco8ofo6M4HMEL2Q4s4SN/0fOtdQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=EVRft4hWQI8e3UWenueRgaBNOVtgZfSBpreXihE/lzQHKKv07jnOozVNoq9jHC59/JzjpfkGm9h30SwBKL6+lECS6rISeNPjEMdtUu4XlsvHcGiDmnkWNbIlno6Rlhm3VGbXpFg4IxBGpIb7s63zMtUjOB0JwrUeS4KYoBA+tY4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=obs.cr; spf=none smtp.mailfrom=obs.cr; dkim=pass (2048-bit key) header.d=obs-cr.20230601.gappssmtp.com header.i=@obs-cr.20230601.gappssmtp.com header.b=s5QfDd9v; arc=none smtp.client-ip=209.85.210.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=obs.cr
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=obs.cr
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=obs-cr.20230601.gappssmtp.com header.i=@obs-cr.20230601.gappssmtp.com header.b="xxh/ZIB3"
-Received: by mail-oo1-f50.google.com with SMTP id 006d021491bc7-5d5c7f23f22so1711939eaf.0
-        for <dwarves@vger.kernel.org>; Fri, 23 Aug 2024 14:28:39 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=obs-cr.20230601.gappssmtp.com header.i=@obs-cr.20230601.gappssmtp.com header.b="s5QfDd9v"
+Received: by mail-ot1-f54.google.com with SMTP id 46e09a7af769-70e00cb1ee7so1785519a34.1
+        for <dwarves@vger.kernel.org>; Fri, 23 Aug 2024 14:28:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=obs-cr.20230601.gappssmtp.com; s=20230601; t=1724448519; x=1725053319; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=lRBYVq8gj337fLTwE2FQO7omhlSiqftyZ7WJosiQJ34=;
-        b=xxh/ZIB3+t8ToayBz51Z3IgANhmf9rWB5/7jfZarQnTY2FcPqgP4OcelEKYcVM9ske
-         SjYT7yZQ5odDENwzJQKZT9Vixf0GcnKGfbyQKQ0Y7hK5rrWiXpAO3Q0U6D7Urlki54f5
-         OlbgX31Pf8N7DioXRfKcoKkN9w/kCRtJrfu7nCzP9KYxhQ+bA0ZEMsmElPJjtQCx13cg
-         jcKVS80TrxIMiQEcfqQ01DKQRvBLe34XdIs8X8SxuZ9BY231stIkD3BpuIaPi/cLSm90
-         fIvfKD3FcnEqJffzTvOBQcfsWK1WvdmnMnkhd+LrIm68YuDOERdeBuysgmOQDYsQ8Oj2
-         0Fjw==
+        d=obs-cr.20230601.gappssmtp.com; s=20230601; t=1724448520; x=1725053320; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Oej+lrTyjB8ipsbaQA7JAkzh2MNOWtjI07nwe8Kzt+w=;
+        b=s5QfDd9vl16crz4AIeh9Fj9rL3W5u4aY/+MFi/lZAZqQUZ8t7KLGkMG5reiPzcd0Xr
+         vZU9rwEDPivCt6bU/1rZRhALEA4MvYvsbZqcpzRkfBovU7lm2VKGGrUNzcUwLDXYEGpU
+         o//MIIK6UVMnWDVovqvInHnOPhnQEOX01Qp6p9LBeM5x/EbNqoTEjED5z5xsPg8Lmjkw
+         AtT3SwUlUJISWNZQNNiSCbm84Vn5MUkGap8fwwp10J30gcVtepMITjDDMQBCjXbGAxu3
+         MbWyYEYkKcXvo8uFCSgIiqL/EMik1sBHt4DjeUz+0vug6qDM5QC9BmC6vGR5j/gcaYi8
+         r+uQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724448519; x=1725053319;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=lRBYVq8gj337fLTwE2FQO7omhlSiqftyZ7WJosiQJ34=;
-        b=jph+5kbGS3xsH1R+hD5nzeXba8u0L+OY/Ph6HVn7NMmEZYTQny8AOI5aeJsvsdKJux
-         eVkGaJXkzBhXg+CitL6WoD/XdlfQp1w783DIzJj8Q7MBNWgQnwWsmnFk+vmTxfQ+AziH
-         xfZnSvz/T2kCKJtrIETz+lbVQZhKfzazhP9Kaj4aEcHneVqRXAsQh7YhIr0w8Vp48wJj
-         bDoUk8b9I+hmUL3LJW1gOmsPSf5/yXY9Mm5vXCfqV8NK9GLtqfCoCZV+9yzU9bAY9Fyw
-         73cD3yWcsi/i8kPT2TFcwlk2KCr07kcMXwWkTii4XpeOnnwEoapMvdrhsGkcQATFaZe6
-         2e7g==
-X-Gm-Message-State: AOJu0Yy3mHSMnRhJyPnXvV8iMdfFpiRT83wqdipWbe3DbPbFDa4dRVk5
-	VU2nlzOXxjraAlgvbLFoS5SirRGO3kzMspBBRAlJr/Ic3BTLNH4YyKcTHo3P/fyH1UMtYaBtIDh
-	L
-X-Google-Smtp-Source: AGHT+IERD8FloUc7cDlPMZeUnwD+aHG4KMoS/FSURH9B45RskEEWCxeguiZtGXD/UvL0+qM9gE9szA==
-X-Received: by 2002:a05:6820:1e12:b0:5da:b554:b84c with SMTP id 006d021491bc7-5dcc625d655mr3323450eaf.5.1724448518865;
-        Fri, 23 Aug 2024 14:28:38 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1724448520; x=1725053320;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Oej+lrTyjB8ipsbaQA7JAkzh2MNOWtjI07nwe8Kzt+w=;
+        b=N1nFf7Prl3oqt/Yua2DMFp+v9hiUicvZY74UvsTsV5xqJkT71AqWOBHoRa1Au86mPW
+         /xoDZma7Yn47p0ND7PodUIFCrMvDdOdGzPVfeedAMvJxQbKnEH/m3dQ3heKscwuC36yh
+         QczfGr3YRlLLrJXHYCB2CcSUnFirboUa2swS87XIroSv/hn9/9McRt7y2iKglk9pVmVU
+         nMvTqP2WfkLvzGuHKq4XsmJJsj55io0Hqwr1LfJa4qwy/7/MGCYN6iR2QaMBbfMjyF1x
+         zgXB6GK4zG6uQlyB5QDadUNqgoRXCESBRJGjpnrhrkGlWX246oif44Jvm8RtQ+MghHwE
+         W4OQ==
+X-Gm-Message-State: AOJu0YzTwkT8DA9UKC47WCs3lmXIgWQIoF4qm46S6AmlsfcPZ/KdJcoT
+	iNy3pYrYHWOe1FlpdM3uthmex02l3vRBSfcFw9fs/9UoeuWP1pesdKzCa6sMH3bEiSlrjwe7Qa1
+	E
+X-Google-Smtp-Source: AGHT+IEzjx1LOdbbE5ST6v7q4+DN+N78xPMrWpCdKccTojhEX2TEPxAo8l964sdpPSX3gH/se9uwig==
+X-Received: by 2002:a05:6830:6f8a:b0:709:3b70:3bb6 with SMTP id 46e09a7af769-70e0ec0e6f6mr4667477a34.28.1724448519927;
+        Fri, 23 Aug 2024 14:28:39 -0700 (PDT)
 Received: from ininer.rhod.uc.edu ([129.137.96.15])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4ce710bb1c9sm1114893173.129.2024.08.23.14.28.38
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4ce710bb1c9sm1114893173.129.2024.08.23.14.28.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Aug 2024 14:28:38 -0700 (PDT)
+        Fri, 23 Aug 2024 14:28:39 -0700 (PDT)
 From: Will Hawkins <hawkinsw@obs.cr>
 To: dwarves@vger.kernel.org
 Cc: Will Hawkins <hawkinsw@obs.cr>
-Subject: [PATCH 0/1] btf_loader support for subprogram linkage
-Date: Fri, 23 Aug 2024 17:28:30 -0400
-Message-ID: <20240823212835.1078351-1-hawkinsw@obs.cr>
+Subject: [PATCH 1/1] btf_loader: Support linkages for BTF subprograms
+Date: Fri, 23 Aug 2024 17:28:31 -0400
+Message-ID: <20240823212835.1078351-2-hawkinsw@obs.cr>
 X-Mailer: git-send-email 2.45.2
+In-Reply-To: <20240823212835.1078351-1-hawkinsw@obs.cr>
+References: <20240823212835.1078351-1-hawkinsw@obs.cr>
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
@@ -65,41 +69,39 @@ List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-First, 
+Handle static and external linkage for BTF subprograms (functions).
 
-I am a huge fan of pahole (and friends). I volunteered to work on
-helping to edit the BTF spec for the IETF and so I've started to look
-more deeply at BTF and the tools. 
-
-Second, I hope that what I am offering is being sent to the right place
-and is in the right format. I tried to follow what seems to be the
-"right thing" by looking at mailing list archives.
-
-This patch add supports to the btf_loader for subprogram (BTF_KIND_FUNC)
-linkages. For example,
-
-```
-$ cat a.c
-static int x() {
-  return 5;
-}
-$ gcc -gbtf -g -O0 -c a.c 
-$ ~/code/pahole/build/pfunct -Fbtf --compile a.o
-int x(void) /* linkage=static */
-{
-	return 0;
-}
-```
-
-Sincerely,
-Will
-
-Will Hawkins (1):
-  btf_loader: Support linkages for BTF subprograms
-
+Signed-off-by: Will Hawkins <hawkinsw@obs.cr>
+---
  btf_loader.c | 8 ++++++++
  1 file changed, 8 insertions(+)
 
+diff --git a/btf_loader.c b/btf_loader.c
+index e0d029a..488c757 100644
+--- a/btf_loader.c
++++ b/btf_loader.c
+@@ -30,6 +30,9 @@
+ #include "dutil.h"
+ #include "dwarves.h"
+ 
++static char btf_linkage_name_static[] = "static";
++static char btf_linkage_name_extern[] = "extern";
++
+ static const char *cu__btf_str(struct cu *cu, uint32_t offset)
+ {
+ 	return offset ? btf__str_by_offset(cu->priv, offset) : NULL;
+@@ -87,6 +90,11 @@ static int create_new_function(struct cu *cu, const struct btf_type *tp, uint32_
+ 	// for BTF this is not really the type of the return of the function,
+ 	// but the prototype, the return type is the one in type_id
+ 	func->btf = 1;
++	if (BTF_INFO_VLEN(tp->info) == BTF_FUNC_STATIC)
++		func->linkage_name =  btf_linkage_name_static;
++	else if (BTF_INFO_VLEN(tp->info) == BTF_FUNC_EXTERN)
++		func->linkage_name =  btf_linkage_name_extern;
++	func->external = BTF_INFO_VLEN(tp->info) == BTF_FUNC_EXTERN;
+ 	func->proto.tag.tag = DW_TAG_subprogram;
+ 	func->proto.tag.type = tp->type;
+ 	func->name = cu__btf_str(cu, tp->name_off);
 -- 
 2.45.2
 
