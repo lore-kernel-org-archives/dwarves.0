@@ -1,131 +1,127 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f41.google.com (mail-qv1-f41.google.com [209.85.219.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D43A0811E2;
-	Mon, 26 Aug 2024 20:04:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 241F1194AEF
+	for <dwarves@vger.kernel.org>; Mon, 26 Aug 2024 20:24:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724702679; cv=none; b=qb4AhDJnvo+4sP0Bf8MweamYvIZZ9i91T8XYgDv8+2rsME/rBtDLuDauXdLr8ey9s9nPydhcHPngQjRVWtXWFsZmZWV9Pz1IUm0vqt7lkv807Uu/EUm1U3T9fo58RbqIluQj3tPUdV5tV00g89uP/y9Y0XmYln1Z/0c48kxlavs=
+	t=1724703860; cv=none; b=Sm2We8aCqkeGp4cdnxwrgOQ9lQ8NRW6sY+qCN9+EYOi/OgObhV1uqmt/lPuGl/bgYO8rBCamXCFZrm1NlwhqVca0nc6rGGMOIura7UgB0JrWG55/VlkCYRPeQrtnQgvLc4wdWvviiA0PvYsx2RgLhqXOXx+nhbaLSUhuQ4z/xbQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724702679; c=relaxed/simple;
-	bh=AkihPQS8bQoOGzU1lf5ytFhEOS/7IsKOwAe50NQNpj4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ayuUPZS0ujzhq5QZDo5g43OUaNBeX1cPAzvLG5f48zabT47+8krkn6AI66zEmcXiS28J009PFjD44hq1AQ/iOqIV7ZwcSB0OsImvQohUwByW3kTgRD0wr/MSP9hWfl6EOkriMdDMGC9yEIvfVBv622KcG6SnKjOPZdIKfpnQlAo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=B7rny3nI; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1724703860; c=relaxed/simple;
+	bh=2WcH7zNjs/4tIMC3w7G3LS3a20sMNEt/cgDLDefQ7Rc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=hJwT0CQLaS2mLBNf3IGOJDYiLO3Ji7wW29BN8c8loXb07Q9iGc7hMjMsK0xR5GhbQF5NlX6LfACWC2fgbIfmvSlmUFFsdBDLCM2w7mWLci7+deg/Ekrkmob36mH4qVvmITcETfC20VbXj1jQeDlg3gGpVAtr9LmBn4RXPwjyQUA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=obs.cr; spf=none smtp.mailfrom=obs.cr; dkim=pass (2048-bit key) header.d=obs-cr.20230601.gappssmtp.com header.i=@obs-cr.20230601.gappssmtp.com header.b=DbC1+xs7; arc=none smtp.client-ip=209.85.219.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=obs.cr
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=obs.cr
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="B7rny3nI"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C19A7C4FF0E;
-	Mon, 26 Aug 2024 20:04:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724702678;
-	bh=AkihPQS8bQoOGzU1lf5ytFhEOS/7IsKOwAe50NQNpj4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=B7rny3nIJQ9zu5civdgfC7uSj83r3D2A6ZU5dsdSkoHtSyQ2WIm1B1tOKOP5OXK63
-	 QKddcND3JDfmYIxjGfoz5dNx3kHim9VQ5J0NXEJ8/BMW3PNg3WdfgUZQtgdnlFM875
-	 r3p9xyKeDGuvkHt6iCusYk1Db8VV6X7CFdWsae4t6hFjSrVNcroFCWoDYrfHPfCxnr
-	 kzbKKujvkvGXrgWgye1Bb3+9fXnEzLTamvFjwatBmAgTYvQoAxMrA1Xt9qaXdcRuTj
-	 H6g+KNuMKQRlo6utDjOIgGCgoKjfLTG654GBsxvHbxEXQ7q6mA858969MUP+HzW8sI
-	 g4X1tUbV0EzTQ==
-Date: Mon, 26 Aug 2024 17:04:35 -0300
-From: Arnaldo Carvalho de Melo <acme@kernel.org>
-To: Phil Auld <pauld@redhat.com>
-Cc: Sedat Dilek <sedat.dilek@gmail.com>, Jiri Slaby <jirislaby@kernel.org>,
-	Shung-Hsi Yu <shung-hsi.yu@suse.com>, dwarves@vger.kernel.org,
-	Jiri Olsa <olsajiri@gmail.com>, masahiroy@kernel.org,
-	linux-kernel@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>,
-	Nicolas Schier <nicolas@fjasle.eu>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>, linux-kbuild@vger.kernel.org,
-	bpf@vger.kernel.org, msuchanek@suse.com
-Subject: Re: [RFC] kbuild: bpf: Do not run pahole with -j on 32bit userspace
-Message-ID: <Zszf0_5DKuscmDWi@x1>
-References: <ZsSpU5DqT3sRDzZy@krava>
- <523c1afa-ed9d-4c76-baea-1c43b1b0c682@kernel.org>
- <c2086083-4378-4503-b3e2-08fb14f8ff37@kernel.org>
- <7ebee21d-058f-4f83-8959-bd7aaa4e7719@kernel.org>
- <a45nq7wustxrztjxmkqzevv3mkki5oizfik7b24gqiyldhlkhv@4rpy4tzwi52l>
- <ZsdYGOS7Yg9pS2BJ@x1>
- <f170d7c2-2056-4f47-8847-af15b9a78b81@kernel.org>
- <Zsy1blxRL9VV9DRg@x1>
- <CA+icZUWMxzAFtr8vsUUQ9OCR68K=F6d6MANx8HMTQntq494roA@mail.gmail.com>
- <20240826184818.GC117125@pauld.westford.csb>
+	dkim=pass (2048-bit key) header.d=obs-cr.20230601.gappssmtp.com header.i=@obs-cr.20230601.gappssmtp.com header.b="DbC1+xs7"
+Received: by mail-qv1-f41.google.com with SMTP id 6a1803df08f44-6bf7707dbb6so36471006d6.0
+        for <dwarves@vger.kernel.org>; Mon, 26 Aug 2024 13:24:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=obs-cr.20230601.gappssmtp.com; s=20230601; t=1724703858; x=1725308658; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3Ih8j4MUp8fPRAl82Mshj0OfdEII9T1nJW4bPBvdw3w=;
+        b=DbC1+xs7Bbx3chpv6yvyr48AMvm49jrxBoyHEnGfW2OhjMOg0C0Klw5WpR0vSpj/LL
+         KmiuVMOBb1t2o34BKDjLlFoXW+GvBQSYzSD/nHvEckOrjWl8G+rItgYKh8HL285Z/SOr
+         Zz41kKye3ljle/kIaSXiCsn6yzPncpw3IZ6UI1PCnaKBB+IkcDniU/zDiOXgq8bH1nF8
+         1OeHpfI8AOV7J2nySSzOUKMzzBEQMI3Pzcg9ro5Rv1lKRK0BN5nvgxvl9Vtv4y63NOr5
+         HJ+oZYbKSFGPBJkbOGsLZZkg3Gune+fM5SLricHhCdbQpANcAiQtXOW/r9e/4SpoiRW1
+         XLOw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724703858; x=1725308658;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=3Ih8j4MUp8fPRAl82Mshj0OfdEII9T1nJW4bPBvdw3w=;
+        b=MN1ZOvrRsWoAcav6J0GNpkeOYvUfXorgzDWqo0HCQLf3+KB2wr2MXrvlmX39cWCmey
+         Upj2V8K9lr0wp1BbToZWmoKpfHtDhoBd/8gJFk+UY7IVy8jMU/ihoscDbAso74RZyeLy
+         ULH+a9/tbMhKJeHdf2qdRWrVELICmNxsFpayipCtF6hFwfbNYVbpsvrYYlhgwxqiMauP
+         N5gZAYkaxBAOe7wNxF6398/m8BgZAdCzBetmatCSqEHGBlKFAU+n0M/lDwZ+ltDclcjo
+         wxgIFizNp9RmwQ3f/xoyoodJ+1r+MqDhzW1MGX9bUldYlqzdkaFiWPrPU3e+bT4M3Rkj
+         sXTg==
+X-Gm-Message-State: AOJu0Yx8BjHZdQmHPKVZ4RqYKC+RGcvblnoAUqWvzs8K70Bq1jYb7Jnn
+	SFWmGZQp0qqkT9XO/oDBUixx4vBHuhD4d9J7fv86Fw5o4i125PYV0bzPBVfAhzWaKla5v8rsi/2
+	sOQ3MH2EBd7ulNNLCb8NN/IuzuUFmlNLVt/2OGA==
+X-Google-Smtp-Source: AGHT+IFJkPvAa4xe+kdLhaJ7BaOAeub6t2tcBbzSxLWZAGNXSZM6geeS56keZR4+ziaLtdM4xhDevcsgwSb4lrh+RuM=
+X-Received: by 2002:a05:6214:224d:b0:6b5:1584:62bf with SMTP id
+ 6a1803df08f44-6c32ae9c191mr17011026d6.6.1724703857877; Mon, 26 Aug 2024
+ 13:24:17 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240826184818.GC117125@pauld.westford.csb>
+References: <20240823212835.1078351-1-hawkinsw@obs.cr> <ZsyWmWL7n4QbE1mp@x1>
+ <ZsyXAcCv8sBwxLH1@x1> <ZsyYGPUEtP5zP3i6@x1> <CADx9qWh=Sw2Cr2Y8K_2ExTFJecTrhenN9TzVH0kyKL+buWVa2Q@mail.gmail.com>
+ <Zsze05ar-q9iKvrS@x1>
+In-Reply-To: <Zsze05ar-q9iKvrS@x1>
+From: Will Hawkins <hawkinsw@obs.cr>
+Date: Mon, 26 Aug 2024 16:24:05 -0400
+Message-ID: <CADx9qWhT4McMfjwm5iZ8hJhuJMxjJqjwRdp73doMXJSC-NnjQw@mail.gmail.com>
+Subject: Re: [PATCH 0/1] btf_loader support for subprogram linkage
+To: Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc: dwarves@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Aug 26, 2024 at 02:48:18PM -0400, Phil Auld wrote:
-> On Mon, Aug 26, 2024 at 08:42:10PM +0200 Sedat Dilek wrote:
-> > On Mon, Aug 26, 2024 at 7:03 PM Arnaldo Carvalho de Melo
-> > <acme@kernel.org> wrote:
-> > >
-> > > On Mon, Aug 26, 2024 at 10:57:22AM +0200, Jiri Slaby wrote:
-> > > > On 22. 08. 24, 17:24, Arnaldo Carvalho de Melo wrote:
-> > > > > On Thu, Aug 22, 2024 at 11:55:05AM +0800, Shung-Hsi Yu wrote:
-> > > > > I stumbled on this limitation as well when trying to build the kernel on
-> > > > > a Libre Computer rk3399-pc board with only 4GiB of RAM, there I just
-> > > > > created a swapfile and it managed to proceed, a bit slowly, but worked
-> > > > > as well.
-> > > >
-> > > > Here, it hits the VM space limit (3 G).
-> > >
-> > > right, in my case it was on a 64-bit system, so just not enough memory,
-> > > not address space.
-> > >
-> > > > > Please let me know if what is in the 'next' branch of:
-> > >
-> > > > > https://git.kernel.org/pub/scm/devel/pahole/pahole.git
-> > >
-> > > > > Works for you, that will be extra motivation to move it to the master
-> > > > > branch and cut 1.28.
-> > >
-> > > > on 64bit (-j1):
-> > > > * master: 3.706 GB
-> > > > (* master + my changes: 3.559 GB)
-> > > > * next: 3.157 GB
-> > >
-> > > > on 32bit:
-> > > >  * master-j1: 2.445 GB
-> > > >  * master-j16: 2.608 GB
-> > > >  * master-j32: 2.811 GB
-> > > >  * next-j1: 2.256 GB
-> > > >  * next-j16: 2.401 GB
-> > > >  * next-j32: 2.613 GB
-> > > >
-> > > > It's definitely better. So I think it could work now, if the thread count
-> > > > was limited to 1 on 32bit. As building with -j10, -j20 randomly fails on
-> > > > random machines (32bit processes only of course). Unlike -j1.
-> > >
-> > > Cool, I just merged a patch from Alan Maguire that should help with the
-> > > parallel case, would be able to test it? It is in the 'next' branch:
-> > >
-> > > ⬢[acme@toolbox pahole]$ git log --oneline -5
-> > > f37212d1611673a2 (HEAD -> master) pahole: Teduce memory usage by smarter deleting of CUs
-> > >
-> > 
-> > *R*edzce? memory usage ...
+On Mon, Aug 26, 2024 at 4:00=E2=80=AFPM Arnaldo Carvalho de Melo
+<acme@kernel.org> wrote:
+>
+> On Mon, Aug 26, 2024 at 12:36:45PM -0400, Will Hawkins wrote:
+> > On Mon, Aug 26, 2024 at 10:58=E2=80=AFAM Arnaldo Carvalho de Melo <acme=
+@kernel.org> wrote:
+> > > commit ce516fb0cf2a3d9fc45c2a9c7ab2cf4bd24965a0
+> > > Author: Arnaldo Carvalho de Melo <acme@ghostprotocols.net>
+> > > Date:   Sun Jul 8 19:47:26 2007 -0300
+>
+> > >     [LIB]: Support DW_AT_MIPS_linkage_name
+>
+> > >     Another C++ specific case:
+>
+> > >     -       class TypeTemplate ByName(const string  &, size_t);
+> > >     +       class TypeTemplate ByName(const string  &, size_t); /* li=
+nkage=3D_ZN4ROOT6Reflex12TypeTemplate6ByNameERKSsj */
+>
+> > >     Signed-off-by: Arnaldo Carvalho de Melo <acme@ghostprotocols.net>
+>
+> > > So its not really "static" or "stern", but the mangled name in langua=
+ges
+>
+> oops, "extern"
+>
+> > > such as C++, so I think this patch needs reworking, there is ambiguit=
+y
+> > > on the "linkage" term, we should use some other term :-\
 > >
-> 
-> If you meant that further typo it's golden, and if not the irony is rich :)
-> 
-> Either way this is my favorite email of the day!
+> > Completely understand! I will rework it and propose something different=
+.
+> >
+> > I am just thankful that you are so welcoming of the contribution! Your
+> > enthusiasm has made a contributor for life!
+>
+> Another recommendation, please don't point the field to strings like
+> "extern" or "static", as DWARF is not language specific, pahole manages
+> to handle C mostly, C++ to a great degree but I also used it with Go,
+> Rust.
+>
+> We want to make it more language agnostic, so while the "linkage" as a
+> mangled name is not language specific, "static" or "extern" may be.
+>
+> So just keep it using the DWARF constant/enumeration, so that at
+> dwarves_fprintf.c time we can, based on the language encoded in the
+> debugging info (for BTF we assume C until we introduce some way to
+> encode Rust (The kernel can be written using Rust, so we're bound to
+> have something in that direction introduced in BTF at some point)).
 
-Hahaha, I went to uppercase what comes after the colon and introduced
-that typo ;-)
+100% understood!
 
-Faxing it....
+Thank you for the feedback!
+Will
 
-- Arnaldo
+
+>
+> - Arnaldo
