@@ -1,152 +1,121 @@
-Received: from mail-oo1-f41.google.com (mail-oo1-f41.google.com [209.85.161.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E9C6198823
-	for <dwarves@vger.kernel.org>; Mon, 26 Aug 2024 16:36:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71C143C17;
+	Mon, 26 Aug 2024 17:03:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724690221; cv=none; b=SRFvAJHs7vbtZJleEepl3e8mwvn3RSWpaVmZ8q+TB8xeBztM2EuGRinAzhHhYzbXA5+gE4KmeJdU1ESsWphMRuzZccY0N+N4s+Q72tqISwCd+EAhfZsUGUcFQfTVE9sghfMIzpdhPFHZt67fdnkAc9ovrcrHQqjNNO+c389qpLM=
+	t=1724691827; cv=none; b=rg+aeUDrTRyL1l/WsYfA3DYHZqkujO4ZhxzxOh72X9OoZH9inSeyNi1PfUd0bQDt9tW9NnReF/35aYxMsDDKpgYOe4pI+K8j1QMGDM24uwzfuV5UH4mSUsfPEICm+3dAR5ixlbiMu1/80dSd+uCloh/i4amMiDgOPg+J5M78sqU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724690221; c=relaxed/simple;
-	bh=vfjbXlrZtRPtQRBf4eNnLP9hGQ0H64XLc3HXP+RaV+I=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=SgSEatvc0NtwU4xm3pIA4G+xvSqn3o7B64CViL6hIsww/sDOgybVzHP0yoEqiTn0ROUxtlL3Nj46RSLrk9+0yayWsNI95XKhZfq2TUsmrYZouU8Dva74g/DEIF/wBqGWy9VRLX/YpWE38qAMRTOt+ckwXq8Tt309dSWQIslZhNE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=obs.cr; spf=none smtp.mailfrom=obs.cr; dkim=pass (2048-bit key) header.d=obs-cr.20230601.gappssmtp.com header.i=@obs-cr.20230601.gappssmtp.com header.b=SzGAEq1b; arc=none smtp.client-ip=209.85.161.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=obs.cr
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=obs.cr
+	s=arc-20240116; t=1724691827; c=relaxed/simple;
+	bh=5qUldRPe69CZ+YfxEz0IQC70ylubWa3moIOLvtg8JCE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HBQLkuk0G2aRS6pp5h335xFy1dKB1oGb5Dgbh36suDzxg1aSeugvwA010o44uZ/wcg0LWMSLpTQo4fRteYyrzHhd/ZduspNug1Zx3I7vjCCjTA5LmeBQFsj80MoDfMOITI6gOEaTgt/nxVeGy0EVRmjNiRTp4V18lxYanqv10oY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lObtDvk8; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=obs-cr.20230601.gappssmtp.com header.i=@obs-cr.20230601.gappssmtp.com header.b="SzGAEq1b"
-Received: by mail-oo1-f41.google.com with SMTP id 006d021491bc7-5dca00a72easo3732652eaf.2
-        for <dwarves@vger.kernel.org>; Mon, 26 Aug 2024 09:36:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=obs-cr.20230601.gappssmtp.com; s=20230601; t=1724690218; x=1725295018; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KdHMOJ6AgDa5/wbWxRIn5n3d4W7b4pyd+CGVoJ5M5jw=;
-        b=SzGAEq1bMYvs9y0pbaosKlt6qO+dM1SH0Wui+k/eB6X46KE7A06xKTpbBX8+yWBfOL
-         Znvz9ZzfHq9jF4ruYWTovAVNA+Ktori36Va0WF58ZSeFo0QInu8PmwXcfa61ynuZNkb9
-         q7UQ9YkDE3ZJxeavXQ0juShD2KqCOvJyl7/HGC0IXWvSDdBy0VK1r2kTsgJbpN2cKiNC
-         d18E9vEqouz1nvm+tLBuocSVynL2ymraf2yh7fOgbIRqHxyPY9qOJpcemW9zGhdent9i
-         uOYGMEPlB+kuALmV5mlFvVataiL9QDj4U8wAg0r0C7yMSAu0g2tZoiRgbGdQIoiMTu5f
-         FnVA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724690218; x=1725295018;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=KdHMOJ6AgDa5/wbWxRIn5n3d4W7b4pyd+CGVoJ5M5jw=;
-        b=Pf6g7KF/M4RWZvuNPFiTIMQPjjYHJtkvOugkNY69qY8zQl5GVSE+VumWCUBCvkmtwJ
-         8plb5ZKrOpi4OWrI1KF2h9O8RpUSHgvOah9E3AwYgsllt6Yj4Zr9cWWToSwcILCkYaKj
-         JLVvC8qVhLcm8PJaymKtbxpmFXiyfpxPmGjtz7WadNaCG2TpPrpiYGQ2k9i4+Xpr+RGn
-         wjRIfgOTtTYByBvZ+qaHQowuyzU2OmkbTTUIg+vGtC7JlHqMUZQ7LH19AjWXn8fBLevZ
-         +HT5MfZ4WYJ8JzCuqUaNbLrQYjcV4HX4cz3iM+s+KGJFMp+QGjNkEWm8SeEczs9XRFu2
-         7cFg==
-X-Gm-Message-State: AOJu0YyoJBiWYgZw5x8Pt7TSELZg+YXDHvjHJ7VR2bl9B+15yE8wwyXy
-	pqeBeA2KNSHUszdeUwyx0YNgliPDEFwllsUqQc5u11Im3Fsowj+HhF8vR1AwbDgAe0HV9H2xFX+
-	Qv77ilwdVzMzZRqmmQvU2y4Fttt4+ul/SfLsPHydIJVY5tyJb
-X-Google-Smtp-Source: AGHT+IHtDWQo6teil08YXNEnxgWDaUXpLQoakq3OnFxBD9WWb1Q9fr09lTDvEdgwylGpKw5N0gtGXro0ihzYXes9aaE=
-X-Received: by 2002:a05:6820:1621:b0:5dc:95e1:b264 with SMTP id
- 006d021491bc7-5dea67ac2f0mr377655eaf.3.1724690218557; Mon, 26 Aug 2024
- 09:36:58 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lObtDvk8"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5BFB0C567F0;
+	Mon, 26 Aug 2024 17:03:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1724691826;
+	bh=5qUldRPe69CZ+YfxEz0IQC70ylubWa3moIOLvtg8JCE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=lObtDvk87oEXziS+hM8r2Yw50PxS0iZ5tSzdetAH1Vo1uViBh6Mk4hr1jS5oWTbYN
+	 tNkB5J69b7//JehMXoQHS/GqD6zdn/cMM8CTPJlJc1YJO0w1wVaOlmhEId6tquz15O
+	 WO/Z/xYRUJwaR5G5l+HIC1s3VpH7dMN6HlTO0uf1MzE+VcETL9ABr1ZgWnvHaX8tqX
+	 jgpO3rg9hJddeKvAU0BiN2qIRujZ/BS4FpUuD1Ce0CBqK3bFWgsl+TSiyEwZWsHeh0
+	 PScaIMTS7iK7OizS0NS5Q1ouYlfgyo0GLmK/G6rBf+ugGG1p18TixxR/BVGU3rU83N
+	 IX7G1gTD2devw==
+Date: Mon, 26 Aug 2024 14:03:42 -0300
+From: Arnaldo Carvalho de Melo <acme@kernel.org>
+To: Jiri Slaby <jirislaby@kernel.org>
+Cc: Shung-Hsi Yu <shung-hsi.yu@suse.com>, dwarves@vger.kernel.org,
+	Jiri Olsa <olsajiri@gmail.com>, masahiroy@kernel.org,
+	linux-kernel@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>,
+	Nicolas Schier <nicolas@fjasle.eu>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>, linux-kbuild@vger.kernel.org,
+	bpf@vger.kernel.org, msuchanek@suse.com
+Subject: Re: [RFC] kbuild: bpf: Do not run pahole with -j on 32bit userspace
+Message-ID: <Zsy1blxRL9VV9DRg@x1>
+References: <20240820085950.200358-1-jirislaby@kernel.org>
+ <ZsSpU5DqT3sRDzZy@krava>
+ <523c1afa-ed9d-4c76-baea-1c43b1b0c682@kernel.org>
+ <c2086083-4378-4503-b3e2-08fb14f8ff37@kernel.org>
+ <7ebee21d-058f-4f83-8959-bd7aaa4e7719@kernel.org>
+ <a45nq7wustxrztjxmkqzevv3mkki5oizfik7b24gqiyldhlkhv@4rpy4tzwi52l>
+ <ZsdYGOS7Yg9pS2BJ@x1>
+ <f170d7c2-2056-4f47-8847-af15b9a78b81@kernel.org>
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240823212835.1078351-1-hawkinsw@obs.cr> <ZsyWmWL7n4QbE1mp@x1>
- <ZsyXAcCv8sBwxLH1@x1> <ZsyYGPUEtP5zP3i6@x1>
-In-Reply-To: <ZsyYGPUEtP5zP3i6@x1>
-From: Will Hawkins <hawkinsw@obs.cr>
-Date: Mon, 26 Aug 2024 12:36:45 -0400
-Message-ID: <CADx9qWh=Sw2Cr2Y8K_2ExTFJecTrhenN9TzVH0kyKL+buWVa2Q@mail.gmail.com>
-Subject: Re: [PATCH 0/1] btf_loader support for subprogram linkage
-To: Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc: dwarves@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <f170d7c2-2056-4f47-8847-af15b9a78b81@kernel.org>
 
-On Mon, Aug 26, 2024 at 10:58=E2=80=AFAM Arnaldo Carvalho de Melo
-<acme@kernel.org> wrote:
->
-> On Mon, Aug 26, 2024 at 11:53:56AM -0300, Arnaldo Carvalho de Melo wrote:
-> > On Mon, Aug 26, 2024 at 11:52:13AM -0300, Arnaldo Carvalho de Melo wrot=
-e:
-> > > On Fri, Aug 23, 2024 at 05:28:30PM -0400, Will Hawkins wrote:
-> > > > First,
-> > > >
-> > > > I am a huge fan of pahole (and friends). I volunteered to work on
-> > > > helping to edit the BTF spec for the IETF and so I've started to lo=
-ok
-> > > > more deeply at BTF and the tools.
-> > > >
-> > > > Second, I hope that what I am offering is being sent to the right p=
-lace
-> > > > and is in the right format. I tried to follow what seems to be the
-> > > > "right thing" by looking at mailing list archives.
-> > > >
-> > > > This patch add supports to the btf_loader for subprogram (BTF_KIND_=
-FUNC)
-> > > > linkages. For example,
-> > > >
-> > > > ```
-> > > > $ cat a.c
-> > > > static int x() {
-> > > >   return 5;
-> > > > }
-> > > > $ gcc -gbtf -g -O0 -c a.c
-> > > > $ ~/code/pahole/build/pfunct -Fbtf --compile a.o
-> > > > int x(void) /* linkage=3Dstatic */
-> > > > {
-> > > >   return 0;
-> > > > }
-> > > > ```
-> > >
-> > > So, I'm changing this to become:
-> > >
-> > >   $ ~/code/pahole/build/pfunct -Fbtf --compile a.o
-> > >   static int x(void)
-> > >   {
-> > >     return 0;
-> > >   }
-> > >
-> > > As --compile is supposed to generate compileable code that is as much=
- as
-> > > possible from the type information similar to the original code, ok?
-> >
-> > I see, your patch isn't the one adding that linkage comment, you're jus=
-t
-> > collecting it from BTF, I'll then add a followup patch to get to the
-> > output I described.
->
-> So I'll looked up what that linkage field comes from and:
->
-> commit ce516fb0cf2a3d9fc45c2a9c7ab2cf4bd24965a0
-> Author: Arnaldo Carvalho de Melo <acme@ghostprotocols.net>
-> Date:   Sun Jul 8 19:47:26 2007 -0300
->
->     [LIB]: Support DW_AT_MIPS_linkage_name
->
->     Another C++ specific case:
->
->     -       class TypeTemplate ByName(const string  &, size_t);
->     +       class TypeTemplate ByName(const string  &, size_t); /* linkag=
-e=3D_ZN4ROOT6Reflex12TypeTemplate6ByNameERKSsj */
->
->     Signed-off-by: Arnaldo Carvalho de Melo <acme@ghostprotocols.net>
->
-> So its not really "static" or "stern", but the mangled name in languages
-> such as C++, so I think this patch needs reworking, there is ambiguity
-> on the "linkage" term, we should use some other term :-\
+On Mon, Aug 26, 2024 at 10:57:22AM +0200, Jiri Slaby wrote:
+> On 22. 08. 24, 17:24, Arnaldo Carvalho de Melo wrote:
+> > On Thu, Aug 22, 2024 at 11:55:05AM +0800, Shung-Hsi Yu wrote:
+> > I stumbled on this limitation as well when trying to build the kernel on
+> > a Libre Computer rk3399-pc board with only 4GiB of RAM, there I just
+> > created a swapfile and it managed to proceed, a bit slowly, but worked
+> > as well.
+> 
+> Here, it hits the VM space limit (3 G).
 
-Completely understand! I will rework it and propose something different.
+right, in my case it was on a 64-bit system, so just not enough memory,
+not address space.
+ 
+> > Please let me know if what is in the 'next' branch of:
 
-I am just thankful that you are so welcoming of the contribution! Your
-enthusiasm has made a contributor for life!
+> > https://git.kernel.org/pub/scm/devel/pahole/pahole.git
 
-Will
+> > Works for you, that will be extra motivation to move it to the master
+> > branch and cut 1.28.
 
+> on 64bit (-j1):
+> * master: 3.706 GB
+> (* master + my changes: 3.559 GB)
+> * next: 3.157 GB
+ 
+> on 32bit:
+>  * master-j1: 2.445 GB
+>  * master-j16: 2.608 GB
+>  * master-j32: 2.811 GB
+>  * next-j1: 2.256 GB
+>  * next-j16: 2.401 GB
+>  * next-j32: 2.613 GB
+> 
+> It's definitely better. So I think it could work now, if the thread count
+> was limited to 1 on 32bit. As building with -j10, -j20 randomly fails on
+> random machines (32bit processes only of course). Unlike -j1.
 
->
-> - Arnaldo
+Cool, I just merged a patch from Alan Maguire that should help with the
+parallel case, would be able to test it? It is in the 'next' branch:
+
+⬢[acme@toolbox pahole]$ git log --oneline -5
+f37212d1611673a2 (HEAD -> master) pahole: Teduce memory usage by smarter deleting of CUs
+
+Excerpt of the above:
+
+    This leads to deleting ~90 CUs during parallel vmlinux BTF generation
+    versus deleting just 1 prior to this change.
+
+c7ec9200caa7d485 btf_encoder: Add "distilled_base" BTF feature to split BTF generation
+bc4e6a9adfc72758 pahole: Sync with libbpf-1.5
+5e3ed3ec2947c69f pahole: Do --lang_exclude CU filtering earlier
+c46455bb0379fa38 dwarf_loader: Allow filtering CUs early in loading
+⬢[acme@toolbox pahole]$
+
+- Arnaldo
