@@ -1,77 +1,42 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADA9A194A75
-	for <dwarves@vger.kernel.org>; Mon, 26 Aug 2024 18:48:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78EA27711F
+	for <dwarves@vger.kernel.org>; Mon, 26 Aug 2024 20:00:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724698117; cv=none; b=d8GpF3xSKwGApq9kMKPnM4445EOynN3blsY8iVxgYOvmjXTwZ5isZ0Lmo0+pLLo4wfUsXCF6tBW+6p6GYwhnb/bXDx2lh3HwBmD0x0ReOmFC/YJATHm0NevJ9/ke11sHSATBdvve0m4xZKP3HoGvagZg4GVmMuZbnHpJaI/ERc4=
+	t=1724702423; cv=none; b=Fw4ZBSGiKnKPGDmpAUX4sUYB/Coc6bfXemUXRncjoet/weciFJmx3r65FHvuvKt582bIDL4wg+vCtWvIc7r0XzuTJ9p2b9mwdFFOoHByZ7JJzeBIgbxfFScb30an3J0VPaVCe1WnfE36LsoHAI0owoWWDlfwzmxeHM7qS3R1G+8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724698117; c=relaxed/simple;
-	bh=EiEe1+ONZhy0DMtBG+AiOFsgeB681Pwsf2p93wZ1cQk=;
+	s=arc-20240116; t=1724702423; c=relaxed/simple;
+	bh=b6eOrKVdJgaRx3OA7lALJSIwV+yhrlwTctNvFs7yJg4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=p4UPdazXbOt+tC67r8JZ4Hs3VMBg+5wm74bYNpw/s8bNhddDkQhaCy81kmJvQXo3OUITRraaGsbj8XKO/AGkCbnYhmnoNiyJXwZCVTcaBh8Vttxj3ktsNxuF07x3F8fUYeqaP8Quy2IQH0+BnmvbDuWjbo7auwtlqCF0UQUAcGc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=QBr8MdRD; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=bDHS7zHVXXy5MUL0YOg5qd9B5P+5tmOx49GNl2JGvpvG7HAx6SBWJTsdSGkiEHbVLfAr6O+N6oQkgmeu1Q0WVnr9D45V1UBqTmEGtWAvDJJH0wRO8gkTpdORGeylDBsmOX/BdJQN5RCLUwgln35IZoREpM3YyMV2rzLEDiJycjE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FNvzyqv9; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="QBr8MdRD"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1724698114;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=KBwWIF15moftoUIZC46ahJXVO1ZjxBGUC6YpiTLQ/4o=;
-	b=QBr8MdRDwN6yTeNnnztgQ0Uyfw24OpbwFMs5yJ1CoOxw2z+pPwXd6qip2XOwkBQ/qgy+9g
-	Fjwv9Z82SmBTrlywIV1AIGYIOIRddBU19M169MkBOODfhxZvkCYEQ3C9/pkjHaETUynaxM
-	kVKxPgrrlEcT3FbmtRRevZ7pUMLmwRg=
-Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-298-BjvKq1OjMXu6cLLofMO5VQ-1; Mon,
- 26 Aug 2024 14:48:31 -0400
-X-MC-Unique: BjvKq1OjMXu6cLLofMO5VQ-1
-Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 30CF21955D48;
-	Mon, 26 Aug 2024 18:48:27 +0000 (UTC)
-Received: from pauld.westford.csb (unknown [10.22.65.61])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id B768F30001A1;
-	Mon, 26 Aug 2024 18:48:20 +0000 (UTC)
-Date: Mon, 26 Aug 2024 14:48:18 -0400
-From: Phil Auld <pauld@redhat.com>
-To: Sedat Dilek <sedat.dilek@gmail.com>
-Cc: Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Jiri Slaby <jirislaby@kernel.org>,
-	Shung-Hsi Yu <shung-hsi.yu@suse.com>, dwarves@vger.kernel.org,
-	Jiri Olsa <olsajiri@gmail.com>, masahiroy@kernel.org,
-	linux-kernel@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>,
-	Nicolas Schier <nicolas@fjasle.eu>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>, linux-kbuild@vger.kernel.org,
-	bpf@vger.kernel.org, msuchanek@suse.com
-Subject: Re: [RFC] kbuild: bpf: Do not run pahole with -j on 32bit userspace
-Message-ID: <20240826184818.GC117125@pauld.westford.csb>
-References: <20240820085950.200358-1-jirislaby@kernel.org>
- <ZsSpU5DqT3sRDzZy@krava>
- <523c1afa-ed9d-4c76-baea-1c43b1b0c682@kernel.org>
- <c2086083-4378-4503-b3e2-08fb14f8ff37@kernel.org>
- <7ebee21d-058f-4f83-8959-bd7aaa4e7719@kernel.org>
- <a45nq7wustxrztjxmkqzevv3mkki5oizfik7b24gqiyldhlkhv@4rpy4tzwi52l>
- <ZsdYGOS7Yg9pS2BJ@x1>
- <f170d7c2-2056-4f47-8847-af15b9a78b81@kernel.org>
- <Zsy1blxRL9VV9DRg@x1>
- <CA+icZUWMxzAFtr8vsUUQ9OCR68K=F6d6MANx8HMTQntq494roA@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FNvzyqv9"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F25DC8B7D0;
+	Mon, 26 Aug 2024 20:00:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1724702423;
+	bh=b6eOrKVdJgaRx3OA7lALJSIwV+yhrlwTctNvFs7yJg4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=FNvzyqv9NTjfIoi7AOFo0XOnkyMgXyR1Z2mRJKhcFQCtIhWY/B2Yugmf22eSDbfSg
+	 7pWUm6olKy+JCqRlOMy4V7U4n0YY0BYuLChAVxqsNIh6ecHeApc6VgEQkmsr7lcKUs
+	 lsO9BG/5UkiaRHrfa0m2SzRKBHmCF/wJqsPwCyjWFPy02edCXNbSeBw7GfIp2QjOgA
+	 AE3p8fUkqSVyHS2Qi6tWHJQWrdMrMPhBlb1ZSWlywjps31yZwO7axgWQJw2DV7fQJz
+	 1B95+7OQzIk56q4q2TngV+DncwCaND9dFH8a7dv8xC41v17vdqQX2TuEOV8lq28nKp
+	 bPnnXG4hvPcMg==
+Date: Mon, 26 Aug 2024 17:00:19 -0300
+From: Arnaldo Carvalho de Melo <acme@kernel.org>
+To: Will Hawkins <hawkinsw@obs.cr>
+Cc: dwarves@vger.kernel.org
+Subject: Re: [PATCH 0/1] btf_loader support for subprogram linkage
+Message-ID: <Zsze05ar-q9iKvrS@x1>
+References: <20240823212835.1078351-1-hawkinsw@obs.cr>
+ <ZsyWmWL7n4QbE1mp@x1>
+ <ZsyXAcCv8sBwxLH1@x1>
+ <ZsyYGPUEtP5zP3i6@x1>
+ <CADx9qWh=Sw2Cr2Y8K_2ExTFJecTrhenN9TzVH0kyKL+buWVa2Q@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
@@ -81,85 +46,47 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CA+icZUWMxzAFtr8vsUUQ9OCR68K=F6d6MANx8HMTQntq494roA@mail.gmail.com>
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
+In-Reply-To: <CADx9qWh=Sw2Cr2Y8K_2ExTFJecTrhenN9TzVH0kyKL+buWVa2Q@mail.gmail.com>
 
-On Mon, Aug 26, 2024 at 08:42:10PM +0200 Sedat Dilek wrote:
-> On Mon, Aug 26, 2024 at 7:03 PM Arnaldo Carvalho de Melo
-> <acme@kernel.org> wrote:
-> >
-> > On Mon, Aug 26, 2024 at 10:57:22AM +0200, Jiri Slaby wrote:
-> > > On 22. 08. 24, 17:24, Arnaldo Carvalho de Melo wrote:
-> > > > On Thu, Aug 22, 2024 at 11:55:05AM +0800, Shung-Hsi Yu wrote:
-> > > > I stumbled on this limitation as well when trying to build the kernel on
-> > > > a Libre Computer rk3399-pc board with only 4GiB of RAM, there I just
-> > > > created a swapfile and it managed to proceed, a bit slowly, but worked
-> > > > as well.
-> > >
-> > > Here, it hits the VM space limit (3 G).
-> >
-> > right, in my case it was on a 64-bit system, so just not enough memory,
-> > not address space.
-> >
-> > > > Please let me know if what is in the 'next' branch of:
-> >
-> > > > https://git.kernel.org/pub/scm/devel/pahole/pahole.git
-> >
-> > > > Works for you, that will be extra motivation to move it to the master
-> > > > branch and cut 1.28.
-> >
-> > > on 64bit (-j1):
-> > > * master: 3.706 GB
-> > > (* master + my changes: 3.559 GB)
-> > > * next: 3.157 GB
-> >
-> > > on 32bit:
-> > >  * master-j1: 2.445 GB
-> > >  * master-j16: 2.608 GB
-> > >  * master-j32: 2.811 GB
-> > >  * next-j1: 2.256 GB
-> > >  * next-j16: 2.401 GB
-> > >  * next-j32: 2.613 GB
-> > >
-> > > It's definitely better. So I think it could work now, if the thread count
-> > > was limited to 1 on 32bit. As building with -j10, -j20 randomly fails on
-> > > random machines (32bit processes only of course). Unlike -j1.
-> >
-> > Cool, I just merged a patch from Alan Maguire that should help with the
-> > parallel case, would be able to test it? It is in the 'next' branch:
-> >
-> > ⬢[acme@toolbox pahole]$ git log --oneline -5
-> > f37212d1611673a2 (HEAD -> master) pahole: Teduce memory usage by smarter deleting of CUs
-> >
+On Mon, Aug 26, 2024 at 12:36:45PM -0400, Will Hawkins wrote:
+> On Mon, Aug 26, 2024 at 10:58 AM Arnaldo Carvalho de Melo <acme@kernel.org> wrote:
+> > commit ce516fb0cf2a3d9fc45c2a9c7ab2cf4bd24965a0
+> > Author: Arnaldo Carvalho de Melo <acme@ghostprotocols.net>
+> > Date:   Sun Jul 8 19:47:26 2007 -0300
+
+> >     [LIB]: Support DW_AT_MIPS_linkage_name
+
+> >     Another C++ specific case:
+
+> >     -       class TypeTemplate ByName(const string  &, size_t);
+> >     +       class TypeTemplate ByName(const string  &, size_t); /* linkage=_ZN4ROOT6Reflex12TypeTemplate6ByNameERKSsj */
+
+> >     Signed-off-by: Arnaldo Carvalho de Melo <acme@ghostprotocols.net>
+
+> > So its not really "static" or "stern", but the mangled name in languages
+
+oops, "extern"
+
+> > such as C++, so I think this patch needs reworking, there is ambiguity
+> > on the "linkage" term, we should use some other term :-\
 > 
-> *R*edzce? memory usage ...
->
-
-If you meant that further typo it's golden, and if not the irony is rich :)
-
-Either way this is my favorite email of the day!
-
-
-Cheers,
-Phil
-
-
-> -Sedat-
+> Completely understand! I will rework it and propose something different.
 > 
-> > Excerpt of the above:
-> >
-> >     This leads to deleting ~90 CUs during parallel vmlinux BTF generation
-> >     versus deleting just 1 prior to this change.
-> >
-> > c7ec9200caa7d485 btf_encoder: Add "distilled_base" BTF feature to split BTF generation
-> > bc4e6a9adfc72758 pahole: Sync with libbpf-1.5
-> > 5e3ed3ec2947c69f pahole: Do --lang_exclude CU filtering earlier
-> > c46455bb0379fa38 dwarf_loader: Allow filtering CUs early in loading
-> > ⬢[acme@toolbox pahole]$
-> >
-> > - Arnaldo
-> >
-> 
+> I am just thankful that you are so welcoming of the contribution! Your
+> enthusiasm has made a contributor for life!
 
--- 
+Another recommendation, please don't point the field to strings like
+"extern" or "static", as DWARF is not language specific, pahole manages
+to handle C mostly, C++ to a great degree but I also used it with Go,
+Rust.
 
+We want to make it more language agnostic, so while the "linkage" as a
+mangled name is not language specific, "static" or "extern" may be.
+
+So just keep it using the DWARF constant/enumeration, so that at
+dwarves_fprintf.c time we can, based on the language encoded in the
+debugging info (for BTF we assume C until we introduce some way to
+encode Rust (The kernel can be written using Rust, so we're bound to
+have something in that direction introduced in BTF at some point)).
+
+- Arnaldo
