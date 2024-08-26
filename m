@@ -1,170 +1,156 @@
-Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
+Received: from mail-oa1-f54.google.com (mail-oa1-f54.google.com [209.85.160.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE9CD129E93;
-	Mon, 26 Aug 2024 22:07:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D36C97DA92
+	for <dwarves@vger.kernel.org>; Mon, 26 Aug 2024 23:31:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724710049; cv=none; b=UqWlkRpb88N8ul6OFeR8T0QEpR35NqZULa9EEqM9hLrnN0+uAFTtYxl0633stk6xAZXXKgW9aPSZ6rUUvaa0HcVyNsk6eoRsGveoLoKhyEcMaFcJIymn7v+rsd8+VCZHLbnEusrtq7NJ4fMMRdUAijofSquuLFsnFRbM6w93pEY=
+	t=1724715099; cv=none; b=arQq7opAgCBdqOIqq5g6ZYDr9f3uftZXL8Ed0ZEQCCzMObdDDQfkwfScYPToSh8MCJ2fpT/0nNqOVf0MkvzEV3Z0jQnkahC7HymDqJPOlnGN/n/+fOem7moivoUPya+4RKJd+60AfRKD5kibxyXqo9JXr/GYrKwM77rrc5bioDs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724710049; c=relaxed/simple;
-	bh=Q9zqWUSu8fGZ8hrDi4+mX345YfY20cBYd1UNmIScO7Y=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=AsAM8O4lh3JJFNIq95JR+8mu3fJd3Bzp63Dzx3zcKLxmbHp71DCGOWAocVJvD51PkVG4gOcd8YrewiNFhfOoRfWNhzF1vmbcfQZd6PJPXDN+Fz4Sy7CM/wQf9ksytLclBordVxsdO9FAK4OgJgbHP9fetkW5dqfGeFTDir+U/oE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=h5BBMBIE; arc=none smtp.client-ip=209.85.216.49
+	s=arc-20240116; t=1724715099; c=relaxed/simple;
+	bh=hTbGVLGP9Ym/O7GLSuwUN/A/J45Vx6m7K+R6pmAzmdE=;
+	h=From:Date:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=jqQYW2W5bi7DMheSHEayYBDyUbJaw6plvOqa3MX1rJH0BIGrUred+PDxMaaUow44MB9qWTikG+DecJIMQ2gC/LtzgdBRsivYUtSt9lc71VPpYBWP2POqAkOfnykz4MVN/wYxSnGns9Ldu5lRffeZfBBqVZ2p49xYfiSYOODUCXY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mw/lvLyB; arc=none smtp.client-ip=209.85.160.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="h5BBMBIE"
-Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-2d3bd8784d3so3779823a91.3;
-        Mon, 26 Aug 2024 15:07:26 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mw/lvLyB"
+Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-27022a3536dso3734503fac.2
+        for <dwarves@vger.kernel.org>; Mon, 26 Aug 2024 16:31:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1724710046; x=1725314846; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=N6wBuMGBO6IYcxN3bymUocORY6Sf95mnXr/c1cVLnvE=;
-        b=h5BBMBIEfdNBTUy4pTRCCHL8GEt8EE0zTYh0dl3BI0cM8LXm3scRNSlP3fgXy1hNld
-         iYJ7oxQKK84h/O54X3bsCQQxhamwLudB9+kdmYw1jfgw9Dpe3X1LadZIvG362NrDFrkO
-         gA4TZ1pzZK0JRah4ySOAHs5Fcv4ah9TUdDTf+ULYFAkKtxRz90DiFsAHqi9TZVr6fTGk
-         mknWCDDHWl6tju3T9ZBfOSjW4LNg8/HHN0y1v3iHOj2hkU3GBzvu3ND0waZEa3xffmYI
-         IaVYg/Ba2Q3j3fTfiJmqoOPk/o+q0JT6xfaHYoRu+TuWK7P8Me6EUJ0tSWwy4cbtzGHa
-         Nzrw==
+        d=gmail.com; s=20230601; t=1724715096; x=1725319896; darn=vger.kernel.org;
+        h=content-disposition:mime-version:message-id:subject:cc:to:date:from
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=KqpIKb0LfeXEdTFL1g0Qu896N5CjS8S322LXjnAAP+M=;
+        b=mw/lvLyB7uydwlTiI+HP0UUKHyiru6RwQjJ440PhnpczQicgacOb68wsuCghL24qqI
+         yXlYn+Vhc670xj2NAV0OoShBmRkaJWXAPpnVsYx5twKgpxDMHkqe/7P0bXaEVnsI6DW7
+         Qa0YbUrNriZ8obYVgbuSKbHHiVGffiG2Xw9XtEk3FbKaa+jd6ULbxATTn2wZ98TPmDuU
+         Fjh+BLyQSxP4Wn+uPcNcwsJAbLn+u/AICC/WrGlCyHZDtCfvdiUb3ypPgdf/WRAqQTSb
+         /iI6ZtP2XPzUdGXRQFwmFB1pKrXrjcCNYTfDSo5WKCB/lFPitCHJRF+wMs8nb2b4P/4l
+         T7Tw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724710046; x=1725314846;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=N6wBuMGBO6IYcxN3bymUocORY6Sf95mnXr/c1cVLnvE=;
-        b=NWpm6LShfNDUKlPbSaSAHbyNMfk0PknKMQZGCTx2XtEMFmlXC4R6ThncbvEM//FoEb
-         LJy9076DEnjksaWZka9JVaivxm3/4etNIFkku+Yf5BdiE79sg/FcS0Fa6gRGiJQpDD4+
-         PQa3ntpVcZzN3jUv3d1pyscFJmT8DT4DgzBHzmzvg8eLLrZKPXHrc4/tJI0NrWf+nQvc
-         AnfESl6GYTNr9WVUFXhVxpp4pPtas1h1uqFxCu7DpccCNaRSdqwRh8sutr8ZDtj9f13T
-         CQWPGg5Pw72u4i87/lbn3DeR2gP4sGJMw/c+ZG/zQ4dMsZbZbvmmyOVakLnd0GyZjRyi
-         20SQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUssi/PegJb4h4CFpcuo143CZiJ1ADNAmOfL1IXyvdTo+BKxlt+1JBxJxdVNpdMG4zTXzQYfOEnrQ==@vger.kernel.org, AJvYcCUxPFbcJca6LQ2WMIospkUVnuuKGX/WjJmFCw0H4GOT9I/NiX/jCumpYwWWx21jbPrzCoYM4lDtUhBuiLSX@vger.kernel.org, AJvYcCVOtheuXI8bWOkn30hy7qYK+MmcnljCYvU1RZQCJC2cdrIAQNQwQ770A8soGUrtxqITaclKTcI/xPuUG5Mx@vger.kernel.org, AJvYcCWvALwIQCZlTYzOqnCZC65PaGdI1yQigoWuXhIBxKPGS22XqVkBCRIdPsIxCBwqiIjm6iA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxRPFs+aCJBt7etkmKVNKo5gv2thN+eFQaG+mSo8xb9JqscY9lb
-	S9OZUH1AvP949P+SAKzoZC58P9oqBDVmHsC6dCK5FDUFLrm45SnAyYjQoXa8D7BEiVMwPTuLx37
-	bkiuyfQEti0s2OCARAcN4HxxDuDI=
-X-Google-Smtp-Source: AGHT+IFRGb2W+WsX2UKq4Wk1GLY6uzmcfAn//NcsablcDQq4KUNIB4ejPvdqknItx6x3QLaJ8Xhm9Yg8LYPhTLP2AGY=
-X-Received: by 2002:a17:90b:3785:b0:2d3:ce96:eb62 with SMTP id
- 98e67ed59e1d1-2d646d6fb73mr13331785a91.38.1724710045979; Mon, 26 Aug 2024
- 15:07:25 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1724715096; x=1725319896;
+        h=content-disposition:mime-version:message-id:subject:cc:to:date:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=KqpIKb0LfeXEdTFL1g0Qu896N5CjS8S322LXjnAAP+M=;
+        b=HuHq0gDXwYTxRgvXy2BgwuVu9UBHfRRyGS9KT3lV3GXv5r4WEkrr6twsSzHxcQrm0Q
+         hWX+dzgfHO5rWP7GOLQV+eKHszJoi+zy/SIPpvZS9dJFvx7Omzmfha4ZFM34oDpsI5s5
+         7OKgy3KMQqztC3mqGuvw6mWKG+c0c2UdGCm2NL31C42v9SIDnE2guRgVe6A5a0ysugZS
+         zfT1w0THHOmZyvejZQrjNLS4d+heWzD7Csba2/mMAFxuXp49Opl9cnNLXY3dbCUGMYdw
+         Z0V3GARXBJt9mJFQQnRi0oscX1VDArP7bdQiTxc6g4L9AUxCNJHEu8YX86L4FFesEL47
+         anGg==
+X-Forwarded-Encrypted: i=1; AJvYcCXse/scwy+LrF6R/aWSMDOPEJOk0hvyhKUKbOTucxI8JAF64xWK4AFar4NBw4SJ99Xu1C029Y0G@vger.kernel.org
+X-Gm-Message-State: AOJu0YyCYlAjH7ulJIZ9P0juqYz1v52MT/uZMIc+ctj8kr6Us9XqWvnI
+	lMCNC6hmzviChrs5ZmqgVTP2Yk5sw/ec4GHS5FyJ9X232epU4Xn5Lcj9KEEr
+X-Google-Smtp-Source: AGHT+IEp8GKXJ3lWVSiPOb0xY57VR5v7YmEPGufLWgRVaVpF0R2b/lJPp1+5zyFOjIZnbinUh5SW8A==
+X-Received: by 2002:a05:6870:648d:b0:260:ffaf:811a with SMTP id 586e51a60fabf-273e63ec243mr13015740fac.8.1724715096085;
+        Mon, 26 Aug 2024 16:31:36 -0700 (PDT)
+Received: from localhost ([138.0.199.252])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7cd9acabac9sm7022384a12.28.2024.08.26.16.31.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Aug 2024 16:31:35 -0700 (PDT)
+From: arnaldo.melo@gmail.com
+X-Google-Original-From: Arnaldo Carvalho de Melo <acme@kernel.org>, Arnaldo Carvalho de Melo <acme@redhat.com>
+Date: Mon, 26 Aug 2024 20:31:33 -0300
+To: Namhyung Kim <namhyung@kernel.org>
+Cc: Alan Maguire <alan.maguire@oracle.com>, Jiri Olsa <jolsa@kernel.org>,
+	dwarves@vger.kernel.org
+Subject: [PATCH 1/1] pfunct: Print DW_AT_external=1 functions once
+Message-ID: <Zs0QVVZZfN9H7wQC@x1>
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <ZsSpU5DqT3sRDzZy@krava> <523c1afa-ed9d-4c76-baea-1c43b1b0c682@kernel.org>
- <c2086083-4378-4503-b3e2-08fb14f8ff37@kernel.org> <7ebee21d-058f-4f83-8959-bd7aaa4e7719@kernel.org>
- <a45nq7wustxrztjxmkqzevv3mkki5oizfik7b24gqiyldhlkhv@4rpy4tzwi52l>
- <ZsdYGOS7Yg9pS2BJ@x1> <f170d7c2-2056-4f47-8847-af15b9a78b81@kernel.org>
- <Zsy1blxRL9VV9DRg@x1> <CA+icZUWMxzAFtr8vsUUQ9OCR68K=F6d6MANx8HMTQntq494roA@mail.gmail.com>
- <20240826184818.GC117125@pauld.westford.csb> <Zszf0_5DKuscmDWi@x1>
-In-Reply-To: <Zszf0_5DKuscmDWi@x1>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Mon, 26 Aug 2024 15:07:14 -0700
-Message-ID: <CAEf4Bza2oR1VLyGLyWRBbMbB00DQDFTCHNU_WT+0ktoWPk1Edw@mail.gmail.com>
-Subject: Re: [RFC] kbuild: bpf: Do not run pahole with -j on 32bit userspace
-To: Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc: Phil Auld <pauld@redhat.com>, Sedat Dilek <sedat.dilek@gmail.com>, 
-	Jiri Slaby <jirislaby@kernel.org>, Shung-Hsi Yu <shung-hsi.yu@suse.com>, dwarves@vger.kernel.org, 
-	Jiri Olsa <olsajiri@gmail.com>, masahiroy@kernel.org, linux-kernel@vger.kernel.org, 
-	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
-	linux-kbuild@vger.kernel.org, bpf@vger.kernel.org, msuchanek@suse.com, 
-	usamaarif642@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Mon, Aug 26, 2024 at 1:04=E2=80=AFPM Arnaldo Carvalho de Melo
-<acme@kernel.org> wrote:
->
-> On Mon, Aug 26, 2024 at 02:48:18PM -0400, Phil Auld wrote:
-> > On Mon, Aug 26, 2024 at 08:42:10PM +0200 Sedat Dilek wrote:
-> > > On Mon, Aug 26, 2024 at 7:03=E2=80=AFPM Arnaldo Carvalho de Melo
-> > > <acme@kernel.org> wrote:
-> > > >
-> > > > On Mon, Aug 26, 2024 at 10:57:22AM +0200, Jiri Slaby wrote:
-> > > > > On 22. 08. 24, 17:24, Arnaldo Carvalho de Melo wrote:
-> > > > > > On Thu, Aug 22, 2024 at 11:55:05AM +0800, Shung-Hsi Yu wrote:
-> > > > > > I stumbled on this limitation as well when trying to build the =
-kernel on
-> > > > > > a Libre Computer rk3399-pc board with only 4GiB of RAM, there I=
- just
-> > > > > > created a swapfile and it managed to proceed, a bit slowly, but=
- worked
-> > > > > > as well.
-> > > > >
-> > > > > Here, it hits the VM space limit (3 G).
-> > > >
-> > > > right, in my case it was on a 64-bit system, so just not enough mem=
-ory,
-> > > > not address space.
-> > > >
-> > > > > > Please let me know if what is in the 'next' branch of:
-> > > >
-> > > > > > https://git.kernel.org/pub/scm/devel/pahole/pahole.git
-> > > >
-> > > > > > Works for you, that will be extra motivation to move it to the =
-master
-> > > > > > branch and cut 1.28.
-> > > >
-> > > > > on 64bit (-j1):
-> > > > > * master: 3.706 GB
-> > > > > (* master + my changes: 3.559 GB)
-> > > > > * next: 3.157 GB
-> > > >
-> > > > > on 32bit:
-> > > > >  * master-j1: 2.445 GB
-> > > > >  * master-j16: 2.608 GB
-> > > > >  * master-j32: 2.811 GB
-> > > > >  * next-j1: 2.256 GB
-> > > > >  * next-j16: 2.401 GB
-> > > > >  * next-j32: 2.613 GB
-> > > > >
-> > > > > It's definitely better. So I think it could work now, if the thre=
-ad count
-> > > > > was limited to 1 on 32bit. As building with -j10, -j20 randomly f=
-ails on
-> > > > > random machines (32bit processes only of course). Unlike -j1.
-> > > >
-> > > > Cool, I just merged a patch from Alan Maguire that should help with=
- the
-> > > > parallel case, would be able to test it? It is in the 'next' branch=
-:
-> > > >
-> > > > =E2=AC=A2[acme@toolbox pahole]$ git log --oneline -5
-> > > > f37212d1611673a2 (HEAD -> master) pahole: Teduce memory usage by sm=
-arter deleting of CUs
-> > > >
-> > >
-> > > *R*edzce? memory usage ...
-> > >
-> >
-> > If you meant that further typo it's golden, and if not the irony is ric=
-h :)
-> >
-> > Either way this is my favorite email of the day!
->
-> Hahaha, I went to uppercase what comes after the colon and introduced
-> that typo ;-)
->
-> Faxing it....
+Namhyung mentioned that 'set_task_cpu' wasn't being printed with pfunct,
+that was because those functions (with DW_AT_external=1) were not being
+printed at all, out of some wrong expectations, this was added to avoid
+printing it multiple times to allow for things like --compile to work,
+but that was too much of a big hammer.
 
-typo-fest continues ;)
+So add fn_stats->printed and use it to determine if functions were
+already printed.
 
-but it's great to see that a new pahole release is coming (cc'ing
-Usama), we are eagerly waiting for one of the bug fixes that will go
-into 1.28 (one of the first commits after 1.27 was cut). Note, libbpf
-CI's for pahole-staging is failing, but that seems a one-off test and
-has nothing to do with pahole being broken.
+Also don't print definitions for functions marked as declarations, as it
+clashes with the ones in system headers, like __builtin_memcpy, etc.
 
->
-> - Arnaldo
->
+This all needs a more thorough love and care, but at least for now
+--compile works with 'fullcircle tcp.o' (generating the functions and
+the types it uses and then compiling it to get the original types and
+functions and prints the external functions:
+
+  $ pfunct -F dwarf -f set_task_cpu vmlinux
+  void set_task_cpu(struct task_struct * p, unsigned int new_cpu);
+  $ pfunct -F btf -f set_task_cpu vmlinux
+  void set_task_cpu(struct task_struct * p, unsigned int new_cpu);
+  $
+
+Reported-by: Namhyung Kim <namhyung@kernel.org>
+Cc: Alan Maguire <alan.maguire@oracle.com>
+Cc: Jiri Olsa <jolsa@kernel.org>
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+---
+ pfunct.c | 17 +++++++++++++++--
+ 1 file changed, 15 insertions(+), 2 deletions(-)
+
+diff --git a/pfunct.c b/pfunct.c
+index 938dd724e44a9416..bc3026b384284cb4 100644
+--- a/pfunct.c
++++ b/pfunct.c
+@@ -49,6 +49,7 @@ struct fn_stats {
+ 	uint32_t	 nr_expansions;
+ 	uint32_t	 size_expansions;
+ 	uint32_t	 nr_files;
++	bool		 printed;
+ };
+ 
+ static struct fn_stats *fn_stats__new(struct tag *tag, const struct cu *cu)
+@@ -95,11 +96,13 @@ static void fn_stats__delete_list(void)
+ 	}
+ }
+ 
+-static void fn_stats__add(struct tag *tag, const struct cu *cu)
++static struct fn_stats *fn_stats__add(struct tag *tag, const struct cu *cu)
+ {
+ 	struct fn_stats *fns = fn_stats__new(tag, cu);
+ 	if (fns != NULL)
+ 		list_add(&fns->node, &fn_stats__list);
++
++	return fns;
+ }
+ 
+ static void fn_stats_inline_exps_fmtr(const struct fn_stats *stats)
+@@ -366,7 +369,12 @@ static void function__show(struct function *func, struct cu *cu)
+ {
+ 	struct tag *tag = function__tag(func);
+ 
+-	if (func->abstract_origin || func->external)
++	if (func->abstract_origin || func->declaration)
++		return;
++
++	struct fn_stats *fstats = fn_stats__find(func->name);
++
++	if (fstats && fstats->printed)
+ 		return;
+ 
+ 	if (expand_types)
+@@ -393,6 +401,11 @@ static void function__show(struct function *func, struct cu *cu)
+ 	putchar('\n');
+ 	if (show_variables || show_inline_expansions)
+ 		function__fprintf_stats(tag, cu, &conf, stdout);
++
++	if (!fstats)
++		fstats = fn_stats__add(tag, cu);
++	if (fstats)
++		fstats->printed = true;
+ }
+ 
+ static int cu_function_iterator(struct cu *cu, void *cookie)
+-- 
+2.46.0
+
