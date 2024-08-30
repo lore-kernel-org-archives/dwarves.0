@@ -1,69 +1,63 @@
-Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0B95DDA6;
-	Thu, 29 Aug 2024 00:08:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFBFA182;
+	Fri, 30 Aug 2024 00:05:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724890122; cv=none; b=ennSxGGWBlTzjAydmZuiNHxKbcEO6I0GDi7wW9xGtxpikp14g2AwoNy0xBah0/6VpUdVbPOpFtyvCHoFafXfz1o5TjzF25dYDDogGOqScrSXAzldkX8FjLxFFAMF0S1E9qIlYd/8orkmYsBlx4TSqyG4wVDWC6xwGh1+sG2wWcU=
+	t=1724976328; cv=none; b=mIhn2K7IRV+sKN2AxYnSS09JrS6vTGgNWqTN/oQnPxjAL4fcWE/e/846IxsOOvDw5rI7GyyQ10V9YHvC1cueVAuFyWxUJ1mJ8vCR1kxrtsMN+fwodJk9JMd9M0vVbi0BHWHjpBA+qEVdL/AqFnAfHqkvGuMspPkEBo/wAV8bRJg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724890122; c=relaxed/simple;
-	bh=4mrOInaGgcSsyPxSOv0jBWUB2KmSNACrUTxiR3RHI8c=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=Gma87mcH4Sv3RO0o4ThicWXf7QYJnAs0pKyESwtztXiZwc+CgOLInOBzzS/0JrQykIj63XtRJHoIquBiUE9F66E841vHi4iMqF0isxQXbdrXoQJYh+Ny7G4wRQPpJSf4Nd0KRJ84h20hEpFs7OB/2zcUZEhaF6PCTNxPZsJw0HA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XSco76Ez; arc=none smtp.client-ip=209.85.215.182
+	s=arc-20240116; t=1724976328; c=relaxed/simple;
+	bh=sSlFIgz3u9weFyLbXNi6UH3Br+zjOBsoBVkY5w1r8fA=;
+	h=Message-ID:Subject:From:To:Cc:Date:Content-Type:MIME-Version; b=i10iEB+W8DAEMznIaDwD7h8IEaoGoPCGKWXdR5BNZuJ8Ynp1jLJKUq7TFLn1sV+DsQczYJvE7Atyd1LI3P27281+VoYh772wZbIqbKPwWjw7/lrX7wG80ycCHRqMXOK3ARBgKFc20kgNLt3ojtM4aR8PzpN4DdH9bWzxt23ywes=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IUHCSUOJ; arc=none smtp.client-ip=209.85.214.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XSco76Ez"
-Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-7cd8803fe0aso33440a12.0;
-        Wed, 28 Aug 2024 17:08:40 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IUHCSUOJ"
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-201ed196debso10680675ad.1;
+        Thu, 29 Aug 2024 17:05:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1724890120; x=1725494920; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=JwAJcNFbkfNLCvJ5Fy89lTRAKt+aTy//gJLU+v3KL2o=;
-        b=XSco76EzxOpoj5WUGpaHpjzM7jf/JR8W3fucYk8dQscHkQAV7djvjR+rN2asIaa2DJ
-         XK9pf0xnQdQaIEvtDTJREEfHxm64nKpcm04yBOzmpH7pui5JMDtod9i23Pwtoalm+KP/
-         qkxIbnNrsgGwMNp9DaMtuaxSwBXgKHQTmg5E63uLql+HZDmY98J9ZqYVY6e1v6j3/zFS
-         h+Zm4uFG2coWR4I4PzHiUv03T2Zm2IoGYdrnQMeXxuXpBMjERZELQmQA70gsm1WNhC19
-         rcdnL+mbHa6VHRw01ifv081wCFz5EB694s0KmvUd1favY9oY5644PB0GOVpzlhId5qNz
-         HlVQ==
+        d=gmail.com; s=20230601; t=1724976326; x=1725581126; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:date:cc:to:from
+         :subject:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=sSlFIgz3u9weFyLbXNi6UH3Br+zjOBsoBVkY5w1r8fA=;
+        b=IUHCSUOJhDZorTK0Ly3ZYWWZBdDCsFnVBnkK/SWwleEI0wiUUgcRuNc6nlfyUmC9KM
+         synKEhkiXf9VmPjKkyhSbfnut6v1b3MtN5voMwbuN0/fGzYvaMoroiYE84byvWMOtTDP
+         JotfBCQPAJ6B1un7Qt4XIih+rpBQ/mwlNoDWNkgzjc+5brVLw9spRt+og7jMgzbKn9S6
+         aPp5esGe7ohoJ8q4hrCNPencwdusms9yLpEC0DF8QChYSz33uYCNFGHE5S6oPFRex5Lx
+         ipzxNqF+KLSHB2TIy276KNLGI3fcDin5eqtUR9LmIrVWyaNsd5qJ14IVYI2O3brTO8Wk
+         m67Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724890120; x=1725494920;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=JwAJcNFbkfNLCvJ5Fy89lTRAKt+aTy//gJLU+v3KL2o=;
-        b=a+2sb7XSOjnl9tL0ggwbkT9uggB/9EcUY6+Erq7dcD2cTv4HNOEcvZh1CEMaSiI+h+
-         iXkyhws5Ts2Skkp3EAZbEwP+euE2sdUdU+uQdZO64yFxeTxpShLW5Z0NnUomr6vd2vtx
-         sJ264uro3XDlIE1/9qdLR9D8qLzUUlqYHwXFV3D36I9lUKlhJ1Fii2iIS9J9COvu8oyn
-         RcCu8cwyn4wc0J+yMSz0WkTXbgxKKR3Yqgi919qnXjHd+Ea+KWeSdFQDR2mWHFZhdePX
-         cxjWOm73MSyIvCRHWr0jPZHj8ddSkZ1YqQChCnrlYMSdNZ5ZETsl4S6nCQkcaEhDVx0o
-         VCyQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU1Dla9MMPJQZqGorqqlkrffOt4wYgwNwejpKMxVBwGzUHJfysdy3dVX42uRqVC8okVKC66C1BH8Q==@vger.kernel.org, AJvYcCVp8GrZKjeMfnOTqLmTi2qF06hCoEd7b3sy/k43698I5ePa5dLwt3B6Sx/lVpFZP/5pzxDFg7TTogNkYSMy@vger.kernel.org, AJvYcCXQB2wzlQe1YyAZj5606oJMd0SOAds+xfs2bgUpdvM1bAt3NvXbuAARe4PqJIZh8ITF99Q=@vger.kernel.org
-X-Gm-Message-State: AOJu0YylTWUoL933GaveNFHgRIWryEfy+yMHK+fsDZiOE7ulhT73Ny7x
-	/gaRWik5POstl/B+JSRHJ4ZMVC3VkBuj356LjW10j0VbxWgaURwC
-X-Google-Smtp-Source: AGHT+IEz7DDxbFAT6mOeyMJDiHUnKBgQmO3DPznwmp0JxhvgeNKaIO5s8gmnsuyfvmHr4oyLGnrb9w==
-X-Received: by 2002:a05:6a20:e196:b0:1c4:9100:6a1b with SMTP id adf61e73a8af0-1cce101dfdfmr998580637.30.1724890119797;
-        Wed, 28 Aug 2024 17:08:39 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1724976326; x=1725581126;
+        h=mime-version:user-agent:content-transfer-encoding:date:cc:to:from
+         :subject:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=sSlFIgz3u9weFyLbXNi6UH3Br+zjOBsoBVkY5w1r8fA=;
+        b=VNhAX9tjVTtOmVWtnCbONgPZ/tLoI8L43iZmPjfJgjqN/QgpsXkGEz2/+pNV+NYWeB
+         lJ0BfDgGDyg8eJfog2P4vsnLeXIz6cTYVI0uTEHDMcc5HMgK76i3Y3/8Zg0NHAciuV5n
+         KpKIXVfXy+MqPICt0oeP6L77nkVihvYJVd/pfNFJo8DXwlteRFzeARuiRG4xCyz/enGO
+         JIFarKfInDgpMX4sxUo+tLBxsvjYEsyswdBgNGfgMTVt830QlywODvhLPRKqQlpFHhHi
+         IvKqL7slIIpx3vZd1K5RzdOIxoPbInzs7zlm9oEspdS9VUdBTBnQsRi0/6Xn3zXqPscJ
+         Et5A==
+X-Forwarded-Encrypted: i=1; AJvYcCU6FNmDKRRbcFOvl3FAcdwm3xOgLv7RB/ibXajKq4NcyTT5332RU1GGRhT8o8idIHCi1I8=@vger.kernel.org, AJvYcCX6FGYPiX9VeLWqG46aprSf7yedgQ9P/46RdkQpRvKKYU4JS2UDqZ4I9jNZInC02FGpW4r8OAUBVg==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyr1Yu7fHyaQU9hFO9/JbtEjjl5K6l3VEvXGsFzPen8mdN2bH3X
+	gm76I7tp7QCGgmKHvdsOD3wENcLOsf+bC2mS4Q8z//Fo6QROfU8C
+X-Google-Smtp-Source: AGHT+IHZHmQ3ZHcF5iIo3Ezo0kM+zarHZ8k5wlyvsVcKqsB+F69XkfM+9B/cufoePpbce1hmkkZqlw==
+X-Received: by 2002:a17:902:ea07:b0:202:4b99:fd34 with SMTP id d9443c01a7336-2050c380dc6mr46653245ad.14.1724976325882;
+        Thu, 29 Aug 2024 17:05:25 -0700 (PDT)
 Received: from [192.168.0.235] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-205152b3343sm482175ad.30.2024.08.28.17.08.38
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-205152b3196sm16758535ad.38.2024.08.29.17.05.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Aug 2024 17:08:39 -0700 (PDT)
-Message-ID: <2b92648adb162a1c6202ba447277a37902d0b407.camel@gmail.com>
-Subject: Re: [PATCH 1/1] pahole: Add option to obtain a vmlinux matching the
- running kernel
+        Thu, 29 Aug 2024 17:05:25 -0700 (PDT)
+Message-ID: <6358db36c5f68b07873a0a5be2d062b1af5ea5f8.camel@gmail.com>
+Subject: FYI: CI regression on big-endian arch (s390) after recent pahole
+ changes
 From: Eduard Zingerman <eddyz87@gmail.com>
 To: Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc: Alan Maguire <alan.maguire@oracle.com>, Andrii Nakryiko
- <andrii@kernel.org>,  Jiri Olsa <jolsa@kernel.org>,
- dwarves@vger.kernel.org, bpf@vger.kernel.org, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>
-Date: Wed, 28 Aug 2024 17:08:34 -0700
-In-Reply-To: <Zs977_n0rkleEl94@x1>
-References: <Zs977_n0rkleEl94@x1>
+Cc: alan.maguire@oracle.com, dwarves@vger.kernel.org, bpf@vger.kernel.org, 
+	andrii@kernel.org, martin.lau@linux.dev, songliubraving@meta.com
+Date: Thu, 29 Aug 2024 17:05:20 -0700
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 User-Agent: Evolution 3.52.4 (3.52.4-1.fc40) 
@@ -74,73 +68,23 @@ List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
-On Wed, 2024-08-28 at 16:35 -0300, Arnaldo Carvalho de Melo wrote:
+Hi Arnaldo, Alan,
 
-[...]
+After recent pahole changes [1] BPF CI fails for s390 [2].
+Song Liu identified that there is a mismatch between endianness of BTF
+in .BTF and .BTF.base sections.
 
-Tested-by: Eduard Zingerman <eddyz87@gmail.com>
+I think that the correct fix should be on libbpf side,
+where btf__distill_base() should inherit endianness from source BTF.
+If there are any plans for new pahole release,
+could you please postpone it until current issue is resolved?
+(I should have a fix for this thing by tomorrow).
 
-> @@ -3707,6 +3716,21 @@ int main(int argc, char *argv[])
->  		goto out;
->  	}
-> =20
-> +	if (show_running_kernel_vmlinux) {
-> +		const char *vmlinux =3D vmlinux_path__find_running_kernel();
-> +
-> +		if (vmlinux) {
-> +			fprintf(stdout, "%s\n", vmlinux);
-> +			rc =3D EXIT_SUCCESS;
-> +		} else {
-> +			fputs("pahole: couldn't find a vmlinux that matches the running kerne=
-l\n"
-> +			      "HINT: Maybe you're inside a container or missing a debuginfo p=
-ackage?\n",
-> +			      stderr);
-> +		}
+Best regards,
+Eduard
 
-Nitpick: when run with valgrind this reports a leak for 'vmlinux':
-
-    =3D=3D186=3D=3D Memcheck, a memory error detector
-    =3D=3D186=3D=3D Copyright (C) 2002-2024, and GNU GPL'd, by Julian Sewar=
-d et al.
-    =3D=3D186=3D=3D Using Valgrind-3.23.0 and LibVEX; rerun with -h for cop=
-yright info
-    =3D=3D186=3D=3D Command: /home/eddy/work/dwarves-fork/build/pahole --ru=
-nning_kernel_vmlinux
-    =3D=3D186=3D=3D=20
-    vmlinux
-    =3D=3D186=3D=3D=20
-    =3D=3D186=3D=3D HEAP SUMMARY:
-    =3D=3D186=3D=3D     in use at exit: 8 bytes in 1 blocks
-    =3D=3D186=3D=3D   total heap usage: 15 allocs, 14 frees, 21,408 bytes a=
-llocated
-    =3D=3D186=3D=3D=20
-    =3D=3D186=3D=3D 8 bytes in 1 blocks are definitely lost in loss record =
-1 of 1
-    =3D=3D186=3D=3D    at 0x4843866: malloc (vg_replace_malloc.c:446)
-    =3D=3D186=3D=3D    by 0x4A8F9AE: strdup (strdup.c:42)
-    =3D=3D186=3D=3D    by 0x48755EC: vmlinux_path__find_running_kernel (dwa=
-rves.c:2718)
-    =3D=3D186=3D=3D    by 0x40ABBD: main (pahole.c:3720)
-    =3D=3D186=3D=3D=20
-    =3D=3D186=3D=3D LEAK SUMMARY:
-    =3D=3D186=3D=3D    definitely lost: 8 bytes in 1 blocks
-    =3D=3D186=3D=3D    indirectly lost: 0 bytes in 0 blocks
-    =3D=3D186=3D=3D      possibly lost: 0 bytes in 0 blocks
-    =3D=3D186=3D=3D    still reachable: 0 bytes in 0 blocks
-    =3D=3D186=3D=3D         suppressed: 0 bytes in 0 blocks
-
-While technically this is not a problem, maybe add a call to free()
-just to avoid noise in valgrind output?
-(Note that 'const' qualifier is no longer needed for
- vmlinux_path__find_running_kernel, as it returns strdup result).
-
-> +
-> +		return rc;
-> +	}
-> +
->  	if (languages.str && parse_languages())
->  		return rc;
-> =20
-
+[1] c7b1f6a29ba1 ("btf_encoder: Add "distilled_base" BTF feature to split B=
+TF generation")
+[2] https://github.com/kernel-patches/bpf/actions/runs/10622763027/job/2944=
+7973415
 
