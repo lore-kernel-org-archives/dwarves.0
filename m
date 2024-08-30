@@ -1,90 +1,107 @@
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+Received: from mail-oo1-f51.google.com (mail-oo1-f51.google.com [209.85.161.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFBFA182;
-	Fri, 30 Aug 2024 00:05:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9ACD8290F;
+	Fri, 30 Aug 2024 01:27:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724976328; cv=none; b=mIhn2K7IRV+sKN2AxYnSS09JrS6vTGgNWqTN/oQnPxjAL4fcWE/e/846IxsOOvDw5rI7GyyQ10V9YHvC1cueVAuFyWxUJ1mJ8vCR1kxrtsMN+fwodJk9JMd9M0vVbi0BHWHjpBA+qEVdL/AqFnAfHqkvGuMspPkEBo/wAV8bRJg=
+	t=1724981280; cv=none; b=QjdyFjB9yPUgD15G9ZKvLEoRVTXnCE2DGeYHSHZrvOfana7ayP6HBpVDDOnH1Jy7lVQk/tsZBueSIZ0Z+sVqdLbVDi6AQ7pHQOqzuoD1+MGKUYqeaaqcK4n1JEwOim0BaPtc0dgxBgx159t0mWUQpu0FCCywH+jg0Z50L3Gla38=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724976328; c=relaxed/simple;
-	bh=sSlFIgz3u9weFyLbXNi6UH3Br+zjOBsoBVkY5w1r8fA=;
-	h=Message-ID:Subject:From:To:Cc:Date:Content-Type:MIME-Version; b=i10iEB+W8DAEMznIaDwD7h8IEaoGoPCGKWXdR5BNZuJ8Ynp1jLJKUq7TFLn1sV+DsQczYJvE7Atyd1LI3P27281+VoYh772wZbIqbKPwWjw7/lrX7wG80ycCHRqMXOK3ARBgKFc20kgNLt3ojtM4aR8PzpN4DdH9bWzxt23ywes=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IUHCSUOJ; arc=none smtp.client-ip=209.85.214.181
+	s=arc-20240116; t=1724981280; c=relaxed/simple;
+	bh=tkxizzu+Qr6DYjmqOjEDI9ZEFYL2EjTSNdBrF7enUnI=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Y6O1AbFDnFJsJVUHVVfcdSR4m/lpNOjLhBb6aUNydDXoLIJv4bwfyUWJJkL1Wz0RK+C28v/ns4abEdhRm36oQ2NZ6AhoNi+lNoyaS7ITljqOQdK9j8QZhMawRI7xvnEwYDdTxXAY84ZV1DiBQVarl7ZZ1FADmxoTFrYPWxciC7s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FNbgsvVX; arc=none smtp.client-ip=209.85.161.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IUHCSUOJ"
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-201ed196debso10680675ad.1;
-        Thu, 29 Aug 2024 17:05:26 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FNbgsvVX"
+Received: by mail-oo1-f51.google.com with SMTP id 006d021491bc7-5dcd8403656so890448eaf.1;
+        Thu, 29 Aug 2024 18:27:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1724976326; x=1725581126; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:date:cc:to:from
-         :subject:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=sSlFIgz3u9weFyLbXNi6UH3Br+zjOBsoBVkY5w1r8fA=;
-        b=IUHCSUOJhDZorTK0Ly3ZYWWZBdDCsFnVBnkK/SWwleEI0wiUUgcRuNc6nlfyUmC9KM
-         synKEhkiXf9VmPjKkyhSbfnut6v1b3MtN5voMwbuN0/fGzYvaMoroiYE84byvWMOtTDP
-         JotfBCQPAJ6B1un7Qt4XIih+rpBQ/mwlNoDWNkgzjc+5brVLw9spRt+og7jMgzbKn9S6
-         aPp5esGe7ohoJ8q4hrCNPencwdusms9yLpEC0DF8QChYSz33uYCNFGHE5S6oPFRex5Lx
-         ipzxNqF+KLSHB2TIy276KNLGI3fcDin5eqtUR9LmIrVWyaNsd5qJ14IVYI2O3brTO8Wk
-         m67Q==
+        d=gmail.com; s=20230601; t=1724981278; x=1725586078; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=2m5HCa4/RJDxDQiRDnhAfj/vgIx0abd4SlvqW52bMj4=;
+        b=FNbgsvVXF9N8i5DwBbTWMDLuwOqBMF0FR3APGpyUiYG2H3dWGIrreqrZR464e9ZV3s
+         NVXqLOsmzzCe7oP/4Zh/e+VSby5sJfYOcROjLARrghj6ucppm5uFBvQ93ZpJu40Gca4U
+         7Vpn6Dbk2xKTlJUXo2K5lKb/VJtvONpV4Om29tG94plouEt+UrTG828aELmHy+wKYYXp
+         VeYRKT8cI6aV9/lZaHR28IWp68iLFymf8AuCgQzLyDk778zA9GTq7sSnbjkzxVB5ZG7+
+         CVkVPk7LY3yvj76OyiFR01hEEsnDD8WGptkpql9j8H4XzuJ6gucsgi+OlosBYFGtJZsP
+         JoaQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724976326; x=1725581126;
-        h=mime-version:user-agent:content-transfer-encoding:date:cc:to:from
-         :subject:message-id:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20230601; t=1724981278; x=1725586078;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=sSlFIgz3u9weFyLbXNi6UH3Br+zjOBsoBVkY5w1r8fA=;
-        b=VNhAX9tjVTtOmVWtnCbONgPZ/tLoI8L43iZmPjfJgjqN/QgpsXkGEz2/+pNV+NYWeB
-         lJ0BfDgGDyg8eJfog2P4vsnLeXIz6cTYVI0uTEHDMcc5HMgK76i3Y3/8Zg0NHAciuV5n
-         KpKIXVfXy+MqPICt0oeP6L77nkVihvYJVd/pfNFJo8DXwlteRFzeARuiRG4xCyz/enGO
-         JIFarKfInDgpMX4sxUo+tLBxsvjYEsyswdBgNGfgMTVt830QlywODvhLPRKqQlpFHhHi
-         IvKqL7slIIpx3vZd1K5RzdOIxoPbInzs7zlm9oEspdS9VUdBTBnQsRi0/6Xn3zXqPscJ
-         Et5A==
-X-Forwarded-Encrypted: i=1; AJvYcCU6FNmDKRRbcFOvl3FAcdwm3xOgLv7RB/ibXajKq4NcyTT5332RU1GGRhT8o8idIHCi1I8=@vger.kernel.org, AJvYcCX6FGYPiX9VeLWqG46aprSf7yedgQ9P/46RdkQpRvKKYU4JS2UDqZ4I9jNZInC02FGpW4r8OAUBVg==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyr1Yu7fHyaQU9hFO9/JbtEjjl5K6l3VEvXGsFzPen8mdN2bH3X
-	gm76I7tp7QCGgmKHvdsOD3wENcLOsf+bC2mS4Q8z//Fo6QROfU8C
-X-Google-Smtp-Source: AGHT+IHZHmQ3ZHcF5iIo3Ezo0kM+zarHZ8k5wlyvsVcKqsB+F69XkfM+9B/cufoePpbce1hmkkZqlw==
-X-Received: by 2002:a17:902:ea07:b0:202:4b99:fd34 with SMTP id d9443c01a7336-2050c380dc6mr46653245ad.14.1724976325882;
-        Thu, 29 Aug 2024 17:05:25 -0700 (PDT)
-Received: from [192.168.0.235] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-205152b3196sm16758535ad.38.2024.08.29.17.05.25
+        bh=2m5HCa4/RJDxDQiRDnhAfj/vgIx0abd4SlvqW52bMj4=;
+        b=CMfTBiMGgQ73IeDRScGTqiTQGjKRiWDT3qr9fKpBfoyhkUKED8t4hl/9h5GCUIrf7y
+         9ApaMHo0OPuIgriq+RSVS6kTTas1y3sJjyXjPh9VJQ9lRhi+pHgQ5aDa8id83Hrms9zS
+         ixw3sS/uIi+DL9UHKW2MXkbj23GIJsCjkUPn/FdSl1YnB5jy09wUY3fCl+WxvMzGCNS9
+         kYhYUvRyUhAsanTV4mC30wKtOLPjMnpYiXAtDFg94gyVjS1zJvGTKAHi4BxWZqZrXAiQ
+         QOr7ZOMo/TZCMxBTQY4AIjcXsxi0mvfPg80DAvE8NBDClSYhPKob3VJLWO0ffIpXDAMd
+         96nA==
+X-Forwarded-Encrypted: i=1; AJvYcCWij5CU/mrDwg4NGP1vUg93OYh+RL9JaxaHqB9xg/x5k+HnvhCg3gVGTiNu8O1sjpQMAvYefvZ5zQ==@vger.kernel.org, AJvYcCX74RTonMG6Sckj2dDXJEa7qn27eK1kS9oVZmyp/6uaVg5OrweOZ3QkrZxFwrK6lNqu8nU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxdCKZ0eaN+Cl2CLtR+q1I2Rqun78B1om/UrXdhCA6w7VK7fR3a
+	v9rPQEXwIlFI/jRsYxv/6giGwXov72cUtpsC5y8COiVnubgCjQAr
+X-Google-Smtp-Source: AGHT+IFqvl1/V3gSGMTqvpExWUqjy4mfg/LC9uFc4ljYJoqQw81zdEjYn+KvHzmXaT9jOrDozkPrHg==
+X-Received: by 2002:a05:6358:5289:b0:1af:1bcd:a37a with SMTP id e5c5f4694b2df-1b603cb88a7mr618873755d.22.1724981277548;
+        Thu, 29 Aug 2024 18:27:57 -0700 (PDT)
+Received: from kodidev-ubuntu (69-172-146-21.cable.teksavvy.com. [69.172.146.21])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7d22e9be18esm1883333a12.73.2024.08.29.18.27.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Aug 2024 17:05:25 -0700 (PDT)
-Message-ID: <6358db36c5f68b07873a0a5be2d062b1af5ea5f8.camel@gmail.com>
-Subject: FYI: CI regression on big-endian arch (s390) after recent pahole
+        Thu, 29 Aug 2024 18:27:57 -0700 (PDT)
+From: Tony Ambardar <tony.ambardar@gmail.com>
+X-Google-Original-From: Tony Ambardar <Tony.Ambardar@gmail.com>
+Date: Thu, 29 Aug 2024 18:27:55 -0700
+To: Eduard Zingerman <eddyz87@gmail.com>
+Cc: Arnaldo Carvalho de Melo <acme@kernel.org>, alan.maguire@oracle.com,
+	dwarves@vger.kernel.org, bpf@vger.kernel.org, andrii@kernel.org,
+	martin.lau@linux.dev, songliubraving@meta.com
+Subject: Re: FYI: CI regression on big-endian arch (s390) after recent pahole
  changes
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc: alan.maguire@oracle.com, dwarves@vger.kernel.org, bpf@vger.kernel.org, 
-	andrii@kernel.org, martin.lau@linux.dev, songliubraving@meta.com
-Date: Thu, 29 Aug 2024 17:05:20 -0700
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.52.4 (3.52.4-1.fc40) 
+Message-ID: <ZtEgG6XJGIGn0z35@kodidev-ubuntu>
+References: <6358db36c5f68b07873a0a5be2d062b1af5ea5f8.camel@gmail.com>
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6358db36c5f68b07873a0a5be2d062b1af5ea5f8.camel@gmail.com>
 
-Hi Arnaldo, Alan,
+On Thu, Aug 29, 2024 at 05:05:20PM -0700, Eduard Zingerman wrote:
+> Hi Arnaldo, Alan,
+> 
+> After recent pahole changes [1] BPF CI fails for s390 [2].
+> Song Liu identified that there is a mismatch between endianness of BTF
+> in .BTF and .BTF.base sections.
+> 
+> I think that the correct fix should be on libbpf side,
+> where btf__distill_base() should inherit endianness from source BTF.
+> If there are any plans for new pahole release,
+> could you please postpone it until current issue is resolved?
+> (I should have a fix for this thing by tomorrow).
 
-After recent pahole changes [1] BPF CI fails for s390 [2].
-Song Liu identified that there is a mismatch between endianness of BTF
-in .BTF and .BTF.base sections.
+Hi Eduard,
 
-I think that the correct fix should be on libbpf side,
-where btf__distill_base() should inherit endianness from source BTF.
-If there are any plans for new pahole release,
-could you please postpone it until current issue is resolved?
-(I should have a fix for this thing by tomorrow).
+Thanks for looking at this. I ran into the CI failure while using s390x
+to test a series adding libbpf bi-endian support. Since I'm deep into
+endianness issues right now, I thought to try the fix you suggested just
+to make some progress but noticed the CI failure has disappeared.[0]
 
-Best regards,
-Eduard
+Did something get fixed already? I can't seem to find the change.
 
-[1] c7b1f6a29ba1 ("btf_encoder: Add "distilled_base" BTF feature to split B=
-TF generation")
-[2] https://github.com/kernel-patches/bpf/actions/runs/10622763027/job/2944=
-7973415
+Many thanks,
+Tony
 
+[0] https://github.com/kernel-patches/bpf/pull/7520
+> 
+> Best regards,
+> Eduard
+> 
+> [1] c7b1f6a29ba1 ("btf_encoder: Add "distilled_base" BTF feature to split BTF generation")
+> [2] https://github.com/kernel-patches/bpf/actions/runs/10622763027/job/29447973415
+> 
