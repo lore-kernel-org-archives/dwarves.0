@@ -1,120 +1,89 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A988319E992;
-	Mon,  2 Sep 2024 14:08:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EFB419F105
+	for <dwarves@vger.kernel.org>; Mon,  2 Sep 2024 14:10:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725286133; cv=none; b=J4wfBji9R+2R2f3taPExzzF4XMYroHMzc9T4uwkBOe1E9Xu7u2jFBxZHrq4Q49CBnlYrNw00LwLSanuhL5AqvCjmkYDcPV+gMT0tJK/98YoYTspV4BGh5P47aNr0aBbOAcwnfN0XDVXjZcEXi1ZkQTN6QPCV9mbo7ZnF05NhceY=
+	t=1725286257; cv=none; b=n7kfddvUVns/XZUqItpCHX80dFsQCMHwAAePHeThYxoVzbWEOm+xMhmZ0Adqa5K9owFStLvNCjNXG0rBAiTleXUDUgutEvYl13zR+IdJS2ZRVVOfbVJdYWe6e+/MjWK8euUlowJTNn3k1CS1owt/34+0CrJfceeG0qI6EAnlJKw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725286133; c=relaxed/simple;
-	bh=1veHNHEwLmZrEaVhmnBY7wrWSGEeHi+8/W3xIx+CqaE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aA5VFcC8NmACLxhg0yzb7OjmYDYBLo5AoaIgT6+RN0GcPT1NSurS2xDmALONxQT5tr8pjglXqYiqGdWBbgyw+Jj/g9QAICWb5q7DnGbGJyOnsfUl/9cTOg8Qw2cmsTCpfUMTYnV1hNk84PvItwJGwbW9e4gSfqD0JVT0ZPyZslc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tlqDdG08; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1725286257; c=relaxed/simple;
+	bh=5YAqI5qlnFc44BG62S+bvG875AYJ7kwTaW7pafpgn8s=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=VrvzYWxDtTCHtf9JmO4ZHK4H4yXPJKSkOqbvird9ruhZ5IKR/yfalcZyiqB7WDe8oAfsJ5oLt4cnAunHfJHhFls30fWfZgvEYCJFZQThTuavgJ9e9Uxa7Sn/7FuH8TKtqwPXSVhiuclV7TD/XnyNDc7+HM8KOq/qJKnrsAUHAV0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=NLnHGv8l; arc=none smtp.client-ip=205.220.177.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tlqDdG08"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F3A2C4CEC2;
-	Mon,  2 Sep 2024 14:08:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725286133;
-	bh=1veHNHEwLmZrEaVhmnBY7wrWSGEeHi+8/W3xIx+CqaE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=tlqDdG08aB0PUTwZ+CDybwQ51eAiu6wmXZ9qqypbObOKhvyUTTALmb3KsSN5Nafjy
-	 p0G5WA40R4jbvl0RGV9F3DCQBDtgNzspI3BED0RGWnacawwRv5xKVEK5a3b3mAHrV+
-	 hds1AzaIwZAp0XO9kxJPz8+Pi/iAa6R0m4tzPxzmsWDXtTLR+sQfkldDDzb01J9viA
-	 2l0vn+rJLxfoM/OevVvZNnzE/prODNrghuEVXcx0SEd22Zz/WW3X965uEka6rxzjHg
-	 pX2T9HxLtm5QeqWUvPEwVCefKB8bPUfSa0YAjGU2pcbNzXsNNDr4F1c0T4WvYWXrzM
-	 HIwfcKiUdO7PA==
-Date: Mon, 2 Sep 2024 11:08:49 -0300
-From: Arnaldo Carvalho de Melo <acme@kernel.org>
-To: Alan Maguire <alan.maguire@oracle.com>
-Cc: Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <songliubraving@meta.com>,
-	"dwarves@vger.kernel.org" <dwarves@vger.kernel.org>,
-	bpf <bpf@vger.kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>
-Subject: Re: FYI: CI regression on big-endian arch (s390) after recent pahole
- changes
-Message-ID: <ZtXG8TTMXTzXUkRg@x1>
-References: <6358db36c5f68b07873a0a5be2d062b1af5ea5f8.camel@gmail.com>
- <442C7AEC-2919-4307-8700-F7A0B60B5565@fb.com>
- <322d9bac47bc3732b77cf2cf23d69f2c4665bc36.camel@gmail.com>
- <860fe244-157b-46cf-9b41-ee9fd36f9c1e@oracle.com>
- <ZtHG9YwwG5kwiRFt@x1>
- <CAEf4Bza9OJckdJ4=nask2m+bJsiDszvoLoaf+GhVFu8CNarb=g@mail.gmail.com>
- <ZtIwXdl_WyYmdLFx@x1>
- <CAEf4BzY5kx9HayBCViuXf0i7DyvFgcRObvnA1u3bqot2WjfyGg@mail.gmail.com>
- <2bd94dc7-172f-49c0-87c8-e3c51c840082@oracle.com>
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="NLnHGv8l"
+Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 482DhA4a014224;
+	Mon, 2 Sep 2024 14:10:48 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=
+	from:to:cc:subject:date:message-id:mime-version
+	:content-transfer-encoding; s=corp-2023-11-20; bh=OQihRXqYnEiWH3
+	lhdXQgSByE8xW8+huiPu08Iz913jQ=; b=NLnHGv8lR2YUQo5S6fPHukvLB1hjdw
+	Zvbz8NPCcfLCnWqtRUzinf/RfdnFJH2A5K3Ivv2NB5nbWCvYStEZW3ZE8mFkTRBb
+	IGdIZ4klPgyHgYKajQuiVRkJhILBIgZdQbS1e+PKRrLX0Q04y2sL27bEOYZHtJ/p
+	lPlP2ZLtsPAA3rU9M5fqRpB8uSeG5cIRDmYwROce4EFeC15qOgLV06DveUDtdflN
+	XsaaVJcO3lU4O4sej6xMfyi0rLbFMxxGYDxxweEp4JBgWlj4eRXgSXxWnw5Bgf5I
+	R1C14RLUXXI1ykzN0p+F2kxtKjpQKaaUP9oO86gMRAtSng5ViKgYg1xQ==
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 41deg5g1xj-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 02 Sep 2024 14:10:48 +0000 (GMT)
+Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 482Dq3gM016448;
+	Mon, 2 Sep 2024 14:10:47 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 41bsmdqwad-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 02 Sep 2024 14:10:47 +0000
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 482EAlQb030686;
+	Mon, 2 Sep 2024 14:10:47 GMT
+Received: from bpf.uk.oracle.com (dhcp-10-175-190-140.vpn.oracle.com [10.175.190.140])
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 41bsmdqw8g-1;
+	Mon, 02 Sep 2024 14:10:47 +0000
+From: Alan Maguire <alan.maguire@oracle.com>
+To: acme@kernel.org
+Cc: jolsa@kernel.org, andrii@kernel.org, ast@kernel.org, eddyz87@gmail.com,
+        dwarves@vger.kernel.org, songliubraving@meta.com, martin.lau@linux.dev,
+        tony.ambardar@gmail.com, Alan Maguire <alan.maguire@oracle.com>
+Subject: [PATCH dwarves] pahole: Sync with latest in-progress libbpf-1.5
+Date: Mon,  2 Sep 2024 15:10:43 +0100
+Message-ID: <20240902141043.177815-1-alan.maguire@oracle.com>
+X-Mailer: git-send-email 2.43.5
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <2bd94dc7-172f-49c0-87c8-e3c51c840082@oracle.com>
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-02_04,2024-09-02_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 bulkscore=0 mlxscore=0
+ mlxlogscore=955 suspectscore=0 malwarescore=0 adultscore=0 phishscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2407110000
+ definitions=main-2409020112
+X-Proofpoint-ORIG-GUID: fnZhnKDWXz-Ay83b5F-vD6oA6plHl3zP
+X-Proofpoint-GUID: fnZhnKDWXz-Ay83b5F-vD6oA6plHl3zP
 
-On Fri, Aug 30, 2024 at 11:34:40PM +0100, Alan Maguire wrote:
-> On 30/08/2024 23:20, Andrii Nakryiko wrote:
-> > On Fri, Aug 30, 2024 at 1:49 PM Arnaldo Carvalho de Melo <acme@kernel.org> wrote:
-> >> On Fri, Aug 30, 2024 at 08:56:08AM -0700, Andrii Nakryiko wrote:
-> >> +++ b/lib/bpf
-> >> @@ -1 +1 @@
-> >> -Subproject commit 6597330c45d185381900037f0130712cd326ae59
-> >> +Subproject commit 686f600bca59e107af4040d0838ca2b02c14ff50
-> >> ⬢[acme@toolbox pahole]$
+This will pull in fixes to BTF support for distilled base BTF.
 
-> >> Right?
-
-> > Yes, and I'm doing another Github sync today.
-
-So, I just commited this locally:
-
-⬢[acme@toolbox pahole]$ git show
-commit 5fd558301891d1c0456fcae79798a789b499c1f9 (HEAD -> master)
-Author: Arnaldo Carvalho de Melo <acme@redhat.com>
-Date:   Mon Sep 2 11:05:06 2024 -0300
-
-    libbpf: Sync with master, i.e. what will become 1.5.0
-    
-    To pick this distilled BPF fix:
-    
-      fe28fae57a9463fbf ("libbpf: Ensure new BTF objects inherit input endianness")
-    
-    Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+---
+ lib/bpf | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/lib/bpf b/lib/bpf
-index 686f600bca59e107..caa17bdcbfc58e68 160000
+index 686f600..caa17bd 160000
 --- a/lib/bpf
 +++ b/lib/bpf
 @@ -1 +1 @@
 -Subproject commit 686f600bca59e107af4040d0838ca2b02c14ff50
 +Subproject commit caa17bdcbfc58e68eaf4d017c058e6577606bf56
-⬢[acme@toolbox pahole]$
+-- 
+2.43.5
 
-Ack?
- 
-> > Separate question, I think pahole supports the shared library version
-> > of libbpf, as an option, is that right? How do you guys handle missing
-> > APIs for distilled BTF in such a case?
- 
-> Good question - at present the distill-related code is conditionally
-> compiled if LIBBPF_MAJOR_VERSION >=1 and LIBBF_MINOR_VERSION >= 5; so if
-> an older shared library libbpf+headers is used, the btf_feature is
-> simply ignored as if we didn't know about it. See [1] for the relevant
-> code in btf_encoder.c. This problem doesn't arise if we're using the
-> synced libbpf.
- 
-> There might be a better way to handle this, but I think that's enough to
-> ensure we avoid compilation failures at least.
-
-I guess this is good enough,
-
-- Arnaldo
- 
-> [1]
-> https://github.com/acmel/dwarves/blob/fd14dc67cb6aaead553074afb4a1ddad10209892/btf_encoder.c#L1766
