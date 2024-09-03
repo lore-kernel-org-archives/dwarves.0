@@ -1,140 +1,104 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2658E1A3A8E;
-	Mon,  2 Sep 2024 18:44:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE5C41CDFDB
+	for <dwarves@vger.kernel.org>; Tue,  3 Sep 2024 06:24:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725302692; cv=none; b=XaGJQcbLPpzs8z7MKL/t7pgXnuFyNHx542zOCs1ZOyYNiJSODMG8vZVC9rldSagUzl93YmC1g9s6jRWalEbMN/lMke+dGw2+YRSgyXeK2gSyMvDep5GnbaWh2+Iqu8WLYph/jFPwj6i8oQD1Z2jOnlQDEOLPjwNg+17bJPj4J60=
+	t=1725344644; cv=none; b=rV/sH04W3Q3zQ6W7H+MY5l2xiZyXQjDM9pNqQ/N9YuR8tyAQjL3TcGPLTxr7yVuLbK1SZVsZwE8ppXva1ILNMRp801H9BNdFyH6iZdQsfz/O6XZW+s4LZmu8ho6mmMNLK1EGZx3jggBqcikKbQH/biPR2KqYEx+EkSXSEpsUl4g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725302692; c=relaxed/simple;
-	bh=HvJTC57CEcuMqHJ1O044sOAIGSvdGXbQRicP0ep4RKw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eF25yyAnDnbZrsMINY+qMgY3YswR/sYtoyPFzI2rSaXGP2K6xQORcg2FEswR5GqRMHCZSoRpTHGfvRjISbQy6vsPZvPoBEBK/MGIh2jjkKc/XSI+nLhaP3VtIUjaCVKdpNelxwX6wBj+92V9Av9ksdTkdBRFWzgqJ4maiTw2BTQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Y0X7ZZhP; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1725344644; c=relaxed/simple;
+	bh=3G8BV9qJS4DlmAZ0GdwqzNo+EXqQTc9qjmOgPlzcZfM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Lf79gT/RsqMQrXGZDOIsf4pLlhFR9rWeRdk7qwCSXaNEmN6bDXy3KnV74qC7Xuw8/z9TmWKo3pI5c67t734FXEyZ1R2wrf+/0AN94TIV6gow9vZKstxerzDlf+zvC6ErXzmnmyZRCocxy19ellw+6VRdl8AmBkx3CxU3OHZKUVQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=FVKRsXGr; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y0X7ZZhP"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9966EC4CEC2;
-	Mon,  2 Sep 2024 18:44:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725302692;
-	bh=HvJTC57CEcuMqHJ1O044sOAIGSvdGXbQRicP0ep4RKw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Y0X7ZZhPJ6iTrW+kC8Sph0925FjKlM2gF96xZgdcZdI+Lqtq87XyFlevB8W83Z2mv
-	 M/AvPRaStoqB86zLPasmSj1nId+CwIiE36ZSuNyh+EU2rCYWIkHFU0Is0OF77zf+AK
-	 Rc+UPeRZYgm775U1QBFRdGpAmffbfkhm9V3Wk2WAh87tcItVCny+chso09NNyHd8/7
-	 dSgvQIbHV0nZkjdToa55Bp5XL3OLnzhVMWBOI0jtmnXzIk4bp7gxZeXfX+H0IOz3EN
-	 P8FKeTiCpoJj61s9/1ddn0xXcpHCYDcZ7lTgej5GYsWMo6Fvj7fdOE6B4N49JtSTLe
-	 Y1FJOo3hsMEBg==
-Date: Mon, 2 Sep 2024 15:44:49 -0300
-From: Arnaldo Carvalho de Melo <acme@kernel.org>
-To: Alan Maguire <alan.maguire@oracle.com>
-Cc: Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <songliubraving@meta.com>,
-	"dwarves@vger.kernel.org" <dwarves@vger.kernel.org>,
-	bpf <bpf@vger.kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>
-Subject: Re: FYI: CI regression on big-endian arch (s390) after recent pahole
- changes
-Message-ID: <ZtYHoZx-JkWTsv51@x1>
-References: <442C7AEC-2919-4307-8700-F7A0B60B5565@fb.com>
- <322d9bac47bc3732b77cf2cf23d69f2c4665bc36.camel@gmail.com>
- <860fe244-157b-46cf-9b41-ee9fd36f9c1e@oracle.com>
- <ZtHG9YwwG5kwiRFt@x1>
- <CAEf4Bza9OJckdJ4=nask2m+bJsiDszvoLoaf+GhVFu8CNarb=g@mail.gmail.com>
- <ZtIwXdl_WyYmdLFx@x1>
- <CAEf4BzY5kx9HayBCViuXf0i7DyvFgcRObvnA1u3bqot2WjfyGg@mail.gmail.com>
- <2bd94dc7-172f-49c0-87c8-e3c51c840082@oracle.com>
- <ZtXG8TTMXTzXUkRg@x1>
- <ab553623-0e0a-496d-a2d8-6fd23de458b0@oracle.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="FVKRsXGr"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1725344641;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=7JG+UMu5uCjI0L95yRYUrH8JT6B8p8Um8NP4te3queA=;
+	b=FVKRsXGr4sNCsxYw9LZOnsnYlQioyOn1QmkyA2ylioYskOOdSg7PrTRcmOs9k0/MinNb/5
+	WVFpMA26fZrsRlPxofA3O4rNC9X6+2LptHODAedcWN3RTOwa0zDrIk3AAE2J7bQidkKYLI
+	ZenEvpx2eP5kDXc9oNYDJ9w8bTwrHrg=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-581-p2NW2v0IMz6-ybEXSh62vw-1; Tue,
+ 03 Sep 2024 02:23:59 -0400
+X-MC-Unique: p2NW2v0IMz6-ybEXSh62vw-1
+Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 6CB421955BF6;
+	Tue,  3 Sep 2024 06:23:58 +0000 (UTC)
+Received: from vmalik-fedora.redhat.com (unknown [10.45.224.186])
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 8F96119560AA;
+	Tue,  3 Sep 2024 06:23:56 +0000 (UTC)
+From: Viktor Malik <vmalik@redhat.com>
+To: acme@kernel.org
+Cc: dwarves@vger.kernel.org,
+	Alan Maguire <alan.maguire@oracle.com>,
+	Viktor Malik <vmalik@redhat.com>
+Subject: [PATCH v2] dwarf_loader: Fix memleaks in creating cus
+Date: Tue,  3 Sep 2024 08:23:52 +0200
+Message-ID: <20240903062352.763644-1-vmalik@redhat.com>
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <ab553623-0e0a-496d-a2d8-6fd23de458b0@oracle.com>
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
 
-On Mon, Sep 02, 2024 at 03:59:26PM +0100, Alan Maguire wrote:
-> On 02/09/2024 15:08, Arnaldo Carvalho de Melo wrote:
-> > On Fri, Aug 30, 2024 at 11:34:40PM +0100, Alan Maguire wrote:
-> >> On 30/08/2024 23:20, Andrii Nakryiko wrote:
-> >>> On Fri, Aug 30, 2024 at 1:49 PM Arnaldo Carvalho de Melo <acme@kernel.org> wrote:
-> >>>> On Fri, Aug 30, 2024 at 08:56:08AM -0700, Andrii Nakryiko wrote:
-> >>>> +++ b/lib/bpf
-> >>>> @@ -1 +1 @@
-> >>>> -Subproject commit 6597330c45d185381900037f0130712cd326ae59
-> >>>> +Subproject commit 686f600bca59e107af4040d0838ca2b02c14ff50
-> >>>> ⬢[acme@toolbox pahole]$
-> > 
-> >>>> Right?
-> > 
-> >>> Yes, and I'm doing another Github sync today.
-> > 
-> > So, I just commited this locally:
-> > 
-> > ⬢[acme@toolbox pahole]$ git show
-> > commit 5fd558301891d1c0456fcae79798a789b499c1f9 (HEAD -> master)
-> > Author: Arnaldo Carvalho de Melo <acme@redhat.com>
-> > Date:   Mon Sep 2 11:05:06 2024 -0300
-> > 
-> >     libbpf: Sync with master, i.e. what will become 1.5.0
-> >     
-> >     To pick this distilled BPF fix:
-> >     
-> >       fe28fae57a9463fbf ("libbpf: Ensure new BTF objects inherit input endianness")
-> >     
-> >     Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
-> > 
-> > diff --git a/lib/bpf b/lib/bpf
-> > index 686f600bca59e107..caa17bdcbfc58e68 160000
-> > --- a/lib/bpf
-> > +++ b/lib/bpf
-> > @@ -1 +1 @@
-> > -Subproject commit 686f600bca59e107af4040d0838ca2b02c14ff50
-> > +Subproject commit caa17bdcbfc58e68eaf4d017c058e6577606bf56
-> > ⬢[acme@toolbox pahole]$
-> > 
-> > Ack?
-> >
-> 
-> Acked-by: Alan Maguire <alan.maguire@oracle.com>
-> 
-> My patch for the same change crossed with your email [1], just ignore
-> it. Thanks!
+Coverity reports a possible memleak in dwarf_cus__create_cu due to cu
+not being freed for the case when it was allocated but cu__set_common
+failed. The same situation occurs in __cus_load_debug_types.
 
-I dropped mine and picked yours :-)
+Fix the leaks.
 
-Thanks!
+Signed-off-by: Viktor Malik <vmalik@redhat.com>
+---
+ dwarf_loader.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
-- Arnaldo
+diff --git a/dwarf_loader.c b/dwarf_loader.c
+index 04f5637..065ed4d 100644
+--- a/dwarf_loader.c
++++ b/dwarf_loader.c
+@@ -3247,11 +3247,14 @@ static int __cus__load_debug_types(struct cus *cus, struct conf_load *conf, Dwfl
+ 				     build_id_len, filename, conf->use_obstack);
+ 			if (cu == NULL ||
+ 			    cu__set_common(cu, conf, mod, elf) != 0) {
++				cu__delete(cu);
+ 				return DWARF_CB_ABORT;
+ 			}
  
-> Alan
-> 
-> [1]
-> https://lore.kernel.org/dwarves/20240902141043.177815-1-alan.maguire@oracle.com/T/#u
-> 
-> >>> Separate question, I think pahole supports the shared library version
-> >>> of libbpf, as an option, is that right? How do you guys handle missing
-> >>> APIs for distilled BTF in such a case?
-> >  
-> >> Good question - at present the distill-related code is conditionally
-> >> compiled if LIBBPF_MAJOR_VERSION >=1 and LIBBF_MINOR_VERSION >= 5; so if
-> >> an older shared library libbpf+headers is used, the btf_feature is
-> >> simply ignored as if we didn't know about it. See [1] for the relevant
-> >> code in btf_encoder.c. This problem doesn't arise if we're using the
-> >> synced libbpf.
-> >  
-> >> There might be a better way to handle this, but I think that's enough to
-> >> ensure we avoid compilation failures at least.
-> > 
-> > I guess this is good enough,
-> > 
-> > - Arnaldo
-> >  
-> >> [1]
-> >> https://github.com/acmel/dwarves/blob/fd14dc67cb6aaead553074afb4a1ddad10209892/btf_encoder.c#L1766
+-			if (dwarf_cu__init(dcup, cu) != 0)
++			if (dwarf_cu__init(dcup, cu) != 0) {
++				cu__delete(cu);
+ 				return DWARF_CB_ABORT;
++			}
+ 			dcup->cu = cu;
+ 			/* Funny hack.  */
+ 			dcup->type_unit = dcup;
+@@ -3378,8 +3381,10 @@ static struct dwarf_cu *dwarf_cus__create_cu(struct dwarf_cus *dcus, Dwarf_Die *
+ 	 */
+ 	const char *name = attr_string(cu_die, DW_AT_name, dcus->conf);
+ 	struct cu *cu = cu__new(name ?: "", pointer_size, dcus->build_id, dcus->build_id_len, dcus->filename, dcus->conf->use_obstack);
+-	if (cu == NULL || cu__set_common(cu, dcus->conf, dcus->mod, dcus->elf) != 0)
++	if (cu == NULL || cu__set_common(cu, dcus->conf, dcus->mod, dcus->elf) != 0) {
++		cu__delete(cu);
+ 		return NULL;
++	}
+ 
+ 	struct dwarf_cu *dcu = dwarf_cu__new(cu);
+ 
+-- 
+2.46.0
+
