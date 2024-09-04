@@ -1,62 +1,66 @@
-Received: from mail-il1-f178.google.com (mail-il1-f178.google.com [209.85.166.178])
+Received: from mail-oa1-f43.google.com (mail-oa1-f43.google.com [209.85.160.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B7C21DC07B
-	for <dwarves@vger.kernel.org>; Wed,  4 Sep 2024 16:41:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02BF41E009E
+	for <dwarves@vger.kernel.org>; Wed,  4 Sep 2024 16:41:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725468116; cv=none; b=C2EuYVRTwB9Oyo1a9Ald0K/Y08edp/8T7td1yV49ph9EP7GiHfnA3IEffVoLwv6IghRihV3UfKYAg6T/llA8CsbVIFOD4Dm6d2PuvivCLsdlDj9Ef5FDt5YlJH+/ELu8+VG9CZeMTcUbjmYd2PujZTt9jq1ixX7N6ZG2eelXWPs=
+	t=1725468117; cv=none; b=oPzpE87sDi/c8c+tMiHAgmCTLNlM4Ws533s3JrQjOqCz/pMpa03Rgu8wHirpzKRbY4XRL8higDMhMZBdZQmElvvm8/e7DIcPYx9WDsTr2VKTpTPjFQyHAYKEHbMvGMibwjclE4XbOVnDL7ktz086EJfgYcK28YDNSv8IDKLtTAA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725468116; c=relaxed/simple;
-	bh=IdqXE+OObA8xY9HQvTcv89ZkdjotwVkwmL9ex5EM55o=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=HbcuDXEz9pnxq6K+SOS4JyQZNDfLeZWplh79sV/pgSHZjJ4xwDFYq28GG4BcDi5QuvTYH4K5HrdvsjE0BpwbhRcdwi0PoB+bWWZgTFPVAaRqFHwaYRP3AWKnBgOGgeV5gEG0VELxaWxd3ja8ZLq+pEg7SsmKB8i87CGh+sV+DTg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=obs.cr; spf=none smtp.mailfrom=obs.cr; dkim=pass (2048-bit key) header.d=obs-cr.20230601.gappssmtp.com header.i=@obs-cr.20230601.gappssmtp.com header.b=LzqExZ4S; arc=none smtp.client-ip=209.85.166.178
+	s=arc-20240116; t=1725468117; c=relaxed/simple;
+	bh=3EDFdFVH86RaH0acRsqCAhJ8JbneuG1zEoMJaF8q9Io=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=F/stG65leHj7sfivpgXKqCYROGjO1wTtlsODy9EdgweLekbLAFJb8x+RgHVqs0GNormfgfExrmZhZMenGXfNXjfKdL3yoe7mQ52f/PZ7tscr0HeFFuWGQXlyowOKICs6vkZ6mhyDzSII+krAQWWDZyKkW82G/PRk7m4WEmkqxag=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=obs.cr; spf=none smtp.mailfrom=obs.cr; dkim=pass (2048-bit key) header.d=obs-cr.20230601.gappssmtp.com header.i=@obs-cr.20230601.gappssmtp.com header.b=vaupeGTv; arc=none smtp.client-ip=209.85.160.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=obs.cr
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=obs.cr
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=obs-cr.20230601.gappssmtp.com header.i=@obs-cr.20230601.gappssmtp.com header.b="LzqExZ4S"
-Received: by mail-il1-f178.google.com with SMTP id e9e14a558f8ab-39f4827a07aso18421295ab.1
-        for <dwarves@vger.kernel.org>; Wed, 04 Sep 2024 09:41:54 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=obs-cr.20230601.gappssmtp.com header.i=@obs-cr.20230601.gappssmtp.com header.b="vaupeGTv"
+Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-2780827dbafso1672402fac.1
+        for <dwarves@vger.kernel.org>; Wed, 04 Sep 2024 09:41:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=obs-cr.20230601.gappssmtp.com; s=20230601; t=1725468113; x=1726072913; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=7xEsvtZEMgE4lO7gsmLlKxe/sQGWpPyzc43ilyok8yM=;
-        b=LzqExZ4SnJzTH6WlA5lH7iyUS4IpoWQJqfjhRy6JuOC3xkQMsoGVhcI7J7OLKut4z+
-         NeW/OyXU0Gg8cVEngF4B+wLe+vMZzxVQ3shrKbFok9PqKvhm9n4YChGYUlRHi7X8oP3L
-         bnnSqEMj4JHqSVP1s/8aYobZc+evtqc4/BKAcFlHXYYIeDh6pTQrpl6aZ6xDckF6CQg7
-         Bmlfl0yUObvPDu0eKSxkxt66fgNoDLJ5A4D/sEIhTq08iL4IMzlQnJuAGh637QEKYICm
-         oN85o+q+jipG5x+ZDe9CYaNuOSshanbUwGlJGDrdJCvf1VnvPEkWYk8jLfC2nQCH5lzZ
-         tf8w==
+        d=obs-cr.20230601.gappssmtp.com; s=20230601; t=1725468115; x=1726072915; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jt78rn03s/imu0OOZ99E4O2LOQ/uzcRu+Y80CYYCzK4=;
+        b=vaupeGTvg5WzL9igFF/+YoN6q35rHxXi3GZoP4+g6pB12QMNCkV1Rxw9ItErfRNwrc
+         PSCFoofGibP3hxxuCkmP0X1l5bn7ndMHivIh/VGC/X0mEh+Yc/7GdEu1lJzIxXEjDw6C
+         d02Ebjfz1UhOWCeGp6sQQ8M5EDJnwob9ev6eNKSm65BdL2Sim+9w+1KjWnPCYxgSx0Ec
+         hz0NKdMfGqbBlKtpvCfpm+w8yAVfuC895tyiRMYlp/BBt6ynkOOzyBqw9LNhLmZWJ/Qw
+         BpK6f09XATYbMBnijoccBoPEZR7d1JPAfaFUKmHwoBvb2Jlf3tR9RRLciNFTebyrBpTB
+         dy1g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725468113; x=1726072913;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=7xEsvtZEMgE4lO7gsmLlKxe/sQGWpPyzc43ilyok8yM=;
-        b=DgtlcMm9Zh7JLnIMCODsliTnkMHV2no06iXQUMBYsQeMdG7RtbzMl2Ec7K6EfoFgGu
-         tgv+epmx2mMmtPh3j/uTPhMu9xB3VyVk52dtKZ+IVe3czgGLK7yGO9PLXUarUUABqFEJ
-         /FQyjcRdBRvrdFSpnT85xp5fsthE3LYWmgjqjkRtqRFOpsOsEmztqHn9VWY5CVmtlVsY
-         6GI4dbsCKf0G8mtD06992n0es4ibugqOiSO4Jh/8pXXu6Jh00g1/kSQ7D2ELpYa+abYN
-         +AyjoyupleQqDRJJkrfg8hJBexn9x1nllaUxg6+cXyDMLkCN2e6+l3hBK2K+WwlYa/CG
-         nMfw==
-X-Gm-Message-State: AOJu0YwBbH7JmcjiYqgy45AkjuzpKKgvGn0T1bPyHalRWkyPwlMIezIL
-	r4MDxjmFKk8RHE/r1LD6vHpSvgcil0vzbk9HQhWZOLumMg7wlaOqcXz2CA51Zt3r37sC460TqD/
-	w
-X-Google-Smtp-Source: AGHT+IGf7I+CERXHEju/Bp2okIgEQ/xGmQwLYtqWyMIn49JzOLeXk0g4sZ/fdu6j0DgIGsFKVKQisw==
-X-Received: by 2002:a05:6e02:1fe6:b0:39d:3043:1f2f with SMTP id e9e14a558f8ab-39f4f697b3bmr181854325ab.14.1725468113217;
-        Wed, 04 Sep 2024 09:41:53 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1725468115; x=1726072915;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=jt78rn03s/imu0OOZ99E4O2LOQ/uzcRu+Y80CYYCzK4=;
+        b=CK6A5y6cDUZYisL7CnSkQZrttIeUP0bk7OO4pFrtro98SdnutwHvmGhUycZ6IclIHl
+         kXrS65e1hjAWwAfnxeZ15XhFewoCaiN+t7lRN7MMyhBMZSGU/JPkVkRfWQsn3x+s7mt0
+         S5QpdPw1UbGqL5QdLRor0wZOgFM8VjQj0y3y019kz4Ir/NI/IfWiofSl/Dof63pLdToM
+         tCJ0VrFuox3DnyZ48PGA1Y14Uqs0xfDR5ZweVr1ef8wVRm9JevL9pPIXdKEEldF/+2Bo
+         ByEBs8Bwgeetjq7fUw0CdkJpAXLwlnYydh69iXL7QWbBt51s1rLlH5+5PDbk+syS9JYp
+         aQ9A==
+X-Gm-Message-State: AOJu0Yz+vaGjf9pzXOtBCtIR8HxOPTs4n5+ATtrDep0UrYjRIC1jDGoU
+	Vq55Y+4C1Ed0k+tVJ5J5/XSFXTeADJK9WDDSHjQjw4Pn/yyCUA3LB+W+HvKf9DjKfpPu22WcaOs
+	+
+X-Google-Smtp-Source: AGHT+IGYtX1T4mEWCG8GrsH8IazVzPEdX0EfUeloQZ0r+3BU4jf5w322/vWP6HqzOYSu3Z+a2S2/aw==
+X-Received: by 2002:a05:6871:588:b0:254:bd24:de83 with SMTP id 586e51a60fabf-277d03a4fb5mr18384131fac.12.1725468114838;
+        Wed, 04 Sep 2024 09:41:54 -0700 (PDT)
 Received: from ininer.rhod.uc.edu ([129.137.96.15])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4ced2e17ba7sm3164954173.77.2024.09.04.09.41.52
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4ced2e17ba7sm3164954173.77.2024.09.04.09.41.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Sep 2024 09:41:52 -0700 (PDT)
+        Wed, 04 Sep 2024 09:41:54 -0700 (PDT)
 From: Will Hawkins <hawkinsw@obs.cr>
 To: dwarves@vger.kernel.org
 Cc: Will Hawkins <hawkinsw@obs.cr>
-Subject: [PATCH 0/1] Handle printing pointer modifiers correctly
-Date: Wed,  4 Sep 2024 12:41:44 -0400
-Message-ID: <20240904164148.1735624-1-hawkinsw@obs.cr>
+Subject: [PATCH 1/1] dwarves_fprintf: Handle pointer modifiers correctly
+Date: Wed,  4 Sep 2024 12:41:45 -0400
+Message-ID: <20240904164148.1735624-2-hawkinsw@obs.cr>
 X-Mailer: git-send-email 2.45.2
+In-Reply-To: <20240904164148.1735624-1-hawkinsw@obs.cr>
+References: <20240904164148.1735624-1-hawkinsw@obs.cr>
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
@@ -65,123 +69,116 @@ List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-As I said in previous messages, I have become a huge fan of pahole. I've
-been working with it rather closely and noticed some, well, oddities in
-how pointer modifiers are printed and wanted to help by attempting to
-provide a fix. 
+In certain cases, pointer modifiers were attached to the wrong part of a type.
 
-Assume that we have a C (named, say, modifier.c) with the contents:
-
-struct S {
-  volatile int * volatile W;
-  const int * const X;
-  const int * volatile Y;
-  volatile int * const Z;
-  int ** const A;
-  int * const * B;
-  int * volatile * C;
-  const int * volatile * D;
-};
-
-struct S global_s;
-
-int main() {
-	return 0;
-}
-
-If we compile it with
-gcc -gbtf -g -O0 -o modifier modifier.c
-
-... we can ask what gdb thinks about the types:
-
-$ gdb modifier
-(gdb) ptype global_s
-type = struct S {
-    volatile int * volatile W;
-    const int * const X;
-    const int * volatile Y;
-    volatile int * const Z;
-    int ** const A;
-    int * const *B;
-    int * volatile *C;
-    const int * volatile *D;
-}
-
-With pahole (compiled from master), we get the following output:
-$ ../build/pahole -F btf --compile modifier
-struct S {
-	volatile volatile int  *   W;                    /*     0     8 */
-	const const int  *         X;                    /*     8     8 */
-	volatile const int  *      Y;                    /*    16     8 */
-	const volatile int  *      Z;                    /*    24     8 */
-	const int * *              A;                    /*    32     8 */
-	int * const *              B;                    /*    40     8 */
-	volatile int *  *          C;                    /*    48     8 */
-	volatile const int  *  *   D;                    /*    56     8 */
-
-	/* size: 64, cachelines: 1, members: 8 */
-};
-
-$ ../build/pahole -F dwarf --compile modifier
-struct S {
-	volatile volatile int  *   W;                    /*     0     8 */
-	const const int  *         X;                    /*     8     8 */
-	volatile const int  *      Y;                    /*    16     8 */
-	const volatile int  *      Z;                    /*    24     8 */
-	const int * *              A;                    /*    32     8 */
-	int * const *              B;                    /*    40     8 */
-	volatile int *  *          C;                    /*    48     8 */
-	volatile const int  *  *   D;                    /*    56     8 */
-
-	/* size: 64, cachelines: 1, members: 8 */
-};
-
-This is not quite right. With the fix (attached) applied, we instead get
-output that looks arguably correct:
-
-$ ../build/pahole -F btf --compile modifier
-struct S {
-	volatile int  * volatile   W;                    /*     0     8 */
-	const int  * const         X;                    /*     8     8 */
-	const int  * volatile      Y;                    /*    16     8 */
-	volatile int  * const      Z;                    /*    24     8 */
-	int * * const              A;                    /*    32     8 */
-	int * const  *             B;                    /*    40     8 */
-	int * volatile  *          C;                    /*    48     8 */
-	const int  * volatile  *   D;                    /*    56     8 */
-
-	/* size: 64, cachelines: 1, members: 8 */
-};
-
-$ ../build/pahole -F dwarf --compile modifierstruct S {
-	volatile int  * volatile   W;                    /*     0     8 */
-	const int  * const         X;                    /*     8     8 */
-	const int  * volatile      Y;                    /*    16     8 */
-	volatile int  * const      Z;                    /*    24     8 */
-	int * * const              A;                    /*    32     8 */
-	int * const  *             B;                    /*    40     8 */
-	int * volatile  *          C;                    /*    48     8 */
-	const int  * volatile  *   D;                    /*    56     8 */
-
-	/* size: 64, cachelines: 1, members: 8 */
-};
-
-I hope that this is helpful.
-
-If the patch is useful but needs changes, please let me know! I would be
-glad to make any changes to fit the codebase.
-
-Thank you for all that you do to keep pahole going!
-
-Will
-
-
-Will Hawkins (1):
-  dwarves_fprintf: Handle pointer modifiers correctly
-
+Signed-off-by: Will Hawkins <hawkinsw@obs.cr>
+---
  dwarves_fprintf.c | 57 ++++++++++++++---------------------------------
  1 file changed, 17 insertions(+), 40 deletions(-)
 
+diff --git a/dwarves_fprintf.c b/dwarves_fprintf.c
+index 54d2fc2..6f1f997 100644
+--- a/dwarves_fprintf.c
++++ b/dwarves_fprintf.c
+@@ -542,16 +542,6 @@ static const char *tag__ptr_name(const struct tag *tag, const struct cu *cu,
+ 			char tmpbf[1024];
+ 			const char *const_pointer = "";
+ 
+-			if (tag__is_const(type)) {
+-				struct tag *next_type = cu__type(cu, type->type);
+-
+-				if (next_type && tag__is_pointer(next_type)) {
+-					if (!(conf && conf->skip_emitting_modifier))
+-						const_pointer = "const ";
+-					type = next_type;
+-				}
+-			}
+-
+ 			snprintf(bf, len, "%s %s%s",
+ 				 __tag__name(type, cu,
+ 					     tmpbf, sizeof(tmpbf), conf),
+@@ -617,20 +607,30 @@ static const char *__tag__name(const struct tag *tag, const struct cu *cu,
+ 			tag__id_not_found_snprintf(bf, len, tag->type);
+ 		else if (!tag__has_type_loop(tag, type, bf, len, NULL)) {
+ 			char tmpbf[128];
+-			const char *prefix = "", *suffix = "",
++			const char *prefix_modifier = NULL, *suffix_modifier = NULL,
+ 				   *type_str = __tag__name(type, cu, tmpbf,
+ 							   sizeof(tmpbf),
+ 							   pconf);
+ 			if (!pconf->skip_emitting_modifier) {
++				const char **modifier = &prefix_modifier;
++				// If the modifier is addressing a pointer, then we will need
++				// put it after the type that is being printed.
++				if (tag__is_pointer(type))
++					modifier = &suffix_modifier;
++
+ 				switch (tag->tag) {
+-				case DW_TAG_volatile_type: prefix = "volatile "; break;
+-				case DW_TAG_const_type: prefix = "const "; break;
+-				case DW_TAG_restrict_type: suffix = " restrict"; break;
+-				case DW_TAG_atomic_type:   prefix = "_Atomic ";  break;
++				case DW_TAG_volatile_type: *modifier = "volatile"; break;
++				case DW_TAG_const_type: *modifier = "const"; break;
++				case DW_TAG_restrict_type: suffix_modifier = " restrict"; break;
++				case DW_TAG_atomic_type:   *modifier = "_Atomic";  break;
+ 				}
+ 			}
+-			snprintf(bf, len, "%s%s%s%s", prefix, type_str, suffix,
+-				 pconf->no_parm_names ? "" : " ");
++			snprintf(bf, len, "%s%s%s%s%s%s", prefix_modifier ? prefix_modifier : "",
++											  prefix_modifier ? " " : "",
++											  type_str,
++											  suffix_modifier ? " " : "",
++											  suffix_modifier ? suffix_modifier : "",
++				 							  pconf->no_parm_names ? "" : " ");
+ 		}
+ 		break;
+ 	case DW_TAG_array_type:
+@@ -833,8 +833,6 @@ inner_struct:
+ 		tconf.suppress_offset_comment = suppress_offset_comment;
+ 	}
+ 
+-	const char *modifier;
+-
+ next_type:
+ 	switch (type->tag) {
+ 	case DW_TAG_pointer_type: {
+@@ -870,7 +868,6 @@ next_type:
+ 		/* Fall Thru */
+ 	}
+ 	default:
+-print_default:
+ 		printed += fprintf(fp, "%-*s %s", tconf.type_spacing,
+ 				   tag__name(type, cu, tbf, sizeof(tbf), &tconf),
+ 				   name);
+@@ -879,26 +876,6 @@ print_default:
+ 		printed += ftype__fprintf(tag__ftype(type), cu, name, 0, 0,
+ 					  tconf.type_spacing, true, &tconf, fp);
+ 		break;
+-	case DW_TAG_atomic_type:
+-		modifier = "_Atomic";
+-		goto print_modifier;
+-	case DW_TAG_const_type:
+-		modifier = "const";
+-print_modifier: {
+-		if (!conf->skip_emitting_modifier) {
+-			size_t modifier_printed = fprintf(fp, "%s ", modifier);
+-			tconf.type_spacing -= modifier_printed;
+-			printed		   += modifier_printed;
+-		}
+-
+-		struct tag *ttype = cu__type(cu, type->type);
+-		if (ttype) {
+-			type = ttype;
+-			goto next_type;
+-		}
+-	}
+-		goto print_default;
+-
+ 	case DW_TAG_array_type:
+ 		printed += array_type__fprintf(type, cu, name, &tconf, fp);
+ 		break;
 -- 
 2.45.2
 
