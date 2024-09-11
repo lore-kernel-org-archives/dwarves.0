@@ -1,66 +1,100 @@
-Received: from szxga06-in.huawei.com (szxga06-in.huawei.com [45.249.212.32])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A925CF4ED;
-	Wed, 11 Sep 2024 03:43:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61B121A3054;
+	Wed, 11 Sep 2024 14:39:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726026204; cv=none; b=LNTkzMjvpCIHzp/VZ15yhKL/7h6EshZBQ1kkxTXvZn5y7LYCyMC4ODApL/WJrrlPM9DzVzsS4Uq4LNapVPW3PfJT+ui51s7hfraurDewJvPdQo71R7c1ZsBrhGLzrmAlt0UDnPl7EyFt1k21UhEqpUxXx+moMfVZt+mNcdWMrVk=
+	t=1726065575; cv=none; b=aK0AihAgs0H6tBfRon4RGwx95K460KPPaT44LXIRJmlBe/KZeQK/reHL+4inUnRt6d9HUP2KLm4jD41dV9entJDtSti/M6+EFv+THvDPryNBv/SpbqI1ZRclTuBJu/g4pDrXMY1zdHDg88LQ2LXT7neJTj+Ts/WL5nAnBQmBRbs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726026204; c=relaxed/simple;
-	bh=Dhmw8cljojrSxEVT/dfTyxbQ1J59v28B3/R6QtUbBPQ=;
-	h=From:To:CC:Subject:Date:Message-ID:Content-Type:MIME-Version; b=Jq346Q8XUDws3KoPkWpISq798QevL5JEo0eMN6s1pp3YalMIstLW1L7Q30EKxoj7uY5Nz4YjkJ6HJQdU+mBi3LIWmt3ANeWM0mm5TJOBLdAHhACZgYpBvrXVZ2Bb//yukNxq55bRdCDfQu1ULRBlKgEpq/la112nMOJf+gIgsNE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.162.112])
-	by szxga06-in.huawei.com (SkyGuard) with ESMTP id 4X3RHT43Mjz1xxBg;
-	Wed, 11 Sep 2024 11:43:17 +0800 (CST)
-Received: from dggpeml100003.china.huawei.com (unknown [7.185.36.120])
-	by mail.maildlp.com (Postfix) with ESMTPS id D4B5F1401F0;
-	Wed, 11 Sep 2024 11:43:18 +0800 (CST)
-Received: from dggpemf500014.china.huawei.com (7.185.36.43) by
- dggpeml100003.china.huawei.com (7.185.36.120) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.39; Wed, 11 Sep 2024 11:43:18 +0800
-Received: from dggpemf500014.china.huawei.com ([7.185.36.43]) by
- dggpemf500014.china.huawei.com ([7.185.36.43]) with mapi id 15.02.1544.011;
- Wed, 11 Sep 2024 11:43:18 +0800
-From: tianmuyang <tianmuyang@huawei.com>
-To: "alan.maguire@oracle.com" <alan.maguire@oracle.com>
-CC: "andrii@kernel.org" <andrii@kernel.org>, "arnaldo.melo@gmail.com"
-	<arnaldo.melo@gmail.com>, "ast@kernel.org" <ast@kernel.org>,
-	"bpf@vger.kernel.org" <bpf@vger.kernel.org>, "daniel@iogearbox.net"
-	<daniel@iogearbox.net>, "dwarves@vger.kernel.org" <dwarves@vger.kernel.org>,
-	"kernel-team@fb.com" <kernel-team@fb.com>, "ndesaulniers@google.com"
-	<ndesaulniers@google.com>, "yonghong.song@linux.dev"
-	<yonghong.song@linux.dev>, "Yanan (Euler)" <yanan@huawei.com>, "Wuchangye
- (EulerOS)" <wuchangye@huawei.com>, Xiesongyang <xiesongyang@huawei.com>,
-	"kongweibin (A)" <kongweibin2@huawei.com>, "zhangmingyi (C)"
-	<zhangmingyi5@huawei.com>, "liwei (H)" <liwei883@huawei.com>
-Subject: Adding new fields to xsk_tx_metadata
-Thread-Topic: Adding new fields to xsk_tx_metadata
-Thread-Index: AdsD8/EQxaT5qWe4SlST+ZFONp+nkw==
-Date: Wed, 11 Sep 2024 03:43:18 +0000
-Message-ID: <7835e88690ad424cbf644bf3cb0610b5@huawei.com>
-Accept-Language: en-US
-Content-Language: zh-CN
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-Content-Type: text/plain; charset="gb2312"
-Content-Transfer-Encoding: base64
+	s=arc-20240116; t=1726065575; c=relaxed/simple;
+	bh=uHPvQ/qOTwwhiS35MIvUjkK5D5Xn64AsuaL5f0tYq1g=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Rn0ujF6gkJMHa+/JjyOhWj2iPZILZ8rltqGopkvCp/fORI20FTZYPtBI28Sd2q5Fb+8/R2u9UPs0PrI+ES6RQayDx4Gj1J4KYxvQtZNQaChcwVpVSm4aN5YiTO6Q36CHtbsQghZ5OxRBkWepIAdDYQlLDrC5h9LsktL2qJk+HVA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XfJ/crhN; arc=none smtp.client-ip=209.85.215.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XfJ/crhN"
+Received: by mail-pg1-f179.google.com with SMTP id 41be03b00d2f7-656d8b346d2so4403551a12.2;
+        Wed, 11 Sep 2024 07:39:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1726065573; x=1726670373; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=uHPvQ/qOTwwhiS35MIvUjkK5D5Xn64AsuaL5f0tYq1g=;
+        b=XfJ/crhN+QW6Yruog5ppoptdtgavczn9Q8KCwRksu3u60krOPL+0yW6O6t5Z2YY49B
+         iBrVQNZo4PODHx9bqmvaULWvXUwKh4PaoPLdpgk6sA510pED0erU50K4ujVTuKv5cdGm
+         cRwVPqEC23KtnS7hzVqoAg9Y6GMt2hhty3yAXgJUYPzEcZNm2EGNqna2BOqg4Vdw/UKG
+         FbYncv92SQ+ltQXaaYB3QGkQnJJaKqNFUvvoyJTqSkvD6YqY5W3+prTJ2d0xd8qD/T+h
+         Wthfq53C1+ouMMz8jPdkVZnchpyBCYdM92J4cGsN2J0pUPZ3rLeJf7Si0kJF5j6iHS1a
+         nR+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1726065573; x=1726670373;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=uHPvQ/qOTwwhiS35MIvUjkK5D5Xn64AsuaL5f0tYq1g=;
+        b=ncTP4mfTFPenh9/EjLt8d9r74H/Vzz2OwWLyJB6HhWlFqjp3niUQ+Zbcfwm+yerHHQ
+         dVqKybGkKBjDM2kUhY7THrSsVvZZqwR9Jfe3OSk75ODgnFXJOl8kiC59K0Yk6qfet4LR
+         nhyJjd4IeAc10CCcq9B7jOmKLfEkMpeRWOiYs1844LzD+8Y7FbEy0MwRGr+/uHjTjB4c
+         ANbLVTHvnk4EOSOT5AuG7rNlzFVQsrgxm+LEHqqj7J4JkJN54TidU36e2cjnSnyKMI8q
+         /XDckIUPMKIu9Mzdn0azGfAId473Fq1LsNfp2+DL+zx1gTY70wd3W4CR8lBHuKI/Gx/G
+         bFBg==
+X-Forwarded-Encrypted: i=1; AJvYcCUvvjmqwKgFFD31dcmCqNGrgHsSpvrjyDyFPjmhwW11tVfmMzCCgnYLjheNW5LXfOxV9qg3D72SOA==@vger.kernel.org, AJvYcCUxLJPRagVEjylmq7qdW4gVHmbYl7QJcGfXE3xNrnD8o14qXl9/Nr+Cdlsi75E8iFATKSQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy3G3rzVo+dHDB89FBuC8cIFzNfOo81XwZP0kgr27r7Xw4NquG2
+	i9skkZeYyLfnkrUDwx4GAtlYgGyCslTeLY8MW6rLJnx4b/81u1E=
+X-Google-Smtp-Source: AGHT+IEDt8imX/5nYS2hKxrQc8EzQ1QISpcZOS7Fqr/l/5GBtqk7ozE0oZ/t7/VHXoLrbyQgWJ+LPg==
+X-Received: by 2002:a05:6a20:e605:b0:1cf:489a:52c1 with SMTP id adf61e73a8af0-1cf5e097936mr6090482637.18.1726065573490;
+        Wed, 11 Sep 2024 07:39:33 -0700 (PDT)
+Received: from localhost ([2601:646:9e00:f56e:2844:3d8f:bf3e:12cc])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2076af25646sm481145ad.58.2024.09.11.07.39.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 Sep 2024 07:39:32 -0700 (PDT)
+Date: Wed, 11 Sep 2024 07:39:32 -0700
+From: Stanislav Fomichev <stfomichev@gmail.com>
+To: tianmuyang <tianmuyang@huawei.com>
+Cc: "alan.maguire@oracle.com" <alan.maguire@oracle.com>,
+	"andrii@kernel.org" <andrii@kernel.org>,
+	"arnaldo.melo@gmail.com" <arnaldo.melo@gmail.com>,
+	"ast@kernel.org" <ast@kernel.org>,
+	"bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+	"daniel@iogearbox.net" <daniel@iogearbox.net>,
+	"dwarves@vger.kernel.org" <dwarves@vger.kernel.org>,
+	"kernel-team@fb.com" <kernel-team@fb.com>,
+	"ndesaulniers@google.com" <ndesaulniers@google.com>,
+	"yonghong.song@linux.dev" <yonghong.song@linux.dev>,
+	"Yanan (Euler)" <yanan@huawei.com>,
+	"Wuchangye (EulerOS)" <wuchangye@huawei.com>,
+	Xiesongyang <xiesongyang@huawei.com>,
+	"kongweibin (A)" <kongweibin2@huawei.com>,
+	"zhangmingyi (C)" <zhangmingyi5@huawei.com>,
+	"liwei (H)" <liwei883@huawei.com>
+Subject: Re: Adding new fields to xsk_tx_metadata
+Message-ID: <ZuGrpG6N_OINizBm@mini-arch>
+References: <7835e88690ad424cbf644bf3cb0610b5@huawei.com>
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <7835e88690ad424cbf644bf3cb0610b5@huawei.com>
 
-SGkgYWxsOg0KV2Ugd2FudCB0byBhZGQgc29tZSBmaWVsZHMgdG8geHNrX3R4X21ldGFkYXRhIHN1
-Y2ggYXMgZ3NvX3R5cGUgJiBnc29fc2l6ZSwgaW4gb3JkZXIgdG8gdHJhbnNmZXIgY29udHJvbCBm
-aWVsZHMgd2hlbiBoYW5kbGluZyBqdW1ibyBmcmFtZXMgcGFzc2luZyBiZXR3ZWVuIFZNcy4gTXkg
-cXVlc3Rpb25zIGFyZToNCjEuIEhhcyB0aGUgY29tbXVuaXR5IGRpc2N1c3NlZCBhYm91dCBhZGRp
-bmcgbmV3IGZpZWxkcyB0byB4c2tfdHhfbWV0YWRhdGGjvw0KMi4gSXMgaXQgYXBwcm9wcmlhdGUg
-dG8gYWRkIHN1Y2ggZmllbGRzKGxpa2UgZ3NvX3R5cGUpIHRvIHhza190eF9tZXRhZGF0YaO/U2lu
-Y2UgY3VycmVudCBmaWVsZHMgc2VlbSB0byBiZSBnZW5lcmFsbHkgaGFyZHdhcmUtcmVsYXRlZC4N
-Cg0KVGhhbmtzo6ENCg==
+On 09/11, tianmuyang wrote:
+> Hi all:
+> We want to add some fields to xsk_tx_metadata such as gso_type & gso_size, in order to transfer control fields when handling jumbo frames passing between VMs. My questions are:
+> 1. Has the community discussed about adding new fields to xsk_tx_metadata？
+
+There has been some discussion of exploring AF_XDP segmentation offloads in
+https://lore.kernel.org/bpf/3190e03c-ea5d-69fb-48e5-6cc45b1ed521@redhat.com/
+
+> 2. Is it appropriate to add such fields(like gso_type) to xsk_tx_metadata？Since current fields seem to be generally hardware-related.
+
+GSO is also HW-related. GSO does all the plumbing to allow the stack use
+HW segmentation. So, in the end, if we end up exposing it to AF_XDP,
+there has to be some HW (or driver) that implements the support.
