@@ -1,392 +1,312 @@
-Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF73317BEAB
-	for <dwarves@vger.kernel.org>; Fri, 20 Sep 2024 19:18:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB7D419CC1F
+	for <dwarves@vger.kernel.org>; Mon, 23 Sep 2024 14:19:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726859925; cv=none; b=E/pjCW0tu1qP3aaUQ69X893pNU+26/2O/cwTvn2v7RC2VGJnwiNA7tFlE+2ZmxpJyAD5YXNRwI0LSploJEH0ClxYBS2gm07lid7fCOGAad/wNgutRai6DWKRNlMO9oPy1pyb1D/GVddKPgWHoYz6Ppinl2qgDkJlHvsmm0Ygtwg=
+	t=1727101191; cv=none; b=Ox6wRvc5VNNa+K5VvEd9k1xg8Di+oA0hlIqZreWQd74sbbNZxiVj6yQxdOoxv5n0wWMFnBjVpZ8kJ6gXa7pc7iEWrm1hqv88nH8hLaao3MVca5p9XcH1ztzVmIbwHL+kIfPZSfEc+LyoXhXI44oC+o1xqWXnOTeVq21+xfALzic=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726859925; c=relaxed/simple;
-	bh=x7GnpK+yKMocQnN+n+QmSpnaG8Q5LpDGnQM4BowiOyM=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=oIN8/NexnOVlSErPN3Jg4vnaOIkYDhvB/QpvAh1YPM7QLbhprWIueb/vm21Jcozav+/BkER9OYY1t4UB1CxQT8rzZRsTnBFCTzrlWHTZhwDUIRl2hlTzPIvVk4LfRB7r1ZUD0KRt/foIhKa/iJO1oP/6aAwKn/85Xkl1mSTz6C4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fPaxgv02; arc=none smtp.client-ip=209.85.215.176
+	s=arc-20240116; t=1727101191; c=relaxed/simple;
+	bh=0f7sXQlef7ITCHZxlE9hpcVlcWqlEMGi96qHvaLIPCA=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lcWwoTDRXx6/mWx2vtEGwrMD3PjMXnqTaN7kquC3NAtrhP5/AxXFOE0F0jR03cvSxQLNCbdQmCNDquKKb+UATgtjJmLVu2gYFPP6OHpg8Yaa7JT74G8B2dqA7MvIFSy+ksNBuB4h1LYErAsoPA9Z9JqE8P4M9vDPiTEuQdQHs6M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Kb+oUtv+; arc=none smtp.client-ip=209.85.221.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fPaxgv02"
-Received: by mail-pg1-f176.google.com with SMTP id 41be03b00d2f7-7db53a20d1fso1655075a12.0
-        for <dwarves@vger.kernel.org>; Fri, 20 Sep 2024 12:18:43 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Kb+oUtv+"
+Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-374b25263a3so2626973f8f.0
+        for <dwarves@vger.kernel.org>; Mon, 23 Sep 2024 07:19:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1726859923; x=1727464723; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=yezXV1WX1irPiLLbyM+jtY9Yd+l/8vd3DSsnd6lDoq0=;
-        b=fPaxgv02mBcnIRVufrHbYFQCvT9swmOhdZZ7jYX4j0KdT4IGwYdP81YpOq+VZ/nUTH
-         xs01ygNz5dHP2kIiBip/naaI/ba8GyijUpZPfUwtdHbb1Wup16LUIjmiHCRlSdVadNQw
-         O9Tbz7sN9ZEe0FIUJo+Y9+nV2NtnTCRS/oXFXIwNzWPvTe76hZGuDIvB3U1nODEQ5Ke6
-         3xO6K3St2Pws7NnEmaIEJuE7560U02d8i5yjbF36e5n1U9HLeaB9i7eq1zhJE09ClxX6
-         aYLAbmJPQTN/OEgSDBdwNug5joOTPrIZfOi8LFQgN5jisdRqG7oovK/RJmTckMhGtfab
-         MNXA==
+        d=gmail.com; s=20230601; t=1727101188; x=1727705988; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=5CZ+mURIur8fBCpcUzk/px0Uir9T085KeZXSUR+KxBU=;
+        b=Kb+oUtv+VnoNwyYMrn6pyIT3GRff8eg+UWN2yyhJYZZLFqZ9yMGTy8Q4WEzMz6jqv6
+         +eA1DtcDbnzv6gWe03jkP5quBet1ekSKs4O2sQUuvhU4gfwe8aoGgMLXu3NFm+xgkWYy
+         PLgJIP65umUvGiAHY18qe7l3VvTu8PRvlwdGw0OY09IbEz1NfjTBCA999pkAlOUqZ9IO
+         XTf+NQ5nyLVHAyzlFyXFm7QnK2WthI91yTFPfkzxMzQbdX213jC6GsWbo0lbT1uKORzJ
+         jqv3C2oBrLL/E/vx7JxJWoLex1NaM8i5R8fC6358HlULdIuUUFrpTxX7xHXxRR/UQEOP
+         HV5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726859923; x=1727464723;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=yezXV1WX1irPiLLbyM+jtY9Yd+l/8vd3DSsnd6lDoq0=;
-        b=r9XKe8G3gmhr4hrZVkbw2BLnxbM5lGJfNPVqxZJXE56uaGWHXGesFTjp44c7z59/U/
-         twfj1AbosOMZKPbxF4ho+Mq2DcCm2YleSCZNRG+WKfI8aQkVTE2/WBjFfbxlOOdaFVDQ
-         VLOV257gAmLaBcady43OitLPYyFueYrLMewWO2j+byYd6UiV7HJpToCgJIcj+Yr0SgP6
-         +C7pbBJX4E6tgXMAkVDskAb4qxXgDi1zjzMCaPhbxEV0Q1Lb1yMdVocp3fkmbl2i7me7
-         kSj0iebfIgyzCqJ3jXKt1lT4SXQj+iOZH9LdRK4cWYMkPJXPogXiYoktwf+VvYNGYr93
-         qu7Q==
-X-Gm-Message-State: AOJu0YzAr+qp7WWVWtV5uhdXagTI8HiEW+9yzKiJdc+9fWbiojxmSNzO
-	nvAK5vQqVfnraziuDpXkY78ggrrfxeVsTyXDzihJUdgQKeHRrO4I
-X-Google-Smtp-Source: AGHT+IF5ghfcpZOTGfIAtQ6lYW1lwRMSmr0uWEwnbq4b5RK1iqdtpYnaDKS5aT2ZYCpSiMNoWiQ5ag==
-X-Received: by 2002:a05:6a20:2d22:b0:1cf:3ec5:e779 with SMTP id adf61e73a8af0-1d30c99bd8bmr4937102637.5.1726859922880;
-        Fri, 20 Sep 2024 12:18:42 -0700 (PDT)
-Received: from [192.168.0.235] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-71944b7b1a2sm10186377b3a.132.2024.09.20.12.18.41
+        d=1e100.net; s=20230601; t=1727101188; x=1727705988;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5CZ+mURIur8fBCpcUzk/px0Uir9T085KeZXSUR+KxBU=;
+        b=o+z++2tLd6SALNiT2WvJy/8dhPSsDk1pIT2UUFEmb1VpgNqeLOl1rpORFxQIsYY+Ns
+         CbkSXWnxDDeeBV/jwi+P0BaA82BsPeiu806UH8FLYLVBsL2Z5LBjG977nL60EO1On2m+
+         9tvC4WWzJl5ecgSJb3aw9fEa/9LlEuZqq2hCMFZ0HFXp4vjG2rk1jkkQpyR/zXjyZNU4
+         o5Bpb45y9nmlBvKUpvcykWxn1qy43TJFDV7QsSto8XFjH3aXCL++DOvkSOkYzBOlz1uR
+         dwqEdlLSbSAX9Vv6Xh6CL6tmND71gmbaZ1ZaoKZhI7ebV9WfIEGs/mUhc/bUuJvCr5ug
+         itgQ==
+X-Forwarded-Encrypted: i=1; AJvYcCW7/5r1GcHrWH/SH8k/Jh4mnopCX6nXlxVabkXNA+Wnuy5MBEr2pVWaKAY5J84ZNLALChwXOxmF@vger.kernel.org
+X-Gm-Message-State: AOJu0YzZ414mBRDp1HMwKIJG/v/Wk+0vHA0UBjUSXNhDU91SKiB6jjAy
+	ZUTH11vPdgkHHdiDAr9X7hS7V0sq6jVIAmK4ENO7mSNC2k+tRRK5
+X-Google-Smtp-Source: AGHT+IGSu8uj2clefrFKgRO62F0foxDnC2lOxuvgMq74t9RPaozI2aMUwqrU54t2MJ/cqE6GDtMNmA==
+X-Received: by 2002:a05:6000:1544:b0:374:cd96:f73 with SMTP id ffacd0b85a97d-37a4223e127mr7194958f8f.3.1727101187857;
+        Mon, 23 Sep 2024 07:19:47 -0700 (PDT)
+Received: from krava (2001-1ae9-1c2-4c00-726e-c10f-8833-ff22.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:726e:c10f:8833:ff22])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5c42bb5f48bsm10389928a12.54.2024.09.23.07.19.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Sep 2024 12:18:42 -0700 (PDT)
-Message-ID: <2be35785218e6df18d3e05ddcaf0406227e05109.camel@gmail.com>
+        Mon, 23 Sep 2024 07:19:47 -0700 (PDT)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Mon, 23 Sep 2024 16:19:45 +0200
+To: Alan Maguire <alan.maguire@oracle.com>
+Cc: acme@kernel.org, dwarves@vger.kernel.org, eddyz87@gmail.com,
+	olsajiri@gmail.com, shung-hsi.yu@suse.com, jirislaby@kernel.org
 Subject: Re: [PATCH v2 dwarves 1/3] btf_encoder: record BTF-centric function
  state instead of DWARF-centric
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Alan Maguire <alan.maguire@oracle.com>, acme@kernel.org
-Cc: dwarves@vger.kernel.org, olsajiri@gmail.com, shung-hsi.yu@suse.com, 
-	jirislaby@kernel.org
-Date: Fri, 20 Sep 2024 12:18:37 -0700
-In-Reply-To: <20240916134946.3893204-2-alan.maguire@oracle.com>
+Message-ID: <ZvF5AdxV-8chJXgp@krava>
 References: <20240916134946.3893204-1-alan.maguire@oracle.com>
-	 <20240916134946.3893204-2-alan.maguire@oracle.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.52.4 (3.52.4-1.fc40) 
+ <20240916134946.3893204-2-alan.maguire@oracle.com>
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240916134946.3893204-2-alan.maguire@oracle.com>
 
-On Mon, 2024-09-16 at 14:49 +0100, Alan Maguire wrote:
+On Mon, Sep 16, 2024 at 02:49:44PM +0100, Alan Maguire wrote:
 
-[...]
+SNIP
 
-> When this is done, memory consumption peaks at 1Gb rather than
-> ~4Gb for vmlinux generation.  Time taken appears to be approximately
-> the same for -j1, but slightly faster for multiple threads;
-> for example:
-
-Hi Alan,
-
-Sorry for delayed reply.
-I tried this patch with selftests vmlinux and see huge reduction indeed:
-
-$ /usr/bin/time -v \
-    pahole -j1 --btf_features=3Dconsistent_func --btf_encode_detached=3Dold=
-.btf vmlinux
-  ...
-  Maximum resident set size (kbytes): 3123660
-
-$ /usr/bin/time -v \
-    pahole -j1 --btf_features=3Dconsistent_func --btf_encode_detached=3Dnew=
-.btf vmlinux
-  ...
-  Maximum resident set size (kbytes): 464400
-
-[...]
-
+> Baseline
+> 
+> $ time pahole -J vmlinux -j1 --btf_features=default
+> 
+> real	0m17.268s
+> user	0m15.808s
+> sys	0m1.415s
+> 
+> $ time pahole -J vmlinux -j8 --btf_features=default
+> 
+> real	0m10.768s
+> user	0m30.793s
+> sys	0m4.199s
+> 
+> With these changes:
+> 
+> $ time pahole -J vmlinux -j1 --btf_features=default
+> 
+> real	0m16.564s
+> user	0m16.029s
+> sys	0m0.492s
+> 
+> $ time pahole -J vmlinux -j8 --btf_features=default
+> 
+> real	0m8.332s
+> user	0m30.627s
+> sys	0m0.714s
+> 
 > In terms of functions encoded, 360 fewer functions make it into
 > BTF due to the different approach in consistency checking, but after
 > examining these cases, they do appear to be legitimately inconsistent
 > functions where the optimized versions have parameter mismatches
 > with the non-optimized expectations.
->=20
+> 
 > Mileage may vary of course, and any testing folks could do would
 > be greatly appreciated!
 
-Interestingly, I don't see any difference in generated "consistent"
-funcs (BPF selftests kernel config, compiled using mainline clang):
+looks good, some comments below.. I was hoping to find some way
+to split the change, but can't think of any ;-)
 
-$ comm -3 <(bpftool btf dump file new.btf | grep ' FUNC ' | sed "s/.*'\(.*\=
-)'.*/\1/" | sort) \
-          <(bpftool btf dump file old.btf | grep ' FUNC ' | sed "s/.*'\(.*\=
-)'.*/\1/" | sort) \
-          | tee | wc -l
-0
+thanks,
+jirka
 
-A few nitpicks below, but overall looks great.
 
-Reviewed-by: Eduard Zingerman <eddyz87@gmail.com>
+SNIP
 
-[...]
-
-> @@ -669,18 +692,25 @@ static int32_t btf_encoder__tag_type(struct btf_enc=
-oder *encoder, uint32_t tag_t
->  	return encoder->type_id_off + tag_type;
->  }
-> =20
-> -static int32_t btf_encoder__add_func_proto(struct btf_encoder *encoder, =
-struct ftype *ftype)
-> +static int32_t btf_encoder__add_func_proto(struct btf_encoder *encoder, =
-struct ftype *ftype, struct elf_function *func)
-
-It is a bit unfortunate that we now have this "doubled" representation
-and both ftype and elf_function pointers have to be passed through
-several layers.
-Ihor (in CC) is now working on having single btf_encoder for each
-processed CU (in order to be able to sort btf's by CU names before
-merging to a single BTF for dedup, thus making reproducible builds
-cheaper). I wonder if this could be further extended to have a
-separate BTF for functions and merge only consistent functions from
-this BTF to a final BTF.
-
-[...]
-
-> @@ -694,20 +724,34 @@ static int32_t btf_encoder__add_func_proto(struct b=
-tf_encoder *encoder, struct f
-> =20
->  	/* add parameters */
->  	param_idx =3D 0;
-> -	ftype__for_each_parameter(ftype, param) {
-> -		const char *name =3D parameter__name(param);
-> +	if (ftype) {
-> +		ftype__for_each_parameter(ftype, param) {
-> +			const char *name =3D parameter__name(param);
-> +
-> +			type_id =3D param->tag.type =3D=3D 0 ? 0 : encoder->type_id_off + par=
-am->tag.type;
-> +			++param_idx;
-> +			if (btf_encoder__add_func_param(encoder, name, type_id, param_idx =3D=
-=3D nr_params))
-> +				return -1;
-> +		}
-> =20
-> -		type_id =3D param->tag.type =3D=3D 0 ? 0 : encoder->type_id_off + para=
-m->tag.type;
->  		++param_idx;
-> -		if (btf_encoder__add_func_param(encoder, name, type_id, param_idx =3D=
-=3D nr_params))
-> -			return -1;
-> -	}
-> +		if (ftype->unspec_parms)
-> +			if (btf_encoder__add_func_param(encoder, NULL, 0, param_idx =3D=3D nr=
-_params))
-> +				return -1;
-> +	} else {
-> +		for (param_idx =3D 0; param_idx < nr_params; param_idx++) {
-> +			struct btf_encoder_func_parm *p =3D &state->parms[param_idx];
-> +			name =3D btf__name_by_offset(btf, p->name_off);
-> =20
-> -	++param_idx;
-> -	if (ftype->unspec_parms)
-> -		if (btf_encoder__add_func_param(encoder, NULL, 0, param_idx =3D=3D nr_=
-params))
-> -			return -1;
-> +			/* adding BTF data may result in a move of the
-> +			 * name string memory, so make a temporary copy.
-> +			 */
-> +			strncpy(tmp_name, name, sizeof(tmp_name));
-
-When compiling with fresh gcc (14.2.1) there is a warning reported at this =
-line:
-
-btf_encoder.c:749:25: warning: =E2=80=98strncpy=E2=80=99 specified bound 12=
-8 equals destination size [-Wstringop-truncation]
-  749 |                         strncpy(tmp_name, name, sizeof(tmp_name));
-      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Which seems to be a legit warning, given section CAVEATS from strncpy man p=
-age.
-There is also a second warning like this (see below).
-(when compiled with BUILD_TYPE=3DRelease).
-
-> =20
-> +			if (btf_encoder__add_func_param(encoder, tmp_name, p->type_id, param_=
-idx =3D=3D nr_params))
-> +				return -1;
-> +		}
-> +	}
->  	return id;
->  }
-> =20
-> @@ -831,53 +875,170 @@ static int32_t btf_encoder__add_decl_tag(struct bt=
-f_encoder *encoder, const char
-
-[...]
-
-> -static bool funcs__match(struct btf_encoder *encoder, struct elf_functio=
-n *func, struct function *f2)
-> +static bool names__match(struct btf *btf1, const struct btf_type *t1,
-> +			struct btf *btf2, const struct btf_type *t2)
+> -static int32_t btf_encoder__add_func_proto(struct btf_encoder *encoder, struct ftype *ftype)
+> +static int32_t btf_encoder__add_func_proto(struct btf_encoder *encoder, struct ftype *ftype, struct elf_function *func)
 >  {
+>  	struct btf *btf = encoder->btf;
+>  	const struct btf_type *t;
+>  	struct parameter *param;
+>  	uint16_t nr_params, param_idx;
+>  	int32_t id, type_id;
+> +	char tmp_name[KSYM_NAME_LEN];
+> +	const char *name;
+> +	struct btf_encoder_func_state *state = &func->state;
 
-[...]
+func could be NULL right?
 
-> +static bool types__match(struct btf_encoder *encoder,
-> +			 struct btf *btf1, int type_id1,
-> +			 struct btf *btf2, int type_id2)
-> +{
+SNIP
 
-[...]
+>  static int32_t btf_encoder__save_func(struct btf_encoder *encoder, struct function *fn, struct elf_function *func)
+>  {
+> -	fn->priv = encoder->cu;
+> -	if (func->function) {
+> -		struct function *existing = func->function;
+> -
+> -		/* If saving and we find an existing entry, we want to merge
+> -		 * observations across both functions, checking that the
+> -		 * "seen optimized parameters", "inconsistent prototype"
+> -		 * and "unexpected register" status is reflected in the
+> -		 * the func entry.
+> -		 * If the entry is new, record encoder state required
+> -		 * to add the local function later (encoder + type_id_off)
+> -		 * such that we can add the function later.
+> -		 */
+> -		existing->proto.optimized_parms |= fn->proto.optimized_parms;
+> -		existing->proto.unexpected_reg |= fn->proto.unexpected_reg;
+> -		if (!existing->proto.unexpected_reg && !existing->proto.inconsistent_proto &&
+> -		     !funcs__match(encoder, func, fn))
+> -			existing->proto.inconsistent_proto = 1;
+> -	} else {
+> -		func->state.type_id_off = encoder->type_id_off;
+> -		func->function = fn;
+> -		encoder->cu->functions_saved++;
 
-> +		switch (btf_kind(t1)) {
-> +		case BTF_KIND_INT:
+we could remove functions_saved from cu now?
 
-Nit: ints have a meaningful .size field and are followed by a u32 word,
-     both should be compared.
+SNIP
 
-> +		case BTF_KIND_FLOAT:
-> +		case BTF_KIND_FWD:
-
-Nit: BTF_KIND_FWD should go to default, fwd__kind steps over it.
-
-> +		case BTF_KIND_TYPEDEF:
-> +		case BTF_KIND_STRUCT:
-> +		case BTF_KIND_UNION:
-> +		case BTF_KIND_ENUM:
-> +		case BTF_KIND_ENUM64:
-> +			return names__match(btf1, t1, btf2, t2);
-> +		case BTF_KIND_PTR:
-> +		case BTF_KIND_VOLATILE:
-> +		case BTF_KIND_CONST:
-> +		case BTF_KIND_RESTRICT:
-> +		case BTF_KIND_TYPE_TAG:
-> +			id1 =3D t1->type;
-> +			id2 =3D t2->type;
-> +			break;
-> +		case BTF_KIND_ARRAY: {
-> +			const struct btf_array *a1 =3D btf_array(t1);
-> +			const struct btf_array *a2 =3D btf_array(t2);
-> +
-> +			if (a1->nelems !=3D a2->nelems)
-> +				return false;
-> +			id1 =3D a1->type;
-> +			id2 =3D a2->type;
-> +			break;
-> +		}
-> +		case BTF_KIND_FUNC_PROTO: {
-> +			const struct btf_param *p1 =3D btf_params(t1);
-> +			const struct btf_param *p2 =3D btf_params(t2);
-> +			int i, vlen =3D btf_vlen(t1);
-> +
-> +			if (vlen !=3D btf_vlen(t2))
-> +				return false;
-> +			if (!types__match(encoder, btf1, t1->type,
-> +					  btf2, t2->type))
-> +				return false;
-> +			for (i =3D 0; i < vlen; i++, p1++, p2++) {
-> +				if (!types__match(encoder, btf1, t1->type,
-> +						  btf2, t2->type))
-> +					return false;
-> +			}
-> +			return true;
-> +		}
-> +		default:
-> +			return false;
-> +		}
-> +	} while (1);
-> +
-> +	return false;
-> +}
-> +
-> +static bool funcs__match(struct btf_encoder *encoder, struct elf_functio=
-n *func,
-> +			 struct btf *btf1, struct btf_encoder_func_state *s1,
-> +			 struct btf *btf2, struct btf_encoder_func_state *s2)
-> +{
-> +	uint8_t i;
-> +
-> +	if (!s1->initialized || !s2->initialized)
->  		return true;
-
-Nit: is it even possible to get here when !s1->initialized || !s2->initiali=
-zed?
-     Maybe log something about inconsistent state?
-
-> =20
-> -	if (!func->state.got_proto)
-> -		func->state.got_proto =3D proto__get(f1, func->state.proto, sizeof(fun=
-c->state.proto));
-> +	if (s1->nr_parms !=3D s2->nr_parms) {
-> +		btf_encoder__log_func_skip(encoder, func,
-> +					   "param count mismatch; %d params !=3D %d params\n",
-> +					   s1->nr_parms, s2->nr_parms);
-> +		return false;
-> +	}
-> +	if (!types__match(encoder, btf1, s1->ret_type_id, btf2, s2->ret_type_id=
-)) {
-> +		btf_encoder__log_func_skip(encoder, func, "return type mismatch\n");
-> +		return false;
-> +	}
-> +	if (s1->nr_parms =3D=3D 0)
-> +		return true;
-> =20
-> -	if (proto__get(f2, proto, sizeof(proto))) {
-> -		if (strcmp(func->state.proto, proto) !=3D 0) {
-> -			if (encoder->verbose)
-> -				printf("function mismatch for '%s'('%s'): '%s' !=3D '%s'\n",
-> -				       name, f1->alias ?: name,
-> -				       func->state.proto, proto);
-> +	for (i =3D 0; i < s1->nr_parms; i++) {
-> +		if (!types__match(encoder, btf1, s1->parms[i].type_id,
-> +				  btf2, s2->parms[i].type_id)) {
-> +			if (encoder->verbose) {
-> +				const char *p1 =3D btf__name_by_offset(btf1, s1->parms[i].name_off);
-> +				const char *p2 =3D btf__name_by_offset(btf2, s2->parms[i].name_off);
-> +
-> +				btf_encoder__log_func_skip(encoder, func,
-> +							   "param type mismatch for param#%d %s %s %s\n",
-> +							   i + 1,
-> +							   p1 ?: "",
-> +							   p1 && p2 ? "!=3D" : "",
-> +							   p2 ?: "");
-> +			}
->  			return false;
->  		}
+> -static int32_t btf_encoder__add_func(struct btf_encoder *encoder, struct function *fn)
+> +static int32_t btf_encoder__add_func(struct btf_encoder *encoder, struct function *fn, struct elf_function *func)
+>  {
+> -	int btf_fnproto_id, btf_fn_id, tag_type_id;
+> -	struct llvm_annotation *annot;
+> +	int btf_fnproto_id, btf_fn_id, tag_type_id = 0;
+> +	int16_t component_idx = -1;
+>  	const char *name;
+> +	const char *value;
+> +	char tmp_value[KSYM_NAME_LEN];
+>  
+> -	btf_fnproto_id = btf_encoder__add_func_proto(encoder, &fn->proto);
+> -	name = function__name(fn);
+> -	btf_fn_id = btf_encoder__add_ref_type(encoder, BTF_KIND_FUNC, btf_fnproto_id, name, false);
+> +	btf_fnproto_id = btf_encoder__add_func_proto(encoder, fn ? &fn->proto : NULL, func);
+> +	name = func->alias ?: func->name;
+> +	if (btf_fnproto_id >= 0)
+> +		btf_fn_id = btf_encoder__add_ref_type(encoder, BTF_KIND_FUNC, btf_fnproto_id, name, false);
+>  	if (btf_fnproto_id < 0 || btf_fn_id < 0) {
+> -		printf("error: failed to encode function '%s'\n", function__name(fn));
+> +		printf("error: failed to encode function '%s': invalid %s\n", name, btf_fnproto_id < 0 ? "proto" : "func");
+>  		return -1;
 >  	}
-> @@ -886,119 +1047,212 @@ static bool funcs__match(struct btf_encoder *enc=
-oder, struct elf_function *func,
-
-[...]
-
-> -static int32_t btf_encoder__add_func(struct btf_encoder *encoder, struct=
- function *fn)
-> +static int32_t btf_encoder__add_func(struct btf_encoder *encoder, struct=
- function *fn, struct elf_function *func)
->  {
-
-[...]
-
+> -	list_for_each_entry(annot, &fn->annots, node) {
+> -		tag_type_id = btf_encoder__add_decl_tag(encoder, annot->value, btf_fn_id,
+> -							annot->component_idx);
+> -		if (tag_type_id < 0) {
+> -			fprintf(stderr, "error: failed to encode tag '%s' to func %s with component_idx %d\n",
+> -				annot->value, name, annot->component_idx);
+> -			return -1;
 > +	if (!fn) {
-> +		struct btf_encoder_func_state *state =3D &func->state;
+> +		struct btf_encoder_func_state *state = &func->state;
 > +		uint16_t idx;
 > +
-> +		if (!state || state->nr_annots =3D=3D 0)
+> +		if (!state || state->nr_annots == 0)
+
+it probably can't happen, but state will be allways != NULL in here.. should it be:
+
+		if (!func || state->nr_annots == 0)
+
+
 > +			return 0;
 > +
-> +		for (idx =3D 0; idx < state->nr_annots; idx++) {
-> +			struct btf_encoder_func_annot *a =3D &state->annots[idx];
+> +		for (idx = 0; idx < state->nr_annots; idx++) {
+> +			struct btf_encoder_func_annot *a = &state->annots[idx];
 > +
-> +			value =3D btf__str_by_offset(encoder->btf, a->value);
+> +			value = btf__str_by_offset(encoder->btf, a->value);
 > +			/* adding BTF data may result in a mode of the
 > +			 * value string memory, so make a temporary copy.
 > +			 */
 > +			strncpy(tmp_value, value, sizeof(tmp_value));
-
-(Second warning from gcc 14.2.1 is reported here)
-
-> +			component_idx =3D a->component_idx;
+> +			component_idx = a->component_idx;
 > +
-> +			tag_type_id =3D btf_encoder__add_decl_tag(encoder, tmp_value, btf_fn_=
-id, component_idx);
+> +			tag_type_id = btf_encoder__add_decl_tag(encoder, tmp_value, btf_fn_id, component_idx);
 > +			if (tag_type_id < 0)
 > +				break;
 > +		}
+> +	} else {
+> +		struct llvm_annotation *annot;
+> +
+> +		list_for_each_entry(annot, &fn->annots, node) {
+> +			value = annot->value;
+> +			component_idx = annot->component_idx;
+> +
+> +			tag_type_id = btf_encoder__add_decl_tag(encoder, value, btf_fn_id,
+> +								component_idx);
+> +			if (tag_type_id < 0)
+> +				break;
+>  		}
+>  	}
+> +	if (tag_type_id < 0) {
+> +		fprintf(stderr, "error: failed to encode tag '%s' to func %s with component_idx %d\n",
+> +			value, name, component_idx);
+> +		return -1;
+> +	}
+> +
+>  	return 0;
+>  }
+>  
+> -static void btf_encoder__add_saved_funcs(struct btf_encoder *encoder)
+> +static int btf_encoder__add_saved_funcs(struct btf_encoder *encoder)
+>  {
+>  	int i;
+>  
+>  	for (i = 0; i < encoder->functions.cnt; i++) {
+>  		struct elf_function *func = &encoder->functions.entries[i];
+> -		struct function *fn = func->function;
+> -		struct btf_encoder *other_encoder;
+> +		struct btf_encoder_func_state *state = &func->state;
+> +		struct btf_encoder *other_encoder = NULL;
+>  
+> -		if (!fn || fn->proto.processed)
+> +		if (!state || !state->initialized || state->processed)
+>  			continue;
 
-[...]
+state is now placed directly in elf_function so will allways be state != NULL
 
+> -
+>  		/* merge optimized-out status across encoders; since each
+>  		 * encoder has the same elf symbol table we can use the
+>  		 * same index to access the same elf symbol.
+>  		 */
+>  		btf_encoders__for_each_encoder(other_encoder) {
+> -			struct function *other_fn;
+> +			struct elf_function *other_func;
+> +			struct btf_encoder_func_state *other_state;
+> +			uint8_t optimized, unexpected, inconsistent;
+>  
+>  			if (other_encoder == encoder)
+>  				continue;
+>  
+> -			other_fn = other_encoder->functions.entries[i].function;
+> -			if (!other_fn)
+> +			other_func = &other_encoder->functions.entries[i];
+> +			other_state = &other_func->state;
+> +			if (!other_state)
+>  				continue;
+
+same as above it will allways be other_state != NULL
+
+> -			fn->proto.optimized_parms |= other_fn->proto.optimized_parms;
+> -			fn->proto.unexpected_reg |= other_fn->proto.unexpected_reg;
+> -			if (other_fn->proto.inconsistent_proto)
+> -				fn->proto.inconsistent_proto = 1;
+> -			if (!fn->proto.unexpected_reg && !fn->proto.inconsistent_proto &&
+> -			    !funcs__match(encoder, func, other_fn))
+> -				fn->proto.inconsistent_proto = 1;
+> -			other_fn->proto.processed = 1;
+> +			optimized = state->optimized_parms | other_state->optimized_parms;
+> +			unexpected = state->unexpected_reg | other_state->unexpected_reg;
+> +			inconsistent = state->inconsistent_proto | other_state->inconsistent_proto;
+> +			if (!unexpected && !inconsistent &&
+> +			    !funcs__match(encoder, func,
+> +					  encoder->btf, state,
+> +					  other_encoder->btf, other_state))
+> +				inconsistent = 1;
+> +			state->optimized_parms = other_state->optimized_parms = optimized;
+> +			state->unexpected_reg = other_state->unexpected_reg = unexpected;
+> +			state->inconsistent_proto = other_state->inconsistent_proto = inconsistent;
+> +
+> +			other_state->processed = 1;
+
+SNIP
