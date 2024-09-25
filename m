@@ -1,58 +1,62 @@
 Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37A5B1537B9
-	for <dwarves@vger.kernel.org>; Wed, 25 Sep 2024 09:17:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2ACF15B10F
+	for <dwarves@vger.kernel.org>; Wed, 25 Sep 2024 09:17:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727255869; cv=none; b=GYfDxN/yOceC0bJCFxqCXycnc0WFj1KdNZQhLl4dLgHRAdNxVWoW5cEU7GuXVwEOA9vyAoptzHKwFN7aHJbjKVc94UgWID6mB7Zrgp6CshzlSo9ZGCsLRhcePCQ3z2/OXHzw5C0s8cqwNyC/Xzrt+dhRD+oNj+Q8rRZ4vOZXJMg=
+	t=1727255874; cv=none; b=tMKdMhwOjYfHEexSRNgefporIIeQY8WbcS6XFV19b3slJWKc6gwNssmphqKK4GiCQKb+RJurzQX1I7/Rm5GWIpIh1JA/5bBf+63MoJ/vf4/Xc5uWkYahsTe52NgvPV5byxwC7iZ8lhM4eeKE+kUzjfT6U1Xf5ci/IH1XojRCee8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727255869; c=relaxed/simple;
-	bh=A4+0mswvHJPn31U5kZlrqaChDUDUEotiQVDb31pTcvQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=EepBy/z1T1sEtruQM89WFQtSBU7cimrBeh/Za0HQWvyPXpQCa9B9QTZfaAQLz+D6BaqeTTDAWhIeG/d7BybPFvr1LygpIzv/414TyTLAAxNPT6Kvp194GijVni2SOTui7Dl2AT2KL6wuySLl4ZEtvpJ1heeinl1hhRs/NcbBncE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=b3F7hhP9; arc=none smtp.client-ip=205.220.177.32
+	s=arc-20240116; t=1727255874; c=relaxed/simple;
+	bh=3Zx7OsNoz+o3l+eYn/59zPWmd9qhUKRs9lEtpVmFt84=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=BURXxRECJEmsE+r/VgAYVPr8OC3JSbjC83lCb9D+MARfxtAex71563d1IeIS/t+z0HeXmt3cNioCWJW2QfuDF0L07l1VjKrB6OLk47M5d0LAmRwwXOgcb19QutF8QNTnzG0hIithmIavnG9y2ITNRKth4T5D12i++BGjoesNdHc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=A5cSM1IG; arc=none smtp.client-ip=205.220.177.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="b3F7hhP9"
-Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 48P1u6HU011646;
-	Wed, 25 Sep 2024 09:17:38 GMT
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="A5cSM1IG"
+Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 48P1uMQe002018;
+	Wed, 25 Sep 2024 09:17:41 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=
-	from:to:cc:subject:date:message-id:mime-version
-	:content-transfer-encoding; s=corp-2023-11-20; bh=K9F7yCn052ysWI
-	6VOmNeEBmL5xfZWafJMu+gHVjfVAo=; b=b3F7hhP9m9QiJpQYaiQthq655+AEzt
-	D+gIdtjBhHTGfTjC8mkswBvlnVTE/wUsP0x0O+pHj+VhXLgCXVrkZsPnt7ewXrnC
-	/3MzEqkMs2ZpwWJqu6YC3zSdHTvmafebYZ2nSI1boapeZWXlrAOTv34G11E+6i3L
-	EYs+fJb3S8/2DUUiFLXT1OrDIpGQKiKnQ57EHz05xdHijvGNxr0PEdfvHWN3Qqbm
-	tSArfu81PHinPOa68Z2mBfuotVa1ZohGhRMo2TPGGvSwiZMBKOwH7yZlhGNU6fos
-	hv/WbHP8e8+tVlFri4FQNG49qAsy86RCXUyHLtRXlgWVX7p+rDa9DVrw==
+	from:to:cc:subject:date:message-id:in-reply-to:references
+	:mime-version:content-transfer-encoding; s=corp-2023-11-20; bh=2
+	FF2hmqoBV2XcH1Iy5nWfb7e6CiJBPHpEWQGYiQRTR8=; b=A5cSM1IGI6AD4ord/
+	E9UgG9tT+cZvJKiyJQgs6jS+kK8QDFo42A4yhVMNtViQ+0or8XXaqkrY8J9BD5qd
+	WITL5Aa6o02apm0LOOz7jvKxRjiXpnnXBe3oDjZng39Jo+rT0w95JCYw/b90rMnB
+	zWGU2dFiIq93LpdjLDu7/cqsT2KKTIUO8FRFPPt/Yl72qBxEhzOc9brxfIqW/BgT
+	hiRVhIP0DnjjmCQicPljNAyc/YVC0EAJYfguSxsjOHfF91ApAniFg+rasXT7YDMU
+	ruxpgduj0BJ8a9c+YQ2jjh+dUNdyVj1Z/rkutZ8aWGKmJcxpS+9SCOE02HXgdmVM
+	PIyxg==
 Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 41smx37bxa-1
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 41smjd7974-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 25 Sep 2024 09:17:37 +0000 (GMT)
+	Wed, 25 Sep 2024 09:17:41 +0000 (GMT)
 Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 48P7bEA7025128;
-	Wed, 25 Sep 2024 09:17:37 GMT
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 48P76qwH025172;
+	Wed, 25 Sep 2024 09:17:40 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 41smkaetuh-1
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 41smkaetvu-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 25 Sep 2024 09:17:37 +0000
+	Wed, 25 Sep 2024 09:17:40 +0000
 Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 48P9Flhx007041;
-	Wed, 25 Sep 2024 09:17:36 GMT
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 48P9Fli3007041;
+	Wed, 25 Sep 2024 09:17:39 GMT
 Received: from bpf.uk.oracle.com (dhcp-10-175-212-44.vpn.oracle.com [10.175.212.44])
-	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 41smkaettn-1;
-	Wed, 25 Sep 2024 09:17:36 +0000
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 41smkaettn-3;
+	Wed, 25 Sep 2024 09:17:39 +0000
 From: Alan Maguire <alan.maguire@oracle.com>
 To: acme@kernel.org
 Cc: dwarves@vger.kernel.org, eddyz87@gmail.com, olsajiri@gmail.com,
         shung-hsi.yu@suse.com, jirislaby@kernel.org, sedat.dilek@gmail.com,
         Alan Maguire <alan.maguire@oracle.com>
-Subject: [PATCH v3 dwarves 0/3] reduce memory overhead of BTF encoding
-Date: Wed, 25 Sep 2024 10:17:31 +0100
-Message-ID: <20240925091734.1943742-1-alan.maguire@oracle.com>
+Subject: [PATCH v3 dwarves 2/3] pfunct: show all functions that match filter criteria
+Date: Wed, 25 Sep 2024 10:17:33 +0100
+Message-ID: <20240925091734.1943742-3-alan.maguire@oracle.com>
 X-Mailer: git-send-email 2.43.5
+In-Reply-To: <20240925091734.1943742-1-alan.maguire@oracle.com>
+References: <20240925091734.1943742-1-alan.maguire@oracle.com>
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
@@ -64,84 +68,138 @@ X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.60.29
  definitions=2024-09-24_02,2024-09-25_01,2024-09-02_01
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 suspectscore=0
- mlxlogscore=841 adultscore=0 mlxscore=0 bulkscore=0 spamscore=0
+ mlxlogscore=999 adultscore=0 mlxscore=0 bulkscore=0 spamscore=0
  phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2408220000 definitions=main-2409250065
-X-Proofpoint-ORIG-GUID: jdYdLVCseozGxCCntTPIqRhoxEUOQRO6
-X-Proofpoint-GUID: jdYdLVCseozGxCCntTPIqRhoxEUOQRO6
+X-Proofpoint-ORIG-GUID: LbfK2lki1UCbpp71Ad00iuUoWUImhO50
+X-Proofpoint-GUID: LbfK2lki1UCbpp71Ad00iuUoWUImhO50
 
-The goal of this series is two-fold
+currently, "pfunct --function <name> vmlinux" will bail once it finds
+an instance of a function; add an option
 
-- Reduce memory utilization during pahole BTF generation
-- Improve testing for BTF function encoding
+  -A, --all                  show all functions that match filter, or show all
+                             function prototypes if no filter is specified
 
-Patch 1 switches from using a DWARF representation when saving function
-information for (possible) later addition to using BTF; the result
-is we can discard DWARF info after use and memory usage will not
-get out of hand.  Peak memory utilization is approximately 1Gb versus
-3/4Gb prior to this change when specifying "-j --btf_features=all".
+..that allows us to see all instances of a function.  It will be
+useful in testing functions skipped by BTF encoding.
 
-Patch 2 adds support to pfunct to show all functions that match a given
-name (allowing us to find inconsistent prototypes in the test in patch
-3), and also adds stealer support for printing all DWARF function
-prototypes to speed up execution (the latter is used in the test also).
+When --function is not specified, all prototypes are displayed but
+we make use of the pfunct_stealer for this case as it massively
+speeds up processing from ~6min to ~12sec.
 
-Patch 3 is a bash test script which carries out vmlinux BTF generation
-and verifies the BTF functions match their DWARF equivalents, and also
-verifies the skipped functions should have been skipped.  Patch 3
-depends on the pfunct functionality from patch 2 and the pahole changes
-in patch 1, but moving forward should be useful for validating pahole
-function-related changes quickly.  The test takes approximately 4
-minutes to run.
+It will be useful in tests to be able to collect prototypes quickly.
 
-Changes since v2:
+Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+---
+ pfunct.c | 36 ++++++++++++++++++++++++++----------
+ 1 file changed, 26 insertions(+), 10 deletions(-)
 
-- fixed checks of func->state since it is always non-NULL and removed
-  now-unneeded fields from dwarves.h; added assertions that either
-  ELF or DWARF data is present for func encoding (Jiri, patch 1)
-- fixed strncpy() issues, improved equality comparions between types
-  (Eduard, patch 1)
-- reworked btf_functions test to minimize overheads
-- replaced egrep with grep -E (Arnaldo, patch 3)
-
-Changes since RFC:
-
-- fixed free issues (Jiri, patch 1)
-- embed func state into struct elf_function as each function
-  has state, and we can use the stack for state comparison
-  avoiding the cost of additional allocations (patch 1)
-- fix an intermittent coredump that resulted from using
-  btf__str_by_offset() string in adding function prototype;
-  needing more space could sometimes result in strset memory
-  movement which would in turn invalidate the char * string,
-  so copy it to a char array for param name/tag value encoding
-  (patch 1)
-- improve logging of decision to skip functions so that we can
-  gather that info more easily for testing in patch 3
-- added new option to pfunct to show all instances of a function
-  prototype and - if no function is specified - use the stealer
-  to dump out all prototypes more rapidly to aid quicker testing
-- added test covering BTF function generation, checking that
-  DWARF/BTF are consistent and that for skipped functions the
-  skip rationale was valid (Jiri, patch 3)
-
-There's no diff-style tests comparing encoding before/after
-changes, but having automated tests probing DWARF/BTF
-correspondence is useful I think.
-
-Alan Maguire (3):
-  btf_encoder: record BTF-centric function state instead of
-    DWARF-centric
-  pfunct: show all functions that match filter criteria
-  tests: add test validating BTF encoding, reasons we skip functions
-
- btf_encoder.c          | 565 +++++++++++++++++++++++++++++++----------
- dwarves.h              |   2 -
- pfunct.c               |  36 ++-
- tests/btf_functions.sh | 186 ++++++++++++++
- 4 files changed, 636 insertions(+), 153 deletions(-)
- create mode 100755 tests/btf_functions.sh
-
+diff --git a/pfunct.c b/pfunct.c
+index bc3026b..e6cb898 100644
+--- a/pfunct.c
++++ b/pfunct.c
+@@ -29,6 +29,7 @@ static int show_cc_inlined;
+ static int show_cc_uninlined;
+ static char *symtab_name;
+ static bool show_prototypes;
++static bool show_all_matches;
+ static bool expand_types;
+ static bool compilable_output;
+ static struct type_emissions emissions;
+@@ -368,17 +369,19 @@ do_parameters:
+ static void function__show(struct function *func, struct cu *cu)
+ {
+ 	struct tag *tag = function__tag(func);
++	struct fn_stats *fstats = NULL;
+ 
+ 	if (func->abstract_origin || func->declaration)
+ 		return;
+ 
+-	struct fn_stats *fstats = fn_stats__find(func->name);
++	if (!show_all_matches) {
++		fstats = fn_stats__find(func->name);
+ 
+-	if (fstats && fstats->printed)
+-		return;
+-
+-	if (expand_types)
+-		function__emit_type_definitions(func, cu, stdout);
++		if (fstats && fstats->printed)
++			return;
++		if (expand_types)
++			function__emit_type_definitions(func, cu, stdout);
++	}
+ 	tag__fprintf(tag, cu, &conf, stdout);
+ 	if (compilable_output) {
+ 		struct tag *type = cu__type(cu, func->proto.tag.type);
+@@ -399,6 +402,8 @@ static void function__show(struct function *func, struct cu *cu)
+ 		fprintf(stdout, "\n}\n");
+ 	}
+ 	putchar('\n');
++	if (show_all_matches)
++		return;
+ 	if (show_variables || show_inline_expansions)
+ 		function__fprintf_stats(tag, cu, &conf, stdout);
+ 
+@@ -417,8 +422,6 @@ static int cu_function_iterator(struct cu *cu, void *cookie)
+ 		if (cookie && strcmp(function__name(function), cookie) != 0)
+ 			continue;
+ 		function__show(function, cu);
+-		if (!expand_types)
+-			return 1;
+ 	}
+ 	return 0;
+ }
+@@ -514,12 +517,19 @@ static enum load_steal_kind pfunct_stealer(struct cu *cu,
+ 
+ 		if (tag) {
+ 			function__show(tag__function(tag), cu);
+-			return LSK__STOP_LOADING;
++			return show_all_matches ? LSK__DELETE : LSK__STOP_LOADING;
+ 		}
+ 	} else if (class_name) {
+ 		cu_class_iterator(cu, class_name);
++	} else if (show_all_matches) {
++		struct function *pos;
++		uint32_t id;
++
++		cu__for_each_function(cu, id, pos)
++			function__show(pos, cu);
+ 	}
+ 
++
+ 	return LSK__DELETE;
+ }
+ 
+@@ -537,6 +547,11 @@ static const struct argp_option pfunct__options[] = {
+ 		.arg  = "ADDR",
+ 		.doc  = "show just the function that where ADDR is",
+ 	},
++	{
++		.key  = 'A',
++		.name = "all",
++		.doc  = "show all functions that match filter, or show all function prototypes if no filter is specified",
++	},
+ 	{
+ 		.key  = 'b',
+ 		.name = "expand_types",
+@@ -672,6 +687,7 @@ static error_t pfunct__options_parser(int key, char *arg,
+ 		break;
+ 	case 'a': addr = strtoull(arg, NULL, 0);
+ 		  conf_load.get_addr_info = true;	 break;
++	case 'A': show_all_matches = true;		 break;
+ 	case 'b': expand_types = true;
+ 		  type_emissions__init(&emissions, &conf);	 break;
+ 	case 'c': class_name = arg;			 break;
+@@ -751,7 +767,7 @@ int main(int argc, char *argv[])
+ 		goto out_dwarves_exit;
+ 	}
+ 
+-	if (function_name || class_name)
++	if (function_name || (!function_name && show_all_matches) || class_name)
+ 		conf_load.steal = pfunct_stealer;
+ 
+ try_sole_arg_as_function_name:
 -- 
 2.43.5
 
