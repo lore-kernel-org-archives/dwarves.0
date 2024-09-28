@@ -1,119 +1,141 @@
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F25CA14BF8B;
-	Fri, 27 Sep 2024 21:52:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
+Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE07815D5CF
+	for <dwarves@vger.kernel.org>; Sat, 28 Sep 2024 04:36:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=163.172.96.212
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727473958; cv=none; b=mdEkXYv/NQVmAaU6Rbo1QHxp/Spn4j6pCAB3Kf41tdcTsZD09Ym/ptJZ0e+IC19xsGGB3/AQzJsfXoVnidGPDCb9t1it0ljGFIwA3H1McrvG1jdHXam9hQJixs040mhrX10uuBdv6EyOjYb36ie8fGmvqc/uCqIdLxu/TgRwVFI=
+	t=1727498211; cv=none; b=pbRzebmp/9n3MEKdDHtYomMAF5h+GqcjjH+yQfhxtmFZdNSlYhKD6GOfFFl+OEBhuywUyvxxcMdL9GiK032sQENeaX0ygHMINAQ8zv2zBOX44b7emVz7Cwm6HQm5tGV9/0OkzeJJ8oWxQ03ImxGlvENh25WWmUh4WuZk77l87ZE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727473958; c=relaxed/simple;
-	bh=KgNkij5ARbIS8TSicp5/QE/xvWbM3MIuVXdtO5tuAsw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ner8AKeMlD3pWl+yvYfgYlED4Yh3MsYmIMgLDYGeIlJvklQQ4NRJtnp8qtnU0RpfG2H2c3WHIEphpgBJA1NamZGd6ot2j2QrgwE6XVxSp4BDQAeKY6CKeA1dGQr9WXvLJnSoCp0D9DS9FRcjPzMQI9Hat1A+/TG0ovCkCIT0s4g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TzncUpP9; arc=none smtp.client-ip=209.85.214.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TzncUpP9"
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-206bd1c6ccdso25352725ad.3;
-        Fri, 27 Sep 2024 14:52:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1727473956; x=1728078756; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wt5HI5c1/abCfhsYESVTQWnehbXIiI7JPMSwXe+tPLU=;
-        b=TzncUpP9/j604iWDzyFeSZA+SjiFuNhaHfWEwadqXSc9rQqgwqZjAE4H8tXxLuiwYX
-         c/RwvDPJf1sf2RNqkqNRghuso5kPIO4DohCMis1Ebdk6Qfjx1QVSTAp6xUWyQrt7OfJK
-         Brr/BEGlHvirZwjcSfpsBu9Tba0qpbUL6dZxdUiq4r3AQK1L8eHr35WeTiS1328/2Jav
-         e3RmtsJbntcZ1xlrpQUlUk3+NBu+lnvqyRkT1zw0NUQAEnPe6Lv+MmmXIKEXwsrzMIi6
-         hvzKIxdh9S+aQOgNJFOGeQNUZp4g7h914uCayb6+fkIG8OW8Of39FmwT0YWzjZhGl7Vh
-         1lzw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727473956; x=1728078756;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=wt5HI5c1/abCfhsYESVTQWnehbXIiI7JPMSwXe+tPLU=;
-        b=mU5KAytDBh+hU8Jq8Xwa+qjuS1kY1Z2nVd9hiAwTSAWLzb5aPxdGO6acq1HUVc+1y7
-         nZgSM0gINeL/h8ahWF/L9kHdIkUHPfWjNOmMedZNeCyzJX0AuI3ilXOrfwso8ckZj4g2
-         wwLevqF1acxbUXsSbGssrbAjLZ/dgP3NLqF3D85BHkGgMfPGtcX9g6s6TrWzEDFVZA6E
-         jeRN0jeKITbtYKyam65oGPaI0gjaC09WbvgqJNLUYYQmtkOoe8+QjNbjblG6xuih9r5K
-         UpA2ahcf8W4rkBS7xE/fXwGCZMhEZOBElsby3tnlId6YMO2Ka6H45Z6N6Gx3cjQCOh6X
-         0zZQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVblf197pN8zaCaIONtdmYTwgBm5lRL8BYnxjkHQ3r8p0s9dKfNBd6okAoM+M3mM1vi37M=@vger.kernel.org
-X-Gm-Message-State: AOJu0YweN0DxNdzNVDxtKM8JKjH7xU30gWDyHP+GrQ7dEITXgs5EuvKK
-	vZ5VU+ftDfPvBfigtB75GPznsRyO8P5lsGyemETUN734k/FLPkbM/gIp5hQuwIQEKUtT9uI0MoL
-	CYgZyZlSc7+D4tbYRvncER9LxSk0=
-X-Google-Smtp-Source: AGHT+IEGB26D0EiMCRLY/fsm2tCjL7SvuHTeefrLnB5vZcJdE9GKA+Vm6tlX5baLsevU0nURHRj6JjkHBRBFe13cVqo=
-X-Received: by 2002:a17:90b:83:b0:2cf:eaec:d74c with SMTP id
- 98e67ed59e1d1-2e0b8a1b905mr5288738a91.16.1727473956392; Fri, 27 Sep 2024
- 14:52:36 -0700 (PDT)
+	s=arc-20240116; t=1727498211; c=relaxed/simple;
+	bh=Ql1XeFf5ZCgkOshHCvQU8d/LYF6aEOHZJdBmLhrpRHQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=AHdKuM3yRJQo5k7wKIzVsIcsE3xy4gTuZSz+gWc2v4vvokrVNsqvG5GOn2CNpbZ+1wEju5Kd/dJZ9Li/37DdGdDrsAPuNOUdx19XiKLDCLZHjUH4BldUunfCeCUDIkH1hCBgolftu9QYLMyhEYuFnQeLwSco7CseJjZg2H/FJt4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=1wt.eu; spf=pass smtp.mailfrom=1wt.eu; arc=none smtp.client-ip=163.172.96.212
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=1wt.eu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=1wt.eu
+Received: (from willy@localhost)
+	by pcw.home.local (8.15.2/8.15.2/Submit) id 48S4acsX004790;
+	Sat, 28 Sep 2024 06:36:38 +0200
+Date: Sat, 28 Sep 2024 06:36:38 +0200
+From: Willy Tarreau <w@1wt.eu>
+To: Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc: dwarves@vger.kernel.org, Alan Maguire <alan.maguire@oracle.com>,
+        Jiri Olsa <jolsa@kernel.org>, Clark Williams <williams@redhat.com>,
+        Kate Carcia <kcarcia@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Subject: Re: [PATCH 0/2] --padding option to combine with
+ --with_flexible_array
+Message-ID: <20240928043638.GA4774@1wt.eu>
+References: <20240927185958.37310-1-acme@kernel.org>
+ <20240927211503.GA4031@1wt.eu>
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240916091921.2929615-1-eddyz87@gmail.com>
-In-Reply-To: <20240916091921.2929615-1-eddyz87@gmail.com>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Fri, 27 Sep 2024 14:52:24 -0700
-Message-ID: <CAEf4BzY5qmrRjNHESAjNm9DnMdfqmaHWYFXZZUC=L0pLJMLuwA@mail.gmail.com>
-Subject: Re: [PATCH dwarves v1] pahole: generate "bpf_fastcall" decl tags for
- eligible kfuncs
-To: Eduard Zingerman <eddyz87@gmail.com>
-Cc: dwarves@vger.kernel.org, arnaldo.melo@gmail.com, bpf@vger.kernel.org, 
-	kernel-team@fb.com, ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, 
-	yonghong.song@linux.dev, martin.lau@linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240927211503.GA4031@1wt.eu>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Mon, Sep 16, 2024 at 2:19=E2=80=AFAM Eduard Zingerman <eddyz87@gmail.com=
-> wrote:
->
-> For kfuncs marked with KF_FASTCALL flag generate the following pair of
-> decl tags:
->
->     $ bpftool btf dump file vmlinux
->     ...
->     [A] FUNC 'bpf_rdonly_cast' type_id=3D...
->     ...
->     [B] DECL_TAG 'bpf_kfunc' type_id=3DA component_idx=3D-1
->     [C] DECL_TAG 'bpf_fastcall' type_id=3DA component_idx=3D-1
->
-> So that bpftool could find 'bpf_fastcall' decl tag and generate
-> appropriate C declarations for such kfuncs, e.g.:
->
->     #ifndef __VMLINUX_H__
->     #define __VMLINUX_H__
->     ...
->     #define __bpf_fastcall __attribute__((bpf_fastcall))
->     ...
->     __bpf_fastcall extern void *bpf_rdonly_cast(...) ...;
->
-> For additional information about 'bpf_fastcall' attribute,
-> see the following commit in the LLVM source tree:
->
-> 64e464349bfc ("[BPF] introduce __attribute__((bpf_fastcall))")
->
-> And the following Linux kernel commit:
->
-> 52839f31cece ("Merge branch 'no_caller_saved_registers-attribute-for-help=
-er-calls'")
->
-> Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
-> ---
->  btf_encoder.c | 59 +++++++++++++++++++++++++++++++++++++--------------
->  1 file changed, 43 insertions(+), 16 deletions(-)
->
+On Fri, Sep 27, 2024 at 11:15:03PM +0200, Willy Tarreau wrote:
+> Hi Arnaldo!
+> 
+> On Fri, Sep 27, 2024 at 03:59:56PM -0300, Arnaldo Carvalho de Melo wrote:
+> > From: Arnaldo Carvalho de Melo <acme@redhat.com>
+> > 
+> > Hi,
+> > 
+> > 	This implements --padding, that combined with the already
+> > available --with_flexible_array option may catch some questionable
+> > structs.
+> > 
+> > 	This comes from a quick discussion I had with Willy Tareau after
+> > Gustavo's talk at this year's Kernel Recipes.
+> > 
+> > 	I have this in the 'next' branch of:
+> > 
+> > https://git.kernel.org/pub/scm/devel/pahole/pahole.git
+> > 
+> > 	Willy, is that what you had in mind?
+> 
+> Oh that was fast!
+> 
+> I'm looking at the output here:
+> 
+>    http://oldvger.kernel.org/~acme/pahole--padding_ge_1_--with_flexible_array.6.10.10-200.fc40.x86_64.txt
+> 
+> I'm seeing in the output above that mem_cgroup was reported due to 48
+> bytes padding being caused by extra alignment. I'm not sure what to
+> think about it to be honest, there could be pros and cons. However it's
+> true that if this struct is embedded inside another one, it starts to
+> smell nevertheless, and such a case is not much frequent so it should
+> be a low rate of false positives in the worst case.
+> 
+> The output is clearly reviewable by hand, that's really cool!
 
-LGTM,
+So I tried it on haproxy. The first good news is that it didn't spot
+anything, indicating that it doesn't seem to trigger false-positives
+(the second good news being that I don't have to fix anything there :-)).
 
-Acked-by: Andrii Nakryiko <andrii@kernel.org>
+For example I have such a struct that contains a forced alignment hole
+before the flex array and it rightfully didn't catch it:
 
-Arnaldo, can you please take a look and if everything seems sane apply
-it to pahole master, so it's easier to use it locally? Thanks!
+  struct ebmb_node {
+        struct eb_node             node;                 /*     0    36 */
 
-[...]
+        /* XXX 4 bytes hole, try to pack */
+
+        union {
+        } __attribute__((__aligned__(8)));               /*    40     0 */
+        unsigned char              key[];                /*    40     0 */
+
+        /* size: 40, cachelines: 1, members: 3 */
+        /* sum members: 36, holes: 1, sum holes: 4 */
+        /* forced alignments: 1, forced holes: 1, sum forced holes: 4 */
+        /* last cacheline: 40 bytes */
+  } __attribute__((__aligned__(8)));
+
+But it correctly spots this one that we imagined during our discussion:
+
+  struct foo {
+        void *                     ptr;                  /*     0     8 */
+        int                        number;               /*     8     4 */
+        char                       array[];              /*    12     0 */
+
+        /* size: 16, cachelines: 1, members: 3 */
+        /* padding: 4 */
+        /* last cacheline: 16 bytes */
+  };
+
+So that looks all good to me!
+
+BTW, while building the -next branch (ubuntu 22 arm64 gcc11.4), I faced
+this warning that you might be interested in, and that didn't appear in
+the master branch:
+
+  In file included from /usr/include/string.h:535,
+                   from /usr/include/obstack.h:136,
+                   from /home/willy/pahole/dwarves.h:13,
+                   from /home/willy/pahole/btf_encoder.c:13:
+  In function strncpy,
+      inlined from btf_encoder__add_func_proto at /home/willy/pahole/btf_encoder.c:749:4:
+  /usr/include/aarch64-linux-gnu/bits/string_fortified.h:95:10: warning: __builtin_strncpy specified bound 128 equals destination size [-Wstringop-truncation]
+     95 |   return __builtin___strncpy_chk (__dest, __src, __len,
+        |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     96 |                                   __glibc_objsize (__dest));
+        |                                   ~~~~~~~~~~~~~~~~~~~~~~~~~
+  In function strncpy,
+      inlined from btf_encoder__add_func at /home/willy/pahole/btf_encoder.c:1172:4:
+  /usr/include/aarch64-linux-gnu/bits/string_fortified.h:95:10: warning: __builtin_strncpy specified bound 128 equals destination size [-Wstringop-truncation]
+     95 |   return __builtin___strncpy_chk (__dest, __src, __len,
+        |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     96 |                                   __glibc_objsize (__dest));
+        |                                   ~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Do not hesitate to ask me for some tests if needed. I can also bisect
+if needed.
+
+Thanks!
+Willy
