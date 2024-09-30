@@ -1,74 +1,103 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57E6A23D2
-	for <dwarves@vger.kernel.org>; Mon, 30 Sep 2024 14:34:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C34D11917C9;
+	Mon, 30 Sep 2024 14:44:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727706884; cv=none; b=F+yLzzliDpgQXw0BWAo1RISx17J+vdouAgGrXF2pZtYq/Dw0yaLvbxrWuT4/rz2m58r614X1zNn3XPfeI98dJrS/P/OZrGyUyJFn1d/MfKH1tSR6eQaHqnCqCxZLGp+xI6XknhynZGHhyjtaE7V4G4O6D34t8nt4ifK1cPxo4+s=
+	t=1727707473; cv=none; b=O++KsiZbLpz6+35rHWlLIdfVEYfBvaeMKc27OYvJM6ihmPTKOe+30DPJ3dZ58hmHM/yf5FCcRNcccfgEUaVBw3Sfcc1C1I1qVZC/qH/lRurHn/LU6va0zCshWPbaBJJzGKkCt521RHZ2SU75OeG/GoGI+A+NamImtnqwqDVSVK4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727706884; c=relaxed/simple;
-	bh=4gJIjEsfSjg1evgGLlfcPO3fyJGdKIL0dG6yEdd2PAA=;
+	s=arc-20240116; t=1727707473; c=relaxed/simple;
+	bh=ipepkvfiPX+ZEqZOxphg5qn1Go5y+GVSQgG04K8aJXo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=e6LJYWPJqJIr4x7Lgu/Evjur5fIOIxMFAmg2vVkspPPZDdUW9MlcXpk+6tH0LKjTJeww1/yeCTmv+a9a1nGsBmf+vt94NytrOaCl1KlitgoVQ+uGWhWonZBHCAer2bBIget90QxJPZpQjto9gNcbO3yZpv+OzJodxX7jdkcYCl8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UZNj8Biy; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=Xcy5KR4MTeV1oRv4+D2BBPRHts6Ts8J1c9DMNV6NBEXm8A4v+ohOmKcXGAEtauicYnTDqbSDzGrNNWFqjy6YXNacacyI+CMAPjW22nYP6iE+qJ51HC7C22wcBT4oPJpKoffLEHJa0YflMS+z3ZtvAT/LyxVUCNLkfsPNjByfKug=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vO+uUT9u; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UZNj8Biy"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B10FEC4CEC7;
-	Mon, 30 Sep 2024 14:34:43 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vO+uUT9u"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 498DDC4CEC7;
+	Mon, 30 Sep 2024 14:44:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1727706884;
-	bh=4gJIjEsfSjg1evgGLlfcPO3fyJGdKIL0dG6yEdd2PAA=;
+	s=k20201202; t=1727707473;
+	bh=ipepkvfiPX+ZEqZOxphg5qn1Go5y+GVSQgG04K8aJXo=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=UZNj8Biy1EA4jzTCV8Ma5mrHD4hoxA7DLp14njmDyzk5wCmoY8btwahjAdnrCNpVt
-	 jDMi0v+xwc277F/zNzPuaQNcF2YgpaE+54e3AvuvY2YcoA9gCye5b/JpBea4VSnkVQ
-	 XmPwZTNRmV16RBfwVdYwoAfc8V6vS8+QvOPMIsK2Z9Rg0lEKySme3uwZust6L9x9pw
-	 ajVl50UpIQKqf+yZhV+RWIfhsi140D5pzbU8uDksav2GwiyaJ7YGExzOedFVp1ifFP
-	 rfEymkNc/LgE/LRVZVgthi5EsIPSd94i8L7qiUMPf/yWA5CC4OmpMK7+ofQu3euDrc
-	 bqcO9L4IGYmkw==
-Date: Mon, 30 Sep 2024 11:34:40 -0300
+	b=vO+uUT9uYnwjeh3HBhqZAMO58cDZzJRC6ukvJTM4Cpv2iLpJmR4oO40kCm7V0K6uc
+	 YfV67rgDIMvQc+M5DbHJuJbYRIARJWSKIfWNYPFH9G+nGfbpMF8dj1ShTMEbM7C3Z3
+	 xVpzzGt76CIrz09ItRkHkooN2B8HGADjjgviacoYoOT8LP75n0E/+Z2SwwEksFeqzB
+	 vb00wxjXuw11ad9PBPBkJA0/H+E5tumzMwAtAFkAjbDl1/BnXg+cHPEpcRdh7b890a
+	 63E5bXDl6tb4FlJeOnb4dDyACAMaaMctX/0EvZJViTwN0t9NMK1JQSpVEGWd4ZIAHX
+	 sTpz4E217DWHA==
+Date: Mon, 30 Sep 2024 11:44:30 -0300
 From: Arnaldo Carvalho de Melo <acme@kernel.org>
-To: Jiri Olsa <olsajiri@gmail.com>
-Cc: Alan Maguire <alan.maguire@oracle.com>, dwarves@vger.kernel.org,
-	eddyz87@gmail.com, shung-hsi.yu@suse.com, jirislaby@kernel.org,
-	sedat.dilek@gmail.com, w@1wt.eu
-Subject: Re: [PATCH v4 dwarves 0/2] fixes for memory optimized BTF
-Message-ID: <Zvq3AKQGHSXfiSIR@x1>
-References: <20240930081725.2465825-1-alan.maguire@oracle.com>
- <ZvqJawSN_UVwQdAc@krava>
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: Eduard Zingerman <eddyz87@gmail.com>, dwarves@vger.kernel.org,
+	arnaldo.melo@gmail.com, bpf@vger.kernel.org, kernel-team@fb.com,
+	ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+	yonghong.song@linux.dev, martin.lau@linux.dev
+Subject: Re: [PATCH dwarves v1] pahole: generate "bpf_fastcall" decl tags for
+ eligible kfuncs
+Message-ID: <Zvq5TmDGqZIdPMya@x1>
+References: <20240916091921.2929615-1-eddyz87@gmail.com>
+ <CAEf4BzY5qmrRjNHESAjNm9DnMdfqmaHWYFXZZUC=L0pLJMLuwA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <ZvqJawSN_UVwQdAc@krava>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAEf4BzY5qmrRjNHESAjNm9DnMdfqmaHWYFXZZUC=L0pLJMLuwA@mail.gmail.com>
 
-On Mon, Sep 30, 2024 at 01:20:11PM +0200, Jiri Olsa wrote:
-> On Mon, Sep 30, 2024 at 09:17:23AM +0100, Alan Maguire wrote:
-> > This series is identical in effect to [1], it is simply applied
-> > on top of the "next" branch which now includes v2 of the series.
-> > 
-> > Patch 1 fixes issues identified in code review around use of
-> > func->state, strncpy issues.
-> > 
-> > Patch 2 speeds up the btf_functions.sh test by reducing the
-> > number of greps/pipes, shaving ~1 minute off execution time.
-> > 
-> > [1] https://lore.kernel.org/dwarves/20240925091734.1943742-1-alan.maguire@oracle.com/
-> > 
-> > Changes since v2:
-> > 
-> > - fixed checks of func->state since it is always non-NULL and removed
-> >   now-unneeded fields from dwarves.h; added assertions that either
-> >   ELF or DWARF data is present for func encoding (Jiri, patch 1)
+On Fri, Sep 27, 2024 at 02:52:24PM -0700, Andrii Nakryiko wrote:
+> On Mon, Sep 16, 2024 at 2:19 AM Eduard Zingerman <eddyz87@gmail.com> wrote:
+> >
+> > For kfuncs marked with KF_FASTCALL flag generate the following pair of
+> > decl tags:
+> >
+> >     $ bpftool btf dump file vmlinux
+> >     ...
+> >     [A] FUNC 'bpf_rdonly_cast' type_id=...
+> >     ...
+> >     [B] DECL_TAG 'bpf_kfunc' type_id=A component_idx=-1
+> >     [C] DECL_TAG 'bpf_fastcall' type_id=A component_idx=-1
+> >
+> > So that bpftool could find 'bpf_fastcall' decl tag and generate
+> > appropriate C declarations for such kfuncs, e.g.:
+> >
+> >     #ifndef __VMLINUX_H__
+> >     #define __VMLINUX_H__
+> >     ...
+> >     #define __bpf_fastcall __attribute__((bpf_fastcall))
+> >     ...
+> >     __bpf_fastcall extern void *bpf_rdonly_cast(...) ...;
+> >
+> > For additional information about 'bpf_fastcall' attribute,
+> > see the following commit in the LLVM source tree:
+> >
+> > 64e464349bfc ("[BPF] introduce __attribute__((bpf_fastcall))")
+> >
+> > And the following Linux kernel commit:
+> >
+> > 52839f31cece ("Merge branch 'no_caller_saved_registers-attribute-for-helper-calls'")
+> >
+> > Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
+> > ---
+> >  btf_encoder.c | 59 +++++++++++++++++++++++++++++++++++++--------------
+> >  1 file changed, 43 insertions(+), 16 deletions(-)
+> >
 > 
-> lgtm
+> LGTM,
 > 
-> Acked-by: Jiri Olsa <jolsa@kernel.org>
+> Acked-by: Andrii Nakryiko <andrii@kernel.org>
+> 
+> Arnaldo, can you please take a look and if everything seems sane apply
+> it to pahole master, so it's easier to use it locally? Thanks!
 
-Thanks, applied to next,
+Minor clash with Alan's
+
+Fixes: 5205d02d8e84a775 ("btf_encoder: record BTF-centric function state instead of DWARF-centric")
+
+Fixed up, testing.
 
 - Arnaldo
