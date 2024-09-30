@@ -1,141 +1,171 @@
-Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE07815D5CF
-	for <dwarves@vger.kernel.org>; Sat, 28 Sep 2024 04:36:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=163.172.96.212
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42F3427462
+	for <dwarves@vger.kernel.org>; Mon, 30 Sep 2024 08:18:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727498211; cv=none; b=pbRzebmp/9n3MEKdDHtYomMAF5h+GqcjjH+yQfhxtmFZdNSlYhKD6GOfFFl+OEBhuywUyvxxcMdL9GiK032sQENeaX0ygHMINAQ8zv2zBOX44b7emVz7Cwm6HQm5tGV9/0OkzeJJ8oWxQ03ImxGlvENh25WWmUh4WuZk77l87ZE=
+	t=1727684286; cv=none; b=pS4N/ckIdnCMQfdF7Z5fbNF6UT9s1UHxipAWbuUl7Vmu0cyxsqyEZcZ26dNYgxMBvVk4/wlMH9aknN6x7IPEEGJm1nGw2xW4rCLHmuLgw0feFfoml5j3gVXj/hlPT0I4ygnvMw0txuCuhYFkmv5LlvCTZeBwmehjcpFA2UEqIgg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727498211; c=relaxed/simple;
-	bh=Ql1XeFf5ZCgkOshHCvQU8d/LYF6aEOHZJdBmLhrpRHQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AHdKuM3yRJQo5k7wKIzVsIcsE3xy4gTuZSz+gWc2v4vvokrVNsqvG5GOn2CNpbZ+1wEju5Kd/dJZ9Li/37DdGdDrsAPuNOUdx19XiKLDCLZHjUH4BldUunfCeCUDIkH1hCBgolftu9QYLMyhEYuFnQeLwSco7CseJjZg2H/FJt4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=1wt.eu; spf=pass smtp.mailfrom=1wt.eu; arc=none smtp.client-ip=163.172.96.212
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=1wt.eu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=1wt.eu
-Received: (from willy@localhost)
-	by pcw.home.local (8.15.2/8.15.2/Submit) id 48S4acsX004790;
-	Sat, 28 Sep 2024 06:36:38 +0200
-Date: Sat, 28 Sep 2024 06:36:38 +0200
-From: Willy Tarreau <w@1wt.eu>
-To: Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc: dwarves@vger.kernel.org, Alan Maguire <alan.maguire@oracle.com>,
-        Jiri Olsa <jolsa@kernel.org>, Clark Williams <williams@redhat.com>,
-        Kate Carcia <kcarcia@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Subject: Re: [PATCH 0/2] --padding option to combine with
- --with_flexible_array
-Message-ID: <20240928043638.GA4774@1wt.eu>
-References: <20240927185958.37310-1-acme@kernel.org>
- <20240927211503.GA4031@1wt.eu>
+	s=arc-20240116; t=1727684286; c=relaxed/simple;
+	bh=Xk0rLUJOvogzdanGLqVfWuuSvzQnuoR4ioCu5hT7lmI=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=ZHAzvP2adw/ePCG8iRtADXoq/mvrQsxHeUKRCpwR5GImLNPUXiae90i6UCq8mNPcWCV0rIVA+i6S/l9W7YBpoIjW1woOcAAx4Z7r7DlRua9WQsi7IDEt8V+GKBlw3DnQ/AI0Lk8UEhUTs7vw7K0RgbiGG4Z1uk0Xqh+i9v0bVVo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=P9cHl747; arc=none smtp.client-ip=205.220.177.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="P9cHl747"
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 48U2thSN009535;
+	Mon, 30 Sep 2024 08:17:35 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=
+	from:to:cc:subject:date:message-id:in-reply-to:references
+	:mime-version:content-transfer-encoding; s=corp-2023-11-20; bh=K
+	VNrjmpDesL7lT2N0uJFfCce3izG0sAz/JpnM30+SlE=; b=P9cHl7475ilkpc2oQ
+	BmJRaR4Tkt7ox1vnXR0UvvhoS5thJoM6CUl2r44DNsaMpdBHt5JRWD/QaULPLpp2
+	ufEG4QlrG4RIabFocRreZNQT9sVNBjMKhfweKP6RGqu1xtBvAfRVg+W/VxEeLn6W
+	cBxhnKBh1jLOYhI48vubAy5hG2u6cGyxRTTCeb/32l4ENb0tQ97aBgMWsupeWbPF
+	W8i8aVBGhw9sA9cG+Tza1l9MjZO1t0bR3RxqJjNuJsJyqtMdQItyqbxIRfNpbx1A
+	37DcYaMq8U17SMpdc/26j0KBHfloP0cGrWE/QVwJcYsRxAqdGZBxDQEdK7dARsYx
+	1Bvyw==
+Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 41x8k32pt5-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 30 Sep 2024 08:17:34 +0000 (GMT)
+Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 48U7qEde040759;
+	Mon, 30 Sep 2024 08:17:33 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 41x885qhgy-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 30 Sep 2024 08:17:33 +0000
+Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 48U8HSoE017104;
+	Mon, 30 Sep 2024 08:17:33 GMT
+Received: from bpf.uk.oracle.com (dhcp-10-175-219-134.vpn.oracle.com [10.175.219.134])
+	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 41x885qheg-3;
+	Mon, 30 Sep 2024 08:17:33 +0000
+From: Alan Maguire <alan.maguire@oracle.com>
+To: acme@kernel.org
+Cc: dwarves@vger.kernel.org, eddyz87@gmail.com, olsajiri@gmail.com,
+        shung-hsi.yu@suse.com, jirislaby@kernel.org, sedat.dilek@gmail.com,
+        w@1wt.eu, Alan Maguire <alan.maguire@oracle.com>
+Subject: [PATCH v4 dwarves 2/2] tests: improve btf_functions.sh by reducing greps/pipes
+Date: Mon, 30 Sep 2024 09:17:25 +0100
+Message-ID: <20240930081725.2465825-3-alan.maguire@oracle.com>
+X-Mailer: git-send-email 2.43.5
+In-Reply-To: <20240930081725.2465825-1-alan.maguire@oracle.com>
+References: <20240930081725.2465825-1-alan.maguire@oracle.com>
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240927211503.GA4031@1wt.eu>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-30_07,2024-09-27_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 suspectscore=0
+ malwarescore=0 adultscore=0 phishscore=0 bulkscore=0 mlxlogscore=999
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2408220000 definitions=main-2409300059
+X-Proofpoint-GUID: 5p4V3kFU7kZnl5DL2h8_rB2Mwn7r5f7A
+X-Proofpoint-ORIG-GUID: 5p4V3kFU7kZnl5DL2h8_rB2Mwn7r5f7A
 
-On Fri, Sep 27, 2024 at 11:15:03PM +0200, Willy Tarreau wrote:
-> Hi Arnaldo!
-> 
-> On Fri, Sep 27, 2024 at 03:59:56PM -0300, Arnaldo Carvalho de Melo wrote:
-> > From: Arnaldo Carvalho de Melo <acme@redhat.com>
-> > 
-> > Hi,
-> > 
-> > 	This implements --padding, that combined with the already
-> > available --with_flexible_array option may catch some questionable
-> > structs.
-> > 
-> > 	This comes from a quick discussion I had with Willy Tareau after
-> > Gustavo's talk at this year's Kernel Recipes.
-> > 
-> > 	I have this in the 'next' branch of:
-> > 
-> > https://git.kernel.org/pub/scm/devel/pahole/pahole.git
-> > 
-> > 	Willy, is that what you had in mind?
-> 
-> Oh that was fast!
-> 
-> I'm looking at the output here:
-> 
->    http://oldvger.kernel.org/~acme/pahole--padding_ge_1_--with_flexible_array.6.10.10-200.fc40.x86_64.txt
-> 
-> I'm seeing in the output above that mem_cgroup was reported due to 48
-> bytes padding being caused by extra alignment. I'm not sure what to
-> think about it to be honest, there could be pros and cons. However it's
-> true that if this struct is embedded inside another one, it starts to
-> smell nevertheless, and such a case is not much frequent so it should
-> be a low rate of false positives in the worst case.
-> 
-> The output is clearly reviewable by hand, that's really cool!
+Reduce number of greps/pipes to minimize overhead of test; in my
+measurements this shaves ~1min off test run time to be approximately
+4 minutes.
 
-So I tried it on haproxy. The first good news is that it didn't spot
-anything, indicating that it doesn't seem to trigger false-positives
-(the second good news being that I don't have to fix anything there :-)).
+Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+---
+ tests/btf_functions.sh | 22 ++++++++--------------
+ 1 file changed, 8 insertions(+), 14 deletions(-)
 
-For example I have such a struct that contains a forced alignment hole
-before the flex array and it rightfully didn't catch it:
+diff --git a/tests/btf_functions.sh b/tests/btf_functions.sh
+index 4a60a18..b8645cc 100755
+--- a/tests/btf_functions.sh
++++ b/tests/btf_functions.sh
+@@ -47,7 +47,8 @@ trap cleanup EXIT
+ 
+ test -n "$VERBOSE" && printf "Encoding..."
+ 
+-pahole --btf_features=default --btf_encode_detached=$outdir/vmlinux.btf --verbose $vmlinux |grep "skipping BTF encoding of function" > ${outdir}/skipped_fns
++pahole --btf_features=default --btf_encode_detached=$outdir/vmlinux.btf --verbose $vmlinux |\
++	grep "skipping BTF encoding of function" > ${outdir}/skipped_fns
+ 
+ test -n "$VERBOSE" && printf "done.\n"
+ 
+@@ -57,7 +58,7 @@ funcs=$(pfunct --format_path=btf $outdir/vmlinux.btf |sort)
+ 
+ # all functions from DWARF; some inline functions are not inlined so include them too
+ pfunct --all --no_parm_names --format_path=dwarf $vmlinux | \
+-	awk '{ print $0}'|sort|uniq > $outdir/dwarf.funcs
++	sort|uniq > $outdir/dwarf.funcs
+ # all functions from BTF (removing bpf_kfunc prefix where found)
+ pfunct --all --no_parm_names --format_path=btf $outdir/vmlinux.btf |\
+ 	awk '{ gsub("^bpf_kfunc ",""); print $0}'|sort|uniq > $outdir/btf.funcs
+@@ -66,14 +67,12 @@ exact=0
+ inline=0
+ const_insensitive=0
+ 
+-for f in $funcs ; do
+-	btf=$(grep " $f(" $outdir/btf.funcs)
++while IFS= read -r btf ; do
+ 	# look for non-inline match first
+-	dwarf=$(grep " $f(" $outdir/dwarf.funcs | grep -Ev "^inline ")
++	dwarf=$(grep -F "$btf" $outdir/dwarf.funcs)
+ 	if [[ "$btf" != "$dwarf" ]]; then
+ 		# function might be declared inline in DWARF.
+-		inline_dwarf=$(grep " $f(" $outdir/dwarf.funcs |grep "^inline ")
+-		if [[ "inline $btf" != "$inline_dwarf" ]]; then
++		if [[ "inline $btf" != "$dwarf" ]]; then
+ 			# some functions have multiple instances in DWARF where one has
+ 			# const param(s) and another does not (see errpos()).  We do not
+ 			# mark these functions inconsistent as though they technically
+@@ -83,7 +82,7 @@ for f in $funcs ; do
+ 			if [[ "$dwarf_noconst" =~ "$btf_noconst" ]]; then
+ 				const_insensitive=$((const_insensitive+1))
+ 			else
+-				echo "ERROR: mismatch for '$f()' : BTF '$btf' not found; DWARF '$dwarf'"
++				echo "ERROR: mismatch : BTF '$btf' not found; DWARF '$dwarf'"
+ 				fail
+ 			fi
+ 		else
+@@ -92,7 +91,7 @@ for f in $funcs ; do
+ 	else
+ 		exact=$((exact+1))
+ 	fi
+-done
++done < $outdir/btf.funcs
+ 
+ echo "Matched $exact functions exactly."
+ echo "Matched $inline functions with inlines."
+@@ -133,8 +132,6 @@ for r in $return_mismatches ; do
+ 	grep " $r(" $outdir/dwarf.funcs | \
+ 	awk -v FN=$r '{i = index($0, FN); if (i>0) print substr($0, 0, i-1) }' \
+ 	| uniq > ${outdir}/retvals.$r
+-	test -n "$VERBOSE" && echo "'${r}()' has return values:"
+-	test -n "$VERBOSE" && cat ${outdir}/retvals.$r
+ 	cnt=$(wc -l ${outdir}/retvals.$r | awk '{ print $1 }')
+ 	if [[ $cnt -lt 2 ]]; then
+ 		echo "ERROR: '${r}()' has only one return value; it should not be reported as having incompatible return values"
+@@ -159,14 +156,11 @@ for p in $param_mismatches ; do
+ 	skipmsg=$(awk -v FN=$p '{ if ($1 == FN) print $0 }' $outdir/skipped_fns)
+ 	altname=$(echo $skipmsg | awk '{ i=index($2,")"); print substr($2,2,i-2); }')
+ 	if [[ "$altname" != "$p" ]]; then
+-		test -n "$VERBOSE" && echo "skipping optimized function $p ($altname); pfunct may not reflect late optimizations."
+ 		optimized=$((optimized+1))
+ 		continue
+ 	fi
+ 	# Ensure there are multiple instances with incompatible params
+ 	grep " $p(" $outdir/dwarf.funcs | uniq > ${outdir}/protos.$p
+-	test -n "$VERBOSE" && echo "'${p}()' has prototypes:"
+-	test -n "$VERBOSE" && cat ${outdir}/protos.$p
+ 	cnt=$(wc -l ${outdir}/protos.$p | awk '{ print $1 }')
+ 	if [[ $cnt -lt 2 ]]; then
+ 		# function may be inlined in multiple sites with different protos
+-- 
+2.43.5
 
-  struct ebmb_node {
-        struct eb_node             node;                 /*     0    36 */
-
-        /* XXX 4 bytes hole, try to pack */
-
-        union {
-        } __attribute__((__aligned__(8)));               /*    40     0 */
-        unsigned char              key[];                /*    40     0 */
-
-        /* size: 40, cachelines: 1, members: 3 */
-        /* sum members: 36, holes: 1, sum holes: 4 */
-        /* forced alignments: 1, forced holes: 1, sum forced holes: 4 */
-        /* last cacheline: 40 bytes */
-  } __attribute__((__aligned__(8)));
-
-But it correctly spots this one that we imagined during our discussion:
-
-  struct foo {
-        void *                     ptr;                  /*     0     8 */
-        int                        number;               /*     8     4 */
-        char                       array[];              /*    12     0 */
-
-        /* size: 16, cachelines: 1, members: 3 */
-        /* padding: 4 */
-        /* last cacheline: 16 bytes */
-  };
-
-So that looks all good to me!
-
-BTW, while building the -next branch (ubuntu 22 arm64 gcc11.4), I faced
-this warning that you might be interested in, and that didn't appear in
-the master branch:
-
-  In file included from /usr/include/string.h:535,
-                   from /usr/include/obstack.h:136,
-                   from /home/willy/pahole/dwarves.h:13,
-                   from /home/willy/pahole/btf_encoder.c:13:
-  In function strncpy,
-      inlined from btf_encoder__add_func_proto at /home/willy/pahole/btf_encoder.c:749:4:
-  /usr/include/aarch64-linux-gnu/bits/string_fortified.h:95:10: warning: __builtin_strncpy specified bound 128 equals destination size [-Wstringop-truncation]
-     95 |   return __builtin___strncpy_chk (__dest, __src, __len,
-        |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     96 |                                   __glibc_objsize (__dest));
-        |                                   ~~~~~~~~~~~~~~~~~~~~~~~~~
-  In function strncpy,
-      inlined from btf_encoder__add_func at /home/willy/pahole/btf_encoder.c:1172:4:
-  /usr/include/aarch64-linux-gnu/bits/string_fortified.h:95:10: warning: __builtin_strncpy specified bound 128 equals destination size [-Wstringop-truncation]
-     95 |   return __builtin___strncpy_chk (__dest, __src, __len,
-        |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     96 |                                   __glibc_objsize (__dest));
-        |                                   ~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Do not hesitate to ask me for some tests if needed. I can also bisect
-if needed.
-
-Thanks!
-Willy
