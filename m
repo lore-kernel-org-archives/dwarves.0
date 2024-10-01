@@ -1,98 +1,77 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2ACD91C6F7F;
-	Tue,  1 Oct 2024 18:53:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7A2F19FA9D
+	for <dwarves@vger.kernel.org>; Tue,  1 Oct 2024 19:36:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727808784; cv=none; b=XIvVgtpEFdzuOVYS1fS6UFtuUq+NPTZ6YxELmI7/xqriY5sFb8tIgns4WZfc2zZtWYkpV6rKNpBJ0OrYG/q0ZNFFnH48LmjzcnFhTBHWC1fSVG3cKV5BWQnKDpBXxAxqgiuq47vgzeKwgwV1VH56/JY1zYETN7ftLr0PyGwtxo8=
+	t=1727811394; cv=none; b=jkoF8RKW1I4+C9m79PQq7vcOpbJlxr+xujOgTpf8rEfrsR58Xd9rzZ8Y1+P2/xA81D0uDvinoD21MNQ7W5Y2i8sXNffsu6iQHsWD8ce4gTMhcOQfdaTH9Vii2xziBVxGS3uscDAbtXZCfqRnkclasLzcrtfpMrDha3Uf/WeZVPE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727808784; c=relaxed/simple;
-	bh=FJMNViwtwp7ygFcH9/LecGPB0XcxiIGp/deL05VLKwE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MxPHAWzP4YoW48TSlqpOsmdOfza8bawsiTumBrcKZ8RZN9No6xBEFz+k1hQVt0xxfqBoOwNMAbN6RFht+6ZRmVUcnwyIml3LluNtosm5ANXZC/oZ9ybCwZOju2Rkitmzga3bnZZloGpXrZwerbf8wJa3p2p8YK9Jenp/iecOLYU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vQ+b0AVn; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1727811394; c=relaxed/simple;
+	bh=mlKXRpzSsYKBTlC4p+tQKjrJb0Ka1gWR95ogjGiFzos=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=cixuiwprJ9nj3wKzidVhL/b8cSFiMKgfywgJ2Oj7HlwwLIBqtTCFIg+zpewCLoJQxb1N6VCuPpy7hKY8VheeB9dcKH7kYw9XuhrhVwcJMWF62dyJ99MqmFsDTFAO/NgglgBFKUbITjgun8A5dRH670v0/gniwaKn4m5JRdWCOt4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ETz4aCL+; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vQ+b0AVn"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 191D1C4CEC6;
-	Tue,  1 Oct 2024 18:53:02 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ETz4aCL+"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8D25C4CEC6;
+	Tue,  1 Oct 2024 19:36:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1727808783;
-	bh=FJMNViwtwp7ygFcH9/LecGPB0XcxiIGp/deL05VLKwE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=vQ+b0AVnGpHfRRX/UoQG6/kCr8R/kD94ZCXZUE1MyosbxSJjRNQTgzG0J0iuw9jLN
-	 zJPiYZp31IndoY0ISkLK5XUBBV+T/b5Bo5u6RgBdr9+SiuxLJoqQRtq7ZGpiU07HFc
-	 VGVqre8/SoR71qLmTqR0BoS8uTPZ4xq0+Tk7o26HD0/ylM4V2xY97PvVh+GaTCRNK1
-	 m8hRLu/iKRtiKzzkYanPVoY7AvCYdMmPniSF6cfWdsW8YRAfiSLUe/IX3WV5KYxvGG
-	 8NusZ6EzHkw3z6hbiws913/R1/4KoVbRgXd/gMgpekRajWjP2lmQUnsRBAg41oFPJm
-	 Q3WtKA93PGCqQ==
-Date: Tue, 1 Oct 2024 15:52:59 -0300
+	s=k20201202; t=1727811394;
+	bh=mlKXRpzSsYKBTlC4p+tQKjrJb0Ka1gWR95ogjGiFzos=;
+	h=Date:From:To:Cc:Subject:From;
+	b=ETz4aCL++bjhHedA+BQ1fYgTW19Vu0foVuR9UEwTrq25CXXj7bxG6icxZUp/e6kQH
+	 YpXU+f1n1ITLtaf84dHh/qBEFVJlyPIotJHUp50EEpcZyL/S+Ggd+pAmIxrv2cxrXU
+	 ppGCQYyW/E6UvXLV7iDojXrp1wClChVU2uGUcm6YRtb/InXx0cIqSjNU1FGF+7PFTO
+	 K1n76e4Xpc2KbmLtlvpW28JLwXeCnKZ9Lwn3y/6Fn7clUbIvIqXQGaCMREtIdivIlN
+	 XyWCYhfWkcs7s4EI2QoOuGEFcS46G3ARJpCmVL6DOgIy5fOKcvbgErj92xsVi5N7gH
+	 rRTwXpi0z5W6g==
+Date: Tue, 1 Oct 2024 16:36:30 -0300
 From: Arnaldo Carvalho de Melo <acme@kernel.org>
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: Stephen Brennan <stephen.s.brennan@oracle.com>, bpf@vger.kernel.org,
-	dwarves@vger.kernel.org, linux-debuggers@vger.kernel.org,
-	Alan Maguire <alan.maguire@oracle.com>
-Subject: Re: [PATCH dwarves v2 4/4] btf_encoder: add global_var feature to
- encode globals
-Message-ID: <ZvxFC99--p4W27ok@x1>
-References: <20240920081903.13473-1-stephen.s.brennan@oracle.com>
- <20240920081903.13473-5-stephen.s.brennan@oracle.com>
- <ZvwQR_LFnjxQNPIY@x1>
- <CAEf4BzaJXiEk03Tkcd2njf=0+pieZHrZ4gBhra0JL_7vF9uwpg@mail.gmail.com>
+To: Alan Maguire <alan.maguire@oracle.com>
+Cc: dwarves@vger.kernel.org
+Subject: [PATCH 1/1] tests reproducible_build.sh: Try first to find a vmlinux
+ using pahole --running_kernel_vmlinux
+Message-ID: <ZvxPPsyEccL5DmD6@x1>
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAEf4BzaJXiEk03Tkcd2njf=0+pieZHrZ4gBhra0JL_7vF9uwpg@mail.gmail.com>
 
-On Tue, Oct 01, 2024 at 10:13:29AM -0700, Andrii Nakryiko wrote:
-> On Tue, Oct 1, 2024 at 8:10 AM Arnaldo Carvalho de Melo <acme@kernel.org> wrote:
-> > On Fri, Sep 20, 2024 at 01:19:01AM -0700, Stephen Brennan wrote:
-> > > Currently the "var" feature only encodes percpu variables. Add the
-> > > ability to encode all global variables.
-> > >
-> > > This also drops the use of the symbol table to find variable names and
-> > > compare them against DWARF names. We simply rely on the DWARF
-> > > information to give us all the variables.
-> >
-> > I applied the three first patches to the next branch that soon will move
-> > to master, but the last patch I think does too many things and ends up
-> > being too big.
-> >
-> > For instance, you could have done the btf_encoder->skip_encoding_vars
-> > transformation into a bitfield in a separate, prep patch, also you
-> > mentions "this also drops the use of the symbol table", can this be made
-> > a separate, prep patch?
-> >
-> > There was a conflict with some new options I added (--padding,
-> > --padding_ge) and I fixed that up and made the series available in the
-> > btf_global_vars branch, can you please go from there and split the last
-> > patch into smaller chunks?
-> >
-> > Thanks for your work on this! I noticed that this is not the default,
-> > i.e. one has to explicitely opt in to have the global variables encoded
-> > in BTF, so that would be interesting to have spelled out in the chunked
-> > out patch that introduces the feature, etc.
-> 
-> We probably shouldn't enable this option in kernel build until we work
-> out details of loading vmlinux BTF(s) through the kernel module.
+Otherwise it stops working when called directly.
 
-Sure, this should be completely opt-in, and for kernel features, even
-for documentational purposes, we need to enable it via --btf_features in
-the Kbuild files, etc.
+Cc: Alan Maguire <alan.maguire@oracle.com>
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+---
+ tests/reproducible_build.sh | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-But with the feature in pahole we can go on experimenting with it, etc.
-
-- Arnaldo
+diff --git a/tests/reproducible_build.sh b/tests/reproducible_build.sh
+index a3603798a26de94c..b2e4d7af8e9ce35b 100755
+--- a/tests/reproducible_build.sh
++++ b/tests/reproducible_build.sh
+@@ -4,8 +4,6 @@
+ # Test if BTF generated serially matches reproducible parallel DWARF loading + serial BTF encoding
+ # Arnaldo Carvalho de Melo <acme@redhat.com> (C) 2024-
  
-> > Also since we have it as a feature and can ask for global variables
-> > using --btf_features=global_var, I don't think we need
-> > --encode_btf_global_vars, right?
+-vmlinux=${vmlinux:-1}
+-
+ if [ -z "$vmlinux" ] ; then
+ 	vmlinux=$(pahole --running_kernel_vmlinux)
+ 	if [ -z "$vmlinux" ] ; then
+@@ -14,6 +12,8 @@ if [ -z "$vmlinux" ] ; then
+ 	fi
+ fi
+ 
++vmlinux=${vmlinux:-1}
++
+ if [ ! -f "$vmlinux" ] ; then
+ 	echo "$vmlinux file not available, please specify another"
+ 	exit 2
+-- 
+2.46.2
 
-> > That will also make the patch smaller, and even if it was required, that
-> > would be something to have in a separate patch.
