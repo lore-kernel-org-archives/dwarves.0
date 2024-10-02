@@ -1,57 +1,58 @@
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70EBD12E1EE
-	for <dwarves@vger.kernel.org>; Wed,  2 Oct 2024 11:33:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99C7212E1EE
+	for <dwarves@vger.kernel.org>; Wed,  2 Oct 2024 11:34:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727868829; cv=none; b=iCbZfZlIymu1e2fMJyR+zeBRsLHkF1wgtf3dL7mDhgLay9dtaLjmPOyWsA/8UPr7NrA6x4hDd0vUSrEfNJX7hmaleS3dY3ghxqCfispXA8uX4UdnUeuT9sJAAhigxpDr2nirBpeAgnTxiHl14mTdEgLyGkSszNWMKx/kObj6d9I=
+	t=1727868842; cv=none; b=e8TLMYdUPKOw1G4LQOm83GLltzAND0IeLKToTSsQaJ3K49o35hNB9J6Dgc2En6RYf5UjwbtIKqVx/T0XI9hxlKRbdp9H/4QipE7yfZLlFN1DHUqwyhbfJ0ycKCzkkEXf+MBPXjLEBD71zOWDE6rXvIyz8EiNUbu/+fnuzsXC+tM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727868829; c=relaxed/simple;
-	bh=2UhQM+9a2vL64m+K6PXpUhGp0qaqAoXrALzcXBCzMVk=;
+	s=arc-20240116; t=1727868842; c=relaxed/simple;
+	bh=9GyVsRpbz8gJybAk6i4ph2SIi5S0o9MJkuRFh+n6pDk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=fD15phGPS5PwZ8FhowQqEm2zW/0x+cUJ3TWKdchzC+LpCZi9lEx3X7c/MMv+K0PgYClRWZPzGugNA0rmv4PC1WA8EeOq9EYxvJFZfYpIv/UANUJCxCUIsnZEqzBVnElsUGKbgbEKqNxGjkdnN5ey6JiZGP1aA+KRud5+/F66MEY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=M1861b9q; arc=none smtp.client-ip=205.220.177.32
+	 MIME-Version; b=ZC19aUp6+5PlxK7kgpGa63j3eLyMIOvf8kei/RvT+z2A7m1aJJZJ1UL1brFuC/rhUgcvT0/QtDmG98WhSRCJI/ykwkG3GGVLMOYHIYjS+CUVyIKZ3/Kzo0tPICUChg42PmeFu2kCtBfyzaX1yUnb+XdQ3lQh4P3CnAsJpPWQpzk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=lZxnY4xf; arc=none smtp.client-ip=205.220.165.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="M1861b9q"
-Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4927fWSV024436;
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="lZxnY4xf"
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4927flPc010272;
 	Wed, 2 Oct 2024 11:33:44 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=
 	from:to:cc:subject:date:message-id:in-reply-to:references
-	:mime-version:content-transfer-encoding; s=corp-2023-11-20; bh=9
-	jzNDmTZznnEoEn2T85KEPD6x3/uIOrsumkayc6RsHs=; b=M1861b9qUwVOETscv
-	89HVNwncAYOd7bTUIc9UX4lmUfu0ck9YB2iLIXz6QDAGOObEWQBnJxyp1E5Qjwhq
-	sTwy6SKoWGA67uJVzaDPduq56BM8SC16DxNqVcz1I6whSCxS/DKc3X2qgdzaSrCz
-	jDs7SQhqjLsvmHaivutSzd3P8B9ghL/vFXmWPWP6O5R+tumPi7xsJ8SIZTUEDpXI
-	wxe2MYOlxea3XRmNDEB6KLlV5PHpx5rTf8olUu4xnjK7BniZVO42iRLJs+pj73IN
-	6XNweV6+MH/L13T0VQKUbjpQfW3RjK5FO96ZgobEmmZ2GAdOr7gpMR+bGeM3ds9y
-	I+v2A==
+	:mime-version:content-transfer-encoding; s=corp-2023-11-20; bh=u
+	LcqOo7Ne9rD0HYHGlWnwan5VXy0n7TBnyxDgC5hxow=; b=lZxnY4xfid4bQL9X1
+	kUBsjBQ0IkblcCSaGF2jRx9K6NlXYRrb98pswBvCBwhvs5stlT43VY781WV1BrpL
+	VrurrpcfrhuaUqXWpn/7lpzO0lFl2NRkdq36NRXhdewTwNaRcs7BQsZMHkY6hLHx
+	iLemFFnOTsu2AWE9ZyPSF+4ciYsVTj6ojNOA5xyF8fSDSLo/Fkt1QHL7gWQYt3EV
+	b6RwZHnIlLyeyYW0cbBs4ApFeMVUJGSz1IddvVIciGzvf1FS8WdtAYNl9PlZBS0J
+	KZ5qYlTqmrZ+VeNHYdd5T/Et5sOjiXPXtOnAW5aPrmqCG6HVLMFsLm7oW+yj8OYY
+	ZAZGw==
 Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 41x8k38x18-1
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 41xabtrpmk-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
 	Wed, 02 Oct 2024 11:33:43 +0000 (GMT)
 Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 492B10NX028553;
-	Wed, 2 Oct 2024 11:33:42 GMT
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 492B10NY028553;
+	Wed, 2 Oct 2024 11:33:43 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 41x888ykwy-1
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 41x888ykxh-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 02 Oct 2024 11:33:41 +0000
+	Wed, 02 Oct 2024 11:33:43 +0000
 Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 492BXeQp004496;
-	Wed, 2 Oct 2024 11:33:41 GMT
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 492BXeQr004496;
+	Wed, 2 Oct 2024 11:33:42 GMT
 Received: from bpf.uk.oracle.com (dhcp-10-175-184-213.vpn.oracle.com [10.175.184.213])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 41x888yksp-2;
-	Wed, 02 Oct 2024 11:33:41 +0000
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 41x888yksp-3;
+	Wed, 02 Oct 2024 11:33:42 +0000
 From: Alan Maguire <alan.maguire@oracle.com>
 To: acme@kernel.org
-Cc: dwarves@vger.kernel.org, Alan Maguire <alan.maguire@oracle.com>
-Subject: [PATCH dwarves 1/2] tests/reproducible_build: fix vmlinux finding logic
-Date: Wed,  2 Oct 2024 12:33:25 +0100
-Message-ID: <20241002113326.792495-2-alan.maguire@oracle.com>
+Cc: dwarves@vger.kernel.org, Alan Maguire <alan.maguire@oracle.com>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>
+Subject: [PATCH dwarves 2/2] tests/btf_functions: reduce verbosity of test
+Date: Wed,  2 Oct 2024 12:33:26 +0100
+Message-ID: <20241002113326.792495-3-alan.maguire@oracle.com>
 X-Mailer: git-send-email 2.43.5
 In-Reply-To: <20241002113326.792495-1-alan.maguire@oracle.com>
 References: <20241002113326.792495-1-alan.maguire@oracle.com>
@@ -69,54 +70,134 @@ X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 mlxs
  mlxlogscore=999 phishscore=0 suspectscore=0 spamscore=0 bulkscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2408220000
  definitions=main-2410020085
-X-Proofpoint-GUID: c8WezR6rtaA8OOvy8K2y6AhepjIxs0XB
-X-Proofpoint-ORIG-GUID: c8WezR6rtaA8OOvy8K2y6AhepjIxs0XB
+X-Proofpoint-ORIG-GUID: 2HP2sIR-LCbajxjMpGfNyHz1d78hD2nL
+X-Proofpoint-GUID: 2HP2sIR-LCbajxjMpGfNyHz1d78hD2nL
 
-In updating the logic that finds the path for vmlinux, it is useful
-to support a few different options
+when in non-verbose mode, emit a single line describing test + result.
 
-1. command-line parameter specification
-2. retrieval via pahole option
-3. environment variable based retrieval
+Non-verbose output now looks like this:
 
-Options 2 and 3 are useful for the case where the script is run
-via the tests script.  When adding support for 3 I incorrectly
-specified
+  1: Validation of BTF encoding of functions; this may take some time: Ok
 
-vmlinx=${vmlinux:-1}
-
-...which should have been
-
-vmlinux=${vmlinux:-$1}
-
-i.e. assign var vmlinux to the env var vmlinux if set, and if that
-is not set, use the first parameter for the vmlinux value.  If neither
-are set we can then fall back to the pahole option.
-
+Suggested-by: Arnaldo Carvalho de Melo <acme@redhat.com>
 Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
 ---
- tests/reproducible_build.sh | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ tests/btf_functions.sh | 54 +++++++++++++++++++++++-------------------
+ 1 file changed, 29 insertions(+), 25 deletions(-)
 
-diff --git a/tests/reproducible_build.sh b/tests/reproducible_build.sh
-index 19ef227..c595636 100755
---- a/tests/reproducible_build.sh
-+++ b/tests/reproducible_build.sh
-@@ -4,12 +4,12 @@
- # Test if BTF generated serially matches reproducible parallel DWARF loading + serial BTF encoding
- # Arnaldo Carvalho de Melo <acme@redhat.com> (C) 2024-
+diff --git a/tests/btf_functions.sh b/tests/btf_functions.sh
+index fbe68f9..5794be9 100755
+--- a/tests/btf_functions.sh
++++ b/tests/btf_functions.sh
+@@ -45,15 +45,14 @@ outdir=$(mktemp -d /tmp/btf_functions.sh.XXXXXX)
  
-+vmlinux=${vmlinux:-$1}
-+
- if [ -z "$vmlinux" ] ; then
- 	vmlinux=$(pahole --running_kernel_vmlinux)
+ trap cleanup EXIT
+ 
+-test -n "$VERBOSE" && printf "Encoding..."
++echo -n "Validation of BTF encoding of functions; this may take some time: "
++test -n "$VERBOSE" && printf "\nEncoding..."
+ 
+ pahole --btf_features=default --btf_encode_detached=$outdir/vmlinux.btf --verbose $vmlinux |\
+ 	grep "skipping BTF encoding of function" > ${outdir}/skipped_fns
+ 
+ test -n "$VERBOSE" && printf "done.\n"
+ 
+-echo "Validation of BTF encoding of functions; this may take some time..."
+-
+ funcs=$(pfunct --format_path=btf $outdir/vmlinux.btf |sort)
+ 
+ # all functions from DWARF; some inline functions are not inlined so include them too
+@@ -93,12 +92,13 @@ while IFS= read -r btf ; do
+ 	fi
+ done < $outdir/btf.funcs
+ 
+-echo "Matched $exact functions exactly."
+-echo "Matched $inline functions with inlines."
+-echo "Matched $const_insensitive functions with multiple const/non-const instances."
+-echo "Ok"
+-
+-echo "Validation of skipped function logic..."
++if [[ -n "$VERBOSE" ]]; then
++	echo "Matched $exact functions exactly."
++	echo "Matched $inline functions with inlines."
++	echo "Matched $const_insensitive functions with multiple const/non-const instances."
++	echo "Ok"
++	echo "Validation of skipped function logic..."
++fi
+ 
+ skipped_cnt=$(wc -l ${outdir}/skipped_fns | awk '{ print $1}')
+ 
+@@ -107,8 +107,6 @@ if [[ "$skipped_cnt" == "0" ]]; then
+ 	exit 0
  fi
  
--vmlinux=${vmlinux:-1}
+-echo "Validating skipped functions are absent from BTF..."
 -
- if [ ! -f "$vmlinux" ] ; then
- 	echo "$vmlinux file not available, please specify another"
- 	exit 2
+ skipped_fns=$(awk '{print $1}' $outdir/skipped_fns)
+ for s in $skipped_fns ; do
+ 	# Ensure the skipped function are not in BTF
+@@ -119,10 +117,11 @@ for s in $skipped_fns ; do
+ 	fi
+ done
+ 
+-echo "Skipped encoding $skipped_cnt functions in BTF."
+-echo "Ok"
+-
+-echo "Validating skipped functions have incompatible return values..."
++if [[ -n "$VERBOSE" ]]; then
++	echo "Skipped encoding $skipped_cnt functions in BTF."
++	echo "Ok"
++	echo "Validating skipped functions have incompatible return values..."
++fi
+ 
+ return_mismatches=$(awk '/return type mismatch/ { print $1 }' $outdir/skipped_fns)
+ return_count=0
+@@ -140,10 +139,11 @@ for r in $return_mismatches ; do
+ 	return_count=$((return_count+1))
+ done
+ 
+-echo "Found $return_count functions with multiple incompatible return values."
+-echo "Ok"
+-
+-echo "Validating skipped functions have incompatible params/counts..."
++if [[ -n "$VERBOSE" ]]; then
++	echo "Found $return_count functions with multiple incompatible return values."
++	echo "Ok"
++	echo "Validating skipped functions have incompatible params/counts..."
++fi
+ 
+ param_mismatches=$(awk '/due to param / { print $1 }' $outdir/skipped_fns)
+ 
+@@ -168,8 +168,10 @@ for p in $param_mismatches ; do
+ 		if [[ -n "$inlined" ]]; then
+ 			multiple_inline=$((multiple_inline+1))
+ 		else
+-			echo "WARN: '${p}()' has only one prototype; if it was subject to late optimization, pfunct may not reflect inconsistencies pahole found."
+-			echo "Full skip message from pahole: $skipmsg"
++			if [[ -n "$VERBOSE" ]]; then
++				echo "WARN: '${p}()' has only one prototype; if it was subject to late optimization, pfunct may not reflect inconsistencies pahole found."
++				echo "Full skip message from pahole: $skipmsg"
++			fi
+ 			warnings=$((warnings+1))
+ 		fi
+ 	else
+@@ -177,10 +179,12 @@ for p in $param_mismatches ; do
+ 	fi
+ done
+ 
+-echo "Found $multiple instances with multiple instances with incompatible parameters."
+-echo "Found $multiple_inline instances where inline functions were not inlined and had incompatible parameters."
+-echo "Found $optimized instances where the function name suggests optimizations led to inconsistent parameters."
+-echo "Found $warnings instances where pfunct did not notice inconsistencies."
++if [[ -n "$VERBOSE" ]]; then
++	echo "Found $multiple instances with multiple instances with incompatible parameters."
++	echo "Found $multiple_inline instances where inline functions were not inlined and had incompatible parameters."
++	echo "Found $optimized instances where the function name suggests optimizations led to inconsistent parameters."
++	echo "Found $warnings instances where pfunct did not notice inconsistencies."
++fi
+ echo "Ok"
+ 
+ exit 0
 -- 
 2.43.5
 
