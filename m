@@ -1,45 +1,66 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8229F6A33F;
-	Thu,  3 Oct 2024 18:33:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 461951AC884;
+	Thu,  3 Oct 2024 20:59:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727980397; cv=none; b=cadSRSKmSiQqzx2C0WOoEoUKE2wYdkBRgln4sVLrGljK7WSQpsl7u+Knhnv1GnkcagwaHWypBJUIwsjQ86tIS9MWe1ORhGtYVsVEM1zvdh1ahog4MI0aqewcylaOyVH/Hxg6JhG4jhYXbKTBN42+Zp1LFQU+vVnAbLZVBcSK/X4=
+	t=1727989149; cv=none; b=oJOjyLmz6vbYlO2KmTGFZS7vbczgd5GFYztoRvhn67t6PmsnIUB1bGgHJt7rLeJFXCvltxIwqpiFev2GBnpK44Vo4cREE1peHN/2Ze0hVJI+QfsAcBKZRcnXsPq3cbYwVso8YkBO/N0Gn7uyFMT4KrZp+w9qfjhQ2OeVll24cXw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727980397; c=relaxed/simple;
-	bh=qeKYzDR0ZzWVVmm6mUgb0da9cLC20051Tsv6ATTHuLc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Tlsgvi/dp+I4J+mx+fMZAI+4Ij4yDae3azngSa6986ukH39Tj1mTYT0rdIh8q08HSc5kF90C0gpaFvbzrF6l/DL3y25xf5FpnQXINN2Fy/HFAUGi6U03yTFvVneolPrAWF/9914ScAtuxc4BQW4lGbkUWWkWJkHv+Jf4FF/AUxI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ijDtx3a/; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1727989149; c=relaxed/simple;
+	bh=ZmpXlFGMpkNtzbN2wBs+Cw+ak6YemdJvW39dDHNXTWY=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lrokz0tZsL7H+KfcWGW3F40EnQ2IcnotpXHHgvUIOLwQGzNw1p8Sbw/pn+wL3fo8Vn0OZ+j+w3JSMIyEvn8qo44c1ea1YFHS8HJdjxghI0O2/z5ywVIhemZdjyD8cQvLHDGbjAyXfP6yglaB/WSKcJn+J1vBC2uvcII+uynQV+c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lhSkImDq; arc=none smtp.client-ip=209.85.128.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ijDtx3a/"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93555C4CEC5;
-	Thu,  3 Oct 2024 18:33:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1727980397;
-	bh=qeKYzDR0ZzWVVmm6mUgb0da9cLC20051Tsv6ATTHuLc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ijDtx3a/OrpwitT1cE66Sn7FpVdibUuLA2lltomzNY18HodbjyOCKyv+UrKSPsO01
-	 3cRNWV3l3XHBA9CbZXwf85jV71yfAbY8jQY1NeG+WUtvNvLZa6MvXqg8jywMUvGPMS
-	 CHXFVB5Ka7FciR5Osv0nyMq/CYeyzpuHTJdC7GfqUb/wW5WyREx+CBZN6teNvadxMW
-	 h4Nx0r27ZJ1F9L0CNutScEkzBVP/RgtLSb0vDrG/GUd0OrmFQcstOP8D5U+I7Saes4
-	 zG7W57ZS1ZmR4nhr+QjQb5JKwTJfEEX1g52j975ECtB7zTHlgd639O2yAfC9SE3rhD
-	 rnhFuOAygzy4A==
-Date: Thu, 3 Oct 2024 15:33:13 -0300
-From: Arnaldo Carvalho de Melo <acme@kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lhSkImDq"
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-42e5e1e6d37so13235325e9.3;
+        Thu, 03 Oct 2024 13:59:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1727989145; x=1728593945; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=mJNihuWQh42d+jrcRZkq6DiE8tAO9UQ/Jb0vkJLRO0o=;
+        b=lhSkImDqrZx6jC6CAR+dULWCkJb46UuS1mrq0cubfaVlN5JcS6kgfyXxl0r1eY6et1
+         QkVozfPDvWqnPR+kIJz90QheCh9skgKnvJfaWU0Oy+MY1dLEMAYs9SUNyootsdt3zDcf
+         yGjIw2FMwBTwELzSO0sjGIl389qmqSkcagGkEikh8qT1Ms0uTdhKfRyGFItiKbXEo67k
+         +zEpHXU1sfFiDrvEk4EFpFhxFM11/vH5GwFriIwYVRlqRV1Rz4FnrIOW5W60eCmc2Hkz
+         w13sK2brpBi35XdstzK5zvj4hrWG2t7TDhOFN7h/yRdCQTdpYrABsOW7SiDcxGkCzK6Y
+         k4LA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1727989145; x=1728593945;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mJNihuWQh42d+jrcRZkq6DiE8tAO9UQ/Jb0vkJLRO0o=;
+        b=QcKPcKChjGgtztCXylsmqiX6cFSxLOZ/LHnhDkQDPQnrkZYplhDehGhNMOzTCLQAR3
+         hfviMkVHGUyiiuCSTjbvC+hEKX62100CdxFpNcb721vdF/v88xdPsQPgHZGgiTUhlYpR
+         nrFWde6IICJAkxPXKbuGPhlEGNGbhWsPBDhYyi7a3/yJ9Q5rPxY66mQwIlOJXlMxcQ6h
+         TBAVOLBeUYQjwdV4B83oJr9zubKIALXTQdHAw2MlMHlu+/Fe4k9ZfmzF2Qu8Cl38lhHK
+         MjfHTlAa12gE0pDDy9uq3sei4CMFMlJAzN7TzENaeUHbyqxqjlFDTEvPJiXK+lqt4ESD
+         OXPw==
+X-Forwarded-Encrypted: i=1; AJvYcCUXAhZ5nO7qz8qX1MAok1uSWPBN81ZPXK0AF7uWNxQNoUz/ONsotGWqr3ycyVRFdk9PV+255SaUEQ==@vger.kernel.org, AJvYcCUw8PjHwMsa31v0+zC/QLpLKUW7ktzDwBpxukhsFKkipXj+UyyFcPlr6ETGWxAC4o4ivzY=@vger.kernel.org, AJvYcCVbOgw8YSkZ4K5M+XO4ugohbmHr16NBcOZDbYXbiX8qawS2XaRKO073GyOVQSQYcbm1xNZjKzFa0NKYSjCFu60o@vger.kernel.org
+X-Gm-Message-State: AOJu0Yye6HJkbFp/8lGi4tr4b9m2Vt8HO8m9/an2jjb1EhRkqL+4cXup
+	tf3hQk9/Nqq3G9QHUyeiBvcaqsbXBY9Zu+HXOD2qgYEcH/52pWkc9eBOFvmA
+X-Google-Smtp-Source: AGHT+IHssXj60QMhEj9YSO13AirAlwQRcDaUB+HiW5Htq7R4F7UVDq3ycVAM4z57QWMb5k3rjt1W7g==
+X-Received: by 2002:a05:600c:3b27:b0:42f:8515:e4a8 with SMTP id 5b1f17b1804b1-42f85a6d5camr2173545e9.6.1727989145119;
+        Thu, 03 Oct 2024 13:59:05 -0700 (PDT)
+Received: from krava (85-193-35-211.rib.o2.cz. [85.193.35.211])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-42f79d8d2fcsm52618615e9.9.2024.10.03.13.59.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Oct 2024 13:59:03 -0700 (PDT)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Thu, 3 Oct 2024 22:59:01 +0200
 To: Stephen Brennan <stephen.s.brennan@oracle.com>
-Cc: Alan Maguire <alan.maguire@oracle.com>, bpf@vger.kernel.org,
-	dwarves@vger.kernel.org, linux-debuggers@vger.kernel.org
-Subject: Re: [PATCH dwarves v3 5/5] pahole: add global_var BTF feature
-Message-ID: <Zv7jaXiQ7Av0p6Hn@x1>
+Cc: Arnaldo Carvalho de Melo <acme@kernel.org>, bpf@vger.kernel.org,
+	dwarves@vger.kernel.org, linux-debuggers@vger.kernel.org,
+	Alan Maguire <alan.maguire@oracle.com>
+Subject: Re: [PATCH dwarves v3 0/5] Emit global variables in BTF
+Message-ID: <Zv8FlbMTd24eJCyE@krava>
 References: <20241002235253.487251-1-stephen.s.brennan@oracle.com>
- <20241002235253.487251-6-stephen.s.brennan@oracle.com>
- <22da229b-86d0-4a0c-b5d6-4883b64669f2@oracle.com>
- <Zv6v0WdEBg4dEJAP@x1>
- <9cda0821-4b25-498e-acf3-cd8055d82ca5@oracle.com>
- <Zv7R2RcFRqMPLB5K@x1>
- <87ttdtkrh4.fsf@oracle.com>
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
@@ -48,140 +69,81 @@ List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <87ttdtkrh4.fsf@oracle.com>
+In-Reply-To: <20241002235253.487251-1-stephen.s.brennan@oracle.com>
 
-On Thu, Oct 03, 2024 at 10:48:23AM -0700, Stephen Brennan wrote:
-> Arnaldo Carvalho de Melo <acme@kernel.org> writes:
-> > On Thu, Oct 03, 2024 at 04:21:07PM +0100, Alan Maguire wrote:
-> >> On 03/10/2024 15:53, Arnaldo Carvalho de Melo wrote:
-> >> > On Thu, Oct 03, 2024 at 03:40:35PM +0100, Alan Maguire wrote:
-> >> >> On 03/10/2024 00:52, Stephen Brennan wrote:
-> >> >>> So far, pahole has only encoded type information for percpu variables.
-> >> >>> However, there are several reasons why type information for all global
-> >> >>> variables would be useful in the kernel:
-> >> > 
-> >> >>> 1. Runtime kernel debuggers like drgn could use the BTF to introspect
-> >> >>> kernel data structures without needing to install heavyweight DWARF.
-> >> > 
-> >> >>> 2. BPF programs using the "__ksym" annotation could declare the
-> >> >>> variables using the correct type, rather than "void".
-> >> > 
-> >> >>> It makes sense to introduce a feature for this in pahole so that these
-> >> >>> capabilities can be explored in the kernel. The feature is non-default:
-> >> >>> when using "--btf-features=default", it is disabled. It must be
-> >> >>> explicitly requested, e.g. with "--btf-features=+global_var".
-> >> >  
-> >> >> I'm not totally sure switching global_var to a non-default feature is
-> >> >> the right answer here.
-> >> >  
-> >> >> The --btf_features "default" set of options are meant to closely mirror
-> >> >> the upstream kernel options we enable when doing BTF encoding. However,
-> >> >> in scripts/Makefile.btf we don't use "default"; we explicitly call out
-> >> >> the set of features we want. We can't just use "default" in that context
-> >> >> since the meaning of "default" varies based upon whatever version of
-> >> >> pahole you have.
-> >> >  
-> >> >> So "default" is simply a convenient shorthand for pahole testing which
-> >> >> corresponds to "give me the set of features that upstream kernels use".
-> >> >> It could have a better name that reflects that more clearly I suppose.
-> >> >  
-> >> >> When we do switch this on in-kernel, we'll add the explicit "global_var"
-> >> >> to the list of features in scripts/Makefile.btf.
-> >> >  
-> >> >> So with all this said, do we make global_vars a default or non-default
-> >> >> feature? It would seem to make sense to specify non-default, since it is
-> >> >> not switched on for the kernel yet, but looking ahead, what if the 1.28
-> >> >> pahole release is used to build vmlinux BTF and we add global_var to the
-> >> >> list of features? In such a case, our "default" set of values would be
-> >> >> out of step with the kernel. So it's not a huge deal, but I would
-> >> >> consider keeping this a default feature to facilitate testing; this
-> >> >> won't change what the kernel does, but it makes testing with full
-> >> >> variable generation easier (I can just do "--btf_features=default").
-> >> > 
-> >> > This "default" really is confusing, as you spelled out above :-\
+On Wed, Oct 02, 2024 at 04:52:42PM -0700, Stephen Brennan wrote:
+> Hello all,
 > 
-> Yeah, I spent a while staring at the comment and reading the code to
-> understand the nuance between the initial and default values. I don't
-> think I fully understood it until this v3 patch, and admittedly I still
-> didn't have the full context of how "default" was used.
+> This is v3 of the series to add global variables to pahole's generated BTF.
+> Patches 1-3 of v2 were already merged. This series splits the last patch of v2
+> and does some small updates. It should apply cleanly to the "next" branch.
+> https://github.com/acmel/dwarves/commits/btf_global_vars/
 > 
-> One interesting point of comparison is the "-M" argument to
-> "qemu-system-$arch". For example:
-> 
->   $ qemu-system-x86_64 -M ?
->   Supported machines are:
->   microvm              microvm (i386)
->   pc                   Standard PC (i440FX + PIIX, 1996) (alias of pc-i440fx-9.0)
->   pc-i440fx-9.0        Standard PC (i440FX + PIIX, 1996) (default)
->   pc-i440fx-8.2        Standard PC (i440FX + PIIX, 1996)
->   pc-i440fx-8.1        Standard PC (i440FX + PIIX, 1996)
->   pc-i440fx-8.0        Standard PC (i440FX + PIIX, 1996)
->   [...]
-> 
-> So the default "pc" machine is simply an alias that gets updated to the
-> most recent machine (with potential new behaviors) every release, but
-> you can always select a specific machine that you care about.
-> 
-> Maybe it would make sense if there were versioned defaults, so that
-> "default" always picks whatever is relevant to the most recent upstream
-> kernel, but you could also select the default as of an older pahole
-> release.
-> 
-> That does sound like plenty of complexity added to an already somewhat
-> confusing system, so I'm not sold on it. The flexibility for adjusting
-> to new kernel defaults is appealing though.
-> 
-> >> >When to
-> >> > add something to it so that it reflects what the kernel has is tricky,
-> >> > perhaps we should instead have a ~/.config/pahole file where developers
-> >> > can add BTF features to add to --btf_features=default in the period
-> >> > where something new was _really_ added to the kernel and before the next
-> >> > version when it _have been added to the kernel set of BTF features_ thus
-> >> > should be set into stone in the pahole sources?
-> >  
-> >> it's a nice idea; I suppose once we have more automated tests, this will
-> >> be less of an issue too. I'm looking at adding a BTF variable test
-> >> shortly, would be good to have coverage there too, especially since
-> >> we're growing the amount of info we encode in this area.
-> >
-> > Sure thing, the more tests, the better!
-> >  
-> >> > So I think we should do as Stephen did, keep it out of
-> >> > --btf_features=default, as it is not yet in the kernel set of options,
-> >> > and have the config file, starting with being able to set those
-> >> > features, i.e. we would have:
-> >
-> >> > $ cat ~/.config/pahole
-> >> > [btf_encoder]
-> >> > 	btf_features=+global_var
-> >
-> >> > wdyt?
-> >  
-> >> I think that makes perfect sense, great idea!
-> >
-> > I was looking for a library to do that to avoid "stealing" the
-> > perf-config code, but perhaps we should use an env var for that?
-> >
-> > PAHOLE_BTF_FEATURES='+global_var'
-> >
-> > To keep things simple?
-> 
-> One concern with configuration files is that (at least on my system)
-> they tend to sit around and get forgotten, unless they're super well
-> known configs like ~/.bashrc. So at some point, I could see myself
-> setting a pahole config and then 6 months later wondering why pahole
-> behaves differently on two different systems.
-> 
-> Env vars are easy to set permanently if you want, but are also more
-> visible and centralized with your other configurations, so they're my
-> preference.
+> Changes since v2:
+> 1. Split things out into several smaller patches as can be seen in the log
+>    below.
 
-Agreed, lets go with an env var.
+thanks for the split, so much better for review, lgtm
 
-And this one is even "ephemeral", i.e. as we get new versions of pahole
-it should match the most recent set of kernel btf_features set and thus
-become unneeded.
+Acked-by: Jiri Olsa <jolsa@kernel.org>
 
-At some point we'll stop adding features, right? 8-)
+thanks,
+jirka
 
-- Arnaldo
+
+> 2. Previously the global_var feature was defined with BTF_DEFAULT_FEATURE, but I
+>    think we agreed in the discussion of v2 that it would be better as
+>    BTF_NON_DEFAULT_FEATURE, so I changed it to align with our discussion.
+> 3. Removed the "--encode_btf_global_vars" option.
+> 3. I went through and straightened out my use of integer types for ELF section
+>    index (size_t, as returned by libelf) as well as the variable addr and size.
+>    To this end I did add a few checks to explicitly ensure we don't overflow the
+>    uint32_t fields in the DATASEC.
+> 
+> To test this out on a Linux build, you'll want to make the following change:
+> 
+> ---------
+> diff --git a/scripts/Makefile.btf b/scripts/Makefile.btf
+> index b75f09f3f424..c88d9e526426 100644
+> --- a/scripts/Makefile.btf
+> +++ b/scripts/Makefile.btf
+> @@ -19,7 +19,7 @@ pahole-flags-$(call test-ge, $(pahole-ver), 125)      += --skip_encoding_btf_inconsis
+>  else
+> 
+>  # Switch to using --btf_features for v1.26 and later.
+> -pahole-flags-$(call test-ge, $(pahole-ver), 126)  = -j --btf_features=encode_force,var,float,enum64,decl_tag,type_tag,optimized_func,consistent_func,decl_tag_kfuncs
+> +pahole-flags-$(call test-ge, $(pahole-ver), 126)  = -j --btf_features=encode_force,var,float,enum64,decl_tag,type_tag,optimized_func,consistent_func,decl_tag_kfuncs,global_var
+> 
+>  ifneq ($(KBUILD_EXTMOD),)
+>  module-pahole-flags-$(call test-ge, $(pahole-ver), 126) += --btf_features=distilled_base
+> ---------
+> 
+> With a suitable kernel config that has BTF enabled, you could then build like
+> so:
+> 
+>     PATH=path/to/pahole_build_dir make all
+> 
+> And you'll be able to examine the size of the results with readelf, or dump the
+> results with bpftool.
+> 
+> v2: https://lore.kernel.org/dwarves/20240920081903.13473-1-stephen.s.brennan@oracle.com/T/
+> v1: https://lore.kernel.org/dwarves/20240912190827.230176-1-stephen.s.brennan@oracle.com/
+> 
+> Stephen Brennan (5):
+>   btf_encoder: use bitfield to control var encoding
+>   btf_encoder: stop indexing symbols for VARs
+>   btf_encoder: explicitly check addr/size for u32 overflow
+>   btf_encoder: allow encoding VARs from many sections
+>   pahole: add global_var BTF feature
+> 
+>  btf_encoder.c      | 348 +++++++++++++++++++++------------------------
+>  btf_encoder.h      |   7 +
+>  dwarves.h          |   1 +
+>  man-pages/pahole.1 |   7 +-
+>  pahole.c           |   3 +-
+>  5 files changed, 178 insertions(+), 188 deletions(-)
+> 
+> -- 
+> 2.43.5
+> 
+> 
