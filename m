@@ -1,60 +1,65 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail-40131.protonmail.ch (mail-40131.protonmail.ch [185.70.40.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88A0B20FAA4
-	for <dwarves@vger.kernel.org>; Fri,  4 Oct 2024 13:19:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B3522141A2
+	for <dwarves@vger.kernel.org>; Fri,  4 Oct 2024 15:28:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.40.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728047996; cv=none; b=uKCjQlVTdFKfNi0Z646BQGcgHqYzEDqK+IMZ/BSfjePCtVE0dzTLs4666gjlFfizqrdUhtPp/cg/BBst7b9bL4RnzpnaNvOnkM2yvtKeTLiSATtFRqO7L0c8KFO75xFUCNkCU+mfDw1FnFMaX5Co6/SlXmHxLHae2z7vdCzKD4I=
+	t=1728055736; cv=none; b=tNS2kblqSGcRHiQ9fsyoY+ixeugsbSXgtU3kNdfFdqGK2/X1VA31Sf5Yx97q7XPMTcPn9xtgfwepGZVQl31M59zsLxNXcfgfo+zvfBTHvrzw2ZWB8he9GADUsbWwLO3N6qfbxI2TN5bDeX08DTe9d9LKffW8CrojB2kbIfVAATA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728047996; c=relaxed/simple;
-	bh=udctvyg2H1XOo8nNnf+cdG1ltr/q0qianEiXHKIKMJA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=o2WfcfDzDq02EYkXT3Qu0A5W8J0KZC0KE3ld1NOrZFkxjZwJlo1nnfbkohSmKIWdwzsrEcmxIKC180W61RlduVAu0illCXYAYTeoL9pKLrg8pFol2A1t+7eYxGWvTzhcURyw0kq+nyMZuUx0/7PaipfmYMB1wGnKHrmJHF0GriI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LtWciHPG; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1728055736; c=relaxed/simple;
+	bh=iX4EU1x80p+IkCZwVQEil3ngTIFac8Us8PtjxjUcu5Y=;
+	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=OOIFKLV6F7PQ+vrOkERosxjReCiQ9c5K/qagokRmEv5Rjg94PJRJdwqiJJ8CRMv4THd7pLJLRsnI03mYZ8SVWl0PvFAGG2yrx+D8vg3Z9bGq1Za/9MC/4X+JFK+GH5XqlcH8US7Ss11ufSDU2pIKe2W3GKmVPfjvfQkYM+fSdd4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me; spf=pass smtp.mailfrom=pm.me; dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b=jYFF1p14; arc=none smtp.client-ip=185.70.40.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pm.me
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LtWciHPG"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 933DAC4CEC6;
-	Fri,  4 Oct 2024 13:19:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1728047996;
-	bh=udctvyg2H1XOo8nNnf+cdG1ltr/q0qianEiXHKIKMJA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=LtWciHPGGpGghOQtRYWaYUp/TB8t/m8wwkOjk7x50iUlTX6ZCMOgf9B2m59DxeJRm
-	 cTgT1IOdwug1rtEyHqM9lH8ptJk+TTy+jEpDvVuh+Ba/Thd94ac1OHH46U03gVGdyZ
-	 safHSj6DxmcBXuu1Hga8UCrVLvcYlOkSVDZKk+IT2eliBw9HRPaw/1WTXCGROdqUpG
-	 9VzVH0lGzOr45YxoQk0Oc/ouptIk5dKh04yxHsb5riNh+/FqS/gf/WDpN5s33zV7kG
-	 aYFf89L2zD5lP2wKhFn7ZVNWtiEhJHLo0IrhdvAPPS37DbNV5GN7aIumnqTZOZfwaW
-	 DG1g9PJmBrUiQ==
-Date: Fri, 4 Oct 2024 10:19:50 -0300
-From: Arnaldo Carvalho de Melo <acme@kernel.org>
+	dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b="jYFF1p14"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me;
+	s=protonmail3; t=1728055732; x=1728314932;
+	bh=iX4EU1x80p+IkCZwVQEil3ngTIFac8Us8PtjxjUcu5Y=;
+	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+	 Message-ID:BIMI-Selector;
+	b=jYFF1p14BvOfWVVvhqF2iROABoKE1YcMdRrwZi3tQ0Ih2FbaQPZ0oHfDPvIurzvUI
+	 2cej9V/pzAqv4Sqs4O9zTExoVG40L3hgx1XRbMYNDTuy1YSrdvhl51ce2XDqXlRKnE
+	 UOvTeIpTNYBSGAB64RbWcR+73YMx/YV/EH+vla4xFlYURqrTTl64KdXPs1yZ0jXeGh
+	 tv/3+ltWkCjbrq1vBfQXiHJAy7kI0c+D/Nyy7/DPom4DWG0BGavZfkPQZkhdbUzvjm
+	 I1syUsRWi5a+UmxNJSiEXZBpSmce7LPWGnLSJPFHodu2QE4i5ArfRJK01nisWkY82O
+	 Gzu4NBzE5qx3Q==
+Date: Fri, 04 Oct 2024 15:28:49 +0000
 To: Alan Maguire <alan.maguire@oracle.com>
-Cc: Ihor Solodrai <ihor.solodrai@pm.me>, dwarves@vger.kernel.org,
-	andrii@kernel.org, eddyz87@gmail.com
-Subject: Re: [PATCH dwarves 0/6] btf_encoder: implement shared elf_functions
- table
-Message-ID: <Zv_rdlKrzAyOwYMn@x1>
-References: <20241004051347.41143-1-ihor.solodrai@pm.me>
- <4d50db76-dd41-4855-977e-1e2a722b73b2@oracle.com>
+From: Ihor Solodrai <ihor.solodrai@pm.me>
+Cc: dwarves@vger.kernel.org, acme@kernel.org, andrii@kernel.org, eddyz87@gmail.com
+Subject: Re: [PATCH dwarves 0/6] btf_encoder: implement shared elf_functions table
+Message-ID: <GpnFTITOVPIKrdi75gJNf_VUqajWA_XKkpz9M7vzr30XF4mGV5BPLVQVFFPiTFN29t7DUiXCrQwna3NqT0pqq9DaHEOGUDNWp2_lB453xZA=@pm.me>
+In-Reply-To: <4d50db76-dd41-4855-977e-1e2a722b73b2@oracle.com>
+References: <20241004051347.41143-1-ihor.solodrai@pm.me> <4d50db76-dd41-4855-977e-1e2a722b73b2@oracle.com>
+Feedback-ID: 27520582:user:proton
+X-Pm-Message-ID: f8613bbcafe5e03dcccab8350450012b28180c27
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4d50db76-dd41-4855-977e-1e2a722b73b2@oracle.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Oct 04, 2024 at 10:15:56AM +0100, Alan Maguire wrote:
+On Friday, October 4th, 2024 at 2:15 AM, Alan Maguire <alan.maguire@oracle.=
+com> wrote:
+
+>=20
 > On 04/10/2024 06:13, Ihor Solodrai wrote:
+>=20
 > > This patchset changes how BTF encoders collect and store function
 > > information in a table searcheable by name, where their
 > > btf_encoder_function_state is maintained.
-> >
-> 
+>=20
+>=20
 > hi Ihor
-> 
+>=20
 > I'll take a more detailed look shortly, but I'd suggest respinning the
 > series against the updated "next" branch shortly as there are changes in
 > flight that Stephen is working on to encode variables; they
@@ -63,90 +68,21 @@ On Fri, Oct 04, 2024 at 10:15:56AM +0100, Alan Maguire wrote:
 > make things easier to wait until those changes land and respin, and I
 > don't think they invalidate the approach you suggest, just will require
 > some merging around variable handling I think.
-
-Right, and this is something I was planning to work into as well: to
-move things from the encoders to the loaders, i.e. collecting info from
-the system should be the work of loaders, encoders then write things in
-the desired output format.
-
-This comes from discussions we had at LPC and even before, i.e. that we
-should be able to write BTF in the BTF encoder from info we read from
-BTF info, be it generated by a compiler or by pahole itself, to amend
-the BTF, add/remove BTF features, etc.
-
-And for that the DWARF loader should pick the things needed for
-encoding, say, percpu info, but when reading from a BTF file (detached
-or in an ELF section) we probably have that info already.
-
-I'm now waiting for Stephen to publish a new version of his patchset to
-review/apply/test.
-
-Then Ihor can work from there, I think.
-
-- Arnaldo
- 
+>=20
 > [1] https://lore.kernel.org/dwarves/8734ldm72u.fsf@oracle.com/
-> 
-> 
-> > Previously a separate array of elf_function structs was built and
-> > stored by each btf_encoder, and when the encoders were merged before
-> > dumping BTF their function tables would be traversed and merged too.
-> > 
-> > With these changes, the table used for searching for elf_function
-> > becomes shared between encoder threads. However, additional
-> > information in the table and in each individual elf_function has to be
-> > stored to accomodate the sharing.
-> > 
-> > The memory footprint is now slightly higher, although it degrades
-> > faster when number of threads is increased without this patchset.
-> > 
-> > /usr/bin/time -v with -j8:
-> > 
-> >     With patchset: Maximum resident set size (kbytes): 1402792 (~2% higher)
-> >     Without:       Maximum resident set size (kbytes): 1376700
-> > 
-> > /usr/bin/time -v with -j16:
-> > 
-> >     With patchset: Maximum resident set size (kbytes): 1456044
-> >     Without:       Maximum resident set size (kbytes): 1450748
-> > 
-> > The idea to make function table shared between encoders has been
-> > mentioned previously [1].
-> > 
-> > I've been looking into ways of improving parallel reproducible_build
-> > time, ideally making it as fast as non-reproducible.  In an off-list
-> > discussion Eduard Zingerman suggested creating a btf_encoder for each
-> > input compilation unit. This would allow to enforce the order of BTF
-> > merge after btf_encoders are done.
-> > 
-> > With each encoder maintaining it's own table this idea proved
-> > infeasible [2]. And so making it shared became a requirement.
-> > 
-> > I implemented a prototype that improved the speed of parallel
-> > reproducible_build by using a similar shared table and implementing
-> > Eduard's idea [3]. On master (84ab453) reproducible_build was ~50%
-> > slower than non-reproducible, and with my experimental changes it was
-> > 20% slower.
-> > 
-> > This patchset stems from that work and discussions. The longer term
-> > goal is to make BTF encoding reproducible by default, and fast.
-> > 
-> > [1] https://lore.kernel.org/dwarves/20240909155031.1596249-1-alan.maguire@oracle.com/
-> > [2] https://lore.kernel.org/dwarves/aQtEzThpIhRiwQpkgeZepPGr5Mt_zuGfPbxQxZgS6SSoPYoqM1afjDqEmIZkdH3YzvhWmWwqCS_8ZvFTcSZHvpkAeBpLRTAZEmrOhq0svfo=@pm.me/
-> > [3] https://github.com/theihor/dwarves/pull/1/files
-> > 
-> > Ihor Solodrai (6):
-> >   dwarf_loader: introduce pre/post cus__load_module hooks to conf_load
-> >   btf_encoder: split btf_encoder__collect_symbols()
-> >   btf_encoder: introduce elf_functions struct type
-> >   btf_encoder: collect elf_functions in pre_cus__load_module
-> >   btf_encoder: introduce elf_functions_entry
-> >   btf_encoder: switch to shared elf_functions table
-> > 
-> >  btf_encoder.c  | 341 ++++++++++++++++++++++++++++++++++++-------------
-> >  btf_encoder.h  |   5 +-
-> >  dwarf_loader.c |  21 ++-
-> >  dwarves.h      |  18 ++-
-> >  pahole.c       |  28 ++--
-> >  5 files changed, 303 insertions(+), 110 deletions(-)
-> > 
+
+Hi Alan.
+
+Yes, I am aware of the pending changes. This is a reason I was a bit
+in a hurry, because I already had experience re-doing this from scratch :)
+
+This patchset was done on top of next (2b35957). I don't expect this
+version to be merged, but I wanted to get feedback from you and
+Arnaldo, so decided to submit.
+
+After Stephen's changes are applied to next, I'll submit v2 of the
+patch.
+
+Thanks!
+
+[...]
