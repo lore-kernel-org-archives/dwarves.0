@@ -1,43 +1,43 @@
-Received: from mail-40131.protonmail.ch (mail-40131.protonmail.ch [185.70.40.131])
+Received: from mail-4322.protonmail.ch (mail-4322.protonmail.ch [185.70.43.22])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6726552F76
-	for <dwarves@vger.kernel.org>; Fri,  4 Oct 2024 05:14:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.40.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D6064F5FB
+	for <dwarves@vger.kernel.org>; Fri,  4 Oct 2024 05:14:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.43.22
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728018850; cv=none; b=c+MeG6vUudYHtQ6p7UQDPBHk2E8+ZkhxLBaqbEJZdfv/xYlAXwYghZeRcmhPCZIiEWCqyoeimLqqtLldKwwLD7Xc7noVXOKBvd531qoaCQa7LTg0JrtT0QQ6kyqeymB5mGAsSYqkIniO0TS1LlfHdOusOr+O0tTj6LFI6p6ijNw=
+	t=1728018855; cv=none; b=E4SZkNUaPjhrPRBTR7DYqZw2DptVK7GFMMBiRtMOnPwF+qvxlsDXntRiIzejBejapb2gj9nqq/trEVMeJE+tJyxwhCGkTu9D7LiksRAzOC7SOotUoRDXPIjd+8uqGL+zxyko7rhzfkv285TSLCzGISPuHTNOS8tdkwbXZk78dds=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728018850; c=relaxed/simple;
-	bh=kB1Yxhzvhlty0q3SwDIadVICeEMouT3Rv0sLIWQdn7E=;
+	s=arc-20240116; t=1728018855; c=relaxed/simple;
+	bh=fabLr06zVVm3evcaxu9kc6miBEwLcVQvUT+muPVqhJI=;
 	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=kIrbu0/ftyENJCff45RcWrbqwY9UcsnxkXmN9XxOK1DQXUab08DRyOSOvwxPbMjMTN+QuyQqZrJLXeoGJVtgl5hG0+bY4YmMdnOkI0XBXsxiT3Phg9xg20uMnUUel/fDLz/ICngITCeldaix6B3zl9ic0btqSQ5M+C8G4qgGMlc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me; spf=pass smtp.mailfrom=pm.me; dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b=J8khgHbe; arc=none smtp.client-ip=185.70.40.131
+	 MIME-Version:Content-Type; b=qSNWwSOraO4gd7gtwEtF9sza2EsMjg6oTy1IVUDgDemq3A0fM57sfQO7yEDMGq3EKuMmh/UrjrOPd5PJMJVjmdn7Tbap/GoDKSc96qHof0GP02Ty0Hwkab7LtvyUE3ollHTzDHEFdAN2YtqvwmAioC4oyCvgdi8ALPsPjDgUixk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me; spf=pass smtp.mailfrom=pm.me; dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b=g+X6VdsB; arc=none smtp.client-ip=185.70.43.22
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pm.me
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b="J8khgHbe"
+	dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b="g+X6VdsB"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me;
-	s=protonmail3; t=1728018840; x=1728278040;
-	bh=A/p8iSRH0htfqN2UqFBpiFMryF0JfGKhAirvPyaXQr4=;
+	s=protonmail3; t=1728018851; x=1728278051;
+	bh=WP1W2hxdGlii5F3A4Pe5XF8FxrmF8R4ipk5bNx2GFSY=;
 	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
 	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
 	 Message-ID:BIMI-Selector;
-	b=J8khgHbeF0G9L1UjcYjUOZdje1RAV6VVlyoyCPKmILYxaZnfs6Vq6cxoriy0Jp/WA
-	 m7ALkp5ebzEubZDSGFl6t2qVAzDfOKUsw4BjwXT1ij88Sm0I88+gVBDlBO74WpXtvI
-	 V6+9wixYVJgOeaCiKH8ON2GY8YzFA87T8KM30fQGEZGiPU+Cg3i4cEpIzC7xKtIhj4
-	 cJXy8styfNvXf8Bn+6Ilp7zYnA2TIreUGrS5g28lCv709gSDE1OLBjXQ9v7oofY4A4
-	 DL/zkAYY0QhfKnsTn695nHzJI8VEBCn4IbgAe4wsAsh+Z4Jacf469BXZrj96+hlyfP
-	 2BhmOB/ioqFPA==
-Date: Fri, 04 Oct 2024 05:13:57 +0000
+	b=g+X6VdsB6lmFgfcOqe9xQqWJAwnJ+q9pd5ppPlfCdBCsRqzC4MIEn8bWICnzmsuKU
+	 5eeLlwgvRanM0ME5So9SUcMyRbY9A+n5E+ghn54sz7waZAlcjx9eobXY/a6pGfqlvB
+	 igZfTXKFubr2aFMZjD44VCV2Q8kK5SEeeJhaWzgdpC3T9hDuCbzKXflVug8rDd3oVn
+	 3tGyfoXOIb+Quq5QVl++y3GRlBDjCalpZjYmW4NSg+G7F9j9iwmp4T4W0LXUgLoXPJ
+	 Rj39qvff6vJxDQKG2UMGV7QFj5lq4fpTy06ogvxtfmk5ANsizmgB6RmHATGZYNk6wY
+	 Rk5IglizyFPZw==
+Date: Fri, 04 Oct 2024 05:14:06 +0000
 To: dwarves@vger.kernel.org
 From: Ihor Solodrai <ihor.solodrai@pm.me>
 Cc: acme@kernel.org, alan.maguire@oracle.com, andrii@kernel.org, eddyz87@gmail.com
-Subject: [PATCH dwarves 2/6] btf_encoder: split btf_encoder__collect_symbols()
-Message-ID: <20241004051347.41143-3-ihor.solodrai@pm.me>
+Subject: [PATCH dwarves 4/6] btf_encoder: collect elf_functions in pre_cus__load_module
+Message-ID: <20241004051347.41143-5-ihor.solodrai@pm.me>
 In-Reply-To: <20241004051347.41143-1-ihor.solodrai@pm.me>
 References: <20241004051347.41143-1-ihor.solodrai@pm.me>
 Feedback-ID: 27520582:user:proton
-X-Pm-Message-ID: 9dd039e7aab82f744a9c0853a6c4914f32ccf781
+X-Pm-Message-ID: 2e3ea9cebc7149a95267fb027ab4db8ea31563a4
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
@@ -47,116 +47,164 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-btf_encoder__collect_symbols() collects information on percpu
-variables and functions from ELF symbols. Factor out these steps into
-separate functions.
+Introduce a global elf_functions_list variable in btf_encoder.c that
+contains an elf_functions per ELF.
 
-This makes sense for subsequent changes making functions table not
-btf_encoder-specific. Also percpu vars will not be collected after
-global variables support is merged [1].
+An elf_functions structure is allocated and filled out by
+btf_encoder__pre_cus__load_module hook, and disposed after
+btf_encoder__encode is done.
 
-[1]: https://lore.kernel.org/dwarves/df3c21d4-9f42-4681-b7bb-78134f430f1c@o=
-racle.com/T/#mf945ef7ecefe3915930c78358c03918ba28f0a05
+At this point btf_encoders don't use shared elf_functions yet, but it
+is built before encoders are initialized.
 
 Signed-off-by: Ihor Solodrai <ihor.solodrai@pm.me>
 ---
- btf_encoder.c | 52 +++++++++++++++++++++++++++++++++++++++++----------
- 1 file changed, 42 insertions(+), 10 deletions(-)
+ btf_encoder.c | 76 +++++++++++++++++++++++++++++++++++++++++++++++++++
+ btf_encoder.h |  2 ++
+ pahole.c      |  3 ++
+ 3 files changed, 81 insertions(+)
 
 diff --git a/btf_encoder.c b/btf_encoder.c
-index 51cd7bf..6e7d2e7 100644
+index ec523a1..0d4a4fe 100644
 --- a/btf_encoder.c
 +++ b/btf_encoder.c
-@@ -2178,7 +2178,7 @@ static int btf_encoder__collect_percpu_var(struct btf=
-_encoder *encoder, GElf_Sym
- =09return 0;
- }
+@@ -106,6 +106,8 @@ struct elf_secinfo {
+ };
 =20
--static int btf_encoder__collect_symbols(struct btf_encoder *encoder, bool =
-collect_percpu_vars)
-+static int btf_encoder__collect_percpu_vars(struct btf_encoder *encoder)
- {
- =09Elf32_Word sym_sec_idx;
- =09uint32_t core_id;
-@@ -2189,22 +2189,37 @@ static int btf_encoder__collect_symbols(struct btf_=
-encoder *encoder, bool collec
+ struct elf_functions {
++=09struct list_head node; // for elf_functions_list
++=09Elf *elf; // source ELF
+ =09struct elf_symtab *symtab;
+ =09struct elf_function *entries;
+ =09int allocated;
+@@ -159,6 +161,72 @@ struct btf_kfunc_set_range {
+ =09uint64_t end;
+ };
 =20
- =09/* search within symtab for percpu variables */
- =09elf_symtab__for_each_symbol_index(encoder->symtab, core_id, sym, sym_se=
-c_idx) {
--=09=09if (collect_percpu_vars && btf_encoder__collect_percpu_var(encoder, =
-&sym, sym_sec_idx))
--=09=09=09return -1;
--=09=09if (btf_encoder__collect_function(encoder, &sym))
-+=09=09if (btf_encoder__collect_percpu_var(encoder, &sym, sym_sec_idx))
- =09=09=09return -1;
- =09}
-=20
--=09if (collect_percpu_vars) {
--=09=09if (encoder->percpu.var_cnt)
--=09=09=09qsort(encoder->percpu.vars, encoder->percpu.var_cnt, sizeof(encod=
-er->percpu.vars[0]), percpu_var_cmp);
-+=09if (encoder->percpu.var_cnt)
-+=09=09qsort(encoder->percpu.vars,
-+=09=09      encoder->percpu.var_cnt,
-+=09=09      sizeof(encoder->percpu.vars[0]),
-+=09=09      percpu_var_cmp);
-=20
--=09=09if (encoder->verbose)
--=09=09=09printf("Found %d per-CPU variables!\n", encoder->percpu.var_cnt);
-+=09if (encoder->verbose)
-+=09=09printf("Found %d per-CPU variables!\n", encoder->percpu.var_cnt);
 +
-+=09return 0;
-+}
++// In principle, multiple ELFs can be processed in one pahole run,
++// so we have to store elf_functions table per ELF.
++// An element is added to the list on btf_encoder__pre_cus__load_module,
++// and removed after btf_encoder__encode is done.
++static LIST_HEAD(elf_functions_list);
 +
-+static int btf_encoder__collect_functions(struct btf_encoder *encoder)
++static struct elf_functions *elf_functions__get(Elf *elf)
 +{
-+=09Elf32_Word sym_sec_idx;
-+=09uint32_t core_id;
-+=09GElf_Sym sym;
++=09struct list_head *pos;
 +
-+=09elf_symtab__for_each_symbol_index(encoder->symtab, core_id, sym, sym_se=
-c_idx) {;
-+=09=09if (btf_encoder__collect_function(encoder, &sym))
-+=09=09=09return -1;
- =09}
-=20
- =09if (encoder->functions.cnt) {
--=09=09qsort(encoder->functions.entries, encoder->functions.cnt, sizeof(enc=
-oder->functions.entries[0]),
-+=09=09qsort(encoder->functions.entries,
-+=09=09      encoder->functions.cnt,
-+=09=09      sizeof(encoder->functions.entries[0]),
- =09=09      functions_cmp);
- =09=09if (encoder->verbose)
- =09=09=09printf("Found %d functions!\n", encoder->functions.cnt);
-@@ -2213,6 +2228,23 @@ static int btf_encoder__collect_symbols(struct btf_e=
-ncoder *encoder, bool collec
- =09return 0;
- }
-=20
-+static int btf_encoder__collect_symbols(struct btf_encoder *encoder, bool =
-collect_percpu_vars)
-+{
-+=09int err;
++=09list_for_each(pos, &elf_functions_list) {
++=09=09struct elf_functions *funcs =3D list_entry(pos, struct elf_functions=
+, node);
 +
-+=09err =3D btf_encoder__collect_functions(encoder);
-+=09if (err)
-+=09=09return err;
-+
-+=09if (collect_percpu_vars) {
-+=09=09err =3D btf_encoder__collect_percpu_vars(encoder);
-+=09=09if (err)
-+=09=09=09return err;
++=09=09if (funcs->elf =3D=3D elf)
++=09=09=09return funcs;
 +=09}
++=09return NULL;
++}
++
++static inline void elf_functions__delete(struct elf_functions *funcs)
++{
++=09free(funcs->entries);
++=09elf_symtab__delete(funcs->symtab);
++=09list_del(&funcs->node);
++=09free(funcs);
++}
++
++static int elf_functions__collect(struct elf_functions *functions);
++
++static struct elf_functions *elf_functions__new(Elf *elf)
++{
++=09struct elf_functions *funcs =3D calloc(1, sizeof(*funcs));
++
++=09if (!funcs)
++=09=09return NULL;
++=09funcs->elf =3D elf;
++
++=09funcs->symtab =3D elf_symtab__new(NULL, elf);
++=09if (!funcs->symtab)
++=09=09goto out_error;
++
++=09int err =3D elf_functions__collect(funcs);
++
++=09if (err)
++=09=09goto out_error;
++
++=09list_add_tail(&funcs->node, &elf_functions_list);
++=09return funcs;
++
++out_error:
++=09elf_functions__delete(funcs);
++=09return NULL;
++}
++
++int btf_encoder__pre_cus__load_module(struct process_dwflmod_parms *parms,=
+ Dwfl_Module *mod, Dwarf *dw, Elf *elf)
++{
++=09struct elf_functions *funcs =3D elf_functions__new(elf);
++
++=09if (!funcs)
++=09=09return -1;
 +
 +=09return 0;
 +}
 +
- static bool ftype__has_arg_names(const struct ftype *ftype)
- {
- =09struct parameter *param;
++
+ static LIST_HEAD(encoders);
+ static pthread_mutex_t encoders__lock =3D PTHREAD_MUTEX_INITIALIZER;
+=20
+@@ -2099,6 +2167,13 @@ int btf_encoder__encode(struct btf_encoder *encoder)
+ #endif
+ =09=09err =3D btf_encoder__write_elf(encoder, encoder->btf, BTF_ELF_SEC);
+ =09}
++
++=09// TODO: after moving encoders to shared elf_functions,
++=09// replace elf_functions__get(encoder->functions.elf) here
++=09// with encoder->functions
++=09// The pointer to shared elf_functions will be set in btf_encoder__new
++=09elf_functions__delete(elf_functions__get(encoder->functions.elf));
++
+ =09return err;
+ }
+=20
+@@ -2442,6 +2517,7 @@ struct btf_encoder *btf_encoder__new(struct cu *cu, c=
+onst char *detached_filenam
+ =09=09=09goto out;
+ =09=09}
+ =09=09encoder->functions.symtab =3D encoder->symtab;
++=09=09encoder->functions.elf =3D cu->elf;
+=20
+ =09=09/* index the ELF sections for later lookup */
+=20
+diff --git a/btf_encoder.h b/btf_encoder.h
+index f54c95a..ee91444 100644
+--- a/btf_encoder.h
++++ b/btf_encoder.h
+@@ -27,4 +27,6 @@ struct btf *btf_encoder__btf(struct btf_encoder *encoder)=
+;
+=20
+ int btf_encoder__add_encoder(struct btf_encoder *encoder, struct btf_encod=
+er *other);
+=20
++int btf_encoder__pre_cus__load_module(struct process_dwflmod_parms *parms,=
+ Dwfl_Module *mod, Dwarf *dw, Elf *elf);
++
+ #endif /* _BTF_ENCODER_H_ */
+diff --git a/pahole.c b/pahole.c
+index 7e7a82e..239eb13 100644
+--- a/pahole.c
++++ b/pahole.c
+@@ -3823,6 +3823,9 @@ int main(int argc, char *argv[])
+ =09=09conf_load.threads_collect =3D pahole_threads_collect;
+ =09}
+=20
++=09if (btf_encode)
++=09=09conf_load.pre_cus__load_module =3D btf_encoder__pre_cus__load_module=
+;
++
+ =09// Make 'pahole --header type < file' a shorter form of 'pahole -C type=
+ --count 1 < file'
+ =09if (conf.header_type && !class_name && prettify_input) {
+ =09=09conf.count =3D 1;
 --=20
 2.34.1
 
