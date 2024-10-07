@@ -1,229 +1,200 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 477B31DE4DC
-	for <dwarves@vger.kernel.org>; Mon,  7 Oct 2024 20:25:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 105A374C08;
+	Mon,  7 Oct 2024 21:47:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728332754; cv=none; b=FIxhrJGSKqPmCQdgoR1q8uNtczIfWi+rv57eGtcYTWVfUPw3UxsZ6yqNYNr0i7szzZoQXuyNHRogOoQxowHeKgetZAneCpxelGeXv9zuvt12JfmAVjJWv3yyVwmYQjV9OtPKE2TuEtmW4IvCDPK7qfdmFGwvSA2c+oXfLJMHZ2c=
+	t=1728337631; cv=none; b=pEI5PBXpw7mQdZy1PA0Oa+zmRRfhHDJDocfcj6Ll5VETIqmAkfQyt0wljURlPyEO5OHSg7BbXYja41SU/eTq/evtRIjpwyJI5+Bq+mCzrnWfsi0Ehp3IY16BxepIBnhTbxoT0EMlJtANPoN0udblj2YB40xhuXqUQY+KuMiTfNA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728332754; c=relaxed/simple;
-	bh=sTLCrxEJkzwt1o/+fm3mAT2MtHKzdkcWxSPsZGJVVH4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=J/t0Y6geveq4PCUWkcaN3FsgwEIcWvogRktWaKsLdnNUgJs854UZHUEsri3MzxRYKHI8Wv3lnrcebBdD09nF15bUXk8QYnO7j23kJVHLyDBIOGHw5/zw8aShAFZwPBUFovvCNF3+Sd/wlNRjmtF7ljzff0XP67/+fvzqZfwVVEg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Gq5iN2DG; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1728337631; c=relaxed/simple;
+	bh=VcZanQC3m+p7WEESbSdjf5TpbV9z0kDJsFseYvijCbI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=TTrYPbyAGiGGYnF6OnU8H8KBGQFPm9tT3ylgFebM44E3VdvxtNyzgeXAM60OiIPPqbnLk+8t3NjjIPNJESzraMXgf462noV57b60CphsLTQ5As3U80kd9y7ld0rh+XjdSyALxNkf3e4p+AIYtm3sH5ugiOcmE8gJfL9fdGka3Zc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=M4AFtj7i; arc=none smtp.client-ip=209.85.216.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Gq5iN2DG"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46486C4CEC7;
-	Mon,  7 Oct 2024 20:25:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1728332753;
-	bh=sTLCrxEJkzwt1o/+fm3mAT2MtHKzdkcWxSPsZGJVVH4=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Gq5iN2DG4UAfoocSlsM/r2n+BCT44UeBqEtH+/1x7eEPO9AHjhHlgvKPdw1gpIbCG
-	 fGuzfEqTtCilwAIrrVzBLcLjOAEDMiehIjHKXCUCTjduZqn4KqjwzNoMhRXj2CnNtz
-	 GvtEk5h3LNSFbLeY7LXna+Y28RwxOsO0ReJLCpOUYa0X2WbOSrLfdj/alBgkcg2OBy
-	 Do8MhGxdnhTKBNEU1McTEhpoyrIxfJ9VvK2zSddO8MYHYjEjy/hUuw0BfLwoWO8lX3
-	 hhEA6n6w0LTV0Xso3OoMDjkii6hpoFDWzcU4IxaBzH1WUv9xmspAm2t9tA+JqLw/2P
-	 yRzFKQDcaPEaQ==
-From: Arnaldo Carvalho de Melo <acme@kernel.org>
-To: Willy Tarreau <w@1wt.eu>
-Cc: dwarves@vger.kernel.org,
-	Alan Maguire <alan.maguire@oracle.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Clark Williams <williams@redhat.com>,
-	Kate Carcia <kcarcia@redhat.com>,
-	Arnaldo Carvalho de Melo <acme@redhat.com>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>
-Subject: [PATCH 5/5] pahole: Introduce --with_embedded_flexible_array
-Date: Mon,  7 Oct 2024 17:25:31 -0300
-Message-ID: <20241007202531.942648-6-acme@kernel.org>
-X-Mailer: git-send-email 2.46.2
-In-Reply-To: <20241007202531.942648-1-acme@kernel.org>
-References: <20241007202531.942648-1-acme@kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="M4AFtj7i"
+Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-2e2840bb4a0so17534a91.3;
+        Mon, 07 Oct 2024 14:47:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1728337629; x=1728942429; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Kv3fPD4rUPx3TkUH5lZOgbJDMKhbgUYLdbkXklJNYiA=;
+        b=M4AFtj7itgoxwbyU5w45c3+mzx1xlJXJ8/QRTOZiXcJRUNS53GGcMQX4gTCxgj4+8z
+         miAw/1rg209wdsi97uqTaz46AnRJEn1SYkaix6+SSYCqtfp58KoJwOr0WgpdQarvCL28
+         v/Dipcq8afo1e60QIdpu/MTpQSpJoe3UWHlVRWtdwrmr7v8a5qpPqoNoYWL96afsdkeo
+         TI3saAlFTDTGGkOt/oByHQQDlsu5UcYbbdgjZvAdxVLCiHPOtUwCMs614kmTjLn1k8gR
+         6MBwRGVCPTkTPObJ5Fj25dNXhna2qHJqAKuBd+3HDw5JroGTHMfTTbiIpO0PH0NRA+ER
+         Pzpg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1728337629; x=1728942429;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Kv3fPD4rUPx3TkUH5lZOgbJDMKhbgUYLdbkXklJNYiA=;
+        b=IxKw7RwVVpEc0DoNfm2JldYPiB3T0DEn1LWdA5Mdg6d0JWEv4adhLHNcrNZLNrdawy
+         uUarJDe4Etu+RacHbN/lTZqYdH5qqXJmBwqwSkQF7t7YjZ3gGLbrf/AoMPXDPM1IMd+p
+         7pWGa2SBUp2oG73qKyXdMAHP/s0THeayc12XOLIu5fC4CAJOgIsrbDhewZdSka0XaLlQ
+         5bZU3vA3tV0nUZ32ayZW6j2nDhFbM1pmq9FdR8QsNk1p25d86M1OCvpndKgLH1PiZZdy
+         gxtMLQV1UnqJcvBGusGKfVWZJyLSUivRVcrA8BMyv8PC38z6t7oivcIGI8abgoHHWVei
+         NbiQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVQkzT9Dlia2MaHm2frzSi9CL4k+hMMZ2SnuZzu+md70WYHQj6rSqW+/s7WmZiuI1q+Q3bW9z4puIb1LOf1aP/H@vger.kernel.org, AJvYcCWSZ8at2P8weWFj7pFOD+kLlMOFJJQoiJIjxSLCGsSGDtIRQv+k4QyEpq0iguzMiDdp6aw=@vger.kernel.org, AJvYcCXSWx+f/GAhG3NlGVO4yNwxXHn36PJOT0QDsklGCSI8aWgwJ7DsBvqMy2Z3/YptEvwnYGMQRwYiZQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz4n2PJcmlddIOWumgOksgYjEG3X/0/vvoeIaOK7+kUAMfFgljG
+	0Xpx623pKI95dgZ5po5FOl5gx+lc+UlhMROc0T9aYwubo6GrcfmLixs+SkhwVkSKcmE02qRRN2H
+	Ri5Wj9Db1wcPpAqZc2LzhR+dPbtk=
+X-Google-Smtp-Source: AGHT+IEiY3L813FikGrucHazYRLlFh++w/y02VGPhAOt7GEsLrRfOvmnC9kn5b6tDYEHvUKmUw/5J87lu5qaiJJiRW4=
+X-Received: by 2002:a17:90a:2e89:b0:2e0:8e36:128 with SMTP id
+ 98e67ed59e1d1-2e1e620f811mr18273694a91.5.1728337624549; Mon, 07 Oct 2024
+ 14:47:04 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20241004172631.629870-1-stephen.s.brennan@oracle.com>
+ <ZwBXA6VCcyF-0aPb@x1> <CAEf4Bza3cnyef1VAcGkmP02dBMU_fp=52aS9LknOWhN855-PPQ@mail.gmail.com>
+ <87o73vltce.fsf@oracle.com> <ZwQs8K7VUrITuUtO@x1> <ZwQvtCJN5idM92z_@x1>
+In-Reply-To: <ZwQvtCJN5idM92z_@x1>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Mon, 7 Oct 2024 14:46:52 -0700
+Message-ID: <CAEf4BzZ2+s0M6hmNEO33se6Nx2v_uAcyaw4GrMhTJDD+fo6BpA@mail.gmail.com>
+Subject: Re: [PATCH dwarves v4 0/4] Emit global variables in BTF
+To: Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc: Stephen Brennan <stephen.s.brennan@oracle.com>, bpf@vger.kernel.org, 
+	dwarves@vger.kernel.org, linux-debuggers@vger.kernel.org, 
+	Alan Maguire <alan.maguire@oracle.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Arnaldo Carvalho de Melo <acme@redhat.com>
+On Mon, Oct 7, 2024 at 12:00=E2=80=AFPM Arnaldo Carvalho de Melo
+<acme@kernel.org> wrote:
+>
+> On Mon, Oct 07, 2024 at 03:48:16PM -0300, Arnaldo Carvalho de Melo wrote:
+> > On Mon, Oct 07, 2024 at 10:24:01AM -0700, Stephen Brennan wrote:
+> > > Andrii Nakryiko <andrii.nakryiko@gmail.com> writes:
+> > > > On Fri, Oct 4, 2024 at 2:21=E2=80=AFPM Arnaldo Carvalho de Melo <ac=
+me@kernel.org> wrote:
+> > > >>
+> > > >> On Fri, Oct 04, 2024 at 10:26:24AM -0700, Stephen Brennan wrote:
+> > > >> > Hi all,
+> > > >> >
+> > > >> > This is v4 of the series which adds global variables to pahole's=
+ generated BTF.
+> > > >> >
+> > > >> > Since v3:
+> > > >> >
+> > > >> > 1. Gathered Alan's Reviewed-by + Tested-by, and Jiri's Acked-by.
+> > > >> > 2. Consistently start shndx loops at 1, and use size_t.
+> > > >> > 3. Since patch 1 of v3 was already applied, I dropped it out of =
+this series.
+> > > >> >
+> > > >> > v3: https://lore.kernel.org/dwarves/20241002235253.487251-1-step=
+hen.s.brennan@oracle.com/
+> > > >> > v2: https://lore.kernel.org/dwarves/20240920081903.13473-1-steph=
+en.s.brennan@oracle.com/
+> > > >> > v1: https://lore.kernel.org/dwarves/20240912190827.230176-1-step=
+hen.s.brennan@oracle.com/
+> > > >> >
+> > > >> > Thanks everyone for your review, tests, and consideration!
+> > > >>
+> > > >> Looks ok, I run the existing regression tests:
+> > > >>
+> > > >> acme@x1:~/git/pahole$ tests/tests
+> > > >>   1: Validation of BTF encoding of functions; this may take some t=
+ime: Ok
+> > > >>   2: Pretty printing of files using DWARF type information: Ok
+> > > >>   3: Parallel reproducible DWARF Loading/Serial BTF encoding: Ok
+> > > >> /home/acme/git/pahole
+> > > >> acme@x1:~/git/pahole$
+> > > >>
+> > > >> And now I'm building a kernel with clang + Thin LTO + Rust enabled=
+ in
+> > > >> the kernel to test other fixes I have merged and doing that with y=
+our
+> > > >> patch series.
+> > > >>
+> > > >> Its all in the next branch and will move to master later today or
+> > > >> tomorrow when I finish the clang+LTO+Rust tests.
+> > > >
+> > > > pahole-staging testing in libbpf CI started failing recently, can y=
+ou
+> > > > please double-check and see if this was caused by these changes? Th=
+ey
+> > > > seem to be related to encoding BTF for per-CPU global variables, so
+> > > > might be relevant ([0] for full run logs)
+> > > >
+> > > >   #33      btf_dump:FAIL
+> > > >   libbpf: extern (var ksym) 'bpf_prog_active': not found in kernel =
+BTF
+> > > >   libbpf: failed to load object 'kfunc_call_test_subprog'
+> > > >   libbpf: failed to load BPF skeleton 'kfunc_call_test_subprog': -2=
+2
+> > > >   test_subprog:FAIL:skel unexpected error: -22
+> > > >   #126/17  kfunc_call/subprog:FAIL
+> > > >   test_subprog_lskel:FAIL:skel unexpected error: -2
+> > > >   #126/18  kfunc_call/subprog_lskel:FAIL
+> > > >   #126     kfunc_call:FAIL
+> > > >   test_ksyms_module_lskel:FAIL:test_ksyms_module_lskel__open_and_lo=
+ad
+> > > > unexpected error: -2
+> > > >   #135/1   ksyms_module/lskel:FAIL
+> > > >   libbpf: extern (var ksym) 'bpf_testmod_ksym_percpu': not found in=
+ kernel BTF
+> > > >   libbpf: failed to load object 'test_ksyms_module'
+> > > >   libbpf: failed to load BPF skeleton 'test_ksyms_module': -22
+> > > >   test_ksyms_module_libbpf:FAIL:test_ksyms_module__open unexpected =
+error: -22
+> > > >   #135/2   ksyms_module/libbpf:FAIL
+> > > >
+> > > >
+> > > >   [0] https://github.com/libbpf/libbpf/actions/runs/11204199648/job=
+/31142297399#step:4:12480
+> > >
+> > > Hi Andrii,
+> > >
+> > > Thanks for the report.
+> > >
+> > > The error: "'bpf_prog_active' not found in kernel BTF" sounds like it=
+'s
+> > > related to a bug that was present in v4 of this patch series:
+> > >
+> > > https://lore.kernel.org/dwarves/ZwPob57HKYbfNpOH@x1/T/#t
+> > >
+> > > Basically due to poor testing of a small refactor on my part, pahole
+> > > failed to emit almost all of the variables for BTF, so it would very
+> > > likely cause this error. And I think this broken commit may have been
+> > > hanging around in the git repository for the weekend, maybe Arnaldo c=
+an
+> > > confirm whether or not it was fixed up.
+> > >
+> > > I cannot see the git SHA for the pahole branch which was used in this=
+ CI
+> > > run, so I can't say for sure. But I do see that the "tmp.master" bran=
+ch
+> > > is now fixed up, so a re-run would verify whether this is the root
+> > > cause.
+> >
+> > right, that is a piece of info I sometimes miss, the SHA used for the
+> > test run, but today's test is in progress and should have the fix for
+> > the inverted logic, we'll see...
+>
+> https://github.com/libbpf/libbpf/actions/runs/11221662157/job/31192457160
+>
+> Passed, so and here as well:
 
-To print structs that have as one of its members a struct with a
-flexible array, i.e. the outer script has a flexible array in its
-middle, which is dangerous.
+Ok, great! Seems like I was either too slow or too fast with reporting
+this, depending how you look at this :)
 
-One example should illustrate this nicely:
-
-  ⬢[acme@toolbox pahole]$ pahole --with_embedded_flexible_array --sizes | wc -l
-  103
-  ⬢[acme@toolbox pahole]$ pahole --with_embedded_flexible_array --sizes | tail
-  acpi_nhlt_format_config	44	0
-  xts_request_ctx	168	0
-  dbc_port	512	1
-  ethtool_link_usettings	96	0
-  pci_setup_rom	64	1
-  lirc_fh	112	1
-  lrw_request_ctx	96	0
-  xt_standard_target	40	0
-  xt_error_target	64	0
-  bpf_ctx_convert	7280	0
-  ⬢[acme@toolbox pahole]$ pahole lirc_fh
-  struct lirc_fh {
-  	struct list_head           list;                 /*     0    16 */
-  	struct rc_dev *            rc;                   /*    16     8 */
-  	int                        carrier_low;          /*    24     4 */
-
-  	/* XXX 4 bytes hole, try to pack */
-
-  	struct {
-  		union {
-  			struct __kfifo kfifo;            /*    32    24 */
-  			unsigned int * type;             /*    32     8 */
-  			const unsigned int  * const_type; /*    32     8 */
-  			char *     rectype;              /*    32     8 */
-  			unsigned int * ptr;              /*    32     8 */
-  			const unsigned int  * ptr_const; /*    32     8 */
-  		};                                       /*    32    24 */
-  		unsigned int       buf[];                /*    56     0 */
-  	} rawir;                                         /*    32    24 */
-  	struct {
-  		union {
-  			struct __kfifo kfifo;            /*    56    24 */
-  			struct lirc_scancode * type;     /*    56     8 */
-  			const struct lirc_scancode  * const_type; /*    56     8 */
-  			char *     rectype;              /*    56     8 */
-  			struct lirc_scancode * ptr;      /*    56     8 */
-  			const struct lirc_scancode  * ptr_const; /*    56     8 */
-  		};                                       /*    56    24 */
-  		/* --- cacheline 1 boundary (64 bytes) was 16 bytes ago --- */
-  		struct lirc_scancode buf[];              /*    80     0 */
-  	} scancodes;                                     /*    56    24 */
-  	wait_queue_head_t          wait_poll;            /*    80    24 */
-  	u8                         send_mode;            /*   104     1 */
-  	u8                         rec_mode;             /*   105     1 */
-
-  	/* size: 112, cachelines: 2, members: 8 */
-  	/* sum members: 102, holes: 1, sum holes: 4 */
-  	/* padding: 6 */
-  	/* last cacheline: 48 bytes */
-  };
-
-  ⬢[acme@toolbox pahole]$
-
-Another case:
-
-  ⬢[acme@toolbox pahole]$ pahole -E ethtool_link_usettings
-  struct ethtool_link_usettings {
-  	struct ethtool_link_settings {
-  		/* typedef __u32 */ unsigned int       cmd;                              /*     0     4 */
-  		/* typedef __u32 */ unsigned int       speed;                            /*     4     4 */
-  		/* typedef __u8 */ unsigned char      duplex;                            /*     8     1 */
-  		/* typedef __u8 */ unsigned char      port;                              /*     9     1 */
-  		/* typedef __u8 */ unsigned char      phy_address;                       /*    10     1 */
-  		/* typedef __u8 */ unsigned char      autoneg;                           /*    11     1 */
-  		/* typedef __u8 */ unsigned char      mdio_support;                      /*    12     1 */
-  		/* typedef __u8 */ unsigned char      eth_tp_mdix;                       /*    13     1 */
-  		/* typedef __u8 */ unsigned char      eth_tp_mdix_ctrl;                  /*    14     1 */
-  		/* typedef __s8 */ signed char        link_mode_masks_nwords;            /*    15     1 */
-  		/* typedef __u8 */ unsigned char      transceiver;                       /*    16     1 */
-  		/* typedef __u8 */ unsigned char      master_slave_cfg;                  /*    17     1 */
-  		/* typedef __u8 */ unsigned char      master_slave_state;                /*    18     1 */
-  		/* typedef __u8 */ unsigned char      rate_matching;                     /*    19     1 */
-  		/* typedef __u32 */ unsigned int       reserved[7];                      /*    20    28 */
-  		/* typedef __u32 */ unsigned int       link_mode_masks[];                /*    48     0 */
-  	} base; /*     0    48 */
-  	struct {
-  		/* typedef __u32 */ unsigned int       supported[4];                     /*    48    16 */
-  		/* --- cacheline 1 boundary (64 bytes) --- */
-  		/* typedef __u32 */ unsigned int       advertising[4];                   /*    64    16 */
-  		/* typedef __u32 */ unsigned int       lp_advertising[4];                /*    80    16 */
-  	} link_modes;                                                                    /*    48    48 */
-
-  	/* size: 96, cachelines: 2, members: 2 */
-  	/* last cacheline: 32 bytes */
-  };
-
-  ⬢[acme@toolbox pahole]$
-
-Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc: Willy Tarreau <w@1wt.eu>
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
----
- man-pages/pahole.1 |  4 ++++
- pahole.c           | 13 +++++++++++++
- 2 files changed, 17 insertions(+)
-
-diff --git a/man-pages/pahole.1 b/man-pages/pahole.1
-index 7c1a69ad23690c75..19dfe676c9e30509 100644
---- a/man-pages/pahole.1
-+++ b/man-pages/pahole.1
-@@ -397,6 +397,10 @@ for instance when using the \fB\-\-reorganize\fR option.
- .B \-P, \-\-with_flexible_array
- Show only structs that have a flexible array.
- 
-+.TP
-+.B \-P, \-\-with_embedded_flexible_array
-+Show only structs that have an embedded flexible array, i.e. a contained struct that has flexible arrays, a flexible array "in the middle".
-+
- .TP
- .B \-q, \-\-quiet
- Be quieter.
-diff --git a/pahole.c b/pahole.c
-index 8bdfaf3e84c407d7..b9e97ef15e6c732e 100644
---- a/pahole.c
-+++ b/pahole.c
-@@ -66,6 +66,7 @@ static uint16_t nr_bit_holes;
- static uint16_t hole_size_ge;
- static uint8_t show_packable;
- static bool show_with_flexible_array;
-+static bool show_with_embedded_flexible_array;
- static uint8_t global_verbose;
- static uint8_t recursive;
- static size_t cacheline_size;
-@@ -825,6 +826,9 @@ static struct class *class__filter(struct class *class, struct cu *cu,
- 	if (show_with_flexible_array && !class__has_flexible_array(class, cu))
- 		return NULL;
- 
-+	if (show_with_embedded_flexible_array && !class__has_embedded_flexible_array(class, cu))
-+		return NULL;
-+
- 	return class;
- }
- 
-@@ -1226,6 +1230,7 @@ ARGP_PROGRAM_VERSION_HOOK_DEF = dwarves_print_version;
- #define ARGP_running_kernel_vmlinux 346
- #define ARG_padding_ge		   347
- #define ARG_padding		   348
-+#define ARGP_with_embedded_flexible_array 349
- 
- /* --btf_features=feature1[,feature2,..] allows us to specify
-  * a list of requested BTF features or "default" to enable all default
-@@ -1505,6 +1510,11 @@ static const struct argp_option pahole__options[] = {
- 		.key  = ARGP_with_flexible_array,
- 		.doc  = "show only structs with a flexible array",
- 	},
-+	{
-+		.name = "with_embedded_flexible_array",
-+		.key  = ARGP_with_embedded_flexible_array,
-+		.doc  = "show only structs with an embedded flexible array (contaning a struct that has a flexible array)",
-+	},
- 	{
- 		.name = "expand_types",
- 		.key  = 'E',
-@@ -2006,6 +2016,9 @@ static error_t pahole__options_parser(int key, char *arg,
- 		parse_btf_features("all", false);	break;
- 	case ARGP_with_flexible_array:
- 		show_with_flexible_array = true;	break;
-+	case ARGP_with_embedded_flexible_array:
-+		just_structs = true;
-+		show_with_embedded_flexible_array = true; break;
- 	case ARGP_prettify_input_filename:
- 		prettify_input_filename = arg;		break;
- 	case ARGP_sort_output:
--- 
-2.46.2
-
+>
+> acme@x1:~/git/pahole$ tests/tests
+>   1: Validation of BTF encoding of functions; this may take some time: Ok
+>   2: Pretty printing of files using DWARF type information: Ok
+>   3: Parallel reproducible DWARF Loading/Serial BTF encoding: Ok
+> acme@x1:~/git/pahole$
+>
+> - Arnaldo
