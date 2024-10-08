@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B657C212D3E
-	for <dwarves@vger.kernel.org>; Tue,  8 Oct 2024 19:52:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B44F8212D3E
+	for <dwarves@vger.kernel.org>; Tue,  8 Oct 2024 19:52:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728417151; cv=none; b=oV4IQgb1G3pEDpNWp3va9zn5wtnEJhTQcVXIhlXoZjbjOHU8QOSgcvk1a+RKYXatGRwIK/zoy+cSor6UczbCGm8lYqVNvaMh/ScWlNhqF6ozFwPyeOmZYRZ1CMgq1goQtluLwe6FwbmPnqSexN+9JMmybV10ogMyYq5dlPeqhRk=
+	t=1728417156; cv=none; b=a6F1q0QCH3at7EBItdEdtF/cQYSWtHjXGolgcItK3xvjhBUN/Ci02DHl09V+hZ7ZeBTvhv6c/7a1eJd5nswzJMttqvWAK1DRdC7jAFCnDnlRYe4NCKNCycAsu2krj11MPw0BcYMlNvZn7gi82q5GLwpJumtHiWisChgI36ocnpg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728417151; c=relaxed/simple;
-	bh=lqdcyeNUo45/5nIZUfXnW9RMZK3K14fTDzkTSc7anes=;
+	s=arc-20240116; t=1728417156; c=relaxed/simple;
+	bh=hiT4j3GwrReazEZ/FPUFl6GM4vUlCwPNeQPDnkXEXGI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=C34u0D9X9WqdruqprKaFSWMrO9Gb85qY6DK4LzgmtAacYO6MmDIeql+F95W+gXr+2a7WpI9VnBPNNzXTUtp7ypnWdJkTVWNndI099OPil2HAm+P+X21UzxJbPG2JU9cq9QRr9X09jYBFg/fbzKxiWYuygSrMqqcGTGAsNBV5D9U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=O3CXroTY; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=HsJw6lxSy+jfm+8/+LgoqvR4DcXCQUG0WZf58qBS6GoO0Vtc1QPv9Sh84OWT2PNxpMHBl4J7+ERuV8cS9wo+4IWOp+Mgx1U+IX3fAC3rXYFUePCAxGgnAdSXeXUE9kswd7RIT90wHY6YdCZNJB0gXCDw5HdmPI5TCkUJPGiNHGQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=joeYDJGf; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="O3CXroTY"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D05BC4CEC7;
-	Tue,  8 Oct 2024 19:52:25 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="joeYDJGf"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF647C4CED0;
+	Tue,  8 Oct 2024 19:52:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1728417151;
-	bh=lqdcyeNUo45/5nIZUfXnW9RMZK3K14fTDzkTSc7anes=;
+	s=k20201202; t=1728417156;
+	bh=hiT4j3GwrReazEZ/FPUFl6GM4vUlCwPNeQPDnkXEXGI=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=O3CXroTYPTJFF6uQQMNCgQMeJYBUEhSeBiBWt8KRKYje5RR19MwEBj9nQ9S7kX45X
-	 i8SCKcVJIRVLAuyqDr21iusdCdTSU3f+fmyMC17oh0yf+Q6smzWXiX2BHqV/9i8K9P
-	 /soYuMaozqsMSEKtUkXeiFT6Ti9Jd5nRaeRy1XxCVq91gLbrD3BNG5eAkRbLlJcXQJ
-	 QCURe9vbWZ/AgMWKzEZ2PJ1Wyy3S1uS4wOYFdCmsNO3ofGVi/SQE5pl6JpDcv6zeMs
-	 CN5X7BkHotkizY4NlmdziyNlzWtAeoxJC2fkpWHtsDsrrONx6fzhYHWDpXSovLqdWp
-	 UjrfxktlUmxBg==
+	b=joeYDJGfUHtmDF4QUMhlhWFyI3aPVnWn9gHerlO+e3lOPKgOAnDstug5qbHzhcl2Y
+	 ee7gTOAD9+qXrhjDkD2SpD8z9a8d/PoMYWHX6q/bigZ46SB2NOuCf6Ci6i3UtzIx3A
+	 Oi0WCXo+bGxou4UwL8gsPTBZF9fKYYTv0sgM9uX1DvMcW7bdIZBjbDIA98WOsbfyhB
+	 VJhHnnfD1ABCVyg7YyCpHrToh5k2FTrohZcs3IPyYL8d3o6j8StO0eLMl4Am8hDaFR
+	 XLgzRXuc9m7/K1AMnYslrM8CV+BMXjQ4gBvn0BMUPrYki8uwFClKQ1ZLqFt7LyyLVW
+	 HSg6Qv8ttFRJA==
 From: Arnaldo Carvalho de Melo <acme@kernel.org>
 To: Willy Tarreau <w@1wt.eu>
 Cc: dwarves@vger.kernel.org,
@@ -35,9 +35,9 @@ Cc: dwarves@vger.kernel.org,
 	Kate Carcia <kcarcia@redhat.com>,
 	Arnaldo Carvalho de Melo <acme@redhat.com>,
 	"Gustavo A. R. Silva" <gustavoars@kernel.org>
-Subject: [PATCH 2/3] fprintf: Show statistics about members with flexible arrays
-Date: Tue,  8 Oct 2024 16:52:08 -0300
-Message-ID: <20241008195209.1094299-3-acme@kernel.org>
+Subject: [PATCH 3/3] tests: Add a test for the accounting of flexible arrays
+Date: Tue,  8 Oct 2024 16:52:09 -0300
+Message-ID: <20241008195209.1094299-4-acme@kernel.org>
 X-Mailer: git-send-email 2.46.2
 In-Reply-To: <20241008195209.1094299-1-acme@kernel.org>
 References: <20241008195209.1094299-1-acme@kernel.org>
@@ -51,250 +51,130 @@ Content-Transfer-Encoding: 8bit
 
 From: Arnaldo Carvalho de Melo <acme@redhat.com>
 
-For instance, this one has embedded flexible arrays:
-
-  $ pahole lirc_fh
-  struct lirc_fh {
-  	struct list_head           list;                 /*     0    16 */
-  	struct rc_dev *            rc;                   /*    16     8 */
-  	int                        carrier_low;          /*    24     4 */
-
-  	/* XXX 4 bytes hole, try to pack */
-
-  	struct {
-  		union {
-  			struct __kfifo kfifo;            /*    32    24 */
-  			unsigned int * type;             /*    32     8 */
-  			const unsigned int  * const_type; /*    32     8 */
-  			char *     rectype;              /*    32     8 */
-  			unsigned int * ptr;              /*    32     8 */
-  			const unsigned int  * ptr_const; /*    32     8 */
-  		};                                       /*    32    24 */
-  		unsigned int       buf[];                /*    56     0 */
-  	} rawir;                                         /*    32    24 */
-
-  	/* XXX last struct has a flexible array */
-
-  	struct {
-  		union {
-  			struct __kfifo kfifo;            /*    56    24 */
-  			struct lirc_scancode * type;     /*    56     8 */
-  			const struct lirc_scancode  * const_type; /*    56     8 */
-  			char *     rectype;              /*    56     8 */
-  			struct lirc_scancode * ptr;      /*    56     8 */
-  			const struct lirc_scancode  * ptr_const; /*    56     8 */
-  		};                                       /*    56    24 */
-  		/* --- cacheline 1 boundary (64 bytes) was 16 bytes ago --- */
-  		struct lirc_scancode buf[];              /*    80     0 */
-  	} scancodes;                                     /*    56    24 */
-
-  	/* XXX last struct has a flexible array */
-
-  	wait_queue_head_t          wait_poll;            /*    80    24 */
-  	u8                         send_mode;            /*   104     1 */
-  	u8                         rec_mode;             /*   105     1 */
-
-  	/* size: 112, cachelines: 2, members: 8 */
-  	/* sum members: 102, holes: 1, sum holes: 4 */
-  	/* padding: 6 */
-  	/* flexible array members: end: 2 */
-  	/* last cacheline: 48 bytes */
-  };
-  $
-
-'end' means that the members with flexible arrays have them in the
-"classical" sense, i.e. the last member of those member types is a []
-member.
-
-When 'middle' appears it means another level, just like the above
-'struct lirc_fh' has multiple members in its midle that are flexible
-arrays.
-
-If we use 'pahole --with_embedded_flexible_array' we'll see quite a few
-in the Linux kernel (using BTF info from /sys/kernel/btf/vmlinux, mostly
-available in most kernels these days), using --sizes so that we get just
-one line per Linux kernel struct that have embedded flexible arrays (and
-its sizes and number of alignment holes, as bonuses):
-
-  $ pahole --sizes --with_embedded_flexible_array | head
-  mem_cgroup	2240	10
-  pglist_data	175424	7
-  zone	1728	5
-  cgroup	1984	3
-  cgroup_root	6272	1
-  page_counter	192	1
-  cpu_hw_events	5200	6
-  crypto_shash	40	1
-  crypto_aead	40	0
-  crypto_ahash	48	2
-  $
-
-  $ pahole crypto_shash
-  struct crypto_shash {
-  	unsigned int               descsize;             /*     0     4 */
-
-  	/* XXX 4 bytes hole, try to pack */
-
-  	struct crypto_tfm          base;                 /*     8    32 */
-
-  	/* XXX last struct has a flexible array, 1 hole */
-
-  	/* size: 40, cachelines: 1, members: 2 */
-  	/* sum members: 36, holes: 1, sum holes: 4 */
-  	/* member types with holes: 1, total: 1 */
-  	/* flexible array members: end: 1 */
-  	/* last cacheline: 40 bytes */
-  };
-  $
-
-If we expand it all:
-
-  $ pahole -E crypto_shash
-  struct crypto_shash {
-  	unsigned int               descsize;                                             /*     0     4 */
-
-  	/* XXX 4 bytes hole, try to pack */
-
-  	struct crypto_tfm {
-  		/* typedef refcount_t */ struct refcount_struct {
-  			/* typedef atomic_t */ struct {
-  				int counter;                                             /*     8     4 */
-  			} refs; /*     8     4 */
-  		} refcnt; /*     8     4 */
-  		/* typedef u32 -> __u32 */ unsigned int       crt_flags;                 /*    12     4 */
-  		int                node;                                                 /*    16     4 */
-
-  		/* XXX 4 bytes hole, try to pack */
-
-  		void               (*exit)(struct crypto_tfm *);                         /*    24     8 */
-  		struct crypto_alg * __crt_alg;                                           /*    32     8 */
-  		void *             __crt_ctx[];                                          /*    40     0 */
-  	} base; /*     8    32 */
-
-  	/* XXX last struct has a flexible array, 1 hole */
-
-  	/* size: 40, cachelines: 1, members: 2 */
-  	/* sum members: 36, holes: 1, sum holes: 4 */
-  	/* member types with holes: 1, total: 1 */
-  	/* flexible array members: end: 1 */
-  	/* last cacheline: 40 bytes */
-  };
-  $
-
-Interesting, but we don't see the "middle" case...
-
-Maybe 'struct cgroup'?
-
-  $ pahole cgroup | tail
-  	struct cgroup *            ancestors[];          /*  1984     0 */
-
-  	/* size: 1984, cachelines: 31, members: 42 */
-  	/* sum members: 1952, holes: 3, sum holes: 32 */
-  	/* member types with holes: 3, total: 3 */
-  	/* paddings: 1, sum paddings: 4 */
-  	/* forced alignments: 1 */
-  	/* flexible array members: end: 1 */
-  };
-
-  $
-
-Humm, maybe some data structure embeds 'struct cgroup'? Lets see with:
-
-  $ pahole --contains cgroup
-  cgroup_root
-  $
-
-A-ha, finally that 'middle' stat:
-
-  $ pahole cgroup_root
-  struct cgroup_root {
-  	struct kernfs_root *       kf_root;              /*     0     8 */
-  	unsigned int               subsys_mask;          /*     8     4 */
-  	int                        hierarchy_id;         /*    12     4 */
-  	struct list_head           root_list;            /*    16    16 */
-  	struct callback_head       rcu;                  /*    32    16 */
-
-  	/* XXX 16 bytes hole, try to pack */
-
-  	/* --- cacheline 1 boundary (64 bytes) --- */
-  	struct cgroup              cgrp __attribute__((__aligned__(64))); /*    64  1984 */
-
-  	/* XXX last struct has a flexible array, embedded flexible array(s), 3 holes */
-
-  	/* --- cacheline 32 boundary (2048 bytes) --- */
-  	struct cgroup *            cgrp_ancestor_storage; /*  2048     8 */
-  	atomic_t                   nr_cgrps;             /*  2056     4 */
-  	unsigned int               flags;                /*  2060     4 */
-  	char                       release_agent_path[4096]; /*  2064  4096 */
-  	/* --- cacheline 96 boundary (6144 bytes) was 16 bytes ago --- */
-  	char                       name[64];             /*  6160    64 */
-
-  	/* size: 6272, cachelines: 98, members: 11 */
-  	/* sum members: 6208, holes: 1, sum holes: 16 */
-  	/* padding: 48 */
-  	/* member types with holes: 1, total: 3 */
-  	/* forced alignments: 1, forced holes: 1, sum forced holes: 16 */
-  	/* flexible array members: end: 1, middle: 1 */
-  } __attribute__((__aligned__(64)));
-  $
+  acme@x1:~/git/pahole$ tests/flexible_arrays.sh
+  Flexible arrays accounting: Ok
+  acme@x1:~/git/pahole$ VERBOSE=1 tests/flexible_arrays.sh
+  Flexible arrays accounting: end: mem_cgroup: 2 2
+  middle: mem_cgroup: 3 3
+  end: pglist_data: 2 2
+  middle: pglist_data: 0 0
+  end: zone: 3 3
+  middle: zone: 0 0
+  end: cgroup: 1 1
+  middle: cgroup: 0 0
+  end: cgroup_root: 1 1
+  middle: cgroup_root: 1 1
+  end: page_counter: 2 2
+  middle: page_counter: 0 0
+  end: cpu_hw_events: 1 1
+  middle: cpu_hw_events: 0 0
+  end: crypto_shash: 1 1
+  middle: crypto_shash: 0 0
+  end: crypto_aead: 1 1
+  middle: crypto_aead: 0 0
+  end: crypto_ahash: 1 1
+  middle: crypto_ahash: 0 0
+  end: crypto_skcipher: 1 1
+  middle: crypto_skcipher: 0 0
+  end: crypto_sync_skcipher: 0 0
+  middle: crypto_sync_skcipher: 1 1
+  <SNIP>
+  end: bpf_ctx_convert: 2 2
+  middle: bpf_ctx_convert: 0 0
+  Ok
+  acme@x1:~/git/pahole$
 
 Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
 Cc: Willy Tarreau <w@1wt.eu>
 Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
 ---
- dwarves_fprintf.c | 20 ++++++++++++++++++++
- 1 file changed, 20 insertions(+)
+ tests/flexible_arrays.sh | 77 ++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 77 insertions(+)
+ create mode 100755 tests/flexible_arrays.sh
 
-diff --git a/dwarves_fprintf.c b/dwarves_fprintf.c
-index 0d642a318fd836ef..e16a6b4da65ed2cd 100644
---- a/dwarves_fprintf.c
-+++ b/dwarves_fprintf.c
-@@ -1502,6 +1502,8 @@ struct member_types_holes {
- 	uint16_t nr_with_bit_holes;
- 	uint16_t total_nr_holes;
- 	uint16_t total_nr_bit_holes;
-+	uint16_t nr_flexible_array_members;
-+	uint16_t nr_embedded_flexible_array_members;
- 	uint32_t sum_paddings;
- 	uint32_t sum_bit_paddings;
- };
-@@ -1540,11 +1542,13 @@ static size_t class__fprintf_member_type_holes(struct class *class, const struct
- 
- 	if (has_flexible_array) {
- 		printed += fprintf(fp, " a flexible array");
-+		++holes->nr_flexible_array_members;
- 		first = false;
- 	}
- 
- 	if (has_embedded_flexible_array) {
- 		printed += fprintf(fp, "%s embedded flexible array(s)", first ? "" : ",");
-+		++holes->nr_embedded_flexible_array_members;
- 		first = false;
- 	}
- 
-@@ -1985,6 +1989,22 @@ next_member:
- 		}
- 		printed += fprintf(fp, " */\n");
- 	}
-+	if (member_types_holes.nr_flexible_array_members > 0 ||
-+	    member_types_holes.nr_embedded_flexible_array_members > 0) {
-+		printed += fprintf(fp, "%.*s/* flexible array members: ",
-+				   cconf.indent, tabs);
+diff --git a/tests/flexible_arrays.sh b/tests/flexible_arrays.sh
+new file mode 100755
+index 0000000000000000..7c21253a7e08c9d3
+--- /dev/null
++++ b/tests/flexible_arrays.sh
+@@ -0,0 +1,77 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0-only
++#
++# Match flexible array member info with the per struct final stats.
++#
++# Arnaldo Carvalho de Melo <acme@redhat.com> (C) 2024-
 +
-+		if (member_types_holes.nr_flexible_array_members > 0)
-+			printed += fprintf(fp, "end: %u", member_types_holes.nr_flexible_array_members);
++vmlinux=${vmlinux:-$1}
 +
-+		if (member_types_holes.nr_embedded_flexible_array_members > 0) {
-+			printed += fprintf(fp, "%smiddle: %u",
-+					   member_types_holes.nr_flexible_array_members ? ", " : "",
-+					   member_types_holes.nr_embedded_flexible_array_members);
-+		}
++if [ -z "$vmlinux" ] ; then
++	vmlinux=$(pahole --running_kernel_vmlinux)
++fi
 +
-+		printed += fprintf(fp, " */\n");
-+	}
- 	cacheline = (cconf.base_offset + type->size) % conf_fprintf__cacheline_size(conf);
- 	if (cacheline != 0)
- 		printed += fprintf(fp, "%.*s/* last cacheline: %u bytes */\n",
++if [ ! -f "$vmlinux" ] ; then
++	echo "$vmlinux file not available, please specify another"
++	exit 2
++fi
++
++pretty=$(mktemp /tmp/flexible_arrays.data.sh.XXXXXX.c)
++
++echo -n "Flexible arrays accounting: "
++
++for struct in $(pahole -F btf --sizes --with_embedded_flexible_array $vmlinux | cut -f1) ; do
++	pahole $struct > $pretty
++
++	# We need to check for just one tab before the comment as when expanding unnamed
++	# structs with members with flexible arrays inside another struct we would mess
++	# up the accounting, see 'pahole fanotify_fid_event' for instance, circa October 2024:
++	# $ pahole fanotify_fid_event
++	# struct fanotify_fid_event {
++	#	struct fanotify_event      fae;                  /*     0    48 */
++	#	__kernel_fsid_t            fsid;                 /*    48     8 */
++	#	struct {
++	#		struct fanotify_fh object_fh;            /*    56     4 */
++	#		/* XXX last struct has a flexible array */
++	#		unsigned char      _inline_fh_buf[12];   /*    60    12 */
++	#	};                                               /*    56    16 */
++
++	#	/* XXX last struct has embedded flexible array(s) */
++	#	/* size: 72, cachelines: 2, members: 3 */
++	#	/* flexible array members: middle: 1 */
++	#	/* last cacheline: 8 bytes */
++	# }
++
++	nr_flexible_arrays=$(grep $'^\t/\* XXX last struct has a flexible array' $pretty | wc -l)
++	nr_embedded_flexible_arrays=$(grep $'^\t/\* XXX last struct.*embedded flexible array' $pretty | wc -l)
++	stat_nr_flexible_arrays=$(grep "flexible array members:.*end:" $pretty | sed -r 's/.*end: *([[:digit:]]+).*/\1/g')
++	[ -z "$stat_nr_flexible_arrays" ] && stat_nr_flexible_arrays=0
++	stat_nr_embedded_flexible_arrays=$(grep "flexible array members:.*middle:" $pretty | sed -r 's/.*middle: *([[:digit:]]+).*/\1/g')
++	[ -z "$stat_nr_embedded_flexible_arrays" ] && stat_nr_embedded_flexible_arrays=0
++	test -n "$VERBOSE" && echo "end: $struct: $nr_flexible_arrays $stat_nr_flexible_arrays"
++	test -n "$VERBOSE" && echo "middle: $struct: $nr_embedded_flexible_arrays $stat_nr_embedded_flexible_arrays"
++
++	if [ "$nr_embedded_flexible_arrays" != "$stat_nr_embedded_flexible_arrays" ] ; then
++		test -n "$VERBOSE" && printf "struct %s: The number of embedded flexible arrays (%s) doesn't match the number of members marked as such (%s)\n" \
++			"$struct" "$stat_nr_embedded_flexible_arrays" "$nr_embedded_flexible_arrays"
++		test -n "$VERBOSE" && pahole $struct
++		FAILED=1
++	fi
++
++	if [ "$nr_flexible_arrays" != "$stat_nr_flexible_arrays" ] ; then
++		test -n "$VERBOSE" && printf "struct %s: The number of flexible arrays (%s) doesn't match the number of members marked as such (%s)\n" \
++			"$struct" "$stat_nr_flexible_arrays" "$nr_flexible_arrays"
++		test -n "$VERBOSE" && pahole $struct
++		FAILED=1
++	fi
++
++	rm -f $pretty
++done
++
++if [ -n "$FAILED" ] ; then
++	echo "FAILED"
++	exit 1
++fi
++
++echo "Ok"
++exit 0
 -- 
 2.46.0
 
