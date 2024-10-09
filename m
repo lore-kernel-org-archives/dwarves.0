@@ -1,180 +1,91 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail-40134.protonmail.ch (mail-40134.protonmail.ch [185.70.40.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B44F8212D3E
-	for <dwarves@vger.kernel.org>; Tue,  8 Oct 2024 19:52:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0D7217B4FE
+	for <dwarves@vger.kernel.org>; Wed,  9 Oct 2024 23:35:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.40.134
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728417156; cv=none; b=a6F1q0QCH3at7EBItdEdtF/cQYSWtHjXGolgcItK3xvjhBUN/Ci02DHl09V+hZ7ZeBTvhv6c/7a1eJd5nswzJMttqvWAK1DRdC7jAFCnDnlRYe4NCKNCycAsu2krj11MPw0BcYMlNvZn7gi82q5GLwpJumtHiWisChgI36ocnpg=
+	t=1728516929; cv=none; b=Mq/tAjdiRCUajysRE7bCItTgYvDtxRv/DV4eLI0UaD0DLwjkGACKAziqBM+05b8tBA6uE5/MR285MzyXk7h4E5Vrea4g6dEowhBotJLZEqaocq3Jjfgab2SUNoB8KG47S4E2emwisMQP0HUHOBq2pvEOzim6GsZdTsEPJSic6jQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728417156; c=relaxed/simple;
-	bh=hiT4j3GwrReazEZ/FPUFl6GM4vUlCwPNeQPDnkXEXGI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=HsJw6lxSy+jfm+8/+LgoqvR4DcXCQUG0WZf58qBS6GoO0Vtc1QPv9Sh84OWT2PNxpMHBl4J7+ERuV8cS9wo+4IWOp+Mgx1U+IX3fAC3rXYFUePCAxGgnAdSXeXUE9kswd7RIT90wHY6YdCZNJB0gXCDw5HdmPI5TCkUJPGiNHGQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=joeYDJGf; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1728516929; c=relaxed/simple;
+	bh=vnYjBxgyXqSGL4pfP6J4LC8mZh4K2QFnWWJWaHxU5xk=;
+	h=Date:To:From:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=EcgBHxAC/WcyRUPxQrFlGwj2yuC6zAiuDJaCTB961IIuQ3lseRyVSvH8/b71edPUuKASlPe+PZdLrV+yplizflXJ1KrsuSz0DtGl0cp/1zWCB7JWHwn6M3ryQ9ulAqodXNo1hm/pFenCqWwaZmJ/7lpMEPeQOLS9blL82gN5xpE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me; spf=pass smtp.mailfrom=pm.me; dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b=Ajc+HGMD; arc=none smtp.client-ip=185.70.40.134
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pm.me
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="joeYDJGf"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF647C4CED0;
-	Tue,  8 Oct 2024 19:52:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1728417156;
-	bh=hiT4j3GwrReazEZ/FPUFl6GM4vUlCwPNeQPDnkXEXGI=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=joeYDJGfUHtmDF4QUMhlhWFyI3aPVnWn9gHerlO+e3lOPKgOAnDstug5qbHzhcl2Y
-	 ee7gTOAD9+qXrhjDkD2SpD8z9a8d/PoMYWHX6q/bigZ46SB2NOuCf6Ci6i3UtzIx3A
-	 Oi0WCXo+bGxou4UwL8gsPTBZF9fKYYTv0sgM9uX1DvMcW7bdIZBjbDIA98WOsbfyhB
-	 VJhHnnfD1ABCVyg7YyCpHrToh5k2FTrohZcs3IPyYL8d3o6j8StO0eLMl4Am8hDaFR
-	 XLgzRXuc9m7/K1AMnYslrM8CV+BMXjQ4gBvn0BMUPrYki8uwFClKQ1ZLqFt7LyyLVW
-	 HSg6Qv8ttFRJA==
-From: Arnaldo Carvalho de Melo <acme@kernel.org>
-To: Willy Tarreau <w@1wt.eu>
-Cc: dwarves@vger.kernel.org,
-	Alan Maguire <alan.maguire@oracle.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Clark Williams <williams@redhat.com>,
-	Kate Carcia <kcarcia@redhat.com>,
-	Arnaldo Carvalho de Melo <acme@redhat.com>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>
-Subject: [PATCH 3/3] tests: Add a test for the accounting of flexible arrays
-Date: Tue,  8 Oct 2024 16:52:09 -0300
-Message-ID: <20241008195209.1094299-4-acme@kernel.org>
-X-Mailer: git-send-email 2.46.2
-In-Reply-To: <20241008195209.1094299-1-acme@kernel.org>
-References: <20241008195209.1094299-1-acme@kernel.org>
+	dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b="Ajc+HGMD"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me;
+	s=protonmail3; t=1728516925; x=1728776125;
+	bh=OQb2DJpq6Jqo1/yjAUOyBVr5YHpSWRREzl3/HHKY71g=;
+	h=Date:To:From:Cc:Subject:Message-ID:Feedback-ID:From:To:Cc:Date:
+	 Subject:Reply-To:Feedback-ID:Message-ID:BIMI-Selector;
+	b=Ajc+HGMDv+Apxz5/bvLhAqHSh226P/+YOFQ6vsqmvu0cD43E4m+Pp03dzg36RAAdE
+	 JjNL4Bzs5tayR3l7NF+ixas7wV5+DPiYgW2R3MUmieVEqJcTZ3rHyyX4VeIhBS7WzQ
+	 wLdDZHacFOaJLT8cvCFkIrXmEuCA6i9Zt3KU3748Wd5vFmxOiT1xTkwpe7sRWfLYxY
+	 /lYBihoJRlkIoJCSMBG3Bin/HrOIi2LkR3Yz04/RZlS8a1AXAnZFAuGXsJYxo+iVSM
+	 az2DObCa97/Dxk63laeEKxUjEi3MQ7Xw+29qL8JTDoQcf2sPk453cLR9AYRIBQjvUn
+	 pQWMeiT/uGZcQ==
+Date: Wed, 09 Oct 2024 23:35:23 +0000
+To: dwarves@vger.kernel.org
+From: Ihor Solodrai <ihor.solodrai@pm.me>
+Cc: acme@kernel.org, alan.maguire@oracle.com, andrii@kernel.org, eddyz87@gmail.com
+Subject: [PATCH v2 dwarves 0/5] btf_encoder: implement shared elf_functions table
+Message-ID: <20241009233520.989453-1-ihor.solodrai@pm.me>
+Feedback-ID: 27520582:user:proton
+X-Pm-Message-ID: 415d99322b2822c9be704f011bb0e8cac01d3683
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-From: Arnaldo Carvalho de Melo <acme@redhat.com>
+This version of the patchset rebases the changes on top of next
+(a1241b0).
 
-  acme@x1:~/git/pahole$ tests/flexible_arrays.sh
-  Flexible arrays accounting: Ok
-  acme@x1:~/git/pahole$ VERBOSE=1 tests/flexible_arrays.sh
-  Flexible arrays accounting: end: mem_cgroup: 2 2
-  middle: mem_cgroup: 3 3
-  end: pglist_data: 2 2
-  middle: pglist_data: 0 0
-  end: zone: 3 3
-  middle: zone: 0 0
-  end: cgroup: 1 1
-  middle: cgroup: 0 0
-  end: cgroup_root: 1 1
-  middle: cgroup_root: 1 1
-  end: page_counter: 2 2
-  middle: page_counter: 0 0
-  end: cpu_hw_events: 1 1
-  middle: cpu_hw_events: 0 0
-  end: crypto_shash: 1 1
-  middle: crypto_shash: 0 0
-  end: crypto_aead: 1 1
-  middle: crypto_aead: 0 0
-  end: crypto_ahash: 1 1
-  middle: crypto_ahash: 0 0
-  end: crypto_skcipher: 1 1
-  middle: crypto_skcipher: 0 0
-  end: crypto_sync_skcipher: 0 0
-  middle: crypto_sync_skcipher: 1 1
-  <SNIP>
-  end: bpf_ctx_convert: 2 2
-  middle: bpf_ctx_convert: 0 0
-  Ok
-  acme@x1:~/git/pahole$
+In comparison to v1, elf_functions_entry struct and related code is
+removed.
 
-Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc: Willy Tarreau <w@1wt.eu>
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
----
- tests/flexible_arrays.sh | 77 ++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 77 insertions(+)
- create mode 100755 tests/flexible_arrays.sh
+Originally (even before I submitted v1) I used gobuffer to store a
+collection of elf_function-s. But that used too much memory, because
+gobuffer allocates big chunks, and these lists mostly contain just a
+few elements.  This prompted me to switch to a list in v1.
 
-diff --git a/tests/flexible_arrays.sh b/tests/flexible_arrays.sh
-new file mode 100755
-index 0000000000000000..7c21253a7e08c9d3
---- /dev/null
-+++ b/tests/flexible_arrays.sh
-@@ -0,0 +1,77 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0-only
-+#
-+# Match flexible array member info with the per struct final stats.
-+#
-+# Arnaldo Carvalho de Melo <acme@redhat.com> (C) 2024-
-+
-+vmlinux=${vmlinux:-$1}
-+
-+if [ -z "$vmlinux" ] ; then
-+	vmlinux=$(pahole --running_kernel_vmlinux)
-+fi
-+
-+if [ ! -f "$vmlinux" ] ; then
-+	echo "$vmlinux file not available, please specify another"
-+	exit 2
-+fi
-+
-+pretty=$(mktemp /tmp/flexible_arrays.data.sh.XXXXXX.c)
-+
-+echo -n "Flexible arrays accounting: "
-+
-+for struct in $(pahole -F btf --sizes --with_embedded_flexible_array $vmlinux | cut -f1) ; do
-+	pahole $struct > $pretty
-+
-+	# We need to check for just one tab before the comment as when expanding unnamed
-+	# structs with members with flexible arrays inside another struct we would mess
-+	# up the accounting, see 'pahole fanotify_fid_event' for instance, circa October 2024:
-+	# $ pahole fanotify_fid_event
-+	# struct fanotify_fid_event {
-+	#	struct fanotify_event      fae;                  /*     0    48 */
-+	#	__kernel_fsid_t            fsid;                 /*    48     8 */
-+	#	struct {
-+	#		struct fanotify_fh object_fh;            /*    56     4 */
-+	#		/* XXX last struct has a flexible array */
-+	#		unsigned char      _inline_fh_buf[12];   /*    60    12 */
-+	#	};                                               /*    56    16 */
-+
-+	#	/* XXX last struct has embedded flexible array(s) */
-+	#	/* size: 72, cachelines: 2, members: 3 */
-+	#	/* flexible array members: middle: 1 */
-+	#	/* last cacheline: 8 bytes */
-+	# }
-+
-+	nr_flexible_arrays=$(grep $'^\t/\* XXX last struct has a flexible array' $pretty | wc -l)
-+	nr_embedded_flexible_arrays=$(grep $'^\t/\* XXX last struct.*embedded flexible array' $pretty | wc -l)
-+	stat_nr_flexible_arrays=$(grep "flexible array members:.*end:" $pretty | sed -r 's/.*end: *([[:digit:]]+).*/\1/g')
-+	[ -z "$stat_nr_flexible_arrays" ] && stat_nr_flexible_arrays=0
-+	stat_nr_embedded_flexible_arrays=$(grep "flexible array members:.*middle:" $pretty | sed -r 's/.*middle: *([[:digit:]]+).*/\1/g')
-+	[ -z "$stat_nr_embedded_flexible_arrays" ] && stat_nr_embedded_flexible_arrays=0
-+	test -n "$VERBOSE" && echo "end: $struct: $nr_flexible_arrays $stat_nr_flexible_arrays"
-+	test -n "$VERBOSE" && echo "middle: $struct: $nr_embedded_flexible_arrays $stat_nr_embedded_flexible_arrays"
-+
-+	if [ "$nr_embedded_flexible_arrays" != "$stat_nr_embedded_flexible_arrays" ] ; then
-+		test -n "$VERBOSE" && printf "struct %s: The number of embedded flexible arrays (%s) doesn't match the number of members marked as such (%s)\n" \
-+			"$struct" "$stat_nr_embedded_flexible_arrays" "$nr_embedded_flexible_arrays"
-+		test -n "$VERBOSE" && pahole $struct
-+		FAILED=1
-+	fi
-+
-+	if [ "$nr_flexible_arrays" != "$stat_nr_flexible_arrays" ] ; then
-+		test -n "$VERBOSE" && printf "struct %s: The number of flexible arrays (%s) doesn't match the number of members marked as such (%s)\n" \
-+			"$struct" "$stat_nr_flexible_arrays" "$nr_flexible_arrays"
-+		test -n "$VERBOSE" && pahole $struct
-+		FAILED=1
-+	fi
-+
-+	rm -f $pretty
-+done
-+
-+if [ -n "$FAILED" ] ; then
-+	echo "FAILED"
-+	exit 1
-+fi
-+
-+echo "Ok"
-+exit 0
--- 
-2.46.0
+While rebasing I realized that we may avoid maintaining a mutex for
+each elf_functions_entry if list updates are made atomically. With
+that change it became obvious that elf_functions_entry abstraction is
+unnecessary, so I removed it.
+
+Also I removed reallocarray_grow logic, which was used for
+elf_functions->entries. I noticed that the number of functions (at
+least in vmlinux) is almost as big as the number of ELF symbols, and
+we can use this to pre-allocate the entire table and then adjust after
+function collection is complete.
+
+A patch splitting btf_encoder__collect_symbols became unnecessary and
+is removed.
+
+v1: https://lore.kernel.org/dwarves/20241004051347.41143-1-ihor.solodrai@pm=
+.me/
+
+Ihor Solodrai (5):
+  dwarf_loader: introduce pre/post cus__load_module hooks to conf_load
+  btf_encoder: introduce elf_functions struct type
+  btf_encoder: collect elf_functions in pre_cus__load_module
+  btf_encoder: make elf_functions.entry an elf_function list
+  btf_encoder: switch to shared elf_functions table
+
+ btf_encoder.c  | 364 ++++++++++++++++++++++++++++++++++---------------
+ btf_encoder.h  |   5 +-
+ dwarf_loader.c |  21 ++-
+ dwarves.h      |  18 ++-
+ pahole.c       |  28 ++--
+ 5 files changed, 307 insertions(+), 129 deletions(-)
+
+--=20
+2.43.0
+
 
