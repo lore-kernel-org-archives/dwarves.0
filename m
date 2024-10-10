@@ -1,103 +1,106 @@
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail-40133.protonmail.ch (mail-40133.protonmail.ch [185.70.40.133])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 521A32AF1D
-	for <dwarves@vger.kernel.org>; Wed,  9 Oct 2024 23:43:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 584EBB663
+	for <dwarves@vger.kernel.org>; Thu, 10 Oct 2024 00:37:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.40.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728517411; cv=none; b=bct9tvt7efLlg4esOFVVHOKyfepmz0xArgz4XkWD/6b+l8Ncy+3rriTUTLiu/5LxpJER3mXF6cdsfw81i8T8PXbqM55i6xJBhgH4NGvMWjNoWBaY69zTPQ7yog/mSC90afoC3wiXKV3cGJIupY3upw0qzcJ7WvXdjBInDNNnjZI=
+	t=1728520624; cv=none; b=taNgej/ArRnvJz5IeJ0sdPsKj5fYfJnjO9BXFg5wSklbl6rE5/O36FMvjLxiuMBtSFXUDhF+QBDqX5d9kI6imiwt99XJ3MCSfJ3ZU2DZV2gQ5zU5k1FPDvYeEAETC2XKkBUQ3t3GLJWDak5/WG4tHtPSNuJA2KpZAQtcb3anhM0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728517411; c=relaxed/simple;
-	bh=3e+VpLGC6IKgbzcERGG49uqVdF/HxsvaKkDQmJhoaLo=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=glgHJ6HhzTM8GJ0NU1UGusw9VrrQIht5AxwDtJJTljypxeRNAww8qr0M6mRe5RQ762uJ0eqmbGSiyN+7ayQu98CFj+DUc2WUQKbPe4hlS0kniKnwzZIHRbsEZJDCMaetlHQ92k3F8OSW4DEP2FDcyN/WH2yRpFg6tTY+yMf78Oo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=D9Y6W3nV; arc=none smtp.client-ip=209.85.214.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1728520624; c=relaxed/simple;
+	bh=EI3wvk6gL5QfB8CDB5/29iijBeqV0zAo+O+L+EQRQOg=;
+	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=PLbU0OTra5uzDJJEFZZiqgd4MBSKX6OhhEsWJEPoJpxHd4Xssu/H/FgwJfdD9khWdbzE4Zkr1FJzIdRLUGxxLwyYZkIk3IsvZQk5DPgjdalKTLNLcYdZqXptBXV45DWW3xWs9I0X+Claj+az73/GrvLsSMVc3cWQwoF9900rSEU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me; spf=pass smtp.mailfrom=pm.me; dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b=eS95tMuS; arc=none smtp.client-ip=185.70.40.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pm.me
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="D9Y6W3nV"
-Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-20c714cd9c8so2212615ad.0
-        for <dwarves@vger.kernel.org>; Wed, 09 Oct 2024 16:43:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1728517409; x=1729122209; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=RY6USLZ1cfhEKmm9Azhr6NQAxQiU+k0fwPUH7efSNRk=;
-        b=D9Y6W3nVhYKTvDZQIiPKelIAKfUWHVb3SrYlyLuHNmp64iO3i9zHyc1FYJgtEj5qsF
-         Uqx7e4IR9Wdht++ey+4XNCfBhJh3p0htnAJAwTOY12jOsRWqAEHhuTdZLKsOMczfWlfj
-         uYtqxnrR3/2c1+0Fx69zuXX8uZoJ3OmU6XaxqUcpmkAnS4TC2PHhKxirFhpxGw4crEN2
-         hghQfu9T/YRNfmOge2SwnP1/Ewozmg6Qv07YiCw5LWbG5JKx2SDW1k7TBgs5fERBlVkk
-         AB6HYw54/OAgYbe3nvx5K2Uo2vxtchVHYZSMJW1rBbac5KYgUa8s3dWdeXwQzNA5vQbw
-         RgFw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728517409; x=1729122209;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=RY6USLZ1cfhEKmm9Azhr6NQAxQiU+k0fwPUH7efSNRk=;
-        b=rWfAC9NoXvdvTZQ0DMJZw7ZKB5jxGy7k6n5IQOvcDszd0Kw8MHz+fHU3jHbP2Yiube
-         z8BlZxsFcf6SFIli3iDvNd0pHpGgsGEQXokCpdfh9BG1yJ2+TxeqBsilDS3aXAEifX5W
-         MUmRVSHgeFdsEUQ7dyKpeykx5gPOHl7FmnbNOKHNY2CfrYymGZ51Q8o1ThM/hzjFc7ZF
-         Jd0hnnQkN72E4tpbuuKKHOz7w/W5+qgmrkPajbzm9x96ibjes99xmNsPJvOEycMufBoU
-         Y1ewBVRcodamgGIDV0PSU6aH3Y2PkNcjiTuzXhwqFKiNdrT875zh4CPtCuvIhnG16axw
-         GyWg==
-X-Forwarded-Encrypted: i=1; AJvYcCUm1UhkePBa/ljo8UitatmWCnw5vPPXD2EvkEDAinfkDJzBJOpv7bfkM7GevrqOW0Hrj60P3IUA@vger.kernel.org
-X-Gm-Message-State: AOJu0YxbiCyervppWfn9xR4b3EM284mrE0VpNchV3Gwri1A56MlDTCXn
-	iTaTrh2Gr28YT+aCd1kkFqTedcMStlRJ2Gakhy6iCLJSl91bJ+6EqCkrIw==
-X-Google-Smtp-Source: AGHT+IHx3TssTUkjoUs+a92ZVLDMNp/9sMp2gX4336O+UAyxl4ie42N6v1eD/SMh8XYnwoU8jXSztA==
-X-Received: by 2002:a17:903:230c:b0:20c:5909:cc30 with SMTP id d9443c01a7336-20c636eb1c0mr65870045ad.10.1728517409590;
-        Wed, 09 Oct 2024 16:43:29 -0700 (PDT)
-Received: from [192.168.0.235] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-20c62af2f7bsm17808865ad.61.2024.10.09.16.43.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Oct 2024 16:43:29 -0700 (PDT)
-Message-ID: <60b79369e829b33c577fe285b6597894e72b7042.camel@gmail.com>
-Subject: Re: [PATCH v2 dwarves 0/5] btf_encoder: implement shared
- elf_functions table
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Ihor Solodrai <ihor.solodrai@pm.me>, dwarves@vger.kernel.org
-Cc: acme@kernel.org, alan.maguire@oracle.com, andrii@kernel.org
-Date: Wed, 09 Oct 2024 16:43:24 -0700
-In-Reply-To: <20241009233520.989453-1-ihor.solodrai@pm.me>
-References: <20241009233520.989453-1-ihor.solodrai@pm.me>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.52.4 (3.52.4-1.fc40) 
+	dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b="eS95tMuS"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me;
+	s=protonmail3; t=1728520614; x=1728779814;
+	bh=gxUfe+297dmJAvSkve4BFYwz5N6LB4IFXISD/oagaxs=;
+	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+	 Message-ID:BIMI-Selector;
+	b=eS95tMuSU59rBLPt3w6hPu2DX+eSqnLn3WfNSQtW0WzyM0F3b+TNdqYz/B/miLtfp
+	 HzIKtCtKtpxDmWGGkurvMgMS8FoG5pp0Y1x0qkPvmJEK7pBKDkhm9U0+b7sXWR8nYE
+	 clQAcbROwov+66NW1tgTFN/ea1dnI/MD+AdyYcS22yE/jZ8cWq0fv9rr5vmH5LZQSs
+	 KM40B7iEqSYAyg62o3BDCMp9Ze4tYYuvEBWgyqGXq83MA+F2SYIAnpGsiQznwNhq/R
+	 YT2IlC7Zp7xSmWLlyxt5aUKwQBj47Ow90tdgt1pAgve6bMhW4EdXoGyMFbP2/EkZAP
+	 8rDnYBuk7Ksog==
+Date: Thu, 10 Oct 2024 00:36:52 +0000
+To: Eduard Zingerman <eddyz87@gmail.com>
+From: Ihor Solodrai <ihor.solodrai@pm.me>
+Cc: dwarves@vger.kernel.org, acme@kernel.org, alan.maguire@oracle.com, andrii@kernel.org
+Subject: Re: [PATCH v2 dwarves 0/5] btf_encoder: implement shared elf_functions table
+Message-ID: <4C0idzPIUJesSQi12dB1SgeTQlGl13N2CCsvjPfdLbvTEemTJoQZ4P-LJcOQqRyM69ZLKVv4mIKDQJvfMYMV2oITse1_uS_m_SjVigh8bL0=@pm.me>
+In-Reply-To: <60b79369e829b33c577fe285b6597894e72b7042.camel@gmail.com>
+References: <20241009233520.989453-1-ihor.solodrai@pm.me> <60b79369e829b33c577fe285b6597894e72b7042.camel@gmail.com>
+Feedback-ID: 27520582:user:proton
+X-Pm-Message-ID: 3e9deedbe288e92d492911098a21e9db7beffe8b
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, 2024-10-09 at 23:35 +0000, Ihor Solodrai wrote:
-> This version of the patchset rebases the changes on top of next
-> (a1241b0).
->=20
-> In comparison to v1, elf_functions_entry struct and related code is
-> removed.
->=20
-> Originally (even before I submitted v1) I used gobuffer to store a
-> collection of elf_function-s. But that used too much memory, because
-> gobuffer allocates big chunks, and these lists mostly contain just a
-> few elements.  This prompted me to switch to a list in v1.
->=20
-> While rebasing I realized that we may avoid maintaining a mutex for
-> each elf_functions_entry if list updates are made atomically. With
-> that change it became obvious that elf_functions_entry abstraction is
-> unnecessary, so I removed it.
->=20
-> Also I removed reallocarray_grow logic, which was used for
-> elf_functions->entries. I noticed that the number of functions (at
-> least in vmlinux) is almost as big as the number of ELF symbols, and
-> we can use this to pre-allocate the entire table and then adjust after
-> function collection is complete.
->=20
-> A patch splitting btf_encoder__collect_symbols became unnecessary and
-> is removed.
-
-Do you have the performance / memory usage stats for next vs this patch-set=
-?
+On Wednesday, October 9th, 2024 at 4:43 PM, Eduard Zingerman <eddyz87@gmail=
+.com> wrote:
 
 [...]
+>=20
+> Do you have the performance / memory usage stats for next vs this patch-s=
+et?
+
+Hi Eduard.
+
+Yes, I ran perf stat, and looked at max memory as reported by
+`/usr/bin/time -v`. The difference is insignificant compared to
+acmel/dwarves:next (a1241b0) [1]. See below.
+
+In terms of speed I didn't expect an improvement. It might have=20
+even gotten worse due to potential encoder threads synchronization
+when accessing elf_functions table. The table is now built once, but
+before the changes it was built once *per thread*.
+
+As for memory, no difference is a little surprising as we now have one
+table instead of N (where N is number of threads). But more stuff was
+added to elf_function, so I guess it ate all potential gains.
+
+
+Performance counter stats for './pahole -J -j8 --btf_features=3Dencode_forc=
+e,var,float,enum64,decl_tag,type_tag,optimized_func,consistent_func,decl_ta=
+g_kfuncs --btf_encode_detached=3D/dev/null --lang_exclude=3Drust ~/repo/bpf=
+-dev-docker/linux/.tmp_vmlinux1' (31 runs):
+
+acmel/dwarves:next
+
+    68,904,383,016      cycles                                             =
+                     ( +-  0.30% )
+
+            5.5862 +- 0.0304 seconds time elapsed  ( +-  0.54% )
+
+vs this patchset
+
+    68,235,717,886      cycles                                             =
+                     ( +-  0.30% )
+
+            5.5550 +- 0.0412 seconds time elapsed  ( +-  0.74% )
+
+Memory on acmel/dwarves:next
+       Maximum resident set size (kbytes): 1392640
+       Maximum resident set size (kbytes): 1394600
+       Maximum resident set size (kbytes): 1393788
+
+Memory on this patchset:
+       Maximum resident set size (kbytes): 1393564
+       Maximum resident set size (kbytes): 1394840
+       Maximum resident set size (kbytes): 1392348
+
+[1] https://github.com/acmel/dwarves/commit/a1241b095de948becfed882929dda7c=
+4318e022a
+
+
