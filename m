@@ -1,106 +1,109 @@
-Received: from mail-40133.protonmail.ch (mail-40133.protonmail.ch [185.70.40.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 584EBB663
-	for <dwarves@vger.kernel.org>; Thu, 10 Oct 2024 00:37:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.40.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FBFD1BC077
+	for <dwarves@vger.kernel.org>; Thu, 10 Oct 2024 08:56:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728520624; cv=none; b=taNgej/ArRnvJz5IeJ0sdPsKj5fYfJnjO9BXFg5wSklbl6rE5/O36FMvjLxiuMBtSFXUDhF+QBDqX5d9kI6imiwt99XJ3MCSfJ3ZU2DZV2gQ5zU5k1FPDvYeEAETC2XKkBUQ3t3GLJWDak5/WG4tHtPSNuJA2KpZAQtcb3anhM0=
+	t=1728550607; cv=none; b=BiiRD7Y0Aa6kEMsS5Bp4OjBBIt99FWVxWepwuN3gQ1OQSDx62JeKQzAB3RmaInqjy46geQuWmjUEmXb4a2sXI1dvpuMKEZqwZ3ooehpbeRL1iks4DvXnXfIbnFTqG11XNPw9AXSGSZuh46iC1UUMJNWvxm7ZOfXSV/6/zIKG3wc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728520624; c=relaxed/simple;
-	bh=EI3wvk6gL5QfB8CDB5/29iijBeqV0zAo+O+L+EQRQOg=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=PLbU0OTra5uzDJJEFZZiqgd4MBSKX6OhhEsWJEPoJpxHd4Xssu/H/FgwJfdD9khWdbzE4Zkr1FJzIdRLUGxxLwyYZkIk3IsvZQk5DPgjdalKTLNLcYdZqXptBXV45DWW3xWs9I0X+Claj+az73/GrvLsSMVc3cWQwoF9900rSEU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me; spf=pass smtp.mailfrom=pm.me; dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b=eS95tMuS; arc=none smtp.client-ip=185.70.40.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pm.me
+	s=arc-20240116; t=1728550607; c=relaxed/simple;
+	bh=sOayZrvHTaGR7mH9Bhy0/dbyNToBzzUUWLkISD4DJQg=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=aCKtdt7wvYoLIDKhNTF++uPzZBvVfzN7bI8GuMqjdxqUSjjcLbvrn6GiBOo/8ufSRCoVCKbM3Kb/j1DsXApLloKysBQOH2yNYWgwUTOcWA5GBZe7wDjotwjFg74D/IfW1B8GhHJtMQJ3BtzL3pXS5Cm2doLlSYU/Am2W7B3IPDk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=D2Kmh7U6; arc=none smtp.client-ip=209.85.214.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b="eS95tMuS"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me;
-	s=protonmail3; t=1728520614; x=1728779814;
-	bh=gxUfe+297dmJAvSkve4BFYwz5N6LB4IFXISD/oagaxs=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-	 Message-ID:BIMI-Selector;
-	b=eS95tMuSU59rBLPt3w6hPu2DX+eSqnLn3WfNSQtW0WzyM0F3b+TNdqYz/B/miLtfp
-	 HzIKtCtKtpxDmWGGkurvMgMS8FoG5pp0Y1x0qkPvmJEK7pBKDkhm9U0+b7sXWR8nYE
-	 clQAcbROwov+66NW1tgTFN/ea1dnI/MD+AdyYcS22yE/jZ8cWq0fv9rr5vmH5LZQSs
-	 KM40B7iEqSYAyg62o3BDCMp9Ze4tYYuvEBWgyqGXq83MA+F2SYIAnpGsiQznwNhq/R
-	 YT2IlC7Zp7xSmWLlyxt5aUKwQBj47Ow90tdgt1pAgve6bMhW4EdXoGyMFbP2/EkZAP
-	 8rDnYBuk7Ksog==
-Date: Thu, 10 Oct 2024 00:36:52 +0000
-To: Eduard Zingerman <eddyz87@gmail.com>
-From: Ihor Solodrai <ihor.solodrai@pm.me>
-Cc: dwarves@vger.kernel.org, acme@kernel.org, alan.maguire@oracle.com, andrii@kernel.org
-Subject: Re: [PATCH v2 dwarves 0/5] btf_encoder: implement shared elf_functions table
-Message-ID: <4C0idzPIUJesSQi12dB1SgeTQlGl13N2CCsvjPfdLbvTEemTJoQZ4P-LJcOQqRyM69ZLKVv4mIKDQJvfMYMV2oITse1_uS_m_SjVigh8bL0=@pm.me>
-In-Reply-To: <60b79369e829b33c577fe285b6597894e72b7042.camel@gmail.com>
-References: <20241009233520.989453-1-ihor.solodrai@pm.me> <60b79369e829b33c577fe285b6597894e72b7042.camel@gmail.com>
-Feedback-ID: 27520582:user:proton
-X-Pm-Message-ID: 3e9deedbe288e92d492911098a21e9db7beffe8b
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="D2Kmh7U6"
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-20c805a0753so5454365ad.0
+        for <dwarves@vger.kernel.org>; Thu, 10 Oct 2024 01:56:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1728550606; x=1729155406; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=iJzizbhEb2y3je/jucPGRD63zrZr862B1ISrQ/WF4tA=;
+        b=D2Kmh7U69uJHxXHa6tMPx7YKRegIE+smcTH7w8TIIvwRHKzoNLXiM9dLX73hqM19CF
+         KSe+1PvCeIbaI72nhQIlW69LR3AIYhUazCWXk6CFfv1O43X4JR46dYasY0GTRCYyZ7mZ
+         KIKeR4am/si263xWwq/RVdlXZNeKctLU4L+j46hPtEkQZE+IZOlaPiXFdvQClIul8zkj
+         x0a4b+E4rzI733XynssKa/rYcTbVouPYCcpwfsS4rbkQP5TdIYHdN3fEwRezebP8akV3
+         djtogxzScnUvY2maFCGTK/WZclTSpOEjsKt1elatj22zXyTLZnlEnjNQ+g595dhwbLiN
+         hL6w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1728550606; x=1729155406;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=iJzizbhEb2y3je/jucPGRD63zrZr862B1ISrQ/WF4tA=;
+        b=QXOboj6VDbgyX/WXdNI7Ojph6DmS4x+yxnOLp8nQAdjy7PigFYA9bWtUAUeZoLwqam
+         A4J/xA990l0+Zla0vG8BP0VvKQFL4TyzHHucIImzRJXjza0YIEqN8Pqy5hfMi9iWMdV2
+         kA6U2NXVfhLcJUR1yjGogkPQ9gHVwwgdZCf055g0swiYIfw68jdwomNWzduG3wHYnaVl
+         pWWrTmcKGCUbVERXgqwOWjTddSTNrChk9pVDm+ccUFFCpREhifpHRJEo3b/Bfr2cvzju
+         3RXNh4pY1xEPILwazD6cVNVca6fusvRBlDX4dPLZogOKLUZtj4M0+LXtTs4TN8FnwBPX
+         KxAA==
+X-Forwarded-Encrypted: i=1; AJvYcCWYKy3J38v/lNZ60xazo+fdl+4IROM7Zr/rBoW/gdnrTWokZTki7kIXLx0K72KrwD89TLq0iKcv@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxq5zd8UEulsFV6yPy+Kqivptova96tmV3ULcgjO5qU29qePsOY
+	YO5fVtB6nayn+yYLYdXaH7bs45SRuoR4K2zh7tDEszgbS0jtwnAYg8RCcQ==
+X-Google-Smtp-Source: AGHT+IENADgkBJNtN/FrZPJotVmddSBFIrxS9KZ3Ju6QxjOtrdUGUmQEX8T27SY5+7ggCoe2ZfVc4g==
+X-Received: by 2002:a17:902:d511:b0:20b:4f95:9339 with SMTP id d9443c01a7336-20c6395b0dfmr72719785ad.60.1728550605761;
+        Thu, 10 Oct 2024 01:56:45 -0700 (PDT)
+Received: from [192.168.0.235] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-20c8c216156sm5832195ad.193.2024.10.10.01.56.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Oct 2024 01:56:45 -0700 (PDT)
+Message-ID: <cb5084defae910442d1dc959d8c642b82ee76744.camel@gmail.com>
+Subject: Re: [PATCH v2 dwarves 1/5] dwarf_loader: introduce pre/post
+ cus__load_module hooks to conf_load
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Ihor Solodrai <ihor.solodrai@pm.me>, dwarves@vger.kernel.org
+Cc: acme@kernel.org, alan.maguire@oracle.com, andrii@kernel.org
+Date: Thu, 10 Oct 2024 01:56:40 -0700
+In-Reply-To: <20241009233520.989453-2-ihor.solodrai@pm.me>
+References: <20241009233520.989453-1-ihor.solodrai@pm.me>
+	 <20241009233520.989453-2-ihor.solodrai@pm.me>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.52.4 (3.52.4-1.fc40) 
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
 
-On Wednesday, October 9th, 2024 at 4:43 PM, Eduard Zingerman <eddyz87@gmail=
-.com> wrote:
+On Wed, 2024-10-09 at 23:35 +0000, Ihor Solodrai wrote:
 
 [...]
->=20
-> Do you have the performance / memory usage stats for next vs this patch-s=
-et?
 
-Hi Eduard.
+> @@ -106,6 +114,14 @@ struct conf_load {
+>  	struct conf_fprintf	*conf_fprintf;
+>  	int			(*threads_prepare)(struct conf_load *conf, int nr_threads, void *=
+*thr_data);
+>  	int			(*threads_collect)(struct conf_load *conf, int nr_threads, void *=
+*thr_data, int error);
+> +	int			(*pre_cus__load_module)(struct process_dwflmod_parms *parms,
+> +							Dwfl_Module *mod,
+> +							Dwarf *dw,
+> +							Elf *elf);
+> +	int			(*post_cus__load_module)(struct process_dwflmod_parms *parms,
+> +							 Dwfl_Module *mod,
+> +							 Dwarf *dw,
+> +							 Elf *elf);
+>  };
 
-Yes, I ran perf stat, and looked at max memory as reported by
-`/usr/bin/time -v`. The difference is insignificant compared to
-acmel/dwarves:next (a1241b0) [1]. See below.
+I'd name these `module_pre_load` and `module_post_load`.
+The `post_cus__load_module` does not seem to be used in this
+patch-set, so I'd exclude it for now.
 
-In terms of speed I didn't expect an improvement. It might have=20
-even gotten worse due to potential encoder threads synchronization
-when accessing elf_functions table. The table is now built once, but
-before the changes it was built once *per thread*.
+I'd also keep the number of parameters to the minimum,
+this patch-set defines only btf_encoder__pre_cus__load_module and it
+only uses `elf` parameter. But since the hook goal is to operate on
+modules I'd pass only Dwfl_Module and use dwfl_module_getelf to get
+a link to Elf instance.
 
-As for memory, no difference is a little surprising as we now have one
-table instead of N (where N is number of threads). But more stuff was
-added to elf_function, so I guess it ate all potential gains.
+> =20
+>  /** struct conf_fprintf - hints to the __fprintf routines
 
-
-Performance counter stats for './pahole -J -j8 --btf_features=3Dencode_forc=
-e,var,float,enum64,decl_tag,type_tag,optimized_func,consistent_func,decl_ta=
-g_kfuncs --btf_encode_detached=3D/dev/null --lang_exclude=3Drust ~/repo/bpf=
--dev-docker/linux/.tmp_vmlinux1' (31 runs):
-
-acmel/dwarves:next
-
-    68,904,383,016      cycles                                             =
-                     ( +-  0.30% )
-
-            5.5862 +- 0.0304 seconds time elapsed  ( +-  0.54% )
-
-vs this patchset
-
-    68,235,717,886      cycles                                             =
-                     ( +-  0.30% )
-
-            5.5550 +- 0.0412 seconds time elapsed  ( +-  0.74% )
-
-Memory on acmel/dwarves:next
-       Maximum resident set size (kbytes): 1392640
-       Maximum resident set size (kbytes): 1394600
-       Maximum resident set size (kbytes): 1393788
-
-Memory on this patchset:
-       Maximum resident set size (kbytes): 1393564
-       Maximum resident set size (kbytes): 1394840
-       Maximum resident set size (kbytes): 1392348
-
-[1] https://github.com/acmel/dwarves/commit/a1241b095de948becfed882929dda7c=
-4318e022a
-
+[...]
 
