@@ -1,140 +1,181 @@
-Received: from mail-40131.protonmail.ch (mail-40131.protonmail.ch [185.70.40.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF1431CF5E9
-	for <dwarves@vger.kernel.org>; Fri, 11 Oct 2024 22:55:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.40.131
+Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 971B8231CA4
+	for <dwarves@vger.kernel.org>; Sun, 13 Oct 2024 10:00:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=163.172.96.212
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728687352; cv=none; b=uGOTCE6rqCGRAiKs+RMixJgCbSBEKYk1sXFLWLWlcssPhNs/p3ZEz2ypfBEQFIoFDDZ0iXnz1W5wjQIcmtSfUw/i0beA2ZV+1y6hxMwTBqBkKDAQMRLiuc1GozqNAwhUTvx7H+7Yj6SLcavCKpfKeJOT52iwkz2GCprkD9NeCbk=
+	t=1728813648; cv=none; b=RM7NfTH3ntAINGXlJ7zK06iusnC0KGwzB97zafCvWoto0nC/V6e1TEKFotZ64FU3cMv6cDtHKWyLKU+EcGehLGHiKLNUdza1/UyeyF+eaks3Ga0TMCSyohG5ipwein2Vmz8dDAAU/CZIs3HuKpxL83G6As40X4cSnFNFMko3aF4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728687352; c=relaxed/simple;
-	bh=yPEjli6zo7yjJ48qzKKNmkvWq7kNEMyitRsXXpP2fls=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=GY+D8+zq1b2Cw4OnMwDMBmshwV5sqm5wNd43TSa7s1ZNPPesmG6jTThLosHQ16p1xO+/vzJXJ2JvG0OFWqPqufMxILbCzb7LouvwkiQwDDtT08uP/ftS3/HpnyOB00LaWk54Of6uwiuXL7jDISUEmBHuWwq3YBRFOIEWbcXrTvw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me; spf=pass smtp.mailfrom=pm.me; dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b=KYRw6AhC; arc=none smtp.client-ip=185.70.40.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pm.me
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b="KYRw6AhC"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me;
-	s=protonmail3; t=1728687348; x=1728946548;
-	bh=1Rfs5BOKKEZoj44U9FbF3tly2WLm5I8BjgBoH4WFIDw=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-	 Message-ID:BIMI-Selector;
-	b=KYRw6AhCPH5s4h/KonGdGiYHsSgGqM2TB8rT3tud8nQfQwiAEH0vjIkI/5bZIl9G3
-	 OFs08NJ18eOTn9wP3/fSnteR5cnzSpRebEiVm6xSMqVCVJXqmwE+M49d0uNK+HGAHY
-	 66FwQVWV+Dqsl1ZMY02e1JKfRYe2blCDovLV4gSvXr55NPCdSvszilZh1O57NthBZZ
-	 tinxJEdjWo7YNE40AZ5eq9opKl1q+S7T65xEpiD+Ehpsj7+9Rms6smdxF0/XcdqJBI
-	 NG+vjsFHDbSEsx5sOhOiWYY/0KUNDB7eyEjAr1KJKM7QfzJGHHquNHBOksW+SgC61U
-	 hUHVGuxtPDmpA==
-Date: Fri, 11 Oct 2024 22:55:44 +0000
-To: Ihor Solodrai <ihor.solodrai@pm.me>
-From: Ihor Solodrai <ihor.solodrai@pm.me>
-Cc: Alan Maguire <alan.maguire@oracle.com>, Eduard Zingerman <eddyz87@gmail.com>, dwarves@vger.kernel.org, acme@kernel.org, andrii@kernel.org
-Subject: Re: [PATCH v2 dwarves 0/5] btf_encoder: implement shared elf_functions table
-Message-ID: <CjP57PbrCPwA8EsOHPQuoZ9YnU1UE0mzeYqoqI4gQHTxIVUgXoEmGS-4R2g1gkf1RMPFVlTSE253f49mPUvqHUiuUw4wxwJXBH3Pv5GPwOg=@pm.me>
-In-Reply-To: <m_fH6Yg0CAytjEUTxfZPpbMVGqGQWhuep4D--XMNrOZJh6MUWlIozEXiCC6ulW4FK6UFvCFlZC_sF0oNsAW3sftTvfPBjpz5AN3MdnxfhB4=@pm.me>
-References: <20241009233520.989453-1-ihor.solodrai@pm.me> <60b79369e829b33c577fe285b6597894e72b7042.camel@gmail.com> <4C0idzPIUJesSQi12dB1SgeTQlGl13N2CCsvjPfdLbvTEemTJoQZ4P-LJcOQqRyM69ZLKVv4mIKDQJvfMYMV2oITse1_uS_m_SjVigh8bL0=@pm.me> <af7ca712-7798-4204-9e15-fa2065154699@oracle.com> <52889283-56c4-4cf6-aad6-b0fbea9e58fb@oracle.com> <m_fH6Yg0CAytjEUTxfZPpbMVGqGQWhuep4D--XMNrOZJh6MUWlIozEXiCC6ulW4FK6UFvCFlZC_sF0oNsAW3sftTvfPBjpz5AN3MdnxfhB4=@pm.me>
-Feedback-ID: 27520582:user:proton
-X-Pm-Message-ID: c9121fa1968167b47b6313dacc308aa0a5cf31ff
+	s=arc-20240116; t=1728813648; c=relaxed/simple;
+	bh=OHadJ8U/ncy/O8zBqV68qg6aUsFbS0YA7oYP1z1ymSg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=iUgOqySqTK6IwtMh6+AMQ2HusuOu3TtOolh2LEY6SLVjiVqJBmbbyKSnLHZHSUhmAl6I56eqfxH8MQMwallZ+/7IxcByPWBhIVKQCamihDbVWBqZaf0xfh0XsWkZPOZ/pEynzstehJ7r2hfb7SOjIJwLxr0WHZ4ohz/RMhcyEQM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=1wt.eu; spf=pass smtp.mailfrom=1wt.eu; arc=none smtp.client-ip=163.172.96.212
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=1wt.eu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=1wt.eu
+Received: (from willy@localhost)
+	by pcw.home.local (8.15.2/8.15.2/Submit) id 49D9p5Ad028906;
+	Sun, 13 Oct 2024 11:51:05 +0200
+Date: Sun, 13 Oct 2024 11:51:05 +0200
+From: Willy Tarreau <w@1wt.eu>
+To: Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc: dwarves@vger.kernel.org, Alan Maguire <alan.maguire@oracle.com>,
+        Jiri Olsa <jolsa@kernel.org>, Clark Williams <williams@redhat.com>,
+        Kate Carcia <kcarcia@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Subject: Re: [PATCH 0/3] Differentiate embedded flexible arrays from flexible
+ ones
+Message-ID: <20241013095105.GA21823@1wt.eu>
+References: <20241008195209.1094299-1-acme@kernel.org>
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241008195209.1094299-1-acme@kernel.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Friday, October 11th, 2024 at 9:52 AM, Ihor Solodrai <ihor.solodrai@pm.m=
-e> wrote:
+Hi Arnaldo,
 
-[...]
+On Tue, Oct 08, 2024 at 04:52:06PM -0300, Arnaldo Carvalho de Melo wrote:
+> From: Arnaldo Carvalho de Melo <acme@redhat.com>
+> 
+> Hi Willy, Gustavo,
+> 
+> 	Now it has even a regression test, this now have what I think is
+> needed, take a look at the output of:
+> 
+>    pahole --with_embedded_flexible_arrays > \
+> 	 http://vger.kernel.org/~acme/pahole--with_embedded_flexible_array-6.10.11-200.fc40.x86_64.c
 
-> Hi Alan. Thank you for testing!
->=20
-> I was going to run a couple more experiments today and respond, but
-> you beat me to it.
->=20
-> I am curious about the memory usage too. I'll try measuring how much
-> is used by btf_encoders and the elf_functions specifically, similar to
-> how I found the table was big before the function representation
-> changes [1]. I'll share if I find anything interesting.
->=20
-> [1] https://lore.kernel.org/dwarves/aQtEzThpIhRiwQpkgeZepPGr5Mt_zuGfPbxQx=
-ZgS6SSoPYoqM1afjDqEmIZkdH3YzvhWmWwqCS_8ZvFTcSZHvpkAeBpLRTAZEmrOhq0svfo=3D@p=
-m.me/
+First, thanks for this great work! Please note that above it's
+"--with_embedded_flexible_array" (without the trailing 's').
 
-Alan,
+I'm seeing that it seems to catch entries added for padding as well:
 
-A heads up: there will definitely be a v3.
+  struct mem_cgroup {
+  ...
+        long unsigned int          move_lock_flags;      /*  1480     8 */
 
-Eduard discovered a bug when building kernel using pahole with this
-patch. I already debugged it and made a fix.
+        /* XXX 48 bytes hole, try to pack */
 
-TL;DR there might be fewer encoders than threads, which I didn't take
-into account here:
+        /* --- cacheline 24 boundary (1536 bytes) --- */
+        struct cacheline_padding   _pad1_;               /*  1536     0 */
 
-diff --git a/pahole.c b/pahole.c
-index a45aa7a..90f712d 100644
---- a/pahole.c
-+++ b/pahole.c
-@@ -3257,29 +3257,34 @@ static int pahole_threads_collect(struct conf_load =
-*conf, int nr_threads, void *
- {
-        struct thread_data **threads =3D (struct thread_data **)thr_data;
-        struct btf_encoder *encoders[nr_threads];
--       int i;
-+       int nr_encoders =3D 0;
-        int err =3D 0;
-+       int i;
-=20
-        if (error)
-                goto out;
-=20
--       for (i =3D 0; i < nr_threads; i++)
--               encoders[i] =3D threads[i]->encoder;
-+       for (i =3D 0; i < nr_threads; i++) {
-+               if (threads[i]->encoder) {
-+                       encoders[nr_encoders] =3D threads[i]->encoder;
-+                       nr_encoders++;
-+               }
-+       }
+        /* XXX last struct has a flexible array */
 
+I think that we could avoid emitting it if the entire struct or union is
+of size zero, as I don't think we'd be using variable length arrays in
+a structure of a single field which is that one anyway.
 
-Regarding memory usage, I tried instrumenting with prints of rusage,
-but that got too inconvenient quickly.
+I also tried to catch this case that we discussed about, which is almost
+always wrong: fma at the end of a struct, followed by padding in the
+container struct, suggesting that the caller meant for the fma to map
+to the next field and failed. But it didn't match it when combined
+with "--padding_ge 1".
 
-So I ended up making flamegraphs [1] for:
+  $ cat pad1.c
+  struct foo {
+          void *ptr;
+          int number;
+          char array[];
+  } foo;
+  
+  struct bar {
+          int number;
+          struct foo foo;
+          char storage[16];
+  } bar;
+  
+  int main(void)
+  {
+          return 0;
+  }
 
-  perf record -F max -e page-faults -g --
-   ./pahole -J -j8 \
-            --btf_features=3Dencode_force,var,float,enum64,decl_tag,type_ta=
-g,optimized_func,consistent_func,decl_tag_kfuncs \
-            --btf_encode_detached=3D/dev/null \
-            --lang_exclude=3Drust \
-            ~/repo/bpf-dev-docker/linux/.tmp_vmlinux1
+  $ gcc -g pad1.c
+  $ ../pahole/build/pahole --with_embedded_flexible_array --padding_ge 1 -E ./a.out 
+  $
+  $ ../pahole/build/pahole --with_embedded_flexible_array -E ./a.out 
+  struct bar {
+          int                        number;                                               /*     0     4 */
+  
+          /* XXX 4 bytes hole, try to pack */
+  
+          struct foo {
+                  void *             ptr;                                                  /*     8     8 */
+                  int                number;                                               /*    16     4 */
+                  char               array[];                                              /*    20     0 */
+          } foo; /*     8    16 */
+  
+          /* XXX last struct has a flexible array, 4 bytes of padding */
+  
+          char                       storage[16];                                          /*    24    16 */
+  
+          /* size: 40, cachelines: 1, members: 3 */
+          /* sum members: 36, holes: 1, sum holes: 4 */
+          /* paddings: 1, sum paddings: 4 */
+          /* flexible array members: end: 1 */
+          /* last cacheline: 40 bytes */
+  };
 
-And compared between next (91bcd1d) and this patchset.
+I think I can reliably spot it by grepping for 'flexible.*padding' but
+that removes some of its beauty and efficiency :-)
 
-If you check the number of samples of=20
-    btf_encoder__collect_symbols() - that's a table per thread
-vs=20
-    elf_functions__collect() - a shared table
+Maybe it's a different case and it would need a different option, such
+as --with_padded_embedded_flexible_array ?
 
-the results are what you might expect: for -j8 shared table is about
-6x smaller.
+> And go on searching for 'flexible' :-)
 
-However, even the duplicated tables have relatively small memory
-footprint: ~4-5% of the page faults.
+Regardless of the status of the points above, that's still really awesome
+and an amazing time-saver! Thanks a lot!
 
-The biggest memory eater is elf_getdata() called from
-btf_encoder__tag_kfuncs(): more than 60%. Maybe that's expected, I
-don't know. Certainly worth looking into.
+> 	Now I'm flexibly moving to other final issues to release pahole 1.28.
 
-Of course, these are page-faults not a direct memory measurement.
-If anyone has suggestion how to get something better, please share.
+Since you're speaking about final issues, I noticed this:
+  - forgetting to pass -g to gcc yields:
 
-[1]: https://gist.github.com/theihor/64bd4460073724a53d26009e7a474b64
+    $ ../pahole/build/pahole --with_embedded_flexible_array -E ./a.out
+    libbpf: failed to find '.BTF' ELF section in ./a.out
+    pahole: file './a.out' has no supported type information.
 
+    For me that was not clear, I thought I faced an incompatibility
+    related to bpf or something, plus my working binaries don't seem
+    to have such a '.BTF' section either. Maybe just asking "were debug
+    symbols omitted?" would be clearer.
+
+  - on my laptop, starting 'pahole' segfaults. I traced it to trying to
+    open(NULL) after failing to find vmlinux:
+
+    $ strace ./build/pahole
+    ...
+    access("/sys/kernel/btf/vmlinux", R_OK) = -1 ENOENT (No such file or directory)
+    uname({sysname="Linux", nodename="wtap.local", ...}) = 0
+    openat(AT_FDCWD, "/sys/kernel/notes", O_RDONLY) = 3
+    read(3, "\4\0\0\0\24\0\0\0\3\0\0\0", 12) = 12
+    read(3, "GNU\0", 4)                     = 4
+    read(3, "\350N\202\23\31g9\302VB(\17u\251\245\"O Xq", 20) = 20
+    close(3)                                = 0
+    openat(AT_FDCWD, "vmlinux", O_RDONLY)   = -1 ENOENT (No such file or directory)
+    openat(AT_FDCWD, "/boot/vmlinux", O_RDONLY) = -1 ENOENT (No such file or directory)
+    openat(AT_FDCWD, "/boot/vmlinux-6.1.91", O_RDONLY) = -1 ENOENT (No such file or directory)
+    openat(AT_FDCWD, "/usr/lib/debug/boot/vmlinux-6.1.91", O_RDONLY) = -1 ENOENT (No such file or directory)
+    openat(AT_FDCWD, "/lib/modules/6.1.91/build/vmlinux", O_RDONLY) = -1 ENOENT (No such file or directory)
+    openat(AT_FDCWD, "/usr/lib/debug/lib/modules/6.1.91/vmlinux", O_RDONLY) = -1 ENOENT (No such file or directory)
+    openat(AT_FDCWD, "/usr/lib/debug/boot/vmlinux-6.1.91.debug", O_RDONLY) = -1 ENOENT (No such file or directory)
+    openat(AT_FDCWD, NULL, O_RDONLY)        = -1 EFAULT (Bad address)
+    --- SIGSEGV {si_signo=SIGSEGV, si_code=SEGV_MAPERR, si_addr=NULL} ---
+    +++ killed by SIGSEGV +++
+
+    I've bisected it to this recent commit:
+
+      commit c08046f98a3f84881133f9172f6bb417add61879
+      Author: Arnaldo Carvalho de Melo <acme@redhat.com>
+      Date:   Wed Aug 28 16:19:17 2024 -0300
+
+          core: Add function to return the path to the running kernel vmlinux
+
+Hoping this helps!
+Willy
