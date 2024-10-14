@@ -1,144 +1,93 @@
-Received: from mail-40131.protonmail.ch (mail-40131.protonmail.ch [185.70.40.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8ED28231C92
-	for <dwarves@vger.kernel.org>; Mon, 14 Oct 2024 19:03:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.40.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31ABC1A76CC
+	for <dwarves@vger.kernel.org>; Mon, 14 Oct 2024 19:03:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728932627; cv=none; b=S+jr0jFVkIWqZDlEB/Gf2MwO3JrwNFS4OPRWNHqP/Cy+EV8wLx/HPrJeDucKgD7+O6iX+9OHBCj/Eki2F6m7XEUTILO6N/0r6qDIpe5oZyCAc6pYn2UK0SaVEKhsIZ+fXqsflxRdGoyizHgL94/t2FMFBliXr0vUV1PToS6MoSA=
+	t=1728932637; cv=none; b=uvkNRbZKbAcUltuj58nE4u1GW6SUJBBFwtykIXBFLZQUtS/joASiQwoP0goJ7mrVjHBLMrZ2Utz5EkV1Aey0ALGbQAQIGukmmLIJu45n07ZIUuePnGONMpLtmID8/plwA1yoRjqxWZsD6L92I1oF526eCSm5/UnkHgCrpW4oljM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728932627; c=relaxed/simple;
-	bh=H7VSBhwNFWwuKcdJw9drvI2rDd/zSuKwNhSzMdGFsGE=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=SOWaOfSEN8+c9GEK9uWnUXLeCjmGrwkqp3P/d6Wo7kWJ3Cw9h84e90nZ1fUrhUA9onrwMHA+T/UrEeOIeDjHWa6H4CyMImijA9x+NGa+iLiz5MVspVp4mb5eEGJ2uEtw4id/uTVgn3oxisnEVCCBx6mOTvyNrd1+w+2QXe4g5sQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me; spf=pass smtp.mailfrom=pm.me; dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b=Mjy93bN6; arc=none smtp.client-ip=185.70.40.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pm.me
+	s=arc-20240116; t=1728932637; c=relaxed/simple;
+	bh=OTHaItToB9HmCFMBXpshR9I/OimmP13iKZnGxPFxwnw=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=J2NtN7lOyJRcFbmuRahPSD2vplWNHQAL1heYEF9RJwxE/vR4/TCrbK90ZPFsHThWnIvu4Ms8rj1Z0DP1GKo9mCOMzQfEOIzdvVIY/VO9I3gbBWf6gTok2nMVXgwHZeqAUCD+YJzk+G/utAF/kGd6Hz9pMFxoit7a1v93+PeWVuU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VrcjdXqV; arc=none smtp.client-ip=209.85.216.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b="Mjy93bN6"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me;
-	s=protonmail3; t=1728932623; x=1729191823;
-	bh=GPv5WPW9zG2U/xlegnfRCwci7kSGgatOu4z22xbxYvs=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-	 Message-ID:BIMI-Selector;
-	b=Mjy93bN6Cs8DzTwkdxG7nkqXdvGl2kcBNkTkLM9N4TZgvA58L1EWXFTbF3M4uhd9l
-	 s6IO5/7CyFGkIR6YWqqM/STWE8ndt2e8/w8jbY2fhgk+T/ATVLsBtd63cHIGfUdy4Z
-	 Uhqf5mxpwyBvuRqIQjjo5RMgN6eQdbzGnfwLHC1PK3Jl9cVRBAMQckuqQCmyptdV9j
-	 GMHvjHONx8O/ZUjmeTpRAj9Ws1kSbvKAd8/TxU8X9yrSUUMo9AYUUDf2ia2zoEZh/I
-	 S9sq6HrZ8eVXo4l0nuRTBmkHiEDBICbF1xhkoZQfANk4rURAF/oQBVMKC/JvQqm9UE
-	 1xyJXtofRUEPA==
-Date: Mon, 14 Oct 2024 19:03:30 +0000
-To: Eduard Zingerman <eddyz87@gmail.com>
-From: Ihor Solodrai <ihor.solodrai@pm.me>
-Cc: dwarves@vger.kernel.org, acme@kernel.org, alan.maguire@oracle.com, andrii@kernel.org
-Subject: Re: [PATCH v2 dwarves 3/5] btf_encoder: collect elf_functions in pre_cus__load_module
-Message-ID: <wh8Ne88FhIBrRfmV5_-tXL_BILUEFXXb6WONJvvucTJOwM56meP3VgKHyiE9qg-DIRQuR3lcmOmwGT53Xa9qBqwBkbDavDf_yCkOmJ5yXiA=@pm.me>
-In-Reply-To: <268884d44497f30e561609ff982cfa87c1c24bb6.camel@gmail.com>
-References: <20241009233520.989453-1-ihor.solodrai@pm.me> <20241009233520.989453-4-ihor.solodrai@pm.me> <268884d44497f30e561609ff982cfa87c1c24bb6.camel@gmail.com>
-Feedback-ID: 27520582:user:proton
-X-Pm-Message-ID: 2087ec95999649e8d603bc56d144e30d854d12b6
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VrcjdXqV"
+Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-2e2eba31d3aso2376460a91.2
+        for <dwarves@vger.kernel.org>; Mon, 14 Oct 2024 12:03:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1728932635; x=1729537435; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=OTHaItToB9HmCFMBXpshR9I/OimmP13iKZnGxPFxwnw=;
+        b=VrcjdXqVJX1wr6VXBFCYDdhruPBRiShhkNOq70fS56ra+UPADx7GHKkp0RL2zWLk9J
+         4+tGz+kP7H3+Y/BS3WihXMKGJIUIvvVHzzCLA6s1kId+JYpBUNuj47Eydt1eaNCvR+C5
+         v9dAr5l6kfjyDAaXaPXeN5n3Bmr9fKYsBiSAaaceAyNbqfmg1hpKtDKE1VRJWkpZgBXa
+         RJVatfiAuJmlxW+Wd3r1fslKgn0zyujnRuIY7WOgESMhx88bzJJcxVv4c5tm8eT0qMzu
+         SpVBto0q+TEXwHS+BKMYwq4Z7LM/BN1jzecS+09Mt+W3c6Lgs3aK4NtNDXPcILKJlHXk
+         Msuw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1728932635; x=1729537435;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=OTHaItToB9HmCFMBXpshR9I/OimmP13iKZnGxPFxwnw=;
+        b=d1VlpW0wtMS3AmR9BBteJGF6sTq1B3mizMG8X6bPMyNQHpfCpnjDl7fJM0pP98B8DV
+         JVw/1afGML3Qlnm8OJL1Bdek/hlue7EqbqPZk1lrwNoeMKz8op3Ym1qunTpEpWBC6aa3
+         S/e4MeAe+cj4x0mCDMlJk8U5iOWpLVuJOHXeIqMI8fFL4suoXpdX53G0YE7vprYibKDr
+         +T/zfnmPy+/EHNfs+zUxITxcYXBW1hQ4iz2IkJFQ3pJMmz1ya6xlOb5oJVUy5skUUmcl
+         4L5Qsi66ZZEzx0rzwCDEnELpxn6O1o6CUaguYfXaBpnldDHLgpXTKDydAktym4i/pw1T
+         VSCw==
+X-Gm-Message-State: AOJu0YyewURpNVfvGYNKmt5XuC0XWYAZ9aN7XY0bmHX0419Rc6OmIS/Q
+	NPyZ/qj0x/RAYSA2MIFFZg3zVRE/mj6Lruo86UxA8b+q24qDOFW3
+X-Google-Smtp-Source: AGHT+IFhRV89XOncbHrPUn/aP3JgyJT8ihpB/87xY65K5tLp/ti4y26q4Q15EdNK72xOleyBTKPztg==
+X-Received: by 2002:a17:90a:bd92:b0:2e0:77aa:fecf with SMTP id 98e67ed59e1d1-2e2f0dfdc29mr13891912a91.41.1728932635361;
+        Mon, 14 Oct 2024 12:03:55 -0700 (PDT)
+Received: from [192.168.0.235] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2e2d5f0af7csm9260192a91.32.2024.10.14.12.03.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Oct 2024 12:03:54 -0700 (PDT)
+Message-ID: <010770092dfc1bdae333431c7c2f82490a5816ce.camel@gmail.com>
+Subject: Re: [PATCH v2 dwarves 1/5] dwarf_loader: introduce pre/post
+ cus__load_module hooks to conf_load
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Ihor Solodrai <ihor.solodrai@pm.me>
+Cc: dwarves@vger.kernel.org, acme@kernel.org, alan.maguire@oracle.com, 
+	andrii@kernel.org
+Date: Mon, 14 Oct 2024 12:03:50 -0700
+In-Reply-To: <6Il82Jpy0bf96RO5Vr2PRs46GF6pnbcanxCJ0oym7pDBkRpdtRddo1cv7y08lVtRyIAHyMRHlx5_iEFU21dn7NAiTdnE7uPwZB3opLJWbJo=@pm.me>
+References: <20241009233520.989453-1-ihor.solodrai@pm.me>
+	 <20241009233520.989453-2-ihor.solodrai@pm.me>
+	 <cb5084defae910442d1dc959d8c642b82ee76744.camel@gmail.com>
+	 <6Il82Jpy0bf96RO5Vr2PRs46GF6pnbcanxCJ0oym7pDBkRpdtRddo1cv7y08lVtRyIAHyMRHlx5_iEFU21dn7NAiTdnE7uPwZB3opLJWbJo=@pm.me>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.52.4 (3.52.4-1.fc40) 
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
 
-On Thursday, October 10th, 2024 at 1:57 AM, Eduard Zingerman <eddyz87@gmail=
-.com> wrote:
+On Mon, 2024-10-14 at 18:50 +0000, Ihor Solodrai wrote:
 
->=20
->=20
-> On Wed, 2024-10-09 at 23:35 +0000, Ihor Solodrai wrote:
->=20
-> [...]
->=20
-> > diff --git a/btf_encoder.c b/btf_encoder.c
->=20
->=20
-> [...]
->=20
-> > +static struct elf_functions *elf_functions__new(Elf *elf)
-> > +{
->=20
->=20
-> I think this function should be renamed to elf_functions_list_init()
-> and it should return int.
+[...]
 
-The elf_functions_list itself is static, this line initializes it:
+> > I'd name these `module_pre_load` and `module_post_load`.
+> > The `post_cus__load_module` does not seem to be used in this
+> > patch-set, so I'd exclude it for now.
+>=20
+> I used these names with the idea that more hooks may be added in the
+> future, so a convention like pre_<exact_fname> and post_<exact_fname>
+> is appropriate. Maybe that's too verbose. How about `pre_load_module`?
 
-    static LIST_HEAD(elf_functions_list);
+=C2=AF\_(=E3=83=84)_/=C2=AF, still like `module_pre_load` more, but whateve=
+r.
 
-elf_functions__new() creates a new (single) elf_functions struct,
-initializes it by collecting the functions, and adds it to the static
-list.
-
-Maybe __new is too cryptic. What do you think about renaming to
-elf_functions_list__add(), or maybe even split into
-elf_functions__new() and _list__add()?
-
->=20
-> [...]
->=20
-> > @@ -2071,6 +2139,13 @@ int btf_encoder__encode(struct btf_encoder *enco=
-der)
-> > #endif
-> > err =3D btf_encoder__write_elf(encoder, encoder->btf, BTF_ELF_SEC);
-> > }
-> > +
-> > + // TODO: after moving encoders to shared elf_functions,
-> > + // replace elf_functions__get(encoder->functions.elf) here
-> > + // with encoder->functions
-> > + // The pointer to shared elf_functions will be set in btf_encoder__ne=
-w
->=20
->=20
-> Nit: the TODO comment is not necessary here, as described change is
-> done later in the patch.
->=20
-> > + elf_functions__delete(elf_functions__get(encoder->functions.elf));
-> > +
-> > return err;
-> > }
-> >=20
-> > @@ -2369,6 +2444,7 @@ struct btf_encoder *btf_encoder__new(struct cu *c=
-u, const char *detached_filenam
-> > goto out;
-> > }
-> > encoder->functions.symtab =3D encoder->symtab;
-> > + encoder->functions.elf =3D cu->elf;
->=20
->=20
-> This line is removed in a subsequent patches, is it needed because of
-> the __delete call in the hunk above? Note, that if you want to account
-> for situation when multiple ELFs are processed the cu->elf might
->=20
-> change, so that __delete call would only delete elf_functions for the
-> last processed cu->elf.
->
-
-I wanted to keep intermediate patches small while maintaining that
-nothing is broken. These lines are necessary, because on this patch
-each encoder is still building it's own table, and each table needs a
-reference to the elf.
-
-If I merge patches #3-#5, these changes would disappear. I can try
-that, but then patch #3 will be quite big to review. What do you think?
-
-
->=20
-> I think that elf_functions should be deleted in main() at the same
-> level where btf_encoder__add_saved_funcs() is called.
->=20
-> > /* index the ELF sections for later lookup */
-
-In this patch, the shared elf_functions is built but not used. It is
-freed in btf_encoder__encode(), the line with TODO comment.
-
->=20
->=20
-> [...]
+[...]
 
