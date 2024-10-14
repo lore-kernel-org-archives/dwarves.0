@@ -1,43 +1,43 @@
 Received: from mail-4316.protonmail.ch (mail-4316.protonmail.ch [185.70.43.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CFE44683
-	for <dwarves@vger.kernel.org>; Mon, 14 Oct 2024 18:50:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB8244683
+	for <dwarves@vger.kernel.org>; Mon, 14 Oct 2024 18:51:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.43.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728931822; cv=none; b=hfQqp0vqOSyr0Cbn0AKH9sahSoHRzZCJ1ENWVmcv7HaOilnieNp0twtg99zJz5i0OVUR8gW8WwdlgXXtMgwgGmLcEhTE8AjW5HljdFEaz07BIBRQPoKvu0ywgcV+pLGzAf2QZDJlByJ2IrEHPIQvD/NyoMDwZ0hPotsojmXeNd4=
+	t=1728931870; cv=none; b=QZp574qjA1ttjgC+VPP/KBPz73D2EIRfL/9HPmyNciNj3JQOio/4UBy6s7beinatvEIJpgOCX60tCour6HqS41gAIZNAHfj/vFabBHNx4ifjVUJO6LOSQfxbrsw9bSzUqRKfgCxh7OI0TDajH8IM0aaasPjQv/b3XzZ/j9RwpvY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728931822; c=relaxed/simple;
-	bh=2+kWHFgX05K5dm69o1gUsSHuCsEsNuztCDH6cR4mBwU=;
+	s=arc-20240116; t=1728931870; c=relaxed/simple;
+	bh=CA5+hfouZUptzaRYu8qBG4vYuufhOirjwE5gl3AK1vA=;
 	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=aKmqAMqrWmDFA9w2GinbC56ZMQEKBShgRE7+sd9aLWpCvmbbZUyTa6s+JdNnpUbFj2jSZ5yNLse0aWELxlaGT3SoB8730Sel6IgpiHGWherTQ6v7sLwjS/VFampCp6XoGwMpXnVFlEgb72HjSj9My4td3UFINIYxPxpUqo2G1RA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me; spf=pass smtp.mailfrom=pm.me; dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b=ooUZumq2; arc=none smtp.client-ip=185.70.43.16
+	 MIME-Version:Content-Type; b=NUzYTIJa3KGr84SNK22xgM0cffO+dIdXYh52xA6A9H+TVDN9qztWLkhx2POI8ED2Xsx0bfhUCA7m6qeZ8A9mHzD5vDacT5IwcBir2f6li8dx+CaqeYJ7osmAeUTfuHqxsnapx7qJcXAMA6kih5zAB5p90zCezOsBU59pMoKCXaU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me; spf=pass smtp.mailfrom=pm.me; dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b=UJHPeyon; arc=none smtp.client-ip=185.70.43.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pm.me
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b="ooUZumq2"
+	dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b="UJHPeyon"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me;
-	s=protonmail3; t=1728931818; x=1729191018;
-	bh=2+kWHFgX05K5dm69o1gUsSHuCsEsNuztCDH6cR4mBwU=;
+	s=protonmail3; t=1728931867; x=1729191067;
+	bh=CA5+hfouZUptzaRYu8qBG4vYuufhOirjwE5gl3AK1vA=;
 	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
 	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
 	 Message-ID:BIMI-Selector;
-	b=ooUZumq2B8jwD1sunnbeDY48ht2CkrqiTEabMvQu3SxvkQ2T93o279Tto0/+AF9GK
-	 aeEmFIVhxC62HU5TztqZwjQhY/mzG10hCmLgiodmfkmn8t41fS6D2X7z+bCLJJujnG
-	 pgrJ/zxTaMt4KxQyQ55CteswvNXt6IfiQnYNvRUYYX3+I6qjz/KyKTl2Sj92D6B/Zh
-	 7Kn/AJ4AqYU8szyR9GJ9Q8t96+9u4VT9OVXFWqgb2AMqqItR8aj0Lr4BSoy6sLXDXo
-	 l4vAKy1fzPF7pif79iD1XF2K4tHwLQ3XDxczDgfES5/fr6EEk349ZP+EqZpgY1UCoD
-	 3ajNYU5NhP6bQ==
-Date: Mon, 14 Oct 2024 18:50:14 +0000
+	b=UJHPeyonaDURq2QlnLDFNa4cGG8IvrpNa4RL/a7rP09bVKcAdMB4eleRE6FzRxvm5
+	 3wihFugFH0yGXNBfGczA3Kvm0rv+GkPcKGgZqpMpQWnmrFjsBDrl09Foh2YgAOLhYU
+	 FCNEuA4k50BixOYS2iXjzrc3we4E05ZPy/6a11qkDiCV0Muzfo25e7JAYMyYYPIoLa
+	 Ks+tJMSHxHuWyX2oZts3gANoDPH74QzCRqp4TmjGZtYzvjIo30yCtCBQstcXElLlsD
+	 LaMUqb++rv+d3+dCAPV4/fPUMws5a8n4WXennr86fxiQMpkbhYqLYBI1LggtrFPCzU
+	 jed+GCcTxiZ5w==
+Date: Mon, 14 Oct 2024 18:51:02 +0000
 To: Eduard Zingerman <eddyz87@gmail.com>
 From: Ihor Solodrai <ihor.solodrai@pm.me>
 Cc: dwarves@vger.kernel.org, acme@kernel.org, alan.maguire@oracle.com, andrii@kernel.org
-Subject: Re: [PATCH v2 dwarves 1/5] dwarf_loader: introduce pre/post cus__load_module hooks to conf_load
-Message-ID: <6Il82Jpy0bf96RO5Vr2PRs46GF6pnbcanxCJ0oym7pDBkRpdtRddo1cv7y08lVtRyIAHyMRHlx5_iEFU21dn7NAiTdnE7uPwZB3opLJWbJo=@pm.me>
-In-Reply-To: <cb5084defae910442d1dc959d8c642b82ee76744.camel@gmail.com>
-References: <20241009233520.989453-1-ihor.solodrai@pm.me> <20241009233520.989453-2-ihor.solodrai@pm.me> <cb5084defae910442d1dc959d8c642b82ee76744.camel@gmail.com>
+Subject: Re: [PATCH v2 dwarves 2/5] btf_encoder: introduce elf_functions struct type
+Message-ID: <2WfzxylM8vqLQqRpXOeX7Ax22IaLHN6_SdaKHPDLoNUql8UzldKizhn0Tbs92MCC8e5ygfm7dUWNGilRcVbepcMibUMGWJDuA3D4O6kRQbk=@pm.me>
+In-Reply-To: <94c828d87e3ae213526f1b403bdff4ad6d6f6a54.camel@gmail.com>
+References: <20241009233520.989453-1-ihor.solodrai@pm.me> <20241009233520.989453-3-ihor.solodrai@pm.me> <94c828d87e3ae213526f1b403bdff4ad6d6f6a54.camel@gmail.com>
 Feedback-ID: 27520582:user:proton
-X-Pm-Message-ID: 2ec644d3e3d476915ee4d93d3c66def759671fe8
+X-Pm-Message-ID: 543d156484ab65b6f4c0abf91debe8b2022a3d9c
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
@@ -47,56 +47,119 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-On Thursday, October 10th, 2024 at 1:56 AM, Eduard Zingerman <eddyz87@gmail=
+On Thursday, October 10th, 2024 at 1:57 AM, Eduard Zingerman <eddyz87@gmail=
 .com> wrote:
 
 >=20
 >=20
 > On Wed, 2024-10-09 at 23:35 +0000, Ihor Solodrai wrote:
 >=20
+> > Extract elf_functions struct type from btf_encoder.
+> >=20
+> > Rewrite btf_encoder__collect_function() into
+> > elf_functions__collect_function(), and btf_encoder__collect_symbols()
+> > into elf_functions__collect().
+>=20
+>=20
+> Nit:
+>=20
+> the sentence above is somewhat cryptic. I think it's better to say
+> something like:
+>=20
+> Extract struct elf_functions from btf_encoder.
+> Replace methods operating functions table in btf_encoder by methods
+> operating on elf_functions:
+> - btf_encoder__collect_function -> elf_functions__collect_function;
+>=20
+> - btf_encoder__collect_symbols -> elf_functions__collect.
+
+ok
+
+>=20
+> > Now these functions do not depend on btf_encoder being passed to them
+> > as a parameter.
+> >=20
+> > Signed-off-by: Ihor Solodrai ihor.solodrai@pm.me
+> > ---
+>=20
+>=20
+> Modulo a few nitpicks this patch looks ok to me.
+>=20
+> Reviewed-by: Eduard Zingerman eddyz87@gmail.com
+>=20
+>=20
 > [...]
 >=20
-> > @@ -106,6 +114,14 @@ struct conf_load {
-> > struct conf_fprintf *conf_fprintf;
-> > int (*threads_prepare)(struct conf_load *conf, int nr_threads, void **t=
-hr_data);
-> > int (*threads_collect)(struct conf_load *conf, int nr_threads, void **t=
-hr_data, int error);
-> > + int (*pre_cus__load_module)(struct process_dwflmod_parms *parms,
-> > + Dwfl_Module *mod,
-> > + Dwarf *dw,
-> > + Elf *elf);
-> > + int (*post_cus__load_module)(struct process_dwflmod_parms *parms,
-> > + Dwfl_Module *mod,
-> > + Dwarf *dw,
-> > + Elf *elf);
-> > };
+> > @@ -2100,22 +2075,38 @@ int btf_encoder__encode(struct btf_encoder *enc=
+oder)
+> > }
+> >=20
+> > -static int btf_encoder__collect_symbols(struct btf_encoder *encoder)
+> > +static int elf_functions__collect(struct elf_functions *functions)
+> > {
+> > - uint32_t sym_sec_idx;
+> > + uint32_t nr_symbols =3D elf_symtab__nr_symbols(functions->symtab);
+> > + Elf32_Word sym_sec_idx;
+> > uint32_t core_id;
+> > GElf_Sym sym;
+> >=20
+> > - elf_symtab__for_each_symbol_index(encoder->symtab, core_id, sym, sym_=
+sec_idx) {
+> > - if (btf_encoder__collect_function(encoder, &sym))
+> > + // We know that number of functions is less than number of symbols,
+> > + // so we can overallocate temporarily.
+> > + functions->entries =3D calloc(nr_symbols, sizeof(struct elf_function)=
+);
+> > + if (!functions->entries) {
+> > + fprintf(stderr, "could not allocate memory for elf_functions table\n"=
+);
+> > + return -ENOMEM;
+> > + }
+> > +
+> > + functions->cnt =3D 0;
+> > + elf_symtab__for_each_symbol_index(functions->symtab, core_id, sym, sy=
+m_sec_idx) {;
+> > + if (elf_functions__collect_function(functions, &sym))
+> > return -1;
+> > }
+> >=20
+> > - if (encoder->functions.cnt) {
+> > - qsort(encoder->functions.entries, encoder->functions.cnt, sizeof(enco=
+der->functions.entries[0]),
+> > + if (functions->cnt)
+> > + qsort(functions->entries,
+> > + functions->cnt,
+> > + sizeof(functions->entries[0]),
+> > functions_cmp);
+> > - if (encoder->verbose)
+> > - printf("Found %d functions!\n", encoder->functions.cnt);
+> > +
+> > + // Reallocate to the exact size
+> > + functions->entries =3D realloc(functions->entries, functions->cnt * s=
+izeof(struct elf_function));
 >=20
 >=20
-> I'd name these `module_pre_load` and `module_post_load`.
-> The `post_cus__load_module` does not seem to be used in this
-> patch-set, so I'd exclude it for now.
+> You need to store realloc result to a temporary, otherwise pointer to
+> previously allocated memory in functions->entries is lost.
 
-I used these names with the idea that more hooks may be added in the
-future, so a convention like pre_<exact_fname> and post_<exact_fname>
-is appropriate. Maybe that's too verbose. How about `pre_load_module`?
+Good point.
 
 >=20
-> I'd also keep the number of parameters to the minimum,
-> this patch-set defines only btf_encoder__pre_cus__load_module and it
-> only uses `elf` parameter. But since the hook goal is to operate on
-> modules I'd pass only Dwfl_Module and use dwfl_module_getelf to get
-> a link to Elf instance.
+> (Although idk if such realloc could fail).
+
+It might fail in principle, although it seems very unlikely [1].
+
+[1] https://stackoverflow.com/questions/12125308/can-realloc-fail-return-nu=
+ll-when-trimming
+
 >=20
-> > /** struct conf_fprintf - hints to the __fprintf routines
-
-When I first introduced these hooks in WIP changes some values from
-parms had to be passed, which is not true for this patchset.
-
-However I tend to agree with the approach of adding as little code as
-necessary. In v3 I am removing the post hook and leaving two arguments
-(elf and mod).
-
+> > + if (!functions->entries) {
+> > + fprintf(stderr, "could not reallocate memory for elf_functions table\=
+n");
+> > + return -ENOMEM;
+> > }
+> >=20
+> > return 0;
 >=20
 >=20
 > [...]
