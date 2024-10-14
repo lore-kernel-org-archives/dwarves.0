@@ -1,43 +1,43 @@
-Received: from mail-4316.protonmail.ch (mail-4316.protonmail.ch [185.70.43.16])
+Received: from mail-40131.protonmail.ch (mail-40131.protonmail.ch [185.70.40.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB8244683
-	for <dwarves@vger.kernel.org>; Mon, 14 Oct 2024 18:51:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.43.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8ED28231C92
+	for <dwarves@vger.kernel.org>; Mon, 14 Oct 2024 19:03:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.40.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728931870; cv=none; b=QZp574qjA1ttjgC+VPP/KBPz73D2EIRfL/9HPmyNciNj3JQOio/4UBy6s7beinatvEIJpgOCX60tCour6HqS41gAIZNAHfj/vFabBHNx4ifjVUJO6LOSQfxbrsw9bSzUqRKfgCxh7OI0TDajH8IM0aaasPjQv/b3XzZ/j9RwpvY=
+	t=1728932627; cv=none; b=S+jr0jFVkIWqZDlEB/Gf2MwO3JrwNFS4OPRWNHqP/Cy+EV8wLx/HPrJeDucKgD7+O6iX+9OHBCj/Eki2F6m7XEUTILO6N/0r6qDIpe5oZyCAc6pYn2UK0SaVEKhsIZ+fXqsflxRdGoyizHgL94/t2FMFBliXr0vUV1PToS6MoSA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728931870; c=relaxed/simple;
-	bh=CA5+hfouZUptzaRYu8qBG4vYuufhOirjwE5gl3AK1vA=;
+	s=arc-20240116; t=1728932627; c=relaxed/simple;
+	bh=H7VSBhwNFWwuKcdJw9drvI2rDd/zSuKwNhSzMdGFsGE=;
 	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=NUzYTIJa3KGr84SNK22xgM0cffO+dIdXYh52xA6A9H+TVDN9qztWLkhx2POI8ED2Xsx0bfhUCA7m6qeZ8A9mHzD5vDacT5IwcBir2f6li8dx+CaqeYJ7osmAeUTfuHqxsnapx7qJcXAMA6kih5zAB5p90zCezOsBU59pMoKCXaU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me; spf=pass smtp.mailfrom=pm.me; dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b=UJHPeyon; arc=none smtp.client-ip=185.70.43.16
+	 MIME-Version:Content-Type; b=SOWaOfSEN8+c9GEK9uWnUXLeCjmGrwkqp3P/d6Wo7kWJ3Cw9h84e90nZ1fUrhUA9onrwMHA+T/UrEeOIeDjHWa6H4CyMImijA9x+NGa+iLiz5MVspVp4mb5eEGJ2uEtw4id/uTVgn3oxisnEVCCBx6mOTvyNrd1+w+2QXe4g5sQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me; spf=pass smtp.mailfrom=pm.me; dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b=Mjy93bN6; arc=none smtp.client-ip=185.70.40.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pm.me
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b="UJHPeyon"
+	dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b="Mjy93bN6"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me;
-	s=protonmail3; t=1728931867; x=1729191067;
-	bh=CA5+hfouZUptzaRYu8qBG4vYuufhOirjwE5gl3AK1vA=;
+	s=protonmail3; t=1728932623; x=1729191823;
+	bh=GPv5WPW9zG2U/xlegnfRCwci7kSGgatOu4z22xbxYvs=;
 	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
 	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
 	 Message-ID:BIMI-Selector;
-	b=UJHPeyonaDURq2QlnLDFNa4cGG8IvrpNa4RL/a7rP09bVKcAdMB4eleRE6FzRxvm5
-	 3wihFugFH0yGXNBfGczA3Kvm0rv+GkPcKGgZqpMpQWnmrFjsBDrl09Foh2YgAOLhYU
-	 FCNEuA4k50BixOYS2iXjzrc3we4E05ZPy/6a11qkDiCV0Muzfo25e7JAYMyYYPIoLa
-	 Ks+tJMSHxHuWyX2oZts3gANoDPH74QzCRqp4TmjGZtYzvjIo30yCtCBQstcXElLlsD
-	 LaMUqb++rv+d3+dCAPV4/fPUMws5a8n4WXennr86fxiQMpkbhYqLYBI1LggtrFPCzU
-	 jed+GCcTxiZ5w==
-Date: Mon, 14 Oct 2024 18:51:02 +0000
+	b=Mjy93bN6Cs8DzTwkdxG7nkqXdvGl2kcBNkTkLM9N4TZgvA58L1EWXFTbF3M4uhd9l
+	 s6IO5/7CyFGkIR6YWqqM/STWE8ndt2e8/w8jbY2fhgk+T/ATVLsBtd63cHIGfUdy4Z
+	 Uhqf5mxpwyBvuRqIQjjo5RMgN6eQdbzGnfwLHC1PK3Jl9cVRBAMQckuqQCmyptdV9j
+	 GMHvjHONx8O/ZUjmeTpRAj9Ws1kSbvKAd8/TxU8X9yrSUUMo9AYUUDf2ia2zoEZh/I
+	 S9sq6HrZ8eVXo4l0nuRTBmkHiEDBICbF1xhkoZQfANk4rURAF/oQBVMKC/JvQqm9UE
+	 1xyJXtofRUEPA==
+Date: Mon, 14 Oct 2024 19:03:30 +0000
 To: Eduard Zingerman <eddyz87@gmail.com>
 From: Ihor Solodrai <ihor.solodrai@pm.me>
 Cc: dwarves@vger.kernel.org, acme@kernel.org, alan.maguire@oracle.com, andrii@kernel.org
-Subject: Re: [PATCH v2 dwarves 2/5] btf_encoder: introduce elf_functions struct type
-Message-ID: <2WfzxylM8vqLQqRpXOeX7Ax22IaLHN6_SdaKHPDLoNUql8UzldKizhn0Tbs92MCC8e5ygfm7dUWNGilRcVbepcMibUMGWJDuA3D4O6kRQbk=@pm.me>
-In-Reply-To: <94c828d87e3ae213526f1b403bdff4ad6d6f6a54.camel@gmail.com>
-References: <20241009233520.989453-1-ihor.solodrai@pm.me> <20241009233520.989453-3-ihor.solodrai@pm.me> <94c828d87e3ae213526f1b403bdff4ad6d6f6a54.camel@gmail.com>
+Subject: Re: [PATCH v2 dwarves 3/5] btf_encoder: collect elf_functions in pre_cus__load_module
+Message-ID: <wh8Ne88FhIBrRfmV5_-tXL_BILUEFXXb6WONJvvucTJOwM56meP3VgKHyiE9qg-DIRQuR3lcmOmwGT53Xa9qBqwBkbDavDf_yCkOmJ5yXiA=@pm.me>
+In-Reply-To: <268884d44497f30e561609ff982cfa87c1c24bb6.camel@gmail.com>
+References: <20241009233520.989453-1-ihor.solodrai@pm.me> <20241009233520.989453-4-ihor.solodrai@pm.me> <268884d44497f30e561609ff982cfa87c1c24bb6.camel@gmail.com>
 Feedback-ID: 27520582:user:proton
-X-Pm-Message-ID: 543d156484ab65b6f4c0abf91debe8b2022a3d9c
+X-Pm-Message-ID: 2087ec95999649e8d603bc56d144e30d854d12b6
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
@@ -54,112 +54,90 @@ On Thursday, October 10th, 2024 at 1:57 AM, Eduard Zingerman <eddyz87@gmail=
 >=20
 > On Wed, 2024-10-09 at 23:35 +0000, Ihor Solodrai wrote:
 >=20
-> > Extract elf_functions struct type from btf_encoder.
-> >=20
-> > Rewrite btf_encoder__collect_function() into
-> > elf_functions__collect_function(), and btf_encoder__collect_symbols()
-> > into elf_functions__collect().
+> [...]
 >=20
->=20
-> Nit:
->=20
-> the sentence above is somewhat cryptic. I think it's better to say
-> something like:
->=20
-> Extract struct elf_functions from btf_encoder.
-> Replace methods operating functions table in btf_encoder by methods
-> operating on elf_functions:
-> - btf_encoder__collect_function -> elf_functions__collect_function;
->=20
-> - btf_encoder__collect_symbols -> elf_functions__collect.
-
-ok
-
->=20
-> > Now these functions do not depend on btf_encoder being passed to them
-> > as a parameter.
-> >=20
-> > Signed-off-by: Ihor Solodrai ihor.solodrai@pm.me
-> > ---
->=20
->=20
-> Modulo a few nitpicks this patch looks ok to me.
->=20
-> Reviewed-by: Eduard Zingerman eddyz87@gmail.com
+> > diff --git a/btf_encoder.c b/btf_encoder.c
 >=20
 >=20
 > [...]
 >=20
-> > @@ -2100,22 +2075,38 @@ int btf_encoder__encode(struct btf_encoder *enc=
-oder)
+> > +static struct elf_functions *elf_functions__new(Elf *elf)
+> > +{
+>=20
+>=20
+> I think this function should be renamed to elf_functions_list_init()
+> and it should return int.
+
+The elf_functions_list itself is static, this line initializes it:
+
+    static LIST_HEAD(elf_functions_list);
+
+elf_functions__new() creates a new (single) elf_functions struct,
+initializes it by collecting the functions, and adds it to the static
+list.
+
+Maybe __new is too cryptic. What do you think about renaming to
+elf_functions_list__add(), or maybe even split into
+elf_functions__new() and _list__add()?
+
+>=20
+> [...]
+>=20
+> > @@ -2071,6 +2139,13 @@ int btf_encoder__encode(struct btf_encoder *enco=
+der)
+> > #endif
+> > err =3D btf_encoder__write_elf(encoder, encoder->btf, BTF_ELF_SEC);
 > > }
-> >=20
-> > -static int btf_encoder__collect_symbols(struct btf_encoder *encoder)
-> > +static int elf_functions__collect(struct elf_functions *functions)
-> > {
-> > - uint32_t sym_sec_idx;
-> > + uint32_t nr_symbols =3D elf_symtab__nr_symbols(functions->symtab);
-> > + Elf32_Word sym_sec_idx;
-> > uint32_t core_id;
-> > GElf_Sym sym;
-> >=20
-> > - elf_symtab__for_each_symbol_index(encoder->symtab, core_id, sym, sym_=
-sec_idx) {
-> > - if (btf_encoder__collect_function(encoder, &sym))
-> > + // We know that number of functions is less than number of symbols,
-> > + // so we can overallocate temporarily.
-> > + functions->entries =3D calloc(nr_symbols, sizeof(struct elf_function)=
-);
-> > + if (!functions->entries) {
-> > + fprintf(stderr, "could not allocate memory for elf_functions table\n"=
-);
-> > + return -ENOMEM;
-> > + }
 > > +
-> > + functions->cnt =3D 0;
-> > + elf_symtab__for_each_symbol_index(functions->symtab, core_id, sym, sy=
-m_sec_idx) {;
-> > + if (elf_functions__collect_function(functions, &sym))
-> > return -1;
-> > }
-> >=20
-> > - if (encoder->functions.cnt) {
-> > - qsort(encoder->functions.entries, encoder->functions.cnt, sizeof(enco=
-der->functions.entries[0]),
-> > + if (functions->cnt)
-> > + qsort(functions->entries,
-> > + functions->cnt,
-> > + sizeof(functions->entries[0]),
-> > functions_cmp);
-> > - if (encoder->verbose)
-> > - printf("Found %d functions!\n", encoder->functions.cnt);
+> > + // TODO: after moving encoders to shared elf_functions,
+> > + // replace elf_functions__get(encoder->functions.elf) here
+> > + // with encoder->functions
+> > + // The pointer to shared elf_functions will be set in btf_encoder__ne=
+w
+>=20
+>=20
+> Nit: the TODO comment is not necessary here, as described change is
+> done later in the patch.
+>=20
+> > + elf_functions__delete(elf_functions__get(encoder->functions.elf));
 > > +
-> > + // Reallocate to the exact size
-> > + functions->entries =3D realloc(functions->entries, functions->cnt * s=
-izeof(struct elf_function));
->=20
->=20
-> You need to store realloc result to a temporary, otherwise pointer to
-> previously allocated memory in functions->entries is lost.
-
-Good point.
-
->=20
-> (Although idk if such realloc could fail).
-
-It might fail in principle, although it seems very unlikely [1].
-
-[1] https://stackoverflow.com/questions/12125308/can-realloc-fail-return-nu=
-ll-when-trimming
-
->=20
-> > + if (!functions->entries) {
-> > + fprintf(stderr, "could not reallocate memory for elf_functions table\=
-n");
-> > + return -ENOMEM;
+> > return err;
 > > }
 > >=20
-> > return 0;
+> > @@ -2369,6 +2444,7 @@ struct btf_encoder *btf_encoder__new(struct cu *c=
+u, const char *detached_filenam
+> > goto out;
+> > }
+> > encoder->functions.symtab =3D encoder->symtab;
+> > + encoder->functions.elf =3D cu->elf;
+>=20
+>=20
+> This line is removed in a subsequent patches, is it needed because of
+> the __delete call in the hunk above? Note, that if you want to account
+> for situation when multiple ELFs are processed the cu->elf might
+>=20
+> change, so that __delete call would only delete elf_functions for the
+> last processed cu->elf.
+>
+
+I wanted to keep intermediate patches small while maintaining that
+nothing is broken. These lines are necessary, because on this patch
+each encoder is still building it's own table, and each table needs a
+reference to the elf.
+
+If I merge patches #3-#5, these changes would disappear. I can try
+that, but then patch #3 will be quite big to review. What do you think?
+
+
+>=20
+> I think that elf_functions should be deleted in main() at the same
+> level where btf_encoder__add_saved_funcs() is called.
+>=20
+> > /* index the ELF sections for later lookup */
+
+In this patch, the shared elf_functions is built but not used. It is
+freed in btf_encoder__encode(), the line with TODO comment.
+
 >=20
 >=20
 > [...]
