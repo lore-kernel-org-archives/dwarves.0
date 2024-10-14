@@ -1,181 +1,113 @@
-Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 971B8231CA4
-	for <dwarves@vger.kernel.org>; Sun, 13 Oct 2024 10:00:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=163.172.96.212
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B55515F3EF
+	for <dwarves@vger.kernel.org>; Mon, 14 Oct 2024 10:31:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728813648; cv=none; b=RM7NfTH3ntAINGXlJ7zK06iusnC0KGwzB97zafCvWoto0nC/V6e1TEKFotZ64FU3cMv6cDtHKWyLKU+EcGehLGHiKLNUdza1/UyeyF+eaks3Ga0TMCSyohG5ipwein2Vmz8dDAAU/CZIs3HuKpxL83G6As40X4cSnFNFMko3aF4=
+	t=1728901914; cv=none; b=QLYKslTcEQlElPPZeMEMkLyaZxjdHSlzfpEDLRdgyXaM9F+vNL10Tx8z0yHWoqv92HLRS2y4Xz+c0A8dbT85l94UhquCVl9k6W3BdapmPLv9iOLUv1X7t5Xky7mstRC4lzxC7UvVy8evxKmWpJX3BHeMMPYow/JdaodDWoT9mNc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728813648; c=relaxed/simple;
-	bh=OHadJ8U/ncy/O8zBqV68qg6aUsFbS0YA7oYP1z1ymSg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iUgOqySqTK6IwtMh6+AMQ2HusuOu3TtOolh2LEY6SLVjiVqJBmbbyKSnLHZHSUhmAl6I56eqfxH8MQMwallZ+/7IxcByPWBhIVKQCamihDbVWBqZaf0xfh0XsWkZPOZ/pEynzstehJ7r2hfb7SOjIJwLxr0WHZ4ohz/RMhcyEQM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=1wt.eu; spf=pass smtp.mailfrom=1wt.eu; arc=none smtp.client-ip=163.172.96.212
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=1wt.eu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=1wt.eu
-Received: (from willy@localhost)
-	by pcw.home.local (8.15.2/8.15.2/Submit) id 49D9p5Ad028906;
-	Sun, 13 Oct 2024 11:51:05 +0200
-Date: Sun, 13 Oct 2024 11:51:05 +0200
-From: Willy Tarreau <w@1wt.eu>
-To: Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc: dwarves@vger.kernel.org, Alan Maguire <alan.maguire@oracle.com>,
-        Jiri Olsa <jolsa@kernel.org>, Clark Williams <williams@redhat.com>,
-        Kate Carcia <kcarcia@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Subject: Re: [PATCH 0/3] Differentiate embedded flexible arrays from flexible
- ones
-Message-ID: <20241013095105.GA21823@1wt.eu>
-References: <20241008195209.1094299-1-acme@kernel.org>
+	s=arc-20240116; t=1728901914; c=relaxed/simple;
+	bh=UOVZ1z++5r838nAG+3jMLp60sABLsV2AALLPgTOkkzY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=HtZsDnG2OVWs7f0qKz4DZaTAO3fpntuZ9YlFgJSWN0EHntZEtzqh4IWwB5QJbrYatbl5AxOapnxCS6jB5tXmpC7iKh+NCqi6LOS0f9OI04sibwJEEp3s1RNdtCATwgwAkfvpbVFitRB6F8lXIhV6B+98ZKoa0AEfwTutlFm0NKw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=mShim1/c; arc=none smtp.client-ip=205.220.165.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="mShim1/c"
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49E9uLKk015135;
+	Mon, 14 Oct 2024 10:31:46 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
+	:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=corp-2023-11-20; bh=nfEbeMLbB0qNXXVOKEeZ40PKncwma
+	Zqu8vLfZgQ3uZ4=; b=mShim1/cLQowIx4wQXTcXkNY6BwqZIZaSmE3eDOPsqmzh
+	p1y5hmFBs3RHjtcPw7jkvJivyy1wyg1GKCQ8HK5LG5jrcq7GSupeGkOPRd2DKgUG
+	9uWSzAWgTrJOSLdSDGoMqyFja+5nNf8VoXIgq6/dMvE9KL9gD5Ea9ykaJPYyktNh
+	AywcOXeuAkyihwiHeCdZMyPalUQz0LJAK5Mr8R922yesh2Czgcu5ybM4rwD8MQVp
+	4KHPM3yahwex6U1zrIG7AKEsP4A+ohqhgMxyD3pdiuN4Gd86/3gSsTb+RX4Wg0bx
+	eTWzyX1lcepSCuh7KsSsgb7GdSoBo1JV7ohPVKDWA==
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 427hnt64sb-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 14 Oct 2024 10:31:46 +0000 (GMT)
+Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 49E900eL036633;
+	Mon, 14 Oct 2024 10:31:44 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 427fjc5sw0-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 14 Oct 2024 10:31:44 +0000
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 49EAViCP039588;
+	Mon, 14 Oct 2024 10:31:44 GMT
+Received: from bpf.uk.oracle.com (dhcp-10-175-173-183.vpn.oracle.com [10.175.173.183])
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 427fjc5svc-1;
+	Mon, 14 Oct 2024 10:31:44 +0000
+From: Alan Maguire <alan.maguire@oracle.com>
+To: acme@kernel.org
+Cc: ihor.solodrai@pm.me, eddyz87@gmail.com, dwarves@vger.kernel.org,
+        Alan Maguire <alan.maguire@oracle.com>
+Subject: [PATCH dwarves] btf_encoder: use ELF_C_READ_MMAP
+Date: Mon, 14 Oct 2024 11:31:42 +0100
+Message-ID: <20241014103142.2280044-1-alan.maguire@oracle.com>
+X-Mailer: git-send-email 2.43.5
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241008195209.1094299-1-acme@kernel.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
+ definitions=2024-10-14_09,2024-10-11_01,2024-09-30_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 mlxscore=0 bulkscore=0
+ spamscore=0 phishscore=0 malwarescore=0 mlxlogscore=998 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2409260000
+ definitions=main-2410140076
+X-Proofpoint-ORIG-GUID: QjIDK9jGLypQvGZE6A5EKrJ2N9PP4NBV
+X-Proofpoint-GUID: QjIDK9jGLypQvGZE6A5EKrJ2N9PP4NBV
 
-Hi Arnaldo,
+This reduces peak memory utilization during BTF vmlinux encoding,
+replacing ELF section-sized malloc()s with mmap()s.
 
-On Tue, Oct 08, 2024 at 04:52:06PM -0300, Arnaldo Carvalho de Melo wrote:
-> From: Arnaldo Carvalho de Melo <acme@redhat.com>
-> 
-> Hi Willy, Gustavo,
-> 
-> 	Now it has even a regression test, this now have what I think is
-> needed, take a look at the output of:
-> 
->    pahole --with_embedded_flexible_arrays > \
-> 	 http://vger.kernel.org/~acme/pahole--with_embedded_flexible_array-6.10.11-200.fc40.x86_64.c
+For -j1 peak memory resident set size drops from
 
-First, thanks for this great work! Please note that above it's
-"--with_embedded_flexible_array" (without the trailing 's').
+        Maximum resident set size (kbytes): 1069220
 
-I'm seeing that it seems to catch entries added for padding as well:
+...to:
 
-  struct mem_cgroup {
-  ...
-        long unsigned int          move_lock_flags;      /*  1480     8 */
+        Maximum resident set size (kbytes): 701888
 
-        /* XXX 48 bytes hole, try to pack */
+...with this patch.
 
-        /* --- cacheline 24 boundary (1536 bytes) --- */
-        struct cacheline_padding   _pad1_;               /*  1536     0 */
+For -j8, peak memory resident set size drops from
 
-        /* XXX last struct has a flexible array */
+        Maximum resident set size (kbytes): 1121172
 
-I think that we could avoid emitting it if the entire struct or union is
-of size zero, as I don't think we'd be using variable length arrays in
-a structure of a single field which is that one anyway.
+...to:
 
-I also tried to catch this case that we discussed about, which is almost
-always wrong: fma at the end of a struct, followed by padding in the
-container struct, suggesting that the caller meant for the fma to map
-to the next field and failed. But it didn't match it when combined
-with "--padding_ge 1".
+        Maximum resident set size (kbytes): 963516
 
-  $ cat pad1.c
-  struct foo {
-          void *ptr;
-          int number;
-          char array[];
-  } foo;
-  
-  struct bar {
-          int number;
-          struct foo foo;
-          char storage[16];
-  } bar;
-  
-  int main(void)
-  {
-          return 0;
-  }
+Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+---
+ btf_encoder.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-  $ gcc -g pad1.c
-  $ ../pahole/build/pahole --with_embedded_flexible_array --padding_ge 1 -E ./a.out 
-  $
-  $ ../pahole/build/pahole --with_embedded_flexible_array -E ./a.out 
-  struct bar {
-          int                        number;                                               /*     0     4 */
-  
-          /* XXX 4 bytes hole, try to pack */
-  
-          struct foo {
-                  void *             ptr;                                                  /*     8     8 */
-                  int                number;                                               /*    16     4 */
-                  char               array[];                                              /*    20     0 */
-          } foo; /*     8    16 */
-  
-          /* XXX last struct has a flexible array, 4 bytes of padding */
-  
-          char                       storage[16];                                          /*    24    16 */
-  
-          /* size: 40, cachelines: 1, members: 3 */
-          /* sum members: 36, holes: 1, sum holes: 4 */
-          /* paddings: 1, sum paddings: 4 */
-          /* flexible array members: end: 1 */
-          /* last cacheline: 40 bytes */
-  };
+diff --git a/btf_encoder.c b/btf_encoder.c
+index 5954238..9599faf 100644
+--- a/btf_encoder.c
++++ b/btf_encoder.c
+@@ -1879,7 +1879,7 @@ static int btf_encoder__tag_kfuncs(struct btf_encoder *encoder)
+ 		goto out;
+ 	}
+ 
+-	elf = elf_begin(fd, ELF_C_READ, NULL);
++	elf = elf_begin(fd, ELF_C_READ_MMAP, NULL);
+ 	if (elf == NULL) {
+ 		elf_error("Cannot update ELF file");
+ 		goto out;
+-- 
+2.43.5
 
-I think I can reliably spot it by grepping for 'flexible.*padding' but
-that removes some of its beauty and efficiency :-)
-
-Maybe it's a different case and it would need a different option, such
-as --with_padded_embedded_flexible_array ?
-
-> And go on searching for 'flexible' :-)
-
-Regardless of the status of the points above, that's still really awesome
-and an amazing time-saver! Thanks a lot!
-
-> 	Now I'm flexibly moving to other final issues to release pahole 1.28.
-
-Since you're speaking about final issues, I noticed this:
-  - forgetting to pass -g to gcc yields:
-
-    $ ../pahole/build/pahole --with_embedded_flexible_array -E ./a.out
-    libbpf: failed to find '.BTF' ELF section in ./a.out
-    pahole: file './a.out' has no supported type information.
-
-    For me that was not clear, I thought I faced an incompatibility
-    related to bpf or something, plus my working binaries don't seem
-    to have such a '.BTF' section either. Maybe just asking "were debug
-    symbols omitted?" would be clearer.
-
-  - on my laptop, starting 'pahole' segfaults. I traced it to trying to
-    open(NULL) after failing to find vmlinux:
-
-    $ strace ./build/pahole
-    ...
-    access("/sys/kernel/btf/vmlinux", R_OK) = -1 ENOENT (No such file or directory)
-    uname({sysname="Linux", nodename="wtap.local", ...}) = 0
-    openat(AT_FDCWD, "/sys/kernel/notes", O_RDONLY) = 3
-    read(3, "\4\0\0\0\24\0\0\0\3\0\0\0", 12) = 12
-    read(3, "GNU\0", 4)                     = 4
-    read(3, "\350N\202\23\31g9\302VB(\17u\251\245\"O Xq", 20) = 20
-    close(3)                                = 0
-    openat(AT_FDCWD, "vmlinux", O_RDONLY)   = -1 ENOENT (No such file or directory)
-    openat(AT_FDCWD, "/boot/vmlinux", O_RDONLY) = -1 ENOENT (No such file or directory)
-    openat(AT_FDCWD, "/boot/vmlinux-6.1.91", O_RDONLY) = -1 ENOENT (No such file or directory)
-    openat(AT_FDCWD, "/usr/lib/debug/boot/vmlinux-6.1.91", O_RDONLY) = -1 ENOENT (No such file or directory)
-    openat(AT_FDCWD, "/lib/modules/6.1.91/build/vmlinux", O_RDONLY) = -1 ENOENT (No such file or directory)
-    openat(AT_FDCWD, "/usr/lib/debug/lib/modules/6.1.91/vmlinux", O_RDONLY) = -1 ENOENT (No such file or directory)
-    openat(AT_FDCWD, "/usr/lib/debug/boot/vmlinux-6.1.91.debug", O_RDONLY) = -1 ENOENT (No such file or directory)
-    openat(AT_FDCWD, NULL, O_RDONLY)        = -1 EFAULT (Bad address)
-    --- SIGSEGV {si_signo=SIGSEGV, si_code=SEGV_MAPERR, si_addr=NULL} ---
-    +++ killed by SIGSEGV +++
-
-    I've bisected it to this recent commit:
-
-      commit c08046f98a3f84881133f9172f6bb417add61879
-      Author: Arnaldo Carvalho de Melo <acme@redhat.com>
-      Date:   Wed Aug 28 16:19:17 2024 -0300
-
-          core: Add function to return the path to the running kernel vmlinux
-
-Hoping this helps!
-Willy
