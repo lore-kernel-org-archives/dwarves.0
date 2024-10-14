@@ -1,173 +1,121 @@
-Received: from mail-4322.protonmail.ch (mail-4322.protonmail.ch [185.70.43.22])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78ADA1D5AD8
-	for <dwarves@vger.kernel.org>; Mon, 14 Oct 2024 23:09:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.43.22
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E40A122318
+	for <dwarves@vger.kernel.org>; Mon, 14 Oct 2024 23:32:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728947346; cv=none; b=InijbRj0AjNkoir5HbArar23o7DtTn4uxetDWdWn8ts5GboJ+7ePHlb+eRSzouHr+DjKTbyHVJEsBtEO5EvgZbe4O4FaQGOX44nOO4OkqiL5zMwFcOFyxOftVuFb52CjUudOt3BnTUPrPQt6kyIN6aDH+u9I+59z5mWPCVkT43I=
+	t=1728948735; cv=none; b=ebAUuFTPJtFZSE0POlF5VuIW+Yi1N8cM29m3obTOgETypyr7/mjN0ALV3EkD/EJZqU7jlILf8v9mUKNu8JV9wze0c256tl/whq8L9qreKdsJJqIPZu4rZp6EwZdORZLRfS9X9I9IQbyYJE4k15hzNWq1ZAGzbHjg6IdduPxTccg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728947346; c=relaxed/simple;
-	bh=7e/5RDgY2Nydnv0L9YDpjl9nMQ+qhrnORWhJcQWSsXQ=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=stRCHE+7bkt6Hnv8kcqln1MH4qaOT+jlGIBQF5k8DuYqoDIHTpLDbcudVH5Tw4k2rYL6AQ3Eun/XLwdNA3BG/Jt488ch23Pzs1RLw/jHU62/OyFESiRwfaKAMOYEGDZK7y+KYj7kLrlzoepPxIx3MFcGzK+rAEO4lkN+HsnskY8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me; spf=pass smtp.mailfrom=pm.me; dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b=PmMqmqkE; arc=none smtp.client-ip=185.70.43.22
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pm.me
+	s=arc-20240116; t=1728948735; c=relaxed/simple;
+	bh=/dz/aDtP/Mwj5q2SUfN75yeKy3/Va7vZ7nC4rtbBFg4=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=QysGQhNssJf8EoAWiIifI8ISoJtKNoitI4baRcL0ug+L7y6xUKReI9rlkBrUQBwPjcyWOHAoOm+A7IqfQLeuYzTC6lx5sAIe0kb5ISeY7wbXiBfA26o9aJHYcTw0LecigLknoF+4NtrevMS50ieMeB0auWtNlzo8CCwYVRxR/o4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SJzNtNOu; arc=none smtp.client-ip=209.85.214.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b="PmMqmqkE"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me;
-	s=protonmail3; t=1728947337; x=1729206537;
-	bh=lYSQyto8qqLLjiq3sQTyhMUGDdD6izUVWzw2fDm2esg=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-	 Message-ID:BIMI-Selector;
-	b=PmMqmqkEHwEvBqXJ2kE/3FK0vgjn3TbfJbfYNRA6QBqwJPnHMHaGnW+MeW/aYJcW3
-	 8wkTSfvR9QsQLnt+mPYAZcxBt/ajrlSBWD4cxZZ6YclKyyLIZmtkDxi8Vsoch74Fy0
-	 NvsxrXqLDb+M6F3J1Jz104Sb/G06+ImWcti4HXFYU24BRybjenZ0Vh9o/mfAKhY1d3
-	 3TqWxcdfL1FaWiL8lp++XCQhOxLfaixr6Yvop6c63133CznrMD+t6r2Q/GUG9nqkO4
-	 7n+Ec/61FfgWKKdmHwKPXROsAoXQ8Gtr8Wh/Ui7EIrKFrPvyCyTDRhlJ8+b0jKjr/o
-	 uA4mVgupxMhoQ==
-Date: Mon, 14 Oct 2024 23:08:51 +0000
-To: Eduard Zingerman <eddyz87@gmail.com>
-From: Ihor Solodrai <ihor.solodrai@pm.me>
-Cc: dwarves@vger.kernel.org, acme@kernel.org, alan.maguire@oracle.com, andrii@kernel.org
-Subject: Re: [PATCH v2 dwarves 3/5] btf_encoder: collect elf_functions in pre_cus__load_module
-Message-ID: <5BZh41mSYjQZMCaMwVmgId6qPAAI1LpidzKcJYqw5Pkj94jYwwuW5jGoZDwxmPkDHE6PXE_pAumBHmjmTqGuK4MEL3xTU_xAcw5xa9vCIlQ=@pm.me>
-In-Reply-To: <19a0e258889f09feb27f6bff6965edee83c2fa16.camel@gmail.com>
-References: <20241009233520.989453-1-ihor.solodrai@pm.me> <20241009233520.989453-4-ihor.solodrai@pm.me> <268884d44497f30e561609ff982cfa87c1c24bb6.camel@gmail.com> <wh8Ne88FhIBrRfmV5_-tXL_BILUEFXXb6WONJvvucTJOwM56meP3VgKHyiE9qg-DIRQuR3lcmOmwGT53Xa9qBqwBkbDavDf_yCkOmJ5yXiA=@pm.me> <7d6631c07df523103ae3a89ebeedf296074d6967.camel@gmail.com> <hrfEwQ1OldXwSegRIZ9XpD6t7pJZJ6sMz7duwiE0dbi_lFlnjEphjTsjxJiakceGnR2_dNfhUp2oJrS2uShN9qHK2tf-32cFVWQS1r-eDds=@pm.me> <19a0e258889f09feb27f6bff6965edee83c2fa16.camel@gmail.com>
-Feedback-ID: 27520582:user:proton
-X-Pm-Message-ID: 31277d0e5c17f316620dd96695505f25013a1297
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SJzNtNOu"
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-20c8b557f91so37179055ad.2
+        for <dwarves@vger.kernel.org>; Mon, 14 Oct 2024 16:32:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1728948733; x=1729553533; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=pwbSPpo2A8k0B91c4XNHi44lm1Du1iObCNlm8Nw8Sno=;
+        b=SJzNtNOuQyYsQUbpDXkfLbyN+mnAaRiiX5eRjA5KhngXCh1YIB5PM72gl6l/m9XXFX
+         GRbS7B4ESkunql6iki4Hf1H7+v2pamTbyEJk2ZrslqKvLu0llbvnFh7vLMqNtMvARcy+
+         ZUpIW9u2/i7KYKJxnGnfxWFirEcL8aIJ/6J1BF/Q63JCq2uupjD3VsKT6V1N1i1rR9yk
+         ngKMiyGzRtG3ddsJyYyqrQS3JE8hZ4VwPNoPSMEr+dyfSAPs7RkLmvlsWkdjpHP2julD
+         y0dHAXjhpZ2xmmY4uENq3ZTFjUe3QmIh8kGP+ulRm5zYUAcLprw26PLuSxdSxsCMjcoT
+         2DKw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1728948733; x=1729553533;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=pwbSPpo2A8k0B91c4XNHi44lm1Du1iObCNlm8Nw8Sno=;
+        b=QtZwuGqJex03+lU0Cva8HDyWaOCudUPU6KU74/m7ygn2aPVX2cx5MWDPTbNNs6V86V
+         0wx3BkfW3OU5WhMlLGlzETZVy9uLgVIN5hDhsjn9xqWq0sHu5j7oiLeFkKA0HQ5DREBj
+         kWINeb2SQjVlg/gH3DwgfPRmeZkLbl7+Cu8Z1jHwWHN9vyhh8nyt1Gh8Bm9eUE6Yj97m
+         c80Onbc3hqvwdL29tZbTChyTaJKLfzaA35x01DtrdJaemBiZN41ERzrGInbGJ/CeXE+z
+         nJX5+HyDx/OABsP6DsjvpcpktjC4GvItZ71pSpDtu12NWkP1JqocBJDE3lDpM+c+lzoP
+         OKtA==
+X-Gm-Message-State: AOJu0YyNAvVv14yxiK1fjMc+wovm39FmtlfZaceRvU9vGu2W7e1qzw/8
+	gV4nENfOEWB6fhKIVWFzNyc+fbTs5MgfQfjgViKcy0WH6aQNr/vGAczxCw==
+X-Google-Smtp-Source: AGHT+IEFTycUIu5yJUIOFi4ourLYV3Vm4iKqz1qlG9m+dWuOaIIL787gb8YHmQABnyOq0gcDyZ7UBQ==
+X-Received: by 2002:a17:902:d552:b0:20b:38fe:60d7 with SMTP id d9443c01a7336-20ca1465d34mr223599325ad.22.1728948733205;
+        Mon, 14 Oct 2024 16:32:13 -0700 (PDT)
+Received: from [192.168.0.235] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-20d18036293sm765855ad.179.2024.10.14.16.32.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Oct 2024 16:32:12 -0700 (PDT)
+Message-ID: <f5b660f7fc027e83957a0cba47f2038d46b37881.camel@gmail.com>
+Subject: Re: [PATCH v2 dwarves 3/5] btf_encoder: collect elf_functions in
+ pre_cus__load_module
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Ihor Solodrai <ihor.solodrai@pm.me>
+Cc: dwarves@vger.kernel.org, acme@kernel.org, alan.maguire@oracle.com, 
+	andrii@kernel.org
+Date: Mon, 14 Oct 2024 16:32:08 -0700
+In-Reply-To: <5BZh41mSYjQZMCaMwVmgId6qPAAI1LpidzKcJYqw5Pkj94jYwwuW5jGoZDwxmPkDHE6PXE_pAumBHmjmTqGuK4MEL3xTU_xAcw5xa9vCIlQ=@pm.me>
+References: <20241009233520.989453-1-ihor.solodrai@pm.me>
+	 <20241009233520.989453-4-ihor.solodrai@pm.me>
+	 <268884d44497f30e561609ff982cfa87c1c24bb6.camel@gmail.com>
+	 <wh8Ne88FhIBrRfmV5_-tXL_BILUEFXXb6WONJvvucTJOwM56meP3VgKHyiE9qg-DIRQuR3lcmOmwGT53Xa9qBqwBkbDavDf_yCkOmJ5yXiA=@pm.me>
+	 <7d6631c07df523103ae3a89ebeedf296074d6967.camel@gmail.com>
+	 <hrfEwQ1OldXwSegRIZ9XpD6t7pJZJ6sMz7duwiE0dbi_lFlnjEphjTsjxJiakceGnR2_dNfhUp2oJrS2uShN9qHK2tf-32cFVWQS1r-eDds=@pm.me>
+	 <19a0e258889f09feb27f6bff6965edee83c2fa16.camel@gmail.com>
+	 <5BZh41mSYjQZMCaMwVmgId6qPAAI1LpidzKcJYqw5Pkj94jYwwuW5jGoZDwxmPkDHE6PXE_pAumBHmjmTqGuK4MEL3xTU_xAcw5xa9vCIlQ=@pm.me>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.52.4 (3.52.4-1.fc40) 
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
 
-On Monday, October 14th, 2024 at 3:30 PM, Eduard Zingerman <eddyz87@gmail.c=
-om> wrote:
+On Mon, 2024-10-14 at 23:08 +0000, Ihor Solodrai wrote:
 
 [...]
->=20
-> Consider the following pahole execution log when patches #1-3 are applied=
-:
->=20
-> $ git log --oneline next..HEAD
-> ce72b07 (HEAD) btf_encoder: collect elf_functions in pre_cus__load_module
-> 4369607 btf_encoder: introduce elf_functions struct type
-> e4ae1a0 dwarf_loader: introduce pre/post cus__load_module hooks to conf_l=
-oad
->=20
-> $ git diff
-> diff --git a/btf_encoder.c b/btf_encoder.c
-> index 9e05b56..8527046 100644
-> --- a/btf_encoder.c
-> +++ b/btf_encoder.c
-> @@ -171,6 +171,7 @@ static struct elf_functions *elf_functions__get(Elf *=
-elf)
->=20
-> static inline void elf_functions__delete(struct elf_functions *funcs)
-> {
-> + fprintf(stderr, "elf_functions__delete(%p)\n", funcs);
-> free(funcs->entries);
->=20
-> elf_symtab__delete(funcs->symtab);
->=20
-> list_del(&funcs->node);
->=20
-> @@ -197,6 +198,7 @@ static struct elf_functions *elf_functions__new(Elf *=
-elf)
-> goto out_error;
->=20
-> list_add_tail(&funcs->node, &elf_functions_list);
->=20
-> + fprintf(stderr, "elf_functions__new(), returning %p\n", funcs);
-> return funcs;
->=20
-> out_error:
->=20
-> $ pahole --btf_encode_detached=3D/dev/null ~/work/bpf-next/kernel/bpf/ver=
-ifier.o ~/work/bpf-next/kernel/bpf/core.o
-> elf_functions__new(), returning 0x307653c0
-> elf_functions__new(), returning 0x30aa8e10
-> elf_functions__delete(0x307653c0)
->=20
-> Note that only one elf_function instance is freed.
 
-Thank you for the example, I get the problem now.
-
-I think this would be the fix:
-
-diff --git a/btf_encoder.c b/btf_encoder.c
-index cfe23d3..5317bce 100644
---- a/btf_encoder.c
-+++ b/btf_encoder.c
-@@ -177,6 +177,16 @@ static inline void elf_functions__delete(struct elf_fu=
-nctions *funcs)
- =09free(funcs);
- }
-=20
-+static inline void elf_functions__delete_all()
-+{
-+=09struct list_head *pos, *tmp;
-+
-+=09list_for_each_safe(pos, tmp, &elf_functions_list) {
-+=09=09struct elf_functions *funcs =3D list_entry(pos, struct elf_functions=
-, node);
-+=09=09elf_functions__delete(funcs);
-+=09}
-+}
-+
- static int elf_functions__collect(struct elf_functions *functions);
-=20
- int btf_encoder__pre_load_module(Dwfl_Module *mod, Elf *elf)
-@@ -2136,8 +2146,7 @@ int btf_encoder__encode(struct btf_encoder *encoder)
- =09=09err =3D btf_encoder__write_elf(encoder, encoder->btf, BTF_ELF_SEC);
- =09}
-=20
--=09elf_functions__delete(elf_functions__get(encoder->functions.elf));
-+=09elf_functions__delete_all();
-
-        return err;
- }
-
-Can't think of a better place to call elf_functions__delete_all(). On
-this patch, btf_encoder__add_saved_funcs() is still called at the
-entry into btf_encoder__encode().
-
-
+> +static inline void elf_functions__delete_all()
+> +{
+> +	struct list_head *pos, *tmp;
+> +
+> +	list_for_each_safe(pos, tmp, &elf_functions_list) {
+> +		struct elf_functions *funcs =3D list_entry(pos, struct elf_functions, =
+node);
+> +		elf_functions__delete(funcs);
+> +	}
+> +}
+> +
+>  static int elf_functions__collect(struct elf_functions *functions);
+> =20
+>  int btf_encoder__pre_load_module(Dwfl_Module *mod, Elf *elf)
+> @@ -2136,8 +2146,7 @@ int btf_encoder__encode(struct btf_encoder *encoder=
+)
+>  		err =3D btf_encoder__write_elf(encoder, encoder->btf, BTF_ELF_SEC);
+>  	}
+> =20
+> -	elf_functions__delete(elf_functions__get(encoder->functions.elf));
+> +	elf_functions__delete_all();
 >=20
-> [...]
->=20
-> > > > > I think that elf_functions should be deleted in main() at the sam=
-e
-> > > > > level where btf_encoder__add_saved_funcs() is called.
-> > > > >=20
-> > > > > > /* index the ELF sections for later lookup */
-> > > >=20
-> > > > In this patch, the shared elf_functions is built but not used. It i=
-s
-> > > > freed in btf_encoder__encode(), the line with TODO comment.
-> > >=20
-> > > My point was that the __delete call for all collected elf_function ob=
-jects
-> > > should be moved to main(). But maybe use `module_post_load()` hook in=
-stead,
-> > > look for specific `elf` and delete it from the list? This way it woul=
-d be
-> > > both symmetrical to `module_pre_load()` and encapsulated within btf_e=
-ncoder.c.
-> >=20
-> > I put the delete call in btf_encoder__encode() because I thought that
-> > elf_functions information might be used there, but I haven't verified
-> > that. It might be possible to do earlier.
-> >=20
-> > I don't think we can do it in post_module_load hook, because
-> > threads_collect happens before cus__load_module is done, and merge of
-> > the encoders happens in threads_collect.
->=20
->=20
-> Good point.
+>         return err;
+>  }
+
+Right, this should work.
+
+> Can't think of a better place to call elf_functions__delete_all(). On
+> this patch, btf_encoder__add_saved_funcs() is still called at the
+> entry into btf_encoder__encode().
+
+This is a bit ugly, tbh, as it makes the lifespan of this global data
+not really obvious. I'd put a call to elf_functions__delete_all()
+somewhere at the 'out' label of the pahole.c:main(), but I do not insist.
+
+[...]
+
