@@ -1,43 +1,43 @@
-Received: from mail-40134.protonmail.ch (mail-40134.protonmail.ch [185.70.40.134])
+Received: from mail-40131.protonmail.ch (mail-40131.protonmail.ch [185.70.40.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44721175B1
-	for <dwarves@vger.kernel.org>; Mon, 14 Oct 2024 16:02:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.40.134
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7ED6728FC
+	for <dwarves@vger.kernel.org>; Mon, 14 Oct 2024 16:21:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.40.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728921755; cv=none; b=gwUsJMax3nGRDmO3RtoSU7+d+A/i5dy4xCvK5XYyjUOGv5R7GcCDTiLN8DqY0gAnumXJzTk6mW7q+40dCdJiUWp/8TwUr/x0O5klmF7jky0fuZwii2+bXnt/s9UuEwuUEDHakG2W4QdR7BPoyXFgF+lS+2egVivKtcRiEXXv+AQ=
+	t=1728922878; cv=none; b=jCRwBrz4tkAhEr8L52Pw9puLMScheKOW/sSiMDpfwAzuUT5xZLPBLY2BYho7H7nd6mLg0A7vZpwmayexfRGNH9rgLoa0dNaVoxNsy1SdeS4maTmQSGRp6HI6r6auMEnLpjQdCLTDaTww1rMLrAwTAg5CbgESeeq0CHqbe6MUBgA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728921755; c=relaxed/simple;
-	bh=UStX58jhm3j7wPQj3dARGnDB8XdJdi3GPXjf37GegbI=;
+	s=arc-20240116; t=1728922878; c=relaxed/simple;
+	bh=Y5BEE4xABVYduD74dSzbppaxvHEsr7fCIBzAS21AD+Q=;
 	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=P/CnEABjA0vNQHU8NtGGZGpoSPQFnqWdLM619kcg12XP2VL8vcQ66AmKzBVo9rNN9Ifx6DIULlbxRr21w6aATbrr+8T5a73ciilSNgdhIjoCvM5vZbsflzFnTR5FHFLdVymRp4g2DueV6ZkiyJ6nwMJ3urwUuR/xqzR/oEGLEsg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me; spf=pass smtp.mailfrom=pm.me; dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b=byZTUoUc; arc=none smtp.client-ip=185.70.40.134
+	 MIME-Version:Content-Type; b=jOX8nPFJZzrISvqIPH5ivEJ6RrbW8ZLuupfDA+BXq+8aqaJWzkdDWVxdlP3+n6uw255zpu0YQrimnw21Fej5cpfufuUigRPNHU90ISG+6q1Gigub4wwFq8xWSkBoCBLnsFvR5n9shUMU7VwB5PiOoou0HL6Ku93TbBYL9QCt7Qw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me; spf=pass smtp.mailfrom=pm.me; dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b=garSrU4F; arc=none smtp.client-ip=185.70.40.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pm.me
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b="byZTUoUc"
+	dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b="garSrU4F"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me;
-	s=protonmail3; t=1728921745; x=1729180945;
-	bh=peB5ut7cnMNVFK6MvwcPBIHrordRPlaAQH6PUdUixkQ=;
+	s=protonmail3; t=1728922868; x=1729182068;
+	bh=fiG/PlHheoLHyuL7aDjzmh67coIgoGdRc1TfTkVa4cY=;
 	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
 	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
 	 Message-ID:BIMI-Selector;
-	b=byZTUoUc5FnqMLNCC/YlIL4QYeiIYjplxSxgGX0C99UscRExf7UyI6YXB9sM1r3BK
-	 2dSpoTEgV+5E0TLwdxR0KR/ZN+QSPD8kR1+SG2fSEzWCRBHu38COE4rvsOfnCdx8Kf
-	 M9mnPkHr/95Nml0C+AKAT6Aty/zkR4g7I9OB3VKiDEAp9zwDJ/gVBSxA27sG29QLiw
-	 Csap5T9pRyn11+jc/4hSECUpMIBOqdUBGHWH/MEL+Mwtzf0QFEufCHQYi4JXhMRe1I
-	 wI59ur/0o/ECSDxcU6xvo62FLnv2SjnfCiUUaEGGUHHSXqJcnDPWlf7QHKe0XRe9G/
-	 0IzS57sEJcANA==
-Date: Mon, 14 Oct 2024 16:02:23 +0000
+	b=garSrU4FVajlEUcdAcJW+HGtJZBV8riBLOBPKZNaPQGM3ybrWmzAh0tj5tY1o0N/I
+	 bA0KMNnHEvVSqMAEnhFm/c2h3J+mXmivPUlEznrnszYbcqFVqBpcgJy0LURD4yncgX
+	 RcUAJZsQTg4OCoTixjZlUstAVomYSWfiT6npAW1WUEkMa2XUbk8ewsshPMjQ7ZFX7u
+	 lpHsd67DRlMEZoVrPvCu5gz0/q/VyXR3CqUZevfz11Sh/g6TiCXUzXgs5V8z2Nja2d
+	 PvrIHq4QA9PxxKOyr0U5PgUPtD+YedDrrdr1O2V25NaJAR83uPxoyGa8wUhT8DbsEb
+	 iMVD6c3/PNq1A==
+Date: Mon, 14 Oct 2024 16:21:04 +0000
 To: Alan Maguire <alan.maguire@oracle.com>
 From: Ihor Solodrai <ihor.solodrai@pm.me>
-Cc: Eduard Zingerman <eddyz87@gmail.com>, dwarves@vger.kernel.org, acme@kernel.org, andrii@kernel.org
-Subject: Re: [PATCH v2 dwarves 0/5] btf_encoder: implement shared elf_functions table
-Message-ID: <JcUUig9yPN-f6XHqo6SUkFN8J4Qxd0xfCGhvsv8rr4pSl8gN3bVj6iSblNkN1xbDgAvXq4D8XtiusJ2lEtCv-lV2-q-xQJlmEiOdr9QaGgk=@pm.me>
-In-Reply-To: <9d3071a1-83fc-4c57-999c-d95f71555dfd@oracle.com>
-References: <20241009233520.989453-1-ihor.solodrai@pm.me> <60b79369e829b33c577fe285b6597894e72b7042.camel@gmail.com> <4C0idzPIUJesSQi12dB1SgeTQlGl13N2CCsvjPfdLbvTEemTJoQZ4P-LJcOQqRyM69ZLKVv4mIKDQJvfMYMV2oITse1_uS_m_SjVigh8bL0=@pm.me> <af7ca712-7798-4204-9e15-fa2065154699@oracle.com> <52889283-56c4-4cf6-aad6-b0fbea9e58fb@oracle.com> <m_fH6Yg0CAytjEUTxfZPpbMVGqGQWhuep4D--XMNrOZJh6MUWlIozEXiCC6ulW4FK6UFvCFlZC_sF0oNsAW3sftTvfPBjpz5AN3MdnxfhB4=@pm.me> <CjP57PbrCPwA8EsOHPQuoZ9YnU1UE0mzeYqoqI4gQHTxIVUgXoEmGS-4R2g1gkf1RMPFVlTSE253f49mPUvqHUiuUw4wxwJXBH3Pv5GPwOg=@pm.me> <9d3071a1-83fc-4c57-999c-d95f71555dfd@oracle.com>
+Cc: acme@kernel.org, eddyz87@gmail.com, dwarves@vger.kernel.org, Andrii Nakryiko <andrii@kernel.org>
+Subject: Re: [PATCH dwarves] btf_encoder: use ELF_C_READ_MMAP
+Message-ID: <jirqHvCggrZmHfQ6dDZRDFcowapRgEQVfhG1cHs7cIRyaE07RELdLlfr5AcWXPqsEhSMRZCvHs99o0eu1FEy2Lek0y3sSbdCemzOKtMGGRs=@pm.me>
+In-Reply-To: <20241014103142.2280044-1-alan.maguire@oracle.com>
+References: <20241014103142.2280044-1-alan.maguire@oracle.com>
 Feedback-ID: 27520582:user:proton
-X-Pm-Message-ID: 10de23aab3d026dee80f803e7d097a3ccc99948b
+X-Pm-Message-ID: 76c82234150d013bfee63c0ab8fc407d46dc7d2a
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
@@ -47,124 +47,107 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-On Monday, October 14th, 2024 at 8:06 AM, Alan Maguire <alan.maguire@oracle=
+
+
+
+
+
+On Monday, October 14th, 2024 at 3:31 AM, Alan Maguire <alan.maguire@oracle=
 .com> wrote:
 
 >=20
 >=20
-> On 11/10/2024 23:55, Ihor Solodrai wrote:
+> This reduces peak memory utilization during BTF vmlinux encoding,
+> replacing ELF section-sized malloc()s with mmap()s.
 >=20
-> > On Friday, October 11th, 2024 at 9:52 AM, Ihor Solodrai ihor.solodrai@p=
-m.me wrote:
-> >=20
-> > [...]
-> >=20
-> > Eduard discovered a bug when building kernel using pahole with this
-> > patch. I already debugged it and made a fix.
-> >=20
-> > TL;DR there might be fewer encoders than threads, which I didn't take
-> > into account here:
-> >=20
-> > diff --git a/pahole.c b/pahole.c
-> > index a45aa7a..90f712d 100644
-> > --- a/pahole.c
-> > +++ b/pahole.c
-> > @@ -3257,29 +3257,34 @@ static int pahole_threads_collect(struct conf_l=
-oad *conf, int nr_threads, void *
-> > {
-> > struct thread_data **threads =3D (struct thread_data **)thr_data;
-> > struct btf_encoder *encoders[nr_threads];
-> > - int i;
-> > + int nr_encoders =3D 0;
-> > int err =3D 0;
-> > + int i;
-> >=20
-> > if (error)
-> > goto out;
-> >=20
-> > - for (i =3D 0; i < nr_threads; i++)
-> > - encoders[i] =3D threads[i]->encoder;
-> > + for (i =3D 0; i < nr_threads; i++) {
-> > + if (threads[i]->encoder) {
-> > + encoders[nr_encoders] =3D threads[i]->encoder;
-> > + nr_encoders++;
-> > + }
-> > + }
+> For -j1 peak memory resident set size drops from
 >=20
+> Maximum resident set size (kbytes): 1069220
 >=20
-> I tried the above, but still saw segmentation faults; the following was
-> needed at my end to get module BTF working:
+> ...to:
 >=20
-> iff --git a/pahole.c b/pahole.c
-> index a45aa7a..bb17aec 100644
-> --- a/pahole.c
-> +++ b/pahole.c
-> @@ -3257,20 +3257,25 @@ static int pahole_threads_collect(struct
-> conf_load *conf, int nr_threads, void *
-> {
-> struct thread_data **threads =3D (struct thread_data **)thr_data;
-> struct btf_encoder *encoders[nr_threads];
-> - int i;
-> + int nr_encoders =3D 0;
-> int err =3D 0;
-> + int i;
+> Maximum resident set size (kbytes): 701888
 >=20
-> if (error)
-> goto out;
+> ...with this patch.
 >=20
-> - for (i =3D 0; i < nr_threads; i++)
-> - encoders[i] =3D threads[i]->encoder;
+> For -j8, peak memory resident set size drops from
 >=20
-> + for (i =3D 0; i < nr_threads; i++) {
-> + if (threads[i]->encoder && threads[i]->encoder !=3D
+> Maximum resident set size (kbytes): 1121172
 >=20
-> btf_encoder) {
-> + encoders[nr_encoders] =3D threads[i]->encoder;
+> ...to:
 >=20
-> + nr_encoders++;
-> + }
-> + }
+> Maximum resident set size (kbytes): 963516
 >=20
-> /*
-> * Merge content of the btf instances of worker threads to the btf
-> * instance of the primary btf_encoder.
-> */
-> - err =3D btf_encoder__merge_encoders(btf_encoder, encoders,
-> nr_threads);
-> + err =3D btf_encoder__merge_encoders(btf_encoder, encoders,
-> nr_encoders);
-> if (err < 0)
-> goto out;
-> err =3D 0;
+> Signed-off-by: Alan Maguire alan.maguire@oracle.com
 >=20
-> In particular, nr_encoders must be used at btf_encoder__merge_encoders().
->=20
-> With this in place, I hit another segmentation fault, due this time to
-> the fact that we need to handle the case where there are no ELF
-> functions (this occurs for one module when building the kernel). Fix is
-> below:
+> ---
+> btf_encoder.c | 2 +-
+> 1 file changed, 1 insertion(+), 1 deletion(-)
 >=20
 > diff --git a/btf_encoder.c b/btf_encoder.c
-> index 07d2031..b61a89c 100644
+> index 5954238..9599faf 100644
 > --- a/btf_encoder.c
 > +++ b/btf_encoder.c
-> @@ -2274,6 +2274,8 @@ static int elf_functions__collect(struct
-> elf_functions *functions)
-> functions->cnt,
+> @@ -1879,7 +1879,7 @@ static int btf_encoder__tag_kfuncs(struct btf_encod=
+er *encoder)
+> goto out;
+> }
 >=20
-> sizeof(functions->entries[0]),
->=20
-> functions_cmp);
-> + else
-> + return 0;
->=20
-> // Reallocate to the exact size
-> functions->entries =3D realloc(functions->entries, functions->cnt
->=20
-> * sizeof(struct elf_function));
->=20
+> - elf =3D elf_begin(fd, ELF_C_READ, NULL);
+> + elf =3D elf_begin(fd, ELF_C_READ_MMAP, NULL);
+> if (elf =3D=3D NULL) {
+> elf_error("Cannot update ELF file");
+> goto out;
+> --
+> 2.43.5
 
-Alan, thank you again for testing. I missed some lines in the diff I
-pasted... Anyway this will be incorporated in v3, thanks.
+Alan, I can confirm this reduces max resident set size when BTF
+encoding vmlinux. Great improvement from a single flag change! See
+below.
 
-> [...] 
+    for j in 1 2 4 8 16 32 64; do
+        echo -n '-j$j: '
+        /usr/bin/time -v \
+        ./pahole -J -j$j \
+             --btf_features=3Dencode_force,var,float,enum64,decl_tag,type_t=
+ag,optimized_func,consistent_func,decl_tag_kfuncs \
+             --btf_encode_detached=3D/dev/null \
+             --lang_exclude=3Drust \
+             ~/repo/bpf-dev-docker/linux/.tmp_vmlinux1 \
+        2>&1 | grep 'Maximum resident set size'
+    done
+
+Current next (91bcd1d):
+
+    -j1: =09Maximum resident set size (kbytes): 1600036
+    -j2: =09Maximum resident set size (kbytes): 1623380
+    -j4: =09Maximum resident set size (kbytes): 1635824
+    -j8: =09Maximum resident set size (kbytes): 1631412
+    -j16: =09Maximum resident set size (kbytes): 1711976
+    -j32: =09Maximum resident set size (kbytes): 1799856
+    -j64: =09Maximum resident set size (kbytes): 1976184
+
+This patch on top of next (91bcd1d):
+
+    -j1: =09Maximum resident set size (kbytes): 640344
+    -j2: =09Maximum resident set size (kbytes): 695272
+    -j4: =09Maximum resident set size (kbytes): 769772
+    -j8: =09Maximum resident set size (kbytes): 895728
+    -j16: =09Maximum resident set size (kbytes): 984908
+    -j32: =09Maximum resident set size (kbytes): 1148420
+    -j64: =09Maximum resident set size (kbytes): 1573944
+
+This patch on top of elf_functions patch (with segfault fixes) [1]:
+
+    -j1: =09Maximum resident set size (kbytes): 642992
+    -j2: =09Maximum resident set size (kbytes): 695432
+    -j4: =09Maximum resident set size (kbytes): 746888
+    -j8: =09Maximum resident set size (kbytes): 851208
+    -j16: =09Maximum resident set size (kbytes): 884232
+    -j32: =09Maximum resident set size (kbytes): 930632
+    -j64: =09Maximum resident set size (kbytes): 1127976
+
+Tested-by: Ihor Solodrai <ihor.solodrai@pm.me>
+
+[1]: https://lore.kernel.org/dwarves/20241009233520.989453-1-ihor.solodrai@=
+pm.me/
