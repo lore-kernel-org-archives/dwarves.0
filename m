@@ -1,43 +1,43 @@
-Received: from mail-40134.protonmail.ch (mail-40134.protonmail.ch [185.70.40.134])
+Received: from mail-4316.protonmail.ch (mail-4316.protonmail.ch [185.70.43.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74B1B1FB3
-	for <dwarves@vger.kernel.org>; Wed, 16 Oct 2024 00:10:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.40.134
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 195191FB3
+	for <dwarves@vger.kernel.org>; Wed, 16 Oct 2024 00:10:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.43.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729037458; cv=none; b=XGGvuQ6n8UPxi5rUj/PZznSnFdcGonIBbsyddlZcKcQd/vc9nUSF2vvImkD1Z2C4+xF2lSBvQFxCz8d7szFppK0IX8n+oG9S1kXG/D+pQ1Gq8J1+ddbg5Ih6KwtUMgG2XJshkpOgCKKI17l3YwK8YKAkxaXgTUjztNekA+qX6/0=
+	t=1729037462; cv=none; b=Mths7lTF7KOfwEWojDltMgn15BIPf40Q19bSZTNuBDTv1+4JXfl99tZxLPSNaCn7xwznSRUpxhzBnHy6NA/GkYA3EoltWb9wgTqU7Hm6Rm8pN4bQq1nNhGDZayRGZipJn5ABk+ll1HLcvZXYPrVuqzWRyebE3BYUEYcs9L4IK2Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729037458; c=relaxed/simple;
-	bh=ba+ySVK9d1LsYM02M1qeUqynaUJQugCFs9FYQGVMnW8=;
+	s=arc-20240116; t=1729037462; c=relaxed/simple;
+	bh=qXVhoUO5KksGYrlqxdSrnSFnjBrLNv5vxuXl0xEMGeo=;
 	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ewnrQrNQ8GJKvrZCPetoimI3pKISauBHEUuLv3Hf3G6WrW2wZd0hjU1lzgbHKIovnJVTpB8fihPLjnflj9EhKW44e9CEcNFxEM0Fk428UUtyKq/aKfKUMaBtlpcAQArYyHOM2L1617mNLWDBQ1XHlraa9XmIpBrc5ngdQnQqsaI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me; spf=pass smtp.mailfrom=pm.me; dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b=ccREztu7; arc=none smtp.client-ip=185.70.40.134
+	 MIME-Version:Content-Type; b=LM2g+p/VZ+jhf6Twu7rR3E5IJqd8z+pgygTyTlRcAP8+wIVqy8HvRBES5eFINA31d9Pzvv4hzWG84R/XcL6ebOVjCQQbsMNFyPKjWA6Vt87Wdw9pyBZt8Km/bDM4WlpgBscpoo/ea1wNtXmJ7swDZH4UKxX9FA/hZylznl6thEk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me; spf=pass smtp.mailfrom=pm.me; dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b=qOtVQ/eS; arc=none smtp.client-ip=185.70.43.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pm.me
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b="ccREztu7"
+	dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b="qOtVQ/eS"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me;
-	s=protonmail3; t=1729037454; x=1729296654;
-	bh=zcN7KUO2upDhM56S6Au2azOg5YwCVjVzOq2ZSSqeMDw=;
+	s=protonmail3; t=1729037458; x=1729296658;
+	bh=3bSU1uRe6oD3ecJJKzdiXe2YYTKGpNIoee+riyzP59I=;
 	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
 	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
 	 Message-ID:BIMI-Selector;
-	b=ccREztu7xzeugFStFhvMfQ1Ko99y/d9xja/lOSM1MBD/SiO0AT0sFjtp40pQmFJDw
-	 mcwBT6hlSCwdXXSK54KbV5R7WRcMcuMBA8kVrOg/0/z2bE0DvWit1WLDTE6Ozk+GLH
-	 IuvVEhgu5AqGHkOO+5Axxz/6Hz5RBixlOjdRAvPgh2CNpwRSKiDxw/F2birbtmYNLz
-	 ogiPn1BJoGj/yrven5eRsj/LGjOv/VCexze7JP0LS37b+sByRBOJxNSpuf0dJSl87q
-	 vcdSS+ip7mVaasi4KSfrLRmNlVKiMFfhD8kD1iINg7M7QfkkMrunFtaSKXiNgycrOk
-	 J97bZ//aviFXA==
-Date: Wed, 16 Oct 2024 00:10:48 +0000
+	b=qOtVQ/eS9sPBi0wxUWzIcgMCjRzAqYDIqQEMFJfrxIBlthcb/S7QsQ2PeGgsQ3ms3
+	 w4MFLnsN01g2zMJYM4IvEk/NYyKDvWksk303Su7LpiQP6fjeJY9OG14g+wDci24gxZ
+	 MtOeL93VErQqoaYuomwSP+vmSM19dRO/VJfVzDk0UTSBBRxi3pC5BnKN1KujiWZNRP
+	 XhwquBfFmsnyd/Q4fq8iXRIhh/OFLCiOrSV7gbrR+xWie4NiW95brNjqvpTnfhwXz5
+	 SeGoW4K0NJqDjOm/WRmFaUU2SIvoYpI3gZgI0u/iOZR3aQbPN4vcWLlNwHzKGOKDZs
+	 +IlE4XyA8Peyg==
+Date: Wed, 16 Oct 2024 00:10:53 +0000
 To: dwarves@vger.kernel.org
 From: Ihor Solodrai <ihor.solodrai@pm.me>
 Cc: acme@kernel.org, alan.maguire@oracle.com, andrii@kernel.org, eddyz87@gmail.com
-Subject: [PATCH v3 dwarves 4/5] btf_encoder: store a list of elf_function per function name
-Message-ID: <20241016001025.857970-5-ihor.solodrai@pm.me>
+Subject: [PATCH v3 dwarves 5/5] btf_encoder: switch to shared elf_functions table
+Message-ID: <20241016001025.857970-6-ihor.solodrai@pm.me>
 In-Reply-To: <20241016001025.857970-1-ihor.solodrai@pm.me>
 References: <20241016001025.857970-1-ihor.solodrai@pm.me>
 Feedback-ID: 27520582:user:proton
-X-Pm-Message-ID: 87d51ee8f290149ea6f114a526804be2bcd24faf
+X-Pm-Message-ID: 9d191dca372509c7d51aeaec0af84ff6f9e3398d
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
@@ -47,266 +47,319 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-btf_encoder__save_func() accumulates observations of DWARF functions,
-maintaining an elf_function per function name.
+Do not collect functions from ELF for each new btf_encoder, and
+instead set a pointer to a shared elf_functions table, built
+beforehand by btf_encoder__pre_cus__load_module().
 
-Part of this routine is a funcs_match() call, which requires access to
-BTF implicitly referenced by btf_encoder_func_state.  In case when
-elf_functions table is maintained by each btf_encoder this is not an
-issue, because every btf_encoder_func_state available to this encoder
-can only reference its own BTF. However if elf_functions table becomes
-shared then existing elf_function/btf_encoder_function_state structs
-can be produced by other encoders referring to their own BTFs. In this
-case funcs_match() can not be called unless BTFs are available and
-writes to them are synchronized in some manner (which is not
-desirable).
+Change the algorithm of btf_encoder__add_saved_funcs().  Traverse
+elf_functions table once and for each function do the following:
+* check function states of each elf_function in a list to determine if
+  it should be added to BTF
+* if yes, add the function to the BTF of the owner of the first
+  elf_function in the list
 
-Accumulated states are later merged between encoders in
-btf_encoder__add_saved_funcs(). To enable sharing of the elf_functions
-table between encoders, two members are introduced to struct
-elf_function:
-  - elf_function *next - to enable linked-list
-  - btf_encoder *encoder - to find elf_function corresponding to a
-    particular encoder in a list
+Do not call btf_encoder__add_saved_funcs() on every
+btf_encoder__add_encoder(). Instead, for non-reproducible
+multi-threaded case do that in pahole_threads_collect(), and for
+single-threaded or reproducible_build do that right before
+btf_encoder__encode().
 
-Each element of elf_functions->entries is a head of a list that stores
-elf_function structs, one for each encoder that searched for this
-function name at least once.
-
-btf_encoder__find_function() is modified to perform the search on
-shared elf_functions table, and atomically update a corresponding list
-as necessary.
-
-At this point each btf_encoder is still maintaining it's own
-elf_functions table, but the updated implementation is used.
-
-Suggested-by: Eduard Zingerman <eddyz87@gmail.com>
 Signed-off-by: Ihor Solodrai <ihor.solodrai@pm.me>
 ---
- btf_encoder.c | 122 +++++++++++++++++++++++++++++++++++++++-----------
- 1 file changed, 96 insertions(+), 26 deletions(-)
+ btf_encoder.c | 113 +++++++++++++++++++++++---------------------------
+ btf_encoder.h |   1 +
+ pahole.c      |   9 +++-
+ 3 files changed, 61 insertions(+), 62 deletions(-)
 
 diff --git a/btf_encoder.c b/btf_encoder.c
-index 8e8fd05..002358c 100644
+index 002358c..1ec39fe 100644
 --- a/btf_encoder.c
 +++ b/btf_encoder.c
-@@ -30,6 +30,7 @@
-=20
- #include <assert.h>
- #include <errno.h>
-+#include <stdatomic.h>
- #include <stdint.h>
- #include <search.h> /* for tsearch(), tfind() and tdestroy() */
- #include <pthread.h>
-@@ -86,10 +87,15 @@ struct btf_encoder_func_state {
+@@ -80,7 +80,6 @@ struct btf_encoder_func_state {
+ =09uint8_t optimized_parms:1;
+ =09uint8_t unexpected_reg:1;
+ =09uint8_t inconsistent_proto:1;
+-=09uint8_t processed:1;
+ =09int ret_type_id;
+ =09struct btf_encoder_func_parm *parms;
+ =09struct btf_encoder_func_annot *annots;
+@@ -141,7 +140,7 @@ struct btf_encoder {
+ =09struct elf_secinfo *secinfo;
+ =09size_t             seccnt;
+ =09int                encode_vars;
+-=09struct elf_functions functions;
++=09struct elf_functions *functions;
  };
 =20
- struct elf_function {
-+=09/* bsearch key */
- =09const char=09*name;
--=09char=09=09*alias;
--=09bool=09=09 generated;
--=09size_t=09=09prefixlen;
-+=09size_t=09=09 prefixlen;
-+=09/* for list search */
-+=09_Atomic(struct elf_function *) next;
-+=09_Atomic(struct btf_encoder *) encoder;
-+=09/* encoder-specific state */
-+=09char *alias;
-+=09bool generated;
- =09struct btf_encoder_func_state state;
- };
-=20
-@@ -106,7 +112,7 @@ struct elf_functions {
- =09struct list_head node; /* for elf_functions_list */
- =09Elf *elf; /* source ELF */
- =09struct elf_symtab *symtab;
--=09struct elf_function *entries;
-+=09struct elf_function *entries; /* an array, each element is a head of a =
-list */
- =09int cnt;
- =09int suffix_cnt; /* number of .isra, .part etc */
- };
-@@ -157,10 +163,29 @@ struct btf_kfunc_set_range {
+ struct btf_func {
+@@ -163,6 +162,19 @@ struct btf_kfunc_set_range {
   */
  static LIST_HEAD(elf_functions_list);
 =20
--static inline void elf_functions__delete(struct elf_functions *funcs)
-+static void __elf_functions__delete(struct elf_functions *funcs)
- {
-+=09struct elf_function *func, *next;
-+
-+=09for (int i =3D 0; i < funcs->cnt; i++) {
-+=09=09/* free all list elements except the head */
-+=09=09func =3D funcs->entries[i].next;
-+=09=09while (func) {
-+=09=09=09next =3D func->next;
-+=09=09=09free(func->alias);
-+=09=09=09zfree(&func->state.annots);
-+=09=09=09zfree(&func->state.parms);
-+=09=09=09free(func);
-+=09=09=09func =3D next;
-+=09=09}
-+=09}
- =09free(funcs->entries);
- =09elf_symtab__delete(funcs->symtab);
-+}
-+
-+static inline void elf_functions__delete(struct elf_functions *funcs)
++static struct elf_functions *elf_functions__get(Elf *elf)
 +{
-+=09__elf_functions__delete(funcs);
- =09list_del(&funcs->node);
- =09free(funcs);
- }
-@@ -1296,12 +1321,30 @@ static int32_t btf_encoder__add_func(struct btf_enc=
-oder *encoder, struct functio
- =09return 0;
- }
-=20
-+#define for_each_elf_function(func, head) \
-+=09for (struct elf_function *func =3D head; func; func =3D func->next)
++=09struct list_head *pos;
 +
-+static inline struct elf_function *find_elf_function(struct elf_function *=
-list_head,
-+=09=09=09=09=09=09     const struct btf_encoder *encoder)
-+{
-+=09for_each_elf_function(f, list_head) {
-+=09=09if (f->encoder =3D=3D encoder)
-+=09=09=09return f;
++=09list_for_each(pos, &elf_functions_list) {
++=09=09struct elf_functions *funcs =3D list_entry(pos, struct elf_functions=
+, node);
++
++=09=09if (funcs->elf =3D=3D elf)
++=09=09=09return funcs;
 +=09}
-+
 +=09return NULL;
 +}
 +
- static int btf_encoder__add_saved_funcs(struct btf_encoder *encoder)
+ static void __elf_functions__delete(struct elf_functions *funcs)
  {
- =09int i;
+ =09struct elf_function *func, *next;
+@@ -238,8 +250,6 @@ out_delete:
+ static LIST_HEAD(encoders);
+ static pthread_mutex_t encoders__lock =3D PTHREAD_MUTEX_INITIALIZER;
 =20
- =09for (i =3D 0; i < encoder->functions.cnt; i++) {
--=09=09struct elf_function *func =3D &encoder->functions.entries[i];
-+=09=09struct elf_function *func =3D find_elf_function(&encoder->functions.=
-entries[i], encoder);
-+
-+=09=09if (!func)
-+=09=09=09continue;
-+
- =09=09struct btf_encoder_func_state *state =3D &func->state;
- =09=09struct btf_encoder *other_encoder =3D NULL;
+-static int btf_encoder__add_saved_funcs(struct btf_encoder *encoder);
+-
+ /* mutex only needed for add/delete, as this can happen in multiple encodi=
+ng
+  * threads.  Traversal of the list is currently confined to thread collect=
+ion.
+  */
+@@ -891,8 +901,6 @@ int32_t btf_encoder__add_encoder(struct btf_encoder *en=
+coder, struct btf_encoder
+ =09if (encoder =3D=3D other)
+ =09=09return 0;
 =20
-@@ -1315,11 +1358,11 @@ static int btf_encoder__add_saved_funcs(struct btf_=
-encoder *encoder)
- =09=09=09struct elf_function *other_func;
- =09=09=09struct btf_encoder_func_state *other_state;
- =09=09=09uint8_t optimized, unexpected, inconsistent;
-+=09=09=09other_func =3D find_elf_function(&other_encoder->functions.entrie=
-s[i], other_encoder);
-=20
--=09=09=09if (other_encoder =3D=3D encoder)
-+=09=09=09if (other_encoder =3D=3D encoder || !other_func)
- =09=09=09=09continue;
-=20
--=09=09=09other_func =3D &other_encoder->functions.entries[i];
- =09=09=09other_state =3D &other_func->state;
- =09=09=09if (!other_state->initialized)
- =09=09=09=09continue;
-@@ -1389,12 +1432,53 @@ static int elf_functions__collect_function(struct e=
-lf_functions *functions, GElf
- =09return 0;
- }
-=20
--static struct elf_function *btf_encoder__find_function(const struct btf_en=
-coder *encoder,
--=09=09=09=09=09=09       const char *name, size_t prefixlen)
-+static struct elf_function *btf_encoder__find_function(struct btf_encoder =
-*encoder,
-+=09=09=09=09=09=09       const char *name,
-+=09=09=09=09=09=09       size_t prefixlen)
- {
- =09struct elf_function key =3D { .name =3D name, .prefixlen =3D prefixlen =
-};
-+=09struct elf_function *func, *head, *tmp;
-+
-+=09head =3D bsearch(&key,
-+=09=09       encoder->functions.entries,
-+=09=09       encoder->functions.cnt,
-+=09=09       sizeof(key),
-+=09=09       functions_cmp);
-+
-+=09/* If head is NULL, then there was no such function name in Elf */
-+=09if (!head)
-+=09=09return NULL;
-=20
--=09return bsearch(&key, encoder->functions.entries, encoder->functions.cnt=
-, sizeof(key), functions_cmp);
-+=09/* If head->encoder is NULL, then calling btf_encoder is the
-+=09 * first one to encounter this function name.  In this case
-+=09 * try to claim the head.
-+=09 */
-+=09tmp =3D NULL;
-+=09if (atomic_compare_exchange_strong(&head->encoder, &tmp, encoder))
-+=09=09return head;
-+
-+=09/* If the head is already claimed (or if current claim attempt
-+=09 * failed), search through the list, and add new elf_function
-+=09 * for this encoder if not found.
-+=09 */
-+=09func =3D find_elf_function(head, encoder);
-+=09if (!func) {
-+=09=09func =3D zalloc(sizeof(*func));
-+=09=09func->name =3D head->name;
-+=09=09func->prefixlen =3D head->prefixlen;
-+=09=09/* Whenever btf_encoder allocates a new elf_function, it sets
-+=09=09 * itself as its encoder. So if the first search through the list
-+=09=09 * didn't find an elf_function, we can be sure no other
-+=09=09 * encoder would add it.  Therefore we only have to ensure
-+=09=09 * that the head->next is updated atomically.
-+=09=09 */
-+=09=09func->encoder =3D encoder;
-+=09=09do {
-+=09=09=09func->next =3D head->next;
-+=09=09} while (!atomic_compare_exchange_weak(&head->next, &func->next, fun=
-c));
-+=09}
-+
-+=09return func;
- }
-=20
- static bool btf_name_char_ok(char c, bool first)
-@@ -2506,18 +2590,9 @@ out_delete:
+-=09btf_encoder__add_saved_funcs(other);
+-
+ =09for (shndx =3D 1; shndx < other->seccnt; shndx++) {
+ =09=09struct gobuffer *var_secinfo_buf =3D &other->secinfo[shndx].secinfo;
+ =09=09size_t sz =3D gobuffer__size(var_secinfo_buf);
+@@ -1335,61 +1343,52 @@ static inline struct elf_function *find_elf_functio=
+n(struct elf_function *list_h
  =09return NULL;
  }
 =20
--void btf_encoder__delete_func(struct elf_function *func)
+-static int btf_encoder__add_saved_funcs(struct btf_encoder *encoder)
 -{
--=09free(func->alias);
--=09zfree(&func->state.annots);
--=09zfree(&func->state.parms);
--}
--
- void btf_encoder__delete(struct btf_encoder *encoder)
- {
 -=09int i;
- =09size_t shndx;
--
- =09if (encoder =3D=3D NULL)
- =09=09return;
 =20
-@@ -2528,13 +2603,8 @@ void btf_encoder__delete(struct btf_encoder *encoder=
-)
+-=09for (i =3D 0; i < encoder->functions.cnt; i++) {
+-=09=09struct elf_function *func =3D find_elf_function(&encoder->functions.=
+entries[i], encoder);
+-
+-=09=09if (!func)
+-=09=09=09continue;
++/* Each element of elf_functions->entries is a list of a variable
++ * number of elf_function structs, because not all encoders saved a
++ * particular function.  However each function saved by at least one
++ * encoder needs to be added to BTF _somewhere_. Here we traverse the
++ * entire elf_functions table, and for each list of elf_function
++ * structs a function is added to the BTF of the encoder of the first
++ * elf_function in the list.
++ */
++int btf_encoder__add_saved_funcs(struct btf_encoder *base_encoder)
++{
++=09struct elf_functions *functions =3D base_encoder->functions;
+=20
+-=09=09struct btf_encoder_func_state *state =3D &func->state;
+-=09=09struct btf_encoder *other_encoder =3D NULL;
++=09for (int i =3D 0; i < functions->cnt; i++) {
++=09=09struct elf_function *list_head =3D &functions->entries[i];
++=09=09struct btf_encoder_func_state *state, *other_state;
++=09=09struct elf_function *func;
++=09=09bool skip_func =3D false;
+=20
+-=09=09if (!state->initialized || state->processed)
+-=09=09=09continue;
+-=09=09/* merge optimized-out status across encoders; since each
+-=09=09 * encoder has the same elf symbol table we can use the
+-=09=09 * same index to access the same elf symbol.
++=09=09/* list_head without an encoder means no encoder has
++=09=09 * saved a function with this name
+ =09=09 */
+-=09=09btf_encoders__for_each_encoder(other_encoder) {
+-=09=09=09struct elf_function *other_func;
+-=09=09=09struct btf_encoder_func_state *other_state;
+-=09=09=09uint8_t optimized, unexpected, inconsistent;
+-=09=09=09other_func =3D find_elf_function(&other_encoder->functions.entrie=
+s[i], other_encoder);
+-
+-=09=09=09if (other_encoder =3D=3D encoder || !other_func)
+-=09=09=09=09continue;
++=09=09if (!list_head->encoder)
++=09=09=09continue;
+=20
++=09=09func =3D list_head;
++=09=09state =3D &func->state;
++=09=09for_each_elf_function(other_func, list_head) {
+ =09=09=09other_state =3D &other_func->state;
+-=09=09=09if (!other_state->initialized)
+-=09=09=09=09continue;
+-=09=09=09optimized =3D state->optimized_parms | other_state->optimized_par=
+ms;
+-=09=09=09unexpected =3D state->unexpected_reg | other_state->unexpected_re=
+g;
+-=09=09=09inconsistent =3D state->inconsistent_proto | other_state->inconsi=
+stent_proto;
+-=09=09=09if (!unexpected && !inconsistent &&
+-=09=09=09    !funcs__match(encoder, func,
+-=09=09=09=09=09  encoder->btf, state,
+-=09=09=09=09=09  other_encoder->btf, other_state))
+-=09=09=09=09inconsistent =3D 1;
+-=09=09=09state->optimized_parms =3D other_state->optimized_parms =3D optim=
+ized;
+-=09=09=09state->unexpected_reg =3D other_state->unexpected_reg =3D unexpec=
+ted;
+-=09=09=09state->inconsistent_proto =3D other_state->inconsistent_proto =3D=
+ inconsistent;
+-
+-=09=09=09other_state->processed =3D 1;
++=09=09=09skip_func |=3D other_state->inconsistent_proto;
++=09=09=09skip_func |=3D other_state->unexpected_reg;
++=09=09=09skip_func |=3D !funcs__match(func->encoder, func,
++=09=09=09=09=09=09   func->encoder->btf, state,
++=09=09=09=09=09=09   other_func->encoder->btf, other_state);
++=09=09=09if (skip_func)
++=09=09=09=09break;
+ =09=09}
+ =09=09/* do not exclude functions with optimized-out parameters; they
+ =09=09 * may still be _called_ with the right parameter values, they
+ =09=09 * just do not _use_ them.  Only exclude functions with
+ =09=09 * unexpected register use or multiple inconsistent prototypes.
+ =09=09 */
+-=09=09if (!state->unexpected_reg && !state->inconsistent_proto) {
+-=09=09=09if (btf_encoder__add_func(encoder, NULL, func))
++=09=09if (!skip_func) {
++=09=09=09if (btf_encoder__add_func(func->encoder, NULL, func))
+ =09=09=09=09return -1;
+ =09=09}
+-=09=09state->processed =3D 1;
+ =09}
+ =09return 0;
+ }
+@@ -1440,8 +1439,8 @@ static struct elf_function *btf_encoder__find_functio=
+n(struct btf_encoder *encod
+ =09struct elf_function *func, *head, *tmp;
+=20
+ =09head =3D bsearch(&key,
+-=09=09       encoder->functions.entries,
+-=09=09       encoder->functions.cnt,
++=09=09       encoder->functions->entries,
++=09=09       encoder->functions->cnt,
+ =09=09       sizeof(key),
+ =09=09       functions_cmp);
+=20
+@@ -2166,9 +2165,6 @@ int btf_encoder__encode(struct btf_encoder *encoder)
+ =09int err;
+ =09size_t shndx;
+=20
+-=09/* for single-threaded case, saved funcs are added here */
+-=09btf_encoder__add_saved_funcs(encoder);
+-
+ =09for (shndx =3D 1; shndx < encoder->seccnt; shndx++)
+ =09=09if (gobuffer__size(&encoder->secinfo[shndx].secinfo))
+ =09=09=09btf_encoder__add_datasec(encoder, shndx);
+@@ -2535,8 +2531,7 @@ struct btf_encoder *btf_encoder__new(struct cu *cu, c=
+onst char *detached_filenam
+ =09=09=09=09printf("%s: '%s' doesn't have symtab.\n", __func__, cu->filena=
+me);
+ =09=09=09goto out;
+ =09=09}
+-=09=09encoder->functions.symtab =3D encoder->symtab;
+-=09=09encoder->functions.elf =3D cu->elf;
++=09=09encoder->functions =3D elf_functions__get(cu->elf);
+=20
+ =09=09/* index the ELF sections for later lookup */
+=20
+@@ -2575,9 +2570,6 @@ struct btf_encoder *btf_encoder__new(struct cu *cu, c=
+onst char *detached_filenam
+ =09=09if (!found_percpu && encoder->verbose)
+ =09=09=09printf("%s: '%s' doesn't have '%s' section\n", __func__, cu->file=
+name, PERCPU_SECTION);
+=20
+-=09=09if (elf_functions__collect(&encoder->functions))
+-=09=09=09goto out_delete;
+-
+ =09=09if (encoder->verbose)
+ =09=09=09printf("File %s:\n", cu->filename);
+ =09=09btf_encoders__add(encoder);
+@@ -2603,8 +2595,7 @@ void btf_encoder__delete(struct btf_encoder *encoder)
  =09zfree(&encoder->source_filename);
  =09btf__free(encoder->btf);
  =09encoder->btf =3D NULL;
--=09elf_symtab__delete(encoder->symtab);
-=20
--=09for (i =3D 0; i < encoder->functions.cnt; i++)
--=09=09btf_encoder__delete_func(&encoder->functions.entries[i]);
--=09encoder->functions.cnt =3D 0;
--=09free(encoder->functions.entries);
--=09encoder->functions.entries =3D NULL;
-+=09__elf_functions__delete(&encoder->functions);
+-
+-=09__elf_functions__delete(&encoder->functions);
++=09elf_symtab__delete(encoder->symtab);
 =20
  =09free(encoder);
  }
+@@ -2703,7 +2694,7 @@ int btf_encoder__encode_cu(struct btf_encoder *encode=
+r, struct cu *cu, struct co
+ =09=09=09continue;
+ =09=09if (!ftype__has_arg_names(&fn->proto))
+ =09=09=09continue;
+-=09=09if (encoder->functions.cnt) {
++=09=09if (encoder->functions->cnt) {
+ =09=09=09const char *name;
+=20
+ =09=09=09name =3D function__name(fn);
+@@ -2719,7 +2710,7 @@ int btf_encoder__encode_cu(struct btf_encoder *encode=
+r, struct cu *cu, struct co
+ =09=09=09=09=09save =3D true;
+ =09=09=09=09else
+ =09=09=09=09=09func->generated =3D true;
+-=09=09=09} else if (encoder->functions.suffix_cnt &&
++=09=09=09} else if (encoder->functions->suffix_cnt &&
+ =09=09=09=09   conf_load->btf_gen_optimized) {
+ =09=09=09=09/* falling back to name.isra.0 match if no exact
+ =09=09=09=09 * match is found; only bother if we found any
+diff --git a/btf_encoder.h b/btf_encoder.h
+index 7debd67..29f652a 100644
+--- a/btf_encoder.h
++++ b/btf_encoder.h
+@@ -33,6 +33,7 @@ int btf_encoder__encode_cu(struct btf_encoder *encoder, s=
+truct cu *cu, struct co
+ struct btf *btf_encoder__btf(struct btf_encoder *encoder);
+=20
+ int btf_encoder__add_encoder(struct btf_encoder *encoder, struct btf_encod=
+er *other);
++int btf_encoder__add_saved_funcs(struct btf_encoder *base_encoder);
+=20
+ int btf_encoder__pre_load_module(Dwfl_Module *mod, Elf *elf);
+=20
+diff --git a/pahole.c b/pahole.c
+index 891af3a..6f83636 100644
+--- a/pahole.c
++++ b/pahole.c
+@@ -3262,12 +3262,16 @@ static int pahole_threads_collect(struct conf_load =
+*conf, int nr_threads, void *
+ =09if (error)
+ =09=09goto out;
+=20
++=09err =3D btf_encoder__add_saved_funcs(btf_encoder);
++=09if (err < 0)
++=09=09goto out;
++
+ =09for (i =3D 0; i < nr_threads; i++) {
+ =09=09/*
+ =09=09 * Merge content of the btf instances of worker threads to the btf
+ =09=09 * instance of the primary btf_encoder.
+                 */
+-=09=09if (!threads[i]->btf)
++=09=09if (!threads[i]->encoder || !threads[i]->btf)
+ =09=09=09continue;
+ =09=09err =3D btf_encoder__add_encoder(btf_encoder, threads[i]->encoder);
+ =09=09if (err < 0)
+@@ -3915,6 +3919,9 @@ try_sole_arg_as_class_names:
+ =09=09=09exit(1);
+ =09=09}
+=20
++=09=09if (conf_load.nr_jobs <=3D 1 || conf_load.reproducible_build)
++=09=09=09btf_encoder__add_saved_funcs(btf_encoder);
++
+ =09=09err =3D btf_encoder__encode(btf_encoder);
+ =09=09if (err) {
+ =09=09=09fputs("Failed to encode BTF\n", stderr);
 --=20
 2.43.0
 
