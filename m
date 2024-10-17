@@ -1,61 +1,57 @@
 Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D1461D88C1
-	for <dwarves@vger.kernel.org>; Thu, 17 Oct 2024 09:24:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30A4D1D7E2F
+	for <dwarves@vger.kernel.org>; Thu, 17 Oct 2024 09:24:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729157086; cv=none; b=VSNzhnpEv20xitB1b12qpcz3m4BnvG0helbqVnv3Ucs/8fz8I2XuzqQU/lSSwKsw0AeppYBgpLt1zuulvCS2fO+Rxaj+hadaz6wEB7IeQRuhDidgH+35XXJEXnWyt5DZfE6bZr3RAh+9Q2RrI61jnuHFwFeRJwRCT1TunvlJczE=
+	t=1729157087; cv=none; b=ZTH37MSeP8OQ85I4u3ujk36mhDGScqEP2SsvXh9mtu084cLKqr6+/TKvW+yJCQsOZuDZrHHEtZmPZTuDZRydgXNxDYcgaDU+yFa4a3MI5yNHt3oggVOdLO2aO3P4XgZ+EFoCJ2KCDwJS1Tets+yU8Hj1E1fRi9cRj8cmSbvZaas=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729157086; c=relaxed/simple;
-	bh=ipzfkDMTJhiKHjcKmwPEpIFHQuvTX03PgGe8hLcKsLY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=taGIU+xu77BMB3VZvDSwy1cwIaTHWELvR4s/cQoJAkQoJl0mKsl1Cu3xXY10+SFRLsqU8yDgDsRInpfc+o7OmV6kr0iUIJu3ss1NN2mhbB9Q5svm0Lwdxwi4xDvRbCHgQqrtu/v2HWSPm3CtSomIj2b+MxPhdxUjp4WbYmHZcEg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=Vv9YAjo0; arc=none smtp.client-ip=205.220.165.32
+	s=arc-20240116; t=1729157087; c=relaxed/simple;
+	bh=+6MFwog+c6I4HOwTMUiFqeGAL3uPSVX5QkOLzi06ioE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=u2yrK6n7f8AiADsZKhRnkhOZ90BTF+1j+V8LTEcwvwfjeaHz+aFznhFFANtdgopwrb38OqY4BAEJG3qxJ9m9et/UMgeHi+bo4Oqj+j97sOmzvgwh/e02thp3tBrmBy5x9kMuPdjRjukI5MDrHZ6McPbz0ZlL+HQ0DD2+AHgT4MI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=jTYeRatm; arc=none smtp.client-ip=205.220.165.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="Vv9YAjo0"
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49H9MdnD003351;
-	Thu, 17 Oct 2024 09:24:38 GMT
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="jTYeRatm"
+Received: from pps.filterd (m0333521.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49H9MfaU011581;
+	Thu, 17 Oct 2024 09:24:37 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=corp-2023-11-20; bh=YoOQz
-	gTygT0UqAHOMNgOrqQbpa0VHL8HuOLAl/7jQ8w=; b=Vv9YAjo08gXo9yPzAYiG5
-	SwSwfmewg9bbnafNipTBIr4RHwyK8rMhrBwj9G+h+Qy7M71zPC50QoxdPjZF9+G4
-	Y1xb41n3+ChysxWo4RTzmSbZ4dPGMlxStOzlRkYy2fHW7+nKjooE4wbe+oQzWFno
-	3z82LnSVYBt1DxzQtWeXbnaVI7xCU+EVHvZULoxXkyiDHTqO4xK0Cg9MP6L91/nY
-	ozIJ8454p5iUgy1mcA2HRZlkVMS5BNt+OzGBT0TskfWjBTnpzrwr9AdQBUocnZnI
-	ASVW6xd0pDyhM3Hnj225y0zDiYpAmpMfHwAQJwWKz1SgBEmfJCeFXwBbXiKnDeOh
-	A==
+	:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=corp-2023-11-20; bh=Qv6jzsZ609NAXq26d2BoV2RkhL27I
+	EgPettwHoOQUfo=; b=jTYeRatmO492kSC3nkvLG7F22gf6OFRowqavpmc8hkraM
+	Bhxf9zIzMmQzuokCrgdZsVNAFtF8bzY2LmunCuxEZ9l4At3je0EV3FYe+pg8EDXt
+	mHoZrdmXqHQskE0Gvm0z6KqyD/ljXIf3SO/8XerVP4BbQFeE9T8Wjlx47KQ4YaQo
+	kMpr/OjgFdJ5rtBPvJkXAbJe1wLT0Ug/QH7bG+fBWlMENIJrhYf4b0vy9KORYEiT
+	ePGBo5Ssn/kfqX6w6r+03KwVvce0DsJQtUmlfEWbm7ZS0Lpvls9wkY5QrP9XzQXZ
+	IWNqmPfy5mbdeIpUVgvifNDs6Xw6LRxpuf4dWIYYQ==
 Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 427hntdwh0-1
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 427g1anpt0-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 17 Oct 2024 09:24:38 +0000 (GMT)
+	Thu, 17 Oct 2024 09:24:36 +0000 (GMT)
 Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 49H7WjV9019919;
-	Thu, 17 Oct 2024 09:24:37 GMT
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 49H8JSl8019471;
+	Thu, 17 Oct 2024 09:24:36 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 427fj9yd91-1
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 427fj9yd8q-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 17 Oct 2024 09:24:37 +0000
+	Thu, 17 Oct 2024 09:24:36 +0000
 Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 49H9OZFZ013396;
-	Thu, 17 Oct 2024 09:24:37 GMT
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 49H9OZFX013396;
+	Thu, 17 Oct 2024 09:24:35 GMT
 Received: from bpf.uk.oracle.com (dhcp-10-175-205-31.vpn.oracle.com [10.175.205.31])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 427fj9yd84-2;
-	Thu, 17 Oct 2024 09:24:37 +0000
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 427fj9yd84-1;
+	Thu, 17 Oct 2024 09:24:35 +0000
 From: Alan Maguire <alan.maguire@oracle.com>
 To: acme@kernel.org
 Cc: dwarves@vger.kernel.org, eddyz87@gmail.com,
         Alan Maguire <alan.maguire@oracle.com>
-Subject: [PATCH dwarves 2/2] tests/btf_functions: redirect stderr for pfunct --format_path=btf
-Date: Thu, 17 Oct 2024 10:24:33 +0100
-Message-ID: <20241017092433.690192-2-alan.maguire@oracle.com>
+Subject: [PATCH dwarves 1/2] btf_loader: send warnings to stderr
+Date: Thu, 17 Oct 2024 10:24:32 +0100
+Message-ID: <20241017092433.690192-1-alan.maguire@oracle.com>
 X-Mailer: git-send-email 2.43.5
-In-Reply-To: <20241017092433.690192-1-alan.maguire@oracle.com>
-References: <20241017092433.690192-1-alan.maguire@oracle.com>
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
@@ -66,43 +62,52 @@ Content-Transfer-Encoding: 8bit
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
  definitions=2024-10-17_09,2024-10-17_01,2024-09-30_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=901 mlxscore=0 phishscore=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 mlxscore=0 phishscore=0
  adultscore=0 bulkscore=0 suspectscore=0 spamscore=0 malwarescore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2409260000
  definitions=main-2410170063
-X-Proofpoint-ORIG-GUID: qjSR5cLrjBXI182dV_ECdz-K679M02PK
-X-Proofpoint-GUID: qjSR5cLrjBXI182dV_ECdz-K679M02PK
+X-Proofpoint-GUID: OMOwMfFmFr6WvFlWfP4S_YrjtKB8bLgM
+X-Proofpoint-ORIG-GUID: OMOwMfFmFr6WvFlWfP4S_YrjtKB8bLgM
 
-...since otherwise we will see the following during test execution
-
-WARNING: still unsuported BTF_KIND_DECL_TAG(bpf_fastcall) for bpf_iter_css_task_next already with attribute (bpf_kfunc), ignoring
-WARNING: still unsuported BTF_KIND_DECL_TAG(bpf_fastcall) for bpf_iter_bits_new already with attribute (bpf_kfunc), ignoring
+Among other things, this helps simplify tests/btf_functions.sh.
 
 Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
 ---
- tests/btf_functions.sh | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ btf_loader.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/tests/btf_functions.sh b/tests/btf_functions.sh
-index 5794be9..1a28923 100755
---- a/tests/btf_functions.sh
-+++ b/tests/btf_functions.sh
-@@ -53,13 +53,13 @@ pahole --btf_features=default --btf_encode_detached=$outdir/vmlinux.btf --verbos
+diff --git a/btf_loader.c b/btf_loader.c
+index c70b67f..4814f29 100644
+--- a/btf_loader.c
++++ b/btf_loader.c
+@@ -449,7 +449,7 @@ static int create_new_tag(struct cu *cu, int type, const struct btf_type *tp, ui
+ 	case BTF_KIND_TYPE_TAG:	tag->tag = DW_TAG_LLVM_annotation; break;
+ 	default:
+ 		free(tag);
+-		printf("%s: Unknown type %d\n\n", __func__, type);
++		fprintf(stderr, "%s: Unknown type %d\n\n", __func__, type);
+ 		return 0;
+ 	}
  
- test -n "$VERBOSE" && printf "done.\n"
+@@ -470,7 +470,7 @@ static int process_decl_tag(struct cu *cu, const struct btf_type *tp)
+ 		tag = cu__tag(cu, tp->type);
  
--funcs=$(pfunct --format_path=btf $outdir/vmlinux.btf |sort)
-+funcs=$(pfunct --format_path=btf $outdir/vmlinux.btf 2>/dev/null|sort)
+ 	if (tag == NULL) {
+-		printf("WARNING: BTF_KIND_DECL_TAG for unknown BTF id %d\n", tp->type);
++		fprintf(stderr, "WARNING: BTF_KIND_DECL_TAG for unknown BTF id %d\n", tp->type);
+ 		return 0;
+ 	}
  
- # all functions from DWARF; some inline functions are not inlined so include them too
- pfunct --all --no_parm_names --format_path=dwarf $vmlinux | \
- 	sort|uniq > $outdir/dwarf.funcs
- # all functions from BTF (removing bpf_kfunc prefix where found)
--pfunct --all --no_parm_names --format_path=btf $outdir/vmlinux.btf |\
-+pfunct --all --no_parm_names --format_path=btf $outdir/vmlinux.btf 2>/dev/null|\
- 	awk '{ gsub("^bpf_kfunc ",""); print $0}'|sort|uniq > $outdir/btf.funcs
+@@ -478,7 +478,8 @@ static int process_decl_tag(struct cu *cu, const struct btf_type *tp)
  
- exact=0
+ 	if (tag->attribute != NULL) {
+ 		char bf[128];
+-		printf("WARNING: still unsuported BTF_KIND_DECL_TAG(%s) for %s already with attribute (%s), ignoring\n",
++
++		fprintf(stderr, "WARNING: still unsuported BTF_KIND_DECL_TAG(%s) for %s already with attribute (%s), ignoring\n",
+ 		       attribute, tag__name(tag, cu, bf, sizeof(bf), NULL), tag->attribute);
+ 	} else {
+ 		tag->attribute = attribute;
 -- 
 2.43.5
 
