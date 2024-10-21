@@ -1,370 +1,477 @@
-Received: from mail-40131.protonmail.ch (mail-40131.protonmail.ch [185.70.40.131])
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD8161547C3
-	for <dwarves@vger.kernel.org>; Fri, 18 Oct 2024 20:17:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.40.131
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729282643; cv=none; b=g5N2r0Ddd3rv4UtW3cAW8kdd9+qE5FTHN6OwCd2e8RuJOhCn92/CMa9WMIxCZchW2e9VVDUK+c4KddeCbDmkRzPvmz1FxYQdEL+Jx1+Xl4iuHcwBBdRQd5RYQFW3Dn/PoXm+OeXTsPldQbKTAwVutCnNN5GwHaCh79Uiqm2Eep0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729282643; c=relaxed/simple;
-	bh=BFCPODVv0b4Qr21FqOm2BIcZMrTEtGtN2dnsF448rUs=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=b+2PhG1IWi+9BynUQRnVrVneR8FTd8iJoInpWrlQmdh9KkQ+bDKn2LXf1BkePiG9ZCVO0aNuLaXM82PhToDJwSFrYvNXrGlz/EBEZoGcCJQfNASXfNwiCMQjBUXInM2DcWkiBwOOxxA7am1am8CDmayioYv+srjn8Awp1pEpKOc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me; spf=pass smtp.mailfrom=pm.me; dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b=rUfkcw3F; arc=none smtp.client-ip=185.70.40.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pm.me
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F0E55028C
+	for <dwarves@vger.kernel.org>; Mon, 21 Oct 2024 17:52:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.177.32
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1729533136; cv=fail; b=IlE9JDCjtndhnLrFu+N/EiRBxL/nKcwnYw86CD6WOA2/3wLl0qkBtVk5IGE4QY7ciigRSJauICI8LKHrxtIUhpmjJcHgHDM+zncpDaS4pVVv9kcnz4jm2iHWTnvfRg5PrcrkCY0MPCmIK3gE58ppjqhsjg6aMYAz+eSnKjjpaPc=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1729533136; c=relaxed/simple;
+	bh=RWKFR+V6YL/eO0IwfAqhWWW5iPzNGqO6A593Y91P/Ak=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=McfyT7y+cTBQUb7wzBN4n3XKKUgP1JVjPSFLJNgrrtiIZc+G8Wqz/FW0gm44ia41kKcHEP0KA9ijvX7OO03D0YMqznkiZ5CGTxi079atFFXzY9oU8jUcaDfPaaeuIx5GpB+xOAHkefr+Zc8bbat6f3yrwNW2/oBDriq2st4QXP8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=I/DpRtzH; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=vjO8dtkb; arc=fail smtp.client-ip=205.220.177.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b="rUfkcw3F"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me;
-	s=protonmail3; t=1729282633; x=1729541833;
-	bh=6oa7wKDop5q0H4zO7KtZLNLHBEUanOHseqGxhjhRS40=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-	 Message-ID:BIMI-Selector;
-	b=rUfkcw3FlTxqKnXA3J110WhMQpI4rKZeYEfZJbHkTtYiei/AIzHD8APHxsRNIIweE
-	 QtG5Wa0KRFWcGAZZqSoPINYqGs3G51ZXn+z/2YFfVF9+mJpGZ5QzpKZAQbShMhk8AQ
-	 t7LBwpC4vf/nETtB1ZCQOPELdQlCqVUHZhE8EH0lSYNwN9aXjPoluke9koL1H8Ylnj
-	 sYIbkL7+vr97VECQw5Qk0f8/Fe+Ljowgrp0dcdooHFGSiOD+f5CbNwYtw5f2Y+mePw
-	 PzA+xFuAGhbnrymXDFRciYnGOihTozdx1a5jed5cf7fG4urWN2gGzesviYyEOgg1+2
-	 OqD4+6SICCf3Q==
-Date: Fri, 18 Oct 2024 20:17:07 +0000
-To: Alan Maguire <alan.maguire@oracle.com>, Arnaldo Carvalho de Melo <acme@kernel.org>
-From: Ihor Solodrai <ihor.solodrai@pm.me>
-Cc: dwarves@vger.kernel.org, andrii@kernel.org, eddyz87@gmail.com
-Subject: Re: [PATCH v3 dwarves 3/5] btf_encoder: collect elf_functions in btf_encoder__pre_load_module
-Message-ID: <4G5AFfVer_N_eJCZYc22pQM9rXbHOV2CZ4uOmqh4gFd1K2mgnbIDIZUpynMNCdJ-CEyvsBr0-cPdUzgNnM05NPkPjRdqdAnCAp8DrvUc-Iw=@pm.me>
-In-Reply-To: <ZxFv46O6UPnqbzGF@x1>
-References: <20241016001025.857970-1-ihor.solodrai@pm.me> <20241016001025.857970-4-ihor.solodrai@pm.me> <05bd8cbb-9e6d-479a-abf6-51e7eb5e67f7@oracle.com> <ZxFv46O6UPnqbzGF@x1>
-Feedback-ID: 27520582:user:proton
-X-Pm-Message-ID: 998b60c6816ea913f94ec14631ce05a6424beffd
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="I/DpRtzH";
+	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="vjO8dtkb"
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49LHXcpI004686;
+	Mon, 21 Oct 2024 17:52:05 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=
+	corp-2023-11-20; bh=s6B93325IiXwLs+fQZ9kzHnKAAic0kj3iG8/3xjubhM=; b=
+	I/DpRtzHLoATHMEO2B2y6ocJl+TzwH3R+DKbKdllwwYHTIeRHmT9+ZuaeSuuH5Cu
+	U+NruYpOkWuoRsEOTwgJbCIghSft6/+HhopDgmxMKwFe/Uv0FOtGvb/b3OFrbcFe
+	lQTz1au+Ia/BnGe2nXRL3T4RT+G5Db5XnrEdbgYbTx6T0+Hsc2JUQMaiOVpBJjsL
+	7Ql8j10mOH4MITQL/5iqrsCFqmq9Lx8axC6VxleTu8Y+fVbWSYAGpBR3hNJlj5fW
+	K6nwIPsTn3RajVCJ5xbcu+GeO304oUWojfbMxW25ZmvQRps7kj8nuoXywbDgWcFc
+	ZCenYG54aGw1WRRDEX99Gw==
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 42c57qbqu9-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 21 Oct 2024 17:52:04 +0000 (GMT)
+Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 49LGSqLt007665;
+	Mon, 21 Oct 2024 17:51:57 GMT
+Received: from nam12-mw2-obe.outbound.protection.outlook.com (mail-mw2nam12lp2043.outbound.protection.outlook.com [104.47.66.43])
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 42c376nqj5-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 21 Oct 2024 17:51:57 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=oiP2QLv3x5pkaIlTLutTMsgmzRx17JQhtNqdhan2NOyVdycRrFEaa5IHi+82dLIhSqwLhVCl5czIhdAQkSOETmqs2N8yYQdzmjaDmlcRNmVe8ZX7ccu5cLE8IBxGTUG6ihB+2koextIocnXQ1Fl2f07MAi1/o1P1IeEnt33CkFkaaT4Fek5161stsA/639F270SueBo8OP7m9RlTpDoelNeLtzFvRchL6NbkBV/nQm4laQei7mkjU0hdbADLIw9nNjZUSp0l2IaRc/+210XYDqUBFFm45CXwR8avwXaPICfmYZXWomqoMmJwF3d1ZGmMTFa0gEr1WzMZwuMaHHgCjw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=s6B93325IiXwLs+fQZ9kzHnKAAic0kj3iG8/3xjubhM=;
+ b=mdSzl/AdnncYn5yQn+CId2ZHMKuwQOLvjbfzsPhL5jbCZfn0V7T5QKoLAKsU+3xfHsx+ULRjfIF23OnbMUTEGBHeX6Kvg/pXVbGQY6pbm1dedQCFergdleU3QVjyZO9BUspLgsE9tlXwVEj4qfh4h9X31kiivu5xhUd3j2H+kzfQjjQb+DCnlyarnGyYIpCH/5ut0Lp1s6cmd3taDlwPT7u1FAelj2rP5856vsF4yEMDbGnTXnxAeHzycmonemsuyz9B9Jsx6A5gkpIMG0PMLSksOANm9OyEK7omCM6g+8cNHBbt3EWjTR9ozwB19a31Y4YUTCkuCU7ECtPwOnDkVA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=s6B93325IiXwLs+fQZ9kzHnKAAic0kj3iG8/3xjubhM=;
+ b=vjO8dtkbiBtfuGDk0EpjJ63HWGmNtNXZHZPY9MIz1O3UzB+1WEtrTgCqj8f4dHM406+uwxUS5EM+grAC+iaJgGW4+iwXYbJEKxKZmao3QwTD66BwrA7/DwYF5Tm68O2b96zVACy7TC++MYe2f7tQ1U1cHs0S4Afx4PELfpLyiUw=
+Received: from BLAPR10MB5267.namprd10.prod.outlook.com (2603:10b6:208:30e::22)
+ by BY5PR10MB4225.namprd10.prod.outlook.com (2603:10b6:a03:20f::24) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8069.29; Mon, 21 Oct
+ 2024 17:51:51 +0000
+Received: from BLAPR10MB5267.namprd10.prod.outlook.com
+ ([fe80::682b:c879:9f97:a34f]) by BLAPR10MB5267.namprd10.prod.outlook.com
+ ([fe80::682b:c879:9f97:a34f%7]) with mapi id 15.20.8069.027; Mon, 21 Oct 2024
+ 17:51:51 +0000
+Message-ID: <8678ce40-3ce2-4ece-985b-a40427386d57@oracle.com>
+Date: Mon, 21 Oct 2024 18:51:47 +0100
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 dwarves 4/5] btf_encoder: store a list of elf_function
+ per function name
+To: Ihor Solodrai <ihor.solodrai@pm.me>, dwarves@vger.kernel.org
+Cc: acme@kernel.org, andrii@kernel.org, eddyz87@gmail.com
+References: <20241016001025.857970-1-ihor.solodrai@pm.me>
+ <20241016001025.857970-5-ihor.solodrai@pm.me>
+Content-Language: en-GB
+From: Alan Maguire <alan.maguire@oracle.com>
+In-Reply-To: <20241016001025.857970-5-ihor.solodrai@pm.me>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: LO4P265CA0217.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:33a::14) To BLAPR10MB5267.namprd10.prod.outlook.com
+ (2603:10b6:208:30e::22)
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BLAPR10MB5267:EE_|BY5PR10MB4225:EE_
+X-MS-Office365-Filtering-Correlation-Id: c50343e7-ce47-451e-2c0a-08dcf1f90ae3
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|366016|1800799024|10070799003;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?em9ZU2NGbk9wd0tZOVpOZjF5MXdoUFc4bnhWRGo2YndFRlhDWExyTThJRjRq?=
+ =?utf-8?B?N3FjMitsRFZtaVNnd0wvVmZFejFOSlkzOFhrblpXQVRoSnVGRURTakZ2OVBr?=
+ =?utf-8?B?QTIxQS8vdnhsRFh4TnRZWGJsY3Z3QncwMGh5bFZ0d3pGY2NldloxR0dTeDky?=
+ =?utf-8?B?VEE3WnpwZ2JLZjFJT0N1Q2JaLytKTllHRlJyWWRVeTlDc3JzWWFZWDhJRWpJ?=
+ =?utf-8?B?U2ZBbTBBT1JSYWoxYnZjTzRLcjNYTGhiaUlYOTFGTUE3MkZOL2JLQTJoTDY4?=
+ =?utf-8?B?T3grenZkTGpOYUZ4OVpaRzhPTWdRZzFEVUZqSjFWd2JRVHQ4T1ZST1pUQ0J1?=
+ =?utf-8?B?S3l4TDl1d20zckpWNklHd1BLc0ZPYU5Hb0lKVEJyRjhnSExIQXFJT2VyM0FO?=
+ =?utf-8?B?Zm9CeDhhTndmU1Q3bDR2d1QwaUU2VWZpTVU4TVVvaHRsZ3JRQUlhRzNnN0dt?=
+ =?utf-8?B?dWp3Mmd5MER5TkNlUUVqUW0rS2VHYkJtOUsyQ1Y5R3NXWHRrMDFrRS9uMDlU?=
+ =?utf-8?B?YjQ2eWNWSXBWeWtjVkd0Nis2UVJUV1JndGRVVUpIM052dC8xWFdFSytLOWVu?=
+ =?utf-8?B?Nmt2RHlVbFh3UktVVG9rZFhjRHdJeG5iOUM4eExoVTNzaTVCUkszU0FZYXE2?=
+ =?utf-8?B?MWluTnZkcUU0RzBhcUt1Wm5oMUg5b0JlV2Jycnk5WDN1ZEtnbTNwQUZZaHVo?=
+ =?utf-8?B?SXNxZ0FReWErcjFlcytjczBnRU44ZnJkaVBrTmdZZlF6anRldmtpU0FZVG5E?=
+ =?utf-8?B?VDF1QzNvK3RuM2RBVXhGQm9VRzlpR0szS0tBOTR0cmVTQVFodmpEQnE3ZlV3?=
+ =?utf-8?B?djl0cmV4K20rRFZkQ0xXR1N2WVNTZUszNUdIaDlwRkZNSmw0VHlteThwOVAr?=
+ =?utf-8?B?dldmQnJZU2E0Mml2RmhEQ0hNdFRDZGh3QVhhWmkvN1Z1MHZSNlgxcTJUa05k?=
+ =?utf-8?B?UWNtUjhGa3ZZSTllMTNXSHpFWGVvanpycE96M3RjV0IweUN4Q21zeGpubG0v?=
+ =?utf-8?B?dTZjSHpjSUY4ZXgwdnZKckhPY1A5OG1oUkt2aE12dndpVzdnckcxM3ZwdDhv?=
+ =?utf-8?B?TUlNYkVBZzVkUHZLbkZlQzhrc1BBLzFOazdiYTV1Vm85NDhvR3o1aVZ6cmVi?=
+ =?utf-8?B?cHV4R3QrbUlCS3UyN2VZeHk5cWcvSVM0QnBGcUFTalVRYVA5UUlOWG1BbEtX?=
+ =?utf-8?B?UCt1VWxGNnh2ZEplZEI0VlJSTVh1c28raE01a2FwOUhTTkdBdGllRXBwSnM5?=
+ =?utf-8?B?S1hLcDBROXVybC9CMUdWaHRub0ppZjFIRG4xaWpLZ2xxeXBJUkg2Sjk3NS9I?=
+ =?utf-8?B?eXVDRVJOR3V0YmoyUHR0YVJGOHI2cytnUVRreTc1SnpYTmhySVpnY2thdmxF?=
+ =?utf-8?B?R2lRVXVoSStHYU1DaG5jR1VTSEJYVzkzb2xMSlBoKzQxZmtoMUVRdkRDU3dp?=
+ =?utf-8?B?SnlOaG5uWkVLNWltckgvb3d3YXB3VEhlZk5TaDFTUERXeE1STnpuR3MxNmVD?=
+ =?utf-8?B?cDdsTmxxNnhkT0Exa0ZLa3dDVERFdGh2NFB1NUJjNHNxOEU5ckJ6VXdyWXo4?=
+ =?utf-8?B?eHBBVS8zZzV3dUpHUWl4SXV2M3pEa2wwQmJkZlF5SjZhcko1Y20xQmZtQVl1?=
+ =?utf-8?B?QTZnR3ZvYkx5bGozYk5ZSHpKbHkrSWdHd2o5aXMxYUpzSHB1WVNCR2dsTVdx?=
+ =?utf-8?B?Qi9wNGRDQVJYQndzdVdRWVg4MmptSjdWczNGcmlmTkhVVWZZdnRLT1pxZ2ZG?=
+ =?utf-8?Q?202nf8KklA1IsN0kyX7cnfTxopzingWQI9lG5Ll?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BLAPR10MB5267.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(366016)(1800799024)(10070799003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?TTl0cjR3WXIzTlNKSC9xS2orLzFvM3poK1pUSTVwSGFGcG9TL285QU1uR0xp?=
+ =?utf-8?B?cUZ1cUoyTWtkZDA2QXlUbkQ5SzZrTXliQmdPY0hEb3VEMEVTbGJURjI0aE82?=
+ =?utf-8?B?MkFBN0UwalZucWRRdW5EeDY2MnAvSlArTjhRa0cxTUpDc1RyeWJ6eG5tTWhQ?=
+ =?utf-8?B?Mm8xcE1IeXdUdCs1My95VEZ1SStWbUtxUy90cHRqRU9QTEdtZUhXZFRyZUlU?=
+ =?utf-8?B?cTRNRmR5SlFCRWtpTHJrVDRQbC96Qk5IUjNIUVdQRlJET1NVSkx6SzJQeXRE?=
+ =?utf-8?B?b0J2c1g3cmtrZFlLZFZzZmJVSWtXU0o5N2ZOeThERmRHczRnRVFHNkZhOVhj?=
+ =?utf-8?B?Y0cwWE13dGhDU1ZiRGNwcGw2Skl5NGlrbW1kenIzdndERDIxN29XK3BzNlNh?=
+ =?utf-8?B?RmR5T0hjSHl3cSs0cERDTUdwbWlya09FaWhMeFpQOUM3SE5SSzlqT3A5VEhZ?=
+ =?utf-8?B?ZlM1L3NzQ1ZSTUtjQmRtWGE2bEoybUlBNTJ3WnYrWU14U1Y3ZXRxR2xLSWla?=
+ =?utf-8?B?YW5qbWRCcHMwTkNMZGc1QU83aXhKM2czekM3NFUzQkF1M2ZPQ1lXUzVKTTh0?=
+ =?utf-8?B?c0hHeGdBY3FiTmkzWDNlelNQUWlvbmp3SFFhNXVvb2xYNHQvSkxsMmNVMldL?=
+ =?utf-8?B?OW53MklPQlkzMW00ZDk5dm8xZTVJY1RqODVSa1B4N2o5RWZ0cHkzdWJJYXly?=
+ =?utf-8?B?ZGJBaWF6S1F3bTA5TmhySllsUW5nUkZraHpSUjhQS2s0SFNGZnJhV0owd1Jv?=
+ =?utf-8?B?L0xFTnRHTTlJajlFL2hjcGhHd29XaVlxOHJxMU1kYmpualZvOWR1aTc4Nml4?=
+ =?utf-8?B?NVBFRGFUNDVBa0d1cjNQV0FKb2FnT2xKdy9sNVI1T1I5b2t1NTN4UXJqS0hK?=
+ =?utf-8?B?T1ZrZk9tMWxSMmVPY1V5cmtkYUc1ZmxHSkhFR2g3eWNtWEFXRDhwTVNZdDRH?=
+ =?utf-8?B?NS9CeGlFVXJnOHhVbk1PWnBqM0Vyb2QyTTFhYTJQRXd6R083K25uQW5uOExz?=
+ =?utf-8?B?Q0ZEOUdCbCt5SkFsYkxPWDNYZjBvMEh5WlBBOVQ4NE9FUkN5RHY1OW9ySEl2?=
+ =?utf-8?B?WVZZdThWZ1ZTT1AyVk9abWZlYk5XOGxGeVI0YWJMT3JucHJES0FENUNiYmxk?=
+ =?utf-8?B?UkRXMWY0cFBMTTJHOVM1d0tkY2hiL1FyQ3lFcHFjbUFVVVZlTlNzQlpLcEJP?=
+ =?utf-8?B?MWgwV0RnYU1jbDkySUhkbDE5N1o4TUs3R3F6dWhzYXVORDF5WUUwNkxVUWZN?=
+ =?utf-8?B?bjNJQUxFOHhrQnUzSy92dnFleTNDUS9QcUE3MzBVclVCcDBWbm9ackZyUVoy?=
+ =?utf-8?B?UzFtSU5OU0lMRktrR2NQVE9qVThYNGEyMnI1KzdGVDJKRnlsa3ltazVaOHlj?=
+ =?utf-8?B?ZkhKMmtrYjJQL1d1dmtScnJpdjNZdS9ZTGE5cXk0T0s0UmxwNHJHUnpRbVF1?=
+ =?utf-8?B?SlBxeHRtVzNHV01hZEJEeCtDblF6c2pCV0cyRFI0U0NjNnpzYUVuNHRsVktZ?=
+ =?utf-8?B?RGRGQTNxQzV1c3Jremk2bTltUUFmS2NCRHZHbTAzcGVEVncrWCtxNXZxaU95?=
+ =?utf-8?B?NWg1TEVXbVBkT3JqMDI5Nnlua3QrVmtJQnZNeVl4NDJiMDJrQ2FzVUN3S1dD?=
+ =?utf-8?B?TktacG05K3BodmtSNEEvVUtsaStLUVFoSXY3L1B4RFF6bFVkQVpUQmF4UUpZ?=
+ =?utf-8?B?VFJjSDN2cnZKTVVXdDZCQWJidU4xZUpYQlRpV3NoVWN2ZStNdjBxbnBTakd1?=
+ =?utf-8?B?c0JiTEJvMDVRY2dvNVJjdDByeG1iMlY1SFNwSXhYQXhVcWpzTFdmaGpMS0Rx?=
+ =?utf-8?B?amMxVndWbng1dkd4d1JGbWJCZGY2NVUrM2twWGpmRjhkR0I0MTBCcE02T0No?=
+ =?utf-8?B?ZlFmYnMweG1saW9vOHJ6UDlpeVMyaW9tdERGRGMvT3pnVDVDb05RY01QZHcr?=
+ =?utf-8?B?eFJSaUFQWjd5VHh6SGNySEwzeTFqWXR6b3JHV0hKNjhaZUpsSkp2UzBXSXRR?=
+ =?utf-8?B?T0JHaHJvK1F2ZEd2dkszY1g4UURZM3BObmdEeTdqamJPZnRHbEhLdlhIUk50?=
+ =?utf-8?B?SWZ0c2hMdTlBMW8xSUdtZDc5RytuMWVCRmlSZnRraExnTnZDZGhZbUh5aVM2?=
+ =?utf-8?B?bjJuY0J3RGQzbUtSWkxGY0tPTkFXRjU5RFZscUlPQVVpM2lTdFQrNmhPMUNZ?=
+ =?utf-8?Q?fT73bt44E3pnqSrRS+PPawg=3D?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
+	7kPYXx/7CzikKKRCII3pfjdY66KHIkvM3fEmcWavrW2GPRMHqTnVJpbvX2pa5/yBM8bAPJdf3qrVQBBVNCMJ8PWM8StpIrR/MFMqJwWtfrgm5FZcWe+e9z2rlQ37/kcLKw801pKoTSMklRIPEMESnuV930JPN+Vovk9GtUv56i5j8zdgRs4f+XR8ycLED6YPlP2WXu3MW+lX2NgFIpWp7u3VlnzaVJNIgw38ZGBhXHp7wFol8Ism0mbkT8Qiyo2BE6vt2Q62nh2zzAzB1RqD66Lawon54EZ1Flcr5SIDq7bqn4hJhgHygu1dBVwnBN3/sMwZUcIg3UX36qEGSh83tsKdY8F6hXMZZlka0u3PwJJ3Pgzodf6876sjUUyLAEjz4zKqznrJIkcpMmQfXSIawAsU8KUEs66IZPPTiJApDrQW7Kkh5cuf8pg9LaD9rTkB1DH0svYbcCh/gSdQxgt7W7ss5ey6uui3+sCVaoo5n/NSPdmEGfDiI+pPYnM6sz2hSMWOxRwG3BJvKbt1rZ67ZVmzIrVroiDM3I/LwYCkGp+KGCqlXF8kfQ63Ln6Ls/eS5vjS7T9sFpRoDZlIJK9E13Yb1abhpZMQs5bmAb+YL1M=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c50343e7-ce47-451e-2c0a-08dcf1f90ae3
+X-MS-Exchange-CrossTenant-AuthSource: BLAPR10MB5267.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Oct 2024 17:51:51.3703
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: xHP0pg+fFhMJVNY7wqGST3pMMXDlFyFT8gTZ8URmXPZPCUPJOFQJdmLcMNzKU/c8LGqPq8jCgArkNYQgWxkCow==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR10MB4225
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
+ definitions=2024-10-21_16,2024-10-21_01,2024-09-30_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 adultscore=0 bulkscore=0
+ malwarescore=0 spamscore=0 mlxlogscore=999 phishscore=0 mlxscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2409260000
+ definitions=main-2410210128
+X-Proofpoint-ORIG-GUID: 2_YavkMtOsvJSyjYPiCxCHsw2OHBqaDK
+X-Proofpoint-GUID: 2_YavkMtOsvJSyjYPiCxCHsw2OHBqaDK
 
-On Thursday, October 17th, 2024 at 1:13 PM, Arnaldo Carvalho de Melo <acme@=
-kernel.org> wrote:
+hi Ihor
 
-> On Thu, Oct 17, 2024 at 11:56:04AM +0100, Alan Maguire wrote:
->=20
-> > On 16/10/2024 01:10, Ihor Solodrai wrote:
-> >=20
-> > > Introduce a global elf_functions_list variable in btf_encoder.c that
-> > > contains an elf_functions per ELF.
-> >=20
-> > Arnaldo can help provide context here, but at least notionally I think
-> > the idea of maintaining libdwarves as a library has value. In that
->=20
->=20
-> Yeah, but in all these years I'm not aware of any user, I even need to
-> do some testing on building pahole statically with libdwarves to see if
-> we get performance improvements...
->=20
-> > context, avoiding global lists where possible is a good thing I think,
->=20
->=20
-> Even without a library :-)
->=20
-> > since if it was used as a library, multiple invokations could confuse
-> > the elf_functions list. To that end, can we make the elf_functions_list
-> > a field in the conf_load perhaps? It already contains base_btf so there
->=20
->=20
-> conf_load looks with the structs we have now, so I would try to start
-> there.
->=20
-> - Arnaldo
->=20
-> > is a precedent for storing data relevant to all encoders there, and
-> > btf_encoder__new() has conf_load as a parameter, so the elf functions
-> > list can still always be retrieved on encoder creation. In addition the
-> > parameter to cus__process_dwflmod() has the parms structure which
-> > contains the conf_load; you'd just need to pass that through to your
-> > pre_load_module() callback I think.
-> >=20
-> > It shouldn't be a massive change but I think it would be worthwhile.
-> >=20
-> > Thanks!
+On 16/10/2024 01:10, Ihor Solodrai wrote:
+> btf_encoder__save_func() accumulates observations of DWARF functions,
+> maintaining an elf_function per function name.
+> 
 
-Hi Alan, Arnaldo, thank you for review.
+I've been struggling with the latter few patches in this series, and I
+think that's in part due to the fact that you have to deal with some
+(what I _think_ are) unnecessary complications in the existing code.
 
-I understand your points, however adding elf_functions to conf_load
-feels wrong to me. The global list I added was analogous to `encoders`
-list in btf_encoder.c
+It should be easier to share ELF representations, but the situation
+you've inherited is we mix immutable (ELF representation) and mutable
+(function state information saved) representations, leading to
+complications that require synchronization across threads.
 
-I poked at the code a bit and came up with a context struct. It's
-still a global variable, but with a clear init/exit interface.
+Stepping back, I think with a few simplifications, we can lay a better
+foundation for your work, and BTF encoding in general. Specifically if we
 
-Potentially other global BTF encoding-related state, for example
-"main" btf_encoder and base_btf, could be stored in this context too.
+- always save and later add functions; currently we only save if we want
+  to avoid inconsistencies, but this means having to maintain two
+  codepaths for function addition which is messy. It is simpler to
+  always save and later see if we want to add functions.
+- fully separate ELF representation (immutable) from saved function
+  represention (mutable). this will enable ELF sharing, and saved
+  functions state can simply point back at the appropriate ELF function
+- For each encoder, we just save all function state representations in a
+  simple list; no merging is done at this point
+- when adding saved functions, we combine lists from all encoders, merge
+  findings on inconsistent representations where required, and add all
+  functions without inconsistent representations.
 
-Please see the diff below and let me know what you think.
+This will mean no concurrency issues, and we end up with a simpler
+representation which I think should make ELF sharing much easier. I've
+got a rough prototype of 3 prerequisite patches doing the above at
+https://github.com/acmel/dwarves/compare/master...alan-maguire:dwarves:elf-prep
 
+The changes are contained in the last 3 patches there if you want to
+take a look.
 
----
- btf_encoder.c | 119 ++++++++++++++++++++++++++++----------------------
- btf_encoder.h |   3 ++
- pahole.c      |  16 ++++---
- 3 files changed, 80 insertions(+), 58 deletions(-)
-
-diff --git a/btf_encoder.c b/btf_encoder.c
-index 1ec39fe..90aaa25 100644
---- a/btf_encoder.c
-+++ b/btf_encoder.c
-@@ -154,19 +154,76 @@ struct btf_kfunc_set_range {
- =09uint64_t end;
- };
-=20
-+static struct {
-+=09bool initialized;
-+
-+=09/* In principle, multiple ELFs can be processed in one pahole run,
-+=09 * so we have to store elf_functions table per ELF.
-+=09 * An element is added to the list on btf_encoder__pre_load_module,
-+=09 * and removed after btf_encoder__encode is done.
-+=09 */
-+=09struct list_head elf_functions_list;
-+
-+=09/* mutex only needed for add/delete, as this can happen in multiple enc=
-oding
-+=09 * threads.  Traversal of the list is currently confined to thread coll=
-ection.
-+=09 */
-+=09pthread_mutex_t btf_encoder_list_lock;
-+=09struct list_head btf_encoder_list;
-+
-+} btf_encoding_context;
-+
-+int btf_encoding_context__init() {
-+=09int err =3D 0;
-+
-+=09if (btf_encoding_context.initialized) {
-+=09=09fprintf(stderr, "btf_encoding_context__init() called while context i=
-s already initialized\n");
-+=09=09err =3D -1;
-+=09=09goto out;
-+=09}
-+
-+=09INIT_LIST_HEAD(&btf_encoding_context.elf_functions_list);
-+=09INIT_LIST_HEAD(&btf_encoding_context.btf_encoder_list);
-+=09pthread_mutex_init(&btf_encoding_context.btf_encoder_list_lock, NULL);
-+=09btf_encoding_context.initialized =3D true;
-+
-+out:
-+=09return err;
-+}
-+
-+static inline void elf_functions__delete(struct elf_functions *funcs);
-+
-+void btf_encoding_context__exit() {
-+=09struct list_head *pos, *tmp;
-+
-+=09if (!btf_encoding_context.initialized) {
-+=09=09fprintf(stderr, "btf_encoding_context__exit() called while context i=
-s not initialized\n");
-+=09=09return;
-+=09}
-+
-+=09list_for_each_safe(pos, tmp, &btf_encoding_context.elf_functions_list) =
-{
-+=09=09struct elf_functions *funcs =3D list_entry(pos, struct elf_functions=
-, node);
-+=09=09list_del(&funcs->node);
-+=09=09elf_functions__delete(funcs);
-+=09}
-+
-+=09pthread_mutex_lock(&btf_encoding_context.btf_encoder_list_lock);
-+=09list_for_each_safe(pos, tmp, &btf_encoding_context.btf_encoder_list) {
-+=09=09struct btf_encoder *encoder =3D list_entry(pos, struct btf_encoder, =
-node);
-+=09=09list_del(&encoder->node);
-+=09=09btf_encoder__delete(encoder);
-+=09}
-+=09pthread_mutex_unlock(&btf_encoding_context.btf_encoder_list_lock);
-+
-+=09pthread_mutex_destroy(&btf_encoding_context.btf_encoder_list_lock);
-+=09btf_encoding_context.initialized =3D false;
-+}
-=20
--/* In principle, multiple ELFs can be processed in one pahole run,
-- * so we have to store elf_functions table per ELF.
-- * An element is added to the list on btf_encoder__pre_load_module,
-- * and removed after btf_encoder__encode is done.
-- */
--static LIST_HEAD(elf_functions_list);
-=20
- static struct elf_functions *elf_functions__get(Elf *elf)
- {
- =09struct list_head *pos;
-=20
--=09list_for_each(pos, &elf_functions_list) {
-+=09list_for_each(pos, &btf_encoding_context.elf_functions_list) {
- =09=09struct elf_functions *funcs =3D list_entry(pos, struct elf_functions=
-, node);
-=20
- =09=09if (funcs->elf =3D=3D elf)
-@@ -198,21 +255,9 @@ static void __elf_functions__delete(struct elf_functio=
-ns *funcs)
- static inline void elf_functions__delete(struct elf_functions *funcs)
- {
- =09__elf_functions__delete(funcs);
--=09list_del(&funcs->node);
- =09free(funcs);
- }
-=20
--static inline void elf_functions__delete_all(void)
--{
--=09struct list_head *pos, *tmp;
--
--=09list_for_each_safe(pos, tmp, &elf_functions_list) {
--=09=09struct elf_functions *funcs =3D list_entry(pos, struct elf_functions=
-, node);
--
--=09=09elf_functions__delete(funcs);
--=09}
--}
--
- static int elf_functions__collect(struct elf_functions *functions);
-=20
- int btf_encoder__pre_load_module(Dwfl_Module *mod, Elf *elf)
-@@ -237,7 +282,7 @@ int btf_encoder__pre_load_module(Dwfl_Module *mod, Elf =
-*elf)
- =09if (err)
- =09=09goto out_delete;
-=20
--=09list_add_tail(&funcs->node, &elf_functions_list);
-+=09list_add_tail(&funcs->node, &btf_encoding_context.elf_functions_list);
-=20
- =09return 0;
-=20
-@@ -246,37 +291,11 @@ out_delete:
- =09return err;
- }
-=20
--
--static LIST_HEAD(encoders);
--static pthread_mutex_t encoders__lock =3D PTHREAD_MUTEX_INITIALIZER;
--
--/* mutex only needed for add/delete, as this can happen in multiple encodi=
-ng
-- * threads.  Traversal of the list is currently confined to thread collect=
-ion.
-- */
--
--#define btf_encoders__for_each_encoder(encoder)=09=09\
--=09list_for_each_entry(encoder, &encoders, node)
--
- static void btf_encoders__add(struct btf_encoder *encoder)
- {
--=09pthread_mutex_lock(&encoders__lock);
--=09list_add_tail(&encoder->node, &encoders);
--=09pthread_mutex_unlock(&encoders__lock);
--}
--
--static void btf_encoders__delete(struct btf_encoder *encoder)
--{
--=09struct btf_encoder *existing =3D NULL;
--
--=09pthread_mutex_lock(&encoders__lock);
--=09/* encoder may not have been added to list yet; check. */
--=09btf_encoders__for_each_encoder(existing) {
--=09=09if (encoder =3D=3D existing)
--=09=09=09break;
--=09}
--=09if (encoder =3D=3D existing)
--=09=09list_del(&encoder->node);
--=09pthread_mutex_unlock(&encoders__lock);
-+=09pthread_mutex_lock(&btf_encoding_context.btf_encoder_list_lock);
-+=09list_add_tail(&encoder->node, &btf_encoding_context.btf_encoder_list);
-+=09pthread_mutex_unlock(&btf_encoding_context.btf_encoder_list_lock);
- }
-=20
- #define PERCPU_SECTION ".data..percpu"
-@@ -2215,7 +2234,6 @@ int btf_encoder__encode(struct btf_encoder *encoder)
- =09=09err =3D btf_encoder__write_elf(encoder, encoder->btf, BTF_ELF_SEC);
- =09}
-=20
--=09elf_functions__delete_all();
- =09return err;
- }
-=20
-@@ -2588,7 +2606,6 @@ void btf_encoder__delete(struct btf_encoder *encoder)
- =09if (encoder =3D=3D NULL)
- =09=09return;
-=20
--=09btf_encoders__delete(encoder);
- =09for (shndx =3D 0; shndx < encoder->seccnt; shndx++)
- =09=09__gobuffer__delete(&encoder->secinfo[shndx].secinfo);
- =09zfree(&encoder->filename);
-diff --git a/btf_encoder.h b/btf_encoder.h
-index 29f652a..c3886b8 100644
---- a/btf_encoder.h
-+++ b/btf_encoder.h
-@@ -23,6 +23,9 @@ enum btf_var_option {
- =09BTF_VAR_GLOBAL =3D 2,
- };
-=20
-+int btf_encoding_context__init();
-+void btf_encoding_context__exit();
-+
- struct btf_encoder *btf_encoder__new(struct cu *cu, const char *detached_f=
-ilename, struct btf *base_btf, bool verbose, struct conf_load *conf_load);
- void btf_encoder__delete(struct btf_encoder *encoder);
-=20
-diff --git a/pahole.c b/pahole.c
-index 6f83636..2a6e012 100644
---- a/pahole.c
-+++ b/pahole.c
-@@ -3280,12 +3280,6 @@ static int pahole_threads_collect(struct conf_load *=
-conf, int nr_threads, void *
- =09err =3D 0;
-=20
- out:
--=09for (i =3D 0; i < nr_threads; i++) {
--=09=09if (threads[i]->encoder && threads[i]->encoder !=3D btf_encoder) {
--=09=09=09btf_encoder__delete(threads[i]->encoder);
--=09=09=09threads[i]->encoder =3D NULL;
--=09=09}
--=09}
- =09free(threads[0]);
-=20
- =09return err;
-@@ -3818,8 +3812,12 @@ int main(int argc, char *argv[])
- =09=09conf_load.threads_collect =3D pahole_threads_collect;
- =09}
-=20
--=09if (btf_encode)
-+=09if (btf_encode) {
- =09=09conf_load.pre_load_module =3D btf_encoder__pre_load_module;
-+=09=09int err =3D btf_encoding_context__init();
-+=09=09if (err < 0)
-+=09=09=09goto out;
-+=09}
-=20
- =09// Make 'pahole --header type < file' a shorter form of 'pahole -C type=
- --count 1 < file'
- =09if (conf.header_type && !class_name && prettify_input) {
-@@ -3928,7 +3926,11 @@ try_sole_arg_as_class_names:
- =09=09=09goto out_cus_delete;
- =09=09}
- =09}
-+
- out_ok:
-+=09if (btf_encode)
-+=09=09btf_encoding_context__exit();
-+
- =09if (stats_formatter !=3D NULL)
- =09=09print_stats();
-=20
---=20
-2.43.0
-
-
-> > > [...]
-
+> Part of this routine is a funcs_match() call, which requires access to
+> BTF implicitly referenced by btf_encoder_func_state.  In case when
+> elf_functions table is maintained by each btf_encoder this is not an
+> issue, because every btf_encoder_func_state available to this encoder
+> can only reference its own BTF. However if elf_functions table becomes
+> shared then existing elf_function/btf_encoder_function_state structs
+> can be produced by other encoders referring to their own BTFs. In this
+> case funcs_match() can not be called unless BTFs are available and
+> writes to them are synchronized in some manner (which is not
+> desirable).
+> 
+> Accumulated states are later merged between encoders in
+> btf_encoder__add_saved_funcs(). To enable sharing of the elf_functions
+> table between encoders, two members are introduced to struct
+> elf_function:
+>   - elf_function *next - to enable linked-list
+>   - btf_encoder *encoder - to find elf_function corresponding to a
+>     particular encoder in a list
+> 
+> Each element of elf_functions->entries is a head of a list that stores
+> elf_function structs, one for each encoder that searched for this
+> function name at least once.
+> 
+> btf_encoder__find_function() is modified to perform the search on
+> shared elf_functions table, and atomically update a corresponding list
+> as necessary.
+> 
+> At this point each btf_encoder is still maintaining it's own
+> elf_functions table, but the updated implementation is used.
+> 
+> Suggested-by: Eduard Zingerman <eddyz87@gmail.com>
+> Signed-off-by: Ihor Solodrai <ihor.solodrai@pm.me>
+> ---
+>  btf_encoder.c | 122 +++++++++++++++++++++++++++++++++++++++-----------
+>  1 file changed, 96 insertions(+), 26 deletions(-)
+> 
+> diff --git a/btf_encoder.c b/btf_encoder.c
+> index 8e8fd05..002358c 100644
+> --- a/btf_encoder.c
+> +++ b/btf_encoder.c
+> @@ -30,6 +30,7 @@
+>  
+>  #include <assert.h>
+>  #include <errno.h>
+> +#include <stdatomic.h>
+>  #include <stdint.h>
+>  #include <search.h> /* for tsearch(), tfind() and tdestroy() */
+>  #include <pthread.h>
+> @@ -86,10 +87,15 @@ struct btf_encoder_func_state {
+>  };
+>  
+>  struct elf_function {
+> +	/* bsearch key */
+>  	const char	*name;
+> -	char		*alias;
+> -	bool		 generated;
+> -	size_t		prefixlen;
+> +	size_t		 prefixlen;
+> +	/* for list search */
+> +	_Atomic(struct elf_function *) next;
+> +	_Atomic(struct btf_encoder *) encoder;
+> +	/* encoder-specific state */
+> +	char *alias;
+> +	bool generated;
+>  	struct btf_encoder_func_state state;
+>  };
+>  
+> @@ -106,7 +112,7 @@ struct elf_functions {
+>  	struct list_head node; /* for elf_functions_list */
+>  	Elf *elf; /* source ELF */
+>  	struct elf_symtab *symtab;
+> -	struct elf_function *entries;
+> +	struct elf_function *entries; /* an array, each element is a head of a list */
+>  	int cnt;
+>  	int suffix_cnt; /* number of .isra, .part etc */
+>  };
+> @@ -157,10 +163,29 @@ struct btf_kfunc_set_range {
+>   */
+>  static LIST_HEAD(elf_functions_list);
+>  
+> -static inline void elf_functions__delete(struct elf_functions *funcs)
+> +static void __elf_functions__delete(struct elf_functions *funcs)
+>  {
+> +	struct elf_function *func, *next;
+> +
+> +	for (int i = 0; i < funcs->cnt; i++) {
+> +		/* free all list elements except the head */
+> +		func = funcs->entries[i].next;
+> +		while (func) {
+> +			next = func->next;
+> +			free(func->alias);
+> +			zfree(&func->state.annots);
+> +			zfree(&func->state.parms);
+> +			free(func);
+> +			func = next;
+> +		}
+> +	}
+>  	free(funcs->entries);
+>  	elf_symtab__delete(funcs->symtab);
+> +}
+> +
+> +static inline void elf_functions__delete(struct elf_functions *funcs)
+> +{
+> +	__elf_functions__delete(funcs);
+>  	list_del(&funcs->node);
+>  	free(funcs);
+>  }
+> @@ -1296,12 +1321,30 @@ static int32_t btf_encoder__add_func(struct btf_encoder *encoder, struct functio
+>  	return 0;
+>  }
+>  
+> +#define for_each_elf_function(func, head) \
+> +	for (struct elf_function *func = head; func; func = func->next)
+> +
+> +static inline struct elf_function *find_elf_function(struct elf_function *list_head,
+> +						     const struct btf_encoder *encoder)
+> +{
+> +	for_each_elf_function(f, list_head) {
+> +		if (f->encoder == encoder)
+> +			return f;
+> +	}
+> +
+> +	return NULL;
+> +}
+> +
+>  static int btf_encoder__add_saved_funcs(struct btf_encoder *encoder)
+>  {
+>  	int i;
+>  
+>  	for (i = 0; i < encoder->functions.cnt; i++) {
+> -		struct elf_function *func = &encoder->functions.entries[i];
+> +		struct elf_function *func = find_elf_function(&encoder->functions.entries[i], encoder);
+> +
+> +		if (!func)
+> +			continue;
+> +
+>  		struct btf_encoder_func_state *state = &func->state;
+>  		struct btf_encoder *other_encoder = NULL;
+>  
+> @@ -1315,11 +1358,11 @@ static int btf_encoder__add_saved_funcs(struct btf_encoder *encoder)
+>  			struct elf_function *other_func;
+>  			struct btf_encoder_func_state *other_state;
+>  			uint8_t optimized, unexpected, inconsistent;
+> +			other_func = find_elf_function(&other_encoder->functions.entries[i], other_encoder);
+>  
+> -			if (other_encoder == encoder)
+> +			if (other_encoder == encoder || !other_func)
+>  				continue;
+>  
+> -			other_func = &other_encoder->functions.entries[i];
+>  			other_state = &other_func->state;
+>  			if (!other_state->initialized)
+>  				continue;
+> @@ -1389,12 +1432,53 @@ static int elf_functions__collect_function(struct elf_functions *functions, GElf
+>  	return 0;
+>  }
+>  
+> -static struct elf_function *btf_encoder__find_function(const struct btf_encoder *encoder,
+> -						       const char *name, size_t prefixlen)
+> +static struct elf_function *btf_encoder__find_function(struct btf_encoder *encoder,
+> +						       const char *name,
+> +						       size_t prefixlen)
+>  {
+>  	struct elf_function key = { .name = name, .prefixlen = prefixlen };
+> +	struct elf_function *func, *head, *tmp;
+> +
+> +	head = bsearch(&key,
+> +		       encoder->functions.entries,
+> +		       encoder->functions.cnt,
+> +		       sizeof(key),
+> +		       functions_cmp);
+> +
+> +	/* If head is NULL, then there was no such function name in Elf */
+> +	if (!head)
+> +		return NULL;
+>  
+> -	return bsearch(&key, encoder->functions.entries, encoder->functions.cnt, sizeof(key), functions_cmp);
+> +	/* If head->encoder is NULL, then calling btf_encoder is the
+> +	 * first one to encounter this function name.  In this case
+> +	 * try to claim the head.
+> +	 */
+> +	tmp = NULL;
+> +	if (atomic_compare_exchange_strong(&head->encoder, &tmp, encoder))
+> +		return head;
+> +
+> +	/* If the head is already claimed (or if current claim attempt
+> +	 * failed), search through the list, and add new elf_function
+> +	 * for this encoder if not found.
+> +	 */
+> +	func = find_elf_function(head, encoder);
+> +	if (!func) {
+> +		func = zalloc(sizeof(*func));
+> +		func->name = head->name;
+> +		func->prefixlen = head->prefixlen;
+> +		/* Whenever btf_encoder allocates a new elf_function, it sets
+> +		 * itself as its encoder. So if the first search through the list
+> +		 * didn't find an elf_function, we can be sure no other
+> +		 * encoder would add it.  Therefore we only have to ensure
+> +		 * that the head->next is updated atomically.
+> +		 */
+> +		func->encoder = encoder;
+> +		do {
+> +			func->next = head->next;
+> +		} while (!atomic_compare_exchange_weak(&head->next, &func->next, func));
+> +	}
+> +
+> +	return func;
+>  }
+>  
+>  static bool btf_name_char_ok(char c, bool first)
+> @@ -2506,18 +2590,9 @@ out_delete:
+>  	return NULL;
+>  }
+>  
+> -void btf_encoder__delete_func(struct elf_function *func)
+> -{
+> -	free(func->alias);
+> -	zfree(&func->state.annots);
+> -	zfree(&func->state.parms);
+> -}
+> -
+>  void btf_encoder__delete(struct btf_encoder *encoder)
+>  {
+> -	int i;
+>  	size_t shndx;
+> -
+>  	if (encoder == NULL)
+>  		return;
+>  
+> @@ -2528,13 +2603,8 @@ void btf_encoder__delete(struct btf_encoder *encoder)
+>  	zfree(&encoder->source_filename);
+>  	btf__free(encoder->btf);
+>  	encoder->btf = NULL;
+> -	elf_symtab__delete(encoder->symtab);
+>  
+> -	for (i = 0; i < encoder->functions.cnt; i++)
+> -		btf_encoder__delete_func(&encoder->functions.entries[i]);
+> -	encoder->functions.cnt = 0;
+> -	free(encoder->functions.entries);
+> -	encoder->functions.entries = NULL;
+> +	__elf_functions__delete(&encoder->functions);
+>  
+>  	free(encoder);
+>  }
 
