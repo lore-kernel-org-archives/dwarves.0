@@ -1,94 +1,76 @@
-Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A911E13AD26
-	for <dwarves@vger.kernel.org>; Tue, 22 Oct 2024 18:21:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C55E17C98
+	for <dwarves@vger.kernel.org>; Tue, 22 Oct 2024 18:39:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729621285; cv=none; b=CYjKGlUu3Y5sfDTFIMoleY5TaD+RrDsOa/upwqEJRE6ij4HXmXsiQuRCprxuOfkibrd/dUIuPXgJnawixFdvTGCU/mZxfdu1/eYy1AHAi20ERmh+ddHAWX+uBpx269/tkV3+v3ng+OubdBy1MVghZuxs3OkrE84D1dqsrbDJhLI=
+	t=1729622377; cv=none; b=Ysabdlp1zCSdyJOLEpKSG73sDBkTAff668pLCQOHFiIoiiVGm7h3DPkYoLO7ei9vAaQqQkywdny6KvtPIWuPcp/FQe9KzO3l3pb9LtPDATQWW+nPWHEK9kDm/D5VgnhXv9x3UHpYTnKwNrElzdfr9vXuppjBTM0sXhqqm/XtCFs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729621285; c=relaxed/simple;
-	bh=OSdmfSHULjFACsen7xgKTWv6R0Oqjj9AISMFcfxuvWk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=eu6eocP5gYWN1rZ2rTPtMpwfp5YaXHeVYSwFlVXOfY3s0cOctSm+30tuUi+bKJJFqIrzZ3hzsRs/Q+xcg3SlZcFBF7wzZjxAZHvV3CvxSY3P8Hd0bo4a8ZuVzy7C39p0rbFC3CVirsUFGftBntLeefUVBFSaoUtLniXvO5sCWxo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lMfFkAz/; arc=none smtp.client-ip=209.85.216.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1729622377; c=relaxed/simple;
+	bh=HbTHhHcdS9O9pupgDELzIMvG0adsZ/Fo6A6fKYTBOlw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=I/ZU/c+tx3Y6sxyfWPOysBOdDFBpPBdvDp09vLX9z8ZZ50SYqB4YbUarDIBPweR2y7gjjcGKRtJOYiOWh/4s+GYsEqhbjx6sGpe3u6mJeffqew9EC4P8OuoiooSh4ceSyFC9FeASy1aQLjYRDj5+Xh2g6rPH/jkgSKhSRVE2Vcg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=T8XQE+a1; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lMfFkAz/"
-Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-2e56750bb13so575626a91.2
-        for <dwarves@vger.kernel.org>; Tue, 22 Oct 2024 11:21:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1729621283; x=1730226083; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OSdmfSHULjFACsen7xgKTWv6R0Oqjj9AISMFcfxuvWk=;
-        b=lMfFkAz/CuRGLBKBSCy+1cgIt+c5oF3BJq9MKA4glbd1kUbf8zyV7IFQDagO2cjmTg
-         uekzivm4KAUC5KTLyUMHzZbxMiruKAvd/xU+kw52DUUQmEl6kog9cvR/WUfzCO+/YzMB
-         sdmTTZkZrsWOMi1APz4AlvFiyR1psGS64RDoKwtdImIy/YO8pnb8BlvAK5cEQ5mOwhfi
-         YZ3TBz67XZZYOdLUGydwqCKKhWc1UeZb//6t2hZ62b8l5ZdpuyCbv0wYTS5qoYIM294l
-         ym7S2427nOf4QEEmIBNRvs0os8Lfu7D8PHKDwDgL2zXOZGB9NqYHOfV3hgW8mYvhudZT
-         ALqw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729621283; x=1730226083;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=OSdmfSHULjFACsen7xgKTWv6R0Oqjj9AISMFcfxuvWk=;
-        b=UpL1QsYt73AYYUU6eAF2TsHbQ4qo6f6jUjAne5SLimphTtcG9sDoNmTaH/ZDaT7DRe
-         jYpMRvI/2PnvRRfBVVqoHWhT75V1r7P+Dq3f5QmhJWVUShnfhIrEVmjLzavrGNrc0sL9
-         zyMz65Ba3EdDBH5UvaYvDrDjWg7MQtYSXVgnLyaUKFB5nDjKO503RxaYin/+bzDauV9V
-         //b3G+0SC29UeT691GSPZAaOXIrYBkyqK2+GAkI7wBMiSAieMqm7I9zKeYHsc0BfZW7Q
-         EzND5CCbiaNrGtOcKF5HKjD9z8DZE+RPn/9zZNARMp7DLL/J6ZZrUpUq9oa0b4S2nGaP
-         Ersw==
-X-Forwarded-Encrypted: i=1; AJvYcCUzhcQT2GjiyLiTsmOoZXDFqhBeh+Ykt5iREuCrRpZ6XXwBUsLTLV0c2+Op546p+mHrMzBmXp9r@vger.kernel.org
-X-Gm-Message-State: AOJu0YwjJZ5Ypqau+6WISp03PTGgOrPgK+xRrpzWi8F5uqYdsyD1FVNN
-	IrcsMBDTc0lI8ZqzRagSmtAZf8D0OPk2mB5UHXsoWv+D7eZQIZK1ZI0A3bA3hG3zGMMvs+tVewE
-	n4t0eaWHVBRZF8HS3z2zl+iV8c5Q=
-X-Google-Smtp-Source: AGHT+IGTP9I/30hrnHXf6FTliwhH82vOp9k07V/qazdxV0xD8c0qCnQ8YAIbaJuY02OBiNH3wtJ8cYM/a5YexWAa9wY=
-X-Received: by 2002:a17:90a:a418:b0:2e2:b20b:59de with SMTP id
- 98e67ed59e1d1-2e5616e8789mr7893446a91.3.1729621282374; Tue, 22 Oct 2024
- 11:21:22 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="T8XQE+a1"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1061C4CEC3;
+	Tue, 22 Oct 2024 18:39:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1729622376;
+	bh=HbTHhHcdS9O9pupgDELzIMvG0adsZ/Fo6A6fKYTBOlw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=T8XQE+a1oLIBnMKm+184JcPT1R+FGC/R9qQuAqXtGh+HmqREBNEnIeaxXIK44kVwS
+	 8uATvbKMKStoGAIrEVzm8NLEU0yMkovYleEsZTu2bcUgz1bpkxrAmLAx11V3AmBB8j
+	 Tbl9dyptGkd8jis6dk3FTMYpda4np3qRTdfnLPqnEw1cnzmSzkYDMAB8Bp7KIJfc+C
+	 uHzry5LGupCRuQqGOU1fI8ub8kTACTnnF8yeoMOQ6rfD1r/96oLRWO7Z1v/UuU2vUI
+	 MVFhX7sRcUMtEZFYCUgQBhuTRfeXxCdWEjul84rfdlY9Uwxr+zDY5Owwo2k/MY54MN
+	 g+ddc6/aV6srw==
+Date: Tue, 22 Oct 2024 15:39:31 -0300
+From: Arnaldo Carvalho de Melo <acme@kernel.org>
+To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc: Alan Maguire <alan.maguire@oracle.com>, ojeda@kernel.org,
+	andrii.nakryiko@gmail.com, jolsa@kernel.org,
+	dwarves@vger.kernel.org, stephen.s.brennan@oracle.com
+Subject: Re: [PATCH dwarves] btf_encoder: filter var names before btf name
+ check
+Message-ID: <ZxfxY44iOJCcuNhU@x1>
+References: <20241018094301.1550149-1-alan.maguire@oracle.com>
+ <CANiq72kMif-BzsNwmh8WpDgc_KohxkHZA2=+F6RjEKV+j8TnmQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241018094301.1550149-1-alan.maguire@oracle.com>
-In-Reply-To: <20241018094301.1550149-1-alan.maguire@oracle.com>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Tue, 22 Oct 2024 20:21:09 +0200
-Message-ID: <CANiq72kMif-BzsNwmh8WpDgc_KohxkHZA2=+F6RjEKV+j8TnmQ@mail.gmail.com>
-Subject: Re: [PATCH dwarves] btf_encoder: filter var names before btf name check
-To: Alan Maguire <alan.maguire@oracle.com>
-Cc: acme@kernel.org, ojeda@kernel.org, andrii.nakryiko@gmail.com, 
-	jolsa@kernel.org, dwarves@vger.kernel.org, stephen.s.brennan@oracle.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CANiq72kMif-BzsNwmh8WpDgc_KohxkHZA2=+F6RjEKV+j8TnmQ@mail.gmail.com>
 
-On Fri, Oct 18, 2024 at 11:43=E2=80=AFAM Alan Maguire <alan.maguire@oracle.=
-com> wrote:
->
-> ...as this means we avoid seeing multiple messages of the form
->
-> PAHOLE: Warning: Found invalid variable name when encoding btf, ignored (=
-sym: '__UNIQUE_ID___addressable__RNvXsa_NtCs2vSfyxKMEZc_4core4charNtB5_11Es=
-capeDebugNtNtNtNtB7_4iter6traits10exact_size17ExactSizeIterator3len57').
->
-> Such symbols are filtered anyway due to the __UNIQUE_ID prefix, so
-> warning about them is not necessary; simply reordering the checks
-> should ensure we will not see these warnings.
->
-> Reported-by: Arnaldo Carvalho de Melo <acme@kernel.org>
-> Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+On Tue, Oct 22, 2024 at 08:21:09PM +0200, Miguel Ojeda wrote:
+> On Fri, Oct 18, 2024 at 11:43 AM Alan Maguire <alan.maguire@oracle.com> wrote:
+> >
+> > ...as this means we avoid seeing multiple messages of the form
+> >
+> > PAHOLE: Warning: Found invalid variable name when encoding btf, ignored (sym: '__UNIQUE_ID___addressable__RNvXsa_NtCs2vSfyxKMEZc_4core4charNtB5_11EscapeDebugNtNtNtNtB7_4iter6traits10exact_size17ExactSizeIterator3len57').
+> >
+> > Such symbols are filtered anyway due to the __UNIQUE_ID prefix, so
+> > warning about them is not necessary; simply reordering the checks
+> > should ensure we will not see these warnings.
+> >
+> > Reported-by: Arnaldo Carvalho de Melo <acme@kernel.org>
+> > Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+> 
+> FWIW, I applied the patch and the `__UNIQUE_ID` warnings indeed go
+> away (but I don't know if those warnings would be useful to see/fix
+> for other reasons):
 
-FWIW, I applied the patch and the `__UNIQUE_ID` warnings indeed go
-away (but I don't know if those warnings would be useful to see/fix
-for other reasons):
+Maybe we should have a debug mode where anything that is skipped gets
+reported.
+ 
+> Tested-by: Miguel Ojeda <ojeda@kernel.org>
 
-Tested-by: Miguel Ojeda <ojeda@kernel.org>
+Thanks, since this hasn't hit 'master' yet, I added it to the cset,
 
-Cheers,
-Miguel
+- Arnaldo
