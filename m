@@ -1,187 +1,87 @@
-Received: from mail-4322.protonmail.ch (mail-4322.protonmail.ch [185.70.43.22])
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3943F8BFF
-	for <dwarves@vger.kernel.org>; Thu, 31 Oct 2024 00:14:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.43.22
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C52A41A726B
+	for <dwarves@vger.kernel.org>; Fri,  1 Nov 2024 14:33:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730333662; cv=none; b=Ck805WkG+x4qamreMknlrvpyLykWRsm2baIrwYGobpOzQIF4NAS2lLl4VKH+TBNOW7jYwTIKysc9NU3U6Tq3P+m7eHaUIpwIwxyZPugBeQY0eQPC3Bltl5ZGL2G3hX6hZaye5pmvBic/pxTghUUxpJR+x4WsbyO+7yX2XSCzoFE=
+	t=1730471632; cv=none; b=BxU2napquGu4LLOtMVE9NMKlUjzuqRSIlQHukZgtIuFbuMdnYqC/0WWYzVoGiiteJ1EWWvFZCWHt1r4WLTUEKXHI/R1OKYqssfbjqUpCqd3JgO5rdDoqWfSCJf03bt/TPe3lbURSl/vXjgGZrTrcLyoH43dzi0t51/9CuRn41JU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730333662; c=relaxed/simple;
-	bh=2G+/PxOqRUJhkzRglx+7lZUrBiGIfLkla1m59yTm5B0=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=aYQMvAQdLQJoBJcQFjg8wSNtShNa31Zv0klD+veVWkAu+wB0lXoKWRefcrrD5LWj/qL4vJJyZotBiuEW6yy0ji7qXDoBkuD8gAcRei8udVHdQE0nKJ+AW1SnZTdYHUO6xNTNsmWKtfOZHOapbF7JwjXg1HA/Ht3z2CXjPU6hzbs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me; spf=pass smtp.mailfrom=pm.me; dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b=e+uxxr2I; arc=none smtp.client-ip=185.70.43.22
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pm.me
+	s=arc-20240116; t=1730471632; c=relaxed/simple;
+	bh=kdicMl9bqit4NtaPcvzQH+DWvkxHYutlusIgqWUymZw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=DPF6b6ExrEklkPUjXSf/84jkvtlKEG43b45x/ZrcZShBnUWNLR33W6YJg80EtGSzFM8NlNrYOAbU7fqSSvE1ykAQLq0b4zNsh2QMB9lGHT+sr9IREOv7zkWo1GRnT9J4nLKriZjg7EGcnt6KTfvKQ9zceCpiwZ/z2M56P+TkcXU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=lsR5ckxV; arc=none smtp.client-ip=205.220.177.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b="e+uxxr2I"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me;
-	s=protonmail3; t=1730333652; x=1730592852;
-	bh=32ouCa2ux9150oTEUUeG8ZNMNSnhmi7Jg3GQZLYpgqs=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-	 Message-ID:BIMI-Selector;
-	b=e+uxxr2IqyhXESbCMlrHrd3soLmP2jpYNY7LHJskn772jiT+hZF4mlMQLmalWOVWM
-	 UFH0VzA5mkfSNZtXbMphWbkFo8fLvK6VJyiBURSPFwXLZtH1hQopAsWIgRAj5MAK1M
-	 SjPT5M+VzBNKp4NI4O/BBYe6pIgoR1mA5h1xBWM/OD+MHqZRi7Hjdyk7P9sRNBpoBU
-	 9SgExR+S6nc3S5dCbGSqfqoUY3Oe+iV9ZoikeYzT9tr/J07bTDmWWVmBsw4Pd9Avfp
-	 iXLC7kmNaDzoFlcseyNkI5cSaI0h14W6oX4ZW9BEOeZUYIhXgJ25M+zbhAo9H6bA5C
-	 vajER+ffK5UbQ==
-Date: Thu, 31 Oct 2024 00:14:09 +0000
-To: Alan Maguire <alan.maguire@oracle.com>
-From: Ihor Solodrai <ihor.solodrai@pm.me>
-Cc: dwarves@vger.kernel.org, bpf <bpf@vger.kernel.org>, acme@kernel.org, andrii@kernel.org, eddyz87@gmail.com
-Subject: Re: [PATCH v3 dwarves 4/5] btf_encoder: store a list of elf_function per function name
-Message-ID: <qZHen28Acr_pzq0oImrTEVB6xsUgeVkqBmQ43dpfluDRfqWYRfCQp9jTj1KCLtXqwXSQmSFObW4HNqKkWaPCsz2HeUKzzkfMtZ8MQJUkfgo=@pm.me>
-In-Reply-To: <8678ce40-3ce2-4ece-985b-a40427386d57@oracle.com>
-References: <20241016001025.857970-1-ihor.solodrai@pm.me> <20241016001025.857970-5-ihor.solodrai@pm.me> <8678ce40-3ce2-4ece-985b-a40427386d57@oracle.com>
-Feedback-ID: 27520582:user:proton
-X-Pm-Message-ID: 25fef072b000f043ef805adcc60754767713e252
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="lsR5ckxV"
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4A1DfeGv009306;
+	Fri, 1 Nov 2024 14:33:46 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
+	:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=corp-2023-11-20; bh=iAiBaE12+ej6yNWZqy+sFa930t07l
+	yiaPNVl4v8pMmI=; b=lsR5ckxVm2fibK4J53ZqwwEqw2HH7RpBSMM++85JvyIPM
+	JzcXZMQ+Gm69MaQpC++uWzpm7hqIOs93iPUeTNr5/83fS0Mxi3W26i0X9nfTnogL
+	ukjFDVTW9AGUTS3ntBXtLr8hCO+TMcr16HFy3jyxpSchCPTYocfvjxhvVYmHL3v8
+	Hz4nxgCOFyZ/9sZRItPDalVtaRhLH2uLAMTLZss4cHm7x/LceEinaW3biP3mTJJ1
+	/mwSuSPH1B2VtZ45wJBVaA7jAQ3JAmB0eeGcnmsFjIMIiKsRWD6STg2XC2Y46gRU
+	YlsH3Yhs77JQSFygMjGzRXWx8ZUPRxYAXCVkQ8+/Q==
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 42grdpccny-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 01 Nov 2024 14:33:45 +0000 (GMT)
+Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 4A1Dof7q012103;
+	Fri, 1 Nov 2024 14:33:45 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 42hnagm4s5-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 01 Nov 2024 14:33:45 +0000
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 4A1EXiKc038983;
+	Fri, 1 Nov 2024 14:33:44 GMT
+Received: from bpf.uk.oracle.com (dhcp-10-175-164-140.vpn.oracle.com [10.175.164.140])
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 42hnagm4r1-1;
+	Fri, 01 Nov 2024 14:33:44 +0000
+From: Alan Maguire <alan.maguire@oracle.com>
+To: acme@kernel.org
+Cc: dwarves@vger.kernel.org, Alan Maguire <alan.maguire@oracle.com>
+Subject: [PATCH dwarves] pahole: Sync with released libbpf-1.5
+Date: Fri,  1 Nov 2024 14:33:43 +0000
+Message-ID: <20241101143343.1131182-1-alan.maguire@oracle.com>
+X-Mailer: git-send-email 2.43.5
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
+ definitions=2024-11-01_09,2024-11-01_01,2024-09-30_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 malwarescore=0 spamscore=0
+ bulkscore=0 mlxscore=0 suspectscore=0 mlxlogscore=870 phishscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2409260000
+ definitions=main-2411010105
+X-Proofpoint-ORIG-GUID: igBDyURsq-t30Gm9CbbyOooRdfzm05nc
+X-Proofpoint-GUID: igBDyURsq-t30Gm9CbbyOooRdfzm05nc
 
-On Monday, October 21st, 2024 at 10:51 AM, Alan Maguire <alan.maguire@oracl=
-e.com> wrote:
+Now that libbpf v1.5 is official, use that commit for syncing.
 
-> hi Ihor
->=20
-> On 16/10/2024 01:10, Ihor Solodrai wrote:
->=20
-> > btf_encoder__save_func() accumulates observations of DWARF functions,
-> > maintaining an elf_function per function name.
->=20
->=20
-> I've been struggling with the latter few patches in this series, and I
-> think that's in part due to the fact that you have to deal with some
-> (what I think are) unnecessary complications in the existing code.
->=20
-> It should be easier to share ELF representations, but the situation
-> you've inherited is we mix immutable (ELF representation) and mutable
-> (function state information saved) representations, leading to
-> complications that require synchronization across threads.
->=20
-> Stepping back, I think with a few simplifications, we can lay a better
-> foundation for your work, and BTF encoding in general. Specifically if we
->=20
-> - always save and later add functions; currently we only save if we want
-> to avoid inconsistencies, but this means having to maintain two
-> codepaths for function addition which is messy. It is simpler to
-> always save and later see if we want to add functions.
-> - fully separate ELF representation (immutable) from saved function
-> represention (mutable). this will enable ELF sharing, and saved
-> functions state can simply point back at the appropriate ELF function
-> - For each encoder, we just save all function state representations in a
-> simple list; no merging is done at this point
-> - when adding saved functions, we combine lists from all encoders, merge
-> findings on inconsistent representations where required, and add all
-> functions without inconsistent representations.
->=20
-> This will mean no concurrency issues, and we end up with a simpler
-> representation which I think should make ELF sharing much easier. I've
-> got a rough prototype of 3 prerequisite patches doing the above at
-> https://github.com/acmel/dwarves/compare/master...alan-maguire:dwarves:el=
-f-prep
->=20
-> The changes are contained in the last 3 patches there if you want to
-> take a look.
+Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+---
+ lib/bpf | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Hi Alan.
-
-Finally got time to try your changes.  Apologies for delay, was busy
-with other things.
-
-TL;DR Here is my patchset rebased on top of your commits:
-* https://github.com/theihor/dwarves/pull/7
-
-Please take a look, and let's sync on how do we plan to merge it
-in. Your commits seem to have debug code in them, so maybe you'd want
-to submit a clean version first.
-
-
-I must say earlier Eduard pointed out (off-list) the problems that
-you've described, but at the time I thought it would be too many
-changes if I tried to address them.
-
-It is indeed easier to move to a shared ELF functions table if all
-function states are collected before merging them, mostly because the
-need for thread synchronization disappears. I was able to effectively
-delete patch 4/5 of the series.
-
-One thing that bothered me is that now btf_encoder__add_saved_funcs()
-does more work (compared to v3 of the patchset). This is of course due
-to the fact that it is required to collect all function states from
-all encoders and group them by name, while it was done "automatically"
-when states were stored in elf_functions table. It's not good, because
-this step is single-threaded.
-
-However, I did some superficial measurements, and it appears
-btf_encoder__add_saved_funcs() step takes ~2% of the time when
-encoding vmlinux. So it's probably not worth complicating.
-
-Regarding "global variables" fork of our discussion [1], I didn't get
-any feedback from you or Arnaldo in response to suggested diff.
-I included a more thought out version in the branch [2], please take=20
-a look.
-
-
-See below some perf stats: marginal speedup and slower RSS growth
-with increasing number of threads.
-
-WIP v4 branch [2]:
-
-     Performance counter stats for '/home/theihor/dev/dwarves/build/pahole =
--J -j23 --btf_features=3Dencode_force,var,float,enum64,decl_tag,type_tag,op=
-timized_func,consistent_func,decl_tag_kfuncs --btf_encode_detached=3D/dev/n=
-ull --lang_exclude=3Drust /home/theihor/git/kernel.org/bpf-next/kbuild-outp=
-ut/.tmp_vmlinux1' (13 runs):
-
-        83,054,827,477      cycles:u                                       =
-                         ( +-  0.29% )
-
-                3.9829 +- 0.0374 seconds time elapsed  ( +-  0.94% )
-
-    -j2: =09Maximum resident set size (kbytes): 783296
-    -j4: =09Maximum resident set size (kbytes): 866976
-    -j8: =09Maximum resident set size (kbytes): 992740
-    -j16: =09Maximum resident set size (kbytes): 1038788
-    -j32: =09Maximum resident set size (kbytes): 1169284
-    -j64: =09Maximum resident set size (kbytes): 1347232
-
-dwarves/next [3]
-
-     Performance counter stats for '/home/theihor/dev/dwarves/build/pahole =
--J -j23 --btf_features=3Dencode_force,var,float,enum64,decl_tag,type_tag,op=
-timized_func,consistent_func,decl_tag_kfuncs --btf_encode_detached=3D/dev/n=
-ull --lang_exclude=3Drust /home/theihor/git/kernel.org/bpf-next/kbuild-outp=
-ut/.tmp_vmlinux1' (13 runs):
-
-        87,748,403,977      cycles:u                                       =
-                         ( +-  0.23% )
-
-                4.0570 +- 0.0240 seconds time elapsed  ( +-  0.59% )
-
-    checking max rss
-    -j2: =09Maximum resident set size (kbytes): 787256
-    -j4: =09Maximum resident set size (kbytes): 884360
-    -j8: =09Maximum resident set size (kbytes): 1018996
-    -j16: =09Maximum resident set size (kbytes): 1083528
-    -j32: =09Maximum resident set size (kbytes): 1279880
-    -j64: =09Maximum resident set size (kbytes): 1634656
-
-
-[1]: https://lore.kernel.org/dwarves/4G5AFfVer_N_eJCZYc22pQM9rXbHOV2CZ4uOmq=
-h4gFd1K2mgnbIDIZUpynMNCdJ-CEyvsBr0-cPdUzgNnM05NPkPjRdqdAnCAp8DrvUc-Iw=3D@pm=
-.me/
-[2]: https://github.com/theihor/dwarves/pull/7
-[3]: https://github.com/theihor/dwarves/commit/729fd9963df576a04f2ba371b033=
-c5300ebf0a91
-
-> [...]
+diff --git a/lib/bpf b/lib/bpf
+index 686f600..caa17bd 160000
+--- a/lib/bpf
++++ b/lib/bpf
+@@ -1 +1 @@
+-Subproject commit caa17bdcbfc58e68eaf4d017c058e6577606bf56
++Subproject commit 09b9e83102eb8ab9e540d36b4559c55f3bcdb95d
+-- 
+2.43.5
 
