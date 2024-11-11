@@ -1,328 +1,183 @@
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D52719DF41;
-	Mon, 11 Nov 2024 11:27:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.165.32
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731324438; cv=fail; b=QKwLnJZeINynPcI45TuI97pV3bmLaq/A8XJLmOrdMGzoKA57Hb070Bvs+whMMpmYO7uLt01zQ+JMcpanYzKMnVOc8rhEGWQ3qMXbcZsnAm2GkRd6eFAl1ZHvWxmrA9rKT4x9Tnltp3IqpIxcPxoAztAxx05nb9FppsOecxSouTA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731324438; c=relaxed/simple;
-	bh=zStiHk5o8pa0I3VObXXQDfFdf0LFBIeQEmWro0SxGJg=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=amcphArzrG9b3ZCgRZNNwNgKcc1rhch6fybf4n17uXWGwgZI8FU69ETuOlaBT2LQTtuQJy2CEKUeaJIHysgod6JimMOYxOv/wPBOsSW8jeAoXBqfX/68S6ghP5fQzvbWpkVBo+pQNs2o/Xrcao6pjAREHmY6KXNiDRRpMx/8z/c=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=A+qNsDhs; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=ncceRYtS; arc=fail smtp.client-ip=205.220.165.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D73A19C56C;
+	Mon, 11 Nov 2024 12:36:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1731328619; cv=none; b=R1SKqWvrB9ipzwpj9/tp3nEmxqOtIuL0AjukGGAfZ1NwDNzgqHPHNraFFjhqkUA7lYCFNLvFp6qoahNuLva9QayrY9HrTZajtI5IQ4vDak3zIiCRpTF/iojNb2Q4Cx/jzoxIdZvBJBYLkPxi9s17sbKU8kZYIE/1HKpFQNkRSaY=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1731328619; c=relaxed/simple;
+	bh=1sVMATZ+XHzhI8+EZUQums1C9tIjgrVA6aLaiEGhr3c=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=haa7Q/CKA8XwT+slfYHJKqPrNTCAjIsw2L++RE4FyrLmqCIyzTKESTLId5A9QzWoqh2DHOKNrTDWzykOxfvTbpd1YnuH1ZZn0ro2mzGX6tL4FD3c1CkPja/tSvveRA8Cei8rMDQ9SxkxiW2d0kvPFbJIyKNZJhhGl696S/1mygc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jBzsDgmM; arc=none smtp.client-ip=209.85.218.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="A+qNsDhs";
-	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="ncceRYtS"
-Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4AB9sqcX017741;
-	Mon, 11 Nov 2024 11:26:51 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=
-	corp-2023-11-20; bh=HcgUosWe4n974lsaMNIQ4kiyo5v8WJ9WHv4xifuOtEw=; b=
-	A+qNsDhshS5d1vtf1kEXj0WqGIDV8DdukFolNE1PJ5ftXH8o0CVuFgGMV1pG+yae
-	AQbF5VSkM7QOGlSzKU37GKAbYqZROw5xTJ3LgZK1Eiy6MyFB8Plscinh4rRUmY78
-	DQq2M2AcM7Y+cwyFBRrFj0bWHASTWglKZ2muKLPYRkOZ6fNXiIpLc6OuRkFPkzKn
-	aBgMdc26+S6DacUyiZV+qRbKKiXaK96nN6+AC/h7OZeCeZ5PDZE6Pb7ndm4UaLR7
-	5kf4q0f9BWlEbmxTrT7Fo+yDwWBboC4MVDUtjMHigwzAYpeHV5FcSI7d8hwZOssY
-	6ewD+IwoCvvnG3amXRBz8w==
-Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 42t0n4t7nu-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 11 Nov 2024 11:26:51 +0000 (GMT)
-Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 4ABAO7hc025515;
-	Mon, 11 Nov 2024 11:26:49 GMT
-Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2043.outbound.protection.outlook.com [104.47.58.43])
-	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 42sx66tpum-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 11 Nov 2024 11:26:49 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=UrtZWHoFm/V6M+mGDW7wu9UGwnyvi2QSv7Xx65ssRjLmjtKHQ7zBMHv7WcmBddhD+BLyl8rabQjZP94wuEJ5D7eq421MLxf5f/qxtBuK3qQ18Vc3L3zuux8XzDe2oM6s2mfCsNDgwAN7vX+//Mk8VafSc4Fp5w3D5LWUYD963nAvIDwJ9w3DQu8ERycUDZVWOIEVqvBch0ZRoWwFksMQXKX4xbnjC89EnzAbmJbq/q+SHKwE/qwjwHWq2zh+qsjxbc2FGpt+hjyEO5TPK59BBXD/BTIzQLY7t+w8Q9qTfwQ4Z6mZZsW+xCq+7JV1jH9obcF984TDA9g6u42pDULG/w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=HcgUosWe4n974lsaMNIQ4kiyo5v8WJ9WHv4xifuOtEw=;
- b=Zuqx8H8XUuncqhfsWMSKlPBlnzNKFZxRVtzU/9zF+ZalL78br4E6dwejeUHix9+54Kr9+VEppzUAaGtmTxVyxaY0170cEzRMQfJILUF7xopFCEO86TXVpW8f8hcmr6+XY8LHFv/IAJL2tflQO7/tZE8ABsmdVYn3ARa7JsyKkZxcxpGo8uNYuWgt7Qo9z8slgLW3IuE7qwqNC2rSPfNN/EdZRxRlmKl4wN6pebmHxdtuunxCUJgrM8ZnGCAul7J9n7zTnaqBpbhXM3FarwU9l/CWXGR4mKR2Gm+dMzdiBPQ/JgBRGWUwjWGVU4CzHc3ssVWU03phZNdFjTThGvka5A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jBzsDgmM"
+Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-a9ec86a67feso783016466b.1;
+        Mon, 11 Nov 2024 04:36:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=HcgUosWe4n974lsaMNIQ4kiyo5v8WJ9WHv4xifuOtEw=;
- b=ncceRYtSSW2JZ/GJcdLXFm9ZXoHhfm3Ay2omqyZO6/OE6UOnt299Ml+/JoGj79kSwSDV2obpTEh2efWn1UhSebcAbLe5VcbbfFWLNihXcp+sHJW/2tRgwdR/uh4ERNjc7eCK4mR188GwI6JzIdzRHEh1IBFlxYtOdcqex/vREyo=
-Received: from BLAPR10MB5267.namprd10.prod.outlook.com (2603:10b6:208:30e::22)
- by DS7PR10MB5104.namprd10.prod.outlook.com (2603:10b6:5:3a1::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8137.28; Mon, 11 Nov
- 2024 11:26:47 +0000
-Received: from BLAPR10MB5267.namprd10.prod.outlook.com
- ([fe80::682b:c879:9f97:a34f]) by BLAPR10MB5267.namprd10.prod.outlook.com
- ([fe80::682b:c879:9f97:a34f%3]) with mapi id 15.20.8137.027; Mon, 11 Nov 2024
- 11:26:47 +0000
-Message-ID: <196c771e-8a73-4acc-8190-1f646a696554@oracle.com>
-Date: Mon, 11 Nov 2024 11:26:40 +0000
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH dwarves 1/3] dwarf_loader: Refactor function
- parameter__new()
-To: Yonghong Song <yonghong.song@linux.dev>,
-        Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
-        dwarves@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
-        bpf@vger.kernel.org, Daniel Borkmann <daniel@iogearbox.net>,
-        kernel-team@fb.com
+        d=gmail.com; s=20230601; t=1731328615; x=1731933415; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=b46JJpzk9fLxJAjQq3bc85OciVgWHq7oFJZ0M84pMjA=;
+        b=jBzsDgmM0wzl3gneBd8xvVlb1S4LrD6l83pTbRvKODMxYyBmtYe+YN1FmCZW+WIUrJ
+         F3pCs4OaRCOjWBgQNWRlvH7RaXC9hcRTXfr14TLKvZImiBivkm24OAMt+82jrWrYZN9w
+         WLevF6Ysja8PHa/HVoQWkTg3ZFnlyaVGq+znXaYSkRvLxTPQjPq8eu52B4gEiQh2TQmi
+         KDqnvZZru6FA27+4V5YNYpFFG2cD8Ac+BmWL+DD5/5Si/lL6cVll3u/Y0wRVz7+bcXDJ
+         UWSG0ZZ7fZvAQtjSm7j1WQxrj1CcbfRJSxSLgHC9ABfWR5cbROKEMXMU/8o6eWLfkxdZ
+         xRHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1731328615; x=1731933415;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=b46JJpzk9fLxJAjQq3bc85OciVgWHq7oFJZ0M84pMjA=;
+        b=k16Z/+N0I9RtnViCH3Q1tKWJd1aPGo5pvqTqPGCe1BX4NxBebV6W90p3K068Ionb5x
+         LkRSDmudkH/VQ6Wgla7dpjD9e9i2l/U65KO8Uc51zxL7Ghiop5p3mwlmSz42KcIHdlAE
+         0TkScO8Er7Cc6059eGZDtaFwTPBRuCksvCxAKMNytE67vTgmOf0scZluF38LHys1tA9y
+         5lc67/a86g2gbC2qVRooztYHLEXrPYW7UWtT2etLFi0olQH6Z749KQxDX2a6SFwsYE83
+         KXSkEcoXN10v/2Dq+VNnNquIC4VWvqji3lp31lUg5Sw78iOszEclzshooOPDtxMawxZ5
+         oTIg==
+X-Forwarded-Encrypted: i=1; AJvYcCUiTU906HuO9OCBD3he/7D5H1h77J3BUiKJfRdxtMPxgefdvqTgYh2zMS9T/DfimNDzmVs=@vger.kernel.org, AJvYcCXOADK2s013CimRXSXYdBJdZ6R8sfJXR2wUXarKUX28OQetIKvPxd6eZPbIR8C8IPUaeXNWpwk/DA==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyz+j5lqhT+n3AxPCIsZtKupS3mTojdb2utBHF5Wikrazwedyg5
+	rc8Gz1nJtzteWU8qZlMbXBxbzwZDiA3qgUD/EnIdmFFR4FARjbz8HxtlIw==
+X-Google-Smtp-Source: AGHT+IFN4KR2uGUxhjK3BkyRsSM96rm6k/XIq4eBm1aBDVfcFjn4dis0roSa7C79TC/eOTb4DISHiw==
+X-Received: by 2002:a17:907:6ea4:b0:a9a:515:1904 with SMTP id a640c23a62f3a-a9eeff0dc1bmr1281832066b.15.1731328615221;
+        Mon, 11 Nov 2024 04:36:55 -0800 (PST)
+Received: from krava (2001-1ae9-1c2-4c00-726e-c10f-8833-ff22.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:726e:c10f:8833:ff22])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a9ee0a17624sm594371666b.24.2024.11.11.04.36.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Nov 2024 04:36:54 -0800 (PST)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Mon, 11 Nov 2024 13:36:52 +0100
+To: Eduard Zingerman <eddyz87@gmail.com>
+Cc: Yonghong Song <yonghong.song@linux.dev>,
+	Alan Maguire <alan.maguire@oracle.com>,
+	Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
+	dwarves@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
+	Daniel Borkmann <daniel@iogearbox.net>, kernel-team@fb.com,
+	Song Liu <song@kernel.org>
+Subject: Re: [PATCH dwarves 3/3] dwarf_loader: Check DW_OP_[GNU_]entry_value
+ for possible parameter matching
+Message-ID: <ZzH6ZDucO2nm9Y52@krava>
 References: <20241108180508.1196431-1-yonghong.song@linux.dev>
- <20241108180513.1197600-1-yonghong.song@linux.dev>
-Content-Language: en-GB
-From: Alan Maguire <alan.maguire@oracle.com>
-In-Reply-To: <20241108180513.1197600-1-yonghong.song@linux.dev>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: LO4P265CA0185.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:311::14) To BLAPR10MB5267.namprd10.prod.outlook.com
- (2603:10b6:208:30e::22)
+ <20241108180524.1198900-1-yonghong.song@linux.dev>
+ <31dea31e6f75916fdc078d433263daa6bb0bffdc.camel@gmail.com>
+ <080794545d8eb3df3d6eba90ac621111ab7171f5.camel@gmail.com>
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BLAPR10MB5267:EE_|DS7PR10MB5104:EE_
-X-MS-Office365-Filtering-Correlation-Id: 892e9ff5-f620-4c57-9f91-08dd0243ba70
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|1800799024|10070799003|366016;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?R0x5TkxWWnZYeERXVStGS3FVSCszUHYxTWNzZ0FJbndVTGVWZ0RSZWRiWFFG?=
- =?utf-8?B?d3VpcWoxSnBDclFLMmhIUGowd3JOUTNnbW1CYVc2ZGFvb004U0lMV2x4UkNK?=
- =?utf-8?B?QmhGMlduMDJYRE1LNnNJanZpT084Wll4UE1HVXpIYlR1VjhrenRzRGJKU24x?=
- =?utf-8?B?dHpIU1hiU0Q1azZRVEdmWWtmV1pCY2NUMnMrdmYrWjN2TEgyK0RrY2pHYXoz?=
- =?utf-8?B?RU90RlBKQW5NSDdreGJtRDZXQnZpbUZnV1pxQTV2SVBIUXFBNGxJUjJ1Qy9Y?=
- =?utf-8?B?VWRkeU9mNXk4M3ZURFc0Vm9VYmRTT3g1bU5RUlR6V2Y2bjNPbVhMMldEbmlV?=
- =?utf-8?B?REU3UXJvdTRFTlpTektyZXI2QTlMdjF2L1lNUXVwOWdNQmtvMzEwYk1vOCtQ?=
- =?utf-8?B?a2tVTmV0OEw4UDk4Y1Q5M3BnN2Jicm1KRXhheThIQnRiLzVVL3ZWNTFtb3Ns?=
- =?utf-8?B?Q2JWa0cyYkFHQ1p2aisvaFdEL1lpTWdVak9BYmRqM3lFOUZEMTJsVjY1Kzdk?=
- =?utf-8?B?dUJXb2NybTVoQ1VOekdPSHg0ODFHYWd2Mk9HKzZpYkFWTVY1REo5TE1LVys2?=
- =?utf-8?B?a0tlSlBVVXdKL0QycVB1TjROL0tlTTdieVZVU1diQU16U1FiczYzcEIvMjV2?=
- =?utf-8?B?eFVvT0ltR1JQVEZua05LdExabVkwYTRWMFBDdUMyYWphQU1pWlNpTlY1aGJJ?=
- =?utf-8?B?UFBZZW9qbFl1UFFkN2JKMHVSTEhKTWtVbHdHV0ltemkwblRqRVQ1SFB5VmNh?=
- =?utf-8?B?blROMUxoelcyend0M1gxRUlUTW9TSDFUQncvQXZYeG1tOWdmaTBvb3laYkVH?=
- =?utf-8?B?OGZqT21vOEIwMnU4ZHBLbHh5Zzk3THJvZURvVlNRLzJaQkUvbmtMeVFUOEFI?=
- =?utf-8?B?MzVnbTlvaUxpeDBsb1pYR1VBV20yWStGOThVcXhFcW55N2JtTVhnSDJDRjZI?=
- =?utf-8?B?ckY4eW9Ma09aWHpEcnhPRlBpNDVZbzFFMXNybzd2cS9Pdjgxb0RnM3Nydzkw?=
- =?utf-8?B?RTNrQXkwZDdONHg5dlo0VkFlbHVVTlFQQnFHS0hNM1A0RDdSODBDK0xZa1Bq?=
- =?utf-8?B?Zm9xNDIrYW42b3FFSXNOZktrWDVuYmQzdUNlWXA1cStsT1pMa3FnT2FsNDBl?=
- =?utf-8?B?cmM4eGgrcmFzL3dkbzc1TFRQZnlTUzBCTC82cVdPdTNwc0Ivc1A0SU4zaEIz?=
- =?utf-8?B?cndCdzZlWnYra04vWmdQYlZLb0VpZEtkb09MaGFjWFNGSjZoT08rRitKZmZC?=
- =?utf-8?B?TUlIdlpST1BGUy80a2JYNU93N0NETDZ3bU9zUFRNMTJrNUZ6WTF6b3FnS2cz?=
- =?utf-8?B?ZnJFRG5TMXBPbE83UHB5RjNiVUFhY0N4M0VDbXhvUmtsV3hXeWQyWFZORnZD?=
- =?utf-8?B?TzRrNTRpajlMVXgzejNPZGtQUFVTNWpYV1lXSVBCUlFOdG1qODBkWkRYTWxW?=
- =?utf-8?B?ekxaZFZpcHFpTjBqS2pwU3NRdVdaalV5dnpGSzZsN1FWWDRrODVnZlFMZXV2?=
- =?utf-8?B?eWh6SnZMZGtPNzI3dTZIbWxQNjJndDAvRkE4Nit4Nk5YVXVmcms5ZmpJNFNh?=
- =?utf-8?B?N3NyR3VWakI3aVg1aE8wRUxNQTJKbVowaVhHNHdvU0IwbHhKZlZ2SWtBQ0NO?=
- =?utf-8?B?dDNXRHVRaWFsVjc2ZWNtWXBIbUJKTERnTnA3L2xnMWxzWW12MzdBOTBJeDdO?=
- =?utf-8?B?aWJzR2huZkNMMjFWWEszbms0SW5sQmdzNnljSHVwQUlSZis1OHpBNlppWEZ0?=
- =?utf-8?Q?N95K3OviXaMwTEDOkKjPa9VTU0ahyja2MLKVXXc?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BLAPR10MB5267.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(1800799024)(10070799003)(366016);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?SzIxR0ZNMTFqTGVRc3IyL3pIckt2KzAzWWc3M01ab2svSy9mMDR0V2VqSlRB?=
- =?utf-8?B?NTNUR0x6RDd3RUpkWmEvV291MVRnSnRrZVo0K2k5ZXhIaFF3blliZnV3aklX?=
- =?utf-8?B?RnU0UEl5eGhWbEt2Njd0L3oxTzA1VHUxdVlPbGpub0JUNEYybFVPbDZ1eWhR?=
- =?utf-8?B?MEpEK24wK0pFQktHYS8zZFd6cUlZN0ZTaUpFQWY0V2RqdWdpWU1wZ1dGVFg4?=
- =?utf-8?B?MUN2aFUwcHBmR3JVc0dseDU4d2N6dG5MUVZKV2NJZDdIWnd5Vmt0cEtwSG00?=
- =?utf-8?B?djFWV2p0SS9JUTFqS0U4MUkxc3QrUEY3YUM3MENUZzFsNzQ3R3k4dHpMcWJD?=
- =?utf-8?B?SGhHNUwzQ1NwY0t0bGFyOGRoZ3lmOGVSc3FFL1JyMmo0L1daYzNaajlvRkp1?=
- =?utf-8?B?N3YyS2VFZi9GdEwxTi9icUNHUVFDMGNxUXYwN1NGWW1Nc2tjMzhLRmk2elU0?=
- =?utf-8?B?cldLVGFtNEVydEZ2NW1kTVBVUWE3b3FUZGVFTmdaUkRWN0VaRmxuUDlwQ25X?=
- =?utf-8?B?R1FvTlF6ME5nUGVSWHU2NVEwbzNjcnhhMHJRRXZrWUcrRGdsdXpaNWUzWWRM?=
- =?utf-8?B?Tk14aE5rUmliUHc5ZkVpSWRWWGkxUEJaeHRQa0s5MGIxQWFMUlpFbkgwdGo3?=
- =?utf-8?B?NnRzUlJoOVRUUG5hQmcyZzFZdk5BMGNkVXZ2V2tQbmw1M05uZDA4QTc1aGhT?=
- =?utf-8?B?ZkFWQ1ZBa2JFU2dxMmRUeDhScGhQSWY0elUxVStiNGZ4YmI3VWd5eUFsVWM4?=
- =?utf-8?B?bFl4MnZhazZSbzBleStUVktsM3FadHpVN1BRekRoaGpYV0d4WU5hR28ySnJx?=
- =?utf-8?B?ZWUyZGlTdHZOR2ZpNmdnSVBPN0Z5TjFDQy93OWlaSFoyQi82aHB2dDIvZStr?=
- =?utf-8?B?VmR6RnF2Mytha283NVFjTXBuQ1E1dURjNER4WHNSZCtObkpiVWVnSTE0SSto?=
- =?utf-8?B?Tkh0U1l3VmlzY3QyNWhvc2lxRkNBZGdDSzVHYnZQWUVrTDZUbG8veXJPc29w?=
- =?utf-8?B?V1RESnRsVWprNWI2M2xMcXREaE5nbnJibllKbTR5YXorQlBpbEZJOUtGMUVt?=
- =?utf-8?B?ekNTYzJYdXhTOE9DV1dGa0lKdlloNE1jaTcveEYzMUwrNFlhZmN3YmdVK2Ev?=
- =?utf-8?B?VGs1TEYwRGFxTkp5ODZ3K1A3N3QzQU9kaXFoREJUM2F4dFFHbWZ3M3BYa0k3?=
- =?utf-8?B?UE9GMmFEMTFDS2FjNlRXQXNjVklCbHZjK3pIQ1gyazBFcmczREtKc3ovSW9q?=
- =?utf-8?B?OXkyaGZ1d1hJUU5VVzZ6VkpIQzFTV2VxNmNORUxJL0FnWU9xK1VlQkE5SHlr?=
- =?utf-8?B?amExQW12OXJLVC9IeTVnemxOZEVzOVFUL0R1S2kyNzdtc1RqaDRaalFyZmFx?=
- =?utf-8?B?QW8vVDBDNmpoTGdxbC9hcHhVVzNQb2FSZC9UUzZyUm50eEZUQzVlaklycVpm?=
- =?utf-8?B?b1FCRVh6dXBGZFR2NGRMN3U2cmUyTTVpR09FYUFiMVA5R3BKOElma29pUVVX?=
- =?utf-8?B?eUFXeHJ5dE5LcWVuV0kzQURuaGhiUEEyb1BERkF2Njl6WDhxZlhqeGZmYjlC?=
- =?utf-8?B?aVRzRU8zejdwOXRSSjNBbjloMFVCd2Z6WVRyQklVN2FaQ28yakluZnh0M1E1?=
- =?utf-8?B?VjRERjJrU2M3RG5VMXFaNm83TmgzS295bkdaTy9lZS96TU1URGdBVVZYTEZu?=
- =?utf-8?B?WjArdVhEZTExRUtOQWgyYms1NmFuYXprTXR0dkw1UitKczExUHpBek0rZHdz?=
- =?utf-8?B?N3M1TWcydmZWN0xacnNEOGFzbUdqN1Y1dWdhTUNvWVhjaVlZSFY2TFZNYU9U?=
- =?utf-8?B?MDBkSlhkRGk4WXkvSmpZRFhvTnh0SUVCNzZJNXJ0QUVmS2t6SXFmVjczYWRC?=
- =?utf-8?B?VkxkUENydTFuaVBoMkJSZ1FlRVdsZHRnRXpObG9WVWw1M0JTVjE5dWlHd01s?=
- =?utf-8?B?MzlOY1JtWnVVVzdSN2NKamUvajNHN3E2QUFla2lqU1RhUGJVdFR5dXhKaFZz?=
- =?utf-8?B?cXVHbENZVEd4aEZsdlE3WmlSUmI0OU1RQXM4dnZyWk1TVkxDUUcxUU1ZZ2NW?=
- =?utf-8?B?M29wM3ZBMlFsOVNKYU4xWFhnR3puVU41NU1kQ2JWL2VFWXVQM24rNVhHcFRz?=
- =?utf-8?B?V3Y1RDNOd1JVOTZtendGSXZqU2tvbzdXUm9kTnR0NmFJUlp5NzY2b2JRYlZQ?=
- =?utf-8?Q?wvEUrWJ8W8tA0hOV5U7U23E=3D?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
-	UhFF2/wjmoJjnlIvQoq7U5snJOcH4ejFsCwt/gul3H81h1YUOfxzrGcTw4ob0BbxRzNY12Lf6HpaI00AG11tayvR/odBr2+RhWmDeFvmC7cDs82YgN4P7kkxquT2f4TQKgmEniGRoDo3B1ZOXViE12zyZZ96wrDn+xEo/MMqs6lph4j/YnCh6EANEZyVhSd8X9Mr3ooIq1busRkVqdrOzZRchBd4IKaXdmis7XOooPOME7aZ/QVStpUkwEXzvQmSuZ5oUvMxUXHU02UDRh6at0JuMR5aHvYg035HoMry3lte2CQhLk5aSg91mppkH2pRJ7YtYj39lgSuAsaCwonDBNeR8tTDOklrUoy3W8FQVBXnZJgD/+YM/ln600pcXN/Beo1J+rTbqo4YZcBgsC6oejZ6mvwZZq8BBr5ZonTGEIjn/TH/qWelLleCB8lLfe52fxzujkABwxmsxtz1YsDdIge4r++ueNsPsNaiKDQ7YIFbPD1xWG08TzP5qud4KttcqI/vm0/6vfypCeb6nv80g7nZnOI4OGldikBpXYIsYmEiR139rN96/z0HQqrRV7/6KJMMVUKL0xzCDP9Su8Jm4ct7zAtiygsjU36Q7kL29PA=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 892e9ff5-f620-4c57-9f91-08dd0243ba70
-X-MS-Exchange-CrossTenant-AuthSource: BLAPR10MB5267.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Nov 2024 11:26:47.2601
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: etP3OqJpHxWZ6OegCKqltf2/1ezI+5TuZD8voSWIzaqPCxYfqcyNImNX9NnLGOTvcLoNdVIFbQYQ7Qwy3RjQKQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR10MB5104
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.62.30
- definitions=2024-11-11_08,2024-11-08_01,2024-09-30_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- spamscore=0 adultscore=0 mlxlogscore=999 mlxscore=0 bulkscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2409260000 definitions=main-2411110096
-X-Proofpoint-ORIG-GUID: czgmCQoJkYQRXKrNU_ULlHFKcMjUyRGG
-X-Proofpoint-GUID: czgmCQoJkYQRXKrNU_ULlHFKcMjUyRGG
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <080794545d8eb3df3d6eba90ac621111ab7171f5.camel@gmail.com>
 
-On 08/11/2024 18:05, Yonghong Song wrote:
-> The dwarf location checking part of function parameter__new() is refactored
-> to another function. The current dwarf location checking only for
-> the first expression of the first location. One later patch may traverse
-> all expressions of all locations, so refactoring makes later change easier.
+On Mon, Nov 11, 2024 at 12:01:13AM -0800, Eduard Zingerman wrote:
+> On Sun, 2024-11-10 at 03:38 -0800, Eduard Zingerman wrote:
 > 
-> No functional change.
+> [...]
 > 
-> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
-> ---
->  dwarf_loader.c | 77 ++++++++++++++++++++++++++++----------------------
->  1 file changed, 44 insertions(+), 33 deletions(-)
+> > Also, it appears there is some bug either in pahole or in libdw's
+> > implementation of dwarf_getlocation(). When I try both your patch-set
+> > and my variant there is a segfault once in a while:
+> > 
+> >   $ for i in $(seq 1 100); \
+> >     do echo "---> $i"; \
+> >        pahole -j --skip_encoding_btf_inconsistent_proto -J --btf_encode_detached=/dev/null vmlinux ; \
+> >     done
+> >   ---> 1
+> >   ...
+> >   ---> 71
+> >   Segmentation fault (core dumped)
+> >   ...
+> > 
+> > The segfault happens only when -j (multiple threads) is passed.
+> > If pahole is built with sanitizers
+> > (passing -DCMAKE_C_FLAGS="-fsanitize=undefined,address")
+> > the stack trace looks as follows:
 > 
-> diff --git a/dwarf_loader.c b/dwarf_loader.c
-> index ec8641b..4bb9096 100644
-> --- a/dwarf_loader.c
-> +++ b/dwarf_loader.c
-> @@ -1157,16 +1157,56 @@ static struct template_parameter_pack *template_parameter_pack__new(Dwarf_Die *d
->  	return pack;
->  }
->  
-> +static bool check_dwarf_locations(Dwarf_Attribute *attr, struct parameter *parm,
-> +				  struct cu *cu, int param_idx)
+> Did some additional research for these SEGFAULTs.
+> Looks like all we are in trouble.
+> 
+> # TLDR
+> 
+> libdw is not supposed to be used in a concurrent context.
+> libdw is a part of elfutils package, the configuration flag
+> making API thread-safe is documented as experimental:
+>   --enable-thread-safety  enable thread safety of libraries EXPERIMENTAL
+> At-least Fedora 40 does not ship elfutils built with this flag set.
+> This colours all current parallel DWARF decoding questionable.
+> 
+> # Why segfault happens
+> 
+> Any references to elfutils source code are for commit [1].
+> The dwarf_getlocation() is one of a few libdw APIs that uses memory
+> allocation internally. The function dwarf_getlocation.c:__libdw_intern_expression
+> iterates over expression encodings in DWARF and allocates
+> a set of objects of type `struct loclist` and `Dwarf_Op`.
+> Pointers to allocated objects are put to a binary tree for caching,
+> see dwarf_getlocation.c:660, the call to eu_tsearch() function.
+> The eu_tsearch() is a wrapper around libc tsearch() function.
+> This wrapper provides locking for the tree,
+> but only if --enable-thread-safety was set during elfutils configuration.
+> The SEGFAULT happens inside tsearch() call because binary tree is malformed, e.g.:
+> 
+>   Thread 8 "pahole" received signal SIGSEGV, Segmentation fault.
+>   [Switching to Thread 0x7fffd9c006c0 (LWP 2630074)]
+>   0x00007ffff7c5d200 in maybe_split_for_insert (...) at tsearch.c:228
+>   228	      if (parentp != NULL && RED(DEREFNODEPTR(parentp)))
+>   (gdb) bt
+>   #0  0x00007ffff7c5d200 in maybe_split_for_insert (...) at tsearch.c:228
+>   #1  0x00007ffff7c5d466 in __GI___tsearch (...) at tsearch.c:358
+>   #2  __GI___tsearch (...) at tsearch.c:290
+>   #3  0x000000000048f096 in __interceptor_tsearch ()
+>   #4  0x00007ffff7f5c482 in __libdw_intern_expression (...) at dwarf_getlocation.c:660
+>   #5  0x00007ffff7f5cf51 in getlocation (...) at dwarf_getlocation.c:678
+>   #6  getlocation (...) at dwarf_getlocation.c:667
+>   #7  dwarf_getlocation (..._ at dwarf_getlocation.c:708
+>   #8  0x00000000005a2ee5 in parameter.new ()
+>   #9  0x00000000005a0122 in die.process_function ()
+>   #10 0x0000000000597efd in __die__process_tag ()
+>   #11 0x0000000000595ad9 in die.process_unit ()
+>   #12 0x0000000000595436 in die.process ()
+>   #13 0x00000000005b0187 in dwarf_cus.process_cu ()
+>   #14 0x00000000005afa38 in dwarf_cus.process_cu_thread ()
+>   #15 0x00000000004c7b8d in asan_thread_start(void*) ()
+>   #16 0x00007ffff7bda6d7 in start_thread (arg=<optimized out>) at pthread_create.c:447
+>   #17 0x00007ffff7c5e60c in clone3 () at ../sysdeps/unix/sysv/linux/x86_64/clone3.S:78
+>   (gdb) p parentp
+>   $1 = (node *) 0x50300079d2a0
+>   (gdb) p *parentp
+>   $2 = (node) 0x0
+> 
+> glibc provides a way to validate binary tree structure.
+> For this misc/tsearch.c has to be changed to define DEBUGGING variable.
+> (I used glibc 2.39 as provided by source rpm for Fedora 40 for experiments).
+> If this is done and custom glibc is used for pahole execution,
+> the following error is reported if '-j' flag is present:
+> 
+>   $ pahole -j --skip_encoding_btf_inconsistent_proto -J --btf_encode_detached=/home/eddy/work/tmp/my-new.btf vmlinux 
+>   Fatal glibc error: tsearch.c:164 (check_tree_recurse): assertion failed: d_sofar == d_total
+>   Fatal glibc error: tsearch.c:164 (check_tree_recurse): assertion failed: d_sofar == d_total
+>   Aborted (core dumped)
+> 
+> Executing pahole using a custom-built libdw,
+> built with --enable-thread-safety resolves the issue.
 
-Nit: I think this should be renamed to something like
-parameter__locations() in keeping with existing naming scheme.
-Could also include the parm->has_loc assignment there instead
-of keeping it in paramter__new().
+could we use libdw__lock around that? but I guess we use it on other
+places as well..
 
+jirka
 
-> +{
-> +	Dwarf_Addr base, start, end;
-> +	struct location loc;
-> +
-> +	/* dwarf_getlocations() handles location lists; here we are
-> +	 * only interested in the first expr.
-> +	 */
-> +	if (parm->has_loc &&
-> +#if _ELFUTILS_PREREQ(0, 157)
-> +	    dwarf_getlocations(attr, 0, &base, &start, &end,
-> +			       &loc.expr, &loc.exprlen) > 0 &&
-> +#else
-> +	    dwarf_getlocation(attr, &loc.expr, &loc.exprlen) == 0 &&
-> +#endif
-> +		loc.exprlen != 0) {
-> +		int expected_reg = cu->register_params[param_idx];
-> +		Dwarf_Op *expr = loc.expr;
-> +
-> +		switch (expr->atom) {
-> +		case DW_OP_reg0 ... DW_OP_reg31:
-> +			/* mark parameters that use an unexpected
-> +			 * register to hold a parameter; these will
-> +			 * be problematic for users of BTF as they
-> +			 * violate expectations about register
-> +			 * contents.
-> +			 */
-> +			if (expected_reg >= 0 && expected_reg != expr->atom)
-> +				parm->unexpected_reg = 1;
-> +			break;
-> +		default:
-> +			parm->optimized = 1;
-> +			break;
-> +		}
-> +
-> +		return true;
-> +	}
-> +
-> +	return false;
-> +}
-> +
->  static struct parameter *parameter__new(Dwarf_Die *die, struct cu *cu,
->  					struct conf_load *conf, int param_idx)
->  {
->  	struct parameter *parm = tag__alloc(cu, sizeof(*parm));
->  
->  	if (parm != NULL) {
-> -		Dwarf_Addr base, start, end;
->  		bool has_const_value;
->  		Dwarf_Attribute attr;
-> -		struct location loc;
->  
->  		tag__init(&parm->tag, cu, die);
->  		parm->name = attr_string(die, DW_AT_name, conf);
-> @@ -1208,38 +1248,9 @@ static struct parameter *parameter__new(Dwarf_Die *die, struct cu *cu,
->  		 */
->  		has_const_value = dwarf_attr(die, DW_AT_const_value, &attr) != NULL;
->  		parm->has_loc = dwarf_attr(die, DW_AT_location, &attr) != NULL;
-> -		/* dwarf_getlocations() handles location lists; here we are
-> -		 * only interested in the first expr.
-> -		 */
-> -		if (parm->has_loc &&
-> -#if _ELFUTILS_PREREQ(0, 157)
-> -		    dwarf_getlocations(&attr, 0, &base, &start, &end,
-> -				       &loc.expr, &loc.exprlen) > 0 &&
-> -#else
-> -		    dwarf_getlocation(&attr, &loc.expr, &loc.exprlen) == 0 &&
-> -#endif
-> -			loc.exprlen != 0) {
-> -			int expected_reg = cu->register_params[param_idx];
-> -			Dwarf_Op *expr = loc.expr;
-> -
-> -			switch (expr->atom) {
-> -			case DW_OP_reg0 ... DW_OP_reg31:
-> -				/* mark parameters that use an unexpected
-> -				 * register to hold a parameter; these will
-> -				 * be problematic for users of BTF as they
-> -				 * violate expectations about register
-> -				 * contents.
-> -				 */
-> -				if (expected_reg >= 0 && expected_reg != expr->atom)
-> -					parm->unexpected_reg = 1;
-> -				break;
-> -			default:
-> -				parm->optimized = 1;
-> -				break;
-> -			}
-> -		} else if (has_const_value) {
-> +
-> +		if (!check_dwarf_locations(&attr, parm, cu, param_idx) && has_const_value)
-
-I think it might be easier to follow the logic if we moved the const
-check alongside the location checks in the separate location check
-function. That way all our optimization-related checking happens in one
-place.
-
-
->  			parm->optimized = 1;
-> -		}
->  	}
->  
->  	return parm;
-
+> 
+> [1] b2f225d6bff8 ("Consolidate and add files to clean target variables")
+>     git://sourceware.org/git/elfutils.git
+> 
+> 
