@@ -1,334 +1,328 @@
-Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BD3D12C54B;
-	Mon, 11 Nov 2024 09:54:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731318861; cv=none; b=aplepYeir666u51LWI5LLo4r/4QWaQqZz55WD74PvsJB9vbqU3CxJS16z5D5t5uSmyQdHqfmEsuHc/wGn52fe08sdQOF+SsEZJY7+yW7/DzbpV4IrY/UZNH9FDb1I/lyev8qwAM8KoafI+M/FmvEIFvDhV/Xx3x/gPWYDWpkV0I=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731318861; c=relaxed/simple;
-	bh=YHJxIYeY914HoQ20eShbZnSorfeSy6xxRBUKJzUfbuM=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KgKwfCPwogbozM6BOT86Du2UqKzJ8H1Y+W0U74tfWqPZfNvPOV/EYPMhxcu9zzTd9ivjdtrwhc4b2fVGdeiSzl9L2eI6G+eI8NftZFPo2rD8o7lGGrlyRRbDWMI+qyWx2nCFNeX1jeC/QQFfk+I7wJ5vCX3OORAxsU0nlRikr40=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KMOzJZmB; arc=none smtp.client-ip=209.85.218.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D52719DF41;
+	Mon, 11 Nov 2024 11:27:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.165.32
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1731324438; cv=fail; b=QKwLnJZeINynPcI45TuI97pV3bmLaq/A8XJLmOrdMGzoKA57Hb070Bvs+whMMpmYO7uLt01zQ+JMcpanYzKMnVOc8rhEGWQ3qMXbcZsnAm2GkRd6eFAl1ZHvWxmrA9rKT4x9Tnltp3IqpIxcPxoAztAxx05nb9FppsOecxSouTA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1731324438; c=relaxed/simple;
+	bh=zStiHk5o8pa0I3VObXXQDfFdf0LFBIeQEmWro0SxGJg=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=amcphArzrG9b3ZCgRZNNwNgKcc1rhch6fybf4n17uXWGwgZI8FU69ETuOlaBT2LQTtuQJy2CEKUeaJIHysgod6JimMOYxOv/wPBOsSW8jeAoXBqfX/68S6ghP5fQzvbWpkVBo+pQNs2o/Xrcao6pjAREHmY6KXNiDRRpMx/8z/c=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=A+qNsDhs; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=ncceRYtS; arc=fail smtp.client-ip=205.220.165.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KMOzJZmB"
-Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-a9ed49edd41so772805066b.0;
-        Mon, 11 Nov 2024 01:54:19 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="A+qNsDhs";
+	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="ncceRYtS"
+Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4AB9sqcX017741;
+	Mon, 11 Nov 2024 11:26:51 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=
+	corp-2023-11-20; bh=HcgUosWe4n974lsaMNIQ4kiyo5v8WJ9WHv4xifuOtEw=; b=
+	A+qNsDhshS5d1vtf1kEXj0WqGIDV8DdukFolNE1PJ5ftXH8o0CVuFgGMV1pG+yae
+	AQbF5VSkM7QOGlSzKU37GKAbYqZROw5xTJ3LgZK1Eiy6MyFB8Plscinh4rRUmY78
+	DQq2M2AcM7Y+cwyFBRrFj0bWHASTWglKZ2muKLPYRkOZ6fNXiIpLc6OuRkFPkzKn
+	aBgMdc26+S6DacUyiZV+qRbKKiXaK96nN6+AC/h7OZeCeZ5PDZE6Pb7ndm4UaLR7
+	5kf4q0f9BWlEbmxTrT7Fo+yDwWBboC4MVDUtjMHigwzAYpeHV5FcSI7d8hwZOssY
+	6ewD+IwoCvvnG3amXRBz8w==
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 42t0n4t7nu-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 11 Nov 2024 11:26:51 +0000 (GMT)
+Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 4ABAO7hc025515;
+	Mon, 11 Nov 2024 11:26:49 GMT
+Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2043.outbound.protection.outlook.com [104.47.58.43])
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 42sx66tpum-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 11 Nov 2024 11:26:49 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=UrtZWHoFm/V6M+mGDW7wu9UGwnyvi2QSv7Xx65ssRjLmjtKHQ7zBMHv7WcmBddhD+BLyl8rabQjZP94wuEJ5D7eq421MLxf5f/qxtBuK3qQ18Vc3L3zuux8XzDe2oM6s2mfCsNDgwAN7vX+//Mk8VafSc4Fp5w3D5LWUYD963nAvIDwJ9w3DQu8ERycUDZVWOIEVqvBch0ZRoWwFksMQXKX4xbnjC89EnzAbmJbq/q+SHKwE/qwjwHWq2zh+qsjxbc2FGpt+hjyEO5TPK59BBXD/BTIzQLY7t+w8Q9qTfwQ4Z6mZZsW+xCq+7JV1jH9obcF984TDA9g6u42pDULG/w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=HcgUosWe4n974lsaMNIQ4kiyo5v8WJ9WHv4xifuOtEw=;
+ b=Zuqx8H8XUuncqhfsWMSKlPBlnzNKFZxRVtzU/9zF+ZalL78br4E6dwejeUHix9+54Kr9+VEppzUAaGtmTxVyxaY0170cEzRMQfJILUF7xopFCEO86TXVpW8f8hcmr6+XY8LHFv/IAJL2tflQO7/tZE8ABsmdVYn3ARa7JsyKkZxcxpGo8uNYuWgt7Qo9z8slgLW3IuE7qwqNC2rSPfNN/EdZRxRlmKl4wN6pebmHxdtuunxCUJgrM8ZnGCAul7J9n7zTnaqBpbhXM3FarwU9l/CWXGR4mKR2Gm+dMzdiBPQ/JgBRGWUwjWGVU4CzHc3ssVWU03phZNdFjTThGvka5A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1731318858; x=1731923658; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=xccvxVAPcgqQw26WknZ5D9ZxLw9B/1sb3k0l0/IcmvY=;
-        b=KMOzJZmBqfdruqZ7IzX4wgk1Sdkz2QHvTGiDtpZy8eVPDxeOAiIxNGsuKDTTPiCqhq
-         XRUNd5shp6kqLoiRyZYhL8VURyPqMIkv23Yn2YhPkfhUu9jjN5XaGnBgl7vEzuHLTY/g
-         n2kwMIHy3BvbWA6ewRCzEv6McDnj01u97lidbx98lLreiKvpAUgCrcHAu1z3O0GCRlZt
-         7otZkKP9DHZjtAptEJlR4oWbpF5m8ti57b33KzrAZciJEUVf2R2m7E/HxzOs+AjXuwWO
-         Y8bOzAUcxhtvrphWBOXeSw/8gtY6Nc2IkmZ53946Z8CsLiAk/Wgye2+6sJF2ebImF77D
-         9wSg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731318858; x=1731923658;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xccvxVAPcgqQw26WknZ5D9ZxLw9B/1sb3k0l0/IcmvY=;
-        b=anOs+Xt3224jyOLYZFEhGjoqHwls1OA4vcOcmLdosumJjCVV3msKfnYG72lqKICtj5
-         RnnyXm+psKdrlRYqCnv6Rr1z8vOpYiJFIS9Foc2XPaC+1QKuvqRfMV5HhzzgAsJ1RmtW
-         m6g8P6CToQjKlaolH9Zfs9S7T7Dq37BYf+XYchxDxXUkhTA/w5IaB3cRuhOLRRJpGFGK
-         mf8LK1VKIPKxV3f3IbdFf4AjztZ01dbbgNv46L37AWut7Geq92yghLZAD6kMGUaKue0j
-         Wad8rr5JoFddSsZSg/p42lwBNUH9MpVYMIRBIz/nO3QavKEy7R+yPpbtZfFjSlJkd9ve
-         9i4Q==
-X-Forwarded-Encrypted: i=1; AJvYcCVCR6T++eFd/q7YeYTAZDeHMdH5r5FKnmXYaGy+eymemvdHpyYGE4M50YOKBip6CJjh0O3g5ujaKw==@vger.kernel.org, AJvYcCWA1Fw2v3PLibRSLJBpDVItG5qJk9svZ+TqBoId1PcvKiJRuX0snT7VKXkD/3IErWqKpyo=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yybcu1xgJT7IeFcvrJjDMHPg+OJo+M1OCDJgkY8LnZr/LoXB/1A
-	p0TnS2uUj238GmrB9ghUg7Egi3p+p+6DCPgpNk5RjhM3oiFD5W0S
-X-Google-Smtp-Source: AGHT+IF85PLdQJFJatQ+e77gMdZ/BxH/s8vcoH2ZXna9kNyDh1TWF3Ani7j5hG1947AnSLrsp3V8dg==
-X-Received: by 2002:a17:907:844:b0:a9a:a96a:e280 with SMTP id a640c23a62f3a-a9eeff0ea22mr1206840266b.20.1731318857698;
-        Mon, 11 Nov 2024 01:54:17 -0800 (PST)
-Received: from krava (2001-1ae9-1c2-4c00-726e-c10f-8833-ff22.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:726e:c10f:8833:ff22])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a9ee0df0c85sm572170866b.171.2024.11.11.01.54.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Nov 2024 01:54:17 -0800 (PST)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Mon, 11 Nov 2024 10:54:15 +0100
-To: Yonghong Song <yonghong.song@linux.dev>
-Cc: Alan Maguire <alan.maguire@oracle.com>,
-	Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
-	dwarves@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
-	Daniel Borkmann <daniel@iogearbox.net>, kernel-team@fb.com,
-	Song Liu <song@kernel.org>
-Subject: Re: [PATCH dwarves 3/3] dwarf_loader: Check DW_OP_[GNU_]entry_value
- for possible parameter matching
-Message-ID: <ZzHURz01dzLHO2H4@krava>
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=HcgUosWe4n974lsaMNIQ4kiyo5v8WJ9WHv4xifuOtEw=;
+ b=ncceRYtSSW2JZ/GJcdLXFm9ZXoHhfm3Ay2omqyZO6/OE6UOnt299Ml+/JoGj79kSwSDV2obpTEh2efWn1UhSebcAbLe5VcbbfFWLNihXcp+sHJW/2tRgwdR/uh4ERNjc7eCK4mR188GwI6JzIdzRHEh1IBFlxYtOdcqex/vREyo=
+Received: from BLAPR10MB5267.namprd10.prod.outlook.com (2603:10b6:208:30e::22)
+ by DS7PR10MB5104.namprd10.prod.outlook.com (2603:10b6:5:3a1::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8137.28; Mon, 11 Nov
+ 2024 11:26:47 +0000
+Received: from BLAPR10MB5267.namprd10.prod.outlook.com
+ ([fe80::682b:c879:9f97:a34f]) by BLAPR10MB5267.namprd10.prod.outlook.com
+ ([fe80::682b:c879:9f97:a34f%3]) with mapi id 15.20.8137.027; Mon, 11 Nov 2024
+ 11:26:47 +0000
+Message-ID: <196c771e-8a73-4acc-8190-1f646a696554@oracle.com>
+Date: Mon, 11 Nov 2024 11:26:40 +0000
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH dwarves 1/3] dwarf_loader: Refactor function
+ parameter__new()
+To: Yonghong Song <yonghong.song@linux.dev>,
+        Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
+        dwarves@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+        bpf@vger.kernel.org, Daniel Borkmann <daniel@iogearbox.net>,
+        kernel-team@fb.com
 References: <20241108180508.1196431-1-yonghong.song@linux.dev>
- <20241108180524.1198900-1-yonghong.song@linux.dev>
+ <20241108180513.1197600-1-yonghong.song@linux.dev>
+Content-Language: en-GB
+From: Alan Maguire <alan.maguire@oracle.com>
+In-Reply-To: <20241108180513.1197600-1-yonghong.song@linux.dev>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: LO4P265CA0185.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:311::14) To BLAPR10MB5267.namprd10.prod.outlook.com
+ (2603:10b6:208:30e::22)
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241108180524.1198900-1-yonghong.song@linux.dev>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BLAPR10MB5267:EE_|DS7PR10MB5104:EE_
+X-MS-Office365-Filtering-Correlation-Id: 892e9ff5-f620-4c57-9f91-08dd0243ba70
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|1800799024|10070799003|366016;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?R0x5TkxWWnZYeERXVStGS3FVSCszUHYxTWNzZ0FJbndVTGVWZ0RSZWRiWFFG?=
+ =?utf-8?B?d3VpcWoxSnBDclFLMmhIUGowd3JOUTNnbW1CYVc2ZGFvb004U0lMV2x4UkNK?=
+ =?utf-8?B?QmhGMlduMDJYRE1LNnNJanZpT084Wll4UE1HVXpIYlR1VjhrenRzRGJKU24x?=
+ =?utf-8?B?dHpIU1hiU0Q1azZRVEdmWWtmV1pCY2NUMnMrdmYrWjN2TEgyK0RrY2pHYXoz?=
+ =?utf-8?B?RU90RlBKQW5NSDdreGJtRDZXQnZpbUZnV1pxQTV2SVBIUXFBNGxJUjJ1Qy9Y?=
+ =?utf-8?B?VWRkeU9mNXk4M3ZURFc0Vm9VYmRTT3g1bU5RUlR6V2Y2bjNPbVhMMldEbmlV?=
+ =?utf-8?B?REU3UXJvdTRFTlpTektyZXI2QTlMdjF2L1lNUXVwOWdNQmtvMzEwYk1vOCtQ?=
+ =?utf-8?B?a2tVTmV0OEw4UDk4Y1Q5M3BnN2Jicm1KRXhheThIQnRiLzVVL3ZWNTFtb3Ns?=
+ =?utf-8?B?Q2JWa0cyYkFHQ1p2aisvaFdEL1lpTWdVak9BYmRqM3lFOUZEMTJsVjY1Kzdk?=
+ =?utf-8?B?dUJXb2NybTVoQ1VOekdPSHg0ODFHYWd2Mk9HKzZpYkFWTVY1REo5TE1LVys2?=
+ =?utf-8?B?a0tlSlBVVXdKL0QycVB1TjROL0tlTTdieVZVU1diQU16U1FiczYzcEIvMjV2?=
+ =?utf-8?B?eFVvT0ltR1JQVEZua05LdExabVkwYTRWMFBDdUMyYWphQU1pWlNpTlY1aGJJ?=
+ =?utf-8?B?UFBZZW9qbFl1UFFkN2JKMHVSTEhKTWtVbHdHV0ltemkwblRqRVQ1SFB5VmNh?=
+ =?utf-8?B?blROMUxoelcyend0M1gxRUlUTW9TSDFUQncvQXZYeG1tOWdmaTBvb3laYkVH?=
+ =?utf-8?B?OGZqT21vOEIwMnU4ZHBLbHh5Zzk3THJvZURvVlNRLzJaQkUvbmtMeVFUOEFI?=
+ =?utf-8?B?MzVnbTlvaUxpeDBsb1pYR1VBV20yWStGOThVcXhFcW55N2JtTVhnSDJDRjZI?=
+ =?utf-8?B?ckY4eW9Ma09aWHpEcnhPRlBpNDVZbzFFMXNybzd2cS9Pdjgxb0RnM3Nydzkw?=
+ =?utf-8?B?RTNrQXkwZDdONHg5dlo0VkFlbHVVTlFQQnFHS0hNM1A0RDdSODBDK0xZa1Bq?=
+ =?utf-8?B?Zm9xNDIrYW42b3FFSXNOZktrWDVuYmQzdUNlWXA1cStsT1pMa3FnT2FsNDBl?=
+ =?utf-8?B?cmM4eGgrcmFzL3dkbzc1TFRQZnlTUzBCTC82cVdPdTNwc0Ivc1A0SU4zaEIz?=
+ =?utf-8?B?cndCdzZlWnYra04vWmdQYlZLb0VpZEtkb09MaGFjWFNGSjZoT08rRitKZmZC?=
+ =?utf-8?B?TUlIdlpST1BGUy80a2JYNU93N0NETDZ3bU9zUFRNMTJrNUZ6WTF6b3FnS2cz?=
+ =?utf-8?B?ZnJFRG5TMXBPbE83UHB5RjNiVUFhY0N4M0VDbXhvUmtsV3hXeWQyWFZORnZD?=
+ =?utf-8?B?TzRrNTRpajlMVXgzejNPZGtQUFVTNWpYV1lXSVBCUlFOdG1qODBkWkRYTWxW?=
+ =?utf-8?B?ekxaZFZpcHFpTjBqS2pwU3NRdVdaalV5dnpGSzZsN1FWWDRrODVnZlFMZXV2?=
+ =?utf-8?B?eWh6SnZMZGtPNzI3dTZIbWxQNjJndDAvRkE4Nit4Nk5YVXVmcms5ZmpJNFNh?=
+ =?utf-8?B?N3NyR3VWakI3aVg1aE8wRUxNQTJKbVowaVhHNHdvU0IwbHhKZlZ2SWtBQ0NO?=
+ =?utf-8?B?dDNXRHVRaWFsVjc2ZWNtWXBIbUJKTERnTnA3L2xnMWxzWW12MzdBOTBJeDdO?=
+ =?utf-8?B?aWJzR2huZkNMMjFWWEszbms0SW5sQmdzNnljSHVwQUlSZis1OHpBNlppWEZ0?=
+ =?utf-8?Q?N95K3OviXaMwTEDOkKjPa9VTU0ahyja2MLKVXXc?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BLAPR10MB5267.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(1800799024)(10070799003)(366016);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?SzIxR0ZNMTFqTGVRc3IyL3pIckt2KzAzWWc3M01ab2svSy9mMDR0V2VqSlRB?=
+ =?utf-8?B?NTNUR0x6RDd3RUpkWmEvV291MVRnSnRrZVo0K2k5ZXhIaFF3blliZnV3aklX?=
+ =?utf-8?B?RnU0UEl5eGhWbEt2Njd0L3oxTzA1VHUxdVlPbGpub0JUNEYybFVPbDZ1eWhR?=
+ =?utf-8?B?MEpEK24wK0pFQktHYS8zZFd6cUlZN0ZTaUpFQWY0V2RqdWdpWU1wZ1dGVFg4?=
+ =?utf-8?B?MUN2aFUwcHBmR3JVc0dseDU4d2N6dG5MUVZKV2NJZDdIWnd5Vmt0cEtwSG00?=
+ =?utf-8?B?djFWV2p0SS9JUTFqS0U4MUkxc3QrUEY3YUM3MENUZzFsNzQ3R3k4dHpMcWJD?=
+ =?utf-8?B?SGhHNUwzQ1NwY0t0bGFyOGRoZ3lmOGVSc3FFL1JyMmo0L1daYzNaajlvRkp1?=
+ =?utf-8?B?N3YyS2VFZi9GdEwxTi9icUNHUVFDMGNxUXYwN1NGWW1Nc2tjMzhLRmk2elU0?=
+ =?utf-8?B?cldLVGFtNEVydEZ2NW1kTVBVUWE3b3FUZGVFTmdaUkRWN0VaRmxuUDlwQ25X?=
+ =?utf-8?B?R1FvTlF6ME5nUGVSWHU2NVEwbzNjcnhhMHJRRXZrWUcrRGdsdXpaNWUzWWRM?=
+ =?utf-8?B?Tk14aE5rUmliUHc5ZkVpSWRWWGkxUEJaeHRQa0s5MGIxQWFMUlpFbkgwdGo3?=
+ =?utf-8?B?NnRzUlJoOVRUUG5hQmcyZzFZdk5BMGNkVXZ2V2tQbmw1M05uZDA4QTc1aGhT?=
+ =?utf-8?B?ZkFWQ1ZBa2JFU2dxMmRUeDhScGhQSWY0elUxVStiNGZ4YmI3VWd5eUFsVWM4?=
+ =?utf-8?B?bFl4MnZhazZSbzBleStUVktsM3FadHpVN1BRekRoaGpYV0d4WU5hR28ySnJx?=
+ =?utf-8?B?ZWUyZGlTdHZOR2ZpNmdnSVBPN0Z5TjFDQy93OWlaSFoyQi82aHB2dDIvZStr?=
+ =?utf-8?B?VmR6RnF2Mytha283NVFjTXBuQ1E1dURjNER4WHNSZCtObkpiVWVnSTE0SSto?=
+ =?utf-8?B?Tkh0U1l3VmlzY3QyNWhvc2lxRkNBZGdDSzVHYnZQWUVrTDZUbG8veXJPc29w?=
+ =?utf-8?B?V1RESnRsVWprNWI2M2xMcXREaE5nbnJibllKbTR5YXorQlBpbEZJOUtGMUVt?=
+ =?utf-8?B?ekNTYzJYdXhTOE9DV1dGa0lKdlloNE1jaTcveEYzMUwrNFlhZmN3YmdVK2Ev?=
+ =?utf-8?B?VGs1TEYwRGFxTkp5ODZ3K1A3N3QzQU9kaXFoREJUM2F4dFFHbWZ3M3BYa0k3?=
+ =?utf-8?B?UE9GMmFEMTFDS2FjNlRXQXNjVklCbHZjK3pIQ1gyazBFcmczREtKc3ovSW9q?=
+ =?utf-8?B?OXkyaGZ1d1hJUU5VVzZ6VkpIQzFTV2VxNmNORUxJL0FnWU9xK1VlQkE5SHlr?=
+ =?utf-8?B?amExQW12OXJLVC9IeTVnemxOZEVzOVFUL0R1S2kyNzdtc1RqaDRaalFyZmFx?=
+ =?utf-8?B?QW8vVDBDNmpoTGdxbC9hcHhVVzNQb2FSZC9UUzZyUm50eEZUQzVlaklycVpm?=
+ =?utf-8?B?b1FCRVh6dXBGZFR2NGRMN3U2cmUyTTVpR09FYUFiMVA5R3BKOElma29pUVVX?=
+ =?utf-8?B?eUFXeHJ5dE5LcWVuV0kzQURuaGhiUEEyb1BERkF2Njl6WDhxZlhqeGZmYjlC?=
+ =?utf-8?B?aVRzRU8zejdwOXRSSjNBbjloMFVCd2Z6WVRyQklVN2FaQ28yakluZnh0M1E1?=
+ =?utf-8?B?VjRERjJrU2M3RG5VMXFaNm83TmgzS295bkdaTy9lZS96TU1URGdBVVZYTEZu?=
+ =?utf-8?B?WjArdVhEZTExRUtOQWgyYms1NmFuYXprTXR0dkw1UitKczExUHpBek0rZHdz?=
+ =?utf-8?B?N3M1TWcydmZWN0xacnNEOGFzbUdqN1Y1dWdhTUNvWVhjaVlZSFY2TFZNYU9U?=
+ =?utf-8?B?MDBkSlhkRGk4WXkvSmpZRFhvTnh0SUVCNzZJNXJ0QUVmS2t6SXFmVjczYWRC?=
+ =?utf-8?B?VkxkUENydTFuaVBoMkJSZ1FlRVdsZHRnRXpObG9WVWw1M0JTVjE5dWlHd01s?=
+ =?utf-8?B?MzlOY1JtWnVVVzdSN2NKamUvajNHN3E2QUFla2lqU1RhUGJVdFR5dXhKaFZz?=
+ =?utf-8?B?cXVHbENZVEd4aEZsdlE3WmlSUmI0OU1RQXM4dnZyWk1TVkxDUUcxUU1ZZ2NW?=
+ =?utf-8?B?M29wM3ZBMlFsOVNKYU4xWFhnR3puVU41NU1kQ2JWL2VFWXVQM24rNVhHcFRz?=
+ =?utf-8?B?V3Y1RDNOd1JVOTZtendGSXZqU2tvbzdXUm9kTnR0NmFJUlp5NzY2b2JRYlZQ?=
+ =?utf-8?Q?wvEUrWJ8W8tA0hOV5U7U23E=3D?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
+	UhFF2/wjmoJjnlIvQoq7U5snJOcH4ejFsCwt/gul3H81h1YUOfxzrGcTw4ob0BbxRzNY12Lf6HpaI00AG11tayvR/odBr2+RhWmDeFvmC7cDs82YgN4P7kkxquT2f4TQKgmEniGRoDo3B1ZOXViE12zyZZ96wrDn+xEo/MMqs6lph4j/YnCh6EANEZyVhSd8X9Mr3ooIq1busRkVqdrOzZRchBd4IKaXdmis7XOooPOME7aZ/QVStpUkwEXzvQmSuZ5oUvMxUXHU02UDRh6at0JuMR5aHvYg035HoMry3lte2CQhLk5aSg91mppkH2pRJ7YtYj39lgSuAsaCwonDBNeR8tTDOklrUoy3W8FQVBXnZJgD/+YM/ln600pcXN/Beo1J+rTbqo4YZcBgsC6oejZ6mvwZZq8BBr5ZonTGEIjn/TH/qWelLleCB8lLfe52fxzujkABwxmsxtz1YsDdIge4r++ueNsPsNaiKDQ7YIFbPD1xWG08TzP5qud4KttcqI/vm0/6vfypCeb6nv80g7nZnOI4OGldikBpXYIsYmEiR139rN96/z0HQqrRV7/6KJMMVUKL0xzCDP9Su8Jm4ct7zAtiygsjU36Q7kL29PA=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 892e9ff5-f620-4c57-9f91-08dd0243ba70
+X-MS-Exchange-CrossTenant-AuthSource: BLAPR10MB5267.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Nov 2024 11:26:47.2601
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: etP3OqJpHxWZ6OegCKqltf2/1ezI+5TuZD8voSWIzaqPCxYfqcyNImNX9NnLGOTvcLoNdVIFbQYQ7Qwy3RjQKQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR10MB5104
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.62.30
+ definitions=2024-11-11_08,2024-11-08_01,2024-09-30_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
+ spamscore=0 adultscore=0 mlxlogscore=999 mlxscore=0 bulkscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2409260000 definitions=main-2411110096
+X-Proofpoint-ORIG-GUID: czgmCQoJkYQRXKrNU_ULlHFKcMjUyRGG
+X-Proofpoint-GUID: czgmCQoJkYQRXKrNU_ULlHFKcMjUyRGG
 
-On Fri, Nov 08, 2024 at 10:05:24AM -0800, Yonghong Song wrote:
-> Song Liu reported that a kernel func (perf_event_read()) cannot be traced
-> in certain situations since the func is not in vmlinux bTF. This happens
-> in kernels 6.4, 6.9 and 6.11 and the kernel is built with pahole 1.27.
+On 08/11/2024 18:05, Yonghong Song wrote:
+> The dwarf location checking part of function parameter__new() is refactored
+> to another function. The current dwarf location checking only for
+> the first expression of the first location. One later patch may traverse
+> all expressions of all locations, so refactoring makes later change easier.
 > 
-> The perf_event_read() signature in kernel (kernel/events/core.c):
->    static int perf_event_read(struct perf_event *event, bool group)
+> No functional change.
 > 
-> Adding '-V' to pahole command line, and the following error msg can be found:
->    skipping addition of 'perf_event_read'(perf_event_read) due to unexpected register used for parameter
-> 
-> Eventually the error message is attributed to the setting
-> (parm->unexpected_reg = 1) in parameter__new() function.
-> 
-> The following is the dwarf representation for perf_event_read():
->     0x0334c034:   DW_TAG_subprogram
->                 DW_AT_low_pc    (0xffffffff812c6110)
->                 DW_AT_high_pc   (0xffffffff812c640a)
->                 DW_AT_frame_base        (DW_OP_reg7 RSP)
->                 DW_AT_GNU_all_call_sites        (true)
->                 DW_AT_name      ("perf_event_read")
->                 DW_AT_decl_file ("/rw/compile/kernel/events/core.c")
->                 DW_AT_decl_line (4641)
->                 DW_AT_prototyped        (true)
->                 DW_AT_type      (0x03324f6a "int")
->     0x0334c04e:     DW_TAG_formal_parameter
->                   DW_AT_location        (0x007de9fd:
->                      [0xffffffff812c6115, 0xffffffff812c6141): DW_OP_reg5 RDI
->                      [0xffffffff812c6141, 0xffffffff812c6323): DW_OP_reg14 R14
->                      [0xffffffff812c6323, 0xffffffff812c63fe): DW_OP_GNU_entry_value(DW_OP_reg5 RDI), DW_OP_stack_value
->                      [0xffffffff812c63fe, 0xffffffff812c6405): DW_OP_reg14 R14
->                      [0xffffffff812c6405, 0xffffffff812c640a): DW_OP_GNU_entry_value(DW_OP_reg5 RDI), DW_OP_stack_value)
->                   DW_AT_name    ("event")
->                   DW_AT_decl_file       ("/rw/compile/kernel/events/core.c")
->                   DW_AT_decl_line       (4641)
->                   DW_AT_type    (0x0333aac2 "perf_event *")
->     0x0334c05e:     DW_TAG_formal_parameter
->                   DW_AT_location        (0x007dea82:
->                      [0xffffffff812c6137, 0xffffffff812c63f2): DW_OP_reg12 R12
->                      [0xffffffff812c63f2, 0xffffffff812c63fe): DW_OP_GNU_entry_value(DW_OP_reg4 RSI), DW_OP_stack_value
->                      [0xffffffff812c63fe, 0xffffffff812c640a): DW_OP_reg12 R12)
->                   DW_AT_name    ("group")
->                   DW_AT_decl_file       ("/rw/compile/kernel/events/core.c")
->                   DW_AT_decl_line       (4641)
->                   DW_AT_type    (0x03327059 "bool")
-
-hi,
-I don't see that on gcc compiled kernel, is that related to clang?
-
-
- <1><318d475>: Abbrev Number: 74 (DW_TAG_subprogram)
-    <318d476>   DW_AT_name        : (indirect string, offset: 0xf5776): perf_event_read
-    <318d47a>   DW_AT_decl_file   : 1
-    <318d47a>   DW_AT_decl_line   : 4746
-    <318d47c>   DW_AT_decl_column : 12
-    <318d47d>   DW_AT_prototyped  : 1
-    <318d47d>   DW_AT_type        : <0x3135e35>
-    <318d481>   DW_AT_low_pc      : 0xffffffff8135be90
-    <318d489>   DW_AT_high_pc     : 0x196
-    <318d491>   DW_AT_frame_base  : 1 byte block: 9c    (DW_OP_call_frame_cfa)
-    <318d493>   DW_AT_call_all_calls: 1
-    <318d493>   DW_AT_sibling     : <0x318d900>
- <2><318d497>: Abbrev Number: 30 (DW_TAG_formal_parameter)
-    <318d498>   DW_AT_name        : (indirect string, offset: 0x491590): event
-    <318d49c>   DW_AT_decl_file   : 1
-    <318d49c>   DW_AT_decl_line   : 4746
-    <318d49e>   DW_AT_decl_column : 47
-    <318d49f>   DW_AT_type        : <0x313a680>
-    <318d4a3>   DW_AT_location    : 0x70c118 (location list)
-    <318d4a7>   DW_AT_GNU_locviews: 0x70c110
- <2><318d4ab>: Abbrev Number: 30 (DW_TAG_formal_parameter)
-    <318d4ac>   DW_AT_name        : (indirect string, offset: 0x51a865): group
-    <318d4b0>   DW_AT_decl_file   : 1
-    <318d4b0>   DW_AT_decl_line   : 4746
-    <318d4b2>   DW_AT_decl_column : 59
-    <318d4b3>   DW_AT_type        : <0x3136055>
-    <318d4b7>   DW_AT_location    : 0x70c144 (location list)
-    <318d4bb>   DW_AT_GNU_locviews: 0x70c13e
-
-locations:
-    0070c144 ffffffff8135be90 (base address)
-    0070c14d v000000000000000 v000000000000000 views at 0070c13e for:
-             ffffffff8135be90 ffffffff8135bed2 (DW_OP_reg4 (rsi))
-    0070c152 v000000000000000 v000000000000000 views at 0070c140 for:
-             ffffffff8135bed2 ffffffff8135bf17 (DW_OP_reg14 (r14))
-    0070c158 v000000000000000 v000000000000000 views at 0070c142 for:
-             ffffffff8135bf17 ffffffff8135c026 (DW_OP_entry_value: (DW_OP_reg4 (rsi)); DW_OP_stack_value)
-    0070c162 <End of list>
-
-
-other than that lgtm and I like the change Eduard suggested
-
-thanks,
-jirka
-
-> 
-> By inspecting the binary, the second argument ("bool group") is used
-> in the function. The following are the disasm code:
->     ffffffff812c6110 <perf_event_read>:
->     ffffffff812c6110: 0f 1f 44 00 00        nopl    (%rax,%rax)
->     ffffffff812c6115: 55                    pushq   %rbp
->     ffffffff812c6116: 41 57                 pushq   %r15
->     ffffffff812c6118: 41 56                 pushq   %r14
->     ffffffff812c611a: 41 55                 pushq   %r13
->     ffffffff812c611c: 41 54                 pushq   %r12
->     ffffffff812c611e: 53                    pushq   %rbx
->     ffffffff812c611f: 48 83 ec 18           subq    $24, %rsp
->     ffffffff812c6123: 41 89 f4              movl    %esi, %r12d
->     <=========== NOTE that here '%esi' is used and moved to '%r12d'.
->     ffffffff812c6126: 49 89 fe              movq    %rdi, %r14
->     ffffffff812c6129: 65 48 8b 04 25 28 00 00 00    movq    %gs:40, %rax
->     ffffffff812c6132: 48 89 44 24 10        movq    %rax, 16(%rsp)
->     ffffffff812c6137: 8b af a8 00 00 00     movl    168(%rdi), %ebp
->     ffffffff812c613d: 85 ed                 testl   %ebp, %ebp
->     ffffffff812c613f: 75 3f                 jne     0xffffffff812c6180 <perf_event_read+0x70>
->     ffffffff812c6141: 66 2e 0f 1f 84 00 00 00 00 00 nopw    %cs:(%rax,%rax)
->     ffffffff812c614b: 0f 1f 44 00 00        nopl    (%rax,%rax)
->     ffffffff812c6150: 49 8b 9e 28 02 00 00  movq    552(%r14), %rbx
->     ffffffff812c6157: 48 89 df              movq    %rbx, %rdi
->     ffffffff812c615a: e8 c1 a0 d7 00        callq   0xffffffff82040220 <_raw_spin_lock_irqsave>
->     ffffffff812c615f: 49 89 c7              movq    %rax, %r15
->     ffffffff812c6162: 41 8b ae a8 00 00 00  movl    168(%r14), %ebp
->     ffffffff812c6169: 85 ed                 testl   %ebp, %ebp
->     ffffffff812c616b: 0f 84 9a 00 00 00     je      0xffffffff812c620b <perf_event_read+0xfb>
->     ffffffff812c6171: 48 89 df              movq    %rbx, %rdi
->     ffffffff812c6174: 4c 89 fe              movq    %r15, %rsi
->     <=========== NOTE: %rsi is overwritten
->     ......
->     ffffffff812c63f0: 41 5c                 popq    %r12
->     <============ POP r12
->     ffffffff812c63f2: 41 5d                 popq    %r13
->     ffffffff812c63f4: 41 5e                 popq    %r14
->     ffffffff812c63f6: 41 5f                 popq    %r15
->     ffffffff812c63f8: 5d                    popq    %rbp
->     ffffffff812c63f9: e9 e2 a8 d7 00        jmp     0xffffffff82040ce0 <__x86_return_thunk>
->     ffffffff812c63fe: 31 c0                 xorl    %eax, %eax
->     ffffffff812c6400: e9 be fe ff ff        jmp     0xffffffff812c62c3 <perf_event_read+0x1b3>
-> 
-> It is not clear why dwarf didn't encode %rsi in locations. But
-> DW_OP_GNU_entry_value(DW_OP_reg4 RSI) tells us that RSI is live at
-> the entry of perf_event_read(). So this patch tries to search
-> DW_OP_GNU_entry_value/DW_OP_entry_value location/expression so if
-> the expected parameter register matchs the register in
-> DW_OP_GNU_entry_value/DW_OP_entry_value, then the original parameter
-> is not optimized.
-> 
-> For one of internal 6.11 kernel, there are 62498 functions in BTF and
-> perf_event_read() is not there. With this patch, there are 61552 functions
-> in BTF and perf_event_read() is included.
-> 
-> Reported-by: Song Liu <song@kernel.org>
 > Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 > ---
->  dwarf_loader.c | 81 +++++++++++++++++++++++++++++++++++---------------
->  1 file changed, 57 insertions(+), 24 deletions(-)
+>  dwarf_loader.c | 77 ++++++++++++++++++++++++++++----------------------
+>  1 file changed, 44 insertions(+), 33 deletions(-)
 > 
 > diff --git a/dwarf_loader.c b/dwarf_loader.c
-> index e0b8c11..1fe44bc 100644
+> index ec8641b..4bb9096 100644
 > --- a/dwarf_loader.c
 > +++ b/dwarf_loader.c
-> @@ -1169,34 +1169,67 @@ static bool check_dwarf_locations(Dwarf_Attribute *attr, struct parameter *parm,
->  		return false;
+> @@ -1157,16 +1157,56 @@ static struct template_parameter_pack *template_parameter_pack__new(Dwarf_Die *d
+>  	return pack;
+>  }
 >  
->  #if _ELFUTILS_PREREQ(0, 157)
-> -	/* dwarf_getlocations() handles location lists; here we are
-> -	 * only interested in the first expr.
-> -	 */
-> -	if (dwarf_getlocations(attr, 0, &base, &start, &end,
-> -			       &loc.expr, &loc.exprlen) > 0 &&
-> -		loc.exprlen != 0) {
-> -		expr = loc.expr;
+> +static bool check_dwarf_locations(Dwarf_Attribute *attr, struct parameter *parm,
+> +				  struct cu *cu, int param_idx)
+
+Nit: I think this should be renamed to something like
+parameter__locations() in keeping with existing naming scheme.
+Could also include the parm->has_loc assignment there instead
+of keeping it in paramter__new().
+
+
+> +{
+> +	Dwarf_Addr base, start, end;
+> +	struct location loc;
+> +
+> +	/* dwarf_getlocations() handles location lists; here we are
+> +	 * only interested in the first expr.
+> +	 */
+> +	if (parm->has_loc &&
+> +#if _ELFUTILS_PREREQ(0, 157)
+> +	    dwarf_getlocations(attr, 0, &base, &start, &end,
+> +			       &loc.expr, &loc.exprlen) > 0 &&
+> +#else
+> +	    dwarf_getlocation(attr, &loc.expr, &loc.exprlen) == 0 &&
+> +#endif
+> +		loc.exprlen != 0) {
+> +		int expected_reg = cu->register_params[param_idx];
+> +		Dwarf_Op *expr = loc.expr;
+> +
+> +		switch (expr->atom) {
+> +		case DW_OP_reg0 ... DW_OP_reg31:
+> +			/* mark parameters that use an unexpected
+> +			 * register to hold a parameter; these will
+> +			 * be problematic for users of BTF as they
+> +			 * violate expectations about register
+> +			 * contents.
+> +			 */
+> +			if (expected_reg >= 0 && expected_reg != expr->atom)
+> +				parm->unexpected_reg = 1;
+> +			break;
+> +		default:
+> +			parm->optimized = 1;
+> +			break;
+> +		}
+> +
+> +		return true;
+> +	}
+> +
+> +	return false;
+> +}
+> +
+>  static struct parameter *parameter__new(Dwarf_Die *die, struct cu *cu,
+>  					struct conf_load *conf, int param_idx)
+>  {
+>  	struct parameter *parm = tag__alloc(cu, sizeof(*parm));
+>  
+>  	if (parm != NULL) {
+> -		Dwarf_Addr base, start, end;
+>  		bool has_const_value;
+>  		Dwarf_Attribute attr;
+> -		struct location loc;
+>  
+>  		tag__init(&parm->tag, cu, die);
+>  		parm->name = attr_string(die, DW_AT_name, conf);
+> @@ -1208,38 +1248,9 @@ static struct parameter *parameter__new(Dwarf_Die *die, struct cu *cu,
+>  		 */
+>  		has_const_value = dwarf_attr(die, DW_AT_const_value, &attr) != NULL;
+>  		parm->has_loc = dwarf_attr(die, DW_AT_location, &attr) != NULL;
+> -		/* dwarf_getlocations() handles location lists; here we are
+> -		 * only interested in the first expr.
+> -		 */
+> -		if (parm->has_loc &&
+> -#if _ELFUTILS_PREREQ(0, 157)
+> -		    dwarf_getlocations(&attr, 0, &base, &start, &end,
+> -				       &loc.expr, &loc.exprlen) > 0 &&
+> -#else
+> -		    dwarf_getlocation(&attr, &loc.expr, &loc.exprlen) == 0 &&
+> -#endif
+> -			loc.exprlen != 0) {
+> -			int expected_reg = cu->register_params[param_idx];
+> -			Dwarf_Op *expr = loc.expr;
 > -
-> -		switch (expr->atom) {
-> -		case DW_OP_reg0 ... DW_OP_reg31:
-> -			/* mark parameters that use an unexpected
-> -			 * register to hold a parameter; these will
-> -			 * be problematic for users of BTF as they
-> -			 * violate expectations about register
-> -			 * contents.
-> +	bool reg_matched = false, reg_unmatched = false, first_expr_reg = false, ret = false;
-> +	ptrdiff_t offset = 0;
-> +	int loc_num = -1;
+> -			switch (expr->atom) {
+> -			case DW_OP_reg0 ... DW_OP_reg31:
+> -				/* mark parameters that use an unexpected
+> -				 * register to hold a parameter; these will
+> -				 * be problematic for users of BTF as they
+> -				 * violate expectations about register
+> -				 * contents.
+> -				 */
+> -				if (expected_reg >= 0 && expected_reg != expr->atom)
+> -					parm->unexpected_reg = 1;
+> -				break;
+> -			default:
+> -				parm->optimized = 1;
+> -				break;
+> -			}
+> -		} else if (has_const_value) {
 > +
-> +	while ((offset = dwarf_getlocations(attr, offset, &base, &start, &end, &loc.expr, &loc.exprlen)) > 0 &&
-> +	       loc.exprlen != 0) {
-> +		ret = true;
-> +		loc_num++;
-> +
-> +		for (int i = 0; i < loc.exprlen; i++) {
-> +			Dwarf_Attribute entry_attr;
-> +			Dwarf_Op *entry_ops;
-> +			size_t entry_len;
-> +
-> +			expr = &loc.expr[i];
-> +			switch (expr->atom) {
-> +			case DW_OP_reg0 ... DW_OP_reg31:
-> +				/* first location, first expression */
-> +				if (loc_num == 0 && i == 0) {
-> +					if (expected_reg >= 0) {
-> +						if (expected_reg == expr->atom) {
-> +							reg_matched = true;
-> +							return true;
-> +						} else {
-> +							reg_unmatched = true;
-> +						}
-> +					}
-> +					first_expr_reg = true;
-> +				}
-> +				break;
-> +			/* For the following dwarf entry (arch x86_64) in parameter locations:
-> +			 *    DW_OP_GNU_entry_value(DW_OP_reg4 RSI), DW_OP_stack_value
-> +			 * RSI register should be available at the entry of the program.
->  			 */
-> -			if (expected_reg >= 0 && expected_reg != expr->atom)
-> -				parm->unexpected_reg = 1;
-> -			break;
-> -		default:
-> -			parm->optimized = 1;
-> -			break;
-> +			case DW_OP_entry_value:
-> +			case DW_OP_GNU_entry_value:
-> +				if (reg_matched)
-> +					break;
-> +				if (dwarf_getlocation_attr (attr, expr, &entry_attr) != 0)
-> +					break;
-> +				if (dwarf_getlocation (&entry_attr, &entry_ops, &entry_len) != 0)
-> +					break;
-> +				if (entry_len != 1)
-> +					break;
-> +				if (expected_reg >= 0 && expected_reg == entry_ops->atom) {
-> +					reg_matched = true;
-> +					return true;
-> +				}
-> +				break;
-> +			default:
-> +				break;
-> +			}
->  		}
-> -
-> -		return true;
+> +		if (!check_dwarf_locations(&attr, parm, cu, param_idx) && has_const_value)
+
+I think it might be easier to follow the logic if we moved the const
+check alongside the location checks in the separate location check
+function. That way all our optimization-related checking happens in one
+place.
+
+
+>  			parm->optimized = 1;
+> -		}
 >  	}
 >  
-> -	return false;
-> +	if (reg_unmatched)
-> +		parm->unexpected_reg = 1;
-> +	else if (ret && !first_expr_reg)
-> +		parm->optimized = 1;
-> +
-> +	return ret;
->  #else
->  	if (dwarf_getlocation(attr, &loc.expr, &loc.exprlen) == 0 &&
->  		loc.exprlen != 0) {
-> -- 
-> 2.43.5
-> 
-> 
+>  	return parm;
+
