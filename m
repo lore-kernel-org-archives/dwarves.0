@@ -1,73 +1,68 @@
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
+Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBF99174EE4;
-	Fri, 15 Nov 2024 08:47:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5B3818FDDB;
+	Fri, 15 Nov 2024 09:34:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731660471; cv=none; b=DpDOoA/XuRY+yhv40TjFG3Zr6EgQ34A/um6iNgibNNhnnTtXKhDc9pAoDpW4DNVZ3eOCz2bLUyN+2a/aIuu7iG+PfyjHnmqLC7JPvQtBlaDq9aVupUCs9/p3aHDDQmI1N5UHssFqmRVy/jNmepM5UvYe0NtCMadwDMGDDvTwb3E=
+	t=1731663281; cv=none; b=cJQHuS0ydLtuNcywmjlpcAEvgLP/s2EB465V70u6LbNR8RLkjtKv5fIZ06eWrKhfF6hxCveZJHxEBg6cT6J1qu4h08puwGaDqvuu1J35jbQ9ZhFc3Rr4vwpaAqxX7QqP5aIfzJHJvFMXmqFR4yY+4NiYT97/AP2lULAerrw+j+4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731660471; c=relaxed/simple;
-	bh=NsNrX4IWlTNuUK4o0qtkKVxHJHNqgLwEy+EZwW5HRZI=;
+	s=arc-20240116; t=1731663281; c=relaxed/simple;
+	bh=WtmG4Vkcl7Z6XOh0kChSiuBh21pZ/wDtQ7qmRnedq/g=;
 	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Z+h93g/XB+8sdcjzvEwCMt21+P76a2VE3gXlOB0HM+lUwPYcp21K8GM9ryoBLBF8GGfVt+gEy7QySQIvMgHOCmpZkdtrrUwBDBXjxzDSq8D9y8kNGMQPRcUzeoCARehMjmea//qgvbW2ii96Qjdvyy6nDT5YXCseNaKYegEducQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bAtj3wyp; arc=none smtp.client-ip=209.85.221.42
+	 Content-Type:Content-Disposition:In-Reply-To; b=sBTDzA5pKwv15JhDhkpk+pRoEZBsZVMn/YKHmwAhF5kNDPeW9lyJMmcW4GmHsUaRRqvA3QQACuS+W5NyNH03hAf2VbUvm60J/W9deYBBH5x5TfMZZNjXwktH5WcT4LI/5afp0BD8fU7U2eJpolecgh04mmr91SVGXZpFrzapvOI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Fg9e0gUn; arc=none smtp.client-ip=209.85.218.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bAtj3wyp"
-Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-382219ceaacso685011f8f.3;
-        Fri, 15 Nov 2024 00:47:49 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Fg9e0gUn"
+Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-aa20c733e92so69747766b.0;
+        Fri, 15 Nov 2024 01:34:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1731660468; x=1732265268; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1731663278; x=1732268078; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=KdH68Ik+FEA9GJcvzuT+cs6b5USGy/M06gjmxC16NMA=;
-        b=bAtj3wypd1zRTgvw9dYFEzlSamvZYGwgc8tnqGV/7Avg5AAGmUMpbkCfKIt5W5LNCK
-         vi5+Fk1SgBilTMNRvDOEzQqkTOvJ8OVfMbiSqLcA/HzVtp0FF41OG8lw6pGoevAjgJaZ
-         Vu/uIULjHn6LIKx6gQw0Qfj0LfUnjwxaLqPbue2+7xEUdZx5Z6Qc5vWU6afqZhxgByUl
-         oF06peDsUtLQ6kUG2Ma7qQFZqTRD/lIkY+ZjcF+xkl54KGRdHM3GnKlTl6j5knpYE9iD
-         4LIhss6VYdIcRDYfXk4FGl83S4X7jVr+63SB4zmyAV3JmloM0EZ4mnMyiA49VVyLeTDO
-         ZV+w==
+        bh=MX66+aEET0Wug4jq+LlfR7APokjStdY3uwRIUrvs+1g=;
+        b=Fg9e0gUnqB2hc0HTlQYhAtHwXlZ50k6Jqbpgtoad+EQgIiqe1+oPuEkq9Ib3X+ijKS
+         0bsmP5CefjtjO8OKhdAA6Jyt/5fBJf88tYidqwytGtbeO10fBo/VaKWHR6LnO9+bBOjZ
+         bUNTVVJ3KudYGhHTF2zslkZWs7XTLosxgjrueN0xaFhNuGIbzhj2aO/7jt50P1bVFr0U
+         GeAB1pYVslhynmWI824fb0MUJJmAQGTkgmJbmJ44vrsJMqVbZPQVptAk1DSXcI+rvhM3
+         fmPmUVJSHkHdb2JZ9qCEIhu1NNW0lkldZchbeFMB4jNF2s7SF/xGH3SNzQMmDPaQv7r8
+         cgnA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731660468; x=1732265268;
+        d=1e100.net; s=20230601; t=1731663278; x=1732268078;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=KdH68Ik+FEA9GJcvzuT+cs6b5USGy/M06gjmxC16NMA=;
-        b=YsV7ZHmKZX8GfVy5P7rQE1jfafgXWnIl5l8UsVkidrzmmz5RUREUdVOgbwKGygwIP4
-         j+5hiss/5iVK2nV9SlYHccyfB5TRexaVdSLMU6LKDQupGrKzctPmKzQ9TtKMvid9lsro
-         P71uh8fa5DU9qE8Su5NqPfRDOnDZb+/ES3/AyHVBVwxSTt6ISWSTaY2Ix5D/+VQHEhVZ
-         +cGJj/7Akb6ufOl5ba5vD4xgnwK66j9w1oGC2VaYcwOsFxmDEryTkvx3skRTNIhNWeMx
-         OLYzkbQe2ty7JoD1J1/BP5JHFNSPg27lcXJYTsIRUrq7f9mXqCZIffpdRXcHWuzSNCnw
-         kNpg==
-X-Forwarded-Encrypted: i=1; AJvYcCWxxG0+O3C20LljdZyiB5GIwWeI54tBRk+WPJ1/PpKg6X73GKdj1I1De/q0TB3PZQOAJaW17SI0JA==@vger.kernel.org, AJvYcCXgncvrL7c5fheFPxipYtnY8Oc/Ueb45CFS9dRelORosKFbi6FEavOidPrNtMEs5XuGPtI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwnpYyYLTq/tdYAYVt1t+i4e/7C1cHvXvAbHeDrdtP0dkqDvelU
-	kwRV2KlD4vQx0qxxyCtMeftyUgI+CZZwoyexzjla3Fd1hv3nskka
-X-Google-Smtp-Source: AGHT+IEIqpTHIZ+VVc4qnsqirZYcQXuIkNNYo4C3RfEvKhaq59txSc8Qv2GIu8nFT6uE9TqHmRnOBA==
-X-Received: by 2002:a5d:64c8:0:b0:382:2276:c93c with SMTP id ffacd0b85a97d-38225a8a36cmr1647551f8f.44.1731660467956;
-        Fri, 15 Nov 2024 00:47:47 -0800 (PST)
+        bh=MX66+aEET0Wug4jq+LlfR7APokjStdY3uwRIUrvs+1g=;
+        b=lt9Etl7+Rdd/8z9iLefy/w2aediW8QwdaOfYekxBT2IC8eedTa8kHeCNarayTUxMnV
+         iwFuyGB+Xt/edeJEepLfr5p0JHS5zpI59i/AP/Qb1qrcy2S+WK5OBGuEkh1Tu2hcZeJA
+         Ie2WVqu4OBKsfovR68hdlXz74zkd8H+mDvdMhW+pF+r3UlNzsJvSp4rISN0UNZSw8Sp6
+         ICBbuvA9UQAcR6NOkV1x97Q1XRhlwKE890UDlER/DwiMBfSLcD2Tao6rqGaftucZDKrT
+         ITBLXWxNOb6XuLZLu5E+KCeuvJ83AYTbQzBj2M9HgBRazfajXHNG5Gb5pp6jNqbPPusb
+         xKHA==
+X-Forwarded-Encrypted: i=1; AJvYcCUqwuicsOhd3uVI9falPCmznhNhwqcxszIdAQUfPGyv5QmVwlGPh8XiE01mmt4f7EwnBkPDt150aA==@vger.kernel.org, AJvYcCVVVeskrlSWSeoKPLtEOJ2Brvm/zbtHq0FGpyUe9YRf+ji5PLSh1Bfh+rC2jz6ZP6/vTw4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwRdASA66Kp2TfX1RjYx3z3dljLd02B4xB1nXvQndO/1n6HXrdF
+	UmBWqiQCJBv327EsmL1Ed4sTxYvttf3DHlybH2F5xdE5KYB3LL7B
+X-Google-Smtp-Source: AGHT+IGrMqybB5jssKYeWnRPqQhqhyeYeLg/u6t6KCD93Nl8rEDXC/pZDwA8SzH6oD5DBeffxy3L5Q==
+X-Received: by 2002:a17:907:9688:b0:a9a:1437:3175 with SMTP id a640c23a62f3a-aa48354c8b7mr180185266b.51.1731663278071;
+        Fri, 15 Nov 2024 01:34:38 -0800 (PST)
 Received: from krava (2001-1ae9-1c2-4c00-726e-c10f-8833-ff22.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:726e:c10f:8833:ff22])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3821ae161b5sm3839203f8f.74.2024.11.15.00.47.47
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aa20e003ff2sm161775066b.123.2024.11.15.01.34.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Nov 2024 00:47:47 -0800 (PST)
+        Fri, 15 Nov 2024 01:34:37 -0800 (PST)
 From: Jiri Olsa <olsajiri@gmail.com>
 X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Fri, 15 Nov 2024 09:47:45 +0100
-To: Yonghong Song <yonghong.song@linux.dev>
-Cc: Eduard Zingerman <eddyz87@gmail.com>,
-	Alan Maguire <alan.maguire@oracle.com>, acme@kernel.org,
-	dwarves@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
-	bpf@vger.kernel.org, daniel@iogearbox.net, kernel-team@fb.com,
-	song@kernel.org, olsajiri@gmail.com
-Subject: Re: [PATCH v2 dwarves 1/2] dwarf_loader: Check
- DW_OP_[GNU_]entry_value for possible parameter matching
-Message-ID: <ZzcKsfbbG8CiSCTY@krava>
+Date: Fri, 15 Nov 2024 10:34:35 +0100
+To: Alan Maguire <alan.maguire@oracle.com>
+Cc: acme@kernel.org, yonghong.song@linux.dev, dwarves@vger.kernel.org,
+	ast@kernel.org, andrii@kernel.org, bpf@vger.kernel.org,
+	daniel@iogearbox.net, kernel-team@fb.com, song@kernel.org,
+	eddyz87@gmail.com, olsajiri@gmail.com
+Subject: Re: [PATCH v2 dwarves 0/2] Check DW_OP_[GNU_]entry_value for
+ possible parameter matching
+Message-ID: <ZzcVq8zcdFm0mNxJ@krava>
 References: <20241114155822.898466-1-alan.maguire@oracle.com>
- <20241114155822.898466-2-alan.maguire@oracle.com>
- <8a08219a-9312-429d-a291-d93a932c849a@linux.dev>
- <80623f0b630bd3761f0239dbe0f3197dcc6ae575.camel@gmail.com>
- <fa3f1a9b-7fee-42f4-9827-b28b1bb3eff6@linux.dev>
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
@@ -76,92 +71,58 @@ List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <fa3f1a9b-7fee-42f4-9827-b28b1bb3eff6@linux.dev>
+In-Reply-To: <20241114155822.898466-1-alan.maguire@oracle.com>
 
-On Thu, Nov 14, 2024 at 12:04:24PM -0800, Yonghong Song wrote:
+On Thu, Nov 14, 2024 at 03:58:20PM +0000, Alan Maguire wrote:
+> Currently, pahole relies on DWARF to find whether a particular func
+> has its parameter mismatched with standard or optimized away.
+> In both these cases, the func will not be put in BTF and this
+> will prevent fentry/fexit tracing for these functions.
 > 
+> The current parameter checking focuses on the first location/expression
+> to match intended parameter register. But in some cases, the first
+> location/expression does not have expected matching information,
+> but further location like DW_OP_[GNU_]entry_value can provide
+> information which matches the expected parameter register.
 > 
+> Patch 1 supports this; patch 2 adds locking around dwarf_getlocation*
+> as it is unsafe in a multithreaded environment.
 > 
-> On 11/14/24 10:21 AM, Eduard Zingerman wrote:
-> > On Thu, 2024-11-14 at 08:51 -0800, Yonghong Song wrote:
-> > 
-> > [...]
-> > 
-> > > > +		/* match DW_OP_entry_value(DW_OP_regXX) at any location */
-> > > > +		case DW_OP_entry_value:
-> > > > +		case DW_OP_GNU_entry_value:
-> > > > +			if (dwarf_getlocation_attr(attr, expr, &entry_attr) == 0 &&
-> > > > +			    dwarf_getlocation(&entry_attr, &entry_ops, &entry_len) == 0 &&
-> > > > +			    entry_len == 1) {
-> > > > +				ret = entry_ops->atom;
-> > > Could we have more than one DW_OP_entry_value? What if the second one
-> > > matches execpted_reg? From dwarf5 documentation, there is no say about
-> > > whether we could have more than one DW_OP_entry_value or not.
-> > > 
-> > > If we have evidence that only one DW_OP_entry_value will appear in parameter
-> > > locations, a comment will be needed in the above.
-> > > 
-> > > Otherwise, let us not do 'goto out' here. Rather, let us compare
-> > > entry_ops->atom with expected_reg. Do 'ret = entry_ops->atom' and
-> > > 'goto out' only if entry_ops->atom == expected_reg. Otherwise,
-> > > the original 'ret' value is preserved.
-> > Basing on this description in lldb source:
-> > https://github.com/llvm/llvm-project/blob/1cd981a5f3c89058edd61cdeb1efa3232b1f71e6/lldb/source/Expression/DWARFExpression.cpp#L538
-> > It would be surprising if DW_OP_entry_value records had different expressions.
-> > However, there are 50 instances of such behaviour in my clang 18.1.8 built kernel., e.g.:
-> > 
-> > 0x01f75d14:   DW_TAG_subprogram
-> >                  DW_AT_low_pc    (0xffffffff818c43a0)
-> >                  DW_AT_high_pc   (0xffffffff818c43c9)
-> >                  DW_AT_frame_base        (DW_OP_reg7 RSP)
-> >                  DW_AT_call_all_calls    (true)
-> >                  DW_AT_name      ("hwcache_align_show")
-> >                  DW_AT_decl_file ("/home/eddy/work/bpf-next/mm/slub.c")
-> >                  DW_AT_decl_line (6621)
-> >                  DW_AT_prototyped        (true)
-> >                  DW_AT_type      (0x01f51a9b "ssize_t")
-> > 
-> > 0x01f75d26:     DW_TAG_formal_parameter
-> >                    DW_AT_location        (indexed (0xa0f) loclist = 0x0062c64f:
-> >                       [0xffffffff818c43a9, 0xffffffff818c43b5): DW_OP_reg5 RDI
-> >                       [0xffffffff818c43b5, 0xffffffff818c43c1): DW_OP_entry_value(DW_OP_reg5 RDI), DW_OP_stack_value
-> >                       [0xffffffff818c43c1, 0xffffffff818c43c9): DW_OP_entry_value(DW_OP_reg4 RSI), DW_OP_stack_value)
-> >                    DW_AT_name    ("s")
-> >                    DW_AT_decl_file       ("/home/eddy/work/bpf-next/mm/slub.c")
-> >                    DW_AT_decl_line       (6621)
-> >                    DW_AT_type    (0x01f4f449 "kmem_cache *")
-> > 
-> > The following change seem not to affect pahole execution time:
-> > 
-> > @@ -1234,7 +1234,8 @@ static int parameter__reg(Dwarf_Attribute *attr, int expected_reg)
-> >                              dwarf_getlocation(&entry_attr, &entry_ops, &entry_len) == 0 &&
-> >                              entry_len == 1) {
-> >                                  ret = entry_ops->atom;
-> > -                               goto out;
-> > +                               if (expr->atom == expected_reg)
-> > +                                       goto out;
-> >                          }
-> >                          break;
-> >                  }
+> Run ~4000 times without observing a segmentation fault (as compared
+> to without patch 2, where a segmentation fault is observed approximately
+> every 200 invokations).
 > 
-> Should we do
-> 			...
-> 			dwarf_getlocation(&entry_attr, &entry_ops, &entry_len) == 0 &&
-> 			entry_len == 1 && expr->atom == expected_reg) {
-> 				ret = entry_ops->atom;
-> 				goto out;
-> 		}
-> 		...
-> ?
+> Changes since v1:
+> 
+> - used Eduard's approach of using a __dwarf_getlocations()
+>   internal wrapper (Eduard, patch 1).
+> - renamed function to parameter__reg(); did not rename
+>   __dwarf_getlocations() since its functionality is based around
+>   retrieving DWARF location info rather than parameter register
+>   indices (Yonghong, patch 2)
+> - added locking around dwarf_getlocation*() usage in dwarf_loader
+>   to avoid segmentation faults reported by Eduard (Jiri, Arnaldo,
+>   patch 2)
 
-+1 
+looks good, I got 95 more functions in clang build including perf_event_read
+and there's no change in generated functions with gcc build
 
+Acked-by: Jiri Olsa <jolsa@kernel.org>
+
+thanks,
 jirka
 
 > 
-> > 
-> > This question aside, I think the changes fine.
-> > 
-> > [...]
-> > 
+> Alan Maguire (1):
+>   dwarf_loader: use libdw__lock for dwarf_getlocation(s)
+> 
+> Eduard Zingerman (1):
+>   dwarf_loader: Check DW_OP_[GNU_]entry_value for possible parameter
+>     matching
+> 
+>  dwarf_loader.c | 121 +++++++++++++++++++++++++++++++++++++++----------
+>  1 file changed, 96 insertions(+), 25 deletions(-)
+> 
+> -- 
+> 2.31.1
 > 
