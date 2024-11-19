@@ -1,120 +1,136 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00C3B15853A
-	for <dwarves@vger.kernel.org>; Tue, 19 Nov 2024 20:19:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 602C1199FDD
+	for <dwarves@vger.kernel.org>; Tue, 19 Nov 2024 22:05:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732047555; cv=none; b=GQpxbHav/UFg3PHPATFjvHT09XGcsF6UeSo5Yk5dh3Uvf/EUiVQpHy4MOgjbgNvz/rBoNhFpsFgkl0t7SQzgD2SuaOb7KtZxbhCILOFaXyl7G4DoAI5GD3Nu5d6fDd9rYZLEAixdyJttmsNPhpLtxxG6AY3sQXK5ugOCax1JSAo=
+	t=1732053905; cv=none; b=W5MLunPXXAyb5Wo12uv2wtbt1QhhpN29SjWUSEH7nk+FmjiKQRDt940EtMBiis8kh4C/YnomFBw2TTxFFS4yei3q2gcLz7syBMFPNUtLQdpoSN7FDEG+7DcHWhS3LfbiUWjV1ZqFsKVf24f7a+FJnjA8XRwe1SsTifH1286iRC4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732047555; c=relaxed/simple;
-	bh=Jtv9VzKbKsaIJa0uPZLBkNu0nzgYwPiUxUvHujDmmjI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=I0VHpydWMt1X+FvFLUq8H3h6n4IUg7FpiUk6YgH+oVvTLI9cWf7wcbTv2zOQQfO2o0gKzv9Dpm98vnolPg10b3OjyjxpZ/nxMhZNcSBHsqg2p8EbaueXk250aVtjtXmjeW2nvkI2/HnftluRvGUNgBmFb+owQdNGmpd2byV+C50=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=c30xxTR9; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1732053905; c=relaxed/simple;
+	bh=bEQSOhSW43jzahuLF6QhZZgW1HCQMyIiTOa8NXtsNGg=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=p/640cHskrwTB8BCFsjoFdsJIz0Ny5uuItUVycRuXB7VflGUi0MI7CLFFp3dt1e2ycaPMwYuuyJvdjx7kgQbFyftjRwrjE9sT0eH5kjqWmB9hujJIUtiwVOjeaIPSj7doHUHXEjdqpO5rmNSPuk9qKZ1YxZmrwrWGowhM5xh54Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZA7sZxhE; arc=none smtp.client-ip=209.85.210.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="c30xxTR9"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F272C4CECF;
-	Tue, 19 Nov 2024 20:19:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1732047553;
-	bh=Jtv9VzKbKsaIJa0uPZLBkNu0nzgYwPiUxUvHujDmmjI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=c30xxTR9CFx1iMfHRL+hZX19ECU0oXtowZ26GF9V3TTcyi+SSp0u51Bmcp7cd2pCA
-	 9hawORRiPq68lQRPRoMIhNJJ9DSRvirWF2+4CkZZoDDmWo43pzOKUU2TJVFPxrceuG
-	 tEtucw9iDZ+dA3jgZjCIPJ17xktc9Sl+CBIk99ce4uoOCGD48IkdGY+GymESxPUgxf
-	 ixpyMTUOMG5MInYL8mThWWOF0VpV7R02fCgt7E4RIipmq3+ay10C8VeLXJAPzj1Ln+
-	 thWyCVp//m7f+dUjFlhCaIqzLxnSNflxyMDF56ObiV7wA0yGIy9mrHrkt934SRO8px
-	 4ZunvM4qfhLeQ==
-Date: Tue, 19 Nov 2024 17:19:08 -0300
-From: Arnaldo Carvalho de Melo <acme@kernel.org>
-To: Alan Maguire <alan.maguire@oracle.com>
-Cc: Jiri Olsa <jolsa@kernel.org>, Clark Williams <williams@redhat.com>,
-	Kate Carcia <kcarcia@redhat.com>, dwarves@vger.kernel.org,
-	Arnaldo Carvalho de Melo <acme@redhat.com>,
-	Matthias Schwarzott <zzam@gentoo.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZA7sZxhE"
+Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-7248c1849bdso3264826b3a.3
+        for <dwarves@vger.kernel.org>; Tue, 19 Nov 2024 14:05:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1732053904; x=1732658704; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=BkrfN/8rKpLBnt7/ut16AtqQsJcgzNhlTUtG22RGASE=;
+        b=ZA7sZxhEcdpStUhz9kM6ilz8DqLUKig+2HwCx3VCwLwxPYQJ3rAGQQ4Cu2vzdt9Y85
+         4Pqdv8orp0/PvviBj8F7Zv/kcLX9C69amoz9x9tpH3UBATctCYMd7Gtwbod8907Jk3nG
+         yHHJnXAr7LGmzNdfBUhdn9qmoizPNBmtKfshtVCmIBEtyk5jKXPIxLtcUFvg7sy5PqNq
+         pTJChYyLCTXn8YackzxV7mH1N6DN4/siR8RnuRVDMdy5YYTRViLwE7LsBn/G/ioyK0QI
+         TUKsFTfMm0gcV3rEhmlJaqeLB5LwLFig17UKhR3YDtnkpVUqivhhfwPXpQMaJeT8ng50
+         i0wA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1732053904; x=1732658704;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=BkrfN/8rKpLBnt7/ut16AtqQsJcgzNhlTUtG22RGASE=;
+        b=Dnhy+iZVnGunN8ZbuoTS2tJ2Q/jHl7y5wnlGl3DW5KTprBPGhi6gtF5y9H1WrKglq8
+         WS1OTgpaJSTrPlCJQA8zAawwnf2stup8MLt1ji2wQ/U/gUuuYNx18NGzYwsV8etlKcmw
+         0C8KP0crJmDcXsuYoB0GrsTOU9JNZdyoHvKNqoI3B/wgBSiLBKdVMl2KsNA1kjMrwz8E
+         +iWlyvd7jr5YPZU8u7Dyf/U+eSSJLoVS/lG9xMP5qLjsK3mmuUcaTfoeO1XYbLhiSs5d
+         ms4E7DyookPqUwoXoG+9n0Y5T2i7K6o7RarSWU8gVQ+v81s7vecPMoxtGS95AS9Pqcq+
+         3rwg==
+X-Forwarded-Encrypted: i=1; AJvYcCUV2VXb2cpqIEYBu96AituluXYOGbfAf47iIuTvUytx8XVNr8kdKEhJJCcC3R25MpJj7qJzGTFO@vger.kernel.org
+X-Gm-Message-State: AOJu0YxeGfB7FyKBVbJ3fZ4xXxgJ5B+At5XzX/y2xgjl1++cu1moZeN9
+	Ajet8xu2uiHcsKfkYrQW4HoGhZ0B8YtODkdyeQu3+lzO5xYBQjBd
+X-Google-Smtp-Source: AGHT+IEXYMmHxoPDhXDfmyMQgBkx+jNcg4Qz6S6ZMDB0IrljVGhmwbjqzqCOybZmMPxMv3pKAtjHig==
+X-Received: by 2002:a05:6a00:a8a:b0:724:63e7:209f with SMTP id d2e1a72fcca58-724bec87604mr869292b3a.2.1732053903572;
+        Tue, 19 Nov 2024 14:05:03 -0800 (PST)
+Received: from [192.168.0.235] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-724beefe891sm186124b3a.65.2024.11.19.14.05.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Nov 2024 14:05:03 -0800 (PST)
+Message-ID: <a1366bfad38306b2e7e41549ba1ac2ed217b94ff.camel@gmail.com>
 Subject: Re: [PATCH 3/5] pahole: Honour exclusive BTF loading
-Message-ID: <ZzzyvMO0jYLMQCVa@x1>
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Arnaldo Carvalho de Melo <acme@kernel.org>, Alan Maguire
+	 <alan.maguire@oracle.com>
+Cc: Jiri Olsa <jolsa@kernel.org>, Clark Williams <williams@redhat.com>, Kate
+ Carcia <kcarcia@redhat.com>, dwarves@vger.kernel.org, Arnaldo Carvalho de
+ Melo <acme@redhat.com>,  Matthias Schwarzott <zzam@gentoo.org>, Andrii
+ Nakryiko <andrii@kernel.org>, Song Liu <song@kernel.org>,  Yonghong Song
+ <yonghong.song@linux.dev>
+Date: Tue, 19 Nov 2024 14:04:58 -0800
+In-Reply-To: <20241119134032.783215-4-acme@kernel.org>
 References: <20241119134032.783215-1-acme@kernel.org>
- <20241119134032.783215-4-acme@kernel.org>
- <0ddffba9-eb26-456b-bfa6-68bf94e8b481@oracle.com>
+	 <20241119134032.783215-4-acme@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.52.4 (3.52.4-1.fc40) 
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0ddffba9-eb26-456b-bfa6-68bf94e8b481@oracle.com>
 
-On Tue, Nov 19, 2024 at 05:47:21PM +0000, Alan Maguire wrote:
-> On 19/11/2024 13:40, Arnaldo Carvalho de Melo wrote:
-> > From: Arnaldo Carvalho de Melo <acme@redhat.com>
-> > 
-> > When we specify 'btf' and BTF info is available in the system, in the
-> > /sys/kernel/btf/vmlinux file, pahole will find it and use it to get the
-> > type information asked for:
-> > 
-> >   root@x1:~# perf trace -o /tmp/output -e openat pahole -F btf list_head ; tail -1 /tmp/output
-> >   struct list_head {
-> >   	struct list_head *         next;                 /*     0     8 */
-> >   	struct list_head *         prev;                 /*     8     8 */
-> > 
-> >   	/* size: 16, cachelines: 1, members: 2 */
-> >   	/* last cacheline: 16 bytes */
-> >   };
-> > 
-> >        1.579 ( 0.010 ms): pahole/764777 openat(dfd: CWD, filename: "/sys/kernel/btf/vmlinux", flags: RDONLY|CLOEXEC) = 3
-> >   root@x1:~#
-> > 
-> > But, if the system doesn't have BTF info, which we now can simulate by using an
-> > environment variable it is tryng DWARF after failing for BTF, which isn't what
-> > the user asked for having specified just btf in the -F pahole command line:
-> > 
-> >   root@x1:~# export PAHOLE_VMLINUX_BTF_FILENAME=non-existent
-> >   root@x1:~# perf trace -o /tmp/output -e openat,access pahole -F btf list_head ; tail -12 /tmp/output
-> >   struct list_head {
-> >   	struct list_head *         next;                 /*     0     8 */
-> >   	struct list_head *         prev;                 /*     8     8 */
-> > 
-> >   	/* size: 16, cachelines: 1, members: 2 */
-> >   	/* last cacheline: 16 bytes */
-> >   };
-> > 
-> >   1.643 ( 0.003 ms): pahole/765220 access(filename: "list_head", mode: R)      = -1 ENOENT (No such file or directory)
-> >   1.658 ( 0.002 ms): pahole/765220 access(filename: "non-existent", mode: R)   = -1 ENOENT (No such file or directory)
-> >   1.697 ( 0.018 ms): pahole/765220 openat(dfd: CWD, filename: "/sys/kernel/notes") = 3
-> >   1.801 ( 0.004 ms): pahole/765220 openat(dfd: CWD, filename: "vmlinux")       = -1 ENOENT (No such file or directory)
-> >   1.807 ( 0.005 ms): pahole/765220 openat(dfd: CWD, filename: "/boot/vmlinux") = -1 ENOENT (No such file or directory)
-> >   1.927 ( 0.005 ms): pahole/765220 openat(dfd: CWD, filename: "/usr/lib/debug/lib/modules/6.11.6-200.fc40.x86_64/vmlinux", flags: RDONLY|CLOEXEC) = 3
-> >   root@x1:~#
-> > 
-> > So honour the request and fails when just BTF is asked and no BTF file is
-> > found:
-> > 
-> >   # export PAHOLE_VMLINUX_BTF_FILENAME=non-existent
-> >   # pahole -F btf list_head
-> >   pahole: couldn't find any btf debug information on this system.
-> >   #
-> > 
-> > Reported-by: Matthias Schwarzott <zzam@gentoo.org>
-> > Cc: Alan Maguire <alan.maguire@oracle.com>
-> > Cc: Andrii Nakryiko <andrii@kernel.org>
-> > Cc: Eduard Zingerman <eddyz87@gmail.com>
-> > Cc: Jiri Olsa <jolsa@kernel.org>
-> > Cc: Song Liu <song@kernel.org>
-> > Cc: Yonghong Song <yonghong.song@linux.dev>
-> > Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
-> 
-> For the series (since some of my replies didn't reach the list, apologies)
-> 
-> Reviewed-by: Alan Maguire <alan.maguire@oracle.com>
-> Tested-by: Alan Maguire <alan.maguire@oracle.com>
+On Tue, 2024-11-19 at 10:40 -0300, Arnaldo Carvalho de Melo wrote:
 
-Thanks, added to all csets,
+[...]
 
-- Arnaldo
+I tried the following test on top of this patch-set:
+
+----- 8< ----------------------------------------
+#!/bin/bash
+
+cat <<EOF | clang -o btf-and-dwarf.o -c -x c -g - || exit 1
+struct test_val { int i; } g;
+EOF
+pahole --btf_encode btf-and-dwarf.o || exit 1
+# Note: has to be llvm-strip, otherwise --no-strip-all is not available
+llvm-strip -o only-dwarf.o    --no-strip-all -R .BTF -R .BTF.ext	btf-and-dw=
+arf.o
+llvm-strip -o only-btf.o      --no-strip-all --strip-debug 		btf-and-dwarf.=
+o
+
+for fmt in none btf dwarf dwarf,btf; do
+    for file in no-such-file only-btf.o only-dwarf.o btf-and-dwarf.o; do
+        if [ "$fmt" =3D=3D "none" ]; then
+            cmd=3D"pahole"
+        else
+            cmd=3D"pahole -F ${fmt}"
+        fi
+        printf -- "------ PAHOLE_VMLINUX_BTF_FILENAME=3D%-20s %-20s ------\=
+n" "${file}" "${cmd}"
+        PAHOLE_VMLINUX_BTF_FILENAME=3D$file $cmd 2>&1 | grep -P '(test_val|=
+pahole:)'
+    done
+done
+---------------------------------------- >8 -----
+
+And there are a few surprising (to me) results, namely:
+
+------ PAHOLE_VMLINUX_BTF_FILENAME=3Donly-dwarf.o         pahole           =
+    ------
+pahole: couldn't find any debug information on this system.
+...
+------ PAHOLE_VMLINUX_BTF_FILENAME=3Donly-dwarf.o         pahole -F dwarf  =
+    ------
+pahole: couldn't find any debug information on this system.
+...
+------ PAHOLE_VMLINUX_BTF_FILENAME=3Dbtf-and-dwarf.o      pahole -F dwarf  =
+    ------
+pahole: couldn't find any debug information on this system.
+...
+------ PAHOLE_VMLINUX_BTF_FILENAME=3Donly-dwarf.o         pahole -F dwarf,b=
+tf  ------
+pahole: couldn't find any debug information on this system.
+...
+
+It looks like DWARF is never loaded.
+llvm-dwarfdump shows that DWARF is indeed present in only-dwarf.o and
+btf-and-dwarf.o. Is this an expected behaviour?
+
+
