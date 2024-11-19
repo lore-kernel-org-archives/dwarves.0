@@ -1,32 +1,32 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8E8E1D1E65
-	for <dwarves@vger.kernel.org>; Tue, 19 Nov 2024 20:18:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00C3B15853A
+	for <dwarves@vger.kernel.org>; Tue, 19 Nov 2024 20:19:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732047513; cv=none; b=gG0ikkzvZ1NdGgl+U1HUiHHGMv9AT9MNQoG1YRWBegp59PQbZGnH/vlvsWjwLh1kcAqjQuqtCD8bE8eeeWUhytem2pl5AexaRy2rXekcgsPhSmhP7Jy9QQdGNHwA6KNAemvL8cLZD2HIDWnhfAFPssRK+EQbvQE68uMLEa4sKPw=
+	t=1732047555; cv=none; b=GQpxbHav/UFg3PHPATFjvHT09XGcsF6UeSo5Yk5dh3Uvf/EUiVQpHy4MOgjbgNvz/rBoNhFpsFgkl0t7SQzgD2SuaOb7KtZxbhCILOFaXyl7G4DoAI5GD3Nu5d6fDd9rYZLEAixdyJttmsNPhpLtxxG6AY3sQXK5ugOCax1JSAo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732047513; c=relaxed/simple;
-	bh=eXr0ndymq3kPDfCwif2LLhGyCa/VcBXqpzUSZfTOGUc=;
+	s=arc-20240116; t=1732047555; c=relaxed/simple;
+	bh=Jtv9VzKbKsaIJa0uPZLBkNu0nzgYwPiUxUvHujDmmjI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bOgjrgaz1wU3X3fGSZL6wpZw7KTDDil96151NND1oJA+XmGTVfX03sbnsuoQIazuJ41SJ/p+C7FeNX+a4lntXgGEFfZCCeEE2Nit3vycEbtc3E/aSRYVwyMVXZZd0geXNj+BJYIWH675I+PRxj0WdT/vIJzu9hjpy2x1tWaHBS4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=N6L2fm6G; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=I0VHpydWMt1X+FvFLUq8H3h6n4IUg7FpiUk6YgH+oVvTLI9cWf7wcbTv2zOQQfO2o0gKzv9Dpm98vnolPg10b3OjyjxpZ/nxMhZNcSBHsqg2p8EbaueXk250aVtjtXmjeW2nvkI2/HnftluRvGUNgBmFb+owQdNGmpd2byV+C50=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=c30xxTR9; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="N6L2fm6G"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40372C4CECF;
-	Tue, 19 Nov 2024 20:18:31 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="c30xxTR9"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F272C4CECF;
+	Tue, 19 Nov 2024 20:19:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1732047513;
-	bh=eXr0ndymq3kPDfCwif2LLhGyCa/VcBXqpzUSZfTOGUc=;
+	s=k20201202; t=1732047553;
+	bh=Jtv9VzKbKsaIJa0uPZLBkNu0nzgYwPiUxUvHujDmmjI=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=N6L2fm6G7TzIC/vIHoQ3thDUDK41AUzGnhE43ljIFIAZ9/FGXFyVVTHXKYL4Q8Od0
-	 bdN0CBjbrV7qzbQqU55k/poZTU+AHd5Ney59s1aq2KTmZ554HJ5IjmkubLb1m+J+2m
-	 y9hZKwHJKhFHIXf3zhcGIWgs4DYxmLzVchZ8HPMxombkOzcZPOgBmupCDRR/BSytRr
-	 EvfuXpJWwVwnhd0FuP5m6LYJIk0CX/F9vG3YpNGqgz240fXDOMLhphIUPSDCCu8rh7
-	 Z2s5TYNYKDTa8JsbrsowagneJLSM9W+fKF8OGQ03DfA2Klp7aFYLmL/oBes21BK/Ar
-	 KJ5wLcU0i7KFA==
-Date: Tue, 19 Nov 2024 17:18:29 -0300
+	b=c30xxTR9CFx1iMfHRL+hZX19ECU0oXtowZ26GF9V3TTcyi+SSp0u51Bmcp7cd2pCA
+	 9hawORRiPq68lQRPRoMIhNJJ9DSRvirWF2+4CkZZoDDmWo43pzOKUU2TJVFPxrceuG
+	 tEtucw9iDZ+dA3jgZjCIPJ17xktc9Sl+CBIk99ce4uoOCGD48IkdGY+GymESxPUgxf
+	 ixpyMTUOMG5MInYL8mThWWOF0VpV7R02fCgt7E4RIipmq3+ay10C8VeLXJAPzj1Ln+
+	 thWyCVp//m7f+dUjFlhCaIqzLxnSNflxyMDF56ObiV7wA0yGIy9mrHrkt934SRO8px
+	 4ZunvM4qfhLeQ==
+Date: Tue, 19 Nov 2024 17:19:08 -0300
 From: Arnaldo Carvalho de Melo <acme@kernel.org>
 To: Alan Maguire <alan.maguire@oracle.com>
 Cc: Jiri Olsa <jolsa@kernel.org>, Clark Williams <williams@redhat.com>,
@@ -37,7 +37,7 @@ Cc: Jiri Olsa <jolsa@kernel.org>, Clark Williams <williams@redhat.com>,
 	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
 	Yonghong Song <yonghong.song@linux.dev>
 Subject: Re: [PATCH 3/5] pahole: Honour exclusive BTF loading
-Message-ID: <ZzzylUuU-a9Y3XB8@x1>
+Message-ID: <ZzzyvMO0jYLMQCVa@x1>
 References: <20241119134032.783215-1-acme@kernel.org>
  <20241119134032.783215-4-acme@kernel.org>
  <0ddffba9-eb26-456b-bfa6-68bf94e8b481@oracle.com>
@@ -114,3 +114,7 @@ On Tue, Nov 19, 2024 at 05:47:21PM +0000, Alan Maguire wrote:
 > 
 > Reviewed-by: Alan Maguire <alan.maguire@oracle.com>
 > Tested-by: Alan Maguire <alan.maguire@oracle.com>
+
+Thanks, added to all csets,
+
+- Arnaldo
