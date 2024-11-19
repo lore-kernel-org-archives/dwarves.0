@@ -1,32 +1,32 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 603001D1E6C
-	for <dwarves@vger.kernel.org>; Tue, 19 Nov 2024 17:51:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D78331D3197
+	for <dwarves@vger.kernel.org>; Tue, 19 Nov 2024 18:29:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732038677; cv=none; b=axQ3Ve/a8eoWz1c2IaWM0K5wiNg5fPeT1B5YDxjv0Xwd7D8NaCKAATf9ZbMFFtrggNFpipQTmfuho9UA4deXFnXLAwf31peNFlNKKsXiY4NP79o/u1jSB/soe67ZzjwEA3P85444leaj2iEtX2lRIWwP08TS4pWkcZ23oR6rnrQ=
+	t=1732040954; cv=none; b=nQoALC6FbOj21h9+0ocbZ1XlQQKDmwaa7xTymgDll8w+0SGLJI6v42DwXP/qbOPRMp+XWpUnv6uczVGFRCYsDuOuQi9m5LxOpnOpc4dXEd0zeHBiuLzp8QcZhkwO7pzZ0PmXjXBLCsPvqAYHL/N3mAd6jdHYMJW/iu7Xsc79G1U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732038677; c=relaxed/simple;
-	bh=S4zzwsIK5279pRaw9TZlm/mOaVhuIkKloynQm8HQ0BE=;
+	s=arc-20240116; t=1732040954; c=relaxed/simple;
+	bh=54y90a6t0IgH6WHbrIlj5CJDsDbfgZJyBuv1P92KfXE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OR06B4eZS8hmhpeIKcY+fP0YQhbMWydI4c9vwjPzv4LxMwz1mspFvwxCcFonUaO3VG7ZqQtsrJPhzFDGnOuOsP0Mu5Hsximuxgws54XalozRrVVwrQ9OOOPG2K78pGrCD9MauDSLWzQYondo4+VA2eZBUHMhnYYa+ubT2BlLCZc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uM6C8lc5; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=LN458e93NiHMcZCRZo8btN9KT1F/BjmqtFSijLfPshgg4eVSa+s0xn/jk0WRf6I31Pq3eSn+N22HhTIod7dk6X4akA+gixZZzg+F2xXWAMefc5YGPS3uyL+j6/TNQy3/U41rByh6W6rA1kl1tj8u4CRCJQGQ8WtPPN6PF/5qVYk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dKgg4HRX; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uM6C8lc5"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8FE7C4CECF;
-	Tue, 19 Nov 2024 17:51:16 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dKgg4HRX"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2353C4CED0;
+	Tue, 19 Nov 2024 18:29:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1732038677;
-	bh=S4zzwsIK5279pRaw9TZlm/mOaVhuIkKloynQm8HQ0BE=;
+	s=k20201202; t=1732040954;
+	bh=54y90a6t0IgH6WHbrIlj5CJDsDbfgZJyBuv1P92KfXE=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=uM6C8lc5+HetScVxHC/bIV15h0tAfHMQLcyl3QCWszSV/89oaFG9sB2afq6cnaSjI
-	 UQk7UeBxUKj1a9Z4N+etU5AAVaYmQYsKhfnRfSYzlYElQAg30DGhTGyKQJVNyxw61Z
-	 NWFfYS9cV4aa6m+ZTJ1ggyEekhkb57nL27aPukI8wLm8G8DWlGB7kDDNKx2EMqTmNm
-	 lPmYQyBKsA0FxVtqyxiUcc9zal9Hhqa7SA+hAQU/bGMClA1nmCn+za65OdjFv5btOM
-	 yEQ22cy/BzPxpwqcYDq78lM2LKp+7vfBVORRFXcgpFe0BoKt88+hly5HoUjcSSAA3M
-	 5PiorsuecVpoQ==
-Date: Tue, 19 Nov 2024 14:51:13 -0300
+	b=dKgg4HRXEftZaHnJo19+rjhQjlRHiWPlvqKQweIjMzuYE4MZsIBiSxmb2mpildXDR
+	 OIe3yd8l+N5AJzZq+QeuOuWrGJ/zUSbv9K8g6Lhjj/gRQ+EIX/gv11BPsQF6HC4ObG
+	 5tgyRv70uUSZu8p6ejSc+vGcutkZwvLsdElyMdFlzYQlnRT5IJCY0DvOkEZJ+oB+dV
+	 SHQRKGqABjirnfbAb7kp8aFrpeI79WvBtWS9BZ5m93vBKljxmdpwu4RvrMqrpC2QPm
+	 8hYGFdkNQyy95W6x+t/yOo9spW2mXI25Q1SN9C4FiVzTPYdAb62DLVH5KErbfKzFIG
+	 +Z575Z83JQhVw==
+Date: Tue, 19 Nov 2024 15:29:10 -0300
 From: Arnaldo Carvalho de Melo <acme@kernel.org>
 To: Alan Maguire <alan.maguire@oracle.com>
 Cc: Jiri Olsa <jolsa@kernel.org>, Clark Williams <williams@redhat.com>,
@@ -36,12 +36,12 @@ Cc: Jiri Olsa <jolsa@kernel.org>, Clark Williams <williams@redhat.com>,
 	Andrii Nakryiko <andrii@kernel.org>,
 	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
 	Yonghong Song <yonghong.song@linux.dev>, dwarves@vger.kernel.org
-Subject: Re: [PATCH 4/5] tests default_vmlinux_btf: Cover the no args
- segfault too
-Message-ID: <ZzzQEdPoMDoGjI5z@x1>
+Subject: Re: [PATCH 5/5] core, libctf: Check if constructor arguments are
+ NULL before using them
+Message-ID: <ZzzY9uwdCO9hezd6@x1>
 References: <20241118204146.772762-1-acme@kernel.org>
- <20241118204146.772762-5-acme@kernel.org>
- <20f6d8af-5c4e-4eb4-925e-7a6b10efcb55@oracle.com>
+ <20241118204146.772762-6-acme@kernel.org>
+ <4b465bfc-8214-41ab-8b6d-bbdf7421e19b@oracle.com>
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
@@ -50,22 +50,32 @@ List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20f6d8af-5c4e-4eb4-925e-7a6b10efcb55@oracle.com>
+In-Reply-To: <4b465bfc-8214-41ab-8b6d-bbdf7421e19b@oracle.com>
 
-On Tue, Nov 19, 2024 at 04:45:42PM +0000, Alan Maguire wrote:
+On Tue, Nov 19, 2024 at 05:02:39PM +0000, Alan Maguire wrote:
 > On 18/11/2024 20:41, Arnaldo Carvalho de Melo wrote:
 > > From: Arnaldo Carvalho de Melo <acme@redhat.com>
 > > 
-> >   root@x1:/home/acme/git/pahole# pahole --running_kernel_vmlinux
-> >   pahole: couldn't find a vmlinux that matches the running kernel
-> >   HINT: Maybe you're inside a container or missing a debuginfo package?
-> >   root@x1:/home/acme/git/pahole# tests/default_vmlinux_btf.sh
-> >   Default BTF on a system without BTF: FAILED
-> >   root@x1:/home/acme/git/pahole# pahole
+> >   # pahole
 > >   Segmentation fault (core dumped)
-> >   root@x1:/home/acme/git/pahole#
+> >   #
 > > 
-> > Now to fix this one as well.
+> > Now we have:
+> > 
+> >   # ls -la bla
+> >   ls: cannot access 'bla': No such file or directory
+> >   # export PAHOLE_VMLINUX_BTF_FILENAME=bla
+> >   # pahole
+> >   pahole: couldn't find any debug information on this system.
+> >   # pahole list_head
+> >   pahole: couldn't find any debug information on this system.
+> >   # pahole -F btf list_head
+> >   pahole: couldn't find any btf debug information on this system.
+> >   # pahole -F dwarf list_head
+> >   pahole: couldn't find any dwarf debug information on this system.
+> >   # tests/default_vmlinux_btf.sh
+> >   Default BTF on a system without BTF: Ok
+> >   #
 > > 
 > > Reported-by: Matthias Schwarzott <zzam@gentoo.org>
 > > Cc: Alan Maguire <alan.maguire@oracle.com>
@@ -77,6 +87,7 @@ On Tue, Nov 19, 2024 at 04:45:42PM +0000, Alan Maguire wrote:
 > > Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
 > 
 > Reviewed-by: Alan Maguire <alan.maguire@oracle.com>
+> Tested-by: Alan Maguire <alan.maguire@oracle.com>
 
 Thanks, added to the cset,
 
