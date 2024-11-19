@@ -1,110 +1,114 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6356D13E03E
-	for <dwarves@vger.kernel.org>; Tue, 19 Nov 2024 19:49:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F361B1CF2BD
+	for <dwarves@vger.kernel.org>; Tue, 19 Nov 2024 19:54:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732045750; cv=none; b=O27l81S4Ii7iiFOACX5rMDPvKRx1L469UJ130jRZsH3H/9fxKleiukIotka+2CBbHw/+j4evEgk8n+obJgAtGIg61ATUUAV+/mFAA3uSqWWK1jJhJKxWsj+Ma8Kf+2o2ELI/01HKYAiaM8qI+RWNOzN5RvZyRohn2UH69ObbGQY=
+	t=1732046060; cv=none; b=E11PDWMIzfTFatYRFnm87sIzYoVQJz9VKQQUglrXyEhOYRNdWR2WjuYUvcIx+3rWQuLfCFM5Mj33OE6FfznsNH2qU8a8iX05S73ZF71gS/AAspwLbFiegkMXJp9e2omOHtIU3nSWzEi/tP/sorFvSf5lrQgIx5b1QO0PGHqEEjY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732045750; c=relaxed/simple;
-	bh=TwyD7poXLrbF2zUID5qwYyHJFG6J75/23jfab1XHT/c=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Uq4zBe+GTRaC7Qtc8w5WYJtS2/hCkMWLEiOaZyDL/0TqYBhDUpkn3ykdjGS37yBIZaoEOCsZdy3VAkliNA6qutIFPkUTFK5iOTYcPi8GGPBMFgonT6dk6RCdl7KACFxxBCoaYM5eceoWP9G2FdsRGRQ0SLbiD1agzFR5Re7kUtw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fRyyLvlx; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1732046060; c=relaxed/simple;
+	bh=aEmAjUWmOsUMWnWZWoAjHvm2HwCzUf0nnYahGyzJm1A=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=IyWKBEsDgSleVo/yN19eWqf04y3o5EAWnBod/MTH/LPw51AixcPF17ncy0un9dNRHuN8vYvdrBkJVhhXH/X0A7cr0pP5/fkhqH/DakQ6dmcjA3RgeXRZGWy3iyf+/6/FV6+AodkEbhYdqAgQYnXyMov1w2zRbvwCovklZc5GzHs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fY/K03ir; arc=none smtp.client-ip=209.85.210.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fRyyLvlx"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B697C4CED1;
-	Tue, 19 Nov 2024 19:49:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1732045750;
-	bh=TwyD7poXLrbF2zUID5qwYyHJFG6J75/23jfab1XHT/c=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=fRyyLvlx2ywQ7Gy44qKRnEnjza+IM+Vw0Xhhs2f4c5q44FkinHyDwsyrSliC/B6Wp
-	 jA6QsmFGS1T42+Ca+zM3gny9x/WjZTTWM3gMlD1oM6D4BYgF3eiangnsjMm8hv0BtD
-	 WC2kvIyCHUugaSWj7sXJM3TCJEe94C8bZEXyBxvLX1HY9KSyBgyRLxniK3FZZ3aJ2q
-	 447MNj5eDbC0HCE8C8n+MnpyQpQfIpK4T0yoO3S9p+0f47h4dG2zpXyqkoqhqdd3oW
-	 +NKc/T/mJXuMYFZJKybLHm/D0d/Rvoi/IA+dtvbKhJmfzehewgBABY7ZUhWXefCQsL
-	 7VYaFakZFOvKA==
-Date: Tue, 19 Nov 2024 16:49:04 -0300
-From: Arnaldo Carvalho de Melo <acme@kernel.org>
-To: Eduard Zingerman <eddyz87@gmail.com>
-Cc: Alan Maguire <alan.maguire@oracle.com>, Jiri Olsa <jolsa@kernel.org>,
-	Clark Williams <williams@redhat.com>,
-	Kate Carcia <kcarcia@redhat.com>,
-	Arnaldo Carvalho de Melo <acme@redhat.com>,
-	Matthias Schwarzott <zzam@gentoo.org>,
-	Andrii Nakryiko <andrii@kernel.org>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>, dwarves@vger.kernel.org
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fY/K03ir"
+Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-724455f40a0so1054757b3a.0
+        for <dwarves@vger.kernel.org>; Tue, 19 Nov 2024 11:54:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1732046058; x=1732650858; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=aEmAjUWmOsUMWnWZWoAjHvm2HwCzUf0nnYahGyzJm1A=;
+        b=fY/K03irTxa0aWX3JXdAzSrwRM88PQZwWWtG9CCqcZ5HCxZu+zrGv69ISpMUqTS0Kq
+         Bf1qBfO55qDmosfEYXthl235jS6ALdIKkZoTlfsdqqkWiHXoUnmeVluWBfxNKjOlQUNv
+         A/yRobVPTz5YGN+dgkuUdYx19vu6xJh7jD44jnD/1a0hGc2n3yiHO22qi6VyMq4M+1YV
+         Pclk4jffM3cdvEslYKbE9wrvoSWnOHOnhzPqEs2XwSCv7AvYSvySk0Ziw6G8JXldh2AT
+         8uLSovrnOZfRxtgF1e3i80D8YyBQgzgOLSUzxOvglgbVXXCIE/WEhqOlM9F9E05pPACm
+         4SpA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1732046058; x=1732650858;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=aEmAjUWmOsUMWnWZWoAjHvm2HwCzUf0nnYahGyzJm1A=;
+        b=vlRioirCJWp7XKQ6KDXUEpkax8u0A/cneYG3FuYNms67qDMTPB8Zljho3BxtxP6ZWc
+         NJbXE9OMj4u/pcS0rF8sXTHixCDcagrsFIv1K0tb22qEdKXSw5v6QnbOWlhyvMC5Tbz9
+         3SC2NfDmx4E7OyfwOd941hEqD1mN518mEu412qwgnKM3wOj5vQ9x9TcAiqdWSBgkl3Sa
+         YduRwaKU2tvuciroUtRWSohETNC5R4K7lJIyRtikOGYJ31WiiZeQxY9xApwpldV5I8RT
+         PMrbLDpL1uAiStmcEGTEBxsb+R7W2q9luyBwnHH4FXJWXxJrDXQFkWlr/InUygoMhbGH
+         wZBg==
+X-Forwarded-Encrypted: i=1; AJvYcCW/10q/Om/vLewLGeUwrieF+Jq1QHFmwQxV3PS0WqrJkUdnqJdbOEIUeLDLmXoSYGUHinWejOhM@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywe4G4Fpl0GMuSWWVpH1Mfp3W+67+ir2TZCzTNM464Yp5f127RU
+	OPnzlBbk42FxzdJno3SwFYtyQQr9g6Nplq6Q+SaUm69lCVoXR2nn
+X-Google-Smtp-Source: AGHT+IFMv1Co6MOqpi3TD0s23v8OD7LrDFoyyfNimET1KxIy7Mc4BNLqGHqaFbQUsMSOHder6vaNHQ==
+X-Received: by 2002:a05:6a00:888:b0:71e:cc7:c511 with SMTP id d2e1a72fcca58-724bee2b334mr310358b3a.23.1732046058184;
+        Tue, 19 Nov 2024 11:54:18 -0800 (PST)
+Received: from [192.168.0.235] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7f8c1c31df6sm8222157a12.31.2024.11.19.11.54.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Nov 2024 11:54:17 -0800 (PST)
+Message-ID: <020ec6550eb5e73bb5a273c57a686565a0a274df.camel@gmail.com>
 Subject: Re: [PATCH 2/5] tests default_vmlinux_btf: Introduce test for using
  BTF by default
-Message-ID: <ZzzrsLQCF9hYtT7P@x1>
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc: Alan Maguire <alan.maguire@oracle.com>, Jiri Olsa <jolsa@kernel.org>, 
+ Clark Williams <williams@redhat.com>, Kate Carcia <kcarcia@redhat.com>,
+ Arnaldo Carvalho de Melo <acme@redhat.com>,  Matthias Schwarzott
+ <zzam@gentoo.org>, Andrii Nakryiko <andrii@kernel.org>, Song Liu
+ <song@kernel.org>,  Yonghong Song <yonghong.song@linux.dev>,
+ dwarves@vger.kernel.org
+Date: Tue, 19 Nov 2024 11:54:12 -0800
+In-Reply-To: <ZzzrsLQCF9hYtT7P@x1>
 References: <20241118204146.772762-1-acme@kernel.org>
- <20241118204146.772762-3-acme@kernel.org>
- <33b85d2c1adafb5a46a874dfcfd43682395e1564.camel@gmail.com>
+	 <20241118204146.772762-3-acme@kernel.org>
+	 <33b85d2c1adafb5a46a874dfcfd43682395e1564.camel@gmail.com>
+	 <ZzzrsLQCF9hYtT7P@x1>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.52.4 (3.52.4-1.fc40) 
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <33b85d2c1adafb5a46a874dfcfd43682395e1564.camel@gmail.com>
 
-On Tue, Nov 19, 2024 at 10:35:35AM -0800, Eduard Zingerman wrote:
-> On Mon, 2024-11-18 at 17:41 -0300, Arnaldo Carvalho de Melo wrote:
-> > From: Arnaldo Carvalho de Melo <acme@redhat.com>
-> > 
-> > On a system without any debugging info or when one specifies BTF as the
-> > only BTF info desired but no BTF is available (or invalidated using
-> > PAHOLE_VMLINUX_BTF_FILENAME to an invalid/non-existent file), we're
-> > getting a segfault:
-> > 
-> >   root@x1:/home/acme/git/pahole# export PAHOLE_VMLINUX_BTF_FILENAME=non-existent
-> >   root@x1:/home/acme/git/pahole# pahole --running_kernel_vmlinux
-> >   pahole: couldn't find a vmlinux that matches the running kernel
-> >   HINT: Maybe you're inside a container or missing a debuginfo package?
-> >   root@x1:/home/acme/git/pahole# pahole
-> >   Segmentation fault (core dumped)
-> >   root@x1:/home/acme/git/pahole#
-> > 
-> > So add a test that checks for that before we fix it:
-> > 
-> >   root@x1:/home/acme/git/pahole# tests/default_vmlinux_btf.sh
-> >   Default BTF on a system without BTF: FAILED
-> >   root@x1:/home/acme/git/pahole#
-> > 
-> > Reported-by: Matthias Schwarzott <zzam@gentoo.org>
-> > Cc: Alan Maguire <alan.maguire@oracle.com>
-> > Cc: Andrii Nakryiko <andrii@kernel.org>
-> > Cc: Eduard Zingerman <eddyz87@gmail.com>
-> > Cc: Jiri Olsa <jolsa@kernel.org>
-> > Cc: Song Liu <song@kernel.org>
-> > Cc: Yonghong Song <yonghong.song@linux.dev>
-> > Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
-> > ---
-> 
-> Lgtm.
-> Would it make sense to move this patch to the end of the series?
-> In case someone does a bisect and runs the tests to find some regression.
+On Tue, 2024-11-19 at 16:49 -0300, Arnaldo Carvalho de Melo wrote:
 
-Humm?
+[...]
 
-So you think it should be introduced only when it passes? I.e. when the
-problem is fixed?
+> > Lgtm.
+> > Would it make sense to move this patch to the end of the series?
+> > In case someone does a bisect and runs the tests to find some regressio=
+n.
+>=20
+> Humm?
+>=20
+> So you think it should be introduced only when it passes? I.e. when the
+> problem is fixed?
 
-My practice so far has been to reproduce the problem manually, write a
-test, show that it detects the problem, fix, then show that the
-regression test shows that the problem is not present anymore.
+Right.
 
-I see your point about a bisection when running in the cset that
-introduces the test case and in all before the fix is added will fail,
-confusing the bisector or not allowing it to be automated :-\
+> My practice so far has been to reproduce the problem manually, write a
+> test, show that it detects the problem, fix, then show that the
+> regression test shows that the problem is not present anymore.
 
-So, yeah, probably, for automated bisection we should move it to after
-the fix, when finishing the devel cycle, which is now, will do.
+Yes, the downside would be that anyone trying out the fix would
+need to do some rebase to try the test w/o fix.
 
-If someone disagrees, please holer.
+> I see your point about a bisection when running in the cset that
+> introduces the test case and in all before the fix is added will fail,
+> confusing the bisector or not allowing it to be automated :-\
+>=20
+> So, yeah, probably, for automated bisection we should move it to after
+> the fix, when finishing the devel cycle, which is now, will do.
 
-- Arnaldo
+Fwiw, that's what folks enforce for bpf selftests =C2=AF\_(=E3=83=84)_/=C2=
+=AF.
+
