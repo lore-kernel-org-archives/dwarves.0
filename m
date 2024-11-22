@@ -1,96 +1,215 @@
-Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
+Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07E9F45945
-	for <dwarves@vger.kernel.org>; Tue, 19 Nov 2024 22:33:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E44D9230999;
+	Fri, 22 Nov 2024 07:02:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732055614; cv=none; b=kZsPNFwrI01Si2jqUYRCh6c+doFbeqRZ5fyUEHqCU8aQKgnuG9x5tjIQ/5RZ9u4QkT7q4hfM2smHTp4+5iUQ4ws4czgPk0zyTvSYj+fwvIPQBc7hKSzI2wlVjq8DZQY3ArduonpvW3ltn9ZqiTWMaImjhJqNZnRZWN2U0190USw=
+	t=1732258961; cv=none; b=JQF/9dX3gyKbxBdcHkEFqUkVbwG3NLRBOnbSWfLKECN8sl00Crw3tSWBygNAbutdy+7g3t13JoZKpm6o3655Fne+5nFS/E3iKpRSmPqLn0524kivzlSFCZCoC3y5xjSTNwAxczbXLIUaJNm0JUrJAKfxC35X6PhMG9OUz2oZj6Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732055614; c=relaxed/simple;
-	bh=cARYVO9RF7wl+BqnkuwLivM9oD6C3oEr2USZY7gMi4M=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=aeLYEO/mcrrKIFQPD6kw1wp4YQXE2GyDL5RnD1JoxubDkPJwSfYh3l2LbdfPhoyvgRGObYyFcEQDGYWPMTZaW2yZZslSUy30krXemJYz4nUE34kAGcHLB9h0H6AsSYcDjW15WfPKXJ2mYIVqnsp+NDjWV3HuYi8F1dd5ceEYMw0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZPgTR+Lg; arc=none smtp.client-ip=209.85.216.51
+	s=arc-20240116; t=1732258961; c=relaxed/simple;
+	bh=BCzQavMbTLZovY7ZiCYU9OQQrG1Bbg+lSGciM7uD4oM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=lnybeEqfGWem2C0efVUvtX1ahtM6BJuqrz58kIt+gYj7SLa061rVFJrRhaGNS6/nlF/X+lYwAw3crsi+SyQWMpd9o+xE+y2cwaKVsr9sAoNIp6opNsM+Izu/Ra6QBhxWfnfZFkcz90tRBqIc3mrRJuwk2vZpv5+DD+cMi7PGCMc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ebm+Cz3u; arc=none smtp.client-ip=209.85.210.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZPgTR+Lg"
-Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-2ea1bc2a9c5so225890a91.0
-        for <dwarves@vger.kernel.org>; Tue, 19 Nov 2024 14:33:32 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ebm+Cz3u"
+Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-7246c8c9b1cso1459897b3a.3;
+        Thu, 21 Nov 2024 23:02:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1732055612; x=1732660412; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=cARYVO9RF7wl+BqnkuwLivM9oD6C3oEr2USZY7gMi4M=;
-        b=ZPgTR+Lg+W8HhFrowFcSDHuK/j7oEM0bg/gsY74EUUx/JH3SLMbL86kG3A6n+uTZGX
-         jfvbRIU2lhASiQcMacUATeVYzIWBV+9emydehomFK4ohpzF2ELR8vhKLeLHbi6GWUR8l
-         I9fdmoVY1qAol8cuYJBaksvM6y95yxpLAfw5+ND9ff5EXt7HlwAY/SxIRnBoEJA4pSn0
-         HVPsMix4zqwZbBXHiR42fUZGCHfnQCBCZVM1qiMbK2lqImOWhI4mcOP3glSfakvyjYTx
-         imsgaDVwqCU8CaAyDhpSmfMPlcag5b3woQ2aJ2yIEeAlASpAIT7aab3PNC1bxMlZdufX
-         FlsA==
+        d=gmail.com; s=20230601; t=1732258959; x=1732863759; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=LhhSvv5L8cYQpEtuyqj4yMfGtjtEeZ7T3AiRgYyYgoE=;
+        b=Ebm+Cz3uXfwOMW+xbI1CqPAnHlhbYNQzA0L4pr7ZqfF+IwhBT2sKIDDyJ1FNGwaS2u
+         A61xp+RD3wlV3A8gt5+HOsiHbgs6v6gsuaJwuKR+kDbSJSOWU9jyD9f4F5AVJoorBKJR
+         mgeiyHYhsOrMq851p8jIHw1RjKWTb6zx47rsnROnl9eZX3mlNvqGWfmzrHVR+jTOkfFq
+         xAv3VBUxD+386V6IOISvX9b2Mtim3l86gbSr0iCqL0yJnLyWVvHtZUP8CLXpINqNuDNe
+         nLB9+TXdhTi5QtejNRNOBJxezRTdXq7E+bGsZrYbgV+Ws6T6nvnGQX7BSj1CP5iCq5So
+         EbjQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732055612; x=1732660412;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=cARYVO9RF7wl+BqnkuwLivM9oD6C3oEr2USZY7gMi4M=;
-        b=CngjEKPZEEEtV8R2fEFAmVeZAmZh9vw57tG0KtbbAbqVKXGo+q5zQnA6UdLyd4pSGD
-         V8IsXnbFYd7vgEa9ke99upo+w38LEUUqzuGNtOrSymWVVYMLgNPQ9/HrHqcPKXwDkUvs
-         Lcfj4H/fePIByBKJwGQj1FG6DqDnWobBJwd9lphQtkijrW/ixO61nay5KgrrKwcyv/+Y
-         v2PLwm4gM/ctDoyyq1sXYGvr8SbgV9bwNzFo5p5g6h7EC91jJhqERcV0Z15vBZLeFAc0
-         eLQM2gc05wI1iPcZOzcjCcLg8onz7fk1T/ATXMuH7go4+x0M5qV3EpNhKLJu9gv7Y7za
-         zhew==
-X-Forwarded-Encrypted: i=1; AJvYcCXjfbQ3aCBkYvIejn/UnnauDP77M6Ubf9lT5vq5tqBDszMCL1ns2PYtAtal5UEv/Q/YP1MbuURD@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw2qWRNF3VUNcTvJgv78PxxEBtIRvyUcUd4Jwgle9wDSQjCy3CF
-	MW0myXCdtfgQhhRngrtah7BJSbsO5z9o9sSBhnvgLV8MmhpweuGy
-X-Google-Smtp-Source: AGHT+IE4MlXkIi95cuByo5OsC7QgXHqa6Kq+YBTLVbVPsH7r+9pp3pXej9823XHwVvcHFYKFSGvYVA==
-X-Received: by 2002:a17:90b:1bcb:b0:2ea:3d2c:24bb with SMTP id 98e67ed59e1d1-2eac851e062mr1122796a91.17.1732055612190;
-        Tue, 19 Nov 2024 14:33:32 -0800 (PST)
-Received: from [192.168.0.235] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2ea89d3678csm3814552a91.43.2024.11.19.14.33.31
+        d=1e100.net; s=20230601; t=1732258959; x=1732863759;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=LhhSvv5L8cYQpEtuyqj4yMfGtjtEeZ7T3AiRgYyYgoE=;
+        b=chO4+OmS8oSi2o1zY1EVmmYoE41leS0G6CLGjzZTFBpzV33xc0H/goijkgJwpfQ2K6
+         UUPBTV9Cexf2eA2+zVAjDjQdbi5TuctMY4ZJPJhHwnV1o2qNr8zwoHQncQX/xtIbr6i0
+         xZYnnSwWg3kbkErLwB9GhTZa+uKtfJ0mflLc9IvflOYd3hdglVraZJWhX7k6EnObsoPr
+         SZQ2V18p2n2miyuZaRXsj3fBA1gRzuuIMlObrGdNG7EadCCIJ2hkqCH7aR7NJM3c1DJO
+         7HoxDdnFU6EAwlsxx88pOFJ8AZnW5A8Da4gjJFV4oUqfLcO2IBADgblgEnPw6oysBW7G
+         mMcA==
+X-Gm-Message-State: AOJu0YzCPmVNv6OByDr8w6o8fpigz3Zu6t1HN9/oimn4fvVLrSBwUABl
+	stq2G5b5WD1CIEXB3XsdN9lkQob2bm73i2LNM8yuiVdQz/ZJqvR9T8Pacg==
+X-Gm-Gg: ASbGncsUXeYlfjNTR8fobLKeHyhfBIc3KWMnnNjya9xhvN3mewiwZ9hlksn3vHWUB9j
+	cYCfkmXwODQEDbYvYbR9yUdpF5LoaSIrhn+N7vF+DeghRlGbNEl6KgvxYEMe4HLtlkOBfpHi8/d
+	q94WX3utEHjWtrQDj3YnyymsCM+xiC59azpDsA6bpHoRNFFfk3XVLgulhugWUlAUEYC2Qrjztpc
+	7PFECw4BsvMc4lJu62XFroJFS5H/3P+fPsZ6rsaoxWgUQ==
+X-Google-Smtp-Source: AGHT+IEk/H/JS2CEAhv7Q1icOOTs1AZvoyydLZF3P5nUuQqQgXSspCY6KbzAcjtw3e9LO0om2hKSrg==
+X-Received: by 2002:a05:6a00:9282:b0:71e:cb5:2219 with SMTP id d2e1a72fcca58-724df63c337mr2207090b3a.9.1732258958849;
+        Thu, 21 Nov 2024 23:02:38 -0800 (PST)
+Received: from honey-badger.. ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7fbcc219426sm929720a12.40.2024.11.21.23.02.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Nov 2024 14:33:31 -0800 (PST)
-Message-ID: <195a02e478cfb75794fecac06d12fb5c4e2ffef1.camel@gmail.com>
-Subject: Re: [PATCH 3/5] pahole: Honour exclusive BTF loading
+        Thu, 21 Nov 2024 23:02:38 -0800 (PST)
 From: Eduard Zingerman <eddyz87@gmail.com>
-To: Alan Maguire <alan.maguire@oracle.com>, Arnaldo Carvalho de Melo
-	 <acme@kernel.org>
-Cc: Jiri Olsa <jolsa@kernel.org>, Clark Williams <williams@redhat.com>, Kate
- Carcia <kcarcia@redhat.com>, dwarves@vger.kernel.org, Arnaldo Carvalho de
- Melo <acme@redhat.com>,  Matthias Schwarzott <zzam@gentoo.org>, Andrii
- Nakryiko <andrii@kernel.org>, Song Liu <song@kernel.org>,  Yonghong Song
- <yonghong.song@linux.dev>
-Date: Tue, 19 Nov 2024 14:33:26 -0800
-In-Reply-To: <f2d1b6b9-f04e-4cd2-b73b-1a72057088da@oracle.com>
-References: <20241119134032.783215-1-acme@kernel.org>
-	 <20241119134032.783215-4-acme@kernel.org>
-	 <a1366bfad38306b2e7e41549ba1ac2ed217b94ff.camel@gmail.com>
-	 <f2d1b6b9-f04e-4cd2-b73b-1a72057088da@oracle.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.52.4 (3.52.4-1.fc40) 
+To: dwarves@vger.kernel.org,
+	arnaldo.melo@gmail.com
+Cc: bpf@vger.kernel.org,
+	kernel-team@fb.com,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	yonghong.song@linux.dev,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Alan Maguire <alan.maguire@oracle.com>,
+	Daniel Xu <dxu@dxuuu.xyz>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Vadim Fedorenko <vadfed@meta.com>
+Subject: [PATCH dwarves v1] btf_encoder: handle .BTF_ids section endianness when cross-compiling
+Date: Thu, 21 Nov 2024 23:02:18 -0800
+Message-ID: <20241122070218.3832680-1-eddyz87@gmail.com>
+X-Mailer: git-send-email 2.47.0
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Tue, 2024-11-19 at 22:28 +0000, Alan Maguire wrote:
+btf_encoder__tag_kfuncs() reads .BTF_ids section to identify a set of
+kfuncs present in the ELF being processed. This section consists of
+records of the following shape:
 
-[...]
+  struct btf_id_and_flag {
+      uint32_t id;
+      uint32_t flags;
+  };
 
-> So my read of the current intent is for PAHOLE_VMLINUX_BTF_FILENAME to
-> provide an override path for BTF debug info only. In the above cases we
-> know where to find BTF but don't go on to assume there is DWARF there
-> too. I think this behaviour would be more surprising if the variable was
-> called something more generic like PAHOLE_VMLINUX_DEBUGINFO_FILENAME -
-> i.e. not specific to debug info type - but that's just my take.
+When endianness of binary operated by pahole differs from the
+host endianness these fields require byte swap before using.
 
-Oh, right...
-My bad, sorry for the noise.
+At the moment such byte swap does not happen and kfuncs are not marked
+with decl tags when e.g. s390 kernel is compiled on x86.
+To reproduces the bug:
+- follow instructions from [0] to build an s390 vmlinux;
+- execute:
+  pahole --btf_features_strict=decl_tag_kfuncs,decl_tag \
+         --btf_encode_detached=test.btf vmlinux
+- observe no kfuncs generated:
+  bpftool btf dump test.btf format c | grep __ksym
 
-Acked-by: Eduard Zingerman <eddyz87@gmail.com>
+This commit fixes the issue by adding an endianness conversion step
+for .BTF_ids section data before main processing step, modifying the
+Elf_Data object in-place.
+The choice is such in order to:
+- minimize changes;
+- keep using Elf_Data, as it provides fields {d_size,d_off} used
+  by kfunc processing routines;
+- avoid sprinkling bswap_32 at each 'struct btf_id_and_flag' field
+  access in fear of forgetting to add new ones when code is modified.
+
+[0] https://docs.kernel.org/bpf/s390.html
+
+Cc: Alan Maguire <alan.maguire@oracle.com>
+Cc: Daniel Xu <dxu@dxuuu.xyz>
+Cc: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: Vadim Fedorenko <vadfed@meta.com>
+Fixes: 72e88f29c6f7 ("pahole: Inject kfunc decl tags into BTF")
+Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
+---
+ btf_encoder.c | 42 ++++++++++++++++++++++++++++++++++++++++++
+ lib/bpf       |  2 +-
+ 2 files changed, 43 insertions(+), 1 deletion(-)
+
+diff --git a/btf_encoder.c b/btf_encoder.c
+index e1adddf..3bdb73b 100644
+--- a/btf_encoder.c
++++ b/btf_encoder.c
+@@ -33,6 +33,7 @@
+ #include <stdint.h>
+ #include <search.h> /* for tsearch(), tfind() and tdestroy() */
+ #include <pthread.h>
++#include <byteswap.h>
+ 
+ #define BTF_IDS_SECTION		".BTF_ids"
+ #define BTF_ID_FUNC_PFX		"__BTF_ID__func__"
+@@ -1847,11 +1848,47 @@ static int btf_encoder__tag_kfunc(struct btf_encoder *encoder, struct gobuffer *
+ 	return 0;
+ }
+ 
++/* If byte order of 'elf' differs from current byte order, convert the data->d_buf.
++ * ELF file is opened in a readonly mode, so data->d_buf cannot be modified in place.
++ * Instead, allocate a new buffer if modification is necessary.
++ */
++static int convert_idlist_endianness(Elf *elf, Elf_Data *data, bool *copied)
++{
++	int byteorder, i;
++	char *elf_ident;
++	uint32_t *tmp;
++
++	*copied = false;
++	elf_ident = elf_getident(elf, NULL);
++	if (elf_ident == NULL) {
++		fprintf(stderr, "Cannot get ELF identification from header\n");
++		return -EINVAL;
++	}
++	byteorder = elf_ident[EI_DATA];
++	if ((BYTE_ORDER == LITTLE_ENDIAN && byteorder == ELFDATA2LSB)
++	    || (BYTE_ORDER == BIG_ENDIAN && byteorder == ELFDATA2MSB))
++		return 0;
++	tmp = malloc(data->d_size);
++	if (tmp == NULL) {
++		fprintf(stderr, "Cannot allocate %lu bytes of memory\n", data->d_size);
++		return -ENOMEM;
++	}
++	memcpy(tmp, data->d_buf, data->d_size);
++	data->d_buf = tmp;
++	*copied = true;
++
++	/* .BTF_ids sections consist of u32 objects */
++	for (i = 0; i < data->d_size / sizeof(uint32_t); i++)
++		tmp[i] = bswap_32(tmp[i]);
++	return 0;
++}
++
+ static int btf_encoder__tag_kfuncs(struct btf_encoder *encoder)
+ {
+ 	const char *filename = encoder->source_filename;
+ 	struct gobuffer btf_kfunc_ranges = {};
+ 	struct gobuffer btf_funcs = {};
++	bool free_idlist = false;
+ 	Elf_Data *symbols = NULL;
+ 	Elf_Data *idlist = NULL;
+ 	Elf_Scn *symscn = NULL;
+@@ -1919,6 +1956,9 @@ static int btf_encoder__tag_kfuncs(struct btf_encoder *encoder)
+ 			idlist_shndx = i;
+ 			idlist_addr = shdr.sh_addr;
+ 			idlist = data;
++			err = convert_idlist_endianness(elf, idlist, &free_idlist);
++			if (err < 0)
++				goto out;
+ 		}
+ 	}
+ 
+@@ -2031,6 +2071,8 @@ static int btf_encoder__tag_kfuncs(struct btf_encoder *encoder)
+ out:
+ 	__gobuffer__delete(&btf_funcs);
+ 	__gobuffer__delete(&btf_kfunc_ranges);
++	if (free_idlist)
++		free(idlist->d_buf);
+ 	if (elf)
+ 		elf_end(elf);
+ 	if (fd != -1)
+diff --git a/lib/bpf b/lib/bpf
+index 09b9e83..caa17bd 160000
+--- a/lib/bpf
++++ b/lib/bpf
+@@ -1 +1 @@
+-Subproject commit 09b9e83102eb8ab9e540d36b4559c55f3bcdb95d
++Subproject commit caa17bdcbfc58e68eaf4d017c058e6577606bf56
+-- 
+2.47.0
 
