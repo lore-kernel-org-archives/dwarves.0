@@ -1,118 +1,129 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F162516F0E8;
-	Tue, 26 Nov 2024 19:02:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA1271DE3CA;
+	Tue, 26 Nov 2024 19:26:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732647750; cv=none; b=SZXUQqsTsP0zZucRNe5GJFfKbo998XnUfXTvXcaRA54Rf5lOzO1BynIoKjMJl/uzQa2MEzJLc8rEhpmrZkOEpnk1UOJfsA0r7jao+dyliVNmvkEkGHJJi4zo75f5meZNLgdmH3B6CsYuptlMuCGqFa/egUdd4wj/muoFOiuhiMY=
+	t=1732649196; cv=none; b=pidu0ZG1MmA/Bho4KKeqvBfhK7jsuahq0ctw71+zEdA52xDSEKKt+i2M7lBgddcDIIRiFQiYfBHXUPKPu3/pv2fBZrQXYCf43vIZA9nedP3lYernABwN3k47VLOgkidf1+JzL6ppPjNBPYri72SE8/oxSSjGGOEJQHAPxXKHF4Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732647750; c=relaxed/simple;
-	bh=VfqMEQxGpW86DlSP9kPieFBfvkn6Zy27+re4cIUUpYM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=p2H7gv7UfOpwF1cgzJz9G5DfDwrfImCW4Sg7uVzdK9vNiarWToa4Vp9xwpbtHYcY7P6/Dgq17Zy48Fi1BEBntaZXXQH+ZzNpw+FnMGmidRbtmfL/FkOyh4wPCxqHQ0qVR8GHRrOOBLA4AXwaL8F6bmmW+Wrqx8B99mCXfFefEPQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Uit2/Qf4; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1732649196; c=relaxed/simple;
+	bh=a0N0Nikb2ppGmyDS/EfrhIlYMCZMTRO4zbkKUQc92h8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=XHqB9tHH+G8XmHOV8lJCBprdFINDyXwGnGozuG5fFP8sohBRKtYtHr6jPlY7+1w7TZYuZz/iIcNRBcpoivnkNNccNZ9L6xzYafjrsw+EU1xrGEth8dUimMdURauqhpb8GtTpFfp4kTzzzG6rbhm4aNcR/4TWAXfKTieHQcbNgx0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IjU26gzM; arc=none smtp.client-ip=209.85.214.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Uit2/Qf4"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC3B3C4CECF;
-	Tue, 26 Nov 2024 19:02:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1732647749;
-	bh=VfqMEQxGpW86DlSP9kPieFBfvkn6Zy27+re4cIUUpYM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Uit2/Qf4uwy8p050i/d0GKt1CeA7lQ/Zg/Y27pk6891JDiPgUnP35fVhjJHry28h0
-	 gr0XjtN07SMdQxt3XnfeYrtuxz7C/UIL9JOQ8PJqf7f79JTpxtS8xpojE0XeJhOUyg
-	 NxeKhjsGug6FT8xyStHfg9epqMhSWM/Y2HaH6mLCqI+Bw54b99Gv2IXt9tR8E3J5og
-	 nWzwVZKfQt8Mfj/cv0+LPK+HpUpC0UGrt26c3XADgpjOsRSYL0oXNtyBC6q6Iw/7ke
-	 LNajVecoHryYeDuGgV/U73M3lIvLMM8macMOzgYiwJiVoTOi7kTbfQtoo4aTGpkk0E
-	 Ons9Amp5p4hQw==
-Date: Tue, 26 Nov 2024 16:02:26 -0300
-From: Arnaldo Carvalho de Melo <acme@kernel.org>
-To: Eduard Zingerman <eddyz87@gmail.com>
-Cc: Jiri Olsa <olsajiri@gmail.com>, dwarves@vger.kernel.org,
-	arnaldo.melo@gmail.com, bpf@vger.kernel.org, kernel-team@fb.com,
-	ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-	yonghong.song@linux.dev, Alan Maguire <alan.maguire@oracle.com>,
-	Daniel Xu <dxu@dxuuu.xyz>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Vadim Fedorenko <vadfed@meta.com>,
-	Vadim Fedorenko <vadim.fedorenko@linux.dev>
-Subject: Re: [PATCH dwarves v2 1/1] btf_encoder: handle .BTF_ids section
- endianness
-Message-ID: <Z0YbQr_QTNrfNqAE@x1>
-References: <20241122214431.292196-1-eddyz87@gmail.com>
- <20241122214431.292196-2-eddyz87@gmail.com>
- <Z0HXqLswziDAjNrk@krava>
- <Z0X2YnMyzNlZyQtP@x1>
- <b2e5cb3b1478d6900f126d4de223500d6be4c97d.camel@gmail.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IjU26gzM"
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2124a86f4cbso53678595ad.3;
+        Tue, 26 Nov 2024 11:26:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1732649194; x=1733253994; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=bTDkAnq2+7FInGjOGBkSG3ELuDlns35SYL/g3aTt6w8=;
+        b=IjU26gzMKzpJJ04IlXiHFqk4yLsFLKbHuCKJ9/e9082IZrH659XxtIHtmsrCB2SefD
+         +72DYrE7HAeJ4wWa7WhK4XrHzDtGOEiYPeGElbXKk92UGNGYjROEZk2EL/UwFVynCSsD
+         s60s2QBQfCC/vMatKEK/GWpDWx2pWig/TkqRyB9xs/UkwanGtNCdRFIq70q2omfdnxM0
+         JhH3r7gmrUrpHN/cbwBgbBzcxG04yjiYh6sL+7FHrG0FEgkPSjUdiS79iAnfNy/dZlNK
+         1XLARquNmPlRO52E+JQHG6aikYgsBBGXXn1QRCcZ/8XJyquoonP7lh4VSLXE8OZTZKgZ
+         VrTg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1732649194; x=1733253994;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=bTDkAnq2+7FInGjOGBkSG3ELuDlns35SYL/g3aTt6w8=;
+        b=Mt+WMOHO26oXYlMrJc8MO7VCOhsPkPl0A2xB05sm0Yt4t8TDfZcUFNKMEhb1MlWhg2
+         QffZMb/TECKCwGf56nFHTwpepgNPjx6MC97sJei3ip3CikYyfq8TetT5Kl/UYmxEdAxs
+         UQSEQ/gxS28EaK3BNUz9iOeVTb4O6p6AGKhuRpigxYz5K9iPDi8gP8b9RFBz64yzgRyg
+         /yszhCt0qg2wN32rKdhITpaCzHAlAEGbBC3nh9RsDZKgo8dj8WV4hoVH/An5wBRU00Il
+         8OD8txHrGeOjha/OdNNrAsHeArR7gVwdaYPuGj+hqrk8FNdhvbGQytYC183lCqmK3fDP
+         KIGw==
+X-Forwarded-Encrypted: i=1; AJvYcCU1iFJyvXQH9nxyhPQxdk3wwwwGRFKDA4+rsAw9vP5OC4objzuds9p0iV7vXxGCbN07oW0=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw5K74hmCNFvvrUn1jDk8wecxbmck0rmuXK4z1C0jDPRmN9+HH4
+	ZGszd36WAVrj5qV9GmTvXcVDqhI7crFbjsGU8sIH/ITgEhN+HRyHi1I58BX6xKN9lRPROhV8DQ9
+	fLA00mNISw00g9iCopwqiK5klI3U=
+X-Gm-Gg: ASbGnct6m86nR/StTvg6ifC9kdZU8MUPsJO0hyK3x5K7qbX7KNfzNJ4QzefV0Zv2+E9
+	7/v5hPdw7MQQWtJ5aHdT7tBoLOYBbiH4wAtqN4TYHMFJ3XL4=
+X-Google-Smtp-Source: AGHT+IE6de1p/fVdq+y3Oszrz6EeYn/HBw5EuO0ubtjKIH7TZxU9cH521y6YWUBmY8ENmnbXgU2YZEX1n3rL4NTx6DM=
+X-Received: by 2002:a17:90b:1bcb:b0:2ea:874b:7da7 with SMTP id
+ 98e67ed59e1d1-2ee097e3a84mr590657a91.33.1732649194005; Tue, 26 Nov 2024
+ 11:26:34 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b2e5cb3b1478d6900f126d4de223500d6be4c97d.camel@gmail.com>
+References: <20241122070218.3832680-1-eddyz87@gmail.com>
+In-Reply-To: <20241122070218.3832680-1-eddyz87@gmail.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Tue, 26 Nov 2024 11:26:22 -0800
+Message-ID: <CAEf4BzakAiPWF9x2h-F737LbJ9ovXCJLbXV9R5vKg0Et5CbqSQ@mail.gmail.com>
+Subject: Re: [PATCH dwarves v1] btf_encoder: handle .BTF_ids section
+ endianness when cross-compiling
+To: Eduard Zingerman <eddyz87@gmail.com>
+Cc: dwarves@vger.kernel.org, arnaldo.melo@gmail.com, bpf@vger.kernel.org, 
+	kernel-team@fb.com, ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, 
+	yonghong.song@linux.dev, Alan Maguire <alan.maguire@oracle.com>, 
+	Daniel Xu <dxu@dxuuu.xyz>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, Vadim Fedorenko <vadfed@meta.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Nov 26, 2024 at 09:32:28AM -0800, Eduard Zingerman wrote:
-> On Tue, 2024-11-26 at 13:25 -0300, Arnaldo Carvalho de Melo wrote:
- 
-> [...]
- 
-> Hi Arnaldo,
- 
-> > I think I saw instructions in one of the messages in this thread to get
-> > hold of a vmlinux for s390 and test it. Right?
- 
-> Yes, in cover letter. Full vmlinux is not needed, a vmlinux binary for
-> s390 would be sufficient for testing. Repeating the recipe for convenience:
- 
->   To reproduce the bug:
->   - follow the instructions in [0] to build an s390 vmlinux;
->   - generate BTF requesting declaration tags for kfuncs:
->     $ pahole --btf_features_strict=decl_tag_kfuncs,decl_tag \
->              --btf_encode_detached=test.btf vmlinux
->   - observe that no kfuncs are generated:
->     $ bpftool btf dump file test.btf format c | grep __ksym
- 
+On Thu, Nov 21, 2024 at 11:02=E2=80=AFPM Eduard Zingerman <eddyz87@gmail.co=
+m> wrote:
+>
+> btf_encoder__tag_kfuncs() reads .BTF_ids section to identify a set of
+> kfuncs present in the ELF being processed. This section consists of
+> records of the following shape:
+>
+>   struct btf_id_and_flag {
+>       uint32_t id;
+>       uint32_t flags;
+>   };
+>
+
+Can we just set data->d_type to ELF_T_WORD and let libelf handle the byte s=
+wap?
+
+> When endianness of binary operated by pahole differs from the
+> host endianness these fields require byte swap before using.
+>
+> At the moment such byte swap does not happen and kfuncs are not marked
+> with decl tags when e.g. s390 kernel is compiled on x86.
+> To reproduces the bug:
+> - follow instructions from [0] to build an s390 vmlinux;
+> - execute:
+>   pahole --btf_features_strict=3Ddecl_tag_kfuncs,decl_tag \
+>          --btf_encode_detached=3Dtest.btf vmlinux
+> - observe no kfuncs generated:
+>   bpftool btf dump test.btf format c | grep __ksym
+>
+> This commit fixes the issue by adding an endianness conversion step
+> for .BTF_ids section data before main processing step, modifying the
+> Elf_Data object in-place.
+> The choice is such in order to:
+> - minimize changes;
+> - keep using Elf_Data, as it provides fields {d_size,d_off} used
+>   by kfunc processing routines;
+> - avoid sprinkling bswap_32 at each 'struct btf_id_and_flag' field
+>   access in fear of forgetting to add new ones when code is modified.
+>
 > [0] https://docs.kernel.org/bpf/s390.html
+>
+> Cc: Alan Maguire <alan.maguire@oracle.com>
+> Cc: Daniel Xu <dxu@dxuuu.xyz>
+> Cc: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+> Cc: Vadim Fedorenko <vadfed@meta.com>
+> Fixes: 72e88f29c6f7 ("pahole: Inject kfunc decl tags into BTF")
+> Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
+> ---
+>  btf_encoder.c | 42 ++++++++++++++++++++++++++++++++++++++++++
+>  lib/bpf       |  2 +-
+>  2 files changed, 43 insertions(+), 1 deletion(-)
+>
 
-Thanks.
- 
-> > One extra question: this solves the BTF encoder case, the loader already
-> > supported loading BTF from a different endianness, right? Lemme
-> > check.
- 
-> > cus__load_btf()
-> >   cu->little_endian = btf__endianness(btf) == BTF_LITTLE_ENDIAN;
-
-> > enum btf_endianness btf__endianness(const struct btf *btf)
-> > {
-> >         if (is_host_big_endian())
-> >                 return btf->swapped_endian ? BTF_LITTLE_ENDIAN : BTF_BIG_ENDIAN;
-> >         else
-> >                 return btf->swapped_endian ? BTF_BIG_ENDIAN : BTF_LITTLE_ENDIAN;
-> > }
- 
-> I can switch to is_host_big_endian() instead of `BYTE_ORDER` macro
-> if you think that's better.
-
-No need for that, I think, is_host_big_endian() is a static function
-inlib/bpf/src/btf.c.
-
-I was just looking at how endianness was being handled and noticed
-libbpf does it, but, as you say below...
- 
-> > So we have parts of BTF byte swapping happening in libbpf and with this
-> > patch, parts of it done in pahole, have you tought about doing this in
-> > libbpf instead?
- 
-> BTF id lists handling is currently not a part of libbpf.
-
-So we should do it in pahole, as you did, so all is clarified now, I'm
-now testing it with the provided instructions.
-
-Thanks,
-
-- Arnaldo
+[...]
