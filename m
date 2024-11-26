@@ -1,107 +1,119 @@
-Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
+Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA7701DD525;
-	Tue, 26 Nov 2024 19:31:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2832C160884;
+	Tue, 26 Nov 2024 21:51:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732649483; cv=none; b=GaQ3zd0+pPqwkuHAlsvXJr9z9Nm0Nq7xWSu47Syq7sDtpL8MNszSTW4c6fSJbArbmlxnhniwsfG0pnJpQzs4E+bTkX3XZR6mhcGdmiYRxNleVYfG9KXYupLTq5WzEa3QiBhg4ui8UGSDC59YowVe21GrZFNffeio7P7seO4arhE=
+	t=1732657921; cv=none; b=DfA4EjCfBCKFSgha+PyynUnIMuc6fXVhgXjPrBKlZAME8en+nInyRnSumo4GEXRuf2k6l4661TL8EFmtawP8sK2Z+rfgaEH+iPT8SjXZ+n1C/tm06GJE0XDsC5NEukfvYwjbvaqzaeQ2JK2Q2T4nlKde7LBkBixc2mte/30tE/U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732649483; c=relaxed/simple;
-	bh=CR+5ihcOztN4AtU1hXOgD0WzFQvbuJt1Ofh4dBJY0oM=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=DGZE7/el0kQ3sC54/x9sRKX87QwW52dxkcbJNfcRCJy4EANtB2BAeFFic5Y89lpWsbPnkSsC2yUqpL5Xd9We31Ad38XEEnILe9DGEXX27lz/fho821rlWzsi9zBbZvAtXzi1VExOfJLgen+TCTOI9GL+dCilozhGzCLxCxxLfVc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BUg4edmO; arc=none smtp.client-ip=209.85.215.169
+	s=arc-20240116; t=1732657921; c=relaxed/simple;
+	bh=K2I+KLfVcJ/vg5KBDzBzCybrQaZV/okWFnSnK2PkFNw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=qEi0I/BIYuFukyERM7Wwxsu1eKhxFDI7LJQcgzs4vAZEfBXL66DzB6eaaEMVSHbcE7NqevVJVMCxxfJzRwr75T0j1lV3G3nZvBpmKfBoi4kZ9AI5humEwYzmDFFvxF0wATFFbsivWxbGcrSKU9TGEMs2UQwL27rKlNQ+I/EOONw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WumWpcGv; arc=none smtp.client-ip=209.85.216.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BUg4edmO"
-Received: by mail-pg1-f169.google.com with SMTP id 41be03b00d2f7-7f71f2b1370so4835471a12.1;
-        Tue, 26 Nov 2024 11:31:21 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WumWpcGv"
+Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-2ea49a1b4c8so4793508a91.2;
+        Tue, 26 Nov 2024 13:51:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1732649481; x=1733254281; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=SLb7oedvGUBw0GUjxMzbeJP7gRUHPB6OTZd4J1q/g2E=;
-        b=BUg4edmOZ5TfqxZCVqlQHZWbXbgaGuEFKLD7972hfxJOfWI3EkthOHTFlmPEJ6EMkS
-         Zia2IeQMj34wNEGvp7BHZt2qKNgui0RcE6m7d2EsYmKZwCR0XKtsEKVw+US12KHIrCTR
-         NLZpipd+yTUa/SX9CUV8qy0HH2wOiQaFd5rY4Liu8HTiiZ0GEFnGX+CunEJD/YpsROKz
-         N3OE6huwon2C4ZSj/tgCu7dGEPFgZIwtf/WwJQDrvXDahxHyY92AtZnbkqTjbNvF7NNb
-         DNOUDAEGmKiBprTtwNBK/z9OH97P/EFPBx2lQ4t5mPssqFbt6cHGWvZYVqZVFUfs64bD
-         SYgw==
+        d=gmail.com; s=20230601; t=1732657919; x=1733262719; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rxjQl4++Xf2qMJwttqI8PkTkdAJoS8d4aSjLdU8VKZA=;
+        b=WumWpcGvdMq5pCfaMGvvLgRP1poK8gO37kVaAGYj/NKeeDFosoiHGOBRIdKSN0J8jo
+         3vkiTI90AThwi/bSJKbkMmJ/AeFQ8uAHnnZHqfbg1yTxVKzvAvE/H7f0OUhWqvXMQgEv
+         jxyywSPlImUDUVNDOGX4myZIQv7tJGOK3F0WnAKPtcrBNHZ1xS3lCN2AbAsxA2YI7UBV
+         Mf8qArlATxhLTYUGmcT6T4a7E/PAAGJnkKihXgFa1jKF3GQ1o7bHLA6GrtHvmOPQt6DF
+         b3CzbDMF/6zFwvHgW87cth4qZRDCA0KMwpBHQRktbzS0U9KRN6NTZ1tsNIxERpPOGGwv
+         jQJw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732649481; x=1733254281;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=SLb7oedvGUBw0GUjxMzbeJP7gRUHPB6OTZd4J1q/g2E=;
-        b=stejaNc6lL4lWnc0KuYaWf3zT+eWZB1ZbAckxlOO0yGoyy5aFZKjVbD8LaJBbV7Ne/
-         WvSGuYxsNgngJ8uUIpgAYl/+WexWs+fIi4K5xAbGgA2zg5a4DhahSuRwioUv2jb5jKKK
-         DLgtcOV+dRjHFutBaA/SIdQHPK+H08qiuReOmAU5uX5KDYyheWzDG/QmioyZtiRAkCEc
-         gaXxP9LNTG41bghLrEeae1rpC6T67EDs9oberSSVTr7rO86U8yT+aZK/+Djd04YhVIx0
-         i1SSNmlaXArEaDSKEvcabfBhnKxDOclxOgpwLsJGtN+oMvmEv3DBGZT6lIzgvjwUWhYr
-         cqtA==
-X-Forwarded-Encrypted: i=1; AJvYcCXma/F3qDamBkPaZ5kiJh+sTky984L5KjWpi+eaybKRx7o9CUsWRgGDRzevyBxR1/iHVos=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwfqgazgMQ3YklzcvjUoQErF/bqpdMRIccphs8iYgqSwxvtPvrb
-	ZEOM7nqDLjcfgVezszvEGL1fuMRC0uGJ7kPnim0nLwm2B6T/0PyE
-X-Gm-Gg: ASbGnctYsf/zO6vmXntA4gk9hyku8Uu67tAgRSRk10ih3fnLPbAD2sIVrUyQrlbbpZG
-	IiIiVsqV+2zy0qO2GfrY2QOFrJk4wgC4DwIW1Qcp/yKPJEGQ+4OTEm1LwTOIzgleP5IyhIMcE15
-	W5/QSjMZbGHuXp2pLXFxIDpw+MCNNJ6JU3Kzq4t7OfosL+9i0CU1hp8863b0Ulaq15zGCLs1iPF
-	/fCHrQ9APA/khxDQG33t+OnEUhjuJG8B+yA3VQj0UCq4tA=
-X-Google-Smtp-Source: AGHT+IHD3RXwJEwlW8bWedkOQAg82KIr9rOhOfzPveXRKRH/CUwgwAUhzTqiOPbcsa/eYThci+YFSw==
-X-Received: by 2002:a05:6a20:258f:b0:1db:db67:4d78 with SMTP id adf61e73a8af0-1e0e0b2c780mr1097337637.22.1732649481096;
-        Tue, 26 Nov 2024 11:31:21 -0800 (PST)
-Received: from [192.168.0.235] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7fbcc1d21c5sm7826788a12.20.2024.11.26.11.31.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Nov 2024 11:31:20 -0800 (PST)
-Message-ID: <69af35e3718748b99e4d295bead4072588a50296.camel@gmail.com>
-Subject: Re: [PATCH dwarves v1] btf_encoder: handle .BTF_ids section
- endianness when cross-compiling
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: dwarves@vger.kernel.org, arnaldo.melo@gmail.com, bpf@vger.kernel.org, 
-	kernel-team@fb.com, ast@kernel.org, daniel@iogearbox.net,
- andrii@kernel.org, 	yonghong.song@linux.dev, Alan Maguire
- <alan.maguire@oracle.com>, Daniel Xu	 <dxu@dxuuu.xyz>, Kumar Kartikeya
- Dwivedi <memxor@gmail.com>, Vadim Fedorenko	 <vadfed@meta.com>
-Date: Tue, 26 Nov 2024 11:31:15 -0800
-In-Reply-To: <CAEf4BzakAiPWF9x2h-F737LbJ9ovXCJLbXV9R5vKg0Et5CbqSQ@mail.gmail.com>
-References: <20241122070218.3832680-1-eddyz87@gmail.com>
-	 <CAEf4BzakAiPWF9x2h-F737LbJ9ovXCJLbXV9R5vKg0Et5CbqSQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.54.1 (3.54.1-1.fc41) 
+        d=1e100.net; s=20230601; t=1732657919; x=1733262719;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=rxjQl4++Xf2qMJwttqI8PkTkdAJoS8d4aSjLdU8VKZA=;
+        b=VYmkfJhMoXJP6ryJDTtoFz3Oj540XV21YI1D5oZg7x4oDQ6B9XNIduTVQWYaYnSX0/
+         1GC7kvCBgYJZAolNHuxkrD17zRoB0kbGkpabtwsfdfBCsE5wCzbJWnmD4f/41W7yQd+m
+         BZGrEcVbjC3/Sevpkj3oEwoBAiRuqvTyBj3sBSDS6bPNTMp/YJrB8YmzICZhCljtzpxX
+         m3xnP65a8hzH7TRrdtdhSHc1L/qNDikhuLkTJYpuwD/OyoVTG84gZX0ixwDv0aCSIBkp
+         xdGB4CP65lG4zVHp5p20onk/VUn0pzCAX6FHCG8rSdniz+GXi6CmhmCq8kE7pVwM3Asw
+         L7Lg==
+X-Forwarded-Encrypted: i=1; AJvYcCX69dzR3o1ZMZBcVkKq+k5fPLMURD4kNQhxI5gW+j9GVC55HiGxngJUXibF2JZJUThCAao=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxwhWTOAwqtlayhy8vSUMPuv+wyP7ShWIZ15jelKZ0NXxIoOR4W
+	F88C3AV4V88BR1vYELNhcZEsYcNoWu9e0Wlc9LsagOE0C+QnRVRWsNkEVPHgxiQqOpqaGsux9aJ
+	6QbBIZaZx99FfTOxlIFgR92feVSo=
+X-Gm-Gg: ASbGncuSNsbTazkxNWoS1WgcnyBzQZU/iTptTtovqGVMzdin9twf8gcn/8tb5ZOz6W5
+	+v07pF+P+igGAnLFuCy+Dm+vZkeQNydGgKrWXlB4TQAsBVsM=
+X-Google-Smtp-Source: AGHT+IEOTCkV3UECEigWtYDOkIXyJ1dy3Pw/vylD41IiufSAmfrBxwhp2URd/85yR5x4n1utvZ9vMv7DGNV4eY01aZE=
+X-Received: by 2002:a17:90b:3ec2:b0:2ea:7cd5:4adf with SMTP id
+ 98e67ed59e1d1-2ee097e2105mr942379a91.31.1732657919397; Tue, 26 Nov 2024
+ 13:51:59 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <20241122070218.3832680-1-eddyz87@gmail.com> <CAEf4BzakAiPWF9x2h-F737LbJ9ovXCJLbXV9R5vKg0Et5CbqSQ@mail.gmail.com>
+ <69af35e3718748b99e4d295bead4072588a50296.camel@gmail.com>
+In-Reply-To: <69af35e3718748b99e4d295bead4072588a50296.camel@gmail.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Tue, 26 Nov 2024 13:51:47 -0800
+Message-ID: <CAEf4Bzb-PMAs7+B85qanUinQrk4aVs4Qk6orbyDP11uBcW-mWA@mail.gmail.com>
+Subject: Re: [PATCH dwarves v1] btf_encoder: handle .BTF_ids section
+ endianness when cross-compiling
+To: Eduard Zingerman <eddyz87@gmail.com>
+Cc: dwarves@vger.kernel.org, arnaldo.melo@gmail.com, bpf@vger.kernel.org, 
+	kernel-team@fb.com, ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, 
+	yonghong.song@linux.dev, Alan Maguire <alan.maguire@oracle.com>, 
+	Daniel Xu <dxu@dxuuu.xyz>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, Vadim Fedorenko <vadfed@meta.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, 2024-11-26 at 11:26 -0800, Andrii Nakryiko wrote:
-> On Thu, Nov 21, 2024 at 11:02=E2=80=AFPM Eduard Zingerman <eddyz87@gmail.=
-com> wrote:
-> >=20
-> > btf_encoder__tag_kfuncs() reads .BTF_ids section to identify a set of
-> > kfuncs present in the ELF being processed. This section consists of
-> > records of the following shape:
-> >=20
-> >   struct btf_id_and_flag {
-> >       uint32_t id;
-> >       uint32_t flags;
-> >   };
-> >=20
->=20
-> Can we just set data->d_type to ELF_T_WORD and let libelf handle the byte=
- swap?
+On Tue, Nov 26, 2024 at 11:31=E2=80=AFAM Eduard Zingerman <eddyz87@gmail.co=
+m> wrote:
+>
+> On Tue, 2024-11-26 at 11:26 -0800, Andrii Nakryiko wrote:
+> > On Thu, Nov 21, 2024 at 11:02=E2=80=AFPM Eduard Zingerman <eddyz87@gmai=
+l.com> wrote:
+> > >
+> > > btf_encoder__tag_kfuncs() reads .BTF_ids section to identify a set of
+> > > kfuncs present in the ELF being processed. This section consists of
+> > > records of the following shape:
+> > >
+> > >   struct btf_id_and_flag {
+> > >       uint32_t id;
+> > >       uint32_t flags;
+> > >   };
+> > >
+> >
+> > Can we just set data->d_type to ELF_T_WORD and let libelf handle the by=
+te swap?
+>
+> When I tried 'data->d_type =3D ELF_T_WORD' + gelf_xlatetom() snippet
+> suggested by Tony Ambardar some time ago, I got a write protection error.
+> Concluded that this is so, because file is opened in O_RDONLY mode.
 
-When I tried 'data->d_type =3D ELF_T_WORD' + gelf_xlatetom() snippet
-suggested by Tony Ambardar some time ago, I got a write protection error.
-Concluded that this is so, because file is opened in O_RDONLY mode.
+Ok, maybe don't follow my words *exactly*, just in spirit ;) I see
+there is elf_getdata_rawchunk() API in libelf, which seems useful:
 
-(Also please note v2 of this patch).
+/* Get data translated from a chunk of the file contents as section data
+   would be for TYPE.  The resulting Elf_Data pointer is valid until
+   elf_end (ELF) is called.  */
+extern Elf_Data *elf_getdata_rawchunk (Elf *__elf,
+                                       int64_t __offset, size_t __size,
+                                       Elf_Type __type);
 
-[...]
+I don't know the surrounding code, I was just hoping to leverage
+libelf's byte swapping support (which I think I learned from Tony as
+well). But if it's too inconvenient, so be it.
 
+>
+> (Also please note v2 of this patch).
+>
+> [...]
+>
