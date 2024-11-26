@@ -1,135 +1,118 @@
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B1B01D6DB1;
-	Tue, 26 Nov 2024 17:32:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F162516F0E8;
+	Tue, 26 Nov 2024 19:02:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732642356; cv=none; b=nOhcvUVC6TWA8jjRVlPqbAIzw9wU10xoBPHz9A+Ess3gvMkWRfedimbqCmfssBFlt+89Qnezlj/DlFX+VsNcGpBppTz7DkMlGWioCE1pgEDzj+xWythfXN1sieNQX3VNWgbOwF8HUa/9fDMFAmTHGg1VvaZVEE0qnbdTnFTnIuo=
+	t=1732647750; cv=none; b=SZXUQqsTsP0zZucRNe5GJFfKbo998XnUfXTvXcaRA54Rf5lOzO1BynIoKjMJl/uzQa2MEzJLc8rEhpmrZkOEpnk1UOJfsA0r7jao+dyliVNmvkEkGHJJi4zo75f5meZNLgdmH3B6CsYuptlMuCGqFa/egUdd4wj/muoFOiuhiMY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732642356; c=relaxed/simple;
-	bh=x/JsoJydVI/aDMpHnkDtFlMhInO/9sxMRx6mm9Pcpwk=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=azOVjC7MrYnf6oG3CJO2ppsXWABoLBd8yqSQ9Vd6Qp0lZOAum178i+EfCJt2izuEsCRNAhBoOlcpAUWXZjspMSc3Lq+LGlwJy/zxb6gzUyQwSHkdcQNCAvghxJ9hx8QE3UL2L1jZFvueu8OsKsyOomeUFRWJBP4c3gtRnqUmR60=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nk31YEI0; arc=none smtp.client-ip=209.85.214.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1732647750; c=relaxed/simple;
+	bh=VfqMEQxGpW86DlSP9kPieFBfvkn6Zy27+re4cIUUpYM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=p2H7gv7UfOpwF1cgzJz9G5DfDwrfImCW4Sg7uVzdK9vNiarWToa4Vp9xwpbtHYcY7P6/Dgq17Zy48Fi1BEBntaZXXQH+ZzNpw+FnMGmidRbtmfL/FkOyh4wPCxqHQ0qVR8GHRrOOBLA4AXwaL8F6bmmW+Wrqx8B99mCXfFefEPQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Uit2/Qf4; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nk31YEI0"
-Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-212348d391cso56983535ad.2;
-        Tue, 26 Nov 2024 09:32:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1732642354; x=1733247154; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=SqKw1ouWNDgAluBu7GXNoP3d9/kyqinVguFG6XhvfoM=;
-        b=nk31YEI0rOl+id6L2lf7WZ73LettsSKrLOgZh1UJi35ANmrFZz0nq9ELCw/YA3hvza
-         yZQmcRybdrjrrLDtNX7ApmOQDwf0qPLo9jjIY3wa85iPlY/t3+ChTr4h32fK1xdSB7Dm
-         dL5qigQ7ePCYV3pQEZsQaa1qUzhLaRnVRcndejDKRd7o+cTzYdbaWYtiphiKsiDcCo0b
-         WTbQzRIKLN7waoD2b+XSOC6BPHlv12xI87dTItzkpde10u/WMliy1lSkO3x6KiL8XFLr
-         bhf9B0PYkAPF3GZs/0N8z7R8JDYDwyJElixga3dofjo1AkZQKaEmSJnAzC0KZd/fiDHR
-         C9QA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732642354; x=1733247154;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=SqKw1ouWNDgAluBu7GXNoP3d9/kyqinVguFG6XhvfoM=;
-        b=UY/wi91/MPGynlFP8Pc/81XbnBQX+BjvZ6M10LUSHz7ObLvRAkTaCzkboBPKPvMsEI
-         bycoESRi5Hk+dh6DVIP2gYNML+y3+GEOMM2evPjRGyBitKljk8STwqzDNdat+4DUhlAd
-         CtcETRiUFFWOP8jNpL/5TOzF/DGVXtiiYTPv/LfMkycvyt6ubFrwjWcjEQ72PJrofHwk
-         zqj7gjCoFsn3rjjkrO+gukxbDdZizZgFaQPoIGWpFub8vpw4sukXu21/xgon7rVTagH8
-         u9S6HmG3KQsDvNJtD8ODKL2K4eqZduTwmnDMKxA7vIoeDyzbKSIQEF+siI3iWjBGPrQX
-         G8Tg==
-X-Forwarded-Encrypted: i=1; AJvYcCVtEHD56j3ppLfniXs27FMjW52gldqm04LjXGOhLiEbDq/tR3Yqf/Y2W5SjbbfL7lbkjsy1ZnHlPA==@vger.kernel.org, AJvYcCX4HYVCKZ+UoNjwNBJb4RpZSJjvmoTTvhKLZ+/Nvo7Xn6XVwqJnVeA3wTOMrAJfIM60eys=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzLNs5O9a9ejJtV0lj/vyYLwQKcfhxOvuuxCDRnkIBLgseXOSlW
-	xjfCE727cWBJM3rN/DdPj6TsjUc5v7qAZTCa416OOO7GXiuWf1Mk
-X-Gm-Gg: ASbGncst/eiapIjTd7HhNn+7q6HhZRgemfl2jvzrd2n7YJ/dwEkLbD6bymrbS7CDn8W
-	pTSH/zewjln0HSkWKHuJCqCfF3sZGw9ocdbC1vBr/r7WzgKBmBMNu4atiiEx/iXjFu4D1M0fj6J
-	ec23jqK0l+oth7qE3zdxnkCvURFG5//I2W8NV4ve25XxKiKflZGMvnla+GyW5fgG8UqVFhHa/rM
-	QViBdaXUoQU1rSJ0O0I+LTJj2PoctqA2oxwb0ENfSNpLuA=
-X-Google-Smtp-Source: AGHT+IGZQKS5COfBHhCV7jMiAM8NCZ6xHQd0/fjS9MbJz2m+W3z3UzAZcHIWT45L68cWPKu4SXfL5Q==
-X-Received: by 2002:a17:902:f682:b0:210:f706:dc4b with SMTP id d9443c01a7336-2150109af63mr192245ad.13.1732642354159;
-        Tue, 26 Nov 2024 09:32:34 -0800 (PST)
-Received: from [192.168.0.235] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2129dc2aad7sm87447545ad.279.2024.11.26.09.32.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Nov 2024 09:32:33 -0800 (PST)
-Message-ID: <b2e5cb3b1478d6900f126d4de223500d6be4c97d.camel@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Uit2/Qf4"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC3B3C4CECF;
+	Tue, 26 Nov 2024 19:02:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1732647749;
+	bh=VfqMEQxGpW86DlSP9kPieFBfvkn6Zy27+re4cIUUpYM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Uit2/Qf4uwy8p050i/d0GKt1CeA7lQ/Zg/Y27pk6891JDiPgUnP35fVhjJHry28h0
+	 gr0XjtN07SMdQxt3XnfeYrtuxz7C/UIL9JOQ8PJqf7f79JTpxtS8xpojE0XeJhOUyg
+	 NxeKhjsGug6FT8xyStHfg9epqMhSWM/Y2HaH6mLCqI+Bw54b99Gv2IXt9tR8E3J5og
+	 nWzwVZKfQt8Mfj/cv0+LPK+HpUpC0UGrt26c3XADgpjOsRSYL0oXNtyBC6q6Iw/7ke
+	 LNajVecoHryYeDuGgV/U73M3lIvLMM8macMOzgYiwJiVoTOi7kTbfQtoo4aTGpkk0E
+	 Ons9Amp5p4hQw==
+Date: Tue, 26 Nov 2024 16:02:26 -0300
+From: Arnaldo Carvalho de Melo <acme@kernel.org>
+To: Eduard Zingerman <eddyz87@gmail.com>
+Cc: Jiri Olsa <olsajiri@gmail.com>, dwarves@vger.kernel.org,
+	arnaldo.melo@gmail.com, bpf@vger.kernel.org, kernel-team@fb.com,
+	ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+	yonghong.song@linux.dev, Alan Maguire <alan.maguire@oracle.com>,
+	Daniel Xu <dxu@dxuuu.xyz>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Vadim Fedorenko <vadfed@meta.com>,
+	Vadim Fedorenko <vadim.fedorenko@linux.dev>
 Subject: Re: [PATCH dwarves v2 1/1] btf_encoder: handle .BTF_ids section
  endianness
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc: Jiri Olsa <olsajiri@gmail.com>, dwarves@vger.kernel.org, 
-	arnaldo.melo@gmail.com, bpf@vger.kernel.org, kernel-team@fb.com,
- ast@kernel.org, 	daniel@iogearbox.net, andrii@kernel.org,
- yonghong.song@linux.dev, Alan Maguire	 <alan.maguire@oracle.com>, Daniel Xu
- <dxu@dxuuu.xyz>, Kumar Kartikeya Dwivedi	 <memxor@gmail.com>, Vadim
- Fedorenko <vadfed@meta.com>, Vadim Fedorenko	 <vadim.fedorenko@linux.dev>
-Date: Tue, 26 Nov 2024 09:32:28 -0800
-In-Reply-To: <Z0X2YnMyzNlZyQtP@x1>
+Message-ID: <Z0YbQr_QTNrfNqAE@x1>
 References: <20241122214431.292196-1-eddyz87@gmail.com>
-	 <20241122214431.292196-2-eddyz87@gmail.com> <Z0HXqLswziDAjNrk@krava>
-	 <Z0X2YnMyzNlZyQtP@x1>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.54.1 (3.54.1-1.fc41) 
+ <20241122214431.292196-2-eddyz87@gmail.com>
+ <Z0HXqLswziDAjNrk@krava>
+ <Z0X2YnMyzNlZyQtP@x1>
+ <b2e5cb3b1478d6900f126d4de223500d6be4c97d.camel@gmail.com>
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b2e5cb3b1478d6900f126d4de223500d6be4c97d.camel@gmail.com>
 
-On Tue, 2024-11-26 at 13:25 -0300, Arnaldo Carvalho de Melo wrote:
+On Tue, Nov 26, 2024 at 09:32:28AM -0800, Eduard Zingerman wrote:
+> On Tue, 2024-11-26 at 13:25 -0300, Arnaldo Carvalho de Melo wrote:
+ 
+> [...]
+ 
+> Hi Arnaldo,
+ 
+> > I think I saw instructions in one of the messages in this thread to get
+> > hold of a vmlinux for s390 and test it. Right?
+ 
+> Yes, in cover letter. Full vmlinux is not needed, a vmlinux binary for
+> s390 would be sufficient for testing. Repeating the recipe for convenience:
+ 
+>   To reproduce the bug:
+>   - follow the instructions in [0] to build an s390 vmlinux;
+>   - generate BTF requesting declaration tags for kfuncs:
+>     $ pahole --btf_features_strict=decl_tag_kfuncs,decl_tag \
+>              --btf_encode_detached=test.btf vmlinux
+>   - observe that no kfuncs are generated:
+>     $ bpftool btf dump file test.btf format c | grep __ksym
+ 
+> [0] https://docs.kernel.org/bpf/s390.html
 
-[...]
+Thanks.
+ 
+> > One extra question: this solves the BTF encoder case, the loader already
+> > supported loading BTF from a different endianness, right? Lemme
+> > check.
+ 
+> > cus__load_btf()
+> >   cu->little_endian = btf__endianness(btf) == BTF_LITTLE_ENDIAN;
 
-Hi Arnaldo,
+> > enum btf_endianness btf__endianness(const struct btf *btf)
+> > {
+> >         if (is_host_big_endian())
+> >                 return btf->swapped_endian ? BTF_LITTLE_ENDIAN : BTF_BIG_ENDIAN;
+> >         else
+> >                 return btf->swapped_endian ? BTF_BIG_ENDIAN : BTF_LITTLE_ENDIAN;
+> > }
+ 
+> I can switch to is_host_big_endian() instead of `BYTE_ORDER` macro
+> if you think that's better.
 
-> I think I saw instructions in one of the messages in this thread to get
-> hold of a vmlinux for s390 and test it. Right?
+No need for that, I think, is_host_big_endian() is a static function
+inlib/bpf/src/btf.c.
 
-Yes, in cover letter. Full vmlinux is not needed, a vmlinux binary for
-s390 would be sufficient for testing. Repeating the recipe for convenience:
+I was just looking at how endianness was being handled and noticed
+libbpf does it, but, as you say below...
+ 
+> > So we have parts of BTF byte swapping happening in libbpf and with this
+> > patch, parts of it done in pahole, have you tought about doing this in
+> > libbpf instead?
+ 
+> BTF id lists handling is currently not a part of libbpf.
 
-  To reproduce the bug:
-  - follow the instructions in [0] to build an s390 vmlinux;
-  - generate BTF requesting declaration tags for kfuncs:
-    $ pahole --btf_features_strict=3Ddecl_tag_kfuncs,decl_tag \
-             --btf_encode_detached=3Dtest.btf vmlinux
-  - observe that no kfuncs are generated:
-    $ bpftool btf dump file test.btf format c | grep __ksym
-
-[0] https://docs.kernel.org/bpf/s390.html
-
-> One extra question: this solves the BTF encoder case, the loader already
-> supported loading BTF from a different endianness, right? Lemme
-> check.
->=20
-> cus__load_btf()
->   cu->little_endian =3D btf__endianness(btf) =3D=3D BTF_LITTLE_ENDIAN;
->=20
-> enum btf_endianness btf__endianness(const struct btf *btf)
-> {
->         if (is_host_big_endian())
->                 return btf->swapped_endian ? BTF_LITTLE_ENDIAN : BTF_BIG_=
-ENDIAN;
->         else
->                 return btf->swapped_endian ? BTF_BIG_ENDIAN : BTF_LITTLE_=
-ENDIAN;
-> }
-
-I can switch to is_host_big_endian() instead of `BYTE_ORDER` macro
-if you think that's better.
-
-> So we have parts of BTF byte swapping happening in libbpf and with this
-> patch, parts of it done in pahole, have you tought about doing this in
-> libbpf instead?
-
-BTF id lists handling is currently not a part of libbpf.
+So we should do it in pahole, as you did, so all is clarified now, I'm
+now testing it with the provided instructions.
 
 Thanks,
-Eduard
 
+- Arnaldo
