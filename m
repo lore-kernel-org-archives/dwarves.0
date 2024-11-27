@@ -1,99 +1,129 @@
-Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
+Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBD2DA23;
-	Wed, 27 Nov 2024 00:35:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB1838C1F;
+	Wed, 27 Nov 2024 01:50:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732667714; cv=none; b=gV7E7W5mAUkOP5PxtbL+v91ZRSZMYXh+QpqhHB7wXHmbO+NNrD2+zS/ZNwtVPZ9QxaKBlxG/CEF7hDhFJJpU5OdyqgK8A/iyOh+nCIg2LNfiwoD8aHvRFU8NA0ZceMI3UMLOF7etvU6SMLrG8AYokpHxV0Haj90ZXpqoixLxNyE=
+	t=1732672221; cv=none; b=QIq0tOUFFOoz7sKEbrNLxKB0DafjkpuLoKn1t2a3snffyHJUsTMo1TCW/WBMbUU86u+rOVPgmo8Bxg/N+KJFSY7PQvQ/4dxwbtDutsZSs7g3yVN41YInAv2agZL87mRmdnJvLWp73kpJvxWnrNX6qf3CLKkc+/QclCNEg9sRM98=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732667714; c=relaxed/simple;
-	bh=wwEHHjeePOFS8sifKhXNpJZ8wSDgwVbUUuXuwR9Q1ZM=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=VGxFZ/rv0WTzBxl97IOTwzlXG4a/Sd7bpgQZpgLUe5TNx96S9s3e+9HJm9/9RoqQoonIazsdV6unHE+f6K6jJqWXTHVNofDNj+FhPTshR7D4gne6NcYNjH3mzB/1AZNDQ/cnomOXvL2yBzjVLhl+pMa2AGP2LMcOfcWp7sJsD7E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FZHbC8aI; arc=none smtp.client-ip=209.85.210.181
+	s=arc-20240116; t=1732672221; c=relaxed/simple;
+	bh=gMRhOUu/z58Nh7afU0fuDYnIZRYslj7PCIccqzuEhC0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Hm6yDYgtQo0pPHOJIRBZpliXhzAW0fHugK3Rz7lISodhc5pnuyDD5qBuALdijThcc6qAK0prfQEu1DskKijSJrv3QkKAijyUL01eUz3fGJLHD3ZYKH7pzXxtD1UQhNmulll0Ei6CLaWcy67163k0UGtzIxpa9VIjfYNFvQl07cY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HrekFJ4W; arc=none smtp.client-ip=209.85.210.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FZHbC8aI"
-Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-7250844b0ecso2868229b3a.1;
-        Tue, 26 Nov 2024 16:35:12 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HrekFJ4W"
+Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-7248c1849bdso6321395b3a.3;
+        Tue, 26 Nov 2024 17:50:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1732667712; x=1733272512; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=wwEHHjeePOFS8sifKhXNpJZ8wSDgwVbUUuXuwR9Q1ZM=;
-        b=FZHbC8aIYCryoOUFjEqIWpXFUXfMAeROiari77/ePPd+ZUP/cTlzihAwbqW8eA/Es6
-         npcl3MwxK44uHghbw/ZhqqvEEzt7DUZ5G9ltmEh3bkpunoieSigjuxTnNJkNMRVJYO/c
-         FIJW6qEOo69OoHsvRsHA4MRskUo+nGefWNyY6znk+HUDwmP7whuMGvbeSEO19Uc/5Wts
-         Kn0JtlZPlx+ZMj+7STOGU5gEiGU9ZOFfCRpHvRc2LytHAvF0tEhleG8DTn31fJeIR4k7
-         2AMKyjWVgOteMPaAW+n7DpbQKzNBPUiiHEoUkKzPHYozACEHYhLRBP5SYuN1BxjryYnK
-         MPgQ==
+        d=gmail.com; s=20230601; t=1732672219; x=1733277019; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=iboirn07jyawzq1taoDeBAaznZev9oVgPRWrysfGHWE=;
+        b=HrekFJ4Wd+V4dgPg3fVB27kQVrVkYMnT14ubMxUTe3wmdOWaadoGSZLI8989fPyGoY
+         1u30TVfZiWcNk3k5Ml7liXDnQlSYVZlIS45xLe/VRc0UbhRUQ6kYxnHE808VVvOWUlQW
+         DADEgknoGlbc28UhQ5kJqB4BcUOdKUrAn7HU70L0Rbhg/zqKadZwt0jgrxBNqPv00GF8
+         dSruahjekxp46m+9+TKM0QWTUNH8+qPfgn0F0F3LfbluoO7yMcxk1tYRHQcMb903SZ0V
+         Uj/CGcxIvYJxmAkfG6fa7EXo2i8JUozAnRWtRFQR1SqqTA8fY2Dc6BAkVtxTuwwr0d4a
+         gdXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732667712; x=1733272512;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=wwEHHjeePOFS8sifKhXNpJZ8wSDgwVbUUuXuwR9Q1ZM=;
-        b=Rz8hXUTF3y0SIM7Xx9tcs2/czaZICMwA0WZdyismnhKgH+9jOcbmNfHt17awSmH1Av
-         oiQILjvI11N8fqib0FG6iqxvRAVoVfCPJV1mcLUjxyenoRRycv8Z/frmtShMTaVvgdVw
-         68pxHDzUv07x2P7hU/2oFwQ1wwZsB1SCvObormPVrjjyw/39E0tQdOw/TKIQnzxejT9B
-         ur2xUcbERFeglJ5KP2dEXgPZETpuTUYsY1/8We92YCDY1OXn6lYZ2OZQjR99Wy6BbyQE
-         rb8tUkZte2kWaMce7/e2wjfjWJ0c33wta7OSkUS3zgeeVHzDsE0b6ZnnmftpNBRrQ/DB
-         nxiA==
-X-Forwarded-Encrypted: i=1; AJvYcCUAAsoprjH7Yb0FfC0WEbnYkC4XCAe4HB5UP5cqVvEON0qTiZ7i2i6/8T2h5OSvqZ1mWqQ=@vger.kernel.org, AJvYcCUSxPNJsttHQIPFL2ojJfZ7OOoP6QxnWyenEloicvUaqzHksgYGGdgL9c4IUrPgsaH5hXU6WCNMXw==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx/lKqvSWuFfkVLqDNl9CBKJQo01epW76S7zOA7Kqn761i0UlNr
-	Ch1ZOyC/Q+5JKKgAsT02K3STbwGORU5Xy7unwXXgTxt0RpJa9d/X
-X-Gm-Gg: ASbGnctlYIUCOFlsOCawhcl3bzRuXAke74d9ae7VH0sRUsO5UIZL4jZBVOgtSKmci1w
-	4A1+TONCtPhlTWaVUkSzQABtR2G3eNnNcsS89xT+ee170L2IJOfPE/kMfp8HnxrwsEmVwCH2qTY
-	DpBi1xU9XjnUhVszfjIQMrMmb5srS3t9xRZ21T8+0q6Ek3/CDiF/PH3RGGH+1/jAKel8ynae5e9
-	eJB034ItFq7he+QSDcObfN6d8FsZQcneE6HlPNaLbL6xAM=
-X-Google-Smtp-Source: AGHT+IHD1XuN8URbcGc6l2ZUECnAebfDlrucXcXvHYpCgKIL6IvV6a9BgOMV68Tu5uvyT0d+4xPENA==
-X-Received: by 2002:a17:90b:5483:b0:2ea:5823:c13d with SMTP id 98e67ed59e1d1-2ee08ecf50emr1603912a91.18.1732667712058;
-        Tue, 26 Nov 2024 16:35:12 -0800 (PST)
-Received: from [192.168.0.235] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2ee0fa33374sm175760a91.4.2024.11.26.16.35.11
+        d=1e100.net; s=20230601; t=1732672219; x=1733277019;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=iboirn07jyawzq1taoDeBAaznZev9oVgPRWrysfGHWE=;
+        b=Um7dmTUQC6Eg+/jjU9//KPjK5vRTQozXxmCIo9r+for1Uv3hmYuLSith2xImeZrAoD
+         1m752vlG30KgK0z0ha78jYwq65twHv/wV5BgEYGGvbrEC0fAE+XYPxzGOR3RkFt0+Thw
+         6lrVY6LbWKzv0Bvwopa4rXP46PaoUuzFke9+mx/uNz+Z5WYTDFL0iu9HcbZn6hIZ1ajN
+         0Rin1cvzBKSodfTU1DjzDLhKdHwTb5TcrS3uCX0DIssKDpp07jfV5slYAlEGNL7VjAPQ
+         fSj5pB+FJonqsCfOpuPGet67c3uK1yaQyvn7u+IHEFKDLEPv2Evyv3z12YKQKpD0zxnB
+         8VHw==
+X-Gm-Message-State: AOJu0YxCPGfLe89H/VAAxN2bOW5Sop8MaWLN03yZWOYVNi4vabp5IvaW
+	ni2UEAZiI0U5s/USZRHHccsKW71lNBNKHyMGlFcT40WVop5uuzAKpJ4jaQ==
+X-Gm-Gg: ASbGncuMbHrOaBqDPxWEu7K6stV9SucZdbVn04xu30CIrVwIrhVYIFRqfsjiHFmRTtx
+	6GNv+nZerNlqcf04UrdJtnA+RAQqX8NfCJgXT+XKKbQW1Cf49l+VA1TQDDw/Q58Sx6D6Wm7Xz0T
+	iYqcqqOGtVOpGBjyJPhcYld5ZW74SAeSKYP65/AFD4IqqrC6djS2nUwGlK5YQUcqa4+mNumB/r2
+	8my8O5QfyG6e0R1rS+WzQdexpQM5Yhawz5q2oUECIwg0w==
+X-Google-Smtp-Source: AGHT+IE18WdT7pS2RVtTlVgMkf17H7WDvWf8eiUNlmg3ytJzLx1A1JmD1BFLbIlb9BBl97iBxlgaSQ==
+X-Received: by 2002:a05:6a21:33a1:b0:1db:ddba:8795 with SMTP id adf61e73a8af0-1e0e0b7d919mr2594772637.36.1732672218679;
+        Tue, 26 Nov 2024 17:50:18 -0800 (PST)
+Received: from honey-badger.. ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-724fcdec956sm6312435b3a.25.2024.11.26.17.50.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Nov 2024 16:35:11 -0800 (PST)
-Message-ID: <ba62f39bf3670008a6e1a2af114b14dd7fdc1c96.camel@gmail.com>
-Subject: Re: [PATCH dwarves v2 1/1] btf_encoder: handle .BTF_ids section
- endianness
+        Tue, 26 Nov 2024 17:50:18 -0800 (PST)
 From: Eduard Zingerman <eddyz87@gmail.com>
-To: Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc: Jiri Olsa <olsajiri@gmail.com>, dwarves@vger.kernel.org, 
-	arnaldo.melo@gmail.com, bpf@vger.kernel.org, kernel-team@fb.com,
- ast@kernel.org, 	daniel@iogearbox.net, andrii@kernel.org,
- yonghong.song@linux.dev, Alan Maguire	 <alan.maguire@oracle.com>, Daniel Xu
- <dxu@dxuuu.xyz>, Kumar Kartikeya Dwivedi	 <memxor@gmail.com>, Vadim
- Fedorenko <vadfed@meta.com>, Vadim Fedorenko	 <vadim.fedorenko@linux.dev>
-Date: Tue, 26 Nov 2024 16:35:06 -0800
-In-Reply-To: <Z0YbQr_QTNrfNqAE@x1>
-References: <20241122214431.292196-1-eddyz87@gmail.com>
-	 <20241122214431.292196-2-eddyz87@gmail.com> <Z0HXqLswziDAjNrk@krava>
-	 <Z0X2YnMyzNlZyQtP@x1>
-	 <b2e5cb3b1478d6900f126d4de223500d6be4c97d.camel@gmail.com>
-	 <Z0YbQr_QTNrfNqAE@x1>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.54.1 (3.54.1-1.fc41) 
+To: dwarves@vger.kernel.org,
+	arnaldo.melo@gmail.com
+Cc: bpf@vger.kernel.org,
+	kernel-team@fb.com,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	yonghong.song@linux.dev,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Alan Maguire <alan.maguire@oracle.com>,
+	Daniel Xu <dxu@dxuuu.xyz>,
+	Jiri Olsa <olsajiri@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Vadim Fedorenko <vadfed@meta.com>
+Subject: [PATCH dwarves v3 0/1] btf_encoder: handle .BTF_ids section endianness
+Date: Tue, 26 Nov 2024 17:50:05 -0800
+Message-ID: <20241127015006.2013050-1-eddyz87@gmail.com>
+X-Mailer: git-send-email 2.47.0
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Hi Arnaldo,
+Currently, pahole does not generate kfunc declaration tags when
+generating BTF for ELF files with an endianness different from the
+host system. For example, this issue occurs when processing a vmlinux
+built for s390 on an x86 host.
 
-Please note a message [0] from Andrii,
-where he suggests using elf_getdata_rawchunk() libelf function.
-I tried it, it works, makes the patch much smaller.
-I'll send a v3 shortly.
+To reproduce the bug:
+- follow the instructions in [0] to build an s390 vmlinux;
+- generate BTF requesting declaration tags for kfuncs:
+  $ pahole --btf_features_strict=decl_tag_kfuncs,decl_tag \
+           --btf_encode_detached=test.btf vmlinux
+- observe that no kfuncs are generated:
+  $ bpftool btf dump file test.btf format c | grep __ksym
 
-[0] https://lore.kernel.org/dwarves/8744c86ba355245f7ecc14d00351c82285fbf64=
-4.camel@gmail.com/T/#me4c02e4a4e7fdd0e69dd52b2a6bf598966dc2145
+This patch resolves the issue by adding the necessary byte-swapping
+operations.
 
-Thanks,
-Eduard
+Changelog:
+- v1 [1] -> v2:
+  - avoid modifying the 'idlist' Elf_Data object directly.
+    Instead, use struct local_elf_data (suggested by Jiri);
+  - update the description of the .BTF_ids section (suggested by Jiri).
+- v2 [2] -> v3:
+  - use elf_getdata_rawchunk() instead of direct conversion loop
+    (suggested by Andrii);
+  - removed Jiri's acked-by and  Vadim's reviewed-by,
+    as patch had changed significantly.
+
+[0] https://docs.kernel.org/bpf/s390.html
+[1] https://lore.kernel.org/dwarves/20241122070218.3832680-1-eddyz87@gmail.com/
+[2] https://lore.kernel.org/dwarves/20241122214431.292196-1-eddyz87@gmail.com/
+
+Cc: Alan Maguire <alan.maguire@oracle.com>
+Cc: Andrii Nakryiko <andrii@kernel.org>
+Cc: Daniel Xu <dxu@dxuuu.xyz>
+Cc: Jiri Olsa <olsajiri@gmail.com>
+Cc: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: Vadim Fedorenko <vadfed@meta.com>
+
+Eduard Zingerman (1):
+  btf_encoder: handle .BTF_ids section endianness
+
+ btf_encoder.c | 26 ++++++++++++++++++++------
+ 1 file changed, 20 insertions(+), 6 deletions(-)
+
+-- 
+2.47.0
 
