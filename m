@@ -1,132 +1,120 @@
-Received: from out-170.mta1.migadu.com (out-170.mta1.migadu.com [95.215.58.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33D13193075
-	for <dwarves@vger.kernel.org>; Wed, 27 Nov 2024 14:00:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BA7C1F9EDC;
+	Wed, 27 Nov 2024 17:53:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732716005; cv=none; b=f3XsjsDU9K4ToWMV1EJR5Szoe+BzvrOEcU+f6Jw+POzh8KsI9BayTxkk6/tmqaGMOeizQNcawG4yuJZFfmk3pCihtHg7kdnskvBsIrCXAWm8qoKNqIcBV7ziq08IzeRWCI84eW/kVe28C5HIbKJF5eW6WI6xBshH60GvbxwBQIY=
+	t=1732730006; cv=none; b=LUndqMRSeKqO8ekc9xQ/MGd+q/SI7HiijeZ/D6JlRYYLOndbCAO8AudjNSfdjb3bUss0KqJj+eevjOpmb4GmG70WPvhna4XFyScQeGS6OMuRdbwHDEieRE1pSNj4gIoMd9N8nXion0nEI8LBAtHQDITJNdcyhqRE1es5wboCEJ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732716005; c=relaxed/simple;
-	bh=3iLOkCRVMa8WlfMFaQcEpRsjfAz3EAZYnnWEoDtsjWM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=L5kxiPZdzXlJm8oDt1FUUJ1XbjY31Jgu2VoiWhpH3TCeMzUin/dKTC7O8cnKFfgTaapLhnP0RiAE44zcJxznaZyN+Y5HG2TH9p8CZL7zGAtgHkjz27/AWFZt719qbAJ+m+GsIajc5GQkRViht2o8wh0sXtAv0u9Ft7aserIqo+E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=oa9pn2/7; arc=none smtp.client-ip=95.215.58.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1732730006; c=relaxed/simple;
+	bh=XkJKEQScM1sUdH9+73haYCE8kwytnHB9fNAKE0pQerg=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=tjde3XQsoJjxDRjmTuEZCf9V5l/Q67HV4qVVJtb+2JJR7kf0AWuLoCFREFOHYr6v46vkR4qgsuVLPQamFDH5Ho0k/Fa2jRUGPMYZ8X3/6hrPk/V2H7HhWa6PtGvG7p0kV3Zkfx2TR5AGV5z9dZHzO1uaPkVicasCOpdPa55ZU14=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ajp9kIfp; arc=none smtp.client-ip=209.85.215.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="oa9pn2/7"
-Message-ID: <35f1dcb0-f577-4861-a82d-c3083dafabd4@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1732715999;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=N2OmpSTHS2zTR/6T9qs+CZJX3BEn5zpT5EJk38SUdY8=;
-	b=oa9pn2/7Ef6BAUhpjiUJ3SZqogBTYiFdRfwfI3NYcvjpKWfpcae2cG4VJOb1XZ9kS4jwHu
-	RU7KhhuvlFQEu43SMzjnJAvGNnDFg+/afHenKzxi+5A/kNAAlLzgKNwxbApwXK7PpG83hp
-	ltpa2ypFlcU8TEot6POKCtMHnE8WGa0=
-Date: Wed, 27 Nov 2024 13:59:55 +0000
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ajp9kIfp"
+Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-7ee11ff7210so5237228a12.1;
+        Wed, 27 Nov 2024 09:53:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1732730004; x=1733334804; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=pBUdGR4bmi6T+Je5/dBA8Nk/49nUCDZWYrCItXq7p6I=;
+        b=Ajp9kIfpXYsvvy4xhvuUQtK3Yw+pvTrlM7HNp0j64PGFQIWleqXKIR/k2RzCJriyFV
+         5ieSH2oKY5hIvZGBl18Hb7TuFkot4JmcQvY9PhObteYY0Vw8bQYOpJjyeQNcfu299n4k
+         Sg+31xgzKtMadR38tXuUSQybaP5wFOqKk0XYmZLypdXWRSG09oVVVYS9pmrCR57Tau2L
+         f6pLzoEyzNiinnDbKkLtdskcYZFiwhIEC5mZ9VVayBf+ZyixiUdGGVKAEBFVtsscsAEg
+         NogpvWvh2TYppgav1urj7rLDP93z34JPLrlf//hL3k7wMw4us66PM85Ans8uk2dCod8c
+         sMtg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1732730004; x=1733334804;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=pBUdGR4bmi6T+Je5/dBA8Nk/49nUCDZWYrCItXq7p6I=;
+        b=gk59SV2V7b+9Ka9VeBaQ7xTTS/88KYuImaI8qUwj0q0xXEMf5ZZuORIWn/ThJJ+11W
+         r9Q0/4FGfeE5aEzTbX+VKxg2Vwdc0DrJH06ogMuwqAUhcfOOv178GzkSdLnXM/3eX8yz
+         skh2dxwp1Z2OYPrHdbHLXKkdyQ4Hjqy3STSRSU9r5raMluSMa7fAiruAVfvnbI5y1UlN
+         JgwYJePAFmKrh5FzDCTZ9kw6g9Q6ylVslgbqE3meMRDciwSg59ccQpyMzeH9djU1XhmL
+         Xmz+PgX84ADvEBjeXOR11oHGsZJgPa6fkRDe6xdycqAZpSJu+LEC31HPHRJQZToT/xI2
+         CcRA==
+X-Forwarded-Encrypted: i=1; AJvYcCXH5YHomeHR61qimPdUkn933fxE4BwZiZT6Kx7e2Fs8C2ESaIIHLNPdc1DSC85/6LkgFQc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwvFqCID9Hiz+I8vfm8FfVx1VBhVLmTY4GpC15Qt20EnNxXcT9u
+	i1ilyt9PH/IDOqZwCrL/lLqPPq8KAMIugZnDfsHgbUQ9cBMGMJt0
+X-Gm-Gg: ASbGncskgvhBq30SJlvSXVaW/JPPnj94c8m4QT/N+F0E8MJ032+w1edSMUTELORlhwe
+	k0+aBs+VfNCxct9eoFGWCEC0a6wzLU/cPF72lej647LqjeBBysd5/heX5HiK5Uyp++Gsp10DD3w
+	3vhxUPsMmY40JVZGfB2+UnbWvzAlcsOPr/trquazSGgpw7zAHb3lObm4IyAU0TBDr9fFsR3WtpM
+	X65Qzv+PCWpVwH4977geX9bP/LvumqF1OfyqHRRFaNEn7U=
+X-Google-Smtp-Source: AGHT+IGVpMYf42rxDToo+RhGVI2wjIYMmSYIwIYkYRHbgawZpwcFFi1sexXLGL7A0g0CSPiHtpDhhA==
+X-Received: by 2002:a05:6a20:244c:b0:1db:ebbf:4b8a with SMTP id adf61e73a8af0-1e0e0aa902bmr5687874637.7.1732730004384;
+        Wed, 27 Nov 2024 09:53:24 -0800 (PST)
+Received: from [192.168.0.235] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-724eaa8c1easm9845787b3a.141.2024.11.27.09.53.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 Nov 2024 09:53:23 -0800 (PST)
+Message-ID: <66720931d0e98065804320142139e963c6de6c37.camel@gmail.com>
+Subject: Re: [PATCH dwarves v3 1/1] btf_encoder: handle .BTF_ids section
+ endianness
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Vadim Fedorenko <vadim.fedorenko@linux.dev>, Jiri Olsa
+ <olsajiri@gmail.com>
+Cc: dwarves@vger.kernel.org, arnaldo.melo@gmail.com, bpf@vger.kernel.org, 
+	kernel-team@fb.com, ast@kernel.org, daniel@iogearbox.net,
+ andrii@kernel.org, 	yonghong.song@linux.dev, Alan Maguire
+ <alan.maguire@oracle.com>, Daniel Xu	 <dxu@dxuuu.xyz>, Kumar Kartikeya
+ Dwivedi <memxor@gmail.com>
+Date: Wed, 27 Nov 2024 09:53:18 -0800
+In-Reply-To: <6187706f-5c7f-4c22-9854-b3225b841385@linux.dev>
+References: <20241127015006.2013050-1-eddyz87@gmail.com>
+	 <20241127015006.2013050-2-eddyz87@gmail.com> <Z0b7zLfaoodeWF6J@krava>
+	 <6187706f-5c7f-4c22-9854-b3225b841385@linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.54.1 (3.54.1-1.fc41) 
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH dwarves v3 1/1] btf_encoder: handle .BTF_ids section
- endianness
-To: Eduard Zingerman <eddyz87@gmail.com>, dwarves@vger.kernel.org,
- arnaldo.melo@gmail.com
-Cc: bpf@vger.kernel.org, kernel-team@fb.com, ast@kernel.org,
- daniel@iogearbox.net, andrii@kernel.org, yonghong.song@linux.dev,
- Alan Maguire <alan.maguire@oracle.com>, Daniel Xu <dxu@dxuuu.xyz>,
- Jiri Olsa <olsajiri@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>
-References: <20241127015006.2013050-1-eddyz87@gmail.com>
- <20241127015006.2013050-2-eddyz87@gmail.com>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Vadim Fedorenko <vadim.fedorenko@linux.dev>
-In-Reply-To: <20241127015006.2013050-2-eddyz87@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
 
-On 27/11/2024 01:50, Eduard Zingerman wrote:
-> btf_encoder__tag_kfuncs() reads .BTF_ids section to identify a set of
-> kfuncs present in the ELF file being processed.
-> This section consists of:
-> - arrays of uint32_t elements;
-> - arrays of records with the following structure:
->    struct btf_id_and_flag {
->        uint32_t id;
->        uint32_t flags;
->    };
-> 
-> When endianness of a binary operated by pahole differs from the host
-> system's endianness, these fields require byte-swapping before use.
-> Currently, this byte-swapping does not occur, resulting in kfuncs not
-> being marked with declaration tags.
-> 
-> This commit resolves the issue by using elf_getdata_rawchunk()
-> function to read .BTF_ids section data. When called with ELF_T_WORD as
-> 'type' parameter it does necessary byte order conversion
-> (only if host and elf endianness do not match).
-> 
-> Cc: Alan Maguire <alan.maguire@oracle.com>
-> Cc: Andrii Nakryiko <andrii@kernel.org>
-> Cc: Daniel Xu <dxu@dxuuu.xyz>
-> Cc: Jiri Olsa <olsajiri@gmail.com>
-> Cc: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-> Cc: Vadim Fedorenko <vadfed@meta.com>
-> Fixes: 72e88f29c6f7 ("pahole: Inject kfunc decl tags into BTF")
-> Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
-> ---
->   btf_encoder.c | 26 ++++++++++++++++++++------
->   1 file changed, 20 insertions(+), 6 deletions(-)
-> 
-> diff --git a/btf_encoder.c b/btf_encoder.c
-> index e1adddf..3754884 100644
-> --- a/btf_encoder.c
-> +++ b/btf_encoder.c
-> @@ -1904,18 +1904,32 @@ static int btf_encoder__tag_kfuncs(struct btf_encoder *encoder)
->   			goto out;
->   		}
->   
-> -		data = elf_getdata(scn, 0);
-> -		if (!data) {
-> -			elf_error("Failed to get ELF section(%d) data", i);
-> -			goto out;
-> -		}
-> -
->   		if (shdr.sh_type == SHT_SYMTAB) {
-> +			data = elf_getdata(scn, 0);
-> +			if (!data) {
-> +				elf_error("Failed to get ELF section(%d) data", i);
-> +				goto out;
-> +			}
-> +
->   			symbols_shndx = i;
->   			symscn = scn;
->   			symbols = data;
->   			strtabidx = shdr.sh_link;
->   		} else if (!strcmp(secname, BTF_IDS_SECTION)) {
-> +			/* .BTF_ids section consists of uint32_t elements,
-> +			 * and thus might need byte order conversion.
-> +			 * However, it has type PROGBITS, hence elf_getdata()
-> +			 * won't automatically do the conversion.
-> +			 * Use elf_getdata_rawchunk() instead,
-> +			 * ELF_T_WORD tells it to do the necessary conversion.
-> +			 */
-> +			data = elf_getdata_rawchunk(elf, shdr.sh_offset, shdr.sh_size, ELF_T_WORD);
-> +			if (!data) {
-> +				elf_error("Failed to get %s ELF section(%d) data",
-> +					  BTF_IDS_SECTION, i);
-> +				goto out;
-> +			}
-> +
->   			idlist_shndx = i;
->   			idlist_addr = shdr.sh_addr;
->   			idlist = data;
+On Wed, 2024-11-27 at 12:03 +0000, Vadim Fedorenko wrote:
 
-Reviewed-by: Vadim Fedorenko <vadim.fedorenko@linux.dev>
+[...]
+
+> > looks good, I'm just curious about one thing..
+> >=20
+> > so ELF_T_WORD enum has this comment: /* Elf32_Word, Elf64_Word, ... */
+> >=20
+> > I did just quick check, ***so I might be easily wrong***, but I wonder =
+the
+> > code in __elf_xfctstom (which I assume is the one called for conversion=
+)
+> > chooses to swap 32/64 bits values based on elf->class .. so for 64bit E=
+LF
+> > class we swap 64bit values? ... while .BTF_ids has always 32 bit values
+>=20
+> Well according to the doc:
+>=20
+>         ELF_T_WORD     Unsigned 32-bit words.
+>         ELF_T_XWORD    Unsigned 64-bit words.
+>=20
+> It shouldn't use 64 bits swap:
+>=20
+> const xfct_t __elf_xfctstom[EV_NUM - 1][EV_NUM - 1][ELFCLASSNUM -=20
+> 1][ELF_T_NUM] =3D
+> ....
+> 	[ELF_T_WORD]	=3D ElfW2(Bits, cvt_Word),		=09
+> 	[ELF_T_XWORD]	=3D ElfW2(Bits, cvt_Xword),		=09
+> ...
+>=20
+> Are you looking somewhere else?
+
+Right, thank you, Vadim.
+
+[...]
+
