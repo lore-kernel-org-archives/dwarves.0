@@ -1,73 +1,72 @@
-Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
+Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C68D2C18C;
-	Fri, 29 Nov 2024 22:35:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2636A13BAEE;
+	Fri, 29 Nov 2024 23:12:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732919724; cv=none; b=TgLhE+KUoB7hnC6vEto0aOGhtwMLuiA4+1ufd9VWzN2YO0Eo5IyBpUeDcHcecdgCRCmo+mnAD0aItxmueekv340MTpY4O8aJaG2MwxGwowUW6CSTSEiympO1R4IrTIEIYuB1ChRjMKGHYgjqW7Yl7HkUngau28ukbTmRJ1FjAu4=
+	t=1732921964; cv=none; b=AQEwA+RxWD2V2MIYSL/hgJe2yug0Ndztj7ARGUo5opmkDJYNaY7HzHfLmWIqe45t8XFq/bC1JhYf5enGU6Nbu5xj5/bSitMQeQPSgOJXXTCQncKd71tZQPXiRbtG1TBLV0Vr6LaWKTKd5inOoWkSf3dZxgf2e3M32qyle4EtUmw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732919724; c=relaxed/simple;
-	bh=mu0DkiZGXnD6C5cAY1jYSN3PsYZgmYhDFG4XbBlxFGk=;
+	s=arc-20240116; t=1732921964; c=relaxed/simple;
+	bh=5LSR8MEDDjsn4Vd6Hsv9lfmFU1uL3HPRpy/0Lp10y7g=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=h6iNfm1FOi2MQKntEPpvmrs/bSfXpyNv6vDreNfaZCb4pLNj6MhNXmsm7p+U3lRVvHheLO1WZeeoUl9pLkZQ3+4ARJDWv4FkhqmH/XepleY2hdHCCJF9mqullsKAEATto5GiRhsMRYUUS8uSnLbBBuWkoUMjg2KSpph0eRvD9IA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gjUfqVIH; arc=none smtp.client-ip=209.85.215.181
+	 Content-Type:MIME-Version; b=muzeV00qPOgTTEXZaX1zM06Qnqz+QESm3JfiSUFbHUQ7k4FKxOkCt1l06mNyKQvHXjrj6LgbRxC50rVuBAvbfAXydT58w44gBB64+VljgJrGnjPHM9cfUbYS6JM/WzCKbWzmwdNAKEuifa8JyENFjjW3GRfuLux++00tvDF7eNc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Oei1bURD; arc=none smtp.client-ip=209.85.216.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gjUfqVIH"
-Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-7e6cbf6cd1dso1173489a12.3;
-        Fri, 29 Nov 2024 14:35:23 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Oei1bURD"
+Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-2eb1433958dso1562136a91.2;
+        Fri, 29 Nov 2024 15:12:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1732919723; x=1733524523; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1732921962; x=1733526762; darn=vger.kernel.org;
         h=mime-version:user-agent:content-transfer-encoding:references
          :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=BgP6DHAJWIOX48v8Lk9orGfycZvbJJM11pIksQ0I9a4=;
-        b=gjUfqVIH5kmYB9nZy5n9ZPGTAiRrg3AW4eOFnMll5UgceZYDtnqi4WJVwIcLF1Mf1V
-         hpn/lri1FAIcGOtpb7x0jKiXT3Rwz4VC1XWGGd9lT8uI3AcgU3CHSJQDaS7GZrbGo0a0
-         jAsfNo2uWk+qZ34B4Dcpurg8RHzDGasPu5qGzjniCixce3UBoHmZUMzxS5jsOWVhXG0e
-         JxbeoHXg4PQN7aw+BW4G8e1sKROBbqn/RKw5oxwuIhDjGryl6JsOXPLVyEcdtyuoXfHU
-         aA+efonh+dOyC/Apot0CzyuNeF8+ziLX3vvVJWfgUwlXpNdDBU71v1F3mr1wY5ydDFIF
-         uFcQ==
+        bh=AwzwPxTauSo9ww8n/2YHOkT3g1m1i87bT4+NGvH7Xb4=;
+        b=Oei1bURDfdmPQCebAuD0iqSxArCHBFkSQFNz3zwK4uNdFCMZV5YPuQlHi/PiQ2HqNe
+         NLWFVTlY/QTSxkmpAmhE+jNnLaDdg2WKcs1vmjGAQkUe8Cr8+CpAHlcq1BzifwtsgJAl
+         F6FKuktMN5gp3b0mshQfESDUt68v5TLYF3nU9b8PfE7W0RKC/TGgKd7XVpgrR5Pq678P
+         t3dHK46qABiXnZ0luVAmGzM68WvFCahHA/PVop44BjhSa3nBnb4ihwggHcP/+/k+4iQ4
+         Y4me1N3m1vmWXsL715q/cH6tg/yWYlwTWMEkpcUYhURtjnlf6ABIQRtXIQ+ykh+tH9QH
+         g6Mg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732919723; x=1733524523;
+        d=1e100.net; s=20230601; t=1732921962; x=1733526762;
         h=mime-version:user-agent:content-transfer-encoding:references
          :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=BgP6DHAJWIOX48v8Lk9orGfycZvbJJM11pIksQ0I9a4=;
-        b=hBkiQBKoJHWKO5sqP4dc80voyhy8jNv0O6eSB8SgLADoSEk6YtGdINgwFoNQ6rViXy
-         SCqoYxyRScl69xS6ZPAwyaBUq8qQ8tCk59Se4x1ojooXSDngbjCgQ/C2U8KzJ3SYee60
-         DGsWHRkF6PqDSSMmGpp1drUbBP3LmdCFeTht7IwkeP497cyM9kPIMtwizUFiFb0k+OIZ
-         zqW9MSYjMKY5sWffX/lD4uHzMmTPgcFb9KrI07QbwbTcQaIFIWONTPtjkZWRqtQWEV5S
-         DCWRG3M2iq2Unj4Ntvjo7Or78l+wtz3iD+muSojVegiWym7rsT57bQVZm7Fh0+X+os7f
-         YZFw==
-X-Forwarded-Encrypted: i=1; AJvYcCUw/EiCPyidlMno7qhUZX1zN28dPmvKcKLvjHfGsWJOodj20gW8gf505b7AxytI3BoUNZ76ZWgW@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw2ZQPd7HDvQpebEHhdtGWVa0/a3xYWSf+yaAKNFXrSjcYDN7hI
-	0glVotFi9zqYySSj2piRPsaoZUJpMKajNBFYKWJsiVeEQa0ITAAo
-X-Gm-Gg: ASbGnct+OMGBjPFsWsPlHRoWVIvEtLKwSFw12MGvBKODE+x1AMx9kAGEP9d4gFJCFkg
-	JWk+OxCwZTEXOIpGE6BfhtIm5hz/vfZVystp2B1mkB2LQQ9uQR6zcGaWMp+EPghMHFKygw7SKKr
-	g6+5Azbyn506JpXSJ0qf1OVG4sQAXIW4x3qBTvOayMgrkZSOud1PVYcGQCGaaI2BT0p1KCYg7Oi
-	E6dMro4B/DNopoJPJXr/Hc36DcRZg1LmwiZY5Z2sCiCDpQ=
-X-Google-Smtp-Source: AGHT+IGW9SfmYaZ6cU3gM63T7PJM4tA5nZWSCg+MdJvE7XWEj7cbZuZSFuqvKonJ1bxzmP3tgrtJdQ==
-X-Received: by 2002:a05:6a20:6a09:b0:1e0:cb94:d3b4 with SMTP id adf61e73a8af0-1e0e0beb9b1mr22494596637.45.1732919722744;
-        Fri, 29 Nov 2024 14:35:22 -0800 (PST)
+        bh=AwzwPxTauSo9ww8n/2YHOkT3g1m1i87bT4+NGvH7Xb4=;
+        b=mmYzEEHRTUV3YHNOjDlS3rQtUla9a++aVaUg+9hKj9A48ixijpbeP2ksmQo0HyWlSj
+         +4DtCVNoXpW/MCS8dPKJpF17+MJvSbT0xZBoV/GFyMcSNOAnuZ/Ei4YpqeSBLZ5JUYmN
+         7IbFnGXF5Jv0FwBZbt4EnStArx8x2v7WuPPMUHOleeRGwnUzaP3L78Xn9OrraYh1MkFv
+         gp9q7CE9IhoM6DpJl7PSgWUrp8Z4Jx2o1Sfj+AmiTR2i29OTPgJyvwSaZaHNc7MRtPn2
+         dtNmZv0elgxfUG+MTzlF79DZSK/B2c8XVtlk2cKjgGwPiHSNRXtp0F3hKGkI1BVGSSaZ
+         mrcA==
+X-Forwarded-Encrypted: i=1; AJvYcCVreU24aUiH1YMlgv9yiCDHqHqajRZLvtnWqnZiLOo2YyKAdcrtJweht8XEpGiDE3IdUcJN/3ap@vger.kernel.org
+X-Gm-Message-State: AOJu0YxnmE4K+aep9nvRIWo2PPm5cW9RJkbEW0cKN+H3gz7NSyqtT017
+	iMrJeW8IYPCReBzZQbi+t9Bw/tCzlKsGz4Nmpe4NR56PUCdCJfCP
+X-Gm-Gg: ASbGncsSj2NjKKC7+eHEC991QgdhAitYUji5LWfXTHjtz5pu7wvFgPuATGLZj4+ECq0
+	jyVR/WgMcDtoezqH06DsUaefsNVEwNRlhnHvYeqjuT7sqLX0gfhiOKApzkMUycs5/VNyZ8CSSUQ
+	JgJNrU4pLduFrqcJylt1EBXxjo25lCNH9pHCfOq84n2Ctg09rDvc6nmt5e1WMjNlt1xCTJ/9qkE
+	t+W1tkBCx2YkiOrQj9sFNgcwkGEXsYUBjArENkP2VOo39c=
+X-Google-Smtp-Source: AGHT+IH9TRH0iBbeTBD0ms711gLCgCgCufH1nWTOni9XCYfESUYimTuM0CV0Kb/15Wdm5IJBrnciZg==
+X-Received: by 2002:a17:90b:1d11:b0:2ee:8008:b583 with SMTP id 98e67ed59e1d1-2ee8008b80bmr666391a91.16.1732921962388;
+        Fri, 29 Nov 2024 15:12:42 -0800 (PST)
 Received: from [192.168.0.235] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72541770786sm3994712b3a.79.2024.11.29.14.35.21
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2ee2b007b5bsm4198966a91.21.2024.11.29.15.12.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Nov 2024 14:35:22 -0800 (PST)
-Message-ID: <3a012e7797907f466ce56a103e5b1d96ae564428.camel@gmail.com>
-Subject: Re: [RFC PATCH 7/9] btf_encoder: switch to shared elf_functions
- table
+        Fri, 29 Nov 2024 15:12:41 -0800 (PST)
+Message-ID: <e1df45360963d265ea5e0b3634f0a3dae0c9c343.camel@gmail.com>
+Subject: Re: [RFC PATCH 8/9] btf_encoder: introduce btf_encoding_context
 From: Eduard Zingerman <eddyz87@gmail.com>
 To: Ihor Solodrai <ihor.solodrai@pm.me>, dwarves@vger.kernel.org, 
 	acme@kernel.org
 Cc: bpf@vger.kernel.org, alan.maguire@oracle.com, andrii@kernel.org, 
 	mykolal@fb.com
-Date: Fri, 29 Nov 2024 14:35:17 -0800
-In-Reply-To: <20241128012341.4081072-8-ihor.solodrai@pm.me>
+Date: Fri, 29 Nov 2024 15:12:37 -0800
+In-Reply-To: <20241128012341.4081072-9-ihor.solodrai@pm.me>
 References: <20241128012341.4081072-1-ihor.solodrai@pm.me>
-	 <20241128012341.4081072-8-ihor.solodrai@pm.me>
+		 <20241128012341.4081072-9-ihor.solodrai@pm.me>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 User-Agent: Evolution 3.54.1 (3.54.1-1.fc41) 
@@ -79,50 +78,62 @@ List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
 On Thu, 2024-11-28 at 01:24 +0000, Ihor Solodrai wrote:
-> Do not collect functions from ELF for each new btf_encoder, and
-> instead set a pointer to a shared elf_functions table, built
-> beforehand by btf_encoder__pre_cus__load_module().
->=20
-> Do not call btf_encoder__add_saved_funcs() on every
-> btf_encoder__add_encoder(). Instead, for non-reproducible
-> multi-threaded case do that in pahole_threads_collect(), and for
-> single-threaded or reproducible_build do that right before
-> btf_encoder__encode().
->=20
-> Signed-off-by: Ihor Solodrai <ihor.solodrai@pm.me>
-> ---
 
-Acked-by: Eduard Zingerman <eddyz87@gmail.com>
+Note, after applying this patch I see the following report from
+address sanitizer:
+
+Direct leak of 3640 byte(s) in 1 object(s) allocated from:
+    #0 0x7f12d2ac2290 in calloc (/lib64/libasan.so.8+0xc2290) (BuildId: ...=
+)
+    #1 0x478775 in btf_encoder__new /home/eddy/work/dwarves-fork/btf_encode=
+r.c:2562
+    #2 0x416f98 in pahole_stealer /home/eddy/work/dwarves-fork/pahole.c:325=
+7
+    #3 0x49f9b9 in cu__finalize /home/eddy/work/dwarves-fork/dwarf_loader.c=
+:3263
+
+Which points to line:
+
+    encoder->secinfo =3D calloc(encoder->seccnt, sizeof(*encoder->secinfo))=
+;
+
+(when compiled with the following flags:
+ -fsanitize=3Dundefined,address -fsanitize-recover=3Daddress -fno-omit-fram=
+e-pointer)
+
 
 [...]
 
-> diff --git a/pahole.c b/pahole.c
-> index 1f8cf4b..b5aea56 100644
-> --- a/pahole.c
-> +++ b/pahole.c
-> @@ -3185,12 +3185,16 @@ static int pahole_threads_collect(struct conf_loa=
-d *conf, int nr_threads, void *
->  	if (error)
->  		goto out;
-> =20
-> +	err =3D btf_encoder__add_saved_funcs(btf_encoder);
-> +	if (err < 0)
-> +		goto out;
+> @@ -1355,19 +1400,15 @@ int btf_encoder__add_saved_funcs(struct btf_encod=
+er *encoder)
+
+Nit: should probably remove 'encoder' parameter and replace it with
+     bool skip_encoding_inconsistent_proto
+     (in one of the earlier patches, just noticed this).
+
+>  		list_for_each_entry(s, &e->func_states, node)
+>  			nr_saved_fns++;
+>  	}
+> -	/* Another thread already did this work */
+> -	if (nr_saved_fns =3D=3D 0) {
+> -		printf("nothing to do for encoder...\n");
 > +
->  	for (i =3D 0; i < nr_threads; i++) {
->  		/*
->  		 * Merge content of the btf instances of worker threads to the btf
->  		 * instance of the primary btf_encoder.
->                  */
-> -		if (!threads[i]->btf)
-> +		if (!threads[i]->encoder || !threads[i]->btf)
->  			continue;
-
-When can 'threads[i]->encoder' be NULL? In case if worker thread exits with=
- error?
-
->  		err =3D btf_encoder__add_encoder(btf_encoder, threads[i]->encoder);
->  		if (err < 0)
+> +	if (nr_saved_fns =3D=3D 0)
+>  		return 0;
+> -	}
+> =20
+> -	printf("got %d saved functions...\n", nr_saved_fns);
+>  	saved_fns =3D calloc(nr_saved_fns, sizeof(*saved_fns));
+>  	btf_encoders__for_each_encoder(e) {
+>  		list_for_each_entry(s, &e->func_states, node)
+>  			saved_fns[i++] =3D s;
+>  	}
+> -	printf("added %d saved fns\n", i);
+>  	qsort(saved_fns, nr_saved_fns, sizeof(*saved_fns), saved_functions_cmp)=
+;
+> =20
+>  	for (i =3D 0; i < nr_saved_fns; i =3D j) {
 
 [...]
+
 
