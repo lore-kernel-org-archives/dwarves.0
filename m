@@ -1,72 +1,73 @@
 Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A841C14F12D;
-	Fri, 29 Nov 2024 08:16:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4661143C40;
+	Fri, 29 Nov 2024 09:07:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732868201; cv=none; b=jt5MePDbeRiQuZ4hZnsglkchHkcDpbP3CNHWBYWUPCekzxZyDJfX0DM/y9GyELScycUhinm9xIP96Nmy4xV09UDjzj2UAinDXsGDyBAMXuE5OS+fbsZ/V4fTTL+E4R1H00T4JeAIN7INlDkhuAtXEJobnIrrZMTB6T3ghK/TwCU=
+	t=1732871235; cv=none; b=vEj7GJ3E4GmKlvC5ISqJ6hGFx/Ifh93yG73f276G7jsiJDsSIkYwTCJODWcpLzWjOlsO52ngBZPCFLqcBldW+yt8YdJTXZujSMWX+YKcnvq9pFRb38eZuxUBUV+fE53wOpfjl5XWzoMulKUk4QSVTg2ggnIxIs5NOWAuNUAT7G4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732868201; c=relaxed/simple;
-	bh=sLtlfFCbNt0XrwspyvnENUYy890b0HsZOxzZQFY4lg4=;
+	s=arc-20240116; t=1732871235; c=relaxed/simple;
+	bh=9QrLSJSfCssyqrKu1PKVDMrDLdQ8KEa80hp/tKV7lc0=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=gIM2ecKXjQUBedotCA7peERK8bW8Wo6jESeIy0sP7uhcgm2nPHdVxVHS4+c+d9Y+DQFWQ3fGzamMBZfHrr8AFYhfB1WKsAdss8zs5SPEfXOiF7hANJBkyXL72B0uPJF9g1C1ZKQOhItiMO36Gr7eZGikbt4s6ROOhk2vuf5DFT0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lRu6Z0Q2; arc=none smtp.client-ip=209.85.214.181
+	 Content-Type:MIME-Version; b=YeOl+WXjA/VWtvmwqLz/DLgmZL6s9vDj/M7vxhfojzs1zdyZ+mGzUpMJPpn7vgNoUSmFhtnIpXuFan4ovMHZH70sZchbo9MT7ao2WIBR2Y/WJVyu52zyd3EN1VxFzt3b/RxcLqGMwJ3K0YeNZQQGD+1d/OHhCo2801tORpAM9x4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=d3/T+A/Q; arc=none smtp.client-ip=209.85.214.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lRu6Z0Q2"
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2153e642114so4269145ad.0;
-        Fri, 29 Nov 2024 00:16:39 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="d3/T+A/Q"
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-21210eaa803so13836965ad.2;
+        Fri, 29 Nov 2024 01:07:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1732868199; x=1733472999; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1732871233; x=1733476033; darn=vger.kernel.org;
         h=mime-version:user-agent:content-transfer-encoding:references
          :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=nJxv4xzfbT+55JaLtX3ltOe8eox/MIJ6AI8blZUYHWc=;
-        b=lRu6Z0Q2RbrHWB3m7j95bP9Il21On2Xns5JSB09G9j79D3etARgRcOm4HcXAzwEIIF
-         07zunfastHFrzBjpkQMB7W4N7f0emGqxhX+a8lKAOaCEas+VDkgJOc2OIPBdrnCy3w+h
-         I/EZGOqp/qISkvk685wfWsbQmruMJYWfnuWmFl5XaNhmiZmpGYJjA1iNRYfSj6us5EBr
-         QcXkH+joQHEC8qfF0zDrXc/cdStl6IKs+5c1lm9wqexKl180gKph0ZoVCTU9anfW2Fk8
-         7SKwEdOAbpSPQKfuKxNh0CWPirzceu4KBzueNf5meQmY+UC5Adn+Wj7jrzNu0MtjFPTe
-         87DQ==
+        bh=fqln9ZdHFUDuCiK8OVuT8Z5lz7dg7Qs0TmnwLBv3y5A=;
+        b=d3/T+A/QvcPT+g6VnXHaZyRBHuk9qlmoicWTKt4jVHGhYRN4DHnSgI4OOHEPVI02xd
+         90ccIN4KWEifBp8QWO0LONIYjKMYoiuoWnmLE9hg5k/GzLIhfLg1TdhvOomTRwPpkg8Y
+         KCokLEONCr3X8NtNNDtH6rLsFRk1i8aN9f4MrRR2bCNYh/oHGiS2Nv9YaKfu7W0Vax3B
+         qxbALTsVFipPQS9P+VAmcEWuJ090fTpxuXLINae0YIZwNidm8rjq/8UJcNCNbMhf0Qtv
+         G1ZEv/LDAMbH7PfUxx4MS0G7Mpr9vwOvRLGkTA3smvsYwJfMlkjNdm/B+QkAlaStClVO
+         wm8A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732868199; x=1733472999;
+        d=1e100.net; s=20230601; t=1732871233; x=1733476033;
         h=mime-version:user-agent:content-transfer-encoding:references
          :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=nJxv4xzfbT+55JaLtX3ltOe8eox/MIJ6AI8blZUYHWc=;
-        b=AHC7vMy/ROHnPug9GX05jnZolNNNejwG/ze/5RmZhx5ceWGLfwa/UmmqgmAr6by7qZ
-         CNTcfbb4qyLOjVR4EfVIK3UFm7vD59qJ7ELlLXoXlSuwJ2YKokKHJOyyTnXhldhIwaVF
-         OODqe/m2OW06yd6XDs6xVNBxn5HBdziDD6eTQ4OQL9BLV4oHkyFCQQ2GqjVa9Ms0S7Y7
-         nHAEGxdCCde6iKxflYMpRJo75hEgq5pBrCARZ3kpX5vvfdPNeWSBoh1DxM1h4+vHsNWM
-         8FmH91co9OcMBnMYlCSl4s/3Ay0jsRX6D1bm+pZsYs+I9WzZml8Xzc3SO+TQQu7hGqtu
-         8Fmg==
-X-Forwarded-Encrypted: i=1; AJvYcCVVUZERLB3eZZJuz/RHbgLrClccGXFM64THwytDjjUZ9BmEJ/daeNWfJfrEqhVXHdjtKX4cQs5p@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxt5S3FdxJiN3Ch6k/choRkiCnxgNMIG8qs29cyuNqDIs9HD/UI
-	2opBy+cDwGupfE+9XrItDIygtUvxjQsS3dJxBHZcn4iKWdkwHzxt
-X-Gm-Gg: ASbGncsnIPDokJ5UNiWQcDFHRyRoO2+kFuPXt17odwNPsr+XEMvP0Rm9k00KriP52dG
-	IIBBIt/IJVwEUuS6SJ+MQL3nxkD4fsn0wjMTN87gpARn0mQUj2PwScZ2oTuAHNtatzgDbRnS5Th
-	/qtwd6LRmqMvS84r33NoJ2ca0ur9x8UuiwAOWuWC61TlVoFrvxZbDt8zhEpZw2QGpDF5hcCtnoH
-	X+bCjGH5O+fI3xMhFBQpk4my7zLVBThLkL7FRQjIk2QXBk=
-X-Google-Smtp-Source: AGHT+IEHgcfh/ESCg325Gyvrd/6CwyDl/ViG7IGCYGqv9qR3tp/TSR7UHi7+HEKdhvNLoTBWGGLIBA==
-X-Received: by 2002:a17:903:986:b0:20b:8776:4902 with SMTP id d9443c01a7336-21501b63d3dmr145111105ad.38.1732868198995;
-        Fri, 29 Nov 2024 00:16:38 -0800 (PST)
+        bh=fqln9ZdHFUDuCiK8OVuT8Z5lz7dg7Qs0TmnwLBv3y5A=;
+        b=J0LyCjlE37a7PsJVSFuRPTB0mWQD9+RN9vEyBH+dwOpvkVVU+yBOCrMz4igfq2RprD
+         yHYhYcCXSTlZ6N2RfMs6IDXnk54zGE996PGgg+DF5YrW3Qq1jDwDxYxaOmOnQ4YGpaT6
+         uwT/+bGSV5U7UvhMs6A481ZfUeO1EkWqkgEnvLe9jfrqRjYhHLj0OoQz/oRnUxr82J9/
+         nqPCd1o0edGYZ8BO1ivlQBQcTGpaSr+9Vt/JK+PBnkltRTjtf9UUXunesXD654XgoJ+X
+         9Lc6GVn7jT26XtyKiC7U1c4qQ7oRRCIP7dGM9uWOucNNxuXdcmH4WPHKzN9T6hO8Yxl/
+         jAFw==
+X-Forwarded-Encrypted: i=1; AJvYcCVDg/n4SZ1G5e3Q1ytUNHKN0l3AA/cDpJ1YCvFiCiCLfG8h5jJT/H3vsELCJCN8U5EYMtBbuyFD@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw51bDJugu9t2FUIRiRE53O3xv/j71gxQV7gwqhIktRd4iM7LGp
+	/hrbq6QEqVdeaRHevD2fSaa3rqclKXvjZQ2k756H9tK0FJ8UN20N
+X-Gm-Gg: ASbGncsFajVLg5N3QnbS4vwVfhUhuV4w8t9PG0KeTCAWQ0E0uB3CFOp6Ej8jG8Z1WJf
+	AVEpvytsCI0C8F1Rm6lUsyly6CrpGDspQ+ohwm7yabFSYy6MZ+q1IUxLpF6An4zHDsn/4NpMxEI
+	TQu6BxTOkxsdnHtM2bvtetIXuySnTP3Ty8kV2tlRdRYLU/ojw5ZeLsD0pRCwcBprpojGqgAE5gB
+	AuZ+b8qZJ69u7wo1vp8Mo7qiBM+MHtsljIFygCdJOW4M0E=
+X-Google-Smtp-Source: AGHT+IG024v4MKZ0mFYSWuYwxhMjctlBjjpe+DSrKp6nbGdfyx5B5nWHSYqcGNl8xq/Q3j2DqCCuNA==
+X-Received: by 2002:a17:902:e88a:b0:20c:5909:cc30 with SMTP id d9443c01a7336-21501082d2fmr149701645ad.10.1732871233099;
+        Fri, 29 Nov 2024 01:07:13 -0800 (PST)
 Received: from [192.168.0.235] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-725417fbffasm2976319b3a.103.2024.11.29.00.16.38
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-215219676b7sm25650605ad.120.2024.11.29.01.07.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Nov 2024 00:16:38 -0800 (PST)
-Message-ID: <e8d4d8a68bff841fb24e2982fa92bd6455562867.camel@gmail.com>
-Subject: Re: [RFC PATCH 1/9] btf_encoder: simplify function encoding
+        Fri, 29 Nov 2024 01:07:12 -0800 (PST)
+Message-ID: <60f195235812389d44c009a7fd97a6a12aa48b17.camel@gmail.com>
+Subject: Re: [RFC PATCH 2/9] btf_encoder: store,use section-relative
+ addresses in ELF function representation
 From: Eduard Zingerman <eddyz87@gmail.com>
 To: Ihor Solodrai <ihor.solodrai@pm.me>, dwarves@vger.kernel.org, 
 	acme@kernel.org
 Cc: bpf@vger.kernel.org, alan.maguire@oracle.com, andrii@kernel.org, 
 	mykolal@fb.com
-Date: Fri, 29 Nov 2024 00:16:33 -0800
-In-Reply-To: <20241128012341.4081072-2-ihor.solodrai@pm.me>
+Date: Fri, 29 Nov 2024 01:07:07 -0800
+In-Reply-To: <20241128012341.4081072-3-ihor.solodrai@pm.me>
 References: <20241128012341.4081072-1-ihor.solodrai@pm.me>
-	 <20241128012341.4081072-2-ihor.solodrai@pm.me>
+	 <20241128012341.4081072-3-ihor.solodrai@pm.me>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 User-Agent: Evolution 3.54.1 (3.54.1-1.fc41) 
@@ -80,24 +81,53 @@ MIME-Version: 1.0
 On Thu, 2024-11-28 at 01:23 +0000, Ihor Solodrai wrote:
 > From: Alan Maguire <alan.maguire@oracle.com>
 >=20
-> Currently we have two modes of function encoding; one adds functions
-> based upon the first instance found and ignores inconsistent
-> representations.  The second saves function representations and later
-> finds inconsistencies.  The mode chosen is determined by
-> conf_load->skip_encoding_btf_inconsistent_proto.
->=20
-> The knock-on effect is that we need to support two modes in
-> btf_encoder__add_func(); one for each case.  Simplify by using
-> the "save function" approach for both cases; only difference is
-> that we allow inconsistent representations if
-> skip_encoding_btf_inconsistent_proto is not set (it is set by default
-> for upstream kernels and has been for a while).
+> This will help us do more accurate DWARF/ELF matching.
+
+It would be good to have a more detailed explanation here.
+E.g. number of generated functions differs with this patch:
+
+# without this patch
+$ bpftool btf dump file /home/eddy/work/tmp/old.btf | grep "\] FUNC '" | wc=
+ -l
+48056
+# with this patch
+$ bpftool btf dump file /home/eddy/work/tmp/new.btf | grep "\] FUNC '" | wc=
+ -l
+48189
+
+It would be helpful to peek one of newly added functions and explain
+why it was previously excluded.
+
 >=20
 > Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
 > Signed-off-by: Ihor Solodrai <ihor.solodrai@pm.me>
 > ---
+>  btf_encoder.c | 37 +++++++++++++++++++++++++++++++------
+>  1 file changed, 31 insertions(+), 6 deletions(-)
+>=20
+> diff --git a/btf_encoder.c b/btf_encoder.c
+> index 98e4d7d..01d7094 100644
+> --- a/btf_encoder.c
+> +++ b/btf_encoder.c
+> @@ -88,6 +88,7 @@ struct btf_encoder_func_state {
+>  struct elf_function {
+>  	const char	*name;
+>  	char		*alias;
+> +	uint32_t	addr;
+>  	size_t		prefixlen;
+>  	struct btf_encoder_func_state state;
+>  };
+> @@ -131,6 +132,7 @@ struct btf_encoder {
+>  		int		    allocated;
+>  		int		    cnt;
+>  		int		    suffix_cnt; /* number of .isra, .part etc */
+> +		uint64_t	    base_addr;
 
-Acked-by: Eduard Zingerman <eddyz87@gmail.com>
+This field is set, but never read.
+
+>  	} functions;
+>  };
+> =20
 
 [...]
 
