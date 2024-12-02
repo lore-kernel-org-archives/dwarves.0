@@ -1,82 +1,72 @@
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5488A1FC0FA;
-	Mon,  2 Dec 2024 12:00:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3076201265;
+	Mon,  2 Dec 2024 13:55:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733140845; cv=none; b=Ik18wg8w8njrUuMYOxN8LpWcyVrlwZS9BWUOEHvs5ffphzhB/xHQ5IfjbTYIIj/XGBzJXuZzoZLIdOKi1wVtv5a0+bSqOYDsUZZl1rFIRu//d6F1mwFtp1/o5lYIMrri3puezlqHtIFbj738LjeT7FO6nhXMj1kH/dz8PJKC+q8=
+	t=1733147750; cv=none; b=R+QRHovArk/7BdT8oxLJaxhHBVJkV+3NZ7bp2N3ucay3Vqf9Zq5PcqiYtsuHPZT7tZXqeDi8tSdZUqg2uAeC1/TAb03YJh7tLUhPsvd6pijcyGdpfjQ6+U06wOz4AvDlD4izL52LZpn/QGcmbH0VL1rNvBYg+BWgKh8ILHnHa8g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733140845; c=relaxed/simple;
-	bh=JGYBHesYIbhC7aBl5yCYh/PzDEWQVUhlwalGax3dWiY=;
+	s=arc-20240116; t=1733147750; c=relaxed/simple;
+	bh=Ydj8DV5t6ezBarawKFIkqn56lPCfEsiVscFuKj8QUaY=;
 	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WMGIK8MY0iAACYzwIYeXW9WZsMs2Jqy2RmoZ2R7+0aAREllUBRcghHQqf+wcLVpTZfluKwZDdPyxKUDtR13Q5uqmSdOwdA+m6shCpPrHNOO1NWKJyG033NxSb9080P0oBCs9NTfQKpg/Hh68Jtf4Tap2bEoOuq9iWytXUuJQQds=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mOLX9a97; arc=none smtp.client-ip=209.85.128.54
+	 Content-Type:Content-Disposition:In-Reply-To; b=pBs/d72VRThkS4sJUR0QQsqizCSVqvT3auAHBHyHWsvfeo90P0KQ50HgPkFZP27KWVNewv6OqGuVAYsFnEDmDy5lRg6QPv4A7jfnQx2qBzmXB2rH9Ap1IpE0KubkTzF/AgIx2CULRrdVy2QZpwDT60nM28wrr9S54aQepdpMET0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PYDhRaBU; arc=none smtp.client-ip=209.85.218.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mOLX9a97"
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-434a1fe2b43so37390325e9.2;
-        Mon, 02 Dec 2024 04:00:44 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PYDhRaBU"
+Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-aa51d32fa69so674993466b.2;
+        Mon, 02 Dec 2024 05:55:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1733140843; x=1733745643; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1733147747; x=1733752547; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=MQnantWxCB7aLJu1F0kD476uJFD2vd0GkTEQYnGy5wg=;
-        b=mOLX9a97jirvY0sKTqzVtRymLx1fTYgt9+YkTqzvTjFMjR63I2xYxHFiJuiP7vHy7C
-         dneq35YaF51dbSlDwiPrVOUEwwb0WqcUkDHxT8CITApoQXr+OvUQCAhZ31y9z+VyFXqM
-         +kLUyjul6LuFpZnSfxb7SXymLfxp/LqhgOJ2ggxnU4zyyJrAjxX6k52mDqPgdnVhXyQ/
-         GJpCTqhkzMXpW0bMrv4gxLGft1hYf7OyuwteS2oHVm56XnzyBlw8FhZ+Dqs4OE+PMu4F
-         Sbg6DvyphFhNjB7A68f3zH8MdNMocCeAAMYyutN5OdVu0OhFq1k4b3HKPAKhAwwpP4JQ
-         4XWw==
+        bh=PA539ENGyPb/F01SAT3XpfaroeO9b4eH8ud/s0JxHkw=;
+        b=PYDhRaBUw0G4TGqcvkvl5Ir3GNSxR5RX4G8DibmSHi5MBdmzI0lCYKeuGGA09XJKF9
+         hYRXw6QCKLG4MBPmJ7SCKHQdjd96LxeZpaeQMzEubUH+GQEowxjq3nu6ZAor8pVPpqTB
+         1z1q8zC4AjIpS3qTQKutEZVsyA2YeWbepmuWgF5shePMMe5ktMCc+JfURu9t4tIlk7cA
+         /OaTT8E5yG4m/Aqj05SKolzgdZn7ba8zytIQ1uRB1i9Th259EMlwVEUrFLho+vunwLNL
+         TJRWGqTp3UaLfrwEit5k0+1jYSdM0RdwSS9TygdqhAMhCcKkYVAGwiOXdv6KGBZtuFSF
+         +x+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733140843; x=1733745643;
+        d=1e100.net; s=20230601; t=1733147747; x=1733752547;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=MQnantWxCB7aLJu1F0kD476uJFD2vd0GkTEQYnGy5wg=;
-        b=mI9buOci5Fu0hLR1SQnFGclByTHmC7bpuDtwlLMFYWCMRaoBBvUJm1ptpQ7EeclX2o
-         GSKaqW9L7bQf8Zg8OVkUS5UmrZ4y0p09t5YMOFJjV7wwzo8YrUXy9kxGML83JwONjiIw
-         35gvnImWbd9RKBzXHH1YQby4exF9DTSHEfkLBtQBgU4a6uJEzinR3wSKg/zNFX1UWP2T
-         3b6j+LbfrAQVPIVGLzvpZzYk2VluaLciaJnU+vNF01bVrZCYi5VXSwZwUBfFST7NADMX
-         WaGaNwWrssWg0plENQ1bl40lbd5QFjAey6Y1s2DVADIqGJjt9miFLh4D7AteI3JqajH+
-         GX3w==
-X-Forwarded-Encrypted: i=1; AJvYcCWS9Q0l86ihNPtaCHIu7xsqfpPIdHuxrTE1/Zp5C6VAkiWdquXOnlPqCy6dQlnLUr1RwBg=@vger.kernel.org, AJvYcCWkXjM9Nc7FscYOB2ROIqXgOvQNSMakhzP5Bit4eiX+zB2ThsUDFVjMrZpM5mi/Vr2Xgrvlnfbr6kHI0wFy@vger.kernel.org, AJvYcCX3xzK+dE/iCMv6z3Vszmtj9ytR/F/KP2hvlNbEnuKtoarwVQ6Ye7ZFD5ECe3qm3ArL6zluV26PTg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxB23XR6UF0Tffaxnjd+VPeLXX3PhoFfzgRGaJVWF64yHtRF1tx
-	Hfx7v427DdiCvC2ixYQz3hr2H5pqcmcoZZm6hQPKR2G6Ih/JZK66
-X-Gm-Gg: ASbGncvVbbLoVnVlfkirQ7USU6P33FPHSGa48Zx3PlSXxO6reqGc8ZP+149H+TyzuDx
-	oqWKfGHYOe5YRBcQl4K/L7xxuIYu/5MIso80WsG8/exuhs8k0j2sK/zPMQnvQovry2dbMa7NFA4
-	igVUWF2P518oS3V9eIpqLKy7aXUsovEhemCjaG9H5oN+ElVgjZolnSy7M8caf4MLDJiksIO983Z
-	ZBWe2fjzcN4YRJHfpcY9e9vIIGbjWDIb9OAR02kJikI/lU/5o33MvMBCs2nLGpc+NvaAtLvkDcd
-	iIxpc9n9iHAVCldN+QkAjjE=
-X-Google-Smtp-Source: AGHT+IFUnVztOxsIywsf2K4G+S+p56Y2jH9xH9k5ei+h2anBWbIlAMqqxZ0Jl6BPHhhsppFFnIdtUg==
-X-Received: by 2002:a05:600c:314a:b0:434:9de2:b101 with SMTP id 5b1f17b1804b1-434a9dbae1amr200448405e9.2.1733140842328;
-        Mon, 02 Dec 2024 04:00:42 -0800 (PST)
+        bh=PA539ENGyPb/F01SAT3XpfaroeO9b4eH8ud/s0JxHkw=;
+        b=jX3O6R/D5EpLhZHsGxO7wJU/YE894kfE5KBnpn7ets6uThVzzT4BR6sMQcd7saW2Rv
+         Zm0IeLNmsoQthgAgOGFeWimBZrmF1coSTh9ch41l5mqBpGhOEcGPYWTUCARkDgmS8hYa
+         +k6a8hyIHzPaaSas+Z/uAHeM7DZP0R3L+5wmPcaF+OtulPdGPkuALJxO+gaJOva7YqMi
+         GCQeGMvU/T8nOTQWTpptejSUmbfOIw9wxNK52jtZPmLzLquEzXuI/RNzI3BoGyLJUp1h
+         pJcM9VDtirD7UtTj5201WJJXjBCWGhj+HjVJetTDDk/FG6uosOpRUIl5GSWN8TDS4O3j
+         gaAw==
+X-Forwarded-Encrypted: i=1; AJvYcCXUmx11IyHrZx7BqUlgx6jBGucD1U0nx5zUg9SRGOJZ5y+f7xtiOxzsLkYCO8YgXN8hiHI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwQQLg+j54wAzjB93D0pAIy8TNfBIZib+TGpHkcxlt/KkcBqRQZ
+	PhAq+1FDgdGaMpU0gHRFScO9eA/HMtG2GBQ9c/mzdORfgGK1eYk/
+X-Gm-Gg: ASbGncsPEUmW6uia8TeqjvruxEOjGmriN33wqL8oVS/LC2r1rqSiLOCdY9SA2jKCgCF
+	UVmfOUWLB50BEJrRmab/YxgihToTQ4OOHt2j32cGHMWgNi8FiOTRTFNEwJoPSmkYs6DtJ+jEfzX
+	idmnze/Y2ctTC/1dOzIUVGdO25MpPnT1aPWdLqikFJJUWHSo+w3OoA01oFh37/UJf1N39pZPyyF
+	Erg5FVeKZD8sjfPt8oB7D4/mgNToWPjnD6DSxXUPWdhY7iEQmTEYodJ0prLumL9bksA1KdhdSan
+	OzHqcsv7SwHUkLjnFSvn/QM=
+X-Google-Smtp-Source: AGHT+IFbiAnceJQ6wHqsqmWoLH3bctwuYtX0/ueCNrTBmE9o5CxHZXly4Jy60FzEtPBhFASWIEDJYA==
+X-Received: by 2002:a17:906:3d29:b0:aa5:152c:1995 with SMTP id a640c23a62f3a-aa581028f89mr1666316266b.45.1733147746976;
+        Mon, 02 Dec 2024 05:55:46 -0800 (PST)
 Received: from krava (2001-1ae9-1c2-4c00-726e-c10f-8833-ff22.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:726e:c10f:8833:ff22])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-434aa7d29fbsm182935605e9.29.2024.12.02.04.00.41
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aa5997d574fsm513054366b.58.2024.12.02.05.55.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Dec 2024 04:00:41 -0800 (PST)
+        Mon, 02 Dec 2024 05:55:46 -0800 (PST)
 From: Jiri Olsa <olsajiri@gmail.com>
 X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Mon, 2 Dec 2024 13:00:40 +0100
-To: Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc: Alan Maguire <alan.maguire@oracle.com>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>, Daniel Xu <dxu@dxuuu.xyz>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Jan Alexander Steffens <heftig@archlinux.org>,
-	Domenico Andreoli <cavok@debian.org>,
-	Matthias Schwarzott <zzam@gentoo.org>,
-	Dominique Leuenberger <dimstar@opensuse.org>,
-	Dominique Martinet <asmadeus@codewreck.org>, bpf@vger.kernel.org,
-	kernel-team@fb.com, dwarves@vger.kernel.org,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: RFT: Testing pahole for the release of v1.28
-Message-ID: <Z02haBRcetTCNK7A@krava>
-References: <Z0jVLcpgyENlGg6E@x1>
+Date: Mon, 2 Dec 2024 14:55:44 +0100
+To: Ihor Solodrai <ihor.solodrai@pm.me>
+Cc: dwarves@vger.kernel.org, acme@kernel.org, bpf@vger.kernel.org,
+	alan.maguire@oracle.com, eddyz87@gmail.com, andrii@kernel.org,
+	mykolal@fb.com
+Subject: Re: [RFC PATCH 0/9] pahole: shared ELF and faster reproducible BTF
+ encoding
+Message-ID: <Z028YOBN_EnUA9Qm@krava>
+References: <20241128012341.4081072-1-ihor.solodrai@pm.me>
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
@@ -85,36 +75,77 @@ List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Z0jVLcpgyENlGg6E@x1>
+In-Reply-To: <20241128012341.4081072-1-ihor.solodrai@pm.me>
 
-On Thu, Nov 28, 2024 at 05:40:13PM -0300, Arnaldo Carvalho de Melo wrote:
-> Hi,
+On Thu, Nov 28, 2024 at 01:23:44AM +0000, Ihor Solodrai wrote:
+
+SNIP
+
+> Test results for this patch series:
 > 
-> 	Please consider testing what is in the master branch both in
-> kernel.org as in github:
-> 
-> https://git.kernel.org/pub/scm/devel/pahole/pahole.git
-> https://github.com/acmel/dwarves.git
-> 
-> 	So that we can release v1.28, we want to follow the cadence of
-> the kernel, i.e. since the kernel was recently released, we should
-> release a new version of pahole, and this one is long overdue.
-> 
-> 	We'll then try to release v1.29 shortly after Linus releases
-> v6.13, and so on.
-> 
-> 	Alan Maguire accepted to co-maintain pahole and as soon as he
-> gets a kernel.org account he'll be able to help me in processing
-> patches, that we expect to continue with the current fashion of being
-> tested and reviewed by as many developers as possible, its greatly
-> appreciated and a good way for us to keep this codebase in shape.
-> 
-> Thanks a lot for all the help,
+>   1: Validation of BTF encoding of functions; this may take some time: Ok
+>   2: Default BTF on a system without BTF: Ok
+>   3: Flexible arrays accounting: WARNING: still unsuported BTF_KIND_DECL_TAG(bpf_fastcall) for bpf_cast_to_kern_ctx already with attribute (bpf_kfunc), ignoring
+> WARNING: still unsuported BTF_KIND_DECL_TAG(bpf_fastcall) for bpf_rdonly_cast already with attribute (bpf_kfunc), ignoring
+> pahole: type 'nft_pipapo_elem' not found
+> pahole: type 'ip6t_standard' not found
+> pahole: type 'ip6t_error' not found
+> pahole: type 'nft_rbtree_elem' not found
+> pahole: type 'nft_rule_dp_last' not found
+> pahole: type 'nft_bitmap_elem' not found
+> pahole: type 'fuse_direntplus' not found
+> pahole: type 'ipt_standard' not found
+> pahole: type 'ipt_error' not found
+> pahole: type 'tls_rec' not found
+> pahole: type 'nft_rhash_elem' not found
+> pahole: type 'nft_hash_elem' not found
+> Ok
+>   4: Pretty printing of files using DWARF type information: Ok
+>   5: Parallel reproducible DWARF Loading/Serial BTF encoding: Ok
 
 hi,
-works fine on my setup
+when trying selftests with this change, I'm getting wrong .BTF
+on bpf selftest bpf_testmod.ko module
 
-Tested-by: Jiri Olsa <jolsa@kernel.org>
+$ bpftool btf dump file ./bpf_testmod.ko
+Error: failed to load BTF from ./bpf_testmod.ko: Invalid argument
 
-thanks,
 jirka
+
+> 
+> 
+> [1]: https://lore.kernel.org/dwarves/20241016001025.857970-1-ihor.solodrai@pm.me/
+> [2]: https://github.com/theihor/dwarves/pull/3
+> [3]: https://lore.kernel.org/dwarves/8678ce40-3ce2-4ece-985b-a40427386d57@oracle.com/
+> [4]: https://github.com/acmel/dwarves/compare/master...alan-maguire:dwarves:elf-prep
+> [5]: https://github.com/theihor/dwarves/pull/8
+> [6]: https://gist.github.com/theihor/f000ce89427828e61fdaa567b332649b
+> [7]: https://github.com/theihor/dwarves/pull/8/commits/a7bc67d79d90f98776c6dc5fdaf9f088eb09909d
+> 
+> 
+> Alan Maguire (3):
+>   btf_encoder: simplify function encoding
+>   btf_encoder: store,use section-relative addresses in ELF function
+>     representation
+>   btf_encoder: separate elf function, saved function representations
+> 
+> Ihor Solodrai (6):
+>   dwarf_loader: introduce pre_load_module hook to conf_load
+>   btf_encoder: introduce elf_functions struct type
+>   btf_encoder: collect elf_functions in btf_encoder__pre_load_module
+>   btf_encoder: switch to shared elf_functions table
+>   btf_encoder: introduce btf_encoding_context
+>   pahole: faster reproducible BTF encoding
+> 
+>  btf_encoder.c  | 661 ++++++++++++++++++++++++++++++-------------------
+>  btf_encoder.h  |   6 +
+>  dwarf_loader.c |  18 +-
+>  dwarves.c      |  47 ++--
+>  dwarves.h      |  16 +-
+>  pahole.c       | 265 +++++++++-----------
+>  6 files changed, 567 insertions(+), 446 deletions(-)
+> 
+> -- 
+> 2.47.0
+> 
+> 
