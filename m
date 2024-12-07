@@ -1,43 +1,58 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B58C2206AA;
-	Fri,  6 Dec 2024 18:30:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 268AAECF;
+	Sat,  7 Dec 2024 14:33:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733509854; cv=none; b=fb3PYpumBAGaXhUnMrvbRGau3GUQbHPjzBixnS2vSjdIQCMzArySXQ65x5j37yQ+ePUM57DV7ol5Gt+1ts9R+XV1mYu8kurEd8moTelBqUxXyafL9+TkIPN9fu8qHLeu/h97oTadb6/kVmjnGx7jgswyMKWMvsE0TfrWV4dBT4k=
+	t=1733581984; cv=none; b=qW7eKVPBTVxJYrWscqF/+9xv6dRCVJqf8xbsboFNSF7GAIb9TXxdTYD3v3rAxViI7iJVnrA0zcWKAPiTjWy+jTMQcrwkVMRTcVzGClFqB7pXH79YuW6+5RpXnqIYNy3s4rNoSS+RTYXLibtIhA3N44g0ynZY6A71NUI4ImxORcc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733509854; c=relaxed/simple;
-	bh=2Wp24oJjXS/c9KQXLyDUphzW/qraZohmgTe7ujYSFSQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aK9aRFejcaPL64fu9QQ98xM/zzlERrzwuGEF6TyesS6OVP1OwIH7CugB1mD+BIaK2n6ngYEHFwz5z21t0nHX/JD2crNzZNjpDqaUC0vhHTP/fbAEjicHXCI+ObKBi/Xohl9DQit5gUSpbvX86FWB+nBMW5XQkR+qEyAMj+6qZZM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=X6prhrZL; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1733581984; c=relaxed/simple;
+	bh=A+wcKv7PGP2QN83cnqM8XjpwyUzscFbwcDfV3Kry5lI=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=uqJP+r1N2+BNsHNDZggK4mOUHLiVK/rTmiTkAltRhCUY4PEmRGG8Yk5sqC8o/vOqP8sECZC36484XtpCI4nHQdGc8lEM8+OwGH7NefwyDciEP/tTN9sCa/VOw6yCZ87L9OXrU8A6UonZfVKkq+qQs0asClt0zDpY6b9aSmj04vg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=W4FCpqOK; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="X6prhrZL"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D7A3C4CED1;
-	Fri,  6 Dec 2024 18:30:53 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="W4FCpqOK"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04898C4CECD;
+	Sat,  7 Dec 2024 14:33:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733509854;
-	bh=2Wp24oJjXS/c9KQXLyDUphzW/qraZohmgTe7ujYSFSQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=X6prhrZLaqnpL2CAavS5gfQsS2iZ/mKrbFnfjXGjIgbqbeyqNK/0u/6QnENJ3DAd/
-	 su2+OTszv4DMwkmJEdjwpW3x4LE8V31DDnf4hZVWQTfNQmKtacfbKWB+BWcaYXtxL9
-	 1+FQEeAu0VR0Kn291m+BeWvfNLUiVpmwUBuAcmQeX6ijIq6104g1B0xSjauIIBXNVD
-	 RRfpw2KzwugF27IgLzFOJpOMvfJjWNHFYU8LqaLUd1sA0x+2DM6rFBzTOr5RnlW1UG
-	 UXyXF5SO+S9fpGgbdq7zxKNXm99gfG3IUSbVs75fsxuollXzXJHixb+DH4WGQ7XusT
-	 O5LyaoMKe4NSg==
-Date: Fri, 6 Dec 2024 15:30:50 -0300
+	s=k20201202; t=1733581983;
+	bh=A+wcKv7PGP2QN83cnqM8XjpwyUzscFbwcDfV3Kry5lI=;
+	h=Date:From:To:Cc:Subject:From;
+	b=W4FCpqOKGQ515PZo+rHz3oJzAZxxVGB9jeqtWjCfDbZRJriJtF89Loj7kH54lMpvd
+	 w156Y6RoOqqlYMKOG+Y9E65xhhzh8Frn1yf6Tbe2iObmcKuo+5ldJiD3MUtc0l+lJ4
+	 8PJy9ysCOcsajtiqUF0nEvdkRiqmyWPatnb2MxnIyOD4XsKOoCBV2TpCwYlmcGQcrO
+	 m1okKozclRlErt7GtH5nzYCM70FI0Ex1t//mXJBa6AvqJ4iymUmRAsu8hk8J/KL1JD
+	 rjmKtKuSSA/Q0qm8W/dw30YNp/WOR1z8IhSzHFwIB1cXdqmGdvEwGafWPUVjoJWVM+
+	 gHxBUwO3mR56Q==
+Date: Sat, 7 Dec 2024 11:33:00 -0300
 From: Arnaldo Carvalho de Melo <acme@kernel.org>
-To: Ihor Solodrai <ihor.solodrai@pm.me>
-Cc: Jiri Olsa <olsajiri@gmail.com>, dwarves@vger.kernel.org,
-	bpf@vger.kernel.org, alan.maguire@oracle.com, eddyz87@gmail.com,
-	andrii@kernel.org, mykolal@fb.com
-Subject: Re: [RFC PATCH 0/9] pahole: shared ELF and faster reproducible BTF
- encoding
-Message-ID: <Z1NC2og1Gvm55yz1@x1>
-References: <20241128012341.4081072-1-ihor.solodrai@pm.me>
- <Z028YOBN_EnUA9Qm@krava>
- <fikVGe8GqZ4_KsZX_M0ZKNEqN-lRzqCvhrqjTP3P5QyV9g3Ath6VcnHrS45P8GNSaTOa-W83VHgjrqlTDSPUIeoCWNhAFnkJJsQaYthVR2k=@pm.me>
+To: dwarves@vger.kernel.org
+Cc: Alan Maguire <alan.maguire@oracle.com>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
+	Jan Alexander Steffens <heftig@archlinux.org>,
+	Domenico Andreoli <cavok@debian.org>,
+	Matthias Schwarzott <zzam@gentoo.org>,
+	Dominique Leuenberger <dimstar@opensuse.org>,
+	Dominique Martinet <asmadeus@codewreck.org>,
+	Viktor Malik <vmalik@redhat.com>,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	Ihor Solodrai <ihor.solodrai@pm.me>,
+	Miguel Ojeda <ojeda@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>, Song Liu <song@kernel.org>,
+	Stephen Brennan <stephen.s.brennan@oracle.com>,
+	Tom Stellard <tstellar@redhat.com>,
+	Vadim Fedorenko <vadim.fedorenko@linux.dev>,
+	Willy Tarreau <w@1wt.eu>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	bpf@vger.kernel.org
+Subject: ANNOUNCE: pahole v1.28 (flex arrays, bpf_fastcall, global vars, btf
+ endianness, distilled BTF base, reg tests)
+Message-ID: <Z1RcnB8WD8wZphcr@x1>
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
@@ -46,91 +61,164 @@ List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <fikVGe8GqZ4_KsZX_M0ZKNEqN-lRzqCvhrqjTP3P5QyV9g3Ath6VcnHrS45P8GNSaTOa-W83VHgjrqlTDSPUIeoCWNhAFnkJJsQaYthVR2k=@pm.me>
 
-On Fri, Dec 06, 2024 at 06:19:24PM +0000, Ihor Solodrai wrote:
-> On Monday, December 2nd, 2024 at 5:55 AM, Jiri Olsa <olsajiri@gmail.com> wrote:
-> 
-> > 
-> > 
-> > On Thu, Nov 28, 2024 at 01:23:44AM +0000, Ihor Solodrai wrote:
-> > 
-> > SNIP
-> > 
-> > > Test results for this patch series:
-> > > 
-> > > 1: Validation of BTF encoding of functions; this may take some time: Ok
-> > > 2: Default BTF on a system without BTF: Ok
-> > > 3: Flexible arrays accounting: WARNING: still unsuported BTF_KIND_DECL_TAG(bpf_fastcall) for bpf_cast_to_kern_ctx already with attribute (bpf_kfunc), ignoring
-> > > WARNING: still unsuported BTF_KIND_DECL_TAG(bpf_fastcall) for bpf_rdonly_cast already with attribute (bpf_kfunc), ignoring
-> > > pahole: type 'nft_pipapo_elem' not found
-> > > pahole: type 'ip6t_standard' not found
-> > > pahole: type 'ip6t_error' not found
-> > > pahole: type 'nft_rbtree_elem' not found
-> > > pahole: type 'nft_rule_dp_last' not found
-> > > pahole: type 'nft_bitmap_elem' not found
-> > > pahole: type 'fuse_direntplus' not found
-> > > pahole: type 'ipt_standard' not found
-> > > pahole: type 'ipt_error' not found
-> > > pahole: type 'tls_rec' not found
-> > > pahole: type 'nft_rhash_elem' not found
-> > > pahole: type 'nft_hash_elem' not found
-> > > Ok
-> > > 4: Pretty printing of files using DWARF type information: Ok
-> > > 5: Parallel reproducible DWARF Loading/Serial BTF encoding: Ok
-> > 
-> > 
-> > hi,
-> > when trying selftests with this change, I'm getting wrong .BTF
-> > on bpf selftest bpf_testmod.ko module
-> > 
-> > $ bpftool btf dump file ./bpf_testmod.ko
-> > Error: failed to load BTF from ./bpf_testmod.ko: Invalid argument
-> 
-> Hi Jiri, thank you for testing.
-> 
-> I think the reason for this failure is that changes in the last patch
-> of the series [1] don't handle correctly a situation when the number
-> of CUs is lesser than the number of jobs. I was too focused on trying
-> to speed up vmlinux encoding.
-> 
-> I am going to try implementing a clear queueing interface between
-> dwarf_loader and pahole_stealer. Hopefully it will make it harder to
-> introduce bugs like this.
-> 
-> I've started working on the v2 of this series which I hope to submit
-> sometime next week.
+Hi,
+ 
+	The v1.28 release of pahole and its friends is out, supporting
+optionally encoding BTF for all global variables, enhanced pretty
+printing of flexible arrays, distilled BTF base, bpf_fastcall BTF decl
+tags, and a growing suite of regression tests.
 
-Thanks for working on this! I'll try to join the reviewers team soon.
+Main git repo:
+
+   https://git.kernel.org/pub/scm/devel/pahole/pahole.git
+
+Mirror git repo:
+
+   https://github.com/acmel/dwarves.git
+
+tarball + gpg signature:
+
+   https://fedorapeople.org/~acme/dwarves/dwarves-1.28.tar.xz
+   https://fedorapeople.org/~acme/dwarves/dwarves-1.28.tar.bz2
+   https://fedorapeople.org/~acme/dwarves/dwarves-1.28.tar.sign
+
+	We'll then try to release v1.29 shortly after Linus releases
+v6.13, and so on.
+ 
+	Alan Maguire accepted to co-maintain pahole and as soon as he
+gets a kernel.org account he'll be able to help me in processing
+patches, that we expect to continue with the current fashion of being
+tested and reviewed by as many developers as possible, its greatly
+appreciated and a good way for us to keep this codebase in shape.
+
+	We have added 121 non-merge commits, with 
+30 files changed, 2806 insertions(+), 939 deletions(-).
+
+	Thanks a lot to all the contributors and distro packagers,
+you're on the CC list, we appreciate a lot the work you put into these
+tools,
+
+Best Regards,
 
 - Arnaldo
- 
-> [1] https://lore.kernel.org/dwarves/20241128012341.4081072-10-ihor.solodrai@pm.me/
-> 
-> > 
-> > jirka
-> > 
-> > > Alan Maguire (3):
-> > > btf_encoder: simplify function encoding
-> > > btf_encoder: store,use section-relative addresses in ELF function
-> > > representation
-> > > btf_encoder: separate elf function, saved function representations
-> > > 
-> > > Ihor Solodrai (6):
-> > > dwarf_loader: introduce pre_load_module hook to conf_load
-> > > btf_encoder: introduce elf_functions struct type
-> > > btf_encoder: collect elf_functions in btf_encoder__pre_load_module
-> > > btf_encoder: switch to shared elf_functions table
-> > > btf_encoder: introduce btf_encoding_context
-> > > pahole: faster reproducible BTF encoding
-> > > 
-> > > btf_encoder.c | 661 ++++++++++++++++++++++++++++++-------------------
-> > > btf_encoder.h | 6 +
-> > > dwarf_loader.c | 18 +-
-> > > dwarves.c | 47 ++--
-> > > dwarves.h | 16 +-
-> > > pahole.c | 265 +++++++++-----------
-> > > 6 files changed, 567 insertions(+), 446 deletions(-)
-> > > 
-> > > --
-> > > 2.47.0
+
+pahole:
+
+- Various improvements to reduce the memory footprint of pahole, notably when
+  doing BTF encoding.
+
+- Show flexible arrays statistics, it detects them at the end of member types,
+  in the middle, etc. This should help with the efforts to spot problematic
+  usage of flexible arrays in the kernel sources, examples:
+
+  https://git.kernel.org/pub/scm/devel/pahole/pahole.git/commit/?id=6ab5318f536927cb
+
+- Introduce --with_embedded_flexible_array option.
+
+- Add '--padding N' to show only structs with N bytes of padding.
+
+- Add '--padding_ge N' to show only structs with at least N bytes of padding.
+
+- Introduce --running_kernel_vmlinux to find a vmlinux that matches the
+  build-id of the running kernel, e.g.:
+
+    $ pahole --running_kernel_vmlinux
+    /usr/lib/debug/lib/modules/6.11.7-200.fc40.x86_64/vmlinux
+    $ rpm -qf /usr/lib/debug/lib/modules/6.11.7-200.fc40.x86_64/vmlinux
+    kernel-debuginfo-6.11.7-200.fc40.x86_64
+    $
+
+  This is a shortcut to find the right vmlinux to use for the running kernel
+  and helps with regression tests.
+
+pfunct:
+
+- Don't stop at the first function that matches a filter, show all of them.
+
+BTF Encoder:
+    
+- Allow encoding data about all global variables, not just per CPU ones.
+    
+  There are several reasons why type information for all global variables to be
+  useful in the kernel, including drgn without DWARF, __ksym BPF programs return
+  type.
+
+  This is non-default, experiment with it using 'pahole --btf-features=+global_var'
+
+- Handle .BTF_ids section endianness, allowing for cross builds involving
+  machines with different endianness to work.
+
+  For instance, encoding BTF info on a s390 vmlinux file on a x86_64 workstation.
+
+- Generate decl tags for bpf_fastcall for eligible kfuncs.
+
+- Add "distilled_base" BTF feature to split BTF generation.
+
+- Use the ELF_C_READ_MMAP mode with libelf, reducing peak memory utilization.
+
+BTF Loader:
+
+- Allow overiding /sys/kernel/btf/vmlinux with some other file, for testing,
+  via the PAHOLE_VMLINUX_BTF_FILENAME environment variable.
+
+DWARF loader:
+
+- Allow setting the list of compile units produced from languages to skip via
+  the PAHOLE_LANG_EXCLUDE environment variable.
+
+- Serialize access to elfutils dwarf_getlocation() to avoid elfutils internal
+  data structure corruption when running multithreaded pahole.
+
+- Honour --lang_exclude when merging LTO built CUs.
+
+- Add the debuginfod client cache directory to the vmlinux search path.
+
+- Print the CU's language when a tag isn't supported.
+
+- Initial support for the DW_TAG_GNU_formal_parameter_pack,
+  DW_TAG_GNU_template_parameter_pack, DW_TAG_template_value_param and
+  DW_TAG_template_type_param DWARF tags.
+
+- Improve the parameter parsing by checking DW_OP_[GNU_]entry_value, this
+  makes some more functions to be made eligible by the BTF encoder, for instance
+  the perf_event_read() in the 6.11 kernel.
+
+Core:
+
+- Use pahole to help in reorganizing its data structures to reduce its memory
+  footprint.
+
+Regression tests:
+
+- Introduce a tests/ directory for adding regression tests, run it with:
+
+  $ tests/tests
+
+  Or run the individual tests directly.
+
+- Add a regression test for the reproducible build feature that establishes
+  as a baseline a detached BTF file without asking for a reproducible build and
+  then compares the output of 'bpftool btf dump file' for this file with the one
+  from BTF reproducible build encodings done with a growing number or threads.
+
+- Add a regression test for the flexible arrays features, checking if the various
+  comments about flexible arrays match the statistics at the final of the pahole
+  pretty print output.
+
+- Add a test that checks if pahole fails when running on a BTF system and BTF was
+  requested, previously it was falling back to DWARF silently.
+
+- Add test validating BTF encoding, reasons we skip functions: DWARF functions
+  that made it into BTF match signatures, functions we say we skipped, we did
+  indeed skip them in BTF encoding and that it was correct to skip these
+  functions.
+
+- Add regression test for 'pahole --prettify' that uses perf to record a simple
+  workload and then pretty print the resulting perf.data file to check that what
+  is produced are the expected records for such a file.
+
+Link: https://lore.kernel.org/all/Z0jVLcpgyENlGg6E@x1/
+Tested-by: Alan Maguire <alan.maguire@oracle.com>
+Tested-by: Jiri Olsa <jolsa@kernel.org>
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
