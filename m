@@ -1,43 +1,40 @@
-Received: from mail-4321.protonmail.ch (mail-4321.protonmail.ch [185.70.43.21])
+Received: from mail-4322.protonmail.ch (mail-4322.protonmail.ch [185.70.43.22])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC2D61946AA
-	for <dwarves@vger.kernel.org>; Fri, 13 Dec 2024 22:46:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.43.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C22B1B3926
+	for <dwarves@vger.kernel.org>; Fri, 13 Dec 2024 23:32:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.43.22
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734130019; cv=none; b=CGooe6UTRj7YjofBifJon3sErzrtTus+/uUXtsU+zSgwai27VngTui4f8LmJ9enaPwEXtSVzZj4Ekf+8U7MV8h0th6wgxu7dzEqdPBeEksQYWOi4jWXJmKOUkO/szudkvCtiUVngebmu557vptbNVL1T6tYb6noOcA87W3MuhyI=
+	t=1734132739; cv=none; b=HE3+FIEo4Q8CmW7AdRHC8iJXfoicFnyqD6G2HxGGDiHzoHoE/UUw9dHzzZ5jFjrsjnmpL9jeCWX6E2ikRjNoN20LmdLCNmRxWgZKa0RvvA84f4RpCP2Ln0YH/UQrmoXj46jV+1+R2eXcWkaI0A1HWfyOi1aDJlWOUvB/6Xe6EGk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734130019; c=relaxed/simple;
-	bh=TUw3Llck66SYK61hj79ad5POlF75naV24pODusLLN5g=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=PMWqiQE9ukP5StEVxfx2Dqh5Hm3WYMm5ZaM8XXtLAmYJhwC9uwa5EJL5JsPipBsvsoAFT8kKa6LxdoDkEXHzcblKK/YFWxP3zQX7/Vq3mhBt+oBpEKmmzJErTy6zo3GjGq1Vu1pS1Cwz2DRiibCW6ZNJetj5CyFcNDviCflPITA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me; spf=pass smtp.mailfrom=pm.me; dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b=pn5h+l7A; arc=none smtp.client-ip=185.70.43.21
+	s=arc-20240116; t=1734132739; c=relaxed/simple;
+	bh=5q/VMlO3zNE/BuxwZYm0y4hReSKTI9Tl064zjIRnM8A=;
+	h=Date:To:From:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=t9nll22CEFYx+S4BB1+7tIrc+pWPA6JjXn6JvvFv4/OdHApIM6TrMdtXz3jhB7OoJV+U0xvz7jqxXoM9fgDn5liXjMAXLkTIebmS6EqDL3ZWzvfuZjqLacygpePymN8Iy7CFh431nnlcCkSymJQt4srKZ+hgjW0XBcKX87AXZgI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me; spf=pass smtp.mailfrom=pm.me; dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b=C8fDi51g; arc=none smtp.client-ip=185.70.43.22
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pm.me
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b="pn5h+l7A"
+	dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b="C8fDi51g"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me;
-	s=protonmail3; t=1734129411; x=1734388611;
-	bh=lvasfu5NHd+ek+ZaTdm1p1DsuVNRzoLV0m37JdwsILM=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-	 Message-ID:BIMI-Selector:List-Unsubscribe:List-Unsubscribe-Post;
-	b=pn5h+l7Ai8DPigTk3d5O8Zo/Ijxuu4OoAFnJQ18J9KtgwqWKheDb9JIX3kl0+YiCL
-	 pR9751x/UuyJnkgPEbQnQNQZYE/jCkZYH2Xk73U3sKX/DZAQ3ZuOH8C/2n8OTFzR6m
-	 ShUmRlA07A0zjz7RTkBphDq8T3dO2DVZtwpm+H8+OilPLcGk6vcTB36VOlhcFCcWUP
-	 wbaP2I/ZIbpGWJYObn2f6sW08uqfaCR/p8CFNEF9OcAZdOaZi13+6NFVeSbNUlJvCI
-	 35rA181LBnOpe8buKkY77NzqEPSmZ9NLTd437A5OAf/PIyuIBjkl9BKnlZEEp3vSb5
-	 hupeqxE0RkktQ==
-Date: Fri, 13 Dec 2024 22:36:48 +0000
+	s=protonmail3; t=1734132735; x=1734391935;
+	bh=4wa09Pjyf/VYrCvmWhZ+rDy4O5NesqDpetb9XCxl0k8=;
+	h=Date:To:From:Cc:Subject:Message-ID:Feedback-ID:From:To:Cc:Date:
+	 Subject:Reply-To:Feedback-ID:Message-ID:BIMI-Selector:
+	 List-Unsubscribe:List-Unsubscribe-Post;
+	b=C8fDi51guNjPwOH5V0R8lFL+OWxWW4ybwJEEYiv74wx77MvWvSFq4gtvuCybW9+Hb
+	 YNlbDfMnAD3AvvJ05kuTG0GC/e9qsllTiHixAOAuuwq00s3p6zR3auCVHmQAd4J/+v
+	 ii0E78+ywhAyzIGdTTbYr0jNWE3TieUgPUcWfuHgyywkZAOe61S+RVS3id41MbI5zY
+	 bEfirCB6cSlQpAfZp3ldanVDMD9Sox4qccF+em6KgAhvq318UXBP+Ur6htAvwJLkKV
+	 9s8gvhnd612YroLSHZ0LjFTairpMqGSVnl7s7KzIesjXLhkS4q6irK9ngL6nXqFCHa
+	 Cy4P+rWhDKZ8g==
+Date: Fri, 13 Dec 2024 23:32:09 +0000
 To: dwarves@vger.kernel.org
 From: Ihor Solodrai <ihor.solodrai@pm.me>
 Cc: acme@kernel.org, alan.maguire@oracle.com, eddyz87@gmail.com, andrii@kernel.org, mykolal@fb.com, bpf@vger.kernel.org
-Subject: [PATCH dwarves v2 01/10] btf_encoder: simplify function encoding
-Message-ID: <20241213223641.564002-2-ihor.solodrai@pm.me>
-In-Reply-To: <20241213223641.564002-1-ihor.solodrai@pm.me>
-References: <20241213223641.564002-1-ihor.solodrai@pm.me>
+Subject: [PATCH dwarves] btf_encoder: fix memory access bugs
+Message-ID: <20241213233205.633927-1-ihor.solodrai@pm.me>
 Feedback-ID: 27520582:user:proton
-X-Pm-Message-ID: 9129c3469d7b412f96e4440bb0a5a57d6a27f717
+X-Pm-Message-ID: 42b5f6a4961fc8dca5f0da61cbca1ad16690e9c6
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
@@ -47,209 +44,68 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-From: Alan Maguire <alan.maguire@oracle.com>
+When compiled with address sanitizer, a couple of errors were reported
+on pahole BTF encoding:
+  * A memory leak of strdup(func->alias), due to unchecked
+    reassignment.
+  * A read of uninitialized memory in gobuffer__sort or bsearch in
+    case btf_funcs gobuffer is empty.
 
-Currently we have two modes of function encoding; one adds functions
-based upon the first instance found and ignores inconsistent
-representations.  The second saves function representations and later
-finds inconsistencies.  The mode chosen is determined by
-conf_load->skip_encoding_btf_inconsistent_proto.
+Used compiler flags:
+    -fsanitize=3Dundefined,address
+    -fsanitize-recover=3Daddress
+    -fno-omit-frame-pointer
 
-The knock-on effect is that we need to support two modes in
-btf_encoder__add_func(); one for each case.  Simplify by using
-the "save function" approach for both cases; only difference is
-that we allow inconsistent representations if
-skip_encoding_btf_inconsistent_proto is not set (it is set by default
-for upstream kernels and has been for a while).
+I stumbled on these while working on [1].
 
-Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+[1] https://lore.kernel.org/dwarves/20241213223641.564002-1-ihor.solodrai@p=
+m.me/
+
 Signed-off-by: Ihor Solodrai <ihor.solodrai@pm.me>
-Acked-by: Eduard Zingerman <eddyz87@gmail.com>
-Acked-by: Jiri Olsa <jolsa@kernel.org>
-
-Link: https://lore.kernel.org/dwarves/20241128012341.4081072-2-ihor.solodra=
-i@pm.me/
 ---
- btf_encoder.c | 79 +++++++++++++++++----------------------------------
- 1 file changed, 26 insertions(+), 53 deletions(-)
+ btf_encoder.c | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
 
 diff --git a/btf_encoder.c b/btf_encoder.c
-index b715bc2..b9a98f5 100644
+index 3754884..520ff58 100644
 --- a/btf_encoder.c
 +++ b/btf_encoder.c
-@@ -88,7 +88,6 @@ struct btf_encoder_func_state {
- struct elf_function {
- =09const char=09*name;
- =09char=09=09*alias;
--=09bool=09=09 generated;
- =09size_t=09=09prefixlen;
- =09struct btf_encoder_func_state state;
- };
-@@ -120,6 +119,7 @@ struct btf_encoder {
- =09=09=09  force,
- =09=09=09  gen_floats,
- =09=09=09  skip_encoding_decl_tag,
-+=09=09=09  skip_encoding_inconsistent_proto,
- =09=09=09  tag_kfuncs,
- =09=09=09  gen_distilled_base;
- =09uint32_t=09  array_index_id;
-@@ -1165,18 +1165,18 @@ out:
- =09return err;
- }
-=20
--static int32_t btf_encoder__add_func(struct btf_encoder *encoder, struct f=
-unction *fn,
-+static int32_t btf_encoder__add_func(struct btf_encoder *encoder,
- =09=09=09=09     struct elf_function *func)
- {
-+=09struct btf_encoder_func_state *state =3D &func->state;
- =09int btf_fnproto_id, btf_fn_id, tag_type_id =3D 0;
- =09int16_t component_idx =3D -1;
- =09const char *name;
- =09const char *value;
- =09char tmp_value[KSYM_NAME_LEN];
-+=09uint16_t idx;
-=20
--=09assert(fn !=3D NULL || func !=3D NULL);
--
--=09btf_fnproto_id =3D btf_encoder__add_func_proto(encoder, fn ? &fn->proto=
- : NULL, func);
-+=09btf_fnproto_id =3D btf_encoder__add_func_proto(encoder, NULL, func);
- =09name =3D func->alias ?: func->name;
- =09if (btf_fnproto_id >=3D 0)
- =09=09btf_fn_id =3D btf_encoder__add_ref_type(encoder, BTF_KIND_FUNC, btf_=
-fnproto_id,
-@@ -1186,40 +1186,23 @@ static int32_t btf_encoder__add_func(struct btf_enc=
-oder *encoder, struct functio
- =09=09       name, btf_fnproto_id < 0 ? "proto" : "func");
- =09=09return -1;
- =09}
--=09if (!fn) {
--=09=09struct btf_encoder_func_state *state =3D &func->state;
--=09=09uint16_t idx;
--
--=09=09if (state->nr_annots =3D=3D 0)
--=09=09=09return 0;
-+=09if (state->nr_annots =3D=3D 0)
-+=09=09return 0;
-=20
--=09=09for (idx =3D 0; idx < state->nr_annots; idx++) {
--=09=09=09struct btf_encoder_func_annot *a =3D &state->annots[idx];
-+=09for (idx =3D 0; idx < state->nr_annots; idx++) {
-+=09=09struct btf_encoder_func_annot *a =3D &state->annots[idx];
-=20
--=09=09=09value =3D btf__str_by_offset(encoder->btf, a->value);
--=09=09=09/* adding BTF data may result in a mode of the
--=09=09=09 * value string memory, so make a temporary copy.
--=09=09=09 */
--=09=09=09strncpy(tmp_value, value, sizeof(tmp_value) - 1);
--=09=09=09component_idx =3D a->component_idx;
--
--=09=09=09tag_type_id =3D btf_encoder__add_decl_tag(encoder, tmp_value,
--=09=09=09=09=09=09=09=09btf_fn_id, component_idx);
--=09=09=09if (tag_type_id < 0)
--=09=09=09=09break;
--=09=09}
--=09} else {
--=09=09struct llvm_annotation *annot;
--
--=09=09list_for_each_entry(annot, &fn->annots, node) {
--=09=09=09value =3D annot->value;
--=09=09=09component_idx =3D annot->component_idx;
-+=09=09value =3D btf__str_by_offset(encoder->btf, a->value);
-+=09=09/* adding BTF data may result in a mode of the
-+=09=09 * value string memory, so make a temporary copy.
-+=09=09 */
-+=09=09strncpy(tmp_value, value, sizeof(tmp_value) - 1);
-+=09=09component_idx =3D a->component_idx;
-=20
--=09=09=09tag_type_id =3D btf_encoder__add_decl_tag(encoder, value, btf_fn_=
-id,
--=09=09=09=09=09=09=09=09component_idx);
--=09=09=09if (tag_type_id < 0)
--=09=09=09=09break;
--=09=09}
-+=09=09tag_type_id =3D btf_encoder__add_decl_tag(encoder, tmp_value,
-+=09=09=09=09=09=09=09btf_fn_id, component_idx);
-+=09=09if (tag_type_id < 0)
-+=09=09=09break;
- =09}
- =09if (tag_type_id < 0) {
- =09=09fprintf(stderr,
-@@ -1277,8 +1260,9 @@ static int btf_encoder__add_saved_funcs(struct btf_en=
-coder *encoder)
- =09=09 * just do not _use_ them.  Only exclude functions with
- =09=09 * unexpected register use or multiple inconsistent prototypes.
- =09=09 */
--=09=09if (!state->unexpected_reg && !state->inconsistent_proto) {
--=09=09=09if (btf_encoder__add_func(encoder, NULL, func))
-+=09=09if (!encoder->skip_encoding_inconsistent_proto ||
-+=09=09    (!state->unexpected_reg && !state->inconsistent_proto)) {
-+=09=09=09if (btf_encoder__add_func(encoder, func))
- =09=09=09=09return -1;
- =09=09}
- =09=09state->processed =3D 1;
-@@ -2361,6 +2345,7 @@ struct btf_encoder *btf_encoder__new(struct cu *cu, c=
-onst char *detached_filenam
- =09=09encoder->force=09=09 =3D conf_load->btf_encode_force;
- =09=09encoder->gen_floats=09 =3D conf_load->btf_gen_floats;
- =09=09encoder->skip_encoding_decl_tag=09 =3D conf_load->skip_encoding_btf_=
-decl_tag;
-+=09=09encoder->skip_encoding_inconsistent_proto =3D conf_load->skip_encodi=
-ng_btf_inconsistent_proto;
- =09=09encoder->tag_kfuncs=09 =3D conf_load->btf_decl_tag_kfuncs;
- =09=09encoder->gen_distilled_base =3D conf_load->btf_gen_distilled_base;
- =09=09encoder->verbose=09 =3D verbose;
-@@ -2566,7 +2551,6 @@ int btf_encoder__encode_cu(struct btf_encoder *encode=
-r, struct cu *cu, struct co
-=20
- =09cu__for_each_function(cu, core_id, fn) {
- =09=09struct elf_function *func =3D NULL;
--=09=09bool save =3D false;
-=20
- =09=09/*
- =09=09 * Skip functions that:
-@@ -2588,15 +2572,8 @@ int btf_encoder__encode_cu(struct btf_encoder *encod=
-er, struct cu *cu, struct co
-=20
- =09=09=09/* prefer exact function name match... */
- =09=09=09func =3D btf_encoder__find_function(encoder, name, 0);
--=09=09=09if (func) {
--=09=09=09=09if (func->generated)
--=09=09=09=09=09continue;
--=09=09=09=09if (conf_load->skip_encoding_btf_inconsistent_proto)
--=09=09=09=09=09save =3D true;
--=09=09=09=09else
--=09=09=09=09=09func->generated =3D true;
--=09=09=09} else if (encoder->functions.suffix_cnt &&
--=09=09=09=09   conf_load->btf_gen_optimized) {
-+=09=09=09if (!func && encoder->functions.suffix_cnt &&
-+=09=09=09    conf_load->btf_gen_optimized) {
- =09=09=09=09/* falling back to name.isra.0 match if no exact
- =09=09=09=09 * match is found; only bother if we found any
- =09=09=09=09 * .suffix function names.  The function
-@@ -2607,7 +2584,6 @@ int btf_encoder__encode_cu(struct btf_encoder *encode=
-r, struct cu *cu, struct co
- =09=09=09=09func =3D btf_encoder__find_function(encoder, name,
- =09=09=09=09=09=09=09=09  strlen(name));
- =09=09=09=09if (func) {
--=09=09=09=09=09save =3D true;
- =09=09=09=09=09if (encoder->verbose)
- =09=09=09=09=09=09printf("matched function '%s' with '%s'%s\n",
- =09=09=09=09=09=09       name, func->name,
-@@ -2625,10 +2601,7 @@ int btf_encoder__encode_cu(struct btf_encoder *encod=
-er, struct cu *cu, struct co
- =09=09if (!func)
- =09=09=09continue;
-=20
--=09=09if (save)
--=09=09=09err =3D btf_encoder__save_func(encoder, fn, func);
--=09=09else
--=09=09=09err =3D btf_encoder__add_func(encoder, fn, func);
-+=09=09err =3D btf_encoder__save_func(encoder, fn, func);
- =09=09if (err)
+@@ -1793,6 +1793,9 @@ static int btf_encoder__collect_btf_funcs(struct btf_=
+encoder *encoder, struct go
  =09=09=09goto out;
  =09}
+=20
++=09if (gobuffer__nr_entries(funcs) <=3D 0)
++=09=09return 0;
++
+ =09/* Now that we've collected funcs, sort them by name */
+ =09gobuffer__sort(funcs, sizeof(struct btf_func), btf_func_cmp);
+=20
+@@ -1954,6 +1957,11 @@ static int btf_encoder__tag_kfuncs(struct btf_encode=
+r *encoder)
+ =09=09goto out;
+ =09}
+=20
++=09if (gobuffer__nr_entries(&btf_funcs) <=3D 0) {
++=09=09err =3D 0;
++=09=09goto out;
++=09}
++
+ =09/* First collect all kfunc set ranges.
+ =09 *
+ =09 * Note we choose not to sort these ranges and accept a linear
+@@ -2607,7 +2615,8 @@ int btf_encoder__encode_cu(struct btf_encoder *encode=
+r, struct cu *cu, struct co
+ =09=09=09=09=09=09       ", has optimized-out parameters" :
+ =09=09=09=09=09=09       fn->proto.unexpected_reg ? ", has unexpected regi=
+ster use by params" :
+ =09=09=09=09=09=09       "");
+-=09=09=09=09=09func->alias =3D strdup(name);
++=09=09=09=09=09if (!func->alias)
++=09=09=09=09=09=09func->alias =3D strdup(name);
+ =09=09=09=09}
+ =09=09=09}
+ =09=09} else {
 --=20
 2.47.1
 
