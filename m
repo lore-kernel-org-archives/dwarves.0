@@ -1,155 +1,116 @@
-Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6ACB46B8;
-	Wed, 18 Dec 2024 00:03:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C64E1C6A3;
+	Wed, 18 Dec 2024 00:40:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734480219; cv=none; b=FwRdY5AoufgBLuGI1Iv8PGsjxY4q2Q7FJ6FJf6EP07WqvYf24JztiebDUS1pxUN32+QrxgYasjVGzhuU779EtAfn38WDL0cE4WWlisNVZaDinPCKRt9rp9zd7zJZ6dt9EGGPPKY72l9VD2BWmJaXjDv4/5UKFOLnQcnzj26Dfno=
+	t=1734482447; cv=none; b=FPZpdwO/oyhEHydq7PiAwGLGEfEsbZdANwljhqFlGzGYvUVk2KfkyuYq7INrpecYR5ZZ9M8XsxT3OcDeQh/F5POEM9O+4P2vtoMzxfISj8O48zPIi83pxXYucz7CcOLVN5HYnsnMoJuaYXdDfj+rMkqUUYmOwkfSqvANggchm1w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734480219; c=relaxed/simple;
-	bh=EWN8HzaCcVGiN6zESp1IAzLmb9kUlts7STcl2xcNnmE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ILiUmj0Kk6zI4vj64o6B+WGf/bJqqkqin17x9EjqB0JapqFLGEnGLkzGSlC9ExWc6hFroJbPp7FdJQ7XZplp9kSRdGXY4RfaoMeeKYgulyb6eG/BMxrh0YaA7UyJEDH/jR+YXC9Ff7ddWAcWjoc1sGmCQiDyhseXMWu+JOjP018=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=J21EcWU1; arc=none smtp.client-ip=209.85.215.178
+	s=arc-20240116; t=1734482447; c=relaxed/simple;
+	bh=cAVrn6acu9d3HlEYfgUBouiRJmMfYpzJqYfYUzT1ysc=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=EHcDwhwPAXA7xLzOWLm8TpKf1HZuJ135TAm8UCGA4+mlnffraJlVcG7s+r54BiiL1Xk5lYjvfqpGy9+leNHem0esYa4p62oXdvf5d7nMGWRinL6PPUL1gNbnheahbkXU45hwfegCOxmm9hkZhAlZrkRpKPvD0zjb51ka0PCuEEI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QxwfmPf7; arc=none smtp.client-ip=209.85.214.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="J21EcWU1"
-Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-7f4325168c8so2643014a12.1;
-        Tue, 17 Dec 2024 16:03:36 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QxwfmPf7"
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-218c8aca5f1so17848705ad.0;
+        Tue, 17 Dec 2024 16:40:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1734480216; x=1735085016; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EWN8HzaCcVGiN6zESp1IAzLmb9kUlts7STcl2xcNnmE=;
-        b=J21EcWU1QnUxDQ9TnGTxJNaVTAW8IzpsZnaZvycuRehRIidjWok11SqOo5Jmme1/Ol
-         hUjz1CrYc4bMBbY0qFXsROydKckkAFVZZNv+MPnx3MZ3c62E1VSGcY/Rc57SKKugS389
-         Hjw0ADbXbHoLZBt2TfOxBRrqll8lnQB3pzQ/FA9G6MyzGVjSX7u/A+qEErNtgnKy9jby
-         AclLIo862Fq+Y6rNB7sM/x1r6tGlmM8efZQVjSEkI0cynEiCciob9uhw31tyzZ0bhqJ9
-         xFTBcA6hWJ91CMeQQHgQdIE6jj2J44vMauIXfl4kVGPRKReeU73lINpuYvAU11S9RBDk
-         QPEw==
+        d=gmail.com; s=20230601; t=1734482445; x=1735087245; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=f0BI6OdKXBnebpImmhoFMNtXacM93U1r3GdpCS8+UHU=;
+        b=QxwfmPf7nj5LsrAijD/gMyI/AlHMAQSiVS7ITSwZ8tGMCse24ICKtL4eu9a8dci3Qy
+         R8GwgG4IvDyFU3Tlqzm1vQqiAw2BLDX+hf82xwKJ0fxx2DitxpvTiPAuOTb2u99+EEHS
+         gOg3ct99en8HfE530NRONB/vjz9crqROpcxnO8w1ZgIMsck0rZWn7Wc5zPramVBQSTY+
+         Ha/WLyBCtbuHtLLhEB2RSwdfCN7+VpbKgK+Z2Uslzd2gl20SXvbWeR+qTDaj5WEH8D15
+         VIK8xWrMLlawBUPcy/WY9wYb4RqDAsUgfymLINyHf1/pKJT/8+1E3hZBdBK7m3JOmSYv
+         agqg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734480216; x=1735085016;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=EWN8HzaCcVGiN6zESp1IAzLmb9kUlts7STcl2xcNnmE=;
-        b=iCDpbSb289K/kHrMIHeJnjuxrE6QLg6D9o8xaVI0yIGEwZjrOF6Fi6FSZIcTntF5GS
-         r1mZs3AVMkrMWenWWYyUwLIJZMbN0tU3u15xGsBqa2b3ZPKt8mUgMSrnxAztlAXxESoT
-         fV0gl4EnpraEiussNfKyteTf8+RkLZCrsKoyyvVH9RwJLkh1c7vZMBSfloZAcGtfiDqu
-         RRjVILHV4sgb1IEbbKQvfNZuDv0vfJ98z7NXwPM7ZV5NXqT+ewr9Q/f7jCEUsB8gpVVC
-         9c+IIL1Wg+k4DPZKovhrYUfr33z3ShrnMgFITiQ1F2XOFxAMSoV5XFob5PIRtZoi75AJ
-         YCCQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVdZJotreQS4EYNispZU2zXOHCSl3pxLZYHkykVYWeX0UPNsmZSucWJ2B9rWJvnBS9EhRdTGio5qg==@vger.kernel.org, AJvYcCWsQtvoLxu24bLELjhUFpg1Awo7D8Lg/MdAlWasjk8max8FMLuAzQ8VhUySlRqui2ihzj4=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz7WSFSXJ5eEL5v8as8HdWKbDLnx2TEq+2wEjr/+9pz3cUGdf5m
-	g8tm5SAM4Scox7EPCWnsuWzca0SVWu3OK7W1YlG/WCqadV95DzWXpoW77acJiGCBHoTvlvZqDp4
-	iRmfJcXfwtNLiLGk78shyn6XlmOc=
-X-Gm-Gg: ASbGncsr2rtVsa6m3RqqJ2kLR7uQd/VQ4+ym4YgzRXfLHcAk25wEEEadBOOiNdjyBHN
-	Uv/gwY2519nVD4BAx38sr6sB0DHI+xYnMmboJ7mM5sNHRMyIV/46jWw==
-X-Google-Smtp-Source: AGHT+IEOkPwYwTFIVyYy1Led+KFM3xqFIeFci9I21joi8fE+JYYc9crGaKwgD7ZoZewH4VXhcVQQg24JZJC7QpvlP7A=
-X-Received: by 2002:a17:90b:4f:b0:2ee:889b:b11e with SMTP id
- 98e67ed59e1d1-2f2e937836bmr1126852a91.30.1734480215970; Tue, 17 Dec 2024
- 16:03:35 -0800 (PST)
+        d=1e100.net; s=20230601; t=1734482445; x=1735087245;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=f0BI6OdKXBnebpImmhoFMNtXacM93U1r3GdpCS8+UHU=;
+        b=sEE8kC7l9ARu2F2thvpyjXCesGQ02CZ+8TR69CkX4WP5MJOwwAahjGil2/Wg+gFexq
+         +NKU+Mzt1S/4eLzfmvvRJINJzoMIJWbxfI3OA1UJoAPD3+j9J+rNVAfymKkLhFYo2K9l
+         wAoGZ4ijxWVL6joKJ2gTIYuiES2vyLdDJTDICytuguolpcxp2j5S7yxSR/qgrVV6T1wn
+         cYzSZ1sVvWm0OMSz0tWx2VqFTb1+G7N53wMwxSbeQG+uoXX1t0ZhIKROXxipo36e2Rpw
+         skOtxR7s4Ri/eAjFT6eJOgGnTKisZ8JwHTKbVNnJRfF1w55STHYgqKcDH9uKUU6rC8vS
+         zKeg==
+X-Forwarded-Encrypted: i=1; AJvYcCXuXY1upFQYbTjI23nVr64qGWJH3fo4fAe1DAKUyJjhN/81auarHxQByKUB6JK0xmTlZ7U=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyeEwqZY6qp/bhSP+JEU6AYHqr7v6MN+oQVt4t/c7Mg5ta0OeUv
+	4J/07fVCc7qRElAqhKd2ZsAS4oT2OanjdJR+g/iZdXSQ+S+fSZ4G
+X-Gm-Gg: ASbGncvZiGrBYYUmvSRlTmB1rfkj5bXjSgW0ZSfqCMs8Xt8kV/SlXhZUXuRkVP3c5zF
+	yWJJy3lyHTfw2H2osO7D5RRuXnpBjElKZBtFTAo+wZd9NSxzibnaE5tPRAMcPYlRWhDe5VSR91P
+	Ru86X6uvB56BuuO5Nbi6IJWRXFtyHxycekt7SW4QBMYmCOOolyJTjLW0f2K8YWZ7PLo/Ytp8WRQ
+	jL6doFYaLAz06yds8Uc5igfAegEpaqMZ6oARxd9sgfKJt2pelWl4g==
+X-Google-Smtp-Source: AGHT+IG9kEh64tuF6IxC0kTz+ZK9LSlqsAzJnnQinRf9ZePXubwfvsU+26nS2CE2xJFeuzk2EQSzvA==
+X-Received: by 2002:a17:902:d510:b0:20c:9936:f0ab with SMTP id d9443c01a7336-218d726c05dmr10714595ad.47.1734482445367;
+        Tue, 17 Dec 2024 16:40:45 -0800 (PST)
+Received: from [192.168.0.235] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-218a1e5034bsm65282945ad.166.2024.12.17.16.40.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Dec 2024 16:40:44 -0800 (PST)
+Message-ID: <af9404ef750f152afb20b2883aad3b9fc5e5a2dc.camel@gmail.com>
+Subject: Re: [PATCH dwarves v2 07/10] btf_encoder: introduce
+ btf_encoding_context
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>, Ihor Solodrai
+	 <ihor.solodrai@pm.me>
+Cc: dwarves@vger.kernel.org, acme@kernel.org, alan.maguire@oracle.com, 
+	andrii@kernel.org, mykolal@fb.com, bpf@vger.kernel.org
+Date: Tue, 17 Dec 2024 16:40:40 -0800
+In-Reply-To: <CAEf4BzZ-chyzJzCdW0AwjaxhO+yfUCO=Dcu+7=m96Ccyq94Y8g@mail.gmail.com>
+References: <20241213223641.564002-1-ihor.solodrai@pm.me>
+	 <20241213223641.564002-8-ihor.solodrai@pm.me>
+	 <09f6bc335380ca73d365566de7af8f2e73ac9cfd.camel@gmail.com>
+	 <735014fda88330d2124f4956cc9a0507f47176db.camel@gmail.com>
+	 <yKpaq5zO0TcrAm1v3p4yd2D9ic0jGUQM0CUSg6CU_31_S1mX7SDljMf36ayteEV2O_MTE2eJkUuu3JoJWPQyIxHibe2zz1W3Uq_RzqiyPVY=@pm.me>
+	 <CAEf4BzZ-chyzJzCdW0AwjaxhO+yfUCO=Dcu+7=m96Ccyq94Y8g@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.54.1 (3.54.1-1.fc41) 
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241213223641.564002-1-ihor.solodrai@pm.me> <20241213223641.564002-8-ihor.solodrai@pm.me>
- <09f6bc335380ca73d365566de7af8f2e73ac9cfd.camel@gmail.com>
- <735014fda88330d2124f4956cc9a0507f47176db.camel@gmail.com> <yKpaq5zO0TcrAm1v3p4yd2D9ic0jGUQM0CUSg6CU_31_S1mX7SDljMf36ayteEV2O_MTE2eJkUuu3JoJWPQyIxHibe2zz1W3Uq_RzqiyPVY=@pm.me>
-In-Reply-To: <yKpaq5zO0TcrAm1v3p4yd2D9ic0jGUQM0CUSg6CU_31_S1mX7SDljMf36ayteEV2O_MTE2eJkUuu3JoJWPQyIxHibe2zz1W3Uq_RzqiyPVY=@pm.me>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Tue, 17 Dec 2024 16:03:24 -0800
-Message-ID: <CAEf4BzZ-chyzJzCdW0AwjaxhO+yfUCO=Dcu+7=m96Ccyq94Y8g@mail.gmail.com>
-Subject: Re: [PATCH dwarves v2 07/10] btf_encoder: introduce btf_encoding_context
-To: Ihor Solodrai <ihor.solodrai@pm.me>
-Cc: Eduard Zingerman <eddyz87@gmail.com>, dwarves@vger.kernel.org, acme@kernel.org, 
-	alan.maguire@oracle.com, andrii@kernel.org, mykolal@fb.com, 
-	bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Tue, Dec 17, 2024 at 10:06=E2=80=AFAM Ihor Solodrai <ihor.solodrai@pm.me=
-> wrote:
->
-> On Monday, December 16th, 2024 at 7:15 PM, Eduard Zingerman <eddyz87@gmai=
-l.com> wrote:
->
-> >
-> > On Mon, 2024-12-16 at 18:39 -0800, Eduard Zingerman wrote:
-> >
-> > > On Fri, 2024-12-13 at 22:37 +0000, Ihor Solodrai wrote:
-> > >
-> > > > Introduce a static struct holding global data necessary for BTF
-> > > > encoding: elf_functions tables and btf_encoder structs.
-> > [...]
-> > >
-> > > After patch #10 "dwarf_loader: multithreading with a job/worker model=
-"
-> > > from this series I do not understand why this patch is necessary.
-> > > After patch #10 there is only one BTF encoder, thus:
-> > > - there is no need to track btf_encoder_list;
-> > > - elf_functions_list can now be a part of the encoder;
-> > > - it should be possible to forgo global variable for encoder
-> > > and pass it as a parameter for each btf_encoder__* func.
-> > >
-> > > So it seems that this patch should be dropped and replaced by one tha=
-t
-> > > follows patch #10 and applies the above simplifications.
-> > > Wdyt?
-> >
-> >
-> > Meaning that patch #6 "btf_encoder: switch to shared elf_functions tabl=
-e"
-> > is not necessary. Strictly speaking, patches 1,2,4 might not be necessa=
-ry
-> > as well, but could be viewed as a refactoring.
-> > Switch to single-threaded BTF encoder significantly changes this patch-=
-set.
->
-> Eduard, thanks for the review again.
->
-> You are correct: if we focus on the multithreading changes in
-> dwarf_loader.c and make a decision that there is always a single
-> btf_encoder, then much of this series can be discarded.
->
-> At the same time I think most of the patches are useful. At the very
-> least they enabled experiments that in the end lead me to the
-> dwarf_loader changes.
->
-> The changes making ELF functions table shared were beneficial in
-> isolation, because they eliminated unnecessary duplication of
-> information between encoders, leading to reduced memory usage.
->
-> The changes splitting ELF and BTF function information in
-> btf_encoder.c and simplifying function processing are also good in
-> isolation.
->
-> In my opinion, it's not wise to discard all of that, because it turned
-> out that a single btf_encoder works better in the use-case we care
-> about now. Later we might want to revisit parallel BTF encoding. Then
-> some version of the refactoring changes here will have to be re-done.
->
-> So I think it makes sense to land most of this series without
-> significant re-work. But of course I am biased here, as I wrote most
-> of the patches, and it's always painful to "throw away" effort.
->
-> Let's see what others think.
+On Tue, 2024-12-17 at 16:03 -0800, Andrii Nakryiko wrote:
 
-I agree with Ihor. I think he invested a lot of time into these
-improvements, and asking him to re-do the series just to shuffle a few
-patches around is just an unnecessary overhead (which also delays the
-ultimate outcome: faster BTF generation with pahole). And as Ihor
-mentioned, we might improve upon this series by parallelizing encoders
-to gain some further improvements, so I think all the internal
-refactoring and preparations are setting up a good base for further
-work.
+[...]
 
-Let's try to finalize patch #10's implementation and land this. It's a
-nice improvement both performance-wise. It's also good that we don't
-need to care about reproducible or not and can effectively deprecate
-that short-lived feature we added not so long ago.
+> I agree with Ihor. I think he invested a lot of time into these
+> improvements, and asking him to re-do the series just to shuffle a few
+> patches around is just an unnecessary overhead (which also delays the
+> ultimate outcome: faster BTF generation with pahole).
+
+Patches #1-4 are good refactorings.
+Patches #5-7 introduce a global state and complication where this
+could be avoided. (These were necessary before Ihor figured out the
+trick with patch #10).
+E.g. 'elf_functions_list':
+- there is no reason for it to be global, it could be a part of the
+  encoder, as it is now;
+- there is no reason for it to be a list, encoding works with a single
+  function table and keeping it as a list just confuses reader.
+
+Same for btf_encoder_list_lock / btf_encoder_list.
+
+> And as Ihor mentioned, we might improve upon this series by
+> parallelizing encoders to gain some further improvements, so I think
+> all the internal refactoring and preparations are setting up a good
+> base for further work.
+
+Not really, the main insight found by Ihor is that parallel BTF
+encoding doesn't make much sense: constructing BTF is as cheap as
+copying it. I don't see much room for improvement here.
+
+[...]
+
