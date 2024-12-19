@@ -1,138 +1,147 @@
-Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail-40134.protonmail.ch (mail-40134.protonmail.ch [185.70.40.134])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 754FE41C64;
-	Thu, 19 Dec 2024 14:59:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FCEC1A255C;
+	Thu, 19 Dec 2024 19:06:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.40.134
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734620394; cv=none; b=bpOWfpHYw3fXPzoe3RTA3eUBeED0OdnrC8SgRtewK96rXRzuyTA9DSe3PB7DrT83exyZc5lL6MEQNtu1aLRkTcw9t6HhjVUL4KqwgTcKPi+PUOOaoVUAtm4DN5H7iW7Y0memJoBbebhmC6frbuRJBfAmnMxCu7bQ9O2/Nr5d8i0=
+	t=1734635200; cv=none; b=JS3Cld0Jbhu1lHc7O3Gqpn+1dNScyODKYrsFyMdUyzMiN7prjp9B6bErsGaGWhC2QKhGTM4ZZkJ3Ndy8m496rux03QSX7qH+L3XY/Rs4Tn0VJY1jEzvzIWuIKhhKVyIvqjgx7jlvA/H6Xsf+0z7EOWgQG11/DZWRlV/Th6El58Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734620394; c=relaxed/simple;
-	bh=OgTzGdMjUDzBpLH3nE4dxG966TArIliV3MMG4w1Bj7s=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QAkStSZxwRYrGebzOPo2wjUrB1KOHf5U59JNaQco4FzJ9OSdofhUGxd+n5DhGUuNCEZjPAt2lQf1Y+TT93vH4wLs/FvK1lR9wtl87k2F9i0AZjoxys13eGmCjHuxOREoqMEwWr4xU4wJ5+L5jpnV5oZiER/9iQyLumHRsD1ZCvA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TwlyLDg+; arc=none smtp.client-ip=209.85.218.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1734635200; c=relaxed/simple;
+	bh=uZXBpaUPnIs0v17kOvIODa1c2ZgMXfUTNoWXsLQrrhY=;
+	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=X6XKgsZqIXAYan+haD1VzZjt3zNMcL5CQeZVZa6zyIIwdLrZvA2RRNMYwftruj+e5482ozG2yll+WPYkI4eFUZX3j0Snquv1gH7af1Qs6hPbiLM52gbe5xdN1vWSPmr4jL/vM1GOKv/g/yE/pX85qkFdF7k5ngLREQDSuDwS7vQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me; spf=pass smtp.mailfrom=pm.me; dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b=qZIWZakc; arc=none smtp.client-ip=185.70.40.134
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pm.me
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TwlyLDg+"
-Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-aab6fa3e20eso152407366b.2;
-        Thu, 19 Dec 2024 06:59:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1734620392; x=1735225192; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=RT8b7xWGQgIZNvaQiz2rHjeAdabu/n/BYzlY90fVtTo=;
-        b=TwlyLDg+6GY2t8LBnsvD81n/rCaiPK4p/hG1idNn5H+iVmyqKXxli3QULRuZ9r1svD
-         YuTtnts7pL91Eg1b2j8hTCymGh4QDwScCuuioHWmiC6jUWR/h2/5Qc0NyU2rEUGQbVZy
-         /zsx2S9mVMQQY51E7ZHcD8vvNmFux/xYyu+1CTfsrKRQoHkUu8kiQFVwCAx7sGv7ARy9
-         5wdMH6AwEoMT3gGiv/HFkm2mdQLrzClALV7075/kaTF/IdJdmM1rPVP/g+JgM9TruwwZ
-         eyIwv7wZLMbxwKfOoSZ5E94WUZvBiFMtu5mjUbF6r6v/JP4LtRkzkkY5KtkgVSktCrEX
-         Bg6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734620392; x=1735225192;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RT8b7xWGQgIZNvaQiz2rHjeAdabu/n/BYzlY90fVtTo=;
-        b=a8IirkVeaZXm7S6QaOwOn4YCU0ueM/VmQh1gfydRjqTIn95NUSzRFLqKIBDa7ZzK1s
-         XF44VenTivmuwu+UU13zLmsbzFTh1vWbsaf0ObVj21lxFuQQuY7t44Vq4IjOCL45IBJM
-         cyptxxwrcvxE0exdJPHT/kkMRAHZ2TXG6yvvfKIAkhXAgvOpm/kym8S/+rcP5Dnoq/Wh
-         9gXyERCKSMsNoREO0oXxCl1ljm/ZRsmMmwK8bhok249Hdmcpdj5tIQ76aYbuzvx99RRk
-         NwBhvzeSPt8nIzx5wIRTos/hjBJYHz0189o1MwXHhHbdUiKkJ822dbHX0ZOXCTNXlk5H
-         oqag==
-X-Forwarded-Encrypted: i=1; AJvYcCWhhXT2Ir0OxtqY4CuqLKQdJb9RHOnbRnCCDppbFjOoBcgBen+0+mIlT+aXTDIdOnOXfBs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyFD2RnZPuDOzmeImi9uqm9j2W8s1PMnWX0v0le1CjAEiGujEMr
-	489MCVpN/Ws65Zk+lm8VDGINNs4yhHUfBtcAJdqt6vKfl9XKa1D1
-X-Gm-Gg: ASbGncvQQRWmIdR5KAFMOSzsN2oxNNYOPFRaReRt/Ddtlb4rgRLafPaPw5DY50eWxNs
-	EGqlqgMmuHvDugC/NY3/Ecltc36/QPWlslWsAdvhAK7zFrJcVCQLP+M+b3ZN4QNjPXh7FncGj1p
-	YrFEcnpfyMPX/ASVugAcsf8jiGc2X4w400lssOVjFCWD3ly7tolWuFOrHH/FFqLe5UwNOlkiAE1
-	zoXXpT4QJf3Q+AHUK5QYtjhB4yr3A9zmAQj+fvfiQPIcFRg6btFkgXwUI6NgyOJ0+UnGdH3ungD
-	dRn9Gh/P7AQP76nCnEeM0XGObflLBA==
-X-Google-Smtp-Source: AGHT+IEDvkM7Ciq+jR/RlAmvhDkvs5hHzML8ujzNicZkiL7EluLOQbDvj+UGSJXLayE8BDFetoNoaw==
-X-Received: by 2002:a17:906:f5aa:b0:aab:eefc:92e5 with SMTP id a640c23a62f3a-aabf473fe7emr646883166b.14.1734620390680;
-        Thu, 19 Dec 2024 06:59:50 -0800 (PST)
-Received: from krava (2001-1ae9-1c2-4c00-726e-c10f-8833-ff22.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:726e:c10f:8833:ff22])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aac0e895194sm74052066b.70.2024.12.19.06.59.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Dec 2024 06:59:50 -0800 (PST)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Thu, 19 Dec 2024 15:59:48 +0100
-To: Ihor Solodrai <ihor.solodrai@pm.me>
-Cc: dwarves@vger.kernel.org, acme@kernel.org, alan.maguire@oracle.com,
-	eddyz87@gmail.com, andrii@kernel.org, mykolal@fb.com,
-	bpf@vger.kernel.org
-Subject: Re: [PATCH dwarves v2 02/10] btf_encoder: separate elf function,
- saved function representations
-Message-ID: <Z2Q05JfsckYSuun0@krava>
-References: <20241213223641.564002-1-ihor.solodrai@pm.me>
- <20241213223641.564002-3-ihor.solodrai@pm.me>
+	dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b="qZIWZakc"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me;
+	s=protonmail3; t=1734635190; x=1734894390;
+	bh=uZXBpaUPnIs0v17kOvIODa1c2ZgMXfUTNoWXsLQrrhY=;
+	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+	 Message-ID:BIMI-Selector:List-Unsubscribe:List-Unsubscribe-Post;
+	b=qZIWZakcvSkA19JP3kAfH5LPsG2StVqxtauNXZ24R9qJG6QhwAzzylc5uRIp5kDxO
+	 Ddes/M/lWhd2zIPSfymFKJp913QdyYJPuaOPsze5z9REfQwAE0ddqurg8Ws0tsWt0X
+	 6P4sqBtc6/MdI9Le75sTi7/PrcGuMpBjUBwB+EOGQ6gfHT+VEUwn06eKq71PdUd18o
+	 SWzQAv46/Gn2+1GDnKTtSIg8xncEcwbFcjlMqtsvaL0Fmqw7r9/L2PTq5Zq+vZtkaY
+	 0WriXCJ5h1k99Ejs3cuPyzeZ5dwy1UJg2f1Cd2eXAJ5iqCAP0tKxNwSITP95agsv/l
+	 wqrGHBhAS0r3Q==
+Date: Thu, 19 Dec 2024 19:06:25 +0000
+To: Jiri Olsa <olsajiri@gmail.com>
+From: Ihor Solodrai <ihor.solodrai@pm.me>
+Cc: dwarves@vger.kernel.org, acme@kernel.org, alan.maguire@oracle.com, eddyz87@gmail.com, andrii@kernel.org, mykolal@fb.com, bpf@vger.kernel.org
+Subject: Re: [PATCH dwarves v2 06/10] btf_encoder: switch to shared elf_functions table
+Message-ID: <K5et08J-yxHY85mfgEBd6GAJNjmpSDmhhcL5JiZYRA6YfVoAtrQTHHa4opWX0vrRrimoCzyWxVMz2x-NJ5P4BXGdBzF-zVbZrpFhBoKfqWU=@pm.me>
+In-Reply-To: <Z2Q0kBEHvLV11Fne@krava>
+References: <20241213223641.564002-1-ihor.solodrai@pm.me> <20241213223641.564002-7-ihor.solodrai@pm.me> <Z2Q0kBEHvLV11Fne@krava>
+Feedback-ID: 27520582:user:proton
+X-Pm-Message-ID: 97ec71539eb61d0b41bf7429c9c8bc4634e0c68e
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241213223641.564002-3-ihor.solodrai@pm.me>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Dec 13, 2024 at 10:36:53PM +0000, Ihor Solodrai wrote:
+On Thursday, December 19th, 2024 at 6:58 AM, Jiri Olsa <olsajiri@gmail.com>=
+ wrote:
 
-SNIP
+>=20
+>=20
+> On Fri, Dec 13, 2024 at 10:37:13PM +0000, Ihor Solodrai wrote:
+>=20
+> SNIP
+>=20
+> > @@ -2116,9 +2128,6 @@ int btf_encoder__encode(struct btf_encoder *encod=
+er)
+> > int err;
+> > size_t shndx;
+> >=20
+> > - /* for single-threaded case, saved funcs are added here */
+> > - btf_encoder__add_saved_funcs(encoder);
+> > -
+> > for (shndx =3D 1; shndx < encoder->seccnt; shndx++)
+> > if (gobuffer__size(&encoder->secinfo[shndx].secinfo))
+> > btf_encoder__add_datasec(encoder, shndx);
+> > @@ -2477,14 +2486,13 @@ struct btf_encoder *btf_encoder__new(struct cu =
+*cu, const char *detached_filenam
+> > goto out_delete;
+> > }
+> >=20
+> > - encoder->symtab =3D elf_symtab__new(NULL, cu->elf);
+> > + encoder->functions =3D elf_functions__get(cu->elf);
+>=20
+>=20
+> elf_functions__get should always return !=3D NULL right? should we add as=
+sert call for that?
+>=20
+> SNIP
+>=20
+> > diff --git a/pahole.c b/pahole.c
+> > index 17af0b4..eb2e71a 100644
+> > --- a/pahole.c
+> > +++ b/pahole.c
+> > @@ -3185,13 +3185,16 @@ static int pahole_threads_collect(struct conf_l=
+oad *conf, int nr_threads, void *
+> > if (error)
+> > goto out;
+> >=20
+> > - btf_encoder__add_saved_funcs(btf_encoder);
+> > + err =3D btf_encoder__add_saved_funcs(btf_encoder);
+> > + if (err < 0)
+> > + goto out;
+> > +
+> > for (i =3D 0; i < nr_threads; i++) {
+> > /*
+> > * Merge content of the btf instances of worker threads to the btf
+> > * instance of the primary btf_encoder.
+> > */
+> > - if (!threads[i]->btf)
+> > + if (!threads[i]->encoder || !threads[i]->btf)
+>=20
+>=20
+> is this related to this change? seems like separate fix
+>=20
+> > continue;
+> > err =3D btf_encoder__add_encoder(btf_encoder, threads[i]->encoder);
+> > if (err < 0)
+> > @@ -3846,6 +3849,9 @@ try_sole_arg_as_class_names:
+> > exit(1);
+> > }
+> >=20
+> > + if (conf_load.nr_jobs <=3D 1 || conf_load.reproducible_build)
+> > + btf_encoder__add_saved_funcs(btf_encoder);
+>=20
+>=20
+> should we check the return value here as well?
+>=20
+> thanks,
+> jirka
 
-> +	btf_encoders__for_each_encoder(e) {
-> +		list_for_each_entry(s, &e->func_states, node)
-> +			nr_saved_fns++;
-> +	}
-> +
-> +	if (nr_saved_fns == 0)
-> +		return 0;
-> +
-> +	saved_fns = calloc(nr_saved_fns, sizeof(*saved_fns));
-> +	btf_encoders__for_each_encoder(e) {
-> +		list_for_each_entry(s, &e->func_states, node)
-> +			saved_fns[i++] = s;
-> +	}
-> +	qsort(saved_fns, nr_saved_fns, sizeof(*saved_fns), saved_functions_cmp);
-> +
-> +	for (i = 0; i < nr_saved_fns; i = j) {
-> +		struct btf_encoder_func_state *state = saved_fns[i];
-> +
-> +		/* Compare across sorted functions that match by name/prefix;
-> +		 * share inconsistent/unexpected reg state between them.
-> +		 */
-> +		j = i + 1;
-> +
-> +		while (j < nr_saved_fns && saved_functions_combine(saved_fns[i], saved_fns[j]) == 0)
-> +			j++;
-> +
-> +		/* do not exclude functions with optimized-out parameters; they
-> +		 * may still be _called_ with the right parameter values, they
-> +		 * just do not _use_ them.  Only exclude functions with
-> +		 * unexpected register use or multiple inconsistent prototypes.
-> +		 */
-> +		if (!encoder->skip_encoding_inconsistent_proto ||
-> +		    (!state->unexpected_reg && !state->inconsistent_proto)) {
-> +			if (btf_encoder__add_func(state->encoder, state)) {
-> +				free(saved_fns);
-> +				return -1;
-> +			}
-> +		}
-> +	}
-> +	/* Now that we are done with function states, free them. */
-> +	free(saved_fns);
-> +	btf_encoders__for_each_encoder(e)
-> +		btf_encoder__delete_saved_funcs(e);
+Jiri, thanks for review.
 
-nit, wrong indent
+This patch is going to be removed in the next version of the series,
+following a discussion with Eduard and Andrii [1].
 
-jirka
+If you're interested you can inspect WIP v3 branch on github [2].
 
-> +	return 0;
-> +}
-> +
->  static int btf_encoder__collect_function(struct btf_encoder *encoder, GElf_Sym *sym)
+I am still testing it, and plan to add a patch removing global
+btf_encoders list. Other than that it's close to what I am going to
+submit.
 
-SNIP
+[1] https://lore.kernel.org/dwarves/C82bYTvJaV4bfT15o25EsBiUvFsj5eTlm17933H=
+vva76CXjIcu3gvpaOCWPgeZ8g3cZ-RMa8Vp0y1o_QMR2LhPB-LEUYfZCGuCfR_HvkIP8=3D@pm.=
+me/
+[2] https://github.com/theihor/dwarves/tree/v3.workers
+
+>=20
+> > +
+> > err =3D btf_encoder__encode(btf_encoder);
+> > btf_encoder__delete(btf_encoder);
+> > if (err) {
+> > --
+> > 2.47.1
