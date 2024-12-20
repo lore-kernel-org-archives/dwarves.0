@@ -1,205 +1,162 @@
-Received: from mail-40133.protonmail.ch (mail-40133.protonmail.ch [185.70.40.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EC9F1B4147;
-	Thu, 19 Dec 2024 19:31:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.40.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7A2219F471;
+	Fri, 20 Dec 2024 09:25:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734636711; cv=none; b=TAAyiXGOSp4CYBecaU+IHC0ezImaIHzDFjfhtwNJqrPJqWuPPEhKyQg+X4y0AGHFO1HQal2M4aMZWUsqfLQ5eN54aT0/uIA64s0XXXcpi8NDt8rFGVoE28ulPN8tHnQchfVbM3e5rgBNRzta0oUNZ8cxULefMQOzECK5tNN/BoA=
+	t=1734686710; cv=none; b=ABXX/WxBogBez8GPNZ+d5I6wD9rGvjd4k26G4yL25GvPYqL0EN4Xb8ix7q+29LEmgArGyqADnfZClX44Khs0BzZ4t1m5YGvmm02kxAw8c8GxT7F23kJF11FcvjELMqrtaUbs4U6pAUYnejS0+DjXO5zyasT+JycOoZAbi1GRPdk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734636711; c=relaxed/simple;
-	bh=zMDGKqDHNRRsp8eposPaHOyDg/J5j+nmpksjxm+fgpE=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=IY2fm/pFaHaG4mQu21F2fxOOxMpvFx3JD18G+J6xroOn+cU2HpDJOkWO8/Lu+7hKVrjHYYZm9nFQHWjRmKM7gBcssbYZY1Bq2QvqoPZpW7tDoCb+xbO2ALRpQBIVVyiJVEUrYmKZaQaBarysb5pVwxxCyNcW0MEAcSP/ezi7WNk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me; spf=pass smtp.mailfrom=pm.me; dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b=NS4MIZ3p; arc=none smtp.client-ip=185.70.40.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pm.me
+	s=arc-20240116; t=1734686710; c=relaxed/simple;
+	bh=K7FgU7x/MhJrjp4LGsTkeXWCeWl1nt1MVeFl8CqcXhY=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BsFsEg7J/g0oSyIVeombM+L1G3Pe7p8vN/ipm9K2GmPtqJAwFnsVgxTK0Wno2ppNZbAsc0g0hS7OL9IMVyR8maJyddOegWob5HJKDc4fUMxhu80ErFzLmf77ob3RyaVIDWfd7EncY8bLF36hzzrTj5Fee87vzC5tF2oKo6OJ8/Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=b38rhq+T; arc=none smtp.client-ip=209.85.221.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b="NS4MIZ3p"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me;
-	s=protonmail3; t=1734636700; x=1734895900;
-	bh=zMDGKqDHNRRsp8eposPaHOyDg/J5j+nmpksjxm+fgpE=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-	 Message-ID:BIMI-Selector:List-Unsubscribe:List-Unsubscribe-Post;
-	b=NS4MIZ3pB6jWBiPnA6wlXpwNqZKXZlP5XjWTB8ErZsFVp0X+aCRFM6szipQHEg9zf
-	 VI1wbx+yrT3wVbXO12CAqGTJBjb6Y6X4jFn24M6a6NZIvW51aFHdzFAYgkmYpg+sSp
-	 NimMWLLidNXENUaNiWCcrQ+LtrilMhAmG3HkH3MyWa22O1J1i/vl7O1qYc4syLo5/3
-	 K2s3zj9wGJOPldDqUp532ypvVb+d8VIsgF4PvS+55hT7M4L3cV+mC7Zb5b5B+eCN1s
-	 uNfrTpkY6vvFPo1a0QpOL0uLYiVELYT9vg1Mg0QKmrNNyiGEoqMlJkD6xs3/I4PiRI
-	 N+t6kXesvkyUA==
-Date: Thu, 19 Dec 2024 19:31:35 +0000
-To: Jiri Olsa <olsajiri@gmail.com>
-From: Ihor Solodrai <ihor.solodrai@pm.me>
-Cc: dwarves@vger.kernel.org, acme@kernel.org, alan.maguire@oracle.com, eddyz87@gmail.com, andrii@kernel.org, mykolal@fb.com, bpf@vger.kernel.org
-Subject: Re: [PATCH dwarves v2 10/10] dwarf_loader: multithreading with a job/worker model
-Message-ID: <Gk0nTkIuEA2FQD6WzNeIq1Hsoj5V2zwmar99_nB5a_Yc96sJLMi3W57sBAr84aUJjUepJkLgVqkOAeXVPvx7B7P0WIgl6qJib2Kw-iGRwaM=@pm.me>
-In-Reply-To: <Z2Q0wU_AOOF0c_NF@krava>
-References: <20241213223641.564002-1-ihor.solodrai@pm.me> <20241213223641.564002-11-ihor.solodrai@pm.me> <Z2Q0wU_AOOF0c_NF@krava>
-Feedback-ID: 27520582:user:proton
-X-Pm-Message-ID: 18bdf95cecd8a8fa8c62be658f9e50117b496816
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="b38rhq+T"
+Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-388cae9eb9fso956866f8f.3;
+        Fri, 20 Dec 2024 01:25:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1734686706; x=1735291506; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=YJ02lvMh+3l+K8jMARDLOYxNUHzDPXRTK+yzso8mae4=;
+        b=b38rhq+TKai7KjNrov1f8rhtb6esG97V5FjhnNCAP+kUAJZupy+10sjg4IG2enm9Gf
+         eZ8WukDFNqy4CRArf4N/aWGz2JY+FYIXCCa5qjCEfr+XhDlNAzuQ2OWfGTCzI6LebqiN
+         +P0OkHakTqRSSUDOT2nUIvLL6JPn36QQ0MdZiFr2SjyQV+W2wjGb+ujTvyAj7ElTXVVj
+         xfc7E6CrbotLDv/oeIJzRbezPa9JxWdbEeFeN471qunDoeGDmhX+Vse2SXoyYpQ3QPKV
+         pm5rc6r1dT/1v1HbsOauQw8mVAG3h5pChVdvmLSw/qPxLIc8N3iuevI3ElQmTQEhRPl4
+         y7Qw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1734686706; x=1735291506;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YJ02lvMh+3l+K8jMARDLOYxNUHzDPXRTK+yzso8mae4=;
+        b=OQR6U8KnwRFp778sMHyPU298NhiHd6UPmWoafGn1YBQE5uCBkBYdPf9Mf4vWvRWCl1
+         czoAtE/XuszPOhoSc0sMg5+LDvDNClc8SV0ZRdqorbHzKsyudbeENGDlAc1up+ZauflM
+         Px8vVw/x5ptTlx8KAGXQURh+NgMj46UQKTKuDKdzkK2XOgNU4pFjRlGB66A0hN36uMwE
+         48ksPNb12gsMTgTFtkhBrMKjqNmZ+JJJMqY+TvRY1uPBKwsX2VHLWCfW98eAEosmeqio
+         jRY+kPXLXn7EgJMXpdwcErxdbQpTYj9PgyiEH3mLdfuZjaEMoFgWqkGp2V+ZBIer/ACc
+         7iyQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVfmNI9p7do/aROYgBk+dw+pIUjuDsf8/XeLGn/rPO5j3vHPxb7DF4HXo9jGBdLpCYmzDnJSTqD4A==@vger.kernel.org, AJvYcCVjGw6gYgIff75Linyptd/9z3L1ndTP9Y1hhJ3CrVlvXZCM5TRXAbNMaZuUyjGk9PQo/zg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwlwQazk3o/6Spt/19CD6X09aLCVJmZMcZW4Po+WUDJYngMMquW
+	OO0Jfc5HQMOd23+b6U6CfOhS6T0uFVyatBRe2hg+9m5LUvEx/wo3I3MfoQ==
+X-Gm-Gg: ASbGncuc32J8j443LfHYzGVPetnII2WFzY0mup4IG4O0tvv9DUPZxqKZmhtwvC3plvB
+	JjYMqzcsVuTiVCJNPtmHl/qCqO7Y0ONbX1HSbL05A4ApbeJK5pItDl6BhvkbaCQqd5jyGB/7ADr
+	WIx2ZTWu3TGYlLsBwnA/nDipyGnYbbQ9uzwFK/1g5urpshMcC4I/AZjtBxsRGRTsnIKMqTY+vUS
+	l0400V1AR6WdEaIbNLI5Ced1tgFdpIxtnFtXKtswtZQ1afasEk6ECx+SxzrUGNFj73dudBzGzNf
+	Ds54Uq3Ka0HqQY5pbaftS9DZYLTQQQ==
+X-Google-Smtp-Source: AGHT+IFPLalNGQnzldQjCiymOy+iFHHOxICFsrQ++sEbtGTKaNPAm8cj7myFuylVIMkkTYXlVOuThQ==
+X-Received: by 2002:a05:6000:481e:b0:382:49f9:74bb with SMTP id ffacd0b85a97d-38a2220120dmr2130765f8f.35.1734686705952;
+        Fri, 20 Dec 2024 01:25:05 -0800 (PST)
+Received: from krava (2001-1ae9-1c2-4c00-726e-c10f-8833-ff22.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:726e:c10f:8833:ff22])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-436612899f0sm40395355e9.38.2024.12.20.01.25.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 Dec 2024 01:25:05 -0800 (PST)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Fri, 20 Dec 2024 10:25:03 +0100
+To: Ihor Solodrai <ihor.solodrai@pm.me>
+Cc: Jiri Olsa <olsajiri@gmail.com>, dwarves@vger.kernel.org,
+	acme@kernel.org, alan.maguire@oracle.com, eddyz87@gmail.com,
+	andrii@kernel.org, mykolal@fb.com, bpf@vger.kernel.org
+Subject: Re: [PATCH dwarves v2 10/10] dwarf_loader: multithreading with a
+ job/worker model
+Message-ID: <Z2U370eu9uPbSk5F@krava>
+References: <20241213223641.564002-1-ihor.solodrai@pm.me>
+ <20241213223641.564002-11-ihor.solodrai@pm.me>
+ <Z2Q0wU_AOOF0c_NF@krava>
+ <Gk0nTkIuEA2FQD6WzNeIq1Hsoj5V2zwmar99_nB5a_Yc96sJLMi3W57sBAr84aUJjUepJkLgVqkOAeXVPvx7B7P0WIgl6qJib2Kw-iGRwaM=@pm.me>
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Gk0nTkIuEA2FQD6WzNeIq1Hsoj5V2zwmar99_nB5a_Yc96sJLMi3W57sBAr84aUJjUepJkLgVqkOAeXVPvx7B7P0WIgl6qJib2Kw-iGRwaM=@pm.me>
 
-On Thursday, December 19th, 2024 at 6:59 AM, Jiri Olsa <olsajiri@gmail.com>=
- wrote:
+On Thu, Dec 19, 2024 at 07:31:35PM +0000, Ihor Solodrai wrote:
 
->=20
->=20
-> On Fri, Dec 13, 2024 at 10:37:34PM +0000, Ihor Solodrai wrote:
->=20
-> SNIP
->=20
-> > +static void *dwarf_loader__worker_thread(void *arg)
-> > +{
-> > + struct cu_processing_job *job;
-> > + struct dwarf_cus *dcus =3D arg;
-> > + bool stop =3D false;
-> > + struct cu cu;
-> > +
-> > + while (!stop) {
-> > + job =3D cus_queue__dequeue_job();
-> > +
-> > + switch (job->type) {
-> > +
-> > + case JOB_DECODE:
-> > + cu =3D dwarf_loader__decode_next_cu(dcus);
-> > +
-> > + if (cu =3D=3D NULL) {
-> > + free(job);
-> > + stop =3D true;
-> > + break;
-> > + }
-> > +
-> > + / Create and enqueue a new JOB_STEAL for this decoded CU */
-> > + struct cu_processing_job *steal_job =3D calloc(1, sizeof(*steal_job))=
-;
->=20
->=20
-> missing steal_job !=3D NULL check
+SNIP
 
-In the next version, job objects are allocated only by the main thread
-and are reused when enqueued [1].
+> > 
+> > 
+> > why '* 4' ?
+> 
+> This is an arbitrary limit, described in comments.
+> 
+> If we allow the workers to pick up next cu for decoding as soon as
+> it's ready, then the memory usage may greatly increase, if the stealer
+> can't keep up with incoming work.
+> 
+> If we want to avoid this there needs to be a limit on how many
+> decoded, but not yet stolen, CUs we allow to hold in memory. When
+> this limit is reached the workers will wait for more CUs to get
+> stolen.
+> 
+> N x 4 is a number I picked after trying various values and looking at
+> the resulting memory usage.
 
->=20
-> SNIP
->=20
-> > -static int dwarf_cus__threaded_process_cus(struct dwarf_cus *dcus)
-> > +static int dwarf_cus__process_cus(struct dwarf_cus *dcus)
-> > {
-> > - pthread_t threads[dcus->conf->nr_jobs];
-> > - struct dwarf_thread dthr[dcus->conf->nr_jobs];
-> > - void *thread_data[dcus->conf->nr_jobs];
-> > - int res;
-> > - int i;
-> > + int nr_workers =3D dcus->conf->nr_jobs > 0 ? dcus->conf->nr_jobs : 1;
-> > + pthread_t workers[nr_workers];
-> > + struct cu_processing_job *job;
-> >=20
-> > - if (dcus->conf->threads_prepare) {
-> > - res =3D dcus->conf->threads_prepare(dcus->conf, dcus->conf->nr_jobs, =
-thread_data);
-> > - if (res !=3D 0)
-> > - return res;
-> > - } else {
-> > - memset(thread_data, 0, sizeof(void *) * dcus->conf->nr_jobs);
-> > + cus_queue__init(nr_workers * 4);
->=20
->=20
-> why '* 4' ?
+I think we can pick some number and add reasoning to the comment
 
-This is an arbitrary limit, described in comments.
+> 
+> We could make it configurable, but this value doesn't look to me as a
+> reasonable user-facing option. Maybe we could add "I don't care about
+> memory usage" flag to pahole? wdyt?
 
-If we allow the workers to pick up next cu for decoding as soon as
-it's ready, then the memory usage may greatly increase, if the stealer
-can't keep up with incoming work.
+--I-don-t-care-about-memory-usage sounds great :-) but I think constant with
+some comment will be enough for now and we'll see if we need it in future
 
-If we want to avoid this there needs to be a limit on how many
-decoded, but not yet stolen, CUs we allow to hold in memory. When
-this limit is reached the workers will wait for more CUs to get
-stolen.
 
-N x 4 is a number I picked after trying various values and looking at
-the resulting memory usage.
+> 
+> > 
+> > > +
+> > > + /* fill up the queue with nr_workers JOB_DECODE jobs */
+> > > + for (int i = 0; i < nr_workers; i++) {
+> > > + job = calloc(1, sizeof(*job));
+> > 
+> > 
+> > missing job != NULL check
+> > 
+> > > + job->type = JOB_DECODE;
+> > > + /* no need for locks, workers were not started yet */
+> > > + list_add(&job->node, &cus_processing_queue.jobs);
+> > > }
+> > > 
+> > > - for (i = 0; i < dcus->conf->nr_jobs; ++i) {
+> > > - dthr[i].dcus = dcus;
+> > > - dthr[i].data = thread_data[i];
+> > > + if (dcus->error)
+> > > + return dcus->error;
+> > > 
+> > > - dcus->error = pthread_create(&threads[i], NULL,
+> > > - dwarf_cus__process_cu_thread,
+> > > - &dthr[i]);
+> > > + for (int i = 0; i < nr_workers; ++i) {
+> > > + dcus->error = pthread_create(&workers[i], NULL,
+> > > + dwarf_loader__worker_thread,
+> > > + dcus);
+> > > if (dcus->error)
+> > > goto out_join;
+> > > }
+> > > @@ -3596,54 +3766,19 @@ static int dwarf_cus__threaded_process_cus(struct dwarf_cus *dcus)
+> > > dcus->error = 0;
+> > > 
+> > > out_join:
+> > > - while (--i >= 0) {
+> > > + for (int i = 0; i < nr_workers; ++i) {
+> > 
+> > 
+> > I think you should keep the original while loop to cleanup/wait only for
+> > threads that we actually created
+> 
+> Do you mean in case of an error from pthread_create? Ok.
 
-We could make it configurable, but this value doesn't look to me as a
-reasonable user-facing option. Maybe we could add "I don't care about
-memory usage" flag to pahole? wdyt?
+yes, thanks
 
->=20
-> > +
-> > + /* fill up the queue with nr_workers JOB_DECODE jobs */
-> > + for (int i =3D 0; i < nr_workers; i++) {
-> > + job =3D calloc(1, sizeof(*job));
->=20
->=20
-> missing job !=3D NULL check
->=20
-> > + job->type =3D JOB_DECODE;
-> > + /* no need for locks, workers were not started yet */
-> > + list_add(&job->node, &cus_processing_queue.jobs);
-> > }
-> >=20
-> > - for (i =3D 0; i < dcus->conf->nr_jobs; ++i) {
-> > - dthr[i].dcus =3D dcus;
-> > - dthr[i].data =3D thread_data[i];
-> > + if (dcus->error)
-> > + return dcus->error;
-> >=20
-> > - dcus->error =3D pthread_create(&threads[i], NULL,
-> > - dwarf_cus__process_cu_thread,
-> > - &dthr[i]);
-> > + for (int i =3D 0; i < nr_workers; ++i) {
-> > + dcus->error =3D pthread_create(&workers[i], NULL,
-> > + dwarf_loader__worker_thread,
-> > + dcus);
-> > if (dcus->error)
-> > goto out_join;
-> > }
-> > @@ -3596,54 +3766,19 @@ static int dwarf_cus__threaded_process_cus(stru=
-ct dwarf_cus *dcus)
-> > dcus->error =3D 0;
-> >=20
-> > out_join:
-> > - while (--i >=3D 0) {
-> > + for (int i =3D 0; i < nr_workers; ++i) {
->=20
->=20
-> I think you should keep the original while loop to cleanup/wait only for
-> threads that we actually created
-
-Do you mean in case of an error from pthread_create? Ok.
-
->=20
-> > void *res;
-> > - int err =3D pthread_join(threads[i], &res);
-> > + int err =3D pthread_join(workers[i], &res);
-> >=20
-> > if (err =3D=3D 0 && res !=3D NULL)
-> > dcus->error =3D (long)res;
-> > }
-> >=20
-> > - if (dcus->conf->threads_collect) {
-> > - res =3D dcus->conf->threads_collect(dcus->conf, dcus->conf->nr_jobs,
-> > - thread_data, dcus->error);
-> > - if (dcus->error =3D=3D 0)
-> > - dcus->error =3D res;
-> > - }
-> > + cus_queue__destroy();
-> >=20
-> > return dcus->error;
-> > }
->=20
->=20
-> SNIP
-
-[1] https://github.com/acmel/dwarves/commit/5278adbe5cb796c7baafb110d8c5cda=
-107ec9d68#diff-77fe7eedce76594a6c71363b22832723fc086a8e72debd0370763e419370=
-4b1eR3706-R3708
-
+jirka
