@@ -1,122 +1,131 @@
-Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail-4322.protonmail.ch (mail-4322.protonmail.ch [185.70.43.22])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A457720D4E4;
-	Fri, 20 Dec 2024 12:31:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BDDE55897;
+	Sat, 21 Dec 2024 01:23:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.43.22
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734697869; cv=none; b=JTrwUz0oj03MFKTEAh9vWcdPfPlVK9NQEG1cm4Uo7HLaytQvV5pe1PWDYlDKsPwDckxrexEewdv7kretZFbIIemZbPOT1lilNN5LQABLI1YplV9k5VONK+ipCB32S8LdK+howgBv395mrAnGnMOFO/dEjjypIZwGUmRwuQSuDZk=
+	t=1734744182; cv=none; b=hdP0maNGHFwl3t1ZGG1bmx7WoKdy7K8lDF7rWwROyNjn5Xz2et4lxbwCTZQKhrrls+8mvcElYQzUxe1b5km+V3gJTqYohHCCczk1TbOJD01fVjyPNZJ6/0zRnL05ZFogCmNpybgvtKKsPQUn7sgfqyJJ2HUQ4AsjcvqxLSo2jb8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734697869; c=relaxed/simple;
-	bh=+eF1HArLPehq0X3xogX3R/QwmI0tpYmU783rhb9q7zw=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JjNukpuTEpsUgVYh9zh0hkhYVyshImW+I/5vYorxML7uPW+f+u7PtuZ20eUe6SRVx46vRaivfNWbQH49mkqe3N3F2ZDlwqpNpeCsB/eIKdUGK/Z3gZVWAcx85UhZ76cdrINu3npd7ezTSRDxGkS85VFd52o9r1OhcZ6A833f+BU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hWMuLYfH; arc=none smtp.client-ip=209.85.218.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1734744182; c=relaxed/simple;
+	bh=strX28Kl+M1pCYCL2pMizSNqFf15nUfk2dB1DEeZarw=;
+	h=Date:To:From:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=Bl7IcFbStW6S8lSg2ffTUzy2ai53P+eqIPbKaig562jcf1RZbxqwI0h5/1JS3wju5rP7J0EK3JGESjiaD02howjrxV0HmzTK/j4SGj3EBHDnnJ1R+G16GKmQixf/XBJ7S5bTJz0OWe4OAAWQXXNYFC6Dz8nOZVxJzdM3O0gJnmw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me; spf=pass smtp.mailfrom=pm.me; dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b=fDodERA8; arc=none smtp.client-ip=185.70.43.22
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pm.me
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hWMuLYfH"
-Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-aa684b6d9c7so338290366b.2;
-        Fri, 20 Dec 2024 04:31:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1734697864; x=1735302664; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=P7lOBblMD1Z+3nNWjzfDIGzNN4URNdmpackdxaxd5mI=;
-        b=hWMuLYfHb2PobHOQtMbEJ35mGfuogPzkuTnjCEDXPRTAzwGyvDaGrrMz60o/m2Rf8v
-         zObwymP441dwBuWK5HokaX0B4g+I0UmRo1dS2aanxTA2aEpWRYeQ8Ye0rM4w0X/rJUmw
-         ZcPXSAZOUkIzyjx6cc+hDHXdyK842Qq3/dLKVJLUFK9qPnWShhMOvEKoOZoTj4FXBJh0
-         8NMOpqame4ngVvjeuQ+TX9MPE5s2tDKPpbBStr1TtKIRV4J/8ZwkJV6ugitSDW+lQU5+
-         pzJ6k0ttMi8OkbaCpcCy03RcicCjQ6X+zjQkkSLApVH2rsRFA2LnOtxs+M9wCpUHcQmr
-         VzvA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734697864; x=1735302664;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=P7lOBblMD1Z+3nNWjzfDIGzNN4URNdmpackdxaxd5mI=;
-        b=XstNo6XS1JB2QqY6A5Wp8rAUIeeAwfEN05ByZilv0+DawqyQh1Aopaaz8oxAZqI8Df
-         xClYg/GHJJixU90u5YuEk0FWE9iHCSsbmF8FPCy4U6neVp63Y55pKQcllqFPGBkHWu6B
-         vlwvQsXSlnMCUKYqT8ZZ0BKFve9yf89nzFRI6hvvpyyYXRDBSZpRPGxeC+Snp17hrObw
-         GnN2e4dPi9qdYpQjkscf5+wwhdYUXg4cXFcfSZSOBIiUp6lNoOIT52ybpVQ+k7OtRAs5
-         SLjTVpil0qA2Aw1aQq3o/lvYJifHFxnG2QnljDba4Uwy+RlfOITUFiKHVKe2LWesmauH
-         JO2Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUUNcQsOntE5ilypVbLsx168/8RmbI8/QaJoVE2deB9n7wPCxsZ7SFV1qgfVE2i3NJYObU=@vger.kernel.org, AJvYcCXhyTkAa6MgzfWpJlxXgyw31mOczfLs7vZIkanGvY3GmUrc5N8FmJ9PxuZmAy8yWDYMMvVCNczDew==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzrwDlKASyliKph0DtqpO9MeumuiA82Zny0sZhQDxuLLI3ooRUA
-	s491z6o/xY9qsCGgZnrn9W8xiM7pjZGoyZvztL6c8BqfP59PwO3i
-X-Gm-Gg: ASbGnctHrozOpwRTxSRI+ixlDDQQ2ip1VKkXwyveNhrfBRDIb7Sk9nf8Q+97ZTulUEL
-	CHsYASlD6UMxWi+DvvLqNn4whx6+h9a91dp/qPz7srQGDZ/aaoT/SIJs6co5WwVYkQCj5oDkHjM
-	+x4I3PYtHCKMizyvetmKrTMn0B2qsjAKxVO57oFTnGtP+xKGDK17ahOWQDjm1OLceH29n0rLSil
-	K1vmvBicxr522/seDdsIdA1iogq/bax3V2Mld8I8jWRZm++07e1XlxJe0LAxbTrheMkJAhkf+Ze
-	Y5Z12homcBkbcLCtaDQpJhmT+ABskw==
-X-Google-Smtp-Source: AGHT+IHnSKuKHvji39kaVGbO9ZOWQVHQebT3WYfJBroORoXmPCLc2Ogd3bzYDPr3T52XxBiEQmzsKg==
-X-Received: by 2002:a17:907:7da5:b0:aa6:8781:9909 with SMTP id a640c23a62f3a-aac2d32837amr212270666b.29.1734697863656;
-        Fri, 20 Dec 2024 04:31:03 -0800 (PST)
-Received: from krava (2001-1ae9-1c2-4c00-726e-c10f-8833-ff22.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:726e:c10f:8833:ff22])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aac0e89490dsm172877266b.45.2024.12.20.04.31.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Dec 2024 04:31:03 -0800 (PST)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Fri, 20 Dec 2024 13:31:01 +0100
-To: Eduard Zingerman <eddyz87@gmail.com>
-Cc: Ihor Solodrai <ihor.solodrai@pm.me>, dwarves@vger.kernel.org,
-	acme@kernel.org, alan.maguire@oracle.com, andrii@kernel.org,
-	mykolal@fb.com, bpf@vger.kernel.org
-Subject: Re: [PATCH dwarves v2 00/10] pahole: shared ELF and faster
- reproducible BTF encoding
-Message-ID: <Z2VjhVlagkpjDzvq@krava>
-References: <20241213223641.564002-1-ihor.solodrai@pm.me>
- <1b1b094ce1e0592c6185c292b2a7692c35dc7e56.camel@gmail.com>
+	dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b="fDodERA8"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me;
+	s=protonmail3; t=1734744173; x=1735003373;
+	bh=gp9Fp+CqfbR81XrWsfdbGdX3vE8NVYUDzVMpsPxJndc=;
+	h=Date:To:From:Cc:Subject:Message-ID:Feedback-ID:From:To:Cc:Date:
+	 Subject:Reply-To:Feedback-ID:Message-ID:BIMI-Selector:
+	 List-Unsubscribe:List-Unsubscribe-Post;
+	b=fDodERA8I2NZ7S08AV1yHfILmb9geGjsNZWuw24mOwaYHybM0pv9wKvi9og+eay4+
+	 siTK23J/qSz7VuHmXvOGcRomGdQOkqdhqiv3DRh2gPElTTjvU2A/Vx041pNMLuJEGd
+	 B+g73IgpgXA1oZJI+/mMhmUHVOA9NzPNRTPxTeH1IgXJGqqt8thrWMbG+QTv9MMQ1K
+	 lkD/HkSX2ht+SISx+okF4yt5pW+jbtJAu/+Slt0BA8PknzIHyzQiOVmxu+BDS9rqe/
+	 LMO48uzGOMyG3/WH6hJTPFkl/wudVHm+7GHbmXpYKE/5p267N3QQa0mYAAp4e6iNF0
+	 qjzh4x6QiIIpQ==
+Date: Sat, 21 Dec 2024 01:22:49 +0000
+To: dwarves@vger.kernel.org
+From: Ihor Solodrai <ihor.solodrai@pm.me>
+Cc: acme@kernel.org, alan.maguire@oracle.com, eddyz87@gmail.com, andrii@kernel.org, mykolal@fb.com, bpf@vger.kernel.org
+Subject: [PATCH dwarves v3 0/8] pahole: faster reproducible BTF encoding
+Message-ID: <20241221012245.243845-1-ihor.solodrai@pm.me>
+Feedback-ID: 27520582:user:proton
+X-Pm-Message-ID: 5ba7a9ff6e9eff089bc35aecc479c5547fb58029
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1b1b094ce1e0592c6185c292b2a7692c35dc7e56.camel@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Dec 16, 2024 at 11:00:08PM -0800, Eduard Zingerman wrote:
-> On Fri, 2024-12-13 at 22:36 +0000, Ihor Solodrai wrote:
-> 
-> for allyesconfig, with your patch-set I get the following stats:
-> 
-> jobs 1, mem 7080048 Kb, time 97.24 sec
-> jobs 3, mem 7091360 Kb, time 60.10 sec
-> jobs 6, mem 7153848 Kb, time 49.73 sec
-> jobs 12, mem 7264036 Kb, time 54.67 sec
-> 
-> w/o your patch-set, using current pahole 'next', I get out memory both
-> with and without reproducible_build flag.
-> 
-> The vmlinux size is 7.6G.
-> 
-> 
+This is a v3 of the patchset aiming to speed up parallel reproducible
+BTF encoding.
 
-I did quick test with vmlinux size 11.8G and it looks great
+In comparison to v2:
+  - removed patch v2 03 adding pre_load_module hook
+  - removed patch v2 05 making use of the hook
+    - since we will have a single btf_encoder, there is no need to
+      collect ELF tables before encoders are created
+  - removed patch v2 07 adding btf_encoder_context
+  - patch v3 04 is a rewritten patch v2 06
+    - each btf_encoder now maintains it's own list of function
+      tables per ELF
+  - patch v3 07 is an updated patch v2 10
+    - dwarf_loader multithreading is adjusted attempting to minimize
+      blocking on locks
+  - new patch v3 08 increases the cu->obstack chunk size
+  - new patch v3 09 cleans up global list of encoders in btf_encoder.c
 
-current pahole (v1.28 tag):
+Testing:
+  - ./tests/tests pass on vmlinux built from bpf-next
+  - bpftool dump of reproducible BTF is identical to v1.28
 
-	 Performance counter stats for '/home/jolsa/kernel/pahole/build/pahole -J -j17 --btf_features=encode_force,
-	 var,float,enum64,decl_tag,type_tag,optimized_func,consistent_func,decl_tag_kfuncs --lang_exclude=rust vmlinux':
+Sample perf runs on 6.9 kernel with a production-like config, on a
+machine with nproc=3D176:
 
-	     178.081877484 seconds time elapsed
+This patchset:
 
-	     479.529725000 seconds user
-	      26.583607000 seconds sys
+    Performance counter stats for '/home/isolodrai/dwarves/build/pahole -J =
+-j --btf_features=3Dencode_force,var,float,enum64,decl_tag,type_tag,optimiz=
+ed_func,consistent_func,decl_tag_kfuncs --lang_exclude=3Drust --btf_encode_=
+detached=3D/dev/null .tmp_vmlinux.btf' (13 runs):
+
+         17,911.11 msec cpu-clock                        #    4.412 CPUs ut=
+ilized               ( +-  0.46% )
+
+            4.0600 +- 0.0116 seconds time elapsed  ( +-  0.29% )
 
 
-new pahole:
+pahole/next (v1.28):
 
-	 Performance counter stats for '/home/jolsa/kernel/pahole/build/pahole -J -j17 --btf_features=encode_force,
-	 var,float,enum64,decl_tag,type_tag,optimized_func,consistent_func,decl_tag_kfuncs --lang_exclude=rust vmlinux':
+    Performance counter stats for '/home/isolodrai/dwarves/build/pahole -J =
+-j --btf_features=3Dencode_force,var,float,enum64,decl_tag,type_tag,optimiz=
+ed_func,consistent_func,decl_tag_kfuncs --lang_exclude=3Drust --btf_encode_=
+detached=3D/dev/null .tmp_vmlinux.btf' (13 runs):
 
-	     111.976182062 seconds time elapsed
+         82,289.12 msec cpu-clock                        #   17.427 CPUs ut=
+ilized               ( +-  0.54% )
 
-	     242.342891000 seconds user
-	      24.254289000 seconds sys
+            4.7219 +- 0.0270 seconds time elapsed  ( +-  0.57% )
 
-thanks,
-jirka
+
+v2: https://lore.kernel.org/dwarves/20241213223641.564002-1-ihor.solodrai@p=
+m.me/
+v1 RFC: https://lore.kernel.org/dwarves/20241128012341.4081072-1-ihor.solod=
+rai@pm.me/
+
+Alan Maguire (2):
+  btf_encoder: simplify function encoding
+  btf_encoder: separate elf function, saved function representations
+
+Ihor Solodrai (6):
+  btf_encoder: introduce elf_functions struct type
+  btf_encoder: introduce elf_functions_list
+  btf_encoder: remove skip_encoding_inconsistent_proto
+  dwarf_loader: introduce cu->id
+  dwarf_loader: multithreading with a job/worker model
+  btf_encoder: clean up global encoders list
+
+ btf_encoder.c               | 643 +++++++++++++++++++-----------------
+ btf_encoder.h               |   7 +-
+ btf_loader.c                |   2 +-
+ ctf_loader.c                |   2 +-
+ dwarf_loader.c              | 335 +++++++++++++------
+ dwarves.c                   |  44 ---
+ dwarves.h                   |  21 +-
+ pahole.c                    | 230 ++-----------
+ pdwtags.c                   |   3 +-
+ pfunct.c                    |   3 +-
+ tests/reproducible_build.sh |   5 +-
+ 11 files changed, 605 insertions(+), 690 deletions(-)
+
+--=20
+2.47.1
+
+
