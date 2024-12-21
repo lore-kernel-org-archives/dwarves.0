@@ -1,43 +1,43 @@
-Received: from mail-4322.protonmail.ch (mail-4322.protonmail.ch [185.70.43.22])
+Received: from mail-10628.protonmail.ch (mail-10628.protonmail.ch [79.135.106.28])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A80651096F;
-	Sat, 21 Dec 2024 01:23:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.43.22
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44BCB1096F
+	for <dwarves@vger.kernel.org>; Sat, 21 Dec 2024 01:23:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.135.106.28
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734744210; cv=none; b=OR6osP9BQEyY5gowv870Wnq8dEK6IzVtLuckU1DuOw3IoiQEJg/9EX3TdFI3wvmqeXxPry4FjFPCVqQK0W01fT/LrnvAXPQAjEMyFtL4Wz/xh5g4suO6YgFDLD4571Oqdsyazo6QU5wQlQXPtnX1+BBP6tnGL7H4lzhK7ErXCgM=
+	t=1734744218; cv=none; b=L6TUQYDMmFqw5cfR1GWNtOatVIK06m7aiVi11PtcfdTc8fivX9CtNBiSlodls7pvjKZ1vla1MAdHDLhh8sDgqy9owpuMf1we9MIj3WAAP4uWL8Mx6LlEMHfqmX4iuZkS8p6aHseJiUCeZklv+5R/Ud9wfFndSfky81qqdelXNqQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734744210; c=relaxed/simple;
-	bh=tvjV7TJKCR7TqQVVHq/jb2EAlkRr16DgKRJp+LHctxA=;
+	s=arc-20240116; t=1734744218; c=relaxed/simple;
+	bh=9VYo4eAq8RtKh26vAo1Pibss4Qs1/eQYick6zfQAWUw=;
 	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=VfYZqjb2K6DveRXG1Qx2Xoz2byacddqTCsoiUQJ3tXdDD654OHFuOJsRdpXGNUtqBe4kKF7yYz2TjGO/7k26Xo1739mDQCkaGdEiI8cF7IgFysQsd8l2fQjzcTN9JWPjA/C62TXFA7eLb77JRj9mxgPeuY2etQnT3DWtj1ilzuI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me; spf=pass smtp.mailfrom=pm.me; dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b=mRgw+txn; arc=none smtp.client-ip=185.70.43.22
+	 MIME-Version:Content-Type; b=KSO/2TTCDeZ+pljbjobnCl+qMkr9NGjyoQnSIBDqClZ+Bb6TTabNSpDfGzBrMhkj/KEcOqNqXDJ3kCB5GTc3AIVdvsaZEWrDZW3dUwStGrQIBhk7FgoHtw5psRIkepqkbffPdrJpvWk34dpOdJkSLd/sowMpNsc8ozTjHNDR1Xc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me; spf=pass smtp.mailfrom=pm.me; dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b=dmTci8vA; arc=none smtp.client-ip=79.135.106.28
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pm.me
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b="mRgw+txn"
+	dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b="dmTci8vA"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me;
-	s=protonmail3; t=1734744206; x=1735003406;
-	bh=5/xuxSQ+gCJi0lxyRPP3+7mgc1ZFRb6x6NXjVLZJPJ0=;
+	s=protonmail3; t=1734744215; x=1735003415;
+	bh=3HTyN4hBVyv4EZy8tnxCPMjsPI0vmWa0uqugOYJgCRM=;
 	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
 	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
 	 Message-ID:BIMI-Selector:List-Unsubscribe:List-Unsubscribe-Post;
-	b=mRgw+txn2TKTKokcs5gtL4W8s/VybBOr6TepBaJwO2QLYBHPPX+RNA906EDOub5KG
-	 30moMO+HNeQF9k0LCUFCmoZ385v+dlOnippQIHUUPWbrudpcUo+WyX8j9AxwJ2dA+C
-	 701XR2dN8ePseJ7DztnwzxgEK3xVWgXG7MyiEHUuAgiWRhzh9ECy/x1p4XNA5G2Fnf
-	 QBXAwXbsgo7Zd6tD7SRHN82H0ilQPVd0TSqT49LZlIpTNKLL7PnZYuCSTpnSmWy9Gj
-	 jQGrTakvexRbA5zfBOVxM2sSxbm4R7Y7UAGs7iOz29NajzeSVxh1GizvlftXkATHJt
-	 OBQ8S7QHWmO1Q==
-Date: Sat, 21 Dec 2024 01:23:23 +0000
+	b=dmTci8vAO7YVk4oEjOA4+6RpurDxqq80l9pge9jmnm6xA+ZrcgmEeNHYKCE+bNKe6
+	 0aZq1U5LwUsn9HVICtQndeB5kDIVIozPSWGHy+CnywdQsQcwnEStnKzmity6vx7lUR
+	 YZSAzbT1IQE2f7JGJN+Y7IK0aLI4KOxIs6epnm9hCa5ymN9ijkbnLlDPLBtUK+cMAx
+	 nCnWClxJlVVwEOMz8r9L5iu92Fdy7xuYMv/dGcQ06A5h/ExPP1Z29Z2vp4OfKgZmXC
+	 vBXTsMnLTsJNHrwtsIL/RCUkMnEp3F6rRr30gU/3nxrNsNz/Nxp6EcqJ+pG/Gjl+hu
+	 3zn8keq6j3gUA==
+Date: Sat, 21 Dec 2024 01:23:30 +0000
 To: dwarves@vger.kernel.org
 From: Ihor Solodrai <ihor.solodrai@pm.me>
 Cc: acme@kernel.org, alan.maguire@oracle.com, eddyz87@gmail.com, andrii@kernel.org, mykolal@fb.com, bpf@vger.kernel.org
-Subject: [PATCH dwarves v3 5/8] btf_encoder: remove skip_encoding_inconsistent_proto
-Message-ID: <20241221012245.243845-6-ihor.solodrai@pm.me>
+Subject: [PATCH dwarves v3 6/8] dwarf_loader: introduce cu->id
+Message-ID: <20241221012245.243845-7-ihor.solodrai@pm.me>
 In-Reply-To: <20241221012245.243845-1-ihor.solodrai@pm.me>
 References: <20241221012245.243845-1-ihor.solodrai@pm.me>
 Feedback-ID: 27520582:user:proton
-X-Pm-Message-ID: 838246001f1f428a320655ec19ce978de073ed7f
+X-Pm-Message-ID: c41e20e40a76bb309c60cd1a16b18dfd3a8c84e0
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
@@ -47,132 +47,53 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-This flag is needed only for btf_encoder__add_saved_funcs(), so there
-is no reason to keep it in each btf_encoder.
+Add an id member to the struct cu.
 
-Link: https://lore.kernel.org/dwarves/e1df45360963d265ea5e0b3634f0a3dae0c9c=
-343.camel@gmail.com/
+An id is an index of a CU, in order they are created in dwarf_loader.c
+This allows for an easy identification of a CU, particularly when they
+need to be processed in order.
 
 Signed-off-by: Ihor Solodrai <ihor.solodrai@pm.me>
 ---
- btf_encoder.c | 10 ++++------
- btf_encoder.h |  4 ++--
- pahole.c      |  7 +++++--
- 3 files changed, 11 insertions(+), 10 deletions(-)
+ dwarf_loader.c | 4 ++++
+ dwarves.h      | 1 +
+ 2 files changed, 5 insertions(+)
 
-diff --git a/btf_encoder.c b/btf_encoder.c
-index 566ecfe..90f1b9a 100644
---- a/btf_encoder.c
-+++ b/btf_encoder.c
-@@ -128,7 +128,6 @@ struct btf_encoder {
- =09=09=09  force,
- =09=09=09  gen_floats,
- =09=09=09  skip_encoding_decl_tag,
--=09=09=09  skip_encoding_inconsistent_proto,
- =09=09=09  tag_kfuncs,
- =09=09=09  gen_distilled_base;
- =09uint32_t=09  array_index_id;
-@@ -1327,7 +1326,7 @@ static void btf_encoder__delete_saved_funcs(struct bt=
-f_encoder *encoder)
- =09}
- }
+diff --git a/dwarf_loader.c b/dwarf_loader.c
+index 598fde4..4f07e17 100644
+--- a/dwarf_loader.c
++++ b/dwarf_loader.c
+@@ -3440,6 +3440,7 @@ struct dwarf_cus {
+ =09int=09=09    build_id_len;
+ =09int=09=09    error;
+ =09struct dwarf_cu=09    *type_dcu;
++=09uint32_t=09nr_cus_created;
+ };
 =20
--int btf_encoder__add_saved_funcs(struct btf_encoder *encoder)
-+int btf_encoder__add_saved_funcs(bool skip_encoding_inconsistent_proto)
- {
- =09struct btf_encoder_func_state **saved_fns, *s;
- =09struct btf_encoder *e =3D NULL;
-@@ -1367,7 +1366,7 @@ int btf_encoder__add_saved_funcs(struct btf_encoder *=
-encoder)
- =09=09 * just do not _use_ them.  Only exclude functions with
- =09=09 * unexpected register use or multiple inconsistent prototypes.
- =09=09 */
--=09=09if (!encoder->skip_encoding_inconsistent_proto ||
-+=09=09if (!skip_encoding_inconsistent_proto ||
- =09=09    (!state->unexpected_reg && !state->inconsistent_proto)) {
- =09=09=09if (btf_encoder__add_func(state->encoder, state)) {
- =09=09=09=09free(saved_fns);
-@@ -2129,14 +2128,14 @@ out:
- =09return err;
- }
+ struct dwarf_thread {
+@@ -3472,6 +3473,9 @@ static struct dwarf_cu *dwarf_cus__create_cu(struct d=
+warf_cus *dcus, Dwarf_Die *
+ =09cu->priv =3D dcu;
+ =09cu->dfops =3D &dwarf__ops;
 =20
--int btf_encoder__encode(struct btf_encoder *encoder)
-+int btf_encoder__encode(struct btf_encoder *encoder, struct conf_load *con=
-f)
- {
- =09bool should_tag_kfuncs;
- =09int err;
- =09size_t shndx;
-=20
- =09/* for single-threaded case, saved funcs are added here */
--=09btf_encoder__add_saved_funcs(encoder);
-+=09btf_encoder__add_saved_funcs(conf->skip_encoding_btf_inconsistent_proto=
-);
-=20
- =09for (shndx =3D 1; shndx < encoder->seccnt; shndx++)
- =09=09if (gobuffer__size(&encoder->secinfo[shndx].secinfo))
-@@ -2464,7 +2463,6 @@ struct btf_encoder *btf_encoder__new(struct cu *cu, c=
-onst char *detached_filenam
- =09=09encoder->force=09=09 =3D conf_load->btf_encode_force;
- =09=09encoder->gen_floats=09 =3D conf_load->btf_gen_floats;
- =09=09encoder->skip_encoding_decl_tag=09 =3D conf_load->skip_encoding_btf_=
-decl_tag;
--=09=09encoder->skip_encoding_inconsistent_proto =3D conf_load->skip_encodi=
-ng_btf_inconsistent_proto;
- =09=09encoder->tag_kfuncs=09 =3D conf_load->btf_decl_tag_kfuncs;
- =09=09encoder->gen_distilled_base =3D conf_load->btf_gen_distilled_base;
- =09=09encoder->verbose=09 =3D verbose;
-diff --git a/btf_encoder.h b/btf_encoder.h
-index 9b26162..b95f2f3 100644
---- a/btf_encoder.h
-+++ b/btf_encoder.h
-@@ -26,13 +26,13 @@ enum btf_var_option {
- struct btf_encoder *btf_encoder__new(struct cu *cu, const char *detached_f=
-ilename, struct btf *base_btf, bool verbose, struct conf_load *conf_load);
- void btf_encoder__delete(struct btf_encoder *encoder);
-=20
--int btf_encoder__encode(struct btf_encoder *encoder);
-+int btf_encoder__encode(struct btf_encoder *encoder, struct conf_load *con=
-f);
-=20
- int btf_encoder__encode_cu(struct btf_encoder *encoder, struct cu *cu, str=
-uct conf_load *conf_load);
-=20
- struct btf *btf_encoder__btf(struct btf_encoder *encoder);
-=20
- int btf_encoder__add_encoder(struct btf_encoder *encoder, struct btf_encod=
-er *other);
--int btf_encoder__add_saved_funcs(struct btf_encoder *encoder);
-+int btf_encoder__add_saved_funcs(bool skip_encoding_inconsistent_proto);
-=20
- #endif /* _BTF_ENCODER_H_ */
-diff --git a/pahole.c b/pahole.c
-index a36b732..37d76b1 100644
---- a/pahole.c
-+++ b/pahole.c
-@@ -3185,7 +3185,10 @@ static int pahole_threads_collect(struct conf_load *=
-conf, int nr_threads, void *
- =09if (error)
- =09=09goto out;
-=20
--=09btf_encoder__add_saved_funcs(btf_encoder);
-+=09err =3D btf_encoder__add_saved_funcs(conf_load.skip_encoding_btf_incons=
-istent_proto);
-+=09if (err < 0)
-+=09=09goto out;
++=09cu->id =3D dcus->nr_cus_created;
++=09dcus->nr_cus_created++;
 +
- =09for (i =3D 0; i < nr_threads; i++) {
- =09=09/*
- =09=09 * Merge content of the btf instances of worker threads to the btf
-@@ -3843,7 +3846,7 @@ try_sole_arg_as_class_names:
- =09=09=09exit(1);
- =09=09}
+ =09return dcu;
+ }
 =20
--=09=09err =3D btf_encoder__encode(btf_encoder);
-+=09=09err =3D btf_encoder__encode(btf_encoder, &conf_load);
- =09=09btf_encoder__delete(btf_encoder);
- =09=09if (err) {
- =09=09=09fputs("Failed to encode BTF\n", stderr);
+diff --git a/dwarves.h b/dwarves.h
+index 1cb0d62..2d08883 100644
+--- a/dwarves.h
++++ b/dwarves.h
+@@ -290,6 +290,7 @@ struct cu {
+ =09struct ptr_table functions_table;
+ =09struct ptr_table tags_table;
+ =09struct rb_root=09 functions;
++=09uint32_t=09 id;
+ =09const char=09 *name;
+ =09char=09=09 *filename;
+ =09void =09=09 *priv;
 --=20
 2.47.1
 
