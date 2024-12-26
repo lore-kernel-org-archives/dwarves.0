@@ -1,55 +1,85 @@
-Received: from mail-4316.protonmail.ch (mail-4316.protonmail.ch [185.70.43.16])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D70238DE9
-	for <dwarves@vger.kernel.org>; Sat, 21 Dec 2024 03:08:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.43.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED317155A30;
+	Thu, 26 Dec 2024 21:11:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734750490; cv=none; b=ZgMuIQxGpzFDTyEZqgnr77DIDn3kAf55nZOD6p/X+FlmY0VUgflHyOsR4j0icDz5jy26AFu4KbRapCBomFcmORQVArWlCq2MD2ZpUuRgDVNBbPl9G9y3lrX54+Vs1R0CV/v0qBNLTwaCCxPwjPzkQzCpPw2sX1+cnDMGwrFsNwM=
+	t=1735247518; cv=none; b=LZIHv+OJndpLz9icuAEI7HD+8S3JSQiNgAIgb/p3/K8kK4EYTOLHi+7YYBrqG6Wh0Usw0+9pPcD4P5ipESCyC0XLaKncfoFwLYpVtiQBYY7PMQRIv4g1BArPsHTnJLt1vFQWCNaeRzchp+oeo9UukobTE8BorXMdYHjezTaK624=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734750490; c=relaxed/simple;
-	bh=OSTi9mdvhq9nlkO9fKmqsWHY3hY3WOW5EBEnkRCKFHA=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=qinIT15CYsc2g8YKnRTaOpDIVs146IdkLwJkmdd5udnrPw4wMJYdf6AF/wtbrPNWH6/8o1KsFtHvJti9ftrGqTSeAFfUYI8gVu5jMMIBi0TIhvVuFYAsTOjVGywKq+cRz/3AWmeUVzJtW6ih6Wc1QjU2WglYRLIffaUtCE2ywpk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me; spf=pass smtp.mailfrom=pm.me; dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b=nakrwi/D; arc=none smtp.client-ip=185.70.43.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pm.me
+	s=arc-20240116; t=1735247518; c=relaxed/simple;
+	bh=DHcPEY8VuZ2nscJsB7wWbIECPVRERUtAk+u+xzNjpIE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HXaW0E86WU99Py/U7XtdPNZ/ygu4AuvKa8WZQweALT656KSeWyfdH6RG5GC6oFTh7PzdsB5jApMKp691SZH7jLwHgaNSrsQDV5UGTLASGn3V2PLtF/fk2Pko/BbR0uTOUMVxdWlsGXnISeNpZ9hC1lgMqGxV+XrHLAxSiVBnufQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rUpgILfY; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b="nakrwi/D"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me;
-	s=protonmail3; t=1734750486; x=1735009686;
-	bh=OSTi9mdvhq9nlkO9fKmqsWHY3hY3WOW5EBEnkRCKFHA=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-	 Message-ID:BIMI-Selector:List-Unsubscribe:List-Unsubscribe-Post;
-	b=nakrwi/D0UppAFRckABidaGgEvD2BjicwzmFkpseTGr3pQH74bBHqRfneGYoloczt
-	 ByJeNDJhZ/JFuS7PNn9vbvwnyeLPzsizOSbNY6wFmi04b/v6IOXJjbmjttbG86vZVq
-	 /uoqJosCFCqhu4jsNouKCQBSNWKUaLvKdYjB1qBrYIRdL06rRrK09i7qU8wzqdrz5x
-	 8AYfAUS02EQOBsRX0s6AHQzHTv/F70Hi3NbFS/ghHjhLlIAZHcpxsS2gJhpU//qZ5M
-	 bCoeqRO81ZWKYTsX4bXyuFq/Y3+DPC01OnPLpk8RxQYbX6icVH/IGwKUXzBGneMKkv
-	 we2v1Rn+FzwCw==
-Date: Sat, 21 Dec 2024 03:08:03 +0000
-To: dwarves@vger.kernel.org
-From: Ihor Solodrai <ihor.solodrai@pm.me>
-Cc: acme@kernel.org, alan.maguire@oracle.com, eddyz87@gmail.com, andrii@kernel.org, mykolal@fb.com, bpf@vger.kernel.org
-Subject: Re: [PATCH dwarves] dwarves: set cu->obstack chunk size to 128Kb
-Message-ID: <m49nn97qH9FUVriXgfTK3r-km8ARVr20pLhsjXgORDd_SfXUqSxcbGgSxKQqXrJlLgF3ZNN1Cs3I7g21bugUwZgEuk6a0yJa1KB0BZyVp-w=@pm.me>
-In-Reply-To: <20241221030445.33907-1-ihor.solodrai@pm.me>
-References: <20241221030445.33907-1-ihor.solodrai@pm.me>
-Feedback-ID: 27520582:user:proton
-X-Pm-Message-ID: c2c1448dea1cb69f881c244d41ce775b59a1e390
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rUpgILfY"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3A4EC4CED1;
+	Thu, 26 Dec 2024 21:11:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1735247517;
+	bh=DHcPEY8VuZ2nscJsB7wWbIECPVRERUtAk+u+xzNjpIE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=rUpgILfYbfwcCyRMQNsdfr2PTZME79kwD1HxgrNsPU2X06yXxdhntFHlc6pAua3fm
+	 D/B3sbu5cSkUL0f3d5NCS/FaFS1/ig6kLi+HvaxxPCzLgKf7mQxcCJ9EVOgO0ss63v
+	 h0jVEf7811dsLQddQqMmewp6YN2B5ItXuELLhcSPe+kBM6rL8rgxvYpxnoI1OJLAgO
+	 rq78GyxM2YnPJaIqins6KA2fXvB7+53ooWQwYl/ESYtXkeVrtpvdFQKE4x7RnZjxmi
+	 HHKkglP67C9IXlvwe2RowmCoBhHmuKzRV7V2U/TFn4y0ceDF/sMI9X49d6ghg0ciEZ
+	 H90aDD/NcGegQ==
+Date: Thu, 26 Dec 2024 18:11:54 -0300
+From: Arnaldo Carvalho de Melo <acme@kernel.org>
+To: Alan Maguire <alan.maguire@oracle.com>
+Cc: Eduard Zingerman <eddyz87@gmail.com>, dwarves@vger.kernel.org,
+	arnaldo.melo@gmail.com, bpf@vger.kernel.org, kernel-team@fb.com,
+	ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+	yonghong.song@linux.dev
+Subject: Re: [PATCH dwarves v1 2/2] tests: verify that pfunct prints
+ btf_decl_tags read from BTF
+Message-ID: <Z23Gmu_ot8svVJnx@x1>
+References: <20241211021227.2341735-1-eddyz87@gmail.com>
+ <20241211021227.2341735-2-eddyz87@gmail.com>
+ <e7247151-ad60-402c-a3f8-ce976ea03dc0@oracle.com>
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e7247151-ad60-402c-a3f8-ce976ea03dc0@oracle.com>
 
-This patch was supposed to be a part of [1], but I missed it when
-preparing a patchset. However it is independent of the other changes
-there, so I'm sending it separately.
+On Thu, Dec 12, 2024 at 07:50:57PM +0000, Alan Maguire wrote:
+> On 11/12/2024 02:12, Eduard Zingerman wrote:
+> > When using BTF as a source, pfunct should now be able to print
+> > btf_decl_tags for programs like below:
+> > 
+> >   #define __tag(x) __attribute__((btf_decl_tag(#x)))
+> >   __tag(a) __tag(b) void foo(void) {}
+> > 
+> > This situation arises after recent kernel changes, where tags 'kfunc'
+> > and 'bpf_fastcall' are added to some functions. To avoid dependency on
+> > a recent kernel version test this by compiling a small C program using
+> > clang with --target=bpf, which would instruct clang to generate .BTF
+> > section.
+> > 
+> > Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
+> 
+> nit: the test is great but it would be good to print out a description
+> even in non-verbose mode; when I run it via ./tests I see
+> 
+>   5: Ok
+> 
+> could we just echo the comment below, i.e.
+> 
+> 5 : Check that pfunct can print btf_decl_tags read from BTF: Ok
+> 
+> ?
+> 
+> Reviewed-by: Alan Maguire <alan.maguire@oracle.com>
+> Tested-by: Alan Maguire <alan.maguire@oracle.com>
 
-[1] https://lore.kernel.org/dwarves/20241221012245.243845-9-ihor.solodrai@p=
-m.me/
+Thanks, applied.
+
+- Arnaldo
+
