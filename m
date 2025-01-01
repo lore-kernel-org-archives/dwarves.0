@@ -1,40 +1,72 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 128A3EAD0
-	for <dwarves@vger.kernel.org>; Mon, 30 Dec 2024 19:36:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFC652942A;
+	Wed,  1 Jan 2025 16:56:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735587367; cv=none; b=tbpXWhQpipr+pVQyLaUQ1n8Zi48aMF2nWdkZKUFCGWD8EkEXYTlulsnzJ120eFs1+oKAvvcnnV4rZDKBC1sZ9EMRO+GoUriQQiH2kEv84NYqIhFRe0UoKT65NJqecT4FgdP49VFjujJ2utsSqZr9Nnmt+pRc8g2icpi32k3Q/Uw=
+	t=1735750574; cv=none; b=i5pzGUcdt3o+lYoGDm0KygsE0vsVB3rBOGUUSG1EGwI89v05cCto9gP9Q6/Yvcp6Us/9vS4C7IKnZKeEnxWapxC6R8pGyUJUbbyB6IMXwU6CGUgXKBIUu1f15sqYa3q79xwaKIDFr7MzqEOPBFusMeRES8evAvzTw7fTPDyDITc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735587367; c=relaxed/simple;
-	bh=q8RV2Oc8PJmAkQA0msGvRp+fCSWtTLgFv+JOH691G9A=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=JEnavPsSyQOp+4xqK04trEcU1TBGOrRmfmFAp7HOBD83kM++PvExg8NORgCoLLXZliBcuwcOSg7f2N3u4rmldlOFO0dhVZkExNxpHTIYM3w+YNGF5X47rvvWCDQK/1vowYqOIXHBcQmzuWp0U/L78gpwW2KH06x6qsWM3FqN2qM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=t2mne4uX; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1735750574; c=relaxed/simple;
+	bh=09nWVagkVZ9t9sb3QkdX+LGVHhngVL98UINO/LWQ2VE=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=VV4QjYtCT7TWca0YDCJJ7WBxgu8WSTngcOdBXOGSDM9JS8fJzUDfMtHN5kouvCNS3ngNxfzqZwCFkwIKB84Vgiu+kthvixO3iHyDQ6rODGpnWJdCZLywWFlOB36udphDuYTUHkJd/s8GlJCbT3fe850wbUfH3EbAG9fcd/yP/so=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iYcTwgPa; arc=none smtp.client-ip=209.85.208.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="t2mne4uX"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38D5AC4CED0;
-	Mon, 30 Dec 2024 19:36:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1735587366;
-	bh=q8RV2Oc8PJmAkQA0msGvRp+fCSWtTLgFv+JOH691G9A=;
-	h=Date:From:To:Cc:Subject:From;
-	b=t2mne4uXi+fqdCYzDzwiJoPn2cUZNh5/+O6IQvQgQhX7XL2Aj8w93n1IbjJydysSt
-	 BJOnJ4zxQ9XNWj3Tq/FUA02DQVFFC/+fWnfmuTOO6lwLOTfsL/18JsMVSZW+aHjpCx
-	 fNVk2DKM62X5oheLKtjFKEkRMyIPwBSn+prEv550oQlAqTZWC896LX2kBenO9Pj/Jf
-	 oMn20nVKRp7p/shfDcgTbhLqcY3Vm8vIUkDVgs9AYQ3YS+129jXBrf49faHLm9/B35
-	 sJIBnrdMXm1HXgvoa2ekP64XpG/NXt1smnfX0XrgcvQN8qMlmyIl9sW3FWeLzUVW0C
-	 EuIL9YcXzk9vg==
-Date: Mon, 30 Dec 2024 16:36:03 -0300
-From: Arnaldo Carvalho de Melo <acme@kernel.org>
-To: Alan Maguire <alan.maguire@oracle.com>
-Cc: Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Ihor Solodrai <ihor.solodrai@pm.me>,
-	Mykola Lysenko <mykolal@fb.com>, dwarves@vger.kernel.org
-Subject: [PATCH 1/1] pfunct: Don't print functions twice when using -f
-Message-ID: <Z3L2I_7Dzob9W0fs@x1>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iYcTwgPa"
+Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-5d27243ba8bso20418628a12.2;
+        Wed, 01 Jan 2025 08:56:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1735750571; x=1736355371; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Mf+GmWT6Is+U7LA24+CKqryejkOI6I9HjBj9goV9Lgg=;
+        b=iYcTwgPavD/zirKrCw9/cuBh5EfYPnrQl4FziCRh51xRQ1yEJ4D6V4Y+8zgZkRQ7SS
+         q/vanZfR04c/yEZ5Az8nd8FENzZpKcQyYGirTqglsb8sgBa5f+8VLjpeOA0r8epFfJEF
+         6Usq4X2VSP7WJ8GkxV0KlkTJDlvVMtWz/3VPbffVor8jcM49Pq+BhxVnUXuO4jUZbgTn
+         x2KzCDSgrdTCM0a/PwyWSzQpPXn+Ea4UnkCYhu7F02KhJczpnW0ByaLStBF39F9BkyUL
+         jwVDgz62ieJim0Go7OLiIW3Xjb4gmaKfb8nJzMxgqH601aMF/b1IPcCuWCisd36vQaoH
+         2Dlg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1735750571; x=1736355371;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Mf+GmWT6Is+U7LA24+CKqryejkOI6I9HjBj9goV9Lgg=;
+        b=DhY7KNJkjpk3Wt8bFDik3tma04/eTyZ1WwrO6eWOlLQniZgnlWDiWbj0x75NW472aW
+         M6uUR30xoFUJJ0kzcQDByp9yVc0VHT6+VKxYsfBiRD1tBv1HtwVRxmNRv3gP4ZhgoXWw
+         2Xve7bcNp51JbYW0yJcDpkZGKMd52pWa7NTvOZ8DCEzkysjSoQsQoKjNOhuFcKc7aAgj
+         1jBPTUEYwsBgZjMWPIbZrS4msQuWmyuiJOrX4s+3PCuXIYzXaXZfRsg4MC88vAKDU4t1
+         9HQoCOjGKjw1YZMn802klE2xFhm4FQwoVrQY3UnRbtf5gOrXy+8l4JslWL/o6M3GF1r0
+         38wg==
+X-Forwarded-Encrypted: i=1; AJvYcCXAQ/+5xqygKnkWpQLzBeSa1frOt6wApxsvzRDrhUYuuSZbo3BJDtpERPkpWgQREx+Nuuc=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyu9FoleRcQ05UsbvjqEr504kqGnO2aaAzyIdNhWDQGwNVVsyCf
+	k9RmSIDLkAnlCybtf8yYJlP8AjE2QMSnkciqgHFQGJW1MmqxS7xCetJuSA==
+X-Gm-Gg: ASbGncsbDJosTW1vRG+yEYmu3t6S4GyoaFvgJHykWVVpx8DhNZcQzXy2r4iXkSUFWlu
+	uREFqI31rSR77F7w2BZp5o1UE0vQ1uRHzlAJtVbbLiTyf2hmFlw+a3Y/TT2n+jcwxq4cMBl7AIa
+	QSOzJmKENg5ToZqu2yraIavTmcTbgau2EKWmXixAW0WtijH+XG1lIrSsAPSEYk3whXnAFMwaa39
+	ljhQRbsG6UTBjwYgkIlnSArGG3CD0kBwLNjoOSGlGBs5REwlDcu9xxECBLUHsU=
+X-Google-Smtp-Source: AGHT+IFhjF0T5Ddy1O8+2fAQdhwPvyppTRc6gto2XXpj4chKe7YPN2ZR3WpKd+0wvowXeFZGgaFiZQ==
+X-Received: by 2002:a05:6402:26ca:b0:5d0:8f1c:8b94 with SMTP id 4fb4d7f45d1cf-5d81ddc0378mr37115061a12.13.1735750570912;
+        Wed, 01 Jan 2025 08:56:10 -0800 (PST)
+Received: from krava (85-193-35-38.rib.o2.cz. [85.193.35.38])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5d80676f23bsm17816845a12.32.2025.01.01.08.56.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Jan 2025 08:56:10 -0800 (PST)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Wed, 1 Jan 2025 17:56:07 +0100
+To: Ihor Solodrai <ihor.solodrai@pm.me>
+Cc: dwarves@vger.kernel.org, acme@kernel.org, alan.maguire@oracle.com,
+	eddyz87@gmail.com, andrii@kernel.org, mykolal@fb.com,
+	bpf@vger.kernel.org
+Subject: Re: [PATCH dwarves v3 2/8] btf_encoder: separate elf function, saved
+ function representations
+Message-ID: <Z3Vzp9M55sRsNgCP@krava>
+References: <20241221012245.243845-1-ihor.solodrai@pm.me>
+ <20241221012245.243845-3-ihor.solodrai@pm.me>
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
@@ -43,58 +75,109 @@ List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20241221012245.243845-3-ihor.solodrai@pm.me>
 
-We print it in the pfunct_stealer, i.e. as soon as we load the CU
-containing the function information, and then, later, we were iterating
-all cus and printing the functions that matched.
+On Sat, Dec 21, 2024 at 01:23:01AM +0000, Ihor Solodrai wrote:
 
-Do it just at the stealer.
+SNIP
 
-Cc: Alan Maguire <alan.maguire@oracle.com>
-Cc: Andrii Nakryiko <andrii@kernel.org>
-Cc: Eduard Zingerman <eddyz87@gmail.com>
-Cc: Ihor Solodrai <ihor.solodrai@pm.me>
-Cc: Mykola Lysenko <mykolal@fb.com>
-Link: https://lore.kernel.org/all/Z3LoTvt7PtUAbh5K@x1
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
----
- pfunct.c | 11 ++++-------
- 1 file changed, 4 insertions(+), 7 deletions(-)
+> +static int saved_functions_combine(void *_a, void *_b)
+> +{
+> +	uint8_t optimized, unexpected, inconsistent;
+> +	struct btf_encoder_func_state *a = _a;
+> +	struct btf_encoder_func_state *b = _b;
+> +	int ret;
+> +
+> +	ret = strncmp(a->elf->name, b->elf->name,
+> +		      max(a->elf->prefixlen, b->elf->prefixlen));
+> +	if (ret != 0)
+> +		return ret;
+> +	optimized = a->optimized_parms | b->optimized_parms;
+> +	unexpected = a->unexpected_reg | b->unexpected_reg;
+> +	inconsistent = a->inconsistent_proto | b->inconsistent_proto;
+> +	if (!unexpected && !inconsistent && !funcs__match(a, b))
+> +		inconsistent = 1;
+> +	a->optimized_parms = b->optimized_parms = optimized;
+> +	a->unexpected_reg = b->unexpected_reg = unexpected;
+> +	a->inconsistent_proto = b->inconsistent_proto = inconsistent;
 
-diff --git a/pfunct.c b/pfunct.c
-index 55eafe8a8e790dcb..5a6dd59a1c7a30b1 100644
---- a/pfunct.c
-+++ b/pfunct.c
-@@ -415,14 +415,12 @@ static void function__show(struct function *func, struct cu *cu)
- 		fstats->printed = true;
- }
- 
--static int cu_function_iterator(struct cu *cu, void *cookie)
-+static int cu_function_iterator(struct cu *cu, void *cookie __maybe_unused)
- {
- 	struct function *function;
- 	uint32_t id;
- 
- 	cu__for_each_function(cu, id, function) {
--		if (cookie && strcmp(function__name(function), cookie) != 0)
--			continue;
- 		function__show(function, cu);
- 	}
- 	return 0;
-@@ -816,10 +814,9 @@ try_sole_arg_as_function_name:
- 		function__show(f, cu);
- 	} else if (show_total_inline_expansion_stats)
- 		print_total_inline_stats();
--	else if (function_name != NULL || expand_types)
--		cus__for_each_cu(cus, cu_function_iterator,
--				 function_name, NULL);
--	else
-+	else if (expand_types)
-+		cus__for_each_cu(cus, cu_function_iterator, NULL, NULL);
-+	else if (function_name == NULL)
- 		print_fn_stats(formatter);
- 
- 	rc = EXIT_SUCCESS;
--- 
-2.46.2
+do we still need to update the 'b' state object?
 
+> +
+> +	return 0;
+> +}
+> +
+> +static void btf_encoder__delete_saved_funcs(struct btf_encoder *encoder)
+> +{
+> +	struct btf_encoder_func_state *pos, *s;
+> +
+> +	list_for_each_entry_safe(pos, s, &encoder->func_states, node) {
+> +		list_del(&pos->node);
+> +		free(pos->parms);
+> +		free(pos->annots);
+> +		free(pos);
+> +	}
+> +
+> +	for (int i = 0; i < encoder->functions.cnt; i++)
+> +		free(encoder->functions.entries[i].alias);
+> +}
+> +
+> +int btf_encoder__add_saved_funcs(struct btf_encoder *encoder)
+> +{
+> +	struct btf_encoder_func_state **saved_fns, *s;
+> +	struct btf_encoder *e = NULL;
+> +	int i = 0, j, nr_saved_fns = 0;
+> +
+> +	/* Retrieve function states from each encoder, combine them
+> +	 * and sort by name, addr.
+> +	 */
+> +	btf_encoders__for_each_encoder(e) {
+> +		list_for_each_entry(s, &e->func_states, node)
+> +			nr_saved_fns++;
+> +	}
+
+the encoder loop goes eventualy away, but still would it make to store
+func_states count instead of the loop?
+
+now when there's just single place that stores 'state' it seems like it
+should be straighforward
+
+SNIP
+
+>  void btf_encoder__delete(struct btf_encoder *encoder)
+>  {
+> -	int i;
+>  	size_t shndx;
+>  
+>  	if (encoder == NULL)
+> @@ -2447,18 +2469,19 @@ void btf_encoder__delete(struct btf_encoder *encoder)
+>  	btf_encoders__delete(encoder);
+>  	for (shndx = 0; shndx < encoder->seccnt; shndx++)
+>  		__gobuffer__delete(&encoder->secinfo[shndx].secinfo);
+> +	free(encoder->secinfo);
+
+nit, this seems unrelated to this change, should be in separate fix?
+
+thanks,
+jirka
+
+
+>  	zfree(&encoder->filename);
+>  	zfree(&encoder->source_filename);
+>  	btf__free(encoder->btf);
+>  	encoder->btf = NULL;
+>  	elf_symtab__delete(encoder->symtab);
+>  
+> -	for (i = 0; i < encoder->functions.cnt; i++)
+> -		btf_encoder__delete_func(&encoder->functions.entries[i]);
+>  	encoder->functions.allocated = encoder->functions.cnt = 0;
+>  	free(encoder->functions.entries);
+>  	encoder->functions.entries = NULL;
+>  
+> +	btf_encoder__delete_saved_funcs(encoder);
+> +
+>  	free(encoder);
+>  }
+>  
+
+SNIP
