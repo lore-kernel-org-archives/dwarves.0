@@ -1,43 +1,43 @@
-Received: from mail-4322.protonmail.ch (mail-4322.protonmail.ch [185.70.43.22])
+Received: from mail-10630.protonmail.ch (mail-10630.protonmail.ch [79.135.106.30])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 774403D96A;
-	Thu,  2 Jan 2025 20:06:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.43.22
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6791C149E00
+	for <dwarves@vger.kernel.org>; Thu,  2 Jan 2025 23:09:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.135.106.30
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735848387; cv=none; b=MCz7xuRf7ZIy3SuU7gqLh43h/xLkybChG+KYniUcT1iF1GRMbIj+x92f+wK6zRxqULHrTiQzyJrqmnYJN0iLdy6GZJuqDv8ujUUHCUKnM0j7rsfpkfkNGByls8y9VO3MLInwHRCdDNxJEZFyKlSlvnCN62C4KTmGWFnizYoBoGk=
+	t=1735859392; cv=none; b=QWWPtsezibL5Qv0M1bs/TAw6W++DE2XDjnqco1fjBgkBRbZlXjuy292qTsPj4JdTU7PpKciq9cVUXkdVBSauJDQ7pw9QX5f+sytWZn95q8YVhqdtDtO4PJcDXvi1kNcZek+9XQxXkErIg5e/M95QvZvFoJoJbnZHqYg65wZKXXw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735848387; c=relaxed/simple;
-	bh=URkk3ojDl9zhoDmfCj9S37FZkFSv8dphTHRMkGvzr/w=;
+	s=arc-20240116; t=1735859392; c=relaxed/simple;
+	bh=QwXGcTIfAkvS3Fk94gdZWZga5aiJG1ozpD8PqRzULvE=;
 	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=h5bse33K3rcwOeLIMI4A1cuEyDZqITOVu8Cah3kXFX/net3QgR++iAn67BmSy1XRIlprGdYUSYgNSWF7MJRUseWjr1HptNFB5+d3xBklrxIBYNz0pHLNF3Q3c1ELpYITuyE8+eGiq6EMcDEsldwDUwCrrzCtts6CUcerS68IpCI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me; spf=pass smtp.mailfrom=pm.me; dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b=LFapZnML; arc=none smtp.client-ip=185.70.43.22
+	 MIME-Version:Content-Type; b=H4z+7W329p6lc2speR2k5SYfE1R5ry2dsaTW0RxvH4E7lDkgUivi4XFW4sylHIz68+Nbwm4dxkKOjPGiMHFhvOuqLiNe2295sYzMxe63M7rMT2+s51mKbaO3m1l8T+00TyKUlxPHMW2OaBx1p6TWflWY61w/WG50IVeFoZ4y6Xs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me; spf=pass smtp.mailfrom=pm.me; dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b=GjDxJwkr; arc=none smtp.client-ip=79.135.106.30
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pm.me
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b="LFapZnML"
+	dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b="GjDxJwkr"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me;
-	s=protonmail3; t=1735848382; x=1736107582;
-	bh=URkk3ojDl9zhoDmfCj9S37FZkFSv8dphTHRMkGvzr/w=;
+	s=protonmail3; t=1735859387; x=1736118587;
+	bh=Iu0u3TGFLGOmO4wQz8Z3WGci4lSPvaIEqNt/sfa4ru4=;
 	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
 	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
 	 Message-ID:BIMI-Selector:List-Unsubscribe:List-Unsubscribe-Post;
-	b=LFapZnMLcwXhY1e5JOmXM968WOTN/WyQ6WMtaPahr/MX/Cjk+GSBAu9ovEZz0Tzd/
-	 KPSaadmzgVuiR8pVRImp+zjYiXhSlTEy5r8vuf3g+Fa7QtrFAZm3ajI54RUueyq4Uu
-	 hTYkeqkGHPgUPSEABofJGAlgpqG8UpNbhVXOHaRTr8hnRljREmvNS4Y1pGR/Alev6p
-	 +OuNQWLvhYpIfacknu2z4DGEzJwRkn+71XTozSUqDENCjWXuSDy6wap60IofNtk5b/
-	 tnfpFWgkkKKnanSF4MCAlTsGff6K2ODCkdEdYzubddFR4FNKO9S90qnOiBHqcShXnX
-	 Smdt3IlOilEqg==
-Date: Thu, 02 Jan 2025 20:06:18 +0000
-To: Jiri Olsa <olsajiri@gmail.com>
+	b=GjDxJwkruWNYH3RF/vb+XzeIXZLySCEtpTi67YeJQeVh6E8kczkHlJrzutxu91t4j
+	 M93HDrCgdL/NKLn21+lms4VjncBswlOAGwrVNzBhd9RP3fpRByoLDNaUyGy/GZ9X/B
+	 kaayeexU3NVEewMPECcwDFyAYtnyBG41Ud3gOEt0/6BOQWgnfkNEviJVwI720XVlLv
+	 77ykuntiDsyO5AYtyLS1uovz0zxu2wgZBls4p6MYA/LJnidTy6cYpQGA4AF9UGObB+
+	 8lG3nGbh364HE2qeABer1ewSn5j8o5XVa9ZgzsWK4QOEV58ka7DCgAdTdlliJAZY6H
+	 A4hI09/g70IKw==
+Date: Thu, 02 Jan 2025 23:09:41 +0000
+To: Arnaldo Carvalho de Melo <acme@kernel.org>
 From: Ihor Solodrai <ihor.solodrai@pm.me>
-Cc: dwarves@vger.kernel.org, acme@kernel.org, alan.maguire@oracle.com, eddyz87@gmail.com, andrii@kernel.org, mykolal@fb.com, bpf@vger.kernel.org
-Subject: Re: [PATCH dwarves v3 3/8] btf_encoder: introduce elf_functions struct type
-Message-ID: <3MqWfdjBO9srtpr8kjweJgCkdwYKV6JC_-SN27S8Y9_J1SzssIgZs4Ptc5tEqpZ7w2vbSmTQ35J5CX35Yb4KMbw8wsTrB2IAf2SWU-k4Xi4=@pm.me>
-In-Reply-To: <Z3VzwnXfKIKMi5TX@krava>
-References: <20241221012245.243845-1-ihor.solodrai@pm.me> <20241221012245.243845-4-ihor.solodrai@pm.me> <Z3VzwnXfKIKMi5TX@krava>
+Cc: dwarves@vger.kernel.org, alan.maguire@oracle.com, eddyz87@gmail.com, andrii@kernel.org, mykolal@fb.com, bpf@vger.kernel.org
+Subject: Re: [PATCH dwarves v3 7/8] dwarf_loader: multithreading with a job/worker model
+Message-ID: <4-vX-msMWpvfNXsNhfTJhstFrQrBWmeCS_w1Xg4ZNeam4UQw1dlq_G03ZfBh59J3uRbt7dvQhINp6tGdRzGVZMF2HUZleeH9ZYOdBfN5ICM=@pm.me>
+In-Reply-To: <Z3LoTvt7PtUAbh5K@x1>
+References: <20241221012245.243845-1-ihor.solodrai@pm.me> <20241221012245.243845-8-ihor.solodrai@pm.me> <Z3LFREHG-8QhoAcc@x1> <Z3LGOXGgK1Qx1zW-@x1> <Z3LoTvt7PtUAbh5K@x1>
 Feedback-ID: 27520582:user:proton
-X-Pm-Message-ID: 6c363a8fe984166e4df34110c1e2a53793134112
+X-Pm-Message-ID: 91125609b65179da7dd5be6159109f9b4c244d77
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
@@ -47,189 +47,146 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-On Wednesday, January 1st, 2025 at 8:56 AM, Jiri Olsa <olsajiri@gmail.com> =
-wrote:
+On Monday, December 30th, 2024 at 10:37 AM, Arnaldo Carvalho de Melo <acme@=
+kernel.org> wrote:
 
 >=20
-> On Sat, Dec 21, 2024 at 01:23:10AM +0000, Ihor Solodrai wrote:
 >=20
-> SNIP
+> On Mon, Dec 30, 2024 at 01:11:41PM -0300, Arnaldo Carvalho de Melo wrote:
 >=20
-> > -static int btf_encoder__collect_function(struct btf_encoder *encoder, =
-GElf_Sym *sym)
-> > +static void elf_functions__collect_function(struct elf_functions *func=
-tions, GElf_Sym *sym)
-> > {
-> > - struct elf_function *new;
-> > + struct elf_function *func;
-> > const char *name;
+> > > Not really :-\
+> > >=20
+> > > root@number:/home/acme/git/pahole# pfunct --decl_info -F dwarf evtchn=
+_fifo_is_pending /lib/modules/6.13.0-rc2/build/vmlinux
+> > > /* Used at: /home/acme/git/linux/drivers/xen/events/events_fifo.c /
+> > > / <946502e> /home/acme/git/linux/drivers/xen/events/events_fifo.c:206=
+ /
+> > > bool evtchn_fifo_is_pending(evtchn_port_t port);
+> > > / Used at: /home/acme/git/linux/drivers/xen/events/events_fifo.c /
+> > > / <946502e> /home/acme/git/linux/drivers/xen/events/events_fifo.c:206=
+ */
+> > > bool evtchn_fifo_is_pending(evtchn_port_t port);
+> > > root@number:/home/acme/git/pahole#
+> > >=20
+> > > So far I couldn't find an explanation for this oddity... Lets see if
+> > > after applying all patches we get past this.
+>=20
+> > Its not related to this patch series, before we get two outputs for
+> > these (and other functions in
+> > /home/acme/git/linux/drivers/xen/events/events_fifo.c).
 > >=20
-> > if (elf_sym__type(sym) !=3D STT_FUNC)
-> > - return 0;
-> > - name =3D elf_sym__name(sym, encoder->symtab);
-> > - if (!name)
-> > - return 0;
-> > + return;
-> >=20
-> > - if (encoder->functions.cnt =3D=3D encoder->functions.allocated) {
-> > - new =3D reallocarray_grow(encoder->functions.entries,
-> > - &encoder->functions.allocated,
-> > - sizeof(encoder->functions.entries));
-> > - if (!new) {
-> > - /
-> > - * The cleanup - delete_functions is called
-> > - * in btf_encoder__encode_cu error path.
-> > - */
-> > - return -1;
-> > - }
-> > - encoder->functions.entries =3D new;
-> > - }
-> > + name =3D elf_sym__name(sym, functions->symtab);
-> > + if (!name)
-> > + return;
-> >=20
-> > - memset(&encoder->functions.entries[encoder->functions.cnt], 0,
-> > - sizeof(*new));
-> > - encoder->functions.entries[encoder->functions.cnt].name =3D name;
-> > + func =3D &functions->entries[functions->cnt];
-> > + func->name =3D name;
-> > if (strchr(name, '.')) {
-> > const char *suffix =3D strchr(name, '.');
-> > -
+> > Still investigating.
 >=20
 >=20
-> nit, let's keep that new line after declaration
+> root@number:/home/acme/git/pahole# perf probe -x ~/bin/pfunct function__s=
+how
+> Added new event:
+> probe_pfunct:function_show (on function__show in /home/acme/git/pahole/bu=
+ild/pfunct)
+>=20
+> You can now use it in all perf tools, such as:
+>=20
+> perf record -e probe_pfunct:function_show -aR sleep 1
+>=20
+> root@number:/home/acme/git/pahole# perf trace -e probe_pfunct:function_sh=
+ow --call-graph dwarf pfunct --decl_info -F dwarf evtchn_fifo_set_pending /=
+lib/modules/6.13.0-rc2/build/vmlinux
+> /* Used at: /home/acme/git/linux/drivers/xen/events/events_fifo.c /
+> / <946517a> /home/acme/git/linux/drivers/xen/events/events_fifo.c:200 */
+>=20
+> void evtchn_fifo_set_pending(evtchn_port_t port);
+> /* Used at: /home/acme/git/linux/drivers/xen/events/events_fifo.c /
+> / <946517a> /home/acme/git/linux/drivers/xen/events/events_fifo.c:200 */
+>=20
+> void evtchn_fifo_set_pending(evtchn_port_t port);
+> 0.000 pfunct/2006089 probe_pfunct:function_show(__probe_ip: 4208235)
+> function__show (/home/acme/git/pahole/build/pfunct)
+> pfunct_stealer (/home/acme/git/pahole/build/pfunct)
+> cus__steal_now (/home/acme/git/pahole/build/libdwarves.so.1.0.0)
+> dwarf_loader__worker_thread (/home/acme/git/pahole/build/libdwarves.so.1.=
+0.0)
+> start_thread (/usr/lib64/libc.so.6)
+> clone3 (/usr/lib64/libc.so.6)
+> 0.134 pfunct/2006088 probe_pfunct:function_show(__probe_ip: 4208235)
+> function__show (/home/acme/git/pahole/build/pfunct)
+> cu_function_iterator (/home/acme/git/pahole/build/pfunct)
+> cus__for_each_cu (/home/acme/git/pahole/build/libdwarves.so.1.0.0)
+> main (/home/acme/git/pahole/build/pfunct)
+> __libc_start_call_main (/usr/lib64/libc.so.6)
+> __libc_start_main@@GLIBC_2.34 (/usr/lib64/libc.so.6)
+> _start (/home/acme/git/pahole/build/pfunct)
+> root@number:/home/acme/git/pahole#
+>=20
+> With the following patch we get just one output for this case, but that
+> isn't the right solution... I'll look on removing the
+> cu_function_iterator() based printing, otherwise when printing all
+> matches we'll still duplicate the printings.
+>=20
+> Anyway, doesn't seem related to the problem that tests/tests was
+> catching, that I'm not being able to reproduce anymore after having the
+> whole series applied, probably some race?
 
-ok
+Hi Arnaldo, thank you for testing.
 
->=20
-> > - encoder->functions.suffix_cnt++;
-> > - encoder->functions.entries[encoder->functions.cnt].prefixlen =3D suff=
-ix - name;
-> > + functions->suffix_cnt++;
-> > + func->prefixlen =3D suffix - name;
-> > } else {
-> > - encoder->functions.entries[encoder->functions.cnt].prefixlen =3D strl=
-en(name);
-> > + func->prefixlen =3D strlen(name);
-> > }
-> > - encoder->functions.cnt++;
-> > - return 0;
-> > +
-> > + functions->cnt++;
-> > }
-> >=20
-> > static struct elf_function *btf_encoder__find_function(const struct btf=
-_encoder *encoder,
-> > @@ -2126,26 +2103,56 @@ int btf_encoder__encode(struct btf_encoder *enc=
-oder)
-> > return err;
-> > }
-> >=20
-> > -
-> > -static int btf_encoder__collect_symbols(struct btf_encoder *encoder)
-> > +static int elf_functions__collect(struct elf_functions *functions)
-> > {
-> > - uint32_t sym_sec_idx;
-> > + uint32_t nr_symbols =3D elf_symtab__nr_symbols(functions->symtab);
-> > + struct elf_function *tmp;
-> > + Elf32_Word sym_sec_idx;
-> > uint32_t core_id;
-> > GElf_Sym sym;
-> > + int err;
-> >=20
-> > - elf_symtab__for_each_symbol_index(encoder->symtab, core_id, sym, sym_=
-sec_idx) {
-> > - if (btf_encoder__collect_function(encoder, &sym))
-> > - return -1;
-> > + /* We know that number of functions is less than number of symbols,
-> > + * so we can overallocate temporarily.
-> > + */
-> > + functions->entries =3D calloc(nr_symbols, sizeof(*functions->entries)=
-);
-> > + if (!functions->entries) {
-> > + err =3D -ENOMEM;
-> > + goto out_free;
->=20
->=20
-> you could just return -ENOMEM here
+I couldn't reproduce the mismatch error that you saw:
 
-I am trying to adhere to the kernel style, although not very strictly.
-It's recommended [1] to have a single exit from a function when there
-is cleanup work.
+    root@number:/home/acme/git/pahole# tests/tests
+      1: Validation of BTF encoding of functions; this may take some time: =
+grep: /tmp/btf_functions.sh.OgxoO4/dwarf.funcs: binary file matches
+    ERROR: mismatch : BTF 'bool evtchn_fifo_is_pending(evtchn_port_t);' not=
+ found; DWARF ''
+    Test data is in /tmp/btf_functions.sh.OgxoO4
 
-I usually check my patches with a script [2] before submitting.
+I've tried a couple of kernels:
+  * 6.12 with selftests/bpf config
+  * Fedora 6.12.6-100.fc40.x86_64 (my workstation)
+  * 6.13-rc2 with Fedora-like config
 
-[1] https://www.kernel.org/doc/html/v4.10/process/coding-style.html#central=
-ized-exiting-of-functions
-[2] https://github.com/torvalds/linux/blob/master/scripts/checkpatch.pl
+I saw warnings that don't seem to be related to this series:
 
->=20
-> > + }
-> > +
-> > + functions->cnt =3D 0;
-> > + elf_symtab__for_each_symbol_index(functions->symtab, core_id, sym, sy=
-m_sec_idx) {
-> > + elf_functions__collect_function(functions, &sym);
-> > }
-> >=20
-> > - if (encoder->functions.cnt) {
-> > - qsort(encoder->functions.entries, encoder->functions.cnt, sizeof(enco=
-der->functions.entries[0]),
-> > + if (functions->cnt) {
-> > + qsort(functions->entries,
-> > + functions->cnt,
-> > + sizeof(*functions->entries),
-> > functions_cmp);
->=20
->=20
-> nit, why not keep the single line?
+    theihor@qube:~/dev/dwarves$ PATH=3D$(realpath build):$PATH vmlinux=3D~/=
+git/kernel.org/linux-for-pahole/vmlinux ./tests/tests
+      1: Validation of BTF encoding of functions; this may take some time: =
+Ok
+      2: Default BTF on a system without BTF: Ok
+      3: Flexible arrays accounting: WARNING: still unsuported BTF_KIND_DEC=
+L_TAG(bpf_fastcall) for bpf_cast_to_kern_ctx already with attribute (bpf_kf=
+unc), ignoring
+    WARNING: still unsuported BTF_KIND_DECL_TAG(bpf_fastcall) for bpf_rdonl=
+y_cast already with attribute (bpf_kfunc), ignoring
+    Ok
+      4: Pretty printing of files using DWARF type information: Ok
+      5: Parallel reproducible DWARF Loading/Serial BTF encoding: Ok
 
-How many chars in a line is too many? :)
+As for potential race, since btf_encoder is sequential and a unit of
+work is a CU, I don't see how a single function could have been
+missed. Other declarations in events_fifo.c would've been affected I
+think.
+
+If you see this again, please let me know.
 
 >=20
-> > - if (encoder->verbose)
-> > - printf("Found %d functions!\n", encoder->functions.cnt);
-> > + } else {
-> > + err =3D 0;
-> > + goto out_free;
-> > + }
-> > +
-> > + /* Reallocate to the exact size */
-> > + tmp =3D realloc(functions->entries, functions->cnt * sizeof(struct el=
-f_function));
-> > + if (tmp) {
-> > + functions->entries =3D tmp;
-> > + } else {
-> > + fprintf(stderr, "could not reallocate memory for elf_functions table\=
-n");
-> > + err =3D -ENOMEM;
-> > + goto out_free;
-> > }
-> >=20
-> > return 0;
-> > +
-> > +out_free:
-> > + free(functions->entries);
-> > + functions->entries =3D NULL;
-> > + functions->cnt =3D 0;
-> > + return err;
-> > }
-> >=20
-> > static bool ftype__has_arg_names(const struct ftype *ftype)
-> > @@ -2406,6 +2413,7 @@ struct btf_encoder *btf_encoder__new(struct cu *c=
-u, const char *detached_filenam
-> > printf("%s: '%s' doesn't have symtab.\n", func, cu->filename);
-> > goto out;
-> > }
-> > + encoder->functions.symtab =3D encoder->symtab;
+> - Arnaldo
 >=20
+> diff --git a/pfunct.c b/pfunct.c
+> index 55eafe8a8e790dcb..9645b004381a7e1e 100644
+> --- a/pfunct.c
+> +++ b/pfunct.c
+> @@ -518,7 +518,13 @@ static enum load_steal_kind pfunct_stealer(struct cu=
+ *cu,
 >=20
-> I was wondering if we need to keep both symtab pointers, but it's sorted
-> out in the next patch ;-)
->=20
-> thanks,
-> jirka
->=20
-> [...]
+> if (tag) {
+> function__show(tag__function(tag), cu);
+> - return show_all_matches ? LSK__DELETE : LSK__STOP_LOADING;
+> + if (!show_all_matches) {
+> + // Expedite exit, since we already did what was requested:
+> + // print the first occurrence of a given function
+> + exit(0);
+> + }
+> +
+> + return LSK__DELETE;
+> }
+> } else if (class_name) {
+> cu_class_iterator(cu, class_name);
+
 
