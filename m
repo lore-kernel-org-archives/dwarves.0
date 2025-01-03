@@ -1,43 +1,43 @@
-Received: from mail-0301.mail-europe.com (mail-0301.mail-europe.com [188.165.51.139])
+Received: from mail-10629.protonmail.ch (mail-10629.protonmail.ch [79.135.106.29])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A740BC13D
-	for <dwarves@vger.kernel.org>; Thu,  2 Jan 2025 23:21:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=188.165.51.139
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F74428FD
+	for <dwarves@vger.kernel.org>; Fri,  3 Jan 2025 00:24:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.135.106.29
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735860098; cv=none; b=hKZlS38XA+mQv/3tQdEnzgKf68mWgTmggI3VIWvI6Fmf/uJ1tHHZlSLzOvmwLMfpCBEBUd6FeLs96kGMRR3OimG3Pli1//sx2Hr0qwB2JuVa6qv+oY9a410xDaURAari4Dy3FuUpvv4YGeIgEvi49qz7VlhKndrmYETZ3jULIPI=
+	t=1735863886; cv=none; b=b2mfem9w0+ZQbCxR7FB/c6SQ067rY6OVNOJMiuPRsjd4ZltqraYKc51Toe/yJ/6BlbqNWR5zAFobxSQBDXQ2ml6V6PlT+mqRBP0CYv7ZqXb0E5YOJELHVP0Wnc5qCsBx00SU1eyQ1Q6hqJITKNsvPmWoTAlc60TIsfO/Txrao7I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735860098; c=relaxed/simple;
-	bh=Hszf4d8EbkshEM7qkgQ2N3EXfm5NOK/dTBsYo3FnPPg=;
+	s=arc-20240116; t=1735863886; c=relaxed/simple;
+	bh=YAp8XKx5+zGq/XceBkw+R7d58tZUalYU+JVlHQsIIII=;
 	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Uwrb4RfAc+PGit/kOP3gD9juWEAG0n5tD6Epzr9Vllp+teIIVYLq7y1TyLjVHKFnxzZTKEGMMFrtnZcZUsCTJS+KJxY3c6xjdHObJN0Ood1vRvChV9eKj2brUjcGEw8ImYAthpQ0KqT0j703G5gWRcoF4EyBGCASsTo/6F9v0xw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me; spf=pass smtp.mailfrom=pm.me; dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b=I2G5pnYf; arc=none smtp.client-ip=188.165.51.139
+	 MIME-Version:Content-Type; b=RY3Obu8sv4EnimmeL8iM1Iwi5ubwdK3fEdkRRXOCWN4YTKmTAZ/X6dVkd1QnGn7TCnai0cqLtvdG1VhOOygKNwYxJl5kyWDPHCox35C4Ne0xEFoDppjq2EyrHl1WB4o0UI3825yooA3kCB3FAadwbhdM61P910BVDtkw0Cyt8gE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me; spf=pass smtp.mailfrom=pm.me; dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b=eu69klS6; arc=none smtp.client-ip=79.135.106.29
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pm.me
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b="I2G5pnYf"
+	dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b="eu69klS6"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me;
-	s=protonmail3; t=1735860081; x=1736119281;
-	bh=Hszf4d8EbkshEM7qkgQ2N3EXfm5NOK/dTBsYo3FnPPg=;
+	s=protonmail3; t=1735863876; x=1736123076;
+	bh=YAp8XKx5+zGq/XceBkw+R7d58tZUalYU+JVlHQsIIII=;
 	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
 	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
 	 Message-ID:BIMI-Selector:List-Unsubscribe:List-Unsubscribe-Post;
-	b=I2G5pnYfrmCXmcGQJiEiGLd7hqss4cAa86Bs6Xf1Sc4GKOu4yARef067CKALAM6xV
-	 0sNbVnTzRVFEiPHoMszbSe8L6aefX9wLlEYlnySARxQq/COrNQ+Dli6eYpwNTMZ7w/
-	 ZzcqGWZSXvELQ/YBUUyvqsjcI+N3nive/uHrMYBeY9PvORL2ixHHb5YqA+RkFe/tPZ
-	 9Dx9JlRzm9ZFwdo8gXGriNwv3rPZJgfAs09it4PjheDPm6fN1TdMMXNkQZz/K3amnt
-	 DT/zCV/EyhiRtjc+A0AeI6CPnee5O848Tt4yK6M1/gnl5bnO2yx13yjcJlYVRVenML
-	 pYkj+GF7K/1lw==
-Date: Thu, 02 Jan 2025 23:21:16 +0000
-To: Arnaldo Carvalho de Melo <acme@kernel.org>
+	b=eu69klS6idadZmfPXT4/t+vf2w/43D5ON91UwUQpt+fPX2zBklVf+1qBMRhHhsKna
+	 Q0tczaMICIkwzGS7nhY7gjVt0eb538eIQCvOAYrl0n89ZLxETFCUoJ9DADcQBDtmtD
+	 BXTlagg8wwQ8XfngX3u+hmDmFRCOBeUF6ebn+MvQW8t8RSsQwH3gL3yCYkx19YQ7lD
+	 u7sZTh/ruG4CHwRcF3+TqR4x4Q+vJFgEKAa0nmQ9vffG7qU+VdPMVNVpzdIUjhRka4
+	 uhCloGll7ulMorvtUX8n3A3sSH+fIfdXBLIdngNSmjWQ+CkOpVSYcqL+M63BgwStcJ
+	 rjfF/XeREMD3A==
+Date: Fri, 03 Jan 2025 00:24:29 +0000
+To: Jiri Olsa <olsajiri@gmail.com>
 From: Ihor Solodrai <ihor.solodrai@pm.me>
-Cc: Alan Maguire <alan.maguire@oracle.com>, Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, Mykola Lysenko <mykolal@fb.com>, dwarves@vger.kernel.org
-Subject: Re: [PATCH 1/1] pfunct: Don't print functions twice when using -f
-Message-ID: <pSXsKeRFQiU9meWBswxgbd5xph4-MORqQqpkutS0ywR3o90CG7umoIishI_WkHfFt2US_290bg023MV2MCn3abx9ytVoyLA95E_Dq8k6T2I=@pm.me>
-In-Reply-To: <Z3L2I_7Dzob9W0fs@x1>
-References: <Z3L2I_7Dzob9W0fs@x1>
+Cc: dwarves@vger.kernel.org, acme@kernel.org, alan.maguire@oracle.com, eddyz87@gmail.com, andrii@kernel.org, mykolal@fb.com, bpf@vger.kernel.org
+Subject: Re: [PATCH dwarves v3 7/8] dwarf_loader: multithreading with a job/worker model
+Message-ID: <qafFqkIRgYxN5kalyCJsyLhIdpgJmCQtdEE-VwWecjAM1gD2VzuZMDBWKVRU81Hb1ksuQeD9tfzHAYgUFECGd6FST1p2w-rWrwo4sNutaFc=@pm.me>
+In-Reply-To: <Z3VzsA8nv4kQj1bH@krava>
+References: <20241221012245.243845-1-ihor.solodrai@pm.me> <20241221012245.243845-8-ihor.solodrai@pm.me> <Z3VzsA8nv4kQj1bH@krava>
 Feedback-ID: 27520582:user:proton
-X-Pm-Message-ID: 5728867e5556038277f825c4e497279136098b5a
+X-Pm-Message-ID: 592cef34946214836df700f89e52d32187b977d5
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
@@ -47,76 +47,232 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-On Monday, December 30th, 2024 at 11:36 AM, Arnaldo Carvalho de Melo <acme@=
-kernel.org> wrote:
+On Wednesday, January 1st, 2025 at 8:56 AM, Jiri Olsa <olsajiri@gmail.com> =
+wrote:
 
 >=20
 >=20
-> We print it in the pfunct_stealer, i.e. as soon as we load the CU
-> containing the function information, and then, later, we were iterating
-> all cus and printing the functions that matched.
+> On Sat, Dec 21, 2024 at 01:23:38AM +0000, Ihor Solodrai wrote:
 >=20
-> Do it just at the stealer.
+> SNIP
 >=20
-> Cc: Alan Maguire alan.maguire@oracle.com
+> > diff --git a/btf_encoder.c b/btf_encoder.c
+> > index 90f1b9a..7e03ba4 100644
+> > --- a/btf_encoder.c
+> > +++ b/btf_encoder.c
+> > @@ -1326,7 +1326,7 @@ static void btf_encoder__delete_saved_funcs(struc=
+t btf_encoder *encoder)
+> > }
+> > }
+> >=20
+> > -int btf_encoder__add_saved_funcs(bool skip_encoding_inconsistent_proto=
+)
+> > +static int btf_encoder__add_saved_funcs(bool skip_encoding_inconsisten=
+t_proto)
+> > {
+> > struct btf_encoder_func_state **saved_fns, *s;
+> > struct btf_encoder *e =3D NULL;
+> > @@ -2134,7 +2134,6 @@ int btf_encoder__encode(struct btf_encoder *encod=
+er, struct conf_load *conf)
+> > int err;
+> > size_t shndx;
+> >=20
+> > - /* for single-threaded case, saved funcs are added here */
+> > btf_encoder__add_saved_funcs(conf->skip_encoding_btf_inconsistent_proto=
+);
 >=20
-> Cc: Andrii Nakryiko andrii@kernel.org
 >=20
-> Cc: Eduard Zingerman eddyz87@gmail.com
->=20
-> Cc: Ihor Solodrai ihor.solodrai@pm.me
->=20
-> Cc: Mykola Lysenko mykolal@fb.com
->=20
-> Link: https://lore.kernel.org/all/Z3LoTvt7PtUAbh5K@x1
-> Signed-off-by: Arnaldo Carvalho de Melo acme@redhat.com
+> should we check the return value in here? now it's the only caller
 
-Can confirm this fixes double-printing of some functions when
-running pfunct -F dwarf
-
-Tested-by: Ihor Solodrai <ihor.solodrai@pm.me>
+Yes, thanks.
 
 >=20
-> ---
-> pfunct.c | 11 ++++-------
-> 1 file changed, 4 insertions(+), 7 deletions(-)
+> SNIP
 >=20
-> diff --git a/pfunct.c b/pfunct.c
-> index 55eafe8a8e790dcb..5a6dd59a1c7a30b1 100644
-> --- a/pfunct.c
-> +++ b/pfunct.c
-> @@ -415,14 +415,12 @@ static void function__show(struct function *func, s=
-truct cu *cu)
-> fstats->printed =3D true;
+> > -struct dwarf_thread {
+> > - struct dwarf_cus *dcus;
+> > - void data;
+> > +/ Multithreading is implemented using a job/worker model.
+> > + * cus_processing_queue represents a collection of jobs to be
+> > + * completed by workers.
+> > + * dwarf_loader__worker_thread is the worker loop, taking jobs from
+> > + * the queue, executing them and re-enqueuing new jobs as necessary.
+> > + * Implementation of this queue ensures two constraints:
+> > + * * JOB_STEAL jobs for a CU are executed in the order of cu->id, as
+> > + * a consequence JOB_STEAL jobs always run one at a time.
+> > + * * Initial number of JOB_DECODE jobs in the queue is effectively a
+> > + * limit on how many decoded CUs can be held in memory.
+> > + * See dwarf_loader__decoded_cus_limit()
+> > + /
+> > +static struct {
+> > + pthread_mutex_t mutex;
+> > + pthread_cond_t job_added;
+> > + / next_cu_id determines the next CU ready to be stealed
+> > + * This enforces the order of CU stealing.
+> > + */
+> > + uint32_t next_cu_id;
+> > + struct list_head jobs;
+> > +} cus_processing_queue;
+> > +
+> > +enum job_type {
+> > + JOB_NONE =3D 0,
 >=20
-> }
 >=20
-> -static int cu_function_iterator(struct cu *cu, void *cookie)
-> +static int cu_function_iterator(struct cu *cu, void *cookie __maybe_unus=
-ed)
-> {
-> struct function *function;
-> uint32_t id;
+> nit, no need for JOB_NONE?
+
+I find it useful for the default value to not be a valid "type". This
+helps to avoid bugs when an object is initialized, but the type has
+not been set explicitly (even though it should be).
+
 >=20
-> cu__for_each_function(cu, id, function) {
-> - if (cookie && strcmp(function__name(function), cookie) !=3D 0)
-> - continue;
-> function__show(function, cu);
-> }
-> return 0;
-> @@ -816,10 +814,9 @@ try_sole_arg_as_function_name:
-> function__show(f, cu);
-> } else if (show_total_inline_expansion_stats)
-> print_total_inline_stats();
-> - else if (function_name !=3D NULL || expand_types)
-> - cus__for_each_cu(cus, cu_function_iterator,
-> - function_name, NULL);
-> - else
-> + else if (expand_types)
-> + cus__for_each_cu(cus, cu_function_iterator, NULL, NULL);
-> + else if (function_name =3D=3D NULL)
-> print_fn_stats(formatter);
+> SNIP
 >=20
-> rc =3D EXIT_SUCCESS;
-> --
-> 2.46.2
+> > +static struct cu_processing_job *cus_queue__try_dequeue(void)
+> > +{
+> > + struct cu_processing_job *job, *dequeued_job =3D NULL;
+> > + struct list_head *pos, tmp;
+> > +
+> > + list_for_each_safe(pos, tmp, &cus_processing_queue.jobs) {
+> > + job =3D list_entry(pos, struct cu_processing_job, node);
+> > + if (job->type =3D=3D JOB_STEAL && job->cu->id =3D=3D cus_processing_q=
+ueue.next_cu_id) {
+> > + dequeued_job =3D job;
+> > + break;
+> > + }
+> > + if (job->type =3D=3D JOB_DECODE) {
+> > + / all JOB_STEALs are added to the head, so no viable JOB_STEAL availa=
+ble /
+> > + dequeued_job =3D job;
+> > + break;
+> > + }
+> > + }
+> > + / No jobs or only steals out of order */
+> > + if (!dequeued_job)
+> > + return NULL;
+> > +
+> > + list_del(&dequeued_job->node);
+> > + return job;
+>=20
+>=20
+> IIUC job =3D=3D dequeued_job at this point, but I think we should return
+> dequeued_job to be clear
+
+Agree.
+
+>=20
+> SNIP
+>=20
+> > -static void *dwarf_cus__process_cu_thread(void *arg)
+> > +static struct cu *dwarf_loader__decode_next_cu(struct dwarf_cus *dcus)
+> > {
+> > - struct dwarf_thread *dthr =3D arg;
+> > - struct dwarf_cus *dcus =3D dthr->dcus;
+> > uint8_t pointer_size, offset_size;
+> > + struct dwarf_cu *dcu =3D NULL;
+> > Dwarf_Die die_mem, *cu_die;
+> > - struct dwarf_cu *dcu;
+> > + int err;
+> >=20
+> > - while (dwarf_cus__nextcu(dcus, &dcu, &die_mem, &cu_die, &pointer_size=
+, &offset_size) =3D=3D 0) {
+> > - if (cu_die =3D=3D NULL)
+> > + err =3D dwarf_cus__nextcu(dcus, &dcu, &die_mem, &cu_die, &pointer_siz=
+e, &offset_size);
+> > +
+> > + if (err < 0)
+> > + goto out_error;
+> > + else if (err =3D=3D 1) /* no more CUs */
+> > + return NULL;
+> > +
+> > + err =3D die__process_and_recode(cu_die, dcu->cu, dcus->conf);
+> > + if (err)
+> > + goto out_error;
+> > + if (cu_die =3D=3D NULL)
+> > + return NULL;
+>=20
+>=20
+> should this check be placed before calling die__process_and_recode ?
+
+Yes, but actually this check is redundant. If dwarf_cus__nextcu
+returns 0, then the cu_die is valid. There are null checks within
+dwarf_cus__nextcu:
+
+=09if (ret =3D=3D 0 && *cu_die !=3D NULL) {
+=09=09*dcu =3D dwarf_cus__create_cu(dcus, *cu_die, *pointer_size);
+=09=09if (*dcu =3D=3D NULL) {
+=09=09=09dcus->error =3D ENOMEM;
+=09=09=09ret =3D -1;
+=09=09=09goto out_unlock;
+=09=09}
+=09=09// Do it here to keep all CUs in cus->cus in the same
+=09=09// order as in the DWARF file being loaded (e.g. vmlinux)
+=09=09__cus__add(dcus->cus, (*dcu)->cu);
+=09}
+
+>=20
+>=20
+> SNIP
+>=20
+> > -static int dwarf_cus__process_cus(struct dwarf_cus *dcus)
+> > -{
+> > - if (dcus->conf->nr_jobs > 1)
+> > - return dwarf_cus__threaded_process_cus(dcus);
+> > -
+> > - return __dwarf_cus__process_cus(dcus);
+> > -}
+> > -
+> > static int cus__merge_and_process_cu(struct cus *cus, struct conf_load =
+*conf,
+> > Dwfl_Module *mod, Dwarf *dw, Elf *elf,
+> > const char *filename,
+> > @@ -3733,7 +3859,8 @@ static int cus__merge_and_process_cu(struct cus *=
+cus, struct conf_load *conf,
+> > if (cu__resolve_func_ret_types_optimized(cu) !=3D LSK__KEEPIT)
+> > goto out_abort;
+> >=20
+> > - if (cus__finalize(cus, cu, conf, NULL) =3D=3D LSK__STOP_LOADING)
+> > + cu__finalize(cu, cus, conf);
+> > + if (cus__steal_now(cus, cu, conf) =3D=3D LSK__STOP_LOADING)
+> > goto out_abort;
+> >=20
+> > return 0;
+> > @@ -3765,7 +3892,8 @@ static int cus__load_module(struct cus *cus, stru=
+ct conf_load *conf,
+> > }
+> >=20
+> > if (type_cu !=3D NULL) {
+> > - type_lsk =3D cu__finalize(type_cu, cus, conf, NULL);
+> > + cu__finalize(type_cu, cus, conf);
+> > + type_lsk =3D cus__steal_now(cus, type_cu, conf);
+> > if (type_lsk =3D=3D LSK__DELETE) {
+> > cus__remove(cus, type_cu);
+> > }
+> > @@ -3787,6 +3915,7 @@ static int cus__load_module(struct cus *cus, stru=
+ct conf_load *conf,
+> > .type_dcu =3D type_cu ? &type_dcu : NULL,
+> > .build_id =3D build_id,
+> > .build_id_len =3D build_id_len,
+> > + .nr_cus_created =3D 0,
+>=20
+>=20
+> should go to the previous patch? if needed at all..
+
+Yeah. I think it's better to have an explicit assignment.
+
+>=20
+> thanks,
+> jirka
+>=20
+> > };
+> > res =3D dwarf_cus__process_cus(&dcus);
+> > }
+> > diff --git a/dwarves.c b/dwarves.c
+> > index ae512b9..7c3e878 100644
+> > --- a/dwarves.c
+> > +++ b/dwarves.c
+> > @@ -530,48 +530,6 @@ void cus__unlock(struct cus *cus)
+> > pthread_mutex_unlock(&cus->mutex);
+> > }
+>=20
+>=20
+> SNIP
