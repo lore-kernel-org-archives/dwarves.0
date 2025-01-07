@@ -1,40 +1,43 @@
-Received: from mail-10631.protonmail.ch (mail-10631.protonmail.ch [79.135.106.31])
+Received: from mail-4316.protonmail.ch (mail-4316.protonmail.ch [185.70.43.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 712132594BF
-	for <dwarves@vger.kernel.org>; Tue,  7 Jan 2025 19:09:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.135.106.31
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 185531F4E29;
+	Tue,  7 Jan 2025 19:09:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.43.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736276955; cv=none; b=pbb2OKsvc1n2lTLICsw1H07f0qCXmjVVB54ma+rUnAWqSQagmApVIXj7cDBV2auHP3cKilSqD8niSwqTOxQwjrcEizelfhPBbhgt4of0UqjAdssAzou+ifpKgUiDXsLOxbPcARDO7aX7b8df7TgHdPn0yjKsBEpNK2u0gUlQp1Y=
+	t=1736276966; cv=none; b=Inx7uQU9VXQ0P/BoSQpA4ali5URGYMHX7tvmZ3zJgQLVyZ1jRfKOro4I1sITCPgMzziX2HJWf9koEfp5IWkVwpA6mbMYQz1RawW5ZlWuB8oyVqgjZ/jpHVbBUTTJbk2FAtt3q2iqErgugSdYoQdymwM0GsyHph9T53NdY1yKsxU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736276955; c=relaxed/simple;
-	bh=XGqkEQice0g6u8tcQ9wZDTZMyCKEF2x1Bc0g3O5OAQY=;
-	h=Date:To:From:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=H2++uLDwgxX22uc8friXE9VtED6nEXdI+IJYBEP0sBVpI2XgUvskaNvRw1yguAj+/M6t0eJKyXMMb45MKhbLfpZwZTtKoZWNre+DZ+zSGx+pRnas+oOQ6f6ZcgcNi27N/ALZQmYXQ9V/Se8P/XaDLUnYZTXGG5draX32ds9hQvQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me; spf=pass smtp.mailfrom=pm.me; dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b=ftdO8HlF; arc=none smtp.client-ip=79.135.106.31
+	s=arc-20240116; t=1736276966; c=relaxed/simple;
+	bh=LSXxYJXI1/a5lYvOsKGKTi34t3dhW6RnI45SOWi99cY=;
+	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=eqE/JkxQhH2TiD924NGFgwWJLGpfFR0GUZOYjAtv1c24IcGx5/i1+Zt50CyoIna0c0QRTaZsSw4/ZgtyvekrbDxInR1PqPwo0ZnGXdtp2R8iJJD54TsTaYKWtPatLFngwIU40hmDSgi4Gz6IA9dJosdn7Ey8DCHygJob3qbyUSQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me; spf=pass smtp.mailfrom=pm.me; dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b=PCB2LT2W; arc=none smtp.client-ip=185.70.43.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pm.me
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b="ftdO8HlF"
+	dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b="PCB2LT2W"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me;
-	s=protonmail3; t=1736276944; x=1736536144;
-	bh=pNZVcCfSqUO6D9NAgq7M2v4i7ufWiCh1/Njrt0hH47E=;
-	h=Date:To:From:Cc:Subject:Message-ID:Feedback-ID:From:To:Cc:Date:
-	 Subject:Reply-To:Feedback-ID:Message-ID:BIMI-Selector:
-	 List-Unsubscribe:List-Unsubscribe-Post;
-	b=ftdO8HlFe/MQSWabgJohygbU8NnfX9u3lAR/rADWd+2au4OWPtuYVse82q15u7CeV
-	 chkmdouzs2wQBKRkK64r4BTy+utN5/TU6LbodIAjJ0kCDOCxJcOQWkv9UjdIPYtQmy
-	 kl+sdKskgiwDUsHiKckQWgD7tpQkjZ9QI8JdOszkqP6K4cQkI7XTyzN618QocD10nv
-	 WREenh5nU/JvNXXjj1HFmT4ofdl4Ohp3SQjgRn18EdBBEv8A3CRF4Y7eiw/QrH36RN
-	 GW1zblx9urpmoR3LjiRRsguzJr/1PQLoTnR8AuAAO57JV7040tcr/+nDc2nIQTsy0y
-	 /cgf5xKvI627Q==
-Date: Tue, 07 Jan 2025 19:08:59 +0000
+	s=protonmail3; t=1736276954; x=1736536154;
+	bh=LSXxYJXI1/a5lYvOsKGKTi34t3dhW6RnI45SOWi99cY=;
+	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+	 Message-ID:BIMI-Selector:List-Unsubscribe:List-Unsubscribe-Post;
+	b=PCB2LT2WBZJqq0uJ7yABUZdbsW27WlQTM9k0F2Cq0rgPQgFrBYgpsBkWBwZORPvoi
+	 DoscldOChLMe4k8BPW+j0I7k/xreOg76Jn/2GQvMzqtgQzUCdv0RdE1qiXHeAVVcKl
+	 MyKd7xFox4yaD24YSQCj4uPmiBxdPoIZf5pG/bZoPAF7NRzUGh2nWhZ6z1wCCZl8tu
+	 RBUUjqCeumlmCy9L2foKs4hZvgL8ZeDWVlYLqWYVa1vGwvE7pnp0+Si3LHJSQkzsdJ
+	 tTiJ0JR0XJDvhGH9DaRUrWoZEYYzwmahXJa1jDkFzdIJldMIG8xsIMaLB6Akg//waG
+	 9q/vHqJOPbjIw==
+Date: Tue, 07 Jan 2025 19:09:10 +0000
 To: dwarves@vger.kernel.org
 From: Ihor Solodrai <ihor.solodrai@pm.me>
 Cc: bpf@vger.kernel.org, acme@kernel.org, alan.maguire@oracle.com, eddyz87@gmail.com, andrii@kernel.org, mykolal@fb.com, olsajiri@gmail.com
-Subject: [PATCH dwarves v4 00/10] pahole: faster reproducible BTF encoding
-Message-ID: <20250107190855.2312210-1-ihor.solodrai@pm.me>
+Subject: [PATCH dwarves v4 02/10] btf_encoder: free encoder->secinfo in btf_encoder__delete
+Message-ID: <20250107190855.2312210-3-ihor.solodrai@pm.me>
+In-Reply-To: <20250107190855.2312210-1-ihor.solodrai@pm.me>
+References: <20250107190855.2312210-1-ihor.solodrai@pm.me>
 Feedback-ID: 27520582:user:proton
-X-Pm-Message-ID: a1199577f2d130a582a12468dd1652adb0e75265
+X-Pm-Message-ID: cbbe895be26f12b3128991d6b620b2fe614d5f46
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
@@ -44,117 +47,30 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-This is v4 of the series aiming to speed up parallel reproducible BTF
-encoding. This version mostly addresses feedback from Jiri Olsa on v3.
+encoder->secinfo is allocated in btf_encoder__new and is
+never freed. Fix that.
 
-A notable adition is a patch 10/10, which changes func_states in
-btf_encoder from a list to an array.
-
-Testing:
-
-    vmlinux=3D/home/theihor/kernels/bpf-next/kbuild-output/.tmp_vmlinux1 PA=
-TH=3D$(realpath build):$PATH ./tests/tests
-      1: Validation of BTF encoding of functions; this may take some time: =
-Ok
-      2: Default BTF on a system without BTF: Ok
-      3: Flexible arrays accounting: pahole: type 'nft_pipapo_elem' not fou=
-nd
-    pahole: type 'tls_rec' not found
-    pahole: type 'fuse_direntplus' not found
-    pahole: type 'nft_rhash_elem' not found
-    pahole: type 'nft_hash_elem' not found
-    pahole: type 'nft_bitmap_elem' not found
-    pahole: type 'ipt_standard' not found
-    pahole: type 'nft_rule_dp_last' not found
-    pahole: type 'ip6t_standard' not found
-    pahole: type 'ipt_error' not found
-    pahole: type 'ip6t_error' not found
-    pahole: type 'nft_rbtree_elem' not found
-    Ok
-      4: Check that pfunct can print btf_decl_tags read from BTF: Ok
-      5: Pretty printing of files using DWARF type information: Ok
-      6: Parallel reproducible DWARF Loading/Serial BTF encoding: Ok
-
-The warnings about not found types are also present at pahole/next, so
-not related to this patchset.
-
-
-Performance check. This patchset (always reproducible):
-
-     Performance counter stats for '/home/theihor/dev/dwarves/build/pahole =
--J -j24 --btf_features=3Dencode_force,var,float,enum64,decl_tag,type_tag,op=
-timized_func,consistent_func,decl_tag_kfuncs,reproducible_build --btf_encod=
-e_detached=3D/dev/null --lang_exclude=3Drust /home/theihor/kernels/bpf-next=
-/kbuild-output/.tmp_vmlinux1' (13 runs):
-
-              5,788.22 msec cpu-clock:u                      #    3.776 CPU=
-s utilized               ( +-  0.17% )
-
-               1.53288 +- 0.00334 seconds time elapsed  ( +-  0.22% )
-
-
-pahole/next (d444eb6), parallel non-reproducible:
-
-     Performance counter stats for '/home/theihor/dev/dwarves/build/pahole =
--J -j24 --btf_features=3Dencode_force,var,float,enum64,decl_tag,type_tag,op=
-timized_func,consistent_func,decl_tag_kfuncs --btf_encode_detached=3D/dev/n=
-ull --lang_exclude=3Drust /home/theihor/kernels/bpf-next/kbuild-output/.tmp=
-_vmlinux1' (13 runs):
-
-             10,462.38 msec cpu-clock:u                      #    6.678 CPU=
-s utilized               ( +-  0.15% )
-
-               1.56670 +- 0.00548 seconds time elapsed  ( +-  0.35% )
-
-
-pahole/next (d444eb6), parallel reproducible:
-
-     Performance counter stats for '/home/theihor/dev/dwarves/build/pahole =
--J -j24 --btf_features=3Dencode_force,var,float,enum64,decl_tag,type_tag,op=
-timized_func,consistent_func,decl_tag_kfuncs,reproducible_build --btf_encod=
-e_detached=3D/dev/null --lang_exclude=3Drust /home/theihor/kernels/bpf-next=
-/kbuild-output/.tmp_vmlinux1' (13 runs):
-
-              6,399.88 msec cpu-clock:u                      #    3.164 CPU=
-s utilized               ( +-  0.22% )
-
-               2.02269 +- 0.00359 seconds time elapsed  ( +-  0.18% )
-
-
-v3: https://lore.kernel.org/dwarves/20241221012245.243845-1-ihor.solodrai@p=
+Link: https://lore.kernel.org/dwarves/YiiVvWJxHUyK75b4FqlvAOnHvX9WLzCsRLG-2=
+36zf_cPZy1jmgbUq2xM4ChxRob1kaTVUdtVljtcpL2Cs3v1wXPGcP8dPeASBiYVGH3jEaQ=3D@p=
 m.me/
-v2: https://lore.kernel.org/dwarves/20241213223641.564002-1-ihor.solodrai@p=
-m.me/
-v1: https://lore.kernel.org/dwarves/20241128012341.4081072-1-ihor.solodrai@=
-pm.me/
 
-Alan Maguire (2):
-  btf_encoder: simplify function encoding
-  btf_encoder: separate elf function, saved function representations
+Signed-off-by: Ihor Solodrai <ihor.solodrai@pm.me>
+---
+ btf_encoder.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Ihor Solodrai (8):
-  btf_encoder: free encoder->secinfo in btf_encoder__delete
-  btf_encoder: introduce elf_functions struct type
-  btf_encoder: introduce elf_functions_list
-  btf_encoder: remove skip_encoding_inconsistent_proto
-  dwarf_loader: introduce cu->id
-  dwarf_loader: multithreading with a job/worker model
-  btf_encoder: clean up global encoders list
-  btf_encoder: switch func_states from a list to an array
-
- btf_encoder.c               | 662 +++++++++++++++++++-----------------
- btf_encoder.h               |   7 +-
- btf_loader.c                |   2 +-
- ctf_loader.c                |   2 +-
- dwarf_loader.c              | 335 ++++++++++++------
- dwarves.c                   |  44 ---
- dwarves.h                   |  21 +-
- pahole.c                    | 230 ++-----------
- pdwtags.c                   |   3 +-
- pfunct.c                    |   3 +-
- tests/reproducible_build.sh |   5 +-
- 11 files changed, 624 insertions(+), 690 deletions(-)
-
+diff --git a/btf_encoder.c b/btf_encoder.c
+index 2e51afd..6720065 100644
+--- a/btf_encoder.c
++++ b/btf_encoder.c
+@@ -2453,6 +2453,7 @@ void btf_encoder__delete(struct btf_encoder *encoder)
+ =09btf_encoders__delete(encoder);
+ =09for (shndx =3D 0; shndx < encoder->seccnt; shndx++)
+ =09=09__gobuffer__delete(&encoder->secinfo[shndx].secinfo);
++=09free(encoder->secinfo);
+ =09zfree(&encoder->filename);
+ =09zfree(&encoder->source_filename);
+ =09btf__free(encoder->btf);
 --=20
 2.47.1
 
