@@ -1,43 +1,43 @@
 Received: from mail-40131.protonmail.ch (mail-40131.protonmail.ch [185.70.40.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BB781F37B6
-	for <dwarves@vger.kernel.org>; Tue,  7 Jan 2025 19:09:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 579061F4737
+	for <dwarves@vger.kernel.org>; Tue,  7 Jan 2025 19:09:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.40.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736276984; cv=none; b=XHnvAzxE9VnplqpWu6TiqBsZhW6wxPpJ7WGw0oA3UntC9JDfhW/dPTLInY15NNxC+b8KggmNvxijPqz/k4aAdvsQq4dFDlJFafpZIlXFWVZcGlPRdfttmrftJSVnxu6b5RGddzcFP6DLbheqzxDCFCoxnxMLxGoKl5Vy4b4h+NY=
+	t=1736276985; cv=none; b=jvPP2pfexE0ibWPAnNFtSAzup978bKd3RPwrxOeJa47+u+ZIC7Lyzmf+ZseOmQaHVXz4UPNPK7fU8zazrSwx65waVX2ClicyAPtra9wUIsajlmp0nQTil4N9o0NdvjOtJutyqbHrAjT/xI5BBVY+EW0NOyl13h3xiYe+opAloGc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736276984; c=relaxed/simple;
-	bh=AnJvG5KV1CDh+Sa9FGvR9/U+9MhmvmAU6SUN9SlHepc=;
+	s=arc-20240116; t=1736276985; c=relaxed/simple;
+	bh=7ovS2eeLPplqA/W3FmMin2daJhx7VohmQwMMXiEQ+RM=;
 	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=G5InUZ2kXcSexuNf+oj5Q5tJEYnhFDbQHVZMjFg7gwioNbWaQHlw35TrtW8G2lnxNWwN0coEbxPNU035V66TCJJk+m05PQFd7j8jBj4f7XGocFG3SJIj9ihSVNK2L4ayMiZb1psHvGWfKG25HGMHSx097udbbVLBA4yd1QnkV2w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me; spf=pass smtp.mailfrom=pm.me; dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b=Q38RzQm/; arc=none smtp.client-ip=185.70.40.131
+	 MIME-Version:Content-Type; b=A16qqeCZUb9r7NLoI45V8vdpqpCrVA6rSwIqeo03lFi93a3zH2Zg3jM5IdMRwcaGftThEDF5tx2pDyp8K2VoA++hAm05cySE9wpBVENl0JAGfFTaRmwzJzFqsbOuk4PM6qwfRAQBiSHxNGIsxilzHrLBfyomLB5dh0ga51xMnn8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me; spf=pass smtp.mailfrom=pm.me; dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b=cCWoExFi; arc=none smtp.client-ip=185.70.40.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pm.me
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b="Q38RzQm/"
+	dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b="cCWoExFi"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me;
-	s=protonmail3; t=1736276971; x=1736536171;
-	bh=jthM5smHq8dNblzxlWEmNR5plcMJ00uxZ5HlZ6RKUPI=;
+	s=protonmail3; t=1736276980; x=1736536180;
+	bh=BHoWOF28SwETmN/kPdJjiJ0vWid8McdO7im7Usp3iGQ=;
 	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
 	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
 	 Message-ID:BIMI-Selector:List-Unsubscribe:List-Unsubscribe-Post;
-	b=Q38RzQm/JL/kS1exixmwRTLhjjyWPoZQ83la7NdbvrQGyDiT12LXHqEQNGTYRf7Vt
-	 5OECJLs1KYgz0fLkGxeLtyh8Gw0XJo21wWjpivCXpxNBn6uc/sjmBIkDstqm1hYnTO
-	 O7BQBLceP1p9OUXNEPVGNmq+VT3Djoa0/C8g1kIU/1juRVcY9K0cv04ZbXtSSZlq7+
-	 GQfsrQUTIESI7d28I0KZla6qVatDxkerTgR1vyToqjn8I62stA0rnAM6q5DRHIcHVI
-	 QG4Y1fYnYCLBWMPAQ7Z6BMMeR5D+ej3SCuQiHHvlXL1yCcTKPb/vHbMt4mRrL7P3zD
-	 vkGZ/1FsI7PFA==
-Date: Tue, 07 Jan 2025 19:09:27 +0000
+	b=cCWoExFiL8pOSn5TAIx8I2Xaa4Rj0Mj/+L5dnAe1lWD5NZzfq9sFURKr4fsZmHyvj
+	 RG62z/HqwteyIs2c1USS/OcTk2JLDugXoRXiYFStTNTyoLgcN4Fxf8noJP8p4bHqlZ
+	 76vQcmuAl+YCTdXb5KXZQcEjW5kb1YbIo992/17eISkkvIRIEziuD2OpY+UvkXmBS+
+	 32+z3cPGV1X4duXGp+LobSC1eB+SMkLJbrXsP+r2zJZhiVZzqESFKt8FObCRV1cZzR
+	 rrpt+JwzhtU81pU7YjUyjLmJG5+TfVscfstRvNcRcnup89mutVeJMZs0A4kSrKxGb6
+	 X2bRUOt7CsZEA==
+Date: Tue, 07 Jan 2025 19:09:37 +0000
 To: dwarves@vger.kernel.org
 From: Ihor Solodrai <ihor.solodrai@pm.me>
 Cc: bpf@vger.kernel.org, acme@kernel.org, alan.maguire@oracle.com, eddyz87@gmail.com, andrii@kernel.org, mykolal@fb.com, olsajiri@gmail.com
-Subject: [PATCH dwarves v4 05/10] btf_encoder: introduce elf_functions_list
-Message-ID: <20250107190855.2312210-6-ihor.solodrai@pm.me>
+Subject: [PATCH dwarves v4 07/10] dwarf_loader: introduce cu->id
+Message-ID: <20250107190855.2312210-8-ihor.solodrai@pm.me>
 In-Reply-To: <20250107190855.2312210-1-ihor.solodrai@pm.me>
 References: <20250107190855.2312210-1-ihor.solodrai@pm.me>
 Feedback-ID: 27520582:user:proton
-X-Pm-Message-ID: 7706a4e7e958c8f792862b8e38a17f4af43d2d60
+X-Pm-Message-ID: b403eedb1f6b467aab56613f796ce5d531955bb8
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
@@ -47,308 +47,62 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-In case of processing of multiple DWARF modules, multiple ELFs are
-read. This requires maintaining and elf_functions table per ELF.
+Add an id member to the struct cu.
 
-Replace btf_encoder.functions with btf_encoder.elf_functions_list,
-that contains all necessary elf_functions tables.
-
-The list is initialized when btf_encoder is created. When a new CU is
-assigned to the encoder in btf_encoder__encode_cu, an elf_functions
-table will be created if the CU is coming from an unknown Elf.
-
-This patch is a variant of [1], following a discussion at [2].
-
-[1] https://lore.kernel.org/bpf/20241213223641.564002-7-ihor.solodrai@pm.me=
-/
-[2] https://lore.kernel.org/bpf/C82bYTvJaV4bfT15o25EsBiUvFsj5eTlm17933Hvva7=
-6CXjIcu3gvpaOCWPgeZ8g3cZ-RMa8Vp0y1o_QMR2LhPB-LEUYfZCGuCfR_HvkIP8=3D@pm.me/
+An id is an index of a CU, in order they are created in dwarf_loader.c
+This allows for an easy identification of a CU, particularly when they
+need to be processed in order.
 
 Signed-off-by: Ihor Solodrai <ihor.solodrai@pm.me>
 ---
- btf_encoder.c | 138 +++++++++++++++++++++++++++++++++++++++++---------
- 1 file changed, 115 insertions(+), 23 deletions(-)
+ dwarf_loader.c | 5 +++++
+ dwarves.h      | 1 +
+ 2 files changed, 6 insertions(+)
 
-diff --git a/btf_encoder.c b/btf_encoder.c
-index 0df9296..7b4523b 100644
---- a/btf_encoder.c
-+++ b/btf_encoder.c
-@@ -102,6 +102,8 @@ struct elf_secinfo {
+diff --git a/dwarf_loader.c b/dwarf_loader.c
+index 34376b2..39e4cba 100644
+--- a/dwarf_loader.c
++++ b/dwarf_loader.c
+@@ -3440,6 +3440,7 @@ struct dwarf_cus {
+ =09int=09=09    build_id_len;
+ =09int=09=09    error;
+ =09struct dwarf_cu=09    *type_dcu;
++=09uint32_t=09nr_cus_created;
  };
 =20
- struct elf_functions {
-+=09struct list_head node; /* for elf_functions_list */
-+=09Elf *elf; /* source ELF */
- =09struct elf_symtab *symtab;
- =09struct elf_function *entries;
- =09int cnt;
-@@ -134,7 +136,11 @@ struct btf_encoder {
- =09size_t             seccnt;
- =09int                encode_vars;
- =09struct list_head   func_states;
--=09struct elf_functions functions;
-+=09/* This is a list of elf_functions tables, one per ELF.
-+=09 * Multiple ELF modules can be processed in one pahole run,
-+=09 * so we have to store elf_functions tables per ELF.
-+=09 */
-+=09struct list_head elf_functions_list;
- };
+ struct dwarf_thread {
+@@ -3472,6 +3473,9 @@ static struct dwarf_cu *dwarf_cus__create_cu(struct d=
+warf_cus *dcus, Dwarf_Die *
+ =09cu->priv =3D dcu;
+ =09cu->dfops =3D &dwarf__ops;
 =20
- struct btf_func {
-@@ -148,6 +154,72 @@ struct btf_kfunc_set_range {
- =09uint64_t end;
- };
++=09cu->id =3D dcus->nr_cus_created;
++=09dcus->nr_cus_created++;
++
+ =09return dcu;
+ }
 =20
-+static inline void elf_functions__delete(struct elf_functions *funcs)
-+{
-+=09for (int i =3D 0; i < funcs->cnt; i++)
-+=09=09free(funcs->entries[i].alias);
-+=09free(funcs->entries);
-+=09elf_symtab__delete(funcs->symtab);
-+=09list_del(&funcs->node);
-+=09free(funcs);
-+}
-+
-+static int elf_functions__collect(struct elf_functions *functions);
-+
-+struct elf_functions *elf_functions__new(Elf *elf)
-+{
-+=09struct elf_functions *funcs;
-+=09int err;
-+
-+=09funcs =3D calloc(1, sizeof(*funcs));
-+=09if (!funcs) {
-+=09=09err =3D -ENOMEM;
-+=09=09goto out_delete;
-+=09}
-+
-+=09funcs->symtab =3D elf_symtab__new(NULL, elf);
-+=09if (!funcs->symtab) {
-+=09=09err =3D -1;
-+=09=09goto out_delete;
-+=09}
-+
-+=09funcs->elf =3D elf;
-+=09err =3D elf_functions__collect(funcs);
-+=09if (err < 0)
-+=09=09goto out_delete;
-+
-+=09return funcs;
-+
-+out_delete:
-+=09elf_functions__delete(funcs);
-+=09return NULL;
-+}
-+
-+static inline void elf_functions_list__clear(struct list_head *elf_functio=
-ns_list)
-+{
-+=09struct elf_functions *funcs;
-+=09struct list_head *pos, *tmp;
-+
-+=09list_for_each_safe(pos, tmp, elf_functions_list) {
-+=09=09funcs =3D list_entry(pos, struct elf_functions, node);
-+=09=09elf_functions__delete(funcs);
-+=09}
-+}
-+
-+static struct elf_functions *elf_functions__find(const Elf *elf, const str=
-uct list_head *elf_functions_list)
-+{
-+=09struct elf_functions *funcs;
-+=09struct list_head *pos;
-+
-+=09list_for_each(pos, elf_functions_list) {
-+=09=09funcs =3D list_entry(pos, struct elf_functions, node);
-+=09=09if (funcs->elf =3D=3D elf)
-+=09=09=09return funcs;
-+=09}
-+=09return NULL;
-+}
-+
-+
- static LIST_HEAD(encoders);
- static pthread_mutex_t encoders__lock =3D PTHREAD_MUTEX_INITIALIZER;
-=20
-@@ -1253,9 +1325,6 @@ static void btf_encoder__delete_saved_funcs(struct bt=
-f_encoder *encoder)
- =09=09free(pos->annots);
- =09=09free(pos);
+@@ -3783,6 +3787,7 @@ static int cus__load_module(struct cus *cus, struct c=
+onf_load *conf,
+ =09=09=09.type_dcu =3D type_cu ? &type_dcu : NULL,
+ =09=09=09.build_id =3D build_id,
+ =09=09=09.build_id_len =3D build_id_len,
++=09=09=09.nr_cus_created =3D 0,
+ =09=09};
+ =09=09res =3D dwarf_cus__process_cus(&dcus);
  =09}
--
--=09for (int i =3D 0; i < encoder->functions.cnt; i++)
--=09=09free(encoder->functions.entries[i].alias);
- }
-=20
- int btf_encoder__add_saved_funcs(struct btf_encoder *encoder)
-@@ -1348,12 +1417,30 @@ static void elf_functions__collect_function(struct =
-elf_functions *functions, GEl
- =09functions->cnt++;
- }
-=20
-+static struct elf_functions *btf_encoder__elf_functions(struct btf_encoder=
- *encoder)
-+{
-+=09struct elf_functions *funcs =3D NULL;
-+
-+=09if (!encoder->cu || !encoder->cu->elf)
-+=09=09return NULL;
-+
-+=09funcs =3D elf_functions__find(encoder->cu->elf, &encoder->elf_functions=
-_list);
-+=09if (!funcs) {
-+=09=09funcs =3D elf_functions__new(encoder->cu->elf);
-+=09=09if (funcs)
-+=09=09=09list_add(&funcs->node, &encoder->elf_functions_list);
-+=09}
-+
-+=09return funcs;
-+}
-+
- static struct elf_function *btf_encoder__find_function(const struct btf_en=
-coder *encoder,
- =09=09=09=09=09=09       const char *name, size_t prefixlen)
- {
-+=09struct elf_functions *funcs =3D elf_functions__find(encoder->cu->elf, &=
-encoder->elf_functions_list);
- =09struct elf_function key =3D { .name =3D name, .prefixlen =3D prefixlen =
-};
-=20
--=09return bsearch(&key, encoder->functions.entries, encoder->functions.cnt=
-, sizeof(key), functions_cmp);
-+=09return bsearch(&key, funcs->entries, funcs->cnt, sizeof(key), functions=
-_cmp);
- }
-=20
- static bool btf_name_char_ok(char c, bool first)
-@@ -2114,6 +2201,8 @@ int btf_encoder__encode(struct btf_encoder *encoder)
- #endif
- =09=09err =3D btf_encoder__write_elf(encoder, encoder->btf, BTF_ELF_SEC);
- =09}
-+
-+=09elf_functions_list__clear(&encoder->elf_functions_list);
- =09return err;
- }
-=20
-@@ -2369,8 +2458,10 @@ out:
- struct btf_encoder *btf_encoder__new(struct cu *cu, const char *detached_f=
-ilename, struct btf *base_btf, bool verbose, struct conf_load *conf_load)
- {
- =09struct btf_encoder *encoder =3D zalloc(sizeof(*encoder));
-+=09struct elf_functions *funcs =3D NULL;
-=20
- =09if (encoder) {
-+=09=09encoder->cu =3D cu;
- =09=09encoder->raw_output =3D detached_filename !=3D NULL;
- =09=09encoder->source_filename =3D strdup(cu->filename);
- =09=09encoder->filename =3D strdup(encoder->raw_output ? detached_filename=
- : cu->filename);
-@@ -2398,6 +2489,13 @@ struct btf_encoder *btf_encoder__new(struct cu *cu, =
-const char *detached_filenam
- =09=09if (conf_load->encode_btf_global_vars)
- =09=09=09encoder->encode_vars |=3D BTF_VAR_GLOBAL;
-=20
-+=09=09INIT_LIST_HEAD(&encoder->elf_functions_list);
-+=09=09funcs =3D btf_encoder__elf_functions(encoder);
-+=09=09if (!funcs)
-+=09=09=09goto out_delete;
-+
-+=09=09encoder->symtab =3D funcs->symtab;
-+
- =09=09GElf_Ehdr ehdr;
-=20
- =09=09if (gelf_getehdr(cu->elf, &ehdr) =3D=3D NULL) {
-@@ -2418,14 +2516,6 @@ struct btf_encoder *btf_encoder__new(struct cu *cu, =
-const char *detached_filenam
- =09=09=09goto out_delete;
- =09=09}
-=20
--=09=09encoder->symtab =3D elf_symtab__new(NULL, cu->elf);
--=09=09if (!encoder->symtab) {
--=09=09=09if (encoder->verbose)
--=09=09=09=09printf("%s: '%s' doesn't have symtab.\n", __func__, cu->filena=
-me);
--=09=09=09goto out;
--=09=09}
--=09=09encoder->functions.symtab =3D encoder->symtab;
--
- =09=09/* index the ELF sections for later lookup */
-=20
- =09=09GElf_Shdr shdr;
-@@ -2463,14 +2553,11 @@ struct btf_encoder *btf_encoder__new(struct cu *cu,=
- const char *detached_filenam
- =09=09if (!found_percpu && encoder->verbose)
- =09=09=09printf("%s: '%s' doesn't have '%s' section\n", __func__, cu->file=
-name, PERCPU_SECTION);
-=20
--=09=09if (elf_functions__collect(&encoder->functions))
--=09=09=09goto out_delete;
--
- =09=09if (encoder->verbose)
- =09=09=09printf("File %s:\n", cu->filename);
- =09=09btf_encoders__add(encoder);
- =09}
--out:
-+
- =09return encoder;
-=20
- out_delete:
-@@ -2493,11 +2580,8 @@ void btf_encoder__delete(struct btf_encoder *encoder=
-)
- =09zfree(&encoder->source_filename);
- =09btf__free(encoder->btf);
- =09encoder->btf =3D NULL;
--=09elf_symtab__delete(encoder->symtab);
-=20
--=09encoder->functions.cnt =3D 0;
--=09free(encoder->functions.entries);
--=09encoder->functions.entries =3D NULL;
-+=09elf_functions_list__clear(&encoder->elf_functions_list);
-=20
- =09btf_encoder__delete_saved_funcs(encoder);
-=20
-@@ -2508,12 +2592,20 @@ int btf_encoder__encode_cu(struct btf_encoder *enco=
-der, struct cu *cu, struct co
- {
- =09struct llvm_annotation *annot;
- =09int btf_type_id, tag_type_id, skipped_types =3D 0;
-+=09struct elf_functions *funcs;
- =09uint32_t core_id;
- =09struct function *fn;
- =09struct tag *pos;
- =09int err =3D 0;
-=20
- =09encoder->cu =3D cu;
-+=09funcs =3D btf_encoder__elf_functions(encoder);
-+=09if (!funcs) {
-+=09=09err =3D -1;
-+=09=09goto out;
-+=09}
-+=09encoder->symtab =3D funcs->symtab;
-+
- =09encoder->type_id_off =3D btf__type_cnt(encoder->btf) - 1;
-=20
- =09if (!encoder->has_index_type) {
-@@ -2597,7 +2689,7 @@ int btf_encoder__encode_cu(struct btf_encoder *encode=
-r, struct cu *cu, struct co
- =09=09=09continue;
- =09=09if (!ftype__has_arg_names(&fn->proto))
- =09=09=09continue;
--=09=09if (encoder->functions.cnt) {
-+=09=09if (funcs->cnt) {
- =09=09=09const char *name;
-=20
- =09=09=09name =3D function__name(fn);
-@@ -2606,7 +2698,7 @@ int btf_encoder__encode_cu(struct btf_encoder *encode=
-r, struct cu *cu, struct co
-=20
- =09=09=09/* prefer exact function name match... */
- =09=09=09func =3D btf_encoder__find_function(encoder, name, 0);
--=09=09=09if (!func && encoder->functions.suffix_cnt &&
-+=09=09=09if (!func && funcs->suffix_cnt &&
- =09=09=09    conf_load->btf_gen_optimized) {
- =09=09=09=09/* falling back to name.isra.0 match if no exact
- =09=09=09=09 * match is found; only bother if we found any
+diff --git a/dwarves.h b/dwarves.h
+index 0a4d5a2..b28a66e 100644
+--- a/dwarves.h
++++ b/dwarves.h
+@@ -290,6 +290,7 @@ struct cu {
+ =09struct ptr_table functions_table;
+ =09struct ptr_table tags_table;
+ =09struct rb_root=09 functions;
++=09uint32_t=09 id;
+ =09const char=09 *name;
+ =09char=09=09 *filename;
+ =09void =09=09 *priv;
 --=20
 2.47.1
 
