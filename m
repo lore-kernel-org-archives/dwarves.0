@@ -1,43 +1,40 @@
-Received: from mail-40134.protonmail.ch (mail-40134.protonmail.ch [185.70.40.134])
+Received: from mail-40131.protonmail.ch (mail-40131.protonmail.ch [185.70.40.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAE8C13B2B8;
-	Thu,  9 Jan 2025 18:39:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.40.134
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44A341AA1D8
+	for <dwarves@vger.kernel.org>; Thu,  9 Jan 2025 19:00:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.40.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736447952; cv=none; b=CJKlOobyG4Hwk66qZHoGe46SscD1qTKwkyeOQpcciK1iTzIOwhxu+DP2YVoNyialEwFQAecEGo3xB+ALZmQ1fWTSHCvwTeGDD2tSusVAft3Z4AyeZxI/Ht4grtLmwziI40iRHMXTsy3iEZS5DmTPNkyPTpHXKGOmeoYEPD0WYjs=
+	t=1736449209; cv=none; b=kodyX/NgJ2d5rql+1VWU+uZZyJDY0RWixIu9oynEShXv64Y6H6KWQo/tZcOC9o4ejGZmUojY2RxH/scCtb8M0EsIPT8iR7Jaw6MBZd8o47NCN33b8Got1/r9O4+rwujwXJs9/cDcMqssi/eoHNVfG3t8+E03us5bXcu8Wf+3DO0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736447952; c=relaxed/simple;
-	bh=Uqguwk6vRTLLu0UvlALj7dGIMZqrlLLKeZF+pZojY88=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=DKBEKtRw2SPHttljjUSgrNVC2ssMfYdv2Fgej4dlQlAcv+sRBzTHvuE1ZrVwFlIcF5YP3EBP7iAmxAyb3KXz0sDAwxDfaAQG30rS5vfWurKoKSTWYNfoDyPpvhjzBeYmaVmYnn8xAXPhkHwTlFO+Az3VMwhAfc1rEhVEePIYlco=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me; spf=pass smtp.mailfrom=pm.me; dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b=mnukIzX0; arc=none smtp.client-ip=185.70.40.134
+	s=arc-20240116; t=1736449209; c=relaxed/simple;
+	bh=sPo30JNIL3dXoWERiHL13cqQ3MMEGH7O5URt4fIhlPk=;
+	h=Date:To:From:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=bhe6bNMY37W6N1xK0aDmjAX5Iz50SFvOlPM8rtPVOuLLoeg2ymUUt+bMNnfeFYwg5Sq38YptFutSr3rSnj486sW+EwtekKAg0E16bvXav5kHf4FRHjTLTCRJtCxRik5GkrL0OlKWVOKSCXGzrgjRnZmW2jyKIZ1c5ZVavu0biss=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me; spf=pass smtp.mailfrom=pm.me; dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b=RXF9VCvS; arc=none smtp.client-ip=185.70.40.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pm.me
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b="mnukIzX0"
+	dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b="RXF9VCvS"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me;
-	s=protonmail3; t=1736447942; x=1736707142;
-	bh=jdFbmQfhoi87Zmc4TZfB0tjtp2G/whz+Y+rKJCOL0iw=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-	 Message-ID:BIMI-Selector:List-Unsubscribe:List-Unsubscribe-Post;
-	b=mnukIzX0TSc5CvCJ/n2C/KXforWzucIbPHXr9dQuibM8eiNZ4ccfVqWmYuNp+LxHd
-	 7b6XRYb8DvHaWV6MJ5O2t68dYDHj5/VPgGka4rxpgC4kcEuwRo+5Q6TJMCDzdjYAX9
-	 Mw4YCThlwVdzeOj6/lq7ebHH2+y7wdW5XZ87T26Ow1sXex+M+xrVi6Vjd+yTwJnDqf
-	 5oCr9opgD+SC21ZB1dhBmFBpBoFbsROscdGrLggZW0zmJvOrG7dgtaYoJzAu5Ikbup
-	 iKHgjxrS27HyDTckZxusaQd2g+8uoo82S3WHhAry6ItZC3sQ39wWnBrEhLEtv8+BQs
-	 cqJuH2bElKRtw==
-Date: Thu, 09 Jan 2025 18:38:57 +0000
-To: Arnaldo Carvalho de Melo <acme@kernel.org>
+	s=protonmail3; t=1736449198; x=1736708398;
+	bh=aJ/8XDfNn391RuCP8JLp8p7TpLFxywYvi/Ae8Db9YKI=;
+	h=Date:To:From:Cc:Subject:Message-ID:Feedback-ID:From:To:Cc:Date:
+	 Subject:Reply-To:Feedback-ID:Message-ID:BIMI-Selector:
+	 List-Unsubscribe:List-Unsubscribe-Post;
+	b=RXF9VCvSWRmneOTBpGtz4bMuN3TGfT3GANh1FCyOeSUIVuBdxz8KcxHpXChPNtPnR
+	 WqVimmIqrqjJ6D03W87lA6Nxwwm28Jivd4Fn/4AkLSg4T3uhxKOPl9uPttzGHa0Hua
+	 Kvodb6PAT+1K7TqLpQqVaE+bmRz+irMUZE2rmBxhyOBnAe2V9ToxkxtUwF0B3yVKwC
+	 gNgk0BqpTaol7CC/dVH/0Vwd4c7Wj97ImiU5OjHH6mt8iIhQ6xwf5qwS2J+6m9stfI
+	 2ui2eVZqGhzYrdyDNdjMk2fuicj3f6WiKID4KXCVRINRzsrUDmuWVhcY3/qaPRRMFy
+	 0n2ItHhqaPiLQ==
+Date: Thu, 09 Jan 2025 18:59:54 +0000
+To: dwarves@vger.kernel.org
 From: Ihor Solodrai <ihor.solodrai@pm.me>
-Cc: dwarves@vger.kernel.org, bpf@vger.kernel.org, alan.maguire@oracle.com, eddyz87@gmail.com, andrii@kernel.org, mykolal@fb.com, olsajiri@gmail.com
-Subject: Re: [PATCH dwarves v4 00/10] pahole: faster reproducible BTF encoding
-Message-ID: <0gG5e2QvD6I6CuApCVn4O0ph5_k_fnKodGP2wGhm6oxiLKh5A_v1mTeezCjU_oEwQxUwRMN9yycf5xbLfIviTlAg-qm6dxHK-PkgVTFDLQ8=@pm.me>
-In-Reply-To: <Z4AWJBNsGJvBU7ZY@x1>
-References: <20250107190855.2312210-1-ihor.solodrai@pm.me> <Z4AWJBNsGJvBU7ZY@x1>
+Cc: bpf@vger.kernel.org, acme@kernel.org, alan.maguire@oracle.com, eddyz87@gmail.com, andrii@kernel.org, mykolal@fb.com, olsajiri@gmail.com
+Subject: [PATCH dwarves v4 RESEND 00/10] pahole: faster reproducible BTF encoding
+Message-ID: <20250109185950.653110-1-ihor.solodrai@pm.me>
 Feedback-ID: 27520582:user:proton
-X-Pm-Message-ID: e1ecc08df1ea92fe1008dc88ff19307cc62b00f4
+X-Pm-Message-ID: cf1aa0a925abcbf5f13d9cc83a31ff3ee14f1275
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
@@ -47,118 +44,120 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-On Thursday, January 9th, 2025 at 10:32 AM, Arnaldo Carvalho de Melo <acme@=
-kernel.org> wrote:
+Note: a resend due to https://lore.kernel.org/dwarves/Z4AWJBNsGJvBU7ZY@x1/
 
->=20
->=20
-> On Tue, Jan 07, 2025 at 07:08:59PM +0000, Ihor Solodrai wrote:
->=20
-> > This is v4 of the series aiming to speed up parallel reproducible BTF
-> > encoding. This version mostly addresses feedback from Jiri Olsa on v3.
->=20
->=20
-> b4 is having trouble with this series, I'm trying to cherry pick
-> things...
+This is v4 of the series aiming to speed up parallel reproducible BTF
+encoding. This version mostly addresses feedback from Jiri Olsa on v3.
 
-Sorry, I think I messed up some patches with manual changes before submitti=
-ng.
-I'll resend a clean series in a bit.
+A notable adition is a patch 10/10, which changes func_states in
+btf_encoder from a list to an array.
 
-Thanks.
+Testing:
 
->=20
-> =E2=AC=A2 [acme@toolbox pahole]$ b4 am -ctsl --cc-trailers 20250107190855=
-.2312210-1-ihor.solodrai@pm.me
-> Grabbing thread from lore.kernel.org/all/20250107190855.2312210-1-ihor.so=
-lodrai@pm.me/t.mbox.gz
-> Checking for newer revisions
-> Grabbing search results from lore.kernel.org
-> Analyzing 13 messages in the thread
-> WARNING: duplicate messages found at index 1
-> Subject 1: dwarf_loader: multithreading with a job/worker model
-> Subject 2: btf_encoder: simplify function encoding
-> 2 is not a reply... assume additional patch
-> Assuming new revision: v2 ([PATCH dwarves v4] btf_encoder: switch func_st=
-ates from a list to an array)
-> Will use the latest revision: v4
-> You can pick other revisions using the -vN flag
-> Checking attestation on all messages, may take a moment...
-> ---
-> =E2=9C=97 [PATCH v4] dwarf_loader: multithreading with a job/worker model
-> =E2=9C=97 BADSIG: DKIM/pm.me
-> + Link: https://lore.kernel.org/r/20250107190855.2312210-9-ihor.solodrai@=
-pm.me
-> + Signed-off-by: Arnaldo Carvalho de Melo acme@redhat.com
->=20
-> =E2=9C=97 [PATCH v4 1/10] btf_encoder: simplify function encoding
-> =E2=9C=97 BADSIG: DKIM/pm.me
-> + Acked-by: Eduard Zingerman eddyz87@gmail.com (=E2=9C=97 DKIM/gmail.com)
->=20
-> + Acked-by: Jiri Olsa jolsa@kernel.org (=E2=9C=97 DKIM/gmail.com)
->=20
-> + Link: https://lore.kernel.org/r/20250107190855.2312210-2-ihor.solodrai@=
-pm.me
-> + Signed-off-by: Arnaldo Carvalho de Melo acme@redhat.com
->=20
-> =E2=9C=97 [PATCH v4 3/10] btf_encoder: separate elf function, saved funct=
-ion representations
-> =E2=9C=97 BADSIG: DKIM/pm.me
-> + Link: https://lore.kernel.org/r/20250107190855.2312210-4-ihor.solodrai@=
-pm.me
-> + Signed-off-by: Arnaldo Carvalho de Melo acme@redhat.com
->=20
-> =E2=9C=97 [PATCH v4 4/10] btf_encoder: introduce elf_functions struct typ=
-e
-> =E2=9C=97 BADSIG: DKIM/pm.me
-> + Link: https://lore.kernel.org/r/20250107190855.2312210-5-ihor.solodrai@=
-pm.me
-> + Signed-off-by: Arnaldo Carvalho de Melo acme@redhat.com
->=20
-> =E2=9C=97 [PATCH v4 5/10] btf_encoder: introduce elf_functions_list
-> =E2=9C=97 BADSIG: DKIM/pm.me
-> + Link: https://lore.kernel.org/r/20250107190855.2312210-6-ihor.solodrai@=
-pm.me
-> + Signed-off-by: Arnaldo Carvalho de Melo acme@redhat.com
->=20
-> =E2=9C=97 [PATCH v4 6/10] btf_encoder: remove skip_encoding_inconsistent_=
-proto
-> =E2=9C=97 BADSIG: DKIM/pm.me
-> + Link: https://lore.kernel.org/r/20250107190855.2312210-7-ihor.solodrai@=
-pm.me
-> + Signed-off-by: Arnaldo Carvalho de Melo acme@redhat.com
->=20
-> =E2=9C=97 [PATCH v4 7/10] dwarf_loader: introduce cu->id
->=20
-> =E2=9C=97 BADSIG: DKIM/pm.me
-> + Link: https://lore.kernel.org/r/20250107190855.2312210-8-ihor.solodrai@=
-pm.me
-> + Signed-off-by: Arnaldo Carvalho de Melo acme@redhat.com
->=20
-> ERROR: missing [8/10]!
-> =E2=9C=97 [PATCH v4 9/10] btf_encoder: clean up global encoders list
-> =E2=9C=97 BADSIG: DKIM/pm.me
-> + Link: https://lore.kernel.org/r/20250107190855.2312210-10-ihor.solodrai=
-@pm.me
-> + Signed-off-by: Arnaldo Carvalho de Melo acme@redhat.com
->=20
-> ERROR: missing [10/10]!
-> ERROR: missing [11/10]!
-> ---
-> Total patches: 8
-> ---
-> WARNING: Thread incomplete!
-> Cover: ./v4_20250107_ihor_solodrai_pahole_faster_reproducible_btf_encodin=
-g.cover
-> Link: https://lore.kernel.org/r/20250107190855.2312210-1-ihor.solodrai@pm=
-.me
-> Base: not specified
-> git am ./v4_20250107_ihor_solodrai_pahole_faster_reproducible_btf_encodin=
-g.mbx
-> =E2=AC=A2 [acme@toolbox pahole]$
->=20
-> > A notable adition is a patch 10/10, which changes func_states in
-> > btf_encoder from a list to an array.
->=20
->=20
-> 
+    vmlinux=3D/home/theihor/kernels/bpf-next/kbuild-output/.tmp_vmlinux1 PA=
+TH=3D$(realpath build):$PATH ./tests/tests
+      1: Validation of BTF encoding of functions; this may take some time: =
+Ok
+      2: Default BTF on a system without BTF: Ok
+      3: Flexible arrays accounting: pahole: type 'nft_pipapo_elem' not fou=
+nd
+    pahole: type 'tls_rec' not found
+    pahole: type 'fuse_direntplus' not found
+    pahole: type 'nft_rhash_elem' not found
+    pahole: type 'nft_hash_elem' not found
+    pahole: type 'nft_bitmap_elem' not found
+    pahole: type 'ipt_standard' not found
+    pahole: type 'nft_rule_dp_last' not found
+    pahole: type 'ip6t_standard' not found
+    pahole: type 'ipt_error' not found
+    pahole: type 'ip6t_error' not found
+    pahole: type 'nft_rbtree_elem' not found
+    Ok
+      4: Check that pfunct can print btf_decl_tags read from BTF: Ok
+      5: Pretty printing of files using DWARF type information: Ok
+      6: Parallel reproducible DWARF Loading/Serial BTF encoding: Ok
+
+The warnings about not found types are also present at pahole/next, so
+not related to this patchset.
+
+
+Performance check. This patchset (always reproducible):
+
+     Performance counter stats for '/home/theihor/dev/dwarves/build/pahole =
+-J -j24 --btf_features=3Dencode_force,var,float,enum64,decl_tag,type_tag,op=
+timized_func,consistent_func,decl_tag_kfuncs,reproducible_build --btf_encod=
+e_detached=3D/dev/null --lang_exclude=3Drust /home/theihor/kernels/bpf-next=
+/kbuild-output/.tmp_vmlinux1' (13 runs):
+
+              5,788.22 msec cpu-clock:u                      #    3.776 CPU=
+s utilized               ( +-  0.17% )
+
+               1.53288 +- 0.00334 seconds time elapsed  ( +-  0.22% )
+
+
+pahole/next (d444eb6), parallel non-reproducible:
+
+     Performance counter stats for '/home/theihor/dev/dwarves/build/pahole =
+-J -j24 --btf_features=3Dencode_force,var,float,enum64,decl_tag,type_tag,op=
+timized_func,consistent_func,decl_tag_kfuncs --btf_encode_detached=3D/dev/n=
+ull --lang_exclude=3Drust /home/theihor/kernels/bpf-next/kbuild-output/.tmp=
+_vmlinux1' (13 runs):
+
+             10,462.38 msec cpu-clock:u                      #    6.678 CPU=
+s utilized               ( +-  0.15% )
+
+               1.56670 +- 0.00548 seconds time elapsed  ( +-  0.35% )
+
+
+pahole/next (d444eb6), parallel reproducible:
+
+     Performance counter stats for '/home/theihor/dev/dwarves/build/pahole =
+-J -j24 --btf_features=3Dencode_force,var,float,enum64,decl_tag,type_tag,op=
+timized_func,consistent_func,decl_tag_kfuncs,reproducible_build --btf_encod=
+e_detached=3D/dev/null --lang_exclude=3Drust /home/theihor/kernels/bpf-next=
+/kbuild-output/.tmp_vmlinux1' (13 runs):
+
+              6,399.88 msec cpu-clock:u                      #    3.164 CPU=
+s utilized               ( +-  0.22% )
+
+               2.02269 +- 0.00359 seconds time elapsed  ( +-  0.18% )
+
+
+v3: https://lore.kernel.org/dwarves/20241221012245.243845-1-ihor.solodrai@p=
+m.me/
+v2: https://lore.kernel.org/dwarves/20241213223641.564002-1-ihor.solodrai@p=
+m.me/
+v1: https://lore.kernel.org/dwarves/20241128012341.4081072-1-ihor.solodrai@=
+pm.me/
+
+Alan Maguire (2):
+  btf_encoder: simplify function encoding
+  btf_encoder: separate elf function, saved function representations
+
+Ihor Solodrai (8):
+  btf_encoder: free encoder->secinfo in btf_encoder__delete
+  btf_encoder: introduce elf_functions struct type
+  btf_encoder: introduce elf_functions_list
+  btf_encoder: remove skip_encoding_inconsistent_proto
+  dwarf_loader: introduce cu->id
+  dwarf_loader: multithreading with a job/worker model
+  btf_encoder: clean up global encoders list
+  btf_encoder: switch func_states from a list to an array
+
+ btf_encoder.c               | 662 +++++++++++++++++++-----------------
+ btf_encoder.h               |   7 +-
+ btf_loader.c                |   2 +-
+ ctf_loader.c                |   2 +-
+ dwarf_loader.c              | 335 ++++++++++++------
+ dwarves.c                   |  44 ---
+ dwarves.h                   |  20 +-
+ pahole.c                    | 230 ++-----------
+ pdwtags.c                   |   3 +-
+ pfunct.c                    |   3 +-
+ tests/reproducible_build.sh |   5 +-
+ 11 files changed, 623 insertions(+), 690 deletions(-)
+
+--=20
+2.47.1
+
+
