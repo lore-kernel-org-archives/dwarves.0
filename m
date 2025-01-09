@@ -1,43 +1,42 @@
-Received: from mail-40133.protonmail.ch (mail-40133.protonmail.ch [185.70.40.133])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFBA81ACEB2
-	for <dwarves@vger.kernel.org>; Thu,  9 Jan 2025 19:00:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.40.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 283544A1A;
+	Thu,  9 Jan 2025 21:21:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736449261; cv=none; b=QYLLDzY39zeujyq6gImgr7Bx1JMK+D7htrJXPTD0pewOPpwsgvn1xY4A7K9E8swhPRYOnaWdqrb+I8yoaLu3ZC2iHpXovN4IQZWoFbfE44XOym1FXV3a+6/eIeGbE+bmUMvPzcx02lX2ZePkF8M1zbEGfUAg7wTD2a2fRyfSQhg=
+	t=1736457672; cv=none; b=ltEiuX3XOI/HrNTD4NE7mF79+KKHzxYXncGVJJRFXuJWtr4BEAnBPlHZ9/tNYw1dBkgWkxDNdDqpYpvwixGTWBeyo3rMJQK2o1VZZ5Bi1JOyAi3rTPE7Qq2lFJ02fa3Et6ykEVXKM2IrE9tTqBcHoJL0MBUS6Pe3xO4n9ElYBbA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736449261; c=relaxed/simple;
-	bh=nWRBvXIZLUG/0nIGRYJF9tUFh/pcE2I31qSTDymXz8o=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Z57+SCEIY5cND40AFNpSjKQU5Jt4QwiCBjo/56dHISEIOB/wuRRmoujwY4N0ACYrtIP0UC2ADpljwzMBDmD0b99CHfbiHgVmUZmGXlrpq2zwFnNqKXLDBM4GRJcX4Yb6SaOKoyzdKJNgpH+p9xynsJKWla3J+OE538M7BwJ7kzw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me; spf=pass smtp.mailfrom=pm.me; dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b=qAgv0GVW; arc=none smtp.client-ip=185.70.40.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pm.me
+	s=arc-20240116; t=1736457672; c=relaxed/simple;
+	bh=5eke31Xn2vgm4qap8irbfg9uOT0d8RFWOkMEN0yJSCI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ElK/QeRSDjd1GkDhsus+OArGrjPwaz+PQd/TnMIqFI2yvjAjytacEyH5OUh4VqayMUmh/yC8mbzHxqB+Xdem8kC7eTZkDmS4mwu85vUK0RNkdLer09h1F4iR5V8x+6rokZn6/rsQicP2INvCGNnCYsEMp4rVLg4soSIDH5K/YX8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PILpHPWF; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b="qAgv0GVW"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me;
-	s=protonmail3; t=1736449257; x=1736708457;
-	bh=23TypOfuJ4mIy7H6YtvpcaGiYoIB9NhyhrjCz2YicjA=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-	 Message-ID:BIMI-Selector:List-Unsubscribe:List-Unsubscribe-Post;
-	b=qAgv0GVW3VUTEQWpt6gCjQJqUq8aL7elAApeyiGPQgTFDY+RXKLULOTFadMJ15m1f
-	 mxVyaNRqOwkjdlC7QgJy8ovrdCpMyht2/sf5dXkyRmsBqBpk/nCf4ULIQlpbKhLAor
-	 Ux0o0OgVIf9rHPhTBtSFXus6Cnk/f95JOHAT/8QoHu5SAn/Gw4RMaHXnyNIXFHaVf3
-	 BviASX32VLpF3FmoMgtDnoBNMLiTDDI8a/xWrsouKInq5TOb/6ARw1BS7RgHRrmgxQ
-	 5idrMMoLuFMfokM034WDjTxbQ3dyXREHGY0swotMDHuBX97RVJx9lusFEqL7kECcZ4
-	 uvIfC6wlYKCnw==
-Date: Thu, 09 Jan 2025 19:00:54 +0000
-To: dwarves@vger.kernel.org
-From: Ihor Solodrai <ihor.solodrai@pm.me>
-Cc: bpf@vger.kernel.org, acme@kernel.org, alan.maguire@oracle.com, eddyz87@gmail.com, andrii@kernel.org, mykolal@fb.com, olsajiri@gmail.com
-Subject: [PATCH dwarves v4 RESEND 10/10] btf_encoder: switch func_states from a list to an array
-Message-ID: <20250109185950.653110-11-ihor.solodrai@pm.me>
-In-Reply-To: <20250109185950.653110-1-ihor.solodrai@pm.me>
-References: <20250109185950.653110-1-ihor.solodrai@pm.me>
-Feedback-ID: 27520582:user:proton
-X-Pm-Message-ID: 199c3894c60d4be22ce735d63b1bc3eda9dd18c4
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PILpHPWF"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70FB0C4CED2;
+	Thu,  9 Jan 2025 21:21:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1736457671;
+	bh=5eke31Xn2vgm4qap8irbfg9uOT0d8RFWOkMEN0yJSCI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=PILpHPWFeqUTEiuS6cJSy128EsobswUe/zXIX2Fii7ZhtY2/GogSb+EesJ2NZqzRs
+	 WOJ8OCzaDBHrgqUs53uKwHyJ667csPb1NmIpMdEmPs5e2v+bEwVcOzFhgOKlHYOvE6
+	 5syIN/hNNX9cNoboK9/KVdf+hm6ihjQC/A18jG4f5On6tixqnERsRrFlKT/6EeqFRX
+	 RI1m308/q4eMFGZpGl6iNwrRnUcCnOp4PmWT8jvx/pxjj1LHQSX6yjl0G/y8jey0+G
+	 JqMNeQWTIc5uZEYvmfzCHB4vVMLG9ynpwsp7SSeLskfzHt8w3nolf8ePIzM0ueBr8+
+	 I0yPvZxiJ5Qbw==
+Date: Thu, 9 Jan 2025 18:21:08 -0300
+From: Arnaldo Carvalho de Melo <acme@kernel.org>
+To: Ihor Solodrai <ihor.solodrai@pm.me>
+Cc: dwarves@vger.kernel.org, bpf@vger.kernel.org, alan.maguire@oracle.com,
+	eddyz87@gmail.com, andrii@kernel.org, mykolal@fb.com,
+	olsajiri@gmail.com
+Subject: Re: [PATCH dwarves v4 00/10] pahole: faster reproducible BTF encoding
+Message-ID: <Z4A9xAHiNxoNihYe@x1>
+References: <20250107190855.2312210-1-ihor.solodrai@pm.me>
+ <Z4AWJBNsGJvBU7ZY@x1>
+ <0gG5e2QvD6I6CuApCVn4O0ph5_k_fnKodGP2wGhm6oxiLKh5A_v1mTeezCjU_oEwQxUwRMN9yycf5xbLfIviTlAg-qm6dxHK-PkgVTFDLQ8=@pm.me>
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
@@ -45,231 +44,87 @@ List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <0gG5e2QvD6I6CuApCVn4O0ph5_k_fnKodGP2wGhm6oxiLKh5A_v1mTeezCjU_oEwQxUwRMN9yycf5xbLfIviTlAg-qm6dxHK-PkgVTFDLQ8=@pm.me>
 
-With only a single encoder, it's now easier to acummulate function
-states into an array, and then sort it before merging the states and
-adding the functions to BTF.
+On Thu, Jan 09, 2025 at 06:38:57PM +0000, Ihor Solodrai wrote:
+> On Thursday, January 9th, 2025 at 10:32 AM, Arnaldo Carvalho de Melo <acme@kernel.org> wrote:
+> 
+> > 
+> > 
+> > On Tue, Jan 07, 2025 at 07:08:59PM +0000, Ihor Solodrai wrote:
+> > 
+> > > This is v4 of the series aiming to speed up parallel reproducible BTF
+> > > encoding. This version mostly addresses feedback from Jiri Olsa on v3.
+> > 
+> > 
+> > b4 is having trouble with this series, I'm trying to cherry pick
+> > things...
+> 
+> Sorry, I think I messed up some patches with manual changes before submitting.
+> I'll resend a clean series in a bit.
 
-Previously a list (per encoder) was collected, and because the sorting
-is required, the lists had to be converted into a temporary array in a
-separate step.
+Better now:
 
-Signed-off-by: Ihor Solodrai <ihor.solodrai@pm.me>
+⬢ [acme@toolbox pahole]$ b4 am -ctsl --cc-trailers 20250109185950.653110-2-ihor.solodrai@pm.me
+Grabbing thread from lore.kernel.org/all/20250109185950.653110-2-ihor.solodrai@pm.me/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 15 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Checking attestation on all messages, may take a moment...
 ---
- btf_encoder.c | 95 ++++++++++++++++++++++++++++++---------------------
- 1 file changed, 57 insertions(+), 38 deletions(-)
-
-diff --git a/btf_encoder.c b/btf_encoder.c
-index da99fbb..78efd70 100644
---- a/btf_encoder.c
-+++ b/btf_encoder.c
-@@ -72,7 +72,6 @@ struct btf_encoder_func_annot {
-=20
- /* state used to do later encoding of saved functions */
- struct btf_encoder_func_state {
--=09struct list_head node;
- =09struct btf_encoder *encoder;
- =09struct elf_function *elf;
- =09uint32_t type_id_off;
-@@ -134,7 +133,11 @@ struct btf_encoder {
- =09struct elf_secinfo *secinfo;
- =09size_t             seccnt;
- =09int                encode_vars;
--=09struct list_head   func_states;
-+=09struct {
-+=09=09struct btf_encoder_func_state *array;
-+=09=09int cnt;
-+=09=09int cap;
-+=09} func_states;
- =09/* This is a list of elf_functions tables, one per ELF.
- =09 * Multiple ELF modules can be processed in one pahole run,
- =09 * so we have to store elf_functions tables per ELF.
-@@ -1078,9 +1081,31 @@ static bool funcs__match(struct btf_encoder_func_sta=
-te *s1,
- =09return true;
- }
-=20
-+static struct btf_encoder_func_state *btf_encoder__alloc_func_state(struct=
- btf_encoder *encoder)
-+{
-+=09struct btf_encoder_func_state *tmp;
-+
-+=09if (encoder->func_states.cnt >=3D encoder->func_states.cap) {
-+
-+=09=09/* We only need to grow to accommodate duplicate
-+=09=09 * function declarations across different CUs, so the
-+=09=09 * rate of the array growth shouldn't be high.
-+=09=09 */
-+=09=09encoder->func_states.cap +=3D 64;
-+
-+=09=09tmp =3D realloc(encoder->func_states.array, sizeof(*tmp) * encoder->=
-func_states.cap);
-+=09=09if (!tmp)
-+=09=09=09return NULL;
-+
-+=09=09encoder->func_states.array =3D tmp;
-+=09}
-+
-+=09return &encoder->func_states.array[encoder->func_states.cnt++];
-+}
-+
- static int32_t btf_encoder__save_func(struct btf_encoder *encoder, struct =
-function *fn, struct elf_function *func)
- {
--=09struct btf_encoder_func_state *state =3D zalloc(sizeof(*state));
-+=09struct btf_encoder_func_state *state =3D btf_encoder__alloc_func_state(=
-encoder);
- =09struct ftype *ftype =3D &fn->proto;
- =09struct btf *btf =3D encoder->btf;
- =09struct llvm_annotation *annot;
-@@ -1142,7 +1167,6 @@ static int32_t btf_encoder__save_func(struct btf_enco=
-der *encoder, struct functi
- =09=09=09idx++;
- =09=09}
- =09}
--=09list_add_tail(&state->node, &encoder->func_states);
- =09return 0;
- out:
- =09zfree(&state->annots);
-@@ -1219,17 +1243,15 @@ static int functions_cmp(const void *_a, const void=
- *_b)
-=20
- static int saved_functions_cmp(const void *_a, const void *_b)
- {
--=09struct btf_encoder_func_state * const *a =3D _a;
--=09struct btf_encoder_func_state * const *b =3D _b;
-+=09const struct btf_encoder_func_state *a =3D _a;
-+=09const struct btf_encoder_func_state *b =3D _b;
-=20
--=09return functions_cmp((*a)->elf, (*b)->elf);
-+=09return functions_cmp(a->elf, b->elf);
- }
-=20
--static int saved_functions_combine(void *_a, void *_b)
-+static int saved_functions_combine(struct btf_encoder_func_state *a, struc=
-t btf_encoder_func_state *b)
- {
- =09uint8_t optimized, unexpected, inconsistent;
--=09struct btf_encoder_func_state *a =3D _a;
--=09struct btf_encoder_func_state *b =3D _b;
- =09int ret;
-=20
- =09ret =3D strncmp(a->elf->name, b->elf->name,
-@@ -1250,44 +1272,37 @@ static int saved_functions_combine(void *_a, void *=
-_b)
-=20
- static void btf_encoder__delete_saved_funcs(struct btf_encoder *encoder)
- {
--=09struct btf_encoder_func_state *pos, *s;
-+=09struct btf_encoder_func_state *state;
-=20
--=09list_for_each_entry_safe(pos, s, &encoder->func_states, node) {
--=09=09list_del(&pos->node);
--=09=09free(pos->parms);
--=09=09free(pos->annots);
--=09=09free(pos);
-+=09for (int i =3D 0; i < encoder->func_states.cnt; i++) {
-+=09=09state =3D &encoder->func_states.array[i];
-+=09=09free(state->parms);
-+=09=09free(state->annots);
- =09}
-+
-+=09free(encoder->func_states.array);
-+
-+=09encoder->func_states.array =3D NULL;
-+=09encoder->func_states.cnt =3D 0;
-+=09encoder->func_states.cap =3D 0;
- }
-=20
- static int btf_encoder__add_saved_funcs(struct btf_encoder *encoder, bool =
-skip_encoding_inconsistent_proto)
- {
--=09struct btf_encoder_func_state **saved_fns =3D NULL, *s;
--=09int err =3D 0, i =3D 0, j, nr_saved_fns =3D 0;
--
--=09/* Retrieve function states from the encoder, combine them
--=09 * and sort by name, addr.
--=09 */
--=09list_for_each_entry(s, &encoder->func_states, node) {
--=09=09nr_saved_fns++;
--=09}
-+=09struct btf_encoder_func_state *saved_fns =3D encoder->func_states.array=
-;
-+=09int nr_saved_fns =3D encoder->func_states.cnt;
-+=09int err =3D 0, i =3D 0, j;
-=20
- =09if (nr_saved_fns =3D=3D 0)
- =09=09goto out;
-=20
--=09saved_fns =3D calloc(nr_saved_fns, sizeof(*saved_fns));
--=09if (!saved_fns) {
--=09=09err =3D -ENOMEM;
--=09=09goto out;
--=09}
--
--=09list_for_each_entry(s, &encoder->func_states, node) {
--=09=09saved_fns[i++] =3D s;
--=09}
-+=09/* Sort the saved_fns so that we can merge multiple states of
-+=09 * the "same" function into one, before adding it to the BTF.
-+=09 */
- =09qsort(saved_fns, nr_saved_fns, sizeof(*saved_fns), saved_functions_cmp)=
-;
-=20
- =09for (i =3D 0; i < nr_saved_fns; i =3D j) {
--=09=09struct btf_encoder_func_state *state =3D saved_fns[i];
-+=09=09struct btf_encoder_func_state *state =3D &saved_fns[i];
- =09=09bool add_to_btf =3D !skip_encoding_inconsistent_proto;
-=20
- =09=09/* Compare across sorted functions that match by name/prefix;
-@@ -1295,7 +1310,7 @@ static int btf_encoder__add_saved_funcs(struct btf_en=
-coder *encoder, bool skip_e
- =09=09 */
- =09=09j =3D i + 1;
-=20
--=09=09while (j < nr_saved_fns && saved_functions_combine(saved_fns[i], sav=
-ed_fns[j]) =3D=3D 0)
-+=09=09while (j < nr_saved_fns && saved_functions_combine(&saved_fns[i], &s=
-aved_fns[j]) =3D=3D 0)
- =09=09=09j++;
-=20
- =09=09/* do not exclude functions with optimized-out parameters; they
-@@ -1313,7 +1328,6 @@ static int btf_encoder__add_saved_funcs(struct btf_en=
-coder *encoder, bool skip_e
- =09}
-=20
- out:
--=09free(saved_fns);
- =09btf_encoder__delete_saved_funcs(encoder);
-=20
- =09return err;
-@@ -2404,7 +2418,7 @@ struct btf_encoder *btf_encoder__new(struct cu *cu, c=
-onst char *detached_filenam
- =09=09encoder->need_index_type =3D false;
- =09=09encoder->array_index_id  =3D 0;
- =09=09encoder->encode_vars =3D 0;
--=09=09INIT_LIST_HEAD(&encoder->func_states);
-+
- =09=09if (!conf_load->skip_encoding_btf_vars)
- =09=09=09encoder->encode_vars |=3D BTF_VAR_PERCPU;
- =09=09if (conf_load->encode_btf_global_vars)
-@@ -2417,6 +2431,11 @@ struct btf_encoder *btf_encoder__new(struct cu *cu, =
-const char *detached_filenam
-=20
- =09=09encoder->symtab =3D funcs->symtab;
-=20
-+=09=09/* Start with funcs->cnt. The array may grow in btf_encoder__alloc_f=
-unc_state() */
-+=09=09encoder->func_states.array =3D zalloc(sizeof(*encoder->func_states.a=
-rray) * funcs->cnt);
-+=09=09encoder->func_states.cap =3D funcs->cnt;
-+=09=09encoder->func_states.cnt =3D 0;
-+
- =09=09GElf_Ehdr ehdr;
-=20
- =09=09if (gelf_getehdr(cu->elf, &ehdr) =3D=3D NULL) {
---=20
-2.47.1
-
-
+  ✗ [PATCH v4 1/10] btf_encoder: simplify function encoding
+    + Acked-by: Eduard Zingerman <eddyz87@gmail.com> (✗ DKIM/gmail.com)
+    + Acked-by: Jiri Olsa <jolsa@kernel.org> (✗ DKIM/gmail.com)
+    + Link: https://lore.kernel.org/r/20250109185950.653110-2-ihor.solodrai@pm.me
+    + Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+  ✗ [PATCH v4 2/10] btf_encoder: free encoder->secinfo in btf_encoder__delete
+    + Link: https://lore.kernel.org/r/20250109185950.653110-3-ihor.solodrai@pm.me
+    + Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+  ✗ [PATCH v4 3/10] btf_encoder: separate elf function, saved function representations
+    + Link: https://lore.kernel.org/r/20250109185950.653110-4-ihor.solodrai@pm.me
+    + Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+  ✗ [PATCH v4 4/10] btf_encoder: introduce elf_functions struct type
+    + Link: https://lore.kernel.org/r/20250109185950.653110-5-ihor.solodrai@pm.me
+    + Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+  ✗ [PATCH v4 5/10] btf_encoder: introduce elf_functions_list
+    + Link: https://lore.kernel.org/r/20250109185950.653110-6-ihor.solodrai@pm.me
+    + Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+  ✗ [PATCH v4 6/10] btf_encoder: remove skip_encoding_inconsistent_proto
+    + Link: https://lore.kernel.org/r/20250109185950.653110-7-ihor.solodrai@pm.me
+    + Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+  ✗ [PATCH v4 7/10] dwarf_loader: introduce cu->id
+    + Link: https://lore.kernel.org/r/20250109185950.653110-8-ihor.solodrai@pm.me
+    + Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+  ✗ [PATCH v4 8/10] dwarf_loader: multithreading with a job/worker model
+    + Link: https://lore.kernel.org/r/20250109185950.653110-9-ihor.solodrai@pm.me
+    + Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+  ✗ [PATCH v4 9/10] btf_encoder: clean up global encoders list
+    + Link: https://lore.kernel.org/r/20250109185950.653110-10-ihor.solodrai@pm.me
+    + Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+  ✗ [PATCH v4 10/10] btf_encoder: switch func_states from a list to an array
+    + Link: https://lore.kernel.org/r/20250109185950.653110-11-ihor.solodrai@pm.me
+    + Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+  ---
+  ✗ BADSIG: DKIM/pm.me
+---
+Total patches: 10
+---
+Cover: ./v4_20250109_ihor_solodrai_pahole_faster_reproducible_btf_encoding.cover
+ Link: https://lore.kernel.org/r/20250109185950.653110-1-ihor.solodrai@pm.me
+ Base: not specified
+       git am ./v4_20250109_ihor_solodrai_pahole_faster_reproducible_btf_encoding.mbx
+⬢ [acme@toolbox pahole]$        git am ./v4_20250109_ihor_solodrai_pahole_faster_reproducible_btf_encoding.mbx
+Applying: btf_encoder: simplify function encoding
+Applying: btf_encoder: free encoder->secinfo in btf_encoder__delete
+Applying: btf_encoder: separate elf function, saved function representations
+Applying: btf_encoder: introduce elf_functions struct type
+Applying: btf_encoder: introduce elf_functions_list
+Applying: btf_encoder: remove skip_encoding_inconsistent_proto
+Applying: dwarf_loader: introduce cu->id
+Applying: dwarf_loader: multithreading with a job/worker model
+Applying: btf_encoder: clean up global encoders list
+Applying: btf_encoder: switch func_states from a list to an array
+⬢ [acme@toolbox pahole]$
