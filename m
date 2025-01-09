@@ -1,42 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92AD539AEB
-	for <dwarves@vger.kernel.org>; Thu,  9 Jan 2025 16:02:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF3C0249E5;
+	Thu,  9 Jan 2025 16:03:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736438525; cv=none; b=RrtklhV927Oy6ZxQXiCbsFxGybU7zK9KneASu3NWvwbdH+AE54uBv03YD/HWJreZ42AIelXpXytXAmaDCiP5TBq7h6iDWw0b/FkYaPx5pOcpmgLyNvzd3OkFHvEhUpoOQlV6SllsE/uqK2TMoI354ZujXysvBAZysziT5hozXHQ=
+	t=1736438609; cv=none; b=nXUv/8ucwwpNibtbUlL0yBEeYcGPJVjMczVX3CJPZIrh4ep6Qu1Ac2/vrrBftA3xIZ4/2li4CnRoC+XZMr7Vkf6OPo+6i57LvrEYe8LxKLSqcJVHKnTLaMHIKZjtEuvMAmfpD46vhN7GhrB3krv0zNmLcrRQpT2hCc77t44CvT4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736438525; c=relaxed/simple;
-	bh=FZc93scrpjUfkxD4/ZDkKTT9PK2CO4OGAlRJNOVqyy4=;
+	s=arc-20240116; t=1736438609; c=relaxed/simple;
+	bh=MeRpIz07IO3DB6Ldz84dGTdMhtVBjunWM8RIYG1CZDs=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Mb9PelTW9b+9VgvpBoeP+9dmXeRpd71TV5R02gB1mhvbFX7z4MP3vOyVIAjX/7tWDDbeDYDu0x1DLeROTc8y3S4ZDPNBTF6V3MMIqidJHYr5BjDoK8jhJzNnjmE14xO8wu8E5rGH3ephDBOe/Muzhn92rBwRQc7Tx45i2bMCRLY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HNOu7I5v; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=OgJSv4oeHOZfPaXQKXB8tyEk3ZjOk+b7XAsLa6vxWmNJQGoMMPSVdvSi6ZpMzPwqLRKFBSeLDgGVe1U+CZy3nnJkLbsXUyUckmCH+oOrlmsJCevmjRvafnyf/HHPSMLXUscGNp3oJ7h8zujlWs5rBX0aH8AVZ9yq7zhmgT9/TQA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=g2Pocp/D; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HNOu7I5v"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10A9EC4CED2;
-	Thu,  9 Jan 2025 16:02:04 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="g2Pocp/D"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1E3DC4CED3;
+	Thu,  9 Jan 2025 16:03:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1736438525;
-	bh=FZc93scrpjUfkxD4/ZDkKTT9PK2CO4OGAlRJNOVqyy4=;
+	s=k20201202; t=1736438609;
+	bh=MeRpIz07IO3DB6Ldz84dGTdMhtVBjunWM8RIYG1CZDs=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=HNOu7I5vJ54Gi4X5W7jsdkU9hcbL+5zjYYeNe7lWD+pnzqsyjhnAJHwlGwm+a6Zk6
-	 JYbGm59mO1W2yLYaeePA6baVoV2OnwWtPVJUvRNKcsBsaPHW1natvpsk5EUa7ANRjg
-	 cjhKppqC5s2ynalBkbSjQJXAZ5FStHvhD1jMH5NYk6Cfui+bgEt/6GZH9NUFias+W9
-	 a7032y5q+wbJGT+ukXbEMhfLbXhgWdoyxrBQhaEAnigeHm1kunaoG2DimmpJLLfNGy
-	 ZC7FlI7gwwxK7q9qHcjYcjEB72a1QwuQth22CS68owqu+sBZW6GPt06AC9DC9uZuSR
-	 ya9uT/CXXuFxA==
-Date: Thu, 9 Jan 2025 13:02:02 -0300
+	b=g2Pocp/D7ATfHqlN++yZr2YQ2pFNHk7+D97yBWrGkQNdjriYrXijXjq7eEfqNxPWU
+	 gBgac0p5Y3kmvE9xVndfsd2BNgR8Gj0BT0Yf9Y7TxCQHuptOdxjDOvWbLglrYFoX++
+	 n2P3KIbUzwWALrY1OnRLxTOjnhmsjpl0Tqg1NzOSzLAjS6jMJNJJEl7DTA4aBDdwZB
+	 INnyhsIX+ILceH+MkpOvenfwzYhx5JbLNeNeVBjG/Wu6Y+2w4xYm8r3g1wt3meY0yx
+	 oT8Wc7Cj7M5GSxbVfAOq50JHRWdskC4/iA2wYdAL8GFPC+VrgHUaCADEiMiFfOgqMR
+	 /4vk9pZuv3bTA==
+Date: Thu, 9 Jan 2025 13:03:26 -0300
 From: Arnaldo Carvalho de Melo <acme@kernel.org>
-To: Ihor Solodrai <ihor.solodrai@pm.me>
-Cc: Alan Maguire <alan.maguire@oracle.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Mykola Lysenko <mykolal@fb.com>, dwarves@vger.kernel.org
-Subject: Re: [PATCH 1/1] pfunct: Don't print functions twice when using -f
-Message-ID: <Z3_y-pCUnFKKwNWe@x1>
-References: <Z3L2I_7Dzob9W0fs@x1>
- <pSXsKeRFQiU9meWBswxgbd5xph4-MORqQqpkutS0ywR3o90CG7umoIishI_WkHfFt2US_290bg023MV2MCn3abx9ytVoyLA95E_Dq8k6T2I=@pm.me>
+To: Alan Maguire <alan.maguire@oracle.com>
+Cc: Ihor Solodrai <ihor.solodrai@pm.me>, dwarves@vger.kernel.org,
+	eddyz87@gmail.com, andrii@kernel.org, mykolal@fb.com,
+	bpf@vger.kernel.org
+Subject: Re: [PATCH dwarves] dwarves: set cu->obstack chunk size to 128Kb
+Message-ID: <Z3_zTvfgnOt-fhLZ@x1>
+References: <20241221030445.33907-1-ihor.solodrai@pm.me>
+ <92a6a095-3a49-4204-af49-643f2db1e3a9@oracle.com>
+ <Xfd2PxigaipLv392tfxKUdgwxRMdn9bMsaq4GCJxbX7DooxvxfZAtJceZkZVk14GHODh0twQw598iFTBaYkZ8mJxTCfEhi7S9WgB54C0zN4=@pm.me>
+ <bf09b28d-e1b6-4de8-8eb2-410b017679ff@oracle.com>
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
@@ -45,80 +46,60 @@ List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <pSXsKeRFQiU9meWBswxgbd5xph4-MORqQqpkutS0ywR3o90CG7umoIishI_WkHfFt2US_290bg023MV2MCn3abx9ytVoyLA95E_Dq8k6T2I=@pm.me>
+In-Reply-To: <bf09b28d-e1b6-4de8-8eb2-410b017679ff@oracle.com>
 
-On Thu, Jan 02, 2025 at 11:21:16PM +0000, Ihor Solodrai wrote:
-> On Monday, December 30th, 2024 at 11:36 AM, Arnaldo Carvalho de Melo <acme@kernel.org> wrote:
+On Wed, Jan 08, 2025 at 05:22:56PM +0000, Alan Maguire wrote:
+> On 08/01/2025 16:38, Ihor Solodrai wrote:
+> > On Wednesday, January 8th, 2025 at 5:55 AM, Alan Maguire <alan.maguire@oracle.com> wrote:
+> > 
+> >>
+> >>
+> >> On 21/12/2024 03:04, Ihor Solodrai wrote:
+> >>
+> >>> In dwarf_loader with growing nr_jobs the wall-clock time of BTF
+> >>> encoding starts worsening after a certain point [1].
+> >>>
+> >>> While some overhead of additional threads is expected, it's not
+> >>> supposed to be noticeable unless nr_jobs is set to an unreasonably big
+> >>> value.
+> >>>
+> >>> It turns out when there are "too many" threads decoding DWARF, they
+> >>> start competing for memory allocation: significant number of cycles is
+> >>> spent in osq_lock - in the depth of malloc called within
+> >>> cu__zalloc. Which suggests that many threads are trying to allocate
+> >>> memory at the same time.
+> >>>
+> >>> See an example on a perf flamegraph for run with -j240 [2]. This is
+> >>> 12-core machine, so the effect is small. On machines with more cores
+> >>> this problem is worse.
+> >>>
+> >>> Increasing the chunk size of obstacks associated with CUs helps to
+> >>> reduce the performance penalty caused by this race condition.
+> >>
+> >>
+> >> Is this because starting with a larger obstack size means we don't have
+> >> to keep reallocating as the obstack grows?
+> > 
+> > Yes. Bigger obstack size leads to lower number of malloc calls. The
+> > mallocs tend to happen at the same time between threads in the case of
+> > DWARF decoding.
+> > 
+> > Curiously, setting a higher obstack chunk size (like 1Mb), does not
+> > improve the overall wall-clock time, and can even make it worse.
+> > This happens because the kernel takes a different code path to allocate
+> > bigger chunks of memory. And also most CUs are not big (at least in case
+> > of vmlinux), so a bigger chunk size probably increases wasted memory.
+> > 
+> > 128Kb seems to be close to a sweet spot for the vmlinux.
+> > The default is 4Kb.
+> >
 > 
-> > 
-> > 
-> > We print it in the pfunct_stealer, i.e. as soon as we load the CU
-> > containing the function information, and then, later, we were iterating
-> > all cus and printing the functions that matched.
-> > 
-> > Do it just at the stealer.
-> > 
-> > Cc: Alan Maguire alan.maguire@oracle.com
-> > 
-> > Cc: Andrii Nakryiko andrii@kernel.org
-> > 
-> > Cc: Eduard Zingerman eddyz87@gmail.com
-> > 
-> > Cc: Ihor Solodrai ihor.solodrai@pm.me
-> > 
-> > Cc: Mykola Lysenko mykolal@fb.com
-> > 
-> > Link: https://lore.kernel.org/all/Z3LoTvt7PtUAbh5K@x1
-> > Signed-off-by: Arnaldo Carvalho de Melo acme@redhat.com
+> Thanks for the additional details!
 > 
-> Can confirm this fixes double-printing of some functions when
-> running pfunct -F dwarf
-> 
-> Tested-by: Ihor Solodrai <ihor.solodrai@pm.me>
+> Reviewed-by: Alan Maguire <alan.maguire@oracle.com>
 
-Thanks, added to the cset.
+I'm adding these details and your reviewed-by tag to that cset.
+
+Thanks!
 
 - Arnaldo
- 
-> > 
-> > ---
-> > pfunct.c | 11 ++++-------
-> > 1 file changed, 4 insertions(+), 7 deletions(-)
-> > 
-> > diff --git a/pfunct.c b/pfunct.c
-> > index 55eafe8a8e790dcb..5a6dd59a1c7a30b1 100644
-> > --- a/pfunct.c
-> > +++ b/pfunct.c
-> > @@ -415,14 +415,12 @@ static void function__show(struct function *func, struct cu *cu)
-> > fstats->printed = true;
-> > 
-> > }
-> > 
-> > -static int cu_function_iterator(struct cu *cu, void *cookie)
-> > +static int cu_function_iterator(struct cu *cu, void *cookie __maybe_unused)
-> > {
-> > struct function *function;
-> > uint32_t id;
-> > 
-> > cu__for_each_function(cu, id, function) {
-> > - if (cookie && strcmp(function__name(function), cookie) != 0)
-> > - continue;
-> > function__show(function, cu);
-> > }
-> > return 0;
-> > @@ -816,10 +814,9 @@ try_sole_arg_as_function_name:
-> > function__show(f, cu);
-> > } else if (show_total_inline_expansion_stats)
-> > print_total_inline_stats();
-> > - else if (function_name != NULL || expand_types)
-> > - cus__for_each_cu(cus, cu_function_iterator,
-> > - function_name, NULL);
-> > - else
-> > + else if (expand_types)
-> > + cus__for_each_cu(cus, cu_function_iterator, NULL, NULL);
-> > + else if (function_name == NULL)
-> > print_fn_stats(formatter);
-> > 
-> > rc = EXIT_SUCCESS;
-> > --
-> > 2.46.2
