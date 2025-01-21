@@ -1,168 +1,116 @@
-Received: from mail-10631.protonmail.ch (mail-10631.protonmail.ch [79.135.106.31])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79A243D81
-	for <dwarves@vger.kernel.org>; Fri, 17 Jan 2025 00:14:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.135.106.31
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AE5D1F1517;
+	Tue, 21 Jan 2025 12:29:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737072895; cv=none; b=MXawucN0GQb7f8CnA6ckR+DVUJAIzfddgjJzB1kWEGmwo0xPtZ1DGJ4moRNJDSm/cCWj+UqMcns1FbY6jMFPQRiQsWLvhQ0XdbvDMVz4eyKH21EY8xB/O55DL1f1B5tm9DJIT8PmYKwZ7N985wkRnb6AxouvR1zgwnN/zD+PP9o=
+	t=1737462548; cv=none; b=dA3BtECpZ8w1ggFWFYN41/FIYClEpCOS0LSo+VxMt0FWX3rv3iFlGMz6IHAuHTXnjfOf3v9s0k+zrE7vydtSpw1YqDUT4Rc0buGBRytj9ZDp+eDse4RUsdaRcFzKWu3RSg9TpMsCmTy5cUuUdNSDz8pKs1+zFxntL/cLIXYNrko=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737072895; c=relaxed/simple;
-	bh=u3DxTae53gohQbJZTsXL/05XNhSXChMYjJx/TcjL80E=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=QShMlbJzpVaeGYhPwTEI3e/ZffvPm86EyhE6KsmZ3iBuwaKNvgL64Z/B/aFal67ifuPCHf5MRnRB2DH/m5W+oDM0TYGJESx8jBp15o08NSnGW5eaYnMFpDVVe70QCKoNYq3cDXNkIy5Dz14zPzWX6sITJDNB7MdWbzm4jB8r8JA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me; spf=pass smtp.mailfrom=pm.me; dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b=KIsEmq8B; arc=none smtp.client-ip=79.135.106.31
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pm.me
+	s=arc-20240116; t=1737462548; c=relaxed/simple;
+	bh=/gJad0hzVC6gdQi0Vrylz5MVKI4Be2IkWe0CLAVCmEY=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=eQ6B/MNjMdLHwxKKm2YLeamlruFgh+3dpzLbeTdGmUCu966JBTW3I5QkNxyn6e9PWFASFwCfnxMR4FDnIXiZtRtRyIvWsf2YtPDd/Z4dDj0CEGb74YsmWF76IuW6GJm8SFEku+57iBwW28t8zss/Q+/YFlsDTWvLsgouW5C/zkQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=doFpnkvz; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b="KIsEmq8B"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me;
-	s=protonmail3; t=1737072885; x=1737332085;
-	bh=u3DxTae53gohQbJZTsXL/05XNhSXChMYjJx/TcjL80E=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-	 Message-ID:BIMI-Selector:List-Unsubscribe:List-Unsubscribe-Post;
-	b=KIsEmq8B1Q0dZPJyxibVCxgP6ZbcQ5/RSQWpdqZSf9pAHXZIAtL5YYHgQH12WoL6O
-	 p3tZddrcCw5d4kSTQd51yI+/KCW9WsaYjfLqp72T/eDzkCVxfvcEg3JKn70mS6pV/B
-	 1FtXapGMeA4DYaFJm1+GnTPwx5VCwHxnZjv3vyNOOES3MoqE/MsFXsLbQbQAC9JBMa
-	 LCSsZiY1AEYWwiCuYpF6/VGikFMFv/XDZZseWjvmq8AT3bcOz0DIqE5+YYDC4cwZ75
-	 XYp4OCCXHo49ttYopvAa0U1awkaaO/2xeBtjJ5Fdu8RQIBvad+fCeYTkjZdrKRcbo8
-	 xH3P5lPa6Ukog==
-Date: Fri, 17 Jan 2025 00:14:40 +0000
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-From: Ihor Solodrai <ihor.solodrai@pm.me>
-Cc: alan.maguire@oracle.com, andrii@kernel.org, Arnaldo Carvalho de Melo <acme@kernel.org>, dwarves@vger.kernel.org, bpf@vger.kernel.org, eddyz87@gmail.com, mykolal@fb.com, olsajiri@gmail.com
-Subject: Re: [PATCH dwarves] btf_encoder: always initialize func_state to 0
-Message-ID: <NnLpoVqF_D4cItx1TyXTZt52XYESyQTsGDwZDgrjOzRJ5tEBVS9OtvQJT68ToG__5rxtMqh_ud23O7AQDWLaU332LavRdLfmRIA7SzCVrTk=@pm.me>
-In-Reply-To: <CAEf4Bzawp=RazHAu=K8WjhhU=A9nSu08OTcov3JScyotxi8GhA@mail.gmail.com>
-References: <20250110023138.659519-1-ihor.solodrai@pm.me> <Z4El7MpHaaj2YX32@x1> <hUL5Ezb9xUJEqsK7bb5iftwkA6tM4b3eZ1uA_pusQ68pSzwUzRh4s2rh4pgiv_WxqlaeZ6BizW9CHBiWeodp_N1vOZmpJLvoKwHbWALMc2Y=@pm.me> <gPqr61y-AW0EUZ6chsBf2VapMfPv3lcgMFNv9ZG9Whx27iDVUWv8OMw0mTxJw2ptx9jrGxNbNBMOXmmmzhElig3VeabYlWlaGlPD6jSAYsY=@pm.me> <CAEf4Bzawp=RazHAu=K8WjhhU=A9nSu08OTcov3JScyotxi8GhA@mail.gmail.com>
-Feedback-ID: 27520582:user:proton
-X-Pm-Message-ID: ab192063dcdc672aab577c0c86ab0a08c10272af
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="doFpnkvz"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0FFC2C4CEDF;
+	Tue, 21 Jan 2025 12:29:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1737462547;
+	bh=/gJad0hzVC6gdQi0Vrylz5MVKI4Be2IkWe0CLAVCmEY=;
+	h=Date:From:To:Cc:Subject:From;
+	b=doFpnkvzq21Sy68Mh7sADg6g95cc5xgRZyJ8YjycDgHO7Vwrp61htEpvQ+qkT1UqF
+	 78a89bjEJQCo7AYCR55B4g0OmSQMBwI6+YGquksKp6SJN3SRM8K6Fp5TlkwolOiB8q
+	 fI0Au9O9EICBh02YsobF7vEVeTRnMWbF9EPKd0c6oaRdMN/ICYRpb+VmIgMXWN6GPv
+	 9Bk3Nlk5WXk2gPHTEZWgkIog+toKqO4pndte+O2iOVvTkLzeg/rjsX29O4G9SllpwJ
+	 5k+DoXUj3EJBhNgEGeyt0ThUhP4hva4fjWDMOsI1XWI7SDSlAWO5riHdgAf1If8VqI
+	 jg1iF0V+FDK3A==
+Date: Tue, 21 Jan 2025 13:29:02 +0100
+From: Arnaldo Carvalho de Melo <acme@kernel.org>
+To: dwarves@vger.kernel.org
+Cc: Alan Maguire <alan.maguire@oracle.com>,
+	Ihor Solodrai <ihor.solodrai@pm.me>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
+	Mykola Lysenko <mykolal@fb.com>,
+	Jan Alexander Steffens <heftig@archlinux.org>,
+	Domenico Andreoli <cavok@debian.org>,
+	Matthias Schwarzott <zzam@gentoo.org>,
+	Dominique Leuenberger <dimstar@opensuse.org>,
+	Dominique Martinet <asmadeus@codewreck.org>,
+	Viktor Malik <vmalik@redhat.com>,
+	Tom Stellard <tstellar@redhat.com>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	bpf@vger.kernel.org
+Subject: ANNOUNCE: pahole v1.29 (Better DWARF loading & BTF encoding)
+Message-ID: <Z4-TDt42dTKZvCo6@x1>
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Thursday, January 16th, 2025 at 3:41 PM, Andrii Nakryiko <andrii.nakryik=
-o@gmail.com> wrote:
+Hi,
+ 
+	The v1.29 release of pahole is out with more efficient
+multithreaded DWARF loading and BTF encoding, that is now always
+reproducible, multiple decl tags are supported in the BTF loader and
+thus pfunct can pretty print the full function prototype.
 
->=20
->=20
-> On Wed, Jan 15, 2025 at 1:06=E2=80=AFPM Ihor Solodrai ihor.solodrai@pm.me=
- wrote:
->=20
-> > On Friday, January 10th, 2025 at 7:58 AM, Ihor Solodrai ihor.solodrai@p=
-m.me wrote:
-> >=20
-> > > On Friday, January 10th, 2025 at 5:51 AM, Arnaldo Carvalho de Melo ac=
-me@kernel.org wrote:
-> > >=20
-> > > > On Fri, Jan 10, 2025 at 02:31:41AM +0000, Ihor Solodrai wrote:
-> > > >=20
-> > > > > BPF CI caught a segfault on aarch64 and s390x [1] after recent me=
-rges
-> > > > > into the master branch.
-> > > >=20
-> > > > In the past the libbpf github actions was tracking the tmp.master (=
-it would
-> > > > be better to track "next") branch and I was looking at when it pass=
-ed to
-> > > > then move "next" to master, that would be great to have so that we
-> > > > wouldn't be having these bugs in the git history, avoiding force pu=
-shes.
-> > >=20
-> > > libbpf CI is still tracking tmp.master:
-> > >=20
-> > > https://github.com/libbpf/libbpf/actions/runs/12696027660/job/3538920=
-6487
-> > >=20
-> > > However it only runs once a day. BPF CI runs more frequently due to t=
-he
-> > > volume of incoming patches. As of recently, BPF CI has been using "ma=
-ster".
-> > > Yesterday, when I saw the failures, I switched BPF CI to v1.28.
-> > >=20
-> > > I think the right way to approach this is for libbpf/libbpf to track =
-"next",
-> > > and BPF CI use "master". Then, most importantly, only merge next into=
- master
-> > > after libbpf CI has passed.
-> > >=20
-> > > This can potentially be automated, but would require push access to t=
-he
-> > > pahole repo. Until then, a maintainer would need to manually check th=
-e
-> > > libbpf CI status here:
-> > >=20
-> > > https://github.com/libbpf/libbpf/actions/workflows/test.yml
-> > >=20
-> > > Another thing is that libbpf CI only tests x86_64 currently.
-> > > We could add aarch64 to libbpf, or migrate pahole staging job to
-> > > kernel-patches/vmtest (which is almost identical to BPF CI).
-> >=20
-> > Hi everyone.
-> >=20
-> > I looked into adding aarch64 to libbpf/libbpf CI: we can't do that
-> > because Github does not provide hosted Linux aarch64 runners, only
-> > macs [1].
-> >=20
-> > Since BPF CI already has all the infrastructure in place, I figured
-> > it's going to be relatively easy to set up an additional workflow
-> > specifically for pahole.
-> >=20
-> > Here is how it looks like:
-> > https://github.com/kernel-patches/vmtest/actions/runs/12796621827
-> >=20
-> > This is basically a simplified BPF CI run: build pahole, build kernel
-> > with gcc, build selftests/bpf with clang-18 and run test_progs (only
-> > one runner, but we can run more if appropriate).
-> >=20
-> > I am thinking to set it up to run once a week, testing pahole/next.
-> > If we do that, tmp.master tracking on libbpf/libbpf can be removed.
->=20
->=20
-> Why not daily? I was even thinking of running it as part of patch
-> testing to catch regressions as early as possible, but then we'd have
-> red CI for any small pahole regression, which would be cumbersome. So
-> perhaps a daily separate run that wouldn't affect upstream patches?
+Main git repo:
 
-We can run daily, that's not an issue. I was thinking weekly, because
-there isn't much activity on the pahole side usually.
+   https://git.kernel.org/pub/scm/devel/pahole/pahole.git
 
->=20
-> > I also thought about email notifications to dwarves list, like we have
-> > for BPF CI. Unfortunately, there is no nice-and-easy way to set this
-> > up: we either have to maintain a dummy email account and use a
-> > third-party action (like [2]), or we could add a code path to Kernel
-> > Patches Daemon that currently handles BPF CI notifications. I don't
-> > like either way.
-> >=20
-> > Alternatively, maintainers could subscribe to github notifications on
-> > kernel-patches/bpf (aka "watch"), but that might be too noisy as there
-> > is a lot of activity there. Of course, you could check the CI runs
-> > without any notifications too.
->=20
->=20
-> Can you send email from inside the CI itself? E.g., if pahole build
-> fails or selftests fail, explicitly send email before failing CI run?
-> Just one idea, don't have anything better.
+Mirror git repo:
 
-Yeah, this is what I meant by using third-party action.
-The issue with it is that you need to provide mail server credentials,
-which are passed to a third-party code. So, to do that a bot-ty email
-account needs to be created and maintained somewhere.
+   https://github.com/acmel/dwarves.git
 
->=20
-> > Alan, Arnaldo, Andrii, please let me know if you have any suggestions
-> > or objections.
-> >=20
-> > [1] https://docs.github.com/en/actions/using-github-hosted-runners/usin=
-g-github-hosted-runners/about-github-hosted-runners#standard-github-hosted-=
-runners-for-public-repositories
-> > [2] https://github.com/marketplace/actions/send-email
-> >=20
-> > > [...]
+tarball + gpg signature:
+
+   https://fedorapeople.org/~acme/dwarves/dwarves-1.29.tar.xz
+   https://fedorapeople.org/~acme/dwarves/dwarves-1.29.tar.bz2
+   https://fedorapeople.org/~acme/dwarves/dwarves-1.29.tar.sign
+
+	Thanks a lot to all the contributors and distro packagers,
+you're on the CC list, we appreciate a lot the work you put into these
+tools,
+
+Best Regards,
+
+- Arnaldo
+
+DWARF loader:
+
+- Multithreading is now contained in the DWARF loader using a jobs queue and a
+  pool of worker threads.
+
+BTF encoder:
+    
+- The parallel reproducible BTF generation done using the new DWARF loader
+  multithreading model is as fast as the old non-reproducible one and thus is
+  now always performed, making the "reproducible_build" flag moot.
+
+  The memory consumption is now greatly reduced as well.
+
+BTF loader:
+
+- Support for multiple BTF_DECL_TAGs pointing to same tag.
+
+  Example:
+    
+      $ pfunct vmlinux -F btf -f bpf_rdonly_cast
+      bpf_kfunc bpf_fastcall void *bpf_rdonly_cast(const void *obj__ign, u32 btf_id__k);
+
+Regression tests:
+
+- Verify that pfunct prints btf_decl_tags read from BTF.
+
+pfunct:
+
+- Don't print functions twice when using -f.
