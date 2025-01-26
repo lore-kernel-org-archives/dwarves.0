@@ -1,70 +1,70 @@
-Received: from mail-vk1-f182.google.com (mail-vk1-f182.google.com [209.85.221.182])
+Received: from mail-ua1-f45.google.com (mail-ua1-f45.google.com [209.85.222.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A23081EB39;
-	Sun, 26 Jan 2025 04:56:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7BEF1487F8;
+	Sun, 26 Jan 2025 20:04:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737867372; cv=none; b=cpJ+JMSsaZy21Qf1fFR29z+4oLCeJlZkAq+ntHvTkZSM/1ZDwd/42ewcaZ0rUQqWCGvn5DGKNn2nh6kMrZFhGeOk4GWfC8ejVoym+N7yYBXqIvqU1sA/VHZ7bxAb1XSA8Xish7gAWIl7Izog2M5GLzR1UQaj7SAfyZnAozhX7Aw=
+	t=1737921874; cv=none; b=Sm0f3rqvJ1RQP9h5aO9PKFQxRU3hIF1Humd5VAQKH+WNpB+miMNK8vxmjMMptp5M2l0Hh0WA1SG95bRGAAQLwR1KPZ8julYDv8aSnjZsB5Gf0ESc1EOLumaQ3i9DyqDqmmEplVRYdAlcxzf4oyiiY8cO+lmJuEx5ueqLeOhTotY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737867372; c=relaxed/simple;
-	bh=YaFs4XEau74Wuo2Chx2Jcd3DQFCoQMxFkkF3xSgmIfE=;
+	s=arc-20240116; t=1737921874; c=relaxed/simple;
+	bh=cA2sHLSy+IECdgnCU0W45BIEjNF7mxy9cjFQpF7naOU=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=OXQPZN1fX8AStkQNR+IGeKNIAAQm19k5+pXLT0wo3enJTfyOUBHpmTmGLGfuk/TudpovrvW/MkoO3pTsnohXz5cxYvWHfo4GwCCfoZgkq/OS0/PoBKPLSPKyph6IIGczcB264+KVcu7SIWD4LQ2vtymed5ZzRdEbMvsngdjXJ4M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mvae7TS1; arc=none smtp.client-ip=209.85.221.182
+	 To:Cc:Content-Type; b=QApg/57Wd1A9jm8H4uLIp9NUW5z8nq6+P3AZoYqOM24mtN3w2rAEYY4cz+9El6ZgU8CUh2XbsWrYPC5CId907EmYuclfWVu8Pgy3ZcCkuUfZcrpObiGVobxWpSwhn3TsoYBQBD+9zWJF5k8Q8v+kxHGXQFIfwcykGh0eAEYfJKY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=W7NBrwmV; arc=none smtp.client-ip=209.85.222.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mvae7TS1"
-Received: by mail-vk1-f182.google.com with SMTP id 71dfb90a1353d-51c7b5f3b8bso1102744e0c.2;
-        Sat, 25 Jan 2025 20:56:10 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="W7NBrwmV"
+Received: by mail-ua1-f45.google.com with SMTP id a1e0cc1a2514c-85c4d855fafso641324241.2;
+        Sun, 26 Jan 2025 12:04:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1737867369; x=1738472169; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1737921871; x=1738526671; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=kZfSaostHchJQJlmbzdS38jlzTEJN0CBdqQ1dysCyyg=;
-        b=mvae7TS1iHmIHpBddiCE6ekIzk+Sg6uevwg4dq1ZPBzuqlvHFGj6VfrFGn8ZHEE8B4
-         sMt51tA55fOlsYAepXAuL0Xn3fvjRDryQN92JAboTBTAH+4B3G/C0d5ko1ceQ55NX3Cf
-         Pbyw+U1mNO1lqjGSCL5ypbJvBeRckA0VD729yfJZws3ZhmZGxvYbamobTh+EJT6s4g+Z
-         OpRwvravGmvpxezmPW5parBE0Ek2EN+Hnj7+xaR//wLDhP6jOsrWzywdUY8246H+OrPy
-         x2kEGGWVhBFUkp4C9p7uidxwI5oehCQmY01Ksh5Ji07bS0kf2pZxUIvPtFVAbdZdaeXY
-         yaeQ==
+        bh=1UFB2cdGGKotEJHKLG+7okveVa4RPRX04Ef/GbO4+/g=;
+        b=W7NBrwmVsByyoHhEeaPJYlfi4D4d+GoYqd8cBofuKCzLkydCPahnu1f9Ywuf5eSzxZ
+         FryDWSu+FRlC0FRhqorunCsS10FqGLn8hVKYDvtBzzNj1oXy6JKj94ximmzFsu8Mirz2
+         hVITrhPmgVUsgOlQ0jz5N7gC3IOsC4h8LVDG5UN2XcsdFz9AZdmuLTYmj6p1uSbAQNml
+         xqsjUL5kbPMZCUx17RRMRUhlRNH0m0NlPlWLpKPEDdpq7kvH41DMura3pYUdH+MNIdkS
+         mczo3Cqmv3b/glZYhDPBVLsXBYTAflWgVdueqWGXmFZ3608Iso+kqxrwP08dKzSkeJ7S
+         BkUQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737867369; x=1738472169;
+        d=1e100.net; s=20230601; t=1737921871; x=1738526671;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=kZfSaostHchJQJlmbzdS38jlzTEJN0CBdqQ1dysCyyg=;
-        b=KEN/ID94vVWWPNcioeJoTQ2F3V4V7/j1PTNIvz7J2BciPxeMGx/BwWTmveo1sjLEsG
-         P0PPVXTCWCDoEOJ3dTLBBgN8+WfucDAefHjnMZItkX12UZFK5rugDv3K8EHoY/eeyHiM
-         IsC3E3mkeLzb9KpEB2qrc2Cs65WVKtgF8AplRXexf5gW8ihuxHONLWXw3/xDSf4uOF29
-         WFEaL3o65RosqLp0DcH1LwnhdZL7tLn2WkNQWnMOwn47ZIm/DR66YxkWNh8hYzw6ZRmR
-         q+LQMI5LlkfuWYKRGdkQM1YQ5fIMMeFh5/fNojLsD2iuxviY2F6Dd4DuCYnAbmM3ctIy
-         VwTw==
-X-Forwarded-Encrypted: i=1; AJvYcCW/xBVzG9ZBmbLHzwnMt2fcnyeYJZMEw80UzbT3JEOd3+cG5+C3wjtDnjj/2mv2UVQJULw=@vger.kernel.org, AJvYcCX7QH8AF2BjJQXtC93M9jk9bUwdgqOwOS0jKhCedkfiQTod9pqz4hjAJ7ncnixX/NLF4cIK+cd/Ug==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzbyHNr55IbPy3KQRddXvGCKcK7ci3hfuz/3j4XDxQ9DPJ3Jo7f
-	bQw/yUcLVdsnKa+WvgnRUd5tLtkWnqHO/Z5iEpdpPSlcWChOwE+JEpTFQcqSBiEp52xSGGfza8q
-	XCc9RctgwyschqKH/zHLc/G28U/c=
-X-Gm-Gg: ASbGncv4bS9ZGyJXNQmnAw7AK1/RaLWgrr4dYyEjSBnMRqbv5uf2zBca+XfsPyc3uGp
-	ndV6zEHJXwd4W0/tdBgkGuje6Vuk3UpuD82WWmKj0Af3E8yF/jCKo+i2ZHucbXS5AVNMZOGhnmq
-	hmKLMgM6y+b4HQWeXDk6Y=
-X-Google-Smtp-Source: AGHT+IHpB7d/vgD0A/dRO7P1xThm/oIl8vJWWLCs5rX0lvGkDYt4n2SHy/LpBYs4mvEWMe3HpdSYkW6d6UazjqjWZms=
-X-Received: by 2002:a05:6102:50a5:b0:4af:e99e:b41b with SMTP id
- ada2fe7eead31-4b690c8894fmr33387918137.19.1737867369451; Sat, 25 Jan 2025
- 20:56:09 -0800 (PST)
+        bh=1UFB2cdGGKotEJHKLG+7okveVa4RPRX04Ef/GbO4+/g=;
+        b=uOAdOa8udCkzd/FePjsPs31VdzVOZCu2kpyozOlwGoKZQHyAoRD1k7kizRWPF8ToYY
+         5y4jLdqWOJ+gVqBvvbtTLuF3odQrXUf1N1tOvlPZaqqxzOqDqxlSGid2vpz+6ye8aPXW
+         F6mwmdooSZEgaURTstKE8Q4x9x8BciHsO015FUQHJ2QVgj+NnwIe9r6C45vAhPuFbt0H
+         nDtI8/lddDDdB/jo7HljpR0KdnoZTEKVvLRTr9HB/DReIR8wvzIIYta7AFnY7jx8Fgps
+         qXfI+gW2qOlXY8Kw9wZIYt3DdzVhmpIj618qsnmBZM6VT/+4lzaQD7OzKEEarGqh6nSU
+         mEaw==
+X-Forwarded-Encrypted: i=1; AJvYcCUPdtiNNRjtFtWwlzzsAthpYdx/nFPtlNGqSoCxNurYQAKFBBkmMv+DauJtZ1nYrta4eUg=@vger.kernel.org, AJvYcCXyXSLDFvyR1379t4Tsdl5rJ6+GbGLbcQWFAhwrl1Z8wHBDMbzD9rBbSnnzsxBVO1xwxUSbRYC4uw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwRiEo/AVZyiQozuCHWlwIR4+vwDzOSwpFE877W1NSOvJA6Rdoq
+	HdUbOsDt/owiyoiwXd+PurNVw39HEQdED9WkYYqHptx8XgaqHjOkcMoadbz/Tr8bUdzqCMOlPhH
+	FJbfLhthlPUEcfli3stWhglqG3YLA4A==
+X-Gm-Gg: ASbGncsamR+7IQhYQtuYv9Hd4BO7acqsjjrlRQLQMi6AghHkTGsNFIEQTqpNIWs8JRO
+	SWHyP6bj8HnJChvmh3mX7OiOtZRiKEOq1IfFon6yci+L1716wMM734keDV2MTXzplETEfzEGCLm
+	uIgdeCxSEKDifrTwWHwv0=
+X-Google-Smtp-Source: AGHT+IGbZszlaUqrEoNChwpMD/TouWv1o51Lx10zKeJCaCrz2n1IqHvAZCs0yJZ7YvwC+VX47CGzsEL7cug21QJNRsk=
+X-Received: by 2002:a05:6102:f08:b0:4b2:c391:7d16 with SMTP id
+ ada2fe7eead31-4b690ba7dcamr32509801137.7.1737921870753; Sun, 26 Jan 2025
+ 12:04:30 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241217103629.2383809-1-alan.maguire@oracle.com>
-In-Reply-To: <20241217103629.2383809-1-alan.maguire@oracle.com>
+References: <20241217103629.2383809-1-alan.maguire@oracle.com> <CAM_iQpXGzy5ESZ3ZE0Wo_p_pkXYbgMe3L8stbBcBCo+oJuWimw@mail.gmail.com>
+In-Reply-To: <CAM_iQpXGzy5ESZ3ZE0Wo_p_pkXYbgMe3L8stbBcBCo+oJuWimw@mail.gmail.com>
 From: Cong Wang <xiyou.wangcong@gmail.com>
-Date: Sat, 25 Jan 2025 20:55:58 -0800
-X-Gm-Features: AWEUYZls6b0XXxS3bkQDDFQgq5BeAL7NM4SN_u0XoRzbPuPnPgbqtGMAZFjVH0c
-Message-ID: <CAM_iQpXGzy5ESZ3ZE0Wo_p_pkXYbgMe3L8stbBcBCo+oJuWimw@mail.gmail.com>
+Date: Sun, 26 Jan 2025 12:04:19 -0800
+X-Gm-Features: AWEUYZnymLgvb1R84UVxarIqrqwBu4pmkgz0CA5MQil9Y0z-IVhL1RyA5w6rhuc
+Message-ID: <CAM_iQpU8jQ9yEs_rAf2gdyt5yie7BwkiU4vpa-efF6ccVo5ADg@mail.gmail.com>
 Subject: Re: [PATCH dwarves] btf_encoder: verify 0 address DWARF variables are
  really in ELF section
 To: Alan Maguire <alan.maguire@oracle.com>
@@ -75,50 +75,36 @@ Cc: acme@kernel.org, yonghong.song@linux.dev, dwarves@vger.kernel.org,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi Alan,
-
-On Tue, Dec 17, 2024 at 2:36=E2=80=AFAM Alan Maguire <alan.maguire@oracle.c=
-om> wrote:
+On Sat, Jan 25, 2025 at 8:55=E2=80=AFPM Cong Wang <xiyou.wangcong@gmail.com=
+> wrote:
 >
-> We use the DWARF location information to match a variable with its
-> associated ELF section.  In the case of per-CPU variables their
-> ELF section address range starts at 0, so any 0 address variables will
-> appear to belong in that ELF section.  However, for "discard" sections
-> DWARF encodes the associated variables with address location 0 so
-> we need to double-check that address 0 variables really are in the
-> associated section by checking the ELF symbol table.
+> Hi Alan,
 >
-> This resolves an issue exposed by CONFIG_DEBUG_FORCE_WEAK_PER_CPU=3Dy
-> kernel builds where __pcpu_* dummary variables in a .discard section
-> get misclassified as belonging in the per-CPU variable section since
-> they specify location address 0.
+> On Tue, Dec 17, 2024 at 2:36=E2=80=AFAM Alan Maguire <alan.maguire@oracle=
+.com> wrote:
+> >
+> > We use the DWARF location information to match a variable with its
+> > associated ELF section.  In the case of per-CPU variables their
+> > ELF section address range starts at 0, so any 0 address variables will
+> > appear to belong in that ELF section.  However, for "discard" sections
+> > DWARF encodes the associated variables with address location 0 so
+> > we need to double-check that address 0 variables really are in the
+> > associated section by checking the ELF symbol table.
+> >
+> > This resolves an issue exposed by CONFIG_DEBUG_FORCE_WEAK_PER_CPU=3Dy
+> > kernel builds where __pcpu_* dummary variables in a .discard section
+> > get misclassified as belonging in the per-CPU variable section since
+> > they specify location address 0.
+>
+> It is _not_ your patch's fault, but I got this segfault which prevents me=
+ from
+> testing this patch. (It also happens after reverting your patch.)
 
-It is _not_ your patch's fault, but I got this segfault which prevents me f=
-rom
-testing this patch. (It also happens after reverting your patch.)
+Never mind, I managed to workaround this issue by a clean build.
 
-  INSTALL libsubcmd_headers
-  INSTALL libsubcmd_headers
-  CALL    scripts/checksyscalls.sh
-  UPD     include/generated/utsversion.h
-  CC      init/version-timestamp.o
-  KSYMS   .tmp_vmlinux0.kallsyms.S
-  AS      .tmp_vmlinux0.kallsyms.o
-  LD      .tmp_vmlinux1
-  BTF     .tmp_vmlinux1.btf.o
-Segmentation fault (core dumped)
-  NM      .tmp_vmlinux1.syms
-  KSYMS   .tmp_vmlinux1.kallsyms.S
-  AS      .tmp_vmlinux1.kallsyms.o
-  LD      .tmp_vmlinux2
-  NM      .tmp_vmlinux2.syms
-  KSYMS   .tmp_vmlinux2.kallsyms.S
-  AS      .tmp_vmlinux2.kallsyms.o
-  LD      vmlinux
-  BTFIDS  vmlinux
-libbpf: failed to find '.BTF' ELF section in vmlinux
-FAILED: load BTF from vmlinux: No data available
-make[2]: *** [scripts/Makefile.vmlinux:77: vmlinux] Error 255
-make[2]: *** Deleting file 'vmlinux'
+And I tested your patch, it works for me with CONFIG_DEBUG_FORCE_WEAK_PER_C=
+PU=3Dy.
 
-Thanks!
+Tested-by: Cong Wang <cong.wang@bytedance.com>
+
+Thanks a lot!
