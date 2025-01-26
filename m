@@ -1,116 +1,124 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vk1-f182.google.com (mail-vk1-f182.google.com [209.85.221.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AE5D1F1517;
-	Tue, 21 Jan 2025 12:29:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A23081EB39;
+	Sun, 26 Jan 2025 04:56:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737462548; cv=none; b=dA3BtECpZ8w1ggFWFYN41/FIYClEpCOS0LSo+VxMt0FWX3rv3iFlGMz6IHAuHTXnjfOf3v9s0k+zrE7vydtSpw1YqDUT4Rc0buGBRytj9ZDp+eDse4RUsdaRcFzKWu3RSg9TpMsCmTy5cUuUdNSDz8pKs1+zFxntL/cLIXYNrko=
+	t=1737867372; cv=none; b=cpJ+JMSsaZy21Qf1fFR29z+4oLCeJlZkAq+ntHvTkZSM/1ZDwd/42ewcaZ0rUQqWCGvn5DGKNn2nh6kMrZFhGeOk4GWfC8ejVoym+N7yYBXqIvqU1sA/VHZ7bxAb1XSA8Xish7gAWIl7Izog2M5GLzR1UQaj7SAfyZnAozhX7Aw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737462548; c=relaxed/simple;
-	bh=/gJad0hzVC6gdQi0Vrylz5MVKI4Be2IkWe0CLAVCmEY=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=eQ6B/MNjMdLHwxKKm2YLeamlruFgh+3dpzLbeTdGmUCu966JBTW3I5QkNxyn6e9PWFASFwCfnxMR4FDnIXiZtRtRyIvWsf2YtPDd/Z4dDj0CEGb74YsmWF76IuW6GJm8SFEku+57iBwW28t8zss/Q+/YFlsDTWvLsgouW5C/zkQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=doFpnkvz; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1737867372; c=relaxed/simple;
+	bh=YaFs4XEau74Wuo2Chx2Jcd3DQFCoQMxFkkF3xSgmIfE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=OXQPZN1fX8AStkQNR+IGeKNIAAQm19k5+pXLT0wo3enJTfyOUBHpmTmGLGfuk/TudpovrvW/MkoO3pTsnohXz5cxYvWHfo4GwCCfoZgkq/OS0/PoBKPLSPKyph6IIGczcB264+KVcu7SIWD4LQ2vtymed5ZzRdEbMvsngdjXJ4M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mvae7TS1; arc=none smtp.client-ip=209.85.221.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="doFpnkvz"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0FFC2C4CEDF;
-	Tue, 21 Jan 2025 12:29:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1737462547;
-	bh=/gJad0hzVC6gdQi0Vrylz5MVKI4Be2IkWe0CLAVCmEY=;
-	h=Date:From:To:Cc:Subject:From;
-	b=doFpnkvzq21Sy68Mh7sADg6g95cc5xgRZyJ8YjycDgHO7Vwrp61htEpvQ+qkT1UqF
-	 78a89bjEJQCo7AYCR55B4g0OmSQMBwI6+YGquksKp6SJN3SRM8K6Fp5TlkwolOiB8q
-	 fI0Au9O9EICBh02YsobF7vEVeTRnMWbF9EPKd0c6oaRdMN/ICYRpb+VmIgMXWN6GPv
-	 9Bk3Nlk5WXk2gPHTEZWgkIog+toKqO4pndte+O2iOVvTkLzeg/rjsX29O4G9SllpwJ
-	 5k+DoXUj3EJBhNgEGeyt0ThUhP4hva4fjWDMOsI1XWI7SDSlAWO5riHdgAf1If8VqI
-	 jg1iF0V+FDK3A==
-Date: Tue, 21 Jan 2025 13:29:02 +0100
-From: Arnaldo Carvalho de Melo <acme@kernel.org>
-To: dwarves@vger.kernel.org
-Cc: Alan Maguire <alan.maguire@oracle.com>,
-	Ihor Solodrai <ihor.solodrai@pm.me>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
-	Mykola Lysenko <mykolal@fb.com>,
-	Jan Alexander Steffens <heftig@archlinux.org>,
-	Domenico Andreoli <cavok@debian.org>,
-	Matthias Schwarzott <zzam@gentoo.org>,
-	Dominique Leuenberger <dimstar@opensuse.org>,
-	Dominique Martinet <asmadeus@codewreck.org>,
-	Viktor Malik <vmalik@redhat.com>,
-	Tom Stellard <tstellar@redhat.com>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	bpf@vger.kernel.org
-Subject: ANNOUNCE: pahole v1.29 (Better DWARF loading & BTF encoding)
-Message-ID: <Z4-TDt42dTKZvCo6@x1>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mvae7TS1"
+Received: by mail-vk1-f182.google.com with SMTP id 71dfb90a1353d-51c7b5f3b8bso1102744e0c.2;
+        Sat, 25 Jan 2025 20:56:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1737867369; x=1738472169; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kZfSaostHchJQJlmbzdS38jlzTEJN0CBdqQ1dysCyyg=;
+        b=mvae7TS1iHmIHpBddiCE6ekIzk+Sg6uevwg4dq1ZPBzuqlvHFGj6VfrFGn8ZHEE8B4
+         sMt51tA55fOlsYAepXAuL0Xn3fvjRDryQN92JAboTBTAH+4B3G/C0d5ko1ceQ55NX3Cf
+         Pbyw+U1mNO1lqjGSCL5ypbJvBeRckA0VD729yfJZws3ZhmZGxvYbamobTh+EJT6s4g+Z
+         OpRwvravGmvpxezmPW5parBE0Ek2EN+Hnj7+xaR//wLDhP6jOsrWzywdUY8246H+OrPy
+         x2kEGGWVhBFUkp4C9p7uidxwI5oehCQmY01Ksh5Ji07bS0kf2pZxUIvPtFVAbdZdaeXY
+         yaeQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1737867369; x=1738472169;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=kZfSaostHchJQJlmbzdS38jlzTEJN0CBdqQ1dysCyyg=;
+        b=KEN/ID94vVWWPNcioeJoTQ2F3V4V7/j1PTNIvz7J2BciPxeMGx/BwWTmveo1sjLEsG
+         P0PPVXTCWCDoEOJ3dTLBBgN8+WfucDAefHjnMZItkX12UZFK5rugDv3K8EHoY/eeyHiM
+         IsC3E3mkeLzb9KpEB2qrc2Cs65WVKtgF8AplRXexf5gW8ihuxHONLWXw3/xDSf4uOF29
+         WFEaL3o65RosqLp0DcH1LwnhdZL7tLn2WkNQWnMOwn47ZIm/DR66YxkWNh8hYzw6ZRmR
+         q+LQMI5LlkfuWYKRGdkQM1YQ5fIMMeFh5/fNojLsD2iuxviY2F6Dd4DuCYnAbmM3ctIy
+         VwTw==
+X-Forwarded-Encrypted: i=1; AJvYcCW/xBVzG9ZBmbLHzwnMt2fcnyeYJZMEw80UzbT3JEOd3+cG5+C3wjtDnjj/2mv2UVQJULw=@vger.kernel.org, AJvYcCX7QH8AF2BjJQXtC93M9jk9bUwdgqOwOS0jKhCedkfiQTod9pqz4hjAJ7ncnixX/NLF4cIK+cd/Ug==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzbyHNr55IbPy3KQRddXvGCKcK7ci3hfuz/3j4XDxQ9DPJ3Jo7f
+	bQw/yUcLVdsnKa+WvgnRUd5tLtkWnqHO/Z5iEpdpPSlcWChOwE+JEpTFQcqSBiEp52xSGGfza8q
+	XCc9RctgwyschqKH/zHLc/G28U/c=
+X-Gm-Gg: ASbGncv4bS9ZGyJXNQmnAw7AK1/RaLWgrr4dYyEjSBnMRqbv5uf2zBca+XfsPyc3uGp
+	ndV6zEHJXwd4W0/tdBgkGuje6Vuk3UpuD82WWmKj0Af3E8yF/jCKo+i2ZHucbXS5AVNMZOGhnmq
+	hmKLMgM6y+b4HQWeXDk6Y=
+X-Google-Smtp-Source: AGHT+IHpB7d/vgD0A/dRO7P1xThm/oIl8vJWWLCs5rX0lvGkDYt4n2SHy/LpBYs4mvEWMe3HpdSYkW6d6UazjqjWZms=
+X-Received: by 2002:a05:6102:50a5:b0:4af:e99e:b41b with SMTP id
+ ada2fe7eead31-4b690c8894fmr33387918137.19.1737867369451; Sat, 25 Jan 2025
+ 20:56:09 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20241217103629.2383809-1-alan.maguire@oracle.com>
+In-Reply-To: <20241217103629.2383809-1-alan.maguire@oracle.com>
+From: Cong Wang <xiyou.wangcong@gmail.com>
+Date: Sat, 25 Jan 2025 20:55:58 -0800
+X-Gm-Features: AWEUYZls6b0XXxS3bkQDDFQgq5BeAL7NM4SN_u0XoRzbPuPnPgbqtGMAZFjVH0c
+Message-ID: <CAM_iQpXGzy5ESZ3ZE0Wo_p_pkXYbgMe3L8stbBcBCo+oJuWimw@mail.gmail.com>
+Subject: Re: [PATCH dwarves] btf_encoder: verify 0 address DWARF variables are
+ really in ELF section
+To: Alan Maguire <alan.maguire@oracle.com>
+Cc: acme@kernel.org, yonghong.song@linux.dev, dwarves@vger.kernel.org, 
+	ast@kernel.org, andrii@kernel.org, bpf@vger.kernel.org, daniel@iogearbox.net, 
+	song@kernel.org, eddyz87@gmail.com, olsajiri@gmail.com, 
+	stephen.s.brennan@oracle.com, laura.nao@collabora.com, ubizjak@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi,
- 
-	The v1.29 release of pahole is out with more efficient
-multithreaded DWARF loading and BTF encoding, that is now always
-reproducible, multiple decl tags are supported in the BTF loader and
-thus pfunct can pretty print the full function prototype.
+Hi Alan,
 
-Main git repo:
+On Tue, Dec 17, 2024 at 2:36=E2=80=AFAM Alan Maguire <alan.maguire@oracle.c=
+om> wrote:
+>
+> We use the DWARF location information to match a variable with its
+> associated ELF section.  In the case of per-CPU variables their
+> ELF section address range starts at 0, so any 0 address variables will
+> appear to belong in that ELF section.  However, for "discard" sections
+> DWARF encodes the associated variables with address location 0 so
+> we need to double-check that address 0 variables really are in the
+> associated section by checking the ELF symbol table.
+>
+> This resolves an issue exposed by CONFIG_DEBUG_FORCE_WEAK_PER_CPU=3Dy
+> kernel builds where __pcpu_* dummary variables in a .discard section
+> get misclassified as belonging in the per-CPU variable section since
+> they specify location address 0.
 
-   https://git.kernel.org/pub/scm/devel/pahole/pahole.git
+It is _not_ your patch's fault, but I got this segfault which prevents me f=
+rom
+testing this patch. (It also happens after reverting your patch.)
 
-Mirror git repo:
+  INSTALL libsubcmd_headers
+  INSTALL libsubcmd_headers
+  CALL    scripts/checksyscalls.sh
+  UPD     include/generated/utsversion.h
+  CC      init/version-timestamp.o
+  KSYMS   .tmp_vmlinux0.kallsyms.S
+  AS      .tmp_vmlinux0.kallsyms.o
+  LD      .tmp_vmlinux1
+  BTF     .tmp_vmlinux1.btf.o
+Segmentation fault (core dumped)
+  NM      .tmp_vmlinux1.syms
+  KSYMS   .tmp_vmlinux1.kallsyms.S
+  AS      .tmp_vmlinux1.kallsyms.o
+  LD      .tmp_vmlinux2
+  NM      .tmp_vmlinux2.syms
+  KSYMS   .tmp_vmlinux2.kallsyms.S
+  AS      .tmp_vmlinux2.kallsyms.o
+  LD      vmlinux
+  BTFIDS  vmlinux
+libbpf: failed to find '.BTF' ELF section in vmlinux
+FAILED: load BTF from vmlinux: No data available
+make[2]: *** [scripts/Makefile.vmlinux:77: vmlinux] Error 255
+make[2]: *** Deleting file 'vmlinux'
 
-   https://github.com/acmel/dwarves.git
-
-tarball + gpg signature:
-
-   https://fedorapeople.org/~acme/dwarves/dwarves-1.29.tar.xz
-   https://fedorapeople.org/~acme/dwarves/dwarves-1.29.tar.bz2
-   https://fedorapeople.org/~acme/dwarves/dwarves-1.29.tar.sign
-
-	Thanks a lot to all the contributors and distro packagers,
-you're on the CC list, we appreciate a lot the work you put into these
-tools,
-
-Best Regards,
-
-- Arnaldo
-
-DWARF loader:
-
-- Multithreading is now contained in the DWARF loader using a jobs queue and a
-  pool of worker threads.
-
-BTF encoder:
-    
-- The parallel reproducible BTF generation done using the new DWARF loader
-  multithreading model is as fast as the old non-reproducible one and thus is
-  now always performed, making the "reproducible_build" flag moot.
-
-  The memory consumption is now greatly reduced as well.
-
-BTF loader:
-
-- Support for multiple BTF_DECL_TAGs pointing to same tag.
-
-  Example:
-    
-      $ pfunct vmlinux -F btf -f bpf_rdonly_cast
-      bpf_kfunc bpf_fastcall void *bpf_rdonly_cast(const void *obj__ign, u32 btf_id__k);
-
-Regression tests:
-
-- Verify that pfunct prints btf_decl_tags read from BTF.
-
-pfunct:
-
-- Don't print functions twice when using -f.
+Thanks!
