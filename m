@@ -1,127 +1,62 @@
-Received: from mail-vk1-f179.google.com (mail-vk1-f179.google.com [209.85.221.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-177.mta1.migadu.com (out-177.mta1.migadu.com [95.215.58.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1108482EB;
-	Fri, 31 Jan 2025 20:18:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5343E17BB6
+	for <dwarves@vger.kernel.org>; Fri, 31 Jan 2025 22:41:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738354738; cv=none; b=OtSLl8BVziWt8ijYOc9QmBn8TKzjJ/AuSXnckgoQ7hvEEdQzKIjSs6UoDqnjsuwGvP5jPSgfol9iii4LTISTRJITQTPbpx7D1Gh1ZfZSh5Ds8A7kdB7CA9uummT4RJOw6ynbtDpO7nETkppCYGDoKOoPZS9RUTva2VQ1POwIuvo=
+	t=1738363281; cv=none; b=iBVQdLugRaiY2UDU2pCUXGodngfTLl8p4r0tFGPUoeB0Qvh4eVlSaYgQIUNVB5qYwn9X9COTD5ASlUIzzz/Sb8xdgGdkhCHJgADjTASJYlDtpoFurNsdLontfH4fZ7h0HmVbEOnt+8YbFqV0aXTAQUG66NHwJ4gnT3VNUaBVnkA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738354738; c=relaxed/simple;
-	bh=9iyCxa6T53JFSusqOepaP2jo/AqvjSE+6oMhgF7dcsU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Iz3Qi6+CNa7X6QYaTwddlNlFPrW+1TSxgFWGG4DlUwKKMg3vxRzjiJlSJR00u4my8aUSORdYQBQTlcx3HRny5NspcSV1t6+7t8zmSriYfnn7hAHxD9hNDspQ1UO6o1X+2+Npy8ZrOnTx1q7Wk3rgpNHQ7plf7S648IkrmWaroAA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OUEA3B3m; arc=none smtp.client-ip=209.85.221.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1738363281; c=relaxed/simple;
+	bh=tOKHEN2axlm26XMGbIBaYDPFTBzrz/07F0A7BbkFtkM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=c+fOwX88IGGS64eGaXHRfxGV+/lH6z1g86oHdQgGw4u5BRWuc/fCP2hvbouthLPzag2LevW4HwrYULaymBFZZU0jy+PGzkvdTCgaknkUAMzekaR1zcwd8R1Q20Jw6E5qikwtF98lARWp++J1pW0/xET/YvvdYoHgkD2L9p7+8oM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=BgMd7By6; arc=none smtp.client-ip=95.215.58.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OUEA3B3m"
-Received: by mail-vk1-f179.google.com with SMTP id 71dfb90a1353d-51eb1823a8eso562448e0c.3;
-        Fri, 31 Jan 2025 12:18:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1738354735; x=1738959535; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WpRiv6R8lU1uWElWUJOCifYXqYBPsYBy0gETLZ4uHsk=;
-        b=OUEA3B3mxBZ9twr0u4Hpjk96XNi/eksir0FRl5eTLLmPLELg7MtB1BJUue4fSx/FXe
-         oltK74Ye6kZM92MmQaqYeNCuR6p019g3ueChUkU3rKv1gdp6yZNUhrV4MKfi1Jyo3HLC
-         60VY2XdqQqHtVp4FULQJxds37Cw+Z+pnykjff36gdXtF0OZcHEyEgJ/lLMJJzzufQPXU
-         BGzHDo/L6TEsXqf2gU39UZEDqakbVhaCK8QvGmxYEjh/wDy+LccA+4xk7uxJTO2qEpbG
-         ukJ1BlpGaduhHtyF0+if/IYQqcyr5i2LrLl3ap8+fiAFUQi6xUP3utDlaT8TCCNtkO0T
-         i+OQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738354735; x=1738959535;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=WpRiv6R8lU1uWElWUJOCifYXqYBPsYBy0gETLZ4uHsk=;
-        b=NSadlsufuWOjo7BxH/tNN4UQ1DGAVtH8BpKB35u4JqQh857v9XNZoSytIe8dIgH0jq
-         d/Xcm0rkiMtDNqL1C41j/cAoGiF3fzlO3hO0JGPLcDXHnuJXLxzetQ05Z5t2K2f/iLCy
-         MMrN1Vx727BnN3OFQysqmunqCWPBfEMwmOD9FII+c7eWpLOnUSycv0hpAd9VbcsFsia8
-         vR5Cd6N7mTydsW41AlbOYhWiu2COqizobCNf4cBe1vqDmg1T/GhzunWZZXT0bOFpHhox
-         LMMnCSMeDDh0Tmc5QQ+vw7+hdf+oqVRhAojkvAUHFY2Eh0YNNMFF0jGbzzYLgFbFKFfD
-         xWLg==
-X-Forwarded-Encrypted: i=1; AJvYcCV2ggyJhQVD/p28w4i4pPjiMuf3WTHE0aweCq6cY/wklFW+4EYaucJoAllv/YqjCDSA1wG2jdkVyA==@vger.kernel.org, AJvYcCVuoeuIEaYMRXRJivf3gLLoMbgq7B/3MOthUjHXV5vYaYZt06uQkGcpLHV6T5K4n6DDsE8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwxQPZDb3yDWMnKGexISempiT6Za47bHnH6a1AgwrYx/jH0kGiW
-	s8YCWj0+KFlxWBd4W8/F49zu0mgmK9M1Tkl1+E5m3TwPKVpUc8wIanGIICziyNO/nw3DWbrf7bc
-	K6gXdawgM6LlyCww3BQrAoSYe5vU=
-X-Gm-Gg: ASbGncsANy8ds4qoiO9SOlmmK8A86cKdsJzAM+vKQ6zZRL7SNOP/44R2nGVCwP+Gmxz
-	d3olP3Ma8Nnnu6pBDKY0aKXPo6ziv2pHJ+1vJRXDnaz+9iUmOnaM7ag7j2Q2AHkGFQ0DkKfvWZK
-	oCbMGOZT+pxOh8fieeW6lVie9fyau0MA==
-X-Google-Smtp-Source: AGHT+IF60xD8+TRvnIjF+jNxXFU3emak0GzTRBeuOiC3FNUOTAmabFCfSNxyG7dGYsG09pNnu08yXGIuQ0vYC14fAIs=
-X-Received: by 2002:a05:6122:400d:b0:515:ed1b:e6dd with SMTP id
- 71dfb90a1353d-51e9e288660mr10395413e0c.0.1738354735483; Fri, 31 Jan 2025
- 12:18:55 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="BgMd7By6"
+Message-ID: <c8cf76ab-b00d-42f2-aeb3-143332ea61f5@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1738363276;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Nrki2uidYl7o9A5bGtx9yqeMvkDktcHZQKIVPm9Iipc=;
+	b=BgMd7By6C4Y70ux/OXs6HU1k2fT3iSrADks0A1NePIQ/tboocEfx9qSPWyCZlxp7ubuFbu
+	xrs3DfQOfvxuAboiUYjArBqhh9x0ovW2OI9qpGldJS174cn2Bs372Hj2gOFuxzhcx6bWxx
+	+MNPAl1GyJ5O/KK2qmnOSCXkWLTehRI=
+Date: Fri, 31 Jan 2025 14:41:01 -0800
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241217103629.2383809-1-alan.maguire@oracle.com>
- <CAM_iQpXGzy5ESZ3ZE0Wo_p_pkXYbgMe3L8stbBcBCo+oJuWimw@mail.gmail.com>
- <CAM_iQpU8jQ9yEs_rAf2gdyt5yie7BwkiU4vpa-efF6ccVo5ADg@mail.gmail.com> <54ff082d-5409-4fe6-b711-b80fdedd751e@oracle.com>
-In-Reply-To: <54ff082d-5409-4fe6-b711-b80fdedd751e@oracle.com>
-From: Cong Wang <xiyou.wangcong@gmail.com>
-Date: Fri, 31 Jan 2025 12:18:43 -0800
-X-Gm-Features: AWEUYZlUiKytPiEuHMBhw4PEp--GsEz5z99q5Y3fWSNnKEE_T_W8xvzUsR6T7I4
-Message-ID: <CAM_iQpXg71K-t4sOYYF47qsPRrgTU45p1faLHBNhBWjXUAZgOA@mail.gmail.com>
-Subject: Re: [PATCH dwarves] btf_encoder: verify 0 address DWARF variables are
- really in ELF section
-To: Alan Maguire <alan.maguire@oracle.com>
-Cc: acme@kernel.org, yonghong.song@linux.dev, dwarves@vger.kernel.org, 
-	ast@kernel.org, andrii@kernel.org, bpf@vger.kernel.org, daniel@iogearbox.net, 
-	song@kernel.org, eddyz87@gmail.com, olsajiri@gmail.com, 
-	stephen.s.brennan@oracle.com, laura.nao@collabora.com, ubizjak@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH dwarves v2] btf_encoder: fix memory access bugs
+To: Alan Maguire <alan.maguire@oracle.com>, acme@kernel.org
+Cc: eddyz87@gmail.com, andrii@kernel.org, mykolal@fb.com,
+ bpf@vger.kernel.org, dwarves@vger.kernel.org
+References: <20241216183112.206072-1-ihor.solodrai@pm.me>
+ <8bb182c6a5f7a7ac3668297bca5a31467fac93de@linux.dev>
+ <c52fcd63-c85f-41a6-ade4-a42c24c8cef8@oracle.com>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Ihor Solodrai <ihor.solodrai@linux.dev>
+In-Reply-To: <c52fcd63-c85f-41a6-ade4-a42c24c8cef8@oracle.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-On Mon, Jan 27, 2025 at 3:17=E2=80=AFAM Alan Maguire <alan.maguire@oracle.c=
-om> wrote:
->
-> On 26/01/2025 20:04, Cong Wang wrote:
-> > On Sat, Jan 25, 2025 at 8:55=E2=80=AFPM Cong Wang <xiyou.wangcong@gmail=
-.com> wrote:
-> >>
-> >> Hi Alan,
-> >>
-> >> On Tue, Dec 17, 2024 at 2:36=E2=80=AFAM Alan Maguire <alan.maguire@ora=
-cle.com> wrote:
-> >>>
-> >>> We use the DWARF location information to match a variable with its
-> >>> associated ELF section.  In the case of per-CPU variables their
-> >>> ELF section address range starts at 0, so any 0 address variables wil=
-l
-> >>> appear to belong in that ELF section.  However, for "discard" section=
-s
-> >>> DWARF encodes the associated variables with address location 0 so
-> >>> we need to double-check that address 0 variables really are in the
-> >>> associated section by checking the ELF symbol table.
-> >>>
-> >>> This resolves an issue exposed by CONFIG_DEBUG_FORCE_WEAK_PER_CPU=3Dy
-> >>> kernel builds where __pcpu_* dummary variables in a .discard section
-> >>> get misclassified as belonging in the per-CPU variable section since
-> >>> they specify location address 0.
-> >>
-> >> It is _not_ your patch's fault, but I got this segfault which prevents=
- me from
-> >> testing this patch. (It also happens after reverting your patch.)
-> >
-> > Never mind, I managed to workaround this issue by a clean build.
-> >
-> > And I tested your patch, it works for me with CONFIG_DEBUG_FORCE_WEAK_P=
-ER_CPU=3Dy.
-> >
-> > Tested-by: Cong Wang <cong.wang@bytedance.com>
-> >
-> > Thanks a lot!
->
-> Thanks for verifying the fix! You didn't happen to get a coredump or
-> backtrace for the earlier segmentation fault by any chance? Just want to
-> make sure there aren't other issues lurking here. Thanks again!
+On 1/31/25 5:14 AM, Alan Maguire wrote:
+ >> [...]
+ >
+ > Thanks for the reminder; we'll make sure this one gets applied shortly.
+ > I wonder if we should add the -fsanitize flags to CFLAGS for RELEASE 
+mode?
+ >
 
-I didn't. I guess there was some mess in my build env, since a clean
-build just worked.
-
-Thanks!
+The issue with these flags is that they significantly reduce
+performance. We might consider adding them for debug builds, but
+certainly not for the release.
