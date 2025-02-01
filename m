@@ -1,62 +1,124 @@
-Received: from out-177.mta1.migadu.com (out-177.mta1.migadu.com [95.215.58.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5343E17BB6
-	for <dwarves@vger.kernel.org>; Fri, 31 Jan 2025 22:41:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1789735963
+	for <dwarves@vger.kernel.org>; Sat,  1 Feb 2025 14:03:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738363281; cv=none; b=iBVQdLugRaiY2UDU2pCUXGodngfTLl8p4r0tFGPUoeB0Qvh4eVlSaYgQIUNVB5qYwn9X9COTD5ASlUIzzz/Sb8xdgGdkhCHJgADjTASJYlDtpoFurNsdLontfH4fZ7h0HmVbEOnt+8YbFqV0aXTAQUG66NHwJ4gnT3VNUaBVnkA=
+	t=1738418629; cv=none; b=o66YrOu32SYiJ23yG2M7wcnih+iWZbMYIO1W+jvjU7FjyBaQ5Wn+RpGTbS6TdCG/Ww0skGxwPP8RSKwPJG+Sxwa45Fb+fpqPrZL81Lx6djEGyBTYThTIUy97Nsq4aIL+oeFa7gncZ5lPue6cGzmZFYPUz2yUamOaQBPn/3BP0a4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738363281; c=relaxed/simple;
-	bh=tOKHEN2axlm26XMGbIBaYDPFTBzrz/07F0A7BbkFtkM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=c+fOwX88IGGS64eGaXHRfxGV+/lH6z1g86oHdQgGw4u5BRWuc/fCP2hvbouthLPzag2LevW4HwrYULaymBFZZU0jy+PGzkvdTCgaknkUAMzekaR1zcwd8R1Q20Jw6E5qikwtF98lARWp++J1pW0/xET/YvvdYoHgkD2L9p7+8oM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=BgMd7By6; arc=none smtp.client-ip=95.215.58.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1738418629; c=relaxed/simple;
+	bh=GMQueMiey9rdTFf7UBKNwhn3faIEOvC6NrVmVt0a1rw=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=IqtdB4owF1nnFhE4psVMFLEHaS68+ACDjY8+DIJ0aA9WWZ9HmLD7HVZ0sP66c+nAWeBDhP85qz6DQE0DJ03EKNx52lkoQVyUU8oKHbFxxTjMl5z07YH/g5aKvYwFfApyXkxJgUKeybMPRvdDXXitPM7tnxe51ko1gB2mp1aLW5g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Oxuj8jYa; arc=none smtp.client-ip=209.85.218.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="BgMd7By6"
-Message-ID: <c8cf76ab-b00d-42f2-aeb3-143332ea61f5@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1738363276;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Nrki2uidYl7o9A5bGtx9yqeMvkDktcHZQKIVPm9Iipc=;
-	b=BgMd7By6C4Y70ux/OXs6HU1k2fT3iSrADks0A1NePIQ/tboocEfx9qSPWyCZlxp7ubuFbu
-	xrs3DfQOfvxuAboiUYjArBqhh9x0ovW2OI9qpGldJS174cn2Bs372Hj2gOFuxzhcx6bWxx
-	+MNPAl1GyJ5O/KK2qmnOSCXkWLTehRI=
-Date: Fri, 31 Jan 2025 14:41:01 -0800
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Oxuj8jYa"
+Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-ab7157cf352so55839366b.0
+        for <dwarves@vger.kernel.org>; Sat, 01 Feb 2025 06:03:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1738418626; x=1739023426; darn=vger.kernel.org;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=UKzKbKOLRC9RhqSGLAXcDyUNqT8hccv/kIrHRutN2xg=;
+        b=Oxuj8jYaxLwKMlNLojMPEIyNLBHrwz5zQyHzmt2ucT9g2l8CnEuwngUjySvnPjR4gf
+         X2QQMInkVZrW9GqwAICDoIxtBQAO47xUmvlYtoQVTDHfCDULYhjv+17szrWDdjV9dKej
+         qm5rSmnOo4C8z6ajN3TyNOicrIOsUtyC5zoWOaVqWF5pHMZcmcvQif1NphmjeL9F2gYg
+         fQrn74zIQwXETjrdZyTr4RvG+TNIjqW2lmfAc2u2Mi7ZT8L3CF1yLrC0o5ymoRxmAk8N
+         dcueEH3anwm8EPO2e/Hus6T3nlp37DJETWqI5+Y3eg86Y4xVSxMHtlfjqw9HRyaQLjZz
+         hjEA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1738418626; x=1739023426;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UKzKbKOLRC9RhqSGLAXcDyUNqT8hccv/kIrHRutN2xg=;
+        b=OK78+SCihJuVMs0SdslxQAczoNYqOIsp2UHwTtP15nwIhtPNtNKNwp0iJ3YpggPntD
+         /5cW1GR8bOPHTWJI2nkVsRCYgcghHMpSPmx3VCDADu+KIDOhZ1cH7QJK6DxKN5OiVt8x
+         xdZJlF0Frc2D9K82UAFt+M8HBrnrdg/wDd9ItJP2L8NLm8Ve6KLKZ/HYHgp71VS6Uy5X
+         UIMT/hteBPPiO4aF6K+oNpr7IhxoH4eqDYunTLsGYfkgo0tetdftpWu1WKZBmKIBOpaS
+         UVrNAAS5doasO8uM8Nvkl7xJVNDtKyLruN9Z70zMqxYCM/udiiZr9i6kmbLT0+FR1gWu
+         9/jg==
+X-Gm-Message-State: AOJu0YwyATH+zeKMSMJrokWSkAlPjT+NlIFx9SWJvw0yRO5QCCBzilVI
+	ZBRhe3R3kxScz4FjlA0OUvilNsygYGkREeqk1Uys/NVBPXTFplm11hveNdqttU5Sww==
+X-Gm-Gg: ASbGncsCCwQQjwoK2JHL2i0nMtdeSuT3OgzREOw+pSumWemLTy2PppBvn/DRJFX0xjI
+	/K3Phrq6pu+/oIEKeNsWzSfYq5Dctn0mR3kt1WpWFbtdEZRayKZKJBOgZTD5K6ZjEycIMMxUk2w
+	TmYbfySQ0olWFJHSp7Py5DwgnyUcOIJOnvsRVWJ1D7BOswiD86vFgBn8SccdopjT7WzvvMpjPV7
+	RVhXp4xrGGS4R8bRSknzu7RTurW4hzlSx5GkKyu3DZQ/eXw+kO1yU/+G6V3kHzbfgFyaeLOkNbs
+	gwubeL12lWH9
+X-Google-Smtp-Source: AGHT+IGbX6C7S6nwT5q+luMNYDcQLhJTggHo7JRhh3SiLyG7Pk23oMr9OdcUx2Ldz5H74tBpUMZUZw==
+X-Received: by 2002:a17:907:6d22:b0:aa6:8764:8738 with SMTP id a640c23a62f3a-ab6e0cab185mr1060098566b.23.1738418625857;
+        Sat, 01 Feb 2025 06:03:45 -0800 (PST)
+Received: from m4.lan (tor-exit-1.zbau.f3netze.de. [2a0b:f4c0:16c:1::1])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ab6ffc9eb9dsm246812266b.27.2025.02.01.06.03.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 01 Feb 2025 06:03:45 -0800 (PST)
+Sender: Domenico Andreoli <domenico.andreoli.it@gmail.com>
+Received: from cavok by m4.lan with local (Exim 4.96)
+	(envelope-from <cavok@localhost>)
+	id 1teE5y-000tJV-1k;
+	Sat, 01 Feb 2025 15:03:38 +0100
+Date: Sat, 1 Feb 2025 15:03:38 +0100
+From: Domenico Andreoli <cavok@debian.org>
+To: dwarves@vger.kernel.org
+Cc: 1037132@bugs.debian.org
+Subject: pahole missing final "cacheline boundary" message
+Message-ID: <Z54pul7P6-Gkc9PU@localhost>
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH dwarves v2] btf_encoder: fix memory access bugs
-To: Alan Maguire <alan.maguire@oracle.com>, acme@kernel.org
-Cc: eddyz87@gmail.com, andrii@kernel.org, mykolal@fb.com,
- bpf@vger.kernel.org, dwarves@vger.kernel.org
-References: <20241216183112.206072-1-ihor.solodrai@pm.me>
- <8bb182c6a5f7a7ac3668297bca5a31467fac93de@linux.dev>
- <c52fcd63-c85f-41a6-ade4-a42c24c8cef8@oracle.com>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
-In-Reply-To: <c52fcd63-c85f-41a6-ade4-a42c24c8cef8@oracle.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="IDh5eg/OwCY1Arc6"
+Content-Disposition: inline
 
-On 1/31/25 5:14 AM, Alan Maguire wrote:
- >> [...]
- >
- > Thanks for the reminder; we'll make sure this one gets applied shortly.
- > I wonder if we should add the -fsanitize flags to CFLAGS for RELEASE 
-mode?
- >
 
-The issue with these flags is that they significantly reduce
-performance. We might consider adding them for debug builds, but
-certainly not for the release.
+--IDh5eg/OwCY1Arc6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+Hi,
+
+We have an enhancement request from a Debian user [0]:
+
+> It would be useful to emit a final a final "cacheline boundary" message
+> when a structure ends on a cacheline, and emit a final "cacheline
+> boundary was NN bytes ago" message when the last member overruns into a
+> new cache line.
+
+Is anybody willing to implement it?
+
+Dom
+
+[0] https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=3D1037132
+
+--=20
+rsa4096: 3B10 0CA1 8674 ACBA B4FE  FCD2 CE5B CF17 9960 DE13
+ed25519: FFB4 0CC3 7F2E 091D F7DA  356E CC79 2832 ED38 CB05
+
+--IDh5eg/OwCY1Arc6
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEGSWGdoKrcEzTtUezikr1XMf+zOIFAmeeKbkACgkQikr1XMf+
+zOIv8Q/8Cl+oEuEDfbgDU0WAxPNzD6CVM3GGh2NkiYXkLLwlzNZLE9pU8J/TIQCx
+MoAuyEyVWFaTZwD53AbRvWMNfxFctMa/Tm0KH1w6ZR+unYne/DH2y85RkilEDOC6
++b/qxDgsstTxkDH5mQ4Y21sI9WNBdnR86VUxhQJ9fB/2MfGIYmbkAAxibbGnL8Sv
+d7aYf06Sbu19jxwfcTEpb7GniszsFsPWu4g6ZdA/d+ZV/muQ9sNNdF5+qE56QpaP
+h/Kp4y8oQ1H23xU2xvDLnixxPbTJsHfIaWVMMEqlVo+O3oSiGRtKzSxbBWAU8f/n
+6OXOSBqDeX/SOjsSzq1/fmYf08QvW5NrN+graZYT4jOwLSTEZKi2sWIvETTGZcRh
+W+LiITpBIbFogujBWPOQe7VjNklRVwMFSKr2IyGBVHRHrqQKoRLXICi81mVial0x
+rOHBfyJXkrY9jLmvSt5kdPw3sQ7Lg8D/NyEvnvb3Fxnb/YlJJrcTQdJSFOES926j
+64BBgfnWXydPCg9dpabOUCkq8sJhm5NL9Q+vFBjidBmLvbQUkf2rg5gW6sy53RRU
+rIWH122Ut0+p0YIwPMAxwo9uRd+nzFLpm71BJx8VVJ5YGZgZv4NbbThr9HdPYtnm
+b1QrDPCUWrOMYbYKZe+GfoFpn2PsRywnj1CJfppUqLnv0zkp+9M=
+=oi/I
+-----END PGP SIGNATURE-----
+
+--IDh5eg/OwCY1Arc6--
