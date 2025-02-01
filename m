@@ -1,71 +1,72 @@
-Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
+Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1789735963
-	for <dwarves@vger.kernel.org>; Sat,  1 Feb 2025 14:03:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 648E6224FD
+	for <dwarves@vger.kernel.org>; Sat,  1 Feb 2025 14:25:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738418629; cv=none; b=o66YrOu32SYiJ23yG2M7wcnih+iWZbMYIO1W+jvjU7FjyBaQ5Wn+RpGTbS6TdCG/Ww0skGxwPP8RSKwPJG+Sxwa45Fb+fpqPrZL81Lx6djEGyBTYThTIUy97Nsq4aIL+oeFa7gncZ5lPue6cGzmZFYPUz2yUamOaQBPn/3BP0a4=
+	t=1738419917; cv=none; b=sUjA0DatvJ3zxXlm9i446Q+PZQFWqcBDi56yDDDCahgLJ08q1lroTrG5bAan8t4rJBFIjDoE1VRuWdQp/NgAdCkGX5SEXz/KkfSJobhnsVU9cFHRzuaCErOstJc8Ay6yppZCZFPNAXhW+Uqvzug3DAb7ofJvr1S2mrKC7NmxwEY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738418629; c=relaxed/simple;
-	bh=GMQueMiey9rdTFf7UBKNwhn3faIEOvC6NrVmVt0a1rw=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=IqtdB4owF1nnFhE4psVMFLEHaS68+ACDjY8+DIJ0aA9WWZ9HmLD7HVZ0sP66c+nAWeBDhP85qz6DQE0DJ03EKNx52lkoQVyUU8oKHbFxxTjMl5z07YH/g5aKvYwFfApyXkxJgUKeybMPRvdDXXitPM7tnxe51ko1gB2mp1aLW5g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Oxuj8jYa; arc=none smtp.client-ip=209.85.218.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
+	s=arc-20240116; t=1738419917; c=relaxed/simple;
+	bh=foVpzYD0h9ImYJS/tv+PdQzD8oKrcc1r0WUfaMKFPUo=;
+	h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=dQEj2xLJ7ASgoD8S+eG07t12zBow04IRJOd87b270dK8IK0Bfn1pwjAL/hykB0yyY1Lgko+28WTzqnJn4rf+Kmh5o1dk1IrCTTQGCnlCw1r1ifnDIAEVbRQATROCiXtxQavZrJJIgoG1oB1EAKZ8PMyHKlAcZEogXlfFepIiC0o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cBjMH6oW; arc=none smtp.client-ip=209.85.218.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Oxuj8jYa"
-Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-ab7157cf352so55839366b.0
-        for <dwarves@vger.kernel.org>; Sat, 01 Feb 2025 06:03:47 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cBjMH6oW"
+Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-aaee0b309adso519749366b.3
+        for <dwarves@vger.kernel.org>; Sat, 01 Feb 2025 06:25:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1738418626; x=1739023426; darn=vger.kernel.org;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+        d=gmail.com; s=20230601; t=1738419914; x=1739024714; darn=vger.kernel.org;
+        h=content-disposition:mime-version:message-id:subject:to:from:date
          :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=UKzKbKOLRC9RhqSGLAXcDyUNqT8hccv/kIrHRutN2xg=;
-        b=Oxuj8jYaxLwKMlNLojMPEIyNLBHrwz5zQyHzmt2ucT9g2l8CnEuwngUjySvnPjR4gf
-         X2QQMInkVZrW9GqwAICDoIxtBQAO47xUmvlYtoQVTDHfCDULYhjv+17szrWDdjV9dKej
-         qm5rSmnOo4C8z6ajN3TyNOicrIOsUtyC5zoWOaVqWF5pHMZcmcvQif1NphmjeL9F2gYg
-         fQrn74zIQwXETjrdZyTr4RvG+TNIjqW2lmfAc2u2Mi7ZT8L3CF1yLrC0o5ymoRxmAk8N
-         dcueEH3anwm8EPO2e/Hus6T3nlp37DJETWqI5+Y3eg86Y4xVSxMHtlfjqw9HRyaQLjZz
-         hjEA==
+        bh=Jm2It8fg+AyxjnR8wgMGdC6OIHoBxHZ9RIk2csmunac=;
+        b=cBjMH6oWbN5DU2SS31xS/zyld8c/2Gz7zqs7ehO7k4CPtXdoG0eXbeAV3dTlkjudT5
+         jruiVrpjMgsqhtlFcV8G6N0q+e+GemKbCuqdiT33auLcIoGqb3+oPK5bLzYLiVP3i2uB
+         HE7qvKEdycHHywg9k1oPTfype8JIVGNFGVjXaV47aEIhWL8J5/qjLlAKjZbjRiPuEJCa
+         GMx8U7t9Z5Ul1MERsgf2GHvI5T7OQ0wFxqXFjIqbPXcX2JC98UwIAgMtIWzRXeQYBNpb
+         0geyic7Dr39kTSAxBAlkNGKc6Gb5Ivn5FK/p6V/t5tKO8pTaUi2Kvv82pmu8ftCKey5D
+         ALZg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738418626; x=1739023426;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+        d=1e100.net; s=20230601; t=1738419914; x=1739024714;
+        h=content-disposition:mime-version:message-id:subject:to:from:date
          :sender:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=UKzKbKOLRC9RhqSGLAXcDyUNqT8hccv/kIrHRutN2xg=;
-        b=OK78+SCihJuVMs0SdslxQAczoNYqOIsp2UHwTtP15nwIhtPNtNKNwp0iJ3YpggPntD
-         /5cW1GR8bOPHTWJI2nkVsRCYgcghHMpSPmx3VCDADu+KIDOhZ1cH7QJK6DxKN5OiVt8x
-         xdZJlF0Frc2D9K82UAFt+M8HBrnrdg/wDd9ItJP2L8NLm8Ve6KLKZ/HYHgp71VS6Uy5X
-         UIMT/hteBPPiO4aF6K+oNpr7IhxoH4eqDYunTLsGYfkgo0tetdftpWu1WKZBmKIBOpaS
-         UVrNAAS5doasO8uM8Nvkl7xJVNDtKyLruN9Z70zMqxYCM/udiiZr9i6kmbLT0+FR1gWu
-         9/jg==
-X-Gm-Message-State: AOJu0YwyATH+zeKMSMJrokWSkAlPjT+NlIFx9SWJvw0yRO5QCCBzilVI
-	ZBRhe3R3kxScz4FjlA0OUvilNsygYGkREeqk1Uys/NVBPXTFplm11hveNdqttU5Sww==
-X-Gm-Gg: ASbGncsCCwQQjwoK2JHL2i0nMtdeSuT3OgzREOw+pSumWemLTy2PppBvn/DRJFX0xjI
-	/K3Phrq6pu+/oIEKeNsWzSfYq5Dctn0mR3kt1WpWFbtdEZRayKZKJBOgZTD5K6ZjEycIMMxUk2w
-	TmYbfySQ0olWFJHSp7Py5DwgnyUcOIJOnvsRVWJ1D7BOswiD86vFgBn8SccdopjT7WzvvMpjPV7
-	RVhXp4xrGGS4R8bRSknzu7RTurW4hzlSx5GkKyu3DZQ/eXw+kO1yU/+G6V3kHzbfgFyaeLOkNbs
-	gwubeL12lWH9
-X-Google-Smtp-Source: AGHT+IGbX6C7S6nwT5q+luMNYDcQLhJTggHo7JRhh3SiLyG7Pk23oMr9OdcUx2Ldz5H74tBpUMZUZw==
-X-Received: by 2002:a17:907:6d22:b0:aa6:8764:8738 with SMTP id a640c23a62f3a-ab6e0cab185mr1060098566b.23.1738418625857;
-        Sat, 01 Feb 2025 06:03:45 -0800 (PST)
-Received: from m4.lan (tor-exit-1.zbau.f3netze.de. [2a0b:f4c0:16c:1::1])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ab6ffc9eb9dsm246812266b.27.2025.02.01.06.03.44
+        bh=Jm2It8fg+AyxjnR8wgMGdC6OIHoBxHZ9RIk2csmunac=;
+        b=FtTWVxRJOUcYbhUJpIiwbX0zyva41RTukOzFvhUumWC2jLVxbQCb9pW0Q6x1cIih5d
+         +8+g7w51wNYc/AXMUvGfvuE+CJlTlG4eweiZ+9yiIR192t1A15Suzyw69kooBa68fh/z
+         6QvpfzqGjWH4wfUUesZy36x/jJ/akJ07ytviKxYhs2J3+abB0gn8eIfGBqZRmmc2kH4N
+         75fUrMpAHnm69mhs27W7PFFikilxKBaZzsIOzIB89F1yQ9poczorTqlML4jo6/h4CJ1y
+         ey1Oo3CtATZ6/TgBVw1aOGmUFNjIycIjKiCNfHT+6TZLYjtGQrL2j9ar2z+PD0VQA7UK
+         E/qA==
+X-Gm-Message-State: AOJu0YyOMqMXteQ3SQoY3VtzOTt3/HU74nduPrQtzgKcGhXycZH06Yp1
+	5eemPXhlZhBsvNO7eoeDu/bmw8unv6utRo/sKeXL4WVG2cyN/hGmIHPWS+VfDhfzdA==
+X-Gm-Gg: ASbGnctDDn+AVuwmeXlyKotkTc9Hk7SbIKPkNDTQf9gjYgr68hV78UfAPnGJ9KU8oNS
+	tVjb+lM8Dd7TnY8dekbCaRACLmHv4JOqAmbw8AlHSdbRVEVsEvxobtN4atVRBo/s/D3Gm3allVn
+	SBp8PGN0TGf7bnfpEjBdiFHduyHrQCjreu9gsRUMTcRhpTnJI8qW0nNc2DpK7kFzmvswFADTt4i
+	Vg53qty3ZCMIrGAz9OtKv0LDsWD5IGLnf5ykvGCH4fN5tbiWK52/IaOOxA5YM0DgU1Tvjd4Sd68
+	nN8rrPswMAcWGdc5QsQflGkl83on
+X-Google-Smtp-Source: AGHT+IEicCpaGJAjX43WCb4zP0dyGw3pN62oLha9J0ZdznDDDKwUjmIloyN+J4yOZEjGRz0hCLySGA==
+X-Received: by 2002:a17:907:7f17:b0:ab6:eecb:41f0 with SMTP id a640c23a62f3a-ab6eecb47ecmr1115275166b.35.1738419913564;
+        Sat, 01 Feb 2025 06:25:13 -0800 (PST)
+Received: from m4.lan (13.tor-exit.nothingtohide.nl. [2001:67c:6ec:203:192:42:116:210])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ab6e4a2fa50sm447763566b.128.2025.02.01.06.25.12
+        for <dwarves@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 01 Feb 2025 06:03:45 -0800 (PST)
+        Sat, 01 Feb 2025 06:25:12 -0800 (PST)
 Sender: Domenico Andreoli <domenico.andreoli.it@gmail.com>
 Received: from cavok by m4.lan with local (Exim 4.96)
 	(envelope-from <cavok@localhost>)
-	id 1teE5y-000tJV-1k;
-	Sat, 01 Feb 2025 15:03:38 +0100
-Date: Sat, 1 Feb 2025 15:03:38 +0100
-From: Domenico Andreoli <cavok@debian.org>
+	id 1teEQo-000wAs-1L
+	for dwarves@vger.kernel.org;
+	Sat, 01 Feb 2025 15:25:10 +0100
+Date: Sat, 1 Feb 2025 15:25:10 +0100
+From: Domenico Andreoli <domenico.andreoli@linux.com>
 To: dwarves@vger.kernel.org
-Cc: 1037132@bugs.debian.org
-Subject: pahole missing final "cacheline boundary" message
-Message-ID: <Z54pul7P6-Gkc9PU@localhost>
+Subject: [PATCH] Fix spelling error.
+Message-ID: <Z54uxjn-wDXi9LGq@localhost>
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
@@ -73,52 +74,65 @@ List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="IDh5eg/OwCY1Arc6"
+	protocol="application/pgp-signature"; boundary="hRTTxpTdphI6doKE"
 Content-Disposition: inline
 
 
---IDh5eg/OwCY1Arc6
+--hRTTxpTdphI6doKE
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Hi,
+=46rom: Domenico Andreoli <domenico.andreoli@linux.com>
 
-We have an enhancement request from a Debian user [0]:
+Fix spelling error.
 
-> It would be useful to emit a final a final "cacheline boundary" message
-> when a structure ends on a cacheline, and emit a final "cacheline
-> boundary was NN bytes ago" message when the last member overruns into a
-> new cache line.
+Signed-off-by: Domenico Andreoli <domenico.andreoli@linux.com>
 
-Is anybody willing to implement it?
+---
+ pahole.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Dom
-
-[0] https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=3D1037132
+Index: b/pahole.c
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+--- a/pahole.c
++++ b/pahole.c
+@@ -1436,7 +1436,7 @@ static const struct argp_option pahole__
+ 	{
+ 		.name =3D "with_embedded_flexible_array",
+ 		.key  =3D ARGP_with_embedded_flexible_array,
+-		.doc  =3D "show only structs with an embedded flexible array (contaning =
+a struct that has a flexible array)",
++		.doc  =3D "show only structs with an embedded flexible array (containing=
+ a struct that has a flexible array)",
+ 	},
+ 	{
+ 		.name =3D "expand_types",
 
 --=20
 rsa4096: 3B10 0CA1 8674 ACBA B4FE  FCD2 CE5B CF17 9960 DE13
 ed25519: FFB4 0CC3 7F2E 091D F7DA  356E CC79 2832 ED38 CB05
 
---IDh5eg/OwCY1Arc6
+--hRTTxpTdphI6doKE
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEGSWGdoKrcEzTtUezikr1XMf+zOIFAmeeKbkACgkQikr1XMf+
-zOIv8Q/8Cl+oEuEDfbgDU0WAxPNzD6CVM3GGh2NkiYXkLLwlzNZLE9pU8J/TIQCx
-MoAuyEyVWFaTZwD53AbRvWMNfxFctMa/Tm0KH1w6ZR+unYne/DH2y85RkilEDOC6
-+b/qxDgsstTxkDH5mQ4Y21sI9WNBdnR86VUxhQJ9fB/2MfGIYmbkAAxibbGnL8Sv
-d7aYf06Sbu19jxwfcTEpb7GniszsFsPWu4g6ZdA/d+ZV/muQ9sNNdF5+qE56QpaP
-h/Kp4y8oQ1H23xU2xvDLnixxPbTJsHfIaWVMMEqlVo+O3oSiGRtKzSxbBWAU8f/n
-6OXOSBqDeX/SOjsSzq1/fmYf08QvW5NrN+graZYT4jOwLSTEZKi2sWIvETTGZcRh
-W+LiITpBIbFogujBWPOQe7VjNklRVwMFSKr2IyGBVHRHrqQKoRLXICi81mVial0x
-rOHBfyJXkrY9jLmvSt5kdPw3sQ7Lg8D/NyEvnvb3Fxnb/YlJJrcTQdJSFOES926j
-64BBgfnWXydPCg9dpabOUCkq8sJhm5NL9Q+vFBjidBmLvbQUkf2rg5gW6sy53RRU
-rIWH122Ut0+p0YIwPMAxwo9uRd+nzFLpm71BJx8VVJ5YGZgZv4NbbThr9HdPYtnm
-b1QrDPCUWrOMYbYKZe+GfoFpn2PsRywnj1CJfppUqLnv0zkp+9M=
-=oi/I
+iQIzBAABCgAdFiEEGSWGdoKrcEzTtUezikr1XMf+zOIFAmeeLrYACgkQikr1XMf+
+zOLzYw/+MRVioZvsHNAw45moK1jjxhbP9bO1R/qqC7omwK6jVIQFzGR/oYT+6O2D
+N1N7WYVqWkLI5Hew1DUs6mw/IquQ2tu4/F/8u6Q3T3g5R6L2+sv8iJQs+8o5pQV5
+JoP+UjLoFOlWiKVWI3ZcThAoKzK+0SNSV3KV7/qaaKOUT2x7XeT9UpS+mwpjUvNY
+0eAYxuB/9amYLN6MESXzOtvIF+igfKCqFe0bE3AQCMmwOQCxhFmbJXW9+uhbBc4/
+g5Om0WSmMZVTCOQLfbUuvKE1cPVoyMqMt2PTZKz3BeF3F0cBAA38oxmXo3fLfpnx
+gbdaTmnAu0kPfCLd4oNkoGsKhZjbCqRkW/o2nolObosgenCR8dQWp/n72NSBXlgz
+SvKzbtf7owFBVCrTwbdfxGTPUkXmHo8FwBxyZ2+M+G+ecd806o3iPfHpCDRrgi3G
+t/BvDhkMW1JnSCKsLtI5U3yExZkYCMKPCyz8+ZuDphBt+DWqKgGrVikZQVfXTTCI
+m/Pcz729LX2CbWng4R3zV94/B/KgnjbDahAl0k/PY8RlE0ACRnSB/Z37vbnGWw3r
+n47SqKCvJCnkFgcX6hBFK/6kGoJCOhsIfu8qIWu3vHn42+Ou1fexmIdEKK6+13NY
+tjzaRCT5mOLVQM1l6rrNlkZSK4bSdIyCdYEK6HZnce58wYH4CQk=
+=qixd
 -----END PGP SIGNATURE-----
 
---IDh5eg/OwCY1Arc6--
+--hRTTxpTdphI6doKE--
