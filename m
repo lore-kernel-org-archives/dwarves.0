@@ -1,127 +1,224 @@
-Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAB1E13CA8A
-	for <dwarves@vger.kernel.org>; Mon, 10 Feb 2025 20:01:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB2A8264609;
+	Mon, 10 Feb 2025 20:57:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739217700; cv=none; b=u/vmEKCATeMVg4q0dwiAQrBuDQ61psf4y4gPfL33DntoeuCsx24Z1hYnhG9nryNr8LUUC/saD4hLU1ipvOPfc6HFEFV1A7eDX17C5zzwwtAlW5QqU3k5BG14bZNt04bzF73XsOOLqrYODhTqYtQZ3rCxruo3GZEaucZHQSycVaQ=
+	t=1739221030; cv=none; b=ZRLp/GtMBq65bfG3UuLui5t3ldi3JjF1giJJ/dZrc2BW6Nvyeoc8qC5FNP71hO2FHCnXm7vKTpsrkkz4XIts8QtI8V8cXOkB1q1L2CPsI7yJQG22+lGbpnbn6zefVVbBN24HMOsH6CYOHOJxVTU2mKEuIkVdEL9KVsBqZcxLwNE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739217700; c=relaxed/simple;
-	bh=LMb2occHGIVU6QtxpELmiWy8eM4ubsVAbzTz3yaKLD0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NFeHZ58P9r5rN49oKnYxdEI3/i5x7lwZ8zA0a+1IfhlGtP+ahijwLDZfys797pxfQUtOm2+4IjOPrh4e5LRcz77bTjJe1QP3GISArybDx123nYI9hi1k0AEM9uQm2WHAu5yIUH9XyZldvhvO+QXJZniOXfqenur5c48jNSmoWfg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NMTwZ47u; arc=none smtp.client-ip=209.85.208.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.com
+	s=arc-20240116; t=1739221030; c=relaxed/simple;
+	bh=UhJW72683R3Q+lyVf9UaFRZj2KU90HIu69PIZbsRMhs=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=nq0KW8+wAmiOnBb/FVDU/UILpcFTBE0Tjtm5A9QjzWpanhN8+5SFeqvHNG8aq0N/hFdLr8YsUznaA2qIj+ewy9NuYfItfvGkaV7cZMi8RJ9dle9gbdVjZFFeG0BdGJpCTHKC6G6J1N5tk5Q5CETTRvTdF3xuFDywsJ3D/Nk/qsI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=T4ZJaU32; arc=none smtp.client-ip=209.85.214.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NMTwZ47u"
-Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-5de5a8a96abso4235571a12.3
-        for <dwarves@vger.kernel.org>; Mon, 10 Feb 2025 12:01:38 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="T4ZJaU32"
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-21f92258aa6so40008965ad.3;
+        Mon, 10 Feb 2025 12:57:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1739217697; x=1739822497; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=wB7Kh5r6NpooK5uzSn8mlA5C45vBwXQ9aI6QD2Cgw/o=;
-        b=NMTwZ47uOEkPDI2Sc16afho5mNP7AcYqL/IQ2aeiKEM6YM/GdzrK27GQtgbZpRhTB9
-         nio0TrhnjS+aSTD4mY++jDpD3yFKMxp4bsYwpsPGAf2UPruLl8OmfTmni/5uJBnBAeVM
-         7UizlN2bURKiVafzn3Yysc6wNnrz5RCwPxp49veOBB79YpdL6bojyZvp6VImKYVt1xXB
-         OJSRCUrMdQa0/5D5y72Cs9NNk9VbAPA7Gp9MD5Xz4Kev5s774t/wQMHBwVNn396+O733
-         bFHt918j37nHlq76qLmcyLnjxH+wBH0OlwL6vGiudy01ZtakYi7RbpvUS5HBuwviM5Px
-         37yg==
+        d=gmail.com; s=20230601; t=1739221028; x=1739825828; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=eNNdNjKpO0UWZNVC6Qa5gHUcXPnEusrX11Ztv0IYjWc=;
+        b=T4ZJaU32HkuVTRF42LxwsLTiXdtsqhmH964wG0ifYfnzoV8VMXiPqcbsWXRfakoQqL
+         sZSAT3GCUXemN2eVgJwGSfjaQhH+zriYu69Tf/jikY0Kh2cGzwUWUwEZvz09MayyWsHO
+         Y6XIG73Z+qQMJhKO9nxKfgEetrmaYuRx3vPd6Gz5a3ogjbdLnYFa2cGJRgQyLX7+sQFd
+         PIAM4Qp7Y8DIYkQorrQF0gPiw75k4vIDeTODw+v0TdKXBC1k5ri40EDtABSVC1/vrhJN
+         K7mi5eTPojwhjZRbrJeTrPC0zHByeJ0yosRdMMgcFhW+xeXWSpPSxqwOCt07LkgxTc6E
+         XECQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739217697; x=1739822497;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=wB7Kh5r6NpooK5uzSn8mlA5C45vBwXQ9aI6QD2Cgw/o=;
-        b=vbBMdb/2ZG0gOJPeEJFTbuDzGrf6Giz57xmPMa9A3s9CKz0KHOgokr6DY6z6A2gCsP
-         kDRxrl59zLBuuKTUsdSlPLLh97EsoST2pY7EiB5ml/xIWTME5hceISXvROAdDle/W5Y3
-         R+BJX36Ix0TOVxoEXUqAWVMggX1ZyEmNdTY/uQaIC4MIjB2RF7TRseryuBqo5r8OVyZw
-         xRNgEY2XlaTU1/UN4114BivYIoHuvo+8dIKRpPAohliT9BoO/31UTdsY5wO2z8QKhJ+V
-         aBEgyuIM6usxSxx3RwGyozG72Hb8rJ8puHBOJI2CA/vXaC34U+GNhU2mp/jTmmiM0nHK
-         geog==
-X-Gm-Message-State: AOJu0YyiMsIPZi5Z04/t3Ybc7HCaAnkB+QKeduTluEXK6AOgGRnUX6zS
-	VY+zFr2jGR3wXy4dgxzk7IbuFDo1tKeo1byEguAwzoiVgJAt59fxm2G+EbWGL2D/tA==
-X-Gm-Gg: ASbGncvCVM03i1YA/4hdCUpAdzNSsRXJ6hFU/KmL5UQWjwKCQiqIxW5OZe73EUB7VMI
-	NwBBrPQeb2mjasjVdfwJFgOzQOOfex5VzRKT+HBuU3iYbz+WdVhuJ/3HEGRxxqlsGtzS439mjmR
-	kPBKtJXvqZCS8opXa50YJDf0Ndc0JqozbKf/4NrrnP4zrnOVTwEiYRmyf0Mj6oqhn4IkYMT+E6n
-	ENmRYp+v0/96F0JX1ltYmV02Zn1Y09Ikq5j1PFtfN7KfNp6E0D/T9Ar1171M3nlZBXR2DTW/EhD
-	gpPZSCMgg3ZQ0WQ=
-X-Google-Smtp-Source: AGHT+IFRyv/I4cJ6AEDeQzTRc7YGBEdqZ9Y7Ag4K0KDyjbQmTaNwH2J1h2azZQ57JJBjjbiHIZguQQ==
-X-Received: by 2002:a05:6402:5254:b0:5de:3ac1:2027 with SMTP id 4fb4d7f45d1cf-5de45002147mr40369357a12.10.1739217692351;
-        Mon, 10 Feb 2025 12:01:32 -0800 (PST)
-Received: from m4.lan (tor-exit-11.zbau.f3netze.de. [2a0b:f4c0:16c:11::1])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5de5cd90b29sm5389444a12.63.2025.02.10.12.01.30
+        d=1e100.net; s=20230601; t=1739221028; x=1739825828;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=eNNdNjKpO0UWZNVC6Qa5gHUcXPnEusrX11Ztv0IYjWc=;
+        b=qAQR640ilovYYNcFq4wii6rTSUPfD15CA7+Ir9P8QUuiLDRR53bO1XgpBicDs/+KpG
+         Kj+eWE3qFEIqEnwkxe4szQn1fIqVCr5I/l7gViQOCZtQC2md5vnlRQCgIrtR+QKmPd5W
+         xEW2/PkP9k93r0mPw5siSfVLgpKT1t5eBkezn7O4JF/1gLzBhXmKI7cFKaRZS/mKe61y
+         3kl00D6HQCymCJLrknpHBqbrurRvghvcORPZj4OKWpuhCUBcpYgIiGQuxMDE8WOQhmRs
+         0Wqfv8Fs+4tVQO3YYTT4TAx2kxbK8/x/xvrQE54inElXMWR3jhU3/u7pmg8KMFAICOwr
+         08QQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVVh8eBN7WQR7QOMRgyikSGv+MxuSqgkFsA5wXJ+8fwbeqN6V3Mld1R0tBfetWA0NH8jMauKUdgwg==@vger.kernel.org, AJvYcCVpMTWVQubFTRTO7URG9U65AoWga++LkZzjUAqB8gVi2vfxlw8sV0OOlCqOWVuVhsILHDY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzgQa111IWmWLZhxkQjTPaYCMwtZWAUaCzrFCzkk/Ioy/Ot8nm1
+	t2/4rJp5KumyZcMfzm6qU0E9unN2cHdZPY9kTrLY4v/Bo2f/EcpJ
+X-Gm-Gg: ASbGncuQpFz49+idx4bZFKT6LVJp5QKYQ0WTEdw4l64RZQ4yaVM3TIDAqIxFSiDOp+q
+	sLDglE8daMnbIm9KeZNYR21WfzprxBkTveED5wJNyBIUe0iwXj9mkFte/Z+uG7FWGPCwXt6KPcu
+	QqEhSAuLSzfHQboeSQe4xRE/QMfJfjZ4CpvoJVxGSJNE7PGQjd4KPC3F6YJprlwCWhepSQpiKfi
+	w1bzvvBrzRtwf5DnmUQ/6es5YwP15h0IsPNA8jWhmpFVmkCNGwZNu7ZHGbwA3w0a6ffi6j2VjMh
+	YkCaJfvQ2sgg
+X-Google-Smtp-Source: AGHT+IH2aJgRCueE1Bda7oylKc6ARRESJefFBHlyWD3ExIghaZ3M6X/JNmZZXdBWp0KPc9Go25ZXzw==
+X-Received: by 2002:a05:6a20:c707:b0:1ed:a524:5567 with SMTP id adf61e73a8af0-1ee03a242d9mr25352528637.9.1739221027849;
+        Mon, 10 Feb 2025 12:57:07 -0800 (PST)
+Received: from [192.168.0.235] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7309569d5e4sm1775510b3a.162.2025.02.10.12.57.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Feb 2025 12:01:31 -0800 (PST)
-Sender: Domenico Andreoli <domenico.andreoli.it@gmail.com>
-Received: from cavok by m4.lan with local (Exim 4.96)
-	(envelope-from <cavok@localhost>)
-	id 1thZyD-0006Bz-0b;
-	Mon, 10 Feb 2025 21:01:29 +0100
-Date: Mon, 10 Feb 2025 21:01:29 +0100
-From: Domenico Andreoli <domenico.andreoli@linux.com>
-To: Alan Maguire <alan.maguire@oracle.com>
-Cc: dwarves@vger.kernel.org
-Subject: Re: [PATCH] Reformat a too long line.
-Message-ID: <Z6pbGaXSGpCOJ6AQ@localhost>
-References: <Z54u8vZh5tJBzv2V@localhost>
- <80c1c334-ac68-4cf8-ab42-a93d9c8974a3@oracle.com>
+        Mon, 10 Feb 2025 12:57:07 -0800 (PST)
+Message-ID: <3782640a577e6945c86d6330bc8a05018a1e5c52.camel@gmail.com>
+Subject: Re: [PATCH dwarves 1/3] btf_encoder: collect kfuncs info in
+ btf_encoder__new
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Ihor Solodrai <ihor.solodrai@linux.dev>, dwarves@vger.kernel.org, 
+	bpf@vger.kernel.org
+Cc: acme@kernel.org, alan.maguire@oracle.com, ast@kernel.org,
+ andrii@kernel.org, 	mykolal@fb.com, kernel-team@meta.com
+Date: Mon, 10 Feb 2025 12:57:02 -0800
+In-Reply-To: <20250207021442.155703-2-ihor.solodrai@linux.dev>
+References: <20250207021442.155703-1-ihor.solodrai@linux.dev>
+	 <20250207021442.155703-2-ihor.solodrai@linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.54.3 (3.54.3-1.fc41) 
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <80c1c334-ac68-4cf8-ab42-a93d9c8974a3@oracle.com>
 
-On Mon, Feb 10, 2025 at 04:54:17PM +0000, Alan Maguire wrote:
-> On 01/02/2025 14:25, Domenico Andreoli wrote:
-> > From: Domenico Andreoli <domenico.andreoli@linux.com>
-> > 
-> > Reformat a too long line.
-> > 
-> > Signed-off-by: Domenico Andreoli <domenico.andreoli@linux.com>
-> 
-> not sure this patch is needed; man will reformat the line for terminal
-> display, right?
+On Thu, 2025-02-06 at 18:14 -0800, Ihor Solodrai wrote:
+> From: Ihor Solodrai <ihor.solodrai@pm.me>
+>=20
+> btf_encoder__tag_kfuncs() is a post-processing step of BTF encoding,
+> executed right before BTF is deduped and dumped to the output.
+>=20
+> Split btf_encoder__tag_kfuncs() routine in two parts:
+>   * btf_encoder__collect_kfuncs()
+>   * btf_encoder__tag_kfuncs()
+>=20
+> btf_encoder__collect_kfuncs() reads the .BTF_ids section of the ELF,
+> collecting kfunc information into a list of kfunc_info structs in the
+> btf_encoder. It is executed in btf_encoder__new() when tag_kfuncs flag
+> is set. This way kfunc information is available during entire lifetime
+> of the btf_encoder.
+>=20
+> btf_encoder__tag_kfuncs() is basically the same: collect BTF
+> functions, and then for each kfunc find and tag correspoding BTF
+> func. Except now kfunc information is not collected in-place, but is
+> simply read from the btf_encoder.
+>=20
+> Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
+> ---
 
-yes, sure but try editing that line from a terminal.
+Tbh, I don't think this split is necessary, modifying btf_type
+in-place should be fine (and libbpf does it at-least in one place).
+E.g. like here:
+https://github.com/acmel/dwarves/compare/master...eddyz87:dwarves:arena-att=
+rs-no-split
+I like it because it keeps the change a bit more contained,
+but I do not insist.
 
-this is purely a source code quality nit, nobody will be injuried if
-you don't merge and neither will if you instead merge it :).
+[...]
 
-> 
-> > 
-> > ---
-> >  man-pages/pahole.1 |    7 ++++++-
-> >  1 file changed, 6 insertions(+), 1 deletion(-)
-> > 
-> > Index: b/man-pages/pahole.1
-> > ===================================================================
-> > --- a/man-pages/pahole.1
-> > +++ b/man-pages/pahole.1
-> > @@ -304,7 +304,12 @@ Allow using all the BTF features support
-> >  
-> >  .TP
-> >  .B \-\-btf_features=FEATURE_LIST
-> > -Encode BTF using the specified feature list, or specify 'default' for all standard features supported.  This option can be used as an alternative to using multiple BTF-related options, and 'default' represents the standard set of BTF features that are in use for kernel BTF generation, so is useful as a shortcut for testing the latest set of standard features.  However kernel builds will call out specific features rather than using 'default' to ensure that the desired features are enabled regardless of pahole version and associated 'default' set.  Supported standard features are
-> > +Encode BTF using the specified feature list, or specify 'default' for all standard features
-> > +supported.  This option can be used as an alternative to using multiple BTF-related options,
-> > +and 'default' represents the standard set of BTF features that are in use for kernel BTF generation,
-> > +so is useful as a shortcut for testing the latest set of standard features.  However kernel builds
-> > +will call out specific features rather than using 'default' to ensure that the desired features
-> > +are enabled regardless of pahole version and associated 'default' set.  Supported standard features are
-> >  
-> >  .nf
-> >  	encode_force       Ignore invalid symbols when encoding BTF; for example
-> 
-> 
+> @@ -1876,11 +1886,10 @@ static int btf_encoder__tag_kfunc(struct btf_enco=
+der *encoder, struct gobuffer *
+>  	return 0;
+>  }
+> =20
+> -static int btf_encoder__tag_kfuncs(struct btf_encoder *encoder)
+> +static int btf_encoder__collect_kfuncs(struct btf_encoder *encoder)
+>  {
+>  	const char *filename =3D encoder->source_filename;
+>  	struct gobuffer btf_kfunc_ranges =3D {};
+> -	struct gobuffer btf_funcs =3D {};
+>  	Elf_Data *symbols =3D NULL;
+>  	Elf_Data *idlist =3D NULL;
+>  	Elf_Scn *symscn =3D NULL;
+> @@ -1897,6 +1906,8 @@ static int btf_encoder__tag_kfuncs(struct btf_encod=
+er *encoder)
+>  	int nr_syms;
+>  	int i =3D 0;
+> =20
+> +	INIT_LIST_HEAD(&encoder->kfuncs);
+> +
 
--- 
-rsa4096: 3B10 0CA1 8674 ACBA B4FE  FCD2 CE5B CF17 9960 DE13
-ed25519: FFB4 0CC3 7F2E 091D F7DA  356E CC79 2832 ED38 CB05
+Nit: do this in the btf_encoder__new?
+
+>  	fd =3D open(filename, O_RDONLY);
+>  	if (fd < 0) {
+>  		fprintf(stderr, "Cannot open %s\n", filename);
+> @@ -1977,12 +1988,6 @@ static int btf_encoder__tag_kfuncs(struct btf_enco=
+der *encoder)
+>  	}
+>  	nr_syms =3D shdr.sh_size / shdr.sh_entsize;
+> =20
+> -	err =3D btf_encoder__collect_btf_funcs(encoder, &btf_funcs);
+> -	if (err) {
+> -		fprintf(stderr, "%s: failed to collect BTF funcs\n", __func__);
+> -		goto out;
+> -	}
+> -
+>  	/* First collect all kfunc set ranges.
+>  	 *
+>  	 * Note we choose not to sort these ranges and accept a linear
+> @@ -2015,12 +2020,13 @@ static int btf_encoder__tag_kfuncs(struct btf_enc=
+oder *encoder)
+>  	for (i =3D 0; i < nr_syms; i++) {
+>  		const struct btf_kfunc_set_range *ranges;
+>  		const struct btf_id_and_flag *pair;
+> +		struct elf_function *elf_fn;
+> +		struct kfunc_info *kfunc;
+>  		unsigned int ranges_cnt;
+>  		char *func, *name;
+>  		ptrdiff_t off;
+>  		GElf_Sym sym;
+>  		bool found;
+> -		int err;
+>  		int j;
+> =20
+>  		if (!gelf_getsym(symbols, i, &sym)) {
+> @@ -2061,18 +2067,26 @@ static int btf_encoder__tag_kfuncs(struct btf_enc=
+oder *encoder)
+>  			continue;
+>  		}
+> =20
+> -		err =3D btf_encoder__tag_kfunc(encoder, &btf_funcs, func, pair->flags)=
+;
+> -		if (err) {
+> -			fprintf(stderr, "%s: failed to tag kfunc '%s'\n", __func__, func);
+> -			free(func);
+> +		elf_fn =3D btf_encoder__find_function(encoder, func, 0);
+> +		free(func);
+> +		if (!elf_fn)
+> +			continue;
+> +		elf_fn->kfunc =3D true;
+> +
+> +		kfunc =3D calloc(1, sizeof(*kfunc));
+> +		if (!kfunc) {
+> +			fprintf(stderr, "%s: failed to allocate memory for kfunc info\n", __f=
+unc__);
+> +			err =3D -ENOMEM;
+>  			goto out;
+>  		}
+> -		free(func);
+> +		kfunc->id =3D pair->id;
+> +		kfunc->flags =3D pair->flags;
+> +		kfunc->name =3D elf_fn->name;
+
+If we do go with split, maybe make refactoring a bit more drastic and
+merge kfunc_info with elf_function?
+This would make maintaining a separate encoder->kfuncs list unnecessary.
+Also, can get rid of separate 'struct gobuffer *funcs'.
+E.g. see my commit on top of yours:
+https://github.com/acmel/dwarves/compare/master...eddyz87:dwarves:arena-att=
+rs-merge-kfunc-info
+
+> +		list_add(&kfunc->node, &encoder->kfuncs);
+>  	}
+> =20
+>  	err =3D 0;
+>  out:
+> -	__gobuffer__delete(&btf_funcs);
+>  	__gobuffer__delete(&btf_kfunc_ranges);
+>  	if (elf)
+>  		elf_end(elf);
+> @@ -2081,6 +2095,34 @@ out:
+>  	return err;
+>  }
+> =20
+
+[...]
+
