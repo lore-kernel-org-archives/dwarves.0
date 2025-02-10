@@ -1,158 +1,225 @@
-Received: from out-181.mta1.migadu.com (out-181.mta1.migadu.com [95.215.58.181])
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 715F61552F5
-	for <dwarves@vger.kernel.org>; Fri,  7 Feb 2025 02:15:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.181
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738894507; cv=none; b=hYh1SF6nToP2AZO9YSqGvSg0KPZVimCBVE1ij9mcPPcay6SjNST+E4TrkK1IBJ0RELFVPWq8ucFhYUA5DBRMiqV0U/QF2ZO/vheZYejev/OyIOqv1mmKm0GoMrL6shq8wwx6FThyDVuybdAP/d855mCx2OHVzufoEy5H8WfxvWc=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738894507; c=relaxed/simple;
-	bh=sPtnUM+a4Sf6PqonCFWka4MME0SiGFhUo/lQWyLP72Q=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Ibl/MfQGKe9FqAW/XeyoR51LcPjd9GZFkPnYbqSce9RKEM9myhJDTeGOaw7vx/W9RvHC+8SmoKJlANMf7f6jWu+E2Iposvj3bX/UcyqWLmFC8b+iKf60t5FV1KG2DYz0nFU39bIKWDzM6QAQeQPb4Qvl7FVM953HWUr3brqe/3Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=kQT7vk6e; arc=none smtp.client-ip=95.215.58.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1BFB256C8D
+	for <dwarves@vger.kernel.org>; Mon, 10 Feb 2025 16:58:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.177.32
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1739206699; cv=fail; b=WRCPTLayvfYZZD8HN7dBkqKbqKNGiRB7TDD2FmHCQ7XemtbpCvDREjd97bSYBxI7nqZipCXKFB+nzoHLX/RSVtlYtiMEhpo2ULQfhNEeHH1b6lENlqOMSxU+iJ9FkavWrwjPXMtWIpRgINl9C6Jpu29n4C1eeG9D72e6T2mmxGQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1739206699; c=relaxed/simple;
+	bh=DcMe/9LjxNuHI6vL/A0s7K0HMMm1qpU54ybiJJr7Vsw=;
+	h=Message-ID:Date:Subject:To:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=DejV+azUlqdQLSlOlhe6AIWV7e6F5S3d8dbHj31Ic5FlMgDbcL7owmYJlkz9tNrvAbRw9cqPslP+L5ZllAWI0DJCELX1KDgmfDDkORwbP/zZmY6lJP5AK9xfEvs4lnNQBfcwE7kYI6GsCoz6b3iw4T+T8kTJPWz2L8BctGUSCLM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=Y0YGG8ny; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=bo7scSHR; arc=fail smtp.client-ip=205.220.177.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="kQT7vk6e"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1738894503;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=3SATihpDI6gKCPNDFWYK7idPXOGcxYr2zvSTDYPOLQQ=;
-	b=kQT7vk6eTCAIKNUNONebA9oSmRP2fR1Ahr5qJVejfLTcQ4l3I41qEqkj+VQOyXjMPajMeR
-	msEuxTKirl3GqQO+R/HrWzCxAK/CTatKje5QW3GpAhfyQOn2LnE5LAtErhtNWoQwArGXDG
-	FEJ+DtUNEAh+E07ZX41vKdf8vS51sBs=
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
-To: dwarves@vger.kernel.org,
-	bpf@vger.kernel.org
-Cc: acme@kernel.org,
-	alan.maguire@oracle.com,
-	ast@kernel.org,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	mykolal@fb.com,
-	kernel-team@meta.com
-Subject: [PATCH dwarves 3/3] pahole: introduce --btf_feature=attributes
-Date: Thu,  6 Feb 2025 18:14:42 -0800
-Message-ID: <20250207021442.155703-4-ihor.solodrai@linux.dev>
-In-Reply-To: <20250207021442.155703-1-ihor.solodrai@linux.dev>
-References: <20250207021442.155703-1-ihor.solodrai@linux.dev>
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="Y0YGG8ny";
+	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="bo7scSHR"
+Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 51AGfac9025250;
+	Mon, 10 Feb 2025 16:58:12 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=
+	content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=
+	corp-2023-11-20; bh=Ml1ZzCzbjMoY3bP7Ema/Pd+EC9Flur6ZW0PKdAPaRv0=; b=
+	Y0YGG8nyNbhnAq4IaDbsFJA0fEIrTLmzmjZBdZnY5TuF03uVlfkf9++Kpy52cpP8
+	TUZNLP0zPI2DSc9qkfcHWYo/oRHN68jR+hNGBh4376UF6ulJClhi4vYAQ0UFgaXI
+	UdMy7ru5WmRWCJMO6hYBPaNjyoQCguXcK5+ni1DpeTy7Y12Pmu0esGS0x7xCy07I
+	CLvgmL431fxZiZGG/80STw97J+NGeRfK/NGHHQVzzkdnQNjOz07hjbfrl0I1udKd
+	gf8KN4yQ7qQYfGK+OWebjyrFWITcNlx5wvWXa8t+4HoaZY0DDc4wMMKSFN9xa+Ot
+	GXYzhbdiKvFY/LvBC7ikeg==
+Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 44p0tn3ddk-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 10 Feb 2025 16:58:11 +0000 (GMT)
+Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 51AGERiS009778;
+	Mon, 10 Feb 2025 16:58:11 GMT
+Received: from nam11-dm6-obe.outbound.protection.outlook.com (mail-dm6nam11lp2176.outbound.protection.outlook.com [104.47.57.176])
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 44nwqdwpqt-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 10 Feb 2025 16:58:11 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=kykb1BBN7wML8Dd050TFywi5RSgTxScXY2TG1EaJFb0zv7GnXy+Mg9+TLpKvZt/66MuhccKcJkU0Oma+va0gW+hFZXypi9xqXM5b7dZRvkmSwE8UTv7tGR3lcbB4FISx+5ppKf4Z69sUchnepwmbcNMibBiaM1dmVG8HZQfJCRU9Qmqxz10JoGAjEKmzEaYulTn/BxTZaYd71cq1ZvWeAhOiZtdMZTRYrxZPoE5xD2kPYr3kVLMuSm+NszQLJRby0T3cSdsnYIq0sWk/CpUAK5UZhd4UGtWsibWizCMexQTKcDHUUMbcnj9ZcbjlNg7INmnGqep9vowyVdZpi7McwQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Ml1ZzCzbjMoY3bP7Ema/Pd+EC9Flur6ZW0PKdAPaRv0=;
+ b=uJ8XDQdqVhyUVrT+QkaWpx3i+qflg5jY6DukrFKjtnOzT+dOcvll2BOrMFDeWNn7TPtmVKWMuF2H8PzHYqfCcANaPbiU83jw+raaORCB/rRfog7Zql3t3G/xLzsUlQ83rZ6oFmR6rlQbGeHAfDZtLAPxKlZ51L/IyY2mQ8t8g+brBWfFCLFYOP3YMolDoa5FRSZV+jVFbkeiSD5M8qCrQc7IQB6qWwoPxR0UJrAk7zvfVjI82awMCHD31pm9QabaRQft8vuSUqTWGSli6cSKlKCQSyXDZEvMCH7gO3nBgWPILU7IAOxoH1rkRNUM8/C5vyrJlc2IZoknq6rFMzYj5g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Ml1ZzCzbjMoY3bP7Ema/Pd+EC9Flur6ZW0PKdAPaRv0=;
+ b=bo7scSHRW8lWcjZlh7wBhY8GsE3Y4q3ihvARXmkKPhltJnxXSe4QXqutH+qOWxma/JHPV62i3ve6O0ZfJ+1LeE+yp4h9SM15+k/3mKxCfBhWRnqDXdyVrJNf4KWim4VpS3kDEMvjr0YWuEhA9nmmPEJwH/PPCnxnTklDSOdx2Ow=
+Received: from BLAPR10MB5267.namprd10.prod.outlook.com (2603:10b6:208:30e::22)
+ by MN2PR10MB4238.namprd10.prod.outlook.com (2603:10b6:208:1d3::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8422.18; Mon, 10 Feb
+ 2025 16:58:09 +0000
+Received: from BLAPR10MB5267.namprd10.prod.outlook.com
+ ([fe80::682b:c879:9f97:a34f]) by BLAPR10MB5267.namprd10.prod.outlook.com
+ ([fe80::682b:c879:9f97:a34f%4]) with mapi id 15.20.8422.015; Mon, 10 Feb 2025
+ 16:58:09 +0000
+Message-ID: <80c1c334-ac68-4cf8-ab42-a93d9c8974a3@oracle.com>
+Date: Mon, 10 Feb 2025 16:54:17 +0000
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] Reformat a too long line.
+To: Domenico Andreoli <domenico.andreoli@linux.com>, dwarves@vger.kernel.org
+References: <Z54u8vZh5tJBzv2V@localhost>
+Content-Language: en-GB
+From: Alan Maguire <alan.maguire@oracle.com>
+In-Reply-To: <Z54u8vZh5tJBzv2V@localhost>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: LO4P123CA0021.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:600:151::8) To BLAPR10MB5267.namprd10.prod.outlook.com
+ (2603:10b6:208:30e::22)
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BLAPR10MB5267:EE_|MN2PR10MB4238:EE_
+X-MS-Office365-Filtering-Correlation-Id: 53558d63-3840-41a5-cfb1-08dd49f418ae
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|366016|1800799024|7053199007;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?UnB2TnlSRGt5WW9lcDRzdS9FYXFxL05wQTRnd1UrTHhicnozTFlINkZKZStC?=
+ =?utf-8?B?cWRXTm0xQ0hIQ1J6TDYvZjI2Z1FVb0tYd0VTdEo1RzduMElhM2JUVWRyZ3k2?=
+ =?utf-8?B?ZzVHckM4ZFpNR0tiaEs0aUNCc1lYUHVVQWp6MENwTURianladFVWRW1aaVEz?=
+ =?utf-8?B?OFIyKzBhdzVHTGdVd2UwcmJxVi9qRFZycnRiaDRPV3BXczlhcEZjVCtvRkV4?=
+ =?utf-8?B?bUp0azNhd2VEVU1UejcxSElCWGg4T3JIYmhHZW51d3poL09oaUtickVtcENZ?=
+ =?utf-8?B?WXJWSFRsWnlycUx4aTJmS0o3WGREU2FZNElpK284aHM4N2NxNjMvcXErV1Nk?=
+ =?utf-8?B?K0dvN1dpTjZoa2h1a3dKMVZmY2xJWmsyNlR2V1gvR050UzRvMXU3eG9QblZ4?=
+ =?utf-8?B?VDQ4RmxCai9wbkdnbVhOTEp4czI4dnRUclpFVVF6ZmxDZkQvbmxCZGlqTUZw?=
+ =?utf-8?B?RlRSMFIvd09sbUJDaFVIVFZvUVVjNndvaG1lcjhzNEM2TnQxbEUyeDZwQVF3?=
+ =?utf-8?B?czVCOFBHN2VadlF2M096blVnOU9FUlFJK3k2Z2Z2NXFVSDdhSW1PbnczUmN1?=
+ =?utf-8?B?SVdoeGNZM0xBVzZpUXJwd0VXNGhsTFFDY2l0eVFub3hOZ2YwRzErL1pZV29C?=
+ =?utf-8?B?S1hYdkJNSU5CUndYOFpnOUVJeGFHaFByY1VYR0VwcWpwQ0U1VUJTS0ZRWEdr?=
+ =?utf-8?B?SEcyNkZnZHpRekQxdFNtakRWU0JHeWU5QmxiWENyMUtLTWJtSlQzSVVqUXl4?=
+ =?utf-8?B?aDhnUDhxTkNsNzBOVmE5ZENhR1dlU1V3ZjZlSEZMdTJQSUVheFkzVVdIcHRw?=
+ =?utf-8?B?Q2FnOEdoNGFROVdIdUhLeU9qanVodUJEK1UvU3J0Y3VVK0F0NExwSXZ0NndQ?=
+ =?utf-8?B?VjlvUmlFbWZjNE43WkhlSlBTbnJJSkF3SHdWYmtoeGxPQ0c3ZG1qSk5BNGNP?=
+ =?utf-8?B?YjF1YVZrMFBZRnZITjNmYTUrbmJNSk5DVlJvZUtCUmNiSFNJVmR0alNZdERt?=
+ =?utf-8?B?K0hRR2FiV3lyZzN4Q0dmOFpqdjZYbGsxdEF2cHhHUmxSNnEwZnZQT1ovV3RF?=
+ =?utf-8?B?YzA0NEh5cTlzRlJMVDZ2MHZHS1ZFcURWcTRJdUJ4azhXZllNbmxHcjZLcDNP?=
+ =?utf-8?B?S205TUNrd0kza2xFSHgxSVU4aU1ZL290R1QxRngzbUg3YjlFWUhaWDlGNThI?=
+ =?utf-8?B?dlgrWmUrbUo5a2JjYldXVHJoc0RqRXFYVkpodktTd1VSWFduMHhMSGUwK2Nz?=
+ =?utf-8?B?ZHBLNlpuOHJNZXo4MWRQVmFjZXc3cmt0dXlhZ2N4b2UyeFhqdjZEcXFFSzBm?=
+ =?utf-8?B?NWUrWGkwUjFXRkxqVlVkVDRJclF0cjlWd1c3V1BzU0l5VmdOUmVuYXNmd3dw?=
+ =?utf-8?B?UEd6Z2FxbzVLQXZ0VEtWYXAyaktnY0Q4QjVMSjQxUzJNR1pxbHh5eTBma29y?=
+ =?utf-8?B?d1BjSVp5cXgrZFdzeXRyUmlNMHhXa043UEtMUHNmTkM1U25GNnVUL3BBampG?=
+ =?utf-8?B?aVNkTWpoRk1CNlRvSFV3VHdDSHd0b2lieno5ZWpHZkJqZUVpV2pFbC92SFJQ?=
+ =?utf-8?B?QW4zRzhEWUZwQ1AybWE4LzJwRWs1aDZxcjhWQS9iR2IrcTdYYkhqaTlqc2xF?=
+ =?utf-8?B?ajN3d2swdW92em5nbmN3Tjh0T1p1UHF6WUNpTEd2V2VzZU9mMGtQNURYWjB2?=
+ =?utf-8?B?YVlGNHBaeHhOR2t4Tkx3a09JZFByQkFDVU45TEcyQWZReDc5T1REbCtCaVlQ?=
+ =?utf-8?B?a0hKSkxPczIrMFVFUi9LTGNXUnBOeW9pV3QzSWVpbmg1bi83NVNIanVYWklx?=
+ =?utf-8?B?dldOKzcvR1FFblhhb0dQVk5oaUJjZ3lFUG1UT213eFduUkhkRUFyUUtNbzc3?=
+ =?utf-8?Q?oIoH67pUIzGjk?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BLAPR10MB5267.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(366016)(1800799024)(7053199007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?VEkrSlpLOVVnaHI0KzU3NGk5OEd1clQ0SXdncGRmVGtEc3hORXh1QXBrbVRU?=
+ =?utf-8?B?dWV0Nzl1TE9mM1AwZTF3OHZOL3lYWS9rTWVLb1BDMDd2WW15cXBoS3NRd0R3?=
+ =?utf-8?B?Qk9OU2NscGhlMHpkeDN2SkpUUjl3a3k2Z1lSeU5wcWU5NDBSb0FaVmtuZlEz?=
+ =?utf-8?B?Um92TFBzNW5wMVdEdlFSQ0pqYmlqZDd6bzhkTmRPdWkwYi9qS1JiVnlpNGxQ?=
+ =?utf-8?B?L1dtdldHODZMaWV2RzdnWlhPNXpVMUIvQ005REx4REhzeWVodUZNcFpVd2Vr?=
+ =?utf-8?B?ZnF4enltRWVsd1RQc0JIWXNFVlJWZzRBR2R6MTljdjhGVXJ0dm1qazNWZFB2?=
+ =?utf-8?B?R1RiQnUzNzg0aXVUTGtERmpiejZFWGVJdC94aWhiM2FGcEl6My9GQnlaVjM5?=
+ =?utf-8?B?aWVXUHZnOUlZOTIzbHloL3JQUk1qOHozSXNuTzBta0pTTDczNnh3eDlqdlNq?=
+ =?utf-8?B?aGVJTWJNZG16TWJQMitlUnRYOEVGZmtkaUYxM3Vud0VJbHZDRWxhT1FUekpG?=
+ =?utf-8?B?VFNTRDJxTklIVHNvcXExS1M2c1E2NEVjN0pyZGZWSFNRcDlpRy9NbFZOWVE0?=
+ =?utf-8?B?dS9HNTJPL2t6NTRNck9UWFBBUDZjS1NYcGdBUm9yRXMrK1V5dmRMVmxuRHV6?=
+ =?utf-8?B?eXNyeEkrUXpoNjlpSGxZSzd3Nm1meVNFRkdOQW4wZnZlUGd0aklCa3hTdHpE?=
+ =?utf-8?B?RzJEUytTNjA0MFNOS3ZFZmlFdHUvZUNiQSt2RGFoNzc4MmZOWmtQUUVITmRh?=
+ =?utf-8?B?clBIaisyMHRLN1BKOE5XZi8xZWtpdWF3OUlvT0lYZWlDRGNNR0todFZRcHhM?=
+ =?utf-8?B?TDQxR2NxQkg0L0ZiVVMyZThFeDlEekZaa25QcS9QZTFLVVJxTm00SHRGaEth?=
+ =?utf-8?B?V1V4ZDVad3pJSGVYRm01RUZ5ZlRPcEd2U1ozbEpzWXF3bHBWWTlEcGdqYkVu?=
+ =?utf-8?B?VW96Wk0zOW5tZjZydjhKb2poOXg2K21nZ2pYd2EyQ0xzQWxKVzFIbFpCajFU?=
+ =?utf-8?B?eU5QWkF3eld0dGVYSE5VekJQSk9NeHltNS85c3Z1SXF1SnVtNmx1YlBhWmQ3?=
+ =?utf-8?B?TTdSaVRhWUZYWGR6STZhT0xrL1hndTJ5SDhCV3JGa1RNSkhNT1hEMTdnNkFI?=
+ =?utf-8?B?bXJkODhGSXBYaHhYc2xmbmljNithYzZQWVFRMUU5cWt4dFpYMTh2d2J3MXQ4?=
+ =?utf-8?B?cXZTelVUS0RzTCtRbGlDcHNFOU41TUdHSm9BOU1kQVByUlcyd3VyOFk5ZW5K?=
+ =?utf-8?B?dFJvYUJLSHlRWUNzMXBJZ0RJMnhicExrU29Od2xKODVkVUJzc056MkxvRGxE?=
+ =?utf-8?B?Zm45K0pzZUk4VEdkS1o1OG9vTjhjOExRUEtub0QreDVEUFI5WTlDREIycTNn?=
+ =?utf-8?B?VThwc3RUZjY3dDdxNDVFa3YzZWhJMisrdWhwdXozT202UVp2Q21CZFRkc3VS?=
+ =?utf-8?B?YThMK0l4NUcrUm5LRkMwYitqNktyTWpjWjZJU0RkY2piZk95OWJwckFVaXhK?=
+ =?utf-8?B?RUhEV0NLQnUrZzdXQTJVSGZHSTZPOE1Rb1o3OTViajJJS3UwSHdpNGpua2Mv?=
+ =?utf-8?B?emJjQ0dtNWQ0S2dMVFNaQmdWVER1cTRSR2RDY3hmSEJRMHcyZG9MRDgzWHM0?=
+ =?utf-8?B?eVZqZlZJRXA0R0Y1aVVhRzBGTG0rMDZBQkswRnJDL2hkWDMycVkwOEpIYjIv?=
+ =?utf-8?B?Mkh5alZ2UFFqMTl3c0QrN3dSeGZnUGp3Z3lJZjhYd2JSYWpzUzdsQWc3c1NX?=
+ =?utf-8?B?Um85SVE1UU9ZMHZ6TXpSL3RYUmVaTkltL3h1bkU3MXhGSE9vWEY2RHZRT1hk?=
+ =?utf-8?B?TzZCelNYcVR3QnZKc0JSNkFlOUdIdG4rZU5WaVRCdThRVDl2NUNObWEra2RK?=
+ =?utf-8?B?WnFnelEySTc5QURSdUZjTWtqNVZVYnZiYzlWZitJUFo2bjFETWl0cFlUeUxY?=
+ =?utf-8?B?MG1uSUN6OWlBcVZ6QWtjTUxrd1AzaERFUTJ1MlRaSC93dWpwVXlITDg1VWRx?=
+ =?utf-8?B?bDZaQWxSRHNmdGhXTnRlTVJ5ZDM4a1hGTDl6aWNON2tpRFpmd0cvdjF6ZS80?=
+ =?utf-8?B?d1RMK3QzUVBJcWxISE8veGdjZEpLdmZBTlFJWndYQXA4OGkrcEV2Sm5ieVQ4?=
+ =?utf-8?B?c2pUQ0hRLzFvZ2FLbFhHajN0Y09wZ2JNL3RxM09hRldORjNxOUpoTThvYVZM?=
+ =?utf-8?B?Umc9PQ==?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
+	2BmCd0BQmzX4m6LEzydpQ251M32CZs23Vg23/hcFm+fatAaGgfZFFDJReJ79MOzlP6B4Jc1dIoOumVGi10zx56BcdJhtmsrJekiyBL2Qmo3KQZSQedgj5WlRlDny1ENIgcu3iqeASyDkvLh8rctbDQZcLp9yI6dWwAKUZ87/9qPxn5dzNsxjTy7jyhp+U5U63lsghGo2v2v3ODN/MdTNewhfCB7UtaLHeOId8UFYSjftxx3F6kUqag8p8fyBQK8ptvHvXh8dIsZYFPV2Lsx83BHZiWej02SBIE/FH2uCxYT/yD5pq/NAPdGgLslTH190+OpgAoRmpJHAUXfDneKykYcsE2a2Tl+OF6RIuRT7jhTdUWnfNkMsLEpezvAxWS3Q7a89r4hue1rriCq6sPoqb0lJGLjNHgeksPo9uLYCOY0uto41gd5aWenVmBlf8sv8PQNwTkqaS3gPmEaSPnXV0Mf5xCM7UGNT5Bf7Ry3m3NPtmVDrr5mqdsOFNNsYoC/SdnmgXPFgTQrXZYumOhT6G+H+jgayc3bm1fHJT68Imu/612K+fUus6hRptfTCbmk0266VQVVBCnhGgWvHuRn4EH5206Dmnol8tA4tDNYm0Y8=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 53558d63-3840-41a5-cfb1-08dd49f418ae
+X-MS-Exchange-CrossTenant-AuthSource: BLAPR10MB5267.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Feb 2025 16:58:09.3294
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 6ruo4vBsvp7UnYvf9ra8OU2B//t8pKk7KdPdwj/IiZf6KwP9w0v8ScVgNhP0EEvtbYJm7c9qC+30SOtjbBjB3Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR10MB4238
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-02-10_09,2025-02-10_01,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 spamscore=0
+ suspectscore=0 malwarescore=0 adultscore=0 bulkscore=0 mlxscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2501170000 definitions=main-2502100139
+X-Proofpoint-GUID: 0FihPw7jCdX9s5GNMcRDoUwu-iKdOfvX
+X-Proofpoint-ORIG-GUID: 0FihPw7jCdX9s5GNMcRDoUwu-iKdOfvX
 
-Add a feature flag "attributes" (default: false) controlling whether
-pahole is allowed to generate BTF attributes: type tags and decl tags
-with kind_flag = 1.
+On 01/02/2025 14:25, Domenico Andreoli wrote:
+> From: Domenico Andreoli <domenico.andreoli@linux.com>
+> 
+> Reformat a too long line.
+> 
+> Signed-off-by: Domenico Andreoli <domenico.andreoli@linux.com>
 
-This is necessary for backward compatibility, as BPF verifier does not
-recognize tags with kind_flag = 1 prior to (at least) 6.14-rc1 [1].
+not sure this patch is needed; man will reformat the line for terminal
+display, right?
 
-[1] https://lore.kernel.org/bpf/20250130201239.1429648-1-ihor.solodrai@linux.dev/
-
-Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
----
- btf_encoder.c |  6 ++++--
- dwarves.h     |  1 +
- pahole.c      | 11 +++++++++++
- 3 files changed, 16 insertions(+), 2 deletions(-)
-
-diff --git a/btf_encoder.c b/btf_encoder.c
-index d7837c2..0a734d4 100644
---- a/btf_encoder.c
-+++ b/btf_encoder.c
-@@ -142,7 +142,8 @@ struct btf_encoder {
- 			  gen_floats,
- 			  skip_encoding_decl_tag,
- 			  tag_kfuncs,
--			  gen_distilled_base;
-+			  gen_distilled_base,
-+			  encode_attributes;
- 	uint32_t	  array_index_id;
- 	struct elf_secinfo *secinfo;
- 	size_t             seccnt;
-@@ -800,7 +801,7 @@ static int btf_encoder__add_bpf_arena_type_tags(struct btf_encoder *encoder, str
- 	int ret_type_id;
- 	int err = 0;
- 
--	if (!state || !state->elf || !state->elf->kfunc)
-+	if (!encoder->encode_attributes || !state || !state->elf || !state->elf->kfunc)
- 		goto out;
- 
- 	kfunc = btf_encoder__kfunc_by_name(encoder, state->elf->name);
-@@ -2553,6 +2554,7 @@ struct btf_encoder *btf_encoder__new(struct cu *cu, const char *detached_filenam
- 		encoder->skip_encoding_decl_tag	 = conf_load->skip_encoding_btf_decl_tag;
- 		encoder->tag_kfuncs	 = conf_load->btf_decl_tag_kfuncs;
- 		encoder->gen_distilled_base = conf_load->btf_gen_distilled_base;
-+		encoder->encode_attributes = conf_load->btf_attributes;
- 		encoder->verbose	 = verbose;
- 		encoder->has_index_type  = false;
- 		encoder->need_index_type = false;
-diff --git a/dwarves.h b/dwarves.h
-index 8234e1a..99ed783 100644
---- a/dwarves.h
-+++ b/dwarves.h
-@@ -89,6 +89,7 @@ struct conf_load {
- 	bool			reproducible_build;
- 	bool			btf_decl_tag_kfuncs;
- 	bool			btf_gen_distilled_base;
-+	bool			btf_attributes;
- 	uint8_t			hashtable_bits;
- 	uint8_t			max_hashtable_bits;
- 	uint16_t		kabi_prefix_len;
-diff --git a/pahole.c b/pahole.c
-index af3e1cf..0bda249 100644
---- a/pahole.c
-+++ b/pahole.c
-@@ -1152,6 +1152,7 @@ ARGP_PROGRAM_VERSION_HOOK_DEF = dwarves_print_version;
- #define ARG_padding_ge		   347
- #define ARG_padding		   348
- #define ARGP_with_embedded_flexible_array 349
-+#define ARGP_btf_attributes	   350
- 
- /* --btf_features=feature1[,feature2,..] allows us to specify
-  * a list of requested BTF features or "default" to enable all default
-@@ -1210,6 +1211,9 @@ struct btf_feature {
- 	BTF_NON_DEFAULT_FEATURE(distilled_base, btf_gen_distilled_base, false),
- #endif
- 	BTF_NON_DEFAULT_FEATURE(global_var, encode_btf_global_vars, false),
-+#if LIBBPF_MAJOR_VERSION >= 1 && LIBBPF_MINOR_VERSION >= 6
-+	BTF_NON_DEFAULT_FEATURE(attributes, btf_attributes, false),
-+#endif
- };
- 
- #define BTF_MAX_FEATURE_STR	1024
-@@ -1785,6 +1789,11 @@ static const struct argp_option pahole__options[] = {
- 		.key = ARGP_running_kernel_vmlinux,
- 		.doc = "Search for, possibly getting from a debuginfo server, a vmlinux matching the running kernel build-id (from /sys/kernel/notes)"
- 	},
-+	{
-+		.name = "btf_attributes",
-+		.key  = ARGP_btf_attributes,
-+		.doc  = "Allow generation of attributes in BTF. Attributes are the type tags and decl tags with the kind_flag set to 1.",
-+	},
- 	{
- 		.name = NULL,
- 	}
-@@ -1979,6 +1988,8 @@ static error_t pahole__options_parser(int key, char *arg,
- 		show_supported_btf_features(stdout);	exit(0);
- 	case ARGP_btf_features_strict:
- 		parse_btf_features(arg, true);		break;
-+	case ARGP_btf_attributes:
-+		conf_load.btf_attributes = true;	break;
- 	default:
- 		return ARGP_ERR_UNKNOWN;
- 	}
--- 
-2.48.1
+> 
+> ---
+>  man-pages/pahole.1 |    7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
+> 
+> Index: b/man-pages/pahole.1
+> ===================================================================
+> --- a/man-pages/pahole.1
+> +++ b/man-pages/pahole.1
+> @@ -304,7 +304,12 @@ Allow using all the BTF features support
+>  
+>  .TP
+>  .B \-\-btf_features=FEATURE_LIST
+> -Encode BTF using the specified feature list, or specify 'default' for all standard features supported.  This option can be used as an alternative to using multiple BTF-related options, and 'default' represents the standard set of BTF features that are in use for kernel BTF generation, so is useful as a shortcut for testing the latest set of standard features.  However kernel builds will call out specific features rather than using 'default' to ensure that the desired features are enabled regardless of pahole version and associated 'default' set.  Supported standard features are
+> +Encode BTF using the specified feature list, or specify 'default' for all standard features
+> +supported.  This option can be used as an alternative to using multiple BTF-related options,
+> +and 'default' represents the standard set of BTF features that are in use for kernel BTF generation,
+> +so is useful as a shortcut for testing the latest set of standard features.  However kernel builds
+> +will call out specific features rather than using 'default' to ensure that the desired features
+> +are enabled regardless of pahole version and associated 'default' set.  Supported standard features are
+>  
+>  .nf
+>  	encode_force       Ignore invalid symbols when encoding BTF; for example
 
