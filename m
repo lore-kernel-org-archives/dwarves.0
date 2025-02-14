@@ -1,124 +1,142 @@
-Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BBBA4D8A3;
-	Thu, 13 Feb 2025 13:16:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92CBC26738A
+	for <dwarves@vger.kernel.org>; Fri, 14 Feb 2025 16:34:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739452590; cv=none; b=SfpoTzoQY0qg1bncZElqMuROaP5QK/fQWgOqJI+zIsqBDF/JBdDN28uzrDvJ8Fj59HaW0rh48iQmXYPAbS+vqVFBj84Sc8WJJqPtZuj9+nlOlWWtegiHW5oy8l419Ip0x6wFrfEd7ezNHG//bTPwV5NwaKAC9BjqmLGgiWfd6tE=
+	t=1739550868; cv=none; b=vDyvALXUUAdIbCI/KOPPmFVFRQXTO9o9YceLYb5uiNXylplTuxpYsNgcFgAyZX2fzrd2MBG8i+1nP+zX0zIwCSdFwhZp4vUylRV8Avzp0yuJlIP/SXggdPNXUzF04NP09FnMX09ubE0fDt4vTcQAvJz5AccUWZRGyFADdKoVhnc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739452590; c=relaxed/simple;
-	bh=3eCKYWe6fbh19Hq5SlKDOM6zLaeIkjczUm0VhjXYiro=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cmLTYwbLnENoI4twtMzaZP5afqsB+RRcx+ZA6FphqHwHlMZn38t3ffL3Fffk/hOT6VYvH0wIJTh/VQCd221GOOi/ioAoHRJBzymhWo5FITtEV4spmmqwep4TbzszIo3NFDTlbqjKlHcAb+irCYWZ6souK8FcjxuY04NNjcFGEuw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=c/rxmGBy; arc=none smtp.client-ip=209.85.218.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1739550868; c=relaxed/simple;
+	bh=Pco5uU8eZZWM2Ihxw+JjePc70qbvyy/2MU9nltYH5Qw=;
+	h=Message-ID:Date:MIME-Version:To:From:Subject:Content-Type; b=kHG1WYL6Jg58nxRTl0DazTgUHp2g4i040YyvapqJNOFOjnP9hoyWbNua53qXUTkt5UPstsEARzx/yKMg/nvzdtLncetLkI1aZ2CPudb2u4SHJW5RQvSVuTb+ESIGlkWy8YsShzP8GChkBdwGBdwKEssIM9gjxAzMm0Jshao76VU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=citrix.com; spf=pass smtp.mailfrom=cloud.com; dkim=pass (1024-bit key) header.d=citrix.com header.i=@citrix.com header.b=t28KYlj2; arc=none smtp.client-ip=209.85.128.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=citrix.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloud.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="c/rxmGBy"
-Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-ab7d58aa674so133526066b.0;
-        Thu, 13 Feb 2025 05:16:28 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=citrix.com header.i=@citrix.com header.b="t28KYlj2"
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-4395f66a639so14637115e9.0
+        for <dwarves@vger.kernel.org>; Fri, 14 Feb 2025 08:34:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1739452587; x=1740057387; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=4wIUF5bRe1OT++Cts/lO87ero9KFNDwns7V0gMpPeUI=;
-        b=c/rxmGByuOlZg6x0qSRFW5SUjajgqHAehfhsrt1zf7TJ4L3IG5JTSm4urUiNUyhGd2
-         2XK4WuBEd2OEugeFOcsd9RTV+jMaE6ZTOrYKr3IeRCcAl4x01/O6b1vVrxlRsP8IY3Qv
-         xsjrijoLUmKUtAivJKhkdARA3qUQkrSXdWjdQhfKSYgxmY5gbf2HYseNuzjIt3yLs8Z0
-         Nz6DGVCD+T+flMih2fA3U4Jfn3kVgxMnE1muVKPTBHSNF3YHFOW/TxF0Pipe5AoFHQH+
-         aWNzZ8Jpn/ra6e1tKRb3eckencmAzAhPurAc3MBBcx6iVjUdo6hXxVgNm1XbNEV+E1o8
-         sKkQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739452587; x=1740057387;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+        d=citrix.com; s=google; t=1739550864; x=1740155664; darn=vger.kernel.org;
+        h=content-transfer-encoding:autocrypt:subject:from:content-language
+         :to:user-agent:mime-version:date:message-id:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=4wIUF5bRe1OT++Cts/lO87ero9KFNDwns7V0gMpPeUI=;
-        b=rvsAncwNIMh/dfm4jRZHSzUYSyN3f6xry4Wzg20iNDFNzgrrAc8zo+kThqhtKhm6fP
-         gWPoream5byNB5GFxHit4CTIsHcfh3K3fxD95RbuxRikg8vmRzvIKhWdtr6wyVyavgDh
-         0s79P6xAUnuNGL6FEpTQbC/A7mo6ANpOwbfoO3UiIb6RbApLO3JrmITebk36hI4xE2L0
-         HyiiEQF6ufj7kb2enO0VAy+uGX2pE3bpMPYXPe8cU3rA56VbvlpGLN1L7E6hA/OfnP9y
-         F45Fv3zUTgpQUnnQAcda/bN7alhUOSuLQAP3SzH9apYSF6QtFtB4YO0o1bNVrD84ZWzU
-         Odow==
-X-Forwarded-Encrypted: i=1; AJvYcCW7YFZ3jAJATVzkotiIGVxp/nUvpiRpp41tghmc8ZPYgpwxOD6bA4prcFaSwMohtxgehC4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YziKzja9uBa73yHIkaa7eZ0XBW9yK2KjYkXrFQFQkpJUX8p0DW8
-	pOvApQcJs9Ef+gIYuKwrwnikR6OOuXDlAE2FNBxPoLyTLcUwAZCb
-X-Gm-Gg: ASbGncuJFNFFgVeszBPGsg1vKt66AyW07/uQcqwTv4DCWIb/kVDiKYPhUuDOhxGMXvx
-	9uka7WJymtmj4264NUjxUG4KCT1gV+7NJWlkdNF93TB3fwvmk9mAXPaEP/G4jq1VAFLtVCrgW7J
-	INfFgyFqlho+OlH5NfJeYiq8mGry9G8dNUdnCyjXlYKyj6CWh5LyX5YoZsGF1DqHgd410SIDvep
-	4josgRtqLhupao0xgwgQo3BXIoIn0Vpu8gyRPTLcyTk9QQwkhwkXNdNHfB8DENrRg5gfD1YFbHH
-	2Q==
-X-Google-Smtp-Source: AGHT+IH0rY8XRLn/35y8eE7mjNXnWlTVW25Tgqq279T/i9vvqpItmmnnty7HU0DkHN9imhETVUdOrA==
-X-Received: by 2002:a17:907:3e0d:b0:ab7:85e2:18bb with SMTP id a640c23a62f3a-ab7f33781aamr721779266b.6.1739452586471;
-        Thu, 13 Feb 2025 05:16:26 -0800 (PST)
-Received: from krava ([173.38.220.37])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aba53376abbsm130283666b.93.2025.02.13.05.16.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Feb 2025 05:16:26 -0800 (PST)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Thu, 13 Feb 2025 14:16:24 +0100
-To: Ihor Solodrai <ihor.solodrai@linux.dev>
-Cc: dwarves@vger.kernel.org, bpf@vger.kernel.org, acme@kernel.org,
-	alan.maguire@oracle.com, ast@kernel.org, andrii@kernel.org,
-	eddyz87@gmail.com, mykolal@fb.com, kernel-team@meta.com
-Subject: Re: [PATCH v2 dwarves 0/4] btf_encoder: emit type tags for bpf_arena
- pointers
-Message-ID: <Z63wqJlP0QNNsWth@krava>
-References: <20250212201552.1431219-1-ihor.solodrai@linux.dev>
+        bh=Pco5uU8eZZWM2Ihxw+JjePc70qbvyy/2MU9nltYH5Qw=;
+        b=t28KYlj2wWIiwYcVSF8mDxAEvZTQzjb9pxHfqUpcdi96EVWYfAwhzw5xHDE3QG45DU
+         kIrUZO6uQTu99mSDTlUQYWajPmrm0RReJ8rhw7snP+dbMKOz75gH1CalY27RtnGyBSbi
+         lxtZowIX5YcEbaHq6AhDN5LGqcYKv8IwkFgss=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1739550864; x=1740155664;
+        h=content-transfer-encoding:autocrypt:subject:from:content-language
+         :to:user-agent:mime-version:date:message-id:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=Pco5uU8eZZWM2Ihxw+JjePc70qbvyy/2MU9nltYH5Qw=;
+        b=LgYxrlnYxvg3Cu5eoMWKtgUvF6GARcJUCB5hxrnhPekmOVY92ZObJSoq6Sm9BU08/y
+         a+24w0MhH7wpPIBYDCuxSwC2ia2c+G9jvJTS69J3+eus0DgaawzWevaLI+1taNePEg9T
+         VdGNNh/2EThfIkBRi7E0jAe7NHrTgsvMbho446DCf6TivAdOr+fVPHaP6EAzhjFCG8db
+         JZd2UICgcahKEZsOliMrEzDF1498bHYjlQCYsBjQMLNyZrfQR78XGLJCIID718ZoV2YZ
+         3Tk301mYfMNsIptiDaE9TMcIrV7iVjO5exaiScokn+wSP8PilI3AGg1nT7JDWjDEXRO4
+         Z9SQ==
+X-Gm-Message-State: AOJu0Yzx+XLK/EomNLO9ZLkKr3Bq9Z0i7EIsCk0DjwTZr47ttQe+i+/+
+	wktMcxpDmCZ0nJOlVqySDIUS1pzsfbkodRX2HIqwIpx1yaQM2uB/v3ZkO1X1olGbl3tIGjNV5lb
+	U
+X-Gm-Gg: ASbGncumY5B5wK641UkiNM61a7ODU6t+bANkdoR++oeUWXweF0l960sVFRXvhQ2ngku
+	0krsMDN9oU/nWEeNeuMCnuA6iwTt9lfEdiOTuVZ+UA+A918mCLccBMhgUR+qubzrqVfdVdfMMUx
+	MTZvoyxA91SADv1n/QUHWo3e4UTY6ZhUo2Pih99qbtnd2S8j0NiqyBKGTB8Vun7nXFANoRL547+
+	e+EFsu5Q1+SI/mwQyu/7jIruZja7fkd0b/gWBp4AOkf45j/WgEhP5dySmTJfBLnfkja3LXxcOZc
+	e7AjaqUsc1APmi3HAaIHjxkkBQ==
+X-Google-Smtp-Source: AGHT+IGmR6H2HlSfcJe1ijVQ8m4SxtLs5yXgeN6RfSzwhykgPgxAuLy3qllgVVHTvb1U4jNhyq9tRA==
+X-Received: by 2002:a05:600c:6d3:b0:439:6017:6689 with SMTP id 5b1f17b1804b1-43960176866mr98626465e9.9.1739550864554;
+        Fri, 14 Feb 2025 08:34:24 -0800 (PST)
+Received: from [10.81.43.157] ([46.149.103.13])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4396b0aa4e9sm11143405e9.16.2025.02.14.08.34.23
+        for <dwarves@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 14 Feb 2025 08:34:24 -0800 (PST)
+Message-ID: <07381c66-f102-44ea-8966-9a49222847b8@citrix.com>
+Date: Fri, 14 Feb 2025 16:34:22 +0000
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250212201552.1431219-1-ihor.solodrai@linux.dev>
+User-Agent: Mozilla Thunderbird
+To: dwarves@vger.kernel.org
+Content-Language: en-GB
+From: Andrew Cooper <andrew.cooper3@citrix.com>
+Subject: Alignment information
+Autocrypt: addr=andrew.cooper3@citrix.com; keydata=
+ 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
+ 6+ahAA==
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Wed, Feb 12, 2025 at 12:15:48PM -0800, Ihor Solodrai wrote:
-> This patch series implements emitting appropriate BTF type tags for
-> argument and return types of kfuncs marked with KF_ARENA_* flags.
-> 
-> For additional context see the description of BPF patch
-> "bpf: define KF_ARENA_* flags for bpf_arena kfuncs" [1].
-> 
-> The feature depends on recent changes in libbpf [2].
-> 
-> [1] https://lore.kernel.org/bpf/20250206003148.2308659-1-ihor.solodrai@linux.dev/
-> [2] https://lore.kernel.org/bpf/20250130201239.1429648-1-ihor.solodrai@linux.dev/
-> 
-> v1->v2:
->   * Rewrite patch #1 refactoring btf_encoder__tag_kfuncs(): now the
->     post-processing step is removed entirely, and kfuncs are tagged in
->     btf_encoder__add_func().
->   * Nits and renames in patch #2
->   * Add patch #4 editing man pages
+Hello,
 
-lgtm
+I think this is a new feature request.
 
-Reviewed-by: Jiri Olsa <jolsa@kernel.org>
+I'm tracking down a UBSAN failure (only shows up on one arch, and it's
+in a list_for_each() so there's loads of container_of() going on too).
 
-thanks,
-jirka
+Newer versions of pahole have the overall structure alignment given the
+end, but I can't seem to persuade it to give the the alignment of each
+field.
 
-> 
-> v1: https://lore.kernel.org/dwarves/20250207021442.155703-1-ihor.solodrai@linux.dev/
-> 
-> Ihor Solodrai (4):
->   btf_encoder: refactor btf_encoder__tag_kfuncs()
->   btf_encoder: emit type tags for bpf_arena pointers
->   pahole: introduce --btf_feature=attributes
->   man-pages: describe attributes and remove reproducible_build
-> 
->  btf_encoder.c      | 282 +++++++++++++++++++++++----------------------
->  dwarves.h          |   1 +
->  man-pages/pahole.1 |   7 +-
->  pahole.c           |  11 ++
->  4 files changed, 161 insertions(+), 140 deletions(-)
-> 
-> -- 
-> 2.48.1
-> 
-> 
+More concretely, I'm looking at a structure which is nearly 4k in size,
+differs per arch and has an overall alignment of 128, but I can't find
+which sub-struct within it is causing such an alignment requirement.
+
+Would it be possible to also print the alignment information in the
+comments that exist already?  i.e., instead of:
+
+/* $offset    $size */
+
+could we have
+
+/* $offset    $size $align */
+
+?
+
+~Andrew
