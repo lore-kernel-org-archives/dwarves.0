@@ -1,181 +1,259 @@
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0301684E1C
-	for <dwarves@vger.kernel.org>; Tue, 18 Feb 2025 15:57:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739894273; cv=none; b=QLcXk6cZT5zsinUUKlt/c6DTWkAR7OHvNghqss3ytsKDtBQkQwseb4U3I1a+DaB6CCjPVg+thZ5dzBw01qHBtyvWFElq8ahZf+1/CnGTtaBza0V6deb/k8Oa7K0GkDmopoEEWSCvyYfVyLggXB9QZwezF+MudY9PJf3yk+nhKxw=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739894273; c=relaxed/simple;
-	bh=5VXUYeJneYSM+dIxsJ2BJD+cMiyA8VYzVX33upRibXg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=cBHrGPld67yqhRF8HOcqxBaLxvrrjMMG4G8ahk3g/xF9kUYEwKPnTXxdK62uYmR/fUGaZbGyqUvd728UxOxZsKKElp2IP1A1yf94tip1F4LWWFtj1z4yjVzAJr5RdyKgivDjFPV83sbupU/rgFINP9B+p+CybSRhLUSB33SaHGk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=citrix.com; spf=pass smtp.mailfrom=cloud.com; dkim=pass (1024-bit key) header.d=citrix.com header.i=@citrix.com header.b=a+YhpqV+; arc=none smtp.client-ip=209.85.128.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=citrix.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloud.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFCFB13B7B3;
+	Tue, 18 Feb 2025 16:54:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.165.32
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1739897686; cv=fail; b=uvnxii4HjwT52SK32qKwNnb76e/WEL3wfu+3KJVpAqKIPGXXm2AUbeFxYyE62MIol1sOFyoZbGxJgzhyTJmuf3gDmpjlMpIQcuO1LnGvA0giQU2nzVwMWRxFiLIGPsXRFm5RfKyPEpP21/8e7la7T9eWuyTUYq0H25RCBeI9LDU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1739897686; c=relaxed/simple;
+	bh=C2RvAptJGA0RbgiHPx4UkiaLQx9HB9n90z/PwoThrNA=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 Content-Type:MIME-Version; b=p/PV5lc0Pmhap4FIdoiChFPanmjkMg/UxqtfnQ94qc0NAFsnuIHIHH8tFVsJLJokBt0ntfZ1fPiCGEKf0xBEVeqK3pJRvh+KQCKGXBjaFUcWotuTeIMpMW3JxwXg4GqW90wL9+vhtHbrwsmfMRaf+I5lkDyR2wnxT81dO8y1A5I=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=UOj+OvjE; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=Wk18Kop7; arc=fail smtp.client-ip=205.220.165.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=citrix.com header.i=@citrix.com header.b="a+YhpqV+"
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-4396f579634so20107975e9.1
-        for <dwarves@vger.kernel.org>; Tue, 18 Feb 2025 07:57:51 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="UOj+OvjE";
+	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="Wk18Kop7"
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 51IGMX57001518;
+	Tue, 18 Feb 2025 16:54:41 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
+	:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=corp-2023-11-20; bh=icA8SuTWyf9PAVaB75
+	UankZm17HQg6nPdnRhbTxlP/c=; b=UOj+OvjEF/w1lzAH5nszyr6RxxmIEfT4t0
+	mdeLkDEIOOs77U1fIBoNY+Wqtdr338IzKgqy/QUgYzkn+RPOOLJM9sjGHFwTXU2+
+	/QSohSwldfIpCxTekUug6kPYf2PRBPPl3vVF4oC2O6QuFD+mE0VLMvpNTQtkUZwd
+	9M1S7lMJ8BJ7G3/deJYDhepn9Q3y4QDrGhmXSWSn30Eve98H5vzQSmb7gpMAdBy3
+	5DjJzlyMe29v+wlv+8ZEoMDdKUTqz88xaaM7qPXndYJ6SPPDwHcoDOVd8FBUXH8M
+	wQckz5KqSFpurnAvTqbqSP2cPXVqVpCc17K9KgnKsPQClolSgtYw==
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 44tkft71qw-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 18 Feb 2025 16:54:41 +0000 (GMT)
+Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 51IGR9sW005198;
+	Tue, 18 Feb 2025 16:54:40 GMT
+Received: from nam12-dm6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2173.outbound.protection.outlook.com [104.47.59.173])
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 44thc91h5f-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 18 Feb 2025 16:54:40 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=StSo6FWcf8AL/71nmSq14/vo4H5CtSK4x7tFp63oqbW48NFEb2zMuzMwJbgFyHVUPLs0JYPDSCE71ZfhEEkAn+QM4Wj6M3gdmBDWquSLCZ++jba0p5lPj3DRwZJv2ZSOyHs+HjPuD2vwMBTdwKf/PhFAU22kKtlaLrCK7Rleu+o8nRD8knKTCEUzuFlvX+MKIaBbJVbaCqfLtwvgG6+JoYf5zzocsVSlaO0WfTPqLYMphSoPluF9NB9uyylxmuJTSZxKGakfnIGDbkTiJfPyTT1lWoPbBpnSgF6h97oKAND0xczvKBUgjRyLRNTpSlHJAOBQy0AOljW+rG+RW5OOnQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=icA8SuTWyf9PAVaB75UankZm17HQg6nPdnRhbTxlP/c=;
+ b=s9XV1OqVwlTmFSsJXU2NBuh+uxcp3hb33k0Eu7/qyqrizF+TeRfSQQRiWcJuQoXHe3q/VsM0Mjs4ozjkPm+G6JxgShWmtgU8czTpU10jwD/jGewdsPa/xr/Pm4B9BzJMpPQf7O1hjkhz4QcGiSnNTO5gcKwGf7yYBHvLulwZEiBJupLHb/H41za+n7jAFYRBdqlXADYpWnQSzKPxz3wjxG1yLCfGadjNIgruiIQlNuUInKuXEfTYtWTMfCxNy4vOrckSNuc/9lWdtxYGnv7qVZwi+EQYW0VHlCyyLoeM8ZzqzBHZhbTKNzEIlb115M/BZTV9cWIomLs51TIaNrAlaw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=citrix.com; s=google; t=1739894270; x=1740499070; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:to:subject:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=uGJk/jauWXLlHhyYcHD6Qu3wfYqtHSSTXficYE+LgxQ=;
-        b=a+YhpqV+JJhpZpSRxxs9s0yLm+jeg+t2PB/ode2UFmWUH87Gl7qfMmSg/TTaUZQtVh
-         imAt6RURUl2YanY1HlrW1KPsMEyONsjb1wK7BZ+6ZiU4Pz+0rkBwlozHsdkAamoqGH54
-         o30cYJKsklgVFdItYM8htZfsFe7qyUmOwPiIs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739894270; x=1740499070;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:to:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=uGJk/jauWXLlHhyYcHD6Qu3wfYqtHSSTXficYE+LgxQ=;
-        b=SjTFpW9OuGW99UPNizeoq5mbIjXzK8o6ugFhc1z/MtmM+zFYXg6XAimqQeUvPG73fz
-         B5oMkKd5IQdDHOgSJNNNi0NCl6DdlwRwe+EZy96whvp8PWE0Oa8hfUcIgEMdFO7yw4fD
-         fAlSCBUZDzk9QzLrCPwnzUWJy5yihn9QzK/W63Nfb1tIHFlQNcTB+lUut76PEd3hXi1f
-         5wwc1nOxrX9HpoEe+qbirSjWYvrAlXWlAad4jJmSJgtaiPTnxhq2veaz7rJuTVszVmhA
-         E1R5C+E1BxFjUSVpXTIv3PpTjJjTlviR2Y3cXkH9VlDLQoUdM80Yi0BOpmXyvhcNOVwv
-         46cA==
-X-Forwarded-Encrypted: i=1; AJvYcCUNOX5cygOlBBf09KsMff8m/3mf7aAEAIfLXbLzT/4LLvOKDgv4bghYToWhvQpFpYhaR03S2oV1@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw6u/4cyYjO/HhBPA/XWY3tKR24EUJerTBECsB+j2fPw+K1zvjs
-	NcCQlT1AgI2MQUl5GYVOhecKsEmzJXXdZhHdjkMBNxpDWhS2W7vvvHoa4/Oeep4G/8uE4x95ASN
-	G
-X-Gm-Gg: ASbGncsoJ/zglOTyXCv01HN2OPrwzyObYVAmj5APZDDghRX2xRPkrmtxdWBlLwnc3IP
-	BZBxzyacCBX7jT1f3J8J6UwUWXVpzOPSqx0GbeQbBqfLXVoie4pDNfSLZYbVSiPQco0dJaitixD
-	X92fmjshOF83tRmsHWUOGu6vCSV1dAhENJ4MyoEH4bzTCDSNpqWkCSIJR9uMY24G9IR9Jys5vxG
-	SPBvK2RMooEK0cXPYOqtKmMw+u127Mq9150Wf8aw9W++rLyuIprSGfkf3OHnRy+NYl1HFcSyqwn
-	2e2uNxRaiVU3IAo3wZcfmCn0KU3gHelsww5Pyf/UhEh1cSXU95OTMbc=
-X-Google-Smtp-Source: AGHT+IH8ETLLpITLYdnkaQdJ30wKtVTbOq0aaAvzpa2utH0vvdHIfUlcjh1Z7HdYywVOGL8V57+wVA==
-X-Received: by 2002:a05:6000:18a9:b0:38f:2193:f8c2 with SMTP id ffacd0b85a97d-38f33f34e32mr14528731f8f.31.1739894270204;
-        Tue, 18 Feb 2025 07:57:50 -0800 (PST)
-Received: from [192.168.1.10] (host-92-26-98-202.as13285.net. [92.26.98.202])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38f258ccdccsm15393716f8f.24.2025.02.18.07.57.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Feb 2025 07:57:49 -0800 (PST)
-Message-ID: <e3e90afc-4b65-4675-ab02-98d800e2180f@citrix.com>
-Date: Tue, 18 Feb 2025 15:57:48 +0000
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=icA8SuTWyf9PAVaB75UankZm17HQg6nPdnRhbTxlP/c=;
+ b=Wk18Kop7MX3mJ2Oq4gqvSTe+OUJkZKANBWzt6st+qibHwhdFEWFsNKczF1Jdg8vpU2AkKjWVeXJF7PNqQ+cIX3YrKN17YrpuWT9Y5e2nC/AMeZcPuAkYeaGUvPrdnlaeyshLW1PaxlPf0VXJT5Q2kGQkebAEHNhg+dYwtFstkv4=
+Received: from PH8PR10MB6597.namprd10.prod.outlook.com (2603:10b6:510:226::20)
+ by CH3PR10MB6762.namprd10.prod.outlook.com (2603:10b6:610:149::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8445.19; Tue, 18 Feb
+ 2025 16:54:38 +0000
+Received: from PH8PR10MB6597.namprd10.prod.outlook.com
+ ([fe80::6874:4af6:bf0a:6ca]) by PH8PR10MB6597.namprd10.prod.outlook.com
+ ([fe80::6874:4af6:bf0a:6ca%4]) with mapi id 15.20.8445.017; Tue, 18 Feb 2025
+ 16:54:38 +0000
+From: Stephen Brennan <stephen.s.brennan@oracle.com>
+To: Alan Maguire <alan.maguire@oracle.com>,
+        Arnaldo Carvalho de Melo
+ <acme@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>
+Cc: dwarves@vger.kernel.org, linux-debuggers@vger.kernel.org,
+        Eduard
+ Zingerman <eddyz87@gmail.com>
+Subject: Re: [PATCH 0/3] Fix duplicated VAR and secinfo
+In-Reply-To: <377e9ec2-35fe-440d-923c-8918756fc635@oracle.com>
+References: <20250212005003.1413091-1-stephen.s.brennan@oracle.com>
+ <377e9ec2-35fe-440d-923c-8918756fc635@oracle.com>
+Date: Tue, 18 Feb 2025 08:54:36 -0800
+Message-ID: <87v7t7fb1v.fsf@oracle.com>
+Content-Type: text/plain
+X-ClientProxiedBy: BN9PR03CA0741.namprd03.prod.outlook.com
+ (2603:10b6:408:110::26) To PH8PR10MB6597.namprd10.prod.outlook.com
+ (2603:10b6:510:226::20)
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: Alignment information
-To: Alan Maguire <alan.maguire@oracle.com>, dwarves@vger.kernel.org
-References: <07381c66-f102-44ea-8966-9a49222847b8@citrix.com>
- <f000e43c-d81b-4ee2-938e-e1b4acbdcb1b@oracle.com>
-Content-Language: en-GB
-From: Andrew Cooper <andrew.cooper3@citrix.com>
-Autocrypt: addr=andrew.cooper3@citrix.com; keydata=
- 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
- 6+ahAA==
-In-Reply-To: <f000e43c-d81b-4ee2-938e-e1b4acbdcb1b@oracle.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH8PR10MB6597:EE_|CH3PR10MB6762:EE_
+X-MS-Office365-Filtering-Correlation-Id: a6c6e9c7-c132-4a52-bfab-08dd503cee62
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|376014|366016;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?ig7D6EQHymyZXHqjbrNRYBwFt5CcPAl5xY8qt3il3qAUZJ0k0uCWLRPAQv9I?=
+ =?us-ascii?Q?ujtm9ITekQ4YFzKyHthZQF7HkaYN8aJ532C+2aj7YDDXPTQtr+p26NK06mmX?=
+ =?us-ascii?Q?Pa5cuKMTsNfhiP/Cv69WgvwJ2GQD5k8v+GnVLso7HFoiLUiYz4tx/RdVBPcq?=
+ =?us-ascii?Q?K2E0lUsL2HhOoBRKP6tpFRrfmFb0OWu8Ab2M4uVt/XgAlP7ucsxuFK4LQFgJ?=
+ =?us-ascii?Q?rzWJs/f71JpH4+/w2McmKvAc5xg5sb/3eKF+792SuHjqY7Vmny3XSnrxa5cx?=
+ =?us-ascii?Q?7G7mojQQ/NRy/5M2L0jN4l87UD+klsw2xujpVF4cUSiRnvFceTa/JWyTPbAH?=
+ =?us-ascii?Q?CsFeO1tUN2CBUP0uo7OFSEQbQGAsOi0SH0eFtMPqVCEBA49AEXtFmpptov+2?=
+ =?us-ascii?Q?8h+kwQ1KYVG/8gqo7oYLsjaQq41WA4jhW8lAxmollJChZwNS5whOZSLXr6pc?=
+ =?us-ascii?Q?NiL8IBb3dSQh7WSKA26Ec7LpFtHZWPkb6MqKwqrlBCCc61AcnzCYm4kom84Z?=
+ =?us-ascii?Q?UtwMfMjw21SQurdNHr1BpjBWQFqgZx2Bu6XqM+NyIg1Qrzy39IXDKMxQDxQA?=
+ =?us-ascii?Q?CvhsiO7kyWBjIQyVrt9TArv3AvkUL7hOpN5+okRcEKRj7MxyesTXUSR8IFdF?=
+ =?us-ascii?Q?//knYgDQUCVymsasAKvYzlnnuZXBAI1B30UXy0cXp9FAawmIYC5esEShRWtS?=
+ =?us-ascii?Q?dDvPNceKnZzZ5RXn0a+Y8gaRY4E1/19gZwLESGxzDEDJyqr4R+o+H+GboPPL?=
+ =?us-ascii?Q?6gq17kJcd9g9pV32DaDRKAkCOIXnXfFb0JrWEWqlCtkN4+zBhk3OvRFO0HNM?=
+ =?us-ascii?Q?LhwLzCqAThoGenCYK+9JRjIHMu9giqzpSC0xaB50erGMKudyGBa3tK215Bm7?=
+ =?us-ascii?Q?9NprB/q7YbGNDwPdoLFZ2/ATYTi5DvPAAct9CY0gsVA8SA+DGLtV2Cx84Bcy?=
+ =?us-ascii?Q?02iz5aVOtoXGguJDnfpLhp9y7SiNMz7FHlkD6shS/tBpTh8+UVuQ8eVyznXP?=
+ =?us-ascii?Q?7dUA3GfEIAhHnrosyAR9A0GixBI2wnxjpBVuLKcE/AeJDIIgpVl583EdWq9n?=
+ =?us-ascii?Q?Ss9CfPya2fmrxJYtWVsm0GmTTGH2kRvgvi+MjYmIzRHtYbhsdE4rlog7XrT9?=
+ =?us-ascii?Q?d8BrZKpjy8J5Ukv5yGXLCuhxyX8aiCHTA5pZucH4IQV9z6YcvvLUBBP85nOF?=
+ =?us-ascii?Q?FzQYDxeYFDaMwlT8ptnsyTp0bxNegBu3ZFx0Qa9SgNQbxqo2jj2VzjQ264tn?=
+ =?us-ascii?Q?Q9E7Tg+DuSrADfJQELwy5/6QgaPcKQv2Z+HAoAu1EBuOfZ8LswJ2NVLwqfy1?=
+ =?us-ascii?Q?Xy84FPXwhjD7LmOhDS2uN3PbX6Lm6RjnCF0Y3/mkNIbMfFei10RFZHVmVHNf?=
+ =?us-ascii?Q?JNcv2FryDg8/eAqOWRzwR8umr1kE?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH8PR10MB6597.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(366016);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?12fI9sdY9dzvRMo7TalVjHcPk0HEahvMIrFzDtMEdhYuSqhJXJWrnqJq1CWh?=
+ =?us-ascii?Q?yo+olXaFM6Apb+F4PpJori0iVQgjsjsGB5NyaMm4RKWn3kgx22Esbf8CksHd?=
+ =?us-ascii?Q?Vzgc1oguU5DZh1vQGVmzi0jmeW/Fww7DRWiVETECQIhWxTIP89iPLwmnTIoD?=
+ =?us-ascii?Q?SPMEkaCEKLgzwqGPlUU1j1T7r4M178TIlB7MDTFeRSdKFtNRI4bv+IVWuSCC?=
+ =?us-ascii?Q?rB6ctT0srr/GKRvrKaMFxB9e2oFttveSEwh3SDBRqXPFU9OZpzjUWP92iCqB?=
+ =?us-ascii?Q?irK9xtEshqqa/uaPqcr6FpdEgs5LVYFfgnWvhRewV3Bpy0zho7fKnJvyT31D?=
+ =?us-ascii?Q?iYKZOrtWyr/9p5Om9Eddyngkq/qLg3VDMF22FYVeyXskHAF5Cnki6Ppqbbwk?=
+ =?us-ascii?Q?06o6VwfEyc9/LIR/EWhzQe1+BEiEbcL3YkT9WDDBST5ZRY1dZxe732vcSHM3?=
+ =?us-ascii?Q?j0rSYX6vy1g8TxTjjaOQ3r0qrsa5PP5f0inrwYW54/NLkB4IESxradfi7ID9?=
+ =?us-ascii?Q?KQt0sPgGviFAnKTsQ/DFfb5uqiyM/UtFp6ZuSdvvRQueFFNSfkDGxKvhH0Pn?=
+ =?us-ascii?Q?FWDGRQHBcty6UE4w+UJCG6dDgAfmOl8fwTW6tsSCmMzGaXq9cZDrizaTAsap?=
+ =?us-ascii?Q?p75ipzgIH2ivziIyfTBA6+DWF60Xid2yTxmkocJm8WQ75qcD5Na3P7XV9aZX?=
+ =?us-ascii?Q?88N6lg5EwZE5wrAUSN10ykBHHWhb/LjwdcGorWW9qSyk4XEcDmWmRnTH4l1+?=
+ =?us-ascii?Q?U1eGHyOGt8AaA5ssHjtPkK/eHvm0DN4/5lH6BacYf69p0e9UXei2cqIXWRxn?=
+ =?us-ascii?Q?gdkynM1t4PxjR5lEsj/wFyCcqWpgDx5h/vtG3sA+RL0h0KKMDvf5kpi42Wvu?=
+ =?us-ascii?Q?4Lx6C3ObrLLuch0c5k3bx5bf6Nc93CpD/COiuR7W3IAgpVARLHanvwfIWaoN?=
+ =?us-ascii?Q?cWLDSzY8ImFaR6J8zag33VcIjUQw2XE9tji12DpWaZCNnUADdHulZVGic5VZ?=
+ =?us-ascii?Q?+gfHxGYpQ///mAhh1whxSld4gYQmFPLwVry2rrQiqV0+tX0QP3SNyWs/pQ9l?=
+ =?us-ascii?Q?22y1C/ZbxxAVoWljfSIP+b9VOE7alyyiTVGY0YOpD2Oz0UHv1fJUlXKjY5xF?=
+ =?us-ascii?Q?aWcFIOnnnqt2+GezEY9ra1JS3SaMXHcDh3xN5pDXLgKfUdzSbgh5LdZmblxR?=
+ =?us-ascii?Q?A11UQdbnTyQrPqw1Arw8yY6fGyLsQBcSqoEhcNADIxBTh2sCFlDrimpBXvWJ?=
+ =?us-ascii?Q?Svw/tAidbzPX/iraL9x5X8mdOZqf2MVOA2QMcZCint3GOrBIe3V2QJvvGloy?=
+ =?us-ascii?Q?fJlcXEXsTc2jy6EIhVxv40cuE30w6lutL+J0M2e7FbKHGZWzemc5SOtAkR5n?=
+ =?us-ascii?Q?NoFLgC64YQfWFsyYT8vjc3rVwnlLdzV3w+isHlY4GtVbD42gPLJJN2f4/Z1q?=
+ =?us-ascii?Q?GUejm3OK6fahiA/LIcSHbqvmQMbjjX6W8h8IoNwPloo/6v8P5gn+BGJLZkQk?=
+ =?us-ascii?Q?PSzG4Zf4oyQWYen1QRI2lmhv1frqK74DQSBRl7AUW1v6Y89hymA6guS3eRL8?=
+ =?us-ascii?Q?etG06JXtjuYZxLDbKWguAa/OHkrQ9tU5qP+csi1HrMJKcniADLRauoUNIA1i?=
+ =?us-ascii?Q?qg=3D=3D?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
+	OH65WucwFndFnGTq5HvEqlvN+4qmvg2KrvHkILKE9RlkPV4GGjkEzk3ghYsDzxz7VsDilejnIlacvDAmOaIzPFbM12zkv83n8o4SLsBMbNgkbW/Me+dC9RGr+tSkiYp7lu8n+JbNgLQf3rCVvsgZXZq3vbpenD4nPJqo6V6xgtSL2tpcIpNiAZrGU0Usc0LARM5Etv6I7z7JqOsXqnT3EwQpUc4u4gWDye2y4vdn4QL0+cJ9XNKtpSZo5SvWL9pKo3mbyWkA05oj8xbjNxhbZLCIgltS/iRPs7kTmael4AuUr8ZeEZC70kSkn9FFZtERptY7BmfeeBVN2JzNSnkQWNfxgK4XmOB/zEz9WsVh29kUCOHfHAKkD1kroa4ybP28BwM/UtnNLqUsh566YGAJ6+9ADUZ8vM504dbT9hEfOYeMgIHy4kgW4zTrjVo69XFPK8ICxD4/3DBOlmFXSkrEPn9qJfsa64MiQSyIOPM8xOGT3q9/LqpRh4JVq7nYvzrlK6gAuRIPKFx4EXqW9+c/SqVk3jrFCzv/WbwXS6iR0OwI+tGUo+TPBOMqMGc2vXWzVgCXrbPQYJuZvOZ5h84sehugEljO32F95Seu9Xca0gg=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a6c6e9c7-c132-4a52-bfab-08dd503cee62
+X-MS-Exchange-CrossTenant-AuthSource: PH8PR10MB6597.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Feb 2025 16:54:38.6281
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: goOUDHytfxVA31LMvM3yRsc4KtJoOHjCL6EpL8KRM1Z+2iMS0MPxRFmRo4iqPA1BKumu+PmrXHW5lrZn8h1ZeyqvYJkEHZZkfrzj8tXfjWM=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR10MB6762
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-02-18_08,2025-02-18_01,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 phishscore=0
+ adultscore=0 mlxscore=0 spamscore=0 mlxlogscore=999 bulkscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2501170000 definitions=main-2502180120
+X-Proofpoint-ORIG-GUID: 6ItVFWY-PdYyLjnG5DZbg3semoGQA2JO
+X-Proofpoint-GUID: 6ItVFWY-PdYyLjnG5DZbg3semoGQA2JO
 
-On 18/02/2025 10:52 am, Alan Maguire wrote:
-> On 14/02/2025 16:34, Andrew Cooper wrote:
->> Hello,
->>
->> I think this is a new feature request.
->>
->> I'm tracking down a UBSAN failure (only shows up on one arch, and it's
->> in a list_for_each() so there's loads of container_of() going on too).
->>
->> Newer versions of pahole have the overall structure alignment given the
->> end, but I can't seem to persuade it to give the the alignment of each
->> field.
->>
->> More concretely, I'm looking at a structure which is nearly 4k in size,
->> differs per arch and has an overall alignment of 128, but I can't find
->> which sub-struct within it is causing such an alignment requirement.
->>
->> Would it be possible to also print the alignment information in the
->> comments that exist already?  i.e., instead of:
->>
->> /* $offset    $size */
->>
->> could we have
->>
->> /* $offset    $size $align */
->>
->> ?
->>
-> hi Andrew, I might be missing something but I think "pahole -E
-> <struct_name>" should give what you're looking for.  This should show
-> any nested structs which have alignment attributes associated.  For
-> example with "pahole -E task_struct" I see the a few substructures
-> tagged with alignment attributes:
+Alan Maguire <alan.maguire@oracle.com> writes:
+> On 12/02/2025 00:49, Stephen Brennan wrote:
+>> [...]
+>> to feedback or suggestions regarding this. I implemented it in pahole
+>> because I'm most familiar with that code, and because it seems to me like
+>> it's reasonable for libbpf to expect that the input variable information is
+>> already deduplicated.
+>> 
 >
-> $ pahole -E task_struct|grep align
-> 		} avg __attribute__((__aligned__(64))); /*   320    64 */
-> 	} __attribute__((__aligned__(64))) stats
-> __attribute__((__aligned__(64))); /*   960   256 */
-> 	/* Force alignment to the next boundary: */
-> 				} regs __attribute__((__aligned__(64))); /*  6016  4096 */
-> 		} fpu __attribute__((__aligned__(64))); /*  5888  4224 */
-> 	} thread __attribute__((__aligned__(64))); /*  5696  4416 */
-> 	/* forced alignments: 2, forced holes: 2, sum forced holes: 88 */
+> I've been thinking about whether core BTF deduplication should handle
+> this case - I'll try and lay out the process and maybe we can think
+> about whether it's better to solve in core dedup or within pahole.
 >
-> It's possible there are bugs that mean this doesn't always work
-> correctly of course; it would be worth trying if that helps and if you
-> run into any issues let us know. Thanks!
+> The deduplication of VARs should be straightforward - they are
+> considered reference types and since in cases like this they share a
+> name and refer to the same type, the reference type deduplication could
+> be extended to cover them.
 
-Hmm, that's a little different.  Still nothing internally, but:
+I wonder if there's a hidden catch here... DECL_TAGs can refer to VARs,
+but as far as I can tell, the semantics are that the DECL_TAG actually
+*modifies* the VAR - it says "this variable declaration had this
+annotation / tag / whatever". This is fundamentally because the
+var_secinfo doesn't point at a chain of DECL_TAGs, it points directly at
+the VAR. (Compare that to, e.g. const/volatile/restrict qualifiers)
 
-> } __attribute__((__aligned__(128))) arch
-> __attribute__((__aligned__(128))); /* 0x180 0x380 */
+So, in a hypothetical situation where there are two variables of the
+same name & type, but one of them has a DECL_TAG referring to it, would
+the deduplication keep these separate?  It seems to me that would be the
+correct behavior.
 
-suggests I've been an idiot all along.  This struct has an explicit
-align attribute, rather than an internal member causing this, hidden
-behind __cacheline_aligned which appears to be wrongly 128 instead of 64.
+> However, the DATASEC references to such
+> variables are a bit trickier.
+>
+> As seen above, the kernel currently disallows DATASEC btf_var_secinfo
+> references that are overlapping, i.e. if I have
+>
+> [123520] DATASEC '.data..percpu' size=229632 vlen=392
+> 	type_id=7708 offset=0 size=48 (VAR 'fixed_percpu_data')
+> 	type_id=5559 offset=4096 size=4096 (VAR 'cpu_debug_store')
+> 	type_id=7060 offset=8192 size=16384 (VAR 'irq_stack_backing_store')
+>
+>
+> ..the kernel enforces that irq_stack_backing_store starts at >= the
+> offset of the previous var (cpu_debug_store) + its size (4096+4096 in
+> this case). This is why the kernel rejects BTF with multiple instances
+> of the same variable, since they overlap.
+>
+> So if we consider the case of deduplicating variables; before dedup we
+> would have something like this in the DATASEC
+>
+> 	type_id=8188 offset=256 size=48 (VAR 'foo')
+> 	type_id=9190 offset=256 size=48 (VAR 'foo')
+>
+>
+> ...and after dedup + remapping it would be:
+>
+> 	type_id=8188 offset=256 size=48 (VAR 'foo')
+> 	type_id=8188 offset=256 size=48 (VAR 'foo')
+>
+> This still violates the overlap check. So there are a few options here:
+>
+> - change the kernel to relax overlap check when multiple references have
+> same type id/offset/size; i.e. they refer to the same variable
+> - have pahole weed out such occurrences
+> - something else?
+>
+> Ideally we don't want to have to resize DATASECs with such duplicate
+> entries as that would add more complexity to dedup.
 
-Ok, so that explains my problem, but I still think it would be nice to
-get the alignment of every member.
+Do you think you could share a bit more about the added complexity &
+cost? I admittedly don't have any knowledge about the deduplicator, but
+naively it seems like the ideal solution would be to delete the
+duplicated var_secinfo and resize the DATASEC.
 
-~Andrew
+> Anyway I'd be interested to hear what others think about whether solving
+> this in BTF dedup itself or pahole makes most sense. Thanks!
+
+Thanks for taking a look into this! Hoping to hear from other
+experienced voices on this question as well.
+
+Thanks,
+Stephen
