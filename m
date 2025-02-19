@@ -1,75 +1,74 @@
-Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
+Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 172958BF8;
-	Wed, 19 Feb 2025 05:46:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 103271805A;
+	Wed, 19 Feb 2025 07:48:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739943964; cv=none; b=eGtJlt8XTLi1b9k/Hl75LZ5yg5awExdyujJgZ6sJnMngiq6Tg83mngwxrRHz5g9bkrJ+ymFHDv+MEtQJ4AhcigEo9Q65V6N2P2izMNkYLD6NN0AOrn8KDJuwMYsCJeU/+r4/aL0qZpIQ5iwCjDxqEf47Qt86awy8M3IPU/b/5Ug=
+	t=1739951303; cv=none; b=UpCGKydWOeU62wUVFpylmpuPVSF5IgNX4ekHKqJHgFxym0mDv/KV4pei7DY5x4iS+SZOupEfh3ao4HT7LvSQ2HmXtABbrw9OVat9eS4OiQ6hnEHZ/QqzXIaTf8deLo5HWAqKSmkz9eX3ZMr+lnbWg7fqVowT3Ya7z5Fv3nGrgAY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739943964; c=relaxed/simple;
-	bh=dGIMySxz5DRw5VQhH38SnBthnAMpo+67IaAIq75P2uw=;
+	s=arc-20240116; t=1739951303; c=relaxed/simple;
+	bh=UPm48SNvkxK9A7sB6MyVbaxyiIPkXc5a7Lc5C9KCdR4=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=q6lzMZiKq0tt/Ol26vzjUjkuGpud1Q2Dj0p/Xw/YhaVRx93l4GkauH2GzSbKXfEd9SggOpwPhUNf+rd3aS4mgsjUEjqswXV7zRyX5rn8mCggx/e4yJvdGBZKN3sSDvuu4P/RviW1UEIE4Q/TQJVeRNSD3FohVf5iYIyvQ+Vxtbg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EHOEaCv1; arc=none smtp.client-ip=209.85.216.52
+	 Content-Type:MIME-Version; b=jEvQrcazpcKxlnIAXOrQFdaijSJFe1fF1MHKlUqiclFv6didd9SdLnSZD4ipkB5WNzg1pMsXrBs5JZQOllKxH3qGgTnusd+ENlI1F9Y/nLf5HODt0MK47y1p+635eKCEQqpjI5kQQ/ByP9I7EItv+F2vAJrTaNZSMBIXDpi/1/A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OobVl1O8; arc=none smtp.client-ip=209.85.216.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EHOEaCv1"
-Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-2f83a8afcbbso806987a91.1;
-        Tue, 18 Feb 2025 21:46:02 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OobVl1O8"
+Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-2fbfa8c73a6so11860878a91.2;
+        Tue, 18 Feb 2025 23:48:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1739943962; x=1740548762; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1739951301; x=1740556101; darn=vger.kernel.org;
         h=mime-version:user-agent:content-transfer-encoding:references
          :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=OdKRTz2Ka05Q/GPi8WGvAjk/zuWSVlVN/wD5pZqv30Y=;
-        b=EHOEaCv1Qe0bAn7549wD3V3n/lrqn3py70HekebyZ4ZxdiFDT9I5J+HGd1clTEuVcn
-         IJW99FLf6NDGllupSGTBdekdDEy+Qzc6QGxUeXXBcTg6CMVabfs67mzjYrCHaFXcCxTb
-         pkZsCjGGEIgNiXtSxS2K11ZvPdKwBWtlhTmcVeaca8MxZiJFQajLQtVryMZJiXL2KXHf
-         IxoidKMCq2gVeVM40T4WzVtrh+nLv8yKUjS3SUCszJZfHS5NvvGxKV4cQckwUwGQ6agu
-         WWwGCwv1eNusHmD7Y0AVco5DfOftZz2PEVBP1i27wShdB149kOkmBsvz/pQL1hbzamlf
-         sZIQ==
+        bh=lsVKDsU0mv5Z/zrU+8jSbfSE2rbJ+sUT0SGVWNZEIzA=;
+        b=OobVl1O8yJDowVfP8JpTemohbMWnydR6n2xvCYoENSR8zF+qn2eOjdgT9dQM/OKeCl
+         DBFOUzINwnZCai/hryzaxzjkcWT8dNNXC2ta+XHCjwZEMtB5F7+PmLxphUqNvKXIgEDf
+         dgc1opWhGAbdcXUz3Q1195zRO6FUgCPKewiS87z/kob7S7YTg++zD72e8xwfQ4t6OLL+
+         Oh+W1ZqM/WNvHC9aO3Q1WKpvmML7soASs7pmZ0nmadSHT5uMPJW0i0X8KmcdDGKRkon2
+         LEWgMjqrI+LMlZU/kpj2VKIH6bF5DvqmacdfdElnVKOjNaTKHXtJmImp9URlyHUQtgf9
+         /Wmg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739943962; x=1740548762;
+        d=1e100.net; s=20230601; t=1739951301; x=1740556101;
         h=mime-version:user-agent:content-transfer-encoding:references
          :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=OdKRTz2Ka05Q/GPi8WGvAjk/zuWSVlVN/wD5pZqv30Y=;
-        b=M6QAWiSKMRpg7PfoGgPzzDO1ZOtxuJh3TD9Z7mSDIcZnPP6TgSTUATt9fRsrklLH5o
-         sSv2eHnRyEVrQsss9KRFIIQuwObof/MxGTEYjJVL48KkBOuWmZY89DfKt0l595ku36gN
-         JNQbHUWo3gNL8/cG3TzUTzEmYjjzZ+VAl+otGhmlZybRIY04yjICr0dtnwH/txvxz6Z8
-         wUh/qZt16JkdOI6Q29iKEhadOMKG0KjptAgEdcOiBjALut6vr6RctKdKAasKsiO5PuKo
-         nhcA1FURXTm/HPKidBz/N5zZejwPlAAgdJ+0Ootij8Lqv6P+xA36HczNtMgTA/I8yeBf
-         /PoA==
-X-Forwarded-Encrypted: i=1; AJvYcCV2eJiKTRwaTa9P9z2BdCsxYnJEYy4+t6xINPhcK5eH2hUaFlkfBbbwdaSvAdZOhkNdpgB7d5njzA==@vger.kernel.org, AJvYcCWbu+A93668AbX7mo3W0q3iwpsvk9N1CSCxX0HZt5SkTgnJV6GEkd0fK2QLkB0itUte2ZU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzvAeF9pyDvBn59QK59ywdVdS3e4/5aXyo/9CVUg/Vz+1OnBiwl
-	YCuM5umnNj6Nn4DxxZgIV21Y6QGACjPskxojnCzC5OIJwPaqwnb7
-X-Gm-Gg: ASbGncsiKV4k5taTZg3gck2w1lHIQoiVpricSh2bYzEd9fheMO0RGv4Ul9URwGEsHrz
-	D7vsiMuKutXqwXasNDWorO39pBuX+40NRdL+lrphLX5X7Agy5RkvgSAtUEBypBcgDtodFJ46L/e
-	u7OvHxHIZETb9fNjVX5SWFeEpjuttuJEoIqFJIrkBTeHrnkl0W4EBRmwWU99nmJ6iLEqXvx+CtD
-	KLHO0WOy2ezP2l3lfuvw5gMWhfcPMcYTQgwT0JORaCd6ZmSWCq5R8qZxTjqt5xoWiY4xuBDpBY2
-	rgEOytdnvGTe
-X-Google-Smtp-Source: AGHT+IGLWp10+MouHvHmEbW8dZkzAyZt8k9iM36m7mFL8R6ONKRAvMEdqSmlQSSpOQvYdgz+FP3/RA==
-X-Received: by 2002:a17:90b:1b06:b0:2fa:2252:f436 with SMTP id 98e67ed59e1d1-2fcb4cdb6bcmr4042412a91.3.1739943962345;
-        Tue, 18 Feb 2025 21:46:02 -0800 (PST)
+        bh=lsVKDsU0mv5Z/zrU+8jSbfSE2rbJ+sUT0SGVWNZEIzA=;
+        b=gfzwjYXkMRBYr4mbkg10u82rkmrgf9R9HZ8OV1LYTcS7djgMTjUBJZF14i+Aj555cp
+         JrRlYShCGZU/YqPWGK4Y+n6pfksOfN6PmNTTTnZJGS8hIN69nvRH7OuWluEl8ezvEK8T
+         qRM1Pey1VsXD1lIk5gWDhbehTivH9WVTfklL2V5y2HnCWyhvqSLFb5cbR+zFTrly1rgz
+         DmYNABaWvWmuWYSu4d7SHo/lrix0n2pH++sC0G1jhsDx8cXkorOQkV2wzN0Ajs2DuavH
+         LnFQgap3S6qng7XLjkIAB0BdjDU2R6fVoZxJLQDglFeFYPnuS1CtyP3zo9wZZ8vmFAj4
+         PM3w==
+X-Forwarded-Encrypted: i=1; AJvYcCW0BXADsJ9wfmLmcnejBi2w5D1QPqVNQkBMIZ3SuC4X8v3ANllWE03q5azRe9KAgBmlvTSZMaYCPxd9t6YP8L4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwvVBAztODNYcJNAzrMR5nTc7/hhSNjtL40wKXI0m9/nxsrL/v6
+	uVq49y1H3o+YU/onOLqwjrFG7dgE3dPSAYHAfqCYfT4lrTJCU1Ay
+X-Gm-Gg: ASbGncuzx0k0ops4ZKY7CUHuQlj2QujYckm6JgX0LsY2onSyWSyNog0SaR2rdBC83Z6
+	xq/7akWwUA/TNBLo9lL05A0A9+PQKba7XMFye86Hif/sWlYne/PHQey0ndu+Mn11/wgmMf7r09j
+	6WlEiTY1j+cPiBKxGT8EOA0GM7RbxvYhPldRWTlP1fdgjhkj/oHhWhE0yCQSODVEdFFFb8+YLP0
+	oQJoAdCJy34LYYJugCDwuhzmqQPUySDAeXr94sb5WHbYmKZsNViRcCyAfM+pbOJ5vQIpDtqseBn
+	wVR+wGispRDK
+X-Google-Smtp-Source: AGHT+IETi0NYn4pmmZ57DgnwXV/4vSwokmTZThL5ChJ9QAiQtXAlPurI950LCe2j8RNsFta/lWoOqw==
+X-Received: by 2002:a05:6a00:6f05:b0:732:6217:8c69 with SMTP id d2e1a72fcca58-73262178e79mr26953397b3a.3.1739951301109;
+        Tue, 18 Feb 2025 23:48:21 -0800 (PST)
 Received: from [192.168.0.235] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2fc13ba6969sm11125784a91.47.2025.02.18.21.46.01
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-73264729945sm7980588b3a.179.2025.02.18.23.48.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Feb 2025 21:46:01 -0800 (PST)
-Message-ID: <a1ab7ec2ca121105065e84ad0b7b0f58cf1f6fe3.camel@gmail.com>
-Subject: Re: [PATCH v2 dwarves 2/4] btf_encoder: emit type tags for
- bpf_arena pointers
+        Tue, 18 Feb 2025 23:48:20 -0800 (PST)
+Message-ID: <64482b97d2431957923a72242edd6e8de371ec13.camel@gmail.com>
+Subject: Re: [PATCH 0/3] Fix duplicated VAR and secinfo
 From: Eduard Zingerman <eddyz87@gmail.com>
-To: Ihor Solodrai <ihor.solodrai@linux.dev>, dwarves@vger.kernel.org, 
-	bpf@vger.kernel.org
-Cc: acme@kernel.org, alan.maguire@oracle.com, ast@kernel.org,
- andrii@kernel.org, 	mykolal@fb.com, kernel-team@meta.com
-Date: Tue, 18 Feb 2025 21:45:57 -0800
-In-Reply-To: <8d222fd0f26fdce0193047074e660abab19ffc32.camel@gmail.com>
-References: <20250212201552.1431219-1-ihor.solodrai@linux.dev>
-		 <20250212201552.1431219-3-ihor.solodrai@linux.dev>
-	 <8d222fd0f26fdce0193047074e660abab19ffc32.camel@gmail.com>
+To: Stephen Brennan <stephen.s.brennan@oracle.com>, Alan Maguire
+	 <alan.maguire@oracle.com>, Arnaldo Carvalho de Melo <acme@kernel.org>, 
+ Andrii Nakryiko <andrii@kernel.org>
+Cc: dwarves@vger.kernel.org, linux-debuggers@vger.kernel.org
+Date: Tue, 18 Feb 2025 23:48:16 -0800
+In-Reply-To: <87v7t7fb1v.fsf@oracle.com>
+References: <20250212005003.1413091-1-stephen.s.brennan@oracle.com>
+	 <377e9ec2-35fe-440d-923c-8918756fc635@oracle.com>
+	 <87v7t7fb1v.fsf@oracle.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 User-Agent: Evolution 3.54.3 (3.54.3-1.fc41) 
@@ -80,89 +79,63 @@ List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
-On Tue, 2025-02-18 at 20:36 -0800, Eduard Zingerman wrote:
-> On Wed, 2025-02-12 at 12:15 -0800, Ihor Solodrai wrote:
->=20
-> [...]
->=20
-> > diff --git a/btf_encoder.c b/btf_encoder.c
-> > index 965e8f0..3cec106 100644
-> > --- a/btf_encoder.c
-> > +++ b/btf_encoder.c
->=20
-> [...]
->=20
-> > +static int btf__tag_bpf_arena_ptr(struct btf *btf, int ptr_id)
-> > +{
-> > +	const struct btf_type *ptr;
-> > +	int tagged_type_id;
-> > +
-> > +	ptr =3D btf__type_by_id(btf, ptr_id);
-> > +	if (!btf_is_ptr(ptr))
-> > +		return -EINVAL;
-> > +
-> > +	tagged_type_id =3D btf__add_type_attr(btf, BPF_ARENA_ATTR, ptr->type)=
-;
-> > +	if (tagged_type_id < 0)
-> > +		return tagged_type_id;
-> > +
-> > +	return btf__add_ptr(btf, tagged_type_id);
-> > +}
->=20
-> I might be confused, but this is a bit strange.
-> The type constructed here is: ptr -> type_tag -> t.
-> However, address_space is an attribute of a pointer, not a pointed type.
-> I think that correct sequence should be: type_tag -> ptr -> t.
-> This would make libbpf emit C declaration as follows:
->=20
->   void * __attribute__((address_space(1))) ptr;
->=20
-> Instead of current:
->=20
->   void __attribute__((address_space(1))) * ptr;
->=20
-> clang generates identical IR for both declarations:
->=20
->   @ptr =3D dso_local global ptr addrspace(1) null, align 8
->=20
-> Thus, imo, this function should be simplified as below:
->=20
->   static int btf__tag_bpf_arena_ptr(struct btf *btf, int ptr_id)
->   {
-> 	const struct btf_type *ptr;
->=20
-> 	ptr =3D btf__type_by_id(btf, ptr_id);
-> 	if (!btf_is_ptr(ptr))
-> 		return -EINVAL;
->=20
-> 	return btf__add_type_attr(btf, BPF_ARENA_ATTR, ptr_id);
->   }
->=20
-> [...]
->
+On Tue, 2025-02-18 at 08:54 -0800, Stephen Brennan wrote:
+> Alan Maguire <alan.maguire@oracle.com> writes:
 
-Ok, this comment can be ignored.
-The following C code:
+Hi Stephen, Alan,
 
-int foo(void * __attribute__((address_space(1))) ptr) {
-  return ptr !=3D 0;
-}
+[...]
 
-does not compile, with the following error reported:
+> I wonder if there's a hidden catch here... DECL_TAGs can refer to VARs,
+> but as far as I can tell, the semantics are that the DECL_TAG actually
+> *modifies* the VAR - it says "this variable declaration had this
+> annotation / tag / whatever". This is fundamentally because the
+> var_secinfo doesn't point at a chain of DECL_TAGs, it points directly at
+> the VAR. (Compare that to, e.g. const/volatile/restrict qualifiers)
+>=20
+> So, in a hypothetical situation where there are two variables of the
+> same name & type, but one of them has a DECL_TAG referring to it, would
+> the deduplication keep these separate?  It seems to me that would be the
+> correct behavior.
 
-test3.c:1:49: error: parameter may not be qualified with an address space
-    1 | int foo(void *__attribute__((address_space(1))) ptr) {
-      |
+This is something too look out for.
+E.g. this is certainly true for decl tags attached to structs.
 
-While the following works:
+[...]
 
-int foo(void __attribute__((address_space(1))) *ptr) {
-  return ptr !=3D 0;
-}
+> > Anyway I'd be interested to hear what others think about whether solvin=
+g
+> > this in BTF dedup itself or pahole makes most sense. Thanks!
+>=20
+> Thanks for taking a look into this! Hoping to hear from other
+> experienced voices on this question as well.
 
-With the following IR generated:
+[...]
 
-define dso_local i32 @foo(ptr addrspace(1) noundef %0) #0 { ... }
+Deduplication for variables would be a bit of a weird one.
+As Alan notes in the previous email, for each data section there is a:
+- 'btf_type' entry of kind BTF_KIND_DATASEC where 'vlen' specifies
+  the number of variables in the section;
+- followed by a number of 'btf_var_secinfo' entries,
+  with 'type' referring to 'btf_type' entries of kind 'BTF_KIND_VAR,
+  and 'offset' specifying offset of the variable within section.
 
-Strange.
+So, we are talking about deduplication of these 'btf_var_secinfo'
+entries. Nothing in existing dedup algorithm handles deduplication of
+"addendum" items like 'btf_var_secinfo', the subject of deduplication
+always has an ID.
+
+A new step, walking each BTF_KIND_DATASEC and collapsing identical
+'btf_var_secinfo' entries can of-course be added.
+(Which also raises a question, whether this has to be done in a loop
+ with an attempt to collapse duplicate BTF_KIND_DATASEC entries?).
+
+A case can be made both for and against this, but given the
+"weirdness" described above and the fact that Stephen already has the
+code, I think performing this deduplication at the pahole level is
+Ok at the moment.
+
+Thanks,
+Eduard
+
 
