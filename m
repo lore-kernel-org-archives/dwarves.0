@@ -1,74 +1,74 @@
 Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57DDA17BA5;
-	Wed, 19 Feb 2025 03:25:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33F7A1D554;
+	Wed, 19 Feb 2025 04:36:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739935555; cv=none; b=ak+Yx6pfinA3hZ8f2CAIBzZaVjDQnoIM1EMTMhUvD1FhxCPqiq5gXPofDjIc3ygo7KIqSroxrew8m/7rCTM7agaTOylokntyg7z0plhWkqj2GnTrnxK1p6zue3xaI8GO7/aqzkd/eWPRBVrcofrpkEXeYjE+6UEgWeSZDgyfyTE=
+	t=1739939778; cv=none; b=IhbcV9FcBYG+FwDq8J8W0877pLd+9CsQlegAFPH/QR0BwNzz8AMJHZSXndyWFjK69rxjPBXHfq9WSBd4gkB43wI+amdoH9jkVK01r9e5M2vq5uLELEKbtUpSkp+aEnpKrglMXGQD8Z7fX7ZTdKnARi9LzBzThZLfcZajvY48lLc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739935555; c=relaxed/simple;
-	bh=MaaRbMsd/SMoOsb8lghfhLA2YiRhcJNBHAyoYnOWDr0=;
+	s=arc-20240116; t=1739939778; c=relaxed/simple;
+	bh=BmHnCACKYA3MiSicyfylGMkAtUIPVbcUold434lJ9R0=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=N2/cuek1gUN1tzDrFxtolL75x9jIEOtnIGjkgtmP90GBz79MtJvS8PvFSGZlX4+76xUP5COftO3GHmVyFt6K5y5kRofag3wUwV50xn/zdik9ZL5wN9XFgRo2kBtoV1zRt/+qSEB/w222QaaCxEOiZCv9UruOsQih0aThtcLOvF8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ImRq4q1K; arc=none smtp.client-ip=209.85.214.179
+	 Content-Type:MIME-Version; b=QRXw8Hc41pYsaJDB141yezrKDdIpyriwHwPP2cdR2Hn0dFjwUwXVdqHbcyZztx5ETfJ4lC7BkhsnjlRerWpnSr9HyVUNIuYtCV2Go6/BSSeVhyATCA3+zf6paZ2CajqyBjzSCgUE1gfHOOtqp5bSOnXWwRKFEf22vFF5IPuWSRY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dJNRoHt3; arc=none smtp.client-ip=209.85.214.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ImRq4q1K"
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-220ca204d04so85512515ad.0;
-        Tue, 18 Feb 2025 19:25:54 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dJNRoHt3"
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-220e989edb6so127185295ad.1;
+        Tue, 18 Feb 2025 20:36:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1739935553; x=1740540353; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1739939776; x=1740544576; darn=vger.kernel.org;
         h=mime-version:user-agent:content-transfer-encoding:references
          :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=VsHh2UfYIF5c9plwhNmEbGRU56oyLElJLZiPhtm6R4A=;
-        b=ImRq4q1KLye1v2T6R7iCplBDN/V+qrTZ5iHTWtCf+4xwjy1K/TnWBsFZccAPLsBNI0
-         x7mNVJ1VdqtpVxqQqrR4SfWk6qrmJ4A9zirWu9+3+uVmH+FQGdqtypKD1mXAvwaH81+o
-         UX1rLXTOfHwPt2wy8kmP2h2hmON8sInE/n3Sa4cvCD9HX/YtfkxwzYnhMUz0N5wf5qvu
-         zViq5/2onk+hoSACRabABP/Rz6h3dS+oJT7EDfv/gefPmbLs7DrgNNDJY7hsqwY4sd6U
-         9/MJBfRF/seECjrx65Jitr3IxC3G73ynWVnajqIwQLQieIta6yQ666ut9LdhXXy7rY4W
-         Yh4g==
+        bh=riATTGyG710pV3BN3120yRJm6DIA+EsvvFZ67rMBOj0=;
+        b=dJNRoHt3cTHALD4VOGhGGbObkpcz+4o6dmUwxFHHO67YMwTPkCDLcElP9kY6lIX2mb
+         AYDLYw5EfOquG3SsFr2DmpSAjSDXsQBzx5+3cgWUmeElsL1CFxKswOv0TV5qYyDtzFN2
+         tuPM+3X118LrrPYPjC9x9Y1bA18L4Gk/xSQgFJRJ3egHJDHVy3kTtVq2pi1WQOZT0Vgd
+         37VooCSeYwVEkSFQDMNgEKAZbx/30MZonpKznhtmEFsoDxjMvLBJkYQUfyIdxMPrVe0p
+         /Rf7sYXhtkC/lzohWzwpmxA7lDpRjygiZzU8jfqwPCQAfRKGMqZkmelnRU9VuVHdbfu9
+         r0WA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739935553; x=1740540353;
+        d=1e100.net; s=20230601; t=1739939776; x=1740544576;
         h=mime-version:user-agent:content-transfer-encoding:references
          :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=VsHh2UfYIF5c9plwhNmEbGRU56oyLElJLZiPhtm6R4A=;
-        b=HFvfd3XoDDZX40dHMKJ76/kxqVWocJGRyb6GDz4SYfp5RfN4wR/AZA89xnlw6C5Mjn
-         XGlV6f3o9OZi6V7FbmA2mj9iyYaLOvYcPI/ULWIyFsWOVp+u1edQCVpYE7DI8t4UjSD0
-         V9y8RMR1dKJlVrIjbK6GLo4F/38UyT3YYJRrAbrx5CoM7zrkt5ee/QT0kEbYseyCKzV5
-         Yq6Z3oNyhzV0iWB8RpiqLq3FTsLEBhzl6z5wUNwQgi+PoCRgYQYe0FhAWr6XBMIR4juH
-         zciNuw0mQfTE+PeAwSrnQXhJAuRCGmeWi3fdweFukGfGzG7XcSDcKeOJkvRKc6txzQVC
-         Oj+Q==
-X-Forwarded-Encrypted: i=1; AJvYcCWgCb1p4ydcz3lAa8jvc3GEKxNSf+gAs2I16SJqqepfe9a008BuAwGDLxv0YS2FGWmi7e8=@vger.kernel.org, AJvYcCX1H5sS1B5cPYmPC2lgUyanKZBclCg+Z6ezHg0s2dtFrrSy1l18r2DIU2nmVqw75YS34Q9UMgyXMw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxEHDfLzPWN8LyrNmcr6E9crIlyCibNUgHKdqOFKL5BqE6z/0zs
-	/CDMeFIWHDAKssThOVw8f/rm89MjmMn5Jr9UoFvulX7AepTKFdDS
-X-Gm-Gg: ASbGncvBk5ykmNhLWZJWJd8W7oCtIy8/GkqXgMi35Ucs+QsZcNAN3a4F3AQq8Gvl+T2
-	FDgBJm9O2cOJ+Rl+IvIqYYJCX4UvZEfAAw1yDkFMGyn+BE8SBiAYjUzKEGMiypbeJlv56C+0AU4
-	XsNFP/EZckWxffLWRH7EOKZQ5Yh+uRYMfQFR6klKkNRh6xC4AIKFSqSdHJPYhIckELvGrQFqLzK
-	xmFDggXs2t8J9i26uAg+L9bhlz2oiFQ8AE0z2DbhbgmTABzhby9Bu4Lo6I/8MhDgj01YixtTa9x
-	JwYo45FF+07g
-X-Google-Smtp-Source: AGHT+IHF6Y+irsLKHTt7tog2nw7DSLlfODnoCNYpD5zKT13flMlg9d4Gprni6OBJCAmP8kcWJDMLgQ==
-X-Received: by 2002:a17:903:32c5:b0:21b:d105:26b9 with SMTP id d9443c01a7336-22170968905mr34171455ad.16.1739935553522;
-        Tue, 18 Feb 2025 19:25:53 -0800 (PST)
+        bh=riATTGyG710pV3BN3120yRJm6DIA+EsvvFZ67rMBOj0=;
+        b=LQUtL37HmQVXdMNYgw7iBdM9Z2F9xJlz8EiwZs3OgyEK4MIve3t9aDum1DujhogX0O
+         wvQbS2fO4rlRPdHI+5QfvHzXlHL34HPp9TmhlBnDCFtsCWbEbsHBSzlP2rePYI0qslkw
+         9oP61h2zpM92oXY59YCoKvcGx6N9+ZfgysOp4hCIH3QHWGcEWXfvP4krn6HxIDrxPlmQ
+         Kskse1T/5cRABPYY2yOTLvTr+6c4/Ylf9PO6Hbiy7/3fHW07T2S/u0LQkxzSYzOcHYxx
+         VxaIOB5dr1KhXRbsN6FMYDPpBAnrt/FT9J8SO2i2gx5FnmueImhcnmgLo744D6gNw3mY
+         UODg==
+X-Forwarded-Encrypted: i=1; AJvYcCW3W7CtTIamIldMj5Pu+mUj9o3ABrBgpbHVlrq8hgCEe2YL3sSA62k49oyJURmNMGIeS7w=@vger.kernel.org, AJvYcCXV9oekpHoodMGRieQt4v9DdQrhqZJNI/sjqYUs2qp/IboijDDvioKsi8vlEYTVSv2TdQtW4AH/Pw==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzm+PBp1Za8Co9YXBNsMsibRICf4RL7Y2Bv8+uOCmjL61L3ktBi
+	9rUC7W2YYooaIU+WjJ8vF7EGo6xrcD+Eyyk+km7pYIGFrQ2cGKY5
+X-Gm-Gg: ASbGncvjhUBrn14MdD+3P1abBxo+v8a1kdkIaau5kHcmvdUhMsdjBpjmmdg2G6NrWgi
+	CUetQj25oWECdTx4MZPQQpJVu7jSfCbY+Yln+AwimSwrHUTQr/7GSGxSLivtR2Eg2uvQkNHRPyH
+	2Y9LREZdNq2yh4acSOlEOP/hCE0O4013JtKrjs18Ta2ch0jALE/sWrA7AuVotYzMcqXdOZLVymW
+	0/HMQppWA08q32AkX+YI1uCFjGpTb2S0eOFMyqIwEtHhc3Koo6cZTQVCgZlYn8T33qHjqaDpxrI
+	WjPvCVXotgOj
+X-Google-Smtp-Source: AGHT+IEB06iw8nq9dtjJMxJVEb1OCgjs1a1uwVd1Lb23kx+Ycmk377vAhGXyiE7sYPHT06gH5rZyKg==
+X-Received: by 2002:a17:903:41c3:b0:21f:baa:80c1 with SMTP id d9443c01a7336-221040d74e3mr282537535ad.53.1739939776307;
+        Tue, 18 Feb 2025 20:36:16 -0800 (PST)
 Received: from [192.168.0.235] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-220d55866f9sm94936535ad.230.2025.02.18.19.25.52
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-220d536437asm97059385ad.72.2025.02.18.20.36.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Feb 2025 19:25:53 -0800 (PST)
-Message-ID: <3717ee0f4ce384311ac551825a455ada6479f16e.camel@gmail.com>
-Subject: Re: [PATCH v2 dwarves 1/4] btf_encoder: refactor
- btf_encoder__tag_kfuncs()
+        Tue, 18 Feb 2025 20:36:15 -0800 (PST)
+Message-ID: <8d222fd0f26fdce0193047074e660abab19ffc32.camel@gmail.com>
+Subject: Re: [PATCH v2 dwarves 2/4] btf_encoder: emit type tags for
+ bpf_arena pointers
 From: Eduard Zingerman <eddyz87@gmail.com>
 To: Ihor Solodrai <ihor.solodrai@linux.dev>, dwarves@vger.kernel.org, 
 	bpf@vger.kernel.org
 Cc: acme@kernel.org, alan.maguire@oracle.com, ast@kernel.org,
  andrii@kernel.org, 	mykolal@fb.com, kernel-team@meta.com
-Date: Tue, 18 Feb 2025 19:25:48 -0800
-In-Reply-To: <20250212201552.1431219-2-ihor.solodrai@linux.dev>
+Date: Tue, 18 Feb 2025 20:36:11 -0800
+In-Reply-To: <20250212201552.1431219-3-ihor.solodrai@linux.dev>
 References: <20250212201552.1431219-1-ihor.solodrai@linux.dev>
-	 <20250212201552.1431219-2-ihor.solodrai@linux.dev>
+	 <20250212201552.1431219-3-ihor.solodrai@linux.dev>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 User-Agent: Evolution 3.54.3 (3.54.3-1.fc41) 
@@ -80,71 +80,60 @@ List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
 On Wed, 2025-02-12 at 12:15 -0800, Ihor Solodrai wrote:
-> btf_encoder__tag_kfuncs() is a post-processing step of BTF encoding,
-> executed right before BTF is deduped and dumped to the output.
->=20
-> Rewrite btf_encoder__tag_kfuncs() into btf_encoder__collect_kfuncs().
-> Now it only reads the .BTF_ids section of the ELF, collecting kfunc
-> information and adding it to corresponding elf_function structs. It is
-> executed in btf_encoder__new() if tag_kfuncs flag is set. This way
-> kfunc information is available within entire lifetime of the
-> btf_encoder.
->=20
-> BTF decl tags for kfuncs are added immediately after the function is
-> added to BTF in btf_encoder__add_func(). It's done by btf__tag_kfunc()
-> factored out from the btf_encoder__tag_kfunc().
->=20
-> As a result btf_encoder__tag_kfuncs(), its subroutines and struct
-
-Nit: btf_encoder__collect_btf_funcs() is the one removed,
-     btf_encoder__tag_kfuncs is renamed.
-
-> btf_func type are deleted, as they are no longer necessary.
->=20
-> Link: https://lore.kernel.org/dwarves/3782640a577e6945c86d6330bc8a05018a1=
-e5c52.camel@gmail.com/
->=20
-> Suggested-by: Eduard Zingerman <eddyz87@gmail.com>
-> Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
-> ---
-
-Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 
 [...]
 
->  btf_encoder.c | 192 +++++++++++++++-----------------------------------
->  1 file changed, 57 insertions(+), 135 deletions(-)
->=20
 > diff --git a/btf_encoder.c b/btf_encoder.c
-> index 511c1ea..965e8f0 100644
+> index 965e8f0..3cec106 100644
 > --- a/btf_encoder.c
 > +++ b/btf_encoder.c
 
 [...]
 
-> @@ -1199,6 +1230,16 @@ static int32_t btf_encoder__add_func(struct btf_en=
-coder *encoder,
->  		       name, btf_fnproto_id < 0 ? "proto" : "func");
->  		return -1;
->  	}
+> +static int btf__tag_bpf_arena_ptr(struct btf *btf, int ptr_id)
+> +{
+> +	const struct btf_type *ptr;
+> +	int tagged_type_id;
 > +
-> +	if (func->kfunc && encoder->tag_kfuncs && !encoder->skip_encoding_decl_=
-tag) {
-> +		err =3D btf__tag_kfunc(encoder->btf, func, btf_fn_id);
-> +		if (err < 0) {
-> +			fprintf(stderr, "%s: failed to tag kfunc '%s': %d\n",
-> +				__func__, func->name, err);
-
-Nit: btf__tag_kfunc() already prints to stderr in case of an error,
-     this printf is unnecessary.
-
-> +			return err;
-> +		}
-> +	}
+> +	ptr =3D btf__type_by_id(btf, ptr_id);
+> +	if (!btf_is_ptr(ptr))
+> +		return -EINVAL;
 > +
->  	if (state->nr_annots =3D=3D 0)
->  		return 0;
-> =20
+> +	tagged_type_id =3D btf__add_type_attr(btf, BPF_ARENA_ATTR, ptr->type);
+> +	if (tagged_type_id < 0)
+> +		return tagged_type_id;
+> +
+> +	return btf__add_ptr(btf, tagged_type_id);
+> +}
+
+I might be confused, but this is a bit strange.
+The type constructed here is: ptr -> type_tag -> t.
+However, address_space is an attribute of a pointer, not a pointed type.
+I think that correct sequence should be: type_tag -> ptr -> t.
+This would make libbpf emit C declaration as follows:
+
+  void * __attribute__((address_space(1))) ptr;
+
+Instead of current:
+
+  void __attribute__((address_space(1))) * ptr;
+
+clang generates identical IR for both declarations:
+
+  @ptr =3D dso_local global ptr addrspace(1) null, align 8
+
+Thus, imo, this function should be simplified as below:
+
+  static int btf__tag_bpf_arena_ptr(struct btf *btf, int ptr_id)
+  {
+	const struct btf_type *ptr;
+
+	ptr =3D btf__type_by_id(btf, ptr_id);
+	if (!btf_is_ptr(ptr))
+		return -EINVAL;
+
+	return btf__add_type_attr(btf, BPF_ARENA_ATTR, ptr_id);
+  }
 
 [...]
 
