@@ -1,141 +1,177 @@
-Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-170.mta0.migadu.com (out-170.mta0.migadu.com [91.218.175.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 103271805A;
-	Wed, 19 Feb 2025 07:48:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EEB62116F9
+	for <dwarves@vger.kernel.org>; Wed, 19 Feb 2025 18:03:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739951303; cv=none; b=UpCGKydWOeU62wUVFpylmpuPVSF5IgNX4ekHKqJHgFxym0mDv/KV4pei7DY5x4iS+SZOupEfh3ao4HT7LvSQ2HmXtABbrw9OVat9eS4OiQ6hnEHZ/QqzXIaTf8deLo5HWAqKSmkz9eX3ZMr+lnbWg7fqVowT3Ya7z5Fv3nGrgAY=
+	t=1739988188; cv=none; b=FeAHwApZ+ShJfaxF3UnoH5Tn+o1j45Vyw2KCH2Vy4d6yB5Nr43bek7tUJMawRrkE7f0++WaVBcaYsNBwYjK3bL9EKp6ro4yW0vJl3zQFURZQ9A3pIUuxcPZyLcwnKUMsgvDk8IZcpJGzFW76ZgJHYF8UbRbCN/2f691nIxmgE30=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739951303; c=relaxed/simple;
-	bh=UPm48SNvkxK9A7sB6MyVbaxyiIPkXc5a7Lc5C9KCdR4=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=jEvQrcazpcKxlnIAXOrQFdaijSJFe1fF1MHKlUqiclFv6didd9SdLnSZD4ipkB5WNzg1pMsXrBs5JZQOllKxH3qGgTnusd+ENlI1F9Y/nLf5HODt0MK47y1p+635eKCEQqpjI5kQQ/ByP9I7EItv+F2vAJrTaNZSMBIXDpi/1/A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OobVl1O8; arc=none smtp.client-ip=209.85.216.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1739988188; c=relaxed/simple;
+	bh=xAclfaeUyhpDx3nrIPKGTVcNFvUJht6e7NL+FkN71CY=;
+	h=MIME-Version:Date:Content-Type:From:Message-ID:Subject:To:Cc:
+	 In-Reply-To:References; b=FMIeNEVMgYOEnCOqxJyBpK+rFZUnPQ0Q57PeQlhwr29ksWh0Wi90wXx95NQXmhWQO1uXJHIWaKZo5mVVwm7A0JXm+YnuGWUveIY3GV5ul1FLGXVqZJROlARzKUThOsuwpg41q43YjkV3N4kRHNVh9qDKAUn+Xoh7QueCBW4X4Fc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=T+le5hsb; arc=none smtp.client-ip=91.218.175.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OobVl1O8"
-Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-2fbfa8c73a6so11860878a91.2;
-        Tue, 18 Feb 2025 23:48:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1739951301; x=1740556101; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=lsVKDsU0mv5Z/zrU+8jSbfSE2rbJ+sUT0SGVWNZEIzA=;
-        b=OobVl1O8yJDowVfP8JpTemohbMWnydR6n2xvCYoENSR8zF+qn2eOjdgT9dQM/OKeCl
-         DBFOUzINwnZCai/hryzaxzjkcWT8dNNXC2ta+XHCjwZEMtB5F7+PmLxphUqNvKXIgEDf
-         dgc1opWhGAbdcXUz3Q1195zRO6FUgCPKewiS87z/kob7S7YTg++zD72e8xwfQ4t6OLL+
-         Oh+W1ZqM/WNvHC9aO3Q1WKpvmML7soASs7pmZ0nmadSHT5uMPJW0i0X8KmcdDGKRkon2
-         LEWgMjqrI+LMlZU/kpj2VKIH6bF5DvqmacdfdElnVKOjNaTKHXtJmImp9URlyHUQtgf9
-         /Wmg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739951301; x=1740556101;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=lsVKDsU0mv5Z/zrU+8jSbfSE2rbJ+sUT0SGVWNZEIzA=;
-        b=gfzwjYXkMRBYr4mbkg10u82rkmrgf9R9HZ8OV1LYTcS7djgMTjUBJZF14i+Aj555cp
-         JrRlYShCGZU/YqPWGK4Y+n6pfksOfN6PmNTTTnZJGS8hIN69nvRH7OuWluEl8ezvEK8T
-         qRM1Pey1VsXD1lIk5gWDhbehTivH9WVTfklL2V5y2HnCWyhvqSLFb5cbR+zFTrly1rgz
-         DmYNABaWvWmuWYSu4d7SHo/lrix0n2pH++sC0G1jhsDx8cXkorOQkV2wzN0Ajs2DuavH
-         LnFQgap3S6qng7XLjkIAB0BdjDU2R6fVoZxJLQDglFeFYPnuS1CtyP3zo9wZZ8vmFAj4
-         PM3w==
-X-Forwarded-Encrypted: i=1; AJvYcCW0BXADsJ9wfmLmcnejBi2w5D1QPqVNQkBMIZ3SuC4X8v3ANllWE03q5azRe9KAgBmlvTSZMaYCPxd9t6YP8L4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwvVBAztODNYcJNAzrMR5nTc7/hhSNjtL40wKXI0m9/nxsrL/v6
-	uVq49y1H3o+YU/onOLqwjrFG7dgE3dPSAYHAfqCYfT4lrTJCU1Ay
-X-Gm-Gg: ASbGncuzx0k0ops4ZKY7CUHuQlj2QujYckm6JgX0LsY2onSyWSyNog0SaR2rdBC83Z6
-	xq/7akWwUA/TNBLo9lL05A0A9+PQKba7XMFye86Hif/sWlYne/PHQey0ndu+Mn11/wgmMf7r09j
-	6WlEiTY1j+cPiBKxGT8EOA0GM7RbxvYhPldRWTlP1fdgjhkj/oHhWhE0yCQSODVEdFFFb8+YLP0
-	oQJoAdCJy34LYYJugCDwuhzmqQPUySDAeXr94sb5WHbYmKZsNViRcCyAfM+pbOJ5vQIpDtqseBn
-	wVR+wGispRDK
-X-Google-Smtp-Source: AGHT+IETi0NYn4pmmZ57DgnwXV/4vSwokmTZThL5ChJ9QAiQtXAlPurI950LCe2j8RNsFta/lWoOqw==
-X-Received: by 2002:a05:6a00:6f05:b0:732:6217:8c69 with SMTP id d2e1a72fcca58-73262178e79mr26953397b3a.3.1739951301109;
-        Tue, 18 Feb 2025 23:48:21 -0800 (PST)
-Received: from [192.168.0.235] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-73264729945sm7980588b3a.179.2025.02.18.23.48.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Feb 2025 23:48:20 -0800 (PST)
-Message-ID: <64482b97d2431957923a72242edd6e8de371ec13.camel@gmail.com>
-Subject: Re: [PATCH 0/3] Fix duplicated VAR and secinfo
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Stephen Brennan <stephen.s.brennan@oracle.com>, Alan Maguire
-	 <alan.maguire@oracle.com>, Arnaldo Carvalho de Melo <acme@kernel.org>, 
- Andrii Nakryiko <andrii@kernel.org>
-Cc: dwarves@vger.kernel.org, linux-debuggers@vger.kernel.org
-Date: Tue, 18 Feb 2025 23:48:16 -0800
-In-Reply-To: <87v7t7fb1v.fsf@oracle.com>
-References: <20250212005003.1413091-1-stephen.s.brennan@oracle.com>
-	 <377e9ec2-35fe-440d-923c-8918756fc635@oracle.com>
-	 <87v7t7fb1v.fsf@oracle.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.54.3 (3.54.3-1.fc41) 
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="T+le5hsb"
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1739988182;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=P9P36S9nIyxnWpqmgfC5N+Lk6itq2kDM7Sl63r4jGrg=;
+	b=T+le5hsbbVHUEY9E0EK6UYe4dcLkqO/n7N1Gea4cMfDqdiniH/RGeT4Y5RTHFtOUS/g0ZT
+	6RtnIabCOjy1EL4RbOcprRiNmfHgjne6s8bbChAcVD/bQTf5eUStz4wtNnoKuz8RugQ8mI
+	N7P86WheZEhZx0rXmUU9iuTUK6g/10k=
+Date: Wed, 19 Feb 2025 18:03:01 +0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: "Ihor Solodrai" <ihor.solodrai@linux.dev>
+Message-ID: <4189ba95819b60fea70eb1771c6c50d0a409d53d@linux.dev>
+TLS-Required: No
+Subject: Re: [PATCH v2 dwarves 2/4] btf_encoder: emit type tags for bpf_arena
+ pointers
+To: "Eduard Zingerman" <eddyz87@gmail.com>, dwarves@vger.kernel.org,
+ bpf@vger.kernel.org
+Cc: acme@kernel.org, alan.maguire@oracle.com, ast@kernel.org,
+ andrii@kernel.org, mykolal@fb.com, kernel-team@meta.com
+In-Reply-To: <a1ab7ec2ca121105065e84ad0b7b0f58cf1f6fe3.camel@gmail.com>
+References: <20250212201552.1431219-1-ihor.solodrai@linux.dev>
+ <20250212201552.1431219-3-ihor.solodrai@linux.dev>
+ <8d222fd0f26fdce0193047074e660abab19ffc32.camel@gmail.com>
+ <a1ab7ec2ca121105065e84ad0b7b0f58cf1f6fe3.camel@gmail.com>
+X-Migadu-Flow: FLOW_OUT
 
-On Tue, 2025-02-18 at 08:54 -0800, Stephen Brennan wrote:
-> Alan Maguire <alan.maguire@oracle.com> writes:
+On 2/18/25 9:45 PM, Eduard Zingerman wrote:
+> On Tue, 2025-02-18 at 20:36 -0800, Eduard Zingerman wrote:
+>> On Wed, 2025-02-12 at 12:15 -0800, Ihor Solodrai wrote:
+>>
+>> [...]
+>>
+>>> diff --git a/btf_encoder.c b/btf_encoder.c
+>>> index 965e8f0..3cec106 100644
+>>> --- a/btf_encoder.c
+>>> +++ b/btf_encoder.c
+>>
+>> [...]
+>>
+>>> +static int btf__tag_bpf_arena_ptr(struct btf *btf, int ptr_id)
+>>> +{
+>>> +	const struct btf_type *ptr;
+>>> +	int tagged_type_id;
+>>> +
+>>> +	ptr =3D btf__type_by_id(btf, ptr_id);
+>>> +	if (!btf_is_ptr(ptr))
+>>> +		return -EINVAL;
+>>> +
+>>> +	tagged_type_id =3D btf__add_type_attr(btf, BPF_ARENA_ATTR, ptr->typ=
+e);
+>>> +	if (tagged_type_id < 0)
+>>> +		return tagged_type_id;
+>>> +
+>>> +	return btf__add_ptr(btf, tagged_type_id);
+>>> +}
+>>
+>> I might be confused, but this is a bit strange.
+>> The type constructed here is: ptr -> type_tag -> t.
+>> However, address_space is an attribute of a pointer, not a pointed typ=
+e.
+>> I think that correct sequence should be: type_tag -> ptr -> t.
+>> This would make libbpf emit C declaration as follows:
+>>
+>>   void * __attribute__((address_space(1))) ptr;
+>>
+>> Instead of current:
+>>
+>>   void __attribute__((address_space(1))) * ptr;
 
-Hi Stephen, Alan,
+I was also confused about this.
 
-[...]
+The goal I had in mind is reproducing bpf_arena_* function
+declarations, which are:
 
-> I wonder if there's a hidden catch here... DECL_TAGs can refer to VARs,
-> but as far as I can tell, the semantics are that the DECL_TAG actually
-> *modifies* the VAR - it says "this variable declaration had this
-> annotation / tag / whatever". This is fundamentally because the
-> var_secinfo doesn't point at a chain of DECL_TAGs, it points directly at
-> the VAR. (Compare that to, e.g. const/volatile/restrict qualifiers)
->=20
-> So, in a hypothetical situation where there are two variables of the
-> same name & type, but one of them has a DECL_TAG referring to it, would
-> the deduplication keep these separate?  It seems to me that would be the
-> correct behavior.
+    void __arena* bpf_arena_alloc_pages(void *map, void __arena *addr, __=
+u32 page_cnt,
+    				    int node_id, __u64 flags) __ksym __weak;
+    void bpf_arena_free_pages(void *map, void __arena *ptr, __u32 page_cn=
+t) __ksym __weak;
 
-This is something too look out for.
-E.g. this is certainly true for decl tags attached to structs.
+AFAIU this is by design. From BTF documentation[1]:
 
-[...]
+    Currently, BTF_KIND_TYPE_TAG is only emitted for pointer types. It ha=
+s
+    the following btf type chain:
 
-> > Anyway I'd be interested to hear what others think about whether solvin=
-g
-> > this in BTF dedup itself or pahole makes most sense. Thanks!
->=20
-> Thanks for taking a look into this! Hoping to hear from other
-> experienced voices on this question as well.
+    ptr -> [type_tag]*
+        -> [const | volatile | restrict | typedef]*
+        -> base_type
 
-[...]
+    Basically, a pointer type points to zero or more type_tag, then zero
+    or more const/volatile/restrict/typedef and finally the base type. Th=
+e
+    base type is one of int, ptr, array, struct, union, enum, func_proto
+    and float types.
 
-Deduplication for variables would be a bit of a weird one.
-As Alan notes in the previous email, for each data section there is a:
-- 'btf_type' entry of kind BTF_KIND_DATASEC where 'vlen' specifies
-  the number of variables in the section;
-- followed by a number of 'btf_var_secinfo' entries,
-  with 'type' referring to 'btf_type' entries of kind 'BTF_KIND_VAR,
-  and 'offset' specifying offset of the variable within section.
+So yeah, unintuitively a tagged pointer in BTF is actually a pointer
+to a tagged type. My guess is, it is so because of how C compilers
+interpret type attributes, as evident by an example you've tested.
 
-So, we are talking about deduplication of these 'btf_var_secinfo'
-entries. Nothing in existing dedup algorithm handles deduplication of
-"addendum" items like 'btf_var_secinfo', the subject of deduplication
-always has an ID.
+[1] https://docs.kernel.org/bpf/btf.html#btf-kind-type-tag
 
-A new step, walking each BTF_KIND_DATASEC and collapsing identical
-'btf_var_secinfo' entries can of-course be added.
-(Which also raises a question, whether this has to be done in a loop
- with an attempt to collapse duplicate BTF_KIND_DATASEC entries?).
-
-A case can be made both for and against this, but given the
-"weirdness" described above and the fact that Stephen already has the
-code, I think performing this deduplication at the pahole level is
-Ok at the moment.
-
-Thanks,
-Eduard
-
-
+>>
+>> clang generates identical IR for both declarations:
+>>
+>>   @ptr =3D dso_local global ptr addrspace(1) null, align 8
+>>
+>> Thus, imo, this function should be simplified as below:
+>>
+>>   static int btf__tag_bpf_arena_ptr(struct btf *btf, int ptr_id)
+>>   {
+>> 	const struct btf_type *ptr;
+>>
+>> 	ptr =3D btf__type_by_id(btf, ptr_id);
+>> 	if (!btf_is_ptr(ptr))
+>> 		return -EINVAL;
+>>
+>> 	return btf__add_type_attr(btf, BPF_ARENA_ATTR, ptr_id);
+>>   }
+>>
+>> [...]
+>>
+>
+> Ok, this comment can be ignored.
+> The following C code:
+>
+> int foo(void * __attribute__((address_space(1))) ptr) {
+>   return ptr !=3D 0;
+> }
+>
+> does not compile, with the following error reported:
+>
+> test3.c:1:49: error: parameter may not be qualified with an address spa=
+ce
+>     1 | int foo(void *__attribute__((address_space(1))) ptr) {
+>       |
+>
+> While the following works:
+>
+> int foo(void __attribute__((address_space(1))) *ptr) {
+>   return ptr !=3D 0;
+> }
+>
+> With the following IR generated:
+>
+> define dso_local i32 @foo(ptr addrspace(1) noundef %0) #0 { ... }
+>
+> Strange.
+>
