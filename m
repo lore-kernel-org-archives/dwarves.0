@@ -1,32 +1,32 @@
-Received: from out-188.mta1.migadu.com (out-188.mta1.migadu.com [95.215.58.188])
+Received: from out-172.mta1.migadu.com (out-172.mta1.migadu.com [95.215.58.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36158253358
-	for <dwarves@vger.kernel.org>; Wed, 19 Feb 2025 21:05:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.188
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D85D25335D
+	for <dwarves@vger.kernel.org>; Wed, 19 Feb 2025 21:05:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739999133; cv=none; b=HRBsfYbdVJzxYTk+nNzmemFQdZU0g15CyaBSM8cDGsSuwipDXw9zpLWlCZPu0uK4yFeFcX+vipsCOjrGR2Xn5e/Y/o76IeGpLEkVQJCKPFlxV1o6fzD6iLw+gj7xLYoIOSvwYnx2ARnjeMOQzxoxN3tyCueBqmPOOp3XVk7ZPpQ=
+	t=1739999135; cv=none; b=nWD/AzMLsAI4wWXrYIOmnvr5q7FJY0HVYrAKUPhQfsXgcZAG8P5OuhwlaaB2r1ma/VygL0lbl+xP3wcWTI5Q2cTpL4f7ocxIYXtHCbOAGsD6DOkAkwAlJ1SfOB9x3KY2njcBvZk1tUgG9x7OWrZ8BmoYrC+dGvB5W1KAMbeHEFk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739999133; c=relaxed/simple;
-	bh=qLHgGhwBEwacMuYSNyCqUY96Diq8gRExKcI49kXbwPI=;
+	s=arc-20240116; t=1739999135; c=relaxed/simple;
+	bh=NR401DGkZ6X0Kw083X0R0d4HY284E4gJ6o98sSyUiDM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=WASq+fihVN9X9J85lDL0OkPRKbIbjUBz4DVotRh+QIq/c2wF1lXOSkexqLN7IHRa/0C6ApIY9XeeF24rBbeaPXE9dOP3DPjifob6rS1XjV5Sa1T0JfEa8jmwvBRkNe3p21LbSkJEIgqRN/zF4QtGwO6c5P2rX5UBdggoPuXF9PE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=c9e/z0T9; arc=none smtp.client-ip=95.215.58.188
+	 MIME-Version; b=IcZBmnuCJs9ne2LdePHsQS8KDJ+hSquQjuxjbGhGnSRfE8uj9NBsxA9w7FZe8n4kyE7+bneR9g7HwjsO4hIAKt0yEGzXZEyIMIAd3dmR36+4/gpHh4BVwxawPMkQcZDMaRNd044pI/NrUn9PSFQDbBscjD1t93atwlGLkNBuJSQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=bB5PVP8h; arc=none smtp.client-ip=95.215.58.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="c9e/z0T9"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="bB5PVP8h"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1739999129;
+	t=1739999131;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=fkxGYcxN0+BcmdBXN6OKPpltu0VWJVCQetbVHuPgcw8=;
-	b=c9e/z0T9ypNScWIfg0RXPgJM2wBDWNmT54Ua1dDdA/tvDW0Wljrq2a4gZpIpuJpL4OGzrq
-	6YPdwuEAuNbnC6ukCMK+D8F7GuVa3BWoNLx2ZQTCXf43VkKuLN4J5hBViC+zWYsWnm+S41
-	rnnb5BtfN2x/OfBE7pLntl0DheHbwLU=
+	bh=XbEsZw1sAzT1POVT60+LaNyybURR5s1P5UwFZxeCkzk=;
+	b=bB5PVP8hzubddN0lQaqfY5ggKZv9CvPfLIxOnB1kN4hVAKD/UR4+Y5IsxhrSZsghlVBInl
+	igNV/GoNK3J/2zNNRHDmEI7C+3m4JZhHHjpRAGxbgnICFBqmp105KbbbsPJNsdwMzOLhJO
+	6k1/LhnbeNM3O/hEu9SpgbB1gn0xWmM=
 From: Ihor Solodrai <ihor.solodrai@linux.dev>
 To: dwarves@vger.kernel.org,
 	bpf@vger.kernel.org
@@ -37,9 +37,9 @@ Cc: acme@kernel.org,
 	eddyz87@gmail.com,
 	mykolal@fb.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v3 1/4] btf_encoder: refactor btf_encoder__tag_kfuncs()
-Date: Wed, 19 Feb 2025 13:05:17 -0800
-Message-ID: <20250219210520.2245369-2-ihor.solodrai@linux.dev>
+Subject: [PATCH bpf-next v3 2/4] btf_encoder: emit type tags for bpf_arena pointers
+Date: Wed, 19 Feb 2025 13:05:18 -0800
+Message-ID: <20250219210520.2245369-3-ihor.solodrai@linux.dev>
 In-Reply-To: <20250219210520.2245369-1-ihor.solodrai@linux.dev>
 References: <20250219210520.2245369-1-ihor.solodrai@linux.dev>
 Precedence: bulk
@@ -51,324 +51,135 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-btf_encoder__tag_kfuncs() is a post-processing step of BTF encoding,
-executed right before BTF is deduped and dumped to the output.
+When adding a kfunc prototype to BTF, check for the flags indicating
+bpf_arena pointers and emit a type tag encoding
+__attribute__((address_space(1))) for them. This also requires
+updating BTF type ids in the btf_encoder_func_state, which is done as
+a side effect in the tagging functions.
 
-Rewrite btf_encoder__tag_kfuncs() into btf_encoder__collect_kfuncs().
-Now it only reads the .BTF_ids section of the ELF, collecting kfunc
-information and adding it to corresponding elf_function structs. It is
-executed in btf_encoder__new() if tag_kfuncs flag is set. This way
-kfunc information is available within entire lifetime of the
-btf_encoder.
+This feature depends on recent update in libbpf, supporting arbitrarty
+attribute encoding [1].
 
-BTF decl tags for kfuncs are added immediately after the function is
-added to BTF in btf_encoder__add_func(). It's done by btf__tag_kfunc()
-factored out from the btf_encoder__tag_kfunc().
+[1] https://lore.kernel.org/bpf/20250130201239.1429648-1-ihor.solodrai@linux.dev/
 
-As a result btf_encoder__collect_btf_funcs(), struct btf_func type and
-other relevant code are deleted, as they are no longer necessary.
-
-Link: https://lore.kernel.org/dwarves/3782640a577e6945c86d6330bc8a05018a1e5c52.camel@gmail.com/
-
-Suggested-by: Eduard Zingerman <eddyz87@gmail.com>
 Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
+Reviewed-by: Alan Maguire <alan.maguire@oracle.com>
 Reviewed-by: Jiri Olsa <jolsa@kernel.org>
-Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 ---
- btf_encoder.c | 189 +++++++++++++++-----------------------------------
- 1 file changed, 54 insertions(+), 135 deletions(-)
+ btf_encoder.c | 86 ++++++++++++++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 85 insertions(+), 1 deletion(-)
 
 diff --git a/btf_encoder.c b/btf_encoder.c
-index 511c1ea..2bea5ee 100644
+index 2bea5ee..844938f 100644
 --- a/btf_encoder.c
 +++ b/btf_encoder.c
-@@ -89,6 +89,8 @@ struct elf_function {
- 	const char	*name;
- 	char		*alias;
- 	size_t		prefixlen;
-+	bool		kfunc;
-+	uint32_t	kfunc_flags;
- };
+@@ -40,7 +40,13 @@
+ #define BTF_SET8_KFUNCS		(1 << 0)
+ #define BTF_KFUNC_TYPE_TAG	"bpf_kfunc"
+ #define BTF_FASTCALL_TAG       "bpf_fastcall"
+-#define KF_FASTCALL            (1 << 12)
++#define BPF_ARENA_ATTR         "address_space(1)"
++
++/* kfunc flags, see include/linux/btf.h in the kernel source */
++#define KF_FASTCALL   (1 << 12)
++#define KF_ARENA_RET  (1 << 13)
++#define KF_ARENA_ARG1 (1 << 14)
++#define KF_ARENA_ARG2 (1 << 15)
  
- struct elf_secinfo {
-@@ -145,11 +147,6 @@ struct btf_encoder {
- 	struct list_head elf_functions_list;
- };
- 
--struct btf_func {
--	const char *name;
--	int	    type_id;
--};
--
- /* Half open interval representing range of addresses containing kfuncs */
- struct btf_kfunc_set_range {
- 	uint64_t start;
-@@ -1178,6 +1175,39 @@ out:
- 	return err;
+ struct btf_id_and_flag {
+ 	uint32_t id;
+@@ -731,6 +737,78 @@ static int32_t btf_encoder__tag_type(struct btf_encoder *encoder, uint32_t tag_t
+ 	return encoder->type_id_off + tag_type;
  }
  
-+static int btf__add_kfunc_decl_tag(struct btf *btf, const char *tag, __u32 id, const char *kfunc)
++#if LIBBPF_MAJOR_VERSION >= 1 && LIBBPF_MINOR_VERSION >= 6
++static int btf__tag_bpf_arena_ptr(struct btf *btf, int ptr_id)
 +{
-+	int err = btf__add_decl_tag(btf, tag, id, -1);
++	const struct btf_type *ptr;
++	int tagged_type_id;
 +
-+	if (err < 0) {
-+		fprintf(stderr, "%s: failed to insert kfunc decl tag for '%s': %d\n",
-+			__func__, kfunc, err);
-+		return err;
-+	}
-+	return 0;
++	ptr = btf__type_by_id(btf, ptr_id);
++	if (!btf_is_ptr(ptr))
++		return -EINVAL;
++
++	tagged_type_id = btf__add_type_attr(btf, BPF_ARENA_ATTR, ptr->type);
++	if (tagged_type_id < 0)
++		return tagged_type_id;
++
++	return btf__add_ptr(btf, tagged_type_id);
 +}
 +
-+static int btf__tag_kfunc(struct btf *btf, struct elf_function *kfunc, __u32 btf_fn_id)
++static int btf__tag_bpf_arena_arg(struct btf *btf, struct btf_encoder_func_state *state, int idx)
 +{
-+	int err;
++	int id;
 +
-+	/* Note we are unconditionally adding the btf_decl_tag even
-+	 * though vmlinux may already contain btf_decl_tags for kfuncs.
-+	 * We are ok to do this b/c we will later btf__dedup() to remove
-+	 * any duplicates.
-+	 */
-+	err = btf__add_kfunc_decl_tag(btf, BTF_KFUNC_TYPE_TAG, btf_fn_id, kfunc->name);
-+	if (err < 0)
-+		return err;
++	if (state->nr_parms <= idx)
++		return -EINVAL;
 +
-+	if (kfunc->kfunc_flags & KF_FASTCALL) {
-+		err = btf__add_kfunc_decl_tag(btf, BTF_FASTCALL_TAG, btf_fn_id, kfunc->name);
-+		if (err < 0)
-+			return err;
++	id = btf__tag_bpf_arena_ptr(btf, state->parms[idx].type_id);
++	if (id < 0) {
++		btf__log_err(btf, BTF_KIND_TYPE_TAG, BPF_ARENA_ATTR, true, id,
++			"Error adding BPF_ARENA_ATTR for an argument of kfunc '%s'", state->elf->name);
++		return id;
 +	}
-+	return 0;
++	state->parms[idx].type_id = id;
++
++	return id;
 +}
 +
- static int32_t btf_encoder__add_func(struct btf_encoder *encoder,
- 				     struct btf_encoder_func_state *state)
- {
-@@ -1188,6 +1218,7 @@ static int32_t btf_encoder__add_func(struct btf_encoder *encoder,
- 	const char *value;
- 	char tmp_value[KSYM_NAME_LEN];
- 	uint16_t idx;
++static int btf__add_bpf_arena_type_tags(struct btf *btf, struct btf_encoder_func_state *state)
++{
++	uint32_t flags = state->elf->kfunc_flags;
++	int ret_type_id;
 +	int err;
- 
- 	btf_fnproto_id = btf_encoder__add_func_proto(encoder, NULL, state);
- 	name = func->alias ?: func->name;
-@@ -1199,6 +1230,13 @@ static int32_t btf_encoder__add_func(struct btf_encoder *encoder,
- 		       name, btf_fnproto_id < 0 ? "proto" : "func");
- 		return -1;
- 	}
 +
-+	if (func->kfunc && encoder->tag_kfuncs && !encoder->skip_encoding_decl_tag) {
-+		err = btf__tag_kfunc(encoder->btf, func, btf_fn_id);
-+		if (err < 0)
-+			return err;
-+	}
-+
- 	if (state->nr_annots == 0)
- 		return 0;
- 
-@@ -1771,116 +1809,10 @@ static char *get_func_name(const char *sym)
- 	return func;
- }
- 
--static int btf_func_cmp(const void *_a, const void *_b)
--{
--	const struct btf_func *a = _a;
--	const struct btf_func *b = _b;
--
--	return strcmp(a->name, b->name);
--}
--
--/*
-- * Collects all functions described in BTF.
-- * Returns non-zero on error.
-- */
--static int btf_encoder__collect_btf_funcs(struct btf_encoder *encoder, struct gobuffer *funcs)
--{
--	struct btf *btf = encoder->btf;
--	int nr_types, type_id;
--	int err = -1;
--
--	/* First collect all the func entries into an array */
--	nr_types = btf__type_cnt(btf);
--	for (type_id = 1; type_id < nr_types; type_id++) {
--		const struct btf_type *type;
--		struct btf_func func = {};
--		const char *name;
--
--		type = btf__type_by_id(btf, type_id);
--		if (!type) {
--			fprintf(stderr, "%s: malformed BTF, can't resolve type for ID %d\n",
--				__func__, type_id);
--			err = -EINVAL;
--			goto out;
--		}
--
--		if (!btf_is_func(type))
--			continue;
--
--		name = btf__name_by_offset(btf, type->name_off);
--		if (!name) {
--			fprintf(stderr, "%s: malformed BTF, can't resolve name for ID %d\n",
--				__func__, type_id);
--			err = -EINVAL;
--			goto out;
--		}
--
--		func.name = name;
--		func.type_id = type_id;
--		err = gobuffer__add(funcs, &func, sizeof(func));
--		if (err < 0)
--			goto out;
--	}
--
--	/* Now that we've collected funcs, sort them by name */
--	gobuffer__sort(funcs, sizeof(struct btf_func), btf_func_cmp);
--
--	err = 0;
--out:
--	return err;
--}
--
--static int btf__add_kfunc_decl_tag(struct btf *btf, const char *tag, __u32 id, const char *kfunc)
--{
--	int err = btf__add_decl_tag(btf, tag, id, -1);
--
--	if (err < 0) {
--		fprintf(stderr, "%s: failed to insert kfunc decl tag for '%s': %d\n",
--			__func__, kfunc, err);
--		return err;
--	}
--	return 0;
--}
--
--static int btf_encoder__tag_kfunc(struct btf_encoder *encoder, struct gobuffer *funcs, const char *kfunc, __u32 flags)
--{
--	struct btf_func key = { .name = kfunc };
--	struct btf *btf = encoder->btf;
--	struct btf_func *target;
--	const void *base;
--	unsigned int cnt;
--	int err;
--
--	base = gobuffer__entries(funcs);
--	cnt = gobuffer__nr_entries(funcs);
--	target = bsearch(&key, base, cnt, sizeof(key), btf_func_cmp);
--	if (!target) {
--		fprintf(stderr, "%s: failed to find kfunc '%s' in BTF\n", __func__, kfunc);
--		return -1;
--	}
--
--	/* Note we are unconditionally adding the btf_decl_tag even
--	 * though vmlinux may already contain btf_decl_tags for kfuncs.
--	 * We are ok to do this b/c we will later btf__dedup() to remove
--	 * any duplicates.
--	 */
--	err = btf__add_kfunc_decl_tag(btf, BTF_KFUNC_TYPE_TAG, target->type_id, kfunc);
--	if (err < 0)
--		return err;
--	if (flags & KF_FASTCALL) {
--		err = btf__add_kfunc_decl_tag(btf, BTF_FASTCALL_TAG, target->type_id, kfunc);
--		if (err < 0)
--			return err;
--	}
--
--	return 0;
--}
--
--static int btf_encoder__tag_kfuncs(struct btf_encoder *encoder)
-+static int btf_encoder__collect_kfuncs(struct btf_encoder *encoder)
- {
- 	const char *filename = encoder->source_filename;
- 	struct gobuffer btf_kfunc_ranges = {};
--	struct gobuffer btf_funcs = {};
- 	Elf_Data *symbols = NULL;
- 	Elf_Data *idlist = NULL;
- 	Elf_Scn *symscn = NULL;
-@@ -1977,12 +1909,6 @@ static int btf_encoder__tag_kfuncs(struct btf_encoder *encoder)
- 	}
- 	nr_syms = shdr.sh_size / shdr.sh_entsize;
- 
--	err = btf_encoder__collect_btf_funcs(encoder, &btf_funcs);
--	if (err) {
--		fprintf(stderr, "%s: failed to collect BTF funcs\n", __func__);
--		goto out;
--	}
--
- 	/* First collect all kfunc set ranges.
- 	 *
- 	 * Note we choose not to sort these ranges and accept a linear
-@@ -2015,12 +1941,12 @@ static int btf_encoder__tag_kfuncs(struct btf_encoder *encoder)
- 	for (i = 0; i < nr_syms; i++) {
- 		const struct btf_kfunc_set_range *ranges;
- 		const struct btf_id_and_flag *pair;
-+		struct elf_function *elf_fn;
- 		unsigned int ranges_cnt;
- 		char *func, *name;
- 		ptrdiff_t off;
- 		GElf_Sym sym;
- 		bool found;
--		int err;
- 		int j;
- 
- 		if (!gelf_getsym(symbols, i, &sym)) {
-@@ -2061,18 +1987,16 @@ static int btf_encoder__tag_kfuncs(struct btf_encoder *encoder)
- 			continue;
- 		}
- 
--		err = btf_encoder__tag_kfunc(encoder, &btf_funcs, func, pair->flags);
--		if (err) {
--			fprintf(stderr, "%s: failed to tag kfunc '%s'\n", __func__, func);
--			free(func);
--			goto out;
-+		elf_fn = btf_encoder__find_function(encoder, func, 0);
-+		if (elf_fn) {
-+			elf_fn->kfunc = true;
-+			elf_fn->kfunc_flags = pair->flags;
- 		}
- 		free(func);
- 	}
- 
- 	err = 0;
- out:
--	__gobuffer__delete(&btf_funcs);
- 	__gobuffer__delete(&btf_kfunc_ranges);
- 	if (elf)
- 		elf_end(elf);
-@@ -2083,7 +2007,6 @@ out:
- 
- int btf_encoder__encode(struct btf_encoder *encoder, struct conf_load *conf)
- {
--	bool should_tag_kfuncs;
- 	int err;
- 	size_t shndx;
- 
-@@ -2099,15 +2022,6 @@ int btf_encoder__encode(struct btf_encoder *encoder, struct conf_load *conf)
- 	if (btf__type_cnt(encoder->btf) == 1)
- 		return 0;
- 
--	/* Note vmlinux may already contain btf_decl_tag's for kfuncs. So
--	 * take care to call this before btf_dedup().
--	 */
--	should_tag_kfuncs = encoder->tag_kfuncs && !encoder->skip_encoding_decl_tag;
--	if (should_tag_kfuncs && btf_encoder__tag_kfuncs(encoder)) {
--		fprintf(stderr, "%s: failed to tag kfuncs!\n", __func__);
--		return -1;
--	}
--
- 	if (btf__dedup(encoder->btf, NULL)) {
- 		fprintf(stderr, "%s: btf__dedup failed!\n", __func__);
- 		return -1;
-@@ -2496,6 +2410,11 @@ struct btf_encoder *btf_encoder__new(struct cu *cu, const char *detached_filenam
- 		if (!found_percpu && encoder->verbose)
- 			printf("%s: '%s' doesn't have '%s' section\n", __func__, cu->filename, PERCPU_SECTION);
- 
-+		if (encoder->tag_kfuncs) {
-+			if (btf_encoder__collect_kfuncs(encoder))
-+				goto out_delete;
++	if (KF_ARENA_RET & flags) {
++		ret_type_id = btf__tag_bpf_arena_ptr(btf, state->ret_type_id);
++		if (ret_type_id < 0) {
++			btf__log_err(btf, BTF_KIND_TYPE_TAG, BPF_ARENA_ATTR, true, ret_type_id,
++				"Error adding BPF_ARENA_ATTR for return type of kfunc '%s'", state->elf->name);
++			return ret_type_id;
 +		}
++		state->ret_type_id = ret_type_id;
++	}
 +
- 		if (encoder->verbose)
- 			printf("File %s:\n", cu->filename);
- 	}
++	if (KF_ARENA_ARG1 & flags) {
++		err = btf__tag_bpf_arena_arg(btf, state, 0);
++		if (err < 0)
++			return err;
++	}
++
++	if (KF_ARENA_ARG2 & flags) {
++		err = btf__tag_bpf_arena_arg(btf, state, 1);
++		if (err < 0)
++			return err;
++	}
++
++	return 0;
++}
++#endif // LIBBPF_MAJOR_VERSION >= 1 && LIBBPF_MINOR_VERSION >= 6
++
++static inline bool is_kfunc_state(struct btf_encoder_func_state *state)
++{
++	return state && state->elf && state->elf->kfunc;
++}
++
+ static int32_t btf_encoder__add_func_proto(struct btf_encoder *encoder, struct ftype *ftype,
+ 					   struct btf_encoder_func_state *state)
+ {
+@@ -744,6 +822,12 @@ static int32_t btf_encoder__add_func_proto(struct btf_encoder *encoder, struct f
+ 
+ 	assert(ftype != NULL || state != NULL);
+ 
++#if LIBBPF_MAJOR_VERSION >= 1 && LIBBPF_MINOR_VERSION >= 6
++	if (is_kfunc_state(state) && encoder->tag_kfuncs)
++		if (btf__add_bpf_arena_type_tags(encoder->btf, state) < 0)
++			return -1;
++#endif
++
+ 	/* add btf_type for func_proto */
+ 	if (ftype) {
+ 		btf = encoder->btf;
 -- 
 2.48.1
 
