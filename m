@@ -1,85 +1,92 @@
-Received: from out-188.mta0.migadu.com (out-188.mta0.migadu.com [91.218.175.188])
+Received: from out-170.mta0.migadu.com (out-170.mta0.migadu.com [91.218.175.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97FCA230BE6
-	for <dwarves@vger.kernel.org>; Fri, 28 Feb 2025 19:47:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.188
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B21D1C7018
+	for <dwarves@vger.kernel.org>; Fri, 28 Feb 2025 19:53:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740772038; cv=none; b=XxwTra7aMEgA80+DF75fEbtTDiE9blRnSBk3cH6KPxombAst0zQGLVp6H+sJskI/WUuuYbXzUUhA2UC7H3J5XO+oh/6lF/WFVGPIE4BhrYPAlaoIyRcDMpebbFJOwSIbwPLr7wA+ihTallPf3n7c4rZlvYzdpF1avSq9vouGLU4=
+	t=1740772389; cv=none; b=koqXpshIO1Jbt2fHfK7P8ZJzvNmcUYM+803VwCrJUxEbxGRwC9t5Qoj2mr1s7ODgFYfpJhE2nwnY1aN68g/6RuVlRYBK1nHTIvg/MI7asgicDW0j5G2wrpZbYH0Np4iawJNt+oxAdxY++P5B63gNuhJuU7aOOk6EpNkDf34OZSQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740772038; c=relaxed/simple;
-	bh=vg72N/6DHfjyoSjIakVAL/xbwxGciAKI+kj6lrkH/RI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Nxe/+sQSIMrcausiq/b+OJTgJkWivygHyo+AubqP/qAg8bTLm+OURs552Y+T/S4IjcTKlSZ1xlJNulJ5/Jk9hHi4tKh8miyB5UJif/OikrXKSuSMn2sZwwr3F3jZrA2PCqgL+wLf7nvfB3enCtREKC3qyhL189Lz1AMEAeY7Wj0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=pLrAzKZB; arc=none smtp.client-ip=91.218.175.188
+	s=arc-20240116; t=1740772389; c=relaxed/simple;
+	bh=EcsZpfGSPX/X9HBka4cd3H7PGSNQLBokC3svgTbthC0=;
+	h=MIME-Version:Date:Content-Type:From:Message-ID:Subject:To:Cc:
+	 In-Reply-To:References; b=PrJlFiYLcieNiuZ7y6EpedRowV6T1QvHcePYna+oDSh04h1sglUQS3SMQ4b26qB/bJ8tnQ4cdSEeK8SRVfHwFxYRrgEb7gtUvA9plUuq+rAAEa3qg63sTGnM/+gAMM70Yc/tyDvNupZlsfoH9DAfFZZ4xMWegXPmAVT91lyrPe4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=aj14BI2S; arc=none smtp.client-ip=91.218.175.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="pLrAzKZB"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1740772034;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=NuvyfCtG+VEG28gEE9qzAwxBAEPojdpIbDgPKLNVZaI=;
-	b=pLrAzKZB9BtHS6yZmEE5aGOB1Th7A7dGasHcsZVmTELMk7HpiqmvtFKNlQS1ogU2Tg4cZI
-	fTXoQZqTZJ4QWZqCE9Y0MyJxQwDH0R5vXoyzf0sc96WW8OmuIXF4LYkacbEGH2cvKCa3Wd
-	ydceeiCFE0GHH8amcBzfJ/vThP4srNw=
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
-To: dwarves@vger.kernel.org,
-	bpf@vger.kernel.org
-Cc: acme@kernel.org,
-	alan.maguire@oracle.com,
-	ast@kernel.org,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	mykolal@fb.com,
-	kernel-team@meta.com
-Subject: [PATCH dwarves v4 6/6] man-pages: describe attributes and remove reproducible_build
-Date: Fri, 28 Feb 2025 11:46:54 -0800
-Message-ID: <20250228194654.1022535-7-ihor.solodrai@linux.dev>
-In-Reply-To: <20250228194654.1022535-1-ihor.solodrai@linux.dev>
-References: <20250228194654.1022535-1-ihor.solodrai@linux.dev>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="aj14BI2S"
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1740772385;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=/7Wwe498qsEAnlbwQpLpWflELriewcuLcBq0HraIf3k=;
+	b=aj14BI2SsGLjfilBNOPl0UI3kt9KeT6QLAHn1XEwu5HJ02H+3EYXwpp1G8Tc8FiFEvJJYa
+	rsQt1hd5rD+DAmzAx4w3FzXcQIpiQ75J1LjTB9WK1nJajXA+COrByCcvqwgXOJwzZ+gpKW
+	6rJ8KRYq6Det1Q8NghokqTND58kyeBc=
+Date: Fri, 28 Feb 2025 19:53:04 +0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: "Ihor Solodrai" <ihor.solodrai@linux.dev>
+Message-ID: <050b81d2c82f57f3e97b27c59198a08b1c8d7f7b@linux.dev>
+TLS-Required: No
+Subject: Re: [PATCH dwarves v4 2/6] btf_encoder: use __weak declarations of
+ version-dependent libbpf API
+To: dwarves@vger.kernel.org, bpf@vger.kernel.org
+Cc: acme@kernel.org, alan.maguire@oracle.com, ast@kernel.org,
+ andrii@kernel.org, eddyz87@gmail.com, mykolal@fb.com,
+ kernel-team@meta.com
+In-Reply-To: <20250228194654.1022535-3-ihor.solodrai@linux.dev>
+References: <20250228194654.1022535-1-ihor.solodrai@linux.dev>
+ <20250228194654.1022535-3-ihor.solodrai@linux.dev>
 X-Migadu-Flow: FLOW_OUT
 
-Add a description of the new --btf_feature=attributes.
+On 2/28/25 11:46 AM, Ihor Solodrai wrote:
+> Instead of compile-time checks for libbpf version, use __weak
+> declarations of the required API functions and do runtime checks at
+> the call sites. This will help with compatibility when libbpf is
+> dynamically linked to pahole [1].
+>
+> [1] https://lore.kernel.org/dwarves/deff78f8-1f99-4c79-a302-cff8dce4d80=
+3@oracle.com/
+>
+> Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
+> ---
+>  btf_encoder.c | 48 +++++++++++++++++++-----------------------------
+>  dwarves.h     | 11 ++++++++++-
+>  pahole.c      |  2 --
+>  3 files changed, 29 insertions(+), 32 deletions(-)
+>
+> diff --git a/btf_encoder.c b/btf_encoder.c
+> index 2bea5ee..12a040f 100644
+> --- a/btf_encoder.c
+> +++ b/btf_encoder.c
+> @@ -34,6 +34,7 @@
+>  #include <search.h> /* for tsearch(), tfind() and tdestroy() */
+>  #include <pthread.h>
+>=20=20
+>=20+#define BTF_BASE_ELF_SEC	".BTF.base"
+>  #define BTF_IDS_SECTION		".BTF_ids"
+>  #define BTF_ID_FUNC_PFX		"__BTF_ID__func__"
+>  #define BTF_ID_SET8_PFX		"__BTF_ID__set8__"
+> @@ -625,29 +626,6 @@ static int32_t btf_encoder__add_struct(struct btf_=
+encoder *encoder, uint8_t kind
+>  	return id;
+>  }
+>=20=20
+>=20-#if LIBBPF_MAJOR_VERSION < 1
 
-Also remove reproducible_build description, as it is now a moot
-feature flag.
+There is an identical condition in btf_loader.c, however it guards
+static functions, for example btf_enum64(). I decided to leave it as
+is, although I find it unlikely that someone would use libbpf < 1.0.
 
-Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
-Reviewed-by: Jiri Olsa <jolsa@kernel.org>
----
- man-pages/pahole.1 | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
-
-diff --git a/man-pages/pahole.1 b/man-pages/pahole.1
-index 39e7b46..3125de3 100644
---- a/man-pages/pahole.1
-+++ b/man-pages/pahole.1
-@@ -327,9 +327,10 @@ Encode BTF using the specified feature list, or specify 'default' for all standa
- Supported non-standard features (not enabled for 'default')
- 
- .nf
--	reproducible_build Ensure generated BTF is consistent every time;
--	                   without this parallel BTF encoding can result in
--	                   inconsistent BTF ids.
-+	attributes         Allow generation of decl_tags and type_tags with
-+	                   kind_flag = 1. These tags can be used to encode
-+	                   arbitrary compiler attributes in BTF, but are
-+	                   backward incompatible.
- 	decl_tag_kfuncs    Inject a BTF_KIND_DECL_TAG for each discovered kfunc.
- 	distilled_base     For split BTF, generate a distilled version of
- 	                   the associated base BTF to support later relocation
--- 
-2.48.1
-
+> [...]
