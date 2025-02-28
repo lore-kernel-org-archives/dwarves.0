@@ -1,32 +1,30 @@
-Received: from out-175.mta0.migadu.com (out-175.mta0.migadu.com [91.218.175.175])
+Received: from out-185.mta0.migadu.com (out-185.mta0.migadu.com [91.218.175.185])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D1E81C2443
-	for <dwarves@vger.kernel.org>; Fri, 28 Feb 2025 19:47:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7BB1230BE2
+	for <dwarves@vger.kernel.org>; Fri, 28 Feb 2025 19:47:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.185
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740772034; cv=none; b=k3XbAelX93fxnsz95eklTiotPTsoakWjGDBPFGEW/sIQ8iDwY5QJTN+INrpB1d3kTniPP7M8xTQZ/eRh3D1dqXv64agkCVLFQMC1M5+dNaufGB8xLT3Sa+3LzxNXHQPXAJguwhnQlhP95qFhB7zc4iL07zhG1I3WzaITTu1r99c=
+	t=1740772035; cv=none; b=jFwtbZA2M8ged1GEzRTRt7DY6aR5SvGjnigMiUPxciqDdtTtncZZZ2N7EfCmVmczZZMPSzx0SCBmmObqD4/aH6ogrXFH0usPFwd8onEX+SL5zMnPJizeaqlYCgWEQ5nP9YBQ1nLsdrbWmHct+8qPFuAs5LVHGP6CVC+jLnRNzIE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740772034; c=relaxed/simple;
-	bh=3Txd3Ms1F59MwpYvrRNNRH+qO33S+ATOzdEx6jmHkl4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=J1nLjW1yPvy26Onn42pT6tSLeo5HozwBgUAoZt8FNIREOeKBTdoS/Hk92II+doUuv+RFO41PG5tHJ/dN1yXBf/L5k7Vk04yyhvu8f4urEpAPtJxnd5zUzzXnkhX6vvVpOM0ucT0B+adqV/h4PIFt4OusijRFcpAI8PS6C7xmE28=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=gaYe/n+l; arc=none smtp.client-ip=91.218.175.175
+	s=arc-20240116; t=1740772035; c=relaxed/simple;
+	bh=ckQNuNmGjM8ecvTnFMutrWxOhwHzxGo6fdCAJ6Ia6sc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=tFmZN56yoSloHovN3oZxObgr7SPMOL6Cyfc1EOgda3EQWHQZJMc0gP2s+TC7GBu6ikO3W0Mn6WETZWiJikw6/y7OqyOwqp4yizJfZ0KoYMRy2ZeVumt8ykUI3/g7magKjYKsGgR5xZVGveyDwXJHQrkJmkOuHaoHtGIp6ENAh8I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=vN6oGCSJ; arc=none smtp.client-ip=91.218.175.185
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="gaYe/n+l"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="vN6oGCSJ"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1740772030;
+	t=1740772021;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ZlLTD2oNXwm4m9BNqPFwBV6D5WIkef4KAuCcKYTayCY=;
-	b=gaYe/n+lvNTDcWKUE3sL72DM2mi9WBpza0YEcqUM3TDbeJ7krKBHhG7ws9XPvSEXUeSuBh
-	ZVSRzmKYrSmxSr2OpAnrwVXNYRP+6aIPFujfno4rn18LKyc3Ui4wAwIv9YoWKDIzYCYgrV
-	4lMwT77NZx2us7S5SZfBQhMJkW4YyvQ=
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=R6NtA1IcvY6lp5dUu6ImTMyn+vAgJw/OBPwKBKOPKck=;
+	b=vN6oGCSJ2ZXCthutI5ziUuKgKerR0T0OK10QFpcgAjYuOiso0A/8keMevSECaQW4X/yaEr
+	dtdfJCAv/w3gQJtE47blsDmjHOC3CKsZSGsa6ktA2uTRCi6DU8IbOCOPexPm3godoe1vG7
+	HmyV3Glz/6bWd3GmDV1hdvKs2vCSa8E=
 From: Ihor Solodrai <ihor.solodrai@linux.dev>
 To: dwarves@vger.kernel.org,
 	bpf@vger.kernel.org
@@ -37,11 +35,9 @@ Cc: acme@kernel.org,
 	eddyz87@gmail.com,
 	mykolal@fb.com,
 	kernel-team@meta.com
-Subject: [PATCH dwarves v4 4/6] btf_encoder: emit type tags for bpf_arena pointers
-Date: Fri, 28 Feb 2025 11:46:52 -0800
-Message-ID: <20250228194654.1022535-5-ihor.solodrai@linux.dev>
-In-Reply-To: <20250228194654.1022535-1-ihor.solodrai@linux.dev>
-References: <20250228194654.1022535-1-ihor.solodrai@linux.dev>
+Subject: [PATCH dwarves v4 0/6] btf_encoder: emit type tags for bpf_arena pointers
+Date: Fri, 28 Feb 2025 11:46:48 -0800
+Message-ID: <20250228194654.1022535-1-ihor.solodrai@linux.dev>
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
@@ -51,149 +47,52 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-When adding a kfunc prototype to BTF, check for the flags indicating
-bpf_arena pointers and emit a type tag encoding
-__attribute__((address_space(1))) for them. This also requires
-updating BTF type ids in the btf_encoder_func_state, which is done as
-a side effect in the tagging functions.
+This patch series implements emitting appropriate BTF type tags for
+argument and return types of kfuncs marked with KF_ARENA_* flags.
 
-This feature depends on recent update in libbpf, supporting arbitrarty
-attribute encoding [1].
+For additional context see the description of BPF patch
+"bpf: define KF_ARENA_* flags for bpf_arena kfuncs" [1].
 
-[1] https://lore.kernel.org/bpf/20250130201239.1429648-1-ihor.solodrai@linux.dev/
+The feature depends on recent changes in libbpf [2].
 
-Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
-Reviewed-by: Alan Maguire <alan.maguire@oracle.com>
-Reviewed-by: Jiri Olsa <jolsa@kernel.org>
----
- btf_encoder.c | 87 ++++++++++++++++++++++++++++++++++++++++++++++++++-
- dwarves.h     |  1 +
- 2 files changed, 87 insertions(+), 1 deletion(-)
+[1] https://lore.kernel.org/bpf/20250206003148.2308659-1-ihor.solodrai@linux.dev/
+[2] https://lore.kernel.org/bpf/20250130201239.1429648-1-ihor.solodrai@linux.dev/
 
-diff --git a/btf_encoder.c b/btf_encoder.c
-index 12a040f..991aba6 100644
---- a/btf_encoder.c
-+++ b/btf_encoder.c
-@@ -41,7 +41,13 @@
- #define BTF_SET8_KFUNCS		(1 << 0)
- #define BTF_KFUNC_TYPE_TAG	"bpf_kfunc"
- #define BTF_FASTCALL_TAG       "bpf_fastcall"
--#define KF_FASTCALL            (1 << 12)
-+#define BPF_ARENA_ATTR         "address_space(1)"
-+
-+/* kfunc flags, see include/linux/btf.h in the kernel source */
-+#define KF_FASTCALL   (1 << 12)
-+#define KF_ARENA_RET  (1 << 13)
-+#define KF_ARENA_ARG1 (1 << 14)
-+#define KF_ARENA_ARG2 (1 << 15)
- 
- struct btf_id_and_flag {
- 	uint32_t id;
-@@ -718,6 +724,81 @@ static int32_t btf_encoder__tag_type(struct btf_encoder *encoder, uint32_t tag_t
- 	return encoder->type_id_off + tag_type;
- }
- 
-+static int btf__tag_bpf_arena_ptr(struct btf *btf, int ptr_id)
-+{
-+	const struct btf_type *ptr;
-+	int tagged_type_id;
-+
-+	ptr = btf__type_by_id(btf, ptr_id);
-+	if (!btf_is_ptr(ptr))
-+		return -EINVAL;
-+
-+	tagged_type_id = btf__add_type_attr(btf, BPF_ARENA_ATTR, ptr->type);
-+	if (tagged_type_id < 0)
-+		return tagged_type_id;
-+
-+	return btf__add_ptr(btf, tagged_type_id);
-+}
-+
-+static int btf__tag_bpf_arena_arg(struct btf *btf, struct btf_encoder_func_state *state, int idx)
-+{
-+	int id;
-+
-+	if (state->nr_parms <= idx)
-+		return -EINVAL;
-+
-+	id = btf__tag_bpf_arena_ptr(btf, state->parms[idx].type_id);
-+	if (id < 0) {
-+		btf__log_err(btf, BTF_KIND_TYPE_TAG, BPF_ARENA_ATTR, true, id,
-+			"Error adding BPF_ARENA_ATTR for an argument of kfunc '%s'", state->elf->name);
-+		return id;
-+	}
-+	state->parms[idx].type_id = id;
-+
-+	return id;
-+}
-+
-+static int btf__add_bpf_arena_type_tags(struct btf *btf, struct btf_encoder_func_state *state)
-+{
-+	uint32_t flags = state->elf->kfunc_flags;
-+	int ret_type_id;
-+	int err;
-+
-+	if (!btf__add_type_attr) {
-+		fprintf(stderr, "btf__add_type_attr is not available, is libbpf < 1.6?\n");
-+		return -ENOTSUP;
-+	}
-+
-+	if (KF_ARENA_RET & flags) {
-+		ret_type_id = btf__tag_bpf_arena_ptr(btf, state->ret_type_id);
-+		if (ret_type_id < 0) {
-+			btf__log_err(btf, BTF_KIND_TYPE_TAG, BPF_ARENA_ATTR, true, ret_type_id,
-+				"Error adding BPF_ARENA_ATTR for return type of kfunc '%s'", state->elf->name);
-+			return ret_type_id;
-+		}
-+		state->ret_type_id = ret_type_id;
-+	}
-+
-+	if (KF_ARENA_ARG1 & flags) {
-+		err = btf__tag_bpf_arena_arg(btf, state, 0);
-+		if (err < 0)
-+			return err;
-+	}
-+
-+	if (KF_ARENA_ARG2 & flags) {
-+		err = btf__tag_bpf_arena_arg(btf, state, 1);
-+		if (err < 0)
-+			return err;
-+	}
-+
-+	return 0;
-+}
-+
-+static inline bool is_kfunc_state(struct btf_encoder_func_state *state)
-+{
-+	return state && state->elf && state->elf->kfunc;
-+}
-+
- static int32_t btf_encoder__add_func_proto(struct btf_encoder *encoder, struct ftype *ftype,
- 					   struct btf_encoder_func_state *state)
- {
-@@ -731,6 +812,10 @@ static int32_t btf_encoder__add_func_proto(struct btf_encoder *encoder, struct f
- 
- 	assert(ftype != NULL || state != NULL);
- 
-+	if (is_kfunc_state(state) && encoder->tag_kfuncs)
-+		if (btf__add_bpf_arena_type_tags(encoder->btf, state) < 0)
-+			return -1;
-+
- 	/* add btf_type for func_proto */
- 	if (ftype) {
- 		btf = encoder->btf;
-diff --git a/dwarves.h b/dwarves.h
-index ab32204..4202dfb 100644
---- a/dwarves.h
-+++ b/dwarves.h
-@@ -52,6 +52,7 @@ enum load_steal_kind {
- struct btf;
- __weak extern int btf__add_enum64(struct btf *btf, const char *name, __u32 byte_sz, bool is_signed);
- __weak extern int btf__add_enum64_value(struct btf *btf, const char *name, __u64 value);
-+__weak extern int btf__add_type_attr(struct btf *btf, const char *value, int ref_type_id);
- __weak extern int btf__distill_base(const struct btf *src_btf, struct btf **new_base_btf, struct btf **new_split_btf);
- 
- /*
+v3->v4:
+  * Add a patch (#2) replacing compile-time libbpf version checks with
+    runtime checks for symbol availablility
+  * Add a patch (#3) bumping libbpf submodule commit to latest master
+  * Modify "btf_encoder: emit type tags for bpf_arena pointers"
+    (#2->#4) to not use compile time libbpf version checks
+
+v2->v3:
+  * Nits in patch #1
+
+v1->v2:
+  * Rewrite patch #1 refactoring btf_encoder__tag_kfuncs(): now the
+    post-processing step is removed entirely, and kfuncs are tagged in
+    btf_encoder__add_func().
+  * Nits and renames in patch #2
+  * Add patch #4 editing man pages
+
+v2: https://lore.kernel.org/dwarves/20250212201552.1431219-1-ihor.solodrai@linux.dev/
+v1: https://lore.kernel.org/dwarves/20250207021442.155703-1-ihor.solodrai@linux.dev/
+
+Ihor Solodrai (6):
+  btf_encoder: refactor btf_encoder__tag_kfuncs()
+  btf_encoder: use __weak declarations of version-dependent libbpf API
+  pahole: sync with libbpf mainline
+  btf_encoder: emit type tags for bpf_arena pointers
+  pahole: introduce --btf_feature=attributes
+  man-pages: describe attributes and remove reproducible_build
+
+ btf_encoder.c      | 328 ++++++++++++++++++++++-----------------------
+ dwarves.h          |  13 +-
+ lib/bpf            |   2 +-
+ man-pages/pahole.1 |   7 +-
+ pahole.c           |  11 +-
+ 5 files changed, 188 insertions(+), 173 deletions(-)
+
 -- 
 2.48.1
 
