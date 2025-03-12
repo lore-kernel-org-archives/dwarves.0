@@ -1,268 +1,760 @@
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+Received: from out-185.mta0.migadu.com (out-185.mta0.migadu.com [91.218.175.185])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DCB31D5CD4;
-	Wed, 12 Mar 2025 16:53:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.177.32
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741798440; cv=fail; b=SvlaDnQlBg2nC8v0P9AfhV6Wsww+RdzjnRoCwNBGgeMKwk4j9FX4/fsSYGlCRc23thtHLob/fplksdTMSqVnBzbo3FuaZXSna+mIo3Z/py3DiuFQzw/ZW7yJPAD0P91d7/eV1fYhkty7LjgHvhVrT0UESs4IZX3gLwWSRz/N+Z8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741798440; c=relaxed/simple;
-	bh=b1p194VQcDU0px1QvJf1vHbKxTmbyaXAV8WGQ1l7/+k=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=o5DJmOHzSLaHxDFAmbJG/lLyGb4xxyfR3x4UjSaoF6LgyfYpRteUU+zfv1ioDA4w9S9rjBQuD8vBOweDjtjQohE1Dx7dwX0f020ZcGAScPfjCuH3JA7soudcgqGcyJulTeGodN41njA/Mn9/EpDgiXXNdHnWa3wQ3gX04cbwqrg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=eSjXsFQB; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=TbosnsIX; arc=fail smtp.client-ip=205.220.177.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 184531EB192
+	for <dwarves@vger.kernel.org>; Wed, 12 Mar 2025 20:28:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.185
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1741811337; cv=none; b=Iojw2cgv4gOOZ/ls1O9iBnjfo80cthnA6iUA1Pk/3PWY9nWe4Ahj4HV5hNvaBQY2/rGViHR5bjESFuHdmmACEPq9/NK1tSTvnDpoOyQZmtBU8DU2PmDXCSezCsEyHphfiFc7L9bNxRCzgCw1gI+ErPWCQ4Mc0D0QRW/kj9SdOps=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1741811337; c=relaxed/simple;
+	bh=cR8IrSw67SXN9xOiC53rHR0ldNCJXWdzziBEdQWdEOE=;
+	h=MIME-Version:Date:Content-Type:From:Message-ID:Subject:To:Cc:
+	 In-Reply-To:References; b=O8RAJVjZ/Q/l1FX7MJ6UA/wyN14NtzlQhD9J77uTAazTWHlTY0I3h8tuj9AAniwq+OJ0BxB13UMeK+uanzSySgYSV0ycHtyarpyDPlVNVi7SZmg2aIeGnGWmbwRswIzoOtjbLa8I0Ksvx+s2mTYQMKSdOTM3PZCmOVc27wJi3Wo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=cAHnyM9U; arc=none smtp.client-ip=91.218.175.185
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="eSjXsFQB";
-	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="TbosnsIX"
-Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 52CBsZUs022177;
-	Wed, 12 Mar 2025 16:53:34 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=
-	corp-2023-11-20; bh=WsARRAWFknoMdXbBRJUcIEnu2uzwbvGDvOH6dOYFCsg=; b=
-	eSjXsFQBlOQtznsmySrTLBMOyDLoqKqJX0js/zlZYO/6+/sVzcqVVlSKdiVicJpV
-	DKu1FJlWsxCZiBbAsYRCO1DIjJhZzZTfvtajmsqYkVDJrxqkdh32WoO4jdZarlJH
-	8xV0WCxr+wjvkLo3BbxYxOBcOHbCF1O/ioEa9UPTNCGRbfyvghGD+g4nuLJ0bBEJ
-	aGXHIzEcP+Y3zMEE394t/os6PTxGHHWUlIucWNNPQLivO3CmqI2ppyAgalcXKCte
-	GV0opQoewRBliV2mE2w9k4Zi32xsGqAcDkv4V4N04lcBDBeQVbw4Gesq9wPvaJ0U
-	hVXKzn+0xbc46SyNqEWB2A==
-Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 45au4h28uq-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 12 Mar 2025 16:53:34 +0000 (GMT)
-Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 52CGNvwk008501;
-	Wed, 12 Mar 2025 16:53:33 GMT
-Received: from nam12-dm6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2175.outbound.protection.outlook.com [104.47.59.175])
-	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 45atn3hvgb-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 12 Mar 2025 16:53:33 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=yU3xlvbxUlYArnj6DIuXFdSW6vGZLXOjB+7czGVFixFcN4P2A2mD1QGt6gcF+dKUmrgM/mETihVn4DssCuXtyxGgC9dLH6plyX19YN2LgRBN7ytYsm65ReFNnFlVnGXMzNexsGuIuxkGjTc/IDs5ik1siA/8p8/ChrU3HFFitBghSb/3Z8UCFSY7G6dSdB8uQC0x+SbwTrOJGziycieOrr841foVlBewQN1+9FVZ7Idefyk0ZKFfVcZC315o0x4HwqqamDP34KbXHgVXgFKxr38aVq060FSE5F96efAM0r5OohtKqIzi/+at85bnCNIugxkQSekCNs+3xj6l4eO1Rw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=WsARRAWFknoMdXbBRJUcIEnu2uzwbvGDvOH6dOYFCsg=;
- b=Fyh4LfmzKLzBK7UGAJ60YXSJ3csSYBlZHJLIjQqXFLJ/ETYR9LsmqPLgnNfBpRh/gcQs42wAZ+vXb8jRO9AJyas9/9O345CNixdh1OkNNALmL05cO928WuxefdNutqZr/9W2xtZO+QMNF5879XOkqNerRpSm41KzZEU9ifSR9I7XlTfqdrS5Wx9Y0Hg74B6+7U9Mf3+l+XLDUsPsfaFynYJkZRJ42AhFVNK2p1gdyLmiVstTsJaqqKG12TQovbIHoGBOUjtYJH9pKvnKnpI2KF5uLh0QnbRJcpF+6EQBOQZK38ZiTwlu/Cyf8wt3KG1JNXo8WkZEbe58GT8XTeSR7Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=WsARRAWFknoMdXbBRJUcIEnu2uzwbvGDvOH6dOYFCsg=;
- b=TbosnsIXIoDtkRJCI3B0yUz5xDKhxEIR/JDYQXwYQweYipoHHbSqR66W1LUr5QAQJv4hs7jRaGBqIZoi/EJ3By40m5Be9RgI9leiJP7kNgsCOeOZxW2EzLE5WuVJXV62TDMr+79WE5UsjXJcEWxhdzio6fltbg466VVsGHkyM7s=
-Received: from BLAPR10MB5267.namprd10.prod.outlook.com (2603:10b6:208:30e::22)
- by PH7PR10MB5724.namprd10.prod.outlook.com (2603:10b6:510:125::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8511.27; Wed, 12 Mar
- 2025 16:53:29 +0000
-Received: from BLAPR10MB5267.namprd10.prod.outlook.com
- ([fe80::682b:c879:9f97:a34f]) by BLAPR10MB5267.namprd10.prod.outlook.com
- ([fe80::682b:c879:9f97:a34f%5]) with mapi id 15.20.8511.026; Wed, 12 Mar 2025
- 16:53:29 +0000
-Message-ID: <b5d5b91c-31a8-4f44-acdc-268081dc2647@oracle.com>
-Date: Wed, 12 Mar 2025 16:53:22 +0000
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH dwarves] btf_encoder: verify 0 address DWARF variables are
- really in ELF section
-To: acme@kernel.org
-Cc: yonghong.song@linux.dev, dwarves@vger.kernel.org, ast@kernel.org,
-        andrii@kernel.org, bpf@vger.kernel.org, daniel@iogearbox.net,
-        song@kernel.org, eddyz87@gmail.com, olsajiri@gmail.com,
-        stephen.s.brennan@oracle.com, laura.nao@collabora.com,
-        ubizjak@gmail.com, Cong Wang <xiyou.wangcong@gmail.com>
-References: <20241217103629.2383809-1-alan.maguire@oracle.com>
-Content-Language: en-GB
-From: Alan Maguire <alan.maguire@oracle.com>
-In-Reply-To: <20241217103629.2383809-1-alan.maguire@oracle.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: LO3P265CA0028.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:387::11) To BLAPR10MB5267.namprd10.prod.outlook.com
- (2603:10b6:208:30e::22)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="cAHnyM9U"
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BLAPR10MB5267:EE_|PH7PR10MB5724:EE_
-X-MS-Office365-Filtering-Correlation-Id: fdd36dfc-12aa-4bb7-7bb5-08dd61866a18
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|1800799024|376014|7416014;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?M3IzZzlkNjJnTVNONUFVVmFscUQwdzlXa3BEc0hBcHpMRDZLQXBXSVhEWVA0?=
- =?utf-8?B?VTZEU1BlUTQ4cXczVGg4R2hBVVU5WVlnUUdyS2dqN0hFTmo3VWtqRjEwaWVM?=
- =?utf-8?B?Z3BPVGV1aWdUT3hITDJuNmppUVRCUEZBY3VSK2tSTzk5OWwrNFhkWGxGZ09z?=
- =?utf-8?B?VHY2TnRWekV5djgrdnk3b243dXRzVnNMYmxZNW5OZ2lOQytnbENibXd3RHVM?=
- =?utf-8?B?RXJCVTlGS3FMb2RMaXo1T1MwOFRRQXlyVnVrL012TFk0aUNiOFkzOFM0cGhk?=
- =?utf-8?B?by9wM1gyVjkvTm5yNVpZdUpFUnE2ek01c05rbnhGWlViU2tEV0V5NTh3M2Fv?=
- =?utf-8?B?cUlGZWJrQWpIVXNWeFkreDB4K2dZNEViQ3R1T1lFMmlHUFlyYnp0cUppRU00?=
- =?utf-8?B?T245ZyttczRnNGhuTkNjRUM1a3pEcXdpL3JMak1yeW5uOUFJbllGTzZienhW?=
- =?utf-8?B?NldTZGVlL2pDdkYreVZ0YnZKRTBZVm1ISkhLbjFFZ05vOHdiOERtUGZUa2Rr?=
- =?utf-8?B?TnNxN25FY3JlTitrMVNhYStFWmYrMEtqd1p3RTUwQlhpbkNtS1M0N0d5Vk9V?=
- =?utf-8?B?ZGJRam9VWkxFVjRLbzNPeEZ5azU4UFAxald6RWN5N0Vqcld6cmFWcmtHTVMx?=
- =?utf-8?B?YlBneSs1MDFzL3NaN1loWGZ3R1VlYmp6WktGemlWdnh2dUJOWCtRa09SYjA2?=
- =?utf-8?B?aDVqWDljc0FOWTJLVDZIRytQa0xueXRaNFV6SFFwMHo0c3JtenRPcktDcVlV?=
- =?utf-8?B?RXhjeUIwalJPVndhSW1ieC9wVTNiZnhPcW1taUFNSEN1VVhwbEp6bEhHUjVp?=
- =?utf-8?B?UUZhOEpkdmJ4QXQ3aGl3cnN4cHkwYzJUUFpJV3JBQXM0VUtDL3Zxamh1QTZz?=
- =?utf-8?B?VDNETDRBZjRVazY1bGNqZnFsL05DcG41SnpvblVoc3BWYnI2VG42eTNtd3lF?=
- =?utf-8?B?M2dCVWpTcUVrTEJLeDV6bm5IWWlzdGJVSWpsdmJ0eWhGU3YxSm5GYzU3SmhR?=
- =?utf-8?B?V0tRUUR5b2N6N3IxMUpXOUFOamZadmtFZ24zZVloenRRQXd1NXRFK2VkTnVW?=
- =?utf-8?B?cTVMaW1MUlFjbUJhajAweFY2S29WbmFoWjUwZEh4bWd4Sk5NZElEZzlOaVpu?=
- =?utf-8?B?Z0ZDUSs5eWgvVDZQTWRuMHNKell2aUpPSHNJVmJVM2tDaWozblk0OUtIR2pD?=
- =?utf-8?B?d2xCYjA5VzlBNGtJeWlXTjVScFFVbGgyUmpZZFVCS2VPTzBNdlFKUzAwQW90?=
- =?utf-8?B?K0UwZWloY0hONUxRK2dld0p6aThEbVNqQnBJMlpxNWMybmpEQk84SFc4WWZZ?=
- =?utf-8?B?WGRXVU13c0czMVNYdmZqeXlBa0xGS21LR3BPTk5PVnlvbXNObmhXTnVJVXBL?=
- =?utf-8?B?bVRMT2FVS0tFMTNjbVZBMURaZ0JJSzRvWDZYT1pFWkZNWGg1K3h4OG1UQmN2?=
- =?utf-8?B?bGZ1ZkJJeGhVRDJwc2xtQS9Wa0hJT3JiVjQ2dFZuZFd4S2ZTMlZYNm4wUy9m?=
- =?utf-8?B?NThjRDdXZ0MrdSsrZWVOSGlJREJRaHNSTW5mcWhZaGt5WmNFTGZsRkhib3V3?=
- =?utf-8?B?VGFIdU1EWG9tVWlqdEZOWlRXNms3TzZJMHU0clJSd3N6U2lOSVVmNEl5Njgx?=
- =?utf-8?B?QzdSZHpQQWljVHRlSjFUNERwdS8rMjR0ZXlKTFBtYVRsTFd3RUVHbnlzZkEy?=
- =?utf-8?B?cTkrWUthREpCa2h6UitFRGN4cU9ybXdsNVc4Vkp5L0hiU3ZGRy95blcrSmZp?=
- =?utf-8?B?M0swQ2RCMFVOVHhsd0JCTGYxWXFneDU4VnliMWdkN1Q1a0N3RXozcTJ6MWFr?=
- =?utf-8?B?d2o0ZTJVdnBPZUQ1RzNLc1d5TFphSy9DYXdmdHRzUkFHNkl0OGZSbVBubVdJ?=
- =?utf-8?Q?AvIOu3Fv2q0TM?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BLAPR10MB5267.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(7416014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?Ull3bnU1UkdvOElMeU9CUU5ZakM0VzlKOWRvekF0eTBKTTRYNVlaeUpUOWxR?=
- =?utf-8?B?MEl4eEc2NU1VK2VUdTZaYmZpZDhDUmxScFFuTE9iWkVFaVJwa3IwMTFtR2dz?=
- =?utf-8?B?ZGFVaTUyaHhFcm1PRy80b0RJZXlLTENaNUVuOXFweXVMS1Zvc1dwMmV3bHpt?=
- =?utf-8?B?a0Nzalg0UE1mYmg3Vm05WjZTby9YRTBVMXNxS3J2cE1OZ2hwQlFkaTIxdEk4?=
- =?utf-8?B?SGlSTDFtWEltUDc3S2MwSUNNOEZIT3RyM0svVjJUeGNSQTZQMW1BUHdDTFht?=
- =?utf-8?B?c1ZJcXBJbFl6SXcvS1BVU1R2TkFuYVRZbk42dFhLZ3FZTzNwT2JlYUhRTHZt?=
- =?utf-8?B?eCtwQnN0dU1Hd3N6d0IxTmhJSDJoNDdCeHpXcG1sNXpiL1dNUFlUdGJoVndu?=
- =?utf-8?B?b2JEVnBEZXR4ZlQ5OHdPaWFvaDlieHMxUXdWdmVvdlJzVEphcWJoZjNKbm5p?=
- =?utf-8?B?VmpHK2h2c2c4OEZsT1ZHNXVveU9EdjcyaURsSktjZ2xRMGlKcWh6RStxZW1J?=
- =?utf-8?B?L2IzZDZWSVIyQlVLZWpKV1BoSDVMT0g1M2M3bTQzOExqa3RLRnM4R2MwNHI1?=
- =?utf-8?B?WXVHS0drMlJtcjVVZGcvL3l4Y25aVG1YY1kxY3V3Z000YytwWnFOdnkzc2dK?=
- =?utf-8?B?M1RSYjY2TXpKRDV2YTZwTStwOVhuTlNPQlVFaDg5MHJ0WmdUdjRNTVpwZ2Nr?=
- =?utf-8?B?TVFjVTlMWEhIS2Y5MTdrWlgvcE1DVHM3WmErNFMyTlhiQXIwSkZCSkhRM01F?=
- =?utf-8?B?U1ZQcC9WWWpLMmthTXJuM2RBVzhEMFNzOE9lQlRFWG9nam4xY3AvWVRETGJR?=
- =?utf-8?B?aEF2N1FYMnpCY2RlL0lnSmVLNkZrUjh2REErcUF4RjRxdTFnKzY3RUJMMTdT?=
- =?utf-8?B?dmNHUm1OS096YTE5VzhYQ2tmdjRtM2RQcGJ3M2gxVnBaUDdaWmJnOWRZUmw5?=
- =?utf-8?B?ZzFYdGRJVFJGUG83c0ZZcFZkTWxNLzk3a2VRVG1RVVdWUjk1R1FuRkxVQ0ZY?=
- =?utf-8?B?ckpOUkF1YlpMYmd1b3JoQ05VY3VJYXRudkNQVjlkWDNYc2hkanM3RnQ3UUtQ?=
- =?utf-8?B?M1B1cDJWdzYwWEREN1ZsTnhQekhCUC9WS2RrRVcyeUZ1YUFYdTJHTjNQdEFQ?=
- =?utf-8?B?b3ZKN3lKOTlFUlM0V0NPZlpCOW8rMkhSbDQwY1BwdzlXMkErWE5QbjJ5R1h1?=
- =?utf-8?B?THlrclNTam5JbGRQb0RMSTI3cGk1YitZL0RBU3BNVW9ZbjFGaHg2RjlvZXZU?=
- =?utf-8?B?QndxME8wZzc1ZCtRTXlLeXpZUHlzSjdrNGcvQk1wUWdUeG9BRm4yVlhYZzdw?=
- =?utf-8?B?WUNJbDJYc1J5TFFzY0NGUnFYaUJ4ei8rdGpSOE9peDVGQk02TmNGaGoveDE1?=
- =?utf-8?B?ZGRla0lDY2hKMC8rcm5EZkowUGpleXBMRDlpV1E0dFdVeHl1dC9EZzRXd284?=
- =?utf-8?B?dmt1dVVSTmhZcklwd1FPQkdiblR0cUVWL1N4aVFiYzdhdzdnMnNOMEVlVmJh?=
- =?utf-8?B?c3ovRkJzZVhXWS9sdGNxelYyMEFhcnhOUGZydjlyMk1tb1Era3FJRHBzWFIw?=
- =?utf-8?B?ZmFiSEZSTnVYUy9MdjdpVXNpeE91bVlHK1ZlK0crUkpoQzE2dDloa0V1bktL?=
- =?utf-8?B?QTRXQyt5bHhWcTk1djI4VWFqRGxqWUplYTVnRmY4V2NiT01FNTJtd0dlZkRJ?=
- =?utf-8?B?cEwrd1o5TjBGODdsMXI0anIzM1NLbFdFa3kyOGE5UEhYTnNubjFuV1YzVHNQ?=
- =?utf-8?B?cmtJZmQ4YXVtc3h4dUtKWnQ0ZGtKbTRTNXloeUIvbmVoTXhQbks3M1BWOWsz?=
- =?utf-8?B?UVgvQmNvc3FudmNJdURCTDlQNVczT1MvYnhXSHk2SE5SUVlaNWQ2d1dBalJL?=
- =?utf-8?B?ZkJSVFNqdGFiU3BSdkpZSW1FVkMwdVVCY3NNK1BIdWY5TE9UMnpOMkRUc1Av?=
- =?utf-8?B?RjB0d2hWSlBORTZ2Znl0MU1oNnU5ZlRvc2orUGRBNERHZFJRNDdscjhWbDls?=
- =?utf-8?B?RVdRWW1nTjI5WUVEYjRESnFBMWlCNWkzMStzZ3d6YlErU2ovSFJDTnl2L0t0?=
- =?utf-8?B?YWxOTXczaGtlbFIxRi8zMGJjV2h6bmxsWDlOQXdybUl3SXdRRlZVSUJ3T0dl?=
- =?utf-8?B?U2t5b05EV3NwU01hdGdFTDVKK2Q4TEtieDZiZGJsOG5kU3NBdFRTRXFNeW1I?=
- =?utf-8?B?eGc9PQ==?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
-	xaNlkBKAfLfJZZ9oRZaERXWkMThS7ySFA8fAg/j4qNw68RZ3mB/TNCjlbWGl8qQGmCZyOj4ZPIUHmE/6z69bIx6tMND4v5WfeZ4iBHIOG0fdPvo+YM9XP6mrpUpT67iHTpYjkiewlRKnDdsvdiX/BP2wdUwWTTYVdQ5+b9itfVT+UZRQPbT6yos8KwI6p2XXuREjVu6P7wtnqZApoXT9JpiRbCNpCttYPIVxBl5e45ORcmOn746XKjSEaBULkxGoYLPBG4kvO4395FF+BJhpOWbAssxpwUGCkmHzM04GUAG/3W6XmSTbk5P/Efg7+tI6orxlBPcS4aaHMZQ/WkXlawKtXvc3ufko04xcpt7v6HLWF4FShZypN47Px6IKJbiZXRjKX5JV54OOfJtz7l0vF4sRjiVWlOBWm0nz2iPMupbO37ZsMCN17pwrM6w1L5GCiJPdxpXg5trM5L/9lBjER08EGnMwqs19u2oga6C+X8hTi6HaZFzoosFzOmmV1VeMPy9FWnvJA78koAwPcf3WpdH0YZsFVoNEEtsDlG+IDJ5QBacy6Tv3xkq032WG5feQwYx9yhAOcq3H6vHyvg02K80guXPG8NFoVIJZAyCOc9Q=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: fdd36dfc-12aa-4bb7-7bb5-08dd61866a18
-X-MS-Exchange-CrossTenant-AuthSource: BLAPR10MB5267.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Mar 2025 16:53:29.1886
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Y64GzCc3Tb8eHjOWqlXe7rdmKjceVUxFYxiFiwtBpS5Hi7Hc45g8/DhPC/xX56KhWgDuqtInOdYRo9ojgD4Ehw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR10MB5724
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1093,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-03-12_06,2025-03-11_02,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- mlxlogscore=999 mlxscore=0 adultscore=0 phishscore=0 spamscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2502280000 definitions=main-2503120116
-X-Proofpoint-ORIG-GUID: Acya9NL53Pe64YF9hTcOzhiVDlWagqJm
-X-Proofpoint-GUID: Acya9NL53Pe64YF9hTcOzhiVDlWagqJm
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1741811331;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=H6f8GF2sVPqeMstiCMo7kvP+EpG8CY9A6KPK0u46BgA=;
+	b=cAHnyM9UsA8XvSdjp9pTQSqC3uHmKoQruPALvM2IcMbN9pYuc9VKUsDebDhbEdnT35wQMi
+	Pc+DwdwEdNlJUaAzB7pmLcWEiqOMNJAVbfWqrsHM1CZyVw9ZXtCp3GUNpSleUg2q5/80ty
+	lYLgD5GGp+307kOpp8oYuOdbLgD0jHo=
+Date: Wed, 12 Mar 2025 20:28:50 +0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: "Ihor Solodrai" <ihor.solodrai@linux.dev>
+Message-ID: <41e06a415837a8ae59b61e653527331a63a8d9ba@linux.dev>
+TLS-Required: No
+Subject: Re: [PATCH dwarves 1/2] dwarves: Add github actions to build, test
+To: "Alan Maguire" <alan.maguire@oracle.com>, acme@kernel.org
+Cc: yonghong.song@linux.dev, dwarves@vger.kernel.org, ast@kernel.org,
+ andrii@kernel.org, bpf@vger.kernel.org, song@kernel.org,
+ eddyz87@gmail.com, olsajiri@gmail.com, "Alan Maguire"
+ <alan.maguire@oracle.com>
+In-Reply-To: <20250306170455.2957229-2-alan.maguire@oracle.com>
+References: <20250306170455.2957229-1-alan.maguire@oracle.com>
+ <20250306170455.2957229-2-alan.maguire@oracle.com>
+X-Migadu-Flow: FLOW_OUT
 
-On 17/12/2024 10:36, Alan Maguire wrote:
-> We use the DWARF location information to match a variable with its
-> associated ELF section.  In the case of per-CPU variables their
-> ELF section address range starts at 0, so any 0 address variables will
-> appear to belong in that ELF section.  However, for "discard" sections
-> DWARF encodes the associated variables with address location 0 so
-> we need to double-check that address 0 variables really are in the
-> associated section by checking the ELF symbol table.
-> 
-> This resolves an issue exposed by CONFIG_DEBUG_FORCE_WEAK_PER_CPU=y
-> kernel builds where __pcpu_* dummary variables in a .discard section
-> get misclassified as belonging in the per-CPU variable section since
-> they specify location address 0.
-> 
-> Reported-by: Cong Wang <xiyou.wangcong@gmail.com>
+On 3/6/25 9:04 AM, Alan Maguire wrote:
+> Borrowing heavily from libbpf github actions, add workflows to
+>
+> - build dwarves for gcc, LLVM
+>
+> - build dwarves for x86_64/aarch64 and use it to build a Linux
+>   kernel including BTF generation; then run dwarves selftests
+>   using generated vmlinux
+>
+> These workflows trigger on all pushes.  This will alow both
+> developers working on dwarves to push a branch to their github
+> repo and test, and also for maintainer pushes from git.kernel.org
+> pahole repo to trigger tests.
+>
+> And similar to libbpf, additional workflows for coverity etc
+> are triggered for pushes to master/next.
+>
 > Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
-
-applied to the next branch of
-
-https://git.kernel.org/pub/scm/devel/pahole/pahole.git/
-
 > ---
->  btf_encoder.c | 27 +++++++++++++++++++++++++++
->  1 file changed, 27 insertions(+)
-> 
-> diff --git a/btf_encoder.c b/btf_encoder.c
-> index 3754884..04f547c 100644
-> --- a/btf_encoder.c
-> +++ b/btf_encoder.c
-> @@ -2189,6 +2189,26 @@ static bool filter_variable_name(const char *name)
->  	return false;
->  }
->  
-> +bool variable_in_sec(struct btf_encoder *encoder, const char *name, size_t shndx)
-> +{
-> +	uint32_t sym_sec_idx;
-> +	uint32_t core_id;
-> +	GElf_Sym sym;
+>  .github/actions/debian/action.yml | 16 ++++++
+>  .github/actions/setup/action.yml  | 23 ++++++++
+>  .github/workflows/build.yml       | 37 ++++++++++++
+>  .github/workflows/codeql.yml      | 53 +++++++++++++++++
+>  .github/workflows/coverity.yml    | 33 +++++++++++
+>  .github/workflows/lint.yml        | 20 +++++++
+>  .github/workflows/ondemand.yml    | 31 ++++++++++
+>  .github/workflows/test.yml        | 36 ++++++++++++
+>  .github/workflows/vmtest.yml      | 94 +++++++++++++++++++++++++++++++
+>  ci/managers/debian.sh             | 88 +++++++++++++++++++++++++++++
+>  ci/managers/travis_wait.bash      | 61 ++++++++++++++++++++
+>  11 files changed, 492 insertions(+)
+>  create mode 100644 .github/actions/debian/action.yml
+>  create mode 100644 .github/actions/setup/action.yml
+>  create mode 100644 .github/workflows/build.yml
+>  create mode 100644 .github/workflows/codeql.yml
+>  create mode 100644 .github/workflows/coverity.yml
+>  create mode 100644 .github/workflows/lint.yml
+>  create mode 100644 .github/workflows/ondemand.yml
+>  create mode 100644 .github/workflows/test.yml
+>  create mode 100644 .github/workflows/vmtest.yml
+>  create mode 100755 ci/managers/debian.sh
+>  create mode 100644 ci/managers/travis_wait.bash
+
+Hi Alan. See comments below.
+
+>
+> diff --git a/.github/actions/debian/action.yml b/.github/actions/debian=
+/action.yml
+> new file mode 100644
+> index 0000000..23d48ec
+> --- /dev/null
+> +++ b/.github/actions/debian/action.yml
+> @@ -0,0 +1,16 @@
+> +name: 'debian'
+> +description: 'Build'
+> +inputs:
+> +  target:
+> +    description: 'Run target'
+> +    required: true
+> +runs:
+> +  using: "composite"
+> +  steps:
+> +    - run: |
+> +        source /tmp/ci_setup
+> +        bash -x $CI_ROOT/managers/debian.sh SETUP
+> +        bash -x $CI_ROOT/managers/debian.sh ${{ inputs.target }}
+> +        bash -x $CI_ROOT/managers/debian.sh CLEANUP
+> +      shell: bash
 > +
-> +	elf_symtab__for_each_symbol_index(encoder->symtab, core_id, sym, sym_sec_idx) {
-> +		const char *sym_name;
+> diff --git a/.github/actions/setup/action.yml b/.github/actions/setup/a=
+ction.yml
+> new file mode 100644
+> index 0000000..ae6eb78
+> --- /dev/null
+> +++ b/.github/actions/setup/action.yml
+> @@ -0,0 +1,23 @@
+> +name: 'setup'
+> +description: 'setup env, create /tmp/ci_setup'
+> +runs:
+> +  using: "composite"
+> +  steps:
+> +    - id: variables
+> +      run: |
+> +        export REPO_ROOT=3D$GITHUB_WORKSPACE
+> +        export CI_ROOT=3D$REPO_ROOT/ci
+> +        # this is somewhat ugly, but that is the easiest way to share =
+this code with
+> +        # arch specific docker
+> +        echo 'echo ::group::Env setup' > /tmp/ci_setup
+> +        echo export DEBIAN_FRONTEND=3Dnoninteractive >> /tmp/ci_setup
+> +        echo sudo apt-get update >> /tmp/ci_setup
+> +        echo sudo apt-get install -y aptitude qemu-kvm zstd binutils-d=
+ev elfutils libcap-dev libelf-dev libdw-dev libguestfs-tools >> /tmp/ci_s=
+etup
+> +        echo export PROJECT_NAME=3D'dwarves' >> /tmp/ci_setup
+> +        echo export AUTHOR_EMAIL=3D"$(git log -1 --pretty=3D\"%aE\")" =
+>> /tmp/ci_setup
+> +        echo export REPO_ROOT=3D$GITHUB_WORKSPACE >> /tmp/ci_setup
+> +        echo export CI_ROOT=3D$REPO_ROOT/ci >> /tmp/ci_setup
+> +        echo export VMTEST_ROOT=3D$CI_ROOT/vmtest >> /tmp/ci_setup
+> +        echo 'echo ::endgroup::' >> /tmp/ci_setup
+> +      shell: bash
 > +
-> +		if (sym_sec_idx != shndx || elf_sym__type(&sym) != STT_OBJECT)
-> +			continue;
-> +		sym_name = elf_sym__name(&sym, encoder->symtab);
-> +		if (!sym_name)
-> +			continue;
-> +		if (strcmp(name, sym_name) == 0)
-> +			return true;
-> +	}
-> +	return false;
+
+I strongly suggest getting rid of local actions (`.github/actions`
+directory) and moving this into an independent shell script.
+
+Generally, it is much easier to develop and debug CI code if you can
+run it locally (say in a fresh docker container). From this follows
+that it is better to write most of it in separately executable scripts
+(in bash or python, like in bpftrace [1]), as opposed to inlining in
+yaml.
+
+For an example of how this might be done see very recently set up
+libbpf/usdt CI [2].
+
+In this particular case, I'd put inlined code into ./ci/setup.sh and
+source it directly from bash when necesary.
+
+It's a little hypocritical of me to point this out, as libbpf still
+has all this mess. But I'd like you to avoid it while it's relatively
+simple.
+
+[1] https://github.com/bpftrace/bpftrace/blob/master/.github/include/ci.p=
+y
+[2] https://github.com/libbpf/usdt/tree/main/.github
+
+> diff --git a/.github/workflows/build.yml b/.github/workflows/build.yml
+> new file mode 100644
+> index 0000000..a95f71f
+> --- /dev/null
+> +++ b/.github/workflows/build.yml
+> @@ -0,0 +1,37 @@
+> +name: dwarves-build
+> +
+> +on:
+> +  pull_request:
+> +  push:
+> +  schedule:
+> +    - cron:  '0 18 * * *'
+> +
+> +concurrency:
+> +  group: ci-build-${{ github.head_ref }}
+> +  cancel-in-progress: true
+> +
+> +jobs:
+> +
+> +  debian:
+> +    runs-on: ubuntu-latest
+> +    name: Debian Build (${{ matrix.name }})
+> +    strategy:
+> +      fail-fast: false
+> +      matrix:
+> +        include:
+> +          - name: default
+> +            target: RUN
+> +          - name: gcc-12
+> +            target: RUN_GCC12
+> +          - name: clang
+> +            target: RUN_CLANG
+> +    steps:
+> +      - uses: actions/checkout@v4
+> +        name: Checkout
+> +      - uses: ./.github/actions/setup
+> +        name: Setup
+> +      - uses: ./.github/actions/debian
+> +        name: Build
+> +        with:
+> +          target: ${{ matrix.target }}
+> +
+> diff --git a/.github/workflows/codeql.yml b/.github/workflows/codeql.ym=
+l
+> new file mode 100644
+> index 0000000..a140be1
+> --- /dev/null
+> +++ b/.github/workflows/codeql.yml
+> @@ -0,0 +1,53 @@
+> +---
+> +# vi: ts=3D2 sw=3D2 et:
+> +
+> +name: "CodeQL"
+> +
+> +on:
+> +  push:
+> +    branches:
+> +      - master
+> +  pull_request:
+> +    branches:
+> +      - master
+> +      - next
+> +
+> +permissions:
+> +  contents: read
+> +
+> +jobs:
+> +  analyze:
+> +    name: Analyze
+> +    runs-on: ubuntu-latest
+> +    concurrency:
+> +      group: ${{ github.workflow }}-${{ matrix.language }}-${{ github.=
+ref }}
+> +      cancel-in-progress: true
+> +    permissions:
+> +      actions: read
+> +      security-events: write
+> +
+> +    strategy:
+> +      fail-fast: false
+> +      matrix:
+> +        language: ['cpp', 'python']
+> +
+> +    steps:
+> +      - name: Checkout repository
+> +        uses: actions/checkout@v4
+> +
+> +      - name: Initialize CodeQL
+> +        uses: github/codeql-action/init@v2
+
+Supported codeql-action version is v3:
+https://github.com/github/codeql-action?tab=3Dreadme-ov-file#supported-ve=
+rsions-of-the-codeql-action
+
+> +        with:
+> +          languages: ${{ matrix.language }}
+> +          queries: +security-extended,security-and-quality
+> +
+> +      - name: Setup
+> +        uses: ./.github/actions/setup
+> +
+> +      - name: Build
+> +        run: |
+> +          source /tmp/ci_setup
+> +          make -C ./src
+> +
+> +      - name: Perform CodeQL Analysis
+> +        uses: github/codeql-action/analyze@v2
+
+Same: v3 here.
+
+> diff --git a/.github/workflows/coverity.yml b/.github/workflows/coverit=
+y.yml
+> new file mode 100644
+> index 0000000..c672a7d
+> --- /dev/null
+> +++ b/.github/workflows/coverity.yml
+> @@ -0,0 +1,33 @@
+> +name: dwarves-ci-coverity
+> +
+> +on:
+> +  push:
+> +    branches:
+> +      - master
+> +      - next
+> +  schedule:
+> +    - cron:  '0 18 * * *'
+> +
+> +jobs:
+> +  coverity:
+> +    runs-on: ubuntu-latest
+> +    name: Coverity
+> +    env:
+> +      COVERITY_SCAN_TOKEN: ${{ secrets.COVERITY_SCAN_TOKEN }}
+
+Assuming you're intentionally want to run coverity scans, you will
+have to set up COVERITY_SCAN_TOKEN secret variable in settings of the
+github repository.
+
+> +    steps:
+> +      - uses: actions/checkout@v4
+> +      - uses: ./.github/actions/setup
+> +      - name: Run coverity
+> +        if: ${{ env.COVERITY_SCAN_TOKEN }}
+> +        run: |
+> +          source /tmp/ci_setup
+> +          export COVERITY_SCAN_NOTIFICATION_EMAIL=3D"${AUTHOR_EMAIL}"
+> +          export COVERITY_SCAN_BRANCH_PATTERN=3D${GITHUB_REF##refs/*/}
+> +          export TRAVIS_BRANCH=3D${COVERITY_SCAN_BRANCH_PATTERN}
+> +          scripts/coverity.sh
+> +        env:
+> +          COVERITY_SCAN_PROJECT_NAME: dwarves=20
+>=20+          COVERITY_SCAN_BUILD_COMMAND_PREPEND: 'cmake .'
+> +          COVERITY_SCAN_BUILD_COMMAND: 'make'
+> +      - name: SCM log
+> +        run: cat /home/runner/work/dwarves/cov-int/scm_log.txt
+> diff --git a/.github/workflows/lint.yml b/.github/workflows/lint.yml
+> new file mode 100644
+> index 0000000..ca13052
+> --- /dev/null
+> +++ b/.github/workflows/lint.yml
+> @@ -0,0 +1,20 @@
+> +name: "lint"
+> +
+> +on:
+> +  pull_request:
+> +  push:
+> +    branches:
+> +      - master
+> +      - next
+> +
+> +jobs:
+> +  shellcheck:
+> +    name: ShellCheck
+> +    runs-on: ubuntu-latest
+> +    steps:
+> +      - name: Checkout repository
+> +        uses: actions/checkout@v4
+> +      - name: Run ShellCheck
+> +        uses: ludeeus/action-shellcheck@master
+> +        env:
+> +          SHELLCHECK_OPTS: --severity=3Derror
+> diff --git a/.github/workflows/ondemand.yml b/.github/workflows/ondeman=
+d.yml
+> new file mode 100644
+> index 0000000..5f3034f
+> --- /dev/null
+> +++ b/.github/workflows/ondemand.yml
+
+The usefullness of ondemand is dubious, tbh. Usually you want to run
+CI against a change in the code, which can be achieved by enabling
+testing workflows on pull_request. IMO ondemand workflow is not
+necessary.
+
+> @@ -0,0 +1,31 @@
+> +name: ondemand
+> +
+> +on:
+> +  workflow_dispatch:
+> +    inputs:
+> +      arch:
+> +        default: 'x86_64'
+> +        required: true
+> +      llvm-version:
+> +        default: '18'
+> +        required: true
+> +      kernel:
+> +        default: 'LATEST'
+> +        required: true
+> +      pahole:
+> +        default: "master"
+> +        required: true
+> +      runs-on:
+> +        default: 'ubuntu-24.04'
+> +        required: true
+> +
+> +jobs:
+> +  vmtest:
+> +    name: ${{ inputs.kernel }} kernel llvm-${{ inputs.llvm-version }} =
+pahole@${{ inputs.pahole }}
+> +    uses: ./.github/workflows/vmtest.yml
+> +    with:
+> +      runs_on: ${{ inputs.runs-on }}
+> +      kernel: ${{ inputs.kernel }}
+> +      arch: ${{ inputs.arch }}
+> +      llvm-version: ${{ inputs.llvm-version }}
+> +      pahole: ${{ inputs.pahole }}
+> diff --git a/.github/workflows/test.yml b/.github/workflows/test.yml
+> new file mode 100644
+> index 0000000..f11ebfe
+> --- /dev/null
+> +++ b/.github/workflows/test.yml
+> @@ -0,0 +1,36 @@
+> +name: dwarves-ci
+> +
+> +on:
+> +  pull_request:
+> +  push:
+> +  schedule:
+> +    - cron:  '0 18 * * *'
+> +
+> +concurrency:
+> +  group: ci-test-${{ github.head_ref }}
+> +  cancel-in-progress: true
+> +
+> +jobs:
+> +  vmtest:
+> +    strategy:
+> +      fail-fast: false
+> +      matrix:
+> +        include:
+> +          - kernel: 'LATEST'
+> +            runs_on: 'ubuntu-24.04'
+> +            arch: 'x86_64'
+> +            llvm-version: '18'
+> +            pahole: 'master'
+> +          - kernel: 'LATEST'
+> +            runs_on: 'ubuntu-24.04-arm'
+> +            arch: 'aarch64'
+> +            llvm-version: '18'
+> +            pahole: 'tmp.master'
+> +    name: Linux ${{ matrix.kernel }}
+> +    uses: ./.github/workflows/vmtest.yml
+> +    with:
+> +      runs_on: ${{ matrix.runs_on }}
+> +      kernel: ${{ matrix.kernel }}
+> +      arch: ${{ matrix.arch }}
+> +      llvm-version: ${{ matrix.llvm-version }}
+> +      pahole: ${{ matrix.pahole }}
+
+llvm-version and pahole inputs don't make any sense for dwarves
+testing. These are inputs of the libbpf/ci/setup-build-env, because
+selftests/bpf need LLVM, and BPF CI also builds kernel with LLVM (do
+you want to do that too for pahole testing?).
+
+My point is, you may be able to avoid the dependency on
+libbpf/ci/setup-build-env and simply install required packages
+directly. It'll be less work for a job, and these inputs won't be
+necessary.
+
+> diff --git a/.github/workflows/vmtest.yml b/.github/workflows/vmtest.ym=
+l
+> new file mode 100644
+> index 0000000..aef5f0a
+> --- /dev/null
+> +++ b/.github/workflows/vmtest.yml
+> @@ -0,0 +1,94 @@
+> +name: 'Build kernel run selftests via vmtest'
+> +
+> +on:
+> +  workflow_call:
+> +    inputs:
+> +      runs_on:
+> +        required: true
+> +        default: 'ubuntu-24.04'
+> +        type: string
+> +      arch:
+> +        description: 'what arch to test'
+> +        required: true
+> +        default: 'x86_64'
+> +        type: string
+> +      kernel:
+> +        description: 'kernel version or LATEST'
+> +        required: true
+> +        default: 'LATEST'
+> +        type: string
+> +      pahole:
+> +        description: 'pahole rev or branch'
+> +        required: false
+> +        default: 'master'
+> +        type: string
+> +      llvm-version:
+> +        description: 'llvm version'
+> +        required: false
+> +        default: '18'
+> +        type: string
+> +jobs:
+> +  vmtest:
+> +    name: pahole@${{ inputs.arch }}
+> +    runs-on: ${{ inputs.runs_on }}
+> +    steps:
+> +
+> +      - uses: actions/checkout@v4
+> +
+> +      - name: Setup environment
+> +        uses: libbpf/ci/setup-build-env@v3
+> +        with:
+> +          pahole: ${{ inputs.pahole }}
+> +          arch: ${{ inputs.arch }}
+> +          llvm-version: ${{ inputs.llvm-version }}
+> +
+> +      - name: Build,install current pahole
+> +        shell: bash
+> +        run: |
+> +          git config --global --add safe.directory ${{ github.workspac=
+e }}
+> +          git submodule update --init
+> +          mkdir build
+> +          cd build
+> +          cmake -DGIT_SUBMODULE=3DOFF -DBUILD_SHARED_LIBS=3DOFF ..
+> +          make -j$((4*$(nproc))) all
+> +          make DESTDIR=3D../install install
+> +
+> +      - name: Get kernel source
+> +        uses: libbpf/ci/get-linux-source@v3
+> +        with:
+> +          repo: 'https://git.kernel.org/pub/scm/linux/kernel/git/bpf/b=
+pf-next.git'
+> +          dest: '${{ github.workspace }}/.kernel'
+> +
+> +      - name: Configure, build kernel with current pahole
+> +        shell: bash
+> +        run: |
+> +          export PATH=3D${{ github.workspace }}/install/usr/local/bin:=
+${PATH}
+> +          export PAHOLE=3D${{ github.workspace }}/install/usr/local/bi=
+n/pahole
+> +          which pahole
+> +          $PAHOLE --version
+> +          cd .kernel
+> +          cat tools/testing/selftests/bpf/config \
+> +              tools/testing/selftests/bpf/config.${{ inputs.arch }} > =
+.config
+> +          # this file might or might not exist depending on kernel ver=
+sion
+> +          cat tools/testing/selftests/bpf/config.vm >> .config || :
+> +          make olddefconfig && make prepare
+> +          grep PAHOLE .config
+> +          grep _BTF .config
+> +          make -j $((4*$(nproc))) all
+> +          cp vmlinux ${{ github.workspace }}
+> +          cd -
+> +
+> +      - name: Run selftests
+
+nit: probably worth giving this step a different name.
+
+> +        env:
+> +          VMLINUX: ${{ github.workspace }}/vmlinux
+> +          LLVM_VERSION: ${{ inputs.llvm-version }}
+> +          SELFTESTS: ${{ github.workspace }}/tests
+> +        shell: bash
+> +        run: |
+> +           cd $SELFTESTS
+> +           export PATH=3D${{ github.workspace }}/install/usr/local/bin=
+:${PATH}
+> +           which pahole
+> +           pahole --version
+> +           vmlinux=3D$VMLINUX ./tests
+> +           cd -
+> +
+> diff --git a/ci/managers/debian.sh b/ci/managers/debian.sh
+
+This script is too complicated for my taste. I would replace it with
+something like docker run step + build-in-docker.sh combination in
+libbpf for ubuntu:
+* https://github.com/libbpf/libbpf/blob/master/.github/workflows/build.ym=
+l#L85-L91
+* https://github.com/libbpf/libbpf/blob/master/ci/build-in-docker.sh
+
+There are more potential parameters here, but all this logic with
+phases is just redundant IMO. For example, apt packages installation
+can be covered by a single shared script (that assumes ubuntu/debian).
+
+> new file mode 100755
+> index 0000000..8316b02
+> --- /dev/null
+> +++ b/ci/managers/debian.sh
+> @@ -0,0 +1,88 @@
+> +#!/bin/bash
+> +
+> +PHASES=3D(${@:-SETUP RUN CLEANUP})
+> +DEBIAN_RELEASE=3D"${DEBIAN_RELEASE:-testing}"
+> +CONT_NAME=3D"${CONT_NAME:-dwarves-debian-$DEBIAN_RELEASE}"
+> +ENV_VARS=3D"${ENV_VARS:-}"
+> +DOCKER_RUN=3D"${DOCKER_RUN:-docker run}"
+> +REPO_ROOT=3D"${REPO_ROOT:-$PWD}"
+> +ADDITIONAL_DEPS=3D(pkgconf)
+> +EXTRA_CFLAGS=3D""
+> +EXTRA_LDFLAGS=3D""
+> +
+> +function info() {
+> +    echo -e "\033[33;1m$1\033[0m"
 > +}
 > +
->  static int btf_encoder__encode_cu_variables(struct btf_encoder *encoder)
->  {
->  	struct cu *cu = encoder->cu;
-> @@ -2258,6 +2278,13 @@ static int btf_encoder__encode_cu_variables(struct btf_encoder *encoder)
->  		if (filter_variable_name(name))
->  			continue;
->  
-> +		/* A 0 address may be in a "discard" section; DWARF provides
-> +		 * location information with address 0 for such variables.
-> +		 * Ensure the variable really is in this section by checking
-> +		 * the ELF symtab.
-> +		 */
-> +		if (addr == 0 && !variable_in_sec(encoder, name, shndx))
-> +			continue;
->  		/* Check for invalid BTF names */
->  		if (!btf_name_valid(name)) {
->  			dump_invalid_symbol("Found invalid variable name when encoding btf",
+> +function error() {
+> +    echo -e "\033[31;1m$1\033[0m"
+> +}
+> +
+> +function docker_exec() {
+> +    docker exec $ENV_VARS $CONT_NAME "$@"
+> +}
+> +
+> +set -eu
+> +
+> +source "$(dirname $0)/travis_wait.bash"
+> +
+> +for phase in "${PHASES[@]}"; do
+> +    case $phase in
+> +        SETUP)
+> +            info "Setup phase"
+> +            info "Using Debian $DEBIAN_RELEASE"
+> +
+> +            docker --version
+> +
+> +            docker pull debian:$DEBIAN_RELEASE
+> +            info "Starting container $CONT_NAME"
+> +            $DOCKER_RUN -v $REPO_ROOT:/build:rw \
+> +                        -w /build --privileged=3Dtrue --name $CONT_NAM=
+E \
+> +                        -dit --net=3Dhost debian:$DEBIAN_RELEASE /bin/=
+bash
+> +            echo -e "::group::Build Env Setup"
+> +
+> +            docker_exec apt-get -y update
+> +            docker_exec apt-get -y install aptitude
+> +            docker_exec aptitude -y install make cmake libz-dev libelf=
+-dev libdw-dev git
+> +            docker_exec aptitude -y install "${ADDITIONAL_DEPS[@]}"
+> +            echo -e "::endgroup::"
+> +            ;;
+> +        RUN|RUN_CLANG|RUN_CLANG16|RUN_GCC12)
+> +            CC=3D"cc"
+> +            if [[ "$phase" =3D~ "RUN_CLANG(\d+)(_ASAN)?" ]]; then
+> +                ENV_VARS=3D"-e CC=3Dclang-${BASH_REMATCH[1]} -e CXX=3D=
+clang++-${BASH_REMATCH[1]}"
+> +                CC=3D"clang-${BASH_REMATCH[1]}"
+> +            elif [[ "$phase" =3D *"CLANG"* ]]; then
+> +                ENV_VARS=3D"-e CC=3Dclang -e CXX=3Dclang++"
+> +                CC=3D"clang"
+> +            elif [[ "$phase" =3D~ "RUN_GCC(\d+)(_ASAN)?" ]]; then
+> +                ENV_VARS=3D"-e CC=3Dgcc-${BASH_REMATCH[1]} -e CXX=3Dg+=
++-${BASH_REMATCH[1]}"
+> +                CC=3D"gcc-${BASH_REMATCH[1]}"
+> +            fi
+> +            if [[ "$CC" !=3D "cc" ]]; then
+> +                docker_exec aptitude -y install "$CC"
+> +            else
+> +                docker_exec aptitude -y install gcc
+> +            fi
+> +	    git config --global --add safe.directory $REPO_ROOT
+> +	    pushd $REPO_ROOT
+> +	    git submodule update --init
+> +	    popd
+> +            docker_exec mkdir build install
+> +            docker_exec ${CC} --version
+> +            info "build"
+> +            docker_exec cmake -DGIT_SUBMODULE=3DOFF .
+> +	    docker_exec make -j$((4*$(nproc)))
+> +            info "install"
+> +            docker_exec make DESTDIR=3D../install install
+> +            ;;
+> +        CLEANUP)
+> +            info "Cleanup phase"
+> +            docker stop $CONT_NAME
+> +            docker rm -f $CONT_NAME
+> +            ;;
+> +        *)
+> +            echo >&2 "Unknown phase '$phase'"
+> +            exit 1
+> +    esac
+> +done
+> diff --git a/ci/managers/travis_wait.bash b/ci/managers/travis_wait.bas=
+h
+> new file mode 100644
+> index 0000000..acf6ad1
+> --- /dev/null
+> +++ b/ci/managers/travis_wait.bash
 
+I am not sure you need this script. I see it's used in
+ci/managers/debian.sh, but I don't know it's purpose.
+
+> @@ -0,0 +1,61 @@
+> +# This was borrowed from https://github.com/travis-ci/travis-build/tre=
+e/master/lib/travis/build/bash
+> +# to get around https://github.com/travis-ci/travis-ci/issues/9979. It=
+ should probably be removed
+> +# as soon as Travis CI has started to provide an easy way to export th=
+e functions to bash scripts.
+> +
+> +travis_jigger() {
+> +  local cmd_pid=3D"${1}"
+> +  shift
+> +  local timeout=3D"${1}"
+> +  shift
+> +  local count=3D0
+> +
+> +  echo -e "\\n"
+> +
+> +  while [[ "${count}" -lt "${timeout}" ]]; do
+> +    count=3D"$((count + 1))"
+> +    echo -ne "Still running (${count} of ${timeout}): ${*}\\r"
+> +    sleep 60
+> +  done
+> +
+> +  echo -e "\\n${ANSI_RED}Timeout (${timeout} minutes) reached. Termina=
+ting \"${*}\"${ANSI_RESET}\\n"
+> +  kill -9 "${cmd_pid}"
+> +}
+> +
+> +travis_wait() {
+> +  local timeout=3D"${1}"
+> +
+> +  if [[ "${timeout}" =3D~ ^[0-9]+$ ]]; then
+> +    shift
+> +  else
+> +    timeout=3D20
+> +  fi
+> +
+> +  local cmd=3D("${@}")
+> +  local log_file=3D"travis_wait_${$}.log"
+> +
+> +  "${cmd[@]}" &>"${log_file}" &
+> +  local cmd_pid=3D"${!}"
+> +
+> +  travis_jigger "${!}" "${timeout}" "${cmd[@]}" &
+> +  local jigger_pid=3D"${!}"
+> +  local result
+> +
+> +  {
+> +    set +e
+> +    wait "${cmd_pid}" 2>/dev/null
+> +    result=3D"${?}"
+> +    ps -p"${jigger_pid}" &>/dev/null && kill "${jigger_pid}"
+> +    set -e
+> +  }
+> +
+> +  if [[ "${result}" -eq 0 ]]; then
+> +    echo -e "\\n${ANSI_GREEN}The command ${cmd[*]} exited with ${resul=
+t}.${ANSI_RESET}"
+> +  else
+> +    echo -e "\\n${ANSI_RED}The command ${cmd[*]} exited with ${result}=
+.${ANSI_RESET}"
+> +  fi
+> +
+> +  echo -e "\\n${ANSI_GREEN}Log:${ANSI_RESET}\\n"
+> +  cat "${log_file}"
+> +
+> +  return "${result}"
+> +}
