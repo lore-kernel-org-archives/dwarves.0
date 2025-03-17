@@ -1,760 +1,109 @@
-Received: from out-185.mta0.migadu.com (out-185.mta0.migadu.com [91.218.175.185])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 184531EB192
-	for <dwarves@vger.kernel.org>; Wed, 12 Mar 2025 20:28:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.185
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E8F11FECB6
+	for <dwarves@vger.kernel.org>; Mon, 17 Mar 2025 22:24:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741811337; cv=none; b=Iojw2cgv4gOOZ/ls1O9iBnjfo80cthnA6iUA1Pk/3PWY9nWe4Ahj4HV5hNvaBQY2/rGViHR5bjESFuHdmmACEPq9/NK1tSTvnDpoOyQZmtBU8DU2PmDXCSezCsEyHphfiFc7L9bNxRCzgCw1gI+ErPWCQ4Mc0D0QRW/kj9SdOps=
+	t=1742250269; cv=none; b=jUSfQlzVL65k7yGidqJySsrcDFZ+yqmhDSxhZSUF73ohLiF0I9YfBYL0mtbBDsDgcAdADwqhxcLdFSuAqg8CZz/AYNW/2Z0wBJq0xxTvvdvqZUyP/PWiRKsVWnQdfohDK+x9I87y9GU/ZvUecYXM0am38kxYs9ZIcEPn9/XQdow=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741811337; c=relaxed/simple;
-	bh=cR8IrSw67SXN9xOiC53rHR0ldNCJXWdzziBEdQWdEOE=;
-	h=MIME-Version:Date:Content-Type:From:Message-ID:Subject:To:Cc:
-	 In-Reply-To:References; b=O8RAJVjZ/Q/l1FX7MJ6UA/wyN14NtzlQhD9J77uTAazTWHlTY0I3h8tuj9AAniwq+OJ0BxB13UMeK+uanzSySgYSV0ycHtyarpyDPlVNVi7SZmg2aIeGnGWmbwRswIzoOtjbLa8I0Ksvx+s2mTYQMKSdOTM3PZCmOVc27wJi3Wo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=cAHnyM9U; arc=none smtp.client-ip=91.218.175.185
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1742250269; c=relaxed/simple;
+	bh=rKlaSfeOL/ClT9nMnyH/t8r9RRBB2gXlo6EGvOf05qo=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=McSBBY8RjwiUbWC1DYNi5nEIJ13Yz78hnhBIZXPwDJ12wRqw4J/9wZad/ojjYPqZjXxcQT8FBU5CjiTQGglCRMb3T2Jh4RbYpUbHASUXAm2kQbwdTtJAZ8CG3Tl2DURNTzfkChDFa0aYnnGEirwyrgitpndgqlWyuoEUnKGrJBw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--samitolvanen.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=3BtmeZ7M; arc=none smtp.client-ip=209.85.214.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--samitolvanen.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="cAHnyM9U"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="3BtmeZ7M"
+Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-2242f3fd213so72978685ad.1
+        for <dwarves@vger.kernel.org>; Mon, 17 Mar 2025 15:24:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1742250268; x=1742855068; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=bppswTLwyuw8FSA9NviSJa6kYnh7VslUHPOj1zMFbvg=;
+        b=3BtmeZ7MYCyQkldurUUHeiSdTh3T9LAG6hFk/ogmLxwu1DQofD36dB7vU0rYoUgcZn
+         yKbscyeiYbYe1Lk0oa5Wk3IiuivTcdSvbks+IlxLzpUU5Rk8nB0A4gFYJaTgD7ESjldO
+         h5l4OMmElZV2HnSZSDHbAaYA0oksbtGK7RLxSgoYGJCjQ+EVVuWi5Pm6NZbgrDx1tLuq
+         7CELSq6jvLSrvCz6LB7HvSdn0TOJ68HZbOlJd+ds9wjLUrA6b0vhORYdNaAe833gzEWm
+         U1Ktrpic4AblGe7G8eOhOG4413vUyKoCAXAMEGOgHlKVgjRiP5NypWnpwqfQp95c4uGf
+         N/Qw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1742250268; x=1742855068;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=bppswTLwyuw8FSA9NviSJa6kYnh7VslUHPOj1zMFbvg=;
+        b=Tb6klR7nydoMbxBBwmORLD6n1rIaUuaFiDFZZM8bU2AofrpTNJf3J1niF58HPgAweO
+         CGbE7AfIvPm9/m/ZVMVhQRyd8ooSpk/iR4ASgCFfWGl5pJtFCFX1aOMMOtKgGlCLdVSq
+         L9tEoYLFmBvN7JgG1NcJiisvmkAB2TPF4QRrqN8DqUtBYHavX7M7+HESR3Ghh1KQDDe2
+         gwJscb8yedFAGTTUwv9mY6UpC6wQKFYMwPdGslen8zSVgUm+rkvCKOnOYG2jvv0RwHAT
+         IELGgz670YADabwJjcexJMcjC/BVAWFgW7SMhj8446S3t2iqsaIJy0ip0mufK95ihBVD
+         Majg==
+X-Gm-Message-State: AOJu0Yw/M3GJ4qRqPfYKbXVMpZGFw5+MX4qCC2SaNYS8xapkIW+ncqQz
+	ZX+pwA6NFd91j0fSUdKSL8bW8bRwKl0OCcKi223HYy8ayKZHl3Yz/wJ3zqwjFq8wS2Dw2zKy9Uu
+	MDg5NAEW6TG/UR1oDMPKedlfGqeH2WKeHFgGBlCHi9q+Xs0kByUBG6qzrLlKsNVPfQvwe98ig97
+	cITpgKGQQvkFdFbpZtvcO5jOHpoCZtFofj7+1SG5zzzvaa2k6/xipmjB2SiwGKybgUZQ==
+X-Google-Smtp-Source: AGHT+IHLmcNi0Ym0nS0iDdRoTURL2g7j6W6DLmylxhOIm26ynKdWVbz34Pa3vMP3oN303VoxmlsPmqhIQ7I9p8ETbhs=
+X-Received: from pjbsd7.prod.google.com ([2002:a17:90b:5147:b0:2ff:6132:8710])
+ (user=samitolvanen job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a17:902:f70c:b0:225:ac99:ae08 with SMTP id d9443c01a7336-225e0a288c6mr192303765ad.5.1742250267625;
+ Mon, 17 Mar 2025 15:24:27 -0700 (PDT)
+Date: Mon, 17 Mar 2025 22:24:24 +0000
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1741811331;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=H6f8GF2sVPqeMstiCMo7kvP+EpG8CY9A6KPK0u46BgA=;
-	b=cAHnyM9UsA8XvSdjp9pTQSqC3uHmKoQruPALvM2IcMbN9pYuc9VKUsDebDhbEdnT35wQMi
-	Pc+DwdwEdNlJUaAzB7pmLcWEiqOMNJAVbfWqrsHM1CZyVw9ZXtCp3GUNpSleUg2q5/80ty
-	lYLgD5GGp+307kOpp8oYuOdbLgD0jHo=
-Date: Wed, 12 Mar 2025 20:28:50 +0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: "Ihor Solodrai" <ihor.solodrai@linux.dev>
-Message-ID: <41e06a415837a8ae59b61e653527331a63a8d9ba@linux.dev>
-TLS-Required: No
-Subject: Re: [PATCH dwarves 1/2] dwarves: Add github actions to build, test
-To: "Alan Maguire" <alan.maguire@oracle.com>, acme@kernel.org
-Cc: yonghong.song@linux.dev, dwarves@vger.kernel.org, ast@kernel.org,
- andrii@kernel.org, bpf@vger.kernel.org, song@kernel.org,
- eddyz87@gmail.com, olsajiri@gmail.com, "Alan Maguire"
- <alan.maguire@oracle.com>
-In-Reply-To: <20250306170455.2957229-2-alan.maguire@oracle.com>
-References: <20250306170455.2957229-1-alan.maguire@oracle.com>
- <20250306170455.2957229-2-alan.maguire@oracle.com>
-X-Migadu-Flow: FLOW_OUT
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.49.0.rc1.451.g8f38331e32-goog
+Message-ID: <20250317222424.3837495-1-samitolvanen@google.com>
+Subject: [PATCH dwarves] btf_encoder: Filter out __gendwarfksyms_ptr_
+From: Sami Tolvanen <samitolvanen@google.com>
+To: dwarves@vger.kernel.org
+Cc: acme@kernel.org, yonghong.song@linux.dev, ast@kernel.org, 
+	andrii@kernel.org, bpf@vger.kernel.org, daniel@iogearbox.net, song@kernel.org, 
+	eddyz87@gmail.com, olsajiri@gmail.com, stephen.s.brennan@oracle.com, 
+	laura.nao@collabora.com, ubizjak@gmail.com, alan.maguire@oracle.com, 
+	xiyou.wangcong@gmail.com, Sami Tolvanen <samitolvanen@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On 3/6/25 9:04 AM, Alan Maguire wrote:
-> Borrowing heavily from libbpf github actions, add workflows to
->
-> - build dwarves for gcc, LLVM
->
-> - build dwarves for x86_64/aarch64 and use it to build a Linux
->   kernel including BTF generation; then run dwarves selftests
->   using generated vmlinux
->
-> These workflows trigger on all pushes.  This will alow both
-> developers working on dwarves to push a branch to their github
-> repo and test, and also for maintainer pushes from git.kernel.org
-> pahole repo to trigger tests.
->
-> And similar to libbpf, additional workflows for coverity etc
-> are triggered for pushes to master/next.
->
-> Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
-> ---
->  .github/actions/debian/action.yml | 16 ++++++
->  .github/actions/setup/action.yml  | 23 ++++++++
->  .github/workflows/build.yml       | 37 ++++++++++++
->  .github/workflows/codeql.yml      | 53 +++++++++++++++++
->  .github/workflows/coverity.yml    | 33 +++++++++++
->  .github/workflows/lint.yml        | 20 +++++++
->  .github/workflows/ondemand.yml    | 31 ++++++++++
->  .github/workflows/test.yml        | 36 ++++++++++++
->  .github/workflows/vmtest.yml      | 94 +++++++++++++++++++++++++++++++
->  ci/managers/debian.sh             | 88 +++++++++++++++++++++++++++++
->  ci/managers/travis_wait.bash      | 61 ++++++++++++++++++++
->  11 files changed, 492 insertions(+)
->  create mode 100644 .github/actions/debian/action.yml
->  create mode 100644 .github/actions/setup/action.yml
->  create mode 100644 .github/workflows/build.yml
->  create mode 100644 .github/workflows/codeql.yml
->  create mode 100644 .github/workflows/coverity.yml
->  create mode 100644 .github/workflows/lint.yml
->  create mode 100644 .github/workflows/ondemand.yml
->  create mode 100644 .github/workflows/test.yml
->  create mode 100644 .github/workflows/vmtest.yml
->  create mode 100755 ci/managers/debian.sh
->  create mode 100644 ci/managers/travis_wait.bash
+With CONFIG_GENDWARFKSYMS, __gendwarfksyms_ptr_<symbol>
+variables are added to the kernel in EXPORT_SYMBOL() to ensure
+DWARF type information is available for exported symbols in the
+TUs where they're actually exported. These symbols are dropped
+when linking vmlinux, but dangling references to them remain
+in DWARF, which results in thousands of 0 address variables
+that pahole needs to validate (since commit 9810758003ce
+("btf_encoder: Verify 0 address DWARF variables are in ELF
+section")).
 
-Hi Alan. See comments below.
+Filter out symbols with the __gendwarfksyms_ptr_ name prefix in
+filter_variable_name() instead of calling variable_in_sec()
+for all of them. This reduces the time it takes to process
+.tmp_vmlinux1 by ~77% on my test system:
 
->
-> diff --git a/.github/actions/debian/action.yml b/.github/actions/debian=
-/action.yml
-> new file mode 100644
-> index 0000000..23d48ec
-> --- /dev/null
-> +++ b/.github/actions/debian/action.yml
-> @@ -0,0 +1,16 @@
-> +name: 'debian'
-> +description: 'Build'
-> +inputs:
-> +  target:
-> +    description: 'Run target'
-> +    required: true
-> +runs:
-> +  using: "composite"
-> +  steps:
-> +    - run: |
-> +        source /tmp/ci_setup
-> +        bash -x $CI_ROOT/managers/debian.sh SETUP
-> +        bash -x $CI_ROOT/managers/debian.sh ${{ inputs.target }}
-> +        bash -x $CI_ROOT/managers/debian.sh CLEANUP
-> +      shell: bash
-> +
-> diff --git a/.github/actions/setup/action.yml b/.github/actions/setup/a=
-ction.yml
-> new file mode 100644
-> index 0000000..ae6eb78
-> --- /dev/null
-> +++ b/.github/actions/setup/action.yml
-> @@ -0,0 +1,23 @@
-> +name: 'setup'
-> +description: 'setup env, create /tmp/ci_setup'
-> +runs:
-> +  using: "composite"
-> +  steps:
-> +    - id: variables
-> +      run: |
-> +        export REPO_ROOT=3D$GITHUB_WORKSPACE
-> +        export CI_ROOT=3D$REPO_ROOT/ci
-> +        # this is somewhat ugly, but that is the easiest way to share =
-this code with
-> +        # arch specific docker
-> +        echo 'echo ::group::Env setup' > /tmp/ci_setup
-> +        echo export DEBIAN_FRONTEND=3Dnoninteractive >> /tmp/ci_setup
-> +        echo sudo apt-get update >> /tmp/ci_setup
-> +        echo sudo apt-get install -y aptitude qemu-kvm zstd binutils-d=
-ev elfutils libcap-dev libelf-dev libdw-dev libguestfs-tools >> /tmp/ci_s=
-etup
-> +        echo export PROJECT_NAME=3D'dwarves' >> /tmp/ci_setup
-> +        echo export AUTHOR_EMAIL=3D"$(git log -1 --pretty=3D\"%aE\")" =
->> /tmp/ci_setup
-> +        echo export REPO_ROOT=3D$GITHUB_WORKSPACE >> /tmp/ci_setup
-> +        echo export CI_ROOT=3D$REPO_ROOT/ci >> /tmp/ci_setup
-> +        echo export VMTEST_ROOT=3D$CI_ROOT/vmtest >> /tmp/ci_setup
-> +        echo 'echo ::endgroup::' >> /tmp/ci_setup
-> +      shell: bash
-> +
+Before: 35.775 +- 0.121  seconds time elapsed  ( +-  0.34% )
+ After: 8.3516 +- 0.0407 seconds time elapsed  ( +-  0.49% )
 
-I strongly suggest getting rid of local actions (`.github/actions`
-directory) and moving this into an independent shell script.
+Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
+---
+ btf_encoder.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Generally, it is much easier to develop and debug CI code if you can
-run it locally (say in a fresh docker container). From this follows
-that it is better to write most of it in separately executable scripts
-(in bash or python, like in bpftrace [1]), as opposed to inlining in
-yaml.
+diff --git a/btf_encoder.c b/btf_encoder.c
+index 1bde310..2bf7c59 100644
+--- a/btf_encoder.c
++++ b/btf_encoder.c
+@@ -2239,6 +2239,7 @@ static bool filter_variable_name(const char *name)
+ 		X("__UNIQUE_ID"),
+ 		X("__tpstrtab_"),
+ 		X("__exitcall_"),
++		X("__gendwarfksyms_ptr_"),
+ 		X("__func_stack_frame_non_standard_")
+ 		#undef X
+ 	};
 
-For an example of how this might be done see very recently set up
-libbpf/usdt CI [2].
+base-commit: a0be596ae76c720d21eef257dec1cf2462130da1
+-- 
+2.49.0.rc1.451.g8f38331e32-goog
 
-In this particular case, I'd put inlined code into ./ci/setup.sh and
-source it directly from bash when necesary.
-
-It's a little hypocritical of me to point this out, as libbpf still
-has all this mess. But I'd like you to avoid it while it's relatively
-simple.
-
-[1] https://github.com/bpftrace/bpftrace/blob/master/.github/include/ci.p=
-y
-[2] https://github.com/libbpf/usdt/tree/main/.github
-
-> diff --git a/.github/workflows/build.yml b/.github/workflows/build.yml
-> new file mode 100644
-> index 0000000..a95f71f
-> --- /dev/null
-> +++ b/.github/workflows/build.yml
-> @@ -0,0 +1,37 @@
-> +name: dwarves-build
-> +
-> +on:
-> +  pull_request:
-> +  push:
-> +  schedule:
-> +    - cron:  '0 18 * * *'
-> +
-> +concurrency:
-> +  group: ci-build-${{ github.head_ref }}
-> +  cancel-in-progress: true
-> +
-> +jobs:
-> +
-> +  debian:
-> +    runs-on: ubuntu-latest
-> +    name: Debian Build (${{ matrix.name }})
-> +    strategy:
-> +      fail-fast: false
-> +      matrix:
-> +        include:
-> +          - name: default
-> +            target: RUN
-> +          - name: gcc-12
-> +            target: RUN_GCC12
-> +          - name: clang
-> +            target: RUN_CLANG
-> +    steps:
-> +      - uses: actions/checkout@v4
-> +        name: Checkout
-> +      - uses: ./.github/actions/setup
-> +        name: Setup
-> +      - uses: ./.github/actions/debian
-> +        name: Build
-> +        with:
-> +          target: ${{ matrix.target }}
-> +
-> diff --git a/.github/workflows/codeql.yml b/.github/workflows/codeql.ym=
-l
-> new file mode 100644
-> index 0000000..a140be1
-> --- /dev/null
-> +++ b/.github/workflows/codeql.yml
-> @@ -0,0 +1,53 @@
-> +---
-> +# vi: ts=3D2 sw=3D2 et:
-> +
-> +name: "CodeQL"
-> +
-> +on:
-> +  push:
-> +    branches:
-> +      - master
-> +  pull_request:
-> +    branches:
-> +      - master
-> +      - next
-> +
-> +permissions:
-> +  contents: read
-> +
-> +jobs:
-> +  analyze:
-> +    name: Analyze
-> +    runs-on: ubuntu-latest
-> +    concurrency:
-> +      group: ${{ github.workflow }}-${{ matrix.language }}-${{ github.=
-ref }}
-> +      cancel-in-progress: true
-> +    permissions:
-> +      actions: read
-> +      security-events: write
-> +
-> +    strategy:
-> +      fail-fast: false
-> +      matrix:
-> +        language: ['cpp', 'python']
-> +
-> +    steps:
-> +      - name: Checkout repository
-> +        uses: actions/checkout@v4
-> +
-> +      - name: Initialize CodeQL
-> +        uses: github/codeql-action/init@v2
-
-Supported codeql-action version is v3:
-https://github.com/github/codeql-action?tab=3Dreadme-ov-file#supported-ve=
-rsions-of-the-codeql-action
-
-> +        with:
-> +          languages: ${{ matrix.language }}
-> +          queries: +security-extended,security-and-quality
-> +
-> +      - name: Setup
-> +        uses: ./.github/actions/setup
-> +
-> +      - name: Build
-> +        run: |
-> +          source /tmp/ci_setup
-> +          make -C ./src
-> +
-> +      - name: Perform CodeQL Analysis
-> +        uses: github/codeql-action/analyze@v2
-
-Same: v3 here.
-
-> diff --git a/.github/workflows/coverity.yml b/.github/workflows/coverit=
-y.yml
-> new file mode 100644
-> index 0000000..c672a7d
-> --- /dev/null
-> +++ b/.github/workflows/coverity.yml
-> @@ -0,0 +1,33 @@
-> +name: dwarves-ci-coverity
-> +
-> +on:
-> +  push:
-> +    branches:
-> +      - master
-> +      - next
-> +  schedule:
-> +    - cron:  '0 18 * * *'
-> +
-> +jobs:
-> +  coverity:
-> +    runs-on: ubuntu-latest
-> +    name: Coverity
-> +    env:
-> +      COVERITY_SCAN_TOKEN: ${{ secrets.COVERITY_SCAN_TOKEN }}
-
-Assuming you're intentionally want to run coverity scans, you will
-have to set up COVERITY_SCAN_TOKEN secret variable in settings of the
-github repository.
-
-> +    steps:
-> +      - uses: actions/checkout@v4
-> +      - uses: ./.github/actions/setup
-> +      - name: Run coverity
-> +        if: ${{ env.COVERITY_SCAN_TOKEN }}
-> +        run: |
-> +          source /tmp/ci_setup
-> +          export COVERITY_SCAN_NOTIFICATION_EMAIL=3D"${AUTHOR_EMAIL}"
-> +          export COVERITY_SCAN_BRANCH_PATTERN=3D${GITHUB_REF##refs/*/}
-> +          export TRAVIS_BRANCH=3D${COVERITY_SCAN_BRANCH_PATTERN}
-> +          scripts/coverity.sh
-> +        env:
-> +          COVERITY_SCAN_PROJECT_NAME: dwarves=20
->=20+          COVERITY_SCAN_BUILD_COMMAND_PREPEND: 'cmake .'
-> +          COVERITY_SCAN_BUILD_COMMAND: 'make'
-> +      - name: SCM log
-> +        run: cat /home/runner/work/dwarves/cov-int/scm_log.txt
-> diff --git a/.github/workflows/lint.yml b/.github/workflows/lint.yml
-> new file mode 100644
-> index 0000000..ca13052
-> --- /dev/null
-> +++ b/.github/workflows/lint.yml
-> @@ -0,0 +1,20 @@
-> +name: "lint"
-> +
-> +on:
-> +  pull_request:
-> +  push:
-> +    branches:
-> +      - master
-> +      - next
-> +
-> +jobs:
-> +  shellcheck:
-> +    name: ShellCheck
-> +    runs-on: ubuntu-latest
-> +    steps:
-> +      - name: Checkout repository
-> +        uses: actions/checkout@v4
-> +      - name: Run ShellCheck
-> +        uses: ludeeus/action-shellcheck@master
-> +        env:
-> +          SHELLCHECK_OPTS: --severity=3Derror
-> diff --git a/.github/workflows/ondemand.yml b/.github/workflows/ondeman=
-d.yml
-> new file mode 100644
-> index 0000000..5f3034f
-> --- /dev/null
-> +++ b/.github/workflows/ondemand.yml
-
-The usefullness of ondemand is dubious, tbh. Usually you want to run
-CI against a change in the code, which can be achieved by enabling
-testing workflows on pull_request. IMO ondemand workflow is not
-necessary.
-
-> @@ -0,0 +1,31 @@
-> +name: ondemand
-> +
-> +on:
-> +  workflow_dispatch:
-> +    inputs:
-> +      arch:
-> +        default: 'x86_64'
-> +        required: true
-> +      llvm-version:
-> +        default: '18'
-> +        required: true
-> +      kernel:
-> +        default: 'LATEST'
-> +        required: true
-> +      pahole:
-> +        default: "master"
-> +        required: true
-> +      runs-on:
-> +        default: 'ubuntu-24.04'
-> +        required: true
-> +
-> +jobs:
-> +  vmtest:
-> +    name: ${{ inputs.kernel }} kernel llvm-${{ inputs.llvm-version }} =
-pahole@${{ inputs.pahole }}
-> +    uses: ./.github/workflows/vmtest.yml
-> +    with:
-> +      runs_on: ${{ inputs.runs-on }}
-> +      kernel: ${{ inputs.kernel }}
-> +      arch: ${{ inputs.arch }}
-> +      llvm-version: ${{ inputs.llvm-version }}
-> +      pahole: ${{ inputs.pahole }}
-> diff --git a/.github/workflows/test.yml b/.github/workflows/test.yml
-> new file mode 100644
-> index 0000000..f11ebfe
-> --- /dev/null
-> +++ b/.github/workflows/test.yml
-> @@ -0,0 +1,36 @@
-> +name: dwarves-ci
-> +
-> +on:
-> +  pull_request:
-> +  push:
-> +  schedule:
-> +    - cron:  '0 18 * * *'
-> +
-> +concurrency:
-> +  group: ci-test-${{ github.head_ref }}
-> +  cancel-in-progress: true
-> +
-> +jobs:
-> +  vmtest:
-> +    strategy:
-> +      fail-fast: false
-> +      matrix:
-> +        include:
-> +          - kernel: 'LATEST'
-> +            runs_on: 'ubuntu-24.04'
-> +            arch: 'x86_64'
-> +            llvm-version: '18'
-> +            pahole: 'master'
-> +          - kernel: 'LATEST'
-> +            runs_on: 'ubuntu-24.04-arm'
-> +            arch: 'aarch64'
-> +            llvm-version: '18'
-> +            pahole: 'tmp.master'
-> +    name: Linux ${{ matrix.kernel }}
-> +    uses: ./.github/workflows/vmtest.yml
-> +    with:
-> +      runs_on: ${{ matrix.runs_on }}
-> +      kernel: ${{ matrix.kernel }}
-> +      arch: ${{ matrix.arch }}
-> +      llvm-version: ${{ matrix.llvm-version }}
-> +      pahole: ${{ matrix.pahole }}
-
-llvm-version and pahole inputs don't make any sense for dwarves
-testing. These are inputs of the libbpf/ci/setup-build-env, because
-selftests/bpf need LLVM, and BPF CI also builds kernel with LLVM (do
-you want to do that too for pahole testing?).
-
-My point is, you may be able to avoid the dependency on
-libbpf/ci/setup-build-env and simply install required packages
-directly. It'll be less work for a job, and these inputs won't be
-necessary.
-
-> diff --git a/.github/workflows/vmtest.yml b/.github/workflows/vmtest.ym=
-l
-> new file mode 100644
-> index 0000000..aef5f0a
-> --- /dev/null
-> +++ b/.github/workflows/vmtest.yml
-> @@ -0,0 +1,94 @@
-> +name: 'Build kernel run selftests via vmtest'
-> +
-> +on:
-> +  workflow_call:
-> +    inputs:
-> +      runs_on:
-> +        required: true
-> +        default: 'ubuntu-24.04'
-> +        type: string
-> +      arch:
-> +        description: 'what arch to test'
-> +        required: true
-> +        default: 'x86_64'
-> +        type: string
-> +      kernel:
-> +        description: 'kernel version or LATEST'
-> +        required: true
-> +        default: 'LATEST'
-> +        type: string
-> +      pahole:
-> +        description: 'pahole rev or branch'
-> +        required: false
-> +        default: 'master'
-> +        type: string
-> +      llvm-version:
-> +        description: 'llvm version'
-> +        required: false
-> +        default: '18'
-> +        type: string
-> +jobs:
-> +  vmtest:
-> +    name: pahole@${{ inputs.arch }}
-> +    runs-on: ${{ inputs.runs_on }}
-> +    steps:
-> +
-> +      - uses: actions/checkout@v4
-> +
-> +      - name: Setup environment
-> +        uses: libbpf/ci/setup-build-env@v3
-> +        with:
-> +          pahole: ${{ inputs.pahole }}
-> +          arch: ${{ inputs.arch }}
-> +          llvm-version: ${{ inputs.llvm-version }}
-> +
-> +      - name: Build,install current pahole
-> +        shell: bash
-> +        run: |
-> +          git config --global --add safe.directory ${{ github.workspac=
-e }}
-> +          git submodule update --init
-> +          mkdir build
-> +          cd build
-> +          cmake -DGIT_SUBMODULE=3DOFF -DBUILD_SHARED_LIBS=3DOFF ..
-> +          make -j$((4*$(nproc))) all
-> +          make DESTDIR=3D../install install
-> +
-> +      - name: Get kernel source
-> +        uses: libbpf/ci/get-linux-source@v3
-> +        with:
-> +          repo: 'https://git.kernel.org/pub/scm/linux/kernel/git/bpf/b=
-pf-next.git'
-> +          dest: '${{ github.workspace }}/.kernel'
-> +
-> +      - name: Configure, build kernel with current pahole
-> +        shell: bash
-> +        run: |
-> +          export PATH=3D${{ github.workspace }}/install/usr/local/bin:=
-${PATH}
-> +          export PAHOLE=3D${{ github.workspace }}/install/usr/local/bi=
-n/pahole
-> +          which pahole
-> +          $PAHOLE --version
-> +          cd .kernel
-> +          cat tools/testing/selftests/bpf/config \
-> +              tools/testing/selftests/bpf/config.${{ inputs.arch }} > =
-.config
-> +          # this file might or might not exist depending on kernel ver=
-sion
-> +          cat tools/testing/selftests/bpf/config.vm >> .config || :
-> +          make olddefconfig && make prepare
-> +          grep PAHOLE .config
-> +          grep _BTF .config
-> +          make -j $((4*$(nproc))) all
-> +          cp vmlinux ${{ github.workspace }}
-> +          cd -
-> +
-> +      - name: Run selftests
-
-nit: probably worth giving this step a different name.
-
-> +        env:
-> +          VMLINUX: ${{ github.workspace }}/vmlinux
-> +          LLVM_VERSION: ${{ inputs.llvm-version }}
-> +          SELFTESTS: ${{ github.workspace }}/tests
-> +        shell: bash
-> +        run: |
-> +           cd $SELFTESTS
-> +           export PATH=3D${{ github.workspace }}/install/usr/local/bin=
-:${PATH}
-> +           which pahole
-> +           pahole --version
-> +           vmlinux=3D$VMLINUX ./tests
-> +           cd -
-> +
-> diff --git a/ci/managers/debian.sh b/ci/managers/debian.sh
-
-This script is too complicated for my taste. I would replace it with
-something like docker run step + build-in-docker.sh combination in
-libbpf for ubuntu:
-* https://github.com/libbpf/libbpf/blob/master/.github/workflows/build.ym=
-l#L85-L91
-* https://github.com/libbpf/libbpf/blob/master/ci/build-in-docker.sh
-
-There are more potential parameters here, but all this logic with
-phases is just redundant IMO. For example, apt packages installation
-can be covered by a single shared script (that assumes ubuntu/debian).
-
-> new file mode 100755
-> index 0000000..8316b02
-> --- /dev/null
-> +++ b/ci/managers/debian.sh
-> @@ -0,0 +1,88 @@
-> +#!/bin/bash
-> +
-> +PHASES=3D(${@:-SETUP RUN CLEANUP})
-> +DEBIAN_RELEASE=3D"${DEBIAN_RELEASE:-testing}"
-> +CONT_NAME=3D"${CONT_NAME:-dwarves-debian-$DEBIAN_RELEASE}"
-> +ENV_VARS=3D"${ENV_VARS:-}"
-> +DOCKER_RUN=3D"${DOCKER_RUN:-docker run}"
-> +REPO_ROOT=3D"${REPO_ROOT:-$PWD}"
-> +ADDITIONAL_DEPS=3D(pkgconf)
-> +EXTRA_CFLAGS=3D""
-> +EXTRA_LDFLAGS=3D""
-> +
-> +function info() {
-> +    echo -e "\033[33;1m$1\033[0m"
-> +}
-> +
-> +function error() {
-> +    echo -e "\033[31;1m$1\033[0m"
-> +}
-> +
-> +function docker_exec() {
-> +    docker exec $ENV_VARS $CONT_NAME "$@"
-> +}
-> +
-> +set -eu
-> +
-> +source "$(dirname $0)/travis_wait.bash"
-> +
-> +for phase in "${PHASES[@]}"; do
-> +    case $phase in
-> +        SETUP)
-> +            info "Setup phase"
-> +            info "Using Debian $DEBIAN_RELEASE"
-> +
-> +            docker --version
-> +
-> +            docker pull debian:$DEBIAN_RELEASE
-> +            info "Starting container $CONT_NAME"
-> +            $DOCKER_RUN -v $REPO_ROOT:/build:rw \
-> +                        -w /build --privileged=3Dtrue --name $CONT_NAM=
-E \
-> +                        -dit --net=3Dhost debian:$DEBIAN_RELEASE /bin/=
-bash
-> +            echo -e "::group::Build Env Setup"
-> +
-> +            docker_exec apt-get -y update
-> +            docker_exec apt-get -y install aptitude
-> +            docker_exec aptitude -y install make cmake libz-dev libelf=
--dev libdw-dev git
-> +            docker_exec aptitude -y install "${ADDITIONAL_DEPS[@]}"
-> +            echo -e "::endgroup::"
-> +            ;;
-> +        RUN|RUN_CLANG|RUN_CLANG16|RUN_GCC12)
-> +            CC=3D"cc"
-> +            if [[ "$phase" =3D~ "RUN_CLANG(\d+)(_ASAN)?" ]]; then
-> +                ENV_VARS=3D"-e CC=3Dclang-${BASH_REMATCH[1]} -e CXX=3D=
-clang++-${BASH_REMATCH[1]}"
-> +                CC=3D"clang-${BASH_REMATCH[1]}"
-> +            elif [[ "$phase" =3D *"CLANG"* ]]; then
-> +                ENV_VARS=3D"-e CC=3Dclang -e CXX=3Dclang++"
-> +                CC=3D"clang"
-> +            elif [[ "$phase" =3D~ "RUN_GCC(\d+)(_ASAN)?" ]]; then
-> +                ENV_VARS=3D"-e CC=3Dgcc-${BASH_REMATCH[1]} -e CXX=3Dg+=
-+-${BASH_REMATCH[1]}"
-> +                CC=3D"gcc-${BASH_REMATCH[1]}"
-> +            fi
-> +            if [[ "$CC" !=3D "cc" ]]; then
-> +                docker_exec aptitude -y install "$CC"
-> +            else
-> +                docker_exec aptitude -y install gcc
-> +            fi
-> +	    git config --global --add safe.directory $REPO_ROOT
-> +	    pushd $REPO_ROOT
-> +	    git submodule update --init
-> +	    popd
-> +            docker_exec mkdir build install
-> +            docker_exec ${CC} --version
-> +            info "build"
-> +            docker_exec cmake -DGIT_SUBMODULE=3DOFF .
-> +	    docker_exec make -j$((4*$(nproc)))
-> +            info "install"
-> +            docker_exec make DESTDIR=3D../install install
-> +            ;;
-> +        CLEANUP)
-> +            info "Cleanup phase"
-> +            docker stop $CONT_NAME
-> +            docker rm -f $CONT_NAME
-> +            ;;
-> +        *)
-> +            echo >&2 "Unknown phase '$phase'"
-> +            exit 1
-> +    esac
-> +done
-> diff --git a/ci/managers/travis_wait.bash b/ci/managers/travis_wait.bas=
-h
-> new file mode 100644
-> index 0000000..acf6ad1
-> --- /dev/null
-> +++ b/ci/managers/travis_wait.bash
-
-I am not sure you need this script. I see it's used in
-ci/managers/debian.sh, but I don't know it's purpose.
-
-> @@ -0,0 +1,61 @@
-> +# This was borrowed from https://github.com/travis-ci/travis-build/tre=
-e/master/lib/travis/build/bash
-> +# to get around https://github.com/travis-ci/travis-ci/issues/9979. It=
- should probably be removed
-> +# as soon as Travis CI has started to provide an easy way to export th=
-e functions to bash scripts.
-> +
-> +travis_jigger() {
-> +  local cmd_pid=3D"${1}"
-> +  shift
-> +  local timeout=3D"${1}"
-> +  shift
-> +  local count=3D0
-> +
-> +  echo -e "\\n"
-> +
-> +  while [[ "${count}" -lt "${timeout}" ]]; do
-> +    count=3D"$((count + 1))"
-> +    echo -ne "Still running (${count} of ${timeout}): ${*}\\r"
-> +    sleep 60
-> +  done
-> +
-> +  echo -e "\\n${ANSI_RED}Timeout (${timeout} minutes) reached. Termina=
-ting \"${*}\"${ANSI_RESET}\\n"
-> +  kill -9 "${cmd_pid}"
-> +}
-> +
-> +travis_wait() {
-> +  local timeout=3D"${1}"
-> +
-> +  if [[ "${timeout}" =3D~ ^[0-9]+$ ]]; then
-> +    shift
-> +  else
-> +    timeout=3D20
-> +  fi
-> +
-> +  local cmd=3D("${@}")
-> +  local log_file=3D"travis_wait_${$}.log"
-> +
-> +  "${cmd[@]}" &>"${log_file}" &
-> +  local cmd_pid=3D"${!}"
-> +
-> +  travis_jigger "${!}" "${timeout}" "${cmd[@]}" &
-> +  local jigger_pid=3D"${!}"
-> +  local result
-> +
-> +  {
-> +    set +e
-> +    wait "${cmd_pid}" 2>/dev/null
-> +    result=3D"${?}"
-> +    ps -p"${jigger_pid}" &>/dev/null && kill "${jigger_pid}"
-> +    set -e
-> +  }
-> +
-> +  if [[ "${result}" -eq 0 ]]; then
-> +    echo -e "\\n${ANSI_GREEN}The command ${cmd[*]} exited with ${resul=
-t}.${ANSI_RESET}"
-> +  else
-> +    echo -e "\\n${ANSI_RED}The command ${cmd[*]} exited with ${result}=
-.${ANSI_RESET}"
-> +  fi
-> +
-> +  echo -e "\\n${ANSI_GREEN}Log:${ANSI_RESET}\\n"
-> +  cat "${log_file}"
-> +
-> +  return "${result}"
-> +}
