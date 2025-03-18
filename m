@@ -1,130 +1,130 @@
-Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
+Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C77091F180C;
-	Tue, 18 Mar 2025 09:52:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E46D20D4F5
+	for <dwarves@vger.kernel.org>; Tue, 18 Mar 2025 16:15:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742291547; cv=none; b=ORbX2FCbRu/zDcRnxlQ4PJxIdPSR7bMIXaLuvtixzbrNygYPUCnznbODQ5wkHxPn0RvcSBx4LoawmJMs01Wwny+/hJV4CCVIHDw9RewdvHKDqwsGRwxwZsNiMlq7mX9IFswUWAKYEszkpQ2VDMaDLAUQBNYULSDpq3mf22DAvMw=
+	t=1742314537; cv=none; b=aYvhM1xPHHl0LkXkxakrmHufv7qKCEnXF2ZlszHKz5/iGghSWkA2kKry4LzFTa6RH5oMXnSQygU/Jz5e26W0DzwNapgq0SFOV7uXhrjawyR5r9yjQEGzoGbzKxgl1l6Q5OXmGaJcFS2auoNv+NKGYUKabEu4iazzCIUsAudcQ7M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742291547; c=relaxed/simple;
-	bh=uT6topeQGMU31LB4uXHJ0a4KZR0fXhTWh//rqKHoDOY=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=a5H0K3Mifl0k2R6ETxM0iiDklKr0WkIiOdcWPWQpUWROf+tqShKGZW9klpwgcz/2wxlg6pxoIyyD6wfYzdCcGeDx1W/vuV97IkV9WzObDFqSoRYOoGgXdfX/qV61Rf6JF5rNnjOT0u0yH6dSE1ofa0+V5H6I7gISFtvrVtVQsMw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nKvCOpkE; arc=none smtp.client-ip=209.85.208.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1742314537; c=relaxed/simple;
+	bh=R7eA5Mv2ZRBzZPTP51WxwulE4PDYO0DbiP30DfcHZtM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=OyFB+R+eawhqdWn86llFETmzMpb4PTc9PNuAzA7vT8rNPiML6FZOT3lBdJGeHxsf3sSB9M1bRdZ/pKeNuaAiQhwuuRF83IL9c9CdhIfXCvmRKksBCJmPh21mlrYgk99K10IZ++UpV+20pellslTqlanLzbXKzToW9Z2LgzrAF6w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=EaLPPLmR; arc=none smtp.client-ip=209.85.208.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nKvCOpkE"
-Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-5e61da95244so9322660a12.2;
-        Tue, 18 Mar 2025 02:52:24 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="EaLPPLmR"
+Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-5e789411187so10173a12.1
+        for <dwarves@vger.kernel.org>; Tue, 18 Mar 2025 09:15:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1742291543; x=1742896343; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=JeX+KrW/EvBHt4dW28OU/pGCmkcVm+7hPwgvlnCKYIs=;
-        b=nKvCOpkEpWMhlE9Q1xThPjiHg9dGhkozQ957A8wKqTn6amLFm7ow5tG/aPzix28sI6
-         MT7oRVRmTqktStsTuVFIDLd7rhClBJox8Yza0KStiWvoQ/TuEYoN/sHkQiXkdlti3aG2
-         R713ifOeKTroC2UiGNvIIU20DZwc/Qhky6i0gW89+pa4Wv6fxn6mBq9mAYzs8dudfZcn
-         BdN44Dl4jNJqENspMasbQzc5WDI6IRl0IuU2BjRHDVnfta3ZQoZnA4t3h6A7Atnx3jPM
-         WH+wVGWTk7PHdOPhSpW7hpp8E5kIM8LB2ZuWnqV5GQ0l3vy6PUDojZTgGq61EktiQlHu
-         RuKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742291543; x=1742896343;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+        d=google.com; s=20230601; t=1742314534; x=1742919334; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=JeX+KrW/EvBHt4dW28OU/pGCmkcVm+7hPwgvlnCKYIs=;
-        b=YO7jKUPmgzSCflDpso32Lk1pz7jpPtjlGLT72/N7joZv+Xw/l3yeV9n7pd7xHHiTDr
-         VGufZmf1es5r5/7zasobGe2/MHCC566gBJfPPk31yCcwJbPnlTQ+OjiE21GAvSUnu0ut
-         Bkxy7OuYpdltob0seYGabkToT2xqCZdDWmaZgOdHhDVfC9jGcM9/tdP71wzlJqGxgqga
-         +w8IyZs667tybDvRosESDajFnSHd/hJEcRNxHlDHb8FCMmAxdw5iM1UuBU71Rf94zYVI
-         sLYAbaS4+GPgGYQznCvRNp0anKUDmGst2MGSa50mXGXqFpUQg8K5YAIdYWJ7kI8SoYGy
-         R08A==
-X-Forwarded-Encrypted: i=1; AJvYcCUOjE1eLzI/nr0/EA16q/AHcTwHqPzYtZYUjMdefI+1mZyakQaX6rC6cbD9UqIdozDBPPg=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyj7p4mj+wquWRiM5KJTTbSxa/3FQ8Rqf4g9pejMeluVMAHonZH
-	dAyBJkVsn+n2tbaJSEDV8tRMxZfpstKqOvC+yOaivBm7Iay4hcQUC22Nwcqw+cbhsQ==
-X-Gm-Gg: ASbGncvKxbg+8D802jPdfxPE9UCjCuMNpOy1HIWEd8P+h3KOlaXwm18zOFCEAjRYncR
-	8iBs4gu2CfyYGNd+XQng4XxNtzMU5lD0936OJOtJyh7xnsCQjz0ptCfHbzqCCHqKLr126Wem64F
-	OIr2UGOdCHNV/eAQ4LCRL6Vi6Giq9kDS2+xiWRabfDxQ0YQpWlP8G2qDxvBvtC2tw1fGxbvelcb
-	y1VlrG00sgdY+46SDjqIuqWmUQGiunanpKv63OKZnj+nKAKwbdz8MqwgVnaDWDVnKXhX2+E8FhB
-	swGLiw2NAH4IvC2F5JleKNODCZmMw+w=
-X-Google-Smtp-Source: AGHT+IF9N/ANNQJhDZ2/vF0mFdUGt1UhozVjw/vf47VxbyKTaephnWcPJvuSE9WXY8AQ6G4+ZEccEA==
-X-Received: by 2002:a17:907:3f23:b0:ac2:8118:27e7 with SMTP id a640c23a62f3a-ac33041af9bmr1524261466b.50.1742291542616;
-        Tue, 18 Mar 2025 02:52:22 -0700 (PDT)
-Received: from krava ([173.38.220.48])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5e816974016sm7484941a12.24.2025.03.18.02.52.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Mar 2025 02:52:22 -0700 (PDT)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Tue, 18 Mar 2025 10:52:20 +0100
-To: Sami Tolvanen <samitolvanen@google.com>
-Cc: dwarves@vger.kernel.org, acme@kernel.org, yonghong.song@linux.dev,
-	ast@kernel.org, andrii@kernel.org, bpf@vger.kernel.org,
-	daniel@iogearbox.net, song@kernel.org, eddyz87@gmail.com,
-	olsajiri@gmail.com, stephen.s.brennan@oracle.com,
-	laura.nao@collabora.com, ubizjak@gmail.com, alan.maguire@oracle.com,
-	xiyou.wangcong@gmail.com
-Subject: Re: [PATCH dwarves] btf_encoder: Filter out __gendwarfksyms_ptr_
-Message-ID: <Z9lCVHIyjLjQ4BOs@krava>
-References: <20250317222424.3837495-1-samitolvanen@google.com>
+        bh=+jmJDqj16bmJCjhJHgSW9PkuV4ug8h0RWaHNKUC3WIA=;
+        b=EaLPPLmR4u4noMPIIkN2JBdGTFs1GEsOCI68LWIK9gyleiC++WfGQnNfKhRctd+r92
+         gXaWka0OTGRRXWjc0Ba+gi/hSG/STYaMAgqNV4v2YmJXYFwta0MxTrkMcqoEjlnY4lu6
+         lKgHEY3pUFmfYls0oKE9w9ywib/2c3F6kzwKWsjqrXbwI5cjjCHhJT4Zo3RlefdTVzG+
+         XGNoJw6THpVBHYp6H/I5zWDu+PE5azaXx6exDxHjooDMvpV+B5STnvCBcusXVl4RqAVI
+         KkcqbSheKzahUvUQiHg1UvZfioOdJwU4OXank233F5YIYEx50zN8NWZ/VHoc0scngajA
+         QR+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1742314534; x=1742919334;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=+jmJDqj16bmJCjhJHgSW9PkuV4ug8h0RWaHNKUC3WIA=;
+        b=EDN9nxcr4/S1NjyTEADB6HWUmUta37PXkGNaYBKa1NxNJymPMbZA9OoJA8OY0cdh0u
+         X8gnskvw4x5ZfSG2ORXKlvDAZ4w00npzKvf2nbWR6dsQKlZhGEyrVhqrqI/pkfMnOU8q
+         9NLL0cS2IMWpyo/6liQcAphTBSRYeW/WpPzwaQQX8iv3j09NsRqzS6MjLtiHRCZD5dCX
+         n9igyhP4QexPlRD/5cjQG5mJavANp8ytJkZyVtQUdN7pyZ/JYHji6wWMkGrmKOz9YYZF
+         TgbEKT05hBBg4mDTjCyaODKi9Nk0xmzbnmPndqwzTxHHk/6abk00JlXkxVguXD/RPS56
+         zoPA==
+X-Gm-Message-State: AOJu0Yxmzxaa9J3sbfvplUuP/E070Bkh7J7WDWAClMFiavhqdNfe1sy/
+	y4R5erGEb/yYL9+iVrLMNog7lgH7jHih2n2mo9pdRAUdv++jSmU7lKFvXKOClfjC6U0VXYQ8tw1
+	kmx/b2I8YkZzmtlJnPvtpUUFgKApr/iRz0vwr
+X-Gm-Gg: ASbGncsX/CuqgHZpoHNiG554pOETXIPVH67wLZqlH7gejniYh/nYJcrYS8UhOLYfGYD
+	4RBjfo3FQY6whckLdJx2CNt5Vh06ptYF6wwnU/Tw0m72oSaef2VCBQUieg9Rea8f+pivYEG2dxO
+	a7BqInZwKufQ5LC6CjpBsJzcL58VlhwhE8oOY8r46Fjf+dZBkU4QWnRg==
+X-Google-Smtp-Source: AGHT+IGXt+xqNpAVcpebaXRpxd9bCxp02FSds3ENDxbbFRWzfDZuvvK6vbayuYFf8wzaBO32B6LUhost6TotQ85rfzc=
+X-Received: by 2002:a50:ab14:0:b0:5e5:ba42:80a9 with SMTP id
+ 4fb4d7f45d1cf-5eb3c17c749mr84493a12.1.1742314533554; Tue, 18 Mar 2025
+ 09:15:33 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250317222424.3837495-1-samitolvanen@google.com>
+References: <20250317222424.3837495-1-samitolvanen@google.com> <Z9lCVHIyjLjQ4BOs@krava>
+In-Reply-To: <Z9lCVHIyjLjQ4BOs@krava>
+From: Sami Tolvanen <samitolvanen@google.com>
+Date: Tue, 18 Mar 2025 16:14:55 +0000
+X-Gm-Features: AQ5f1JoXfdBPbJRrnsraWCFbKaMMxt3_bX5Xqq1EC96SWysXOKWn97Dz_vL-zOE
+Message-ID: <CABCJKud4e_bBvOrXSrOmkiw+XX8DJzKBC=nxmNP7e=GusGEkOw@mail.gmail.com>
+Subject: Re: [PATCH dwarves] btf_encoder: Filter out __gendwarfksyms_ptr_
+To: Jiri Olsa <olsajiri@gmail.com>
+Cc: dwarves@vger.kernel.org, acme@kernel.org, yonghong.song@linux.dev, 
+	ast@kernel.org, andrii@kernel.org, bpf@vger.kernel.org, daniel@iogearbox.net, 
+	song@kernel.org, eddyz87@gmail.com, stephen.s.brennan@oracle.com, 
+	laura.nao@collabora.com, ubizjak@gmail.com, alan.maguire@oracle.com, 
+	xiyou.wangcong@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Mar 17, 2025 at 10:24:24PM +0000, Sami Tolvanen wrote:
-> With CONFIG_GENDWARFKSYMS, __gendwarfksyms_ptr_<symbol>
-> variables are added to the kernel in EXPORT_SYMBOL() to ensure
-> DWARF type information is available for exported symbols in the
-> TUs where they're actually exported. These symbols are dropped
-> when linking vmlinux, but dangling references to them remain
-> in DWARF, which results in thousands of 0 address variables
-> that pahole needs to validate (since commit 9810758003ce
-> ("btf_encoder: Verify 0 address DWARF variables are in ELF
-> section")).
-> 
-> Filter out symbols with the __gendwarfksyms_ptr_ name prefix in
-> filter_variable_name() instead of calling variable_in_sec()
-> for all of them. This reduces the time it takes to process
-> .tmp_vmlinux1 by ~77% on my test system:
-> 
-> Before: 35.775 +- 0.121  seconds time elapsed  ( +-  0.34% )
->  After: 8.3516 +- 0.0407 seconds time elapsed  ( +-  0.49% )
+Hi Jiri,
 
-makes sense to me, I just can't reproduce the speedup
-could you please share your .config?
+On Tue, Mar 18, 2025 at 9:52=E2=80=AFAM Jiri Olsa <olsajiri@gmail.com> wrot=
+e:
+>
+> On Mon, Mar 17, 2025 at 10:24:24PM +0000, Sami Tolvanen wrote:
+> > With CONFIG_GENDWARFKSYMS, __gendwarfksyms_ptr_<symbol>
+> > variables are added to the kernel in EXPORT_SYMBOL() to ensure
+> > DWARF type information is available for exported symbols in the
+> > TUs where they're actually exported. These symbols are dropped
+> > when linking vmlinux, but dangling references to them remain
+> > in DWARF, which results in thousands of 0 address variables
+> > that pahole needs to validate (since commit 9810758003ce
+> > ("btf_encoder: Verify 0 address DWARF variables are in ELF
+> > section")).
+> >
+> > Filter out symbols with the __gendwarfksyms_ptr_ name prefix in
+> > filter_variable_name() instead of calling variable_in_sec()
+> > for all of them. This reduces the time it takes to process
+> > .tmp_vmlinux1 by ~77% on my test system:
+> >
+> > Before: 35.775 +- 0.121  seconds time elapsed  ( +-  0.34% )
+> >  After: 8.3516 +- 0.0407 seconds time elapsed  ( +-  0.49% )
+>
+> makes sense to me, I just can't reproduce the speedup
+> could you please share your .config?
 
-thanks,
-jirka
+Sure, here's the config I used to repro this:
 
+https://gist.github.com/samitolvanen/dca66a1a779861be27579f88c9b6ba5d
 
-> 
-> Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
-> ---
->  btf_encoder.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/btf_encoder.c b/btf_encoder.c
-> index 1bde310..2bf7c59 100644
-> --- a/btf_encoder.c
-> +++ b/btf_encoder.c
-> @@ -2239,6 +2239,7 @@ static bool filter_variable_name(const char *name)
->  		X("__UNIQUE_ID"),
->  		X("__tpstrtab_"),
->  		X("__exitcall_"),
-> +		X("__gendwarfksyms_ptr_"),
->  		X("__func_stack_frame_non_standard_")
->  		#undef X
->  	};
-> 
-> base-commit: a0be596ae76c720d21eef257dec1cf2462130da1
-> -- 
-> 2.49.0.rc1.451.g8f38331e32-goog
-> 
+This is essentially x86_64 defconfig with GENDWARFKSYMS and
+DEBUG_INFO_BTF both enabled. When building this config with gcc, we
+end up with 0 address __gendwarfksyms_ptr variables in DWARF:
+
+...
+0x0001b5c6:   DW_TAG_variable
+                DW_AT_name      ("__gendwarfksyms_ptr_system_state")
+                DW_AT_decl_file ("../init/main.c")
+                DW_AT_decl_line (129)
+                DW_AT_decl_column       (1)
+                DW_AT_type      (0x0001b5dc "system_states *")
+                DW_AT_location  (DW_OP_addr 0x0)
+...
+
+Note that this doesn't seem to happen when building with Clang.
+
+Before commit 9810758003ce this resulted in pahole thinking all these
+variables are in the .data..percpu section, which resulted in
+btf_datasec_check_meta() failing with "Invalid offset" during boot.
+pahole/next doesn't have this issue, but validating the 0 address
+variables is unfortunately a bit slow when we have a lot of them.
+
+Sami
