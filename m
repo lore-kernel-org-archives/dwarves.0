@@ -1,170 +1,110 @@
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-170.mta0.migadu.com (out-170.mta0.migadu.com [91.218.175.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC76B2F5E;
-	Thu, 20 Mar 2025 11:59:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF1E51B422A
+	for <dwarves@vger.kernel.org>; Thu, 20 Mar 2025 16:32:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742471956; cv=none; b=l+25diX1DgSp3byHfKI9wLl3OhVDrhHvsj4c8v022JgqGk2H5obUJ/9I2gwoq7na5AV7ye+0qZWsAE6uRSWChsLeE6/uVeQ11hJJBgAI7mZoyXbud9j+fywjXFjC3f/WElJM5qUFlCjex3g//7qn0xg6d23qt3wWIuoSHaDHNsI=
+	t=1742488340; cv=none; b=Y+x3sb8Er5Ok0yz70hSO/GTuV4jY4s4JvCFtD2QE3kZYwB4Q5abVia6it2aIYt0B3OBHy9RDB2pSuqMzGzQAqJ/yxIXdln2kwlMLPanZlTW+HJar2i2ikCfRU/GofjMQzwHp8lxbRfKmDvs3fTBO/J5Jk8RD2IkZ63CNi2Ya58A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742471956; c=relaxed/simple;
-	bh=k6pZ/VHA/PYYSfWztLxy5AzpbmLLFqCsFo79lk+FYtA=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rhoxSJeWj+WpP0Q2CzqxBCRMsRsQ1tX4lMU304lTjadTj5TzuY+9b5h2E8Z8oTkefUCxkJgKxtp2gk5eFj0ZO3sm7///oAmQuRR15wlvZIpPlulEPLwu1aru5PVFw9tjIOziu1R8TEtEZPUaRhuE20k/EY3C98ceYP1789u5Mxo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Myy7cr3n; arc=none smtp.client-ip=209.85.128.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1742488340; c=relaxed/simple;
+	bh=vD1y1DDkDUM4yp5FfHeL2BOmu+2bZs6XIZphB0iRpJA=;
+	h=MIME-Version:Date:Content-Type:From:Message-ID:Subject:To:Cc:
+	 In-Reply-To:References; b=ZHofWMSTkGYcpnkwrwmnr2tD4bHpJDvXpLMA0TtuFPTKDpAwNR7UhwLMojtxbyNVP0Jxcx9B+9dA9CF9YtnPmk4HNVQPX2yauvLX3VzSehvAqCFzLzv6kufvq0cywcJAzAeIKGVaIFGU9XrPE+HnDs5368Nvxs5832degDMsEiw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=QGgyIOsb; arc=none smtp.client-ip=91.218.175.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Myy7cr3n"
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-43cfe574976so3844385e9.1;
-        Thu, 20 Mar 2025 04:59:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1742471953; x=1743076753; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:date:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=h/x60ZukXyaekHgP17JR/LQ2RUh943tF9WlzTRtfbzk=;
-        b=Myy7cr3nUCMmRUGZDJhrnWRpc5lOROHURXh6/sQ3yYYQIHLtJdv6BnIhblI6Fpj78s
-         6Jg6iw+Rz5nO+olIB7s4jAn1JP68ogXkTR44fzORFxASQXsKfAxA8NZaR+EXQdtsxDJg
-         SbN13VCZPXF3Oy3nRump5IYxnV55lnzqjwxH/D9HNTDUgdi0ecZn7lttkPQaUCkeHte5
-         rA6dOR5/OP+feR8vYu9sFANvBbVsusyNLLIRKEGxEc0Evbzp3uIu/Ov/BGLSDXkSC2PR
-         pVVGN1iGROjj6PC6+oHf0QajoCETWCH2VRstoduUkgNRdiUpP8ukLHLRL7oRBJ8DqIBe
-         GtUw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742471953; x=1743076753;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:date:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=h/x60ZukXyaekHgP17JR/LQ2RUh943tF9WlzTRtfbzk=;
-        b=Jd3OeFf5LDELc74gRKYKQ5cQPIvH6rxQnEjygNKooU/rRQJ//qdWUTcZPYn7ye31Do
-         51Jh8MgmQCkfy9ghHeqL66NKOBu9XuDCRp0Jhc6I/3VNn8UdWF5NLa149UydsM2MAYVs
-         e5q63Ndot8Vrwk/+AQnHSJZufCorwzEA+n6Mv2Xe7l+QVylLQ6rMoK+3t4mVHrX0F/Jj
-         2I6khxI8TF3XWoXMooJt9MYNoh6S9j8WXVfnD+G3ZB8GNlUvizG4Wv2DfROqjGbDreKV
-         nKF9/1iRR+Js7q3XXEhrI4tsN6w0stkbZBo3Tp32XVKsRp484Bb1iDcrUov/fY0wHMwY
-         YaZQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUkDlaCNXkx/8mEl7VcVkvJjXPcKZSgM2ABkVD+/vRffbawh7SRRzMXLCcWPbCpH+qeAEYg/38Fhw==@vger.kernel.org, AJvYcCVlpGsFzqNEhwsRYpqUowZpEUu+Zq9VfGxNHCXYL3w8kx5r9DSm5cLVYBSSqHVI3ywNJi4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwOjbNOMqkTKwilQFt+xCQYxu00x2BsafnY1mjjgIB+sfMhHXop
-	Ol1EAZheUxIumrMM440HhRR9LqhyYzo0TyZi3kOjIEjfDpHL2vlj
-X-Gm-Gg: ASbGncuyt6UgHOpwkP7f7MHUBGWO3Z+ixlnUKCEaS6TJRIN898o6lO/EDIKYUcrHBc/
-	HTkrcffHCyHZc3M68pH8s4mJA1tkvdMiYJ24MMlR1dG0/d7a2+qYdOrGMQvsSh7zhhh0Z4MD5ya
-	y0e7ZIMYpfm04Ghippkkh67Xq8C9ZyXh8yDK5HQwAR5LccoJvg6schayDQ3VSOmQ0xi3GfNTcYT
-	vGl46ZhO4Ud0BrtghWunOYz+NtYPEawDXK5Y0CXAV3qudM5DHzR10hlssSG7d25Dsdilv4vJFvb
-	x4vvJbSJ7MmEMFJhIceZtvEuTITI4hI=
-X-Google-Smtp-Source: AGHT+IFMKykbyPo81mhCNedV78s7FbwsBTXH+w5A2qK43bVHhHMZ3vyKLqnRYinFRz4X+TOImi9REw==
-X-Received: by 2002:a05:600c:1d15:b0:43c:ec4c:25b4 with SMTP id 5b1f17b1804b1-43d4378b3ddmr51012115e9.10.1742471952465;
-        Thu, 20 Mar 2025 04:59:12 -0700 (PDT)
-Received: from krava ([173.38.220.37])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-395cb7ebe3csm24015961f8f.99.2025.03.20.04.59.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Mar 2025 04:59:11 -0700 (PDT)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Thu, 20 Mar 2025 12:59:09 +0100
-To: Alan Maguire <alan.maguire@oracle.com>
-Cc: Sami Tolvanen <samitolvanen@google.com>, Jiri Olsa <olsajiri@gmail.com>,
-	dwarves@vger.kernel.org, acme@kernel.org, yonghong.song@linux.dev,
-	ast@kernel.org, andrii@kernel.org, bpf@vger.kernel.org,
-	daniel@iogearbox.net, song@kernel.org, eddyz87@gmail.com,
-	stephen.s.brennan@oracle.com, laura.nao@collabora.com,
-	ubizjak@gmail.com, xiyou.wangcong@gmail.com
-Subject: Re: [PATCH dwarves] btf_encoder: Filter out __gendwarfksyms_ptr_
-Message-ID: <Z9wDDY4ET94ruTSh@krava>
-References: <20250317222424.3837495-1-samitolvanen@google.com>
- <Z9lCVHIyjLjQ4BOs@krava>
- <CABCJKud4e_bBvOrXSrOmkiw+XX8DJzKBC=nxmNP7e=GusGEkOw@mail.gmail.com>
- <45881882-46d2-43ca-b833-439363926c87@oracle.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="QGgyIOsb"
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <45881882-46d2-43ca-b833-439363926c87@oracle.com>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1742488326;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=vD1y1DDkDUM4yp5FfHeL2BOmu+2bZs6XIZphB0iRpJA=;
+	b=QGgyIOsbWeb4a1fYAwm5TBWPrEe6TdULZ1Tm0s4pq761ldH4PCCEyq7diPuH/Mgv8zLfG+
+	G3kSzsXM8L4VAXA4PsryfXcBBVfkMcka2q3V0SKYXEk/FMO2wWCsflURxxS2Gp96rtjMBx
+	iPtKdDlUJX54KuJD52YjnXv3HlQc+RM=
+Date: Thu, 20 Mar 2025 16:32:04 +0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: "Ihor Solodrai" <ihor.solodrai@linux.dev>
+Message-ID: <9c3d6c77c79bfa2175a727886ce235152054f605@linux.dev>
+TLS-Required: No
+Subject: Re: [PATCH dwarves v4 0/6] btf_encoder: emit type tags for bpf_arena
+  pointers
+To: dwarves@vger.kernel.org, bpf@vger.kernel.org
+Cc: acme@kernel.org, alan.maguire@oracle.com, ast@kernel.org,
+ andrii@kernel.org, eddyz87@gmail.com, mykolal@fb.com,
+ kernel-team@meta.com
+In-Reply-To: <20250228194654.1022535-1-ihor.solodrai@linux.dev>
+References: <20250228194654.1022535-1-ihor.solodrai@linux.dev>
+X-Migadu-Flow: FLOW_OUT
 
-On Thu, Mar 20, 2025 at 09:54:21AM +0000, Alan Maguire wrote:
-> On 18/03/2025 16:14, Sami Tolvanen wrote:
-> > Hi Jiri,
-> > 
-> > On Tue, Mar 18, 2025 at 9:52 AM Jiri Olsa <olsajiri@gmail.com> wrote:
-> >>
-> >> On Mon, Mar 17, 2025 at 10:24:24PM +0000, Sami Tolvanen wrote:
-> >>> With CONFIG_GENDWARFKSYMS, __gendwarfksyms_ptr_<symbol>
-> >>> variables are added to the kernel in EXPORT_SYMBOL() to ensure
-> >>> DWARF type information is available for exported symbols in the
-> >>> TUs where they're actually exported. These symbols are dropped
-> >>> when linking vmlinux, but dangling references to them remain
-> >>> in DWARF, which results in thousands of 0 address variables
-> >>> that pahole needs to validate (since commit 9810758003ce
-> >>> ("btf_encoder: Verify 0 address DWARF variables are in ELF
-> >>> section")).
-> >>>
-> >>> Filter out symbols with the __gendwarfksyms_ptr_ name prefix in
-> >>> filter_variable_name() instead of calling variable_in_sec()
-> >>> for all of them. This reduces the time it takes to process
-> >>> .tmp_vmlinux1 by ~77% on my test system:
-> >>>
-> >>> Before: 35.775 +- 0.121  seconds time elapsed  ( +-  0.34% )
-> >>>  After: 8.3516 +- 0.0407 seconds time elapsed  ( +-  0.49% )
-> >>
-> >> makes sense to me, I just can't reproduce the speedup
-> >> could you please share your .config?
-> > 
-> > Sure, here's the config I used to repro this:
-> > 
-> > https://gist.github.com/samitolvanen/dca66a1a779861be27579f88c9b6ba5d
-> > 
-> > This is essentially x86_64 defconfig with GENDWARFKSYMS and
-> > DEBUG_INFO_BTF both enabled. When building this config with gcc, we
-> > end up with 0 address __gendwarfksyms_ptr variables in DWARF:
-> > 
-> > ...
-> > 0x0001b5c6:   DW_TAG_variable
-> >                 DW_AT_name      ("__gendwarfksyms_ptr_system_state")
-> >                 DW_AT_decl_file ("../init/main.c")
-> >                 DW_AT_decl_line (129)
-> >                 DW_AT_decl_column       (1)
-> >                 DW_AT_type      (0x0001b5dc "system_states *")
-> >                 DW_AT_location  (DW_OP_addr 0x0)
-> > ...
-> > 
-> > Note that this doesn't seem to happen when building with Clang.
-> > 
-> > Before commit 9810758003ce this resulted in pahole thinking all these
-> > variables are in the .data..percpu section, which resulted in
-> > btf_datasec_check_meta() failing with "Invalid offset" during boot.
-> > pahole/next doesn't have this issue, but validating the 0 address
-> > variables is unfortunately a bit slow when we have a lot of them.
-> >
-> 
-> Thanks for the fix Sami! I've tested it at my end and can reproduce the
-> longer time for BTF encoding on x86_64 prior to the fix and its
-> resolution. Let's wait a bit longer before landing it to see if anyone
-> else gets a chance to test/ack it, but I think we should probably also add a
-> 
-> Fixes: 9810758003ce9f ("btf_encoder: Verify 0 address DWARF variables
-> are in ELF section")
+On 2/28/25 11:46 AM, Ihor Solodrai wrote:
+> This patch series implements emitting appropriate BTF type tags for
+> argument and return types of kfuncs marked with KF_ARENA_* flags.
+>
+> For additional context see the description of BPF patch
+> "bpf: define KF_ARENA_* flags for bpf_arena kfuncs" [1].
+>
+> The feature depends on recent changes in libbpf [2].
+>
+> [1] https://lore.kernel.org/bpf/20250206003148.2308659-1-ihor.solodrai@=
+linux.dev/
+> [2] https://lore.kernel.org/bpf/20250130201239.1429648-1-ihor.solodrai@=
+linux.dev/
+>
+> v3->v4:
+> * Add a patch (#2) replacing compile-time libbpf version checks with
+> runtime checks for symbol availablility
+> * Add a patch (#3) bumping libbpf submodule commit to latest master
+> * Modify "btf_encoder: emit type tags for bpf_arena pointers"
+> (#2->#4) to not use compile time libbpf version checks
+>
+> v2->v3:
+> * Nits in patch #1
+>
+> v1->v2:
+> * Rewrite patch #1 refactoring btf_encoder__tag_kfuncs(): now the
+> post-processing step is removed entirely, and kfuncs are tagged in
+> btf_encoder__add_func().
+> * Nits and renames in patch #2
+> * Add patch #4 editing man pages
+>
+> v2: https://lore.kernel.org/dwarves/20250212201552.1431219-1-ihor.solod=
+rai@linux.dev/
+> v1: https://lore.kernel.org/dwarves/20250207021442.155703-1-ihor.solodr=
+ai@linux.dev/
+>
+> Ihor Solodrai (6):
+> btf_encoder: refactor btf_encoder__tag_kfuncs()
+> btf_encoder: use __weak declarations of version-dependent libbpf API
+> pahole: sync with libbpf mainline
+> btf_encoder: emit type tags for bpf_arena pointers
+> pahole: introduce --btf_feature=3Dattributes
+> man-pages: describe attributes and remove reproducible_build
 
-+1 
+Hi Alan, Arnaldo.
 
-Acked-by: Jiri Olsa <jolsa@kernel.org>
+This series hasn't received any comments in a while.
+Do you plan to review/land this?
 
-thanks,
-jirka
+Thanks.
 
-
-> 
-> (no need to resend for this; I can add it when committing it)
-> 
-> I'm thinking we should also try and incorporate some performance tests
-> for vmlinux BTF encoding into the tests subdirectory to better catch
-> issues like this; perhaps the CI can baseline encoding performance on
-> the next branch versus the branch that has the changes..
-> 
-> Thanks again!
-> 
-> Alan
-> > Sami
-> 
+>
+> btf_encoder.c | 328 ++++++++++++++++++++++-----------------------
+> dwarves.h | 13 +-
+> lib/bpf | 2 +-
+> man-pages/pahole.1 | 7 +-
+> pahole.c | 11 +-
+> 5 files changed, 188 insertions(+), 173 deletions(-)
+>
