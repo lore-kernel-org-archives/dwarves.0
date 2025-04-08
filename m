@@ -1,239 +1,754 @@
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+Received: from out-176.mta1.migadu.com (out-176.mta1.migadu.com [95.215.58.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 505C8267723
-	for <dwarves@vger.kernel.org>; Tue,  8 Apr 2025 10:14:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.165.32
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744107277; cv=fail; b=HQqhg0B5PNwMWbh3i341U/0bkIDOEr1IpS8w0fepsENENFSO5Xu/+jr8bYslZkHtNjH0wG9DJHtDjguzSDXf7MjBOoaJw7USfZrnPqF6HTTvxuuUw9u9Gh/nFK0tIVe0+FrfKIJCrxL6xIhQHMj85qCkOcaD4xY8x38d5MlFzP4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744107277; c=relaxed/simple;
-	bh=Y5H9QTNzzpWDVKKATI2epMPm8cAECCmS3Vp62Eu63Ys=;
-	h=Message-ID:Date:Subject:From:To:Cc:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=rkro9VudgfmsVXzd7Sd8a4pHsxvllaXK2uJ9ClTKw+AoC3/5RYhM0+pJupa48xEuu1m6jk9EAaO4/uSGIgADS6RcIlkJ9iBrqFAc99aAwiIBrTQEhl6WXML0zaaJIT05OF7o/XPnPws1KX749CiLGemuZSAG7L82d86MudX48mA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=AHyyHsQ6; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=CrCFjhXg; arc=fail smtp.client-ip=205.220.165.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0572236A74;
+	Tue,  8 Apr 2025 19:09:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.176
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1744139369; cv=none; b=WT5wub8mIsM/hzZCi5G1LWnu6DyiVOekipk6tWY1MOV1wQ1vED4oXA+B4OS8PLJAB1loIEM6NKdu84vg4nyqC0XdrADTYR6TrH+hJpUYZzAKYPCYwAaBuaBJ97xrYyRH8x9h+D+rtf2ZNwcdtZ28zOgfJ78MgmE8TUaIYVkkMog=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1744139369; c=relaxed/simple;
+	bh=GSUg5sNeSui9JMRAzL6Ok1x2MOGwlypfFoOatdXpj6Q=;
+	h=MIME-Version:Date:Content-Type:From:Message-ID:Subject:To:Cc:
+	 In-Reply-To:References; b=bZA+TVxPpaAjPcyIPgY4LLhjNyWlrMaFHSLrHiD6SgxifBWObw5NJuXOONkTZ5h+sXRLDeydt1CX5oJkLHO8iOXBmYjCgMc19yAKg4svcN3PriLIXTe1yy41v8wkQqRVX5y78m5Dkb1bZdz+eST5EUwW1lYIiUEq92KLbwys4u0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=TrtqpCyH; arc=none smtp.client-ip=95.215.58.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="AHyyHsQ6";
-	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="CrCFjhXg"
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5381u4ZQ025619;
-	Tue, 8 Apr 2025 10:14:32 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=
-	corp-2023-11-20; bh=t/tXqAbgMQ8hAMs5qpugPijxtEgniv2XB3n1dOJgFIw=; b=
-	AHyyHsQ6oTL2DtuvYpbgfWxW6etB006zE+2ex1vb7Piz01T4ExOJKn/MHoYTrCLz
-	1FbLneP5JcMXvJsrSQFghWJrBGVbZtwT/NX/gTHadVUjvGtOORLM/f2tGWZ0pm9s
-	p7+SiXl3YVJjGoC8hW1eZjCtaCbH8XPtvMz9trO5a516sBaOI54H/AkMe4ncJCIV
-	2nVHTij4bEFmIqL0xrbjMQeS/e6yOaIwQh2qaInrH1t8gO/bw/kpjwq2Trl4Jkgh
-	LhZ+nzqiQzWJk/cgBOj/019+VSj9GxnnxpEMt/vZS1IpanVQFjdULXfVDQB9WLRz
-	x41JYsnQCkLerbhRe4cIUg==
-Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 45tw2tme0c-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 08 Apr 2025 10:14:32 +0000 (GMT)
-Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 538A5B1d020992;
-	Tue, 8 Apr 2025 10:14:30 GMT
-Received: from bn1pr04cu002.outbound.protection.outlook.com (mail-eastus2azlp17010021.outbound.protection.outlook.com [40.93.12.21])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 45ttyfbpfa-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 08 Apr 2025 10:14:30 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=V6l3n3qnVwg6St5QL4sQqtJq7TIm6cdOwlmIfRWNEuyfXo1jXenQuUmhtQZpWb+3tsRi019vR5T6N0POcUc42DG3g3biQIKP00xl2rFXBe1pZ/YI00yOKCPisQY4OluxXf4W6CDiVdssd1+5aRS5aHDk7gIqq3kyL1GawEBDCvumjyPYL1/Rhqgx35gwkBHIvg+jouku5keyk+sl/BGCD4c2mFXPW6CAHbZfwzWtOMVBuvhHWPwF9nKXugU7ExGg4mhLSoTYhpGYpELaGxYPu6gZ9psECeid0VensbpO+jL/zfgYZiUY9JN2HMS3LSG1emszEVGz+hVeFpvekoCO8w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=t/tXqAbgMQ8hAMs5qpugPijxtEgniv2XB3n1dOJgFIw=;
- b=wiU7FJhwJkIbo0NsubVVkFbLTDlQN39u4SihZO1tqIlIDINMtdSyGzavyiNLWLAj36npMdq0IkFfC0DKNNOUkNAqvd6fU89kDXNhpBxV7V4+YIXAEMJTHOjmDCwe7CDRHbWtzfA4vKciWzdMGoULbcgNpeosLtLundPk4V5N3CXN1cqgFw4d2rTylAVQwrXXMVXJXfg+btJo5CxIoATvJ1L0eqpmcy+wNTrzclbKO46B4yGSxpg/dWzs7b9Jm7PtxcDLcYEa4VRzDhtYLkS1Pdi38hrU6W6XlRwoXJVpR9Zw3baUXN2lATI4GwM11uvyA/WWNKtFs73GX6mDRyMGYA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=t/tXqAbgMQ8hAMs5qpugPijxtEgniv2XB3n1dOJgFIw=;
- b=CrCFjhXgtBTca9JB8C5hkCdqckdBv0rjc1rRGNotqqxXN5uMc2CSpkvdqass1Z5FcWqC3nk+tS9lPxY6XQiQ8cKINSpCE/dTW8yi7cJBN0azlO5L+2qNWml2hZWRkFwePfqzhYHES1JsI+14NI+WEeFqb5NjHy6Vf8pE/TMtX50=
-Received: from BLAPR10MB5267.namprd10.prod.outlook.com (2603:10b6:208:30e::22)
- by LV3PR10MB7915.namprd10.prod.outlook.com (2603:10b6:408:21a::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8606.33; Tue, 8 Apr
- 2025 10:14:29 +0000
-Received: from BLAPR10MB5267.namprd10.prod.outlook.com
- ([fe80::682b:c879:9f97:a34f]) by BLAPR10MB5267.namprd10.prod.outlook.com
- ([fe80::682b:c879:9f97:a34f%5]) with mapi id 15.20.8632.017; Tue, 8 Apr 2025
- 10:14:29 +0000
-Message-ID: <c784d7c1-431e-4c43-95ac-ab6869c1d7da@oracle.com>
-Date: Tue, 8 Apr 2025 11:14:25 +0100
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/1] pahole: When trying to encode BTF avoid DWARF less
- files
-From: Alan Maguire <alan.maguire@oracle.com>
-To: Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc: dwarves@vger.kernel.org
-References: <Z-2fij_hUUFYF-YQ@x1>
- <a86ffc25-fdbc-4f6a-9579-aff59400d677@oracle.com>
-Content-Language: en-GB
-In-Reply-To: <a86ffc25-fdbc-4f6a-9579-aff59400d677@oracle.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: DUZPR01CA0097.eurprd01.prod.exchangelabs.com
- (2603:10a6:10:4bb::10) To BLAPR10MB5267.namprd10.prod.outlook.com
- (2603:10b6:208:30e::22)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="TrtqpCyH"
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BLAPR10MB5267:EE_|LV3PR10MB7915:EE_
-X-MS-Office365-Filtering-Correlation-Id: a0d1f68e-27bd-422d-fc13-08dd768625f1
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|376014|1800799024;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?YjJWKzAvWlZqVzFDaS9rVWoyZXpyVUphVC9qNjViZGY1SnlQOUpKcHBLNTFq?=
- =?utf-8?B?ank1M3FzVzhJNW5jQUJscXNNaUx0TXBsY0laL0lNbjc5RzR4anlNUzYraUtM?=
- =?utf-8?B?ZW9mSDBDeTZSd0RzM1hCRFpSY0J4SDdRYWtNVUtTTXp3WWdzd0hsR0NPN2t0?=
- =?utf-8?B?dHNhNG11VFZaYzR1Ymk0akV3UXpWQUdVUDl3ZndzSm4wd1l3TEFCemluM0l5?=
- =?utf-8?B?em0wOGRQNVVPYXVUbUZ1QmVKUzhINUpvWUlheS9uR0FQbHc4eldCd2o3QjRs?=
- =?utf-8?B?L0RwQ2l3OW44QnMrcXFiNk9kNjF4b09scHJ5ZHZ1S1JpQmJBaUVIeXhJZUxw?=
- =?utf-8?B?QVM2elNpcldwc3VjQVhBZHBNN28yZU1lNkhpMVhVVUwwN2swQUlVTjMwY2Zx?=
- =?utf-8?B?SEE4SVJBRm03a2ptUi9XMmZqZnpUak9PdVpVZ3laZDVGUHNQNzNQandNVVJr?=
- =?utf-8?B?LzcvZWFSR0kraVZLanFzcnh6UTlpZmZYTDV1cWZqTlRVL0dDYkwvelYyVXgw?=
- =?utf-8?B?Q05wSVNXT0wrUHZrczBQM1RZRUh5V3BtYnJJU3RNaEgxUjA3K2R0YkJqRXRk?=
- =?utf-8?B?dDFock56TkIyY1pMK1lQeXJEZEQrTkdFdXo2eGMxckVpTU5odVBFQVNMT3lT?=
- =?utf-8?B?a04vUWJiT1N3dUxnYWhLeXlwaXVvU2lKN0p3T2RxTjlzeWU5ejd3RURBTmJT?=
- =?utf-8?B?N3k0RzV3dWpVeU5leCtHQUl6dnhkR1pUZGk3UVNDS3hpRzZvbGRIbG83dVZ4?=
- =?utf-8?B?UHdtbnpkWE1KZk5oanRONE0zYWtsRThIK0RYVEpQam44NTZXaVpyTG40ekxp?=
- =?utf-8?B?Z0ZrZ1l5QlBVaXBxU3NrL1FMak1EY2VTdzh5WWl1ekhNL0o0S3ZWRWxhWWl4?=
- =?utf-8?B?VFN4b0RoTjdlOVJOZzRiLzNCYXFxWnJnSlUvVHd3VzJaT1pmZG1LYUprVy92?=
- =?utf-8?B?MmRucWhjOGVPcm03ZXU1VFhWRUs3eTRjK0R5bUNURUtjYURZYlJHa0s2ekZy?=
- =?utf-8?B?TG03M0lPQUpzWENKSWpNdVh2emN4MkNib05JRVllcTNjVEhzUXNtM2dESFNI?=
- =?utf-8?B?MGpGS2E2L2szZnZHK2QrNE9OVTRhRmc2OUQyakErVGxwQzJqSEE3cG9hVHl4?=
- =?utf-8?B?bW5jdTdtSWF5NlVXTitqRjdCb2xBTm16M1RJYTFJazdjdWZDbXpMQWtta0RX?=
- =?utf-8?B?d2N1cVdiTVVHZ3dZTS9SRzJ3QW1GOVZGTVh2QlpxbmpiYUpEcndGaUxaaU9Q?=
- =?utf-8?B?Mk1OY2FscEZ6akwxRzRURVl2cHQvMUlEaUk3ZDY2UDlwNTBpTWxUdU42VFRn?=
- =?utf-8?B?cE9CeDZvUG92YWE5T3pobzNkMVZuSGdUVlRjeHB1djg1RVhrTkpCVmk4NnB4?=
- =?utf-8?B?cGwvTDh4bGhlOTFlbE5jV01JeDdZTi9qYnBQaC9leXpST1owYy84cGorNFN2?=
- =?utf-8?B?dStwOVRldWVmWXRZSEE3SVFHazBCZ1ZYeUFXei9GZEVlN1l4R3VCeFRSTWpT?=
- =?utf-8?B?MVBpZGg1OVFyTXFpWW9UQ3RDQ1NIYXIzUDkzQm0yMlkwZWYvT0hDbmVBQ3pk?=
- =?utf-8?B?TnFZaS9HVWdVUmRsUEthTXNUYU1ZdGtyMDc0SXhGc1Z6d21PUW9xR0pFdnNO?=
- =?utf-8?B?OGJLTHZ3RTJtVSs4K0NCUUtsaE9HTHo5b2VQNXNtLzN1cDIyZCtwSEJZMWxw?=
- =?utf-8?B?dU1iLzlzOWZsZGdYT1M5MFNVVkRjN09FMGFNUGlnZWVVOU1NTVptTFJUVy9n?=
- =?utf-8?B?ZTZvZUtMb0lpeXZqZFk4UzFSUEdZY0dSVGVQZ004MkExWklJRnh6M25Ycmsv?=
- =?utf-8?B?eWJzN29SWVZlYlc2d0JIVjk5OFJoalZwM0h2b2FheW9BaVVhMHRnUmFaSS90?=
- =?utf-8?B?dFpFaFA5SHVIaEFwTFY2TWtYNkVSZmVQMExPRkE0dCtKb2UyOGhwQXlEaVV5?=
- =?utf-8?Q?TOMEgtJmPsI=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BLAPR10MB5267.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(1800799024);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?V3IrZUR4VnBHakc1bVQyaDdpM0JMTFhqeDQxdHk3NXF0Q09mN3ZxTE5PMmZT?=
- =?utf-8?B?NU1OWXQwQjZ3K3h0bS9KbHRXRlp2R2pxZm43NEJRaVBtWEZoc2N5dzhiK3g3?=
- =?utf-8?B?SlNlb1ZtMmhrczd5TkNTMURyVndpN2o0dGV6RnRCNVNsVTJONy85bE9sZ1Bk?=
- =?utf-8?B?aEZwaTBpYkdvc1VNbGg4L0hOSGhsUzdwcGFuZnhFbmdRK2g4RnJrVkhBNWtR?=
- =?utf-8?B?WUh6c20zQnhyOW5TMzZRTE05TjFYMldtSmd3bW9VSW9EaEdqVlphS2lWa3VT?=
- =?utf-8?B?MC9xTkU0MnF3UFJ3dlBpWkZwMlBlYldrbkVQQ08xbnBOT3pwbFEzV3l1d1dx?=
- =?utf-8?B?ZjNyYVFXNitCVy9oYTAyQ2NlYjFRMzM4Rms5Ynh5RWIyS2o4RG5qQ2xFeXZJ?=
- =?utf-8?B?TnV6a25EbWRNKzdONWlvL1M0RUt1K0drTUhGbmZGZzdnMldxb2sydCtta2dI?=
- =?utf-8?B?MGVRUmNQZ3g0RWR0dUdxb1FobE9ObitUTy9OZEFFeU52U1lEQzRaOTFSai9l?=
- =?utf-8?B?WHErYW92MUdhWExWK2dTZ09KS2hkZVNEMEpzenRKbW1KNWZOVkRWZkpUQWRY?=
- =?utf-8?B?MXduRHNBQVRZelBjcGhRMmFaSXU0OXpNdVJsbEVvSjVQNitqWkZhZmtUQjJ3?=
- =?utf-8?B?MGwzT055WStISlhiQjNoeGFvK2VsSnQ3dTNUNmN2TTFCTmxzQXN5ZG5NQS9G?=
- =?utf-8?B?REEyOGJnQ04xcjBHNG1zSWlzWEVDRng2WnhQb2xENTRHaVA3LzlYdW5LTHZV?=
- =?utf-8?B?Q1YwMXlXbitJTGRpT21pMm8vRlRzbHR0YlNvK3NuRlkyRXdqWjJmOEMvUjNv?=
- =?utf-8?B?WUxhQTVveENjWXNveWh6NUxiMkE5S2t3VWw3QXlwcHA0QTJlWmY1aXBaTnFR?=
- =?utf-8?B?a1pMcmhnbkdHbjRzRDJnUE9TYnJVQXI5NHRlS0tvbHFjRHlJNVVvRldyM0xG?=
- =?utf-8?B?c0tFMUtLR3VqSTA0dmV3U1FkNldUM3J5N0d3TmlvOUpqZFRPQnliY2J2QytV?=
- =?utf-8?B?UVZmUnIrOU9Odmh1dkhTZExPZWFvdTB4QzdrOHlFTjFKRm93T1JMYkthMTdC?=
- =?utf-8?B?aTNqUzhqYjFTSzVaSmcyQnl0OTZ1NXJlTEdPcGJGRGhxUy9Ob1BVc05uU1VN?=
- =?utf-8?B?Wlp0NkRZcEIxZmlyZU41andRTnBZVVJ5eHZHaE42TC96ZGpVcnk0MlJ1N0lS?=
- =?utf-8?B?QVZFemQ3alJVUUJXby9GcXdNUUx3OFNWZmZYaHFBRjkrakJMbWpGQlRRQzM4?=
- =?utf-8?B?Sk90d1J1b1I2d28xdXZCRGU1Skt3VFczU21uc0pmRCtTbFF6OGJkdE1GS3Rl?=
- =?utf-8?B?QVYySTdJamVQdHE2UU1idFB2Vk10M1FNRXN2OG9yZ3oxSjNrMVhLY3V0OTQw?=
- =?utf-8?B?dGJTYjJZNSt5cmcyUm1JQTFpYTZZamRnTGQySXFYZmN2ajAwV1ZEOUJNWnE4?=
- =?utf-8?B?ZkRZTUdwWFlQM0RRd0xNeHF2cFhweVQzSDQ3NHd4bFkveTk5L25DRUFDM0N2?=
- =?utf-8?B?R3cxektQRktlVDFpaFp2SFdwNE1HTDBrRXZJTE9IK3JTODNKNFFmWU5tQW0w?=
- =?utf-8?B?NmhXc2hrTUlweUQwaWpnY3h3SUR6Lzdya3JjMEdMeHJJTWF0dHRiQkVYWEh5?=
- =?utf-8?B?MUVENEp1UnZIWmpOL2xKb1dXTHZ6d21PTkpBTWE4RmdmTzlHc1FNZ0tHSmNF?=
- =?utf-8?B?QmFNSWdDalNSaEhzWGVjeGFGWDZlc0wybWUxTzJJZ0VYRW5jODBKbTcrdVJN?=
- =?utf-8?B?S2hnODV5QUVsd28wVUJ5VXdCRzdjenQwaU1VdEdxVlpmQUxMdGJxY2ZRUFpH?=
- =?utf-8?B?RFdYeVJpSlY1TzV0b2Zxa1BrdjMxQjF6WmJwQlpqOVRneXd2TDd5bXV6U04w?=
- =?utf-8?B?aUt1UzFJcDJuVWN6UU56ZVFhaEVDSlMrYXQ3RDExWDBWc2g1dTlkZU10Vy83?=
- =?utf-8?B?QXJ2MnJOTEVpdWkwUTZhOUpPN3BJQTZiZWd1OS9RRytObEpDSnFhNGpkYkpv?=
- =?utf-8?B?VFZRTjQ4YitYN0RxTW5tSGVNR3Z2a0RGYUxLL1ZLOEo4N1JDbmR3eHZSaVJD?=
- =?utf-8?B?WnkvWTllTzlSVnljUnFLZE56c09VNHFXOXNuN1hhdjBRNzJscDM5UTZoRXdQ?=
- =?utf-8?B?VksyOURpY0FHUGJpbUZwS095WFgxR3hDblkwLy9BekRkYnZ3RmIwYXN4VkZ6?=
- =?utf-8?B?SXc9PQ==?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
-	m+1PO7cmD5ydgB6AIMLzflHt1FiHECjKMDKOYoOL8ZJrbP9FIHgVCTt2Zcv9mzp+3mmH56q+tpo0j4Blw/FYwmOxEt/1sGzJIRvYbeb03lUSu8c/uo9324Fl5sW2SAo8GFiPCz+k2Jgng3uTL7bn2LvqQVaX/PXekQtO7r3c2NEvpvuo0a8F/BS2oIpTmZl6O6Px29WXDPlOLoW/TJdvEOn2IWnpdkGKuw32oYdEkTWXoiinNZlOhA25cWaxFOzXKHrUN+rHDr+5d520OO7JFMcCA6LgDeZQf+IMTqTb0zBWQKhJNlOZ9oLV4fimgEfdD4SIOnlLDCdZFKu7w4vD9mV1m8sMRfblxUxTnR8iWzpv5zFsM6+WsdvMXfMEECnElM/2YvwhpPm/RwOHDYjNW6ITt/h9VgZ0fxshk9Dngj4jNCU8A5sMA5jBP31frQzlYmAsgHpXgVdGph5KPa0iEtIV4MNz5MzbaylVSKG92se6Y0EkwEWSNJtP6n9UXqnCOqXrV2c5DT6+xHQuELb1W2GRvuBFhQSerjHX156F3GknxsRylCydRBGxEA7TiD/s//5NWlqHxqd5G2GPLv/ypndtlat2gWjoEbkTJplyAwU=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a0d1f68e-27bd-422d-fc13-08dd768625f1
-X-MS-Exchange-CrossTenant-AuthSource: BLAPR10MB5267.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Apr 2025 10:14:29.2608
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: oZm4Bk2ZmnJQd5AhPgugU2RBIGn/vRrz83vi5Y+1k7IN1HnqEFpz2Rw2R6zDt32cxh125nUDgC1vm8rpyuzeMg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV3PR10MB7915
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1095,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-04-08_03,2025-04-07_01,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 spamscore=0
- mlxlogscore=999 phishscore=0 bulkscore=0 adultscore=0 malwarescore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2502280000 definitions=main-2504080073
-X-Proofpoint-ORIG-GUID: sdJzL3eoZg7FfQV0DZktsqJI79QtEMjD
-X-Proofpoint-GUID: sdJzL3eoZg7FfQV0DZktsqJI79QtEMjD
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1744139361;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=rmbLv8RPpI5n7a2CR/XZnCeWo/uMFMLdqkQHIvo8n8I=;
+	b=TrtqpCyHubfQlo3tA1kOGJAo4K24xAd02Qp3cSLFr0sBENgvG/9OmtI6zh217dE9VnbIro
+	DzV6QG2MMRIG/LPXtsCDfCQP0Kd3glbqPAzWXPJSGbYEcAz9oFmjUoaw9SAZbhxTJa+NiO
+	zAD/G3ZGGcSXj1JqZHvHar12w8432sc=
+Date: Tue, 08 Apr 2025 19:09:17 +0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: "Ihor Solodrai" <ihor.solodrai@linux.dev>
+Message-ID: <880e470b221b93882250e759e4a7334b48ec88b6@linux.dev>
+TLS-Required: No
+Subject: Re: [PATCH v2 dwarves 1/2] dwarves: Add github actions to build,
+ test
+To: "Alan Maguire" <alan.maguire@oracle.com>, acme@kernel.org
+Cc: yonghong.song@linux.dev, dwarves@vger.kernel.org, ast@kernel.org,
+ andrii@kernel.org, bpf@vger.kernel.org, daniel@iogearbox.net,
+ song@kernel.org, eddyz87@gmail.com, olsajiri@gmail.com, "Alan Maguire"
+ <alan.maguire@oracle.com>
+In-Reply-To: <20250401092435.1619617-2-alan.maguire@oracle.com>
+References: <20250401092435.1619617-1-alan.maguire@oracle.com>
+ <20250401092435.1619617-2-alan.maguire@oracle.com>
+X-Migadu-Flow: FLOW_OUT
 
-On 03/04/2025 19:40, Alan Maguire wrote:
-> On 02/04/2025 21:35, Arnaldo Carvalho de Melo wrote:
->> Make sure only DWARF is expected when encoding BTF. In time BTF will
->> also be accepted, to fixup or augment info produced by some producer, be
->> it gcc, clang, pahole or some other tool, for now, avoid trying to use
->> BTF when DWARF isn't available.
->>
->> Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
->> ---
->>  pahole.c | 8 ++++++++
->>  1 file changed, 8 insertions(+)
->>
->> diff --git a/pahole.c b/pahole.c
->> index af3e1cfe224dd14a..f247ff5e88feeb95 100644
->> --- a/pahole.c
->> +++ b/pahole.c
->> @@ -3493,6 +3493,14 @@ int main(int argc, char *argv[])
->>  		goto out;
->>  	}
->>  
->> +	// Right now encoding BTF has to be from DWARF, so enforce that, otherwise
->> +	// the loading process can fall back to other formats, BTF being the case
->> +	// and as this is at this point unintended, avoid that.
->> +	// Next we need to just skip object files that don't have the format we
->> +	// expect as the source for BTF encoding, i.e. no DWARF, no BTF, no problema.
->> +	if (btf_encode && conf_load.format_path == NULL)
->> +		conf_load.format_path = "dwarf";
->> +
->>  	if (show_running_kernel_vmlinux) {
->>  		const char *vmlinux = vmlinux_path__find_running_kernel();
->>  
-> 
-> LGTM
-> 
-> Acked-by: Alan Maguire <alan.maguire@oracle.com>
-> 
+On 4/1/25 2:24 AM, Alan Maguire wrote:
+> Borrowing heavily from libbpf github actions, add workflows to
+>
+> - build dwarves for gcc, LLVM
+>
+> - build dwarves for x86_64/aarch64 and use it to build a Linux
+>   kernel including BTF generation; then run dwarves selftests
+>   using generated vmlinux
+>
+> These workflows trigger on all pushes.  This will allow both
+> developers working on dwarves to push a branch to their github
+> repo and test, and also for maintainer pushes from git.kernel.org
+> pahole repo to trigger tests.
+>
+> The build/test workflows can also be run as bash scripts locally,
+> as is described in the toplevel README.
+>
+> Similar to libbpf, additional workflows for coverity etc
+> are triggered for pushes to master/next.
+>
+> Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
 
-applied to the next branch of
+Hi Alan. Thanks for addressing my comments.
 
-https://git.kernel.org/pub/scm/devel/pahole/pahole.git/
+Acked-by: Ihor Solodrai <ihor.solodrai@linux.dev>
 
-thanks!
+Some nits and questions below.
 
-Alan
+> ---
+>  .github/scripts/build-debian.sh  | 92 ++++++++++++++++++++++++++++++++
+>  .github/scripts/build-kernel.sh  | 35 ++++++++++++
+>  .github/scripts/build-pahole.sh  | 17 ++++++
+>  .github/scripts/run-selftests.sh | 15 ++++++
+>  .github/scripts/travis_wait.bash | 61 +++++++++++++++++++++
+>  .github/workflows/build.yml      | 34 ++++++++++++
+>  .github/workflows/codeql.yml     | 53 ++++++++++++++++++
+>  .github/workflows/coverity.yml   | 33 ++++++++++++
+>  .github/workflows/lint.yml       | 20 +++++++
+>  .github/workflows/ondemand.yml   | 31 +++++++++++
+>  .github/workflows/test.yml       | 36 +++++++++++++
+>  .github/workflows/vmtest.yml     | 62 +++++++++++++++++++++
+>  README                           | 18 +++++++
+>  13 files changed, 507 insertions(+)
+>  create mode 100755 .github/scripts/build-debian.sh
+>  create mode 100755 .github/scripts/build-kernel.sh
+>  create mode 100755 .github/scripts/build-pahole.sh
+>  create mode 100755 .github/scripts/run-selftests.sh
+>  create mode 100755 .github/scripts/travis_wait.bash
+>  create mode 100644 .github/workflows/build.yml
+>  create mode 100644 .github/workflows/codeql.yml
+>  create mode 100644 .github/workflows/coverity.yml
+>  create mode 100644 .github/workflows/lint.yml
+>  create mode 100644 .github/workflows/ondemand.yml
+>  create mode 100644 .github/workflows/test.yml
+>  create mode 100644 .github/workflows/vmtest.yml
+>
+> diff --git a/.github/scripts/build-debian.sh b/.github/scripts/build-de=
+bian.sh
+> new file mode 100755
+> index 0000000..5a0789a
+> --- /dev/null
+> +++ b/.github/scripts/build-debian.sh
+> @@ -0,0 +1,92 @@
+> +#!/bin/bash
+> +# SPDX-License-Identifier: GPL-2.0-only
+> +#
+> +# Copyright (c) 2025, Oracle and/or its affiliates.
+> +#
+> +
+> +PHASES=3D(${@:-SETUP RUN CLEANUP})
+> +DEBIAN_RELEASE=3D"${DEBIAN_RELEASE:-testing}"
+> +CONT_NAME=3D"${CONT_NAME:-dwarves-debian-$DEBIAN_RELEASE}"
+> +ENV_VARS=3D"${ENV_VARS:-}"
+> +DOCKER_RUN=3D"${DOCKER_RUN:-docker run}"
+> +REPO_ROOT=3D"${REPO_ROOT:-$PWD}"
+> +ADDITIONAL_DEPS=3D(pkgconf)
+> +EXTRA_CFLAGS=3D""
+> +EXTRA_LDFLAGS=3D""
+> +
+> +function info() {
+> +    echo -e "\033[33;1m$1\033[0m"
+> +}
+> +
+> +function error() {
+> +    echo -e "\033[31;1m$1\033[0m"
+> +}
+> +
+> +function docker_exec() {
+> +    docker exec $ENV_VARS $CONT_NAME "$@"
+> +}
+> +
+> +set -eu
+> +
+> +source "$(dirname $0)/travis_wait.bash"
+> +
+> +for phase in "${PHASES[@]}"; do
+> +    case $phase in
+> +        SETUP)
+> +            info "Setup phase"
+> +            info "Using Debian $DEBIAN_RELEASE"
+> +
+> +            docker --version
+> +
+> +            docker pull debian:$DEBIAN_RELEASE
+> +            info "Starting container $CONT_NAME"
+> +            $DOCKER_RUN -v $REPO_ROOT:/build:rw \
+> +                        -w /build --privileged=3Dtrue --name $CONT_NAM=
+E \
+> +                        -dit --net=3Dhost debian:$DEBIAN_RELEASE /bin/=
+bash
+> +            echo -e "::group::Build Env Setup"
+> +
+> +            docker_exec apt-get -y update
+> +            docker_exec apt-get -y install aptitude
+> +            docker_exec aptitude -y install make cmake libz-dev libelf=
+-dev libdw-dev git
+> +            docker_exec aptitude -y install "${ADDITIONAL_DEPS[@]}"
+> +            echo -e "::endgroup::"
+> +            ;;
+> +        RUN|RUN_CLANG|RUN_CLANG16|RUN_GCC12)
+> +            CC=3D"cc"
+> +            if [[ "$phase" =3D~ "RUN_CLANG(\d+)(_ASAN)?" ]]; then
+> +                ENV_VARS=3D"-e CC=3Dclang-${BASH_REMATCH[1]} -e CXX=3D=
+clang++-${BASH_REMATCH[1]}"
+> +                CC=3D"clang-${BASH_REMATCH[1]}"
+> +            elif [[ "$phase" =3D *"CLANG"* ]]; then
+> +                ENV_VARS=3D"-e CC=3Dclang -e CXX=3Dclang++"
+> +                CC=3D"clang"
+> +            elif [[ "$phase" =3D~ "RUN_GCC(\d+)(_ASAN)?" ]]; then
+> +                ENV_VARS=3D"-e CC=3Dgcc-${BASH_REMATCH[1]} -e CXX=3Dg+=
++-${BASH_REMATCH[1]}"
+> +                CC=3D"gcc-${BASH_REMATCH[1]}"
+> +            fi
+> +            if [[ "$CC" !=3D "cc" ]]; then
+> +                docker_exec aptitude -y install "$CC"
+> +            else
+> +                docker_exec aptitude -y install gcc
+> +            fi
+> +	    git config --global --add safe.directory $REPO_ROOT
+> +	    pushd $REPO_ROOT
+> +	    git submodule update --init
+> +	    popd
+> +            docker_exec mkdir build install
+> +            docker_exec ${CC} --version
+> +            info "build"
+> +            docker_exec cmake -DGIT_SUBMODULE=3DOFF .
+> +	    docker_exec make -j$((4*$(nproc)))
+> +            info "install"
+> +            docker_exec make DESTDIR=3D../install install
+> +            ;;
+> +        CLEANUP)
+> +            info "Cleanup phase"
+> +            docker stop $CONT_NAME
+> +            docker rm -f $CONT_NAME
+> +            ;;
+> +        *)
+> +            echo >&2 "Unknown phase '$phase'"
+> +            exit 1
+> +    esac
+> +done
+> diff --git a/.github/scripts/build-kernel.sh b/.github/scripts/build-ke=
+rnel.sh
+> new file mode 100755
+> index 0000000..41a3cf8
+> --- /dev/null
+> +++ b/.github/scripts/build-kernel.sh
+> @@ -0,0 +1,35 @@
+> +#!/usr/bin/bash
+> +# SPDX-License-Identifier: GPL-2.0-only
+> +#
+> +# Copyright (c) 2025, Oracle and/or its affiliates.
+> +#
+> +
+> +GITHUB_WORKSPACE=3D${GITHUB_WORKSPACE:-$(dirname $0)/../..}
+> +INPUTS_ARCH=3D${INPUTS_ARCH:-$(uname -m)}
+> +REPO=3D${REPO:-https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf=
+-next.git}
+> +REPO_BRANCH=3D${REPO_BRANCH:-master}
+> +REPO_TARGET=3D${GITHUB_WORKSPACE}/.kernel
+> +
+> +export PATH=3D${GITHUB_WORKSPACE}/install/usr/local/bin:${PATH}
+> +export PAHOLE=3D${GITHUB_WORKSPACE}/install/usr/local/bin/pahole
+> +
+> +which pahole
+> +$PAHOLE --version
+> +
+> +if [[ ! -d $REPO_TARGET ]]; then
+> +	git clone $REPO $REPO_TARGET
+> +fi
+> +cd $REPO_TARGET
+> +git checkout $REPO_BRANCH
+> +
+> +cat tools/testing/selftests/bpf/config \
+> +    tools/testing/selftests/bpf/config.${INPUTS_ARCH} > .config
+> +# this file might or might not exist depending on kernel version
+> +if [[ -f tools/testing/selftests/bpf/config.vm ]]; then
+> +	cat tools/testing/selftests/bpf/config.vm >> .config
+> +fi
+> +make olddefconfig && make prepare
+> +grep PAHOLE .config
+> +grep _BTF .config
+
+This looks like debugging code, but instead of removing it I think it
+is useful to dump entire config to the output (hence job log) in case
+something goes wrong. How about `cat .config` before make
+olddefconfig?
+
+> +make -j $((4*$(nproc))) all
+> +
+> diff --git a/.github/scripts/build-pahole.sh b/.github/scripts/build-pa=
+hole.sh
+> new file mode 100755
+> index 0000000..64f9eea
+> --- /dev/null
+> +++ b/.github/scripts/build-pahole.sh
+> @@ -0,0 +1,17 @@
+> +#!/usr/bin/bash
+> +# SPDX-License-Identifier: GPL-2.0-only
+> +#
+> +# Copyright (c) 2025, Oracle and/or its affiliates.
+> +#
+> +
+> +GITHUB_WORKSPACE=3D${GITHUB_WORKSPACE:-$(dirname $0)/../..}
+> +cd $GITHUB_WORKSPACE
+> +git config --global --add safe.directory $GITHUB_WORKSPACE
+> +git submodule update --init
+> +mkdir -p build
+> +cd build
+> +pwd
+> +cmake -DGIT_SUBMODULE=3DOFF -DBUILD_SHARED_LIBS=3DOFF ..
+
+With these cmake options, what version of libbpf is used?
+
+On CI a build/test of both static and shared variants should be
+tested, ideally. But that doesn't have to be a part of this patchset.
+
+> +make -j$((4*$(nproc))) all
+> +make DESTDIR=3D../install install
+> +
+> diff --git a/.github/scripts/run-selftests.sh b/.github/scripts/run-sel=
+ftests.sh
+> new file mode 100755
+> index 0000000..f9ba24e
+> --- /dev/null
+> +++ b/.github/scripts/run-selftests.sh
+> @@ -0,0 +1,15 @@
+> +#!/usr/bin/bash
+> +# SPDX-License-Identifier: GPL-2.0-only
+> +#
+> +# Copyright (c) 2025, Oracle and/or its affiliates.
+> +#
+> +
+> +GITHUB_WORKSPACE=3D${GITHUB_WORKSPACE:-$(pwd)}
+> +VMLINUX=3D${GITHUB_WORKSPACE}/.kernel/vmlinux
+> +SELFTESTS=3D${GITHUB_WORKSPACE}/tests
+> +cd $SELFTESTS
+> +export PATH=3D${GITHUB_WORKSPACE}/install/usr/local/bin:${PATH}
+> +which pahole
+> +pahole --version
+> +vmlinux=3D$VMLINUX ./tests
+> +
+> diff --git a/.github/scripts/travis_wait.bash b/.github/scripts/travis_=
+wait.bash
+> new file mode 100755
+> index 0000000..acf6ad1
+> --- /dev/null
+> +++ b/.github/scripts/travis_wait.bash
+> @@ -0,0 +1,61 @@
+> +# This was borrowed from https://github.com/travis-ci/travis-build/tre=
+e/master/lib/travis/build/bash
+> +# to get around https://github.com/travis-ci/travis-ci/issues/9979. It=
+ should probably be removed
+> +# as soon as Travis CI has started to provide an easy way to export th=
+e functions to bash scripts.
+
+This comment makes me think travis_wait.bash could be removed.
+Do you know if it's actually necessary (for build-debian.sh)?
+
+> +
+> +travis_jigger() {
+> +  local cmd_pid=3D"${1}"
+> +  shift
+> +  local timeout=3D"${1}"
+> +  shift
+> +  local count=3D0
+> +
+> +  echo -e "\\n"
+> +
+> +  while [[ "${count}" -lt "${timeout}" ]]; do
+> +    count=3D"$((count + 1))"
+> +    echo -ne "Still running (${count} of ${timeout}): ${*}\\r"
+> +    sleep 60
+> +  done
+> +
+> +  echo -e "\\n${ANSI_RED}Timeout (${timeout} minutes) reached. Termina=
+ting \"${*}\"${ANSI_RESET}\\n"
+> +  kill -9 "${cmd_pid}"
+> +}
+> +
+> +travis_wait() {
+> +  local timeout=3D"${1}"
+> +
+> +  if [[ "${timeout}" =3D~ ^[0-9]+$ ]]; then
+> +    shift
+> +  else
+> +    timeout=3D20
+> +  fi
+> +
+> +  local cmd=3D("${@}")
+> +  local log_file=3D"travis_wait_${$}.log"
+> +
+> +  "${cmd[@]}" &>"${log_file}" &
+> +  local cmd_pid=3D"${!}"
+> +
+> +  travis_jigger "${!}" "${timeout}" "${cmd[@]}" &
+> +  local jigger_pid=3D"${!}"
+> +  local result
+> +
+> +  {
+> +    set +e
+> +    wait "${cmd_pid}" 2>/dev/null
+> +    result=3D"${?}"
+> +    ps -p"${jigger_pid}" &>/dev/null && kill "${jigger_pid}"
+> +    set -e
+> +  }
+> +
+> +  if [[ "${result}" -eq 0 ]]; then
+> +    echo -e "\\n${ANSI_GREEN}The command ${cmd[*]} exited with ${resul=
+t}.${ANSI_RESET}"
+> +  else
+> +    echo -e "\\n${ANSI_RED}The command ${cmd[*]} exited with ${result}=
+.${ANSI_RESET}"
+> +  fi
+> +
+> +  echo -e "\\n${ANSI_GREEN}Log:${ANSI_RESET}\\n"
+> +  cat "${log_file}"
+> +
+> +  return "${result}"
+> +}
+> diff --git a/.github/workflows/build.yml b/.github/workflows/build.yml
+> new file mode 100644
+> index 0000000..25a395f
+> --- /dev/null
+> +++ b/.github/workflows/build.yml
+> @@ -0,0 +1,34 @@
+> +name: dwarves-build
+> +
+> +on:
+> +  pull_request:
+> +  push:
+> +  schedule:
+> +    - cron:  '0 18 * * *'
+> +
+> +concurrency:
+> +  group: ci-build-${{ github.head_ref }}
+> +  cancel-in-progress: true
+> +
+> +jobs:
+> +
+> +  debian:
+> +    runs-on: ubuntu-latest
+> +    name: Debian Build (${{ matrix.name }})
+> +    strategy:
+> +      fail-fast: false
+> +      matrix:
+> +        include:
+> +          - name: default
+> +            target: RUN
+> +          - name: gcc-12
+> +            target: RUN_GCC12
+> +          - name: clang
+> +            target: RUN_CLANG
+> +    steps:
+> +      - uses: actions/checkout@v4
+> +        name: Checkout
+> +      - name: setup
+> +        shell: bash
+> +        run: ./.github/scripts/build-debian.sh SETUP ${{ matrix.target=
+ }}
+> +
+> diff --git a/.github/workflows/codeql.yml b/.github/workflows/codeql.ym=
+l
+> new file mode 100644
+> index 0000000..a140be1
+> --- /dev/null
+> +++ b/.github/workflows/codeql.yml
+> @@ -0,0 +1,53 @@
+> +---
+> +# vi: ts=3D2 sw=3D2 et:
+> +
+> +name: "CodeQL"
+> +
+> +on:
+> +  push:
+> +    branches:
+> +      - master
+> +  pull_request:
+> +    branches:
+> +      - master
+> +      - next
+> +
+> +permissions:
+> +  contents: read
+> +
+> +jobs:
+> +  analyze:
+> +    name: Analyze
+> +    runs-on: ubuntu-latest
+> +    concurrency:
+> +      group: ${{ github.workflow }}-${{ matrix.language }}-${{ github.=
+ref }}
+> +      cancel-in-progress: true
+> +    permissions:
+> +      actions: read
+> +      security-events: write
+> +
+> +    strategy:
+> +      fail-fast: false
+> +      matrix:
+> +        language: ['cpp', 'python']
+> +
+> +    steps:
+> +      - name: Checkout repository
+> +        uses: actions/checkout@v4
+> +
+> +      - name: Initialize CodeQL
+> +        uses: github/codeql-action/init@v2
+> +        with:
+> +          languages: ${{ matrix.language }}
+> +          queries: +security-extended,security-and-quality
+> +
+> +      - name: Setup
+> +        uses: ./.github/actions/setup
+> +
+> +      - name: Build
+> +        run: |
+> +          source /tmp/ci_setup
+> +          make -C ./src
+> +
+> +      - name: Perform CodeQL Analysis
+> +        uses: github/codeql-action/analyze@v2
+> diff --git a/.github/workflows/coverity.yml b/.github/workflows/coverit=
+y.yml
+> new file mode 100644
+> index 0000000..97a04d4
+> --- /dev/null
+> +++ b/.github/workflows/coverity.yml
+> @@ -0,0 +1,33 @@
+> +name: dwarves-ci-coverity
+> +
+> +on:
+> +  push:
+> +    branches:
+> +      - master
+> +      - next
+> +  schedule:
+> +    - cron:  '0 18 * * *'
+> +
+> +jobs:
+> +  coverity:
+> +    runs-on: ubuntu-latest
+> +    name: Coverity
+> +    env:
+> +      COVERITY_SCAN_TOKEN: ${{ secrets.COVERITY_SCAN_TOKEN }}
+> +    steps:
+> +      - uses: actions/checkout@v4
+> +      - uses: ./.github/actions/setup
+> +      - name: Run coverity
+> +        if: ${{ env.COVERITY_SCAN_TOKEN }}
+> +        run: |
+> +          source /tmp/ci_setup
+> +          export COVERITY_SCAN_NOTIFICATION_EMAIL=3D"${AUTHOR_EMAIL}"
+> +          export COVERITY_SCAN_BRANCH_PATTERN=3D${GITHUB_REF##refs/*/}
+> +          export TRAVIS_BRANCH=3D${COVERITY_SCAN_BRANCH_PATTERN}
+> +          scripts/coverity.sh
+> +        env:
+> +          COVERITY_SCAN_PROJECT_NAME: dwarves
+> +          COVERITY_SCAN_BUILD_COMMAND_PREPEND: 'cmake .'
+> +          COVERITY_SCAN_BUILD_COMMAND: 'make'
+> +      - name: SCM log
+> +        run: cat /home/runner/work/dwarves/cov-int/scm_log.txt
+> diff --git a/.github/workflows/lint.yml b/.github/workflows/lint.yml
+> new file mode 100644
+> index 0000000..ca13052
+> --- /dev/null
+> +++ b/.github/workflows/lint.yml
+> @@ -0,0 +1,20 @@
+> +name: "lint"
+> +
+> +on:
+> +  pull_request:
+> +  push:
+> +    branches:
+> +      - master
+> +      - next
+> +
+> +jobs:
+> +  shellcheck:
+> +    name: ShellCheck
+> +    runs-on: ubuntu-latest
+> +    steps:
+> +      - name: Checkout repository
+> +        uses: actions/checkout@v4
+> +      - name: Run ShellCheck
+> +        uses: ludeeus/action-shellcheck@master
+> +        env:
+> +          SHELLCHECK_OPTS: --severity=3Derror
+> diff --git a/.github/workflows/ondemand.yml b/.github/workflows/ondeman=
+d.yml
+> new file mode 100644
+> index 0000000..5f3034f
+> --- /dev/null
+> +++ b/.github/workflows/ondemand.yml
+> @@ -0,0 +1,31 @@
+> +name: ondemand
+> +
+> +on:
+> +  workflow_dispatch:
+> +    inputs:
+> +      arch:
+> +        default: 'x86_64'
+> +        required: true
+> +      llvm-version:
+> +        default: '18'
+> +        required: true
+> +      kernel:
+> +        default: 'LATEST'
+> +        required: true
+> +      pahole:
+> +        default: "master"
+> +        required: true
+> +      runs-on:
+> +        default: 'ubuntu-24.04'
+> +        required: true
+> +
+> +jobs:
+> +  vmtest:
+> +    name: ${{ inputs.kernel }} kernel llvm-${{ inputs.llvm-version }} =
+pahole@${{ inputs.pahole }}
+> +    uses: ./.github/workflows/vmtest.yml
+> +    with:
+> +      runs_on: ${{ inputs.runs-on }}
+> +      kernel: ${{ inputs.kernel }}
+> +      arch: ${{ inputs.arch }}
+> +      llvm-version: ${{=20inputs.llvm-version }}
+> +      pahole: ${{ inputs.pahole }}
+> diff --git a/.github/workflows/test.yml b/.github/workflows/test.yml
+> new file mode 100644
+> index 0000000..f11ebfe
+> --- /dev/null
+> +++ b/.github/workflows/test.yml
+> @@ -0,0 +1,36 @@
+> +name: dwarves-ci
+> +
+> +on:
+> +  pull_request:
+> +  push:
+> +  schedule:
+> +    - cron:  '0 18 * * *'
+> +
+> +concurrency:
+> +  group: ci-test-${{ github.head_ref }}
+> +  cancel-in-progress: true
+> +
+> +jobs:
+> +  vmtest:
+> +    strategy:
+> +      fail-fast: false
+> +      matrix:
+> +        include:
+> +          - kernel: 'LATEST'
+> +            runs_on: 'ubuntu-24.04'
+> +            arch: 'x86_64'
+> +            llvm-version: '18'
+> +            pahole: 'master'
+> +          - kernel: 'LATEST'
+> +            runs_on: 'ubuntu-24.04-arm'
+> +            arch: 'aarch64'
+> +            llvm-version: '18'
+> +            pahole: 'tmp.master'
+> +    name: Linux ${{ matrix.kernel }}
+> +    uses: ./.github/workflows/vmtest.yml
+> +    with:
+> +      runs_on: ${{ matrix.runs_on }}
+> +      kernel: ${{ matrix.kernel }}
+> +      arch: ${{ matrix.arch }}
+> +      llvm-version: ${{ matrix.llvm-version }}
+> +      pahole: ${{ matrix.pahole }}
+> diff --git a/.github/workflows/vmtest.yml b/.github/workflows/vmtest.ym=
+l
+> new file mode 100644
+> index 0000000..0f66eed
+> --- /dev/null
+> +++ b/.github/workflows/vmtest.yml
+> @@ -0,0 +1,62 @@
+> +name: 'Build kernel run selftests via vmtest'
+> +
+> +on:
+> +  workflow_call:
+> +    inputs:
+> +      runs_on:
+> +        required: true
+> +        default: 'ubuntu-24.04'
+> +        type: string
+> +      arch:
+> +        description: 'what arch to test'
+> +        required: true
+> +        default: 'x86_64'
+> +        type: string
+> +      kernel:
+> +        description: 'kernel version or LATEST'
+> +        required: true
+> +        default: 'LATEST'
+> +        type: string
+> +      pahole:
+> +        description: 'pahole rev or branch'
+> +        required: false
+> +        default: 'master'
+> +        type: string
+> +      llvm-version:
+> +        description: 'llvm version'
+> +        required: false
+> +        default: '18'
+> +        type: string
+> +jobs:
+> +  vmtest:
+> +    name: pahole@${{ inputs.arch }}
+> +    runs-on: ${{ inputs.runs_on }}
+> +    steps:
+> +
+> +      - uses: actions/checkout@v4
+> +
+> +      - name: Setup environment
+> +        uses: libbpf/ci/setup-build-env@v3
+> +        with:
+> +          pahole: ${{ inputs.pahole }}
+> +          arch: ${{ inputs.arch }}
+> +          llvm-version: ${{ inputs.llvm-version }}
+
+I think I mentioned it before, but libbpf/ci/setup-build-env checks
+out and installs pahole too, which is unnecessary here. Have you tried
+removing this step from the job?
+
+You should be able to reuse a piece of SETUP logic from
+build-debian.sh to install pahole's dependencies. Although you kernel
+build deps are needed too.
+
+I could make a change in libbpf/ci/setup-build-env to accept a special
+`pahole` input value or check for env variable to NOT build pahole.
+What do you think?
+
+> +
+> +      - name: Build,install current pahole
+> +        shell: bash
+> +        run: .github/scripts/build-pahole.sh
+> +
+> +      - name: Get kernel source
+> +        uses: libbpf/ci/get-linux-source@v3
+> +        with:
+> +          repo: 'https://git.kernel.org/pub/scm/linux/kernel/git/bpf/b=
+pf-next.git'
+> +          dest: '${{ github.workspace }}/.kernel'
+> +
+> +      - name: Configure, build kernel with current pahole
+> +        shell: bash
+> +        run: .github/scripts/build-kernel.sh
+> +
+> +      - name: Run selftests
+> +        shell: bash
+> +        run: .github/scripts/run-selftests.sh
+> +
+> diff --git a/README b/README
+> index 7ee3b87..a938266 100644
+> --- a/README
+> +++ b/README
+> @@ -21,3 +21,21 @@ cmake Options:
+>  You may need to update the libbpf git submodule:
+>=20=20
+>=20 git submodule update --init --recursive
+> +
+> +Testing:
+> +
+> +Tests are available in the tests subdirectory and should be run prior =
+to
+> +submitting patches.  Patches that add functionality should add to test=
+s
+> +here also.  Tests can be run by
+> +
+> +- running the scripts directly using a pre-existing vmlinux binary; i.=
+e.
+> +	cd tests ; vmlinux=3D/path/2/vmlinux ./tests
+> +  (the vmlinux binary must contain DWARF to be converted to BTF)
+> +
+> +- running the tests via local scripts in .github/scripts; i.e.
+> +	bash .github/scripts/build-pahole.sh; \
+> +	bash .github/scripts/build-kernel.sh; \
+> +	bash .github/scripts/run-selftests.sh
+> +- via GitHub actions: push a branch to a GitHub repo; actions will be
+> +  triggered for build and test matching the above steps.  See the "Act=
+ions"
+> +  tab in the github repo for info on job pass/fail and logs.
