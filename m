@@ -1,92 +1,87 @@
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA88E74C14;
-	Thu, 24 Apr 2025 07:49:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.165.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 612F3190664;
+	Thu, 24 Apr 2025 18:08:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.177.32
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745480963; cv=fail; b=fWyQ7aRpJ0yutDKld7tT2BQ6MpOxKpX2iMQkWsxmLUjX75fu6nWhyTzwWEjjdlmX3zWFyanwA9Skw6hN38Bfamf/LfVN4V2p3geWdPN9A2XY0KuBfRTmsLlPkztqRwisPPtkya5nyK8n2XoiN8Dmz68Y38vquvBGEa1oz8yY4lU=
+	t=1745518087; cv=fail; b=QvAk7Ybkf7Nc5CUvYXTsWzhR6RQvCFCW9ZW29RAbEm9Y02+mdfO/YPpXE+GJJLytxx9gOtS1KXdIjvII0TKPKGw0p3xUEcdhzSTRg+/7rjTZYB7NpqkYbzXhTmYtML8gqxcSSHCeLUFCozgjx3kaYkRgQg4zNc/HxufpVEWHBNc=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745480963; c=relaxed/simple;
-	bh=N+gzwA7u6m8SQyivrCNROw/dgPVnsWrLFNqLvyyfyJc=;
+	s=arc-20240116; t=1745518087; c=relaxed/simple;
+	bh=FV9kMI9zba8PQDQLfkBW/4+HUAptjen1NJ9PS6RMOzE=;
 	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=B4p8SFDs1dQJaDHaa3/f38rVbutA5FrdF20iTyYz4WdWnMUTjfrzcl9Bf3MUM3mI724Ibv5rGW1+AzEa6yGEDyHxhPq7feUXY65utLP+gpInBVcAMJMIKwiEptsPcq8qhNH1S5YuYacbIuCXP0a5gx0n4HNDuRc/UHWaNke/Qx0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=aGgFOESV; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=IkEncoaH; arc=fail smtp.client-ip=205.220.165.32
+	 Content-Type:MIME-Version; b=FdgtT0jOTtPU8LTiKHxCl+Wgoq1O/ePyy5vr4r0y//eTp+WlAzXsdmBvL5IFITaTOeFZQvloej4DL6ha9xG+jViPovRK3Gync7NN2QAY2+Fht2F79dzacZNuVF42Ts3lIafCZVabO8f+MrydIDyquhD0hvS/Ej4cfKcysnubKhE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=BzoKXnUx; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=DSlD356j; arc=fail smtp.client-ip=205.220.177.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="aGgFOESV";
-	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="IkEncoaH"
-Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 53O7awmc008933;
-	Thu, 24 Apr 2025 07:48:55 GMT
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="BzoKXnUx";
+	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="DSlD356j"
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 53OGlaKW029635;
+	Thu, 24 Apr 2025 18:07:52 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
 	:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=
-	corp-2023-11-20; bh=cmEwAgyrS7xSOtIdh/JG8JGBZcCo8vP8VhdExHZb6lw=; b=
-	aGgFOESV0n1apzuTYsNuCGq18xU/RFvtfQ+D7K7FCetSoPxCbRbPCAitU3QWMR3b
-	j0dQZdFcGLvZYFGVRHkXlga9HWAf9qz2YsS0iJbicsHDQUAoGJGUA03OG8Mv857g
-	Bo+4X+qIGp4bfP7PptF0CkLThj1SWTJam2Xn24kYZuGMOEX4pb84YsWt1L5C4ti/
-	IjhffwNfvdHXSlaSEopq3r8nGhA4yS3JJVxZ4wDlbnHeyHtiW5tUy5f9rD55kwCV
-	O+wuWWPSoCUSrzwxlUKxhwEI5QWtRGw44kG71Jt+pHnyPBMoqQXyOFXEcqn1zQlo
-	hm1/5GF4l8IouPrpcBw1EQ==
-Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 467h2kg0fr-1
+	corp-2023-11-20; bh=vT6tp7KegoGzi6RjP7AAlUIC3TrNtXH1ClZk9OSCPrU=; b=
+	BzoKXnUxKIT1W3xlvwLps80oiO7cMbrBhwXHuIpdnyAXQ3ukJtTEEsqPPSTqBrqm
+	TGMPp7GrZitVl+bJZ1o5IQU2s4Ik2ck23Kb0mDidPSeU6vNlaMYBEpgk/QSdWPq7
+	V4GOM1ed3UZFepSaJCTeV1vURkKJQENQW6eJu4gGGB9TTMO4qrSPPKhAZHLb6rPh
+	23OiKN+x8CcR0ColN9kXY4tXYBc06upRAHpoQaw/bij9ydtix63/OEFLWViqcjm5
+	PoP+/Ut1mv5dcB72JgM2g0PcFyaD4u/aWK3Q9aoINpxs1PDFUmroNH3PLRiOrY/Q
+	HThsr1VN8op16huho6pukw==
+Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 467s4a8asw-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 24 Apr 2025 07:48:54 +0000 (GMT)
-Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 53O64gMI031064;
-	Thu, 24 Apr 2025 07:48:54 GMT
-Received: from cy4pr02cu008.outbound.protection.outlook.com (mail-westcentralusazlp17011028.outbound.protection.outlook.com [40.93.6.28])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 466k06x4e9-1
+	Thu, 24 Apr 2025 18:07:52 +0000 (GMT)
+Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 53OH3af9024802;
+	Thu, 24 Apr 2025 18:07:51 GMT
+Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2044.outbound.protection.outlook.com [104.47.58.44])
+	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 467pubsyk2-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 24 Apr 2025 07:48:54 +0000
+	Thu, 24 Apr 2025 18:07:51 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=KNLuB42OJDNyM4od6Z8OoLsR0P6lKTH9sH78nKpikP0UC78F4kOUb2LrT1nLz7YDEY4l8kBUhm7jtOoxcHWnInKSR3w41IaOTHcNaxMXsQe4iHcOWes1E1dv/G/IcDwYsUhVOBTv/l0q7d8RY0RCiTJCFlHO0KXfw2Pqn0NpPl4s64OP5j+UxyRxw39j+y/i9bLY/eYzJ/MzXthiV8g/TxjPW2NfPcfwNbivSJ2HePmVBNRiqmpex8/lOQOYpJr+gVDDsYSeXlENWWDnkPqhlT2DRoS1l8ge5wYWmZglZRGvInKQxGnqaS/jUFo4SvgsUMQqVIBm6HdNLRcK54iyLQ==
+ b=NEaKgzDp0gkP+dfJJ+QxfAPLgJ0cqZXwOjpOkCGNTKNRYoJsaVuSPPF3rPNp2aavLwjQdiHh6VqpbmZ1E3Mf4SpwLmuOy11Htu8vqQmiiy8bIds7yGjVBGGel4lY6l/aj+zj21gyp//5v6I/wOrmIw/8qE97MU/Ozxupiw+/N/vmndgmVnM4zmqjCL6K/9Mu2gXM/9lw8CfevczGT6JmYt76ZEnLaTpG2WyGqcws6FuPcsaGU3z0mnCWSTJjqWhrJD0UmQX75tZN6geAyiRdxLGplsguGGimZ9GqA0X+jdh+juCvWTzUYEcQ35l8+Ta395nJUckLgLLcPIpPmlBZiw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=cmEwAgyrS7xSOtIdh/JG8JGBZcCo8vP8VhdExHZb6lw=;
- b=Eel00LQhIwVUBOzAWVtCJp5Sp1Uzjrx/mXgD5QyCm//27DIOd3I4AoKAo0/RCdOQ+KtXBe6YLVSQDk2dzBrsEU26x39oO84+ZNKbuESVwxHbOACFOLbbw+7m483rRItX4MQlg3XTK6gQohteJ3AH5EVcPrnQpqs9mtnlnyAz8/sHruE20zqx+FnoNPNCgsszbbePBSUjLGuVMqx6YTrJKHindIst+uz3Pr7fZl39J0Ayg9hAEfPCwHKgA3H/HedPtLTZUaGDD9iQuoDCLVyDdvczbJ1kquY2LSu6VI1o1aguohq1fy+gM/S3vSALPlnjS5WsFqQl69SQ5dGuAEZa/g==
+ bh=vT6tp7KegoGzi6RjP7AAlUIC3TrNtXH1ClZk9OSCPrU=;
+ b=KTl1CxUPtUw8Bx+dodQ8kPrNAHZHf4B42WlIqTCpy7Jb7mEuuPSCObIIC4CyFUcCMn4kReLaCOXHHemfUFmOJlDYBV8KfJIFmKKu9HLTbveTlmwl6jve5x3n9F+L+Q84xQkt7c0RmTw8O+zmdvPLt6FF+3ezNO8P1bxcZxFn/L8440HH1So2YMpEeSAOKKR0rCsZMxG4Mqw+pa9RitZrDUossDxXvsMlJ6xnVqZgkzhTAfWQvOIc9WRwoJRxu6XeXU4RbBkoeVf+Gn/+DbwNcUxRkNUI0h1+sSw/A/SkdzCpyqsa3HckJDDsNiKC5+rhVaNz5yPPfqVjOXbtybmBKA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
  dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=cmEwAgyrS7xSOtIdh/JG8JGBZcCo8vP8VhdExHZb6lw=;
- b=IkEncoaHqtU/9wIU7E2hSKln0z6BH70ELBst1MTwjm3BbVUQUrVQBQ8eevxPrl3AeWTdlS1hUQ04w6Z6pCiUHPqp2rle5/FQiGILma42DotBFWqTHX5g37ENwrQs4Yf1N9iVtnDy377cCYCsGJC/Fykd6s573HLXD2Q6h+3DbbE=
+ bh=vT6tp7KegoGzi6RjP7AAlUIC3TrNtXH1ClZk9OSCPrU=;
+ b=DSlD356jw8QFcPy5LkOX1nAvgddPkMTAwtwHLbjFBIQ0E6doUG6YZrRH0zt0XG2WhyCDwP17vgLh3DgxAq77i4D/L2MN5HlYGPOMbZMWC5RU66rkk/S0i+SSR7sNR7/YcoNT/DuQEgJAoaqhalkOhLukQLzGLn5Llk8YBrStL2Q=
 Received: from BLAPR10MB5267.namprd10.prod.outlook.com (2603:10b6:208:30e::22)
- by IA4PR10MB8423.namprd10.prod.outlook.com (2603:10b6:208:55c::6) with
+ by PH0PR10MB5893.namprd10.prod.outlook.com (2603:10b6:510:149::11) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8655.31; Thu, 24 Apr
- 2025 07:48:52 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8655.30; Thu, 24 Apr
+ 2025 18:07:48 +0000
 Received: from BLAPR10MB5267.namprd10.prod.outlook.com
  ([fe80::682b:c879:9f97:a34f]) by BLAPR10MB5267.namprd10.prod.outlook.com
  ([fe80::682b:c879:9f97:a34f%4]) with mapi id 15.20.8678.025; Thu, 24 Apr 2025
- 07:48:51 +0000
-Message-ID: <9a577a7a-d55b-4017-b1ab-e6f2980f58b0@oracle.com>
-Date: Thu, 24 Apr 2025 08:48:39 +0100
+ 18:07:48 +0000
+Message-ID: <03a0ad73-325c-4d6d-ba32-13a4938dc4cf@oracle.com>
+Date: Thu, 24 Apr 2025 19:07:40 +0100
 User-Agent: Mozilla Thunderbird
-Subject: Re: pahole v1.30 and libbpf: Introduce kflag for type_tags and
- decl_tags in BTF
-To: sedat.dilek@gmail.com
-Cc: Ihor Solodrai <ihor.solodrai@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
-        Eduard Zingerman <eddyz87@gmail.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>, Mykola Lysenko <mykolal@fb.com>,
-        bpf@vger.kernel.org, sudipm.mukherjee@gmail.com, cavok@debian.org,
-        "dwarves@vger.kernel.org" <dwarves@vger.kernel.org>
-References: <CA+icZUW31vpS=R3zM6G4FMkzuiQovqtd+e-8ihwsK_A-QtSSYg@mail.gmail.com>
- <CAEf4BzadoMS7RPL26J2U_NyQUXnwVEmP+TxHU6D8R4AKvWSGsA@mail.gmail.com>
+Subject: Re: die__process: DW_TAG_compile_unit, DW_TAG_type_unit,
+ DW_TAG_partial_unit or DW_TAG_skeleton_unit expected got INVALID (0x0) @
+ 115a4a9!
+To: Paul Menzel <pmenzel@molgen.mpg.de>,
+        Martin KaFai Lau <martin.lau@linux.dev>
+Cc: bpf@vger.kernel.org, "dwarves@vger.kernel.org" <dwarves@vger.kernel.org>
+References: <2b3986f2-7152-4c11-957a-b08641dfe132@molgen.mpg.de>
 Content-Language: en-GB
 From: Alan Maguire <alan.maguire@oracle.com>
-In-Reply-To: <CAEf4BzadoMS7RPL26J2U_NyQUXnwVEmP+TxHU6D8R4AKvWSGsA@mail.gmail.com>
+In-Reply-To: <2b3986f2-7152-4c11-957a-b08641dfe132@molgen.mpg.de>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: SI2PR02CA0040.apcprd02.prod.outlook.com
- (2603:1096:4:196::6) To BLAPR10MB5267.namprd10.prod.outlook.com
+X-ClientProxiedBy: LO4P123CA0170.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:600:18a::13) To BLAPR10MB5267.namprd10.prod.outlook.com
  (2603:10b6:208:30e::22)
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
@@ -95,324 +90,215 @@ List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BLAPR10MB5267:EE_|IA4PR10MB8423:EE_
-X-MS-Office365-Filtering-Correlation-Id: 156bed49-b7b1-41af-fb1a-08dd8304746e
+X-MS-TrafficTypeDiagnostic: BLAPR10MB5267:EE_|PH0PR10MB5893:EE_
+X-MS-Office365-Filtering-Correlation-Id: ceefd138-36c5-4d26-237b-08dd835aebf5
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|7416014|366016|1800799024|376014|13003099007|7053199007;
+X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|1800799024|376014;
 X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?ZlZoTzNCK24wOWl0aGtiUTNXOGQ1TEIxTURCNmFFbG13SGJYdTNndG5TZVdW?=
- =?utf-8?B?SHNuOXUybVZiNFczQUczSU56OUxkaVJUdTZDZ2JBdTFkRkcrRFNGUjlaMlI2?=
- =?utf-8?B?dFBIcDNXbnRpSlBTc2hDeWVIVWJqQlBETUQ4MFhicXhPQ0kyOEJpRmNweS9K?=
- =?utf-8?B?Wmd4NGZzWXl4NXE2RTFyVkw5ZlNGWDdsQ09VL0FtRWJKMkJ4ZUN2R3RrUTZ4?=
- =?utf-8?B?Nzg5dkhKWWR4enBlT0k3b2MrQVM4SWJoYmRjZ01zVXY0YXZKbkFDb0U4eFZJ?=
- =?utf-8?B?TE5xbm5CeEw2WU4vRVJ5U1ZBcGErbkJsOUNUTEpLck1QZnVHY1ZiSUxFbEFr?=
- =?utf-8?B?SExIOHBobE12dyszQk91MFRneVF4TnVrNXYreW9tSnJXcCtuSlljQ0FMc2g1?=
- =?utf-8?B?eXdvUStWTWViTnJTVFRxYXRUS21WdFNxaHcva3pDa2FPaFdkNE5BdG1qdzkr?=
- =?utf-8?B?Z2VGM1hRdy9DNUhVclFvZmxKNDBQdTRSVGVBTjduL1ZnWnZ0OFVLa2hWeFo2?=
- =?utf-8?B?Z090VlU4Rkx3UVU4SnppM3N3UjV0QVdoTlJVT2JsWUdaRVR6cmJpaWhLdGxz?=
- =?utf-8?B?ZWM0bDdZYS8xYWJSYTIvcU1vNWtlZml6VjFPQWxRZE1pckRnZ1hQc0lKVzFu?=
- =?utf-8?B?MVpLY3krVjVrcUFVRXBSdDEzMU53aGZpbHFGS0xhb1J0UkZCd3JNZzh0QXdm?=
- =?utf-8?B?REtYblc3MitMbE9HMSt6T0FMdlBma3VuNllUek56Tk4yT2ExRmd3RTBVdHEv?=
- =?utf-8?B?cFFpMVVHY0g1SEdHTXBZa1AxeUhobmhSYUJwTzltd2ZWMTk0SkdCZWxaOWJN?=
- =?utf-8?B?T2RXVnpJNm9PSDQrcjBGV0hNSG9NVGRldDNGcmlyc3dvd0g3VEdsWmVWckZI?=
- =?utf-8?B?dWpVaTJFVUN3UTU3d3N5MXRNY0ZzSi9yems0UnIwcFYzZWMzWnhuOWswZG9i?=
- =?utf-8?B?czU4dmpOU0Y4Y1hqTFY3MW5aWUtlam9kUVBUcGNteC80QVFrZDVuQWRkK3dC?=
- =?utf-8?B?MkpGMFpZWG5lMUxTUWtYdFBQK1c4TjdjYS82WnViSTYwYVk1N1JvOXBNeFBS?=
- =?utf-8?B?Y3locjhXYUdQa1kwM04xRTh5NVJJc2ZzQTFQd0FuSFpJZ1g2WW83VVFENXRx?=
- =?utf-8?B?R0tEVUdoQktlWmZQQlZpUEsvc2ZoZkRld0lyTkVwZWs1Z0RYZkkwV1pmazMw?=
- =?utf-8?B?eGFINWpyMUZlMzRMQkdoYitqWi9wcWV0bzFQcVpJMG84d2pUZU52a0gyeE9t?=
- =?utf-8?B?d2JDUGM5NzBZREhMZUh0SHMwSi9yOGVyc1MvcTlJQWM1UGpxa2NCMHFnVE84?=
- =?utf-8?B?QWtHZUNVaTREcnJKaGNWNEJ4RHlvcEZXTzBZN2lMdVpkT2crT25KT3ZHOGEy?=
- =?utf-8?B?SU1oQ1poQXk1TzZVSGNveDlsN2JLeks0UFpPMWxvMFdLd1VMQTErMWNCVWt5?=
- =?utf-8?B?U0E4dU0zV3FzYWFTU1ZSQWZNRW9zZmtjejRhNjN3c2VqRFdSNkNzakVLbXZs?=
- =?utf-8?B?QW9jNEZ0Um44Z1NBdnE2VUIrcWNNdEFLdmtDZmUvT2dZU1VQQkxjY2J0Zm00?=
- =?utf-8?B?cGpwaVVNbVBlbUNlMXFtU1V6TlpTaXJIci9SQ3N4a2F0MzhSKzRrbVpTd2xk?=
- =?utf-8?B?NjZYNk1aNDFYY2RQVUUvTUFRL2tqcTFndnI2Nk4yZ3Zza0FUcU1tai83TzFV?=
- =?utf-8?B?ZU1ublNvbEppTkE1MUpTVWNRTnBkcEhZY0lHVzFMTXE3NTZqZXNhZ0RERSt6?=
- =?utf-8?B?WmZKc0JHODMzcFNacitDMWtYTVZEQk8zNTl0N0tvQjV6aWpZcHVxYnlXQXZm?=
- =?utf-8?B?RjcwV3kydVdJY3MyVWtsc05wRnFzb3JMN1RpSGRqK0t0MDQ4WDIzY1FtNUxX?=
- =?utf-8?Q?3qKtivCfV3JGt?=
+	=?utf-8?B?QUtpMW5lYUFOZEhkdis1RE8zYS92aDQrV1VkM0dDeVpmYkplZSsvbXd4UTV2?=
+ =?utf-8?B?RjJhd3hXTm4vVXZrOUZMeUVHd0tYa2VaOUIxRjFJM3VNVVNQUytrQXRycWhx?=
+ =?utf-8?B?c1djd1dXbmlINGxKSFJCQTlHcDRjMzhobiszdDJZMnYrekpEZ2FnYmNTa1ls?=
+ =?utf-8?B?ZHM4eEFKL2w1WGhSYnBMeG1xYWhvNlJFTkd4ZVdEZUYyZXNOb253Z0o1Y2c2?=
+ =?utf-8?B?eGpTTlZJUjJhVHpVaEVORG0yRklsMHFmMTMyOGlxWm9nc0NiL3RSNGp0ajFH?=
+ =?utf-8?B?MTYyL3VNM2I5N1B4RHVEU0hqQm5IRVJOcDVXdkVDR0NYUUNQRkR5NVhoZFda?=
+ =?utf-8?B?MkJvZ1U5bDhFY2x6cGpEa3dhY0lXSW90SmkxSlJqVDZLVWFPeTdZRmxYaVRR?=
+ =?utf-8?B?U0lyZC9KTjA1LzQ3anlUYTlCemlGRGJKZVYwRkV2aWttZzF2d09PWkdWZU1v?=
+ =?utf-8?B?eCtDbkx1VDJ6SVZ5SnNpWVhNcDlFYXAxZVgzY09zaG1pZ3h0eW9NaFFSN0d0?=
+ =?utf-8?B?VTI4dmx3SWpDaUFzcEtkVDdpbWhLV05yYmNLYUdaSmdZdkltUXRsZEdsRjVH?=
+ =?utf-8?B?YzU3ODdrYkFMS3FHZDdsUU5Db3haMjBDQjZWYzJJbzBOSXd0dDFlMjVMa202?=
+ =?utf-8?B?N200VWRUOG5peGtDTEJHaTVuZVVLNklzUHh5K25DUm5sMXQwRXVvdUxZaWlo?=
+ =?utf-8?B?d2NSZlBqcllHV1dmM3JVa3pCWXkvWWxxbk83Ymg1Ui9IeTlPUlU0SVRDWGRW?=
+ =?utf-8?B?T21BaHBuQUR3ZFFaSXp3L1d0T2VFY0ZRWjViSkg1T09jMXJYaGRHWnUrVzVk?=
+ =?utf-8?B?eE5Ybm9iTjNPT2pZOXNuVnBxMi95V1dxNU52QWN5WEk4UmM0a2xlSHFhUkUv?=
+ =?utf-8?B?YVZyT2wxcGYvb1hLdnpzdnJTWjE2VU1iWTRibm5idmQvZ2FpaU0zVWkwWUZJ?=
+ =?utf-8?B?WE40WUkxdkE5WHoyb1lRMi9oWHNVL2NxellrTVdQVE5mWDB0L1JyYVZ0WXVz?=
+ =?utf-8?B?UnhlMFlCajlqUGx0TE5TSEdneDd0Q3BRbys4TC9aZW9pak5zZ012N1VrdVQy?=
+ =?utf-8?B?L2tFSVI5cGFFRVc1VFNNVE41ckxpemVVdU41clFvclUwNkVZWi8zRHBDSGNx?=
+ =?utf-8?B?RGoxSjNGeWlIWWNnVFlranp4c1BVcml6YUZiOUxTOElDTklYeGd2b2pKWUhp?=
+ =?utf-8?B?ZkxWVmVoRzZCZmVhM0NVbXlrL25JZkNnVFpUeGU2U3d5amJhSmlFS2RPOFBq?=
+ =?utf-8?B?Rk9RVHhyczdxMzlyWDNjVmYySFRHemtUYTVRYmR4V0NiRTRxeHliZm1TNEpT?=
+ =?utf-8?B?TVA2MEg4YjVMcVQzZ0RZeUd6Y0M5M29mbnNmSHFyQndpcWxOU1lsTjdQdG40?=
+ =?utf-8?B?Zk5NRDNsYmpnTUR0OHg4QXdjeXgzU1J3MG5PZG9jNEFUMUJQZEpqcFlNNjlF?=
+ =?utf-8?B?RzkvMlZZM1kvR05td2FLcEdOZC9tZk1sRlhXN2kxdk1xZHFPcjU1SGQxVUFR?=
+ =?utf-8?B?ZnpvS1pXaWM2MHVWbnNoZGsvaUtodVVHbWZIbTBwY2ErTWZpZVpwTnJvOXdi?=
+ =?utf-8?B?cjhxVFUycjZBZWt2WDBYWUR0eWRaVjkzNWY2S1VDU2tyeGNPS1hzeW9yTGlX?=
+ =?utf-8?B?Y1RPTXpQcnZFMXZtQ1FlalpIa2lVZGNaT0VDY0dvN1BaQlBkWnduT0NFRlE4?=
+ =?utf-8?B?TExUK0ltK2JtanI4ait2NEQrMCtGUVZ2OTZQU1Nkekw1UXdzeUhWaFVXRHYy?=
+ =?utf-8?B?aVBKNlVuMXFKRU52LytyeGF1b0phblZ0MjJ3dFFITnpxTW91VnVTZ1RWL2tX?=
+ =?utf-8?B?bERNOXoyL1FMTmVtcUlYSy81R3ZYaFk3Ujk3K0RUZGp5UlNIRTdDdUVKMXJE?=
+ =?utf-8?B?ZGdwaVdpU1dKc0c1S0tOejRKWEtBVElzcXhPTDJSNFp0VFZBQ0wrcXc0cTd1?=
+ =?utf-8?Q?6unxaoHfml8=3D?=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BLAPR10MB5267.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(366016)(1800799024)(376014)(13003099007)(7053199007);DIR:OUT;SFP:1101;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BLAPR10MB5267.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?V3RYUHI4ZVhkb2MrMWM4T2V0R1haRTRsK3ZVazdmQ2ZqdG9KUkhtR0JuNC90?=
- =?utf-8?B?eWFQQm5UWFVkSDNudVRKUGVoU1lZT2p1UkxkTlI2bTB3MGRlaEJrQkxEcFVP?=
- =?utf-8?B?ZUhWVHdMWEVXYnVEb3NvbSt6V296MTgzN0hMRTJmSzBaR0E3VjNoZ0o4R2tP?=
- =?utf-8?B?NnhRdjhHamYxaitVZmZCSk9saWFleC92bk4rNTMycHUvMzN1SkhkNWNhdXEr?=
- =?utf-8?B?aGtVRmhha0Zha1dJZFM1cDh4MDRPRW1YcExSSEFxRXNmaW8rM0VhY0oxQW0y?=
- =?utf-8?B?MnRuaHFYRUpzdjZmeDBJU2NOMy85ayszbFM5Q1p5RGZIWmdUUXF3RmRwWUlw?=
- =?utf-8?B?VWYrRUFQM3VwTkllNFVDQTFVZ3M4OEFUa0NFRjZOZ3JmejI0d3dHaXBHSFYr?=
- =?utf-8?B?cldwc2o5QTQwZktFTkVoWDhJTFBjYmFJcDVZQngwSk5ESWdhdXZZNnpkVURU?=
- =?utf-8?B?YUdMSXEyb09zWW9YVlVGaVJKUDRONWY4NDRWM2o2K1djc081QWJZVHQ5andZ?=
- =?utf-8?B?YU9xZjIrcGZaaDBtYklnU3drVHNJcmN6Rm1xOWt2UWVFbjhnOEFoSVBqdHQ4?=
- =?utf-8?B?SGxaNVkvdlA2WHB2aVFVSmVpZHJuZTdkMm9JYTVqMVNGbmNkTWZnTlZKVXlD?=
- =?utf-8?B?NXFtclBTZlZ1M2Y1Tjg4b3FkMFJPQ0MwN21Bc2pQTzBiUHpGajBjeThNQ2R0?=
- =?utf-8?B?a2htQTF4TUxxZUdRZTVBS21KSVAxcTJnK3NISzZNTUthNjhtZTN5MUhHd0VU?=
- =?utf-8?B?WWJKOXZyWFlJei9ReEw2UW9wbm9wUkt0MFV3TU5hRHVJSm4yUndxRU1nR2dI?=
- =?utf-8?B?U2dCNlBCL0hubzRWdkRIcXUyekRKVWlCNDBYNitKVXR4cGpTTjRzU21POGZl?=
- =?utf-8?B?NHBXa2NUOFNlcHY3RndwQ2FET2x4K2RJUGh6cWw1dHVqL1NzamFXWXZ0V0tT?=
- =?utf-8?B?anFUQUtKdjlxSTM5b05WYU9ORVdzNWNxM0c3UDh6T1BWdU5VQ0RPeXozZTB3?=
- =?utf-8?B?NzBkcjNXMUhZcFJNck10WHN2MGVIY1J3cE5PaFBFNE8xM0ZSM2JHcEZKZzd0?=
- =?utf-8?B?ZDBhQmswTElIakVkTDYrcSttRmVuV0ZTVFhrZUJlL0xtWTJQYzBISkpIZ1V1?=
- =?utf-8?B?bmhVVTR1VThhRE5iQzhXRUxpQUpUc09aMUtHY3laSWFneWp5WW5JZEo4UXlL?=
- =?utf-8?B?NG9ZUldNakViZ0wzVjlUSUZVcStGMTRkVWtqb0x3bkIwalo1WllsUzJYaUww?=
- =?utf-8?B?UW9BV2V6Y2x2bnhhK0dhNXJRZVFxb2R5VkxuWDJpYk80ajRWTVVPcFZRaFY0?=
- =?utf-8?B?NUNwa0ZHUDRSb2xHNzV4eVRndVpNRHMzdXAwOEJCL0d5aStrSnZTekZybDBk?=
- =?utf-8?B?aTBPcDB4MzY3SmpIQm44R3NjMytFdUY3VXd6RTQ3b3djVFd0RzNVaVdVWklq?=
- =?utf-8?B?TkxwdGs1NEx6NFNmc2VjcHRwWFkwSmNmQllPWDh4cmhBeW5WRzlyMVY5NmVT?=
- =?utf-8?B?ZXY4bnFUUHVRMDNmQU1QbFRCREp0ZDE4ZHpzSzlZY1dUUnl3WDdHT05pZnBH?=
- =?utf-8?B?WjBHS1hLUkhmc0laZnNCc2R3OVZDYmJaTFplMjZCQXpIVkpScWU3eWFlWHBY?=
- =?utf-8?B?cUR4blM0Z2Rya25MMGdnUkFyOTdRRVRSVm9LbmtpWWxnUUVMdllEb29CYVZQ?=
- =?utf-8?B?djdHOUltaXJYUmJKZDhrbC80RjVpOEZOdVM5M1dqNnVidmtha1UzUENGNjdN?=
- =?utf-8?B?bVRVdlJSWjlMWW0vMFdnU3lIM1pZMldNZ1loVU44Y0Y1TlFwSElCQjRDc1Zi?=
- =?utf-8?B?RE52bkc4Q2ZGbE8yVHlxd3JhWTZreWR3T3A0NGxhcnljRlNGaE9YMVh2ay9H?=
- =?utf-8?B?ekh0ck5SREgzTTBSZ09TeE1GUFFvOEpiaWVJWCtIa3ZBWVkvM05uaC9HalBH?=
- =?utf-8?B?djRpTW1hU3JmazNaUENzcGlZUndoUFdJSHlaR29OVlF3cTNaQXVvcXZsbWVB?=
- =?utf-8?B?SldsSm54U0lsOVY3T25PbHBMYW55OE5WTXlnSGFkZ1VXNU9abzVPZUwyTzRE?=
- =?utf-8?B?aGZ1SnBZWGdGVmVCTmhBbVpNc29QUkRCQ3BNVkZ2SmEzTFB2NkVKV1ozaCtH?=
- =?utf-8?B?SVVNd1RvNWdoejNCRHdhVHk0WEhOcjZleC9MTFFmLzFXVHp2S1hYSktRMkYz?=
- =?utf-8?B?S3c9PQ==?=
+	=?utf-8?B?T09EUk9SS3ByZUdaSFNKWkZlMkJITE10YzVTbXp4bVBpRDNwMjUzVGtHSmxt?=
+ =?utf-8?B?WW1NWU0vRGJTYkt2cGMwaDVnd3lSOUh5MkNXR2wzc254cVJKTnZ3VmtPZEhK?=
+ =?utf-8?B?TG5NTjdNT3R4Y3JoK2k5Q28rMmRqTTRqOXN1MHEvMHduaEtHbFFyV2JBVHVB?=
+ =?utf-8?B?MXhFd3BMYWZ4MUJtTjBGRXBLM1ViRmIxYzY4clBtNFQwY1dObW8vd0ZZZFBB?=
+ =?utf-8?B?VzZMNUxTYk1GcUhtTzloVnNsNEZ0K0x6YTc5V1h5Vkx0U2U4ZlBPbkQwamEx?=
+ =?utf-8?B?R1dmOWI5L1RPNDFkMDR2d0hWaGlXOEdLUExpbTlVNUxYTGZ3MlJVdWhnSjA2?=
+ =?utf-8?B?cG1zVFpVTlA5OHBHN015Y1IxTEtoT21VS2ZXVVJPcE8xLy9MYklyY0tqZzhW?=
+ =?utf-8?B?R29iWkhCNDVRaWQyTHQrSStsait0amc1ZVJCNGIrTVV6WWxxeDlnMU5VNDJL?=
+ =?utf-8?B?QUdPREZDRE1LZ0lweThsalBjdHRRdzl0RDJ5eGphRWEyd2t0ZEdXRFl5WFhk?=
+ =?utf-8?B?Z2dIWHdPNjhaL2RIVllXVUtGdjFYM1RXcXlzN1JTL3RxQlU3dHhDTFVnZk5V?=
+ =?utf-8?B?ZExLeHRRLysrUVBvV1VFTXk4OWZWYVFuazZ4UWRqeGJIejlVQW16dTJ1Nllo?=
+ =?utf-8?B?dVAybWlQYkxQb1FtMDhrdnZtYU03Z3lTbC8zbjVjOGdrc21BOVRhejFqUFhH?=
+ =?utf-8?B?RVBtN2xKdENqdGdmV1lkVUVIWmRab2NoTWx6TGd6UloyZ2pLWWNkZStBSFp2?=
+ =?utf-8?B?a0ZIbE5zTWFuRElVOUhFZkpSNmhGNFBXZDAyMVVPZWtpNEFycW9wK0Z5Rkt2?=
+ =?utf-8?B?TE5xMTFWVkVPYXdFTE1hTEltN09FSEtuTnZ4WWxiNTVXemNQUDRHQXdBL0pr?=
+ =?utf-8?B?VWkzeE8yTmM4bTF5NWhJanNTTDZPRHZTTUQySUtGWHp5ZThhS3RrenBkcmxP?=
+ =?utf-8?B?eGRyOVQ1RlZML05VdGxidlhiK1FKTDNNcVd0a3hmdk96dVpYNktxNjAvZ2Zi?=
+ =?utf-8?B?YjlvN1VEZzFocnExYVozWVZWR0tGajdXeHl5SEU4Rlh0bXV3bkhIMnJpeHFk?=
+ =?utf-8?B?QlFXaW56S2FqbWV1VW9lYi9sUzd2bXJVNmJiTjVQZkZUaFdXWFRpMVBNU2NU?=
+ =?utf-8?B?MFQrV3NWd2NBQW8veC9yT2RQMTdwalcrMkx4aHJzYm9TemtINjhJYWsyNFgy?=
+ =?utf-8?B?Umc0L3U1U3JIS3BFUXJ3elZLNzRYMWtiSFk5NC9QVW81ZlZEYjRhYmpUa0Ji?=
+ =?utf-8?B?cWlqLzZpaEN2OERGY2QwMEwxNjVQQWJNUlk0WjJmdlp3ZThlVm5uOWJTOUI0?=
+ =?utf-8?B?dXgzRkd6cDJJWjFDM1M4Yk5ETy9leXlGY1pweGwza0lLY2kwU3lzbk1kRXRi?=
+ =?utf-8?B?UWdrMUtXc2hNZUVOc1RYd2ttUG50dE9NZVpIcm4xeExmcitQSkczT2UxWnJx?=
+ =?utf-8?B?NEZRNFY5L2diZ1VXbEpZS1RzdUd3SzZQTXM2ZEljTFIrRzNpbEk3MzAvQ2NH?=
+ =?utf-8?B?aUdwRHRqb2ZqTkZ3aXIrem1ybk0vYWV5TW15ZHo1cHRBRUZrUWdKOXUzQURr?=
+ =?utf-8?B?TUxWMjJkYlpEaUJHWXRLTUpvdkFNNkM0UERqWFB6YlJqTUVuR3hkWjgzL0ky?=
+ =?utf-8?B?R2R2TWowRDFxOTVORDg1NXNockJtaS80N25MWHBuTlFrZFNVYWM4RjVOVFpy?=
+ =?utf-8?B?Vy92Rk1IblpzU1hWVUp4ZTQ3QVdEb1pJNmtkalR5bXpScCtSQmt5VFh6bXp6?=
+ =?utf-8?B?cWJCb1g2cDEvQit2NWg4Ti85bk5kM2lIUlpWajYyMnpOME5EY05XUTZjVjFM?=
+ =?utf-8?B?a3RRL1dBaXNXUXY0anZKMUc1VUhuaURkOWVlVDBqbmh2MWdSKzh3cXNKY2RV?=
+ =?utf-8?B?b3FORWl1R002NTBhNVgrSDZZcWptVytTc2tZUWpZN0FUT3duN1I4eDkyaVQx?=
+ =?utf-8?B?SUh3N0R0eGNWYldDUFdieUFWNVZUSkphR245WFQwSVNGakVLdUlOUGozdlNR?=
+ =?utf-8?B?MGdhdEdpUW4xR3pjdHcwZkppN0NtSVA5ekdROE9XZUFldmhoc2RpUVFnU2RP?=
+ =?utf-8?B?Q2VRakIxOUFrcWhkWktxSTVHUWlzU2htZTA4Y0lDdDlrSGZtS1YzNldPQjV3?=
+ =?utf-8?B?QkFxU2JzOXRYa0NQWkZtVno2dFVJV3UyMk1TMXROZFR6WGVmUlpaM3BKZTQr?=
+ =?utf-8?B?OWc9PQ==?=
 X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
-	j+uOY1QCLSTqcsHbxAaxUS+AfRHYR6UPSEpY3t0Wrmv4iPELIXAinIVR5I1KqKuiNzOpvvo7gz9cufgpotipSg3wZX5CowGByT61c569P+6nS4bifQ2tc3omFmfCWfo6Sv+lAx2WWtUiloC1GKgmYZD8vYyMF8PDYBClVOK+R/WGmS6AeHPSXHpAWkniSyy3UwViRZOVUBPIYh3FsDT+6pl2WtyPH4PYu5c6Q53xZrG2gelMnO0uu7IzeAHItALkT32HbLICky+8Gcendm/4b+h2bd1iX3QyvPRiydde+YpjYsD2ErMqUgd6b+ZpzpFFntyWhHA6udM68lLaxaNsjC/dvNzKAWru3WwwVhzRhXoV/m7zC7S/npjZRJqKp7ANihZHLmXsG0UERc53WmVv7eXypakC4IOjGqwCG2Ty1uHFSoGWfSTH8zwW4EyW3nzYepjEMRiBFT+KGK03rEURAvncn7SpIUOHbMjAQnZsaJayB1IIqJgT0h8JccIvlQGmrZAgZeXQ0cyJBtA2u0fK2cjoAJVQzmahETn0HNPTeHCBTp+u+5gXpiFhWA/LtS8kp1TGsKuhr5Cyuo35LN5sPm63R1v1Vd03GwfAx1z2fJI=
+	5jWPVxO+fZFYeyHyueKe0b3m37m4KAzoAoIcYtG27FV38ig2Raet5JrUrNQCdlUU89rQGV4+lBGtBP1ifZ2sHy/E7zjGFJ89Nb33tAPjfYlWc0mYzhhdnn87WW9Y9w3RPKum7TMNu7LsVXzAuSJPnn45CONsXXXVH65GtFZ+gG9s5YGDOLc+vXNBlyQcVsOacXf4aKZz66v+2q0xCI/M1nvhD0zWT8omGL3JG1dkp+vHTD91Ca3QJ1uhqESU46yFW0qNgBnhfBHqIEKz1w9SVdXMgBUuVe3KelkzIIRRpoHQs+Boil7NbrgbjtBRbRMAkJXsT1Npz+JmI59NRrW3KCa8yEryLF6XXTFCMfH5rafAdVsB4vPQQxonwCKL8+mG55RVqUYY6HRgv2FbmdwnPMo0IXuh0YUvIbu18d7rBe30mOKS0/QDpChzx7REAyV1cCv1/H4XNIEyV0UmpNdq4ywIZ2ACABaywvpUiE/vIoboMGGFxlFBLyPRdB2vHHoBWIBlwQtpGD7E7l3poVQBiDgw0+N5jHqfAiISzryP5CCj3vm27oDnf8KOnBEs+iYKCwbILJ869gmzJxGERrhwhzqXw+GN2tMCpOwV2+Ypw2Y=
 X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 156bed49-b7b1-41af-fb1a-08dd8304746e
+X-MS-Exchange-CrossTenant-Network-Message-Id: ceefd138-36c5-4d26-237b-08dd835aebf5
 X-MS-Exchange-CrossTenant-AuthSource: BLAPR10MB5267.namprd10.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Apr 2025 07:48:51.6608
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Apr 2025 18:07:48.7895
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: tXSFGxeIknDYnl8sZE6WgQmEZzrJGkxa/3TOW2tvWSByocjaW8q6mGQxxVR2B3WEKbgiUj7vLtahgGiKi9gttw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA4PR10MB8423
+X-MS-Exchange-CrossTenant-UserPrincipalName: SG1q6u09DJimCCb8anvoGBm6/cYrwCGt2bZb+dKzVrXcHqX2llEoroHJE6JLd898Wqv0klX0CWaWY4M0o7WM7w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR10MB5893
 X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.680,FMLib:17.12.80.40
- definitions=2025-04-24_03,2025-04-22_01,2025-02-21_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 bulkscore=0 mlxscore=0
- spamscore=0 malwarescore=0 mlxlogscore=999 suspectscore=0 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2504070000
- definitions=main-2504240050
-X-Proofpoint-GUID: Kw30saZ0rDG0fCJJc0BsUJ9pQbfx_rzO
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNDI0MDA1MCBTYWx0ZWRfX/OapOaycWCdB AMt9G8r3rRR049j62q6O2yud1Lb9mZaaWbdg4TrS6qrw3JmiR2ndL9sqgz7x3UoG356IU5rREPp 17HZpWkMmbIiHkChnl0BVOK0RkOiG+2+l+gIAjNuO0hbkB4Xm3PyOjl+uSxtLHYaLGR0Hhll3kw
- tHOoMZkGcZ3j/wu2NXHw/xn4oHxE9k03+M1faNUGlgfpkXrtUpD2HnNwJGbdsOwU22P39o0Z48M om6/knmYTE00QmkPodqt1bD4fKAbFiolDTW1MMR4+Ul/D8/QKduVW6LPk9TZGVUF+/iwYfa0aRR jNkuvAaBGeFVemeACYx2KKnofY21SUp8MZ+E1oS46JzFrOy4rMKQaNKsau+qjq67enIWnEnI+NN Q92Ongl1
-X-Proofpoint-ORIG-GUID: Kw30saZ0rDG0fCJJc0BsUJ9pQbfx_rzO
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
+ definitions=2025-04-24_08,2025-04-24_02,2025-02-21_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 mlxlogscore=999
+ mlxscore=0 spamscore=0 phishscore=0 bulkscore=0 adultscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2504070000 definitions=main-2504240125
+X-Proofpoint-ORIG-GUID: qK2Tn4oK3vVyvC_LOEwuvyb-KuZFOTvR
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNDI0MDEyNSBTYWx0ZWRfXza6NHw1czNeG CUk5+c2VkKjVnlrnTceBOVGlAkxJ1ODkUpp5l4bZ5iLGUCJwsHo/OTthbHS7/20bppOc99wUuD+ lMAdnGjzVpgWYigHORjbHL1ni0kKYh3UXweQEMHEMK1BPAOZwLj9FF4sff7lZm/mplDzl31VlWU
+ HGLQuyKDcV97wDst8iuaDPzZICHxQ+h9cBRH9GXpIUsUHHW4vM8/dsnC64phTzT5LrHUbc4BiEr WuKZqUlSwQ1D39boF/HC0HboV2PonwFe1U5xdQ6UkBVdepo35WEsIr/N+Qv0BA7Q8QnsDIS49Pc i7Fgyh9nOtVA45agV7kC5l+QonfE2F91jObmGSb+Bpu1cPO9imr2DrqAaZ7bCU6WKvVnR8XGQkv y54UyaNm
+X-Proofpoint-GUID: qK2Tn4oK3vVyvC_LOEwuvyb-KuZFOTvR
 
-On 23/04/2025 18:50, Andrii Nakryiko wrote:
-> On Fri, Apr 18, 2025 at 11:58 AM Sedat Dilek <sedat.dilek@gmail.com> wrote:
->>
->> [ QUESTION ]
->>
->> How to check if libbpf API functions
->>  * btf__add_decl_attr()
->>  * btf__add_type_attr()
->> work as expected with pahole v1.30?
+On 22/04/2025 14:33, Paul Menzel wrote:
+> Dear Linux folks,
 > 
-> What does it mean "work as expected"?
 > 
-> Can you be a bit more explicit about what is the problem and what
-> doesn't work? I didn't get that from the below investigation notes,
-> sorry.
+> Trying to build Linux 6.12.23 with BTF and pahole 1.30, I get the build
+> failure below:
 > 
->>
->> Looks like I need Linux version >= v6.15-rc1?
->>
+>     $ more .config
+>     […]
+>     #
+>     # Compile-time checks and compiler options
+>     #
+>     CONFIG_DEBUG_INFO=y
+>     CONFIG_AS_HAS_NON_CONST_ULEB128=y
+>     # CONFIG_DEBUG_INFO_NONE is not set
+>     # CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT is not set
+>     # CONFIG_DEBUG_INFO_DWARF4 is not set
+>     CONFIG_DEBUG_INFO_DWARF5=y
+>     # CONFIG_DEBUG_INFO_REDUCED is not set
+>     CONFIG_DEBUG_INFO_COMPRESSED_NONE=y
+>     # CONFIG_DEBUG_INFO_COMPRESSED_ZLIB is not set
+>     # CONFIG_DEBUG_INFO_SPLIT is not set
+>     CONFIG_DEBUG_INFO_BTF=y
+>     CONFIG_PAHOLE_HAS_SPLIT_BTF=y
+>     CONFIG_DEBUG_INFO_BTF_MODULES=y
+>     # CONFIG_MODULE_ALLOW_BTF_MISMATCH is not set
+>     # CONFIG_GDB_SCRIPTS is not set
+>     CONFIG_FRAME_WARN=2048
+>     # CONFIG_STRIP_ASM_SYMS is not set
+>     # CONFIG_READABLE_ASM is not set
+>     # CONFIG_HEADERS_INSTALL is not set
+>     # CONFIG_DEBUG_SECTION_MISMATCH is not set
+>     CONFIG_SECTION_MISMATCH_WARN_ONLY=y
+>     CONFIG_OBJTOOL=y
+>     # CONFIG_DEBUG_FORCE_WEAK_PER_CPU is not set
+>     # end of Compile-time checks and compiler options
+>     […]
+>     $ make -j100
+>     […]
+>       LD      .tmp_vmlinux1
+>       BTF     .tmp_vmlinux1.btf.o
+>     die__process: DW_TAG_compile_unit, DW_TAG_type_unit,
+> DW_TAG_partial_unit or DW_TAG_skeleton_unit expected got INVALID (0x0) @
+> 115a4a9!
+>     error decoding cu
+>     pahole: .tmp_vmlinux1: Invalid argument
+>       NM      .tmp_vmlinux1.syms
+>       KSYMS   .tmp_vmlinux1.kallsyms.S
+>       AS      .tmp_vmlinux1.kallsyms.o
+>       LD      .tmp_vmlinux2
+>       NM      .tmp_vmlinux2.syms
+>       KSYMS   .tmp_vmlinux2.kallsyms.S
+>       AS      .tmp_vmlinux2.kallsyms.o
+>       LD      vmlinux
+>       BTFIDS  vmlinux
+>     libbpf: failed to find '.BTF' ELF section in vmlinux
+>     FAILED: load BTF from vmlinux: No data available
+>     make[2]: *** [scripts/Makefile.vmlinux:34: vmlinux] Error 255
+>     make[2]: *** Deleting file 'vmlinux'
+>     make[1]: *** [/dev/shm/linux/Makefile:1179: vmlinux] Error 2
+>     make: *** [Makefile:224: __sub-make] Error 2
+> 
+> Help how to get a successful build is much appreciated.
+>
 
-hi Sedat, I'm presuming you just want a way to test these new APIs using
-pahole-generated BTF (if that's not what you're asking, as Andrii says
-please do let us know what you're trying to do in more detail).
-
-There are two aspects to this; can I generate those attributes, and can
-the kernel handle them?
-
-For the first case, type attributes are currently generated if the
-"attributes" BTF feature is specified. Whether you have this
-functionality in pahole v1.30 depends how you build pahole; if you use
-the git submodule, you will have the required function. If not, the new
-functionality Ihor added should dynamically detect the presence of
-btf__add_type_attr() in the shared library libbpf.so for cases where the
-"attributes" flag is specified. If your libbpf.so does not have that
-function, the feature request is ignored. btf__add_decl_attr() isn't
-used in pahole yet. You can run
-
-pahole --supported_btf_features
-
-...to see if the feature is supported; looks like it is in your case
-from what you sent.
-
-Now the next issue is whether a kernel can parse type tags with kind
-flag set; only kernels that specify the "attributes" BTF feature in
-scripts/Makefile.btf should generate such type tags, as these are the
-kernels that can validate BTF containing them.
-
-You can see type attributes in action for vmlinux BTF by running
-"bpftool btf dump file vmlinux format c"; a few of the arena-related
-kfunc parameters should have address_space(1) attributes associated with
-them; example
-
-extern void __attribute__((address_space(1)))
-*bpf_arena_alloc_pages(void *p__map, void
-__attribute__((address_space(1))) *addr__ign, u32 page_cnt, int node_id,
-u64 flags) __weak __ksym;
-
-Note that you need a matching bpftool that also understands that the
-kind flag set means an __attribute__((address_space(1))) ; otherwise
-these will incorrectly show as
-__attribute__(btf_type_tag("address_space(1)")). So make sure you use
-the bpftool from a kernel supporting the "attributes" BTF feature.
-
-It would be good to have a standalone pahole selftest covering type
-attribute generation; if that's something you would like to contribute
-that would be great. We can't really test the decl attribute from the
-pahole side until pahole starts using it.
-
-From a libbpf perspective, looks like bpf selftests have test coverage
-for btf__add_type_attr() already as part of prog_tests/btf_dump.c.
+hi Paul, I haven't been able to reproduce this one yet with your config;
+I tried with bpf-next + gcc-14, then switched to linux stable 6.12y +
+gcc 12 as that more closely matched your situation; all works fine for
+me. I'll try more precisely matching the gcc 12 version; things worked
+fine with pahole v.130 + gcc 12.2.1; from your config looks like you
+have gcc 12.3.0.
 
 Alan
 
-
->> dileks@iniza:~/src/linux/git$ git log --oneline -1
->> 51d1b1d42841c557dabde5b140ae20774591e6dc
->> 51d1b1d42841 libbpf: Introduce kflag for type_tags and decl_tags in BTF
->>
->> Add the following functions to libbpf API:
->>  * btf__add_type_attr()
->>  * btf__add_decl_attr()
->>
->> dileks@iniza:~/src/linux/git$ git describe --contains
->> 51d1b1d42841c557dabde5b140ae20774591e6dc
->> v6.15-rc1~98^2~87^2~5
->>
->> Currently, I use Debian-kernel v6.12.22 and want to build a selfmade
->> v6.12.24 (when it is released).
->>
->> If you need further information, please let me know.
->>
->> Best Thanks,
->> -Sedat-
->>
->> P.S.: My investigations
->>
->> [ DEBIAN PAHOLE ]
->>
->> Debian/unstable AMD64 ships on my request pahole version 1.30-1.
->> This version was built against libbpf-dev version (1:1.5.0-2)
->>
->> Link: https://packages.debian.org/sid/pahole
->> Link: https://packages.debian.org/sid/libbpf-dev
->> Link: https://bugs.debian.org/1103000
->>
->>
->> [ SELFMADE PAHOLE ]
->>
->> Prereq: libbpf API version >= 1.6.0
->>
->> dileks@iniza:~/src/pahole/git$ git describe
->> v1.29-16-gb45268b74da1
->>
->> dileks@iniza:~/src/pahole/git$ git log --oneline -1
->> b45268b74da1 (HEAD -> pahole-v1.30, tag: v1.30, origin/next,
->> origin/master, origin/HEAD, master) Prep 1.30
->>
->> root# /opt/pahole/bin/pahole --version
->> v1.30
->>
->> INFO: git describe should report v1.30
->>
->>
->> [ BUILD INSTRUCTIONS ]
->>
->> VER="1.30"
->> PREFIX="/opt/pahole-$VER"
->> PREFIX_CMAKE_OPTS="-DCMAKE_INSTALL_PREFIX=$PREFIX"
->>
->> echo $PREFIX_CMAKE_OPTS
->>
->> cd ..
->> mkdir build
->> cd build
->>
->> # NOTE: See upstream commit "CMakeList.txt: Respect CMAKE_INSTALL_LIBDIR"
->> ##cmake $PREFIX_CMAKE_OPTS -D__LIB=lib ../git
->> LC_ALL=C.UTF-8 cmake $PREFIX_CMAKE_OPTS ../git
->> make
->> sudo make install
->>
->> NOTE: Do NOT forget to run `ldconfig` as root (see below).
->>
->>
->> [ LDCONFIG ]
->>
->> File: /etc/ld.so.conf.d/a-local-pahole.conf
->>
->> # pahole lib configuration
->> /opt/pahole/lib
->>
->> root# cd /opt
->> root# ln -sf pahole-$VER pahole
->> root# ldconfig
->> root# ldconfig --print-cache | grep pahole
->>
->>
->> [ PAHOLE - CMAKE LOG (LIBBPF) ]
->>
->> [...]
->> -- Submodule update
->> Submodule 'lib/bpf' (https://github.com/libbpf/libbpf) registered for
->> path 'lib/bpf'
->> Cloning into '/home/dileks/src/pahole/git/lib/bpf'...
->> Submodule path 'lib/bpf': checked out '42a6ef63161a8dc4288172b27f3870e50b3606f7'
->> -- Submodule update - done
->>
->> Link: https://web.git.kernel.org/pub/scm/devel/pahole/pahole.git/commit/?h=v1.30&id=fe2dcd28ba9d348744ee93fed43cbed5dc0d6a43
->>
->>
->> [ BTF FEATURES ]
->>
->> root# /opt/pahole/bin/pahole --usage | grep feature
->>            [--btf_encode_force] [--btf_features=FEATURE_LIST]
->>            [--btf_features_strict=FEATURE_LIST_STRICT] [--btf_gen_all]
->>            [--skip_missing] [--sort] [--structs] [--supported_btf_features]
->>
->> NOTE: --btf_feature*s* (all options plural) VS. commit 40e82f5be9a7
->> ("pahole: Introduce --btf_feature=attributes")
->>
->> root# /opt/pahole/bin/pahole --supported_btf_features
->> encode_force,var,float,decl_tag,type_tag,enum64,optimized_func,consistent_func,decl_tag_kfuncs,reproducible_build,distilled_base,global_var,attributes
->>
->> NOTE: Supported = attributes
->>
->>
->> [ LIBBPF API VERSION >= 1.6.0 ]
->>
->> Link: https://web.git.kernel.org/pub/scm/devel/pahole/pahole.git/commit/?h=v1.30&id=fe2dcd28ba9d348744ee93fed43cbed5dc0d6a43
->>
->> commit fe2dcd28ba9d348744ee93fed43cbed5dc0d6a43 ("pahole: Sync with
->> libbpf mainline")
->>
->> Pull recently added libbpf API functions:
->>  * btf__add_decl_attr()
->>  * btf__add_type_attr()
->>
->> root# llvm-dwarfdump-19 /opt/pahole/bin/pahole | grep btf | grep add
->>                DW_AT_name      ("btf__add_type_attr")
->>                DW_AT_name      ("btf__add_enum64")
->>
->>
->> [ pahole.git - lib/bpf/src/libbpf.map ]
->>
->> LIBBPF_1.6.0 {
->>        global:
->>                bpf_linker__add_buf;
->>                bpf_linker__add_fd;
->>                bpf_linker__new_fd;
->>                btf__add_decl_attr;
->>                btf__add_type_attr;
->> } LIBBPF_1.5.0;
->>
->> -EOT-
+> 
+> Kind regards,
+> 
+> Paul
+> 
+> 
+> PS: Using pahole 1.23 I get:
+> 
+>     $ make -j100
+>     […]
+>       LD      .tmp_vmlinux1
+>       BTF     .tmp_vmlinux1.btf.o
+>     pahole: Multithreading requires elfutils >= 0.178. Continuing with a
+> single thread...
+>     Unsupported DW_TAG_unspecified_type(0x3b)
+>     Encountered error while encoding BTF.
+>       NM      .tmp_vmlinux1.syms
+>       KSYMS   .tmp_vmlinux1.kallsyms.S
+>       AS      .tmp_vmlinux1.kallsyms.o
+>       LD      .tmp_vmlinux2
+>       NM      .tmp_vmlinux2.syms
+>       KSYMS   .tmp_vmlinux2.kallsyms.S
+>       AS      .tmp_vmlinux2.kallsyms.o
+>       LD      vmlinux
+>       BTFIDS  vmlinux
+>     libbpf: failed to find '.BTF' ELF section in vmlinux
+>     FAILED: load BTF from vmlinux: No data available
+>     make[2]: *** [scripts/Makefile.vmlinux:34: vmlinux] Error 255
+>     make[2]: *** Deleting file 'vmlinux'
+>     make[1]: *** [/dev/shm/linux/Makefile:1179: vmlinux] Error 2
+>     make: *** [Makefile:224: __sub-make] Error 2
 
