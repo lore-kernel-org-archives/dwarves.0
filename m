@@ -1,258 +1,165 @@
-Received: from fout-b3-smtp.messagingengine.com (fout-b3-smtp.messagingengine.com [202.12.124.146])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A02E1A256E;
-	Fri, 25 Apr 2025 18:40:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.146
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE876219303;
+	Fri, 25 Apr 2025 19:43:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745606461; cv=none; b=H5BvjLeAcTyOE49vJUZdlh8r2lFwkMMCwVu88d6dTYiyqRasihKytbRIFrA5D9JdOgckKhmuZmBB2PF+lzfmc5qfJ5UzhGSlinhfdPYRkyt9lwQgOxwtNJeFapSfuIEKA6+v9fcT2uJrJ3H5bLuR4BUqJxMipYjBDfX6GREjBAE=
+	t=1745610198; cv=none; b=IRwVcGJynMeaOMzREWrmAKsMRQDEBt1DrfOJ0bIeLQzEPFd5f9kOPmkTbJV+S0MyMLwtWGtn8X3vJ9a8Nn3xAjTweCZRT3pVzHUMj8K0Y88kFsJHmsCFhdU6I5rnWNaiCg9wOSEMngN2OFJlNA48xOW2xP+gzShGRmCIxK4lqtA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745606461; c=relaxed/simple;
-	bh=KP8roe5x3OaKvl7hyNpU3wzG5QEOfl0Luu7GnQu6BxQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aIkd5xxMMgqFcEd2CdnRPnBwkkd/IMmNvdT5I6zf5UaXSQtR/G3iBsg/p0Hrc7gM7bqhtqDwF9P72bHBCFYTbXVA/1n88WzVGtPlxt3vRWdjgfovpWlj2KY64ypsWy+jJURDtRNr3t6G2V7fo8w58yH1hxHqn5UOvmmiPTugyvY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dxuuu.xyz; spf=pass smtp.mailfrom=dxuuu.xyz; dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b=BIs8VeWX; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=DaS4mMNU; arc=none smtp.client-ip=202.12.124.146
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dxuuu.xyz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dxuuu.xyz
+	s=arc-20240116; t=1745610198; c=relaxed/simple;
+	bh=n4kqhT7GqQL7ewcpNVtoptzgVUov77wzYh2GMvFeFLM=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=e7sK3PYtXV5IuxAY/SNoBz7v1ew54jm48jibTnzTIcxPyPqjZ78G4vQEFRbx9o7KDa5iq102AblVIIE8kin46be2jkBVkXkMB2MRjArtYENC1OrAt38UE41JBuvWl6lZy9zy+pjIS1II5WQA1lpXy3N1z4by/vqQNG88hYOpc/8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FFgK1mxG; arc=none smtp.client-ip=209.85.214.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b="BIs8VeWX";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="DaS4mMNU"
-Received: from phl-compute-05.internal (phl-compute-05.phl.internal [10.202.2.45])
-	by mailfout.stl.internal (Postfix) with ESMTP id 39C891140232;
-	Fri, 25 Apr 2025 14:40:57 -0400 (EDT)
-Received: from phl-mailfrontend-01 ([10.202.2.162])
-  by phl-compute-05.internal (MEProxy); Fri, 25 Apr 2025 14:40:57 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm2; t=1745606457; x=1745692857; bh=bz4wF9TTlh
-	ZEFwrPNnb9FAdgOG9sz7R91MKV/Owj6r8=; b=BIs8VeWXWp3sVIXzNjFV5OG6a3
-	qJMglnz0yEhtOErweKv9mpoivK4QoEbRdPgPBfJHhTAFPBedqDLvM99b+IPCjtH+
-	+RCs6Zzz1/p9aVR/DpGEuqyyBdCtvUcgM/qqElGM4WON2yQkpqpT957xGQTZP9jW
-	4mhkPf5/rNMmUsmHuuYLeNX7lmD0ZtYxTBzOWTRSDtmDOHOmb4QUscIVoHBv7RTM
-	feVvQIdUYg/igu0YDQ9ivOmNZ7SHpgKgY/anUrY03yirm0KmbinM/FiTeQ7tud3K
-	2RneplF4rPAUGaNzdQ7k7EUONQKnQZDCb5dP4ADREopj8j3kXHnerKehE3EQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
-	1745606457; x=1745692857; bh=bz4wF9TTlhZEFwrPNnb9FAdgOG9sz7R91MK
-	V/Owj6r8=; b=DaS4mMNUJl0URu1kn0cToSkZyFVr12Y9DCaV75AOEEYrlxHYLKW
-	Ffpo/im51iTonp4UZ2BmLQQKBYtjqf8WHRLG56LJkXjhlfK3mCy8OqIvdZhCnpzi
-	ByWz6tk1LcAOg3e87mp32+uZ2Fm1/KKR8eAhUaxlqXHQAYAB92w2cO6Ru+Eayk0h
-	AR9XeEZOYVTzsUpKEmblzfRz9Cid0p/yV9U0bwSJwFD30kKVVXmwDKxJNO8JpNON
-	MFbwR3hVfcAwwwXhRAcibrN36wgMWCm/ySF5F3cKJ5/tY3YS3G/pBTwiVFaQCoSk
-	sSdvxWcIxP3Mlrcxkmzn8yta02xjincDiPw==
-X-ME-Sender: <xms:ONcLaISeWyH24Bro9-FN5N3PCaJ_0xJgHJ0a4TiKC2eJh_ZjUyj6eg>
-    <xme:ONcLaFwyE2aDo1TIRiFvQEbSMgBU1EeOQXsvEebuU3B7UhyQGDsF7HTA6k9lvCUnj
-    wv7gZdizK4aQD4l9g>
-X-ME-Received: <xmr:ONcLaF1xm-Fv5uSU-Y9-H9ndwOvkEhv6jMAN3TjzC4c-h9YdpxbxMtl-aVW7LcoCJ1z2HXr60G2RKxmsn-k3W5IrPmxKS-juPokBobIzyMClSg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvheeftdekucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggv
-    pdfurfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucgfrhhlucfvnfffuc
-    dljedtmdenucfjughrpeffhffvvefukfhfgggtuggjsehttdfstddttddvnecuhfhrohhm
-    peffrghnihgvlhcuighuuceougiguhesugiguhhuuhdrgiihiieqnecuggftrfgrthhtvg
-    hrnhepvdefkeetuddufeeigedtheefffekuedukeehudffudfffffggeeitdetgfdvhfdv
-    necuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepugiguh
-    esugiguhhuuhdrgiihiidpnhgspghrtghpthhtohepuddupdhmohguvgepshhmthhpohhu
-    thdprhgtphhtthhopehtthhrvgihvghrsehmvghtrgdrtghomhdprhgtphhtthhopegufi
-    grrhhvvghssehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepsghpfhesvhhg
-    vghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopegrtghmvgeskhgvrhhnvghlrdhorh
-    hgpdhrtghpthhtoheprghstheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohephihhshes
-    mhgvthgrrdgtohhmpdhrtghpthhtoheprghnughrihhisehkvghrnhgvlhdrohhrghdprh
-    gtphhtthhopehihhhorhdrshholhhoughrrghisehlihhnuhigrdguvghvpdhrtghpthht
-    ohepshhonhhglhhiuhgsrhgrvhhinhhgsehmvghtrgdrtghomh
-X-ME-Proxy: <xmx:ONcLaMA-qCMyvy8tWzlBqR5_TdYW21l5v-FEnb4OH2AveBJ3DBxHyQ>
-    <xmx:ONcLaBj8Ruz8GHeU_HktMumKM8bRTdHXYZKksQXcxJ8HQ9bNdr-9IA>
-    <xmx:ONcLaIqCvRcrU81Ct6lhBDAq9rcqCPsdZd56zcCulj3dDGwGsrvCBg>
-    <xmx:ONcLaEgiztQgBLOuSJWyV_SzEL0-dC19kG6vOweh94khf9UoKvtiyg>
-    <xmx:OdcLaD9VdbmXG_uil7a_Wob14TZgnlOu7LjY-b4cBPfRwuuiSKvJQinS>
-Feedback-ID: i6a694271:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 25 Apr 2025 14:40:55 -0400 (EDT)
-Date: Fri, 25 Apr 2025 12:40:53 -0600
-From: Daniel Xu <dxu@dxuuu.xyz>
-To: ttreyer@meta.com
-Cc: dwarves@vger.kernel.org, bpf@vger.kernel.org, acme@kernel.org, 
-	ast@kernel.org, yhs@meta.com, andrii@kernel.org, ihor.solodrai@linux.dev, 
-	songliubraving@meta.com, alan.maguire@oracle.com, mykolal@meta.com
-Subject: Re: [PATCH RFC 0/3] list inline expansions in .BTF.inline
-Message-ID: <fcjioco2rdnrupme4gixd4vynh52paudcc7br7smqhmdhdr4js@5uolobs4ycsi>
-References: <20250416-btf_inline-v1-0-e4bd2f8adae5@meta.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FFgK1mxG"
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-224019ad9edso39502865ad.1;
+        Fri, 25 Apr 2025 12:43:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1745610196; x=1746214996; darn=vger.kernel.org;
+        h=mime-version:user-agent:message-id:date:references:in-reply-to
+         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=O72gn9kR1nz94erxUiMK+2B4889QajzPSc5EcH4w7oQ=;
+        b=FFgK1mxGO3IxmuD6ENS8eyJUf1hRiYo6Z2854eiG5lcPG2F5BlA7H+r+c3HGGLT61h
+         WbJvJcUHxnjSeLPqo28Z4+yipSK63vuyHjtQ69sMCgEw7whWVJAFL+etQ4wsc20KFKyU
+         x66bIaYY4S9YhuOovbudfsxMkfgn0o20vym5eSu6/sT7M29p77KvdNqYDc3IysU2NCAY
+         rT/7YW5vZd6cSiD7pl4CGZkZVArDztI4EmbHcYXN9J79R4Dw2lp3iwDUNIIjbqHHwIS3
+         QStyJ92worhU6jkozzXinc1b3E21FeA1XxZDD/HQP1EYn63+5VRlliktUw9eSzvWrFvv
+         3A4Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1745610196; x=1746214996;
+        h=mime-version:user-agent:message-id:date:references:in-reply-to
+         :subject:cc:to:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=O72gn9kR1nz94erxUiMK+2B4889QajzPSc5EcH4w7oQ=;
+        b=BsTnIEiRySPPRO3vXPZA+8018K1rq90VYC1t6a0RNGOkL+LzECQW9V2IobithFUvJQ
+         MImqPtMOtYc864n6sbblmY6ZOAm9fuDmpsiW7XyrEvesOLuBnPxphRK8gqWsTSdqTkAs
+         V8r+IbyAROh3TFxQjSpM/gu9Tu6O9Yckr6fXC2/NK1Awo+UFTTJ8ZCCD+MGB46AKwwt9
+         UfmZ2hcsVAwXp/WXW+ILIYz1AgrWBesqj35L7wUkXQdXTZdI/Ail5V0armiMIwyl225t
+         8i6AYyTqvxbKZkiY638H4AMGe1cVmK1iZDbFIMTiXF+utujpwLe7ujARd+TIZdlFQqsE
+         ucpw==
+X-Forwarded-Encrypted: i=1; AJvYcCUBqoJlyjkx9nGer1Wo/kmogNYq14mh1Rh1YKCXNy1WKYwS/QDojx+6qQLCKf67i5HOaaE=@vger.kernel.org, AJvYcCUI1NT77ApQYLw9cBrW+0DuJ4pHakm9CclRaEqhx1Lf17aFDRYBVcp57lD99vD2ZJVg+Iwtf9dqyg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyQ2SWfBje4c1DFJbBZlug46BWHfrONflz+i/NZ7YG9lP9x+IsS
+	L8RkpaSu2GmOLIYlxNYgVbj1vFoXtLIWuRZoCUoixhGSf+aDsM02vZBHHcyT
+X-Gm-Gg: ASbGnctm33Zir2I5GVlij/43yyc5cy9hToEXi99jEbrARotZHAo4IQnK45PzJbnJw/D
+	0DH71bnDBBEixyNvuh8w8i7KnNzV1fIiXxbCPbMrEKD/m/15+Bur9kwNM01sc3ct5DCG8gfa4U7
+	Ez7+0dHZawnOWTZcF3qM+sOGTOO2JU/JsSiEgSmwlbpQ4A9Yi5ND+QHx0kwK49iRyahmUutiEvR
+	NTenigQ9ZCs+KD5re4TpyfhqIyiwfshT9KQTpVT78tekgmc13qTnxpDTNhtfUtW961vdOK6OUKM
+	ihfceRzmeKHA1t5bSpqDYgmidBWMVO3q72Ms8MHTSj+1Rq+mCg==
+X-Google-Smtp-Source: AGHT+IHpHc9vDl2/wlDzc1r1tDIY6Cg3nbLf1cZp64W7ABpbEeQEXuhbEnsncnRvx4CxA2IbaeMjNg==
+X-Received: by 2002:a17:903:1788:b0:224:1935:d9a3 with SMTP id d9443c01a7336-22dbf5ded71mr53976815ad.21.1745610195837;
+        Fri, 25 Apr 2025 12:43:15 -0700 (PDT)
+Received: from ezingerman-mba ([2620:10d:c090:500::5:5728])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-22db4d77395sm36502055ad.5.2025.04.25.12.43.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Apr 2025 12:43:15 -0700 (PDT)
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Alan Maguire <alan.maguire@oracle.com>,  Arnaldo Carvalho de Melo
+ <acme@kernel.org>,  Andrii Nakryiko <andrii@kernel.org>,  Ihor Solodrai
+ <ihor.solodrai@linux.dev>,  bpf <bpf@vger.kernel.org>,
+  dwarves@vger.kernel.org,  Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Subject: Re: pahole and gcc-14 issues
+In-Reply-To: <m2v7qsglbx.fsf@gmail.com> (Eduard Zingerman's message of "Fri,
+	25 Apr 2025 11:14:26 -0700")
+References: <CAADnVQL+-LiJGXwxD3jEUrOonO-fX0SZC8496dVzUXvfkB7gYQ@mail.gmail.com>
+	<m2v7qsglbx.fsf@gmail.com>
+Date: Fri, 25 Apr 2025 12:43:13 -0700
+Message-ID: <m2h62cgh7y.fsf@gmail.com>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250416-btf_inline-v1-0-e4bd2f8adae5@meta.com>
+Content-Type: text/plain
 
-Hi Thierry,
+Eduard Zingerman <eddyz87@gmail.com> writes:
 
-Great progress!
+> Alexei Starovoitov <alexei.starovoitov@gmail.com> writes:
+>
+>> Hi All,
+>>
+>> Looks like pahole fails to deduplicate BTF when kernel and
+>> kernel module are built with gcc-14.
+>> I see this issue with various kernel .config-s on bpf and
+>> bpf-next trees.
+>> I tried pahole 1.28 and the latest master. Same issues.
+>>
+>> BTF in bpf_testmod.ko built with gcc-14 has 2849 types.
+>> When built with gcc-13 it has 454 types.
+>> So something is confusing dedup logic.
+>> Would be great if dedup experts can take a look,
+>> since this dedup issue is breaking a lot of selftests/bpf.
+>
+> It does not look like the problem is with dedup.
+> Quick glance at structure definitions does not show any duplications,
+> just much more structs compared to clang:
 
-Some high level notes below.
+Or maybe it is.
+For example, task_struct is added to .ko BTF generated by gcc, but not
+clang. This can only happen if dedup fails to merge structures in base
+and module btf, right?
 
-On Wed, Apr 16, 2025 at 07:20:34PM +0000, Thierry Treyer via B4 Relay wrote:
-> This proposal extends BTF to list the locations of inlined functions and
-> their arguments in a new '.BTF.inline` section.
-> 
-> == Background ==
-> 
-> Inline functions are often a blind spot for profiling and tracing tools:
-> * They cannot probe fully inlined functions.
->   The BTF contains no data about them.
-> * They miss calls to partially inlined functions,
->   where a function has a symbol, but is also inlined in some callers.
-> * They cannot account for time spent in inlined calls.
->   Instead, they report the time to the caller.
-> * They don't provide a way to access the arguments of an inlined call.
-> 
-> The issue is exacerbated by Link-Time Optimization, which enables more
-> inlining across Object files. One workaround is to disable inlining for
-> the profiled functions, but that requires a whole kernel compilation and
-> doesn't allow for iterative exploration.
-> 
-> The information required to solve the above problems is not easily
-> accessible. It requires parsing most of the DWARF's '.debug_info` section,
-> which is time consuming and not trivial.
-> Instead, this proposal leverages and extends the existing information
-> contained in '.BTF` (for typing) and '.BTF.ext` (for caller location),
-> with information from a new section called '.BTF.inline`,
-> listing inlined instances.
-> 
-> == .BTF.inline Section ==
-> 
-> The new '.BTF.inline` section has a layout similar to '.BTF`.
-> 
->  off |0-bit      |16-bits  |24-bits  |32-bits                           |
-> -----+-----------+---------+---------+----------------------------------+
-> 0x00 |   magic   | version |  flags  |          header length           |
-> 0x08 |      inline info offset       |        inline info length        |
-> 0x10 |        location offset        |          location length         |
-> -----+------------------------------------------------------------------+
->      ~                        inline info section                       ~
-> -----+------------------------------------------------------------------+
->      ~                          location section                        ~
-> -----+------------------------------------------------------------------+
-> 
-> It starts with a header (see 'struct btf_inline_header`),
-> followed by two subsections:
-> 1. The 'Inline Info' section contains an entry for each inlined function.
->    Each entry describes the instance's location in its caller and is
->    followed by the offsets in the 'Location' section of the parameters
->    location expressions. See 'struct btf_inline_instance`.
-> 2. The 'Location' section contains location expressions describing how
->    to retrieve the value of a parameter. The expressions are NULL-
->    terminated and are adressed similarly to '.BTF`'s string table.
-> 
-> struct btf_inline_header {
->   uint16_t magic;
->   uint8_t version, flags;
->   uint32_t header_length;
->   uint32_t inline_info_offset, inline_info_length;
->   uint32_t location_offset, location_length;
-> };
-> 
-> struct btf_inline_instance {
->   type_id_t callee_id;     // BTF id of the inlined function
->   type_id_t caller_id;     // BTF id of the caller
->   uint32_t caller_offset;  // offset of the callee within the caller
->   uint16_t nr_parms;       // number of parameters
-> //uint32_t parm_location[nr_parms];  // offset of the location expression
-> };                                   // in 'Location' for each parameter
-> 
-> == Location Expressions ==
-> 
-> We looked at the DWARF location expressions for the arguments of inlined
-> instances having <= 100 instances, on a production kernel v6.9.0. This
-> yielded 176,800 instances with 269,327 arguments. We learned that most
-> expressions are simple register access, perhaps with an offset. We would
-> get access to 87% of the arguments by implementing literal and register.
-> 
-> Op. Category      Expr. Count    Expr. %
-> ----------------------------------------
-> literal                 10714      3.98%
-> register+above         234698     87.14%
-> arithmetic+above       239444     88.90%
-> composite+above        240394     89.26%
-> stack+above            242075     89.88%
-> empty                   27252     10.12%
-> 
-> We propose to re-encode DWARF location expressions into a custom BTF
-> location expression format. It operates on a stack of values, similar to
-> DWARF's location expressions, but is stripped of unused operators,
-> while allowing future expansions.
+Here is an interesting observation:
 
-A stack machine seems overkill. I'm certainly not an expert on DWARF
-location expressions, but I think we need to get away from arbitrarily
-complex expressions, even if they are simpler than DWARF ones. I don't
-think we want consumers implementing any kind of interpreter or VM.
+$ bpftool btf dump file ~/tmp/objs-gcc/bpf_testmod.ko format c | awk '/struct task_struct \{/ {s=1} s {print $0} /^\}/ {s=0}' > ~/tmp/task_struct.ko.c
 
-I'd vote for something extremely prescriptive, even if it means adding a
-lot of enum variants. At least this way, consumers can be sure they've
-fully implemented the spec and detect when more complex support is
-added.
+$ bpftool btf dump file ~/tmp/objs-gcc/vmlinux format c | awk '/struct task_struct \{/ {s=1} s {print $0} /^\}/ {s=0}' > ~/tmp/task_struct.vmlinux.c
 
-> 
-> A location expression is composed of a series of operations, terminated
-> by a NULL-byte/LOC_END_OF_EXPR operator. The very first expression in the
-> 'Location' subsection must be an empty expression constisting only of
-> LOC_END_OF_EXPR.
-> 
-> An operator is a tagged union: the tag describes the operation to carry
-> out and the union contains the operands.
->  
->  ID | Operator Name        | Operands[...]
-> ----+----------------------+-------------------------------------------
->   0 | LOC_END_OF_EXPR      | _none_
->   1 | LOC_SIGNED_CONST_1   |  s8: constant's value
->   2 | LOC_SIGNED_CONST_2   | s16: constant's value
->   3 | LOC_SIGNED_CONST_4   | s32: constant's value
->   4 | LOC_SIGNED_CONST_8   | s64: constant's value
->   5 | LOC_UNSIGNED_CONST_1 |  u8: constant's value
->   6 | LOC_UNSIGNED_CONST_2 | u16: constant's value
->   7 | LOC_UNSIGNED_CONST_4 | u32: constant's value
->   8 | LOC_UNSIGNED_CONST_8 | u64: constant's value
->   9 | LOC_REGISTER         |  u8: DWARF register number from the ABI
->  10 | LOC_REGISTER_OFFSET  |  u8: DWARF register number from the ABI
->                            | s64: offset added to the register's value
->  11 | LOC_DEREF            |  u8: size of the deref'd type
-> 
-> This list should be further expanded to include arithmetic operations.
-> 
-> Example: accessing a field at offset 12B from a struct whose adresse is
->          in the '%rdi` register, on amd64, has the following encoding:
-> 
-> [0x0a 0x05 0x000000000000000c] [0x0b 0x04] [0x00]
->  |    |    ` Offset Added       |    |      ` LOC_END_OF_EXPR
->  |    ` Register Number         |    ` Size of Deref.
->  ` LOC_REGISTER_OFFSET          ` LOC_DEREF
-> 
-> == Summary ==
-> 
-> Combining the new information from '.BTF.inline` with the existing data
-> from '.BTF` and '.BTF.ext`, tools will be able to locate inline functions
-> and their arguments. Symbolizer can also use the data to display the
-> functions inlined at a given address.
-> 
-> Fully inlined functions are not part of the BTF and thus are not covered
-> by this proposal. Adding them to the BTF would enable their coverage and
-> should be considered.
-
-I think supporting fully inlined functions as part of this work would
-add a lot of value to users. It doesn't necessarily have to happen in
-the first patchset, but we probably want to plan on doing it.
-
-Regarding BTF, another option is to just leave `callee_id` unset, right?
-Consumers should be able to recognize BTF for the inlined function isn't
-available and then act accordingly. For bpftrace, that probably means
-not allowing function argument access.
-
-[...]
-
-Thanks,
-Daniel
+$ diff -pruN ~/tmp/task_struct.ko.c ~/tmp/task_struct.vmlinux.c
+--- /home/ezingerman/tmp/task_struct.ko.c       2025-04-25 12:37:48.312480603 -0700
++++ /home/ezingerman/tmp/task_struct.vmlinux.c  2025-04-25 12:38:03.096644654 -0700
+@@ -18,7 +18,6 @@ struct task_struct {
+        int static_prio;
+        int normal_prio;
+        unsigned int rt_priority;
+-       long: 0;
+        struct sched_entity se;
+        struct sched_rt_entity rt;
+        struct sched_dl_entity dl;
+@@ -46,7 +45,6 @@ struct task_struct {
+        short unsigned int migration_flags;
+        int rcu_read_lock_nesting;
+        union rcu_special rcu_read_unlock_special;
+-       long: 0;
+        struct list_head rcu_node_entry;
+        struct rcu_node *rcu_blocked_node;
+        long unsigned int rcu_tasks_nvcsw;
+@@ -55,16 +53,13 @@ struct task_struct {
+        int rcu_tasks_idle_cpu;
+        struct list_head rcu_tasks_holdout_list;
+        int rcu_tasks_exit_cpu;
+-       long: 0;
+        struct list_head rcu_tasks_exit_list;
+        int trc_reader_nesting;
+        int trc_ipi_to_cpu;
+        union rcu_special trc_reader_special;
+-       long: 0;
+        struct list_head trc_holdout_list;
+        struct list_head trc_blkd_node;
+        int trc_blkd_cpu;
+-       long: 0;
+        struct sched_info sched_info;
+        struct list_head tasks;
+        struct plist_node pushable_tasks;
+@@ -166,7 +161,6 @@ struct task_struct {
+        struct mutex_waiter *blocked_on;
+        struct mutex *blocker_mutex;
+        int non_block_count;
+-       long: 0;
+        struct irqtrace_events irqtrace;
+        unsigned int hardirq_threaded;
+        u64 hardirq_chain_key;
+@@ -277,7 +271,6 @@ struct task_struct {
+        __u64 __mce_reserved: 62;
+        struct callback_head mce_kill_me;
+        int mce_count;
+-       long: 0;
+        struct llist_head kretprobe_instances;
+        struct llist_head rethooks;
+        struct callback_head l1d_flush_kill;
