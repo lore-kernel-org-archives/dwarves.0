@@ -1,58 +1,58 @@
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+Received: from mail-pg1-f173.google.com (mail-pg1-f173.google.com [209.85.215.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73ADE26FA42;
-	Tue, 29 Apr 2025 20:56:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12160214225;
+	Tue, 29 Apr 2025 21:45:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745960171; cv=none; b=EWKsErv0t6MHm5Pwlh7pEN1O+h5Sb01v2ldtSU412m+c/g8fB9D3/HfokRnmEGPu1SGCfuo8SU/QBgkJ+gsObaiD5wFzEmK3VJzCExvGu549KTqsJCV2zs2z/txXdt7pbA+HFxGgzl3oqb++jPhUm//5L2fTE2rruE5TcvL7/jw=
+	t=1745963114; cv=none; b=q9rCYPzQ1ObzX5w+nw0FWhGYCto+CaFwV3tB0wcIeJ/WDIfW2w3Q4awie7SNThtvHdscp85FXcJdeAzKRoLS83ynJaiC97OYBWgoQLA0zwB+jud/sak1Br3vpQxGKsQM8bLWTXZmBx619e4K+ee+4JEX7BbCllZIpP8gg7LJRo4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745960171; c=relaxed/simple;
-	bh=QiIFHt2bjcTfhL7pAplJy2TZjgDHR4pbuldcAfuRb1Q=;
+	s=arc-20240116; t=1745963114; c=relaxed/simple;
+	bh=AjG+E2cfuG1nRkS+RGQxPmmmJUJk3KjQUSaOb9JpgY4=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=eLPMOzitUZdXo+h8D5J4fU4zKEirpgIzch7tl3Sj/Oo7iWfpLJk2VGyzOnhNYRvPkJ0a9byQVFG1paXtUwjU8MnBHgl1VGmZ7NI5SlQWQJB7vu4YXfo4NgTRLNfzNY6736ka/QQmD60Jie6Zakn0QUY7XM6ADR4+Rq3f1azoIS0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=baBkNumo; arc=none smtp.client-ip=209.85.128.51
+	 To:Cc:Content-Type; b=SJVUY/gapp/mzHC6wED1IYFLlmUQ5m+qgi5dZfHl16Fs5Jq87u/NED5onQgvrG5mCuT3Rji0FRDs1r7xxMcMQOBJ/N7FcfABjRfvaDdy6XVC2uWgM5i3A/TbEFrLu3MTS6pa86HzBIiSMdVQx0kNPwFVt4ONRPxpLHas7Qd5wlQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MpE136f5; arc=none smtp.client-ip=209.85.215.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="baBkNumo"
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-43d2d952eb1so43077705e9.1;
-        Tue, 29 Apr 2025 13:56:09 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MpE136f5"
+Received: by mail-pg1-f173.google.com with SMTP id 41be03b00d2f7-af51596da56so5570118a12.0;
+        Tue, 29 Apr 2025 14:45:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1745960168; x=1746564968; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1745963112; x=1746567912; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=o5F0qeBOsq9CE1hiB1Qr5EJ0CfI1jniAF1KATON5GvM=;
-        b=baBkNumoQGNMkN1MSdA/UcdfTamX9xR9uf18bGuXVufgR589ckW97SX7vMwqO+auv2
-         eaNaeQUQp5EJhXd/+riCEEXKHBlSdnrNxCo3dt1Gg5WSIo8jwMJ8w9LGQgZBFgHAmJbn
-         Xba4vXEaiZMLmtDy8NAe9xtXvbgeLlEefYowsv0yvLz95PA4cCxdN4lAjCeI9ClfJypK
-         R781Cf3KW/NdE8N2wH+8I6015/xLrXQKk1BkRXsWAgv6dbN3uX0fNsRh7HAB1adviY+p
-         x8YN8dj8TooEmov8cez7462yffBuncazOtCD7N8N32exXXKqcFPEiy7Y0UA4A/SYdMzn
-         lu5Q==
+        bh=z0CnmFR3NERVJnvpIol6cRYn3z/pjgObWP0m9NwcYps=;
+        b=MpE136f5zrVZfs6y4ZG5gcg8PM8hBMT/Wr3vz8yZeT7KxMY+PaBwA0NAUjNf3+OY9/
+         6twiWdV8KdMuSFawlqOwz+mCR1s3XT6JI3ydA4J3sx6K04xDaQNIrLHdCMT3iAQkCb/R
+         bwtTMs9No/jLhAOR3t+JVKgDnoHwwWVGbQP/E3k6IOax2ym6ArN5QtmAUhXBriRmVHOx
+         r7gW+ad+/Z5AMzgSf3suvTC5+H17dxfsWGbaF1kHxsljbro89LGykSKimAUIGhpIJ8tI
+         9w2ePAyE/6L7L4at3UisYzR7BsryDGYxThxURpcZXXHKhoFpQSm3XmYSOhDisH6jV5dJ
+         h86Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745960168; x=1746564968;
+        d=1e100.net; s=20230601; t=1745963112; x=1746567912;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=o5F0qeBOsq9CE1hiB1Qr5EJ0CfI1jniAF1KATON5GvM=;
-        b=KXjYdC4RJ/OUOw7xOk5McXFtm21pefW9+pWoiy/bSSz4dTS+7Ru/ybnEnbNM3oDhjo
-         9vR/R0TtsjRWdoj2NtDgwHSL7HMl+YgxzZJmxMmB0Ng7CZS97+aQhT+pv2mpRf36RHfD
-         c4CFNJY0wk1Nn2OuYbL0svUWUbhBOIr2npQ3j+9w2Q043utkWwzAS0X8/TNwocuz3J1+
-         kmEixqvsRRf3E0E1dE6DAsXuxpmFV7lgFJ2LPzbB/06s7YXTwQ6ang4CyP8kRHj1Yywe
-         erY2IZqCeeFIaDqiIHIza5Ou5rhn4uCDu5gMtZVoIHRa9fgHUNhm6tcbjcbCyHpVWjiy
-         H9XQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUQ8ifO2A9uFt7X0cA7cuzpmRUFOxybC8TcBxBjATBbD1jGvmPohb5I6Il46xv2QJmDA94=@vger.kernel.org, AJvYcCWkdjzKYe1kAuNhFIbYqUFePaBRTgFI2o6YOG8LqZqO5BJjovHuF6r4mOg8OkTNJ6QoMHDGbo4AWQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyUz2125QrFs8LmDw4zEHXdl3k7JlmYDbOKQom07a4AbM2/p9gR
-	/FPJEOQyBzA2/0NZLSya4lLrV8AYpbZVqhRrCg3ys6H3G2Q2TP2Brk56gqtTcppT9avlxjzh5LO
-	4+tSC7Z2ls1Z4wLi11TyCilR5IUmf/ABD
-X-Gm-Gg: ASbGncsCFBYumXZ/IMfRMeJfglPzFpfkubLs4zPm7XzJANAkvhsNAuH08Do/Q0FQQJC
-	ENPTTB7eBeWSCy3BxYzA4RrHziqZkSEkmNJdbzY8arfJ+FOf45rAsedTYOzUmJiFn2boHZ4o+UO
-	OIH3sT3py5Z7aHnGCmZLLohq8EeVNJAlta6tbsEBRYv/0ZtC5g
-X-Google-Smtp-Source: AGHT+IEOSLi2l3fC4qwWluR88CBHkYW463xJGtG3Vfu12fTWvqETP/18Meo8CrphGeZ5Odg0QJFf+hLGCoigPfE/0Xk=
-X-Received: by 2002:a05:600c:540e:b0:43d:7588:6687 with SMTP id
- 5b1f17b1804b1-441b1f35790mr6725705e9.12.1745960167565; Tue, 29 Apr 2025
- 13:56:07 -0700 (PDT)
+        bh=z0CnmFR3NERVJnvpIol6cRYn3z/pjgObWP0m9NwcYps=;
+        b=HBFI9lxwl9nje7kKb9SvThbUx6uEh9Vb5dP9b7g6kiyhmtd+yLBxAQxnQIKTu03XwT
+         qm4PfYc0nvm6bODuS+lZEBLcy1+LmDCks6mvCmViXid1NYY2OUpu/aXgg8HueNGtyyPN
+         WrCh4wKacdzeGUEbqqlfLlmzvXKe9f/KJsjHnBx++4aBK9l5aZcw3b0RZ2UTll5lbVSG
+         T+NFg2ph6H4ubY8W/obYOi/Y56Au4arkZS8+jYzUGHZC4uTVTp8RSDLDnY6wSG9q+1cX
+         f0AZC0UI/DReWkdVrxvZx3VMbATGXtb8APMXwIiSvyqiXC7FUum4ptZwoQoe9gyFAacy
+         4Rmw==
+X-Forwarded-Encrypted: i=1; AJvYcCV1rLWBr43oOdvWJhe+IXmK3q9aQYri1Iz6+sg2Fud5cxSKcyQ8hd/fTNdlGMaDyVtsuK0=@vger.kernel.org, AJvYcCVwTaEknO/Hwt8d3mFFDirKhSZhbtYhP/diFhR0gxzAtNjAADPTheBZLHdZbdD37JhG3jk4dADGUQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyQIYbladu4P7140u2G3Q3AjM+t3629mR4wMJjt56+aPjySxe6n
+	bLnwOQSGqn1bV4sXI8qJcPP2ko0yig3DMC10dJAudrOPcEuBiIhnCDUcKGJxB61Y3I/4jXZN1yA
+	aTtdi8O3pShs+tQ23ZRpaX2BRUow=
+X-Gm-Gg: ASbGncvDuxbcZCCsf/tqCpFCnT1+sJRvSp/5M5GqKAkYrSTsc+TUHJ2dYE7MYgp8m1c
+	/iMMVmnl4hdsvn4DGTF4gJ7snvR7vS4gQ78Px4P29qvPNJAXLIW02OfK7GouM7hCg9rJjRzADUh
+	RtkUku3a+K4bZ+el1kgociK5WDWMgMHbeoDKU0og==
+X-Google-Smtp-Source: AGHT+IGoGjWI8G9nl8VlipQj3A/hCzHazcDMvzTc1zD2fKnvy438ZNdtm1jylLoyGxeTxA3YNnk8T/3aHT1uLBTGlNw=
+X-Received: by 2002:a17:90b:540f:b0:2ee:ab29:1a63 with SMTP id
+ 98e67ed59e1d1-30a332d5c8emr829374a91.3.1745963112048; Tue, 29 Apr 2025
+ 14:45:12 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
@@ -68,13 +68,14 @@ References: <CAADnVQL+-LiJGXwxD3jEUrOonO-fX0SZC8496dVzUXvfkB7gYQ@mail.gmail.com>
  <CAEf4Bzays+8g7kj4fNS0rBLPTQWzYb_maFkyHyij4ky1xm_GAg@mail.gmail.com>
  <CAEf4BzZgQMV+Gtiob_K-uuizyuqajyLjnGbKOJLyiGB=DxmY2Q@mail.gmail.com>
  <m2ldrihikq.fsf@gmail.com> <CAEf4Bzb_-Wk8eWZyPc7_r2Oq_o_Tgg+2CE+nTom2wOhjcpDw4A@mail.gmail.com>
-In-Reply-To: <CAEf4Bzb_-Wk8eWZyPc7_r2Oq_o_Tgg+2CE+nTom2wOhjcpDw4A@mail.gmail.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Tue, 29 Apr 2025 13:55:55 -0700
-X-Gm-Features: ATxdqUEVGWJHDJgxYAjg7Suzm00tfE2ovEInyk9xWHoF_D61_PoSPVefxKxQF10
-Message-ID: <CAADnVQJ3FYSVbjRKTs8NaPp6Gvq=HdrmDmf+=rP87TNJiSL2kw@mail.gmail.com>
+ <CAADnVQJ3FYSVbjRKTs8NaPp6Gvq=HdrmDmf+=rP87TNJiSL2kw@mail.gmail.com>
+In-Reply-To: <CAADnVQJ3FYSVbjRKTs8NaPp6Gvq=HdrmDmf+=rP87TNJiSL2kw@mail.gmail.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Tue, 29 Apr 2025 14:44:59 -0700
+X-Gm-Features: ATxdqUEh9R9DOC8Tp51F_N0J1UVWJvhS4XMVVa5TTI7Drp2YXV2VSLCkMw-FJvg
+Message-ID: <CAEf4BzYECYxn8GjkczkTZnRDPq_M81+GfMLXZzkYOHcv48G7TQ@mail.gmail.com>
 Subject: Re: pahole and gcc-14 issues
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 Cc: Eduard Zingerman <eddyz87@gmail.com>, Alan Maguire <alan.maguire@oracle.com>, 
 	Arnaldo Carvalho de Melo <acme@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
 	Ihor Solodrai <ihor.solodrai@linux.dev>, bpf <bpf@vger.kernel.org>, dwarves@vger.kernel.org, 
@@ -82,28 +83,39 @@ Cc: Eduard Zingerman <eddyz87@gmail.com>, Alan Maguire <alan.maguire@oracle.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Apr 29, 2025 at 12:50=E2=80=AFPM Andrii Nakryiko
-<andrii.nakryiko@gmail.com> wrote:
+On Tue, Apr 29, 2025 at 1:56=E2=80=AFPM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
 >
+> On Tue, Apr 29, 2025 at 12:50=E2=80=AFPM Andrii Nakryiko
+> <andrii.nakryiko@gmail.com> wrote:
+> >
+> >
+> > But here you go if you want to play with it ([0]).
+> >
+> > And yes, "visited" marks are the solution, but I was thinking that if
+> > we implement a pre-processing deduplication step as we discussed
+> > offline, we won't need to do any of this, so didn't want to pursue
+> > this further. But we can talk about this, of course. So far this
+> > generality doesn't buy us anything, I got byte-for-byte identical
+> > bpf_testmod.ko with Alan's and my changes all the same.
+> >
+> >   [0] https://gist.github.com/anakryiko/fd1c84dcad91141d27d8bd33453521d=
+1
 >
-> But here you go if you want to play with it ([0]).
+> I like it. I think it's worth following up with that.
+> Why do you think max_depth is not enough?
+> Because of
+> btf_dedup_identical_types ->
+>   btf_dedup_identical_structs ->
+>     btf_dedup_identical_types
+> ?
+> Then pass &max_depth from btf_dedup_is_equiv() ?
 >
-> And yes, "visited" marks are the solution, but I was thinking that if
-> we implement a pre-processing deduplication step as we discussed
-> offline, we won't need to do any of this, so didn't want to pursue
-> this further. But we can talk about this, of course. So far this
-> generality doesn't buy us anything, I got byte-for-byte identical
-> bpf_testmod.ko with Alan's and my changes all the same.
->
->   [0] https://gist.github.com/anakryiko/fd1c84dcad91141d27d8bd33453521d1
 
-I like it. I think it's worth following up with that.
-Why do you think max_depth is not enough?
-Because of
-btf_dedup_identical_types ->
-  btf_dedup_identical_structs ->
-    btf_dedup_identical_types
-?
-Then pass &max_depth from btf_dedup_is_equiv() ?
+yep, that was another option I considered, just have a "global max depth".
 
-The visited mark seems overkill.
+OK, I'll update my patch and do a bit more benchmarking. I want to see
+if this doesn't add much to the overall dedup time. Will post
+something later (probably tomorrow)
+
+> The visited mark seems overkill.
