@@ -1,48 +1,52 @@
 Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD49F1F9F7A
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 392481F8EEF
 	for <dwarves@vger.kernel.org>; Thu,  1 May 2025 14:56:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746111410; cv=none; b=jfKkMC0/MTgbmHoyoHiD3xSzmPGQUbzZRutd1Z3r5VPOGMVNWE5pjxGYUkItz9hEPvveWeXKat1esrx8fTIsyIJbQZMV0n951ixMAy/fl5h3do7j5+634NLLS+3RtqdcOm5XVQ0l8hI/5tBsQ5NOm/vdyln4R2i7UCcxPdfYcGQ=
+	t=1746111410; cv=none; b=dzAwzgvDA3oKN4H70dufH/cU01wAWnlr86p9By/KW6GcISLfK4Smflms3EHUc3ai3i7oLBNu9JI0udzmIt0xSfUcRE1UDjva3mOSHD3HrhBZnal/dV7qcFoabZG1SAsUqYDAv+3PtS5nERX8soLbv214TluO/WgDOZHfO4F+yBs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1746111410; c=relaxed/simple;
-	bh=VV8L2UT+TaGHHVMa/FQlCmJnGH4vPJcDlRq/CRTWuVY=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version; b=hH2FDjCFvF3vztVekBKZX07Q0MrpD7df2EB33toYfxvqF04zbtk6oy9qqs78F6cQD8Ip4v4be0Ua5ftJg443BE/RgRCFncfCwC3ehq4I2X31eyXxFD02ShjIi4jcxUxBHBfoQXJ5aRxLr+PdCP1g29cW9s1EkfXp7/1Gc2Y0/HM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=aYfi7qu6; arc=none smtp.client-ip=205.220.177.32
+	bh=xsmnGtpN4MWR8gGsy9FaQqx9YQa8n7dUz3n6CvvHl/E=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=dqvFBhstjpM11/s3xUtGjaVM6085hZRYDiJ55a2D2ynumUOEZjGo2MOPs3PPUKf2b3dqqLeffUjw+3viQDygMu3Zj3CmpFy++8Ro1NWZZduP083Vp8eH0s5HD5x3sGeunuQB8ttKJdy7se2ddmdfJhM7g6vGec03ithvITHwRF0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=XsA4Dr5v; arc=none smtp.client-ip=205.220.177.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="aYfi7qu6"
-Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 541Etwo8007120
-	for <dwarves@vger.kernel.org>; Thu, 1 May 2025 14:56:47 GMT
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="XsA4Dr5v"
+Received: from pps.filterd (m0333520.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 541EtrQY027596
+	for <dwarves@vger.kernel.org>; Thu, 1 May 2025 14:56:48 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=
-	content-transfer-encoding:date:from:message-id:mime-version
-	:subject:to; s=corp-2025-04-25; bh=VkdwYZWOXS9qwWDVWFNSQxbsYalrg
-	x692SQFQSr2Q1Q=; b=aYfi7qu6oAL5X19NCJjdu8j299bCMQ3zrYvz4c7Fcy24i
-	4gukxboW6sQ0caAxnh1zE5+7EqWSlFGfWjWfRKMK67ULwsHcmOrl87zvU9btSUuR
-	4iLP3PI1R5XW9wCjk+Pdvj170jvkrQMCzeJlTrlgk9yhoQK/MyPTdC/7LRqQdL8e
-	1dRumNjRlRjdc8tbDJ3rG1nd8NESNXc5hMscPBHrMbeFAV3IZJPTgpdUIkUxmfli
-	dE71gWAwVt36xQJ1IG/mvmc2nVbRBzsz1puXvT+9z8Gf7wxHW7x5zHePH6MhHg0j
-	iWuuOk5MIXQUjy7qJHzCXgYuAAs9psbolegqWptAw==
+	content-transfer-encoding:date:from:in-reply-to:message-id
+	:mime-version:references:subject:to; s=corp-2025-04-25; bh=ZiKfU
+	mHNHnKhLFYv0zQDAnEPiZXcdwYNuJ6phydr4l4=; b=XsA4Dr5vusy9tCugE9aGl
+	q6Iolx+BvAy6qYWvXF2cV4QB0DrEA2IfscV10kwcALg06eQSlKzz7CJDWD0tfEe9
+	6/lTDL283FsldkBKmhd1qaY4TK5O8CfTcxXbp/iHZ9acoK1xBGhMBaKEsYpy8MrI
+	Xxmf7+prTZ6UMaxdKtESEx2L+H7C8tR1S6NtpMro1Uqv9LBdR9yOcXgHW2AnBUDw
+	wLH1dnKQrnlKrEKIMPeddqzngNxQ+nSc8zYihLJzCsKLxCobwqoLR30s5V5/9PSS
+	yWzsDEDHGgkV3/BZEpwJQKDG4hMqZBC7xmNpgceZDeMJPmFTidrXFX3oxCas/cUK
+	A==
 Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 46b6uck5ph-1
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 46b6uku73t-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK)
 	for <dwarves@vger.kernel.org>; Thu, 01 May 2025 14:56:47 +0000 (GMT)
 Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 541E1Dpg023886
-	for <dwarves@vger.kernel.org>; Thu, 1 May 2025 14:56:46 GMT
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 541E1Dph023886
+	for <dwarves@vger.kernel.org>; Thu, 1 May 2025 14:56:47 GMT
 Received: from bpf.uk.oracle.com (dhcp-10-154-61-155.vpn.oracle.com [10.154.61.155])
-	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 468nxjv48n-1
-	for <dwarves@vger.kernel.org>; Thu, 01 May 2025 14:56:46 +0000
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 468nxjv48n-2
+	for <dwarves@vger.kernel.org>; Thu, 01 May 2025 14:56:47 +0000
 From: Alan Maguire <alan.maguire@oracle.com>
 To: dwarves@vger.kernel.org
-Subject: [RFC dwarves 0/3] Explore using address-based DWARF->ELF
-Date: Thu,  1 May 2025 15:56:42 +0100
-Message-ID: <20250501145645.3317264-1-alan.maguire@oracle.com>
+Subject: [RFC dwarves 1/3] btf_encoder: collect ELF function addresses
+Date: Thu,  1 May 2025 15:56:43 +0100
+Message-ID: <20250501145645.3317264-2-alan.maguire@oracle.com>
 X-Mailer: git-send-email 2.43.5
+In-Reply-To: <20250501145645.3317264-1-alan.maguire@oracle.com>
+References: <20250501145645.3317264-1-alan.maguire@oracle.com>
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
@@ -53,49 +57,46 @@ Content-Transfer-Encoding: 8bit
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
  definitions=2025-05-01_05,2025-04-24_02,2025-02-21_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=726 phishscore=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=970 phishscore=0
  suspectscore=0 spamscore=0 adultscore=0 mlxscore=0 malwarescore=0
  bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2504070000 definitions=main-2505010112
-X-Authority-Analysis: v=2.4 cv=ZsHtK87G c=1 sm=1 tr=0 ts=68138baf b=1 cx=c_pps a=qoll8+KPOyaMroiJ2sR5sw==:117 a=qoll8+KPOyaMroiJ2sR5sw==:17 a=dt9VzEwgFbYA:10 a=BM02i9vloc0mCPFLoRoA:9 cc=ntf awl=host:13130
-X-Proofpoint-ORIG-GUID: eEAvtL2h1T6mTIApdpDBlCY8JQQl1YwO
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNTAxMDExMyBTYWx0ZWRfX1TyONkwDKCfK vMtjSGv5sj57Q+9FsUu8MTmPOGQC1RweNUhg6Bc1JdI/8u1nf8oztkNrKAWQi6jSSSeB3ZI0+vj /S4WBETomKlvm7ysz9dcnZ8oi05p1etQ+WxM1jX82M+hPHF33mWVIW1RI3oAmJrnIT7g25CWE51
- UxqPGZ7vvcLBmkJ8HujZ4Sm32w6R20t17/PJjDzk+eA/4qz8wGdx5hkmNLW3LepTkfNouN8Loxz TI2JaCvNaegKWT8ulJJtuVdf+AKo9JY2PrBYMBsIRoAMqnxetEth5/8PRlN9tq29rJOsqAz0ebr Zy346XKNcDZgHdPaw11HOcr2beXkufMRFNrwuJZonLf+WvQuaSFqUbsUvlsioxoTfiNPJjsoNRa
- yo91uZnaXniE92z3fx2u8FVgFV809PqGG+Kyn8NwauTedUzNRMy9DouiaH7kjgKRBl2zqExM
-X-Proofpoint-GUID: eEAvtL2h1T6mTIApdpDBlCY8JQQl1YwO
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNTAxMDExMyBTYWx0ZWRfX3e5blWRfm7Cp JWrfHeRF0D9V8NPOymQjUcG5T+084u4YoayY5cdvbsS+FYm62r9EhWkLkzsB1vRkilDjWZQ/wyV wHOE750SuvWN4KPo8iN5kSKB6XtiVIbzVeW+0BtDUQJot12jjcPrePyseYtCMpR+hcX/5OAFeKW
+ s07AlQzkyyf41ma+NzkHxUyygm3L4rhpqTQfjXqQTxdys8rOERU4nqoKM+/QYwOgZ4gTyJ4vSbP ONRe0zZHNWWCjocYeU00lTEIrTQ2FMDVoZQ+VCsJU9o0KWRSMAkvYEkdAy3nnxy4/BaxmEx7DND hOLY2p8tUDTqlcHZ8KADzqWcEy9CciFFl/OrEwzRWx7RoFA6HQDiPU0QkUG9ULg/HAZ76y4DRtK
+ zgje06vVWLvE4kmZkluQDk23+39sE2pSC6XsSvsmMqEszpWJV0wOhEV6fb6Gm4O8yEcOOeMs
+X-Proofpoint-GUID: IeXv_QfkK4Zx9dDr9zam-_EXiw-3glS1
+X-Authority-Analysis: v=2.4 cv=A5VsP7WG c=1 sm=1 tr=0 ts=68138baf b=1 cx=c_pps a=qoll8+KPOyaMroiJ2sR5sw==:117 a=qoll8+KPOyaMroiJ2sR5sw==:17 a=dt9VzEwgFbYA:10 a=yPCof4ZbAAAA:8 a=o5u7cY3h-2El4r25gkgA:9 cc=ntf awl=host:13130
+X-Proofpoint-ORIG-GUID: IeXv_QfkK4Zx9dDr9zam-_EXiw-3glS1
 
-This work-in-progress series is an initial exploration of using
-function addresses to match between DWARF and ELF to improve matching
-accuracy, and as a prelude to potentially representing address info
-in BTF itself.
+When collecting immutable ELF function info, store addresses
+of functions as these will be used for better DWARF/ELF correspondence
+matching.
 
-It is missing ~1000 functions in the resultant generated vmlinux BTF
-where we currently cannot find an associated address in the DWARF;
-there may be further enhancements needed in our DWARF function address
-association, or we may ultimately need to use a hybrid address/name
-scheme, falling back to names where DWARF addresses are not present.
+Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+---
+ btf_encoder.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-When we come to encode addresses in BTF, they will be likely 32-bit
-section relative.  This will allow for kernels that randomize the kernel
-base address.  But that is not tackled yet; these initial changes are
-focused on improving the BTF generated using address-based matching,
-but not augmenting BTF with addresses yet.
-
-Would be great if folks could see if there are any potential
-improvements to make the matching process more complete, or just want
-to try out the series and compare before/after BTF encoding to see what
-is missing. Thanks!
-
-Alan Maguire (3):
-  btf_encoder: collect ELF function addresses
-  dwarf_loader: make more effort to retrieve a function address
-  btf_encoder: use function address to match ELF -> DWARF
-
- btf_encoder.c  | 78 ++++++++++++++++++++++++++------------------------
- dwarf_loader.c | 29 ++++++++++++++++---
- dwarves.h      |  3 +-
- 3 files changed, 68 insertions(+), 42 deletions(-)
-
+diff --git a/btf_encoder.c b/btf_encoder.c
+index 0bc2334..b1e64d1 100644
+--- a/btf_encoder.c
++++ b/btf_encoder.c
+@@ -98,6 +98,7 @@ struct elf_function {
+ 	size_t		prefixlen;
+ 	bool		kfunc;
+ 	uint32_t	kfunc_flags;
++	uint64_t	addr;
+ };
+ 
+ struct elf_secinfo {
+@@ -1461,6 +1462,7 @@ static void elf_functions__collect_function(struct elf_functions *functions, GEl
+ 
+ 	func = &functions->entries[functions->cnt];
+ 	func->name = name;
++	func->addr = elf_sym__value(sym);
+ 	if (strchr(name, '.')) {
+ 		const char *suffix = strchr(name, '.');
+ 
 -- 
 2.39.3
 
