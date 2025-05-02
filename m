@@ -1,240 +1,265 @@
-Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8960BEC4;
-	Fri,  2 May 2025 07:03:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746169440; cv=none; b=K/64gRnPD6LRdtWYA7+hZkHRSPw2flSuPvVH7UJoi/T1Ug3FqpGwTbJC1GJIy6fKUY/WC2IUfrV639Z2Ox7tnRTK27dNzFqBA6M5j2nr91fQlv8PeSHKfLCnNYuZ7v46ehRfq4rXV0KREmi82Ha2qZyb7UWfi3VYx2zsuSVh7uU=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746169440; c=relaxed/simple;
-	bh=5NCyzHxoZmrrGUk8gb1hw1m1Gkot6OxYurRwplbQYyY=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=pGBvhiELXQrKLvdXo+DXrVVDIes7vdh32T2ez89FGAtpC+n79pdhIVRCCVxz7v4pGLV86DFFASFeUTmXWaRsitw0iGNXxGHiLjKHQhQC9cZXpLPy8rimIuGe9iYPHnx9kgdlYms7LrLZYAqPcCm4XbBO1bThezUXVQ0Ellfj1uw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=crfkqoBJ; arc=none smtp.client-ip=209.85.210.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2ADEA1F426C;
+	Fri,  2 May 2025 08:19:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.177.32
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1746173948; cv=fail; b=BM6Wm3dzJ0s6lRReKAFJT7ygXo0I4+2y3kkN8qf7z9zbd0689l/NMeg/MF6MhuP/VivzwwvOjZgfCi43TdPRgONwZMRk+NiTeseFVfLX37MZaUqhL9SfNcjx8twegbgBeQqAj/pqApuvrJ235ranqodJz8iNFcu3jdns0aNnttQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1746173948; c=relaxed/simple;
+	bh=7934b5GoN5+WlgSCYb2gcF/VPZwhSjT7p5ykNMv+6n8=;
+	h=Message-ID:Date:Subject:To:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=cUEif3sP1zoxG2A0BNvhwPbEmPKdgSIeyoG2hRNxB4hhcG8i4tN077oY7SHe3jqkNztUklFC6N4xMYHymGD6/rsoKtncC7exFXcGOmCEBKChJF9sdxa0/tTxtb8KTTtvvaj3H88zD/skQwcgPQ5QEHq5BRn0r0LkE/czNQICB5Q=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=o9V2Ija/; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=MEpjDGbl; arc=fail smtp.client-ip=205.220.177.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="crfkqoBJ"
-Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-7403f3ece96so2416424b3a.0;
-        Fri, 02 May 2025 00:03:58 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="o9V2Ija/";
+	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="MEpjDGbl"
+Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5425WCPK015439;
+	Fri, 2 May 2025 08:19:04 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=
+	content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=
+	corp-2025-04-25; bh=tHilg9fAnCQGz0qzZoPF8axI4+OykdyOGLFb17gSv1I=; b=
+	o9V2Ija/r1plvX1w9+LXhxeAOs0M7B9gfUsYlg1vSHJlB+3YyZGX3stqTMkE9U1Z
+	7oMjskUPJlEucJuUh1IV3tUr2HSEdVDYqHk7feUb9HTaue0Xi7YURpFfHry7XSbf
+	8zvDAwbuwzAUE2M5ZUFLA2gVhIF29frxNtuWIYSpDp0uQNDQWy/A73H8rf8D44wC
+	qak4HXE6X2opBj7DY5x2mX3nGdNCrUxDobDEzMBOzFLcilmHLZ8o+gjqFigX7cK4
+	gNUY3B7hxrdJAGfJCRvPo8KueVhdGTjxAWQYbblcy44t2sHS58MFLP6bc/x9osFE
+	OnDypcfpU8X2w/U1lsQUdg==
+Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 46b6ukmvaj-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 02 May 2025 08:19:04 +0000 (GMT)
+Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 5427CpwP013794;
+	Fri, 2 May 2025 08:19:03 GMT
+Received: from bl2pr02cu003.outbound.protection.outlook.com (mail-eastusazlp17010002.outbound.protection.outlook.com [40.93.11.2])
+	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 468nxdhumq-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 02 May 2025 08:19:03 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=qUKqa8h0UbJfi/81BusasbFOYgBo87aSqnVoodZMxouWiPHurMSeR4wtgSkIrNpaMkwzFE3vHGHiWKBns91Ri1m+3bAVcuUtmLwxmiGfIbmqV0Rou+egMmN/EsimOgXN1p2GmQc50HZYcEAAXSkPWCVm1PvWZq2A0pqA/ZQOpj5S1lh148/U2YPUNNEZN1doM0pxmXHKfe9XnM49RDr1CBZNJYrDwNjuNhAPrYfXCpJJaSslH9Z54XDmLaVBz2Ci1oTxvOyYwnL55oI7LKEiEb47jFqez1E/iDtNLXb4SfVmNoltgZdjP8J0sUBoQ996bB7Mvy8WYoaWs079arq0ow==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=tHilg9fAnCQGz0qzZoPF8axI4+OykdyOGLFb17gSv1I=;
+ b=AsuT4CUddsjJ8RYxi2KseMkVHUbJ1bj1tb1cOp8M3GUAo1QcIBBWdPbDbbkxFOT/yxTEilwSaspoItfURJdOnTL3vWFzoPtsEXcASGmoWYoNql559e3Dkx8WlJ2Hx4avR7HrQn1YgkLbrL9pw784qk5X4qrenGKqoxwPT7NS07lsmOOIxu9+6Fd/Xznm0YYKvUOtvoEPo2nB/ravrl5KjcEuMz59taHJq9gReh5Cy8ibuy/595U+d5D302mrgL9BpUIcDxHKMyfnBcvoL9pV+TqJ21r5BJbiCpqErQif69jJ4GWw5GbrXFqrv/sZdwOdsUgnS01uAX/7oAO5GJLJbQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1746169437; x=1746774237; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6FDGQJhNgEuOh2N4eI+6x1J4DY0UC6a+PG+ptep3NfQ=;
-        b=crfkqoBJsgjDhXlqD7xh6IXK8kHnjkBc2PJE8aIPyNIDcp6jvn5IHi3TfpcouHfdvk
-         t46qfwO6s3aaIns+zhLETeJjp3HV16EQlbrE5qqpo9Y07wX2c/hwtHGyd+6XC0Ixfx32
-         f7pa7D+laDkzdLGoL5n/ryMWYo5GSOTjdMtGAoGRmabZRhk/0r+4povbvrrQxJBbTU84
-         dac0DlKaIUuzffbDDZh5Ey9M9CNVqVTUs/uglG81CZC0RdKWC8wNh1fRZVIDLBXUUi2+
-         yq/saqYZFgqr+hGrZ2R8E2d+7pWbNHgpBmbuU/yEO+cPml8wuDc1DDKbxUOFCIrR6FcU
-         749A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746169437; x=1746774237;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=6FDGQJhNgEuOh2N4eI+6x1J4DY0UC6a+PG+ptep3NfQ=;
-        b=ajmdlnxrFFO51WDeBfq/LJEJ1bCGscKVLCN26zDsgGNSs7Qll+72DWEGG7ykvmxRuS
-         DxiWp9aPgky3Ttfm1QI3wU3UhB6EThpjCqoXlNDsmqvqMYfY4b46R4oqS7lXcfMCEBNK
-         evekl3UGSsz5HQ8bswyyNRtZPXQ9ifJqmmc+LrJqHwjIsE5rfJRoK1ZGWZjhgI67tGfF
-         TeSQ8YycNrfbSspOjC2Pyf6HNUwsjFT0/PwPIJUqSNamkG5PzHo97bnY422HoBBc3vZa
-         e2MrRCLKUlO83VRzWo0LWTB2MVUjAhFmKRJ8mYOfXW6o5d/+eooYx47dkTiePhxoH0XV
-         Agsg==
-X-Forwarded-Encrypted: i=1; AJvYcCWixsqEqxfINEiUvFWUDUIukoKVvSCsg7mDTT/mz9QI0kwFr44FirceB145sdvmp/rqFzg=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzgq+gYiEy8eGf1HbivN00fRKpZFnAgjfQWfvtdwBR54DISfvkV
-	EIw684/FajOuVRANwif1Pb8KNODCk1b0ykQ2HCMMEi00dxP26Ad1QmyLtg==
-X-Gm-Gg: ASbGncswdsMR+PvK52GmCgKYZ2q3zxuU3aBYFATLzLtsME3OkUHFqD5jshEdRwMxKeq
-	6ifYgTSDTpUQf3EICAaeAsh6DVO45SH3j+Ei3XnuIRXygqPvDHxyAcnEgQK7iPHiyI5qLUYRjPY
-	EVlr6UeMm1WMC892RTwcIi+DpvzbOvPI1+apW6tdXEpj6OG1s5Gen75BZU3Xw3tZTAaK7+YxofL
-	LEVciyT6nDC9pykCC2QcH53I6vDy6YqJbw3S8VepMCODdS5xVq1ZrPys1Ut+FUZEeEHAJU0Qde3
-	jVyCGHVi+hl5/pzQyzP6LLsgAqKQrMp2mU1iBgtu1MGpCw2rEbAXxvOblytdvFzZsGq5uEL74ZV
-	VhH0asOmydJpRfJdYnsBHlC4P7L0=
-X-Google-Smtp-Source: AGHT+IGz2pQ6N9cuMbwK9ZZ8Rq+H8aLFImVz37je5Fnkhb+tvjIBFfM3OdLxYKoTbZ+sJ/LZ6G6sGw==
-X-Received: by 2002:a05:6a21:32aa:b0:201:85f4:ad21 with SMTP id adf61e73a8af0-20cdfee98dbmr2366529637.31.1746169437515;
-        Fri, 02 May 2025 00:03:57 -0700 (PDT)
-Received: from localhost.localdomain (69-172-146-21.cable.teksavvy.com. [69.172.146.21])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7405902109dsm855071b3a.106.2025.05.02.00.03.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 May 2025 00:03:56 -0700 (PDT)
-From: Tony Ambardar <tony.ambardar@gmail.com>
-To: dwarves@vger.kernel.org,
-	bpf@vger.kernel.org
-Cc: Tony Ambardar <tony.ambardar@gmail.com>,
-	Alan Maguire <alan.maguire@oracle.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>
-Subject: [PATCH dwarves v2] dwarf_loader: Fix skipped encoding of function BTF on 32-bit systems
-Date: Fri,  2 May 2025 00:03:18 -0700
-Message-Id: <20250502070318.1561924-1-tony.ambardar@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <Z/+HZ3w2KmbK5OAi@kodidev-ubuntu>
-References: <Z/+HZ3w2KmbK5OAi@kodidev-ubuntu>
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=tHilg9fAnCQGz0qzZoPF8axI4+OykdyOGLFb17gSv1I=;
+ b=MEpjDGbld+h15mQp9bD3KbdXChugyFVtBcPyYIH/uAtGLKHQj3uXqhuiknRF0YVLJYMtCLGv53BbWU9PN9Y8g7ikUqd5lywHCaqyJA5JrPRVPJuJRHaBwcua9HwBgV11h9f/uvoVczAXoULdyYIOJw1AxngLuC2gET9qYkvgrPk=
+Received: from BLAPR10MB5267.namprd10.prod.outlook.com (2603:10b6:208:30e::22)
+ by IA0PR10MB7230.namprd10.prod.outlook.com (2603:10b6:208:403::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8699.19; Fri, 2 May
+ 2025 08:19:00 +0000
+Received: from BLAPR10MB5267.namprd10.prod.outlook.com
+ ([fe80::682b:c879:9f97:a34f]) by BLAPR10MB5267.namprd10.prod.outlook.com
+ ([fe80::682b:c879:9f97:a34f%4]) with mapi id 15.20.8699.022; Fri, 2 May 2025
+ 08:19:00 +0000
+Message-ID: <3b19f6a5-a5f5-4872-b38d-018165b5edd7@oracle.com>
+Date: Fri, 2 May 2025 09:18:56 +0100
+User-Agent: Mozilla Thunderbird
+Subject: Re: BUG in pahole?: strange error in tests/flexible_arrays.sh
+To: Tony Ambardar <tony.ambardar@gmail.com>, dwarves@vger.kernel.org,
+        bpf@vger.kernel.org
+References: <aBQwRduNwBFciGkq@kodidev-ubuntu>
+Content-Language: en-GB
+From: Alan Maguire <alan.maguire@oracle.com>
+In-Reply-To: <aBQwRduNwBFciGkq@kodidev-ubuntu>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: AM9P250CA0010.EURP250.PROD.OUTLOOK.COM
+ (2603:10a6:20b:21c::15) To BLAPR10MB5267.namprd10.prod.outlook.com
+ (2603:10b6:208:30e::22)
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BLAPR10MB5267:EE_|IA0PR10MB7230:EE_
+X-MS-Office365-Filtering-Correlation-Id: cb034397-4f5d-4e32-f13a-08dd8951fda7
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|376014|1800799024;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?alhydVNWeHlEWFFBOU8wOUIwdTBDbVNIV3locjBXenhnYktKbk11OHdWOG9s?=
+ =?utf-8?B?bzZqTmx0TThyd3pTNVNjeHY2N25EOTJFT3hlNHVQS3RPbkthdm5vMkJhalky?=
+ =?utf-8?B?NEVlNmc2MVV2MkpiV3gxeWFyMHcxdlBReTE0U0VaUDBrZURZQklIbFdLbE5Z?=
+ =?utf-8?B?dWJMaTloNTM0YlpOUlk5ZW9nTjNuTFpkZ1d0L295ZUJLcWtPcGJManlrM3lJ?=
+ =?utf-8?B?bHF2Ums0TExGN0g4VmI0WkdHREkxdzR0bm44TTVqNVpxTmRmclFvdE94SnZj?=
+ =?utf-8?B?QWVPRFpNOXpoSmJmTHEzRHQwbVRJMDhnQXFESFNEUW93bktLOUVzd2pqSStj?=
+ =?utf-8?B?NTFWSVpiMlJ2NStvL2x1Z2kraHNubldYZlM4TlB6MENNQitINC9GektlT2pU?=
+ =?utf-8?B?MWhVQ1lqa2prOGVUZEgvOXI0eGtJZWNtbnRRNHNKWm5VWTNpWVdFb0RsQ0JY?=
+ =?utf-8?B?bmkvWUkzUmJ1Qm9lb3NjUFRCWDUvVGpLdnk3TGlUc3VoazFHZS9LbUVGdHlM?=
+ =?utf-8?B?MWtOTy9ialNvV1ZrN2R1UkZ1OG9zeVJsOTlVMVRmOXQ2WXFQcFJFU0hXOWpk?=
+ =?utf-8?B?RHJubjh6M01UMGI1VmxYZG04eWRabWV5OE9ENEpOM3djWkRjUnVoRW9aQVZT?=
+ =?utf-8?B?cUhDTFplRnIwa3RPam9IQkpnME5mOEZESnNmYXNweDEwT2dmRWpWL3FzdVRX?=
+ =?utf-8?B?WGNqZ0xtaVcrRjZzQWpNam1kcm9LakE2WlM3dEJCZGFrR3hkWmJqZitBaE1l?=
+ =?utf-8?B?dEp3ZlVoTk9ybFlwekNWaXEzUjdiNmlwRk1lSFpRYVNiWU85QkZZUjZEQlNH?=
+ =?utf-8?B?eVdmOWwxd1RYdlcyMnpWcGdFVG1qcGFTQjliRzIwZHlmbW9LQ1pVdmw4NmNL?=
+ =?utf-8?B?UlFUMkpGTWlCN0FoM2JuNHJDWjRhaVc0QmNQeHQ5Ny83RDJ4SWRyU3pZWFNB?=
+ =?utf-8?B?VTJTM2pMSUpOUFpRNU9CWkxxcEhlcytkK09mZDRQSUZuNzYyTm1FUmNsbE1x?=
+ =?utf-8?B?NzJscHpzOHJVYlFBdFhZTHNRVWpVV1E5NHpaak5uY0hZOFkxdTZCQk9SN0Jh?=
+ =?utf-8?B?cXc2a1RURmtlYVdXSXdmMWlLZ1ZocTJLamJ1THl1TjRVWkdMejhqTGpWWk5y?=
+ =?utf-8?B?RUFmR1NBSWg2QVoxdmlwaS9ZZXp3NDRpWkMwTHBuUWZtdmxHUStVdXpPZVBm?=
+ =?utf-8?B?VG5vYWZnNGx1VTRWK1ZzL2dSZ0xleUNRUXpLOUlzUHVybklZOW55UnMrZzIx?=
+ =?utf-8?B?MkJHS3AxNFBpQy9OYWY0TzNYeFBLaHgvb3hTczJ3bzhWNDB6dThGNzQ2U29s?=
+ =?utf-8?B?b3dGVHY3UVVuR0JCMVhsMDc1QlMxdncvdnpCWWx0ZkpxeWlmb2w5YVhRTkh5?=
+ =?utf-8?B?TFp1K1J4SHNobTM5ZWYzcmgrYjlaeUJSVEg4eWZxZUpQRW5mV2ovckdiQ2lO?=
+ =?utf-8?B?NVd4cElHR0p1bDdyTlNzSVgvajhjN3NBNk9EeUhoRkpEKzBOK3pKSVVJYTd6?=
+ =?utf-8?B?VjBGbTExMWRsVG1PTDJNdmlpVUZlbk5NNTEwTlZJT29zV1lmUkcxeUZZbTMv?=
+ =?utf-8?B?TVg3cjhvU3RMazNpLzc2ZVFUTmthWFowT3ZOMzVYMnI2c1RxWjZ4d3ptRmJ6?=
+ =?utf-8?B?dkExYk56ZUxHK1NsNThNeEpTdkRWUEJPRlNQR2pXVWswYlBPYk1XZzhJVmVh?=
+ =?utf-8?B?eExDMDRYTjEzbnJFa25zMGo4cGpkYTlkQ1lYajdVejJLYTV1NCtuVGxYU0ZJ?=
+ =?utf-8?B?Wjlob1d5bGt1bGt6QU9QY1dmS0RPalA0VzRQdlN0a0R0WXdGYlRlQnltS0ND?=
+ =?utf-8?B?NDZkNWllYVNpclJ3SWMwR2FaR2ZrVW00K1ZQTFZQZ3Z4WFY5RjlYTm9JQWJI?=
+ =?utf-8?B?cC9ueS9JM3AxMGxQMlpBTFYza0tNQWQ1U2QvemxrcHZheFFGRGd3U3UwL1ZD?=
+ =?utf-8?Q?w6RHQT65cgA=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BLAPR10MB5267.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(1800799024);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?TldoYnBwV05QN1ZmTXFlZVdmZ091dlFsMGtuMC9hLzdEVVJuUTNrZzBmZzg5?=
+ =?utf-8?B?RjNPbVlxcmlIZTJxSGtJNWVMRXN1aVRPN2hjVGd5Mi83SC9YZjJQdFNqYTd4?=
+ =?utf-8?B?cEFwYXR4OWZISnR5OEJmK1ZKUFlPWVFvbGpGdE9XUVlKTVlveitKSldHVWtq?=
+ =?utf-8?B?OHpkaDAzRDdiSjFRNFVZSy9YYWFmSHhwUUpQTDFQZ3M1TExldGhwbGUxQXVU?=
+ =?utf-8?B?YmxjMkpjU09nb1dBcHlEeU84RWpOUk5CMUN3QnhucTQ1UkVMdDRKQnd4V3NW?=
+ =?utf-8?B?VytkUmFjVDdtUEErOE1leDRFOXZOQUJuYzZVSzRySnhKa2FnT0dqbnplN3NG?=
+ =?utf-8?B?c25WMFNnTkR3UVVSaHFMYUdTUmxET1YxZVVIcW8vNm53NnlSbU1VN0FmUm1N?=
+ =?utf-8?B?SGhYZm50aWMrL0J3MlRJRXlDQjFMdUxjdUJXa2V3SVM1U3hvb2FFaW84OU5C?=
+ =?utf-8?B?a2hlRVR6aVMvWjRwd05KbSt4ZC9TUjd3SzAxb3o5VlF6Y1F6OTRKZktLWjA2?=
+ =?utf-8?B?bXJQRWRaQXFHcTNwR3hyQlorTFV3VGZQWk1YVmNiaytINll4VlZWYjhRNVE4?=
+ =?utf-8?B?QjZHbE5QYVVQeWxKR1FGWXN6V0lpSGRBU200N0NVOE94VEFJdzRXSktoNXZR?=
+ =?utf-8?B?SVBBTDlPUUQ1YmJVVzhmbjdkbUNCUEtVbWU5L3NGSFQzVlR3emU5RUJzZU03?=
+ =?utf-8?B?RnRQTGFaUlIwQmgzUjV0N2xHcS9pRU8rbHZ1OGtJN2ZhOHlmOUVqc3NZR2th?=
+ =?utf-8?B?OW9jSXJBbjVjL29lQzhadnlkQlVDSEU3QytpZXZtR0UzRWV4NjJ2cDVBRFRh?=
+ =?utf-8?B?UUEvekhJL1pkSkRhRmRNY25tVFJRamZGTEt6VmVpRjhDQS9UUDRUK2g4d2l6?=
+ =?utf-8?B?aDFRalBJdFRITkpMTVFVbURqWGRPUXF6MXc5MXBRMzN3cWxvVkdBVE5qcUZR?=
+ =?utf-8?B?M2g3aEczb29rSTVnalp6S0hmcW05UnhjbDM1anp1K1E5K2dMY1R1UW1BaDlk?=
+ =?utf-8?B?QVJpZ3l0dUFJUXBra0RxSzdCQXduTXFQWTNlRVQ1WE0xWDNlU3hWc1daOWNr?=
+ =?utf-8?B?dDVIZDlsNzVidEZVbU5XYmk2Y3pSNlRHM1pxb1pjQ2dvekR3K1EzNG9UYjFE?=
+ =?utf-8?B?amQ5RkVuQ3RRempWYm9IRWFNWWJQOGlPN0JidHFSVUZyZmhtOTZFWFNNTU1j?=
+ =?utf-8?B?dFl1TmJLcXUydmZNWTBnN0pjT2pXTnh0U2tlbXNNYkxPOXBISUVHcTlsRUZF?=
+ =?utf-8?B?SGZPOXpibUNCdGdGdGt1bkZ1VnRJSEttT2xRbEFSMnJZZzVjT2dOMTQ1MUFs?=
+ =?utf-8?B?dFRzdUJvcG1CRHlBQUxxaGpBY0xNRkJUQlJFNDZNRm1QR0EwbXBOSmQrS2Jz?=
+ =?utf-8?B?Um5JWDdUaCt3eW5BdjdCZnl1OVkzQ2ZveUc1VmZnR3YwcEdDdUtJS3J5S2pp?=
+ =?utf-8?B?MnhCYWFHeWVwZjFDVFZCcksyL2JPMG84aHdRVkVBV2RLY3ZEOUkrOUFDMHlx?=
+ =?utf-8?B?MEE5NTdONU9OUkszbUp2Tk40bkVMbndURHY4NE15QyswZWt5ZEU3ejZQcHZt?=
+ =?utf-8?B?aXNrUFhlUmpCOUhxUDhpL3ZiOThLUkNScEo3QTJUOWQwWlhlWnE3TGk0eEs0?=
+ =?utf-8?B?R045S0RDeVowbis4d2RQb2pmREFPZHlNMHZEWDduZTBFT0hRamphNjFyL1di?=
+ =?utf-8?B?S1dmckRHNnZIc2MySi90M0Zjb2hlUjdOUGEwNzlIZnhsL3VxNnJNRXpZUVFP?=
+ =?utf-8?B?NXRhdmxJdWJybGRwL003bHZMajFJS1pzZy8xZnc1K0lhQ3RBNEkybE0yUkNC?=
+ =?utf-8?B?WmxrVmp0NWx5NWEwcU5BeUNLS293eGtvMHpLbXJiKzIwaVIvYW9VWlBNa29U?=
+ =?utf-8?B?N2RORklEUy9LbFo2aHROMytIRk1COFRSb0YwTUFpaEhjRWFjTEhYTk9vRmJS?=
+ =?utf-8?B?RGhFN2ZsYkEzYW1ZRm9FMkxxUVQ0WW1uRzJibjQ2Wk1HUXZmSU9KZ2lvWTlS?=
+ =?utf-8?B?d00wRTQvUWZvVUpRYkJWVGxmbmxERUhDZkRvUXNDRS9WcHQ4NG1lRlpxSEto?=
+ =?utf-8?B?YW52akI2V0hwcGVoYWVaV0QvR1lUNEVwMXhKT1pMM242WFNIRkdZRFd2WTd0?=
+ =?utf-8?B?TkRuUnRNMUFLb2JzTmVXa1d4SGlGNEY4aERndjdzV0ZEalllZ0YvKzIvYXRH?=
+ =?utf-8?B?Z3c9PQ==?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
+	Qkwqgn82PLjjv0ne0gZGwIpu642PUz8naLL/HK7IP3FtUrONjs+tzRMGhSAtyJOA4bMaRX3F+o8QqEWh6JyKuEIgFuN499qgykkzrrdOpI4qKrvWnl1kFkrmVwxnpTUkFdZitfGM5QF+U+mJja9f42xp2CZn40sV0dKqRW68RIx6fw83IB6xFoSRu/P2MTyX7GNOc0Ec4bRlae4gGA9vtbKv92i2bbW+cajsj7/ZIDAYroM8d0YzCYYUdbM175TxvwBS+OCe1xdjFax48TTIBE4gnJgF76NqoRcxdRlXirqC+IwZv0Eyt0YED8/GoQG9hg83Fw+ozrStODMhcNRWJP3LIE66UPyKPkp/dijRBeOTijhA31ik7QQwyhzqBzh9IRkPyZn9e4tBNFJhpeI28tz8kZGg6Dl0n/pb2LkVYQXi5/IDy/bhMPn4IO69y+Z8CsbBM1pbT73Lx43OhdQM6sSIZcvXfN72Pn+kmJwH1Jb0Y6W7hjZBuGuq/jdHCKtTKyIvHT9Gwe3EHjanknKqEwZc9lxErZtW08+O8LuLWUHQLW3h/a8uwrnUzc7eCfekNpS4Hu/u3RD+6ShbftchXomYCiVdbGrOZazL998RFWw=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: cb034397-4f5d-4e32-f13a-08dd8951fda7
+X-MS-Exchange-CrossTenant-AuthSource: BLAPR10MB5267.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 May 2025 08:19:00.2504
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Zav81CRl5XVtX2CAyu1Bdm1am82+xs/ROWfuP7+SpqtjpKH9sFmBzvQl//g6bdtuwPS3xMAhCwkIsQn8SUC5pw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR10MB7230
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
+ definitions=2025-05-01_06,2025-04-30_01,2025-02-21_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 adultscore=0 phishscore=0
+ bulkscore=0 mlxlogscore=999 suspectscore=0 mlxscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2504070000
+ definitions=main-2505020064
+X-Authority-Analysis: v=2.4 cv=MIZgmNZl c=1 sm=1 tr=0 ts=68147ff8 b=1 cx=c_pps a=WeWmnZmh0fydH62SvGsd2A==:117 a=WeWmnZmh0fydH62SvGsd2A==:17 a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=wKuvFiaSGQ0qltdbU6+NXLB8nM8=:19 a=Ol13hO9ccFRV9qXi2t6ftBPywas=:19
+ a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10 a=dt9VzEwgFbYA:10 a=GoEa3M9JfhUA:10 a=rYKvOK0H9t3e5z19t88A:9 a=QEXdDO2ut3YA:10
+X-Proofpoint-GUID: xiZVY4BAJAnA4ae3l-iSMHRFNNZh7WX4
+X-Proofpoint-ORIG-GUID: xiZVY4BAJAnA4ae3l-iSMHRFNNZh7WX4
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNTAyMDA2NCBTYWx0ZWRfXyRs0Atq5De3/ zl6ZF4pa5aMVrwwxMwyzhJXb5T6KGxDCWZtuairXWmJgoJwItDA/EO+5oEYJhkK9CGZ92usJHuy P18XRvXtWoappvIsi/RqL0AHk0OqOOlIbxbaYiEApro1ldHBjJdhnAI5lAxlfiaXE5fdc+iNec5
+ i5Au/53QMgnFtiNp/aFYStKpXw+4KRsIA0fvkJi2lvfzAChEVWuxGSxYhbcSERJtJL4ELhckr2i VTFJcNWz5h/K4OMQXNyuJeKZmcsyOS2DL3IwwchV6MpbGUGtd0kpmomsEKN27Xja083BxgqHz0c uUdDjtbeKELAK46HrnkiWOU7MelOfpJQjF5W0BWtHPxDgakWZHL5lluCqz9zMkY45Z/vBPITwJ3
+ 5Gjd9m/KNGfQAAmsN7g3N1xiegyTjiuZ4m364nt+/BHm1/sniiRIOHq35UMw5xDoSHyDS6AE
 
-I encountered an issue building BTF kernels for 32-bit armhf, where many
-functions are missing in BTF data:
+On 02/05/2025 03:39, Tony Ambardar wrote:
+> Hello all,
+> 
+> I ran into the following running the latest pahole tests:
+> 
+>   $ vmlinux=~/linux/vmlinux ./tests/tests
+>     1: Validation of BTF encoding of functions; this may take some time: Ok
+>     2: Default BTF on a system without BTF: Ok
+>     3: Flexible arrays accounting: pahole: type 'bpf_empty_prog_array' not found
+>   pahole: type 'kstatmount' not found
+>   pahole: type 'crypto_lskcipher' not found
+>   pahole: type 'crypto_sig' not found
+>   pahole: type 'hash_ctx' not found
+>   pahole: type 'scsi_stream_status_header' not found
+>   pahole: type 'virtnet_info' not found
+>   pahole: type 'geneve_dev' not found
+>   pahole: type 'geneve_config' not found
+>   pahole: type 'lirc_fh' not found
+>   pahole: type 'scmi_registered_events_desc' not found
+>   pahole: type 'events_queue' not found
+>   pahole: type 'hid_debug_list' not found
+>   pahole: type 'flow_offload_action' not found
+>   pahole: type 'nft_rule_dp_last' not found
+>   pahole: type 'nft_rhash_elem' not found
+>   pahole: type 'nft_hash_elem' not found
+>   pahole: type 'nft_bitmap_elem' not found
+>   pahole: type 'nft_rbtree_elem' not found
+>   pahole: type 'nft_pipapo_elem' not found
+>   pahole: type 'xt_standard_target' not found
+>   pahole: type 'xt_error_target' not found
+>   pahole: type 'ipt_standard' not found
+>   pahole: type 'ipt_error' not found
+>   pahole: type 'ip6t_standard' not found
+>   pahole: type 'ip6t_error' not found
+> 
+> This is simple to reproduce (e.g. code in flexible_arrays.sh):
+> 
+>   $ pahole kstatmount ~/linux/vmlinux
+>   pahole: type 'kstatmount' not found
+> 
+> But despite the above:
+> 
+>   $ bpftool btf dump file ~/linux/vmlinux format raw|grep kstatmount
+>   [13145] STRUCT 'kstatmount' size=624 vlen=8
+> 
+> And:
+>   
+>   $ pahole -C kstatmount ~/linux/vmlinux
+>   struct kstatmount {
+>           struct statmount *         buf;                  /*     0     4 */
+>   ...
+>   };
+> 
+> Has this been seen before? Am I missing something? Any insight folks have
+> would be appreciated.
+> 
+> The same behaviour is also seen with '.tmp_vmlinux1.btf.o', which I attach.
+> 
+> Many thanks,
+> Tony Ambardar
 
-  LD      vmlinux
-  BTFIDS  vmlinux
-WARN: resolve_btfids: unresolved symbol vfs_truncate
-WARN: resolve_btfids: unresolved symbol vfs_fallocate
-WARN: resolve_btfids: unresolved symbol scx_bpf_select_cpu_dfl
-WARN: resolve_btfids: unresolved symbol scx_bpf_pick_idle_cpu_node
-WARN: resolve_btfids: unresolved symbol scx_bpf_pick_idle_cpu
-WARN: resolve_btfids: unresolved symbol scx_bpf_pick_any_cpu_node
-WARN: resolve_btfids: unresolved symbol scx_bpf_pick_any_cpu
-WARN: resolve_btfids: unresolved symbol scx_bpf_kick_cpu
-WARN: resolve_btfids: unresolved symbol scx_bpf_exit_bstr
-WARN: resolve_btfids: unresolved symbol scx_bpf_dsq_nr_queued
-WARN: resolve_btfids: unresolved symbol scx_bpf_dsq_move_vtime
-WARN: resolve_btfids: unresolved symbol scx_bpf_dsq_move_to_local
-WARN: resolve_btfids: unresolved symbol scx_bpf_dsq_move
-WARN: resolve_btfids: unresolved symbol scx_bpf_dsq_insert_vtime
-WARN: resolve_btfids: unresolved symbol scx_bpf_dsq_insert
-WARN: resolve_btfids: unresolved symbol scx_bpf_dispatch_vtime_from_dsq
-WARN: resolve_btfids: unresolved symbol scx_bpf_dispatch_vtime
-WARN: resolve_btfids: unresolved symbol scx_bpf_dispatch_from_dsq_set_vtime
-WARN: resolve_btfids: unresolved symbol scx_bpf_dispatch_from_dsq_set_slice
-WARN: resolve_btfids: unresolved symbol scx_bpf_dispatch_from_dsq
-WARN: resolve_btfids: unresolved symbol scx_bpf_dispatch
-WARN: resolve_btfids: unresolved symbol scx_bpf_destroy_dsq
-WARN: resolve_btfids: unresolved symbol scx_bpf_create_dsq
-WARN: resolve_btfids: unresolved symbol scx_bpf_consume
-WARN: resolve_btfids: unresolved symbol bpf_throw
-WARN: resolve_btfids: unresolved symbol bpf_sock_ops_enable_tx_tstamp
-WARN: resolve_btfids: unresolved symbol bpf_percpu_obj_new_impl
-WARN: resolve_btfids: unresolved symbol bpf_obj_new_impl
-WARN: resolve_btfids: unresolved symbol bpf_lookup_user_key
-WARN: resolve_btfids: unresolved symbol bpf_lookup_system_key
-WARN: resolve_btfids: unresolved symbol bpf_iter_task_vma_new
-WARN: resolve_btfids: unresolved symbol bpf_iter_scx_dsq_new
-WARN: resolve_btfids: unresolved symbol bpf_get_kmem_cache
-WARN: resolve_btfids: unresolved symbol bpf_dynptr_from_xdp
-WARN: resolve_btfids: unresolved symbol bpf_dynptr_from_skb
-WARN: resolve_btfids: unresolved symbol bpf_cgroup_from_id
-  NM      System.map
+hi Tony, I've seen this too (with a slightly different cast of
+characters); I keep meaning to look into it but haven't had a chance yet
+so thanks for doing some investigation! Seems like it is a bug in type
+display rather than in BTF generation at least..
 
-After further debugging this can be reproduced more simply:
-
-$ pahole -J -j --btf_features=decl_tag,consistent_func,decl_tag_kfuncs .tmp_vmlinux_armhf
-btf_encoder__tag_kfunc: failed to find kfunc 'scx_bpf_select_cpu_dfl' in BTF
-btf_encoder__tag_kfuncs: failed to tag kfunc 'scx_bpf_select_cpu_dfl'
-
-$ pfunct -Fbtf -E -f scx_bpf_select_cpu_dfl .tmp_vmlinux_armhf
-<nothing>
-
-$ pfunct -Fdwarf -E -f scx_bpf_select_cpu_dfl .tmp_vmlinux_armhf
-s32 scx_bpf_select_cpu_dfl(struct task_struct * p, s32 prev_cpu, u64 wake_flags, bool * is_idle);
-
-$ pahole -J -j --btf_features=decl_tag,decl_tag_kfuncs .tmp_vmlinux_armhf
-
-$ pfunct -Fbtf -E -f scx_bpf_select_cpu_dfl .tmp_vmlinux_armhf
-bpf_kfunc s32 scx_bpf_select_cpu_dfl(struct task_struct * p, s32 prev_cpu, u64 wake_flags, bool * is_idle);
-
-The key things to note are the pahole 'consistent_func' feature and the u64
-'wake_flags' parameter vs. arm 32-bit registers. These point to existing
-code handling arguments larger than register-size, but only structs.
-
-Generalize the code for any type of argument misfit to register size (i.e.
-zero or > cu->addr_size). This should work for integral or aggregate types,
-and also avoids a bug in the current code where a register-sized struct
-could be mistaken for larger.
-
-Fixes: a53c58158b76 ("dwarf_loader: Mark functions that do not use expected registers for params")
-Signed-off-by: Tony Ambardar <tony.ambardar@gmail.com>
----
-v1 -> v2:
- - Update to preserve existing behaviour where zero-sized struct params
-   still permit the function to be encoded, as noted by Alan.
-
----
- dwarf_loader.c | 37 +++++++++++++------------------------
- 1 file changed, 13 insertions(+), 24 deletions(-)
-
-diff --git a/dwarf_loader.c b/dwarf_loader.c
-index e1ba7bc..abf1717 100644
---- a/dwarf_loader.c
-+++ b/dwarf_loader.c
-@@ -2914,23 +2914,11 @@ out:
- 	return 0;
- }
- 
--static bool param__is_struct(struct cu *cu, struct tag *tag)
-+static bool param__misfits_reg(struct cu *cu, struct tag *tag)
- {
--	struct tag *type = cu__type(cu, tag->type);
-+	size_t sz = tag__size(tag, cu);
- 
--	if (!type)
--		return false;
--
--	switch (type->tag) {
--	case DW_TAG_structure_type:
--		return true;
--	case DW_TAG_const_type:
--	case DW_TAG_typedef:
--		/* handle "typedef struct", const parameter */
--		return param__is_struct(cu, type);
--	default:
--		return false;
--	}
-+	return sz == 0 || sz > cu->addr_size;
- }
- 
- static int cu__resolve_func_ret_types_optimized(struct cu *cu)
-@@ -2942,9 +2930,9 @@ static int cu__resolve_func_ret_types_optimized(struct cu *cu)
- 		struct tag *tag = pt->entries[i];
- 		struct parameter *pos;
- 		struct function *fn = tag__function(tag);
--		bool has_unexpected_reg = false, has_struct_param = false;
-+		bool has_unexpected_reg = false, has_misfit_param = false;
- 
--		/* mark function as optimized if parameter is, or
-+		/* Mark function as optimized if parameter is, or
- 		 * if parameter does not have a location; at this
- 		 * point location presence has been marked in
- 		 * abstract origins for cases where a parameter
-@@ -2953,10 +2941,11 @@ static int cu__resolve_func_ret_types_optimized(struct cu *cu)
- 		 *
- 		 * Also mark functions which, due to optimization,
- 		 * use an unexpected register for a parameter.
--		 * Exception is functions which have a struct
--		 * as a parameter, as multiple registers may
--		 * be used to represent it, throwing off register
--		 * to parameter mapping.
-+		 * Exception is functions with a wide/zero-sized
-+		 * parameter, as single register won't be used
-+		 * to represent it, throwing off register to
-+		 * parameter mapping. Examples include large
-+		 * structs or 64-bit types on a 32-bit arch.
- 		 */
- 		ftype__for_each_parameter(&fn->proto, pos) {
- 			if (pos->optimized || !pos->has_loc)
-@@ -2967,11 +2956,11 @@ static int cu__resolve_func_ret_types_optimized(struct cu *cu)
- 		}
- 		if (has_unexpected_reg) {
- 			ftype__for_each_parameter(&fn->proto, pos) {
--				has_struct_param = param__is_struct(cu, &pos->tag);
--				if (has_struct_param)
-+				has_misfit_param = param__misfits_reg(cu, &pos->tag);
-+				if (has_misfit_param)
- 					break;
- 			}
--			if (!has_struct_param)
-+			if (!has_misfit_param)
- 				fn->proto.unexpected_reg = 1;
- 		}
- 
--- 
-2.34.1
-
+Alan
