@@ -1,43 +1,46 @@
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1567231A3B;
-	Wed,  7 May 2025 22:20:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEC0E256D;
+	Thu,  8 May 2025 09:38:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746656435; cv=none; b=StXUwDvkpr7sUeXgGof1Ipo0mMlMdSX0moZTH2DIOOYQDL3e36+etdAFyxz2MEujYhyyM8uSdoOIkT6jxryrKIpVLaiG26d8hoeAtTjhWWLBvfsKmGDdq3r0jPJo8dbqCHztNOnuTMd+QkAhYJntC6jD6ZSNfPyILgpdtnfkNqQ=
+	t=1746697094; cv=none; b=VF7AmJrq21WBWt4yrZgfjShHeClQUwRF6d6SzjCp3dgRSb7rQHebFUYRzlFFv7p/DXEDU4juld7omBe6dUdAlR29ZwY2HN+iqMEaT2iaJKH3NlPgglHnrpyAiEVKXW4ik1fTy0ioeGsTGwDMl0ZQGkDQDqum/gPamEgZoVoQEfE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746656435; c=relaxed/simple;
-	bh=mLymb9m1Aamh6w9wXRY8bm3iLfvFqm2zCOEODZIwCHY=;
-	h=Content-Type:Date:Message-Id:Cc:Subject:From:To:Mime-Version:
-	 References:In-Reply-To; b=bgcLYSVQgq0t9XgI8k6FKenMRdwy/jiCHCTbTEidi+fM9LZlVVwcXzwFpl67XBuKVSj/wxuKsBcqIjqoEp9BDCShzsMTRDk/A2/YxmWFwo7ThCgQ3vGtVGN3163U3pwqqP0Z6HuAd/oLnR2H2NNPwFlRXlFfDAiNSKPBDiiyhIo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=HHidIfVq; arc=none smtp.client-ip=217.70.183.199
+	s=arc-20240116; t=1746697094; c=relaxed/simple;
+	bh=SaXVJVqCe8qEoYe4/DuliBjSR0HDjrjWq27uDIX9Nco=;
+	h=Content-Type:Date:Message-Id:Subject:From:To:Cc:Mime-Version:
+	 References:In-Reply-To; b=KiXUHor0Gy5XM7Qr3WTlfuY2k4MJB0r2fVlbWfFy3HZu4iV2s3zI9yn8J0LqwtxqTHeFX4bA93Gcv6m8EEW+1OD9xkGYOyd4pXYQwL2NIcCCs3MxIpHyWko83g1JL5o2cFhunB6CpliTzFMJGiwkTXfIToK3WTZzgfUnOpYJGQ0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=jdIWhOqJ; arc=none smtp.client-ip=217.70.183.197
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="HHidIfVq"
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 5780B43969;
-	Wed,  7 May 2025 22:20:30 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="jdIWhOqJ"
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 4220D439EB;
+	Thu,  8 May 2025 09:38:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1746656430;
+	t=1746697087;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=xwXyFQMqk6Dz3xysP6Qan9loJGBSspmDNGXagmKMr7s=;
-	b=HHidIfVqd1xpJy0qJEs8nlSaspY3IRVsFG3h9lSYVZHXdIGwQn+gS2dr+3617xZdMxAlUT
-	GRjF8MsBo2Y50uUL9ciDRl2gzj540aG/uCo0j/lFdegmW1SWOp7jeE01yeHI1aNc81WntT
-	dUPMd95WCerz7GQcfazBNPQXtqfZQ8GVTant2HGWs4WXfJ5e0Hw3JNQjYkYM/Oling4eK+
-	awCYtgSUeh9TuoVE0dzcokv4bPJksErtxL3/NhScBHS+btf5ofdUhobc9Oqauw1zNc9RSH
-	LpM2rPcB4KAR2f7J+hGZ3NA87/Un98NiQn5bCiYi8BGOV/DVdNVuL0Qs6EwVpw==
+	bh=p0b3+napmc38ovl9hoUwfu3ONlhB8xiw4jdwMaPzEcs=;
+	b=jdIWhOqJy3XbvgQFPrqfGBwg7SVIJGCcPraTUF5QQel2GUOsPF/UUbvlPzyZoo0Qayn4Tg
+	pWdQAA9szKfe82OTAXwwAmUt7j5kRLavFiCmPx8hNQsDTyF3sMsv6nMoAZ2rkMKODIyV+7
+	QDngj4QIEvSOGcP8RZ+j9r0TH9AWjzV5Tm7b+DKziUuoeaN5rJo5rpzslXhe8VjJypyIsx
+	bmoUt6Lw7//v0nfgxe6xVB0GCj6Piu7xCA+oJ1HkHlJ8pH8VwgkSvrRseB8nAGMlmG7O0/
+	RPeR5/uRR+xBzBpSnUu+5Uf4/eEh2vi3pCpYu4ggcd+ISc9vizIVb7feSKbyBw==
 Content-Type: text/plain; charset=UTF-8
-Date: Thu, 08 May 2025 00:20:30 +0200
-Message-Id: <D9QA12O1IQU9.3AVBN6BI611LL@bootlin.com>
-Cc: "Arnaldo Carvalho de Melo" <acme@kernel.org>, "Alan Maguire"
- <alan.maguire@oracle.com>, <bpf@vger.kernel.org>, <dwarves@vger.kernel.org>
-Subject: Re: Pahole/BTF issue with __int128
+Date: Thu, 08 May 2025 11:38:06 +0200
+Message-Id: <D9QOFW6WEIT0.2AJBVJINZRRBV@bootlin.com>
+Subject: Re: [PATCH dwarves v2] dwarf_loader: Fix skipped encoding of
+ function BTF on 32-bit systems
 From: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
-To: "Tony Ambardar" <tony.ambardar@gmail.com>
+To: "Tony Ambardar" <tony.ambardar@gmail.com>, <dwarves@vger.kernel.org>,
+ <bpf@vger.kernel.org>
+Cc: "Alan Maguire" <alan.maguire@oracle.com>, "Arnaldo Carvalho de Melo"
+ <acme@kernel.org>, "Andrii Nakryiko" <andrii@kernel.org>, "Alexei
+ Starovoitov" <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
@@ -46,80 +49,55 @@ List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-Mailer: aerc 0.20.1-0-g2ecb8770224a
-References: <D9Q73OTLEOU4.LNAO9K4POETM@bootlin.com>
- <aBvE++cyskZTfAo5@kodidev-ubuntu>
-In-Reply-To: <aBvE++cyskZTfAo5@kodidev-ubuntu>
+References: <Z/+HZ3w2KmbK5OAi@kodidev-ubuntu>
+ <20250502070318.1561924-1-tony.ambardar@gmail.com>
+In-Reply-To: <20250502070318.1561924-1-tony.ambardar@gmail.com>
 X-GND-State: clean
 X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvkeektdegucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpegtfffkvefuhffvggfgofhfjgesthhqredtredtjeenucfhrhhomheptehlvgigihhsucfnohhthhhorhoruceorghlvgigihhsrdhlohhthhhorhgvsegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeekveevvdekieeihffftefgieffvedvhfehgfehkeeuudfhveeufffgffejiefhueenucffohhmrghinhepkhgvrhhnvghlrdhorhhgpdgsohhothhlihhnrdgtohhmnecukfhppedvrgdtvdemkeegvdekmehfleegtgemvgdttdemmeguieehnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddvmeekgedvkeemfhelgegtmegvtddtmeemugeihedphhgvlhhopehlohgtrghlhhhoshhtpdhmrghilhhfrhhomheprghlvgigihhsrdhlohhthhhorhgvsegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopeehpdhrtghpthhtohepthhonhihrdgrmhgsrghruggrrhesghhmrghilhdrtghomhdprhgtphhtthhopegrtghmvgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprghlrghnrdhmrghguhhirhgvsehorhgrtghlvgdrtghomhdprhgtphhtthhopegsphhfs
- ehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepugifrghrvhgvshesvhhgvghrrdhkvghrnhgvlhdrohhrgh
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvkeelgedtucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpegtfffkuffhvfevggfgofhfjgesthhqredtredtjeenucfhrhhomheptehlvgigihhsucfnohhthhhorhoruceorghlvgigihhsrdhlohhthhhorhgvsegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeffkefgfedvvdfhhfevjedvjedtvedvhfeileekgfdtfefhfedtgeekkeehffdtjeenucffohhmrghinhepkhgvrhhnvghlrdhorhhgpdgsohhothhlihhnrdgtohhmnecukfhppedvrgdtvdemkeegvdekmehfleegtgemvgdttdemmehfkeehnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddvmeekgedvkeemfhelgegtmegvtddtmeemfhekhedphhgvlhhopehlohgtrghlhhhoshhtpdhmrghilhhfrhhomheprghlvgigihhsrdhlohhthhhorhgvsegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopeekpdhrtghpthhtohepthhonhihrdgrmhgsrghruggrrhesghhmrghilhdrtghomhdprhgtphhtthhopegufigrrhhvvghssehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepsghpfhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhop
+ egrlhgrnhdrmhgrghhuihhrvgesohhrrggtlhgvrdgtohhmpdhrtghpthhtoheprggtmhgvsehkvghrnhgvlhdrohhrghdprhgtphhtthhopegrnhgurhhiiheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprghstheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepuggrnhhivghlsehiohhgvggrrhgsohigrdhnvght
 X-GND-Sasl: alexis.lothore@bootlin.com
 
-Hi Tony,
-thanks a lot for the prompt answer !
+Hello,
 
-On Wed May 7, 2025 at 10:39 PM CEST, Tony Ambardar wrote:
-> On Wed, May 07, 2025 at 10:02:51PM +0200, Alexis Lothor=C3=A9 wrote:
->> Hello,
+On Fri May 2, 2025 at 9:03 AM CEST, Tony Ambardar wrote:
+> I encountered an issue building BTF kernels for 32-bit armhf, where many
+> functions are missing in BTF data:
 
 [...]
 
-> Hi Alexis,
->
->> Am I missing some constraint or limitation that would prevent the case 2
->> function from being described with BTF info ? If not, any advice about h=
-ow
->> to debug this further ?
->>=20
->
-> I suspect this might be related to an issue I ran into where pahole may
-> mis-encode types larger than register-size [1]. Out of curiosity, could
-> you try rebuilding and using a pahole with my latest patch [2]?
->
-> 1: https://lore.kernel.org/dwarves/20250410083359.198724-1-tony.ambardar@=
-gmail.com/
-> 2: https://lore.kernel.org/dwarves/20250502070318.1561924-1-tony.ambardar=
-@gmail.com/
+> Fixes: a53c58158b76 ("dwarf_loader: Mark functions that do not use expect=
+ed registers for params")
+> Signed-off-by: Tony Ambardar <tony.ambardar@gmail.com>
 
-I gave a try to your patch on top of pahole 1.30, and indeed it seems that
-my issue is fixed with your solution. I now have some BTF info for my
-bpf_testmod_test_struct_arg_11 func:
+I encountered some issues with pahole 1.30 when trying to generate BTF data
+for functions having some __int128 values ([1]), and have been redirected
+here by Tony. I gave a try to the patch below and confirm that it fixes my
+issue: BTF data is now properly generated for my target function, so:
 
-  [...]
-  [370] FUNC_PROTO '(anon)' ret_type_id=3D6 vlen=3D6
-          'a' type_id=3D10
-          'b' type_id=3D10
-          'c' type_id=3D10
-          'd' type_id=3D10
-          'e' type_id=3D5
-          'f' type_id=3D10
-  [371] FUNC 'bpf_testmod_test_struct_arg_11' type_id=3D370 linkage=3Dstati=
-c
-  [...]
+Tested-by: Alexis Lothor=C3=A9 <alexis.lothore@bootlin.com>
 
-I also did some quick tests around Alan's request in your series, I'll
-report to your series' thread.
+While at it, to follow-up on Alan's request for more testing, I did the
+following:
+- build kernel and bpf selftests with pahole 1.30, extract BTF raw data
+  with bpftool
+- repeat with pahole 1.30 + Tony's patch
+- I build my kernel for arm64, it is based on bpf-next_base and I use a
+  defconfig very close to the one used in BPF CI (so based on
+  tools/testing/selftests/bpf/config*)
 
-Thanks for the help !
+I observe the following when comparing the resulting BTF data with/without
+Tony's patch:
+- There is no difference on vmlinux BTF data
+- For bpf_testmod.ko, there is a slight shift in the first BTF ID (first ID
+  is 46 with pristine pahole, 47 with patched pahole), which in turns makes
+  a lot of noise in the diff, but the actual diff seems to be about two new
+  BTF entries related to my custom function now being properly detected
+  (BTF_KIND_FUNC and BTF_KIND_FUNC_PROTO)
 
 Alexis
 
-
->
-> Cheers,
-> Tony
->
->> Thanks,
->>=20
->> Alexis
->>=20
->> --=20
->> Alexis Lothor=C3=A9, Bootlin
->> Embedded Linux and Kernel engineering
->> https://bootlin.com
-
-
-
+[1] https://lore.kernel.org/bpf/D9Q73OTLEOU4.LNAO9K4POETM@bootlin.com/
 
 --=20
 Alexis Lothor=C3=A9, Bootlin
