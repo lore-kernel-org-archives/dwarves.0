@@ -1,138 +1,147 @@
-Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
+Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7E0E258CD5;
-	Mon, 12 May 2025 08:41:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A36A725B688;
+	Mon, 12 May 2025 09:17:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747039302; cv=none; b=Wahq7IFXlMb7ohQXNiBP4os1GJxgoleHEs4Ijhpslfm15THZSDBgthSpkw4181x/vYfNYIPUMvKHp2P/FsK6OZK2aOXqeXvcvyEas7vXDcDVKIRcHffARfKQ6Ycvx5KszWC+LXYjYT8yIOi1u5b2DphhiToPiJO6YLNVIolijqs=
+	t=1747041434; cv=none; b=Un0Pj7hMthx1hQeQC0eH8Fs287g/C9m7NNhsBpROal8cwr2uvm5l/MDBV2mr02AbsoEBaIXTLYJ5jvuCemR57huONdntsuCxQfNJSOCYympcYNEbStOrFuIC3JZIdNNFdvLjwymRLX3dAHTPyrw7OkCwgyqpBEzktgF2ETC47BA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747039302; c=relaxed/simple;
-	bh=hqBX+xGfNElrgdTW9eIfxPqbLZN2mU7X2qWEDWx5qdQ=;
+	s=arc-20240116; t=1747041434; c=relaxed/simple;
+	bh=P3RO4uTvgPJ/nyC0opWGVPsTm1WUI+nNvITgfZ+op6s=;
 	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MDRe0tzlvnXnzGcsPJMWvAyquG1MgymAPE/ojPPutrif4lxlputQiilXXcdPLUa8MDWCwcESne9fAQNlYIaSn3vEylXASrDGpOoheVykGNsBsstXJYtwnpOiktslLDPoQiRjJCvrvpyQvGYMyV8Gh03DFmM9VcRSBpyKYePn6Oo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nkIJKLqw; arc=none smtp.client-ip=209.85.210.176
+	 Content-Type:Content-Disposition:In-Reply-To; b=WkC8RRNcoj4FVmTrt0EzqiW5jrVn6VK0k22vn3t7XoEw0+1/6HbaTJmPHW2KKI4ipriny6Owl0Le7o3PHsBBEHZCqoPrPx8Zvk2PX9w4vYKMU9wkQdx7/2e1dpWO/qaVTURM6detFd3MwJ4749l6ZukGHY01eYOnYg4s0kx0Aio=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lJrkGb+T; arc=none smtp.client-ip=209.85.215.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nkIJKLqw"
-Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-73c17c770a7so4974120b3a.2;
-        Mon, 12 May 2025 01:41:40 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lJrkGb+T"
+Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-ae727e87c26so2756505a12.0;
+        Mon, 12 May 2025 02:17:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1747039300; x=1747644100; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1747041432; x=1747646232; darn=vger.kernel.org;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :mime-version:references:message-id:subject:cc:to:date:from:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=UmmPAcPe/c87F8AEMy+drk6M/wujfqyOh/FDo+55s0k=;
-        b=nkIJKLqwXU46fNebqkdXtCu4zdNou0trugsv8c/j8akxiF+BNmC5ICrOpZkFyaI4Hp
-         qVsaYQBfgEtSGzp93v6qnrcoC/Pelwmu9OUg39XC1JyE+EFXPU96pT39RJ+D2PADtiDM
-         HJIUljR0qj12oY4jFyX/k+FfiyCHmjYOuCspyaL3yq1yYJ7VrLplm3R8tU0PraWMLPVt
-         V7ohNJcC6lTFYa6D7+K58N+oCBSuw0MeGbppwSPFna2BCCtatt4xNs9oijlKP+FfgPuX
-         4ZRLDHzhKKeBmu72O8jXpeDr2b/c/8ggxnHhv2K6YFgwy8+weigLzQCpVdrksbTvlEcz
-         9RHQ==
+        bh=4jBu5hJfjZzXiWMlnb1HWsX2/XDd8JSuHJcwEjzDNow=;
+        b=lJrkGb+Tf6SOYsc6+Pzvsl3o81IN0xmvR8v/Iu0zfOvHK6C2cBEMybAxgpqkOxMeeA
+         tLn/4gHkyjFt3F4ZqhNuX8FSRlA0aojfuTjhynFqOE0pMG0PGoPOPUKlHat3Sbb4ghXx
+         3miw/x/QOYOcejoNUYbZkx7WUSxR7HjPJlQoadTig8RUebu89dxydKeLfnXnIQoQ5BY3
+         ieqnPxQGFz7R//mxjq4FuGF7wiJ+LuLxmM3IiJnd4HCJPc7+cIsF1hBcmj2Oyuy15Y/X
+         bjsdn9r/pzQnJQRZlmwoVUDH8UBo6pO+V/NRmSbnHYaFhFhzimnxP7bzW+EaGgqJQtBQ
+         FBOw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747039300; x=1747644100;
+        d=1e100.net; s=20230601; t=1747041432; x=1747646232;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :mime-version:references:message-id:subject:cc:to:date:from
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=UmmPAcPe/c87F8AEMy+drk6M/wujfqyOh/FDo+55s0k=;
-        b=TWuAzYJbKhdiZ84uiIzXMHPmA+zz0Yajun/9Y2EmM849OxnnG2pCu9h4FNbxBZBvy6
-         3708AACv6kS7ecqDMM40zKvhcMvyN7QUWkOM1Hy29A/pZymFMBHowUl0z8iqbjaf5Wi7
-         vaJYGFDdV5Laozkd0at61wNQEHgZrK06/55B7apX0mKJAjXlvakLKcex1SINAUy3+J72
-         xsN/eULQhAdPtkalXpcw34bOAOFFDpBz5CZa5tPAPsGAHFftnGAHqPbrYp7YaJ97Be/Q
-         ENIU7Pgl7QVrx8mxU3iTgrt2PwoFrLht1tf/mlAeOHpgP5svbbYp5bzAEjFWVQwvg2J0
-         vp9w==
-X-Forwarded-Encrypted: i=1; AJvYcCVPmCjI7FxUFZE3nzGdoHqjDOD0rMKGTmXNgZoM/OdacblNEChE0lSglWp+cON6XaxaZJA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzVIJ3YNFnD1gUHoGf6C+qXwhYbAqa8DRmrqx4Rhsi7jKwfgIQ3
-	qkOA2+79WADk83W2VyJbwqRYEVA/7Asbm9XkWQt3kIZOd10G8+eL
-X-Gm-Gg: ASbGncv+PE4V9aC8gNRNfg2lgnz34uZwXDORYtmexvczMPmc2SIlcXW2sWRwDFk6C+8
-	aQppxdSIJJUSgb9ATzvNAAWvdW07MzRt6MOMsHe8uXj1prCJxVjUyWJfGdtO0K72e2qc6DRVdUh
-	GIG/fr0sDty46If0T0YPhN5jUIau/wydgJ2uroAJRcG4GV7GMljiSzDs8UMw+jPIrSysD9wg7CZ
-	MgJ6gy0mgT0gJBmyYipREw6+voc/oKg/iS2bKlBsQEwH0h/dlTZ1Lb/rsazunU5eI6OoNEmO015
-	VwzdcuVmzgFAcIEO9kIss5Ucjy7DRtfY0KyOP5LJjj5iVhF96ymOaSXG/E7WBPYF7Qj9ulEXyi9
-	5sOEjtYcTP/waz04VnA==
-X-Google-Smtp-Source: AGHT+IHK+FP+VA1MzFOQX4DTYugWnrHSfZgtJ+QmwPItd1tXwd4DhHAHN4Yl/t1egY/IQgtiLexm1A==
-X-Received: by 2002:a05:6a00:181f:b0:736:a8db:93b4 with SMTP id d2e1a72fcca58-7423ba8738bmr17113330b3a.2.1747039299781;
-        Mon, 12 May 2025 01:41:39 -0700 (PDT)
+        bh=4jBu5hJfjZzXiWMlnb1HWsX2/XDd8JSuHJcwEjzDNow=;
+        b=tji8q7RSsg1lQY/tU0xmlB4SPvlNxh5FhvBcstFcNlWDZamr/AKFKc1szA8kWsBzzL
+         hqI7fcccZ9ZQpfoKhmyVMhNzRg7V9VdXbn+h3FuI5OVrc7mPScddZH5UkFJpT0VAE81q
+         c0cYDGE+PilG3/+dTdesoDBNHwYY7k6DfGqg9lvYo5DXa2aNRuAi6UyQ0HSB7U2Xr53e
+         m1aXRUt6n0aZUfxSXPdmJIkjQKtElOpsLDRKXqWIbumfFqQTCEHrH4MpVONoRdxc2XSU
+         ce7/2OP5dfXJHtmn17XQBRshbMXzwakTbQVUmHzwt5z7luRG5TJHudLvE81qGCupExEd
+         Qs8g==
+X-Forwarded-Encrypted: i=1; AJvYcCWiChr4KoUsB1+nWMPVDiVmf8Gb+KxmVsXOVbZ3spvLXAuqfcLuGKhDXqUw+AVgAwbFfRg=@vger.kernel.org, AJvYcCXTjASoTrd077Ir9ZFAuxYk4idPxGHeOv9NFhkrdmF0k8tTm+tSFQSpylRccpODaWtkDGuAA0U2mg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyOzWnZSJYOGWoF9/Q1BWlZ+2CJpeEczJy2L1ApQxF9ORZKz7QB
+	4bA69CGMQKJ1uDju80/jzwNxM65jo60fJ2jkMstlxeEv0fSmilGa
+X-Gm-Gg: ASbGnctSkabnCsmJqMHq84OnzhCMIZ2cSKbpGMqALTVg8lLgpBRyZCagfPn3bmZ39QB
+	W0dht9oy/P+fDpWVBiC4x/f8fXifQjlWe6wBjHLG7sGyGUFXbDHyH8FmJGndvHZbqc4eT2RlobT
+	Bca7aKdswXlhf8K+OXmOEVa3zTGoX5MZdUeWta+qjxzNM1GGNu8CBsCS/YmlxR7+slD4J4o58dx
+	KTcXMNkBms7TVZRRdk2uCQYiXn7HwCa1H05o2EJctB7yBOtMOIkfTLVljJtHgHu2AA7u1sNz2rh
+	S3ZsG8M97EGXdESprD5NgcD+f59LvuC+JZf6XPldowBzmoaRx7Ij9vSdnmHfKZqOBbl4/odRH3S
+	m+LsICI1VS7PzgmBy5w==
+X-Google-Smtp-Source: AGHT+IFfbzuYKpsOTWT62pyr+ORVdi61roFYUmfgA7Sx/VqLJzxuAFCHa5grksluo2iybb5qj1GIhQ==
+X-Received: by 2002:a17:902:d4ca:b0:220:eade:d77e with SMTP id d9443c01a7336-22fc9185ef8mr201478675ad.40.1747041431756;
+        Mon, 12 May 2025 02:17:11 -0700 (PDT)
 Received: from kodidev-ubuntu (69-172-146-21.cable.teksavvy.com. [69.172.146.21])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-74237a89b11sm5409297b3a.163.2025.05.12.01.41.38
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-22fc75450b6sm58724975ad.49.2025.05.12.02.17.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 May 2025 01:41:39 -0700 (PDT)
+        Mon, 12 May 2025 02:17:11 -0700 (PDT)
 From: Tony Ambardar <tony.ambardar@gmail.com>
 X-Google-Original-From: Tony Ambardar <Tony.Ambardar@gmail.com>
-Date: Mon, 12 May 2025 01:41:36 -0700
-To: Alexis =?iso-8859-1?Q?Lothor=E9?= <alexis.lothore@bootlin.com>
-Cc: dwarves@vger.kernel.org, bpf@vger.kernel.org,
-	Alan Maguire <alan.maguire@oracle.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>
-Subject: Re: [PATCH dwarves v2] dwarf_loader: Fix skipped encoding of
- function BTF on 32-bit systems
-Message-ID: <aCG0QKuwuOpGrZgs@kodidev-ubuntu>
-References: <Z/+HZ3w2KmbK5OAi@kodidev-ubuntu>
- <20250502070318.1561924-1-tony.ambardar@gmail.com>
- <D9QOFW6WEIT0.2AJBVJINZRRBV@bootlin.com>
- <aB2Q3ylln95YFTCD@kodidev-ubuntu>
- <D9RHP83CJA32.1LGMU4SC9QJ1K@bootlin.com>
+Date: Mon, 12 May 2025 02:17:07 -0700
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: Alan Maguire <alan.maguire@oracle.com>, martin.lau@linux.dev,
+	ast@kernel.org, andrii@kernel.org, alexis.lothore@bootlin.com,
+	eddyz87@gmail.com, song@kernel.org, yonghong.song@linux.dev,
+	john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me,
+	haoluo@google.com, jolsa@kernel.org, mykolal@fb.com,
+	bpf@vger.kernel.org, dwarves@vger.kernel.org
+Subject: Re: [RFC bpf-next 0/3] bpf: handle 0-sized structs properly
+Message-ID: <aCG8kz1eZjjw+sSU@kodidev-ubuntu>
+References: <20250508132237.1817317-1-alan.maguire@oracle.com>
+ <CAEf4BzZfFixwy4vQG8jrUBtAOUFx=t1KG2F+AtKPVNCsMz0vQw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <D9RHP83CJA32.1LGMU4SC9QJ1K@bootlin.com>
+In-Reply-To: <CAEf4BzZfFixwy4vQG8jrUBtAOUFx=t1KG2F+AtKPVNCsMz0vQw@mail.gmail.com>
 
-On Fri, May 09, 2025 at 10:33:50AM +0200, Alexis Lothoré wrote:
-> On Fri May 9, 2025 at 7:21 AM CEST, Tony Ambardar wrote:
-> > Hi Alexis,
+On Fri, May 09, 2025 at 11:40:47AM -0700, Andrii Nakryiko wrote:
+> On Thu, May 8, 2025 at 6:22â€¯AM Alan Maguire <alan.maguire@oracle.com> wrote:
 > >
-> > On Thu, May 08, 2025 at 11:38:06AM +0200, Alexis Lothoré wrote:
-> >> Hello,
+> > When testing v1 of [1] we noticed that functions with 0-sized structs
+> > as parameters were not part of BTF encoding; this was fixed in v2.
+> > However we need to make sure we handle such zero-sized structs
+> > correctly since they confound the calling convention expectations -
+> > no registers are used for the empty struct so this has knock-on effects
+> > for subsequent register-parameter matching.
 > 
-> [...]
+> Do you have a list (or at least an example) of the function we are
+> talking about, just curious to see what's that.
 > 
-> > Nice! I notice bootlin has worked on several BPF testing contributions,
-> > and was wondering if your build is some new standard buildroot/yocto
-> > config tailored for BPF testing, and what archs it might support? Reason
-> > for asking is I have a large stack of WIP patches for enabling use of
-> > test_progs across 64/32-bit archs and cross-compilation, and I'm keen to
-> > see other examples of configs, root images, etc. (especially for 32-bit)
-> > At the moment I'm targeting 32-bit armhf support to make progress..
-> 
-> No,  that's really a custom, minimal setup that I am using, based on
-> buildroot. My workflow is roughly the following:
-> - use buildroot to download an arm64 toolchain and build a minimal rootfs.
->   No specific defconfig used, it is a configuration from scratch, with
->   additional tools for development and debugging
-> - configure a kernel for arm64 testing:
-> $ cat tools/testing/selftest/bpf/{config,config.vm,config.aarch64} >
-> .config
-> - use the toolchain downloaded by buildroot to build the kernel
-> - build the selftests with the same toolchain (so I am cross-building those
->   directly from my host, I am not really using vmtest)
-> - run all of those in qemu, and run the selftests directly with test_progs
->   in there
 
-Understood, and thanks for the details. I basically do the same, with only a
-couple of differences intended to ease adding armhf as a bpf-ci target
-eventually:
+BTW, Alan shared an example in the other pahole patch thread:
+https://lore.kernel.org/dwarves/07d92da1-36f3-44d2-a0a4-cf7dabf278c6@oracle.com/
 
- - use the Ubuntu arm cross-toolchain to build on x86_64
- - use mkrootfs tools from bpf-ci to make a Debian Bookworm rootfs
+> The question I have is whether it's safe to assume that regardless of
+> architecture we can assume that zero-sized struct has no effect on
+> register allocation (which would seem logical, but is that true for
+> all ABIs).
+> 
+> BTW, while looking at patch #2, I noticed that
+> btf_distill_func_proto() disallows functions returning
+> struct-by-value, which seems overly aggressive, at least for structs
+> of up to 8 bytes. So maybe if we can validate that both cases are not
+> introducing any new quirks across all supported architectures, we can
+> solve both limitations?
+> 
 
-Take care,
-Tony
+Given pahole (and my related patch) assume pass-by-value for well-sized
+structs, I'd like to see this too. But while the pahole patch works on
+64/32-bit archs, I noticed from patch #1 that e.g. ___bpf_treg_cnt()
+seems to hard-code a 64-bit register size. Perhaps we can fix that too? 
 
+> P.S., oh, and s390x selftest (test_struct_args) isn't happy, please check.
 > 
-> Alexis
 > 
-> -- 
-> Alexis Lothoré, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
-> 
+> >
+> > Patch 1 updates BPF_PROG2() to handle the zero-sized struct case.
+> > Patch 2 makes 0-sized structs a special case, allowing them to exist
+> > as parameter representations in BTF without failing verification.
+> > Patch 3 is a selftest that ensures the parameters after the 0-sized
+> > struct are represented correctly.
+> >
+> > [1] https://lore.kernel.org/dwarves/20250502070318.1561924-1-tony.ambardar@gmail.com/
+> >
+> > Alan Maguire (3):
+> >   libbpf: update BPF_PROG2() to handle empty structs
+> >   bpf: allow 0-sized structs as function parameters
+> >   selftests/bpf: add 0-length struct testing to tracing_struct tests
+> >
+> >  kernel/bpf/btf.c                                     |  2 +-
+> >  tools/lib/bpf/bpf_tracing.h                          |  6 ++++--
+> >  .../selftests/bpf/prog_tests/tracing_struct.c        |  2 ++
+> >  tools/testing/selftests/bpf/progs/tracing_struct.c   | 11 +++++++++++
+> >  tools/testing/selftests/bpf/test_kmods/bpf_testmod.c | 12 ++++++++++++
+> >  5 files changed, 30 insertions(+), 3 deletions(-)
+> >
+> > --
+> > 2.39.3
+> >
