@@ -1,51 +1,51 @@
 Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3539279333;
-	Wed, 28 May 2025 09:58:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 481FF748D;
+	Wed, 28 May 2025 09:58:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748426309; cv=none; b=myvLvH8mP4wE7IzVs8wkDVAux34joCd4tUo+759tAkDi4db4y/qsKzovREDn8fAR5wBrEUZDSayCab2Pozo4Y3dUupWSfZ78PzAEMOQ6N/dBvRmWVpnsjLTTHfSvI6xzFt1KtG+KqO1alxgXhuSYbM+zaS5z4lgUkZBi9Yc5avY=
+	t=1748426314; cv=none; b=MQFMM3sgAJuknWX5by6hj77dd69bIbDYVy3iwU4IzEITKDnCyAW9YewYwbmhpePN0gGG5Ajh1wj7Fixvu8F04CRuxKMIMrNQPdqeDqIlUYo/pX9JtyDKdCt4MhB+wnBWyWgCn8St2XjIt+8xFAf8lf4BwE+p+ENFfT3rDYrg5WI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748426309; c=relaxed/simple;
-	bh=e631HXGUW7G5SHkH0MzEnEWHqPlVtXkCbvdH/TDndOI=;
+	s=arc-20240116; t=1748426314; c=relaxed/simple;
+	bh=I1k5kY7Ku8uknlMfkIAAzXh9HQr+ulRl2pvSl6kL86M=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=erPUdIP2ozXIcUr44maI1qWQat78n9TRbcz6tpuatdUayccBll9sdc14bzARWVpBV5kZ2t0lKvWes90LMK1uutN4NMi8xABXWcS6HB7g1eJkvnvgPak0kp74DNq1kqT6fcwqDyob32gFdt7Mo77OYto7Gg5I9E5i41q892rA6/k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=eVPJsUEW; arc=none smtp.client-ip=205.220.165.32
+	 MIME-Version; b=moAc+1jWSAqEixZCNQEtlx27bq/wZjVewBB88tP1t7u2why+5M3XRrOWCctAvTvKTYM9BTjG4yBSZoGPHIrTr9HkNM1RxcbHc+Slx5tAq1NjuubItzMTpR0yQFZ4c4ttrAjQ3r06OaMlZpEBamN9a74kv4V5xdA30yoRYmBfIgM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=U2rbY+vL; arc=none smtp.client-ip=205.220.165.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="eVPJsUEW"
-Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 54S1fwZR010082;
-	Wed, 28 May 2025 09:58:07 GMT
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="U2rbY+vL"
+Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 54S1gCdR002321;
+	Wed, 28 May 2025 09:58:13 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
 	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=corp-2025-04-25; bh=9FQRM
-	HD6FRxfxEv8vf/49tSHCdfUfxG1CwilaGYd7R4=; b=eVPJsUEWUryxVgKSASeLn
-	xjO7LLKanniEMZJHeFxYHfHVAeQeNAyjK5L6sy1hDtVt4FAbuZ6ivLFUmHRc1Lbe
-	kD3/iE90laQs403g0l2xBYUWlVEYFwE+VrhTPF4t24cm2EuuabctHLQpdAdrp94g
-	BmwMcvdisoNdt8Gmb8S4Xzi1kn2+/3NngPSqqGORJYpwZDE4mGrPWg5dxm0YvV2N
-	wCluBnCFlCyYKNp1EQC4sNA6Y5LzjC6cqb085udXIegw5IIo9tbU2A5ixxth+JYo
-	8fUYTuuEFI3D/o8lzaJvE3qpmiUTxquCwvSqgLU9XxZ5JphYKhtH1rZ5oXn/MggZ
+	:mime-version:references:subject:to; s=corp-2025-04-25; bh=Cexua
+	R91RZlj8N4rMHIdX8R9eFCCrcIzUPlSy66Lp80=; b=U2rbY+vLL1gbZjDGlA8DK
+	m5u04kFRkj9QiNZTfdObrIOBafcMz+JwjRcL2ANurjXmod58nu0rawv/YU8tF1VC
+	ZstIFQTXe/Uffld38r2zQq0qgjl0boHUkTejMxr5iz1CxI/i7lMJVA2JjQeJU42y
+	ERnZ1AHEIRxEcZsRyb/+R9epAWdzGL1ABd6/37FyVxEWUgWp79/gXM4wsjzSesGQ
+	ruXBwC4KjfJTJ1dAz1kW6hf8RS84Eg4j32m6R2nOQ+WPMsZsfdrmLcD+odet/QYD
+	CpgIeg4ngTniadT8Ucf9dQgNK6o/lgc+0iUHbSyHECZRou7oGUjJo3FdhiLd1vBO
 	A==
 Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 46v3pd5988-1
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 46v0ykwhhx-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 28 May 2025 09:58:07 +0000 (GMT)
+	Wed, 28 May 2025 09:58:13 +0000 (GMT)
 Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 54S9nkUC024403;
-	Wed, 28 May 2025 09:58:03 GMT
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 54S9UuTg024593;
+	Wed, 28 May 2025 09:58:12 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 46u4jaev5j-1
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 46u4jaevaw-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 28 May 2025 09:58:03 +0000
+	Wed, 28 May 2025 09:58:11 +0000
 Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 54S9qwVw007194;
-	Wed, 28 May 2025 09:58:02 GMT
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 54S9qwW4007194;
+	Wed, 28 May 2025 09:58:11 GMT
 Received: from bpf.uk.oracle.com (dhcp-10-154-51-118.vpn.oracle.com [10.154.51.118])
-	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 46u4jaeuw6-7;
-	Wed, 28 May 2025 09:58:02 +0000
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 46u4jaeuw6-10;
+	Wed, 28 May 2025 09:58:11 +0000
 From: Alan Maguire <alan.maguire@oracle.com>
 To: andrii@kernel.org, ast@kernel.org
 Cc: daniel@iogearbox.net, martin.lau@linux.dev, eddyz87@gmail.com,
@@ -54,9 +54,9 @@ Cc: daniel@iogearbox.net, martin.lau@linux.dev, eddyz87@gmail.com,
         jolsa@kernel.org, masahiroy@kernel.org, qmo@kernel.org,
         ihor.solodrai@linux.dev, dwarves@vger.kernel.org, bpf@vger.kernel.org,
         ttreyer@meta.com, Alan Maguire <alan.maguire@oracle.com>
-Subject: [PATCH v5 bpf-next 6/9] btf: support kernel parsing of BTF with kind layout
-Date: Wed, 28 May 2025 10:57:40 +0100
-Message-ID: <20250528095743.791722-7-alan.maguire@oracle.com>
+Subject: [PATCH v5 bpf-next 9/9] kbuild, bpf: Specify "kind_layout" optional feature
+Date: Wed, 28 May 2025 10:57:43 +0100
+Message-ID: <20250528095743.791722-10-alan.maguire@oracle.com>
 X-Mailer: git-send-email 2.43.5
 In-Reply-To: <20250528095743.791722-1-alan.maguire@oracle.com>
 References: <20250528095743.791722-1-alan.maguire@oracle.com>
@@ -74,203 +74,36 @@ X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 ad
  suspectscore=0 bulkscore=0 phishscore=0 mlxlogscore=999 mlxscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2505160000
  definitions=main-2505280086
-X-Proofpoint-ORIG-GUID: 4sEaCGkF38ce1i_g9q3hCA-C4rPKO47g
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNTI4MDA4NyBTYWx0ZWRfX7iatPqdLXDLp 253ERyLHztv6MI9v7IvULPtOsu3Szh/jchnwOAUOuK7H7s30tWndsP3N0QvF7oODpCaic4B/cjE CDJD3D3VCpRqiM//iHeFx62e1QlAf4tNvJ5yfHWnxExa2I591Ol5mnLVlvNhfDYgZeRlqXGHngZ
- camVuTEu9XMmy0NJhw5HGomLil1JeIMw+OIOxcUO5hhN2n36kaO35TNN8k++YsVuy3BNGW8ggqp 7zJ1Vlfhk/X/YFci2VKax+h7YlGw0UwOGcpRVEvY0PUxRGo+bkErg6l+Jox05dQZNCR8Sxm/11W 2zDB7Hsr0hT/2aK7IcO9Jo59aNlxUM8SD1YGt2nJThPRG8glzDoBjIeN/5Ij2eRyv7hYA6cZJ4P
- +LwQnBCncz411/YxImBoAm2tyYK6L/dQGx3bHKsuVkWQLtleIA6eiabKJI6xrNaehBftbZN6
-X-Authority-Analysis: v=2.4 cv=UZNRSLSN c=1 sm=1 tr=0 ts=6836de2f b=1 cx=c_pps a=zPCbziy225d3KhSqZt3L1A==:117 a=zPCbziy225d3KhSqZt3L1A==:17 a=dt9VzEwgFbYA:10 a=yPCof4ZbAAAA:8 a=Nk0STND0-C7HVw_Qa7oA:9 cc=ntf awl=host:13206
-X-Proofpoint-GUID: 4sEaCGkF38ce1i_g9q3hCA-C4rPKO47g
+X-Proofpoint-GUID: HJYkvhoa9vdlTi16vIeniBDsRHnn7qCL
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNTI4MDA4NyBTYWx0ZWRfX0Bz2DJ5R1UZ6 T/ZK4pbJlEs2VTORYJnjijn8wbUgIn+yX02uCB7AND48iT54iyHFtgWhXnt9Goegu98VUUoWqrR FsKHFcg0ih5PBfx5dHZYraO3WoVAEmR06nBMsF37WkGSAjmy+WXnJXSitxUyCjwNJJBUjwW8vb6
+ Mg68AbpTG4O5qgxETTzWCR0QDENHV7Ym1DKfJGgpfqFPXs9fg7dR22rPTx8f3FHjTSxsViZ3hrX 737U3Vzo6ufihJXtNMYf8dZF1L/ZLD37TgViqRwYeZwO4x4A02KWscJkRJ87eHpgxg4IIjDAJ7f ISPmdEhrrGvm7cGNE2ZTc2XS2NGJ3IyNDcFF8BHaPjEB8hfOcAPYNH8A4CmMWy0Fe+VYKczPE/h
+ JB1pYJ2tiZUPO/B3JbKTHYX5YGlwWMHfXsHhu24JfkuPT7nOXxStjvo4AkyixmrMDPNf+vVl
+X-Proofpoint-ORIG-GUID: HJYkvhoa9vdlTi16vIeniBDsRHnn7qCL
+X-Authority-Analysis: v=2.4 cv=N7MpF39B c=1 sm=1 tr=0 ts=6836de35 b=1 cx=c_pps a=zPCbziy225d3KhSqZt3L1A==:117 a=zPCbziy225d3KhSqZt3L1A==:17 a=dt9VzEwgFbYA:10 a=yPCof4ZbAAAA:8 a=YSa9T1u8tzWrEExJ3QwA:9 cc=ntf awl=host:13206
 
-Validate kind layout if present, but because the kernel must be
-strict in what it accepts, reject BTF with unsupported kinds,
-even if they are in the kind layout information.
+The "kind_layout" feature will add metadata about BTF kinds to the
+generated BTF; its absence in pahole will not trigger an error so it
+is safe to add unconditionally as it will simply be ignored if pahole
+does not support it.
 
 Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
 ---
- kernel/bpf/btf.c | 96 ++++++++++++++++++++++++++++++++++++++----------
- 1 file changed, 76 insertions(+), 20 deletions(-)
+ scripts/Makefile.btf | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index 0f7828380895..a18d7b8ba14c 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -268,6 +268,7 @@ struct btf {
- 	struct btf_id_dtor_kfunc_tab *dtor_kfunc_tab;
- 	struct btf_struct_metas *struct_meta_tab;
- 	struct btf_struct_ops_tab *struct_ops_tab;
-+	struct btf_kind_layout *kind_layout;
+diff --git a/scripts/Makefile.btf b/scripts/Makefile.btf
+index db76335dd917..c5a3526952ac 100644
+--- a/scripts/Makefile.btf
++++ b/scripts/Makefile.btf
+@@ -23,7 +23,7 @@ else
+ # Switch to using --btf_features for v1.26 and later.
+ pahole-flags-$(call test-ge, $(pahole-ver), 126)  = -j$(JOBS) --btf_features=encode_force,var,float,enum64,decl_tag,type_tag,optimized_func,consistent_func,decl_tag_kfuncs
  
- 	/* split BTF support */
- 	struct btf *base_btf;
-@@ -5208,23 +5209,36 @@ static s32 btf_check_meta(struct btf_verifier_env *env,
- 		return -EINVAL;
- 	}
+-pahole-flags-$(call test-ge, $(pahole-ver), 130) += --btf_features=attributes
++pahole-flags-$(call test-ge, $(pahole-ver), 130) += --btf_features=attributes,kind_layout
  
--	if (BTF_INFO_KIND(t->info) > BTF_KIND_MAX ||
--	    BTF_INFO_KIND(t->info) == BTF_KIND_UNKN) {
-+	if (!btf_name_offset_valid(env->btf, t->name_off)) {
-+		btf_verifier_log(env, "[%u] Invalid name_offset:%u",
-+				 env->log_type_id, t->name_off);
-+		return -EINVAL;
-+	}
-+
-+	if (BTF_INFO_KIND(t->info) == BTF_KIND_UNKN) {
- 		btf_verifier_log(env, "[%u] Invalid kind:%u",
- 				 env->log_type_id, BTF_INFO_KIND(t->info));
- 		return -EINVAL;
- 	}
- 
--	if (!btf_name_offset_valid(env->btf, t->name_off)) {
--		btf_verifier_log(env, "[%u] Invalid name_offset:%u",
--				 env->log_type_id, t->name_off);
-+	if (BTF_INFO_KIND(t->info) > BTF_KIND_MAX && env->btf->kind_layout &&
-+	    (BTF_INFO_KIND(t->info) * sizeof(struct btf_kind_layout)) <
-+	     env->btf->hdr.kind_layout_len) {
-+		btf_verifier_log(env, "[%u] unknown but required kind %u",
-+				 env->log_type_id,
-+				 BTF_INFO_KIND(t->info));
- 		return -EINVAL;
-+	} else {
-+		if (BTF_INFO_KIND(t->info) > BTF_KIND_MAX) {
-+			btf_verifier_log(env, "[%u] Invalid kind:%u",
-+					 env->log_type_id, BTF_INFO_KIND(t->info));
-+			return -EINVAL;
-+		}
-+		var_meta_size = btf_type_ops(t)->check_meta(env, t, meta_left);
-+		if (var_meta_size < 0)
-+			return var_meta_size;
- 	}
- 
--	var_meta_size = btf_type_ops(t)->check_meta(env, t, meta_left);
--	if (var_meta_size < 0)
--		return var_meta_size;
--
- 	meta_left -= var_meta_size;
- 
- 	return saved_meta_left - meta_left;
-@@ -5398,7 +5412,8 @@ static int btf_parse_str_sec(struct btf_verifier_env *env)
- 	start = btf->nohdr_data + hdr->str_off;
- 	end = start + hdr->str_len;
- 
--	if (end != btf->data + btf->data_size) {
-+	if (hdr->hdr_len < sizeof(struct btf_header) &&
-+	    end != btf->data + btf->data_size) {
- 		btf_verifier_log(env, "String section is not at the end");
- 		return -EINVAL;
- 	}
-@@ -5419,9 +5434,41 @@ static int btf_parse_str_sec(struct btf_verifier_env *env)
- 	return 0;
- }
- 
-+static int btf_parse_kind_layout_sec(struct btf_verifier_env *env)
-+{
-+	const struct btf_header *hdr = &env->btf->hdr;
-+	struct btf *btf = env->btf;
-+	void *start, *end;
-+
-+	if (hdr->hdr_len < sizeof(struct btf_header) ||
-+	    hdr->kind_layout_len == 0)
-+		return 0;
-+
-+	/* Kind layout section must align to 4 bytes */
-+	if (hdr->kind_layout_off & (sizeof(u32) - 1)) {
-+		btf_verifier_log(env, "Unaligned kind_layout_off");
-+		return -EINVAL;
-+	}
-+	start = btf->nohdr_data + hdr->kind_layout_off;
-+	end = start + hdr->kind_layout_len;
-+
-+	if (hdr->kind_layout_len < sizeof(struct btf_kind_layout)) {
-+		btf_verifier_log(env, "Kind layout section is too small");
-+		return -EINVAL;
-+	}
-+	if (end != btf->data + btf->data_size) {
-+		btf_verifier_log(env, "Kind layout section is not at the end");
-+		return -EINVAL;
-+	}
-+	btf->kind_layout = start;
-+
-+	return 0;
-+}
-+
- static const size_t btf_sec_info_offset[] = {
- 	offsetof(struct btf_header, type_off),
- 	offsetof(struct btf_header, str_off),
-+	offsetof(struct btf_header, kind_layout_off),
- };
- 
- static int btf_sec_info_cmp(const void *a, const void *b)
-@@ -5436,44 +5483,49 @@ static int btf_check_sec_info(struct btf_verifier_env *env,
- 			      u32 btf_data_size)
- {
- 	struct btf_sec_info secs[ARRAY_SIZE(btf_sec_info_offset)];
--	u32 total, expected_total, i;
-+	u32 nr_secs = ARRAY_SIZE(btf_sec_info_offset);
-+	u32 total, expected_total, gap, i;
- 	const struct btf_header *hdr;
- 	const struct btf *btf;
- 
- 	btf = env->btf;
- 	hdr = &btf->hdr;
- 
-+	if (hdr->hdr_len < sizeof(struct btf_header))
-+		nr_secs--;
-+
- 	/* Populate the secs from hdr */
--	for (i = 0; i < ARRAY_SIZE(btf_sec_info_offset); i++)
-+	for (i = 0; i < nr_secs; i++)
- 		secs[i] = *(struct btf_sec_info *)((void *)hdr +
- 						   btf_sec_info_offset[i]);
- 
--	sort(secs, ARRAY_SIZE(btf_sec_info_offset),
-+	sort(secs, nr_secs,
- 	     sizeof(struct btf_sec_info), btf_sec_info_cmp, NULL);
- 
- 	/* Check for gaps and overlap among sections */
- 	total = 0;
- 	expected_total = btf_data_size - hdr->hdr_len;
--	for (i = 0; i < ARRAY_SIZE(btf_sec_info_offset); i++) {
-+	for (i = 0; i < nr_secs; i++) {
- 		if (expected_total < secs[i].off) {
- 			btf_verifier_log(env, "Invalid section offset");
- 			return -EINVAL;
- 		}
--		if (total < secs[i].off) {
--			/* gap */
--			btf_verifier_log(env, "Unsupported section found");
--			return -EINVAL;
--		}
- 		if (total > secs[i].off) {
- 			btf_verifier_log(env, "Section overlap found");
- 			return -EINVAL;
- 		}
-+		gap = secs[i].off - total;
-+		if (gap >= 4) {
-+			/* gap larger than alignment gap */
-+			btf_verifier_log(env, "Unsupported section found");
-+			return -EINVAL;
-+		}
- 		if (expected_total - total < secs[i].len) {
- 			btf_verifier_log(env,
- 					 "Total section length too long");
- 			return -EINVAL;
- 		}
--		total += secs[i].len;
-+		total += secs[i].len + gap;
- 	}
- 
- 	/* There is data other than hdr and known sections */
-@@ -5809,6 +5861,10 @@ static struct btf *btf_parse(const union bpf_attr *attr, bpfptr_t uattr, u32 uat
- 	if (err)
- 		goto errout;
- 
-+	err = btf_parse_kind_layout_sec(env);
-+	if (err)
-+		goto errout;
-+
- 	err = btf_parse_type_sec(env);
- 	if (err)
- 		goto errout;
+ ifneq ($(KBUILD_EXTMOD),)
+ module-pahole-flags-$(call test-ge, $(pahole-ver), 128) += --btf_features=distilled_base
 -- 
 2.39.3
 
