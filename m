@@ -1,197 +1,104 @@
-Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAEE220551C;
-	Tue, 27 May 2025 21:41:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82675A2D;
+	Wed, 28 May 2025 09:54:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748382092; cv=none; b=B2W0p5SfOmkoi2xKCsam5QjBRjHsJpZJsGWGF7eEzMvDlu6Vt/DxgpYD+bVHq9Zb40AtljJ5oiMZzU0niBv2ZiUMK7d462V2oSh8uznxPGOkCn2QjZBBRnmVfbdwEoaCYXDVL+DM9WKe7jLhDBecswg26XF2Ioai0dPr+W0aCbY=
+	t=1748426060; cv=none; b=h9PdnAfy+flaCa7fj69FF+XOc+4KfSKCVNhAsKwDzg+BXnbN7TffZprDE3HDRZdsaPqYM4SoJOLCQZBAY/PCd3TLeMvu5mlQ3pu+iRoNY38P89pY1gYRkujGNT8l2TQUM/c3fWDLOr+4Enxgqf6zkAxpovsmuK2H792zb6D3PHE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748382092; c=relaxed/simple;
-	bh=b37r62/PQ1+q3+JTGoZFirUufbRcbWMygWyJ42hBi4M=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=j23zGqyfzggp0yBrqeJoSY3UU6UVa737Uzl6rc8Z7qRxM8M5h/JvTrxDFgqcdOmcr8RocuR+cIz/cIqPU4dJ89i7fv3PkAaqdkIaF3igpC9z+4zArkgpc5iLXStVVxi154pzE1R/S51azxrQQ86icy4/C0Ta5JyFpm6YIZF6c8Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=buaean/f; arc=none smtp.client-ip=209.85.216.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1748426060; c=relaxed/simple;
+	bh=hymKjgdGZBBHJdguAXeWnMcqyJGBfy7xcIJxesUqu/w=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=JbtqBX20cMDFjbdopttENlccwZaJldx3rTEPzKYkDQ20xjq81dHY3rpTR+PIZ3N+Ta6Z+ZveTK0GSSHhdFmUPC2B/pJqe9ZabrIy7iXimqzq0DBeQRwshAORmJrUZ525aP0AxFLpTBAHrQkS/+sSqq3krmoePw/wOsrnjTZZDFI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=qaMdrpWq; arc=none smtp.client-ip=205.220.177.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="buaean/f"
-Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-31149f0393dso2157268a91.1;
-        Tue, 27 May 2025 14:41:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1748382090; x=1748986890; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rgRYyyw+a2/aWbP9YIIdfoRYj+7frEzMlZj8+mWk9XE=;
-        b=buaean/f3JlOODeMckhp09gvuBNLxBSUOUFD6EpNrccF/ftyffCDMU/4dPv7gGVUXi
-         eoVa/a5fEjLZmgM0ygxq6VOSSshvPcqqpasAmFUHV0KsrixH5eYikPPJJyX3aVPJZBYC
-         jQgfoCcdKfxi+Uwvei1MW82N6po6S9cKTsgoH4JgU15q/1fFlQ1i6YwARRzb9f9llBtY
-         vNNV42EhHDDYDyGaxPc8OTLvm4Oe4ipVB13/LCHGe5nnekkl8fqlu8+N3QGOc7scbLii
-         Ph6VFbubWyZ4nh39kM0VsMvQsqxpk4bBpeFjayazWiaL4GWRAbfQmWIOCTEs+kYP0HJJ
-         P5Fw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1748382090; x=1748986890;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=rgRYyyw+a2/aWbP9YIIdfoRYj+7frEzMlZj8+mWk9XE=;
-        b=fqZcB5OUEPibM4Zb0Y6tNiv78DD3Xvn+FTQ6E+ACoOiWLWS4HS9DECruqYw/pylyVw
-         rdeXndgcCwjfRPkQwdJkMqV4ZJWRkMo/97cukvRHeJm2tm83nYHJR/wuh0ODOCp3pgFV
-         aLCZ/aLzpioC7cbX4Z0LXrHmUjwVyePgnTYqtnV4HNcCORG0//DJs0if/2WzMPzGXNJQ
-         wxyo2ZqD9EEzvN3P1Y+61KjdluuEcUJmOFWzdOpkwhY/Ss90NWzKT0witdbA+cwXkUBa
-         Sl8ttR7S8I+n5kO0YvZxenOoEOCi/FczlpuqvNlIgbYVT5XO9xFeHpMzondQ63skIvDQ
-         JeKA==
-X-Forwarded-Encrypted: i=1; AJvYcCU9Ew63Ztjg2jUKJq7i5no92TrfAOwXRAdpqSf5CFLOtwvVn5XEPKxjj7MI4oJKAZHcASo=@vger.kernel.org, AJvYcCUElXOaz42DEpleodNz2kx9s+6aq5ydldD4J1TdKZGHtdObx5w94Joff5p10S0Ji0Ex/dPv6mnZUw==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx+jkPz3IqVJfIKgZOCgskrqz4WwgVGSzWzYXsdakLLToejavps
-	Gnq3NrTrkh9qLvntQ1+bonq+4/5cwKioHTUbYHGK2ax7/tOTEYJL2ne8Bdy1aA7jS5fh1RwKvKs
-	4FDAlgR1C7/mZavi/CqCe7bdPe8GragRG2A==
-X-Gm-Gg: ASbGncvJhlhIJj7Mb6pc8vAL6C+WHF1rdwZbWj1aHg7HEpmoTqyWTm4ACiRS8GOG5s+
-	AlwnRfokqyRpaxoTDVVCp8xW4xsRqajfGzdT9fdg8aZQtrq0RXyJbW4pCffYEdbsXClxvc/wv30
-	JNiJvM4gYY5djseIHxb0hEMhPSnKw5wATMLvBj26N84j1AA+FC
-X-Google-Smtp-Source: AGHT+IHgyTusboXaQq9I7KVe+GnJiwTu5VJhQzZ97tPewDqcMLzflPIbc+VwJCRRimENfdcXtF3uLUWqThYJU0/DF3A=
-X-Received: by 2002:a17:90b:5282:b0:311:df4b:4b8c with SMTP id
- 98e67ed59e1d1-311df4b4d23mr736012a91.7.1748382089822; Tue, 27 May 2025
- 14:41:29 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="qaMdrpWq"
+Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 54S1fuMc004030;
+	Wed, 28 May 2025 09:53:56 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
+	:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=corp-2025-04-25; bh=43pviGFJO1d7CRq8lDO9uUYVrrBo0
+	178sNFNpqYWoXw=; b=qaMdrpWqSdw9e1DlI1EsKlIP5+TnUwtmHxtNDDtg4OW6m
+	wK6htUbpVPLKGMyL+Ap3eg9ktv7CcL3YDjPtTAPmMD8VhczKhSegBsBA2h8YohbJ
+	6htrsKi4fdP2kuVH/DaXQn67n3a/Gb3xHcws+XF94k2/tldeNWhgi7mRUQdSOB4G
+	gyWGTwFmga2dMADkXPiDPBr6nTbEFxfQLW7eI5oa9h3UEfe92xmORAzeJjDYaUSt
+	lBhreaY7TrX2+KsOQA+xrl8TzdcEJk7FiSngRQXy+CjJpKC6L40JhN8nS+ehvcMl
+	+Pn2HxwSNCj9NwzPkxNAWXiHhTJzvL3dV2fWJ3aVw==
+Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 46v21s5c4g-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 28 May 2025 09:53:56 +0000 (GMT)
+Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 54S7Ssao028686;
+	Wed, 28 May 2025 09:53:55 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 46u4ja79af-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 28 May 2025 09:53:55 +0000
+Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 54S9rs34013320;
+	Wed, 28 May 2025 09:53:54 GMT
+Received: from bpf.uk.oracle.com (dhcp-10-154-51-118.vpn.oracle.com [10.154.51.118])
+	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 46u4ja797j-1;
+	Wed, 28 May 2025 09:53:54 +0000
+From: Alan Maguire <alan.maguire@oracle.com>
+To: andrii@kernel.org, ast@kernel.org
+Cc: daniel@iogearbox.net, martin.lau@linux.dev, eddyz87@gmail.com,
+        song@kernel.org, yonghong.song@linux.dev, john.fastabend@gmail.com,
+        kpsingh@kernel.org, sdf@fomichev.me, haoluo@google.com,
+        jolsa@kernel.org, masahiroy@kernel.org, qmo@kernel.org,
+        ihor.solodrai@linux.dev, dwarves@vger.kernel.org, bpf@vger.kernel.org,
+        ttreyer@meta.com, Alan Maguire <alan.maguire@oracle.com>
+Subject: [PATCH dwarves 0/2] pahole: add support for kind_layout
+Date: Wed, 28 May 2025 10:53:47 +0100
+Message-ID: <20250528095349.788793-1-alan.maguire@oracle.com>
+X-Mailer: git-send-email 2.43.5
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250416-btf_inline-v1-0-e4bd2f8adae5@meta.com>
- <d39e456b-20ed-48cf-90c0-c0b0b03dabe6@oracle.com> <09366E0A-0819-4C0A-9179-F40F8F46ECE0@meta.com>
- <CAEf4BzZxccvWcGJ06hSnrVh6jJO-gdCLUitc7qNE-2oO8iK+og@mail.gmail.com>
- <bfb120452de9d9ce0868485bc41fa8cf56edf4cf.camel@gmail.com>
- <530F1115-7836-4F1F-A14D-F1A7B49EF299@meta.com> <6428960b-a1a7-4b1f-8975-5a85e2b8697d@oracle.com>
-In-Reply-To: <6428960b-a1a7-4b1f-8975-5a85e2b8697d@oracle.com>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Tue, 27 May 2025 14:41:17 -0700
-X-Gm-Features: AX0GCFsnKDVdX8xHE8GBgx5pnjms9tbaT5vkJ58CxchEr0UrFXN8sOPvKv-Y7vc
-Message-ID: <CAEf4BzaG-GtJwVXNyZKqYnZFqq210uLFSHPArZYXyS+fab5Dmg@mail.gmail.com>
-Subject: Re: [PATCH RFC 0/3] list inline expansions in .BTF.inline
-To: Alan Maguire <alan.maguire@oracle.com>
-Cc: Thierry Treyer <ttreyer@meta.com>, Eduard Zingerman <eddyz87@gmail.com>, 
-	"dwarves@vger.kernel.org" <dwarves@vger.kernel.org>, "bpf@vger.kernel.org" <bpf@vger.kernel.org>, 
-	"acme@kernel.org" <acme@kernel.org>, "ast@kernel.org" <ast@kernel.org>, Yonghong Song <yhs@meta.com>, 
-	"andrii@kernel.org" <andrii@kernel.org>, "ihor.solodrai@linux.dev" <ihor.solodrai@linux.dev>, 
-	Song Liu <songliubraving@meta.com>, Mykola Lysenko <mykolal@meta.com>, Daniel Xu <dlxu@meta.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
+ definitions=2025-05-28_05,2025-05-27_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 phishscore=0 suspectscore=0
+ adultscore=0 malwarescore=0 bulkscore=0 mlxscore=0 mlxlogscore=960
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2505160000
+ definitions=main-2505280086
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNTI4MDA4NiBTYWx0ZWRfX+nuiI6Pgd7pf hNHiNrQiTvTL9XTo+YJoJjVvOVWMI5SRjSqFcTb1onFRqzTxplLWQVjyAF3qiB7ctznf7oxV1uN YbvThXpMxJn6e6C5Vk/ufqXVGmtbsJl9pSLcmaw3KKRmo3eD5ynw/26RvAOpTFhQYnunQVG6FD1
+ Nq8yBjpk02Ieotfzj50+gCF/iCD8dBX7VfIvx8q1uBs/eMUGJdB1XBTO6Yw658x2JCopraqiHFf vM+LHR41/zCPNZOGnRZNjhX//Xqg9K3l/p2il9PtCm10d2o4ekBUg0fm49Y5uIDxCyfbpKJ4Sj/ g3JqkPf8iWl6NM8pehmiVxYJsEkx3fGj7gs/++M6q3yA/FIPnpjBNk7x+MJYsbPiSl99VRd1bxB
+ GrPnq84Iz4NwMphsQRLZdkG9ZSikNvIe1sCEhBsOq1l/IxenODGo9FoOWP0+x9R/ahpALBZY
+X-Proofpoint-GUID: DD0qzMg8h91nm1m5zz0gQPyiviRfmYDA
+X-Authority-Analysis: v=2.4 cv=UvhjN/wB c=1 sm=1 tr=0 ts=6836dd34 cx=c_pps a=XiAAW1AwiKB2Y8Wsi+sD2Q==:117 a=XiAAW1AwiKB2Y8Wsi+sD2Q==:17 a=dt9VzEwgFbYA:10 a=h_xdTLq9NACotyI007wA:9
+X-Proofpoint-ORIG-GUID: DD0qzMg8h91nm1m5zz0gQPyiviRfmYDA
 
-On Mon, May 26, 2025 at 7:30=E2=80=AFAM Alan Maguire <alan.maguire@oracle.c=
-om> wrote:
->
-> On 23/05/2025 19:57, Thierry Treyer wrote:
-> >>>>  2) // param_offsets point to each parameters' location
-> >>>>     struct fn_info { u32 type_id, offset; u16 param_offsets[proto.ar=
-glen]; };
-> >>>>  [...]
-> >>>>  (2) param offsets, w/ dedup         14,526      4,808,838    4,823,=
-364
-> >>>
-> >>> This one is almost as good as (3) below, but fits better into the
-> >>> existing kind+vlen model where there is a variable number of fixed
-> >>> sized elements (but locations can still be variable-sized and keep
-> >>> evolving much more easily). I'd go with this one, unless I'm missing
-> >>> some important benefit of other representations.
-> >>
-> >> Thierry, could you please provide some details for the representation
-> >> of both fn_info and parameters for this case?
-> >
-> > The locations are stored in their own sub-section, like strings, using =
-the
-> > encoding described previously. A location is a tagged union of an opera=
-tion
-> > and its operands describing how to find to parameter=E2=80=99s value.
-> >
-> > The locations for nil, =E2=80=99%rdi=E2=80=99 and =E2=80=99*(%rdi + 32)=
-=E2=80=99 are encoded as follow:
-> >
-> >   [0x00] [0x09 0x05] [0x0a 0x05 0x00000020]
-> > #  `NIL   `REG   #5   |    `Reg#5        `Offset added to Reg=E2=80=99s=
- value
-> > #                     `ADDR_REG_OFF
-> >
-> > The funcsec table starts with a `struct btf_type` of type FUNCSEC, foll=
-owed by
-> > vlen `struct btf_func_secinfo` (referred previously as fn_info):
-> >
-> >   .align(4)
-> >   struct btf_func_secinfo {
-> >     __u32 type_id;                       // Type ID of FUNC
-> >     __u32 offset;                        // Offset in section
-> >     __u16 parameter_offsets[proto.vlen]; // Offsets to params=E2=80=99 =
-location
-> >   };
-> >
-> > To know how many parameters a function has, you=E2=80=99d use its type_=
-id to retrieve
-> > its FUNC, then its FUNC_PROTO to finally get the FUNC_PROTO vlen.
-> > Optimized out parameters won=E2=80=99t have a location, so we need a NI=
-L to skip them.
-> >
-> >
-> > Given a function with arg0 optimized out, arg1 at *(%rdi + 32) and arg2=
- in %rdi.
-> > You=E2=80=99d get the following encoding:
-> >
-> >   [1] FUNC_PROTO, vlen=3D3
-> >       ...args
-> >   [2] FUNC 'foo' type_id=3D1
-> >   [3] FUNCSEC '.text', vlen=3D1           # ,NIL   ,*(%rdi + 32)
-> >       - type_id=3Dn, offset=3D0x1234, params=3D[0x0, 0x3, 0x1]
-> >                                         #             `%rdi
-> >
-> > # Regular BTF encoding for 1 and 2
-> >   ...
-> > # ,FUNCSEC =E2=80=99.text=E2=80=99, vlen=3D1
-> >   [0x000001 0x14000001 0x00000000]
-> > # ,btf_func_secinfo      ,params=3D[0x0, 0x3, 0x1] + extra nil for alig=
-nment
-> >   [0x00000002 0x00001234 0x0000 0x0003 0x0001 0x0000]
-> >
-> > Note: I didn=E2=80=99t take into account the 4-bytes padding requiremen=
-t of BTF.
-> >       I=E2=80=99ve sent the correct numbers when responding to Alexei.
-> >
-> >> I'm curious how far this version is from exhausting u16 limit.
-> >
-> >
-> > We=E2=80=99re already using 22% of the 64=E2=80=AFkiB addressable by u1=
-6.
-> >
-> >> Why abuse DATASEC if we are extending BTF with new types anyways? I'd
-> >> go with a dedicated FUNCSEC (or FUNCSET, maybe?..)
-> >
-> > I'm not sure that a 'set' describes the table best, since a function
-> > can have multiple entries in the table.
-> > FUNCSEC is ugly, but it conveys that the offsets are from a section=E2=
-=80=99s base.
->
->
-> I totally agree that we have more freedom to define new representations
-> here, so don't feel too constrained by existing representations like
-> DATASEC if they are not helpful.
->
-> One thing I hadn't really thought about before you suggested it is
-> having the locations in a separate section from types as we have for
-> strings. Do we need that? Or could we have a BTF_KIND_LOC_SEC that is
-> associated with the FUNC_SEC via a type id (loc sec points at the type
-> of the associated func sec) and contains the packed location info?
->
-> In other words
->
-> [3] FUNCSEC '.text', vlen=3D ...
-> <func_id, offset, param_location_offsets[]>
-> ...
-> [4] LOCSEC '.text', type_id=3D3
-> <packed locations>
+A soon-to-arrive series will add support to add BTF kind layout
+information to BTF; this describes the BTF kinds known about at
+time of encoding in order to support parsing even in cases where
+the kinds are not known to the parser; the kind layout relates a
+BTF kind to the amount of space it consumes via an optional single
+element following the BTF type or a set of vlen-specified objects.
 
-LOCSEC pointing to FUNCSEC isn't that useful, no? You'd want to go
-from FUNCSEC to LOCSEC quickly, not the other way around, no? But I
-also don't see the need to have a per-ELF-section set of locations,
-tbh... One set ought to be enough across all FUNCSECs?
+This series implements the support for the BTF "kind_layout" feature
+but does not require the libbpf changes to support it; the feature
+test uses a weak declaration of btf__new_empty_opts() to handle the
+unsupported case.
 
-> ...
->
+Alan Maguire (2):
+  pahole: Add "kind_layout" BTF encoding feature
+  man-pages: describe kind_layout BTF feature
+
+ btf_encoder.c      | 10 +++++++++-
+ dwarves.h          | 13 ++++++++++++-
+ man-pages/pahole.1 |  2 ++
+ pahole.c           |  7 +++++++
+ 4 files changed, 30 insertions(+), 2 deletions(-)
+
+-- 
+2.39.3
+
