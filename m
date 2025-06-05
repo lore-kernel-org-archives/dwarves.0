@@ -1,61 +1,68 @@
-Received: from out-182.mta0.migadu.com (out-182.mta0.migadu.com [91.218.175.182])
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6814C1AA1DA
-	for <dwarves@vger.kernel.org>; Wed,  4 Jun 2025 17:31:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2D651A2545;
+	Thu,  5 Jun 2025 07:35:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.200
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749058305; cv=none; b=LMNe2+Ds3zbIhkoF9W7WjEHjcol4j6cmAXVGp7erfy7GPBogN0eRrBbMiQ0cNvCE3stuqll+lAsttEcIAIIWv5g7ps+/Q1y3mIWIo7u4IPY4Q+qdVzjkVOq4fgSWKtpujft2ZXqPBhdooK1i6IQJPKpKXpUsLQqBRy7ghsso3tY=
+	t=1749108931; cv=none; b=GXggvh5Y2h94e+Zdl79u6gciivNLpK60n+nXxFA1RIHsq+xBnxuSPrSLdHZa7ExUpd4FlA5MCnmBCquneHk9FFVQj58UZUK9iUmrqitYutgvwneLFSWctobqDT7XHHzAF5lKN4Q4BATXxonCCj3KorbF5x5Q7o+y8b8PX8cqVOg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749058305; c=relaxed/simple;
-	bh=MWXRvUe9Er4znH/AsHQZLrU5RXMXc/v8wZVtsMhvu7c=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ApwWL8Fj4TpkshQoDv3CngkyPtk7Pw/G1AzyPWmnpx86XPi69B8VMiKJddAMwB2BfNeCW1RUMW+Is9YORG6dZ6rGXal4nwgSSAKHzLJgy+9rRzw9E/tMB6cEGbdMaEOIHxrN9pyTfo16DptPPABGz5uwvUHRZDNrwaSlUlsPFlI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=WJQ/VWxP; arc=none smtp.client-ip=91.218.175.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1749108931; c=relaxed/simple;
+	bh=5Yg2TszODfSWyu/tkAewlOKe9bmGQWD5HRPUFzitAq0=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=KiJsa4xEGDz2aJLNsv/s54tTTnXmNvA/LuFx4QEm3OynDdd3VjYtDXxkfCF5qUKeJZCpdXdzxJRY/uWBplaFG/n7TbQ1nF4Ewg3UTfGoL3YEULhKxJd+GWqZPnwaE6bGwTzQbck0iP35txm7iTb/dwib6Z1aC6ix5FREBy9IENg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=kj784Nm5; arc=none smtp.client-ip=217.70.183.200
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="WJQ/VWxP"
-Message-ID: <9a2ba0ad-b34d-42f8-89a6-d9a44f007bdc@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1749058290;
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="kj784Nm5"
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 5236843935;
+	Thu,  5 Jun 2025 07:35:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1749108920;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=cblBX32hBSMGN1bRDDUz9lTIgViFoNWr1i8Qx9BOzE8=;
-	b=WJQ/VWxP668jiRTd22ItARHZuzMoQhmaB3SO9vl1+6W071uWHgtq0WoRfz95O3x72EkcxN
-	nK2Fw6Mj7kwzdJRBT7BaXuujz/MetlaBuXdFjGnGGXFy27OLanDhT1Kr6hd6AZ1ws9O/2i
-	NQA4CGWnOHunrOES5pTIOxAnVt98148=
-Date: Wed, 4 Jun 2025 10:31:02 -0700
+	bh=5Yg2TszODfSWyu/tkAewlOKe9bmGQWD5HRPUFzitAq0=;
+	b=kj784Nm5ZgltuTXJv+pbKGMDA1t5/ru/eck+iLsRHT9bh9dUAeKg1UtiSce3r6Rlkt7NZG
+	qIToZTnegQa10FbPzHFs+21XG8fPMSJ9luRmHf0Tcez7mIKtXf9cvIyEX0qlJeupy/3EGv
+	MrWDfRryvUUNfeFlQnZP3sB5mO5Z0Q7yCadc1YSb2Q4hFOq0DMbigaRqE5MeN8JAuyOXOS
+	tdRwbxKu/TiRONaFFbT1o0xDZe9esDi5hlY10LwDmFTJoQ+xZELZxa87B0WtIdPEUOanPV
+	hRLRzekmcstDQk4EaSTKY5DBrLMkgQ6hPQxyzj9+v0rfzvpRPaSdlch0EXpxZg==
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Thu, 05 Jun 2025 09:35:15 +0200
+Message-Id: <DAEFD2WH7HRV.2SOG9Q00QSEXH@bootlin.com>
+Cc: "Alexei Starovoitov" <ast@kernel.org>, "Daniel Borkmann"
+ <daniel@iogearbox.net>, "John Fastabend" <john.fastabend@gmail.com>,
+ "Andrii Nakryiko" <andrii@kernel.org>, "Martin KaFai Lau"
+ <martin.lau@linux.dev>, "Eduard Zingerman" <eddyz87@gmail.com>, "Song Liu"
+ <song@kernel.org>, "Yonghong Song" <yonghong.song@linux.dev>, "KP Singh"
+ <kpsingh@kernel.org>, "Stanislav Fomichev" <sdf@fomichev.me>, "Hao Luo"
+ <haoluo@google.com>, "Jiri Olsa" <jolsa@kernel.org>, "Puranjay Mohan"
+ <puranjay@kernel.org>, "Xu Kuohai" <xukuohai@huaweicloud.com>, "Catalin
+ Marinas" <catalin.marinas@arm.com>, "Will Deacon" <will@kernel.org>,
+ "Mykola Lysenko" <mykolal@fb.com>, "Shuah Khan" <shuah@kernel.org>, "Maxime
+ Coquelin" <mcoquelin.stm32@gmail.com>, "Alexandre Torgue"
+ <alexandre.torgue@foss.st.com>, "Florent Revest" <revest@chromium.org>,
+ "Bastien Curutchet" <bastien.curutchet@bootlin.com>,
+ <ebpf@linuxfoundation.org>, "Thomas Petazzoni"
+ <thomas.petazzoni@bootlin.com>, <bpf@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+ <linux-kselftest@vger.kernel.org>,
+ <linux-stm32@st-md-mailman.stormreply.com>, <dwarves@vger.kernel.org>
 Subject: Re: [Question] attributes encoding in BTF
-To: =?UTF-8?Q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>,
- Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>,
- John Fastabend <john.fastabend@gmail.com>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
- Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
- Puranjay Mohan <puranjay@kernel.org>, Xu Kuohai <xukuohai@huaweicloud.com>,
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
- Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
- Maxime Coquelin <mcoquelin.stm32@gmail.com>,
- Alexandre Torgue <alexandre.torgue@foss.st.com>,
- Florent Revest <revest@chromium.org>,
- Bastien Curutchet <bastien.curutchet@bootlin.com>, ebpf@linuxfoundation.org,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-kselftest@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
- dwarves@vger.kernel.org
+From: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
+To: "Ihor Solodrai" <ihor.solodrai@linux.dev>, "Andrii Nakryiko"
+ <andrii.nakryiko@gmail.com>
+X-Mailer: aerc 0.20.1-0-g2ecb8770224a
 References: <20250411-many_args_arm64-v1-0-0a32fe72339e@bootlin.com>
  <20250411-many_args_arm64-v1-1-0a32fe72339e@bootlin.com>
  <CAEf4Bzbn6BdXTOb0dTcsQmOMZpp5=DzGS2hHHQ3+dwcja=gv+w@mail.gmail.com>
@@ -63,132 +70,62 @@ References: <20250411-many_args_arm64-v1-0-0a32fe72339e@bootlin.com>
  <CAEf4BzZHMYyGDZ4c4eNXG7Fm=ecxCCbKhKbQTbCjvWmKtdwvBw@mail.gmail.com>
  <D9E9IQQ3QKXM.3UJ17G9CBS1FH@bootlin.com>
  <DADMLIVHMSSO.3AXSI5216WCT6@bootlin.com>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
-In-Reply-To: <DADMLIVHMSSO.3AXSI5216WCT6@bootlin.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+ <9a2ba0ad-b34d-42f8-89a6-d9a44f007bdc@linux.dev>
+In-Reply-To: <9a2ba0ad-b34d-42f8-89a6-d9a44f007bdc@linux.dev>
+X-GND-State: clean
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtddugdeffedvucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpegggfgtfffkvefuhffvofhfjgesthhqredtredtjeenucfhrhhomheptehlvgigihhsucfnohhthhhorhoruceorghlvgigihhsrdhlohhthhhorhgvsegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeffvddufffhieffheetfffggeeugedtieduheeilefguddvheegvdeuffeuveeltdenucffohhmrghinhepkhgvrhhnvghlrdhorhhgpdgsohhothhlihhnrdgtohhmnecukfhppedvuddvrddutdehrdduhedtrddvhedvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdduvddruddthedrudehtddrvdehvddphhgvlhhopehlohgtrghlhhhoshhtpdhmrghilhhfrhhomheprghlvgigihhsrdhlohhthhhorhgvsegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopeefvddprhgtphhtthhopehihhhorhdrshholhhoughrrghisehlihhnuhigrdguvghvpdhrtghpthhtoheprghnughrihhirdhnrghkrhihihhkohesghhmrghilhdrtghomhdprhgtphhtthhopegrshhtsehkvghrnhgvlhdrohhrghdprhgtphhtthhopegurghnihgvlhesihhoghgvrghrsghogidrnhgvt
+ hdprhgtphhtthhopehjohhhnhdrfhgrshhtrggsvghnugesghhmrghilhdrtghomhdprhgtphhtthhopegrnhgurhhiiheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepmhgrrhhtihhnrdhlrghusehlihhnuhigrdguvghvpdhrtghpthhtohepvgguugihiiekjeesghhmrghilhdrtghomh
+X-GND-Sasl: alexis.lothore@bootlin.com
 
-On 6/4/25 2:02 AM, Alexis LothorÃ© wrote:
-> Hi all,
-> a simpler version of this series has been merged, and so I am now taking a
-> look at the issue I have put aside in the merged version: dealing with more
-> specific data layout for arguments passed on stack. For example, a function
-> can pass small structs on stack, but this need special care when generating
-> the corresponding bpf trampolines. Those structs have specific alignment
-> specified by the target ABI, but it can also be altered with attributes
-> packing the structure or modifying the alignment.
-> 
-> Some platforms already support structs on stack (see
-> tracing_struct_many_args test), but as discussed earlier, those may suffer
-> from the same kind of issue mentioned above.
-> 
-> On Wed Apr 23, 2025 at 9:24 PM CEST, Alexis Lothoré wrote:
->> Hi Andrii,
->>
->> On Wed Apr 23, 2025 at 7:15 PM CEST, Andrii Nakryiko wrote:
->>> On Thu, Apr 17, 2025 at 12:14 AM Alexis Lothoré
->>> <alexis.lothore@bootlin.com> wrote:
->>>>
->>>> Hi Andrii,
->>>>
->>>> On Wed Apr 16, 2025 at 11:24 PM CEST, Andrii Nakryiko wrote:
-> 
-> [...]
-> 
->>> I'd suggest looking at btf__align_of() in libbpf (tools/lib/bpf/btf.c)
->>> to see how we calculate alignment there. It seems to work decently
->>> enough. It won't cover any arch-specific extra rules like double
->>> needing 16-byte alignment (I vaguely remember something like that for
->>> some architectures, but I might be misremembering), or anything
->>> similar. It also won't detect (I don't think it's possible without
->>> DWARF) artificially increased alignment with attribute((aligned(N))).
->>
->> Thanks for the pointer, I'll take a look at it. The more we discuss this
->> series, the less member size sounds relevant for what I'm trying to achieve
->> here.
->>
->> Following Xu's comments, I have been thinking about how I could detect the
->> custom alignments and packing on structures, and I was wondering if I could
->> somehow benefit from __attribute__ encoding in BTF info ([1]). But
->> following your hint, I also see some btf_is_struct_packed() in
->> tools/lib/bpf/btf_dump.c that could help. I'll dig this further and see if
->> I can manage to make something work with all of this.
-> 
-> Andrii's comment above illustrates well my current issue: when functions
-> pass arguments on stack, we are missing info for some of them to correctly
-> build trampolines, especially for struct, which can have attributes like
-> __attribute__((packed)) or __attribute__((align(x))). [1] seems to be a
-> recent solution implemented for BTF to cover this need. IIUC it encodes any
-> arbitratry attribute affecting a data type or function, so if I have some
-> struct like this one in my kernel or a module:
-> 
-> struct foo {
->      short b
->      int a;
-> } __packed;
-> 
-> I would expect the corresponding BTF data to have some BTF_KIND_DECL_TAG
-> describing the "packed" attribute for the corresponding structure, but I
-> fail to find any of those when running:
-> 
-> $ bpftool btf dump file vmlinux format raw
-> 
-> In there I see some DECL_TAG but those are mostly 'bpf_kfunc', I see not
-> arbitrary attribute like 'packed' or 'aligned(x)'.
-> 
-> What I really need to do in the end is to be able to parse those alignments
-> attributes info in the kernel at runtime when generating trampolines, but I
-> hoped to be able to see them with bpftool first to validate the concept.
-> 
-> I started taking a look further at this and stumbled upon [2] in which Alan
-> gives many more details about the feature, so I did the following checks:
-> - kernel version 6.15.0-rc4 from bpf-next_base: it contains the updated
->    Makefile.btf calling pahole with `--btf_features=attributes`
-> - pahole v1.30
->    $ pahole --supported_btf_features
->    encode_force,var,float,decl_tag,type_tag,enum64,optimized_func,consistent_func,decl_tag_kfuncs,reproducible_build,distilled_base,global_var,attributes
->    This pahole comes from my distro pkg manager, but I have also done the
->    same test with a freshly built pahole, while taking care of pulling the
->    libbpf submodule.
-> - bpftool v7.6.0
->      bpftool v7.6.0
->      using libbpf v1.6
->      features: llvm, skeletons
-> 
-> Could I be missing something obvious ? Or did I misunderstand the actual
-> attribute encoding feature ?
+Hi Ihor,
 
-Hi Alexis.
+On Wed Jun 4, 2025 at 7:31 PM CEST, Ihor Solodrai wrote:
+> On 6/4/25 2:02 AM, Alexis Lothor=C3=83=C2=A9 wrote:
 
-The changes recently landed in pahole and libbpf re attributes had a 
-very narrow goal: passing through particular attributes for some BPF 
-kfuncs from the kernel source to vmlinux.h
+[...]
 
-BTF now has a way of encoding any attribute (as opposed to only bpf 
-type/decl tags) by setting type/decl tag kind flag [1]. So it is 
-possible to represent attributes like packed and aligned in BTF.
+>> Could I be missing something obvious ? Or did I misunderstand the actual
+>> attribute encoding feature ?
+>
+> Hi Alexis.
+>
+> The changes recently landed in pahole and libbpf re attributes had a=20
+> very narrow goal: passing through particular attributes for some BPF=20
+> kfuncs from the kernel source to vmlinux.h
+>
+> BTF now has a way of encoding any attribute (as opposed to only bpf=20
+> type/decl tags) by setting type/decl tag kind flag [1]. So it is=20
+> possible to represent attributes like packed and aligned in BTF.
+>
+> However, the BTF tags need to be generated by something, in case of=20
+> vmlinux by pahole. Pahole generates BTF by parsing DWARF. And, as far as=
+=20
+> I understand, attributes are not (can not be?) represented in DWARF in a=
+=20
+> generic way, it really depends on specifics of the attribute.
+>
+> In order to support packed/aligned, pahole needs to know how to figure=20
+> them out from DWARF input and add the tags to BTF. And this does not=20
+> happen right now, which is why you don't see anything in bpftool output.
+>
+> [1]=20
+> https://lore.kernel.org/bpf/20250130201239.1429648-1-ihor.solodrai@linux.=
+dev/
 
-However, the BTF tags need to be generated by something, in case of 
-vmlinux by pahole. Pahole generates BTF by parsing DWARF. And, as far as 
-I understand, attributes are not (can not be?) represented in DWARF in a 
-generic way, it really depends on specifics of the attribute.
+Thanks for the details ! I have missed this possibility, as I have been
+assuming that DWARF info was exposing the needed info. I'll take a look at
+it, but if those attributes can not be represented by DWARF, I'll have to
+find another way of getting those packing/alignment modifications on data
+type (eg: re-use/share btf__align_of from libbpf, as suggested by Andrii,
+but it may not able to cover all cases).
 
-In order to support packed/aligned, pahole needs to know how to figure 
-them out from DWARF input and add the tags to BTF. And this does not 
-happen right now, which is why you don't see anything in bpftool output.
+Thanks,
 
-[1] 
-https://lore.kernel.org/bpf/20250130201239.1429648-1-ihor.solodrai@linux.dev/
+Alexis
 
-> 
-> Thanks,
-> 
-> Alexis
-> 
-> [1] https://lore.kernel.org/bpf/20250130201239.1429648-1-ihor.solodrai@linux.dev/
-> [2] https://lore.kernel.org/all/CA+icZUW31vpS=R3zM6G4FMkzuiQovqtd+e-8ihwsK_A-QtSSYg@mail.gmail.com/
-> 
+--=20
+Alexis Lothor=C3=A9, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
