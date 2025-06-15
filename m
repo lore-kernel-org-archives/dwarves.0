@@ -1,255 +1,195 @@
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA848255F33
-	for <dwarves@vger.kernel.org>; Mon,  9 Jun 2025 12:22:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.165.32
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749471774; cv=fail; b=ptLBJZ7yRxsJln99wmHJv4t7Vw2EWY+TimvYRNXhjxVozD70rghJQ/ESvuL1a+bdfIzj6oHF6REQ9lW60VWn8mVCKa6Dh+FXRrdoX5tZGSnM5FwZLN1Xp5vjJ3uJlWaMG2l+f6ho0ox+Yqh7lnBTph3Vu2kcUN/V5RtxwL7e4iU=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749471774; c=relaxed/simple;
-	bh=AFk0GjnUhGNtP5Q7v4I1lGDyrCPCJlbpN9kDILwz9MM=;
-	h=From:To:Cc:Subject:References:Date:In-Reply-To:Message-ID:
-	 Content-Type:MIME-Version; b=KorsKNtaRwulH5tsvC6kp3DMZXr464bayvVb3QkurUNhtvjNztoiFmsoIeCpoZJT5ul4X6xo+RqWyta3dInfsLLYHdULi+IR80dx5wVFeqank8IuZu9/6txh16QojxV/24NtRb0fRairtyZgeILAZUd26R+CLt7nFYVrW4p8H8s=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=BS1WQGNW; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=HoD39sjv; arc=fail smtp.client-ip=205.220.165.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 801A33A1BA;
+	Sun, 15 Jun 2025 14:00:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.195
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1749996050; cv=none; b=RwXPbOBOndyo1bOT6Gx6Rdrd/Lx5lxwb1DQCae+A7KIqa/deBIrfw6HEn/10iYuN5YQZE4I1aa+UNdRmxr9puVh8RGMJEctZbTOazfhxYPlchC3NVpyuNXJ+kqy3pQUdTHcpCjuTa22DcT2MpsCPQXJZF0wBxilpXmIpOLKn46Q=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1749996050; c=relaxed/simple;
+	bh=tzBgEfNbszZFjneQrhgK2sYcgixJ885U9DAEQALxusE=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=kSzcFHteaYoeGMavDklN0+PjIXX1jeftU40ZsklZ7btepxqWgq13OV/JUahTXFq2asRrWbRLMXxCsLFTj8U5ZdC7cfNN/GKiLKQdguoj0heH0eYSSjGoW6yWz5b8CAoBl/BNvszvnlcS4mqHfMD1BU7jruJMFZUDDs1CR+GiQPk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=A7TiUfOZ; arc=none smtp.client-ip=217.70.183.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="BS1WQGNW";
-	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="HoD39sjv"
-Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5593fsWD008085;
-	Mon, 9 Jun 2025 12:22:43 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=corp-2025-04-25; bh=97IsHqUYV/TX4Jf+ga
-	sY7UfEcJu+mIQoV4rGadrKDjU=; b=BS1WQGNWstL+4JiBp+2ZUl4iVMBqzlJwCA
-	5VcZZxDWX7iLGyxYTdpFSax2kBVBhEfPl3ZcQwmh/0TM+LI6hikCWTDRhWJ3n6jb
-	3pinsYxxcLji4ilQRYiIng/b4BPLKs9EqUoFP0UzbRePA2UJuCGkn/uWGdRl4hAE
-	B9n0Y7yN17ZSAd570B5DFoLkuSW/ukAaPOZh6se5FO0vOxjmK647DWonKHMD7IBx
-	l8HYo0++SYOQu3ZhTS2TgLbLUS/UGQqXxGr2nf8EVjYWizJftJ0iZxqHCjEQwRkQ
-	GNKt4gQFd2a++cKTH0ceb9aHrwonsxjbNIcKLCcrCkry7aKvlyog==
-Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 474c14a19t-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 09 Jun 2025 12:22:42 +0000 (GMT)
-Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 559BseKs020433;
-	Mon, 9 Jun 2025 12:22:40 GMT
-Received: from cy7pr03cu001.outbound.protection.outlook.com (mail-westcentralusazon11012011.outbound.protection.outlook.com [40.93.200.11])
-	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 474bvdmdds-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 09 Jun 2025 12:22:40 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=VKWQ6Ew0Q/hPMnQv6TFL2TjtY9AosvuWwv/XDevRInJWDxhPCvryn+ozEZYPN9Tlj1RJWtJgQ+cNJ0PxKqtHKgy04bfEkJh/uytiSIR2+m9JSl2k1jw9oujCuheVDSFxQRSAYzHRdEEkYvwGubVtt+bOCYMZ2iUuEH4IvPNyOfmYNENoU5ecF7W9Yaby4LG4rLmt1QSuTW2vLjo/q7pXGXq+gxzPdeogBKba5U2qINRaAkpSc/l0uxi7fmtwwsulvDZsmBUUx4vFakJU0KqKIyp8sQ9i0tayd+s+6yMs9TXmTcMVvgRy+NZthxiAW3cF3BRJDuQ0gTbculBcFSafJg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=97IsHqUYV/TX4Jf+gasY7UfEcJu+mIQoV4rGadrKDjU=;
- b=APUEVc1vEr4sW63Z0LTW67En+tXInWU4rNiL7WaWl2yyixRnBxtwZW2nJBxPW6KWDcBAl9c9jK5od0+WCAEaY7eFa5+TXpziZFP1l6IhS3viB/D3txB7n23PUX6vshbtVI6X+rbFxe1sytczS0DuCdoAtwHcdfRmFwYbkZZfS8JEqpPA6zqM//u5t89jYlrnRXHmBmVE2FjC0vDHmd1RLyMW2zgYLeKCFhBFIbnU0IGRx0gG5/NvYtqg4fzCvNV/Dpc+CGzbz0uHT2EO8sfcjwsVtAu20VYC8bjJ7BO80vRpJ5/PVZ/mMds+RMInrFFJR+O9mhV0ianbZ6t381VVbQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=97IsHqUYV/TX4Jf+gasY7UfEcJu+mIQoV4rGadrKDjU=;
- b=HoD39sjvW36juWKq5eJ5LjwpR/Wd4WoncHOH2IVl6hnm99B5tKCIEO6NSAToW0XgEjhfgMEMm/HZVRuEPEqj0AezD9UhNt21VrFkgHSkJ0ABPtF2O8i+lFbQcE/owDEXBTqvRp0R2FkaDipjIbM8lPkg0MCDnY+Of2tGSjDPD0E=
-Received: from DS7PR10MB5037.namprd10.prod.outlook.com (2603:10b6:5:3a9::23)
- by SN7PR10MB6571.namprd10.prod.outlook.com (2603:10b6:806:2aa::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8813.29; Mon, 9 Jun
- 2025 12:22:36 +0000
-Received: from DS7PR10MB5037.namprd10.prod.outlook.com
- ([fe80::824a:572e:d9d7:e9f1]) by DS7PR10MB5037.namprd10.prod.outlook.com
- ([fe80::824a:572e:d9d7:e9f1%6]) with mapi id 15.20.8813.024; Mon, 9 Jun 2025
- 12:22:36 +0000
-From: Nick Alcock <nick.alcock@oracle.com>
-To: Sam James <sam@gentoo.org>
-Cc: <nick.alcock@oracle.com>, <acme@kernel.org>, <alan.maguire@oracle.com>,
-        <andrii@kernel.org>, <ast@kernel.org>, <bruce.mcculloch@oracle.com>,
-        <david.faust@oracle.com>, <dwarves@vger.kernel.org>,
-        <elena.zannoni@oracle.com>, <jose.marchesi@oracle.com>,
-        <stephen.brennan@oracle.com>
-Subject: Re: Proof-of-concept GCC/GNU ld toolchain-driven BTF
- generation/deduplication
-References: <874iwqvfeb.fsf@gentoo.org>
-Emacs: Lovecraft was an optimist.
-Date: Mon, 09 Jun 2025 13:22:31 +0100
-In-Reply-To: <874iwqvfeb.fsf@gentoo.org> (Sam James's message of "Sun, 8 Jun
-	2025 08:52:44 +0100")
-Message-ID: <878qm1je9k.fsf@esperi.org.uk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.3 (gnu/linux)
-Content-Type: text/plain
-X-ClientProxiedBy: LO4P123CA0356.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:18d::19) To DS7PR10MB5037.namprd10.prod.outlook.com
- (2603:10b6:5:3a9::23)
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="A7TiUfOZ"
+Received: by mail.gandi.net (Postfix) with ESMTPSA id D7A6B205B1;
+	Sun, 15 Jun 2025 14:00:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1749996037;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=YxXS5lj0DrF49L/g0V9R5FkVyXH9S7gR1QjB4hu3uuE=;
+	b=A7TiUfOZSoNCNlpd3feyEIMq7JweNSA26Ki+asH1Rd/WvFZi6wU8mGFvLOiyagoFjwL8JL
+	xo9M58/kDnjnSORKMzRqxzrCLgPAGB8Bu5MzN3EMIYoY6aN+6oHKGrYFTIO3qN/Pw67h/B
+	IMc2jyqqF5WnGXYgwIPTBVuwK7QfL9I9ZUJ6sI7veC8g4rtStWZ/IVP4WS757EaSs2cq3B
+	2xNCG4rBNC84HJC/1B3ddFVbvd1E5riocXBoJdq4moXdkt4MuVYmrwo0+OjTp/wdmH6h4R
+	eSQhByt4F2xarijNXWHhMAAbmtcVLzvls0lGIxnTZz73uWzR5oqhqzM6rTospw==
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS7PR10MB5037:EE_|SN7PR10MB6571:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2e70c55c-f9b9-41c6-0c1a-08dda7505141
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|1800799024|376014|10070799003;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?jkikwfNn6e3r4Oekhf38wtjjXh440M2kjdwCug2exX9kDXga/JO2sIEfi8xP?=
- =?us-ascii?Q?8FAOCeAuWDFTWV13wsKLYcSQ5BCt7AHGzfZ3o4ux3oKQCc/P7pyGIcuq6DDJ?=
- =?us-ascii?Q?H/XJgjZGCTSQmDMDBXI5uh6MwgltBe26ZOJiQ/kmdW2BFhO+FS6wbIy8W//q?=
- =?us-ascii?Q?SyFFW5GpRSzyvQkjVfQsJ0uy9q+dD/EInW94s4OBPqBVBdAi2fT1VQDrf1EC?=
- =?us-ascii?Q?AxNEu8CzC7q37niCRIIsiHqPIH3cY/mk262B6uOOVNzvV2bYuJt0nTlveFTh?=
- =?us-ascii?Q?chgjAen6fx5lPq9bbFNuEP0p4HWS9cj7q1maZ2WAU3jD+TpplKcgXEHRfDsY?=
- =?us-ascii?Q?qybXWHl+obyCIEH7roNA8A8JI2RoHA+reuuQfXzi71pSmgqjtqin8JhnGyTl?=
- =?us-ascii?Q?y8SfGLUc9mhXBSSzsDDpIo2YFWC2MEX4mzj4sda0A2xKi0qiK5vWx6bKzmzi?=
- =?us-ascii?Q?M8ttkJQWiv462bxhgN7AOhh3gBZdDJkC1yi1KIMXOKFXAvYyWnQKyRgzamnw?=
- =?us-ascii?Q?Vyibxh7KYSeCe21QwHYdED0S06F6si2CVWEOdfouamWOLavMren2dQn3sgcf?=
- =?us-ascii?Q?2rjCOMavCrrYkoFJpEVriJFXnW97ZELtCCA3VT1cFS4z+e46G65/t82IhYwn?=
- =?us-ascii?Q?RBHxIf8gejN5vJ28JxiG0eVkX0Dvt2FxjSl2UxKtke5eY3VqCqaCTeLHer4L?=
- =?us-ascii?Q?6N7Uqwa2bQpwL2gM326juD9ZDjTzURsZH3U/akubZsXk19KdxVnZSLsGOxFO?=
- =?us-ascii?Q?sjeVmcIFb2nZTu7+HAdqaV2mKLrcrQfnycS6i7YUdlQCQfJLyOVgVlo93zuZ?=
- =?us-ascii?Q?NsX/TVbjy+dUiE4h6srMxdOj3bwZd85EU3mdvktf4zQC8zJIrTuGSGOxUyRO?=
- =?us-ascii?Q?fBM6uwEPI8ccH9yD/36OUuG8SOj05rIKC2g8/PdZw/nCPNggH4R79Y4iVDRV?=
- =?us-ascii?Q?ZuCC1yda0fGGeRLIghblJZfrMbKbg5eEFbk+oRFb58LWIOhKtqH0YqRiStzE?=
- =?us-ascii?Q?6BmdgHB1CvyZkkrPQotUCJ9UcEUY4EpYEsNw11uY+/OntJQkr1x8RHyOrxi9?=
- =?us-ascii?Q?jnMMkdMq4yfLNgB3fYKhPBMoFGqYtjsBKIZmy8eEjlmBOj3cWsuGppyMQpqj?=
- =?us-ascii?Q?0H3AJw6XrKEM6dHFbodJ9qpXr0OHk4r6ZggyuSeroNq/xCx0JraLcN7l18LC?=
- =?us-ascii?Q?xmdXy5fX1Fsoj5+NNembe+D7j8UIa4DFMVvXHpa+dJmUz4utgtbB2lVvssTU?=
- =?us-ascii?Q?ChJv0iGg75LrfB0kL2i1uFBGQP1xcNx15VlcuLXhpo96cmO8N48rGAGAjPPp?=
- =?us-ascii?Q?nHpDQUign6FWIY6TD3S8QlwqCS+o+/YveFalcN5am8COlMjG8CMJUQQHQ5SU?=
- =?us-ascii?Q?ZRNPT9FLVmMbgQQR9Si85FL9c46y?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR10MB5037.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(10070799003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?zNeALz5qE7bkKwwQriHflSxoIAV4XN84bS4ofFGzxvD7a3fE3evOZXY0Aogn?=
- =?us-ascii?Q?zYz7n13UsZ4HPE/46MOYCdzcaXM6zi04959C4XjL0GgNt5NEJk5kpVq+ovu4?=
- =?us-ascii?Q?FpABbicqYATfIJcy+ZPTcRG0yXQPDq3LlmJimEMjgsAKU/vpc0UA7AZ6ton9?=
- =?us-ascii?Q?vlmKBlGwJFFkc6rQODAiR+9gSz2sabd9mMVrGT9JS5m8z4RZW7GoCh16VSGK?=
- =?us-ascii?Q?tejsiZbfBknzYwgaDN1Pe+0Hc/oaeHLXseO9CctP3Zqs43v8159oEz+aUWxZ?=
- =?us-ascii?Q?hsHzAzqqTsrvPPS+PMsBsZlKHRwbVAbihsUlyG7kYVRLdopcMSd5AZuK/oLx?=
- =?us-ascii?Q?Qr/1+/cSC99uEh6Shcfvu+gDg98Y+CZtp2ETT3rC4Zj6uypPXFi/B6uvIY3O?=
- =?us-ascii?Q?ogacQatD/+YfizYGMEYe8eYG8yWH2H9ASAz1hKByj3uFrVMYpAGB9oLKeOCg?=
- =?us-ascii?Q?ZjB/6xC0dFEXVb/YwNUlR2oRUGOOF8nt/Lb0J++yulQ2rljQDZverdEJPDd+?=
- =?us-ascii?Q?+X1GZJkjgLNLGs4dFPquUU2b6Ic84Naf+WaEqSozGcnuz5lpvDz/fpULZNeg?=
- =?us-ascii?Q?MTWoylh1BQW1ZiugZzC0l/RrqtLyW1SD8QOvOe+nDC29lIT2WMEvr2HuSdu6?=
- =?us-ascii?Q?PGBDFXyVwmuvsyqnNayrvhdSmh5d0anHih3C379TcL9XHFFhJqHv7N5ioi1n?=
- =?us-ascii?Q?X8JiJN264ylHFjwGsOaTsteG7nU+16uV9p2a6puH8TF6urv6Ua+jd7+z+dV1?=
- =?us-ascii?Q?EdkNLSCGr20HWOw4sA2AddOBfwIDIAGOjpg57mhLc0vr/X7cC3HdDEBiaE1K?=
- =?us-ascii?Q?+mBE0lRmB7o45VN/nTPZpdzOi9JK3j5AECrXqYFfz3S5Mmm9dxBRfwIU7l++?=
- =?us-ascii?Q?8rS7lvCsDUpyXB/8vuWd8o3GSKGJh+d3fhf0OvkcSuNnf1Zj9PHusRUnP56j?=
- =?us-ascii?Q?jsqVZWxjLm0yDqOyJUe3uSVI5Sp0916eP66kleD6RXEQ6YB0bectvmB1w6nu?=
- =?us-ascii?Q?NKjLxaeGVycqQBef9RPsm22Yjtoq6HpfIcTo2EpFOsUnTAl5muywniVglxvs?=
- =?us-ascii?Q?mafIZ7nitDKMflaCGprOotlFd04IuLXIcJronOnPWah2mTBuZ3yOjmW/v/Zy?=
- =?us-ascii?Q?/IVSEkvbsJdJiCbOMNvMV1lCFvxusrK5UyZQHb/FDaaCaICAqbsJoLl+ViQv?=
- =?us-ascii?Q?vcoklzz4MlMZpkd5n7C7GBd0eCO5oQHH5bRwa8kxSSsIc4HKfMi6K4dIpufr?=
- =?us-ascii?Q?xDRI1FQMKbx6d+as2VjyM6c1xeCUF3MXaxTbr02axUJ6rS7PPg07D8JG8B9s?=
- =?us-ascii?Q?ivGT1+MEirZTvsMfzHJfbUrUNvAGZqPgU5RP9O+aGMYpmHCfFyRQUFEKGIfY?=
- =?us-ascii?Q?W1Fu3Eydo3eDqQNaC6fCDxwUvmmx+aoRZcCL8pBQE5jYPD/kJAs7MCR8TPHg?=
- =?us-ascii?Q?wAh+1cm9EqEwq6V4jHUoJGQxLLo6CpNWsfcYCyMFwxayDVssRpf2GrZTA6qB?=
- =?us-ascii?Q?WrBZdlad9Z3x/drZjx4lriFIK83bi1KyF7OsfP5HdY43HzDSncb1XKVfxUj6?=
- =?us-ascii?Q?MdOO7Ik5AnzLXQk/KXUVYI0x5BtKEneYAFZ4Y2Q0wE2NWkACRv++/cyYaJ1G?=
- =?us-ascii?Q?4w=3D=3D?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
-	fzGXa+ewktyBYAL+tArTLhkF7QjhxbOAQLjMQhB0BBfyYeYLHS1aCEIEU6RIo1bfVBDXS8HSmlmviNmrIWYCLWO9R0OvmmuEOFA26zfW/cgIn9CehLVX9hQxKCywYJtNLag/BadUw0rVk+qc/TP4dStbYYleBdx42n2Vd5s4/VUsDiQSC+EUfS2lK1r8ZT/Ly9TXie89qG8kEMdGwx2QK0kmqrxFDiNo6YN6NiOGKSfxD5/hg1LVSRn3Ue1P2l4UnXf9FXhzLsiKZ0hucxASaHIEH2Wh4E58TP34FfUWKndwnPWl38PSn1Kcb/9rQixUH3RU5yriboDfCdZPmAfBoYsRyj4VinSN+6lDvibHV4CBzT4kCfebzO8044sT13qwZTK794b9YkOZc4f8Db/suRIr0T6AulRGE3vJrEEFSafYiefjgTDsQO5hrRkUZcw6kXtcGVu8IX8n+Q+XDiQUSNKw5yO+Vi+sL0G7JiqLhE9M5EGrKd9NTLhncEk5IqgY6jSyt+RohT28LkB8Fhv6oKumPJiBb+5gcBf/Kv5DRS54difYKs9uqC7a94J7vgcZM0GYqdswdJxngKzkFBy9iAOdV6SE5Dwt99VS+t3ymyU=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2e70c55c-f9b9-41c6-0c1a-08dda7505141
-X-MS-Exchange-CrossTenant-AuthSource: DS7PR10MB5037.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Jun 2025 12:22:36.1170
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: JW64Dx5LlWD4zPsvqZkQvHo2VZreWJuxRdXIGVmJ5YLr6pEAZPCjSmBWxzxSzjch/PMeoVIXtqVJoFMP0DrxHQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR10MB6571
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
- definitions=2025-06-09_05,2025-06-05_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 mlxscore=0 mlxlogscore=950
- bulkscore=0 adultscore=0 suspectscore=0 malwarescore=0 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2505160000
- definitions=main-2506090092
-X-Proofpoint-GUID: 9y5_ZWocaHTxy4yqk00vRD5_OLw9tyS-
-X-Authority-Analysis: v=2.4 cv=GcEXnRXL c=1 sm=1 tr=0 ts=6846d212 b=1 cx=c_pps a=qoll8+KPOyaMroiJ2sR5sw==:117 a=qoll8+KPOyaMroiJ2sR5sw==:17 a=6eWqkTHjU83fiwn7nKZWdM+Sl24=:19 a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=wKuvFiaSGQ0qltdbU6+NXLB8nM8=:19
- a=Ol13hO9ccFRV9qXi2t6ftBPywas=:19 a=xqWC_Br6kY4A:10 a=6IFa9wvqVegA:10 a=GoEa3M9JfhUA:10 a=CCpqsmhAAAAA:8 a=QAM83G0QAAAA:8 a=L79a9yAk0OFF_Jf525sA:9 a=ul9cdbp4aOFLsgKbc677:22 a=NLyg-29WhGNiqY41-mI0:22 cc=ntf awl=host:13207
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNjA5MDA5MSBTYWx0ZWRfX3DBGcA5gKe5D Cis5gimYbM1IMgk86eJ9PETmmPbbMNqVcoMnob8wdiOahSfdem2tcZzWbMQp04mv1Es8bHzpPWq PBz/ibKsoewLCJPytiAf9bM51NvDdX0p3p+p5tGwHR3soqIRg7d9pYbnpl+bK0P3qFU2zBAc8GX
- 1xToohWIHinZPKBKgsPZ5dZzvYLTptJG9KPBHU0a5dJVR1nO1vt0q72qqPHg7GGX13rpQELcTAJ JZ0mRphVBMvOfCbzdsm6ETJea9VF/gmLSwb2kA4GL7Dlole7iyXmoiaYqxP9WZWjUea40c25u1j E9veyk8OzwHWBawOVbInjY7XmqP1f2uPi7oLNrFZC4qOg4FIHnpexw3nkDO5X2hdTFARmNqL3fo
- EuJ1J7f57fzg640OhXh2CAMGt3PFY911JQ3PggPTgY11rS6SNk7gE1B5WRJ7DQ8kUYBno6Sc
-X-Proofpoint-ORIG-GUID: 9y5_ZWocaHTxy4yqk00vRD5_OLw9tyS-
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Sun, 15 Jun 2025 16:00:30 +0200
+Message-Id: <DAN5THWRO6KS.XXZ00IOTQZH9@bootlin.com>
+Cc: "Peter Zijlstra" <peterz@infradead.org>, "Alexei Starovoitov"
+ <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii
+ Nakryiko" <andrii@kernel.org>, "Martin KaFai Lau" <martin.lau@linux.dev>,
+ "Eduard Zingerman" <eddyz87@gmail.com>, "Song Liu" <song@kernel.org>,
+ "Yonghong Song" <yonghong.song@linux.dev>, "John Fastabend"
+ <john.fastabend@gmail.com>, "KP Singh" <kpsingh@kernel.org>, "Stanislav
+ Fomichev" <sdf@fomichev.me>, "Hao Luo" <haoluo@google.com>, "Jiri Olsa"
+ <jolsa@kernel.org>, "David S. Miller" <davem@davemloft.net>, "David Ahern"
+ <dsahern@kernel.org>, "Thomas Gleixner" <tglx@linutronix.de>, "Ingo Molnar"
+ <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>, "Dave Hansen"
+ <dave.hansen@linux.intel.com>, "X86 ML" <x86@kernel.org>, "H. Peter Anvin"
+ <hpa@zytor.com>, "Menglong Dong" <imagedong@tencent.com>,
+ =?utf-8?q?Bj=C3=B6rn_T=C3=B6pel?= <bjorn@kernel.org>, "Pu Lehui"
+ <pulehui@huawei.com>, "Puranjay Mohan" <puranjay@kernel.org>, "Paul
+ Walmsley" <paul.walmsley@sifive.com>, "Palmer Dabbelt"
+ <palmer@dabbelt.com>, "Albert Ou" <aou@eecs.berkeley.edu>, "Alexandre
+ Ghiti" <alex@ghiti.fr>, "Ilya Leoshkevich" <iii@linux.ibm.com>, "Heiko
+ Carstens" <hca@linux.ibm.com>, "Vasily Gorbik" <gor@linux.ibm.com>,
+ "Alexander Gordeev" <agordeev@linux.ibm.com>, "Christian Borntraeger"
+ <borntraeger@linux.ibm.com>, "Sven Schnelle" <svens@linux.ibm.com>, "Hari
+ Bathini" <hbathini@linux.ibm.com>, "Christophe Leroy"
+ <christophe.leroy@csgroup.eu>, "Naveen N Rao" <naveen@kernel.org>,
+ "Madhavan Srinivasan" <maddy@linux.ibm.com>, "Michael Ellerman"
+ <mpe@ellerman.id.au>, "Nicholas Piggin" <npiggin@gmail.com>, "Mykola
+ Lysenko" <mykolal@fb.com>, "Shuah Khan" <shuah@kernel.org>, "Maxime
+ Coquelin" <mcoquelin.stm32@gmail.com>, "Alexandre Torgue"
+ <alexandre.torgue@foss.st.com>, <ebpf@linuxfoundation.org>, "Thomas
+ Petazzoni" <thomas.petazzoni@bootlin.com>, "Bastien Curutchet"
+ <bastien.curutchet@bootlin.com>, "Network Development"
+ <netdev@vger.kernel.org>, "bpf" <bpf@vger.kernel.org>, "LKML"
+ <linux-kernel@vger.kernel.org>, =?utf-8?q?Bj=C3=B6rn_T=C3=B6pel?=
+ <bjorn@rivosinc.com>, "linux-riscv" <linux-riscv@lists.infradead.org>,
+ "linux-s390" <linux-s390@vger.kernel.org>, "ppc-dev"
+ <linuxppc-dev@lists.ozlabs.org>, "open list:KERNEL SELFTEST FRAMEWORK"
+ <linux-kselftest@vger.kernel.org>,
+ <linux-stm32@st-md-mailman.stormreply.com>, "linux-arm-kernel"
+ <linux-arm-kernel@lists.infradead.org>, "dwarves" <dwarves@vger.kernel.org>
+Subject: Re: [PATCH bpf 2/7] bpf/x86: prevent trampoline attachment when
+ args location on stack is uncertain
+From: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
+To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+X-Mailer: aerc 0.20.1-0-g2ecb8770224a
+References: <20250613-deny_trampoline_structs_on_stack-v1-0-5be9211768c3@bootlin.com> <20250613-deny_trampoline_structs_on_stack-v1-2-5be9211768c3@bootlin.com> <20250613081150.GJ2273038@noisy.programming.kicks-ass.net> <DAL9GRMH74F4.2IV0HN0NGU65X@bootlin.com> <20250613083232.GL2273038@noisy.programming.kicks-ass.net> <DALA5WYA04OG.1283TZDOVLBPS@bootlin.com> <CAADnVQ+sj9XhscN9PdmTzjVa7Eif21noAUH3y1K6x5bWcL-5pg@mail.gmail.com>
+In-Reply-To: <CAADnVQ+sj9XhscN9PdmTzjVa7Eif21noAUH3y1K6x5bWcL-5pg@mail.gmail.com>
+X-GND-State: clean
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtddugddvfeekkecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepggfgtgffkfevuffhvffofhgjsehtqhertdertdejnecuhfhrohhmpeetlhgvgihishcunfhothhhohhrrocuoegrlhgvgihishdrlhhothhhohhrvgessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepteekleehffevvedvudfhueelffeugfdtveefvdfguefgffehtdekleetheelleffnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucfkphepvdgrtddvmeekgedvkeemfhelgegtmegvtddtmeemsgehvgenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtvdemkeegvdekmehfleegtgemvgdttdemmegshegvpdhhvghloheplhhotggrlhhhohhsthdpmhgrihhlfhhrohhmpegrlhgvgihishdrlhhothhhohhrvgessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepiedtpdhrtghpthhtoheprghlvgigvghirdhsthgrrhhovhhoihhtohhvsehgmhgrihhlrdgtohhmpdhrtghpthhtohepphgvthgvrhiisehinhhfrhgruggvrggurdhorhhgpdhrtghpthhtoheprghstheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepuggrnhhivghlsehiohhgvggrrhgso
+ higrdhnvghtpdhrtghpthhtoheprghnughrihhisehkvghrnhgvlhdrohhrghdprhgtphhtthhopehmrghrthhinhdrlhgruheslhhinhhugidruggvvhdprhgtphhtthhopegvugguhiiikeejsehgmhgrihhlrdgtohhmpdhrtghpthhtohepshhonhhgsehkvghrnhgvlhdrohhrgh
+X-GND-Sasl: alexis.lothore@bootlin.com
 
-On 8 Jun 2025, Sam James outgrape:
+On Sat Jun 14, 2025 at 12:35 AM CEST, Alexei Starovoitov wrote:
+> On Fri, Jun 13, 2025 at 1:59=E2=80=AFAM Alexis Lothor=C3=A9
+> <alexis.lothore@bootlin.com> wrote:
+>>
+>> On Fri Jun 13, 2025 at 10:32 AM CEST, Peter Zijlstra wrote:
+>> > On Fri, Jun 13, 2025 at 10:26:37AM +0200, Alexis Lothor=C3=A9 wrote:
 
-> Thanks for this, I'm really excited to see it. The disk space (and time
-> needed) for DWARF has been a problem for us especially as a source-based
-> distribution because we can't assume all builds are done on some beefy
-> centralised builder ;)
+[...]
 
-That probably affects userspace, mostly, since most packages are
-userspace packages -- but then, almost all the remaining differences
-between BTF and CTFv4 are driven by the needs of userspace
-usage.
+>> If I need to respin, I'll rewrite the commit message to include the deta=
+ils
+>> above.
+>
+> No need to respin. The cover letter is quite detailed already.
+>
+> But looking at the patch and this thread I think we need to agree
+> on the long term approach to BTF, since people assume that
+> it's a more compact dwarf and any missing information
+> should be added to it.
+> Like in this case special alignment case and packed attributes
+> are not expressed in BTF and I believe they should not be.
+> BTF is not a debug format and not a substitute for dwarf.
+> There is no goal to express everything possible in C.
+> It's minimal, because BTF is _practical_ description of
+> types and data present in the kernel.
+> I don't think the special case of packing and alignment exists
+> in the kernel today, so the current format is sufficient.
+> It doesn't miss anything.
+> I think we made arm64 JIT unnecessary restrictive and now considering
+> to make all other JITs restrictive too for hypothetical case
+> of some future kernel functions.
+> I feel we're going in the wrong direction.
+> Instead we should teach pahole to sanitize BTF where functions
+> are using this fancy alignment and packed structs.
+> pahole can see it in dwarf and can skip emitting BTF for such
+> functions. Then the kernel JITs on all architectures won't even
+> see such cases.
+>
+> The issue was initially discovered by a selftest:
+> https://lore.kernel.org/bpf/20250411-many_args_arm64-v1-3-0a32fe72339e@bo=
+otlin.com/
+> that attempted to support these two types:
+> +struct bpf_testmod_struct_arg_4 {
+> + __u64 a;
+> + __u64 b;
+> +};
+> +
+> +struct bpf_testmod_struct_arg_5 {
+> + __int128 a;
+> +};
+>
+> The former is present in the kernel. It's more or less sockptr_t,
+> and people want to access it for observability in tracing.
+> The latter doesn't exist in the kernel and we cannot represent
+> it properly in BTF without losing alignment.
+>
+> So I think we should go back to that series:
+> https://lore.kernel.org/bpf/20250411-many_args_arm64-v1-0-0a32fe72339e@bo=
+otlin.com/
+>
+> remove __int128 selftest, but also teach pahole
+> to recognize types that cannot be represented in BTF and
+> don't emit them either into vmlinux or in kernel module
+> (like in this case it was bpf_testmod.ko)
+> I think that would be a better path forward aligned
+> with the long term goal of BTF.
+>
+> And before people ask... pahole is a trusted component of the build
+> system. We trust it just as we trust gcc, clang, linker, objtool.
 
-Ideally I want it to be fast enough that it can be used for real-time
-ABI checking in places like ld.so (I have an improvement coming up
-suggested by Dodji that might reduce the time needed for such checks of
-public symbol type-compat to nearly unit time with minimal space
-reqirements).
+So if I understand correctly your point, it would be better to just move ou=
+t
+those constraints from the JIT compilers, and just not represent those spec=
+ial
+cases in BTF, so that it becomes impossible to hook programs on those funct=
+ions,
+since they are not event present in BTF info.
+And so:
+- cancel this series
+- revert the small ARM64 check about struct passed on stack
+- update pahole to make sure that it does not encode info about this specif=
+ic
+  kind of functions.
 
-> Have you got a list of what's left to do and also what you need from the
-> community? Or is this a preview of what you're working on and not
-> expecting much discussion yet?
+I still expect some challenges with this. AFAIU pahole uses DWARF to genera=
+te
+BTF, and discussions in [1] highlighted the fact that the attributes alteri=
+ng
+the structs alignment are not reliably encoded in DWARF. Maybe pahole can
+"guess" if a struct has been altered, by doing something like
+btf_is_struct_packed in libbpf ? As Andrii mentioned in [2], it may not be
+able to cover all cases, but that could  be a start. If that's indeed the
+desired direction, I can take a further look at this.
 
-Oh, discussion is welcome! If this whole thing is a disaster that nobody
-will ever accept, I want to know *now* before I spend more time on it.
++ CC dwarves ML
 
+Alexis
 
-My todo list before I try for upstreaming this immensity is here:
-<https://sourceware.org/binutils/wiki/CTF/Todo/CTFv4>.  Most of the
-really big stuff on that list is done, but there's some things that must
-be done for robustness, some that are known regressions from CTFv3, one
-that is critical for anything at all (back-compatibility reading) and
-some things that we should do anyway as long as we're changing the
-format and libctf API and ABI like this. The API breaks are small, but
-they're there...
+[1] https://lore.kernel.org/bpf/9a2ba0ad-b34d-42f8-89a6-d9a44f007bdc@linux.=
+dev/
+[2] https://lore.kernel.org/bpf/CAEf4BzZHMYyGDZ4c4eNXG7Fm=3DecxCCbKhKbQTbCj=
+vWmKtdwvBw@mail.gmail.com/
 
-(None of these changes affect anything in the BTF subset, so all the
-stuff the kernel build process needs should just keep working
-unchanged.)
-
-It's probably three weeks' to a month's work, I guess.
-
-What I need from the community?
-
-Once back-compat reading is in place and the libctf testsuite starts
-working properly again, I'll have to start seeing about getting people
-to review the libctf series before upstreaming into binutils, and that's
-a big thing to ask of anyone. It's cut into smallish pieces but it's
-still 12,000 lines or so... not quite ready for that yet though.
-
-A smaller but perhaps harder and more important job: the public API as a
-whole could do with review -- it's possible there are changes that don't
-require existing users to make more than small mods, but that *also*
-make it much simpler and/or more expressive... also, we've added a lot
-of new functions in this series, and I'd like to make sure they make
-some sort of coherent sense.  API review from unbiased external API
-users (or want-to-be-users) is probably the most important thing people
-could do to help here, really.  The public API of the new release is
-here:
-
-https://sourceware.org/git/?p=binutils-gdb.git;a=blob;f=include/ctf-api.h;;hb=refs/heads/users/nalcock/road-to-ctfv4
-
-It's big, but much of the size is CTF/BTF dict creation or linking stuff
-that can be ignored if you're only a consumer. However, the query side
-is still quite big, and some of the function names around things like
-symbol lookup are... not good (speaking as the guy who made them
-up). Improved names and/or better ways to do this by combining some of
-these functions into one would be nice :)
-
-An .org file briefly listing all the changes is here:
-
-https://sourceware.org/git/?p=binutils-gdb.git;a=blob;f=libctf/api.org;;hb=refs/heads/users/nalcock/road-to-ctfv4
