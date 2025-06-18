@@ -1,210 +1,269 @@
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FE6917BCE;
-	Sun, 15 Jun 2025 15:44:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8A222EBB8D;
+	Wed, 18 Jun 2025 15:02:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.200
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750002281; cv=none; b=jdinFbuTZpfmAm137QtlK65dtnUYbRcIiwstV2+fPmh6EAWRaR98ae7myZtdFzukjqoQ0R6YElPNwK8b9Kw00gLgtFklZHEXdLf7jBrOGcOowcWTGHDdrMN2rY4y9+PABKfgV/nWeSalud3cgi4B9n5c58EeSwD1yNAeWC/PsV4=
+	t=1750258953; cv=none; b=V/e1y6jD7E0hrSSMhOiU1pjgGD2X5fU/Di2Sd2LaBIRz5+PwtBc+jwhr5LLTrWuUR0JVFywWU+QvygZyZVTRd9Z4iGsOsLlePUOVB80NDHqzTl/NBlbIh6bj4+0r8+xjOW7AZ8tgT86HAIhEl416NTZS2l/gd4r0n1/Olw+pfzg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750002281; c=relaxed/simple;
-	bh=pWRdTeTn/1OegzG4ltWn5U5SgZqMCMMLHaPU9vAtyKk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ibYPepd5YRBXbIcTWpFIMClurkbJao5ZfAm/ZvbziOeH5JlIe4a7azICptpuwFUx9ya0lmmgAcrc6i7Wv78ueSda9gA2kksXbCZi/uMyEeGLp9p5Cu202/BWzN8JKevZuUzKctibGizBuNOE2r0lpPybvSI/cD8+iefcf6g8ma8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dA10Xkxz; arc=none smtp.client-ip=209.85.221.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1750258953; c=relaxed/simple;
+	bh=0BUJKvxEgclFebZLkXs2Yiq8R2dLpB16Uc67L6C40P8=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=rxvASWBJGYqZYmwdWW+E/EDO3j5bljbdVCfAAWRSmq0Cg3+ithDqzIaoputE9O+5NOfqTmATF9WGB8SUJc+b/fVbh/TrNJ7NNGaANEDcKbKp3OWzdHDn7pnECVHJrpLiJATseJBwhm5/Mxlor/FUTLNUBY/eaR6zhQaHRg1N+yI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=G53KCZa6; arc=none smtp.client-ip=217.70.183.200
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dA10Xkxz"
-Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-3a53359dea5so2437508f8f.0;
-        Sun, 15 Jun 2025 08:44:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1750002275; x=1750607075; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Q24V+OwPQTKaIgjR+NjdUiOeSoG4NNmYTDA2NhEIjAI=;
-        b=dA10XkxzSI/fHK2luyIGGkG5SXbzX3TwJIiqgInP3v9mHgZxVn12OUeGPFaUBgvJr2
-         OyNOGYYh6JofO1+9Sevl/6F/vmn4RetkQG0F88RTgImmPcCMN/EYPyxX2opJN3HMUbhM
-         5LFmqqckPGtBtIB/a9bvjEGEAOP90OjrcM0/HeIZk6x/BxxVtZ3XuPJ5pwXGhgl/P1c1
-         ofxhNqIN5xBmGOE5LhYHa9z2w1MTyF4o2JX+7ucQVa00wvvMtHOzO/U7lIYESLfBeiAI
-         jkuoLniSOEcDjhQgeu7u8dynaKXxf4ovotMb1bzZzTbUycbGmUXv+cQzB/iH686UAK9U
-         v95w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750002275; x=1750607075;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Q24V+OwPQTKaIgjR+NjdUiOeSoG4NNmYTDA2NhEIjAI=;
-        b=nxOElu68sjHS40dc0nmGHT7fzU4U5wY0Ye5M9KPtsSBAkueENBCVbRhYkr3QDyM6gF
-         ADWgUa22R1xAhxvT8Dxk+NFVIycme30ECD52v7BmZeRXLbKSRgpTdr37pFS5q/4/D9Q0
-         Iit5KjRBbI3MVvvDK8VbgGbfL3zD2TEA6RTybM41ty7k5T8JfmLMVd2/w3m7DY6CNzXM
-         FzMMIbDy4bUV+nJGIe/pQ+NncrCWGxBH4Mjkpd6GD2qVBNxcjwlUFSWiLScvEzfcXrqC
-         +0rzSWqiAkhg+Vl52mOaFVkzul+1+6nAVqCZAYjSbGnR2pFWwYuGUf0UYqoM71ts88fN
-         DQ9A==
-X-Forwarded-Encrypted: i=1; AJvYcCUqF+sH0BVxoSz1a3XFrl7qQL4akjOoZbMWdGX/Ddq4j5LDUoM+PzuQKWayyfGC0T0I2S3OYRZci8r4TxXC9rGK@vger.kernel.org, AJvYcCUqTjPyRE+TK/FFK3GKhL344S/4sVWMkUmxSYAvlD3GSg0MZ475BaEVtqIauLFWyW4zk8M=@vger.kernel.org, AJvYcCVSX+jCxW2UyvH4mz3DNSDOFe2W/GhcncI+1b1LWaI2oRrsbhiomGHFHeomsYOW9tmebjO0rEyrIqZbTn6U@vger.kernel.org, AJvYcCWGDN9btWAiDc5xwf1tmQCFkCnnX8osaIN/5FecQvSrdJslsmQgXNI9Tewfx5/croosdz25RBxj@vger.kernel.org, AJvYcCX51SRTh1eye9qHU7BL16tUYjXHfIqix8+IrbPmtvEoP3Ckq1oEsj3kR+TJ8EDhP1wGsPUzmLrjV1wo4A==@vger.kernel.org, AJvYcCXeNAne4/qEsjvjCFZ9+iR959uOeP2EHJ98nAdoJ4vKuv5ny3y1xdHu4aZY7efxyQnb8Rb2Ujx/vg==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw0/I+xzvokvfS1a2EgdZAcsURvXoH7dylCRxL9wVaQNd1Ma2Ta
-	fOTO0dQQWzGmoUCcXQBAqQQpC5Ut6cF/SMsNcOP98LvmDN1O0lXPFSezanFYHJGM66xmoeg5vBn
-	sOjj5cscxFpQ9eTvpJzm3XeDrJsjVYng=
-X-Gm-Gg: ASbGncvJxNgTmeazZsqW/ffCmJ/xCW32eyB1/lstN3sq5HKdIZLyIPSRQ4CCtfxiV3w
-	TIyBjWD2nhstLSyccafZk/4zCbXzAT7/6k0odhzwp1OGE1NjW9jvPAZRlvDvJSHn9sVP9QlKtZi
-	bPthxsaoAp5qYHhtDrv9dEmAW+PM2bj7VgFPWXxtFkRgypmtrbKyGb4A==
-X-Google-Smtp-Source: AGHT+IEVMqrf36wFDwIu+Qav+T1hxhMtiOfYIpsqMlJITLohO7pPVX7dQmL5OFhL7NsYv2qBiULo8wqoJRikRf0wek4=
-X-Received: by 2002:a05:6000:718:b0:3a5:3b63:58f0 with SMTP id
- ffacd0b85a97d-3a57237178dmr4884718f8f.18.1750002274959; Sun, 15 Jun 2025
- 08:44:34 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="G53KCZa6"
+Received: by mail.gandi.net (Postfix) with ESMTPSA id D460243949;
+	Wed, 18 Jun 2025 15:02:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1750258943;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=yXp3EMZM2KuaBt/hR8mEzxtDjmvXDda0FZvwBvzXw1w=;
+	b=G53KCZa6Pfzm90xnM1znRnvLgWJdeHXqf7JBgjSpdCpGbgpsAwyR1rK3LhKbmfhYmjdK67
+	bJcK/+UlB+/w3MQeZUnoRt11Mq/57TerE2xQ1yNC87i4tqm67Cf8gSZOjHlRDVCzuOZ6Qu
+	A3g5LS7a8lFYrFEDG5a7zcfvRlqTFSwbJxTdliNeoyTiedSmeF+xH6NWA6jctc4nrXtbNy
+	NRnBXeWqi9hvJiQ6lYYUCIHKG1ajmTAjb2X3VMxo2dcuiOJrfNqfAeRoVDW6WaciMsi6+j
+	evAOQkt+05jU9Lgrwu6mC++f22EHA7UVy0FnkNwhpeczRU9cMdvxL+jsqU3DQw==
+From: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
+Date: Wed, 18 Jun 2025 17:02:14 +0200
+Subject: [PATCH RFC] btf_encoder: skip functions consuming structs passed
+ by value on stack
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250613-deny_trampoline_structs_on_stack-v1-0-5be9211768c3@bootlin.com>
- <20250613-deny_trampoline_structs_on_stack-v1-2-5be9211768c3@bootlin.com>
- <20250613081150.GJ2273038@noisy.programming.kicks-ass.net>
- <DAL9GRMH74F4.2IV0HN0NGU65X@bootlin.com> <20250613083232.GL2273038@noisy.programming.kicks-ass.net>
- <DALA5WYA04OG.1283TZDOVLBPS@bootlin.com> <CAADnVQ+sj9XhscN9PdmTzjVa7Eif21noAUH3y1K6x5bWcL-5pg@mail.gmail.com>
- <DAN5THWRO6KS.XXZ00IOTQZH9@bootlin.com>
-In-Reply-To: <DAN5THWRO6KS.XXZ00IOTQZH9@bootlin.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Sun, 15 Jun 2025 08:44:23 -0700
-X-Gm-Features: AX0GCFum0GptEjJNe1zyPyz2oALA4PaNl_E8ueRtmTM4_c9kw_4GcQiqb2A1p90
-Message-ID: <CAADnVQJPQNC5VaybR_GZry5YZhNcJmWSSouuTSsU1XKhDfXYwQ@mail.gmail.com>
-Subject: Re: [PATCH bpf 2/7] bpf/x86: prevent trampoline attachment when args
- location on stack is uncertain
-To: =?UTF-8?Q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
-Cc: Peter Zijlstra <peterz@infradead.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, "David S. Miller" <davem@davemloft.net>, David Ahern <dsahern@kernel.org>, 
-	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, X86 ML <x86@kernel.org>, 
-	"H. Peter Anvin" <hpa@zytor.com>, Menglong Dong <imagedong@tencent.com>, 
-	=?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>, 
-	Pu Lehui <pulehui@huawei.com>, Puranjay Mohan <puranjay@kernel.org>, 
-	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>, 
-	Ilya Leoshkevich <iii@linux.ibm.com>, Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
-	Alexander Gordeev <agordeev@linux.ibm.com>, Christian Borntraeger <borntraeger@linux.ibm.com>, 
-	Sven Schnelle <svens@linux.ibm.com>, Hari Bathini <hbathini@linux.ibm.com>, 
-	Christophe Leroy <christophe.leroy@csgroup.eu>, Naveen N Rao <naveen@kernel.org>, 
-	Madhavan Srinivasan <maddy@linux.ibm.com>, Michael Ellerman <mpe@ellerman.id.au>, 
-	Nicholas Piggin <npiggin@gmail.com>, Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, 
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>, Alexandre Torgue <alexandre.torgue@foss.st.com>, 
-	ebpf@linuxfoundation.org, Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
-	Bastien Curutchet <bastien.curutchet@bootlin.com>, 
-	Network Development <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>, 
-	LKML <linux-kernel@vger.kernel.org>, =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@rivosinc.com>, 
-	linux-riscv <linux-riscv@lists.infradead.org>, linux-s390 <linux-s390@vger.kernel.org>, 
-	ppc-dev <linuxppc-dev@lists.ozlabs.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, linux-stm32@st-md-mailman.stormreply.com, 
-	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>, dwarves <dwarves@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20250618-btf_skip_structs_on_stack-v1-1-e70be639cc53@bootlin.com>
+X-B4-Tracking: v=1; b=H4sIAPXUUmgC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDI1MDM0Nz3aSStPji7MyC+OKSotLkkuL4/DwgMzE5W9fAwCwxJc3E1DzF1EA
+ JqL+gKDUtswJsdrRSkJuzUmxtLQCSIdtJcAAAAA==
+X-Change-ID: 20250617-btf_skip_structs_on_stack-006adf457d50
+To: dwarves@vger.kernel.org
+Cc: bpf@vger.kernel.org, Alan Maguire <alan.maguire@oracle.com>, 
+ Arnaldo Carvalho de Melo <acme@kernel.org>, Alexei Starovoitov <ast@fb.com>, 
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
+ Bastien Curutchet <bastien.curutchet@bootlin.com>, 
+ =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
+X-Mailer: b4 0.14.2
+X-GND-State: clean
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtddvgddvleehucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhfffugggtgffkvfevofesthekredtredtjeenucfhrhhomheptehlvgigihhsucfnohhthhhorhoruceorghlvgigihhsrdhlohhthhhorhgvsegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpedukeevfedtieefvdefgfdvgfejudeiveduledtueelhfehgfeivdfhtefhgfffgeenucffohhmrghinhepkhgvrhhnvghlrdhorhhgpdgsohhothhlihhnrdgtohhmnecukfhppeeltddrkeelrdduieefrdduvdejnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepledtrdekledrudeifedruddvjedphhgvlhhopegludelvddrudeikedrtddrvddungdpmhgrihhlfhhrohhmpegrlhgvgihishdrlhhothhhohhrvgessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepkedprhgtphhtthhopegrshhtsehfsgdrtghomhdprhgtphhtthhopehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomhdprhgtphhtthhopegsrghsthhivghnrdgtuhhruhhttghhvghtsegsohhothhlihhnrdgtohhmpdhrtghpthhtoheprghlvgigihhsrdhlohhthhhorhgvsegso
+ hhothhlihhnrdgtohhmpdhrtghpthhtoheprghlrghnrdhmrghguhhirhgvsehorhgrtghlvgdrtghomhdprhgtphhtthhopegrtghmvgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepugifrghrvhgvshesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopegsphhfsehvghgvrhdrkhgvrhhnvghlrdhorhhg
+X-GND-Sasl: alexis.lothore@bootlin.com
 
-On Sun, Jun 15, 2025 at 7:00=E2=80=AFAM Alexis Lothor=C3=A9
-<alexis.lothore@bootlin.com> wrote:
->
-> On Sat Jun 14, 2025 at 12:35 AM CEST, Alexei Starovoitov wrote:
-> > On Fri, Jun 13, 2025 at 1:59=E2=80=AFAM Alexis Lothor=C3=A9
-> > <alexis.lothore@bootlin.com> wrote:
-> >>
-> >> On Fri Jun 13, 2025 at 10:32 AM CEST, Peter Zijlstra wrote:
-> >> > On Fri, Jun 13, 2025 at 10:26:37AM +0200, Alexis Lothor=C3=A9 wrote:
->
-> [...]
->
-> >> If I need to respin, I'll rewrite the commit message to include the de=
-tails
-> >> above.
-> >
-> > No need to respin. The cover letter is quite detailed already.
-> >
-> > But looking at the patch and this thread I think we need to agree
-> > on the long term approach to BTF, since people assume that
-> > it's a more compact dwarf and any missing information
-> > should be added to it.
-> > Like in this case special alignment case and packed attributes
-> > are not expressed in BTF and I believe they should not be.
-> > BTF is not a debug format and not a substitute for dwarf.
-> > There is no goal to express everything possible in C.
-> > It's minimal, because BTF is _practical_ description of
-> > types and data present in the kernel.
-> > I don't think the special case of packing and alignment exists
-> > in the kernel today, so the current format is sufficient.
-> > It doesn't miss anything.
-> > I think we made arm64 JIT unnecessary restrictive and now considering
-> > to make all other JITs restrictive too for hypothetical case
-> > of some future kernel functions.
-> > I feel we're going in the wrong direction.
-> > Instead we should teach pahole to sanitize BTF where functions
-> > are using this fancy alignment and packed structs.
-> > pahole can see it in dwarf and can skip emitting BTF for such
-> > functions. Then the kernel JITs on all architectures won't even
-> > see such cases.
-> >
-> > The issue was initially discovered by a selftest:
-> > https://lore.kernel.org/bpf/20250411-many_args_arm64-v1-3-0a32fe72339e@=
-bootlin.com/
-> > that attempted to support these two types:
-> > +struct bpf_testmod_struct_arg_4 {
-> > + __u64 a;
-> > + __u64 b;
-> > +};
-> > +
-> > +struct bpf_testmod_struct_arg_5 {
-> > + __int128 a;
-> > +};
-> >
-> > The former is present in the kernel. It's more or less sockptr_t,
-> > and people want to access it for observability in tracing.
-> > The latter doesn't exist in the kernel and we cannot represent
-> > it properly in BTF without losing alignment.
-> >
-> > So I think we should go back to that series:
-> > https://lore.kernel.org/bpf/20250411-many_args_arm64-v1-0-0a32fe72339e@=
-bootlin.com/
-> >
-> > remove __int128 selftest, but also teach pahole
-> > to recognize types that cannot be represented in BTF and
-> > don't emit them either into vmlinux or in kernel module
-> > (like in this case it was bpf_testmod.ko)
-> > I think that would be a better path forward aligned
-> > with the long term goal of BTF.
-> >
-> > And before people ask... pahole is a trusted component of the build
-> > system. We trust it just as we trust gcc, clang, linker, objtool.
->
-> So if I understand correctly your point, it would be better to just move =
-out
-> those constraints from the JIT compilers, and just not represent those sp=
-ecial
-> cases in BTF, so that it becomes impossible to hook programs on those fun=
-ctions,
-> since they are not event present in BTF info.
-> And so:
-> - cancel this series
-> - revert the small ARM64 check about struct passed on stack
-> - update pahole to make sure that it does not encode info about this spec=
-ific
->   kind of functions.
+Most ABIs allow functions to receive structs passed by value, if they
+fit in a register or a pair of registers, depending on the exact ABI.
+However, when there is a struct passed by value but all registers are
+already used for parameters passing, the struct is still passed by value
+but on the stack, leading to possible mistakes about its exact location:
+if the struct definition has some attributes like
+__attribute__((packed)) or __attribute__((aligned(X)), its location on
+the stack is altered, but this change is not reflected in dwarf
+information. The corresponding BTF data generated from this can lead to
+incorrect BPF trampolines generation (eg to attach bpf tracing programs
+to kernel functions) in the Linux kernel.
 
-yes
+It may not desirable to try to encode this kind of detail in BTF:
+- BTF aims to remain a compact format
+- this case currently does not really exist in the Linux kernel
+- those attributes are not reliably encoded by compilers in DWARF info
 
-> I still expect some challenges with this. AFAIU pahole uses DWARF to gene=
-rate
-> BTF, and discussions in [1] highlighted the fact that the attributes alte=
-ring
-> the structs alignment are not reliably encoded in DWARF. Maybe pahole can
-> "guess" if a struct has been altered, by doing something like
-> btf_is_struct_packed in libbpf ? As Andrii mentioned in [2], it may not b=
-e
-> able to cover all cases, but that could  be a start. If that's indeed the
-> desired direction, I can take a further look at this.
+So rather than trying to encode more details about those specific
+functions, detect those and prevent the encoder from encoding the
+corresponding info in BTF
 
-so be it. If syzbot was taught to fuzz dwarf I'm sure it would
-have exposed hundreds of bugs in the format itself and compilers,
-but since such convoluted constructs are not present in the kernel
-source code it's not a concern.
+Signed-off-by: Alexis Lothoré <alexis.lothore@bootlin.com>
+---
+Hello,
+this small RFC series is a follow-up to an attempt to prevent some
+possible wrong bpf attachment cases in the kernel.
+When attaching ebpf tracing programs to kernel functions, the kernel has
+to generate a trampoline able to read and save the target function
+arguments. There is a specific case in which we can not reliably perform
+this task: most supported architectures allow passing a struct by value
+if they fit in a register or a pair of register. The issue is when there
+is no available register to pass such argument (eg because all registers
+have been used by previous arguments): in this case the struct is passed
+by value on the stack, but the exact struct location can not be reliably
+deduced by the trampoline, as it may be altered by some attributes like
+__attribute__((packed)) or __attribute__((aligned(X)). This detail is
+not present in the BTF info used to build the trampoline.
+
+There has been multiple attempts and discussions to handle this case.
+[1] is a first attempt, trying to properly support this case, by
+deducing more info about the struct passed on stack, but the comments
+quickly highlighted some issues. A second attempt ([2]) handled it the
+other way around, by simply preventing the trampoline creation if such
+variable is consumed by the target function. However, discussions around
+this series showed that despite being handled for the specific
+architecture receiving this series (ARM64), other architectures still
+allow to generate wrong trampolines, as they did not have the
+corresponding check. So it has been followed by [3], aiming to enforce
+the same constraint for all affected architectures. Alexei eventually
+suggested that it may not be the correct direction, and that a solution
+could be to just make sure that those specific functions are not
+described in BTF info. This series then brings a RFC implementing this
+option in pahole. 
+
+This has been tested on both a vmlinux file and bpf_testmod.ko on x86
+- in bpf_testmod.ko: bpf_testmod_test_struct_arg_9 is not encoded
+  anymore, as it passes a struct bpf_testmod_struct_arg_5 on the stack
+- on kernel side:
+  - __vxlan_fdb_delete is now encoded in BTF info (I am not sure why
+    yet, and I still fail to understand how it relates to this series)
+  - vma_modify_flags_uffd is not encoded anymore, as it passes a
+    struct vm_userfaultfd_ctx on the stack
+
+A few points remain to be handled/answered, depending on the feedback on
+this approach:
+- the series currently bring no new test to ensure that those specific
+  functions are not encoded
+- AFAIU Arnaldo's update on pahole @ LSFMM suggests that  pahole will
+  eventually be replaced by compilers as the _main_ tool to  generate
+  BTF ([4]), so if the fix is relevant in pahole, it may become relevant
+  as well in compilers generating btf data ?
+- should this change be locked behind a pahole commandline parameter ?
+- sort this __vxlan_fdb_delete issue out
+
+[1] https://lore.kernel.org/bpf/20250411-many_args_arm64-v1-0-0a32fe72339e@bootlin.com/
+[2] https://lore.kernel.org/bpf/20250527-many_args_arm64-v3-0-3faf7bb8e4a2@bootlin.com/
+[3] https://lore.kernel.org/bpf/20250613-deny_trampoline_structs_on_stack-v1-0-5be9211768c3@bootlin.com/
+[4] http://oldvger.kernel.org/~acme/prez/lsfmm-bpf-2025/#/32
+---
+ btf_encoder.c  | 14 ++++++++++----
+ dwarf_loader.c | 17 ++++++++++++++++-
+ dwarves.h      |  2 ++
+ 3 files changed, 28 insertions(+), 5 deletions(-)
+
+diff --git a/btf_encoder.c b/btf_encoder.c
+index 0bc23349b5d740c3ddab8208b2e15cdbdd139b9d..fc2f114695e9aad790ec4074f37cf6ca51adfeec 100644
+--- a/btf_encoder.c
++++ b/btf_encoder.c
+@@ -87,6 +87,7 @@ struct btf_encoder_func_state {
+ 	uint8_t optimized_parms:1;
+ 	uint8_t unexpected_reg:1;
+ 	uint8_t inconsistent_proto:1;
++	uint8_t uncertain_loc:1;
+ 	int ret_type_id;
+ 	struct btf_encoder_func_parm *parms;
+ 	struct btf_encoder_func_annot *annots;
+@@ -1203,6 +1204,7 @@ static int32_t btf_encoder__save_func(struct btf_encoder *encoder, struct functi
+ 	state->inconsistent_proto = ftype->inconsistent_proto;
+ 	state->unexpected_reg = ftype->unexpected_reg;
+ 	state->optimized_parms = ftype->optimized_parms;
++	state->uncertain_loc = ftype->uncertain_loc;
+ 	ftype__for_each_parameter(ftype, param) {
+ 		const char *name = parameter__name(param) ?: "";
+ 
+@@ -1365,7 +1367,7 @@ static int saved_functions_cmp(const void *_a, const void *_b)
+ 
+ static int saved_functions_combine(struct btf_encoder_func_state *a, struct btf_encoder_func_state *b)
+ {
+-	uint8_t optimized, unexpected, inconsistent;
++	uint8_t optimized, unexpected, inconsistent, uncertain_loc;
+ 	int ret;
+ 
+ 	ret = strncmp(a->elf->name, b->elf->name,
+@@ -1375,11 +1377,13 @@ static int saved_functions_combine(struct btf_encoder_func_state *a, struct btf_
+ 	optimized = a->optimized_parms | b->optimized_parms;
+ 	unexpected = a->unexpected_reg | b->unexpected_reg;
+ 	inconsistent = a->inconsistent_proto | b->inconsistent_proto;
+-	if (!unexpected && !inconsistent && !funcs__match(a, b))
++	uncertain_loc = a->uncertain_loc | b->uncertain_loc;
++	if (!unexpected && !inconsistent && !uncertain_loc && !funcs__match(a, b))
+ 		inconsistent = 1;
+ 	a->optimized_parms = b->optimized_parms = optimized;
+ 	a->unexpected_reg = b->unexpected_reg = unexpected;
+ 	a->inconsistent_proto = b->inconsistent_proto = inconsistent;
++	a->uncertain_loc = b->uncertain_loc = uncertain_loc;
+ 
+ 	return 0;
+ }
+@@ -1432,9 +1436,11 @@ static int btf_encoder__add_saved_funcs(struct btf_encoder *encoder, bool skip_e
+ 		 * just do not _use_ them.  Only exclude functions with
+ 		 * unexpected register use or multiple inconsistent prototypes.
+ 		 */
+-		add_to_btf |= !state->unexpected_reg && !state->inconsistent_proto;
++                add_to_btf |= !state->unexpected_reg &&
++                              !state->inconsistent_proto &&
++                              !state->uncertain_loc;
+ 
+-		if (add_to_btf) {
++                if (add_to_btf) {
+ 			err = btf_encoder__add_func(state->encoder, state);
+ 			if (err < 0)
+ 				goto out;
+diff --git a/dwarf_loader.c b/dwarf_loader.c
+index abf17175d830caa63834464f959e6376223eb19c..ef00cdf308166732fc0938f2eecd56d314d3354f 100644
+--- a/dwarf_loader.c
++++ b/dwarf_loader.c
+@@ -1258,8 +1258,20 @@ static struct parameter *parameter__new(Dwarf_Die *die, struct cu *cu,
+ 		tag__init(&parm->tag, cu, die);
+ 		parm->name = attr_string(die, DW_AT_name, conf);
+ 
+-		if (param_idx >= cu->nr_register_params || param_idx < 0)
++		if(param_idx < 0)
+ 			return parm;
++
++		if (param_idx >= cu->nr_register_params) {
++			if(dwarf_attr(die, DW_AT_type, &attr)){
++				Dwarf_Die type_die;
++				if (dwarf_formref_die(&attr, &type_die) &&
++						dwarf_tag(&type_die) == DW_TAG_structure_type) {
++					parm->uncertain_loc = 1;
++				}
++			}
++			return parm;
++		}
++
+ 		/* Parameters which use DW_AT_abstract_origin to point at
+ 		 * the original parameter definition (with no name in the DIE)
+ 		 * are the result of later DWARF generation during compilation
+@@ -2953,6 +2965,9 @@ static int cu__resolve_func_ret_types_optimized(struct cu *cu)
+ 
+ 			if (pos->unexpected_reg)
+ 				has_unexpected_reg = true;
++
++			if (pos->uncertain_loc)
++				fn->proto.uncertain_loc = 1;
+ 		}
+ 		if (has_unexpected_reg) {
+ 			ftype__for_each_parameter(&fn->proto, pos) {
+diff --git a/dwarves.h b/dwarves.h
+index 36c689847ebf29a1ab9936f9d0f928dd46514547..883852f4b60a36d73bce4568cbacd8ef3cff97ea 100644
+--- a/dwarves.h
++++ b/dwarves.h
+@@ -943,6 +943,7 @@ struct parameter {
+ 	uint8_t optimized:1;
+ 	uint8_t unexpected_reg:1;
+ 	uint8_t has_loc:1;
++	uint8_t uncertain_loc:1;
+ };
+ 
+ static inline struct parameter *tag__parameter(const struct tag *tag)
+@@ -1021,6 +1022,7 @@ struct ftype {
+ 	uint8_t		 unexpected_reg:1;
+ 	uint8_t		 processed:1;
+ 	uint8_t		 inconsistent_proto:1;
++	uint8_t		 uncertain_loc:1;
+ 	struct list_head template_type_params;
+ 	struct list_head template_value_params;
+ 	struct template_parameter_pack *template_parameter_pack;
+
+---
+base-commit: 40c2a7b9277c774a47b27f48ede7d1824587da50
+change-id: 20250617-btf_skip_structs_on_stack-006adf457d50
+
+Best regards,
+-- 
+Alexis Lothoré, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
+
