@@ -1,114 +1,124 @@
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CB6B2EE5ED;
-	Wed, 18 Jun 2025 16:29:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB08424BCE8;
+	Thu, 19 Jun 2025 13:12:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750264150; cv=none; b=e4v4075k5ntfrHGGnbH/x1U80b9tSAmUB6sP0Ws9Tz6DomQFoQVGU6iG8XKo3AoUfwevY0MdI/9B2CyM3rmKTCNMXbvFn26+rM7CNFm8Kkz5E+tJGd7qvK76bQZKa8DI6pgSz+kYy0d5feJS1pGWyB+/darhNgj852FS4JdSvF0=
+	t=1750338779; cv=none; b=eJw1kOhJZR1H9g9HHb3Yi82Cf21iOOi53hZ2j525CjfXv7i8/U3ceq5S+GJqSHObN9jegzUcFh2LvAuOdFdAFvqHmcEUb8BkL+ASFwH8k1j/4dLNHLLAYnh0aVZqMXeyMtAKfDyW1YN6BCgyyI6BqhPPAh7pgi7d8otG4q12sk8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750264150; c=relaxed/simple;
-	bh=9SLa1q9Pak84QCpjXco8/q2gGqSY6bF+kN8FZ0ev6fA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=hBA5IIEb3hEvZ5aFsBNaWAmqzY1qOsYtZgRumbInI3piXOQDqiAH7B/Yn/89vzSPftTBJmTnMd2nt+rS17JLK5ikNgqxJR9bksT2jENi9AqBwoh6d+3Di6M3s0kBUvqNatzUxpMCNCSmYvN7i9/E7R8eY6tbJx9iTgOC/rg5nzI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=J+qIb6oy; arc=none smtp.client-ip=209.85.128.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1750338779; c=relaxed/simple;
+	bh=EAEwLrNrZn89SJrZf6SoWUu9v34ompP4HfrQsDRwCZ0=;
+	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
+	 References:In-Reply-To; b=G9bfkBfNWLi5A9KWUA82HQikZmltBQq72KVBdRz7y0HnfEJ3rAeFIa65To9sUoJhTH40kA7sS1Bb6/mj/w2hCzSEbsi8UgaptxOQlzzLjwny4M7j1/VcADz6YszSJMscGQ+SRG4Q9R8WypRNRajqVwVbeZDaLN6hRuGODbop1Dg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=l0XgnY5P; arc=none smtp.client-ip=217.70.183.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="J+qIb6oy"
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-451dbe494d6so90391065e9.1;
-        Wed, 18 Jun 2025 09:29:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1750264147; x=1750868947; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6lqAYtkpafNC7lzR5Lfub5awrDOE4jtjrDArcjQTGp0=;
-        b=J+qIb6oyTjxytzJBXAWZ92f7M83UMdWHTiLclw+i059JKVqOGlYUL42wUJ8Ln52Htl
-         c1UVvax/QpLfRpbcbbh/kJqyaxtgru58cY/31nicdZS/W9fneraVRrKBg0h3qtwx7VIO
-         3PLdr6rg59dRDPKitvuT508/R7ya8oYlETQau62wN/DzkzRjZrBY0vdbEPTt4s6lblcS
-         Nf2YpZCqkm8Urh6oIKatdkj2HSZKRoyv22y2RDScjNuW8W1jZBbD7TrABLpmmf1woXYd
-         tGfR4ZCWy5kaQQbXl64ks8jnmZ6MJ4+CyzCf+vql48GPhzX6jNBNhg0wTsO3fs4feYaL
-         7COA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750264147; x=1750868947;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=6lqAYtkpafNC7lzR5Lfub5awrDOE4jtjrDArcjQTGp0=;
-        b=cwnoE6dvi3PC4k1AefC9d3oLSFHxEZW7NtrwVvbQVcjCqxBz9qPvaLHguYYkvBfD1x
-         T0sqK5K43FmbaQa96g9Yug9SCD5+x5/H0U4dm4y4kxo0Biafwmoytk70K836b9d66I5s
-         CnFkQlMawssIbPnT1waKRydqUinEZeyMzKp3cOBFc8YvpPqMcOEeNkX/6W6u+B9Xw+l5
-         06IEN8KxU2O+obodnnOgwUE3x3ItHUCRHr6Lxe8F/cSbSW4k3wFc8/HX5YZIx+UvmPEm
-         2zyB1bPCk7h29GvLyhooairaIDbDQu6nrLnX06ItkS/yZuo1HEwAW94+o3PrI3bMUlb/
-         b/3A==
-X-Forwarded-Encrypted: i=1; AJvYcCWtepYb4S87/tg+XMnwfhOTecwmJHZNJ69g7wT6AKieiYNdaLeYLP+898RV7sjkESa8PRA=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz9C+o3KBPSkYFovJJdNjIElwrZVQxUl0sklz2s5hmBVmmoNOuA
-	tdDY1RfNUhN1TEmOzjoE6DoNOrelPOMk7FqGsv4bq4cbDReYC290CSRCOeyIfdNChhgsKfN3SeN
-	nomTxB4wb5U0ukH7UsyTGG8hxc57t/uQ=
-X-Gm-Gg: ASbGncskVTdvOtbFbEjNpYRwPQoP9Q1WSwbpsHqz1Z44JvOlOt9c0pLgyOTh2E7dM+n
-	QGPxkvMapKFn/nw/IkhEygXqi59eDTjCYogQggw7PMaw0CUU5o0bSVWQKq+SI4rBk88/P30m1C5
-	5UY8xONqhUIDhSz80T0R7QPsnTJWdo8MsaAX79G6uha1DMyMYQkAKLLkHRUJjm1ZHYiIlm2A9n
-X-Google-Smtp-Source: AGHT+IGoN6HWyBfV65/LyWEmoXqWenu7SN8sC6ZCkhabNJsbT32Xy+4ii7hnttDTx9oQB2WDXJ/obmubwj32atMFFlA=
-X-Received: by 2002:a05:600c:620f:b0:43d:fa59:a685 with SMTP id
- 5b1f17b1804b1-4533cb1b85cmr175708405e9.33.1750264147095; Wed, 18 Jun 2025
- 09:29:07 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="l0XgnY5P"
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 8F87E44409;
+	Thu, 19 Jun 2025 13:12:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1750338775;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=gPkK/JmjHVHDwlaJB0UiPd7flLbze+6a9dRbeO8SSOs=;
+	b=l0XgnY5PRdfPXtdLtkzrYegKR20q4cI0YxjNzx11XtI+vj3BsIOhUSefOlhpshdaw18thU
+	Zm7Dni+IN91pGGOjv/ihI/MEIT4xFa4A6G+jpum1yDl0dSE21KrFkqn4YDb19yfQqLV7td
+	DgOvdJAVgUolP3zNRE/8jkkjCwFb5Nk48fsI52PHr/nf5tL/89Btg+tHfexWeaA2al4vEV
+	pUkGzsPl8Y8R3ypTkFpLTPdmnqUimqPXkiaXXYATKMKef5/8JLWdD8OdvXl9o3uwYzh+wF
+	nbonUKWNzU7VUgjefAQQ2PJdCF4DrBoZ1NR0ZzWo+DzL3O+PCe3L6dNiIv2fKw==
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20250618-btf_skip_structs_on_stack-v1-1-e70be639cc53@bootlin.com>
-In-Reply-To: <20250618-btf_skip_structs_on_stack-v1-1-e70be639cc53@bootlin.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Wed, 18 Jun 2025 09:28:56 -0700
-X-Gm-Features: Ac12FXw-X8EiXIr6EGaMDDd9Tzs40cG-ybs1fp6ccCveR6AKiIh5vRmb4lwUmzQ
-Message-ID: <CAADnVQJOiqCic664bPaBdwBwf1NGqfH-T6ZkQJOF7X4h7HuxBA@mail.gmail.com>
-Subject: Re: [PATCH RFC] btf_encoder: skip functions consuming structs passed
- by value on stack
-To: =?UTF-8?Q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
-Cc: dwarves <dwarves@vger.kernel.org>, bpf <bpf@vger.kernel.org>, 
-	Alan Maguire <alan.maguire@oracle.com>, Arnaldo Carvalho de Melo <acme@kernel.org>, 
-	Alexei Starovoitov <ast@fb.com>, Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
-	Bastien Curutchet <bastien.curutchet@bootlin.com>
-Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Thu, 19 Jun 2025 15:12:54 +0200
+Message-Id: <DAQJB898I4M9.2EE33TP8JV9X9@bootlin.com>
+To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+Cc: "dwarves" <dwarves@vger.kernel.org>, "bpf" <bpf@vger.kernel.org>, "Alan
+ Maguire" <alan.maguire@oracle.com>, "Arnaldo Carvalho de Melo"
+ <acme@kernel.org>, "Alexei Starovoitov" <ast@fb.com>, "Thomas Petazzoni"
+ <thomas.petazzoni@bootlin.com>, "Bastien Curutchet"
+ <bastien.curutchet@bootlin.com>
+Subject: Re: [PATCH RFC] btf_encoder: skip functions consuming structs
+ passed by value on stack
+From: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
+X-Mailer: aerc 0.20.1-0-g2ecb8770224a
+References: <20250618-btf_skip_structs_on_stack-v1-1-e70be639cc53@bootlin.com> <CAADnVQJOiqCic664bPaBdwBwf1NGqfH-T6ZkQJOF7X4h7HuxBA@mail.gmail.com>
+In-Reply-To: <CAADnVQJOiqCic664bPaBdwBwf1NGqfH-T6ZkQJOF7X4h7HuxBA@mail.gmail.com>
+X-GND-State: clean
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtddvgdehieduucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpegggfgtfffkvfevuffhofhfjgesthhqredtredtjeenucfhrhhomheptehlvgigihhsucfnohhthhhorhoruceorghlvgigihhsrdhlohhthhhorhgvsegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeekgfffhfehhfefgeekhfffudfhheekveffleeuhfelgfefueevhedvkeduhfehveenucffohhmrghinhepsghoohhtlhhinhdrtghomhenucfkphepvdgrtddvmeekgedvkeemfhelgegtmegvtddtmeemfhekheenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtvdemkeegvdekmehfleegtgemvgdttdemmehfkeehpdhhvghloheplhhotggrlhhhohhsthdpmhgrihhlfhhrohhmpegrlhgvgihishdrlhhothhhohhrvgessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepkedprhgtphhtthhopegrlhgvgigvihdrshhtrghrohhvohhithhovhesghhmrghilhdrtghomhdprhgtphhtthhopegufigrrhhvvghssehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepsghpfhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopegrlhgrnhdrmhgrg
+ hhuihhrvgesohhrrggtlhgvrdgtohhmpdhrtghpthhtoheprggtmhgvsehkvghrnhgvlhdrohhrghdprhgtphhtthhopegrshhtsehfsgdrtghomhdprhgtphhtthhopehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomhdprhgtphhtthhopegsrghsthhivghnrdgtuhhruhhttghhvghtsegsohhothhlihhnrdgtohhm
+X-GND-Sasl: alexis.lothore@bootlin.com
 
-On Wed, Jun 18, 2025 at 8:02=E2=80=AFAM Alexis Lothor=C3=A9
-<alexis.lothore@bootlin.com> wrote:
+On Wed Jun 18, 2025 at 6:28 PM CEST, Alexei Starovoitov wrote:
+> On Wed, Jun 18, 2025 at 8:02=E2=80=AFAM Alexis Lothor=C3=A9
+> <alexis.lothore@bootlin.com> wrote:
+>>
+>> - those attributes are not reliably encoded by compilers in DWARF info
 >
-> - those attributes are not reliably encoded by compilers in DWARF info
+> What would be an example of unreliability?
+> Maybe they're reliable enough for cases we're concerned about ?
 
-What would be an example of unreliability?
-Maybe they're reliable enough for cases we're concerned about ?
-
-> +
-> +               if (param_idx >=3D cu->nr_register_params) {
-> +                       if(dwarf_attr(die, DW_AT_type, &attr)){
-> +                               Dwarf_Die type_die;
-> +                               if (dwarf_formref_die(&attr, &type_die) &=
-&
-> +                                               dwarf_tag(&type_die) =3D=
+The example I had in mind is around the fact that there is no explicit
+dwarf attribute stating that a struct is packed. It may be deduced in some
+cases by taking a look at the DW_TAG_byte_size and checking if it matches
+the expected size of locations of all its members, but there are cases in
+which the packed attribute does not change the struct size, while still
+altering its alignment (but more below)
+>
+>> +
+>> +               if (param_idx >=3D cu->nr_register_params) {
+>> +                       if(dwarf_attr(die, DW_AT_type, &attr)){
+>> +                               Dwarf_Die type_die;
+>> +                               if (dwarf_formref_die(&attr, &type_die) =
+&&
+>> +                                               dwarf_tag(&type_die) =3D=
 =3D DW_TAG_structure_type) {
-> +                                       parm->uncertain_loc =3D 1;
-> +                               }
-> +                       }
-> +                       return parm;
+>> +                                       parm->uncertain_loc =3D 1;
+>> +                               }
+>> +                       }
+>> +                       return parm;
+>
+> This is too pessimistic.
+> In
+> bpf_testmod_test_struct_arg_9(u64 a, void *b, short c, int d, void *e, ch=
+ar f,
+>                               short g, struct bpf_testmod_struct_arg_5
+> h, long i)
+>
+> struct bpf_testmod_struct_arg_5 {
+>         char a;
+>         short b;
+>         int c;
+>         long d;
+> };
+>
+> though it's passed on the stack it fits into normal calling convention.
+> It doesn't have align or packed attributes, so no need to exclude it ?
 
-This is too pessimistic.
-In
-bpf_testmod_test_struct_arg_9(u64 a, void *b, short c, int d, void *e, char=
- f,
-                              short g, struct bpf_testmod_struct_arg_5
-h, long i)
+I went for the simplest solution, assuming that there were cases involving
+packing/alignent customization that we would not be able to detect (eg: the
+packed attr that does not change size but reduce alignment). But thinking
+more about it, those cases need really specific conditions thay may not
+exist currently in the kernel (eg: having some __int128 embedded in a
+struct).
 
-struct bpf_testmod_struct_arg_5 {
-        char a;
-        short b;
-        int c;
-        long d;
-};
+I see that pahole already has some logic to check if a struct is
+altered (eg class__infer_packed_attributes), I'll check if I can come with
+something more selective.
 
-though it's passed on the stack it fits into normal calling convention.
-It doesn't have align or packed attributes, so no need to exclude it ?
+Alexis
+
+--=20
+Alexis Lothor=C3=A9, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
+
