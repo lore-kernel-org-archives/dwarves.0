@@ -1,41 +1,41 @@
-Received: from out-181.mta1.migadu.com (out-181.mta1.migadu.com [95.215.58.181])
+Received: from out-184.mta0.migadu.com (out-184.mta0.migadu.com [91.218.175.184])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 363D323A99E
-	for <dwarves@vger.kernel.org>; Thu,  3 Jul 2025 18:18:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79AF4218584
+	for <dwarves@vger.kernel.org>; Thu,  3 Jul 2025 18:31:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.184
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751566689; cv=none; b=mMFai7c+Zyp+nmgaYgsnyyXAef4m5o2tzVK4JY0hSaZwuVC3ylZob7/S6hqL6AJVYctIrlictiejFkEpgY1Bypdx15V9IdabwdU8pWBqiy/zgBomXyowruzXZb55Cv0yVkSMCdfL+MwapDvqSX3c5qpGEaIfJWEYXTCa/Q53raE=
+	t=1751567482; cv=none; b=dAMLOgHgG78ysiBc9dMBJ/dRgHfynaeW4NnTv3B5wIa7twSZSmWhHvETibacHqbObmZ3N1D4ScCiYUTG9Sf+FSKGvguWno/iteuOkPn2isGeKzZ4SjduK46QnRwRzgT5MC0Klix93ecLj2GYlAq1CzE429JzvziACN2pqIPB0AM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751566689; c=relaxed/simple;
-	bh=ldYKss+oN3iLOu22adLNUkny792ZWWGzAjOy1P4SzAk=;
+	s=arc-20240116; t=1751567482; c=relaxed/simple;
+	bh=n/RZtDeZJaQdiKsEBjBlGeNXvHv/nNtUEqZ8bM+8/+g=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=DEk+5eIqT1taInVcVNDTr4biZZMBscUGCK9QzJf32l3/fV92LxmF3N7MMFmob13asi7ekCzO7FS67YIMqg9V3ave0nKbS+hXPQpIXPsskVVY/BpdpfqPpenC1L0AkfJjwXbYeeEv6tfwyMNJDPVNX9Dr2RAie/a3z/PILFz1bJo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=MfeZpb+A; arc=none smtp.client-ip=95.215.58.181
+	 In-Reply-To:Content-Type; b=W+CLbqOmxv8wROJYxIea6XtPI6NodWewZlt4jl/uyFpYpj8jYiJece/JK7ECumgignT2bAe92SH+CsMRGODvLZj1DZB7cYX+/RFo4+YsouHJ93h0wrGyw8vAxxQ9ZDltugeKGLcUzfD5omexGUMDnTKANcrKs5XU0h5+I6EjoOg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Yy9MBAwJ; arc=none smtp.client-ip=91.218.175.184
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="MfeZpb+A"
-Message-ID: <8923cd39-a242-4f61-b99e-b5fe5678ee84@linux.dev>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Yy9MBAwJ"
+Message-ID: <f696f834-bca6-4f9e-a81e-f7e45126e2eb@linux.dev>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1751566673;
+	t=1751567474;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=PzYOX+cRCf4jSg8iA91rzOOhCH3MjcvLbUiv4tW4608=;
-	b=MfeZpb+AAyhv5KmLt6ao3qdCjaQIPlkIvCw8sHjE22UsIjpwifwJtAYkhjuk9pbmVszcdA
-	TJTHGY08drNXcPKGz7hLrV15D673FLv2v9ZyLmnMJ7JgTzH1m908DmYpcHYtb/D4mJ37Bs
-	Gym9Iy0g+cyb/IokY+/IgT5YAMsFJ5M=
-Date: Thu, 3 Jul 2025 11:17:47 -0700
+	bh=FofvLQ7tmJsQ9FqeI8ziwmn8d0TNkpV4nB/bTnoB8Jw=;
+	b=Yy9MBAwJ/gXC7vNP4gs0sAOZm/sMQLFfzm3N4VfwxQLcPm6kGjJ6jK7Zdu72uTfhGwPPCN
+	/R3ZFXd/j8AFILxxYZnFKq5W0DuHuS4V1tpHj6jJ9cVad3l1lQ+ifinCN264nQ66DrHKm5
+	5SOS19KP6JILUZ1bMG7PNAgyqPQEWDk=
+Date: Thu, 3 Jul 2025 11:31:03 -0700
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH v2 1/3] btf_encoder: skip functions consuming packed
- structs passed by value on stack
+Subject: Re: [PATCH v2 2/3] tests: add some tests validating skipped functions
+ due to uncertain arg location
 To: =?UTF-8?Q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?=
  <alexis.lothore@bootlin.com>, dwarves@vger.kernel.org
 Cc: bpf@vger.kernel.org, Alan Maguire <alan.maguire@oracle.com>,
@@ -43,170 +43,297 @@ Cc: bpf@vger.kernel.org, Alan Maguire <alan.maguire@oracle.com>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
  Bastien Curutchet <bastien.curutchet@bootlin.com>, ebpf@linuxfoundation.org
 References: <20250703-btf_skip_structs_on_stack-v2-0-4767e3ba10c9@bootlin.com>
- <20250703-btf_skip_structs_on_stack-v2-1-4767e3ba10c9@bootlin.com>
+ <20250703-btf_skip_structs_on_stack-v2-2-4767e3ba10c9@bootlin.com>
 Content-Language: en-US
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 From: Ihor Solodrai <ihor.solodrai@linux.dev>
-In-Reply-To: <20250703-btf_skip_structs_on_stack-v2-1-4767e3ba10c9@bootlin.com>
+In-Reply-To: <20250703-btf_skip_structs_on_stack-v2-2-4767e3ba10c9@bootlin.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
 On 7/3/25 2:02 AM, Alexis LothorÃ© (eBPF Foundation) wrote:
-> Most ABIs allow functions to receive structs passed by value, if they
-> fit in a register or a pair of registers, depending on the exact ABI.
-> However, when there is a struct passed by value but all registers are
-> already used for parameters passing, the struct is still passed by value
-> but on the stack. This becomes an issue if the passed struct is defined
-> with some attributes like __attribute__((packed)) or
-> __attribute__((aligned(X)), as its location on the stack is altered, but
-> this change is not reflected in dwarf information. The corresponding BTF
-> data generated from this can lead to incorrect BPF trampolines
-> generation (eg to attach bpf tracing programs to kernel functions) in
-> the Linux kernel.
+> Add a small kernel module representing specific cases likely absent from
+> standard vmlinux files. As a starter, the introduced module exposes a
+> few functions consuming structs passed by value, some passed by
+> register, some passed on the stack:
 > 
-> Prevent those wrong cases by not encoding functions consuming structs
-> passed by value on stack, when those structs do not have the expected
-> alignment due to some attribute usage.
+>    int kmod_test_init(void);
+>    int test_kmod_func_ok(int, void *, char, short int);
+>    int test_kmod_func_struct_ok(int, void *, char, struct kmod_struct);
+>    int test_kmod_func_struct_on_stack_ok(int, void *, char, short int, int, \
+>      void *, char, short int, struct kmod_struct);
+>    int test_kmod_func_struct_on_stack_ko(int, void *, char, short int, int, \
+>      void *, char, short int, struct kmod_struct_packed);
+> 
+> Then enrich btf_functions.sh to make it perform the following steps:
+> - build the module
+> - generate BTF info and pfunct listing, both with dwarf and the
+>    generated BTF
+> - check that any function encoded in BTF is found in DWARF
+> - check that any function announced as skipped is indeed absent from BTF
+> - check that any skipped function has been skipped due to uncertain
+>    parameter location
+> 
+> Those new tests are executed only if a kernel directory is provided as
+> script's second argument, they are otherwise skipped.
+
+While this shouldn't be a problem for CI, since it checks out a kernel
+tree to test vmlinux as input, I wonder if there is a way to do the
+same test without this dependency.
+
+We need to generate a binary with DWARF, containing function
+prototypes with packed/aligned attributes. Give it to pahole and see
+that those functions were skipped.
+
+Any reason it must be a kernel module? Am I missing something?
+
+
+> 
+> Example of the new test execution:
+>    Encoding...Matched 4 functions exactly.
+>    Ok
+>    Validation of skipped function logic...
+>    Skipped encoding 1 functions in BTF.
+>    Ok
+>    Validating skipped functions have uncertain parameter location...
+>    Found 1 legitimately skipped function due to uncertain loc
+>    Ok
 > 
 > Signed-off-by: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
 > ---
 > Changes in v2:
-> - do not deny any struct passed by value, only those passed on stack AND
->    with some attribute alteration
-> - use the existing class__infer_packed_attributes to deduce is a struct
->    is "altered". As a consequence, move the function filtering from
->    parameter__new to btf_encoder__encode_cu, to make sure that all the
->    needed data has been parsed from debug info
+> - new patch
 > ---
->   btf_encoder.c | 50 ++++++++++++++++++++++++++++++++++++++++++++++++--
->   dwarves.h     |  1 +
->   2 files changed, 49 insertions(+), 2 deletions(-)
+>   tests/btf_functions.sh | 99 ++++++++++++++++++++++++++++++++++++++++++++++++++
+>   tests/kmod/Makefile    |  1 +
+>   tests/kmod/kmod.c      | 69 +++++++++++++++++++++++++++++++++++
+>   3 files changed, 169 insertions(+)
 > 
-
-Hi Alexis. A couple of comments below.
-
-
-> diff --git a/btf_encoder.c b/btf_encoder.c
-> index 0bc23349b5d740c3ddab8208b2e15cdbdd139b9d..16739066caae808aea77175e6c221afbe37b7c70 100644
-> --- a/btf_encoder.c
-> +++ b/btf_encoder.c
-> @@ -87,6 +87,7 @@ struct btf_encoder_func_state {
->   	uint8_t optimized_parms:1;
->   	uint8_t unexpected_reg:1;
->   	uint8_t inconsistent_proto:1;
-> +	uint8_t uncertain_parm_loc:1;
->   	int ret_type_id;
->   	struct btf_encoder_func_parm *parms;
->   	struct btf_encoder_func_annot *annots;
-> @@ -1203,6 +1204,7 @@ static int32_t btf_encoder__save_func(struct btf_encoder *encoder, struct functi
->   	state->inconsistent_proto = ftype->inconsistent_proto;
->   	state->unexpected_reg = ftype->unexpected_reg;
->   	state->optimized_parms = ftype->optimized_parms;
-> +	state->uncertain_parm_loc = ftype->uncertain_parm_loc;
->   	ftype__for_each_parameter(ftype, param) {
->   		const char *name = parameter__name(param) ?: "";
+> diff --git a/tests/btf_functions.sh b/tests/btf_functions.sh
+> index c92e5ae906f90badfede86eb530108894fbc8c93..64810b7eb51e7f2693929fbf66e0641a9d4e0277 100755
+> --- a/tests/btf_functions.sh
+> +++ b/tests/btf_functions.sh
+> @@ -193,4 +193,103 @@ if [[ -n "$VERBOSE" ]]; then
+>   fi
+>   echo "Ok"
 >   
-> @@ -1430,9 +1432,15 @@ static int btf_encoder__add_saved_funcs(struct btf_encoder *encoder, bool skip_e
->   		/* do not exclude functions with optimized-out parameters; they
->   		 * may still be _called_ with the right parameter values, they
->   		 * just do not _use_ them.  Only exclude functions with
-> -		 * unexpected register use or multiple inconsistent prototypes.
-> +		 * unexpected register use, multiple inconsistent prototypes or
-> +		 * uncertain parameters location
->   		 */
-> -		add_to_btf |= !state->unexpected_reg && !state->inconsistent_proto;
-> +		add_to_btf |= !state->unexpected_reg && !state->inconsistent_proto && !state->uncertain_parm_loc;
+> +# Some specific cases can not  be tested directly with a standard kernel.
+> +# We can use the kernel module in kmod/ to test those cases, like packed
+> +# structs passed on the stack. Run this test only if we have the needed
+> +# dependencies (eg: some kernel sources directory passed as argument; those
+> +# must match the used vmlinux file)
+> +
+> +KDIR=${KDIR:-$2}
+> +if [ -z "$KDIR" ] ; then
+> +	echo "Skipping kmod tests"
+> +	exit 0
+> +fi
+> +
+> +echo -n "Validation of BTF encoding corner cases with kmod functions; this may take some time: "
+> +
+> +test -n "$VERBOSE" && printf "\nBuilding kmod..."
+> +tests_dir=$(dirname $0)
+> +make -C ${KDIR} M=${tests_dir}/kmod
+
+This part fails for me:
+
+isolodrai@isolodrai-fedora-PC2K40WQ:~/pahole/tests$ 
+KDIR=/home/isolodrai/kernels/bpf-next 
+vmlinux=/home/isolodrai/kernels/bpf-next/vmlinux ./btf_functions.sh
+Validation of BTF encoding of functions; this may take some time: Ok
+Validation of BTF encoding corner cases with kmod functions; this may 
+take some time: make: Entering directory '/home/isolodrai/kernels/bpf-next'
+Makefile:199: *** specified external module directory "./kmod" does not 
+exist.  Stop.
+make: Leaving directory '/home/isolodrai/kernels/bpf-next'
+No skipped functions.  Done.
+
+Maybe:
+
+diff --git a/tests/btf_functions.sh b/tests/btf_functions.sh
+index 64810b7..fcb1591 100755
+--- a/tests/btf_functions.sh
++++ b/tests/btf_functions.sh
+@@ -208,7 +208,7 @@ fi
+  echo -n "Validation of BTF encoding corner cases with kmod functions; 
+this may take some time: "
+
+  test -n "$VERBOSE" && printf "\nBuilding kmod..."
+-tests_dir=$(dirname $0)
++tests_dir=$(realpath $(dirname $0))
+  make -C ${KDIR} M=${tests_dir}/kmod
+
+  test -n "$VERBOSE" && printf "\nEncoding..."
 
 
-Is it possible for a function to have uncertain_parm_loc in one CU,
-but not in another?
-
-If yes, we still don't want the function in BTF, right?
+Also, in case kernel is built with LLVM, one must set LLVM=1.
+Not sure if this is detectable by the test.
 
 > +
-> +		if (state->uncertain_parm_loc)
-> +			btf_encoder__log_func_skip(encoder, saved_fns[i].elf,
-> +					"uncertain parameter location\n",
-> +					0, 0);
->   
->   		if (add_to_btf) {
->   			err = btf_encoder__add_func(state->encoder, state);
-> @@ -2553,6 +2561,39 @@ void btf_encoder__delete(struct btf_encoder *encoder)
->   	free(encoder);
->   }
->   
-> +static bool ftype__has_uncertain_arg_loc(struct cu *cu, struct ftype *ftype)
+> +test -n "$VERBOSE" && printf "\nEncoding..."
+> +pahole --btf_features=default --lang_exclude=rust --btf_encode_detached=$outdir/kmod.btf \
+> +	--verbose ${tests_dir}/kmod/kmod.ko | grep "skipping BTF encoding of function" \
+> +	> ${outdir}/kmod_skipped_fns
+> +
+> +funcs=$(pfunct --format_path=btf $outdir/kmod.btf 2>/dev/null|sort)
+> +pfunct --all --no_parm_names --format_path=dwarf kmod/kmod.ko | \
+> +	sort|uniq > $outdir/kmod_dwarf.funcs
+> +pfunct --all --no_parm_names --format_path=btf $outdir/kmod.btf 2>/dev/null|\
+> +	awk '{ gsub("^(bpf_kfunc |bpf_fastcall )+",""); print $0}'|sort|uniq > $outdir/kmod_btf.funcs
+> +
+> +exact=0
+> +while IFS= read -r btf ; do
+> +	# Matching process can be kept simpler as the tested binary is
+> +	# specifically tailored for tests
+> +	dwarf=$(grep -F "$btf" $outdir/kmod_dwarf.funcs)
+> +	if [[ "$btf" != "$dwarf" ]]; then
+> +		echo "ERROR: mismatch : BTF '$btf' not found; DWARF '$dwarf'"
+> +		fail
+> +	else
+> +		exact=$((exact+1))
+> +	fi
+> +done < $outdir/kmod_btf.funcs
+> +
+> +if [[ -n "$VERBOSE" ]]; then
+> +	echo "Matched $exact functions exactly."
+> +	echo "Ok"
+> +	echo "Validation of skipped function logic..."
+> +fi
+> +
+> +skipped_cnt=$(wc -l ${outdir}/kmod_skipped_fns | awk '{ print $1}')
+> +if [[ "$skipped_cnt" == "0" ]]; then
+> +	echo "No skipped functions.  Done."
+> +	exit 0
+> +fi
+> +
+> +skipped_fns=$(awk '{print $1}' $outdir/kmod_skipped_fns)
+> +for s in $skipped_fns ; do
+> +	# Ensure the skipped function are not in BTF
+> +	inbtf=$(grep " $s(" $outdir/kmod_btf.funcs)
+> +	if [[ -n "$inbtf" ]]; then
+> +		echo "ERROR: '${s}()' was added incorrectly to BTF: '$inbtf'"
+> +		fail
+> +	fi
+> +done
+> +
+> +if [[ -n "$VERBOSE" ]]; then
+> +	echo "Skipped encoding $skipped_cnt functions in BTF."
+> +	echo "Ok"
+> +	echo "Validating skipped functions have uncertain parameter location..."
+> +fi
+> +
+> +uncertain_loc=$(awk '/due to uncertain parameter location/ { print $1 }' $outdir/kmod_skipped_fns)
+> +legitimate_skip=0
+> +
+> +for f in $uncertain_loc ; do
+> +	# Extract parameters types
+> +	raw_params=$(grep ${f} $outdir/kmod_dwarf.funcs|sed -n 's/^[^(]*(\([^)]*\)).*/\1/p')
+> +	IFS=',' read -ra params <<< "${raw_params}"
+> +	for param in "${params[@]}"
+> +	do
+> +		# Search any param that could be a struct
+> +		struct_type=$(echo ${param}|grep -E '^struct [^*]' | sed -E 's/^struct //')
+> +		if [ -n "${struct_type}" ]; then
+> +			# Check with pahole if the struct is detected as
+> +			# packed
+> +			if pahole -C "${struct_type}" kmod/kmod.ko|grep -q __packed__
+> +			then
+> +				legitimate_skip=$((legitimate_skip+1))
+> +				continue 2
+> +			fi
+> +		fi
+> +	done
+> +	echo "ERROR: '${f}()' should not have been skipped; it has no parameter with uncertain location"
+> +	fail
+> +done
+> +
+> +if [[ -n "$VERBOSE" ]]; then
+> +	echo "Found ${legitimate_skip} legitimately skipped function due to uncertain loc"
+> +fi
+> +echo "Ok"
+>   exit 0
+> diff --git a/tests/kmod/Makefile b/tests/kmod/Makefile
+> new file mode 100644
+> index 0000000000000000000000000000000000000000..e7c2ed929eaf81e91429f744c3778156ed2be2d2
+> --- /dev/null
+> +++ b/tests/kmod/Makefile
+> @@ -0,0 +1 @@
+> +obj-m += kmod.o
+> diff --git a/tests/kmod/kmod.c b/tests/kmod/kmod.c
+> new file mode 100644
+> index 0000000000000000000000000000000000000000..5b93614b6156b05925a6cb48809ad63533ccba3e
+> --- /dev/null
+> +++ b/tests/kmod/kmod.c
+> @@ -0,0 +1,69 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +#include <linux/module.h>
+> +#include <linux/printk.h>
+> +
+> +struct kmod_struct {
+> +	char a;
+> +	short b;
+> +	int c;
+> +	unsigned long long d;
+> +};
+> +
+> +struct kmod_struct_packed {
+> +	char a;
+> +	short b;
+> +	int c;
+> +	unsigned long long d;
+> +}__packed;
+> +
+> +int test_kmod_func_ok(int a, void *b, char c, short d);
+> +int test_kmod_func_struct_ok(int a, void *b, char c, struct kmod_struct d);
+> +int test_kmod_func_struct_on_stack_ok(int a, void *b, char c, short d, int e,
+> +                                      void *f, char g, short h,
+> +                                      struct kmod_struct i);
+> +int test_kmod_func_struct_on_stack_ko(int a, void *b, char c, short d, int e,
+> +                                      void *f, char g, short h,
+> +                                      struct kmod_struct_packed i);
+> +
+> +noinline int test_kmod_func_ok(int a, void *b, char c, short d)
 > +{
-> +	struct parameter *param;
-> +	int param_idx = 0;
-> +
-> +	if (ftype->nr_parms < cu->nr_register_params)
-> +		return false;
-> +
-> +	ftype__for_each_parameter(ftype, param) {
-> +		if (param_idx++ < cu->nr_register_params)
-> +			continue;
-> +
-> +		struct tag *type = cu__type(cu, param->tag.type);
-> +
-> +		if (type == NULL || !tag__is_struct(type))
-> +			continue;
-> +
-> +		struct type *ctype = tag__type(type);
-> +		if (ctype->namespace.name == 0)
-> +			continue;
-> +
-> +		struct class *class = tag__class(type);
-> +
-> +		class__find_holes(class);
-> +		class__infer_packed_attributes(class, cu);
-> +
-> +		if (class->is_packed)
-> +			return true;
-> +	}
-> +
-> +	return false;
+> +	return a + (long)b + c + d;
 > +}
 > +
->   int btf_encoder__encode_cu(struct btf_encoder *encoder, struct cu *cu, struct conf_load *conf_load)
->   {
->   	struct llvm_annotation *annot;
-> @@ -2647,6 +2688,8 @@ int btf_encoder__encode_cu(struct btf_encoder *encoder, struct cu *cu, struct co
->   		 * Skip functions that:
->   		 *   - are marked as declarations
->   		 *   - do not have full argument names
-> +		 *   - have arguments with uncertain locations, e.g packed
-> +		 *   structs passed by value on stack
->   		 *   - are not in ftrace list (if it's available)
->   		 *   - are not external (in case ftrace filter is not available)
->   		 */
-> @@ -2693,6 +2736,9 @@ int btf_encoder__encode_cu(struct btf_encoder *encoder, struct cu *cu, struct co
->   		if (!func)
->   			continue;
->   
-> +		if (ftype__has_uncertain_arg_loc(cu, &fn->proto))
-> +			fn->proto.uncertain_parm_loc = 1;
+> +noinline int test_kmod_func_struct_ok(int a, void *b, char c,
+> +                                      struct kmod_struct d)
+> +{
+> +	return a + (long)b + c + d.a + d.b + d.c + d.d;
+> +}
 > +
->   		err = btf_encoder__save_func(encoder, fn, func);
-
-I think checking and setting uncertain_parm_loc flag should be done
-inside btf_encoder__save_func(), because that's where we inspect DWARF
-function prototype and add a new btf_encoder_func_state.
-
->   		if (err)
->   			goto out;
-> diff --git a/dwarves.h b/dwarves.h
-> index 36c689847ebf29a1ab9936f9d0f928dd46514547..d689aee5910f4b40dc13b3e9dc596dfbe6a2c3d0 100644
-> --- a/dwarves.h
-> +++ b/dwarves.h
-> @@ -1021,6 +1021,7 @@ struct ftype {
->   	uint8_t		 unexpected_reg:1;
->   	uint8_t		 processed:1;
->   	uint8_t		 inconsistent_proto:1;
-> +	uint8_t		 uncertain_parm_loc:1;
->   	struct list_head template_type_params;
->   	struct list_head template_value_params;
->   	struct template_parameter_pack *template_parameter_pack;
+> +noinline int test_kmod_func_struct_on_stack_ok(int a, void *b, char c, short d,
+> +                                               int e, void *f, char g, short h,
+> +                                               struct kmod_struct i)
+> +{
+> +	return a + (long)b + c + d + e + (long)f + g + h + i.a + i.b + i.c + i.d;
+> +}
+> +
+> +noinline int test_kmod_func_struct_on_stack_ko(int a, void *b, char c, short d,
+> +                                               int e, void *f, char g, short h,
+> +                                               struct kmod_struct_packed i)
+> +{
+> +	return a + (long)b + c + d + e + (long)f + g + h + i.a + i.b + i.c + i.d;
+> +}
+> +
+> +static int kmod_test_init(void)
+> +{
+> +	struct kmod_struct test;
+> +	struct kmod_struct_packed test_bis;
+> +
+> +	test_kmod_func_ok(0, NULL, 0, 0);
+> +	test_kmod_func_struct_ok(0, NULL, 0, test);
+> +	test_kmod_func_struct_on_stack_ok(0, NULL, 0, 0, 0, NULL, 0, 0, test);
+> +	test_kmod_func_struct_on_stack_ko(0, NULL, 0, 0, 0, NULL, 0, 0, test_bis);
+> +	return 0;
+> +}
+> +
+> +module_init(kmod_test_init);
+> +
+> +MODULE_AUTHOR("Alexis Lothoré");
+> +MODULE_LICENSE("GPL");
+> +MODULE_DESCRIPTION("Pahole testing module");
 > 
 
