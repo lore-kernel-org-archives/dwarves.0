@@ -1,204 +1,132 @@
-Received: from out-187.mta1.migadu.com (out-187.mta1.migadu.com [95.215.58.187])
+Received: from relay15.mail.gandi.net (relay15.mail.gandi.net [217.70.178.235])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1882199FBA;
-	Fri,  4 Jul 2025 20:05:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.187
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86F8B86329;
+	Fri,  4 Jul 2025 21:10:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.178.235
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751659545; cv=none; b=sA3132uoO4xh7N7Ogsj68qLuQAvnpMXfk0YpN8QUwkRdoOJ2vwjIU+M1Lf1fS3XJPJ5AYbhfOr2VMe1MYKuOrTH+ZhnlEUjVnqxEGnLTngdNRnOEZXu5/fm1+dJFrHalz/yVuuAoXDa1+0aOQB7F3HNnLXJc99ZPrYujBkaStf8=
+	t=1751663413; cv=none; b=R9Q0ic/frhvIXRZbzWyMuYuSB3uSuauDbJERMsqzPKKjdPExtxt73n2KmPJODeEg/Vl7dOnPgvBSvkfJrnt8c4ODBO2n7abd20gus4kn0SNhSCJq0JfHp+7hYDcd4HoTwXT9eEom7+G3UDE3po1tCGb2w4GLFwoNWmUmveCulhA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751659545; c=relaxed/simple;
-	bh=MRu18Rt/dtKGs3D7BpURKXIOsMC6qMC+qDN+Rgq4GUU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=nzhA0BP6TGBTYZgcIxq/g60mHSwHRSP3hRdcnioSgdEbhND0tg+ENiezujSsJc3tQhIBPeDbKCsbBenKLZTT4JPb2VZ9RqLtvFYiKx7hDdzsHYD5hMW+I0qJuxSgHo/LHVowc6CTnB8mCdqXPSB8A5YSaZW4QLAcShsNJ2O3uQc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=XetEQWeR; arc=none smtp.client-ip=95.215.58.187
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1751663413; c=relaxed/simple;
+	bh=iOlVGYXIaHdx9FU2jfM2U5YECB3mmKKuqVUVbRsDbrQ=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=LQn14lDeAC7yGeM5BB8y3xW/ER8+u8i+Iuo1pRN8Vy5E3XC1U8JraJYL4nBWujT7NtFfGcFYxiFZfba+Knae7ujVeqXKenH3Nh3DFV9SK3qPiqeMGtr0E8W0fXdmTJZplRS147Q4a96njeASIe5yR0TgUFjtx5xrjBuFyT3X3gM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=iB4f0WyX; arc=none smtp.client-ip=217.70.178.235
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="XetEQWeR"
-Message-ID: <5aadf682-3b1f-4769-a2c1-523085026ac8@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1751659539;
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="iB4f0WyX"
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 2B6D3442D7;
+	Fri,  4 Jul 2025 21:10:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1751663408;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=4TGkPheEZ0633TsdxcuJRJiU7E9UMND4K1dgjzrkuso=;
-	b=XetEQWeRDV2bpGb3QP2Sfu1ZkfqA4UyEA/GWnBwNa9TSRfmx+UHxudsDnwsS/aIyLy0po+
-	j2zDqv4x4R5nY4cTSUz9k5x83+I+T5Cv8zuwTdIzYDSE66vsvaO4uA66PpmU7G18heYfVL
-	/Y7zxkGVGg/DX+yPyGCJuqYJOtljHk8=
-Date: Fri, 4 Jul 2025 13:05:28 -0700
+	bh=WwiUZSVURQgKc/avE+J57gMa/HpkFfMh4jEvN/BZ29U=;
+	b=iB4f0WyXAbAkQy5m6W5lXAiqHYnomQ2q3AnCUIs+xJ/RF8nk5SBjNzQPq1YCAAogJvs1h4
+	lCThBRp7sjv1eQFWZTJftfww/jc/QRN8cA5UyvQqQdrTZ5yz4W2nIqya7+Z5qG2Z1DtItr
+	Gm2Yu3uJpIKwFvU35UZz3wbgePfhqmqlkBwCvyEBXh7Axq4h/OKdhUJ4gbpMwjPULY7jNL
+	OEatCSEzflPcwgL65C14MJc0oEU9v6cFn/Wvq2NDFUS33B1VcOaUn0HynNss2NTeuZ9SoR
+	xLs+Y0JuY5yY9/fs0JBS0fs8Btm+ZQvJLkPZS0Dprp0D9vDFmQ6ppWd5tbr/Jg==
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Fri, 04 Jul 2025 23:10:07 +0200
+Message-Id: <DB3KUSI90IPO.1AR35OTXH2Y8M@bootlin.com>
+Cc: <bpf@vger.kernel.org>, "Alan Maguire" <alan.maguire@oracle.com>,
+ "Arnaldo Carvalho de Melo" <acme@kernel.org>, "Alexei Starovoitov"
+ <ast@fb.com>, "Thomas Petazzoni" <thomas.petazzoni@bootlin.com>, "Bastien
+ Curutchet" <bastien.curutchet@bootlin.com>, <ebpf@linuxfoundation.org>
 Subject: Re: [PATCH v2 1/3] btf_encoder: skip functions consuming packed
  structs passed by value on stack
-To: =?UTF-8?Q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?=
- <alexis.lothore@bootlin.com>, dwarves@vger.kernel.org
-Cc: bpf@vger.kernel.org, Alan Maguire <alan.maguire@oracle.com>,
- Arnaldo Carvalho de Melo <acme@kernel.org>, Alexei Starovoitov <ast@fb.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Bastien Curutchet <bastien.curutchet@bootlin.com>, ebpf@linuxfoundation.org
-References: <20250703-btf_skip_structs_on_stack-v2-0-4767e3ba10c9@bootlin.com>
- <20250703-btf_skip_structs_on_stack-v2-1-4767e3ba10c9@bootlin.com>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
-In-Reply-To: <20250703-btf_skip_structs_on_stack-v2-1-4767e3ba10c9@bootlin.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+From: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
+To: "Ihor Solodrai" <ihor.solodrai@linux.dev>, <dwarves@vger.kernel.org>
+X-Mailer: aerc 0.20.1-0-g2ecb8770224a
+References: <20250703-btf_skip_structs_on_stack-v2-0-4767e3ba10c9@bootlin.com> <20250703-btf_skip_structs_on_stack-v2-1-4767e3ba10c9@bootlin.com> <8923cd39-a242-4f61-b99e-b5fe5678ee84@linux.dev> <DB35D2MDSOGN.1X8PB5AF5M3KN@bootlin.com> <a9a3cc94-7ce2-4993-96ab-500f250e6e25@linux.dev>
+In-Reply-To: <a9a3cc94-7ce2-4993-96ab-500f250e6e25@linux.dev>
+X-GND-State: clean
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgddvgedvtdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepggfgtgffkfevuffhvffofhgjsehtqhertdertdejnecuhfhrohhmpeetlhgvgihishcunfhothhhohhrrocuoegrlhgvgihishdrlhhothhhohhrvgessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepudfgjeejkedugeekgeeftdffvdeiieetkedtffetudeuueegtedugfefkeejffehnecukfhppedvrgdtvdemkeegvdekmehfleegtgemvgdttdemmegshegvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddvmeekgedvkeemfhelgegtmegvtddtmeemsgehvgdphhgvlhhopehlohgtrghlhhhoshhtpdhmrghilhhfrhhomheprghlvgigihhsrdhlohhthhhorhgvsegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopeelpdhrtghpthhtohepihhhohhrrdhsohhlohgurhgriheslhhinhhugidruggvvhdprhgtphhtthhopegufigrrhhvvghssehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepsghpfhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopegrlhgrnhdrmhgrghhuihhrvgesohhrrggtlhgvrdgtohhmpdhrtghpthhtohepr
+ ggtmhgvsehkvghrnhgvlhdrohhrghdprhgtphhtthhopegrshhtsehfsgdrtghomhdprhgtphhtthhopehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomhdprhgtphhtthhopegsrghsthhivghnrdgtuhhruhhttghhvghtsegsohhothhlihhnrdgtohhm
 
-On 7/3/25 2:02 AM, Alexis LothorÃ© (eBPF Foundation) wrote:
-> Most ABIs allow functions to receive structs passed by value, if they
-> fit in a register or a pair of registers, depending on the exact ABI.
-> However, when there is a struct passed by value but all registers are
-> already used for parameters passing, the struct is still passed by value
-> but on the stack. This becomes an issue if the passed struct is defined
-> with some attributes like __attribute__((packed)) or
-> __attribute__((aligned(X)), as its location on the stack is altered, but
-> this change is not reflected in dwarf information. The corresponding BTF
-> data generated from this can lead to incorrect BPF trampolines
-> generation (eg to attach bpf tracing programs to kernel functions) in
-> the Linux kernel.
-> 
-> Prevent those wrong cases by not encoding functions consuming structs
-> passed by value on stack, when those structs do not have the expected
-> alignment due to some attribute usage.
-> 
-> Signed-off-by: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
-> ---
-> Changes in v2:
-> - do not deny any struct passed by value, only those passed on stack AND
->    with some attribute alteration
-> - use the existing class__infer_packed_attributes to deduce is a struct
->    is "altered". As a consequence, move the function filtering from
->    parameter__new to btf_encoder__encode_cu, to make sure that all the
->    needed data has been parsed from debug info
-> ---
->   btf_encoder.c | 50 ++++++++++++++++++++++++++++++++++++++++++++++++--
->   dwarves.h     |  1 +
->   2 files changed, 49 insertions(+), 2 deletions(-)
-> 
-> diff --git a/btf_encoder.c b/btf_encoder.c
-> index 0bc23349b5d740c3ddab8208b2e15cdbdd139b9d..16739066caae808aea77175e6c221afbe37b7c70 100644
-> --- a/btf_encoder.c
-> +++ b/btf_encoder.c
-> @@ -87,6 +87,7 @@ struct btf_encoder_func_state {
->   	uint8_t optimized_parms:1;
->   	uint8_t unexpected_reg:1;
->   	uint8_t inconsistent_proto:1;
-> +	uint8_t uncertain_parm_loc:1;
->   	int ret_type_id;
->   	struct btf_encoder_func_parm *parms;
->   	struct btf_encoder_func_annot *annots;
-> @@ -1203,6 +1204,7 @@ static int32_t btf_encoder__save_func(struct btf_encoder *encoder, struct functi
->   	state->inconsistent_proto = ftype->inconsistent_proto;
->   	state->unexpected_reg = ftype->unexpected_reg;
->   	state->optimized_parms = ftype->optimized_parms;
-> +	state->uncertain_parm_loc = ftype->uncertain_parm_loc;
->   	ftype__for_each_parameter(ftype, param) {
->   		const char *name = parameter__name(param) ?: "";
->   
-> @@ -1430,9 +1432,15 @@ static int btf_encoder__add_saved_funcs(struct btf_encoder *encoder, bool skip_e
->   		/* do not exclude functions with optimized-out parameters; they
->   		 * may still be _called_ with the right parameter values, they
->   		 * just do not _use_ them.  Only exclude functions with
-> -		 * unexpected register use or multiple inconsistent prototypes.
-> +		 * unexpected register use, multiple inconsistent prototypes or
-> +		 * uncertain parameters location
->   		 */
-> -		add_to_btf |= !state->unexpected_reg && !state->inconsistent_proto;
-> +		add_to_btf |= !state->unexpected_reg && !state->inconsistent_proto && !state->uncertain_parm_loc;
-> +
-> +		if (state->uncertain_parm_loc)
-> +			btf_encoder__log_func_skip(encoder, saved_fns[i].elf,
-> +					"uncertain parameter location\n",
-> +					0, 0);
->   
->   		if (add_to_btf) {
->   			err = btf_encoder__add_func(state->encoder, state);
-> @@ -2553,6 +2561,39 @@ void btf_encoder__delete(struct btf_encoder *encoder)
->   	free(encoder);
->   }
->   
-> +static bool ftype__has_uncertain_arg_loc(struct cu *cu, struct ftype *ftype)
-> +{
-> +	struct parameter *param;
-> +	int param_idx = 0;
-> +
-> +	if (ftype->nr_parms < cu->nr_register_params)
-> +		return false;
-> +
-> +	ftype__for_each_parameter(ftype, param) {
-> +		if (param_idx++ < cu->nr_register_params)
-> +			continue;
-> +
-> +		struct tag *type = cu__type(cu, param->tag.type);
-> +
-> +		if (type == NULL || !tag__is_struct(type))
-> +			continue;
-> +
-> +		struct type *ctype = tag__type(type);
-> +		if (ctype->namespace.name == 0)
-> +			continue;
-> +
-> +		struct class *class = tag__class(type);
-> +
-> +		class__find_holes(class);
-> +		class__infer_packed_attributes(class, cu);
+On Fri Jul 4, 2025 at 9:59 PM CEST, Ihor Solodrai wrote:
+> On 7/4/25 2:01 AM, Alexis Lothor=C3=A9 wrote:
+>> Hello Ihor,
+>>=20
+>> thanks for the prompt feedback and testing !
+>>=20
+>> On Thu Jul 3, 2025 at 8:17 PM CEST, Ihor Solodrai wrote:
+>>> On 7/3/25 2:02 AM, Alexis Lothor=C3=83=C2=A9 (eBPF Foundation) wrote:
+>>=20
+>> [...]
+>>=20
+>>>>    		/* do not exclude functions with optimized-out parameters; they
+>>>>    		 * may still be _called_ with the right parameter values, they
+>>>>    		 * just do not _use_ them.  Only exclude functions with
+>>>> -		 * unexpected register use or multiple inconsistent prototypes.
+>>>> +		 * unexpected register use, multiple inconsistent prototypes or
+>>>> +		 * uncertain parameters location
+>>>>    		 */
+>>>> -		add_to_btf |=3D !state->unexpected_reg && !state->inconsistent_prot=
+o;
+>>>> +		add_to_btf |=3D !state->unexpected_reg && !state->inconsistent_prot=
+o && !state->uncertain_parm_loc;
+>>>
+>>>
+>>> Is it possible for a function to have uncertain_parm_loc in one CU,
+>>> but not in another?
+>>>
+>>> If yes, we still don't want the function in BTF, right?
+>>=20
+>> TBH, my understanding about those discrepancies between CUs about the sa=
+me
+>> functions and how pahole handle them is still a bit fragile. Have you go=
+t
+>> any example about how it could be the case ?
+>
+> I would hope stuff like this doesn't happen often in the real
+> world, but in principle you could have the following situation:
+>
+> #ifdef ENABLE_PACKING
+> struct some_data {
+>      char header;
+>      int payload;
+>      short footer;
+> } __attribute__((packed));
+> #else
+> struct some_data {
+>      char header;
+>      int payload;
+>      short footer;
+> };
+> #endif
+>
+> void read_data(/* lots of args */, struct some_data data) { ... }
+>
+> And then one user has #define ENABLE_PACKING and the other doesn't,
+> for example:
+>
+> #define ENABLE_PACKING // or not
+> #include "some_data.h"
+>
+> void user() {
+>       struct some_data =3D get_some_data();
+>       ...
+>       read_data(/* args */, some_data);
+> }
+>
+> And then you compile a binary with both users:
+>
+> $ gcc -g -O0 user1.c user2.c
+>
+> DWARF will contain both packed and not packed instances of struct
+> some_data and two corresponding read_data() funcs.
 
-I just noticed that class__infer_packed_attributes() already does call
-class__find_holes() [1], so calling it here is unnecessary. Although
-there is already a flag to detect repeated calls [2].
-
-[1] https://github.com/acmel/dwarves/blob/master/dwarves.c#L1859
-[2] https://github.com/acmel/dwarves/blob/master/dwarves.c#L1604-L1605
-
-> +
-> +		if (class->is_packed)
-> +			return true;
-> +	}
-> +
-> +	return false;
-> +}
-> +
->   int btf_encoder__encode_cu(struct btf_encoder *encoder, struct cu *cu, struct conf_load *conf_load)
->   {
->   	struct llvm_annotation *annot;
-> @@ -2647,6 +2688,8 @@ int btf_encoder__encode_cu(struct btf_encoder *encoder, struct cu *cu, struct co
->   		 * Skip functions that:
->   		 *   - are marked as declarations
->   		 *   - do not have full argument names
-> +		 *   - have arguments with uncertain locations, e.g packed
-> +		 *   structs passed by value on stack
->   		 *   - are not in ftrace list (if it's available)
->   		 *   - are not external (in case ftrace filter is not available)
->   		 */
-> @@ -2693,6 +2736,9 @@ int btf_encoder__encode_cu(struct btf_encoder *encoder, struct cu *cu, struct co
->   		if (!func)
->   			continue;
->   
-> +		if (ftype__has_uncertain_arg_loc(cu, &fn->proto))
-> +			fn->proto.uncertain_parm_loc = 1;
-> +
->   		err = btf_encoder__save_func(encoder, fn, func);
->   		if (err)
->   			goto out;
-> diff --git a/dwarves.h b/dwarves.h
-> index 36c689847ebf29a1ab9936f9d0f928dd46514547..d689aee5910f4b40dc13b3e9dc596dfbe6a2c3d0 100644
-> --- a/dwarves.h
-> +++ b/dwarves.h
-> @@ -1021,6 +1021,7 @@ struct ftype {
->   	uint8_t		 unexpected_reg:1;
->   	uint8_t		 processed:1;
->   	uint8_t		 inconsistent_proto:1;
-> +	uint8_t		 uncertain_parm_loc:1;
->   	struct list_head template_type_params;
->   	struct list_head template_value_params;
->   	struct template_parameter_pack *template_parameter_pack;
-> 
-
+Got it, thanks for the clarification !
