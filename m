@@ -1,39 +1,39 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5621C2DECB2
-	for <dwarves@vger.kernel.org>; Tue,  8 Jul 2025 14:09:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E43F2DEA84
+	for <dwarves@vger.kernel.org>; Tue,  8 Jul 2025 14:09:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751983744; cv=none; b=qaApKgqB6iEgdrYkCgM3OeNP/fLll2+cT/fd5MArk6bihVLq2HJ/5DS3AEqm5/bXj40NIixWNkO947UnI39FzZqMYY2ID9xnqAA2IKkOUC+gcjaJzNdGVLGD9ulCPMTxSRrsEvHLN0ZejSmv0MnrUElhNGg5wWc4OxOSp8Nm8/s=
+	t=1751983747; cv=none; b=PPoj6RJXdI6eUUimepQxq+Ft1Nf+dC0pm3g/vyUuiuTKekGr/VscTGzFmbulFXqG5ELhfdwXKH5zZzxcRrH+10DMvnxaPl1nchRPEhFNbpfrylwEPa2B8pJOgPkxNmmSLzN/7PfQCui1b1Zltmd878C3nl+Isjs9w1lbX1y3EIk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751983744; c=relaxed/simple;
-	bh=0geH4ukuZFm1rA3WPuEDc7bUJuKdfItbr1h4UFPOwRs=;
+	s=arc-20240116; t=1751983747; c=relaxed/simple;
+	bh=Q6LvWkYTJB4bL2q+7t4u7yJ42e3NqQ4uLusSAVKV3P8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=u8ZiJjVVihrJk3/63zeZCXmG7UFxV4XYn/5P9G5fkCX/E5AFV6w5DPuRKCLJJd8T+SuNezzX+7TcW+XTaD6G90pBaRmO7Ha2Uhf6q3U/cfaWcqoGL1CkuhGij8ZdRn5PXB9UAnZK0fJMLpKkxm4hcx6SFQjulVvzby3USoIPtwA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eHvMC8Gq; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=mi6kR7rLVNkhgSNf6r7r0niDOtmX+EuvT9nrUrDi32np66K/3la1CGeL24qRlSh8OSui68JMHtUjfEIdR4FKWR8BgyMjvWjEncr8hedmMKOOo+mmnOlQixu38aYeuik91fjENny16/dlkb9tClT928pLwGc0KemrH1VGU6H9Mjg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HlHN2tQ4; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eHvMC8Gq"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97F63C4CEEF;
-	Tue,  8 Jul 2025 14:09:03 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HlHN2tQ4"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A85D8C4CEED;
+	Tue,  8 Jul 2025 14:09:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751983743;
-	bh=0geH4ukuZFm1rA3WPuEDc7bUJuKdfItbr1h4UFPOwRs=;
+	s=k20201202; t=1751983747;
+	bh=Q6LvWkYTJB4bL2q+7t4u7yJ42e3NqQ4uLusSAVKV3P8=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=eHvMC8Gqt+9huSBm/vrLn6UJL19mOFizjlVekyYppCpqtFnfRBlczj10p7SLNlzSt
-	 GvXD/UaEmAMnqWojvygggTfc5XWfuR54cLryU3E/oJWvmrj89L7CgKQqPS87SuJU1v
-	 HUIakpqwuMpYkCRKqbWyoQu6PCAlqyv/C1ciDQVEKw4cyNFRo82H6zmTbhg2zh0qnf
-	 OUhhZDk60aKoNXJvTCI+gUlsNP8oZNMcuuhmh5yBuPiq5CHrwYIruwMk7LS3MB/da2
-	 2mYSz+y97qOYVjmEVGes6fywTs3P9M1gPKGlPUeeHDpPoYevL1zXMBvJgYqJ+yb0KJ
-	 eAiKwO/p+C9WA==
+	b=HlHN2tQ46fDD960GxUMEa/6Gav3tYh9grSrfKvseEX047DT4sXKBsYRu0SOPSaB4q
+	 6SxWTfC6yR5wvSgcC8sB929t90B23eA1BOBeRz+xumsTZ84DAqI2k5M8Y/C7C1cM04
+	 T81y2VJpLX6jAzCj/uEJ/+mJlWuSwcsDUV/Cv/i8KObGasxU3knbf91/kfPHNHy9uO
+	 CxOY5c1KsbWzZwILUfaSu5HoK5a4WvNQ0UpiXd6qggJF0Mzhu093aNS3s835yfaY/+
+	 ikqXWGM9Y53LDdce4hZEESRHs/jyoPQZhT8Mt6cAnjgHLiS3DnQeaBzvejyZpK78Y7
+	 U0EOimIYIVNmA==
 From: Antoine Tenart <atenart@kernel.org>
 To: dwarves@vger.kernel.org
 Cc: Antoine Tenart <atenart@kernel.org>,
 	pvalerio@redhat.com,
 	alan.maguire@oracle.com
-Subject: [PATCH v2 1/2] btf_loader: infer alignment for zero-length arrays
-Date: Tue,  8 Jul 2025 16:08:54 +0200
-Message-ID: <20250708140856.311717-2-atenart@kernel.org>
+Subject: [PATCH v2 2/2] btf_loader: fix smallest offset in case of bitfields
+Date: Tue,  8 Jul 2025 16:08:55 +0200
+Message-ID: <20250708140856.311717-3-atenart@kernel.org>
 X-Mailer: git-send-email 2.50.0
 In-Reply-To: <20250708140856.311717-1-atenart@kernel.org>
 References: <20250708140856.311717-1-atenart@kernel.org>
@@ -45,77 +45,85 @@ List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Zero sized arrays do not go through the bitfield fixup logic, which in
-turn makes them to skip the alignment infer logic. The result is
-zero-length arrays being incorrectly aligned when an explicit statement
-is needed. E.g. this happens for variable length arrays at end of
-structures, or for 0-length ones.
+In case the member is a bitfield, using pos->byte_size can be misleading
+as it can be larger than the actual size. In such case we could miss an
+actual hole in the struct and not infer the alignment as expected.
 
 Before this patch we can see:
 
-  struct skb_ext {
-	refcount_t                 refcnt;               /*     0     4 */
-	u8                         offset[4];            /*     4     4 */
-	u8                         chunks;               /*     8     1 */
+  $ pahole nf_tables.btf -C nft_rule_dp
+  struct nft_rule_dp {
+  	u64                        is_last:1;            /*     0: 0  8 */
+  	u64                        dlen:12;              /*     0: 1  8 */
+  	u64                        handle:42;            /*     0:13  8 */
 
-	/* XXX 7 bytes hole, try to pack */
+  	/* XXX 9 bits hole, try to pack */
 
-	char                       data[];               /*    16     0 */
+  	unsigned char              data[];               /*     8     0 */
 
-	/* size: 16, cachelines: 1, members: 4 */
-	/* sum members: 9, holes: 1, sum holes: 7 */
-	/* last cacheline: 16 bytes */
-  } __attribute__((__aligned__(8)));
+  	/* size: 8, cachelines: 1, members: 4 */
+  	/* sum bitfield members: 55 bits, bit holes: 1, sum bit holes: 9 bits */
+  	/* last cacheline: 8 bytes */
+  };
 
-  offsetof(struct skb_ext, data) returns 9.
+  offsetof(struct nft_rule_dp, data) returns 7.
+
+Where `data` won't be aligned as expected, as the first member fits on
+the byte left after the bitfield.
 
 After this patch we get:
 
-  struct skb_ext {
-	refcount_t                 refcnt;               /*     0     4 */
-	u8                         offset[4];            /*     4     4 */
-	u8                         chunks;               /*     8     1 */
+  $ pahole nf_tables.btf -C nft_rule_dp
+  struct nft_rule_dp {
+  	u64                        is_last:1;            /*     0: 0  8 */
+  	u64                        dlen:12;              /*     0: 1  8 */
+  	u64                        handle:42;            /*     0:13  8 */
 
-	/* XXX 7 bytes hole, try to pack */
+  	/* XXX 9 bits hole, try to pack */
 
-	char                       data[] __attribute__((__aligned__(8))); /*    16     0 */
+  	unsigned char              data[] __attribute__((__aligned__(2))); /*     8     0 */
 
-	/* size: 16, cachelines: 1, members: 4 */
-	/* sum members: 9, holes: 1, sum holes: 7 */
-	/* forced alignments: 1, forced holes: 1, sum forced holes: 7 */
-	/* last cacheline: 16 bytes */
-  } __attribute__((__aligned__(8)));
+  	/* size: 8, cachelines: 1, members: 4 */
+  	/* sum bitfield members: 55 bits, bit holes: 1, sum bit holes: 9 bits */
+  	/* forced alignments: 1 */
+  	/* last cacheline: 8 bytes */
+  };
 
-  offsetof(struct skb_ext, data) returns 16.
+  offsetof(struct nft_rule_dp, data) returns 8.
+
+Thanks to Paolo Valerio for helping, including narrowing down where the
+issue was (BTF decoder).
 
 Reviewed-by: Alan Maguire <alan.maguire@oracle.com>
 Signed-off-by: Antoine Tenart <atenart@kernel.org>
 ---
- btf_loader.c | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+ btf_loader.c | 13 ++++++++++++-
+ 1 file changed, 12 insertions(+), 1 deletion(-)
 
 diff --git a/btf_loader.c b/btf_loader.c
-index f4f9f65289b5..6e345ec2442a 100644
+index 6e345ec2442a..64ea68022ab0 100644
 --- a/btf_loader.c
 +++ b/btf_loader.c
-@@ -645,9 +645,15 @@ static int class__fixup_btf_bitfields(const struct conf_load *conf, struct tag *
- 		pos->byte_size = tag__size(type, cu);
- 		pos->bit_size = pos->byte_size * 8;
- 
--		/* if BTF data is incorrect and has size == 0, skip field,
--		 * instead of crashing */
-+		/* If the BTF data is incorrect and has size == 0, skip field
-+		 * instead of crashing. However the field can be a zero or
-+		 * variable-length array and we still need to infer alignment.
+@@ -678,7 +678,18 @@ static int class__fixup_btf_bitfields(const struct conf_load *conf, struct tag *
+ 							pos->byte_offset,
+ 							tag__natural_alignment(type, cu),
+ 							smallest_offset);
+-		smallest_offset = pos->byte_offset + pos->byte_size;
++
++		/* Compute the smallest offset between this field and the next
++		 * one.
++		 *
++		 * In case of bitfields we need to take into account the
++		 * actual size being used instead of the underlying type one as
++		 * it could be larger, otherwise we could miss a hole.
 +		 */
- 		if (pos->byte_size == 0) {
-+			pos->alignment = class__infer_alignment(conf,
-+								pos->byte_offset,
-+								tag__natural_alignment(type, cu),
-+								smallest_offset);
- 			continue;
- 		}
++		smallest_offset = pos->byte_offset;
++		smallest_offset += pos->bitfield_size ?
++			(pos->bitfield_offset + pos->bitfield_size + 7) / 8 :
++			pos->byte_size;
+ 	}
  
+ 	tag_type->alignment = class__infer_alignment(conf,
 -- 
 2.50.0
 
