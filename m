@@ -1,137 +1,237 @@
-Received: from out-174.mta1.migadu.com (out-174.mta1.migadu.com [95.215.58.174])
+Received: from relay16.mail.gandi.net (relay16.mail.gandi.net [217.70.178.236])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11D727405A
-	for <dwarves@vger.kernel.org>; Wed, 16 Jul 2025 00:35:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCC4128A1C8
+	for <dwarves@vger.kernel.org>; Wed, 16 Jul 2025 09:08:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.178.236
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752626110; cv=none; b=SOFGrFdYCeCwDNzwPBfS6aeJt3veiGAl8EvsoDna2wn6mU5dmMwJdQmQWwJS4QZtrHSnUoROQEZJlCihlREox9GYNLHi0DbHU+bHavi0ghkQI4kizHZ7e61wGRch7Dxk1rFfokUJshgFCiegwqAyn7vpo7R+0tvYfZQf+NDKvb4=
+	t=1752656883; cv=none; b=R4r2rQChsWBUy7/yAFCUBT5Q/ZbHkKzmjYXKJtrt9NjzyZs8OLj/stIfUUK48uSJskEkKfX8skf4JFA1s3vM43690URwNVrjwruYsKyguT79UWNGTelXYk7Ncxj9t0UtsvvwrZcMX70b0BDYUa8UlG87kA5LDSxEsdjgbFh8edI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752626110; c=relaxed/simple;
-	bh=i5xnGWA6aCOVM8PL1UzdxhSqBxC8EVTH3Wk/P4IcK04=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=q+XE5HvxxDq8s5Eih2xtVcPPmfyDmPLAolhpRvfs3Pgo0H2WO4cd0d236koRTGWHDQELslDKpDyOo4ySxLX18a+HndG2QbTFz7e/SmG66qB4ZH2/NjfE2TInoYPWsHnuGy9d3xM1PX3Zqf5vklmZcssvXBhfeaBEgPSKdaNRQqs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=J5USGr9e; arc=none smtp.client-ip=95.215.58.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1752656883; c=relaxed/simple;
+	bh=HjJiZp1zDuf/7/OZMxr1R2hc+xKRIQl6wY/HZgYkSDk=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=Cu7ZBmDJ9vrz5Vv0Ffn3XRrUQNtnRBC0UAJwIe+mIJ/vrZIncFI8u6qikbN5ZwCzZTlWIszqfRHLvuycHD3z0SRQMh8ZxbSG4RBxfwgXNhpClSyDP0EiRRdqG/uun+OgeUFAS2vmQVqUNgSdhEaFv1EiRzHktg3YrOA1jpJSdaE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=a1mqfUQT; arc=none smtp.client-ip=217.70.178.236
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="J5USGr9e"
-Message-ID: <b40a13d8-0fc9-44bd-a0c7-e656d0a14819@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1752626105;
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="a1mqfUQT"
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 2AD0843896;
+	Wed, 16 Jul 2025 09:07:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1752656872;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=jmliiU+uUkJ+3G40FReJrT5cdViv5DUGUpPp55i8RQI=;
-	b=J5USGr9ea86oqdEBAjgMFTAaHxtIwu3z/wEMXyPBb4sVlLWjN+dlPRrWGZsKowFKBnF0bb
-	q9PEENu5q10j7pE8kW/9sg0VRgmhdglow6lCXqJiNurmifDQQn4D3hxHZh/ma6hnSfTbBI
-	h7UHO8sx4Q49/mwAnGkjVO1nQP+AA7U=
-Date: Tue, 15 Jul 2025 17:34:59 -0700
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=PtdmW5pd8gySUFwg053b6FakSc6F/jwGLa6JKxIJueU=;
+	b=a1mqfUQTqMMQ7m3xL90vBDDH0i21NqZp7krkEujY0qMarpBwxBSLTRdZCSYHJtcEgHM7L7
+	DrUykiZ/Bs/B/0AVvxc5UgKK+l/uSpjJGCLRENaWqjrPZeKN5xZDE/zzqOJ5BrV+qXrRNP
+	5FWY3+ElJf+XDYikJ3TFSnYk1bYs1yB4p8SOtuLDV/Gq2trhWw/7Z28dVnOULhyFGCXv+5
+	JlbPVk7xRgfTSNynp1nKmhdahOmWT2+Lk5mN4RJZX3rEweD+x6PHegDIzMfHPGwVbVJzwh
+	JGqMkIsg4rRVsQQ9iqF6/ClJbwV+vU3WZYKcapG1Pqo7pL2qNTEZ2U+imAWudA==
+From: =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
+Date: Wed, 16 Jul 2025 11:04:31 +0200
+Subject: [PATCH] pahole: do not return an error when printing only a
+ specific class
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v2 17/18] selftests/bpf: add basic testcases for
- tracing_multi
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Menglong Dong <menglong8.dong@gmail.com>,
- Alan Maguire <alan.maguire@oracle.com>, Jiri Olsa <jolsa@kernel.org>,
- bpf <bpf@vger.kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Andrii Nakryiko <andrii@kernel.org>,
- Arnaldo Carvalho de Melo <acme@kernel.org>, dwarves <dwarves@vger.kernel.org>
-References: <20250703121521.1874196-1-dongml2@chinatelecom.cn>
- <20250703121521.1874196-18-dongml2@chinatelecom.cn>
- <CAADnVQKxgrXZ3ATO4rdC9GcTtXvURpKR8XcGCdCa_qPh4RGFrQ@mail.gmail.com>
- <9771eaa3-413a-4ab0-b7e1-d6a6f326c43f@linux.dev>
- <3dfbc97c-5721-4bd7-9443-ce57d7ba592c@linux.dev>
- <CAADnVQK-06d8E85aJ-=K+Af+a8_MSNJFiBqjpXYs4+adiTuwvw@mail.gmail.com>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
-In-Reply-To: <CAADnVQK-06d8E85aJ-=K+Af+a8_MSNJFiBqjpXYs4+adiTuwvw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Message-Id: <20250716-lsk__abort-v1-1-586f31a9d97d@bootlin.com>
+X-B4-Tracking: v=1; b=H4sIAB5rd2gC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDI1MDc0Mz3Zzi7Pj4xKT8ohJdoyRTQ3MLM4PENCMLJaCGgqLUtMwKsGHRsbW
+ 1AKRpb2hcAAAA
+X-Change-ID: 20250716-lsk__abort-2b517860af28
+To: dwarves@vger.kernel.org
+Cc: Ihor Solodrai <ihor.solodrai@linux.dev>, 
+ Alan Maguire <alan.maguire@oracle.com>, 
+ Arnaldo Carvalho de Melo <acme@redhat.com>, ebpf@linuxfoundation.org, 
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
+ Bastien Curutchet <bastien.curutchet@bootlin.com>, 
+ =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
+X-Mailer: b4 0.14.2
+X-GND-State: clean
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdehjeeftdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephfffufggtgfgkffvvefosehtkeertdertdejnecuhfhrohhmpeetlhgvgihishcunfhothhhohhrroculdgvuefrhfcuhfhouhhnuggrthhiohhnmdcuoegrlhgvgihishdrlhhothhhohhrvgessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepjefghfeiudduffetfeehueduffdtteeigeehvdeludetueffvedvfedttdekieevnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghdpsghoohhtlhhinhdrtghomhenucfkphepvdgrtddvmeekgedvkeemfhelgegtmegvtddtmeemfhekheenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtvdemkeegvdekmehfleegtgemvgdttdemmehfkeehpdhhvghloheplgduledvrdduieekrddurdduleejngdpmhgrihhlfhhrohhmpegrlhgvgihishdrlhhothhhohhrvgessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepkedprhgtphhtthhopegsrghsthhivghnrdgtuhhruhhttghhvghtsegsohhothhlihhnrdgtohhmpdhrtghpthhtoheprghlvgigihhsrdhlohhthhhorhgvsegsohhothhlihhnrdgtohhmpdhrtghpt
+ hhtohepthhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmpdhrtghpthhtoheprggtmhgvsehrvgguhhgrthdrtghomhdprhgtphhtthhopegrlhgrnhdrmhgrghhuihhrvgesohhrrggtlhgvrdgtohhmpdhrtghpthhtohepugifrghrvhgvshesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopegvsghpfheslhhinhhugihfohhunhgurghtihhonhdrohhrghdprhgtphhtthhopehihhhorhdrshholhhoughrrghisehlihhnuhigrdguvghv
 
-On 7/15/25 5:31 PM, Alexei Starovoitov wrote:
-> On Tue, Jul 15, 2025 at 5:27 PM Ihor Solodrai <ihor.solodrai@linux.dev> wrote:
->>
->> On 7/14/25 4:49 PM, Ihor Solodrai wrote:
->>> On 7/8/25 1:07 PM, Alexei Starovoitov wrote:
->>>> On Thu, Jul 3, 2025 at 5:18 AM Menglong Dong
->>>> <menglong8.dong@gmail.com> wrote:
->>>>>
->>>>> +               return true;
->>>>> +
->>>>> +       /* Following symbols have multi definition in kallsyms, take
->>>>> +        * "t_next" for example:
->>>>> +        *
->>>>> +        *     ffffffff813c10d0 t t_next
->>>>> +        *     ffffffff813d31b0 t t_next
->>>>> +        *     ffffffff813e06b0 t t_next
->>>>> +        *     ffffffff813eb360 t t_next
->>>>> +        *     ffffffff81613360 t t_next
->>>>> +        *
->>>>> +        * but only one of them have corresponding mrecord:
->>>>> +        *     ffffffff81613364 t_next
->>>>> +        *
->>>>> +        * The kernel search the target function address by the symbol
->>>>> +        * name "t_next" with kallsyms_lookup_name() during attaching
->>>>> +        * and the function "0xffffffff813c10d0" can be matched, which
->>>>> +        * doesn't have a corresponding mrecord. And this will make
->>>>> +        * the attach failing. Skip the functions like this.
->>>>> +        *
->>>>> +        * The list maybe not whole, so we still can fail......We need a
->>>>> +        * way to make the whole things right. Yes, we need fix it :/
->>>>> +        */
->>>>> +       if (!strcmp(name, "kill_pid_usb_asyncio"))
->>>>> +               return true;
->>>>> +       if (!strcmp(name, "t_next"))
->>>>> +               return true;
->>>>> +       if (!strcmp(name, "t_stop"))
->>>>> +               return true;
->>
->> This little patch will filter out from BTF any static functions with
->> the same name that appear more than once.
->>
->> diff --git a/btf_encoder.c b/btf_encoder.c
->> index 0bc2334..6441269 100644
->> --- a/btf_encoder.c
->> +++ b/btf_encoder.c
->> @@ -96,7 +96,8 @@ struct elf_function {
->>           const char      *name;
->>           char            *alias;
->>           size_t          prefixlen;
->> -       bool            kfunc;
->> +       uint8_t         is_static:1;
->> +       uint8_t         kfunc:1;
->>           uint32_t        kfunc_flags;
->>    };
->>
->> @@ -1374,7 +1375,7 @@ static int saved_functions_combine(struct
->> btf_encoder_func_state *a, struct btf_
->>                   return ret;
->>           optimized = a->optimized_parms | b->optimized_parms;
->>           unexpected = a->unexpected_reg | b->unexpected_reg;
->> -       inconsistent = a->inconsistent_proto | b->inconsistent_proto;
->> +       inconsistent = a->inconsistent_proto | b->inconsistent_proto |
->> a->elf->is_static | b->elf->is_static;
->>           if (!unexpected && !inconsistent && !funcs__match(a, b))
->>                   inconsistent = 1;
->>           a->optimized_parms = b->optimized_parms = optimized;
->> @@ -1461,6 +1462,8 @@ static void elf_functions__collect_function(struct
->> elf_functions *functions, GEl
->>
->>           func = &functions->entries[functions->cnt];
->>           func->name = name;
->> +       func->is_static = elf_sym__bind(sym) == STB_LOCAL;
->> +
-> 
-> Hmm. We definitely don't want to filter out all static functions.
-> That's too drastic.
+When trying to print a specific class layout with recent pahole
+versions, we get an error right after the expected class print:
 
-Not all static functions. Only those that match by name.
+  $ ./build/pahole -C test_bin_struct_packed -F dwarf tests/bin/test_bin
+  struct test_bin_struct_packed {
+          char                       a;                    /*     0     1 */
+          short int                  b;                    /*     1     2 */
+          int                        c;                    /*     3     4 */
+          long long unsigned int     d;                    /*     7     8 */
+
+          /* size: 15, cachelines: 1, members: 4 */
+          /* last cacheline: 15 bytes */
+  } __attribute__((__packed__));
+
+  pahole: /home/alexis/src/pahole/tests/bin/test_bin: Invalid argument
+
+This error is due to pahole_stealer returning LSK__STOP_LOADING when
+dealing with a single class and when it is done. This LSK__STOP_LOADING
+is then propagated to dwarf_loader__worker_thread and interpreted as an
+error (and turned into a DWARF_CB_ABORT). The main issue is that this
+LSK__STOP_LOADING value is sometimes generated by actual issues during
+pahole stealing, sometimes by "nominal" execution.
+
+Add a new LSK__ABORT status to distinguish between those nominal and
+faulty cases. Return an error only when pahole_stealer returns
+LSK__ABORT.
+
+Signed-off-by: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
+---
+See [1] for original discussions about the issue
+
+[1] https://lore.kernel.org/dwarves/DB5VWHU0N27I.3ETC4G47KB9Q@bootlin.com/
+---
+ dwarf_loader.c |  6 ++++--
+ dwarves.h      |  1 +
+ pahole.c       | 21 +++++++++++----------
+ 3 files changed, 16 insertions(+), 12 deletions(-)
+
+diff --git a/dwarf_loader.c b/dwarf_loader.c
+index ef00cdf308166732fc0938f2eecd56d314d3354f..4e1e19c9d828e111d78012feda4c8baa0d716378 100644
+--- a/dwarf_loader.c
++++ b/dwarf_loader.c
+@@ -3277,6 +3277,8 @@ static int cus__steal_now(struct cus *cus, struct cu *cu, struct conf_load *conf
+ 		break;
+ 	case LSK__KEEPIT:
+ 		break;
++	case LSK__ABORT:
++		break;
+ 	}
+ 	return lsk;
+ }
+@@ -3679,7 +3681,7 @@ static void *dwarf_loader__worker_thread(void *arg)
+ 			break;
+ 
+ 		case JOB_STEAL:
+-			if (cus__steal_now(dcus->cus, job->cu, dcus->conf) == LSK__STOP_LOADING)
++			if (cus__steal_now(dcus->cus, job->cu, dcus->conf) == LSK__ABORT)
+ 				goto out_abort;
+ 			cus_queue__inc_next_cu_id();
+ 			/* re-enqueue JOB_DECODE so that next CU is decoded from DWARF */
+@@ -3872,7 +3874,7 @@ static int cus__merge_and_process_cu(struct cus *cus, struct conf_load *conf,
+ 		goto out_abort;
+ 
+ 	cu__finalize(cu, cus, conf);
+-	if (cus__steal_now(cus, cu, conf) == LSK__STOP_LOADING)
++	if (cus__steal_now(cus, cu, conf) == LSK__ABORT)
+ 		goto out_abort;
+ 
+ 	return 0;
+diff --git a/dwarves.h b/dwarves.h
+index 883852f4b60a36d73bce4568cbacd8ef3cff97ea..5df1cdad9be36212bd6548e86180860daffa3f63 100644
+--- a/dwarves.h
++++ b/dwarves.h
+@@ -43,6 +43,7 @@ enum load_steal_kind {
+ 	LSK__KEEPIT,
+ 	LSK__DELETE,
+ 	LSK__STOP_LOADING,
++	LSK__ABORT,
+ };
+ 
+ /*
+diff --git a/pahole.c b/pahole.c
+index 333e71ab65924d2c64771be7d40f768f02e9a0f0..66448fc430c19e5137a8467026d35d2ba3125e4c 100644
+--- a/pahole.c
++++ b/pahole.c
+@@ -3165,13 +3165,13 @@ static enum load_steal_kind pahole_stealer__btf_encode(struct cu *cu, struct con
+ 
+ 	if (!btf_encoder) {
+ 		fprintf(stderr, "Error creating BTF encoder.\n");
+-		return LSK__STOP_LOADING;
++		return LSK__ABORT;
+ 	}
+ 
+ 	err = btf_encoder__encode_cu(btf_encoder, cu, conf_load);
+ 	if (err < 0) {
+ 		fprintf(stderr, "Error while encoding BTF.\n");
+-		return LSK__STOP_LOADING;
++		return LSK__ABORT;
+ 	}
+ 
+ 	return LSK__DELETE;
+@@ -3230,7 +3230,7 @@ static enum load_steal_kind pahole_stealer(struct cu *cu, struct conf_load *conf
+ 		 *
+ 		 * FIXME: Disabled, should use Oracle's libctf
+ 		 */
+-		goto dump_and_stop;
++		goto dump_and_abort;
+ 	}
+ #endif
+ 	if (class_name == NULL) {
+@@ -3281,7 +3281,7 @@ static enum load_steal_kind pahole_stealer(struct cu *cu, struct conf_load *conf
+ 
+ 		if (prototype->nr_args != 0 && !tag__is_struct(class)) {
+ 			fprintf(stderr, "pahole: attributes are only supported with 'class' and 'struct' types\n");
+-			goto dump_and_stop;
++			goto dump_and_abort;
+ 		}
+ 
+ 		struct type *type = tag__type(class);
+@@ -3291,7 +3291,7 @@ static enum load_steal_kind pahole_stealer(struct cu *cu, struct conf_load *conf
+ 			if (type->sizeof_member == NULL) {
+ 				fprintf(stderr, "pahole: the sizeof member '%s' wasn't found in the '%s' type\n",
+ 					prototype->size, prototype->name);
+-				goto dump_and_stop;
++				goto dump_and_abort;
+ 			}
+ 		}
+ 
+@@ -3300,7 +3300,7 @@ static enum load_steal_kind pahole_stealer(struct cu *cu, struct conf_load *conf
+ 			if (type->type_member == NULL) {
+ 				fprintf(stderr, "pahole: the type member '%s' wasn't found in the '%s' type\n",
+ 					prototype->type, prototype->name);
+-				goto dump_and_stop;
++				goto dump_and_abort;
+ 			}
+ 		}
+ 
+@@ -3315,7 +3315,7 @@ static enum load_steal_kind pahole_stealer(struct cu *cu, struct conf_load *conf
+ 			if (type->filter == NULL) {
+ 				fprintf(stderr, "pahole: invalid filter '%s' for '%s'\n",
+ 					prototype->filter, prototype->name);
+-				goto dump_and_stop;
++				goto dump_and_abort;
+ 			}
+ 		}
+ 
+@@ -3386,15 +3386,16 @@ static enum load_steal_kind pahole_stealer(struct cu *cu, struct conf_load *conf
+ 	/*
+ 	 * If we found all the entries in --class_name, stop
+ 	 */
+-	if (list_empty(&class_names)) {
+-dump_and_stop:
++	if (list_empty(&class_names))
+ 		ret = LSK__STOP_LOADING;
+-	}
+ dump_it:
+ 	if (first_obj_only)
+ 		ret = LSK__STOP_LOADING;
+ filter_it:
+ 	return ret;
++dump_and_abort:
++	ret = LSK__ABORT;
++	return ret;
+ }
+ 
+ static int prototypes__add(struct list_head *prototypes, const char *entry)
+
+---
+base-commit: 9845339bd09f9889dd741ed94f71eb92008dcdfc
+change-id: 20250716-lsk__abort-2b517860af28
+
+Best regards,
+-- 
+Alexis Lothoré, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
