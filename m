@@ -1,224 +1,144 @@
-Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-177.mta1.migadu.com (out-177.mta1.migadu.com [95.215.58.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE5ED2AD3E;
-	Wed, 23 Jul 2025 11:22:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C60F21F5838
+	for <dwarves@vger.kernel.org>; Wed, 23 Jul 2025 15:37:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753269730; cv=none; b=OI7/Jr/Lgk/r4sgdu5Ew6gfCb1Wb9rk0KyHVpll7Bzitjkqi0ir0YziY8PIGcdWmCa1WUs4YnIkPvUAwRGoTy92iofpARYQDHRRAelrL7rC2QfIkAFlJmK0YSDAcQwsD8ULZzL5NV8iMNNSgBMbhCBEjwdGBPhDhDr2bTZMVVDU=
+	t=1753285047; cv=none; b=nB2UIBnCBNprYg96XDwFtISHesORUxwJ8bZtN5MuK5m3zSoZHwXo8l0e/JJTMoi96EG4Nwi+hxCYlTK7JT78Ha06YTbG6u0VhQH9hXSZJ70xSuUL5M9SNAgyoLVWucG0b8xO99lH2nX9TPYYo40ekzZdFp+l4AQCSSpf+VluJf8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753269730; c=relaxed/simple;
-	bh=pxJ3pJd7nzPXoMJ6kq+2LBi2Mm/j1NrfF45b/CR9ArU=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NFmrW7SIqDs1UIs+V3vBCiHjj7Do/dYfVHXXcl1fIofnRmrwCGFTx2DkWoT7s8SdqmLA735bk5sRkfvigDc6MIaA8wgxbD0AnlU1EohuXWfKs9+72Ch+RDffOZMMU9Y8xTD/HQIrzYx/VTdeVYIOOTHa08Xc8jlgjlSEesmde/c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WM4Pbaa3; arc=none smtp.client-ip=209.85.218.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1753285047; c=relaxed/simple;
+	bh=YDM1oCy3bU7iq8A4WnduLbhL4wu1njeoeDRAHpE30lY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=n0K54SycSCAY5undravIxKZX9jS0yv4oG2K+4ey5WJaw/4+5okmXt2soAU1ONj73M1CZGJRaTgaJBRP+VWLYk5+p8fAAFsnDQjzLfANikwuVl330cN0HjjP39d6dxFjtZC5m1Jb3V0qQYz9Cmxj0nYQfo7FA7T8A0qU4X9mMT8s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Zv58LPeP; arc=none smtp.client-ip=95.215.58.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WM4Pbaa3"
-Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-ae0c4945c76so890790466b.3;
-        Wed, 23 Jul 2025 04:22:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1753269727; x=1753874527; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=WtqF6SYf/sU431PoBbxz3xgk14uzAc5hlJpUljy3fLY=;
-        b=WM4Pbaa3PQ9Hcjhvs41YgtTMZFqy86UqygG/S8PVCCkBFEI+fvxbwyyzer07DFS8am
-         xz7OSRcsubj57wpFte/jR+7foT74s13WNF3Gf2Bu7ZpwYTji6vImpCHwbVU5Ofl4FJDh
-         WTL7n1l8pZjvBgBqQ9ptEWM9H7hJr47PxYLqk3wxXI6Ryr5gi1xaKWj7O2Q87tUHWj5p
-         v5qfPgqWTuLZvAZAD3mG43CYetE9l58D9TtsdFndQYFwz9a03H5qmCO22Yg/iGga0nS/
-         Y3zVWmWkYRKGlKhiNiyKCweIp+toxzNqAR/HxCF2JLiZMqMR5RCCe6pELNe3DPIr7cJd
-         90hg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753269727; x=1753874527;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WtqF6SYf/sU431PoBbxz3xgk14uzAc5hlJpUljy3fLY=;
-        b=goFaiB/ypZhQiVCjnZQ9K3ZFigV1ck20k4rITOKlqSH39bAqWfKn+Y/eofoXzhme7S
-         xjMGSPWzWYnF4E+/MJAk+PZbJ5IAH6JWWx55+hc8qf/LT9dYHO4IXyeHJNAwPckb8Y9Z
-         8mKmjxbC+rQZYQ7XSJDEdxYE+8ZAshUt+mWfhmBvfQPhazTTq16DsixwOi/CcTJSGZTl
-         sPeFVxdI44u8PblnjHbZLHAANXLYL6L0jDS//P3SYnZXHkF0qOrx6gKMNypGzyAQIKZV
-         FwFG0Lp6KBrL29cqroRb60V5apkoVHEoW2hXkaRGzH+8Ywu+qTgZQriMg1nGHEWhFzHp
-         ub4A==
-X-Forwarded-Encrypted: i=1; AJvYcCV1mg2sx8fiU18q8GkJ4oxjf9FACeAKJYV49FmLtYQagH+2GLsXwp+ITH09n9WVU+ixaac=@vger.kernel.org, AJvYcCXEfHkgc6RkKoW5Xsd6alVVlEp80Pa4x/CZMQJTamz30YKtrcGmMPUUcbQe4V2CUTch3OARm+D/4Q==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzxkcEXWnjQNTFFDZ7Cs+qJEw6dCv6vJHNmUbKO3HLGSH2yq7Tv
-	1tClTriJNeQSRsbjgA/C1mQqX//abE9W57d3GRzKZagThFAZtEDeRuJr
-X-Gm-Gg: ASbGncsgOHpdZYcythaiebgD2hFTMwFqY9moM4d6WdFdy/FAr8BlzpNf5KOJ5OppyvI
-	POZR99leSx82wQ2fZFilex9lGMgmwTiqjgsBUr25TY3QXKL27eRCcLJiq1cPEapcBxcR8Bn009G
-	EpWYYue1SkY3XUJRa07Xus3+TYGenCDOXrElOOjufOES/flttCIUYlbC7pnnTWs1nx1qtPbuXxE
-	WaNj+v23+qc6GDu4HEXFI74qmBKKPFNG7cWmb957ixNDKjdBQz3nc6apQusnp75bY6xnvaWUaGl
-	vqoZYJ2RqCCUROfwjlb1hS9ACrCfqSi4aaK/IxO1G8pH8zzuXsvoULA3Bkq8RTFClbB9pL0P/E3
-	KrpziTLQY
-X-Google-Smtp-Source: AGHT+IH2hxV8D2GnQvgDqBUYoY4mbnfRLLmUtkCNUKWCdmmYIe1SpTqOYKlK2EbvWcfpzJmk+xWlfQ==
-X-Received: by 2002:a17:907:3d0f:b0:ae3:696c:60a with SMTP id a640c23a62f3a-af2f66c5e04mr207505866b.8.1753269726359;
-        Wed, 23 Jul 2025 04:22:06 -0700 (PDT)
-Received: from krava ([173.38.220.33])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aec6ca2ffecsm1031723266b.82.2025.07.23.04.22.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Jul 2025 04:22:05 -0700 (PDT)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Wed, 23 Jul 2025 13:22:03 +0200
-To: Ihor Solodrai <ihor.solodrai@linux.dev>
-Cc: Alan Maguire <alan.maguire@oracle.com>, Jiri Olsa <olsajiri@gmail.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Menglong Dong <menglong8.dong@gmail.com>, dwarves@vger.kernel.org,
-	bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andriin@fb.com>, Yonghong Song <yhs@fb.com>,
-	Song Liu <songliubraving@fb.com>,
-	Eduard Zingerman <eddyz87@gmail.com>
-Subject: Re: [RFC dwarves] btf_encoder: Remove duplicates from functions
- entries
-Message-ID: <aIDFh26qdAURVL0u@krava>
-References: <20250717152512.488022-1-jolsa@kernel.org>
- <e4fece83-8267-4929-b1aa-65a9e2882dd8@oracle.com>
- <aH5OW0rtSuMn1st1@krava>
- <6b4fda90fbf8f6aeeb2732bbfb6e81ba5669e2f3@linux.dev>
- <e88caa24-6bfa-457c-8e88-d00ed775ebd1@oracle.com>
- <98f41eaf6dd364745013650d58c5f254a592221c@linux.dev>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Zv58LPeP"
+Message-ID: <83f3a344-3d7d-44cb-af3c-2029abb0ebe3@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1753285042;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=yeWtFjcDnzL7cIRw9IbQlD+ZQIQMIFdH3i7YI9c1RMI=;
+	b=Zv58LPePkp/P15o/zoarto71I/YYw0RMyDWZL8DmiypivDZ0oJh7tkD5M8/ybOtoyBSo4K
+	d4BbFpsUdJuq9Lzfq8ykCuXg7EqYuws/OphXdfTnv3zWER2LAHDfym9PdLUbBj1yQ4QXgC
+	N234XltMWAEGsKcPh2up50Fyc/NAZY8=
+Date: Wed, 23 Jul 2025 08:37:17 -0700
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <98f41eaf6dd364745013650d58c5f254a592221c@linux.dev>
+Subject: Re: [PATCH] pahole: do not return an error when printing only a
+ specific class
+To: Alan Maguire <alan.maguire@oracle.com>,
+ =?UTF-8?Q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>,
+ dwarves@vger.kernel.org
+Cc: Arnaldo Carvalho de Melo <acme@redhat.com>, ebpf@linuxfoundation.org,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Bastien Curutchet <bastien.curutchet@bootlin.com>
+References: <20250716-lsk__abort-v1-1-586f31a9d97d@bootlin.com>
+ <e1afba7b-93f9-4ed3-9cd5-ef4ff4bebb70@linux.dev>
+ <DBJASAZ3SGNN.364AZ1P0QK6G6@bootlin.com>
+ <b8eee8a2-943d-4724-b9b4-f4816b8aea85@oracle.com>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Ihor Solodrai <ihor.solodrai@linux.dev>
+In-Reply-To: <b8eee8a2-943d-4724-b9b4-f4816b8aea85@oracle.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Tue, Jul 22, 2025 at 10:58:52PM +0000, Ihor Solodrai wrote:
+On 7/23/25 3:03 AM, Alan Maguire wrote:
+> On 23/07/2025 09:39, Alexis Lothoré wrote:
+>> Hi Ihor,
+>>
+>> On Wed Jul 23, 2025 at 1:42 AM CEST, Ihor Solodrai wrote:
+>>> On 7/16/25 2:04 AM, Alexis Lothoré (eBPF Foundation) wrote:
+>>
+>> [...]
+>>
+>>>>    	cu__finalize(cu, cus, conf);
+>>>> -	if (cus__steal_now(cus, cu, conf) == LSK__STOP_LOADING)
+>>>> +	if (cus__steal_now(cus, cu, conf) == LSK__ABORT)
+>>>>    		goto out_abort;
+>>>
+>>> I think we should handle both LSK__STOP_LOADING and LSK__ABORT here,
+>>> otherwise the worker will keep loading DWARF (which is most of the
+>>> pahole's work) and passing cu-s to the stealer function.
+>>>
+>>> I guess in many cases it'll complete without errors, but it's just
+>>> unnecessary work.
+>>>
+>>> Maybe add a check for LSK__STOP_LOADING here with goto_ok?
+>>
+>> Hmmm, I am not sure how to follow you here. Even if cus__steal_now returns
+>> LSK__STOP_LOADING, I need to return DWARF_CB_OK from
+>> cus__merge_and_process_cu, otherwise it will be processed as an error
+>> again. Or are you suggesting just make sure to delete current cu but still
+>> return DWARF_CB_OK when getting LSK__STOP_LOADING, as done below ?
 
-SNIP
+LSK__STOP_LOADING signals that no more input needs to be processed.
 
-> @@ -1338,48 +1381,39 @@ static int32_t btf_encoder__add_func(struct btf_encoder *encoder,
->  	return 0;
->  }
->  
-> -static int functions_cmp(const void *_a, const void *_b)
-> +static int elf_function__name_cmp(const void *_a, const void *_b)
->  {
->  	const struct elf_function *a = _a;
->  	const struct elf_function *b = _b;
->  
-> -	/* if search key allows prefix match, verify target has matching
-> -	 * prefix len and prefix matches.
-> -	 */
-> -	if (a->prefixlen && a->prefixlen == b->prefixlen)
-> -		return strncmp(a->name, b->name, b->prefixlen);
+So I was thinking we should make sure the workers terminate without
+error and return DWARF_CB_OK. Whether we delete a cu or not is not
+that important since we are exiting soon anyway.
 
-nice to see this one removed ;-)
+>>
+>> --- a/dwarf_loader.c
+>> +++ b/dwarf_loader.c
+>> @@ -3796,6 +3796,7 @@ static int cus__merge_and_process_cu(struct cus *cus, struct conf_load *conf,
+>>          Dwarf_Off off = 0, noff;
+>>          struct cu *cu = NULL;
+>>          size_t cuhl;
+>> +       int res;
+>>
+>>          while (dwarf_nextcu(dw, off, &noff, &cuhl, NULL, &pointer_size,
+>>                              &offset_size) == 0) {
+>> @@ -3874,7 +3875,8 @@ static int cus__merge_and_process_cu(struct cus *cus, struct conf_load *conf,
+>>                  goto out_abort;
+>>
+>>          cu__finalize(cu, cus, conf);
+>> -       if (cus__steal_now(cus, cu, conf) == LSK__ABORT)
+>> +       res = cus__steal_now(cus, cu, conf);
+>> +       if (res == LSK__STOP_LOADING || res == LSK__ABORT)
+>>                  goto out_abort;
+>>
+>>          return 0;
+>> @@ -3882,7 +3884,7 @@ static int cus__merge_and_process_cu(struct cus *cus, struct conf_load *conf,
+>>   out_abort:
+>>          dwarf_cu__delete(cu);
+>>          cu__delete(cu);
+>> -       return DWARF_CB_ABORT;
+>> +       return res == LSK__STOP_LOADING ? DWARF_CB_OK : DWARF_CB_ABORT;
+>>   }
+>>
+>>
+>> Thanks,
+>>
+>> Alexis
+>>
+>>
+> 
+> Good point; I think ideally we'd like to stop processing in either case
+> but still distinguish error from early exit. We could perhaps set the
+> appropriate LSK_ value in dcus (dcus->lsk_status?) to make the
+> distinction and use it in cus__load_module(), renaming out_error in
+> dwarf_cus__process_cu()  to out_early or something to underline the fact
+> that it's an early exit not necessarily a failure. So we preserve the
+> return of CB_ABORT for both failure and early exit, but can still tell
+> these apart using dcus->lsk_status. Would that work?
 
->  	return strcmp(a->name, b->name);
->  }
->  
-> -#ifndef max
-> -#define max(x, y) ((x) < (y) ? (y) : (x))
-> -#endif
-> -
->  static int saved_functions_cmp(const void *_a, const void *_b)
->  {
->  	const struct btf_encoder_func_state *a = _a;
->  	const struct btf_encoder_func_state *b = _b;
->  
-> -	return functions_cmp(a->elf, b->elf);
-> +	return elf_function__name_cmp(a->elf, b->elf);
->  }
->  
->  static int saved_functions_combine(struct btf_encoder_func_state *a, struct btf_encoder_func_state *b)
->  {
-> -	uint8_t optimized, unexpected, inconsistent;
-> -	int ret;
-> +	uint8_t optimized, unexpected, inconsistent, ambiguous_addr;
-> +
-> +	if (a->elf != b->elf)
-> +		return 1;
->  
-> -	ret = strncmp(a->elf->name, b->elf->name,
-> -		      max(a->elf->prefixlen, b->elf->prefixlen));
-> -	if (ret != 0)
-> -		return ret;
->  	optimized = a->optimized_parms | b->optimized_parms;
->  	unexpected = a->unexpected_reg | b->unexpected_reg;
->  	inconsistent = a->inconsistent_proto | b->inconsistent_proto;
-> -	if (!unexpected && !inconsistent && !funcs__match(a, b))
-> +	ambiguous_addr = a->ambiguous_addr | b->ambiguous_addr;
-> +	if (!unexpected && !inconsistent && !ambiguous_addr && !funcs__match(a, b))
->  		inconsistent = 1;
->  	a->optimized_parms = b->optimized_parms = optimized;
->  	a->unexpected_reg = b->unexpected_reg = unexpected;
->  	a->inconsistent_proto = b->inconsistent_proto = inconsistent;
-> +	a->ambiguous_addr = b->ambiguous_addr = ambiguous_addr;
+Good suggestion. Yes, I think that would work better than just return
+DWARF_CB_OK from the worker.
 
-
-I had to add change below to get the functions with multiple addresses out
-
-diff --git a/btf_encoder.c b/btf_encoder.c
-index fcc30aa9d97f..7b9679794790 100644
---- a/btf_encoder.c
-+++ b/btf_encoder.c
-@@ -1466,7 +1466,7 @@ static int btf_encoder__add_saved_funcs(struct btf_encoder *encoder, bool skip_e
- 		 * just do not _use_ them.  Only exclude functions with
- 		 * unexpected register use or multiple inconsistent prototypes.
- 		 */
--		add_to_btf |= !state->unexpected_reg && !state->inconsistent_proto;
-+		add_to_btf |= !state->unexpected_reg && !state->inconsistent_proto && !state->ambiguous_addr;
- 
- 		if (add_to_btf) {
- 			err = btf_encoder__add_func(state->encoder, state);
-
-
-other than that I like the approach
-
-SNIP
-
-> @@ -2153,18 +2191,75 @@ static int elf_functions__collect(struct elf_functions *functions)
->  		goto out_free;
->  	}
->  
-> +	/* First, collect an elf_function for each GElf_Sym
-> +	 * Where func->name is without a suffix
-> +	 */
->  	functions->cnt = 0;
->  	elf_symtab__for_each_symbol_index(functions->symtab, core_id, sym, sym_sec_idx) {
-> -		elf_functions__collect_function(functions, &sym);
-> +
-> +		if (elf_sym__type(&sym) != STT_FUNC)
-> +			continue;
-> +
-> +		sym_name = elf_sym__name(&sym, functions->symtab);
-> +		if (!sym_name)
-> +			continue;
-> +
-> +		func = &functions->entries[functions->cnt];
-> +
-> +		const char *suffix = strchr(sym_name, '.');
-> +		if (suffix) {
-> +			functions->suffix_cnt++;
-
-do we need suffix_cnt now?
-
-thanks,
-jirka
+I overlooked the fact that there are many workers, and one of them
+exiting with DWARF_CB_OK would not affect the others. But
+DWARF_CB_ABORT would via the cus_processing_queue.abort flag.
 
 
-> +			func->name = strndup(sym_name, suffix - sym_name);
-> +		} else {
-> +			func->name = strdup(sym_name);
-> +		}
-> +		if (!func->name) {
-> +			err = -ENOMEM;
-> +			goto out_free;
-> +		}
-> +
-> +		func_sym.name = sym_name;
-> +		func_sym.addr = sym.st_value;
-> +
-> +		err = elf_function__push_sym(func, &func_sym);
-> +		if (err)
-> +			goto out_free;
-> +
-> +		functions->cnt++;
->  	}
-
-SNIP
