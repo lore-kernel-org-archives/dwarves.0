@@ -1,253 +1,109 @@
-Received: from out-185.mta0.migadu.com (out-185.mta0.migadu.com [91.218.175.185])
+Received: from out-172.mta0.migadu.com (out-172.mta0.migadu.com [91.218.175.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C85112EE972
-	for <dwarves@vger.kernel.org>; Thu, 24 Jul 2025 21:26:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.185
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D93B286A9
+	for <dwarves@vger.kernel.org>; Tue, 29 Jul 2025 03:19:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753392418; cv=none; b=Fl385o1gvBWEvoUT410Y15GwfZVLuP212pajDvVbKIxgSR5ABTJxaWDgHv2uCqQorhTZQUMco0V2HF6XByQfsomsmNuhXgqny/YnriEqf1XIEscxXa6MqG4SC9jYUr2XzN+zSE+LJUUYeCycTF5M/oEQFZyQTFu7UOVlsDODMhk=
+	t=1753759189; cv=none; b=bIHOxQh+4gHCvf4w4wj+mpm9bGjgzhkicRkTcAqwG6npTacprRRYM1as6yFk7atnOF/JPM9CwJORXHViacCbnz71vk1nokBATuXbBfG52FngDlb6iUuaYcGXG9/SGNLJyAO2NvWjhsz1CplLzfiZj2vyhsy4okRtZME/qofy0Z4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753392418; c=relaxed/simple;
-	bh=DLfx5UxUqQRRsSNJOR1gvua75ykoDeSRS+ogkYCD0t0=;
+	s=arc-20240116; t=1753759189; c=relaxed/simple;
+	bh=rfLkZfNRgVzhPd4eKZPjv4mzfJ2NW8TKmWVYs6DJtGk=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=mlDrDHmR22pja9WV6sOJJNAtXIkvQc/OX+YOIef7/geQ7JsRJzGb4BKTYmbEE0L1vYnnMcnkQ2ukn8KYfmwHIUN5NXXWxB67j7eXK3YKdyYxbzZHMnsAojtJ9HqHd8N1aaAMAahtN/zae5di5lxms52KcVrtgeMRSos8cbbW72s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=iG4eOp1E; arc=none smtp.client-ip=91.218.175.185
+	 In-Reply-To:Content-Type; b=DaAOQFrnuEKBn2V3SRP9WLiL+NAO9VUcdWN0buSl3rusRTkaaPeYD2A41AaZLgAVPJUeN3e+dEVR0+LuJ47Nxy/SLcdkGzMfvKSOSi2B3H5FIvz4EPbZXVmSo6edgHWanqpTqcN2tOoOUzO3/blFM7acnnVeWgYaMxPUFxinsCw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=PiwpeDY1; arc=none smtp.client-ip=91.218.175.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="iG4eOp1E"
-Message-ID: <83d1b791-85fd-49ea-9c40-f3ba4c23850d@linux.dev>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="PiwpeDY1"
+Message-ID: <f7553b3f-5827-4f50-81a9-9bd0802734b9@linux.dev>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1753392413;
+	t=1753759184;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=aiDMgTgdg/bop1UfVygXoPnAhLssawEJ/6Y7IIh/JkQ=;
-	b=iG4eOp1EKGa5ZwNd0y/wBHUvYnLUWUKuWudYdhG/j83CJAcdOLEHVwNFlXDBUR9RpWgLKE
-	iK4NzmVFO60ofsdk/8boSSCcZqFL7t4niwMMCX7OP/D225NdcwaVjzAr1W8dDRpNoK1dsX
-	Qwo8W3MrVw9BMXvyGq+lsQFkdvBxMys=
-Date: Thu, 24 Jul 2025 14:26:46 -0700
+	bh=RW898mCt+fN2SNRHEY5+Ml/7rpCL6yX8PIkPWvoow54=;
+	b=PiwpeDY1Wih6Kg7VwwjJSKqyljFaWpTLoQCXvpLWya6Dv3ZwLC0viD9BjsBOaMaLfaVD92
+	TMUTrpYe+tumajo2sl4KqHts3aPzeQQvrAO2N7JWgEYSVCTH7U41qqmvcKVG9SAlVvoq54
+	8um1PupJvMe47FefACHFscngeJpyMxk=
+Date: Mon, 28 Jul 2025 20:19:37 -0700
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [RFC dwarves] btf_encoder: Remove duplicates from functions
- entries
-To: Alan Maguire <alan.maguire@oracle.com>, Jiri Olsa <olsajiri@gmail.com>
-Cc: Arnaldo Carvalho de Melo <acme@kernel.org>,
- Menglong Dong <menglong8.dong@gmail.com>, dwarves@vger.kernel.org,
- bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
- Andrii Nakryiko <andriin@fb.com>, Yonghong Song <yhs@fb.com>,
- Song Liu <songliubraving@fb.com>, Eduard Zingerman <eddyz87@gmail.com>
-References: <20250717152512.488022-1-jolsa@kernel.org>
- <e4fece83-8267-4929-b1aa-65a9e2882dd8@oracle.com> <aH5OW0rtSuMn1st1@krava>
- <6b4fda90fbf8f6aeeb2732bbfb6e81ba5669e2f3@linux.dev>
- <e88caa24-6bfa-457c-8e88-d00ed775ebd1@oracle.com>
- <98f41eaf6dd364745013650d58c5f254a592221c@linux.dev> <aIDFh26qdAURVL0u@krava>
- <f44af47f-e05e-4fa4-95ca-bf95f04e4c27@oracle.com>
+Subject: Re: [PATCH dwarves v2] btf_encoder: group all function ELF syms by
+ function name
+To: alan.maguire@oracle.com, olsajiri@gmail.com, dwarves@vger.kernel.org
+Cc: bpf@vger.kernel.org, acme@kernel.org, andrii@kernel.org, ast@kernel.org,
+ eddyz87@gmail.com, menglong8.dong@gmail.com, song@kernel.org,
+ yonghong.song@linux.dev, kernel-team@meta.com
+References: <20250729020308.103139-1-isolodrai@meta.com>
 Content-Language: en-US
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 From: Ihor Solodrai <ihor.solodrai@linux.dev>
-In-Reply-To: <f44af47f-e05e-4fa4-95ca-bf95f04e4c27@oracle.com>
+In-Reply-To: <20250729020308.103139-1-isolodrai@meta.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Migadu-Flow: FLOW_OUT
 
-On 7/24/25 10:54 AM, Alan Maguire wrote:
-> On 23/07/2025 12:22, Jiri Olsa wrote:
->> On Tue, Jul 22, 2025 at 10:58:52PM +0000, Ihor Solodrai wrote:
->>
->> SNIP
->>
->>> @@ -1338,48 +1381,39 @@ static int32_t btf_encoder__add_func(struct btf_encoder *encoder,
->>>   	return 0;
->>>   }
->>>   
->>> -static int functions_cmp(const void *_a, const void *_b)
->>> +static int elf_function__name_cmp(const void *_a, const void *_b)
->>>   {
->>>   	const struct elf_function *a = _a;
->>>   	const struct elf_function *b = _b;
->>>   
->>> -	/* if search key allows prefix match, verify target has matching
->>> -	 * prefix len and prefix matches.
->>> -	 */
->>> -	if (a->prefixlen && a->prefixlen == b->prefixlen)
->>> -		return strncmp(a->name, b->name, b->prefixlen);
->>
->> nice to see this one removed ;-)
->>
->>>   	return strcmp(a->name, b->name);
->>>   }
->>>   
->>> -#ifndef max
->>> -#define max(x, y) ((x) < (y) ? (y) : (x))
->>> -#endif
->>> -
->>>   static int saved_functions_cmp(const void *_a, const void *_b)
->>>   {
->>>   	const struct btf_encoder_func_state *a = _a;
->>>   	const struct btf_encoder_func_state *b = _b;
->>>   
->>> -	return functions_cmp(a->elf, b->elf);
->>> +	return elf_function__name_cmp(a->elf, b->elf);
->>>   }
->>>   
->>>   static int saved_functions_combine(struct btf_encoder_func_state *a, struct btf_encoder_func_state *b)
->>>   {
->>> -	uint8_t optimized, unexpected, inconsistent;
->>> -	int ret;
->>> +	uint8_t optimized, unexpected, inconsistent, ambiguous_addr;
->>> +
->>> +	if (a->elf != b->elf)
->>> +		return 1;
->>>   
->>> -	ret = strncmp(a->elf->name, b->elf->name,
->>> -		      max(a->elf->prefixlen, b->elf->prefixlen));
->>> -	if (ret != 0)
->>> -		return ret;
->>>   	optimized = a->optimized_parms | b->optimized_parms;
->>>   	unexpected = a->unexpected_reg | b->unexpected_reg;
->>>   	inconsistent = a->inconsistent_proto | b->inconsistent_proto;
->>> -	if (!unexpected && !inconsistent && !funcs__match(a, b))
->>> +	ambiguous_addr = a->ambiguous_addr | b->ambiguous_addr;
->>> +	if (!unexpected && !inconsistent && !ambiguous_addr && !funcs__match(a, b))
->>>   		inconsistent = 1;
->>>   	a->optimized_parms = b->optimized_parms = optimized;
->>>   	a->unexpected_reg = b->unexpected_reg = unexpected;
->>>   	a->inconsistent_proto = b->inconsistent_proto = inconsistent;
->>> +	a->ambiguous_addr = b->ambiguous_addr = ambiguous_addr;
->>
->>
->> I had to add change below to get the functions with multiple addresses out
->>
->> diff --git a/btf_encoder.c b/btf_encoder.c
->> index fcc30aa9d97f..7b9679794790 100644
->> --- a/btf_encoder.c
->> +++ b/btf_encoder.c
->> @@ -1466,7 +1466,7 @@ static int btf_encoder__add_saved_funcs(struct btf_encoder *encoder, bool skip_e
->>   		 * just do not _use_ them.  Only exclude functions with
->>   		 * unexpected register use or multiple inconsistent prototypes.
->>   		 */
->> -		add_to_btf |= !state->unexpected_reg && !state->inconsistent_proto;
->> +		add_to_btf |= !state->unexpected_reg && !state->inconsistent_proto && !state->ambiguous_addr;
->>   
->>   		if (add_to_btf) {
->>   			err = btf_encoder__add_func(state->encoder, state);
->>
->>
->> other than that I like the approach
->>
+On 7/28/25 7:03 PM, Ihor Solodrai wrote:
+> btf_encoder collects function ELF symbols into a table, which is later
+> used for processing DWARF data and determining whether a function can
+> be added to BTF.
 > 
-> Thanks for the patch! I ran it through CI [1] with the above change plus
-> an added whitespace after the function name in the printf() in
-> btf_encoder__log_func_skip(). The btf_functions.sh test expects
-> whitespace after function names when examining skipped functions, so
-> either the test should be updated to handle no whitespace or we should
-> ensure the space is there after the function name like this:
+> So far the ELF symbol name was used as a key for search in this table,
+> and a search by prefix match was attempted in cases when ELF symbol
+> name has a compiler-generated suffix.
 > 
->          printf("%s : skipping BTF encoding of function due to ",
-> func->name);
+> This implementation has bugs [1][2], causing some functions to be
+> inappropriately excluded from (or included into) BTF.
 > 
-> Otherwise we get a CI failure that is nothing to do with the changes.
+> Rework the implementation of the ELF functions table. Use a name of a
+> function without any suffix - symbol name before the first occurrence
+> of '.' - as a key. This way btf_encoder__find_function() always
+> returns a valid elf_function object (or NULL).
 > 
-> With this in place we do however lose a lot of functions it seems, some
-> I suspect unnecessarily. For example:
+> Collect an array of symbol name + address pairs from GElf_Sym for each
+> elf_function when building the elf_functions table.
 > 
+> Introduce ambiguous_addr flag to the btf_encoder_func_state. It is set
+> when the function is saved by examining the array of ELF symbols in
+> elf_function__has_ambiguous_address(). It tests whether there is only
+> one unique address for this function name, taking into account that
+> some addresses associated with it are not relevant:
+>    * ".cold" suffix indicates a piece of hot/cold split
+>    * ".part" suffix indicates a piece of partial inline
 > 
-> Looking at
+> When inspecting symbol name we have to search for any occurrence of
+> the target suffix, as opposed to testing the entire suffix, or the end
+> of a string. This is because suffixes may be combined by the compiler,
+> for example producing ".isra0.cold", and the conclusion will be
+> incorrect.
 > 
->   < void __tcp_send_ack(struct sock * sk, u32 rcv_nxt, u16 flags);
+> In saved_functions_combine() check ambiguous_addr when deciding
+> whether a function should be included in BTF.
 > 
-> ffffffff83c83170 t __tcp_send_ack.part.0
-> ffffffff83c83310 T __tcp_send_ack
+> Successful CI run: https://github.com/acmel/dwarves/pull/68/checks
 > 
-> So __tcp_send_ack is partially inlined, but partial inlines should not
-> count as ambiguous addresses I think. We should probably ensure we skip
-> .part suffixes as well as .cold in calculating ambiguous addresses.
+> I manually spot checked some of the ~200 functions from vmlinux (BPF
+> CI-like kconfig) that are now excluded: all of those that I checked
+> had multiple addresses, and some where static functions from different
+> files with the same name.
 > 
-> I modified the patch somewhat and we wind up losing ~400 functions
-> instead of over 700, see [2].
+> [1] https://lore.kernel.org/bpf/2f8c792e-9675-4385-b1cb-10266c72bd45@linux.dev/
+> [2] https://lore.kernel.org/dwarves/6b4fda90fbf8f6aeeb2732bbfb6e81ba5669e2f3@linux.dev/
 > 
-> Modified patch is at [3]. If the mods look okay to you Ihor would you
-> mind sending it officially? Would be great to get wider testing to
-> ensure it doesn't break anything or leave any functions out unexpectedly.
+> v1: https://lore.kernel.org/dwarves/98f41eaf6dd364745013650d58c5f254a592221c@linux.dev/
+> Signed-off-by: Ihor Solodrai <isolodrai@meta.com>
+> [...]
 
-Alan, Jiri, thank you for review and testing. I sent this draft in a bit 
-of a rush, sorry.
+Not sure what's wrong, but it appears this message can't reach
+vger.kernel.org, or maybe is spam filtered.
 
-I'll incorporate your suggestions, test the patch a bit more and then
-will send a clean version. I am curious what functions are lost and
-why, will report if notice anything interesting.
+I sent to vger.kernel.org from @meta.com email in the past w/o issues.
 
-> 
->> SNIP
->>
->>> @@ -2153,18 +2191,75 @@ static int elf_functions__collect(struct elf_functions *functions)
->>>   		goto out_free;
->>>   	}
->>>   
->>> +	/* First, collect an elf_function for each GElf_Sym
->>> +	 * Where func->name is without a suffix
->>> +	 */
->>>   	functions->cnt = 0;
->>>   	elf_symtab__for_each_symbol_index(functions->symtab, core_id, sym, sym_sec_idx) {
->>> -		elf_functions__collect_function(functions, &sym);
->>> +
->>> +		if (elf_sym__type(&sym) != STT_FUNC)
->>> +			continue;
->>> +
->>> +		sym_name = elf_sym__name(&sym, functions->symtab);
->>> +		if (!sym_name)
->>> +			continue;
->>> +
->>> +		func = &functions->entries[functions->cnt];
->>> +
->>> +		const char *suffix = strchr(sym_name, '.');
->>> +		if (suffix) {
->>> +			functions->suffix_cnt++;
->>
->> do we need suffix_cnt now?
->>
-> 
-> think it's been unused for a while now, so can be removed I think.
-> 
-> Thanks again for working on this!
-> 
-> Alan
-> 
-> [1] https://github.com/alan-maguire/dwarves/actions/runs/16500065295
-> [2]
-> https://github.com/alan-maguire/dwarves/actions/runs/16501897430/job/46662503155
-> [3]
-> https://github.com/acmel/dwarves/commit/30dffd7fc34e7753b3d21b4b3f1a5e17814c224f
-> 
->> thanks,
->> jirka
->>
->>
->>> +			func->name = strndup(sym_name, suffix - sym_name);
->>> +		} else {
->>> +			func->name = strdup(sym_name);
->>> +		}
->>> +		if (!func->name) {
->>> +			err = -ENOMEM;
->>> +			goto out_free;
->>> +		}
->>> +
->>> +		func_sym.name = sym_name;
->>> +		func_sym.addr = sym.st_value;
->>> +
->>> +		err = elf_function__push_sym(func, &func_sym);
->>> +		if (err)
->>> +			goto out_free;
->>> +
->>> +		functions->cnt++;
->>>   	}
->>
->> SNIP
-> 
+Any suggestions?..
 
