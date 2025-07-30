@@ -1,276 +1,308 @@
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E76D1758B;
-	Tue, 29 Jul 2025 13:04:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6CC52957AD
+	for <dwarves@vger.kernel.org>; Wed, 30 Jul 2025 15:26:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753794281; cv=none; b=mIwgH9WHYprngDe9ccbrUS2prsycV31MZKDnEeL7Hj56hX5YMCLB6R80Yy1pfCZtaKN4/8lrOBJuLbTTvvxbZMOdbyRn+GHkTdK4N8Oqkjw6MIHr+7THChQ9P8zhCWLl9mu1udsOIm7wEFqpUWuArzjA/VfLfor36rBpnwuF0QE=
+	t=1753889204; cv=none; b=PD/3bGwB55ch9i9d7ruBPsYrLg0BxAq8DqC+zHuMl6sPZ/A1BzedZdSCV6kV1xsu+zuuqEDoyIovN5diwoiCc4jycEbEe2/rk5l3B/JGUd0FEOCSAnlK9PGgH2sQ5yX/iDCa3wFEJWEsM/UaOBqHqMMmEIv4d1v3bf8h9VDxrZ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753794281; c=relaxed/simple;
-	bh=q9XcOaXmn9wB9mHkwgwnoVjDE+ud+VPbABLrXLB26og=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lpspPuaeHHwLM1FvvOSYsx6U/X+schBMH+lFtnOgp40cC3q4TlmoePuCtQwkzY3vciI1WbiMME1RRblHCpkrax4g1J5jioTUAjsRfqjVu1AeHZ/GUkTo17xtiibodREbu15FiW/yudGUsoQLM3QLYCwwrRRkTuv/cP+wrs077mk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PjhV/PyY; arc=none smtp.client-ip=209.85.128.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1753889204; c=relaxed/simple;
+	bh=+peGhC/D7bZ5Wp0FFtID/kCBa4ld78nepxLM1KxYrQk=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=HKtrrDBCv3I0yukf3pdShwQLTURVhn4mFmQmGDykhylW+ffV6oSq4IVPDLCQCRpn+QUBdYgZDgo5XmEIWlmXjaN+9uSUPx36T32QvzRk57gOcx+popRkyV9ej56Ggt+JBfJNmGYgR+72ygj2hfQTNozys0njusEPlh/On8cXERs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=WV/6K5eo; arc=none smtp.client-ip=217.70.183.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PjhV/PyY"
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-451d3f72391so51465385e9.3;
-        Tue, 29 Jul 2025 06:04:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1753794277; x=1754399077; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ix14CESA9kHg0m61f4E3nGpbISmReGVmm6+MjRVF5hM=;
-        b=PjhV/PyYJv6b9F1v64aWxLyumI9j9lxYlkqbp9ne3nO34zrMVNKqSfgxHQgl2diqlz
-         eq/WR5xy5KHg7ZpT5dqSV6Q1ayakkb7hwfOmvmufQz6ASQm3Lr4qkGogqijGH2dSzbY6
-         vGbJyLFteCT2k2TF310y9RhAdMdmuznEf//lXu10HDFT5Mgcy1hU2hrgWnDGLs0MLCNa
-         DvOFY5Crn8F4hY+nTniOs5rz4VFTa6r0RR1z7/rjeFNmVOSJ7/KbJiuBCipvUjIJ1viF
-         7ygAKPX1ZSNku+u19QxV7rNev4/Kz/lWrH/ARO+8BbswRAM5naLr0gkjJ09HFr5LiO/d
-         qK0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753794277; x=1754399077;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ix14CESA9kHg0m61f4E3nGpbISmReGVmm6+MjRVF5hM=;
-        b=SN8gQPySlX1MrUk958haufSij5O3CFQ3nfAU4rnh0p3qajhMQWbXrwX7CIuTgHEyow
-         2JuwDMvpOA0pFMj+U63cJpEfIiPao1RiOxHr9J01BQCkRtBcTr4aY43f8bNskpdhIk60
-         WDgtoTJDmUjZpp0tBb+RkUzDRqHPdhyAj9pS/k30jFdFldpshcypZxTxtSEl8a8T5E8U
-         jR73Y0uEr0YeOB4ehExLxQ833SVDqFM/pfuh/WcrqHu/qdN5vWiqpzZtZmmH5iT3aNXk
-         BsoEGHALtVI3a09i55b2k2rX8KiOsccNJGjnuNVq1Not0RW9xzCmG2D+snqVZkOiZXiX
-         NSpw==
-X-Forwarded-Encrypted: i=1; AJvYcCVqa6Ku7uyM+27EZF99qjNVk2ynF28pMGtSKBdPZFrMhy2EqONr/+grPs70VRpBoFlQvBM=@vger.kernel.org, AJvYcCW8jG0oY1NyjK4TqKE/LRk0SVVac1m5CJBhHvHxmYn2wJwPMO1OjGJY45Wk537H86NU3KbxZCz++w==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyAJye8tJg0LHX0HJp7I00BHNHocTskkDpSOfcNsbaNRK1+6tkU
-	S5NJwSkbhzMlx2PBgZLnFc+Rw2i/61mPYYCxpGz73WQy7VsrLaUxTNRU
-X-Gm-Gg: ASbGnctoZr5Ivh7m899m9PC3TVNQCwtqyaRJQemAH8+GoOtNdTZWiif4Yp5ZgTWlReK
-	A+ECmPAr1bUXB1F7uzoqIxyQ47Jtyv4+hqmONW8TIG1+k5YZSaj+Lb3Gsn48USPa+h8/+KaSGYu
-	ah9jsZzRqfpn2pAlTAf22Jqoknv/yMC/1A9cQzYZ0XGhauB5NUAhpsHxA+bxXWokxA5QPyOSTHB
-	n5IQp0ei7ob5sYubE2LbKQoTBV7R3usabfeuNZZVAl2WA3BQ6f21ysDK2wMrHmrjlNtVZIpfllE
-	g76m4Kt9e2HOibYYFiGtJnA85YAciz3dj+AGf8FYch4tK1T2qkvVj9HNhv+71hS8ZGCBFmh1O7t
-	VYqG50XxmuQ==
-X-Google-Smtp-Source: AGHT+IF+DR3PyvqH8kcTTECuIOvI8t45eIIaw39S1Hsw+BgCKJs/pdqIGXADQlm7IdG0IdpyCpFEqg==
-X-Received: by 2002:a05:600c:8b11:b0:456:1d34:97a with SMTP id 5b1f17b1804b1-4587631561fmr143174525e9.9.1753794276870;
-        Tue, 29 Jul 2025 06:04:36 -0700 (PDT)
-Received: from krava ([176.74.159.170])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3b778eb27besm12308757f8f.9.2025.07.29.06.04.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Jul 2025 06:04:36 -0700 (PDT)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Tue, 29 Jul 2025 15:04:34 +0200
-To: ihor.solodrai@linux.dev
-Cc: alan.maguire@oracle.com, olsajiri@gmail.com, dwarves@vger.kernel.org,
-	bpf@vger.kernel.org, acme@kernel.org, andrii@kernel.org,
-	ast@kernel.org, eddyz87@gmail.com, menglong8.dong@gmail.com,
-	song@kernel.org, yonghong.song@linux.dev, kernel-team@meta.com
-Subject: Re: [PATCH dwarves v2] btf_encoder: group all function ELF syms by
- function name
-Message-ID: <aIjG4q6oirhi4pN1@krava>
-References: <20250729020308.103139-1-isolodrai@meta.com>
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="WV/6K5eo"
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 7AE624442D;
+	Wed, 30 Jul 2025 15:26:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1753889197;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=5lZSq8I6noaYFWDZjsIjoANGVIVgFxq7kPpA+ios6oc=;
+	b=WV/6K5eoNaFpxz5TAxo+Ml5l8JugBeRXycqigATyNDnp43j+kCuSt/b53yJNJ12cWym9GQ
+	WnAX5LjxLfsh4S7RQE9Bw0ejaUAMyIee/FXlwK1YmHiqFtx2sNqfQHBRIbWcbc+UpXhJ/2
+	BVacnlHXm11sDRiAD/9XHxWlNzUDM+vSD2aBSFvZYZ9XNVa4Ag5eQtNPwTZntVKWU9BlxB
+	3u3Fe6u5gIzFHtrhDue61pudURrh1BNp1H3iEx7LvqmrZGV19dxgt8CWtAUDFkTkk/x/6A
+	WsfMR0nf76PWKPImmnLyj3QW6dPzljTnU2nOr7/0bJ85+69SBp6IzsW+CWO+Lw==
+From: =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
+Date: Wed, 30 Jul 2025 17:26:30 +0200
+Subject: [PATCH v2] pahole: do not return an error when printing only a
+ specific class
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250729020308.103139-1-isolodrai@meta.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20250730-lsk__abort-v2-1-fcec3172a878@bootlin.com>
+X-B4-Tracking: v=1; b=H4sIAKU5imgC/23MSw7CIBSF4a00dywGMDzqqPswTUNbsDdWMEAaT
+ cPexY4d/ic53w7JRrQJrs0O0W6YMPga/NTAtBh/twTn2sApF1QxSdb0GAYzhpgJHwVTWlLjuIZ
+ 6eEXr8H1gt772gimH+Dnsjf3Wv8zGCCNCS3dhpp1bNXdjCHlFf57CE/pSyheoO/dWpgAAAA==
+X-Change-ID: 20250716-lsk__abort-2b517860af28
+To: dwarves@vger.kernel.org
+Cc: Ihor Solodrai <ihor.solodrai@linux.dev>, 
+ Alan Maguire <alan.maguire@oracle.com>, 
+ Arnaldo Carvalho de Melo <acme@redhat.com>, ebpf@linuxfoundation.org, 
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
+ Bastien Curutchet <bastien.curutchet@bootlin.com>, 
+ =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
+X-Mailer: b4 0.14.2
+X-GND-State: clean
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdelkedvkecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephfffufggtgfgkffvvefosehtkeertdertdejnecuhfhrohhmpeetlhgvgihishcunfhothhhohhrroculdgvuefrhfcuhfhouhhnuggrthhiohhnmdcuoegrlhgvgihishdrlhhothhhohhrvgessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepjefghfeiudduffetfeehueduffdtteeigeehvdeludetueffvedvfedttdekieevnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghdpsghoohhtlhhinhdrtghomhenucfkphepvdgrtddvmeekgedvkeemfhelgegtmegvtddtmeemfhekheenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtvdemkeegvdekmehfleegtgemvgdttdemmehfkeehpdhhvghloheplgduledvrdduieekrddurdduleejngdpmhgrihhlfhhrohhmpegrlhgvgihishdrlhhothhhohhrvgessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepkedprhgtphhtthhopegvsghpfheslhhinhhugihfohhunhgurghtihhonhdrohhrghdprhgtphhtthhopehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomhdprhgtphhtthhop
+ egrlhgvgihishdrlhhothhhohhrvgessghoohhtlhhinhdrtghomhdprhgtphhtthhopehihhhorhdrshholhhoughrrghisehlihhnuhigrdguvghvpdhrtghpthhtohepugifrghrvhgvshesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopegrlhgrnhdrmhgrghhuihhrvgesohhrrggtlhgvrdgtohhmpdhrtghpthhtohepsggrshhtihgvnhdrtghurhhuthgthhgvthessghoohhtlhhinhdrtghomhdprhgtphhtthhopegrtghmvgesrhgvughhrghtrdgtohhm
+X-GND-Sasl: alexis.lothore@bootlin.com
 
-On Mon, Jul 28, 2025 at 07:03:08PM -0700, Ihor Solodrai wrote:
-> btf_encoder collects function ELF symbols into a table, which is later
-> used for processing DWARF data and determining whether a function can
-> be added to BTF.
-> 
-> So far the ELF symbol name was used as a key for search in this table,
-> and a search by prefix match was attempted in cases when ELF symbol
-> name has a compiler-generated suffix.
-> 
-> This implementation has bugs [1][2], causing some functions to be
-> inappropriately excluded from (or included into) BTF.
-> 
-> Rework the implementation of the ELF functions table. Use a name of a
-> function without any suffix - symbol name before the first occurrence
-> of '.' - as a key. This way btf_encoder__find_function() always
-> returns a valid elf_function object (or NULL).
-> 
-> Collect an array of symbol name + address pairs from GElf_Sym for each
-> elf_function when building the elf_functions table.
-> 
-> Introduce ambiguous_addr flag to the btf_encoder_func_state. It is set
-> when the function is saved by examining the array of ELF symbols in
-> elf_function__has_ambiguous_address(). It tests whether there is only
-> one unique address for this function name, taking into account that
-> some addresses associated with it are not relevant:
->   * ".cold" suffix indicates a piece of hot/cold split
->   * ".part" suffix indicates a piece of partial inline
-> 
-> When inspecting symbol name we have to search for any occurrence of
-> the target suffix, as opposed to testing the entire suffix, or the end
-> of a string. This is because suffixes may be combined by the compiler,
-> for example producing ".isra0.cold", and the conclusion will be
-> incorrect.
-> 
-> In saved_functions_combine() check ambiguous_addr when deciding
-> whether a function should be included in BTF.
-> 
-> Successful CI run: https://github.com/acmel/dwarves/pull/68/checks
-> 
-> I manually spot checked some of the ~200 functions from vmlinux (BPF
-> CI-like kconfig) that are now excluded: all of those that I checked
-> had multiple addresses, and some where static functions from different
-> files with the same name.
+When trying to print a specific class layout with recent pahole
+versions, we get an error right after the expected class print:
 
-in my config the change removed 464, did the same check and all of them
-had more different addresses
+  $ ./build/pahole -C test_bin_struct_packed -F dwarf tests/bin/test_bin
+  struct test_bin_struct_packed {
+          char                       a;                    /*     0     1 */
+          short int                  b;                    /*     1     2 */
+          int                        c;                    /*     3     4 */
+          long long unsigned int     d;                    /*     7     8 */
 
-couple nits below, but feel free to ignore
+          /* size: 15, cachelines: 1, members: 4 */
+          /* last cacheline: 15 bytes */
+  } __attribute__((__packed__));
 
-Acked-by: Jiri Olsa <jolsa@kernel.org>
+  pahole: /home/alexis/src/pahole/tests/bin/test_bin: Invalid argument
 
-thanks,
-jirka
+This error is due to pahole_stealer returning LSK__STOP_LOADING when
+dealing with a single class and when it is done. This LSK__STOP_LOADING
+is then propagated to dwarf_loader__worker_thread and interpreted as an
+error (and turned into a DWARF_CB_ABORT). The main issue is that this
+LSK__STOP_LOADING value is sometimes generated by actual issues during
+pahole stealing, sometimes by "nominal" execution.
 
+Add a new LSK__ABORT status to distinguish between those nominal and
+faulty cases. Still let DWARF_CB_ABORT value propagate when the stealer
+returns either LSK__ABORT or LSK__STOP_LOADING (so that any other
+running worker is properly asked to stop, thanks to
+cus_processsing_queue.abort), but also propagate the LSK status, and
+return an error on DWARF_CB_ABORT only if the status is LSK__ABORT.
 
-> 
-> [1] https://lore.kernel.org/bpf/2f8c792e-9675-4385-b1cb-10266c72bd45@linux.dev/
-> [2] https://lore.kernel.org/dwarves/6b4fda90fbf8f6aeeb2732bbfb6e81ba5669e2f3@linux.dev/
-> 
-> v1: https://lore.kernel.org/dwarves/98f41eaf6dd364745013650d58c5f254a592221c@linux.dev/
-> Signed-off-by: Ihor Solodrai <isolodrai@meta.com>
-> ---
->  btf_encoder.c | 250 ++++++++++++++++++++++++++++++++------------------
->  1 file changed, 162 insertions(+), 88 deletions(-)
-> 
-> diff --git a/btf_encoder.c b/btf_encoder.c
-> index 0bc2334..0aa94ae 100644
-> --- a/btf_encoder.c
-> +++ b/btf_encoder.c
-> @@ -87,16 +87,22 @@ struct btf_encoder_func_state {
->  	uint8_t optimized_parms:1;
->  	uint8_t unexpected_reg:1;
->  	uint8_t inconsistent_proto:1;
-> +	uint8_t ambiguous_addr:1;
->  	int ret_type_id;
->  	struct btf_encoder_func_parm *parms;
->  	struct btf_encoder_func_annot *annots;
->  };
->  
-> +struct elf_function_sym {
-> +	const char *name;
-> +	uint64_t addr;
-> +};
-> +
->  struct elf_function {
-> -	const char	*name;
-> -	char		*alias;
-> -	size_t		prefixlen;
-> -	bool		kfunc;
-> +	char		*name;
-> +	struct elf_function_sym *syms;
-> +	uint8_t 	sym_cnt;
+Signed-off-by: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
+---
+Changes in v2:
+- rename out_error to out_early in dwarf_loader__worker_thread
+- Introduced lsk_status in struct_dwarf_cus, which hold a worker LSK
+  return status
+- keep returning DWARF_CB_ABORT if worker returns LSK__STOP_LOADING
+- in cus__load_module, do not return an error is lsk_status is different
+  from LSK__ABORT
+- Link to v1: https://lore.kernel.org/r/20250716-lsk__abort-v1-1-586f31a9d97d@bootlin.com
+---
+See [1] for original discussions about the issue
 
-should we make this bigger, or at least check the overflow
+[1] https://lore.kernel.org/dwarves/DB5VWHU0N27I.3ETC4G47KB9Q@bootlin.com/
+---
+ dwarf_loader.c | 19 ++++++++++++++-----
+ dwarves.h      |  1 +
+ pahole.c       | 21 +++++++++++----------
+ 3 files changed, 26 insertions(+), 15 deletions(-)
 
-256 dups are probably not possible, but with all those different
-suffixes we might get close soon ;-)
+diff --git a/dwarf_loader.c b/dwarf_loader.c
+index ef00cdf308166732fc0938f2eecd56d314d3354f..1b44327c0b9ef9f4d9ae120e2b6d57b531c65277 100644
+--- a/dwarf_loader.c
++++ b/dwarf_loader.c
+@@ -3277,6 +3277,8 @@ static int cus__steal_now(struct cus *cus, struct cu *cu, struct conf_load *conf
+ 		break;
+ 	case LSK__KEEPIT:
+ 		break;
++	case LSK__ABORT:
++		break;
+ 	}
+ 	return lsk;
+ }
+@@ -3439,6 +3441,7 @@ struct dwarf_cus {
+ 	const unsigned char *build_id;
+ 	int		    build_id_len;
+ 	int		    error;
++	int		    lsk_status;
+ 	struct dwarf_cu	    *type_dcu;
+ 	uint32_t	nr_cus_created;
+ };
+@@ -3657,6 +3660,7 @@ static void *dwarf_loader__worker_thread(void *arg)
+ 	struct dwarf_cus *dcus = arg;
+ 	bool stop = false;
+ 	struct cu *cu;
++	int ret;
+ 
+ 	while (!stop) {
+ 		job = cus_queue__enqdeq_job(job);
+@@ -3679,8 +3683,11 @@ static void *dwarf_loader__worker_thread(void *arg)
+ 			break;
+ 
+ 		case JOB_STEAL:
+-			if (cus__steal_now(dcus->cus, job->cu, dcus->conf) == LSK__STOP_LOADING)
++			ret = cus__steal_now(dcus->cus, job->cu, dcus->conf);
++			if (ret == LSK__ABORT || ret == LSK__STOP_LOADING) {
++				dcus->lsk_status = ret;
+ 				goto out_abort;
++			}
+ 			cus_queue__inc_next_cu_id();
+ 			/* re-enqueue JOB_DECODE so that next CU is decoded from DWARF */
+ 			job->type = JOB_DECODE;
+@@ -3750,7 +3757,7 @@ static int dwarf_cus__process_cus(struct dwarf_cus *dcus)
+ 		job = calloc(1, sizeof(*job));
+ 		if (!job) {
+ 			dcus->error = -ENOMEM;
+-			goto out_error;
++			goto out_early;
+ 		}
+ 		job->type = JOB_DECODE;
+ 		/* no need for locks, workers were not started yet */
+@@ -3776,7 +3783,7 @@ out_join:
+ 			dcus->error = (long)res;
+ 	}
+ 
+-out_error:
++out_early:
+ 	cus_queue__destroy();
+ 
+ 	return dcus->error;
+@@ -3872,7 +3879,7 @@ static int cus__merge_and_process_cu(struct cus *cus, struct conf_load *conf,
+ 		goto out_abort;
+ 
+ 	cu__finalize(cu, cus, conf);
+-	if (cus__steal_now(cus, cu, conf) == LSK__STOP_LOADING)
++	if (cus__steal_now(cus, cu, conf) == LSK__ABORT)
+ 		goto out_abort;
+ 
+ 	return 0;
+@@ -3897,6 +3904,7 @@ static int cus__load_module(struct cus *cus, struct conf_load *conf,
+ 	struct cu *type_cu;
+ 	struct dwarf_cu type_dcu;
+ 	int type_lsk = LSK__KEEPIT;
++	int lsk_worker_status = LSK__ABORT;
+ 
+ 	int res = __cus__load_debug_types(cus, conf, mod, dw, elf, filename, build_id, build_id_len, &type_cu, &type_dcu);
+ 	if (res != 0) {
+@@ -3930,9 +3938,10 @@ static int cus__load_module(struct cus *cus, struct conf_load *conf,
+ 			.nr_cus_created = 0,
+ 		};
+ 		res = dwarf_cus__process_cus(&dcus);
++		lsk_worker_status = dcus.lsk_status;
+ 	}
+ 
+-	if (res)
++	if (res && lsk_worker_status == LSK__ABORT)
+ 		return res;
+ 
+ 	if (type_lsk == LSK__DELETE)
+diff --git a/dwarves.h b/dwarves.h
+index 883852f4b60a36d73bce4568cbacd8ef3cff97ea..5df1cdad9be36212bd6548e86180860daffa3f63 100644
+--- a/dwarves.h
++++ b/dwarves.h
+@@ -43,6 +43,7 @@ enum load_steal_kind {
+ 	LSK__KEEPIT,
+ 	LSK__DELETE,
+ 	LSK__STOP_LOADING,
++	LSK__ABORT,
+ };
+ 
+ /*
+diff --git a/pahole.c b/pahole.c
+index 333e71ab65924d2c64771be7d40f768f02e9a0f0..66448fc430c19e5137a8467026d35d2ba3125e4c 100644
+--- a/pahole.c
++++ b/pahole.c
+@@ -3165,13 +3165,13 @@ static enum load_steal_kind pahole_stealer__btf_encode(struct cu *cu, struct con
+ 
+ 	if (!btf_encoder) {
+ 		fprintf(stderr, "Error creating BTF encoder.\n");
+-		return LSK__STOP_LOADING;
++		return LSK__ABORT;
+ 	}
+ 
+ 	err = btf_encoder__encode_cu(btf_encoder, cu, conf_load);
+ 	if (err < 0) {
+ 		fprintf(stderr, "Error while encoding BTF.\n");
+-		return LSK__STOP_LOADING;
++		return LSK__ABORT;
+ 	}
+ 
+ 	return LSK__DELETE;
+@@ -3230,7 +3230,7 @@ static enum load_steal_kind pahole_stealer(struct cu *cu, struct conf_load *conf
+ 		 *
+ 		 * FIXME: Disabled, should use Oracle's libctf
+ 		 */
+-		goto dump_and_stop;
++		goto dump_and_abort;
+ 	}
+ #endif
+ 	if (class_name == NULL) {
+@@ -3281,7 +3281,7 @@ static enum load_steal_kind pahole_stealer(struct cu *cu, struct conf_load *conf
+ 
+ 		if (prototype->nr_args != 0 && !tag__is_struct(class)) {
+ 			fprintf(stderr, "pahole: attributes are only supported with 'class' and 'struct' types\n");
+-			goto dump_and_stop;
++			goto dump_and_abort;
+ 		}
+ 
+ 		struct type *type = tag__type(class);
+@@ -3291,7 +3291,7 @@ static enum load_steal_kind pahole_stealer(struct cu *cu, struct conf_load *conf
+ 			if (type->sizeof_member == NULL) {
+ 				fprintf(stderr, "pahole: the sizeof member '%s' wasn't found in the '%s' type\n",
+ 					prototype->size, prototype->name);
+-				goto dump_and_stop;
++				goto dump_and_abort;
+ 			}
+ 		}
+ 
+@@ -3300,7 +3300,7 @@ static enum load_steal_kind pahole_stealer(struct cu *cu, struct conf_load *conf
+ 			if (type->type_member == NULL) {
+ 				fprintf(stderr, "pahole: the type member '%s' wasn't found in the '%s' type\n",
+ 					prototype->type, prototype->name);
+-				goto dump_and_stop;
++				goto dump_and_abort;
+ 			}
+ 		}
+ 
+@@ -3315,7 +3315,7 @@ static enum load_steal_kind pahole_stealer(struct cu *cu, struct conf_load *conf
+ 			if (type->filter == NULL) {
+ 				fprintf(stderr, "pahole: invalid filter '%s' for '%s'\n",
+ 					prototype->filter, prototype->name);
+-				goto dump_and_stop;
++				goto dump_and_abort;
+ 			}
+ 		}
+ 
+@@ -3386,15 +3386,16 @@ static enum load_steal_kind pahole_stealer(struct cu *cu, struct conf_load *conf
+ 	/*
+ 	 * If we found all the entries in --class_name, stop
+ 	 */
+-	if (list_empty(&class_names)) {
+-dump_and_stop:
++	if (list_empty(&class_names))
+ 		ret = LSK__STOP_LOADING;
+-	}
+ dump_it:
+ 	if (first_obj_only)
+ 		ret = LSK__STOP_LOADING;
+ filter_it:
+ 	return ret;
++dump_and_abort:
++	ret = LSK__ABORT;
++	return ret;
+ }
+ 
+ static int prototypes__add(struct list_head *prototypes, const char *entry)
 
-> +	uint8_t		kfunc:1;
->  	uint32_t	kfunc_flags;
->  };
->  
-> @@ -115,7 +121,6 @@ struct elf_functions {
->  	struct elf_symtab *symtab;
->  	struct elf_function *entries;
->  	int cnt;
-> -	int suffix_cnt; /* number of .isra, .part etc */
->  };
->  
->  /*
-> @@ -161,10 +166,18 @@ struct btf_kfunc_set_range {
->  	uint64_t end;
->  };
->  
-> +static inline void elf_function__free_content(struct elf_function *func) {
+---
+base-commit: 9845339bd09f9889dd741ed94f71eb92008dcdfc
+change-id: 20250716-lsk__abort-2b517860af28
 
-elf_function__clear ?
+Best regards,
+-- 
+Alexis Lothoré, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
-> +	free(func->name);
-> +	if (func->sym_cnt)
-> +		free(func->syms);
-> +	memset(func, 0, sizeof(*func));
-> +}
-> +
->  static inline void elf_functions__delete(struct elf_functions *funcs)
->  {
-> -	for (int i = 0; i < funcs->cnt; i++)
-> -		free(funcs->entries[i].alias);
-> +	for (int i = 0; i < funcs->cnt; i++) {
-> +		elf_function__free_content(&funcs->entries[i]);
-> +	}
->  	free(funcs->entries);
->  	elf_symtab__delete(funcs->symtab);
->  	list_del(&funcs->node);
-> @@ -981,8 +994,7 @@ static void btf_encoder__log_func_skip(struct btf_encoder *encoder, struct elf_f
->  
->  	if (!encoder->verbose)
->  		return;
-> -	printf("%s (%s): skipping BTF encoding of function due to ",
-> -	       func->alias ?: func->name, func->name);
-> +	printf("%s : skipping BTF encoding of function due to ", func->name);
->  	va_start(ap, fmt);
->  	vprintf(fmt, ap);
->  	va_end(ap);
-> @@ -1176,6 +1188,48 @@ static struct btf_encoder_func_state *btf_encoder__alloc_func_state(struct btf_e
->  	return state;
->  }
->  
-> +/* some "." suffixes do not correspond to real functions;
-> + * - .part for partial inline
-> + * - .cold for rarely-used codepath extracted for better code locality
-> + */
-> +static bool str_contains_non_fn_suffix(const char *str) {
-> +	static const char *skip[] = {
-> +		".cold",
-> +		".part"
-> +	};
-> +	char *suffix = strchr(str, '.');
-> +	int i;
-> +
-> +	if (!suffix)
-> +		return false;
-> +	for (i = 0; i < ARRAY_SIZE(skip); i++) {
-> +		if (strstr(suffix, skip[i]))
-> +			return true;
-> +	}
-> +	return false;
-> +}
-> +
-> +static bool elf_function__has_ambiguous_address(struct elf_function *func) {
-> +	struct elf_function_sym *sym;
-> +	uint64_t addr;
-> +
-> +	if (func->sym_cnt <= 1)
-> +		return false;
-> +
-> +	addr = 0;
-> +	for (int i = 0; i < func->sym_cnt; i++) {
-> +		sym = &func->syms[i];
-> +		if (!str_contains_non_fn_suffix(sym->name)) {
-> +			if (addr && addr != sym->addr)
-> +				return true;
-> +			else
-> +			 	addr = sym->addr;
-
-nit extra space ' '    ^^^
-
-> +		}
-> +	}
-> +
-> +	return false;
-> +}
-> +
-
-SNIP
