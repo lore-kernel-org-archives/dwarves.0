@@ -1,57 +1,57 @@
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47E57147C9B;
-	Thu,  7 Aug 2025 14:42:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 932CA263C90;
+	Thu,  7 Aug 2025 14:42:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754577741; cv=none; b=sp+EXeJ5d/AF9vHGg323cHERzlEBxguwlMCn2IQnt6QGGOCueDGOafKqldot+mYDpmjpZA7GmLkGVM1TpXot5I5sVz/7Y43VT3zdJGRo2cX4Lfb0/WukykgZ0CshYtyYtdR9Q9HaPgpG4/XAFc5RTAS+7aA1YPpbbNzY58wKA1w=
+	t=1754577742; cv=none; b=DOnzUa1TsGjQ57Skb3NMR267BXMMDRZsWL8kqn+XII425E2ss+mna5iNNDnDvLYnQfdV6ktGfpAtOEsmIl+Wxf2N9lNgXRcDByAy2JEhpVoRFcnexzi5Z1ebrHjEQl6MCBddn74HSGFxWS0OFZz9q8/zX2d63xi7AgtnmPM9Nf4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754577741; c=relaxed/simple;
-	bh=5vhwdRoUoZuAXN/p69QGR1KXle7xTpZXh9UFzZrYC2g=;
+	s=arc-20240116; t=1754577742; c=relaxed/simple;
+	bh=ijKB1Ky666q7aR3Knn6PFo74lcFALU/SmYO5lb/ZiRE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=a70opdosoASHGoMe0uncBzFbxEp9QgWHjJrFFs4Aj+LWBLGy+kkJR3j3EzegVBtUrokWdZkk5NV2ndUO5TXKrKVHWEh+lQHkUWwjQ4ptqSWmXIJTEvR3HId/yfWnx/fW+ZXrqOkRJv+6NkFbiX3v3C6LlN9lJXw2L0kQy9WGXag=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=XDJSwqdb; arc=none smtp.client-ip=205.220.177.32
+	 MIME-Version; b=XNJi/NlrKC13SZoQjQbSYK1o5leeZ0G78rVVr2dHyhQtqMEmX5WXrGPcMMpauo2MtptAfc7gM3BWIwsvkzZB+Btz9BdTziVMXUtegI9nzVfyXlVGPs6E/nMUKeZAyuhEI1oRbC7W73UDj/UWfZyRYSSPxQ61BAed38J9QpuXzck=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=g9Y28cUy; arc=none smtp.client-ip=205.220.165.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="XDJSwqdb"
-Received: from pps.filterd (m0333520.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5777NdMv007678;
-	Thu, 7 Aug 2025 14:42:17 GMT
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="g9Y28cUy"
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5777MuFZ028222;
+	Thu, 7 Aug 2025 14:42:14 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
 	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=corp-2025-04-25; bh=OTrLD
-	LELUt4hoWoIcDjI17KLLa4S0Fo0MTU2AC1Z4D4=; b=XDJSwqdbKB7n8/h9t1Vnf
-	sv/9a3EsPE2IKQConECAnKEuxjhqf8GuQIouYg/N+E+gwIGc1zkP6jhowvs67RXl
-	9U78xQ3gUZ/5uGR1BFBXGDh34UpGKTRsQUYvh1yMwD/fSZZgWGc2QEp7C3BYVL81
-	4Z0LV4Coy2MuMl3ooEFzBW5ASUyFJ8WD3BXPOBBn/vnA4JM8U5emhpNpezg7JxBc
-	CRnHErBDLiSwyXGoysjnbr5jBfYWRsOLkRZ2854wDXMhEJ5r7ZO5G+L3+TRDwqKB
-	07pB+FtAAG53dgeHmGq8E8QYoX9yFqAuIBvsIwsrEw/OsM0c/N31Z/LhPkhHstfR
-	A==
+	:mime-version:references:subject:to; s=corp-2025-04-25; bh=5oSIu
+	bgx/rgb7cmAPaN7nYMKOXUeSs7BVMrk9up3+5U=; b=g9Y28cUyif/LM+zW3/6Vr
+	Lr3BvD1WW2HAbyH9pFN8d12oh0SMO8cqrYP0HWeSelpkD3X6U2vuHDVVF0Q1IS4I
+	EGt2PwEhlZUxs4hTxsmkh9Px6vJXQjOaCSo5oxQk7hMHNjMlfjswU09ncmOmCFhw
+	C2XLMzYZYjE/7sKVB6aXbkFmTw+J9vYDqTT2dCTBnWhjFDGCYhhkqeE9Ol0+PnXo
+	aTX9BBZhWXvwXzRmkcEf0GJVe8TWTa1S9gkmNnVIn9UVQqyAHGe2fUhQXyjtUs/w
+	mxPOhvTcUTDfZSUBDLU/9Hv6We0LDID9qWm50b2a1t7jGio4vNz4a/3XX+J/yPzZ
+	w==
 Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 48bpxy4dp4-1
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 48bpvh47yv-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 07 Aug 2025 14:42:17 +0000 (GMT)
+	Thu, 07 Aug 2025 14:42:14 +0000 (GMT)
 Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 577ER2Eh005733;
-	Thu, 7 Aug 2025 14:42:16 GMT
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 577DLxnN005799;
+	Thu, 7 Aug 2025 14:42:13 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 48bpwyhw00-1
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 48bpwyhvw4-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 07 Aug 2025 14:42:16 +0000
+	Thu, 07 Aug 2025 14:42:13 +0000
 Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 577EgAIt014830;
-	Thu, 7 Aug 2025 14:42:15 GMT
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 577EgAIn014830;
+	Thu, 7 Aug 2025 14:42:12 GMT
 Received: from bpf.uk.oracle.com (dhcp-10-154-53-8.vpn.oracle.com [10.154.53.8])
-	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 48bpwyhvt5-6;
-	Thu, 07 Aug 2025 14:42:15 +0000
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 48bpwyhvt5-3;
+	Thu, 07 Aug 2025 14:42:12 +0000
 From: Alan Maguire <alan.maguire@oracle.com>
 To: dwarves@vger.kernel.org
 Cc: bpf@vger.kernel.org, Alan Maguire <alan.maguire@oracle.com>
-Subject: [RFC dwarves 5/6] btf_encoder: Do not error out if BTF is not found in some input files
-Date: Thu,  7 Aug 2025 15:42:08 +0100
-Message-ID: <20250807144209.1845760-6-alan.maguire@oracle.com>
+Subject: [RFC dwarves 2/6] pfunct: Fix up function display with updated prototype representation
+Date: Thu,  7 Aug 2025 15:42:05 +0100
+Message-ID: <20250807144209.1845760-3-alan.maguire@oracle.com>
 X-Mailer: git-send-email 2.43.5
 In-Reply-To: <20250807144209.1845760-1-alan.maguire@oracle.com>
 References: <20250807144209.1845760-1-alan.maguire@oracle.com>
@@ -69,85 +69,56 @@ X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 su
  spamscore=0 adultscore=0 phishscore=0 bulkscore=0 mlxscore=0
  mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2507300000 definitions=main-2508070118
-X-Proofpoint-GUID: G2BVlNT1if90gMq2Gm1bZWOnK5jEIxIu
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwODA3MDExOSBTYWx0ZWRfX1//nJC/eUOyX
- lPi3w8ED7WLAIlU+St/KEj5CsFqIK6r41S87tkm0XTo+xfRQ8eHuL/Q7eXnzyV5oooooZSZIGm4
- qg75iabLgibwGAxAU0vOqikySHrBCdlJEAewVBzHBqDv97kTMPfLjPNlo9RLWlEAxOa6i1NPSrn
- zKu6/1Ob/aWIOLduiB3RkXaaN67rpTzSzdWZaxSsw6rYxlTM4ez9ieQPFHPFimme1X3kyjTEGMk
- 5kDFjcgJiWI9EtvkIpUdhdAApqMY/mWwRpax3aXin3tqHU+P3fErITH1rNI/76H30Q1HtCaCf2J
- 3AetrDusRbBPUV0+yFGfLTyZe9AgRAMgbfGXnjlFZotYF/G2o9orvdh5387Xibhj9KsJMCn0BCZ
- sQ3on1FTwb7XY1llWIKYOXZhyP8tC1TTmoOPmZ5jtFNJd2ZxJERK3St/VdSUeHACDhajkyoB
-X-Authority-Analysis: v=2.4 cv=Y9/4sgeN c=1 sm=1 tr=0 ts=6894bb49 b=1 cx=c_pps
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwODA3MDExOSBTYWx0ZWRfXw3OlN4JADa7G
+ nLFRwtLHj5aJod9/Z+EHZZ0Cf76uALbV6JUfsV3VJvTQC3zRHLWISv9fdu7q8mIcX1sHZ4xGYj9
+ 7fb6Adw9UCf7DoKsOI0ZhppGiWPji+U/aW/EB89g/G0oHpfj4BfgHRy7+oVK4xeCGSJk439B0ny
+ 6kGqVG9TZcQhBNsz3uY7gCkmOpK7zA6mw/znSiwvm9+GQikfJ0VTuceIZPzU77/jLX1mnRtgJ01
+ C2mhukIznvOikCxUCznqrwX8TZoMoZN0zPP5det0bSXQfJv4lCb/AvGDN2uppOzqrWH7vigGQV4
+ zMsBHcjW81brKP+3HfWctJDA3CMV97p+d1bZN6a6e2hBqf/Q6iBXHNX1JdafVXMhLvNNi+b53y8
+ IZsrLUlev4WJXPFxr9MhaGttdrLfWRjfy+UANb0m7xTt4uzamSQZP2K0lnyoSAZ4TPFq0Zjs
+X-Proofpoint-ORIG-GUID: y9pBjj-SwcDUuJrYeiIKIGvM6OoRBAZN
+X-Proofpoint-GUID: y9pBjj-SwcDUuJrYeiIKIGvM6OoRBAZN
+X-Authority-Analysis: v=2.4 cv=Hpl2G1TS c=1 sm=1 tr=0 ts=6894bb46 b=1 cx=c_pps
  a=zPCbziy225d3KhSqZt3L1A==:117 a=zPCbziy225d3KhSqZt3L1A==:17
- a=PBXSyQl6t6HQkZJ5:21 a=2OwXVqhp2XgA:10 a=yPCof4ZbAAAA:8
- a=Rz7FqSVgpgXAa5yxgpcA:9 cc=ntf awl=host:12069
-X-Proofpoint-ORIG-GUID: G2BVlNT1if90gMq2Gm1bZWOnK5jEIxIu
+ a=2OwXVqhp2XgA:10 a=yPCof4ZbAAAA:8 a=aRT4OfQelZJyg_GMs3UA:9 cc=ntf
+ awl=host:12069
 
-When encoding from a lot of object file sources, it is possible some
-will not contain BTF, so if --btf_features=encode_force is set, drive
-on as long as at least one _does_ contain a .BTF section.
-
-With this in place, we can test how gcc -gbtf generation across vmlinux
-works in a simple manner by doing the following on a kernel build which
-specified -gbtf in the KCFLAGS environment variable (tested with gcc 14):
-
- pahole --format_path=btf -J --btf_features=encode_force \
-        --btf_encode_detached=/tmp/vmlinux.btf $(ar t vmlinux.a)
-
-("ar t vmlinux.a" gives a list of the object files comprising vmlinux)
-
-This is no substitute for link-time BTF deduplication of course, but
-it does provide a simple way to see the BTF that gcc generates for vmlinux.
-
-The idea is that we can explore differences in BTF generation across
-the various combinations
-
-1. debug info source: DWARF; dedup done via pahole (traditional)
-2. debug info source: compiler-generated BTF; dedup done via pahole (above)
-3. debug info source: compiler-generated BTF; dedup done via linker (TBD)
-
-Handling 3 - linker-based dedup - will require BTF archives so that is the
-next step we need to explore.
+Now that the function prototype representation has been updated
+in the BTF-derived ftype, no special handling is needed for printing
+BTF functions.
 
 Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
 ---
- dwarves.c | 14 ++++++++++++--
- 1 file changed, 12 insertions(+), 2 deletions(-)
+ dwarves_fprintf.c | 2 +-
+ pfunct.c          | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/dwarves.c b/dwarves.c
-index ef93239..8b37b13 100644
---- a/dwarves.c
-+++ b/dwarves.c
-@@ -2948,17 +2948,27 @@ try_elf:
- int cus__load_files(struct cus *cus, struct conf_load *conf,
- 		    char *filenames[])
+diff --git a/dwarves_fprintf.c b/dwarves_fprintf.c
+index 1ec478c..557fe7a 100644
+--- a/dwarves_fprintf.c
++++ b/dwarves_fprintf.c
+@@ -1402,7 +1402,7 @@ static size_t function__fprintf(const struct tag *tag, const struct cu *cu,
+ 				const struct conf_fprintf *conf, FILE *fp)
  {
--	int i = 0;
-+	int i = 0, loaded = 0, failed = 0;
+ 	struct function *func = tag__function(tag);
+-	struct ftype *ftype = func->btf ? tag__ftype(cu__type(cu, func->proto.tag.type)) : &func->proto;
++	struct ftype *ftype = &func->proto;
+ 	size_t printed = 0;
+ 	bool inlined = !conf->strip_inline && function__declared_inline(func);
+ 	int i;
+diff --git a/pfunct.c b/pfunct.c
+index 5a6dd59..61cefd5 100644
+--- a/pfunct.c
++++ b/pfunct.c
+@@ -326,7 +326,7 @@ static int function__emit_type_definitions(struct function *func,
+ 					   struct cu *cu, FILE *fp)
+ {
+ 	struct parameter *pos;
+-	struct ftype *proto = func->btf ? tag__ftype(cu__type(cu, func->proto.tag.type)) : &func->proto;
++	struct ftype *proto = &func->proto;
+ 	struct tag *type = cu__type(cu, proto->tag.type);
  
- 	while (filenames[i] != NULL) {
- 		int err = cus__load_file(cus, conf, filenames[i]);
- 		if (err) {
- 			errno = -err;
--			return -++i;
-+			if (conf->btf_encode_force)
-+				failed = -(i + 1);
-+			else
-+				return -++i;
-+		} else {
-+			loaded++;
- 		}
- 		++i;
- 	}
- 
-+	if (conf->btf_encode_force) {
-+		/* If no files loaded, error out, otherwise return success */
-+		if (loaded == 0)
-+			return failed;
-+	}
- 	return i ? 0 : cus__load_running_kernel(cus, conf);
- }
- 
+ retry_return_type:
 -- 
 2.43.5
 
