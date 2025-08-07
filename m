@@ -1,57 +1,57 @@
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 932CA263C90;
-	Thu,  7 Aug 2025 14:42:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BC13262FF8;
+	Thu,  7 Aug 2025 14:42:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754577742; cv=none; b=DOnzUa1TsGjQ57Skb3NMR267BXMMDRZsWL8kqn+XII425E2ss+mna5iNNDnDvLYnQfdV6ktGfpAtOEsmIl+Wxf2N9lNgXRcDByAy2JEhpVoRFcnexzi5Z1ebrHjEQl6MCBddn74HSGFxWS0OFZz9q8/zX2d63xi7AgtnmPM9Nf4=
+	t=1754577742; cv=none; b=SVBBr87lsfD3Ra2/qZZ2jlhk8G8WHURSlucGbSoTfDwjdvuXg+GhatK79A8NPkJ6GGYfW68goido4HKlQGsx+m/Add3BsUovvw5gQTB34uecHotO4867RtwM84fA5wGxcpgK1KQpe5JZkZKqESBp1m/vWlNFjdQp+iaQIxny4t8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1754577742; c=relaxed/simple;
-	bh=ijKB1Ky666q7aR3Knn6PFo74lcFALU/SmYO5lb/ZiRE=;
+	bh=uY2YYBLhCe4Z6/eH5GyvY31+PFSBjlYJgir23MrVrWw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=XNJi/NlrKC13SZoQjQbSYK1o5leeZ0G78rVVr2dHyhQtqMEmX5WXrGPcMMpauo2MtptAfc7gM3BWIwsvkzZB+Btz9BdTziVMXUtegI9nzVfyXlVGPs6E/nMUKeZAyuhEI1oRbC7W73UDj/UWfZyRYSSPxQ61BAed38J9QpuXzck=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=g9Y28cUy; arc=none smtp.client-ip=205.220.165.32
+	 MIME-Version; b=poP8dX7/K/ZIXhfAmH5taAKseXzgwqD+Tmw2RjYU4uOuq9khSmknpCKuf8sorzjjXhQfSJ/Y6uAAvyrBEXrS1700hj0+S1AC6EhPvY6JPo0GAnM70vDtXsQzF7PZjZx0kdoeB6GFDKpBpNMNfmow1V0qIUogFOz6A9TMD+SJ+GM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=rRI06iNl; arc=none smtp.client-ip=205.220.177.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="g9Y28cUy"
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5777MuFZ028222;
-	Thu, 7 Aug 2025 14:42:14 GMT
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="rRI06iNl"
+Received: from pps.filterd (m0333520.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5777MsQD006993;
+	Thu, 7 Aug 2025 14:42:18 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
 	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=corp-2025-04-25; bh=5oSIu
-	bgx/rgb7cmAPaN7nYMKOXUeSs7BVMrk9up3+5U=; b=g9Y28cUyif/LM+zW3/6Vr
-	Lr3BvD1WW2HAbyH9pFN8d12oh0SMO8cqrYP0HWeSelpkD3X6U2vuHDVVF0Q1IS4I
-	EGt2PwEhlZUxs4hTxsmkh9Px6vJXQjOaCSo5oxQk7hMHNjMlfjswU09ncmOmCFhw
-	C2XLMzYZYjE/7sKVB6aXbkFmTw+J9vYDqTT2dCTBnWhjFDGCYhhkqeE9Ol0+PnXo
-	aTX9BBZhWXvwXzRmkcEf0GJVe8TWTa1S9gkmNnVIn9UVQqyAHGe2fUhQXyjtUs/w
-	mxPOhvTcUTDfZSUBDLU/9Hv6We0LDID9qWm50b2a1t7jGio4vNz4a/3XX+J/yPzZ
-	w==
+	:mime-version:references:subject:to; s=corp-2025-04-25; bh=IGoNu
+	kqg2VApmAgikSGXKQzP6s57nCKJToW7CCIR2ns=; b=rRI06iNlqBTr4Tf/I2VKw
+	EyOK7XQ0vIdohmLbJT2UwriWEomiNloYm8bPmixi6eLuBnf8cYaqd8KxHRrfiHij
+	oPnGZUbdUliJP9dvRtLM0dZLFGT9QOX8KzQ+whYRTxuflTcISy5dy5/QEaeLswk6
+	1/ax+99hXyB8Oze8xAHfA7ajW1e0uKSSdisoJNwH3FJAmoJjW9Nq2fFMkybJTdEe
+	igNpCCk+TThkqqY04cWNj8dCvXofKhxCwzPGBebGbGjoC3cuC8PEWUVHpkKPtMlH
+	W+8Oazrj6rkxoT3EVcrZKOyXrcu4ZxcMeqEWsMCtfY2s0rjG8akUXqlu3N+tMCYp
+	A==
 Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 48bpvh47yv-1
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 48bpxy4dp5-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 07 Aug 2025 14:42:14 +0000 (GMT)
+	Thu, 07 Aug 2025 14:42:17 +0000 (GMT)
 Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 577DLxnN005799;
-	Thu, 7 Aug 2025 14:42:13 GMT
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 577DuDjY005693;
+	Thu, 7 Aug 2025 14:42:17 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 48bpwyhvw4-1
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 48bpwyhw0j-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 07 Aug 2025 14:42:13 +0000
+	Thu, 07 Aug 2025 14:42:16 +0000
 Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 577EgAIn014830;
-	Thu, 7 Aug 2025 14:42:12 GMT
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 577EgAIv014830;
+	Thu, 7 Aug 2025 14:42:16 GMT
 Received: from bpf.uk.oracle.com (dhcp-10-154-53-8.vpn.oracle.com [10.154.53.8])
-	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 48bpwyhvt5-3;
-	Thu, 07 Aug 2025 14:42:12 +0000
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 48bpwyhvt5-7;
+	Thu, 07 Aug 2025 14:42:16 +0000
 From: Alan Maguire <alan.maguire@oracle.com>
 To: dwarves@vger.kernel.org
 Cc: bpf@vger.kernel.org, Alan Maguire <alan.maguire@oracle.com>
-Subject: [RFC dwarves 2/6] pfunct: Fix up function display with updated prototype representation
-Date: Thu,  7 Aug 2025 15:42:05 +0100
-Message-ID: <20250807144209.1845760-3-alan.maguire@oracle.com>
+Subject: [RFC dwarves 6/6] tests: Add test of pahole using BTF as input to BTF generation
+Date: Thu,  7 Aug 2025 15:42:09 +0100
+Message-ID: <20250807144209.1845760-7-alan.maguire@oracle.com>
 X-Mailer: git-send-email 2.43.5
 In-Reply-To: <20250807144209.1845760-1-alan.maguire@oracle.com>
 References: <20250807144209.1845760-1-alan.maguire@oracle.com>
@@ -67,58 +67,160 @@ X-Proofpoint-Virus-Version: vendor=baseguard
  definitions=2025-08-07_03,2025-08-06_01,2025-03-28_01
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 suspectscore=0
  spamscore=0 adultscore=0 phishscore=0 bulkscore=0 mlxscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ mlxlogscore=928 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2507300000 definitions=main-2508070118
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwODA3MDExOSBTYWx0ZWRfXw3OlN4JADa7G
- nLFRwtLHj5aJod9/Z+EHZZ0Cf76uALbV6JUfsV3VJvTQC3zRHLWISv9fdu7q8mIcX1sHZ4xGYj9
- 7fb6Adw9UCf7DoKsOI0ZhppGiWPji+U/aW/EB89g/G0oHpfj4BfgHRy7+oVK4xeCGSJk439B0ny
- 6kGqVG9TZcQhBNsz3uY7gCkmOpK7zA6mw/znSiwvm9+GQikfJ0VTuceIZPzU77/jLX1mnRtgJ01
- C2mhukIznvOikCxUCznqrwX8TZoMoZN0zPP5det0bSXQfJv4lCb/AvGDN2uppOzqrWH7vigGQV4
- zMsBHcjW81brKP+3HfWctJDA3CMV97p+d1bZN6a6e2hBqf/Q6iBXHNX1JdafVXMhLvNNi+b53y8
- IZsrLUlev4WJXPFxr9MhaGttdrLfWRjfy+UANb0m7xTt4uzamSQZP2K0lnyoSAZ4TPFq0Zjs
-X-Proofpoint-ORIG-GUID: y9pBjj-SwcDUuJrYeiIKIGvM6OoRBAZN
-X-Proofpoint-GUID: y9pBjj-SwcDUuJrYeiIKIGvM6OoRBAZN
-X-Authority-Analysis: v=2.4 cv=Hpl2G1TS c=1 sm=1 tr=0 ts=6894bb46 b=1 cx=c_pps
+X-Proofpoint-GUID: lx_9dJScUNI6jpbV2UeWtGd5LhqzhRr8
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwODA3MDExOSBTYWx0ZWRfX3Jb+q6m8Yxfm
+ gOfoGwyn2cRX3ZgbjJSbcUjuBqE/SeHrGxuPB1FSJAxlm6Xw3kuCvGb+kADScY8oBaga9cFhUWh
+ zban6digFQldfo/CaA0lxJjk59bOo4bne+l90fGhLEA7Sb9m49BBx/EcoOBc2kLi+MQ1jIjIYum
+ K0Wnj74JDeeWQ1RejMhVWu44K/6zZrgPK421k+q4Ap9VyZigAcSIwXI+MFBMTMrEL+EOyo0kBpr
+ ERFNaf8tgpuWgwu5wsd2YkQvRW1IxeM3cIS3a/w6Syz/eNxawMkKbXR0q0xHxPgkkgvoAc4NSNt
+ h7R3Q8K1Szjpcj/E3t5/hsBkoXxR6V4XxfiAh75oBN/lYOWKO9Ij46MW84TEn6bzIa6a0EP4B/p
+ MOuStVFqR14oWpgWeY+Wj/ym00PzTwEkZzEjbw73yWv3mSmx7Mc3XxwaDLfaDEun3sxGCM8w
+X-Authority-Analysis: v=2.4 cv=Y9/4sgeN c=1 sm=1 tr=0 ts=6894bb49 b=1 cx=c_pps
  a=zPCbziy225d3KhSqZt3L1A==:117 a=zPCbziy225d3KhSqZt3L1A==:17
- a=2OwXVqhp2XgA:10 a=yPCof4ZbAAAA:8 a=aRT4OfQelZJyg_GMs3UA:9 cc=ntf
+ a=2OwXVqhp2XgA:10 a=yPCof4ZbAAAA:8 a=xz9bU-MXYe8BVxLLlEsA:9 cc=ntf
  awl=host:12069
+X-Proofpoint-ORIG-GUID: lx_9dJScUNI6jpbV2UeWtGd5LhqzhRr8
 
-Now that the function prototype representation has been updated
-in the BTF-derived ftype, no special handling is needed for printing
-BTF functions.
+Create two .o files containing BTF as a result of passing -gbtf
+and ensure that we can run BTF generation (and dedup) on them
+to get a valid detached BTF output.
 
 Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
 ---
- dwarves_fprintf.c | 2 +-
- pfunct.c          | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ tests/btf_2_btf.sh | 122 +++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 122 insertions(+)
+ create mode 100755 tests/btf_2_btf.sh
 
-diff --git a/dwarves_fprintf.c b/dwarves_fprintf.c
-index 1ec478c..557fe7a 100644
---- a/dwarves_fprintf.c
-+++ b/dwarves_fprintf.c
-@@ -1402,7 +1402,7 @@ static size_t function__fprintf(const struct tag *tag, const struct cu *cu,
- 				const struct conf_fprintf *conf, FILE *fp)
- {
- 	struct function *func = tag__function(tag);
--	struct ftype *ftype = func->btf ? tag__ftype(cu__type(cu, func->proto.tag.type)) : &func->proto;
-+	struct ftype *ftype = &func->proto;
- 	size_t printed = 0;
- 	bool inlined = !conf->strip_inline && function__declared_inline(func);
- 	int i;
-diff --git a/pfunct.c b/pfunct.c
-index 5a6dd59..61cefd5 100644
---- a/pfunct.c
-+++ b/pfunct.c
-@@ -326,7 +326,7 @@ static int function__emit_type_definitions(struct function *func,
- 					   struct cu *cu, FILE *fp)
- {
- 	struct parameter *pos;
--	struct ftype *proto = func->btf ? tag__ftype(cu__type(cu, func->proto.tag.type)) : &func->proto;
-+	struct ftype *proto = &func->proto;
- 	struct tag *type = cu__type(cu, proto->tag.type);
- 
- retry_return_type:
+diff --git a/tests/btf_2_btf.sh b/tests/btf_2_btf.sh
+new file mode 100755
+index 0000000..dbc4f34
+--- /dev/null
++++ b/tests/btf_2_btf.sh
+@@ -0,0 +1,122 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0-only
++#
++# Copyright (c) 2025, Oracle and/or its affiliates.
++#
++# Use -gbtf to compile objects with BTF and combine/dedup the
++# BTF using pahole; this tests the ability to take BTF as
++# input for BTF encoding as well as DWARF.
++#
++
++outdir=
++
++fail()
++{
++	# Do not remove test dir; might be useful for analysis
++	trap - EXIT
++	if [[ -d "$outdir" ]]; then
++		echo "Test data is in $outdir"
++	fi
++	exit 1
++}
++
++cleanup()
++{
++	rm ${outdir}/*
++	rmdir $outdir
++}
++
++outdir=$(mktemp -d /tmp/btf_2_btf.sh.XXXXXX)
++
++trap cleanup EXIT
++
++echo -n "Validation of BTF encoding from cc-generated BTF: "
++
++cat <<EOF > ${outdir}/f1.c
++#include <stdlib.h>
++
++enum foo {
++	E1,
++	E2,
++	E3
++};
++
++struct bar {
++	enum foo f1;
++	int f2;
++	char *f3;
++	void *f4;
++};
++
++int baz(struct bar *b)
++{
++	return b->f2++;
++}
++EOF
++gcc -gbtf -c ${outdir}/f1.c -o ${outdir}/f1.o
++if [[ $? -ne 0 ]]; then
++	echo "skip: -gbtf not supported or gcc not present"
++	exit 1
++fi
++
++cat <<EOF > ${outdir}/f2.c
++#include <stdlib.h>
++
++enum foo {
++        E1,
++        E2,
++        E3
++};
++
++struct bar {
++        enum foo f1;
++        int f2;
++        char *f3;
++        void *f4;
++};
++
++struct bar2 {
++	void *f1;
++	int f2[3];
++};
++
++int othervar;
++
++void *baz2(struct bar2 *b2, char *o)
++{
++	if (b2->f2[0] > 2)
++		return NULL;
++	return o;
++}
++EOF
++gcc -gbtf -c ${outdir}/f2.c -o ${outdir}/f2.o
++
++pahole -J --format_path=btf --btf_features=default --lang_exclude=rust \
++	--btf_encode_detached=${outdir}/cc.btf ${outdir}/f1.o ${outdir}/f2.o
++
++for f in ${outdir}/f1.o ${outdir}/cc.btf ; do
++	struct=$(pahole $f |grep "struct bar" 2>/dev/null)
++	if [[ -z "$struct" ]]; then
++		echo "struct bar not found in '$f'"
++		fail
++	fi
++	fns=$(pfunct --all $f |grep baz 2>/dev/null)
++	if [[ -z "$fns" ]]; then
++		echo "function baz not found in '$f'"
++		fail
++	fi
++done
++struct=$(pahole $f |grep "struct bar2" 2>/dev/null)
++if [[ -z "$struct" ]]; then
++	echo "struct bar2 not found in '$f'"
++	fail
++fi
++fn=$(pfunct --all $f |grep "baz2" 2>/dev/null)
++if [[ -z "$fn" ]]; then
++	echo "function baz2 not found in '$f'"
++	fail
++fi
++
++echo "Ok"
++
++exit 0
 -- 
 2.43.5
 
