@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B58A535959
-	for <dwarves@vger.kernel.org>; Thu,  7 Aug 2025 18:25:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C85A5271A84
+	for <dwarves@vger.kernel.org>; Thu,  7 Aug 2025 18:25:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754591151; cv=none; b=P+NfIbOCUDYCYfW62c0n2QvcCvuqU+KN2W7WAkbjr9gMX8brMlNH8OUiuZKnRmZ4qvSy59GhiG/jsAu0FFoovaeQwslmmKL2pkd3iwB65SKPWcKEHzelHoQbNafyqjc5TQe7dPYcz23Z0fJ/AiOvxJbURHIWtkiUdK+5+EQptGA=
+	t=1754591155; cv=none; b=XiysWumtliMsyiRz3dgKxhB3oeS4fnDauSznEcfq0tXzgb0CBClCwngYRlsVVD68oQojrOpiqEYCUngqIikVPAK59MfD8uuoUOSWUWqjbqIPGDVWO5P7OmiTeAWU9roCG2+QzV3EfxyYFT0XS+/1hK3bxoOfMlCnBAC4Vr5AWzQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754591151; c=relaxed/simple;
-	bh=CWMmg3sC6kHYMynXC/CL9KkLyh0bv3iNTd6MscrAT3s=;
+	s=arc-20240116; t=1754591155; c=relaxed/simple;
+	bh=KtTpm0Y2v7+ZKC7JcE1cDqmibRHXzvSo0MXeOk40Ekk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=UXJa4zag4MRWMUmBmOHfZ+92ggHL9QHpGblWnIFH7MllkVv+Xa8WQGwYfnXV+Z6iwaUREzpZbqH7sUf/dLCJNFsFOqmNkBrmC7f8pSUu0e6s3XSREnkWcLapi+ykof/XTlCIsnpdp5sOGXWFbC4NGh3nYhXl1YEJrcEnsjgbd8c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Z4BZRXq1; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=EqQBoeTmnr7jEx7jp1uLnHUxd+nAuP09WpGTL+hIFKqVDF6gV9eLdRcZ1k4p//1f3C6VdbtlygBNo327eR8EjjaKg5VlFfXjbwlKfQ97V5wpX9ifNH/tgMO/HiX6vLjk5SOTP0OrNfcVE7xmiQnUKPXsH0OGCcbNp04Wc75eBQQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nqiDvlxH; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Z4BZRXq1"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75010C4CEEB;
-	Thu,  7 Aug 2025 18:25:47 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nqiDvlxH"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6C6EC4CEEB;
+	Thu,  7 Aug 2025 18:25:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1754591151;
-	bh=CWMmg3sC6kHYMynXC/CL9KkLyh0bv3iNTd6MscrAT3s=;
+	s=k20201202; t=1754591155;
+	bh=KtTpm0Y2v7+ZKC7JcE1cDqmibRHXzvSo0MXeOk40Ekk=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Z4BZRXq1HRCyYeuyYgCNbQOjgV48nZ5XtfY5ctXF+HRsEuddP2ccGgAtKkD0yf8V/
-	 EJDtw1mdhHtY/eqLyyTeq+q/kQMRp1KeTikUbPILC0jNiXf/LuPm01WNffw4z++FpB
-	 QnwP2jDM3oThMU0PdzmLJD7LEkD11vRJUxcsoTMbpE2LEE6608QQUvQLjFnO06VrRx
-	 1Z3bK1eqHfAm1M3a/ZtUyI9hp8zKWSEP88k0XoDmxDClrM20bZWxn0y08dTDt0VPE7
-	 5MtzEAxvxHXKw02q5iDTTWttXk7KMykSnKyWvpYOHrurtzjpN2rIpg8lqc23OzUVFp
-	 c0ygh7cJR7mWg==
+	b=nqiDvlxHzhdr4Qo6vmGbhmFL5kdFYuElbEzewposGXMOjVNNtUn8YH3+rTNeqDOd5
+	 7jIBLBtR3xd+Km4AswnBuyE0DbYrGb+KUj/qRO6JoNT2lcTGh5ngOpo650fVh4APZi
+	 xuu39Uymn5eoLDsEh1W49t8UHCrjPlwD3cJWCe7gCmAigdENw7TXfSgLSZ3T35vWV8
+	 nKwq0Eu20490ADwXDte9a2SDEMcrD/CH/8w3fA41uxmfLzfBslXg2SjI+sKzr0elTt
+	 IlMiy6CzeVKvQPkdnS9D6AmXCpntaViRtuoIfsKrB+G3Q/H85RDYrI0/JLD/ZRcKDB
+	 xko+h2vJZqbOw==
 From: Arnaldo Carvalho de Melo <acme@kernel.org>
 To: Alan Maguire <alan.maguire@oracle.com>
 Cc: Jiri Olsa <jolsa@kernel.org>,
@@ -39,9 +39,9 @@ Cc: Jiri Olsa <jolsa@kernel.org>,
 	Namhyung Kim <namhyung@kernel.org>,
 	Nick Alcock <nick.alcock@oracle.com>,
 	Yonghong Song <yonghong.song@linux.dev>
-Subject: [PATCH 1/4] libbpf: Simplify error handling removing needless repeated err checks
-Date: Thu,  7 Aug 2025 15:25:35 -0300
-Message-ID: <20250807182538.136498-2-acme@kernel.org>
+Subject: [PATCH 2/4] libbpf: Check if there is extra data at the end of a BTF
+Date: Thu,  7 Aug 2025 15:25:36 -0300
+Message-ID: <20250807182538.136498-3-acme@kernel.org>
 X-Mailer: git-send-email 2.50.1
 In-Reply-To: <20250807182538.136498-1-acme@kernel.org>
 References: <20250807182538.136498-1-acme@kernel.org>
@@ -55,9 +55,30 @@ Content-Transfer-Encoding: 8bit
 
 From: Arnaldo Carvalho de Melo <acme@redhat.com>
 
-The 'done' label can be inside the last test for 'err', as all jumps
-there are immediately preceded by setting 'err' to a non-zero value, so
-no need to check it.
+We get the size for btf->raw_size from the ELF section where it is or
+from the size of a detached BTF, check if there is extra data at the
+end and avoid wasting space, when not using mmap.
+
+This can happen if we generate BTF for all .o files and it then gets
+combined by the linker, which is the default action when finding
+unhandled sections with the same name in multiple .o files.
+
+For instance:
+
+  root@x1:~/bla# bpftool -d btf dump file ~acme/btf2btf/vmlinux | wc -l
+  libbpf: BTF raw_size chopped from 380507209 to 238545
+  12084
+  root@x1:~/bla#
+
+The above is one such file, where that vmlinux .BTF section has lots of
+.BTF files combined by the linker.
+
+A deduplicated one, generated by pahole + libbpf when converting from
+DWARF has way more stuff in it and the raw_size matches the ELF size:
+
+  root@x1:~/bla# bpftool -d btf dump file /sys/kernel/btf/vmlinux |wc -l
+  355927
+  root@x1:~/bla#
 
 Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 Cc: Andrii Nakryiko <andrii.nakryiko@gmail.com>
@@ -68,26 +89,102 @@ Cc: Nick Alcock <nick.alcock@oracle.com>
 Cc: Yonghong Song <yonghong.song@linux.dev>
 Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
 ---
- tools/lib/bpf/btf.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ tools/lib/bpf/btf.c | 42 ++++++++++++++++++++++++++++++++----------
+ 1 file changed, 32 insertions(+), 10 deletions(-)
 
 diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
-index 37682908cb0f3bd4..9bacd4dddff366bf 100644
+index 9bacd4dddff366bf..ee45d461d53bea9a 100644
 --- a/tools/lib/bpf/btf.c
 +++ b/tools/lib/bpf/btf.c
-@@ -1090,11 +1090,9 @@ static struct btf *btf_new(const void *data, __u32 size, struct btf *base_btf, b
- 	err = btf_parse_str_sec(btf);
- 	err = err ?: btf_parse_type_sec(btf);
- 	err = err ?: btf_sanity_check(btf);
+@@ -124,6 +124,9 @@ struct btf {
+ 	/* whether raw_data is a (read-only) mmap */
+ 	bool raw_data_is_mmap;
+ 
++	/* Wheter there was more data after the end of strings */
++	bool extra_raw_data;
++
+ 	/* BTF object FD, if loaded into kernel */
+ 	int fd;
+ 
+@@ -225,10 +228,9 @@ static void btf_bswap_hdr(struct btf_header *h)
+ 	h->str_len = bswap_32(h->str_len);
+ }
+ 
+-static int btf_parse_hdr(struct btf *btf)
++static int btf_parse_hdr(struct btf *btf, struct btf_header *hdr)
+ {
+-	struct btf_header *hdr = btf->hdr;
+-	__u32 meta_left;
++	__u32 meta_left, raw_size;
+ 
+ 	if (btf->raw_size < sizeof(struct btf_header)) {
+ 		pr_debug("BTF header not found\n");
+@@ -271,6 +273,18 @@ static int btf_parse_hdr(struct btf *btf)
+ 		return -EINVAL;
+ 	}
+ 
++	/* If there is more data after the strings, it will not be used,
++	 * so we might as well trim here and don't waste memory.
++	 * This paves the way for a BTF archive, created by default
++	 * by the linker when finding .BTF in multiple .o files.
++	 */
++	raw_size = sizeof(*hdr) + hdr->str_off + hdr->str_len;
++	if (raw_size != btf->raw_size) {
++		pr_debug("BTF raw_size chopped from %u to %u\n", btf->raw_size, raw_size);
++		btf->raw_size = raw_size;
++		btf->extra_raw_data = true;
++	}
++
+ 	return 0;
+ }
+ 
+@@ -1047,6 +1061,7 @@ struct btf *btf__new_empty_split(struct btf *base_btf)
+ 
+ static struct btf *btf_new(const void *data, __u32 size, struct btf *base_btf, bool is_mmap)
+ {
++	struct btf_header hdr;
+ 	struct btf *btf;
+ 	int err;
+ 
+@@ -1065,24 +1080,31 @@ static struct btf *btf_new(const void *data, __u32 size, struct btf *base_btf, b
+ 		btf->start_str_off = base_btf->hdr->str_len;
+ 	}
+ 
++	/* We still don't know if this is an archive, i.e. if 'size' is
++	 * the raw_size of a BTF or the sum of all BTFs in an archive,
++	 * it'll be adjusted when we parse the header.
++	 */
++	btf->raw_size = size;
++	memcpy(&hdr, data, sizeof(hdr));
++
++	err = btf_parse_hdr(btf, &hdr);
++	if (err)
++		goto done;
++
+ 	if (is_mmap) {
+ 		btf->raw_data = (void *)data;
+ 		btf->raw_data_is_mmap = true;
+ 	} else {
+-		btf->raw_data = malloc(size);
++		btf->raw_data = malloc(btf->raw_size);
+ 		if (!btf->raw_data) {
+ 			err = -ENOMEM;
+ 			goto done;
+ 		}
+-		memcpy(btf->raw_data, data, size);
++		memcpy(btf->raw_data, data, btf->raw_size);
+ 	}
+ 
+-	btf->raw_size = size;
+-
+ 	btf->hdr = btf->raw_data;
+-	err = btf_parse_hdr(btf);
 -	if (err)
 -		goto done;
++	memcpy(btf->hdr, &hdr, sizeof(hdr));
  
--done:
- 	if (err) {
-+done:
- 		btf__free(btf);
- 		return ERR_PTR(err);
- 	}
+ 	btf->strs_data = btf->raw_data + btf->hdr->hdr_len + btf->hdr->str_off;
+ 	btf->types_data = btf->raw_data + btf->hdr->hdr_len + btf->hdr->type_off;
 -- 
 2.50.1
 
