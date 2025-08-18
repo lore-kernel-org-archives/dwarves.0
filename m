@@ -1,62 +1,88 @@
-Received: from mx0b-0064b401.pphosted.com (mx0b-0064b401.pphosted.com [205.220.178.238])
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DF4628504B
-	for <dwarves@vger.kernel.org>; Thu, 14 Aug 2025 09:42:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.178.238
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EA6932A3C2
+	for <dwarves@vger.kernel.org>; Mon, 18 Aug 2025 13:56:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.165.32
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755164578; cv=fail; b=c7TUCflJBbykPSPWLwQ+HBifeNrZlAiBoRR+bAZw2/xdNVrhjPnxfWuryd6Q1h2OZ1FOIU2q2KZt9X0oIFrUHXYws6n8jkp0Oeqh3ratY+J0tEfCv9dUuteTEXOkHTWegAW5BD86q/yPXMbRQyTsZXSJ/VjN9HvBmo9fyID/kYM=
+	t=1755525413; cv=fail; b=Xhih52otvkijLu6ap2niAIG7NwiXsg2yu5E/wMIcG7E/f+TbjG8NKVQwp5JPGXxu8nTxZX0+kyHgVJ1SiiWvuQSr8DCEuVtRRuO9Eu96gS9w+2uiJlF6OV2hvPXiia++Fuq4fBidZAmOCj42P6fLkqws4efdesU1QA4uxmd9Jhc=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755164578; c=relaxed/simple;
-	bh=ZTm5htZyTe7tul7yffRi3dLAoIcJ3vv4iexuNGMrRF8=;
-	h=Message-ID:Date:Subject:From:To:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=DkspunpZqBc6UQvelExvsXjoh2Xn0IdkLOVOkA9342w31Nbe/jsLFKkDOBqyIB9rTClsBzAThUO74ZDzwEpHu+PhBcfh8K72vBgKTo6L7+eT+PRpE1x1XUNrUT0D29sOvamZmbBKHUwQvTDKb13zkqhHbeGdPit54hk2DnCUYwg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=windriver.com; spf=pass smtp.mailfrom=windriver.com; arc=fail smtp.client-ip=205.220.178.238
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=windriver.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=windriver.com
-Received: from pps.filterd (m0250812.ppops.net [127.0.0.1])
-	by mx0a-0064b401.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 57E9adOO1377619;
-	Thu, 14 Aug 2025 09:42:28 GMT
-Received: from nam12-dm6-obe.outbound.protection.outlook.com (mail-dm6nam12on2086.outbound.protection.outlook.com [40.107.243.86])
-	by mx0a-0064b401.pphosted.com (PPS) with ESMTPS id 48ggw0sm63-1
-	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-	Thu, 14 Aug 2025 09:42:27 +0000 (GMT)
+	s=arc-20240116; t=1755525413; c=relaxed/simple;
+	bh=0Yg43t25+46xbVbq4rv2HiBL211HNvh7Xf3ie/3oZzY=;
+	h=Message-ID:Date:Subject:To:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=N2LwfqaqrDKec8D+Z4sgMT3DLkCV5kZo63OzeIPlXDY+RryAqJRaTpdnFrSlwfK7ZVX+i1nTWv+Qh7sDfW+pSNoyedckD8dxQ9y7e3oICGgSNQv8Vkd6lt1K2/p/skPVHXLFzt/9coKMCwVbFjovi2bghqtJEw+4/CIgB/j+Vw8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=oP5fpr5S; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=IC+oTAeL; arc=fail smtp.client-ip=205.220.165.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="oP5fpr5S";
+	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="IC+oTAeL"
+Received: from pps.filterd (m0333521.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 57I9esmB018391;
+	Mon, 18 Aug 2025 13:56:46 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=
+	content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=
+	corp-2025-04-25; bh=1HAIIvj7aO93d8+FdAq5RKsDoNrXcCN38Xq2YSHZnh8=; b=
+	oP5fpr5SRnVymIt2g7wYvZZtWGmTUmTI5QbZ0whXbQVMHvMkY3hhtUc+gNVj9ysF
+	iLCX6ODilulLfRyNsySZq2svfpzmTiY1GcGNvMWB+23L11li0E2wzYc5Yn5o2R1c
+	tPArFHNmWVuqBiYJA1IG7sfbxwZF7dir5QyYd6lEoPt8FETFx0JK1jIQ4+zm/rO6
+	2JvM5h8Zvu/WaL8Gxt6S5R7iSvfWKbsKcvvWS1eptxUKXNtGQRiDj4R7rN6Jxtd2
+	G4LVi5UieYimFi31aMM2NH+fO1cik7MLdowJ/tb3TEb8Vx0RiyvitTSKXLTBUK+W
+	ngXm6IOBdQtSV530pAf4LQ==
+Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 48m0ybrn0s-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 18 Aug 2025 13:56:45 +0000 (GMT)
+Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 57IDLlLA011418;
+	Mon, 18 Aug 2025 13:56:44 GMT
+Received: from nam11-dm6-obe.outbound.protection.outlook.com (mail-dm6nam11on2042.outbound.protection.outlook.com [40.107.223.42])
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 48jge99qp4-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 18 Aug 2025 13:56:44 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=wnkzsq9sCp79aXGNIWpW4DhcMvjXJGdnZbet1l7A9eqiOhhV1ONFda+KE8EIWTZ9C68nxMiBTzlqrhfIM09zQo5fy4abJMjWjSleFNtDRApyoGhvCjksadezKcLS5jRsjsqTozVp+MEfc8L5ih9IIHczv9y0CJTKzQ1wsqTt/VTIbspGHk5lUELayVePBX675qiRjs31YTIR0dqlSgyqjDGhmvGhMWYiIqqIpBNGfNkdbRZPCf0Dx3gP1bU8Uk/GS2aJEKqekmGlay5UAQzo46P1Ftq2ALZx61rptOByixRQmRKQNZcGOrwoN9Ltt1/HEKkCrpSqye0XpdZ8I87K6A==
+ b=IB8w6kNjyfnbJqJ/SLdD8joEHmr4GByHDi0ex2oo2cOOaIFk9sOBlPy6q9qv8KQ6P3H9SKJOvQ2Qn1kiRAyEr8RZaznm5sLRwrk4Y1XbIUapqNtkSAZoqJ3PlT2iPuqWdoI9xoYQWEf7vhp0sFzlkPo+sXmyLBAjHH93bEfJlTFvIOeDwV8YfZUT/x6LXjFFWbAnIZdkUtbUNac1wqkOATWFMpchalTWSM1RXUNIgGu+wMjo0iy/Uj8gqBn8dRfhrhScrXEO0W0gXWULPvQhqi5MU89+O7IAzGtfcEBA3Mzg6YKDqKxCLIyjToiNlx8W3noz457aOjH/IgZQZq1VgQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=IVp/yZSGFrZgGAH08SiO8NbyWkBHA+WJmrUMOsNqmKc=;
- b=Mn3zWhGr1tDXCxmR0tTOjZ5yK2KGiLB5aezSE5OiXhDzDKQ3yxgH8U2n1a+sUP4Y9jC5Uv4HIitWZvpufHnr8SLn0k7+YubO/cIHlE0Zq3ob//Guk5uxoXu4dzEIt0KDPRLSF2dfLGZ2ozNj8f1F0VC4Yu9+mUD3GfmvfNwcbwJJfh1ev0xnObHWbRrFioJgjmb8WDfr9K6nyeWy62klbYorrA5JPnN/uYsqfu7RytgVWkedym8hvo58F5tTmmfTYPM3oAoqi7fN0TcmVpeF24m0WusC9/SKzs4mnMGISOyY6lUCkGt7IVYvbcw++bs+Ihkr2YQGnpox2ACweA9SBw==
+ bh=1HAIIvj7aO93d8+FdAq5RKsDoNrXcCN38Xq2YSHZnh8=;
+ b=WhIaFD9c8WQ/cw3vrvTteqZ+4Ycmzwr8OidR1M/hgkEKUDdmzKju7WnbHfCbiCtt9Xskvq3agNpB1JsYPiaAR5ptSXoeLpkEaLeYQxoERi6aB8TZUyGg/gxa++z79mCNAVfgcDuSWunF7LQltoKXzDCm4Z+kXk5k4aU3rPBCYpDywN6kyRT9mNaZCvmgTGHOu5LcU54OWUznEe4PdyFynXIe0uUUgV7o887gGCbIxssjwQSfOfGUWOFJ8QOd/Xitjc5GQZRNuVL1uys/OFk+3F3lTwHFf0uEOvPlkzxMFIKLmen5JSuJqukF4BwUu/b0Qa9wVTeb65Snd2hHX7giZA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=windriver.com; dmarc=pass action=none
- header.from=windriver.com; dkim=pass header.d=windriver.com; arc=none
-Received: from DS0PR11MB7312.namprd11.prod.outlook.com (2603:10b6:8:11f::18)
- by MW3PR11MB4523.namprd11.prod.outlook.com (2603:10b6:303:5b::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9031.17; Thu, 14 Aug
- 2025 09:42:24 +0000
-Received: from DS0PR11MB7312.namprd11.prod.outlook.com
- ([fe80::8436:b2d3:31a9:1c8c]) by DS0PR11MB7312.namprd11.prod.outlook.com
- ([fe80::8436:b2d3:31a9:1c8c%3]) with mapi id 15.20.9031.014; Thu, 14 Aug 2025
- 09:42:24 +0000
-Message-ID: <ec72bbb8-b74d-49d1-bb42-5343feab8e5b@windriver.com>
-Date: Thu, 14 Aug 2025 17:42:17 +0800
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=1HAIIvj7aO93d8+FdAq5RKsDoNrXcCN38Xq2YSHZnh8=;
+ b=IC+oTAeLLTwDRdO5pcAxE4zzKM44TYyn95twZ6vIhqdzEGL38lDGryBAzRvPLRBoEMvqPLe3WBt0h9ejS3NmSgWcENwPQq/9Pc8PoHy8aeLwRC1QD/0komyQiqcF0zluxqgveVqOaALnLKfn0DZuFBWSpOMpd8nkWCy5BaabW34=
+Received: from DS0PR10MB6271.namprd10.prod.outlook.com (2603:10b6:8:d1::15) by
+ SA1PR10MB6592.namprd10.prod.outlook.com (2603:10b6:806:2be::6) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9031.21; Mon, 18 Aug 2025 13:56:42 +0000
+Received: from DS0PR10MB6271.namprd10.prod.outlook.com
+ ([fe80::940b:88ca:dd2d:6b0c]) by DS0PR10MB6271.namprd10.prod.outlook.com
+ ([fe80::940b:88ca:dd2d:6b0c%6]) with mapi id 15.20.9031.023; Mon, 18 Aug 2025
+ 13:56:42 +0000
+Message-ID: <7b071d63-71db-49d4-ab03-2dd7072a28aa@oracle.com>
+Date: Mon, 18 Aug 2025 14:56:35 +0100
 User-Agent: Mozilla Thunderbird
 Subject: Re: "Segmentation fault" of pahole
-From: Changqing Li <changqing.li@windriver.com>
-To: Ihor Solodrai <ihor.solodrai@linux.dev>, acme@kernel.org,
+To: Changqing Li <changqing.li@windriver.com>,
+        Ihor Solodrai <ihor.solodrai@linux.dev>, acme@kernel.org,
         dwarves@vger.kernel.org
 References: <24bcc853-533c-42ab-bc37-0c13e0baa217@windriver.com>
  <37030a9d-28d8-4871-8acb-b26c59240710@linux.dev>
  <f1e2dc2b-a88b-4342-8e94-65481ae0cb4f@windriver.com>
-Content-Language: en-US
-In-Reply-To: <f1e2dc2b-a88b-4342-8e94-65481ae0cb4f@windriver.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+ <ec72bbb8-b74d-49d1-bb42-5343feab8e5b@windriver.com>
+Content-Language: en-GB
+From: Alan Maguire <alan.maguire@oracle.com>
+In-Reply-To: <ec72bbb8-b74d-49d1-bb42-5343feab8e5b@windriver.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: SG2PR01CA0191.apcprd01.prod.exchangelabs.com
- (2603:1096:4:189::6) To DS0PR11MB7312.namprd11.prod.outlook.com
- (2603:10b6:8:11f::18)
+X-ClientProxiedBy: LO4P265CA0249.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:350::14) To DS0PR10MB6271.namprd10.prod.outlook.com
+ (2603:10b6:8:d1::15)
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
@@ -64,355 +90,342 @@ List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS0PR11MB7312:EE_|MW3PR11MB4523:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3ea97735-5ed6-46cb-d503-08dddb16df91
+X-MS-TrafficTypeDiagnostic: DS0PR10MB6271:EE_|SA1PR10MB6592:EE_
+X-MS-Office365-Filtering-Correlation-Id: a055df2a-e13f-4be9-c6de-08ddde5f0f91
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|376014|1800799024|13003099007;
+X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|366016|1800799024;
 X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?VFBPZFJ5MllOSUdEdEZhM0dJemdsQ1ZjU2lNUnNtc25mWWN6QlVLSWpZbFRP?=
- =?utf-8?B?TlYxWk9CWEtPQnlWRDQ0SkRHS3dEVCtUVHRGZlJmL3l2MVRuUnZFWDdTWHN1?=
- =?utf-8?B?YXpnaTg0OUk0NUM0ZTlMdkJlUkRROXdocW5GSkV0OXBtdWJiUjlpNi85MThB?=
- =?utf-8?B?VVp2TFQ2Q2VVOUhFWnhUREFpZHdrRGFybUk2YzFubFhWZUxHaFkwQ3kzRkx6?=
- =?utf-8?B?VDBtc1BYcXJIcHVlM3hNSjhlMjZUR1JsNVIvT1BSTWpKRjQydkRvalduYmJ5?=
- =?utf-8?B?bFRDcSsrL1NXTG9hcnRHNFlPMW0zTGJXMmYyNmpaWDRhaEErOWpUb2pMdGpC?=
- =?utf-8?B?ZFVJMWN1TzNpQUdrM1d6N0dmSzdOZFdSM3FrajJ2TE5FR25pWSt6SWF0TDhN?=
- =?utf-8?B?K2VMUFVEKzNWWHMxSGEwa2YySlVCMTVYYnppUVF3WW1YMXpsT1piaTZ3Zm5x?=
- =?utf-8?B?WHRlQ3ZFTU45QU04azNnQUtGaFBzTWRQRGF5SmM5L3BnNVkyNzloMkF6T3hu?=
- =?utf-8?B?OWZLL2RHb0lQbkRwNUNBS2ppQTFIUTNEZ1huQUFlR3J1SDE0eUNERTZvNjg3?=
- =?utf-8?B?QmhzMWp1THBvYnIwKzlQbWRibXNwL2tCZlNDTzBrQmNDdTJiQkhIL1lydmJ1?=
- =?utf-8?B?bmFaeVFvZjhzRGpPSnp5NUJLdW9kQjhSSHl5djNkMS9IdFdGY0FNazlocHlr?=
- =?utf-8?B?OU1OSG92VUJwK0lmaUZXcE4veHdmNGwvQ1NHTlpwRWdtYmZjU2tyRDNFbTFp?=
- =?utf-8?B?MmJEdVdGeGZ6SzAwM0ViQWk1R1FFdzg1ZzhGWXRpNEVMTmlNL1NXeVBLOFlx?=
- =?utf-8?B?bGdBalhLWjJ1SUZxdEtIOTVRQkI1L21odWxJMFZOM2JRTjdoWTAvRjg2L0Mw?=
- =?utf-8?B?U3FGVUwreDhHZmZ2REREbkNwQzAyVFlZZnNBSzFpNS9KdTZOeWl1dlB1RE9T?=
- =?utf-8?B?S1cwak5GNFY0TDI4bDNiaStxeXYyekNraW56WXhBYmtQQXpMbW5GTnF0ckdt?=
- =?utf-8?B?dDhZRXdZLzBIeStNMVYrZjJXdVVrckYvNnMyUzRJckdUNjRjN1RUbUZKWnpi?=
- =?utf-8?B?S080UW5walFKTUNGaksvRzZQQlV5Q05GQWV6emNwUnkrbjBTUUtPNXN6WWtJ?=
- =?utf-8?B?UHRrWWtFN0dIQkFVWmMzS0EyZjRzWmVLQ283RTZLRnB1MFhDZVZJZFNkRDNn?=
- =?utf-8?B?WVlBVmJsWDBabHRCWFM3Rk05K3lFVHNkSVUvZ3VQL1VjMkZKS0FsZHQwS2Qx?=
- =?utf-8?B?OG5RQklUSWxUeTlwNVUrKzdoNDB6LzlIUitzRGFSc0FHcXR1dFNMTmJQeWZF?=
- =?utf-8?B?WXB3aTdQQzN0RDkxc0pJcFBNaGtQVmxYRTQ0aDYxSk1qbnlVS0lwUHdQY2Q0?=
- =?utf-8?B?NFNvcVJKY3JPTTVWaXZJUUJiQitRNmlyWUFWNEI0VC9GZjhML2FubGhrRmw0?=
- =?utf-8?B?SGVvd0EzUjdGUmFzd21kM1cvYTdCelc0MDlnYjNycDkzOEFBU0Q5ajhHZWZu?=
- =?utf-8?B?eEhuL3czaWZmVXBoelVPQWNRcVdyTVc1VlRIVUxUd21MS0JoT1YxMkJRczl6?=
- =?utf-8?B?WDRTT0EyQXM4NmdMZEM0OWh0WXJnT0xpbzNIZVgwa1R6MVA4ZHFFcHVhZzRz?=
- =?utf-8?B?dTVoN3FVRENDMU42N2tma3NXU1YzSWdwMTFvSXhLc2NBOXA3L2MrdEJBRlRy?=
- =?utf-8?B?VWxibW9xdk9UMzJPcGxLMDBvTFRQN1JMWEdtSzZqVTNmK3dSWnUvLzM1Y3R1?=
- =?utf-8?B?OHA4N0F1SDFRczdLU0JITENPNmNSVUdGWnp3ZlZjdjNqZVc2eHloMk5RenBj?=
- =?utf-8?B?L2YvRStQL3J1RVpadTBtRWhUNkZ5c2dFajlLUmU2UUFFK2p1U1FkZ3ZWNUtN?=
- =?utf-8?B?d0RPQVRROG1sTWN0ckMvQUlDM1pvR2hFcFBEeXRlelhmenJQL1VqcTE3Y29P?=
- =?utf-8?Q?8f2lYF+CvHk=3D?=
+	=?utf-8?B?ZHFLNzNxVU13TDI0U2JIeVdxSFBBamxWczYzTHdKQmwxUVJTVXZHaGt6Vkpi?=
+ =?utf-8?B?SUFld01GVVZTYUcxTFpPOGhWeFdIdlM1YTJDbjZTVW43RXNKK2FzZk9leGV2?=
+ =?utf-8?B?bDNNdi9xbjduWXFhSjBhOGZsb2FCa0V6dWpLSGV6dWd2R3lzSTFIMUxrVm12?=
+ =?utf-8?B?b1lWcHR0cElueFI5TVY1YStZQUE4SWFGWUlFSWtCZWJ6b1FxMlNyYUpGWVNh?=
+ =?utf-8?B?cE9ZZmVpbU5ldVNkMmhjNWJGRUFtczd2YmJoQlU2NzMxMXFIOUtIWWpTZE5j?=
+ =?utf-8?B?aHNNNFk1bmhkZjh1b1hnUEx4aXViTG5nVWxOUkVzMzEvejViNzh6dURrM2pR?=
+ =?utf-8?B?YU9HdTU5ZjJoMlhQZjh1RjYvTmJpeEdSZ2krczE0U1hBa2ZhYzZyd2tkWTZ4?=
+ =?utf-8?B?ZlRCb1Mra2dQWXJQUmpOdTZHZmRCenZRVG9yZm13N2ZBUXhIc1BQQXB2dW9G?=
+ =?utf-8?B?NjBHT1d6T0dnYkdMYndkbUdlSDJJWlRidmZTTnZFcERZbVVQSGhPM25Oa0Jw?=
+ =?utf-8?B?NTZKTElkRnBmbzlrQktlbjZiSGpIL2paY1l1cUVFYUh0NFFDK0NMdGhqU3BO?=
+ =?utf-8?B?NDZ0Q0lKd3pwSndiNzdNK3JvUUZiZjkvbXBwT1pobmNIYVQrRXY3TjNNLytO?=
+ =?utf-8?B?d1l5SjJrQmRuVTV5SGFwQkxqY1JER2NveHlZN0hFSXBDakRMcGt3U2pVbkZT?=
+ =?utf-8?B?eE1ENVlsVnk2U0xybHlURTRPRFlVZFZOdENSdTR4eG5hZUNFbmhjWDBudVVN?=
+ =?utf-8?B?QnlZL2V6MWZOd0M4V0M3dUNtYWcwMUVGQkhaeFZYV0pmVXcycVRjWk1HVTB6?=
+ =?utf-8?B?SnBYM3lVWVI2NjFKWTRRM045alJvYmMrNUt0KzVVeTNFTkgwK0NoaTh5M2N6?=
+ =?utf-8?B?OWowSDcyaHdpSzFXcUUvdDRMUkxzQU5xa011T3VZVEhYdDZ2SnVYdVVybHpY?=
+ =?utf-8?B?ZjMrbUtRMDJ6aUwyUVJIMEZlTTRNdGpPVzBEZkJvejhldGxNMzlUaGZ4SkpI?=
+ =?utf-8?B?SzNpK0FET0Z1d3prWXNXUExWQUI2MlZRY09uR3dFYXI2U0FuaFZxZ3N5cklM?=
+ =?utf-8?B?WnZ3SXRSbER5QkJwNEVIcFRVaTZwelR6K0FqZ1kvNWNVeVJoeTFXbjBCN3Bp?=
+ =?utf-8?B?Q0JFejJJb0dHQ2k0UUpJNm9sdk9vVU81MjhVa0FNMTM4K1F2V0dUdHh4MVdI?=
+ =?utf-8?B?MnpXMnZ5cVhXalh5cjFnMUlhTE9MOTNSM2FRY3lCUkFPRTRiMmhKN0JUaVYz?=
+ =?utf-8?B?bmxtQXhuTlhzUXU1THZNbDN3dStraGp2U2pmYk54dDA2RlNMWDBQM0swZkow?=
+ =?utf-8?B?ejZOY2dLQXoxeGNYYkxkaTdBNk0yTWpqeVJSQWFYTmZnRFJhTXJiWmgrVEZK?=
+ =?utf-8?B?NDhlZEpKcFdBVUdLNEg0LzFxSUJ2anJBSFhDUGlTNWk4NUVWZVlCNFpJNkF3?=
+ =?utf-8?B?eFQ1cG9NOXdGelo2cUZEOHE5bW8vaTlROWxWN09MVlZaRFdQVzhvZHpaWEdR?=
+ =?utf-8?B?QTNmNXpyUTBtUUNLbFBTRk5OWXM4bDlSTTNBRUVwS0psSUZUUWc2OGhzeU1D?=
+ =?utf-8?B?Z2grYmkzek5ndEVpMEVYc0o4WWVaMnhJV2c3NTFXbnRndW95MjZVTFY2dGRZ?=
+ =?utf-8?B?a09GTXFOeXV5bGw0UzZEWlI3bXJrSEc3NENUOWtsYkhrQU5UR3BnYjc4RWp2?=
+ =?utf-8?B?THlGMDdUMm9OR2duMUk0ZkNPVkNrRm05VkpmeUJwdGdqZE9wdXFQT2hNS1Br?=
+ =?utf-8?B?UUtjbmFZVVhyUTY5ZGpPLzJHMzJ6TDBlVFlvcjR3Mkl6c1pPZ3RTMko1YXpD?=
+ =?utf-8?B?bUpQTGE2ZTcrUEtLU1pjbjV3RHliemRDR2lhbmo1dFZ1SGl4b0txL3BOeDJC?=
+ =?utf-8?B?dmV5ZFM2TkgwV3RYbW9Fa1pRWHZPbXNUOUxJV0swT0JEWTFhUzdzUU1TZmZY?=
+ =?utf-8?Q?ViHWkC/Xc0g=3D?=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR11MB7312.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(1800799024)(13003099007);DIR:OUT;SFP:1101;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR10MB6271.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(366016)(1800799024);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?bXovWlpnM1lxWGVQbEJicHcyeTgxYk9oTkNSUnNFb1praTRvWTd5OGZtRjZ6?=
- =?utf-8?B?Yk1EeTVpRlQwNHgxZEFaNGlxcTR1QTQ4U3NYSzBOZ3lpclJxa2dEUlhOTHMw?=
- =?utf-8?B?WktjdjJYRERUU3ZVZTdnR3ZHVlhIRmhzMEZNNVBWZ2Zmcmw2OXBBdDhOU3Rj?=
- =?utf-8?B?bkl4UUNvZURMbHZpZ0IxQUVHY2xka0t0TkxnWjMyUUJ1bkM2aTZENVBtd0sv?=
- =?utf-8?B?SzV2VmxlN1FjRE9sSldFNnN3N0VZb0VXeWJnZ1dBY08wWklTR3dlNGkzYkl3?=
- =?utf-8?B?M1ZEOXpGeUFYVGRCUlo4MGFTSVRhR1YvRmNrTi9qWU5mTDhPVENWMlV5cDJm?=
- =?utf-8?B?aVNvczdpWkxaQllNWjRBb2h5VVFNcFMvVmovdmJZYk4xVlNOL0o5ME12Q1Yr?=
- =?utf-8?B?cUh1UTVZVTd4aFN5RlREZTBndnZGU1pZMWg2Sjd0dFNoNlFLenZyTFNYQ0Rt?=
- =?utf-8?B?aVVYQ3JFcGo0Sy9sTm4vU1NPZnVYbWVCcnFNZHdhd20zNWZURGZRZGtpclNW?=
- =?utf-8?B?OTBPVjAzeFc1bUNqK1dLVEl5MzBVU0Z2MTNJT0VVOWtVL1FDNW1xc0NiMFhi?=
- =?utf-8?B?aVhOcXFyRExJb05HUFBFTVVrVjR0ZmUwMHVVc0dwMU5WamYzM3dLY0gvYWJt?=
- =?utf-8?B?bG5rcFJ2YU5NOFk0NENlSjdwTk1wSlJFQ3pDSmswZzd4V3p1NTNCNWVDeVlM?=
- =?utf-8?B?UVdMaFBYZjFtZ0xZWHZPMlY1ZkpEbjF0bi9TNndZNm9rcTA1cnF2MnFvbDl4?=
- =?utf-8?B?aWVHNFNOT2ExbGhJUDVlL1QyMVhxR2VOTkRiRTltS3VjQWw5R2NIREhkVnYz?=
- =?utf-8?B?OUVSdStncFJ6N3EwTjZtM2ZZektPQmVPbFdiYzhyMU1xTXQzK3NVdElUZTFp?=
- =?utf-8?B?Sm5WSS9ERmNYNFM4SXNCWTlFRU8zN3JOc2ZvSWhaYVBlRFBUenYyWnk5bytG?=
- =?utf-8?B?YmhjWUVzQmxEMVRuZlUyNitXNFc3VWJGZU10SEpLUFFBK2QrNDhIa1BKN1pa?=
- =?utf-8?B?bGlObnQ5RzFyMFFVb3ZhVXh4LzdDNWFpNWZNVklRd0NudHBJUmhLR3J5NzMz?=
- =?utf-8?B?c1ZBenAzNXM3Z2hFOHlUay9tS1lBcVIzdGJwNTlQRHVYSzQ5aFRyZS9qOUI4?=
- =?utf-8?B?K3pNRkZUM3JLRDhtalVuWVIwZU05WnYzSFVVWGo2Z050ZExHMytTL0hFbVR6?=
- =?utf-8?B?eTlYRGhKVlJGK1JjQ2V6TVlBbTZkS3hjMXZ5VklLVWpVRW5Yb0NsN0ZlNmI5?=
- =?utf-8?B?ZUVJc0loNUVUNmRkUEdmUENCT1ZXLzRNRm5LZk9vSGlZdmZRdzJNS2tJWk5N?=
- =?utf-8?B?cXR5MkdwWkhSKzhlaUJ4cmxvczQ5ZmJtblBRYjczb3RWcnV2U3N5QWIyL3Mw?=
- =?utf-8?B?T0gyTWEwWVdnZW5iRWYwdnJKeEhpeURiR2E5a0xLNk85WTA2dEg1SjZidEMy?=
- =?utf-8?B?ajF0L3docjNGaVE5V29qc0lnU1JrYnBmVlZXWEFvME1JRjJBbllSRDQyNEE2?=
- =?utf-8?B?Q1NGeW1HRlczZDRDMDhOUndnckRyZDBDT3M0UUpzWllaRHQrcjRULzc2bjVN?=
- =?utf-8?B?VFRUS09ZcE9Pa25iYUlNTC91RWIzQjZUN3J4dytjbFduVExpNFVpNVV2dnhN?=
- =?utf-8?B?T3BwazFUTWw1elB3dWJWOXorZFRibks3UlRSVXVGODRwVU5aNjVzTk5VRDFn?=
- =?utf-8?B?RVVOczJNMHNOU2toUVhRSHlNMXF3Ri80VFhUcEE0UjhkVEs5Z2lSTDVMT3hk?=
- =?utf-8?B?Z3o0aVRQaDdXaUR2M2M0ZFUzK3c4RUFWYk5XYk1ML28wNGVVUEsrdnZKR1da?=
- =?utf-8?B?YnE5UnZpdDZrYkRNWFRtY0JaNHpNb1Z2cUViK29tTjhTNCs4RHFkVk9jVEdC?=
- =?utf-8?B?SkoyalBDMlhGRmVOLzhLem9VUzEyK09pVEwrVDJYNUg4eWw4RS91Snk2WGtz?=
- =?utf-8?B?WHdSK1kzYlR1RzhnNE40aEd5UWQ0cURNQWozdyszQnZiZFZPQ29mc2pGanJJ?=
- =?utf-8?B?SWxVaTlTTmtQUkpSZTRVL3FJeHRSa2tPZExhTE01aC93bVVQbkEySm9vRGFr?=
- =?utf-8?B?TnFIZDBqRFAvM05kQ3lxWHN2SUcvY2JoekdzUXZaM3E0QVd1bEpwdUF1ckNx?=
- =?utf-8?B?eDBGZ25NZDdyVW5tY2lWTktoakN3bGR0MFU0VG5aWlFSOEpsWEdWQjFNdGJu?=
+	=?utf-8?B?RkhYM0dwWXU0cXY4N0ZHODk3WnpoNVl4Zkt6UmV0aU5JWUFpNG0xVzVWNlNY?=
+ =?utf-8?B?ZWwzUTJ3V3VodWI0ZXNtbzdqYm9CcXF2OTZqd0tPRnVQNXJuSzhxM2xQQXMx?=
+ =?utf-8?B?ZHgzZmhMdG4wRFpLMXRjTVdlVlhDdVVRUExpQ1FCcGxYb3l2Tm9QRUtMbmMy?=
+ =?utf-8?B?aTl4c0tod3p1K2kwWWVodlE2aHN0VElDdm14c2JZL0sxMGRjNllXWXdwblF1?=
+ =?utf-8?B?cGtDNkQvMHhFNjd0TE5GQk8zZ2ZFQlZvTmh1YXduOUtvaE0vQ0dzZ3RoTTlm?=
+ =?utf-8?B?Vks1Zk5xM3BsZThwM2lCL1hLRVdyRElHSFV1T2psUldiMDloS0VJWTQ0Y3JL?=
+ =?utf-8?B?eG1lMlpVVVlKNVRpdnpMU2JPR0pWbTNSeWxBQmRYdkhrbVJzUnhRTkxQWURW?=
+ =?utf-8?B?UGswamVOYnVkSzE0N1ZDYlQwbCswNWNuTTlaRnNkWXRJaVdzVmRpVGs3WE5Q?=
+ =?utf-8?B?SE9BcE9aQk0rQjh1VFN3bWJ4OTlldkFvYklqamEzQ0NYaDZORTBNTVRDN0ZN?=
+ =?utf-8?B?Y1IyK0tsd3dTSU1ibDc2QTExZTdnMmJGVWxmWUg2Nmg0L1hnNFR3Q01Uc0gy?=
+ =?utf-8?B?NlI2REFla2g5eDJ5eHZNWExDOWxvUDIrck5NbjRwSmlVdVZxUVNGdmN0Qi9D?=
+ =?utf-8?B?WmhHQ2lnelR2TjJxRDErMEFxbFVjZ0ZnL2x5bFhRaDlmc0Fhc09Vb3FpSUgy?=
+ =?utf-8?B?eVJmY21EU2NoT1ZXaSs3VlZPSU5OaWZuOVdHL0h0aEtLK2cyRUNyenpzOHow?=
+ =?utf-8?B?Qi8rUmVROHN6OG12a3Y3SzNHc1JwVlQvT0JZZXdEdWNEczV2eTV1TjZpQTNt?=
+ =?utf-8?B?amZZNDNGUzVmeXAvSFBCSzVEODNPNHRaL0dodGVQRkFCR0hBeDBTenRTc09n?=
+ =?utf-8?B?T1I2YmM1MlBDdkIvVkUySzdGT1lTajNvYjZZMlRBU1VPMzRYbGY3SCtRQXNy?=
+ =?utf-8?B?STNxeEJxRHR3OHNmb2FvVmd2QlMzbjBrV0xXR2dwRW9HM3YzYjVtYXhRU0Fx?=
+ =?utf-8?B?STNKYlNpOW1mWW9QcDhRbzIzMGMzTkRSc2JYbXZDL2ZCQTRBMVZIeXRaY25l?=
+ =?utf-8?B?MjVFUG1nOFAxMUFERnd3OTlHYm5QaExHZTBkRGtYM1Y1dnZYczZNM3lDRXNx?=
+ =?utf-8?B?RDFLSjZQSWhMd1p4SmFUVlErVGlnL21WZUZoY2FLQ0V6dkpJd0hHUkJEOG9y?=
+ =?utf-8?B?M0NmQmo0OG16TXNpRElvTUhkWGgyOXFaei9wWmdoZDZJdDI3bEJuN0xxTzBp?=
+ =?utf-8?B?S1VreHh5ZUpUZmMySHVlNjJkRmNzNnJ0cFJUSUxXcng2WDBzNStFUTduVlZu?=
+ =?utf-8?B?eWZ6NHNYK2crbkU0TTdGMEUwUWJ0MEg5WmR6Njg0bTlBdmVIckVuR3MvTEhU?=
+ =?utf-8?B?Z09ST01UUEYzMmpiOVhUWTU3YUVxQjNrdXpibmpYT0JWN1p6aXEvYVduT0t1?=
+ =?utf-8?B?aU8zRjJ1TmVWVGFScmVtM2h3ajh0Vk1pc0lUZDVxYmUvME5KcTBTUE9vNVFK?=
+ =?utf-8?B?NEVYV2x6TVQwY3B5Z1p5eTZPcVpoaVhTUVBJelNJQnNZVU5XdFhMTE12STlw?=
+ =?utf-8?B?cFY4azdUZFo4NGwrYU8zT2U1MUZjM3k4bXRYM3o3VHdzQ1gwc09vVktTeWM1?=
+ =?utf-8?B?ZlJ6Z2RIWnNRdFlUMUY3NjlsZ3NyUExaNFpwbXNNWWxHN1V0cmoyQ0dReUZH?=
+ =?utf-8?B?d0Q3b2s0dHBkcDNmc3RmWHJjWUdrTEZvZ3dNai9adUpmTnlqaWtyMkl6L0Ji?=
+ =?utf-8?B?dVh6bitmVEZDRnJVQzg1c0w2VVJkdHc4a00xcU1VbWJvT25UbWJ1a29oN2RE?=
+ =?utf-8?B?MUt2NGluMWNHK2hjM0J2eDNvQnJjRWxTOVBiZS91eFhKUlJZcDlWZGM3UHhi?=
+ =?utf-8?B?cW9Kc015d1RoNE1LN21Bc1hqK2dCNC9uaytPeVZYT3dEcjFFNk5UajJPU2JC?=
+ =?utf-8?B?aG9ZbFI3aDJpTWwvdUJhbUpleHYwNVlVVDVDM2VpUzB1YlprVDBlTUNYNzFl?=
+ =?utf-8?B?SnRvUmZtK3NuWXJJUkN4dmpyeXF2WS8zUnhGT0ZRYUszSDVhcU1wQlVpcDZw?=
+ =?utf-8?B?VG9wdFlwWHVYdkdBZnJOR25QeE5yRWsyeWRIQXNNcG50dlh0MVJCS3puTWxm?=
+ =?utf-8?B?OXZrcldOZ3lCVTNLYVRYTjhEMUtYTWRDUWUxbkZMM2tUMkdJR1dmR2VIbHcx?=
  =?utf-8?B?MXc9PQ==?=
-X-OriginatorOrg: windriver.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3ea97735-5ed6-46cb-d503-08dddb16df91
-X-MS-Exchange-CrossTenant-AuthSource: DS0PR11MB7312.namprd11.prod.outlook.com
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
+	U/cCbaxfG8Oi8TtB1a6sv9vWEl2Ujv4orpQTwRKhwUXSGlgqWtbeMIZywDKE01/xwVchEPEnOyVsTiBMtj0JDWvHavAN6EWoOUUMtf3i796OfViH+NKh0vrTC1l/EmVTz0IogE+zCiwMqtXhXuxi5dWw/kYArOEZe2R1LZA0Sz7Vw5df33eYhWTCDyTCPUHVRRU2HnHU8BY2NQaF7XOVo3uZxk+MjGjDFLFuqMddxd4ncbuOcbOQWV6bZvyhE4qV1isnF6EYExgYOHR3tSt5MOmqxcucR2CJjXmXW+DI6ZNXc+/TiYNwoakY4LAA7dfHsLQUfFyZ1UXrajBJ4HTog/9k2kSW0UdWmX7NI1UbQGwLoVV0w3fJc0o5SrSyt5f+yeDyJ+9tDY4ZKMZ4Ui9i35Ix2vzUaZR8UeomUNIxwdkDSNEPT9Mhcq97sen6mdcUSwXdiXBH4c6m2RtRsXiD3JJ7587M2acB6M0Q4JMHwAcGgf15a7K8bWUpAFlWnJyNScCbk9i7Ac6JLeglnOmMarUcQgj+8zh1wr5yvugCzkx7D6h4Gx3K4RHz/2myMy6tHaSDfyw5/005Y0pVptpUO5Mg9ae+npnKKgpJZ9vvxxw=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a055df2a-e13f-4be9-c6de-08ddde5f0f91
+X-MS-Exchange-CrossTenant-AuthSource: DS0PR10MB6271.namprd10.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Aug 2025 09:42:24.6091
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Aug 2025 13:56:42.3713
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 8ddb2873-a1ad-4a18-ae4e-4644631433be
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: hjxYbkmClWRsrBjGgsuJhKl5AbL3MbO2Kov76QT8k4hG14JiBilVshsO+A1dk6vww+JgXyVZl+jeRnSR8kPwBluc/3EVvqHzBfMYaIWoIIU=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW3PR11MB4523
-X-Proofpoint-GUID: PTwKa9Qu1PyWvNaVXZ_mBdUwEh98RJeF
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwODE0MDA3OSBTYWx0ZWRfX06kjBBzZXXBl
- H5fJPqIdffGY8GACr6ymy+SdMmjaQ/fXbCQoVYLVqhds3N9IRGRG+2vjVXnCMOft+ZF+PUba325
- 0aBNo7afgUDKAqjfN+6YBcKxp+8d1In23yY6Cw4lovCIp1oBblNDau+FNvTMPREJp/ClL63E2B+
- KeaEE6HUEsK5jZ5oqBorrJKvcRFSGlN8G4OjqFesLndXGzIOzhOzcWsd1+hihfx6fiFqrWUOpyV
- 5HXApDqTgBSqG1KWLz5HC8um2sZpTt7WyMyPYBqUyKDiVA8dYTL1mUFrwj6vqDleBfxt9BFC0w+
- n9BjlKbGJg4+xYFUlZsRSssA4MpqdWJNfHnM89ZcaRoXhI8c1GAStsJorZs8rw=
-X-Authority-Analysis: v=2.4 cv=fN453Yae c=1 sm=1 tr=0 ts=689daf84 cx=c_pps
- a=E/8BleX2w456MFKUPs7IYQ==:117 a=6eWqkTHjU83fiwn7nKZWdM+Sl24=:19
- a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19 a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19
- a=wKuvFiaSGQ0qltdbU6+NXLB8nM8=:19 a=Ol13hO9ccFRV9qXi2t6ftBPywas=:19
- a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10 a=2OwXVqhp2XgA:10 a=VwQbUJbxAAAA:8
- a=syfNYHXCo_SBGoLZ8NQA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
-X-Proofpoint-ORIG-GUID: PTwKa9Qu1PyWvNaVXZ_mBdUwEh98RJeF
+X-MS-Exchange-CrossTenant-UserPrincipalName: ymcpHBV4XFs6pC+WhHjp1tdtOCMpdL7OdvzR9Dau8IzT+3QdhpRcaszv1Ed8EibbLX6zll+w0ZhKjZgIN64qcg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR10MB6592
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
- definitions=2025-08-13_02,2025-08-11_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- suspectscore=0 bulkscore=0 clxscore=1015 impostorscore=0 malwarescore=0
- spamscore=0 phishscore=0 adultscore=0 priorityscore=1501
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2507300000 definitions=firstrun
+ definitions=2025-08-18_05,2025-08-14_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
+ mlxlogscore=999 adultscore=0 phishscore=0 bulkscore=0 mlxscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2507300000 definitions=main-2508180133
+X-Authority-Analysis: v=2.4 cv=fcOty1QF c=1 sm=1 tr=0 ts=68a3311e b=1 cx=c_pps
+ a=qoll8+KPOyaMroiJ2sR5sw==:117 a=qoll8+KPOyaMroiJ2sR5sw==:17
+ a=6eWqkTHjU83fiwn7nKZWdM+Sl24=:19 a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19
+ a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=wKuvFiaSGQ0qltdbU6+NXLB8nM8=:19
+ a=Ol13hO9ccFRV9qXi2t6ftBPywas=:19 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
+ a=2OwXVqhp2XgA:10 a=GoEa3M9JfhUA:10 a=VwQbUJbxAAAA:8 a=_3LlO853D_h4DPy1K14A:9
+ a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10 cc=ntf awl=host:12070
+X-Proofpoint-GUID: LYApMmkQ1pQ-XDfv6v3GeXjD9MhnXXuU
+X-Proofpoint-ORIG-GUID: LYApMmkQ1pQ-XDfv6v3GeXjD9MhnXXuU
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwODE4MDEzNCBTYWx0ZWRfXxVcHrNpNXbID
+ Nu6q9be0BUwrMR7/8hXEAe5A13F0N7rOFeWzrViJbCZ0JiVWDth9tBeHMAbwUbjOv3T0Rx8if0s
+ PX3jpA16aH41N0gMaNL5a9VnVStSCmyR9HkHZ0/jySij1XUFTKN+wkvXwbOdrpV9pcT5okYvwhu
+ D1ATS2bUh97bD24NMVZjuArB0DQPWh6WSPM/ZCc7jcrxknwfYVF4u++ZA1wdPdXhGLXy6WUG33s
+ LNZRJP+U3GYXKeyR2xskQjj21jS/7XGKBEdOk0SSj8rSGLryAbLZzcNLzxdAzz+SYqh/ZPQlFoZ
+ ZZWuvFGdv/D8XPcJFAWBzICg8IVWK2y9Tfor3TuSeMbx7XNHhBrvwC1VvXuudSV2iaORx8783rn
+ JSoTQ6ZRVzDU21hh9rx1JproW+/sOybw0ZJoxO9vNPISlg26nEC4X1rYYRMFHpNgIOF+bbj2
 
-
-On 8/14/25 17:20, Changqing Li wrote:
->
-> On 8/14/25 07:45, Ihor Solodrai wrote:
->> CAUTION: This email comes from a non Wind River email account!
->> Do not click links or open attachments unless you recognize the 
->> sender and know the content is safe.
+On 14/08/2025 10:42, Changqing Li wrote:
+> 
+> On 8/14/25 17:20, Changqing Li wrote:
 >>
->> On 8/10/25 6:18 PM, Changqing Li wrote:
->>> Hi,  Dear maintainers
+>> On 8/14/25 07:45, Ihor Solodrai wrote:
+>>> CAUTION: This email comes from a non Wind River email account!
+>>> Do not click links or open attachments unless you recognize the
+>>> sender and know the content is safe.
 >>>
->>> I met a "Segmentation fault" error of pahole.   It happened when I
->>> passed an ELF file without .symtab section.
->>> Maybe I passed an  unsupport file, but I think it should not segfault,
->>> maybe  a warnning or error message is better.
+>>> On 8/10/25 6:18 PM, Changqing Li wrote:
+>>>> Hi,  Dear maintainers
+>>>>
+>>>> I met a "Segmentation fault" error of pahole.   It happened when I
+>>>> passed an ELF file without .symtab section.
+>>>> Maybe I passed an  unsupport file, but I think it should not segfault,
+>>>> maybe  a warnning or error message is better.
+>>>>
+>>>>
+>>>> Here is the detailed info:
+>>>> Pahole version:
+>>>> # pahole --version
+>>>> v1.29
+>>>>
+>>>> Reproduce Command:
+>>>> root@intel-x86-64:/~# pahole --btf_features=default -J /boot/
+>>>> vmlinux-6.12.40-yocto-standard
+>>>> pahole[599]: segfault at 8 ip 00007f7c92d819e2 sp 00007f7c799febe0
+>>>> error
+>>>> 6 in libdwarves.so.1.0.0[189e2,7f7c92d72000+1c000] likely on CPU 0
+>>>> (core
+>>>> 0, socket 0)
+>>>> Code: 74 19 ff ff 48 39 dd 75 ef 4c 89 ef e8 67 19 ff ff 49 8b 7c 24 18
+>>>> e8 8d 13 ff ff 49 8b 14 24 49 8b 44 24 08 4c 89 e7 45 31 e4 <48> 89 42
+>>>> 08 48 89 10 e8 42 19 ff ff e9 30 ff ff ff e8 58 0a ff ff
+>>>> Segmentation fault (core dumped)
+>>>>
+>>>> root@intel-x86-64:~# file /boot/vmlinux-6.12.40-yocto-standard
+>>>> /boot/vmlinux-6.12.40-yocto-standard: ELF 64-bit LSB executable,
+>>>> x86-64,
+>>>> version 1 (SYSV), statically linked,
+>>>> BuildID[sha1]=1e73fe48101f07b9d991dc045ab9f9672a0feac0, stripped
+>>>>
+>>>> root@intel-x86-64:/usr/bin# readelf -S /boot/vmlinux-6.12.40-yocto-
+>>>> standard | grep .symtab
+>>>>    [ 4] __ksymtab         PROGBITS         ffffffff82c11e00 01e11e00
+>>>>    [ 5] __ksymtab_gpl     PROGBITS         ffffffff82c24730 01e24730
+>>>>    [ 6] __ksymtab_strings PROGBITS         ffffffff82c397f0 01e397f0
+>>>>
+>>>>
+>>>> (gdb) bt
+>>>> #0  elf_functions__new (elf=<optimized out>) at /usr/src/debug/
+>>>> pahole/1.29/btf_encoder.c:196
+>>>> #1  0x00007ffff7f92a7d in btf_encoder__elf_functions
+>>>> (encoder=encoder@entry=0x7fffd8008dc0) at /usr/src/debug/pahole/1.29/
+>>>> btf_encoder.c:1374
+>>>> #2  0x00007ffff7f94489 in btf_encoder__new (cu=cu@entry=0x7fffd8001e50,
+>>>> detached_filename=<optimized out>, warning: could not convert 'btf'
+>>>> from
+>>>> the host encoding (ANSI_X3.4-1968) to UTF-32.
+>>>> This normally should not happen, please file a bug report.
+>>>> base_btf=0x0,
+>>>>      verbose=<optimized out>, conf_load=conf_load@entry=0x555555565280
+>>>> <conf_load>) at /usr/src/debug/pahole/1.29/btf_encoder.c:2431
+>>>> #3  0x000055555555db49 in pahole_stealer__btf_encode
+>>>> (cu=0x7fffd8001e50,
+>>>> conf_load=0x555555565280 <conf_load>)
+>>>>      at /usr/src/debug/pahole/1.29/pahole.c:3126
+>>>> #4  pahole_stealer (cu=0x7fffd8001e50, conf_load=0x555555565280
+>>>> <conf_load>) at /usr/src/debug/pahole/1.29/pahole.c:3187
+>>>> #5  0x00007ffff7f9d023 in cus__steal_now (cus=<optimized out>,
+>>>> cu=<optimized out>, conf=<optimized out>)
+>>>>      at /usr/src/debug/pahole/1.29/dwarf_loader.c:3266
+>>>> #6  dwarf_loader__worker_thread (arg=0x7fffffffe700) at /usr/src/debug/
+>>>> pahole/1.29/dwarf_loader.c:3672
+>>>> #7  0x00007ffff7dbe722 in start_thread (arg=<optimized out>) at
+>>>> pthread_create.c:448
+>>>> #8  0x00007ffff7e314fc in __GI___clone3 () at ../sysdeps/unix/sysv/
+>>>> linux/x86_64/clone3.S:78
+>>>> (gdb)
+>>>>
+>>>>
+>>>> Command  "pahole --btf_features=default -J /boot/.debug/
+>>>> vmlinux-6.12.40-
+>>>> yocto-standard " works well since /boot/.debug/vmlinux-6.12.40-yocto-
+>>>> standard has  .symtab section.
+>>>> root@intel-x86-64:/usr/bin# file /boot/.debug/vmlinux-6.12.40-yocto-
+>>>> standard
+>>>> /boot/.debug/vmlinux-6.12.40-yocto-standard: ELF 64-bit LSB executable,
+>>>> x86-64, version 1 (SYSV), statically linked,
+>>>> BuildID[sha1]=1e73fe48101f07b9d991dc045ab9f9672a0feac0, with
+>>>> debug_info,
+>>>> not stripped
+>>>>
+>>>> root@intel-x86-64:/usr/bin# readelf -S /boot/.debug/vmlinux-6.12.40-
+>>>> yocto-standard | grep .symtab
+>>>>    [ 4] __ksymtab         NOBITS           ffffffff82c11e00 00001000
+>>>>    [ 5] __ksymtab_gpl     NOBITS           ffffffff82c24730 00001000
+>>>>    [ 6] __ksymtab_strings NOBITS           ffffffff82c397f0 00001000
+>>>>    [49] .symtab           SYMTAB           0000000000000000 154cf200
+>>>>
 >>>
+>>> Hi Changqing Li, thanks for the bug report.
 >>>
->>> Here is the detailed info:
->>> Pahole version:
->>> # pahole --version
->>> v1.29
+>>> I couldn't reproduce this error with a stripped vmlinux:
 >>>
->>> Reproduce Command:
->>> root@intel-x86-64:/~# pahole --btf_features=default -J /boot/
->>> vmlinux-6.12.40-yocto-standard
->>> pahole[599]: segfault at 8 ip 00007f7c92d819e2 sp 00007f7c799febe0 
->>> error
->>> 6 in libdwarves.so.1.0.0[189e2,7f7c92d72000+1c000] likely on CPU 0 
->>> (core
->>> 0, socket 0)
->>> Code: 74 19 ff ff 48 39 dd 75 ef 4c 89 ef e8 67 19 ff ff 49 8b 7c 24 18
->>> e8 8d 13 ff ff 49 8b 14 24 49 8b 44 24 08 4c 89 e7 45 31 e4 <48> 89 42
->>> 08 48 89 10 e8 42 19 ff ff e9 30 ff ff ff e8 58 0a ff ff
->>> Segmentation fault (core dumped)
+>>> $ objcopy --strip-all ~/kernels/bpf-next/.tmp_vmlinux1 vmlinux-strip-all
 >>>
->>> root@intel-x86-64:~# file /boot/vmlinux-6.12.40-yocto-standard
->>> /boot/vmlinux-6.12.40-yocto-standard: ELF 64-bit LSB executable, 
->>> x86-64,
->>> version 1 (SYSV), statically linked,
->>> BuildID[sha1]=1e73fe48101f07b9d991dc045ab9f9672a0feac0, stripped
+>>> v1.29 fails with:
+>>> $ ./build/pahole --btf_features=default -J $(realpath vmlinux-strip-all)
+>>> Error creating BTF encoder.
 >>>
->>> root@intel-x86-64:/usr/bin# readelf -S /boot/vmlinux-6.12.40-yocto-
->>> standard | grep .symtab
->>>    [ 4] __ksymtab         PROGBITS         ffffffff82c11e00 01e11e00
->>>    [ 5] __ksymtab_gpl     PROGBITS         ffffffff82c24730 01e24730
->>>    [ 6] __ksymtab_strings PROGBITS         ffffffff82c397f0 01e397f0
+>>> v1.30 fails with:
+>>> $ ./build/pahole --btf_features=default -J $(realpath vmlinux-strip-all)
+>>> pahole: /home/isolodrai/pahole/vmlinux-strip-all: Invalid argument
 >>>
+>>> Different errors are not nice, but at least no segfault.
 >>>
->>> (gdb) bt
->>> #0  elf_functions__new (elf=<optimized out>) at /usr/src/debug/
->>> pahole/1.29/btf_encoder.c:196
->>> #1  0x00007ffff7f92a7d in btf_encoder__elf_functions
->>> (encoder=encoder@entry=0x7fffd8008dc0) at /usr/src/debug/pahole/1.29/
->>> btf_encoder.c:1374
->>> #2  0x00007ffff7f94489 in btf_encoder__new (cu=cu@entry=0x7fffd8001e50,
->>> detached_filename=<optimized out>, warning: could not convert 'btf' 
->>> from
->>> the host encoding (ANSI_X3.4-1968) to UTF-32.
->>> This normally should not happen, please file a bug report.
->>> base_btf=0x0,
->>>      verbose=<optimized out>, conf_load=conf_load@entry=0x555555565280
->>> <conf_load>) at /usr/src/debug/pahole/1.29/btf_encoder.c:2431
->>> #3  0x000055555555db49 in pahole_stealer__btf_encode 
->>> (cu=0x7fffd8001e50,
->>> conf_load=0x555555565280 <conf_load>)
->>>      at /usr/src/debug/pahole/1.29/pahole.c:3126
->>> #4  pahole_stealer (cu=0x7fffd8001e50, conf_load=0x555555565280
->>> <conf_load>) at /usr/src/debug/pahole/1.29/pahole.c:3187
->>> #5  0x00007ffff7f9d023 in cus__steal_now (cus=<optimized out>,
->>> cu=<optimized out>, conf=<optimized out>)
->>>      at /usr/src/debug/pahole/1.29/dwarf_loader.c:3266
->>> #6  dwarf_loader__worker_thread (arg=0x7fffffffe700) at /usr/src/debug/
->>> pahole/1.29/dwarf_loader.c:3672
->>> #7  0x00007ffff7dbe722 in start_thread (arg=<optimized out>) at
->>> pthread_create.c:448
->>> #8  0x00007ffff7e314fc in __GI___clone3 () at ../sysdeps/unix/sysv/
->>> linux/x86_64/clone3.S:78
->>> (gdb)
+>>> Could you please share the vmlinux binary that causes the error?
+>>> And also check if you get a segfault on v1.30 too?
 >>>
+>>> Thanks.
 >>>
->>> Command  "pahole --btf_features=default -J 
->>> /boot/.debug/vmlinux-6.12.40-
->>> yocto-standard " works well since /boot/.debug/vmlinux-6.12.40-yocto-
->>> standard has  .symtab section.
->>> root@intel-x86-64:/usr/bin# file /boot/.debug/vmlinux-6.12.40-yocto-
->>> standard
->>> /boot/.debug/vmlinux-6.12.40-yocto-standard: ELF 64-bit LSB executable,
->>> x86-64, version 1 (SYSV), statically linked,
->>> BuildID[sha1]=1e73fe48101f07b9d991dc045ab9f9672a0feac0, with 
->>> debug_info,
->>> not stripped
->>>
->>> root@intel-x86-64:/usr/bin# readelf -S /boot/.debug/vmlinux-6.12.40-
->>> yocto-standard | grep .symtab
->>>    [ 4] __ksymtab         NOBITS           ffffffff82c11e00 00001000
->>>    [ 5] __ksymtab_gpl     NOBITS           ffffffff82c24730 00001000
->>>    [ 6] __ksymtab_strings NOBITS           ffffffff82c397f0 00001000
->>>    [49] .symtab           SYMTAB           0000000000000000 154cf200
->>>
->>
->> Hi Changqing Li, thanks for the bug report.
->>
->> I couldn't reproduce this error with a stripped vmlinux:
->>
->> $ objcopy --strip-all ~/kernels/bpf-next/.tmp_vmlinux1 vmlinux-strip-all
->>
->> v1.29 fails with:
->> $ ./build/pahole --btf_features=default -J $(realpath vmlinux-strip-all)
+>> Hi, Ihor
+>> Thanks for checking this. Here is my retest result:
+>> On version 1.29:
+>> root@intel-x86-64:~# pahole --btf_features=default -J /boot/
+>> vmlinux-6.12.40-yocto-standard
+>> pahole[333]: segfault at 8 ip 00007fd5025179e2 sp 00007fd4e73febe0
+>> error 6 in libdwarves.so.1.0.0[189e2,7fd502508000+1c000] likely on CPU
+>> 0 (core 0, socket 0)
+>> Code: 74 19 ff ff 48 39 dd 75 ef 4c 89 ef e8 67 19 ff ff 49 8b 7c 24
+>> 18 e8 8d 13 ff ff 49 8b 14 24 49 8b 44 24 08 4c 89 e7 45 31 e4 <48> 89
+>> 42 08 48 89 10 e8 42 19 ff ff e9 30 ff ff ff e8 58 0a ff ff
+>> Segmentation fault (core dumped)
+>> root@intel-x86-64:~# cp /boot/vmlinux-6.12.40-yocto-standard /root/
+>> root@intel-x86-64:~# pahole --btf_features=default -J /root/
+>> vmlinux-6.12.40-yocto-standard
 >> Error creating BTF encoder.
 >>
->> v1.30 fails with:
->> $ ./build/pahole --btf_features=default -J $(realpath vmlinux-strip-all)
->> pahole: /home/isolodrai/pahole/vmlinux-strip-all: Invalid argument
+>> We can see that the same vmlinux-6.12.40-yocto-standard have different
+>> result. After do some debugging,  I found that
+>> /boot/vmlinux-6.12.40-yocto-standard segfault since it has debuginfo
+>> file /boot/.debug/vmlinux-6.12.40-yocto-standard.
+>> after I move .debug to .xxx, it will not segfault.
+>> root@intel-x86-64:/boot# mv .debug/ .xxx
+>> root@intel-x86-64:/boot# pahole --btf_features=default -J /boot/
+>> vmlinux-6.12.40-yocto-standard
+>> Error creating BTF encoder.
 >>
->> Different errors are not nice, but at least no segfault.
+>> dwfl_module_getdwarf in cus__process_dwflmod return different when
+>> with or without debug,  without .debug, dw=NULL,
+>> with .debug, dw will have a value, then causes the different process.
 >>
->> Could you please share the vmlinux binary that causes the error?
->> And also check if you get a segfault on v1.30 too?
+>> On version 1.30
+>> root@intel-x86-64:~# pahole --version
+>> v1.30
+>> root@intel-x86-64:~# pahole --btf_features=default -J /boot/
+>> vmlinux-6.12.40-yocto-standard
+>> pahole[314]: segfault at 8 ip 00007f2b0b6b2bf3 sp 00007f2af05feb20
+>> error 6 in libdwarves.so.1.0.0[18bf3,7f2b0b6a3000+1c000] likely on CPU
+>> 0 (core 0, socket 0)
+>> Code: 33 17 ff ff 48 39 dd 75 ee 4c 89 ef e8 26 17 ff ff 49 8b 7c 24
+>> 18 e8 5c 11 ff ff 49 8b 14 24 49 8b 44 24 08 4c 89 e7 45 31 e4 <48> 89
+>> 42 08 48 89 10 e8 01 17 ff ff e9 2d ff ff ff e8 37 08 ff ff
+>> Segmentation fault (core dumped)
+>> root@intel-x86-64:~# cp /boot/vmlinux-6.12.40-yocto-standard /root/
+>> root@intel-x86-64:~#  pahole --btf_features=default -J /root/
+>> vmlinux-6.12.40-yocto-standard
+>> pahole: /root/vmlinux-6.12.40-yocto-standard: Invalid argument
+>> root@intel-x86-64:~# cd /root
+>> root@intel-x86-64:~# mkdir .debug
+>> root@intel-x86-64:~# cp /boot/.debug/vmlinux-6.12.40-yocto-
+>> standard .debug/
+>> root@intel-x86-64:~# pahole --btf_features=default -J /root/
+>> vmlinux-6.12.40-yocto-standard
+>> pahole[441]: segfault at 8 ip 00007f64a9032bf3 sp 00007f648dffeb20
+>> error 6 in libdwarves.so.1.0.0[18bf3,7f64a9023000+1c000] likely on CPU
+>> 0 (core 0, socket 0)
+>> Code: 33 17 ff ff 48 39 dd 75 ee 4c 89 ef e8 26 17 ff ff 49 8b 7c 24
+>> 18 e8 5c 11 ff ff 49 8b 14 24 49 8b 44 24 08 4c 89 e7 45 31 e4 <48> 89
+>> 42 08 48 89 10 e8 01 17 ff ff e9 2d ff ff ff e8 37 08 ff ff
 >>
->> Thanks.
->>
-> Hi, Ihor
-> Thanks for checking this. Here is my retest result:
-> On version 1.29:
-> root@intel-x86-64:~# pahole --btf_features=default -J 
-> /boot/vmlinux-6.12.40-yocto-standard
-> pahole[333]: segfault at 8 ip 00007fd5025179e2 sp 00007fd4e73febe0 
-> error 6 in libdwarves.so.1.0.0[189e2,7fd502508000+1c000] likely on CPU 
-> 0 (core 0, socket 0)
-> Code: 74 19 ff ff 48 39 dd 75 ef 4c 89 ef e8 67 19 ff ff 49 8b 7c 24 
-> 18 e8 8d 13 ff ff 49 8b 14 24 49 8b 44 24 08 4c 89 e7 45 31 e4 <48> 89 
-> 42 08 48 89 10 e8 42 19 ff ff e9 30 ff ff ff e8 58 0a ff ff
-> Segmentation fault (core dumped)
-> root@intel-x86-64:~# cp /boot/vmlinux-6.12.40-yocto-standard /root/
-> root@intel-x86-64:~# pahole --btf_features=default -J 
-> /root/vmlinux-6.12.40-yocto-standard
-> Error creating BTF encoder.
->
-> We can see that the same vmlinux-6.12.40-yocto-standard have different 
-> result. After do some debugging,  I found that
-> /boot/vmlinux-6.12.40-yocto-standard segfault since it has debuginfo 
-> file /boot/.debug/vmlinux-6.12.40-yocto-standard.
-> after I move .debug to .xxx, it will not segfault.
-> root@intel-x86-64:/boot# mv .debug/ .xxx
-> root@intel-x86-64:/boot# pahole --btf_features=default -J 
-> /boot/vmlinux-6.12.40-yocto-standard
-> Error creating BTF encoder.
->
-> dwfl_module_getdwarf in cus__process_dwflmod return different when 
-> with or without debug,  without .debug, dw=NULL,
-> with .debug, dw will have a value, then causes the different process.
->
-> On version 1.30
-> root@intel-x86-64:~# pahole --version
-> v1.30
-> root@intel-x86-64:~# pahole --btf_features=default -J 
-> /boot/vmlinux-6.12.40-yocto-standard
-> pahole[314]: segfault at 8 ip 00007f2b0b6b2bf3 sp 00007f2af05feb20 
-> error 6 in libdwarves.so.1.0.0[18bf3,7f2b0b6a3000+1c000] likely on CPU 
-> 0 (core 0, socket 0)
-> Code: 33 17 ff ff 48 39 dd 75 ee 4c 89 ef e8 26 17 ff ff 49 8b 7c 24 
-> 18 e8 5c 11 ff ff 49 8b 14 24 49 8b 44 24 08 4c 89 e7 45 31 e4 <48> 89 
-> 42 08 48 89 10 e8 01 17 ff ff e9 2d ff ff ff e8 37 08 ff ff
-> Segmentation fault (core dumped)
-> root@intel-x86-64:~# cp /boot/vmlinux-6.12.40-yocto-standard /root/
-> root@intel-x86-64:~#  pahole --btf_features=default -J 
-> /root/vmlinux-6.12.40-yocto-standard
-> pahole: /root/vmlinux-6.12.40-yocto-standard: Invalid argument
-> root@intel-x86-64:~# cd /root
-> root@intel-x86-64:~# mkdir .debug
-> root@intel-x86-64:~# cp /boot/.debug/vmlinux-6.12.40-yocto-standard 
-> .debug/
-> root@intel-x86-64:~# pahole --btf_features=default -J 
-> /root/vmlinux-6.12.40-yocto-standard
-> pahole[441]: segfault at 8 ip 00007f64a9032bf3 sp 00007f648dffeb20 
-> error 6 in libdwarves.so.1.0.0[18bf3,7f64a9023000+1c000] likely on CPU 
-> 0 (core 0, socket 0)
-> Code: 33 17 ff ff 48 39 dd 75 ee 4c 89 ef e8 26 17 ff ff 49 8b 7c 24 
-> 18 e8 5c 11 ff ff 49 8b 14 24 49 8b 44 24 08 4c 89 e7 45 31 e4 <48> 89 
-> 42 08 48 89 10 e8 01 17 ff ff e9 2d ff ff ff e8 37 08 ff ff
->
-> Segmentation fault (core dumped) 
+>> Segmentation fault (core dumped) 
+> 
+> I think this " Invalid argument " change  is caused by this commit:
+> 
+> https://git.kernel.org/pub/scm/devel/pahole/pahole.git/commit/?
+> id=b4a071d99bb9e7c0d3c6ea7a6835389a4d350ed4
+> 
+> encode BTF with DWARF less files is not support for v1.30, so, since  /
+> boot/vmlinux-6.12.40-yocto-standard without debuginfo, it taken as in
+> invalid argument,
+> 
+> I think it is  ok,  but maybe more clear reason is better.
+> 
 
-I think this " Invalid argument " change  is caused by this commit:
+Thanks for the report!
 
-https://git.kernel.org/pub/scm/devel/pahole/pahole.git/commit/?id=b4a071d99bb9e7c0d3c6ea7a6835389a4d350ed4
+With latest pahole (next branch of
+https://git.kernel.org/pub/scm/devel/pahole/pahole.git/ ) including
+Arnaldo's change
 
-encode BTF with DWARF less files is not support for v1.30, so, since  
-/boot/vmlinux-6.12.40-yocto-standard without debuginfo, it taken as in 
-invalid argument,
+commit 97bf0a0b0572ec023761da9226b068b59b471de0
+Author: Arnaldo Carvalho de Melo <acme@kernel.org>
+Date:   Tue Jul 22 11:22:27 2025 -0300
 
-I think it is  ok,  but maybe more clear reason is better.
+    pahole: Don't fail when encoding BTF on an object with no DWARF info
 
 
-Regards
+I see the following pahole results against a stripped vmlinux:
 
-Changqing
+$ pahole --btf_features=default -J vmlinux.stripped
+$ echo $?
+0
 
->
->
-> I can share my /boot/vmlinux-6.12.40-yocto-standard  and 
-> /boot/.debug/vmlinux-6.12.40-yocto-standard, but it will be big 
-> attachment, I am not sure
->
-> if it is ok to send big attachment in the mailist.
->
-> Can you check with my new test result?   if  still need  the 
-> vmlinux-6.12.40-yocto-standard, I can try send to this maillist.
->
->
-> Regards
->
-> Changqing
->
->>>
->>> Analyzation:
->>> if the ELF file doesn't have .symtab section, in function |
->>> elf_functions__new, |funcs->symtab will be NULL, goto out_delete, then
->>> run elf_functions__delete.
->>> https://git.kernel.org/pub/scm/devel/pahole/pahole.git/tree/
->>> btf_encoder.c?id=06350d14776a77e16ea5064030fea63bbdd22f27#n176
->>>
->>> And segfault happened in line: list_del(&funcs->node), since funcs-
->>>  >node  not added into the list elf_functions_list yet.
->>> https://git.kernel.org/pub/scm/devel/pahole/pahole.git/tree/
->>> btf_encoder.c?id=06350d14776a77e16ea5064030fea63bbdd22f27#n170
->>>
->>> Should we check if the node is added into list elf_functions_list 
->>> before
->>> list_del?  Please help to review this issue, thanks.
->>>
->>> Regards
->>> Changqing
->>>
->>>
->>>
->>>
->>
+Can you reproduce the segmentation fault with the above pahole? If you
+can provide a way to get a stripped pahole like the above for me to test
+with, or provide the kernel .config used to build it, that would be
+great. Thanks!
+
+Alan
