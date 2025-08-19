@@ -1,254 +1,301 @@
-Received: from out-181.mta1.migadu.com (out-181.mta1.migadu.com [95.215.58.181])
+Received: from out-182.mta1.migadu.com (out-182.mta1.migadu.com [95.215.58.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1754A2D248A
-	for <dwarves@vger.kernel.org>; Tue, 19 Aug 2025 19:20:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0531221577
+	for <dwarves@vger.kernel.org>; Tue, 19 Aug 2025 19:35:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755631262; cv=none; b=sOzE9rE+zClgZ7bSeBObOGEW3IQMzgfXue7aC5dZoAijAnjmWtubqvFLRN2PVcnPrkJYOPANnahPJiDGvL+uoxHXkppKHxspN/mt1g7TJDyO9xnVZOYAvAGD03pero14Yfk6FO7Bm3zjinBsct8A3q6z14Ka/L3Yc2dX0dMcmDA=
+	t=1755632142; cv=none; b=fq11+2kACFTddXnH2V5tqESMUo6z36Bfd3+izRR8cZIjlelE90drq6YGu8TiorGUOSti2RTad8ZV1d7d5xFctgET/SQA7pVuJwcv6TjTQrUzQ6XaiJp9q5AK9SRKcNMqVZHMXaKfx/q0uM3auwxO2zwwcKTc/jozvrjASFqwjCs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755631262; c=relaxed/simple;
-	bh=pt+k+7gganuT1koKMjYMT/keyIG0P7TROZ27afkrCVg=;
+	s=arc-20240116; t=1755632142; c=relaxed/simple;
+	bh=GNdmD23cnUUpMkrjNBvs3ossC7Y8/ypE+ibdnQT14DI=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=kQMEC739a6FYTud/NUjpJZUAko1HkOXImmvQldCn3gpmiaYVbRYCKZpL8NchcQcEPIHCW8sjVCGvYTulKnowfM20PN90heIHbbBai/h+S7chAT13kZhqzUTtWIOTMRe/DCa5FEzwmlbnxnJb2yvahRkBYFVH86SrofMh2lPVnvs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=SwrOVqGy; arc=none smtp.client-ip=95.215.58.181
+	 In-Reply-To:Content-Type; b=JZziWk7ufJUSqCQwvbM13rK9FTqno6/yZ7YFsZJIodsiByYDHfOtRf6tFzSO2Ux/Qxdx8vpBf2ways6RXG4QU2qZmIA0tTkiNyZF1ize6pqZk1jv+ZWZryF7ILyURCTiu2eBPx17e0Hqs6Yvo+rz6t86sCe/4jCV1+8bnhJ8/hs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=vUT3HFWZ; arc=none smtp.client-ip=95.215.58.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="SwrOVqGy"
-Message-ID: <acef4a0e-7d3b-4e05-b3ca-1007580f2754@linux.dev>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="vUT3HFWZ"
+Message-ID: <d845b2ae-a231-4bd0-a3f2-b70f14b395ad@linux.dev>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1755631248;
+	t=1755632127;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=3V4G8whUAW6DOBCF2tqk+IbXZSO7gu3VTeoA0htigx4=;
-	b=SwrOVqGyB8aKKs1ObnBme+BLefT/ld3aO09w6BcxYt139LMWkfT/7VZZOBuu4hyn/l7GDj
-	v5BVzv1lmUEikRnCsWW6wxrQsbC+EQQthJPvXtEHEzR1e1nmgZrmh9kEoUYcUgW3VxiCHS
-	TF+QbzjESZuOUwQCDQhaNeWNEgxvtiY=
-Date: Tue, 19 Aug 2025 12:20:42 -0700
+	bh=wsbBGhhrkpG4xAg6uyGXhWitoB1z4NFYvdixmUzIsl4=;
+	b=vUT3HFWZkleaFCMJxU3g4c5NgaB4mzareXSycZIzGf9bmRhabOVAxWfomDGshRJtycmDnb
+	KEHUEap81OuYIuY8p5nbqJ6oApkUV/Mm+ykW6jh34rKMkrhE40CYZIcj5+ZmMdR03Qp1LE
+	v3H36mVCPSH7jWGsvwwWxvUij15S5Y0=
+Date: Tue, 19 Aug 2025 12:34:53 -0700
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: "Segmentation fault" of pahole
-To: Alan Maguire <alan.maguire@oracle.com>,
- Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc: Changqing Li <changqing.li@windriver.com>, dwarves@vger.kernel.org,
- Kernel Team <kernel-team@meta.com>, bpf <bpf@vger.kernel.org>
-References: <24bcc853-533c-42ab-bc37-0c13e0baa217@windriver.com>
- <37030a9d-28d8-4871-8acb-b26c59240710@linux.dev>
- <f1e2dc2b-a88b-4342-8e94-65481ae0cb4f@windriver.com>
- <ec72bbb8-b74d-49d1-bb42-5343feab8e5b@windriver.com>
- <7b071d63-71db-49d4-ab03-2dd7072a28aa@oracle.com>
- <979a1ac4-21d3-4384-8ce4-d10f41887088@linux.dev> <aKOSqWlQHZM0Icyj@x1>
- <ad67ade4-f645-4121-a4ca-40f9ecb988fe@oracle.com>
+Subject: Re: [PATCH dwarves v2] btf_encoder: group all function ELF syms by
+ function name
+To: Alan Maguire <alan.maguire@oracle.com>, olsajiri@gmail.com,
+ dwarves@vger.kernel.org
+Cc: bpf@vger.kernel.org, acme@kernel.org, andrii@kernel.org, ast@kernel.org,
+ eddyz87@gmail.com, menglong8.dong@gmail.com, song@kernel.org,
+ yonghong.song@linux.dev, kernel-team@meta.com
+References: <20250729020308.103139-1-isolodrai@meta.com>
+ <79a329ef-9bb3-454e-9135-731f2fd51951@oracle.com>
+ <647eb60a-c8f2-4ad3-ad98-b49b6e713402@oracle.com>
+ <3dcf7a0d-4a65-43d9-8fe8-34c7e0e20d62@linux.dev>
+ <5a926464-62bf-40b2-8ca4-a7669298a8ea@oracle.com>
 Content-Language: en-US
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 From: Ihor Solodrai <ihor.solodrai@linux.dev>
-In-Reply-To: <ad67ade4-f645-4121-a4ca-40f9ecb988fe@oracle.com>
+In-Reply-To: <5a926464-62bf-40b2-8ca4-a7669298a8ea@oracle.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-On 8/19/25 10:33 AM, Alan Maguire wrote:
-> On 18/08/2025 21:52, Arnaldo Carvalho de Melo wrote:
->> On Mon, Aug 18, 2025 at 10:56:36AM -0700, Ihor Solodrai wrote:
+On 8/5/25 4:24 AM, Alan Maguire wrote:
+> On 01/08/2025 21:51, Ihor Solodrai wrote:
+>> On 7/31/25 11:57 AM, Alan Maguire wrote:
+>>> On 31/07/2025 15:16, Alan Maguire wrote:
+>>>> On 29/07/2025 03:03, Ihor Solodrai wrote:
+>>>>> btf_encoder collects function ELF symbols into a table, which is later
+>>>>> used for processing DWARF data and determining whether a function can
+>>>>> be added to BTF.
+>>>>>
+>>>>> So far the ELF symbol name was used as a key for search in this table,
+>>>>> and a search by prefix match was attempted in cases when ELF symbol
+>>>>> name has a compiler-generated suffix.
+>>>>>
+>>>>> This implementation has bugs [1][2], causing some functions to be
+>>>>> inappropriately excluded from (or included into) BTF.
+>>>>>
+>>>>> Rework the implementation of the ELF functions table. Use a name of a
+>>>>> function without any suffix - symbol name before the first occurrence
+>>>>> of '.' - as a key. This way btf_encoder__find_function() always
+>>>>> returns a valid elf_function object (or NULL).
+>>>>>
+>>>>> Collect an array of symbol name + address pairs from GElf_Sym for each
+>>>>> elf_function when building the elf_functions table.
+>>>>>
+>>>>> Introduce ambiguous_addr flag to the btf_encoder_func_state. It is set
+>>>>> when the function is saved by examining the array of ELF symbols in
+>>>>> elf_function__has_ambiguous_address(). It tests whether there is only
+>>>>> one unique address for this function name, taking into account that
+>>>>> some addresses associated with it are not relevant:
+>>>>>     * ".cold" suffix indicates a piece of hot/cold split
+>>>>>     * ".part" suffix indicates a piece of partial inline
+>>>>>
+>>>>> When inspecting symbol name we have to search for any occurrence of
+>>>>> the target suffix, as opposed to testing the entire suffix, or the end
+>>>>> of a string. This is because suffixes may be combined by the compiler,
+>>>>> for example producing ".isra0.cold", and the conclusion will be
+>>>>> incorrect.
+>>>>>
+>>>>> In saved_functions_combine() check ambiguous_addr when deciding
+>>>>> whether a function should be included in BTF.
+>>>>>
+>>>>> Successful CI run: https://github.com/acmel/dwarves/pull/68/checks
+>>>>>
+>>>>> I manually spot checked some of the ~200 functions from vmlinux (BPF
+>>>>> CI-like kconfig) that are now excluded: all of those that I checked
+>>>>> had multiple addresses, and some where static functions from different
+>>>>> files with the same name.
+>>>>>
+>>>>> [1] https://lore.kernel.org/bpf/2f8c792e-9675-4385-
+>>>>> b1cb-10266c72bd45@linux.dev/
+>>>>> [2] https://lore.kernel.org/
+>>>>> dwarves/6b4fda90fbf8f6aeeb2732bbfb6e81ba5669e2f3@linux.dev/
+>>>>>
+>>>>> v1: https://lore.kernel.org/
+>>>>> dwarves/98f41eaf6dd364745013650d58c5f254a592221c@linux.dev/
+>>>>> Signed-off-by: Ihor Solodrai <isolodrai@meta.com>
+>>>>
+>>>> Thanks for doing this Ihor! Apologies for just thinking of this now, but
+>>>> why don't we filter out the .cold and .part functions earlier, not even
+>>>> adding them to the ELF functions list? Something like this on top of
+>>>> your patch:
+>>>>
+>>>> $ git diff
+>>>> diff --git a/btf_encoder.c b/btf_encoder.c
+>>>> index 0aa94ae..f61db0f 100644
+>>>> --- a/btf_encoder.c
+>>>> +++ b/btf_encoder.c
+>>>> @@ -1188,27 +1188,6 @@ static struct btf_encoder_func_state
+>>>> *btf_encoder__alloc_func_state(struct btf_e
+>>>>           return state;
+>>>>    }
+>>>>
+>>>> -/* some "." suffixes do not correspond to real functions;
+>>>> - * - .part for partial inline
+>>>> - * - .cold for rarely-used codepath extracted for better code locality
+>>>> - */
+>>>> -static bool str_contains_non_fn_suffix(const char *str) {
+>>>> -       static const char *skip[] = {
+>>>> -               ".cold",
+>>>> -               ".part"
+>>>> -       };
+>>>> -       char *suffix = strchr(str, '.');
+>>>> -       int i;
+>>>> -
+>>>> -       if (!suffix)
+>>>> -               return false;
+>>>> -       for (i = 0; i < ARRAY_SIZE(skip); i++) {
+>>>> -               if (strstr(suffix, skip[i]))
+>>>> -                       return true;
+>>>> -       }
+>>>> -       return false;
+>>>> -}
+>>>> -
+>>>>    static bool elf_function__has_ambiguous_address(struct elf_function
+>>>> *func) {
+>>>>           struct elf_function_sym *sym;
+>>>>           uint64_t addr;
+>>>> @@ -1219,12 +1198,10 @@ static bool
+>>>> elf_function__has_ambiguous_address(struct elf_function *func) {
+>>>>           addr = 0;
+>>>>           for (int i = 0; i < func->sym_cnt; i++) {
+>>>>                   sym = &func->syms[i];
+>>>> -               if (!str_contains_non_fn_suffix(sym->name)) {
+>>>> -                       if (addr && addr != sym->addr)
+>>>> -                               return true;
+>>>> -                       else
+>>>> +               if (addr && addr != sym->addr)
+>>>> +                       return true;
+>>>> +               else
+>>>>                                   addr = sym->addr;
+>>>> -               }
+>>>>           }
+>>>>
+>>>>
+>>>>           return false;
+>>>> @@ -2208,9 +2185,12 @@ static int elf_functions__collect(struct
+>>>> elf_functions *functions)
+>>>>                   func = &functions->entries[functions->cnt];
+>>>>
+>>>>                   suffix = strchr(sym_name, '.');
+>>>> -               if (suffix)
+>>>> +               if (suffix) {
+>>>> +                       if (strstr(suffix, ".part") ||
+>>>> +                           strstr(suffix, ".cold"))
+>>>> +                               continue;
+>>>>                           func->name = strndup(sym_name, suffix -
+>>>> sym_name);
+>>>> -               else
+>>>> +               } else
+>>>>                           func->name = strdup(sym_name);
+>>>>
+>>>>                   if (!func->name) {
+>>>>
+>>>> I think that would work and saves later string comparisons, what do you
+>>>> think?
+>>>>
+>>>
+>>> Apologies, this isn't sufficient. Considering cases like objpool_free(),
+>>> the problem is it has two entries in ELF for objpool_free and
+>>> objpool_free.part.0. So let's say we exclude objpool_free.part.0 from
+>>> the ELF representation, then we could potentially end up excluding
+>>> objpool_free as inconsistent if the DWARF for objpool_free.part.0
+>>> doesn't match that of objpool_free. It would appear to be inconsistent
+>>> but isn't really.
+>>
+>> Alan, as far as I can tell, in your example the function would be
+>> considered inconsistent independent of whether .part is included in
+>> elf_function->syms or not. We determine argument inconsistency based
+>> on DWARF data (struct function) passed into btf_encoder__save_func().
+>>
+>> So if there is a difference in arguments between objpool_free.part.0
+>> and objpool_free, it will be detected anyways.
+>>
+> 
+> I think I've solved that in the following proof-of-concept series [1] -
+> by retaining the .part functions in the ELF list _and_ matching the
+> DWARF and ELF via address we can distinguish between foo and foo.part.0
+> debug information and discard the latter such that it is not included in
+> the determination of inconsistency.
+> 
+>> A significant difference between v2 and v3 (just sent [1]) is in that
+>> if there is *only* "foo.part.0" symbol but no "foo", then it will not
+>> be included in v3 (because it's not in the elf_functions table), but
+>> would be in v2 (because there is only one address). And the correct
+>> behavior from the BTF encoding point of view is v3.
+>>
+> 
+> Yep, that part sounds good; I _think_ the approach I'm proposing solves
+> that too, along with not incorrectly marking foo/foo.part.0 as inconsistent.
+> 
+> The series is the top 3 commits in [1]; the first commit [2] is yours
+> modulo the small tweak of marking non-functions during ELF function
+> creation. The second [3] uses address ranges to try harder to get
+> address info from DWARF, while the final one [4] skips creating function
+> state for functions that we address-match as the .part/.cold functions
+> in debug info. This all allows us to better identify debug information
+> that is tied to the non-function .part/.cold optimizations.
+
+Hi Alan. Bumping this thread.
+
+I haven't reviewed/tested your github changes thoroughly, but the
+approach makes sense to me overall.
+
+What do you think about applying the group-by-name patch [1] first,
+maybe including your tweak? It would fix a couple of bugs right away.
+
+And later you can send a more refined draft of patches to use
+addresses for matching.
+
+[1] 
+https://lore.kernel.org/dwarves/20250801202009.3942492-1-ihor.solodrai@linux.dev/
+
+> 
+> 
+> [1]
+> https://github.com/acmel/dwarves/compare/master...alan-maguire:dwarves:pahole-next-remove-dupaddrs
+> [2]
+> https://github.com/acmel/dwarves/commit/e256ffaf13cce96c4e782192b2814e1a2664fe99
+> [3]
+> https://github.com/acmel/dwarves/commit/7cc2c1e21f1daeb29aa270fd9f23ef1ba99fcd4e
+> [4]
+> https://github.com/acmel/dwarves/commit/893f14c2a854c240a927294996f449a3ad63eaed
+>> [1] https://lore.kernel.org/dwarves/20250801202009.3942492-1-
+>> ihor.solodrai@linux.dev/
+>>
+>>
+>>>
+>>> I think the best thing might be to retain the .part/.cold repesentations
+>>> in the ELF table but perhaps mark them with a flag (non_fn for
+>>> non-function or similar?) at creation time to avoid expensive string
+>>> comparisons later.
+>>
+>> That's a good point. In v3 I exclude .part and .cold from the table,
+>> and store ambiguous_addr flag in elf_function. If anything, we should
+>> be doing less string comparisons now.
+>>
+>>>
+>>> On the subject of improving matching, we do have address info for DWARF
+>>> functions in many cases like this, and that can help guide DWARF->ELF
+>>> mapping. I have a patch that helps collect function address info in
+>>> dwarf_loader.c; perhaps we could make use of it in doing more accurate
+>>> matching? In the above case for example, we actually have DWARF function
+>>> addresses for both objpool_free and objpool_free.part.0 so we could in
+>>> that case figure out the DWARF-ELF mapping even though there are
+>>> multiple ELF addresses and multiple DWARF representations.
+>>>
+>>> Haven't thought it through fully to be honest, but I think we want to
+>>> avoid edge cases like the above where we either label a function as
+>>> inconsistent or ambiguous unnecessarily. I'll try to come up with a
+>>> rough proof-of-concept that weaves address-based matching into the
+>>> approach you have here, since what you've done is a huge improvement.
+>>> Again sorry for the noise here, I struggle to think through all the
+>>> permutations we have to consider here to be honest.
+>>>
+>>> Thanks!
+>>>
+>>> Alan
+>>>
 >>>
 >>> [...]
 >>>
->>> Hi everyone.
->>>
->>> I was able to reproduce the error by feeding pahole a vmlinux with a
->>> debuglink [1], created with:
->>>
->>>      vmlinux=$(realpath ~/kernels/bpf-next/.tmp_vmlinux1)
->>>      objcopy --only-keep-debug $vmlinux vmlinux.debug
->>>      objcopy --strip-all --add-gnu-debuglink=vmlinux.debug $vmlinux
->>> vmlinux.stripped
->>>
->>> With that, I got the following valgrind output:
->>>
->>>      $ valgrind ./build/pahole --btf_features=default -J
->>> ./mbox/vmlinux.stripped
->>>      ==40680== Memcheck, a memory error detector
->>>      ==40680== Copyright (C) 2002-2024, and GNU GPL'd, by Julian Seward et
->>> al.
->>>      ==40680== Using Valgrind-3.25.1 and LibVEX; rerun with -h for copyright
->>> info
->>>      ==40680== Command: ./build/pahole --btf_features=default -J
->>> ./mbox/vmlinux.stripped
->>>      ==40680==
->>>      ==40680== Warning: set address range perms: large range [0x7c20000,
->>> 0x32e2d000) (defined)
->>>      ==40680== Thread 2:
->>>      ==40680== Invalid write of size 8
->>>      ==40680==    at 0x487D34D: __list_del (list.h:106)
->>>      ==40680==    by 0x487D384: list_del (list.h:118)
->>>      ==40680==    by 0x487D6DB: elf_functions__delete (btf_encoder.c:170)
->>>      ==40680==    by 0x487D77C: elf_functions__new (btf_encoder.c:201)
->>>      ==40680==    by 0x4880E2A: btf_encoder__elf_functions
->>> (btf_encoder.c:1485)
->>>      ==40680==    by 0x4883558: btf_encoder__new (btf_encoder.c:2450)
->>>      ==40680==    by 0x4078DD: pahole_stealer__btf_encode (pahole.c:3160)
->>>      ==40680==    by 0x407B0D: pahole_stealer (pahole.c:3221)
->>>      ==40680==    by 0x488D2F5: cus__steal_now (dwarf_loader.c:3266)
->>>      ==40680==    by 0x488DF74: dwarf_loader__worker_thread
->>> (dwarf_loader.c:3678)
->>>      ==40680==    by 0x4A8F723: start_thread (pthread_create.c:448)
->>>      ==40680==    by 0x4B13613: clone (clone.S:100)
->>>      ==40680==  Address 0x8 is not stack'd, malloc'd or (recently) free'd
->>>
->>> As far as I understand, in principle pahole could support search for a
->>> file linked via .gnu_debuglink, but that's a separate issue.
 >>
->> Agreed.
->>   
->>> Please see a bugfix patch below.
->>>
->>> [1]
->>> https://manpages.debian.org/unstable/binutils-common/objcopy.1.en.html#add~3
->>>
->>>
->>>  From 6104783080709dad0726740615149951109f839e Mon Sep 17 00:00:00 2001
->>> From: Ihor Solodrai <ihor.solodrai@linux.dev>
->>> Date: Mon, 18 Aug 2025 10:30:16 -0700
->>> Subject: [PATCH] btf_encoder: fix elf_functions cleanup on error
->>>
->>> When elf_functions__new() errors out and jumps to
->>> elf_functions__delete(), pahole segfaults on attempt to list_del the
->>> elf_functions instance from a list, to which it was never added.
->>>
->>> Fix this by changing elf_functions__delete() to
->>> elf_functions__clear(), moving list_del and free calls out of it. Then
->>> clear and free on error, and remove from the list on normal cleanup in
->>> elf_functions_list__clear().
->>
->> I think we should still call it __delete() to have a counterpart to
->> __new() and just remove that removal from the list from the __delete().
-
-Thanks for the review. Here is a v2:
-
- From f3d6b1eb33df182bed94e09d716de0f883816513 Mon Sep 17 00:00:00 2001
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
-Date: Tue, 19 Aug 2025 12:05:38 -0700
-Subject: [PATCH dwarves v2] btf_encoder: fix elf_functions cleanup on error
-
-When elf_functions__new() errors out and jumps to
-elf_functions__delete(), pahole segfaults on attempt to list_del() the
-elf_functions instance from a list, to which it was never added.
-
-Fix this by moving list_del() call out of
-elf_functions__delete(). Remove from the list only on normal cleanup
-in elf_functions_list__clear().
-
-v1: 
-https://lore.kernel.org/dwarves/979a1ac4-21d3-4384-8ce4-d10f41887088@linux.dev/
-
-Closes: 
-https://lore.kernel.org/dwarves/24bcc853-533c-42ab-bc37-0c13e0baa217@windriver.com/
-Reported-by: Changqing Li <changqing.li@windriver.com>
-Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
-Reviewed-by: Arnaldo Carvalho de Melo <acme@redhat.com>
----
-  btf_encoder.c | 2 +-
-  1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/btf_encoder.c b/btf_encoder.c
-index 3f040fe..6300a43 100644
---- a/btf_encoder.c
-+++ b/btf_encoder.c
-@@ -168,7 +168,6 @@ static inline void elf_functions__delete(struct 
-elf_functions *funcs)
-  		free(funcs->entries[i].alias);
-  	free(funcs->entries);
-  	elf_symtab__delete(funcs->symtab);
--	list_del(&funcs->node);
-  	free(funcs);
-  }
-
-@@ -210,6 +209,7 @@ static inline void elf_functions_list__clear(struct 
-list_head *elf_functions_lis
-
-  	list_for_each_safe(pos, tmp, elf_functions_list) {
-  		funcs = list_entry(pos, struct elf_functions, node);
-+		list_del(&funcs->node);
-  		elf_functions__delete(funcs);
-  	}
-  }
--- 
-2.50.1
-
-
-
->>
->> Apart from that, it looks to address a bug, so with the above changed:
->>
->> Reviewed-by: Arnaldo Carvalho de Melo <acme@redhat.com>
 >>
 > 
-> Thanks for the fix Ihor!
-> 
-> Sorry to bikeshed this but how about using funcs->elf as a proxy for
-> determining if we have elf function info to add to the list, so we could
-> then fix elf_functions__delete() to guard the list_del():
-> 
-> 	if (funcs->elf)
-> 		list_del(&funcs->node);
-> 
-> 
-> we'd just then need to tweak
-> 
-> -	funcs->elf = elf;
->          err = elf_functions__collect(funcs);
-> 	if (err < 0)
->                  goto out_delete;
-> +	funcs->elf = elf;
-> 
-> Would that work?
-
-Not for this bug, because we actually check for a NULL Elf earlier here:
-
-static struct elf_functions *btf_encoder__elf_functions(struct 
-btf_encoder *encoder)
-{
-	struct elf_functions *funcs = NULL;
-
-	if (!encoder->cu || !encoder->cu->elf)    // <-- this
-		return NULL;
-
-	funcs = elf_functions__find(encoder->cu->elf, 
-&encoder->elf_functions_list);
-	if (!funcs) {
-		funcs = elf_functions__new(encoder->cu->elf);
-		if (funcs)
-			list_add(&funcs->node, &encoder->elf_functions_list);
-	}
-
-	return funcs;
-}
-
-The condition triggering an error (at least in the case of debuglink
-that I made up) is in elf_symtab__new():
-
-struct elf_symtab *elf_symtab__new(const char *name, Elf *elf)
-{
-	size_t symtab_index;
-
-	if (name == NULL)
-		name = ".symtab";
-
-	GElf_Shdr shdr;
-	Elf_Scn *sec = elf_section_by_name(elf, &shdr, name, &symtab_index);
-
-	if (sec == NULL)    // <--- this
-		return NULL;
-     ...
-
-
-> 
->> [...]
 
