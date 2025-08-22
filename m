@@ -1,103 +1,95 @@
 Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08C2D393DC3;
-	Thu, 21 Aug 2025 21:36:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B05023373D;
+	Fri, 22 Aug 2025 15:57:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.165.32
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755812169; cv=fail; b=AXJH3wglMKPIMfcgECk/xAgto2ziWrIsUunvCC75+7DxgiU9ntN+zLgZH2xYDwmLeT9o0UMewfUqod2GZ+Dg97iUlqZAgfR4UvKxc8s0/TbD1/bNMgXde9DqwjWL1UYrsqQh4UZ8VOH8JDJQKAIhug5/5XpIVJ9doLBISb9DjR0=
+	t=1755878276; cv=fail; b=QWLBnmqNYscIQDTbvFYoJDWkeXhzlsj700QwvjKfI96v1lidZTiLUZVnlgP3wQXOdAvwd7LyRCwp33bzKoHUUbztgS2NOQeBgcxvHcQ8DkhRvdORfzO8eekpch2MoZaiUqiC/dt+s1KEgs6D2/hsiBbezOHqoubSm45egSn6QHo=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755812169; c=relaxed/simple;
-	bh=WqZ0eDP+TBSTJDGgfpGfNNmsIIxJjM55kpBZ1rhUrg4=;
-	h=From:To:Cc:Subject:References:Date:In-Reply-To:Message-ID:
-	 Content-Type:MIME-Version; b=U0AyyeKdaxVU+Z+YB04IvSdxTVXE+JBV5DOF9N/NPs8CqkipN/PVLghhw3jSyxpMFlmOmnTvWmPf6XxSlfaBxT6nudj+PtLcSGHfNixhR2RFCJKH+Ro+JEH8tm/TEHXr8jwt3W7f3ww4VbVNbN/+BHNqq1OHQHRxzFwb2KCw6ow=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=mmYi6n8L; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=CO2zKivP; arc=fail smtp.client-ip=205.220.165.32
+	s=arc-20240116; t=1755878276; c=relaxed/simple;
+	bh=wxVvdqoq3FFnRT43u0ikmEQX3UTlq7Ca5f6lybmKD6M=;
+	h=Message-ID:Date:Subject:From:To:Cc:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=qy0ZzEAGC4hn5v5AJoIx/MYpPvVAj8wgQPNJR8hAvm+JlFH475Xzmj31Mhodc83jqYJ+WuqemvDi3fqx9wM54mxXldA1/jFijaSLhp2RdCG84FMtgsi3mHSSiZ6ATYmZ5uMjXo9vsvTtJn3VzWWZr0WFdRZ4ivi3NOWH4MiUyGA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=HYEHeqLV; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=cA6Xree6; arc=fail smtp.client-ip=205.220.165.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="mmYi6n8L";
-	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="CO2zKivP"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="HYEHeqLV";
+	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="cA6Xree6"
 Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 57LLQsL9012303;
-	Thu, 21 Aug 2025 21:35:58 GMT
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 57MFH2kK023642;
+	Fri, 22 Aug 2025 15:57:37 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=corp-2025-04-25; bh=u22mEGRrTQ6drisEQQ
-	plxBMsI9lk0SpgayWknsaCYTc=; b=mmYi6n8LzMqLXeGDRpKbp3kPbzST8JIhJG
-	XRPRr52/2wLq2gqqUIbGJiuUg0Y043HLbIJXGjpLhpvZ/rrbLmQx//peJrtEeK/h
-	C+S/gvcTDlaqWB65WoHeRyQBhrC032369hpKaAnGCdVjN5XGy5ZrxpsBJ1x/xaUC
-	8PirMR47PQDa8YfThihn6CVdNGv5731PVjE+VF4u5WJ+UUV9Mt85uD4gnC8twayb
-	o2nfFxsoyPVvQix5stVHssdkvJn2wcfy2d4pIxCX86e0MSsrYB6sXQIqjmsNu8xK
-	GMBcE0T+FMswO0/xjcjI25M4VFyGkiKHao4jrJzXvO+9/i+hjfIA==
-Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 48pa2685hh-1
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=
+	corp-2025-04-25; bh=3jmjfuVXxlgAJyN56vJZvDbitcccQ1MRsnIJa+uDGLM=; b=
+	HYEHeqLVmp0G9IyWOrfNyTDX4I/mCzj0koB+bosRL282q3plD9lWIxz7CB8R+bBD
+	SKsOlp6EkxwL98X5ZJjnTVg7B+D/dGwAA/yuBHYUuFIdv1IQUuFwBdB0zHnYkRyG
+	9V5QZrJwJDJt6hWSSSrshZYyWYPYN5xUWvcIV9nlBoF+EBPzNR76QSmq0kPi3vuN
+	z1uzyoYfkNzD+TuzxSTAntc3k2E+yFoRFV2TIRsxJLlgQWQTMex2Why0FWso/8u+
+	oXhA1dLQCiMIiNZAk7AhWQYSDs2TGSu50n3qopKy1Rt4KmMkx4szsVxoGKL42biq
+	C8n3Ry2tRB42lXP/K0iKIw==
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 48pa269p07-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 21 Aug 2025 21:35:57 +0000 (GMT)
-Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 57LKWQCQ007281;
-	Thu, 21 Aug 2025 21:35:57 GMT
-Received: from nam11-dm6-obe.outbound.protection.outlook.com (mail-dm6nam11on2055.outbound.protection.outlook.com [40.107.223.55])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 48my3smwjv-1
+	Fri, 22 Aug 2025 15:57:36 +0000 (GMT)
+Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 57MFPapI021102;
+	Fri, 22 Aug 2025 15:57:35 GMT
+Received: from nam04-dm6-obe.outbound.protection.outlook.com (mail-dm6nam04on2067.outbound.protection.outlook.com [40.107.102.67])
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 48nj6hgu03-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 21 Aug 2025 21:35:57 +0000
+	Fri, 22 Aug 2025 15:57:35 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=MILmPoIgpP5GPYuc67+S1eBR/AALb6pgxXqoAThzbq+D9j77gp46KXKHifCerge0g/nRbyrKOEBWIZmuD2xkMGziBgxaBwZX8hU9X+H7I5MmWNZ0xSTpxw5vp78wmk4hqy9cJCUAJjBJobPgvNIlbp3UAhgIkwOXO4P6jnAYyNVJIbpM3GE0CLf9FsNWKwg5xnc2b3i5QwKavCgFr8yCD1GZrJ220NKZrpuRjEcfqiiHrg/b0PGk0myo/DPjtHJRJUZR+sO3p9ilGgQxGFjqEmydB3HvCePoRg1XErL+3VfpiOCMQUVKsInKL0L/BGyg09owG/BlEYySZMAgyuzjUg==
+ b=k1qP7+E2jif8Ucbjryu4eQE6RzJfC1AspLWerTB/T6ulIB+8hvUffX6KBNLPLdFALE/Vsz1fC9TUTSE2tgYBVMO3AsLlCJdODvrNOK6G7nUrCTJVTDkU5dWyvmAkM3cojKkdf3lzSD0YGtiqSsjTmdt1ggPgb+uVk6xTBbWUF1pV+Abw237p7/xRaIILm7S/zRn8x5hX81XMzB+AD3H92QCoUt4jA17HELvj9/hzXNQvJ3s2+nM4KoscfvSP3f/eQg9HexgfABqKC4WxtjpcyG3Qpo2t4MHV5lAu8T+PfB1D2F6KT54vm3Hui4BKAIaoeaq21PdnHtBVXslpGQrNAw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=u22mEGRrTQ6drisEQQplxBMsI9lk0SpgayWknsaCYTc=;
- b=dpNYixAvkjAoWWN2jd+3rsyl8uVJJ3rvkYjpn+vhwLZvtNIHCCVnOvmbT3+Jftk9JELtozjA123yMowT2mRKJz/blo18Fa2wZbuehLVd/jlgRaA9QuKmV4N6YJrEPbeOe1Gc35mhFAdPzjYe1HiezK1j+EXYO4Csj3TtVXoVs34bZenWMBBtqCvOzjc/Mf0Cx/GVjc2krAjkhcPD1+8IqGbeiXM34y3SsyEk9lu1VdrQ+MfkmJZiiMEaNQEvbqznHQZEbhZ2ZphTgNa4cj6l2+J8Ucv1WLFcAAqNNF3xaZCjZd070O9dMPaAFlEOQv7s2ZKd5+C37ixlfDMKgod0QA==
+ bh=3jmjfuVXxlgAJyN56vJZvDbitcccQ1MRsnIJa+uDGLM=;
+ b=qRfirUIXUpyBB2PO4Kqm0Ki1IWneHkzOAcc8OGOZSBrbTS2/a2bU5k1yyyMJL07FaIU4xa+xPhnhuO1A+nyrIMfTlZ1v0rec0htI9N5CMvKNW9Owi50L9Nsd+orAIq1QoYd6A9Jwd3groHOEHbSVd/BlIGZ6V8dV+cuvTZS7SJEhAFJB+0a7jNPfUWzgrIQmMBHKcwcaFm8npfGcfOr8/BNmpSy9vRcYkIDWVZPJI4Knhpe8uPsaRPnMowhMZPMHKGxb2J/VzWIMKE+5wLwVoItjj3uqXZkgJ4qCtxOJKfblBbXUAcvCogj8RcsrFeP2x93IPivZm7MpWSnSvbNFfw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
  dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=u22mEGRrTQ6drisEQQplxBMsI9lk0SpgayWknsaCYTc=;
- b=CO2zKivPCubKThImYY1FtJjqcmCrjgqTwFL9GxK5CMK0g3W8QeqmFKP6JpGfAITxqlF87FR9T+VvlzsggZHXyTgjFgXMQDOdr4kpIfbOQsCNg0108KrMKsqpv38NVtRI5p1bdNxkYebk6uPBYnwC0jj9OiLXswv2Bhu4uZvaRDc=
-Received: from PH3PPFA3184E4F2.namprd10.prod.outlook.com
- (2603:10b6:518:1::7bb) by DS0PR10MB8054.namprd10.prod.outlook.com
- (2603:10b6:8:1f1::8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9052.14; Thu, 21 Aug
- 2025 21:35:54 +0000
-Received: from PH3PPFA3184E4F2.namprd10.prod.outlook.com
- ([fe80::815c:d94d:29c8:ecb3]) by PH3PPFA3184E4F2.namprd10.prod.outlook.com
- ([fe80::815c:d94d:29c8:ecb3%8]) with mapi id 15.20.9052.013; Thu, 21 Aug 2025
- 21:35:54 +0000
-From: Nick Alcock <nick.alcock@oracle.com>
-To: Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
-Cc: Eduard Zingerman <eddyz87@gmail.com>,
-        Alexei Starovoitov
- <alexei.starovoitov@gmail.com>,
-        Arnaldo Carvalho de Melo
- <acme@kernel.org>, nick.alcock@oracle.com,
-        Alan Maguire
- <alan.maguire@oracle.com>, Jiri Olsa <jolsa@kernel.org>,
-        Clark Williams
- <williams@redhat.com>,
-        Kate Carcia <kcarcia@redhat.com>, dwarves
- <dwarves@vger.kernel.org>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Yonghong Song
- <yonghong.song@linux.dev>,
-        "Jose E. Marchesi" <jose.marchesi@oracle.com>,
-        Namhyung Kim <namhyung@kernel.org>, bpf <bpf@vger.kernel.org>
-Subject: Re: [RFC 0/4] BTF archive with unmodified pahole+toolchain
-References: <20250807182538.136498-1-acme@kernel.org>
-	<CAADnVQ+cvvHN9CunLP03yRFKz2YJirmF0j80-fZ0A-8aVVopPg@mail.gmail.com>
-	<b297444e23c42caeab254c90fa91f46f75212e29.camel@gmail.com>
-	<8EEC78FB-CBFA-4DFD-827D-3D5E809ACA0F@gmail.com>
-Emacs: because Hell was full.
-Date: Thu, 21 Aug 2025 22:35:51 +0100
-In-Reply-To: <8EEC78FB-CBFA-4DFD-827D-3D5E809ACA0F@gmail.com> (Arnaldo
-	Carvalho de Melo's message of "Fri, 08 Aug 2025 16:10:38 -0300")
-Message-ID: <87zfbsici0.fsf@esperi.org.uk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.3 (gnu/linux)
-Content-Type: text/plain
-X-ClientProxiedBy: LO4P123CA0555.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:33b::8) To PH3PPFA3184E4F2.namprd10.prod.outlook.com
- (2603:10b6:518:1::7bb)
+ bh=3jmjfuVXxlgAJyN56vJZvDbitcccQ1MRsnIJa+uDGLM=;
+ b=cA6Xree6bXq6p36yv6CAel1Drj8NwqYuwUNZpdw2028svvGoSwko+lfr8RASw4Wa59wkGPfiKJi046bP45drKEu7wuNjPJRgUvVT+iFo+Uo5VJeSH0vAn6GiC7wnbJqzK0KboQgEpkz55NV2csXYFJOe5u+bxocdwU8i9hottj8=
+Received: from DS0PR10MB6271.namprd10.prod.outlook.com (2603:10b6:8:d1::15) by
+ IA1PR10MB6193.namprd10.prod.outlook.com (2603:10b6:208:3a7::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9052.15; Fri, 22 Aug
+ 2025 15:57:32 +0000
+Received: from DS0PR10MB6271.namprd10.prod.outlook.com
+ ([fe80::940b:88ca:dd2d:6b0c]) by DS0PR10MB6271.namprd10.prod.outlook.com
+ ([fe80::940b:88ca:dd2d:6b0c%6]) with mapi id 15.20.9031.023; Fri, 22 Aug 2025
+ 15:57:30 +0000
+Message-ID: <14cf1f79-11fc-43ef-9f6b-01e0f80c9da1@oracle.com>
+Date: Fri, 22 Aug 2025 16:57:22 +0100
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH dwarves v2] btf_encoder: group all function ELF syms by
+ function name
+From: Alan Maguire <alan.maguire@oracle.com>
+To: Ihor Solodrai <ihor.solodrai@linux.dev>, olsajiri@gmail.com,
+        dwarves@vger.kernel.org
+Cc: bpf@vger.kernel.org, acme@kernel.org, andrii@kernel.org, ast@kernel.org,
+        eddyz87@gmail.com, menglong8.dong@gmail.com, song@kernel.org,
+        yonghong.song@linux.dev, kernel-team@meta.com
+References: <20250729020308.103139-1-isolodrai@meta.com>
+ <79a329ef-9bb3-454e-9135-731f2fd51951@oracle.com>
+ <647eb60a-c8f2-4ad3-ad98-b49b6e713402@oracle.com>
+ <3dcf7a0d-4a65-43d9-8fe8-34c7e0e20d62@linux.dev>
+ <5a926464-62bf-40b2-8ca4-a7669298a8ea@oracle.com>
+ <d845b2ae-a231-4bd0-a3f2-b70f14b395ad@linux.dev>
+ <9da9d7f2-e586-40a4-8080-2903920d32a3@oracle.com>
+Content-Language: en-GB
+In-Reply-To: <9da9d7f2-e586-40a4-8080-2903920d32a3@oracle.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: LO4P123CA0177.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:600:18a::20) To DS0PR10MB6271.namprd10.prod.outlook.com
+ (2603:10b6:8:d1::15)
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
@@ -105,280 +97,337 @@ List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH3PPFA3184E4F2:EE_|DS0PR10MB8054:EE_
-X-MS-Office365-Filtering-Correlation-Id: 7f95fe7d-8d5e-4eec-dfe0-08dde0fab54d
+X-MS-TrafficTypeDiagnostic: DS0PR10MB6271:EE_|IA1PR10MB6193:EE_
+X-MS-Office365-Filtering-Correlation-Id: 001b9ac9-5433-4ad9-7b31-08dde1949996
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|7416014|366016|10070799003|376014;
+	BCL:0;ARA:13230040|376014|7416014|366016|1800799024|13003099007;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?9llY3IbrXvMKesun2HqzBg3P1vXBzwINJ4ri1F+HyPL8wofzIi/H7Sl+Ud6u?=
- =?us-ascii?Q?aA0pnhkMIhoEL7B3dFS7XrlGtrq+4glxPgl5bv8dcUI9eE2uqn9lUmkvjBVg?=
- =?us-ascii?Q?Ig1N5a9sUJXp13gg8Tx0N5WWjebyitHEdqme0scrEYNTFRbmKHSSR+j3ytZe?=
- =?us-ascii?Q?LTYKsWrDBAclUaWRTJ/zAosI9TI7n1KZjoBX+VAfIO2A/jUu4jumn/oqEJ/9?=
- =?us-ascii?Q?nAFSzGnlMo7xyCxiU0OX4NLHj0XaaAEuHDOlSsVw32mOURA7gernB1W65GEx?=
- =?us-ascii?Q?cPXO3c7q5GUUqvnzzv3Mu7z3tZbz/Fy8YxX5KjTr4UeuHoFMSlG7Lv+riknj?=
- =?us-ascii?Q?Dx6QVjHeCqPZUzT5kSHxv14/CHLZCr2vQrm/yXDp5fKN7wRXV2oluXCoG0TH?=
- =?us-ascii?Q?glZrZ6WCQhtMt+TruE6iVpuwXqe3fTjGFk7lPDuL3V+EUeR+TQ8uo5f3wMDB?=
- =?us-ascii?Q?cjAKPMKC52VZRb89HqqbcISQquOQPpzL9+Uc/p+1u1SpHbh+I7Wxw+wXVJy4?=
- =?us-ascii?Q?EfIQIxyPzbZfC2+/1oZ25Flj/vAgzezyqzbzoUTsUJuin0NtL45hvYQIvpBW?=
- =?us-ascii?Q?xj6pl9oRUVkHzNgT8jkx/odUIfNZVzkvi4/GoqtYiteobKoBrJ8z6D0XI1nb?=
- =?us-ascii?Q?DyEB54Fp0aftmXWI1cubVi4P/1oWncfyTJJavwUMUG7uXY0i9Uuny23wBmsU?=
- =?us-ascii?Q?V4Rs9XGWxY+1/7pUNEBwr0KUCwRldJ3Kc+SK5dfq4jnc7CvjDHKxJtHLi3Vd?=
- =?us-ascii?Q?jz/LG/uxfcKyhWiDWf6nC50qM8qQIBnky6V7TaHzMTH6kU5AsrYjQqhmFnaz?=
- =?us-ascii?Q?+Z+17wmlfdRceIwzCg7ssriZpesF1q/31rhRbIDUBDjrK6/MXzCzFajBS7O+?=
- =?us-ascii?Q?TZIpu8qK0byFauKAgDjRiAuqoXJDqUweHcp7BX+6BeRbKEk9GM3EqbFdIK0H?=
- =?us-ascii?Q?xpGALJlRspB059CCj952+jAY0Y3b/qoltsvT3WqT5Xw+1NKAGpIJ2O4a8KJe?=
- =?us-ascii?Q?U2xEQ4MetyRnyXJU1V3FkDeO9IBs7p2YjrSkpWfUdlrNHd0CUe0DuKJP355v?=
- =?us-ascii?Q?KumwaQvONbBNuzLOF484YrTM3dNpSsMCvgtPvJYpx7QDld37xs+GJWY/U47h?=
- =?us-ascii?Q?rjt2nxUknnXqaCYsnVR8WMtaiHVZWClxwzBeJGC5uKU799m3gHED2n8Uenpc?=
- =?us-ascii?Q?iUopVZ3cCRi8c3WENVOmYJmWQg6eUXVx8OXQ4s9F6yt0cqtXm4Z57ijP4xFh?=
- =?us-ascii?Q?W0zP7PbzKLt0GRkd9hmhYMYJUAmqXH4vqfF++8cS/K/egit+VtTdC6S4qwzu?=
- =?us-ascii?Q?5wR87Z3jGKsvehOKCqcuwd+Cxa1GitGw8zaHzdfkU2I8mU2qCZM5dmvNJmB2?=
- =?us-ascii?Q?wZdHGAM=3D?=
+	=?utf-8?B?emEyZjB4UVVmVE1TbXVGWTh6T3gxMHdNRS9Md1hBSzU1NjdUbHozL1lWS2d5?=
+ =?utf-8?B?WGRRVjcrLzhqWm5xRW8rcll2L3phcWhxcWYxWkVzYmk1LzFkNDd5WmNLSU1x?=
+ =?utf-8?B?T0dXMWtxMlplb0FRMTcyYmJPVVRoL1RlMmxHdVkrVWtIbUppRk81ZUZua3pt?=
+ =?utf-8?B?RjVGOW54SGpJbUsySisrTXRxYWNEcUpwOUJQQkJ2L3NzMTIrMlc2RS9TVzk3?=
+ =?utf-8?B?UmNpajhtMW5EQ24yWkxBbTFrUUZRVDFhdXNQbS9rWTJ1dHNKREIrYmxZaW0x?=
+ =?utf-8?B?Vk5wZzR5UVREcWFRVnhrc1B2cDh0cEVsdDdNM2doNWpCQnJWeVZtSmpENCtz?=
+ =?utf-8?B?UVllazR3OXNhN0RKd245cGcvdW5GUTdYUVE2NUhWNlZVSGt5eXlHTGdLSUQw?=
+ =?utf-8?B?VmNESWVmU3cxSy9qNHRvZ1RBcytTanFVM0c3SkREVFBLRi9OelM2SXZ6aWJZ?=
+ =?utf-8?B?RjhSR0FVVmN1cGRGb2VHYkhSZ1B0NHZ1ejkxSlJFRGJXQkV1MkRrZnFZSXlp?=
+ =?utf-8?B?eDBMbExNaWpxZWFRMHUzaHVsNFVHQ3h5RmVhYSt6WDZzWklrSTdMU3ZNaS9l?=
+ =?utf-8?B?RTV5ekQyUjRVL1REZkpyS2ZWSHZKOTJVY3hzZEtUeW5RUEkza1JZM2pEenlR?=
+ =?utf-8?B?NU05Qkx0RVdwU1hrbUhGMHMvbm9DQk43WEI4NUVoRWFXRzJPaTBseTJmMXZx?=
+ =?utf-8?B?cVJiT0QrcmlBdW1OVHlGdU5rUWpFVGdtSUk3M1cydVFESGhnbisvRDM5aW94?=
+ =?utf-8?B?ZHJod1Z5WVpHQ1RHb21XTDZmZFlXWG14cjEwbjZCUUFwY1JScmVISStibEVE?=
+ =?utf-8?B?SDBWTDZ4aUJveFB5a292cFl6bGVsViswT1k5YUQwOEZWY2JsRWYvYjR2WmtR?=
+ =?utf-8?B?VkgybXBFSG1JVWU1enVGTXpvVmpxWEZnWFRTSlhHcUk3M01NMjVKVW1DaC9F?=
+ =?utf-8?B?VU91QkNPL0lYc0dZYkNULzJUNTh0SmdvdnUxYURIaUFHZ01QWHFUMEtQMFZl?=
+ =?utf-8?B?ejRQQXRINGtxcmxybllMWkR3RjhDaHpCU0VlRTBuUDVNUFZjZ1ZQcDBDcm1o?=
+ =?utf-8?B?blBhR1hlY0NyYkRyUUR2REllTnV4NlVuQmV6VDA3OHphOVA4U2xDcExuTFZV?=
+ =?utf-8?B?c1JnNEpON09XZFhOR0JhL3JKV21oMHZNM2dlSDNRRzkyUWVkNUdrZVdRMWxo?=
+ =?utf-8?B?b0diUFpxVGVURFlwTE80WE9kMFpYTWdPN0lzOERLVkJmdGtMeE4rQUtld3RG?=
+ =?utf-8?B?NHIwQ2V1Y2xnMXhGK3B2R3Y4RWdXRVQ1b3BVUE05VUxYMmhIQVFCeE85Q3hz?=
+ =?utf-8?B?cHFpLy9sdHhMQ3VJQWp5bENyVWdDOStZU1R2T2dJZTRDdThtWEVwMkJqODlz?=
+ =?utf-8?B?bUlUMCtidWQ2UElDWmdnOHlSM0MrNFNZYmNqMHFPaXFpdTdrYTVwV3Vjd2tn?=
+ =?utf-8?B?VmluV2NiVTlpQlJ0b3k1T3FlRTY0R3dsb01ac2hsK3ltUFhKdjBIdGIzL3R0?=
+ =?utf-8?B?bXduM1cwNjZ0WGVsZ0U5V0xlK2VrWXZzaC81dllmSkE0OVFKSzJXU20wVTdh?=
+ =?utf-8?B?bGpZbEk5Uk1WUm9haHp0VERkdUg1akxwRWptNktXWFJKSVFHSTZRb0s2SkQz?=
+ =?utf-8?B?UEZhSHNKb244TUZKRlhNM0xzaDZ4eXJhekk4NTI1dEdIcm1QYmlyTHRjSHNv?=
+ =?utf-8?B?eEsrWVQ3UE01Q0tnc1YrVGxsQ3A0aEVhTkI1Ri9STmZyN3lYbTRNNzdhQmND?=
+ =?utf-8?B?ZUh1V2lZbHVBT2k1d1Z6cXZFUEFqSS9MQ285MGRzYUhya05OU1ZLKzFETjVB?=
+ =?utf-8?B?U2lubDFXT3B4VkdoTHJPTVFyaXZ1NGRlb2VxUSttUTJuVUlCcGNScndsMWtz?=
+ =?utf-8?Q?Kuner1ZxHZH8o?=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH3PPFA3184E4F2.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(7416014)(366016)(10070799003)(376014);DIR:OUT;SFP:1101;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR10MB6271.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(366016)(1800799024)(13003099007);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?w4In1u976GxGm1q8fL1RKHgfE8AN7+iNysfzj+1rpO6GIa0oebXhmQ/om6X5?=
- =?us-ascii?Q?zw3UFm2B14RWqo9hUHJqnjTd+RS39PwpiMD3lD4wtm7mfFjfWIL6zJ450Ais?=
- =?us-ascii?Q?+9xDCbtQIJpdibSjlZxzhobGtwTyr1TzfT0zaBOkUeyPgtrdwo1gP6Ebrdl9?=
- =?us-ascii?Q?BckI0+y0L1vMpuxPGyuorOCK2JeXjY9bp+rdOPphLIt+Rka/pXtsnlHXQL03?=
- =?us-ascii?Q?KF95lAzO0ezU+UHI83WTNA2bjBxg8nA4ifC0GHg9xSyGYkNwA0kh9kC/Zz05?=
- =?us-ascii?Q?nrI6xSM+cLXH/Zu+INUvLLElfj3LaD4Wzin0odEcMpg1rSZPlOtPlSM625+A?=
- =?us-ascii?Q?sH5mskjdw3lRsK034in88zCWw1lvbJ+KmIN8KGm967IbDFK6P3PHQPGX4lp3?=
- =?us-ascii?Q?vO3HwIxiCLKOTxQ5nYId9N8by53UT7r8n6fW3sDdcQDIbtfAEHzBOiG4rSHk?=
- =?us-ascii?Q?wV9NaZwY9PkBC4OKKZ1WD5moCNQ3z5goSuCErSLVGyiqMbVs6XtisByvmBet?=
- =?us-ascii?Q?SftjwQWiZ7VC+KsljKpK9afcocPfoJf4rFkr0dqpdLipn2WAVo8qNHdBqn3E?=
- =?us-ascii?Q?Vsfn76egGRt6LVy+hwbEjLEBey7NVaWviRHnfr1IejDSGZlF/zy2Jos46IvC?=
- =?us-ascii?Q?itbkVCJ4YgwH6G4o+vwpfFBMP3qa8xjomx0N8gcGKV0Jqbai8Eij244Hv22c?=
- =?us-ascii?Q?zX85yGm+/5cM+WjbO+MnApoLMTu/7/8KMl2fd/NuS/4SfKFs5rKsbzqB/eLC?=
- =?us-ascii?Q?pMIWnFb4dwNpCfIoA3/ArwxXolFSmSnuiIKgrr20GS8q7jxQVl5uUzn2YVpV?=
- =?us-ascii?Q?hatEFr+D88hkjieAv0gXOubcIwRL9BcQOiW8uJ8MX7Ma3g4gFlT0CbsGk6a7?=
- =?us-ascii?Q?EJLN8N0fgnm+oqc/DnJa6eKTGpIBxSmSYEuMbIr58fmBGMF/QzrZh7VT14V6?=
- =?us-ascii?Q?UaKSGKpjdJ3/nc78GUeNbMI7CKgzXMEpvq2bgmv7h+qUnFr5j9FBr8G1ybx4?=
- =?us-ascii?Q?oxU0W0izhf502mLRv8/tfL0W7jT1d+MpT/Li3x5WxT0SGSlRqNyA3f5yfVQg?=
- =?us-ascii?Q?rhFdc/+daVqyQw7hQ8GKjbjF4RmwStE3xacV8Bsqea4cZHCG2SoZvyssOpnw?=
- =?us-ascii?Q?qsuICG8xa1tX6Rm2ufxiTfuiZASrGqgKo9gvaE89+6V8EAEv9ZfgAZ3yXlWZ?=
- =?us-ascii?Q?WCFlvW0FRiEdDlSAHzT3GnpNAXvO9UsPTbV57OVhGtggHQEtTnpZruS8Wea4?=
- =?us-ascii?Q?YhLvXLRmnPxFpt3Ql5Jbu/HkHV5PjpNI/baYYWSaYkoscIX7j4HawpjSkKY7?=
- =?us-ascii?Q?SqHrbZs0vNUN6uR10t1kgA4AlfIYGRy2a22PnhOFWXF8e4nDFuKCA2GsjTEZ?=
- =?us-ascii?Q?oVRZQFjbAJo8fMZfe7l5mVcBjtzEhgJbivAtS+MujbjogJbhByfPHvTf1pEU?=
- =?us-ascii?Q?4wKIXpMPGxDm3HImY3AFFWIanGxmaq6RjEBYujXR2ASG2rgQd7Z6NacDzsbQ?=
- =?us-ascii?Q?WbuYKHO44YdRpzMRQLHLpfgo9ovmQk+F0j1NUG4zTt00ddD0KFPtVD1v5BQi?=
- =?us-ascii?Q?CGsxA2bpxYDui1ymHF/mPY/wDRb8q6JXwE+buGHJJSiW21s4F7tjo4lIImP+?=
- =?us-ascii?Q?nQ=3D=3D?=
+	=?utf-8?B?d3pOQlltamlNcXgxV0tzN2ZGcVRDME1kcEJzb0RrZzFkK3huTWQ3MGlRMXRj?=
+ =?utf-8?B?ZUlZMHA3ekd0UnErMzZoOHNEOUR2QnhlNTJ5MmlZeGpMSU9oSlNRMlA5WEkz?=
+ =?utf-8?B?dFQxemJaQ3kxbEJ1R01CUHN1MC8rdmR4NmdDZndlMklYdDNpb1ZGdFRJbzRj?=
+ =?utf-8?B?TStaNGRkbVFoeWVUS2J1R0ZvbmF5ai9kbGNXTVhYdFlNQm5MdVdZNHBSYnFU?=
+ =?utf-8?B?c29CdDdseEhMa21nMHhobXFUemJCS3ZQeTUyNktoSEJZWHV6ZS8rQmJmdjRv?=
+ =?utf-8?B?K1dZS2hlV2xKM0NKSGtrTzlsT3R3K2xCRkd6cDNGTUdUZTFBT09oZGQ0ZTBB?=
+ =?utf-8?B?SlNBdzlNR2MvWkk1cGhVWk84SVY1TFRJbmdka3dkL0dPQzNoajNaNktsNnE2?=
+ =?utf-8?B?NEd6UXV5SXdrZnZ1TThBc1RLVXNzZ2daVDlaREN3R1ZIc0FSSXpzNm9LUStp?=
+ =?utf-8?B?QWV4WUxCZ2tEWGdBaHNuZ2hSTlJTenlBcDNDeGN2SnV5em0zZ3VqTTU3YVdR?=
+ =?utf-8?B?RFJjVFp3Q1hSRzRMWk5WblZYNnZsKzlWK1RFRWtUQ0N1TUZGRy9IYlloOSts?=
+ =?utf-8?B?aWJtTU53QkF0azErOUYzcDNDZlExb3hCS29kVTlBVFZDNGJwM3RJemxxdGdL?=
+ =?utf-8?B?bGRGRCtCWDRqajg0ZzUzWkQwZXJrUndxTmx4eGtlMWc1TUdXQkpMS2QrWXE0?=
+ =?utf-8?B?Rjl1dU9oRHFiZDNjYVBQc3FYejYwMWtzUWdraTFKeWtvbWN0aGR3OTRXSFo1?=
+ =?utf-8?B?U1BXcllMcW9keTFaMytuZjZZR1RJV2pYaHhrT1FIWmJVME5HM3VvMmhTN3J4?=
+ =?utf-8?B?T0FtbFJmUTRPeG5yeHpwS1hBNUpiWDd6ZWlkOXMvd2NVbS90RTNDam84TTk2?=
+ =?utf-8?B?VHRXRHhOS3B5Mnd6b3ZwcEFHdTNHRmxiM2hWcyt1SEM4bUQzQ2tNMWVZME4r?=
+ =?utf-8?B?UjJSa2kyNFlXNUFEdUgrRFJpNW04eEx4MEVqWEtXazRYU3hLQkRaUWtVZDBB?=
+ =?utf-8?B?eWZzbXcwMC9OdkgxdjRVN01xcG4yMGNpQStqT3oxYTlFQkFsZ1NIYlp5dGp5?=
+ =?utf-8?B?U3B1blEzRVE3azZKSHFnMEhJaThLTk1hOC9xRVlaUytlOVFZU0dFd25OMkJ2?=
+ =?utf-8?B?czdUcFdoanlGZ3NXWjNCczBxV1J0bWRROWlOYzNMdEpwQzNYeDFpSlljZk1W?=
+ =?utf-8?B?TUQ5M3VqZEkvRmc5ckJ6QU5pa3FDNjZvSkZPNFRqVEFhTkxzQWFvSkJjRk1X?=
+ =?utf-8?B?cm1JVit6WEt1bnNzVzdEVmwrd0dUM1NFTk55elRobnVmdDRuM2FUWDJqWlBM?=
+ =?utf-8?B?cVUvZnh2OWVXU3dHOVhudzllakw4aisvRllIeFBoQkEvRWlrODNTVU4rdGkx?=
+ =?utf-8?B?cWxuR291VWFMS0JHSll6SVRWaW4rOHBsai9aYVdvSm5XYit0VnN4WTFMNlpU?=
+ =?utf-8?B?bm9Ca0VWY1hUa3pTT3RaMFYwU005M1JZakUzZ29mdUE4MlVMQmh4SDYwTVpL?=
+ =?utf-8?B?SVpSa1RlTmlWUFhLczdLV20xUld2ZjVmK2ZCaVBGRVhJT1ppMjhmSjBOZUdK?=
+ =?utf-8?B?ZURCS2FVKzNBekJoYy9OL0R1bERmY0M3WVorRFFXVmwweFNMMHpzWWJDNHJz?=
+ =?utf-8?B?azlWNndHRk9rcDhIMndaN2tvS3J1Wm5uNDlIc2w0dkpWL0FIY0lHZUZCaGxo?=
+ =?utf-8?B?dndLemNiZlBtV0hXdXRaTmpyeW0vUkNVN05pR1FITlZDUkxIbGlTajRpdGJz?=
+ =?utf-8?B?MzREa3hMbTRWbG80Z1BYU2kwYmg4dzgrRXBXOWtXZWhHRXU3YWRXWGI4eU0v?=
+ =?utf-8?B?aWpwS2VLNjhSd1JucmdEOFVJYXJYT0IwZUFaMkUxLzhYK1YyRzJUTGZ4WllQ?=
+ =?utf-8?B?OXRVQnFHQlZjdEFaYlUxUytPejFhRkxORmhBR2lZby95RldORnZUZTFpUnRP?=
+ =?utf-8?B?VlZMUnpsVG9mdzRkbDM1OGc3SC9XN3Zkc2JmSHpDclJFTlRmOVVVZnFNcE12?=
+ =?utf-8?B?NGluUSsycXhFeUdaWFRzYjZGdnJXOVZFZDE4Z29aV0puUFpHN3JwVzZuclQr?=
+ =?utf-8?B?dW9MVzlUWURqcWtVWWlzM3FCb25JMEVxVnBkcmFib3Yyc1BoNDNjN1hTL29I?=
+ =?utf-8?B?b3R6cUwvanJWUld2RXlORjNsems0QSs5OW1RRG9FMXRxWmJxdDZzTFh5dnpr?=
+ =?utf-8?B?MWc9PQ==?=
 X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
-	9PLeFB/ycQ+3q8iIcW2HSzR3QO/RUR/fgxoyYkHj0mH+XH7+qnIWgCwIGSJgRfgm2pD3q3OZXnhglvWq3VJA4bJyqz7zEIxf0bOiUzX80SWsK23nPo49K2FwZ4ThBac6E0fy4fVRSHxZuxVKrrFymOUtwBhKCXjm+e8duf3nXjrP537wg/tnML2tBSy7b49gt2ONnOxJos4DfRLFhho6XF9WSc7odzpIPo3MLnUgozUos3oEscpFiJzDaM7kOuJlS71fJvwyrUha6MAAqTP799hxif7o9LVH67KicrE83PphIZBu/U5EBj9gKgN9nz4T+A0q+qYuIlFnh6tpFFQ8OIcBw7ziEtB7rM/PdJUOFZFiG/12T8HVk7/fqIiVvqwm6tNhQoxziWZFpkxTrDokivAYJSDVJL2gr/eDdZ5nRCMlqvH5UAy2deNBLrAKuZj2lI0Ty8lSj1ipXSMZBwZXUfSatPu0hSoeE91eO03PV4+Df3sX9wRR1+pyxTB5NWk2OUdFjrwK7mL8PLx/xETmPHfVY416dPt88zVbHnKvKn+2TzR8tWLCs5ca1n3JvS6FB49RMF3LbvcbUcPyGK/mCg3hGzQSjLG2YvR1+WPwrm4=
+	d8kN5bpwf7sHqIBEyPC/6xmQnuXHnuZYt2lbkE4+TEGF95IlFcj8oBr+6NqyuWdo/cjgmFQFewAISHmGdRJTL8qY5dmvMKby5TPxstK98Pl+v1ItsE1xR+ZKUl35DWV3JnK5IXoM3Ycxd1AjxO1qF9thPv8U94zBkGTUG/PrlfW9i8e7hEG+LLVe4of51SxUqZMkaMVTZKkpj8aP6D2mRHu7qB9N4P2temIWBc8upGycWPVVsGeDNSREJ2v/K6QvwlOv+UmDsIMrH9KM/lfzGGMcAlPyo06mmqdM2cFOL4Ul5I1MV7ujQ2L8tpTzp6Sa0kmYxI79PX/ux4CmJSPgc12ew6SuAgPftETmdtvMQA728FISH5Lf8EZIIYc9/JjPNNd8C2XnIjwxQWc5pa+C6bf+ylrTh584xPjUvXU8uwidQS0TPb4yrDN3f23ZbSqNDz4+QyZ6SBZCAOTKMtG4Lm5hzapiqccvqN2I9U5PxaCYL1bgEkEh6Y8epxr6crm2nzyacB14BeFj8es4yiDxjjV2I8irJJAOXJkiZD3WM+7HOZ12brQ/v4VFaaQttAtFCMMFO7wMJEteg3QvawzhHUk+ksMARJEuvMAOXLxC2Qc=
 X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7f95fe7d-8d5e-4eec-dfe0-08dde0fab54d
-X-MS-Exchange-CrossTenant-AuthSource: PH3PPFA3184E4F2.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 001b9ac9-5433-4ad9-7b31-08dde1949996
+X-MS-Exchange-CrossTenant-AuthSource: DS0PR10MB6271.namprd10.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Aug 2025 21:35:54.7255
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Aug 2025 15:57:30.6358
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: iMxvRV2/U70y+Dfli7G7vfRM9tCRK9aKDqMJcXn+cZYCqYg+JMvxZkLpR2URer7VTSowPKVFNxitElRsHszSGw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR10MB8054
+X-MS-Exchange-CrossTenant-UserPrincipalName: k7yyTqZt4WLwLceyu0E4ZPL1tC30kU2OqPOodR3UT24nVcuFbyDtYtJ0ZCQ5UxUXxPCLlxN6wPb8Qc6tU2QGOQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR10MB6193
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
- definitions=2025-08-21_04,2025-08-20_03,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 suspectscore=0 mlxlogscore=999
+ definitions=2025-08-22_04,2025-08-20_03,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 mlxlogscore=999
+ suspectscore=0 bulkscore=0 spamscore=0 adultscore=0 phishscore=0
  mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2508110000 definitions=main-2508210185
-X-Authority-Analysis: v=2.4 cv=ZPiOWX7b c=1 sm=1 tr=0 ts=68a7913e cx=c_pps
- a=XiAAW1AwiKB2Y8Wsi+sD2Q==:117 a=XiAAW1AwiKB2Y8Wsi+sD2Q==:17
+ engine=8.12.0-2508110000 definitions=main-2508220144
+X-Authority-Analysis: v=2.4 cv=ZPiOWX7b c=1 sm=1 tr=0 ts=68a89370 b=1 cx=c_pps
+ a=zPCbziy225d3KhSqZt3L1A==:117 a=zPCbziy225d3KhSqZt3L1A==:17
  a=6eWqkTHjU83fiwn7nKZWdM+Sl24=:19 a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19
  a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=wKuvFiaSGQ0qltdbU6+NXLB8nM8=:19
- a=Ol13hO9ccFRV9qXi2t6ftBPywas=:19 a=xqWC_Br6kY4A:10 a=2OwXVqhp2XgA:10
- a=GoEa3M9JfhUA:10 a=NEAV23lmAAAA:8 a=pGLkceISAAAA:8 a=PM7QdzbvwkqI9MqRD-UA:9
- a=cPQSjfK2_nFv0Q5t_7PE:22
-X-Proofpoint-GUID: ushBtft3AV5MY4JJQB-FNyBI-PXN_dPd
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwODIxMDE2OCBTYWx0ZWRfX1KcVrnnnOSFt
- nEgrgMVtZxCUe/YHo+yEYc473NKnsTC5bTC8PL30lk08/fMxsBDNUYYqqkkUCwC+8HA9dJAvFpD
- pzXlLeSaKLU23TOryAXp9V/cBBjZ3b20Gl8dyTJp7RdM8EFH9v8Kg3fJBEuqo1gzIy8CmKPCfrT
- sgNBtPPIo2eJ1fHirRWvEwUCMUbvxWPnpdVjKacXfeAlfLcUlhfYD750nRLiaWOaMyjPLVyjuPn
- cJfK9+cZTiQbMhJR9ep9lccSDAgX0pKugayg2fdsivunb0FW4rwHT5y2OxykAH5XZOZl9G+/NVm
- nVF3M/Q/ikEqkJXSR4RS8M0Px/W9dI6Hcmzmudd0ui2RyQq2ZU+yFOkyVD1Vxcd+DZ9CXr8LyZw
- qL3eHcfzEVFV3jVij4Mw6qy4jSaG7w==
-X-Proofpoint-ORIG-GUID: ushBtft3AV5MY4JJQB-FNyBI-PXN_dPd
+ a=Ol13hO9ccFRV9qXi2t6ftBPywas=:19 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
+ a=2OwXVqhp2XgA:10 a=GoEa3M9JfhUA:10 a=NEAV23lmAAAA:8 a=VwQbUJbxAAAA:8
+ a=VabnemYjAAAA:8 a=RGFWwebjtHBWPh8rVzEA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+ a=gKebqoRLp9LExxC7YDUY:22 cc=ntf awl=host:12069
+X-Proofpoint-GUID: GG1y-6T7qybnL8y-YZSnqGGxAollFbY9
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwODIxMDE2OCBTYWx0ZWRfX7bOgas+9hFT1
+ uS669TZ9rCX+bp+0xUG2H3BSeKScfawkRAuzLHwapZaPMAB0rwzj4+Vdj4H90FZRLZ9YFQyBGrl
+ Tk+rmdj99tTeuEMDTZAxmrHI5mAf5gflSGfCI+7fp7SA2kG2g5xi54ii58hFjIt5yeqP6M6xGGG
+ WyktQWMucSPTNOMBiEF2J0DozL3lo8428LdHoKWI9G0KVI6bEPy2zPoaS9R6b37bu7yhj4c6qCI
+ 8tyAFXEmrM+aPzMx5uDrCpLU2v0KArHoIv5tyVHPbUlkfyvwOFiPXFwDITWNo2gx9OHjS1X4Jsw
+ YSPhyx4P7HswWFEAQp8tzas6yVKu5xm3W+xFq6eIDIUnFrnXfaAg9kpQPYEiqNxDc1bkPkbVOG4
+ 3+4Fo5DEzyT1G+Kz289gxY/ad231nwPuCg4ocYjGNEkdHpPhsnA=
+X-Proofpoint-ORIG-GUID: GG1y-6T7qybnL8y-YZSnqGGxAollFbY9
 
-On 8 Aug 2025, Arnaldo Carvalho de Melo told this:
-
-> On August 8, 2025 3:28:13 PM GMT-03:00, Eduard Zingerman <eddyz87@gmail.com> wrote:
->>On Thu, 2025-08-07 at 19:09 -0700, Alexei Starovoitov wrote:
+On 20/08/2025 12:04, Alan Maguire wrote:
+> On 19/08/2025 20:34, Ihor Solodrai wrote:
+>> On 8/5/25 4:24 AM, Alan Maguire wrote:
+>>> On 01/08/2025 21:51, Ihor Solodrai wrote:
+>>>> On 7/31/25 11:57 AM, Alan Maguire wrote:
+>>>>> On 31/07/2025 15:16, Alan Maguire wrote:
+>>>>>> On 29/07/2025 03:03, Ihor Solodrai wrote:
+>>>>>>> btf_encoder collects function ELF symbols into a table, which is
+>>>>>>> later
+>>>>>>> used for processing DWARF data and determining whether a function can
+>>>>>>> be added to BTF.
+>>>>>>>
+>>>>>>> So far the ELF symbol name was used as a key for search in this
+>>>>>>> table,
+>>>>>>> and a search by prefix match was attempted in cases when ELF symbol
+>>>>>>> name has a compiler-generated suffix.
+>>>>>>>
+>>>>>>> This implementation has bugs [1][2], causing some functions to be
+>>>>>>> inappropriately excluded from (or included into) BTF.
+>>>>>>>
+>>>>>>> Rework the implementation of the ELF functions table. Use a name of a
+>>>>>>> function without any suffix - symbol name before the first occurrence
+>>>>>>> of '.' - as a key. This way btf_encoder__find_function() always
+>>>>>>> returns a valid elf_function object (or NULL).
+>>>>>>>
+>>>>>>> Collect an array of symbol name + address pairs from GElf_Sym for
+>>>>>>> each
+>>>>>>> elf_function when building the elf_functions table.
+>>>>>>>
+>>>>>>> Introduce ambiguous_addr flag to the btf_encoder_func_state. It is
+>>>>>>> set
+>>>>>>> when the function is saved by examining the array of ELF symbols in
+>>>>>>> elf_function__has_ambiguous_address(). It tests whether there is only
+>>>>>>> one unique address for this function name, taking into account that
+>>>>>>> some addresses associated with it are not relevant:
+>>>>>>>     * ".cold" suffix indicates a piece of hot/cold split
+>>>>>>>     * ".part" suffix indicates a piece of partial inline
+>>>>>>>
+>>>>>>> When inspecting symbol name we have to search for any occurrence of
+>>>>>>> the target suffix, as opposed to testing the entire suffix, or the
+>>>>>>> end
+>>>>>>> of a string. This is because suffixes may be combined by the
+>>>>>>> compiler,
+>>>>>>> for example producing ".isra0.cold", and the conclusion will be
+>>>>>>> incorrect.
+>>>>>>>
+>>>>>>> In saved_functions_combine() check ambiguous_addr when deciding
+>>>>>>> whether a function should be included in BTF.
+>>>>>>>
+>>>>>>> Successful CI run: https://github.com/acmel/dwarves/pull/68/checks
+>>>>>>>
+>>>>>>> I manually spot checked some of the ~200 functions from vmlinux (BPF
+>>>>>>> CI-like kconfig) that are now excluded: all of those that I checked
+>>>>>>> had multiple addresses, and some where static functions from
+>>>>>>> different
+>>>>>>> files with the same name.
+>>>>>>>
+>>>>>>> [1] https://lore.kernel.org/bpf/2f8c792e-9675-4385-
+>>>>>>> b1cb-10266c72bd45@linux.dev/
+>>>>>>> [2] https://lore.kernel.org/
+>>>>>>> dwarves/6b4fda90fbf8f6aeeb2732bbfb6e81ba5669e2f3@linux.dev/
+>>>>>>>
+>>>>>>> v1: https://lore.kernel.org/
+>>>>>>> dwarves/98f41eaf6dd364745013650d58c5f254a592221c@linux.dev/
+>>>>>>> Signed-off-by: Ihor Solodrai <isolodrai@meta.com>
+>>>>>>
+>>>>>> Thanks for doing this Ihor! Apologies for just thinking of this
+>>>>>> now, but
+>>>>>> why don't we filter out the .cold and .part functions earlier, not
+>>>>>> even
+>>>>>> adding them to the ELF functions list? Something like this on top of
+>>>>>> your patch:
+>>>>>>
+>>>>>> $ git diff
+>>>>>> diff --git a/btf_encoder.c b/btf_encoder.c
+>>>>>> index 0aa94ae..f61db0f 100644
+>>>>>> --- a/btf_encoder.c
+>>>>>> +++ b/btf_encoder.c
+>>>>>> @@ -1188,27 +1188,6 @@ static struct btf_encoder_func_state
+>>>>>> *btf_encoder__alloc_func_state(struct btf_e
+>>>>>>           return state;
+>>>>>>    }
+>>>>>>
+>>>>>> -/* some "." suffixes do not correspond to real functions;
+>>>>>> - * - .part for partial inline
+>>>>>> - * - .cold for rarely-used codepath extracted for better code
+>>>>>> locality
+>>>>>> - */
+>>>>>> -static bool str_contains_non_fn_suffix(const char *str) {
+>>>>>> -       static const char *skip[] = {
+>>>>>> -               ".cold",
+>>>>>> -               ".part"
+>>>>>> -       };
+>>>>>> -       char *suffix = strchr(str, '.');
+>>>>>> -       int i;
+>>>>>> -
+>>>>>> -       if (!suffix)
+>>>>>> -               return false;
+>>>>>> -       for (i = 0; i < ARRAY_SIZE(skip); i++) {
+>>>>>> -               if (strstr(suffix, skip[i]))
+>>>>>> -                       return true;
+>>>>>> -       }
+>>>>>> -       return false;
+>>>>>> -}
+>>>>>> -
+>>>>>>    static bool elf_function__has_ambiguous_address(struct elf_function
+>>>>>> *func) {
+>>>>>>           struct elf_function_sym *sym;
+>>>>>>           uint64_t addr;
+>>>>>> @@ -1219,12 +1198,10 @@ static bool
+>>>>>> elf_function__has_ambiguous_address(struct elf_function *func) {
+>>>>>>           addr = 0;
+>>>>>>           for (int i = 0; i < func->sym_cnt; i++) {
+>>>>>>                   sym = &func->syms[i];
+>>>>>> -               if (!str_contains_non_fn_suffix(sym->name)) {
+>>>>>> -                       if (addr && addr != sym->addr)
+>>>>>> -                               return true;
+>>>>>> -                       else
+>>>>>> +               if (addr && addr != sym->addr)
+>>>>>> +                       return true;
+>>>>>> +               else
+>>>>>>                                   addr = sym->addr;
+>>>>>> -               }
+>>>>>>           }
+>>>>>>
+>>>>>>
+>>>>>>           return false;
+>>>>>> @@ -2208,9 +2185,12 @@ static int elf_functions__collect(struct
+>>>>>> elf_functions *functions)
+>>>>>>                   func = &functions->entries[functions->cnt];
+>>>>>>
+>>>>>>                   suffix = strchr(sym_name, '.');
+>>>>>> -               if (suffix)
+>>>>>> +               if (suffix) {
+>>>>>> +                       if (strstr(suffix, ".part") ||
+>>>>>> +                           strstr(suffix, ".cold"))
+>>>>>> +                               continue;
+>>>>>>                           func->name = strndup(sym_name, suffix -
+>>>>>> sym_name);
+>>>>>> -               else
+>>>>>> +               } else
+>>>>>>                           func->name = strdup(sym_name);
+>>>>>>
+>>>>>>                   if (!func->name) {
+>>>>>>
+>>>>>> I think that would work and saves later string comparisons, what do
+>>>>>> you
+>>>>>> think?
+>>>>>>
+>>>>>
+>>>>> Apologies, this isn't sufficient. Considering cases like
+>>>>> objpool_free(),
+>>>>> the problem is it has two entries in ELF for objpool_free and
+>>>>> objpool_free.part.0. So let's say we exclude objpool_free.part.0 from
+>>>>> the ELF representation, then we could potentially end up excluding
+>>>>> objpool_free as inconsistent if the DWARF for objpool_free.part.0
+>>>>> doesn't match that of objpool_free. It would appear to be inconsistent
+>>>>> but isn't really.
+>>>>
+>>>> Alan, as far as I can tell, in your example the function would be
+>>>> considered inconsistent independent of whether .part is included in
+>>>> elf_function->syms or not. We determine argument inconsistency based
+>>>> on DWARF data (struct function) passed into btf_encoder__save_func().
+>>>>
+>>>> So if there is a difference in arguments between objpool_free.part.0
+>>>> and objpool_free, it will be detected anyways.
+>>>>
+>>>
+>>> I think I've solved that in the following proof-of-concept series [1] -
+>>> by retaining the .part functions in the ELF list _and_ matching the
+>>> DWARF and ELF via address we can distinguish between foo and foo.part.0
+>>> debug information and discard the latter such that it is not included in
+>>> the determination of inconsistency.
+>>>
+>>>> A significant difference between v2 and v3 (just sent [1]) is in that
+>>>> if there is *only* "foo.part.0" symbol but no "foo", then it will not
+>>>> be included in v3 (because it's not in the elf_functions table), but
+>>>> would be in v2 (because there is only one address). And the correct
+>>>> behavior from the BTF encoding point of view is v3.
+>>>>
+>>>
+>>> Yep, that part sounds good; I _think_ the approach I'm proposing solves
+>>> that too, along with not incorrectly marking foo/foo.part.0 as
+>>> inconsistent.
+>>>
+>>> The series is the top 3 commits in [1]; the first commit [2] is yours
+>>> modulo the small tweak of marking non-functions during ELF function
+>>> creation. The second [3] uses address ranges to try harder to get
+>>> address info from DWARF, while the final one [4] skips creating function
+>>> state for functions that we address-match as the .part/.cold functions
+>>> in debug info. This all allows us to better identify debug information
+>>> that is tied to the non-function .part/.cold optimizations.
 >>
->>> Before you jump into 1,2,3 let's discuss the end goal.
->>> I think the assumption here is that this btf-for-each-.o approach
->>> is supposed to speed up the build, right ?
-
-Generating BTF directly in the compiler certainly does, in situations
-where we can avoid DWARF. We reduce the amount of data written out by
-something like 11GiB (!) in my tests.
-
->>I'd like to second Alexei's question.
->>In the cover letter Arnaldo points out that un-deduplicated BTF
->>amounts for 325Mb, while total DWARF size is 365Mb.
-
-That very much depends on the kernels you build. In my tests of
-enterprise kernels (including modules) with the GCC+btfarchive toolchain
-(not feeding it to pahole yet), I found total DWARF of 11.2GiB,
-undeduplicated BTF of 550MiB (counting raw .o compiler output alone),
-and a final dedupicated BTF size (including all modules) of about 38MiB
-(which I'm sure I can reduce).
-
->>The size of DWARF sections in the final vmlinux is comparable to yours: 307Mb.
->>The total size of the generated binaries is 905Mb.
->>So, unless the above calculations are messed up, the total gain here is:
->>- save ~500Mb generated during build
-
-For me, 11GiB :)
-
->>- save some time on pahole not needing to parse/convert DWARF
-
-In my tests, a *lot*. I think Arnaldo has recently improved this, but
-back in April when I was comparing things, I had to kill pahole when it
-was dedupping an allmodconfig kernel-plus-modules because it ate more
-than 70GiB of RAM and was still chewing on all 20 cores of my machine
-after two hours. btfdedup (which uses the libctf deduplicator used by
-GNU ld), despite being single-threaded and doing things like ambiguous
-type detection as well, used 12GiB and took 19 minutes. (Multithreading
-it is in progress, too). allyesconfig is faster. Anything sane is faster
-yet. Enterprise kernels take about four minutes, which is not too
-different from pahole.
-
-I was shocked by this: I thought libctf would be slower than pahole, and
-instead it turned out to be faster, sometimes much faster. I suspect
-much of this frankly ridiculous difference was DWARF conversion, and so
-would be improved by doing it in parallel (as here), but... still. Not
-having to generate and consume all that DWARF is bound to help! It's
-like 95% less work...
-
->>So, I see several drawbacks:
->>- As you note, there would be two avenues to generate BTF now:
->>  - DWARF + pahole
->>  - BTF + pahole (replaced by BTF + ld at some point?)
-
-The code exists... BTF + ld + dedupping the resulting ld-dedupped output
-together.
-
-Note that the code used to deduplicate BTF with libctf (as used by ld)
-is not large. Look:
-https://github.com/nickalcock/linux/blob/nix/btfa/scripts/btf/btfarchive.c
-(and of those functions, you don't need transform_module_names(),
-suck_in_modules(), or suck_in_lines(): it's really no more code than is
-needed to tell it which inputs map to which modules, then a couple of
-lines to trigger dedup and emit the resulting BTF archive).
-
-It's entirely reasonable for pahole in future to simply call libctf's
-deduplicator to dedup BTF if it sees that the linker hasn't done it, or
-to do what btfarchive does here itself to dedup the linker-deduplicated
-per-module output and the vmlinux BTF against each other (and then we
-don't need btfarchive at all, which means fewer build system changes).
-
-This would let pahole dedup BTF if needed while not wasting time on it
-if the linker already did it, *and* let you ditch the pahole
-deduplicator so you don't need to maintain it any more, even when clang
-et al are being used. (Obviously, you'd only do this once libctf's dedup
-is up to scratch and once it's in a release binutils, since I'm sure
-there will be bugs I need to fix!)
-
->>  This is a potential source of bugs.
-
-That's not a very good argument. *Everything* is a potential source of
-bugs. I will of course prioritize fixing any bugs in libctf that affect
-pahole's operation: not breaking pahole matters!
-
->>  Is the goal to forgo DWARF+pahole at some point in the future?
+>> Hi Alan. Bumping this thread.
+>>
+>> I haven't reviewed/tested your github changes thoroughly, but the
+>> approach makes sense to me overall.
+>>
+>> What do you think about applying the group-by-name patch [1] first,
+>> maybe including your tweak? It would fix a couple of bugs right away.
+>>
+>> And later you can send a more refined draft of patches to use
+>> addresses for matching.
+>>
+> 
+> Yep, sounds good. Better to separate these changes; to support that I'll
+> add the tweak to your patch where we record but flag .part/.cold
+> functions as non-functions in [1]
+> 
+> If no-one objects, I'll land that in pahole next later. Thanks!
 >
-> I think the goal is to allow DWARF less builds, which can probably save time even if we do use pahole to convert DWARF generated from the compiler into BTF and right away strip DWARF.
->
-> This is for use cases where DWARF isn't needed and we want to for example have CI systems running faster.
 
-Yep! Also this means that you can get new features like type and decl
-tags into BTF faster, because it's much quicker to get them into GCC and
-libctf (at least for recent compiler releases) than it is to get them
-into DWARF just so you can get them out of DWARF again and translate
-them into BTF. DWARF simply has many more consumers to think about,
-while the kernel is obviously a critical consumer of GCC's and libctf's
-generated BTF (we do need to consider userspace, but we don't need to be
-as conservative as a giant behemoth like DWARF must be. I'm confident
-enough in my testing to be willing to backport things to binutils
-release branches as needed, though probably not to points before the
-first release where BTF support is added to libctf because that change
-is pretty massive.)
+Done, thank you!
 
-> My initial interest was to do minimal changes to pave the way for BTF
-> generated for vmlinux directly from the compiler, but the realization
-> that DWARF still has a lot of mileage, meaning distros will continue
-> to enable it for the foreseeable future makes me think that maybe
-> doing nothing and continue to use the current method is the sensible
-> thing to do.
-
-Speaking purely selfishly, I would be... unhappy to find that I'd spent
-all this effort on a BTF-capable deduplicator only to find you didn't
-want to use it no matter how good it ended up being :( this seems like a
-rather sudden change of heart...
-
->>- I assume that it is much faster to land changes in pahole compared
->>  to changes in gcc, so future btf modifications/features might be a
->>  bit harder to execute. Wdyt?
-
-As noted, I think this is not really true, at least once the core BTF
-dedup stuff has landed: I can backport stuff on top of them without
-doing releases, and distros usually pick it up within a few days. The
-principal delay is testing...
-
-> Right, that too, even if we enable generation of BTF for native .o
-> files by the compiler we would still want to use pahole to augment it
-> with new features or to fixup compiler BTF generation bugs. And maybe
-> for generating tags that are only possible to have the necessary info
-> at the last moment.
-
-Well, yes. I thought it was always the plan for pahole to keep consuming
-and augmenting BTF! Among other things, the kernel uses a bunch of
-additional sections that reference BTF types that GNU ld has no idea how
-to generate, and which nobody is planning to use outside the kernel.
-That's also where a lot of the innovation is happening, and GCC and GNU
-ld don't need to get involved in that at all (unless and until you want
-them to).
-
-I can say that changing libctf to support *every difference from CTF
-that BTF has got* and teaching GNU ld to handle that took about two
-months, so implementing single changes in future doesn't seem like an
-insurmountable burden (and much of that two months was spent on
-infrastructural adjustments to allow easier changes in future -- the
-hardest single BTF feature to suppoert was probably datasecs and vars,
-and that took about a week including deduplication). Obviously there
-will be bugs, but when they show up I'll fix them.
-
-I am not worried about the maintenance burden of supporting new BTF
-stuff in binutils libctf and I don't think Jose is worried about it in
-GCC either.
-
-I mean, it's not like it's going to be an extra burden for long: the
-medium-term goal is to replace CTF with BTF entirely, even for userspace
-consumption. There are surprisingly few new features needed before we
-can consign CTF to history and converge on one type format to rule them
-all. (I think they're all entirely nondisruptive too.)
-
-> Now if we could have hooks in the linker associated with a given ELF
-> section name (.BTF) to use instead of just concatenating, and then at
-> the end have another hook that would finish the process by doing the
-> dedup, just like I do in this series, that would save one of those
-> linker calls.
-
-Yeah, we looked at that, but GNU ld's plugin support is totally focused
-on the needs of LTO and can't really handle what dedup needs at all:
-fixing that would likely be a substantial and fiddly change. As part of
-the CTF and BTF work there *are* internal hooks in ld and libbfd that do
-what is needed, but they're not exported outside the linker, and
-exporting them looks to be... painful. (But it seems unnecessary for GNU
-ld, since it will after all be able to dedup BTF with no plugins at all,
-and already can in my proof-of-concept branch on binutils-gdb git.)
-
--- 
-NULL && (void)
+Alan
