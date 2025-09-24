@@ -1,32 +1,32 @@
-Received: from out-170.mta1.migadu.com (out-170.mta1.migadu.com [95.215.58.170])
+Received: from out-180.mta1.migadu.com (out-180.mta1.migadu.com [95.215.58.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1275928725C
-	for <dwarves@vger.kernel.org>; Wed, 24 Sep 2025 21:17:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51ED12868A2
+	for <dwarves@vger.kernel.org>; Wed, 24 Sep 2025 21:17:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758748674; cv=none; b=XUNiXVYLVCA1+bbo0jj4h/KkagKrJVGUvp4r7Ft2sIz+98d3Uh8AyKQzrs++OgPGCELZM8GCHSZKOjJ0taCfuH9MnVY5iDfHbPnfHzkzrv09vy/LzUdqbdVw7mVG5XDlsju8gEqparks8ugZI7nWlwwI0R1hZE+t/gP5AEDnRs4=
+	t=1758748678; cv=none; b=jC1WV+axedJb9QZUe/8acyJYj/mco6tZSo54siSmNDFREtAAzI/FNupuWJZmNFrMTX7sTKHW3Ya0bwIPJu/4sad8/d9etBiBZDHZ1xRnbubpNNe4K1nTn3g0myH6Tvtqdz5Iy3Iebpo0N186tnBYhkeMumegAAHW0wDc06DH4xk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758748674; c=relaxed/simple;
-	bh=noLGBk3BobGgXM+g4xcjyFpRhI9H1sdfcf5mxz8vs6M=;
+	s=arc-20240116; t=1758748678; c=relaxed/simple;
+	bh=G8LdN2z7wbf1vloFox/XmjpFK9SM2+QRCs8UPp2AkQA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=A1hoJXcojp1q+FFl3nFZeuRXaZ7dgFwNAVtR4NDLqrfyu02hORtRKAls3dKJhVMXnvsgweKrxJ+yD/tR4f/g3EdndTPr+1iX6It/JBmvAHkZIzBjCttf641SY4Asr2OjRA0dN5Dq4+DqLxe6o5BzZIe7JkWFiG1XnXPK8aFjdwU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Ezy9HIA1; arc=none smtp.client-ip=95.215.58.170
+	 MIME-Version; b=aZWg5OkdeK0SEn5/2QbpKBHrI6Owzm+Wsd7DOdkLJXQL25hETYrmMEGqkOMxwjLD9PM/p7A/pRo/RSzBBVXkhcFr27Zlr6Fs9pZUBW+UIdxAOdWhUz2lH3GhAGX0Rd1YwKxQq4San5+xb88R2V/wKK/tbWdaJrmNrv7inTx/yKU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=f61xoIjz; arc=none smtp.client-ip=95.215.58.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Ezy9HIA1"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="f61xoIjz"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1758748671;
+	t=1758748674;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=s02gFHLfNdqb4+6D2XqszlhW7FFJXOgoVuG5bmEz1U8=;
-	b=Ezy9HIA18WnvMBFjyL4Yyt1Econ6LJmEEawQv+G2nZstJTVNu4oK/Y5f4hGlGKVQoPp/5T
-	lLAHqXidwlh0hCA336O25Y2yy/xYoo0cSNABs5cQYgnau3zZqw3HlOWkB5m6iYsmhnkO60
-	O6z5pyvjcYezaAN2YVIophFdKeXiweM=
+	bh=Uct836lYuqfFRLfHtAOH7TZRq2jsbdOM1nGFgj8QNXA=;
+	b=f61xoIjzr+Sv6SVfmAy8xMbTILiphPOiR8pWVQSp7lJr1NdnL8J7DOVoFhoQEdOC0lVswD
+	jwuqtdLfa1GxU9b+MStwA2kc+0ZW/nmlUDvJqD+O7fn5xf75G/vrHBjCs73rHHSn3FyYmw
+	c9iU0pogX67SZR8R9gL7LRivxhneLhU=
 From: Ihor Solodrai <ihor.solodrai@linux.dev>
 To: bpf@vger.kernel.org,
 	andrii@kernel.org,
@@ -37,9 +37,9 @@ Cc: dwarves@vger.kernel.org,
 	eddyz87@gmail.com,
 	tj@kernel.org,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v1 5/6] bpf: mark bpf_stream_vprink kfunc with KF_IMPLICIT_PROG_AUX_ARG
-Date: Wed, 24 Sep 2025 14:17:15 -0700
-Message-ID: <20250924211716.1287715-6-ihor.solodrai@linux.dev>
+Subject: [PATCH bpf-next v1 6/6] bpf: mark bpf_task_work_* kfuncs with KF_IMPLICIT_PROG_AUX_ARG
+Date: Wed, 24 Sep 2025 14:17:16 -0700
+Message-ID: <20250924211716.1287715-7-ihor.solodrai@linux.dev>
 In-Reply-To: <20250924211716.1287715-1-ihor.solodrai@linux.dev>
 References: <20250924211716.1287715-1-ihor.solodrai@linux.dev>
 Precedence: bulk
@@ -51,102 +51,157 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-Update bpf_stream_vprink macro in libbpf and fix call sites in
-the relevant selftests.
+Two kfuncs that use aux__prog argument were recently added [1]:
+  * bpf_task_work_schedule_resume
+  * bpf_task_work_schedule_signal
+
+Update them to use the new kfunc flag and fix usages in the selftests.
+
+[1] https://lore.kernel.org/bpf/20250923112404.668720-1-mykyta.yatsenko5@gmail.com/
 
 Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
 ---
- kernel/bpf/helpers.c                            | 2 +-
- kernel/bpf/stream.c                             | 3 +--
- tools/lib/bpf/bpf_helpers.h                     | 4 ++--
- tools/testing/selftests/bpf/progs/stream_fail.c | 6 +++---
- 4 files changed, 7 insertions(+), 8 deletions(-)
+ kernel/bpf/helpers.c                             | 16 ++++++++--------
+ tools/testing/selftests/bpf/progs/task_work.c    |  6 +++---
+ .../testing/selftests/bpf/progs/task_work_fail.c |  8 ++++----
+ .../selftests/bpf/progs/task_work_stress.c       |  2 +-
+ 4 files changed, 16 insertions(+), 16 deletions(-)
 
 diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index 6b46acfec790..875195a0ea72 100644
+index 875195a0ea72..ccdc204a66cf 100644
 --- a/kernel/bpf/helpers.c
 +++ b/kernel/bpf/helpers.c
-@@ -4378,7 +4378,7 @@ BTF_ID_FLAGS(func, bpf_strnstr);
- #if defined(CONFIG_BPF_LSM) && defined(CONFIG_CGROUPS)
+@@ -4178,15 +4178,15 @@ static int bpf_task_work_schedule(struct task_struct *task, struct bpf_task_work
+  * @tw: Pointer to struct bpf_task_work in BPF map value for internal bookkeeping
+  * @map__map: bpf_map that embeds struct bpf_task_work in the values
+  * @callback: pointer to BPF subprogram to call
+- * @aux__prog: user should pass NULL
++ * @aux: pointer to bpf_prog_aux of the caller BPF program, implicitly set by the verifier
+  *
+  * Return: 0 if task work has been scheduled successfully, negative error code otherwise
+  */
+ __bpf_kfunc int bpf_task_work_schedule_signal(struct task_struct *task, struct bpf_task_work *tw,
+ 					      void *map__map, bpf_task_work_callback_t callback,
+-					      void *aux__prog)
++					      struct bpf_prog_aux *aux)
+ {
+-	return bpf_task_work_schedule(task, tw, map__map, callback, aux__prog, TWA_SIGNAL);
++	return bpf_task_work_schedule(task, tw, map__map, callback, aux, TWA_SIGNAL);
+ }
+ 
+ /**
+@@ -4195,15 +4195,15 @@ __bpf_kfunc int bpf_task_work_schedule_signal(struct task_struct *task, struct b
+  * @tw: Pointer to struct bpf_task_work in BPF map value for internal bookkeeping
+  * @map__map: bpf_map that embeds struct bpf_task_work in the values
+  * @callback: pointer to BPF subprogram to call
+- * @aux__prog: user should pass NULL
++ * @aux: pointer to bpf_prog_aux of the caller BPF program, implicitly set by the verifier
+  *
+  * Return: 0 if task work has been scheduled successfully, negative error code otherwise
+  */
+ __bpf_kfunc int bpf_task_work_schedule_resume(struct task_struct *task, struct bpf_task_work *tw,
+ 					      void *map__map, bpf_task_work_callback_t callback,
+-					      void *aux__prog)
++					      struct bpf_prog_aux *aux)
+ {
+-	return bpf_task_work_schedule(task, tw, map__map, callback, aux__prog, TWA_RESUME);
++	return bpf_task_work_schedule(task, tw, map__map, callback, aux, TWA_RESUME);
+ }
+ 
+ __bpf_kfunc_end_defs();
+@@ -4379,8 +4379,8 @@ BTF_ID_FLAGS(func, bpf_strnstr);
  BTF_ID_FLAGS(func, bpf_cgroup_read_xattr, KF_RCU)
  #endif
--BTF_ID_FLAGS(func, bpf_stream_vprintk, KF_TRUSTED_ARGS)
-+BTF_ID_FLAGS(func, bpf_stream_vprintk, KF_TRUSTED_ARGS | KF_IMPLICIT_PROG_AUX_ARG)
- BTF_ID_FLAGS(func, bpf_task_work_schedule_signal, KF_TRUSTED_ARGS)
- BTF_ID_FLAGS(func, bpf_task_work_schedule_resume, KF_TRUSTED_ARGS)
+ BTF_ID_FLAGS(func, bpf_stream_vprintk, KF_TRUSTED_ARGS | KF_IMPLICIT_PROG_AUX_ARG)
+-BTF_ID_FLAGS(func, bpf_task_work_schedule_signal, KF_TRUSTED_ARGS)
+-BTF_ID_FLAGS(func, bpf_task_work_schedule_resume, KF_TRUSTED_ARGS)
++BTF_ID_FLAGS(func, bpf_task_work_schedule_signal, KF_TRUSTED_ARGS | KF_IMPLICIT_PROG_AUX_ARG)
++BTF_ID_FLAGS(func, bpf_task_work_schedule_resume, KF_TRUSTED_ARGS | KF_IMPLICIT_PROG_AUX_ARG)
  BTF_ID_FLAGS(func, bpf_wq_set_callback, KF_IMPLICIT_PROG_AUX_ARG)
-diff --git a/kernel/bpf/stream.c b/kernel/bpf/stream.c
-index ab592db4a4bf..0c75d0a8cea2 100644
---- a/kernel/bpf/stream.c
-+++ b/kernel/bpf/stream.c
-@@ -355,13 +355,12 @@ __bpf_kfunc_start_defs();
-  * Avoid using enum bpf_stream_id so that kfunc users don't have to pull in the
-  * enum in headers.
-  */
--__bpf_kfunc int bpf_stream_vprintk(int stream_id, const char *fmt__str, const void *args, u32 len__sz, void *aux__prog)
-+__bpf_kfunc int bpf_stream_vprintk(int stream_id, const char *fmt__str, const void *args, u32 len__sz, struct bpf_prog_aux *aux)
- {
- 	struct bpf_bprintf_data data = {
- 		.get_bin_args	= true,
- 		.get_buf	= true,
- 	};
--	struct bpf_prog_aux *aux = aux__prog;
- 	u32 fmt_size = strlen(fmt__str) + 1;
- 	struct bpf_stream *stream;
- 	u32 data_len = len__sz;
-diff --git a/tools/lib/bpf/bpf_helpers.h b/tools/lib/bpf/bpf_helpers.h
-index 80c028540656..9a6d719315a3 100644
---- a/tools/lib/bpf/bpf_helpers.h
-+++ b/tools/lib/bpf/bpf_helpers.h
-@@ -316,7 +316,7 @@ enum libbpf_tristate {
- })
+ BTF_KFUNCS_END(common_btf_ids)
  
- extern int bpf_stream_vprintk(int stream_id, const char *fmt__str, const void *args,
--			      __u32 len__sz, void *aux__prog) __weak __ksym;
-+			      __u32 len__sz) __weak __ksym;
+diff --git a/tools/testing/selftests/bpf/progs/task_work.c b/tools/testing/selftests/bpf/progs/task_work.c
+index 23217f06a3ec..eedd5c3dabb4 100644
+--- a/tools/testing/selftests/bpf/progs/task_work.c
++++ b/tools/testing/selftests/bpf/progs/task_work.c
+@@ -66,7 +66,7 @@ int oncpu_hash_map(struct pt_regs *args)
+ 	if (!work)
+ 		return 0;
  
- #define bpf_stream_printk(stream_id, fmt, args...)				\
- ({										\
-@@ -328,7 +328,7 @@ extern int bpf_stream_vprintk(int stream_id, const char *fmt__str, const void *a
- 	___bpf_fill(___param, args);						\
- 	_Pragma("GCC diagnostic pop")						\
- 										\
--	bpf_stream_vprintk(stream_id, ___fmt, ___param, sizeof(___param), NULL);\
-+	bpf_stream_vprintk(stream_id, ___fmt, ___param, sizeof(___param));\
- })
- 
- /* Use __bpf_printk when bpf_printk call has 3 or fewer fmt args
-diff --git a/tools/testing/selftests/bpf/progs/stream_fail.c b/tools/testing/selftests/bpf/progs/stream_fail.c
-index b4a0d0cc8ec8..8e8249f3521c 100644
---- a/tools/testing/selftests/bpf/progs/stream_fail.c
-+++ b/tools/testing/selftests/bpf/progs/stream_fail.c
-@@ -10,7 +10,7 @@ SEC("syscall")
- __failure __msg("Possibly NULL pointer passed")
- int stream_vprintk_null_arg(void *ctx)
- {
--	bpf_stream_vprintk(BPF_STDOUT, "", NULL, 0, NULL);
-+	bpf_stream_vprintk(BPF_STDOUT, "", NULL, 0);
+-	bpf_task_work_schedule_resume(task, &work->tw, &hmap, process_work, NULL);
++	bpf_task_work_schedule_resume(task, &work->tw, &hmap, process_work);
  	return 0;
  }
  
-@@ -18,7 +18,7 @@ SEC("syscall")
- __failure __msg("R3 type=scalar expected=")
- int stream_vprintk_scalar_arg(void *ctx)
- {
--	bpf_stream_vprintk(BPF_STDOUT, "", (void *)46, 0, NULL);
-+	bpf_stream_vprintk(BPF_STDOUT, "", (void *)46, 0);
+@@ -80,7 +80,7 @@ int oncpu_array_map(struct pt_regs *args)
+ 	work = bpf_map_lookup_elem(&arrmap, &key);
+ 	if (!work)
+ 		return 0;
+-	bpf_task_work_schedule_signal(task, &work->tw, &arrmap, process_work, NULL);
++	bpf_task_work_schedule_signal(task, &work->tw, &arrmap, process_work);
  	return 0;
  }
  
-@@ -26,7 +26,7 @@ SEC("syscall")
- __failure __msg("arg#1 doesn't point to a const string")
- int stream_vprintk_string_arg(void *ctx)
- {
--	bpf_stream_vprintk(BPF_STDOUT, ctx, NULL, 0, NULL);
-+	bpf_stream_vprintk(BPF_STDOUT, ctx, NULL, 0);
+@@ -102,6 +102,6 @@ int oncpu_lru_map(struct pt_regs *args)
+ 	work = bpf_map_lookup_elem(&lrumap, &key);
+ 	if (!work || work->data[0])
+ 		return 0;
+-	bpf_task_work_schedule_resume(task, &work->tw, &lrumap, process_work, NULL);
++	bpf_task_work_schedule_resume(task, &work->tw, &lrumap, process_work);
+ 	return 0;
+ }
+diff --git a/tools/testing/selftests/bpf/progs/task_work_fail.c b/tools/testing/selftests/bpf/progs/task_work_fail.c
+index 77fe8f28facd..82e4b8913333 100644
+--- a/tools/testing/selftests/bpf/progs/task_work_fail.c
++++ b/tools/testing/selftests/bpf/progs/task_work_fail.c
+@@ -53,7 +53,7 @@ int mismatch_map(struct pt_regs *args)
+ 	work = bpf_map_lookup_elem(&arrmap, &key);
+ 	if (!work)
+ 		return 0;
+-	bpf_task_work_schedule_resume(task, &work->tw, &hmap, process_work, NULL);
++	bpf_task_work_schedule_resume(task, &work->tw, &hmap, process_work);
  	return 0;
  }
  
+@@ -65,7 +65,7 @@ int no_map_task_work(struct pt_regs *args)
+ 	struct bpf_task_work tw;
+ 
+ 	task = bpf_get_current_task_btf();
+-	bpf_task_work_schedule_resume(task, &tw, &hmap, process_work, NULL);
++	bpf_task_work_schedule_resume(task, &tw, &hmap, process_work);
+ 	return 0;
+ }
+ 
+@@ -76,7 +76,7 @@ int task_work_null(struct pt_regs *args)
+ 	struct task_struct *task;
+ 
+ 	task = bpf_get_current_task_btf();
+-	bpf_task_work_schedule_resume(task, NULL, &hmap, process_work, NULL);
++	bpf_task_work_schedule_resume(task, NULL, &hmap, process_work);
+ 	return 0;
+ }
+ 
+@@ -91,6 +91,6 @@ int map_null(struct pt_regs *args)
+ 	work = bpf_map_lookup_elem(&arrmap, &key);
+ 	if (!work)
+ 		return 0;
+-	bpf_task_work_schedule_resume(task, &work->tw, NULL, process_work, NULL);
++	bpf_task_work_schedule_resume(task, &work->tw, NULL, process_work);
+ 	return 0;
+ }
+diff --git a/tools/testing/selftests/bpf/progs/task_work_stress.c b/tools/testing/selftests/bpf/progs/task_work_stress.c
+index 90fca06fff56..1d4378f351ef 100644
+--- a/tools/testing/selftests/bpf/progs/task_work_stress.c
++++ b/tools/testing/selftests/bpf/progs/task_work_stress.c
+@@ -52,7 +52,7 @@ int schedule_task_work(void *ctx)
+ 			return 0;
+ 	}
+ 	err = bpf_task_work_schedule_signal(bpf_get_current_task_btf(), &work->tw, &hmap,
+-					    process_work, NULL);
++					    process_work);
+ 	if (err)
+ 		__sync_fetch_and_add(&schedule_error, 1);
+ 	else
 -- 
 2.51.0
 
