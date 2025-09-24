@@ -1,32 +1,32 @@
-Received: from out-173.mta1.migadu.com (out-173.mta1.migadu.com [95.215.58.173])
+Received: from out-179.mta1.migadu.com (out-179.mta1.migadu.com [95.215.58.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7E672853EE
-	for <dwarves@vger.kernel.org>; Wed, 24 Sep 2025 21:17:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B440F28724D
+	for <dwarves@vger.kernel.org>; Wed, 24 Sep 2025 21:17:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758748662; cv=none; b=CbSQlVIFptIWwgt1H84rJBNAysnCzplOeKKf3fgjckndYadgoWttG7hP2fyORUFDmOcFHxexQHsu/chZaM0jA1RcDAtHruWUMa2LzNUGD9JknleTiTUdp9ky7k/0dS0LF2hoW6HK5TrRDyWPEwjusadN/G78+ulAm6jKD5jzhs4=
+	t=1758748665; cv=none; b=GRxGKNTQfskBmLDNVInGQOVYxtv6aNXYgZclBIz64/FhPmQHiNMbQeDYFcQJg+zliHq1m1jVJDRZ94b2D49TJ6tO+5lCpxu8vew4+hSIqECONbEKsIUPNDoOb16g6j5p82zN2cWz+cZVbZ9DNoLS3EOm+6KtVJErQrtda1zfXOo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758748662; c=relaxed/simple;
-	bh=o/mHM4VHAPIZfWDdvS5Q3T7Zy1mbB75C13GQ8DLPdEw=;
+	s=arc-20240116; t=1758748665; c=relaxed/simple;
+	bh=3IDhPc38RJCqvih6fZIb08mtHUvhUbF6OXJdDllvz5w=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=GNdhRSZpYt/9cjNySuHMMHevvdwKZArJfAvr7l6nBh1oO48fXjLxOX5nJojTQM5zqeWnfrm5glIPc3MUjmmWFUkfLOP32tz/kQk5iaKB8kUREMxJDCv58OQcVYGE4RW6dPH+tvJ3ClLcMqvTZd0MSmqYnSgTWsGbP2v+jRGcihI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=k3yI59kO; arc=none smtp.client-ip=95.215.58.173
+	 MIME-Version; b=C0ELBs90wLH/GEaYx8lbRv7+b8QXlYoMVXw/KFkRutrtreENVGFwuPEuw1KaZnnhrFB3gXtq9NtfexzIRJkfXMDSV9fs6ARPAGqYuqsUmJm8BcbG851Kejzb4iQQVpX1Muo6vZU3SEFozzjWqwvBM5TWtPxKWSy5BjZJBXwQjlQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=g+C9gk4X; arc=none smtp.client-ip=95.215.58.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="k3yI59kO"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="g+C9gk4X"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1758748658;
+	t=1758748662;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=dSbSusNuKu+jc1W3pic04AkzE9iuCHfGjcDrmSnTttI=;
-	b=k3yI59kO0rmkAHww8iPwEIYj2Y2YMPvSG2Wy6d17FvlAR5k7hVTuFRgW5HJ/nk8ajVPyZp
-	uzpaUZoJWhd1zRfmtXq8Ypl7HHJ5YjKvTO6mpdzGQYVkADzaw2eGvlPewOTj7PegN1f2Mh
-	7U+rRaqghVRB4IofwSA1iAvB+zHK7qo=
+	bh=8rtw740UVlePHnNJHSehP2wVmWrZailmwDbfQueAecc=;
+	b=g+C9gk4XRkwIzG9/+c4NvXQxhXklNVqre2hwASRkTFg8FGnXJCS02kcLa+FWOgr9JY4XaB
+	DnkU3MUm9mLm6GEAuwf56kPj56SWWN17XSdPqoYjmjvdVQ5gnP0GynQGcPSB6pF1CMtwmw
+	Lng7l4KxrMG2nAn+y+tFHE3P7kdAR8s=
 From: Ihor Solodrai <ihor.solodrai@linux.dev>
 To: bpf@vger.kernel.org,
 	andrii@kernel.org,
@@ -37,9 +37,9 @@ Cc: dwarves@vger.kernel.org,
 	eddyz87@gmail.com,
 	tj@kernel.org,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v1 1/6] bpf: implement KF_IMPLICIT_PROG_AUX_ARG flag
-Date: Wed, 24 Sep 2025 14:17:11 -0700
-Message-ID: <20250924211716.1287715-2-ihor.solodrai@linux.dev>
+Subject: [PATCH bpf-next v1 2/6] bpf,docs: Add documentation for KF_IMPLICIT_PROG_AUX_ARG
+Date: Wed, 24 Sep 2025 14:17:12 -0700
+Message-ID: <20250924211716.1287715-3-ihor.solodrai@linux.dev>
 In-Reply-To: <20250924211716.1287715-1-ihor.solodrai@linux.dev>
 References: <20250924211716.1287715-1-ihor.solodrai@linux.dev>
 Precedence: bulk
@@ -51,114 +51,70 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-Define KF_IMPLICIT_PROG_AUX_ARG and handle it in the BPF verifier.
-
-The mechanism of patching is exactly the same as for __prog parameter
-annotation: in check_kfunc_args() detect the relevant parameter and
-remember regno in cur_aux(env)->arg_prog.
-
-Then the (unchanged in this patch) fixup_kfunc_call() adds a mov
-instruction to set the actual pointer to prog_aux.
-
-The caveat for KF_IMPLICIT_PROG_AUX_ARG is in implicitness. We have to
-separately check that the number of arguments is under
-MAX_BPF_FUNC_REG_ARGS.
+Add a section explaining KF_IMPLICIT_PROG_AUX_ARG kfunc flag.
+Mark __prog annotation as deprecated.
 
 Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
 ---
- include/linux/btf.h   |  3 +++
- kernel/bpf/verifier.c | 43 ++++++++++++++++++++++++++++++++++++-------
- 2 files changed, 39 insertions(+), 7 deletions(-)
+ Documentation/bpf/kfuncs.rst | 39 +++++++++++++++++++++++++++++++++++-
+ 1 file changed, 38 insertions(+), 1 deletion(-)
 
-diff --git a/include/linux/btf.h b/include/linux/btf.h
-index f06976ffb63f..479ee96c2c97 100644
---- a/include/linux/btf.h
-+++ b/include/linux/btf.h
-@@ -79,6 +79,9 @@
- #define KF_ARENA_RET    (1 << 13) /* kfunc returns an arena pointer */
- #define KF_ARENA_ARG1   (1 << 14) /* kfunc takes an arena pointer as its first argument */
- #define KF_ARENA_ARG2   (1 << 15) /* kfunc takes an arena pointer as its second argument */
-+/* kfunc takes a pointer to struct bpf_prog_aux as the last argument,
-+ * passed implicitly in BPF */
-+#define KF_IMPLICIT_PROG_AUX_ARG (1 << 16)
+diff --git a/Documentation/bpf/kfuncs.rst b/Documentation/bpf/kfuncs.rst
+index e38941370b90..cc04ffd9a667 100644
+--- a/Documentation/bpf/kfuncs.rst
++++ b/Documentation/bpf/kfuncs.rst
+@@ -160,7 +160,7 @@ Or::
+                 ...
+         }
  
- /*
-  * Tag marking a kernel function as a kfunc. This is meant to minimize the
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index e892df386eed..f1f9ea21f99b 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -11948,6 +11948,11 @@ static bool is_kfunc_rcu_protected(struct bpf_kfunc_call_arg_meta *meta)
- 	return meta->kfunc_flags & KF_RCU_PROTECTED;
- }
+-2.2.6 __prog Annotation
++2.2.6 __prog Annotation (deprecated, use KF_IMPLICIT_PROG_AUX_ARG instead)
+ ---------------------------
+ This annotation is used to indicate that the argument needs to be fixed up to
+ the bpf_prog_aux of the caller BPF program. Any value passed into this argument
+@@ -374,6 +374,43 @@ encouraged to make their use-cases known as early as possible, and participate
+ in upstream discussions regarding whether to keep, change, deprecate, or remove
+ those kfuncs if and when such discussions occur.
  
-+static bool is_kfunc_with_implicit_prog_aux_arg(struct bpf_kfunc_call_arg_meta *meta)
-+{
-+	return meta->kfunc_flags & KF_IMPLICIT_PROG_AUX_ARG;
-+}
++2.4.10 KF_IMPLICIT_PROG_AUX_ARG flag
++------------------------------------
 +
- static bool is_kfunc_arg_mem_size(const struct btf *btf,
- 				  const struct btf_param *arg,
- 				  const struct bpf_reg_state *reg)
-@@ -12029,6 +12034,18 @@ static bool is_kfunc_arg_prog(const struct btf *btf, const struct btf_param *arg
- 	return btf_param_match_suffix(btf, arg, "__prog");
- }
- 
-+static int set_kfunc_arg_prog_regno(struct bpf_verifier_env *env, struct bpf_kfunc_call_arg_meta *meta, u32 regno)
-+{
-+	if (meta->arg_prog) {
-+		verifier_bug(env, "Only 1 prog->aux argument supported per-kfunc");
-+		return -EFAULT;
-+	}
-+	meta->arg_prog = true;
-+	cur_aux(env)->arg_prog = regno;
++The KF_IMPLICIT_PROG_AUX_ARG flag is used to indicate that the last
++argument of a BPF kfunc is a pointer to struct bpf_prog_aux of the
++caller BPF program, implicitly set by the verifier.
 +
-+	return 0;
-+}
++If a kfunc is marked with this flag, the function declaration in the
++kernel must have ``struct bpf_prog_aux *`` as the last argument.
++However in the kernel BTF (produced by pahole) this argument will be
++omitted, making it invisible to BPF programs calling the kfunc.
 +
- static bool is_kfunc_arg_scalar_with_name(const struct btf *btf,
- 					  const struct btf_param *arg,
- 					  const char *name)
-@@ -13050,6 +13067,21 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_kfunc_call_
- 		return -EINVAL;
- 	}
- 
-+	/* KF_IMPLICIT_PROG_AUX_ARG means that the kfunc has one less argument in BTF,
-+	 * so we have to set_kfunc_arg_prog_regno() outside the arg check loop.
-+	 */
-+	if (is_kfunc_with_implicit_prog_aux_arg(meta)) {
-+		if (nargs + 1 > MAX_BPF_FUNC_REG_ARGS) {
-+			verifier_bug(env, "A kfunc with KF_IMPLICIT_PROG_AUX_ARG flag has %d > %d args",
-+				     nargs + 1, MAX_BPF_FUNC_REG_ARGS);
-+			return -EFAULT;
-+		}
-+		u32 regno = nargs + 1;
-+		ret = set_kfunc_arg_prog_regno(env, meta, regno);
-+		if (ret)
-+			return ret;
++Note that the implicit argument is an actual BPF argument passed
++through a register, reducing the number of the available function
++arguments.
++
++Example declaration:
++
++.. code-block:: c
++
++	__bpf_kfunc int bpf_task_work_schedule_resume(struct task_struct *task, struct bpf_task_work *tw,
++						void *map__map, bpf_task_work_callback_t callback,
++						struct bpf_prog_aux *aux)
++	{
++		return bpf_task_work_schedule(task, tw, map__map, callback, aux, TWA_RESUME);
 +	}
 +
- 	/* Check that BTF function arguments match actual types that the
- 	 * verifier sees.
- 	 */
-@@ -13066,14 +13098,11 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_kfunc_call_
- 		if (is_kfunc_arg_ignore(btf, &args[i]))
- 			continue;
- 
-+		/* __prog annotation check for backward compatibility */
- 		if (is_kfunc_arg_prog(btf, &args[i])) {
--			/* Used to reject repeated use of __prog. */
--			if (meta->arg_prog) {
--				verifier_bug(env, "Only 1 prog->aux argument supported per-kfunc");
--				return -EFAULT;
--			}
--			meta->arg_prog = true;
--			cur_aux(env)->arg_prog = regno;
-+			ret = set_kfunc_arg_prog_regno(env, meta, regno);
-+			if (ret)
-+				return ret;
- 			continue;
- 		}
++	BTF_ID_FLAGS(func, bpf_task_work_schedule_resume, KF_TRUSTED_ARGS | KF_IMPLICIT_PROG_AUX_ARG)
++
++Example usage:
++
++.. code-block:: c
++
++	/* note the last argument is ommitted */
++	bpf_task_work_schedule_resume(task, &tw, &hmap, process_work);
++
++
+ 2.5 Registering the kfuncs
+ --------------------------
  
 -- 
 2.51.0
