@@ -1,203 +1,95 @@
-Received: from out-186.mta0.migadu.com (out-186.mta0.migadu.com [91.218.175.186])
+Received: from out-181.mta1.migadu.com (out-181.mta1.migadu.com [95.215.58.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0CD23596B
-	for <dwarves@vger.kernel.org>; Thu, 25 Sep 2025 16:13:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.186
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 250853596B
+	for <dwarves@vger.kernel.org>; Thu, 25 Sep 2025 16:19:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758816816; cv=none; b=T2N812kUqJdVF3Bcbs+RgHaVI0mXb/9DFjzRyZRChRdrbeWvSA0FonRBfX5ufPEY1+sLmcnoBz7ziWST8AW9vk0h0k1xxJBWWWK0wYmJoEeMyzJqS0oP0ldn1q3y3mq/jGQZjP5SEjgG05+m59cDbI271Rvu2x+4G5oIcwO6ygM=
+	t=1758817190; cv=none; b=NeZ9inEReeu5WfVypZhb9o1aSKkmwSGk1pyaHjWki+HVSYe0vVekPvQR+ZgCNOqrbgZM/E+XLny8OrpqbciowuxWzBz9EpmYxt6A9fMq+YdECcGF0i6gMihmNFBK3aCkmO5UvziR1a9p2zIK5m7P8EpSF5UkBO3oyG+zCCiwkk4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758816816; c=relaxed/simple;
-	bh=jXFdzTOLovsJrN9Nfs//Q5qxLuBEFEGKhi+yA65myVY=;
+	s=arc-20240116; t=1758817190; c=relaxed/simple;
+	bh=MYtK8vJj5/2Cw+bnmxLwl+w3ncDzgbwjrpm87YACW/Q=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=qHWgECe57zdKR27vK6AEATRsaUpa9wUCp1bNheSVLZVtDdD9dFQqZtCe3y+6j6XmI9u08iyUaOY9GV3sCUPJoPhIkf3uRQ1hnAwyTRnLXtg0ftYw4F08ejPBYSoMFcFpH4YRIk4Uf7cNH4Ljf1DdI++CDRL3qlAQlwjowGYmPCQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=cJMWqO0w; arc=none smtp.client-ip=91.218.175.186
+	 In-Reply-To:Content-Type; b=ARkr64FxJQmHSoqgJfaX6QtDmRQMkDFYYTKwsVVAggxaBZmmZ2fhJbgMKZQsVwzNGZyInXMd2dnAxOnbKvQQ8C+4LOPLsT4jlKi/MMg2KI5A5AyPFDuKnrWkIB25CPGR/5usCd6P+R545/CH7vDX7k2zcKcMjv+oWZBPWlAVzE8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=f886UFyd; arc=none smtp.client-ip=95.215.58.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="cJMWqO0w"
-Message-ID: <6a6403ec-166a-4d48-8bf5-f43ae1759e5f@linux.dev>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="f886UFyd"
+Message-ID: <a486f7ec-698b-4089-ba5c-30172d898db1@linux.dev>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1758816802;
+	t=1758817185;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=v1lzzFfCMcFF938iOkK2Z663LjuwV7KmPYm7+6fFCMc=;
-	b=cJMWqO0wO5K4Q+rErfGLe/ps9Tt5Se2RTOHUZ525iSrHg5r1IzqWt1BMLdlPZc+GAWCm8i
-	FiUWAwEKpHfGyWgev6FgVAnAuDcft6cKnn2yq/79/Sdz7djcvIPC1AUR2QqiWOzDowktEr
-	AN0CBjLP9Xmu7iLrnoQr51q89qO4MVY=
-Date: Thu, 25 Sep 2025 09:13:17 -0700
+	bh=B/fcKec7nCfCYMoChwjrym0cIPBZQwDJ0nUj5VjWfZc=;
+	b=f886UFydl6m2Efq2B3isrmet6ovEBDsuvg5eozy4ohs5Vq001oUW1WMqaLE2FrjTdSuJlQ
+	hFGO1l1bXrViusjubaZZmfyVhgbDBunL8zsf3zjCwHmGh+Tx+Xj+s8C/40tzs8utDpqI8s
+	jLU9tiL59LySn1hw1wbuniNEW8drXrI=
+Date: Thu, 25 Sep 2025 09:19:40 -0700
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v1 1/6] bpf: implement KF_IMPLICIT_PROG_AUX_ARG
- flag
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
- Eduard <eddyz87@gmail.com>, Andrii Nakryiko <andrii@kernel.org>
-Cc: bpf <bpf@vger.kernel.org>, dwarves <dwarves@vger.kernel.org>,
+Subject: Re: [PATCH bpf-next v1 3/6] selftests/bpf: update bpf_wq_set_callback
+ macro
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: bpf <bpf@vger.kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ Alexei Starovoitov <ast@kernel.org>, dwarves <dwarves@vger.kernel.org>,
  Alan Maguire <alan.maguire@oracle.com>,
- Arnaldo Carvalho de Melo <acme@kernel.org>, Tejun Heo <tj@kernel.org>,
- Kernel Team <kernel-team@meta.com>
+ Arnaldo Carvalho de Melo <acme@kernel.org>, Eduard <eddyz87@gmail.com>,
+ Tejun Heo <tj@kernel.org>, Kernel Team <kernel-team@meta.com>
 References: <20250924211716.1287715-1-ihor.solodrai@linux.dev>
- <20250924211716.1287715-2-ihor.solodrai@linux.dev>
- <CAADnVQLvuubey0A0Fk=bzN-=JG2UUQHRqBijZpuvqMQ+xy4W4g@mail.gmail.com>
+ <20250924211716.1287715-4-ihor.solodrai@linux.dev>
+ <CAADnVQLG1=xr9OWKZna0hjfswZ+pZ8RM3fAtsVd+aYW7xaFFcQ@mail.gmail.com>
 Content-Language: en-US
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 From: Ihor Solodrai <ihor.solodrai@linux.dev>
-In-Reply-To: <CAADnVQLvuubey0A0Fk=bzN-=JG2UUQHRqBijZpuvqMQ+xy4W4g@mail.gmail.com>
+In-Reply-To: <CAADnVQLG1=xr9OWKZna0hjfswZ+pZ8RM3fAtsVd+aYW7xaFFcQ@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
 
 
-On 9/25/25 2:49 AM, Alexei Starovoitov wrote:
+On 9/25/25 2:53 AM, Alexei Starovoitov wrote:
 > On Wed, Sep 24, 2025 at 10:17 PM Ihor Solodrai <ihor.solodrai@linux.dev> wrote:
 >>
->> Define KF_IMPLICIT_PROG_AUX_ARG and handle it in the BPF verifier.
+>> Subsequent patch introduces bpf_wq_set_callback kfunc with an
+>> implicit bpf_prog_aux argument.
 >>
->> The mechanism of patching is exactly the same as for __prog parameter
->> annotation: in check_kfunc_args() detect the relevant parameter and
->> remember regno in cur_aux(env)->arg_prog.
->>
->> Then the (unchanged in this patch) fixup_kfunc_call() adds a mov
->> instruction to set the actual pointer to prog_aux.
->>
->> The caveat for KF_IMPLICIT_PROG_AUX_ARG is in implicitness. We have to
->> separately check that the number of arguments is under
->> MAX_BPF_FUNC_REG_ARGS.
+>> To ensure backward compatibility add a weak declaration and make
+>> bpf_wq_set_callback macro to check for the new kfunc first.
 >>
 >> Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
 >> ---
->>  include/linux/btf.h   |  3 +++
->>  kernel/bpf/verifier.c | 43 ++++++++++++++++++++++++++++++++++++-------
->>  2 files changed, 39 insertions(+), 7 deletions(-)
+>>  tools/testing/selftests/bpf/bpf_experimental.h | 7 ++++++-
+>>  1 file changed, 6 insertions(+), 1 deletion(-)
 >>
->> diff --git a/include/linux/btf.h b/include/linux/btf.h
->> index f06976ffb63f..479ee96c2c97 100644
->> --- a/include/linux/btf.h
->> +++ b/include/linux/btf.h
->> @@ -79,6 +79,9 @@
->>  #define KF_ARENA_RET    (1 << 13) /* kfunc returns an arena pointer */
->>  #define KF_ARENA_ARG1   (1 << 14) /* kfunc takes an arena pointer as its first argument */
->>  #define KF_ARENA_ARG2   (1 << 15) /* kfunc takes an arena pointer as its second argument */
->> +/* kfunc takes a pointer to struct bpf_prog_aux as the last argument,
->> + * passed implicitly in BPF */
+>> diff --git a/tools/testing/selftests/bpf/bpf_experimental.h b/tools/testing/selftests/bpf/bpf_experimental.h
+>> index d89eda3fd8a3..341408d017ea 100644
+>> --- a/tools/testing/selftests/bpf/bpf_experimental.h
+>> +++ b/tools/testing/selftests/bpf/bpf_experimental.h
+>> @@ -583,8 +583,13 @@ extern int bpf_wq_start(struct bpf_wq *wq, unsigned int flags) __weak __ksym;
+>>  extern int bpf_wq_set_callback_impl(struct bpf_wq *wq,
+>>                 int (callback_fn)(void *map, int *key, void *value),
+>>                 unsigned int flags__k, void *aux__ign) __ksym;
+>> +extern int bpf_wq_set_callback(struct bpf_wq *wq,
+>> +               int (callback_fn)(void *map, int *key, void *value),
+>> +               unsigned int flags) __weak __ksym;
+>>  #define bpf_wq_set_callback(timer, cb, flags) \
+>> -       bpf_wq_set_callback_impl(timer, cb, flags, NULL)
+>> +       (bpf_wq_set_callback ? \
+>> +               bpf_wq_set_callback(timer, cb, flags) : \
+>> +               bpf_wq_set_callback_impl(timer, cb, flags, NULL))
 > 
-> This is neither networking nor kernel comment style.
-> Pls use proper kernel comment style in a new code,
-> and reformat old net/bpf style when adjusting old comments.
-> 
->> +#define KF_IMPLICIT_PROG_AUX_ARG (1 << 16)
-> 
-> The name is too verbose imo.
-> How about
-> KF_HIDDEN_PROG_ARG
-> or
-> KF_PROG_LAST_ARG
-> 
-> "Implicit" is not 100% correct, since it's very explicit
-> in kfunc definition in C, but removed from BTF.
-> "Hidden" is also not an exact fit for the same reasons.
-> Hence my preference is KF_PROG_LAST_ARG.
-> 
-> "aux" part is also an implementation detail.
-> 
->>  /*
->>   * Tag marking a kernel function as a kfunc. This is meant to minimize the
->> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
->> index e892df386eed..f1f9ea21f99b 100644
->> --- a/kernel/bpf/verifier.c
->> +++ b/kernel/bpf/verifier.c
->> @@ -11948,6 +11948,11 @@ static bool is_kfunc_rcu_protected(struct bpf_kfunc_call_arg_meta *meta)
->>         return meta->kfunc_flags & KF_RCU_PROTECTED;
->>  }
->>
->> +static bool is_kfunc_with_implicit_prog_aux_arg(struct bpf_kfunc_call_arg_meta *meta)
->> +{
->> +       return meta->kfunc_flags & KF_IMPLICIT_PROG_AUX_ARG;
->> +}
->> +
->>  static bool is_kfunc_arg_mem_size(const struct btf *btf,
->>                                   const struct btf_param *arg,
->>                                   const struct bpf_reg_state *reg)
->> @@ -12029,6 +12034,18 @@ static bool is_kfunc_arg_prog(const struct btf *btf, const struct btf_param *arg
->>         return btf_param_match_suffix(btf, arg, "__prog");
->>  }
->>
->> +static int set_kfunc_arg_prog_regno(struct bpf_verifier_env *env, struct bpf_kfunc_call_arg_meta *meta, u32 regno)
->> +{
->> +       if (meta->arg_prog) {
->> +               verifier_bug(env, "Only 1 prog->aux argument supported per-kfunc");
->> +               return -EFAULT;
->> +       }
->> +       meta->arg_prog = true;
->> +       cur_aux(env)->arg_prog = regno;
->> +
->> +       return 0;
->> +}
->> +
->>  static bool is_kfunc_arg_scalar_with_name(const struct btf *btf,
->>                                           const struct btf_param *arg,
->>                                           const char *name)
->> @@ -13050,6 +13067,21 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_kfunc_call_
->>                 return -EINVAL;
->>         }
->>
->> +       /* KF_IMPLICIT_PROG_AUX_ARG means that the kfunc has one less argument in BTF,
->> +        * so we have to set_kfunc_arg_prog_regno() outside the arg check loop.
->> +        */
-> 
-> Use kernel comment style.
-> 
->> +       if (is_kfunc_with_implicit_prog_aux_arg(meta)) {
->> +               if (nargs + 1 > MAX_BPF_FUNC_REG_ARGS) {
->> +                       verifier_bug(env, "A kfunc with KF_IMPLICIT_PROG_AUX_ARG flag has %d > %d args",
->> +                                    nargs + 1, MAX_BPF_FUNC_REG_ARGS);
->> +                       return -EFAULT;
->> +               }
->> +               u32 regno = nargs + 1;
-> 
-> Variable declaration should be first in the block
-> followed by a blank line.
-> 
-> Also I would remove this double "> MAX_BPF_FUNC_REG_ARGS" check.
-> Move if (is_kfunc_with_prog_last_arg(meta))
-> couple lines above before the check,
-> and actual_nargs = nargs + 1;
-> if (actual_nargs > MAX_BPF_FUNC_REG_ARGS)
-> to cover both cases.
-> I wouldn't worry that verbose() isn't too specific.
-> If it prints nargs and actual_nargs whoever develops a kfunc
-> can get an idea.
-> Also in the future there is a good chance we will add more
-> KF_FOO_LAST_ARG flags to cleanup other *_impl() kfuncs
-> that have a special last argument, like bpf_rbtree_add_impl.
-> If all of them copy paste "> MAX_BPF_FUNC_REG_ARGS" check
-> it will be too verbose. Hence one nargs check for them all.
+> There is also drivers/hid/bpf/progs/hid_bpf_helpers.h
+> Pls double check that hid-bpf still compiles and works.
 
-Hi Alexei, thank you for the review.
+Yes, I noticed the usage.
 
-Sorry for the styling mistakes, forgot to run patches through
-checkpatch.pl
-
-In the other thread Eduard proposes a different approach to the
-implementation [1].  Basically, leave BTF unmodified and move argument
-hiding logic to bpftool's vmlinux.h generation.
-
-IMO modifying BTF is more straightforward, but if the main goal is to
-have a nice BPF C interface, maybe Eduard is onto something.
-
-Curious to hear yours and Andrii's opinion on that.
-
-Thanks.
-
-[1] https://lore.kernel.org/bpf/b92d892f6a09fc7a411838ccf03dfebbba96384b.camel@gmail.com/
-
-> 
-> pw-bot: cr
-
+I plan to send separate patches to hid when this series gets closer to
+landing.
