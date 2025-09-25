@@ -1,123 +1,140 @@
-Received: from out-187.mta1.migadu.com (out-187.mta1.migadu.com [95.215.58.187])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C9D81D5CD9
-	for <dwarves@vger.kernel.org>; Thu, 25 Sep 2025 16:33:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.187
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A462925F988
+	for <dwarves@vger.kernel.org>; Thu, 25 Sep 2025 17:15:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758817985; cv=none; b=pTwgMW34OZfpAVw1khw03/+yAe2tOM99aw0+ZIxap2iZ78WCvwNb4VDamqT5y3kdOMgiDL+p7W2kujgMib64hkEV7evk+teFd/NH689BQTK5+rcAeaEix13qVet9B+xwG5zcYP0WCqYZWeXrgeAJELMbzyKYUwfDPHRJWkhuz1U=
+	t=1758820531; cv=none; b=Drpz1Yq3olT8sqXTvre4QvmzJglbYmWdtnKTB9I9PZBhaA7Ml5eaRq7y3cPe6ITun5vB2K3Cy8cOINghxtKY7ipAxVk8A55lsC64ag8G+3cDNOw5j6/RZcRLyFsKJ1dN1At5MjeD2r4lD4azDkrKXdCGXxX1Z9UGV8clP6spnLg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758817985; c=relaxed/simple;
-	bh=S3NKEt4GRgoBwPONRw+g8M2LkQgCWtko1S2apP7hbdA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=CeN6Rly6x4ocIeaI0L/FhLeMsdVDwpDU/OSl8/S+k4T9de6WSgYJDNQOUVqefQF4wK6qTubcMhN/i3aEzyLQlxunOl6YgzIkax9no4biVuAwRQy6gZRgnMsy5Wceb1HU93JvYCpenXJwViuESmqQgXIrN37UKvz0ON7bAPdIRwg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=kULI3936; arc=none smtp.client-ip=95.215.58.187
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1758820531; c=relaxed/simple;
+	bh=brKcv+SZBosARsBrRsCIGSFwpsXb1IgnE59o8tm6UmQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=sAC57D/bsZeSvgv1M11282AR+8eQ1AuOE7OdyJ+IQaZ7bJIZrgiuCiCZ8/A9r9KgbLxnLe37G2sK0vi8VtFPlOWV76yzyIou3ZLkBH11KMWIqLP9bcc2/HW1d9bM1s9J3fuiE3lMDSKoiwjX0yF+1Dfxa9xevj05KlvHfZ/4H60=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bhkVkFqU; arc=none smtp.client-ip=209.85.210.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="kULI3936"
-Message-ID: <977e0020-fb79-4bf7-9349-cd99dc0d93d6@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1758817981;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=XHyNLQlojJR72U3JVe8KHfwEXQ2ZW6KVB1AD3T02K0A=;
-	b=kULI3936GhlERED/54S8LILzUfOPEmXkPI3zcfMSH4D1UNT8RO+Y5kfvLBfKFIrGOi7pqp
-	U+eWD612LQdfa7XVAN/p9/cAKoybrJqMv3GHRejORIEeEf/SNcGThIZ5ntQEDZx4jxase9
-	Prf8hO6CaJ13AFvK1ySlBv+HOElNBGc=
-Date: Thu, 25 Sep 2025 09:32:55 -0700
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bhkVkFqU"
+Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-77f2e621ef8so1655738b3a.0
+        for <dwarves@vger.kernel.org>; Thu, 25 Sep 2025 10:15:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1758820529; x=1759425329; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fP3e5XpX/mv2mFcDefKMMzsu7+cgHOTBv7hjzKJz3UM=;
+        b=bhkVkFqUiFJIrcVibiFv+ckkP44eLYCXZ62emN0VTfyb7uS5dqjCVI6is8Z4T7wDoz
+         GWpR4dVxoEzImmdEsCJ2G1AiwyWJH2C+Sx1iw/ZHbpeJbMpFKk3wyR7tv1btl4x7qasG
+         vWU6aZZUSBVfe/ftx+sgNsOXQqxTZMFEZGCuRiexmSif0Oyu7T5XXEXngldC6mNh/ieV
+         dIXmFiLoPOaAJ39HMpm6iDL/bixp/+x+RowoSHuCA+efAYFPMvgVkORErw/Y6TteUSFC
+         OphAnc9lM2llEZT1TYlSAz7gtES9KkXY+N9rfDmNaw7BcRRC7AbI39mo2tE3UlsJ9VA8
+         R/YA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1758820529; x=1759425329;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=fP3e5XpX/mv2mFcDefKMMzsu7+cgHOTBv7hjzKJz3UM=;
+        b=dG9lz+fgZPHdXcus+f1sLMCf5z5M7naSNB8U6PqzbvmDWt0J0P9ceulYb03HBIYmOj
+         zjvlacsMSVqjoqA2nJadBk2mB5Z+hzuATFhaETXIemNAxMZgwLK3VWfz+mmlooM/UqoF
+         URRN1RJf2oxto17vaanvj6kw/ny9B2vGAl5en3Qft6x3y6STM6ZBkJELveGoDTzOrKdC
+         Uhkal+aau6JaDUU5g+T+4lMBNj8UE/ASkTtkZ46oykz6xYwMtYweNFqt88464IuH6/03
+         jonm03mHZQmfq+4KhIBMbQ6b5TZiNIIunOn2GUyXW1vrvuO1pPrIF+RaFo7yFI46D+w1
+         /ncg==
+X-Forwarded-Encrypted: i=1; AJvYcCUQo9A0c6UQxFrzn3d1FX5RYPHU/5VyZlgtRWM7kJpx2LLIB7XxXj5H3yl23zaOR17tXSToVCVQ@vger.kernel.org
+X-Gm-Message-State: AOJu0YyH2QlPANT2NkMrLiCLyXLvmvK6FHt7Nw1XSwvHY1b5u8q7N3tV
+	dU7CZrdtgmi9bN+tMMn3MY9jBcoI3vwjRQXtjyftRrb1UWyMr8p0RGhUvvmI23EzNWimqR6s5Z5
+	HA+Sx8b8a6e0R+wTEP8DvNFNt3ZHFMkX68g==
+X-Gm-Gg: ASbGncso0T6PZfgkBcD0Zsa0w49NyahvRf6G/f4f0qmLv2y4C4S30KVTfU00Xouk9Gq
+	I2tXUos617+BjV4Jyvm4PviSeKp/1mYdHm0PhXTphtGwUz1367XXqPliewyzbsnXDsAAuhWsTaZ
+	RoNb6E8rV0yWYAotwLTH+ZVi0O0fhmLlw8D4BdsP7IAAdSZDe3uf78N9ZjaKS89J6veCAuL8cMq
+	6/WrfWBBLK2ocTwT00EaoY=
+X-Google-Smtp-Source: AGHT+IEhH2YUTxIE9+nyCzayweg/wqeGqERQgiT8DAxYtFLnlo+kjlkgLrEKgyglDHa3hJjWMuPZHtd3BK+jEN4ANwA=
+X-Received: by 2002:a17:90b:1c04:b0:32e:d600:4fe9 with SMTP id
+ 98e67ed59e1d1-3342a20be0emr4706103a91.4.1758820528547; Thu, 25 Sep 2025
+ 10:15:28 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v1 5/6] bpf: mark bpf_stream_vprink kfunc with
- KF_IMPLICIT_PROG_AUX_ARG
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: bpf <bpf@vger.kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- Alexei Starovoitov <ast@kernel.org>, dwarves <dwarves@vger.kernel.org>,
- Alan Maguire <alan.maguire@oracle.com>,
- Arnaldo Carvalho de Melo <acme@kernel.org>, Eduard <eddyz87@gmail.com>,
- Tejun Heo <tj@kernel.org>, Kernel Team <kernel-team@meta.com>
-References: <20250924211716.1287715-1-ihor.solodrai@linux.dev>
- <20250924211716.1287715-6-ihor.solodrai@linux.dev>
- <CAADnVQLVeZd0JOz-GBgZfi=t5kvtH_z1Ri2w6b-AW7DHgEBv5w@mail.gmail.com>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
-In-Reply-To: <CAADnVQLVeZd0JOz-GBgZfi=t5kvtH_z1Ri2w6b-AW7DHgEBv5w@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+References: <20250924211512.1287298-1-ihor.solodrai@linux.dev>
+ <20250924211512.1287298-3-ihor.solodrai@linux.dev> <4fb8a812fdd01f115a99317c8e46ad055b5bf102.camel@gmail.com>
+ <a7f28918-7eda-42e9-ae41-446b7a2d9759@linux.dev> <b92d892f6a09fc7a411838ccf03dfebbba96384b.camel@gmail.com>
+In-Reply-To: <b92d892f6a09fc7a411838ccf03dfebbba96384b.camel@gmail.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Thu, 25 Sep 2025 10:15:14 -0700
+X-Gm-Features: AS18NWBrxfrNowky9yFmZ92ieSPJ0nogD7mzjj0Dmg02YrBfmCtvZRzyfhSKmNg
+Message-ID: <CAEf4BzaaJLDDLqO64iuCVkMoT3jTnrCrRe-UB4_e0BWqa+FuNw@mail.gmail.com>
+Subject: Re: [PATCH dwarves v1 2/2] btf_encoder: implement KF_IMPLICIT_PROG_AUX_ARG
+ kfunc flag handling
+To: Eduard Zingerman <eddyz87@gmail.com>
+Cc: Ihor Solodrai <ihor.solodrai@linux.dev>, dwarves@vger.kernel.org, 
+	alan.maguire@oracle.com, acme@kernel.org, andrii <andrii@kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>, bpf@vger.kernel.org, tj@kernel.org, kernel-team@meta.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Thu, Sep 25, 2025 at 6:28=E2=80=AFAM Eduard Zingerman <eddyz87@gmail.com=
+> wrote:
+>
+> On Wed, 2025-09-24 at 20:59 -0700, Ihor Solodrai wrote:
+>
+> [...]
+>
+> > I'm not sure how generic KF_IMPLICIT_ARG would even work.
+> > Any *implicit* parameter requires a very concrete implementation in
+> > the verifier: an actual pointer of a particular type is injected after
+> > the verification.
+>
+> Does not seem complicated:
+>
+> - In pahole generate a special decl_tag for bpftool.
+> - In bpftool, don't emit last argument to vmlinux.h, if that flag is pres=
+ent.
+> - on kernel side, when checking kfunc args, also check for the flag
+>   and switch over types recorded for last function parameter in BTF.
+>   If kernel knows how to handle it, great, if it does not, emit
+>   verifier error.
+> - Not sure, but likely, the change on the libbpf side will be needed,
+>   as it compares function prototypes between program and kernel BTFs.
 
+this is exactly the thing I'd like to avoid: setting up special CO-RE
+matching rules for these few special kfuncs
 
-On 9/25/25 3:01 AM, Alexei Starovoitov wrote:
-> On Wed, Sep 24, 2025 at 10:17 PM Ihor Solodrai <ihor.solodrai@linux.dev> wrote:
->>
->> Update bpf_stream_vprink macro in libbpf and fix call sites in
-> 
-> 't' is missing in bpf_stream_vprintk().
-> 
->> the relevant selftests.
->>
->> Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
->> ---
->>  kernel/bpf/helpers.c                            | 2 +-
->>  kernel/bpf/stream.c                             | 3 +--
->>  tools/lib/bpf/bpf_helpers.h                     | 4 ++--
->>  tools/testing/selftests/bpf/progs/stream_fail.c | 6 +++---
->>  4 files changed, 7 insertions(+), 8 deletions(-)
->>
->> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
->> index 6b46acfec790..875195a0ea72 100644
->> --- a/kernel/bpf/helpers.c
->> +++ b/kernel/bpf/helpers.c
->> @@ -4378,7 +4378,7 @@ BTF_ID_FLAGS(func, bpf_strnstr);
->>  #if defined(CONFIG_BPF_LSM) && defined(CONFIG_CGROUPS)
->>  BTF_ID_FLAGS(func, bpf_cgroup_read_xattr, KF_RCU)
->>  #endif
->> -BTF_ID_FLAGS(func, bpf_stream_vprintk, KF_TRUSTED_ARGS)
->> +BTF_ID_FLAGS(func, bpf_stream_vprintk, KF_TRUSTED_ARGS | KF_IMPLICIT_PROG_AUX_ARG)
-> 
-> This kfunc will be in part of 6.17 release in a couple days,
-> so backward compat work is necessary.
-> I don't think we can just remove the arg.
-
-Acked.
-
-> 
->> --- a/tools/lib/bpf/bpf_helpers.h
->> +++ b/tools/lib/bpf/bpf_helpers.h
->> @@ -316,7 +316,7 @@ enum libbpf_tristate {
->>  })
->>
->>  extern int bpf_stream_vprintk(int stream_id, const char *fmt__str, const void *args,
->> -                             __u32 len__sz, void *aux__prog) __weak __ksym;
->> +                             __u32 len__sz) __weak __ksym;
-> 
-> CI is complaining of conflicting types for 'bpf_stream_vprintk',
-> since it's using pahole master.
-> It will stop complaining once pahole changes are merged,
-> but this issue will affect all developers until they
-> update pahole.
-> Not sure how to keep backward compat.
-
-Right.
-
-One way to do it is to conditionalize new kfunc defitions under a
-config flag similar to how we have CONFIG_PAHOLE_HAS_SPLIT_BTF and co.
-
-But this seems like too much trouble for just a couple of kfuncs,
-especially since we do not guarantee stable interface for kfuncs.
-
-We could ask people to update pahole version if they run into
-issues. And they shouldn't unless they are actually using the kfuncs,
-or more specifically: have their own declarations of said kfuncs.
-
-bpf_stream_vprintk() is a special case, because it is already in
-libbpf.
+>
+> E.g., for bpf_wq_set_callback keep the definition as is:
+>
+> __bpf_kfunc int bpf_wq_set_callback(struct bpf_wq *wq,
+>                                     int (callback_fn)(void *map, int *key=
+, void *value),
+>                                     unsigned int flags,
+>                                     struct bpf_prog_aux *aux)
+>
+> Kernel BTF will have it with full set of parameters.
+> But because of the flag, it will be printed w/o last parameter in
+> vmlinux.h:
+>
+> extern int bpf_wq_set_callback(struct bpf_wq *wq,
+>                                     int (callback_fn)(void *map, int *key=
+, void *value),
+>                                     unsigned int flags) __weak __ksym
+>
+> On kernel side check_kfunc_args() will have access to complete BTF
+> declaration, so it can:
+> - check presence of the flag
+> - lookup bpf_prog_aux from the kernel side BTF
+> - call set_kfunc_arg_prog_regno.
+>
+> > So we have to do a type check on pahole side to catch invalid kfunc
+> > declarations. And the verifier of course must be very strict about
+> > where it can pass pointers to kernel objects.
+>
+> Type checks on pahole side will require upgrades to both kernel and
+> pahole, when new implicit parameter types are added. I'd try to avoid
+> that.
+>
+> Also, do we plan to have several implicit parameters passed to a same
+> function?
