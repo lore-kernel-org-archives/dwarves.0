@@ -1,119 +1,145 @@
-Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
+Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CC1B30C34E
-	for <dwarves@vger.kernel.org>; Thu, 25 Sep 2025 17:24:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0D8430DEDF
+	for <dwarves@vger.kernel.org>; Thu, 25 Sep 2025 17:28:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758821095; cv=none; b=u5MQM46p7LqxsTFhlqNKRFKLPf0KhTMdzi+Ex44wDLHl19NgId3DkUwrX0sg/bCUPp0+8YaIZIoHVo3QCixiYKLUxkmQ0rZWB3GObIceeL6P3+T0sU9a+L/XVWxmQknxZMWd379lOHw1m4OateSXuguaT9O4S4u5tr3n6UjZcIw=
+	t=1758821324; cv=none; b=SfW+EEIeXSaAzUXOREZMhLD4ukOJaGb3AEdDTTl2V1FuCjtovDm4MXFNFB2SwaO2mRUEXYkeQJLr79GvA/MXYgbm3SDrK6P7GceJ6h24hIBgcM7da7KBKYXrAtxY09o7OUudlPTAZiSA+xX7CR1LUsfW4LKOdH63xC0hV5ItRbs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758821095; c=relaxed/simple;
-	bh=uic5NLXZ3Gwk6TwZghx+l81X4gMVRQfY7RrGNWUQ7Sk=;
+	s=arc-20240116; t=1758821324; c=relaxed/simple;
+	bh=rOcf7syoHsIouvlswXay6faEtX9NiT5q5lhurDm9gxU=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=auXfI6JZrGuBUntAPZEEJv3MRHFcxFpdi1eq0kBmMYa2ehBLPnq62u4Xsj94/2kRcjc6FqTMiyw5y7hQ0vAIbNjBN2E9sWHwkLGdNSoIMFwYWJ3UedlooX/FyDuNfaPZCMaPWkzSHqc0IPJ0VDZnbIFvuMiL/KL1kQ3XsrTzTmw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RyCSQdQS; arc=none smtp.client-ip=209.85.210.172
+	 To:Cc:Content-Type; b=OaRCMIbIN1aou6fED4UGH/DYFMYT3SZoP1jC2uiMWRZGU0nSbI5Q404IcGhHBvf2LJJ0WKDvrCKe08CiNQLTrMmghTiwbbWio3qY1gY9PorMBtfJnghZAfzHtfn0Y9tWEskLutFwP72qc6aq3IfWb796MBRUEUDb8NKUJ9WJ52Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=d2FOppdA; arc=none smtp.client-ip=209.85.216.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RyCSQdQS"
-Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-77f41086c11so1214283b3a.0
-        for <dwarves@vger.kernel.org>; Thu, 25 Sep 2025 10:24:54 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="d2FOppdA"
+Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-330469eb750so1403678a91.2
+        for <dwarves@vger.kernel.org>; Thu, 25 Sep 2025 10:28:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1758821093; x=1759425893; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1758821322; x=1759426122; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=8qGWEFcKf1Q/BMH/xe5kNdjXU907WuDD9TQHcEONvz4=;
-        b=RyCSQdQSZTqQ0YP26TUxX9cAZt0GZfWmVzcsg/6nKyLw/03GHFvWvwxWSqQO2Gu9y1
-         tBMUCPDAt3JjP3VKXyKxmWdwJZtFW9quO+q4MffPo4FNVqakZT9L1w5Hkd9VnLD88mCM
-         41wXaNW0XXRMdtqQeojdQ8EkPxSQJ0hRsnyX9TwnuuyE2EIq3Oy9hhlmm85OuktSHZ4Y
-         v5hC60uc/Bk7Bd0gBDsfxCwuEd0j1lFone9ONp9RWHUYN8Q0HMAuaaEPkau38MiedbdG
-         IljEJAh9J6SqXFjHatvVN/QamYoCUFh0fiL69yAOBgysOdvoS94qBEqWNRrkEzdun3GN
-         osrw==
+        bh=Ps1znGvbkVaXEVnKByBRiv/UuQfRsE9vw1c5JC/YArg=;
+        b=d2FOppdA71KPVxL4yqVq0J17ketd9frW1ZFNY36rDd6h3QPd1vb1/3RRuw5Nr2heoV
+         MBJQJqV8QGHt0GnbY/RygyLJlHE0dUUsXpDg/UW2qcJugWwzC87F0l/Xug/EmzdkpYzL
+         QmQf5MZvxY2vR6tc1ijaNatih0Gb1lapR5Mr8/j98y/czntxUlZ+HUuqODHI21DQ2aqE
+         JlSZU9AdzK+gLJnd8yOReBuHhobTtLLZTn9mPKpIa4tGpOduFm9vVe/8/FiY+jTUIsbQ
+         vG9880L0MiJh/b5nMRMcbWrV9me3khSxMVHSEZfG9G6veSD2w1Akfnj60SEN2qH95DbW
+         yTdw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758821093; x=1759425893;
+        d=1e100.net; s=20230601; t=1758821322; x=1759426122;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=8qGWEFcKf1Q/BMH/xe5kNdjXU907WuDD9TQHcEONvz4=;
-        b=V/nN3QAFfQgVAUhjJQp3rdhAGO/0SN5+qRYHeZIChQD3ppY4qmVPLI3ZXUqyHeHdYd
-         oco0OJQdhZPQ3kV6KISM6EmEDpc7bSgWo54iRmCkPWH2JHaDl8Rjnil6UKa7cKvjSOGA
-         KTQ7c7S3tSckXeHwQWqBLufLSGOTFsgkXgc0h2fa+pt2uCy8YQHwEUBTyEr/2gAez2nh
-         d0tSR1/Gun4IWX1reADT4O+oXemd9emC/2jWZv6hK68l6DMxJD/SbrZlZLfNl1EHCdyH
-         1Nal1Tfi7rkEqNJGJmVdZduK/nLOvLyfS8mTmlnd3h+jYdyGsZsQyfT5mEnJsClXkG/U
-         vzuA==
-X-Forwarded-Encrypted: i=1; AJvYcCV+pVctQuLzTj1brAMQnuc7vDFROfA2HzsvVhmpSFiUyn79lssCBX6sKQUPrvDyuYEnNvL28Vc6@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzk+N5N/HiMw4DZMG+hTHuoRcfh72N42G81Cu2tog7buUkfj34m
-	wVKa2dIXMIK3J7q38JCZXla1vHjN+vjfz/zkvBIFo64m2mpn9q7CMi9CmsR01BN5nPAh9lTEaze
-	YA+kdaNm8WWcx9pSMFucdtGiQ4rpDX8Q=
-X-Gm-Gg: ASbGnctS/RDgwhayg/rYT/q0W0AXqOefBJVQrSByiHh35cNrH64TrMAXs6EnDTIBJRH
-	GGag+dDTqche2ksvaBFVuptZ3kk1aPUcR6MxDdmq8WZH+xSCkmuL+G7NnWolY3jHV6xBASRt1CP
-	AKT6Tm0JrvLao3L658XDdB9BiQxVP8QysjPGe4Yj5UotoKOLM3LHW8V17G/GjKLH66CbTKHMGY7
-	FMOspjzcsXffW09go6aGrE=
-X-Google-Smtp-Source: AGHT+IF1cmY38iSiCpyQnw40ZuYKLljDr6khypvNT+srsTL/4Xar1WHSbWp2jzFJi25Z8p7njhvgPwEjacIHTL82YmM=
-X-Received: by 2002:a05:6a20:6a26:b0:2e0:9b1a:6425 with SMTP id
- adf61e73a8af0-2e7d37f2c7cmr5674507637.52.1758821093555; Thu, 25 Sep 2025
- 10:24:53 -0700 (PDT)
+        bh=Ps1znGvbkVaXEVnKByBRiv/UuQfRsE9vw1c5JC/YArg=;
+        b=lzbqsCTc2XnyIJb/jOg1MCLsrXlN38meXRfBfjzVeaA9ZC7ZAY7R0I1wOmURzjZiGs
+         hNRSYtKyyJQKYlSaLIlJqjs0Bi+sbEbJDodNLkJvkpn3clnEyBjg4SjhhwgmNnnlpw9m
+         XcfmoUeBMreGyd2a0mTaDhRCOAPDh/ykddNkHbZdPSrhoS0i3uX3nW5XYuNZ8GgoKYqU
+         KCs4gs1IWnhuy/wWO+BDXYigNc9whKxJeeFbo1/l1zGoUFDyqm842nYRHa3r0QvICieW
+         XLtbcyigxnmNfkHG2eLcn4fj/dpRB0PZKCsGNslcIb9TKsmwOhSh8fjkpsFtIycMOw/W
+         2aJg==
+X-Forwarded-Encrypted: i=1; AJvYcCVOFuc+9w2g5jquLlUpGzS8tUrIWmcaCTkR86+f/0KrOR/P+oHEoUWNi8t0XioJd/Z//54LvaR0@vger.kernel.org
+X-Gm-Message-State: AOJu0YwYzgdBD4/VdAOnArsLFVKr1aee6s/kgps5mQk1qH8XDuTsi780
+	ZNwQuDFbP1I+aFDDF+sGWnhy7VaLLgKeqpZYw8ngzNf4k1MVJ19hfyfEefxECKMAOGPheMUL/91
+	7qc4BdpGlcQqIGkzSJTJx6RQfR/5wuJ0=
+X-Gm-Gg: ASbGncvHpRYlM6iVWTxBaqUZ3D+q/g7yW9q9WZWt7AzOGdMlNhUPxR7h2WYWJ6p/LcR
+	WBoIYB4P1g5BlpDCstsu4fiAbUYOudK7EFqTFY42Mvf2RtQHwQCPH0IESaci9KlF4G3kM8O+fIJ
+	B/4xsk59eq8448OSkEax3kMD2EgP9MlCxv/PK/UsLDtowML2IXMa8RblDJUuYbu1SOWmwMCOmo+
+	rORdz579NQWEJVtR8EpS/8=
+X-Google-Smtp-Source: AGHT+IERtJP4yKArjLd7Spfh81zpMovZaA2mNRIPJ9EYwYqEAhNv01fojMGCGP2U42CUl9VrWp6tPm5mBsH2WhMmmfM=
+X-Received: by 2002:a17:90b:4f86:b0:31e:cc6b:320f with SMTP id
+ 98e67ed59e1d1-3342a2574b0mr4566533a91.5.1758821321850; Thu, 25 Sep 2025
+ 10:28:41 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250924211716.1287715-1-ihor.solodrai@linux.dev> <20250924211716.1287715-4-ihor.solodrai@linux.dev>
-In-Reply-To: <20250924211716.1287715-4-ihor.solodrai@linux.dev>
+References: <20250924211716.1287715-1-ihor.solodrai@linux.dev>
+ <20250924211716.1287715-6-ihor.solodrai@linux.dev> <CAADnVQLVeZd0JOz-GBgZfi=t5kvtH_z1Ri2w6b-AW7DHgEBv5w@mail.gmail.com>
+In-Reply-To: <CAADnVQLVeZd0JOz-GBgZfi=t5kvtH_z1Ri2w6b-AW7DHgEBv5w@mail.gmail.com>
 From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Thu, 25 Sep 2025 10:24:39 -0700
-X-Gm-Features: AS18NWAPHXouIW6u15vmyeweW5NUjq0Wu_ulwmAdbjT6wmZjfyVCKaCsh-JWbeM
-Message-ID: <CAEf4Bza+fdzaPnFs-NWets5TA=80TPdaiydDXo-ykO9OdD_bvQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v1 3/6] selftests/bpf: update bpf_wq_set_callback macro
-To: Ihor Solodrai <ihor.solodrai@linux.dev>
-Cc: bpf@vger.kernel.org, andrii@kernel.org, ast@kernel.org, 
-	dwarves@vger.kernel.org, alan.maguire@oracle.com, acme@kernel.org, 
-	eddyz87@gmail.com, tj@kernel.org, kernel-team@meta.com
+Date: Thu, 25 Sep 2025 10:28:27 -0700
+X-Gm-Features: AS18NWB-4LZf9cOXY9YqPOuXPeqtspFedHp8sVRj_k25pAwxrufXUj48JJ82jg0
+Message-ID: <CAEf4BzY+9gxA+r6K4u==mC8DMs_0F6jsG72B4HXWQo5uQLOhZw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v1 5/6] bpf: mark bpf_stream_vprink kfunc with KF_IMPLICIT_PROG_AUX_ARG
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Ihor Solodrai <ihor.solodrai@linux.dev>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf <bpf@vger.kernel.org>, 
+	Andrii Nakryiko <andrii@kernel.org>, Alexei Starovoitov <ast@kernel.org>, dwarves <dwarves@vger.kernel.org>, 
+	Alan Maguire <alan.maguire@oracle.com>, Arnaldo Carvalho de Melo <acme@kernel.org>, Eduard <eddyz87@gmail.com>, 
+	Tejun Heo <tj@kernel.org>, Kernel Team <kernel-team@meta.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Sep 24, 2025 at 2:17=E2=80=AFPM Ihor Solodrai <ihor.solodrai@linux.=
-dev> wrote:
+On Thu, Sep 25, 2025 at 3:01=E2=80=AFAM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
 >
-> Subsequent patch introduces bpf_wq_set_callback kfunc with an
-> implicit bpf_prog_aux argument.
+> On Wed, Sep 24, 2025 at 10:17=E2=80=AFPM Ihor Solodrai <ihor.solodrai@lin=
+ux.dev> wrote:
+> >
+> > Update bpf_stream_vprink macro in libbpf and fix call sites in
 >
-> To ensure backward compatibility add a weak declaration and make
-> bpf_wq_set_callback macro to check for the new kfunc first.
+> 't' is missing in bpf_stream_vprintk().
 >
-> Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
-> ---
->  tools/testing/selftests/bpf/bpf_experimental.h | 7 ++++++-
->  1 file changed, 6 insertions(+), 1 deletion(-)
+> > the relevant selftests.
+> >
+> > Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
+> > ---
+> >  kernel/bpf/helpers.c                            | 2 +-
+> >  kernel/bpf/stream.c                             | 3 +--
+> >  tools/lib/bpf/bpf_helpers.h                     | 4 ++--
+> >  tools/testing/selftests/bpf/progs/stream_fail.c | 6 +++---
+> >  4 files changed, 7 insertions(+), 8 deletions(-)
+> >
+> > diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+> > index 6b46acfec790..875195a0ea72 100644
+> > --- a/kernel/bpf/helpers.c
+> > +++ b/kernel/bpf/helpers.c
+> > @@ -4378,7 +4378,7 @@ BTF_ID_FLAGS(func, bpf_strnstr);
+> >  #if defined(CONFIG_BPF_LSM) && defined(CONFIG_CGROUPS)
+> >  BTF_ID_FLAGS(func, bpf_cgroup_read_xattr, KF_RCU)
+> >  #endif
+> > -BTF_ID_FLAGS(func, bpf_stream_vprintk, KF_TRUSTED_ARGS)
+> > +BTF_ID_FLAGS(func, bpf_stream_vprintk, KF_TRUSTED_ARGS | KF_IMPLICIT_P=
+ROG_AUX_ARG)
 >
-> diff --git a/tools/testing/selftests/bpf/bpf_experimental.h b/tools/testi=
-ng/selftests/bpf/bpf_experimental.h
-> index d89eda3fd8a3..341408d017ea 100644
-> --- a/tools/testing/selftests/bpf/bpf_experimental.h
-> +++ b/tools/testing/selftests/bpf/bpf_experimental.h
-> @@ -583,8 +583,13 @@ extern int bpf_wq_start(struct bpf_wq *wq, unsigned =
-int flags) __weak __ksym;
->  extern int bpf_wq_set_callback_impl(struct bpf_wq *wq,
->                 int (callback_fn)(void *map, int *key, void *value),
->                 unsigned int flags__k, void *aux__ign) __ksym;
-> +extern int bpf_wq_set_callback(struct bpf_wq *wq,
-> +               int (callback_fn)(void *map, int *key, void *value),
-> +               unsigned int flags) __weak __ksym;
->  #define bpf_wq_set_callback(timer, cb, flags) \
-> -       bpf_wq_set_callback_impl(timer, cb, flags, NULL)
-> +       (bpf_wq_set_callback ? \
+> This kfunc will be in part of 6.17 release in a couple days,
+> so backward compat work is necessary.
+> I don't think we can just remove the arg.
+
+Can we still rename current "explicit prog_aux" version to
+bpf_stream_vprintk_impl() still?
+
+That would solve backwards compat problems and would be in line with
+bpf_wq_set_callback_impl() approach.
 
 
-use bpf_ksym_exists(), it has additional "fool-proofing" checks
+If we can't, then we'd have to name the new function something different?
 
-> +               bpf_wq_set_callback(timer, cb, flags) : \
-> +               bpf_wq_set_callback_impl(timer, cb, flags, NULL))
+Don't know if there is some other  BPF CO-RE and ELF symbol aliasing
+magic that can be used, we'll need to play with this to see what
+works.
+
 >
->  struct bpf_iter_kmem_cache;
->  extern int bpf_iter_kmem_cache_new(struct bpf_iter_kmem_cache *it) __wea=
-k __ksym;
-> --
-> 2.51.0
+> > --- a/tools/lib/bpf/bpf_helpers.h
+> > +++ b/tools/lib/bpf/bpf_helpers.h
+> > @@ -316,7 +316,7 @@ enum libbpf_tristate {
+> >  })
+> >
+> >  extern int bpf_stream_vprintk(int stream_id, const char *fmt__str, con=
+st void *args,
+> > -                             __u32 len__sz, void *aux__prog) __weak __=
+ksym;
+> > +                             __u32 len__sz) __weak __ksym;
 >
+> CI is complaining of conflicting types for 'bpf_stream_vprintk',
+> since it's using pahole master.
+> It will stop complaining once pahole changes are merged,
+> but this issue will affect all developers until they
+> update pahole.
+> Not sure how to keep backward compat.
