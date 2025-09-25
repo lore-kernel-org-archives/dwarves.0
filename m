@@ -1,127 +1,136 @@
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
+Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DABDB2E974D
-	for <dwarves@vger.kernel.org>; Thu, 25 Sep 2025 10:01:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1998B1FDA9E
+	for <dwarves@vger.kernel.org>; Thu, 25 Sep 2025 13:28:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758794477; cv=none; b=FPt4EoF+2WT/mNviZH2FynsXWSkSLw+RjtXYwSBgT9JhiNDrZF1clb7BvN9VHvvlB47ux820dsbloI7qiRg4q9TMnMHNQDf+h9BcwZysiG22WQuNwa8yDDblw9/uV/gTycMzO3+CZS5MCPIqjSBTIRwrn3NO3UGzTYXAR2LWVoY=
+	t=1758806916; cv=none; b=eQc7p0hdr7/vgY4vHPxCxbX8ZgJ6Lk7/1LEX8oaS7Eh7HOq/HpGT4WuQ0rrNzHRVxqLeia/dArsvB6lH6wgpuz0aR4mgR9+oqUJWhoHObkqc+5NSX2VUox4Q/ZBToBO+88Swvs7Wh1JJxWL5PHMFcBbQ7pFgSOSNLx2GA2QUczc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758794477; c=relaxed/simple;
-	bh=MmaMbvm0BD9NGLBFscAIFMVqjCmdg8rnqQ4WZdh20jg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=qYEZrzTX0piqOE6rBC15iYT6CMHUuUf+A1xwYYihEO1XyLdOLwJs4cqGeu8lECtrkwJWB3IB7eYgiGcGMy/ZF4rqckQ5pnHwD+MNz8SFxfJRGDQwrxHMvYYevyv1cMC1BRoPxErF1dMfk6GxiUhFgztQQckn1bgkUFRLyt3aRTQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=me7MDBbx; arc=none smtp.client-ip=209.85.221.45
+	s=arc-20240116; t=1758806916; c=relaxed/simple;
+	bh=Wtr4343jRw+x6tvTLVc6oPOqmQwis8WJiaqbBbi9p1M=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=I2blBSXUKfoGr0+XWWROnc2gAks37WkbDuJLdhFE0lTYyxpgGtNGhkEhkYJAQsVg4QZtPSTV3TJlB5fiHk5CrviL/5YozjIW7aBpEJWL507fr1Ys/KPWHb6ecKCc3klFl6DPACYWc/B7awoY9C5IKv/xOK9JRxLIzbddK7h6+5M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=McRjYv7P; arc=none smtp.client-ip=209.85.216.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="me7MDBbx"
-Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-3ee12a63af1so526789f8f.1
-        for <dwarves@vger.kernel.org>; Thu, 25 Sep 2025 03:01:15 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="McRjYv7P"
+Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-3322e63602eso1276822a91.0
+        for <dwarves@vger.kernel.org>; Thu, 25 Sep 2025 06:28:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1758794474; x=1759399274; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ua5lAPnVTXrXgCW85PYKdWzoS2UhfrJn6AOwiqTs+L0=;
-        b=me7MDBbxXUkYk/48dM6L9kTINAkz84AfsffG60w0KJNtx+nUhhY4FmKUe6Jxn+crey
-         vwnxtgb9oK7oH18SfMCxe6x6Pby2cafFqcH90iVfo3sm1+sUfO/8t7z+yAJrKS/JT5eO
-         Yw8SZk98nZKQo5sM2S8SO3jZBO0FtSLbJ2c4rN98oia5IzrO6OxKedsT27UHZ4siTGvU
-         qm8OZLLUCPtWgfuaxAgwHfdSAoiUPJO2N+HJR3jFUMsbwcVbRnPhibW8RCTYFvargrzH
-         LQHqlfQvXHyefM0VGiAsjmd3j+RrspBg9Na2TwlRvXbm+Gjf4i5SvI+L95NlMrfm4Pgl
-         DBHg==
+        d=gmail.com; s=20230601; t=1758806914; x=1759411714; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=nKSNE7rQEgC3Vt/685jIbcjO6yNnx0GPMdfTZMEBO/0=;
+        b=McRjYv7PQuAuJIgp1WkTzaUIConLHmqsNPAGPzUnwHpZ7iuxrHu+e3L+Fmsk5Y9ENh
+         xm06uFEdzjUAs0Ego6AyErXmy3OsQdDOLVhEhxWl5y1nlLnizk+DmbUqqV8a+Cs5rweT
+         EjVGlGDUBMlshJSIbk0Y1neGKLwPm0deamKo5RFZAafZ9M6rV30mxFWVt5f5G9koQnRb
+         4ghEnDp12xDtNxtasiERCFOPaEHUUGaRTzbgAncilj3KIQbYe72B3iekPEKWnXK3Hmyc
+         f+r+kb5RexANLtom0R7tuH0Cp8/JepZZQBiZHf85VAPzrtORbxs4CrDjFsIyHDkJCn2f
+         r/Qw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758794474; x=1759399274;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ua5lAPnVTXrXgCW85PYKdWzoS2UhfrJn6AOwiqTs+L0=;
-        b=pvhAaD63noHlea7sfHLkA9sycU8g267sN3kHjyVsHd+ttMD0bdmM7HDVp1Y323hlzf
-         yd0mB00Rg2qlXbsAL9nAAOO43EKIRt68aBthpqynuytNQ98Bqzqvz0cZ1DMysueILRJq
-         yEIyv4vIwWWphT6MSIRSOuhSBn7A/77ItRIzd3vmpv1WeOQPNGyo6BND1+KWssPbVQvs
-         xga4tEY1CIXBNmU2LYkdP9Ddxd2mS3gwx+/hJOdfcH3i830M7RJ29kCWrUZXB7AQd3OH
-         dwe8vFInHkQXvB4ptbhSWO1HMoP2IJi6jxS+2zijN/ThyaHtydZus4FOmLtW39UHbQAA
-         rjlQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUJMhSSv+tf6DNbrwy1Rxe32auabM4QUMIf07VtbjJTHZJRRbBO/iqDw+uUKb6GTZC3y71xp8o7@vger.kernel.org
-X-Gm-Message-State: AOJu0Yza1Lbu/VM2xrTbvCH7LaQEqV8LEkn4ZPFcN0D6ks1wJxXVipGV
-	rMilk2mSKWLGFjJbcc8fd5+ineDoN6pifPobmiSJc7EXUhZG2ndzZp17Mng4f2sf7FWofmDQ251
-	YE+VwwUMAT6XK1pCsvTX1kwyEOrQVLaigJIBcQALiDw==
-X-Gm-Gg: ASbGnctBL4J3ARJkw1e3WIhzvgwh8zK7MDUIOuT6cNAnxSF5fLHPiHENZFh/pOBTxPD
-	sHXyjBzHUac5c1ZB3TqTcxvw+2Ce1XGL0VcOdqk9gKXpdBqsgP+9m32Du9avXKcnaYv1/zknDYD
-	SPIrkG4RofjU8OXIHMNsVqwuDUnJkemrvwjn0N4wLyHO3Tud5Yuu7yejuoMJSjzptmJti801PY6
-	jLurg==
-X-Google-Smtp-Source: AGHT+IGtR2czsdkyEmAICV40coZ6c28sg3u9AZr4AKSP8hxkY5faznN8s+d+okKrk1LIYnfpOO2+/acK3rYiukENt30=
-X-Received: by 2002:a5d:588c:0:b0:3ee:15b9:97c4 with SMTP id
- ffacd0b85a97d-40e4cc63177mr2528966f8f.52.1758794474154; Thu, 25 Sep 2025
- 03:01:14 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1758806914; x=1759411714;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=nKSNE7rQEgC3Vt/685jIbcjO6yNnx0GPMdfTZMEBO/0=;
+        b=E6gPmPPwiMzf3s1cu7qdeUuGnXS5C0YqHzRhxGafJLXESXRHq0Tj/jK9HY3I0tAPOm
+         U9LcES7eSE57DJ2MJwpk87aBrV/06rJ3zi4BELpviHHR7h8np3FWBC92+H05IMeAix7a
+         vdZD/EKTasjLJDsNjb/n0983p+rh4GFxRRzmB0o8DUW/HMyufcUmxokwmwblbedWd+2Y
+         HRNZOapHogG+EGAjP2MohXDeXmoSI62/uSdsDNYL0mLlSz3p2EgOdfjGa1Ym0SBT+Yq7
+         HVXfND4dLupto8tofSiDDjquG9MjJwhOw1eEc9Kql4PbNj/m7NHtUgcdLB4P2or9QEOe
+         5z0Q==
+X-Forwarded-Encrypted: i=1; AJvYcCU2HiOkjfBchtaaKqc0vl6EV39u8o754xC0HaYTiErLj/TTTNGK+ePFlFSCyQhFxa3g11F3Q43c@vger.kernel.org
+X-Gm-Message-State: AOJu0YylLw+M47tmXjLCgWLWBD3Zk+QLK95bjhNrUGH58qr6wsI0ld9g
+	sWHlZaON5VYqR33HolOsNAd4PcIEAULUDCUmcNIToz5iAwA/SZYLmDkZ
+X-Gm-Gg: ASbGnctlJztPg/gqEXD91CIg58B6O3YahYmm2GWUz9foJUdO1XuP3kJN1ASjKY0TEeS
+	mflvOAXkRN8TZjRXnop3dH83N8muyJrDcNX4Ig4h7rWlVnardt7k0HugRJ8uxGIDQV/+jFT6nPd
+	+sHeAXxWEmRklt8dwyOCVVogFJiF1TUdtu5B4vT8e8kLJLmbd8Lo7T8hxs5bPlqP8pcGX6C//Uo
+	Z36XPbr2bycWHmsgj60hHcgYIbST/qv+keOk+Pgxq+LkYZ3kaqD4JPHx8TKnVbp2mW1PRAG8vAN
+	iHaQy5VUC1RxDl+wx2G6bwY0xbSFULDSgGtS9qPpW08ecHNxvD0yPuBcG0PdZpksnExwCd7R8ez
+	2jq+HeEUVfTPyMWx3jwLr1ss=
+X-Google-Smtp-Source: AGHT+IG+2OXHAZ/OOB6tGx4st9SdDqsB343hU2yAeiB/tTlQmrBbTF+J4DCQGTWAHYW4xflyZuXd/A==
+X-Received: by 2002:a17:90b:314c:b0:32e:5cba:ae26 with SMTP id 98e67ed59e1d1-3342a2ae68cmr3654294a91.23.1758806914245;
+        Thu, 25 Sep 2025 06:28:34 -0700 (PDT)
+Received: from [192.168.33.19] ([24.114.36.201])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-33471d71199sm2396108a91.5.2025.09.25.06.28.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 Sep 2025 06:28:33 -0700 (PDT)
+Message-ID: <b92d892f6a09fc7a411838ccf03dfebbba96384b.camel@gmail.com>
+Subject: Re: [PATCH dwarves v1 2/2] btf_encoder: implement
+ KF_IMPLICIT_PROG_AUX_ARG kfunc flag handling
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Ihor Solodrai <ihor.solodrai@linux.dev>, dwarves@vger.kernel.org, 
+ alan.maguire@oracle.com, acme@kernel.org, andrii <andrii@kernel.org>,
+ Alexei Starovoitov <ast@kernel.org>
+Cc: bpf@vger.kernel.org, tj@kernel.org, kernel-team@meta.com
+Date: Thu, 25 Sep 2025 06:28:26 -0700
+In-Reply-To: <a7f28918-7eda-42e9-ae41-446b7a2d9759@linux.dev>
+References: <20250924211512.1287298-1-ihor.solodrai@linux.dev>
+	 <20250924211512.1287298-3-ihor.solodrai@linux.dev>
+	 <4fb8a812fdd01f115a99317c8e46ad055b5bf102.camel@gmail.com>
+	 <a7f28918-7eda-42e9-ae41-446b7a2d9759@linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.52.3-0ubuntu1 
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250924211716.1287715-1-ihor.solodrai@linux.dev> <20250924211716.1287715-6-ihor.solodrai@linux.dev>
-In-Reply-To: <20250924211716.1287715-6-ihor.solodrai@linux.dev>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Thu, 25 Sep 2025 11:01:03 +0100
-X-Gm-Features: AS18NWBuk_kSerlDHBMCegasZ7D_viImTdL1RG35VfP-zH03EO5RnHpv-wkb75c
-Message-ID: <CAADnVQLVeZd0JOz-GBgZfi=t5kvtH_z1Ri2w6b-AW7DHgEBv5w@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v1 5/6] bpf: mark bpf_stream_vprink kfunc with KF_IMPLICIT_PROG_AUX_ARG
-To: Ihor Solodrai <ihor.solodrai@linux.dev>, Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: bpf <bpf@vger.kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, dwarves <dwarves@vger.kernel.org>, 
-	Alan Maguire <alan.maguire@oracle.com>, Arnaldo Carvalho de Melo <acme@kernel.org>, Eduard <eddyz87@gmail.com>, 
-	Tejun Heo <tj@kernel.org>, Kernel Team <kernel-team@meta.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Wed, Sep 24, 2025 at 10:17=E2=80=AFPM Ihor Solodrai <ihor.solodrai@linux=
-.dev> wrote:
->
-> Update bpf_stream_vprink macro in libbpf and fix call sites in
+On Wed, 2025-09-24 at 20:59 -0700, Ihor Solodrai wrote:
 
-'t' is missing in bpf_stream_vprintk().
+[...]
 
-> the relevant selftests.
->
-> Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
-> ---
->  kernel/bpf/helpers.c                            | 2 +-
->  kernel/bpf/stream.c                             | 3 +--
->  tools/lib/bpf/bpf_helpers.h                     | 4 ++--
->  tools/testing/selftests/bpf/progs/stream_fail.c | 6 +++---
->  4 files changed, 7 insertions(+), 8 deletions(-)
->
-> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-> index 6b46acfec790..875195a0ea72 100644
-> --- a/kernel/bpf/helpers.c
-> +++ b/kernel/bpf/helpers.c
-> @@ -4378,7 +4378,7 @@ BTF_ID_FLAGS(func, bpf_strnstr);
->  #if defined(CONFIG_BPF_LSM) && defined(CONFIG_CGROUPS)
->  BTF_ID_FLAGS(func, bpf_cgroup_read_xattr, KF_RCU)
->  #endif
-> -BTF_ID_FLAGS(func, bpf_stream_vprintk, KF_TRUSTED_ARGS)
-> +BTF_ID_FLAGS(func, bpf_stream_vprintk, KF_TRUSTED_ARGS | KF_IMPLICIT_PRO=
-G_AUX_ARG)
+> I'm not sure how generic KF_IMPLICIT_ARG would even work.
+> Any *implicit* parameter requires a very concrete implementation in
+> the verifier: an actual pointer of a particular type is injected after
+> the verification.
 
-This kfunc will be in part of 6.17 release in a couple days,
-so backward compat work is necessary.
-I don't think we can just remove the arg.
+Does not seem complicated:
 
-> --- a/tools/lib/bpf/bpf_helpers.h
-> +++ b/tools/lib/bpf/bpf_helpers.h
-> @@ -316,7 +316,7 @@ enum libbpf_tristate {
->  })
->
->  extern int bpf_stream_vprintk(int stream_id, const char *fmt__str, const=
- void *args,
-> -                             __u32 len__sz, void *aux__prog) __weak __ks=
-ym;
-> +                             __u32 len__sz) __weak __ksym;
+- In pahole generate a special decl_tag for bpftool.
+- In bpftool, don't emit last argument to vmlinux.h, if that flag is presen=
+t.
+- on kernel side, when checking kfunc args, also check for the flag
+  and switch over types recorded for last function parameter in BTF.
+  If kernel knows how to handle it, great, if it does not, emit
+  verifier error.
+- Not sure, but likely, the change on the libbpf side will be needed,
+  as it compares function prototypes between program and kernel BTFs.
 
-CI is complaining of conflicting types for 'bpf_stream_vprintk',
-since it's using pahole master.
-It will stop complaining once pahole changes are merged,
-but this issue will affect all developers until they
-update pahole.
-Not sure how to keep backward compat.
+E.g., for bpf_wq_set_callback keep the definition as is:
+
+__bpf_kfunc int bpf_wq_set_callback(struct bpf_wq *wq,
+				    int (callback_fn)(void *map, int *key, void *value),
+				    unsigned int flags,
+				    struct bpf_prog_aux *aux)
+                   =20
+Kernel BTF will have it with full set of parameters.
+But because of the flag, it will be printed w/o last parameter in
+vmlinux.h:
+
+extern int bpf_wq_set_callback(struct bpf_wq *wq,
+				    int (callback_fn)(void *map, int *key, void *value),
+				    unsigned int flags) __weak __ksym
+
+On kernel side check_kfunc_args() will have access to complete BTF
+declaration, so it can:
+- check presence of the flag
+- lookup bpf_prog_aux from the kernel side BTF
+- call set_kfunc_arg_prog_regno.
+
+> So we have to do a type check on pahole side to catch invalid kfunc
+> declarations. And the verifier of course must be very strict about
+> where it can pass pointers to kernel objects.
+
+Type checks on pahole side will require upgrades to both kernel and
+pahole, when new implicit parameter types are added. I'd try to avoid
+that.
+
+Also, do we plan to have several implicit parameters passed to a same
+function?
