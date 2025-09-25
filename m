@@ -1,106 +1,215 @@
-Received: from out-185.mta0.migadu.com (out-185.mta0.migadu.com [91.218.175.185])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F40E1BC9E2
-	for <dwarves@vger.kernel.org>; Thu, 25 Sep 2025 03:59:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.185
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 504361805E
+	for <dwarves@vger.kernel.org>; Thu, 25 Sep 2025 09:49:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758772786; cv=none; b=iAuRfGXoU+SWhoSgtT3w+KQa9W8EYCo9W1Y2PdUVN+qGR+g40Yz/mballn93GBqXDkov4BQnQPkr4STVrcW/tgeW4fU7CRaIKPvMe6sSOYxaPN33LKhnvFn3TMHuM13pWtBmPU/j9rile3/cLdem46m5bNDJAC69AkBNG4odZyA=
+	t=1758793786; cv=none; b=sCKRI0YYR4e1qFrA9BXZtNXiUjK5tdW2KRZrB/dqlhZCqAB4H4QuVsPJ0hw1ShgLUkYzyY/EUIrPIP9RYNCPRx/pimjdcyD3/Kczo8X3+4e6MsUMPi2iUfUNb/VNGHCFOa0ie2jPH8/GGGb6p5MPbBbxKgByfSO0D0FZeNQCSmo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758772786; c=relaxed/simple;
-	bh=ePsaRNAeU6Xr6umqa5d+ci1pHN6nOzsF/9/qmOkJ3pM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=BZd19QNwpJTrf9u4SC7q3NowotvJ0pj1GPUeLVtFRvJeffLQp9gbdzDFvVtIpvO+QpRLR6W2hMsVpUTFlllYgfFivOAxLJYMeEolVIYRoIBqNPDKXfuaNtcQaE0g9zlAgg4OmbngEm77gDfS15snR/sCPgSR5LXSmAoyBMog5Bw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=WcZH+J4d; arc=none smtp.client-ip=91.218.175.185
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1758793786; c=relaxed/simple;
+	bh=8Ar+LW16cuafXplhrJrUtsg6Y0P549XzFqMr05t7WHs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ckEEu3hr3hdicCM0OSBRO4wqTWDOKnDZqmFQY1vMWH/ZqdQVICisUYiN9CgUD7RDJ6KTJ9rVth3LNB05HOskdXu6HlHV2tZnREhWhkwFSiYqYD0fP1d/PHNK2sMjI6+7E+2ugJJxHUt79G2dg46ww+BZvsGC7w9+AIgGmiyx7Pc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XEKpyGIM; arc=none smtp.client-ip=209.85.221.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="WcZH+J4d"
-Message-ID: <a7f28918-7eda-42e9-ae41-446b7a2d9759@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1758772772;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=cPRyhmW5HLnkAnQTp0om7bXwksvc0OFNthNGDCOxHs8=;
-	b=WcZH+J4d7cFDX1qJfeczpAARaAzFB/97y3hyZXiY8ETU/+qax9aoQL15HACsKQk1YAd+Cf
-	2O1I9sreC6IfLmkts6LsqluHi45n7vT32aNLMPJySRw9p0SJbFcUbZeR5eTI8YtAjqvU5M
-	sKAHj3zGEf75lG+/sMWzqW7MgIU4o+Y=
-Date: Wed, 24 Sep 2025 20:59:28 -0700
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XEKpyGIM"
+Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-3ece0e4c5faso777382f8f.1
+        for <dwarves@vger.kernel.org>; Thu, 25 Sep 2025 02:49:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1758793783; x=1759398583; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xAdB0h6gywyYGEbcKZEpB8tiADjT0Zg7QlPCyUrAOtk=;
+        b=XEKpyGIMZUrpgF9oIsujNdtSj4k/VSkSfIzAkzjWUxj0H6Y/SMWD1RbXfErURNXU0D
+         o7zEodBsBdwiAX34eDRxol6XTXv24VZHaodDP9iaYMcLfFxpROo/iiuyfqGgAEeI4h0A
+         CYiCFdQ9C9/pLqK5YM3LjHRreTnLuFHfslkHohaG6f9e+Zgt7srZWBl22zMra6+u0d/E
+         Wi2R/LwGByUajOyFDCEzYW7WUfIhWJ4d9/h8KXs/XOzYR7/Ei20FsRSRl8iy9bZsWuF/
+         aBbanQVbnbfA7oIw0KPE5zehwk0jNGO1h+4+eOn04kn/Ck3pkgnowwmpLWW7WSWMREW6
+         t/DQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1758793783; x=1759398583;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=xAdB0h6gywyYGEbcKZEpB8tiADjT0Zg7QlPCyUrAOtk=;
+        b=By1slrxuMrWSXxNu8WKjPVnwMr1utsVhsFiRUj0HK/dx2MLF38O2BootzBPs2X8wL6
+         +Up3ayZN5Y3uANuwJDG1kOKml9pNubdFz4yXidDu0VepHYBttcebL57aFgPkIj5YW8WJ
+         dj6clxAR8ZZSwZPZlxhpRjFPapoTkyM3QnwTzTVz9WdUw3NsJFqd9g3k6DN7C/KbnPZg
+         kwr0tli198C09FG2+Dt7ztQWBpDgDww6WfLAv7iM6DZoVKiTury6jFsYnUwWvbVfBOUp
+         XQzkKqI7hOdGugbkeqc/+hAPVxoDOXusOYp8KPGbZC8PKpZE2lKQtfoQ6i5tJlCP8HM8
+         o92A==
+X-Forwarded-Encrypted: i=1; AJvYcCUP6frqfXSaeSv8zSfcLujF6wXjHNNfHP+155O2Fpbw0Njr+L4A6cJTf3Mykc8WLFbPP+HnmkV9@vger.kernel.org
+X-Gm-Message-State: AOJu0YxYrQFEZQqCAD6LSmZ+C+0Us8a9FNDiQRY7rBk67OfIsPshfsWD
+	JvZdRQv5yzybov3hgMaE9Vhu9ixHh1kpOQFwsNhWUxMafFC5HhQkHfrikeTSaewboUQigV9BGxy
+	3ybQC5Rz2LwTkyYBQ5fBDGuM19tKTy5A=
+X-Gm-Gg: ASbGncsooW879G3dBaTVepT/UQnr9FpF2Icsk9yr13OLxk7deWSF986avC5I8OcK0Sc
+	cxkTAvVb8EgbccUPfZuu3oroKlLQPPmmkcRQq9u1VxQcugZ209eWE+uNT3pA8nQMUu+jYwjPfqP
+	VOYMyMCdNtydnxct/GT2z+rIhjoCnP7XdX1902DmeYgJW4LugLvxYJtTSQEnDY0DLTgktQA0i+l
+	FryWQ==
+X-Google-Smtp-Source: AGHT+IEo0J7byEs7BdWOXsGPzkT2J09Ix+etXUhkwQcB9QQkq4MZ1w/7V+zQyT9gfSuagZLTrmn+cv5Vxa5I6YBHVns=
+X-Received: by 2002:a05:6000:220f:b0:3ec:3cac:7dfd with SMTP id
+ ffacd0b85a97d-40e44c3da28mr2914145f8f.26.1758793782363; Thu, 25 Sep 2025
+ 02:49:42 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH dwarves v1 2/2] btf_encoder: implement
- KF_IMPLICIT_PROG_AUX_ARG kfunc flag handling
-To: Eduard Zingerman <eddyz87@gmail.com>, dwarves@vger.kernel.org,
- alan.maguire@oracle.com, acme@kernel.org, andrii <andrii@kernel.org>,
- Alexei Starovoitov <ast@kernel.org>
-Cc: bpf@vger.kernel.org, tj@kernel.org, kernel-team@meta.com
-References: <20250924211512.1287298-1-ihor.solodrai@linux.dev>
- <20250924211512.1287298-3-ihor.solodrai@linux.dev>
- <4fb8a812fdd01f115a99317c8e46ad055b5bf102.camel@gmail.com>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
-In-Reply-To: <4fb8a812fdd01f115a99317c8e46ad055b5bf102.camel@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+References: <20250924211716.1287715-1-ihor.solodrai@linux.dev> <20250924211716.1287715-2-ihor.solodrai@linux.dev>
+In-Reply-To: <20250924211716.1287715-2-ihor.solodrai@linux.dev>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Thu, 25 Sep 2025 10:49:31 +0100
+X-Gm-Features: AS18NWDI0PcoHJucBujAEwrYnqvMKkwuEPh-avG_8_H40XT5_nl48CsvY_ofg7w
+Message-ID: <CAADnVQLvuubey0A0Fk=bzN-=JG2UUQHRqBijZpuvqMQ+xy4W4g@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v1 1/6] bpf: implement KF_IMPLICIT_PROG_AUX_ARG flag
+To: Ihor Solodrai <ihor.solodrai@linux.dev>
+Cc: bpf <bpf@vger.kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>, dwarves <dwarves@vger.kernel.org>, 
+	Alan Maguire <alan.maguire@oracle.com>, Arnaldo Carvalho de Melo <acme@kernel.org>, Eduard <eddyz87@gmail.com>, 
+	Tejun Heo <tj@kernel.org>, Kernel Team <kernel-team@meta.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Wed, Sep 24, 2025 at 10:17=E2=80=AFPM Ihor Solodrai <ihor.solodrai@linux=
+.dev> wrote:
+>
+> Define KF_IMPLICIT_PROG_AUX_ARG and handle it in the BPF verifier.
+>
+> The mechanism of patching is exactly the same as for __prog parameter
+> annotation: in check_kfunc_args() detect the relevant parameter and
+> remember regno in cur_aux(env)->arg_prog.
+>
+> Then the (unchanged in this patch) fixup_kfunc_call() adds a mov
+> instruction to set the actual pointer to prog_aux.
+>
+> The caveat for KF_IMPLICIT_PROG_AUX_ARG is in implicitness. We have to
+> separately check that the number of arguments is under
+> MAX_BPF_FUNC_REG_ARGS.
+>
+> Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
+> ---
+>  include/linux/btf.h   |  3 +++
+>  kernel/bpf/verifier.c | 43 ++++++++++++++++++++++++++++++++++++-------
+>  2 files changed, 39 insertions(+), 7 deletions(-)
+>
+> diff --git a/include/linux/btf.h b/include/linux/btf.h
+> index f06976ffb63f..479ee96c2c97 100644
+> --- a/include/linux/btf.h
+> +++ b/include/linux/btf.h
+> @@ -79,6 +79,9 @@
+>  #define KF_ARENA_RET    (1 << 13) /* kfunc returns an arena pointer */
+>  #define KF_ARENA_ARG1   (1 << 14) /* kfunc takes an arena pointer as its=
+ first argument */
+>  #define KF_ARENA_ARG2   (1 << 15) /* kfunc takes an arena pointer as its=
+ second argument */
+> +/* kfunc takes a pointer to struct bpf_prog_aux as the last argument,
+> + * passed implicitly in BPF */
 
+This is neither networking nor kernel comment style.
+Pls use proper kernel comment style in a new code,
+and reformat old net/bpf style when adjusting old comments.
 
-On 9/24/25 6:22 PM, Eduard Zingerman wrote:
-> On Wed, 2025-09-24 at 14:15 -0700, Ihor Solodrai wrote:
->> When a kfunc is marked with KF_IMPLICIT_PROG_AUX_ARG, do not emit the
->> last parameter of this function to BTF.
-> 
-> [...]
-> 
->> @@ -887,6 +923,12 @@ static int32_t btf_encoder__add_func_proto_for_state(struct btf_encoder *encoder
->>  	nr_params = state->nr_parms;
->>  	type_id = state->ret_type_id;
->>  
->> +	if (is_kfunc_state(state) && KF_IMPLICIT_PROG_AUX_ARG & state->elf->kfunc_flags) {
->> +		if (validate_kfunc_with_implicit_prog_aux_arg(state))
->> +			return -1;
->> +		nr_params--;
->> +	}
->> +
->>  	id = btf_encoder__emit_func_proto(encoder, type_id, nr_params);
->>  	if (id < 0)
->>  		return id;
-> 
-> This change hides the fact that function accepts one more parameter
-> both from kernel BTF and from program BTF (via vmlinux.h).
+> +#define KF_IMPLICIT_PROG_AUX_ARG (1 << 16)
 
-Right, this is intentional.
+The name is too verbose imo.
+How about
+KF_HIDDEN_PROG_ARG
+or
+KF_PROG_LAST_ARG
 
-> Do we anticipate other implicit parameter types?
+"Implicit" is not 100% correct, since it's very explicit
+in kfunc definition in C, but removed from BTF.
+"Hidden" is also not an exact fit for the same reasons.
+Hence my preference is KF_PROG_LAST_ARG.
 
-It's very plausible, but I don't know of specific examples.
+"aux" part is also an implementation detail.
 
-> Because if we do, it seems like having some generic KF_IMPLICIT_ARG
-> and hiding it only from vmlinux.h seem more flexible.
+>  /*
+>   * Tag marking a kernel function as a kfunc. This is meant to minimize t=
+he
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index e892df386eed..f1f9ea21f99b 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -11948,6 +11948,11 @@ static bool is_kfunc_rcu_protected(struct bpf_kf=
+unc_call_arg_meta *meta)
+>         return meta->kfunc_flags & KF_RCU_PROTECTED;
+>  }
+>
+> +static bool is_kfunc_with_implicit_prog_aux_arg(struct bpf_kfunc_call_ar=
+g_meta *meta)
+> +{
+> +       return meta->kfunc_flags & KF_IMPLICIT_PROG_AUX_ARG;
+> +}
+> +
+>  static bool is_kfunc_arg_mem_size(const struct btf *btf,
+>                                   const struct btf_param *arg,
+>                                   const struct bpf_reg_state *reg)
+> @@ -12029,6 +12034,18 @@ static bool is_kfunc_arg_prog(const struct btf *=
+btf, const struct btf_param *arg
+>         return btf_param_match_suffix(btf, arg, "__prog");
+>  }
+>
+> +static int set_kfunc_arg_prog_regno(struct bpf_verifier_env *env, struct=
+ bpf_kfunc_call_arg_meta *meta, u32 regno)
+> +{
+> +       if (meta->arg_prog) {
+> +               verifier_bug(env, "Only 1 prog->aux argument supported pe=
+r-kfunc");
+> +               return -EFAULT;
+> +       }
+> +       meta->arg_prog =3D true;
+> +       cur_aux(env)->arg_prog =3D regno;
+> +
+> +       return 0;
+> +}
+> +
+>  static bool is_kfunc_arg_scalar_with_name(const struct btf *btf,
+>                                           const struct btf_param *arg,
+>                                           const char *name)
+> @@ -13050,6 +13067,21 @@ static int check_kfunc_args(struct bpf_verifier_=
+env *env, struct bpf_kfunc_call_
+>                 return -EINVAL;
+>         }
+>
+> +       /* KF_IMPLICIT_PROG_AUX_ARG means that the kfunc has one less arg=
+ument in BTF,
+> +        * so we have to set_kfunc_arg_prog_regno() outside the arg check=
+ loop.
+> +        */
 
-I'm not sure how generic KF_IMPLICIT_ARG would even work.
+Use kernel comment style.
 
-Any *implicit* parameter requires a very concrete implementation in
-the verifier: an actual pointer of a particular type is injected after
-the verification. So we have to do a type check on pahole side to
-catch invalid kfunc declarations. And the verifier of course must be
-very strict about where it can pass pointers to kernel objects.
+> +       if (is_kfunc_with_implicit_prog_aux_arg(meta)) {
+> +               if (nargs + 1 > MAX_BPF_FUNC_REG_ARGS) {
+> +                       verifier_bug(env, "A kfunc with KF_IMPLICIT_PROG_=
+AUX_ARG flag has %d > %d args",
+> +                                    nargs + 1, MAX_BPF_FUNC_REG_ARGS);
+> +                       return -EFAULT;
+> +               }
+> +               u32 regno =3D nargs + 1;
 
-From a couple of discussions with Andrii, my impression is that it
-would be beneficial to have some kind of generic "execution context"
-available to BPF programs and/or kfuncs to cover all potential
-implicit arguments. But that's a separate big discussion.
+Variable declaration should be first in the block
+followed by a blank line.
 
-Supporting bpf_prog_aux specifically is a pragmatic improvement to the
-current inconvenience that sched_ext has to deal with [1].
+Also I would remove this double "> MAX_BPF_FUNC_REG_ARGS" check.
+Move if (is_kfunc_with_prog_last_arg(meta))
+couple lines above before the check,
+and actual_nargs =3D nargs + 1;
+if (actual_nargs > MAX_BPF_FUNC_REG_ARGS)
+to cover both cases.
+I wouldn't worry that verbose() isn't too specific.
+If it prints nargs and actual_nargs whoever develops a kfunc
+can get an idea.
+Also in the future there is a good chance we will add more
+KF_FOO_LAST_ARG flags to cleanup other *_impl() kfuncs
+that have a special last argument, like bpf_rbtree_add_impl.
+If all of them copy paste "> MAX_BPF_FUNC_REG_ARGS" check
+it will be too verbose. Hence one nargs check for them all.
 
-[1] https://lore.kernel.org/bpf/20250920005931.2753828-42-tj@kernel.org/
-
+pw-bot: cr
