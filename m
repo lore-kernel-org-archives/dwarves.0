@@ -1,59 +1,59 @@
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FC5F2EAB64
-	for <dwarves@vger.kernel.org>; Fri, 26 Sep 2025 12:10:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4370D1F2BB5
+	for <dwarves@vger.kernel.org>; Fri, 26 Sep 2025 15:11:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758888622; cv=none; b=bztdoBeqLgDP7V0RncnZEWGwIsc0O5FtgfrYUuSB163Mqouo6Hnn4jtsQies2IGply+Nop1RNOxziuQxH2sQ622Zl3iyNagC7SQBvpHmcwsoNwhTpD7hd3pmW4i1AzhXJ/GdMX4MxV7+G5RiDx9I1rm9R9uam5GJsB6xKvDgKac=
+	t=1758899498; cv=none; b=RsaK10QwwsrZirLhhsFssBtKeEPMdKInvUt7Na+scuThimonAVLIpmOWmZKVJOM2+W6mj/g8+A/Yxjs21uA/VgYGylC16IHLpbo1zsTet02HPas29KQ6mZqQDJVXMmB72CjeY49IS7audUWaYtq6eeOQlqol5kxWzRslHp2g8/8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758888622; c=relaxed/simple;
-	bh=98Qnu7flfxkf7wI/METMehtEGP+JyUBz2GmZ46j+rx0=;
+	s=arc-20240116; t=1758899498; c=relaxed/simple;
+	bh=g9pIptTJimWNIf/L/brlFk5fsMJfisO7ECBgQLbZUxo=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=OCw3to0PdS5cVKqITTXYKFBN6/4i/eSsTQ1sx+1H/Uj/orq5ziTS7v7Tsjh2ZpQzaKYFORT0zCuaM3pNe9evn6Y7zIyUB68YUE93bGVdobHl1mbW2Oy3iU7TbkfJQYa0BXE0EqR2/D9yvi+IB6B10ItOerD9nFDMiPoaKhtSOxs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DMKZdsiw; arc=none smtp.client-ip=209.85.128.50
+	 To:Cc:Content-Type; b=ZavheooBoP2nycbQnwmnVcTW1nbzIaYa9MKvMExiKfrYTpGJD4u48OSZqSoS2XKspAbb/syzhvyxNUCWiF6zkA9nmUCtIIE7oQakywOhN/7rADqrqETNFCUyodVViLCzwYbLwzHiaxSosOYENl5Xwa/8FETKp4gOIrwouaqItKc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eoseU7mK; arc=none smtp.client-ip=209.85.216.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DMKZdsiw"
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-46c889b310dso16479565e9.0
-        for <dwarves@vger.kernel.org>; Fri, 26 Sep 2025 05:10:20 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eoseU7mK"
+Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-32ed19ce5a3so1972764a91.0
+        for <dwarves@vger.kernel.org>; Fri, 26 Sep 2025 08:11:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1758888618; x=1759493418; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1758899496; x=1759504296; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=98Qnu7flfxkf7wI/METMehtEGP+JyUBz2GmZ46j+rx0=;
-        b=DMKZdsiwug3nYxSqV0Vx/uR4PtJx6NxHMXfkNOcEUXnUK4P0Li0uS88dOIXyqF3T4/
-         D+EY2LDNxuIHMtEsQKr9m0P3MVXwxPzRKhbM885ReD4vY0EWDtWkffRo6Tfi/LLnGltj
-         T1N9YLWlnnDZtYUaA01+rJkvhHw05EAFiZoAla5vRgObf3ebb94bZ4uhd1kLCr6tOOA+
-         zcD59qseHc/HwwzaF/qAyvzppz+2rcyHQEnQoqfbF87SXgPdsMY0gCZSj3QzPqXQ/AM9
-         zqndYKycO3OvrVJAMoZkCJ45Eij2BYz9qYzwS3Xf/aUwmIT50FurYs/6mDHBtYQxAzZD
-         G5uw==
+        bh=g9pIptTJimWNIf/L/brlFk5fsMJfisO7ECBgQLbZUxo=;
+        b=eoseU7mKR8vj5pTw4/Wtuk0Bwu9dZLJR/JFWwOFVAth0xqA7R5bduIjjUy3+bfYiLD
+         nW1FM+gwIZvZlwPzB00SxL3uBeCiDD71qzASvfg9nGvBOvQLkPqSgmoq7mOtrgU2hAqn
+         lvbMmRc0noIQJZp1/BobeLKG11LBgm0gdx2xkw+fveHS/vHI3OSxgbSU9l9um4WgRI6e
+         vsFYCAUQCIIx1jTH8wpAcZLqRFvy8ofodyM323lzzYok2tznIq6S5EreDtBKT077ZJk+
+         rYNxulPWH5+fOMZDAAB0lMIj/t57VAh8pDrteqE/94i4hlD/jlqMh5KdNN99b1MEqvAb
+         kKRA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758888618; x=1759493418;
+        d=1e100.net; s=20230601; t=1758899496; x=1759504296;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=98Qnu7flfxkf7wI/METMehtEGP+JyUBz2GmZ46j+rx0=;
-        b=bOGaHREkkXN6UEUmII3YlVJv8YxE9cdXdHEAWUoAaEtnA5udt9wMQlrUd+/PI+jQNO
-         MWirxDwGwg2oTZZYucqIrgp7C6UlJxdkyXK3TWlcCJN+T3/ZHqaqW+BhU2YEYnyFsnal
-         nSbRwPM9yODUF1mFxp6dcn/7UslT9G38QE/JXYlWbrcv2lAAaPRAEMTDwlC3kIL5APvG
-         J+KvOWtHlkRo4+8kiEipjjk+eYjH7K2uJUFAkzw5KE70mwNtijq+Pprs5k51NEj7NcqX
-         FCXtOELtHX1CuXNC6pbVvE9IDMVF1GCH/PjXQBmahoZNhKmhostBgOgW4BPz4YJNbDEk
-         pBIg==
-X-Forwarded-Encrypted: i=1; AJvYcCV5IQ9c34qOk7CLssdm9GwFyZQhUDkUFfj4i/Qv2oTeCsIXiUZpTDMV8WfAWUUIMsyguw+fVw7F@vger.kernel.org
-X-Gm-Message-State: AOJu0YyFygqVWKJFRMmVgASP2hXwnN4yJ/9HpufZz3H6EBesiMTbNNhj
-	mu8W3zLos7qilofYhJBOcjVKe2Qmid6BTApfzj5MXsaQfBI+F2/E1aTZuDhZIjMS2t2u3UZWCnB
-	1/BDGBNt6/dJFYtxFcZIxEX0p1xtsHUbQx25I
-X-Gm-Gg: ASbGncs99IT6heuKYfOHbMPMiNt48FicYp+qXGQpkbBND7uOphc9k2ynhGexpzDjgVF
-	II0FXQPpBz/9BRZDPmEYEeFrr7WWYMJXeocEN6pid5fx1txPF5jYddvcZj3CwErtTpHUGF+nk4f
-	8FJFWdZXgPjTtmeeFLDMRhCloHIJSm9HztMj3W+0YWjcE1w5BAeGLjIQUm+pAiVLI2OUWmv3K1+
-	H5YEkswPao3WgZLavt1
-X-Google-Smtp-Source: AGHT+IH9loFwUgH3YJGS+0RMq0eswdUZUaJXCi+wpIdfNHiJAuvdmXHUnrSkjTiparpZLGmnpYEMlVTEa/AVQtMm2GI=
-X-Received: by 2002:a05:600c:4d01:b0:459:d577:bd24 with SMTP id
- 5b1f17b1804b1-46e33c36bacmr37230875e9.7.1758888618365; Fri, 26 Sep 2025
- 05:10:18 -0700 (PDT)
+        bh=g9pIptTJimWNIf/L/brlFk5fsMJfisO7ECBgQLbZUxo=;
+        b=V9VvIq+UGqLhTGGccxCNgOAJIIAgiHYogoIF1G0q2YClv1zwWGSf+5IS56Aj3UxM4a
+         qW4glEPmv2N5T5Fa5eD2ZmzbA2ebO7Xdic0PaOBecv7KW1ecyj0LMbzE3wdaBFp4OvOb
+         gl5AU3ZL4YrdjqZ+Lie+eQzp2glKFlRf75EQLKY+snV90SSYzzKm2itUgUprJXT4iQfz
+         NFs8eabk6c9MzsY6W+J9sxDC5ZhNDgTddvqVrcYbHTWC8Je41bAvQXmia1X+enTz6LIc
+         ZdwL1gmqkU+clLqrKevf9aEi3bNVe20rTmXw4/wkyQgM73KHHYlzcOy9mT5o/a8EYwkK
+         NHiw==
+X-Forwarded-Encrypted: i=1; AJvYcCU9bJT1MW1LIf6PMxd1g3A3OpZDUMTVWY3uHVEWRiAwZosxVrVSpB7gQjjN3wj8TqjxZXuAdtCb@vger.kernel.org
+X-Gm-Message-State: AOJu0YzOuFd8dDcMfSNC865CzGt1l9lFskI00sHHNeuZWm7ZzV/etia8
+	+rg9vO+WUKBVlUbWcSj0McXnWuTl14C0TQCNpQ+PbRLjTnOb/DjrZzuOmEgnyuFKTcD3KSXc5IC
+	66ChDlD3G1JovY/maQMNDCkxShHzeLVE=
+X-Gm-Gg: ASbGncscz2L9fMlk4RNSGroRKH2XEp9pRRFUoN4FaYH97rt1IqH5sbowEbfaMgj+hJL
+	KVCAGj5/J6zAJ0SBKNSvHB0Tkmf3W34P28C/36Rp36jVCspRZYglSKALnEqKe7mdWTrTn3n0SYJ
+	M9cVQS0Bt1HFPPv7SYMfQML3uDcKOuUFYz6k58hBu3msITF+ylhI1ilZpVR9Lu1fmeukWBGTcgd
+	pORqxUpTrZ1ieA=
+X-Google-Smtp-Source: AGHT+IFhJlYN40bI1MEGGa45XXHXXTHqcL+90nE/4Q0kdrKgnR2L0H7EcM4P1dJR7SAXJ5OZiKfRAiJ+xE3eBBKayEg=
+X-Received: by 2002:a17:90b:1b12:b0:32e:3686:830e with SMTP id
+ 98e67ed59e1d1-334302782a8mr7663171a91.23.1758899496215; Fri, 26 Sep 2025
+ 08:11:36 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
@@ -65,14 +65,15 @@ References: <20250924211716.1287715-1-ihor.solodrai@linux.dev>
  <6a6403ec-166a-4d48-8bf5-f43ae1759e5f@linux.dev> <CAEf4BzbYXADoUge5C7zhzZAEDESE7YJFwW_jO4-F5L3j-bwPMw@mail.gmail.com>
  <CAADnVQL+28vPquMgw+hZMT1P6NkE5jLUXf=HDNj65N9np1rgfw@mail.gmail.com>
  <CAEf4BzYm=dTqT=Aj-=Jg=n8AtcxZL1CiQiY5mVbUNA-pesz=sQ@mail.gmail.com>
- <CAP01T74_ZfQtHTsBmjNsGnuB4TeTTqqw2BOb8=3od6znS8XtQg@mail.gmail.com> <CAEf4BzY1g1svHDfQu8UmauTerWLMEk=OMWKO-f9HSe7tfB1arA@mail.gmail.com>
-In-Reply-To: <CAEf4BzY1g1svHDfQu8UmauTerWLMEk=OMWKO-f9HSe7tfB1arA@mail.gmail.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Fri, 26 Sep 2025 13:10:06 +0100
-X-Gm-Features: AS18NWA3vm22xwhbQzcJRYtbJa4eUp3__481yLn5_uTUvxfxIjYG-CHsmDTDgR0
-Message-ID: <CAADnVQJX3guxpXuyP_spuNQMtWOxmh3DbDSyY+1_kz2z6_VDUQ@mail.gmail.com>
+ <CAP01T74_ZfQtHTsBmjNsGnuB4TeTTqqw2BOb8=3od6znS8XtQg@mail.gmail.com>
+ <CAEf4BzY1g1svHDfQu8UmauTerWLMEk=OMWKO-f9HSe7tfB1arA@mail.gmail.com> <CAADnVQJX3guxpXuyP_spuNQMtWOxmh3DbDSyY+1_kz2z6_VDUQ@mail.gmail.com>
+In-Reply-To: <CAADnVQJX3guxpXuyP_spuNQMtWOxmh3DbDSyY+1_kz2z6_VDUQ@mail.gmail.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Fri, 26 Sep 2025 08:11:23 -0700
+X-Gm-Features: AS18NWBVh-eDMGsV6DeA-MzCTtUSumqnZn07H3JmR1vfv4XHhrnBxxxj1HSVa_M
+Message-ID: <CAEf4Bzb9jiFegQQHLpgBvVUS1HcEWuCJFfvG+2UNevT_0Ki5ng@mail.gmail.com>
 Subject: Re: [PATCH bpf-next v1 1/6] bpf: implement KF_IMPLICIT_PROG_AUX_ARG flag
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 Cc: Kumar Kartikeya Dwivedi <memxor@gmail.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
 	Eduard <eddyz87@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>, 
 	dwarves <dwarves@vger.kernel.org>, Alan Maguire <alan.maguire@oracle.com>, 
@@ -80,99 +81,110 @@ Cc: Kumar Kartikeya Dwivedi <memxor@gmail.com>, Ihor Solodrai <ihor.solodrai@lin
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Sep 26, 2025 at 12:07=E2=80=AFAM Andrii Nakryiko
-<andrii.nakryiko@gmail.com> wrote:
+On Fri, Sep 26, 2025 at 5:10=E2=80=AFAM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
 >
-> On Thu, Sep 25, 2025 at 3:58=E2=80=AFPM Kumar Kartikeya Dwivedi
-> <memxor@gmail.com> wrote:
+> On Fri, Sep 26, 2025 at 12:07=E2=80=AFAM Andrii Nakryiko
+> <andrii.nakryiko@gmail.com> wrote:
 > >
-> > On Fri, 26 Sept 2025 at 00:54, Andrii Nakryiko
-> > <andrii.nakryiko@gmail.com> wrote:
+> > On Thu, Sep 25, 2025 at 3:58=E2=80=AFPM Kumar Kartikeya Dwivedi
+> > <memxor@gmail.com> wrote:
 > > >
-> > > On Thu, Sep 25, 2025 at 12:35=E2=80=AFPM Alexei Starovoitov
-> > > <alexei.starovoitov@gmail.com> wrote:
+> > > On Fri, 26 Sept 2025 at 00:54, Andrii Nakryiko
+> > > <andrii.nakryiko@gmail.com> wrote:
 > > > >
-> > > > On Thu, Sep 25, 2025 at 6:23=E2=80=AFPM Andrii Nakryiko
-> > > > <andrii.nakryiko@gmail.com> wrote:
+> > > > On Thu, Sep 25, 2025 at 12:35=E2=80=AFPM Alexei Starovoitov
+> > > > <alexei.starovoitov@gmail.com> wrote:
 > > > > >
-> > > > > I do see the benefit of having the generic "KF_MAGIC_ARG(s)" flag=
- on
-> > > > > the kernel side of things and having access to full BTF informati=
-on
-> > > > > for parameters to let verifier know what specific kind of magic
-> > > > > argument that kfunc has, though. So as an alternative, maybe we c=
-an
-> > > > > create both a kfunc definition *meant for BPF programs* (i.e., wi=
-thout
-> > > > > magic argument(s)), and then have a full original definition (pro=
-duced
-> > > > > by pahole, it will need to understand KF_MAGIC_ARGS anyways) with=
- full
-> > > > > type information *for internal BPF verifier needs*. I don't know
-> > > > > what's the best way to do that, maybe just a special ".magic" suf=
-fix,
-> > > > > just to let the verifier easily find that? On the kernel side, if
-> > > > > kfunc has BPF_MAGIC_ARGS kflag we just look up "my_fancy_kfunc.ma=
-gic"
-> > > > > FUNC definition?
-> > > >
-> > > > Interesting idea. Maybe to simplify backward compat the pahole can
-> > > > emit two BTFs: kfunc_foo(args), kfunc_foo_impl(args, void *aux)
-> > > > into vmlinux BTF.
-> > > > bpftool will emit both in vmlinux.h and bpf side doesn't need to ch=
-ange.
-> > > > libbpf doesn't need to change either.
-> > > > The verifier would need a special check to resolve two kfunc BTFs
-> > > > name into one kallsym name, since both kfuncs is one actual functio=
+> > > > > On Thu, Sep 25, 2025 at 6:23=E2=80=AFPM Andrii Nakryiko
+> > > > > <andrii.nakryiko@gmail.com> wrote:
+> > > > > >
+> > > > > > I do see the benefit of having the generic "KF_MAGIC_ARG(s)" fl=
+ag on
+> > > > > > the kernel side of things and having access to full BTF informa=
+tion
+> > > > > > for parameters to let verifier know what specific kind of magic
+> > > > > > argument that kfunc has, though. So as an alternative, maybe we=
+ can
+> > > > > > create both a kfunc definition *meant for BPF programs* (i.e., =
+without
+> > > > > > magic argument(s)), and then have a full original definition (p=
+roduced
+> > > > > > by pahole, it will need to understand KF_MAGIC_ARGS anyways) wi=
+th full
+> > > > > > type information *for internal BPF verifier needs*. I don't kno=
+w
+> > > > > > what's the best way to do that, maybe just a special ".magic" s=
+uffix,
+> > > > > > just to let the verifier easily find that? On the kernel side, =
+if
+> > > > > > kfunc has BPF_MAGIC_ARGS kflag we just look up "my_fancy_kfunc.=
+magic"
+> > > > > > FUNC definition?
+> > > > >
+> > > > > Interesting idea. Maybe to simplify backward compat the pahole ca=
 n
-> > > > on the kernel.
-> > > > bpf_wq_set_callback_impl() definition doesn't change. Only:
-> > > > -BTF_ID_FLAGS(func, bpf_wq_set_callback_impl)
-> > > > +BTF_ID_FLAGS(func, bpf_wq_set_callback_impl, KF_PROG_ARG)
+> > > > > emit two BTFs: kfunc_foo(args), kfunc_foo_impl(args, void *aux)
+> > > > > into vmlinux BTF.
+> > > > > bpftool will emit both in vmlinux.h and bpf side doesn't need to =
+change.
+> > > > > libbpf doesn't need to change either.
+> > > > > The verifier would need a special check to resolve two kfunc BTFs
+> > > > > name into one kallsym name, since both kfuncs is one actual funct=
+ion
+> > > > > on the kernel.
+> > > > > bpf_wq_set_callback_impl() definition doesn't change. Only:
+> > > > > -BTF_ID_FLAGS(func, bpf_wq_set_callback_impl)
+> > > > > +BTF_ID_FLAGS(func, bpf_wq_set_callback_impl, KF_PROG_ARG)
+> > > > >
+> > > > > and the verifier can check that the last arg is aux__prog when
+> > > > > KF_PROG_ARG is specified.
+> > > > >
+> > > > > The runtime performance will be slightly better too, since
+> > > > > no need for wrappers like:
+> > > > >
+> > > > > +__bpf_kfunc int bpf_wq_set_callback_impl(struct bpf_wq *wq,
+> > > > > + int (callback_fn)(void *map, int *key, void *value),
+> > > > > + unsigned int flags,
+> > > > > + void *aux__prog)
+> > > > > +{
+> > > > > + return bpf_wq_set_callback(wq, callback_fn, flags, aux__prog);
+> > > > > +}
+> > > > >
+> > > > > It's just one jmpl insn, but still.
 > > > >
-> > > > and the verifier can check that the last arg is aux__prog when
-> > > > KF_PROG_ARG is specified.
+> > > > So basically xxx_impl() will be a phantom function that verifier wi=
+ll
+> > > > recognize and it will need to have corresponding xxx() kfunc with
+> > > > corresponding KF_PROG_ARG for everything to work. Makes sense.
 > > > >
-> > > > The runtime performance will be slightly better too, since
-> > > > no need for wrappers like:
+> > > > Two notes:
 > > > >
-> > > > +__bpf_kfunc int bpf_wq_set_callback_impl(struct bpf_wq *wq,
-> > > > + int (callback_fn)(void *map, int *key, void *value),
-> > > > + unsigned int flags,
-> > > > + void *aux__prog)
-> > > > +{
-> > > > + return bpf_wq_set_callback(wq, callback_fn, flags, aux__prog);
-> > > > +}
-> > > >
-> > > > It's just one jmpl insn, but still.
-> > >
-> > > So basically xxx_impl() will be a phantom function that verifier will
-> > > recognize and it will need to have corresponding xxx() kfunc with
-> > > corresponding KF_PROG_ARG for everything to work. Makes sense.
-> > >
-> > > Two notes:
-> > >
-> > > a) KF flag would need to be more generically named, because we'll hav=
-e
-> > > other implicit arguments (like those for bpf_obj_new_impl, for
-> > > example), which will be distinguished based on their BTF type
-
-agree
-
-> > >
-> > > b) bpf_stream_vprintk() throws a bit of a wrench into all this becaus=
-e
-> > > it doesn't follow _impl naming convention. Any suggestions on how to
-> > > deal with that?
-> >
-> > We can probably do a compat break for this kfunc alone for now, it's
-> > not been a long time since it's been out (1 release) not much adoption
-> > yet.
+> > > > a) KF flag would need to be more generically named, because we'll h=
+ave
+> > > > other implicit arguments (like those for bpf_obj_new_impl, for
+> > > > example), which will be distinguished based on their BTF type
 >
-> Ideally there would be 0 releases with that name :) it's just
-> tantalizing that we can s/bpf_stream_vprintk/bpf_stream_vprintk_impl/
-> in like 8 places and avoid this altogether, but it is so late in the
-> release that I suspect no one will want to do this last minute "fix".
+> agree
+>
+> > > >
+> > > > b) bpf_stream_vprintk() throws a bit of a wrench into all this beca=
+use
+> > > > it doesn't follow _impl naming convention. Any suggestions on how t=
+o
+> > > > deal with that?
+> > >
+> > > We can probably do a compat break for this kfunc alone for now, it's
+> > > not been a long time since it's been out (1 release) not much adoptio=
+n
+> > > yet.
+> >
+> > Ideally there would be 0 releases with that name :) it's just
+> > tantalizing that we can s/bpf_stream_vprintk/bpf_stream_vprintk_impl/
+> > in like 8 places and avoid this altogether, but it is so late in the
+> > release that I suspect no one will want to do this last minute "fix".
+>
+> I think we can still do it even after 6.17 is released and
+> backport it as a fix.
 
-I think we can still do it even after 6.17 is released and
-backport it as a fix.
+ok then, sounds like a plan
