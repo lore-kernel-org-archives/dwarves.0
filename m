@@ -1,152 +1,113 @@
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 882EC346E69
-	for <dwarves@vger.kernel.org>; Fri, 24 Oct 2025 18:04:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 091DF33507A
+	for <dwarves@vger.kernel.org>; Tue, 28 Oct 2025 14:53:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761329063; cv=none; b=iZe8hd3ZxVdv8uG2tJdWsBs0zkTXrQx5pljonK9unWKCY5zWZz0urdQ4fgEGRJ8uAvfhl0p2qboV9+hOQktxr2Lww31ffJ/idI7fMATuJAwTZKX6ExVGznE+UgLT8/ALtI+CO3w1Nds4Rll4HVuZKI2YtfSEesrk912p+daIuCU=
+	t=1761663220; cv=none; b=hadlhtk0Yo2nLNKZ+W9omivqtBe+rzD8JcjpnLCZAPvI2UNKtFmFJ0z5uXZ4x431ns0hPfvbMRpecIFsSGpCDtQUnn67X+uafQlMfXjkMMHrkh4U7CXDKwwvSCQyNJWPlUsHhCNbiMSsMQo7cDo+NspweOe0ySPYD2Q+dP7WjzI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761329063; c=relaxed/simple;
-	bh=0aXwfreW00qqegLYVnsodvroBi8vtCBLrEadWdIaZ4k=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=O/2oBpZbf3wLlSe4ckAGymGNeAmezvOnUBYZNQFDE2IiQzIRC97n3du+XIfVpI6q5V5N5+TBVB/FzVF+jWkxjGoxsyZ3YrdDYdHGLsQh9lr9shHab+M68QjQEp+InfUJ+drIunN7ezQsb9WqeDoLWt7R86bo1vUKQ4m/2Njh/AQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=d1jlIRd3; arc=none smtp.client-ip=209.85.214.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1761663220; c=relaxed/simple;
+	bh=L9NwUDO4yKaBpQKcoMtJHakWOzCQn/ZxB4fx1VZTbNg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=hO+90xdIuxLHAwXA9WfDZ4jSFk7rTNQO2CwvpvBscrIX2ixKkfymRd/31eIeIxn+ZuvYaFr0rSxhUyNJXOACsnI3LCPOHxKLZ7hgkiFAGhFAYJUhTFtkEp4XJ+kBMB9a4g/XOFFzBgT9y7F0nyIwCXh+Kzt2QfbUd4IuCL2aHuk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JVOW76Sy; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="d1jlIRd3"
-Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-29470bc80ceso26173665ad.1
-        for <dwarves@vger.kernel.org>; Fri, 24 Oct 2025 11:04:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1761329061; x=1761933861; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=S2mPecITudGEHD9RRX13zhOsRqqQMp77PbhpvYwFYEM=;
-        b=d1jlIRd3SDeTbvzBeQYJPg7adC+P80Xp1f8PT5LX7FE5B245ZxSDrroY5FyjuGXCft
-         BQ472gODVzTrfNLeA3tP2QR3H8BtRhGMrNEx2ByBj7/KNd+cODHL2Jy9f4uLSP5VTh1+
-         xtj+26Q5Wd4rHPrpKb8+8EwB+WCFpE8KT2O2iOkTIrAUFHP8y0TzxowPUcuvV2qUIcYi
-         HkgsNgTGvPX1yk2oI/9w4WDx+uN5sY7aakz1NjANGTqdpdD4JuLtCDvEuGT9fm2mPhrR
-         yDP0ZfNYRqORYakHQqwig7MqpcVsMBpQrlY+ST7R8hmug4Ox0XSiS2hmAvx0RwzhRcp0
-         hLgA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761329061; x=1761933861;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=S2mPecITudGEHD9RRX13zhOsRqqQMp77PbhpvYwFYEM=;
-        b=haQO2iu23jZLNJ4SJzOsuFhpt/VvVUFZ21EcNuhuSXyvynbTfCyvvSmKusGKUaUppK
-         3Mr6h/c2HhFcLhI2bgySqEDdYzUK6JFXOzW8Up/pBtLMxtUIHaM3v0+MJwxotNxPWI9W
-         CDhPFWr8ECJ6dfBL3itRp5LM/vfuplNPSve5hvTcYXhajMZRfLJU8lX2q5XMWSjvz4d8
-         GpOEglVE6Yn1iV3X5wKWZlPweNz302pOzn1/fFaZy1r58guiLaUz1TO5Qtsc1+++ArdL
-         6ZhZ1GMSx2rzxJGwGf+jStpT+KFVIw1lcPVKf/CiBkTA43UteOBebsQUKuzSgTsEMR+r
-         H7IA==
-X-Forwarded-Encrypted: i=1; AJvYcCWFTPopsEHqNEBl7esZRMfdClZP1VXCwNSzkvkCpHT+6boFxnMeRFiUwhiL8RQSoDJZ7KVACGlL@vger.kernel.org
-X-Gm-Message-State: AOJu0Yycceb9fj7HlhpbeUWEkA+JX60VomYs7NcYmg0A6CKNzipXkURw
-	Ms2zv0TGeeW/KR4RqzJcnRxJ6XfM4ulm0AD5ZaxQwHfqQGLlSUi61827
-X-Gm-Gg: ASbGncvgaPwEZsnm8GT0vETNmRnv0mdcGh5TvVhaDfJoMkucGDCCS5h4QIKhlyGblmY
-	Dn0s7iqbQl3BDLouCRkgiftUT1OOo0ngLYiEGAFyzKqH9o1edTaM21lomAx1zC2JfvHvwNRFjjP
-	6Eselc4FRTdqoSzBYMT60l+5AknxoDli2ClM55GOPAZDZiKkFlICuA2Ok2CEi6YDp4dYald1IcG
-	tPUgHVhdt4Il0H0XCtYbYCV3ASzPt000hjtjDxr/WR8q6OsiU4IuBVXBZm4m+c+OLjNSKKgAjgN
-	HEhd09bQCf8c6SsLxLrAH1OjhTufAX8ATewIu1dxZs5Z4htRh16yJEtLYmxFIHbWo4rCh9m/m8v
-	1AkCTj7e91EU1To+k3qEZZNRe1kJVUnKzQx2OHExWrss2ECFE5zqs7IS2J6yEgwPkmyM3ZrFekA
-	==
-X-Google-Smtp-Source: AGHT+IGkCRXr3yvEzhHl7cHzC4V9C6dn0wOqTQhbbV9nWX7e2tcIH4tWVIPO6X4385s5hJyJED+qLg==
-X-Received: by 2002:a17:903:187:b0:27d:6cb6:f7c2 with SMTP id d9443c01a7336-29489e050e4mr45217505ad.17.1761329060577;
-        Fri, 24 Oct 2025 11:04:20 -0700 (PDT)
-Received: from [192.168.0.226] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2946e2579e2sm62151625ad.111.2025.10.24.11.04.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Oct 2025 11:04:20 -0700 (PDT)
-Message-ID: <18bee370c4804e666eb7d5360c47439c246e1cb7.camel@gmail.com>
-Subject: Re: [RFC dwarves 4/5] btf_encoder: Support encoding of inline
- location information
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Alan Maguire <alan.maguire@oracle.com>, dwarves@vger.kernel.org
-Cc: andrii@kernel.org, ast@kernel.org, daniel@iogearbox.net,
- martin.lau@linux.dev, 	acme@kernel.org, ttreyer@meta.com,
- yonghong.song@linux.dev, song@kernel.org, 	john.fastabend@gmail.com,
- kpsingh@kernel.org, sdf@fomichev.me, haoluo@google.com, 	jolsa@kernel.org,
- qmo@kernel.org, ihor.solodrai@linux.dev, david.faust@oracle.com, 
-	jose.marchesi@oracle.com, bpf@vger.kernel.org
-Date: Fri, 24 Oct 2025 11:04:17 -0700
-In-Reply-To: <20251024073328.370457-5-alan.maguire@oracle.com>
-References: <20251024073328.370457-1-alan.maguire@oracle.com>
-	 <20251024073328.370457-5-alan.maguire@oracle.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.2 (3.56.2-1.fc42) 
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JVOW76Sy"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A340C4CEFD;
+	Tue, 28 Oct 2025 14:53:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1761663219;
+	bh=L9NwUDO4yKaBpQKcoMtJHakWOzCQn/ZxB4fx1VZTbNg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=JVOW76SyiMNEikm3R/utafYHLpO1u10TfyqajM6EIlZJP1nL0r66hRgfhtOgDetit
+	 d+8Kzu025Zne1EuImp6w2qN2m/1pRjIx+WN8giXc3Np9NfTWie89MUqUzQLH+kZiVo
+	 BOxIPDh0iBohxOLo/epYk/mQrvew4zoOh6mZ4IbTJbV5SMOOZ6N2+xlNQNPpt02Ytz
+	 6cZBcw1MOvw4uRaIF9nfK9pPxvrsaoXRWUWJMigjo1oASzrCZMfrWXS61srH8dOfTy
+	 5NrHtpCY4JOBPfgwFL1nRkIG4xOpYTrlzAWo6hi66WfNTXGolEdvNxMd5RE3PpmGwW
+	 rPrJai31XTnWA==
+Date: Tue, 28 Oct 2025 11:53:35 -0300
+From: Arnaldo Carvalho de Melo <acme@kernel.org>
+To: Matthias Schwarzott <zzam@gentoo.org>
+Cc: Alan Maguire <alan.maguire@oracle.com>, dwarves@vger.kernel.org
+Subject: Re: pahole: Fix deprecated cmake_minimum_required
+Message-ID: <aQDY7_VtHlFP7ssB@x1>
+References: <bef26065-2dd0-43df-9dfb-f3c4b7a17685@gentoo.org>
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <bef26065-2dd0-43df-9dfb-f3c4b7a17685@gentoo.org>
 
-On Fri, 2025-10-24 at 08:33 +0100, Alan Maguire wrote:
-> This patch requires updated libbpf with APIs to add location
-> information.  Iterate over inline expansions saving prototype
-> and associated location info for later addition.  Location
-> info can either be added to .BTF or a new .BTF.extra section
-> which is split BTF relative to .BTF; this helps when size of
-> location info makes adding it to .BTF prohibitive.  To support
-> this we need to dedup .BTF first, then access the mappings of
-> types to ensure the types of the parameters and return values
-> of the functions associated with the inline sites get post-dedup
-> updates.  Finally the .BTF.extra section itself is deduplicated
-> allowing for FUNC_PROTO, LOC_PARAM and LOC_PROTO deduplication.
->=20
-> Multiple BTF_KIND_LOCSECs are added if there are more then
-> 65535 (max value vlen can support).
->=20
-> Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+On Tue, Oct 28, 2025 at 07:58:17AM +0100, Matthias Schwarzott wrote:
+> I got to know that using a cmake_minimum_required version of less than 3.10
+> is deprecated. Support for it will be removed from cmake.
+
+Support for what? For features present before 3.10? So we better make
+sure that we have pahole use that 'cmake_minimum_required(3.10)' so that
+we don't end up using such deprecated cmake features and end up breaking
+the build in distros using, say, cmake 3.11?
+
+Please CC dwarves@vger.kernel.org when sending patches, like I did in
+this reply :-)
+
+Thanks!
+
+- Arnaldo
+ 
+> I suggest to raise the minimum required cmake version to at least 3.10
+> (released 20 November 2017).
+> See attached patch.
+
+> see gentoo pahole issue: https://bugs.gentoo.org/964482
+> gentoo overall issue: https://bugs.gentoo.org/964405
+ 
+> cmake merge request:
+> https://gitlab.kitware.com/cmake/cmake/-/merge_requests/9875
+ 
+> deprecate-pre-3.10
+> ------------------
+ 
+> * Compatibility with versions of CMake older than 3.10 is now deprecated
+>   and will be removed from a future version.  Calls to
+>   :command:`cmake_minimum_required` or :command:`cmake_policy` that set
+>   the policy version to an older value now issue a deprecation diagnostic.
+
+> From b9e521ef5e9c01d8d19f505de778ceaef5ecd4eb Mon Sep 17 00:00:00 2001
+> From: Matthias Schwarzott <zzam@gentoo.org>
+> Date: Tue, 28 Oct 2025 07:52:00 +0100
+> Subject: [PATCH] CMakeLists.txt: Require cmake 3.10 or higher
+> 
+> To fix this warning from cmake:
+> 
+> CMake Deprecation Warning at CMakeLists.txt:1 (cmake_minimum_required):
+>   Compatibility with CMake < 3.10 will be removed from a future version of
+>   CMake.
+> 
+>   Update the VERSION argument <min> value.  Or, use the <min>...<max> syntax
+>   to tell CMake that the project requires at least <min> but has been updated
+>   to work with policies introduced by <max> or earlier.
+> 
+> Signed-off-by: Matthias Schwarzott <zzam@gentoo.org>
 > ---
+>  CMakeLists.txt | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/CMakeLists.txt b/CMakeLists.txt
+> index eb873000d7bf..91522c1382a5 100644
+> --- a/CMakeLists.txt
+> +++ b/CMakeLists.txt
+> @@ -1,4 +1,4 @@
+> -cmake_minimum_required(VERSION 3.5)
+> +cmake_minimum_required(VERSION 3.10)
+>  project(pahole C)
+>  cmake_policy(SET CMP0005 NEW)
+>  
+> -- 
+> 2.51.0
+> 
 
-At first it appears that encoding abstract origin of the inlined
-functions and relying on dedup is a bit wasteful. But given that
-abstract origin might not even exist in the main functions list,
-it appears that attempts to track function states more precisely would
-be more convoluted.
-
-After sleeping on this patch, I think that having two separate
-function state lists (as is done here) is indeed a simplest approach
-to take.
-
-[...]
-
-> @@ -812,14 +864,16 @@ static int btf__add_bpf_arena_type_tags(struct btf =
-*btf, struct btf_encoder_func
-> =20
->  static inline bool is_kfunc_state(struct btf_encoder_func_state *state)
->  {
-> -	return state && state->elf && state->elf->kfunc;
-> +	if (!state || !state->elf)
-> +		return false;
-> +	return state->elf->kfunc;
->  }
-> =20
->  static int32_t btf_encoder__add_func_proto(struct btf_encoder *encoder, =
-struct ftype *ftype,
->  					   struct btf_encoder_func_state *state)
->  {
-> +	struct btf *btf =3D encoder->btf;
-
-I was confused by this change, as previously btf was either a
-state->encoder->btf of encoder->btf. But it turns out that
-__add_func_proto() callsites guarantee that encoder =3D=3D state->encoder
-when state is present.
-
-Wdyt about a change [1], that splits __add_func_proto() in two in
-order to avoid confusion regarding encoders being in sync?
-
-[1] https://github.com/acmel/dwarves/commit/080d1f27ae71e30c269a1e26e85bb86=
-c3683f195
-
->  	const struct btf_type *t;
-> -	struct btf *btf;
->  	struct parameter *param;
->  	uint16_t nr_params, param_idx;
->  	int32_t id, type_id;
-
-[...]
