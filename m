@@ -1,212 +1,105 @@
-Received: from out-178.mta0.migadu.com (out-178.mta0.migadu.com [91.218.175.178])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44BD43590C2
-	for <dwarves@vger.kernel.org>; Wed, 29 Oct 2025 19:03:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8DE535773C;
+	Wed, 29 Oct 2025 19:41:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761764596; cv=none; b=jiORIWrvSr692Un+gAvvuVSv9SS5/dNwW1gCgMT3W84pPJ/w663j7dlU5sLeTZ3vDs1lDc3OvubURu4hk1OU8VLhEfjY92tzFjU+elS9Xn/AXA1Io+yWShaTF0dzmMP49hWMCtVR0hDOcSGBAmvi168p0S+5n39R8XtgLWTSoso=
+	t=1761766878; cv=none; b=ngBADEJy3C0RB2K5V+xBip26iWyzwCbqMDkKdwJnIwmOAyjjMtTz9E6q/JiO90xG5XKPiVixlvR3i+8dcG3cJSDMdRdlMXtTsxj3jq1QyPZa62s6yD57ldfhq5dLdbPdgrzgK24xVy4WflS4Pxs+HF/zTDtgZiaH31a/7NuBMuw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761764596; c=relaxed/simple;
-	bh=RGO1j4Dju8yQfdDBWbVtKAPBSjnNy+5CTClWybOAxXs=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=cWxK93E4jFf16VR2n0LyROO54ZTy5Fh+y3YQtgRdwxaAMXt7tcMBOm9C9DAS9iiP0a0fT028FD3R+ix+/g82nrIm1pxP2mU4w6S52ymr2GMG9w0QXNd6A+my8rEUGUneJ2RukIvx00FF9yF2uPq3gn3gPP/XqNpULbqwCF5HQ/0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=BezHKazF; arc=none smtp.client-ip=91.218.175.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1761766878; c=relaxed/simple;
+	bh=TNh5VN+rElAfNyIN5E6bNLS9CBZBBa8t2lecam8U8gs=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=lR5yDsOEjg9JIhM7m/AGU0FZCMnv6Ylz4bFgL+ngtqXB65jJ7icRypFQqm2Nswrv3i31X1/1qHOyDYnZKP+6rK/FgLwvYMRPf6094EAJb4PINq40/Y+4ZiEL51l7ZvgWXoSoE0hkmeagci7U35v/fMBEuWixf6hvZ6HMbpA0sgA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=djmOjuuV; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="BezHKazF"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1761764591;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=f/iuo7SQRLCCySQCpSHDHmbX9U2oDKQrTYMzN8xEyVM=;
-	b=BezHKazFEnktQ3HSWbX8vMOYhIQPzP0PYaM3eOccZM72VtJKFc/eiHNl+KJJKK7Qe2U8J3
-	2xlkMsi/wZluOHJv8UMk9KNkRvA7O1Suf4DjukXDcdtQOzEnK8ePr1jUi5weJcFX2fjT/N
-	CHJhUfCQHPBcj2fYFBfw6zinevFZBsw=
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
-To: dwarves@vger.kernel.org,
-	alan.maguire@oracle.com,
-	acme@kernel.org
-Cc: bpf@vger.kernel.org,
-	andrii@kernel.org,
-	ast@kernel.org,
-	eddyz87@gmail.com,
-	tj@kernel.org,
-	kernel-team@meta.com
-Subject: [PATCH dwarves v1 3/3] btf_encoder: support kfuncs with KF_MAGIC_ARGS flag
-Date: Wed, 29 Oct 2025 12:02:49 -0700
-Message-ID: <20251029190249.3323752-4-ihor.solodrai@linux.dev>
-In-Reply-To: <20251029190249.3323752-1-ihor.solodrai@linux.dev>
-References: <20251029190249.3323752-1-ihor.solodrai@linux.dev>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="djmOjuuV"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 892CAC4CEF7;
+	Wed, 29 Oct 2025 19:41:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1761766877;
+	bh=TNh5VN+rElAfNyIN5E6bNLS9CBZBBa8t2lecam8U8gs=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=djmOjuuVyjehkE20q1AcUA7N+34z3eBFEhFK7BhhomkjvmecfYM1K0KkgKgw3JIyj
+	 R8uQdlsl4BmZ9Aivwn6LLsHe7hFYIQvR/iP8iSLDuoQ/w1zk8Lpao65RJYFgKrJn8x
+	 64BIQ2loxBt3lBkgVSlyx1B+X5D2JOVYwWJaYEk9OV8fGsLaNXxJawzttAWXgV9938
+	 cYX7n0hgvBqw/iX2nqncjI2hLZAvWOObxiyBGOP/GQnmhEBi6Wiye1XZnp0BNyy/SN
+	 B9IZR8oMQqAu5EIabcz943NjWcSRxCIbMqYhujk2Aa6FDMHwmUSCBHIA8ZrvEviZpl
+	 NTF7NPWDAq5xg==
+Content-Type: multipart/mixed; boundary="===============3920572624472113543=="
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Message-Id: <3ff9f05dd90ecae535887b2b6ae14ab6b04fd28e8da22af874e917c5126cd803@mail.kernel.org>
+In-Reply-To: <20251029190113.3323406-2-ihor.solodrai@linux.dev>
+References: <20251029190113.3323406-2-ihor.solodrai@linux.dev>
+Subject: Re: [PATCH bpf-next v1 1/8] bpf: Add BTF_ID_LIST_END and BTF_ID_LIST_SIZE macros
+From: bot+bpf-ci@kernel.org
+To: ihor.solodrai@linux.dev,bpf@vger.kernel.org,andrii@kernel.org,ast@kernel.org
+Cc: dwarves@vger.kernel.org,alan.maguire@oracle.com,acme@kernel.org,eddyz87@gmail.com,tj@kernel.org,kernel-team@meta.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Wed, 29 Oct 2025 19:41:16 +0000 (UTC)
 
-For BPF kernel functions marked with KF_MAGIC_ARGS flag we emit two
-functions to BTF:
-  * kfunc_impl() with prototype that matches kernel declaration
-  * kfunc() with prototype that omits __magic arguments
+--===============3920572624472113543==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
+
+```
+commit d616f53ce936875dd9f44cc77f9bed1198596463
+Author: Ihor Solodrai <ihor.solodrai@linux.dev>
+
+bpf: Add BTF_ID_LIST_END and BTF_ID_LIST_SIZE macros
+
+This commit adds two new preprocessor macros to btf_ids.h for
+calculating the size of BTF_ID_LIST arrays using pointer arithmetic
+between a list and its __end marker.
+
+> diff --git a/include/linux/btf_ids.h b/include/linux/btf_ids.h
+> index 139bdecec..27a4724d5 100644
+> --- a/include/linux/btf_ids.h
+> +++ b/include/linux/btf_ids.h
+> @@ -97,6 +97,16 @@ asm(							\
+>  __BTF_ID_LIST(name, local)				\
+>  extern u32 name[];
+>
+> +/*
+> + * The BTF_ID_LIST_END macro may be used to denote an end
+> + * of a BTF_ID_LIST. This enables calculation of the list
+> + * size with BTF_ID_LIST_SIZE.
+> + */
+> +#define BTF_ID_LIST_END(name) \
+> +BTF_ID_LIST(name##__end)
+> +#define BTF_ID_LIST_SIZE(name) \
+> +(name##__end - name)
+> +
+
+Are the fallback definitions missing for CONFIG_DEBUG_INFO_BTF=n?
+
+Looking at the #else branch starting at line 228, all existing macros
+like BTF_ID_LIST, BTF_ID, BTF_SET_START, etc. have fallback definitions.
+These new macros BTF_ID_LIST_END and BTF_ID_LIST_SIZE only exist in the
+CONFIG_DEBUG_INFO_BTF=y path. When CONFIG_DEBUG_INFO_BTF is disabled,
+code using these macros will fail to compile.
+
+While there's no current usage that would break, the API is incomplete
+compared to the established pattern in this header where every macro
+works in both config states.
+
+>  #define BTF_ID_LIST_GLOBAL(name, n)			\
+>  __BTF_ID_LIST(name, globl)
+
+
+```
+
 ---
- btf_encoder.c | 121 +++++++++++++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 119 insertions(+), 2 deletions(-)
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-diff --git a/btf_encoder.c b/btf_encoder.c
-index b730280..7a10be3 100644
---- a/btf_encoder.c
-+++ b/btf_encoder.c
-@@ -48,6 +48,7 @@
- #define KF_ARENA_RET  (1 << 13)
- #define KF_ARENA_ARG1 (1 << 14)
- #define KF_ARENA_ARG2 (1 << 15)
-+#define KF_MAGIC_ARGS (1 << 16)
- 
- struct btf_id_and_flag {
- 	uint32_t id;
-@@ -1404,8 +1405,8 @@ static int32_t btf_encoder__add_func(struct btf_encoder *encoder,
- 	return btf_fn_id;
- }
- 
--static int btf_encoder__add_bpf_kfunc(struct btf_encoder *encoder,
--				      struct btf_encoder_func_state *state)
-+static int btf_encoder__add_bpf_kfunc_instance(struct btf_encoder *encoder,
-+					       struct btf_encoder_func_state *state)
- {
- 	int btf_fn_id, err;
- 
-@@ -1426,6 +1427,122 @@ static int btf_encoder__add_bpf_kfunc(struct btf_encoder *encoder,
- 	return 0;
- }
- 
-+static inline bool str_ends_with(const char *str, const char *suffix)
-+{
-+	int suffix_len = strlen(suffix);
-+	int str_len = strlen(str);
-+
-+	if (str_len < suffix_len)
-+		return false;
-+
-+	return strcmp(str + str_len - suffix_len, suffix) == 0;
-+}
-+
-+#define BPF_KF_IMPL_SUFFIX "_impl"
-+#define BPF_KF_ARG_MAGIC_SUFFIX "__magic"
-+
-+static inline bool btf__is_kf_magic_arg(const struct btf *btf, const struct btf_encoder_func_parm *p)
-+{
-+	const char *name;
-+
-+	name = btf__name_by_offset(btf, p->name_off);
-+	if (!name)
-+		return false;
-+
-+	return str_ends_with(name, BPF_KF_ARG_MAGIC_SUFFIX);
-+}
-+
-+/*
-+ * A kfunc with KF_MAGIC_ARGS flag has some number of arguments set implicitly by the BPF
-+ * verifier. Such arguments are identified by __magic suffix in the argument name.
-+ * process_kfunc_magic_args() checks the arguments from last to first, and returns the number of
-+ * magic arguments. Note that *all* magic arguments must come after *all* normal arguments in the
-+ * function signature. If this assumption is violated, or if no __magic arguments are found,
-+ * process_kfunc_magic_args() returns an error.
-+ */
-+static int process_kfunc_magic_args(struct btf_encoder_func_state *state)
-+{
-+	const struct btf *btf = state->encoder->btf;
-+	const struct btf_encoder_func_parm *p;
-+	int cnt = 0, i;
-+
-+	for (i = state->nr_parms - 1; i >= 0; i--) {
-+		p = &state->parms[i];
-+		if (btf__is_kf_magic_arg(btf, p)) {
-+			cnt++;
-+			if (cnt != state->nr_parms - i)
-+				goto out_err;
-+		} else if (cnt == 0) {
-+			goto out_err;
-+		}
-+	}
-+
-+	return cnt;
-+
-+out_err:
-+	btf__log_err(btf, BTF_KIND_FUNC_PROTO, state->elf->name, true, 0,
-+		     "return=%u Error emitting BTF func proto for KF_MAGIC_ARGS kfunc: unexpected kfunc signature",
-+		     p->type_id);
-+	return -1;
-+}
-+
-+/*
-+ * For KF_MAGIC_ARGS kfuncs we emit two BTF functions (and protos):
-+ *   - bpf_foo_impl(<original kernel args>)
-+ *   - bpf_foo(<bpf args w/o magic args>)
-+ * We achieve this by creating a temporary btf_encoder_func_state-s
-+ */
-+static int btf_encoder__add_bpf_kfunc_with_magic_args(struct btf_encoder *encoder,
-+						      struct btf_encoder_func_state *state)
-+{
-+	struct btf_encoder_func_annot tmp_annots[state->nr_annots];
-+	struct btf_encoder_func_state tmp_state = *state;
-+	struct elf_function tmp_elf = *state->elf;
-+	char tmp_name[KSYM_NAME_LEN];
-+	int err, i, j, nr_magic_args;
-+
-+	/* First, add kfunc_impl(), modifying only the name */
-+	strcpy(tmp_name, state->elf->name);
-+	strcat(tmp_name, BPF_KF_IMPL_SUFFIX);
-+	tmp_elf.name = tmp_name;
-+	tmp_state.elf = &tmp_elf;
-+	err = btf_encoder__add_bpf_kfunc_instance(encoder, &tmp_state);
-+	if (err < 0)
-+		return -1;
-+
-+	/* Then add kfunc() with omitted magic arguments */
-+	nr_magic_args = process_kfunc_magic_args(state);
-+	if (nr_magic_args <= 0)
-+		return -1;
-+
-+	tmp_state.elf = state->elf;
-+	tmp_state.nr_parms -= nr_magic_args;
-+	j = 0;
-+	for (i = 0; i < state->nr_annots; i++) {
-+		if (state->annots[i].component_idx < tmp_state.nr_parms)
-+			tmp_annots[j++] = state->annots[i];
-+	}
-+	tmp_state.nr_annots = j;
-+	tmp_state.annots = tmp_annots;
-+	err = btf_encoder__add_bpf_kfunc_instance(encoder, &tmp_state);
-+	if (err < 0)
-+		return -1;
-+
-+	return 0;
-+}
-+
-+static inline int btf_encoder__add_bpf_kfunc(struct btf_encoder *encoder,
-+					     struct btf_encoder_func_state *state)
-+{
-+	uint32_t flags = state->elf->kfunc_flags;
-+
-+	if (KF_MAGIC_ARGS & flags)
-+		return btf_encoder__add_bpf_kfunc_with_magic_args(encoder, state);
-+
-+	return btf_encoder__add_bpf_kfunc_instance(encoder, state);
-+}
-+
-+
- static int elf_function__name_cmp(const void *_a, const void *_b)
- {
- 	const struct elf_function *a = _a;
--- 
-2.51.1
+In-Reply-To-Subject: `bpf: Add BTF_ID_LIST_END and BTF_ID_LIST_SIZE macros`
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/18919699520
 
+--===============3920572624472113543==--
