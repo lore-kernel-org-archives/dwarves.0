@@ -1,75 +1,74 @@
-Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EEC931DD8A
-	for <dwarves@vger.kernel.org>; Wed, 29 Oct 2025 23:54:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 244DF3218BA
+	for <dwarves@vger.kernel.org>; Wed, 29 Oct 2025 23:55:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761782093; cv=none; b=IAS/y2jGZaOYs808rffrEQgrwaKbLI9voB/MCqnYFIYRS2FFViPmdwY7x7LGVci3MjRwp3MtW2D8rp9ue3/1MMcLR7+MM8ezVnb4i+pFLWUwccBCzkGlhdZ+H0B88bJW8FICbwSl52Gch2IcXvP4+NpurIoYh/fGKAFp/WOjLwE=
+	t=1761782104; cv=none; b=CdPxPuqqLdVNrEpKqVsFeTW7F/BK2S7TLJzpGa26iMCxi8u20SRAHUZeQhF39KRtMEMGzIIOziVZnrzfkNJpAIUUGIdN+xbvgpr+wLYMt04kGxWjW9s1PI/JMPxGdeH7ATHONR6iawy/Y7LdxZI7mKyaLHKI6YWUDCDuUS4fdP8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761782093; c=relaxed/simple;
-	bh=IdqEFmHuoRNxR3u0UPrZ5MdcP+JNada6rMZWAMJseOs=;
+	s=arc-20240116; t=1761782104; c=relaxed/simple;
+	bh=CYuA3OD7N1VyOHmj72f8JRfLIC7SK2GyTfK04raeZz8=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=omDXAXCwb3rte3YdsVThq84RvTnQUjmAET46o+3YTFZpf0G5vSdA7CDehhGtGf7stV1go9pTGkG1egeXxzmcmxJmFxKKzWCwfpQHJMD1mUMxZ9Fr2PvRmUvKpIL+HKXYTk+6zGXF5yfFPRf2sukSDzMIRvrp9fEFRhbw1/t4nkE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ItPkI+DR; arc=none smtp.client-ip=209.85.215.169
+	 Content-Type:MIME-Version; b=rm4jf7zEZnchkSpbrGwx0wIQwaFRfXMqCO/g4C41fjo2usHuXZucyJQbe4DEkUysRdLlSIEQwudREyFrKXur7PdcbTYUi4Yj+OiLcLQKqx5n4YG8FH6rLs3YgJEbXPCDSXc1g8y9docYcTZ8j7YY/2GIlzpa7q/n6zXcEMrmlQE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Gtoj1i58; arc=none smtp.client-ip=209.85.214.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ItPkI+DR"
-Received: by mail-pg1-f169.google.com with SMTP id 41be03b00d2f7-b6cea3f34ebso261266a12.0
-        for <dwarves@vger.kernel.org>; Wed, 29 Oct 2025 16:54:52 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Gtoj1i58"
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-27d3540a43fso5125215ad.3
+        for <dwarves@vger.kernel.org>; Wed, 29 Oct 2025 16:55:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1761782092; x=1762386892; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1761782102; x=1762386902; darn=vger.kernel.org;
         h=mime-version:user-agent:content-transfer-encoding:references
          :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=VqHaPvvHNUWfgjNN6SzCPgghHpzAxfuGayVQHsMdmeE=;
-        b=ItPkI+DReCHnQEmUMZxEB1XrUNFArr3q5S+JVMeJn4Wrt4zaY+ogH4FRtdWxdfM0Q8
-         XLisXfQRjBVvzJOOeRw3Yiszcry0QZr6wWAtvotdf5vggycUFwoDW8mcAZkWFzcH80nM
-         9uKG9YWWM3SZdMRnhLwxoFG0jhTiq1SK+qzPM0wkWQgdOGswZrx3jMCGP2CBHGBp7Qkq
-         uXuChpJ3nwNLk7ZneDBQD2w1W0fzmcsPB0Zht+f+6ie8Wj1+lPv94zh2Eohg90A4GLCK
-         6JUOMhm20cMlyVEkPTgaoNRIDwp2/nqgEtIjZWcn+uN+/aPui5rNJjWffwxihjvXqCvr
-         612A==
+        bh=lODhMav5p1K71nbHvBAouQHLQOzUWHcWHd+5BKoeR1c=;
+        b=Gtoj1i58LcAU60pZCZ5gB4EGCXj/+K/1GkW0xg9MzOecBHCllhxCKzCO24LjpfE6QE
+         eLym776yHabv7Q4ccbiU6mmJ/yJd8VRPNRqgWmXgNShAgYD8ERuxaUTMlNaHMP39B104
+         rZLvssqNiJvt8xVJjNeX7mVMjGR4PwjWreg9sYF2xvRKcuQuU4ooZAD+sV4TtQNdCQHB
+         6D1YrI240QjV6O3IeZD5EKl8n22dmW1vrFFxPSv+9TTYo4DzW9r1WZDVvdU4Uk6tcWKn
+         dR6nzkgCNFXjQ7rkjyTH/3GXzeEb94DKnUxiCf74QXPU5cpPopmLhK9l+FI+NjUxs+7A
+         KXcQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761782092; x=1762386892;
+        d=1e100.net; s=20230601; t=1761782102; x=1762386902;
         h=mime-version:user-agent:content-transfer-encoding:references
          :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=VqHaPvvHNUWfgjNN6SzCPgghHpzAxfuGayVQHsMdmeE=;
-        b=cpQYQg+rMpJ5m/dLhxnFXNKD35fQ4IMtY96fY1tW/ImZIuBUXVvK5UC+nzTAWZT+sD
-         M6YYHXo7Ew0DwpRBs+hamAttSSf9HYkYQVoTD0GMkX5xCPNuSx8fe9FZ9enSsFiWyxPa
-         /9ZxGboS60hK5NxYs4GwyiIZaVHKGe4hx5E/puZYVs4OACtzTWQWHQ5jJX7OMp2lFSqc
-         dAoXTwTAGKbAssVHavswfgYMnn9TS8QELQCMEmSNAfPxa3vmoZb6si8LibRpE6YIvENF
-         AzM8JBHOhirddPDkiz2PuzSG3k38Mqyg/wab8jMM+sbDCPcN3GtKXKipLBP5Wa0Xcwnn
-         hGtA==
-X-Gm-Message-State: AOJu0YxRYYtJkrn7ZgP/vW7NKYDt43alzXzLijJdfQIEaMe9oP0mXy/Q
-	jI7WNaUnOj4afv1Mbb5X35L66A7AX5crOmxBEwR3UNTjOYWqcKOEpmOs
-X-Gm-Gg: ASbGncuKD6iIIxjyjW+dxMQTnLzTYGp8kpJ6xH/10lyBTLHN/471mnJ52Lxg1LVse0y
-	uDqsmBCnNL0aUxGD1yzRbfXgPZUg0gQe/Xld4X/TkKR1XnJQw11QSZRpxZnYkidTiUMGKC+gXs/
-	gK9VJ1s13V8+P3U48y+H0wg3rn1EkQ3rgBVse0mKPqNbYTCpH+y9F8mKfB8Fie9jyHGs1FscE+5
-	8/RxpYHWD0SUHs+dPB8RN7oPsFQysBlwAOiOOvIL4HKOzut4flZFwrfEL1oNPxMDiUbpijQHPiQ
-	cpspqM84XGzfrZ8gMOSv9b7NZccuMyZEjqsc3N0hZkoH90+/0ZOaIsNGwksuP8Y/2SBN+Gqh47J
-	XKLCnDxo/JLBfxwsyKnVdRrDBFduK8h/sUbbM39rd6WSmWRtA9huLI/NSeEpYUWrpEBBm8w3jra
-	K6bWfhZewGxEsRWdb5HsaghuNTtA==
-X-Google-Smtp-Source: AGHT+IFHrYkS9VYx/11lvKingSrB4Z7zZwes4RlUiaCld0TDU8btdffXKIIOQlDKot8lbPJDzMD8+Q==
-X-Received: by 2002:a17:903:22ca:b0:267:9931:dbfb with SMTP id d9443c01a7336-294ee0aa27fmr12249935ad.54.1761782091823;
-        Wed, 29 Oct 2025 16:54:51 -0700 (PDT)
+        bh=lODhMav5p1K71nbHvBAouQHLQOzUWHcWHd+5BKoeR1c=;
+        b=hjj5uVBawJKdrRMewG9ZI9YU+qi+dZ/vyeReRyiDqKlwWAn8fo4oVfzRrivXhzL13J
+         fYbNmXdH4qGYk15g3wdIqLmD9izsprXZA95A3aUjrtRSh1cTet8aM2PNzz09mM/Y2FZi
+         JWYPsocbEQmoRWkADfJob3jOlGt/K2zmsjzn7X7FNMjyxmlvEgSVgV8KOn1+YG1abMNL
+         tEWwq0GkSgPy7pqYjN1yh9427BHWAII3UhLLQGdEQUGATtu0roh4J7ztrTPXi92yWgsu
+         Ls7ONpg51/E5fdDWBb61ddDCwn6ra+ZsQnT1C/vC5a648UOmC4+F9ZlDCYWUU+arZ732
+         hv7A==
+X-Gm-Message-State: AOJu0Yy4glYrJy85ytTQq9iaCJDLWUoNGAGSrJvGPqv89SmPeF5CbZbE
+	6uKhBKqy4QThcCGi0oWx7BPxvHQbrSgaba9cAyF7jb5zkLhGorC2ASll
+X-Gm-Gg: ASbGncvCWF8FgfB5vQIwRZs3K4wSsHU5hPP/vUjFe5bKnPYab5a7Qfy/AhoLGPRvr1t
+	OeQKAzKaH/f0tWZ1aBic0xY6CpP8zXI5b4nVDXMKQl/2xi5BgsbjpTpIC9+RKt+SCQzOFY+kthe
+	rPVGNDycKVQMbP7NOflmxCQU4eQzFHLqEOyh2Hrg271PkHmKQ/gVYJJpkvhLFGHZyDQ3hXWOoch
+	h+/Sr2HzeEHGWSdbhj1MP5voavglJX/r58TWLgEdzAyxRz9oAaDzHvyOv5g0ePDoTXEme0ahnum
+	CNJdOumB9ec71Zf6yaxqP1aQXZB9FFu80exCx15XOfEX6mMQ/PP9QD+l9PL5uw8Y+WppFYU10/w
+	dQ4EmlssLrb45kGAjOW/KVvuVKGpBpj+n6hSKDIT2TejfrcOu+R8IB2QTiZhae47OxPPXM3dtdi
+	MDZs1c6F4SaQi/oViQxoBNPhfvBY0a0DKVndDLM4+thEYDEAk=
+X-Google-Smtp-Source: AGHT+IGSab5b/K48kjoDAIw5ovbxTQ1bdqBd16anwHKOLxBIj1YWvYElMA79LCrE9dJiCPT/HKFH5g==
+X-Received: by 2002:a17:902:7448:b0:27f:1c1a:ee43 with SMTP id d9443c01a7336-294deebc4fdmr35815395ad.29.1761782102406;
+        Wed, 29 Oct 2025 16:55:02 -0700 (PDT)
 Received: from ?IPv6:2a03:83e0:115c:1:3086:7e8a:8b32:fa24? ([2620:10d:c090:500::5:6b34])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-29498d23218sm162919995ad.51.2025.10.29.16.54.50
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-29498cf49easm166854335ad.9.2025.10.29.16.55.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Oct 2025 16:54:51 -0700 (PDT)
-Message-ID: <c7df8f49fe90256a37b286df7771dfca9b9573a4.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v1 1/8] bpf: Add BTF_ID_LIST_END and
- BTF_ID_LIST_SIZE macros
+        Wed, 29 Oct 2025 16:55:02 -0700 (PDT)
+Message-ID: <ddf506c9c5c5e9fbfd2c1b7d99bc4d2307fc702d.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v1 2/8] bpf: Refactor btf_kfunc_id_set_contains
 From: Eduard Zingerman <eddyz87@gmail.com>
 To: Ihor Solodrai <ihor.solodrai@linux.dev>, bpf@vger.kernel.org, 
 	andrii@kernel.org, ast@kernel.org
 Cc: dwarves@vger.kernel.org, alan.maguire@oracle.com, acme@kernel.org, 
 	tj@kernel.org, kernel-team@meta.com
-Date: Wed, 29 Oct 2025 16:54:50 -0700
-In-Reply-To: <20251029190113.3323406-2-ihor.solodrai@linux.dev>
+Date: Wed, 29 Oct 2025 16:55:00 -0700
+In-Reply-To: <20251029190113.3323406-3-ihor.solodrai@linux.dev>
 References: <20251029190113.3323406-1-ihor.solodrai@linux.dev>
-		 <20251029190113.3323406-2-ihor.solodrai@linux.dev>
+		 <20251029190113.3323406-3-ihor.solodrai@linux.dev>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 User-Agent: Evolution 3.56.2 (3.56.2-1.fc42) 
@@ -81,39 +80,51 @@ List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
 On Wed, 2025-10-29 at 12:01 -0700, Ihor Solodrai wrote:
-> Implement macros in btf_ids.h to enable a calculation of BTF_ID_LIST
-> size. This is done by declaring an additional __end symbol which can
-> then be used as an indicator of the end of an array.
+> btf_kfunc_id_set_contains() is called by fetch_kfunc_meta() in the BPF
+> verifier to get the kfunc flags stored in the .BTF_ids ELF section.
+> If it returns NULL instead of a valid pointer, it's interpreted by the
+> verifier as an illegal kfunc usage which fails the verification.
+>=20
+> Conceptually, there are two potential reasons for
+> btf_kfunc_id_set_contains() to return NULL:
+>=20
+>   1. Provided kfunc BTF id is not present in relevant kfunc id sets.
+>   2. The kfunc is not allowed, as determined by the program type
+>      specific filter [1].
+>=20
+> The filter functions accept a pointer to `struct bpf_prog`, so they
+> might implicitly depend on earlier stages of verification, when
+> bpf_prog members are set.
+>=20
+> For example, bpf_qdisc_kfunc_filter() in linux/net/sched/bpf_qdisc.c
+> inspects prog->aux->st_ops [2], which is initialized in:
+>=20
+>     check_attach_btf_id() -> check_struct_ops_btf_id()
+>=20
+> So far this hasn't been an issue, because fetch_kfunc_meta() is the
+> only place where lookup + filter logic is applied to a kfunc id.
+>=20
+> However in subsequent patches of this series it is necessary to
+> inspect kfunc flags earlier in BPF verifier, in the add_kfunc_call().
+>=20
+> To resolve this, refactor btf_kfunc_id_set_contains() into two
+> interface functions: btf_kfunc_flags() that does not apply the
+> filters, and btf_kfunc_flags_if_allowed() that does.
+>=20
+> [1] https://lore.kernel.org/all/20230519225157.760788-7-aditi.ghag@isoval=
+ent.com/
+> [2] https://lore.kernel.org/all/20250409214606.2000194-4-ameryhung@gmail.=
+com/
 >=20
 > Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
 > ---
->  include/linux/btf_ids.h | 10 ++++++++++
->  1 file changed, 10 insertions(+)
->=20
-> diff --git a/include/linux/btf_ids.h b/include/linux/btf_ids.h
-> index 139bdececdcf..27a4724d5aa9 100644
-> --- a/include/linux/btf_ids.h
-> +++ b/include/linux/btf_ids.h
-> @@ -97,6 +97,16 @@ asm(							\
->  __BTF_ID_LIST(name, local)				\
->  extern u32 name[];
-> =20
-> +/*
-> + * The BTF_ID_LIST_END macro may be used to denote an end
-> + * of a BTF_ID_LIST. This enables calculation of the list
-> + * size with BTF_ID_LIST_SIZE.
-> + */
-> +#define BTF_ID_LIST_END(name) \
-> +BTF_ID_LIST(name##__end)
-> +#define BTF_ID_LIST_SIZE(name) \
-> +(name##__end - name)
-> +
 
-Nit: no need for line break?
+This preserves original semantics, as far as I can tell,
+although a more logical split for API functions seem to be:
+- btf_kfunc_is_allowed()
+- btf_kfunc_flags()
 
-  #define BTF_ID_LIST_SIZE(name) (name##__end - name)
+Reviewed-by: Eduard Zingerman <eddyz87@gmail.com>
 
->  #define BTF_ID_LIST_GLOBAL(name, n)			\
->  __BTF_ID_LIST(name, globl)
-> =20
+[...]
 
