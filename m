@@ -1,98 +1,144 @@
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA3508F6F
-	for <dwarves@vger.kernel.org>; Thu, 30 Oct 2025 00:03:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7402B17A318
+	for <dwarves@vger.kernel.org>; Thu, 30 Oct 2025 00:16:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761782619; cv=none; b=m1lOuxjN4xR/n2XN7hGtjz90uCPmzysoUKBKLe7yZuL6kZ/1iV+GuXNawwWwwtdrwxY4Fpk591WQPDke/9tXiSfEHpr7TZxQEJookH8FX4VseOCvImTHhXL3yIMGitzbwcLG96ZAnMyV4kaaC+ubtx/ky7R5BHGamGrmGbuHVlM=
+	t=1761783381; cv=none; b=GzRQtAEDpGd1RsgF/VQx+vJnVYjN5jX6kfOD7JjxFoVtp8Ioy1ZsftppN6K6DzX1zXtlAbJXAqQE9KTqAIasVUYDE1jBYteQRIy9h8a+3mURv5Di6lsRQFIuKwXlAAqv9VNEheJYDfVRlbbqs51F8q0sYM0SeDIX/VKoTI+qyG0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761782619; c=relaxed/simple;
-	bh=IQdAVekv4irRGgMMfp/PjHkXohbkVOvsM/8HtebJv/c=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=h7mxed3T/dFZmbFOinxPTTAuFE/zsgbiye2OFBwWKI3GsMdQei2sTx3D43wivYm6eycdB2kcBBNHBAdUqIqPIrdTf6QH2H4JboB6rPU43EA/VbQtnNDDb2eS511WnPlJfY0IT1MMLVfiQa6Dn2NtdEwS4VSk5bFZmwNrVChtMqU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mGkWCGQL; arc=none smtp.client-ip=209.85.128.43
+	s=arc-20240116; t=1761783381; c=relaxed/simple;
+	bh=lkkYvAfGJyHErUCtLY2pHZe5NAqZZAtOb5uiVNeM6TE=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=XJ8gafsoNCLBv4FpNgt8ItiJTttt/4yq1rr1iLaEk5nlFYbcm1rb3kifJ6wm/z+zbTWHZydL6hPFLd0cKb4WLY09ED8nl6976WGjsaIS/eCWehjFJEpd4pcBM4F1JkO7C6zmbmB7fHa97dastYgDKalvnl1JhZj6kEunu21TeDc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Zzfc9pkO; arc=none smtp.client-ip=209.85.210.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mGkWCGQL"
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-475dd54d7cdso1494855e9.1
-        for <dwarves@vger.kernel.org>; Wed, 29 Oct 2025 17:03:37 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Zzfc9pkO"
+Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-77f5d497692so677701b3a.1
+        for <dwarves@vger.kernel.org>; Wed, 29 Oct 2025 17:16:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1761782616; x=1762387416; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=El4J/tPU5GVXHSLQfOqUzKCRr5OClPDUdxz6lfYkO5M=;
-        b=mGkWCGQLgx5y1ztnWdRLWrFPG2DE/dwLk3NSXZ1ocEQlwZEmwWQL7fT/ds1dDS4gKX
-         gyi9cgN52qiO+lvSHVLBx+v21aubhfwHJxmnXm3ZKTDbW/uAfDqfWa36Jol1HvljrAZe
-         HKN4ctxFAvkpu/rMsY4woNp2TCU3gW0VHngAKGc+cib3AITXZRZBmyoQ2Ql+ySku2M9A
-         rWh4TWVOpW8tYYzz/qpiyVtCQk/d6Q07o4cpRBE4+VePUUuROAxZ+4j6s9dnqgcgW1nJ
-         cQQkDp9Obv64O5VN3IfvIy3KZ4A7mxxXcJBCe3yTE9h+SFszAiYkcbB/P8ahMeHIgl9N
-         /2xw==
+        d=gmail.com; s=20230601; t=1761783380; x=1762388180; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=msuM7kcIsqN5uFPie9riIUGHCFzbf5VjirHQu/5O5dA=;
+        b=Zzfc9pkO/MSLJn/tAbvAFdT+4SIAsjRLFKldRI33ISdo3jKT6919RNOxmoxjHDM3+S
+         y2wxCdktGShMV3se+xdNBDXmbBmWC625dsk8aAqrc5/mLZAcmYbgsfKCwmGL7q59pdNh
+         3WmfFx5nOqvu5tnDOuSmfyr+pfL5wDTec67/tEcCyDINWXCAA7JFPVrs/aENGlJo+8YK
+         o/ltYt8G8z5HPfi3p1IkyW94zCSgQaaZYi1gh2zKnA0Mp0b5WuVs3EuVKfo6jKOXGrMX
+         YfZ4B5OnzJDrRmIB1Oz8E4koMIxyvCPsF8nL/7TosD6xvk0v56uapEE657//gsQaMhOQ
+         MgiQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761782616; x=1762387416;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=El4J/tPU5GVXHSLQfOqUzKCRr5OClPDUdxz6lfYkO5M=;
-        b=u9LiJZFRQWIhsAPrRqXwJcoYMSeDGl2snPBl6i4TlPMbtTdTR4B5PepWc/cuhlL16u
-         o/8FruuuRfOl4SKZHv8jkEYqHUipjTvRyNIg2V11E3hp3tvSPl89F0pLAxzWOOD6YXV5
-         iOzSf/g+nIMU4vW2t7aGnM8o3CCSVBZa9UuPSqSq5RN354YBZVvD1hs6IdabACr5rCR6
-         PHwO/me52cG4Ys/nK/tsew16kPoZrC6zk+wMANkvgU9HTZenPZ6crmstalthMOl3z4hG
-         AJJePKjEDGt7Wf83n9YTtnptu3yGB7mTMMmFbK1w4hGXAyjx3wQUUKbagIUNPmROF8im
-         N/hw==
-X-Forwarded-Encrypted: i=1; AJvYcCU0wRaMCslNcFm4ARS2F0M6dAFsXojSn+Bjr/hD4RAwO0/HxsxWOfJe+01YOD1olSHzQzUuOxR9@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxjgsx1HDj/lgUQgVDdbClFimxlxrf8aDHIzSN/oay2wv9qKq5p
-	BEXeS8BkSY+3gMNa72MsfgZhUUZ4WzHJ8PH01K/llf98HrfOZmCH33r1DFVGuQJV6Ek9QozCGIw
-	IZ/jEYZHvSxk5FD9gT1dU1nRYPOfzSig=
-X-Gm-Gg: ASbGncu0985sBA+DZvEBquXmhM0TPF1o5xzG8WCGQiiiGFXYN3F6fTmw1G1Z+oJdRxu
-	1wa1DixWWECEfPJOCY9rfITafFDoyW5rtI5U4zHUxmaMIR4kic/idI1fE9ZA8C1JrrxzEKJychX
-	CdomvW+lxppmiP6wz4BNbtrMCpARpxJemIi2VosiMMIpTmtjFX5NVWQTkivEWoVsLit4G5Fg7pB
-	NLJSHfaJ73FZ/WJ8a5/jD2CkrtddC3J58jtJd+5o/d1xxXDjQ3E7cAYP9LNU1icaTtgB7wuBMQP
-	PkQSLMHJRyffJ8Oc6g==
-X-Google-Smtp-Source: AGHT+IFh+W6qz2ceIUI2QhqYoE/268h3PX3Rtjarak7sWgQhdPAZITWiUaam+JJ2eaaDJjXrqjrqy4uREJVwVsVFhj8=
-X-Received: by 2002:a5d:5c89:0:b0:3e7:68b2:c556 with SMTP id
- ffacd0b85a97d-429aef84080mr4043118f8f.26.1761782615888; Wed, 29 Oct 2025
- 17:03:35 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1761783380; x=1762388180;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=msuM7kcIsqN5uFPie9riIUGHCFzbf5VjirHQu/5O5dA=;
+        b=RS6GrN5uKCqVslS8eNt9wwy39T9Vu7gWPgH8MErlyumsNautnFUQppVdNb5j3QpdzE
+         GSbfVTO8XqiUVOfEV5tTpei7zdL6reRl0G8lBBvWeD0HftjEoZxINyClzNrRKbt7x2z8
+         9n6AfA1pOvsq2BHUlnvr9ECit0tsy05r8u8+RxVTF6MIAXM0yU5nhusveyIK4xBBJm0/
+         REBuYyibu3EQKvgC8/NbpUicNWFqyJY56MC0xTczAxgRYqgb9hM/bawWm9gYi6BmV245
+         vlTn8uyVTAreyKI/IK+XBYOm7S1Hct+Fn3EJVkZ8G8mhUMrk9uuW6bhMPFR85CLmwixB
+         gN9Q==
+X-Gm-Message-State: AOJu0Yyf5TBUtLYfyfGJG/QqYJbeKOyVyovUoKwaVGGoWVXY1LoTQB3w
+	sY0AnIK+nwQYfaTfDYUUGRBboZIUnb3B5PFqIghLgnYaCtlL1AWdENWD
+X-Gm-Gg: ASbGncsk1jlatQRaNr2ZH1YnX98+w0wb04fV73+zf9XAkF8njAP2q2qeTHhYIL3zrS4
+	8OYTB6yGxj3iYZNnG0uovS0Ln2CfDce/3M8dY8s0SN35xKadKwEhfmqNnBbykyCMddW0gKikPo7
+	k6jVAhC1AW28oc/2w3oaV9H3lxVVPhBJ0LS+CYC+4CsG7owMP2wmwo57jEXg0qfi72baa6QtzP2
+	BNUL5cCRqUntioIEndndYoxDuaWRHfVUQCQps/pre4rMckFUU5m4oI27BohH4XFtI2/FtJobPo3
+	0d26DgnSst8UDxRh4zRW9uV8nwV71x106YHv/lwr5N0E+LX0/XkDl+8yJNCqjvf6jKO0/Dc2Fge
+	1Oo5lUOEvmXL/hqui9dBEo3T1iaRYXVIhpwH2+plLUFYWL6pBtxPLz/wvq4bq6fFl0j3r8tpvuW
+	7eS/trRzqwRB4JPm7EwEdkKHveNg==
+X-Google-Smtp-Source: AGHT+IGYNCGnTE8vldzzzwfa8aWZAFdxGb9LI3wHfrcY6NJc1hj5Ms2gdLFdB5J+/1Q91lTKZZou9Q==
+X-Received: by 2002:a05:6a20:3ca6:b0:2e5:c9ee:96fa with SMTP id adf61e73a8af0-34786a1ea4amr1488329637.34.1761783379640;
+        Wed, 29 Oct 2025 17:16:19 -0700 (PDT)
+Received: from ?IPv6:2a03:83e0:115c:1:3086:7e8a:8b32:fa24? ([2620:10d:c090:500::5:6b34])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b712ce3a6efsm14732052a12.24.2025.10.29.17.16.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Oct 2025 17:16:19 -0700 (PDT)
+Message-ID: <c03a5ebfadf924be0ab0679a48d33d323d7ea7e5.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v1 5/8] bpf: Re-define bpf_wq_set_callback as
+ magic kfunc
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Ihor Solodrai <ihor.solodrai@linux.dev>, bpf@vger.kernel.org, 
+	andrii@kernel.org, ast@kernel.org
+Cc: dwarves@vger.kernel.org, alan.maguire@oracle.com, acme@kernel.org, 
+	tj@kernel.org, kernel-team@meta.com
+Date: Wed, 29 Oct 2025 17:16:17 -0700
+In-Reply-To: <20251029190113.3323406-6-ihor.solodrai@linux.dev>
+References: <20251029190113.3323406-1-ihor.solodrai@linux.dev>
+	 <20251029190113.3323406-6-ihor.solodrai@linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.2 (3.56.2-1.fc42) 
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251029190113.3323406-1-ihor.solodrai@linux.dev>
- <20251029190113.3323406-4-ihor.solodrai@linux.dev> <b667472aeb77ac63a3de82dae77012c0285e0286.camel@gmail.com>
-In-Reply-To: <b667472aeb77ac63a3de82dae77012c0285e0286.camel@gmail.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Wed, 29 Oct 2025 17:03:24 -0700
-X-Gm-Features: AWmQ_blixd95JW4fMfByV1IsDwwur7m8Z0T058Ir4uDIHps2me8sOhgRz7Ob68I
-Message-ID: <CAADnVQJPevofLp0B0h40t0X1gj_032kw42K0ykHW4BqdmY0eNw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v1 3/8] bpf: Support for kfuncs with KF_MAGIC_ARGS
-To: Eduard Zingerman <eddyz87@gmail.com>
-Cc: Ihor Solodrai <ihor.solodrai@linux.dev>, bpf <bpf@vger.kernel.org>, 
-	Andrii Nakryiko <andrii@kernel.org>, Alexei Starovoitov <ast@kernel.org>, dwarves <dwarves@vger.kernel.org>, 
-	Alan Maguire <alan.maguire@oracle.com>, Arnaldo Carvalho de Melo <acme@kernel.org>, Tejun Heo <tj@kernel.org>, 
-	Kernel Team <kernel-team@meta.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Wed, Oct 29, 2025 at 4:54=E2=80=AFPM Eduard Zingerman <eddyz87@gmail.com=
-> wrote:
->
-> On Wed, 2025-10-29 at 12:01 -0700, Ihor Solodrai wrote:
-> > A kernel function bpf_foo with KF_MAGIC_ARGS flag is expected to have
->                                  ^^^^^^^^^^^^^
->                 I don't like this name very much.
->                 It bears very little context.
->                 Imo, KF_IMPLICIT_ARGS fits the use case much better.
+On Wed, 2025-10-29 at 12:01 -0700, Ihor Solodrai wrote:
 
-+1
-I hate the name as well.
-KF_IMPLICIT_ARGS sounds much better and can be abbreviated
-to "__impl" in arg names.
-That way it will accidentally match our existing _impl() kfuncs
-though there _impl meant "implementation".
+[...]
 
-I think this double meaning of "impl" as "implementation specific"
-and "implicit" actually fits.
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 67914464d503..3c9e963d879b 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+
+[...]
+
+> @@ -12916,9 +12919,10 @@ static bool is_bpf_throw_kfunc(struct bpf_insn *=
+insn)
+>  	       insn->imm =3D=3D special_kfunc_list[KF_bpf_throw];
+>  }
+> =20
+> -static bool is_bpf_wq_set_callback_impl_kfunc(u32 btf_id)
+> +static bool is_bpf_wq_set_callback_kfunc(u32 btf_id)
+>  {
+> -	return btf_id =3D=3D special_kfunc_list[KF_bpf_wq_set_callback_impl];
+> +	return btf_id =3D=3D special_kfunc_list[KF_bpf_wq_set_callback_impl] ||
+> +	       btf_id =3D=3D special_kfunc_list[KF_bpf_wq_set_callback];
+
+If insn->imm is patched in add_kfunc_call() there will be no need to
+handle two cases here.
+
+>  }
+> =20
+>  static bool is_callback_calling_kfunc(u32 btf_id)
+> @@ -14035,7 +14039,7 @@ static int check_kfunc_call(struct bpf_verifier_e=
+nv *env, struct bpf_insn *insn,
+>  		meta.r0_rdonly =3D false;
+>  	}
+> =20
+> -	if (is_bpf_wq_set_callback_impl_kfunc(meta.func_id)) {
+> +	if (is_bpf_wq_set_callback_kfunc(meta.func_id)) {
+>  		err =3D push_callback_call(env, insn, insn_idx, meta.subprogno,
+>  					 set_timer_callback_state);
+>  		if (err) {
+> diff --git a/tools/testing/selftests/bpf/bpf_experimental.h b/tools/testi=
+ng/selftests/bpf/bpf_experimental.h
+> index 2cd9165c7348..68a49b1f77ae 100644
+> --- a/tools/testing/selftests/bpf/bpf_experimental.h
+> +++ b/tools/testing/selftests/bpf/bpf_experimental.h
+
+Nit: The tests won't fail with the above changes, right?
+     If so, we usually ship changes to selftests in separate patches.
+
+> @@ -580,11 +580,6 @@ extern void bpf_iter_css_destroy(struct bpf_iter_css=
+ *it) __weak __ksym;
+> =20
+>  extern int bpf_wq_init(struct bpf_wq *wq, void *p__map, unsigned int fla=
+gs) __weak __ksym;
+>  extern int bpf_wq_start(struct bpf_wq *wq, unsigned int flags) __weak __=
+ksym;
+> -extern int bpf_wq_set_callback_impl(struct bpf_wq *wq,
+> -		int (callback_fn)(void *map, int *key, void *value),
+> -		unsigned int flags__k, void *aux__ign) __ksym;
+> -#define bpf_wq_set_callback(timer, cb, flags) \
+> -	bpf_wq_set_callback_impl(timer, cb, flags, NULL)
+
+...
