@@ -1,372 +1,195 @@
-Received: from out-182.mta1.migadu.com (out-182.mta1.migadu.com [95.215.58.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 402191E0DFE
-	for <dwarves@vger.kernel.org>; Thu, 30 Oct 2025 16:31:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C8693678DF
+	for <dwarves@vger.kernel.org>; Thu, 30 Oct 2025 17:26:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761841917; cv=none; b=YlkkWa1j+Y3NqQD5Df12/PeLEtM11bp54SDoKq2VEOfKo4bq4D+lB6x5y1X/Ecr0D8CLZNCrzb1PbgFmqPMH1eYCX53yysNMGxjDbqAywgQhZ8m5lcLanZqA/UOVhGmtsuBZKDtizHteWL0DD4CPJZRJmpuVuD+1pHLme1HEHb8=
+	t=1761845205; cv=none; b=h8beE7IpzQvKVT7CCgsyIS4dMt7d6/WE0cA83Wy0UBD+FecmpX1d2uZKiIGwmAid1HSEOavLmGvH5F+4To5mE1zRoedgn2ewq7vNOaYcVFCbd9UZzxmA3jE0IeBljo+ceQ5oLwLLu2U0z87MJWu79vxnipzUG6DzONXhMTjVq1E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761841917; c=relaxed/simple;
-	bh=LvsVgjui+xkzsc16wqUAitJaNr7z/qDFzJ8IhokZBQw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=POzSBJvXm877upOdgU3wGjz9tPbHqXkoaDmCRgH91fcTlfs4Hk8UCtmeSbD0EEO3T8zR4OyYMrQCVSXgQWgYj/CVrVL42c7/npkQ4Bixm2DLPU3GHd7GuVvLXWicvG9fW6VRirZLNgDp9AsZtmTX6vPhP0SoJzYNepNcWHtPJO4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=BDCFzivK; arc=none smtp.client-ip=95.215.58.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1761845205; c=relaxed/simple;
+	bh=R66pJ2aeC9T8mvq2SNWf8g2+t/j2D+rZ3f/RxsZQgbU=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=qwekhlPS4pahQG6SCHa9Q1XCnqEeg72EmtCz3Ri3gCoIt3mhPcVb0yMW4TWbhlWOodg9v0hVgeddiU07PlhadM8gW/poSj34bhBzNoKtuLIM2OPV2yTpSqfzVRvwaxPfbinLkPwbV4Fv/bmly7vt3LHtzrS7AMYMr50ZGDiD5TE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=C5aedShf; arc=none smtp.client-ip=209.85.216.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="BDCFzivK"
-Message-ID: <da20bc30-85be-44ab-b837-19aa97ebc431@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1761841911;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=vNzeQ9OrF0RxDX6QJrxesWPafhoDbt7IX7HVAQcbCek=;
-	b=BDCFzivK29rh6YiZZJVU49dhJx8t5QGRwEUz+dZW8Duf5eqIy7IeC61HiMzUucCW4kr+wU
-	O/s2HV8YrlmSFuNteIeV4GEeX2zlnSe9bErNEeViDPEfTdfhQXpNoKpRsomgkME5ryAzrK
-	1CN1NUaOkXhmW1c0cpSaqeoEZGaJV0E=
-Date: Thu, 30 Oct 2025 09:31:42 -0700
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="C5aedShf"
+Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-34077439166so468035a91.2
+        for <dwarves@vger.kernel.org>; Thu, 30 Oct 2025 10:26:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1761845203; x=1762450003; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=VBUZoX5dT2XZvzWD1hhhjp5IwzQTAkja0LZXBOQj9Aw=;
+        b=C5aedShfUdlRcp2X2X5npNdaQv5tPy22EKYt1MttovPaP/6Z5fTtgrtjF016IT5AT5
+         eK4E1vK4xcHuczp3i3uunwrnW5li+mkZDLCuiqzlD2smlr/BkdUP48LtxH6hKzrFLn1E
+         et6pyeUNNy2gh7DMdw46eec+Wq16QJiRINjUlGrlhG3db2MdMSnNMfcaLZKaYW0ab7R5
+         BMxS6CfY/b16sn346rcuAm8y6mwd3MmRVnLz7HbnYmCTHjzMUl3lP+TPxOe6/d5nGkar
+         8wj49cuJ0CpiGLv5Hq6T2ahG/mYuH8XP058xJAUDIBQ521GuSpWPEYU5zD6keX3jVleM
+         vqwA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1761845203; x=1762450003;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=VBUZoX5dT2XZvzWD1hhhjp5IwzQTAkja0LZXBOQj9Aw=;
+        b=anvnuQwnZMeOgwnlviU6cRAH5CEwLDKY1QsGSCNYBPRPGqmT7cUApr/VteQ9M5DOdm
+         zOZZMx5N+MpNPKa8vToRE+c+iIJD67piI12wbrx2SAqHo9PIIGBjL/YLtPlRREh412sp
+         1srYCya5svOao1nu1lMBJBtRkmnNtx+lOImh2vg0kYkiuyChz8cs6NuW0c7MUpFo6jqN
+         eGSVkKlIKU22btbmJre8iBZxLabFkrRrhOnMap36Uj2VcSix75uz6aak9i4QP6fplMRl
+         cMXu0hoVPciSdXdAjDYbjq2uVe+D5oKHemlnP2fCLPodtcDC45KwIKrghBA8muY92YEN
+         iGMw==
+X-Gm-Message-State: AOJu0Yx+Y8Sav2NJKRY6v+bo8PLkMMcq4gUHhCIEZL1v6wi/xRoCEtxy
+	kI1pdu+IEntz0rPcUjosg1Ufo40A2nEtko9ZaTjBm5EKUgsp/xMz3WwVgChhoJKGT7Y=
+X-Gm-Gg: ASbGnct9zKcdTx053owgsP8pSA9x2ltC4zLZKi9v6rvgybVloQxzFRy2kQC/OJ4veU+
+	DIkaSuOlzVRQO5tZEyk0w1l3kMt8IWu8kNjGe5jsaIhdLWcnbn3AOJufnKCvQ1xmtAJ5xCp4cd+
+	KJ9hrO8OjBnFquqnXNYNHLbYLz3lVfJmbtVW3u6tnRH3zsO5qfHbCuk2qLt3WBV7DTU+jZdnTWc
+	91AcUxbxy1qaP+M6d9ywiBp+S6xqJ3FMZw+18HbL1KK7sqofC3tjBAYLVEuLXVDdYmAC2+IXXpU
+	jl6zieq59IPAznbw54CgRrTIafcxsNJ8NDfkekWeU2kyaeWW9Q59neQF0x0qEocZ5JGpkPZ2K0X
+	4rhdbsTpOgAxPcPOIIe55nhekNIYcpWrDa89hz7mKicGTIpPb69mGzfmatvYuKPGzkqJpiAUjlV
+	QA4kPaYaTA
+X-Google-Smtp-Source: AGHT+IF8A1a0P+znyR1j5oHtd7dlJzE05Rb6IK1i4Mns4f+5/RJqwEfxxr/XTUHh1gih4O1KdJJb3w==
+X-Received: by 2002:a17:90b:3947:b0:32e:753d:76da with SMTP id 98e67ed59e1d1-34083074e0emr636625a91.20.1761845202733;
+        Thu, 30 Oct 2025 10:26:42 -0700 (PDT)
+Received: from [192.168.0.226] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-34050972842sm3298836a91.2.2025.10.30.10.26.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Oct 2025 10:26:42 -0700 (PDT)
+Message-ID: <aea5cd2ca9523a61d0193308a1b5f938a8d5b073.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v1 3/8] bpf: Support for kfuncs with
+ KF_MAGIC_ARGS
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Ihor Solodrai <ihor.solodrai@linux.dev>, bpf@vger.kernel.org, 
+	andrii@kernel.org, ast@kernel.org
+Cc: dwarves@vger.kernel.org, alan.maguire@oracle.com, acme@kernel.org, 
+	tj@kernel.org, kernel-team@meta.com
+Date: Thu, 30 Oct 2025 10:26:39 -0700
+In-Reply-To: <da20bc30-85be-44ab-b837-19aa97ebc431@linux.dev>
+References: <20251029190113.3323406-1-ihor.solodrai@linux.dev>
+	 <20251029190113.3323406-4-ihor.solodrai@linux.dev>
+	 <b667472aeb77ac63a3de82dae77012c0285e0286.camel@gmail.com>
+	 <da20bc30-85be-44ab-b837-19aa97ebc431@linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.2 (3.56.2-1.fc42) 
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v1 3/8] bpf: Support for kfuncs with
- KF_MAGIC_ARGS
-To: Eduard Zingerman <eddyz87@gmail.com>, bpf@vger.kernel.org,
- andrii@kernel.org, ast@kernel.org
-Cc: dwarves@vger.kernel.org, alan.maguire@oracle.com, acme@kernel.org,
- tj@kernel.org, kernel-team@meta.com
-References: <20251029190113.3323406-1-ihor.solodrai@linux.dev>
- <20251029190113.3323406-4-ihor.solodrai@linux.dev>
- <b667472aeb77ac63a3de82dae77012c0285e0286.camel@gmail.com>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
-In-Reply-To: <b667472aeb77ac63a3de82dae77012c0285e0286.camel@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
 
-Hi Eduard, thank you for a quick review.
+On Thu, 2025-10-30 at 09:31 -0700, Ihor Solodrai wrote:
+> Hi Eduard, thank you for a quick review.
+>=20
+> On 10/29/25 4:54 PM, Eduard Zingerman wrote:
+> > On Wed, 2025-10-29 at 12:01 -0700, Ihor Solodrai wrote:
+> > > A kernel function bpf_foo with KF_MAGIC_ARGS flag is expected to have
+> >                                  ^^^^^^^^^^^^^
+> > 		I don't like this name very much.
+> > 		It bears very little context.
+> > 		Imo, KF_IMPLICIT_ARGS fits the use case much better.
+>=20
+> I know, naming is hard...
+>=20
+> The issue is that it's not only the flag, across the code we need
+> descriptive names for every "magic" thing:
+>   * a flagged function
+>     * how do we call it? kfunc_with_impl_args?
+>   * a function that exists only in BTF (_impl)
+>     * it's not an "implicit" function
+>     * it's not exactly an "implementation" function
+>     * "fake" is even worse than "magic" IMO, because it's not fake,
+>       but you could argue it's magical :D
+>     * btf_only_kfunc?
+>   * describing arguments is simpler: "implicit" seems ok, although as
+>     Alexei pointed out in previous iteration they are very much
+>     explicit in the kernel [1]
+>=20
+> For me, "(BPF) interface" and "(kernel) implementation" pair of terms
+> makes sense, but then I think it would be logical to have both
+> declarations in the kernel.
+>=20
+> The advantage of "magic" in this context is that it doesn't have
+> loaded meaning. But I agree this is a stretch, so can't insist.
+>=20
+> [1] https://lore.kernel.org/bpf/CAADnVQLvuubey0A0Fk=3DbzN-=3DJG2UUQHRqBij=
+ZpuvqMQ+xy4W4g@mail.gmail.com/
 
-On 10/29/25 4:54 PM, Eduard Zingerman wrote:
-> On Wed, 2025-10-29 at 12:01 -0700, Ihor Solodrai wrote:
->> A kernel function bpf_foo with KF_MAGIC_ARGS flag is expected to have
->                                  ^^^^^^^^^^^^^
-> 		I don't like this name very much.
-> 		It bears very little context.
-> 		Imo, KF_IMPLICIT_ARGS fits the use case much better.
+- KF_IMPLICIT_ARGS
+- explicit_args_id -- for prototype with full set of args
+- implicit_args_id -- for prototype with missing args
 
-I know, naming is hard...
+[...]
 
-The issue is that it's not only the flag, across the code we need
-descriptive names for every "magic" thing:
-  * a flagged function
-    * how do we call it? kfunc_with_impl_args?
-  * a function that exists only in BTF (_impl)
-    * it's not an "implicit" function
-    * it's not exactly an "implementation" function
-    * "fake" is even worse than "magic" IMO, because it's not fake,
-      but you could argue it's magical :D
-    * btf_only_kfunc?
-  * describing arguments is simpler: "implicit" seems ok, although as
-    Alexei pointed out in previous iteration they are very much
-    explicit in the kernel [1]
+> > > @@ -3349,8 +3400,37 @@ static int add_kfunc_call(struct bpf_verifier_=
+env *env, u32 func_id, s16 offset)
+> > >  		return -EINVAL;
+> > >  	}
+> > > =20
+> > > +	kfunc_flags =3D btf_kfunc_flags(desc_btf, func_id, env->prog);
+> > >  	func_name =3D btf_name_by_offset(desc_btf, func->name_off);
+> > >  	addr =3D kallsyms_lookup_name(func_name);
+> > > +
+> > > +	/* This may be an _impl kfunc with KF_MAGIC_ARGS counterpart */
+> > > +	if (unlikely(!addr && !kfunc_flags)) {
+> > > +		tmp_func_id =3D magic_kfunc_by_impl(func_id);
+> >=20
+> > I think there is no need to hide magic_kfunc_by_impl() call behind the
+> > above condition. It can be moved before kfunc_flags assignment.
+> > Then it wont be necessary to textually repeat btf_name_by_offset() and
+> > kallsyms_lookup_name() calls.
+>=20
+> Not sure I follow...
+>=20
+> Yes, !addr is enough to detect potential _impl function, but there is
+> no way around name lookup in BTF and then another address lookup.
+>=20
+> The _impl function doesn't have an address, so after failed
+>   kallsyms_lookup_name("kfunc_impl");
+> we must do
+>   kallsyms_lookup_name("kfunc");
+> to find the correct address.
+>=20
+> Or do you suggest doing something like:
+>=20
+>   tmp_func_id =3D magic_kfunc_by_impl(func_id);
+>   if (tmp_func_id > 0)
+>       func_id =3D tmp_func_id;
+>=20
+> at the beginning of add_kfunc_call()?
 
-For me, "(BPF) interface" and "(kernel) implementation" pair of terms
-makes sense, but then I think it would be logical to have both
-declarations in the kernel.
+This, just check for magic_kfunc_by_impl() and replace func_id.
 
-The advantage of "magic" in this context is that it doesn't have
-loaded meaning. But I agree this is a stretch, so can't insist.
+[...]
 
-[1] https://lore.kernel.org/bpf/CAADnVQLvuubey0A0Fk=bzN-=JG2UUQHRqBijZpuvqMQ+xy4W4g@mail.gmail.com/
+> > > @@ -13632,10 +13718,28 @@ static int fetch_kfunc_meta(struct bpf_veri=
+fier_env *env,
+> > >  	func_proto =3D btf_type_by_id(desc_btf, func->type);
+> > > =20
+> > >  	kfunc_flags =3D btf_kfunc_flags_if_allowed(desc_btf, func_id, env->=
+prog);
+> > > -	if (!kfunc_flags) {
+> > > -		return -EACCES;
+> > > +	if (unlikely(!kfunc_flags)) {
+> >=20
+> > What if we patch insn->imm to use the "fake" function id in add_kfunc_c=
+all()?
+> > Then modifications to fetch_kfunc_meta() wont be necessary.
+>=20
+>=20
+> I considered this. I wasn't sure it's safe to patch insn->imm at this
+> stage of verification. Also I thought it may be harder to debug the
+> verifier if we do btf id replacement in the calls pre-verification
+> (because we lose the original btf id).
 
+See no issues with that.
 
-> 
->> two types in BTF:
->>   * `bpf_foo` with a function prototype that omits __magic arguments
->>   * `bpf_foo_impl` with a function prototype that matches kernel
->>      declaration, but doesn't have a ksym associated with its name
-> 
-> Could you please start with an example here?
-> Stating how `bpf_foo` needs to be declared in kernel, and what are the
-> options to invoke it from bpf.  Then proceed with BTF details, etc.
+> Maybe I was too causious.
+>=20
+> Alexei, Andrii, what do you think?
 
-Ok. I think I can reshuffle explanations between the cover letter and
-commit message, it's a bit redundant already.
-
-> 
->> In order to support magic kfuncs the verifier has to know how to
->> resolve calls both of `bpf_foo` and `bpf_foo_impl` to the correct BTF
->> function prototype and address.
->>
->> In add_kfunc_call() kfunc flags are inspected to detect a magic kfunc
->> or its _impl, and then the address and func_proto are adjusted for the
->> kfunc descriptor.
->>
->> In fetch_kfunc_meta() similar logic is used to fixup the contents of
->> struct bpf_kfunc_call_arg_meta.
->>
->> In check_kfunc_call() reset the subreg_def of registers holding magic
->> arguments to correctly track zero extensions.
->>
->> Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
->> ---
->>  include/linux/btf.h   |   1 +
->>  kernel/bpf/verifier.c | 123 ++++++++++++++++++++++++++++++++++++++++--
->>  2 files changed, 120 insertions(+), 4 deletions(-)
->>
->> diff --git a/include/linux/btf.h b/include/linux/btf.h
->> index 9c64bc5e5789..3fe20514692f 100644
->> --- a/include/linux/btf.h
->> +++ b/include/linux/btf.h
->> @@ -79,6 +79,7 @@
->>  #define KF_ARENA_RET    (1 << 13) /* kfunc returns an arena pointer */
->>  #define KF_ARENA_ARG1   (1 << 14) /* kfunc takes an arena pointer as its first argument */
->>  #define KF_ARENA_ARG2   (1 << 15) /* kfunc takes an arena pointer as its second argument */
->> +#define KF_MAGIC_ARGS   (1 << 16) /* kfunc signature is different from its BPF signature */
->>  
->>  /*
->>   * Tag marking a kernel function as a kfunc. This is meant to minimize the
->> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
->> index cb1b483be0fa..fcf0872b9e3d 100644
->> --- a/kernel/bpf/verifier.c
->> +++ b/kernel/bpf/verifier.c
->> @@ -3263,17 +3263,68 @@ static struct btf *find_kfunc_desc_btf(struct bpf_verifier_env *env, s16 offset)
->>  	return btf_vmlinux ?: ERR_PTR(-ENOENT);
->>  }
->>  
->> +/*
->> + * magic_kfuncs is used as a list of (foo, foo_impl) pairs
->> + */
->> +BTF_ID_LIST(magic_kfuncs)
->> +BTF_ID_UNUSED
->> +BTF_ID_LIST_END(magic_kfuncs)
->> +
->> +static s32 magic_kfunc_by_impl(s32 impl_func_id)
->> +{
->> +	int i;
->> +
->> +	for (i = 1; i < BTF_ID_LIST_SIZE(magic_kfuncs); i += 2) {
->> +		if (magic_kfuncs[i] == impl_func_id)
->                                        ^^^^^
-> Nit: similarly, I'd rename this to something like "implicit_func_id"
->      or "fake_func_id. "impl" is confusing because this id has nothing
->      to do with implementation.
-> 
->> +			return magic_kfuncs[i - 1];
->> +	}
->> +	return -ENOENT;
->> +}
->> +
->> +static s32 impl_by_magic_kfunc(s32 func_id)
->> +{
->> +	int i;
->> +
->> +	for (i = 0; i < BTF_ID_LIST_SIZE(magic_kfuncs); i += 2) {
->> +		if (magic_kfuncs[i] == func_id)
->> +			return magic_kfuncs[i + 1];
->> +	}
->> +	return -ENOENT;
->> +}
->> +
->> +static const struct btf_type *find_magic_kfunc_proto(struct btf *desc_btf, s32 func_id)
->> +{
->> +	const struct btf_type *impl_func, *func_proto;
->> +	u32 impl_func_id;
->> +
->> +	impl_func_id = impl_by_magic_kfunc(func_id);
->> +	if (impl_func_id < 0)
->> +		return NULL;
->> +
->> +	impl_func = btf_type_by_id(desc_btf, impl_func_id);
->> +	if (!impl_func || !btf_type_is_func(impl_func))
->> +		return NULL;
->> +
->> +	func_proto = btf_type_by_id(desc_btf, impl_func->type);
->> +	if (!func_proto || !btf_type_is_func_proto(func_proto))
->> +		return NULL;
->> +
->> +	return func_proto;
->> +}
->> +
->>  static int add_kfunc_call(struct bpf_verifier_env *env, u32 func_id, s16 offset)
->>  {
->> -	const struct btf_type *func, *func_proto;
->> +	const struct btf_type *func, *func_proto, *tmp_func;
->>  	struct bpf_kfunc_btf_tab *btf_tab;
->> +	const char *func_name, *tmp_name;
->>  	struct btf_func_model func_model;
->>  	struct bpf_kfunc_desc_tab *tab;
->>  	struct bpf_prog_aux *prog_aux;
->>  	struct bpf_kfunc_desc *desc;
->> -	const char *func_name;
->>  	struct btf *desc_btf;
->>  	unsigned long addr;
->> +	u32 *kfunc_flags;
->> +	s32 tmp_func_id;
->>  	int err;
->>  
->>  	prog_aux = env->prog->aux;
->> @@ -3349,8 +3400,37 @@ static int add_kfunc_call(struct bpf_verifier_env *env, u32 func_id, s16 offset)
->>  		return -EINVAL;
->>  	}
->>  
->> +	kfunc_flags = btf_kfunc_flags(desc_btf, func_id, env->prog);
->>  	func_name = btf_name_by_offset(desc_btf, func->name_off);
->>  	addr = kallsyms_lookup_name(func_name);
->> +
->> +	/* This may be an _impl kfunc with KF_MAGIC_ARGS counterpart */
->> +	if (unlikely(!addr && !kfunc_flags)) {
->> +		tmp_func_id = magic_kfunc_by_impl(func_id);
-> 
-> I think there is no need to hide magic_kfunc_by_impl() call behind the
-> above condition. It can be moved before kfunc_flags assignment.
-> Then it wont be necessary to textually repeat btf_name_by_offset() and
-> kallsyms_lookup_name() calls.
-
-Not sure I follow...
-
-Yes, !addr is enough to detect potential _impl function, but there is
-no way around name lookup in BTF and then another address lookup.
-
-The _impl function doesn't have an address, so after failed
-  kallsyms_lookup_name("kfunc_impl");
-we must do
-  kallsyms_lookup_name("kfunc");
-to find the correct address.
-
-Or do you suggest doing something like:
-
-  tmp_func_id = magic_kfunc_by_impl(func_id);
-  if (tmp_func_id > 0)
-      func_id = tmp_func_id;
-
-at the beginning of add_kfunc_call()?
-
-
-> 
->> +		if (tmp_func_id < 0)
->> +			return -EACCES;
-> 
-> Nit: this skips proper error reporting: "cannot find address for kernel function %s\n".
-> 
->> +		tmp_func = btf_type_by_id(desc_btf, tmp_func_id);
->> +		if (!tmp_func || !btf_type_is_func(tmp_func))
-> 
-> Nit: this condition indicates a verifier bug, should it be reported as such?
-> 
->> +			return -EACCES;
->> +		tmp_name = btf_name_by_offset(desc_btf, tmp_func->name_off);
->> +		addr = kallsyms_lookup_name(tmp_name);
->> +	}
->> +
->> +	/*
->> +	 * Note that kfunc_flags may be NULL at this point, which means that we couldn't find
->> +	 * func_id in any relevant kfunc_id_set. This most likely indicates an invalid kfunc call.
->> +	 * However we don't want to fail the verification here, because invalid calls may be
->> +	 * eliminated as dead code later.
->> +	 */
->> +	if (unlikely(kfunc_flags && KF_MAGIC_ARGS & *kfunc_flags)) {
->> +		func_proto = find_magic_kfunc_proto(desc_btf, func_id);
->> +		if (!func_proto) {
->> +			verbose(env, "cannot find _impl proto for kernel function %s\n",
->> +			func_name);
->> +			return -EINVAL;
->> +		}
->> +	}
->> +
->>  	if (!addr) {
->>  		verbose(env, "cannot find address for kernel function %s\n",
->>  			func_name);
->> @@ -12051,6 +12131,11 @@ static bool is_kfunc_arg_irq_flag(const struct btf *btf, const struct btf_param
->>  	return btf_param_match_suffix(btf, arg, "__irq_flag");
->>  }
->>  
->> +static bool is_kfunc_arg_magic(const struct btf *btf, const struct btf_param *arg)
->> +{
->> +	return btf_param_match_suffix(btf, arg, "__magic");
->> +}
->> +
->>  static bool is_kfunc_arg_prog(const struct btf *btf, const struct btf_param *arg)
->>  {
->>  	return btf_param_match_suffix(btf, arg, "__prog");
->> @@ -13613,6 +13698,7 @@ static int fetch_kfunc_meta(struct bpf_verifier_env *env,
->>  	u32 func_id, *kfunc_flags;
->>  	const char *func_name;
->>  	struct btf *desc_btf;
->> +	s32 tmp_func_id;
->>  
->>  	if (kfunc_name)
->>  		*kfunc_name = NULL;
->> @@ -13632,10 +13718,28 @@ static int fetch_kfunc_meta(struct bpf_verifier_env *env,
->>  	func_proto = btf_type_by_id(desc_btf, func->type);
->>  
->>  	kfunc_flags = btf_kfunc_flags_if_allowed(desc_btf, func_id, env->prog);
->> -	if (!kfunc_flags) {
->> -		return -EACCES;
->> +	if (unlikely(!kfunc_flags)) {
-> 
-> What if we patch insn->imm to use the "fake" function id in add_kfunc_call()?
-> Then modifications to fetch_kfunc_meta() wont be necessary.
-
-
-I considered this. I wasn't sure it's safe to patch insn->imm at this
-stage of verification. Also I thought it may be harder to debug the
-verifier if we do btf id replacement in the calls pre-verification
-(because we lose the original btf id).
-
-Maybe I was too causious.
-
-Alexei, Andrii, what do you think?
-
-
-> 
->> +		/*
->> +		 * An _impl kfunc with KF_MAGIC_ARGS counterpart
->> +		 * does not have its own kfunc flags.
->> +		 */
->> +		tmp_func_id = magic_kfunc_by_impl(func_id);
->> +		if (tmp_func_id < 0)
->> +			return -EACCES;
->> +		kfunc_flags = btf_kfunc_flags_if_allowed(desc_btf, tmp_func_id, env->prog);
->> +		if (!kfunc_flags)
->> +			return -EACCES;
->> +	} else if (unlikely(KF_MAGIC_ARGS & *kfunc_flags)) {
->> +		/*
->> +		 * An actual func_proto of a kfunc with KF_MAGIC_ARGS flag
->> +		 * can be found through the corresponding _impl kfunc.
->> +		 */
->> +		func_proto = find_magic_kfunc_proto(desc_btf, func_id);
->>  	}
->>  
->> +	if (!func_proto)
->> +		return -EACCES;
->> +
->>  	memset(meta, 0, sizeof(*meta));
->>  	meta->btf = desc_btf;
->>  	meta->func_id = func_id;
->> @@ -14189,6 +14293,17 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
->>  	for (i = 0; i < nargs; i++) {
->>  		u32 regno = i + 1;
->>  
->> +		/*
->> +		 * Magic arguments are set after main verification pass.
->> +		 * For correct tracking of zero-extensions we have to reset subreg_def for such
->> +		 * args. Otherwise mark_btf_func_reg_size() will be inspecting subreg_def of regs
->> +		 * from an earlier (irrelevant) point in the program, which may lead to an error
->> +		 * in opt_subreg_zext_lo32_rnd_hi32().
->> +		 */
->> +		if (unlikely(KF_MAGIC_ARGS & meta.kfunc_flags
->> +				&& is_kfunc_arg_magic(desc_btf, &args[i])))
->> +			regs[regno].subreg_def = DEF_NOT_SUBREG;
->> +
->>  		t = btf_type_skip_modifiers(desc_btf, args[i].type, NULL);
->>  		if (btf_type_is_ptr(t))
->>  			mark_btf_func_reg_size(env, regno, sizeof(void *));
-
+[...]
