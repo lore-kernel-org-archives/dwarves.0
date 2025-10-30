@@ -1,92 +1,96 @@
-Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-174.mta0.migadu.com (out-174.mta0.migadu.com [91.218.175.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B13636CA8A
-	for <dwarves@vger.kernel.org>; Thu, 30 Oct 2025 18:42:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5A831F9F51
+	for <dwarves@vger.kernel.org>; Thu, 30 Oct 2025 18:46:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761849749; cv=none; b=MAck1fMQPC/2dMUxP9hqIS1IBVVTzc7NILSSwINvfoYKsA9dI96k2nOVmq2c+nH9J6AnE1LIY5BTpoOyLQL0WCF8Oa8pMVcIY/DaLp73nLS0kT1c8c1OUeRx5D6LDsdtZnqudxKgVxaBsDohCr5Bzn+CbaunAWVOe82MsB2mZpg=
+	t=1761850002; cv=none; b=AyKdUSz/jcSqllieznxfaU87zaHR7fLpakt++uDuZafeCi0FUqy1FQB1BQIeEl4+uPyb5Luoi2vtMCsp/6uI6LReIcShyttsKxzlughPkYLjw6MM9c8Uw4EQgxme2tJfjBgNofcgD9kM34RbtkGSfmdkJySX/mvBwENeOrlAL6k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761849749; c=relaxed/simple;
-	bh=fqtnOdojOdFfgjwtxnv71uAMW/0p0vRttvQJJj7ox8Y=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=l9QXNRjtIVKRtQlDVKokBUT/j3AR3eHMXuLKJOPMmqHqqhCV/1guj1qKGSQfarE82HVz79cJH4aMegQY6iKXfc64wKW0o4wLrnlLwk0FsREn8qZ/gTCi0OUMyKJU98gKNqjnY0Z13LwjQsSqnhs6wux5TRjeLlGDeR9TuDBM0UM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mr6yogZa; arc=none smtp.client-ip=209.85.216.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1761850002; c=relaxed/simple;
+	bh=pqxNHriMw1r4afu4RkiP94Fn2Ci3RsF9b4eEXwdr8UE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=uDggJgO1uJd9PLDsY1fBVJcC0TAv4RTYdSxlgT5EWJXBAG3RfM6wSW2xWfDcCkeCwPiwRtOEDHv079JPNGopVsoWvIrOqOL8d8MyoZBN4GslVIusSXOlHHWBPzjdUkLhtjvtdUVBGo1jGTjMqMhm+9dBGt6oYKk8n69MiCiThqQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ZxnqIDK1; arc=none smtp.client-ip=91.218.175.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mr6yogZa"
-Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-33f9aec69b6so1861252a91.1
-        for <dwarves@vger.kernel.org>; Thu, 30 Oct 2025 11:42:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1761849748; x=1762454548; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=fwrkrZIUazJ7bwJv5R2Mr8CVBfe2F2MQtH76Kc4QL0U=;
-        b=mr6yogZards/f+97gGCpQxv75Gfbai9BnLx5ecRHTldW644NNqJ7Im/2K+FqU8mtUU
-         K1yGCHSrm/9uBDxf1X+kksYl0tijQH64AgYGanho6JU4tDv6YaKeW/lMhChWOMcofflQ
-         itzvzD/hq1vsHXnPhN+co8LWMFNHrjTrJskC4WQkW29ToHVjfM/h99Fskr2412Ez6Fu/
-         Bs8yFfA9+SWZ5dTHDu0NgB3Ko4LswpOtgO7nb7c4OlR1BuirilyBaUHTszq4vpWGwFr5
-         TpWg1aCk+67/FVFFhtAfEp+zglWFa0jR2DSTWt3bWgeXDNE0z8Ni1x47GvGEthq358Ay
-         bONg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761849748; x=1762454548;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=fwrkrZIUazJ7bwJv5R2Mr8CVBfe2F2MQtH76Kc4QL0U=;
-        b=jpqUCMWG02EjJ95wQjaOmY9LQDLLvPSCKc8NbmvRfaSEVrHYrNoUEm8l/aqlbrOuFS
-         MVP+FPu2n6tPeISkY/t4hW1IQIwHKPnNAh0o8foE7Wc12xMvrD7TI73hUcqcD56xQr/4
-         59tpTI+RsPKwBkTJktUSNrLb95xaI78ruXsweSTvem5HlX5bNdW2UbnDMNQKwRrCW9Zd
-         4lDDtmXUHFcFtn1/1YA8Vx5+Vs8MAzks3v0eIxHifWTysv4kZs3fpSV6b4QnTFXtqg5I
-         ghduOnEj+XcIj/y3hQ8NY56kGiiKD3lQDfhJ8mKDWMtb/lPJ0aiUllmW3wwBqlEO3Glo
-         QEqA==
-X-Gm-Message-State: AOJu0YwHFoiRFrH/31Q4ONqDqr67ADiMUgbh/wgPUO6ZANu/HPZnLf/u
-	tTrae7YgF8rpAGsSm42fi0lkvBQqLtfy2O8siVjYg8Ovxt6ughrMu5yO
-X-Gm-Gg: ASbGncvyAg6nwjcBvmfaWqXRD4IJDoZpzwJ3Nb9OkEgaHR5xdF62He8+40lR+fehkbG
-	syNjIoVCRszZKGHLkokrOr5ryKTotBRj4aoxssWWY2XF0JmZw961gV0059U6pyeG9oGtmOLgb9K
-	19Ak0s+Q7qMh+0ihpJDRqU6zHKJ9QOOsvvKS6cyfkzkmnXjfmO1Ve9Mbs7pxT0UQFlCn7c3BX+f
-	t7H8qART2DCbZ0Grl7Mlvo+nWalNhiRl0EvZXUh79JbpJ64+fthxOY10Kisz70vc8qKYAOfYNX8
-	8PRY73TKD8ZvKsHFH9a43IZAvZiISNb1RE5132iYNhwmEdqXtRZQarLhZTsTqs6CMhdy1KOHBJo
-	YGt+/VeoS3OUo5AeOWyzbEIvA9cbsIsv5U+mQ0ynAn3QiVQj3Wq8MzD7hzttNwfvVsNRanQ68UA
-	5ioG+3eSbL
-X-Google-Smtp-Source: AGHT+IEOmCJTpNFIXtxyOp5mwzIkcVae3pLCciRt7rZVx/1uKSxUgWjvR9oDLlzFVkUnfq1L5jZwPA==
-X-Received: by 2002:a17:90b:530c:b0:339:ec9c:b26d with SMTP id 98e67ed59e1d1-34082fa950bmr1078051a91.8.1761849747632;
-        Thu, 30 Oct 2025 11:42:27 -0700 (PDT)
-Received: from [192.168.0.226] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-34050b9edeasm3349299a91.14.2025.10.30.11.42.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Oct 2025 11:42:27 -0700 (PDT)
-Message-ID: <4558f35eb191c2605542b368f1dab4f69231ab8c.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v1 0/8] bpf: magic kernel functions
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Alan Maguire <alan.maguire@oracle.com>, Ihor Solodrai	
- <ihor.solodrai@linux.dev>, bpf@vger.kernel.org, andrii@kernel.org,
- ast@kernel.org
-Cc: dwarves@vger.kernel.org, acme@kernel.org, tj@kernel.org,
- kernel-team@meta.com
-Date: Thu, 30 Oct 2025 11:42:24 -0700
-In-Reply-To: <145364f5-3752-41b7-92d9-c97437b95b9a@oracle.com>
-References: <20251029190113.3323406-1-ihor.solodrai@linux.dev>
-	 <50ddff79d33d6e2d57e104f610273d647530ddbc.camel@gmail.com>
-	 <99115d79a7808ca1290726561e36b64ec56e2a1e.camel@gmail.com>
-	 <6e0b67d02cf7243b01a163589b3b58d1e4a0fdd8.camel@gmail.com>
-	 <145364f5-3752-41b7-92d9-c97437b95b9a@oracle.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.2 (3.56.2-1.fc42) 
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ZxnqIDK1"
+Message-ID: <710129ad-ebe6-4a92-a21f-3aa1f762fe74@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1761849997;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=qTn/s4qWennv6WaQpWLMdKogEFBIvv5r2D6SfWS1Xb8=;
+	b=ZxnqIDK1ut4lr7E0jW0DFudT2drfORsZzMwF9WRiRr4ZCMXRxYv/A1ZrkGCtaJRmdqYG7D
+	4L4Us5nUgJRlb2jq6N3cIsve5aAzh4DYcNyOJrTitigMHvDhiUgpWSUG8T5zJpESyU3ci+
+	VzQB2F1GzbZtk/78ZFRM+MdAB+vUbFQ=
+Date: Thu, 30 Oct 2025 11:46:30 -0700
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Subject: Re: [PATCH bpf-next v1 0/8] bpf: magic kernel functions
+To: Alan Maguire <alan.maguire@oracle.com>,
+ Eduard Zingerman <eddyz87@gmail.com>, bpf@vger.kernel.org,
+ andrii@kernel.org, ast@kernel.org
+Cc: dwarves@vger.kernel.org, acme@kernel.org, tj@kernel.org,
+ kernel-team@meta.com
+References: <20251029190113.3323406-1-ihor.solodrai@linux.dev>
+ <50ddff79d33d6e2d57e104f610273d647530ddbc.camel@gmail.com>
+ <99115d79a7808ca1290726561e36b64ec56e2a1e.camel@gmail.com>
+ <6e0b67d02cf7243b01a163589b3b58d1e4a0fdd8.camel@gmail.com>
+ <145364f5-3752-41b7-92d9-c97437b95b9a@oracle.com>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Ihor Solodrai <ihor.solodrai@linux.dev>
+In-Reply-To: <145364f5-3752-41b7-92d9-c97437b95b9a@oracle.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-On Thu, 2025-10-30 at 18:26 +0000, Alan Maguire wrote:
-
-[...]
-
+On 10/30/25 11:26 AM, Alan Maguire wrote:
+> On 30/10/2025 18:14, Eduard Zingerman wrote:
+>> On Wed, 2025-10-29 at 23:11 -0700, Eduard Zingerman wrote:
+>>> On Wed, 2025-10-29 at 17:44 -0700, Eduard Zingerman wrote:
+>>>> On Wed, 2025-10-29 at 12:01 -0700, Ihor Solodrai wrote:
+>>>>
+>>>> [...]
+>>
+>> Scheme discussed off-list for new functions with __implicit args:
+>> - kernel source code:
+>>
+>>     __bpf_kfunc void foo(struct bpf_prog_aux p__implicit)
+>> 	BTF_ID_FLAGS(foo, KF_IMPLICIT_ARGS)
+>>
+>> - pahole:
+>>   - renames foo to foo_impl
+>>   - adds bpf-side definition for 'foo' w/o implicit args
+>>   vmlinux btf:
+>>
+>>     __bpf_kfunc void foo_impl(struct bpf_prog_aux p__implicit);
+>>     void foo(void);
+>>
+>> - resolve_btfids puts the 'foo' (the one w/o implicit args) id to all
+>>   id lists (no changes needed for this, follows from pahole changes);
+>> - verifier.c:add_kfunc_call()
+>>   - Sees the id of 'foo' and kfunc flags with KF_IMPLICIT_ARGS
+>>   - Replaces the id with id of 'foo_impl'.
+>>
+>> This will break the following scenario:
+>> - new kfunc is added with __implicit arg
+>> - kernel is built with old pahole
+>> - vmlinux.h is generated for such kernel
+>> - bpf program is compiled against such vmlinux.h
+>> - attempt to run such program on a new kernel compiled with new pahole
+>>   will fail.
+>>
+>> Andrei and Alexei deemed this acceptable.
+> 
 > Okay so bear with me as this is probably a massive over-simplification.
 > It seems like what we want here is a way to establish a relationship
 > between the BTF associated with the _impl function and the kfunc-visible
@@ -100,15 +104,40 @@ On Thu, 2025-10-30 at 18:26 +0000, Alan Maguire wrote:
 > loop (aside from generating BTF for both variants as usual) and
 > compatibility issues aren't there as much because resolve_btfids travels
 > with the kernel, no changes needed for pahole.
->=20
+
+We've had a couple of rounds of back and forth on this.
+
+The reasoning here is that going forward we want to make a kfunc with
+implicit arguments easy to define. That is:
+
+    __bpf_kfunc int bpf_kfunc(int arg, struct bpf_prog_aux *aux__impl) {}
+    BTF_ID_FLAGS(func, bpf_kfunc, KF_IMPLICIT_ARGS)
+
+That's it.
+
+In order to keep pahole out of the loop, it's necessary to have both
+interface and implementation declarations in the kernel. Something
+like this:
+
+    __bpf_kfunc_interface int bpf_kfunc(int arg) {}
+    __bpf_kfunc int bpf_kfunc_impl(int arg, struct bpf_prog_aux *aux__impl) {}
+    BTF_ID_FLAGS(func, bpf_kfunc, KF_IMPLICIT_ARGS)
+
+Which shifts most of the burden of resolving KF_IMPLICIT_ARGS to the
+verifier. But then of course both variants will be callable from BPF,
+which is another thing we'd like to avoid.
+
+pahole provides an ability to modify BTF only, and make that
+bpf_kfunc_impl (almost) invisible to the user, which is great.
+
+The downside is that maintaining backwards compatibility between
+kernel, pahole and BPF binaries is difficult.
+
+
+> 
 > I'm guessing the above is missing something though?
+> 
+> Thanks!
+> 
+> Alan
 
-Andrii does not like having to declare two functions manually in C code:
-
-  __bpf_kfunc foo_impl(p__implicit);
-  __bpf_kfunc foo(void);    <-------- don't want to declare this explicitly
-
-But prototypes for both functions are needed in the BTF.
-And the only place that can invent new BTFs is pahole.
-Imo, that's a bit of an over-complication =C2=AF\_(=E3=83=84)_/=C2=AF.
- =20
