@@ -1,76 +1,75 @@
-Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
+Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2719F2ED866
-	for <dwarves@vger.kernel.org>; Wed,  5 Nov 2025 22:07:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDC572EE5FE
+	for <dwarves@vger.kernel.org>; Wed,  5 Nov 2025 22:09:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762380476; cv=none; b=dIzNbbyREjBbizJBh1Ob0KVUe0ZF7VunWm1MH003hURRBl5VtTEVQED81/JMHeCHpUhMQRCne0o26LJDFunA4Haqse8eS+I1W7IQpvETlaHK+2ftdtKK1m5C58XocgySTnyC3Hz+WPWqjrM2LPIrIPMtZT92xGtrSYEFsLBMj0Q=
+	t=1762380543; cv=none; b=o4iKSr4RA3ioYkH2WZGKyJMtpllBG7nTxn8KL+IAXKzmei4KLaW4g+Coribb+SS61p9+cbM0q4sYibQgixSbguWjzffYDvj552NDp0w/Gr+mKV+07YsF8bIvwPl5yErfzUOxDqB7oMQf2xdrxWdyc4Ugcd0bbeJYXEoEj6emY0Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762380476; c=relaxed/simple;
-	bh=5krTRkoMQzSVD4dkgq2VoRoFS4p0YotvMcCijGLNDL8=;
+	s=arc-20240116; t=1762380543; c=relaxed/simple;
+	bh=KgXp3nCnzWJkka6TIDbKkxCGzc5iLi6go3oc5VGCLSc=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=XYg9+e/fnjCRMM3Gy4jv8/J2ySzSJHsK/sI5aSLh5ZvEGsXhZy+4jMl5WU5XQ4H25cdVT1goWjYQJUbZeKJvw9HKOo4bvg3d3XcF8r44tkDlT6xhGILqXGQKw4K9ptcgEoaKHEsw6Z3F9Vtis8kda5eCojMancl3Xd9iV9z5JTA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IfLZkk5n; arc=none smtp.client-ip=209.85.210.170
+	 Content-Type:MIME-Version; b=kTsrhT+Px3rts+q9J52cB8MtAbIheIfH5Fc1kd/p5UJYY5L9d/b9wMBlGlKKrX/D4MrOH5ti2NGvn8zlZmJcyPAOpb/oL7ySRBT3QQqnxoQHWckjltbGlZIsF4bj2p+xFaeDCi8oj8148sw1c9BKALfWasgUhDgCF5VCNB+8SF4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=m1ks+Q7t; arc=none smtp.client-ip=209.85.215.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IfLZkk5n"
-Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-76e2ea933b7so339841b3a.1
-        for <dwarves@vger.kernel.org>; Wed, 05 Nov 2025 14:07:55 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="m1ks+Q7t"
+Received: by mail-pg1-f176.google.com with SMTP id 41be03b00d2f7-ba599137cf8so295229a12.0
+        for <dwarves@vger.kernel.org>; Wed, 05 Nov 2025 14:09:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1762380474; x=1762985274; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1762380541; x=1762985341; darn=vger.kernel.org;
         h=mime-version:user-agent:content-transfer-encoding:references
          :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=M2Ubau25FQKUQ99DQtgmPUMsvH7h9LKNq2dn1/ErqV8=;
-        b=IfLZkk5nXFYwW2zpZC8YGJF+SA3i57u9HzPtHmkwDIj2mSE3Kmg+8Z4hjOOHOnIIll
-         /kTBu2Ul6fLViKdB9JJQRsBJEocSvjyUHsljdkcW4LVYRy75gH/PYX11+yoKxWYJdtDt
-         CPCkKorqfYnyTioB3xYLr/fAI++Yh82xmnE27YHqEen/AmjW6Y9JjspepiNu2YHRl4wz
-         Atwe8negtjGlIb9SdS2b7txOHaBqaRmGeKd/ZJLjlwSfaK+7csDqPWl/ffmTpcKAkWkL
-         l4FKWhi/vUL4+9igAaIckk0Aa7tMVCHZnE/9VjyjcHjxOBBfudHGklV6nTL242OJvh5u
-         FruA==
+        bh=8+4iq6Nh86L1GZyal89LrHUzhbwe/7RnJqO8ZvkHHtE=;
+        b=m1ks+Q7tcLohYFK1Dzo+hWdx5CmHrHwbBoqjjhsgJRTaWmtdiTCZChkUrbaWpneBtv
+         eJXmAJLuVOYwh0+4LO34KowNDrReoK37Tg3l6ea/KJPKVwbcMkYBej4ol9zL3iSWF28S
+         i2IAm5NkcX3grf/41Jx6a4EheZLnMvrnHBMopbgq8a67tH7smqqCNOMLQ1Hp5bO+gCC5
+         Bfhfn8+a5JVgit3WBiezQACOfIsVDX94j1LHrPoXSz8R6+V1KGONOH8JQnMW+/5looJN
+         FwUIgU/3I/ULSOuCtHWAfg8yarPGFTIGO+MdP43GiOpdrCoqwFn2Mn361il5x7VOW9Ci
+         GzHg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762380474; x=1762985274;
+        d=1e100.net; s=20230601; t=1762380541; x=1762985341;
         h=mime-version:user-agent:content-transfer-encoding:references
          :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=M2Ubau25FQKUQ99DQtgmPUMsvH7h9LKNq2dn1/ErqV8=;
-        b=r/s0EKhvXv0dbrRxo4KnNjX384ismx1T1IzKp+JWthCsQH1+x4jY4lwzI6BtOUtCEG
-         M0wEbV3k5+Yl6TMh/i8B9ym4oaoHPNNUx6leXpnKNytfoQWx/ozDhfu76fOE/0Ll25J8
-         G+fTn8XdMnq2cuU876ZhfJqsyvKrr1vYk1VmVXxCEGuK/YNfg9C6on80vL01ndGPUfPf
-         7y5UyqGwMIawtzjt3hxy3HdVbr7KIoWtqQVy8pKisBtR80pSdgnLxtKZSzMRTXfZuJAA
-         1L7AUq+wZvsINHTPJ2raLpeqJ23dk8m+hKO0OCdAW4nX+/PhV8zrhDEj24KZmjXIP/90
-         rZLg==
-X-Forwarded-Encrypted: i=1; AJvYcCWHSlT0zWSuNaDNb0AgmYEa+Qh2DtNpd05FQgF8N0Ahauj2Tz4OaP5D1j7V+viraHUHR/7bupHX@vger.kernel.org
-X-Gm-Message-State: AOJu0YwnvAjo5GTbCQnyzDs1DZQaQlu5qR+BhqaACTCyMt/s+0phDSzm
-	i02Fnm6ocCZ+wvKjBhQKfe2s2RTrWxA7f7QG3lqx2MvZ0iIYTBSw5ePd
-X-Gm-Gg: ASbGncsxqPvp0WnM+gwZxZ6ac6zVd7/xTwBcvxdg1ssQ18WHyfXWyZARN1SbOwN9yqI
-	+vzhdlGxiSPHyQCR0eNKkYBcLZ9S+hcOrd9ZlasmGuqJnMBbtt8gYAQ56LVDoka7NHrs7rkvTuv
-	176eCF2v7KCfguESlLAejRq5JYyi5QlbBx9VpbYHOqssbkxoS+SeatGsetqahIaYZbjbUhGCOxy
-	91KCLt1g45hKYIiGmZOr4g6t7imuzpgd0ElhcHAHQQdfEXheCVR0kSB0BjuvzqwsenLNb+FXm5o
-	3/xhFI4Psd6TPR4KXwNXM3eqIontvSaEPTH7i0BrUxZWtLSmIrj9pP6dcK7NHhVb2DU+77+fw3H
-	GXJnKWdPWUO7jj9AzDB2HTODgndphh0JJBflTclM2gwkU93QAf1+BRdHKDg/iCCQRJcvOh5cYXc
-	Z10+6WqQIBRZpWEeOntgJYkCyU6JjSufNEffo=
-X-Google-Smtp-Source: AGHT+IFdZOB0M+qj11LfJg/Kpz/HRb0u4801UcFyALDLujBt3wuysLdvfZewJByj820lfVxAXmPVMg==
-X-Received: by 2002:a05:6a00:3e16:b0:77e:d2f7:f307 with SMTP id d2e1a72fcca58-7af706c387emr1294327b3a.9.1762380474262;
-        Wed, 05 Nov 2025 14:07:54 -0800 (PST)
+        bh=8+4iq6Nh86L1GZyal89LrHUzhbwe/7RnJqO8ZvkHHtE=;
+        b=ZwGFkdNPxefmt04DGG2gTokmNmC/ZIea/34F/CEndrOSrAAAbm1fGahvkbBCKCiljt
+         IcpgdEAHk80ahFixeB5JJjDVy+jo2O83hmTSVDJP9I1J0mO1O30EJMZh0F9+OemkIX/Y
+         k8xsDMquliA7SdDbw/GyrUg3v1dalpCpq2JNSl2yFZRdIvlEIoISpqIMEhrhFE5plszI
+         WuJzzz3QZW5kr7QXe9zhvv11/5uGK0YBHnJ2unK7iaLdAcy7PqA3J340FoE3ZXk/20hM
+         p/ybV1+GapJWnRB7nQTPFVbFOP1d4bUci9bfEDRfYavsniHUkM/8MwQ4Zu9tDYxvh08c
+         JvNA==
+X-Forwarded-Encrypted: i=1; AJvYcCWwPPJ0+bp2o5Z/dx7fV/8gleKKv2Z4CxojjxdesrpXW8oBl+bUqRBTsvPJ03cMNPiL5oXwTDXD@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywq2425lXdxoQx7rJU2wUUYFLwfXNvc2xuD5dHUhVz12hdDFmB3
+	V9Pgsnda9Oj7OL9+lzL5haDLCACQx48NYp8IjDqrdZ6tJHlAft45w6pd
+X-Gm-Gg: ASbGnctBaiMWDrhJYNjOuuWGYhoqC5S5xymveFHj36FWDurqTJ36YigDscKtSrfB+bS
+	kUtnOX4cX5b4vBWt8Kujakd+OajwxuOtlTHqLfQPO3SFBeoMB7+HkDzqOexPJLujFlZ+zAF02s0
+	uIiSVF6U2SmXLSBpmUo6lHkcbUrfXaXyr0aCT9DHHzOUDUn8SvCHLGrVWwDLo+5SwaDf6zBzzIW
+	l+e61LqXFppC3W3QDCNC0dUqvWC6dI7t5hzBtirpGKAZfxPWRqsVDLTM1mMQCR0ZfFRAw++nkSo
+	yDYH0FezEQX+BkQaRHyss0tPtrhn75cW4Q5/kjU4IgPo0sg2HWUAbRd6J6PL6fB0p12eElbziQO
+	bErvhQIwj7ahYk82CcuwVQhHLy5nHSe7Y4C4IrfJwrbo2GxUFuvM2FQckroTX3s0ngpprh9cheM
+	O4D9KXXbeLESxEDhSa1RlG2Qt7LbmWkBkHF60=
+X-Google-Smtp-Source: AGHT+IENaFQ323oqHXktoW9GYmrBP/FWVmxzB76vnO2zIMZUBVCvou6g2s32dv+DxPvmfdHEzD56lg==
+X-Received: by 2002:a05:6a21:3e07:b0:2cf:afc1:cc3c with SMTP id adf61e73a8af0-350de314257mr966411637.16.1762380541043;
+        Wed, 05 Nov 2025 14:09:01 -0800 (PST)
 Received: from ?IPv6:2a03:83e0:115c:1:cdf2:29c1:f331:3e1? ([2620:10d:c090:500::6:8aee])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7af7f84fc12sm450647b3a.2.2025.11.05.14.07.53
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-341d11e2336sm84997a91.1.2025.11.05.14.09.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Nov 2025 14:07:53 -0800 (PST)
-Message-ID: <5348259229fb7ae5b37b026cc4a403450cb3d62d.camel@gmail.com>
-Subject: Re: [PATCH dwarves v3 3/3] btf_encoder: Factor out BPF kfunc
- emission
+        Wed, 05 Nov 2025 14:09:00 -0800 (PST)
+Message-ID: <c251bcb61fb1ed225d2ad1b0d865f4b4bb7ffb5c.camel@gmail.com>
+Subject: Re: [PATCH dwarves v3 0/3] btf_encoder: refactor emission of BTF
+ funcs
 From: Eduard Zingerman <eddyz87@gmail.com>
 To: Ihor Solodrai <ihor.solodrai@linux.dev>, dwarves@vger.kernel.org, 
 	alan.maguire@oracle.com, acme@kernel.org
 Cc: bpf@vger.kernel.org, andrii@kernel.org, ast@kernel.org,
  kernel-team@meta.com
-Date: Wed, 05 Nov 2025 14:07:52 -0800
-In-Reply-To: <20251105185926.296539-4-ihor.solodrai@linux.dev>
+Date: Wed, 05 Nov 2025 14:08:59 -0800
+In-Reply-To: <20251105185926.296539-1-ihor.solodrai@linux.dev>
 References: <20251105185926.296539-1-ihor.solodrai@linux.dev>
-	 <20251105185926.296539-4-ihor.solodrai@linux.dev>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 User-Agent: Evolution 3.56.2 (3.56.2-1.fc42) 
@@ -82,44 +81,28 @@ List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
 On Wed, 2025-11-05 at 10:59 -0800, Ihor Solodrai wrote:
+> This series refactors a few functions that handle how BTF functions
+> are emitted.
+>=20
+> While addressing comments from Eduard, I noticed that we don't
+> actually need to carry the encoder in btf_encoder_func_state, because
+> only one encoder exists at all times. So in v3 I added a patch
+> removing encoder from the state struct, which resolves the ambiguity
+> of where state->encoder should be used.
+>=20
+> v2: https://lore.kernel.org/dwarves/20251104233532.196287-1-ihor.solodrai=
+@linux.dev/
+> v1: https://lore.kernel.org/dwarves/20251029190249.3323752-2-ihor.solodra=
+i@linux.dev/
+>=20
+> Ihor Solodrai (3):
+>   btf_encoder: Remove encoder pointer from btf_encoder_func_state
+>   btf_encoder: Refactor btf_encoder__add_func_proto
+>   btf_encoder: Factor out BPF kfunc emission
+>=20
+>  btf_encoder.c | 204 +++++++++++++++++++++++++++++---------------------
+>  1 file changed, 117 insertions(+), 87 deletions(-)
 
-[...]
+No difference in generated BTF with my test kernel config.
 
-> @@ -1408,6 +1394,28 @@ static int32_t btf_encoder__add_func(struct btf_en=
-coder *encoder,
->  		return -1;
->  	}
-> =20
-> +	return btf_fn_id;
-> +}
-> +
-> +static int btf_encoder__add_bpf_kfunc(struct btf_encoder *encoder,
-> +				      struct btf_encoder_func_state *state)
-> +{
-> +	int btf_fn_id, err;
-> +
-> +	if (encoder->tag_kfuncs && encoder->encode_attributes)
-> +		if (btf__add_bpf_arena_type_tags(encoder->btf, state) < 0)
-> +			return -1;
-
-Nit: maybe keep the error check consistent with the one below? E.g.:
-       err =3D btf__add_bpf_arena_type_tags(...);
-       if (err)
-          return err;
-     ?
-> +
-> +	btf_fn_id =3D btf_encoder__add_func(encoder, state);
-> +	if (btf_fn_id < 0)
-> +		return -1;
-> +
-> +	if (encoder->tag_kfuncs && !encoder->skip_encoding_decl_tag) {
-> +		err =3D btf__tag_kfunc(encoder->btf, state->elf, btf_fn_id);
-> +		if (err < 0)
-> +			return -1;
-> +	}
-> +
->  	return 0;
->  }
-> =20
-
-[...]
+Tested-by: Eduard Zingerman <eddyz87@gmail.com>
