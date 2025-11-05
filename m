@@ -1,135 +1,71 @@
-Received: from smtp.gentoo.org (woodpecker.gentoo.org [140.211.166.183])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-176.mta1.migadu.com (out-176.mta1.migadu.com [95.215.58.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 906F92C08B0
-	for <dwarves@vger.kernel.org>; Wed,  5 Nov 2025 07:00:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=140.211.166.183
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6948E26FDB3
+	for <dwarves@vger.kernel.org>; Wed,  5 Nov 2025 18:59:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762326017; cv=none; b=LmHmOOhM+Z4nfCNqxTVA+c0uMXGNJN/4VBK9TZQSxQzjp5LxOxz6EUL/otGL5jxyZsTRkp6WVUrAT7D/MyUi1ZIts35+2NP8VagRvDBtFsqgJFIGaTTZqfwRQzoKgtVQcXJXAABpVCjqaMni2lIqIFaCh6ulxUrIeP6/QL2TiBc=
+	t=1762369188; cv=none; b=WaAliPdCUMkOYJ66Jb2Ei4slfAFvrM5BDMk17UBYgADFLJ3fR3269LdtPJvlmbhKZMGqk7MDHN+T6m93Vc3Z91b+CV9YLGFun2AKR++0+zIWgqUIoxZ6gVl2aYkCsfOiQYIeCarWj8QgTAlYv+0595hSEPTzchzYXf97D7wLIfA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762326017; c=relaxed/simple;
-	bh=b3uKeyCVpHhO/GtbxvdQHML0vlC2c6jyp+psIKo8yuQ=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=GbXo0A7+Digr21Wd0+EbRcdSXv6aqIEh/8cbqkmTjlPjOtzusdb1b4EiyHvAbkxVviiR9v/xBKgcMQ/t0hu+t4fMXj0qsE2AGp5y65MSxv4J52mx+IzTKNx8dvBdjcoAsRZO+yU0yt+TQc6Iu+kAt9Ml779QbfsaqPblklw0MIw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gentoo.org; spf=pass smtp.mailfrom=gentoo.org; arc=none smtp.client-ip=140.211.166.183
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gentoo.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gentoo.org
-Received: from [IPV6:2001:a62:4d6:5401:ad99:51f1:12ea:ab02] (unknown [IPv6:2001:a62:4d6:5401:ad99:51f1:12ea:ab02])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: zzam)
-	by smtp.gentoo.org (Postfix) with ESMTPSA id 53DDA33DF47;
-	Wed, 05 Nov 2025 07:00:01 +0000 (UTC)
-Message-ID: <656efe8d-7214-4d5c-a47b-3ceb1eb5ff26@gentoo.org>
-Date: Wed, 5 Nov 2025 08:00:19 +0100
+	s=arc-20240116; t=1762369188; c=relaxed/simple;
+	bh=3GwN5gWb07Yf5LOcMgdhPtd1aiTrudPwLqJ4k/U+JCM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=a3iKdpsENY0GkP4EDhj24k2wK2/JT5ph+ia153WjZZbc0r1xyINI80TkSA1akfBUCavW31S0VKAqZ+oukRxLtvpT0+TdcRNITDjh6LyCVZTnIpCDJLwM31eS78rcxZRQfKPwF8m2K0JZhpBfJ6OKSZx3hZSF1PVRPb4RRASrr74=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=uIrIVMWq; arc=none smtp.client-ip=95.215.58.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="uIrIVMWq"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1762369182;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=ArQX/hFYiBzDmap8PQiaxRMbGd76dktq6M3+JyIauSY=;
+	b=uIrIVMWq52vlGdnIkfacilq22rSLri3ZM1/+oo2YTwZCTkVdeRBWO07XYd2xZpFcMHBSdX
+	GY7McJeXKav45eYdVCeJ6OvKouxpCdHNcxi63yBr1b0QYlHqNtQe1KgramLUlJhsteZEOU
+	HJ77ErUBmahykAEqXgwZC+yFEU/IjEg=
+From: Ihor Solodrai <ihor.solodrai@linux.dev>
+To: dwarves@vger.kernel.org,
+	alan.maguire@oracle.com,
+	acme@kernel.org,
+	eddyz87@gmail.com
+Cc: bpf@vger.kernel.org,
+	andrii@kernel.org,
+	ast@kernel.org,
+	kernel-team@meta.com
+Subject: [PATCH dwarves v3 0/3] btf_encoder: refactor emission of BTF funcs
+Date: Wed,  5 Nov 2025 10:59:23 -0800
+Message-ID: <20251105185926.296539-1-ihor.solodrai@linux.dev>
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Matthias Schwarzott <zzam@gentoo.org>
-Subject: Re: pahole: Fix deprecated cmake_minimum_required
-To: Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc: Alan Maguire <alan.maguire@oracle.com>, dwarves@vger.kernel.org
-References: <bef26065-2dd0-43df-9dfb-f3c4b7a17685@gentoo.org>
- <aQDY7_VtHlFP7ssB@x1>
-Content-Language: en-US
-In-Reply-To: <aQDY7_VtHlFP7ssB@x1>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-Am 28.10.25 um 15:53 schrieb Arnaldo Carvalho de Melo:
-> On Tue, Oct 28, 2025 at 07:58:17AM +0100, Matthias Schwarzott wrote:
->> I got to know that using a cmake_minimum_required version of less than 3.10
->> is deprecated. Support for it will be removed from cmake.
-> 
-> Support for what? For features present before 3.10? So we better make
-> sure that we have pahole use that 'cmake_minimum_required(3.10)' so that
-> we don't end up using such deprecated cmake features and end up breaking
-> the build in distros using, say, cmake 3.11?
+This series refactors a few functions that handle how BTF functions
+are emitted.
 
-Similar. If we declare cmake_minimum_version less than 3.10 then a new 
-released cmake-4.3 might error out similar to this (when I reduce 
-min-version to 3.0):
+While addressing comments from Eduard, I noticed that we don't
+actually need to carry the encoder in btf_encoder_func_state, because
+only one encoder exists at all times. So in v3 I added a patch
+removing encoder from the state struct, which resolves the ambiguity
+of where state->encoder should be used.
 
-   CMake Error at CMakeLists.txt:1 (cmake_minimum_required):
-     Compatibility with CMake < 3.5 has been removed from CMake.
+v2: https://lore.kernel.org/dwarves/20251104233532.196287-1-ihor.solodrai@linux.dev/
+v1: https://lore.kernel.org/dwarves/20251029190249.3323752-2-ihor.solodrai@linux.dev/
 
-     Update the VERSION argument <min> value.  Or, use the <min>...<max> 
-syntax
-     to tell CMake that the project requires at least <min> but has been 
-updated
-     to work with policies introduced by <max> or earlier.
+Ihor Solodrai (3):
+  btf_encoder: Remove encoder pointer from btf_encoder_func_state
+  btf_encoder: Refactor btf_encoder__add_func_proto
+  btf_encoder: Factor out BPF kfunc emission
 
-     Or, add -DCMAKE_POLICY_VERSION_MINIMUM=3.5 to try configuring anyway.
+ btf_encoder.c | 204 +++++++++++++++++++++++++++++---------------------
+ 1 file changed, 117 insertions(+), 87 deletions(-)
 
-> 
-> Please CC dwarves@vger.kernel.org when sending patches, like I did in
-> this reply :-)
-
-Good to know.
-
-Regards
-Matthias
-
-> 
-> Thanks!
-> 
-> - Arnaldo
->   
->> I suggest to raise the minimum required cmake version to at least 3.10
->> (released 20 November 2017).
->> See attached patch.
-> 
->> see gentoo pahole issue: https://bugs.gentoo.org/964482
->> gentoo overall issue: https://bugs.gentoo.org/964405
->   
->> cmake merge request:
->> https://gitlab.kitware.com/cmake/cmake/-/merge_requests/9875
->   
->> deprecate-pre-3.10
->> ------------------
->   
->> * Compatibility with versions of CMake older than 3.10 is now deprecated
->>    and will be removed from a future version.  Calls to
->>    :command:`cmake_minimum_required` or :command:`cmake_policy` that set
->>    the policy version to an older value now issue a deprecation diagnostic.
-> 
->>  From b9e521ef5e9c01d8d19f505de778ceaef5ecd4eb Mon Sep 17 00:00:00 2001
->> From: Matthias Schwarzott <zzam@gentoo.org>
->> Date: Tue, 28 Oct 2025 07:52:00 +0100
->> Subject: [PATCH] CMakeLists.txt: Require cmake 3.10 or higher
->>
->> To fix this warning from cmake:
->>
->> CMake Deprecation Warning at CMakeLists.txt:1 (cmake_minimum_required):
->>    Compatibility with CMake < 3.10 will be removed from a future version of
->>    CMake.
->>
->>    Update the VERSION argument <min> value.  Or, use the <min>...<max> syntax
->>    to tell CMake that the project requires at least <min> but has been updated
->>    to work with policies introduced by <max> or earlier.
->>
->> Signed-off-by: Matthias Schwarzott <zzam@gentoo.org>
->> ---
->>   CMakeLists.txt | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/CMakeLists.txt b/CMakeLists.txt
->> index eb873000d7bf..91522c1382a5 100644
->> --- a/CMakeLists.txt
->> +++ b/CMakeLists.txt
->> @@ -1,4 +1,4 @@
->> -cmake_minimum_required(VERSION 3.5)
->> +cmake_minimum_required(VERSION 3.10)
->>   project(pahole C)
->>   cmake_policy(SET CMP0005 NEW)
->>   
->> -- 
->> 2.51.0
->>
-> 
+-- 
+2.51.1
 
