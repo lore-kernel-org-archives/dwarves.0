@@ -1,155 +1,104 @@
-Received: from out-172.mta0.migadu.com (out-172.mta0.migadu.com [91.218.175.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8864832E741;
-	Tue,  4 Nov 2025 23:35:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 854C327453
+	for <dwarves@vger.kernel.org>; Wed,  5 Nov 2025 01:45:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762299361; cv=none; b=KjVDLB7S7RQbqvbgh1coagigwEWWe2WH17uv0b/l5D9SbGE9Bh1kmtWLeP7EXNVN1omwGZHS/kt+TBNWUtoUY+JOcMAgpZrhreykI50ej6bvpVXwDuIbbKRJ3/4nVnvp3NBb1r3tz0wXsEhhXiVdIbw0XRZtXD+qABmVxVqXPpY=
+	t=1762307120; cv=none; b=hO402PF0H2fXD/mn3ZY/1Iw2XplsqlVXZUNg9/utM/iBCf0iKMW0i0F4CJKXhJZil5+IOwiXV4mblSbtDJnryHsv0peN3OA+/zugGaHM6qvFYwrbVK/m3Ds3GocWYG1tZXeRTKz2f6B4vBQA9z5bNAKasVWFOJCDgosQtTTjWrM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762299361; c=relaxed/simple;
-	bh=nVCZv7BDaADVPM+NUS7ZNu0z7wImAda6AlRFZGx41zE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ckvxJhY1JyjRO/Q0hTiJeWznsOaIycT3oLpOUOg25IGIAV2FXRFqVAqGnwtbRy+0JqqCe5L3UPiDl7TNJ2g3WqkfdPeFbBqdV4QFhqpyJFze3KmrmLcJy/4KiU/OY9xGYoLAdDJoNYaK49PUrLfISANoGYORDrlSicAygtbKpYc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=FPCmQ1DV; arc=none smtp.client-ip=91.218.175.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1762307120; c=relaxed/simple;
+	bh=+fMeu6S6+hdh2AO7AJ7kBbTO3lR3XOXXCyxIrAl2zvo=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=Dl+fKcf4/jvC/zF4CGBNYUFdYMkIpOQj170Bj6tuDLdUqXMAKQPgbp2y51Y6lvllfhp96WjgyYg3txWUATIGsqCyOx3r69aniQHQIdmwfiUa2nSJwDi765+d2zVm5LqC88MakSuAHj1WtEN33ntxUeD4P1wH/CqHlmaUoqNDL98=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DmiXKcbl; arc=none smtp.client-ip=209.85.215.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="FPCmQ1DV"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1762299357;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=qHztu5pNrbiBILt1YDLFsBjjPbkd4otCCvwHABdiiEo=;
-	b=FPCmQ1DVC5vOHiJHUjfb7VK8ypqqYlP2I8GoFnxqR1Jn67A6hGXyzMe1AEEw4tQaDEHMLJ
-	+z33te9+Rr31+b4UQJT/8rK+yToiZdrzrdkVpnzM1AfBgyfHZSFKaV6iBGqQ06b2pDIrLz
-	NpNNc/lQVZli5umNlxKdhUTNyh1K+Bk=
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
-To: dwarves@vger.kernel.org,
-	alan.maguire@oracle.com,
-	acme@kernel.org,
-	eddyz87@gmail.com
-Cc: bpf@vger.kernel.org,
-	andrii@kernel.org,
-	ast@kernel.org,
-	kernel-team@meta.com
-Subject: [PATCH dwarves v2 2/2] btf_encoder: factor out btf_encoder__add_bpf_kfunc()
-Date: Tue,  4 Nov 2025 15:35:32 -0800
-Message-ID: <20251104233532.196287-3-ihor.solodrai@linux.dev>
-In-Reply-To: <20251104233532.196287-1-ihor.solodrai@linux.dev>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DmiXKcbl"
+Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-b9a5b5b47bfso2056347a12.1
+        for <dwarves@vger.kernel.org>; Tue, 04 Nov 2025 17:45:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1762307119; x=1762911919; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=KxZDxh7I7x4eGax46NKR/v6t63M0OZYsUiQcPaev0EI=;
+        b=DmiXKcblimxTQf1teNsOcDPLWpN8uP9El5v3YEBXwYyflNk61fi8iu4OpQDGQw7y1Q
+         sn1anS0BDr2mEQ7RGAw0jzMCQ9h32CMFgkQVTtkJcN1sRC2nnoxy7Hsn/YOqDSA02ISq
+         pOLvOiATnrCp27sWcgXfB5l+bkWl4d/VBx99ID3+CSn7fYkTCgebBOvZG+CAqQdjuHoT
+         XkSPbrq2fTrgvNNom5mkhiIJ4RExQMl98oXIsJqPwwh8mMYl0YnDXYC7LqYgxCIdCl51
+         8PC23yHDNKJm5o+qdOR1EMcGcHu7veDYf2lW/YB7nB+5dBTe42Tt8H/i1wTRmYRGfsCs
+         f0Eg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1762307119; x=1762911919;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=KxZDxh7I7x4eGax46NKR/v6t63M0OZYsUiQcPaev0EI=;
+        b=CyWr2o/UdkOIighJlYwPyZEW2J25EpLB4TmoxsLEfBfDPKCYNKccgDfkxYOxWS9BBB
+         xBq15y15dAIKIDsVNurStJFkAAUm6kQx0DScv2mCZL2nl+sb9sn3DRKrOGCBpuyGvPs0
+         sOZpi9T7Lf2Cpz58w+nCVmZE53aHSkm164tSPAgyguA8u+u4CeZkDb6902RhamJFvYWc
+         z7/04YmVG1vyP+pWHWHOzpiKkkACMoO0DDURmoIijf3kVtZCo7T+1obM9TCYYoWRfdh7
+         DvCwgXRWcDGHwJ+/qdQBWe1Ug6iexr9W9bVnY4AdlE9SRqWOMY24vJsRRagi6CjVbqV9
+         C3DQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUwWddsEUzJBgbvWNhWU+Ti7+imdKn3tu34v/wb2f/wqMKqkX7As6Q9J2nzUjpu+aycuSELx1wy@vger.kernel.org
+X-Gm-Message-State: AOJu0YyVvIrc3E9vk1ooGGWPWBBuiXoVQjXzYPQzmHoQNadN4A1JLDjW
+	Ei6oDY0tiWL0BHMgf4Ij6X+sRDy8g5c7J5Pi826IrsnIRn8FZ6lDZ+ar
+X-Gm-Gg: ASbGncvu5Gq+1rX7kYnioMcujFXslATxCB4L0ju37qjeWq4xsxSadCk+tlgt1Dd4sQR
+	zP/Nf2+kh67UI8fvdbdDJz9LqmRdf4OCnKcTcb80aFDkcG7+gV6wdWqLF2M1tlXvMYmo9fghjhJ
+	Nf1yD0WYlWTJL3CUasRrHabW1e6wnhVvE7d1WCepvUTt7NuaZupIpfIIzEkmdTZ3fa4HRPZy/MC
+	+5DhZwERnvRkewbeDOX5QyODR01rrq8DPXOPAB0Kqbsknoso7ziuFRvNUQnAOw2E/oadYXnmi9P
+	5e7JBlvS4zS4YK7FrBUKJqoWvjF8LPfZinx2mYs+XT6TW1kRYkeofq+pjj2GlW6P0VYBfzLGGfM
+	xaRAKPLyL3KMEK86Fc6+4dqb393rvMA/xqadokvg/91omYXHrDf5v9dzEIjQMrS2cHoOvdvTiG7
+	srZHww3laXESXeMj/4M6GjOgKl6OHeIruwJg==
+X-Google-Smtp-Source: AGHT+IHeEavZBNwuat1kGcSsAB0eRT2oAHDkUWWx0WOQQf7szc8HSJbJ/29q+YDY7xjS5ULKOclaog==
+X-Received: by 2002:a17:902:f644:b0:295:5945:2920 with SMTP id d9443c01a7336-2962ada6848mr20749405ad.34.1762307118679;
+        Tue, 04 Nov 2025 17:45:18 -0800 (PST)
+Received: from ?IPv6:2a03:83e0:115c:1:a643:22b:eb9:c921? ([2620:10d:c090:500::5:99aa])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-29601a61418sm41376615ad.96.2025.11.04.17.45.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Nov 2025 17:45:18 -0800 (PST)
+Message-ID: <09e212d8cec59ed6de637b62dd974c88fd33a3b0.camel@gmail.com>
+Subject: Re: [PATCH dwarves v2 1/2] btf_encoder: refactor
+ btf_encoder__add_func_proto
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Ihor Solodrai <ihor.solodrai@linux.dev>, dwarves@vger.kernel.org, 
+	alan.maguire@oracle.com, acme@kernel.org
+Cc: bpf@vger.kernel.org, andrii@kernel.org, ast@kernel.org,
+ kernel-team@meta.com
+Date: Tue, 04 Nov 2025 17:45:16 -0800
+In-Reply-To: <20251104233532.196287-2-ihor.solodrai@linux.dev>
 References: <20251104233532.196287-1-ihor.solodrai@linux.dev>
+	 <20251104233532.196287-2-ihor.solodrai@linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.2 (3.56.2-1.fc42) 
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
 
-Emitting BTF for BPF kernel functions requires special
-handling. Consolidate this behavior into btf_encoder__add_bpf_kfunc()
-function, which uses simplified btf_encoder_add_func()
+On Tue, 2025-11-04 at 15:35 -0800, Ihor Solodrai wrote:
+> btf_encoder__add_func_proto() essentially implements two independent
+> code paths depending on input arguments: one for struct ftype and the
+> other for struct btf_encoder_func_state.
+>=20
+> Split btf_encoder__add_func_proto() into two variants:
+>   * btf_encoder__add_func_proto_for_ftype()
+>   * func_state__add_func_proto()
+>=20
+> And factor out common btf_encoder__emit_func_proto() subroutine.
+>=20
+> No functional changes.
+>=20
+> Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
+> ---
 
-No functional changes.
+No changes in generated BTF for my test kernel.
 
-Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
----
- btf_encoder.c | 43 +++++++++++++++++++++++++++----------------
- 1 file changed, 27 insertions(+), 16 deletions(-)
+Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 
-diff --git a/btf_encoder.c b/btf_encoder.c
-index d4ab5ec..7accaa0 100644
---- a/btf_encoder.c
-+++ b/btf_encoder.c
-@@ -774,6 +774,7 @@ static int btf__tag_bpf_arena_arg(struct btf *btf, struct btf_encoder_func_state
- 	return id;
- }
- 
-+/* Modifies state->ret_type_id and state->parms[i].type_id for flagged kfuncs */
- static int btf__add_bpf_arena_type_tags(struct btf *btf, struct btf_encoder_func_state *state)
- {
- 	uint32_t flags = state->elf->kfunc_flags;
-@@ -884,11 +885,6 @@ static int32_t func_state__add_func_proto(struct btf_encoder_func_state *state)
- 	const char *name;
- 	bool is_last;
- 
--	/* Beware: btf__add_bpf_arena_type_tags may change some members of the state */
--	if (is_kfunc_state(state) && encoder->tag_kfuncs && encoder->encode_attributes)
--		if (btf__add_bpf_arena_type_tags(encoder->btf, state) < 0)
--			return -1;
--
- 	type_id = state->ret_type_id;
- 	nr_params = state->nr_parms;
- 
-@@ -1367,7 +1363,6 @@ static int32_t btf_encoder__add_func(struct btf_encoder *encoder,
- 	const char *value;
- 	char tmp_value[KSYM_NAME_LEN];
- 	uint16_t idx;
--	int err;
- 
- 	btf_fnproto_id = func_state__add_func_proto(state);
- 	name = func->name;
-@@ -1380,15 +1375,6 @@ static int32_t btf_encoder__add_func(struct btf_encoder *encoder,
- 		return -1;
- 	}
- 
--	if (func->kfunc && encoder->tag_kfuncs && !encoder->skip_encoding_decl_tag) {
--		err = btf__tag_kfunc(encoder->btf, func, btf_fn_id);
--		if (err < 0)
--			return err;
--	}
--
--	if (state->nr_annots == 0)
--		return 0;
--
- 	for (idx = 0; idx < state->nr_annots; idx++) {
- 		struct btf_encoder_func_annot *a = &state->annots[idx];
- 
-@@ -1411,6 +1397,28 @@ static int32_t btf_encoder__add_func(struct btf_encoder *encoder,
- 		return -1;
- 	}
- 
-+	return btf_fn_id;
-+}
-+
-+static int btf_encoder__add_bpf_kfunc(struct btf_encoder *encoder,
-+				      struct btf_encoder_func_state *state)
-+{
-+	int btf_fn_id, err;
-+
-+	if (encoder->tag_kfuncs && encoder->encode_attributes)
-+		if (btf__add_bpf_arena_type_tags(encoder->btf, state) < 0)
-+			return -1;
-+
-+	btf_fn_id = btf_encoder__add_func(encoder, state);
-+	if (btf_fn_id < 0)
-+		return -1;
-+
-+	if (encoder->tag_kfuncs && !encoder->skip_encoding_decl_tag) {
-+		err = btf__tag_kfunc(encoder->btf, state->elf, btf_fn_id);
-+		if (err < 0)
-+			return -1;
-+	}
-+
- 	return 0;
- }
- 
-@@ -1508,7 +1516,10 @@ static int btf_encoder__add_saved_funcs(struct btf_encoder *encoder, bool skip_e
- 					0, 0);
- 
- 		if (add_to_btf) {
--			err = btf_encoder__add_func(state->encoder, state);
-+			if (is_kfunc_state(state))
-+				err = btf_encoder__add_bpf_kfunc(state->encoder, state);
-+			else
-+				err = btf_encoder__add_func(state->encoder, state);
- 			if (err < 0)
- 				goto out;
- 		}
--- 
-2.51.1
-
+[...]
