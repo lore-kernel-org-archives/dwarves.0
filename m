@@ -1,168 +1,125 @@
-Received: from out-181.mta0.migadu.com (out-181.mta0.migadu.com [91.218.175.181])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE1F32222D2
-	for <dwarves@vger.kernel.org>; Thu,  6 Nov 2025 01:28:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8735F2F60D1;
+	Mon, 10 Nov 2025 22:12:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762392537; cv=none; b=MMfOZsekTlExPZBCMGkYHkXEX+Ot9paaMp65SYV/AAZ4XRRLAMKUl0M1Wso9UzT2XpdN50QI4vNXfifPeJK5OS5FV0OW4zpJ2orivyE+qYySp4pZb0svd4mD/tHOo+AS78Sjy+BFRfefKYqySGiNk1axWtSv25kT+8L+i8gUBFA=
+	t=1762812749; cv=none; b=qBrTYYNVxK2V4rhsdM5Xtxz1SiwGj/d/94q16b4fQN3Ka512kiHya1rD638camTttxk5U4WKuWVS3XjvYTnaRQtspYP6nlntHxHuVxoA25Zc0SBL8YfNd+NxFjTb20Lha2h1KMN0ecwbrnBHNHJYoSH2Kletv08m3Vy4lAJL5Jo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762392537; c=relaxed/simple;
-	bh=cBYfu+lEp1uTxD7e7OzDYqbb3DH7WRxuriznZvgABS0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=g0xnJmgbdHW2xzlC9NaaKtgbQ8BgBe78lHyogs5NpYmVugnuxkdYpJm9INdSI12JWoIdWyK3j7HNu3OJyfil+V870J3Vu7cwKHaThRkFZt1VQCF7TlyQU4YO+8XNVbiSggRAuhYbsuIBMWYC+8tBTGnNax5TUgibd5FZ67iiaPU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ZsihvxJR; arc=none smtp.client-ip=91.218.175.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1762812749; c=relaxed/simple;
+	bh=iy5kMaaeHl6VSN+jlhG/NqPo3TCL0ASyH7OyGSMw9lA=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=VYJbNj1yvUHksHyR47kJeAUWi8dH/9q22hPLKzEzPoZzojmOLzLW0TYKaVaUlq8xzYTaIwjsvuhUb+4LbiYiqvOLeH0JJ64JursQYvhfp1MjK3jx3DLnmvRPJUv/h9NY/Jy9xw/LCYxriRPrDPqqxZOtzlTSXZyHByIv8ZIHwho=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nVkrl/PV; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ZsihvxJR"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1762392534;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=brfkkiFIUjzBv5glmIbWyU8Lsk9WqNmYBwzLqwenkuI=;
-	b=ZsihvxJRvhni3XM/XCa38QoMeuupf6g2r9P21G9BTbig6H2oDDeq6vmgdT+0sdpbOLaZay
-	Ahj5B7/TVjPlJbDKHtnLTQwdSQIAJkiYQXfP+V/+7B0wAjJI5Mw6RPxn6MvDfb9EYRP+0f
-	6PRtP0AN1aSXEfjMiVn/VhpsMEpiBIE=
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
-To: dwarves@vger.kernel.org,
-	alan.maguire@oracle.com,
-	acme@kernel.org,
-	eddyz87@gmail.com
-Cc: bpf@vger.kernel.org,
-	andrii@kernel.org,
-	ast@kernel.org,
-	kernel-team@meta.com
-Subject: [PATCH dwarves v4 3/3] btf_encoder: Factor out BPF kfunc emission
-Date: Wed,  5 Nov 2025 17:28:35 -0800
-Message-ID: <20251106012835.260373-4-ihor.solodrai@linux.dev>
-In-Reply-To: <20251106012835.260373-1-ihor.solodrai@linux.dev>
-References: <20251106012835.260373-1-ihor.solodrai@linux.dev>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nVkrl/PV"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 467CCC4AF0B;
+	Mon, 10 Nov 2025 22:12:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1762812748;
+	bh=iy5kMaaeHl6VSN+jlhG/NqPo3TCL0ASyH7OyGSMw9lA=;
+	h=Date:From:To:Cc:Subject:From;
+	b=nVkrl/PVVPxAsLFk7JCIzcInUKR6DLaCNhhFQy3d1Dkby1BF0XHCGJPjqFu3ikvMW
+	 ofaCkL/c3da9Ev5KbiDoh6UHUkW62VvQfKcKM1EFY3aMgysUXOp1BxAmV7qUtOAWEx
+	 LHyRdjcvSQFXSJxJtZu5P0qKsyKt+Rwx/AB4rTuR4mXCO7sbA0yK65PNw+nJfSVp8U
+	 F+iqDnqoJ3pR1wmvd0GDqbkmtzqglCQgwzudG1xPyDxUkrZG3YikN1Des1tcjHpOBb
+	 4x+LH4JQDbNW6Pd6u+fy/C4UWwxTuzQ1yT7r1AQwHh5rMjn3eAWxC2d2cDQJSC03jt
+	 7X8xZFh5q9g+Q==
+Date: Mon, 10 Nov 2025 19:12:25 -0300
+From: Arnaldo Carvalho de Melo <acme@kernel.org>
+To: dwarves@vger.kernel.org
+Cc: Alan Maguire <alan.maguire@oracle.com>,
+	Ihor Solodrai <ihor.solodrai@pm.me>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
+	Menglong Dong <menglong8.dong@gmail.com>,
+	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
+	Alexis =?iso-8859-1?Q?Lothor=E9?= <alexis.lothore@bootlin.com>,
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+	Bastien Curutchet <bastien.curutchet@bootlin.com>,
+	Jan Alexander Steffens <heftig@archlinux.org>,
+	Domenico Andreoli <cavok@debian.org>,
+	Matthias Schwarzott <zzam@gentoo.org>,
+	Dominique Leuenberger <dimstar@opensuse.org>,
+	Dominique Martinet <asmadeus@codewreck.org>,
+	Viktor Malik <vmalik@redhat.com>, Peter Frost <mail@pfrost.me>,
+	Paul Menzel <pmenzel@molgen.mpg.de>,
+	Ben Olson <matthew.olson@intel.com>,
+	Antoine Tenart <atenart@kernel.org>,
+	Paolo Valerio <pvalerio@redhat.com>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	bpf@vger.kernel.org
+Subject: ANNOUNCE: pahole v1.31 (BTF function encoding, BTF alignment
+ inference, more CI)
+Message-ID: <aRJjSfT-PZXayd5S@x1>
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Generating BTF for BPF kernel functions requires special
-handling. Consolidate this behavior into btf_encoder__add_bpf_kfunc(),
-which uses simplified btf_encoder_add_func().
+Hi,
+ 
+	The v1.31 release of pahole is out with a reworked selection of
+functions to encode in BTF, improvements in the inference of alignment
+when loading from BTF, where this isn't explicitely encoded, and more CI
+tests.
 
-No functional changes.
+Main git repo:
 
-Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
-Tested-by: Eduard Zingerman <eddyz87@gmail.com>
----
- btf_encoder.c | 51 ++++++++++++++++++++++++++++++++-------------------
- 1 file changed, 32 insertions(+), 19 deletions(-)
+   https://git.kernel.org/pub/scm/devel/pahole/pahole.git
 
-diff --git a/btf_encoder.c b/btf_encoder.c
-index bdda7d0..b37ee7f 100644
---- a/btf_encoder.c
-+++ b/btf_encoder.c
-@@ -773,6 +773,7 @@ static int btf__tag_bpf_arena_arg(struct btf *btf, struct btf_encoder_func_state
- 	return id;
- }
- 
-+/* Modifies state->ret_type_id and state->parms[i].type_id for flagged kfuncs */
- static int btf__add_bpf_arena_type_tags(struct btf *btf, struct btf_encoder_func_state *state)
- {
- 	uint32_t flags = state->elf->kfunc_flags;
-@@ -883,11 +884,6 @@ static int32_t btf_encoder__add_func_proto_for_state(struct btf_encoder *encoder
- 	const char *name;
- 	bool is_last;
- 
--	/* Beware: btf__add_bpf_arena_type_tags may change some members of the state */
--	if (is_kfunc_state(state) && encoder->tag_kfuncs && encoder->encode_attributes)
--		if (btf__add_bpf_arena_type_tags(encoder->btf, state) < 0)
--			return -1;
--
- 	type_id = state->ret_type_id;
- 	nr_params = state->nr_parms;
- 
-@@ -1357,14 +1353,13 @@ static int btf__tag_kfunc(struct btf *btf, struct elf_function *kfunc, __u32 btf
- static int32_t btf_encoder__add_func(struct btf_encoder *encoder,
- 				     struct btf_encoder_func_state *state)
- {
--	struct elf_function *func = state->elf;
- 	int btf_fnproto_id, btf_fn_id, tag_type_id = 0;
-+	struct elf_function *func = state->elf;
-+	char tmp_value[KSYM_NAME_LEN];
- 	int16_t component_idx = -1;
--	const char *name;
- 	const char *value;
--	char tmp_value[KSYM_NAME_LEN];
-+	const char *name;
- 	uint16_t idx;
--	int err;
- 
- 	btf_fnproto_id = btf_encoder__add_func_proto_for_state(encoder, state);
- 	name = func->name;
-@@ -1377,15 +1372,6 @@ static int32_t btf_encoder__add_func(struct btf_encoder *encoder,
- 		return -1;
- 	}
- 
--	if (func->kfunc && encoder->tag_kfuncs && !encoder->skip_encoding_decl_tag) {
--		err = btf__tag_kfunc(encoder->btf, func, btf_fn_id);
--		if (err < 0)
--			return err;
--	}
--
--	if (state->nr_annots == 0)
--		return 0;
--
- 	for (idx = 0; idx < state->nr_annots; idx++) {
- 		struct btf_encoder_func_annot *a = &state->annots[idx];
- 
-@@ -1408,6 +1394,30 @@ static int32_t btf_encoder__add_func(struct btf_encoder *encoder,
- 		return -1;
- 	}
- 
-+	return btf_fn_id;
-+}
-+
-+static int btf_encoder__add_bpf_kfunc(struct btf_encoder *encoder,
-+				      struct btf_encoder_func_state *state)
-+{
-+	int btf_fn_id, err;
-+
-+	if (encoder->tag_kfuncs && encoder->encode_attributes) {
-+		err = btf__add_bpf_arena_type_tags(encoder->btf, state);
-+		if (err < 0)
-+			return err;
-+	}
-+
-+	btf_fn_id = btf_encoder__add_func(encoder, state);
-+	if (btf_fn_id < 0)
-+		return -1;
-+
-+	if (encoder->tag_kfuncs && !encoder->skip_encoding_decl_tag) {
-+		err = btf__tag_kfunc(encoder->btf, state->elf, btf_fn_id);
-+		if (err < 0)
-+			return err;
-+	}
-+
- 	return 0;
- }
- 
-@@ -1507,7 +1517,10 @@ static int btf_encoder__add_saved_funcs(struct btf_encoder *encoder, bool skip_e
- 					0, 0);
- 
- 		if (add_to_btf) {
--			err = btf_encoder__add_func(encoder, state);
-+			if (is_kfunc_state(state))
-+				err = btf_encoder__add_bpf_kfunc(encoder, state);
-+			else
-+				err = btf_encoder__add_func(encoder, state);
- 			if (err < 0)
- 				goto out;
- 		}
--- 
-2.51.1
+Mirror git repo:
 
+   https://github.com/acmel/dwarves.git
+
+tarball + gpg signature:
+
+   https://fedorapeople.org/~acme/dwarves/dwarves-1.31.tar.xz
+   https://fedorapeople.org/~acme/dwarves/dwarves-1.31.tar.bz2
+   https://fedorapeople.org/~acme/dwarves/dwarves-1.31.tar.sign
+
+	Thanks a lot to all the contributors and distro packagers,
+you're on the CC list, we appreciate a lot the work you put into these
+tools,
+
+Best Regards,
+
+- Arnaldo & Alan
+
+BTF encoder:
+
+- Rework the selection of functions to represent in BTF, for instance:
+
+  - Skip functions that passes values thru the stack when those structs don't
+    have expected alignment due to some attribute usage that then causes
+    problems with BTF trampolines due to lack of expressiveness in BTF to
+    signal such special cases.
+
+- Skip objects (compile units) without DWARF: don't stop a multi object
+  encoding session just because one doesn't have any DWARF in it.
+
+- Fix BTF dedup by updating libbpf. 
+
+BTF loader:
+
+- Fix the inference of the explicit alignment attribute of zero length arrays,
+  like struct skb_ext->data[] in the Linux kernel. Important as BTF has no no
+  explicit alignment attribute encoding.
+
+- Fix the inference of alignments after bitfields, such as in struct
+  nft_rule_dp->data[] after ->handle:42, also in the Linux kernel.
+    
+pahole:
+
+- Fix segfault with --show_reorg_steps option, e.g. pahole -R -S -C task_struct.
+
+CI:
+
+- Add comparision of functions encoded in BTF between baseline 'master' branch
+  and current branch, i.e. 'next'.
