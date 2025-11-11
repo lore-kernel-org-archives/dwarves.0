@@ -1,21 +1,21 @@
 Received: from 66-220-144-178.mail-mxout.facebook.com (66-220-144-178.mail-mxout.facebook.com [66.220.144.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D66893043B5
-	for <dwarves@vger.kernel.org>; Tue, 11 Nov 2025 17:04:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A00F43730F8
+	for <dwarves@vger.kernel.org>; Tue, 11 Nov 2025 17:04:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.144.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762880683; cv=none; b=pBXJSrSQbO5WYxfPPeQvIFhWT6wqke67plncy/t5ixwdu3vaJlqMUHUteOGVvJrlpf1V7OXihNirnwymPEzAgtV7KS1KuwzlvZMtVsGELE1Qpw+5x39dBo3QfPPipzJgpbhWScuCyL5IfkW9ouB0sTuqWmRGmfSwkZU4w4/Lhas=
+	t=1762880685; cv=none; b=N1vJSVE1Rb6xvmqtDZRg6jsjt1bySeQQCNNsPXxCjNJF7/h7Z0bQw3cNhTgmLPjojpzc5/cC0BcteZxF85hay4CRykYm0zv1D+P/Pjp6Rk4VLRIhReCqUTcE2PZV2Si21/lmtSrYneuuYnnjFfFem74GNmHjvsaeToIj9CS1Jvc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762880683; c=relaxed/simple;
-	bh=VYIBjBVTCNqOAFEgx+njh/nJbLMUFKX20ywZAqKiNpE=;
+	s=arc-20240116; t=1762880685; c=relaxed/simple;
+	bh=hsycmXAHehfr4kQaW7lud8UMrcHrqiul/tVlyIUzRaU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Avi/Tyoof3YGY9rnapxGIeglwDF6qrM/LILUXIX5wEmxCzf9PVoNXn4sLxBrfgCUn8lw9z8nKqf34hv+OBbcyybnqptDweJbSSiPFKpTOu8lFbmaVF9KZuCMPdDWZPNExADuoBy0BtDapM+bmlKTEsIESdtbh8iogpNeIvwYEgM=
+	 MIME-Version; b=JS91Qfbit4QO0EmiJxat+WWnPEYpCu2wh526OBVtSDVtIknEuQxIX2Tba9W+Fs+IfE03Ifl+5dXKsyxZIiKp3hgAW3BIS1eF1GoacRx1iyklQumD/1g0EJmpt2NPQaXU3n3/5l+Luwdw+z335wdBmTzEmF1mRUbZrMZ3PhedtHY=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.144.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id DDCBB14B81A06; Tue, 11 Nov 2025 09:04:29 -0800 (PST)
+	id 0225914B81A12; Tue, 11 Nov 2025 09:04:35 -0800 (PST)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: Alan Maguire <alan.maguire@oracle.com>,
 	Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
@@ -26,9 +26,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	David Faust <david.faust@oracle.com>,
 	"Jose E . Marchesi" <jose.marchesi@oracle.com>,
 	kernel-team@fb.com
-Subject: [PATCH dwarves 1/3] btf_encoder: Refactor elf_functions__new() with struct btf_encoder as argument
-Date: Tue, 11 Nov 2025 09:04:29 -0800
-Message-ID: <20251111170429.287170-1-yonghong.song@linux.dev>
+Subject: [PATCH dwarves 2/3] bpf_encoder: Refactor a helper elf_function__check_and_push_sym()
+Date: Tue, 11 Nov 2025 09:04:34 -0800
+Message-ID: <20251111170434.287807-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20251111170424.286892-1-yonghong.song@linux.dev>
 References: <20251111170424.286892-1-yonghong.song@linux.dev>
@@ -40,45 +40,64 @@ List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-For elf_functions__new(), replace original argument 'Elf *elf' with
-'struct btf_encoder *encoder' for future use.
+Inside elf_functions__collect(), refactor portion of the code
+to be a helper elf_function__check_and_push_sym(). Such a helper
+will be used in the next patch.
 
 Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 ---
- btf_encoder.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ btf_encoder.c | 24 ++++++++++++++----------
+ 1 file changed, 14 insertions(+), 10 deletions(-)
 
 diff --git a/btf_encoder.c b/btf_encoder.c
-index 03bc3c7..1c69577 100644
+index 1c69577..d28af58 100644
 --- a/btf_encoder.c
 +++ b/btf_encoder.c
-@@ -187,11 +187,13 @@ static inline void elf_functions__delete(struct elf=
-_functions *funcs)
+@@ -2181,10 +2181,22 @@ static inline int elf_function__push_sym(struct e=
+lf_function *func, struct elf_f
+ 	return 0;
+ }
 =20
- static int elf_functions__collect(struct elf_functions *functions);
-=20
--struct elf_functions *elf_functions__new(Elf *elf)
-+struct elf_functions *elf_functions__new(struct btf_encoder *encoder)
++static int elf_function__check_and_push_sym(struct elf_function *func, c=
+onst char *sym_name, int st_value)
++{
++	struct elf_function_sym func_sym;
++
++	if (!func->name)
++		return -ENOMEM;
++
++	func_sym.name =3D sym_name;
++	func_sym.addr =3D st_value;
++
++	return elf_function__push_sym(func, &func_sym);
++}
++
+ static int elf_functions__collect(struct elf_functions *functions)
  {
- 	struct elf_functions *funcs;
-+	Elf *elf;
- 	int err;
+ 	uint32_t nr_symbols =3D elf_symtab__nr_symbols(functions->symtab);
+-	struct elf_function_sym func_sym;
+ 	struct elf_function *func, *tmp;
+ 	const char *sym_name, *suffix;
+ 	Elf32_Word sym_sec_idx;
+@@ -2224,15 +2236,7 @@ static int elf_functions__collect(struct elf_funct=
+ions *functions)
+ 		else
+ 			func->name =3D strdup(sym_name);
 =20
-+	elf =3D encoder->cu->elf;
- 	funcs =3D calloc(1, sizeof(*funcs));
- 	if (!funcs) {
- 		err =3D -ENOMEM;
-@@ -1509,7 +1511,7 @@ static struct elf_functions *btf_encoder__elf_funct=
-ions(struct btf_encoder *enco
+-		if (!func->name) {
+-			err =3D -ENOMEM;
+-			goto out_free;
+-		}
+-
+-		func_sym.name =3D sym_name;
+-		func_sym.addr =3D sym.st_value;
+-
+-		err =3D elf_function__push_sym(func, &func_sym);
++		err =3D elf_function__check_and_push_sym(func, sym_name, sym.st_value)=
+;
+ 		if (err)
+ 			goto out_free;
 =20
- 	funcs =3D elf_functions__find(encoder->cu->elf, &encoder->elf_functions=
-_list);
- 	if (!funcs) {
--		funcs =3D elf_functions__new(encoder->cu->elf);
-+		funcs =3D elf_functions__new(encoder);
- 		if (funcs)
- 			list_add(&funcs->node, &encoder->elf_functions_list);
- 	}
 --=20
 2.47.3
 
