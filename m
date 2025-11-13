@@ -1,831 +1,237 @@
-Received: from 66-220-144-179.mail-mxout.facebook.com (66-220-144-179.mail-mxout.facebook.com [66.220.144.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28A8936C5AA
-	for <dwarves@vger.kernel.org>; Tue, 11 Nov 2025 17:04:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.144.179
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762880693; cv=none; b=pgJZ4az4x1vmBA2C4kiMKJ3QzvLcZY3pTksjx69lW0OxIlcYSK6WA7nJUTR4ladnzZ1RZKauom5rrzI4Ibm16nxaaumw5I2sGxLUpUg8fhqMtfNU89D0B7LE+hFnGY9UBPW95hZhqXwYyZIuasx9Ffg4DFEyFKP96qu/GCuVTJQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762880693; c=relaxed/simple;
-	bh=OK+D3lee2zoUoAfFSI1bI5pDoijkXCsiNM9vqL1GdAo=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=CIRy8FjwUeCTmvu2APAiAEe00UZkoarA6CguzVJVM2auIURd4ANuu1xE+4GR9q4cXAGycKiDtaqCaJV+yjZFjNNkgIHZvNafG9hX1hKMqKEJU/knUco4ffNSsd66fOZYReeBWcSmC1hXvRF2sp60ziC9KnK27lZP5TfHPoonit8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.144.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
-Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id 1B10514B81A47; Tue, 11 Nov 2025 09:04:40 -0800 (PST)
-From: Yonghong Song <yonghong.song@linux.dev>
-To: Alan Maguire <alan.maguire@oracle.com>,
-	Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
-	dwarves@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	bpf@vger.kernel.org,
-	David Faust <david.faust@oracle.com>,
-	"Jose E . Marchesi" <jose.marchesi@oracle.com>,
-	kernel-team@fb.com
-Subject: [PATCH dwarves 3/3] pahole: Replace or add functions with true signatures in btf
-Date: Tue, 11 Nov 2025 09:04:40 -0800
-Message-ID: <20251111170440.288485-1-yonghong.song@linux.dev>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20251111170424.286892-1-yonghong.song@linux.dev>
-References: <20251111170424.286892-1-yonghong.song@linux.dev>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 119CB361DDE;
+	Thu, 13 Nov 2025 16:38:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.177.32
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1763051888; cv=fail; b=DgoVQA0TDSUIML6YjKaqZmsWQRyeXseLtAypulju8sTnssGhxVCnNCeYhbnxpbF7dCadj26oOfxhWl6sO0ufBIF2rmRjptDo0Qpzzuho2a/8dqc6TJfZZ1EJWfSH8yjPrJ3Y6X03p0gGBD8TgWSkZKGtBEXPXLbttqqWVdcLCNc=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1763051888; c=relaxed/simple;
+	bh=bToI1tHWj52pIULTbS5688hBWl1PC/WcOPC54FTGyj8=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=BMrXCETPa3QRLhF74dkkAgUZOlw1AfuXZS2/Fb4ft3bRkwypq2T768EiS3f4Vz70it/xpAyW7pXRpSln8a32UCCc7nZGnxHpOYmHL5bQdZliiDLj1nK7UulahWzPx9mGN7m4F/kCi9nYFmkXZMjrOYOL7HMNYrIuDvHDKJE8VpQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=eguudjPh; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=JzLPXyqT; arc=fail smtp.client-ip=205.220.177.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="eguudjPh";
+	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="JzLPXyqT"
+Received: from pps.filterd (m0333520.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5ADE9rcm012173;
+	Thu, 13 Nov 2025 16:37:01 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=
+	corp-2025-04-25; bh=qoalB/7kzIWMA7qzFmu9js8QDBzXnpzaOxwEaHIFmHw=; b=
+	eguudjPhChrXg/W/1SEXyO2dDHmS7E0sDkoDJlo5WptvYpTT56hyNfuydyKUDmix
+	W4suR0tereshF92pZlkl0pWbnRrkA0IdqNJUml+9pWm7N0tVARGHQtjzSX7PGj+F
+	HX4cCUAEYYnWuX03RZDHdvXK2YLfhWNFOOqY2oTPdzV+ZHsK5W3OZ9MOvkKucTky
+	Qx+ead3GvA8c0UBJaLWazdb+9BZKBfJzmIfan1GvurODjn4aJdNet+ZoC37eqvqt
+	U0Tu0czf6hb4NHOnJxGFVD90wiUUGUCzFi2NdsLaWvew/ynvaxJ/LVOvG+/QmQuM
+	BkTwp4F//lapXg20o/nnhA==
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4acybqt7j6-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 13 Nov 2025 16:37:01 +0000 (GMT)
+Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 5ADFtAux000447;
+	Thu, 13 Nov 2025 16:37:00 GMT
+Received: from ch5pr02cu005.outbound.protection.outlook.com (mail-northcentralusazon11012028.outbound.protection.outlook.com [40.107.200.28])
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 4a9vafwhyp-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 13 Nov 2025 16:37:00 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=rUFWSDeKB82PMy9EDZ4siAb/9H1mljs4Je0xppczwd8blYoafRAbYzUjQv+MfJiJywRh7ivlKBgJXbU8VOm1bftLe0n9YLOAntUk1JogKkxVihG+IzH3TVn4Dpk3SFzAEjpc3tEB4QndRFkWGoVSUfpoiXcmrBWOER+vxnCsIreiM2I2WzTgF7/hDTcM4Fc7tlrhisvIWIOdeAMmhqhaGL5ejumGIOxqRIqM0/Iird6EV35MbTJtkuwTQBS9aOU+rqp1aPNyz10wW7wGvIEcthbH85/R4SXTapVyWrHdRzX7rkTGTQ2BPNzD3S2LVIfTyLDRwleqpZE/bE/yVdtyTQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=qoalB/7kzIWMA7qzFmu9js8QDBzXnpzaOxwEaHIFmHw=;
+ b=Uk5s4vGW7oVsqkqWUxkTpnd373DHjZ7L58tgNq9DzpScWeZ7CzqD7ihRS1JDADHnGBXeYS8vbuE8vfvGf9OgEqrcvFRl+BolG6m/z8J7iCJ4pkL/tccgLUzdrBRLtkLAl2pVGwMN9VdOzBM1B+xXawsGQnQhBPyPaDLFpC8kUdpH1GtejDsWXQtd6W/2VCYhFmeanP/9x8LiYp3DSw5bC0mBI7qSipERqdzGY3bdaBZXGT27/mnwyvXz9l3xtFCkCadakXugx8U6H6I+HdVW7i7h54+dzNp+2OjSDAIvi6EtPy4NZOT6sRublYowjx+FOXGdDmCBlYfKe0ZFB0h5cA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=qoalB/7kzIWMA7qzFmu9js8QDBzXnpzaOxwEaHIFmHw=;
+ b=JzLPXyqTQoS4AyaJ6D4vYgJh3I11+Q9pHLCUaxSFZr2YNHwVc7U8gFNjbu9sES8LbVYWB70/d4uwlREOSklCLijGHhSceKjTWH5ZkecMcLWBPrgw6gfvfE8ADE9GqB90Vk1RHO4ff0tjZAIK0ul5p1vIH3blYsNlKdyU71QBU7E=
+Received: from DS0PR10MB6271.namprd10.prod.outlook.com (2603:10b6:8:d1::15) by
+ PH0PR10MB6433.namprd10.prod.outlook.com (2603:10b6:510:21c::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9320.17; Thu, 13 Nov
+ 2025 16:36:57 +0000
+Received: from DS0PR10MB6271.namprd10.prod.outlook.com
+ ([fe80::940b:88ca:dd2d:6b0c]) by DS0PR10MB6271.namprd10.prod.outlook.com
+ ([fe80::940b:88ca:dd2d:6b0c%7]) with mapi id 15.20.9320.013; Thu, 13 Nov 2025
+ 16:36:57 +0000
+Message-ID: <520bd6d8-b0a1-40f2-a674-b4c6ed02e254@oracle.com>
+Date: Thu, 13 Nov 2025 16:36:50 +0000
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH dwarves v4 0/3] btf_encoder: refactor emission of BTF
+ funcs
+To: Ihor Solodrai <ihor.solodrai@linux.dev>, dwarves@vger.kernel.org,
+        acme@kernel.org, eddyz87@gmail.com
+Cc: bpf@vger.kernel.org, andrii@kernel.org, ast@kernel.org,
+        kernel-team@meta.com
+References: <20251106012835.260373-1-ihor.solodrai@linux.dev>
+Content-Language: en-GB
+From: Alan Maguire <alan.maguire@oracle.com>
+In-Reply-To: <20251106012835.260373-1-ihor.solodrai@linux.dev>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: FR4P281CA0164.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:ba::11) To DS0PR10MB6271.namprd10.prod.outlook.com
+ (2603:10b6:8:d1::15)
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-
-Overview
-=3D=3D=3D=3D=3D=3D=3D=3D
-
-The llvm pull request ([1]) is able to emit dwarf data for
-changed-signature and new functions. The new dwarf format has
-tag DW_TAG_inlined_subroutine and directly under CU. There
-is no other change for existing dwarf. See further down examples.
-
-When building linux kernel with [1], additional functions will
-be added to dwarf:
-  - A function with signature changed compared to source.
-    For example, original function foo(int a, int b) is optimized
-    too foo(int b). The foo(int b) will be added to dwarf
-    and the original foo(int a, int b) is not touched.
-  - A function generated by the compiler which typically will have
-    '.' in the function name, for example, in thin-lto mode,
-    a function could be foo.llvm.<hash>.
-
-A new feature 'true_signature' is introduced in pahole. Only if
-'true_signature' is enabled by pahole in linux kernel, pahole will
-either replace the old function with new function for correct
-signature in vmlinux/module btf, or add new functions to the btf
-like foo.llvm.<hash>.
-
-Below are some more detailed illustration of new dwarf format,
-how compiler controls what to generate, and how newly added
-functions (e.g., foo.llvm.<hash>) could be used, etc.
-
-Added Dwarf Contents
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-
-The following are some examples from linux kernel.
-
-Example 1
----------
-
-  0x000411f0:   DW_TAG_inlined_subroutine
-                  DW_AT_name      ("split_fs_names")
-                  DW_AT_type      (0x00023368 "int")
-                  DW_AT_artificial        (true)
-                  DW_AT_specification     (0x00040d1f "split_fs_names")
-
-  0x000411fc:     DW_TAG_formal_parameter
-                    DW_AT_name    ("page")
-                    DW_AT_type    (0x000233bb "char *")
-
-  0x00041204:     NULL
-
-vmlinux BTF:
-  [131534] FUNC_PROTO '(anon)' ret_type_id=3D14 vlen=3D1
-          'page' type_id=3D100
-  [131535] FUNC 'split_fs_names' type_id=3D131534 linkage=3Dstatic
-
-Signature changed due to optimization. The source signature is
-  static int __init split_fs_names(char *page, size_t size) { ... }
-
-The vmlinux BTF will encode 'int split_fs_names(char *page)'.
-
-Example 2
----------
-
-  0x01886077:   DW_TAG_inlined_subroutine
-                  DW_AT_name      ("map_create")
-                  DW_AT_type      (0x01854182 "int")
-                  DW_AT_artificial        (true)
-                  DW_AT_specification     (0x01870e96 "map_create")
-
-  0x01886083:     DW_TAG_formal_parameter
-                    DW_AT_name    ("attr")
-                    DW_AT_type    (0x01854370 "bpf_attr *")
-
-  0x0188608b:     DW_TAG_formal_parameter
-                    DW_AT_name    ("uattr__coerce1")
-                    DW_AT_type    (0x01855b14 "bool")
-
-  0x01886093:     NULL
-
-vmlinux BTF:
-  [119] TYPEDEF 'bool' type_id=3D120
-  [120] INT '_Bool' size=3D1 bits_offset=3D0 nr_bits=3D8 encoding=3DBOOL
-  ...
-  [106699] FUNC_PROTO '(anon)' ret_type_id=3D14 vlen=3D2
-          'attr' type_id=3D707
-          'uattr__coerce1' type_id=3D119
-  [106700] FUNC 'map_create' type_id=3D106699 linkage=3Dstatic
-
-Signature changed due to optimization. The source signature is
-  static int map_create(union bpf_attr *attr, bpfptr_t uattr) { ... }
-
-Example 3
----------
-
-  0x0060dd56:   DW_TAG_inlined_subroutine
-                  DW_AT_name      ("enable_step.llvm.569499763459584554")
-                  DW_AT_artificial        (true)
-                  DW_AT_specification     (0x0060d396 "enable_step")
-
-  0x0060dd5d:     DW_TAG_formal_parameter
-                    DW_AT_name    ("child")
-                    DW_AT_type    (0x006046b9 "task_struct *")
-
-  0x0060dd64:     DW_TAG_formal_parameter
-                    DW_AT_name    ("block")
-                    DW_AT_type    (0x00605b99 "bool")
-
-  0x0060dd6b:     NULL
-
-  [90683] FUNC_PROTO '(anon)' ret_type_id=3D0 vlen=3D2
-          'child' type_id=3D321
-          'block' type_id=3D45
-  [90684] FUNC 'enable_step' type_id=3D90683 linkage=3Dstatic
-  [90685] FUNC 'enable_step.llvm.569499763459584554' type_id=3D90683 link=
-age=3Dstatic
-
-No signature change. But the thin-lto promoted the function enable_step()=
- to global,
-hence enable_step.llvm.<hash>. The existing dwarf should already have
-'enable_step' so the above puts 'enable_step.llvm.569499763459584554'
-as the name.
-
-Example 4
----------
-
-  0x00b920fb:   DW_TAG_inlined_subroutine
-                  DW_AT_name      ("__ioremap_caller")
-                  DW_AT_linkage_name      ("__ioremap_caller.llvm.7660766=
-26088609549")
-                  DW_AT_type      (0x00b83dd6 "void *")
-                  DW_AT_artificial        (true)
-                  DW_AT_specification     (0x00b8420d "__ioremap_caller")
-
-  0x00b92109:     DW_TAG_formal_parameter
-                    DW_AT_name    ("phys_addr")
-                    DW_AT_type    (0x00b850b2 "resource_size_t")
-
-  0x00b92111:     DW_TAG_formal_parameter
-                    DW_AT_name    ("size")
-                    DW_AT_type    (0x00b841dd "unsigned long")
-
-  0x00b92119:     DW_TAG_formal_parameter
-                    DW_AT_name    ("pcm")
-                    DW_AT_type    (0x00b84562 "page_cache_mode")
-
-  0x00b92121:     DW_TAG_formal_parameter
-                    DW_AT_name    ("caller")
-                    DW_AT_type    (0x00b83dd6 "void *")
-
-  0x00b92129:     NULL
-
-The corresponding vmlinux BTF:
-  [60222] FUNC_PROTO '(anon)' ret_type_id=3D17 vlen=3D4
-          'phys_addr' type_id=3D56
-          'size' type_id=3D15
-          'pcm' type_id=3D5633
-          'caller' type_id=3D17
-  [60223] FUNC '__ioremap_caller' type_id=3D60222 linkage=3Dstatic
-  [60224] FUNC '__ioremap_caller.llvm.766076626088609549' type_id=3D60222=
- linkage=3Dstatic
-
-For this one, the signature and func name changed for __ioremap_caller().
-The original signature is
-  static void __iomem *
-  __ioremap_caller(resource_size_t phys_addr, unsigned long size,
-                   enum page_cache_mode pcm, void *caller, bool encrypted=
-) { ... }
-
-Build Linux Kernel
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-
-The following kernel patch is needed to support true signatures:
-  diff --git a/Makefile b/Makefile
-  index 088565edc911..a35dd86c7639 100644
-  --- a/Makefile
-  +++ b/Makefile
-  @@ -1002,6 +1002,11 @@ endif
-   ifdef CONFIG_LTO_CLANG
-   ifdef CONFIG_LTO_CLANG_THIN
-   CC_FLAGS_LTO   :=3D -flto=3Dthin -fsplit-lto-unit
-  +ifeq ($(call test-ge, $(CONFIG_PAHOLE_VERSION), 130),y)
-  +ifeq ($(call clang-min-version, 220000),y)
-  +KBUILD_LDFLAGS  +=3D $(call ld-option, -mllvm -enable-changed-func-dbi=
-nfo)
-  +endif
-  +endif
-   else
-   CC_FLAGS_LTO   :=3D -flto
-   endif
-  @@ -1009,6 +1014,12 @@ CC_FLAGS_LTO     +=3D -fvisibility=3Dhidden
-
-   # Limit inlining across translation units to reduce binary size
-   KBUILD_LDFLAGS +=3D -mllvm -import-instr-limit=3D5
-  +else
-  +ifeq ($(call test-ge, $(CONFIG_PAHOLE_VERSION), 130),y)
-  +ifeq ($(call clang-min-version, 220000),y)
-  +KBUILD_CFLAGS  +=3D -mllvm -enable-changed-func-dbinfo
-  +endif
-  +endif
-   endif
-
-   ifdef CONFIG_LTO
-  diff --git a/scripts/Makefile.btf b/scripts/Makefile.btf
-  index db76335dd917..2f66cc0bc2b5 100644
-  --- a/scripts/Makefile.btf
-  +++ b/scripts/Makefile.btf
-  @@ -23,7 +23,7 @@ else
-   # Switch to using --btf_features for v1.26 and later.
-   pahole-flags-$(call test-ge, $(pahole-ver), 126)  =3D -j$(JOBS) --btf_=
-features=3Dencode_force,var,float,enum64,decl_tag,type_tag,optimized_func=
-,consistent_func,decl_tag_kfuncs
-
-  -pahole-flags-$(call test-ge, $(pahole-ver), 130) +=3D --btf_features=3D=
-attributes
-  +pahole-flags-$(call test-ge, $(pahole-ver), 130) +=3D --btf_features=3D=
-attributes --btf_features=3Dtrue_signature
-
-Option to avoid import <foo>.<...> functions
---------------------------------------------
-
-There is a debate whether we should really introduce dwarf function like =
-<foo>.llvm.<hash>
-into BTF. Current pahole searches kallsyms and for symbol like <foo>.llvm=
-.<hash>, only
-<foo> is represented as an elf symbol. This typically is true as if <foo>=
-.llvm.<hash>
-symbol exists, symbol <foo> should not exist. In such cases, one symbol c=
-orresponds to
-one dwarf function entry should work.
-
-However, in llvm, there is a pass FunctionSpecializer which can do specia=
-lization of
-original functions ([1]). For example, there is a static function foo(a, =
-b, c, d) and it
-is used in multiple call sites in the same function. It is possible the l=
-lvm
-may generate the following clones:
-  foo.specialized.1(a, b, c)
-  foo.specialized.2(a, b, d)
-  foo.specialized.3(b, c, d)
-The default maximum number of specialization is 3. If the original functi=
-on foo()
-is not used, then the function foo() will be removed. In such cases, we p=
-robably
-should import foo.<...>() functions if we want to trace those functions. =
-In [1],
-I give one example where print_cpu.specialized.1(...) is created. But I a=
-gree that
-this is a corner case. Not sure whether gcc has similar situation or not.
-
-Anyway, the llvm option "-mllvm -skip-dotted-func" can be used to skip al=
-l functions
-with <foo>.<...>. The following is the related build flag:
-
-  KBUILD_LDFLAGS  +=3D $(call ld-option, -mllvm -enable-changed-func-dbin=
-fo -mllvm -skip-dotted-func)
-  KBUILD_CFLAGS  +=3D -mllvm -enable-changed-func-dbinfo -mllvm -skip-dot=
-ted-func
-
-In this case, the function like __ioremap_caller.llvm.766076626088609549 =
-will not appear in
-generated new dwarfs.
-
-Remarks
-=3D=3D=3D=3D=3D=3D=3D
-
-The llvm patch [1] supports remarks which help dump out some debug info,
-e.g., why a particular function is skipped or generated in special way. T=
-he
-below kernel build option can enable remarks:
-
-  KBUILD_LDFLAGS  +=3D $(call ld-option, -mllvm -enable-changed-func-dbin=
-fo \
-      --opt-remarks-filename --opt-remarks-passes emit-changed-func-debug=
-info)
-  KBUILD_CFLAGS  +=3D -mllvm -enable-changed-func-dbinfo -fsave-optimizat=
-ion-record \
-      -foptimization-record-passes=3Demit-changed-func-debuginfo
-
-For non-lto mode, the remark files will be in the same directory as
-the corresponding object file. For lto mode, the remark files will be
-in the build directory as invoked by ld.lld. The following command
-can help find any non-empty remark file which can help debugging.
-  find . -type f -name '*.opt.yaml.*' -size +0c
-
-Currently, there are no remarks generated. The following is a remark exam=
-ple
-in the commit message in [1].
-
-  $ cat test.opt.yaml
-  --- !Passed
-  Pass:            emit-changed-func-debuginfo
-  Name:            FindNoDIVariable
-  DebugLoc:        { File: test.c, Line: 1, Column: 0 }
-  Function:        callee
-  Args:
-    - String:          'create a new int type '
-    - ArgName:         ''
-    - String:          '('
-    - ArgIndex:        '0'
-    - String:          ')'
-  ...
-
-Some Statictics
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-
-Comparing with and without dotted functions:
--------------------------------------------
-
-  without -mllvm -enable-changed-func-dbinfo:
-    non-lto: 66051 functions
-    lto:     66227 functions
-  additional functions with -mllvm -enable-changed-func-dbinfo:
-    non-lto: 894  new DW_TAG_inlined_subroutine entries
-    lto:     2993 ...
-  additional functions with -mllvm -enable-changed-func-dbinfo -mllvm -sk=
-ip-dotted-func
-    non-lto: 894  ...
-    lto:     1152 ...
-
-So the option '-mllvm -skip-dotted-func' does filter out lots of
-funcitons like <foo>.llvm.<hash>.
-
-vmlinux BTF size:
-----------------
-                                               size
-  non-lto without new signatures:              0x623a4a
-  non-lto with default new signatures:         0x6274c7
-  non-lto with additional -skip-dotted-func:   0x6274c7
-
-  lto without new signatures:                  0x63386e
-  lto with default new signatures:             0x651281
-  lto with additional -skip-dotted-func:       0x63776b
-
-For non-lto build, the vmlinux BTF increases 14973 bytes compared to
-the build without default new signatures.
-
-For lto build, the vmlinux BTF increases 121363 bytes compared to
-the build without default new signatures. If enabling -skip-dotted-func,
-the increase will be 16125 bytes.
-
-So looks like the BTF increase should not be a concern here.
-
-Should We Import Functions with Dot?
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-
-Current pahole removed ".<...>" suffix in kallsyms so the function
-name can match the existing dwarf. This way, the BTF can be generated
-based on dwarf subprogram entries.
-
-In [1], function with dot (e.g., foo.llvm.<hash>) is allowed to be
-in dwarf. This paves the way to have such functions in kernel BTF as well=
-.
-
-Previously, fentry/fexit for function enable_step.llvm.569499763459584554=
-() won't work
-since in vmlinux BTF, the name is 'enable_step'. But 'enable_step' is not=
- in kallsyms,
-so bpf program load will fail. Now we can have a function entry with name
-enable_step.llvm.569499763459584554 in BTF and the name matches with kern=
-el, so
-fentry/fexit can be successful although this needs a little bit user work=
-:
-
-        skel =3D fentry_lto__open();
-        if (!ASSERT_OK_PTR(skel, "fentry_lto__open"))
-                return;
-
-        /* The fentry target is 'start_thread_common' or 'start_thread_co=
-mmon.llvm.<hash>' */
-        /* User need to find out whether either or them exist in ksyms.
-         * Let start_thread_common.llvm.<hash> exists.
-         */
-
-        prog =3D skel->progs.test1;
-        bpf_program__set_attach_target(prog, 0, "start_thread_common.llvm=
-.<hash>");
-
-        err =3D fentry_lto__load(skel);
-        if (!ASSERT_OK(err, "fentry_lto__load"))
-                goto out;
-
-But there are alternative solutions to handle the above.
-
-Solution 1: In [2] which utilize the kprobe_multi with option 'unique_mat=
-ch'.
-It should work in most cases except something like functions foobar() and
-foo.llvm.<hash>(). In such cases, unique_match 'foo*' will not work since
-it will match both functions. But maybe regex could be 'foo.llvm.*'?
-
-Solution 2: With function name 'foo', the kernel can search both 'foo' an=
-d
-'foo.<...>' in kallsyms. If any of two symbols is uniquely available, the
-kernel just picks it and proceed as normal.
-
-Linux Kernel BPF Selftest Resutls
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D
-
-Tried with both non-lto and lto mode, there are no additional selftest
-failures compared to without this patch set.
-
-Future Work
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-
-We need gcc side to generate true signatures as well with ideally
-the same dwarf format.
-
-  [1] https://github.com/llvm/llvm-project/pull/165310
-  [2] https://lore.kernel.org/bpf/20250109174023.3368432-1-yonghong.song@=
-linux.dev/
-
-Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
----
- btf_encoder.c  | 55 +++++++++++++++++++++++++++----
- dwarf_loader.c | 89 ++++++++++++++++++++++++++++++++++++++++++++++++++
- dwarves.h      |  4 +++
- pahole.c       |  9 +++++
- 4 files changed, 150 insertions(+), 7 deletions(-)
-
-diff --git a/btf_encoder.c b/btf_encoder.c
-index d28af58..0f9a4e3 100644
---- a/btf_encoder.c
-+++ b/btf_encoder.c
-@@ -89,6 +89,7 @@ struct btf_encoder_func_state {
- 	uint8_t inconsistent_proto:1;
- 	uint8_t uncertain_parm_loc:1;
- 	uint8_t ambiguous_addr:1;
-+	uint8_t true_signature:1;
- 	int ret_type_id;
- 	struct btf_encoder_func_parm *parms;
- 	struct btf_encoder_func_annot *annots;
-@@ -145,11 +146,13 @@ struct btf_encoder {
- 			  skip_encoding_decl_tag,
- 			  tag_kfuncs,
- 			  gen_distilled_base,
--			  encode_attributes;
-+			  encode_attributes,
-+			  dotted_true_signature;
- 	uint32_t	  array_index_id;
- 	struct elf_secinfo *secinfo;
- 	size_t             seccnt;
- 	int                encode_vars;
-+	int		   nr_true_signature_funcs;
- 	struct {
- 		struct btf_encoder_func_state *array;
- 		int cnt;
-@@ -185,7 +188,7 @@ static inline void elf_functions__delete(struct elf_f=
-unctions *funcs)
- 	free(funcs);
- }
-=20
--static int elf_functions__collect(struct elf_functions *functions);
-+static int elf_functions__collect(struct btf_encoder *encoder, struct el=
-f_functions *functions);
-=20
- struct elf_functions *elf_functions__new(struct btf_encoder *encoder)
- {
-@@ -207,7 +210,7 @@ struct elf_functions *elf_functions__new(struct btf_e=
-ncoder *encoder)
- 	}
-=20
- 	funcs->elf =3D elf;
--	err =3D elf_functions__collect(funcs);
-+	err =3D elf_functions__collect(encoder, funcs);
- 	if (err < 0)
- 		goto out_delete;
-=20
-@@ -1250,6 +1253,7 @@ static int32_t btf_encoder__save_func(struct btf_en=
-coder *encoder, struct functi
- 	state->elf =3D func;
- 	state->nr_parms =3D ftype->nr_parms + (ftype->unspec_parms ? 1 : 0);
- 	state->ret_type_id =3D ftype->tag.type =3D=3D 0 ? 0 : encoder->type_id_=
-off + ftype->tag.type;
-+	state->true_signature =3D ftype->true_signature;
- 	if (state->nr_parms > 0) {
- 		state->parms =3D zalloc(state->nr_parms * sizeof(*state->parms));
- 		if (!state->parms) {
-@@ -1409,7 +1413,20 @@ static int saved_functions_cmp(const void *_a, con=
-st void *_b)
- 	const struct btf_encoder_func_state *a =3D _a;
- 	const struct btf_encoder_func_state *b =3D _b;
-=20
--	return elf_function__name_cmp(a->elf, b->elf);
-+	int ret =3D strcmp(a->elf->name, b->elf->name);
-+	if (ret)
-+		return ret;
-+
-+	/* Two identical names, if one has true_signture attribute, make sure t=
-he
-+	 * one has true_attirube in earlier place. This way, the other function
-+	 * will be filtered out during later btf generation.
-+	 */
-+	if (a->true_signature)
-+		return -1;
-+	else if (b->true_signature)
-+		return 1;
-+
-+	return 0;
- }
-=20
- static int saved_functions_combine(struct btf_encoder_func_state *a, str=
-uct btf_encoder_func_state *b)
-@@ -1419,6 +1436,10 @@ static int saved_functions_combine(struct btf_enco=
-der_func_state *a, struct btf_
- 	if (a->elf !=3D b->elf)
- 		return 1;
-=20
-+	/* Skip if any of the func states represents a true_signature function.=
- */
-+	if (a->true_signature || b->true_signature)
-+		return 0;
-+
- 	optimized =3D a->optimized_parms | b->optimized_parms;
- 	unexpected =3D a->unexpected_reg | b->unexpected_reg;
- 	inconsistent =3D a->inconsistent_proto | b->inconsistent_proto;
-@@ -2194,9 +2215,10 @@ static int elf_function__check_and_push_sym(struct=
- elf_function *func, const cha
- 	return elf_function__push_sym(func, &func_sym);
- }
-=20
--static int elf_functions__collect(struct elf_functions *functions)
-+static int elf_functions__collect(struct btf_encoder *encoder, struct el=
-f_functions *functions)
- {
- 	uint32_t nr_symbols =3D elf_symtab__nr_symbols(functions->symtab);
-+	bool dotted_true_signature =3D encoder->dotted_true_signature;
- 	struct elf_function *func, *tmp;
- 	const char *sym_name, *suffix;
- 	Elf32_Word sym_sec_idx;
-@@ -2204,10 +2226,10 @@ static int elf_functions__collect(struct elf_func=
-tions *functions)
- 	uint32_t core_id;
- 	GElf_Sym sym;
-=20
--	/* We know that number of functions is less than number of symbols,
-+	/* We know that number of functions is less than number of symbols plus=
- number of true signature funcs,
- 	 * so we can overallocate temporarily.
- 	 */
--	functions->entries =3D calloc(nr_symbols, sizeof(*functions->entries));
-+	functions->entries =3D calloc(nr_symbols + encoder->nr_true_signature_f=
-uncs, sizeof(*functions->entries));
- 	if (!functions->entries) {
- 		err =3D -ENOMEM;
- 		goto out_free;
-@@ -2241,6 +2263,23 @@ static int elf_functions__collect(struct elf_funct=
-ions *functions)
- 			goto out_free;
-=20
- 		functions->cnt++;
-+
-+		/* If the dwarf true signature addition does not have any function wit=
-h dot,
-+		 * do nothing. Otherwise, if the suffix is not NULL, i.e, it has '.' i=
-n the
-+		 * function, proceed to record this elf function so later BTF encoding
-+		 * can succeed.
-+		 */
-+		if (!dotted_true_signature || !suffix)
-+			continue;
-+
-+		func =3D &functions->entries[functions->cnt];
-+		func->name =3D strdup(sym_name);
-+
-+		err =3D elf_function__check_and_push_sym(func, sym_name, sym.st_value)=
-;
-+		if (err)
-+			goto out_free;
-+
-+		functions->cnt++;
- 	}
-=20
- 	/* At this point functions->entries is an unordered array of elf_functi=
-on
-@@ -2546,6 +2585,8 @@ struct btf_encoder *btf_encoder__new(struct cu *cu,=
- const char *detached_filenam
- 		encoder->tag_kfuncs	 =3D conf_load->btf_decl_tag_kfuncs;
- 		encoder->gen_distilled_base =3D conf_load->btf_gen_distilled_base;
- 		encoder->encode_attributes =3D conf_load->btf_attributes;
-+		encoder->dotted_true_signature =3D conf_load->dotted_true_signature;
-+		encoder->nr_true_signature_funcs =3D conf_load->nr_true_signature_func=
-s;
- 		encoder->verbose	 =3D verbose;
- 		encoder->has_index_type  =3D false;
- 		encoder->need_index_type =3D false;
-diff --git a/dwarf_loader.c b/dwarf_loader.c
-index 79be3f5..1c1cfb2 100644
---- a/dwarf_loader.c
-+++ b/dwarf_loader.c
-@@ -537,6 +537,19 @@ static void tag__init(struct tag *tag, struct cu *cu=
-, Dwarf_Die *die)
- 	INIT_LIST_HEAD(&tag->node);
- }
-=20
-+static void tag__init_true_signature(struct tag *tag, struct cu *cu, Dwa=
-rf_Die *die)
-+{
-+	struct dwarf_tag *dtag =3D tag__dwarf(tag);
-+
-+	tag->tag =3D DW_TAG_subprogram;
-+	dtag->id  =3D dwarf_dieoffset(die);
-+	dwarf_tag__set_attr_type(dtag, type, die, DW_AT_type);
-+	tag->recursivity_level =3D 0;
-+	tag->attributes =3D NULL;
-+
-+	INIT_LIST_HEAD(&tag->node);
-+}
-+
- static struct tag *tag__new(Dwarf_Die *die, struct cu *cu)
- {
- 	struct tag *tag =3D tag__alloc(cu, sizeof(*tag));
-@@ -1487,6 +1500,22 @@ static void ftype__init(struct ftype *ftype, Dwarf=
-_Die *die, struct cu *cu)
- 	ftype->template_parameter_pack =3D NULL;
- }
-=20
-+static void ftype__init_true_signature(struct ftype *ftype, Dwarf_Die *d=
-ie, struct cu *cu)
-+{
-+#ifndef NDEBUG
-+	const uint16_t tag =3D dwarf_tag(die);
-+	assert(tag =3D=3D DW_TAG_inlined_subroutine);
-+#endif
-+	tag__init_true_signature(&ftype->tag, cu, die);
-+	INIT_LIST_HEAD(&ftype->parms);
-+	INIT_LIST_HEAD(&ftype->template_type_params);
-+	INIT_LIST_HEAD(&ftype->template_value_params);
-+	ftype->nr_parms	    =3D 0;
-+	ftype->unspec_parms =3D 0;
-+	ftype->template_parameter_pack =3D NULL;
-+	ftype->true_signature =3D 1;
-+}
-+
- static struct ftype *ftype__new(Dwarf_Die *die, struct cu *cu)
- {
- 	struct ftype *ftype =3D tag__alloc(cu, sizeof(*ftype));
-@@ -2468,9 +2497,69 @@ static struct tag *__die__process_tag(Dwarf_Die *d=
-ie, struct cu *cu,
- 	return tag;
- }
-=20
-+static int die__process_inline_subroutine(Dwarf_Die *die, struct cu *cu,=
- struct conf_load *conf, const char *name)
-+{
-+	struct function *function =3D tag__alloc(cu, sizeof(*function));
-+
-+	if (function !=3D NULL) {
-+		ftype__init_true_signature(&function->proto, die, cu);
-+		lexblock__init(&function->lexblock, cu, die);
-+		function->name =3D name;
-+		tag__set_spec(&function->proto.tag, die);
-+		INIT_LIST_HEAD(&function->annots);
-+		function->cu_total_size_inline_expansions =3D 0;
-+		function->cu_total_nr_inline_expansions =3D 0;
-+		function->priv =3D NULL;
-+	}
-+
-+	if (function !=3D NULL &&
-+	    die__process_function(die, &function->proto, &function->lexblock, c=
-u, conf) !=3D 0) {
-+		function__delete(function, cu);
-+		function =3D NULL;
-+	}
-+
-+	struct tag *tag =3D function ? &function->proto.tag : NULL;
-+	if (tag =3D=3D NULL)
-+		return -ENOMEM;
-+
-+	uint32_t id =3D 0;
-+	tag->top_level =3D 1;
-+	cu__add_tag(cu, tag, &id);
-+	cu__hash(cu, tag);
-+	struct dwarf_tag *dtag =3D tag__dwarf(tag);
-+	dtag->small_id =3D id;
-+
-+	conf->nr_true_signature_funcs++;
-+	if (!conf->dotted_true_signature && !!strchr(name, '.'))
-+		conf->dotted_true_signature =3D true;
-+
-+	return 0;
-+}
-+
- static int die__process_unit(Dwarf_Die *die, struct cu *cu, struct conf_=
-load *conf)
- {
- 	do {
-+		// special process DW_TAG_inlined_subroutine
-+		if (conf->true_signature && dwarf_tag(die) =3D=3D DW_TAG_inlined_subro=
-utine) {
-+			const char *name;
-+			int ret;
-+
-+			name =3D attr_string(die, DW_AT_name, conf);
-+			ret =3D die__process_inline_subroutine(die, cu, conf, name);
-+			if (ret)
-+				return ret;
-+
-+			name =3D attr_string(die, DW_AT_linkage_name, conf);
-+			if (!name)
-+				continue;
-+
-+			ret =3D die__process_inline_subroutine(die, cu, conf, name);
-+			if (ret)
-+				return ret;
-+
-+			continue;
-+		}
-+
- 		struct tag *tag =3D die__process_tag(die, cu, 1, conf);
- 		if (tag =3D=3D NULL)
- 			return -ENOMEM;
-diff --git a/dwarves.h b/dwarves.h
-index 21d4166..dfd43e1 100644
---- a/dwarves.h
-+++ b/dwarves.h
-@@ -79,6 +79,7 @@ struct conf_load {
- 	void			*cookie;
- 	char			*format_path;
- 	int			nr_jobs;
-+	int			nr_true_signature_funcs;
- 	bool			extra_dbg_info;
- 	bool			use_obstack;
- 	bool			fixup_silly_bitfields;
-@@ -101,6 +102,8 @@ struct conf_load {
- 	bool			btf_decl_tag_kfuncs;
- 	bool			btf_gen_distilled_base;
- 	bool			btf_attributes;
-+	bool			true_signature;
-+	bool			dotted_true_signature;
- 	uint8_t			hashtable_bits;
- 	uint8_t			max_hashtable_bits;
- 	uint16_t		kabi_prefix_len;
-@@ -1023,6 +1026,7 @@ struct ftype {
- 	uint8_t		 processed:1;
- 	uint8_t		 inconsistent_proto:1;
- 	uint8_t		 uncertain_parm_loc:1;
-+	uint8_t		 true_signature:1;
- 	struct list_head template_type_params;
- 	struct list_head template_value_params;
- 	struct template_parameter_pack *template_parameter_pack;
-diff --git a/pahole.c b/pahole.c
-index ef01e58..b81d03a 100644
---- a/pahole.c
-+++ b/pahole.c
-@@ -1153,6 +1153,7 @@ ARGP_PROGRAM_VERSION_HOOK_DEF =3D dwarves_print_ver=
-sion;
- #define ARG_padding		   348
- #define ARGP_with_embedded_flexible_array 349
- #define ARGP_btf_attributes	   350
-+#define ARGP_true_signature	   351
-=20
- /* --btf_features=3Dfeature1[,feature2,..] allows us to specify
-  * a list of requested BTF features or "default" to enable all default
-@@ -1234,6 +1235,7 @@ struct btf_feature {
- 	BTF_NON_DEFAULT_FEATURE(global_var, encode_btf_global_vars, false),
- 	BTF_NON_DEFAULT_FEATURE_CHECK(attributes, btf_attributes, false,
- 				      attributes_check),
-+	BTF_NON_DEFAULT_FEATURE(true_signature, true_signature, false),
- };
-=20
- #define BTF_MAX_FEATURE_STR	1024
-@@ -1817,6 +1819,11 @@ static const struct argp_option pahole__options[] =
-=3D {
- 		.key  =3D ARGP_btf_attributes,
- 		.doc  =3D "Allow generation of attributes in BTF. Attributes are the t=
-ype tags and decl tags with the kind_flag set to 1.",
- 	},
-+	{
-+		.name =3D "true_signature",
-+		.key  =3D ARGP_true_signature,
-+		.doc  =3D "Replace existing functions and add new functions with true =
-signatures.",
-+	},
- 	{
- 		.name =3D NULL,
- 	}
-@@ -2013,6 +2020,8 @@ static error_t pahole__options_parser(int key, char=
- *arg,
- 		parse_btf_features(arg, true);		break;
- 	case ARGP_btf_attributes:
- 		conf_load.btf_attributes =3D true;	break;
-+	case ARGP_true_signature:
-+		conf_load.true_signature =3D true;	break;
- 	default:
- 		return ARGP_ERR_UNKNOWN;
- 	}
---=20
-2.47.3
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS0PR10MB6271:EE_|PH0PR10MB6433:EE_
+X-MS-Office365-Filtering-Correlation-Id: 0bc85e18-2d75-4b78-0d2f-08de22d2dc3b
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|376014|1800799024|7053199007;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?WUJtRzF1RDNrVjNaUTEvdkRGbGFaUW9hdW1XclZEYkFMNW84U2tuSVBRR0dG?=
+ =?utf-8?B?RVVOY1pOcG9JdTJ1WjRGSCtpd3g3UEEyaXJlTmZNcnlaaSs0czF3bElpaDhy?=
+ =?utf-8?B?S3BzSHVsYmJRV05HQ2RGR3ZkeGk2SENVTld6RnV5Z3B2azlxUFpHZXFWOENk?=
+ =?utf-8?B?SHpXaVVjeFFNUGFxbjBMTzF1U3c4QkFMb3VmU2lIdjlLd2F1TWtTelJaZnR0?=
+ =?utf-8?B?enlad3ZoVncwK2ZKaXBXdEwzcWVsbThZQkJoZmkxd01ORU01anZnRGdKak1Q?=
+ =?utf-8?B?ZDVZRFNmdGJQTlBWTnJkOFZ6UFNGVUhTQWI0WCsxd3pYZ2Jpd3QwMFpReGxZ?=
+ =?utf-8?B?SzUvdDhHSkFJdFR1RlBRYnRMaHRZN2F1cVBzMnBrcVNrL05tSTV3NnlaZFJB?=
+ =?utf-8?B?NVhUMzlvUUNIVU0zWlBGOHE3TVR6MXZTelg5a0hlUEdIMFVSYXRBMHhEeDR0?=
+ =?utf-8?B?US8wYkJBWVEwRzBwdU9Oa3NudU9RdnNndlJCSTVQL0dDWXFrRVJ6U1piZW5Y?=
+ =?utf-8?B?VDNQUkt0SE9sSTczaTQ5RHBsaEN4QU5NNkVyOTFnQm1HYXlVTEpzR25iWlNU?=
+ =?utf-8?B?TEZERmQ2alNrSVVhSnFRU3VBOTZwbkpxbWVEdk0xUFlTbXBJYjJadmRrTis4?=
+ =?utf-8?B?UHJaVUJQcmx3U3FFS3c3a1ZPN1dnMXZQNmdaWTNXanQwZkR2cjZqZ2lKVUhh?=
+ =?utf-8?B?Y2dZTzRYbkJwYzdkL0hvVENORmg2UnM4dU5SZVQ0azRoLzZsbkRrenNKRGw1?=
+ =?utf-8?B?ZkdRenJtZWdZQTJQbVdXaG5CcklsMkFDODFaelM4eHNFT2tuKytWd3piOW1N?=
+ =?utf-8?B?cjdkT2R0L0FraHB4T2pjVXc0ZHEvS20zUDV0T2h6ZWsrWG94dnBLRnFrQVov?=
+ =?utf-8?B?UldrUVZpRVUwRkd6dTRydzV6NmhsYmVjNTliMHQyTVg0bFVVaGR5aDMrMkkv?=
+ =?utf-8?B?cU9nWEkreHNFYlB1WGw5aXBhT3IwekJWa0ZFSkxHMGFGVmx1SUVZYmhKemtF?=
+ =?utf-8?B?eXhnUStsV2Vua0dLWWtRM21ROHlScnY4ajIzSkI1bGUvcnlsM2VSalcvZUlF?=
+ =?utf-8?B?Sm5BRlpvSEU4ZTVvN2YrY1JWaXZZNXFtaW5vYTNiajFrK1Yrd3ZzcWt2UUY2?=
+ =?utf-8?B?SDh3TmsyMGN2Ulc2R3RwbG1XMmtTRXNmaHJxdC8yVURTWEVlUzNDS2ZoTXZa?=
+ =?utf-8?B?bFRlSEFmUXJldEFSeHdmem02MUI2MElxQmd1dVd1dTNRNXY1ZzFHUmVWK094?=
+ =?utf-8?B?d2pkTUZmWitnaTQ3azdsVEo5elpLMTVralM3MEdCdGwwaEFmVWI5MmxsMkFs?=
+ =?utf-8?B?RjJZeDJCRU9SWUVURW15N0U4NTZOK1p3OWpwWG1JOFlkUVJqbFdHRFVjR05V?=
+ =?utf-8?B?YzQrSno1RU1HUmhPOU0zS2V6L0RzR3VlR3FzRWwxQnRsbzZBQ1RBOWJyNzRJ?=
+ =?utf-8?B?ZXhma1ZmL2RJRzI3L0dUR2VqWmR6anZZdCthZUptdUZIMDdSQldqbFV4WlVB?=
+ =?utf-8?B?MXlYZVIxRXRmWWR0S3pDdjcxdU5OTFRFdWtnNU9xelh3TGw4ZndTa3l0ZXpM?=
+ =?utf-8?B?ckpQNlM5aFpCOTc4dVNjUGljMEJ3dnpOUTY1Wk1RNVlEbTEzTGxRRmJPN2I5?=
+ =?utf-8?B?NWV1bjl0SVRSV0ZUR1BTSGpoZ1l0NUtyellya0lOS1U1MnBsdExrRGFDNS9C?=
+ =?utf-8?B?amJLenM3YUMrZFZBV3dXVUJNNXhDdVF6eis5dnJpZWVLRXZkMTg0eXN4YlVC?=
+ =?utf-8?B?RU04a05YNlVyeEhvUVd6MkUxbEo2Q0x3NHo1YWJjam1ESWhkTjhrZUNtN3BW?=
+ =?utf-8?B?MHdVa1NQZXJhdE00dzBoaVZLeEgzRGxvVi9DbEdpSHRBNmk1NEViSEtlNkNG?=
+ =?utf-8?B?bWFHVEZHa0hSenlad28valRPMFo5Qmk5QnlUWnVSbUFZYkVqMEIzRUJyYUxM?=
+ =?utf-8?B?YlFrVmVyZHVDSUpFQnRzUHJmcmVsWU9WRUtWalN3blY5aE0vWGNIeFVzeGxp?=
+ =?utf-8?B?ZUxZeFlobTNRPT0=?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR10MB6271.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(1800799024)(7053199007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?NnRubjBLQnplTEE0eit5Q1Y2NTJHUlVLNDZNWnU0N0VKOERsSU9lUmZwRWVn?=
+ =?utf-8?B?a3g2RVpNSkcydWRMZ0krcllBbkluc2xtQi9rN0g2NS9QNU4yMm4xWjNZWStv?=
+ =?utf-8?B?Rm91czlpaXB0dTZEckRQL1NKS0tBM1FaVWFiS3dBdTZhOFd3WEJUNDY2SGxP?=
+ =?utf-8?B?VktMV2wyazJUOWt2MUNxZ3BlQno3djAzVnhUVlFCbklTWWJ4OE1sQVMzWlp6?=
+ =?utf-8?B?ZXNPZldsL3FaQ2gxdVVMdjloUy9BeVUwQVUzV3FJVC9qRmovVncwU0NpSTlT?=
+ =?utf-8?B?MXA0SzhxVEhxL3BmNC8xeUl2eW1ra1JnNEYxUEhaVmU5Tk1nR2RHZFdWWkE4?=
+ =?utf-8?B?K1lzSFI0NjE0L3hrV2hLdUIxQ1Y3QmVLU1RZb3NNK2VTZDcvaHVHOWxLU0Fr?=
+ =?utf-8?B?V3plalhrOEpKQ2h1QWxKUllUWCtSOUVGV1ZEcWNPT0VLVTRpR0ZpeGlWSVBa?=
+ =?utf-8?B?bENjN3dsSWw5Z0dkZGFwSmpidTZYV1JvK1hyUHNIaEYrSFpIRVI3K0pqVTFw?=
+ =?utf-8?B?ZnVUamtCNHlqR0tWOGx5WGEvZ1ZyM1RzbkU5bUVuNTVPQlVaVmVXNkxTRGtM?=
+ =?utf-8?B?V0hlNmJtVGo3NXNrUE5DSGowRm40WWwyMHhWcW5jRy9Sa2c4Z3RhaFhKUERU?=
+ =?utf-8?B?TEVzc2x0TnFDbnFUQUc3QzM4Q2xXR2dSUmNEbmZyQVNWSFhCTGIwaGdhR0Rx?=
+ =?utf-8?B?TFRnQmtCK2VUZzBBbE8zenlQZ2RIYUpqZnFnVWNxalRnY1F3blZGclowR1A5?=
+ =?utf-8?B?SytKZ0xpYXlyUTR0SmM3UkNpaVZQK2ExQzZTY21RT1lWSnpzR0tPdGJiSWw3?=
+ =?utf-8?B?ZWFORVgyam5FeDk1OC83MTBDU0MvMStBQkJHMlVOY0xXaVJzaGNZSVJHZW91?=
+ =?utf-8?B?dVAwMEJ3blVkWTEwWG1DVkJhdHhKVVp0QmUrUnRUMUtPdWlZSjA0UWlWbTc0?=
+ =?utf-8?B?VEpVUHFTSzZ1WThTTnhVdDRrVXRXSXh4QitEL3hsbS9CeTEyKzR2ekkvOHVo?=
+ =?utf-8?B?Z2hCTmlvYUZpa0NYV0w5bE4vNHZTdDFpSmZFazlUT05nME1IcFlNQVQzWUdM?=
+ =?utf-8?B?NHhtOHgyZjBoK0Yrdk1RSURjZEg5N0FvaTZ2NFU2VXh5V1hZVzBjY2NCZThW?=
+ =?utf-8?B?YStCRitMVjZUSlBmcW5pODFSb1QydDNpelhmUlgzaDlhelZYL0R1ZkNHYzBm?=
+ =?utf-8?B?U1gvRHZ5Sm5VRjIwN0paSy9ITGZiU24zVGdhSUxncG9rRlhhTm5lTUFlcjdX?=
+ =?utf-8?B?R3VUK3FDYVpmM0ZUdUtMRVdZdlVSSHRDMG9lazJLQU5UWGd1WVB6Yld4RUN1?=
+ =?utf-8?B?QWxnTHJlQ1o1RFhMaXFuL2s5NlgwbDFsWnVLWk5idmNQb2srdUc2c2hJNVZy?=
+ =?utf-8?B?bklJOTJtWXJubncrVERYalBWZkJkM3k5WkhkOFRId2crVkhHU0thcCtrT1hF?=
+ =?utf-8?B?SHdPb1JaMGVUSHkxWk9wV2FuY3NkTE9tV3B1VFVNRlJ1bWc3VWxGT3FkNGdY?=
+ =?utf-8?B?N3pDVW9NYlhGY0JGODBHek5CaHFLN0tiZXBpRSswMG1aeVFXcythRnhJWSt5?=
+ =?utf-8?B?elpzRHZLWnZlUmNSbGREaG5RcW5sU0QxdFJHOVdTYk5oaFNnaDNia0FuQ3F6?=
+ =?utf-8?B?TGtETlExVkZidFF1bTkwS3ErWG1hOStOLzFaQm4yZ0Jnb1BsYmE1NVJLd1FE?=
+ =?utf-8?B?c1hQbTh2NW1zcUFGTUM5b0VSNVV0Q1Vmd01BRTd6b0dDMSszU1JzZGhJeVc1?=
+ =?utf-8?B?QnArMW5LS3Y4TzBDZ2sxZzl4N2VFQUd1bnUrZ245akZGZlpYWVVjVGd3SVB0?=
+ =?utf-8?B?aVcxWnY3Vmk0SDBCS1FUZlZBaSs3MjVma2RLTFlGelZzaHQweFdLZHFCTy9y?=
+ =?utf-8?B?SitNdTRDUEhnYmYzZFlDRVM5YSt6QjMyQ2NudFM4RllDNDlGUTErckpsM3Zn?=
+ =?utf-8?B?Q2VoSVFFMS9vQVZBUkw4Z0pIdEFRK0pTU3N1RkRrVVEySEppQ3RQbERMNW5w?=
+ =?utf-8?B?c3J6dHRRU25SSTB3N2JnN3dkNGNvdEp1Wk9kZ2ZPWTVwaEovbjlhdWM4Z2F0?=
+ =?utf-8?B?Ly82dlJFQmJ1b3BsV0l5dCtDU1JVQWVSMjNwWTFqZzZHSHJIeXg1RVdodHBQ?=
+ =?utf-8?B?S1YwbXI1SWs1T0JiS0hZbndmUTIyTUFZVHhHQ01PY05ENjJhZTkwZk1mdEVR?=
+ =?utf-8?B?K3c9PQ==?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
+	Su8niVZBQWj4whjKyzG4CJmOELaE+DD15gXAZY86QANQlwSKRmFrX41yhWjKBcIO6gzbRT2UEPOyw5zGyFdDx3YXBwbSR13+mxDK+85PEXHC3/M4t/cm0L5G0ls7sNqXd9t4c2bNHAIw8Qvl/X2YWLvtOeKz4xSHp1wPWnKYVZS4+/z1IwOR7b+fa6TZwMWCVByH3G1kgBBY/drUt3K3aR2QMyjF+YtAxqvx61S8iQM3AH0Sj71eSnrsTjrnltEDmXl/hXFpsrrNMinj/JmyMdEBSey0O/42yehk33tWmyapymCbL3v/4KkfP/04Y68qmub3nVLOlOjFldkm4Y8aLTR66331XUkebkogMPCsYNA+NuK5PCK9KQJNKEDr/7u+USpxbQEVLNXHq9LdLwJRXXmL+njfWx2kya5SLzTG2+S7Id6FRLZlZSi0mflY0b5Z3RTEmLfNuq4zrg4YarVmwuoHRga5MPTWhMKsmWdenSFsBHrjwrbFdI2EzUYdsLwWFyl3Nxq86lidydUD4zUUZPfW2GluClXN2a51dbg5Zo5286PYml/yuUX/lS2w8rWI3Hrs3hC5Xd1jO9/tKq+Go5PtSjTtH1wjC6YTRKvK+qo=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0bc85e18-2d75-4b78-0d2f-08de22d2dc3b
+X-MS-Exchange-CrossTenant-AuthSource: DS0PR10MB6271.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Nov 2025 16:36:57.1785
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: GPtyMxRZntlHlo2loTjR67EBOR3m8IbPKDTdCTg665K2+cZlcAGzB+3lFFqQpb9tzAYjn/TexnmXEd+zbBH2Cg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR10MB6433
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
+ definitions=2025-11-13_03,2025-11-13_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=840 mlxscore=0 spamscore=0
+ phishscore=0 suspectscore=0 adultscore=0 bulkscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2510240000
+ definitions=main-2511130128
+X-Proofpoint-GUID: 6I9tgBn4HVUC6vBd7hEflFNjg_-VrkAm
+X-Proofpoint-ORIG-GUID: 6I9tgBn4HVUC6vBd7hEflFNjg_-VrkAm
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTEyMDE0NyBTYWx0ZWRfX7uObG9UN2GMb
+ BnHU7YnH+kzWcukZgLowZOfPMrXhnGSZPytytU8k44e7Rr5uu97tSnnlPgJ1WbOHPhMKYcF9AwS
+ d+kPe4SAxOBUy2vkcixM/TV6MGHMFvSxo4qpvewn4uGt/B5xaqV26X3BcSCHrLXavUx7dZOE5li
+ Qde6vZAi/z952oLEfc+osy1a9tsiI51g2x/Izwxy5X1RBGLV5RA3sR7NaUYdwvYwQOz2YkjowTb
+ r1sg18tioC61TYVN5RbPqUvpVOqP0vFIIY0oyRkBoa9LUQB1gl+sc17rWWS2ZrSWFviiv7xr6ln
+ FmU8EGhsSRFCqcydLLz+K++srh1nCPDJ/668lyjW0C3cMqirMqJMiuQdfgTaa7qUS0CKus9Rj2x
+ E6kCXvb452yXRTLhPqygASPXCX6Kc/Iv0R7NoLoGiTuVPOb5Zjs=
+X-Authority-Analysis: v=2.4 cv=X7hf6WTe c=1 sm=1 tr=0 ts=6916092d b=1 cx=c_pps
+ a=zPCbziy225d3KhSqZt3L1A==:117 a=zPCbziy225d3KhSqZt3L1A==:17
+ a=6eWqkTHjU83fiwn7nKZWdM+Sl24=:19 a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19
+ a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
+ a=6UeiqGixMTsA:10 a=GoEa3M9JfhUA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=VwQbUJbxAAAA:8 a=YbacuVO6NpnqvNI4pVAA:9 a=QEXdDO2ut3YA:10 cc=ntf
+ awl=host:12098
+
+On 06/11/2025 01:28, Ihor Solodrai wrote:
+> This series refactors a few functions that handle how BTF functions
+> are emitted.
+> 
+> v3->v4: Error handling nit from Eduard
+> v2->v3: Add patch removing encoder from btf_encoder_func_state
+> 
+> v3: https://lore.kernel.org/dwarves/20251105185926.296539-1-ihor.solodrai@linux.dev/
+> v2: https://lore.kernel.org/dwarves/20251104233532.196287-1-ihor.solodrai@linux.dev/
+> v1: https://lore.kernel.org/dwarves/20251029190249.3323752-2-ihor.solodrai@linux.dev/
+>
+
+series applied to the next branch of
+https://git.kernel.org/pub/scm/devel/pahole/pahole.git/
+
+Thank you!
+
+> Ihor Solodrai (3):
+>   btf_encoder: Remove encoder pointer from btf_encoder_func_state
+>   btf_encoder: Refactor btf_encoder__add_func_proto
+>   btf_encoder: Factor out BPF kfunc emission
+> 
+>  btf_encoder.c | 206 +++++++++++++++++++++++++++++---------------------
+>  1 file changed, 119 insertions(+), 87 deletions(-)
+> 
 
