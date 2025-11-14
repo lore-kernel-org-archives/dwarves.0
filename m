@@ -1,192 +1,89 @@
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EB8023D7D7
-	for <dwarves@vger.kernel.org>; Thu, 13 Nov 2025 17:37:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA6C726B777;
+	Fri, 14 Nov 2025 02:10:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763055431; cv=none; b=jQpCWJNcLVU+hlD6hgtnG80zu/fJ0KWFdtfq5ejXFdYwT2E5FyLNom5xOVsSPVxHrEG0IBwCv2bbesp5cguHiLyTs3iw1YsWcwmu5M4jbrlJBmlWpwLNsoLc4pO1w66pfHl43NFBN0s7mJkfxD5E3uXyfGuhVpA/jlWJS2teFYk=
+	t=1763086242; cv=none; b=HonyL77DqR7G/sbU/uGopCa9w9FOtgw78BtkF5OBN5KyEjgxVYSJhFx+pkekX3Qn1sywnnyifS6GcJGQmjS1hQZwsFt0NSMVZO+GP+It3OTx9FYSZB0o7pHxJ9tiOcnjvrXJEWZNejQp73EkzIJwgG6AlYEB3H0pjYd6EsmZa5Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763055431; c=relaxed/simple;
-	bh=z10O3j/8GoaA9cou2j1MyFLH4uxgDzyACMLShJ/hd2M=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=tQqkzxzP+mv5qs9ENl7jwcx8aaU484cnDcW8vNyu40eiaXCI1nat6z1cyFiofX9md5nsQmkHhHOSq9LcHeB9Bs1CuU79llMEzuI9WJrFPzrHWUn6S0V0svkuQE2c/pvGv+NM3y6foJGb+9GLFIpXilIVoweRzwvNlrWs4O5GGno=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XfmSONC5; arc=none smtp.client-ip=209.85.128.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1763086242; c=relaxed/simple;
+	bh=FfbPqAon6pN6iJ5lflLTEH3YJugpETQ+/neHJen4Sxg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=EHRamri/YfuYaRkBTNpAkxWVJ5Y6vKZecNXhmp4D68xKwZlYLHduuSHDJDdVxn7fXzldrpd/y0PTPcOnLBiRXgH9D7viWjgVgWQi+nts8O/oaBsBHjUbjGP0PC6sA5Ze24x987RUsyxvcPRrKw5wTZPQD9XJ+eBMj9j5UnOdM4I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=I4aQt06e; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XfmSONC5"
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-475ca9237c2so6616265e9.3
-        for <dwarves@vger.kernel.org>; Thu, 13 Nov 2025 09:37:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1763055427; x=1763660227; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qj1Gqs3nM+ixdoLbw4xBV6RsmvT4bhXgtp/k4VuMzRE=;
-        b=XfmSONC5T2Bih8cfiMvo4CLgt3AUE0ZR1JxvEplooMWlVdA6RaHiXtcVmUAlmoyhg5
-         rJzXQ+cGGiY2lIoRtAWevpTM1SI+5d+2xNw/hQixDbIvMyGOlseBtRtwo5Nj7hYEoYg8
-         +6Q2uNfMMHghkYCt8y4C9k+2oqeZTYtSMpIMs9IPzPLdBJxvrl2VilQpUM2rPMpgdI/e
-         CcWw/79R3a7YMZzQmtTaQxMCVFWYO1ohwqmRujLR5AE4cHw1RngTTvtIEQVr5FA96XYC
-         s5PJYTzsB6cTGZyIng0S7d4UhgFZ6Ju+W26vAlyPCwsZWCVka3BPj57++eBI6SLdGKJU
-         522Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763055427; x=1763660227;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=qj1Gqs3nM+ixdoLbw4xBV6RsmvT4bhXgtp/k4VuMzRE=;
-        b=VMapwqvowVrAk/zx58bUW4ZrXdVd12JwBZFzAHVqb2fo7R50ZnFo239Dz5yjR4UVNg
-         Z+EHw6gQ3a9RKgAEkvNabUMPDk9d+GrT9MKIW1cuuP2Tkqrt8ulVeBS5l4FQLtcUUpUL
-         vShsq4Ye/01iLbPb/aEpiE8R7OSIeVktNxWYHN1VPC0qHyieu6Y6dSRjbQTQ+C9q/isD
-         5pEM2aGzi7wQAe8uCnWbFTfBKY5FmLU7T8iP5FECCsbLqdozpGJCALlhmEBkS6ULBKAH
-         giHP0+nadhmZ1jeMr7DRtCJ6/1nRPRWdjuFjm0Sd3ObBSS6dlwFbUnsn6KuyQwt3MgZx
-         IlRg==
-X-Forwarded-Encrypted: i=1; AJvYcCUNL2cbKRe8uCH35lcUxQVrxQ4FwrQODAqX3OS/OOt8kNH/xHcU5fu8PfJcM+2E1eTjNJ4OzAgp@vger.kernel.org
-X-Gm-Message-State: AOJu0YyoF8HmBpBrQRtU1D+gv3Flj8W4M6w+41robyeIbLO9efkDZNUs
-	orlMk2yafQSE7zyYn2fAxmxQSaXt0syvHFzLHQ6sdgXIU8wuBLRpENUnHvCisLNGNtxGSuJrp+e
-	XKRaIKFZgZWTq0lrjxtZr+shIuknG0VdkYg==
-X-Gm-Gg: ASbGnctPoQ/3iOOhTDRESlGSAB3sNimxpRNgr5ChSCpUmch/v6e9YRw49Am0/pRJHwm
-	8NhSBQ5ILpu7UqXGsawO6If+WU/zjRCVH1ctY3Hf/DxAstGhPNJpXqIihw+WQezvAicXL2nLRrx
-	AWP+GdpcfuJKUJEbXSsr1KyP+7qBF6toTF+xTNKWXFIUHec4JMmusHNc7xsSgut8B3Ph0b1/N9V
-	q/UWglq7XK0T0osJwp6UCU3UzmAzpWjaKw03wG0DKggJDUe8arswg8bKKN0qbO8yHBBlKVi+ip0
-	vhf9l8CSGSQ=
-X-Google-Smtp-Source: AGHT+IHyQqQ2zkM+hiLaEkMsF1hyAuJIGSZF40lFJN/FPLUmdcx/IX7AY2M8enll470JmD5fHEykpfb5HFoFffQz3z8=
-X-Received: by 2002:a05:600c:4fc4:b0:475:de12:d3b2 with SMTP id
- 5b1f17b1804b1-4778feaa9f4mr3332035e9.36.1763055427196; Thu, 13 Nov 2025
- 09:37:07 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="I4aQt06e"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2AD46C4CEF5;
+	Fri, 14 Nov 2025 02:10:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1763086241;
+	bh=FfbPqAon6pN6iJ5lflLTEH3YJugpETQ+/neHJen4Sxg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=I4aQt06e0wes6QtYZcEoYtdrt9w7QbA4TSVbEn8YDO2Neb5anlmpRWYJzwpoaxZNr
+	 WyNEfZBrxiNk1zNGEqlusLkfZ1oSzr4Xzf30fHupxCYQ+OykAj5IpIVc/fXgLNNRGr
+	 4sN4gjMzQs2JmmUOj43kwicKUZKobGXkXV5xUXLReLNd7ThwmRdFGpxgoauJtfALsT
+	 LT+y4JehkeiQhOGw1Y/0O/UmlNy385vl2cJagax9kngM7rMdzF6i8i2ALrPaR/xLQ0
+	 WmBGMDsvwjcO7cfWOmklvahXo4ieRCJiDmlxHukXllAJYDwCDjkBBelmhvZtPSdcDv
+	 lDGzUdVf6Iojw==
+Date: Thu, 13 Nov 2025 23:10:38 -0300
+From: Arnaldo Carvalho de Melo <acme@kernel.org>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Alan Maguire <alan.maguire@oracle.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	dwarves <dwarves@vger.kernel.org>, Eduard <eddyz87@gmail.com>,
+	bpf <bpf@vger.kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Kernel Team <kernel-team@meta.com>
+Subject: Re: [PATCH dwarves v4 0/3] btf_encoder: refactor emission of BTF
+ funcs
+Message-ID: <aRaPnq2QJN1iFF_3@x1>
+References: <20251106012835.260373-1-ihor.solodrai@linux.dev>
+ <520bd6d8-b0a1-40f2-a674-b4c6ed02e254@oracle.com>
+ <CAADnVQJj6EcntgiAm6Kv8FJvP3tQcG=EzWt-uFuzszHtcw4gmg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251111170424.286892-1-yonghong.song@linux.dev> <a9ebf236-78c8-439a-b427-cb817efe23ae@oracle.com>
-In-Reply-To: <a9ebf236-78c8-439a-b427-cb817efe23ae@oracle.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Thu, 13 Nov 2025 09:36:53 -0800
-X-Gm-Features: AWmQ_blADtHvNtGdjEpR5QH25QIjr-6XXTFbsmzK_SWAMXHYIwg_N0XkxIhYr68
-Message-ID: <CAADnVQKr+9gneG4ZZHBKWjTo-AiqPCf_Mxv_sCi9acqEKkKShw@mail.gmail.com>
-Subject: Re: [PATCH dwarves 0/3] pahole: Replace or add functions with true
- signatures in btf
-To: Alan Maguire <alan.maguire@oracle.com>
-Cc: Yonghong Song <yonghong.song@linux.dev>, 
-	Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>, dwarves <dwarves@vger.kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>, 
-	David Faust <david.faust@oracle.com>, "Jose E . Marchesi" <jose.marchesi@oracle.com>, 
-	Kernel Team <kernel-team@fb.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAADnVQJj6EcntgiAm6Kv8FJvP3tQcG=EzWt-uFuzszHtcw4gmg@mail.gmail.com>
 
-On Thu, Nov 13, 2025 at 8:45=E2=80=AFAM Alan Maguire <alan.maguire@oracle.c=
-om> wrote:
->
-> On 11/11/2025 17:04, Yonghong Song wrote:
-> > Current vmlinux BTF encoding is based on the source level signatures.
-> > But the compiler may do some optimization and changed the signature.
-> > If the user tried with source level signature, their initial implementa=
-tion
-> > may have wrong results and then the user need to check what is the
-> > problem and work around it, e.g. through kprobe since kprobe does not
-> > need vmlinux BTF.
+On Thu, Nov 13, 2025 at 09:20:44AM -0800, Alexei Starovoitov wrote:
+> On Thu, Nov 13, 2025 at 8:37 AM Alan Maguire <alan.maguire@oracle.com> wrote:
 > >
-> > The following is a concrete example for [1].
-> > The original source signature:
-> >   typedef struct {
-> >         union {
-> >                 void            *kernel;
-> >                 void __user     *user;
-> >         };
-> >         bool            is_kernel : 1;
-> >   } sockptr_t;
-> >   typedef sockptr_t bpfptr_t;
-> >   static int map_create(union bpf_attr *attr, bpfptr_t uattr) { ... }
-> > After compiler optimization, the signature becomes:
-> >   static int map_create(union bpf_attr *attr, bool uattr__coerce1) { ..=
-. }
+> > On 06/11/2025 01:28, Ihor Solodrai wrote:
+> > > This series refactors a few functions that handle how BTF functions
+> > > are emitted.
+> > >
+> > > v3->v4: Error handling nit from Eduard
+> > > v2->v3: Add patch removing encoder from btf_encoder_func_state
+> > >
+> > > v3: https://lore.kernel.org/dwarves/20251105185926.296539-1-ihor.solodrai@linux.dev/
+> > > v2: https://lore.kernel.org/dwarves/20251104233532.196287-1-ihor.solodrai@linux.dev/
+> > > v1: https://lore.kernel.org/dwarves/20251029190249.3323752-2-ihor.solodrai@linux.dev/
+> > >
 > >
-> > In the above, uattr__coerce1 corresponds to 'is_kernel' field in sockpt=
-r_t.
-> > Here, the suffix '__coerce1' refers to the second 64bit value in
-> > sockptr_t. The first 64bit value will be '__coerce0' if that value
-> > is used instead.
-> >
-> > To do proper tracing, it would be good for the users to know the
-> > changed signature. With the actual signature, both kprobe and fentry
-> > should work as usual. This can avoid user surprise and improve
-> > developer productivity.
-> >
-> > The llvm compiler patch [1] collects true signature and encoded those
-> > functions in dwarf. pahole will process these functions and
-> > replace old signtures with true signatures. Additionally,
-> > new functions (e.g., foo.llvm.<hash>) can be encoded in
-> > vmlinux BTF as well.
-> >
-> > Patches 1/2 are refactor patches. Patch 3 has the detailed explanation
-> > in commit message and implements the logic to encode replaced or new
-> > signatures to vmlinux BTF. Please see Patch 3 for details.
-> >
->
->
-> Thanks for sending the series Yonghong! I think the thing we need to
-> discuss at a high level is this; what is the proposed relationship
-> between source code and BTF function encoding? The approach we have
-> taken thus far is to use source level as the basis for encoding, and as
-> part of that we attempt to identify cases where the source-level
-> expectations are violated by the compiled (optimized) code. We currently
-> do not encode those cases as in the case of optimized-out parameters,
-> source-level expectations of parameter position could lead to bad
-> behaviour. There are probably cases we miss in this, but that is the
-> intent at least.
->
-> There are however cases where .isra-suffixed functions retain the
-> expected parameter representations; in such cases we encode with the
-> prefix name ("foo" not "foo.isra.0") as DWARF does.
->
-> So in moving away from that, I think we need to make a clear decision
-> and have handling in place. My practical worry is that users trying to
-> write BPF progs cannot easily predict if a parameter is optimized out
-> and so on, so it's hard to write stable BPF programs for such
-> signatures. Less of a problem if using a high-level tracer I suppose.
->
-> The approach I had been thinking about was to utilize BTF location
-> information for such cases, but the RFC [1] didn't get around to
-> implementing the support. So the idea would be have location info with
-> parameter types and locations, but because we don't encode a function
-> fentry can't be used (but kprobes still could as for inline sites). So
-> under that scheme the foo.llvm.hash functions could still be called
-> "foo" since we have address information for the sites we can match foo
-> to foo.llvm.hash.
->
-> Anyway I'd appreciate other perspectives here. We have implicitly tied
-> BTF function encoding thus for to source-level representation for
-> reasons of fentry safety, but we could potentially move away from that.
-> Doing so though would I think at a minimum require machinery for fentry
-> safety to preserved, but we could find other ways to flag this in the
-> BTF function representation potentially. Thanks!
+> > series applied to the next branch of
+> > https://git.kernel.org/pub/scm/devel/pahole/pahole.git/
+> 
+> Same rant as before...
+> Can we please keep it normal with all changes going to master ?
+> This 'next' branch confused people in the past.
 
-Looks like we have a big disconnect here.
-To me BTF was never about the source, but about vmlinux final binary.
-Compile flags, configs change both types and functions significantly.
-For types it's easy to see in the vmlinux BTF how they got transformed
-from the original types in the source. Some source types disappear
-altogether. Similar situation with functions. They mutate.
-Partial inling, function renames are all part of the same category.
-BTF has to describe the final result, so that tracers/users can
-actually debug/introspect the kernel they have and not an abstract
-kernel source. pahole was conservative and removed functions that
-don't match BTF. loc* set is going to bring back these functions
-into BTF with their arguments. True signature support is complementary
-and mandatory part to loc* set. We need both. Compiler has to
-store the true signature in dwarf and pahole has to pass it to BTF
-along with location of arguments and actual name of function symbol table.
+I think the problem before was that it sat there for far too long.
 
-Re: whether to strip .llvm or not, I think it's better to keep BTF
-matching symbol table which is kallsyms. If it has .llvm suffix in kallsyms
-it should have the same name in BTF. Tracing tools can attach
-with "func_name.*" pattern. libbpf already supports it.
-And thanks to BTF the fentry prog should match what is true
-kernel function signature. What was the source signature is secondary.
-The users cannot write their progs based on source, since such
-source code doesn't exist in the binary, so nothing to trace.
-While true signature with actual parameters is traceable.
+I see value in it staying there for a short period for some eventual
+rebase and for some CI thing, to avoid polluting, think of it as some
+topic branch on the way to master.
+
+- Arnaldo
+
+> I see no value in this 'next' thing.
+> All development should happen in master and every developer
+> should base their changes on top of it.
+> Eventually the release happens out of master too when it's deemed stable.
+
