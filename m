@@ -1,70 +1,114 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-177.mta0.migadu.com (out-177.mta0.migadu.com [91.218.175.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6605D2F9DB1;
-	Fri, 14 Nov 2025 20:54:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75C9D1D61A3
+	for <dwarves@vger.kernel.org>; Wed, 26 Nov 2025 01:29:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763153651; cv=none; b=r5MHugcnOtMNMCp2mggSVcD9LmbQFmUVMy46yyBJanXoLDx1TiEN4R+ki70IPP6AjN6DE/WsFAcnNV06K6u2NfUilPVYfP3g6ZJoSVWCjrVIw9CZHF5BZDEKVlnBJU9K/99gRY8JiHGwJWPfjbz8LIOnjqrVYtRUwIX2dKIJFNo=
+	t=1764120575; cv=none; b=LKme9+6Pu9BMkafH6+3+8hLbi+1Mi2np1FYfuE+QzDG+B+ZYJZLcPF3wlRovXoGfA8rRqrvx+YBrSyoy4zo5e05CWpM1sw/I7KsMaQ4zh+p1Paa55W7fhIFQKR+uuqoRbTJmV8dvlFf5YC+g/gZ8jiyN/9jWBo91/qGbqT12lJA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763153651; c=relaxed/simple;
-	bh=9Rn+j27YqsCiy8IBahTgon9NGRAbHXc5LTFSb+CP4i8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=s+7vU+aNu3RIUowJQOESU8a2pimI+N/WCKHK9BfIWCh1yr3eYuQ//000fmUGOrGfS3Ie/sZ+3PXKvB9dOiUNJgmsNwLCD/1SCXdqZrfeNAinrIqnB/WOKlAg770c0AnlSBNX/tY7zeQhb9j3ttogxDCpCMZsDdvB9hsCV9jf3Q0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iOl10M2F; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1764120575; c=relaxed/simple;
+	bh=0vPBXFkWZ/MzGH4tjLWdF3Fl9qTxFcaK/Jzqj1oLtgA=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=RZMYVCKdABdEp/BMymMH/ydDOZtp1C2zuHZH/aH0dqxHaK9u+UxplMzu3edPUKGUfFbFpdi6jJLrXDaM50NJDkeUuv863HxaFPea1asoijIEhO5brfcbWCQupdQbdPy1NE2ivvAmndD+C0TKow6MRMhr5q8OKSaKYYKmefXtzFA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=MCaqU0Cu; arc=none smtp.client-ip=91.218.175.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iOl10M2F"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62746C16AAE;
-	Fri, 14 Nov 2025 20:54:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763153651;
-	bh=9Rn+j27YqsCiy8IBahTgon9NGRAbHXc5LTFSb+CP4i8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=iOl10M2FcgJ9JON1Wq03S5B5JCrcVzMSl2gQGjyC4JP8p2tY4Ao0FfithDDv6Kiuy
-	 /35arqsjOpf0erxtP5T3f24gbSFlAwjHERHBLQh321O+jcPtmr3k3cjgmXuo7u7ry+
-	 AwhA6Wx+WB/z2ZLvs1d2sLv62sSiOyYPES9sOzoabguSeQI6JEgNSIAnNWXw2UafJ9
-	 9UesFZZf6f2S6ozDSHBlIPOWAdlxn7TBZIKQMG9v+eOq06XnF/O1Z1X6xsdkU23SjL
-	 KKrk65lyTlr0G4Qdhhzb4v6LnIqLLK2FnmXkEc9hgvSshJBHL0DpK1pMPh9WooHbh0
-	 L1t474N9RKTPw==
-Date: Fri, 14 Nov 2025 17:54:07 -0300
-From: Arnaldo Carvalho de Melo <acme@kernel.org>
-To: Alan Maguire <alan.maguire@oracle.com>
-Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	dwarves <dwarves@vger.kernel.org>, Eduard <eddyz87@gmail.com>,
-	bpf <bpf@vger.kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Kernel Team <kernel-team@meta.com>
-Subject: Re: [PATCH dwarves v4 0/3] btf_encoder: refactor emission of BTF
- funcs
-Message-ID: <aReW7z_xjpD6ZCXG@x1>
-References: <20251106012835.260373-1-ihor.solodrai@linux.dev>
- <520bd6d8-b0a1-40f2-a674-b4c6ed02e254@oracle.com>
- <CAADnVQJj6EcntgiAm6Kv8FJvP3tQcG=EzWt-uFuzszHtcw4gmg@mail.gmail.com>
- <aRaPnq2QJN1iFF_3@x1>
- <cf503462-6616-4cdc-ae63-b126b28ae66a@oracle.com>
- <aReWlPqSGWnj8sPf@x1>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="MCaqU0Cu"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1764120570;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=4xzNaBNG8jGgwOPkttRYQPmkjzfbEIAH53D/pi2LZps=;
+	b=MCaqU0Cup+kk5iU+XTEsWgK2C5cR4gPaOFtdx7Tp6e4LOtTwFJH/CidUDGTYNCdhUukKqj
+	TATIZPGq9cGcvF0aIY7FVyBVbv7obvfE5ITssPGkG6V4gEzrjQL+j3lNlnbA/FBEcggnUI
+	T63SBlPCsmMUKB+NnyIg8gRmXyTy7ms=
+From: Ihor Solodrai <ihor.solodrai@linux.dev>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nicolas Schier <nicolas.schier@linux.dev>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>
+Cc: bpf@vger.kernel.org,
+	dwarves@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kbuild@vger.kernel.org,
+	Alan Maguire <alan.maguire@oracle.com>,
+	Donglin Peng <dolinux.peng@gmail.com>
+Subject: [PATCH bpf-next v1 1/4] resolve_btfids: rename object btf field to btf_path
+Date: Tue, 25 Nov 2025 17:26:53 -0800
+Message-ID: <20251126012656.3546071-2-ihor.solodrai@linux.dev>
+In-Reply-To: <20251126012656.3546071-1-ihor.solodrai@linux.dev>
+References: <20251126012656.3546071-1-ihor.solodrai@linux.dev>
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aReWlPqSGWnj8sPf@x1>
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Fri, Nov 14, 2025 at 05:52:41PM -0300, Arnaldo Carvalho de Melo wrote:
-> On Fri, Nov 14, 2025 at 03:40:36PM +0000, Alan Maguire wrote:
-> > Yeah, I think if we can augment CI to cover more we can narrow this
-> > window, aiming for zero as the test coverage improves.
-> 
-> So the 'next' is an artifact for CI usage, i.e. if we just don't
-> announce that it was merged, do it for the CI sake and then when it runs
-> and don't detect any problem we go ahead and merge into master and
-> announce that it was merged, nothing of this drama would take place.
+Rename the member of `struct object` holding the path to BTF data if
+provided via --btf arg. `btf_path` is less ambiguous.
 
-BTW, I looked at the patches, ran tests and merged next into master,
-pushed out to master in both kernel.org and github.
+Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
+---
+ tools/bpf/resolve_btfids/main.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-- Arnaldo
+diff --git a/tools/bpf/resolve_btfids/main.c b/tools/bpf/resolve_btfids/main.c
+index d47191c6e55e..d2762487ce5f 100644
+--- a/tools/bpf/resolve_btfids/main.c
++++ b/tools/bpf/resolve_btfids/main.c
+@@ -113,7 +113,7 @@ struct btf_id {
+ 
+ struct object {
+ 	const char *path;
+-	const char *btf;
++	const char *btf_path;
+ 	const char *base_btf_path;
+ 
+ 	struct {
+@@ -550,11 +550,11 @@ static int symbols_resolve(struct object *obj)
+ 		}
+ 	}
+ 
+-	btf = btf__parse_split(obj->btf ?: obj->path, base_btf);
++	btf = btf__parse_split(obj->btf_path ?: obj->path, base_btf);
+ 	err = libbpf_get_error(btf);
+ 	if (err) {
+ 		pr_err("FAILED: load BTF from %s: %s\n",
+-			obj->btf ?: obj->path, strerror(-err));
++			obj->btf_path ?: obj->path, strerror(-err));
+ 		goto out;
+ 	}
+ 
+@@ -790,7 +790,7 @@ int main(int argc, const char **argv)
+ 	struct option btfid_options[] = {
+ 		OPT_INCR('v', "verbose", &verbose,
+ 			 "be more verbose (show errors, etc)"),
+-		OPT_STRING(0, "btf", &obj.btf, "BTF data",
++		OPT_STRING(0, "btf", &obj.btf_path, "BTF data",
+ 			   "BTF data"),
+ 		OPT_STRING('b', "btf_base", &obj.base_btf_path, "file",
+ 			   "path of file providing base BTF"),
+-- 
+2.52.0
+
