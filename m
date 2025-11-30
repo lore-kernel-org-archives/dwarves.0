@@ -1,154 +1,144 @@
-Received: from out-178.mta1.migadu.com (out-178.mta1.migadu.com [95.215.58.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from layka.disroot.org (layka.disroot.org [178.21.23.139])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8226F2874E1
-	for <dwarves@vger.kernel.org>; Fri, 28 Nov 2025 05:53:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F697189906;
+	Sun, 30 Nov 2025 03:22:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.21.23.139
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764309187; cv=none; b=rEJQDugyCiOcQA93WWVLQZbg5OPEop/8JyOOHd2ItFY67RP9wOvMc56y/DTkrAFQGukxCv8F0F4L39xNjwqutWOakaL/CGuSiDhPnehNaYB++rK5nlSEEbyH09cOL5iuWsKt3pWiikZ8cDhnx97SkF6dTO06PjQ04qnN432bILY=
+	t=1764472935; cv=none; b=mzxaSoeMk88fJm795+ubqOP47Qv0HZb/2hTNzx0Ojfr/aiWBLJHTMUPbZC6JYlU08m18ESmprmKoPS2xrqMezkMh47S02ONpcgKJ+rf9JK5V1qChYnP6TKUY5zsj+c8XZB8D8/YgVz/YI9dwCO5LRtO4eJzVGTlc0dJUwiPyFNA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764309187; c=relaxed/simple;
-	bh=RQVF1+JFrUDP7pWYGElPnvlQaxwGVSjjir5Air3+jxE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=OIa9b7/zOEbux1lohT629wKm1FsIeYuHWczB1dA8PHpflQzPu5OyFgsXSKC07hoUavtCSZcw3xrhQoNtQbe1mt27GtxENA7m9H9ENsUN+vuYjbRXQ/PMclpmg5yNLk3EHq0tHx+opC6Cs0/Lw3sRnFq68JK8x0QtksbqM96TqFM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=grSjPLCW; arc=none smtp.client-ip=95.215.58.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1764472935; c=relaxed/simple;
+	bh=FZ/WvfCqo8xDaaAaSqJFYv1l/GPzCL60qrZ5Pt1GyLE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=qFqMZdY98vbsiH4ppe2dzD3xGLFz9eOMf0h/nexdiXqn0Z2vHPhfFT4DsCggyTKoG6hXPVAavfhcUTHh5uH+pvlpOvQPqovebZpw4fkBwjMR6M0n/m2ofpOf/rF/FZVnqBuWIRbjPagQ/K0V4v2N9zIjt8XTJU8mzbxB7wQjfeM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org; spf=pass smtp.mailfrom=disroot.org; dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b=gBfUj9lj; arc=none smtp.client-ip=178.21.23.139
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=disroot.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="grSjPLCW"
-Message-ID: <bba5017e-a590-480b-ae48-17ae45e44e48@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1764309173;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=DeK+WWIuGM5Ij6R+DCWdy+dRvgTRhpUvIDcR9SzI3VY=;
-	b=grSjPLCWd8k6WDkTLuZ+zD73d/pcfAdLPYtBp722Kn9FsBVX8KgjwXD5hVp2LTyzWmrl/V
-	EulG/P7+YmdQCaNrTqJ5no/ZJm0FRXcY8TKw6KIufKzwmHPtzc//TM9sesBtOiZxLVWBei
-	lF0U8uLWBw6MYC8bloWXqR3IQSissDw=
-Date: Thu, 27 Nov 2025 21:52:33 -0800
+	dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b="gBfUj9lj"
+Received: from mail01.disroot.lan (localhost [127.0.0.1])
+	by disroot.org (Postfix) with ESMTP id 702DA25DAA;
+	Sun, 30 Nov 2025 04:22:02 +0100 (CET)
+X-Virus-Scanned: SPAM Filter at disroot.org
+Received: from layka.disroot.org ([127.0.0.1])
+ by localhost (disroot.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id WBLmcre_4clJ; Sun, 30 Nov 2025 04:22:01 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=disroot.org; s=mail;
+	t=1764472921; bh=FZ/WvfCqo8xDaaAaSqJFYv1l/GPzCL60qrZ5Pt1GyLE=;
+	h=From:To:Cc:Subject:Date;
+	b=gBfUj9ljMH7eG7MDi6VR0AysnYUwtcvof9YYxd1GODhgIg5qzBUzdNJL6ELjfByCm
+	 /3Cln+MUoDQEldwU1/I6qe+zFRoCpw79zyO4EcKI3BuRlREwTKtOD0QXAd/t1RPWfZ
+	 fXsSD6F+cgOdDRCxacTihraO1mU86F6jJTQOQhk95WhLcrcWQN8Bqd0h9J8gnkPDxP
+	 zvSluth+K4D0lGuNE01bjn8vkjYCGBXbhK6m17qQ4rqX/EZGEZkQLFHEJaM+fVPrrK
+	 Pt0FI0WCcche+4r2+1yNEYKwPXnEOXUsYzcb92krtDqzjGL2H2VZMEza+XvDS5KAQR
+	 kjAngLQz7/EjA==
+From: Yao Zi <ziyao@disroot.org>
+To: Alan Maguire <alan.maguire@oracle.com>
+Cc: dwarves@vger.kernel.org,
+	bpf@vger.kernel.org,
+	Yao Zi <ziyao@disroot.org>,
+	q66 <me@q66.moe>
+Subject: [PATCH dwarves] dwarf_loader: Handle DW_AT_location attrs containing DW_OP_plus_uconst
+Date: Sun, 30 Nov 2025 03:21:14 +0000
+Message-ID: <20251130032113.4938-2-ziyao@disroot.org>
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v2 4/4] resolve_btfids: change in-place update
- with raw binary output
-To: Donglin Peng <dolinux.peng@gmail.com>
-Cc: Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
- Nicolas Schier <nicolas.schier@linux.dev>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Alan Maguire <alan.maguire@oracle.com>, bpf@vger.kernel.org,
- dwarves@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kbuild@vger.kernel.org
-References: <20251127185242.3954132-1-ihor.solodrai@linux.dev>
- <20251127185242.3954132-5-ihor.solodrai@linux.dev>
- <CAErzpmvsgSDe-QcWH8SFFErL6y3p3zrqNri5-UHJ9iK2ChyiBw@mail.gmail.com>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
-In-Reply-To: <CAErzpmvsgSDe-QcWH8SFFErL6y3p3zrqNri5-UHJ9iK2ChyiBw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
 
-On 11/27/25 7:20 PM, Donglin Peng wrote:
-> On Fri, Nov 28, 2025 at 2:53 AM Ihor Solodrai <ihor.solodrai@linux.dev> wrote:
->>
->> [...]
->>
->> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
->> index bac22265e7ff..ec7e2a7721c7 100644
->> --- a/tools/testing/selftests/bpf/Makefile
->> +++ b/tools/testing/selftests/bpf/Makefile
->> @@ -4,6 +4,7 @@ include ../../../scripts/Makefile.arch
->>  include ../../../scripts/Makefile.include
->>
->>  CXX ?= $(CROSS_COMPILE)g++
->> +OBJCOPY ?= $(CROSS_COMPILE)objcopy
->>
->>  CURDIR := $(abspath .)
->>  TOOLSDIR := $(abspath ../../..)
->> @@ -716,6 +717,10 @@ $(OUTPUT)/$(TRUNNER_BINARY): $(TRUNNER_TEST_OBJS)                  \
->>         $$(call msg,BINARY,,$$@)
->>         $(Q)$$(CC) $$(CFLAGS) $$(filter %.a %.o,$$^) $$(LDLIBS) $$(LLVM_LDLIBS) $$(LDFLAGS) $$(LLVM_LDFLAGS) -o $$@
->>         $(Q)$(RESOLVE_BTFIDS) --btf $(TRUNNER_OUTPUT)/btf_data.bpf.o $$@
->> +       $(Q)if [ -f $$@.btf_ids ]; then \
->> +               $(OBJCOPY) --update-section .BTF_ids=$$@.btf_ids $$@; \
-> 
-> I encountered a resolve_btfids self-test failure when enabling the
-> BTF sorting feature, with the following error output:
-> 
-> All error logs:
-> resolve_symbols:PASS:resolve 0 nsec
-> test_resolve_btfids:PASS:id_check 0 nsec
-> test_resolve_btfids:PASS:id_check 0 nsec
-> test_resolve_btfids:FAIL:id_check wrong ID for T (7 != 5)
-> #369     resolve_btfids:FAIL
-> 
-> The root cause is that prog_tests/resolve_btfids.c retrieves type IDs
-> from btf_data.bpf.o and compares them against the IDs in test_progs.
-> However, while the IDs in test_progs are sorted, those in btf_data.bpf.o
-> remain in their original unsorted state, causing the validation to fail.
-> 
-> This presents two potential solutions:
-> 1. Update the relevant .BTF.* section datas in btf_data.bpf.o, including
->     the .BTF and .BTF.ext sections
-> 2. Modify prog_tests/resolve_btfids.c to retrieve IDs from test_progs.btf
->     instead. However, I discovered that test_progs.btf is deleted in the
->     subsequent code section.
-> 
-> What do you think of it?
+LLVM has a GlobalMerge pass, which tries to group multiple global
+variables together and address them with through a single register with
+offsets coded in instructions, to reduce register pressure. Address of
+symbols transformed by the pass may be represented by an DWARF
+expression consisting of DW_OP_addrx and DW_OP_plus_uconst, which
+naturally matches the way a merged variable is addressed.
 
-Within resolve_btfids it's clear that we have to update (sort in this
-case) BTF first, and then resolve the ids based on the changed BTF.
+However, our dwarf_loader currently ignores anything but the first in
+the location expression, including the DW_OP_plus_uconst atom, which
+appears the second operation in this case. This could result in broken
+BTF information produced by pahole, where several merged symbols are
+given the same offset, even though in fact they don't overlap.
 
-As for the test, we should probably change it to become closer to an
-actual resolve_btfids use-case. Maybe even replace or remove it.
+LLVM has enabled MergeGlobal pass for PowerPC[1] and RISC-V[2] by
+default since version 20, let's handle DW_OP_plus_uconst operations in
+DW_AT_location attributes correctly to ensure correct BTF could be
+produced for LLVM-built kernels.
 
-resolve_btfids operates on BTF generated by pahole for
-kernel/module. And the .BTF_ids section makes sense only in kernel
-space AFAIU (might be wrong, let me know if I am).
+Fixes: a6ea527aab91 ("variable: Add ->addr member")
+Reported-by: q66 <me@q66.moe>
+Closes: https://github.com/ClangBuiltLinux/linux/issues/2089
+Link: https://github.com/llvm/llvm-project/commit/aaa37d6755e6 # [1]
+Link: https://github.com/llvm/llvm-project/commit/9d02264b03ea # [2]
+Signed-off-by: Yao Zi <ziyao@disroot.org>
+---
 
-And in this test we are using BTF produced by LLVM for a BPF program,
-and then create a .BTF_ids section in a user-space app (test_progs /
-resolve_btfids.test.o), although using proper kernel macros.
+The problem is found by several distros building Linux kernel with LLVM
+and BTF enabled, after upgrading to LLVM 20 or later, kernels built for
+RISC-V and PowerPC issue errors like
 
-By the way, the test was written more than 5y ago [1], so it might be
-outdated too.
+[    1.296358] BPF:      type_id=4457 offset=4224 size=8
+[    1.296767] BPF:
+[    1.296919] BPF: Invalid offset
 
-I think the behavior that we care about is already indirectly tested
-by bpf_testmod module tests, with custom BPF kfuncs and BTF_ID_*
-declarations etc. If resolve_btfids is broken, those tests will fail.
+on startup, and loading any modules fails with -EINVAL unless
+CONFIG_MODULE_ALLOW_BTF_MISMATCH is turned on,
 
-But it's also reasonable to have some tests targeting resolve_btfids
-app itself, of course. This one doesn't fit though IMO.
+# insmod tun.ko
+[   12.892421] failed to validate module [tun] BTF: -22
+[   12.936971] failed to validate module [tun] BTF: -22
+insmod: can't insert 'tun.ko': Invalid argument
 
-I'll try to think of something.
+By comparing DWARF dump and BTF dump, it's found BTF contains symbols
+with the same offset,
 
-[1] https://lore.kernel.org/bpf/20200703095111.3268961-10-jolsa@kernel.org/
+type_id=4148 offset=4208 size=8 (VAR 'vector_misaligned_access')
+type_id=4147 offset=4208 size=8 (VAR 'misaligned_access_speed')
 
+while the same symbols are described with different DW_AT_location
+attributes,
 
-> 
-> Thanks,
-> Donglin
-> 
->> +       fi
->> +       $(Q)rm -f $$@.btf_ids $$@.btf
->>         $(Q)ln -sf $(if $2,..,.)/tools/build/bpftool/$(USE_BOOTSTRAP)bpftool \
->>                    $(OUTPUT)/$(if $2,$2/)bpftool
->>
->> --
->> 2.52.0
->>
+0x0011ade7:   DW_TAG_variable
+                DW_AT_name      ("misaligned_access_speed")
+                DW_AT_type      (0x0011adf2 "long")
+		DW_AT_decl_file	("...")
+                DW_AT_external  (true)
+                DW_AT_decl_line (24)
+                DW_AT_location  (DW_OP_addrx 0x0)
+
+...
+
+0x0011adf6:   DW_TAG_variable
+                DW_AT_name      ("vector_misaligned_access")
+                DW_AT_type      (0x0011adf2 "long")
+                DW_AT_external  (true)
+                DW_AT_decl_file ("...")
+                DW_AT_decl_line (25)
+                DW_AT_location  (DW_OP_addrx 0x0, DW_OP_plus_uconst 0x8)
+
+For more detailed analysis and kernel config for reproducing the issue,
+please refer to the Closes link. Thanks for your time and review.
+
+ dwarf_loader.c | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/dwarf_loader.c b/dwarf_loader.c
+index 79be3f516a26..635015676389 100644
+--- a/dwarf_loader.c
++++ b/dwarf_loader.c
+@@ -708,6 +708,11 @@ static enum vscope dwarf__location(Dwarf_Die *die, uint64_t *addr, struct locati
+ 		case DW_OP_addrx:
+ 			scope = VSCOPE_GLOBAL;
+ 			*addr = expr[0].number;
++
++			if (location->exprlen == 2 &&
++			    expr[1].atom == DW_OP_plus_uconst)
++				addr += expr[1].number;
++
+ 			break;
+ 		case DW_OP_reg1 ... DW_OP_reg31:
+ 		case DW_OP_breg0 ... DW_OP_breg31:
+-- 
+2.51.2
 
