@@ -1,176 +1,325 @@
-Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31A703191D0
-	for <dwarves@vger.kernel.org>; Mon,  1 Dec 2025 17:27:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C206313E02
+	for <dwarves@vger.kernel.org>; Mon,  1 Dec 2025 18:27:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764610038; cv=none; b=O+f9VMzm3v5WyHDV8Kbd28nBjSgmQc0Js4ZXUxLuIYp1Ve/hVE7mKvZq9/AInS0+x+OLo8hE7ytY50kb/BYsY5Q26ItWC1ZUWT4JhJtBg6cZtWz6ET/J4Cax1M0XAHfKR8Oru1uaoYxKIOdE6CyX53fzTeZOF893Wqj9+xNnAiU=
+	t=1764613629; cv=none; b=tVHBRvoWex3d7If2waEmQqbPMrPF/6uBYGQSMDieDzctyHM5n66uK/3DnQIaKKnqTbWpMcHmF0wfpB63VAS0Eb6ek9ulBhx2M2ehcj9bWMcW49p+dtchB9ABZKjKHN5wH7s8rr6tbXwnakHyrlZfEnTCWUeEL5jGdG3dYb7u760=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764610038; c=relaxed/simple;
-	bh=UKEcAU5XG9XTh0LArW+wQNvSNYiB+nKnM68aZ0vsVi0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=YhZa7NF8R4VrnzL2uJyQl0HVHYJi0kN+F3N+us1VAi9YvDXIV5VXKfcZSI4o/nbjTVrbthvY+2JhApZyv8wTf94Ci7Veuv8Eqj39b8BNbjUibfRSEhWukGM6ZK1k6l6jt1NHGwJX9q0DxaKBmvjFGNlK/+OM8NfWq/rK4dRfSt0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iDHDxekv; arc=none smtp.client-ip=209.85.216.44
+	s=arc-20240116; t=1764613629; c=relaxed/simple;
+	bh=Oqw+12WE701l1f1TwGH2seyHYMxYe+Xqgy5HR8nXULk=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=kFNF5nDO2J26Flf1Ido2JWzjDL0RzCqGF0S/wXhL7jGkaQDukUYqvYQZ5VLPT7snc/WQmBFHWymOSrPx3+Bz04olmCZgWzI4bauoXDAfIpTmFkiTC/qItiDScSJkfDXXM/aJFmBUi0dmWASwH9hNlxtX4zWQe9qrb+7BnBIjeUY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=e3P/UOa9; arc=none smtp.client-ip=209.85.214.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iDHDxekv"
-Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-3438231df5fso5138715a91.2
-        for <dwarves@vger.kernel.org>; Mon, 01 Dec 2025 09:27:16 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="e3P/UOa9"
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-29555b384acso51144385ad.1
+        for <dwarves@vger.kernel.org>; Mon, 01 Dec 2025 10:27:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1764610036; x=1765214836; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ijq5sdrlqJg37gB6OmgS7cKCkkSyxlmrkLtviwXuwno=;
-        b=iDHDxekv4gVpeFGVHXCkHbjAFU5Dbw3m+XHVPOMWq1BNS+K7IX1RHNnnKUu4BLu6uI
-         21ZCWI9LqrjGSfPChFUJRdCkVxZpRJohTyeIrTJajDnbX1V14FFyFwk1bzLhfXqOBBxS
-         uisHkfBVsgmHbk6t7fEgi4YlkCH87v7I1UGLWBWCsV77fzHDa0oPAwxGyyV1wDm4YvHx
-         lcDovKGVJmrKonM7g5AZWjPhmjIxpCv3ExyuSpoCQ82u0baI8CSbHimXM1VYklw0KqGU
-         e7kb8HJDw6Wq3xtMYEODEJ3kR7gfj9F6YtC3YK2gIFfP4dOvL64dMBidoCiZoJcRfmBY
-         aMqA==
+        d=gmail.com; s=20230601; t=1764613626; x=1765218426; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=t4LngEGfANLHmsHbH8DGsv2GB/mOjSjrOn98fu7nAbY=;
+        b=e3P/UOa9m2m08h8YkOTGquYphKgiyKUDZDc7qo4r5tz625igplogDVeAwkh6at+lp1
+         lZRTFeEXt7XtqQa7jzr48B8lVKze2qhplwvkOag+45WYalcbT8mSESaT4u8vQFi4HPnj
+         HVLEeuP9tXwCs88wicSJ8sOdflhjul5gNlPjw3W3TgjjKc5JNHIuAMEtciQU5uzdv8G4
+         NV699GCM6gbxMq9m7o98ymVYth/cCJ3fmZTrXBGyM+PBW/993eetU2Y3Bueg116hRttM
+         2BdCHqAsESraxKUBsF5LQm9ePrD524I5Ti9fNnvOYmtw9EX3qpjp9muBTq3nlR4EenUW
+         +ckQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764610036; x=1765214836;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=ijq5sdrlqJg37gB6OmgS7cKCkkSyxlmrkLtviwXuwno=;
-        b=g2648EfX7LaabY132E1rZjOo2Vw3WMmKFrCR4N2ZntsL8fulAqdA1yvuic8gU4p9Vf
-         dTUYvJ6u3IrZS16eyy8wZiviUZMugJCsxMpoGiLJiaTQgvSEWkzYmQip+/CGoxFh10Eo
-         KFswegKhRSKOP2n4xMZOtubcl45U4t1wydkKbZGmoPRTrLrR2Ssbi+pUHlKmV1foUAWp
-         smGCIJmeFCo1OLbLRePXWWy8vzjPNxIJyk7RKUx7H4bZQK9UP+0QX9aPGcUWizDT5LUO
-         1DI5bjlxxZ8mObNtZ7kRi4yzxzBfNYvxm8yd7RDufXiCWhamQr+5wCYfqRi0E6nzjK4Q
-         bK9Q==
-X-Forwarded-Encrypted: i=1; AJvYcCWQdJTBQ7JFIFlh5SrAoSIgHiXXaHCgiE2q7RHufu3uKko1RZnWeA05aDtIOqhrh/jaTctHb8AH@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy7XefH3ZYe6k3X3HZjLlyaGGIZwmAKMibsY1BCn33nDSOLoMU7
-	9ie/lRIF1ELdJYNV+9vU5NxUF/PT4vbOhryPCv8GL7pihfm7LoH2MDniEiIQ62HEU8PjLgHyarL
-	UEnc1faV5yIuIrXI3pczn+AIVR4PGsuw=
-X-Gm-Gg: ASbGncsJsHEv/IqYDeq4R7FYmnykzT0yNUBzHnvfJpvDxo42aiFjRF7qtpahp+l6USE
-	sneLA7YFOSov+5vWjOnRq/JqVApQ6uSLJs7vbX2z5qkoLKVkolHaLpt7+Ps5MkofC3//0V9/4Qu
-	3cXK/h+oZ28A8pO6BsSlRw5jckHelQvSStBBQQtRvLAvl3Rwm54Utgv6nJHqgylq7WWN41iYGSx
-	fcpfeEQgM+P71b+VucHZ9+pBjrKHL6SLdL/EYvvFTGLtAjP/Ry72zMjdqtKr9JWKWCBjWXLgBE/
-	XydHDoLj3Z4=
-X-Google-Smtp-Source: AGHT+IGx09HDUgaoADTduGqPajX6ASw2XvUan4kcA666p0ucXEytDotdQYFZNC19FTRcVAIVrhsi5V5N6apBj1QvUjk=
-X-Received: by 2002:a17:90b:2781:b0:341:194:5e82 with SMTP id
- 98e67ed59e1d1-3475ed5183fmr24662841a91.30.1764610036443; Mon, 01 Dec 2025
- 09:27:16 -0800 (PST)
+        d=1e100.net; s=20230601; t=1764613626; x=1765218426;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=t4LngEGfANLHmsHbH8DGsv2GB/mOjSjrOn98fu7nAbY=;
+        b=E6o7YICO4kyVrTkl2Sljx9E6YDuXuWKRvvNQObHK+dhfdbBeaRc1S9xw/xX8KOMVe1
+         vOnvgrcOQYgF+WSGvZ+iZzXTs6HBswiY8e7/Xipo1/v6uJqktS5R4SDHUg8z+Q1TswZm
+         EALRpya+N/P3Z+r83IKAPOt11UeBXW4aXJEi3PLZ9uohBsb8T28vsRl3Cy/5tBX93RnI
+         /+/TEXg1G1BZUnkYbB7SvNucSV5lCe+JTUxJZrrAzFBodGdKaTqE0awhdRqkBrNvmgMs
+         gXHbsvAewbrQwoPJE1VBiu2ClmpxLiK/S3r+KkPrEW2u4Aq8GL45X/SPoHVb1Y/eEiXE
+         d+7Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUmm1HXDrlnb+uNxCBf7uHtnk4Bb2DtyTFckeDbA+s0kqlUDXJIzh7VsRyq44JbDQxUIC70yPQ9@vger.kernel.org
+X-Gm-Message-State: AOJu0YzmPRcfhMZgxD2dEllO1pjF9VQnLDdDnTfVZIWH+bXgtQ1Ng7zK
+	+AbpfWyNfJKg5oMF46erWhWMB0tCepsrmoO9s2wU625LVT185bU7Z8i8
+X-Gm-Gg: ASbGncscATTltEo8hbQlu1HhBc/nnYX/Sq5Y/2qL/gQT4xpg9N4sElLLUX9bGPWj9qQ
+	iBLTSDQ7Zb4gcbo6PYmI8XJcKMdr5BEFbVbSoviaLR2G34N6mtsCSOLxvZtSaFB8CD4xUuojEBT
+	AIz1uY4nRavsVoDk5BV7ulZrDHVXX2czbun/aKbLQd6e67MCM8DLqj+XMlo4+a4rtEGwtfyXQR3
+	ayX1AYzlMeQN5vj0O0o6I+hoV6RRIxdo6+HyMdcpQF002z2KOpYfGPVjLHR2fv+Vfp2proOL55A
+	W/ySc5g2XwQBA29H8V4OhDpXWCFTxMGeKMI3IMGlivbMr18e/BzJCjE6wkxWXOlqx48FmTjUoUC
+	d1tHikOtXD7KM8N9sSIvwVWS3crGs9YqvxxDq53j9X5oLVySjtff8467jsy5yQQN7O3dWR2A608
+	mmzLV6Hwh4w2/8Ti5srHmcgduX4UtxEor/2UV3
+X-Google-Smtp-Source: AGHT+IF9K57qoC5IjEjc4mYogefluYvwG/X7Dku4JGaj8S9XO9T4+dQH/sdyPqluw0Wg/ijbBwX56w==
+X-Received: by 2002:a17:902:ebca:b0:295:82b4:216a with SMTP id d9443c01a7336-29b6c6b5911mr397778135ad.55.1764613626171;
+        Mon, 01 Dec 2025 10:27:06 -0800 (PST)
+Received: from ?IPv6:2a03:83e0:115c:1:a2c1:e629:f1e2:84c8? ([2620:10d:c090:500::6:79eb])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-29bceb29fbbsm128466535ad.49.2025.12.01.10.27.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 01 Dec 2025 10:27:05 -0800 (PST)
+Message-ID: <483e9a808bcc400a80e8c9a752fa0163b2d0dd54.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v2 3/4] resolve_btfids: introduce enum
+ btf_id_kind
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Ihor Solodrai <ihor.solodrai@linux.dev>, Alexei Starovoitov
+ <ast@kernel.org>,  Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko
+ <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>,  Song Liu
+ <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, John Fastabend	
+ <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, Stanislav
+ Fomichev	 <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa
+ <jolsa@kernel.org>,  Nathan Chancellor	 <nathan@kernel.org>, Nicolas Schier
+ <nicolas.schier@linux.dev>, Nick Desaulniers
+ <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, Justin
+ Stitt	 <justinstitt@google.com>, Alan Maguire <alan.maguire@oracle.com>,
+ Donglin Peng	 <dolinux.peng@gmail.com>
+Cc: bpf@vger.kernel.org, dwarves@vger.kernel.org,
+ linux-kernel@vger.kernel.org, 	linux-kbuild@vger.kernel.org
+Date: Mon, 01 Dec 2025 10:27:02 -0800
+In-Reply-To: <20251127185242.3954132-4-ihor.solodrai@linux.dev>
+References: <20251127185242.3954132-1-ihor.solodrai@linux.dev>
+	 <20251127185242.3954132-4-ihor.solodrai@linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.2 (3.56.2-2.fc42) 
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251127185242.3954132-1-ihor.solodrai@linux.dev> <20251127185242.3954132-4-ihor.solodrai@linux.dev>
-In-Reply-To: <20251127185242.3954132-4-ihor.solodrai@linux.dev>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Mon, 1 Dec 2025 09:27:03 -0800
-X-Gm-Features: AWmQ_bkjXdi8-UO2T_nJR5GKr0m3vFgYdnfm11dAyI-KtaylhiOL7YCwKriYRGE
-Message-ID: <CAEf4Bza+L_RL_d7JFFLmzkYj2dbnT8rDgqwCat2zLOekToRm-g@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 3/4] resolve_btfids: introduce enum btf_id_kind
-To: Ihor Solodrai <ihor.solodrai@linux.dev>
-Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nicolas Schier <nicolas.schier@linux.dev>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, Alan Maguire <alan.maguire@oracle.com>, 
-	Donglin Peng <dolinux.peng@gmail.com>, bpf@vger.kernel.org, dwarves@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Thu, Nov 27, 2025 at 10:53=E2=80=AFAM Ihor Solodrai <ihor.solodrai@linux=
-.dev> wrote:
->
+On Thu, 2025-11-27 at 10:52 -0800, Ihor Solodrai wrote:
 > Instead of using multiple flags, make struct btf_id tagged with an
 > enum value indicating its kind in the context of resolve_btfids.
 >
 > Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
 > ---
+
+Just a few nits, looks good to me overall.
+
 >  tools/bpf/resolve_btfids/main.c | 62 ++++++++++++++++++++++-----------
 >  1 file changed, 42 insertions(+), 20 deletions(-)
+>
+> diff --git a/tools/bpf/resolve_btfids/main.c b/tools/bpf/resolve_btfids/m=
+ain.c
+> index b4caae1170dd..c60d303ca6ed 100644
+> --- a/tools/bpf/resolve_btfids/main.c
+> +++ b/tools/bpf/resolve_btfids/main.c
+> @@ -98,6 +98,13 @@
+>  # error "Unknown machine endianness!"
+>  #endif
+>
+> +enum btf_id_kind {
+> +	BTF_ID_KIND_NONE,
+> +	BTF_ID_KIND_SYM,
+> +	BTF_ID_KIND_SET,
+> +	BTF_ID_KIND_SET8
+> +};
+> +
+>  struct btf_id {
+>  	struct rb_node	 rb_node;
+>  	char		*name;
+> @@ -105,9 +112,8 @@ struct btf_id {
+>  		int	 id;
+>  		int	 cnt;
+>  	};
+> -	int		 addr_cnt;
+> -	bool		 is_set;
+> -	bool		 is_set8;
+> +	enum btf_id_kind kind:8;
+> +	int		 addr_cnt:8;
+                                 ^^
 
-[...]
+Nit: these bitfields are not really necessary:
 
+  $ pahole -C btf_id ./tools/bpf/resolve_btfids/resolve_btfids
+  struct btf_id {
+          struct rb_node             rb_node __attribute__((__aligned__(8))=
+); /*     0    24 */
+          char *                     name;                 /*    24     8 *=
+/
+          union {
+                  int                id;                   /*    32     4 *=
+/
+                  int                cnt;                  /*    32     4 *=
+/
+          };                                               /*    32     4 *=
+/
+          enum btf_id_kind           kind:8;               /*    36: 0  4 *=
+/
+          int                        addr_cnt:8;           /*    36: 8  4 *=
+/
+
+          /* XXX 16 bits hole, try to pack */
+
+          Elf64_Addr                 addr[100];            /*    40   800 *=
+/
+
+          /* size: 840, cachelines: 14, members: 6 */
+          /* sum members: 836 */
+          /* sum bitfield members: 16 bits, bit holes: 1, sum bit holes: 16=
+ bits */
+          /* forced alignments: 1 */
+          /* last cacheline: 8 bytes */
+  } __attribute__((__aligned__(8)));
+
+>  	Elf64_Addr	 addr[ADDR_CNT];
+>  };
+>
+> @@ -260,26 +266,33 @@ static char *get_id(const char *prefix_end)
+>  	return id;
+>  }
 >
 > -static struct btf_id *add_set(struct object *obj, char *name, bool is_se=
 t8)
 > +static struct btf_id *add_set(struct object *obj, char *name, enum btf_i=
 d_kind kind)
 >  {
->         /*
->          * __BTF_ID__set__name
->          * name =3D    ^
->          * id   =3D         ^
->          */
-> -       char *id =3D name + (is_set8 ? sizeof(BTF_SET8 "__") : sizeof(BTF=
-_SET "__")) - 1;
-> +       int prefixlen =3D kind =3D=3D BTF_ID_KIND_SET8 ? sizeof(BTF_SET8 =
-"__") : sizeof(BTF_SET "__");
-> +       char *id =3D name + prefixlen - 1;
->         int len =3D strlen(name);
-> +       struct btf_id *btf_id;
+>  	/*
+>  	 * __BTF_ID__set__name
+>  	 * name =3D    ^
+>  	 * id   =3D         ^
+>  	 */
+> -	char *id =3D name + (is_set8 ? sizeof(BTF_SET8 "__") : sizeof(BTF_SET "=
+__")) - 1;
+> +	int prefixlen =3D kind =3D=3D BTF_ID_KIND_SET8 ? sizeof(BTF_SET8 "__") =
+: sizeof(BTF_SET "__");
+
+Nit: Should prefixlen be an input parameter as well? (Or adjust the 'name' =
+at the callsite?)
+     Otherwise the parameter is still a boolean logically.
+
+> +	char *id =3D name + prefixlen - 1;
+>  	int len =3D strlen(name);
+> +	struct btf_id *btf_id;
 >
->         if (id >=3D name + len) {
->                 pr_err("FAILED to parse set name: %s\n", name);
->                 return NULL;
->         }
+>  	if (id >=3D name + len) {
+>  		pr_err("FAILED to parse set name: %s\n", name);
+>  		return NULL;
+>  	}
 >
-> -       return btf_id__add(&obj->sets, id, true);
-> +       btf_id =3D btf_id__add(&obj->sets, id, true);
-> +       if (btf_id)
-> +               btf_id->kind =3D kind;
+> -	return btf_id__add(&obj->sets, id, true);
+> +	btf_id =3D btf_id__add(&obj->sets, id, true);
+> +	if (btf_id)
+> +		btf_id->kind =3D kind;
 > +
-> +       return btf_id;
+> +	return btf_id;
 >  }
 >
 >  static struct btf_id *add_symbol(struct rb_root *root, char *name, size_=
 t size)
 >  {
-> +       struct btf_id *btf_id;
->         char *id;
+> +	struct btf_id *btf_id;
+>  	char *id;
 >
->         id =3D get_id(name + size);
+>  	id =3D get_id(name + size);
 > @@ -288,7 +301,11 @@ static struct btf_id *add_symbol(struct rb_root *roo=
 t, char *name, size_t size)
->                 return NULL;
->         }
+>  		return NULL;
+>  	}
 >
-> -       return btf_id__add(root, id, false);
-> +       btf_id =3D btf_id__add(root, id, false);
-> +       if (btf_id)
-> +               btf_id->kind =3D BTF_ID_KIND_SYM;
-
-seeing this pattern repeated, wouldn't it make sense to just pass this
-kind to btf_id__add() and set it there?
-
+> -	return btf_id__add(root, id, false);
+> +	btf_id =3D btf_id__add(root, id, false);
+> +	if (btf_id)
+> +		btf_id->kind =3D BTF_ID_KIND_SYM;
 > +
-> +       return btf_id;
+> +	return btf_id;
+
+Agree with Andrii regarding 'kind' being a btf_id__add() parameter.
+
 >  }
 >
-
-[...]
-
+>  /* Older libelf.h and glibc elf.h might not yet define the ELF compressi=
+on types. */
+> @@ -491,28 +508,24 @@ static int symbols_collect(struct object *obj)
+>  			id =3D add_symbol(&obj->funcs, prefix, sizeof(BTF_FUNC) - 1);
+>  		/* set8 */
+>  		} else if (!strncmp(prefix, BTF_SET8, sizeof(BTF_SET8) - 1)) {
+> -			id =3D add_set(obj, prefix, true);
+> +			id =3D add_set(obj, prefix, BTF_ID_KIND_SET8);
+>  			/*
+>  			 * SET8 objects store list's count, which is encoded
+>  			 * in symbol's size, together with 'cnt' field hence
+>  			 * that - 1.
+>  			 */
+> -			if (id) {
+> +			if (id)
+>  				id->cnt =3D sym.st_size / sizeof(uint64_t) - 1;
+> -				id->is_set8 =3D true;
+> -			}
+>  		/* set */
+>  		} else if (!strncmp(prefix, BTF_SET, sizeof(BTF_SET) - 1)) {
+> -			id =3D add_set(obj, prefix, false);
+> +			id =3D add_set(obj, prefix, BTF_ID_KIND_SET);
+>  			/*
+>  			 * SET objects store list's count, which is encoded
+>  			 * in symbol's size, together with 'cnt' field hence
+>  			 * that - 1.
+>  			 */
+> -			if (id) {
+> +			if (id)
+>  				id->cnt =3D sym.st_size / sizeof(int) - 1;
+> -				id->is_set =3D true;
+> -			}
+>  		} else {
+>  			pr_err("FAILED unsupported prefix %s\n", prefix);
+>  			return -1;
 > @@ -643,7 +656,7 @@ static int id_patch(struct object *obj, struct btf_id=
  *id)
->         int i;
+>  	int i;
 >
->         /* For set, set8, id->id may be 0 */
-> -       if (!id->id && !id->is_set && !id->is_set8) {
-> +       if (!id->id && id->kind =3D=3D BTF_ID_KIND_SYM) {
+>  	/* For set, set8, id->id may be 0 */
+> -	if (!id->id && !id->is_set && !id->is_set8) {
+> +	if (!id->id && id->kind =3D=3D BTF_ID_KIND_SYM) {
+>  		pr_err("WARN: resolve_btfids: unresolved symbol %s\n", id->name);
+>  		warnings++;
+>  	}
+> @@ -696,6 +709,7 @@ static int sets_patch(struct object *obj)
+>  {
+>  	Elf_Data *data =3D obj->efile.idlist;
+>  	struct rb_node *next;
+> +	int cnt;
+>
+>  	next =3D rb_first(&obj->sets);
+>  	while (next) {
+> @@ -715,11 +729,15 @@ static int sets_patch(struct object *obj)
+>  			return -1;
+>  		}
+>
+> -		if (id->is_set) {
+> +		switch (id->kind) {
+> +		case BTF_ID_KIND_SET:
+>  			set =3D data->d_buf + off;
+> +			cnt =3D set->cnt;
+>  			qsort(set->ids, set->cnt, sizeof(set->ids[0]), cmp_id);
+> -		} else {
+> +			break;
+> +		case BTF_ID_KIND_SET8:
+>  			set8 =3D data->d_buf + off;
+> +			cnt =3D set8->cnt;
+>  			/*
+>  			 * Make sure id is at the beginning of the pairs
+>  			 * struct, otherwise the below qsort would not work.
+> @@ -744,10 +762,14 @@ static int sets_patch(struct object *obj)
+>  						bswap_32(set8->pairs[i].flags);
+>  				}
+>  			}
+> +			break;
+> +		case BTF_ID_KIND_SYM:
+> +		default:
 
-nit: comment says the exception is specifically for SET and SET8, so I
-think checking for those two instead of for SYM (implying that only
-other possible options are set and set8) would be a bit more
-future-proof?
+Nit: just default, no need for `case BTF_ID_KIND_SYM:`?
 
->                 pr_err("WARN: resolve_btfids: unresolved symbol %s\n", id=
-->name);
->                 warnings++;
->         }
-
-[...]
+> +			pr_err("Unexpected btf_id_kind %d for set '%s'\n", id->kind, id->name=
+);
+> +			return -1;
+>  		}
+>
+> -		pr_debug("sorting  addr %5lu: cnt %6d [%s]\n",
+> -			 off, id->is_set ? set->cnt : set8->cnt, id->name);
+> +		pr_debug("sorting  addr %5lu: cnt %6d [%s]\n", off, cnt, id->name);
+>
+>  		next =3D rb_next(next);
+>  	}
