@@ -1,158 +1,404 @@
-Received: from out-174.mta0.migadu.com (out-174.mta0.migadu.com [91.218.175.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B6502D3732;
-	Tue,  2 Dec 2025 19:08:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB27B26B741
+	for <dwarves@vger.kernel.org>; Wed,  3 Dec 2025 09:14:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764702528; cv=none; b=ouUHZnE92/8tyaWTM7+JaHxZ5I2+1y44aOluIlIo2ovqIrYxo8Cb9RM9EfpxJKWR0UdJXWDmhpDWq+2fH4Cl1CuO0ic+kZnAJfCeTPXclXL0CM+smywlB3WYzuxFIcSJzG5gRMe1r89mROsp8aqmb9RkNgfJHjbfm+oftjFdfOo=
+	t=1764753278; cv=none; b=rHGQxEU7LFdb6uk/DlTF2eZa5WrSYDSzYq1HZzqI8LZX3XMEihjANqIrh3S7NRvIfipRKYJn/PsZcM2Gegflrz4MTRv7lcc0Kf6a3pWP4JIKEBWmyLxcS1AoOnCpVr18Pr615at2dV1TEPV0P2yj85ZyasiR4Bnfdcu1h11hVxY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764702528; c=relaxed/simple;
-	bh=ar4ZMYmNGGuktek8mF2bDDERYiPWFCukyWLOPoUcc/4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=KTU8f4WTMy6eSDzNVcqiUkejOPCyxezAF29nc4uaSKcpryhBwDYxHBNz8VLxsmPFITq6CLy8nI2MfdVLDyzKlhM0Ah/Uq9KHlkFaZt53ATnmhQ0Gy0OVknObjJKXTQdGMrYXh1H/+qayMzSbH5IkMSo5Lo3Jc4skGATQETg92wE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=eaVg1VHa; arc=none smtp.client-ip=91.218.175.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1764753278; c=relaxed/simple;
+	bh=ut8HRGOgivsoB0kx50pHLVq+z8gVE0mBBi4b9ppr2Kw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=a4SEvRU0j45gmtc+ka0eSKVNLUKvJmo2KFR2FtVkfrtLH3qEv1MRMAGJRGiirkGK37JNCebwKxM0GhTCfoHErbkwwQt9Dg2FO91AFU0qOXXtEjGTEDXAsm6bspJ/ZWQWejARaIqYkXp8tqldMN6ooZ+jzDSOssW21z8AmEVpNOQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Jcb4hee3; arc=none smtp.client-ip=209.85.218.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="eaVg1VHa"
-Message-ID: <3f60cb6e-a36c-44b3-b80a-3a99d013e0a3@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1764702513;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=1O5gtbVuRm3/hxxP89eo2s5fhbmgYhtby5Tb7ixZAA4=;
-	b=eaVg1VHa4BVWlcLJTpk2jb8rdrvYCaZF604wbC5ETx1RKCpQTHzqPoo5GHULUXm4CGC+ct
-	K9ppVVefV9OVULCWSaZkksAq5/jD/k4rUDEObpwf2FbB/e0x4m/bgvDZGjFoAjVHsWYygI
-	kmDgACgmtwOXNc+aJREtZfUIWTE3k7I=
-Date: Tue, 2 Dec 2025 11:08:25 -0800
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Jcb4hee3"
+Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-b762de65c07so347628566b.2
+        for <dwarves@vger.kernel.org>; Wed, 03 Dec 2025 01:14:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1764753275; x=1765358075; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/jykVF6C50DofBVWNGtAsaNOhzMdnpnwN579zp18tvo=;
+        b=Jcb4hee3i6RMrNEDL6FgKEL6kgpTWTzI3E8xdGmh0v+9Kl0kFeS8U+YFkS5z6vjvqd
+         9JJuhPBYi6bcqE3OAH+LCw8JZn8AYFkFj6t6a32Ohvw+QRxiCd4cmTO7ITNDncY7pZ1N
+         ybL3J22pdhas7ltWIC6eN97d0a1t9pejZpd2EQlaMQMdp+53yk3Do5U80p92+jOoXJEd
+         QMVV9cCOqAJnbYZdhzyWGqCtJNf7gxp7SE9HQ0zsksGneqDsuyzasENf+kmttR/Bbji7
+         WLWrvNa7GBZFs7USsx3yWy2CmPe4x1DxZagWFD9cBAqZ7cFnP9lQ+2m9L0QHD7LQeJOO
+         CSGA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1764753275; x=1765358075;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=/jykVF6C50DofBVWNGtAsaNOhzMdnpnwN579zp18tvo=;
+        b=n+LiuZNbzSaaRTleo6H5uTGucXYS7GwxHaKqjL8Cl3oyoq9kiGD2eAAlBREbu2/xOF
+         6CsU5zm9sOy2WjCW2pvXqUanAYlSvVH1L7Kaea3id8RYXON2IN38K8lxk1bJ8emJbTpR
+         OQyHfVqm6oLoXWdlkZW+/5M/suR+HIB9H4pCJIy2gi36sTUl8u+MlojJbngmICifcMKl
+         uEwdPrpNoTrwwVadwrnYRA8Ggews3bJ6YKNK/p0191IqQM5hnH/gFt4i7n15UnBkorhx
+         MEwAXU4VuMWntKWBvKjk0Aok6GDpfXty1rBWT4wSeZa/tE8DXAa//NcZIxlYGIl+7C++
+         zneQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWwhGL67WSJGvSZ3U2oRGyVW+NAZ72a0Qy5dvvzEiuoLraa7Rm+aKt4hyAgprQvOIR/RGZN4Zsy@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxx8CmA4H8+wwYGF8OVlO4fpbK2ACs90poFtBk0idFLUAxTU9gW
+	rpkuvyXnNXQxN46lWh0IhWvPd7NWwq5gJPnAIMNo2idGhF72+Nljk7H4JyFcvOJP9fJEYpXLlLF
+	E871IObV0iVQLK7qXRhltZ1Dd0aTeJV0=
+X-Gm-Gg: ASbGncvokyInDglkcnqjy35oMmbFz1k/z9ke6lkp10Lyn4vEn1DON0iY1bYlbQLfOt9
+	81Zy/wto6VuPGVhb1ajfSuT5e5mSoHpWxg9eR9PqE5+XESvmn9yVgOwGt3oOS6OEcCLgGXfooAu
+	4zXIdJb8Bui+B72IGLcCzPCYFbLEnqyXEDqVhRNtWVbBmYCpjzuphW4XOuid/81afHp9kEY/xVZ
+	2N1n5OAGRhn4N+l5nVAlaPsfc7hq4YAjbXXQHHlJ8mAoa3Ep8R3gVzXgElrN+B4Ko+HPUeG
+X-Google-Smtp-Source: AGHT+IEbr04sJVE4nvZUHZmXCNQkR/JZubmHYKe97g98UhmUP9Gb2cZrjPJlhUbKu9YMF0LyXfxhYRMYX4mSKvhJRSI=
+X-Received: by 2002:a17:906:f58f:b0:b73:6998:7bce with SMTP id
+ a640c23a62f3a-b79dc51b194mr158113566b.33.1764753274848; Wed, 03 Dec 2025
+ 01:14:34 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v2 3/4] resolve_btfids: introduce enum
- btf_id_kind
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
- Nicolas Schier <nicolas.schier@linux.dev>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Alan Maguire <alan.maguire@oracle.com>, Donglin Peng
- <dolinux.peng@gmail.com>, bpf@vger.kernel.org, dwarves@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org
 References: <20251127185242.3954132-1-ihor.solodrai@linux.dev>
- <20251127185242.3954132-4-ihor.solodrai@linux.dev>
- <CAEf4Bza+L_RL_d7JFFLmzkYj2dbnT8rDgqwCat2zLOekToRm-g@mail.gmail.com>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
-In-Reply-To: <CAEf4Bza+L_RL_d7JFFLmzkYj2dbnT8rDgqwCat2zLOekToRm-g@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+ <20251127185242.3954132-5-ihor.solodrai@linux.dev> <CAErzpmvsgSDe-QcWH8SFFErL6y3p3zrqNri5-UHJ9iK2ChyiBw@mail.gmail.com>
+ <bba5017e-a590-480b-ae48-17ae45e44e48@linux.dev> <642f6b68-0691-44a1-844f-a8cddec41fd0@linux.dev>
+ <CAErzpmsoeFJBhqXZF1ttUCDx5HSFVawdiVfsG2vWSOq4DBBruQ@mail.gmail.com> <1175fe21-5c0b-4680-8fa7-55d22e4bcaca@linux.dev>
+In-Reply-To: <1175fe21-5c0b-4680-8fa7-55d22e4bcaca@linux.dev>
+From: Donglin Peng <dolinux.peng@gmail.com>
+Date: Wed, 3 Dec 2025 17:14:21 +0800
+X-Gm-Features: AWmQ_bmZ6kzjhxdhvzeaKJNPMi5MeEsvJ8QRRB3ITcKG_ofOlcKUeWSpxKEpwtc
+Message-ID: <CAErzpms1hg=6JZJMRLK6gNsSZDeBbz-4RmUfU6aSf8J281QSwQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 4/4] resolve_btfids: change in-place update
+ with raw binary output
+To: Ihor Solodrai <ihor.solodrai@linux.dev>
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nicolas Schier <nicolas.schier@linux.dev>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, Alan Maguire <alan.maguire@oracle.com>, bpf@vger.kernel.org, 
+	dwarves@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kbuild@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 12/1/25 9:27 AM, Andrii Nakryiko wrote:
-> On Thu, Nov 27, 2025 at 10:53 AM Ihor Solodrai <ihor.solodrai@linux.dev> wrote:
->>
->> Instead of using multiple flags, make struct btf_id tagged with an
->> enum value indicating its kind in the context of resolve_btfids.
->>
->> Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
->> ---
->>  tools/bpf/resolve_btfids/main.c | 62 ++++++++++++++++++++++-----------
->>  1 file changed, 42 insertions(+), 20 deletions(-)
-> 
-> [...]
-> 
->>
->> -static struct btf_id *add_set(struct object *obj, char *name, bool is_set8)
->> +static struct btf_id *add_set(struct object *obj, char *name, enum btf_id_kind kind)
->>  {
->>         /*
->>          * __BTF_ID__set__name
->>          * name =    ^
->>          * id   =         ^
->>          */
->> -       char *id = name + (is_set8 ? sizeof(BTF_SET8 "__") : sizeof(BTF_SET "__")) - 1;
->> +       int prefixlen = kind == BTF_ID_KIND_SET8 ? sizeof(BTF_SET8 "__") : sizeof(BTF_SET "__");
->> +       char *id = name + prefixlen - 1;
->>         int len = strlen(name);
->> +       struct btf_id *btf_id;
->>
->>         if (id >= name + len) {
->>                 pr_err("FAILED to parse set name: %s\n", name);
->>                 return NULL;
->>         }
->>
->> -       return btf_id__add(&obj->sets, id, true);
->> +       btf_id = btf_id__add(&obj->sets, id, true);
->> +       if (btf_id)
->> +               btf_id->kind = kind;
->> +
->> +       return btf_id;
->>  }
->>
->>  static struct btf_id *add_symbol(struct rb_root *root, char *name, size_t size)
->>  {
->> +       struct btf_id *btf_id;
->>         char *id;
->>
->>         id = get_id(name + size);
->> @@ -288,7 +301,11 @@ static struct btf_id *add_symbol(struct rb_root *root, char *name, size_t size)
->>                 return NULL;
->>         }
->>
->> -       return btf_id__add(root, id, false);
->> +       btf_id = btf_id__add(root, id, false);
->> +       if (btf_id)
->> +               btf_id->kind = BTF_ID_KIND_SYM;
-> 
-> seeing this pattern repeated, wouldn't it make sense to just pass this
-> kind to btf_id__add() and set it there?
+On Wed, Dec 3, 2025 at 3:01=E2=80=AFAM Ihor Solodrai <ihor.solodrai@linux.d=
+ev> wrote:
+>
+> On 12/1/25 6:01 PM, Donglin Peng wrote:
+> > On Tue, Dec 2, 2025 at 3:46=E2=80=AFAM Ihor Solodrai <ihor.solodrai@lin=
+ux.dev> wrote:
+> >>
+> >> On 11/27/25 9:52 PM, Ihor Solodrai wrote:
+> >>> On 11/27/25 7:20 PM, Donglin Peng wrote:
+> >>>> On Fri, Nov 28, 2025 at 2:53=E2=80=AFAM Ihor Solodrai <ihor.solodrai=
+@linux.dev> wrote:
+> >>>>>
+> >>>>> [...]
+> >>>>>
+> >>>>> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/s=
+elftests/bpf/Makefile
+> >>>>> index bac22265e7ff..ec7e2a7721c7 100644
+> >>>>> --- a/tools/testing/selftests/bpf/Makefile
+> >>>>> +++ b/tools/testing/selftests/bpf/Makefile
+> >>>>> @@ -4,6 +4,7 @@ include ../../../scripts/Makefile.arch
+> >>>>>  include ../../../scripts/Makefile.include
+> >>>>>
+> >>>>>  CXX ?=3D $(CROSS_COMPILE)g++
+> >>>>> +OBJCOPY ?=3D $(CROSS_COMPILE)objcopy
+> >>>>>
+> >>>>>  CURDIR :=3D $(abspath .)
+> >>>>>  TOOLSDIR :=3D $(abspath ../../..)
+> >>>>> @@ -716,6 +717,10 @@ $(OUTPUT)/$(TRUNNER_BINARY): $(TRUNNER_TEST_OB=
+JS)                  \
+> >>>>>         $$(call msg,BINARY,,$$@)
+> >>>>>         $(Q)$$(CC) $$(CFLAGS) $$(filter %.a %.o,$$^) $$(LDLIBS) $$(=
+LLVM_LDLIBS) $$(LDFLAGS) $$(LLVM_LDFLAGS) -o $$@
+> >>>>>         $(Q)$(RESOLVE_BTFIDS) --btf $(TRUNNER_OUTPUT)/btf_data.bpf.=
+o $$@
+> >>>>> +       $(Q)if [ -f $$@.btf_ids ]; then \
+> >>>>> +               $(OBJCOPY) --update-section .BTF_ids=3D$$@.btf_ids =
+$$@; \
+> >>>>
+> >>>> I encountered a resolve_btfids self-test failure when enabling the
+> >>>> BTF sorting feature, with the following error output:
+> >>>>
+> >>>> All error logs:
+> >>>> resolve_symbols:PASS:resolve 0 nsec
+> >>>> test_resolve_btfids:PASS:id_check 0 nsec
+> >>>> test_resolve_btfids:PASS:id_check 0 nsec
+> >>>> test_resolve_btfids:FAIL:id_check wrong ID for T (7 !=3D 5)
+> >>>> #369     resolve_btfids:FAIL
+> >>>>
+> >>>> The root cause is that prog_tests/resolve_btfids.c retrieves type ID=
+s
+> >>>> from btf_data.bpf.o and compares them against the IDs in test_progs.
+> >>>> However, while the IDs in test_progs are sorted, those in btf_data.b=
+pf.o
+> >>>> remain in their original unsorted state, causing the validation to f=
+ail.
+> >>>>
+> >>>> This presents two potential solutions:
+> >>>> 1. Update the relevant .BTF.* section datas in btf_data.bpf.o, inclu=
+ding
+> >>>>     the .BTF and .BTF.ext sections
+> >>>> 2. Modify prog_tests/resolve_btfids.c to retrieve IDs from test_prog=
+s.btf
+> >>>>     instead. However, I discovered that test_progs.btf is deleted in=
+ the
+> >>>>     subsequent code section.
+> >>>>
+> >>>> What do you think of it?
+> >>>
+> >>> Within resolve_btfids it's clear that we have to update (sort in this
+> >>> case) BTF first, and then resolve the ids based on the changed BTF.
+> >>>
+> >>> As for the test, we should probably change it to become closer to an
+> >>> actual resolve_btfids use-case. Maybe even replace or remove it.
+> >>>
+> >>> resolve_btfids operates on BTF generated by pahole for
+> >>> kernel/module. And the .BTF_ids section makes sense only in kernel
+> >>> space AFAIU (might be wrong, let me know if I am).
+> >>>
+> >>> And in this test we are using BTF produced by LLVM for a BPF program,
+> >>> and then create a .BTF_ids section in a user-space app (test_progs /
+> >>> resolve_btfids.test.o), although using proper kernel macros.
+> >>>
+> >>> By the way, the test was written more than 5y ago [1], so it might be
+> >>> outdated too.
+> >>>
+> >>> I think the behavior that we care about is already indirectly tested
+> >>> by bpf_testmod module tests, with custom BPF kfuncs and BTF_ID_*
+> >>> declarations etc. If resolve_btfids is broken, those tests will fail.
+> >>>
+> >>> But it's also reasonable to have some tests targeting resolve_btfids
+> >>> app itself, of course. This one doesn't fit though IMO.
+> >>>
+> >>> I'll try to think of something.
+> >>
+> >> Hi Donglin,
+> >>
+> >> I discussed this off-list with Andrii, and we agreed that the selftest
+> >> itself is reasonable with respect to testing resolve_btfids output.
+> >>
+> >> In this series, I only have to change the test_progs build recipe.
+> >>
+> >> The problem that you've encountered I think can be fixed in the test,
+> >> which is basically what you suggested as option 2:
+> >>
+> >>   static int resolve_symbols(void)
+> >>   {
+> >>         struct btf *btf;
+> >>         int type_id;
+> >>         __u32 nr;
+> >>
+> >>         btf =3D btf__parse_elf("btf_data.bpf.o", NULL); /* <--- this *=
+/
+> >>
+> >>         [...]
+> >>
+> >> Instead of reading in the source BTF, we have to load .btf produced by
+> >> resolve_btfids. A complication is that it's going to be a different
+> >> file for every TRUNNER_BINARY, which has to be accounted for, although
+> >> the BTF itself would be identical between relevant runners.
+> >>
+> >> If go this route, I think we should add .btf cleanup to the Makefile
+> >> and update local .gitignore
+> >
+> > Thanks, could the following modification be accepted?
+> >
+> > diff --git a/tools/testing/selftests/bpf/.gitignore
+> > b/tools/testing/selftests/bpf/.gitignore
+> > index be1ee7ba7ce0..38ac369cd701 100644
+> > --- a/tools/testing/selftests/bpf/.gitignore
+> > +++ b/tools/testing/selftests/bpf/.gitignore
+> > @@ -45,3 +45,4 @@ xdp_synproxy
+> >  xdp_hw_metadata
+> >  xdp_features
+> >  verification_cert.h
+> > +*.btf
+> > diff --git a/tools/testing/selftests/bpf/Makefile
+> > b/tools/testing/selftests/bpf/Makefile
+> > index 2a027ff9ceaf..a1188129229f 100644
+> > --- a/tools/testing/selftests/bpf/Makefile
+> > +++ b/tools/testing/selftests/bpf/Makefile
+> > @@ -720,7 +720,7 @@ $(OUTPUT)/$(TRUNNER_BINARY): $(TRUNNER_TEST_OBJS)
+> >                  \
+> >         $(Q)if [ -f $$@.btf_ids ]; then \
+> >                 $(OBJCOPY) --update-section .BTF_ids=3D$$@.btf_ids $$@;=
+ \
+> >         fi
+> > -       $(Q)rm -f $$@.btf_ids $$@.btf
+> > +       $(Q)rm -f $$@.btf_ids
+> >         $(Q)ln -sf $(if $2,..,.)/tools/build/bpftool/$(USE_BOOTSTRAP)bp=
+ftool \
+> >                    $(OUTPUT)/$(if $2,$2/)bpftool
+> >
+> > @@ -908,7 +908,7 @@ EXTRA_CLEAN :=3D $(SCRATCH_DIR) $(HOST_SCRATCH_DIR)
+> >                  \
+> >         prog_tests/tests.h map_tests/tests.h verifier/tests.h          =
+ \
+> >         feature bpftool $(TEST_KMOD_TARGETS)                           =
+ \
+> >         $(addprefix $(OUTPUT)/,*.o *.d *.skel.h *.lskel.h *.subskel.h  =
+ \
+> > -                              no_alu32 cpuv4 bpf_gcc                  =
+ \
+> > +                              *.btf no_alu32 cpuv4 bpf_gcc            =
+ \
+> >                                liburandom_read.so)                     =
+ \
+> >         $(OUTPUT)/FEATURE-DUMP.selftests
+> >
+> > diff --git a/tools/testing/selftests/bpf/prog_tests/resolve_btfids.c
+> > b/tools/testing/selftests/bpf/prog_tests/resolve_btfids.c
+> > index 51544372f52e..00883ff16569 100644
+> > --- a/tools/testing/selftests/bpf/prog_tests/resolve_btfids.c
+> > +++ b/tools/testing/selftests/bpf/prog_tests/resolve_btfids.c
+> > @@ -101,7 +101,7 @@ static int resolve_symbols(void)
+> >         int type_id;
+> >         __u32 nr;
+> >
+> > -       btf =3D btf__parse_elf("btf_data.bpf.o", NULL);
+> > +       btf =3D btf__parse_raw("test_progs.btf");
+>
+> We can't hardcode a filename here, because $(OUTPUT)/$(TRUNNER_BINARY)
+> is a generic rule for a number of different binaries (test_progs,
+> test_maps, test_progs-no_alu32 and others).
+>
+> I think there are a few options how to deal with this:
+> - generate .btf and .btf_ids not for the final TRUNNER_BINARY, but for
+>   a specific test object (resolve_btfids.test.o in this case); then we
+>   could load "resolve_btfids.test.o.btf"
+> - implement an --output-btf option in resolve_btfids
+> - somehow (env var?) determine what binary is running in the test
+> - (a hack) in the makefile, copy $@.btf to "test.btf" or similar
+>
+> IMO the first option is the best, as this makefile code exists because
+> of that specific test.
+>
+> The --output-btf is okay in principle, but I don't like the idea of
+> adding a cli option that would be used only for one selftest.
 
-I like the idea, because we could get rid the "unique" flag then.
+Thanks, I understand. Here are the changes based on the first option:
 
-But the btf_id__add() does not necessarily create a new struct, and so
-if we pass the kind in, what do we do with existing objects?
-Overwrite the kind? If not, do we check for a mismatch?
+diff --git a/tools/testing/selftests/bpf/Makefile
+b/tools/testing/selftests/bpf/Makefile
+index 2a027ff9ceaf..751960aeb8e5 100644
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -704,6 +704,16 @@ ifneq ($2:$(OUTPUT),:$(shell pwd))
+        $(Q)rsync -aq $$^ $(TRUNNER_OUTPUT)/
+ endif
 
-> 
->> +
->> +       return btf_id;
->>  }
->>
-> 
-> [...]
-> 
->> @@ -643,7 +656,7 @@ static int id_patch(struct object *obj, struct btf_id *id)
->>         int i;
->>
->>         /* For set, set8, id->id may be 0 */
->> -       if (!id->id && !id->is_set && !id->is_set8) {
->> +       if (!id->id && id->kind == BTF_ID_KIND_SYM) {
-> 
-> nit: comment says the exception is specifically for SET and SET8, so I
-> think checking for those two instead of for SYM (implying that only
-> other possible options are set and set8) would be a bit more
-> future-proof?
++ifneq ($(TRUNNER_BINARY),test_maps)
++$(TRUNNER_OUTPUT)/resolve_btfids.test.o.btf
+$(TRUNNER_OUTPUT)/resolve_btfids.test.o.btf_ids:
+$(TRUNNER_OUTPUT)/btf_data.bpf.o          \
++
+                      $(TRUNNER_OUTPUT)/resolve_btfids.test.o    \
++
+                      $(RESOLVE_BTFIDS)
++       $(call msg,BTF+IDS,resolve_btfids,$@)
++       $(Q)$(RESOLVE_BTFIDS) --btf $(dir $@)btf_data.bpf.o $(dir
+$@)resolve_btfids.test.o
++
++$(OUTPUT)/$(TRUNNER_BINARY): $(TRUNNER_OUTPUT)/resolve_btfids.test.o.btf_i=
+ds
++endif
++
+ # some X.test.o files have runtime dependencies on Y.bpf.o files
+ $(OUTPUT)/$(TRUNNER_BINARY): | $(TRUNNER_BPF_OBJS)
 
-ok
+@@ -716,11 +726,9 @@ $(OUTPUT)/$(TRUNNER_BINARY): $(TRUNNER_TEST_OBJS)
+                 \
+                             | $(TRUNNER_BINARY)-extras
+        $$(call msg,BINARY,,$$@)
+        $(Q)$$(CC) $$(CFLAGS) $$(filter %.a %.o,$$^) $$(LDLIBS)
+$$(LLVM_LDLIBS) $$(LDFLAGS) $$(LLVM_LDFLAGS) -o $$@
+-       $(Q)$(RESOLVE_BTFIDS) --btf $(TRUNNER_OUTPUT)/btf_data.bpf.o $$@
+-       $(Q)if [ -f $$@.btf_ids ]; then \
+-               $(OBJCOPY) --update-section .BTF_ids=3D$$@.btf_ids $$@; \
++       $(Q)if [ "$(TRUNNER_BINARY)" !=3D "test_maps" ]; then \
++               $(OBJCOPY) --update-section
+.BTF_ids=3D$(TRUNNER_OUTPUT)/resolve_btfids.test.o.btf_ids $$@; \
+        fi
+-       $(Q)rm -f $$@.btf_ids $$@.btf
+        $(Q)ln -sf $(if $2,..,.)/tools/build/bpftool/$(USE_BOOTSTRAP)bpftoo=
+l \
+                   $(OUTPUT)/$(if $2,$2/)bpftool
 
-> 
->>                 pr_err("WARN: resolve_btfids: unresolved symbol %s\n", id->name);
->>                 warnings++;
->>         }
-> 
-> [...]
+@@ -908,7 +916,7 @@ EXTRA_CLEAN :=3D $(SCRATCH_DIR) $(HOST_SCRATCH_DIR)
+                 \
+        prog_tests/tests.h map_tests/tests.h verifier/tests.h           \
+        feature bpftool $(TEST_KMOD_TARGETS)                            \
+        $(addprefix $(OUTPUT)/,*.o *.d *.skel.h *.lskel.h *.subskel.h   \
+-                              no_alu32 cpuv4 bpf_gcc                   \
++                              *.btf *.btf_ids no_alu32 cpuv4 bpf_gcc   \
+                               liburandom_read.so)                      \
+        $(OUTPUT)/FEATURE-DUMP.selftests
 
+diff --git a/tools/testing/selftests/bpf/prog_tests/resolve_btfids.c
+b/tools/testing/selftests/bpf/prog_tests/resolve_btfids.c
+index 51544372f52e..eef6efc82606 100644
+--- a/tools/testing/selftests/bpf/prog_tests/resolve_btfids.c
++++ b/tools/testing/selftests/bpf/prog_tests/resolve_btfids.c
+@@ -101,9 +101,9 @@ static int resolve_symbols(void)
+        int type_id;
+        __u32 nr;
+
+-       btf =3D btf__parse_elf("btf_data.bpf.o", NULL);
++       btf =3D btf__parse_raw("resolve_btfids.test.o.btf");
+        if (CHECK(libbpf_get_error(btf), "resolve",
+-                 "Failed to load BTF from btf_data.bpf.o\n"))
++                 "Failed to load BTF from resolve_btfids.test.o.btf\n"))
+                return -1;
+
+        nr =3D btf__type_cnt(btf);
+
+>
+> >         if (CHECK(libbpf_get_error(btf), "resolve",
+> >                   "Failed to load BTF from btf_data.bpf.o\n"))
+> >                 return -1;
+> >
+> > Thanks,
+> > Donglin
+> >
+> >>
+> >> This change is not strictly necessary in this series, but it is for
+> >> the BTF sorting series. Let me know if you would like to take this on,
+> >> so we don't do the same work twice.
+> >
+> > Thanks, I will take it on.
+>
+> Thank you. I think that'll be a patch in the BTF sorting series.
+> You can work on top of this (v2) series for now. The feedback so far has
+> been mostly nits, and I don't expect overall approach to change in v3.
+>
+> >
+> >>
+> >>>
+> >>> [1] https://lore.kernel.org/bpf/20200703095111.3268961-10-jolsa@kerne=
+l.org/
+> >>>
+> >>>
+> >>>>
+> >>>> Thanks,
+> >>>> Donglin
+> >>>>
+> >>>>> +       fi
+> >>>>> +       $(Q)rm -f $$@.btf_ids $$@.btf
+> >>>>>         $(Q)ln -sf $(if $2,..,.)/tools/build/bpftool/$(USE_BOOTSTRA=
+P)bpftool \
+> >>>>>                    $(OUTPUT)/$(if $2,$2/)bpftool
+> >>>>>
+> >>>>> --
+> >>>>> 2.52.0
+> >>>>>
+> >>>
+> >>
+>
