@@ -1,209 +1,129 @@
-Received: from out-174.mta0.migadu.com (out-174.mta0.migadu.com [91.218.175.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F7F6284663
-	for <dwarves@vger.kernel.org>; Thu,  4 Dec 2025 17:29:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 984E333A6E1
+	for <dwarves@vger.kernel.org>; Thu,  4 Dec 2025 18:06:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764869377; cv=none; b=rvaPYZc3aaElQmoFRtybmYheO7sxbgijoWXtAngfXdGjd+vLJBjW1kgknEK2RWq4O76kadkevhB2DthltwvPx9tYhEXp2W34sdNE6SSiT0Iv9mDid0e11GBuaalGxtVZuFfaZwgbNf4uvMeolXDx4eyVue/rlDeG+yNqD+4vXpo=
+	t=1764871586; cv=none; b=INcCD64p19IWsOgcrlFQKqLlNb2ueTCK/nHFrvQQ7sv+8kiSE/yy93fhpCckpU0peYeTdzNZCeO3K2nzD/b0wjbiA/OPPqix4pdW3CDJG36grHEbo9hPHCtX8WsJdZw+3SGRTBbCSioPsDAvnv4MfcF6m79drDta2jMjXq3bzfY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764869377; c=relaxed/simple;
-	bh=VObQTcmuw106kO7LqSo5gKzmOxYv+iNa0d9/Azcw9K0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=qNvodEKU53yJP00mzAxDMtTCzAubsthQav3wiK2Hj0ZouCm/ycBZfJoWjIHRoNuZ/YdGmGtBcUqQvQEFCtdgzr6EMyH3Fv3UJYpZ0XpPjDAANIP3B+nU8HYaiO7yefSapM8dyr/q7zsW2I3Qtt7KdETqb3RArDl5R8J/6k0P+aw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=o0FpQ1HN; arc=none smtp.client-ip=91.218.175.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1764871586; c=relaxed/simple;
+	bh=IYlPdcQB+qlawwvAMYnbc3ygWE7N3I35+bMQZp+FjW8=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=oRoaX8n16AEJugaZbZUMcHYej1c8xmFBbIV13xj8O9u7az8rtpLXZ9vCAZx0QWbaHI2Q29gkm5tY8bt+QIzE9mv3hCPUSJqCeyHKrhCep5uFjfIr2YuBUDrMyuGPDo97UdxvMp1SXC7h8BVpdxpuKCa74KZq2MDuimqR7FbM6JA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Yuva/7M2; arc=none smtp.client-ip=209.85.216.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="o0FpQ1HN"
-Message-ID: <79031f38-d131-4b78-982c-7ca6ab9de71e@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1764869363;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=yzdwd2xo/mbl9AiCmV7jWAIZgfbn0MTtXVPvlyQqC0U=;
-	b=o0FpQ1HNNc+dzIR1vTeCURGZ+zrS4s1vZgFdhJ9/C8y+aLVMunED8ES9Z1Tq13ji9EtRWl
-	El9QI9VWJPhHq1p4EnymoKwPaZjHfPYeBnJ2e6Ywjvlk3vIhXqRQIHt019nIekxQCQN7cn
-	2GPbzqtkyGmWolooa7AgHhi7TZ0ozCI=
-Date: Thu, 4 Dec 2025 09:29:14 -0800
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Yuva/7M2"
+Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-3436d6ca17bso1323321a91.3
+        for <dwarves@vger.kernel.org>; Thu, 04 Dec 2025 10:06:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1764871584; x=1765476384; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=IYlPdcQB+qlawwvAMYnbc3ygWE7N3I35+bMQZp+FjW8=;
+        b=Yuva/7M2CTYCcwYKWn2bSOPOfeswxxCU4WJ0ZLugUyWdAiAigIkDLE041v/dzWuurt
+         jtH4JvHq2DiaZ/4j1bV/Ga17rwHNjOjGyj/ebxuwdZolMBNRpbd8XLnAMwrwXimXEBru
+         onDY647DmEO0q31pQYiYidVZ4m72B08YR+1dhGJV6VEfJlXvz+bxPRUhjbMACIu/Dg8m
+         gIFXeV59a6IE0JKR85uajI8DKS5OT7p/tYFrc8854hCGNZ+xzMroWLTAqgPfz6tlQknu
+         FR8+qVKzrkYIUHvs7OcwV4nIdfLA8s/IggdzDAqxUopcEicl8kEG/imGhN4gVnp46Ijp
+         cVUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1764871584; x=1765476384;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=IYlPdcQB+qlawwvAMYnbc3ygWE7N3I35+bMQZp+FjW8=;
+        b=A1sZvdYNHUxtMBuwuOnBRfdqoYqyopnbDOa562h1+mDkbZArTVenrooDPZgSS21zYO
+         V7MRVJm1ZzUe5fOEv7llTZxf8PP7ESvzQeKn+V1PZvx1SdIgpId2F8QayZEcmn+a6fAI
+         2DpOX3O0bdi2UjHRuVCRqIgIjY8DcLtxN9PC4FL6zOx5cwUmeTz4/tnoZ4HacHjej96D
+         SvrjNQqrlHFZbJHuR0R11e/qrAl+lIWR/PE2fyTD1Jfu1uQpCC+RoHROrJ5zOflLgtKf
+         sRdKqNqH3AkJ3Es0NWX2FZ/Q8X/TN1U/hqPkdcRXObvsI76vUW90VtDwUYN2k2h0WQpa
+         9oFw==
+X-Forwarded-Encrypted: i=1; AJvYcCX3JbeI/Lz/fumswAoHqadG4HCa0cY0VVShNV81kWN6qWcV+pwuf5ybupPArDbCMHxUXjnnGTlS@vger.kernel.org
+X-Gm-Message-State: AOJu0YwP/Bc9+AesWd91vis5vvRhokRHIBe8xhO5Wr092Edwz2pdT0EI
+	PXYyGrI80qo1YNpiCqsm26MM28jW3YGFBuxQb8IKSyzbY2uE111DZfCx
+X-Gm-Gg: ASbGncs+1CZWm4gw+OgAdcpOeKSzjU5IpTLqAta79XsRJL7pm+CrtcY7ZUpyMKZCZ1I
+	skiTRY7E3UBTXSSwhKwKwFJqhKH6qD4agZSmJyT2RHDWrvqw1oLusJ6Q+xH8Z7YlTeVsDa6yM8O
+	LVvGxKgT9gvvBdDZ95MZ1nUtbJgUyMdgjwl+1lRUq0TyH2Pwlxhy+erC37BHKX0ZNZisFMLMUnv
+	Pz9zTigNuri+SgWHoxGU2VWgId84fPRUZndxBiQPe5Pjrm1X51relqKsK/brloJ3RXgMH0I4i7Y
+	Gq7WGcDyFRU4mCCyxMeC7bSxOCxjHdyYc0+KVC2erHbfaHYK4vk9VhB/+AbGEF7bJfsSFbK1247
+	+G6l2P61/Rfd/gVnpIwgF07UIoVWL+ccHSGwU1I0Lo/TG87jK8tnKokzJ1g7DWix2ChMaAZz3VX
+	aKIvKwvibw
+X-Google-Smtp-Source: AGHT+IHLCo+72DPRWKONv/JPgaSabOzTBsVk4U00GSBcgCo1zw2Ja1fCMHkVELYZuK7F1CmTW4l48g==
+X-Received: by 2002:a17:90a:ec87:b0:339:d03e:2a11 with SMTP id 98e67ed59e1d1-349125d0973mr7484739a91.14.1764871583726;
+        Thu, 04 Dec 2025 10:06:23 -0800 (PST)
+Received: from [192.168.0.226] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3494f596810sm2395842a91.10.2025.12.04.10.06.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 04 Dec 2025 10:06:23 -0800 (PST)
+Message-ID: <707080716569c7de7c3cb5869b67d62b55a96b68.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v2 4/4] resolve_btfids: change in-place update
+ with raw binary output
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Ihor Solodrai <ihor.solodrai@linux.dev>, Alexei Starovoitov
+ <ast@kernel.org>,  Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko
+ <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>,  Song Liu
+ <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, John Fastabend	
+ <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, Stanislav
+ Fomichev	 <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa
+ <jolsa@kernel.org>,  Nathan Chancellor	 <nathan@kernel.org>, Nicolas Schier
+ <nicolas.schier@linux.dev>, Nick Desaulniers
+ <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, Justin
+ Stitt	 <justinstitt@google.com>, Alan Maguire <alan.maguire@oracle.com>,
+ Donglin Peng	 <dolinux.peng@gmail.com>
+Cc: bpf@vger.kernel.org, dwarves@vger.kernel.org,
+ linux-kernel@vger.kernel.org, 	linux-kbuild@vger.kernel.org
+Date: Thu, 04 Dec 2025 10:06:20 -0800
+In-Reply-To: <79031f38-d131-4b78-982c-7ca6ab9de71e@linux.dev>
+References: <20251127185242.3954132-1-ihor.solodrai@linux.dev>
+	 <20251127185242.3954132-5-ihor.solodrai@linux.dev>
+	 <de6d1c8f581fb746ad97b93dbfb054ae7db6b5d8.camel@gmail.com>
+	 <e8aacbc8-3702-42e9-b5f0-cfcd71df072e@linux.dev>
+	 <763200e4f55197da44789b97fd5379ae8bf32c08.camel@gmail.com>
+	 <79031f38-d131-4b78-982c-7ca6ab9de71e@linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.2 (3.56.2-2.fc42) 
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v2 4/4] resolve_btfids: change in-place update
- with raw binary output
-To: Eduard Zingerman <eddyz87@gmail.com>, Alexei Starovoitov
- <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
- Nicolas Schier <nicolas.schier@linux.dev>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Alan Maguire <alan.maguire@oracle.com>, Donglin Peng <dolinux.peng@gmail.com>
-Cc: bpf@vger.kernel.org, dwarves@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org
-References: <20251127185242.3954132-1-ihor.solodrai@linux.dev>
- <20251127185242.3954132-5-ihor.solodrai@linux.dev>
- <de6d1c8f581fb746ad97b93dbfb054ae7db6b5d8.camel@gmail.com>
- <e8aacbc8-3702-42e9-b5f0-cfcd71df072e@linux.dev>
- <763200e4f55197da44789b97fd5379ae8bf32c08.camel@gmail.com>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
-In-Reply-To: <763200e4f55197da44789b97fd5379ae8bf32c08.camel@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
 
-On 12/4/25 8:57 AM, Eduard Zingerman wrote:
-> On Wed, 2025-12-03 at 21:13 -0800, Ihor Solodrai wrote:
->> On 12/1/25 11:55 AM, Eduard Zingerman wrote:
->>> On Thu, 2025-11-27 at 10:52 -0800, Ihor Solodrai wrote:
->>>> Currently resolve_btfids updates .BTF_ids section of an ELF file
->>>> in-place, based on the contents of provided BTF, usually within the
->>>> same input file, and optionally a BTF base.
->>>>
->>
->> Hi Eduard, thank you for the review.
->>
->>>> This patch changes resolve_btfids behavior to enable BTF
->>>> transformations as part of its main operation. To achieve this
->>>> in-place ELF write in resolve_btfids is replaced with generation of
->>>> the following binaries:
->>>>   * ${1}.btf with .BTF section data
->>>>   * ${1}.distilled_base.btf with .BTF.base section data (for
->>>>     out-of-tree modules)
->>>>   * ${1}.btf_ids with .BTF_ids section data, if it exists in ${1}
->>>
->>> Nit: use ${1}.BTF / ${1}.BTF.base / ${1}.BTF_ids, so that each file is
->>>      named by it's corresponding section?
->>
->> Sure, makes sense.
->>
->>>
->>>>
->>>> The execution of resolve_btfids and consumption of its output is
->>>> orchestrated by scripts/gen-btf.sh introduced in this patch.
->>>>
->>>> The rationale for this approach is that updating ELF in-place with
->>>> libelf API is complicated and bug-prone, especially in the context of
->>>> the kernel build. On the other hand applying objcopy to manipulate ELF
->>>> sections is simpler and more reliable.
->>>
->>> Nit: more context needed, as is the statement raises questions but not
->>>      answers them.
->>
->> Would you like to see more details about why using libelf is complicated?
->> I don't follow what's unclear here, sorry...
-> 
-> The claim here is: "libelf API is complicated and bug-prone ... in
-> context of the kernel build". This is a very vague wording.
-> The decision to rely on objcopy/linker comes from a specific needs
-> outlined by Andrii in an off-list discussion. It will be good to have
-> this context captured in the commit message, instead of bluntly
-> stating that libelf is bug-prone.
+On Thu, 2025-12-04 at 09:29 -0800, Ihor Solodrai wrote:
 
-Ok, it seems you're conflating two separate issues.
+[...]
 
-There is a requirement to *link* .BTF section into vmlinux, because it
-must have a SHF_ALLOC flag, which makes objcopying the section data
-insufficient: linker has to do some magic under the hood.
+> Ok, it seems you're conflating two separate issues.
+>=20
+> There is a requirement to *link* .BTF section into vmlinux, because it
+> must have a SHF_ALLOC flag, which makes objcopying the section data
+> insufficient: linker has to do some magic under the hood.
+>=20
+> The patch doesn't change this behavior, and this was (and is) covered
+> in the script comments.
+>=20
+> A separate issue is what resolve_btfids does: updates ELF in-place
+> (before the patch) or outputs detached section data (after patch).
+>=20
+> The paragraph in the commit message attempted to explain the decision
+> to output raw section data. And apparently I did a bad job of
+> that. I'll rewrite this part it in the next revision.
+>=20
+> And I feel I should clarify that I didn't claim that libelf is buggy.
+> I meant that using it is complicated, which makes resolve_btfids buggy.
 
-The patch doesn't change this behavior, and this was (and is) covered
-in the script comments.
+So, pahole does the following:
+- elf_begin(fildes: fd, cmd: ELF_C_RDWR, ref: NULL);
+- selects a section to modify and modifies it
+- elf_flagdata(data: btf_data, cmd: ELF_C_SET, flags: ELF_F_DIRTY);
+- elf_update(elf, cmd: ELF_C_WRITE)
+- elf_end(elf)
 
-A separate issue is what resolve_btfids does: updates ELF in-place
-(before the patch) or outputs detached section data (after patch).
+What exactly is complicated about that?
 
-The paragraph in the commit message attempted to explain the decision
-to output raw section data. And apparently I did a bad job of
-that. I'll rewrite this part it in the next revision.
-
-And I feel I should clarify that I didn't claim that libelf is buggy.
-I meant that using it is complicated, which makes resolve_btfids buggy.
-
-> 
->>>> [...]
->>>>  # Create ${2}.o file with all symbols from the ${1} object file
->>>>  kallsyms()
->>>>  {
->>>> @@ -204,6 +176,7 @@ if is_enabled CONFIG_ARCH_WANTS_PRE_LINK_VMLINUX; then
->>>>  fi
->>>>  
->>>>  btf_vmlinux_bin_o=
->>>> +btfids_vmlinux=
->>>>  kallsymso=
->>>>  strip_debug=
->>>>  generate_map=
->>>> @@ -224,11 +197,13 @@ if is_enabled CONFIG_KALLSYMS || is_enabled CONFIG_DEBUG_INFO_BTF; then
->>>>  fi
->>>>  
->>>>  if is_enabled CONFIG_DEBUG_INFO_BTF; then
->>>> -	if ! gen_btf .tmp_vmlinux1; then
->>>> +	if ! ${srctree}/scripts/gen-btf.sh .tmp_vmlinux1; then
->>>
->>> Nit: maybe pass output file names as parameters for get-btf.sh?
->>
->> I don't see a point in that. The script and callsite will become
->> more complicated, but what is the benefit?
-> 
-> In order to avoid implicit naming conventions.  Hence, the reader of
-> the script code has clear understanding about in and out parameters.
-
-I think implicit naming convention makes sense for this script.
-The script's top comment describes what it does in detail, including
-the output naming.
-
-> 
->>> [...]
->>>>  
->>>> +static inline bool is_envvar_set(const char *var_name)
->>>> +{
->>>> +	const char *value = getenv(var_name);
->>>> +
->>>> +	return value && value[0] != '\0';
->>>> +}
->>>> +
->>>>  static int load_btf(struct object *obj)
->>>>  {
->>>>  	struct btf *base_btf = NULL, *btf = NULL;
->>>> @@ -571,6 +554,20 @@ static int load_btf(struct object *obj)
->>>>  	obj->base_btf = base_btf;
->>>>  	obj->btf = btf;
->>>>  
->>>> +	if (obj->base_btf && is_envvar_set("KBUILD_EXTMOD")) {
->>>
->>> This is a bit ugly, maybe use a dedicated parameter instead of
->>> checking environment variable?
->>
->> Disagree. I intentionally tried to avoid adding options to
->> resolve_btfids, because it's not intendend for general CLI usage (as
->> opposed to pahole, for example). IMO the interface should be as simple
->> as possible.
->>
->> If we add an option, we still have to check for the env variable
->> somewhere, and then pass the argument through. Why? Just checking an
->> env var when it matters is simpler.
->>
->> I don't think we want or expect resolve_btfids to run outside of the
->> kernel or selftests build.
-> 
-> This comes to personal opinion, of-course.
-> So, in my personal opinion, obfuscating a command line tool interface
-> with it being parameterized by both environment variables and command
-> line parameters is rarely justified.  In this particular case it will
-> only make life a tad harder for someone debugging resolve_btfids by
-> copy-pasting command from make output.
-> 
-> Hence, I find this piece of code ugly.
-> 
-> [...]
-
+[...]
