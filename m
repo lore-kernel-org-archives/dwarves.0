@@ -1,51 +1,51 @@
 Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC50D2FFDC2;
-	Wed, 10 Dec 2025 20:34:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F2812EAD0D;
+	Wed, 10 Dec 2025 20:34:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765398864; cv=none; b=JLFT8V+swlPO4EkRli/J2UNyUdm7kiZGjg7ztAJoCILKw2kWym3magzfH31TN9O7Ef1M9Fv3LX11lUjPbbQcKbS/rm9cEl0xUWExGihQPKssl3phH93RGHlZDQ7SCOm87zbq4ITmK0xpSn5FNW0uFyJxZABtPnbFSTdgC5t3Xjo=
+	t=1765398881; cv=none; b=pxU4K6gHci0fURrZRuTAjq2b28igEpFFX4/NFFMk62rdgdS7o3CIJYw7WY0Je6Sxh5zrmr4hhb6zoA+V9znoQfz2+Y3hmrBMfDn3CYHOBCjrlr5En9AaHxcaIkj5BOWG4AbGM/0BoiIKOiiE9uIr9A0xbkKyzZ9WgmnA32metJU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765398864; c=relaxed/simple;
-	bh=fuPXMwOZFviQByDHs/6lai8TofzvPJMTBdZalsli2KI=;
+	s=arc-20240116; t=1765398881; c=relaxed/simple;
+	bh=d61PyGw54C1FQq7jg3t9WJ1cxBE4hguMqLoNBkzHexE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=RK+CjYjIkbSAj/3MrdPWGhWGfs/zwjnwjXp8OWuxmdeN5rq12jyr2XgMFtLmj+RThYzuoCLRRJpSnoNpjr0te6ttLnUlhl/BMZmi39OWvqMbcIY3T92PFMwnlhAosMRu+hmCKGqzhy9cuERfEdGBc+mWmw6TjG6hS8CuPIzfTYw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=eoYDQqdo; arc=none smtp.client-ip=205.220.177.32
+	 MIME-Version; b=YzEtpnumMVcuJgVM1WhWwsJIPy4FSQl9vghRJv9kUJHe/qTmemOuIkkHvlyrTA9c9mVwhskcVa31jUgRLf6ko7QkZ42IR7tluo4/HVIHk3gzE7x/7KVyjDbO41lZiW72Ip007gybPo4nooQP88QHYnLEbxVaxjuwcwtAf28oaYc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=YdX2pg1d; arc=none smtp.client-ip=205.220.177.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="eoYDQqdo"
-Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5BAIY8P43798961;
-	Wed, 10 Dec 2025 20:33:01 GMT
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="YdX2pg1d"
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5BAIYOZl3758427;
+	Wed, 10 Dec 2025 20:33:15 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
 	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=corp-2025-04-25; bh=5G0Cn
-	cV0eT6uz8BM0jpDFEH0NmsMxffd04ZZoW6Ky2U=; b=eoYDQqdokIVu4nWi61sx+
-	dnyF0yJ3+Dd6zIw1m4TQ7Oyet4Yixg1WJvX/vXfZkhKRdINTLoElO7Ri0aFZk5z8
-	3hPf7LhYpNx8tvu1vbu2iH2xFLHf1J/tSh5vjimB0Nd6gxQv8yOueRuilc9za0QA
-	0oWQqBcCP9oDzNr9BxeyMOxeJTrfm3w8by0a/i1/7ASuL7RUJ9zHEgScTAYheZIt
-	tMGztW5wmFgZbW0AYieMlumhfUE9gJgEda+F39zcpYAR/N7KAv2KXVsA6Eg0AbIA
-	3Fb2eCUUeSLSylMAei9FCRP2mtaYk7qiwoHroRWLzzNhxFfqm7h76aJoDzJiQeh0
-	w==
+	:mime-version:references:subject:to; s=corp-2025-04-25; bh=hEGkA
+	kCWF7WIGrTUBJezXyGzk3hJWbnrydSfEHJs3Yc=; b=YdX2pg1dZxesFMdW0SJ4e
+	oZag2K+RbBDETBKlwsp8UbNmgMlzTS+tzz1Fn85d3Qe9wqu2x68qv7tndpshZnpF
+	UiS3rJ9uJtY6bKzHiyHXLFQ356ETqMOFhsUaTJT/E5Mr2c31piEmznI0ShNCVOG1
+	yZsjbTgKPs22IhRW0RNTU5V0XFdmSp/Qt1RnZLb2Q7gat5MsuNwvQmIbAf9yn8ur
+	LDBvcJEL5nbt/venu22vVXRQCx3qnMN3Z1YD7tnNJ9HHi4gj2bf3Rv3iG3tOsTFf
+	RsAAgp1udO5DHbJl1XrApQpGAg+2lia8sh91d/J3bHrwfc9hHD0luMP+Y9RuhMb9
+	A==
 Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4ayd1m8buc-1
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4aybqv0h7v-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 10 Dec 2025 20:33:01 +0000 (GMT)
+	Wed, 10 Dec 2025 20:33:14 +0000 (GMT)
 Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 5BAKTEKV039944;
-	Wed, 10 Dec 2025 20:33:00 GMT
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 5BAJ70ZN039933;
+	Wed, 10 Dec 2025 20:33:14 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 4avaxmrpyf-1
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 4avaxmrq84-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 10 Dec 2025 20:33:00 +0000
+	Wed, 10 Dec 2025 20:33:14 +0000
 Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 5BAKWkSd001635;
-	Wed, 10 Dec 2025 20:32:59 GMT
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 5BAKWkSn001635;
+	Wed, 10 Dec 2025 20:33:13 GMT
 Received: from bpf.uk.oracle.com (dhcp-10-154-60-41.vpn.oracle.com [10.154.60.41])
-	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 4avaxmrprn-6;
-	Wed, 10 Dec 2025 20:32:59 +0000
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 4avaxmrprn-11;
+	Wed, 10 Dec 2025 20:33:13 +0000
 From: Alan Maguire <alan.maguire@oracle.com>
 To: andrii@kernel.org, ast@kernel.org
 Cc: daniel@iogearbox.net, martin.lau@linux.dev, eddyz87@gmail.com,
@@ -54,9 +54,9 @@ Cc: daniel@iogearbox.net, martin.lau@linux.dev, eddyz87@gmail.com,
         jolsa@kernel.org, qmo@kernel.org, ihor.solodrai@linux.dev,
         dwarves@vger.kernel.org, bpf@vger.kernel.org, ttreyer@meta.com,
         Alan Maguire <alan.maguire@oracle.com>
-Subject: [PATCH v6 bpf-next 05/10] libbpf: BTF validation can use kind layout for unknown kinds
-Date: Wed, 10 Dec 2025 20:32:38 +0000
-Message-ID: <20251210203243.814529-6-alan.maguire@oracle.com>
+Subject: [PATCH v6 bpf-next 10/10] kbuild, bpf: Specify "kind_layout" optional feature
+Date: Wed, 10 Dec 2025 20:32:43 +0000
+Message-ID: <20251210203243.814529-11-alan.maguire@oracle.com>
 X-Mailer: git-send-email 2.43.5
 In-Reply-To: <20251210203243.814529-1-alan.maguire@oracle.com>
 References: <20251210203243.814529-1-alan.maguire@oracle.com>
@@ -74,49 +74,43 @@ X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 bulksc
  suspectscore=0 spamscore=0 mlxlogscore=999 adultscore=0 malwarescore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2510240000
  definitions=main-2512100168
-X-Proofpoint-GUID: gs922G6Z_fKB9FjZaLnDMWR3eGTX_K7W
-X-Authority-Analysis: v=2.4 cv=HvZ72kTS c=1 sm=1 tr=0 ts=6939d8fd b=1 cx=c_pps
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMjEwMDE2OCBTYWx0ZWRfXxoM+Ha7qr+gb
+ iTIU2ONA0O1DQU8nX6UNNE8MkMxJImwS3V1KmRTc5apPF1qdJAqDxErmuicXSJWTAn+TjzsqULC
+ Iab5MAjfXgqM5YfGAA7Hffcg3TZHNjzf4X95ADgtDvvhDM0bbR92hKsWNNOS+Igcn6LAoTfsecp
+ cX3AAmiX1IDIfnBQeQW9WLBuaV8o5WF9vWePX0xrdhf58qLwBx/wQVPndFQ+OMVC+PMxi6fFVYI
+ t1WLNWMO5GC+kMI5rslP3Fmzv9Lixo2Dn8StWwdPXp8voBXdJYuaw5goKwS7Tqghw65/n480BpV
+ wdIaFZtisAhZIyOyng1B3ujVCbR71zK0WuHhVPkpz4yexq1CrKgGGOdtAPp3IaNk7UNqGF+3Olr
+ ag8De8xevBkU63xVIqFnVVkj0AeAoo+P1QW50LaCfEUoW2jPink=
+X-Proofpoint-ORIG-GUID: rS5gvEpZgQLE0x_9OEpisz8u8LRS6u_3
+X-Authority-Analysis: v=2.4 cv=OLAqHCaB c=1 sm=1 tr=0 ts=6939d90a b=1 cx=c_pps
  a=qoll8+KPOyaMroiJ2sR5sw==:117 a=qoll8+KPOyaMroiJ2sR5sw==:17
  a=wP3pNCr1ah4A:10 a=VkNPw1HP01LnGYTKEx00:22 a=yPCof4ZbAAAA:8
- a=aoasKMbPG5nyLhygJAEA:9 a=zgiPjhLxNE0A:10 a=zZCYzV9kfG8A:10 cc=ntf
- awl=host:12099
-X-Proofpoint-ORIG-GUID: gs922G6Z_fKB9FjZaLnDMWR3eGTX_K7W
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMjEwMDE2OCBTYWx0ZWRfX1WrBi1yd9Wp2
- jdej3ubmwjsUpTjXKEUjL+XUvp1qbZaAQQUgybKA5qf9UG1FhgRSbDG0EtPZC/ez8pmc5Pjnm7C
- u7fl1ylM/JAvM7m+8XGpTA0jlzWm9uoPPrzild+d+QSvgO36lT6DVDWnC4sU96JtH1wliRleyCS
- y8Vn4XmlJk9QsZ24Oo5CJqqSBwoSpF2zXfHiAePY2oeP13RoN8cNhsR2x8vabMdG9Mj7p5U0x4Q
- wN2O6SceLdm8aevIvq1uTgFTqhK/WAaUU3v5TjKmic3RmYkihbZ7XGsowO0oF/tdwlTM8foLwlw
- pfO82fvmJUcuecPCHHPsj3fmQffi4ZMLz4+15BZYJqaFXr5z0WbMhAScq5fQS8Fr5AxpFqsSs6b
- l5njO764npUEYeZV745F/HXVs47dLAxHS59K3GHfS7hsdzCNyoU=
+ a=J4qZCyyk7QvxA2XVlwcA:9 cc=ntf awl=host:12099
+X-Proofpoint-GUID: rS5gvEpZgQLE0x_9OEpisz8u8LRS6u_3
 
-BTF parsing can use kind layout to navigate unknown kinds, so
-btf_validate_type() should take kind layout information into
-account to avoid failure when an unrecognized kind is met.
+The "kind_layout" feature will add metadata about BTF kinds to the
+generated BTF; its absence in pahole will not trigger an error so it
+is safe to add unconditionally as it will simply be ignored if pahole
+does not support it.
 
 Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
 ---
- tools/lib/bpf/btf.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ scripts/Makefile.btf | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
-index 2133e976cb9c..19e37a543e9a 100644
---- a/tools/lib/bpf/btf.c
-+++ b/tools/lib/bpf/btf.c
-@@ -691,8 +691,12 @@ static int btf_validate_type(const struct btf *btf, const struct btf_type *t, __
- 		break;
- 	}
- 	default:
--		pr_warn("btf: type [%u]: unrecognized kind %u\n", id, kind);
--		return -EINVAL;
-+		/* Kind may be represented in kind layout information. */
-+		if (btf_type_size_unknown(btf, t) < 0) {
-+			pr_warn("btf: type [%u]: unrecognized kind %u\n", id, kind);
-+			return -EINVAL;
-+		}
-+		break;
- 	}
- 	return 0;
- }
+diff --git a/scripts/Makefile.btf b/scripts/Makefile.btf
+index db76335dd917..c20f9bbcabeb 100644
+--- a/scripts/Makefile.btf
++++ b/scripts/Makefile.btf
+@@ -25,6 +25,8 @@ pahole-flags-$(call test-ge, $(pahole-ver), 126)  = -j$(JOBS) --btf_features=enc
+ 
+ pahole-flags-$(call test-ge, $(pahole-ver), 130) += --btf_features=attributes
+ 
++pahole-flags-$(call test-ge, $(pahole-ver), 131) += --btf_features=kind_layout
++
+ ifneq ($(KBUILD_EXTMOD),)
+ module-pahole-flags-$(call test-ge, $(pahole-ver), 128) += --btf_features=distilled_base
+ endif
 -- 
 2.43.5
 
