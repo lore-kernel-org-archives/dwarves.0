@@ -1,51 +1,51 @@
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FBAC23EAB8;
-	Thu, 11 Dec 2025 16:47:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3C1C3126AF;
+	Thu, 11 Dec 2025 16:47:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765471645; cv=none; b=YLnuiDn4eVMNxvCqsmRMSGpLwRPFemEBd/hbk4rvHUEy1uXcfScP+otNE0hcXs4eN3KvRfyM0c5mHcbvp/eRzHYWKYM5q6J/ZUVl4YLUl5LFuz/p793FTH7kJiyIWZuWkzXJJyHZGXK/ecOAHg+AMezcxyJmw+040bFgp8HYtQk=
+	t=1765471646; cv=none; b=oz1Ux38X+FJl/a2wODN8D2mlSm2ZxeD1cVND9eKazms1wi/atE3tAzkBxVeUm4J4pTodPKGKwTutdEDdkM1oKLK4r+BL3XOXCxbaSzqTy52yvwM4hV8eE0LSeWj3yDNfz06mBJzLnAe8RpOvLpW6D0/3gIdQ/s1E3wj+HcmMUN8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765471645; c=relaxed/simple;
-	bh=UCO1n7Kl/U/cQA/z44g0OwGBgWHatmWtgC4wAAE7ux0=;
+	s=arc-20240116; t=1765471646; c=relaxed/simple;
+	bh=fl1iLhCaw6Q72AjhmJEqSHWzE702Eyo5AvkELbKXs6s=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=M5noK+jpF7m3QF3o7cyUtq5y3F1Kn52vE95bqYs+JcdeIBE9feI+4V7p6P8HNJ+sDQD1tfMI9VNe8uxfrmTU7POzu4ol/5hm4PH6yoi5fGZ9F97rF0X6dDDvXvnSgk8XuR/G8oq+aYLKohfETbLybBpYsnWfTrY9f9CbmyPjOMM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=Hzy3GTLm; arc=none smtp.client-ip=205.220.165.32
+	 MIME-Version; b=PHvbIDH2IG7LTE3DRxVRY1g/bLiHxjca3p75KIeSNVCW1GDSKi2aqfeHD0us1lxwfBj2yRCvuDllJV7w3k3KMifCompsFgkc/jo+cOqs2hH8T8G+ljI6cBSw4F9tdITKy/E0EnMQfSoo0w5M9JK5MbUke38D0aHJJLx4AEXkHI0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=Eb1e2dgR; arc=none smtp.client-ip=205.220.177.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="Hzy3GTLm"
-Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5BBG5Bve1699173;
-	Thu, 11 Dec 2025 16:46:55 GMT
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="Eb1e2dgR"
+Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5BBG5EXi1722247;
+	Thu, 11 Dec 2025 16:47:05 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
 	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=corp-2025-04-25; bh=yHmpp
-	/bN3czi3p4dn4fkwBODHJuHvYUemZfXIc7nGUI=; b=Hzy3GTLmX+6+8iP4VVltv
-	IN38f/HTYt8oLJRkAfL3GVAg44dB5hiPV8iLjQVqvPCiuFLRAFt80brP7naXUjzi
-	QH/HbEtFfao4cUUfI64NsKgzU+5qiKvjT9DFied7VDBn1BP26BFXcagVmWpl1X8n
-	1s8hTqmIuekvddYnrGmnJUwRFUXDl97d4XEzWnUeY4KFm6auHA2YfCqwoNCgmLOM
-	RtxP/Dkz9dmvRbBjH3pypxI8EQ0KHzSUOLl4YZu87OiCn3hX5PxGZBGWrXmHwaFm
-	UJwynl9VGMpSQIqyrvKgtiX7q7rIE7dY/4T7+928bFyToabWBaVXSCjekXPTgZmC
-	g==
+	:mime-version:references:subject:to; s=corp-2025-04-25; bh=dVt3s
+	YM5QlQcCuJfpcIU0I+e6tHqTk3p7vVEd9TY+fU=; b=Eb1e2dgR4SXnCehXX80ar
+	Zz7GGqfGldEdwfpz7Jy6B9nYtZvt6VRp0d7lA7KGODdDAHycUtycRdY7kK4C4Ljr
+	e8GCIvW6EA6VzOVHmBQTx3pRLaXgXrKYdvXP3VFYnd1suCsAWHFdhtfwvXtaJFos
+	imhr91uhvC00IGPqf4qDkh/b8s19s6VBBoz8+QU7xegpiYHgPE0iFd0vcnfWQZ8H
+	/M9ge7YvTlNIOB/1IRE/ZxrcS04fc/YXTTUQ9acG+LRgm0DbPz8yWSqrSimdYhoF
+	10QX5NIdsPfFdVRDYPWUhQxs4DkfBAVur2nc07AjqMegdOhMBvtJTOE+Vy/JtI5I
+	w==
 Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4aycy8svpg-1
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4ayd1m9ss2-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 11 Dec 2025 16:46:54 +0000 (GMT)
+	Thu, 11 Dec 2025 16:47:05 +0000 (GMT)
 Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 5BBGjaa6039934;
-	Thu, 11 Dec 2025 16:46:53 GMT
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 5BBF62po039952;
+	Thu, 11 Dec 2025 16:47:04 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 4avaxnswt8-1
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 4avaxnswyv-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 11 Dec 2025 16:46:53 +0000
+	Thu, 11 Dec 2025 16:47:04 +0000
 Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 5BBGknm9030704;
-	Thu, 11 Dec 2025 16:46:52 GMT
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 5BBGknmH030704;
+	Thu, 11 Dec 2025 16:47:03 GMT
 Received: from bpf.uk.oracle.com (dhcp-10-154-50-126.vpn.oracle.com [10.154.50.126])
-	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 4avaxnswqy-2;
-	Thu, 11 Dec 2025 16:46:52 +0000
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 4avaxnswqy-6;
+	Thu, 11 Dec 2025 16:47:03 +0000
 From: Alan Maguire <alan.maguire@oracle.com>
 To: andrii@kernel.org, ast@kernel.org
 Cc: daniel@iogearbox.net, martin.lau@linux.dev, eddyz87@gmail.com,
@@ -54,9 +54,9 @@ Cc: daniel@iogearbox.net, martin.lau@linux.dev, eddyz87@gmail.com,
         jolsa@kernel.org, qmo@kernel.org, ihor.solodrai@linux.dev,
         dwarves@vger.kernel.org, bpf@vger.kernel.org, ttreyer@meta.com,
         Alan Maguire <alan.maguire@oracle.com>
-Subject: [PATCH v7 bpf-next 01/10] btf: add kind layout encoding to UAPI
-Date: Thu, 11 Dec 2025 16:46:37 +0000
-Message-ID: <20251211164646.1219122-2-alan.maguire@oracle.com>
+Subject: [PATCH v7 bpf-next 05/10] libbpf: BTF validation can use kind layout for unknown kinds
+Date: Thu, 11 Dec 2025 16:46:41 +0000
+Message-ID: <20251211164646.1219122-6-alan.maguire@oracle.com>
 X-Mailer: git-send-email 2.43.5
 In-Reply-To: <20251211164646.1219122-1-alan.maguire@oracle.com>
 References: <20251211164646.1219122-1-alan.maguire@oracle.com>
@@ -74,101 +74,49 @@ X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 bulksc
  suspectscore=0 spamscore=0 mlxlogscore=999 adultscore=0 malwarescore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2510240000
  definitions=main-2512110133
-X-Proofpoint-ORIG-GUID: isoP9edgGFSBV14fSysVh4YvAeZfY-JH
-X-Authority-Analysis: v=2.4 cv=SZn6t/Ru c=1 sm=1 tr=0 ts=693af57e b=1 cx=c_pps
+X-Proofpoint-GUID: MtN1f2yh9FCJ9lzkH420iuEHi0RCVnTV
+X-Authority-Analysis: v=2.4 cv=HvZ72kTS c=1 sm=1 tr=0 ts=693af589 b=1 cx=c_pps
  a=qoll8+KPOyaMroiJ2sR5sw==:117 a=qoll8+KPOyaMroiJ2sR5sw==:17
- a=wP3pNCr1ah4A:10 a=VkNPw1HP01LnGYTKEx00:22 a=VwQbUJbxAAAA:8 a=pGLkceISAAAA:8
- a=yPCof4ZbAAAA:8 a=X2N_ohHhAXeM7Wann8EA:9 cc=ntf awl=host:12110
-X-Proofpoint-GUID: isoP9edgGFSBV14fSysVh4YvAeZfY-JH
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMjExMDEzNCBTYWx0ZWRfXxoouoeph4yWV
- ZGjm4lwIRuN6akeMD3qkmAB/qQtAXgIAoC1ZWHZgI2wWnwoz6ihGzxYEwJXNCocPajgF5Dq39iB
- JHRt5lJOu/aLiuwO6ZXA4JzDkL6KWaFVqaNt37gDP/pSvPKmKW5jH4lzjuM5cdOm6dyzv+s588L
- xv/bQIcTTmkeMg+iU9Cwj91mgYLVL3NSkkjJp46S95MC3IdZHZNx/IKpwkiIPqUylm7lgCl46EB
- Rrkm2IHNsoyjI+vt9lfGv0U7TV2CcKiEU7Y6+/p2Qq97q7Y3CvtASYTp7M0MWPb9MZgLewPqOee
- iDKVOcP4//BFas/b5Rr3m6ineBk8C1seSRTsHCIa6xYn0m7lMzW/AKFy+mW8GqKxmRXqxMPBTZT
- U+4m62icN/t5TBiu69HeWz7gAo+ijA0jJZtPVmIRZoT+31uo/YA=
+ a=wP3pNCr1ah4A:10 a=VkNPw1HP01LnGYTKEx00:22 a=yPCof4ZbAAAA:8
+ a=aoasKMbPG5nyLhygJAEA:9 a=zgiPjhLxNE0A:10 a=zZCYzV9kfG8A:10 cc=ntf
+ awl=host:12110
+X-Proofpoint-ORIG-GUID: MtN1f2yh9FCJ9lzkH420iuEHi0RCVnTV
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMjExMDEzNCBTYWx0ZWRfXx0omHNazTW6P
+ cfI4NLuvWuOc5xq+oEmaIWVssrXjUvM/rd87J0yJMs5ypbp+DeyBdiMWdGgwqt0IBNKtrRmy8Yd
+ 0ItwfNwBXuJ6GKGomynI0AlBWWagnc/uQ067Ef/AtYRAy8/moPW9QaYPK5QExKn/6HEeTKY4dXO
+ LEHq6l5EqLWziknPwR4WvRm95uMi4qYI8hKbePur0bnMDVwljiko2xROq1ZTdVfkVXY7YppQ/ad
+ +HrR/alp+AT8ISVEJvF3A3hKlYBo4/wIN2Cawgx1k6/lfqZjKcCFN33qhik3xJBOuGIwY8y1uTu
+ 3TBTRpLP7IqD3nUr2YRJRQ5hAqjp0lhE4xSnBRECj6LnT21xHJetH3JKTMRpsRhvDGRmHiT3EuW
+ xNxfuQn/4WcnaOCrzV/snDR0ckjjB8U1Ht8Tg7nsn50VH2hr1lI=
 
-BTF kind layouts provide information to parse BTF kinds. By separating
-parsing BTF from using all the information it provides, we allow BTF
-to encode new features even if they cannot be used by readers. This
-will be helpful in particular for cases where older tools are used
-to parse newer BTF with kinds the older tools do not recognize;
-the BTF can still be parsed in such cases using kind layout.
+BTF parsing can use kind layout to navigate unknown kinds, so
+btf_validate_type() should take kind layout information into
+account to avoid failure when an unrecognized kind is met.
 
-The intent is to support encoding of kind layouts optionally so that
-tools like pahole can add this information. For each kind, we record
-
-- length of singular element following struct btf_type
-- length of each of the btf_vlen() elements following
-
-The ideas here were discussed at [1], [2]; hence
-
-Suggested-by: Andrii Nakryiko <andrii@kernel.org>
 Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
-
-[1] https://lore.kernel.org/bpf/CAEf4BzYjWHRdNNw4B=eOXOs_ONrDwrgX4bn=Nuc1g8JPFC34MA@mail.gmail.com/
-[2] https://lore.kernel.org/bpf/20230531201936.1992188-1-alan.maguire@oracle.com/
 ---
- include/uapi/linux/btf.h       | 10 ++++++++++
- tools/include/uapi/linux/btf.h | 10 ++++++++++
- 2 files changed, 20 insertions(+)
+ tools/lib/bpf/btf.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/include/uapi/linux/btf.h b/include/uapi/linux/btf.h
-index 266d4ffa6c07..64dd681274f4 100644
---- a/include/uapi/linux/btf.h
-+++ b/include/uapi/linux/btf.h
-@@ -8,6 +8,14 @@
- #define BTF_MAGIC	0xeB9F
- #define BTF_VERSION	1
- 
-+/* kind layout section consists of a struct btf_kind_layout for each known
-+ * kind at BTF encoding time.
-+ */
-+struct btf_kind_layout {
-+	__u8 info_sz;		/* size of singular element after btf_type */
-+	__u8 elem_sz;		/* size of each of btf_vlen(t) elements */
-+};
-+
- struct btf_header {
- 	__u16	magic;
- 	__u8	version;
-@@ -19,6 +27,8 @@ struct btf_header {
- 	__u32	type_len;	/* length of type section	*/
- 	__u32	str_off;	/* offset of string section	*/
- 	__u32	str_len;	/* length of string section	*/
-+	__u32	kind_layout_off;/* offset of kind layout section */
-+	__u32	kind_layout_len;/* length of kind layout section */
- };
- 
- /* Max # of type identifier */
-diff --git a/tools/include/uapi/linux/btf.h b/tools/include/uapi/linux/btf.h
-index 266d4ffa6c07..64dd681274f4 100644
---- a/tools/include/uapi/linux/btf.h
-+++ b/tools/include/uapi/linux/btf.h
-@@ -8,6 +8,14 @@
- #define BTF_MAGIC	0xeB9F
- #define BTF_VERSION	1
- 
-+/* kind layout section consists of a struct btf_kind_layout for each known
-+ * kind at BTF encoding time.
-+ */
-+struct btf_kind_layout {
-+	__u8 info_sz;		/* size of singular element after btf_type */
-+	__u8 elem_sz;		/* size of each of btf_vlen(t) elements */
-+};
-+
- struct btf_header {
- 	__u16	magic;
- 	__u8	version;
-@@ -19,6 +27,8 @@ struct btf_header {
- 	__u32	type_len;	/* length of type section	*/
- 	__u32	str_off;	/* offset of string section	*/
- 	__u32	str_len;	/* length of string section	*/
-+	__u32	kind_layout_off;/* offset of kind layout section */
-+	__u32	kind_layout_len;/* length of kind layout section */
- };
- 
- /* Max # of type identifier */
+diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
+index 9ef46aef43fc..440cd451c340 100644
+--- a/tools/lib/bpf/btf.c
++++ b/tools/lib/bpf/btf.c
+@@ -706,8 +706,12 @@ static int btf_validate_type(const struct btf *btf, const struct btf_type *t, __
+ 		break;
+ 	}
+ 	default:
+-		pr_warn("btf: type [%u]: unrecognized kind %u\n", id, kind);
+-		return -EINVAL;
++		/* Kind may be represented in kind layout information. */
++		if (btf_type_size_unknown(btf, t) < 0) {
++			pr_warn("btf: type [%u]: unrecognized kind %u\n", id, kind);
++			return -EINVAL;
++		}
++		break;
+ 	}
+ 	return 0;
+ }
 -- 
 2.39.3
 
