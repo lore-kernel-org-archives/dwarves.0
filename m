@@ -1,156 +1,128 @@
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail69.out.titan.email (mail69.out.titan.email [3.216.99.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7DB21917F0
-	for <dwarves@vger.kernel.org>; Sat, 13 Dec 2025 03:51:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF670298CB7
+	for <dwarves@vger.kernel.org>; Sat, 13 Dec 2025 08:20:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=3.216.99.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765597907; cv=none; b=kpcxl1P6vBkqqtU0ZCdTIvX/KQLNjn2vLpXVQvY+s3Y2m/mmQL4DYoi534LUsogYyqZbhVCFLIdeRigs8OqV+aFR8PAX2DM3YSwF6ahnF70OKgnwI3kAmHXZqb3x0jcSm1Nty7303Y8RFNG5kLXsYzsJn8+juQRremEE+De3Zzw=
+	t=1765614032; cv=none; b=Jg0ZC6OAXBchgJ4c9hF0FJGKsLaoM33v6VGR/GCnIItd3QePs5tvs6v2cUrZcJtDPJHc6aBVsDHMvW85UhVdZ3op0Pzy5eoGiYNuQJCh3XQlD6GUnPkhtMJP9OSjVXHGt6B5Gxq7HQuSEuCXyOHqNkpriRpkZz/+XVcnuxnb2DU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765597907; c=relaxed/simple;
-	bh=uscT8Cs8wBFI8wiJhSy+7LAetnzLJV2CLIL4Ql/3nfA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=VGZMz1TOQzcHWVufjpYInAFfd9Mwm1PfY+Row5g+EtyPJKSRixNhO0LFEzyV5Ktz7hITO4tzkOe9pycAeOuN9UjxxDuqbqH1ma94nQsAu8+dI4x9GL7Z9o268vjXM02Q4HAqinlOIuB31s1vBFo04UUp544j21tS/w8j6TIqoMw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=k58+4PkB; arc=none smtp.client-ip=209.85.214.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1765614032; c=relaxed/simple;
+	bh=tMqJYHgMME4WvarDgCgm8Mdk0TRQIniiYmJc5WXYzzw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=sJ3baipmPn7e46WCuVcKfZ1dIi/gIA6dacfMI/B61PXbWVkxDFk0iCuehLuWznpzTSRvRjiG2rVXFieYx1QhPMvpjhDAcvIEIN+vJnds0JvdZK0uysGi4TxFZOPXKJ4GUWWATpnnhTxz7NvS4ulBaImjgwldJc2BmhGGXoJgzhU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ziyao.cc; spf=pass smtp.mailfrom=ziyao.cc; dkim=pass (1024-bit key) header.d=ziyao.cc header.i=@ziyao.cc header.b=WMdf1yAZ; arc=none smtp.client-ip=3.216.99.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ziyao.cc
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ziyao.cc
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="k58+4PkB"
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-297d4ac44fbso9231705ad.0
-        for <dwarves@vger.kernel.org>; Fri, 12 Dec 2025 19:51:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1765597905; x=1766202705; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Qtt5olcEbFdNtHyhpME8qsZGCPrss/5X0HqR4SKaFN4=;
-        b=k58+4PkBEqgf+8vP9mFo8PzV5kcwTqf+CsT34dHgPkxHysq/kCAH2ZV+MtS0MUmxMK
-         20/9cfuQtqTcyEUb2FzFs8Rn/UZnMTX/Az2VhyxUFWt3X/rwE16QOpWM5HtQWcQT0MdX
-         SzoXKo3uGaoUYjutK8w8vINfYRZqkcDzt/ik3TMcQF5vzRpTvs0gyzRCjMBaom/jhWox
-         IrWe6BWSp+c8m5OopugtboZHqDpvD7QknAFOtPXoLFQN7KCeL2322OsYx4KBMS9CwZp3
-         7Lz87uk2J0w9fSQz2NI3qMtdjAo2HClciJlVSmRryCx6uH5bhpWEooSQEiP2Nvj/e0Ty
-         DdOQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765597905; x=1766202705;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Qtt5olcEbFdNtHyhpME8qsZGCPrss/5X0HqR4SKaFN4=;
-        b=us6H3vg5AW+TEuKoL1qm7OGbKk0e7xwlJgto24vUCMWk5CXSAjtUMVJvH0IBghCDyF
-         qKMTR287TvYUOjPlv1rqTN/A7WYs/0XUHHtIlpjZSh9DZsgMxBz79LQDfbmLfVHyxnsT
-         1maCWB6ouWIPZY7SeawUzYfYbF9Nb8GcCDAUI1nIm4VkK+mDAg2s4UxNw5U+VNqNeQPq
-         xCSznIZN7poBdwKBdzqH0NNOD1kQ0Up50oRmaNuNbIWUWv9vHxvR462y9coyjGt4uCoe
-         tuI2SqKgUI8qViDtrfm0eZjO9qC1QTSwS7XJcAdUjxoeLP7PZz+tQgBouH+z/PcUmUfl
-         TEMw==
-X-Forwarded-Encrypted: i=1; AJvYcCVExNfglbbHeFNzt9I+MESe62/Y1yZUzolSIqW2KqmBH5vg54MDKQvD2Iij3v+A35TEbak9m+MN@vger.kernel.org
-X-Gm-Message-State: AOJu0YygfFL48M2JPQAW4WbGgy2fKQL4LQJKMKQJNcVjHPi0PqEu2BzK
-	KFrT1fazUkV3HqOkP2vPM5IF78ef8GTGDn9Xq9srQRIaGRuX/e3dLabg
-X-Gm-Gg: AY/fxX5wKG/L505YDvVTA8dkwPinUY60P8jbRUyIScE3+ra4SLSX+pkvyzkzjzSpGG8
-	DrT5sWO2UwLEUUZAvFIuWmTbuDQJdp2AfGu3nLl9/M1yx8silojXF1ewFocT1JVdVJzoOrwJk/H
-	c+VqY/sFfRSzgK/MtVtrnhIpN87byDsxmqywPBI4WP2Ij0n3dENaO1U81CHbguEWD7PBfGYtnLQ
-	nhEp9KJXhccubsmUiyVHbM9uqlFdQ7bjYuHKImf0X4Y9FRGtASsHeqq+NknuYujtLMmgXex9Ed3
-	GPTN9F7AUS10oQh4zdSf3jJE0slraEKJhWgSwOtwrfiTuWUqXRWdzIXUiWZvkBd6Koo8Yg+y/IO
-	rW+aNSQzjAqqvXqQHrxe2d+0peY0RBRPxN95hp65GmKfp3E6bS/w0AShzuoEB4JfXgf90ExsP1s
-	9/xF0lxMCUlkbNnkf6eJK4OZgH7xfjSgPepwiiNkZENEm25UcIRHMD7VNaG94=
-X-Google-Smtp-Source: AGHT+IGSBRnT12udRwJeWV8FDUJn5X2BM7apTDfwdXf9FduS4gutii6U21QkPX2DK5RIAwtpfoxXiQ==
-X-Received: by 2002:a17:903:320a:b0:295:55fc:67a0 with SMTP id d9443c01a7336-29eee9f2be6mr80191975ad.2.1765597905105;
-        Fri, 12 Dec 2025 19:51:45 -0800 (PST)
-Received: from [10.200.5.118] (p99249-ipoefx.ipoe.ocn.ne.jp. [153.246.134.248])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-29ee9b374a9sm69193025ad.11.2025.12.12.19.51.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 12 Dec 2025 19:51:44 -0800 (PST)
-Message-ID: <e2775a4d-e79e-4c3a-84bf-6c95b8f543e9@gmail.com>
-Date: Sat, 13 Dec 2025 03:51:38 +0000
+	dkim=pass (1024-bit key) header.d=ziyao.cc header.i=@ziyao.cc header.b="WMdf1yAZ"
+Received: from localhost (localhost [127.0.0.1])
+	by smtp-out.flockmail.com (Postfix) with ESMTP id 4dSzlr6CHGz9rvR;
+	Sat, 13 Dec 2025 08:20:24 +0000 (UTC)
+DKIM-Signature: a=rsa-sha256; bh=39BXdQPgl272D26llb4eKizzyaDUSI/FuUYQ+gWa2+4=;
+	c=relaxed/relaxed; d=ziyao.cc;
+	h=mime-version:subject:in-reply-to:date:to:cc:message-id:from:references:from:to:cc:subject:date:message-id:in-reply-to:references:reply-to;
+	q=dns/txt; s=titan1; t=1765614024; v=1;
+	b=WMdf1yAZR69Y5aO2Rt2xtl2/w40BKhNzlX8++AsNjvEENlzJ+AyXinnHN0qSkg8oXrQch3pc
+	EwehiaAGjj7uH0+IwHvKFo+unRrME/qhaoSt2uy02j6KAeavY0L3byuEJWfcNtWisXu4LuPGPeY
+	vrf+T39DUQQYz4YteFDoZc7A=
+Received: from pie (unknown [117.171.66.90])
+	by smtp-out.flockmail.com (Postfix) with ESMTPA id 4dSzln3Cv0z9rvW;
+	Sat, 13 Dec 2025 08:20:21 +0000 (UTC)
+Date: Sat, 13 Dec 2025 08:20:14 +0000
+Feedback-ID: :me@ziyao.cc:ziyao.cc:flockmailId
+From: Yao Zi <me@ziyao.cc>
+To: Yonghong Song <yonghong.song@linux.dev>,
+	Alan Maguire <alan.maguire@oracle.com>
+Cc: dwarves@vger.kernel.org, bpf@vger.kernel.org, q66 <me@q66.moe>
+Subject: Re: [PATCH dwarves] dwarf_loader: Handle DW_AT_location attrs
+ containing DW_OP_plus_uconst
+Message-ID: <aT0hjyVstASDsl-E@pie>
+References: <20251130032113.4938-2-ziyao@disroot.org>
+ <a3f82302-09d2-45e1-a30a-38a32ddbf947@linux.dev>
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 bpf-next 03/10] libbpf: use kind layout to compute an
- unknown kind size
-To: Alan Maguire <alan.maguire@oracle.com>, bot+bpf-ci@kernel.org,
- andrii@kernel.org, ast@kernel.org
-Cc: daniel@iogearbox.net, martin.lau@linux.dev, eddyz87@gmail.com,
- song@kernel.org, yonghong.song@linux.dev, john.fastabend@gmail.com,
- kpsingh@kernel.org, sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org,
- qmo@kernel.org, ihor.solodrai@linux.dev, dwarves@vger.kernel.org,
- bpf@vger.kernel.org, ttreyer@meta.com, martin.lau@kernel.org, clm@meta.com
-References: <20251210203243.814529-4-alan.maguire@oracle.com>
- <6dcc4caa01eabb37a074ca584c6e9deac0e8ab217269dac8e2317a23c252f5c2@mail.kernel.org>
- <e15e740b-ff93-451b-99b0-9baa025730f2@oracle.com>
-Content-Language: en-US
-From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-In-Reply-To: <e15e740b-ff93-451b-99b0-9baa025730f2@oracle.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a3f82302-09d2-45e1-a30a-38a32ddbf947@linux.dev>
+X-F-Verdict: SPFVALID
+X-Titan-Src-Out: 1765614024715901337.21635.7901820713464576493@prod-use1-smtp-out1003.
+X-CMAE-Score: 0
+X-CMAE-Analysis: v=2.4 cv=TPG/S0la c=1 sm=1 tr=0 ts=693d21c8
+	a=rBp+3XZz9uO5KTvnfbZ58A==:117 a=rBp+3XZz9uO5KTvnfbZ58A==:17
+	a=kj9zAlcOel0A:10 a=MKtGQD3n3ToA:10 a=CEWIc4RMnpUA:10 a=VSvT0IB8AAAA:20
+	a=xTb4uN8yn8Aq-SSUa2sA:9 a=CjuIK1q_8ugA:10 a=3z85VNIBY5UIEeAh_hcH:22
+	a=NWVoK91CQySWRX1oVYDe:22 a=bA3UWDv6hWIuX7UZL3qL:22
 
-On 12/11/25 08:33, Alan Maguire wrote:
-> On 10/12/2025 20:55, bot+bpf-ci@kernel.org wrote:
->>> diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
->>> index 737adc560818..4eb0704a0309 100644
->>> --- a/tools/lib/bpf/btf.c
->>> +++ b/tools/lib/bpf/btf.c
->> [ ... ]
->>
->>> +/* for unknown kinds, consult kind layout. */
->>> +static int btf_type_size_unknown(const struct btf *btf, const struct btf_type *t)
->>> +{
->>> +	int size = sizeof(struct btf_type);
->>> +	struct btf_kind_layout *k = NULL;
->>> +	__u16 vlen = btf_vlen(t);
->>> +	__u8 kind = btf_kind(t);
->>> +
->>> +	if (btf->kind_layout)
->>> +		k = &((struct btf_kind_layout *)btf->kind_layout)[kind];
->>> +
->>> +	if (!k || (void *)k > ((void *)btf->kind_layout + btf->hdr->kind_layout_len)) {
->>                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->>
->> Can the bounds check be moved before the array access?  Currently the code
->> indexes into kind_layout[kind] before validating whether 'kind' is within
->> bounds.  While computing an out-of-bounds pointer may not cause immediate
->> issues, the bounds check itself appears incorrect.
->>
->> The check uses '>' which allows access when k points exactly to the end of
->> the array. For example, if kind_layout_len is 40 bytes (20 kinds * 2 bytes
->> each) and kind is 20, then k would point to offset 40, and the check
->> '(ptr at 40) > (ptr at 40)' evaluates to false, allowing the subsequent
->> read of k->info_sz at an out-of-bounds location.
->>
->> Should this be: 'if (!btf->kind_layout || kind >= (btf->hdr->kind_layout_len
->> / sizeof(*k)))'?  This would validate the index before the array access and
->> ensure the full structure can be read safely.
->>
-> Yep, good suggestion. Will fix.
-maybe something like this:
+Hi Yonghong,
 
-__u32 off = kind * sizeof(struct btf_kind_layout);
+Sorry for the late reply,
 
-if (!btf->kind_layout || off >= btf->hdr->kind_layout_len) {
-     pr_debug("Unsupported BTF_KIND: %u\n", kind);
-     return -EINVAL;
-}
+On Wed, Dec 03, 2025 at 04:46:20PM -0800, Yonghong Song wrote:
+> 
+> 
+> On 11/29/25 7:21 PM, Yao Zi wrote:
 
-k = btf->kind_layout + off;
->>> +		pr_debug("Unsupported BTF_KIND: %u\n", btf_kind(t));
->>> +		return -EINVAL;
->>> +	}
->>> +
->>> +	size += k->info_sz;
->>> +	size += vlen * k->elem_sz;
->>> +
->>> +	return size;
->>> +}
->> [ ... ]
->>
->>
->> ---
->> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
->> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
->>
->> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/20112692486
->
+...
 
+> > diff --git a/dwarf_loader.c b/dwarf_loader.c
+> > index 79be3f516a26..635015676389 100644
+> > --- a/dwarf_loader.c
+> > +++ b/dwarf_loader.c
+> > @@ -708,6 +708,11 @@ static enum vscope dwarf__location(Dwarf_Die *die, uint64_t *addr, struct locati
+> >   		case DW_OP_addrx:
+> >   			scope = VSCOPE_GLOBAL;
+> >   			*addr = expr[0].number;
+> > +
+> > +			if (location->exprlen == 2 &&
+> > +			    expr[1].atom == DW_OP_plus_uconst)
+> > +				addr += expr[1].number;
+> 
+> This does not work. 'addr' is the parameter and the above new 'addr' value won't
+> pass back to caller so the above is effectively a noop.
+
+Oops, this is a silly problem.
+
+> I think we need to add an additional parameter to pass the 'expr[1].number' back
+> to the caller, e.g.,
+
+However, I don't think it's necessary. See my explanation below,
+
+> static enum vscope dwarf__location(Dwarf_Die *die, uint64_t *addr, uint32_t *offset, struct location *location) { ... }
+> 
+> and
+> 
+>    in the above
+>        *offset = expr[1].number.
+> 
+> Now the caller has the following information:
+>   . The deference of *addr stores the index to .debug_addr
+
+No, dwarf__location() invokes attr_location(), which calls
+dwarf_getlocation() and dwarf_formaddr(), the latter already performs a
+lookup in .debug_addr[1], so what is stored in *addr is right the symbol
+address.
+
+Thus I think it's enough to keep the signature, but add the offset to
+*addr.
+
+>   . The offset to the address in .debug_addr
+> and the final address will be debug_addr[*addr] + offset.
+> 
+> > +
+> >   			break;
+> >   		case DW_OP_reg1 ... DW_OP_reg31:
+> >   		case DW_OP_breg0 ... DW_OP_breg31:
+> 
+
+Thanks for your review, I'll soon send a patch with the missing pointer
+dereference to addr added.
+
+Best regards,
+Yao Zi
+
+[1]: https://github.com/sourceware-org/elfutils/blob/67199e1c974db37f2bd200dcca7d7103f42ed06e/libdw/dwarf_formaddr.c#L37-L77
