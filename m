@@ -1,67 +1,67 @@
-Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
+Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95C6223E340
-	for <dwarves@vger.kernel.org>; Sat, 13 Dec 2025 02:52:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01C4E21CC62
+	for <dwarves@vger.kernel.org>; Sat, 13 Dec 2025 03:37:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765594353; cv=none; b=XzHAFkdZqIhNC+4xKhsIdxrz4jXfdh9YumOM9iRSJMMsPzhHan+eRKAPJK2JAtfBRXeYeyRQ2CRVzlkOOCy9DgTIcikWPfGSpUtVwh8SO7Wj6TqbDIvY0+65AWQ8TOnxhakRlZfXS5SiUF4cTWCH6UnzuhnYSFyrjekh2RGYEvI=
+	t=1765597032; cv=none; b=MZlKv3zEQr2UHt0DFOY6LH5osuox1SEqdRSL6HFYpgDN4gyyRDwCDoXc5AGiMYailL46GSadQuh5RibQsNsvtLndFn33s504yMfqUqZ25g6UACVhEO7zv4pGEOCd5I4tsaDDnqWOk0Qi0ec6fdRj7lvCIf47VQx2hQ/f1gQrV9s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765594353; c=relaxed/simple;
-	bh=c4DdOgJc4Vpxs6PMnmslSP7tyBi+CwUSMeFbIRk59uA=;
+	s=arc-20240116; t=1765597032; c=relaxed/simple;
+	bh=fqSvSrhFug2JV6WmV1UCtlSUDH6aThNUlEs/0ccCKes=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=jHcMlwy9eQn3voSmmsIDbBqDJgxvkMqlA77+h1AD2ARwzKZlIIn8rSMxL+m3gDrSkQqlU7bdqCTLjntdWLAZYNSrnLmq2HLA4WwBtwJma4R+7BmpSbUmeIhK7TgSe8rGAcX0YPJHbS20nvvZk+benEhQ/IcvJvxxrVZZlco7HKs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=E6UcTR53; arc=none smtp.client-ip=209.85.216.54
+	 In-Reply-To:Content-Type; b=QlSHLm8kfj13uPbYDgTz1FfOYJacmEAcOPjukcSFTSZNc9rZqPOsoDg43W7puguZoo/Wfdncr/ShCYoksW/GeHCLuNWp3oyFDFvpmw2pAdzAW8mSmMKHwr6TQHmRAUGYS4eUN54sI2RD/sqL9mHh9C9vCngF8a9HNYNr2++rGrc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Hdo0wFFi; arc=none smtp.client-ip=209.85.210.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="E6UcTR53"
-Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-340bcc92c7dso977365a91.0
-        for <dwarves@vger.kernel.org>; Fri, 12 Dec 2025 18:52:31 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Hdo0wFFi"
+Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-7b8bbf16b71so1934057b3a.2
+        for <dwarves@vger.kernel.org>; Fri, 12 Dec 2025 19:37:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1765594351; x=1766199151; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1765597030; x=1766201830; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=b1xekd7jNRvWyejeiz/Mjp08XhFxQMXlao7baAbp6Y8=;
-        b=E6UcTR53vYwKKDZobg0hG7DP1axGlUTInb33kDaPVtP6xpiyOX8zAH3gz/Am75XCdL
-         JHWfcd82LLstD1PtWziRmMTRWgb7eQrqEfTgWPC/6njF9ZcqST4NsArvC+rvHrFldeh5
-         hNozZHa/NShLZOxQZv46jdSxhr94PZmAP/JXil943hSPP6PC7aIKIMe3IauKwug7kPmk
-         atyeKxH7Y8594FB5ClAkRCUnghqMGzHVLqTI8/HAyb0L/aATzcAodaPP5y3rhjJWL7hT
-         +dBGZOKEAqXvZ2DXjGI5Ea1hmA49kJ3qqK1nyF4QosGm6oLsLO42Wbs8W+AJg8ziKaS5
-         7RwA==
+        bh=hA6QsVYx7rfhwWy/5ONDT2VzsMpUtJPGiQnqD5LqvjI=;
+        b=Hdo0wFFiT27AAT8aMWNMysNbfkq2XLAKzIBExZtAExzlwdagRYEJA2+7YrE83qRXvN
+         F4THCYOUiY7th2VzSobEccbdix5xNbBYh8RA+2M+wCWFSxI9Irb4Jfi8XbplvD0ng0VL
+         MRmwev1TTGbWf4kXciMgF3zWObxxLy51roY9j4VtPU89A3L2K1+37AkjMT0h2a5yIDiN
+         aaQzFQY4ikphTAosYy2R2f+YQKu37iD5XSszUIzmc5ecox4EyBI7H+0PCtxlR2vD8eQS
+         x2eM1zGwCy+tNfw+PAdkvuVKO0ykVrNmqy+YNKjpZCXAu7pfmOWbvHl5Qz39/+kD1DtJ
+         IHEA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765594351; x=1766199151;
+        d=1e100.net; s=20230601; t=1765597030; x=1766201830;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=b1xekd7jNRvWyejeiz/Mjp08XhFxQMXlao7baAbp6Y8=;
-        b=xQbiZqXspx5MXK5UqNUeFzQo1q2MPayuZoM42KbPyObc/yT2PNH/Owc5gAUvg9OIw3
-         C79ekAAr7C1spwqvs8qK+zADRPx12ZjJVEAp7GGMTQmE5jGNfTi6jqJZxpoRls3vDNia
-         SQlFGiQXnW8VaIqgeGzT6WHwDvn5U5RZ0d5Krsu9j+JDNPjXcASXxpu4fzxr3GZaIqWg
-         5C3EENkh+HAhpJ5zSCtpv3fpq6hdXBR50JgXCAgfPz8B/YI9skYhMWQxuwhBFQUNfLf7
-         FIEY6BFaQQFFOVtKhv48dtSlo5Lu1YZ6MN78W1CEwCSvfZwr0p+1qvWamXqm7wZBVhIC
-         HWOA==
-X-Forwarded-Encrypted: i=1; AJvYcCWzPzT2pjt5fWEe9jVVr/1Fx8iqMjhyPE5WoYhVCencRsIjdA59BYgN+hIhm+XWnt/5cxi/HjkT@vger.kernel.org
-X-Gm-Message-State: AOJu0YzgnXF1E049aRwkcGT069sNAjddMZ9azSFupPRDKmxJB5gmek2M
-	StNpHQevsqZsNGTCCREoY+UWtJCb0NPW+ALfhxdEFSPYvaJX7eSQLLvm
-X-Gm-Gg: AY/fxX5UdlR+Hpmv2oTfQHEmJFHgy3YIYPJdE6/rgStc7UWve5OkECpjWcMnlLVP+oS
-	LY/Cv08BT+axnhW+EDAEAFBdLkPTo7akcqOyc+3/16S33QYEaZaAjDnUV7nc/T8o3qlqKhxIwk3
-	7WomDLA1CmUiSoLAriWmnJXFmv5UCoJa53V7xza/JzWvpxrd7X1bJbXZGPt5mLGccUD8fNF/HXV
-	0cVrMupwMGO7ofqeqFH40ictAkVFFFwFXso5tJuv1GsX4dndSjVqjPz7TrR6C7/YxoG1uxTNTqG
-	/P6ON+hcviAIYBlP00oRzdWw+Aa8pZw5YEtuTk+yJmZxvv238Q2FPY0os9NVhtauvZPMhJkdRuS
-	605J+cRGS+INt3FRCc2gJqjvDHf2QDANRXG9UotJxGXEXbBxSK0/rCQqSMLRC+AvvLHgIp9fdE5
-	et6+Hw411pfoU9ITdvz49Gr5Y/t1tqmNLzZ4cqn3RJ5r5v3WOL/WepicWpl+0=
-X-Google-Smtp-Source: AGHT+IH+NhW6YC3uwIelwrTgwRfZUi4wpFc/C9iTv1mkfJzZ9vTbO6xofyNxjPpW9k8p4n3ujswBng==
-X-Received: by 2002:a17:90b:580f:b0:343:3898:e7c9 with SMTP id 98e67ed59e1d1-34a925f4a0fmr6595372a91.2.1765594350793;
-        Fri, 12 Dec 2025 18:52:30 -0800 (PST)
+        bh=hA6QsVYx7rfhwWy/5ONDT2VzsMpUtJPGiQnqD5LqvjI=;
+        b=l1oN4dsk2/+0GA/o3ZM7OZaYONfcNzKJM57+vDV/9X/G67nTQI45AuBPT33SypeBSo
+         vDbAv91OGdgJNcuht6ZVbQ+AQpTQbZmJUPR7Qs0EvXKQNqZFv0qkM3/ebeu4iIqpfgQI
+         lk/Wbkg00/SwlsygMfA5QjgqZhP7/bVL+iXuiBlNiVkayDWj7igdsDjVW6i77+cCrgyS
+         Bc2NmEleENKq/nSMfET0V1AUmVedaj2KO5InWPDgV4UWPXDeHastT4NgOxCPw5Sfwqk5
+         4ASJpVOLCVNMefFzJ9Ojg1svMGycbBMv7W7w8uyVf7B8tL6f3T3tiPU2Xgz7I93iNnkE
+         WHBQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVF7J+trmR6QbSR1uIrnec4suriWXxxGx3e0i8BFM4e0L4oRmhaO5aadxktXMWJmfE/AUtnpmzA@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyob7KbN2oS6PKokIGa69t0AX2JkfmiBiB7f0/FWYXoqjViveyw
+	widxxPoOw3/Yn4PdsEn2f3cS9lknMp/dzmSy7U+J4YMu27J3HbipWGZc
+X-Gm-Gg: AY/fxX6tQXx3p7LUEqy5hakPnKaP+o7EbEwGkJ0FGYtfW5ZV8kuPwsiOAtjgNXJ7Pal
+	rZlrcFCZWpBs3oV5Pw/jZoJeTXAQJ80ZnQAZx4Gwgof+4cMTsKlOn+HewQSQ2WZx3s+LaVhJuI4
+	C85lgsTLxxuwi6PCp3TkjUf/A4L+d4/hl2wNEFhMRubnvJGPwYI4P1VRlVFaV9/vrLJeRCFYbSW
+	lVw7CNs21i3bDfyLmzcwukH8iEWovlp2/IHxMJOO5YpfjdlU4I+Hku+9lWtEfyYod89LQOJWtFx
+	RLVep2VQzaWv7/6VawzKlWFAuASc1N3C2HB9iHuME+1UacmLnbWwuzsnHXhzX0Cba99HEIbpHO2
+	zEb2ND2CvhBNEw9QzZNvCxF/Ce3dMFgcm1pXKZF/eefD/0xinwU7/OUxmRgKfdqs21q1aAGV+be
+	Z2GzlyCo7E64Y6TLneOhsfxAyrPpDHaxk8JsSaI8CNL2Ifg2hSItAt3he5ZAI=
+X-Google-Smtp-Source: AGHT+IEt2Ao/mpoHd/BtLxNEwCv4ALeGirUW4QnURj/7zbL6o/30qWZ9zLQvzqczttv5SSBSF3NKbw==
+X-Received: by 2002:a05:6a20:748a:b0:364:be7:7006 with SMTP id adf61e73a8af0-369b433b216mr4503025637.15.1765597030008;
+        Fri, 12 Dec 2025 19:37:10 -0800 (PST)
 Received: from [10.200.5.118] (p99249-ipoefx.ipoe.ocn.ne.jp. [153.246.134.248])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c0c206cf429sm6528080a12.0.2025.12.12.18.52.26
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c0c25b7d59dsm6336281a12.6.2025.12.12.19.37.04
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 12 Dec 2025 18:52:30 -0800 (PST)
-Message-ID: <64a618b5-d14a-496e-8295-60e495098a7c@gmail.com>
-Date: Sat, 13 Dec 2025 02:52:24 +0000
+        Fri, 12 Dec 2025 19:37:09 -0800 (PST)
+Message-ID: <562aa38b-2cf0-490c-98df-0b42e1d5a599@gmail.com>
+Date: Sat, 13 Dec 2025 03:37:03 +0000
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
@@ -69,7 +69,8 @@ List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 bpf-next 01/10] btf: add kind layout encoding to UAPI
+Subject: Re: [PATCH v6 bpf-next 02/10] libbpf: Support kind layout section
+ handling in BTF
 To: Alan Maguire <alan.maguire@oracle.com>, andrii@kernel.org, ast@kernel.org
 Cc: daniel@iogearbox.net, martin.lau@linux.dev, eddyz87@gmail.com,
  song@kernel.org, yonghong.song@linux.dev, john.fastabend@gmail.com,
@@ -77,101 +78,425 @@ Cc: daniel@iogearbox.net, martin.lau@linux.dev, eddyz87@gmail.com,
  qmo@kernel.org, ihor.solodrai@linux.dev, dwarves@vger.kernel.org,
  bpf@vger.kernel.org, ttreyer@meta.com
 References: <20251210203243.814529-1-alan.maguire@oracle.com>
- <20251210203243.814529-2-alan.maguire@oracle.com>
+ <20251210203243.814529-3-alan.maguire@oracle.com>
 Content-Language: en-US
 From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-In-Reply-To: <20251210203243.814529-2-alan.maguire@oracle.com>
+In-Reply-To: <20251210203243.814529-3-alan.maguire@oracle.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
 On 12/10/25 20:32, Alan Maguire wrote:
-> BTF kind layouts provide information to parse BTF kinds. By separating
-> parsing BTF from using all the information it provides, we allow BTF
-> to encode new features even if they cannot be used by readers. This
-> will be helpful in particular for cases where older tools are used
-> to parse newer BTF with kinds the older tools do not recognize;
-> the BTF can still be parsed in such cases using kind layout.
+> Support reading in kind layout fixing endian issues on reading;
+> also support writing kind layout section to raw BTF object.
+> There is not yet an API to populate the kind layout with meaningful
+> information.
 >
-> The intent is to support encoding of kind layouts optionally so that
-> tools like pahole can add this information. For each kind, we record
+> As part of this, we need to consider multiple valid BTF header
+> sizes; the original or the kind layout-extended headers.
+> So to support this, the "struct btf" representation is modified
+> to always allocate a "struct btf_header" and copy the valid
+> portion from the raw data to it; this means we can always safely
+> check fields like btf->hdr->kind_layout_len.
 >
-> - length of singular element following struct btf_type
-> - length of each of the btf_vlen() elements following
->
-> The ideas here were discussed at [1], [2]; hence
->
-> Suggested-by: Andrii Nakryiko <andrii@kernel.org>
 > Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
->
-> [1] https://lore.kernel.org/bpf/CAEf4BzYjWHRdNNw4B=eOXOs_ONrDwrgX4bn=Nuc1g8JPFC34MA@mail.gmail.com/
-> [2] https://lore.kernel.org/bpf/20230531201936.1992188-1-alan.maguire@oracle.com/
 > ---
->   include/uapi/linux/btf.h       | 10 ++++++++++
->   tools/include/uapi/linux/btf.h | 10 ++++++++++
->   2 files changed, 20 insertions(+)
+>   tools/lib/bpf/btf.c | 200 ++++++++++++++++++++++++++++++--------------
+>   1 file changed, 139 insertions(+), 61 deletions(-)
 >
-> diff --git a/include/uapi/linux/btf.h b/include/uapi/linux/btf.h
-> index 266d4ffa6c07..64dd681274f4 100644
-> --- a/include/uapi/linux/btf.h
-> +++ b/include/uapi/linux/btf.h
-> @@ -8,6 +8,14 @@
->   #define BTF_MAGIC	0xeB9F
->   #define BTF_VERSION	1
+> diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
+> index b136572e889a..737adc560818 100644
+> --- a/tools/lib/bpf/btf.c
+> +++ b/tools/lib/bpf/btf.c
+> @@ -40,42 +40,53 @@ struct btf {
 >   
-> +/* kind layout section consists of a struct btf_kind_layout for each known
-> + * kind at BTF encoding time.
-> + */
-We switched to kernel style comments in the new code:
-/*
-  * comment
-  */
-
-instead of
-/* comment
-  */
-> +struct btf_kind_layout {
-> +	__u8 info_sz;		/* size of singular element after btf_type */
-> +	__u8 elem_sz;		/* size of each of btf_vlen(t) elements */
-> +};
+>   	/*
+>   	 * When BTF is loaded from an ELF or raw memory it is stored
+> -	 * in a contiguous memory block. The hdr, type_data, and, strs_data
+> +	 * in a contiguous memory block. The  type_data, and, strs_data
+>   	 * point inside that memory region to their respective parts of BTF
+>   	 * representation:
+>   	 *
+> -	 * +--------------------------------+
+> -	 * |  Header  |  Types  |  Strings  |
+> -	 * +--------------------------------+
+> -	 * ^          ^         ^
+> -	 * |          |         |
+> -	 * hdr        |         |
+> -	 * types_data-+         |
+> -	 * strs_data------------+
+> +	 * +--------------------------------+---------------------+
+> +	 * |  Header  |  Types  |  Strings  |Optional kind layout |
+> +	 * +--------------------------------+---------------------+
+> +	 * ^          ^         ^           ^
+> +	 * |          |         |           |
+> +	 * raw_data   |         |           |
+> +	 * types_data-+         |           |
+> +	 * strs_data------------+           |
+> +	 * kind_layout----------------------+
+> +	 *
+> +	 * A separate struct btf_header is allocated for btf->hdr,
+> +	 * and header information is copied into it.  This allows us
+> +	 * to handle header data for various header formats; the original,
+> +	 * the extended header with kind layout, etc.
+>   	 *
+>   	 * If BTF data is later modified, e.g., due to types added or
+>   	 * removed, BTF deduplication performed, etc, this contiguous
+> -	 * representation is broken up into three independently allocated
+> -	 * memory regions to be able to modify them independently.
+> +	 * representation is broken up into four independent memory
+> +	 * regions.
+> +	 *
+>   	 * raw_data is nulled out at that point, but can be later allocated
+>   	 * and cached again if user calls btf__raw_data(), at which point
+> -	 * raw_data will contain a contiguous copy of header, types, and
+> -	 * strings:
+> +	 * raw_data will contain a contiguous copy of header, types, strings
+> +	 * and optionally kind_layout.  kind_layout optionally points to a
+> +	 * kind_layout array - this allows us to encode information about
+> +	 * the kinds known at encoding time.  If kind_layout is NULL no
+> +	 * kind information is encoded.
+>   	 *
+> -	 * +----------+  +---------+  +-----------+
+> -	 * |  Header  |  |  Types  |  |  Strings  |
+> -	 * +----------+  +---------+  +-----------+
+> -	 * ^             ^            ^
+> -	 * |             |            |
+> -	 * hdr           |            |
+> -	 * types_data----+            |
+> -	 * strset__data(strs_set)-----+
+> +	 * +----------+  +---------+  +-----------+   +-----------+
+> +	 * |  Header  |  |  Types  |  |  Strings  |   |kind_layout|
+> +	 * +----------+  +---------+  +-----------+   +-----------+
+> +	 * ^             ^            ^               ^
+> +	 * |             |            |               |
+> +	 * hdr           |            |               |
+> +	 * types_data----+            |               |
+> +	 * strset__data(strs_set)-----+               |
+> +	 * kind_layout--------------------------------+
+>   	 *
+> -	 *               +----------+---------+-----------+
+> -	 *               |  Header  |  Types  |  Strings  |
+> -	 * raw_data----->+----------+---------+-----------+
+> +	 *               +----------+---------+-----------+---------------------+
+> +	 *               |  Header  |  Types  |  Strings  | Optional kind layout|
+> +	 * raw_data----->+----------+---------+-----------+---------------------+
+>   	 */
+> -	struct btf_header *hdr;
+> +	struct btf_header *hdr; /* separately-allocated header data */
+>   
+>   	void *types_data;
+>   	size_t types_data_cap; /* used size stored in hdr->type_len */
+> @@ -123,6 +134,13 @@ struct btf {
+>   	/* whether raw_data is a (read-only) mmap */
+>   	bool raw_data_is_mmap;
+>   
+> +	/* is BTF modifiable? i.e. is it split into separate sections as described above? */
+> +	bool modifiable;
+> +	/* Points either at raw kind layout data in parsed BTF (if present), or
+> +	 * at an allocated kind layout array when BTF is modifiable.
+> +	 */
+> +	void *kind_layout;
 > +
->   struct btf_header {
->   	__u16	magic;
->   	__u8	version;
-> @@ -19,6 +27,8 @@ struct btf_header {
->   	__u32	type_len;	/* length of type section	*/
->   	__u32	str_off;	/* offset of string section	*/
->   	__u32	str_len;	/* length of string section	*/
-> +	__u32	kind_layout_off;/* offset of kind layout section */
-> +	__u32	kind_layout_len;/* length of kind layout section */
->   };
+>   	/* BTF object FD, if loaded into kernel */
+>   	int fd;
 >   
->   /* Max # of type identifier */
-> diff --git a/tools/include/uapi/linux/btf.h b/tools/include/uapi/linux/btf.h
-> index 266d4ffa6c07..64dd681274f4 100644
-> --- a/tools/include/uapi/linux/btf.h
-> +++ b/tools/include/uapi/linux/btf.h
-> @@ -8,6 +8,14 @@
->   #define BTF_MAGIC	0xeB9F
->   #define BTF_VERSION	1
+> @@ -214,7 +232,7 @@ static int btf_add_type_idx_entry(struct btf *btf, __u32 type_off)
+>   	return 0;
+>   }
 >   
-> +/* kind layout section consists of a struct btf_kind_layout for each known
-> + * kind at BTF encoding time.
-> + */
-> +struct btf_kind_layout {
-> +	__u8 info_sz;		/* size of singular element after btf_type */
-> +	__u8 elem_sz;		/* size of each of btf_vlen(t) elements */
-> +};
+> -static void btf_bswap_hdr(struct btf_header *h)
+> +static void btf_bswap_hdr(struct btf_header *h, __u32 hdr_len)
+>   {
+>   	h->magic = bswap_16(h->magic);
+>   	h->hdr_len = bswap_32(h->hdr_len);
+> @@ -222,50 +240,68 @@ static void btf_bswap_hdr(struct btf_header *h)
+>   	h->type_len = bswap_32(h->type_len);
+>   	h->str_off = bswap_32(h->str_off);
+>   	h->str_len = bswap_32(h->str_len);
+> +	/* May be operating on raw data with hdr_len that does not include below fields */
+> +	if (hdr_len >= sizeof(struct btf_header)) {
+> +		h->kind_layout_off = bswap_32(h->kind_layout_off);
+> +		h->kind_layout_len = bswap_32(h->kind_layout_len);
+> +	}
+>   }
+>   
+>   static int btf_parse_hdr(struct btf *btf)
+>   {
+> -	struct btf_header *hdr = btf->hdr;
+> +	struct btf_header *hdr = btf->raw_data;
+> +	__u32 hdr_len = hdr->hdr_len;
+>   	__u32 meta_left;
+>   
+> -	if (btf->raw_size < sizeof(struct btf_header)) {
+> +	if (btf->raw_size < offsetofend(struct btf_header, str_len)) {
+>   		pr_debug("BTF header not found\n");
+>   		return -EINVAL;
+>   	}
+>   
+>   	if (hdr->magic == bswap_16(BTF_MAGIC)) {
+>   		btf->swapped_endian = true;
+> -		if (bswap_32(hdr->hdr_len) != sizeof(struct btf_header)) {
+> +		hdr_len = bswap_32(hdr->hdr_len);
+> +		if (hdr_len < offsetofend(struct btf_header, str_len)) {
+>   			pr_warn("Can't load BTF with non-native endianness due to unsupported header length %u\n",
+> -				bswap_32(hdr->hdr_len));
+> +				hdr_len);
+>   			return -ENOTSUP;
+>   		}
+> -		btf_bswap_hdr(hdr);
+>   	} else if (hdr->magic != BTF_MAGIC) {
+>   		pr_debug("Invalid BTF magic: %x\n", hdr->magic);
+>   		return -EINVAL;
+>   	}
+>   
+> -	if (btf->raw_size < hdr->hdr_len) {
+> +	if (btf->raw_size < hdr_len) {
+>   		pr_debug("BTF header len %u larger than data size %u\n",
+> -			 hdr->hdr_len, btf->raw_size);
+> +			 hdr_len, btf->raw_size);
+>   		return -EINVAL;
+>   	}
+>   
+> -	meta_left = btf->raw_size - hdr->hdr_len;
+> -	if (meta_left < (long long)hdr->str_off + hdr->str_len) {
+> +	/* At this point, we have basic header information, so allocate btf->hdr */
+> +	btf->hdr = calloc(1, sizeof(struct btf_header));
+> +	if (!btf->hdr) {
+> +		pr_debug("BTF header allocation failed\n");
+> +		return -ENOMEM;
+> +	}
+> +	if (btf->swapped_endian)
+> +		btf_bswap_hdr(hdr, hdr_len);
+> +	memcpy(btf->hdr, hdr, hdr_len < sizeof(struct btf_header) ? hdr_len :
+> +								    sizeof(struct btf_header));
+can we simplify this a little bit: memcpy(btf->hdr, hdr, min(hdr_len, 
+sizeof(struct btf_header));?
+min macro is available in libbpf_internal.h
 > +
->   struct btf_header {
->   	__u16	magic;
->   	__u8	version;
-> @@ -19,6 +27,8 @@ struct btf_header {
->   	__u32	type_len;	/* length of type section	*/
->   	__u32	str_off;	/* offset of string section	*/
->   	__u32	str_len;	/* length of string section	*/
-> +	__u32	kind_layout_off;/* offset of kind layout section */
-> +	__u32	kind_layout_len;/* length of kind layout section */
->   };
+> +	meta_left = btf->raw_size - hdr_len;
+> +	if (meta_left < (long long)btf->hdr->str_off + btf->hdr->str_len) {
+>   		pr_debug("Invalid BTF total size: %u\n", btf->raw_size);
+>   		return -EINVAL;
+>   	}
 >   
->   /* Max # of type identifier */
+> -	if ((long long)hdr->type_off + hdr->type_len > hdr->str_off) {
+> +	if ((long long)btf->hdr->type_off + btf->hdr->type_len > btf->hdr->str_off) {
+>   		pr_debug("Invalid BTF data sections layout: type data at %u + %u, strings data at %u + %u\n",
+> -			 hdr->type_off, hdr->type_len, hdr->str_off, hdr->str_len);
+> +			 btf->hdr->type_off, btf->hdr->type_len, btf->hdr->str_off,
+> +			 btf->hdr->str_len);
+>   		return -EINVAL;
+>   	}
+>   
+> -	if (hdr->type_off % 4) {
+> +	if (btf->hdr->type_off % 4) {
+>   		pr_debug("BTF type section is not aligned to 4 bytes\n");
+>   		return -EINVAL;
+>   	}
+> @@ -292,6 +328,22 @@ static int btf_parse_str_sec(struct btf *btf)
+>   	return 0;
+>   }
+>   
+> +static int btf_parse_kind_layout_sec(struct btf *btf)
+> +{
+> +	const struct btf_header *hdr = btf->hdr;
+> +
+> +	if (!hdr->kind_layout_off || !hdr->kind_layout_len)
+> +		return 0;
+> +
+> +	if (hdr->kind_layout_len % sizeof(struct btf_kind_layout) != 0) {
+> +		pr_debug("Invalid BTF kind layout section\n");
+> +		return -EINVAL;
+> +	}
+> +	btf->kind_layout = btf->raw_data + btf->hdr->hdr_len + btf->hdr->kind_layout_off;
+> +
+> +	return 0;
+> +}
+> +
+>   static int btf_type_size(const struct btf_type *t)
+>   {
+>   	const int base_size = sizeof(struct btf_type);
+> @@ -951,7 +1003,8 @@ __s32 btf__find_by_name_kind(const struct btf *btf, const char *type_name,
+>   
+>   static bool btf_is_modifiable(const struct btf *btf)
+>   {
+> -	return (void *)btf->hdr != btf->raw_data;
+> +	/* BTF is modifiable if split into multiple sections */
+> +	return btf->modifiable;
+>   }
+>   
+>   static void btf_free_raw_data(struct btf *btf)
+> @@ -980,10 +1033,11 @@ void btf__free(struct btf *btf)
+>   		 * might still have a cached contiguous raw data present,
+>   		 * which will be unconditionally freed below.
+>   		 */
+> -		free(btf->hdr);
+>   		free(btf->types_data);
+>   		strset__free(btf->strs_set);
+> +		free(btf->kind_layout);
+>   	}
+> +	free(btf->hdr);
+>   	btf_free_raw_data(btf);
+>   	free(btf->raw_data_swapped);
+>   	free(btf->type_offs);
+> @@ -994,6 +1048,7 @@ void btf__free(struct btf *btf)
+>   
+>   static struct btf *btf_new_empty(struct btf *base_btf)
+>   {
+> +	struct btf_header *hdr;
+>   	struct btf *btf;
+>   
+>   	btf = calloc(1, sizeof(*btf));
+> @@ -1022,14 +1077,20 @@ static struct btf *btf_new_empty(struct btf *base_btf)
+>   		return ERR_PTR(-ENOMEM);
+>   	}
+>   
+> -	btf->hdr = btf->raw_data;
+> -	btf->hdr->hdr_len = sizeof(struct btf_header);
+> -	btf->hdr->magic = BTF_MAGIC;
+> -	btf->hdr->version = BTF_VERSION;
+> +	hdr = btf->raw_data;
+> +	hdr->hdr_len = sizeof(struct btf_header);
+> +	hdr->magic = BTF_MAGIC;
+> +	hdr->version = BTF_VERSION;
+>   
+> -	btf->types_data = btf->raw_data + btf->hdr->hdr_len;
+> -	btf->strs_data = btf->raw_data + btf->hdr->hdr_len;
+> -	btf->hdr->str_len = base_btf ? 0 : 1; /* empty string at offset 0 */
+> +	btf->types_data = btf->raw_data + hdr->hdr_len;
+> +	btf->strs_data = btf->raw_data + hdr->hdr_len;
+> +	hdr->str_len = base_btf ? 0 : 1; /* empty string at offset 0 */
+> +	btf->hdr = calloc(1, sizeof(struct btf_header));
+> +	if (!btf->hdr) {
+> +		free(btf);
+> +		return ERR_PTR(-ENOMEM);
+> +	}
+> +	memcpy(btf->hdr, hdr, sizeof(*hdr));
+>   
+>   	return btf;
+>   }
+> @@ -1078,7 +1139,6 @@ static struct btf *btf_new(const void *data, __u32 size, struct btf *base_btf, b
+>   
+>   	btf->raw_size = size;
+>   
+> -	btf->hdr = btf->raw_data;
+>   	err = btf_parse_hdr(btf);
+>   	if (err)
+>   		goto done;
+> @@ -1087,6 +1147,7 @@ static struct btf *btf_new(const void *data, __u32 size, struct btf *base_btf, b
+>   	btf->types_data = btf->raw_data + btf->hdr->hdr_len + btf->hdr->type_off;
+>   
+>   	err = btf_parse_str_sec(btf);
+> +	err = err ?: btf_parse_kind_layout_sec(btf);
+>   	err = err ?: btf_parse_type_sec(btf);
+>   	err = err ?: btf_sanity_check(btf);
+>   	if (err)
+> @@ -1550,6 +1611,11 @@ static void *btf_get_raw_data(const struct btf *btf, __u32 *size, bool swap_endi
+>   	}
+>   
+>   	data_sz = hdr->hdr_len + hdr->type_len + hdr->str_len;
+> +	if (btf->kind_layout) {
+> +		data_sz = roundup(data_sz, 4);
+> +		data_sz += hdr->kind_layout_len;
+> +		hdr->kind_layout_off = roundup(hdr->type_len + hdr->str_len, 4);
+> +	}
+>   	data = calloc(1, data_sz);
+>   	if (!data)
+>   		return NULL;
+> @@ -1557,7 +1623,7 @@ static void *btf_get_raw_data(const struct btf *btf, __u32 *size, bool swap_endi
+>   
+>   	memcpy(p, hdr, hdr->hdr_len);
+>   	if (swap_endian)
+> -		btf_bswap_hdr(p);
+> +		btf_bswap_hdr(p, hdr->hdr_len);
+>   	p += hdr->hdr_len;
+>   
+>   	memcpy(p, btf->types_data, hdr->type_len);
+> @@ -1576,7 +1642,11 @@ static void *btf_get_raw_data(const struct btf *btf, __u32 *size, bool swap_endi
+>   	p += hdr->type_len;
+>   
+>   	memcpy(p, btf_strs_data(btf), hdr->str_len);
+> -	p += hdr->str_len;
+> +
+> +	if (btf->kind_layout) {
+> +		p = data + hdr->hdr_len + hdr->kind_layout_off;
+> +		memcpy(p, btf->kind_layout, hdr->kind_layout_len);
+> +	}
+>   
+>   	*size = data_sz;
+>   	return data;
+> @@ -1717,13 +1787,13 @@ static void btf_invalidate_raw_data(struct btf *btf)
+>   	}
+>   }
+>   
+> -/* Ensure BTF is ready to be modified (by splitting into a three memory
+> - * regions for header, types, and strings). Also invalidate cached
+> - * raw_data, if any.
+> +/* Ensure BTF is ready to be modified (by splitting into memory regions
+> + * for types and strings, with kind layout section if needed (btf->hdr
+> + * is already a separate region).  Also invalidate cached raw_data, if any.
+>    */
+>   static int btf_ensure_modifiable(struct btf *btf)
+>   {
+> -	void *hdr, *types;
+> +	void *types, *kind_layout = NULL;
+>   	struct strset *set = NULL;
+>   	int err = -ENOMEM;
+>   
+> @@ -1733,15 +1803,20 @@ static int btf_ensure_modifiable(struct btf *btf)
+>   		return 0;
+>   	}
+>   
+> -	/* split raw data into three memory regions */
+> -	hdr = malloc(btf->hdr->hdr_len);
+> +	/* split raw data into memory regions; btf->hdr is done already. */
+>   	types = malloc(btf->hdr->type_len);
+> -	if (!hdr || !types)
+> +	if (!types)
+>   		goto err_out;
+> -
+> -	memcpy(hdr, btf->hdr, btf->hdr->hdr_len);
+>   	memcpy(types, btf->types_data, btf->hdr->type_len);
+>   
+> +	if (btf->hdr->kind_layout_len && btf->hdr->kind_layout_off) {
+> +		kind_layout = malloc(btf->hdr->kind_layout_len);
+> +		if (!kind_layout)
+> +			goto err_out;
+> +		memcpy(kind_layout, btf->raw_data + btf->hdr->hdr_len + btf->hdr->kind_layout_off,
+> +		       btf->hdr->kind_layout_len);
+> +	}
+> +
+>   	/* build lookup index for all strings */
+>   	set = strset__new(BTF_MAX_STR_OFFSET, btf->strs_data, btf->hdr->str_len);
+>   	if (IS_ERR(set)) {
+> @@ -1750,11 +1825,12 @@ static int btf_ensure_modifiable(struct btf *btf)
+>   	}
+>   
+>   	/* only when everything was successful, update internal state */
+> -	btf->hdr = hdr;
+>   	btf->types_data = types;
+>   	btf->types_data_cap = btf->hdr->type_len;
+>   	btf->strs_data = NULL;
+>   	btf->strs_set = set;
+> +	if (kind_layout)
+> +		btf->kind_layout = kind_layout;
+>   	/* if BTF was created from scratch, all strings are guaranteed to be
+>   	 * unique and deduplicated
+>   	 */
+> @@ -1766,12 +1842,14 @@ static int btf_ensure_modifiable(struct btf *btf)
+>   	/* invalidate raw_data representation */
+>   	btf_invalidate_raw_data(btf);
+>   
+> +	btf->modifiable = true;
+> +
+>   	return 0;
+>   
+>   err_out:
+>   	strset__free(set);
+> -	free(hdr);
+>   	free(types);
+> +	free(kind_layout);
+>   	return err;
+>   }
+>   
 
