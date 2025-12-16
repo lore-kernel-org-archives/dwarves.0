@@ -1,67 +1,67 @@
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA8F12C17A1
-	for <dwarves@vger.kernel.org>; Tue, 16 Dec 2025 21:21:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DF35221F13
+	for <dwarves@vger.kernel.org>; Tue, 16 Dec 2025 21:25:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765920119; cv=none; b=YNR4q7umrRb6tMvmXid7gFxhrNJ51W79UUcIJ/NuKuwUTcPbLA3g+Aja4qi18HcCpuSY3Ybn2LF+SSwMat99I8/YTn28+pLCTBa4wqQ8fJTDWBK3iHB7jT1V1ycNgZySDxFN/w2POzcohBLeCvEIi1SkawU0LFK3WjyJ5Ws8yHE=
+	t=1765920307; cv=none; b=GFlC/UKD+32nPCke/WzDZzCzar5DdXa6/pAwxzzBt+j56mDE08nNvp7/JSgAuPEylO00vYaqNEHwBTgH2/19igeihL46oqq4zxcp2p86S7OKOvRctlTVkU3YNQpUAW6Z3BWuA8nJDCMKxOneAKkBNpjd8LY6IyQNxIzV3aI+hCk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765920119; c=relaxed/simple;
-	bh=+QEPGr+Iu+hi73Z5uGfoueLk3SXJa149FVNfcpqUH20=;
+	s=arc-20240116; t=1765920307; c=relaxed/simple;
+	bh=KJkB6gBSdbXyjv9CnMBG0ujfKQGyrkxxiVE0wJCrlaI=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=g2UkccPaJl6mlS1I+CeX38v5QF5a3b/3H6kAUeamPUO/oBE/ovlI8crQ/r0RTPMuzW1CrDJ9/BmTsp8LYiJqx2QvxziVV4oSNllUF2ozpc1JytWLMnVd3vbdXXmuBiXio/Nzu0jER/MH1FwTqTdP/fUPIhwjQHVu7yituXBSTaM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CkMP82mH; arc=none smtp.client-ip=209.85.214.177
+	 Content-Type:MIME-Version; b=N0XuSXc9poY5aBp/lXl3JlFVIByAb2XGOTrN/1+NFtSsIcAT4YXQ1l0Y7jT5irCmatFpevF1UU3sOsDPUpTzg7jhUAq4ZFeSo4/IxjdIMNdfeDXrQTyh+/mh7taLmhi1OTeF0SjluNBgpIAeHi/YlxmNv+owcwzhR2h3zI2/a3Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZTcO7/30; arc=none smtp.client-ip=209.85.210.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CkMP82mH"
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-2a07fac8aa1so38837025ad.1
-        for <dwarves@vger.kernel.org>; Tue, 16 Dec 2025 13:21:57 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZTcO7/30"
+Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-7b9c17dd591so4336550b3a.3
+        for <dwarves@vger.kernel.org>; Tue, 16 Dec 2025 13:25:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1765920117; x=1766524917; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1765920305; x=1766525105; darn=vger.kernel.org;
         h=mime-version:user-agent:content-transfer-encoding:references
          :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=GoGeK1g9YwKrSivRU+t+dex6Y1tJ3oax7zgFN2o+Tz4=;
-        b=CkMP82mHxCekxV8tGXhNCddZViIjUDUA1r5O3OctRZjCzOmd20VHFBJV7m298ku1nn
-         CcNf+aCPypQDIzy//zPPivRPAFac5vSRAdeR3Aec8HuIbak6VzK2WUh0wjToaX8kO9K8
-         xFa4sVYECO/UnKPtRDXxxUO849lzvSY4p7i4wW79/OGuW3S9NXwSohAFmqLWwnWu+pm0
-         kgNNZgPdVdkylmbLsYViKo+Zx4QLYMIN9x/AFzSU7ygFuUm6z2mVrNStrwN/bL1QAUH8
-         o0LOw5OlzbxFudyJ6L3BTycFFb3c1m+jqJUe1drFOyN3LbFHcsXIYDaXuOxT51EKDD+W
-         IHbg==
+        bh=P+fgU8yAOKDodlvbOzyL0bNanv5w+dN6b9YogBsB4DM=;
+        b=ZTcO7/30RnP2aON+s9ex20ed4BTbd7AbE4sWyVfh3xOrStdtdayiYGxiHVwATAiSP8
+         BU5JEmlX64r/zCjoapARDJkZHoSUehmpwGb8B+ia5lw7a82WVmbwbtaVJRu8Zka81DCM
+         OV/Xfyy3cKJvQsVCL612GiAxsN8o4LwOI7398kbgt4iJdBuV8FHYNHRouj3qv8bPx+In
+         Dt11PjIM28JY0Y0XPz4FEpzh0h6Nn03ljNV+2eRUFkJ4GDMzPi5//tKQdnI5zTnv0xl5
+         pFgFQxgoucfqFL6ERk1BQ8nZf2SaaM4hDAwLUuIQl4UiNdOC23VGB+lxYO9qyHp93OLx
+         3fyg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765920117; x=1766524917;
+        d=1e100.net; s=20230601; t=1765920305; x=1766525105;
         h=mime-version:user-agent:content-transfer-encoding:references
          :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GoGeK1g9YwKrSivRU+t+dex6Y1tJ3oax7zgFN2o+Tz4=;
-        b=qEYvX0DcefEoy/I/KXlnGhgGUAbcDvqQNi4oK6zuz4DhSoxLW2biwGC0DMmR0nRuUC
-         4m19dp2LnDJ8Hj8KrxoXPKSEVW00KZ2G+UTfx04WLQvidLbXWjDXvCOGh3bouhWw4Wo2
-         u2fvveWlI9PNyhxjwgQJ351XtSzVc1Ze3AA1Uq8QNqF3H+tdeWkIbCOFKFaMvafkVFVQ
-         1tuyl3MQzvYEr62TGgJ0OwMrVfMrrhgPZCeXKVjYROpudvuRUpnX6B0TQ1BtvXbLwLCu
-         SdZQdG3m8ZwQU6txPPtWjVlXtry+ZrO0oGadvXbm0z4ANFDz3mlGjBLaVGThnIG14wHY
-         m3cQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWlT0F1pOQX9Vg/aw8eFqXmg9c6sVgqClmk6cHYTbtNCto/W2uoE8GYBmEO8NiqokOqWJ6Iszt4@vger.kernel.org
-X-Gm-Message-State: AOJu0YxbDxcv+GqhuHbcuxdOMmFcBUS3IdGp2E8iIKgM7hgk1PHs0aTC
-	gaIlWayIay4mhbOg6YYWbhKSGblJ1y/fq9wNw6VHR2lkzu4vlMzNbXPc
-X-Gm-Gg: AY/fxX4bOUldUB9R33r+nbPnaZo4Fp9X8JPvA7p+ZDqsEfNpW7i3Z8fgI4CPLh8Y8nw
-	O3mxYVES1htqYXRRrXYnVutXIvaT7/+2o2ql/ew/T7MUF1n/nEzf3tf0sZU+dGBRAMHhFgC+Ely
-	ED0CFTvFJiDzluE9jm/oyYFrE//wMfGgBI55cw2xdWyYqYuAXjzHnEvDZjPTkEP+NQtXFxzETus
-	abd+xawYN1Tc9kIoMBxlJ1R+95wU56Y8i6FHCqXXmFBs/n8TFxjy/WWThBf//LNfMi/ZXkOgXFQ
-	d4hjyQnPyJeo44twBEQu7Km5tGWusqI8YW37kRm13KdvBkOe/BuPiHgERg9k7BFDqIZfcPptlF/
-	DZOMeb72pLFTU/y7QEAIenLbOECn4URgeaIgILg3bazd3xXF30ZrnFMY/tiNg5ml5CMJ4MIXRat
-	rNCvWCTlhe
-X-Google-Smtp-Source: AGHT+IGcHlsW1EY+4zXWrJZ6eHWfcZ72JStxzoQg5sCS39glyCCVIkQoWR1wBYREG69U1c85ZRFcpQ==
-X-Received: by 2002:a17:902:ebca:b0:295:86a1:5008 with SMTP id d9443c01a7336-29f23c7c568mr152233595ad.38.1765920117060;
-        Tue, 16 Dec 2025 13:21:57 -0800 (PST)
+        bh=P+fgU8yAOKDodlvbOzyL0bNanv5w+dN6b9YogBsB4DM=;
+        b=Jz1EGa+phvfLlKpLxC/1ZVuF1aT1XtMMkHH3DlH7ekgas1FhI+rELh+HcsqPjt0BXW
+         BLh5wEarXpCtGOnkDYscYSt6S7IsJSy7NvS4BYdQTpn5kxdcI7gySER3fuFC7dbyA6Fi
+         hIS0fssno2PLBrk/YApDajNA9OMpx/uh5ECr8V//svqKmf4ggurKdgTe8/cjbPQJPcKJ
+         UyZK4upOC3P3rIl4X1uz5EJlmbh+3aZuP8rhie5VVmaaNs1JSp5axPHjQwV4JE0k1KS2
+         axe8l6hbAo5AsEbkRdRqOlyaGUVh/orWhoKSe8ndzduYgWfTbd75FNN9fvij5pw6C7iA
+         eFZw==
+X-Forwarded-Encrypted: i=1; AJvYcCXpa7aks/FZ/eRH9ErK2R28F/s5Q6bC9SeD+RVVCkSJeAn4pIHZ4fYO2bo1CQPQtyeqOcGJDKls@vger.kernel.org
+X-Gm-Message-State: AOJu0YyxtbVLVDagnRlF+le1rqJXYu8O2/sB7ZNDHw1zdJZh2jiNmyH1
+	xr7FMzNucUkla/+gov99SZKb97JN1uTTEd4R/uAPFSO2rgDl2l8W1Xs9
+X-Gm-Gg: AY/fxX6qTe6V//R/zmBwpPWihV2wPB5jEjZ7ioAGvoMZyz25yiV6ttLhLWHZfcFSid0
+	lDa2w0JsDW5fi1C0gvw9fuQCg/rhdz5RA2c6LkQhy5zUQNVwkDy6nIWw+6B974gHvhTRJds/vrN
+	ogdqPIQCClCINzkNHO058mTdMMs1Dl4FYEp6+UKVpONUoKQkBJ6OSV9DDSxRReXZBRizPg8E/XS
+	x6V981Q73TIaYR0lC4oT2lzTCkAQJOmguUEeZgqRRTcD7Mm/axvWxj/oFw2t8Q9NPP7t1YDodQf
+	JZdRfEasXmn9A5AO7McHvk3eJ7JtQWw49IHJ0WS0F7Fpx4yLQCCWTn8bwgpJFkI6c0YFnN+/6/n
+	PiESUaag02hIKTNXqQe+0/fviqPvdFEjcW00AdOsp6dv2SAe7ri45Flcz1HgMt/pTaRx0pIjfEw
+	gzhQ7kmwjw
+X-Google-Smtp-Source: AGHT+IEpWg7yNPvyj30E/Kr/ueDF1YrXlqf+wsqamSsT7jCEGBokncPH/BdDic5/vNTEITz0OLA/VA==
+X-Received: by 2002:a05:6a21:99a7:b0:35f:4e9d:d28b with SMTP id adf61e73a8af0-369adebe02fmr17497087637.18.1765920304866;
+        Tue, 16 Dec 2025 13:25:04 -0800 (PST)
 Received: from [192.168.0.226] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2a0cf143804sm84871045ad.73.2025.12.16.13.21.55
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7fcbc0c0acbsm475048b3a.60.2025.12.16.13.25.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Dec 2025 13:21:56 -0800 (PST)
-Message-ID: <26e95f737d2de5133702c9b641946e70ec2d1dae.camel@gmail.com>
-Subject: Re: [PATCH v8 bpf-next 03/10] libbpf: use kind layout to compute an
- unknown kind size
+        Tue, 16 Dec 2025 13:25:04 -0800 (PST)
+Message-ID: <87d08c49a65a951944e5b2254e605e3c4a064e50.camel@gmail.com>
+Subject: Re: [PATCH v8 bpf-next 06/10] btf: support kernel parsing of BTF
+ with kind layout
 From: Eduard Zingerman <eddyz87@gmail.com>
 To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
 Cc: Alan Maguire <alan.maguire@oracle.com>, andrii@kernel.org,
@@ -70,15 +70,12 @@ Cc: Alan Maguire <alan.maguire@oracle.com>, andrii@kernel.org,
  kpsingh@kernel.org, 	sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org,
  qmo@kernel.org, 	ihor.solodrai@linux.dev, dwarves@vger.kernel.org,
  bpf@vger.kernel.org, 	ttreyer@meta.com, mykyta.yatsenko5@gmail.com
-Date: Tue, 16 Dec 2025 13:21:53 -0800
-In-Reply-To: <CAEf4BzayA6if0xcTLux=eyASM1kpARmrOdDRmgG9F1SFa-fEcg@mail.gmail.com>
+Date: Tue, 16 Dec 2025 13:25:01 -0800
+In-Reply-To: <CAEf4BzbgjZfxUeB78D4u4LRzESsTSdzOgFJAkOqEoQcRWuS=2g@mail.gmail.com>
 References: <20251215091730.1188790-1-alan.maguire@oracle.com>
-	 <20251215091730.1188790-4-alan.maguire@oracle.com>
-	 <9e1b071598f9c1c1adcac0d8cb2591c452a675fd.camel@gmail.com>
-	 <6f3027ee-576d-45de-9795-9a8e620292e9@oracle.com>
-	 <CAEf4BzYQeiECx9UpDqv6zRjd1EPjw8B44YX3KPGR1Z4dFKi1UA@mail.gmail.com>
-	 <27e4a60100602f769f3c5410a398a75fe0151967.camel@gmail.com>
-	 <CAEf4BzayA6if0xcTLux=eyASM1kpARmrOdDRmgG9F1SFa-fEcg@mail.gmail.com>
+	 <20251215091730.1188790-7-alan.maguire@oracle.com>
+	 <1351a3a944fab86e7fe1babf8b31cde4e722077e.camel@gmail.com>
+	 <CAEf4BzbgjZfxUeB78D4u4LRzESsTSdzOgFJAkOqEoQcRWuS=2g@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 User-Agent: Evolution 3.56.2 (3.56.2-2.fc42) 
@@ -89,97 +86,115 @@ List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
-On Tue, 2025-12-16 at 13:11 -0800, Andrii Nakryiko wrote:
-> On Tue, Dec 16, 2025 at 11:58=E2=80=AFAM Eduard Zingerman <eddyz87@gmail.=
+On Tue, 2025-12-16 at 13:21 -0800, Andrii Nakryiko wrote:
+> On Mon, Dec 15, 2025 at 10:51=E2=80=AFPM Eduard Zingerman <eddyz87@gmail.=
 com> wrote:
 > >=20
-> > On Tue, 2025-12-16 at 11:42 -0800, Andrii Nakryiko wrote:
-> > > On Tue, Dec 16, 2025 at 7:00=E2=80=AFAM Alan Maguire <alan.maguire@or=
-acle.com> wrote:
-> > > >=20
-> > > > On 16/12/2025 06:07, Eduard Zingerman wrote:
-> > > > > On Mon, 2025-12-15 at 09:17 +0000, Alan Maguire wrote:
-> > > > >=20
-> > > > > [...]
-> > > > >=20
-> > > > > > @@ -395,8 +416,7 @@ static int btf_type_size(const struct btf_t=
-ype *t)
-> > > > > >      case BTF_KIND_DECL_TAG:
-> > > > > >              return base_size + sizeof(struct btf_decl_tag);
-> > > > > >      default:
-> > > > > > -            pr_debug("Unsupported BTF_KIND:%u\n", btf_kind(t))=
-;
-> > > > > > -            return -EINVAL;
-> > > > > > +            return btf_type_size_unknown(btf, t);
-> > > > > >      }
-> > > > > >  }
-> > > > > >=20
-> > > > >=20
-> > > > > That's a matter of personal preference, of-course, but it seems t=
-o me
-> > > > > that using `kind_layouts` table from your next patch for size
-> > > > > computation for all kinds would be a bit more elegant.
-> > > > >=20
-> > > > > Also, a question, should BTF validation check sizes for known kin=
-ds
-> > > > > and reject kind layout sections if those sizes differ from expect=
-ed?
-> > > > >=20
-> > > >=20
-> > > > yeah, I'd say we'd need your second suggestion for the first to be =
-safe,
-> > > > and it seems worthwhile doing both I think. Thanks!
-> > >=20
-> > > ... but we will just blindly trust layout for unknown kinds, though?
-> > > So it's a bit inconsistent. I'd say let's keep it simple and don't
-> > > overdo the checking? btf_sanity_check() will validate that all known
-> > > kinds are well-formed, isn't that sufficient to ensure that subsequen=
-t
-> > > use of BTF data in libbpf won't crash? If some tool generated a subtl=
-y
-> > > invalid layout section which otherwise preserves BTF data
-> > > correctness... I don't know, this seems fine. The goal of sanity
-> > > checking is just to prevent more checks in all different places that
-> > > will subsequently rely on IDs being valid, and stuff like that. If
-> > > layout info is wrong for known kinds, so be it, we are not using that
-> > > information anyways.
+> > On Mon, 2025-12-15 at 09:17 +0000, Alan Maguire wrote:
 > >=20
-> > Ignoring layout information for known kinds can lead to weird
-> > scenarios: e.g. suppose type size is N, but kind layout specifies that
-> > it is M > N, and the tool generating BTF uses M to actually layout the
-> > binary data. We are being a bit inconsistent with such encoding.
+> > If strict kind layout checks are the goal, would it make sense to
+> > check sizes declared in kind_layout for known types?
+> >=20
+> > [...]
+> >=20
+> > > @@ -5215,23 +5216,36 @@ static s32 btf_check_meta(struct btf_verifier=
+_env *env,
+> > >               return -EINVAL;
+> > >       }
+> > >=20
+> > > -     if (BTF_INFO_KIND(t->info) > BTF_KIND_MAX ||
+> > > -         BTF_INFO_KIND(t->info) =3D=3D BTF_KIND_UNKN) {
+> > > +     if (!btf_name_offset_valid(env->btf, t->name_off)) {
+> > > +             btf_verifier_log(env, "[%u] Invalid name_offset:%u",
+> > > +                              env->log_type_id, t->name_off);
+> > > +             return -EINVAL;
+> > > +     }
+> > > +
+> > > +     if (BTF_INFO_KIND(t->info) =3D=3D BTF_KIND_UNKN) {
+> > >               btf_verifier_log(env, "[%u] Invalid kind:%u",
+> > >                                env->log_type_id, BTF_INFO_KIND(t->inf=
+o));
+> > >               return -EINVAL;
+> > >       }
+> > >=20
+> > > -     if (!btf_name_offset_valid(env->btf, t->name_off)) {
+> > > -             btf_verifier_log(env, "[%u] Invalid name_offset:%u",
+> > > -                              env->log_type_id, t->name_off);
+> > > +     if (BTF_INFO_KIND(t->info) > BTF_KIND_MAX && env->btf->kind_lay=
+out &&
+> > > +         ((BTF_INFO_KIND(t->info) + 1) * sizeof(struct btf_kind_layo=
+ut)) <
+> > > +          env->btf->hdr.kind_layout_len) {
+> > > +             btf_verifier_log(env, "[%u] unknown but required kind %=
+u",
+> > > +                              env->log_type_id,
+> > > +                              BTF_INFO_KIND(t->info));
+> > >               return -EINVAL;
+> > > +     } else {
+> > > +             if (BTF_INFO_KIND(t->info) > BTF_KIND_MAX) {
+> > > +                     btf_verifier_log(env, "[%u] Invalid kind:%u",
+> > > +                                      env->log_type_id, BTF_INFO_KIN=
+D(t->info));
+> > > +                     return -EINVAL;
+> > > +             }
+> > > +             var_meta_size =3D btf_type_ops(t)->check_meta(env, t, m=
+eta_left);
+> > > +             if (var_meta_size < 0)
+> > > +                     return var_meta_size;
+> > >       }
+> > >=20
+> > > -     var_meta_size =3D btf_type_ops(t)->check_meta(env, t, meta_left=
+);
+> > > -     if (var_meta_size < 0)
+> > > -             return var_meta_size;
+> > > -
+> > >       meta_left -=3D var_meta_size;
+> >=20
+> > It appears that a smaller change here would achieve same results:
+> >=20
+> >     -        if (BTF_INFO_KIND(t->info) > BTF_KIND_MAX ||
+> >     +        u32 layout_kind_max =3D env->btf->hdr.kind_layout_len / si=
+zeof(struct btf_kind_layout);
+> >     +        if (BTF_INFO_KIND(t->info) > layout_kind_max ||
+> >                  BTF_INFO_KIND(t->info) =3D=3D BTF_KIND_UNKN) {
+> >                      btf_verifier_log(env, "[%u] Invalid kind:%u",
+> >                                       env->log_type_id, BTF_INFO_KIND(t=
+->info));
+> >                      return -EINVAL;
+> >              }
+> >=20
+> >     +        if (BTF_INFO_KIND(t->info) > BTF_KIND_MAX) {
+> >     +                btf_verifier_log(env, "[%u] unknown but required k=
+ind %u",
+> >     +                                 env->log_type_id,
+> >     +                                 BTF_INFO_KIND(t->info));
+> >     +        }
+> >     +
+> >              if (!btf_name_offset_valid(env->btf, t->name_off)) {
+> >                      btf_verifier_log(env, "[%u] Invalid name_offset:%u=
+",
+> >                                       env->log_type_id, t->name_off);
+> >=20
+> > wdyt?
+> >=20
+> > But tbh, the "unknown but required kind" message seems unnecessary,
+> >=20
 >=20
-> Who are "we" here? The tool that emitted incorrect layout information
-> -- yep, for sure. (But that shouldn't happen for correct BTF.)
+> Hm.. Do I understand that this patch will actually allow uploading BTF
+> with some kinds that are unknown to the kernel? I don't think we
+> should allow this. If the kernel sees a kind that it knows nothing
+> about, it should reject the BTF. libbpf will sanitize such BTF so that
+> the host kernel never sees unknown/unsupported BTF kind.
 >=20
-> We do btf_sanity_check() upfront to minimize various sanity checks
-> spread out in libbpf code when using BTF data later on. But the goal
-> there is not really to check "100% standards conformance" of whatever
-> BTF we are working with. Kernel is way more concerned about validity
-> and not letting anything unexpected get through, but libbpf is in user
-> space and it's a bit different approach there.
->=20
-> As long as BTF looks structurally sound (btf_sanity_check), it should
-> be fine for our needs. If BTF is corrupted or just uses invalid ID, or
-> whatnot, it will eventually fail somewhere, most probably. But the
-> goal is not to have NULL derefs and stuff like that.
+> I think doing layout info validation is a good thing, I'd keep it, but
+> having layout information is not a substitute for kernel knowing full
+> semantics of the kind. Let's not relax kernel-side validation for BTF.
 
-Introducing layout info into format provides an alternative definition
-for structural soundness. E.g. some types or vlen elements can have
-padding in the end all of a sudden.
+I don't think this patch relaxes anything.
+It just generates a different error message for kinds that are unknown
+to kernel and:
+- described in the layout info
+- not described in the layout info.
+(Personally, I don't think that this differentiation is necessary).
 
-Using this info for some types but not the others is inconsistent.
-Given that BTF rewrites would only be unsound in presence of unknown
-types the whole feature looks questionable to me.
-
-> Basically what I'm trying to say is that if some tool intentionally or
-> unintentionally generates invalid layout information, but the rest of
-> data is valid, and libbpf doesn't look at layout and otherwise makes
-> fine use of BTF. Then that's fine with me, that BTF fulfills its duty
-> as far as libbpf is concerned. Libbpf here is just a consumer that
-> tries to be as permissive (unlike kernel) as possible, while not
-> leading to a process crash.
->=20
-> With double checking that layout info matches our implicit knowledge
-> of type layout we are starting to move into BTF verification a bit,
-> IMO. And I think that's misleading and unnecessary.
+Otherwise the patch does basic sanity checks for layout section itself.
