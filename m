@@ -1,134 +1,149 @@
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1A17311C37
-	for <dwarves@vger.kernel.org>; Tue, 16 Dec 2025 22:35:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16D452D9798
+	for <dwarves@vger.kernel.org>; Tue, 16 Dec 2025 23:00:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765924558; cv=none; b=J/Ky4Zj/0oNHvrcz3H83Y870z2ccPX9slLVbRT+jcmlrNy8zPOeJVQ7M70NMkrtK86keD4QxxllnG73lAtmBZIb59Rg1QvaxtkTBCI+bWjvMCQhNNUIZuX0NIemae9JxiHFKNdfu7KyZEG4xQRMJGMb35Nt4ij/tR/KwzORZAbE=
+	t=1765926058; cv=none; b=PrSeg1vhGxIyM+gMZOn0w0+5jCZtuqcW7CoY11ALkRlqSFupwIcP6gg/+zsCHUSwyH0bCVCkaSAThz/Xppdfl/xeaV23++xujwQbLHkWE6HjoHqmVB2iTarMxmXGcE1NC1hINJ+7hN26RwY9QIJYmmcuaspvwQ8v2SSOphiU8x8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765924558; c=relaxed/simple;
-	bh=WGWXYPcJmuvmwRCa3kvpN8lY0MC0ZrvAzxIclIoxP0U=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=AbUuhI+OG0x1chF6kpeMo+7hW+7MEosOueyyJWmInHfK1AZ0/f4YC0ij4a8k8biCgQwGBGk2T3CYVcbOmYh040YXc9axYqpE9kQeofpBiyct8wmQOa8bgVUjuka1NhFEyPsIiKKGskrXNzeYihgLLmqCo29nFUKCJFco5gZYtzA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=V3cjKsQZ; arc=none smtp.client-ip=209.85.214.180
+	s=arc-20240116; t=1765926058; c=relaxed/simple;
+	bh=QHTn7Ape7PKJS+Dlk3JnqkbYmgLXPYQwVFt/xRLllLE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=tJx5EYnausOIWP7cxV4wc9qHeh0D1VK+zROlH/84JSgtRmDErQPpaTkGB+AYuDPKAkmCsx/gjotC5EGy4vpEnnTvePER6+tcgbP5RgbwcWFbBGef5DZSwl47mxFYYXYb8lpCI8/xNOlDbOPo4oHnle06Pm8I3g0O1SqHfRaBu4o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ObzHemgW; arc=none smtp.client-ip=209.85.216.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="V3cjKsQZ"
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2a09757004cso42474975ad.3
-        for <dwarves@vger.kernel.org>; Tue, 16 Dec 2025 14:35:56 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ObzHemgW"
+Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-34c24f4dfb7so3273425a91.0
+        for <dwarves@vger.kernel.org>; Tue, 16 Dec 2025 15:00:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1765924556; x=1766529356; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=WGWXYPcJmuvmwRCa3kvpN8lY0MC0ZrvAzxIclIoxP0U=;
-        b=V3cjKsQZyloBKrJuydyxJhM5eXON1SRP//sT3+dwlG09IP/11vXhujon1faWFBnMKD
-         XOYIB8RYBUooKrmXezuNZlJj/1y0X93rCOiRefwOlkjSCDAD3rAGy2OvcBE+AzireZeh
-         mANyFQhmyS305ArFt1/jCKud5+2bDvHnpPPoxg+XOYfDqm+IxyYjoW4iuspSNfg4JXe0
-         6llAsOkxYdh5CQ1k63SWp3jHnB/lWUmitDHBhhR8glcKl3nzJtr21Tk3+FAwT9xsuEi1
-         fv/x5jJUNCrvkrKPowncWBh1s+xRHwF/8DZy0jkmeEFffntUtWsZKTfHMC9Ue93ATcLl
-         3oqw==
+        d=gmail.com; s=20230601; t=1765926056; x=1766530856; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QHTn7Ape7PKJS+Dlk3JnqkbYmgLXPYQwVFt/xRLllLE=;
+        b=ObzHemgWzswGq7qTddeKOUejvN267ay6lMeQEGIqatKeVJct4Fk0ZlK0LZr1i+VSQy
+         FzgKwIzbraD/RamwIc4GEBwyar2C9RjsE/h0y+Y1gNFAWyKLAuqhjOFshLh84TahUgM7
+         R3Ydtyx1lLSsLexxF+pjg/gtGBs7jqp3YB691D9ttQci4NpdH3E7Yq6a+qbTQi6yFH7N
+         jiUJbeKWBpwIxvIrA3GTHCCcOcfa/CNaSBj+ATYA9r0a4Fdr36WOj1yNFA20rFWcPFTA
+         9GpTlBglAAHtOg8CnuWEdkLP5wzcqi5/rwyXxMy6Ngl/HFUbQX6gEMAOX5DF0hhkVpTL
+         yZ/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765924556; x=1766529356;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=WGWXYPcJmuvmwRCa3kvpN8lY0MC0ZrvAzxIclIoxP0U=;
-        b=YH85IY7Nc2mKrQhqZu59RztU1eQyB6wCz0HMMst/zFfocZQ61ktvzjbDY0gi+CZTib
-         lAslao/R+4kaCnLFX1bQ60YYK4yyyqJNokQOu22idXP0XpyUPYhq0g4NF61D9JsJ1FS3
-         3LeKHx5eUnJoGlDuBp4GhHeufxAJAAPUsrK6XlZyKvMvHKXcdzDiK+iFhc5HIl/oReSp
-         cYdWFrFWIhdz72y7Z9isJ+ndOugXeWHDh/8vGM74vaLDG4ugqpq8mRFgy3jFx704vAZU
-         fdgzex9xP6ZGGMGeNDNsc3zLh2G3SZoNc/esIAb1T38aT79O/YRCmAI8mxAdXL2OoMlw
-         6mTw==
-X-Forwarded-Encrypted: i=1; AJvYcCWSGWV4oNgFLyRhGwFNKw8k6FDGBrCuIoLmF85K4KMKEMyD61PX7HJJfAFB9nDzHHC3EjPcvCjD@vger.kernel.org
-X-Gm-Message-State: AOJu0YwdU1lOZvQUpjwOQt4JX0MejsmpUWWP9vUpi9xnfc6oIDJaemF+
-	pLgCkw8R4IGxIplYsPgmlrpqkogoTkjnwsfwlP/2iU52OxtwHsmwOU3C
-X-Gm-Gg: AY/fxX6x6E4AfyF4f5PpB7GH0JZzqa7AtnPb/VeSszLyKKSY3R3lUDKzQ3pSfE7sOE4
-	eLpKVBmIylxDlM8Ol8qQ/leJzwHI0aKjjYYfCCpEF8CHQBvdwWuoWcFnbiT5aAXwpsHrRZnVYmY
-	UlF+1CK+rL39s9r+L1R8abiynKH3QFm9Vifc+JajKUwGMRd9eEeGuykTHSObRbHrSQ6rTGp9uWK
-	Q0BBsof5YEBtsDVkt/VuG5TwgjifnxK3P1wH9fTvNwXRxPShDm6xJA8UC2p2gULIHgIAjkvxRU2
-	wwWQpURUBTF8bEyxNcV4syo+dSnej1HdrTFfm9GK/5z3UAGcBxJYGqvbN7P4zvIAD0ajb8gj4Sr
-	Hv7fiBbg62O9Yl659I4RjzaZELarX2dEZk4Yop3dF7VdoXToF0HTJczzjTmRdo3aL9WHY3qBYcX
-	g14RDA4BKa
-X-Google-Smtp-Source: AGHT+IFF1TvMbOgaX/N9aJcylJ0T2NIr4wu4xOMd9UY4g2QQhOhOrjjeZfuwhQiKW+MVRe5SVusfOA==
-X-Received: by 2002:a17:902:c403:b0:29d:9db2:f833 with SMTP id d9443c01a7336-29f23b77308mr169678295ad.25.1765924556078;
-        Tue, 16 Dec 2025 14:35:56 -0800 (PST)
-Received: from [192.168.0.226] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-29f13d6a887sm148193835ad.91.2025.12.16.14.35.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Dec 2025 14:35:55 -0800 (PST)
-Message-ID: <4b12236c974db52ea19985cc9c5e08e021db9ec1.camel@gmail.com>
-Subject: Re: [PATCH v8 bpf-next 03/10] libbpf: use kind layout to compute an
- unknown kind size
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: Alan Maguire <alan.maguire@oracle.com>, andrii@kernel.org,
- ast@kernel.org, 	daniel@iogearbox.net, martin.lau@linux.dev,
- song@kernel.org, 	yonghong.song@linux.dev, john.fastabend@gmail.com,
- kpsingh@kernel.org, 	sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org,
- qmo@kernel.org, 	ihor.solodrai@linux.dev, dwarves@vger.kernel.org,
- bpf@vger.kernel.org, 	ttreyer@meta.com, mykyta.yatsenko5@gmail.com
-Date: Tue, 16 Dec 2025 14:35:52 -0800
-In-Reply-To: <CAEf4BzawMy=woHx_yHY0iiD0x12B_+J8mFgV5zT3aCpG2N0s-g@mail.gmail.com>
-References: <20251215091730.1188790-1-alan.maguire@oracle.com>
-	 <20251215091730.1188790-4-alan.maguire@oracle.com>
-	 <9e1b071598f9c1c1adcac0d8cb2591c452a675fd.camel@gmail.com>
-	 <6f3027ee-576d-45de-9795-9a8e620292e9@oracle.com>
-	 <CAEf4BzYQeiECx9UpDqv6zRjd1EPjw8B44YX3KPGR1Z4dFKi1UA@mail.gmail.com>
-	 <27e4a60100602f769f3c5410a398a75fe0151967.camel@gmail.com>
-	 <CAEf4BzayA6if0xcTLux=eyASM1kpARmrOdDRmgG9F1SFa-fEcg@mail.gmail.com>
-	 <26e95f737d2de5133702c9b641946e70ec2d1dae.camel@gmail.com>
-	 <CAEf4BzawMy=woHx_yHY0iiD0x12B_+J8mFgV5zT3aCpG2N0s-g@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.2 (3.56.2-2.fc42) 
+        d=1e100.net; s=20230601; t=1765926056; x=1766530856;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=QHTn7Ape7PKJS+Dlk3JnqkbYmgLXPYQwVFt/xRLllLE=;
+        b=YOmMJqiTIcCfT/uCcjjgcUwsXuWRgZDif15QzO+ME6pypXV92ZzV1Ea5CxGxGz88sD
+         w6a5GiFo/SNFxbQNon9hq8zTy2OXQsJsq9sZWrcuSZ6Z/Th93Yq/TL9/b2QhzLPWyFOW
+         NC4aI6/oXVADPeVAaKtkYfOD2wavGr8QxnNimOJWhvUA9OIuHIAQ3NQl/ZisnTTmutaB
+         ovDCh6sqqosfdJLOSlWjo9qF6i0Zj+a5p42sj+8LAQMk0pK2MvtFWApMzU4oY5zOnIwJ
+         XAjhe1QnIIpUHe4hKtzhzHTFz+HlGqI5QI/8cZ8QSP6qOnrEZ/CMiD2t38A0+dDmeJ2z
+         Fi2A==
+X-Forwarded-Encrypted: i=1; AJvYcCU5ylpiWxrsf1wnLCDLAoC+H4D9aWl/jXRHxw8kIwvEcDCTilVb1u730C0kKmLZnkZsodFAjRzS@vger.kernel.org
+X-Gm-Message-State: AOJu0YzLYJxu8ECeQFPpL7UmBL7T6Hj0xCw4MphzvgIk/UBp2m61O3Hp
+	uOUsgRRmfRtfJa+SiIqh6nvuejrmhM1pnZBa7sKoWji2SooV61GV2BdFHtVo3Cx0UxCyL95tgxw
+	xKRax6o6nSBPJ86AYB4BBuU6ZLjAVX8g=
+X-Gm-Gg: AY/fxX58zm//q6YisjVSlIVhgboIc3ZUft6lvlkOsrZKY8B0UAG7I8qMcWgc7JxZa/W
+	PRi0JnwcUHnfAH/Ev+9xbdfpxiaAbJ3lu16fvLtVlVfWqHJG/LWWoUkkE014K7tFexgzADmsBK7
+	kJ1J74RJ4mpPPGPVTcm7H/VurfkdQdb37y41yZvkC+Kg/clw8BiRB+AAoTWvR5sG8rLic9Rf5Fe
+	Otb8sRE3F8gNrOPIsTwBh6lfmnzv14leuWnWD7bpVvX+LtZAq9/FOEmlV4o8h8HL4TnGWHeccHP
+	kRVM0CU+V/0=
+X-Google-Smtp-Source: AGHT+IE4uq1aQEKzYCRpxkzI2n9m1G5wgHi2swQD76/eh1lmF6mHDy3JTiLnZJgHQzPfsAOYyPWms/YOppfF7trvdBU=
+X-Received: by 2002:a17:90b:258c:b0:34c:cb3c:f544 with SMTP id
+ 98e67ed59e1d1-34ccb3d0d0dmr4181586a91.14.1765926056210; Tue, 16 Dec 2025
+ 15:00:56 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <20251215091730.1188790-1-alan.maguire@oracle.com>
+ <20251215091730.1188790-4-alan.maguire@oracle.com> <9e1b071598f9c1c1adcac0d8cb2591c452a675fd.camel@gmail.com>
+ <6f3027ee-576d-45de-9795-9a8e620292e9@oracle.com> <CAEf4BzYQeiECx9UpDqv6zRjd1EPjw8B44YX3KPGR1Z4dFKi1UA@mail.gmail.com>
+ <27e4a60100602f769f3c5410a398a75fe0151967.camel@gmail.com>
+ <CAEf4BzayA6if0xcTLux=eyASM1kpARmrOdDRmgG9F1SFa-fEcg@mail.gmail.com>
+ <26e95f737d2de5133702c9b641946e70ec2d1dae.camel@gmail.com>
+ <CAEf4BzawMy=woHx_yHY0iiD0x12B_+J8mFgV5zT3aCpG2N0s-g@mail.gmail.com> <4b12236c974db52ea19985cc9c5e08e021db9ec1.camel@gmail.com>
+In-Reply-To: <4b12236c974db52ea19985cc9c5e08e021db9ec1.camel@gmail.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Tue, 16 Dec 2025 15:00:42 -0800
+X-Gm-Features: AQt7F2o1hIoyH552Fz8_fwBqLQ3Of6KbxG-ctMvRDSnbAC2TNEmRnbbWlpIdi4g
+Message-ID: <CAEf4BzbAXGdROrnGZZ_GBZmn9muKz9Cr+yUbovo+pmx-8GLdhg@mail.gmail.com>
+Subject: Re: [PATCH v8 bpf-next 03/10] libbpf: use kind layout to compute an
+ unknown kind size
+To: Eduard Zingerman <eddyz87@gmail.com>
+Cc: Alan Maguire <alan.maguire@oracle.com>, andrii@kernel.org, ast@kernel.org, 
+	daniel@iogearbox.net, martin.lau@linux.dev, song@kernel.org, 
+	yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org, 
+	sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, qmo@kernel.org, 
+	ihor.solodrai@linux.dev, dwarves@vger.kernel.org, bpf@vger.kernel.org, 
+	ttreyer@meta.com, mykyta.yatsenko5@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, 2025-12-16 at 14:23 -0800, Andrii Nakryiko wrote:
-
-[...]
-
-> Ok, so what you are saying is that if there is layout info we should
-> always use that instead of hard-coded knowledge about kind layout,
-> right? Ok, I can agree to that, but see note about extensibility
-> below.
+On Tue, Dec 16, 2025 at 2:35=E2=80=AFPM Eduard Zingerman <eddyz87@gmail.com=
+> wrote:
 >
-> But that's a bit different from validating that the recorded layout
-> of, say, BTF_KIND_STRUCT is what we expect (sizeof(struct btf_type) +
-> vlen * sizeof(struct btf_member)). Because if we enforce that, then we
-> still preclude any extensions to those layouts in the future. And if
-> we do that, what's the point of looking at layout info for kinds we do
-> know about?
+> On Tue, 2025-12-16 at 14:23 -0800, Andrii Nakryiko wrote:
+>
+> [...]
+>
+> > Ok, so what you are saying is that if there is layout info we should
+> > always use that instead of hard-coded knowledge about kind layout,
+> > right? Ok, I can agree to that, but see note about extensibility
+> > below.
+> >
+> > But that's a bit different from validating that the recorded layout
+> > of, say, BTF_KIND_STRUCT is what we expect (sizeof(struct btf_type) +
+> > vlen * sizeof(struct btf_member)). Because if we enforce that, then we
+> > still preclude any extensions to those layouts in the future. And if
+> > we do that, what's the point of looking at layout info for kinds we do
+> > know about?
+>
+> If full flexibility is allowed, then all places where e.g. libbpf
+> iterates params or struct members require an update. That's a big
+> change.
+>
+> I suggested checking layout sizes for existing types as a half-measure
+> allowing to avoid such changes.
 
-If full flexibility is allowed, then all places where e.g. libbpf
-iterates params or struct members require an update. That's a big
-change.
+Shouldn't we just say that layout info will never change for the kind?
+Whatever fixed + vlen size it starts with, that's set in stone.
 
-I suggested checking layout sizes for existing types as a half-measure
-allowing to avoid such changes.
+>
+> > > Given that BTF rewrites would only be unsound in presence of unknown
+> > > types the whole feature looks questionable to me.
+> >
+> > What are those "BTF rewrites" you are referring to? I'm getting a bit
+> > lost in this discussion, tbh.
+>
+> E.g. btf__permute(), as it will not permute all types if some of the
+> are unknown. Or dedup.
 
-> > Given that BTF rewrites would only be unsound in presence of unknown
-> > types the whole feature looks questionable to me.
->=20
-> What are those "BTF rewrites" you are referring to? I'm getting a bit
-> lost in this discussion, tbh.
+Yes, agreed, I don't think we should allow modifications like that of
+course, who said we should?
 
-E.g. btf__permute(), as it will not permute all types if some of the
-are unknown. Or dedup.
+>
+> > This feature is designed to allow introducing new (presumably,
+> > optional) kinds and not break older versions of libbpf/bpftool to at
+> > least be able to dump known contents. Does the current implementation
+> > achieve that goal? What other goals do you think this feature should
+> > support?
+>
+> I don't think anything other than dump is possible to support.
 
-> This feature is designed to allow introducing new (presumably,
-> optional) kinds and not break older versions of libbpf/bpftool to at
-> least be able to dump known contents. Does the current implementation
-> achieve that goal? What other goals do you think this feature should
-> support?
+Ok, then we are on the same page.
 
-I don't think anything other than dump is possible to support.
+One interesting question is what to do about libbpf's BTF
+sanitization? Should we still try to replace unknown types with
+something that byte-size-wise is compatible? It might not work in all
+cases, depending on the semantics of unknown KIND, but it should work
+in practice if we are careful about adding new kinds "responsibly".
+WDYT?
 
-[...]
+>
+> [...]
