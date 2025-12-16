@@ -1,74 +1,74 @@
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F1A330595C
-	for <dwarves@vger.kernel.org>; Tue, 16 Dec 2025 19:34:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55F4D31CA7B
+	for <dwarves@vger.kernel.org>; Tue, 16 Dec 2025 19:37:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765913674; cv=none; b=JzzX7JjLmgXHyJT19YVwIjt7e2eME/OGKOfO4tVCn8dPEpTXmaGYjCDMFfwddOX2382Fp5uogLWzDg2i+rlPQkdNOL6ZvyckJRUZ2k8TRPAjpgxocLVatTbMfVSXJMdcNN48IlN3aCeds7zuCCuIJyvC6X0w4w4722L/bnbLm00=
+	t=1765913849; cv=none; b=Xvcmhm/wnNOuhETPA23x5V8CeGKrEFD41mV7Xs7220pJtSHeUwzKnLP3tsZre9NoNzQG/ZRusO87+Ps/9o8InZo2DvGAwCO9HH/pd7Pi8jNvwgq8zmokaBzS3cfHE+9roGZc/PPXUmwUhi65M0VRMyKEeU/NUgKpGPWs+K33Cyw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765913674; c=relaxed/simple;
-	bh=FOUuSxJdgORqB3D7sSJIl9DIFcwVTc2m8UMrIKsIHuk=;
+	s=arc-20240116; t=1765913849; c=relaxed/simple;
+	bh=4T87opl1MhUsqElKkPBN1qdTf4dvDuH6O9SZ0RiiiaM=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=W17KsSyv0TtWmPfr9OGr8WkVC/2QRG8W7CP4ElC1Sjc0//xnbcJ2lwvjSEkpAz28gpmWshT07yJXYsHvmcTZ21Q1GB6YSQXvGIcm1DCH15zg7qojpbo41pddUbm6s46XxHOwy1VqDfIDH/TMSyKQLwCFZjkIdXlnLrurUCTHmnI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QJJQfmg1; arc=none smtp.client-ip=209.85.214.174
+	 To:Cc:Content-Type; b=iJwP+65htWnGmz5OUTo4fTSbg/W6b7CTsG1adVSePGZHHfqGXna7VNkvI7zQZo/BBuXPbv7UuFBQJsf8cp91HqHRew0ikFySoalS6kTlJm1pvbmSglf8TtQfO800CPkRWUCd82SRaIooCvP9PzXr1pcmfxa/Z1X4LjywF8iz7eI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SilsQ5LJ; arc=none smtp.client-ip=209.85.216.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QJJQfmg1"
-Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-2a0f3f74587so31329915ad.2
-        for <dwarves@vger.kernel.org>; Tue, 16 Dec 2025 11:34:32 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SilsQ5LJ"
+Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-34c21417781so4238218a91.3
+        for <dwarves@vger.kernel.org>; Tue, 16 Dec 2025 11:37:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1765913672; x=1766518472; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1765913847; x=1766518647; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=oc7wkmO1G/O6pko8A6pYs9YQriGWhLxGOsAWt5QrAsQ=;
-        b=QJJQfmg1Vsk/e99Pdd1B77NmhIIxCvwJN0XTkSV4NFeCzIranNc5QmMrgG5EocEXWj
-         5vvbyKYZ46IohyXvo0xLwS5BVaAh/mriBcBnq+SLiVupzoE0+0sAACS8vqaAUv9mISdM
-         FRiOizXeGZMCKo6nh/jPkBM0hfwONc4jbhwXujnaLHgrniueHfyWfqamcc6YKBQulOCw
-         71OlgCWlN2c+8l4hBoM4L5thCp8EBFOlDxJD7zrsb01EWqH6ULT0f05nQnG6QmVzL4jq
-         N4bcZGMau2ckp1ABGEq8Rcunld5zIavHD1M48+7uOBwc+eom01OfrULu/t0k3vYtgMMc
-         +6LQ==
+        bh=OV/pHipMQLh0hDMe1/upHJtQtKiIxsYJe6Wq15q0SJU=;
+        b=SilsQ5LJ1Z/2cUi6T34a3VDv1IcGLY0W7KK8B5veXkzmngnv0jUscRvo/yosMB5/zF
+         ziOcdk21eRzbO1oDJcXpKNuBy3pDiLQwN+tpcJzfmKToAJtk00HPEBpAviFBEW8QYkBz
+         PN2tfqYc5BbBdRAbn30HEaoSf2NNkLCWeHO1eR9CeSUMR94LwgQ53Dktxqd1cDAPwA01
+         aWuxK1hKQN/jH4I3zVnjyhQ3u46nRf5V+qUPFgnnsKMSBcHFvlfb+u9c5DlbxTp3Lxdc
+         fIx5h6Xuyz/xO01GwYVhxuwY5fJ5NNRPmwah/m9BzrDNjeMs+pbrbtLlQ2muizZycHG7
+         LBfw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765913672; x=1766518472;
+        d=1e100.net; s=20230601; t=1765913847; x=1766518647;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=oc7wkmO1G/O6pko8A6pYs9YQriGWhLxGOsAWt5QrAsQ=;
-        b=m+3rxW4zfPcPuorqIJhj0CotfLIpcaBBNPQ0AuyizMKjYzc+jzOCsTtB6xF0xyWP3/
-         Om+/KnaEiioaRlAUBPEJFwRRRyT1wvsC9K5++qSRdEJaXU8hqrkMBtooFwEXcvLlBN2t
-         5t+qNo1fjVQTGRNQUIhpa8gjYqEDf3JCBS94h0YobI6JmnOFxi1nlnCuI0kQHvIxO/oX
-         onR6XiiXvZF3MZg/hnYj+XF6rSpNJ9k9AcRY31RoKZwRNPJE1LwqCJPStCS5TLwG1SAO
-         YnvaYab/pjrdEFfDR7aMWjHeewRC4+6P3reUTUNRw8dWm8QN7QkvWmylCFGoYjXlW00f
-         QahQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVZAEBwpofYe0Ld3AWl/eeaOioFZ4qO2Zk+LlX9hmMNP1ERhK7YtHVs3M12wj0Ar9YDleB4CtPm@vger.kernel.org
-X-Gm-Message-State: AOJu0YwZviW5jIRcvaShntDzfg5YG1fvEEooBOuT/h3OgmF2lqeNyb06
-	IVd1iTlsDmRDJ4VweuetQMyfytOEwew44LVmnKI96hP7xPo0hIMjswwRfi0sD7Ba9tbMCf/Kvgm
-	L2RfYnDzLCODKZhenQgVz7wJYrs6Nh94=
-X-Gm-Gg: AY/fxX5YpCgNuxlzgautkw8mrwqFy/yVh52aMkj1WvLOj/jyDQVek4SlWTcu1te578+
-	23GgNmo/MOMqKuhxnd2Cn3LQk2q1SkEGjcvoRZ9ighN6+lS/RrcKWQg+iDKxoJi0oeXyRMX1kOQ
-	ODkFMa8+TGJwpdFp1/xkBYGgG6Kej/oAxez5hOpOxChMdfGfzRkmtXUpokYtg3I0Bv+rU0HXHvM
-	CpkzzM+9t9DoupBa2AlTc/9zFnklWGTBjENCSeXAG0DV/qD6NK6jxyPtjCnT0icldZr2GK606ma
-	RX5OkPnl43yNX/SXlhb+bA==
-X-Google-Smtp-Source: AGHT+IEsuGduX2I3bXsULyMkGChsdw2z5fq5cnIZQT+MZ84MVYQK1PlYH1Ek/DkKCc50LTlhFjXA528yfrA5Rwazwm8=
-X-Received: by 2002:a17:903:37ce:b0:295:195:23b6 with SMTP id
- d9443c01a7336-29f26eff462mr157031955ad.55.1765913671737; Tue, 16 Dec 2025
- 11:34:31 -0800 (PST)
+        bh=OV/pHipMQLh0hDMe1/upHJtQtKiIxsYJe6Wq15q0SJU=;
+        b=fGI44ZneqCy235hHAVprdIvjkRnFMGJhQRJdEkYTX3HEqJY4kg5xTGnO//0Znb/koz
+         x3kRO5PVsy4jHerE6jnL9wENdDOIOA6r8boBGVjAXWGKtws7dOkE/Z/BjHa1fK9d4ZfQ
+         l3sEhQBofca/+/AERsp2Z49CjuJgKXLrmJ3jFtDqRlcLE1gJs4B4ElIsZRyCA6hIKUIp
+         gTOLw9PuJxhCRMG25AwkAsmw50/gyEJMfUUF8LunTWtA6eQTsPib6YntsggaUiOLy0rz
+         asqAFS3owbncH9bD5vBj1/15kchm8NCjFnLQLcu2Nw845QxO89RuJzoRPDSttThB3vB1
+         kNtg==
+X-Forwarded-Encrypted: i=1; AJvYcCUpNhI6HT/d9aPHdjZdmfP5InnbA0QEop6ijLL2sbU1CyNrTwbiBzRKirsF4enb5+E8nNvBNj5Z@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz7GX3exsDEz+0dDBKsGatRRxKU1ZmBd1KkfKwupBmY1r4HrLqz
+	ha+G23hdJFwalErEfEspKM/oHcGtg/CaBBjh2pN5cT219RtpIQU3EKfSESm7d7tdjtfzMuqV5GK
+	1EWYnfM1L/SBzOzN7Iy7HvE/djy0N2kE=
+X-Gm-Gg: AY/fxX7WY59ebMR14xSZWcDtL6Svf/j9zLihM5lAED6Dgp6sLUnyo6rvr9H59T+1b5F
+	qjArJPXQmwqUDgtUFIpi2GmU9Bt9QPc2MhdywqyFW8X7dPVYfHv2Fd1rSyZ0+FwnJVLNPU3BYln
+	3ho/4s38vOguGulHUaHtoqnEbACh7I2F/oqMFDdiqpNoVeS/fO9z+XTcU5cPieiXxZHV5btJP5v
+	aX3KfdlraGd8DEozcMgjanLxAGQ3GGdaMvcSUM3LaZ0mHX35WuXIdeNU7Mw2+ta6qAnlSXlsu7p
+	MEcuzuazeYA=
+X-Google-Smtp-Source: AGHT+IH4+VPbnc+Q69iIjOdzqoJhOjlzXEjC1IbbYnKAb7DLXDcS7MZtD66nNclFkwVmOAo2VEquHf7Lwyt4D4MRjZU=
+X-Received: by 2002:a17:90b:3f85:b0:341:a9e7:e5f9 with SMTP id
+ 98e67ed59e1d1-34abd5dc26emr14755404a91.0.1765913847131; Tue, 16 Dec 2025
+ 11:37:27 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251215091730.1188790-1-alan.maguire@oracle.com> <20251215091730.1188790-3-alan.maguire@oracle.com>
-In-Reply-To: <20251215091730.1188790-3-alan.maguire@oracle.com>
+References: <20251215091730.1188790-1-alan.maguire@oracle.com> <20251215091730.1188790-4-alan.maguire@oracle.com>
+In-Reply-To: <20251215091730.1188790-4-alan.maguire@oracle.com>
 From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Tue, 16 Dec 2025 11:34:19 -0800
-X-Gm-Features: AQt7F2r7RadIHnW-JtgmqkW2Axe8h6an67lvT1fjUpr8JKMz67Elo4iajzTAOP4
-Message-ID: <CAEf4Bza+C7nRxFDHS0dNDk5XF79nE6y4GqEu0bmtJPTMoFrNvQ@mail.gmail.com>
-Subject: Re: [PATCH v8 bpf-next 02/10] libbpf: Support kind layout section
- handling in BTF
+Date: Tue, 16 Dec 2025 11:37:14 -0800
+X-Gm-Features: AQt7F2pcpQIXGIt4MZQ1hdQibCI191OMDvdx_dZEMA0OsU3STCe9YwzYn4HroBk
+Message-ID: <CAEf4BzbsLMgRuJz0PGDojZG32G0GQcSKnt4F9CVVROLPXHY+TA@mail.gmail.com>
+Subject: Re: [PATCH v8 bpf-next 03/10] libbpf: use kind layout to compute an
+ unknown kind size
 To: Alan Maguire <alan.maguire@oracle.com>
 Cc: andrii@kernel.org, ast@kernel.org, daniel@iogearbox.net, 
 	martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org, 
@@ -82,145 +82,65 @@ Content-Transfer-Encoding: quoted-printable
 On Mon, Dec 15, 2025 at 1:18=E2=80=AFAM Alan Maguire <alan.maguire@oracle.c=
 om> wrote:
 >
-> Support reading in kind layout fixing endian issues on reading;
-> also support writing kind layout section to raw BTF object.
-> There is not yet an API to populate the kind layout with meaningful
-> information.
->
-> As part of this, we need to consider multiple valid BTF header
-> sizes; the original or the kind layout-extended headers.
-> So to support this, the "struct btf" representation is modified
-> to always allocate a "struct btf_header" and copy the valid
-> portion from the raw data to it; this means we can always safely
-> check fields like btf->hdr->kind_layout_len.
+> This allows BTF parsing to proceed even if we do not know the
+> kind.
 >
 > Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
 > ---
->  tools/lib/bpf/btf.c | 260 +++++++++++++++++++++++++++++++-------------
->  1 file changed, 183 insertions(+), 77 deletions(-)
+>  tools/lib/bpf/btf.c | 34 +++++++++++++++++++++++++++-------
+>  1 file changed, 27 insertions(+), 7 deletions(-)
 >
 > diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
-> index b136572e889a..8835aee6ee84 100644
+> index 8835aee6ee84..3936ee04a46a 100644
 > --- a/tools/lib/bpf/btf.c
 > +++ b/tools/lib/bpf/btf.c
-> @@ -40,42 +40,53 @@ struct btf {
->
->         /*
->          * When BTF is loaded from an ELF or raw memory it is stored
-> -        * in a contiguous memory block. The hdr, type_data, and, strs_da=
-ta
-> +        * in a contiguous memory block. The  type_data, and, strs_data
-
-nit: two spaces, and so many commas around and ;) let's leave Oxford
-comma, but comma after and is weird
-
->          * point inside that memory region to their respective parts of B=
-TF
->          * representation:
->          *
-> -        * +--------------------------------+
-> -        * |  Header  |  Types  |  Strings  |
-> -        * +--------------------------------+
-> -        * ^          ^         ^
-> -        * |          |         |
-> -        * hdr        |         |
-> -        * types_data-+         |
-> -        * strs_data------------+
-> +        * +--------------------------------+---------------------+
-> +        * |  Header  |  Types  |  Strings  |Optional kind layout |
-
-Space missing, boo. Keep diagrams beautiful!..
-
-> +        * +--------------------------------+---------------------+
-> +        * ^          ^         ^           ^
-> +        * |          |         |           |
-> +        * raw_data   |         |           |
-> +        * types_data-+         |           |
-> +        * strs_data------------+           |
-> +        * kind_layout----------------------+
-> +        *
-> +        * A separate struct btf_header is allocated for btf->hdr,
-> +        * and header information is copied into it.  This allows us
-> +        * to handle header data for various header formats; the original=
-,
-> +        * the extended header with kind layout, etc.
->          *
->          * If BTF data is later modified, e.g., due to types added or
->          * removed, BTF deduplication performed, etc, this contiguous
-> -        * representation is broken up into three independently allocated
-> -        * memory regions to be able to modify them independently.
-> +        * representation is broken up into four independent memory
-> +        * regions.
-> +        *
->          * raw_data is nulled out at that point, but can be later allocat=
-ed
->          * and cached again if user calls btf__raw_data(), at which point
-> -        * raw_data will contain a contiguous copy of header, types, and
-> -        * strings:
-> +        * raw_data will contain a contiguous copy of header, types, stri=
-ngs
-> +        * and optionally kind_layout.  kind_layout optionally points to =
-a
-> +        * kind_layout array - this allows us to encode information about
-> +        * the kinds known at encoding time.  If kind_layout is NULL no
-> +        * kind information is encoded.
->          *
-> -        * +----------+  +---------+  +-----------+
-> -        * |  Header  |  |  Types  |  |  Strings  |
-> -        * +----------+  +---------+  +-----------+
-> -        * ^             ^            ^
-> -        * |             |            |
-> -        * hdr           |            |
-> -        * types_data----+            |
-> -        * strset__data(strs_set)-----+
-> +        * +----------+  +---------+  +-----------+   +-----------+
-> +        * |  Header  |  |  Types  |  |  Strings  |   |kind_layout|
-> +        * +----------+  +---------+  +-----------+   +-----------+
-
-nit: spaces (and if we go with "layout" naming, this will be short and
-beautiful " Layout " ;)
-
-> +        * ^             ^            ^               ^
-> +        * |             |            |               |
-> +        * hdr           |            |               |
-> +        * types_data----+            |               |
-> +        * strset__data(strs_set)-----+               |
-> +        * kind_layout--------------------------------+
-
-[...]
-
-> @@ -3888,7 +3989,7 @@ static int btf_dedup_strings(struct btf_dedup *d)
->
->         /* replace BTF string data and hash with deduped ones */
->         strset__free(d->btf->strs_set);
-> -       d->btf->hdr->str_len =3D strset__data_size(d->strs_set);
-> +       btf_hdr_update_str_len(d->btf, strset__data_size(d->strs_set));
->         d->btf->strs_set =3D d->strs_set;
->         d->strs_set =3D NULL;
->         d->btf->strs_deduped =3D true;
-> @@ -5343,6 +5444,11 @@ static int btf_dedup_compact_types(struct btf_dedu=
-p *d)
->         d->btf->type_offs =3D new_offs;
->         d->btf->hdr->str_off =3D d->btf->hdr->type_len;
->         d->btf->raw_size =3D d->btf->hdr->hdr_len + d->btf->hdr->type_len=
- + d->btf->hdr->str_len;
-> +       if (d->btf->kind_layout) {
-> +               d->btf->hdr->kind_layout_off =3D d->btf->hdr->str_off + r=
-oundup(d->btf->hdr->str_len,
-> +                                                                        =
-     4);
-> +               d->btf->raw_size =3D roundup(d->btf->raw_size, 4) + d->bt=
-f->hdr->kind_layout_len;
-
-maybe put layout data after type data, but before strings? rounding up
-string section which is byte-based feels weird. I think old libbpf
-implementations should handle all this well, because btf_header
-explicitly specifies string section offset, no?
-
-> +       }
+> @@ -359,7 +359,28 @@ static int btf_parse_kind_layout_sec(struct btf *btf=
+)
 >         return 0;
 >  }
 >
-> --
-> 2.39.3
+> -static int btf_type_size(const struct btf_type *t)
+> +/* for unknown kinds, consult kind layout. */
+> +static int btf_type_size_unknown(const struct btf *btf, const struct btf=
+_type *t)
+> +{
+> +       int size =3D sizeof(struct btf_type);
+> +       struct btf_kind_layout *k =3D NULL;
+> +       __u16 vlen =3D btf_vlen(t);
+> +       __u8 kind =3D btf_kind(t);
+> +       __u32 off =3D kind * sizeof(struct btf_kind_layout);
+> +
+> +       if (!btf->kind_layout || off >=3D btf->hdr->kind_layout_len) {
+> +               pr_debug("Unsupported BTF_KIND: %u\n", btf_kind(t));
+> +               return -EINVAL;
+> +       }
+> +       k =3D btf->kind_layout + off;
+> +
+> +       size +=3D k->info_sz;
+> +       size +=3D vlen * k->elem_sz;
+> +
+> +       return size;
+
+return sizeof(struct btf_type) + k->info_sz + vlen * k->elem_sz;
+
+Stateless, explicit, single line. All good properties.
+
+> +}
+> +
+> +static int btf_type_size(const struct btf *btf, const struct btf_type *t=
+)
+>  {
+>         const int base_size =3D sizeof(struct btf_type);
+>         __u16 vlen =3D btf_vlen(t);
+> @@ -395,8 +416,7 @@ static int btf_type_size(const struct btf_type *t)
+>         case BTF_KIND_DECL_TAG:
+>                 return base_size + sizeof(struct btf_decl_tag);
+>         default:
+> -               pr_debug("Unsupported BTF_KIND:%u\n", btf_kind(t));
+> -               return -EINVAL;
+> +               return btf_type_size_unknown(btf, t);
+>         }
+>  }
 >
+
+[...]
