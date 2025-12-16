@@ -1,92 +1,78 @@
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E77732EA173
-	for <dwarves@vger.kernel.org>; Tue, 16 Dec 2025 02:54:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 358D332ABCD
+	for <dwarves@vger.kernel.org>; Tue, 16 Dec 2025 05:58:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765853689; cv=none; b=rhLL7JvBexZtmFyan4tDLvZHyQWFgZ7lIvLbmXe4BZpozhpeeUR+mtP/j6iaa/wTGFS9yxj5QKH5TUWDei3Xtxhvc+AABgwgWHyadCOrpfYtILlX0iGmBdV81SOdd6Xd2OD0Jk0CZfEZsygeYX6jAfO1kcyCayjQdqYKIthwzi4=
+	t=1765864702; cv=none; b=OJBY4LMdyC54wIDcNs03RlsPgaqdauRPoXyrD0zUOMzSeBTSbHmyEOn2mVA9UXcMrhPTC+VHf0yWug0bhVw2kQublK73qa2xaWaH1FCwvIQXN+mw9TFC597GOYy4Ih8K1xrVgv7HPxGf251v2XyrLT1EnAaK6n7lMBspdY6wxtA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765853689; c=relaxed/simple;
-	bh=numGoBvFqUmKgYq+gTvwU6RDyzW/FMMZFczl/Mu6Beo=;
+	s=arc-20240116; t=1765864702; c=relaxed/simple;
+	bh=sM3cNw5SIpD6IQ+LU+smmGWOeqggf2l3Ts/h3XPM7KU=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=GxXbryLLl/PUqH5QsnWVg/V3WoQ7aSXQDtxcgUljNG8zXkiYNihBSQLuDgHOCjIQvFe2wkGzSISPGGTuadNjKXaB1TVPpW3oke31RmMEcHQoTIOauYaeI8UyiyFS4ArQ8yJBb6qnLCXk3zVCJdC2aC0e05k9ix+rwQwRcvl7nwQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mkIJojbm; arc=none smtp.client-ip=209.85.214.173
+	 Content-Type:MIME-Version; b=Uo+GH8ZRQqTAem4W2fpyzrFYXjIoh/hJ59vBpuUVh9MDRCO+1UgBYE1pxy6cpY4NWnqInEC/lCzT87XH0X0ShKhetQb2umb291IGIjZIXXn/YH3ihVMbuwR2sFppOWSz5+VI9z+JDxr/VDQUJtnMIt6HuRu6CFt83mzsJwaSkpM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Dms3mFpV; arc=none smtp.client-ip=209.85.216.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mkIJojbm"
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2a0eaf55d58so9608195ad.1
-        for <dwarves@vger.kernel.org>; Mon, 15 Dec 2025 18:54:46 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Dms3mFpV"
+Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-34c7d0c5ddaso1123016a91.0
+        for <dwarves@vger.kernel.org>; Mon, 15 Dec 2025 21:58:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1765853686; x=1766458486; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1765864695; x=1766469495; darn=vger.kernel.org;
         h=mime-version:user-agent:content-transfer-encoding:references
          :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=7WAisvZ8c0VsEQQ/ay4lGlVwantG9QHW/ILMt+qNiOc=;
-        b=mkIJojbm5zOc5rIC91ptnT8r2j92xoAXz1j/E/L3aLFg8ub1IMoPhqnKI++9D53Za+
-         3jqwNxHKrCSooTvu3e6y54PgZNOk9HDhpq25+OQNshLFKgI/TqO1KgJUvTtEzOtcy46r
-         RQ5WFPcwf45PCSj9p/USVGJtPioSPXBvPJrvoRRhyOdRe6V/mxdvCQG2AyEyj82qfeKR
-         fAQvoxU2Cs2365knGLsui0aJZ8CIKt2bu5ssUd0DJqMSlKBQWbQ7Jg22KbrNRu625R61
-         /yEcjHo7mMFXPglshLsX+IaY8sVG2+B+8QN6Z21JY1RiFuOfaRFgJ1adniTuCyF9SqfT
-         Fg2g==
+        bh=IVTImU2QQNFAuOXTdHLvkqMQomKRULNxJdHbr0KDxdg=;
+        b=Dms3mFpVRZBitcSWGgtum/lNFyVfGlVKEMDOn+bNzD5Lh5priv2tpQbTu9lyhZLrco
+         jezpXKmVnGFHwPyJQDNuUH9xL+UjW4JPsif2uBMRe74Uid6YMYPmaqLKuxDSajG06PVy
+         MnwKkeYqvGL9p2S73Q5GfpwpVdXpbwOGW230wfCxAYm9357x4h6EChJZ7J1vfckvbI2o
+         DkWStaNgZAotjQ1W4uoc1Hrbpb4gBRbTRAvAjD/w4bieooWeExoyr9pqYO+9F4jgqsVs
+         bQJlqxynA+cIM7T2GRVkJ3K9AggEtG2tNRYFUd9te4RbtBJl2gFsZFwhcv2WzYDmzXZd
+         3CVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765853686; x=1766458486;
+        d=1e100.net; s=20230601; t=1765864695; x=1766469495;
         h=mime-version:user-agent:content-transfer-encoding:references
          :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7WAisvZ8c0VsEQQ/ay4lGlVwantG9QHW/ILMt+qNiOc=;
-        b=UneLZ8O1rAXZRo7dwbMMslUK1JrOF4hk+m/jUaF6nIW8314aMV2gAqAvSa1AwuJPG5
-         UDHfH2J3RRAmg9jzJ7+d+LAKfVox7JrUl1MtLSF/RY6ZO+ta4dMl62B8NlvhjmM7u4KP
-         duj/7ufasTKlUt4o/1ixdTQ6Bsgnk7O4NkY8fPU+nBbR5p3njsvkPqUD72gBS31zdzrN
-         3+AC9jKqd8LZqNkCwagLsRqfnlg9HpDpfJIjI4rTwLeCWf7F2DtQ6lA3ruvDswkeVMDW
-         VXPrbY2j62gVVORy33vkcbFmE0fLMVTgcTBETkOGmrBCm3KuMBhDP2QDMlxTS8LBeZOb
-         mo4A==
-X-Forwarded-Encrypted: i=1; AJvYcCWQMz2GMub6ibiwi0h2aAPLcxjWD73jFycKiGSX1VnfScJDYq8YGkPrsgk6x9rJKBLO0Au1dxoz@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz9pJGnsckFbNeuEtA7NJ/toU3UDwtx/1iSPON6vAmGOyeumAaV
-	3V5jK+0fJ0VWSjv/BSWewcG24njfVYImskAcj7QtnVz7lqU3E7/xhVqX
-X-Gm-Gg: AY/fxX4EIngm+a64fFTvlGEHNyI6y4SjtkDzgq37ZfTnlpAXxzDdVYRn2YNMXjnhIeg
-	y5Jj2aW4FY4LyWDzPc+V/utUnxhrfURPjknJpZ3fFBhN2wvq1QeAy8pCtn5wtJMxMyfUkj/AYTr
-	i5EdHuaZmweyCEocWi17OHfnwfz6LN1wg0U6++BVZzkUZWYBMHN+IFERWT/IJr4HOfYEeRXOiMR
-	IqTt2HCMnnx3S6pIG+dFsAGILy/4oG70T2n2MSAA9xa2/wtzInAtTlN7EqolFxMiAreD8MXjG1x
-	VEPZMKNY5/RhxvxiKeU0EP+5oC4Bl1FvX3Q+M1umKzJ8b+jipsIZLtw3C6UPzLQXY1Y3hgiOk++
-	+fAhL5FG8P5JQENVzGKjl0C6s26FginLIu7MtPGeOjG1zvuiqjnoEue9RJbzyrLrC9b9Ol/6j1g
-	3vWNCMU66a
-X-Google-Smtp-Source: AGHT+IHCrdtZDAP84b4wHx8q9geC3s/5+S5GqytXyOs32NpX6TX024B5zSY7ifUNYMrtppDYkMvk6Q==
-X-Received: by 2002:a17:903:fad:b0:298:639b:a64f with SMTP id d9443c01a7336-29f24d47166mr136419605ad.6.1765853686097;
-        Mon, 15 Dec 2025 18:54:46 -0800 (PST)
+        bh=IVTImU2QQNFAuOXTdHLvkqMQomKRULNxJdHbr0KDxdg=;
+        b=kLwmNYdcK0vKCDso5q1PJZYZa/Hwia1Q/Q3nAocj14BhDLhKAxlM0aY7eH+rmg+DCL
+         L+1ZZIiS0o9lS7wvErPPZ4inxmbzAe8cDsDzJV9IETKbEYn5AdjSe9C//i8bGLVvi7hn
+         VQRS15zQg8wuhQJskO70jsSAngwKPo7Hdh2wUGv7evmNluR88i/Z3QlgLmmG8/dmy7WY
+         05B949VY6Z0P/DOkr9WBTlIPi2HaWUE5404j+O9iShx2O72ZZqn/hr7Rd71EqM+t92rb
+         dCWOaw93dc06Sr4AiwPJY4ImuajRTY5ZLnu0gstHK8E/SCfEuRRSD65DNmBUrruOQFIn
+         ytDA==
+X-Forwarded-Encrypted: i=1; AJvYcCUoHqp+LUO5RPzavgZNRoUJZ0tMxgukVmBSJHHlxNV5K6FVe6DFJc/GqSdxFYirja+zjYE0f8Nd@vger.kernel.org
+X-Gm-Message-State: AOJu0YzGFjkhk+5alXFl7McQf3BBKMaXjMLc6SyhNupdW1SaW4SBWc65
+	JfIpqWNzJJ3hijh9q34+O5hM6zZiFUmEimd2Qsfr2n8x5rHCOSIZXczf
+X-Gm-Gg: AY/fxX5bN4UuCSsDcN/bHDw37+9tCZvGxKtDDQhFW8bOLSllXQBXgFcTtMmNvsTPlD+
+	XrKainQRLN/2+YY927ozqqKEt+jW3GPDcNeiRW/sDjD5lQuw4+NZAXO6IYu/d+3bQZAl3aoGRKF
+	PTn0jNtsNh93yYRf6lFA80g6Gaj62or9PXDQUnNeQirQf9/Govj8lFpU+5KpQ39+HA0EiL9cG5+
+	DWSW6dDGWDwTDJ85RL6zgRSMC/uAOLyj13aH9+U0GemjVYClSR6ie6uXJUS5RoMwstMTSR/DTMc
+	/vhsk0VF+Vyh+VEBr3MjBpMwSz2taLfxid5xQKWYRy0ebpGPuUdcq19wZ3xbwOa7hJHKICnH/dY
+	N+SRX9I14pIuarqkoIxG0nR/UWeMu4hQoXRb57OnrfV4lQMyMzs1VmdH1oEkHdRXO09lOWmXnGt
+	RSmR8zjb4y
+X-Google-Smtp-Source: AGHT+IHLNsvQdwzrBfeSHByDYIeQscxyPTYW9jk/uY54VBfW+Ug79KVvtcihVB6EuC6Db4DpraKqnA==
+X-Received: by 2002:a17:90b:3c05:b0:34c:2778:1681 with SMTP id 98e67ed59e1d1-34c27781911mr10785620a91.6.1765864695242;
+        Mon, 15 Dec 2025 21:58:15 -0800 (PST)
 Received: from [192.168.0.226] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2a094398ed0sm84118975ad.27.2025.12.15.18.54.44
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-34cd215a212sm192143a91.0.2025.12.15.21.58.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Dec 2025 18:54:45 -0800 (PST)
-Message-ID: <9c9ac17e916162d8921e4829153b350080923339.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v3 3/6] resolve_btfids: Introduce enum
- btf_id_kind
+        Mon, 15 Dec 2025 21:58:14 -0800 (PST)
+Message-ID: <1456370aa292410bdda4bff85bead8e091675f4c.camel@gmail.com>
+Subject: Re: [PATCH v8 bpf-next 04/10] libbpf: Add kind layout encoding
+ support
 From: Eduard Zingerman <eddyz87@gmail.com>
-To: Ihor Solodrai <ihor.solodrai@linux.dev>, Alexei Starovoitov
- <ast@kernel.org>,  Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko
- <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>,  Song Liu
- <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, John Fastabend	
- <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, Stanislav
- Fomichev	 <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa
- <jolsa@kernel.org>,  Andrew Morton <akpm@linux-foundation.org>, Nathan
- Chancellor <nathan@kernel.org>, Nicolas Schier	 <nsc@kernel.org>, Tejun Heo
- <tj@kernel.org>, David Vernet <void@manifault.com>,  Andrea Righi
- <arighi@nvidia.com>, Changwoo Min <changwoo@igalia.com>, Shuah Khan
- <shuah@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt	 <justinstitt@google.com>,
- Alan Maguire <alan.maguire@oracle.com>, Donglin Peng	
- <dolinux.peng@gmail.com>
-Cc: bpf@vger.kernel.org, dwarves@vger.kernel.org,
- linux-kernel@vger.kernel.org, 	linux-kbuild@vger.kernel.org
-Date: Mon, 15 Dec 2025 18:54:42 -0800
-In-Reply-To: <4daf5253-685b-4047-8e2a-06ed2c72c830@linux.dev>
-References: <20251205223046.4155870-1-ihor.solodrai@linux.dev>
-	 <20251205223046.4155870-4-ihor.solodrai@linux.dev>
-	 <386068b11e146a9dbb502f770d7e012e3dea950f.camel@gmail.com>
-	 <c857acb9-977a-49ca-a03f-ef3fd68fabae@linux.dev>
-	 <b37bbff7486f47404872017faecba43833116d61.camel@gmail.com>
-	 <4daf5253-685b-4047-8e2a-06ed2c72c830@linux.dev>
+To: Alan Maguire <alan.maguire@oracle.com>, andrii@kernel.org, ast@kernel.org
+Cc: daniel@iogearbox.net, martin.lau@linux.dev, song@kernel.org, 
+	yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org, 
+	sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, qmo@kernel.org, 
+	ihor.solodrai@linux.dev, dwarves@vger.kernel.org, bpf@vger.kernel.org, 
+	ttreyer@meta.com, mykyta.yatsenko5@gmail.com
+Date: Mon, 15 Dec 2025 21:58:11 -0800
+In-Reply-To: <20251215091730.1188790-5-alan.maguire@oracle.com>
+References: <20251215091730.1188790-1-alan.maguire@oracle.com>
+	 <20251215091730.1188790-5-alan.maguire@oracle.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 User-Agent: Evolution 3.56.2 (3.56.2-2.fc42) 
@@ -97,56 +83,56 @@ List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
-On Mon, 2025-12-15 at 18:52 -0800, Ihor Solodrai wrote:
-> On 12/15/25 6:38 PM, Eduard Zingerman wrote:
-> > On Mon, 2025-12-15 at 18:31 -0800, Ihor Solodrai wrote:
-> > > On 12/11/25 11:09 PM, Eduard Zingerman wrote:
-> > > > On Fri, 2025-12-05 at 14:30 -0800, Ihor Solodrai wrote:
-> > > > > Instead of using multiple flags, make struct btf_id tagged with a=
-n
-> > > > > enum value indicating its kind in the context of resolve_btfids.
-> > > > >=20
-> > > > > Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
-> > > > > ---
-> > > >=20
-> > > > Acked-by: Eduard Zingerman <eddyz87@gmail.com>
-> > > >=20
-> > > > (But see a question below).
-> > > >=20
-> > > > > @@ -213,14 +218,19 @@ btf_id__add(struct rb_root *root, char *nam=
-e, bool unique)
-> > > > >  			p =3D &(*p)->rb_left;
-> > > > >  		else if (cmp > 0)
-> > > > >  			p =3D &(*p)->rb_right;
-> > > > > -		else
-> > > > > -			return unique ? NULL : id;
-> > > > > +		else if (kind =3D=3D BTF_ID_KIND_SYM && id->kind =3D=3D BTF_ID=
-_KIND_SYM)
-> > > >=20
-> > > > Nit: I'd keep the 'unique' parameter alongside 'kind' and resolve t=
-his
-> > > >      condition on the function callsite.
-> > >=20
-> > > I don't like the boolean args, they're always opaque on the callsite.
-> > >=20
-> > > We want to allow duplicates for _KIND_SYM and forbid for other kinds.
-> > > Since we are passing the kind from outside, I think it makes sense to
-> > > check for this inside the function. It makes the usage simpler.
-> >=20
-> > On the contrary, the callsite knows exactly what it wants:
-> > unique or non-unique entries. Here you need additional logic
-> > to figure out the intent.
-> >=20
-> > Arguably the uniqueness is associated not with entry type,
-> > but with a particular tree the entry is added to.
-> > And that is a property of the callsite.
->=20
-> You're right that the uniqueness is associated with a tree.
-> This means we could even check the kind of the root...
->=20
-> I'm thinking maybe it's cleaner to have btf_id__add() and
-> btf_id__add_unique(). It can even be a wrapper around btf_id__add()
-> with a boolean.  wdyt?
+On Mon, 2025-12-15 at 09:17 +0000, Alan Maguire wrote:
 
-Well, sure, that would be a bit cleaner on the callsite.
-Up to you, given the number of the callsites I wouldn't bother.
+[...]
+
+> @@ -1106,6 +1137,8 @@ static struct btf *btf_new_empty(struct btf *base_b=
+tf)
+> =20
+>  	/* +1 for empty string at offset 0 */
+>  	btf->raw_size =3D sizeof(struct btf_header) + (base_btf ? 0 : 1);
+> +	if (add_kind_layout)
+> +		btf->raw_size =3D roundup(btf->raw_size, 4) + sizeof(kind_layouts);
+>  	btf->raw_data =3D calloc(1, btf->raw_size);
+>  	if (!btf->raw_data) {
+>  		free(btf);
+> @@ -1126,6 +1159,13 @@ static struct btf *btf_new_empty(struct btf *base_=
+btf)
+>  		free(btf);
+>  		return ERR_PTR(-ENOMEM);
+>  	}
+> +
+> +	if (add_kind_layout) {
+> +		hdr->kind_layout_len =3D sizeof(kind_layouts);
+> +		hdr->kind_layout_off =3D roundup(hdr->str_len, 4);
+
+btf_add_str() adjusts btf->hdr->str_len w/o moving hdr->kind_layout_off.
+This should make hdr->kind_layout_off obsolete after each string addition.
+btf_get_raw_data() does not seem to have any logic to adjust kind_layout_of=
+f.
+Is this a problem, or do I miss something?
+
+> +		btf->kind_layout =3D btf->raw_data + hdr->hdr_len + hdr->kind_layout_o=
+ff;
+> +		memcpy(btf->kind_layout, kind_layouts, sizeof(kind_layouts));
+> +	}
+>  	memcpy(btf->hdr, hdr, sizeof(*hdr));
+> =20
+>  	return btf;
+> @@ -1133,12 +1173,26 @@ static struct btf *btf_new_empty(struct btf *base=
+_btf)
+> =20
+>  struct btf *btf__new_empty(void)
+>  {
+> -	return libbpf_ptr(btf_new_empty(NULL));
+> +	LIBBPF_OPTS(btf_new_opts, opts);
+> +
+> +	return libbpf_ptr(btf_new_empty(&opts));
+
+Nit: btf_new_empty(NULL) should work fine because of OPTS_GET.
+
+>  }
+> =20
+
+[...]
