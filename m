@@ -1,241 +1,213 @@
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2400033985D;
-	Tue, 16 Dec 2025 15:00:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.177.32
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765897251; cv=fail; b=PGynUUUticJUOiGIQGgvtVsIydhlZiGg9nvxNURdn7logN/pkpNKtToMrsZBdvsmkcq13wSL4B0dmlmDg/z2bC6KR/1t67IDr4rLaUGDykyp8iT5yhAhZSOP3pSlQwlfWM5GPO87f+x919cH/S2LuVigRYuhKPvQTYOajb9fh58=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765897251; c=relaxed/simple;
-	bh=hXHyyRkIa41mAL6xXtAMzysgZShZ6MA0NhwOCniGaHg=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=g+HwObIgH6gCgRcFN399NgbotHnejnljArvhP0rDP3XHVA/PVMaYYSLk1o2/eg7Nzu0qLEVWxWDelqiq5fdo16NCTrTeKg1H2aoSbJFHj4t9yUvtIFWL3vHhYT0nWV3RlS1JUyKGNH/RW38kOxWGr4mdUhC/FQtWk3EiSRmPM1E=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=mLMQJ3bp; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=JlOHdHL9; arc=fail smtp.client-ip=205.220.177.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87DDF2494FE
+	for <dwarves@vger.kernel.org>; Tue, 16 Dec 2025 19:24:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1765913053; cv=none; b=Xsdg6i8vsQhYIx/jUfG0C2Ar1vd6qRxpIfV+Bn1rvlyLQ/YvKNpjixxP/XxCJbuKsuOuGtjxBSWfHlEeH+U9STtAZXWRti3XlLTQuRvXk9hbGFWA+9Karl7S8Tn9AbZA7eIxqMjs/oxgvEavfymKDLq+D9dGDYyyjlvUuIwH0DY=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1765913053; c=relaxed/simple;
+	bh=ooZ0QfKUBYA6shRv2CRc6MFKQQBfLYgGe2Cf4cQjEQk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ihzDJucvqHdOcWvObs78B5kGxULZKNvwDwyBuQjnO4zhnHy2B3QbmUcMKzzsSrPJ98xsAUzjJuCNt3kxBei7T/kXO5gBHNcxp7qR24WOytO0K8eKj1obS2cQPHEpcUWDYT+Tj/2FG+mzNel8hD2dtExZi1pMGeKnXvKss8+r6S8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HHUilc3/; arc=none smtp.client-ip=209.85.214.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="mLMQJ3bp";
-	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="JlOHdHL9"
-Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5BGDuKP4443586;
-	Tue, 16 Dec 2025 15:00:28 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=
-	corp-2025-04-25; bh=cExlfW6NQgW93Gz2/pVdw1tSTyku4zIhu8lRQ0ZZB+Y=; b=
-	mLMQJ3bpc69l9jTB5FP21DYOcm7x9o+63x20OWNuIyC95/gs7UfqwsriEXL2XDLW
-	1cVFN6n95XH6sANAbNmek9G1TqlnaAJ9PIleWenR/3ognJmNlM7jY2njelCrM748
-	4M0xF5CTigmjnLvhKOxGHvz+00lUyE51snm78LmXv72+JZRKiDiK3j/O2CgQ7Ptz
-	iFR1b48I3645cBsk4/pPD6hIejpkzBywvVsdG6zR9lOB6h3BgsH6TQadL72gGzC6
-	MZg3UDJcm0u2yZ4qxOY0lMBnJxmGdcswDufTDdPZOsGSVXOkglfkdNRUKuorK+0Q
-	KJC2heLVyZW1wwB8JJGhHQ==
-Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4b0xja42r8-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 16 Dec 2025 15:00:27 +0000 (GMT)
-Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 5BGESjkV022442;
-	Tue, 16 Dec 2025 15:00:27 GMT
-Received: from ph8pr06cu001.outbound.protection.outlook.com (mail-westus3azon11012024.outbound.protection.outlook.com [40.107.209.24])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 4b0xkkbqn0-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 16 Dec 2025 15:00:27 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=VtcTrJId+Mwi/fOmoEJ24OssjMcbPZ6ZLcxpGT9lZ7ft2owD5j0gQD42MDBpl7Hqn9kAAnXUdrr5tHW9wb2eZluezmYhoyqZkRqRRV8zCRhKqHLOqZmX1U2jTt9AVqAZZSXvTEaK0BQbYdRoUPwwSmvz4RtvWgkwoJHB302I/TdbnBai2NW/batsWMTnUUARkPJjfzf4pxV5p3Gy2T0M069FBv8KajPuFVoveJDSihB6GZAUuPvVrf78ankIxYAcY36uQQCygBAMwRaXYYhCR1Os3qxi1V/j/vugHNAK9b2+TqCJ49YGhawGCux0Of4r9+Nq3rXWb6P1cy5ZBFvitQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=cExlfW6NQgW93Gz2/pVdw1tSTyku4zIhu8lRQ0ZZB+Y=;
- b=JZWNPZpmIxMFsAbFntyrRGFUIZCz9GLLFFqtKQYe2mUBodH/zrdRWMDQOKd/bFllx2XeNS6FcUNFibuidrtB+pcX0EAIDRDLTSZlIh3A3w93mSHOWSjiqM+6JYCMbz1tSJTlVJce9iQbYbLu09JUi7w5THgITirzbrDNO65B0NObn4xpUTPPSVG8O2igGSbTBQtCfQSXm9jNQZXCsvKaoO+Ui2hcmk13XCVX2fyB/qrOXxWWxGqdK+vS7eByLq4bRINxObr/W5BAMBtI1c6IgwxzeuRPkmmxgrAt1FS6PESDndBaNgjqRbmg/SOtR3KSm4ePA6Wqei717BEen/sOMw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HHUilc3/"
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-2a0d6f647e2so42222195ad.1
+        for <dwarves@vger.kernel.org>; Tue, 16 Dec 2025 11:24:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=cExlfW6NQgW93Gz2/pVdw1tSTyku4zIhu8lRQ0ZZB+Y=;
- b=JlOHdHL95H8LeR9m7K1feV4TWYXkWkMkVI2qP3Hs8HZ5IBkd+tlW7ukeNXrhH51ZjBkVakh26Tnbj0u0h2C5JfNgwvKQZOzkbhq+FZEQIxAVWYCx7v/fiSZlb3tyM2yPLA5ALLbZ6KV9lqfOMg8MFjujUTBeA26qTXeVbKxlaqs=
-Received: from DS0PR10MB6271.namprd10.prod.outlook.com (2603:10b6:8:d1::15) by
- DS7PR10MB5182.namprd10.prod.outlook.com (2603:10b6:5:38f::21) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9412.13; Tue, 16 Dec 2025 15:00:21 +0000
-Received: from DS0PR10MB6271.namprd10.prod.outlook.com
- ([fe80::940b:88ca:dd2d:6b0c]) by DS0PR10MB6271.namprd10.prod.outlook.com
- ([fe80::940b:88ca:dd2d:6b0c%7]) with mapi id 15.20.9412.011; Tue, 16 Dec 2025
- 15:00:21 +0000
-Message-ID: <6f3027ee-576d-45de-9795-9a8e620292e9@oracle.com>
-Date: Tue, 16 Dec 2025 15:00:08 +0000
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v8 bpf-next 03/10] libbpf: use kind layout to compute an
- unknown kind size
-To: Eduard Zingerman <eddyz87@gmail.com>, andrii@kernel.org, ast@kernel.org
-Cc: daniel@iogearbox.net, martin.lau@linux.dev, song@kernel.org,
-        yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
-        sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, qmo@kernel.org,
-        ihor.solodrai@linux.dev, dwarves@vger.kernel.org, bpf@vger.kernel.org,
-        ttreyer@meta.com, mykyta.yatsenko5@gmail.com
-References: <20251215091730.1188790-1-alan.maguire@oracle.com>
- <20251215091730.1188790-4-alan.maguire@oracle.com>
- <9e1b071598f9c1c1adcac0d8cb2591c452a675fd.camel@gmail.com>
-Content-Language: en-GB
-From: Alan Maguire <alan.maguire@oracle.com>
-In-Reply-To: <9e1b071598f9c1c1adcac0d8cb2591c452a675fd.camel@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR5P281CA0057.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:f0::15) To DS0PR10MB6271.namprd10.prod.outlook.com
- (2603:10b6:8:d1::15)
+        d=gmail.com; s=20230601; t=1765913051; x=1766517851; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3OFLb+PyTjJ/zhmEb+HAMOWfwVfqn7xB1EKids03e+E=;
+        b=HHUilc3/j8hjkib3Xv4+9z2ZGT/Fo+U7J3Z0PmZ7yWbp3tP8kW4CYrh4eivAjg9Ap9
+         EMOV8nMDVnqZHEs9Sm3tuxvhYnN68Y3mLw7cWGvs9fIvVAL7FffPSSG/7yt+GfCtsw5L
+         IzebzNlONsRSUBBva2n6CL7JuPsNdVZ397OFerqiozpujB/w8k0v66J+Zt5MUhI3ucAb
+         SHom4ajmcEgEMxmgnnXKEIg5PDSSNRacYqK7kTmFoacy5wyZZ/XeP1qzUiFOdAvBOToD
+         4+k2vFTauL/KOYivrc/Hi8zWjToO+B5hbfX2tptTl/BIjlJKFXWl3CfgxT6CmWRYbj2M
+         P9UQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1765913051; x=1766517851;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=3OFLb+PyTjJ/zhmEb+HAMOWfwVfqn7xB1EKids03e+E=;
+        b=bclVR3M4BiE2bXOUlW1IdDNwayZPiTFyWo9+zSd971n2FG3828GW0XXDZWbxF0hfeh
+         a2bhHQ61jLwTbZ2YI5bYZoFJy+v5Mam8y5c55F2kQnKbNBafnnuyVbQ1GAvVMw9s/a1M
+         5eKIsScXBvbo+arhSOxF7HrpBVu7oPWwvdbakC60dIPsx7tJvpvr+LvhJRQiblbSH2vw
+         9KO+Pqq+HqJcar5cxx1WRoBHtX6xtKUeAoxpVPo+UD6w20XzEZMpl2laBUwSsBPovzsV
+         tBWLyonSyQEMXGBsaUR4HWBEGe6e9yFlUSzq6xc0x4fng/1+WuqeLEoHFwxwxSHWmpoB
+         ejVQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVJJGOdQYatg1Hipce2XjdLW5FIdZuVn6ZdhnTWC6tCPBbgrmbFLFjTfCOd3VSDX5zoXrQGo2sD@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywp5LZ/XZyre7OMScqi11AjYMptRsiO7mXZVQIBKEzOwSWPIJV4
+	hdCyNKx/8WP6AbxdaPrsUVyZaLhUaz4UmLnpCuzXh2EN4BXOKJ8zGGKS7Ba0/hP3Vfr1G86xPS5
+	u6XWGrW6U2JUXsJUXNRj3YS0deWaNV+M=
+X-Gm-Gg: AY/fxX7SyIE9uEF+94+GgcwCvhmxLTK7ESLgXxzgL3dnit0wE6SykUyP+l781q/xhxe
+	FyT240nUDabFX2pK6+UfljBF5KjqX1UTfuzpoorypWYdRvFYmVj4AuX53f847ehM79LgsCT415A
+	r6qHpnFtEuIYQ7E4j2SAcp6vW16aVWFq2H1UuPxmlQhd/SpDHzvRHg085m0BA+I0d5egicfNLHh
+	haMphJW5BwXhdg+HjErU0xCddK49zb6mJ+ZmUuCsfQPtLZ1SAF3h8sBXKbpPz4swzSjQTdODUyG
+	ggjC3RavNS0=
+X-Google-Smtp-Source: AGHT+IHIx8dDm+HwHh/VEesDGa9Gc+/UFGspgdGg2mVgFc0+CunoiqlWIh2QtpZgYBRdgVlPWvS6uysXNQvo4CKjptY=
+X-Received: by 2002:a17:903:2350:b0:29f:3a57:ba7a with SMTP id
+ d9443c01a7336-29f3a57cd8fmr131776335ad.19.1765913050293; Tue, 16 Dec 2025
+ 11:24:10 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS0PR10MB6271:EE_|DS7PR10MB5182:EE_
-X-MS-Office365-Filtering-Correlation-Id: 08ac25ac-9da1-46b6-a7bb-08de3cb3d57b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|366016|7416014|376014;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?a3djVENzbUIwNkxXYjdHMlV4YTVXWXoraEFjLzV1bjdwOUp6VnZHYnNZNmxm?=
- =?utf-8?B?bVYvZFVvOG91Y29yanI2WWdVd1RZdW8yYkl3NlRSRVpJNmZlb0lFVENZUmlz?=
- =?utf-8?B?LzRwbGlNNk00OWY0OGhJNyttRmd4OVJDUnlwWllDOHdac0x1K1E3all3R1hn?=
- =?utf-8?B?WkNEUGRzcXhxQWpzTFNaOHpyQ0doZVBhT0dLVkNVUjgydVJYL29zMTZvMzQ3?=
- =?utf-8?B?YU9WMEFLNlBCV1NSaGtkcEliQktNQzdlK3ZlQ1JuU0RZQ3FDcnZQTEtRalM5?=
- =?utf-8?B?dEUwRy9FVmNZNitLYTFoZzlqZWxZellUNHd6MnBZVHpiTXNWbHNLOEVsc0VN?=
- =?utf-8?B?OWRSdEIwZXdvd3EvZ0c2cjU3R25YMWNuQ2N0MURBQmRva0lobU9zT1NwbWpn?=
- =?utf-8?B?U25vRG43QXppNUdvdFlYTjNsWDFWaG8rQ0phdnRGa0JDRnFuMjRpUVdwN21I?=
- =?utf-8?B?VHdEdlZJVU8ySlhjRlB0ZEppVmZ0SHBBbjlmbGdTRVJ0T1RxKytEcjluYjNx?=
- =?utf-8?B?M0MwL0VHN2MzWVl4UFBVaGdHN2lxakg1YnYrZld6L0VuQTRFZ243NjFtbURY?=
- =?utf-8?B?c0hSaU9kZUpHTGVHYURCSjVQMStkSFVDT3hyTHRIaGZJQmRMYStQR29YTHVG?=
- =?utf-8?B?KzJIMFZ1dGdLYUNGMGJ3RUNiNEZQNXhZTTVMWVNRZjlNcnFMMjlZanY3T0Ns?=
- =?utf-8?B?c3RvMmx0U3lMV0lvdFJYbk5oMzEwL3M2MlF5Tnp6QjI5Q2FGa2NMenVSMkpX?=
- =?utf-8?B?aHl0bEFBSHVTRW9FdVFKc2txdHpVcjFtbnIvZFl1anZEV2xvUC9OVmg2R3Y5?=
- =?utf-8?B?MEd5ZjM4aGhnaUd0YWVHYkQrcjhpVkxKbmJleGRiZ1dHQWQyZWRnQysyNnhz?=
- =?utf-8?B?MUo4MGZTYWtYQnd4SnR6TUFzTnlqbjBQdXllYVhoODJGNm1JZnFhUEhPM0ov?=
- =?utf-8?B?STFJN2VoTDVZdmFpK3NEK3QvUk5LRmlPOTVTTThJTnNuN1gwUVJxZElFa0Jl?=
- =?utf-8?B?N2NsRHBLUUVpVEVEc0RWZlNQMFdQMXB3dDNiazc1WFVsMUtEVGFKbzdINHBX?=
- =?utf-8?B?T1hucWFyMDZRWDl0ckl0RkdwcUNaZWlMeDdBU0NoajNjQytQa3dBWnh6RHFM?=
- =?utf-8?B?dUlGNllPbWN4eUdqVzZzMnc1YjgrZUt1YXI3MGcyK3J4YzZwRHRsMmRlK0M4?=
- =?utf-8?B?WFRzVGZDTWFlbVB5anExeVpZdk1RcGk0Z3ZaOWRvc0lkVXJnQTBCRXVFamVK?=
- =?utf-8?B?a3V1TVRnRFZaWVdwZWFsdGxFaTBlNHRsSWpBOSt4WTRCc2gyS1UzcVc4Z0ZV?=
- =?utf-8?B?c1dBNlFKMVRRa0IxRzVkTVdxTXVrc2JmRFloWFgvRFI2MHJOYWFnTWJHQ0Er?=
- =?utf-8?B?VmJiWStBZnk0SzZLUGZDeXFzeEkxdDBJVnE4UHFQVjNyMkxBVGhvdTJrMU9R?=
- =?utf-8?B?OHZ6b2JGN3JKSFR3aEtrVGhVWkdwYW9iSnV5SW16eVFzWEREaVZwdkVsNG9n?=
- =?utf-8?B?VGsxT1JzRVc1T09xSkhmZUdJbUt0UDNYdGlob1dLakVrVzB3U3k1czZISEVz?=
- =?utf-8?B?ZkhaQ2E1UGo1OHdpTDJDSFFRUUs2UjBMdEZpcXhWVGdoNEd1TEhjb3BDN3ph?=
- =?utf-8?B?YlBwSVZmMm1UL3NXTHZUbER2UDB3SkhCcmFZZEVzL0VHaGNYSVo0eUtYVzQz?=
- =?utf-8?B?MktGOHh0ZWJGRDBVaTVsY09nR1VvQnhuYU1sdDFKWWZFVUt2MFRSbkgxNWhJ?=
- =?utf-8?B?ZUNGaTZpR3NlcmFETmtnRkRNNUVBUFhPbDMwcDZVZTVSWVJnU2dMYXJNVjJN?=
- =?utf-8?B?Q2dyeGhTc21QTzZDMTNKMjEyRDNEcURrankzK1QxM2xmZ3c3TVVad0hneW9F?=
- =?utf-8?B?U0RxSDRmckQvcnFkRjhzNk1kYWF0c3ZSbGh6YjZNSFV6MUR5TVhZbUN6L2hn?=
- =?utf-8?Q?SOH5ioFy5u1FRTVTBqU8y669Cca0DZxT?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR10MB6271.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(7416014)(376014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?azVLMjREaTlmRVdLRER0eS9vSytnRGkzOFJCb1E4SFBNeWJ4OTlpdVdML0to?=
- =?utf-8?B?Z1RmZG5EUVpXbG9oTHlZOWxHY01YUThKRzE5blJ3dGhNUWNJVmxxOGFZK3J2?=
- =?utf-8?B?YkVGcmdxZGJVbkZjZU1URE1IdFhKZ2VJVWlLbDZmdm9tYklrcG9aQU0zYUVZ?=
- =?utf-8?B?ZVQ5OUt5Vm5XSC9KNHA5OXZPd0cvQU5uakYrV254c1NNMjB0WE1sanZyTUZr?=
- =?utf-8?B?cTluRFRxL3Q5T0xsN09CdERneE5MQmVkM2JsTEorNkcrVXd6Mjl5NGR0elUr?=
- =?utf-8?B?Q1BRbElwTG1hbXVZWWVFdGZEZXNSczF6QXhpcW1McmR2a1N2cFdONGZvR3VE?=
- =?utf-8?B?QlNnSkdsTEp1WW04T2poZXY0UWlsdC80ckRTbk4weVg5Q1M5QkJ1V3M3ek9W?=
- =?utf-8?B?WWhBQkdteHo5VlhYa0dRVm9zVTQ3dGlONjFvL1JpN21KL1U0RWl4Q0xrdERU?=
- =?utf-8?B?ZVhFRFM1aUt6bHBNRWV3MG0wY0pmL1EyNWorWDZoRHpWcCtRY2drMmFCWXhi?=
- =?utf-8?B?eko2TXY1N1E4ZGtpSHZJK1FUeG9VVE1YNVlSNVlwTDNRbzhOdGpGa3FVV0hj?=
- =?utf-8?B?ZWtQOWY0ak1OcHQ1NU5OUVpWZXJ4UUxaK0VvOHd3S3cvSExxcHpjTnN2bGxC?=
- =?utf-8?B?bUgvVkVTR2Q1VGh2ajFkL0trUitsbnlUdDlRZDhZNHNpN2xOMloxOUFhbks5?=
- =?utf-8?B?dENkMGdLekJxd09GSngrNDgvUFpJc3cwbDVlaDNLajFXS29PZVRxOExqc0d4?=
- =?utf-8?B?TjJuZzNvY2JMR0ZncmVWb2l3dE52bHNFTTFxeUdZbk5UWktQZFlNcWU0ck1Z?=
- =?utf-8?B?a2thR2hZS2FqYU0xcHZRQVNpMDZaOEtKdnZHaGJydXIzZHcvZnUyQnRjUzhu?=
- =?utf-8?B?bkpBS2l6bTN6c1Z1dys2Zk8rSzgwOWFTNzhvL05oaE5pTk5Xak5mWW1OZXlX?=
- =?utf-8?B?SGhWUW11UVFmY0RZNGVCWTBQYzVGa3JMTWhyTDhSQVJpSzVRM01kb1MwQmpt?=
- =?utf-8?B?eGxNZFUrMFE1T1dzRlZkK0tUU3duRlFuU1pMcUVBNjVLUWxTaEFKL1k5bkhs?=
- =?utf-8?B?L2I5NXFPZHU1aUR2dEtucEtnMEIxTi92citSQkxZL0d0ak9EenlZMkdIN2xn?=
- =?utf-8?B?TEkvUkF3YXltQTBmZlA1WVhvSm1ZWERsTWx6NGE0bnZCTXVZZzUzdERNZXlG?=
- =?utf-8?B?bUtmamVaVFNGSE9YK1RIOVRnazlWSWRMSFFpQ1JoOFc0clJwWHNuaWtrcjE1?=
- =?utf-8?B?OHFoT1NTOFl6d0lISWJ3YTRpLzNVamhqbnhML3poT0tUY05id1hQYnJqU1Ry?=
- =?utf-8?B?aThVUUVNV2RyWFNpODdzMUVXWlhDTUlpajVTNnZSS0VGd1JaVHNjOGQvRG03?=
- =?utf-8?B?QnFtaHJNYVRrRDRCNkxEYkVodUxTRVRzNjZtQTc5T1pIdzNGWkY4eGN0cFhL?=
- =?utf-8?B?Q21HcmpTd2tDUUM2TTBtZkNPY0Mxa2xFTTlKYWVlM1VMMVQ5azFLb2N1dzAw?=
- =?utf-8?B?b09OVHQvQlhPZzVNLzIzRG52R1N2YnhGTDBYYVhYMmwwOWpvOFFwVktlZG9S?=
- =?utf-8?B?Zk1wMVUwQ1BZQlozNW5rTDhIaWRkRWkzUXdCM1NObmtHTk1xUjlSYXI3VldS?=
- =?utf-8?B?bzNuakZnTElzTk0xYS9Dc0R6OTYzM05RaUtzMlRnQUt2SGNkYlhPZ3NFZWNs?=
- =?utf-8?B?ZlFTSHh2ZStKU0Z2bVVGUGJwNEpjOWJPSENyTklkOHRaSUxDQkpqMitUdFpM?=
- =?utf-8?B?UU5xNkhGY2xFZEZsY0haVTRzMXgzRmpnNG1GNmRDOFZjUFFIbVRTbkI1eHor?=
- =?utf-8?B?eDF3NDIrdzA0Z1pRZVRFcE9qRy9oNlFyS21hYjhKSUNRWHZQNGpybGkwdGZH?=
- =?utf-8?B?NWlvckRTeXhaUm43MEhhQ0lPUG1ZUUhCUWZRemt6OS8xdTJBUC9Eb2RSQlBQ?=
- =?utf-8?B?Y2kzdTZrMW5QbVBiK0pFRExtMXA4SUV6dXBhRkpPdnFJVnNNMlVDTTBnN2h4?=
- =?utf-8?B?VTdNekZpRTVqOXBvVnZtczhhTUdUR05TV0U4ZXgreGZsWmFtajNPVklRVEg5?=
- =?utf-8?B?UzZEY0xoTUdyYTdYeFBuNDZuc3B0elJvUWZHMERSYjM4TzZRSDJ3eDZFeTFn?=
- =?utf-8?B?QUswcko2cVZ6UERFaHJodVVZb0p2VU5rNVJ6cWRyRnJXbGZtYnZScUI3NEN4?=
- =?utf-8?B?REE9PQ==?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
-	3TNERpN7u++LBaOdPZb1hBqiypqj3hfLViuT8UoHH8RwOXjN2DjJ1bCCnkDyxjd8930IR5NIoA1N/uGjInD6gvgEej5AhIdFzbFmiyZeCE1DzXvBk5Lr5HCOArhRurHMJXVTU6/ai5vV5eWr8Ar7wVJOI7sn/xQW62rBqYCd2+qQ540DXBIJs4gumVJuG5KS7iA/CLGKrG131iMSYtIExw8qq8qDBihLIzqYfTjCsmWyxLQOEpRjkyOUZUKmmxsLrWjfkvuiu3O6+RpKvZiLrISI8ShBzlNlFWn80KDQiDHj+w9SPXCxwQKq6HMrx9iWbPj0YVeHDrBnCTwINGX/Ye82PkRKv8mzGmVCEntpvGMVPE5ZMw9SBV/JCnpFcCYCAubT1ueO4v/odA5u2uNw8bHUdZOhCKG0o3dOMxpGUt7j9c/yaIF6AqoGaEtwTneyxlDTquz/0XLiJC+Cw0cDU4xq4ubcfoiSC2ZFSWo32L4RClfzvbg2XKzmpl1SotyMZNmvBPrQ0LA+5+CWNaOX/+mHW6zkCxGRRBQbIS2VdXJuSD++bhRcbXTlcZgtz6aYefVGgoWPMsKtPiElFOvvOwkzs4ORKOa49Z0YwwxOzRI=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 08ac25ac-9da1-46b6-a7bb-08de3cb3d57b
-X-MS-Exchange-CrossTenant-AuthSource: DS0PR10MB6271.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Dec 2025 15:00:21.5226
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: AX/NiaQz+Awhgml0ZrEyRO54e+Iub28OhsepcZloMP4+wjqqaQhMPVm3JqhJXKgICk1X5s6obj430Ic+7X0fGw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR10MB5182
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2025-12-16_02,2025-12-16_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 suspectscore=0 adultscore=0
- mlxscore=0 malwarescore=0 mlxlogscore=880 phishscore=0 spamscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2510240000
- definitions=main-2512160128
-X-Authority-Analysis: v=2.4 cv=TbWbdBQh c=1 sm=1 tr=0 ts=6941740b b=1 cx=c_pps
- a=e1sVV491RgrpLwSTMOnk8w==:117 a=e1sVV491RgrpLwSTMOnk8w==:17
- a=6eWqkTHjU83fiwn7nKZWdM+Sl24=:19 a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19
- a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
- a=wP3pNCr1ah4A:10 a=GoEa3M9JfhUA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=ckNEw6ko5CaXkXk6fd0A:9 a=QEXdDO2ut3YA:10 cc=ntf awl=host:13654
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMjE2MDEyOCBTYWx0ZWRfXwXhXTwX3fvJq
- gmBJ/zziG9z5F3NYJvNhtgKrMkkTyJmeP7uJYpsWC8PwzyJFECgD8cPVtLmBrIJ6PTIAvggL4uS
- CXjyi0un5VwZ6vMTysLTq/hA7PhDSWHwffAaNglsjzWnVdL0cXx5A5aIutaFbrDOLjosngQs7rL
- X6O7vd6ZK3FGESDXJm4SgOOIJ9hgOQqyqSPuTGwhxFdcd7EjSwiuFChRm9HIW15/ltinY6PTkuB
- 0pooTB96pvCusdPcneQlsjnz17F5vBhXqnPnhLaBky1Vbndr5xsY3tQHOXF2HQpR95F2Y7ve89z
- JyUl1h+UQ/MdxaOCDvR1u4IKlLe2D95hHx8pz9imHY+kSFuWl8ZHBASmU/ji3ym+PNUM9LoTvqI
- QBxf11+8/tmjQF0VgRuq5IrmLKC+3kZUaRKxeEZua3ZgyPOvLeI=
-X-Proofpoint-ORIG-GUID: iaZBgPP7N-Q64jtIoaFRSVH2-1Qojndc
-X-Proofpoint-GUID: iaZBgPP7N-Q64jtIoaFRSVH2-1Qojndc
+References: <20251215091730.1188790-1-alan.maguire@oracle.com> <20251215091730.1188790-2-alan.maguire@oracle.com>
+In-Reply-To: <20251215091730.1188790-2-alan.maguire@oracle.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Tue, 16 Dec 2025 11:23:58 -0800
+X-Gm-Features: AQt7F2oNfULt3jn1QW5lR7kfBJeeWWTmPXgFNySNwWJJijvNSYos0_6ZraaCyV8
+Message-ID: <CAEf4Bzaw6KRU2yDbawOe+eusCjCwvg0FwhkpvGA3HE=gC=ZLbQ@mail.gmail.com>
+Subject: Re: [PATCH v8 bpf-next 01/10] btf: add kind layout encoding to UAPI
+To: Alan Maguire <alan.maguire@oracle.com>
+Cc: andrii@kernel.org, ast@kernel.org, daniel@iogearbox.net, 
+	martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org, 
+	yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org, 
+	sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, qmo@kernel.org, 
+	ihor.solodrai@linux.dev, dwarves@vger.kernel.org, bpf@vger.kernel.org, 
+	ttreyer@meta.com, mykyta.yatsenko5@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 16/12/2025 06:07, Eduard Zingerman wrote:
-> On Mon, 2025-12-15 at 09:17 +0000, Alan Maguire wrote:
-> 
-> [...]
-> 
->> @@ -395,8 +416,7 @@ static int btf_type_size(const struct btf_type *t)
->>  	case BTF_KIND_DECL_TAG:
->>  		return base_size + sizeof(struct btf_decl_tag);
->>  	default:
->> -		pr_debug("Unsupported BTF_KIND:%u\n", btf_kind(t));
->> -		return -EINVAL;
->> +		return btf_type_size_unknown(btf, t);
->>  	}
->>  }
->>  
-> 
-> That's a matter of personal preference, of-course, but it seems to me
-> that using `kind_layouts` table from your next patch for size
-> computation for all kinds would be a bit more elegant.
-> 
-> Also, a question, should BTF validation check sizes for known kinds
-> and reject kind layout sections if those sizes differ from expected?
+On Mon, Dec 15, 2025 at 1:18=E2=80=AFAM Alan Maguire <alan.maguire@oracle.c=
+om> wrote:
 >
+> BTF kind layouts provide information to parse BTF kinds. By separating
+> parsing BTF from using all the information it provides, we allow BTF
+> to encode new features even if they cannot be used by readers. This
+> will be helpful in particular for cases where older tools are used
+> to parse newer BTF with kinds the older tools do not recognize;
+> the BTF can still be parsed in such cases using kind layout.
+>
+> The intent is to support encoding of kind layouts optionally so that
+> tools like pahole can add this information. For each kind, we record
+>
+> - length of singular element following struct btf_type
+> - length of each of the btf_vlen() elements following
+>
+> The ideas here were discussed at [1], [2]; hence
+>
+> Suggested-by: Andrii Nakryiko <andrii@kernel.org>
+> Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+>
+> [1] https://lore.kernel.org/bpf/CAEf4BzYjWHRdNNw4B=3DeOXOs_ONrDwrgX4bn=3D=
+Nuc1g8JPFC34MA@mail.gmail.com/
+> [2] https://lore.kernel.org/bpf/20230531201936.1992188-1-alan.maguire@ora=
+cle.com/
+> ---
+>  include/uapi/linux/btf.h       | 11 +++++++++++
+>  tools/include/uapi/linux/btf.h | 11 +++++++++++
+>  2 files changed, 22 insertions(+)
+>
+> diff --git a/include/uapi/linux/btf.h b/include/uapi/linux/btf.h
+> index 266d4ffa6c07..c1854a1c7b38 100644
+> --- a/include/uapi/linux/btf.h
+> +++ b/include/uapi/linux/btf.h
+> @@ -8,6 +8,15 @@
+>  #define BTF_MAGIC      0xeB9F
+>  #define BTF_VERSION    1
+>
+> +/*
+> + * kind layout section consists of a struct btf_kind_layout for each kno=
+wn
+> + * kind at BTF encoding time.
+> + */
+> +struct btf_kind_layout {
+> +       __u8 info_sz;           /* size of singular element after btf_typ=
+e */
+> +       __u8 elem_sz;           /* size of each of btf_vlen(t) elements *=
+/
 
-yeah, I'd say we'd need your second suggestion for the first to be safe,
-and it seems worthwhile doing both I think. Thanks!
- 
-> [...]
+So Eduard pointed out that at some point we discussed having a name of
+a kind (i.e., "struct", "typedef", etc). By now I have no recollection
+what were the arguments, do you remember? I'm not sure how I feel now
+about having extra 4 bytes per kind, but that's not really a lot of
+data (20*4 =3D 80 bytes added), so might as well add it, I suppose?
 
+I think we were also discussing having flags per kind to designate
+some extra semantics, where applicable. Again, don't remember
+arguments for or against, but one case where I think this would be
+very beneficial is when we add something like type_tag, which is
+inevitably used from "normal" struct and will be almost inevitable in
+normal vmlinux BTF. Think about it, we have some field which will be
+CONST -> PTR -> TYPE_TAG -> STRUCT. That TYPE_TAG shouldn't just
+totally break (old) bpftool's dump, as it really can be easily ignored
+**if we know TYPE_TAG can be ignored and it is just a reference
+type**. That reference type means that there is another type pointed
+to using struct btf_type::type field (instead of that field being a
+size).
+
+So I think it would be nice to encode this as a flag that says a) kind
+can be ignored without compromising type integrity (i.e., memory
+layout is preserved) which will be true for all kinds of modifier
+kinds (const/volatile/restrict/type_tag, even for typedef that should
+be true) and b) kind is reference type, so struct btf_type::type is a
+"pointer" to a valid other underlying type.
+
+Thoughts?
+
+> +};
+> +
+>  struct btf_header {
+>         __u16   magic;
+>         __u8    version;
+> @@ -19,6 +28,8 @@ struct btf_header {
+>         __u32   type_len;       /* length of type section       */
+>         __u32   str_off;        /* offset of string section     */
+>         __u32   str_len;        /* length of string section     */
+> +       __u32   kind_layout_off;/* offset of kind layout section */
+> +       __u32   kind_layout_len;/* length of kind layout section */
+
+nit: kind_layout is a bit mouthful, have you considered "descr" (for
+description/descriptor) or just "layout" as a name designator?
+
+
+
+>  };
+>
+>  /* Max # of type identifier */
+> diff --git a/tools/include/uapi/linux/btf.h b/tools/include/uapi/linux/bt=
+f.h
+> index 266d4ffa6c07..c1854a1c7b38 100644
+> --- a/tools/include/uapi/linux/btf.h
+> +++ b/tools/include/uapi/linux/btf.h
+> @@ -8,6 +8,15 @@
+>  #define BTF_MAGIC      0xeB9F
+>  #define BTF_VERSION    1
+>
+> +/*
+> + * kind layout section consists of a struct btf_kind_layout for each kno=
+wn
+> + * kind at BTF encoding time.
+> + */
+> +struct btf_kind_layout {
+> +       __u8 info_sz;           /* size of singular element after btf_typ=
+e */
+> +       __u8 elem_sz;           /* size of each of btf_vlen(t) elements *=
+/
+> +};
+> +
+>  struct btf_header {
+>         __u16   magic;
+>         __u8    version;
+> @@ -19,6 +28,8 @@ struct btf_header {
+>         __u32   type_len;       /* length of type section       */
+>         __u32   str_off;        /* offset of string section     */
+>         __u32   str_len;        /* length of string section     */
+> +       __u32   kind_layout_off;/* offset of kind layout section */
+> +       __u32   kind_layout_len;/* length of kind layout section */
+>  };
+>
+>  /* Max # of type identifier */
+> --
+> 2.39.3
+>
