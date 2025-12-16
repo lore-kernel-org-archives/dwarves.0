@@ -1,111 +1,194 @@
-Received: from out-174.mta0.migadu.com (out-174.mta0.migadu.com [91.218.175.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A24732BEC41
-	for <dwarves@vger.kernel.org>; Tue, 16 Dec 2025 20:42:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70928139579
+	for <dwarves@vger.kernel.org>; Tue, 16 Dec 2025 21:04:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765917733; cv=none; b=UEUdFq8aPuVsOAUn+00IudUQj+uwm5bk2MTVMs0TFS/oPD+4BW+KA9aoXEbVQtB93thEgtCJuy1I8PCcX+8tXCCb2xE8XmQNuC7X8tquu3fGz4b4r/H2GJY6X3dFYeF7nRAYX1Mau+zvuFGHWrq4l6unDWOIJt/oqbBjYS64JX0=
+	t=1765919093; cv=none; b=Ze9rh7RtSOFAG/y0O8deNH1l+OIBLYGJP+mMiNws698DJmFMSKhaz3hPJJtM+RJe6lHqdT8hBSOGPiebG4rt5Tl5Lz7u7Lk6GucoQRPERUnK8NhYKcB4CKNJgp4RHmV86K6v2CLS5ftkNB/wS2rrOg7I4eQguCAGhVssGOou9ig=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765917733; c=relaxed/simple;
-	bh=kYRZPQVIXaPZPvBqjFrVHSe3OQvXSms9kx6HAz+Sc6o=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=nNDe2GWAHxcQqlWQ028wcfM0eKstWYnOmfDD0+/1CRGCjuRSyFQPBLG4rZWboWLo9BVjLrubPOeS8wysWdxARrQpJaj47spYyCXkj5Jmu/zOnDY1SEt5oM1mLULJ4I8WMoi1v4kFFL0bXVlaOIrhbNqSBE2W1RLJlgFFBR6DDa4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=EOSBR9jD; arc=none smtp.client-ip=91.218.175.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1765919093; c=relaxed/simple;
+	bh=FDeqb4YVxKH/kBQ78qSpKhuU3RRP/gsIDLhtpIGKkso=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=cRkYYaxMyVw8lsVEvQFQtPVYb0fNISzIrxCTPUYb5Q6DXRpD5b5gVh/pic7LQjM6+ucL2BTzgvmWqOXAQACOt0YPl2d0ks+FWc8m2KCNglQuCyHp+wqZCSCU2RxIe8qFAYyzVZPU89LnA92geRfLwLdnGoTalwkIKkgx4Hu5BR8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FUoDVYSI; arc=none smtp.client-ip=209.85.216.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="EOSBR9jD"
-Message-ID: <cecb6351-ea9a-4f8a-863a-82c9ef02f012@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1765917714;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=NI/FBGNehU9YUSYgyB/T6XjjzQJetB/bgxtbGtuRsyA=;
-	b=EOSBR9jDAYi3b1D0UmXpcjapzKWvFni01k2gkpJj7cMWZ5nKYil9hpl5OoaBz8zFEiJ6Pu
-	FficCWLudBTHev9OhiQRCHRtdJD0My8wh2lpkccQ+0NAJGbkW5zDVSrXoMQJPlKnCJqNIp
-	mQpWb8uvFo6YjSIG5D406m+IA6x0XIg=
-Date: Tue, 16 Dec 2025 12:41:44 -0800
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FUoDVYSI"
+Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-34c5f0222b0so2634498a91.3
+        for <dwarves@vger.kernel.org>; Tue, 16 Dec 2025 13:04:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1765919091; x=1766523891; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EIXd/dFGyEZDpmc4f1kvbOIwtnfZwt/kYFCBECgbqUI=;
+        b=FUoDVYSIFvWWLCn+Iu80vXvllnLbyEMu0e17MJk4oXbZeIfOK9jXrUTSLKvvXn/pjI
+         +bFD/lY9bbh3OhmdL337Tv7fE4/UA2gsTkygfyo8RG/HotXP6A1kvrH8IHkWHWB+pwwp
+         79SicwiOzO3clw56ixWEkn6GP3rS1jYKA0VwBLa/0k4j6KrPtcCFpabCpwlev740Zsc/
+         LsKHxXDPDXUgjIkmmb1kruxh4vtanv0EHLsNZfXrPclxdCbSWwpKlT2b2943sPQ43rw3
+         Fp1uDOKFpc71oJ/BvUiabGtmJ9OvUFTfdIs4QvE3FUKAZRcZecqJ/q62tm5pCnOox30f
+         41Bg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1765919091; x=1766523891;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=EIXd/dFGyEZDpmc4f1kvbOIwtnfZwt/kYFCBECgbqUI=;
+        b=Oct9JnGXr7cKbYAbDq6g+Ne2DBGWBVCW3K5tJsFb8O8z6qOzkD3+KcJBcp0s57yoHA
+         0vFnnuGX6CU6wolGrS9k3JIAFxAgOi7jwy1GZ3nzQLCrY0BodDPUOmVnIOVm90JodEx6
+         Co/HML6adNraJzWb8YaE8x3m+tsOOTvt8PZnspF5i+Kc1B0Wu6CsWMqwjcv9CWRj/NKG
+         yhS/E1khyL9WHL+jtqahNJ3Fv0e5kZUF6SPtJsan7Hex51+KGpll3htYOVoSTpBJpV2M
+         2oLmH9IFo2xr7p//200pPLN1sMgDALjknn1UKZ2MB1zQ2yw6oamLfAK09W48zmbq7p2A
+         oH5g==
+X-Forwarded-Encrypted: i=1; AJvYcCWeoGYGrWkSLNJyoyT1gFALdfQBYrg+Z2gKhj0JHvzOTWQxYpV2hjfNmTN5aEkrSW8YFFEqAnPJ@vger.kernel.org
+X-Gm-Message-State: AOJu0YytNFRErrAhC0NamvpQdOrAtqJZNX0BUHdGVrbWoEFvAVBFa6gO
+	cZhr9OBd0aBO0N+XI0AnxyHuC0hqPm9UQE8uMh2gSWw7nPSk8naUsjW67PflEkQwd7/N0CYFwn7
+	u/1g13h4JS8k53e3ZyZm3UpXkMJ6nsL8=
+X-Gm-Gg: AY/fxX6Y0abzNecINpEF+jK8yXMSalxXxK8S5syAGRgkD2N+DnU0/6Jv9XqstzkbujJ
+	ibUsKDFaQx7P7PlI8iKOfjrof2xQgHYZDcCFu5j4Vg2xe8FO+X2cmWScTLVWKAH9CSMUJ8FOgC3
+	f50VgLqqNHt7jQdoSJPKOMI7zp2Tp+p701PRwTwxNPaO04t16uWwPnrmEH+LH4doImYE/q6TrFC
+	JyLLWiJQbJth86L8MOMXLlBOr1WgDKr3di6GDus/AJglVRvNwvATbtaJRwePsE+IzyBJ2dVx1fw
+	CTQAlU/oSEkwFeUR9byntg==
+X-Google-Smtp-Source: AGHT+IFMIwh21ikhDKMfcfZPq4afb5cjuBNy7xli0B2P36QEj2XlMh+oD2CeTSCGleHnEUkf/OoKwXOajg43jVFbqkg=
+X-Received: by 2002:a17:90b:2891:b0:32b:9774:d340 with SMTP id
+ 98e67ed59e1d1-34abd78d3a2mr13349984a91.33.1765919090552; Tue, 16 Dec 2025
+ 13:04:50 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v2 4/4] resolve_btfids: change in-place update
- with raw binary output
-To: kernel test robot <lkp@intel.com>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
- Nicolas Schier <nicolas.schier@linux.dev>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Alan Maguire <alan.maguire@oracle.com>, Donglin Peng <dolinux.peng@gmail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, bpf@vger.kernel.org,
- dwarves@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kbuild@vger.kernel.org
-References: <20251127185242.3954132-5-ihor.solodrai@linux.dev>
- <202512061213.85NHVN2W-lkp@intel.com>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
-In-Reply-To: <202512061213.85NHVN2W-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+References: <20251215091730.1188790-1-alan.maguire@oracle.com> <20251215091730.1188790-5-alan.maguire@oracle.com>
+In-Reply-To: <20251215091730.1188790-5-alan.maguire@oracle.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Tue, 16 Dec 2025 13:04:37 -0800
+X-Gm-Features: AQt7F2qWwrDEBXsFsq1OiDW_11tfqC-ZuahsYEDLv8_rqpT-CV-RT2EpvUPVwIQ
+Message-ID: <CAEf4BzZuFB6zvMjdqKDumUAT4vr5MeA3LBqTh5xRZmAQ5KC10g@mail.gmail.com>
+Subject: Re: [PATCH v8 bpf-next 04/10] libbpf: Add kind layout encoding support
+To: Alan Maguire <alan.maguire@oracle.com>
+Cc: andrii@kernel.org, ast@kernel.org, daniel@iogearbox.net, 
+	martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org, 
+	yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org, 
+	sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, qmo@kernel.org, 
+	ihor.solodrai@linux.dev, dwarves@vger.kernel.org, bpf@vger.kernel.org, 
+	ttreyer@meta.com, mykyta.yatsenko5@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 12/5/25 9:08 PM, kernel test robot wrote:
-> Hi Ihor,
-> 
-> kernel test robot noticed the following build errors:
-> 
-> [auto build test ERROR on bpf-next/master]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Ihor-Solodrai/resolve_btfids-rename-object-btf-field-to-btf_path/20251128-025645
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-> patch link:    https://lore.kernel.org/r/20251127185242.3954132-5-ihor.solodrai%40linux.dev
-> patch subject: [PATCH bpf-next v2 4/4] resolve_btfids: change in-place update with raw binary output
-> config: arm64-randconfig-004-20251205 (https://download.01.org/0day-ci/archive/20251206/202512061213.85NHVN2W-lkp@intel.com/config)
-> compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 14bf95b06a18b9b59c89601cbc0e5a6f2176b118)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251206/202512061213.85NHVN2W-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202512061213.85NHVN2W-lkp@intel.com/
-> 
-> All errors (new ones prefixed by >>):
-> 
->>> ld.lld: error: .tmp_vmlinux1.btf.o is incompatible with aarch64elf
-> 
+On Mon, Dec 15, 2025 at 1:18=E2=80=AFAM Alan Maguire <alan.maguire@oracle.c=
+om> wrote:
+>
+> Support encoding of BTF kind layout data via btf__new_empty_opts().
+>
+> Current supported opts are base_btf and add_kind_layout.
+>
+> Kind layout information is maintained in btf.c in the
+> kind_layouts[] array; when BTF is created with the
+> add_kind_layout option it represents the current view
+> of supported BTF kinds.
+>
+> Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+> ---
+>  tools/lib/bpf/btf.c      | 60 ++++++++++++++++++++++++++++++++++++++--
+>  tools/lib/bpf/btf.h      | 20 ++++++++++++++
+>  tools/lib/bpf/libbpf.map |  1 +
+>  3 files changed, 78 insertions(+), 3 deletions(-)
+>
+> diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
+> index 3936ee04a46a..589a9632a630 100644
+> --- a/tools/lib/bpf/btf.c
+> +++ b/tools/lib/bpf/btf.c
+> @@ -29,6 +29,35 @@
+>
+>  static struct btf_type btf_void;
+>
+> +/* Describe how kinds are laid out; some have a singular element followi=
+ng the "struct btf_type",
+> + * some have BTF_INFO_VLEN(t->info) elements.  Specify sizes for both.  =
+Flags are currently unused.
+> + * Kind layout can be optionally added to the BTF representation in a de=
+dicated section to
+> + * facilitate parsing.  New kinds must be added here.
+> + */
+> +struct btf_kind_layout kind_layouts[NR_BTF_KINDS] =3D {
 
-I was able to reproduce this error.
+static?
 
-It happens only when cross-compiling with LLVM (which we don't do on
-BPF CI, btw) because of this line in gen-btf.sh:
+> +/*     singular element size           vlen element(s) size */
+> +{      0,                              0                               }=
+, /* _UNKN */
 
-	echo "" | ${CC} -c -x c -o ${btf_data} -
+use
 
-The purpose of this command is to produce an "empty" linkable ELF
-file. The .BTF section is objcopied into it, and then it's linked
-into the vmlinux.
+[BTF_KIND_UNKN] =3D { 0, 0 },
+[BTF_KIND_INT] =3D { sizeof(__u32), 0 },
+and so on
 
-Before the changes in this patch, the "empty" ELF was produced with
-objcopy --strip-all on .tmp_vmlinux1, which is a slower operation.
+it's succinct and self-descriptive
 
-ld.lld fails, because ${CC} without the flags is just clang in this
-case, and it emits an ELF for host arch, which of course can't be
-linked. It can be fixed with:
+[...]
 
-	echo "" | ${CC} ${CLANG_FLAGS} -c -x c -o ${btf_data} -
+>  static struct btf *btf_new(const void *data, __u32 size, struct btf *bas=
+e_btf, bool is_mmap)
+> diff --git a/tools/lib/bpf/btf.h b/tools/lib/bpf/btf.h
+> index cc01494d6210..dcc166834937 100644
+> --- a/tools/lib/bpf/btf.h
+> +++ b/tools/lib/bpf/btf.h
+> @@ -109,6 +109,26 @@ LIBBPF_API struct btf *btf__new_empty(void);
+>   */
+>  LIBBPF_API struct btf *btf__new_empty_split(struct btf *base_btf);
+>
+> +struct btf_new_opts {
+> +       size_t sz;
+> +       struct btf *base_btf;   /* optional base BTF */
+> +       bool add_kind_layout;   /* add BTF kind layout information */
 
-${CLANG_FLAGS} contains a correct clang --target when cross-compiling.
+Why an option? Let's just always emit this. And teach libbpf to
+"sanitize" layout if the host kernel doesn't support it. Looking at
+kernel validation code, it should be enough to just zero-out layout
+len/off fields in the header. (Maybe we'll need to zero out layout
+data itself, but I don't see any zero checks for that, so probably is
+fine without that).
 
-I'll use this in the upcoming v4 of the series.
+As a general rule, let's avoid adding options if we can just make it
+work unconditionally. Options are never a great solution, it's just
+sometimes a necessary evil.
+
+> +       size_t:0;
+> +};
+> +#define btf_new_opts__last_field add_kind_layout
+> +
+> +/**
+> + * @brief **btf__new_empty_opts()** creates an unpopulated BTF object wi=
+th
+> + * optional *base_btf* and BTF kind layout description if *add_kind_layo=
+ut*
+> + * is set
+> + * @return new BTF object instance which has to be eventually freed with
+> + * **btf__free()**
+> + *
+> + * On error, NULL is returned and the thread-local `errno` variable is
+> + * set to the error code.
+> + */
+> +LIBBPF_API struct btf *btf__new_empty_opts(struct btf_new_opts *opts);
+> +
+>  /**
+>   * @brief **btf__distill_base()** creates new versions of the split BTF
+>   * *src_btf* and its base BTF. The new base BTF will only contain the ty=
+pes
+> diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
+> index 84fb90a016c9..0fb9a1f70e72 100644
+> --- a/tools/lib/bpf/libbpf.map
+> +++ b/tools/lib/bpf/libbpf.map
+> @@ -453,4 +453,5 @@ LIBBPF_1.7.0 {
+>                 bpf_map__exclusive_program;
+>                 bpf_prog_assoc_struct_ops;
+>                 bpf_program__assoc_struct_ops;
+> +               btf__new_empty_opts;
+>  } LIBBPF_1.6.0;
+> --
+> 2.39.3
+>
