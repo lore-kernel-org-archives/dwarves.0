@@ -1,137 +1,117 @@
-Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-172.mta1.migadu.com (out-172.mta1.migadu.com [95.215.58.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 350E81E3DE5
-	for <dwarves@vger.kernel.org>; Wed, 17 Dec 2025 00:38:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28F5A3A1E8C
+	for <dwarves@vger.kernel.org>; Wed, 17 Dec 2025 04:13:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765931902; cv=none; b=uvo0Wjr0BRNjWrRc6ZSUTvvFrzlFE6Xw9G0f0/STg5zle0AybkistAfmcBz9PxHnN1Dtw6cPP1HXu3p1snrAs/nJXmqrOLvorqV3NwukATClUmOrjqSdQKyWV4yFP//co258eiC5BoGQmk9Fvx1WH++ael6gW46JhDak82ndqvI=
+	t=1765944785; cv=none; b=GGxyLjCbzQZPRdpOT564kJUW/bRE7kVz8vAmohsrj4YXaqWNavqmX+6EYI3rMrDif7kXp690crRrUaGsGDN2Zr+XmzRxMlBB4RNMjikYs6s1msbAn8Ti83O0ROkO+hdV4Q6V7VbxYQLGEO1ysCJOQyY53sKF0ohvQVB1i60Nwto=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765931902; c=relaxed/simple;
-	bh=1tRhOh6qqMw/Ci6WUJIXtBYjb4c9GePbl9osWpiJjlE=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=a12xQNJqGxcwHBBO+g83x+n3hims4+beB9wcOHxmLplf4mCSNt1UFYr3K0dz70vcQsw7ATzHXWcEafQo1zEZn8bILKPbQZYXqgAYC4KCYz5g/ZHaAMXgsgwbVUP3nQInnlMH5veeyEhzwio98cD7TnrxmenEj7f5JqS1WqXicOc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WaFjBVWv; arc=none smtp.client-ip=209.85.210.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1765944785; c=relaxed/simple;
+	bh=/3XOxNcGq7pJuEmAANasaV8qAUwY0h4d2Fr9Byfd5wY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=B1iOGlSv7pLlD9/q+cO/oM6fF+WRZw0YeWU3+8yW5nMsR8HoA4sW3n+iDaXuAn0AG9vkMjGB984i8xiBT3d2kzGFEGuZ42s20wKYrU5R7+crgzt9BmVCUhRre3vFVFIPLMui1SSHVZBS/SoGjxtmZXpQ0JKBu3yW8XVQeOYcf7c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Kjh6pBO7; arc=none smtp.client-ip=95.215.58.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WaFjBVWv"
-Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-7bc248dc16aso4303731b3a.0
-        for <dwarves@vger.kernel.org>; Tue, 16 Dec 2025 16:38:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1765931900; x=1766536700; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=1tRhOh6qqMw/Ci6WUJIXtBYjb4c9GePbl9osWpiJjlE=;
-        b=WaFjBVWvzx8Sv58j7wruF5comF7Q3txRgzFtZu2p8GVgY5Zzgqo7wrry/ErvXIz2zD
-         qq0tvNjTbuRuOS4gCp+bwkbSXH+fVt0OXN7Ce5Pp/BUo8SgQbwNXY7wHKB9wWs/KwrSP
-         YP3LdAviMq19/zrwA45/wU+ijsY3Mrt4tr0tSNaV99PwdSt2ZhyZpBvaRw8bg++PiSUn
-         oRgiD7FD9tzI5WL2TH28JPS/dMXy2iTNOnndzkfX1yPGW3vtpgcoOwfW2bNUbdU1VBlH
-         2aNfvcwDmfDQShPkcuLdMZJ1EwzYYLks9gbGRq/kzZd0U9bJbt2vQlwlGaR3BTKr8U9U
-         4d8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765931900; x=1766536700;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1tRhOh6qqMw/Ci6WUJIXtBYjb4c9GePbl9osWpiJjlE=;
-        b=iOZqdKHg7Kvj9L1TKF74EUk2uWZL657fHLgmJM0wMkbrRt90CskL4pAQxPk7eCGOk+
-         OF6lD0jNW8xlcBU++TOcs5s9rLEjLhd9b9T9V1dgFP7dF/x9stFVZbAxpMOvLFboHN8c
-         wvEYUN7fkH+HDLWIrQsLiB0IjOpxgE4rTAOHvava02rCdHJhiiKz+cPN6U+eJYXXPTMZ
-         qqxlIBebeqGuLEx5S07LjsDvDERrnolSxAoZIFAu5Z9Wh+OJHJCAUsGDp0y2mJtW3qE3
-         CV2rYsi2f+c9J3iFiJXL3nzitk7d7BDp5oXihhZ/PnODikiSunPicryGBtF07Sl1Z7xE
-         qK+Q==
-X-Forwarded-Encrypted: i=1; AJvYcCWJ6pwjjcEltON4Dx7483k3XOcXsLrX6I+hn4FvEw91tEyU7ayQrE5Vu6sEnkZFmWLjgj7u5eya@vger.kernel.org
-X-Gm-Message-State: AOJu0YxZA0wHshNopfMafAYyEUMHcG1vEZPkFgsGBc79ww2oIvSaqMxu
-	ryFp0QSLHZWdyxFj77TW19U2FvjgYUFXqh8w7F0ZVMjVPoxm1zMCjjMqHmomtq9K
-X-Gm-Gg: AY/fxX5+NyzCgd/8+90MqvPM5EErArD7xF+fuNTvMup7AE8tV8JlRe1AeYK5Qz3mYiH
-	D0VqspW5p81I/fn3yLl9wHpW6LpB4DrUPo8iavkJN4Gy9MK8BAsPJtk0VGTyVKHG4gOQkjixAyk
-	LC3y57hPDeveJTBqcsUY56LoKj3zlw+Ta5Vh6TUdQNG06PT4twSqiTWcRMVuG2LhlADLDLC8z0o
-	pwYutdMAXfTOMUIDuX8rdF1CsFwaWZENUT7V3gdj4Tqc6lJcUFekIY22uuH3ypzPj+WrkvlBo31
-	JSqcG0iMw4ZBeRw20JuaGYYmKm105lyNaIn5VdoCBUHaOFa/Lrqc1D04z1rJ6OlY6F7vbVFGM/h
-	BqLv4xBYntum7tJAuPG/NptZXcfq08W/jZfy16GSs3f6AhVVbzb0X7zHmhMwDMTEuXRqpIJne8l
-	87502auxuS
-X-Google-Smtp-Source: AGHT+IE6EhSKp6I+thulqwzyGYJnQtzVRTJO8gT+bIKaJidx+BjnVhacsRLeeLuAWxB4mTIHGm2aeQ==
-X-Received: by 2002:a05:6a21:328b:b0:341:84ee:7597 with SMTP id adf61e73a8af0-369afa0e194mr16130214637.47.1765931900355;
-        Tue, 16 Dec 2025 16:38:20 -0800 (PST)
-Received: from [192.168.0.226] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c1726e2b02csm5551426a12.27.2025.12.16.16.38.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Dec 2025 16:38:19 -0800 (PST)
-Message-ID: <199b61f28146c672875a947ab8b92d60aa8a3484.camel@gmail.com>
-Subject: Re: [PATCH v8 bpf-next 03/10] libbpf: use kind layout to compute an
- unknown kind size
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: Alan Maguire <alan.maguire@oracle.com>, andrii@kernel.org,
- ast@kernel.org, 	daniel@iogearbox.net, martin.lau@linux.dev,
- song@kernel.org, 	yonghong.song@linux.dev, john.fastabend@gmail.com,
- kpsingh@kernel.org, 	sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org,
- qmo@kernel.org, 	ihor.solodrai@linux.dev, dwarves@vger.kernel.org,
- bpf@vger.kernel.org, 	ttreyer@meta.com, mykyta.yatsenko5@gmail.com
-Date: Tue, 16 Dec 2025 16:38:16 -0800
-In-Reply-To: <CAEf4BzYbrT03M2w1gWJT4QPrVZtGC5rpCQGmHomDb4i7yEU0JA@mail.gmail.com>
-References: <20251215091730.1188790-1-alan.maguire@oracle.com>
-	 <20251215091730.1188790-4-alan.maguire@oracle.com>
-	 <9e1b071598f9c1c1adcac0d8cb2591c452a675fd.camel@gmail.com>
-	 <6f3027ee-576d-45de-9795-9a8e620292e9@oracle.com>
-	 <CAEf4BzYQeiECx9UpDqv6zRjd1EPjw8B44YX3KPGR1Z4dFKi1UA@mail.gmail.com>
-	 <27e4a60100602f769f3c5410a398a75fe0151967.camel@gmail.com>
-	 <CAEf4BzayA6if0xcTLux=eyASM1kpARmrOdDRmgG9F1SFa-fEcg@mail.gmail.com>
-	 <26e95f737d2de5133702c9b641946e70ec2d1dae.camel@gmail.com>
-	 <CAEf4BzawMy=woHx_yHY0iiD0x12B_+J8mFgV5zT3aCpG2N0s-g@mail.gmail.com>
-	 <4b12236c974db52ea19985cc9c5e08e021db9ec1.camel@gmail.com>
-	 <CAEf4BzbAXGdROrnGZZ_GBZmn9muKz9Cr+yUbovo+pmx-8GLdhg@mail.gmail.com>
-	 <d05e0af873f2f36359b34cc3865c44c98bc291e0.camel@gmail.com>
-	 <CAEf4BzYbrT03M2w1gWJT4QPrVZtGC5rpCQGmHomDb4i7yEU0JA@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.2 (3.56.2-2.fc42) 
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Kjh6pBO7"
+Message-ID: <7e57cc87-9258-4d9e-a01c-c76f8938ae46@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1765944780;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=yZv0I8sBeJ2LG4Vm5P6dpIWDpxSL+jbxMtqs26pPzTk=;
+	b=Kjh6pBO7y9+v8fQ4lF0mtvG4Hzu1UtRMSjd+qVqAVSXeNFF0Wmic0oOEHtl3io4cHHbFEU
+	9W85qk+lcoSw0dSZDHdG2mJUxhy1JTOxGyVQppairuAzI7uVB9+kG1mA1h/beG2ZJQ3mck
+	L2T96zjhudvF98qgTiSJiXweM9UTY/w=
+Date: Tue, 16 Dec 2025 20:12:52 -0800
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Subject: Re: [PATCH dwarves] dwarf_loader: Handle DW_AT_location attrs
+ containing DW_OP_plus_uconst
+Content-Language: en-GB
+To: Yao Zi <me@ziyao.cc>, Alan Maguire <alan.maguire@oracle.com>
+Cc: dwarves@vger.kernel.org, bpf@vger.kernel.org, q66 <me@q66.moe>
+References: <20251130032113.4938-2-ziyao@disroot.org>
+ <a3f82302-09d2-45e1-a30a-38a32ddbf947@linux.dev> <aT0hjyVstASDsl-E@pie>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <aT0hjyVstASDsl-E@pie>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-On Tue, 2025-12-16 at 16:30 -0800, Andrii Nakryiko wrote:
 
-[...]
 
-> > > One interesting question is what to do about libbpf's BTF
-> > > sanitization? Should we still try to replace unknown types with
-> > > something that byte-size-wise is compatible? It might not work in all
-> > > cases, depending on the semantics of unknown KIND, but it should work
-> > > in practice if we are careful about adding new kinds "responsibly".
-> > > WDYT?
-> >=20
-> > The question here is to how to compute the size for the unknown.
-> > It is possible to have a flag specifying if btf_type->size is a true
-> > size. But computation is more sophisticated for e.g. arrays.
-> > On the other hand, if member of some structure has unknown kind,
-> > it can be safely deleted, as struct has size field and offsets for all
-> > members. So, sanitization by deleting types of unknown kind is
-> > possible to some extent.
->=20
-> I think it's unlikely we'll add some kind that will be directly
-> embeddable into struct except for some modifiers. For modifiers (which
-> I'm arguing we should add a flag stating that this kind is used as a
-> modifier and its type field is actually a type ID field), we can
-> replace them either with typedef or const and preserve layout and most
-> of semantics. And for optional stuff like decl_tag, they are usually
-> stand-alone pointing to types (rather than having types pointed to
-> them), so just replacing them with something that is compatible in
-> terms of byte size in BTF data should be sufficient.
->=20
-> I think BTF sanitization will have to be best effort, but if we keep
-> sanitization in mind, we can ensure reasonable behavior.
->=20
-> Ultimately, though, you should always strive to use the very latest
-> libbpf with your BPF object files. So maybe no sanitization of unknown
-> kinds is the right (and simple) answer here: just update libbpf and it
-> will take care of sanitization of *known* kinds.
+On 12/13/25 12:20 AM, Yao Zi wrote:
+> Hi Yonghong,
+>
+> Sorry for the late reply,
+>
+> On Wed, Dec 03, 2025 at 04:46:20PM -0800, Yonghong Song wrote:
+>>
+>> On 11/29/25 7:21 PM, Yao Zi wrote:
+> ...
+>
+>>> diff --git a/dwarf_loader.c b/dwarf_loader.c
+>>> index 79be3f516a26..635015676389 100644
+>>> --- a/dwarf_loader.c
+>>> +++ b/dwarf_loader.c
+>>> @@ -708,6 +708,11 @@ static enum vscope dwarf__location(Dwarf_Die *die, uint64_t *addr, struct locati
+>>>    		case DW_OP_addrx:
+>>>    			scope = VSCOPE_GLOBAL;
+>>>    			*addr = expr[0].number;
+>>> +
+>>> +			if (location->exprlen == 2 &&
+>>> +			    expr[1].atom == DW_OP_plus_uconst)
+>>> +				addr += expr[1].number;
+>> This does not work. 'addr' is the parameter and the above new 'addr' value won't
+>> pass back to caller so the above is effectively a noop.
+> Oops, this is a silly problem.
+>
+>> I think we need to add an additional parameter to pass the 'expr[1].number' back
+>> to the caller, e.g.,
+> However, I don't think it's necessary. See my explanation below,
+>
+>> static enum vscope dwarf__location(Dwarf_Die *die, uint64_t *addr, uint32_t *offset, struct location *location) { ... }
+>>
+>> and
+>>
+>>     in the above
+>>         *offset = expr[1].number.
+>>
+>> Now the caller has the following information:
+>>    . The deference of *addr stores the index to .debug_addr
+> No, dwarf__location() invokes attr_location(), which calls
+> dwarf_getlocation() and dwarf_formaddr(), the latter already performs a
+> lookup in .debug_addr[1], so what is stored in *addr is right the symbol
+> address.
+>
+> Thus I think it's enough to keep the signature, but add the offset to
+> *addr.
 
-Idk, this would matter if we decide to change clang to emit new BTF
-kinds for BPF programs. Maybe postpone sanitization implementation
-until requirements are better understood?
+Indeed, this does make sense. Thanks for explanation.
+
+>
+>>    . The offset to the address in .debug_addr
+>> and the final address will be debug_addr[*addr] + offset.
+>>
+>>> +
+>>>    			break;
+>>>    		case DW_OP_reg1 ... DW_OP_reg31:
+>>>    		case DW_OP_breg0 ... DW_OP_breg31:
+> Thanks for your review, I'll soon send a patch with the missing pointer
+> dereference to addr added.
+>
+> Best regards,
+> Yao Zi
+>
+> [1]: https://github.com/sourceware-org/elfutils/blob/67199e1c974db37f2bd200dcca7d7103f42ed06e/libdw/dwarf_formaddr.c#L37-L77
+
