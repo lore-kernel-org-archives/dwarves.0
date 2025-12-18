@@ -1,162 +1,100 @@
-Received: from out-171.mta1.migadu.com (out-171.mta1.migadu.com [95.215.58.171])
+Received: from out-186.mta1.migadu.com (out-186.mta1.migadu.com [95.215.58.186])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3619225742F
-	for <dwarves@vger.kernel.org>; Thu, 18 Dec 2025 17:47:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E3DC28A3FA
+	for <dwarves@vger.kernel.org>; Thu, 18 Dec 2025 17:54:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.186
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766080066; cv=none; b=IB3idmIRhcLnD6Km41VB+Qnm866Dt5Xiiml2mLlnaJ4p2pE+LMsbdzhNXRoNtKTWDkiZwmfXuRzZ7HhEM1RfmyRrDlLsBzBCoQYC7j5b/8H7RxGkW7F67jRU2aW1+5QWfRoRLU7qLiK14f1aXilKZPCpIcHHRya2xB36rKVZLLU=
+	t=1766080485; cv=none; b=TzyFLo0ip5EU5NKCbnjycb9tK+l0DbcIFbb8BXZTCy+zIRxknjNWCnJhEvdoZsW7gQXNxjaWXKR4SbmlM8t6UBU16chKc0URrWogN/75hmHjyWDvfL+Chkt/Wu1XXeWnGafy1Wdv2d3VdX1K5I7CalDhlWR9rGOIorjN86lGpdY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766080066; c=relaxed/simple;
-	bh=5ViQi7mwghCiXIMF1t1NV68g5oN/hKIMhDraT72mmus=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=sxPu8MR7cRHd5CYkCPriiXOIRbbhOcMV33TP3bGZSnz2gy6iFL/UKG6HPsLr7z85pKanMe3FDfB2yr4BkBcxCXehIX8D1X9EhzysoMAwdjmkacQCQTSeLQFnNX84jfpxeaVNPTJKzYtm0JW9GFKiYE8cheNx9h2z+3k0PqSmJd8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=AZh/DD/m; arc=none smtp.client-ip=95.215.58.171
+	s=arc-20240116; t=1766080485; c=relaxed/simple;
+	bh=BlQDc676DFnVF6OGF97FiYjC0Ujy2FI8SBN0U50Q4qI=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=tp1UaQkxShhan091WKbL3eqbthBoDH5riPszx1LS3SKRLdMas6i+1YeRmue2oo5CtwSYmYGYmMEED/u9Z88elKpXRJuzMVXJ6j+6G2hvgighxDxumsv6hlyVM8TQ479gcJ2aULdnR7Rvp+gvye6KAvlWltA/N7Mz7CA/OOWja7c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=CvAf7SCy; arc=none smtp.client-ip=95.215.58.186
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="AZh/DD/m"
-Message-ID: <d9b9e129-349b-4510-bf33-01b831c2174b@linux.dev>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="CvAf7SCy"
+Message-ID: <914f4a97-f053-4979-b63a-9b7a7f72369a@linux.dev>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1766080051;
+	t=1766080480;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=HB++E3E6r46WQuwBh9XXcMAuVJ8INhZP5ZHmjXyJtDc=;
-	b=AZh/DD/mU1b3vRHrw8i+4nCb4AOJv7ewUUM3CfnPf5c9gJEXFlkidjX/ITCrgAEK6Hdxsn
-	uQ0peoLHngYesrV7FuUIlJAcKYwVx+f67DDM32vU7I32AyLjzfb6m0a2Cz+LsrC6QLvx/w
-	H9snbQQLOc+JAn4qkIJlF1SlqKoXOPc=
-Date: Thu, 18 Dec 2025 09:46:14 -0800
+	bh=IwIbyE2OIjwa5Pd/qUk27uqrSWv5qGUPTN23vG586Hs=;
+	b=CvAf7SCy+fRbUb6yHAXH6qzFLDgRc1cws58QAMCNN+woKBE4uNIlxLRJeleWIw8waMVTXF
+	hQavKFA2ihbxYvP5rX2ScxczSozHtMeLFkMIghTRYJ4K/68TnsO9fJZgolpxbFJmW2Zns/
+	HHmWfJO/kKGlMbyIafxKXUe9UDZeArE=
+Date: Thu, 18 Dec 2025 09:54:20 -0800
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v4 3/8] resolve_btfids: Introduce enum
- btf_id_kind
-To: bot+bpf-ci@kernel.org, alan.maguire@oracle.com, ast@kernel.org,
- arighi@nvidia.com, akpm@linux-foundation.org, andrii@kernel.org,
- morbo@google.com, changwoo@igalia.com, daniel@iogearbox.net,
- void@manifault.com, dolinux.peng@gmail.com, eddyz87@gmail.com,
- haoluo@google.com, jolsa@kernel.org, john.fastabend@gmail.com,
- corbet@lwn.net, justinstitt@google.com, kpsingh@kernel.org,
- martin.lau@linux.dev, nathan@kernel.org, nick.desaulniers+lkml@gmail.com,
- nsc@kernel.org, shuah@kernel.org, song@kernel.org, sdf@fomichev.me,
- tj@kernel.org, yonghong.song@linux.dev
-Cc: bpf@vger.kernel.org, dwarves@vger.kernel.org,
- linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
- sched-ext@lists.linux.dev, martin.lau@kernel.org, clm@meta.com
-References: <20251218003314.260269-4-ihor.solodrai@linux.dev>
- <106b6e71bce75b8f12a85f2f99e75129e67af7287f6d81fa912589ece14044f9@mail.kernel.org>
-Content-Language: en-US
+Subject: Re: [PATCH bpf-next v4 8/8] resolve_btfids: Change in-place update
+ with raw binary output
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 From: Ihor Solodrai <ihor.solodrai@linux.dev>
-In-Reply-To: <106b6e71bce75b8f12a85f2f99e75129e67af7287f6d81fa912589ece14044f9@mail.kernel.org>
+To: Alan Maguire <alan.maguire@oracle.com>,
+ Alexei Starovoitov <ast@kernel.org>, Andrea Righi <arighi@nvidia.com>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ Andrii Nakryiko <andrii@kernel.org>, Bill Wendling <morbo@google.com>,
+ Changwoo Min <changwoo@igalia.com>, Daniel Borkmann <daniel@iogearbox.net>,
+ David Vernet <void@manifault.com>, Donglin Peng <dolinux.peng@gmail.com>,
+ Eduard Zingerman <eddyz87@gmail.com>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, John Fastabend <john.fastabend@gmail.com>,
+ Jonathan Corbet <corbet@lwn.net>, Justin Stitt <justinstitt@google.com>,
+ KP Singh <kpsingh@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+ Nicolas Schier <nsc@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ Song Liu <song@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+ Tejun Heo <tj@kernel.org>, Yonghong Song <yonghong.song@linux.dev>
+Cc: bpf@vger.kernel.org, dwarves@vger.kernel.org,
+ linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+ sched-ext@lists.linux.dev
+References: <20251218003314.260269-1-ihor.solodrai@linux.dev>
+ <20251218003314.260269-9-ihor.solodrai@linux.dev>
+Content-Language: en-US
+In-Reply-To: <20251218003314.260269-9-ihor.solodrai@linux.dev>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Migadu-Flow: FLOW_OUT
 
-On 12/17/25 4:47 PM, bot+bpf-ci@kernel.org wrote:
->> diff --git a/tools/bpf/resolve_btfids/main.c b/tools/bpf/resolve_btfids/main.c
->> index b4caae1170dd..da8c7d127632 100644
->> --- a/tools/bpf/resolve_btfids/main.c
->> +++ b/tools/bpf/resolve_btfids/main.c
-> 
-> [ ... ]
-> 
->> @@ -260,22 +279,36 @@ static char *get_id(const char *prefix_end)
->>  	return id;
->>  }
->>
->> -static struct btf_id *add_set(struct object *obj, char *name, bool is_set8)
->> +static struct btf_id *add_set(struct object *obj, char *name, enum btf_id_kind kind)
->>  {
->> +	int len = strlen(name);
->> +	int prefixlen;
->> +	char *id;
->> +
->>  	/*
->>  	 * __BTF_ID__set__name
->>  	 * name =    ^
->>  	 * id   =         ^
->>  	 */
->> -	char *id = name + (is_set8 ? sizeof(BTF_SET8 "__") : sizeof(BTF_SET "__")) - 1;
->> -	int len = strlen(name);
->> +	switch (kind) {
->> +	case BTF_ID_KIND_SET:
->> +		prefixlen = sizeof(BTF_SET "__") - 1;
->> +		break;
->> +	case BTF_ID_KIND_SET8:
->> +		prefixlen = sizeof(BTF_SET8 "__") - 1;
->> +		break;
->> +	default:
->> +		pr_err("Unexpected kind %d passed to %s() for symbol %s\n", kind, __func__, name);
->> +		return NULL;
->> +	}
->> +
->> +	id = name + prefixlen - 1;
-> 
-> Is this off by one? The original code computed:
-> 
->     id = name + sizeof(BTF_SET "__") - 1
-> 
-> For BTF_SET ("set"), this gives: name + sizeof("set__") - 1 = name + 6 - 1 = name + 5
-> 
-> The new code computes:
-> 
->     prefixlen = sizeof(BTF_SET "__") - 1 = 6 - 1 = 5
->     id = name + prefixlen - 1 = name + 5 - 1 = name + 4
-> 
-> The -1 appears to be applied twice now, once in the prefixlen assignment and
-> again when computing id. Should this line be:
-> 
->     id = name + prefixlen;
+On 12/17/25 4:33 PM, Ihor Solodrai wrote:
+> [...]
+> diff --git a/scripts/Makefile.btf b/scripts/Makefile.btf
+> index 840a55de42da..b8569d450ed9 100644
+> --- a/scripts/Makefile.btf
+> +++ b/scripts/Makefile.btf
+> @@ -1,5 +1,10 @@
+>  # SPDX-License-Identifier: GPL-2.0
+>  
+> +gen-btf-y				=
+> +gen-btf-$(CONFIG_DEBUG_INFO_BTF)	= $(srctree)/scripts/gen-btf.sh
+> +
+> +export GEN_BTF := $(gen-btf-y)
+> +
 
-Yes, this is an off-by-one bug.
+Ugh... GEN_BTF is not used anywhere in v4.
+Looks like I forgot a `git add` at some point.
 
-Good catch, Opus 4.5. Sonnet 4.5 missed this in v3.
+I'll wait a bit before sending a v5, in case there is more feedback.
 
-This was "harmless", since the names stored in the trees don't affect
-the output.  The comparison between the names still works, as they all
-simply got a "_" prefix.  But this only makes the bug sneaky, which is
-very bad.
-
-The suggested fix is meh though, IMO a better one is:
-
-diff --git a/tools/bpf/resolve_btfids/main.c b/tools/bpf/resolve_btfids/main.c
-index 3e88dc862d87..ffc15c249ed4 100644
---- a/tools/bpf/resolve_btfids/main.c
-+++ b/tools/bpf/resolve_btfids/main.c
-@@ -295,10 +295,10 @@ static struct btf_id *add_set(struct object *obj, char *name, enum btf_id_kind k
-         */
-        switch (kind) {
-        case BTF_ID_KIND_SET:
--               prefixlen = sizeof(BTF_SET "__") - 1;
-+               prefixlen = sizeof(BTF_SET "__");
-                break;
-        case BTF_ID_KIND_SET8:
--               prefixlen = sizeof(BTF_SET8 "__") - 1;
-+               prefixlen = sizeof(BTF_SET8 "__");
-                break;
-        default:
-                pr_err("Unexpected kind %d passed to %s() for symbol %s\n", kind, __func__, name);
-
-> 
->>  	if (id >= name + len) {
->>  		pr_err("FAILED to parse set name: %s\n", name);
->>  		return NULL;
->>  	}
->>
->> -	return btf_id__add(&obj->sets, id, true);
->> +	return btf_id__add_unique(&obj->sets, id, kind);
->>  }
-> 
-> 
-> ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-> 
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/20321956014
-
+>  pahole-ver := $(CONFIG_PAHOLE_VERSION)
+>  pahole-flags-y :=
+>  
+> @@ -18,13 +23,15 @@ pahole-flags-$(call test-ge, $(pahole-ver), 126)  = -j$(JOBS) --btf_features=enc
+>  
+>  pahole-flags-$(call test-ge, $(pahole-ver), 130) += --btf_features=attributes
+>  
+> -ifneq ($(KBUILD_EXTMOD),)
+> -module-pahole-flags-$(call test-ge, $(pahole-ver), 128) += --btf_features=distilled_base
+> -endif
+> -
+>  endif
+>  
+>  [...]
