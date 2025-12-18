@@ -1,147 +1,125 @@
-Received: from out-171.mta1.migadu.com (out-171.mta1.migadu.com [95.215.58.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C38BB27B33B
-	for <dwarves@vger.kernel.org>; Thu, 18 Dec 2025 20:04:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD4893321D7
+	for <dwarves@vger.kernel.org>; Thu, 18 Dec 2025 20:57:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766088245; cv=none; b=pV2GGRIlGZQbtjG5q7IL+A+25saMMhgsg7nyLSbcnmdy9xUzcldnwMochhDizD3OVML2mXPziGszCg3xic46v2i5jiJ7LWHVW7TRGfY+DAcGEzXHlLX6ZpgXinEZi1FOfKR57SVhSrByQmvQ7BuSmNwHE+IAFfCVLf44T/x0T9g=
+	t=1766091453; cv=none; b=eyapvGXuh+p6OunDuRDMUtiDEf7aFos5e4Tzs/vowEiPL1XSCfbJ4p1sLeifSZIjvTmXMbS6q+hKLQWPhKEufF9X/AMLwfT9G1c44OswbLfarXMMyW/ARbwb9q3Biv2GItrTBjUSY0X0EEq4TRdw0DH33pylpOfXGyP3NfIPzVs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766088245; c=relaxed/simple;
-	bh=PPvYnQFfQ73AnUC0oRFF/I/KG/4xgToHLM8c+NUW9KQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=j7Qh7EdnUhLVhYL4+3y5MIRfdW2c8N160qrBzdmr5LV7NlbruDatm1mX6DEpVg/9//JtOcg8Fqt8Llzy7mMSdQOvh1r/zfVoH2CJbvxaTNeGqX8CL1nLqs671SqOV70/FosUVLzm8eNDaa32uUtio9etJmYx2RjHyADl9CJ5ar4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=M17jirHj; arc=none smtp.client-ip=95.215.58.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1766091453; c=relaxed/simple;
+	bh=Wk9qv34inWutk0debgHw5c52MI0wE6RiXjFrTeu/W50=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=MBcILxaUKWeX6qdsotR2k5cjLf4QN2sIT8lf2pMWW1lmN7U3mJTi7eu4ZE1/Ry+Wx+5+t/VYsBDMkOCLDrDmtSkCKXC4XJgh7r/7n95rLcg1G2vrbo+ZScXMmnAv4rfKeYEA7KH5z0nAZ53PQBVJIxyLjosFxL9eqjpSRJcidQQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FaV8xYao; arc=none smtp.client-ip=209.85.210.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="M17jirHj"
-Message-ID: <113fe7cd-210c-4c4f-8703-f289010fd049@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1766088240;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=HJWs7dH71y+hTKsetOhwbeZpE9paXeOM1specKRWVPc=;
-	b=M17jirHjlrJw432LfQw2ENQp2+vaVwBMXOCMQti9IIYJRb9brkYmXeD1WcEPzXEdSRWZ7T
-	vOx9isK633UZl4/Ar4G7/E9/w6C01J8nU88uSPidbhEvuIyaU5QdC/T3FIifRqWgH+W6oD
-	DrUPmPnZVuLU0oIL7jvcyFv0HRWPXqE=
-Date: Thu, 18 Dec 2025 12:03:19 -0800
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FaV8xYao"
+Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-7f0db5700b2so1010510b3a.0
+        for <dwarves@vger.kernel.org>; Thu, 18 Dec 2025 12:57:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1766091451; x=1766696251; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=Wk9qv34inWutk0debgHw5c52MI0wE6RiXjFrTeu/W50=;
+        b=FaV8xYaoL/pd46fC66fgHn0FIjdbefEapfZ3o1xxFYGp+hsRVKKv55c+hDDMhJt2+s
+         xQ2eadFG5n1IFkuIpsdzaxCwhxe89Vjv4JjbJnm2b0HLtDfgy4OV2IAaWGHdSqf5Xw72
+         aRzxuMKFAa0+tzTYeYhWeavR4n2fSiaKCo6d3b81jigRFXKu5uzzUGZG5CjlGfCeihMN
+         WWEL666dh39RYJJaNzXHGpzWgf5I1OpUh0w3Iz1uwomsIkYwckNvOvlfCZIe19g+EOyk
+         7zsyLxzUq0FfvwoZrZC7nD8z2/796wWC1/rXlQfIc2Q7Dw/IOy/lyUxrYkBjhrOVuSoh
+         X7Vw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1766091451; x=1766696251;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Wk9qv34inWutk0debgHw5c52MI0wE6RiXjFrTeu/W50=;
+        b=ANpDNX4SW4kTWyP6SDUuobPg8hcU9h0zisdy8p/GgKTLlxZmZAVjLiUOYW4NANLQl2
+         ZNCX/UuWLcm+hYFamtuAvLfRCkqgbpFGwtP0vm6mSvs2Y19rJ8dDhYb7SDhxtQiOq0oo
+         36syq+tn+tTSK+DXytLgqHx0yYfyV9mwgNjE93QtOUungSvnewlhxkQA8R7klfZO+idp
+         Gd2iMEIzUQ1PoGqNpvewBj92ii7Q0vVtV5FS+Ebf1yu8PHnnIPzqzue5dvbq3cutlCoB
+         t1Ax3DebnHDfzZdAUqXg3iRYct73L7Tjriy7dpVSK0BRMTFkiVdTLAM3O9NtRVx7NYg/
+         jZaA==
+X-Forwarded-Encrypted: i=1; AJvYcCXrZc0owDLY9GGb4bvQ5Y/R3J6XQabPNMI+7Z7+0PexCy9nBNB80hTp+GEQNCC+yskDM3/LDAHa@vger.kernel.org
+X-Gm-Message-State: AOJu0YxDIp+vbf+b5BMzFNy5yyMXzErvUbh+qFCaoa+Ex6G1hwsXdCyH
+	9HOBfnRtgv0vMOmWIV3mAF5HlyOvXO0Hb1+PPRpH/nnjiec3lQPAXAB+vniS07MMuVo=
+X-Gm-Gg: AY/fxX63IwH7Dx8Koz7e+T9X1RX4Qm3q4jFzFLlJf/MD24goLhEX3BOczT14eQaZIXn
+	UHk+v7ytufX5XZgCYG689W1KQRNYskBBcSRgbmNbXe4wWVpYoWB0a2OXS7J5Io9J/QPC2pj6wxC
+	39g/nXm/tmd5+hkb5TDddtCYupjc6dMwecOx7mSz4M5VKy3HFqKyZYJ0Vu9Q4DbCnUrQQP9JCQ3
+	soOmbUU1bV8d0chwLk2JSWEhMeGvLOxgGG2RZsCoAh2ybMAYRgzJJhmYf05NEbbM1oxZc8QM8NI
+	SDr8Fi7A+Ch3HMg4hC0MWqqdEr9OSZbePHH8nkLZYaZPjeDu2EVVQr4UwfnWgzPZKzp/lN7kfVx
+	nVj15McIVnbLxOfDQVKkkfAb01HRH8wlgs4oDfMj0ZTMDDMKe6oe5qjDeUNDQh7XWbjt8T/q2X8
+	2MMkmeOqjAbdes0KTa/clOf6ZMsqTxAafYNmr1YMq768pnpA4=
+X-Google-Smtp-Source: AGHT+IE5wqF1Ur/4n0bAKqhUgwQpIAW7BXffJ7Vx2YXELxiT7ohVhw05y1v6Iu0zG3ReeHlWkO5oUA==
+X-Received: by 2002:a05:6a00:4006:b0:7e8:4398:b362 with SMTP id d2e1a72fcca58-7ff6667949dmr378405b3a.53.1766085763362;
+        Thu, 18 Dec 2025 11:22:43 -0800 (PST)
+Received: from ?IPv6:2a03:83e0:115c:1:d912:2088:c593:6daa? ([2620:10d:c090:500::7:e642])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7ff7b127b00sm99807b3a.21.2025.12.18.11.22.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 18 Dec 2025 11:22:43 -0800 (PST)
+Message-ID: <0be0a3b4d39e31653ce38c16b413d717921f2ced.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v4 7/8] selftests/bpf: Run resolve_btfids only
+ for relevant .test.o objects
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Ihor Solodrai <ihor.solodrai@linux.dev>, Alan Maguire	
+ <alan.maguire@oracle.com>, Alexei Starovoitov <ast@kernel.org>, Andrea
+ Righi	 <arighi@nvidia.com>, Andrew Morton <akpm@linux-foundation.org>,
+ Andrii Nakryiko	 <andrii@kernel.org>, Bill Wendling <morbo@google.com>,
+ Changwoo Min	 <changwoo@igalia.com>, Daniel Borkmann
+ <daniel@iogearbox.net>, David Vernet	 <void@manifault.com>, Donglin Peng
+ <dolinux.peng@gmail.com>, Hao Luo	 <haoluo@google.com>, Jiri Olsa
+ <jolsa@kernel.org>, John Fastabend	 <john.fastabend@gmail.com>, Jonathan
+ Corbet <corbet@lwn.net>, Justin Stitt	 <justinstitt@google.com>, KP Singh
+ <kpsingh@kernel.org>, Martin KaFai Lau	 <martin.lau@linux.dev>, Nathan
+ Chancellor <nathan@kernel.org>, Nick Desaulniers	
+ <nick.desaulniers+lkml@gmail.com>, Nicolas Schier <nsc@kernel.org>, Shuah
+ Khan	 <shuah@kernel.org>, Song Liu <song@kernel.org>, Stanislav Fomichev	
+ <sdf@fomichev.me>, Tejun Heo <tj@kernel.org>, Yonghong Song	
+ <yonghong.song@linux.dev>
+Cc: bpf@vger.kernel.org, dwarves@vger.kernel.org,
+ linux-kbuild@vger.kernel.org, 	linux-kernel@vger.kernel.org,
+ sched-ext@lists.linux.dev
+Date: Thu, 18 Dec 2025 11:22:40 -0800
+In-Reply-To: <20251218003314.260269-8-ihor.solodrai@linux.dev>
+References: <20251218003314.260269-1-ihor.solodrai@linux.dev>
+	 <20251218003314.260269-8-ihor.solodrai@linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.2 (3.56.2-2.fc42) 
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v4 3/8] resolve_btfids: Introduce enum
- btf_id_kind
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: bot+bpf-ci@kernel.org, alan.maguire@oracle.com, ast@kernel.org,
- arighi@nvidia.com, akpm@linux-foundation.org, andrii@kernel.org,
- morbo@google.com, changwoo@igalia.com, daniel@iogearbox.net,
- void@manifault.com, dolinux.peng@gmail.com, eddyz87@gmail.com,
- haoluo@google.com, jolsa@kernel.org, john.fastabend@gmail.com,
- corbet@lwn.net, justinstitt@google.com, kpsingh@kernel.org,
- martin.lau@linux.dev, nathan@kernel.org, nick.desaulniers+lkml@gmail.com,
- nsc@kernel.org, shuah@kernel.org, song@kernel.org, sdf@fomichev.me,
- tj@kernel.org, yonghong.song@linux.dev, bpf@vger.kernel.org,
- dwarves@vger.kernel.org, linux-kbuild@vger.kernel.org,
- linux-kernel@vger.kernel.org, sched-ext@lists.linux.dev,
- martin.lau@kernel.org, clm@meta.com
-References: <20251218003314.260269-4-ihor.solodrai@linux.dev>
- <106b6e71bce75b8f12a85f2f99e75129e67af7287f6d81fa912589ece14044f9@mail.kernel.org>
- <d9b9e129-349b-4510-bf33-01b831c2174b@linux.dev>
- <CAEf4BzZXzQ6fZetTA8Trwa_pu7o1AJuMyUuHbW9YXHYGQL-_HA@mail.gmail.com>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
-In-Reply-To: <CAEf4BzZXzQ6fZetTA8Trwa_pu7o1AJuMyUuHbW9YXHYGQL-_HA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
 
-On 12/18/25 11:58 AM, Andrii Nakryiko wrote:
-> On Thu, Dec 18, 2025 at 9:47 AM Ihor Solodrai <ihor.solodrai@linux.dev> wrote:
->>
->> On 12/17/25 4:47 PM, bot+bpf-ci@kernel.org wrote:
->>>> diff --git a/tools/bpf/resolve_btfids/main.c b/tools/bpf/resolve_btfids/main.c
->>>> index b4caae1170dd..da8c7d127632 100644
->>>> --- a/tools/bpf/resolve_btfids/main.c
->>>> +++ b/tools/bpf/resolve_btfids/main.c
->>>
->>> [ ... ]
->>>
->>>> @@ -260,22 +279,36 @@ static char *get_id(const char *prefix_end)
->>>>      return id;
->>>>  }
->>>>
->>>> -static struct btf_id *add_set(struct object *obj, char *name, bool is_set8)
->>>> +static struct btf_id *add_set(struct object *obj, char *name, enum btf_id_kind kind)
->>>>  {
->>>> +    int len = strlen(name);
->>>> +    int prefixlen;
->>>> +    char *id;
->>>> +
->>>>      /*
->>>>       * __BTF_ID__set__name
->>>>       * name =    ^
->>>>       * id   =         ^
->>>>       */
->>>> -    char *id = name + (is_set8 ? sizeof(BTF_SET8 "__") : sizeof(BTF_SET "__")) - 1;
->>>> -    int len = strlen(name);
->>>> +    switch (kind) {
->>>> +    case BTF_ID_KIND_SET:
->>>> +            prefixlen = sizeof(BTF_SET "__") - 1;
->>>> +            break;
->>>> +    case BTF_ID_KIND_SET8:
->>>> +            prefixlen = sizeof(BTF_SET8 "__") - 1;
->>>> +            break;
->>>> +    default:
->>>> +            pr_err("Unexpected kind %d passed to %s() for symbol %s\n", kind, __func__, name);
->>>> +            return NULL;
->>>> +    }
->>>> +
->>>> +    id = name + prefixlen - 1;
->>>
->>> Is this off by one? The original code computed:
->>>
->>>     id = name + sizeof(BTF_SET "__") - 1
->>>
->>> For BTF_SET ("set"), this gives: name + sizeof("set__") - 1 = name + 6 - 1 = name + 5
->>>
->>> The new code computes:
->>>
->>>     prefixlen = sizeof(BTF_SET "__") - 1 = 6 - 1 = 5
->>>     id = name + prefixlen - 1 = name + 5 - 1 = name + 4
->>>
->>> The -1 appears to be applied twice now, once in the prefixlen assignment and
->>> again when computing id. Should this line be:
->>>
->>>     id = name + prefixlen;
->>
->> Yes, this is an off-by-one bug.
->>
->> Good catch, Opus 4.5. Sonnet 4.5 missed this in v3.
->>
->> This was "harmless", since the names stored in the trees don't affect
->> the output.  The comparison between the names still works, as they all
->> simply got a "_" prefix.  But this only makes the bug sneaky, which is
->> very bad.
->>
->> The suggested fix is meh though, IMO a better one is:
-> 
-> the bug is not in determining prefix length, but in using it to find
-> where id starts in the string, so the fix should be
-> 
-> id = name + prefixlen;
-> 
-> prefixlen is calculated correctly, IMO
+On Wed, 2025-12-17 at 16:33 -0800, Ihor Solodrai wrote:
+> A selftest targeting resolve_btfids functionality relies on a resolved
+> .BTF_ids section to be available in the TRUNNER_BINARY. The underlying
+> BTF data is taken from a special BPF program (btf_data.c), and so
+> resolve_btfids is executed as a part of a TRUNNER_BINARY build recipe
+> on the final binary.
+>=20
+> Subsequent patches in this series allow resolve_btfids to modify BTF
+> before resolving the symbols, which means that the test needs access
+> to that modified BTF [1]. Currently the test simply reads in
+> btf_data.bpf.o on the assumption that BTF hasn't changed.
+>=20
+> Implement resolve_btfids call only for particular test objects (just
+> resolve_btfids.test.o for now). The test objects are linked into the
+> TRUNNER_BINARY, and so .BTF_ids section will be available there.
+>=20
+> This will make it trivial for the resolve_btfids test to access BTF
+> modified by resolve_btfids.
+>=20
+> [1] https://lore.kernel.org/bpf/CAErzpmvsgSDe-QcWH8SFFErL6y3p3zrqNri5-UHJ=
+9iK2ChyiBw@mail.gmail.com/
+>=20
+> Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
+> ---
 
-Aaahh, because the null byte is counted by sizeof, right... I missed that.
+Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 
-> 
->>
->> [...]
->>
-
+[...]
