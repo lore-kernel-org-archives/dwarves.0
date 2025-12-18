@@ -1,92 +1,92 @@
-Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96BC9255E53
-	for <dwarves@vger.kernel.org>; Thu, 18 Dec 2025 22:36:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0980D2C0291
+	for <dwarves@vger.kernel.org>; Thu, 18 Dec 2025 22:39:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766097413; cv=none; b=vDYYB9dmHZ9vdvQvf5J4DJQyyqX5IlBCGvJ4BT9C/3790y7Db/dsDYo3uFVGlEWgBwA4j4xqYJZeUqLyRNSpKhHdx3yS3wtNYW4tpUZPepgJhmQSepq4wowg0lkJym4B0kcYlXHdX2PPJ3ssuPd7Bun7pDBl8e9w84GaSqnuFl4=
+	t=1766097599; cv=none; b=nHer0TCIb64uFXxrF1O7MkS1xWCqIHenXppU1U3xqjZcLvDXwt89auUf6uE7e/ReIHkNu7ADRqy6X5/D6sOXhkVtZJh1xe1/hIPERfQcrmzxPnT5+c5Q7LH1y8KNyIcGjT+3dVX1cxI+tD9pyd1ZRY9KaWjXcEYN+h0+nWevQDA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766097413; c=relaxed/simple;
-	bh=R8UeLBJLrvkfvZOEZSqcabfSgjfJkFuoPrm60lLwYBY=;
+	s=arc-20240116; t=1766097599; c=relaxed/simple;
+	bh=eamKHa6W7ULY0ixSx/sof431csrKXdlpYvmmnDnJOFA=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=CvH5cYt1GwYeqPtkzqUlvC1/S7B3TcWandHp7bkkyGx0BWcPczER8P8UZbXkHTpWa3uJi9U7NPrGYoYIHPx0LOXrTKOl7TSMtbbZM/vBaMbFePiG3X2ahuZ963jimlKPlidQUjQFdYhND8BBKeoLV84j9GRfhrgAZv1GKxorlUA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=G8x8FlI3; arc=none smtp.client-ip=209.85.215.181
+	 Content-Type:MIME-Version; b=XJA/+38w1ihivS9NvIn35mHLYAqk+03rLe346KF1cCjP2gCiemcNwbMiMvYvIXUTDaL/dlo5Lvjy1+R0JDnU64WqzJ1oM9Hw9UUZQmC94PG+HaHhbZG5bJrd2RiFGYrCAGL2jAvvCba8FPXQy7B6F0pHl0terxBkS8/TbcOzbPk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jAZ0tnxv; arc=none smtp.client-ip=209.85.214.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="G8x8FlI3"
-Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-b6ce6d1d3dcso1063660a12.3
-        for <dwarves@vger.kernel.org>; Thu, 18 Dec 2025 14:36:51 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jAZ0tnxv"
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-2a1388cdac3so10615165ad.0
+        for <dwarves@vger.kernel.org>; Thu, 18 Dec 2025 14:39:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1766097411; x=1766702211; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1766097597; x=1766702397; darn=vger.kernel.org;
         h=mime-version:user-agent:content-transfer-encoding:references
          :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=VzVQ1y8+WKGH6EPGxTsxz1kEYrhRBeEdLO+POK8ea7k=;
-        b=G8x8FlI3sn0OwbT2cHGOW/DjZph5q9pdSQB4zJCFA5ueteqkvP839NC7ZCDc3CeNnV
-         X9Kb3Wxy94z6CSXUZvnDAq1ulbdVsrun/CKLieRZJEV03/5T67xXlSixd3Bg17k8Sccy
-         aPUvqsvGHbDZ2wUfGSNwqFwbG5T/6wBal82HwfOvGUeTTSjPmfZJi91GCTW1bphq2RIt
-         p1OARAJ73MpcBUQdFnx2EIR6YRjNejRYaQ45jpIKv7mENlWUgBcnhRI8vdQaxcRwJf3j
-         MfzcwaIWa+SgaU+XdpomdQWjJlOTyKJan8S7pGBlWDeHMfi4T+1AEwGesQegdlahHvyQ
-         rVFw==
+        bh=eamKHa6W7ULY0ixSx/sof431csrKXdlpYvmmnDnJOFA=;
+        b=jAZ0tnxv63j4DOvodBhWdTRwmrfNfUen/w5yFUlkAcD/EBvQzMK3Cm4wYcsRkZ7CBK
+         4sz/2yI/lafXrnXEVoBkEsBKZKAE9HxUsBLGO7Qn2QZMZ02LPj48YWIYPoqZvSalkysA
+         zuwJ2wPCbqN/tyd4fKR9glkI4s4H4ohAV5BdWZY50B1IIhTbj/xh/03LWPm9HZsLeeGF
+         PuBgxvHQqjYuLwPZPHuI8ZNO3OcLQGLM/fzibopqhGZLHjzosQGGJx1r0PCxrh00P58Z
+         NqSdkARs/ceSaP82PifVltK24F1o/zBO7P6zJ+hgiJeb1nbQoEkaAhzqlali3TVBWvQx
+         0Ojw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1766097411; x=1766702211;
+        d=1e100.net; s=20230601; t=1766097597; x=1766702397;
         h=mime-version:user-agent:content-transfer-encoding:references
          :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=VzVQ1y8+WKGH6EPGxTsxz1kEYrhRBeEdLO+POK8ea7k=;
-        b=rNdn4w3nbkSAunaVrfHVgJ8PeqN3bI9aROOVb+nImOCG87Z/HOzVt4eMmODXazscuk
-         777u1bCqXNVx0ZP737ACUchHzgRH2iIhKNPr9sKRRRZG19nJDa6Xjpr4lsSW6SbqKfND
-         XwE6gmbUqhRlxBSA0RuOewgu51Ph3TEVZb7eFsBNVQDqpmZSRCq0hA3vJj4NxAcfxIM5
-         D1/ujH6kf/Z7sQ379cyfrjkpCi12FJxxcWRq/DrdK6d0p45f2GfVz6gqtIcFDPHzwMEP
-         VdXFakJ5RM3a5fZEJWNb0HZxLETlJMGQM21fBYBWXONnE4ysfcxWnrgeH/vDfvAlCFiR
-         94ew==
-X-Forwarded-Encrypted: i=1; AJvYcCWi+E0Pzwmv/Or9c6CGW1ymxgrBW7twb2eQf7T9MhZiWMRDsIZ4mCQXFMNCk/BETf9fX+Q1QQhg@vger.kernel.org
-X-Gm-Message-State: AOJu0YwP4PFW8RuPyVnR7en4BltYnuNjqazYS6r7548lZEI/rfKeX49B
-	UEqyD8iRs4s0xfhjyLiHmMkyLJyqzAKSCdwy4CdX5oKy5j/z62uxRBAc
-X-Gm-Gg: AY/fxX7Ci6Uvw3hWV/Zj1Dd+FvU8sLFWar99Y6UPdpyG2/5q6zGGuantY+M5ODRbxAE
-	TgJZM0b1Xkdv0fH7qLKxXnFtPqo+1uyHbl+jwmmPHKN+ntCrKmYzjjs+Xn+u+1mr2e6+MkiMoaj
-	7W9Ok4x1V86RqdmsaVehAngfqRBayIvnDg8TKXBfCW/hX/8rr1Qms9GpuOQANsIm6YmxB7eLyCn
-	1p/v4CLXfvD/H+qmdZ9tu1nADHOJfLeFYJRCntCbIc+XkHluU0fGJNoME1facV5OPqTfELoeM0/
-	n15sZe8lGil/QgYrahcKQftD7kbAUZ75cADwyV1Bob7VkELwNjKnzQYRLxRjJ3goOgfNLd0VBb9
-	p7RQ8Cp6bH7PbuOnuCgil0hBW30gTJKyRjP94lZt6YsPG8w2LGq3Op7jgfYRP4wmOCP5jtXGlOC
-	p4kWgHkbT/P3MoBI0b2Io/Wq7490wRSWdcLfefdIV/eQBC+oQ=
-X-Google-Smtp-Source: AGHT+IHNPlWMg4U+f1upK+9jgW3JjSmNEr/AngVm9bM2DPXIk+aTU/1sGxVvbhy1P/adlu2zEQdkZQ==
-X-Received: by 2002:a05:7300:80c2:b0:2ae:4be1:db4a with SMTP id 5a478bee46e88-2b05ec02ff2mr1170186eec.12.1766097410643;
-        Thu, 18 Dec 2025 14:36:50 -0800 (PST)
+        bh=eamKHa6W7ULY0ixSx/sof431csrKXdlpYvmmnDnJOFA=;
+        b=I1hfNnSRxgXJiCWaSbLDQ2bobqzzfbZK2ZimTcIdddvdV2xppVLK2laa+uNL2tD0sZ
+         0piBIhQ/1Y6of+lH4lgt6pmkNSueg2Se47m8Ffi8qyS4/E6xF6/eNeNpGcjjsVoBkwfA
+         PA2fXN8d/NxmEY7bScRb0LC2MPgFaZewOnqAvcc48fiKSStcYhOOD/gtcRUovzXUBvKd
+         0MJ+oxBgZBg1YZlOrICjTV/vIjSuGEMz8rdo8d+Tzp2CjcmCq0k3gDZGYCdST7vB6NUy
+         7/rSK4o82a6muLsYidfiQM9xk5icbByq6ekzw/S3+3jLqS1fLpkW1qOlUxRw4EKXVfwU
+         0g7Q==
+X-Forwarded-Encrypted: i=1; AJvYcCX5lHBZnEKboKJbfANnN2ywj7y5Wr2s+7qzo6hdCorpbdP68J250rbGCzA6jcH4arZgu6YmygF9@vger.kernel.org
+X-Gm-Message-State: AOJu0YzIM8+SSATllFikrw5jXCKuumf8aSxw0XP+rO1oaKQvrQ9ncOGY
+	RV6Rux6mgBbCsg0khjFt+l5l6cE/TirazxXiNRrSsn0Y1mt9Wn6cu8fx
+X-Gm-Gg: AY/fxX57mRkd7PBZEx5kbTrkJQVQXm2nJN8K6ff/PbNJKYt/hyuxC1husywkyj73kB6
+	yftkvpJNCZHwCbMiVnRSqRUdmZwI2ZB+JRQQ7uyVWlrjSDK8oS6H7L2RSF7kTylF9Vuveewtu7I
+	+hWqrhUeJRFrAKVeXEzBwGRyGixITPGNw/bI9d7OGJbfiA0X9W+7x9kEPsboyHIpp/QVgn1nf5P
+	dRjkL/KXT2daKTNT/iQ1uBI4UDHfH2KiQstwcrMHHUZbcu4/8oWjGXpHhtFOJhS0MNTFKe1D8YL
+	Lo2RrLEmE/oo5a+8ZkVG/mz/cBacnD/9ME3797QCCa2qAuyMKZuM2Pdg8JnbR3SNiIIsJPM/tHI
+	dPqrh5p9f9sEXbZSmEozsJ6bXbuFVfYzgIIhFDztyKCNgTzwvVMl8UN3N1okYyHdTCevd2w5yWw
+	vMud4UUYyfzD1RPFL+QX0/ezzXKnYif4/zCydK
+X-Google-Smtp-Source: AGHT+IEVSlp9LXlzmaGmg8SZZsLd9mJhWKS6Iylg31EbQc75zWEKIMS5zueMBmRpuYcgZRvP0hKo6w==
+X-Received: by 2002:a05:7022:2586:b0:119:e56c:18a7 with SMTP id a92af1059eb24-121722b4e90mr878908c88.15.1766097597216;
+        Thu, 18 Dec 2025 14:39:57 -0800 (PST)
 Received: from ?IPv6:2a03:83e0:115c:1:4779:aa2b:e8ff:52c4? ([2620:10d:c090:500::5:3eff])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2b05ffd5f86sm1263617eec.5.2025.12.18.14.36.48
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1217253bfe2sm1480954c88.10.2025.12.18.14.39.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Dec 2025 14:36:50 -0800 (PST)
-Message-ID: <78acd4cd0cb8ed6b4c0c36cb79294efe606a4366.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v4 5/8] kbuild: Sync kconfig when
- PAHOLE_VERSION changes
+        Thu, 18 Dec 2025 14:39:56 -0800 (PST)
+Message-ID: <62a74bb81d7e791cffe4aa52bf3e18bc854f3edc.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v4 8/8] resolve_btfids: Change in-place update
+ with raw binary output
 From: Eduard Zingerman <eddyz87@gmail.com>
-To: Ihor Solodrai <ihor.solodrai@linux.dev>, Alan Maguire	
- <alan.maguire@oracle.com>, Alexei Starovoitov <ast@kernel.org>, Andrea
- Righi	 <arighi@nvidia.com>, Andrew Morton <akpm@linux-foundation.org>,
- Andrii Nakryiko	 <andrii@kernel.org>, Bill Wendling <morbo@google.com>,
- Changwoo Min	 <changwoo@igalia.com>, Daniel Borkmann
- <daniel@iogearbox.net>, David Vernet	 <void@manifault.com>, Donglin Peng
- <dolinux.peng@gmail.com>, Hao Luo	 <haoluo@google.com>, Jiri Olsa
- <jolsa@kernel.org>, John Fastabend	 <john.fastabend@gmail.com>, Jonathan
- Corbet <corbet@lwn.net>, Justin Stitt	 <justinstitt@google.com>, KP Singh
- <kpsingh@kernel.org>, Martin KaFai Lau	 <martin.lau@linux.dev>, Nathan
- Chancellor <nathan@kernel.org>, Nick Desaulniers	
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>, Ihor Solodrai
+	 <ihor.solodrai@linux.dev>
+Cc: Alan Maguire <alan.maguire@oracle.com>, Alexei Starovoitov
+ <ast@kernel.org>,  Andrea Righi <arighi@nvidia.com>, Andrew Morton
+ <akpm@linux-foundation.org>, Andrii Nakryiko	 <andrii@kernel.org>, Bill
+ Wendling <morbo@google.com>, Changwoo Min	 <changwoo@igalia.com>, Daniel
+ Borkmann <daniel@iogearbox.net>, David Vernet	 <void@manifault.com>,
+ Donglin Peng <dolinux.peng@gmail.com>, Hao Luo	 <haoluo@google.com>, Jiri
+ Olsa <jolsa@kernel.org>, John Fastabend	 <john.fastabend@gmail.com>,
+ Jonathan Corbet <corbet@lwn.net>, Justin Stitt	 <justinstitt@google.com>,
+ KP Singh <kpsingh@kernel.org>, Martin KaFai Lau	 <martin.lau@linux.dev>,
+ Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers	
  <nick.desaulniers+lkml@gmail.com>, Nicolas Schier <nsc@kernel.org>, Shuah
  Khan	 <shuah@kernel.org>, Song Liu <song@kernel.org>, Stanislav Fomichev	
  <sdf@fomichev.me>, Tejun Heo <tj@kernel.org>, Yonghong Song	
- <yonghong.song@linux.dev>
-Cc: bpf@vger.kernel.org, dwarves@vger.kernel.org,
- linux-kbuild@vger.kernel.org, 	linux-kernel@vger.kernel.org,
- sched-ext@lists.linux.dev
-Date: Thu, 18 Dec 2025 14:36:47 -0800
-In-Reply-To: <9640d2f5-7e6e-4526-a9ab-831bd826f01d@linux.dev>
+ <yonghong.song@linux.dev>, bpf@vger.kernel.org, dwarves@vger.kernel.org, 
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	sched-ext@lists.linux.dev
+Date: Thu, 18 Dec 2025 14:39:54 -0800
+In-Reply-To: <CAEf4BzZA4czi1KEOrW9tn8v18LZN4FAqzrHyB_78VatEZhb+Fw@mail.gmail.com>
 References: <20251218003314.260269-1-ihor.solodrai@linux.dev>
-	 <20251218003314.260269-6-ihor.solodrai@linux.dev>
-	 <8be2cafa00b759220e73a6ce837ac9a3ff52da1f.camel@gmail.com>
-	 <9640d2f5-7e6e-4526-a9ab-831bd826f01d@linux.dev>
+	 <20251218003314.260269-9-ihor.solodrai@linux.dev>
+	 <914f4a97-f053-4979-b63a-9b7a7f72369a@linux.dev>
+	 <CAEf4BzZA4czi1KEOrW9tn8v18LZN4FAqzrHyB_78VatEZhb+Fw@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 User-Agent: Evolution 3.56.2 (3.56.2-2.fc42) 
@@ -97,124 +97,14 @@ List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
-On Thu, 2025-12-18 at 13:33 -0800, Ihor Solodrai wrote:
-> On 12/18/25 11:21 AM, Eduard Zingerman wrote:
-> > On Wed, 2025-12-17 at 16:33 -0800, Ihor Solodrai wrote:
-> > > This patch implements kconfig re-sync when the pahole version changes
-> > > between builds, similar to how it happens for compiler version change
-> > > via CC_VERSION_TEXT.
-> > >=20
-> > > Define PAHOLE_VERSION in the top-level Makefile and export it for
-> > > config builds. Set CONFIG_PAHOLE_VERSION default to the exported
-> > > variable.
-> > >=20
-> > > Kconfig records the PAHOLE_VERSION value in
-> > > include/config/auto.conf.cmd [1].
-> > >=20
-> > > The Makefile includes auto.conf.cmd, so if PAHOLE_VERSION changes
-> > > between builds, make detects a dependency change and triggers
-> > > syncconfig to update the kconfig [2].
-> > >=20
-> > > For external module builds, add a warning message in the prepare
-> > > target, similar to the existing compiler version mismatch warning.
-> > >=20
-> > > Note that if pahole is not installed or available, PAHOLE_VERSION is
-> > > set to 0 by pahole-version.sh, so the (un)installation of pahole is
-> > > treated as a version change.
-> > >=20
-> > > See previous discussions for context [3].
-> > >=20
-> > > [1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.gi=
-t/tree/scripts/kconfig/preprocess.c?h=3Dv6.18#n91
-> > > [2] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.gi=
-t/tree/Makefile?h=3Dv6.18#n815
-> > > [3] https://lore.kernel.org/bpf/8f946abf-dd88-4fac-8bb4-84fcd8d81cf0@=
-oracle.com/
-> > >=20
-> > > Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
-> > > ---
-> >=20
-> > When building BPF selftest modules the pahole version change was
-> > detected, but it seems that BTF rebuild was not triggered:
-> >=20
-> >   $ (cd ./tools/testing/selftests/bpf/test_kmods/; make -j)
-> >   make[1]: Entering directory '/home/ezingerman/bpf-next'
-> >   make[2]: Entering directory '/home/ezingerman/bpf-next/tools/testing/=
-selftests/bpf/test_kmods'
-> >     CC [M]  bpf_testmod.o
-> >     CC [M]  bpf_test_no_cfi.o
-> >     CC [M]  bpf_test_modorder_x.o
-> >     CC [M]  bpf_test_modorder_y.o
-> >     CC [M]  bpf_test_rqspinlock.o
-> >     MODPOST Module.symvers
-> >     CC [M]  bpf_testmod.mod.o
-> >     CC [M]  .module-common.o
-> >     CC [M]  bpf_test_no_cfi.mod.o
-> >     CC [M]  bpf_test_modorder_x.mod.o
-> >     CC [M]  bpf_test_modorder_y.mod.o
-> >     CC [M]  bpf_test_rqspinlock.mod.o
-> >     LD [M]  bpf_test_modorder_x.ko
-> >     LD [M]  bpf_testmod.ko
-> >     LD [M]  bpf_test_modorder_y.ko
-> >     LD [M]  bpf_test_no_cfi.ko
-> >     BTF [M] bpf_test_modorder_x.ko
-> >     LD [M]  bpf_test_rqspinlock.ko
-> >     BTF     bpf_test_modorder_x.ko
-> >     BTF [M] bpf_test_no_cfi.ko
-> >     BTF [M] bpf_test_modorder_y.ko
-> >     BTF [M] bpf_testmod.ko
-> >     BTF     bpf_test_no_cfi.ko
-> >     BTF     bpf_test_modorder_y.ko
-> >     BTF [M] bpf_test_rqspinlock.ko
-> >     BTF     bpf_testmod.ko
-> >     BTF     bpf_test_rqspinlock.ko
-> >     BTFIDS  bpf_test_modorder_x.ko
-> >     BTFIDS  bpf_test_modorder_y.ko
-> >     BTFIDS  bpf_test_no_cfi.ko
-> >     BTFIDS  bpf_testmod.ko
-> >     OBJCOPY bpf_test_modorder_x.ko.BTF
-> >     BTFIDS  bpf_test_rqspinlock.ko
-> >     OBJCOPY bpf_test_no_cfi.ko.BTF
-> >     OBJCOPY bpf_test_modorder_y.ko.BTF
-> >     OBJCOPY bpf_testmod.ko.BTF
-> >     OBJCOPY bpf_test_rqspinlock.ko.BTF
-> >   make[2]: Leaving directory '/home/ezingerman/bpf-next/tools/testing/s=
-elftests/bpf/test_kmods'
-> >   make[1]: Leaving directory '/home/ezingerman/bpf-next'
-> >   [~/bpf-next]
-> >   $ (cd ./tools/testing/selftests/bpf/test_kmods/; make -j)
-> >   make[1]: Entering directory '/home/ezingerman/bpf-next'
-> >   make[2]: Entering directory '/home/ezingerman/bpf-next/tools/testing/=
-selftests/bpf/test_kmods'
-> >   make[2]: Leaving directory '/home/ezingerman/bpf-next/tools/testing/s=
-elftests/bpf/test_kmods'
-> >   make[1]: Leaving directory '/home/ezingerman/bpf-next'
-> >=20
-> > ... update pahole from version 131 to 132 ...
-> >=20
-> >   [~/bpf-next]
-> >   $ (cd ./tools/testing/selftests/bpf/test_kmods/; make -j)
-> >   make[1]: Entering directory '/home/ezingerman/bpf-next'
-> >   make[2]: Entering directory '/home/ezingerman/bpf-next/tools/testing/=
-selftests/bpf/test_kmods'
-> >   warning: pahole version differs from the one used to build the kernel
-> >     The kernel was built with: 131
-> >     You are using:             132
-> >   make[2]: Leaving directory '/home/ezingerman/bpf-next/tools/testing/s=
-elftests/bpf/test_kmods'
-> >   make[1]: Leaving directory '/home/ezingerman/bpf-next'
-> >=20
-> > Is this an expected behavior?
->=20
-> Yes, it's expected.
->=20
-> I simply repeated the logic used for compiler version change: for
-> external modules only the warning is printed.
->=20
-> See https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tr=
-ee/Makefile?h=3Dv6.18#n1857
->=20
+On Thu, 2025-12-18 at 13:15 -0800, Andrii Nakryiko wrote:
 
-Ok, it does rebuild BTF for the kernel itself.
+[...]
 
-Tested-by: Eduard Zingerman <eddyz87@gmail.com>
+> It all looks good to me, so don't wait for any more feedback from my
+> side. If Eduard doesn't find anything in patch #8, please send new
+> revision, thanks!
+
+Lgtm, let's wrap this up.
+
+[...]
