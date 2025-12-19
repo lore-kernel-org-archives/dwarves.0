@@ -1,138 +1,100 @@
-Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1D8A33F375
-	for <dwarves@vger.kernel.org>; Fri, 19 Dec 2025 18:44:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E985D340A4D;
+	Fri, 19 Dec 2025 20:13:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766169885; cv=none; b=OgcxTh9dlrXvVSQM48UeEonBSO2H6cSYFL7cTwbz/ZuzTLIRqWqyhjl/fv4Cl7AJpwsmHMhuS0eJcr4SubHuXBvXAKJilBA7kx0qkGg4dw/HOoj5f6Y/2BzSef947nt5F7NKtghp/lvYchW49hIPY7GMohJ552IRFBiNEMuc6/c=
+	t=1766175213; cv=none; b=bML1ko9NI6gEwD86KeW1BzfF2Yhk6J+U9ygdb4e2jb0C0NtRymy8USehuSlDEFnQHAghZV6OsdgXFQG1j2KgfLe0+yrQqwLlrc4e8E/g9bJ9v0Ew2151ZrklQAlAEeEnpqCyJVY4MHIt3xOYcgltQKgK8XjAuMQnv8xI06mMukk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766169885; c=relaxed/simple;
-	bh=qUIbJz4v0Rubf3X8GDdYbaOS1mdha3XyVNbYZgSaA2w=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=QKHsL2RK++AdQFlIYA+DZ7U+as8emP8Tqu3HsVdB2F3yRsWHWRMCi5x8kAZpL9CWEQPpkVDw4GrurlWT2WQlM05+1jcabkmqkFt/V1449X7FcqOmNmyEZ+CVjWcmIX0RW4sv0PScUFKYGccRve0YlwvXWHjU6/hry4tEfUn6oB4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eLTVGQFO; arc=none smtp.client-ip=209.85.215.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1766175213; c=relaxed/simple;
+	bh=sE0c0GGQsA1YI5deNqRs6714o7gIOr/u/TiO5P7G4Fo=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=M09QPfePCPyjWvCGADZW2Y4X9ECX9bkKCA6QNVZpHu8sXKe6dwylcGLuUQ91M6gLDyp5/HPR31vZYKaxXb/I0hQpqwgovMR9EQDr+VnZQAZk4lO4sG66ScwrsNLL9KEWE6e69YkfND9TrSBeL12p8J1zQhe3PqdzdMeoE/4ocFo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SeZLOZhP; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eLTVGQFO"
-Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-bfb84c2fe5eso876651a12.1
-        for <dwarves@vger.kernel.org>; Fri, 19 Dec 2025 10:44:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1766169882; x=1766774682; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=qUIbJz4v0Rubf3X8GDdYbaOS1mdha3XyVNbYZgSaA2w=;
-        b=eLTVGQFOzm5xYs/oOJBZEUEfMtz4C/cClPhCnkB1LQ7F1FZ2epst6goqVyorHscKA8
-         0/RxHrU0w8afpP1kDBWuYeXR6UR/Kxy5oMTQGlXuncSMMQkQ0jeuawe7Mnq+69xNUM/h
-         5tCcZUcRzrhAMEb6brjcE+pf6brIBGqJVjDvE6j1Pyuf6WSgfaxc5eLRbJz4A+MKUFmc
-         +lSb4048Qg6Cpwx79oPhARzOZ3VHwyuTk9Zh7248ya6npu3TGG4fwiFxqTk2fD4fh7W5
-         azn1IhpQqZ0H7taq+vn4uYoONFsFY3G+Lh9SFyecpdTj8R1kfPzy6KaobAQzaFi58cNk
-         1nPA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1766169882; x=1766774682;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qUIbJz4v0Rubf3X8GDdYbaOS1mdha3XyVNbYZgSaA2w=;
-        b=SYsRxyWGIQvv6+CdncnXN4ItUUThb5FfGy4jjwYPfUjn4ROBCL0sV0az6wCR6dhMp1
-         LxJSlnHXAqwb1A6bVK4OD78x+nvG7xaf7zMQz55M7kIxW8kU1g/jJzwlcksx/gjKRj4R
-         EQWcvmDzID5vEF47nwBq9O+Z8sod82lM7gP3AEQxNl0wJR4y3xi3es39xIbyRLzawIZB
-         jZ//UlpD9Jgcl88tSDY0cXp2rUZbUndOF9OYvQSz7Hd5kXsnbrilz9GvvAFWtsaLpkVi
-         GCOuDgdhItN7En/kB2u2yDuHdei499mWRDcLAQ1Z4TJN1DGn8JWiisRhHcIVd6t/5HCw
-         6Muw==
-X-Forwarded-Encrypted: i=1; AJvYcCUgHlJKlJZmJLwPwYXZrePPt6vDPzy0v9NELmYW+UaijFb0koxXWp5/hMRxiJjvWsbqDupDDnZQ@vger.kernel.org
-X-Gm-Message-State: AOJu0YxDpazVADSv99v6/0o/17LW1JpweSMyy+gyY6EEFsp5yIUzAQU3
-	RPTaYMj9/eA9UC9RpCdviqocYuTrUiyuqX16bTfM8xP8IJghwZ9YQ9/S
-X-Gm-Gg: AY/fxX5cZNnemarv0AG4DO7RSvLovzAzcqnPiNYJTyFi+dY8eN0p1/ArGEdsuC/PApA
-	UfzlDDegXZTAxsoJ+Biu4vR66JTHqZmYmIf4LJxFH8u4L82lrxmt0fwWeRqo19R0+9zhl9BAqMm
-	kOmPoWv8UCtt0K9L1+XbfFtKixZgIWAQ7QmYqmO8vDjW2WXe5ArVZ2f8c1q5R3zS+FJO1EbT9tk
-	G9rYe3mi4L2bL/f7OAnMi32DI+o3LM08Mjy+FOjKt3b0s/8Nr1a4w7qs52tdI+AuydSZ97qzcdZ
-	gFXO/JHWj6ilbcDiexn7e2icxpsdqFqdNxIzhVkMAS6MivywPGKY3eXpFOfTYXhwNRFf+vxMHtD
-	4PVsCTX+1RHqoNVkl5vEh8/AmOxzaCW3uyURXa5tBnqZj3ggKJTKwD11FtDYVmMnNhCamM/8m6d
-	fWl2vR7es=
-X-Google-Smtp-Source: AGHT+IG31t9E+qtbzvlggQ58tNUpirdrVXwoq5p8e1XvpatVKwcKANPdBsUzaj3dxq8sc9z2zdP7qg==
-X-Received: by 2002:a17:90b:1d0d:b0:32e:23c9:6f41 with SMTP id 98e67ed59e1d1-34e90d6980bmr3302082a91.5.1766169881612;
-        Fri, 19 Dec 2025 10:44:41 -0800 (PST)
-Received: from [192.168.0.56] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-34e76ce0c8asm2156786a91.2.2025.12.19.10.44.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 Dec 2025 10:44:40 -0800 (PST)
-Message-ID: <aaeacdd937e2d0b04959c009bc9ebdd18497865b.camel@gmail.com>
-Subject: Re: [PATCH v8 bpf-next 02/10] libbpf: Support kind layout section
- handling in BTF
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: Alan Maguire <alan.maguire@oracle.com>, andrii@kernel.org,
- ast@kernel.org, 	daniel@iogearbox.net, martin.lau@linux.dev,
- song@kernel.org, 	yonghong.song@linux.dev, john.fastabend@gmail.com,
- kpsingh@kernel.org, 	sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org,
- qmo@kernel.org, 	ihor.solodrai@linux.dev, dwarves@vger.kernel.org,
- bpf@vger.kernel.org, 	ttreyer@meta.com, mykyta.yatsenko5@gmail.com
-Date: Fri, 19 Dec 2025 10:44:37 -0800
-In-Reply-To: <CAEf4BzaS9xoFaTF7LEyjYg9iPZZGn3=UhDVXAv9AuuMz1wFoZg@mail.gmail.com>
-References: <20251215091730.1188790-1-alan.maguire@oracle.com>
-	 <20251215091730.1188790-3-alan.maguire@oracle.com>
-	 <CAEf4Bza+C7nRxFDHS0dNDk5XF79nE6y4GqEu0bmtJPTMoFrNvQ@mail.gmail.com>
-	 <db38bb39-7d16-41b6-968d-61e3b7681440@oracle.com>
-	 <CAEf4Bzbn_eWC8W8+so-BgkzNOxx8jgEysU3kTzBCW1jwXPEfnQ@mail.gmail.com>
-	 <ccafde20-3ea5-458a-b2e7-219aaa9a7ff0@oracle.com>
-	 <CAEf4BzZ+iH1XvaYOjE==GPJ6wFo14_QtrFYvyvWa=ebc6UKPbA@mail.gmail.com>
-	 <a99c8b9148a71c7827b00be5c793bfe8379de1de.camel@gmail.com>
-	 <CAEf4BzaS9xoFaTF7LEyjYg9iPZZGn3=UhDVXAv9AuuMz1wFoZg@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.58.1 (3.58.1-1.fc43) 
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SeZLOZhP"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51041C4CEF1;
+	Fri, 19 Dec 2025 20:13:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1766175212;
+	bh=sE0c0GGQsA1YI5deNqRs6714o7gIOr/u/TiO5P7G4Fo=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=SeZLOZhPnZ9HHpGeBzhICjgByevTRmO0lIdvPTOkLcWummJjZXak2euFmB4jU9x/S
+	 835+5wxqBm486Ux+ISQyx/nE5FzHnh/3QSOKSjpFtcgF2IW+nkyFRQJrEhaMcRewY2
+	 acS4IM7SZjz/YmGs41Oy8WlwIgN1dZkwszQvYGQRzrkM2boEsG2DaXub1/otRM4q8X
+	 fnFQOVkc/bbbpr6ybW0FN4SLquxc1oFIwM/m/BiyblmOxbYEiNBigTiDOF0H4Ajnqo
+	 mbHYST3nBAq9Jjy+YJp9Flzj6JQ+yHnU97VKjGGnUi9RVfoafTfo9fbyvVcuM+wbAO
+	 L8Epai+k/NxMA==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 3C7BF380AAF2;
+	Fri, 19 Dec 2025 20:10:22 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next v7 0/8] resolve_btfids: Support for BTF
+ modifications
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <176617502078.3992426.17457796078611623356.git-patchwork-notify@kernel.org>
+Date: Fri, 19 Dec 2025 20:10:20 +0000
+References: <20251219181321.1283664-1-ihor.solodrai@linux.dev>
+In-Reply-To: <20251219181321.1283664-1-ihor.solodrai@linux.dev>
+To: Ihor Solodrai <ihor.solodrai@linux.dev>
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+ martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
+ yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
+ sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org,
+ akpm@linux-foundation.org, nathan@kernel.org, nsc@kernel.org, corbet@lwn.net,
+ tj@kernel.org, void@manifault.com, arighi@nvidia.com, changwoo@igalia.com,
+ shuah@kernel.org, nick.desaulniers+lkml@gmail.com, morbo@google.com,
+ justinstitt@google.com, alan.maguire@oracle.com, dolinux.peng@gmail.com,
+ bpf@vger.kernel.org, dwarves@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kbuild@vger.kernel.org, sched-ext@lists.linux.dev
 
-On Fri, 2025-12-19 at 10:41 -0800, Andrii Nakryiko wrote:
-> On Fri, Dec 19, 2025 at 10:36=E2=80=AFAM Eduard Zingerman <eddyz87@gmail.=
-com> wrote:
-> >=20
-> > On Fri, 2025-12-19 at 10:21 -0800, Andrii Nakryiko wrote:
-> >=20
-> > [...]
-> >=20
-> > > > The sanitization for user-space consumption is doable alright, I wa=
-s thinking
-> > > > of the case where the kernel itself reads in BTF for vmlinux/module=
-s on boot,
-> > > > and that BTF was generated by newer pahole so has unexpected layout=
- info.
-> > > > If we just emitted layout info unconditionally that would mean newe=
-r pahole might
-> > > > generate BTf for a kernel that it could not read. If however we rel=
-axed the
-> > > > constraints a bit I think we could get the validation to succeed fo=
-r older
-> > > > kernels while ignoring the bits of the BTF they don't care about. F=
-ix that would
-> > > > also potentially future-proof addition of other sections to the BTF=
- header without
-> > > > requiring options.
-> > >=20
-> > > No, let's forget about allowing the kernel to let through some
-> > > unrecognized parts of BTF. Pahole will keep introducing feature flags
-> > > that we need to enable (like layout stuff, for example), so old
-> > > kernels built with new pahole will be just fine. And any
-> > > kernel-specific modifications will be moved to resolve_btfids and wil=
-l
-> > > be in-sync with kernel logic. I think we are all good and we don't
-> > > have to invent new things on this front, potentially opening us up to
-> > > some unforeseen attacks through BTF injection.
-> >=20
-> > That would mean that the flag to generate or not layout information
-> > should remain, right?
->=20
-> Yeah, unfortunately, as there will be no libbpf to sanitize that. But
-> that brings the layout question for Clang/GCC, are we adding that?
-> That should be emitted unconditionally, IMO.
+Hello:
 
-I don't think we have layout generation in the current roadmap.
-I'll add it to the plan.
+This series was applied to bpf/bpf-next.git (master)
+by Andrii Nakryiko <andrii@kernel.org>:
+
+On Fri, 19 Dec 2025 10:13:13 -0800 you wrote:
+> This series changes resolve_btfids and kernel build scripts to enable
+> BTF transformations in resolve_btfids. Main motivation for enhancing
+> resolve_btfids is to reduce dependency of the kernel build on pahole
+> capabilities [1] and enable BTF features and optimizations [2][3]
+> particular to the kernel.
+> 
+> Patches #1-#4 in the series are non-functional changes in
+> resolve_btfids.
+> 
+> [...]
+
+Here is the summary with links:
+  - [bpf-next,v7,1/8] resolve_btfids: Rename object btf field to btf_path
+    https://git.kernel.org/bpf/bpf-next/c/c1c7d61746f4
+  - [bpf-next,v7,2/8] resolve_btfids: Factor out load_btf()
+    https://git.kernel.org/bpf/bpf-next/c/5f347a0f781a
+  - [bpf-next,v7,3/8] resolve_btfids: Introduce enum btf_id_kind
+    https://git.kernel.org/bpf/bpf-next/c/a4fa885bd52d
+  - [bpf-next,v7,4/8] resolve_btfids: Always build with -Wall -Werror
+    https://git.kernel.org/bpf/bpf-next/c/fb348d4fdf5e
+  - [bpf-next,v7,5/8] kbuild: Sync kconfig when PAHOLE_VERSION changes
+    https://git.kernel.org/bpf/bpf-next/c/90e5b38a2652
+  - [bpf-next,v7,6/8] lib/Kconfig.debug: Set the minimum required pahole version to v1.22
+    https://git.kernel.org/bpf/bpf-next/c/903922cfa0e6
+  - [bpf-next,v7,7/8] selftests/bpf: Run resolve_btfids only for relevant .test.o objects
+    https://git.kernel.org/bpf/bpf-next/c/014e1cdb5fad
+  - [bpf-next,v7,8/8] resolve_btfids: Change in-place update with raw binary output
+    https://git.kernel.org/bpf/bpf-next/c/522397d05e7d
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
