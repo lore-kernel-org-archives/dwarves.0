@@ -1,32 +1,32 @@
-Received: from out-189.mta1.migadu.com (out-189.mta1.migadu.com [95.215.58.189])
+Received: from out-188.mta1.migadu.com (out-188.mta1.migadu.com [95.215.58.188])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3101334FF45
-	for <dwarves@vger.kernel.org>; Fri, 19 Dec 2025 18:14:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.189
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8E1C34FF76
+	for <dwarves@vger.kernel.org>; Fri, 19 Dec 2025 18:14:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.188
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766168053; cv=none; b=ZJ+BD7htWb66jJHMff7ZK5Tel7HkK0WYwOmOF2pbHfk2vbW3VjU+gTtEqOj3bImF3GZ8UTWgKAYeFPSqYlMAocq25lxt66Kg0S9OJjDJl4t2r3GLIuJUuVobezVf5zpvC07scTKbmnAeI97z9VuCvxDJxbwY9t8wQB/uzUMP8lI=
+	t=1766168061; cv=none; b=ClkcFCxuWXwvg9jJBEfvu7gtG+AmC7m4HLyJpoIWjuI42bXd9Yk28d4AtxIcFusMqstanwhNHI0DUhRgzWCGcM0NfLbC9w6GRRLiXTIP/bW3h0MgtpXzSZyVB+Xq7LI2hDSauHsv/0NWF+z71ZNB4KE3GYBq0WJoSa/zKPVoN8E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766168053; c=relaxed/simple;
-	bh=tp9YHMFIgfOkO02aAd/KCXTftP7CK2+lu5osQoeayzc=;
+	s=arc-20240116; t=1766168061; c=relaxed/simple;
+	bh=RIatdLGJs9ccgIc14D03GI3j70EcobeXV60MzFDU25U=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=CasM8vq8esj084JcZhYppTRe7aBq8l5FU/IgIEtpttbnCcUQ5TFoOqYAQyWG7X85xpPw+FdgHz6QdL9kgHNNSg4YsOJJlp2G1ZFdW5TjEkTrU4eknnY3LRbCEPYZRMZ/azIvCZih/yjAKI6mYHmiINcI8SCZOlrqDWncmsnHIyM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=XUKdi0fn; arc=none smtp.client-ip=95.215.58.189
+	 MIME-Version; b=Ix9e6eRdyt3MMFUo5iOn6XYvpWC3kTimjZEuX9dKrSumw9K8Itl+Iq2eSA96cPsFDvsEozmNIUjg0Rlo8kUpAiTKdwJiRQ5f00E79fCvQ1U06ReKHsWagdRh6/OXi/oybuu9TmqwmHMl/cGr/i//U48rpFXZwN/p4285uZ/YcsU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=FJL6a7VF; arc=none smtp.client-ip=95.215.58.188
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="XUKdi0fn"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="FJL6a7VF"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1766168048;
+	t=1766168054;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=hZpCqGU04k/0iz6cgq5pReieVoes9gLFY2kS9ihPdx4=;
-	b=XUKdi0fnyrj40EphcVCMtE8VZitAnvWZPTCRaOhI9xPQ3KGusg+G7SgC+uPlxUojD1ACzc
-	mfI/LvFZ/BzIWa12e5FM/xen3ZsQzdiXFT6kaFF95rqi2nkzUI+iVWrzp0Nj7Jb3vcF2vc
-	4v+tNOfNzNFprpZXc21gN2glZbjb7uU=
+	bh=eRf8rJz1Tj2FggqEZIaoF6sSftsqCsFHz4HLS3YlcGY=;
+	b=FJL6a7VFc+e4yDMm0SNaiEMKwVXlrLFRkSee2XYNWDNqfeBqdKoatBUwRV7vNgW5WwQbtp
+	dgXjMJwqltaUhBZSajqH/nS5eYTH6jkfwejgrEW3X/I8zM0vKSt3qTbvIDzcsXLKBpmmow
+	ZC9WbhTVn9f5bBfj81qkcrpCiqwelbA=
 From: Ihor Solodrai <ihor.solodrai@linux.dev>
 To: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
@@ -59,9 +59,9 @@ Cc: bpf@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-kbuild@vger.kernel.org,
 	sched-ext@lists.linux.dev
-Subject: [PATCH bpf-next v7 3/8] resolve_btfids: Introduce enum btf_id_kind
-Date: Fri, 19 Dec 2025 10:13:16 -0800
-Message-ID: <20251219181321.1283664-4-ihor.solodrai@linux.dev>
+Subject: [PATCH bpf-next v7 4/8] resolve_btfids: Always build with -Wall -Werror
+Date: Fri, 19 Dec 2025 10:13:17 -0800
+Message-ID: <20251219181321.1283664-5-ihor.solodrai@linux.dev>
 In-Reply-To: <20251219181321.1283664-1-ihor.solodrai@linux.dev>
 References: <20251219181321.1283664-1-ihor.solodrai@linux.dev>
 Precedence: bulk
@@ -73,224 +73,31 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-Instead of using multiple flags, make struct btf_id tagged with an
-enum value indicating its kind in the context of resolve_btfids.
+resolve_btfids builds without compiler warnings currently, so let's
+enforce this for future changes with '-Wall -Werror' flags [1].
 
-Acked-by: Eduard Zingerman <eddyz87@gmail.com>
+[1] https://lore.kernel.org/bpf/1957a60b-6c45-42a7-b525-a6e335a735ff@linux.dev/
+
 Tested-by: Alan Maguire <alan.maguire@oracle.com>
 Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
 ---
- tools/bpf/resolve_btfids/main.c | 83 ++++++++++++++++++++++++---------
- 1 file changed, 60 insertions(+), 23 deletions(-)
+ tools/bpf/resolve_btfids/Makefile | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/tools/bpf/resolve_btfids/main.c b/tools/bpf/resolve_btfids/main.c
-index b4caae1170dd..e721e20a2bbd 100644
---- a/tools/bpf/resolve_btfids/main.c
-+++ b/tools/bpf/resolve_btfids/main.c
-@@ -98,6 +98,13 @@
- # error "Unknown machine endianness!"
- #endif
+diff --git a/tools/bpf/resolve_btfids/Makefile b/tools/bpf/resolve_btfids/Makefile
+index ce1b556dfa90..1733a6e93a07 100644
+--- a/tools/bpf/resolve_btfids/Makefile
++++ b/tools/bpf/resolve_btfids/Makefile
+@@ -70,7 +70,8 @@ HOSTCFLAGS_resolve_btfids += -g \
+           -I$(srctree)/tools/include/uapi \
+           -I$(LIBBPF_INCLUDE) \
+           -I$(SUBCMD_INCLUDE) \
+-          $(LIBELF_FLAGS)
++          $(LIBELF_FLAGS) \
++          -Wall -Werror
  
-+enum btf_id_kind {
-+	BTF_ID_KIND_NONE,
-+	BTF_ID_KIND_SYM,
-+	BTF_ID_KIND_SET,
-+	BTF_ID_KIND_SET8
-+};
-+
- struct btf_id {
- 	struct rb_node	 rb_node;
- 	char		*name;
-@@ -105,9 +112,8 @@ struct btf_id {
- 		int	 id;
- 		int	 cnt;
- 	};
-+	enum btf_id_kind kind;
- 	int		 addr_cnt;
--	bool		 is_set;
--	bool		 is_set8;
- 	Elf64_Addr	 addr[ADDR_CNT];
- };
+ LIBS = $(LIBELF_LIBS) -lz
  
-@@ -197,8 +203,10 @@ static struct btf_id *btf_id__find(struct rb_root *root, const char *name)
- 	return NULL;
- }
- 
--static struct btf_id *
--btf_id__add(struct rb_root *root, char *name, bool unique)
-+static struct btf_id *__btf_id__add(struct rb_root *root,
-+				    char *name,
-+				    enum btf_id_kind kind,
-+				    bool unique)
- {
- 	struct rb_node **p = &root->rb_node;
- 	struct rb_node *parent = NULL;
-@@ -221,12 +229,23 @@ btf_id__add(struct rb_root *root, char *name, bool unique)
- 	if (id) {
- 		pr_debug("adding symbol %s\n", name);
- 		id->name = name;
-+		id->kind = kind;
- 		rb_link_node(&id->rb_node, parent, p);
- 		rb_insert_color(&id->rb_node, root);
- 	}
- 	return id;
- }
- 
-+static inline struct btf_id *btf_id__add(struct rb_root *root, char *name, enum btf_id_kind kind)
-+{
-+	return __btf_id__add(root, name, kind, false);
-+}
-+
-+static inline struct btf_id *btf_id__add_unique(struct rb_root *root, char *name, enum btf_id_kind kind)
-+{
-+	return __btf_id__add(root, name, kind, true);
-+}
-+
- static char *get_id(const char *prefix_end)
- {
- 	/*
-@@ -260,22 +279,36 @@ static char *get_id(const char *prefix_end)
- 	return id;
- }
- 
--static struct btf_id *add_set(struct object *obj, char *name, bool is_set8)
-+static struct btf_id *add_set(struct object *obj, char *name, enum btf_id_kind kind)
- {
-+	int len = strlen(name);
-+	int prefixlen;
-+	char *id;
-+
- 	/*
- 	 * __BTF_ID__set__name
- 	 * name =    ^
- 	 * id   =         ^
- 	 */
--	char *id = name + (is_set8 ? sizeof(BTF_SET8 "__") : sizeof(BTF_SET "__")) - 1;
--	int len = strlen(name);
-+	switch (kind) {
-+	case BTF_ID_KIND_SET:
-+		prefixlen = sizeof(BTF_SET "__") - 1;
-+		break;
-+	case BTF_ID_KIND_SET8:
-+		prefixlen = sizeof(BTF_SET8 "__") - 1;
-+		break;
-+	default:
-+		pr_err("Unexpected kind %d passed to %s() for symbol %s\n", kind, __func__, name);
-+		return NULL;
-+	}
- 
-+	id = name + prefixlen;
- 	if (id >= name + len) {
- 		pr_err("FAILED to parse set name: %s\n", name);
- 		return NULL;
- 	}
- 
--	return btf_id__add(&obj->sets, id, true);
-+	return btf_id__add_unique(&obj->sets, id, kind);
- }
- 
- static struct btf_id *add_symbol(struct rb_root *root, char *name, size_t size)
-@@ -288,7 +321,7 @@ static struct btf_id *add_symbol(struct rb_root *root, char *name, size_t size)
- 		return NULL;
- 	}
- 
--	return btf_id__add(root, id, false);
-+	return btf_id__add(root, id, BTF_ID_KIND_SYM);
- }
- 
- /* Older libelf.h and glibc elf.h might not yet define the ELF compression types. */
-@@ -491,35 +524,31 @@ static int symbols_collect(struct object *obj)
- 			id = add_symbol(&obj->funcs, prefix, sizeof(BTF_FUNC) - 1);
- 		/* set8 */
- 		} else if (!strncmp(prefix, BTF_SET8, sizeof(BTF_SET8) - 1)) {
--			id = add_set(obj, prefix, true);
-+			id = add_set(obj, prefix, BTF_ID_KIND_SET8);
- 			/*
- 			 * SET8 objects store list's count, which is encoded
- 			 * in symbol's size, together with 'cnt' field hence
- 			 * that - 1.
- 			 */
--			if (id) {
-+			if (id)
- 				id->cnt = sym.st_size / sizeof(uint64_t) - 1;
--				id->is_set8 = true;
--			}
- 		/* set */
- 		} else if (!strncmp(prefix, BTF_SET, sizeof(BTF_SET) - 1)) {
--			id = add_set(obj, prefix, false);
-+			id = add_set(obj, prefix, BTF_ID_KIND_SET);
- 			/*
- 			 * SET objects store list's count, which is encoded
- 			 * in symbol's size, together with 'cnt' field hence
- 			 * that - 1.
- 			 */
--			if (id) {
-+			if (id)
- 				id->cnt = sym.st_size / sizeof(int) - 1;
--				id->is_set = true;
--			}
- 		} else {
- 			pr_err("FAILED unsupported prefix %s\n", prefix);
- 			return -1;
- 		}
- 
- 		if (!id)
--			return -ENOMEM;
-+			return -EINVAL;
- 
- 		if (id->addr_cnt >= ADDR_CNT) {
- 			pr_err("FAILED symbol %s crossed the number of allowed lists\n",
-@@ -643,7 +672,7 @@ static int id_patch(struct object *obj, struct btf_id *id)
- 	int i;
- 
- 	/* For set, set8, id->id may be 0 */
--	if (!id->id && !id->is_set && !id->is_set8) {
-+	if (!id->id && id->kind != BTF_ID_KIND_SET && id->kind != BTF_ID_KIND_SET8) {
- 		pr_err("WARN: resolve_btfids: unresolved symbol %s\n", id->name);
- 		warnings++;
- 	}
-@@ -696,6 +725,7 @@ static int sets_patch(struct object *obj)
- {
- 	Elf_Data *data = obj->efile.idlist;
- 	struct rb_node *next;
-+	int cnt;
- 
- 	next = rb_first(&obj->sets);
- 	while (next) {
-@@ -715,11 +745,15 @@ static int sets_patch(struct object *obj)
- 			return -1;
- 		}
- 
--		if (id->is_set) {
-+		switch (id->kind) {
-+		case BTF_ID_KIND_SET:
- 			set = data->d_buf + off;
-+			cnt = set->cnt;
- 			qsort(set->ids, set->cnt, sizeof(set->ids[0]), cmp_id);
--		} else {
-+			break;
-+		case BTF_ID_KIND_SET8:
- 			set8 = data->d_buf + off;
-+			cnt = set8->cnt;
- 			/*
- 			 * Make sure id is at the beginning of the pairs
- 			 * struct, otherwise the below qsort would not work.
-@@ -744,10 +778,13 @@ static int sets_patch(struct object *obj)
- 						bswap_32(set8->pairs[i].flags);
- 				}
- 			}
-+			break;
-+		default:
-+			pr_err("Unexpected btf_id_kind %d for set '%s'\n", id->kind, id->name);
-+			return -1;
- 		}
- 
--		pr_debug("sorting  addr %5lu: cnt %6d [%s]\n",
--			 off, id->is_set ? set->cnt : set8->cnt, id->name);
-+		pr_debug("sorting  addr %5lu: cnt %6d [%s]\n", off, cnt, id->name);
- 
- 		next = rb_next(next);
- 	}
 -- 
 2.52.0
 
