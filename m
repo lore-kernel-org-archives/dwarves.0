@@ -1,290 +1,126 @@
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-182.mta1.migadu.com (out-182.mta1.migadu.com [95.215.58.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 635622727EE
-	for <dwarves@vger.kernel.org>; Fri, 19 Dec 2025 17:59:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3614034DB7E
+	for <dwarves@vger.kernel.org>; Fri, 19 Dec 2025 18:13:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766167145; cv=none; b=tvKWLc4atLO8iONjNJUUmzJG7F0xrKY1zlmF8cc0KjOc7QMTEVSY6OkZ4PM2qSubxd8zAh9MxpVwMgrMGSiK1jm1fSDNz/TQ4YKXOmPODzmQ6aZqiZ1cz5oK1tDieg2zkHK92VnjWHjh0N+WtpUfu7c0UCN7uhwDb3+VBJn7AtI=
+	t=1766168039; cv=none; b=QEuiENcLS41ubOARUEN3gS6eiPWymfcJw4+gS05QS9IDec/XRXJMi0g0VjOPU4VjiqilN1Ko417pG6YQUWWoIjExAdq2hXctZw+HKsR2bdISt9KyDGcuZNSofV0Uh3TCGXLMKFlSW3QOWwSwlG9znax7U/ZPhWaXs9f7kxM2NLE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766167145; c=relaxed/simple;
-	bh=SVwXawwJqmV8FEwhgJ5+11th3V5S7kqhU4cZk74979M=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=YlVkHfRdLSvt7TnIf5DMJl6ZXgNaInxn+o+5hQ2FtTVZ8K2fQHxXeaWqPlCAuIKKvwo6h8b6IKNACPYzgfTYxmM7k1fKR2gyAgsXc6GV8d3/yPsfS/kyLgNl/xtOuAkvP0g3zwZ091CRpDfjRBwAzHv342t1C9qRaJ7NalPvVR4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=baN9RqMQ; arc=none smtp.client-ip=209.85.214.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1766168039; c=relaxed/simple;
+	bh=xwdCmNBq4UArbLWiiMi29/rI19AL51F13PUJKOOtxjA=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=L26DGZ5lkUInE/L9QKef7OMb8s8jlmbPb0ynIfZ4Srw2Y1kTm046Iiw2T3cJvC9XVKrbsIYb5Q3NdG7e1or/Wb1I1AKGSIJNwn2qSRYbaieuX3b3q5YUh33zGkuWA0/BsiuJw8FFzbKvOfQ83IXIGTqhxYHJBDKOUL+vgz8mMZ8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=PAOHF2TW; arc=none smtp.client-ip=95.215.58.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="baN9RqMQ"
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-2a0a33d0585so19838355ad.1
-        for <dwarves@vger.kernel.org>; Fri, 19 Dec 2025 09:59:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1766167142; x=1766771942; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Tlpe6+pZrbcw9Zu+li+e09BHjw+JoUbz2Bk5+b9DEF0=;
-        b=baN9RqMQPKK4/YTQuZHajbL4qTLztjkKbKlyHbp99o9lThDQuFPZ45PX31Lxz+aDGI
-         py4ASdtjPDllGonhPDi2JHsVapT4/EEm9T7CwT7ApOENdnICt1UtMnQyvaUqaCzSzyB/
-         8KWwnnYk8/MxBIRJqO/z585ur66kuMvw5Qvqh0OPGQeJsphf2EdwIAv/CJlOVhef3ZaL
-         fig2g7aR7JMDwm6bLT7by5tHSQ5/9d4/bJ4YykxpiV2FKBikYg8RioeEcnlW/g+gK6ob
-         c9220hKCUroqjsOFkU2/5TqrRAWs9NphfEb9tIUthrVFRWmJRsbF4J82krOoCZeG/RWw
-         fbng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1766167142; x=1766771942;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=Tlpe6+pZrbcw9Zu+li+e09BHjw+JoUbz2Bk5+b9DEF0=;
-        b=cRefua8TIygBkijggCvjg6qzz33Kga4GYp55e5Tb1c6rIWVb9CUPgETPG3XKCwWPEY
-         547mqqOU+iZzc7tl8vhMgeroQHYWMyqcI5hXW398vTLQvooy74WvtwcpsqIP8/pc4NpI
-         J3akbhVmHH3nu2fdQa3/RxZA4rXCSLfXj9dKJ2+VGmigvB5+8NbazsL9A1L0eipZ00fW
-         9/ZmzXhGBgoal0l44MI7EH9ldJ8V9U5XqJM4Svd3l9yiLb5MOeo3oZebnP0niE69F7P/
-         R7eLTv1/CIYS/8XIVSDdlYN4QwqssHx2FSQendc05kPbyXGa0X3v6BWPjsZfhBJS1g82
-         SRWg==
-X-Forwarded-Encrypted: i=1; AJvYcCVD/2IKpwSKLk0wedO0Oxz4uWc9XrYHBnLjxAz2KGcAa7ECxoeiyAefyIF2q7/rs6rrsiVVxjR5@vger.kernel.org
-X-Gm-Message-State: AOJu0YyvAAa2a55j4iG6xEYDaa03QcMXOYazrnAhKz8BBb6NZzvXKaAt
-	RyjA2NC21MXquRB3oHuWXtXq5biZqAFUJGCEb+IEkJ/YxmJSW4hckSyOXZCqnpB0AVYiNIeQ4Wu
-	78SFc6xSRBIBdahdwy+wtevodLF9YZts=
-X-Gm-Gg: AY/fxX5sjrqo7JhduIBplVWzyoHnXd9lt+c9r594HPwJR97y0QdRYBug+pEDddzX1iZ
-	LHQnYCtOFR4XX62CmW+035dYTSzBPZXTDAeaxirQtyGslWuAp6riLSf1FVwgh1lpDIksUFUjWkA
-	lJXI3oDoo+9BAiMFey3ubuhno5lzEE8Ys6+A1i/Az042Da8O4t26aV4vcF6I68JDFYLEGxygFFH
-	R22n0i8yGW1ezgxuid3XFKHhMAdT5mrOmJorcpXixY35DY5lOytE4ib2ELxGtemQaoekjI=
-X-Google-Smtp-Source: AGHT+IHRxLsCXrDiVvVO9sp6L04oGH/AhQnwCzcfqHNN5tR1CYv3oXG2RxS8/oWzWeNDguKnMm6dMZVWHGD69hkpWDc=
-X-Received: by 2002:a17:90b:4a52:b0:34c:35ce:3c5f with SMTP id
- 98e67ed59e1d1-34e9212f6c8mr2672757a91.5.1766167142432; Fri, 19 Dec 2025
- 09:59:02 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="PAOHF2TW"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1766168035;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=4zunZq07cIUHpgGkUrroZ/jV28TJVmVXjL61x/8YIV8=;
+	b=PAOHF2TWFTq49Ty0PMvixwFcvzPGV1k1I/WcNQ8ZZn2rPj0jNpeMafbCLiImAf7cMmVVMG
+	MjBtk2m7PBTW4PkW6KFXgf7G5nOnKwxsQSjs1F7/smlV3TIEWcZbXGWQVgpEKynHNn5i2p
+	F++UeCRHeNBhrL+6vabyVDC4+/mZMyA=
+From: Ihor Solodrai <ihor.solodrai@linux.dev>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nicolas Schier <nsc@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Tejun Heo <tj@kernel.org>,
+	David Vernet <void@manifault.com>,
+	Andrea Righi <arighi@nvidia.com>,
+	Changwoo Min <changwoo@igalia.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Alan Maguire <alan.maguire@oracle.com>,
+	Donglin Peng <dolinux.peng@gmail.com>
+Cc: bpf@vger.kernel.org,
+	dwarves@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kbuild@vger.kernel.org,
+	sched-ext@lists.linux.dev
+Subject: [PATCH bpf-next v7 1/8] resolve_btfids: Rename object btf field to btf_path
+Date: Fri, 19 Dec 2025 10:13:14 -0800
+Message-ID: <20251219181321.1283664-2-ihor.solodrai@linux.dev>
+In-Reply-To: <20251219181321.1283664-1-ihor.solodrai@linux.dev>
+References: <20251219181321.1283664-1-ihor.solodrai@linux.dev>
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251215091730.1188790-1-alan.maguire@oracle.com>
- <20251215091730.1188790-3-alan.maguire@oracle.com> <CAEf4Bza+C7nRxFDHS0dNDk5XF79nE6y4GqEu0bmtJPTMoFrNvQ@mail.gmail.com>
- <db38bb39-7d16-41b6-968d-61e3b7681440@oracle.com>
-In-Reply-To: <db38bb39-7d16-41b6-968d-61e3b7681440@oracle.com>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Fri, 19 Dec 2025 09:58:50 -0800
-X-Gm-Features: AQt7F2qe5G7UQmwFPf8eqQLjCndwC0USKlN9uGKlkNRW1Dphi8Epul_MS2UniEg
-Message-ID: <CAEf4Bzbn_eWC8W8+so-BgkzNOxx8jgEysU3kTzBCW1jwXPEfnQ@mail.gmail.com>
-Subject: Re: [PATCH v8 bpf-next 02/10] libbpf: Support kind layout section
- handling in BTF
-To: Alan Maguire <alan.maguire@oracle.com>
-Cc: andrii@kernel.org, ast@kernel.org, daniel@iogearbox.net, 
-	martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org, 
-	yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org, 
-	sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, qmo@kernel.org, 
-	ihor.solodrai@linux.dev, dwarves@vger.kernel.org, bpf@vger.kernel.org, 
-	ttreyer@meta.com, mykyta.yatsenko5@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Fri, Dec 19, 2025 at 5:34=E2=80=AFAM Alan Maguire <alan.maguire@oracle.c=
-om> wrote:
->
-> On 16/12/2025 19:34, Andrii Nakryiko wrote:
-> > On Mon, Dec 15, 2025 at 1:18=E2=80=AFAM Alan Maguire <alan.maguire@orac=
-le.com> wrote:
-> >>
-> >> Support reading in kind layout fixing endian issues on reading;
-> >> also support writing kind layout section to raw BTF object.
-> >> There is not yet an API to populate the kind layout with meaningful
-> >> information.
-> >>
-> >> As part of this, we need to consider multiple valid BTF header
-> >> sizes; the original or the kind layout-extended headers.
-> >> So to support this, the "struct btf" representation is modified
-> >> to always allocate a "struct btf_header" and copy the valid
-> >> portion from the raw data to it; this means we can always safely
-> >> check fields like btf->hdr->kind_layout_len.
-> >>
-> >> Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
-> >> ---
-> >>  tools/lib/bpf/btf.c | 260 +++++++++++++++++++++++++++++++------------=
--
-> >>  1 file changed, 183 insertions(+), 77 deletions(-)
-> >>
-> >> diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
-> >> index b136572e889a..8835aee6ee84 100644
-> >> --- a/tools/lib/bpf/btf.c
-> >> +++ b/tools/lib/bpf/btf.c
-> >> @@ -40,42 +40,53 @@ struct btf {
-> >>
-> >>         /*
-> >>          * When BTF is loaded from an ELF or raw memory it is stored
-> >> -        * in a contiguous memory block. The hdr, type_data, and, strs=
-_data
-> >> +        * in a contiguous memory block. The  type_data, and, strs_dat=
-a
-> >
-> > nit: two spaces, and so many commas around and ;) let's leave Oxford
-> > comma, but comma after and is weird
-> >
-> >>          * point inside that memory region to their respective parts o=
-f BTF
-> >>          * representation:
-> >>          *
-> >> -        * +--------------------------------+
-> >> -        * |  Header  |  Types  |  Strings  |
-> >> -        * +--------------------------------+
-> >> -        * ^          ^         ^
-> >> -        * |          |         |
-> >> -        * hdr        |         |
-> >> -        * types_data-+         |
-> >> -        * strs_data------------+
-> >> +        * +--------------------------------+---------------------+
-> >> +        * |  Header  |  Types  |  Strings  |Optional kind layout |
-> >
-> > Space missing, boo. Keep diagrams beautiful!..
-> >
-> >> +        * +--------------------------------+---------------------+
-> >> +        * ^          ^         ^           ^
-> >> +        * |          |         |           |
-> >> +        * raw_data   |         |           |
-> >> +        * types_data-+         |           |
-> >> +        * strs_data------------+           |
-> >> +        * kind_layout----------------------+
-> >> +        *
-> >> +        * A separate struct btf_header is allocated for btf->hdr,
-> >> +        * and header information is copied into it.  This allows us
-> >> +        * to handle header data for various header formats; the origi=
-nal,
-> >> +        * the extended header with kind layout, etc.
-> >>          *
-> >>          * If BTF data is later modified, e.g., due to types added or
-> >>          * removed, BTF deduplication performed, etc, this contiguous
-> >> -        * representation is broken up into three independently alloca=
-ted
-> >> -        * memory regions to be able to modify them independently.
-> >> +        * representation is broken up into four independent memory
-> >> +        * regions.
-> >> +        *
-> >>          * raw_data is nulled out at that point, but can be later allo=
-cated
-> >>          * and cached again if user calls btf__raw_data(), at which po=
-int
-> >> -        * raw_data will contain a contiguous copy of header, types, a=
-nd
-> >> -        * strings:
-> >> +        * raw_data will contain a contiguous copy of header, types, s=
-trings
-> >> +        * and optionally kind_layout.  kind_layout optionally points =
-to a
-> >> +        * kind_layout array - this allows us to encode information ab=
-out
-> >> +        * the kinds known at encoding time.  If kind_layout is NULL n=
-o
-> >> +        * kind information is encoded.
-> >>          *
-> >> -        * +----------+  +---------+  +-----------+
-> >> -        * |  Header  |  |  Types  |  |  Strings  |
-> >> -        * +----------+  +---------+  +-----------+
-> >> -        * ^             ^            ^
-> >> -        * |             |            |
-> >> -        * hdr           |            |
-> >> -        * types_data----+            |
-> >> -        * strset__data(strs_set)-----+
-> >> +        * +----------+  +---------+  +-----------+   +-----------+
-> >> +        * |  Header  |  |  Types  |  |  Strings  |   |kind_layout|
-> >> +        * +----------+  +---------+  +-----------+   +-----------+
-> >
-> > nit: spaces (and if we go with "layout" naming, this will be short and
-> > beautiful " Layout " ;)
-> >
-> >> +        * ^             ^            ^               ^
-> >> +        * |             |            |               |
-> >> +        * hdr           |            |               |
-> >> +        * types_data----+            |               |
-> >> +        * strset__data(strs_set)-----+               |
-> >> +        * kind_layout--------------------------------+
-> >
-> > [...]
-> >
-> >> @@ -3888,7 +3989,7 @@ static int btf_dedup_strings(struct btf_dedup *d=
-)
-> >>
-> >>         /* replace BTF string data and hash with deduped ones */
-> >>         strset__free(d->btf->strs_set);
-> >> -       d->btf->hdr->str_len =3D strset__data_size(d->strs_set);
-> >> +       btf_hdr_update_str_len(d->btf, strset__data_size(d->strs_set))=
-;
-> >>         d->btf->strs_set =3D d->strs_set;
-> >>         d->strs_set =3D NULL;
-> >>         d->btf->strs_deduped =3D true;
-> >> @@ -5343,6 +5444,11 @@ static int btf_dedup_compact_types(struct btf_d=
-edup *d)
-> >>         d->btf->type_offs =3D new_offs;
-> >>         d->btf->hdr->str_off =3D d->btf->hdr->type_len;
-> >>         d->btf->raw_size =3D d->btf->hdr->hdr_len + d->btf->hdr->type_=
-len + d->btf->hdr->str_len;
-> >> +       if (d->btf->kind_layout) {
-> >> +               d->btf->hdr->kind_layout_off =3D d->btf->hdr->str_off =
-+ roundup(d->btf->hdr->str_len,
-> >> +                                                                     =
-        4);
-> >> +               d->btf->raw_size =3D roundup(d->btf->raw_size, 4) + d-=
->btf->hdr->kind_layout_len;
-> >
-> > maybe put layout data after type data, but before strings? rounding up
-> > string section which is byte-based feels weird. I think old libbpf
-> > implementations should handle all this well, because btf_header
-> > explicitly specifies string section offset, no?
-> >
->
-> That sounds good, but I think there are some strictness issues with how w=
-e parse
-> BTF on the kernel side that we may need to think about, especially if we =
-want to
-> make kind layout always available. In that case we'd need to think how ol=
-d kernels
-> built with newer pahole might handle newer headers with layout info.
->
-> First in btf_parse_hdr() the kernel rejects BTF with non-zero unsupported=
- fields.
-> So trying to load vmlinux BTF generated by a pahole that adds layout info=
- will
-> fail for such a kernel.
->
-> Second when validating section info in btf_check_sec_info() we check for =
-overlaps
-> between known sections, and we also check for gaps between known sections=
-. Finally we
-> also check for any additional data other than the known section data.
+Rename the member of `struct object` holding the path to BTF data if
+provided via --btf arg. `btf_path` is less ambiguous.
 
-I thought we don't validate gaps, I missed btf_check_sec_info()
-checks, though. Good for kernel, it should be strict.
+Acked-by: Eduard Zingerman <eddyz87@gmail.com>
+Tested-by: Alan Maguire <alan.maguire@oracle.com>
+Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
+---
+ tools/bpf/resolve_btfids/main.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-But it's easy to drop this layout info in libbpf for BTF sanitization,
-this shouldn't be a problem. Just shift everything to the left and
-adjust strs_off.
+diff --git a/tools/bpf/resolve_btfids/main.c b/tools/bpf/resolve_btfids/main.c
+index d47191c6e55e..164f0c941f04 100644
+--- a/tools/bpf/resolve_btfids/main.c
++++ b/tools/bpf/resolve_btfids/main.c
+@@ -113,7 +113,7 @@ struct btf_id {
+ 
+ struct object {
+ 	const char *path;
+-	const char *btf;
++	const char *btf_path;
+ 	const char *base_btf_path;
+ 
+ 	struct {
+@@ -550,11 +550,11 @@ static int symbols_resolve(struct object *obj)
+ 		}
+ 	}
+ 
+-	btf = btf__parse_split(obj->btf ?: obj->path, base_btf);
++	btf = btf__parse_split(obj->btf_path ?: obj->path, base_btf);
+ 	err = libbpf_get_error(btf);
+ 	if (err) {
+ 		pr_err("FAILED: load BTF from %s: %s\n",
+-			obj->btf ?: obj->path, strerror(-err));
++			obj->btf_path ?: obj->path, strerror(-err));
+ 		goto out;
+ 	}
+ 
+@@ -790,8 +790,8 @@ int main(int argc, const char **argv)
+ 	struct option btfid_options[] = {
+ 		OPT_INCR('v', "verbose", &verbose,
+ 			 "be more verbose (show errors, etc)"),
+-		OPT_STRING(0, "btf", &obj.btf, "BTF data",
+-			   "BTF data"),
++		OPT_STRING(0, "btf", &obj.btf_path, "file",
++			   "path to a file with input BTF data"),
+ 		OPT_STRING('b', "btf_base", &obj.base_btf_path, "file",
+ 			   "path of file providing base BTF"),
+ 		OPT_BOOLEAN(0, "fatal_warnings", &fatal_warnings,
+-- 
+2.52.0
 
->
-> For layout info stored between type+strings we'd wind up rejecting it for=
- a few reasons:
->
-> 1. we'd find non-zero data in the header (layout offset/len)
-> 2. we'd find a "gap" between types+strings (the layout data)
->
-> Similarly with layout at the end
->
-> 1. we'd find non-zero data in the header (kind layout offset/len)
-> 2. we'd find unaccounted-for data after the string data (the kind layout =
-data)
->
-> So either way we'd wind up with unsupported headers. One approach would b=
-e to
-> do stable backports relaxing these header tests; I think we could relax t=
-hem to
-> simply ensure no overlap between sections and that sections don't overrun=
- data
-> length without risking having unusable BTF. Then a newer BTF header with =
-additional
-> layout info wouldn't get rejected. What do you think?
-
-See above, I don't see why we can't just sanitize BTF and drop layout
-parts altogether. They are optional for kernel either way, no harm in
-dropping them.
-
->
-> Alan
