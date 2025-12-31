@@ -1,105 +1,174 @@
-Received: from out-172.mta1.migadu.com (out-172.mta1.migadu.com [95.215.58.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f74.google.com (mail-wm1-f74.google.com [209.85.128.74])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE305271A7C
-	for <dwarves@vger.kernel.org>; Mon, 29 Dec 2025 19:28:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 440121A840A
+	for <dwarves@vger.kernel.org>; Wed, 31 Dec 2025 08:53:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767036523; cv=none; b=nV3gWze0DAZ+ch2fDx1Imv9YLkw7ZMYc0pIGM+jIQnOAtGiQ0vkphHNFmRh3szjoBi8d+z6yfptHp5uYn8EmF6wBUxWsQhd1F/DIYh552A0s6Ps12u643lXa7LV8r7zF6gwbkJv1T3QVHzyw1LG+NoNJt2w/DANZDOhagzuZZbI=
+	t=1767171231; cv=none; b=gNckH/4FqB8AjH2IiZj4LGaSrYXagbfnMWCI/yUQyi8UwOeFZ6ETu4tVSZBbCnwWPaZSt+WyrVQaCttCg5X3/M6arLZ7LsJ02uLkBhv10cTCJAzHYmecRZ4ZQtZgfiDnWpTZk4MFxTkBgl8nYXPCYGJQn7GUtNuV82cYdXpeE5I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767036523; c=relaxed/simple;
-	bh=OvepIgKTsXQ554crop9a18ID5p0xWukoyJgTO3AWK+s=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ERTgy21v0WSlg0Fk2Bv55LFWgvaKSAxNlCBSPJ9wdmpO+wCYdqd1vdDT9draD4P1Sz/sT8L6hUuIKAsWSWk9iJiXJXHl2TLHfJnBZajo7JKjTSPMZrjaG9h0pmIFrVFffSaRxoEeTzswkhxP1iGDVXh4VJ8xxEqguuXby3jvhj8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=jNeIe3bC; arc=none smtp.client-ip=95.215.58.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1767171231; c=relaxed/simple;
+	bh=0xNMWLmzbdpUAIU2L73K9taXz+TuQgiz53/MYOlnHXE=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=GXXNes9lvWr7AovjGpZKXWgzHW6iwFbKmbnfWw2j4vjiUKo+YuOka8XbazJDVJSjEIjKOkbhEsyWihBRf6jIbnRdiisDk2/ezS0zIjrCKiPHprcAMH7RNdM9lYH1Xn1RXSx59WTwstoUC5HsdjWy9SMHVkTJYOlML7sCv9Pa0Ns=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--mattbobrowski.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=fIAUeASC; arc=none smtp.client-ip=209.85.128.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--mattbobrowski.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="jNeIe3bC"
-Message-ID: <5c9130f8-dd8a-41c4-8033-d5661f64c01a@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1767036509;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Irz9LTpqvbmdmlGPdks1FZg7wCTsfvzQn5Eo49frrB4=;
-	b=jNeIe3bCnu6XyQCXlqqd5hpLnTRq96sypyzRUtDSC6IHaCuWb7ttMM4nGHeAaXtjshEnam
-	qVSotNJSq4u18h03AMXj9tATx7VRK69uKeu+c126wv8frmZHDHEs77M53pSAGB/Se5nSsX
-	2oF8EeFZniVaZ0rEM8Lx/htuO/53pDA=
-Date: Mon, 29 Dec 2025 11:28:10 -0800
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="fIAUeASC"
+Received: by mail-wm1-f74.google.com with SMTP id 5b1f17b1804b1-477a1e2b372so84237315e9.2
+        for <dwarves@vger.kernel.org>; Wed, 31 Dec 2025 00:53:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1767171227; x=1767776027; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=zEcLp/F9Uq6NVB3VNgG8AY0r9oLq8C7H19pf8kVAwrQ=;
+        b=fIAUeASCExgN6xNOySjJIaDgaIHinRZHSH/6OME9lIO5KUB8C96Dgm2js5K6mf5Njm
+         Iv+Gt9xAltrbrcvcvT4IpF7e+hiJ/z8IKxEem0VGCPeGANASDXJmmHHbRyUJoGGbiFXv
+         LoSbOBiNFdkOy0ofhR2AmK71PNV8XHbWy4NxKiU3zYE4byCPzJr4c7I42wfuk5pmI/cX
+         syfDmreNPKwWCoXfJ9Fg8jn+i0ZGNeuV20sDmLnn1O4/iTGEI01L2lhORgpP48q8SXW6
+         qfysqR5CxLa/g5auN7cSqwSgVLLYT4fUPPFAFUYwDi6X8nykYgUrMQKOn3VD2QKAOhKj
+         0SoA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1767171227; x=1767776027;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=zEcLp/F9Uq6NVB3VNgG8AY0r9oLq8C7H19pf8kVAwrQ=;
+        b=q/SOjZtZnmiowffhj/9XGMqQKCFWVreOkQIYXhFy4dThputrwxI6XuUwMmgxKQP2os
+         XA8D74OwKK41fP2WSKKtU9dM/1M6Au6F4snW4q1I21y/fS5n46Pe9UMTeZfe8yIg1XpL
+         yfCvy3MsUPTpLo/1cc9g/7OmSCfMh9uVwznvq5TJXrSpxrwUWrBiq2Pr6cKQCBa7XJRL
+         mP0WDcWHi3XnLqX8hBW6R4n9SnM7LwmUi+fNq3jIqf1T73tPX/awVYbCAdQD0MsFnfHJ
+         8gLplA8BnRgGnJls43so9sqNZhnhAQYCDLrF1cBMR4shPMVSPQtldI9BibHixB1AvyxP
+         ajuw==
+X-Forwarded-Encrypted: i=1; AJvYcCXR8DLicWJT/3RbgH8UvU9ORt03eGXrLipv/xgY2Fez4m2CXly11uRwnAdsO150e8xN+KVl9rUa@vger.kernel.org
+X-Gm-Message-State: AOJu0YyJimZ7DIO/kx3YNZQqsFLJBJhT+iZlwyPua0fkRlNd5sNFzJX9
+	Z7tfb/bRSgG8+wqLneLyBCcti6t15TeDBnO0GrcPmn97exjJtQdkEDFLk69lJlS168xHTuKmnNs
+	Y7s7+Jn1/3AmY+urRUXcSBVe5Al7hmiu9GQ==
+X-Google-Smtp-Source: AGHT+IGHQ93F3Tury6kxsMpyVrTuIgnVMVGbs0mQe672Vf4kgnZkpMZsMOHvbBuTZHe6N2QqQIaMGREDJk/24EhBvSGM
+X-Received: from wmow10.prod.google.com ([2002:a05:600c:474a:b0:475:d804:bfd2])
+ (user=mattbobrowski job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:600c:8216:b0:47d:403e:90c9 with SMTP id 5b1f17b1804b1-47d403e9114mr234064145e9.11.1767171227538;
+ Wed, 31 Dec 2025 00:53:47 -0800 (PST)
+Date: Wed, 31 Dec 2025 08:53:22 +0000
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Subject: Re: [bpf-next:master 8/9] FAILED: load BTF from .tmp_vmlinux1.BTF.1:
- No such file or directory
-To: kernel test robot <lkp@intel.com>, Dinh Nguyen <dinguyen@kernel.org>,
- Alan Maguire <alan.maguire@oracle.com>
-Cc: oe-kbuild-all@lists.linux.dev, Andrii Nakryiko <andrii@kernel.org>,
- bpf <bpf@vger.kernel.org>, linux-kbuild@vger.kernel.org,
- linux-kernel@vger.kernel.org, dwarves <dwarves@vger.kernel.org>
-References: <202512250932.X7mdviuH-lkp@intel.com>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
-In-Reply-To: <202512250932.X7mdviuH-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.52.0.351.gbe84eed79e-goog
+Message-ID: <20251231085322.3248063-1-mattbobrowski@google.com>
+Subject: [PATCH dwarves] btf_encoder: prefer strong function definitions for
+ BTF generation
+From: Matt Bobrowski <mattbobrowski@google.com>
+To: Alan Maguire <alan.maguire@oracle.com>, 
+	Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>, dwarves@vger.kernel.org
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
+	Stanislav Fomichev <sdf@fomichev.me>, John Fastabend <john.fastabend@gmail.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Matt Bobrowski <mattbobrowski@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On 12/24/25 5:01 PM, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-> head:   f14cdb1367b947d373215e36cfe9c69768dbafc9
-> commit: 522397d05e7d4a7c30b91841492360336b24f833 [8/9] resolve_btfids: Change in-place update with raw binary output
-> config: nios2-randconfig-001-20251224 (https://download.01.org/0day-ci/archive/20251225/202512250932.X7mdviuH-lkp@intel.com/config)
-> compiler: nios2-linux-gcc (GCC) 11.5.0
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251225/202512250932.X7mdviuH-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202512250932.X7mdviuH-lkp@intel.com/
-> 
-> All errors (new ones prefixed by >>):
-> 
->    Complex, interval and imaginary float types are not supported
->    Error while encoding BTF.
+Currently, when a function has both a weak and a strong definition
+across different compilation units (CUs), the BTF encoder arbitrarily
+selects one to generate the BTF entry. This selection fundamentally is
+dependent on the order in which pahole processes the CUs.
 
-Hi Dinh, Alan,
+This indifference often leads to a mismatch where the generated BTF
+reflects the weak definition's prototype, even though the linker
+selected the strong definition for the final vmlinux binary.
 
-Not sure why this has surfaced only now, but it appears that kernel
-build with ARCH=nios2 and CONFIG_DEBUG_INFO_BTF=y has been broken for
-a long time.
+A notable example described in [0] involving function
+bpf_lsm_mmap_file(). Both weak and strong definitions exist,
+distinguished only by parameter names (e.g., file vs
+file__nullable). While the strong definition is linked into the
+vmlinux object, the generated BTF contained the prototype for the weak
+definition. This causes issues for BPF verifier (e.g., __nullable
+annotation semantics), or tools relying on accurate type information.
 
-I tried the following revisions:
-  - bpf-next @ 522397d05e7d as in bug report
-  - bpf-next @ 014e1cdb5fad without the gen-btf.sh patch
-  - v6.18
-  - v6.17
-  - v6.12 (~1y ago)
+To fix this, ensure the BTF encoder selects the function definition
+corresponding to the actual code linked into the binary. This is
+achieved by comparing the DWARF function address (DW_AT_low_pc) with
+the ELF symbol address (st_value). Only the DWARF entry for the strong
+definition will match the final resolved ELF symbol address.
 
-All fail with the same error in pahole [1]:
+[0] https://lore.kernel.org/all/aVJY9H-e83T7ivT4@google.com/
 
-	Complex, interval and imaginary float types are not supported
-	Encountered error while encoding BTF.
+Link: https://lore.kernel.org/all/aVJY9H-e83T7ivT4@google.com/
+Signed-off-by: Matt Bobrowski <mattbobrowski@google.com>
+---
+ btf_encoder.c | 36 ++++++++++++++++++++++++++++++++++++
+ 1 file changed, 36 insertions(+)
 
-I used v1.24 in most experiments, the default debian:bookworm
-installation.  Upgrading pahole to v1.31 doesn't change this behavior.
-
-I also stumbled on a phoronix article [2], saying Nios II support has
-ended with GCC 15. Is it actively supported in Linux?
-
-Not clear to me if anything needs to be fixed here. I'd appreciate any input.
-
-Thanks.
-
-[1] https://git.kernel.org/pub/scm/devel/pahole/pahole.git/tree/btf_encoder.c?h=v1.31#n469
-[2] https://www.phoronix.com/news/GCC-15-Drops-Altera-Nios-II
-
-
->>> FAILED: load BTF from .tmp_vmlinux1.BTF.1: No such file or directory
-> 
+diff --git a/btf_encoder.c b/btf_encoder.c
+index b37ee7f..0462094 100644
+--- a/btf_encoder.c
++++ b/btf_encoder.c
+@@ -79,6 +79,7 @@ struct btf_encoder_func_annot {
+ 
+ /* state used to do later encoding of saved functions */
+ struct btf_encoder_func_state {
++	uint64_t addr;
+ 	struct elf_function *elf;
+ 	uint32_t type_id_off;
+ 	uint16_t nr_parms;
+@@ -1258,6 +1259,7 @@ static int32_t btf_encoder__save_func(struct btf_encoder *encoder, struct functi
+ 	if (!state)
+ 		return -ENOMEM;
+ 
++	state->addr = function__addr(fn);
+ 	state->elf = func;
+ 	state->nr_parms = ftype->nr_parms + (ftype->unspec_parms ? 1 : 0);
+ 	state->ret_type_id = ftype->tag.type == 0 ? 0 : encoder->type_id_off + ftype->tag.type;
+@@ -1477,6 +1479,29 @@ static void btf_encoder__delete_saved_funcs(struct btf_encoder *encoder)
+ 	encoder->func_states.cap = 0;
+ }
+ 
++static struct btf_encoder_func_state *btf_encoder__select_canonical_state(struct btf_encoder_func_state *combined_states,
++									  int combined_cnt)
++{
++	int i, j;
++
++	/*
++	 * The same elf_function is shared amongst combined functions,
++	 * as per saved_functions_combine().
++	 */
++	struct elf_function *elf = combined_states[0].elf;
++
++	for (i = 0; i < combined_cnt; i++) {
++		struct btf_encoder_func_state *state = &combined_states[i];
++
++		for (j = 0; j < elf->sym_cnt; j++) {
++			if (state->addr == elf->syms[j].addr)
++				return state;
++		}
++	}
++
++	return &combined_states[0];
++}
++
+ static int btf_encoder__add_saved_funcs(struct btf_encoder *encoder, bool skip_encoding_inconsistent_proto)
+ {
+ 	struct btf_encoder_func_state *saved_fns = encoder->func_states.array;
+@@ -1517,6 +1542,17 @@ static int btf_encoder__add_saved_funcs(struct btf_encoder *encoder, bool skip_e
+ 					0, 0);
+ 
+ 		if (add_to_btf) {
++			/*
++			 * We're to add the current function within
++			 * BTF. Although, from all functions that have
++			 * possibly been combined via
++			 * saved_functions_combine(), ensure to only
++			 * select and emit BTF for the most canonical
++			 * function definition.
++			 */
++			if (j - i > 1)
++				state = btf_encoder__select_canonical_state(state, j - i);
++
+ 			if (is_kfunc_state(state))
+ 				err = btf_encoder__add_bpf_kfunc(encoder, state);
+ 			else
+-- 
+2.52.0.351.gbe84eed79e-goog
 
