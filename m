@@ -1,170 +1,141 @@
-Received: from out-186.mta0.migadu.com (out-186.mta0.migadu.com [91.218.175.186])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C53AF274FC2
-	for <dwarves@vger.kernel.org>; Fri,  2 Jan 2026 18:46:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.186
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3677129A30E
+	for <dwarves@vger.kernel.org>; Sat,  3 Jan 2026 09:11:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767379584; cv=none; b=PKggcRrkjd303E3c3gaUHn+GFCln1yC0GA4l5Sm0cAZbIPduQQOPP78DtmFuxVmDce8pIRnZSl3H4TNGCHjPdqanGYIq9rHu/fPHKJgMLTBYmX4MYiwRzuznlkrZBEJ+oyv45r8tgYg0xXzwvFtZs616E3Vg/sqUf9D9L8WAkPA=
+	t=1767431512; cv=none; b=eez8B9HLRBTudo7EtLQ72vEDIOlaqPhRx2mfMBf7seek/Ov2Yo8krgXav8bntZvQh9qIMljPvo0OTSHFYXBI8BPrvvw9s9BYbu4a+7z/lrtxIvR5Ge8e/tWpvKUfUdn14ZYNsl00tByyzpBteqbBvZs/qrfw75rWmY5z75vSZQk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767379584; c=relaxed/simple;
-	bh=yhajlUA1fx/Zlcit0+DfuP64OZIo8uCVQkMIAyu+5jo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=fh4W2BuvcXBQQ/EH8U+cIMbIVuCe1VNs55mAbv2j+tei1nCmJ93Qvpu3U+eiams1SF9mnYVCCzUvtqc/qieYljLFQbeuRhTI0Sj9xCfD6uOvGHRLRlg4qpE9bFiB/1njxd1qCW6fGocTbhflWjrVKicZSaBuGZfGHVHPrdtlXfc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=lTlEWbm9; arc=none smtp.client-ip=91.218.175.186
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1767431512; c=relaxed/simple;
+	bh=HA43poXcwQpADE2V9nU830RzFH6YDFnRj5guQFKHWY8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=R1oZ+IMF6eAqZHZ1iSyGHFLSQV3JWTYlhPazyiWTG6CrQ5VnZcDHYbOk45QrACWs/JNbr+KG2b/cNMSWqlIXXut6f7bC5MDL2frzHOZFzeyeDWOHqQUaTLfXKkPQUt0PQlv4bafEV9vHaSYxF/k1D6evtxzVlirQhEzN+SgvR7c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QBUVEBi8; arc=none smtp.client-ip=209.85.210.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="lTlEWbm9"
-Message-ID: <926aca4a-d7d5-4e7d-9096-77b27374c5cd@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1767379570;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Gu+uHmJxvrBGDqdBSBYDxMXWFhr+1xD81atoaAx9KeQ=;
-	b=lTlEWbm9IyvqFMZ1NFIlRpw8IivhTV1qdcYynTYKu6vmuPeMALfyYX7NKPFurDwCcsIHTS
-	IP8AtIREDo0YGxPHq5lj2Q/9jChfnWyGni1dbvYSpp/XqfJTHSaCSBr9xGGe+yR+S1oB5V
-	O91wdgsVwxCp+vA5Ouo0FYO4+NXdGxk=
-Date: Fri, 2 Jan 2026 10:46:00 -0800
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QBUVEBi8"
+Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-7acd9a03ba9so13042718b3a.1
+        for <dwarves@vger.kernel.org>; Sat, 03 Jan 2026 01:11:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1767431510; x=1768036310; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=CbB/u4Boyz6wim8LLKDK6vrmsmGBVfzV79ZjNtpeGas=;
+        b=QBUVEBi82nqruvb4sfB04p3544/imFFRNhSir75cFMCYEf4h7wFYoiCRPAb2RDlCUI
+         JerEuwpOEZ0GOxQ8jFm34HljVvdV5bYZafRfcssETKyeqFGT39xc0+IHNUcmMeHbwoDU
+         FprCWxpzDtZY7DMFALG2r1vbuE8T7s6QlLk2RSj6hW+OSjM5W6mi3GBXRjauu0pptzFM
+         c3hH95Ec9RJvj4mBlgHlSQ0LUkY4aOK+PSr/O8tdqqxMbs7WpK6/LQ1EBXhbvcy+QoE0
+         FteuA3DvB8BRlyGkbU6KogeB1GAtL9ry9eLbltQrdGuLSVt3hPOqNDbi7sXQvHmDH21g
+         +JtQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1767431510; x=1768036310;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=CbB/u4Boyz6wim8LLKDK6vrmsmGBVfzV79ZjNtpeGas=;
+        b=LJWT6Xy9UV5AgchwA3U4YAzLI85gSxCGZB4KG/DvcFDc7gXVVExN6zEczAhNmv5HKe
+         2GtwKwzjGWLJ2YnKJmWrA2iYovA562OpoNsj8BUDFMddxwGuJtowQKKM5hprfmrhVcyk
+         jhO3MkcGb+stYGI+1JWhwBCHEK/CJRM2AkowcJu0/qwngkWRM9MRE3UuL9pa4p59vYz7
+         a3BVD1r3XG0Sau0FFhOrhURUo3L6+YvtkVKjfuAHxmaq1RKMQHwjAVzon8MdFzIg1VYV
+         1EMMhBkiqYUwV7gZiNK9bycQARVGABuYQkJ4t+RVinwPzf8D5q1HZ41idNe5UV5Qj//K
+         zh5Q==
+X-Forwarded-Encrypted: i=1; AJvYcCXBSQ8V+fhRhMAl+jR8kPvQ2Ei0ldvNNX9p2skK6QDeeudvsxSO3JnpCXBrVjHwxmftHGpsPOMq@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz6SKV0J1kxl5HRMh3JifmjMUwocz+khbSOVMsYCloW1LNQ6Dvw
+	/xytDgT4zKmjO/w9QL3UwjIbottZXiYwse1C5Ru4WTcGiHAwC71aat2A
+X-Gm-Gg: AY/fxX56BCQQUvAj6VF7utvhvzCXFffX9Mc9PVOp+LuK4lhK0tDad0bYLj5/4zHRDWP
+	1ggxG1vapx+NARpCSnP/JTpr1vZugQrsZQmY57XtMlZAf7P/zY1TyKt5AVZn7aVnZiodb6koxKX
+	FnCDF/Ljw36kLppHbU9O3OoX+fmoUb/2lhK+d/YOODjXPj7Tm3FP1sW5HXsPDAoUFJuDn+xMUT6
+	0/clU+QRbZ63GMUnjRLuC8nRiHqP4t2R+g5pEJMCVzB8G9J3J4O9/1s+cqxA34l3HCxAMPqfnYq
+	ab2tdt6qSCCI38kfKbMp6faSC3pgzf1yw5GvaleqgK3Z7gF1UnChTsyroJ7xAyGvOF7wAUgxIgg
+	5IItyWoF3iLcN4xe206Q/VtHaM5H1jNHt5kw5CbCBqGNxDcNl7Kco0vy7wwqi9tLoqIRkJdMn2j
+	MkDEXZPD7hO+0=
+X-Google-Smtp-Source: AGHT+IHj+Yc5i5BlyxHw8XH6x0veUjij66PZD5scVA7u5fS2kWQiygSaCY5f39DOPJCDQFwr9SkNbQ==
+X-Received: by 2002:a05:6a00:e0f:b0:7e8:4398:b34f with SMTP id d2e1a72fcca58-7ff66079339mr38129658b3a.34.1767431510268;
+        Sat, 03 Jan 2026 01:11:50 -0800 (PST)
+Received: from archie.me ([210.87.74.117])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7ff7e797aadsm42981212b3a.61.2026.01.03.01.11.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 03 Jan 2026 01:11:48 -0800 (PST)
+Received: by archie.me (Postfix, from userid 1000)
+	id ABA154092C2B; Sat, 03 Jan 2026 16:11:46 +0700 (WIB)
+Date: Sat, 3 Jan 2026 16:11:46 +0700
+From: Bagas Sanjaya <bagasdotme@gmail.com>
+To: Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Hemanth Malla <vmalla@linux.microsoft.com>, bpf@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+	martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
+	yonghong.song@linux.dev, john.fastabend@gmail.com,
+	kpsingh@kernel.org, sdf@fomichev.me, haoluo@google.com,
+	jolsa@kernel.org, vmalla@microsoft.com, corbet@lwn.net,
+	Alan Maguire <alan.maguire@oracle.com>,
+	dwarves <dwarves@vger.kernel.org>
+Subject: Re: [PATCH bpf-next] bpf, docs: Update pahole to 1.28 for selftests
+Message-ID: <aVjdUjai0lzpMeHv@archie.me>
+References: <1767352415-24862-1-git-send-email-vmalla@linux.microsoft.com>
+ <bcd23277-a18e-4bb5-ba76-3416c84511c2@linux.dev>
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH dwarves] btf_encoder: prefer strong function definitions
- for BTF generation
-To: Matt Bobrowski <mattbobrowski@google.com>,
- Alan Maguire <alan.maguire@oracle.com>,
- Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>, dwarves@vger.kernel.org
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
- KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
- John Fastabend <john.fastabend@gmail.com>, Jiri Olsa <jolsa@kernel.org>
-References: <20251231085322.3248063-1-mattbobrowski@google.com>
-Content-Language: en-GB
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <20251231085322.3248063-1-mattbobrowski@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="x53cqXSfhecsAUML"
+Content-Disposition: inline
+In-Reply-To: <bcd23277-a18e-4bb5-ba76-3416c84511c2@linux.dev>
 
 
+--x53cqXSfhecsAUML
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On 12/31/25 12:53 AM, Matt Bobrowski wrote:
-> Currently, when a function has both a weak and a strong definition
-> across different compilation units (CUs), the BTF encoder arbitrarily
-> selects one to generate the BTF entry. This selection fundamentally is
-> dependent on the order in which pahole processes the CUs.
->
-> This indifference often leads to a mismatch where the generated BTF
-> reflects the weak definition's prototype, even though the linker
-> selected the strong definition for the final vmlinux binary.
->
-> A notable example described in [0] involving function
-> bpf_lsm_mmap_file(). Both weak and strong definitions exist,
-> distinguished only by parameter names (e.g., file vs
-> file__nullable). While the strong definition is linked into the
-> vmlinux object, the generated BTF contained the prototype for the weak
-> definition. This causes issues for BPF verifier (e.g., __nullable
-> annotation semantics), or tools relying on accurate type information.
->
-> To fix this, ensure the BTF encoder selects the function definition
-> corresponding to the actual code linked into the binary. This is
-> achieved by comparing the DWARF function address (DW_AT_low_pc) with
-> the ELF symbol address (st_value). Only the DWARF entry for the strong
-> definition will match the final resolved ELF symbol address.
->
-> [0] https://lore.kernel.org/all/aVJY9H-e83T7ivT4@google.com/
->
-> Link: https://lore.kernel.org/all/aVJY9H-e83T7ivT4@google.com/
-> Signed-off-by: Matt Bobrowski <mattbobrowski@google.com>
+On Fri, Jan 02, 2026 at 07:33:50AM -0800, Ihor Solodrai wrote:
+> On 1/2/26 3:13 AM, Hemanth Malla wrote:
+> > diff --git a/Documentation/bpf/bpf_devel_QA.rst b/Documentation/bpf/bpf=
+_devel_QA.rst
+> > index 0acb4c9b8d90..3a147b6c780e 100644
+> > --- a/Documentation/bpf/bpf_devel_QA.rst
+> > +++ b/Documentation/bpf/bpf_devel_QA.rst
+> > @@ -482,7 +482,7 @@ under test should match the config file fragment in
+> >  tools/testing/selftests/bpf as closely as possible.
+> > =20
+> >  Finally to ensure support for latest BPF Type Format features -
+> > -discussed in Documentation/bpf/btf.rst - pahole version 1.16
+> > +discussed in Documentation/bpf/btf.rst - pahole version 1.28
+>=20
+> Hi Hemanth, thanks for the patch.
+>=20
+> Acked-by: Ihor Solodrai <ihor.solodrai@linux.dev>
+>=20
+> 1.28 is needed for --distilled_base [1], which is only a requirement
+> for tests using modules. Many other tests are likely to work with
+> older versions, but the minimum for the kernel build is 1.22 now [2].
+>=20
+> Not sure if it's worth it to add this nuance to the QA doc, although
+> in general we should recommend people running the selftests to use the
+> latest pahole release. Maybe add a comment?
 
-LGTM with some nits below.
+I guess minimum pahole version can be added to
+Documentation/process/changes.rst.
 
-Acked-by: Yonghong Song <yonghong.song@linux.dev>
+Thanks.
 
-> ---
->   btf_encoder.c | 36 ++++++++++++++++++++++++++++++++++++
->   1 file changed, 36 insertions(+)
->
-> diff --git a/btf_encoder.c b/btf_encoder.c
-> index b37ee7f..0462094 100644
-> --- a/btf_encoder.c
-> +++ b/btf_encoder.c
-> @@ -79,6 +79,7 @@ struct btf_encoder_func_annot {
->   
->   /* state used to do later encoding of saved functions */
->   struct btf_encoder_func_state {
-> +	uint64_t addr;
->   	struct elf_function *elf;
->   	uint32_t type_id_off;
->   	uint16_t nr_parms;
-> @@ -1258,6 +1259,7 @@ static int32_t btf_encoder__save_func(struct btf_encoder *encoder, struct functi
->   	if (!state)
->   		return -ENOMEM;
->   
-> +	state->addr = function__addr(fn);
->   	state->elf = func;
->   	state->nr_parms = ftype->nr_parms + (ftype->unspec_parms ? 1 : 0);
->   	state->ret_type_id = ftype->tag.type == 0 ? 0 : encoder->type_id_off + ftype->tag.type;
-> @@ -1477,6 +1479,29 @@ static void btf_encoder__delete_saved_funcs(struct btf_encoder *encoder)
->   	encoder->func_states.cap = 0;
->   }
->   
-> +static struct btf_encoder_func_state *btf_encoder__select_canonical_state(struct btf_encoder_func_state *combined_states,
-> +									  int combined_cnt)
-> +{
-> +	int i, j;
-> +
-> +	/*
-> +	 * The same elf_function is shared amongst combined functions,
-> +	 * as per saved_functions_combine().
-> +	 */
-> +	struct elf_function *elf = combined_states[0].elf;
+--=20
+An old man doll... just what I always wanted! - Clara
 
-The logic is okay. But can we limit elf->sym_cnt to be 1 here?
-This will match the case where two functions (weak and strong)
-co-exist in compiler and eventually only strong/global function
-will survive.
+--x53cqXSfhecsAUML
+Content-Type: application/pgp-signature; name=signature.asc
 
-> +
-> +	for (i = 0; i < combined_cnt; i++) {
-> +		struct btf_encoder_func_state *state = &combined_states[i];
-> +
-> +		for (j = 0; j < elf->sym_cnt; j++) {
-> +			if (state->addr == elf->syms[j].addr)
-> +				return state;
-> +		}
-> +	}
-> +
-> +	return &combined_states[0];
-> +}
-> +
->   static int btf_encoder__add_saved_funcs(struct btf_encoder *encoder, bool skip_encoding_inconsistent_proto)
->   {
->   	struct btf_encoder_func_state *saved_fns = encoder->func_states.array;
-> @@ -1517,6 +1542,17 @@ static int btf_encoder__add_saved_funcs(struct btf_encoder *encoder, bool skip_e
->   					0, 0);
->   
->   		if (add_to_btf) {
-> +			/*
-> +			 * We're to add the current function within
-> +			 * BTF. Although, from all functions that have
-> +			 * possibly been combined via
-> +			 * saved_functions_combine(), ensure to only
-> +			 * select and emit BTF for the most canonical
-> +			 * function definition.
-> +			 */
-> +			if (j - i > 1)
-> +				state = btf_encoder__select_canonical_state(state, j - i);
-> +
->   			if (is_kfunc_state(state))
->   				err = btf_encoder__add_bpf_kfunc(encoder, state);
->   			else
+-----BEGIN PGP SIGNATURE-----
 
+iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCaVjdSgAKCRD2uYlJVVFO
+o/ofAP9+4EXkvyXn4xtHYs/ZObOs1c59JDS0PbftimugULAbBQD/bWQidzmK3WT/
+kSgpPyJVYNhsw4M7WZ30T5LQm9z0QQk=
+=xORZ
+-----END PGP SIGNATURE-----
+
+--x53cqXSfhecsAUML--
