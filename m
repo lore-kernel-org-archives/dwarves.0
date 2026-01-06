@@ -1,214 +1,249 @@
-Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C3B3329E7B
-	for <dwarves@vger.kernel.org>; Tue,  6 Jan 2026 01:19:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767662392; cv=none; b=PLjmdAaaTVEDyvWEzflZPPQKTFcNmvigrElbF/tyY5kwZYuG79npoorj/pVONd6VHeqYsyBJXlCkT2rB4RTjZd2el4X5YXaKc2kYKP2wgy+skaFqvdb3/S3o2k8QD5gcSYz1iNsNzBznZ25LztkfyoM0sTlEnT034baepioOTaM=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767662392; c=relaxed/simple;
-	bh=Lw+WUkHAnt7Yk9QGoWEP7lHFIOoDXXnkegUifZDeZ7w=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=uDoNXqCAjN7mXb2Mqgi8DlcF46I+PvHZCJiNJ+8ORyTRI4l42WAMU6yzrJN12UnPwIOUnMQvAzSKtJzhuIFEz/IQ+IE/7XReok0JZRomnqujAKFvGHrjs77JqCbPynIIiIgV634ArHBGgM5a3oyHpkbWgfKX5CoGXp1GFC3JXOI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VAVIEx8G; arc=none smtp.client-ip=209.85.216.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 338EB1F0E29;
+	Tue,  6 Jan 2026 13:55:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.165.32
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1767707745; cv=fail; b=Yh8U0CABp/m8aWGzICKlBbXEmjIjWwPBJZJgw7SHn7qmG4gyaKFPkMmv45ZdtqXq7678rrTM5FKResV+KvdVLvi3nU1eHgRn4FrQ7VWqKp1lfN9kC12Bi8hhObxLp0lpyN2qcS1l1iK3kBPuh+JL8F5kMVsjMIeUuco1Zqbebvs=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1767707745; c=relaxed/simple;
+	bh=qIn/vpMSJFt66/a5is3TH68sS0yxaE2VJ5w8edynFx0=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=d9e/N/FtG5zzC+AmuR7GmEpBqGx3rdLPaE4FgX/Y2kGzjd5LNDMIOzTfL7IxD+w8Cn13rlJimn/CV7Q00Dm8Axgd7R2Rp7rkytORZMm0J+cY+EoyGehciJaFOhYSJCS6Mssvkkvr0xB6JPBuyovWx6ojApIV2H0ygZO36bkdwRc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=kSsEb4ol; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=Y0KrR1ZC; arc=fail smtp.client-ip=205.220.165.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VAVIEx8G"
-Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-34abc7da414so485794a91.0
-        for <dwarves@vger.kernel.org>; Mon, 05 Jan 2026 17:19:50 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="kSsEb4ol";
+	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="Y0KrR1ZC"
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 606DJRJ73612391;
+	Tue, 6 Jan 2026 13:55:32 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=
+	corp-2025-04-25; bh=Y4i0ijr9Tx0cHdbpdYKSO+H04+Vit50nyS2aITNAOeE=; b=
+	kSsEb4olM9BeqKnuGGRCZoGhW+Ul8p3nPwTpj0NRGbLnspBM0qhVAFJlHtv+ezNi
+	CmU+iD0webQvbSKdTF7qCmSf3Df7uMDVzRhdFK3ix2aYmSM6Vq7Xk2ng/pSnjjup
+	/VzcQzYN17oYHRSJZZLy/fAAMGnGrHeYKKoLXev9QFMxwyYPOEo8y3+Y5ATZ7DbH
+	liM58y0jiwpVJGooNF0gBgwa8INkyAcXRS7llJYuNIW7Ct4zgu7vgO8lpnjVN4G5
+	eJQo2i667RYTwekqojNeWd783sFAJjixPlU9cUQMD/Nh/4hsfkc8AUXV5acX7AaP
+	eIIOnnf83FDEwRmQ3waTrg==
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4bh35xg1gp-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 06 Jan 2026 13:55:32 +0000 (GMT)
+Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 606CAOsH020359;
+	Tue, 6 Jan 2026 13:55:31 GMT
+Received: from co1pr03cu002.outbound.protection.outlook.com (mail-westus2azon11010017.outbound.protection.outlook.com [52.101.46.17])
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 4besjjmjby-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 06 Jan 2026 13:55:31 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=XV9iRdcXJoRBXb/MOly553nQYHT/S0xRRr90WWVAxemGhFlBD02gz4IVNOmt4O7tIGKDOmHgCT6R9TXu9W6WZm6tmV5LqEhdWLVqE83RM3826pyXEkMFUhqEYQFJZyI/JdEtClb+iWDt0VZ9AXwNgvSw71/JXNkiVGR1lgGbxFrZEbVShgVKNp/NBtj9VHBJYmt/Vlv+xstmTf2OlWt5rfowyEc0BJBkF7zEXaph0oMfFhb7RW6ab6+hZ2mBEaMGoVnURr1QsFkVVS5W46D7/fyeRqGq7hPr1pqfknZlP6sMV0IoohyHldMD+klZk1bUhcoEYYb6yFFuK52hiEswRw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Y4i0ijr9Tx0cHdbpdYKSO+H04+Vit50nyS2aITNAOeE=;
+ b=ep1qvqNV8l3AcL0ckyLIh4pqWvDfgu3zzh07h06CtvczQs3fYXwei1RZV4xfH9rUBPBIpRgfhpaXrHn1WMQY1S5XbT8G3+iEKklVsfyb5PirXI1jOBVuLBMsXFMKtNJj/eMMHfgrXQuHslzU4+p6xca9yN/CzqtaRGTJb/1+rwbisBa5+UkppGSlygXxYYx9RNExn7NAupFjaWaMduYB5GlNtZzQBLynn61uWGCLqswhYDHsbSA5eBOP5J/PTccs91qXXVzgNecQzpQqRlUoQE6SkDVr835A0W0l7MtTq4ehbc0tr3euwZ6+l5esacFuVO3xeCcNAuadz6fyKm+wAw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1767662390; x=1768267190; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5sXr0qzW/IPoJWgMaNDnsLaUUbJyxXu9pwTAJUvCB88=;
-        b=VAVIEx8GQYYbdhq8voNYdzjCFGIuiVjFZr5aLS7icUlHI0dcicAzISl9SZe6LK8r5z
-         Lmd0tfZ47AYq0rfLFE8FVv3T+/jo6f6PC9BDGxIKseGuKzHFwvR/AADwLSgm/3fcQ9T0
-         4maApwddPycuvKdtq1FJ5ZiceQ+Ja2U13T0Jd8KYVpJLttYieiW8yr/mlYJzQiRt/m0Z
-         EK79xkoF3mzYw3lO2ScCqsw5dtCNAIZqhhV1OXJ0eWxiqXJfjDSngo5pztDjpm/VWv8R
-         ytSBHkE751iXI8rqSX+bwhSm84jqbEnS3N18r4s8yVbwyH91UFQVvxP1Ioc7IDylMDRc
-         RaEA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767662390; x=1768267190;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=5sXr0qzW/IPoJWgMaNDnsLaUUbJyxXu9pwTAJUvCB88=;
-        b=iw6Ln/32x3oLASgrA+rrDIOYVqDARzeHOATJtJ830GWrSvWT6dG69+yQuD3xY61by/
-         VOHRsjDJOU35EDLcxmFCO+celpHn5sdFchUgrtxZLOxTj/zVaV9RGgX10IOooAaiW4No
-         5qCTx+1Bu4rOAlddJcxAxon7F7Br/Vb4RbWGuqhVTlZqoUw47UdOHYRTsCMl8SdoLQVa
-         YANGqHFl6kKf+fdc0x0+8w8OE4TP/OenIxrnJ+QzB7/jvOfzkpQq5eV+84MnI5opbuoA
-         mXXqA36LKqMMgeTsqOOm0ZwldvNllkE1kKLUHk9MGt14HMJAhq5dKCzdTWIYRFCgwFQ4
-         61YA==
-X-Forwarded-Encrypted: i=1; AJvYcCWkWam4CtMaD5wwfbrhTjSmZ5AyCxmNUgTD9S82Cr2VBfkrxRRQyUvVD0XkE1UugBXGRdpD0qCO@vger.kernel.org
-X-Gm-Message-State: AOJu0YxNJqP3ymixD+imzNd0UmsCsm5ToS0ToqOCNRsX80ZTEX+JhIgD
-	GBfN1poA3zJwR0fB888NSyrn4D8CBbKNs7qZ+12NpvL18jw6FXUYrmmbn6YWnfUB/tWWBYXP7ZY
-	nhpqlBXfLWv/Kf8j6ZdXpJKIJWSV9XI4=
-X-Gm-Gg: AY/fxX7JUTVddtxfHxf/QTp1RvRL4PY0UrMFTRKox4r5PGUTVnYATBkOGNgCRltbyck
-	qdhpixABGjjwRxicrVZhe59iI/gs6zybfPpLRCl33lqmfHhzOmXoBHtz01TLM3/OB8ko7Rs5q01
-	9AvQzdOyqTQso3zvEQIMdF7F5tKImWKzhZ7Cvlws1QLXtjHd0zcLo+QmRKdlh8lllzDFf7yqSVk
-	A+852M3BozxAHEnlLcT7BbdBqH9iqVIwLcLU0YkBbaUiFQADKzVOXut7b/v9aDV7pOTb7syRVdD
-	njUX+S+u5lE=
-X-Google-Smtp-Source: AGHT+IGsRYa3i86/AOhfKIG44a6+dPFfkcN9Yo45nJhrrW+I7bVbNxtD29bDj16FhUltixRQlUynO952vkFKIP+oqa0=
-X-Received: by 2002:a17:90b:4d0b:b0:34c:6108:bf32 with SMTP id
- 98e67ed59e1d1-34f5f34391bmr806921a91.34.1767662389588; Mon, 05 Jan 2026
- 17:19:49 -0800 (PST)
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Y4i0ijr9Tx0cHdbpdYKSO+H04+Vit50nyS2aITNAOeE=;
+ b=Y0KrR1ZCulBvfwzfgxOGZKrsv07+A1yYWKwkemCN++cSjcTxy3+/eW/MVnRsE3xYOOaO6EvPZYlTEqz85SJR3izWS5bkvahYtdAB4xNfP7zupNdyLCrEYCjNL8/WzA0Pqfk1t+cRg27KdrIheSAOVi3DoSBKjDh+GKJXfRGtYjA=
+Received: from DS0PR10MB6271.namprd10.prod.outlook.com (2603:10b6:8:d1::15) by
+ DS0PR10MB7019.namprd10.prod.outlook.com (2603:10b6:8:14c::11) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9478.4; Tue, 6 Jan 2026 13:55:20 +0000
+Received: from DS0PR10MB6271.namprd10.prod.outlook.com
+ ([fe80::940b:88ca:dd2d:6b0c]) by DS0PR10MB6271.namprd10.prod.outlook.com
+ ([fe80::940b:88ca:dd2d:6b0c%7]) with mapi id 15.20.9478.004; Tue, 6 Jan 2026
+ 13:55:20 +0000
+Message-ID: <69e4d6a1-3726-4372-b457-ca7847988fc8@oracle.com>
+Date: Tue, 6 Jan 2026 13:55:15 +0000
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH dwarves v2] dwarf_loader: Handle DW_AT_location attrs
+ containing DW_OP_plus_uconst
+To: Yonghong Song <yonghong.song@linux.dev>, Yao Zi <me@ziyao.cc>
+Cc: dwarves@vger.kernel.org, bpf@vger.kernel.org, q66 <me@q66.moe>
+References: <20251213082721.51017-2-me@ziyao.cc>
+ <3b3c5b4b-b4a3-402b-8d5d-507edaf4a814@linux.dev>
+Content-Language: en-GB
+From: Alan Maguire <alan.maguire@oracle.com>
+In-Reply-To: <3b3c5b4b-b4a3-402b-8d5d-507edaf4a814@linux.dev>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: LO4P265CA0124.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:2c6::14) To DS0PR10MB6271.namprd10.prod.outlook.com
+ (2603:10b6:8:d1::15)
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251215091730.1188790-1-alan.maguire@oracle.com>
- <20251215091730.1188790-2-alan.maguire@oracle.com> <CAEf4Bzaw6KRU2yDbawOe+eusCjCwvg0FwhkpvGA3HE=gC=ZLbQ@mail.gmail.com>
- <42914a9b-0f34-4cee-bc36-4847373fa0b5@oracle.com> <CAEf4BzZuikZK5cZQyV=ge6UBKHxc+dwTLjcHZB_1Smw1AwntNA@mail.gmail.com>
- <e2df60e1-db17-4b75-8e0e-56fcfdb53686@oracle.com> <CAEf4BzarPLAcwKApft_nBVM_d3WW58zytZfLQVz387TF2c2FVg@mail.gmail.com>
- <CAADnVQ+achE6ebfCxyfHyxMMFJ-Oq=hUK=JkWUAGwz+7HeV4Qw@mail.gmail.com>
- <22c54404-512c-4229-8c93-8ec1321619e0@oracle.com> <CAADnVQ+VU_nRgPS0H6j6=macgT49+eW7KCf7zPEn9V5K0HN5-A@mail.gmail.com>
- <19a4596d-06dc-42ae-b149-cc2b52fffae9@oracle.com> <CAEf4BzbCxGaFu5E_oYdMxzkqhtVxSnwHawcUv5jM5Sodut5cdA@mail.gmail.com>
- <CAADnVQKYTMPyWLNn-5HHnA23Ay3qNdGUJ9TNVcy62zPEf013Xg@mail.gmail.com>
-In-Reply-To: <CAADnVQKYTMPyWLNn-5HHnA23Ay3qNdGUJ9TNVcy62zPEf013Xg@mail.gmail.com>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Mon, 5 Jan 2026 17:19:36 -0800
-X-Gm-Features: AQt7F2pZAV7IfRbL6vMBPZ6Ket-bsN85Nj8JjHlliDzsn9YmzXeC5qneEBG3rgQ
-Message-ID: <CAEf4Bzb5askzzBL4BnR1tcjio+jW3zdVs_pPPgSq7vd+N5zuXA@mail.gmail.com>
-Subject: Re: [PATCH v8 bpf-next 01/10] btf: add kind layout encoding to UAPI
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Alan Maguire <alan.maguire@oracle.com>, Andrii Nakryiko <andrii@kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Quentin Monnet <qmo@kernel.org>, 
-	Ihor Solodrai <ihor.solodrai@linux.dev>, dwarves <dwarves@vger.kernel.org>, 
-	bpf <bpf@vger.kernel.org>, Thierry Treyer <ttreyer@meta.com>, 
-	Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS0PR10MB6271:EE_|DS0PR10MB7019:EE_
+X-MS-Office365-Filtering-Correlation-Id: 5f1fcf56-5267-4a92-6dd6-08de4d2b3af5
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|376014|366016|7053199007;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?WkZIMzBnNFlMQUxQdWdoZkR6aTdmbitOaW0rM1BsV0Y3RmJUdmhINlUvVUN4?=
+ =?utf-8?B?R2tZY2YwcXR2WmVBZlgza2Y4TmRXYXREbWlaSW1saUlXenBSaldzZ0xJL29p?=
+ =?utf-8?B?UlZ3WWtsMlpFRmw1WWgwdmNsNU5FbXpHMDZvMlJGTm5Hc1BIWEprakVocG94?=
+ =?utf-8?B?dnN0R0o2MFNQWjBvalljaWNGUU1WYXhFL05CdjNJQzdEeWZMVU1sWTNLY0Qr?=
+ =?utf-8?B?aEhyaVRyWFJrNjlRaGlrRWkzRHkyOUtVZTJjZkVYVThPWG11ZjNLQmFoeXQ4?=
+ =?utf-8?B?QXRJdXowejR4MzBtS24rTStobGVjL3NBVVdOeXRVTjdUemxBSVJ0N2JiOHNH?=
+ =?utf-8?B?Q1NlS1AxWG9LSDZmdHdPdzlhb3ZCM1lrdTA2T2R4VEpJcUxMZkxsb3FDdUhi?=
+ =?utf-8?B?Ty9MMTNUNnByTFpqVUpjbkloZm5YTVpPbWh4R2loOVlERWp2UE1xanZ5NFMy?=
+ =?utf-8?B?UVZlaEFleG5XdWk0Y29ERTYzTXVQUHV3RDg5QWRiMkVFYjY4TXNvbVBMUER6?=
+ =?utf-8?B?ZjBKeXd4NkUvRDBFVG5DU3VNVkRzajRCSjVtV0gyZTA3dGVzbUhCL1BVQ0p2?=
+ =?utf-8?B?UUF3RVBZQ3kyazQwNWwvZzdXUXAxWlJrckw5VVVXL0FoS2VXM3hTbHp2NHV2?=
+ =?utf-8?B?aVdVNzBWdXFWbU1YTm00emlNWVQvSkQ0NTE2T29TWm5LM3d3eHpSeXVUcmdH?=
+ =?utf-8?B?OEJqOW5EYnBlK1REY3JxbExTc0dZK3VHY0dEaHFqTy8wWVpybDZxTEtyc1dV?=
+ =?utf-8?B?a3NvNjF2RHFUN25IeGJyb0NXYityOFd2bHg1THp5TTh3VlFDLzlyZmU2LzBp?=
+ =?utf-8?B?WHdPKzlRNmhRT3N1aE05WVZ6cW9OQzNaUkJ4NCtFUDIxQkhBc0N5S2dJUGRG?=
+ =?utf-8?B?bDVOYUNFQTNDVGlZbndQbm9Bb0F5dDFrUCszd1BVcFpMRGxXNnhiSFdqV1Nj?=
+ =?utf-8?B?RjNXM3NUazNkK1pONWo2VlRNUWI1Mjc0alRmT2Jpa2xUajJaTHZ6bzF0WkdT?=
+ =?utf-8?B?SUVESzhCM0F1WHIzNnpYcEIvRXFmcGNxQUNnUndEd2hHczVlZUJZU05ObXY1?=
+ =?utf-8?B?Smc0bXRtczV3TFJwYkZjUloxektEUSs5bUUvd1BWd2JkdUNiVUJmdmxEa1pv?=
+ =?utf-8?B?c0hJTCtQWDE2ZXZic01BZGZwQkw1V3ViS1BKbzBjMi9kL3F4R0ZqRmdtK0kw?=
+ =?utf-8?B?S24zUkJlbWwrMmlrMVRNUS9oTU5hRmwrRDI5ZUkwdHc5eWxXZzVFZWlpcjQ0?=
+ =?utf-8?B?cjhyZEZqSVVheUZLNWZ6QmdibnRQYnMxaU9WNnR6VktyQjV4U0pSVG5SZlQ4?=
+ =?utf-8?B?bnBBYlRLYXlnMjZoUTdmRlRydUROWTNGYU8vakZObDd6RjdsR2xrZnNIczc1?=
+ =?utf-8?B?emxvR2Vmd0lNK3pHaUZwT2hSTElrUDF2K0ZiWjc3RDNvajdjcmd0RkdDdkNl?=
+ =?utf-8?B?dnQ2Ui96OG1iS3F5QThoN1loRm5XMklFWWVtOHNlazNsSG5NV1VON2lBenF3?=
+ =?utf-8?B?clhvZXlXc0trZjFDcno2aVJXbmxCT1l2YmpZRk43c2pJZnBLMEJpc0RsbXZs?=
+ =?utf-8?B?cW1STkxpNWloZG1HR2pxbmlZYnZZOUVsb05jTmpSNndaOTlzSy84d3ovOEpa?=
+ =?utf-8?B?RWlKRmVpY3RVbVJzTEViclRVOUU0Vi82YTN2WG9UU0NjN3VDbURHTlZDbUk4?=
+ =?utf-8?B?Q3hJekZRa0xpYzhBSU5Od2JicFhOVGJCUXNtY011WDk5QmN3ZGZ2V1NPYUZi?=
+ =?utf-8?B?MWxxVmZnck1lQ0UzejB0S1hiQ2w1SHFtM3RHY0c4VzJVZWg2QmUrR2djNjRm?=
+ =?utf-8?B?aTFCa0xJWXlicGdtd244dzFiTUV4NWJIYzd1WENUdTI2OThkb2FiaVJYQkZp?=
+ =?utf-8?B?UXo1NmloM3JaWUdHR0N3RWM2aGhVKzNiWVZPQTc4L0t2L0E4SnpMa2xCQ2VO?=
+ =?utf-8?B?N3MrbCtuKzFpaVc4MnlQdHIzTCt1ODhnd0wzUGRiMUd5M2VrRzE1U3B1SFpz?=
+ =?utf-8?B?NytnZjlFakVnPT0=?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR10MB6271.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(366016)(7053199007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?NkRzV1JWU25GcmJQTmhoUVRZZ0hRQ0N3dzgyaHUyOEtUeWhwdnJFNEUzb1lN?=
+ =?utf-8?B?Wm9Nc1Blc2RnZ1RNZ3V1elI2YUZsUDgzWHIwR2l6dG9PTTVCalZXeFc5dkQv?=
+ =?utf-8?B?M1duSElNUXkraHFjUEFjcit3YnJESCswVUN2L2p6c0VjZ1lmS3NwSFdIMmpY?=
+ =?utf-8?B?aUxQUzBaTS9FUFBQZUhiZFRQSlphRzdnT2pSU2tkbE93MXRjNW1rNm93OHJF?=
+ =?utf-8?B?a3JQbnNheDU4eDVSN0ZmK3BEeUN5ZHhXNXpmbEd4ZEY3SGNtOTlOS3VyNlho?=
+ =?utf-8?B?T1JFZGw5OVFyU1oyeStYZ2d0elRQU1lBcXVqQmhMSWJrWHdrSFBaNEpObTV2?=
+ =?utf-8?B?TDkrY0JYWGFTRzl3V3k5a2oyckhwQUVsZVZhVUdNUkRVSjYwZHFaMVpIdmhJ?=
+ =?utf-8?B?eTd5dDhwMitaYVVEZm1ESjhPN1JCbnRRUEtNSmNKVTd2Ri92K3lNY1hiMHlC?=
+ =?utf-8?B?b3FhQVlSRFc2a0tRQ2NGemtZUk9RVjBVVzI2eUVkbkM2d2ZXeTJ3V1dPUThB?=
+ =?utf-8?B?NDJGdlJwU0x5bHdocmgvNnk0NVRUZVdVZGVGSWhJalNnMUZHM1BlSzFLTkhR?=
+ =?utf-8?B?M0dpQVZJM3RodjBHMThVRmNsdCswZUJlZEI0WWo4c1gvQURZaWphTnZ5YkNk?=
+ =?utf-8?B?MDNTSGxUY003aTRrZHlNelBsNEdSY3BiOFdha0NjMERWVXRTbERJQStxbURE?=
+ =?utf-8?B?M3JSMXhFUGJEd0dOSTdrN0NBRTdJeWFrT1JCai9RbEVXOW8wOEw1dkpURlVT?=
+ =?utf-8?B?Qktaa3YwdGRheVJxNXZnelgyV2Y5UXNQWjFDT1MxR2M2eitlUm44YXBEaURt?=
+ =?utf-8?B?K0IyNGd3Q21TU0QrRWp5S3V5TkNBWWxkek5ZVEFPVnBVVzQ0MkozNmFzejNn?=
+ =?utf-8?B?b3VnRjlXemtyTW5iODlxTW1nNzVtWHBIek5FaDRZM01UWmdURDE4VmdlbXVY?=
+ =?utf-8?B?OTFjQTFqS0hCL1VUSUxWWDMvd21jQlVlTnRUd3dBckRTTzdRNnM5Qis1U3Nm?=
+ =?utf-8?B?L3VKYVArQzNENkk5NVRweER2a25tL1lBL2VvWkVINHduZHhSNmpuOExkeG5C?=
+ =?utf-8?B?eVRNWENBOGQveGNOcUUrWGd1VWdQT0E4TFhNa0tSUHFEbkFMWGFXWmNTdGxy?=
+ =?utf-8?B?VzhvUzdiYzljSldYYkszMmtpN1UxdytRTW04alFpbWxNU050am9sNkNaeENU?=
+ =?utf-8?B?QTdPRURBSlNuYTNXYVpnbzNVUnM5cDk0eDN0ZE13Y2s4ZXVoTkpnVUtROU96?=
+ =?utf-8?B?VlJJbGpiS01GWXlIalBXWGFwYlh6blF1Z0w3a2RvMmZTSDRVVkFPTWcrSzVJ?=
+ =?utf-8?B?ZDArMnVBcGtFeGpQTUVJNlpkVlh4MnZOUUprcWsyZjR4dFhMMjd4UlcyNlEy?=
+ =?utf-8?B?MG1XcGErNFhzVVpaRGFJSkw5UkxqbURYR2hkR2xnZzY2UUxJRE1zY2hwWmZZ?=
+ =?utf-8?B?Njk3YlhUdHRsRVc0ZWJJcy9CYjBCQ2V5ZVc1eXZIcXRHYkVwQXFSSHhKdW05?=
+ =?utf-8?B?Q285KzZGN2hyUTIrbWdHekQ2cU9pZmpkUVhDQmI0eDBXb1dmVWlNeitXcEZY?=
+ =?utf-8?B?Q0pwbmRDY3ZCNUdwNGlPa2hkSnZRdXl6ZjJLQ3ZrelJxWHc2RVhDVnFCRURh?=
+ =?utf-8?B?M0o1Sk5kanBraFk1TGl0L01sSmtQaXNwQ2diVzRSaWhFNXlUZXR6UEhmTkxw?=
+ =?utf-8?B?OXJ2L1duUTlxL3IzQ3JpUFI5cktXUmRqRUQ2L0JVajFnK3VCc2lheHAwdmJI?=
+ =?utf-8?B?NHI5UXRDQmtxTldubnpUcGtUaVFDSzdlOHFaM05vUlkzOHF5VDFIU0ozeGx5?=
+ =?utf-8?B?eFFwUEl5QzluZlRWcEJZVVNNa21VbTZSQ3dqc2xhbG1EWWVUNzNBUWpqVmF4?=
+ =?utf-8?B?L0EvTHlvRFRFUWl4NGFIWG1mQVdScERMNk05czM0dFVEQlUvM3czS0ZNZEJ1?=
+ =?utf-8?B?bFRLTDBJZkM2dm5ERGJyUGgrSnJRZit6eDFEaUZjbW9TQnZLRzZkLy9ob3pr?=
+ =?utf-8?B?VkVYMU1IMXl1MWlJSjVSTkpnc1JhanpKb2ZXYUh1ZElKRlJMUW0yM2hNbm5G?=
+ =?utf-8?B?NHg4MUw4ZkJGWTBETm9jdDh4ejdZM1ZkalRZeUlxSUhwZk95YngwT2p5QVhM?=
+ =?utf-8?B?OUpGbnoxZ3JLVVVoWll3MmlpYkxwclBoRUNRb2dHNmtaY3k2TWllcVRwVTFE?=
+ =?utf-8?B?YStyZlUzM1Zhd3YxOWdYYkE4WmtlTHUrZGI1SUZYeS9FTytFbTBjNGJUQWpF?=
+ =?utf-8?B?SmtaTUFUWFV1N3BJU1dNVTlvRys4dk5WZUtLVE4vOXJNTWcxNStzOXU5eFBo?=
+ =?utf-8?B?Z1lUcFh1VkxORWNFR1RQRDJSWTkwWkNaamEvVVhtQy9MQ3B3Q2Mzdz09?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
+	keKGzObiyEqZ3ZP6SQCpqfWWNTlQR/GI1ZPfacWP8i/rvaSI0JS6jrE4jpHicXGs/3S93KByvz/VTztLMeKxIVQhp9cVuHuOKReYu6zU8cGKzGPowPEsPMs/5HiaxPot0G8WYjUE1pRCF2Y29vqczNi66C2FHdgFDgbDwbiwn86tqGZVYHuaUksKp8oOd18VGLWGp+8SyPpnci6GU/gJSb9YDfa4MfKlkDVSHlXHttl83jHpRKTJpeyjnsrfuQaEH9WP+744LlwyqJEUF+4ac4RUGvRpRY6MpALoE6vB4TnE8HO6a26OYxdI4MiI87f4ifNSv4exvrJXYiA7UwgQW/kGvseeiuo6MGuY4FkDem1QIkkGqvhRwoYz3Oc0BZPZKE6gfOW9/hQpUZJosU17w9Uxu23X4UdaMOfi2v9UhkMWXHmqZTA3GOBQprjClkqS9TVqqUGsuet+0omPcwZUc85eoFMFaEBKWGNY8ICBCxb7SM42CKifArkAB4VS0lRfA+lbC0nm9IrAmWZlnpYdgG1gFlVAvOb3+7WLLcPcvoOO9RuqZhJ1lexHAPM7qRVLTzw/ylAaih3WYbCfeaThdAVYk/9g2O/F+NNcFkh8ZgU=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5f1fcf56-5267-4a92-6dd6-08de4d2b3af5
+X-MS-Exchange-CrossTenant-AuthSource: DS0PR10MB6271.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jan 2026 13:55:20.4097
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: bXujXDaqSINLlxWIVtbW1JlO1XgMR+CoQSXJ3VP05nFjNhefMphSbm79kqrpib7/A4EYLlFld6eOGZUZ1Nejgw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR10MB7019
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
+ definitions=2026-01-06_01,2026-01-06_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 bulkscore=0
+ suspectscore=0 malwarescore=0 adultscore=0 mlxscore=0 phishscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2512120000 definitions=main-2601060120
+X-Proofpoint-ORIG-GUID: 0XQgTcha4sUrWik1n9FKNpBobRpMW_FW
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTA2MDEyMSBTYWx0ZWRfX3yaO4cjbkTPO
+ F7q6CTq2PiI7C0zjqEGJE1Aaz42yl8LgSjjlDL/L6fCcPb4CV4bXc2bFhz1GnqTYaZoAujT7Rde
+ 3kySZT6JcFghlMV5p+Prvysg0baWC+uzO5NJ8Q/hUdiMbbOg8Eu4lWJScULlcllb3wMrlF8E15y
+ oVapv79Gd5Llj5ppz9nVXcWN5U05xdwLG6uMU/f4zmccEybajqJM0JLnklJZphi295xDoVDnouJ
+ fbs906OGb9gP80fVP8RQgZu4tPeNYeswLiTjJaC0GGaWbVwnbszyGFB3jYliLHyv2W2tgLe255c
+ 3SEVZLfupYWBI/Oy4x0lKIEjljpLFQGwsEODCeTCH0wMq3fn+szsnO1i4K6WOsP8mVjJmtbhiby
+ ar+M+KoTSlkJ4u1DbpL8oN+bA3bWKbteB+1EVx1+eHMQlVQ60siCxqx3X1Z9IGBbnoumJBiOr4v
+ PpXuYWQzA8PCCQYX4CcQz1vt5W0DYuhtEvuoZuZI=
+X-Authority-Analysis: v=2.4 cv=A+Vh/qWG c=1 sm=1 tr=0 ts=695d1454 b=1 cx=c_pps
+ a=zPCbziy225d3KhSqZt3L1A==:117 a=zPCbziy225d3KhSqZt3L1A==:17
+ a=6eWqkTHjU83fiwn7nKZWdM+Sl24=:19 a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19
+ a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
+ a=vUbySO9Y5rIA:10 a=GoEa3M9JfhUA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=NEAV23lmAAAA:8 a=Pww0aMKsBU7VkPqB4k0A:9 a=QEXdDO2ut3YA:10 cc=ntf
+ awl=host:12109
+X-Proofpoint-GUID: 0XQgTcha4sUrWik1n9FKNpBobRpMW_FW
 
-On Mon, Jan 5, 2026 at 4:51=E2=80=AFPM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Mon, Jan 5, 2026 at 4:11=E2=80=AFPM Andrii Nakryiko
-> <andrii.nakryiko@gmail.com> wrote:
-> >
-> > On Tue, Dec 23, 2025 at 3:09=E2=80=AFAM Alan Maguire <alan.maguire@orac=
-le.com> wrote:
-> > >
-> > > On 22/12/2025 19:03, Alexei Starovoitov wrote:
-> > > > On Sun, Dec 21, 2025 at 10:58=E2=80=AFPM Alan Maguire <alan.maguire=
-@oracle.com> wrote:
-> > > >>
-> > > >>>
-> > > >>> Hold on. I'm missing how libbpf will sanitize things for older ke=
-rnels?
-> > > >>
-> > > >> The sanitization we can get from layout info is for handling a ker=
-nel built with
-> > > >> newer kernel/module BTF. The userspace tooling (libbpf and others)=
- does not fully
-> > > >> understand it due to the presence of new kinds. In such a case lay=
-out data gives us
-> > > >> info to parse it by providing info on kind layout, and libbpf can =
-sanitize it
-> > > >> to be usable for some cases (where the type graph is not fatally c=
-ompromised
-> > > >> by the lack of a kind). This will always be somewhat limited, but =
-it
-> > > >> does provide more usability than we have today.
-> > > >
-> > > > I'm even more confused now. libbpf will sanitize BTF for the sake o=
-f
-> > > > user space? That's not something it ever did. libbpf sanitizes BTF
-> > > > only to
-> > >
-> > > Right; it's an extension of the sanitization concept from what it doe=
-s today.
-> > > Today we sanitize newer _program_ BTF to ensure it is acceptable to a=
- kernel which
-> > > lacks specific aspects of that BTF; the goal here is to support some =
-simple sanitization
-> > > of the newer _kernel_ BTF by libbpf to help tools (that know about ki=
-nd layout but may lack
-> > > latest kind info kernel has) to make that kernel BTF usable.
-> >
-> > Wait, is that really a goal? I get why Alexei is confused now :)
-> >
-> > I think we should stick to libbpf sanitizing only BPF program's BTFs
-> > for the sake of loading it into the kernel. If some user space tool is
-> > trying to work with kernel BTF that has BTF features that tool doesn't
-> > support, then we only have two reasonable options: a) tool just fails
-> > to process that BTF altogether or b) the tool is smart enough to
-> > utilize BTF layout information to know which BTF types it can safely
-> > skip (that's where those flags I argue for would be useful). In both
-> > cases libbpf's btf__parse() will succeed because libbpf can utilize
-> > layout info to construct a lookup table for btf__type_by_id(). And
-> > libbpf doesn't need to do anything beyond that, IMO.
-> >
-> > We'll teach bpftool to dump as much of BTF as possible (I mean
-> > `bpftool btf dump file`), so it's possible to get an idea of what part
-> > of BTF is not supported and show those that we know about. We could
-> > teach btf_dump to ignore those types that are "safe modifier-like
-> > reference kind" (as marked with that flag I proposed earlier), so that
-> > `format c` works as well (though I wouldn't recommend using such
-> > output as a proper vmlinux.h, users should update bpftool ASAP for
-> > such use cases).
-> >
-> > As far as the kernel is concerned, BTF layout is not used and should
-> > not be used or trusted (it can be "spoofed" by the user). It can
-> > validate it for sanity, but that's pretty much it. Other than that, if
-> > the kernel doesn't *completely* understand every single piece of BTF,
-> > it should reject it (and that's also why libbpf should sanitize BPF
-> > object's BTF, of course).
->
-> +1 to all of the above, except ok-to-skip flag, since I feel
-> it will cause more bike sheding and arguing whether a particular
-> new addition to BTF is skippable or not. Like upcoming location info.
+On 17/12/2025 04:14, Yonghong Song wrote:
+> 
+> 
+> On 12/13/25 12:27 AM, Yao Zi wrote:
+>> LLVM has a GlobalMerge pass, which tries to group multiple global
+>> variables together and address them with through a single register with
+>> offsets coded in instructions, to reduce register pressure. Address of
+>> symbols transformed by the pass may be represented by an DWARF
+>> expression consisting of DW_OP_addrx and DW_OP_plus_uconst, which
+>> naturally matches the way a merged variable is addressed.
+>>
+>> However, our dwarf_loader currently ignores anything but the first in
+>> the location expression, including the DW_OP_plus_uconst atom, which
+>> appears the second operation in this case. This could result in broken
+>> BTF information produced by pahole, where several merged symbols are
+>> given the same offset, even though in fact they don't overlap.
+>>
+>> LLVM has enabled MergeGlobal pass for PowerPC[1] and RISC-V[2] by
+>> default since version 20, let's handle DW_OP_plus_uconst operations in
+>> DW_AT_location attributes correctly to ensure correct BTF could be
+>> produced for LLVM-built kernels.
+>>
+>> Fixes: a6ea527aab91 ("variable: Add ->addr member")
+>> Reported-by: q66 <me@q66.moe>
+>> Closes: https://github.com/ClangBuiltLinux/linux/issues/2089
+>> Link: https://github.com/llvm/llvm-project/commit/aaa37d6755e6 # [1]
+>> Link: https://github.com/llvm/llvm-project/commit/9d02264b03ea # [2]
+>> Signed-off-by: Yao Zi <me@ziyao.cc>
+> 
+> Acked-by: Yonghong Song <yonghong.song@linux.dev>
+> 
 
-I was thinking about something like TYPE_TAG, where it's in the chain
-of types and is unavoidable when processing STRUCT and its field.
-Having a flag specifying that it's ref-like (so btf_type::type field
-points to a valid type ID) would allow it to still make sense of the
-entire struct and its fields, though you might be missing some
-(presumably) optional and highly-specialized extra annotation.
+Tested using dwarves CI [1]; change looks good, applied. Thanks!
 
-But it's fine not to add it, just some type graphs will be completely
-unprocessable using old tools. Perhaps not such a big deal.
+Alan
 
-I suspect all the newly added BTF kinds will be of "ok-to-skip" kind,
-whether they are more like DECL_TAG (roots pointing to other types) or
-TYPE_TAG (in the middle of type chain, being pointed to from STRUCT
-fields, PROTO args, etc).
-
-> Is it skippable? kinda. Or, say, we decide to add vector types to BTF.
-> Skippable? One might argue that they are while they are mandatory
-> for some other use case.
-> Looking at it differently, if the kernel is old and cannot understand tha=
-t
-> BTF feature the libbpf has to sanitize it no matter skippable or not.
-> While from btf__parse() pov it also doesn't matter.
-> btf_new()->btf_parse_hdr() will remember kind layout,
-> and btf_parse_type_sec() can construct the index for the whole thing
-> with layout info,
-> while btf_validate_type() has to warn about unknown kind regardless
-> of skippable flag. The tool (bpftool or else) needs to yell when
-> final vmlinux.h is incomplete. Skipping printing modifier-like decl_tag
-> is pretty bad for vmlinux.h. It's really not skippable (in my opinion)
-> though one might argue that they are.
-
-Yeah, I agree about vmlinux.h. One way to enforce this would be to
-have btf_dump emit something uncompilable as
-"HERE_BE_DRAGONS_SKIPPED_SOMETHING"  as if it was const/volatile
-modified.
-
-But yeah, we don't want bikeshedding. It's fine.
-
->
-> Also let's not call btf__parse() process with layout info
-> as a sanitization. Sanitization is the word to describe actual replacemen=
-t
-> of unrecognized kind with a known kind. Here btf__parse() won't be
-> mangling it. Who knows, maybe btf_dumper (in bpftool or else)
-> understands the kind, though libbpf's btf__parse() does not.
+[1] https://github.com/alan-maguire/dwarves/actions/runs/20747914338
