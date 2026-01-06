@@ -1,60 +1,60 @@
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A64B33A1E6D
-	for <dwarves@vger.kernel.org>; Tue,  6 Jan 2026 00:11:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B2A91C4A20
+	for <dwarves@vger.kernel.org>; Tue,  6 Jan 2026 00:51:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767658292; cv=none; b=fKuMTJCmUkKdbqOzEhuUnHzKpsNo1Ffo+k8/6Wu081Xs/IbelmoLAmDTiTZ3UKK9LhFLwk24MUP+l7JyeBKkVHvFJ7R0gzudAP60RRczzCMV6Cy2UVCdTIUObod8oeUsF3UiHbmT50wX/ZzVej5rOIJMTCR1N/1eE3ehrjqLCFo=
+	t=1767660706; cv=none; b=Vbts3qmJm6MDFf09uFuE2PV3hjfs0jyPRKDrzKgtg3fhv4B09HRGGXrexQyEF8uio5rQ8k+Z2xP8UOyh58qY/fOI39IgifMvTmkOTThXh36Lm1R+43EW2u5CaeZBIfXCFo3SGwh+rtSlvHOD1nv753enf79UaCWylZXvaBS4EXg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767658292; c=relaxed/simple;
-	bh=F6+3je+EEmJmWIQ0SfdR3X2JK05w+tFnGByabsfYQOE=;
+	s=arc-20240116; t=1767660706; c=relaxed/simple;
+	bh=UnDJNkCi/bg3d+KVoXoKsgv2gDGGiQ++BntTusyBhag=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=MiqCjMcdwy+SdRilqXDJS4nZB6LZRweX2XvKOSG83NtmNvQTvuvAj7/bNzko8fUpIJgESBpMVJeCUw3ndU7JCGKSF84ngZMACe0BlrZOFqRfU2m+HoXfNRmM3NAKCwEur2psdPDyVPZUNk0vBg2hZquys7IQIdiljyxATwcIQgs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RGJRLYWu; arc=none smtp.client-ip=209.85.216.46
+	 To:Cc:Content-Type; b=n483HBjriI8RAeDducv1yPEhMmmHX3J2plttMrh6EZkFYqUX9BciyIsSwkBQakj1bt81FpZOT6UfsMV6MYsYry0sZ5tDkjXOGijKXIPPsnLF9ztEBtZjzrapFXnm4CDPdRiW77Z+B/LVqu0ie4WrpRlzU0n5j7XWpqp9qdMm6nE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VExAqKcZ; arc=none smtp.client-ip=209.85.128.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RGJRLYWu"
-Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-34c9edf63a7so523280a91.1
-        for <dwarves@vger.kernel.org>; Mon, 05 Jan 2026 16:11:30 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VExAqKcZ"
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-47795f6f5c0so2754325e9.1
+        for <dwarves@vger.kernel.org>; Mon, 05 Jan 2026 16:51:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1767658290; x=1768263090; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1767660703; x=1768265503; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=F6+3je+EEmJmWIQ0SfdR3X2JK05w+tFnGByabsfYQOE=;
-        b=RGJRLYWuauOf8FhOLxco6O68Frp5yiMECL+YxeGYnxbyrWfYXczrbTe0NhmB+OqETR
-         nY5vrcxu6y8c1H99C2IRF1phVezJvyS9itDQKK6JxJwNtroSDMIJbNsf++Rd5LiYljQ3
-         42CnBdnTbGFg3fFO42uDwsUfImvRm3XYC6VTFJjhAuA8oi2Qesvh6JSbjB5Jb92dILLP
-         1osmwr4H2YSXfnyUDhBwrUo/57PF/MM1WEEKazdwdDxPVQXZL/eNWUqkqRmctXP55dp8
-         sH1/h5vavnw9+RiDD3lYeU8ftL9oIhWVjpiIZmhsQmNxYUy0TB8OqtM2TNDp1ieeAVLc
-         yJoA==
+        bh=UnDJNkCi/bg3d+KVoXoKsgv2gDGGiQ++BntTusyBhag=;
+        b=VExAqKcZB92l0qCCaaY1auheeEyR1bOLyPJw4eNfa4oInI/b+2ewVMNlaFpF+RW4zx
+         XSe1RCYi40RSTTdp+0Rc/dcFj5/Dz9N7+HrB4BpvqqWtaAedJGU2S/smRguDsZD8iZf2
+         CIHVkqZXbXnI+REN+Zb1jA78guRu2MQgNY8HrS87jzBIOH40WR+/56iRCOZ2+GuH3xp3
+         861MFw+5/kiXauWDNdkj4pzKh9Dub7cKTkVzJ7amBxc0solHecS9V2xmfsxTJIAjMXx/
+         Rb28e84jvRvO2FU5772z1e9rcQNW8ARzDB+x4LzEf4mvI++SaDMO47FYBb6wDyg6WWrx
+         KzsA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767658290; x=1768263090;
+        d=1e100.net; s=20230601; t=1767660703; x=1768265503;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=F6+3je+EEmJmWIQ0SfdR3X2JK05w+tFnGByabsfYQOE=;
-        b=K00r4hio6TSgFPFy87Me74VWj/igCqGOQ1pdndAGuMRm6N/ffNuL3OZsEywKE21ZjY
-         d7CWKutIVi+8p8FgKXwdQYd0sDh59UuF81BKIYJ6EI+wV+d6I29/GQ30hyT8XMtUR94m
-         dvZ1WWSIIYPM0/DTCfivttSihUNco1PJaepP4fHgmAHJq/UlTvELxUV2IF/b4CJXV1KX
-         eTp6uuRQ/EbFAwXZQ2AHpF634s+eIWiHiDRvSQ/kLhO+zCJhruWaPXiK3WW//6qjFcMH
-         yFTyv+YiHrq5z6WeH1feNiH5UWvBWbMGQyf7KKcAyAOAPg7Vos5rvra0ffsjwGWPPPYA
-         MKtA==
-X-Forwarded-Encrypted: i=1; AJvYcCWOtfCF/wYg9QAKbjRLP41nvaahQ+uBmVxbDKBsu66379xijylEwhZ8iN6bFYG9vL5Xzx3hAqex@vger.kernel.org
-X-Gm-Message-State: AOJu0YxQ9Phy8MrLzea6uvwCS5dL+uetUnCay0Sl56LZuuv76Vvf602M
-	+4/vIa283LgXptxBCsJJ+Pks6W9imIyvZ6/7do1K2w9EBMjKnxljduFsOyIRA6U7Y7gp/rzT4tP
-	wJCdJbVF6yuuZQXl6gpYgrOsCWUsZ5jk=
-X-Gm-Gg: AY/fxX7OKXqrX0w59a2b2x51MfRxmsxCGpuDuCA3nls6rAACktJ3uLbiyLrpCnqJ154
-	tkmzhx8SsIDZnox3p9vts25gxoXkIW3Gx0QIFTi516/YIoaBDJdGjRXjm2/zGI/kzCFiQQiXlJp
-	N8YI/K27mLQDmjXLsCE6iZea/F+1dk8vCsImN5dWwktO+FMatPDwibRwpgy5fg3U+wYDf5mdrPM
-	+fzIGTy2gfAwJGljJSYABHjecvmSI0zF0uCWCD45gBG3HTrMRuZt44obfs1nXe1NLMnP7ZvVJQw
-	4zyBCJtg0xMnYydMBXScqg==
-X-Google-Smtp-Source: AGHT+IF1W5jEPGTE3aO4fb62l3pc/M9aoHV+BLLJRBDWE9QCDCwnUu3zt/BFxfFOf8AaVmseyHCr4NqXQK3qwatTR5s=
-X-Received: by 2002:a17:90a:d2c6:b0:340:b908:9665 with SMTP id
- 98e67ed59e1d1-34f5f32f41bmr868940a91.37.1767658289829; Mon, 05 Jan 2026
- 16:11:29 -0800 (PST)
+        bh=UnDJNkCi/bg3d+KVoXoKsgv2gDGGiQ++BntTusyBhag=;
+        b=SBL4VnHYqffHKONytsVhrHmf8TbeDPDCe9RCFLind1cCX+GVAlFo18gzzJ83Qa6mdc
+         72o7vfwtQzEYTmoNC+kEfUGODmLmhIZ9EvaCSVDI22LfMpzydZBWLjec0Fyqx7lcNM4C
+         AY4OGEK2TlypaSxjUO4vB6bXB32j8eh6/3H407LTO5PhBHrS2V37O1YPj4/Esj9CKxDE
+         /3RMceFWSNVE0YAwB/CEjW7DqR1ED2PGaq0tQxN7vcW0Yhv9ficienNu4QGLNLLXZZPk
+         hFQD8YbK1A+UoEnHXsGBGmU+LedfKZBCuJDCdghNdC1OhDJejoj5JQXzNPsFGArrpd/4
+         EgEg==
+X-Forwarded-Encrypted: i=1; AJvYcCUP/4W+eLjTjGaOWHN/ED/JgNl59X2ZomIQ4z1YI+OU41068pD1MJP0ZieOPLuEA11/MGmvNVGD@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywk85Js/hgKSg99ezagpcEW9A5fO4nUKwkKxe4ShfNu0VYpOeqQ
+	cW66/7TQkDcEISpi2eTTfTFZp9i0uXhg7y0JZgzlLcfOPhUPO3Hq2sX+QLZUTRTIld8wYAMXZIt
+	nZBBs90W/90FXM8wwFnlZ885u7mNxKcg=
+X-Gm-Gg: AY/fxX5KH7JM3WfThxrhq8NmUReXVvhv7hLgh9H58FqcGtvV7Wex1hSFsAVvyvSuES8
+	7lvirGZvv5YdMGpYApnqXFID85rxCKPOFVk6Sob0BOn31RsXIRFHeNm1RSWFwkA4et7cfUrfzjn
+	x80/YbLjC8VIyI/9VwxoC84dB1c4mkZ8cc1MUfbb9s0+DPpzAXBCnywxLpE4F2y/fw9YGXvrwVy
+	0dt6FYdnhxSbRbJqvKS/Pd11J/odMhnLYr4bLDpg/h3511noIzuLz3fpaUmI7DtXQfr+m52kssT
+	RqyA4feBritC6g0RAoGflT2WJ9Mt
+X-Google-Smtp-Source: AGHT+IGRVuoSJMOI+CDhhAGzg0TWtiqIBeZfnrxaJIqPzHAnSzRAQhr7G4J0svlVw0jXugQGgHaRsbpVIhsMKo0Cygo=
+X-Received: by 2002:a05:600c:a113:b0:479:3a89:121d with SMTP id
+ 5b1f17b1804b1-47d7f0a7336mr10731465e9.36.1767660702484; Mon, 05 Jan 2026
+ 16:51:42 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
@@ -67,15 +67,15 @@ References: <20251215091730.1188790-1-alan.maguire@oracle.com>
  <e2df60e1-db17-4b75-8e0e-56fcfdb53686@oracle.com> <CAEf4BzarPLAcwKApft_nBVM_d3WW58zytZfLQVz387TF2c2FVg@mail.gmail.com>
  <CAADnVQ+achE6ebfCxyfHyxMMFJ-Oq=hUK=JkWUAGwz+7HeV4Qw@mail.gmail.com>
  <22c54404-512c-4229-8c93-8ec1321619e0@oracle.com> <CAADnVQ+VU_nRgPS0H6j6=macgT49+eW7KCf7zPEn9V5K0HN5-A@mail.gmail.com>
- <19a4596d-06dc-42ae-b149-cc2b52fffae9@oracle.com>
-In-Reply-To: <19a4596d-06dc-42ae-b149-cc2b52fffae9@oracle.com>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Mon, 5 Jan 2026 16:11:17 -0800
-X-Gm-Features: AQt7F2rJzuwfcRiuuaVgCyIvWFj0PWFvoIx4vn4W02DceGhrvAOlPrR6ywNywr0
-Message-ID: <CAEf4BzbCxGaFu5E_oYdMxzkqhtVxSnwHawcUv5jM5Sodut5cdA@mail.gmail.com>
+ <19a4596d-06dc-42ae-b149-cc2b52fffae9@oracle.com> <CAEf4BzbCxGaFu5E_oYdMxzkqhtVxSnwHawcUv5jM5Sodut5cdA@mail.gmail.com>
+In-Reply-To: <CAEf4BzbCxGaFu5E_oYdMxzkqhtVxSnwHawcUv5jM5Sodut5cdA@mail.gmail.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Mon, 5 Jan 2026 16:51:31 -0800
+X-Gm-Features: AQt7F2q7Mb7N57eroU0mHgkFf7yIF7CSgmqN1VJp3QZ9cFoXlGhHEOHIMp2KOy4
+Message-ID: <CAADnVQKYTMPyWLNn-5HHnA23Ay3qNdGUJ9TNVcy62zPEf013Xg@mail.gmail.com>
 Subject: Re: [PATCH v8 bpf-next 01/10] btf: add kind layout encoding to UAPI
-To: Alan Maguire <alan.maguire@oracle.com>
-Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, 
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: Alan Maguire <alan.maguire@oracle.com>, Andrii Nakryiko <andrii@kernel.org>, 
 	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
 	Martin KaFai Lau <martin.lau@linux.dev>, Eduard <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
 	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
@@ -87,96 +87,96 @@ Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, Andrii Nakryiko <andrii@k
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Dec 23, 2025 at 3:09=E2=80=AFAM Alan Maguire <alan.maguire@oracle.c=
-om> wrote:
+On Mon, Jan 5, 2026 at 4:11=E2=80=AFPM Andrii Nakryiko
+<andrii.nakryiko@gmail.com> wrote:
 >
-> On 22/12/2025 19:03, Alexei Starovoitov wrote:
-> > On Sun, Dec 21, 2025 at 10:58=E2=80=AFPM Alan Maguire <alan.maguire@ora=
-cle.com> wrote:
-> >>
-> >>>
-> >>> Hold on. I'm missing how libbpf will sanitize things for older kernel=
-s?
-> >>
-> >> The sanitization we can get from layout info is for handling a kernel =
-built with
-> >> newer kernel/module BTF. The userspace tooling (libbpf and others) doe=
-s not fully
-> >> understand it due to the presence of new kinds. In such a case layout =
-data gives us
-> >> info to parse it by providing info on kind layout, and libbpf can sani=
-tize it
-> >> to be usable for some cases (where the type graph is not fatally compr=
-omised
-> >> by the lack of a kind). This will always be somewhat limited, but it
-> >> does provide more usability than we have today.
+> On Tue, Dec 23, 2025 at 3:09=E2=80=AFAM Alan Maguire <alan.maguire@oracle=
+.com> wrote:
 > >
-> > I'm even more confused now. libbpf will sanitize BTF for the sake of
-> > user space? That's not something it ever did. libbpf sanitizes BTF
-> > only to
+> > On 22/12/2025 19:03, Alexei Starovoitov wrote:
+> > > On Sun, Dec 21, 2025 at 10:58=E2=80=AFPM Alan Maguire <alan.maguire@o=
+racle.com> wrote:
+> > >>
+> > >>>
+> > >>> Hold on. I'm missing how libbpf will sanitize things for older kern=
+els?
+> > >>
+> > >> The sanitization we can get from layout info is for handling a kerne=
+l built with
+> > >> newer kernel/module BTF. The userspace tooling (libbpf and others) d=
+oes not fully
+> > >> understand it due to the presence of new kinds. In such a case layou=
+t data gives us
+> > >> info to parse it by providing info on kind layout, and libbpf can sa=
+nitize it
+> > >> to be usable for some cases (where the type graph is not fatally com=
+promised
+> > >> by the lack of a kind). This will always be somewhat limited, but it
+> > >> does provide more usability than we have today.
+> > >
+> > > I'm even more confused now. libbpf will sanitize BTF for the sake of
+> > > user space? That's not something it ever did. libbpf sanitizes BTF
+> > > only to
+> >
+> > Right; it's an extension of the sanitization concept from what it does =
+today.
+> > Today we sanitize newer _program_ BTF to ensure it is acceptable to a k=
+ernel which
+> > lacks specific aspects of that BTF; the goal here is to support some si=
+mple sanitization
+> > of the newer _kernel_ BTF by libbpf to help tools (that know about kind=
+ layout but may lack
+> > latest kind info kernel has) to make that kernel BTF usable.
 >
-> Right; it's an extension of the sanitization concept from what it does to=
-day.
-> Today we sanitize newer _program_ BTF to ensure it is acceptable to a ker=
-nel which
-> lacks specific aspects of that BTF; the goal here is to support some simp=
-le sanitization
-> of the newer _kernel_ BTF by libbpf to help tools (that know about kind l=
-ayout but may lack
-> latest kind info kernel has) to make that kernel BTF usable.
-
-Wait, is that really a goal? I get why Alexei is confused now :)
-
-I think we should stick to libbpf sanitizing only BPF program's BTFs
-for the sake of loading it into the kernel. If some user space tool is
-trying to work with kernel BTF that has BTF features that tool doesn't
-support, then we only have two reasonable options: a) tool just fails
-to process that BTF altogether or b) the tool is smart enough to
-utilize BTF layout information to know which BTF types it can safely
-skip (that's where those flags I argue for would be useful). In both
-cases libbpf's btf__parse() will succeed because libbpf can utilize
-layout info to construct a lookup table for btf__type_by_id(). And
-libbpf doesn't need to do anything beyond that, IMO.
-
-We'll teach bpftool to dump as much of BTF as possible (I mean
-`bpftool btf dump file`), so it's possible to get an idea of what part
-of BTF is not supported and show those that we know about. We could
-teach btf_dump to ignore those types that are "safe modifier-like
-reference kind" (as marked with that flag I proposed earlier), so that
-`format c` works as well (though I wouldn't recommend using such
-output as a proper vmlinux.h, users should update bpftool ASAP for
-such use cases).
-
-As far as the kernel is concerned, BTF layout is not used and should
-not be used or trusted (it can be "spoofed" by the user). It can
-validate it for sanity, but that's pretty much it. Other than that, if
-the kernel doesn't *completely* understand every single piece of BTF,
-it should reject it (and that's also why libbpf should sanitize BPF
-object's BTF, of course).
-
-> Both address mismatches between
-> kernel BTF version and userspace. The sanitization available in this case=
- is quite limited,
-> but it would work for cases like BTF location info where it's optional an=
-d doesn't get
-> entangled in the type graph. We could call it something else if it would =
-help distinguish
-> the concepts, but it is a similar sort of activity.
+> Wait, is that really a goal? I get why Alexei is confused now :)
 >
+> I think we should stick to libbpf sanitizing only BPF program's BTFs
+> for the sake of loading it into the kernel. If some user space tool is
+> trying to work with kernel BTF that has BTF features that tool doesn't
+> support, then we only have two reasonable options: a) tool just fails
+> to process that BTF altogether or b) the tool is smart enough to
+> utilize BTF layout information to know which BTF types it can safely
+> skip (that's where those flags I argue for would be useful). In both
+> cases libbpf's btf__parse() will succeed because libbpf can utilize
+> layout info to construct a lookup table for btf__type_by_id(). And
+> libbpf doesn't need to do anything beyond that, IMO.
 >
-> > be loaded in the older kernel where the original BTF was
-> > generated for a newer one. There is no reason to mangle BTF right until
-> > the point of loading. Presence of a kind layout helps user space toolin=
-g
-> > to print it, but that's not sanitization. The tools will just skip over=
-.
+> We'll teach bpftool to dump as much of BTF as possible (I mean
+> `bpftool btf dump file`), so it's possible to get an idea of what part
+> of BTF is not supported and show those that we know about. We could
+> teach btf_dump to ignore those types that are "safe modifier-like
+> reference kind" (as marked with that flag I proposed earlier), so that
+> `format c` works as well (though I wouldn't recommend using such
+> output as a proper vmlinux.h, users should update bpftool ASAP for
+> such use cases).
 >
-> With the help of flags, we can do a bit more than just have bpftool print=
- types; we can
-> also support generation of a vmlinux.h in some cases, support some fentry=
- tracing etc.
-> Anything that requires a close type match or relies on the newer BTF feat=
-ures we do not
-> support will not work of course, but it still salvages some usability whe=
-n kernel BTF is
-> newer.
+> As far as the kernel is concerned, BTF layout is not used and should
+> not be used or trusted (it can be "spoofed" by the user). It can
+> validate it for sanity, but that's pretty much it. Other than that, if
+> the kernel doesn't *completely* understand every single piece of BTF,
+> it should reject it (and that's also why libbpf should sanitize BPF
+> object's BTF, of course).
+
++1 to all of the above, except ok-to-skip flag, since I feel
+it will cause more bike sheding and arguing whether a particular
+new addition to BTF is skippable or not. Like upcoming location info.
+Is it skippable? kinda. Or, say, we decide to add vector types to BTF.
+Skippable? One might argue that they are while they are mandatory
+for some other use case.
+Looking at it differently, if the kernel is old and cannot understand that
+BTF feature the libbpf has to sanitize it no matter skippable or not.
+While from btf__parse() pov it also doesn't matter.
+btf_new()->btf_parse_hdr() will remember kind layout,
+and btf_parse_type_sec() can construct the index for the whole thing
+with layout info,
+while btf_validate_type() has to warn about unknown kind regardless
+of skippable flag. The tool (bpftool or else) needs to yell when
+final vmlinux.h is incomplete. Skipping printing modifier-like decl_tag
+is pretty bad for vmlinux.h. It's really not skippable (in my opinion)
+though one might argue that they are.
+
+Also let's not call btf__parse() process with layout info
+as a sanitization. Sanitization is the word to describe actual replacement
+of unrecognized kind with a known kind. Here btf__parse() won't be
+mangling it. Who knows, maybe btf_dumper (in bpftool or else)
+understands the kind, though libbpf's btf__parse() does not.
