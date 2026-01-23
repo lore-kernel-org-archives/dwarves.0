@@ -1,313 +1,164 @@
-Received: from out-173.mta1.migadu.com (out-173.mta1.migadu.com [95.215.58.173])
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B09837FF57
-	for <dwarves@vger.kernel.org>; Thu, 22 Jan 2026 18:37:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98DCF2BD022;
+	Fri, 23 Jan 2026 17:27:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769107034; cv=none; b=rddOByLO5TzyXM+R48m6FnZHnMMhYpIk6hHvSbfFuyk+RuLZilkkR8RTfl4PJWiGMVE2o8PMnSfgyUzsNre4zSmkEHsubIgwcP6bc81AHzuCDHV94s4QXB6yUTG7CYGLfRvnhSR23xVX2/Q1WA0/4NlShPG1yBuiP5gdpQAeE/g=
+	t=1769189225; cv=none; b=QXwfNFAdekH8nqszCI78ITZvN58npc9+sLaswdQcXrNYcJJdTOuLKFxX2Sg0hvYu9BSr7Ko20NY5hxVxP6qsgCmBJ9A7y/pytzVfZQ1QWvoUezIec7Vkp8+2aRQnjunJm8YqrXPPHVVjqh7ZR8UpMODb3FkK+Gemf7xFPcWOeG4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769107034; c=relaxed/simple;
-	bh=2DmcWeiXJayKKL9AFIPK48NUvpCdUsdGsnfeKPz4Hiw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=k3WPu2tZSpnIt31oTiCCxavRD2YNmT2WP7Ov6qwo7D/Vllnbw8PwAlMxllbSQwmQxdvuVebreueq2MVB7CAZ0VRl35XlL4HrtGQOaiiPyjRtcf6i8lfT9i9uHKFkDSVdAG2iIkBObT+iyUrasV8cWYH18aqDZ65MIEiy4nhR+1o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=vwABxxfW; arc=none smtp.client-ip=95.215.58.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1769189225; c=relaxed/simple;
+	bh=gE+YSAmUdBU9tF5v5zjzS2N7WXLrWf9Pl+CsEd15rek=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=LLdO0g6OBqC61enZmJ/ZDy1U+KD2jmyBWlXGDO5O4ywOKdEGbiE6ScY1O7fgvnqePfsim0ctrlo4qv45ZaEIfJK2Uk6xqi264LykkZf/89C3BAPT+oCXqqb9XxuibYnZpqR/1n+Vv5fffZ8H70EWh5ARCkosJ7S8rlX4CUbzk0c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=V7LZfsJd; arc=none smtp.client-ip=205.220.165.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="vwABxxfW"
-Message-ID: <b675ea8a-290e-4313-b74d-92bb4eac467e@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1769107024;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=FpavnOCYqHbMBJz/zqUzOQcMA7NQtsEOgdjN4Go6MAA=;
-	b=vwABxxfWbluRW4NLnuM3MoF9/yppDqRXXByqgviJ5TkhTxjh3t7k53cOOresuU3uCtt6K9
-	MWXw6m3NX3AbSl0zetC+QTjfohyZnQfjlamdd1IJL56luuy0Ucdy5eVeuLXXHcCtkkKVbc
-	KA0Oao2Nv+Gsmcgrpf5kMrtoRUHUSKY=
-Date: Thu, 22 Jan 2026 10:36:56 -0800
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="V7LZfsJd"
+Received: from pps.filterd (m0333521.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 60NFQliQ1884148;
+	Fri, 23 Jan 2026 17:26:54 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
+	:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=corp-2025-04-25; bh=EUmeirkADnF+iEw/WsQoXPRLsBxBf
+	6cnvjcddv3gNl0=; b=V7LZfsJdOwzWJSyY81i5GFyNTVhSy7obBQRxynCK1QXuJ
+	iV0i7qqmvQaXXw/Lp8eqxuQTpYEEJldVXyXGvb5s4VUMeT90OtZKC5cziz4KFAp+
+	1an0oJyq5cW5dv3BBLJyiFLVcr/0/BP15v/8SZxEaSrSQ/RqgA7gnrOO06B3oZN7
+	MdDn/8ULLGojffHTNfwJLQ3WTx9XiTnBdGJRcwbPThkeAZhyePj/PA8YPmaeC54D
+	Pjrs6LCyBVDHB0AWBwCgn9wmYJTox6VwwkxZzFjaNBVzd5ZZXq28dMFa2sz9cuKP
+	3g0+/WJVSgBwe2fum7YWryjMQcJIILV7sTSthS4lA==
+Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4br1b8jt1j-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 23 Jan 2026 17:26:54 +0000 (GMT)
+Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 60NGrTmm025036;
+	Fri, 23 Jan 2026 17:26:53 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 4bujd1q8pg-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 23 Jan 2026 17:26:53 +0000
+Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 60NHH3mL020337;
+	Fri, 23 Jan 2026 17:26:52 GMT
+Received: from bpf.uk.oracle.com (dhcp-10-154-50-82.vpn.oracle.com [10.154.50.82])
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 4bujd1q8n1-1;
+	Fri, 23 Jan 2026 17:26:52 +0000
+From: Alan Maguire <alan.maguire@oracle.com>
+To: yonghong.song@linux.dev, mattbobrowski@google.com
+Cc: ihor.solodrai@linux.dev, eddyz87@gmail.com, jolsa@kernel.org,
+        andrii@kernel.org, ast@kernel.org, david.faust@oracle.com,
+        dwarves@vger.kernel.org, bpf@vger.kernel.org,
+        Alan Maguire <alan.maguire@oracle.com>
+Subject: [PATCH v2 dwarves 0/5] Improve BTF concrete function accuracy
+Date: Fri, 23 Jan 2026 17:26:45 +0000
+Message-ID: <20260123172650.4062362-1-alan.maguire@oracle.com>
+X-Mailer: git-send-email 2.43.5
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH dwarves 3/4] btf_encoder: Add true_signature feature
- support for "."-suffixed functions
-Content-Language: en-GB
-To: Alan Maguire <alan.maguire@oracle.com>, mattbobrowski@google.com
-Cc: eddyz87@gmail.com, ihor.solodrai@linux.dev, jolsa@kernel.org,
- andrii@kernel.org, ast@kernel.org, dwarves@vger.kernel.org,
- bpf@vger.kernel.org
-References: <20260113131352.2395024-1-alan.maguire@oracle.com>
- <20260113131352.2395024-4-alan.maguire@oracle.com>
- <4d7c529c-a910-431f-8e6a-b8e5f4f7cffa@linux.dev>
- <49f81b2e-187e-4056-b6de-9a7f028c2f5a@oracle.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <49f81b2e-187e-4056-b6de-9a7f028c2f5a@oracle.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.20,FMLib:17.12.100.49
+ definitions=2026-01-23_02,2026-01-22_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 spamscore=0 suspectscore=0
+ malwarescore=0 bulkscore=0 mlxscore=0 mlxlogscore=811 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2601150000
+ definitions=main-2601230131
+X-Authority-Analysis: v=2.4 cv=WbcBqkhX c=1 sm=1 tr=0 ts=6973af5e b=1 cx=c_pps
+ a=qoll8+KPOyaMroiJ2sR5sw==:117 a=qoll8+KPOyaMroiJ2sR5sw==:17
+ a=vUbySO9Y5rIA:10 a=VkNPw1HP01LnGYTKEx00:22 a=VwQbUJbxAAAA:8 a=yPCof4ZbAAAA:8
+ a=JqVbt3Op-64Y-Lxj14cA:9 cc=ntf awl=host:12104
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTIzMDEzMSBTYWx0ZWRfX60S6VV3fjGWD
+ s3p8XN/TWdrki/vGRZjXZ5tMZhqVa7P84WOB2vmS414k1Lk3e3tVcPJEeaPbmKseKTPuKHzZMGJ
+ DING8BdwV+wRl9IuYbIFx+MNxUSEBbSlBWzNob9xujGfm482ZKR132z5dzV9bftDluvamJKJ+Vn
+ zsBD6lguSRCvvob/Ra/iLcD9QqCSbTq4qUQU253bGdkivgPOJwbHfav/MxoFWcHMxFYyNWX/IAJ
+ Aa86+rID73PgqkjTTMdJP/GXven2ERqALIG4nzRvCLA7OACJL1WqwJUNUZ8eYehAia7Jt857acJ
+ ZnrjjxhqxNxa0swA2nDTL745Nkct9ykJgLmYX+hRpEJ1RFJjfjCB64EQ3WRGuu3R+u4sETIBNXz
+ le/HzjgsaFgOxLN/sDr+jk16iypJfCmOtbhmScdkoKfYh0jVtD8gWx76vdn2apJ2YborSw2P5He
+ 8KB+mnCqux/SiZiiDlh2wUhwdkCQ2wHBjOGyMwGM=
+X-Proofpoint-ORIG-GUID: DSlpwrg_mh8HW8qkO8pDQTNZAiE9kLLA
+X-Proofpoint-GUID: DSlpwrg_mh8HW8qkO8pDQTNZAiE9kLLA
 
+This series brings together a few solutions to issues we have
+with accuracy of BTF function representation at the binary level.
 
+The first patch detects mismatches between concrete (binary)
+and abstract (source-level) function signatures as a means
+of either excluding them or providing a "true" function signature.
 
-On 1/22/26 10:21 AM, Alan Maguire wrote:
-> On 20/01/2026 17:53, Yonghong Song wrote:
->>
->> On 1/13/26 5:13 AM, Alan Maguire wrote:
->>> Currently we collate function information by name and add functions
->>> provided there are no inconsistencies across various representations.
->>>
->>> For true_signature support - where we wish to add the real signature
->>> of a function even if it differs from source level - we need to do
->>> a few things:
->>>
->>> 1. For "."-suffixed functions, we need to match from DWARF->ELF;
->>>      we can do this via the address associated with the function.
->>>      In doing this, we can then be confident that the debug info
->>>      for foo.isra.0 is the right info for the function at that
->>>      address.
->>>
->>> 2. When adding saved functions we need to look for such cases
->>>      and provided they do not violate other constraints around BTF
->>>      representation - unexpected reg usage for function, uncertain
->>>      parameter location or ambiguous address - we add them with
->>>      their "."-suffixed name.  The latter can be used as a signal
->>>      that the function is transformed from the original.
->>>
->>> Doing this adds 500 functions to BTF.  These are traceable with
->>> their "."-suffix names and because we have excluded ambiguous
->>> address cases we know exactly which function address they refer
->>> to.
->>>
->>> Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
->>> ---
->>>    btf_encoder.c | 73 ++++++++++++++++++++++++++++++++++++++++++++++-----
->>>    dwarves.h     |  1 +
->>>    pahole.c      |  1 +
->>>    3 files changed, 68 insertions(+), 7 deletions(-)
->>>
->>> diff --git a/btf_encoder.c b/btf_encoder.c
->>> index 5bc61cb..01fd469 100644
->>> --- a/btf_encoder.c
->>> +++ b/btf_encoder.c
->>> @@ -77,9 +77,16 @@ struct btf_encoder_func_annot {
->>>        int16_t component_idx;
->>>    };
->>>    +struct elf_function_sym {
->>> +    const char *name;
->>> +    uint64_t addr;
->>> +};
->>> +
->>>    /* state used to do later encoding of saved functions */
->>>    struct btf_encoder_func_state {
->>>        struct elf_function *elf;
->>> +    struct elf_function_sym *sym;
->>> +    uint64_t addr;
->>>        uint32_t type_id_off;
->>>        uint16_t nr_parms;
->>>        uint16_t nr_annots;
->>> @@ -94,11 +101,6 @@ struct btf_encoder_func_state {
->>>        struct btf_encoder_func_annot *annots;
->>>    };
->>>    -struct elf_function_sym {
->>> -    const char *name;
->>> -    uint64_t addr;
->>> -};
->>> -
->>>    struct elf_function {
->>>        char        *name;
->>>        struct elf_function_sym *syms;
->>> @@ -145,7 +147,8 @@ struct btf_encoder {
->>>                  skip_encoding_decl_tag,
->>>                  tag_kfuncs,
->>>                  gen_distilled_base,
->>> -              encode_attributes;
->>> +              encode_attributes,
->>> +              true_signature;
->>>        uint32_t      array_index_id;
->>>        struct elf_secinfo *secinfo;
->>>        size_t             seccnt;
->>> @@ -1271,14 +1274,34 @@ static int32_t btf_encoder__save_func(struct btf_encoder *encoder, struct functi
->>>                goto out;
->>>            }
->>>        }
->>> +    if (encoder->true_signature && fn->lexblock.ip.addr) {
->>> +        int i;
->>> +
->>> +        for (i = 0; i < func->sym_cnt; i++) {
->>> +            if (fn->lexblock.ip.addr != func->syms[i].addr)
->>> +                continue;
->>> +            /* Only need to record address for '.'-suffixed
->>> +             * functions, since we only currently need true
->>> +             * signatures for them.
->>> +             */
->>> +            if (!strchr(func->syms[i].name, '.'))
->>> +                continue;
->>> +            state->sym = &func->syms[i];
->>> +            break;
->>> +        }
->>> +    }
->>>        state->inconsistent_proto = ftype->inconsistent_proto;
->>>        state->unexpected_reg = ftype->unexpected_reg;
->>>        state->optimized_parms = ftype->optimized_parms;
->>>        state->uncertain_parm_loc = ftype->uncertain_parm_loc;
->>>        state->reordered_parm = ftype->reordered_parm;
->>>        ftype__for_each_parameter(ftype, param) {
->>> -        const char *name = parameter__name(param) ?: "";
->>> +        const char *name;
->>>    +        /* No location info + reordered means optimized out. */
->>> +        if (ftype->reordered_parm && !param->has_loc)
->>> +            continue;
->>> +        name = parameter__name(param) ?: "";
->>>            str_off = btf__add_str(btf, name);
->>>            if (str_off < 0) {
->>>                err = str_off;
->>> @@ -1367,6 +1390,9 @@ static int32_t btf_encoder__add_func(struct btf_encoder *encoder,
->>>          btf_fnproto_id = btf_encoder__add_func_proto_for_state(encoder, state);
->>>        name = func->name;
->>> +    if (encoder->true_signature && state->sym)
->>> +        name = state->sym->name;
->>> +
->>>        if (btf_fnproto_id >= 0)
->>>            btf_fn_id = btf_encoder__add_ref_type(encoder, BTF_KIND_FUNC, btf_fnproto_id,
->>>                                  name, false);
->>> @@ -1509,6 +1535,38 @@ static int btf_encoder__add_saved_funcs(struct btf_encoder *encoder, bool skip_e
->>>            while (j < nr_saved_fns && saved_functions_combine(encoder, &saved_fns[i], &saved_fns[j]) == 0)
->>>                j++;
->>>    +        /* Add true signatures for case where we have an exact
->>> +         * symbol match by address from DWARF->ELF and have a
->>> +         * "." suffixed name.
->>> +         */
->>> +        if (encoder->true_signature) {
->>> +            int k;
->>> +
->>> +            for (k = i; k < nr_saved_fns; k++) {
->>> +                struct btf_encoder_func_state *true_state = &saved_fns[k];
->>> +
->>> +                if (state->elf != true_state->elf)
->>> +                    break;
->>> +                if (!true_state->sym)
->>> +                    continue;
->>> +                /* Unexpected reg, uncertain parm loc and
->>> +                 * ambiguous address mean we cannot trust fentry.
->>> +                 */
->>> +                if (true_state->unexpected_reg ||
->>> +                    true_state->uncertain_parm_loc ||
->>> +                    true_state->ambiguous_addr)
->>> +                    continue;
->>> +                err = btf_encoder__add_func(encoder, true_state);
->>> +                if (err < 0)
->>> +                    goto out;
->>> +                break;
->>> +            }
->>> +        }
->>> +
->>> +        /* True symbol that was handled above; skip. */
->>> +        if (state->sym)
->>> +            continue;
->> I did an experiment with the following code:
->>
->> $ cat test.c
->> struct t { int a; };
->> __attribute__((noinline)) char *tar(struct t *a, struct t *d) { if (a->a == d->a) return (char *)10; else return (char *)0; }
->> __attribute__((noinline)) static char * foo(struct t *a, int b, struct t *d)
->> {
->>    return tar(a, d);
->> }
->> __attribute__((noinline)) char *bar(struct t *a, struct t *d)
->> {
->>    return foo(a, 1, d);
->> }
->>
->> struct t p1, p2;
->> int main() {
->>    return !!bar(&p1, &p2);
->> }
->>
->> and compiled with gcc11:
->> $ gcc -O2 -g test.c
->>
->> I hacked btf_encoder.c with true_signature is all on and with
->> $ pahole -JV ./a.out
->> ...
->> btf_encoder__new: './a.out' doesn't have '.data..percpu' section
->> File ./a.out:
->> [1] STRUCT t size=4
->>          a type_id=2 bits_offset=0
->> [2] INT int size=4 nr_bits=32 encoding=SIGNED
->> [3] PTR (anon) type_id=4
->> [4] INT char size=1 nr_bits=8 encoding=SIGNED
->> [5] PTR (anon) type_id=1
->> search cu 'test.c' for percpu global variables.
->> [6] FUNC_PROTO (anon) return=3 args=(5 a, 5 d)
->> [7] FUNC bar type_id=6
->> [8] FUNC_PROTO (anon) return=3 args=(5 a, 5 d, vararg)
->> [9] FUNC foo.constprop.0 type_id=8
->> foo : skipping BTF encoding of function due to reordered parameters
->> [10] FUNC_PROTO (anon) return=2 args=(void)
->> [11] FUNC main type_id=10
->> [12] FUNC_PROTO (anon) return=3 args=(5 a, 5 d)
->> [13] FUNC tar type_id=12
->>
->> There are two issues.
->>
->> First in btf_encoder__add_saved_funcs(), it is possible below
->> +        /* True symbol that was handled above; skip. */
->> +        if (state->sym)
->> +            continue;
->> state->sym is false.
->> But one of true_state->sym in the above loop could be true.
->> So if btf_encoder__add_func(encoder, true_state) is successful,
->> we should continue in the above regardless state->sym null or not.
->> This will remove the warning:
->>    foo : skipping BTF encoding of function due to reordered parameters
->>
-> thanks, will fix this.
->
->> Second, we have foo.constprop.0 func proto encoding:
->>    [8] FUNC_PROTO (anon) return=3 args=(5 a, 5 d, vararg)
->> The last argument 'vararg' should not be there since the
->> optimized out argument is already gone.
->>
-> The problem here was both
->
-> 1. we weren't dealing with const values; and
-> 2. when a parameter was marked optimized we weren't reducing the number
-> of params, so ended up with an extra 0-type param on the end,
-> resembling a vararg.
->
-> Fixing both of these we get:
->
-> $ pahole -J --verbose --btf_features=+true_signature a.out
-> btf_encoder__new: 'a.out' doesn't have '.data..percpu' section
-> File a.out:
-> [1] STRUCT t size=4
-> 	a type_id=2 bits_offset=0
-> [2] INT int size=4 nr_bits=32 encoding=SIGNED
-> [3] PTR (anon) type_id=4
-> [4] INT char size=1 nr_bits=8 encoding=SIGNED
-> [5] PTR (anon) type_id=1
-> search cu 'true_test.c' for percpu global variables.
-> [6] FUNC_PROTO (anon) return=3 args=(5 a, 5 d)
-> [7] FUNC bar type_id=6
-> [8] FUNC_PROTO (anon) return=3 args=(5 a, 5 d)
-> [9] FUNC foo.constprop.0 type_id=8
-> [10] FUNC_PROTO (anon) return=2 args=(void)
-> [11] FUNC main type_id=10
-> [12] FUNC_PROTO (anon) return=3 args=(5 a, 5 d)
-> [13] FUNC tar type_id=12
->
-> ...which I _think_ is right.
->
-> I'll retest and respin; was wondering if it'd be okay to incorporate
-> the above into a selftest, as it's really useful? Thanks!
+Patch 2 adds GCC true function signature support for optimized
+functions; with that support, we use binary-level signatures
+for .isra.0, .constprop.0 functions and represent them with
+their "." suffixes as BTF_KIND_FUNC names.
 
-Looks like current pahole tests (at pahole/tests directory) are all
-simple and using python. But true signature might be worth to have
-some tests at pahole as it is unlikely that kernel/bpf will validate it.
-But having these selftests can be a separate patch.
+This allows for fentry attach to such functions, and
+the "." suffix is an indicator of signature modification.
+The feature is guarded by a default-off BTF feature because
+older kernels did not support a "." in a function name.
+
+Patch 3 uses Yonghong's example program as a test; compiling
+with -O2 we expect a parameter to "foo" to be optimized
+out and the true function signature should reflect that.
+
+Patch 4 documents the non-default "true_signature" feature.
+
+Patch 5 is Matt's patch to favour the strong function
+over the associated weak declaration.  The other patches
+are important prerequisites for this as the patch selects
+the binary-level function (with a lowpc value), and in
+the case of optimized functions we were often selecting
+the .isra function with optimized-out parameters.  Because
+pahole did not previously detect this correctly we ended
+up with functions with signatures having reordered parameters.
+
+Patches 1-2 help avoid this by better detecting optimized-out
+function parameters.
+
+With these patches in place, ~20 functions are omitted from
+vmlinux BTF; all these are "."-suffixed functions which
+we were not noticing had optimized-out parameters.
+
+Experimenting with adding true_signature to BTF features
+we end up adding approximately 500 .isra and .constprop
+functions to vmlinux BTF.
+
+The true function signature support here will also hopefully
+help pave the way for Yonghong's work on the LLVM side.
+
+Changes since v1 [1]
+
+- dropped Yonghong's patch (Ihor)
+- fixed up issues Yonghong found in true signature encoding
+  where we did not adjust the number of parameters and
+  were not handling true function signature case correctly
+  when adding saved functions (Yonghong, patch 2)
+- added test using Yonghong's example (patch 3)
+
+[1] https://lore.kernel.org/dwarves/20260113131352.2395024-1-alan.maguire@oracle.com/
+
+Alan Maguire (4):
+  dwarf_loader/btf_encoder: Detect reordered parameters
+  btf_encoder: Add true_signature feature support for "."-suffixed
+    functions
+  test: add gcc true signature test
+  man-pages: document true_signature btf_feature
+
+Matt Bobrowski (1):
+  btf_encoder: Prefer strong function definitions for BTF generation
+
+ btf_encoder.c                | 139 +++++++++++++++++++++++++++++++----
+ dwarf_loader.c               |   5 +-
+ dwarves.h                    |   3 +
+ man-pages/pahole.1           |   5 ++
+ pahole.c                     |   1 +
+ tests/gcc_true_signatures.sh |  92 +++++++++++++++++++++++
+ 6 files changed, 227 insertions(+), 18 deletions(-)
+ create mode 100755 tests/gcc_true_signatures.sh
+
+-- 
+2.43.5
 
