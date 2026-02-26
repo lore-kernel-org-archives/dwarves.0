@@ -1,111 +1,80 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81D7838F93E;
-	Thu, 26 Feb 2026 10:05:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E77BF394496;
+	Thu, 26 Feb 2026 10:05:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772100352; cv=none; b=nOwp+pgKhy7JkS8LK41fwo/h9FvIDOG2GYAbCk5HLsxjumAxh6iXVP8gNI2WIeWaQiB50lVk3LHBhtJ2XrbenCuWmi1sVXqSFma05gT5K70J8mgyZReNXZBqi7zdru3XAfHjB6NuOJrMb7GKXepldGb8PplY4ZyXW576b3t9bfg=
+	t=1772100357; cv=none; b=KTPKcGhfYaqYb5iWY8J6Lk7DZK8d7xwAM+Zef2HlZ8Y9IwUZ+M0opvjTKx3WCSctqk7DSkuBVWN9iR/0Ng9igkVMriAi1u1GH3kRhCYtueLGbH6vlICgp7HX7nDTCbnjx955/GS6pS37BetA4Qn5Md5Y3EAthnWRsPwiD/iklTc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772100352; c=relaxed/simple;
-	bh=D0qJuSpU0Gty9tLbS/qN9Ky8StV+HXREw5JF+V/RAfI=;
+	s=arc-20240116; t=1772100357; c=relaxed/simple;
+	bh=+VTGIvfnV0UjS2fYd3+wF+qTS94i6mZEr6QVkORUYZI=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=G1bgKJwRTqvvpn2NpA0lIDCYUjngaqS6OGI5tjqaHDm+Eb/TY+nFj4ipPjTxXE57XzHvS4BirTPqanEMO3kH7XH3Gb1Y6FowghF6Qf//+s6tojPipJwCZLSc8UrhzvMdHS5hEebVRzBONmE6lEdLnh6KC97/8QDoSf7Hvwn6zjQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gGgpiyWI; arc=none smtp.client-ip=10.30.226.201
+	 Subject:From:To:Cc:Date; b=e86mqtgDs1cCUCki48r1hSix1EBeGydlog4zUh1rpH2R9k/WSIBc/lW/C2U8DI8HX7QhtQMDFbp7RFgkSwupeHPfFMKVSiZ0iaJWrv5v5K4BIN3UoOKk2eXOnn2s6Veb0wqGmlrZDSZxplSosGwLdVQt/3fosDj3KSTwij+ryF4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PL3y36kk; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gGgpiyWI"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 622C2C19422;
-	Thu, 26 Feb 2026 10:05:50 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PL3y36kk"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5EC3C19422;
+	Thu, 26 Feb 2026 10:05:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772100352;
-	bh=D0qJuSpU0Gty9tLbS/qN9Ky8StV+HXREw5JF+V/RAfI=;
+	s=k20201202; t=1772100356;
+	bh=+VTGIvfnV0UjS2fYd3+wF+qTS94i6mZEr6QVkORUYZI=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=gGgpiyWIVaBig6oFwZFSuYeXhBO3aPHdmbKrTW/PUnOMewfyuqocQWwWS1ntroKyN
-	 C8I50OwbLRm1PiwmdwPNDuM9TBYWlW4uWeAHDwo+K7qkQgYCfyKX3j8bVBwYYgIJ73
-	 XnzxS+9TkSZ2TI9i3YPTxJfWxxAF0H8u0EE5EF3iSAfl2bg1ntPaQWdTbV+0qFM65B
-	 M9y+ud8CEZDsGSVzQbZzuoXtYkZ3Gj9a7Gek1zfAt9ipfvCJglf3McezGr5nzTgy44
-	 Ju87dM5lhYFbTTWTw8FM1NUSFoGqbf8O0lt1m8LvomxVM81yN9alaAGaQw39CA1zTP
-	 FzdYdY3HrK3eQ==
-Content-Type: multipart/mixed; boundary="===============0829458916520923019=="
+	b=PL3y36kkjkNMOgtOBhgDLwzVZBHeHa0/P8czUP70mmNXDr0tScVZlfMBCudDkSpO0
+	 F1recgRV9s4pk5B/S5RBk4Ko9PqCOvSW+VdY0B8Mh92WuEIig7y2yjuzsfwmbuYS7y
+	 1GOv4eP/ds7qBMnrYzfTYhh3YbUJuO8yr4sVFatNwR2zyK/QHxUYZ6wOa2BTOZ/a9k
+	 ekB4wEfb+8Tqryf4GIyU99EdXtZ9XzACKXq7qnILpReW/er+1ShZn6LC+PznTh5TpT
+	 1u04DOF7ukPJT1ylwniV+Kh9Oja8D1EJpA1xc8RAb2OIHge1rf1un9kjnXk50B5iJD
+	 MEBrKvfehWgfw==
+Content-Type: multipart/mixed; boundary="===============8979527142850515311=="
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <dc1d9fb29ac2eba86b21fb85ad1bac9d096f0e9680ef87b42a86200120b5e7a1@mail.kernel.org>
-In-Reply-To: <20260226085624.1909682-7-alan.maguire@oracle.com>
-References: <20260226085624.1909682-7-alan.maguire@oracle.com>
-Subject: Re: [PATCH v9 bpf-next 06/10] btf: support kernel parsing of BTF with layout info
+Message-Id: <6c47d067a977a179a9c4e888efc97ba8521749688c591e1da34a2b33d1abf343@mail.kernel.org>
+In-Reply-To: <20260226085624.1909682-5-alan.maguire@oracle.com>
+References: <20260226085624.1909682-5-alan.maguire@oracle.com>
+Subject: Re: [PATCH v9 bpf-next 04/10] libbpf: Add layout encoding support
 From: bot+bpf-ci@kernel.org
 To: alan.maguire@oracle.com,andrii@kernel.org,ast@kernel.org
 Cc: daniel@iogearbox.net,martin.lau@linux.dev,eddyz87@gmail.com,song@kernel.org,yonghong.song@linux.dev,john.fastabend@gmail.com,kpsingh@kernel.org,sdf@fomichev.me,haoluo@google.com,jolsa@kernel.org,qmo@kernel.org,ihor.solodrai@linux.dev,mykyta.yatsenko5@gmail.com,dwarves@vger.kernel.org,bpf@vger.kernel.org,alan.maguire@oracle.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Thu, 26 Feb 2026 10:05:50 +0000 (UTC)
+Date: Thu, 26 Feb 2026 10:05:53 +0000 (UTC)
 
---===============0829458916520923019==
+--===============8979527142850515311==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-> --- a/kernel/bpf/btf.c
-> +++ b/kernel/bpf/btf.c
+> Layout information is maintained in btf.c in the layouts[] array;
+> when BTF is created with the add_layout option in represents the
+> current view of supported BTF kinds.
+
+There is a typo in the commit message: "in represents" should be
+"it represents".
+
+> diff --git a/tools/lib/bpf/btf.h b/tools/lib/bpf/btf.h
+> index b30008c267c0..a1f8deca2603 100644
+> --- a/tools/lib/bpf/btf.h
+> +++ b/tools/lib/bpf/btf.h
 
 [ ... ]
 
-> @@ -5327,23 +5328,36 @@ static s32 btf_check_meta(struct btf_verifier_env *env,
->  		return -EINVAL;
->  	}
->
-> +	if (!btf_name_offset_valid(env->btf, t->name_off)) {
-> +		btf_verifier_log(env, "[%u] Invalid name_offset:%u",
-> +				 env->log_type_id, t->name_off);
-> +		return -EINVAL;
-> +	}
-> +
-> +	if (BTF_INFO_KIND(t->info) == BTF_KIND_UNKN) {
->  		btf_verifier_log(env, "[%u] Invalid kind:%u",
->  				 env->log_type_id, BTF_INFO_KIND(t->info));
->  		return -EINVAL;
->  	}
->
-> +	if (BTF_INFO_KIND(t->info) > BTF_KIND_MAX && env->btf->layout &&
-> +	    ((BTF_INFO_KIND(t->info) + 1) * sizeof(struct btf_layout)) <
-> +	     env->btf->hdr.layout_len) {
-                                       ^
+> +struct btf_new_opts {
+> +	size_t sz;
+> +	struct btf *base_btf;	/* optional base BTF */
+> +	bool add_layout;	/* add BTF layout information */
+> +	size_t:0;
+> +};
 
-Should this be <= instead of < ?  If the layout section has exactly
-N entries, layout_len is N * sizeof(struct btf_layout).  For the
-last covered kind (K = N - 1), this computes:
+In v8, Andrii Nakryiko asked why this is an option rather than
+always emitting layout unconditionally:
 
-    (K + 1) * sizeof(struct btf_layout) == layout_len
+https://lore.kernel.org/bpf/CAEf4BzZuFB6zvMjdqKDumUAT4vr5MeA3LBqTh5xRZmAQ5KC10g@mail.gmail.com/
 
-With < that evaluates to false, so the last kind covered by the
-layout section falls through to the else branch and gets logged as
-"Invalid kind" instead of "unknown but required kind".
-
-The libbpf equivalent in btf_type_size_unknown() uses:
-
-    __u32 layout_kinds = btf->hdr.layout_len / sizeof(struct btf_layout);
-    if (!l || kind >= layout_kinds) {
-
-which accepts the last entry.  Using <= here would match that
-behavior.
-
-> +		btf_verifier_log(env, "[%u] unknown but required kind %u",
-> +				 env->log_type_id,
-> +				 BTF_INFO_KIND(t->info));
->  		return -EINVAL;
-> +	} else {
-> +		if (BTF_INFO_KIND(t->info) > BTF_KIND_MAX) {
-> +			btf_verifier_log(env, "[%u] Invalid kind:%u",
-> +					 env->log_type_id, BTF_INFO_KIND(t->info));
-> +			return -EINVAL;
-> +		}
-> +		var_meta_size = btf_type_ops(t)->check_meta(env, t, meta_left);
-> +		if (var_meta_size < 0)
-> +			return var_meta_size;
->  	}
+Was there a reason the suggestion to always emit layout and
+sanitize it for older kernels was not followed?
 
 
 ---
@@ -115,9 +84,9 @@ See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/22436234361
 
 AI-authorship-score: low
-AI-authorship-explanation: Multi-year revision history with detailed reviewer interactions, idiomatic kernel C, and an off-by-one error typical of manual arithmetic translation are inconsistent with AI-generated code.
-issues-found: 1
+AI-authorship-explanation: Long lore history (v3-v9 spanning 2023-2026), iterative reviewer feedback, human-style typo in commit message, and consistent with author's established BPF contributions.
+issues-found: 2
 issue-severity-score: low
-issue-severity-explanation: Off-by-one in layout bounds check produces wrong verifier log message but does not change functional behavior since both paths return -EINVAL.
+issue-severity-explanation: A commit message typo and an unaddressed maintainer design request about always emitting layout rather than making it optional; no functional bugs found.
 
---===============0829458916520923019==--
+--===============8979527142850515311==--
