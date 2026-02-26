@@ -1,80 +1,121 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E77BF394496;
-	Thu, 26 Feb 2026 10:05:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FF083A1D1A;
+	Thu, 26 Feb 2026 10:06:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772100357; cv=none; b=KTPKcGhfYaqYb5iWY8J6Lk7DZK8d7xwAM+Zef2HlZ8Y9IwUZ+M0opvjTKx3WCSctqk7DSkuBVWN9iR/0Ng9igkVMriAi1u1GH3kRhCYtueLGbH6vlICgp7HX7nDTCbnjx955/GS6pS37BetA4Qn5Md5Y3EAthnWRsPwiD/iklTc=
+	t=1772100360; cv=none; b=mP/+cKcI3zbZW3QFfFZeVmSmdNcRWvCYfzITk3ikH2QYk10Kmd8l78UMPkXN087/8hkU02jqnpsnxO1Ij65Q/ehKoGBxxNIuWugui43hQXx/S4bsYefqLY/svWU88s2TjUvEOPh4fv1Gq1QmKzZvL0VMwwVIdcomVIvFwjz6zNE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772100357; c=relaxed/simple;
-	bh=+VTGIvfnV0UjS2fYd3+wF+qTS94i6mZEr6QVkORUYZI=;
+	s=arc-20240116; t=1772100360; c=relaxed/simple;
+	bh=eoRXZrRxRnKYax4o2Gq8rQTqHGtZNjsO6KvoELD9tx0=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=e86mqtgDs1cCUCki48r1hSix1EBeGydlog4zUh1rpH2R9k/WSIBc/lW/C2U8DI8HX7QhtQMDFbp7RFgkSwupeHPfFMKVSiZ0iaJWrv5v5K4BIN3UoOKk2eXOnn2s6Veb0wqGmlrZDSZxplSosGwLdVQt/3fosDj3KSTwij+ryF4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PL3y36kk; arc=none smtp.client-ip=10.30.226.201
+	 Subject:From:To:Cc:Date; b=rkOjFGGBXQVZndyepHgYQR/OpnRtY9mWC8Tf7pOzUJZy4eJUKBY8+3iPdmW8TPruB31jnzDrVSUqfKGAVJgHY7mHY4v4zXmmxw+JODn4l50DvtjDddzEzBWp1pLjQ5HZaWuqL/qBY4zLPhuUVwJ17u0I3P+klsYIvpvWR88WYMU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eaQ14SLE; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PL3y36kk"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5EC3C19422;
-	Thu, 26 Feb 2026 10:05:53 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eaQ14SLE"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40B46C19422;
+	Thu, 26 Feb 2026 10:05:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772100356;
-	bh=+VTGIvfnV0UjS2fYd3+wF+qTS94i6mZEr6QVkORUYZI=;
+	s=k20201202; t=1772100360;
+	bh=eoRXZrRxRnKYax4o2Gq8rQTqHGtZNjsO6KvoELD9tx0=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=PL3y36kkjkNMOgtOBhgDLwzVZBHeHa0/P8czUP70mmNXDr0tScVZlfMBCudDkSpO0
-	 F1recgRV9s4pk5B/S5RBk4Ko9PqCOvSW+VdY0B8Mh92WuEIig7y2yjuzsfwmbuYS7y
-	 1GOv4eP/ds7qBMnrYzfTYhh3YbUJuO8yr4sVFatNwR2zyK/QHxUYZ6wOa2BTOZ/a9k
-	 ekB4wEfb+8Tqryf4GIyU99EdXtZ9XzACKXq7qnILpReW/er+1ShZn6LC+PznTh5TpT
-	 1u04DOF7ukPJT1ylwniV+Kh9Oja8D1EJpA1xc8RAb2OIHge1rf1un9kjnXk50B5iJD
-	 MEBrKvfehWgfw==
-Content-Type: multipart/mixed; boundary="===============8979527142850515311=="
+	b=eaQ14SLEZWkf948aq+zRZ8ejPhiQWlEIu+xLugNmIayLmySBw6URgXq9lDWrGEX+1
+	 bia7rpsqohN66S4WIHf3xO0th2IYSav3ICuKAd/VM8wDUAPXq2/yHbYh0cdQek1x5+
+	 AtLxNkk8pTm/MXUEWaxXhqE+AQtXSTmgFkvDhveHA+OnmMaS0odw4Ks9yGumep1C1K
+	 MhAB3AdyZZYwgPFq6b92anAmDHN1cr9l76C/5qiyUdYst8E3y2/ZKlWTl9FVuPBLqN
+	 AhsOAhI2EXr9ryIf3bQ5rD7hffMhSB+7MCWjx7MGeQGpD2UvLEYiss+Z0+D30RagzC
+	 z8AnmjzvXlVdg==
+Content-Type: multipart/mixed; boundary="===============6843499927274922463=="
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <6c47d067a977a179a9c4e888efc97ba8521749688c591e1da34a2b33d1abf343@mail.kernel.org>
-In-Reply-To: <20260226085624.1909682-5-alan.maguire@oracle.com>
-References: <20260226085624.1909682-5-alan.maguire@oracle.com>
-Subject: Re: [PATCH v9 bpf-next 04/10] libbpf: Add layout encoding support
+Message-Id: <1e030700935a6f99789250a8841c908cfda89f4e5cd215ada2485b02c07994c7@mail.kernel.org>
+In-Reply-To: <20260226085624.1909682-3-alan.maguire@oracle.com>
+References: <20260226085624.1909682-3-alan.maguire@oracle.com>
+Subject: Re: [PATCH v9 bpf-next 02/10] libbpf: Support layout section handling in BTF
 From: bot+bpf-ci@kernel.org
 To: alan.maguire@oracle.com,andrii@kernel.org,ast@kernel.org
 Cc: daniel@iogearbox.net,martin.lau@linux.dev,eddyz87@gmail.com,song@kernel.org,yonghong.song@linux.dev,john.fastabend@gmail.com,kpsingh@kernel.org,sdf@fomichev.me,haoluo@google.com,jolsa@kernel.org,qmo@kernel.org,ihor.solodrai@linux.dev,mykyta.yatsenko5@gmail.com,dwarves@vger.kernel.org,bpf@vger.kernel.org,alan.maguire@oracle.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Thu, 26 Feb 2026 10:05:53 +0000 (UTC)
+Date: Thu, 26 Feb 2026 10:05:58 +0000 (UTC)
 
---===============8979527142850515311==
+--===============6843499927274922463==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> Layout information is maintained in btf.c in the layouts[] array;
-> when BTF is created with the add_layout option in represents the
-> current view of supported BTF kinds.
-
-There is a typo in the commit message: "in represents" should be
-"it represents".
-
-> diff --git a/tools/lib/bpf/btf.h b/tools/lib/bpf/btf.h
-> index b30008c267c0..a1f8deca2603 100644
-> --- a/tools/lib/bpf/btf.h
-> +++ b/tools/lib/bpf/btf.h
+> diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
+> index 83fe79ffcb8f..3438cc15bb7a 100644
+> --- a/tools/lib/bpf/btf.c
+> +++ b/tools/lib/bpf/btf.c
 
 [ ... ]
 
-> +struct btf_new_opts {
-> +	size_t sz;
-> +	struct btf *base_btf;	/* optional base BTF */
-> +	bool add_layout;	/* add BTF layout information */
-> +	size_t:0;
-> +};
+> @@ -224,66 +242,95 @@ static void btf_bswap_hdr(struct btf_header *h)
 
-In v8, Andrii Nakryiko asked why this is an option rather than
-always emitting layout unconditionally:
+[ ... ]
 
-https://lore.kernel.org/bpf/CAEf4BzZuFB6zvMjdqKDumUAT4vr5MeA3LBqTh5xRZmAQ5KC10g@mail.gmail.com/
+>  static int btf_parse_hdr(struct btf *btf)
+>  {
+> -	struct btf_header *hdr = btf->hdr;
+> +	struct btf_header *hdr = btf->raw_data;
+> +	__u32 hdr_len = hdr->hdr_len;
 
-Was there a reason the suggestion to always emit layout and
-sanitize it for older kernels was not followed?
+[ ... ]
+
+> +	memcpy(&btf->hdr, hdr, min((size_t)hdr_len, sizeof(struct btf_header)));
+
+The memcpy here correctly caps the copy at sizeof(struct btf_header),
+but btf->hdr.hdr_len retains the original value from the raw data.
+If the input BTF has a future-extended header where hdr_len exceeds
+sizeof(struct btf_header), only sizeof(struct btf_header) bytes are
+stored, yet hdr_len remembers the larger original value. This
+matters in btf_get_raw_data() below.
+
+[ ... ]
+
+> @@ -1601,7 +1664,7 @@ static const void *btf_strs_data(const struct btf *btf)
+>
+>  static void *btf_get_raw_data(const struct btf *btf, __u32 *size, bool swap_endian)
+>  {
+> -	struct btf_header *hdr = btf->hdr;
+> +	const struct btf_header *hdr = &btf->hdr;
+>  	struct btf_type *t;
+>  	void *data, *p;
+>  	__u32 data_sz;
+
+[ ... ]
+
+>  	memcpy(p, hdr, hdr->hdr_len);
+
+When hdr_len > sizeof(struct btf_header), does this read past the
+end of the embedded btf->hdr struct? hdr points to &btf->hdr which
+is sizeof(struct btf_header) bytes, but hdr->hdr_len can be larger
+if the parsed BTF had a future-extended header. The extra bytes
+would come from adjacent struct btf fields (types_data, etc.),
+leaking internal state into the serialized output.
+
+Previously, btf->hdr pointed directly into raw_data where the full
+header (including any extension bytes) was available. The switch to
+an embedded struct loses those extra bytes, but the serialization
+still tries to write hdr_len bytes.
+
+One possible fix:
+
+    memcpy(p, hdr, min((__u32)sizeof(struct btf_header), hdr->hdr_len));
+    if (hdr->hdr_len > sizeof(struct btf_header))
+        memset(p + sizeof(struct btf_header), 0,
+               hdr->hdr_len - sizeof(struct btf_header));
+
+>  	if (swap_endian)
+> -		btf_bswap_hdr(p);
+> +		btf_bswap_hdr(p, hdr->hdr_len);
+>  	p += hdr->hdr_len;
+
+[ ... ]
 
 
 ---
@@ -84,9 +125,9 @@ See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/22436234361
 
 AI-authorship-score: low
-AI-authorship-explanation: Long lore history (v3-v9 spanning 2023-2026), iterative reviewer feedback, human-style typo in commit message, and consistent with author's established BPF contributions.
-issues-found: 2
-issue-severity-score: low
-issue-severity-explanation: A commit message typo and an unaddressed maintainer design request about always emitting layout rather than making it optional; no functional bugs found.
+AI-authorship-explanation: The patch went through nine review iterations on lore with detailed human reviewer interactions, follows established libbpf patterns, and the subtle header over-read is characteristic of human-authored refactoring.
+issues-found: 1
+issue-severity-score: medium
+issue-severity-explanation: btf_get_raw_data() reads past the embedded btf->hdr struct into adjacent fields when hdr_len exceeds sizeof(struct btf_header), silently leaking internal state into serialized BTF output.
 
---===============8979527142850515311==--
+--===============6843499927274922463==--
