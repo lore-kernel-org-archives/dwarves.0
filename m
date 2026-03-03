@@ -1,49 +1,51 @@
 Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0ED6346FA8;
-	Tue,  3 Mar 2026 18:21:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E1933B8BCE;
+	Tue,  3 Mar 2026 18:21:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772562091; cv=none; b=fcAx0LDvcuk/CuNGI28m8lmjCIM3otfBPhzaCLTQl1nMw8Z/PAZNIxqw3iyQMAnQCSkKTRhHSKcleL58iqAzt5QV13DndWm6QOrX+/amDDeZbRqPnL3hxKeNZXU9nGxPChGVnba3OfrSU5J5f3XbsYg3pjoGsecdFcAYwnoooGM=
+	t=1772562101; cv=none; b=rfJJRf6uvyZHAfR3hN3e4jCv7Pk+cPcCCi30ldgo1+ge1cvWjJEc2W7H2K06h8KHcHUygS6/ffLISUntss+4S7kQve3zG1/PUNz4LDuR9JH9NZMhEL1hva9YGqNGl5BBlj//Tv3tmHAnCdf8ecxFWSIbHSA2O79aJpKdYDJ4UsI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772562091; c=relaxed/simple;
-	bh=ujL+6dMd5SAKKNwDjrqW6qtj6OV9abCunAuF43o60oI=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=AE5umMkhGUyQUsEhLzBvCPCg0ImRm45bbHBOewcBYFt0vVQbe+Whqu8D/7lZH6Tc9ZoNFroKRBAZdoQE8jqsRoHwcEA/Lozmk0jwL2odoNyQmcl/0Pp4HnQtVMb258mjbvp8J+4+ZA7FAnhjoe4D/LX/zGnV7XJv/BHdOhnnthA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=PK+NZif8; arc=none smtp.client-ip=205.220.177.32
+	s=arc-20240116; t=1772562101; c=relaxed/simple;
+	bh=Df9OB5oe6ohlwZ85xlKDtKIBP1FN+uqlgAQMvF6PATc=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=tIFURt0Kz436o+6zYsBWlidD1eryr/Wi09avtNucQ2yVUJs4DMEQmofr1KpWF6PXS9oTrFgixAMeecM/GvJmKeRnhC2YxvKsnt0eQ8UzZZwIl+VoCN7R4ohSXIBRtCP8fFqkVGoXVZg7UR19J51sj5J8uhFT8wMNUGELUkdttC8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=TZlaTeMx; arc=none smtp.client-ip=205.220.177.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="PK+NZif8"
-Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 623Hk3Fw637939;
-	Tue, 3 Mar 2026 18:20:09 GMT
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="TZlaTeMx"
+Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 623HmGQE929602;
+	Tue, 3 Mar 2026 18:20:20 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-transfer-encoding:date:from:message-id:mime-version
-	:subject:to; s=corp-2025-04-25; bh=S1FtDtCO1EI97sfaku6dm7pXFghCM
-	jy7llmydUtXeRk=; b=PK+NZif8rkYudeEDhlis70PMmvLFKvbjnkHeBTt+cBxaS
-	WybBdGkN691ipQC3j+c3IsII62QHe9d2Qf9MlLwKQhAicp7SyQ9ZVETdqDMFk6p0
-	gFCVDX4z+dj/O8EpMT/rBQ0DFcT9ADcVFY6/fFxeEXBOgmjCxKK9JyJq2vQpze6G
-	o4ujVHVouwIS/et//xyUPCRADNaFFQSPNk3PxPo4U0sl2mZdlK/EnT0PuKMvAyin
-	gAdPwsbprj5NeRUj6mUM/bKsrQNDsBaRtfYv9Y82+ckPW5HBZUgVz4pHg4u6ifwt
-	6BnDNKT9XsfUKQU3nMMccI8408MpOITFYiuy5aQDg==
+	:content-transfer-encoding:date:from:in-reply-to:message-id
+	:mime-version:references:subject:to; s=corp-2025-04-25; bh=sesYn
+	5KWRNM8yaUhRzmvWhK4jtnxZ0x5aVj0JZgJB/g=; b=TZlaTeMx/AJ8vUcejrAPT
+	Dt1dvT3lWllgMygXcnBq7n2S8MU4hcZ4Pv4o4K+fPij+5go88xbo/HEaNFBKJ7Mi
+	LTiRqJI3s3HtizAoZMeO92Nm9KH+0bWJLVCgP4ghrEmhAgJrJaUKsUaXnTsJcuVC
+	7un6YKfddjk0qjTVaa9u4yqy2uKCfebssD9Q9udCQBLBRFeMAmupk4rhlLBaieI3
+	dU7d++jJqdx8ufPtd2AHfUkirYMOfdssv0bgoCTNFCnWrX5Zqj+IbzJji8YmOHGs
+	ShnFsB77d+dj9EJrbd7Sgyfgw0Jp6PddMkVLM6/7UairB6kqpG1lM4gog+p1ZZio
+	g==
 Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4cp4b3g1r3-1
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4cp4c381th-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 03 Mar 2026 18:20:08 +0000 (GMT)
+	Tue, 03 Mar 2026 18:20:19 +0000 (GMT)
 Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 623HcZCt037800;
-	Tue, 3 Mar 2026 18:20:08 GMT
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 623H0mgb037876;
+	Tue, 3 Mar 2026 18:20:19 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 4ckpteyy0w-1
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 4ckpteyye1-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 03 Mar 2026 18:20:08 +0000
+	Tue, 03 Mar 2026 18:20:19 +0000
 Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 623IK7o3029269;
-	Tue, 3 Mar 2026 18:20:07 GMT
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 623IK7oB029269;
+	Tue, 3 Mar 2026 18:20:18 GMT
 Received: from bpf.uk.oracle.com (dhcp-10-154-62-133.vpn.oracle.com [10.154.62.133])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 4ckpteyxu6-1;
-	Tue, 03 Mar 2026 18:20:07 +0000
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 4ckpteyxu6-5;
+	Tue, 03 Mar 2026 18:20:18 +0000
 From: Alan Maguire <alan.maguire@oracle.com>
 To: andrii@kernel.org, ast@kernel.org
 Cc: daniel@iogearbox.net, martin.lau@linux.dev, eddyz87@gmail.com,
@@ -52,10 +54,12 @@ Cc: daniel@iogearbox.net, martin.lau@linux.dev, eddyz87@gmail.com,
         jolsa@kernel.org, qmo@kernel.org, ihor.solodrai@linux.dev,
         mykyta.yatsenko5@gmail.com, dwarves@vger.kernel.org,
         bpf@vger.kernel.org, Alan Maguire <alan.maguire@oracle.com>
-Subject: [PATCH v12 bpf-next 0/8] Add BTF layout to BTF
-Date: Tue,  3 Mar 2026 18:19:55 +0000
-Message-ID: <20260303182003.117483-1-alan.maguire@oracle.com>
+Subject: [PATCH v12 bpf-next 4/8] libbpf: Add layout encoding support
+Date: Tue,  3 Mar 2026 18:19:59 +0000
+Message-ID: <20260303182003.117483-5-alan.maguire@oracle.com>
 X-Mailer: git-send-email 2.43.5
+In-Reply-To: <20260303182003.117483-1-alan.maguire@oracle.com>
+References: <20260303182003.117483-1-alan.maguire@oracle.com>
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
@@ -70,192 +74,178 @@ X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 malwa
  spamscore=0 mlxscore=0 mlxlogscore=999 suspectscore=0 adultscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2602130000
  definitions=main-2603030148
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzAzMDE0OCBTYWx0ZWRfX0aKRzKYdQQI8
- TSIHfcaoTJqRlTNTPy/7X/HAQds4wjgLBI9tdsxzAMcLIS+QV2jzGY+X3QGADVdcxva5VEJEiHn
- kzDDBHW7nltZKxuUCU/ld7z2IQG8jKiEQfPycg7sWI9+1c/1oDgjXOszt/AxqKEeQ7O2PbcAEUW
- mSP5LXhoh5EDn34pTN0FvKK95zWVwqg6/OxRK3mLH6B2C/8Rw2OjDeHvpWZ5pIL93CmpiBgb9TC
- pB2XFJmvv2sVb1l9N10PJYJ36aYwJrYgvxNmzWcB400OOsqqJwFjdK1ua/K9UIpcaVe04QREwXn
- j7iHae+vPltK50bKgla582LEBVBPIyMrJpIvZ7J+Cs1AERs/ODBFbqNMlfMVL3UxtgKPq734jGG
- 5pGJCXu1J3vpTswCQc/kKcsYNopP/8HGlWGFtqkPzCUQ6m/C5ne63sAmeKhQq4gVE+OIYCORwAj
- kE7Zq47tt3rQs7hJQ7VAi/Rghx/F+5AoPzL3JdKU=
-X-Proofpoint-GUID: PgTC5NIcfO73IqFCQRUGNHFDTi7XjAYH
-X-Proofpoint-ORIG-GUID: PgTC5NIcfO73IqFCQRUGNHFDTi7XjAYH
-X-Authority-Analysis: v=2.4 cv=GuRPO01C c=1 sm=1 tr=0 ts=69a72658 b=1 cx=c_pps
+X-Proofpoint-GUID: CickXJB5DG6HxPirAWPqa3e7J-Eum5cH
+X-Authority-Analysis: v=2.4 cv=VZH6/Vp9 c=1 sm=1 tr=0 ts=69a72664 b=1 cx=c_pps
  a=e1sVV491RgrpLwSTMOnk8w==:117 a=e1sVV491RgrpLwSTMOnk8w==:17
  a=Yq5XynenixoA:10 a=VkNPw1HP01LnGYTKEx00:22 a=jiCTI4zE5U7BLdzWsZGv:22
- a=o5oIOnhZENCTenyL_yNV:22 a=VwQbUJbxAAAA:8 a=pGLkceISAAAA:8 a=yPCof4ZbAAAA:8
- a=CBUCM8e3fqF-Uks7LccA:9 cc=ntf awl=host:13812
+ a=3I1J8UUJPc9JN9BFgKH3:22 a=yPCof4ZbAAAA:8 a=lIN0CykIrsTzq82mcFQA:9 cc=ntf
+ awl=host:13812
+X-Proofpoint-ORIG-GUID: CickXJB5DG6HxPirAWPqa3e7J-Eum5cH
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzAzMDE0OCBTYWx0ZWRfX7uc9BgjX4FkI
+ LBvLoJQvvF/oAbOcKQF6V32QMNL7U5r5YNWgTjmfqvJTypuhoQbEWbIb/p+hoGdlu4uKz2rUayJ
+ rMOzh0S2ezJQzHDxLNpBc/FHOb0C33UmUy6Llg4EbONRTaY1KglgTbTLG+3cdocKSAH7/PkQx4G
+ OMswFxDuwby15KarAZCnELCghEqFCnRQrIlfn/QfpS0nKkeetCYCMxc2Yza2dgDCj0OM6xVyDRY
+ g0cjo7zRRyBvYUM9Oh2iimvdNzB4P0Q2y0z87sF6KrDGyJHn/d3ZM7WlkGTU/jmPNwE+Nj0ILiR
+ U/TDjC278xy2z25WpPEyesNR4g4HDwINWIVnxEmiQMMpxTbwgNU/yBz86l9OLe04piTO4XW+vVB
+ Wc4/cvSGVJrM/vf2/Yeu2NIKQMaLRlRLQ2Hs99kj+zoCORV6GlJVunQA7sZMzlXOfJh1w7K8YBJ
+ nMFlTw1L0XZ+zAr8frnsojCtFgzs7aj/bf4d04Y8=
 
-Update struct btf_header to add a new "layout" section containing
-a description of how to parse the BTF kinds known about at BTF
-encoding time.  This provides the opportunity for tools that might
-not know all of these kinds - as is the case when older tools run
-on more newly-generated BTF - to still parse the BTF provided,
-even if it cannot all be used.
+Support encoding of BTF layout data via btf__new_empty_opts().
 
-The ideas here were discussed at [1], with further discussion
-at [2].
+Current supported opts are base_btf and add_layout.
 
-Patches for pahole will enable the layout addition during BTF
-generation are at [3], but even absent these the addition of the
-layout feature in the final patch in this series should not break
-anything since such unknown features are simply ignored during pahole
-BTF generation.
+Layout information is maintained in btf.c in the layouts[] array;
+when BTF is created with the add_layout option it represents the
+current view of supported BTF kinds.
 
-Changes since v11 [4]:
+Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+---
+ tools/lib/bpf/btf.c      | 59 ++++++++++++++++++++++++++++++++++++++--
+ tools/lib/bpf/btf.h      | 20 ++++++++++++++
+ tools/lib/bpf/libbpf.map |  1 +
+ 3 files changed, 78 insertions(+), 2 deletions(-)
 
-- Revert unneeded changes to btf__new_empty() (Eduard, review bot,
-  patch 4)
-- Reorder btf_parse_layout_sec() checks to ensure min size check
-  occurs before multiple check (review bot, patch 6)
-
-Changes since v10 [5]:
-
-- deal with read overflow with small header (review bot, patch 2)
-- validate layout length is a multiple of sizeof(struct btf_layout)
-  (review bot, patch 6)
-- fix comment style (Alexei, patches 4,7)
-- remove bpftool BTF metadata subcommands for now (Alexei)
-
-Changes since v9: [6]:
-
-- fix memcpy header size overrun (review bot, patch 2)
-- return size computation directly (Andrii, patch 333)
-- revert to original unknown kind logging (Alexei/review bot,
-  patch 6)
-- gap-checking logic can be simplified now that we have
-  4-byte aligned types and layout together (patch 6)
-- fix naming of layout offset, unconditionally emit a layouts
-  array in json (Quentin, review bot, patch 8)
-- fix metadata output in man page to include flags (review bot,
-  patch 9)
-
-Changes since v8: [7]:
-
-- updated name from "kind_layout" to "layout" (Andrii)
-- moved layout info to inbetween types and strings since
-  both types and layout info align on 4 bytes (Andrii)
-- use embedded btf_header (Eduard)
-- when consulting layout, fall back to base BTF if none found in
-  split BTF; this will allow us to only encode layout info in
-  vmlinux rather than repeating it for each module.
-
-Changes since v7: [8]:
-
-- Fixed comment style in UAPI headers (Mykyta, patch 1)
-- Simplify calcuation of header size using min() (Mykyta, patch 2)
-- simplify computation of bounds for kind (Mykyta, patch 3)
-- Added utility functions for updating type, string offsets when
-  data is added; this simplifies the code and encapsulates such
-  updates more clearly (patch 2)
-
-Changes since v6: [9]:
-
- BPF review bot caught some memory leaks around freeing
-  of kind layout; more importantly, it noted that we were
-  breaking with the contiguous BTF representation for
-  btf_new_empty_opts(). Doing so meant that freeing kind_layout
-  could not be predicated on having btf->modifiable set, so
-  adpoted the contiguous raw data layout for BTF to be
-  consistent with type/string storage (patches 2,4)
-- Moved checks for kind overflow prior to referencing kinds
-  to avoid any risk of overrun (patches 3, 8)
-- Tightened up kind layout header offset/len header validation
-  to catch invalid combinations early in btf_parse_hdr()
-  (patch 2)
-- Fixed selftest to verify calloc success (patch 7)
-
-Changes since v5: [10]:
-
-- removed flags field from kind layout; it is not really workable
-  since we would have to define semantics of all possible future
-  flags today to be usable. Instead stick to parsing only, which
-  means each kind just needs the length of the singular and
-  vlen-specified objects (Alexei)
-- added documentation for bpftool BTF metadata dump (Quentin, patch 9)
-
-Changes since v4: [11]:
-
-- removed CRC generation since it is not needed to handle modules
-  built at different time than kernel; distilled base BTF supports
-  this now
-- fixed up bpftool display of empty kind names, comment/documentation
-  indentation (Quentin, patches 8, 9)
-
-Changes since v3 [12]:
-
-- fixed mismerge issues with kbuild changes for BTF generation
-  (patches 9, 14)
-- fixed a few small issues in libbpf with kind layout representation
-  (patches 2, 4)
-
-Changes since v2 [13]:
-
-- drop "optional" kind flag (Andrii, patch 1)
-- allocate "struct btf_header" for struct btf to ensure
-  we can always access new fields (Andrii, patch 2)
-- use an internal BTF kind array in btf.c to simplify
-  kind encoding (Andrii, patch 2)
-- drop use of kind layout information for in-kernel parsing,
-  since the kernel needs to be strict in what it accepts
-  (Andrii, patch 6)
-- added CRC verification for BTF objects and for matching
-  with base object (Alexei, patches 7,8)
-- fixed bpftool json output (Quentin, patch 10)
-- added standalone module BTF support, tests (patches 13-17)
-
-Changes since RFC
-- Terminology change from meta -> kind_layout
-  (Alexei and Andrii)
-- Simplify representation, removing meta header
-  and just having kind layout section (Alexei)
-- Fixed bpftool to have JSON support, support
-  prefix match, documented changes (Quentin)
-- Separated metadata opts into add_kind_layout
-  and add_crc
-- Added additional positive/negative tests
-  to cover basic unknown kind, one with an
-  info_sz object following it and one with
-  N elem_sz elements following it.
-- Updated pahole-flags to use help output
-  rather than version to see if features
-  are present
-
-[1] https://lore.kernel.org/bpf/CAEf4BzYjWHRdNNw4B=eOXOs_ONrDwrgX4bn=Nuc1g8JPFC34MA@mail.gmail.com/
-[2] https://lore.kernel.org/bpf/20230531201936.1992188-1-alan.maguire@oracle.com/
-[3] https://lore.kernel.org/dwarves/20260226085240.1908874-1-alan.maguire@oracle.com/
-[4]
-[5] https://lore.kernel.org/bpf/20260227100426.2585191-1-alan.maguire@oracle.com/
-[6] https://lore.kernel.org/bpf/20260226085624.1909682-1-alan.maguire@oracle.com/
-[7] https://lore.kernel.org/bpf/20251215091730.1188790-1-alan.maguire@oracle.com/
-[8] https://lore.kernel.org/dwarves/20251211164646.1219122-1-alan.maguire@oracle.com/
-[9] https://lore.kernel.org/bpf/20251210203243.814529-1-alan.maguire@oracle.com/
-[10] https://lore.kernel.org/bpf/20250528095743.791722-1-alan.maguire@oracle.com/
-[11] https://lore.kernel.org/bpf/20231112124834.388735-1-alan.maguire@oracle.com/
-[12] https://lore.kernel.org/bpf/20231110110304.63910-1-alan.maguire@oracle.com/
-[13] https://lore.kernel.org/bpf/20230616171728.530116-1-alan.maguire@oracle.com/
-
-Alan Maguire (8):
-  btf: add BTF kind layout encoding to UAPI
-  libbpf: Support layout section handling in BTF
-  libbpf: use layout to compute an unknown kind size
-  libbpf: Add layout encoding support
-  libbpf: BTF validation can use layout for unknown kinds
-  btf: support kernel parsing of BTF with layout info
-  selftests/bpf: test kind encoding/decoding
-  kbuild, bpf: Specify "layout" optional feature
-
- include/uapi/linux/btf.h                      |  12 +
- kernel/bpf/btf.c                              |  55 ++-
- scripts/Makefile.btf                          |   2 +
- tools/include/uapi/linux/btf.h                |  12 +
- tools/lib/bpf/btf.c                           | 418 +++++++++++++-----
- tools/lib/bpf/btf.h                           |  20 +
- tools/lib/bpf/libbpf.map                      |   1 +
- .../selftests/bpf/prog_tests/btf_kind.c       | 212 +++++++++
- 8 files changed, 606 insertions(+), 126 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/btf_kind.c
-
+diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
+index 9f4d1bd73b4d..eba0cae65bb4 100644
+--- a/tools/lib/bpf/btf.c
++++ b/tools/lib/bpf/btf.c
+@@ -29,6 +29,36 @@
+ 
+ static struct btf_type btf_void;
+ 
++/*
++ * Describe how kinds are laid out; some have a singular element following the "struct btf_type",
++ * some have BTF_INFO_VLEN(t->info) elements.  Specify sizes for both.  Flags are currently unused.
++ * Kind layout can be optionally added to the BTF representation in a dedicated section to
++ * facilitate parsing.  New kinds must be added here.
++ */
++static struct btf_layout layouts[NR_BTF_KINDS] = {
++/*				singular element size		vlen element(s) size		flags */
++[BTF_KIND_UNKN] =	{	0,				0,				0 },
++[BTF_KIND_INT] =	{	sizeof(__u32),			0,				0 },
++[BTF_KIND_PTR] =	{	0,				0,				0 },
++[BTF_KIND_ARRAY] =	{	sizeof(struct btf_array),	0,				0 },
++[BTF_KIND_STRUCT] =	{	0,				sizeof(struct btf_member),	0 },
++[BTF_KIND_UNION] =	{	0,				sizeof(struct btf_member),	0 },
++[BTF_KIND_ENUM] =	{	0,				sizeof(struct btf_enum),	0 },
++[BTF_KIND_FWD] =	{	0,				0,				0 },
++[BTF_KIND_TYPEDEF] =	{	0,				0,				0 },
++[BTF_KIND_VOLATILE] =	{	0,				0,				0 },
++[BTF_KIND_CONST] =	{	0,				0,				0 },
++[BTF_KIND_RESTRICT] =	{	0,				0,				0 },
++[BTF_KIND_FUNC] =	{	0,				0,				0 },
++[BTF_KIND_FUNC_PROTO] =	{	0,				sizeof(struct btf_param),	0 },
++[BTF_KIND_VAR] =	{	sizeof(struct btf_var),		0,				0 },
++[BTF_KIND_DATASEC] =	{	0,				sizeof(struct btf_var_secinfo),	0 },
++[BTF_KIND_FLOAT] =	{	0,				0,				0 },
++[BTF_KIND_DECL_TAG] =	{	sizeof(struct btf_decl_tag),	0,				0 },
++[BTF_KIND_TYPE_TAG] =	{	0,				0,				0 },
++[BTF_KIND_ENUM64] =	{	0,				sizeof(struct btf_enum64),	0 },
++};
++
+ struct btf {
+ 	/* raw BTF data in native endianness */
+ 	void *raw_data;
+@@ -1139,8 +1169,10 @@ void btf__free(struct btf *btf)
+ 	free(btf);
+ }
+ 
+-static struct btf *btf_new_empty(struct btf *base_btf)
++static struct btf *btf_new_empty(struct btf_new_opts *opts)
+ {
++	bool add_layout = OPTS_GET(opts, add_layout, false);
++	struct btf *base_btf = OPTS_GET(opts, base_btf, NULL);
+ 	struct btf_header *hdr;
+ 	struct btf *btf;
+ 
+@@ -1165,6 +1197,8 @@ static struct btf *btf_new_empty(struct btf *base_btf)
+ 
+ 	/* +1 for empty string at offset 0 */
+ 	btf->raw_size = sizeof(struct btf_header) + (base_btf ? 0 : 1);
++	if (add_layout)
++		btf->raw_size += sizeof(layouts);
+ 	btf->raw_data = calloc(1, btf->raw_size);
+ 	if (!btf->raw_data) {
+ 		free(btf);
+@@ -1179,6 +1213,15 @@ static struct btf *btf_new_empty(struct btf *base_btf)
+ 	btf->types_data = btf->raw_data + hdr->hdr_len;
+ 	btf->strs_data = btf->raw_data + hdr->hdr_len;
+ 	hdr->str_len = base_btf ? 0 : 1; /* empty string at offset 0 */
++
++	if (add_layout) {
++		hdr->layout_len = sizeof(layouts);
++		btf->layout = btf->raw_data + hdr->hdr_len;
++		memcpy(btf->layout, layouts, sizeof(layouts));
++		btf->strs_data += sizeof(layouts);
++		hdr->str_off += sizeof(layouts);
++	}
++
+ 	memcpy(&btf->hdr, hdr, sizeof(*hdr));
+ 
+ 	return btf;
+@@ -1191,7 +1234,19 @@ struct btf *btf__new_empty(void)
+ 
+ struct btf *btf__new_empty_split(struct btf *base_btf)
+ {
+-	return libbpf_ptr(btf_new_empty(base_btf));
++	LIBBPF_OPTS(btf_new_opts, opts);
++
++	opts.base_btf = base_btf;
++
++	return libbpf_ptr(btf_new_empty(&opts));
++}
++
++struct btf *btf__new_empty_opts(struct btf_new_opts *opts)
++{
++	if (!OPTS_VALID(opts, btf_new_opts))
++		return libbpf_err_ptr(-EINVAL);
++
++	return libbpf_ptr(btf_new_empty(opts));
+ }
+ 
+ static struct btf *btf_new(const void *data, __u32 size, struct btf *base_btf, bool is_mmap)
+diff --git a/tools/lib/bpf/btf.h b/tools/lib/bpf/btf.h
+index b30008c267c0..a1f8deca2603 100644
+--- a/tools/lib/bpf/btf.h
++++ b/tools/lib/bpf/btf.h
+@@ -109,6 +109,26 @@ LIBBPF_API struct btf *btf__new_empty(void);
+  */
+ LIBBPF_API struct btf *btf__new_empty_split(struct btf *base_btf);
+ 
++struct btf_new_opts {
++	size_t sz;
++	struct btf *base_btf;	/* optional base BTF */
++	bool add_layout;	/* add BTF layout information */
++	size_t:0;
++};
++#define btf_new_opts__last_field add_layout
++
++/**
++ * @brief **btf__new_empty_opts()** creates an unpopulated BTF object with
++ * optional *base_btf* and BTF kind layout description if *add_layout*
++ * is set
++ * @return new BTF object instance which has to be eventually freed with
++ * **btf__free()**
++ *
++ * On error, NULL is returned and the thread-local `errno` variable is
++ * set to the error code.
++ */
++LIBBPF_API struct btf *btf__new_empty_opts(struct btf_new_opts *opts);
++
+ /**
+  * @brief **btf__distill_base()** creates new versions of the split BTF
+  * *src_btf* and its base BTF. The new base BTF will only contain the types
+diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
+index d18fbcea7578..0f740fb27a12 100644
+--- a/tools/lib/bpf/libbpf.map
++++ b/tools/lib/bpf/libbpf.map
+@@ -453,5 +453,6 @@ LIBBPF_1.7.0 {
+ 		bpf_map__exclusive_program;
+ 		bpf_prog_assoc_struct_ops;
+ 		bpf_program__assoc_struct_ops;
++		btf__new_empty_opts;
+ 		btf__permute;
+ } LIBBPF_1.6.0;
 -- 
 2.39.3
 
