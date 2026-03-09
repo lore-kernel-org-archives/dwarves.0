@@ -1,35 +1,46 @@
-Received: from 66-220-155-179.mail-mxout.facebook.com (66-220-155-179.mail-mxout.facebook.com [66.220.155.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.24])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E33303D7D83
-	for <dwarves@vger.kernel.org>; Mon,  9 Mar 2026 15:33:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.155.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBD6B2BD5B4
+	for <dwarves@vger.kernel.org>; Mon,  9 Mar 2026 17:05:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.24
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773070394; cv=none; b=aW97dTDTeWNRpszBvolGBySAvoTDrYYv993+md5YGGQDJcpBALSR5xGxyPkKz7X8cAmsomcEl+t6sV+y+iPZJ5YRgMa2SwpMrdR4SOm0DDwhpO2bf+9LLwQb0X8TrV5zk+eoKeVqcRooAOld2vyV9/6UkgRUr8FfoaQiaNyfGQQ=
+	t=1773075952; cv=none; b=deaQD6TN/Fjk+prjvlepOvmc3GAE82eE+M3+HGIkmA5LsyjmBPsU3jIvyLKqo/4SezJcnPNsZtvfXmdWQS+dHooNK4tTodW4eJtAaZk5msHF0uAKtbUteDxwGxKnoq71Ulwih8fgWdAGopjD2hPufkwgaQrliqDDtCtHR4TpItU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773070394; c=relaxed/simple;
-	bh=SjqU1PCjJxWDURIZKigdDFtT346ulOxagGcQxxkHQSk=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=qm3T6L6OwznI1bYiR+j8y0VU0d5hAEy8LrLGmgnP4oa8rTJNgFBjmRByh811R/0kF9zMHFdZfCabZhfr4h0ii84Yufeg5MbgV4iqU58VI5NGj2dVY64mhvSbxxBqGkwVrM+nSRdW6iIbPg5RppIkWPukMwU1DW19am8VAoVUHmE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.155.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
-Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id D100E24944435; Mon,  9 Mar 2026 08:33:01 -0700 (PDT)
-From: Yonghong Song <yonghong.song@linux.dev>
-To: Alan Maguire <alan.maguire@oracle.com>,
-	Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
-	dwarves@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	bpf@vger.kernel.org,
-	kernel-team@fb.com
-Subject: [PATCH dwarves v2 9/9] tests: Add a few clang true signature tests
-Date: Mon,  9 Mar 2026 08:33:01 -0700
-Message-ID: <20260309153301.1922035-1-yonghong.song@linux.dev>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260309153215.1917033-1-yonghong.song@linux.dev>
-References: <20260309153215.1917033-1-yonghong.song@linux.dev>
+	s=arc-20240116; t=1773075952; c=relaxed/simple;
+	bh=0u5fm9mt6xFNcZ1QBXt2Kl0wrAVQqnKYZ+luRYu2Ur0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=AzUecIP/87XVtkIM6KXVBBO8h/c7J0U+vuqnl5fvQxi6BeGD3LGODyUD5mZ+tnyWtsQsXxc3/DFCKoy/rdTwkOk1QGpJt4lEe7jLebrcTbjsnNouJrZrHgK3JWWjfShBdpcUv5KdaBPCUyh8Yqzjm3u9DnudYiTFswF1mDV7z1s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=geoide.fr; spf=pass smtp.mailfrom=geoide.fr; dkim=pass (2048-bit key) header.d=geoide.fr header.i=d.hourtoulle@geoide.fr header.b=xcFTfD/S; arc=none smtp.client-ip=212.227.17.24
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=geoide.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=geoide.fr
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=geoide.fr header.i=d.hourtoulle@geoide.fr header.b="xcFTfD/S"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=geoide.fr;
+	s=s1-ionos; t=1773075941; x=1773680741; i=d.hourtoulle@geoide.fr;
+	bh=m6JghVr/A/sr67Bgtpa4d9VesdKNk2SkGyD/CMeexgg=;
+	h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:
+	 MIME-Version:Content-Transfer-Encoding:cc:
+	 content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=xcFTfD/SrHyt3guGpCZlpMd9ro30UQWZaNREW9xxwhQxmLHGsAMTob9RAsrUtg9/
+	 Cpmf5sOMq6tuKR1uG6mZF2GIPfyGiI1mPHqprvkkGiQNjrr1lLGa/7QypB18iG5g9
+	 litnDWbT+eRDeXrTmzWV8rVQ2wwPRTRdcua5KWqL9oWeSYEuLtIuR49MkmdLYuY9Y
+	 6cbeOxdIheUH1bhFbLJS4PYVZj8y7wBKszCfCXqbsdMtLSRPPcu6HcBDZ8/E567dg
+	 JPUJMkNS+Hyb+ebi3JQT61HgNf+QKFVcRfjRx/sLSOtJQrE9y4TznbxOyU6iKs/Xd
+	 Hc8nVJUOa1KbrmT3zA==
+X-UI-Sender-Class: 55c96926-9e95-11ee-ae09-1f7a4046a0f6
+Received: from client.hidden.invalid by mrelayeu.kundenserver.de (mreue107
+ [213.165.67.119]) with ESMTPSA (Nemesis) id 1Mjjvp-1vEzII2l47-00dt14; Mon, 09
+ Mar 2026 17:52:25 +0100
+From: "d.hourtoulle" <d.hourtoulle@geoide.fr>
+To: alan.maguire@oracle.com,
+	acme@redhat.com
+Cc: dwarves@vger.kernel.org,
+	Damien Hourtoulle <damien.hourtoulle@gmail.com>
+Subject: [PATCH v2] pahole: fix discarded-qualifiers for strchr/strstr.
+Date: Mon,  9 Mar 2026 17:52:20 +0100
+Message-ID: <20260309165220.2974165-1-d.hourtoulle@geoide.fr>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
@@ -37,348 +48,181 @@ List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:hBfgfkwLFjlVb6K34QnNItBwS9W9IvngkEg0TbIvwIMeCygxoJf
+ 5GX7zW3XwTeRLyNIEmtTWoVk+vLumkBpwo+eRl1sgpotfC514whPHPmE2gDS5O3LLBVKEzF
+ Jcc1yETGq4DCQKeMD1M841lLXLfWUpmB25XrdHkODK/kbVf8iBi0OpLEIGj/lAyeQkZNOLE
+ KrYD207Gu9KLcmCGG1AHA==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:X4wfABglk2g=;4smEnjWd/YqnXFrD5DxnpRj4PsS
+ JuWYdWUyfG8kqTc+VPyAjoS+pruZCiQtWCR6gA7fRJ9qnom6b9eKFQVJnyK3dHQRL0WE/SIqX
+ ocpAP3MiD6jw9XfLZsSJk/1ixlVhU2ZHZ8coAVi6oX7NdsCn8TPr9/EPUCTRbQbBOrGIAW7Yw
+ fbpBNWK0mjhHLaVpnXIi1LCFRVXLeloiG9D1fEBJ0iNxlWFk5nFTOVciXXuCgMR21tAFpud25
+ t53BEM+i/VlM9hZ83diDrtn5UpoWdozBZN+gEYI/We/g5YRhGL+8b467ChLH8BH3ZQrWuSXmC
+ F1+5o1x5/FdSz4bUQ5K8LnWveELegOIs8d5TQjXKL+FDNI6xz/38s044L3qj2+7zsTfTRAqAD
+ CQUQzFpOBP1OD5K3jBm1gLrBWWDZlfS2VaK3HNXYwVX+kHR6q0dtirP12aLWT9XGotA0vWMfX
+ Mpp4XwrwTOhJzImqG0+S+vEsQSZCwmgM+bpoySPrF2ErbFgNrDMAXcbQh4+FzmU75pwMPtlRw
+ Hp3Umaab+64lXYmV+rcK3yFqR1j/SscUUT1ktu4xc+e+YFJhE8/54jzV2D4gh7n1X0nsuYAH8
+ e2CeHYBSYKnij8TUkLBbIfIvZChu2fvAjGtS+giZqvW6xdMxCqteIyfytHeMdpwspDOrSqGQI
+ CQKzteEyGO+IwdJLzxjnOnB4/y07TfyoIvrwzlavvA6rx1UB54gCJTu0DAMXm6J6K3JcjzI1p
+ lmU2Vri+Bxxoiyn6G1AgeGfHGoQI65JwBKvcGtSwemKPcH46HrbBPzXb+i24ZAgZse0pMFZm4
+ rWKMx/ZRynRmGOSIJaeiP77+/8HBNeMss+qXAipdQMEVdOINe6JWVbfK4ODHQJF/vN+Paioft
+ FDlza5ePT85QBMMy5lVzJyTLsOW3e8YrViqiYRkZ5fzD/aAnnUSYeZdq6rLhSO2O/V5CMKL9c
+ tq40ALFGARfXIZqnQvWRK8rpOYhJG7tvFtwPSFAJRZAXya0Rmew15V2TlmK99DE3WKasJBoXY
+ sO6sDZ+j1uWDzgA7gix7YGV1VR/0KStkPdbEY1EtXZXClLWD5Xk9/APor3LZDyHwSjmQgTQt8
+ H4l7Mq6A/ffO++SCznbWK0vkD2W/eorvL6DSGTWr2WXRJ1mplnDpKIVz+oJYD0zbhL1FLsIVv
+ p1Zp9PwvNGVxSX8smyz3QZMYfldqdYhluOhaTVLYuD3ZD+d4iPL9VyweIOr2xorXf+7HN3gmq
+ UNLlyrZqTyZXo6d6y5r3Xp9Ei+ZiM+ct/Hl75pdyo9tgtlp/L67SjThX8KbDh4k1HR/+O6MWP
+ noRqhfSLXX+QBQRlbTgQmo/jf1SPx+b/ht1UWajU9g/P2ZFhOHY0EdiQOf+2CaRpp+CnBqfsS
+ EGH6flWchwyReA8DyIQObbsykL1MvpQ0zQ90UOyb/2/XY6WQKqvGCGzuBkgwgb6WPOy7gZf6X
+ UiCPQ82dXrh3L7BmF5L3sMuvFV5Am45ejHA38d9JRe5A7Y5pluT8umX0Rz2bzvg7dQLPVDssq
+ sANQ//78QGgaMTfB+4k4OlQIyD5Jj5cymgQZlrGH+F0xekgzLHc9JIyiDd6FrSJ798FREXsEf
+ hs4wv5xKh4+qiTOHsD07Qavsk4fFL4oBsU1ft8V4CXSV3fQF4/Qnqgh2BFO5GMD0NTiv4IWe4
+ Zqwl/n5Cf2MrpDQNfUP4g74MvnBloy6l6AFVb9Vk6SOtB4gpF4RAoNTXisxQzDJRl9xNW9snW
+ bjGWMEZxvbqMgCOeLuLCIc1BMHHTvJ44V9UtLgF3N6BWMVLn20KAUfHQ=
 
-Three tests are added.
+From: Damien Hourtoulle <damien.hourtoulle@gmail.com>
 
-Test 1: clang_parm_optimized.sh
-  BTF:   char * foo(struct t * a, struct t * d);
-  DWARF: char * foo(struct t * a, int b, struct t * d);
-where parameber 'b' is unused.
+Glibc 2.43 added C23 const-preserving overloads :
+https://sourceware.org/glibc/wiki/Release/2.43.
 
-Test 2: clang_parm_optimized_stack.sh
-  BTF:   char * foo(struct t * a, struct t * d);
-  DWARF: char * foo(struct t * a, int b1, int b2, int b3, int b4, int b5,=
- int b6, struct t * d);
-where parameters 'b1' to 'b6' are unused.
+For the function prototype__new, fix local variable declaration to use
+the correct const char* type instead of char*, removing the need to
+discard the const qualifier.
 
-Test 3: clang_parm_aggregate.sh
-  BTF:   long foo(long a__f1, struct t b, int i);
-  DWARF: long foo(struct t a, struct t b, int i);
-where the 'struct t' definition is 'struct t { long f1; long f2; };', and
-a.f2 is not used in the function.
+Signed-off-by: Damien Hourtoulle <damien.hourtoulle@gmail.com>
+=2D--
+Changes in v2:
+ - In type_instance__int_value loop: update sep_mutable instead of sep
+ - In type__find_type_enum loop: introduce char *cur to iterate through
+   the mutable copy, so sep_mutable stays const-correct and is updated
+   correctly on each iteration
 
-Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
----
- tests/true_signatures/clang_parm_aggregate.sh | 83 ++++++++++++++++
- tests/true_signatures/clang_parm_optimized.sh | 95 +++++++++++++++++++
- .../clang_parm_optimized_stack.sh             | 95 +++++++++++++++++++
- .../gcc_true_signatures.sh                    |  0
- 4 files changed, 273 insertions(+)
- create mode 100755 tests/true_signatures/clang_parm_aggregate.sh
- create mode 100755 tests/true_signatures/clang_parm_optimized.sh
- create mode 100755 tests/true_signatures/clang_parm_optimized_stack.sh
- rename tests/{ =3D> true_signatures}/gcc_true_signatures.sh (100%)
+ btf_encoder.c |  2 +-
+ pahole.c      | 33 ++++++++++++++++-----------------
+ 2 files changed, 17 insertions(+), 18 deletions(-)
 
-diff --git a/tests/true_signatures/clang_parm_aggregate.sh b/tests/true_s=
-ignatures/clang_parm_aggregate.sh
-new file mode 100755
-index 0000000..6d92701
---- /dev/null
-+++ b/tests/true_signatures/clang_parm_aggregate.sh
-@@ -0,0 +1,83 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0-only
-+
-+outdir=3D
-+
-+fail()
-+{
-+	# Do not remove test dir; might be useful for analysis
-+	trap - EXIT
-+	if [[ -d "$outdir" ]]; then
-+		echo "Test data is in $outdir"
-+	fi
-+	exit 1
-+}
-+
-+cleanup()
-+{
-+	rm ${outdir}/*
-+	rmdir $outdir
-+}
-+
-+outdir=3D$(mktemp -d /tmp/clang_true.sh.XXXXXX)
-+
-+trap cleanup EXIT
-+
-+echo -n "Validation of BTF encoding of true_signatures: "
-+
-+clang_true=3D"${outdir}/clang_true"
-+CC=3D$(which clang 2>/dev/null)
-+
-+if [[ -z "$CC" ]]; then
-+	echo "skip: clang not available"
-+	exit 2
-+fi
-+
-+cat > ${clang_true}.c << EOF
-+struct t { long f1; long f2; };
-+__attribute__((noinline)) static long foo(struct t a, struct t b, int i)
-+{
-+        return a.f1 + b.f1 + b.f2 + i;
-+}
-+
-+struct t p1, p2;
-+int i;
-+int main()
-+{
-+        return (int)foo(p1, p2, i);
-+}
-+EOF
-+
-+CFLAGS=3D"$CFLAGS -g -O2"
-+${CC} ${CFLAGS} -o $clang_true ${clang_true}.c
-+if [[ $? -ne 0 ]]; then
-+	echo "Could not compile ${clang_true}.c" >& 2
-+	exit 1
-+fi
-+LLVM_OBJCOPY=3Dobjcopy pahole -J --btf_features=3D+true_signature $clang=
-_true
-+if [[ $? -ne 0 ]]; then
-+	echo "Could not encode BTF for $clang_true"
-+	exit 1
-+fi
-+
-+btf_optimized=3D$(pfunct --all --format_path=3Dbtf $clang_true |grep "fo=
-o")
-+if [[ -z "$btf_optimized" ]]; then
-+	echo "skip: no optimizations applied."
-+	exit 2
-+fi
-+
-+btf_cmp=3D$btf_optimized
-+dwarf=3D$(pfunct --all $clang_true |grep "foo")
-+
-+test -n "$VERBOSE" && printf "\nBTF: $btf_optimized  DWARF: $dwarf \n"
-+
-+if [[ "$btf_cmp" =3D=3D "$dwarf" ]]; then
-+	echo "BTF and DWARF signatures should be different and they are not: BT=
-F: $btf_optimized ; DWARF $dwarf"
-+	exit 1
-+else
-+        echo ""
-+        echo "  BTF:   $btf_optimized"
-+        echo "  DWARF: $dwarf"
-+fi
-+echo "Ok"
-+exit 0
-diff --git a/tests/true_signatures/clang_parm_optimized.sh b/tests/true_s=
-ignatures/clang_parm_optimized.sh
-new file mode 100755
-index 0000000..3022e2b
---- /dev/null
-+++ b/tests/true_signatures/clang_parm_optimized.sh
-@@ -0,0 +1,95 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0-only
-+
-+outdir=3D
-+
-+fail()
-+{
-+	# Do not remove test dir; might be useful for analysis
-+	trap - EXIT
-+	if [[ -d "$outdir" ]]; then
-+		echo "Test data is in $outdir"
-+	fi
-+	exit 1
-+}
-+
-+cleanup()
-+{
-+	rm ${outdir}/*
-+	rmdir $outdir
-+}
-+
-+outdir=3D$(mktemp -d /tmp/clang_true.sh.XXXXXX)
-+
-+trap cleanup EXIT
-+
-+echo -n "Validation of BTF encoding of true_signatures: "
-+
-+clang_true=3D"${outdir}/clang_true"
-+CC=3D$(which clang 2>/dev/null)
-+
-+if [[ -z "$CC" ]]; then
-+	echo "skip: clang not available"
-+	exit 2
-+fi
-+
-+cat > ${clang_true}.c << EOF
-+struct t { int a; };
-+__attribute__((noinline)) char *tar(struct t *a, struct t *d)
-+{
-+	if (a->a =3D=3D d->a)
-+		return (char *)10;
-+	else
-+		return (char *)0;
-+}
-+
-+__attribute__((noinline)) static char * foo(struct t *a, int b, struct t=
- *d)
-+{
-+	return tar(a, d);
-+}
-+
-+__attribute__((noinline)) char *bar(struct t *a, struct t *d)
-+{
-+	return foo(a, 1, d);
-+}
-+
-+struct t p1, p2;
-+int main()
-+{
-+	return !!bar(&p1, &p2);
-+}
-+EOF
-+
-+CFLAGS=3D"$CFLAGS -g -O2"
-+${CC} ${CFLAGS} -o $clang_true ${clang_true}.c
-+if [[ $? -ne 0 ]]; then
-+	echo "Could not compile ${clang_true}.c" >& 2
-+	exit 1
-+fi
-+LLVM_OBJCOPY=3Dobjcopy pahole -J --btf_features=3D+true_signature $clang=
-_true
-+if [[ $? -ne 0 ]]; then
-+	echo "Could not encode BTF for $clang_true"
-+	exit 1
-+fi
-+
-+btf_optimized=3D$(pfunct --all --format_path=3Dbtf $clang_true |grep "fo=
-o")
-+if [[ -z "$btf_optimized" ]]; then
-+	echo "skip: no optimizations applied."
-+	exit 2
-+fi
-+
-+btf_cmp=3D$btf_optimized
-+dwarf=3D$(pfunct --all $clang_true |grep "foo")
-+
-+test -n "$VERBOSE" && printf "\nBTF: $btf_optimized  DWARF: $dwarf \n"
-+
-+if [[ "$btf_cmp" =3D=3D "$dwarf" ]]; then
-+	echo "BTF and DWARF signatures should be different and they are not: BT=
-F: $btf_optimized ; DWARF $dwarf"
-+	exit 1
-+else
-+        echo ""
-+        echo "  BTF:   $btf_optimized"
-+        echo "  DWARF: $dwarf"
-+fi
-+echo "Ok"
-+exit 0
-diff --git a/tests/true_signatures/clang_parm_optimized_stack.sh b/tests/=
-true_signatures/clang_parm_optimized_stack.sh
-new file mode 100755
-index 0000000..1abb96d
---- /dev/null
-+++ b/tests/true_signatures/clang_parm_optimized_stack.sh
-@@ -0,0 +1,95 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0-only
-+
-+outdir=3D
-+
-+fail()
-+{
-+	# Do not remove test dir; might be useful for analysis
-+	trap - EXIT
-+	if [[ -d "$outdir" ]]; then
-+		echo "Test data is in $outdir"
-+	fi
-+	exit 1
-+}
-+
-+cleanup()
-+{
-+	rm ${outdir}/*
-+	rmdir $outdir
-+}
-+
-+outdir=3D$(mktemp -d /tmp/clang_true.sh.XXXXXX)
-+
-+trap cleanup EXIT
-+
-+echo -n "Validation of BTF encoding of true_signatures: "
-+
-+clang_true=3D"${outdir}/clang_true"
-+CC=3D$(which clang 2>/dev/null)
-+
-+if [[ -z "$CC" ]]; then
-+	echo "skip: clang not available"
-+	exit 2
-+fi
-+
-+cat > ${clang_true}.c << EOF
-+struct t { int a; };
-+__attribute__((noinline)) char *tar(struct t *a, struct t *d)
-+{
-+        if (a->a =3D=3D d->a)
-+                return (char *)10;
-+        else
-+                return (char *)0;
-+}
-+
-+__attribute__((noinline)) static char * foo(struct t *a, int b1, int b2,=
- int b3, int b4, int b5, int b6, struct t *d)
-+{
-+        return tar(a, d);
-+}
-+
-+__attribute__((noinline)) char *bar(struct t *a, struct t *d)
-+{
-+        return foo(a, 1, 2, 3, 4, 5, 6, d);
-+}
-+
-+struct t p1, p2;
-+int main()
-+{
-+        return !!bar(&p1, &p2);
-+}
-+EOF
-+
-+CFLAGS=3D"$CFLAGS -g -O2"
-+${CC} ${CFLAGS} -o $clang_true ${clang_true}.c
-+if [[ $? -ne 0 ]]; then
-+	echo "Could not compile ${clang_true}.c" >& 2
-+	exit 1
-+fi
-+LLVM_OBJCOPY=3Dobjcopy pahole -J --btf_features=3D+true_signature $clang=
-_true
-+if [[ $? -ne 0 ]]; then
-+	echo "Could not encode BTF for $clang_true"
-+	exit 1
-+fi
-+
-+btf_optimized=3D$(pfunct --all --format_path=3Dbtf $clang_true |grep "fo=
-o")
-+if [[ -z "$btf_optimized" ]]; then
-+	echo "skip: no optimizations applied."
-+	exit 2
-+fi
-+
-+btf_cmp=3D$btf_optimized
-+dwarf=3D$(pfunct --all $clang_true |grep "foo")
-+
-+test -n "$VERBOSE" && printf "\nBTF: $btf_optimized  DWARF: $dwarf \n"
-+
-+if [[ "$btf_cmp" =3D=3D "$dwarf" ]]; then
-+	echo "BTF and DWARF signatures should be different and they are not: BT=
-F: $btf_optimized ; DWARF $dwarf"
-+	exit 1
-+else
-+        echo ""
-+        echo "  BTF:   $btf_optimized"
-+        echo "  DWARF: $dwarf"
-+fi
-+echo "Ok"
-+exit 0
-diff --git a/tests/gcc_true_signatures.sh b/tests/true_signatures/gcc_tru=
-e_signatures.sh
-similarity index 100%
-rename from tests/gcc_true_signatures.sh
-rename to tests/true_signatures/gcc_true_signatures.sh
---=20
-2.47.3
+diff --git a/btf_encoder.c b/btf_encoder.c
+index aa7cd1c..d36984a 100644
+=2D-- a/btf_encoder.c
++++ b/btf_encoder.c
+@@ -1218,7 +1218,7 @@ static bool str_contains_non_fn_suffix(const char *s=
+tr) {
+ 		".cold",
+ 		".part"
+ 	};
+-	char *suffix =3D strchr(str, '.');
++	const char *suffix =3D strchr(str, '.');
+ 	int i;
+=20
+ 	if (!suffix)
+diff --git a/pahole.c b/pahole.c
+index 02a0d19..9dfeeb2 100644
+=2D-- a/pahole.c
++++ b/pahole.c
+@@ -2483,7 +2483,7 @@ static int64_t type_instance__int_value(struct type_=
+instance *instance, const ch
+ 	int byte_offset =3D 0;
+=20
+ 	if (!member) {
+-		char *sep =3D strchr(member_name_orig, '.');
++		const char *sep =3D strchr(member_name_orig, '.');
+=20
+ 		if (!sep)
+ 			return -1;
+@@ -2496,8 +2496,8 @@ static int64_t type_instance__int_value(struct type_=
+instance *instance, const ch
+ 		char *member_name =3D member_name_alloc;
+ 		struct type *type =3D instance->type;
+=20
+-		sep =3D member_name_alloc + (sep - member_name_orig);
+-		*sep =3D 0;
++		char *sep_mutable =3D member_name_alloc + (sep - member_name_orig);  //=
+ sep mutable for the copy
++		*sep_mutable =3D 0;
+=20
+ 		while (1) {
+ 			member =3D type__find_member_by_name(type, member_name);
+@@ -2510,9 +2510,9 @@ out_free_member_name:
+ 			type =3D tag__type(cu__type(cu, member->tag.type));
+ 			if (type =3D=3D NULL)
+ 				goto out_free_member_name;
+-			member_name =3D sep + 1;
+-			sep =3D strchr(member_name, '.');
+-			if (!sep)
++			member_name =3D sep_mutable + 1;
++			sep_mutable =3D strchr(member_name, '.');
++			if (!sep_mutable)
+ 				break;
+=20
+ 		}
+@@ -2950,7 +2950,7 @@ static struct prototype *prototype__new(const char *=
+expression)
+=20
+ 	strcpy(prototype->name, expression);
+=20
+-	const char *name =3D prototype->name;
++	char *name =3D prototype->name;
+=20
+ 	prototype->nr_args =3D 0;
+=20
+@@ -2964,10 +2964,9 @@ static struct prototype *prototype__new(const char =
+*expression)
+ 	if (args_close =3D=3D NULL)
+ 		goto out_no_closing_parens;
+=20
++	*args_open++ =3D *args_close =3D '\0';
+ 	char *args =3D args_open;
+=20
+-	*args++ =3D *args_close =3D '\0';
+-
+ 	while (isspace(*args))
+ 		++args;
+=20
+@@ -3114,7 +3113,7 @@ static int type__find_type_enum(struct type *type, s=
+truct cu *cu, const char *ty
+ 		return type__add_type_enum(type, te, cu);
+=20
+ 	// Now look at a 'virtual enum', i.e. the concatenation of multiple enum=
+s
+-	char *sep =3D strchr(type_enum, '+');
++	const char *sep =3D strchr(type_enum, '+');
+=20
+ 	if (!sep)
+ 		return -1;
+@@ -3126,13 +3125,13 @@ static int type__find_type_enum(struct type *type,=
+ struct cu *cu, const char *ty
+=20
+ 	int ret =3D -1;
+=20
+-	sep =3D type_enums + (sep - type_enum);
++	char *sep_mutable =3D type_enums + (sep - type_enum);
++	char *cur =3D type_enums;
+=20
+-	type_enum =3D type_enums;
+-	*sep =3D '\0';
++	*sep_mutable =3D '\0';
+=20
+ 	while (1) {
+-		te =3D cu__find_enumeration_by_name(cu, type_enum, NULL);
++		te =3D cu__find_enumeration_by_name(cu, cur, NULL);
+=20
+ 		if (!te)
+ 			goto out;
+@@ -3141,10 +3140,10 @@ static int type__find_type_enum(struct type *type,=
+ struct cu *cu, const char *ty
+ 		if (ret)
+ 			goto out;
+=20
+-		if (sep =3D=3D NULL)
++		if (sep_mutable =3D=3D NULL)
+ 			break;
+-		type_enum =3D sep + 1;
+-		sep =3D strchr(type_enum, '+');
++		cur =3D sep_mutable + 1;
++		sep_mutable =3D strchr(cur, '+');
+ 	}
+=20
+ 	ret =3D 0;
+=2D-=20
+2.53.0
 
