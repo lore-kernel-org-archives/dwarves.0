@@ -1,94 +1,93 @@
-Received: from mail-pg1-f175.google.com (mail-pg1-f175.google.com [209.85.215.175])
+Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A0F92D6E67
-	for <dwarves@vger.kernel.org>; Wed, 11 Mar 2026 17:46:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.215.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D326B3E3144
+	for <dwarves@vger.kernel.org>; Wed, 11 Mar 2026 17:52:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.216.44
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773251199; cv=pass; b=q9Ze4bM4u6NdRBa4QjD16rDYLJKq4spcAx6v+su32jP4YPtMa0wdHTo0BVfSWmBZra4SRCxGoI9R/yN5f8XtLMv7+iBSAP0rDX03pknKHKNMjyQe8wj7wwB4Mh+EpXTvEDHbvuXAo8JF0mxhX5RM3z4DeUjEK5oWEsvD+ERu4c4=
+	t=1773251538; cv=pass; b=a3GkbFHVTLLWMM5oKXHBARzzP27sw3nPXU9lDsC3tp+Y5LZ8KYLgzQICOONdwTmuU2LZm1zWO7gIXSKxw36vS2HUk7eHc/RIycN+eHZXugl4UrFZ96Lhi6FYByXgFNnrJpoo0jgxMY+oFiCOqDfvRrXBILd436Zpz5U3R8OnNWY=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773251199; c=relaxed/simple;
-	bh=U55dxhPwWjTbDNblaC6CYNPA3GkL6VWrivlJzvge+D0=;
+	s=arc-20240116; t=1773251538; c=relaxed/simple;
+	bh=vMpReo10GUnLpPyz/99nveri6JI8OFWDwKYxJmDwRao=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=KXD0tdgmYTJJcjs/BLJNLSEGJ9zGwRaG37MaLrZyFCGrrfO3K4f5+3r+5oD85Y+0YAWXsG6TvElRwgL0Ix6ztdt/irMifJBjm18N5fKGLAtfR4RSyJRJwDOFzhilEuxmw9bzKjra4AZRnBDtVI6gDhp2sKZB63R0nt6lrEAI2Ho=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YavksS/Z; arc=pass smtp.client-ip=209.85.215.175
+	 To:Cc:Content-Type; b=co/FuhQ6jBMxzs+79+IWENnTi1d8hlXt0FuvjJB/b2XJX0wMbd0B8RhN338uwckuNbROoEZWDYWjCf+uPYvFLBG/iW4ZgTtu1icwPQKRooIsXEuXNzMZWzdl3X4qrcMo9FT1Ja+1mcjQ62MwU51erS4kWR4nTjjOJZiWIOF997s=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Do6hQU7C; arc=pass smtp.client-ip=209.85.216.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YavksS/Z"
-Received: by mail-pg1-f175.google.com with SMTP id 41be03b00d2f7-c739561f0d3so44924a12.3
-        for <dwarves@vger.kernel.org>; Wed, 11 Mar 2026 10:46:38 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1773251198; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Do6hQU7C"
+Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-3598e065d8dso53364a91.2
+        for <dwarves@vger.kernel.org>; Wed, 11 Mar 2026 10:52:17 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1773251537; cv=none;
         d=google.com; s=arc-20240605;
-        b=SrgdYvtxDcXiRzbWM2dCaox4SKPbbnqvIRmO3iaFVI2xqoG/+bx2lyml7sQbpbE+Cj
-         uNR/Q6CFN4EroY8fvB3kIQnPhXFizNga1U1JxYUUEoNWupxVN3QVRpaCyB4wwPQ1N7tD
-         +PwPipQPeXuS5iVuidkIllygDs0bYyfTLvxbhAatZTt4J+PEg+fxtC/SSUFlAIJPGHXI
-         LumC4Khxjwo/KJw3bnPqVjJI53dhVv/pGwYkZzOYorWE/7yh96/S28bMtYVFkr8LiTPZ
-         Iwv3TEZtBFP1LzAbpSz0Io1zk8WNf6VxUnE8vigiWphMsyS+y6fk6S7KXwNQeSUimcRZ
-         BQuQ==
+        b=VP5WqiXfLuOcfU9nrY42u8pLfSGGFklq4GVoxQEIMkOt1afADvpmuMQfHFEdrRBc1/
+         za//MsG1t4Ph0+JQwV/n9/sPsC+HrvEje9Sz82O4GIs5leTtl/7mLbGGIdQNti6VwJiC
+         I1UisS7PqaIgm2EzQWHhM7YJfFcl0hgK7CHkOSyHEfCvG3CD//c8AeaTyVkXincSfWHY
+         TypVE3ECJps5fQzVCDD89TQgMB/GL90iNIyOdBxCF8mLMEPhOXO3/k71wRcnkq+IaMY8
+         asjfC36fUgsHe8wE5BZ/KyO/SRejufhovWqonI7ZsZ+ZxQTSfyiccEjthAXN0k2JSpBw
+         mbvw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=v/OQNd9y+UayBiD2BW4UV3/sUJiK1ToC4qs87k338Zk=;
-        fh=E/Ljb7+VlvoDz/OX17Fbyj0bN56rtgrbrxyjy/ixal0=;
-        b=gfkWJU2EEbwGwWeKjvLLAk9ATNry6oTShdwsuRmo3qB25H7NIg4JH3/7C0a7kepHUf
-         goutFoHDgVaqEWLd3K8nu2n8MgagGpizH5X3QKDxHO+y0a1hhjV1tOWRq35us2ZlXlkT
-         qeRIrWMsA6CGwBnUZkb/UECaM8cP0dfi7WGH+SX7Y6dVELO9KyD1q4EMelYQJ8Pbx7OT
-         kewE3gZ+KT0911lzMP/K5pSFZuR9rMIBq+qVy3Zw+TNoSVSIU9BTJXy8T4WtLPF+NEr9
-         9t8JJ22kcsfyDORINh6e64UrhO1wWIk84WnAKJz6fv5/70RMcDIxNn4sMxtyo25mbS3m
-         GVIQ==;
+        bh=FdI9Exj0v8OQnm3T+xWDMFtUnbuu07xMkRoM7mEsgJA=;
+        fh=uHXe4sJ1bIrb5rZ3Nh/3VK2czCbpnCEYyN17fgq0Mcs=;
+        b=G8y84fISradJzXTJreDc3UqQKh4o+jHw0QCs2JN0LVwwmskWkSZTiMwXKF6O4Exw5H
+         vMTOmiYEtRg5UvV7zXK0cDgLMtQFQEAvJTRvl76xMH06X7DhSnHYmsZeKQRFyP/eOcLh
+         aLWViBlaejRgR8d8E8QnVXnEg+rlrxnyFyeB3KqkNp7SBZUt/UEp6IpRn9VsDB3nV6I1
+         radXAes2Fl53Iyxo6fpkTe2Dn90f6cB6DHqY4aqpDr8oJLmLYhvqQ/BWxTbVRVHnkT8d
+         13k1nP4QO/IkfdvS8KlguXcYJECNqTBaPTe+qLkHUK5fIwsuvyYPHD+I+jyanMBs3GWh
+         fhiA==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773251198; x=1773855998; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1773251537; x=1773856337; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=v/OQNd9y+UayBiD2BW4UV3/sUJiK1ToC4qs87k338Zk=;
-        b=YavksS/ZEFftR4ZyzPeGYlwRS875StLnGqgkKbkdJQzPDwTa3cvKWbHK3RjOh+3ZTq
-         O034hrvOi+3GaAB3GNy56l1nAfy+VXBr+E5dzCNHVHpSba34nd+UIsPFVH9rkcAU6ujh
-         1aHcAidpCBEEsVHGWACqCb1pj4X8Tih40LZhgjXsuMoGErkVVeP6X3MMUH0GZZfznUGk
-         TjStfWocWkqpWyEzp8zVFmCqlDa77X84hkZwRmtq+zwF85zbFpUayLfPNw6w58GE75er
-         VPObx+yF8maGFZIwTIHqhLWMRyTQL3R7RX3t9EfEdn1hBfCVYxKRq9ME9bkOO3Qy5i0C
-         qWAA==
+        bh=FdI9Exj0v8OQnm3T+xWDMFtUnbuu07xMkRoM7mEsgJA=;
+        b=Do6hQU7CfyiZCiIHY4bmlLbnLxwan0TfLdn2Zq0htzJ4O0GNXIrcmy08irE1ecXuqj
+         9E5xibKWJOd5E2UCV6BJo66ZpIkjYYnPU7YfFtStxQc7ti+7GUmukzkD/K7pDoZIYkO7
+         r4XGHEGx8gXktKPCX/VRYToNOcRu//cyWPB7/YP3chmYdIjAks3YT7H6UlY6vSBbQ5fj
+         eJGovS7NXELIEx7YqX6pTFyyqk+/h5CFzGk2uJFFRxg3/qddubVysiUbKr+HqNjwgva0
+         kFzZlJ8hUz0XGxKfc8zvqnQ9WnEgCEaVxbNbnzImtfn7ePMpNjtgARpaMhbBfc+uRC7M
+         QnvA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773251198; x=1773855998;
+        d=1e100.net; s=20230601; t=1773251537; x=1773856337;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=v/OQNd9y+UayBiD2BW4UV3/sUJiK1ToC4qs87k338Zk=;
-        b=P3KsFbS2sK5JZshL7dP0QP2Vq5kmhRERhQjsJwAafAi5SDR7Lubsx8vcRljD2XFplZ
-         2Tn7aRh6oZtEe2tPNXZ6cqs8SXrvD2JwTEOoDyai3mS4WkD2oYZijJh2kTaDbgh8Ux+L
-         m3025rxoXXT5gnqZ+3O5epDBCtUzzehIbpTL6QEIrgXtD+s/hQ0bbQ5ehMvbv0dYnmjj
-         7mXSLYW/lIFlRiiT9GlgXPD1XLZ6ONmBY3pSPNVbb7WMdhtz/+bao+x8420+UyvK2wav
-         1OCiZD+5ySpWx0Ks+RkoFGkYbuGwIpKqw8VxCxAGXJmrjhRefu29Fez1KtbM2pEGInGn
-         +rog==
-X-Forwarded-Encrypted: i=1; AJvYcCXBKpToPyTG2txB4Et0q+DAZumsFxQWDt+gprs9TeNJNPz4EcTuP19GniWJ/JWJcu1zFTGd8vHD@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywq7G47nADOE7Ct7PCS0+p50HiRErZqe4fTCOxqdlKvRxyWBq2Z
-	cF0e/efgnMWQby5ObKwrZLyPuVdhlMj9TOwMHIpLRZAtpKxR2OYK1AyKNcqI079/jgFqVnBvOw3
-	c1AoE7Ij0EBkodztdMCwIGpFYv8z1s6o=
-X-Gm-Gg: ATEYQzwylgh7u6qaPyeKkcERLBj3/ItROg2/EUsMS6WxHNUg2sRdxzDLiobot/KH54A
-	Inye6jhlVrMsqkKhgl27VZWdt2l2V50Y9sigIDgvVwxHX7+wWsgxCJNBtZbON3p121iPyAb1/qG
-	//KrX4rnUZkbHJPKPFK7wd7erajdNdqnp4DQbWBfQZVewRwmEWGf0qxtjh6VROEA96DaG1kguY7
-	SY12yvQSc/j7T3lr4b2Sszx8II6OuVh9qFcXMeZJr5rQhaDWZ7HNuXD8om8CUUs5dAOf+pONokm
-	xJKnk4M=
-X-Received: by 2002:a05:6a21:70cb:b0:398:9e99:e190 with SMTP id
- adf61e73a8af0-398c60e4115mr3096099637.33.1773251197610; Wed, 11 Mar 2026
- 10:46:37 -0700 (PDT)
+        bh=FdI9Exj0v8OQnm3T+xWDMFtUnbuu07xMkRoM7mEsgJA=;
+        b=dgX/T2Xf3NMbLPACYLpe8aOKRb1WMhm+z/WAEjl2Fz4URBiUj6MG/z3qWDxjG5qZwb
+         pKsE0AfuAl0I9xSAKltNtqoAEZH955te3mzkTRgcGmA1xT8THxvsbOHipOsX3GTOsun7
+         4wESNQxqs4/amjMDuZnsS8beoVhwyv93f0d3JgnmegS9hxSeJOG/QGbticvkGBYPM5Ez
+         nx+b8YXW/0kue+5a33n5dX0Hvx7qIGGtknb6SCx561d/3PEBSsCy+WybgF52QeHMdlWv
+         L8Yi4k3WDcRPXkkKKaRjs2kghbR8iREC9F0P3VXSH0hYXbKYoYWR4ixitgH0HSyNBx8+
+         kYcg==
+X-Forwarded-Encrypted: i=1; AJvYcCWTFVOIQaXb23tjpNYaukzFSLEgUY7NcP1dTEnyTyQZnN+mSbQ1Tw4uQu0Y36MAZBMBGuG5Dksv@vger.kernel.org
+X-Gm-Message-State: AOJu0YyjBVlq0B7Phncj6VQ8epnuvD4Ot/DFcdx6LZMB503bgU98FOcL
+	5A8DKcfKJd8jLL9vRp6JSG3MmvhtRH7ngQ7IObcmRHYJBfdHBbEE+qWPHdtsMRO3XFLlBz2ZwTq
+	OSUQgp88fBL5miLBZsLGg8I4Y9J34moo=
+X-Gm-Gg: ATEYQzyzrWrkFeOcQ8QO4WjBnDP8+U1Rkvx46Sm8+9RAh1CunkslzDs+xszyfa+0fbS
+	H3J+b34VtuozLwBqg/Iz5uCybXkc4K0B1NWlhix/dh8fakPAI6aIyPdrcgIcM1POujw1KUcDtRo
+	+MpopdvmV3H8ifwjJQqCG8awIRMiH4K54Hd6YMmMcr0W8NHMk2GqZ4ecKBsnjPQJfxefMw4pkiR
+	3TWQ1wktNjFjhH2nLIu7r54f9PYZZR/V6lPYlTJZVqCXEkI4ccE/V2JAaIyltkTObmBcRRrXlzZ
+	unguZus=
+X-Received: by 2002:a17:902:f60b:b0:2ae:b991:a44f with SMTP id
+ d9443c01a7336-2aeb991a833mr8434945ad.50.1773251537290; Wed, 11 Mar 2026
+ 10:52:17 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260306113630.1281527-1-alan.maguire@oracle.com> <20260306113630.1281527-4-alan.maguire@oracle.com>
-In-Reply-To: <20260306113630.1281527-4-alan.maguire@oracle.com>
+References: <20260306113630.1281527-1-alan.maguire@oracle.com> <b8ec9336-5204-4b1f-a7bf-995858b22b18@oracle.com>
+In-Reply-To: <b8ec9336-5204-4b1f-a7bf-995858b22b18@oracle.com>
 From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Wed, 11 Mar 2026 10:46:24 -0700
-X-Gm-Features: AaiRm50l3hjalPVXWnb3ojFmIUdLirJnF_KaJFQRejzIbEFIc3nbVQT0oD-dDKQ
-Message-ID: <CAEf4BzYQGh1=EJkewD9wSyTawvwxTFJ9ODy-PFVHeuP59ATBQA@mail.gmail.com>
-Subject: Re: [PATCH v13 bpf-next 3/8] libbpf: use layout to compute an unknown
- kind size
+Date: Wed, 11 Mar 2026 10:52:04 -0700
+X-Gm-Features: AaiRm53N3m_FOpJqyt3YFy_5DszUqVFYLox_su51bOe-o1h2In5UUlb7LuXacFs
+Message-ID: <CAEf4BzYgArb8DhgNdOikPYSqCjYSasmT1TA8d26=WSk+aPWFOA@mail.gmail.com>
+Subject: Re: [PATCH v13 bpf-next 0/8] Add BTF layout to BTF
 To: Alan Maguire <alan.maguire@oracle.com>
 Cc: andrii@kernel.org, ast@kernel.org, daniel@iogearbox.net, 
 	martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org, 
@@ -99,42 +98,29 @@ Cc: andrii@kernel.org, ast@kernel.org, daniel@iogearbox.net,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Mar 6, 2026 at 3:37=E2=80=AFAM Alan Maguire <alan.maguire@oracle.co=
-m> wrote:
+On Wed, Mar 11, 2026 at 10:35=E2=80=AFAM Alan Maguire <alan.maguire@oracle.=
+com> wrote:
 >
-> This allows BTF parsing to proceed even if we do not know the
-> kind.  Fall back to base BTF layout if layout information is
-> not in split BTF.
+> On 06/03/2026 11:36, Alan Maguire wrote:
+> > Update struct btf_header to add a new "layout" section containing
+> > a description of how to parse the BTF kinds known about at BTF
+> > encoding time.  This provides the opportunity for tools that might
+> > not know all of these kinds - as is the case when older tools run
+> > on more newly-generated BTF - to still parse the BTF provided,
+> > even if it cannot all be used.
+> >
 >
-> Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
-> ---
->  tools/lib/bpf/btf.c | 42 +++++++++++++++++++++++++++++++++---------
->  1 file changed, 33 insertions(+), 9 deletions(-)
+> looks like patch 2 needs a resync with bpf-next [1]; let me know if there=
+'s
+> any additional feedback and I can roll it into an updated revision if nee=
+ded.
 >
-> diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
-> index ae13f9f4df08..9f4d1bd73b4d 100644
-> --- a/tools/lib/bpf/btf.c
-> +++ b/tools/lib/bpf/btf.c
-> @@ -356,7 +356,32 @@ static int btf_parse_layout_sec(struct btf *btf)
->         return 0;
->  }
+
+please see my comment/question about potentially truncating btf_header
+(internally) and how that situation should be dealt with for writable
+BTF situation, but other than that looks good to me
+
+> Thanks!
 >
-> -static int btf_type_size(const struct btf_type *t)
-> +/* for unknown kinds, consult kind layout. */
-> +static int btf_type_size_unknown(const struct btf *btf, const struct btf=
-_type *t)
-> +{
-> +       __u32 layout_kinds =3D btf->hdr.layout_len / sizeof(struct btf_la=
-yout);
-
-(give you are going to resubmit anyways)
-
-nit: l_cnt or something? layout_kinds sounds like it actually contains a co=
-ntent
-
-> +       struct btf_layout *l =3D btf->layout;
-> +       __u16 vlen =3D btf_vlen(t);
-> +       __u32 kind =3D btf_kind(t);
-> +
-
-[...]
+> [1] https://patchwork.kernel.org/project/netdevbpf/patch/20260306113630.1=
+281527-9-alan.maguire@oracle.com/
