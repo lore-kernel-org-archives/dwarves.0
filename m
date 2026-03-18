@@ -1,51 +1,51 @@
 Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A48933D7D9D;
-	Wed, 18 Mar 2026 13:30:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B67A63D8114;
+	Wed, 18 Mar 2026 13:30:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773840645; cv=none; b=ZMK0mmS/4H+avK1jUyT80O+Ys2QU3iEuycSli4tDZg4o9DPp/BkQSsIDoDKexMcPhwqXuW+7ixrZuFOve2GvGpHFtsJzO90kojPJaz0NUV8tyJaQXzfzO2idR5du9BDkZTJqLIpU1GrYf7ZpJCsj/Dy8s3gaB2HbQg6mNiVE968=
+	t=1773840648; cv=none; b=HMiUvdZv8lkHCrMDXBv7b1a5Enj7s80j43XKmjSo7Git7k5luq3kfaPFx+uGyhNMJ2vdt8WPeZ6lpBMT9NFUrTsn+hPtmVzQRmG0TfC6hBkCjXjwZ2f+qYr8PWNl5pYjAFOU0aRunOfDHiCww8vPMzoT2MRCYj5cuJnq1lik9tc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773840645; c=relaxed/simple;
-	bh=i500z2Bj3ObBlwJ2KefL6RMavoIXVvP+zpGFg+Gwg1w=;
+	s=arc-20240116; t=1773840648; c=relaxed/simple;
+	bh=Vl8d+1lloIOpJRAoS12Cp0A3vK8mnBKYu4DEwbR+X4o=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=P5GCeE4J6EGDwjQ/C5RmAyFnTy9Jo+3Z7YDuR3iHJCbP6WOVTXdZoSEg+sPypWoKjKa1L3euU5rDJo+iVe+Ah1/LN/RJGUFL4E+36xrWhRPEMIYLsSWJk4lM/qz6BF04FqI14W3Xeyo7YdRuwIANAR1qJTOVGL0zX3SyeMvrqn0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=YjeF5h8Y; arc=none smtp.client-ip=205.220.177.32
+	 MIME-Version; b=C+zUHDPz6KzN8OKzMYj8fIwVT0S3Nozm72MiKm6mCFacougN8ISALOzCoUVsSjRBIocfLofsfLAvJlKV+vzprJ7zokOBHH+SYzs9klOLj9+Lsvko6uQ8iY6x9QSVWoZynjsSYRlPXdtLgPTrxi/XbZJxeHTrVQQBQDSbKQ3qZB8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=URh7bpjS; arc=none smtp.client-ip=205.220.177.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="YjeF5h8Y"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="URh7bpjS"
 Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 62I2MtiB2167099;
-	Wed, 18 Mar 2026 13:30:05 GMT
+	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 62I2Mv3r2167105;
+	Wed, 18 Mar 2026 13:30:13 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
 	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=corp-2025-04-25; bh=OjNZh
-	MieJM43MccA6oY3sp5DjyQ1/p5erty7X8DYWPI=; b=YjeF5h8YwEkIEqjv49gjT
-	pOoang9d18m8lCGln0KWBySuP3B+pTi2EXAfUW7wVmFoVhtZG0utCqApvhxOdtGv
-	ovUl+Qf4MTtiMANXhsiQo6hhO1vFDHNtM+lpKQxdhjP2jzcC5hxphL1cDsxS40at
-	4su5zypVJV1lmYoDJZ9SAZrxFfqL6AGaM6G/WIj/xO0zP0/aDpEUl/dWycULZMxl
-	41TaWIGHxPoSo6/oA1Nlw65TBGS8oSS500IKgS2PgYxu4PTUGg0GugOcikLo2pui
-	mXpcr5eYlcw6Yt80J6ymkOqVvY+ZISKoG26opbDKidghC+BPTZsvPio0YTCw9Jfz
-	w==
+	:mime-version:references:subject:to; s=corp-2025-04-25; bh=xrbpE
+	90Tswxkx7Bq0apvQT9aEigEF/KUczrfJPjSyfs=; b=URh7bpjSio+kCup/Bg3q8
+	ixaHJkqTMvLZCYkeWghUvN4tbyqjrk31vPXFjfEZTadSnVMyHvnK7QVVbO0dhVRD
+	Caw9+KlTURjq3XzKMCBUM4U8vf8nwB9gpCQMWoRsVAQZjvnIJS3O3DbS4k2e99pA
+	Xi/hBvL9gWgG9d8IjNtXvnRyw9c/fxvOjmjXM44aHNSR782bD5MKMsRS4P/xXJB9
+	GwCpMBm6kAQkHCv5eF66dXChJnVFemA0dK90ZTFwKtdbg1hm4B/TqrAL8Ahjd+TM
+	mqVVDyeuQNovGBk/GZmP9OSV3t/+8g1AZJy9bZqAtNn4MuNzV8oRU/p+rrULAwx4
+	g==
 Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4cvx3b5xp2-1
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4cvx3b5xpa-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 18 Mar 2026 13:30:04 +0000 (GMT)
+	Wed, 18 Mar 2026 13:30:13 +0000 (GMT)
 Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 62ICk1Kx030626;
-	Wed, 18 Mar 2026 13:30:03 GMT
+	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 62ICewS2031300;
+	Wed, 18 Mar 2026 13:30:12 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 4cvx4bmtcn-1
+	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 4cvx4bmtqj-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 18 Mar 2026 13:30:03 +0000
+	Wed, 18 Mar 2026 13:30:12 +0000
 Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 62IDTVfO009174;
-	Wed, 18 Mar 2026 13:30:02 GMT
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 62IDTVfS009174;
+	Wed, 18 Mar 2026 13:30:11 GMT
 Received: from bpf.uk.oracle.com (dhcp-10-154-52-75.vpn.oracle.com [10.154.52.75])
-	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 4cvx4bmsqg-9;
-	Wed, 18 Mar 2026 13:30:02 +0000
+	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 4cvx4bmsqg-11;
+	Wed, 18 Mar 2026 13:30:11 +0000
 From: Alan Maguire <alan.maguire@oracle.com>
 To: andrii@kernel.org, ast@kernel.org
 Cc: daniel@iogearbox.net, martin.lau@linux.dev, eddyz87@gmail.com,
@@ -54,9 +54,9 @@ Cc: daniel@iogearbox.net, martin.lau@linux.dev, eddyz87@gmail.com,
         jolsa@kernel.org, qmo@kernel.org, ihor.solodrai@linux.dev,
         mykyta.yatsenko5@gmail.com, dwarves@vger.kernel.org,
         bpf@vger.kernel.org, Alan Maguire <alan.maguire@oracle.com>
-Subject: [PATCH v14 bpf-next 08/10] selftests/bpf: test kind encoding/decoding
-Date: Wed, 18 Mar 2026 13:29:25 +0000
-Message-ID: <20260318132927.1142388-9-alan.maguire@oracle.com>
+Subject: [PATCH v14 bpf-next 10/10] kbuild, bpf: Specify "layout" optional feature
+Date: Wed, 18 Mar 2026 13:29:27 +0000
+Message-ID: <20260318132927.1142388-11-alan.maguire@oracle.com>
 X-Mailer: git-send-email 2.43.5
 In-Reply-To: <20260318132927.1142388-1-alan.maguire@oracle.com>
 References: <20260318132927.1142388-1-alan.maguire@oracle.com>
@@ -74,262 +74,44 @@ X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 mlxlog
  suspectscore=0 spamscore=0 adultscore=0 malwarescore=0 bulkscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2603050001
  definitions=main-2603180114
-X-Proofpoint-GUID: V5qfe7Zx91iLp4baNLFvsPPb8oNDpkaA
-X-Proofpoint-ORIG-GUID: V5qfe7Zx91iLp4baNLFvsPPb8oNDpkaA
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzE4MDExNCBTYWx0ZWRfX2sHFuX+Y/Id8
- C68nh0DAyxLuYaEilZyfGH6FnDcLahBfzLMMIo3ElEpQFELNVEk7pP4LeHTJ4dveBSOjfiPDav2
- Byp1OvP/crncsk7HAZSz8GfcbALef9TBBTKX9zLUvmy65X+3USurDExFOmSjGIyNhyn0tp1DmWA
- 7ZYM+ebeMLFhCjuVklfVC1KBJq6QeM8I1C1d+M6+t+GZNGPCkBbcGb+64pdKJaSyppX4sqYwRiX
- cHj299icSVb+RA8wQ7MoJiW3Zw709tjJ5Jhmgi5kYvCPWItwV/JL61GI01euP5hsjLNa8dLsWOa
- xDfW2aNlbS/96Uf3ITzfZgAFETwNNXcAXy74Cs9Wb113Q+xpGg8jktw0EF9czmL2y6nKwmSKSLV
- 0AlePfbxQpnWh+xt1pqTpgm3vDmjOsCoeQuf5oTJ4YWHB9aVvEZOoYIl5CMUAS1+UhblcModYEH
- PMyCeAKBA1cnSFukdEA==
-X-Authority-Analysis: v=2.4 cv=IN4PywvG c=1 sm=1 tr=0 ts=69baa8dc b=1 cx=c_pps
+X-Proofpoint-GUID: TgUulkartxZuZlikg2gpdrZAwinPbYk4
+X-Proofpoint-ORIG-GUID: TgUulkartxZuZlikg2gpdrZAwinPbYk4
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzE4MDExNCBTYWx0ZWRfXz0I82tpPFdGZ
+ i+4wkCHSA3mGa67TGVPY9evHy7i2G1ugSiej8aZQLuxclCoDEZ69wYabqes96xgs+6T5H2869pe
+ jKmURdVTFQdg6suBk60qQnNleSElgyjpL5SDlldyWBvMlOTXpupLEyf1vRYmWbv/+o8uW77j1WR
+ uiewYFQ9cH/K189dgYYyG9bvLxje9HybiT2xI4ciK3ZKAHJqYW9OVoWwrtGNPfv730dL7zIhgOF
+ UXPmTJfSZMDgVTSmFcZ+8tZtZnbqpXF3z+/K/wlQ1Cv82iqiYZUmUrLAi16mHBdClwLYYnothWl
+ c+6pwviOO+0slx0R05vvRJsjlQpRmymY8zjLxfZkaYu+z0fQsV+KyE6QV2zbWdVgPxyXU1FDkrK
+ 8aNbFXjvX3F71qBYuFhFv91s+IE/SlKDxd+B3ZmPo4bXBRnxtR2d0FuFahIT3zoc9oHf91nEq+o
+ RNqFBOLCvch8D+9VMqQ==
+X-Authority-Analysis: v=2.4 cv=IN4PywvG c=1 sm=1 tr=0 ts=69baa8e5 b=1 cx=c_pps
  a=WeWmnZmh0fydH62SvGsd2A==:117 a=WeWmnZmh0fydH62SvGsd2A==:17
  a=Yq5XynenixoA:10 a=VkNPw1HP01LnGYTKEx00:22 a=jiCTI4zE5U7BLdzWsZGv:22
- a=x4eqshVgHu-cdnggieHk:22 a=yPCof4ZbAAAA:8 a=P5AOqOs47VSxRN55gpgA:9
+ a=x4eqshVgHu-cdnggieHk:22 a=yPCof4ZbAAAA:8 a=J4qZCyyk7QvxA2XVlwcA:9
 
-verify btf__new_empty_opts() adds layouts for all kinds supported,
-and after adding kind-related types for an unknown kind, ensure that
-parsing uses this info when that kind is encountered rather than
-giving up.
+The "layout" feature will add metadata about BTF kinds to the
+generated BTF; its absence in pahole will not trigger an error so it
+is safe to add unconditionally as it will simply be ignored if pahole
+does not support it.
 
 Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
 ---
- .../selftests/bpf/prog_tests/btf_kind.c       | 224 ++++++++++++++++++
- 1 file changed, 224 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/btf_kind.c
+ scripts/Makefile.btf | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/btf_kind.c b/tools/testing/selftests/bpf/prog_tests/btf_kind.c
-new file mode 100644
-index 000000000000..c9f5fd4a0783
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/btf_kind.c
-@@ -0,0 +1,224 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2026, Oracle and/or its affiliates. */
+diff --git a/scripts/Makefile.btf b/scripts/Makefile.btf
+index 562a04b40e06..e66e13e79653 100644
+--- a/scripts/Makefile.btf
++++ b/scripts/Makefile.btf
+@@ -18,6 +18,8 @@ pahole-flags-$(call test-ge, $(pahole-ver), 126)  = -j$(JOBS) --btf_features=enc
+ 
+ pahole-flags-$(call test-ge, $(pahole-ver), 130) += --btf_features=attributes
+ 
++pahole-flags-$(call test-ge, $(pahole-ver), 131) += --btf_features=layout
 +
-+#include <test_progs.h>
-+#include <bpf/btf.h>
-+#include <bpf/libbpf.h>
-+
-+/* Verify kind encoding exists for each kind */
-+static void test_btf_kind_encoding(void)
-+{
-+	LIBBPF_OPTS(btf_new_opts, opts);
-+	const struct btf_header *hdr;
-+	const void *raw_btf;
-+	struct btf *btf;
-+	__u32 raw_size;
-+
-+	opts.add_layout = true;
-+	btf = btf__new_empty_opts(&opts);
-+	if (!ASSERT_OK_PTR(btf, "btf_new"))
-+		return;
-+
-+	raw_btf = btf__raw_data(btf, &raw_size);
-+	if (!ASSERT_OK_PTR(raw_btf, "btf__raw_data"))
-+		return;
-+
-+	hdr = raw_btf;
-+
-+	ASSERT_EQ(hdr->layout_off % 4, 0, "layout_aligned");
-+	ASSERT_EQ(hdr->layout_len, sizeof(struct btf_layout) * NR_BTF_KINDS,
-+		  "layout_len");
-+	ASSERT_EQ(hdr->str_off, hdr->layout_off + hdr->layout_len, "str_after_layout");
-+	btf__free(btf);
-+
-+	opts.add_layout = false;
-+	btf = btf__new_empty_opts(&opts);
-+	if (!ASSERT_OK_PTR(btf, "btf_new"))
-+		return;
-+
-+	raw_btf = btf__raw_data(btf, &raw_size);
-+	if (!ASSERT_OK_PTR(raw_btf, "btf__raw_data"))
-+		return;
-+
-+	hdr = raw_btf;
-+
-+	ASSERT_EQ(hdr->layout_off, 0, "no_layout_off");
-+	ASSERT_EQ(hdr->layout_len, 0, "no_layout_len");
-+	ASSERT_EQ(hdr->str_off, hdr->type_off + hdr->type_len, "strs_after_types");
-+	btf__free(btf);
-+}
-+
-+static int write_raw_btf(const char *btf_path, void *raw_btf, size_t raw_size)
-+{
-+	int fd = open(btf_path, O_WRONLY | O_CREAT | O_TRUNC | O_CLOEXEC, 0644);
-+	ssize_t n;
-+
-+	if (!ASSERT_OK_FD(fd, "open_raw_btf"))
-+		return -1;
-+	n = write(fd, raw_btf, raw_size);
-+	close(fd);
-+	if (!ASSERT_EQ(n, (ssize_t)raw_size, "write_raw_btf"))
-+		return -1;
-+	return 0;
-+}
-+
-+/*
-+ * Fabricate an unrecognized kind at BTF_KIND_MAX + 1, and after adding
-+ * the appropriate struct/typedefs to the BTF such that it recognizes
-+ * this kind, ensure that parsing of BTF containing the unrecognized kind
-+ * can succeed.
-+ */
-+void test_btf_kind_decoding(void)
-+{
-+	struct btf *btf = NULL, *new_btf = NULL;
-+	__s32 int_id, unrec_id, id, id2;
-+	LIBBPF_OPTS(btf_new_opts, opts);
-+	struct btf_layout *l;
-+	struct btf_header *hdr;
-+	const void *raw_btf;
-+	struct btf_type *t;
-+	char btf_path[64];
-+	void *new_raw_btf;
-+	void *str_data;
-+	__u32 raw_size;
-+
-+	opts.add_layout = true;
-+	btf = btf__new_empty_opts(&opts);
-+	if (!ASSERT_OK_PTR(btf, "btf_new"))
-+		return;
-+
-+	int_id = btf__add_int(btf, "test_char", 1, BTF_INT_CHAR);
-+	if (!ASSERT_GT(int_id, 0, "add_int_id"))
-+		return;
-+
-+	/*
-+	 * Create our type with unrecognized kind by adding a typedef kind
-+	 * we will overwrite it with our unrecognized kind value.
-+	 */
-+	unrec_id = btf__add_typedef(btf, "unrec_kind", int_id);
-+	if (!ASSERT_GT(unrec_id, 0, "add_unrec_id"))
-+		return;
-+
-+	/*
-+	 * Add an id after it that we will look up to verify we can parse
-+	 * beyond unrecognized kinds.
-+	 */
-+	id = btf__add_typedef(btf, "test_lookup", int_id);
-+	if (!ASSERT_GT(id, 0, "add_test_lookup_id"))
-+		return;
-+	id2 = btf__add_typedef(btf, "test_lookup2", int_id);
-+	if (!ASSERT_GT(id2, 0, "add_test_lookup_id2"))
-+		return;
-+
-+	raw_btf = (void *)btf__raw_data(btf, &raw_size);
-+	if (!ASSERT_OK_PTR(raw_btf, "btf__raw_data"))
-+		return;
-+
-+	new_raw_btf = calloc(1, raw_size + sizeof(*l));
-+	if (!ASSERT_OK_PTR(new_raw_btf, "calloc_raw_btf"))
-+		return;
-+	memcpy(new_raw_btf, raw_btf, raw_size);
-+
-+	hdr = new_raw_btf;
-+
-+	/* Move strings to make space for one new layout description */
-+	raw_size += sizeof(*l);
-+	str_data = new_raw_btf + hdr->hdr_len + hdr->str_off;
-+	memmove(str_data + sizeof(*l), str_data, hdr->str_len);
-+	hdr->str_off += sizeof(*l);
-+
-+	/* Add new layout description */
-+	hdr->layout_len += sizeof(*l);
-+	l = new_raw_btf + hdr->hdr_len + hdr->layout_off;
-+	l[NR_BTF_KINDS].info_sz = 0;
-+	l[NR_BTF_KINDS].elem_sz = 0;
-+	l[NR_BTF_KINDS].flags = 0;
-+
-+	/* Now modify typedef added above to be an unrecognized kind. */
-+	t = (void *)hdr + hdr->hdr_len + hdr->type_off + sizeof(struct btf_type) +
-+		sizeof(__u32);
-+	t->info = (NR_BTF_KINDS << 24);
-+
-+	/* Write BTF to a raw file, ready for parsing. */
-+	snprintf(btf_path, sizeof(btf_path), "/tmp/btf_kind.%d", getpid());
-+
-+	if (write_raw_btf(btf_path, new_raw_btf, raw_size))
-+		goto out;
-+
-+	/*
-+	 * Verify parsing succeeds, and that we can read type info past
-+	 * the unrecognized kind.
-+	 */
-+	new_btf = btf__parse_raw(btf_path);
-+	if (ASSERT_OK_PTR(new_btf, "btf__parse_raw")) {
-+		ASSERT_EQ(btf__find_by_name(new_btf, "unrec_kind"), unrec_id,
-+			  "unrec_kind_found");
-+		ASSERT_EQ(btf__find_by_name_kind(new_btf, "test_lookup",
-+						 BTF_KIND_TYPEDEF), id,
-+			  "verify_id_lookup");
-+		ASSERT_EQ(btf__find_by_name_kind(new_btf, "test_lookup2",
-+						 BTF_KIND_TYPEDEF), id2,
-+			  "verify_id2_lookup");
-+	}
-+	btf__free(new_btf);
-+	new_btf = NULL;
-+
-+	/*
-+	 * Next, change info_sz to equal sizeof(struct btf_type); this means the
-+	 * "test_lookup" kind will be reinterpreted as a singular info element
-+	 * following the unrecognized kind.
-+	 */
-+	l[NR_BTF_KINDS].info_sz = sizeof(struct btf_type);
-+	if (write_raw_btf(btf_path, new_raw_btf, raw_size))
-+		goto out;
-+
-+	new_btf = btf__parse_raw(btf_path);
-+	if (ASSERT_OK_PTR(new_btf, "btf__parse_raw")) {
-+		ASSERT_EQ(btf__find_by_name_kind(new_btf, "test_lookup",
-+						 BTF_KIND_TYPEDEF), -ENOENT,
-+			  "verify_id_not_found");
-+		/* id of "test_lookup2" will be id2 -1 as we have removed one type */
-+		ASSERT_EQ(btf__find_by_name_kind(new_btf, "test_lookup2",
-+						 BTF_KIND_TYPEDEF), id2 - 1,
-+			  "verify_id_lookup2");
-+
-+	}
-+	btf__free(new_btf);
-+	new_btf = NULL;
-+
-+	/*
-+	 * Change elem_sz to equal sizeof(struct btf_type)/2 and set vlen
-+	 * associated with unrecognized type to 2; this allows us to verify
-+	 * vlen-specified BTF can still be parsed.
-+	 */
-+	l[NR_BTF_KINDS].info_sz = 0;
-+	l[NR_BTF_KINDS].elem_sz = sizeof(struct btf_type)/2;
-+	t->info |= 2;
-+	if (write_raw_btf(btf_path, new_raw_btf, raw_size))
-+		goto out;
-+
-+	new_btf = btf__parse_raw(btf_path);
-+	if (ASSERT_OK_PTR(new_btf, "btf__parse_raw")) {
-+		ASSERT_EQ(btf__find_by_name_kind(new_btf, "test_lookup",
-+						 BTF_KIND_TYPEDEF), -ENOENT,
-+			  "verify_id_not_found");
-+		/* id of "test_lookup2" will be id2 -1 as we have removed one type */
-+		ASSERT_EQ(btf__find_by_name_kind(new_btf, "test_lookup2",
-+						 BTF_KIND_TYPEDEF), id2 - 1,
-+			  "verify_id_lookup2");
-+
-+	}
-+out:
-+	btf__free(new_btf);
-+	free(new_raw_btf);
-+	unlink(btf_path);
-+	btf__free(btf);
-+}
-+
-+void test_btf_kind(void)
-+{
-+	if (test__start_subtest("btf_kind_encoding"))
-+		test_btf_kind_encoding();
-+	if (test__start_subtest("btf_kind_decoding"))
-+		test_btf_kind_decoding();
-+}
+ endif
+ 
+ pahole-flags-$(CONFIG_PAHOLE_HAS_LANG_EXCLUDE)		+= --lang_exclude=rust
 -- 
 2.39.3
 
