@@ -1,238 +1,180 @@
-Received: from out-188.mta0.migadu.com (out-188.mta0.migadu.com [91.218.175.188])
+Received: from out-180.mta1.migadu.com (out-180.mta1.migadu.com [95.215.58.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8254D3D3009;
-	Thu, 19 Mar 2026 16:23:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.188
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAC7F376481
+	for <dwarves@vger.kernel.org>; Thu, 19 Mar 2026 17:32:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773937399; cv=none; b=ow+aF75MyCxy6LulYjpzbRPQOJ+gXlNqDcTBKqgRlEqi/kIvgjzCKJ9x5rtSIZaQm5/v47VPqYKjE5KmjwPb88Xi2KiX6GSqhJXkAk00aKxS8GfkaYAjWgMtFtny+SasXTcF7OIcGS7DbV4BqR8w53pisVzQrKXNPxMGgdzgb7I=
+	t=1773941542; cv=none; b=DJuCrgfkDnFn8urKcB7jXnCxS0hULIUPtHjF1wOGf6l27MCxgh36QZiEDJ+L/Ja5Gx4XI7mE0yCRcCJh4xyiYDV3ZBtLPPiNDWMmXiuSAGBguzZlT5hsbyAGhd76vq406uX6eYWKVEErNPa8jGqyF0V4paUzCWMeDi2LZdvmFLw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773937399; c=relaxed/simple;
-	bh=70bUYwbaaJ9p6utY8MdZKgKx7ImSoxmOzTovx8XajVY=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=F6otgrUl4nDU+rRfL4Hi5Oe2DjotBJ/LSAiG3+maTRwBHiS+RJYjxxpZQvMEj2ZPX5Zn9B2ce/jkDEMkl63a5sOGQCovgrC4jMslIv95WIeVBC/RJgB45Tj6xvIPNQZDjrw+kTQ9bqsDrxFbtl5bwgCpCbeka+8YT/bSf0OaorA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=cmmrMF2n; arc=none smtp.client-ip=91.218.175.188
+	s=arc-20240116; t=1773941542; c=relaxed/simple;
+	bh=bpqvR8J6/QG/+CtU1wW/hVktCz6ZD7fFdAxHTYrBc2Y=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=mNYwGdklDDe6/FhVCiIqFqCEdAK1W3CkKLAC+VOqoalb6zqM7x2Mfk/d5ICNPc5zL6gCuLgkJrrpODlG/yb2FfvvKd+5njJiTz0TSwvLo3RjOQY3nxx6ollSaHHmogFK3C5LseoQo3zdCa5QG14ZVrxgd/Ks+4aF1C8chbNKqM4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=GYOCa+MO; arc=none smtp.client-ip=95.215.58.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="cmmrMF2n"
-Message-ID: <c7abb3d6-d1d0-4970-88c8-4b6afa2dc399@linux.dev>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="GYOCa+MO"
+Message-ID: <4e6b366f-eaea-4cc1-b9c2-629c8089967e@linux.dev>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1773937395;
+	t=1773941527;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=nn/s8BUc2tFo9k2gjZqMpf6WdJVGJ+Vpz/+b+ulpCpE=;
-	b=cmmrMF2nu8UYjnHxKrJlBMgIlundraRFQH52WTguulc050voelTYTbj/8tT0Dy71RUDSz8
-	mqKOoHrBMBx6qToeYJHWgqREo0q4W8papHCJN9g7EAFZaoYRhhS4rkSow+Hf6xBrq2aAIn
-	dLJ92+DdF6uiMT2zHQX88O1y4DTn1QA=
-Date: Thu, 19 Mar 2026 09:23:11 -0700
+	bh=YWDwFX7RDlzg//VzZrJ7A37vtyfA4VbBikusGF6Mh3g=;
+	b=GYOCa+MOdBygqHs9YnzKQS3lZcPIU+5RffiahGa5mBZ575dVQ01BYVI9zf1/OUBFmmQOD6
+	YzNlIDo9XT8cc0g6guzmNkL+dDoJ95SnIHoJdRFL8yX90qB5iNkC3LxhGZ++LIBur5H56L
+	UUBwGYqzv5slx3iyUEZyMSs/kXwXe6M=
+Date: Thu, 19 Mar 2026 10:31:41 -0700
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH dwarves v2 0/9] pahole: Encode true signatures in kernel
- BTF
+Subject: Re: [PATCH dwarves 1/9] dwarf_loader: Reduce parameter checking with
+ clang DW_AT_calling_convention attr
+To: Jiri Olsa <olsajiri@gmail.com>
+Cc: Alan Maguire <alan.maguire@oracle.com>,
+ Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>, dwarves@vger.kernel.org,
+ Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ bpf@vger.kernel.org, kernel-team@fb.com
+References: <20260305225455.1151066-1-yonghong.song@linux.dev>
+ <20260305225500.1151338-1-yonghong.song@linux.dev> <abvs73VjXf_1byN6@krava>
 Content-Language: en-GB
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 From: Yonghong Song <yonghong.song@linux.dev>
-To: Alan Maguire <alan.maguire@oracle.com>,
- Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>, dwarves@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- bpf@vger.kernel.org, kernel-team@fb.com
-References: <20260309153215.1917033-1-yonghong.song@linux.dev>
- <976a9e56-a221-4f63-8f10-caf2a3c8fa4f@oracle.com>
- <caa6ac68-9702-43fb-87cc-7393fb44c176@linux.dev>
-In-Reply-To: <caa6ac68-9702-43fb-87cc-7393fb44c176@linux.dev>
+In-Reply-To: <abvs73VjXf_1byN6@krava>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Migadu-Flow: FLOW_OUT
 
 
-On 3/9/26 12:25 PM, Yonghong Song wrote:
+
+On 3/19/26 5:32 AM, Jiri Olsa wrote:
+> On Thu, Mar 05, 2026 at 02:55:00PM -0800, Yonghong Song wrote:
 >
+> SNIP
 >
-> On 3/9/26 11:39 AM, Alan Maguire wrote:
->> On 09/03/2026 15:32, Yonghong Song wrote:
->>> Current vmlinux BTF encoding is based on the source level signatures.
->>> But the compiler may do some optimization and changed the signature.
->>> If the user tried with source level signature, their initial 
->>> implementation
->>> may have wrong results and then the user need to check what is the
->>> problem and work around it, e.g. through kprobe since kprobe does not
->>> need vmlinux BTF.
->>>
->>> Majority of changed signatures are due to dead argument elimination.
->>> The following is a more complex one. The original source signature:
->>>    typedef struct {
->>>          union {
->>>                  void            *kernel;
->>>                  void __user     *user;
->>>          };
->>>          bool            is_kernel : 1;
->>>    } sockptr_t;
->>>    typedef sockptr_t bpfptr_t;
->>>    static int map_create(union bpf_attr *attr, bpfptr_t uattr) { ... }
->>> After compiler optimization, the signature becomes:
->>>    static int map_create(union bpf_attr *attr, bool 
->>> uattr__is_kernel) { ... }
->>> In the above, uattr__is_kernel corresponds to 'is_kernel' field in 
->>> sockptr_t.
->>> This makes it easier for developers to understand what changed.
->>>
->>> The new signature needs to properly follow ABI specification based on
->>> locations. Otherwise, that signature should be discarded. For example,
->>>
->>>      0x0242f1f7:   DW_TAG_subprogram
->>>                      DW_AT_name ("memblock_find_in_range")
->>>                      DW_AT_calling_convention (DW_CC_nocall)
->>>                      DW_AT_type      (0x0242decc "phys_addr_t")
->>>                      ...
->>>      0x0242f22e:     DW_TAG_formal_parameter
->>>                        DW_AT_location        (indexed (0x14a) 
->>> loclist = 0x005595bc:
->>>                           [0xffffffff87a000f9, 0xffffffff87a00178): 
->>> DW_OP_reg5 RDI
->>>                           [0xffffffff87a00178, 0xffffffff87a001be): 
->>> DW_OP_reg14 R14
->>>                           [0xffffffff87a001be, 0xffffffff87a001c7): 
->>> DW_OP_entry_value(DW_OP_reg5 RDI), DW_OP_stack_value
->>>                           [0xffffffff87a001c7, 0xffffffff87a00214): 
->>> DW_OP_reg14 R14)
->>>                        DW_AT_name    ("start")
->>>                        DW_AT_type    (0x0242decc "phys_addr_t")
->>>                        ...
->>>      0x0242f239:     DW_TAG_formal_parameter
->>>                        DW_AT_location        (indexed (0x14b) 
->>> loclist = 0x005595e6:
->>>                           [0xffffffff87a000f9, 0xffffffff87a00175): 
->>> DW_OP_reg4 RSI
->>>                           [0xffffffff87a00175, 0xffffffff87a001b8): 
->>> DW_OP_reg3 RBX
->>>                           [0xffffffff87a001b8, 0xffffffff87a001c7): 
->>> DW_OP_entry_value(DW_OP_reg4 RSI), DW_OP_stack_value
->>>                           [0xffffffff87a001c7, 0xffffffff87a00214): 
->>> DW_OP_reg3 RBX)
->>>                        DW_AT_name    ("end")
->>>                        DW_AT_type    (0x0242decc "phys_addr_t")
->>>                        ...
->>>      0x0242f245:     DW_TAG_formal_parameter
->>>                        DW_AT_location        (indexed (0x14c) 
->>> loclist = 0x00559610:
->>>                           [0xffffffff87a001e3, 0xffffffff87a001ef): 
->>> DW_OP_breg4 RSI+0)
->>>                        DW_AT_name    ("size")
->>>                        DW_AT_type    (0x0242decc "phys_addr_t")
->>>                        ...
->>>      0x0242f250:     DW_TAG_formal_parameter
->>>                        DW_AT_const_value     (4096)
->>>                        DW_AT_name    ("align")
->>>                        DW_AT_type    (0x0242decc "phys_addr_t")
->>>                        ...
->>>
->>> The third argument should correspond to RDX for x86_64. But the 
->>> location suggests that
->>> the parameter value is stored in the address with 'RSI + 0'. It is 
->>> not clear whether
->>> the parameter value is stored in RDX or not. So we have to discard 
->>> this funciton in
->>> vmlinux BTF to avoid incorrect true signatures.
->>>
->>> For llvm, any function having
->>>    DW_AT_calling_convention        (DW_CC_nocall)
->>> in dwarf DW_TAG_subprogram will indicate that this function has 
->>> signature changed.
->>> I did experiment with latest bpf-next. For x86_64, there are 69103 
->>> kernel functions
->>> and 875 kernel functions having signature changed. A series of 
->>> patches are intended
->>> to ensure true signatures are properly represented. Eventually, only 
->>> 17 functions
->>> cannot have true signatures due to locations.
->>>
->> hi Yonghong, one high-level question before I start digging into this 
->> further.
->> Are there any minimum requirements on LLVM/clang version for this 
->> support? Thanks!
->
-> This featureDW_AT_calling_convention is introduced into llvm on June 
-> 2022: https://reviews.llvm.org/D127134
-> The release is llvm15. From Documentation/process/changes.rst, we have
->     Clang/LLVM (optional)  15.0.0           clang --version
-> So we should be okay.
->
-> But if the kernel is built with -O3 or FullLTO, there will be some
-> additional signature changed functions and they will be checked
-> only available at >= llvm23 (see 
-> https://github.com/llvm/llvm-project/pull/178973).
-> But the number of those additional signature changed functions should 
-> not be that many.
-> Also typical kernel build is -O2 so we are not missing signature changed
-> functions in most cases.
->
+>> ---
+>>   dwarf_loader.c | 71 +++++++++++++++++++++++++++++++++++++++++++-------
+>>   dwarves.h      |  2 ++
+>>   2 files changed, 63 insertions(+), 10 deletions(-)
 >>
->> Alan
->>> For arm64, there are 863 kernel functions having signature changed, and
->>> 79 functions cannot have true signatures due to locations. I checked 
->>> those
->>> functions and look like llvm arm64 backend more relaxed to compute 
->>> parameter
->>> values.
->>>
->>> For the patch set, Patch 1 introduced usage of 
->>> DW_AT_calling_convention, which
->>> can precisely identify which function has signature changed. This 
->>> can filter
->>> majority of functions where their signature won't change.
->>> Patches 2 to 7 tried to find functions with true signature.
->>> Patch 8 enables to btf encoder to properly generate BTF.
->>> Patch 9 includes a few tests.
->>>
->>> Changelog:
->>>    v1 -> v2:
->>>      - v1: 
->>> https://lore.kernel.org/bpf/20260305225455.1151066-1-yonghong.song@linux.dev/
->>>      - Added producer_clang guarding in btf_encoder. Otherwise, gcc 
->>> kernel build
->>>        will crash pahole.
->>>      - Fix an early return in parameter__reg() which didn't do 
->>> pthread_mutex_unlock()
->>>        which caused the deadlock for arm64.
->>>      - Add a few more places to guard with producer_clang and 
->>> conf->true_signature
->>>        to maintain the previous behavior if not clang or 
->>> conf->true_signature is false.
->>>
->>> Yonghong Song (9):
->>>    dwarf_loader: Reduce parameter checking with clang
->>>      DW_AT_calling_convention attr
->>>    dwarf_loader: Handle signatures with dead arguments
->>>    dwarf_loader: Refactor initial ret -1 to be macro PARM_DEFAULT_FAIL
->>>    dwarf_laoder: Handle locations with DW_OP_fbreg
->>>    dwarf_loader: Change exprlen checking condition in parameter__reg()
->>>    dwarf_loader: Detect optimized parameters with locations having
->>>      constant values
->>>    dwarf_loader: Handle expression lists
->>>    btf_encoder: Handle optimized parameter properly
->>>    tests: Add a few clang true signature tests
->>>
->>>   btf_encoder.c                                 |  13 +-
->>>   dwarf_loader.c                                | 397 
->>> +++++++++++++++++-
->>>   dwarves.h                                     |   3 +
->>>   tests/true_signatures/clang_parm_aggregate.sh |  83 ++++
->>>   tests/true_signatures/clang_parm_optimized.sh |  95 +++++
->>>   .../clang_parm_optimized_stack.sh             |  95 +++++
->>>   .../gcc_true_signatures.sh                    |   0
->>>   7 files changed, 662 insertions(+), 24 deletions(-)
->>>   create mode 100755 tests/true_signatures/clang_parm_aggregate.sh
->>>   create mode 100755 tests/true_signatures/clang_parm_optimized.sh
->>>   create mode 100755 
->>> tests/true_signatures/clang_parm_optimized_stack.sh
->>>   rename tests/{ => true_signatures}/gcc_true_signatures.sh (100%)
->>>
-Ping. Alan, have you got some chances to review this patch set?
+>> diff --git a/dwarf_loader.c b/dwarf_loader.c
+>> index 16fb7be..610b69e 100644
+>> --- a/dwarf_loader.c
+>> +++ b/dwarf_loader.c
+>> @@ -1190,6 +1190,10 @@ static ptrdiff_t __dwarf_getlocations(Dwarf_Attribute *attr,
+>>   	return ret;
+>>   }
+>>   
+>> +struct func_info {
+>> +	bool signature_changed;
+>> +};
+>> +
+>>   /* For DW_AT_location 'attr':
+>>    * - if first location is DW_OP_regXX with expected number, return the register;
+>>    *   otherwise save the register for later return
+>> @@ -1252,7 +1256,8 @@ out:
+>>   }
+>>   
+>>   static struct parameter *parameter__new(Dwarf_Die *die, struct cu *cu,
+>> -					struct conf_load *conf, int param_idx)
+>> +					struct conf_load *conf, int param_idx,
+>> +					struct func_info *info)
+>>   {
+>>   	struct parameter *parm = tag__alloc(cu, sizeof(*parm));
+>>   
+>> @@ -1265,6 +1270,8 @@ static struct parameter *parameter__new(Dwarf_Die *die, struct cu *cu,
+>>   		parm->idx = param_idx;
+>>   		if (param_idx >= cu->nr_register_params || param_idx < 0)
+>>   			return parm;
+>> +		if (cu->producer_clang && !info->signature_changed)
+>> +			return parm;
+> should you check for info != NULL?
+
+We should be okay. I audited that if info is NULL, then param_idx must be < 0.
+
+>
+>>   		/* Parameters which use DW_AT_abstract_origin to point at
+>>   		 * the original parameter definition (with no name in the DIE)
+>>   		 * are the result of later DWARF generation during compilation
+>> @@ -1337,7 +1344,7 @@ static int formal_parameter_pack__load_params(struct formal_parameter_pack *pack
+>>   			continue;
+>>   		}
+>>   
+>> -		struct parameter *param = parameter__new(die, cu, conf, -1);
+>> +		struct parameter *param = parameter__new(die, cu, conf, -1, NULL);
+>>   
+>>   		if (param == NULL)
+>>   			return -1;
+>> @@ -1502,6 +1509,29 @@ static struct ftype *ftype__new(Dwarf_Die *die, struct cu *cu)
+>>   	return ftype;
+>>   }
+>>   
+> SNIP
+>
+>>   	int param_idx = 0;
+>>   	Dwarf_Die child;
+>> @@ -2320,7 +2353,7 @@ static int die__process_function(Dwarf_Die *die, struct ftype *ftype,
+>>   			continue;
+>>   		}
+>>   		case DW_TAG_formal_parameter:
+>> -			tag = die__create_new_parameter(die, ftype, lexblock, cu, conf, param_idx++);
+>> +			tag = die__create_new_parameter(die, ftype, lexblock, cu, conf, param_idx++, info);
+>>   			break;
+>>   		case DW_TAG_variable:
+>>   			tag = die__create_new_variable(die, cu, conf, 0);
+>> @@ -2391,9 +2424,10 @@ out_enomem:
+>>   static struct tag *die__create_new_function(Dwarf_Die *die, struct cu *cu, struct conf_load *conf)
+>>   {
+>>   	struct function *function = function__new(die, cu, conf);
+>> +	struct func_info info = { function->signature_changed };
+> would it be easier to add signature_changed to struct ftype or pass
+> function pointer directly to die__process_function ?
+>
+> (after reading the rest of the patches, seems like func_info is needed
+> anyway, so maybe not worth it)
+
+Right, there are additional fields in func_info struct.
+
+>
+>>   
+>>   	if (function != NULL &&
+>> -	    die__process_function(die, &function->proto, &function->lexblock, cu, conf) != 0) {
+>> +	    die__process_function(die, &function->proto, &function->lexblock, cu, conf, &info) != 0) {
+>>   		function__delete(function, cu);
+>>   		function = NULL;
+>>   	}
+>> @@ -3045,6 +3079,21 @@ static unsigned long long dwarf_tag__orig_id(const struct tag *tag,
+>>   	return cu->extra_dbg_info ? dtag->id : 0;
+>>   }
+>>   
+>> +static bool attr_producer_clang(Dwarf_Die *die)
+>> +{
+>> +	Dwarf_Attribute attr;
+>> +	const char *producer;
+>> +
+>> +	if (dwarf_attr(die, DW_AT_producer, &attr) == NULL)
+>> +		return false;
+>> +
+>> +	producer = dwarf_formstring(&attr);
+>> +	if (!producer)
+>> +		return false;
+>> +
+> nit you could call attr_string(die, DW_AT_producer, NULL) to get the string
+
+Good point. Will fix it in the next revision.
+
+>
+> jirka
+>
+>> +	return !!strstr(producer, "clang");
+>> +}
+>> +
+> SNIP
+>
 
