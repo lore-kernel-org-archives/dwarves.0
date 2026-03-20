@@ -1,395 +1,185 @@
-Received: from out-171.mta0.migadu.com (out-171.mta0.migadu.com [91.218.175.171])
+Received: from out-177.mta1.migadu.com (out-177.mta1.migadu.com [95.215.58.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D9FE1A9F8D
-	for <dwarves@vger.kernel.org>; Fri, 20 Mar 2026 04:52:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E9B6286430
+	for <dwarves@vger.kernel.org>; Fri, 20 Mar 2026 05:00:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773982377; cv=none; b=hX5OnnXFB+adT06h5QFhEX3MK2YZ9i6626/UeTOTOmx2InsFTHL8/+wOcDym0l/xrTlx2GD7KMtDB88FELKFNCEUrWCk9Z0C4NM6k3BJl2cHKmsgplijorGGNSV2/PHPPLAYZZSWmR51r5+VH7b7nMlnHxZQ9DZjGnuONn1sWVg=
+	t=1773982857; cv=none; b=oP2N8mevLSf6bH9j9ONkeOijfLbHszzOfYRMKM7aFswiSm7F90krTudBTgBuLS7PJy9kHZgUnpSZ4t8kF+fqAoH8nriDt454Did3T29stN+hJp6QlV+FY7hFgiWmr273qYyibSB+bjSbZ5SwvySIv/9mGQdGeNxV3d4mndEcwlU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773982377; c=relaxed/simple;
-	bh=sMpAJWRiMoczmK9FXt2ABPYWhJ/J8T0E019kQ+XfAUk=;
+	s=arc-20240116; t=1773982857; c=relaxed/simple;
+	bh=7Bvryjb3U5dYWwyP2CW7U0e5Npac4SyEbRAbfk85H1M=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=f72QOGzeLasWoxyZWeI3U6VaHPb9kHAAt0R+AwCazO23SD8JyC8HHIypgrIVd5ImBIIo3LybtKBgQEN4jtZ6uDPq8dTTLuCcfa235xeIC0FHQv22KY1kfsl6m3mRiGlu5jZnGGe7YaJVXMHzMSgA7WywC8Of5fnmXtKZcaYj+2A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=UJ52eabS; arc=none smtp.client-ip=91.218.175.171
+	 In-Reply-To:Content-Type; b=X0yPum9tiWs1K4HLusjT0o6v9tTT+8ngNS9oa84xpLLxhhpIQ3hXdiNDvZ4VTR/f76QbtkJf70ftYp5vdEsjChqdTQOV+zzH5G/nIajOow3Z9XrL6D3NsUCX/WSgpT4xyBeLndDLHF1wU5oHYXZadrwtrDsMt1ERQKZF7RTeOns=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=iDvZ9Pvv; arc=none smtp.client-ip=95.215.58.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="UJ52eabS"
-Message-ID: <7a30f200-9f70-4091-a770-8b9f31810c9a@linux.dev>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="iDvZ9Pvv"
+Message-ID: <cc592002-b65b-4ec2-bc99-8a53ca221bbd@linux.dev>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1773982363;
+	t=1773982844;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=b/60SDR12VDRijm+lUVRHae0YEmRg+Cvc86I0EZ5+mU=;
-	b=UJ52eabS7hFs6wVivN+akZuYmQ5I99LxK77fV4oE06VmWenkcxWSe9JqJPhOwWz1AH+xrx
-	nb1V6z/UpbTyiGZp3N7+QcJV4Oet3YUC4x+41ZfZmehXfDsgEGZuq8qvYH0WfZ9H1ZRiqK
-	xLVCUkXbxon4F2+ypuFVIAU7emhQ5nc=
-Date: Thu, 19 Mar 2026 21:52:35 -0700
+	bh=0GzKbEyEB0l+ERcDP9flzcM6p5rpgvZQkAd7pS4hnCo=;
+	b=iDvZ9PvvW+a0/fN7iTKnY1M8cbuH+M5nZ7tKcSr7Ixx6k1oGW92E3Xr9cUlvnUzOGG0lXm
+	19izLy65NOC4XXfk1pCuw/z83bYiYnkSzm1/wU4JQqX6qEoj1cfhdmojgmzukkYEp+bodn
+	pTUnFWn3BD5XuyLkuw5eI3dr9H1x7I8=
+Date: Thu, 19 Mar 2026 22:00:28 -0700
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH dwarves 9/9] tests: Add a few clang true signature tests
+Subject: Re: [PATCH dwarves 2/9] dwarf_loader: Handle signatures with dead
+ arguments
 Content-Language: en-GB
 To: Alan Maguire <alan.maguire@oracle.com>,
  Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>, dwarves@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
  bpf@vger.kernel.org, kernel-team@fb.com
 References: <20260305225455.1151066-1-yonghong.song@linux.dev>
- <20260305225542.1158464-1-yonghong.song@linux.dev>
- <e2096d0a-5c78-496e-a269-1daf2a3784b5@oracle.com>
+ <20260305225506.1153181-1-yonghong.song@linux.dev>
+ <b20663a4-957d-4bb0-bf2c-4921da446514@oracle.com>
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <e2096d0a-5c78-496e-a269-1daf2a3784b5@oracle.com>
+In-Reply-To: <b20663a4-957d-4bb0-bf2c-4921da446514@oracle.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Migadu-Flow: FLOW_OUT
 
 
 
-On 3/19/26 11:48 AM, Alan Maguire wrote:
+On 3/19/26 11:55 AM, Alan Maguire wrote:
 > On 05/03/2026 22:55, Yonghong Song wrote:
->> Three tests are added.
+>> For llvm dwarf, the dead argument may be in the middle of
+>> DW_TAG_subprogram. So we introduce skip_idx in order to
+>> match expected registers properly.
 >>
->> Test 1: clang_parm_optimized.sh
->>    BTF:   char * foo(struct t * a, struct t * d);
->>    DWARF: char * foo(struct t * a, int b, struct t * d);
->> where parameber 'b' is unused.
+>> For example:
+>>    0x00042897:   DW_TAG_subprogram
+>>                    DW_AT_name      ("create_dev")
+>>                    DW_AT_calling_convention        (DW_CC_nocall)
+>>                    DW_AT_type      (0x0002429a "int")
+>>                    ...
 >>
->> Test 2: clang_parm_optimized_stack.sh
->>    BTF:   char * foo(struct t * a, struct t * d);
->>    DWARF: char * foo(struct t * a, int b1, int b2, int b3, int b4, int b5, int b6, struct t * d);
->> where parameters 'b1' to 'b6' are unused.
+>>    0x000428ab:     DW_TAG_formal_parameter
+>>                      DW_AT_name    ("name")
+>>                      DW_AT_type    (0x000242ed "char *")
+>>                      ...
 >>
->> Test 3: clang_parm_aggregate.sh
->>    BTF:   long foo(long a__f1, struct t b, int i);
->>    DWARF: long foo(struct t a, struct t b, int i);
->> where the 'struct t' definition is 'struct t { long f1; long f2; };', and
->> a.f2 is not used in the function.
+>>    0x000428b5:     DW_TAG_formal_parameter
+>>                      DW_AT_location        (indexed (0x3f) loclist = 0x000027f8:
+>>                         [0xffffffff87681370, 0xffffffff8768137a): DW_OP_reg5 RDI
+>>                         [0xffffffff8768137a, 0xffffffff87681392): DW_OP_reg3 RBX
+>>                         [0xffffffff87681392, 0xffffffff876813ae): DW_OP_entry_value(DW_OP_reg5 RDI), DW_OP_stack_value)
+>>                      DW_AT_name    ("dev")
+>>                      DW_AT_type    (0x00026859 "dev_t")
+>>                      ...
+>>
+>> With skip_idx, we can identify that the second original argument
+>> 'dev' becomes the first one after optimization.
 >>
 >> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
-> tests look good but we need to ensure they are run by the ./tests script
-> so that they will be run in CI. also take a look at Bruce's work to
-> add common test functions [1], will probably simplify aspects of the tests.
-
-Okay. The [1] is recently added. I will follow the convention in the next revision.
-
->
-> Thanks!
->
-> Alan
->
-> [1] https://lore.kernel.org/dwarves/20260309205643.1985134-2-bruce.mcculloch@oracle.com/
->
 >> ---
->>   tests/true_signatures/clang_parm_aggregate.sh | 83 ++++++++++++++++
->>   tests/true_signatures/clang_parm_optimized.sh | 95 +++++++++++++++++++
->>   .../clang_parm_optimized_stack.sh             | 95 +++++++++++++++++++
->>   .../gcc_true_signatures.sh                    |  0
->>   4 files changed, 273 insertions(+)
->>   create mode 100755 tests/true_signatures/clang_parm_aggregate.sh
->>   create mode 100755 tests/true_signatures/clang_parm_optimized.sh
->>   create mode 100755 tests/true_signatures/clang_parm_optimized_stack.sh
->>   rename tests/{ => true_signatures}/gcc_true_signatures.sh (100%)
+>>   dwarf_loader.c | 27 +++++++++++++++++++++++----
+>>   1 file changed, 23 insertions(+), 4 deletions(-)
 >>
->> diff --git a/tests/true_signatures/clang_parm_aggregate.sh b/tests/true_signatures/clang_parm_aggregate.sh
->> new file mode 100755
->> index 0000000..6d92701
->> --- /dev/null
->> +++ b/tests/true_signatures/clang_parm_aggregate.sh
->> @@ -0,0 +1,83 @@
->> +#!/bin/bash
->> +# SPDX-License-Identifier: GPL-2.0-only
->> +
->> +outdir=
->> +
->> +fail()
->> +{
->> +	# Do not remove test dir; might be useful for analysis
->> +	trap - EXIT
->> +	if [[ -d "$outdir" ]]; then
->> +		echo "Test data is in $outdir"
->> +	fi
->> +	exit 1
->> +}
->> +
->> +cleanup()
->> +{
->> +	rm ${outdir}/*
->> +	rmdir $outdir
->> +}
->> +
->> +outdir=$(mktemp -d /tmp/clang_true.sh.XXXXXX)
->> +
->> +trap cleanup EXIT
->> +
->> +echo -n "Validation of BTF encoding of true_signatures: "
->> +
->> +clang_true="${outdir}/clang_true"
->> +CC=$(which clang 2>/dev/null)
->> +
->> +if [[ -z "$CC" ]]; then
->> +	echo "skip: clang not available"
->> +	exit 2
->> +fi
->> +
->> +cat > ${clang_true}.c << EOF
->> +struct t { long f1; long f2; };
->> +__attribute__((noinline)) static long foo(struct t a, struct t b, int i)
->> +{
->> +        return a.f1 + b.f1 + b.f2 + i;
->> +}
->> +
->> +struct t p1, p2;
->> +int i;
->> +int main()
->> +{
->> +        return (int)foo(p1, p2, i);
->> +}
->> +EOF
->> +
->> +CFLAGS="$CFLAGS -g -O2"
->> +${CC} ${CFLAGS} -o $clang_true ${clang_true}.c
->> +if [[ $? -ne 0 ]]; then
->> +	echo "Could not compile ${clang_true}.c" >& 2
->> +	exit 1
->> +fi
->> +LLVM_OBJCOPY=objcopy pahole -J --btf_features=+true_signature $clang_true
->> +if [[ $? -ne 0 ]]; then
->> +	echo "Could not encode BTF for $clang_true"
->> +	exit 1
->> +fi
->> +
->> +btf_optimized=$(pfunct --all --format_path=btf $clang_true |grep "foo")
->> +if [[ -z "$btf_optimized" ]]; then
->> +	echo "skip: no optimizations applied."
->> +	exit 2
->> +fi
->> +
->> +btf_cmp=$btf_optimized
->> +dwarf=$(pfunct --all $clang_true |grep "foo")
->> +
->> +test -n "$VERBOSE" && printf "\nBTF: $btf_optimized  DWARF: $dwarf \n"
->> +
->> +if [[ "$btf_cmp" == "$dwarf" ]]; then
->> +	echo "BTF and DWARF signatures should be different and they are not: BTF: $btf_optimized ; DWARF $dwarf"
->> +	exit 1
->> +else
->> +        echo ""
->> +        echo "  BTF:   $btf_optimized"
->> +        echo "  DWARF: $dwarf"
->> +fi
->> +echo "Ok"
->> +exit 0
->> diff --git a/tests/true_signatures/clang_parm_optimized.sh b/tests/true_signatures/clang_parm_optimized.sh
->> new file mode 100755
->> index 0000000..3022e2b
->> --- /dev/null
->> +++ b/tests/true_signatures/clang_parm_optimized.sh
->> @@ -0,0 +1,95 @@
->> +#!/bin/bash
->> +# SPDX-License-Identifier: GPL-2.0-only
->> +
->> +outdir=
->> +
->> +fail()
->> +{
->> +	# Do not remove test dir; might be useful for analysis
->> +	trap - EXIT
->> +	if [[ -d "$outdir" ]]; then
->> +		echo "Test data is in $outdir"
->> +	fi
->> +	exit 1
->> +}
->> +
->> +cleanup()
->> +{
->> +	rm ${outdir}/*
->> +	rmdir $outdir
->> +}
->> +
->> +outdir=$(mktemp -d /tmp/clang_true.sh.XXXXXX)
->> +
->> +trap cleanup EXIT
->> +
->> +echo -n "Validation of BTF encoding of true_signatures: "
->> +
->> +clang_true="${outdir}/clang_true"
->> +CC=$(which clang 2>/dev/null)
->> +
->> +if [[ -z "$CC" ]]; then
->> +	echo "skip: clang not available"
->> +	exit 2
->> +fi
->> +
->> +cat > ${clang_true}.c << EOF
->> +struct t { int a; };
->> +__attribute__((noinline)) char *tar(struct t *a, struct t *d)
->> +{
->> +	if (a->a == d->a)
->> +		return (char *)10;
->> +	else
->> +		return (char *)0;
->> +}
->> +
->> +__attribute__((noinline)) static char * foo(struct t *a, int b, struct t *d)
->> +{
->> +	return tar(a, d);
->> +}
->> +
->> +__attribute__((noinline)) char *bar(struct t *a, struct t *d)
->> +{
->> +	return foo(a, 1, d);
->> +}
->> +
->> +struct t p1, p2;
->> +int main()
->> +{
->> +	return !!bar(&p1, &p2);
->> +}
->> +EOF
->> +
->> +CFLAGS="$CFLAGS -g -O2"
->> +${CC} ${CFLAGS} -o $clang_true ${clang_true}.c
->> +if [[ $? -ne 0 ]]; then
->> +	echo "Could not compile ${clang_true}.c" >& 2
->> +	exit 1
->> +fi
->> +LLVM_OBJCOPY=objcopy pahole -J --btf_features=+true_signature $clang_true
->> +if [[ $? -ne 0 ]]; then
->> +	echo "Could not encode BTF for $clang_true"
->> +	exit 1
->> +fi
->> +
->> +btf_optimized=$(pfunct --all --format_path=btf $clang_true |grep "foo")
->> +if [[ -z "$btf_optimized" ]]; then
->> +	echo "skip: no optimizations applied."
->> +	exit 2
->> +fi
->> +
->> +btf_cmp=$btf_optimized
->> +dwarf=$(pfunct --all $clang_true |grep "foo")
->> +
->> +test -n "$VERBOSE" && printf "\nBTF: $btf_optimized  DWARF: $dwarf \n"
->> +
->> +if [[ "$btf_cmp" == "$dwarf" ]]; then
->> +	echo "BTF and DWARF signatures should be different and they are not: BTF: $btf_optimized ; DWARF $dwarf"
->> +	exit 1
->> +else
->> +        echo ""
->> +        echo "  BTF:   $btf_optimized"
->> +        echo "  DWARF: $dwarf"
->> +fi
->> +echo "Ok"
->> +exit 0
->> diff --git a/tests/true_signatures/clang_parm_optimized_stack.sh b/tests/true_signatures/clang_parm_optimized_stack.sh
->> new file mode 100755
->> index 0000000..1abb96d
->> --- /dev/null
->> +++ b/tests/true_signatures/clang_parm_optimized_stack.sh
->> @@ -0,0 +1,95 @@
->> +#!/bin/bash
->> +# SPDX-License-Identifier: GPL-2.0-only
->> +
->> +outdir=
->> +
->> +fail()
->> +{
->> +	# Do not remove test dir; might be useful for analysis
->> +	trap - EXIT
->> +	if [[ -d "$outdir" ]]; then
->> +		echo "Test data is in $outdir"
->> +	fi
->> +	exit 1
->> +}
->> +
->> +cleanup()
->> +{
->> +	rm ${outdir}/*
->> +	rmdir $outdir
->> +}
->> +
->> +outdir=$(mktemp -d /tmp/clang_true.sh.XXXXXX)
->> +
->> +trap cleanup EXIT
->> +
->> +echo -n "Validation of BTF encoding of true_signatures: "
->> +
->> +clang_true="${outdir}/clang_true"
->> +CC=$(which clang 2>/dev/null)
->> +
->> +if [[ -z "$CC" ]]; then
->> +	echo "skip: clang not available"
->> +	exit 2
->> +fi
->> +
->> +cat > ${clang_true}.c << EOF
->> +struct t { int a; };
->> +__attribute__((noinline)) char *tar(struct t *a, struct t *d)
->> +{
->> +        if (a->a == d->a)
->> +                return (char *)10;
->> +        else
->> +                return (char *)0;
->> +}
->> +
->> +__attribute__((noinline)) static char * foo(struct t *a, int b1, int b2, int b3, int b4, int b5, int b6, struct t *d)
->> +{
->> +        return tar(a, d);
->> +}
->> +
->> +__attribute__((noinline)) char *bar(struct t *a, struct t *d)
->> +{
->> +        return foo(a, 1, 2, 3, 4, 5, 6, d);
->> +}
->> +
->> +struct t p1, p2;
->> +int main()
->> +{
->> +        return !!bar(&p1, &p2);
->> +}
->> +EOF
->> +
->> +CFLAGS="$CFLAGS -g -O2"
->> +${CC} ${CFLAGS} -o $clang_true ${clang_true}.c
->> +if [[ $? -ne 0 ]]; then
->> +	echo "Could not compile ${clang_true}.c" >& 2
->> +	exit 1
->> +fi
->> +LLVM_OBJCOPY=objcopy pahole -J --btf_features=+true_signature $clang_true
->> +if [[ $? -ne 0 ]]; then
->> +	echo "Could not encode BTF for $clang_true"
->> +	exit 1
->> +fi
->> +
->> +btf_optimized=$(pfunct --all --format_path=btf $clang_true |grep "foo")
->> +if [[ -z "$btf_optimized" ]]; then
->> +	echo "skip: no optimizations applied."
->> +	exit 2
->> +fi
->> +
->> +btf_cmp=$btf_optimized
->> +dwarf=$(pfunct --all $clang_true |grep "foo")
->> +
->> +test -n "$VERBOSE" && printf "\nBTF: $btf_optimized  DWARF: $dwarf \n"
->> +
->> +if [[ "$btf_cmp" == "$dwarf" ]]; then
->> +	echo "BTF and DWARF signatures should be different and they are not: BTF: $btf_optimized ; DWARF $dwarf"
->> +	exit 1
->> +else
->> +        echo ""
->> +        echo "  BTF:   $btf_optimized"
->> +        echo "  DWARF: $dwarf"
->> +fi
->> +echo "Ok"
->> +exit 0
->> diff --git a/tests/gcc_true_signatures.sh b/tests/true_signatures/gcc_true_signatures.sh
->> similarity index 100%
->> rename from tests/gcc_true_signatures.sh
->> rename to tests/true_signatures/gcc_true_signatures.sh
+>> diff --git a/dwarf_loader.c b/dwarf_loader.c
+>> index 610b69e..1ced5e2 100644
+>> --- a/dwarf_loader.c
+>> +++ b/dwarf_loader.c
+>> @@ -1192,6 +1192,7 @@ static ptrdiff_t __dwarf_getlocations(Dwarf_Attribute *attr,
+>>   
+>>   struct func_info {
+>>   	bool signature_changed;
+>> +	int skip_idx;
+>>   };
+>>   
+>>   /* For DW_AT_location 'attr':
+>> @@ -1264,13 +1265,28 @@ static struct parameter *parameter__new(Dwarf_Die *die, struct cu *cu,
+>>   	if (parm != NULL) {
+>>   		bool has_const_value;
+>>   		Dwarf_Attribute attr;
+>> +		int reg_idx;
+>>   
+>>   		tag__init(&parm->tag, cu, die);
+>>   		parm->name = attr_string(die, DW_AT_name, conf);
+>>   		parm->idx = param_idx;
+>> -		if (param_idx >= cu->nr_register_params || param_idx < 0)
+>> +		if (param_idx < 0)
+>>   			return parm;
+>> -		if (cu->producer_clang && !info->signature_changed)
+>> +		if (!cu->producer_clang && param_idx >= cu->nr_register_params)
+>> +			return parm;
+>> +		if (cu->producer_clang) {
+>> +			if (!info->signature_changed)
+>> +				return parm;
+>> +			/* if true_signature is not enabled, mark parameter as
+>> +			 * unexpected_reg since there is a skipped parameter before.
+>> +			 */
+>> +			if (!conf->true_signature && info->skip_idx) {
+>> +				parm->unexpected_reg = 1;
+>> +				return parm;
+>> +			}
+>> +		}
+>> +		reg_idx = param_idx - info->skip_idx;
+>> +		if (reg_idx >= cu->nr_register_params)
+>>   			return parm;
+>>   		/* Parameters which use DW_AT_abstract_origin to point at
+>>   		 * the original parameter definition (with no name in the DIE)
+>> @@ -1309,7 +1325,7 @@ static struct parameter *parameter__new(Dwarf_Die *die, struct cu *cu,
+>>   		parm->has_loc = dwarf_attr(die, DW_AT_location, &attr) != NULL;
+>>   
+>>   		if (parm->has_loc) {
+>> -			int expected_reg = cu->register_params[param_idx];
+>> +			int expected_reg = cu->register_params[reg_idx];
+>>   			int actual_reg = parameter__reg(&attr, expected_reg);
+>>   
+>>   			if (actual_reg < 0)
+>> @@ -1322,8 +1338,11 @@ static struct parameter *parameter__new(Dwarf_Die *die, struct cu *cu,
+>>   				 * contents.
+>>   				 */
+>>   				parm->unexpected_reg = 1;
+>> -		} else if (has_const_value) {
+>> +		} else if (!cu->producer_clang && has_const_value) {
+>> +			parm->optimized = 1;
+>> +		} else if (cu->producer_clang) {
+>>   			parm->optimized = 1;
+>> +			info->skip_idx++;
+>>   		}
+>>   	}
+>>   
+> In [1]  (dwarf_loader/btf_encoder: Detect reordered parameters)
+>
+> we detect reordered/missing parameters for gcc by comparing abstract origin to concrete representation
+> and mark any such functions by setting the reordered_parm bitfield in the encoder func state. In this
+> approach reordered encompasses both missing and actual reordering; in practice it's always the former, but
+> the DWARF representation was confusing because it had the actually-used parameters (with location info)
+> followed by the unused ones (without location info). Before the above commit we were treating these
+> function signatures incorrectly as valid leading to wrong functions signatures.
+>
+> All of this is to say: should we mark with reordered_parm instead? The reason I suggest this is that
+> btf_encoder__save_func() has handling for skipping functions without locations with reordered_parm set;
+> maybe we could find a way to unify that across clang/gcc cases?
+
+For v2, I focused on clang side. I have not studied such unification yet. I think it is possible
+since ultimately both clang and gcc tries to skip some parameters.
+
+>
+> Now in the clang case, I guess reordered is a poor description; for gcc it really means "reordered as
+> compared to abstract origin". If we could find a better way to describe/encompass both cases that would
+> be ideal I think. The terminology used in the gcc true signature code isn't great today.
+
+Agree that we want *common* names to represent both gcc and clang for skipped parameters.
+BTW, please review v2 instead:
+    https://lore.kernel.org/bpf/20260309153215.1917033-1-yonghong.song@linux.dev/
+
+Thanks!
+
+>
+> [1] https://git.kernel.org/pub/scm/devel/pahole/pahole.git/commit/?id=109e5e4554f663e5f12fb634bc54cceb710aec61
 
