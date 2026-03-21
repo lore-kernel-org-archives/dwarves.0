@@ -1,227 +1,208 @@
-Received: from out-177.mta1.migadu.com (out-177.mta1.migadu.com [95.215.58.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B37DA222584
-	for <dwarves@vger.kernel.org>; Fri, 20 Mar 2026 19:21:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79D6D2DCF45
+	for <dwarves@vger.kernel.org>; Sat, 21 Mar 2026 23:10:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774034464; cv=none; b=BM9KcwrKpc7dbHTwj4DvatBEq2PQEDtBf3sbSZBS/jQSWOL1V7tQdelydBl+5z/TkAHUZgnimVdRD+H2E8XcacF9tFNBGHBXZUGyEBKcD/m98i4Tw76lN1QQkmkk295DwdNTG8eDfdHpaIIdUz9y9noG/Fp0sMeh7pEyHP0SJcA=
+	t=1774134614; cv=none; b=b9OnKyuQbPyxjb6WcdbszlmyONpEkAzLVV7yOihFsJk+GTQZzTJlu5SGVErn/XXVhhzcDBYkOQ86W7O8dDy0s5b4ynC7f8shAU+J9wn1BABid5RW0HYGllnp5xqB5wVAt8oB/XrmkDR+sfQah+aKkAB4wkQDIkF7jkIVlm1TyW8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774034464; c=relaxed/simple;
-	bh=6lbdnYhKaJrIPRRybFLguCxpkqoV5KLS8rqotxuKGEc=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=lfEF/ekk5gBBt/iNdohCVFxs+N0nEm/In7mWZR0mdDrjn1MPUqIQDJhiOunQ1VQ/0z2Jx1/jZQK5E8aex5vjnu873MB0g4TBDDqZzAZ70NZjVMpUE7TqAGkA0comQVxnmf02M3dqMSqAqjZt2deeqQt45kEMteKnqOf8FyXKcKY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=MBc4BpSh; arc=none smtp.client-ip=95.215.58.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1774134614; c=relaxed/simple;
+	bh=qjWzt5zxOCmdPCFHzeqxoxvc2n4W4pGiamCu95fl7Vo=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Mu81r5K5lqMubKNu+16QjpN+rVGgPxVN1vo3P9A/QU9/Jh8ENegclbFK758CS4rg5rfreV9vgnS2LBTwYg31aefBFZjOC/8WdxnqVIwmGQtZATtAyPBMyy2rglAMkGHfi+9uugVQErY3g1njWR1db3a8cGLyN86kZR2H4Drhil0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=P+/6yhVG; arc=none smtp.client-ip=209.85.128.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="MBc4BpSh"
-Message-ID: <a212e256-234d-4320-be8d-3ddfcc2aa2e3@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1774034459;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=dfuH1OveVlpiqTGy/rrT1hG/JG7Ua/DjJ9BpDAgo8C0=;
-	b=MBc4BpShTZmq4mPtjDKoyD48xUC85lTfU5qLpKau7nazLrBsEvS6d8MUXE/FTpGAsVBQsO
-	hjI3MefnkJcPX8xOAP7PMAGsF17DpL1ETNpVp8PHnQiiN0J+XB59REsDRgZTK4o/ClMfoD
-	zoP+8AOF3XuN5doI3nyOz1bCANiAIOQ=
-Date: Fri, 20 Mar 2026 12:20:47 -0700
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="P+/6yhVG"
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-4853e1ce427so16915105e9.3
+        for <dwarves@vger.kernel.org>; Sat, 21 Mar 2026 16:10:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1774134612; x=1774739412; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=RAiqI595arRy4CAIyc0bHqmknX0/3hwV7qho4fXUmuU=;
+        b=P+/6yhVGo4wMQucMbq/GlhPczaBF3PrqmIgBMZEbtSUDbuVKO99Ry/gizlM037N0FY
+         ENPs1RyDBELaQ9d7lNUbSuj/m6MleDqrCt7fCvAHpEDMQYWckpSGQQzRiFPEmGUD8Tu3
+         1O0Bmx+sX09TrYIthM9janfDyMcpiqkqB7X6UAg4l3uG3bVW2CYiwrxBb25B+j0KYfgt
+         laVITwgheouZLGdz7GwFwQ+tE+DivstkuGY5uzOXO5qpRXWAmGqgKk1p5g2PTfL8oeMe
+         SBl18GF57MO7zh8P2PQrQ4hAL9BxiYxkfLyY1rkZqCXpTa98PDe1T+i0hDc1lO2uNa1B
+         auDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774134612; x=1774739412;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=RAiqI595arRy4CAIyc0bHqmknX0/3hwV7qho4fXUmuU=;
+        b=KoIzuGerOG0hMxUNWf09kEeSLKoqJEBxpNMODqGBEIcrSLy0Fud8ONiRkvd6Ktu8GJ
+         fddfBwW5cUP3f69B5OCuAewyhl0kRuAuJCIffXMWO1XbnpJL7l8zwTnyTPVbG9nL5pXI
+         23O/dzd8NnW2iethY4KnLoQ4C5D2EDUj9ovv4EJujSbPhx+pOQi6DZ+Hb8lp1XWmawdZ
+         Fq2G98YN+01pkF8nDFDuIzKI+27/RKfg6magKb0HlNq89jOHh+Uetu8zW+AF0Vw29C+T
+         aiFJkkxSIjb+uaeFxZ2I0fp0nZh2lzdZ0OzRI4vNOyh9sUgx0XF/MUpyVm9K2s6LcyFE
+         TZag==
+X-Forwarded-Encrypted: i=1; AJvYcCXMJSpw6fgWHh9f7S7VpGNxMNGGSx3ovqIsLUBXltnMKv3Npi6nSbinYV2RZeJ9+R2rXk5h9Qpe@vger.kernel.org
+X-Gm-Message-State: AOJu0YxfB23KjrCynYwIfXow0mOc51bdW2mCKH5PUWrUfAiVRrGnX/lL
+	9VVblpRcqfc972qQN1t43MGTMDc7rMFWVM4IVg0RUbNEocRQB/vOkTxL
+X-Gm-Gg: ATEYQzw6lVzWdorNtJ8J+gBWU3CFcw9Cde4U2zp02DX4HRRJw4/ajyg4dRnd19Rktds
+	21Z63c1eQQmMhrD88Mc0nzFw/W4a2LdliBOPzayQMXanKp7Q1I2UYITFip/ahog7wRV+AYwYFG8
+	vPVo/FJLdBBsVe/+BFsyRVdpBtrm2R8dhTQST3nuDDcsdGJF1fXLQBIatYFSZKBa+ua5mhJ1wTw
+	GaaEY7FtzvyJiSGQ49KqvhvLbFipiYEHfWuYd0VkBGOgPLXxLhA4nnXrbaF1eotjfTf80XnM2km
+	Hxl84Twev17Cl/tPJRdhU8gqKGQwranTwVR2wM4QRLnAmsoKPXj43Z/XXOKr/fTrXZoGUf9Xvnt
+	2Gi/gkDzpcwKM+ZINTuJ70ziMRReembOAxJ6ZHtm/wlUMQ/a+zPPEkHATyQXCf4OtBQ0Q0ICHlW
+	FSlN4kmsoBMR0=
+X-Received: by 2002:a05:600c:a418:b0:485:3423:727d with SMTP id 5b1f17b1804b1-486ff03f502mr84577345e9.26.1774134611611;
+        Sat, 21 Mar 2026 16:10:11 -0700 (PDT)
+Received: from krava ([176.74.159.170])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-486f8ba4baesm364878975e9.13.2026.03.21.16.10.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 21 Mar 2026 16:10:11 -0700 (PDT)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Sun, 22 Mar 2026 00:10:09 +0100
+To: Yonghong Song <yonghong.song@linux.dev>
+Cc: Alan Maguire <alan.maguire@oracle.com>,
+	Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
+	dwarves@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
+	kernel-team@fb.com
+Subject: Re: [PATCH dwarves v3 7/9] dwarf_loader: Handle expression lists
+Message-ID: <ab8lUbZE83_XEyyR@krava>
+References: <20260320190917.1970524-1-yonghong.song@linux.dev>
+ <20260320190953.1974467-1-yonghong.song@linux.dev>
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH dwarves 2/9] dwarf_loader: Handle signatures with dead
- arguments
-Content-Language: en-GB
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yonghong Song <yonghong.song@linux.dev>
-To: Alan Maguire <alan.maguire@oracle.com>,
- Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>, dwarves@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- bpf@vger.kernel.org, kernel-team@fb.com
-References: <20260305225455.1151066-1-yonghong.song@linux.dev>
- <20260305225506.1153181-1-yonghong.song@linux.dev>
- <b20663a4-957d-4bb0-bf2c-4921da446514@oracle.com>
- <cc592002-b65b-4ec2-bc99-8a53ca221bbd@linux.dev>
-In-Reply-To: <cc592002-b65b-4ec2-bc99-8a53ca221bbd@linux.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260320190953.1974467-1-yonghong.song@linux.dev>
 
+On Fri, Mar 20, 2026 at 12:09:53PM -0700, Yonghong Song wrote:
 
+SNIP
 
-On 3/19/26 10:00 PM, Yonghong Song wrote:
->
->
-> On 3/19/26 11:55 AM, Alan Maguire wrote:
->> On 05/03/2026 22:55, Yonghong Song wrote:
->>> For llvm dwarf, the dead argument may be in the middle of
->>> DW_TAG_subprogram. So we introduce skip_idx in order to
->>> match expected registers properly.
->>>
->>> For example:
->>>    0x00042897:   DW_TAG_subprogram
->>>                    DW_AT_name      ("create_dev")
->>>                    DW_AT_calling_convention (DW_CC_nocall)
->>>                    DW_AT_type      (0x0002429a "int")
->>>                    ...
->>>
->>>    0x000428ab:     DW_TAG_formal_parameter
->>>                      DW_AT_name    ("name")
->>>                      DW_AT_type    (0x000242ed "char *")
->>>                      ...
->>>
->>>    0x000428b5:     DW_TAG_formal_parameter
->>>                      DW_AT_location        (indexed (0x3f) loclist = 
->>> 0x000027f8:
->>>                         [0xffffffff87681370, 0xffffffff8768137a): 
->>> DW_OP_reg5 RDI
->>>                         [0xffffffff8768137a, 0xffffffff87681392): 
->>> DW_OP_reg3 RBX
->>>                         [0xffffffff87681392, 0xffffffff876813ae): 
->>> DW_OP_entry_value(DW_OP_reg5 RDI), DW_OP_stack_value)
->>>                      DW_AT_name    ("dev")
->>>                      DW_AT_type    (0x00026859 "dev_t")
->>>                      ...
->>>
->>> With skip_idx, we can identify that the second original argument
->>> 'dev' becomes the first one after optimization.
->>>
->>> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
->>> ---
->>>   dwarf_loader.c | 27 +++++++++++++++++++++++----
->>>   1 file changed, 23 insertions(+), 4 deletions(-)
->>>
->>> diff --git a/dwarf_loader.c b/dwarf_loader.c
->>> index 610b69e..1ced5e2 100644
->>> --- a/dwarf_loader.c
->>> +++ b/dwarf_loader.c
->>> @@ -1192,6 +1192,7 @@ static ptrdiff_t 
->>> __dwarf_getlocations(Dwarf_Attribute *attr,
->>>     struct func_info {
->>>       bool signature_changed;
->>> +    int skip_idx;
->>>   };
->>>     /* For DW_AT_location 'attr':
->>> @@ -1264,13 +1265,28 @@ static struct parameter 
->>> *parameter__new(Dwarf_Die *die, struct cu *cu,
->>>       if (parm != NULL) {
->>>           bool has_const_value;
->>>           Dwarf_Attribute attr;
->>> +        int reg_idx;
->>>             tag__init(&parm->tag, cu, die);
->>>           parm->name = attr_string(die, DW_AT_name, conf);
->>>           parm->idx = param_idx;
->>> -        if (param_idx >= cu->nr_register_params || param_idx < 0)
->>> +        if (param_idx < 0)
->>>               return parm;
->>> -        if (cu->producer_clang && !info->signature_changed)
->>> +        if (!cu->producer_clang && param_idx >= 
->>> cu->nr_register_params)
->>> +            return parm;
->>> +        if (cu->producer_clang) {
->>> +            if (!info->signature_changed)
->>> +                return parm;
->>> +            /* if true_signature is not enabled, mark parameter as
->>> +             * unexpected_reg since there is a skipped parameter 
->>> before.
->>> +             */
->>> +            if (!conf->true_signature && info->skip_idx) {
->>> +                parm->unexpected_reg = 1;
->>> +                return parm;
->>> +            }
->>> +        }
->>> +        reg_idx = param_idx - info->skip_idx;
->>> +        if (reg_idx >= cu->nr_register_params)
->>>               return parm;
->>>           /* Parameters which use DW_AT_abstract_origin to point at
->>>            * the original parameter definition (with no name in the 
->>> DIE)
->>> @@ -1309,7 +1325,7 @@ static struct parameter 
->>> *parameter__new(Dwarf_Die *die, struct cu *cu,
->>>           parm->has_loc = dwarf_attr(die, DW_AT_location, &attr) != 
->>> NULL;
->>>             if (parm->has_loc) {
->>> -            int expected_reg = cu->register_params[param_idx];
->>> +            int expected_reg = cu->register_params[reg_idx];
->>>               int actual_reg = parameter__reg(&attr, expected_reg);
->>>                 if (actual_reg < 0)
->>> @@ -1322,8 +1338,11 @@ static struct parameter 
->>> *parameter__new(Dwarf_Die *die, struct cu *cu,
->>>                    * contents.
->>>                    */
->>>                   parm->unexpected_reg = 1;
->>> -        } else if (has_const_value) {
->>> +        } else if (!cu->producer_clang && has_const_value) {
->>> +            parm->optimized = 1;
->>> +        } else if (cu->producer_clang) {
->>>               parm->optimized = 1;
->>> +            info->skip_idx++;
->>>           }
->>>       }
->> In [1]  (dwarf_loader/btf_encoder: Detect reordered parameters)
->>
->> we detect reordered/missing parameters for gcc by comparing abstract 
->> origin to concrete representation
->> and mark any such functions by setting the reordered_parm bitfield in 
->> the encoder func state. In this
->> approach reordered encompasses both missing and actual reordering; in 
->> practice it's always the former, but
->> the DWARF representation was confusing because it had the 
->> actually-used parameters (with location info)
->> followed by the unused ones (without location info). Before the above 
->> commit we were treating these
->> function signatures incorrectly as valid leading to wrong functions 
->> signatures.
->>
->> All of this is to say: should we mark with reordered_parm instead? 
->> The reason I suggest this is that
->> btf_encoder__save_func() has handling for skipping functions without 
->> locations with reordered_parm set;
->> maybe we could find a way to unify that across clang/gcc cases?
->
-> For v2, I focused on clang side. I have not studied such unification 
-> yet. I think it is possible
-> since ultimately both clang and gcc tries to skip some parameters.
->
->>
->> Now in the clang case, I guess reordered is a poor description; for 
->> gcc it really means "reordered as
->> compared to abstract origin". If we could find a better way to 
->> describe/encompass both cases that would
->> be ideal I think. The terminology used in the gcc true signature code 
->> isn't great today.
->
-> Agree that we want *common* names to represent both gcc and clang for 
-> skipped parameters.
-> BTW, please review v2 instead:
-> https://lore.kernel.org/bpf/20260309153215.1917033-1-yonghong.song@linux.dev/ 
->
+> +	if (byte_size <= cu->addr_size || !cu->agg_use_two_regs) {
+> +		switch (expr[0].atom) {
+> +		case DW_OP_reg0 ... DW_OP_reg31:
+> +			if (loc_num != 0)
+> +				break;
+> +			*ret = expr[0].atom;
+> +			if (*ret == expected_reg)
+> +				return *ret;
+> +			break;
+> +		case DW_OP_breg0 ... DW_OP_breg31:
+> +			if (loc_num != 0)
+> +				break;
+> +			bool has_op_stack_value = false;
+> +			for (int i = 1; i < exprlen; i++) {
+> +				if (expr[i].atom == DW_OP_stack_value) {
+> +					has_op_stack_value = true;
+> +					break;
+> +				}
+> +			}
+> +			if (!has_op_stack_value)
+> +				break;
+> +			/* The existence of DW_OP_stack_value means that
+> +			 * DW_OP_bregX register is used as value.
+> +			 */
+> +			*ret = expr[0].atom - DW_OP_breg0 + DW_OP_reg0;
+> +			if (*ret == expected_reg)
+> +				return *ret;
+> +		}
+> +	} else {
+> +		/* cu->addr * 2 */
+> +		int off = 0;
+> +		for (int i = 0; i < exprlen; i++) {
+> +			if (expr[i].atom == DW_OP_piece) {
+> +				int num = expr[i].number;
+> +				if (i == 0) {
+> +					off = num;
+> +					continue;
+> +				}
+> +				if (off < cu->addr_size) (*lower_half) |= (1 << off);
+> +				else (*upper_half) |= (1 << (off - cu->addr_size));
+> +				off += num;
 
-Jiri, Alan,
+this is really hard for me to read.. I think it needs to follow common
+formatting rules and it deserves some explanation either in comments
+or in changelog
 
-Thanks for the previous review. I just updated with v3:
+> +			} else if (expr[i].atom >= DW_OP_reg0 && expr[i].atom <= DW_OP_reg31) {
+> +				if (off < cu->addr_size)
+> +					*ret = expr[i].atom;
+> +				else if (*ret < 0)
+> +					*ret = expr[i].atom;
+> +			}
+> +			/* FIXME: not handling DW_OP_bregX yet since we do not have
+> +			 * a use case for it yet for linux kernel.
+> +			 */
+> +		}
+> +	}
+> +
+>  	return PARM_CONTINUE;
+>  }
+>  
+> +/* The lower_half and upper_half, computed in parameter__multi_exprs(), are handled here.
+> + */
+> +static int parameter__handle_two_addr_len(int expected_reg, unsigned long lower_half, unsigned long upper_half,
+> +					  int ret, Dwarf_Die *die, struct conf_load *conf, struct cu *cu,
+> +					  struct parameter *parm) {
+> +	if (!lower_half && !upper_half)
+> +		return ret;
+> +
+> +	if (ret != expected_reg)
+> +		return ret;
+> +
+> +	if (!conf->true_signature)
+> +		return PARM_DEFAULT_FAIL;
+> +
+> +	/* Both halfs are used based on dwarf */
+> +	if (lower_half && upper_half)
+> +		return PARM_TWO_ADDR_LEN;
+> +
+> +	/* FIXME: parm->name may be NULL due to abstract origin. We do not want to
+> +	 * update abstract origin as the type in abstract origin may be used
+> +	 * in some other places. We could remove abstract origin in this parameter
+> +	 * and add name and type in parameter itself. Right now, for current bpf-next
+> +	 * repo, we do not have instances below where parm->name is NULL for x86_64 arch.
+> +	 */
+> +	if (!parm->name)
+> +		return PARM_TO_BE_IMPROVED;
+> +
+> +	/* FIXME: Only support single field now so we can have a good parameter name and
+> +	 * type for it.
+> +	 */
+> +	if (__builtin_popcountll(lower_half) >= 2 || __builtin_popcountll(upper_half) >= 2)
+> +		return PARM_TO_BE_IMPROVED;
+> +
+> +	int field_offset;
+> +	if (__builtin_popcountll(lower_half) == 1)
+> +		field_offset = __builtin_ctzll(lower_half);
+> +	else
+> +		field_offset = cu->addr_size + __builtin_ctzll(upper_half);
+> +
+> +	/* FIXME: Only struct type is supported. */
+> +	Dwarf_Die member_die;
+> +	if (!get_member_with_offset(die, field_offset, &member_die))
+> +		return PARM_TO_BE_IMPROVED;
+> +
+> +	const char *member_name = attr_string(&member_die, DW_AT_name, conf);
+> +	int len = sizeof(parm->name) + strlen(member_name) + 3;
 
-   https://lore.kernel.org/bpf/20260320190917.1970524-1-yonghong.song@linux.dev/
+this seems wrong, shoud be strlen for parm->name? maybe asprintf is
+better option in here?
 
-which addressed the issue to simplify getting cu->producer_clang, rewrite tests
-based on latest convention, and try to use info->signature_changed instead of cu->producer_clang
-to avoid clear separation between gcc and clang.
+> +	char *new_name = malloc(len);
 
-Please review v3.
+also there's cu__malloc, and we should check if the allocation failed
 
-Thanks!
+> +	sprintf(new_name, "%s__%s", parm->name, member_name);
+> +	parm->name = new_name;
 
->
-> Thanks!
->
->>
->> [1] 
->> https://git.kernel.org/pub/scm/devel/pahole/pahole.git/commit/?id=109e5e4554f663e5f12fb634bc54cceb710aec61
->
->
+I wonder this will leak, because normally the name is allocated with
+dwarf_formstring and we don't need to free it, but now we do
 
+jirka
