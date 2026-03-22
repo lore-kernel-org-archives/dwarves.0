@@ -1,236 +1,174 @@
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-179.mta0.migadu.com (out-179.mta0.migadu.com [91.218.175.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4F4C2DF13F
-	for <dwarves@vger.kernel.org>; Sat, 21 Mar 2026 23:10:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2ED3F3382C3
+	for <dwarves@vger.kernel.org>; Sun, 22 Mar 2026 17:36:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774134635; cv=none; b=fxAdXfCDqCmbGT4R8uTozSr5wIl3l2/EzJBCnNNHTCNPScJZxa1qe7rLm6bRJIIiF61jO9wICOjCwxMDQZWXpUeQzQgK9kLuZn+O40c6ghJcc95q/n1XiRNnMO5R67qKd8/mPx/UGs/GkcIH14c6Xk6JaUF1dPs6Z6KyTpEnGJ0=
+	t=1774200983; cv=none; b=sT6o/Hkg3jzio0zqyuLIVmpjTOX2omncmNQnKqRu0HWPvYvfDPdoZDSCIafzMYmuTEb6g9tPC0oCnkjHvsm4BG4iY3XROOq6h9smmEsXDmZDqXQqIu57iLr6yZVEzR8qhUmKVUooqC/0YNcLg8aPzV82iRHXQ4RuGQOxFcljpoA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774134635; c=relaxed/simple;
-	bh=hfJzD2JlmYnPFsyg2Ej61GkvqvKsECIxyN2aYzydLiQ=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QMugtnHn5gw2sm61xZaM5vVh4Q98fLDnTnhL5DitxpLdoGcEsEzbsRlUaUsE02hV1GtbNitjKmkHcfCZKsuCaieJz6LCkvZw3cBNOz5XtxbtmMKhHtecTpubIq3Y1hRFU20u60DaKX+hSt8klHw0X6U5G5AiDvEKvqThxb5Xo0Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lVesIdCb; arc=none smtp.client-ip=209.85.221.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1774200983; c=relaxed/simple;
+	bh=82ZxUAZcmNBU6wZ1Lb/CNq5PgzsWJD14mGWVWneVuwM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=b1D6z0QN45uiffzLAqsBsMZzjkg7w5vWPJEWy24LlxTBXTZbdnwBOQDOMd9SlLXjMY2ZqhPjqMCTskguEnPkzyKABnaH77E170PQLwEyDdZwE6SZ8Jd+hVoVP3ltb4dOPctvs0G7wxPN1r/YkTYvRXTmRIMVwd6JNnP325yHrLQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=uazEQU4G; arc=none smtp.client-ip=91.218.175.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lVesIdCb"
-Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-439c9bdc1eeso3012680f8f.3
-        for <dwarves@vger.kernel.org>; Sat, 21 Mar 2026 16:10:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1774134631; x=1774739431; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=yP8SXZwcE/V/cT9XIusmisooInFGfddf9R1Afv0fWwk=;
-        b=lVesIdCb558qXmKXp9Uusy5aQ1tgS1x2ds1/rxLyEAIOSjPwYI5fk5+oiC2DwjOQfV
-         +Bxq//Sn34p3MIjtuBxVVM/sr6+A0yGqv3C4pHZyM3xG/SmrthspThQ4DiUiOI715tk2
-         YeoZbAfznRiKBu/M0yhdcdpn+zixGqpwWK0gW5ZjdUYGFLSnNsGbPXXeiH2wD8dncQ46
-         QprxnXU2EF3mk8RwBHx1AE/6v5sO1GdhJ5UyI50707t7J6tywSU2mVCQS9EOelQCug0E
-         Apj0DSI4TIhQFcRng99dHl01Lc/v6Kp/oZnw8qnM6WO/DZ6Co9AHS/Nr3zc7P56fv+8/
-         jDEw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774134631; x=1774739431;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=yP8SXZwcE/V/cT9XIusmisooInFGfddf9R1Afv0fWwk=;
-        b=OTo2BWT7M5X4OppxNyntJ64fW6uzxrRxPXIbkxqFJl/ZPnVqHKCkn5Mpj012ti82SU
-         33XbqzHYr4DL5SzTCHQOfw1n79+d72ql1JEToFUij6IMDHW5wtCchz91qrKTGY5rDWjW
-         ZQKPHtg3Ue+M8Wx+dB/G4S1rwNzMKBvn7eNo2Ykc2jVKrtKcEhen70plEY5WZb3+imrE
-         YQ72dUwK7eUTTyeTfdnVCOdBEeJlyX+FO7CVt152oU/XDWUiQiykvKqkgpWXJG85Y+Rn
-         xidRryoLUhwgU6S1/niZh40VU+wkDLcCnvlzgBtuv5fFnkwA+q83RI90zsafQ50gEB97
-         kYEw==
-X-Forwarded-Encrypted: i=1; AJvYcCUkzE2OGDdcV+/PER3B1Yvyq9M4n+0sC8vQR9m5FSfk08YYxsv1G0hlVgp8aznXR567KrgWSdC6@vger.kernel.org
-X-Gm-Message-State: AOJu0YzhzgLADwHaKnwR6IqT1VZVem7TVF/WjT8OSQdwoSz24vvdYryw
-	WE+/HAq8O+zvzsGz4aAhLrrzKxJpL/UwAoBr86vCR+0xqE6PM/pXxAwT
-X-Gm-Gg: ATEYQzw8jACF6iWrM86yp47AfvlQeNowALmrgOFJnC93asiSylCouUZLZ6GW7D+Jn+P
-	E6/izqYHDzQ7jYs+KG0c0WWwZCd42aEP2KjD5NC72trO+nnsX27oHu9ra2KkAypdx8xaGTGs395
-	Ex5mDHz4zl29sa//HLe5g4/ncTOQFnuccoQcEzZVo+0//j1YTk58ZMi38SKoNNoboaLAQ3BOfUG
-	dvbuepODgLNsxlbfWmu5ZQYvBnRpbfKA3S2Nv8ZDWJqq0ET27XEPJEW1fPcK62jCox8KKUILkvW
-	UHzT4mdxrlmapcV0KjeF4tC9qGRRHUk4B8jT6ZmuWrwLSpKPSIfJFajFsklc0i9dS7AonaxNqKd
-	V+10/JBuKTxItX9rN/vj9f6nBigBrgB/M0GWim8ebk1LMTJXkZangbQIWOD+xBxRh8hKICuUMMs
-	G0515Ncu7tC8A=
-X-Received: by 2002:a5d:588e:0:b0:43b:5767:8f2a with SMTP id ffacd0b85a97d-43b6423a596mr12110449f8f.22.1774134631017;
-        Sat, 21 Mar 2026 16:10:31 -0700 (PDT)
-Received: from krava ([176.74.159.170])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43b647120a1sm17818122f8f.30.2026.03.21.16.10.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 21 Mar 2026 16:10:30 -0700 (PDT)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Sun, 22 Mar 2026 00:10:28 +0100
-To: Yonghong Song <yonghong.song@linux.dev>
-Cc: Alan Maguire <alan.maguire@oracle.com>,
-	Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
-	dwarves@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
-	kernel-team@fb.com
-Subject: Re: [PATCH dwarves v3 2/9] dwarf_loader: Handle signatures with dead
- arguments
-Message-ID: <ab8lZBk2Z_1sPkZL@krava>
-References: <20260320190917.1970524-1-yonghong.song@linux.dev>
- <20260320190927.1970829-1-yonghong.song@linux.dev>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="uazEQU4G"
+Message-ID: <2c9260b9-0eb3-416b-a75f-f33f37be6b63@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1774200973;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Yxe5CWU+eDGkL6k5XfqteyqTp3illiA3mbY2G0EXX54=;
+	b=uazEQU4GtdsszsUjy8Z8QJy/Kl/5+IMHKMLlkj6oJRKqgfxp3n7YIxpPtphr5e3xCbbNgL
+	2S8OUqOGG4jae3WSsO09mJox60QTsU7/j4BpVUJacbm8oHwND6hg7SnkajkaIwmTkJ4AyB
+	xKP5g5rmwJXeZVlvs3ebxDXC+awCQ7w=
+Date: Sun, 22 Mar 2026 10:36:01 -0700
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260320190927.1970829-1-yonghong.song@linux.dev>
-
-On Fri, Mar 20, 2026 at 12:09:27PM -0700, Yonghong Song wrote:
-> For llvm dwarf, the dead argument may be in the middle of
-> DW_TAG_subprogram. So we introduce skip_idx in order to
-> match expected registers properly.
-> 
-> For example:
->   0x00042897:   DW_TAG_subprogram
->                   DW_AT_name      ("create_dev")
->                   DW_AT_calling_convention        (DW_CC_nocall)
->                   DW_AT_type      (0x0002429a "int")
->                   ...
-> 
->   0x000428ab:     DW_TAG_formal_parameter
->                     DW_AT_name    ("name")
->                     DW_AT_type    (0x000242ed "char *")
->                     ...
-> 
->   0x000428b5:     DW_TAG_formal_parameter
->                     DW_AT_location        (indexed (0x3f) loclist = 0x000027f8:
->                        [0xffffffff87681370, 0xffffffff8768137a): DW_OP_reg5 RDI
->                        [0xffffffff8768137a, 0xffffffff87681392): DW_OP_reg3 RBX
->                        [0xffffffff87681392, 0xffffffff876813ae): DW_OP_entry_value(DW_OP_reg5 RDI), DW_OP_stack_value)
->                     DW_AT_name    ("dev")
->                     DW_AT_type    (0x00026859 "dev_t")
->                     ...
-> 
-> With skip_idx, we can identify that the second original argument
-> 'dev' becomes the first one after optimization.
-
-hi,
-this change removes for me functions below and some of them (ata_dev_select,
-dmi_save_type, perhaps more) seem to be removed because their last 2 arguments
-are constants IIUC, which does not seem to be what the changelog suggests,
-but I guess it's still correct (it's without +true_signature)
-
-jirka
+Subject: Re: [PATCH dwarves v3 1/9] dwarf_loader: Reduce parameter checking
+ with clang DW_AT_calling_convention attr
+Content-Language: en-GB
+To: Jiri Olsa <olsajiri@gmail.com>
+Cc: Alan Maguire <alan.maguire@oracle.com>,
+ Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>, dwarves@vger.kernel.org,
+ Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ bpf@vger.kernel.org, kernel-team@fb.com
+References: <20260320190917.1970524-1-yonghong.song@linux.dev>
+ <20260320190922.1970709-1-yonghong.song@linux.dev> <ab8lWhTT8LZGbtQs@krava>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <ab8lWhTT8LZGbtQs@krava>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
 
-ata_dev_select
-__cgroup1_procs_write
-check_buffer_access
-dax_disassociate_entry
-devlink_nl_sb_port_pool_fill
-dmi_format_ids
-dmi_save_type
-dmi_save_uuid
-get_buffer
-get_net_track
-gue_remcsum
-icmpv4_xrlim_allow
-insert_vmap_area_augment
-__intel_pmu_enable_all
-ip6addrlbl_fill
-ip6_dst_store
-kernelmode_fixup_or_oops
-merge_note_headers_elf32
-merge_note_headers_elf64
-mt_destroy_walk
-__mutex_lock
-__netdev_walk_all_lower_dev
-pci_create_device_link
-populate_kprobe_blacklist
-proc_get_long
-rt_mutex_adjust_prio_chain
-rt_set_nexthop
-run_lwt_bpf
-simple_attr_write_xsigned
-__skb_gro_checksum_validate_needed
-tclass_notify
-tg_set_conf
-toggle_bp_slot
-trace_event_get_offsets_aer_event
-trace_event_get_offsets_br_fdb_external_learn_add
-trace_event_get_offsets_br_fdb_update
-trace_event_get_offsets_cache_tag_flush
-trace_event_get_offsets_devlink_health_recover_aborted
-trace_event_get_offsets_iommu_error
-trace_event_get_offsets_prq_report
-virtio_net_hdr_from_skb
-writeback_inodes_wb
-xfs_file_dio_write_aligned
 
+On 3/21/26 4:10 PM, Jiri Olsa wrote:
+> On Fri, Mar 20, 2026 at 12:09:22PM -0700, Yonghong Song wrote:
+>> Currently every function is checked for its parameters to identify whether
+>> the signature changed or not. If signature indeed changed, pahole may do
+>> some adjustment for parameters for true signatures.
+>>
+>> In clang, any function with the following attribute
+>>        DW_AT_calling_convention        (DW_CC_nocall)
+>> indicates this function having signature changed.
+>> pahole can take advantage of this to avoid parameter checking if
+>> DW_AT_calling_convention is not DW_CC_nocall.
+>>
+>> But more importantly, DW_CC_nocall can identify signature-changed functions
+>> and parameters can be checked one-after-another to create the true
+>> signatures. Otherwise, it takes more effort to identify whether a
+>> function has signature changed or not. For example, for funciton
+>>    __bpf_kfunc static void bbr_main(struct sock *sk, u32 ack, int flag,
+>>       const struct rate_sample *rs) { ... }
+>> and bbr_main() is a callback function in
+>>    .cong_control   = bbr_main
+>> in 'struct tcp_congestion_ops tcp_bbr_cong_ops'.
+>> In the above bbr_main(...), parameter 'ack' and 'flag' are not used.
+>> The following are some details:
+>>
+>> 0x0a713b8d:     DW_TAG_formal_parameter
+>>                    DW_AT_location        (indexed (0x28) loclist = 0x0166d452:
+>>                       [0xffffffff83e77fd9, 0xffffffff83e78016): DW_OP_reg5 RDI
+>>                       ...
+>>                    DW_AT_name    ("sk")
+>>                    DW_AT_type    (0x0a6f5b2b "sock *")
+>>                    ...
+>>
+>> 0x0a713b98:     DW_TAG_formal_parameter
+>>                    DW_AT_name    ("ack")
+>>                    DW_AT_type    (0x0a6f58fd "u32")
+>>                    ...
+>>
+>> 0x0a713ba2:     DW_TAG_formal_parameter
+>>                    DW_AT_name    ("flag")
+>>                    DW_AT_type    (0x0a6f57d1 "int")
+>>                    ...
+>>
+>> 0x0a713bac:     DW_TAG_formal_parameter
+>>                    DW_AT_location        (indexed (0x29) loclist = 0x0166d4a8:
+>>                       [0xffffffff83e77fd9, 0xffffffff83e78016): DW_OP_reg2 RCX
+>>                       ...
+>>                    DW_AT_name    ("rs")
+>>                    DW_AT_type    (0x0a710da5 "const rate_sample *")
+>>                    DW_AT_decl_line       (1027)
+>>
+>> Some analysis for the above dwarf can conclude that the 'ark' and 'flag'
+>> may be related to RSI and RDX, considering the last one is RCX. Basically this
+>> requires all parameters are available to collectively decide whether the
+>> true signature can be found or not. In such case, DW_CC_nocall can make things
+>> easier as parameter can be checked one after another.
+>>
+>> For a clang built bpf-next kernel, in non-LTO setup, the number of kernel functions
+>> is 69103 and the number of signature changed functions is 875, based on
+>>        DW_AT_calling_convention        (DW_CC_nocall)
+>> indication.
+> we don't display these stats, right? would be great and probably easy
+> to count different flags and aggregate them
 
-> 
-> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
-> ---
->  dwarf_loader.c | 19 +++++++++++++++++--
->  1 file changed, 17 insertions(+), 2 deletions(-)
-> 
-> diff --git a/dwarf_loader.c b/dwarf_loader.c
-> index 21f8bf1..a6e6587 100644
-> --- a/dwarf_loader.c
-> +++ b/dwarf_loader.c
-> @@ -1192,6 +1192,7 @@ static ptrdiff_t __dwarf_getlocations(Dwarf_Attribute *attr,
->  
->  struct func_info {
->  	bool signature_changed;
-> +	int skip_idx;
->  };
->  
->  /* For DW_AT_location 'attr':
-> @@ -1264,6 +1265,7 @@ static struct parameter *parameter__new(Dwarf_Die *die, struct cu *cu,
->  	if (parm != NULL) {
->  		bool has_const_value;
->  		Dwarf_Attribute attr;
-> +		int reg_idx;
->  
->  		tag__init(&parm->tag, cu, die);
->  		parm->name = attr_string(die, DW_AT_name, conf);
-> @@ -1273,7 +1275,18 @@ static struct parameter *parameter__new(Dwarf_Die *die, struct cu *cu,
->  		if (!info->signature_changed) {
->  			if (cu->producer_clang || param_idx >= cu->nr_register_params)
->  				return parm;
-> +		} else {
-> +			/* if true_signature is not enabled, mark parameter as
-> +			 * unexpected_reg since there is a skipped parameter before.
-> +			 */
-> +			if (!conf->true_signature && info->skip_idx) {
-> +				parm->unexpected_reg = 1;
-> +				return parm;
-> +			}
->  		}
-> +		reg_idx = param_idx - info->skip_idx;
-> +		if (reg_idx >= cu->nr_register_params)
-> +			return parm;
->  		/* Parameters which use DW_AT_abstract_origin to point at
->  		 * the original parameter definition (with no name in the DIE)
->  		 * are the result of later DWARF generation during compilation
-> @@ -1311,7 +1324,7 @@ static struct parameter *parameter__new(Dwarf_Die *die, struct cu *cu,
->  		parm->has_loc = dwarf_attr(die, DW_AT_location, &attr) != NULL;
->  
->  		if (parm->has_loc) {
-> -			int expected_reg = cu->register_params[param_idx];
-> +			int expected_reg = cu->register_params[reg_idx];
->  			int actual_reg = parameter__reg(&attr, expected_reg);
->  
->  			if (actual_reg < 0)
-> @@ -1324,8 +1337,10 @@ static struct parameter *parameter__new(Dwarf_Die *die, struct cu *cu,
->  				 * contents.
->  				 */
->  				parm->unexpected_reg = 1;
-> -		} else if (has_const_value) {
-> +		} else if (has_const_value || info->signature_changed) {
->  			parm->optimized = 1;
-> +			if (info->signature_changed)
-> +				info->skip_idx++;
->  		}
->  	}
->  
-> -- 
-> 2.52.0
-> 
-> 
+The actual stats will be different depending on kernel code and compiler optimization.
+But I think I can still count them for each commit so people will know
+which change caused how much true signature.
+
+>
+>> Among 875 signature changed functions, after this patch, 495 functions
+>> can have proper true signatures, mostly due to simple dead argument
+>> elimination. The number of remaining functions, which cannot get the
+>> true signature, is 379. They will be addressed in the subsequent commits.
+> after this change I have more functions added (below) and I checked
+> few and they seem ok (w/o DW_CC_nocall)
+
+Most global functions should be okay. But some global functions
+esp. if argument is more than 8 byte (struct type), they may be
+considered as signature change with the current implementation.
+
+>
+> jirka
+>
+>
+> acpi_ex_do_debug_object
+> add_bits
+> amd_pstate_get_mode_string
+> dma_alloc_from_contiguous
+> do_set_pmd
+> dst_destroy
+> find_cpio_data
+> find_microcode_in_initrd
+> ima_write_policy
+> insn_init
+> io_tx_ubuf_complete
+> ip6_protocol_deliver_rcu
+> kvm_tdp_mmu_unmap_gfn_range
+> net_dim_get_def_rx_moderation
+> net_dim_get_def_tx_moderation
+> pinctrl_commit_state
+> string_unescape
+> syscall_copy_user_array
+> tdp_mmu_zap_leafs
+> usb_speed_string
+> __vlan_find_dev_deep_rcu
+> __vxlan_fdb_delete
+> xfs_bmbt_maxrecs
+> xfs_inobt_maxrecs
+> ZSTD_buildSequencesStatistics
+> ZSTD_copyCCtx
+> ZSTD_findFrameSizeInfo
+> ZSTD_get1BlockSummary
+> zstd_get_cparams
+> ZSTD_getCParams
+> ZSTD_getCParamsFromCCtxParams
+> ZSTD_getCParamsFromCDict
+> ZSTD_getCParams_internal
+> zstd_get_params
+> ZSTD_getParams
+
