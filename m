@@ -1,21 +1,21 @@
-Received: from 69-171-232-181.mail-mxout.facebook.com (69-171-232-181.mail-mxout.facebook.com [69.171.232.181])
+Received: from 66-220-155-178.mail-mxout.facebook.com (66-220-155-178.mail-mxout.facebook.com [66.220.155.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24D7438E13D
-	for <dwarves@vger.kernel.org>; Thu, 26 Mar 2026 01:32:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=69.171.232.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4525B211A05
+	for <dwarves@vger.kernel.org>; Thu, 26 Mar 2026 01:32:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.155.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774488729; cv=none; b=pII5eKwN/K2nHdccZ04r9VnUTZg7+Cay2u5feQgbI6nuL07eKOyo4lK/Qa/0RWePCXTHPApaA47Di6yVJs4VcBWI4oNEod5yGS+GVrkUbK3mNy7iJ1++vr9xF0NqOdp9hlFXn6/q/KrmtMY0uJq0wWymwPBERRwfiihal/lVXOU=
+	t=1774488739; cv=none; b=nDB07w/ztNnl+TqsEH2U4JNBqmIhMu7aOUlhF7ja5ihWCahrz3QQShoAqlWYUOG3c3NrWk1MalGKNYJvmB+scfA1K76C2MAjxPa8JEIbw36B/Vm7HT8AU/9S2pSyO9SRfu/gywyrzCrzUbO82JA8akpNWb86845UgfVOmhnbUl0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774488729; c=relaxed/simple;
-	bh=9lwDGxrEtsv/wZDeTm2u+YBU/Ts8T4ILLIU+2p5ZWog=;
+	s=arc-20240116; t=1774488739; c=relaxed/simple;
+	bh=ORznJtcDeB2xEbX1NqQgMEwuzyg/N22ir6CqW3SoT7w=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=XE/ZuM+8hQTtX3tixRuhXWaFHARf4Hh5b5A9diGrFxnqiTVEzfQugCb+QhMq9PE+sYieI2r2nww1bMHbKsffd1HJC1KqXj8r7wPhSRPRGTka+l/GqaS5mph636ffYzi4FHKrB4rHAdmcaRXXIMoKfAo94XyCn+3gjXdMnT91wgU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=69.171.232.181
+	 MIME-Version; b=ONcTWqK5U09UaShzw8T5kWAkEkh6qkXT+5rSKoz2f6vVg53ZNtBUeqCEVQMW5y4qrVINnS2UVkO7pjXCMcp1jDc/ZV4ngNG43T5o/pXD9TLfXlBsI58ePTnF5dHgfmc8cY0/w7sp3TwMuRQaHKdw7hY/utoUV5L1ffuOjD61nrE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.155.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id C08952E280F44; Wed, 25 Mar 2026 18:31:59 -0700 (PDT)
+	id E22FA2E280F6B; Wed, 25 Mar 2026 18:32:04 -0700 (PDT)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: Alan Maguire <alan.maguire@oracle.com>,
 	Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
@@ -24,9 +24,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Andrii Nakryiko <andrii@kernel.org>,
 	bpf@vger.kernel.org,
 	kernel-team@fb.com
-Subject: [PATCH dwarves v4 03/11] dwarf_loader: Handle signatures with dead arguments
-Date: Wed, 25 Mar 2026 18:31:59 -0700
-Message-ID: <20260326013159.2904078-1-yonghong.song@linux.dev>
+Subject: [PATCH dwarves v4 04/11] dwarf_loader: Refactor initial ret -1 to be macro PARM_DEFAULT_FAIL
+Date: Wed, 25 Mar 2026 18:32:04 -0700
+Message-ID: <20260326013204.2904431-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260326013144.2901265-1-yonghong.song@linux.dev>
 References: <20260326013144.2901265-1-yonghong.song@linux.dev>
@@ -38,228 +38,61 @@ List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-For llvm dwarf, the dead argument may be in the middle of
-DW_TAG_subprogram. So we introduce skip_idx in order to
-match expected registers properly.
-
-For example:
-  0x00042897:   DW_TAG_subprogram
-                  DW_AT_name      ("create_dev")
-                  DW_AT_calling_convention        (DW_CC_nocall)
-                  DW_AT_type      (0x0002429a "int")
-                  ...
-
-  0x000428ab:     DW_TAG_formal_parameter
-                    DW_AT_name    ("name")
-                    DW_AT_type    (0x000242ed "char *")
-                    ...
-
-  0x000428b5:     DW_TAG_formal_parameter
-                    DW_AT_location        (indexed (0x3f) loclist =3D 0x0=
-00027f8:
-                       [0xffffffff87681370, 0xffffffff8768137a): DW_OP_re=
-g5 RDI
-                       [0xffffffff8768137a, 0xffffffff87681392): DW_OP_re=
-g3 RBX
-                       [0xffffffff87681392, 0xffffffff876813ae): DW_OP_en=
-try_value(DW_OP_reg5 RDI), DW_OP_stack_value)
-                    DW_AT_name    ("dev")
-                    DW_AT_type    (0x00026859 "dev_t")
-                    ...
-
-With skip_idx, we can identify that the second original argument
-'dev' becomes the first one after optimization.
-
-The previous patch has the following:
-  0x0533fd03:   DW_TAG_subprogram
-                  DW_AT_name      ("acpi_irq_penalty_update")
-                  DW_AT_calling_convention        (DW_CC_nocall)
-                  DW_AT_type      (0x05334dc7 "int")
-                  ...
-
-  0x0533fd15:     DW_TAG_formal_parameter
-                    DW_AT_name    ("str")
-                    DW_AT_type    (0x05335918 "char *")
-                    ...
-
-  0x0533fd1f:     DW_TAG_formal_parameter
-                    DW_AT_location        (indexed (0x3b) loclist =3D 0x0=
-0eb9d83:
-                       [0xffff80008419f2e0, 0xffff80008419f324): DW_OP_re=
-g1 W1
-                       [0xffff80008419f324, 0xffff80008419f47c): DW_OP_re=
-g19 W19
-                       [0xffff80008419f47c, 0xffff80008419f494): DW_OP_en=
-try_value(DW_OP_reg1 W1), DW_OP_stack_value
-                       [0xffff80008419f494, 0xffff80008419f498): DW_OP_re=
-g19 W19)
-                    DW_AT_name    ("used")
-                    DW_AT_type    (0x05334dc7 "int")
-                    ...
-
-It is also handled properly with parameter 'str' will have W0 register.
-
-With this patch, I checked x86_64 that the number of invalid true signatu=
-res is reduced
-from 532 to 96. This suggests that majority of optimized functions are ca=
-used by
-dead arguments.
+Later on, More macro return values will be implemented to make
+code easier to understand.
 
 Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 ---
- dwarf_loader.c | 93 +++++++++++++++++++++++++++++++++++++++++++++++---
- 1 file changed, 88 insertions(+), 5 deletions(-)
+ dwarf_loader.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
 diff --git a/dwarf_loader.c b/dwarf_loader.c
-index 412a73e..c1b7763 100644
+index c1b7763..c8aeca2 100644
 --- a/dwarf_loader.c
 +++ b/dwarf_loader.c
-@@ -1195,10 +1195,62 @@ static ptrdiff_t __dwarf_getlocations(Dwarf_Attri=
-bute *attr,
+@@ -1190,6 +1190,8 @@ static ptrdiff_t __dwarf_getlocations(Dwarf_Attribu=
+te *attr,
+ 	return ret;
+ }
 =20
- struct func_info {
- 	bool signature_changed;
-+	int skip_idx;
- 	int nr_params;
- 	int param_start_regs[MAX_PRESCAN_PARAMS];
- };
++#define	PARM_DEFAULT_FAIL	-1
++
+ /* Max 20 register parameters, considering some parameters may be optimi=
+zed out.  */
+ #define	MAX_PRESCAN_PARAMS	20
 =20
-+static int __get_type_byte_size(Dwarf_Die *die, struct cu *cu)
-+{
-+	Dwarf_Attribute attr;
-+	if (dwarf_attr(die, DW_AT_type, &attr) =3D=3D NULL)
-+		return 0;
-+
-+	Dwarf_Die type_die;
-+	if (dwarf_formref_die(&attr, &type_die) =3D=3D NULL)
-+		return 0;
-+
-+	/* A type does not have byte_size.
-+	 * 0x000dac83: DW_TAG_formal_parameter
-+			 DW_AT_location        (indexed (0x385) loclist =3D 0x00016175:
-+			   [0xffff800080098cb0, 0xffff800080098cb4): DW_OP_breg8 W8+0
-+			   [0xffff800080098cb4, 0xffff800080098ff4): DW_OP_breg31 WSP+16, DW_=
-OP_deref
-+			   [0xffff800080099054, 0xffff80008009908c): DW_OP_breg31 WSP+16, DW_=
-OP_deref)
-+			 DW_AT_name    ("ubuf")
-+			 DW_AT_decl_file       ("/home/yhs/work/bpf-next/arch/arm64/kernel/pt=
-race.c")
-+			 DW_AT_decl_line       (886)
-+			 DW_AT_type    (0x000d467e "const void *")
-+
-+	  * 0x000d467e: DW_TAG_pointer_type
-+			  DW_AT_type      (0x000c4320 "const void")
-+
-+	  * 0x000c4320: DW_TAG_const_type
-+	  */
-+	if (dwarf_tag(&type_die) =3D=3D DW_TAG_pointer_type)
-+		return cu->addr_size;
-+
-+	uint64_t bsize =3D attr_numeric(&type_die, DW_AT_byte_size);
-+	if (bsize =3D=3D 0)
-+		return __get_type_byte_size(&type_die, cu);
-+
-+	return bsize;
-+}
-+
-+static int get_type_byte_size(Dwarf_Die *die, struct cu *cu)
-+{
-+	int byte_size =3D 0;
-+
-+	Dwarf_Attribute attr;
-+	if (dwarf_attr(die, DW_AT_abstract_origin, &attr)) {
-+		Dwarf_Die origin;
-+		if (dwarf_formref_die(&attr, &origin))
-+			byte_size =3D __get_type_byte_size(&origin, cu);
-+	} else {
-+		byte_size =3D __get_type_byte_size(die, cu);
-+	}
-+	return byte_size;
-+}
-+
- /* Get the first DW_OP_X (should be a register) from a parameter's DW_AT=
-_location. */
- static int parameter__peek_first_reg(Dwarf_Die *die)
+@@ -1281,7 +1283,7 @@ static int parameter__peek_first_reg(Dwarf_Die *die=
+)
+  *   otherwise save the register for later return
+  * - if location DW_OP_entry_value(DW_OP_regXX) with expected number is =
+in the
+  *   list, return the register; otherwise save register for later return
+- * - otherwise if no register was found for locations, return -1.
++ * - otherwise if no register was found for locations, return PARM_DEFAU=
+LT_FAIL.
+  */
+ static int parameter__reg(Dwarf_Attribute *attr, int expected_reg)
  {
-@@ -1292,8 +1344,9 @@ static struct parameter *parameter__new(Dwarf_Die *=
+@@ -1291,7 +1293,7 @@ static int parameter__reg(Dwarf_Attribute *attr, in=
+t expected_reg)
+ 	size_t exprlen, entry_len;
+ 	ptrdiff_t offset =3D 0;
+ 	int loc_num =3D -1;
+-	int ret =3D -1;
++	int ret =3D PARM_DEFAULT_FAIL;
+=20
+ 	/* use libdw__lock as dwarf_getlocation(s) has concurrency issues
+ 	 * when libdw is not compiled with experimental --enable-thread-safety
+@@ -1403,7 +1405,7 @@ static struct parameter *parameter__new(Dwarf_Die *=
 die, struct cu *cu,
- 	struct parameter *parm =3D tag__alloc(cu, sizeof(*parm));
-=20
- 	if (parm !=3D NULL) {
--		bool has_const_value;
-+		bool has_const_value, true_sig_enabled;
- 		Dwarf_Attribute attr;
-+		int reg_idx;
-=20
- 		tag__init(&parm->tag, cu, die);
- 		parm->name =3D attr_string(die, DW_AT_name, conf);
-@@ -1303,8 +1356,10 @@ static struct parameter *parameter__new(Dwarf_Die =
-*die, struct cu *cu,
- 		if (!info->signature_changed) {
- 			if (cu->producer_clang || param_idx >=3D cu->nr_register_params)
- 				return parm;
--		} else if (param_idx >=3D cu->nr_register_params) {
--			return parm;
-+		} else {
-+			reg_idx =3D param_idx - info->skip_idx;
-+			if (reg_idx >=3D cu->nr_register_params)
-+				return parm;
- 		}
-=20
- 		/* Parameters which use DW_AT_abstract_origin to point at
-@@ -1342,9 +1397,10 @@ static struct parameter *parameter__new(Dwarf_Die =
-*die, struct cu *cu,
- 		 */
- 		has_const_value =3D dwarf_attr(die, DW_AT_const_value, &attr) !=3D NUL=
-L;
- 		parm->has_loc =3D dwarf_attr(die, DW_AT_location, &attr) !=3D NULL;
-+		true_sig_enabled =3D conf->true_signature && info->signature_changed;
-=20
- 		if (parm->has_loc) {
--			int expected_reg =3D cu->register_params[param_idx];
-+			int expected_reg =3D cu->register_params[reg_idx];
+ 			int expected_reg =3D cu->register_params[reg_idx];
  			int actual_reg =3D parameter__reg(&attr, expected_reg);
 =20
- 			if (actual_reg < 0)
-@@ -1357,8 +1413,35 @@ static struct parameter *parameter__new(Dwarf_Die =
-*die, struct cu *cu,
- 				 * contents.
- 				 */
- 				parm->unexpected_reg =3D 1;
--		} else if (has_const_value) {
-+		} else if (has_const_value && !cu->producer_clang) {
-+			parm->optimized =3D 1;
-+		} else if (true_sig_enabled) {
-+			int byte_size, num_regs, next_reg_idx;
-+
-+			if (param_idx + 1 < info->nr_params) {
-+				int next_start =3D info->param_start_regs[param_idx + 1];
-+				if (next_start >=3D 0) {
-+					/* check whether we should preserve the argument or not */
-+					byte_size =3D get_type_byte_size(die, cu);
-+					/* byte_size 0 should not happen. */
-+					if (!byte_size) {
-+						parm->unexpected_reg =3D 1;
-+						return parm;
-+					}
-+
-+					num_regs =3D (byte_size + cu->addr_size - 1) / cu->addr_size;
-+					next_reg_idx =3D reg_idx + num_regs;
-+					if (next_reg_idx < cu->nr_register_params &&
-+					    next_start =3D=3D cu->register_params[next_reg_idx]) {
-+						if (byte_size > cu->addr_size)
-+							info->skip_idx--;
-+						return parm;
-+					}
-+				}
-+			}
-+
- 			parm->optimized =3D 1;
-+			info->skip_idx++;
- 		}
- 	}
-=20
+-			if (actual_reg < 0)
++			if (actual_reg =3D=3D PARM_DEFAULT_FAIL)
+ 				parm->optimized =3D 1;
+ 			else if (expected_reg >=3D 0 && expected_reg !=3D actual_reg)
+ 				/* mark parameters that use an unexpected
 --=20
 2.52.0
 
