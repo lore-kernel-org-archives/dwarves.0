@@ -1,21 +1,21 @@
-Received: from 69-171-232-180.mail-mxout.facebook.com (69-171-232-180.mail-mxout.facebook.com [69.171.232.180])
+Received: from 69-171-232-181.mail-mxout.facebook.com (69-171-232-181.mail-mxout.facebook.com [69.171.232.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF67938BF94
-	for <dwarves@vger.kernel.org>; Thu, 26 Mar 2026 01:32:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=69.171.232.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AF3338D6B6
+	for <dwarves@vger.kernel.org>; Thu, 26 Mar 2026 01:32:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=69.171.232.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774488724; cv=none; b=h2kHvB+0a4eerBc5TZTleZG1C04ikvBs4vE+6PavsQqO5VBD2tlutdsrqCW1TCQMLv7iLJ3muo4jwQStmyvCnHU9Nl3oR7fOm57scBpKb95rS8nYfzRya7+x5IDhAW1mnR5aaqpjiCfPJpO20zngospIq8/dznGMl9o/e4wt1gg=
+	t=1774488727; cv=none; b=Q2VH/rNQH4L8WKRsPpSb5h2HgRYR+9jNut9Cw2s1KsMN4bAEfIdrXUXVaciTJGV69rS29Tgbz+jBZ1KHaOUf26s8rOyQmsMCRX5paPrKUWpncDWbWqq8XWdNhZEVCTpQCxeyOh+xfZBWCMyg1jOowjl1dVV2UD3zTysY9RG8yV0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774488724; c=relaxed/simple;
-	bh=2GGW/KfvEFrzCYfgS7BDxz5WJaoFU/LNCtmCMIg0F60=;
+	s=arc-20240116; t=1774488727; c=relaxed/simple;
+	bh=atlUyN+UmIgGjvOaPTwXWR+g9SwXQsHPnpaXADaRudY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=RrJYh75/nrhRDI2FFG2PYJUo0O/TY87R1/aXJ95n/+cSKryuFdawsPiAgDNbIsZBSCp7d9Fny+Z6XnsQHKdZaA2EmZJa//epra0TCnc2KBuJfVeUE9ouJbRLuOQ7g4vltY4t37QE+roENLMwo57Q0A9ykfZNNQ+4vlUS5t5LD1c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=69.171.232.180
+	 MIME-Version; b=l811JJDxuJgi+AJO+zoyWnWiP4FC7Bg3mGyMXOKxvvAoqWoyOozTttotIWyOQZzo+CHNosG6k8q+ooprpFHf42a9qH/gENMMS7rCwbdMkPNUAhGxJbbFWBk+F+Lnj4EkbC+0vmO6t79mGiSSN27U5BLkyx323OsDFBSRASF0HyA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=69.171.232.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id 7B4222E280EFE; Wed, 25 Mar 2026 18:31:49 -0700 (PDT)
+	id 9EAB92E280F29; Wed, 25 Mar 2026 18:31:54 -0700 (PDT)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: Alan Maguire <alan.maguire@oracle.com>,
 	Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
@@ -24,9 +24,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Andrii Nakryiko <andrii@kernel.org>,
 	bpf@vger.kernel.org,
 	kernel-team@fb.com
-Subject: [PATCH dwarves v4 01/11] dwarf_loader: Reduce parameter checking with clang DW_AT_calling_convention attr
-Date: Wed, 25 Mar 2026 18:31:49 -0700
-Message-ID: <20260326013149.2902251-1-yonghong.song@linux.dev>
+Subject: [PATCH dwarves v4 02/11] dwarf_loader: Prescan all parameters with expected registers
+Date: Wed, 25 Mar 2026 18:31:54 -0700
+Message-ID: <20260326013154.2903247-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260326013144.2901265-1-yonghong.song@linux.dev>
 References: <20260326013144.2901265-1-yonghong.song@linux.dev>
@@ -38,331 +38,216 @@ List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-Currently every function is checked for its parameters to identify whethe=
-r
-the signature changed or not. If signature indeed changed, pahole may do
-some adjustment for parameters for true signatures.
+Find expected registers for each parameter so the current
+parameter can check the next one to decide what type should be
+used. In some cases, based on dwarf locations, a particular
+parameter can be optimized. But the compiler may not really
+optimize it. In such cases, the original parameter type should
+be preserved in order to match the next parameter register.
 
-In clang, any function with the following attribute
-      DW_AT_calling_convention        (DW_CC_nocall)
-indicates this function having signature changed.
-pahole can take advantage of this to avoid parameter checking if
-DW_AT_calling_convention is not DW_CC_nocall.
-
-But more importantly, DW_CC_nocall can identify signature-changed functio=
-ns
-and parameters can be checked one-after-another to create the true
-signatures. Otherwise, it takes more effort to identify whether a
-function has signature changed or not. For example, for funciton
-  __bpf_kfunc static void bbr_main(struct sock *sk, u32 ack, int flag,
-     const struct rate_sample *rs) { ... }
-and bbr_main() is a callback function in
-  .cong_control   =3D bbr_main
-in 'struct tcp_congestion_ops tcp_bbr_cong_ops'.
-In the above bbr_main(...), parameter 'ack' and 'flag' are not used.
-The following are some details:
-
-0x0a713b8d:     DW_TAG_formal_parameter
-                  DW_AT_location        (indexed (0x28) loclist =3D 0x016=
-6d452:
-                     [0xffffffff83e77fd9, 0xffffffff83e78016): DW_OP_reg5=
- RDI
-                     ...
-                  DW_AT_name    ("sk")
-                  DW_AT_type    (0x0a6f5b2b "sock *")
+The following are two examples, all from arm64.
+Example 1:
+  $ cat t.c
+  struct t { long f1; long f2; };
+  __attribute__((noinline)) static long foo(struct t a, struct t b, int i=
+)
+  {
+          return a.f1 + b.f1 + b.f2;
+  }
+  struct t p1, p2;
+  int i;
+  int main()
+  {
+          return (int)foo(p1, p2, i);
+  }
+  $ clang -O2 -g t.c
+  $ llvm-dwarfdump a.out
+  ...
+  0x00000041:   DW_TAG_subprogram
+                  DW_AT_calling_convention        (DW_CC_nocall)
+                  DW_AT_type      (0x0000008f "long")
                   ...
 
-0x0a713b98:     DW_TAG_formal_parameter
-                  DW_AT_name    ("ack")
-                  DW_AT_type    (0x0a6f58fd "u32")
+  0x00000051:     DW_TAG_formal_parameter
+                    DW_AT_location        (indexed (0x0) loclist =3D 0x00=
+000014:
+                       [0x0000000000000740, 0x0000000000000748): DW_OP_re=
+g0 W0, DW_OP_piece 0x8)
+                    DW_AT_name    ("a")
+                    DW_AT_type    (0x00000077 "t")
+                    ...
+
+  0x0000005a:     DW_TAG_formal_parameter
+                    DW_AT_location        (indexed (0x1) loclist =3D 0x00=
+00001c:
+                       [0x0000000000000740, 0x000000000000074c): DW_OP_re=
+g2 W2, DW_OP_piece 0x8, DW_OP_reg3 W3, DW_OP_piece 0x8)
+                    DW_AT_name    ("b")
+                    DW_AT_type    (0x00000077 "t")
+                    ...
+
+  0x00000063:     DW_TAG_formal_parameter
+                    DW_AT_name    ("i")
+                    DW_AT_type    (0x00000027 "int")
+                    ...
+
+  0x0000006b:     NULL
+
+In the above, parameter 'a' actually only uses the first 8 byte value, so=
+ looks like
+it can be optimized. But since the second parameter starts with register =
+W2, it makes
+sense to keep the first parameter original type to ensure correct ABI.
+
+Another example from vmlinux dwarf:
+
+  0x0533fd03:   DW_TAG_subprogram
+                  DW_AT_calling_convention        (DW_CC_nocall)
+                  DW_AT_type      (0x05334dc7 "int")
                   ...
 
-0x0a713ba2:     DW_TAG_formal_parameter
-                  DW_AT_name    ("flag")
-                  DW_AT_type    (0x0a6f57d1 "int")
-                  ...
+  0x0533fd15:     DW_TAG_formal_parameter
+                    DW_AT_name    ("str")
+                    DW_AT_type    (0x05335918 "char *")
+                    ...
 
-0x0a713bac:     DW_TAG_formal_parameter
-                  DW_AT_location        (indexed (0x29) loclist =3D 0x016=
-6d4a8:
-                     [0xffffffff83e77fd9, 0xffffffff83e78016): DW_OP_reg2=
- RCX
-                     ...
-                  DW_AT_name    ("rs")
-                  DW_AT_type    (0x0a710da5 "const rate_sample *")
+  0x0533fd1f:     DW_TAG_formal_parameter
+                    DW_AT_location        (indexed (0x3b) loclist =3D 0x0=
+0eb9d83:
+                       [0xffff80008419f2e0, 0xffff80008419f324): DW_OP_re=
+g1 W1
+                       [0xffff80008419f324, 0xffff80008419f47c): DW_OP_re=
+g19 W19
+                       [0xffff80008419f47c, 0xffff80008419f494): DW_OP_en=
+try_value(DW_OP_reg1 W1), DW_OP_stack_value
+                       [0xffff80008419f494, 0xffff80008419f498): DW_OP_re=
+g19 W19)
+                    DW_AT_name    ("used")
+                    DW_AT_type    (0x05334dc7 "int")
+                    ...
 
-Some analysis for the above dwarf can conclude that the 'ark' and 'flag'
-may be related to RSI and RDX, considering the last one is RCX. Basically=
- this
-requires all parameters are available to collectively decide whether the
-true signature can be found or not. In such case, DW_CC_nocall can make t=
-hings
-easier as parameter can be checked one after another.
+In the above, since the second argument has register W1, it makes sense t=
+o
+keep the type of the first argument to ensure correct ABI.
 
-For a clang built bpf-next kernel with x86_64, in non-LTO setup,
-the number of kernel functions is 69103 and the number of signature chang=
-ed
-functions is 875, based on
-      DW_AT_calling_convention        (DW_CC_nocall)
-indication.
-
-Among 875 signature changed functions, after this patch, 343 functions
-can have proper true signatures, mostly due to simple dead argument
-elimination. The number of remaining functions, which cannot get the
-true signature, is 532 due to dead or additional-checked parameters.
-
-They will be addressed in the subsequent commits.
-
-In llvm23, I implemented [1] which added DW_CC_nocall for ArgumentPromoti=
-on pass.
-This compiler pass can add additional DW_CC_nocall cases for the followin=
-g
-compilation:
-      - Flag -O3 or FullLTO
-So once llvm23 available, we may have more DW_CC_nocall cases, hence more
-potential true signatures if the kernel is built with -O3 or
-with FullLTO (CONFIG_LTO_CLANG_FULL).
-
-  [1] https://github.com/llvm/llvm-project/pull/178973
+Without prescan, the above two cases will be rejected for btf due to mism=
+atched
+expected registers.
 
 Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 ---
- dwarf_loader.c | 82 +++++++++++++++++++++++++++++++++++++++++---------
- dwarves.h      |  1 +
- 2 files changed, 69 insertions(+), 14 deletions(-)
+ dwarf_loader.c | 68 ++++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 68 insertions(+)
 
 diff --git a/dwarf_loader.c b/dwarf_loader.c
-index 16fb7be..c569002 100644
+index c569002..412a73e 100644
 --- a/dwarf_loader.c
 +++ b/dwarf_loader.c
-@@ -1190,6 +1190,10 @@ static ptrdiff_t __dwarf_getlocations(Dwarf_Attrib=
-ute *attr,
+@@ -1190,10 +1190,40 @@ static ptrdiff_t __dwarf_getlocations(Dwarf_Attri=
+bute *attr,
  	return ret;
  }
 =20
-+struct func_info {
-+	bool signature_changed;
-+};
++/* Max 20 register parameters, considering some parameters may be optimi=
+zed out.  */
++#define	MAX_PRESCAN_PARAMS	20
++
+ struct func_info {
+ 	bool signature_changed;
++	int nr_params;
++	int param_start_regs[MAX_PRESCAN_PARAMS];
+ };
+=20
++/* Get the first DW_OP_X (should be a register) from a parameter's DW_AT=
+_location. */
++static int parameter__peek_first_reg(Dwarf_Die *die)
++{
++	Dwarf_Attribute attr;
++	if (dwarf_attr(die, DW_AT_location, &attr) =3D=3D NULL)
++		return -1;
++
++	Dwarf_Addr base, start, end;
++	Dwarf_Op *expr;
++	size_t exprlen;
++	ptrdiff_t offset =3D 0;
++
++	pthread_mutex_lock(&libdw__lock);
++	offset =3D __dwarf_getlocations(&attr, offset, &base, &start, &end, &ex=
+pr, &exprlen);
++	pthread_mutex_unlock(&libdw__lock);
++
++	if (offset <=3D 0 || exprlen =3D=3D 0)
++		return -1;
++
++	if (expr[0].atom >=3D DW_OP_reg0 && expr[0].atom <=3D DW_OP_reg31)
++		return expr[0].atom;
++
++	return -1;
++}
 +
  /* For DW_AT_location 'attr':
   * - if first location is DW_OP_regXX with expected number, return the r=
 egister;
   *   otherwise save the register for later return
-@@ -1252,7 +1256,8 @@ out:
+@@ -2425,6 +2455,43 @@ out_enomem:
+ 	return -ENOMEM;
  }
 =20
- static struct parameter *parameter__new(Dwarf_Die *die, struct cu *cu,
--					struct conf_load *conf, int param_idx)
-+					struct conf_load *conf, int param_idx,
-+					struct func_info *info)
- {
- 	struct parameter *parm =3D tag__alloc(cu, sizeof(*parm));
-=20
-@@ -1263,8 +1268,15 @@ static struct parameter *parameter__new(Dwarf_Die =
-*die, struct cu *cu,
- 		tag__init(&parm->tag, cu, die);
- 		parm->name =3D attr_string(die, DW_AT_name, conf);
- 		parm->idx =3D param_idx;
--		if (param_idx >=3D cu->nr_register_params || param_idx < 0)
-+		if (param_idx < 0)
-+			return parm;
-+		if (!info->signature_changed) {
-+			if (cu->producer_clang || param_idx >=3D cu->nr_register_params)
-+				return parm;
-+		} else if (param_idx >=3D cu->nr_register_params) {
- 			return parm;
-+		}
-+
- 		/* Parameters which use DW_AT_abstract_origin to point at
- 		 * the original parameter definition (with no name in the DIE)
- 		 * are the result of later DWARF generation during compilation
-@@ -1337,7 +1349,7 @@ static int formal_parameter_pack__load_params(struc=
-t formal_parameter_pack *pack
- 			continue;
- 		}
-=20
--		struct parameter *param =3D parameter__new(die, cu, conf, -1);
-+		struct parameter *param =3D parameter__new(die, cu, conf, -1, NULL);
-=20
- 		if (param =3D=3D NULL)
- 			return -1;
-@@ -1502,6 +1514,29 @@ static struct ftype *ftype__new(Dwarf_Die *die, st=
-ruct cu *cu)
- 	return ftype;
- }
-=20
-+static bool function__signature_changed(struct function *func, Dwarf_Die=
- *die)
++/* Pre-scan all formal parameters to collect their starting registers.
++ * This allows look-ahead when processing parameters sequentially, so th=
+at
++ * a parameter can check the next parameter's register to determine if t=
+he
++ * ABI register layout is preserved despite partial optimization.
++ * For example, for a function like below:
++ *  struct t { long f1; long f2; };
++ *  __attribute__((noinline)) static long foo(struct t a, struct t b)
++ *  {
++ *      return a.f1 + b.f1 + b.f2;
++ *  }
++ * If dwarf has parameter 'a' at aarch64 register W0, and 'b' at registe=
+r W2,
++ * even compiler could optimize 'a' to 'a.f1'. To conform to ABI, the
++ * parameter 'a' will keep 'struct t' type.
++ */
++static void func_info__prescan_params(struct func_info *info, Dwarf_Die =
+*die)
 +{
-+	/* The inlined DW_TAG_subprogram typically has the original source type=
- for
-+	 * abstract origin of a concrete function with address range, inlined s=
-ubroutine,
-+	 * or call site.
-+	 */
-+	if (func->inlined)
-+		return false;
++	Dwarf_Die child;
++	int idx =3D 0;
 +
-+	if (!func->abstract_origin)
-+		return attr_numeric(die, DW_AT_calling_convention) =3D=3D DW_CC_nocall=
-;
++	if (!info->signature_changed)
++		return;
 +
-+	Dwarf_Attribute attr;
-+	if (dwarf_attr(die, DW_AT_abstract_origin, &attr)) {
-+		Dwarf_Die origin;
-+		if (dwarf_formref_die(&attr, &origin))
-+			return attr_numeric(&origin, DW_AT_calling_convention) =3D=3D DW_CC_n=
-ocall;
-+	}
++	if (!dwarf_haschildren(die) || dwarf_child(die, &child) !=3D 0)
++		return;
 +
-+	/* This should not happen */
-+	return false;
++	do {
++		if (dwarf_tag(&child) !=3D DW_TAG_formal_parameter)
++			continue;
++		if (idx >=3D MAX_PRESCAN_PARAMS)
++			break;
++		info->param_start_regs[idx] =3D parameter__peek_first_reg(&child);
++		idx++;
++	} while (dwarf_siblingof(&child, &child) =3D=3D 0);
++
++	info->nr_params =3D idx;
 +}
 +
- static struct function *function__new(Dwarf_Die *die, struct cu *cu, str=
-uct conf_load *conf)
- {
- 	struct function *func =3D tag__alloc(cu, sizeof(*func));
-@@ -1800,9 +1835,9 @@ static struct tag *die__create_new_parameter(Dwarf_=
-Die *die,
- 					     struct ftype *ftype,
- 					     struct lexblock *lexblock,
- 					     struct cu *cu, struct conf_load *conf,
--					     int param_idx)
-+					     int param_idx, struct func_info *info)
- {
--	struct parameter *parm =3D parameter__new(die, cu, conf, param_idx);
-+	struct parameter *parm =3D parameter__new(die, cu, conf, param_idx, inf=
-o);
-=20
- 	if (parm =3D=3D NULL)
- 		return NULL;
-@@ -1889,7 +1924,7 @@ static struct tag *die__create_new_subroutine_type(=
-Dwarf_Die *die,
- 			tag__print_not_supported(die);
- 			continue;
- 		case DW_TAG_formal_parameter:
--			tag =3D die__create_new_parameter(die, ftype, NULL, cu, conf, -1);
-+			tag =3D die__create_new_parameter(die, ftype, NULL, cu, conf, -1, NUL=
-L);
- 			break;
- 		case DW_TAG_unspecified_parameters:
- 			ftype->unspec_parms =3D 1;
-@@ -2118,7 +2153,8 @@ out_enomem:
- }
-=20
- static int die__process_function(Dwarf_Die *die, struct ftype *ftype,
--				  struct lexblock *lexblock, struct cu *cu, struct conf_load *conf);
-+				 struct lexblock *lexblock, struct cu *cu, struct conf_load *conf,
-+				 struct func_info *info);
-=20
- static int die__create_new_lexblock(Dwarf_Die *die,
- 				    struct cu *cu, struct lexblock *father, struct conf_load *conf)
-@@ -2126,7 +2162,7 @@ static int die__create_new_lexblock(Dwarf_Die *die,
- 	struct lexblock *lexblock =3D lexblock__new(die, cu);
-=20
- 	if (lexblock !=3D NULL) {
--		if (die__process_function(die, NULL, lexblock, cu, conf) !=3D 0)
-+		if (die__process_function(die, NULL, lexblock, cu, conf, NULL) !=3D 0)
- 			goto out_delete;
- 	}
- 	if (father !=3D NULL)
-@@ -2246,7 +2282,8 @@ static struct tag *die__create_new_inline_expansion=
-(Dwarf_Die *die,
- }
-=20
- static int die__process_function(Dwarf_Die *die, struct ftype *ftype,
--				 struct lexblock *lexblock, struct cu *cu, struct conf_load *conf)
-+				 struct lexblock *lexblock, struct cu *cu, struct conf_load *conf,
-+				 struct func_info *info)
- {
- 	int param_idx =3D 0;
- 	Dwarf_Die child;
-@@ -2320,7 +2357,7 @@ static int die__process_function(Dwarf_Die *die, st=
-ruct ftype *ftype,
- 			continue;
- 		}
- 		case DW_TAG_formal_parameter:
--			tag =3D die__create_new_parameter(die, ftype, lexblock, cu, conf, par=
-am_idx++);
-+			tag =3D die__create_new_parameter(die, ftype, lexblock, cu, conf, par=
-am_idx++, info);
- 			break;
- 		case DW_TAG_variable:
- 			tag =3D die__create_new_variable(die, cu, conf, 0);
-@@ -2391,11 +2428,15 @@ out_enomem:
  static struct tag *die__create_new_function(Dwarf_Die *die, struct cu *c=
 u, struct conf_load *conf)
  {
  	struct function *function =3D function__new(die, cu, conf);
-+	struct func_info info =3D {};
-+
-+	if (function !=3D NULL) {
-+		info.signature_changed =3D function__signature_changed(function, die);
+@@ -2432,6 +2499,7 @@ static struct tag *die__create_new_function(Dwarf_D=
+ie *die, struct cu *cu, struc
 =20
--	if (function !=3D NULL &&
--	    die__process_function(die, &function->proto, &function->lexblock, c=
-u, conf) !=3D 0) {
--		function__delete(function, cu);
--		function =3D NULL;
-+		if (die__process_function(die, &function->proto, &function->lexblock, =
+ 	if (function !=3D NULL) {
+ 		info.signature_changed =3D function__signature_changed(function, die);
++		func_info__prescan_params(&info, die);
+=20
+ 		if (die__process_function(die, &function->proto, &function->lexblock, =
 cu, conf, &info) !=3D 0) {
-+			function__delete(function, cu);
-+			function =3D NULL;
-+		}
- 	}
-=20
- 	return function ? &function->proto.tag : NULL;
-@@ -3045,6 +3086,17 @@ static unsigned long long dwarf_tag__orig_id(const=
- struct tag *tag,
- 	return cu->extra_dbg_info ? dtag->id : 0;
- }
-=20
-+static bool attr_producer_clang(Dwarf_Die *die)
-+{
-+	const char *producer;
-+
-+	producer =3D attr_string(die, DW_AT_producer, NULL);
-+	if (!producer)
-+		return false;
-+
-+	return !!strstr(producer, "clang");
-+}
-+
- struct debug_fmt_ops dwarf__ops;
-=20
- static int die__process(Dwarf_Die *die, struct cu *cu, struct conf_load =
-*conf)
-@@ -3082,6 +3134,7 @@ static int die__process(Dwarf_Die *die, struct cu *=
-cu, struct conf_load *conf)
- 	}
-=20
- 	cu->language =3D attr_numeric(die, DW_AT_language);
-+	cu->producer_clang =3D attr_producer_clang(die);
-=20
- 	if (conf->early_cu_filter)
- 		cu =3D conf->early_cu_filter(cu);
-@@ -3841,6 +3894,7 @@ static int cus__merge_and_process_cu(struct cus *cu=
-s, struct conf_load *conf,
- 			cu->priv =3D dcu;
- 			cu->dfops =3D &dwarf__ops;
- 			cu->language =3D attr_numeric(cu_die, DW_AT_language);
-+			cu->producer_clang =3D attr_producer_clang(cu_die);
- 			cus__add(cus, cu);
- 		}
-=20
-diff --git a/dwarves.h b/dwarves.h
-index d7c6474..4cabab0 100644
---- a/dwarves.h
-+++ b/dwarves.h
-@@ -302,6 +302,7 @@ struct cu {
- 	uint8_t		 has_addr_info:1;
- 	uint8_t		 uses_global_strings:1;
- 	uint8_t		 little_endian:1;
-+	uint8_t		 producer_clang:1;
- 	uint8_t		 nr_register_params;
- 	int		 register_params[ARCH_MAX_REGISTER_PARAMS];
- 	int		 functions_saved;
+ 			function__delete(function, cu);
 --=20
 2.52.0
 
