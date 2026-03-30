@@ -1,88 +1,90 @@
 Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94E7E396B8B
-	for <dwarves@vger.kernel.org>; Mon, 30 Mar 2026 09:05:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 856291339B1;
+	Mon, 30 Mar 2026 09:56:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.165.32
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774861540; cv=fail; b=jCTQKpus17u1Fw0D0pQlEJDfjb6jIGjbDVFuwuOyojXlSDpMn6mXHIw2W6cs213mK7PcVggC+yxdJXNUHxL5KCLgnWSowgK+3HGsSWLu2yzvFvrbUcovDKJmHSSigBtgSBOM3CIJzJnDHIZM8a3APns1MtqunGLs5Jz1GTqcsdo=
+	t=1774864598; cv=fail; b=Ax7qnuTBgKuaFljWAIeeWpvWYENrfMu+JC4y1b+HzzY+A+oRb4L0F2j++KVSRXg+nXpbyVZptcGX7xIDt+T17O3lhc8w1BN/WDrKVYzTv57z57f0tMAbHMBakF1uo1h39taA/x1sSfPOgrFOYDMF0W+4ahof4nseNnwHEXUJTlw=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774861540; c=relaxed/simple;
-	bh=2L6BToZXBdOEmiLTXIy9PEwl4qvC60MkmSv4Tj7Vxpg=;
+	s=arc-20240116; t=1774864598; c=relaxed/simple;
+	bh=pQHTE1bir1l3DhBgSd5AzO/6AMu4co/mTxS48FMp70M=;
 	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=Zs53JJcoTNWeN9q4EJvPebVf7kPsATenAEb3o4QlloMx3XBTakgwa2IgqqO9IJgsjN7N4nB8l5aFyhhM7uZL9fraaIey3m/zlG1geJdomRLOmckiQEtqNSFoxRddZ8f/QtwF3rrLFH7QaGDw8KNv4aFCMu9pJtgaSjHSE0L7n+g=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=EvCEIZaW; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=RgYvB90h; arc=fail smtp.client-ip=205.220.165.32
+	 Content-Type:MIME-Version; b=E9um16TZJ8lGBSACFtg86PU+18L0FmI3SDNoVvcGEr2mGSSgKj613toFpMQcESROpVIgTr68jjTgwgRD9aSitUpk1ShNkecyxJtj4lYGQA/YKxBECbiIXYd2Z0vo3mwc5fneLn2LCk5DPhQTI0v+8DbkBpFddE74yh6zIJAzpEU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=p+5uHbX1; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=RdZUM4eb; arc=fail smtp.client-ip=205.220.165.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="EvCEIZaW";
-	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="RgYvB90h"
-Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 62TMuA2F577905;
-	Mon, 30 Mar 2026 09:05:34 GMT
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="p+5uHbX1";
+	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="RdZUM4eb"
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 62U1bDGb633172;
+	Mon, 30 Mar 2026 09:56:18 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
 	:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=
-	corp-2025-04-25; bh=hFSgFUpSFf58pme7d6pU7g8mxTa73Rk+O6EY9njYQgI=; b=
-	EvCEIZaWxJLX91bCGXS44WS1SmPD0z1HhS/Ef0u+heBftAhZI1Pf4ShZDGNKR8sM
-	P57TnmT9IcxO1i9JbyAYATC/DG3j2o2fxv+bi4gUkZYW79bnuumdzAMS+2k2GFoB
-	Pvrriy7eiMj0xmTFR/iSzz3eF5Wd6W5yThqJ6RqcZTV1RMIyTm7I+nfyiZ1ZFcDi
-	JL4YR2oF6iojt2/jvzyHW24bYtlu5BxGxOVex2SrK5wFviPpAhqdwsSl2qzbLb6w
-	qXL+CaegBZw40sVMbr2EAO0rjuOEM9q9LCCpPyvxKPudwBqE2ar5wNqqjPnCdVSE
-	HOpU6HL5/1jIQMzOOzDwAA==
-Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4d65jw9sng-1
+	corp-2025-04-25; bh=oYCXGRWbUoElZ5rJftSryDFLF7dTdfXyKvPfRh2mYXc=; b=
+	p+5uHbX1JZG8OEfTEwdAZXsi9qEMvGjIS8zoBaJvQpoBpKeLnfLiwriAukNnPJGG
+	667ZXfZKYyzvKYaKc7SuQUX78EebEH5Ja/dj4zbXM2k/SVE5DDOoK1efjcG9wSP4
+	Vk2DSa1jiNgaRPMTxNBtKmeWItUos7NB9E5uqUqnbFQXpvwMXYDMeEylvAXJSGXJ
+	YEXnlKdC8D/aECWLc5FwGfI4yWgs3siRi9GiieA4xblLS5B2MUIuX3Mt8nxRYIEd
+	0z4eUMZAhOkx1ZH8xHrNxxtQQjixVcmMl44WYbiQ0wqWaEeanWUvAwbQO7PcaEu7
+	MZtX2EN375Da7ZmiyPMJug==
+Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4d67hq9tbq-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 30 Mar 2026 09:05:34 +0000 (GMT)
-Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 62U8OnX8029482;
-	Mon, 30 Mar 2026 09:05:33 GMT
-Received: from sn4pr0501cu005.outbound.protection.outlook.com (mail-southcentralusazon11011066.outbound.protection.outlook.com [40.93.194.66])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 4d65e87mvp-1
+	Mon, 30 Mar 2026 09:56:18 +0000 (GMT)
+Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 62U92YMa036474;
+	Mon, 30 Mar 2026 09:56:17 GMT
+Received: from ch1pr05cu001.outbound.protection.outlook.com (mail-northcentralusazon11010064.outbound.protection.outlook.com [52.101.193.64])
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 4d65eetrtj-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 30 Mar 2026 09:05:33 +0000
+	Mon, 30 Mar 2026 09:56:17 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=hMpmN+hrFVOa23DD/lLRB34kNz2BGER/wFdejEMSID8ZP0VIFEvwOr7iGproasufySjsua6xHFx0LQFKSX4nSQIXtLgjoF02wnnadaeWD8AnQoPYZHN2UCE5+JrKxvtO5lhyUnELSAbrVY082s29ovhbtb/oO0ZON6hdaMeaQIQFb58A05YfaHJcSRXh5+PvG08TGY6J13xF+axSDPGLrKC/VVYMtDRIRcwUKl6C88PPMs2UT3VrPt91MTlL7fIHerfoGa84jrVPqxdaPqAB7HrN05iVAg7qNVrWBZxV91ZiXukpuzPnz/aeZhiS0EkemOSGfXHLkFAQ7j1QSV036w==
+ b=Qs792jrVjxOLtwVbvKiitFvRY93abC9TokUd3HbNQ6FeS5MOPwiObIYfKxXfHv/fAX8re0CS3dazMNq9ZGzZZtJWv2xnkdywC8oIHtERG0yEKJGtC6cORwLw0g2ET2e011YhgGW1Pi6JVAW9ONAwI+xlm54wW947iOcVp9kl0uvd1sq3eee954G37msYT1n/sPKvYV/xneTYASIO7aHiWa2uqk2vnng9lDtgRxjV/qAnTEf/V2bz/CtFQttjjOua+DKljs73rdYX05pm2DhQNC9MeJyVFu7XV5zvYREbkfqZKCQijooEMvffweZAWSwNWSHOP3uduP/9wxoVGc/i+A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=hFSgFUpSFf58pme7d6pU7g8mxTa73Rk+O6EY9njYQgI=;
- b=Xu1Go/W5sQvDpQ8AeHfFZJBkB2hMyrw+vFouY4OER8jxI933QxnDBCMguw6TDfl75b4ydUtQ7CwdvRFFKbvBLGGeNHYyR21WZhRfkCj8Iovm72Tbyyu5JCkLAtivHa3oqibDRrFFAyn0LoFpodY04kICS31DiFDM+tB594qyL0JIWtgKITePw3zVcS6UQ0L3cXBy175HQSqJIFXo7O+VYh0BGnfhsXfAOcRiFYqBgijuRfOCMFVS04s5OfGRO/nMLp/evWMXKljmtnbEOZo1C9z9LR6HUACNDT/8p3D+waNn+5T5UehzZXt2tUXQcMw7b14eY2otTqoUE6YSTJ733A==
+ bh=oYCXGRWbUoElZ5rJftSryDFLF7dTdfXyKvPfRh2mYXc=;
+ b=cJt9HOBsqcetDsR6W2QgFq0HHLBS0hoDlA/Mz1etbuh01V1YD4qNdbNtyV9pzYOF4e/HtsOztZMQ1t6vYGbZ6PWvVbX0rTk70eMkgZVsWU6j9P9adz4gULprTnkzH4pbn0cb0/8Pw1VCTLIEu0j8XPFGzesKvhVjymtGK/gH2OdeVVzE0pBuF5xawKyiMAXgL4ZKVimvmdRVsSLsv1J53TBoStOcEPWKkRK6TI+K1uhG/fgu7yuR0ecXyiQlYTJXLfJPvN4n8Kae+O3lUPIaG2MLlWc4+SMWgehg7WfbnBKpFrvIie50/oSJIfD/3sXveo7NI4n+nyw2Uz2ZhO7Tig==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
  dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=hFSgFUpSFf58pme7d6pU7g8mxTa73Rk+O6EY9njYQgI=;
- b=RgYvB90hRghAHA8Fr7u9ZEwqXW11HVjW+iwmwEatIz40enOiivSrvPLVtRNP2z2udoJA5qFq7nZbfecWlAE+zIuM846O2GY9nhcuzDqVNkGNGNgBdp2UFebx23BwdDclhwOn7EonxgOiOSOJtgjv+b1CfXjB78L0pq8P01dmgGY=
+ bh=oYCXGRWbUoElZ5rJftSryDFLF7dTdfXyKvPfRh2mYXc=;
+ b=RdZUM4eb+ln7h8bA8Hh945WEP5nD/7GL27/WYcE86BkMpPIPUjn4QFP9lzgMTfHJddIY5WYnMvPCAxuOvGoMaofC2KbqKQygi2p+2qVyjpDCI/Bws3C0+K4J/C/vje9q7NaC/CGqPCUkXWLJuhbuD9vYLR5QbZjcOpQoRy9diPo=
 Received: from DS0PR10MB6271.namprd10.prod.outlook.com (2603:10b6:8:d1::15) by
- BLAPR10MB5188.namprd10.prod.outlook.com (2603:10b6:208:30d::11) with
+ DS4PR10MB997644.namprd10.prod.outlook.com (2603:10b6:8:319::16) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9745.28; Mon, 30 Mar
- 2026 09:05:31 +0000
+ 2026 09:56:15 +0000
 Received: from DS0PR10MB6271.namprd10.prod.outlook.com
  ([fe80::3292:21a0:97be:4836]) by DS0PR10MB6271.namprd10.prod.outlook.com
  ([fe80::3292:21a0:97be:4836%4]) with mapi id 15.20.9745.027; Mon, 30 Mar 2026
- 09:05:31 +0000
-Message-ID: <741f21ad-5b95-4028-9f0f-4818f00428ef@oracle.com>
-Date: Mon, 30 Mar 2026 10:05:26 +0100
+ 09:56:15 +0000
+Message-ID: <908e71c9-42d2-43ab-9e1b-6111a5e62488@oracle.com>
+Date: Mon, 30 Mar 2026 10:56:08 +0100
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/3] dwarf_loader: Initial support for DW_TAG_subprogram
- in DW_TAG_enumeration
-To: Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc: Jiri Olsa <jolsa@kernel.org>, Clark Williams <williams@redhat.com>,
-        Kate Carcia <kcarcia@redhat.com>, dwarves@vger.kernel.org,
-        Arnaldo Carvalho de Melo <acme@redhat.com>
-References: <20260323211533.1909029-1-acme@kernel.org>
- <20260323211533.1909029-3-acme@kernel.org>
+Subject: Re: [PATCH dwarves v4 00/11] pahole: Encode true signatures in kernel
+ BTF
+To: Yonghong Song <yonghong.song@linux.dev>,
+        Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
+        dwarves@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+        bpf@vger.kernel.org, kernel-team@fb.com
+References: <20260326013144.2901265-1-yonghong.song@linux.dev>
+ <c2143369-7b31-45d2-9c34-ae311582e074@oracle.com>
+ <8424ac77-a469-4064-bfca-542d671d5ea6@linux.dev>
 Content-Language: en-GB
 From: Alan Maguire <alan.maguire@oracle.com>
-In-Reply-To: <20260323211533.1909029-3-acme@kernel.org>
+In-Reply-To: <8424ac77-a469-4064-bfca-542d671d5ea6@linux.dev>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: DU7P251CA0021.EURP251.PROD.OUTLOOK.COM
- (2603:10a6:10:551::23) To DS0PR10MB6271.namprd10.prod.outlook.com
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: FR4P281CA0094.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:cb::11) To DS0PR10MB6271.namprd10.prod.outlook.com
  (2603:10b6:8:d1::15)
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
@@ -91,174 +93,286 @@ List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS0PR10MB6271:EE_|BLAPR10MB5188:EE_
-X-MS-Office365-Filtering-Correlation-Id: 57699b45-b362-4f04-1941-08de8e3b7e88
+X-MS-TrafficTypeDiagnostic: DS0PR10MB6271:EE_|DS4PR10MB997644:EE_
+X-MS-Office365-Filtering-Correlation-Id: 41bed2fd-c030-40c9-fc0a-08de8e4294ba
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|366016|1800799024|22082099003|56012099003|18002099003;
+	BCL:0;ARA:13230040|1800799024|376014|366016|22082099003|18002099003|56012099003;
 X-Microsoft-Antispam-Message-Info:
-	KYO8zg371HyVbQwKfQKbxewj8K+KRouKzHsc4KC/1oGjxbj+f6km911wBYY1DCbsVim/TBZwKOz7ZW9bM8OWW/umKrqIzTbbO6R/Mv+T5vseGvDiMUfcEQRi4x+wdx0wgReR9EzutCbKqzoXnCkZBP+gBSWcosyMd6zSoXeunEy5QWXlOkz5f4lE4sXI/TpKXYNeBav8NR9UKgY3K7/s29Su49vBZRzHlGMJyXDBwBqB6c7ofUgKIqn3f2sPiv+eicr5CGaTfMdcBck33zauhURy0FcDoINgCg2NHfQOkTQbbAjIqcmBo5Ac/WWtLnB/8Cz3xuGWgovXpNZXN3DdFUml5FoH9hleGqE0YsXYxfv0wssAJZewOhx5L8EehDTV7gB4x4ghem6Xs+23KpOqDKSZ581YHhnDox3RqQIUyLniE5jogM1JJ13mk7ZRTeNdWEMcv6pYvqOfNzObFt6G/znlVq4dQjrKed3KldqKzg45GdrqibqoANLY+TpF+AjYeMQxGoZm5G8ihy5nLaEm5UemOa2Yg2vH6iO6cac+mI9nsqXoca8M3Kn5SxuzWYoD2vIn64RP/FjxW53UAiCOL6ZIGNvQvTMvbXklkLheDoaqHecy/MsCiRJBIpjUeaRA0y2qkLHIEwDxbDfvKDCAbJoiTKbecr0LjuBrFO9H38fZlUfy8hjRk4ZRN+QskIBtM/wU6Mmp4xpJv8Gqpquw8qyT+bFAbWa5IYLf01mS95s=
+	snZ/zl8E1ptl5TASvOBv/v14fTko8WVFpTqS8NPzMRuwEkPgc41ByrYy6zbXzTGds6byleN9exPZV9VWxuyJfTEEzagZsParvlOyNwQkq+fu2RBNtCtM/XVvrzg60fL32yZZQNBCGtviOdIOPu8q+iAMJSDxBgJcrO/oh3VikMFjEzw5exIqEEMLAM8RLtYodjaiJknN2bMgtejTYDfnLyL6hU+/L/Vhbk+hWPsJy+zatvzCrKD+tM9kxdvmcwdUwfYZjCueTksMPkmDP3bDSoIklgc4ume392/qEtDfZYE7oQMhtThcgNSOnmkhNrsDI5Zy8yjxXxI2fQgzSJwnTcA0DlxyDqQDnfV9pA7VuO2a0I+DqbWVHEsKgQU4ub5bEPYsBeJ1/gLL0ED6EMKZfL70CLQl+O5zYQq9kwB0Oewe8avBTnoeSpgwnC/IcPCU6CP3O4xx6xaDF6Me7HjzyMtwJmTTVXfgrF2rdJfDMP/1eFAnn/8a811F0XT5WywD1KjP/b9lIVVt5vRc/WDapPy5jIVUsr7xWAMf1oF3Ozbllsr8K5xlEvAtL6Kwhkd5u5dvBTgOpYHpBrzO7c9yIMc5B825hUVzC3vaHQssWWxqVYzhBCIX5mAoSm9dT6Hn5l8ow3UK7uuJbKNqdGC+qih1/frk9N50/8mO2Pl9aeLfRvPGUGPPwz0sECgD87DHDxwvjb8fVm5jYUmD8RmQqB+TRPOtINoW4Ad+uvP1OlA=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR10MB6271.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(366016)(1800799024)(22082099003)(56012099003)(18002099003);DIR:OUT;SFP:1101;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR10MB6271.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(366016)(22082099003)(18002099003)(56012099003);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?R2pGeElFT3laUEF2dDAwRFgxZEs2NFRKaGNvaWh1cDFUdEpib1UxSy80bXBZ?=
- =?utf-8?B?dnlqTWt3OGVMQlh6eS9HMjRuQ2l6Sk9ocm5USzZpanBsdHNBTU0yZzJMMnQ1?=
- =?utf-8?B?dThYbDFXQUdSVFlCeCtTbVZiM2d0VXQxdlp3U1lzTDJHcVRnOXJrWndZekd2?=
- =?utf-8?B?c1oxUWhjdlVFa292TmZuYWl0dVAxc1doOWUvcjAvTTVaY0lrYU5pR3EzQkMv?=
- =?utf-8?B?VUZXYWg0WUdKb3hhS044ZUNHd3pKNzhWZTFHamg3bE9ldUVtUko5VzlsRFRK?=
- =?utf-8?B?QkdkTEpKMncwM2MvczhhZEpvbWR4N1ZRMTBQVVhGYmQ5OEVvQ1lITXQxdWc3?=
- =?utf-8?B?dXRmWVFHaVA1NWtURk1LdXNxOUw4WlpidGhQMEE1Yzh3WVlMaFJodG45Qk9S?=
- =?utf-8?B?TWptWmJYcTAxeDdYRGNvYVd6N3k5a0dXdTIrakRpNFBCemRzSFpQR1BkWHNC?=
- =?utf-8?B?QmI5ZFJPdGxaNlVKbk9IQmpzWWV4aVh4Y3hSVXJlRmtnbFllK2o5ckNEak9F?=
- =?utf-8?B?Zi9lNE1EVjYrZVJ4N1FSUWFlTEhRV2l2MUpwQXlZbjNWNzR1c3dwZVhyYnVB?=
- =?utf-8?B?K1RFWGNTOXQ5dDRMS2NTNWRVNnJhWXhCSjQ4d2FlY1ZKOFp6K3Z5TUEyUlFx?=
- =?utf-8?B?NEprRXFMK1B1VkJ6UCtRaTQ5RkZqWEdrSmtVUU9ZUnpXNFdGbUVXbW1KaU0x?=
- =?utf-8?B?djMrZDNFZ00ya2xremNaajMvWUpIUVRQT2RjSVl5MzM0em0wZThCNFcvVGp1?=
- =?utf-8?B?bkdsVDJNNUVXN0NtZUsvTDkwNHEvbVlDTkhKZjYwaUlndXdpZGlMWC9zemNt?=
- =?utf-8?B?cFhodUhSR1R2bkQwUXJvZ2FlYk53QzNrOWN2QkdaSkJqaE1MdGt6eWEzbWQ5?=
- =?utf-8?B?WHhuOFJjcHZmSFhveThWbGpiRDdvOEx6NXhyM05KZ21IN2RzdE1ZamJNOXpp?=
- =?utf-8?B?cnUweGpDUHBqUkZpeDhTbVQrRTNlM1lFdWoycFhyRE4vKytTRzQ5Si9EeDh0?=
- =?utf-8?B?dVpTOHdMVG5ENnd3UjJTYUFQZGt2TlpFSzY1UnJMZTZ1NVZxMjZsSXk5YStt?=
- =?utf-8?B?citiOFdORjM3blFVbnl3RjJsZlNHWVpwUXA2VDJ6SVhRa1RMYnlVWlF1SmlM?=
- =?utf-8?B?YjVqMkh2eW1lby84T3UvdWt2eG9FQXRTZWQ1R0MzVXJ0K1k0KzhSWTAxbUUv?=
- =?utf-8?B?Q2JnMzMvMGdBRWZQVVlVQ3AxN3RKSW9FdHVBcWxRQ1NnQjBvNU5HM1F6NlVs?=
- =?utf-8?B?b29GdXJwWmUvMGdXSmxOL09KWDFqN1NjV1BxYWFHK0czbWQyQ1pvU1ZZdzJl?=
- =?utf-8?B?ZnlyTWhqY0YwZXQ4dzgvNG9oSDY3aXhaVlZYT3RGSTF3Zk0ycld5aFdCczgz?=
- =?utf-8?B?TENnaEFac2dMQkYwZFl0SHBEcE9CNmM4bDcyWmQrWTZlZE85SW1PWU14UzRO?=
- =?utf-8?B?dThhVnBaYWo3bGtqUUVMQ21ydVAxNnJPTVpKUk1qWlEwNE43Y1dUekFGQzdD?=
- =?utf-8?B?S1Z4dEthTzBubHIxd0xtTFV4VFMvWFZBZ0NRZjFZZWVtOHRSWU94U1NsdGJ3?=
- =?utf-8?B?cDdCTWs2bW14MHJtSm5VVjZ3WTVuTm1PbHlmdU9qdmVNUlpQWkpTNVNXa2Rk?=
- =?utf-8?B?NW9vNDYvVGFrV2NhRGxtNE0wZXQzbFUzTVlIanV2UmIrcTdhVWdmekdWTGlF?=
- =?utf-8?B?cUZtb25PeW45ODZHSDE2SnZKQjFPRlNoUDJ2cnJ1d0VxUzVBcnpDNDZqNnRI?=
- =?utf-8?B?WVNDdEgrN0I4eHVBOUV5WHdqVUJtLzJOWklHMi9DWkg0aGNSZTM0bHRycnBI?=
- =?utf-8?B?MGp3SEhuV1VOTm14bTFLa1I0QjBIZ2k4bjBvR1BmNXg4S0RFa29WbXg5bFJx?=
- =?utf-8?B?RlFCbUNUbVl6V2Z1NHBCT05DeUxraFZaaFlLSU9aSDFhQ1NqU3l5RlVjRmgw?=
- =?utf-8?B?Tmo3SDkrSDB3czhzZUx5c0M0QVhhaXpWRnpGWnFCSndrY3NsS3ZBc21RYVQr?=
- =?utf-8?B?dFJKQzJHL2ozU1VKZVlUYmhyeUVBTjBJK25uYUR6akVwRE5UMmVKS2dhVW1h?=
- =?utf-8?B?SmdMUHFhZkU0VUo5eEdONEZvaFJlYVkxTkJCMWJrcUI3dlcwRnEybGo5NzVo?=
- =?utf-8?B?dFpER09EVnVxT2FES1NlN3prT2FObmFZZlhRT2xnTk8wa1JURmMreXppWWxO?=
- =?utf-8?B?clZoMTJpUndTWGFDTEFVZWtiMkwrbjBiNHhyTXc0a1BMdWtUQjFrcVhBNE1p?=
- =?utf-8?B?UFlDdzB5UWFLUmQvdkUrclRaK2RqT1laYUNpZzhRNXU0VjF2bGh1a0hTZ1hH?=
- =?utf-8?B?VWFsb29Lb1VFVEUrVnBTVC9mT0tHVStQSmVaVSttN1g2R1BnODNZdz09?=
+	=?utf-8?B?L21yRWlQa2pOczdjZjNXU2RPd0lnM2twSGdQQTl3VmtzR2hUOE1iSE5DbzI3?=
+ =?utf-8?B?V0JzSXVYTHhRSUZ2Y2xGTm8vZVV4V200WUFwQlZqZm43NkNWb25vajg1SmZH?=
+ =?utf-8?B?R2pCM2I5RU5aMzUrdDFaQU05NnJrNEIzZFF4dStGaGY3STBJdXVCT1NjTzg2?=
+ =?utf-8?B?TjF2VkMxSmRJbzdOdVBCZjFBZFhMbnlJMjRoUFpKTDZ5aEplOWt2SXpCYWNT?=
+ =?utf-8?B?RTVPd2FFbC9Kem9UcVg5UXF6Vk9TYXJnbVFoMkRzTVhkL082TnIrWXJHcEl0?=
+ =?utf-8?B?Y0hZR0x0Uk1QZlZCNGgzejJnZlpzVEd1V29LTmMyU0xOQWYwcVA4N0RjS2Nk?=
+ =?utf-8?B?eXQ2emd6QmdzeVJuSmt3NDIxQXJIZDZNeDcwaEZXa3p1VCtIRDNJWUZGd01K?=
+ =?utf-8?B?cTZxK3pYeVpEbXFyQlRROU5FcEV1ZG9kcjBPbUo1THA1MDhXQXFzKzh0dWM5?=
+ =?utf-8?B?RHR4RHphVllSR3gxQUZ3RXZ6MHV2TXk5dnhiYzF3eG9uaFdPcDFqdXhpc1ZQ?=
+ =?utf-8?B?SFFvSnlSNVBsem9pbTRjdDVlWUl2U0lUMWVFb1hXZ2NKWDllQkNYWUl2NVJr?=
+ =?utf-8?B?SjhOM1BTc3BkRWVqWE9GZ3NKTlVEbkRzZkFEMHFGajhJNmNPaVRZd3NUSG83?=
+ =?utf-8?B?U1ZPN2pXbzZCNXl4MGdaNjROWkw5TVRJaGtkcUk0VlRUVmpUMTIvTjE3VVZj?=
+ =?utf-8?B?U3RUMUIvZk1qNXdqaGgrc2I2aVh2NTh3QkxtWnhlSTA0cUk1K0lJajN6ODFX?=
+ =?utf-8?B?NVI1VUZVOUs5VDN6UzBIVXRIMS9FeVNMSHJadllkaU1qSk5UcXhyVUVmRnVC?=
+ =?utf-8?B?WGhPV0NsRUY1TDFmWWc5ZStGWXZrOUlvUXdabjhXMnBGaU02TnBtZzZnZHph?=
+ =?utf-8?B?ZXgrYXpWSERnenpZMmdxOERYWlpYSUxYblg2b083MGRUK09ZSm8zdFN2cFM2?=
+ =?utf-8?B?WkRIZWdndEZ2L1Ird3NHbStjSkJhVUp4VXQ5YllpM3ZFWDFwcjI0SUR2d2w2?=
+ =?utf-8?B?OCtwV2hDb3ZtWEdRejlqZmpjdWlXQXBGWlE4b2hiblA3Qms1NTZlWkM4TG9o?=
+ =?utf-8?B?QWFLSExFM3lqbjZMRStGUjN0MGxNb2pGS1VDSmdqNENvbTlwR3J4R3g0d2wy?=
+ =?utf-8?B?S3N3Um5mOTRkYTU4dUtvVUhvMHJxUE00aVNGQzdMbzVQU00waHQ1enB5VWdk?=
+ =?utf-8?B?YXZyRnBFNWlWQk5GZVBzb3IvOXpRbXJiQzNTVXJRTFFaYytodGdtVU1DcHBL?=
+ =?utf-8?B?ZzhKSjI2a3JWTFU1WFRBOTlDY1JHWWtaTW5SYm9qT0wzMG9CSnMvbmFuNVVw?=
+ =?utf-8?B?ZXBIbzZzOXhFcitIT1ZLT2l6YVFjb0lRYTh1V3NPRlBSaGwzZmpES0dLYWZZ?=
+ =?utf-8?B?R2x4YVRSSXV0aFFOWlpnT1V3WXZRTFJLY1ZkR1RIY2tCMWZBVmhOWXJJYi9i?=
+ =?utf-8?B?cTBERTM4VWZUaU1nRFF4cXRoU1R3WEcwOHE0NDZSUU9VVWdHa2JQTExPVkkr?=
+ =?utf-8?B?cmJJa2Z2WnpNR2RWV2I2SUQ0b1N2NVdmcHdQdFJBYkYzdmY1UlpMU3ZDc0lC?=
+ =?utf-8?B?cXBUMUZJY0YzUXUwRWk1UW8wVklqczU4aUJrZnU1ejJlR2wzTXZpZ1FEa3Bx?=
+ =?utf-8?B?OHBpTkxUQTcwUW5QQjFIZW9aTmVTdjhYUlhyMGdwNlAxN1hwODU5Tis2SGZR?=
+ =?utf-8?B?RHJaR2ZqOEhFNDgvMkllUUF1VHZnS1BwQnZteEhTK1Yrck9kY3RVWnYxQVdZ?=
+ =?utf-8?B?MDdiWjRRZkFLTjNBL0dVWUdtbTdIY2tzV1VSaGJEaCtia3lSVmF5T3dLZjdq?=
+ =?utf-8?B?a1hPbitnQnZBaFVlMnYwMjJDYm5YREprSEtzNEhrb3k4ZzArd3lSc1k3RjVR?=
+ =?utf-8?B?cU92V3BuTXhZUVZEQnFZbDNobStuUnpIM2hjS2JJa2thdzluNmFSWmwrMUw0?=
+ =?utf-8?B?bG83MURVK3BFaTdiMXhKSWp1dVgwaTdJYldBSEVTQ01QQzRxcHRoTmc4YXQ5?=
+ =?utf-8?B?ZFp1VllMOW1GQk50Q0pzdXFIVGtvc1pMMUVTN3gvbkVzeFowc3ExbmE5d3JH?=
+ =?utf-8?B?c093QWxDL2FsUFBtRU0yRGpJVkxta0RRakQvb3hvMGJxK0FSZDZIblhMaWgv?=
+ =?utf-8?B?WDc3M0lHYzlNazhqOTVVejhidWdCUHhwRHJ2MFRwYmZiL2JwTXZDR2sxOGJE?=
+ =?utf-8?B?SDk2ZUFMQ2ZkL3BVU0NhS214LytGQmZ0OTR5WFZsbnd2dmhkTGRLaFhyQUIx?=
+ =?utf-8?B?QmZDVXA3TjNVQVV0Wm1MeERTcU5sckhwalNSVDZ1dkxycFpQZ1hoaGY5T3Z4?=
+ =?utf-8?B?dEViK1EwcStZeW5PVWpRakRmYVR5eDR1WnFISlJKZ3RVdTVzVkZrdz09?=
 X-Exchange-RoutingPolicyChecked:
-	TE/2QElMxeD3whImurlcJSqvKYYw8zLed1GD8n+OK+uuP599Uvv6+HMrMfUs7vsQYxWh3Q6yYTcGveQaBD8vfT9xOAlJBLLAeITYqnkT8pbi0XpJfhLAgNq6zSTglTV9+/bIWZYX7elmFxpUaVLoQaxFIiND54fYb0IAVS8T9aQ2tPsz9r6mGXpgUZjSUqNKYY5uqz3nnVTVov6NhRtK/DCm4KSG1ivBsf+vrOzh47fUcdidfzu85xMQBUbMq0Kw77GfgLX6KrkpXDVdNANa15UwQyLfXOCUUHXYubphiDUUVzs2qtM55O29y/xOopVB+Gex23SBzcf/bDnayTta4w==
+	GL8XNRQ+t8YbZS8B/iQq7fYQ0y8pcFzMnSMV0hWz4xW6+WNv9/are4/VuboKfVT6Fo9UiXi8r+lb2j65tq75EPI9HQ4mv7sL08Or5jqwhvY0SN/xYiJFS7Zo3Kg+Z2cRT1ak7Ao598hKHTOjjzS/uF6qhvhzaEBAjHEW3Da5PnjBeXh+3/RJKLG+5pH4z3v2gZhv03ZbIZIiXWATzSetnSt+jTixHDUYOZpCXhBMPFLpTT6AU8Ay2iY9Vwikjd0F9LAJhWY+8y5H+0ejeEOrJl6ANphvZ9cj8vgnbN7iRwaV4ZNEzUhhHgHc2jtYxiGmmqNpnExtEUHQ27gcgP4KAw==
 X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
-	0czddNdm9zimg+O3fvV3uK4Oew+sblYbLJQZ556huEGDPvH1lkWDInfM9qTQ+aMwwTiIAUNknz5IIEd0WZDm6fN3Z+OhhVTqEQfb2RHrAUbn5ROPZ0MfaWks0/w24172Lnu+PdWemHLPvkwGX0UtzvI8Qno2c3+laluIGwci2ZeTs06fM6r2rrwbh0o8foEayRGEKqSWG4J+NCjilf+P3Pk3dXiZpMUXkrDKvLXafs5HHskWgb42FT7EQsQNcPFvbkI788Q8LE/77yflIbzczf7QNWdLrkeAw9n6vK4r4vJ2G8Y1w09dsgUO/jkd06EKdgK959ZrLQ6t47wfHrab4hBlzYe/Fpmg16to7bvQVlcKeCPzkFKSghw+kF+HD7vkU2gXxI4qUfc4IRsKINMNbX99ff8EFFCk6AG0R/prd2ZcETl2koJr4COdPyTZIhLa9zq8FO5SASCy7QtZKTmYxlxTALsNDOwfK9d/DOK5XELmQZNZiBV49dTR0IywcpTASpCPut+Cn5yyAWw/GXfkExkrATfFkGgOTpW0CKVg45OUs98Gd4x/1Al/dhHrVcLZJhUex0zJc/e94YcZ3SBuU7YgTcyDCKYdfVoIp5WpDNQ=
+	H9AyIpfj/iHuo/UPRxdrSVf7OO6G24Vpad6XHwB+aWz9PrqbkV8DDHRwR0fhXBO352NNJFFm+WIM1AoxG3di7aeG7sd+h20If4HG3mLQd7fwq1ejjN1U0kysmKDjWfoO68VmBhogMtwJ+ssSwAGI/2XXm7kBw5nAAHjK+1pKdBrK7amWF+0YHBTiX1OoHNR3azTv5lU9f7tL8hPFvfuv0RZnUhrRqHVfyB5+MIg0dMiqqq/lQoVhvwlnMavkgLgDuKaDPHWnZkgtKPgSKXNA+3EgqknGpfPd83r+3tjVWW7G3OMcfA1Of7Th/QilVJ6JFSfzfydMuDj7AXC0NVaPp7f2hFoEJUOVxE42Rpbl7dlhiTAXWiCRWHG6lInavzMCO2g6RjOctjqQLr48gtFEtqe8j1BN2OFLVugAnZ36NSuimPH0afWoUOCaLvLo/FQyQW3x1DBt1odt3Z9OwtyOy3P3HjztnP7CLzCKaMm7ZtL4IXGGKoAlOZVA7WNCMS+6My/W+QsTRbTKGXATI/nteZxKCqzacBeLb2/zD2xHrLEree4YwCm8U9tq6SmPSRaE76MorowJOwTtFsJ+266tWo1U0G56aykuoDd9Bsk89eA=
 X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 57699b45-b362-4f04-1941-08de8e3b7e88
+X-MS-Exchange-CrossTenant-Network-Message-Id: 41bed2fd-c030-40c9-fc0a-08de8e4294ba
 X-MS-Exchange-CrossTenant-AuthSource: DS0PR10MB6271.namprd10.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Mar 2026 09:05:31.2092
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Mar 2026 09:56:15.0060
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: kpTHieNtQmNcQUpNHuuVWmujlZT7lUtYSqaXLBp4n5vxijbolNDT80ZMBE8XFq/kkzwVCd4Pc9zEQ/NpdEo46A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BLAPR10MB5188
+X-MS-Exchange-CrossTenant-UserPrincipalName: tFnOTsr7YZWtN2hfpecfF11XBFJ3O+dUeyX5YYHrSRD2F0jgA58gr+/YFm+I2iJRq6sv4IO7AriXzZSa2rvLcw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS4PR10MB997644
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
  definitions=2026-03-29_05,2026-03-28_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 mlxscore=0
- malwarescore=0 bulkscore=0 mlxlogscore=999 adultscore=0 spamscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2603050001 definitions=main-2603300070
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzMwMDA3MCBTYWx0ZWRfX/0w1bbzaICwp
- TEDGbTxVsJIYXV93Rx03Rxa6w/eW8ZuFKMCJXpDwvL8NiBnb/qMgjoooO/OuWyJcqbM/KIMcAiv
- TjB3UWDbIBQN6wND2BYkYGr5jL6LYQhAlBZ3rU4q9ZKAwORX074s9sIaNppuzOvRfkIsdp90cnH
- 7O0BjVMjAFT3waLhDU9+xpPVuvdO+7rrduJpgel2nBqaCeXZH/DBTo/4vQxSN1bfC0JFj4PJHYp
- lvD8E1oLLLJ2PJFZuSLdgySAU60/YG9WcbH4b7HwC/U1mDHNDmV9eXsrsMyhWC+PjHADHbazajm
- cWWIK3wzMHrky6xGgHsiA0HBPr5z0X/kmecKWBsPIJ6eGADoGVMIZO1AjDMUzqI9P8QLcf6s7lQ
- utUebGLRvWSrZ3L6k+IvRFojk0iaRd+JmZasoIabBLTzd3qpQipM80+04q1/SpDvvv09PHalx+w
- Ec2lKmM6qsRWVRc5Ljw==
-X-Authority-Analysis: v=2.4 cv=CJEnnBrD c=1 sm=1 tr=0 ts=69ca3cde cx=c_pps
- a=OOZaFjgC48PWsiFpTAqLcw==:117 a=OOZaFjgC48PWsiFpTAqLcw==:17
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 mlxscore=0 adultscore=0
+ bulkscore=0 phishscore=0 suspectscore=0 malwarescore=0 spamscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2603050001
+ definitions=main-2603300077
+X-Authority-Analysis: v=2.4 cv=T7WBjvKQ c=1 sm=1 tr=0 ts=69ca48c2 b=1 cx=c_pps
+ a=qoll8+KPOyaMroiJ2sR5sw==:117 a=qoll8+KPOyaMroiJ2sR5sw==:17
  a=6eWqkTHjU83fiwn7nKZWdM+Sl24=:19 a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19
  a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
  a=Yq5XynenixoA:10 a=GoEa3M9JfhUA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=jiCTI4zE5U7BLdzWsZGv:22 a=RD47p0oAkeU5bO7t-o6f:22 a=20KFwNOVAAAA:8
- a=yPCof4ZbAAAA:8 a=_nt0qgtSTFgWODJrQlsA:9 a=QEXdDO2ut3YA:10 a=O8hF6Hzn-FEA:10
-X-Proofpoint-ORIG-GUID: QB70xLf4Sp_nPL2t0eE8w7puYF-qEQP5
-X-Proofpoint-GUID: QB70xLf4Sp_nPL2t0eE8w7puYF-qEQP5
+ a=jiCTI4zE5U7BLdzWsZGv:22 a=7Gl3-_t3PgB9XO-mQDs3:22 a=NEAV23lmAAAA:8
+ a=FMeiI-8lGC5hG4MUdM0A:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10 cc=ntf
+ awl=host:12276
+X-Proofpoint-ORIG-GUID: BToYoUer4hbHx-DXCMVY-08dvOkgyafc
+X-Proofpoint-GUID: BToYoUer4hbHx-DXCMVY-08dvOkgyafc
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzMwMDA3NyBTYWx0ZWRfX4RDPlmFJd6Q2
+ 0vJoMpOEsoYELqa+HX1Yx3iw+7pfuI5qHb+duO6jr6unT51mLHQLikVcgV9d8qa1ZXyjwgiT14k
+ bLZoKCTLiZpmkvG4Xn5wr3rj9kdc4I39ckYYWdUyc1z2G/SgYZokOLUPDqiDARwaal7jpcA8fU8
+ 4d9MJtkj1BYbJL6K2+eN0jdCavxIoq5vKvYxEt4jMjlRGdWUpDtC9AL7Z6hpFb+6bGSdL8FWP3+
+ eIHQw93wi1UscIhJonMF95av54chjTAWs8WJxjxDjcTWtSLL353NKR5E0rIBRG1hSZWtoSUjhiE
+ G2kpbQ9yy7T2HdyWzECQcnbZ7Osq2hw8Tw997iXIeiNDD+J/LivBVuWkJ5FfJM/uv7NYO4GuvD2
+ ZwC0pugHCMkXsdSHkTS/lfZylOGiLiHg04Y9vY+0+djxoxbXb0/xm8G1lBYw/bcF+fu9XhVbr2V
+ Wwl5dnKOe2sOCUeH10/WrSvOGr+LhR+o+zZV5RtY=
 
-On 23/03/2026 21:15, Arnaldo Carvalho de Melo wrote:
-> From: Arnaldo Carvalho de Melo <acme@redhat.com>
+On 27/03/2026 19:38, Yonghong Song wrote:
 > 
-> In Rust enums can have subprograms, add initial support for it.
 > 
+> On 3/27/26 9:02 AM, Alan Maguire wrote:
+>> On 26/03/2026 01:31, Yonghong Song wrote:
+>>> Current vmlinux BTF encoding is based on the source level signatures.
+>>> But the compiler may do some optimization and changed the signature.
+>>> If the user tried with source level signature, their initial implementation
+>>> may have wrong results and then the user need to check what is the
+>>> problem and work around it, e.g. through kprobe since kprobe does not
+>>> need vmlinux BTF.
+>>>
+>>> Majority of changed signatures are due to dead argument elimination.
+>>> The following is a more complex one. The original source signature:
+>>>    typedef struct {
+>>>          union {
+>>>                  void            *kernel;
+>>>                  void __user     *user;
+>>>          };
+>>>          bool            is_kernel : 1;
+>>>    } sockptr_t;
+>>>    typedef sockptr_t bpfptr_t;
+>>>    static int map_create(union bpf_attr *attr, bpfptr_t uattr) { ... }
+>>> After compiler optimization, the signature becomes:
+>>>    static int map_create(union bpf_attr *attr, bool uattr__is_kernel) { ... }
+>>> In the above, uattr__is_kernel corresponds to 'is_kernel' field in sockptr_t.
+>>> This makes it easier for developers to understand what changed.
+>>>
+>>> The new signature needs to properly follow ABI specification based on
+>>> locations. Otherwise, that signature should be discarded. For example,
+>>>
+>>>      0x0242f1f7:   DW_TAG_subprogram
+>>>                      DW_AT_name      ("memblock_find_in_range")
+>>>                      DW_AT_calling_convention        (DW_CC_nocall)
+>>>                      DW_AT_type      (0x0242decc "phys_addr_t")
+>>>                      ...
+>>>      0x0242f22e:     DW_TAG_formal_parameter
+>>>                        DW_AT_location        (indexed (0x14a) loclist = 0x005595bc:
+>>>                           [0xffffffff87a000f9, 0xffffffff87a00178): DW_OP_reg5 RDI
+>>>                           [0xffffffff87a00178, 0xffffffff87a001be): DW_OP_reg14 R14
+>>>                           [0xffffffff87a001be, 0xffffffff87a001c7): DW_OP_entry_value(DW_OP_reg5 RDI), DW_OP_stack_value
+>>>                           [0xffffffff87a001c7, 0xffffffff87a00214): DW_OP_reg14 R14)
+>>>                        DW_AT_name    ("start")
+>>>                        DW_AT_type    (0x0242decc "phys_addr_t")
+>>>                        ...
+>>>      0x0242f239:     DW_TAG_formal_parameter
+>>>                        DW_AT_location        (indexed (0x14b) loclist = 0x005595e6:
+>>>                           [0xffffffff87a000f9, 0xffffffff87a00175): DW_OP_reg4 RSI
+>>>                           [0xffffffff87a00175, 0xffffffff87a001b8): DW_OP_reg3 RBX
+>>>                           [0xffffffff87a001b8, 0xffffffff87a001c7): DW_OP_entry_value(DW_OP_reg4 RSI), DW_OP_stack_value
+>>>                           [0xffffffff87a001c7, 0xffffffff87a00214): DW_OP_reg3 RBX)
+>>>                        DW_AT_name    ("end")
+>>>                        DW_AT_type    (0x0242decc "phys_addr_t")
+>>>                        ...
+>>>      0x0242f245:     DW_TAG_formal_parameter
+>>>                        DW_AT_location        (indexed (0x14c) loclist = 0x00559610:
+>>>                           [0xffffffff87a001e3, 0xffffffff87a001ef): DW_OP_breg4 RSI+0)
+>>>                        DW_AT_name    ("size")
+>>>                        DW_AT_type    (0x0242decc "phys_addr_t")
+>>>                        ...
+>>>      0x0242f250:     DW_TAG_formal_parameter
+>>>                        DW_AT_const_value     (4096)
+>>>                        DW_AT_name    ("align")
+>>>                        DW_AT_type    (0x0242decc "phys_addr_t")
+>>>                        ...
+>>>
+>>> The third argument should correspond to RDX for x86_64. But the location suggests that
+>>> the parameter value is stored in the address with 'RSI + 0'. It is not clear whether
+>>> the parameter value is stored in RDX or not. So we have to discard this funciton in
+>>> vmlinux BTF to avoid incorrect true signatures.
+>>>
+>>> For llvm, any function having
+>>>    DW_AT_calling_convention        (DW_CC_nocall)
+>>> in dwarf DW_TAG_subprogram will indicate that this function has signature changed.
+>>> I did experiment with latest bpf-next. For x86_64, there are 69103 kernel functions
+>>> and 875 kernel functions having signature changed. A series of patches are intended
+>>> to ensure true signatures are properly represented. Eventually, only 18 functions
+>>> cannot have true signatures due to locations.
+>>>
+>>> For arm64, there are 863 kernel functions having signature changed, and
+>>> 70 functions cannot have true signatures due to locations. I checked those
+>>> functions and look like llvm arm64 backend more relaxed to compute parameter
+>>> values.
+>>>
+>>> For full testing, I enabled true signature support in kernel scripts/Makefile.btf like below:
+>>>    -pahole-flags-$(call test-ge, $(pahole-ver), 130) += --btf_features=attributes
+>>>    +pahole-flags-$(call test-ge, $(pahole-ver), 130) += --btf_features=attributes --btf_features=+true_signature
+>>>
+>>> For the patch set, Patch 1 introduced usage of DW_AT_calling_convention, which
+>>> can precisely identify which function has signature changed. This can filter
+>>> majority of functions where their signature won't change. Patch 2 did a prescan
+>>> of parameter registers to accommodate some cases where the optimization could
+>>> happen but didn't. Patches 3 to 9 tried to find functions with true signature.
+>>> Patch 10 enables to btf encoder to properly generate BTF.
+>>> Patch 11 includes a few tests.
+>>>
+>> I'm looking through this now, but FYI the test run with clang kernel build
+>> is passing now, great work! The log [1] shows 23 additional functions for
+>> clang kernel builds (see the "Compare functiokns generated" step). Interestingly
+>> it shows a few additional functions for x86_64 too, I suspect a side effect of
+>> better handling of parameter location info, but I need to confirm:
+>>
+>> ### Compare vmlinux BTF functions generated with this change vs baseline (none means no differences).
+>> 1345a1346
+>>> void __do_notify(struct mqueue_inode_info * info);
+>
 
-I guess we'd need some form of enhanced enumerator kind to support this in BTF,
-since I don't see any means to enhance the existing enumerator kind info to
-support references to other type ids like functions.
+Apologies; I said x86_64 above where I should have said gcc+x86_64; the list of extra functions
+I pasted into the message was for gcc specifically.
+ 
+> It would be great if both this change and baseline are showed. For example, for this __do_notify() function.
+> The kernel source:
 
-> Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+In such cases, the functions are not present in the baseline. The aim of the compare functions step
+is to show the set of added/removed functions, observing the effects of a pahole change on the list of 
+encoded functions.
 
-Reviewed-by: Alan Maguire <alan.maguire@oracle.com>
+I would like us to get to the point we can use pfunct to print detailed info about a function;
+various representations, inlined at specific addresses etc but we don't have that yet.
 
-> ---
->  dwarf_loader.c | 38 ++++++++++++++++++++++++++++++--------
->  1 file changed, 30 insertions(+), 8 deletions(-)
+>   static void __do_notify(struct mqueue_inode_info *info) { ... }
 > 
-> diff --git a/dwarf_loader.c b/dwarf_loader.c
-> index f0833e8c44a944a8..b5a92160ecf82f74 100644
-> --- a/dwarf_loader.c
-> +++ b/dwarf_loader.c
-> @@ -1943,6 +1943,8 @@ out_delete:
->  	return NULL;
->  }
->  
-> +static struct tag *die__create_new_function(Dwarf_Die *die, struct cu *cu, struct conf_load *conf);
-> +
->  static struct tag *die__create_new_enumeration(Dwarf_Die *die, struct cu *cu, struct conf_load *conf)
->  {
->  	Dwarf_Die child;
-> @@ -1964,18 +1966,38 @@ static struct tag *die__create_new_enumeration(Dwarf_Die *die, struct cu *cu, st
->  
->  	die = &child;
->  	do {
-> -		struct enumerator *enumerator;
-> +		switch (dwarf_tag(die)) {
-> +		case DW_TAG_enumerator: {
-> +			struct enumerator *enumerator = enumerator__new(die, cu, conf);
-> +
-> +			if (enumerator == NULL)
-> +				goto out_delete;
-> +
-> +			enumeration__add(enumeration, enumerator);
-> +			cu__hash(cu, &enumerator->tag);
-> +		}
-> +			continue;
-> +		case DW_TAG_subprogram: {
-> +			struct tag *tag = die__create_new_function(die, cu, conf);
-> +			uint32_t id;
-> +
-> +			if (tag == NULL)
-> +				goto out_delete;
->  
-> -		if (dwarf_tag(die) != DW_TAG_enumerator) {
-> +			if (cu__add_tag(cu, tag, &id) < 0) {
-> +				tag__delete(tag, cu);
-> +				goto out_delete;
-> +			}
-> +
-> +			cu__hash(cu, tag);
-> +			struct dwarf_tag *dtag = tag__dwarf(tag);
-> +			dtag->small_id = id;
-> +			break;
-> +		}
-> +		default:
->  			cu__tag_not_handled(cu, die);
->  			continue;
->  		}
-> -		enumerator = enumerator__new(die, cu, conf);
-> -		if (enumerator == NULL)
-> -			goto out_delete;
-> -
-> -		enumeration__add(enumeration, enumerator);
-> -		cu__hash(cu, &enumerator->tag);
->  	} while (dwarf_siblingof(die, die) == 0);
->  out:
->  	return &enumeration->namespace.tag;
+> The dwarf generated by clang23 build:
+> 
+> 0x04442f84:   DW_TAG_subprogram
+>                 DW_AT_low_pc    (0xffffffff82409720)
+>                 DW_AT_high_pc   (0xffffffff82409db7)
+>                 DW_AT_frame_base        (DW_OP_call_frame_cfa, DW_OP_consts -128, DW_OP_plus)
+>                 DW_AT_call_all_calls    (true)
+>                 DW_AT_name      ("__do_notify")
+>                 DW_AT_decl_file ("/home/yhs/work/bpf-next/ipc/mqueue.c")
+>                 DW_AT_decl_line (777)
+>                 DW_AT_prototyped        (true)
+>                     0x04442f98:     DW_TAG_formal_parameter
+>                   DW_AT_location        (indexed (0x19d) loclist = 0x00c7000c:
+>                      [0xffffffff82409725, 0xffffffff82409763): DW_OP_reg5 RDI
+>                      [0xffffffff82409763, 0xffffffff82409ac6): DW_OP_reg3 RBX
+>                      [0xffffffff82409ac6, 0xffffffff82409b01): DW_OP_entry_value(DW_OP_reg5 RDI), DW_OP_stack_value
+>                      [0xffffffff82409b01, 0xffffffff82409cdf): DW_OP_reg3 RBX
+>                      [0xffffffff82409cdf, 0xffffffff82409ce4): DW_OP_entry_value(DW_OP_reg5 RDI), DW_OP_stack_value
+>                      [0xffffffff82409ce4, 0xffffffff82409db7): DW_OP_reg3 RBX)
+>                   DW_AT_name    ("info")
+>                   DW_AT_decl_file       ("/home/yhs/work/bpf-next/ipc/mqueue.c")
+>                   DW_AT_decl_line       (777)
+>                   DW_AT_type    (0x0443d068 "mqueue_inode_info *")
+> 
+> The function __do_notify() does not have nocall attribute so the signature should
+> be preserved as the original.
+> 
+>> 4994a4996
+>>> int __vxlan_fdb_delete(struct vxlan_dev * vxlan, const unsigned char  * addr, union vxlan_addr ip, __be16 port, __be32 src_vni, __be32 vni, u32 ifindex, bool swdev_notify);
+> 
+> __vxlan_fdb_delete is a global function. See the signature:
+> 
+> int __vxlan_fdb_delete(struct vxlan_dev *vxlan,
+>                        const unsigned char *addr, union vxlan_addr ip,
+>                        __be16 port, __be32 src_vni, __be32 vni,
+>                        u32 ifindex, bool swdev_notify)
+> { ... }
+> 
+> and dwarf
+> 
+> 0x06c44a41:   DW_TAG_subprogram
+>                 DW_AT_low_pc    (0xffffffff82fa0aa0)
+>                 DW_AT_high_pc   (0xffffffff82fa0f9a)
+>                 DW_AT_frame_base        (DW_OP_reg7 RSP)
+>                 DW_AT_call_all_calls    (true)
+>                 DW_AT_name      ("__vxlan_fdb_delete")
+>                 DW_AT_decl_file ("/home/yhs/work/bpf-next/drivers/net/vxlan/vxlan_core.c")
+>                 DW_AT_decl_line (1273)
+>                 DW_AT_prototyped        (true)
+>                 DW_AT_type      (0x06c21271 "int")
+>                 DW_AT_external  (true)
+> 
+> So there should have no difference. Again, it would be great to show both base and this patch set.
+> 
+>> 15185a15188
+>>> int devlink_nl_param_value_put(struct sk_buff * msg, enum devlink_param_type type, int nla_type, union devlink_param_value val, bool flag_as_u8);
+>> 18862a18866
+>>> struct cpio_data find_microcode_in_initrd(const char  * path);
+>> 48240a48245
+>>> struct dst_entry * xfrm6_dst_lookup(const struct xfrm_dst_lookup_params  * params);
+>> I'll push the CI change to enable clang builds so we have it by default from now on.
+>>
+>> [1] https://github.com/alan-maguire/dwarves/actions/runs/23638670169
+>>   
+> 
+> Sounds good. Thanks!
+> 
 
