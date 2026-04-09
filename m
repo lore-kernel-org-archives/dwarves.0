@@ -1,218 +1,139 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from CY7PR03CU001.outbound.protection.outlook.com (mail-westcentralusazon11010052.outbound.protection.outlook.com [40.93.198.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 602DE34DCEB
-	for <dwarves@vger.kernel.org>; Wed,  8 Apr 2026 17:36:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775669781; cv=none; b=cFC0S8PBsTwoOHCFSzLeMC6S9EXhgLQUF1NFtDVrt1j7Lv703HXY4hiUtrncuY+VvZF8BIyb2UfyctfJ0jVbz6qJVTfwiWZlUWV/Gl7JKMXn8TLm2XtVIAIUftUKLWzLkedRG8g3m8KkYJjXnnbd9qMINHVlMgN63mNiS7uvVuk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775669781; c=relaxed/simple;
-	bh=s5tg0hSL+hJSExfs2PnFwQx+YXI/Uf77EL7cGSQRwQE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Zf5FKow/yrTw1/JMtVyV1GbRL8Yujue1SrW4EAkHYQK8hh7YzQf+ZviMxvTFAQhFGkBuatBqLZC4saWTbJ1RqANQ78u5P9xjPPMYhbmWUsu4Wq+o01zeodcX5mL42euW8YFeISy1nQWyg0nZRETnDp+7bwFZ6FrNcy4TCvH9+nc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Fgu/96xN; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E546B3DEFE2
+	for <dwarves@vger.kernel.org>; Thu,  9 Apr 2026 14:47:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.198.52
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775746079; cv=fail; b=Xz333Olq21uaJAETLXvflsLpF50iO4Nr/h1KBXmdqTZveCzoGzXmW4aDDbmaE9G5bCEY/OqocLweR5VMb+KJ/sO44ZP+wnHGinRXOIIaiXtwvfO5ejoOsOaBV1iZ+hWh1fABXXhpB0DLEffcNHjYDtPpESgaBKtUngFhnd370v4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775746079; c=relaxed/simple;
+	bh=gwgnxm8eCQr4ROH7oyTKn/sjk69qkBW8r5v0qU8QmJ0=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=GFoYCBWKbSbMxoWfWLvzMLGmogZER+dsNR2CMpZ34pOui/jzX/0+8/YkgE690q2dzv99u8uZ4xE/3p9RHXqgmVU0i5i8sXtTonDIc1FBS1616TscdrOncD9bfWLi7sLMRjn8IS5owFAvaDldnrg3UBbPLY4UrgwqSTNquRF7f70=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=j0x8NxII; arc=fail smtp.client-ip=40.93.198.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Fgu/96xN"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F183C19421;
-	Wed,  8 Apr 2026 17:36:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775669781;
-	bh=s5tg0hSL+hJSExfs2PnFwQx+YXI/Uf77EL7cGSQRwQE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Fgu/96xNRxrjnhMniHgbPCctjlKTP/fZCuMhOyyUYPThITYMV8OP4UdBxxUfnFeQ2
-	 +6QniqZ5pzZuo/W1Jvxnl4MSHp7b5MnSfAjecp9qQ2g7rrLJAsIwIQ38gZlv/Rx5fh
-	 EwA3jo5l62R5myxGvkIJXrPUwA7QeJJBZNo38iSAnAfzswot4+HNcOEwTI1k7RtyR0
-	 AAAqABb2IlxwnMHE0xq5SMLHcg6KmqMDkjaSZ6YRIlLVmbjoOJzMSDHOs1pTkyR/VC
-	 MuVjuoiBavAEP8D6V9LWbjXAH+G3m9KZdUDx1QwehEMO7vj0p9fYVxvJGrNSQ9mwnQ
-	 2BS5G9Y7V55Kg==
-Date: Wed, 8 Apr 2026 14:36:17 -0300
-From: Arnaldo Carvalho de Melo <acme@kernel.org>
-To: Alan Maguire <alan.maguire@oracle.com>
-Cc: Jiri Olsa <jolsa@kernel.org>, Clark Williams <williams@redhat.com>,
-	Kate Carcia <kcarcia@redhat.com>, dwarves@vger.kernel.org,
-	Arnaldo Carvalho de Melo <acme@redhat.com>
-Subject: Re: [PATCH 1/3] dwarf_loader: Initial support for DW_TAG_variant_part
-Message-ID: <adaSEUa3QbcL26JT@x1>
-References: <20260323211533.1909029-1-acme@kernel.org>
- <20260323211533.1909029-2-acme@kernel.org>
- <78c51d5b-554c-42c0-ac6d-2e7738d9f3ca@oracle.com>
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="j0x8NxII"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=iP/nVlBXGqlcP0pS/PM+bxhCohlMbWBz8IkOJvmWW8M04N3mkf9jVK4zni1jCfUTd6tP1XQDWDOt8K3y8bSZz1NzJGkL4rW2MMeKgCArs5YpUtVv/wMN/n8dqsxgnlyDAP3xBKQKhkDGlRMvi0NbKa1b+NPYuJF04b/7sHfEaafuo106ABqDJhbgIddyWPLbsvYSaixXqpwcqrTScguPIrdeKyGSiGI0dU3l/arZzdHu5TyR778DObDGtgwdjBbh55j/qP20x8sM1fNoh8/iZO9XbxkuFc4ICM9ugiW32KmZivWxT21ArfMyx63dnzkaeSv5n5v3hM8taEnVjZlLNQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=hq+OP6wvz3KadcFsXcF7I/ROjCb0LoNaDYOBQPgroeI=;
+ b=IEMs2h6gxL5i5OJWsey8mgph7dB+tD3EMLwH1MrBWrVjzWtH4mlAjNp4XepneIR5igiqcj11JPsps8CEgcU7K2NJDKJK4cn2eIPXinWJlTg6j9QYwWnKBJLN+OAv1pEqEzczL5NHFzEm1sSiXIqh7Vemf3BoSwt5Z33QiJcdakNZAhFJkRskYKV5HKt8MlJpgSdtSBdndNUWA4WeS0smBDlsGJ/e6utKiv/hYbzkxhlXprm2siTqIvrIyDGypnkvMfjdvc+cKVnAE0HfC7U1NcB3sYZiINqbWuMAApi46smiYCCbwX4De04MH3jP4cmOtuxG22Eg28qqulFoFhBcYw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.160) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=hq+OP6wvz3KadcFsXcF7I/ROjCb0LoNaDYOBQPgroeI=;
+ b=j0x8NxIIIuclvDbbvGSpclNlrFAL5yRwwoaqbHsguxEIxUHWjhlGkFTnSlc+0c/GRL19yle091ZucOtl17IURGmFkjysZVKlOaoQJ3jWLbzBVkbfSK60Mzl2rY8FBZOACNhRa7o5EpV7o3hkEYcmTH3OjZ0LHysxXJyiVOVz4QXBYmFJWaNfsJP7G3bl93V6K8b/NCgdh+jMZ+fKvOorc8WcysadH0wGzO1bMW7IsVxVDPrj/kTTKyYKRwmt/oKf+vLfufEiq0ndSMAoQEg5ZMFsVttByQRCyUZf1vWrikFbvZdzyGy0DdpZQq8PVlxdQqPyyByrLsXPs8zfVo4ckw==
+Received: from CH0PR03CA0348.namprd03.prod.outlook.com (2603:10b6:610:11a::23)
+ by PH7PR12MB7259.namprd12.prod.outlook.com (2603:10b6:510:207::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9769.20; Thu, 9 Apr
+ 2026 14:47:44 +0000
+Received: from CH2PEPF0000013F.namprd02.prod.outlook.com
+ (2603:10b6:610:11a:cafe::31) by CH0PR03CA0348.outlook.office365.com
+ (2603:10b6:610:11a::23) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9769.41 via Frontend Transport; Thu,
+ 9 Apr 2026 14:47:44 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ CH2PEPF0000013F.mail.protection.outlook.com (10.167.244.71) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9769.17 via Frontend Transport; Thu, 9 Apr 2026 14:47:44 +0000
+Received: from rnnvmail203.nvidia.com (10.129.68.9) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Thu, 9 Apr
+ 2026 07:47:29 -0700
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by rnnvmail203.nvidia.com
+ (10.129.68.9) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Thu, 9 Apr
+ 2026 07:47:19 -0700
+Received: from vdi.nvidia.com (10.127.8.12) by mail.nvidia.com (10.129.68.8)
+ with Microsoft SMTP Server id 15.2.2562.20 via Frontend Transport; Thu, 9 Apr
+ 2026 07:47:18 -0700
+From: Gal Pressman <gal@nvidia.com>
+To: <dwarves@vger.kernel.org>
+CC: Gal Pressman <gal@nvidia.com>
+Subject: [PATCH dwarves] man-pages: Fix incorrect command line argument in documentation
+Date: Thu, 9 Apr 2026 17:47:18 +0300
+Message-ID: <20260409144718.1582227-1-gal@nvidia.com>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <78c51d5b-554c-42c0-ac6d-2e7738d9f3ca@oracle.com>
+Content-Type: text/plain
+X-NV-OnPremToCloud: ExternallySecured
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CH2PEPF0000013F:EE_|PH7PR12MB7259:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3a58f257-8b89-4d19-3743-08de9646f5c0
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|82310400026|36860700016|376014|18002099003|56012099003;
+X-Microsoft-Antispam-Message-Info:
+	ahWrhLWixJethdESrbJQrpzaXPQAiDRVUiyVU9KXrJaEsi5kPcV2GsdEtikhzrQ9kcxs50GyTSadDJ+cuG+HgRwEIUVUkA0Eyf3RA2PmPvX1xasoWlNNnIfkfvVM9oCnqKn32/zAUv+yp1OGij0+vG9W3HtV8l4+KTCzZ9hEYkM/x+EPyFWM7KDgND+5rK9FhjvM9sAly5Mqz0UAzQi0Zuz31B+72mUFbYd1ti2wpMPMqaZxivA8A1wUcKnaL8NjnJROyDAwhbCqg3IbfsjICX+uvE4fqX37bBwqUByBLcqvIZ+7S7GWjf9x6jWIKTFFPoCnpard5/knHw3YlIKe7v/ImduQw4oytMO5EYJWcHWeVgrhq5ZG+YEB8WgCsdx3ARcpAIr+uM82c43fAoDD5DYu5G4G6rLfjTh21zJb1z4id/oF+1p+SP7rYpKSMVMGecfk+UGNbBTKb+z0TxZGuv5RPzl3IIWAaPqHZeUaUvpWiSv7CVVG9fJsav5TDHENZgRm20Lf7amyT34GXkBLJx9IVjREKl5DLuuSbTBPM1n6+86/8HsweqLLK13zZ+00ZFNBGt+B00nuje0xtniJ+xxHEELaHlU7/05o/xXQBpwpOJNvuXu0LqNImaqzteciYtk0C0ylN2DI7mirc6gCrF8Sxa6JuzGprfsZVLlmz6pL1gczuCpSAsNhXcyZN8mi+v3iT4RymmqPpb0Im4pWQb1DQleCyINXoH8q3I6giyM9kiBk6Nh8MGXMogbFFyv3ghpBI7Tmr8nt1jA/21WJKA==
+X-Forefront-Antispam-Report:
+	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230040)(1800799024)(82310400026)(36860700016)(376014)(18002099003)(56012099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	Ls8KTFhXJaGLWwIPha7iE6F2GgAJWrAa5yJ9mPsnsABOeWPC1L2Oc5l2TgJd/RlM4qUKbzO4Wc8aVocJURQRgNQYIpIfznEnWyYr6SoZIP4tyYDLjWnQbLkJVf3Z1/mtRNrNRNir0QfXA5rcsbLWBROTH/1UOah+VeEnz2GipdhqYQtMGtgtEQ7o0aptJ7Mt7u6RZAY+9HlF09mQt5qjadBwhbgcPmOVVBT8ex3JJv5MR1kZJxI37/g1K1hFOR9A6d3W1kV2+PYSkiXZ2eq13K7NSIPjW4jqkaJ6u84sO4ufX0vCVAVjP/erytlG4PiNkD6VAf2Km64JQqov0VpjpT1vMHxFIYeJHvKoXL6hdEcwfpMghZyNb5NG03WS9FWFb+q1yZDHi4CL6DPOTOcZk3/efCsmhESbqLKuljCZPNwYWKl+f6/78N+38omNDKiA
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Apr 2026 14:47:44.6562
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3a58f257-8b89-4d19-3743-08de9646f5c0
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	CH2PEPF0000013F.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB7259
 
-On Wed, Apr 08, 2026 at 03:05:35PM +0100, Alan Maguire wrote:
-> On 23/03/2026 21:15, Arnaldo Carvalho de Melo wrote:
-> > From: Arnaldo Carvalho de Melo <acme@redhat.com>
-> > 
-> > Still doesn't handle its sub hierarchy, i.e. the DW_TAG_variant entries
-> > and its underlying DW_TAG_member entries.
-> > 
-> > This was noticed when running the regression test that uses a debug
-> > build of perf to process a perf.data file and test pahole's pretty
-> > printing features, as now perf has a synthetic workload that is written
-> > in rust:
-> > 
-> >  <0><20c95a>: Abbrev Number: 1 (DW_TAG_compile_unit)
-> >     <20c95b>   DW_AT_producer    : (indirect string, offset: 0x4ee5a): clang LLVM (rustc version 1.93.1 (01f6ddf75 2026-02-11) (Fedora 1.93.1-1.fc43))
-> >     <20c95f>   DW_AT_language    : 28	(Rust)
-> >     <20c961>   DW_AT_name        : (indirect string, offset: 0x4eeaa): tests/workloads/code_with_type.rs/@/code_with_type.d6e680867bfb8b27-cgu.0
-> >     <20c965>   DW_AT_stmt_list   : 0x5e1ed
-> >     <20c969>   DW_AT_comp_dir    : (indirect string, offset: 0x487f1): /home/acme/git/perf-tools/tools/perf
-> >     <20c96d>   DW_AT_low_pc      : 0
-> >     <20c975>   DW_AT_ranges      : 0x2d0
-> > ⬢ [acme@toolbx pahole]$
-> > 
-> > So lets add some scaffolding for the Rust DWARF constructs involved for
-> > us to be able to continue using perf with DWARF to test the pretty
-> > printing features.
-> > 
-> > Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
-> > ---
-> >  dwarf_loader.c | 26 +++++++++++++++++++++++++-
-> >  dwarves.c      |  6 ++++++
-> >  dwarves.h      |  7 +++++++
-> >  3 files changed, 38 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/dwarf_loader.c b/dwarf_loader.c
-> > index 16fb7becffee56f6..f0833e8c44a944a8 100644
-> > --- a/dwarf_loader.c
-> > +++ b/dwarf_loader.c
-> > @@ -508,6 +508,8 @@ static void tag__init(struct tag *tag, struct cu *cu, Dwarf_Die *die)
-> >  
-> >  	if (tag->tag == DW_TAG_imported_module || tag->tag == DW_TAG_imported_declaration)
-> >  		dwarf_tag__set_attr_type(dtag, type, die, DW_AT_import);
-> > +	else if (tag->tag == DW_TAG_variant_part)
-> > +		dwarf_tag__set_attr_type(dtag, type, die, DW_AT_discr);
-> >  	else
-> >  		dwarf_tag__set_attr_type(dtag, type, die, DW_AT_type);
-> >  
-> > @@ -1170,6 +1172,18 @@ static struct template_parameter_pack *template_parameter_pack__new(Dwarf_Die *d
-> >  	return pack;
-> >  }
-> >  
-> > +static struct variant_part *variant_part__new(Dwarf_Die *die, struct cu *cu, struct conf_load *conf)
-> > +{
-> > +	struct variant_part *vpart = tag__alloc(cu, sizeof(*vpart));
-> > +
-> > +	if (vpart != NULL) {
-> > +		tag__init(&vpart->tag, cu, die);
-> > +		INIT_LIST_HEAD(&vpart->variants);
-> > +	}
-> > +
-> > +	return vpart;
-> > +}
-> > +
-> >  /* Returns number of locations found or negative value for errors. */
-> >  static ptrdiff_t __dwarf_getlocations(Dwarf_Attribute *attr,
-> >  				      ptrdiff_t offset, Dwarf_Addr *basep,
-> > @@ -1990,9 +2004,19 @@ static int die__process_class(Dwarf_Die *die, struct type *class,
-> >  		case DW_TAG_GNU_template_template_param:
-> >  #endif
-> >  		case DW_TAG_subrange_type: // XXX: ADA stuff, its a type tho, will have other entries referencing it...
-> > -		case DW_TAG_variant_part: // XXX: Rust stuff
-> >  			tag__print_not_supported(die);
-> >  			continue;
-> > +		case DW_TAG_variant_part: {
-> > +			struct variant_part *vpart = variant_part__new(die, cu, conf);
-> > +
-> > +			if (vpart == NULL)
-> > +				return -ENOMEM;
-> > +
-> > +			// For rust it seems we have just one, but DWARF, according to Gemini, support having
-> > +			// more than one DW_TAG_variant_part for a given DW_TAG_structure_type, so future proof it
-> > +			type__add_variant_part(class, vpart);
-> > +			continue;
-> > +		}
-> >  		case DW_TAG_template_type_parameter: {
-> >  			struct template_type_param *ttparm = template_type_param__new(die, cu, conf);
-> >  
-> > diff --git a/dwarves.c b/dwarves.c
-> > index ef93239d26827711..efc7ae214376e1c1 100644
-> > --- a/dwarves.c
-> > +++ b/dwarves.c
-> > @@ -428,6 +428,7 @@ void __type__init(struct type *type)
-> >  	INIT_LIST_HEAD(&type->type_enum);
-> >  	INIT_LIST_HEAD(&type->template_type_params);
-> >  	INIT_LIST_HEAD(&type->template_value_params);
-> > +	INIT_LIST_HEAD(&type->variant_parts);
-> >  	type->template_parameter_pack = NULL;
-> >  	type->sizeof_member = NULL;
-> >  	type->member_prefix = NULL;
-> > @@ -1366,6 +1367,11 @@ void type__add_template_value_param(struct type *type, struct template_value_par
-> >  	list_add_tail(&tvparam->tag.node, &type->template_value_params);
-> >  }
-> >  
-> > +void type__add_variant_part(struct type *type, struct variant_part *vpart)
-> > +{
-> > +	list_add_tail(&vpart->tag.node, &type->variant_parts);
-> > +}
-> > +
-> >  struct class_member *type__last_member(struct type *type)
-> >  {
-> >  	struct class_member *pos;
-> > diff --git a/dwarves.h b/dwarves.h
-> > index d7c64742c29a9e9f..95d84b8ce3a6e95d 100644
-> > --- a/dwarves.h
-> > +++ b/dwarves.h
-> > @@ -1011,6 +1011,11 @@ static inline struct formal_parameter_pack *tag__formal_parameter_pack(const str
-> >  
-> >  void formal_parameter_pack__add(struct formal_parameter_pack *pack, struct parameter *param);
-> >  
-> > +struct variant_part {
-> > +	struct tag	 tag;
-> > +	struct list_head variants;
-> > +};
-> > +
-> >  /*
-> >   * tag.tag can be DW_TAG_subprogram_type or DW_TAG_subroutine_type.
-> >   */
-> > @@ -1281,6 +1286,7 @@ struct type {
-> >  	uint8_t		 is_signed_enum:1;
-> >  	struct list_head template_type_params;
-> >  	struct list_head template_value_params;
-> > +	struct list_head variant_parts;
-> >  	struct template_parameter_pack *template_parameter_pack;
-> >  };
-> >  
-> > @@ -1401,6 +1407,7 @@ static inline struct class_member *class_member__next(struct class_member *membe
-> >  void type__add_member(struct type *type, struct class_member *member);
-> >  void type__add_template_type_param(struct type *type, struct template_type_param *ttparm);
-> >  void type__add_template_value_param(struct type *type, struct template_value_param *tvparam);
-> > +void type__add_variant_part(struct type *type, struct variant_part *vpart);
-> >  
-> >  struct class_member *
-> >  	type__find_first_biggest_size_base_type_member(struct type *type,
+The --with_flexible_array and --with_embedded_flexible_array arguments
+were wrongly documented with the short argument '-P' (copy-paste mistake
+from previous argument), remove it.
+
+Fixes: 7eea706c1499 ("pahole: Introduce --with_flexible_array option to show just types ending in a flexible array")
+Fixes: 446c28d118b9 ("pahole: Introduce --with_embedded_flexible_array")
+Signed-off-by: Gal Pressman <gal@nvidia.com>
+---
+ man-pages/pahole.1 | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/man-pages/pahole.1 b/man-pages/pahole.1
+index 90a8f4566de6..19067f4fef03 100644
+--- a/man-pages/pahole.1
++++ b/man-pages/pahole.1
+@@ -404,11 +404,11 @@ Show only structs that has holes that can be packed if members are reorganized,
+ for instance when using the \fB\-\-reorganize\fR option.
  
-> do we also need some cleanup for the variant parts in type__delete() something like:
-> 
-> 	list_for_each_entry_safe(pos, n, type->variant_parts, node) {
-> 		list_del_int(&pos->node);
-> 		free(pos);
-> 	}
+ .TP
+-.B \-P, \-\-with_flexible_array
++.B     \-\-with_flexible_array
+ Show only structs that have a flexible array.
+ 
+ .TP
+-.B \-P, \-\-with_embedded_flexible_array
++.B     \-\-with_embedded_flexible_array
+ Show only structs that have an embedded flexible array, i.e. a contained struct that has flexible arrays, a flexible array "in the middle".
+ 
+ .TP
+-- 
+2.52.0
 
-Right, I'll fix it in v2, there are some other issues that Claude
-detected that I'll address in the enumeration case, one of them can be
-seen here:
-
-⬢ [acme@toolbx pahole]$ pahole -C ProgramKind /tmp/build/perf-tools-next/tests/workloads/code_with_type.a
-enum ProgramKind {
-	PathLookup = 0,
-	Relative   = 1,
-	Absolute   = 2,
-	�3"��     = 140698500347136,
-} __attribute__((__packed__));
-
-⬢ [acme@toolbx pahole]$
-
-Namely this Rust enum has a DW_TAG_subprogram, that
-enumeration__fprintf() doesn't know about, fixing it now.
-
-- Arnaldo
