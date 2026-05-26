@@ -1,192 +1,144 @@
-Received: from 66-220-144-178.mail-mxout.facebook.com (66-220-144-178.mail-mxout.facebook.com [66.220.144.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-177.mta1.migadu.com (out-177.mta1.migadu.com [95.215.58.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48F91232395
-	for <dwarves@vger.kernel.org>; Sat, 23 May 2026 16:58:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.144.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A897F3FDBFC
+	for <dwarves@vger.kernel.org>; Tue, 26 May 2026 18:18:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779555518; cv=none; b=g028wwym4hJ965isUXkPxDBgDiwpmE0gkjr5dU1ZbuQhbCrM+Sq6U3AQiHO4pluSRLIX+4Dqu2Giu/ZiVc7ndnmZax7wAIHwF57OVL+mgw8Qo2jJCwbUZJLT8D7ol+pDGQvvHVbG5CIM0RqRn19skIAtCj85keBMBbhaeDd+/Xs=
+	t=1779819522; cv=none; b=X3YvJZ5nybS1g7RLH1SZatMXra05YCseW3v1XoPkkeMUtTDHSJ7/YmKuOhBpluXlrSS8HWo6igAgcBlzcYTh9OmoLnrEG7QKzjSeE11rC/2pbO3+LYo023KbKgdWHo5eYclqtXPztxEPZ3AGruH+HyeM5h7SCAX4wnXfZiBGpUo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779555518; c=relaxed/simple;
-	bh=Ms33cKPMo5En6J9Tq8n8GPB74vTuve63eBThTc+2qP0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=bzahNt48oH5DtgF0k+pEtabt8FHo1cZIVItQDL/5Oi6l85EkqfKnCyhTgMyMk0GuygUQyhndODbBppTl0kB51xfekeuK0PYrYjqp15dT1RjMCZf2m8vqDRJjuvTDbUr1AK+MnJbpRnZC4DPgJRWg0SHonlufu84Fv1SyAffdKCM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.144.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
-Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id 39F14EE901941; Sat, 23 May 2026 09:58:27 -0700 (PDT)
-From: Yonghong Song <yonghong.song@linux.dev>
-To: Alan Maguire <alan.maguire@oracle.com>,
-	Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
-	dwarves@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
+	s=arc-20240116; t=1779819522; c=relaxed/simple;
+	bh=9W0XTRZgM6vyO0z0pyvc6/ghlKztWK+8w5stFQPop7M=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=nLc7S3NIf98eEQIuj+5eDoPsEwBuxO5D/fNkXf6zbzijRoqAgBj+zIIMPAiaE1h+TJXmc0JVyFoiRvR3hBaRs87El6FSLsnvSBh8MzyYsCuRElUcDfUgvlXS2RlZBCGZgzaoST+2QplB2fhRXD6A46aVej05ZRr6IW4iNGMSclI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=HmrympiW; arc=none smtp.client-ip=95.215.58.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="HmrympiW"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1779819517;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=eyqvlvGrxY2dgFuzelEmEhJMrKgwtBvwQKpvyFr/HkI=;
+	b=HmrympiWnIY7ojm+gw40T9xfeoZKlvUmPISD/1MP0eTgaqdZc3lCDZGWmyBA5KUwj5aYDv
+	UvyVhc6ewvYahNBvd0370Xeibv3qHF3k3Hs+i5OpVnNKOZWLxIGFph+LyuhJKhkQURsRZT
+	PzcI0EADY4BN/yfbC8xvfmiF9wawoRQ=
+From: Vineet Gupta <vineet.gupta@linux.dev>
+To: dwarves@vger.kernel.org
+Cc: bpf@vger.kernel.org,
 	Andrii Nakryiko <andrii@kernel.org>,
-	bpf@vger.kernel.org,
-	kernel-team@fb.com
-Subject: [PATCH dwarves v5 10/11] btf_encoder: Handle optimized parameter properly
-Date: Sat, 23 May 2026 09:58:27 -0700
-Message-ID: <20260523165827.1232923-1-yonghong.song@linux.dev>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260523165712.1225231-1-yonghong.song@linux.dev>
-References: <20260523165712.1225231-1-yonghong.song@linux.dev>
+	acme@kernel.org,
+	Alan Maguire <alan.maguire@oracle.com>,
+	jose.marchesi@oracle.com,
+	David Faust <david.faust@oracle.com>,
+	Vineet Gupta <vineet.gupta@linux.dev>
+Subject: [PATCH 1/2] dwarf_loader: Extract die__add_btf_type_tag() helper
+Date: Tue, 26 May 2026 11:18:17 -0700
+Message-ID: <20260526181818.4159927-1-vineet.gupta@linux.dev>
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-Ensure to skip optimized parameter so btf can generate
-proper true signatures.
+Extract the btf_type_tag annotation creation logic from
+die__create_new_pointer_tag() into a reusable die__add_btf_type_tag()
+helper. Pure refactor with no functional change, preparing for
+DW_TAG_GNU_annotation support.
 
-In the first patch of the patch set, with DW_CC_nocall filtering, 875 fun=
-ctions
-have signature changed. With a series of improvement, eventually only 18 =
-functions
-remain and unfortunately these functions cannot be converted to true sign=
-atures
-due to locations. For example,
-
-0x0242f1f7:   DW_TAG_subprogram
-                DW_AT_name      ("memblock_find_in_range")
-                DW_AT_calling_convention        (DW_CC_nocall)
-                DW_AT_type      (0x0242decc "phys_addr_t")
-                ...
-
-0x0242f22e:     DW_TAG_formal_parameter
-                  DW_AT_location        (indexed (0x14a) loclist =3D 0x00=
-5595bc:
-                     [0xffffffff87a000f9, 0xffffffff87a00178): DW_OP_reg5=
- RDI
-                     [0xffffffff87a00178, 0xffffffff87a001be): DW_OP_reg1=
-4 R14
-                     [0xffffffff87a001be, 0xffffffff87a001c7): DW_OP_entr=
-y_value(DW_OP_reg5 RDI), DW_OP_stack_value
-                     [0xffffffff87a001c7, 0xffffffff87a00214): DW_OP_reg1=
-4 R14)
-                  DW_AT_name    ("start")
-                  DW_AT_type    (0x0242decc "phys_addr_t")
-                  ...
-
-0x0242f239:     DW_TAG_formal_parameter
-                  DW_AT_location        (indexed (0x14b) loclist =3D 0x00=
-5595e6:
-                     [0xffffffff87a000f9, 0xffffffff87a00175): DW_OP_reg4=
- RSI
-                     [0xffffffff87a00175, 0xffffffff87a001b8): DW_OP_reg3=
- RBX
-                     [0xffffffff87a001b8, 0xffffffff87a001c7): DW_OP_entr=
-y_value(DW_OP_reg4 RSI), DW_OP_stack_value
-                     [0xffffffff87a001c7, 0xffffffff87a00214): DW_OP_reg3=
- RBX)
-                  DW_AT_name    ("end")
-                  DW_AT_type    (0x0242decc "phys_addr_t")
-                  ...
-
-0x0242f245:     DW_TAG_formal_parameter
-                  DW_AT_location        (indexed (0x14c) loclist =3D 0x00=
-559610:
-                     [0xffffffff87a001e3, 0xffffffff87a001ef): DW_OP_breg=
-4 RSI+0)
-                  DW_AT_name    ("size")
-                  DW_AT_type    (0x0242decc "phys_addr_t")
-                  ...
-
-0x0242f250:     DW_TAG_formal_parameter
-                  DW_AT_const_value     (4096)
-                  DW_AT_name    ("align")
-                  DW_AT_type    (0x0242decc "phys_addr_t")
-                  ...
-
-The third parameter 'size' is not from RDX. Hence, true signature is not =
-possible for this function.
-
-I also did some experiments on arm64. The number of signature-changed fun=
-citons
-is 863 and finally there are 70 functions cannot be converted to true sig=
-natures.
-Through dwarf comparison of x86_64 vs. arm64, llvm arm64 backend looks li=
-ke having
-more relaxation to compute parameter values for those signature-changed f=
-unctions.
-
-Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
+Signed-off-by: Vineet Gupta <vineet.gupta@linux.dev>
 ---
- btf_encoder.c | 32 +++++++++++++++++++++++++++++---
- 1 file changed, 29 insertions(+), 3 deletions(-)
+ dwarf_loader.c | 54 +++++++++++++++++++++++++++-----------------------
+ 1 file changed, 29 insertions(+), 25 deletions(-)
 
-diff --git a/btf_encoder.c b/btf_encoder.c
-index 633bc61..26be31d 100644
---- a/btf_encoder.c
-+++ b/btf_encoder.c
-@@ -1257,15 +1257,21 @@ static int32_t btf_encoder__save_func(struct btf_=
-encoder *encoder, struct functi
- 	struct btf *btf =3D encoder->btf;
- 	struct llvm_annotation *annot;
- 	struct parameter *param;
--	uint8_t param_idx =3D 0;
-+	uint8_t param_idx =3D 0, skip_idx =3D 0;
- 	int str_off, err =3D 0;
-=20
- 	if (!state)
- 		return -ENOMEM;
-=20
-+	if (encoder->true_signature && encoder->cu->producer_clang) {
-+		ftype__for_each_parameter(ftype, param) {
-+			if (param->optimized) skip_idx++;
-+		}
+diff --git a/dwarf_loader.c b/dwarf_loader.c
+index 16fb7becffee..365cc24e212d 100644
+--- a/dwarf_loader.c
++++ b/dwarf_loader.c
+@@ -1600,14 +1600,40 @@ static struct btf_type_tag_type *die__create_new_btf_type_tag_type(Dwarf_Die *di
+ 	return tag;
+ }
+ 
++static int die__add_btf_type_tag(struct btf_type_tag_ptr_type **tagp,
++				 Dwarf_Die *die, Dwarf_Die *adie,
++				 struct cu *cu, struct conf_load *conf)
++{
++	struct btf_type_tag_type *annot;
++	uint32_t id;
++
++	if (*tagp == NULL) {
++		*tagp = die__create_new_btf_type_tag_ptr_type(die, cu);
++		if (!*tagp)
++			return -ENOMEM;
 +	}
 +
- 	state->addr =3D function__addr(fn);
- 	state->elf =3D func;
--	state->nr_parms =3D ftype->nr_parms + (ftype->unspec_parms ? 1 : 0);
-+	state->nr_parms =3D ftype->nr_parms - skip_idx + (ftype->unspec_parms ?=
- 1 : 0);
- 	state->ret_type_id =3D ftype->tag.type =3D=3D 0 ? 0 : encoder->type_id_=
-off + ftype->tag.type;
- 	if (state->nr_parms > 0) {
- 		state->parms =3D zalloc(state->nr_parms * sizeof(*state->parms));
-@@ -1297,14 +1303,34 @@ static int32_t btf_encoder__save_func(struct btf_=
-encoder *encoder, struct functi
- 	state->reordered_parm =3D ftype->reordered_parm;
- 	ftype__for_each_parameter(ftype, param) {
- 		const char *name;
-+		char *final_name =3D NULL;
-=20
- 		/* No location info/optimized + reordered means optimized out. */
- 		if (ftype->reordered_parm && (!param->has_loc || param->optimized)) {
- 			state->nr_parms--;
++	annot = die__create_new_btf_type_tag_type(adie, cu, conf);
++	if (annot == NULL)
++		return -ENOMEM;
++
++	if (cu__table_add_tag(cu, &annot->tag, &id) < 0)
++		return -ENOMEM;
++
++	struct dwarf_tag *dtag = tag__dwarf(&annot->tag);
++	dtag->small_id = id;
++	cu__hash(cu, &annot->tag);
++
++	list_add(&annot->node, &(*tagp)->tags);
++	return 0;
++}
++
+ static struct tag *die__create_new_pointer_tag(Dwarf_Die *die, struct cu *cu,
+ 					       struct conf_load *conf)
+ {
+ 	struct btf_type_tag_ptr_type *tag = NULL;
+-	struct btf_type_tag_type *annot;
+ 	Dwarf_Die *cdie, child;
+ 	const char *name;
+-	uint32_t id;
+ 
+ 	/* If no child tags or skipping btf_type_tag encoding, just create a new tag
+ 	 * and return
+@@ -1622,34 +1648,12 @@ static struct tag *die__create_new_pointer_tag(Dwarf_Die *die, struct cu *cu,
+ 		if (dwarf_tag(cdie) != DW_TAG_LLVM_annotation)
  			continue;
- 		}
--		name =3D parameter__name(param) ?: "";
-+		if (encoder->true_signature && encoder->cu->producer_clang && param->o=
-ptimized)
-+			continue;
-+
-+		name =3D parameter__name(param);
-+		if (!name) {
-+			name =3D "";
-+		} else if (param->true_sig_member_name) {
-+			/* Non-null param->true_sig_member_name indicates that the parameter
-+			 * name is <parameter_name>__<field_name>.
-+			 */
-+			if (asprintf(&final_name, "%s__%s", name, param->true_sig_member_name=
-) =3D=3D -1) {
-+				err =3D -ENOMEM;
-+				goto out;
-+			}
-+			name =3D final_name;
-+		}
-+
- 		str_off =3D btf__add_str(btf, name);
-+		if (final_name)
-+			free(final_name);
-+
- 		if (str_off < 0) {
- 			err =3D str_off;
- 			goto out;
---=20
-2.53.0-Meta
+ 
+-		/* Only check btf_type_tag annotations */
+ 		name = attr_string(cdie, DW_AT_name, conf);
+ 		if (strcmp(name, "btf_type_tag") != 0)
+ 			continue;
+ 
+-		if (tag == NULL) {
+-			/* Create a btf_type_tag_ptr type. */
+-			tag = die__create_new_btf_type_tag_ptr_type(die, cu);
+-			if (!tag)
+-				return NULL;
+-		}
+-
+-		/* Create a btf_type_tag type for this annotation. */
+-		annot = die__create_new_btf_type_tag_type(cdie, cu, conf);
+-		if (annot == NULL)
++		if (die__add_btf_type_tag(&tag, die, cdie, cu, conf))
+ 			return NULL;
+-
+-		if (cu__table_add_tag(cu, &annot->tag, &id) < 0)
+-			return NULL;
+-
+-		struct dwarf_tag *dtag = tag__dwarf(&annot->tag);
+-		dtag->small_id = id;
+-		cu__hash(cu, &annot->tag);
+-
+-		/* For a list of DW_TAG_LLVM_annotation like tag1 -> tag2 -> tag3,
+-		 * the tag->tags contains tag3 -> tag2 -> tag1.
+-		 */
+-		list_add(&annot->node, &tag->tags);
+ 	} while (dwarf_siblingof(cdie, cdie) == 0);
+ 
+ 	return tag ? &tag->tag : tag__new(die, cu);
+-- 
+2.54.0
 
