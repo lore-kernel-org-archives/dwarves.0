@@ -1,196 +1,189 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from out-186.mta0.migadu.com (out-186.mta0.migadu.com [91.218.175.186])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EE88352C3C
-	for <dwarves@vger.kernel.org>; Fri, 29 May 2026 19:29:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A03A32DA749
+	for <dwarves@vger.kernel.org>; Fri, 29 May 2026 23:32:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.186
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780082943; cv=none; b=NddL2S9vC77T0Y+iJ5SQeh85LSMTz0waPSwGJB51YRzL+Iu8nIozmgwLq6QkIxv3XSZ1bAr5Ap3noWlFYeWyaDvhzDARrofwrETih8x9WD6hgwyZvTyFmh3JNmvdA8nCh1CuC5KXKts3rm2T65ait3mklmZEKYy2WM9y6pr2FCs=
+	t=1780097564; cv=none; b=k1CZjhgmcSEtJ5nTx3z4vOn+V1y8opfkmG6YVcqNt5VYrnfQQr1mhbUyghHhtoezLKvRbrAxjhovUsH1MEMy8tqs5uCUrwEOgaYN1NFcXe6/c1/9NANx9lIILagd1nGUV2Jsob3+FinqnPIl9MxEQSz1WFuB4h/+NaQvqJjJxa8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780082943; c=relaxed/simple;
-	bh=I8+LTCBFW8qmHgWpBSurpegyjyGehQlJ3sSI5si5i3c=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gQHE2cAjclduMiqPMOOksLMIq1cJjR7ldP3LC7bybp6vJyUNXH20wWlGRtlkD5kmkojsPchA3+mxSt745v4FdyfqgYFEzL0jw/JGEbIgxGLwt/2xf+4nb7O4GkNOEVqRRlJLFWaxrOwgNNNzaZsX8tSWYk7U6j3bS/JORZdbaBc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SdBvC/6l; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780097564; c=relaxed/simple;
+	bh=EKUG5FaKEPTtW0ZCzGlbL5bRZQ+vKQfC2Pr6OAlvMYM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=SDoJu+xFlSiwOWXIMKs9U/2/00K41zEzkCZ+JRdjCEgY9nyli6jncLoYDipFY/QBCkuRKO/zod5KMtY6dn/sT0mDJWo67zT5von0It5acBQEUUOXYU/dhAOYQam3kjTeORQnTKtO9qKsf1i/J2mezbeA21005RAxFVsIYZF3kok=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=hQrC5H0K; arc=none smtp.client-ip=91.218.175.186
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SdBvC/6l"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09CFC1F00893;
-	Fri, 29 May 2026 19:29:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780082941;
-	bh=4ZW5uKBmzUebPgRKGfi5SSKzArb30l8jjjYPuGa43Nc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=SdBvC/6lD60G2Pbfqt8ycSXKXdP8U9QBo6iEkIJVMpN15SIeTySlDd/1uPzvVnVQ7
-	 wNkuHSGxgCACoPvV7TvFi8gprG00HgUDTjrcOdT9ZmIclA/2sadx0UbUPqsSgStl/V
-	 DQNPPMYF927om8ZiYSSv3niF4LZ0r5Ts8Y12xGrQrEOV0KnZ0lGAeKZznV+RFLvOtT
-	 pDjw8gQVSqKnj5LZFy8lrdIzfiCxa8+c/qHAGSyp6AhSc/1fIEHRrkaIb+LISiQQIn
-	 md4sZM3oDXK0fpPTtLDkXBlgAK0FZXTbV6GE+KoutGPyChvojK9R/rrNLpydy4IVao
-	 VDxKTq96QeQrA==
-Date: Fri, 29 May 2026 16:28:57 -0300
-From: Arnaldo Carvalho de Melo <acme@kernel.org>
-To: Christoph Hellwig <hch@lst.de>
-Cc: dwarves@vger.kernel.org
-Subject: Re: pahole treats embedded structures a holes
-Message-ID: <ahno-Wd92sAnRkK9@x1>
-References: <20260528051152.GA27820@lst.de>
- <ahhFlsCJzkxLt3M6@x1>
- <20260528135852.GA30243@lst.de>
- <ahicHN7iwtCwasPj@x1>
- <20260529040210.GA13350@lst.de>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="hQrC5H0K"
+Message-ID: <7497e2f5-024b-41ff-8d9b-6e26bd46d954@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1780097550;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Fq1pM4jaE1+5/YLEsuNROiVdiip51uo7jUA93DBpQDA=;
+	b=hQrC5H0KDAVIstHxFNDalmYIC68hHgGPnOlDb6OYocOPqTL1p7VYc+nMhzcM9FYjZolD0a
+	/feEeG+iqii/ImOdzPCwoE5vX4E3sHfq1ya9R+BT/FwCjV3Ne23Olsfkon2ai0jIT5Kp+Z
+	1NL/8ya5aDvY9P006OdhaviBJlAGoHM=
+Date: Fri, 29 May 2026 16:32:21 -0700
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20260529040210.GA13350@lst.de>
+Subject: Re: [PAHOLE Patch v2 2/2] Add support for DW_TAG_GNU_annotation
+To: Alan Maguire <alan.maguire@oracle.com>, dwarves@vger.kernel.org
+Cc: bpf@vger.kernel.org, Andrii Nakryiko <andrii@kernel.org>,
+ acme@kernel.org, jose.marchesi@oracle.com,
+ David Faust <david.faust@oracle.com>
+References: <20260528223616.2035618-1-vineet.gupta@linux.dev>
+ <20260528223616.2035618-2-vineet.gupta@linux.dev>
+ <81094fe9-c77e-4f84-9449-e7c9bb29fad6@oracle.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Vineet Gupta <vineet.gupta@linux.dev>
+Content-Language: en-US
+In-Reply-To: <81094fe9-c77e-4f84-9449-e7c9bb29fad6@oracle.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-On Fri, May 29, 2026 at 06:02:10AM +0200, Christoph Hellwig wrote:
-> On Thu, May 28, 2026 at 04:48:44PM -0300, Arnaldo Carvalho de Melo wrote:
-> > acme@number:~$ readelf -wi git/build/allmodconfig/fs/xfs/xfs_buf.o  | g=
-rep -m1 DW_AT_producer
-=20
-> hch@brick:~/work/xfs$ readelf -wi fs/xfs/xfs_buf.o  | grep -m1 DW_AT_prod=
-ucer
->     <d>   DW_AT_producer    : (indirect string, offset: 0x6012): GNU C11 =
-15.2.0 -mno-sse -mno-mmx -mno-sse2 -mno-3dnow -mno-avx -mno-sse4a -m64 -mno=
--80387 -mno-fp-ret-in-387 -mpreferred-stack-boundary=3D3 -mskip-rax-setup -=
-march=3Dx86-64 -mtune=3Dgeneric -mno-red-zone -mcmodel=3Dkernel -mstack-pro=
-tector-guard-reg=3Dgs -mstack-protector-guard-symbol=3D__ref_stack_chk_guar=
-d -mindirect-branch=3Dthunk-extern -mindirect-branch-register -mindirect-br=
-anch-cs-prefix -mfunction-return=3Dthunk-extern -g -gdwarf-5 -O2 -std=3Dgnu=
-11 -fshort-wchar -funsigned-char -fno-common -fno-PIE -fno-strict-aliasing =
--fms-extensions -fcf-protection=3Dbranch -falign-jumps=3D1 -falign-loops=3D=
-1 -fno-asynchronous-unwind-tables -fno-jump-tables -fpatchable-function-ent=
-ry=3D16,16 -fno-delete-null-pointer-checks -fno-allow-store-data-races -fst=
-ack-protector-strong -fomit-frame-pointer -fzero-init-padding-bits=3Dall -f=
-no-stack-clash-protection -fmin-function-alignment=3D16 -fstrict-flex-array=
-s=3D3 -fno-strict-overflow -fstack-check=3Dno -fconserve-stack -fno-builtin=
--wcslen -fno-var-tracking -femit-struct-debug-baseonly
+On 5/29/26 06:37, Alan Maguire wrote:
+> thanks for this Vineet! I'm building gcc-16 to manually test now but I have a few
+> suggestions below in the meantime. Changes look good in CI [1]
+>
+> [1] https://github.com/alan-maguire/dwarves/actions/runs/26632028538
 
-> > then, please take a look at this sequence:
+Cool.
+>> +static int add_gnu_annotation_chain(Dwarf_Die *die, int component_idx,
+>> +				    struct conf_load *conf, struct list_head *head)
+>> +{
+>> +	Dwarf_Attribute attr;
+>> +	Dwarf_Die annot_die;
+>> +
+>> +	if (dwarf_attr(die, DW_AT_GNU_annotation, &attr) == NULL ||
+>> +	    dwarf_formref_die(&attr, &annot_die) == NULL)
+>> +		return 0;
+>> +
+>> +	for (;;) {
+>> +		if (dwarf_tag(&annot_die) != DW_TAG_GNU_annotation)
+>> +			break;
+>> +
+>> +		int ret = add_llvm_annotation(&annot_die, component_idx, conf, head);
+>> +		if (ret)
+>> +			return ret;
+>> +
+>> +		if (dwarf_attr(&annot_die, DW_AT_GNU_annotation, &attr) == NULL ||
+>> +		    dwarf_formref_die(&attr, &annot_die) == NULL)
+>> +			break;
+>> +	}
+> the pointer tag handling below uses bookkeeping to track visited dies; is there a need
+> for that here too? maybe a bit paranoid but perhaps we could haul the loop detection
+> logic out and reuse in both places?
 
-> > acme@number:~$ readelf -wi git/build/allmodconfig/fs/xfs/xfs_buf.o  | g=
-rep -w xfs_buf$ -B1 -A12
-=20
-> hch@brick:~/work/xfs$ readelf -wi fs/xfs/xfs_buf.o  | grep -w xfs_buf$ -B=
-1 -A12
->  <1><f1c>: Abbrev Number: 93 (DW_TAG_structure_type)
->     <f1d>   DW_AT_name        : (indirect string, offset: 0x3358): xfs_buf
->     <f21>   DW_AT_byte_size   : 344
->     <f23>   DW_AT_alignment   : 8
->     <f23>   DW_AT_decl_file   : 46
->     <f23>   DW_AT_decl_line   : 138
->     <f24>   DW_AT_decl_column : 8
->     <f24>   DW_AT_sibling     : <0x10a2>
->  <2><f28>: Abbrev Number: 39 (DW_TAG_member)
->     <f29>   DW_AT_name        : (indirect string, offset: 0x5e80): b_rhas=
-h_head
->     <f2d>   DW_AT_decl_file   : 46
->     <f2d>   DW_AT_decl_line   : 146
->     <f2e>   DW_AT_decl_column : 20
->     <f2f>   DW_AT_type        : <0x9c8>
-=20
-> > acme@number:~$ readelf -wi git/build/allmodconfig/fs/xfs/xfs_buf.o  | g=
-rep '<5b22>' -A12
-=20
-> hch@brick:~/work/xfs$ readelf -wi fs/xfs/xfs_buf.o  | grep '<0x9c8>' -A12
+Looking back now, the loop detection seems excessive. It was from the 
+initial attempt to triage what seemed like an infinite loop in pahole 
+but just turned out to be excessive match failures and bails and retries 
+due to the gcc bug [1] which was generating variants of same core 
+struct, causing failures pretty much everywhere due to the core struct 
+being embedded all over. If we want to add loop detection that should be 
+addon as it unconditional additional processing. I agree that even with 
+that out of picture this function and the opencoded check_gnu_attr code 
+seem to share a lot of structure - but they have their own *thing* to do 
+and it would be unwieldy and awkward to factor out into a shared loop 
+body with a call back or an additional arg to call add_llvm_annotation 
+or die__add_btf_type_tag for either of those cases.
 
-This part is the tricky one, see that the 0x isn't there inside the
-<TYPE> in my grep, I guess whoever wrote readelf used this to get the
-offset, not the many entries pointing to it :-)
+[1] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=125421 
+<https://gcc.gnu.org/bugzilla/show_bug.cgi?id=125421>
 
-You need to do this:
+>> +check_gnu_attr:
+>> +	/* Check for GCC-style DW_AT_GNU_annotation attribute */
+>> +	if (tag != NULL ||
+>> +	    dwarf_attr(die, DW_AT_GNU_annotation, &attr) == NULL ||
+>> +	    dwarf_formref_die(&attr, &annot_die) == NULL)
+>> +		goto out;
+>> +
+>> +	Dwarf_Off visited[256];
+>> +	int nr_visited = 0;
+>> +
+>> +	for (;;) {
+>> +		Dwarf_Off off = dwarf_dieoffset(&annot_die);
+>> +		bool cycle = false;
+>> +		int i;
+>> +
+>> +		for (i = 0; i < nr_visited; i++) {
+>> +			if (visited[i] == off) {
+>> +				cycle = true;
+>> +				break;
+>> +			}
+>> +		}
+>> +		if (cycle || nr_visited >= (int)ARRAY_SIZE(visited))
+>> +			break;
+>> +		visited[nr_visited++] = off;
 
-hch@brick:~/work/xfs$ readelf -wi fs/xfs/xfs_buf.o  | grep '<9c8>' -A12
+I'm thinking of ripping this all out. Rest of dwarf machinery feels 
+robust enough.
 
-Without the 0x, so that I can see what is the type for that member.
+>> +
+>> +		if (dwarf_tag(&annot_die) != DW_TAG_GNU_annotation)
+>> +			break;
+>> +
+>> +		name = attr_string(&annot_die, DW_AT_name, conf);
+>> +		if (strcmp(name, "btf_type_tag") != 0)
+>> +			break;
+> should we "continue;" here instead; if we encounter a non-type tag annotation
+> might we miss subsequent btf type tag annotations? might not be an issue today
+> but might be more future-proof to continue here maybe?
 
-Or better, please send me your fs/xfs/xfs_buf.o, that will be easier,
-I'll try it myself, and if I reproduce your results, I'll be able to fix
-it and test on the same fs/xfs/xfs_buf.o file.
+Good point. Will do.
 
-- Arnaldo
+>
+>> +
+>> +		if (die__add_btf_type_tag(&tag, die, &annot_die, cu, conf))
+>> +			return NULL;
+>> +
+>> +		if (dwarf_attr(&annot_die, DW_AT_GNU_annotation, &attr) == NULL ||
+>> +		    dwarf_formref_die(&attr, &annot_die) == NULL)
+>> +			break;
+>> +	}
+>> +
+>> +out:
+>>   	return tag ? &tag->tag : tag__new(die, cu);
+>>   }
 
->     <9ce>   DW_AT_type        : <0x9c8>
->  <1><9d2>: Abbrev Number: 29 (DW_TAG_structure_type)
->     <9d3>   DW_AT_name        : (indirect string, offset: 0x303): rhlist_=
-head
->     <9d7>   DW_AT_declaration : 1
->  <1><9d7>: Abbrev Number: 29 (DW_TAG_structure_type)
->     <9d8>   DW_AT_name        : (indirect string, offset: 0x27b4): rhasht=
-able_compare_arg
->     <9dc>   DW_AT_declaration : 1
->  <1><9dc>: Abbrev Number: 17 (DW_TAG_pointer_type)
->     <9dd>   DW_AT_byte_size   : 8
->     <9dd>   DW_AT_type        : <0x9d7>
->  <1><9e1>: Abbrev Number: 29 (DW_TAG_structure_type)
->     <9e2>   DW_AT_name        : (indirect string, offset: 0x2ce3): rhasht=
-able_params
->     <9e6>   DW_AT_declaration : 1
-> --
->     <f2f>   DW_AT_type        : <0x9c8>
->     <f33>   DW_AT_data_member_location: 0
->  <2><f34>: Abbrev Number: 39 (DW_TAG_member)
->     <f35>   DW_AT_name        : (indirect string, offset: 0x25e): b_rhash=
-_key
->     <f39>   DW_AT_decl_file   : 46
->     <f39>   DW_AT_decl_line   : 148
->     <f3a>   DW_AT_decl_column : 15
->     <f3b>   DW_AT_type        : <0xcb1>
->     <f3f>   DW_AT_data_member_location: 8
->  <2><f40>: Abbrev Number: 39 (DW_TAG_member)
->     <f41>   DW_AT_name        : (indirect string, offset: 0x3fbd): b_leng=
-th
->     <f45>   DW_AT_decl_file   : 46
->     <f45>   DW_AT_decl_line   : 149
-> --
->     <1fa9>   DW_AT_type        : <0x9c8>
->  <1><1fad>: Abbrev Number: 33 (DW_TAG_subprogram)
->     <1fae>   DW_AT_external    : 1
->     <1fae>   DW_AT_name        : (indirect string, offset: 0x5b66): __SCT=
-__tp_func_xfs_buf_backing_vmalloc
->     <1fb2>   DW_AT_decl_file   : 3
->     <1fb3>   DW_AT_decl_line   : 793
->     <1fb5>   DW_AT_decl_column : 1
->     <1fb6>   DW_AT_prototyped  : 1
->     <1fb6>   DW_AT_type        : <0x6e>
->     <1fba>   DW_AT_declaration : 1
->     <1fba>   DW_AT_sibling     : <0x1fce>
->  <2><1fbe>: Abbrev Number: 6 (DW_TAG_formal_parameter)
->     <1fbf>   DW_AT_type        : <0x27f>
->=20
->=20
-> > iacme@number:~$ readelf -wi git/build/allmodconfig/fs/xfs/xfs_buf.o  | =
-grep '<5b42>' -A4
-> >  <1><5b42>: Abbrev Number: 8 (DW_TAG_pointer_type)
-> >     <5b43>   DW_AT_byte_size   : 8
-> >     <5b43>   DW_AT_type        : <0x5b22>
-> >  <1><5b47>: Abbrev Number: 30 (DW_TAG_structure_type)
-> >     <5b48>   DW_AT_name        : (indirect string, offset: 0x14c84): rh=
-list_head
->=20
-> hch@brick:~/work/xfs$ readelf -wi fs/xfs/xfs_buf.o  | grep '<0x9c8>' -A4
->     <9ce>   DW_AT_type        : <0x9c8>
->  <1><9d2>: Abbrev Number: 29 (DW_TAG_structure_type)
->     <9d3>   DW_AT_name        : (indirect string, offset: 0x303): rhlist_=
-head
->     <9d7>   DW_AT_declaration : 1
->  <1><9d7>: Abbrev Number: 29 (DW_TAG_structure_type)
-> --
->     <f2f>   DW_AT_type        : <0x9c8>
->     <f33>   DW_AT_data_member_location: 0
->  <2><f34>: Abbrev Number: 39 (DW_TAG_member)
->     <f35>   DW_AT_name        : (indirect string, offset: 0x25e): b_rhash=
-_key
->     <f39>   DW_AT_decl_file   : 46
-> --
->     <1fa9>   DW_AT_type        : <0x9c8>
->  <1><1fad>: Abbrev Number: 33 (DW_TAG_subprogram)
->     <1fae>   DW_AT_external    : 1
->     <1fae>   DW_AT_name        : (indirect string, offset: 0x5b66): __SCT=
-__tp_func_xfs_buf_backing_vmalloc
->     <1fb2>   DW_AT_decl_file   : 3
+[snip]
+
+>>   
+>>
+>> diff --git a/tests/pfunct-btf-decl-tags.sh b/tests/pfunct-btf-decl-tags.sh
+>> index 35884b4e8687..5fdddc09f179 100755
+>> --- a/tests/pfunct-btf-decl-tags.sh
+>> +++ b/tests/pfunct-btf-decl-tags.sh
+>> @@ -13,17 +13,21 @@ trap cleanup EXIT
+>>   
+>>   title_log "Check that pfunct can print btf_decl_tags read from BTF."
+>>   
+>> -# gcc now also supports decl tags as of gcc commit 43dcea48b8c,
+>> -# in upstream version 16.
+>> -# UPTODO: add a check here for that.
+>> +# gcc 16+ supports decl tags via DW_TAG_GNU_annotation (gcc commit ac7027f180b).
+>> +# Use gcc if available and version >= 16, otherwise fall back to clang.
+>>   
+> Is there a reason why we couldn't do both? We'd ideally have CI test both clang
+> and gcc so wouldn't want to skip one or the other really. I'd suggest we lose
+> the elif logic below and test with whatever is available gcc, clang or both
+> ideally. We can fix up CI to install gcc 16 later.
+
+OK.
+
+> Also I'd suggest move the test to a separate patch. Thanks!
+
+The test was already there, just not wired up for gcc. So it seems the 
+ask is to leave it disabled here do a separate patch for enabling. Sure 
+that works too.
+
+Thx,
+-Vineet
