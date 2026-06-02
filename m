@@ -1,206 +1,168 @@
-Received: from mail-dl1-f49.google.com (mail-dl1-f49.google.com [74.125.82.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C8F23161A4
-	for <dwarves@vger.kernel.org>; Tue,  2 Jun 2026 01:05:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4768937C0E3;
+	Tue,  2 Jun 2026 18:14:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780362337; cv=none; b=R1Cwf4UfCosTy7mKXvN0k8nZ/pJe+aWdcCNjgXTvKz3ID8gpDXXIEdMTEfgCY90nVWVhfSMoh7eL3grpCXkIM1Oj4X6I201oe+m865i/skeD7EJRfaaGR7E/Og70Qf0/jrnqT9oA9lonpemjkQ4RZfjX/5kSYjJbF240oR+3BGU=
+	t=1780424092; cv=none; b=oVEwoVF2E3zWVgDdCtBjNTaqGV0UBeZwmUFN2mB1R/vSDWLTCZrJp/a6MjfkwtyBvv+XgItEBms8EavGRJ1NW03Q4KMXE1bWhp5DxnP072G5K/tkxHmTUT+XVUR9h4vVhnfbid+rw1Bxfi+OXso24ZCnKO8r20zEqV63tEBqSjk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780362337; c=relaxed/simple;
-	bh=ToHc5GxUKwINZrR3fzfLrAxSuFarAZPeqI5xQbIJZDw=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=G8gI576Nxhw1HIx8/Sce7US/9HQ4vNbaz51u4AO9hZdMEDLd4ZAzlbOMg/BI38Y1eMLt1E7NDiWgGFGkr4uTdR8CrJmzdKAh1PDSaKIogkWlSePL2Io421W803mdbPaH20Mm3ugoJTp7foJLaX5lYfCgC9U/kxzFDoKOR4IqvAg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=eCTUpvuV; arc=none smtp.client-ip=74.125.82.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
+	s=arc-20240116; t=1780424092; c=relaxed/simple;
+	bh=YmWRG+cDTWhJ5SCI3D0fI4vPJ7luNXKxUaLyWZgh+jQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=EgC0mNYlQSHZbc6ijkx361pT3io8oMHXCgZHs/9rTfPCBIFKC6CkiNhtzRaVMbNZBrWsMytbxPIZEvAYfnxF+vrJjnU4ysGi+ryAV0Li7gTAgJiLm2yhhwx/LVGEhiyRz+LNwsebRHy1KXiPVQ8RSE/u+MMSA9IoV2uf0fMBD9M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=D0AR5yja; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="eCTUpvuV"
-Received: by mail-dl1-f49.google.com with SMTP id a92af1059eb24-136b46c3540so11309100c88.1
-        for <dwarves@vger.kernel.org>; Mon, 01 Jun 2026 18:05:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1780362335; x=1780967135; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oZQoA4UaQO9wE6A7Q5YCAeXhGRjXxFgUqc5coKVMKck=;
-        b=eCTUpvuVkbHsNZygE5qK5jOmWYhAGg+DkgrMvI/zcsyVSLwTh8+IOxaOUwEoKyMkMf
-         hb+NNcwJx7i1spFZafRgcb3g+D/FSD4QWwvGSuL1UYbiHoaIv3hxe4+NFUxfGerZ38ff
-         CUJur73eWU6tM9xNWVHNrgBLxqj9jKto6BbH5mUyp93jRihz6rWpyY0948l7lbHPu96T
-         zmVDcl0QN1ge2AyK4TOPNQr1HyRqn+hWYX9m1mI/6vMWrAs4+ueFvvH3iYDOaSh0n6JM
-         kZ7DjiUqLaZ9VTbIMLi+eONbScn09oKfdVCudfpbJ5CJzlTQdXB/F9NzHJe/LWcOGKen
-         4law==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780362335; x=1780967135;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=oZQoA4UaQO9wE6A7Q5YCAeXhGRjXxFgUqc5coKVMKck=;
-        b=fCz2WUKz75eHvuFVddgXWU8ixoQibWL4i/Fg4hFgHKaYeEDO2VvC9cT252cY/MTokB
-         EknAm7m4itFsTYBK/hCbl6w5TQ7+jIsz5SOBNbh3pNRckHHlgPaKknRDIUry8saL3z5T
-         upm4kZ+VMYsJgX075MbZMcksv5jUbtOnIgUqXFrTvxWSDKJoJ+CrowSSsUW93cqzaJl9
-         dQoI9B/QJtEF1PRuZMHvF9ihT447EggVQzPYvxTcjh/b5tQl+LDwi7WQdiGxOsVWngKw
-         OMdKsxnKGlC8lHb09ZFB0FxaRu340JDTblnDftyicYYPbEpZtt6poG7Q0OrF3l0RLJWx
-         Qv/w==
-X-Forwarded-Encrypted: i=1; AFNElJ+Ml0ZCy4YrAwAXXyBLk1oQmWM5BKADtAO/osjANc725jrGR09TDJ2FjCXYy27KlS4Yao7vrlsN@vger.kernel.org
-X-Gm-Message-State: AOJu0YyQ/OQe4T+Pxo7zbVHBqKCIAO0oT13eaNTC++voLmgEDq880aV4
-	Yk7MRYFjZ1udmkNIE30MHlci1s5ulfnAKb/voDnYjsm6d3bbPHxfJu/R8ISqUop7How=
-X-Gm-Gg: Acq92OFCqY/W5m5ZQO3TMdHN56i7BTzJ/RpyubvDV8iimSTvDt/kHo82oEp9MUtarvc
-	1G4ZktbAD7u9pt0Kocrqv/ksKJlciMrlXB8gD990aXrZpdgcWCIygUGKNZ4mtJtcy0iOxTcWFvh
-	nbHSfX3lGUVX14ekmro6oXznMsZoU8i7YqVJDWUuCLzTGZDkw83iMd0HJQQgqK7kL8+wZ2HlA18
-	7BXPfHoS4IcSqsrltse7SggQFant716qA5dLI9NVh4X29NGbIDz/pD4Iw/vCGkfEDODKwixWR3G
-	l+V69WvUCEdUnDSMuu1L2exFptKfRnvbG7Qa+FWjYBAii6GEL4Jp0xjIeS5RipeGLW5BJX0Vf2J
-	vvsJM7Si0q2cZ4P2LEZjOdV4eD1MBEFfkfRuhOMr8TZQDUs6ZkpzKAlhULBlFAgaIN5sPS1+ZrP
-	xWavP7IoJ8Q+TyOaadO/FPyielUQ==
-X-Received: by 2002:a05:7022:f502:b0:137:ddaf:7e89 with SMTP id a92af1059eb24-137ddaf7f47mr2297872c88.15.1780362334922;
-        Mon, 01 Jun 2026 18:05:34 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:600::4f12])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-137b3d8f839sm7441673c88.15.2026.06.01.18.05.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 01 Jun 2026 18:05:34 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="D0AR5yja"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45AAE1F00893;
+	Tue,  2 Jun 2026 18:14:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780424090;
+	bh=TUN7lnLd/zH7x+2mD9IYGErZQ43x0pjC/KUS+ntYZ4o=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=D0AR5yjajMxOITtIPL56Cu4gDLqbZ3PDv9euXpcspGhcfgrr4PcJz8zjyxwIuRq1p
+	 Zh+FbLWRBv+idy1oY7j+3xxjmbsfeS2L7HJDheRflLzyncqME6/Ph2RKzeTTNRG5SL
+	 osY/ET2Fz6Xl5llv8rvPmoJmkHiXQzuzgedPQTzoXr9/rcjIZ+WW/jhkayBxxFNyMq
+	 FgRM1EjbRsFyMPE3qqWHtjnWYjvfqm/9hPrLUuSVsu2n0AwVnTxY2bNMihjbKVQyku
+	 BfyCN32bT38kgx3qObYcWil4e3hCbb8tTq1SZqi8OyBSteM0mx78QfklnjQ5nb5Eit
+	 14DBzQxoxxLWA==
+Date: Tue, 2 Jun 2026 15:14:47 -0300
+From: Arnaldo Carvalho de Melo <acme@kernel.org>
+To: Emil Tsalapatis <emil@etsalapatis.com>
+Cc: Vineet Gupta <vineet.gupta@linux.dev>, dwarves@vger.kernel.org,
+	bpf@vger.kernel.org, Andrii Nakryiko <andrii@kernel.org>,
+	Alan Maguire <alan.maguire@oracle.com>, jose.marchesi@oracle.com,
+	David Faust <david.faust@oracle.com>
+Subject: Re: [PAHOLE v3 1/3] dwarf_loader: Extract die__add_btf_type_tag()
+ helper
+Message-ID: <ah8dl-yaSPm64GhP@x1>
+References: <20260601183511.594100-1-vineet.gupta@linux.dev>
+ <DIXYL7ZGEO7C.3HN24VDJYZQOR@etsalapatis.com>
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 01 Jun 2026 21:05:32 -0400
-Message-Id: <DIY5RWLRH7C1.8YT4ECR1ZALU@etsalapatis.com>
-Cc: <bpf@vger.kernel.org>, "Andrii Nakryiko" <andrii@kernel.org>,
- <acme@kernel.org>, "Alan Maguire" <alan.maguire@oracle.com>,
- <jose.marchesi@oracle.com>, "David Faust" <david.faust@oracle.com>
-Subject: Re: [PAHOLE v3 3/3] tests: Support GCC in pfunct-btf-decl-tags test
-From: "Emil Tsalapatis" <emil@etsalapatis.com>
-To: "Vineet Gupta" <vineet.gupta@linux.dev>, <dwarves@vger.kernel.org>
-X-Mailer: aerc 0.21.0-0-g5549850facc2
-References: <20260601183511.594100-1-vineet.gupta@linux.dev>
- <20260601183511.594100-3-vineet.gupta@linux.dev>
-In-Reply-To: <20260601183511.594100-3-vineet.gupta@linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <DIXYL7ZGEO7C.3HN24VDJYZQOR@etsalapatis.com>
 
-On Mon Jun 1, 2026 at 2:35 PM EDT, Vineet Gupta wrote:
-> GCC 16+ supports btf_decl_tag via DW_TAG_GNU_annotation.
-> Update the test to run with either of GCC (>=3D 16) and clang.
->
-> Signed-off-by: Vineet Gupta <vineet.gupta@linux.dev>
+On Mon, Jun 01, 2026 at 03:27:41PM -0400, Emil Tsalapatis wrote:
+> On Mon Jun 1, 2026 at 2:35 PM EDT, Vineet Gupta wrote:
+> > NFC change preparing for DW_TAG_GNU_annotation support.
+> > Extract the btf_type_tag annotation creation logic from into a helper
+> > die__add_btf_type_tag().
+> >
+> > Signed-off-by: Vineet Gupta <vineet.gupta@linux.dev>
+> > ---
+> > Changes since v2 [2]
+> >  - die__add_btf_type_tag() returns pointer not error code.
+> >
+> > Changes since v1 [1]
+> >  - NFC reinstate some original comments
+> 
+> Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
+ 
+> Minor nit/question below.
 
-Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
+Some more nits below :-)
+ 
+> > +++ b/dwarf_loader.c
+> > @@ -1600,14 +1600,43 @@ static struct btf_type_tag_type *die__create_new_btf_type_tag_type(Dwarf_Die *di
+> >  	return tag;
+> >  }
+> >  
+> > +static struct btf_type_tag_ptr_type *die__add_btf_type_tag(struct btf_type_tag_ptr_type *tag,
+> > +							    Dwarf_Die *die, Dwarf_Die *adie,
+> > +							    struct cu *cu, struct conf_load *conf)
+> > +{
+> > +	struct btf_type_tag_type *annot;
+> > +	uint32_t id;
+> > +
+> > +	if (tag == NULL) {
+> > +		tag = die__create_new_btf_type_tag_ptr_type(die, cu);
+> > +		if (!tag)
+> > +			return NULL;
 
-> ---
->  tests/pfunct-btf-decl-tags.sh | 72 +++++++++++++++++++++++++++--------
->  1 file changed, 56 insertions(+), 16 deletions(-)
->
-> diff --git a/tests/pfunct-btf-decl-tags.sh b/tests/pfunct-btf-decl-tags.s=
-h
-> index 35884b4e8687..a46aa1f3df55 100755
-> --- a/tests/pfunct-btf-decl-tags.sh
-> +++ b/tests/pfunct-btf-decl-tags.sh
-> @@ -6,24 +6,36 @@
->  source test_lib.sh
-> =20
->  outdir=3D$(make_tmpdir)
-> -tmpobj=3D$(make_tmpobj)
-> =20
->  # Comment this out to save test data.
->  trap cleanup EXIT
-> =20
->  title_log "Check that pfunct can print btf_decl_tags read from BTF."
-> =20
-> -# gcc now also supports decl tags as of gcc commit 43dcea48b8c,
-> -# in upstream version 16.
-> -# UPTODO: add a check here for that.
-> +# gcc 16+ supports decl tags via DW_TAG_GNU_annotation (gcc commit ac702=
-7f180b).
-> =20
-> +GCC=3D${GCC:-gcc}
->  CLANG=3D${CLANG:-clang}
-> -if ! command -v $CLANG > /dev/null; then
-> -	error_log "Need clang for test $0"
-> +
-> +use_gcc=3D0
-> +if command -v $GCC > /dev/null; then
-> +	gcc_ver=3D$($GCC -dumpversion 2>/dev/null | cut -d. -f1)
-> +	if [ "$gcc_ver" -ge 16 ] 2>/dev/null; then
-> +		use_gcc=3D1
-> +	fi
-> +fi
-> +
-> +use_clang=3D0
-> +if command -v $CLANG > /dev/null; then
-> +	use_clang=3D1
-> +fi
-> +
-> +if [ "$use_gcc" -eq 0 ] && [ "$use_clang" -eq 0 ]; then
-> +	error_log "Need gcc >=3D 16 or clang for test $0"
->  	test_fail
->  fi
-> =20
-> -(cat <<EOF
-> +src=3D$(cat <<EOF
->  #define __tag(x) __attribute__((btf_decl_tag(#x)))
-> =20
->  __tag(a) __tag(b) __tag(c) void foo(void) {}
-> @@ -31,7 +43,7 @@ __tag(a) __tag(b)          void bar(void) {}
->  __tag(a)                   void buz(void) {}
-> =20
->  EOF
-> -) | $CLANG --target=3Dbpf -c -g -x c -o $tmpobj -
-> +)
-> =20
->  # tags order is not guaranteed
->  sort_tags=3D$(cat <<EOF
-> @@ -54,16 +66,44 @@ a void buz(void);
->  EOF
->  )
-> =20
-> -out=3D$(pfunct -P -F btf $tmpobj | awk "$sort_tags" | sort)
-> -d=3D$(diff -u <(echo "$expected") <(echo "$out"))
-> +run_test() {
-> +	local compiler=3D$1
-> +	local tmpobj=3D$2
-> +
-> +	info_log "Testing with $compiler"
-> +	out=3D$(pfunct -P -F btf $tmpobj | awk "$sort_tags" | sort)
-> +	d=3D$(diff -u <(echo "$expected") <(echo "$out"))
-> +
-> +	if [[ "$d" =3D=3D "" ]]; then
-> +		info_log "  passed"
-> +		return 0
-> +	else
-> +		error_log "pfunct output does not match expected ($compiler):"
-> +		info_log "$d"
-> +		info_log
-> +		info_log "Complete output:"
-> +		info_log "$out"
-> +		return 1
-> +	fi
-> +}
-> +
-> +failed=3D0
-> +
-> +if [ "$use_gcc" -eq 1 ]; then
-> +	tmpobj=3D$(make_tmpobj)
-> +	echo "$src" | $GCC -c -g -x c -o $tmpobj - 2>/dev/null
-> +	pahole -J $tmpobj 2>/dev/null
-> +	run_test "$GCC (version $gcc_ver)" "$tmpobj" || failed=3D1
-> +fi
-> +
-> +if [ "$use_clang" -eq 1 ]; then
-> +	tmpobj=3D$(make_tmpobj)
-> +	echo "$src" | $CLANG --target=3Dbpf -c -g -x c -o $tmpobj -
-> +	run_test "$CLANG" "$tmpobj" || failed=3D1
-> +fi
-> =20
-> -if [[ "$d" =3D=3D "" ]]; then
-> +if [ "$failed" -eq 0 ]; then
->  	test_pass
->  else
-> -	error_log "pfunct output does not match expected:"
-> -	info_log "$d"
-> -	info_log
-> -	info_log "Complete output:"
-> -	info_log "$out"
->  	test_fail
->  fi
+There was an inconsistency on the code you moved here, namely first tag
+is tested against NULL then it is negated, equivalent, but since we're
+moving it, lets make it consistent, in the kernel it is most common to
+use !ptr as it is more compact, so please make the first test !tag, just
+like the second.
 
+> > +	}
+> > +
+> > +	annot = die__create_new_btf_type_tag_type(adie, cu, conf);
+> > +	if (annot == NULL)
+> > +		return NULL;
+> > +
+> > +	if (cu__table_add_tag(cu, &annot->tag, &id) < 0)
+> > +		return NULL;
+> > +
+> > +	struct dwarf_tag *dtag = tag__dwarf(&annot->tag);
+> > +	dtag->small_id = id;
+> > +	cu__hash(cu, &annot->tag);
+> > +
+> > +	/* Prepends: for annotations tag1 -> tag2 -> tag3,
+ 
+> Not familiar with pahole's coding style, do we want to adjust the
+> comments?
+
+Not that important, but we try to follow kernel style, so yeah that
+would be:
+
+	/*
+	 * Prepends: for annotations tag1 -> tag2 -> tag3,
+
+But by now I don't dwell that much on these minor details :)
+
+> > +	 * the tag->tags list ends up as tag3 -> tag2 -> tag1.
+> > +	 */
+> > +	list_add(&annot->node, &tag->tags);
+> > +	return tag;
+> > +}
+> > +
+> >  static struct tag *die__create_new_pointer_tag(Dwarf_Die *die, struct cu *cu,
+> >  					       struct conf_load *conf)
+> >  {
+> >  	struct btf_type_tag_ptr_type *tag = NULL;
+> > -	struct btf_type_tag_type *annot;
+> >  	Dwarf_Die *cdie, child;
+> >  	const char *name;
+> > -	uint32_t id;
+> >  
+> >  	/* If no child tags or skipping btf_type_tag encoding, just create a new tag
+> >  	 * and return
+> > @@ -1627,29 +1656,9 @@ static struct tag *die__create_new_pointer_tag(Dwarf_Die *die, struct cu *cu,
+> >  		if (strcmp(name, "btf_type_tag") != 0)
+> >  			continue;
+> >  
+> > -		if (tag == NULL) {
+> > -			/* Create a btf_type_tag_ptr type. */
+> > -			tag = die__create_new_btf_type_tag_ptr_type(die, cu);
+> > -			if (!tag)
+> > -				return NULL;
+> > -		}
+> > -
+> > -		/* Create a btf_type_tag type for this annotation. */
+> > -		annot = die__create_new_btf_type_tag_type(cdie, cu, conf);
+> > -		if (annot == NULL)
+> > -			return NULL;
+> > -
+> > -		if (cu__table_add_tag(cu, &annot->tag, &id) < 0)
+> > +		tag = die__add_btf_type_tag(tag, die, cdie, cu, conf);
+> > +		if (tag == NULL)
+> >  			return NULL;
+> > -
+> > -		struct dwarf_tag *dtag = tag__dwarf(&annot->tag);
+> > -		dtag->small_id = id;
+> > -		cu__hash(cu, &annot->tag);
+> > -
+> > -		/* For a list of DW_TAG_LLVM_annotation like tag1 -> tag2 -> tag3,
+> > -		 * the tag->tags contains tag3 -> tag2 -> tag1.
+> > -		 */
+> > -		list_add(&annot->node, &tag->tags);
+> >  	} while (dwarf_siblingof(cdie, cdie) == 0);
+> >  
+> >  	return tag ? &tag->tag : tag__new(die, cu);
