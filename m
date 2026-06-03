@@ -1,208 +1,370 @@
-Received: from mail-dl1-f45.google.com (mail-dl1-f45.google.com [74.125.82.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-187.mta1.migadu.com (out-187.mta1.migadu.com [95.215.58.187])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37BA7304976
-	for <dwarves@vger.kernel.org>; Wed,  3 Jun 2026 20:44:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67BD772603
+	for <dwarves@vger.kernel.org>; Wed,  3 Jun 2026 20:55:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.187
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780519468; cv=none; b=X8DYZAjZgNNyBburbgfPF6F1D49bVdGw8K59VfbeMCkPO6jxhUn/geOITJzWb6BtNSvqgp2NtImnX6orFhrg9cjJhGz3aed6H52GrxPRQyBqNce7NBZeo5rSkpfvIrh29Tq0bylVBTK4jzYCkaNY8BQ81qEUFJrJW59awZQItyc=
+	t=1780520125; cv=none; b=alYAUe9OVDhFmp0lSx1deopIkiLwo8i/rIfOQbwV5MRDyQbFtm8Wsgt/lKC9Pb7J/5zRDgU4fONFzB9aMsAMGR3Sj3kTaX/JD56xlwETXKjoFsD014Y2byYudGG4mQ5tNplkKt0YjJUJlBu0qgI4+JouB/HPWmSJse0b4pdMFGI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780519468; c=relaxed/simple;
-	bh=Xsxnu+t7r2JLJ+HvQNxgV/7N37onpmizU7YvE2O91Z8=;
-	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
-	 References:In-Reply-To; b=o8D5JUdXchic8P/7gZFhdoUy7wZ+6BX1NB8ZQPlXTuc5QzeKk0zkSSFsgtmNEPgLpyIvq9Z1zDrP/8Md07YQZY7IhYBZsqrSx/mGbX7USfV+LCbw9D/q3uN7mzvPcjOpFALCZSGCe4RmH0HNx5X6dthZPrrn47HZGi+ZioZonWA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=wEguWJEb; arc=none smtp.client-ip=74.125.82.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
+	s=arc-20240116; t=1780520125; c=relaxed/simple;
+	bh=5WxmjyLHAUyrQ3y5B9dmi5KhXfJRHTkp3yvPplXS0a4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=JjU465UjJf1aFTINTP70txtQkjp0z1NC9WNZq9safoVA+d071D9rFoavWirNpM8mT3XA8wYYN1GGdUvglqWqpqQoXq1lEhXq+OwC4AjGwkXquvPF/dkhie2X1oPrqD0t3VdIK4jESLMlmoW338FsNAqQ4HygRmzxQkTSrTi1ue0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Z0XIrv1v; arc=none smtp.client-ip=95.215.58.187
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="wEguWJEb"
-Received: by mail-dl1-f45.google.com with SMTP id a92af1059eb24-1370417c01cso13437023c88.1
-        for <dwarves@vger.kernel.org>; Wed, 03 Jun 2026 13:44:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1780519466; x=1781124266; darn=vger.kernel.org;
-        h=in-reply-to:references:subject:cc:to:from:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=49U9zuaCrRFc16K07IX5eMfLgjnW0VawFcMW+R70KvI=;
-        b=wEguWJEb3Xlwgz1EZWtcX6RPsuriKVQe9wgGalGoRrVCUXxmlsmg2SC3hr0jfSwDf5
-         AX4EKeDlKVmZoxqvsGunTsDGpSXGJlxG/KS+vQAFipZYBxRF4tRVEWalU1e0h6rJLKnj
-         b6zoch1dSLiCDH/r/kzaAalJRtZAPfo4Yhbcgz06DTZPuZP9wur6yCTC20ICPoPGA6UY
-         O5YMHZ8ybJESpooJoApQPAwDhKG4in7Y9tSdIhPER3qglVKEb+bbPzOQJexHjJVBKMWE
-         +MJjASbFx2GmCLyt/QZMbI3BCU+lpL+AEWFZh7d+gOf+BBHeNetadPoEFlv9V3ZSL0bX
-         PxHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780519466; x=1781124266;
-        h=in-reply-to:references:subject:cc:to:from:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=49U9zuaCrRFc16K07IX5eMfLgjnW0VawFcMW+R70KvI=;
-        b=rOhd7yaJ4QvvnKBNyAZIAn5zfxJFgm3pAee5O0Gtp94MG5ygJl3c1bymeoKikuPh8p
-         H1UlE8f7lFz90MYs02wodOaAO0ZYqUupv4Jb0kjc8nHi5P3bfqyfFQ3sajNcUQYShDvD
-         vnRuULk657Cuj4NQlPGF0vzxa7pzWy+lo5vPncIehwQXy+EBlgD9xT6XXVULjXtVg5DC
-         3Sl8WGUi75i3Uwd4fnRTLM4HihWvVQ7aSZbEgbMKAlkPO/uAGBaikiyqjvGFzm8sgWPr
-         8CcueutsiKNCAhFwSxu+JJqz5Yu256HW2+GylUBiXjGQv0zdScX9gVpZu8LaPMM7H9Qv
-         qZmQ==
-X-Forwarded-Encrypted: i=1; AFNElJ9thnYcju8A3kjuikNv0Sggw0wNlKUuSyflnzT7RWq8Yn6dxlQ4Jzk98xaQviLOAax0TDXMXcI4@vger.kernel.org
-X-Gm-Message-State: AOJu0YwVLmmPk192gwrsBl4Z6wbNKCHXQvjeItvgvGltV2oP0T71hsEB
-	6CvwE36ZWnfuVObwbO7khVEyXqOsHT8oDjhr4/PJpHwiu3SvCyH/MNHGe+QEhZegdp8=
-X-Gm-Gg: Acq92OEXkd+/+XCiqk4Mrgui7SC5eQFzbkcpX2SSxNsQO/b84sFlEprYcIq/fFW8CIy
-	TcPuJ79jADAjbZLQR7kmSogAOIISsbg9xMMGn9dywt+GLka35wj9BCHyUW6LuCBIkyESB+OotWw
-	acG1BNItb2qGFviQj5D2BA+ZJYMKF8mR5gkRGsDE7+dB11Ce3Cb7BTMl6w+uK3r8qTpHjHsdkRZ
-	VoSWh+dDpNpESiaz095GpJAblTZ6IoXH/esK+PFtc/YZV8SAvY/mXwpW7BUjr+euhBpK2BH4G9G
-	7D+Vjg7S51axCBqezeNVtEX2liV2lziWb9Zeif/pCI59WUyJthQudhGYmllfDIF04sSeBmjgj8H
-	mMTRZQIJpJl9n9YxxLI+sEmVo7JGfMMAGP5UVHCKPU7CJb/FNuqOYf3Z5wpeMqrClGTjvHa8ooV
-	+WKHAsi3kVCo00Hjk=
-X-Received: by 2002:a05:7022:60d:b0:130:760b:77aa with SMTP id a92af1059eb24-137f6c25649mr2259484c88.41.1780519466200;
-        Wed, 03 Jun 2026 13:44:26 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:600::4ada])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-137f716017esm3108451c88.15.2026.06.03.13.44.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 03 Jun 2026 13:44:25 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Z0XIrv1v"
+Message-ID: <27ee8637-a825-4f3f-b4ec-59dad215f4b4@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1780520120;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=b2ECYxQxYGFsKJYyT/iVN4mphykpRekojW7aYtSE9Ak=;
+	b=Z0XIrv1v0ikfeCrd00bi8U8nB+QK/XSqPpUDfleVYJcUkA3SI2HJ8ZuXzCxX8qbkdiaFhM
+	w13ebqBhs6IympDoU8iM8WrTXoeiQ5Fist4ib9AHLKxRS2Hlh/IsW1PQq7oQfkSIjUZuTm
+	emGU1Dmsppg2eHV/1/ljRBDawgUecJs=
+Date: Wed, 3 Jun 2026 13:54:53 -0700
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Wed, 03 Jun 2026 16:44:23 -0400
-Message-Id: <DIZPH1MFO1TW.NPPNVHBBCMHT@etsalapatis.com>
-From: "Emil Tsalapatis" <emil@etsalapatis.com>
-To: "Vineet Gupta" <vineet.gupta@linux.dev>, <dwarves@vger.kernel.org>
-Cc: <bpf@vger.kernel.org>, "Andrii Nakryiko" <andrii@kernel.org>,
- <acme@kernel.org>, "Alan Maguire" <alan.maguire@oracle.com>, "Emil
- Tsalapatis" <emil@etsalapatis.com>, <jose.marchesi@oracle.com>, "David
- Faust" <david.faust@oracle.com>
-Subject: Re: [PAHOLE v4 3/3] tests: Support GCC in pfunct-btf-decl-tags test
-X-Mailer: aerc 0.21.0-0-g5549850facc2
+MIME-Version: 1.0
+Subject: Re: [PAHOLE v4 2/3] dwarf_loader: Add support for
+ DW_TAG_GNU_annotation
+To: Yonghong Song <yonghong.song@linux.dev>, dwarves@vger.kernel.org
+Cc: bpf@vger.kernel.org, Andrii Nakryiko <andrii@kernel.org>,
+ acme@kernel.org, Alan Maguire <alan.maguire@oracle.com>,
+ Emil Tsalapatis <emil@etsalapatis.com>, jose.marchesi@oracle.com,
+ David Faust <david.faust@oracle.com>
 References: <20260602195512.1511013-1-vineet.gupta@linux.dev>
- <20260602195512.1511013-3-vineet.gupta@linux.dev>
-In-Reply-To: <20260602195512.1511013-3-vineet.gupta@linux.dev>
+ <20260602195512.1511013-2-vineet.gupta@linux.dev>
+ <9152fde6-d35c-4688-9ff1-c7fe152c9b2a@linux.dev>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Vineet Gupta <vineet.gupta@linux.dev>
+Content-Language: en-US
+In-Reply-To: <9152fde6-d35c-4688-9ff1-c7fe152c9b2a@linux.dev>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Tue Jun 2, 2026 at 3:55 PM EDT, Vineet Gupta wrote:
-> GCC 16+ supports btf_decl_tag via DW_TAG_GNU_annotation. Update the
-> test to run with both GCC (>=3D 16) and clang when available, instead
-> of requiring clang only.
+Hi Yonghong,
+
+Thanks for reviewing the patches.
+
+On 6/3/26 1:08 PM, Yonghong Song wrote:
+>> [3] https://lore.kernel.org/bpf/20260601183511.594100-2-vineet.gupta@linux.dev/
+>> [2] https://lore.kernel.org/bpf/20260528223616.2035618-2-vineet.gupta@linux.dev/
+>> [1] https://lore.kernel.org/bpf/20260526181818.4159927-2-vineet.gupta@linux.dev/
+> I download and build gcc-16.1 which will be used for gcc compilation.
+> I did some experiments with this patch set for both type tag and decl tag.
+> See below.
+
+FWIW, you definitely need a fix [1] on top of gcc 16.1.
+The patch explains the reasoning and did cause some missing entries in 
+type chain.
+I haven't checked if this changes anything specific to issues you point 
+below.
+
+[1] https://gcc.gnu.org/pipermail/bpf/2026-May/000147.html
+
+
 >
-> Signed-off-by: Vineet Gupta <vineet.gupta@linux.dev>
-
-Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
-
-> ---
->  tests/pfunct-btf-decl-tags.sh | 72 +++++++++++++++++++++++++++--------
->  1 file changed, 56 insertions(+), 16 deletions(-)
+> For type tag
+> ============
 >
-> diff --git a/tests/pfunct-btf-decl-tags.sh b/tests/pfunct-btf-decl-tags.s=
-h
-> index 35884b4e8687..a46aa1f3df55 100755
-> --- a/tests/pfunct-btf-decl-tags.sh
-> +++ b/tests/pfunct-btf-decl-tags.sh
-> @@ -6,24 +6,36 @@
->  source test_lib.sh
-> =20
->  outdir=3D$(make_tmpdir)
-> -tmpobj=3D$(make_tmpobj)
-> =20
->  # Comment this out to save test data.
->  trap cleanup EXIT
-> =20
->  title_log "Check that pfunct can print btf_decl_tags read from BTF."
-> =20
-> -# gcc now also supports decl tags as of gcc commit 43dcea48b8c,
-> -# in upstream version 16.
-> -# UPTODO: add a check here for that.
-> +# gcc 16+ supports decl tags via DW_TAG_GNU_annotation (gcc commit ac702=
-7f180b).
-> =20
-> +GCC=3D${GCC:-gcc}
->  CLANG=3D${CLANG:-clang}
-> -if ! command -v $CLANG > /dev/null; then
-> -	error_log "Need clang for test $0"
-> +
-> +use_gcc=3D0
-> +if command -v $GCC > /dev/null; then
-> +	gcc_ver=3D$($GCC -dumpversion 2>/dev/null | cut -d. -f1)
-> +	if [ "$gcc_ver" -ge 16 ] 2>/dev/null; then
-> +		use_gcc=3D1
-> +	fi
-> +fi
-> +
-> +use_clang=3D0
-> +if command -v $CLANG > /dev/null; then
-> +	use_clang=3D1
-> +fi
-> +
-> +if [ "$use_gcc" -eq 0 ] && [ "$use_clang" -eq 0 ]; then
-> +	error_log "Need gcc >=3D 16 or clang for test $0"
->  	test_fail
->  fi
-> =20
-> -(cat <<EOF
-> +src=3D$(cat <<EOF
->  #define __tag(x) __attribute__((btf_decl_tag(#x)))
-> =20
->  __tag(a) __tag(b) __tag(c) void foo(void) {}
-> @@ -31,7 +43,7 @@ __tag(a) __tag(b)          void bar(void) {}
->  __tag(a)                   void buz(void) {}
-> =20
->  EOF
-> -) | $CLANG --target=3Dbpf -c -g -x c -o $tmpobj -
-> +)
-> =20
->  # tags order is not guaranteed
->  sort_tags=3D$(cat <<EOF
-> @@ -54,16 +66,44 @@ a void buz(void);
->  EOF
->  )
-> =20
-> -out=3D$(pfunct -P -F btf $tmpobj | awk "$sort_tags" | sort)
-> -d=3D$(diff -u <(echo "$expected") <(echo "$out"))
-> +run_test() {
-> +	local compiler=3D$1
-> +	local tmpobj=3D$2
-> +
-> +	info_log "Testing with $compiler"
-> +	out=3D$(pfunct -P -F btf $tmpobj | awk "$sort_tags" | sort)
-> +	d=3D$(diff -u <(echo "$expected") <(echo "$out"))
-> +
-> +	if [[ "$d" =3D=3D "" ]]; then
-> +		info_log "  passed"
-> +		return 0
-> +	else
-> +		error_log "pfunct output does not match expected ($compiler):"
-> +		info_log "$d"
-> +		info_log
-> +		info_log "Complete output:"
-> +		info_log "$out"
-> +		return 1
-> +	fi
-> +}
-> +
-> +failed=3D0
-> +
-> +if [ "$use_gcc" -eq 1 ]; then
-> +	tmpobj=3D$(make_tmpobj)
-> +	echo "$src" | $GCC -c -g -x c -o $tmpobj - 2>/dev/null
-> +	pahole -J $tmpobj 2>/dev/null
-> +	run_test "$GCC (version $gcc_ver)" "$tmpobj" || failed=3D1
-> +fi
-> +
-> +if [ "$use_clang" -eq 1 ]; then
-> +	tmpobj=3D$(make_tmpobj)
-> +	echo "$src" | $CLANG --target=3Dbpf -c -g -x c -o $tmpobj -
-> +	run_test "$CLANG" "$tmpobj" || failed=3D1
-> +fi
-> =20
-> -if [[ "$d" =3D=3D "" ]]; then
-> +if [ "$failed" -eq 0 ]; then
->  	test_pass
->  else
-> -	error_log "pfunct output does not match expected:"
-> -	info_log "$d"
-> -	info_log
-> -	info_log "Complete output:"
-> -	info_log "$out"
->  	test_fail
->  fi
+> $ cat type_tag.c
+> /* btf_type_tag test cases.
+>    *
+>    * btf_type_tag annotates a *type* and the tag becomes part of the type
+>    * chain in BTF (TYPE_TAG kind), e.g. used by the kernel for __user / __rcu
+>    * / __percpu style annotations.
+>    *
+>    * Placement matters: the tag is written *before* the '*' so it annotates
+>    * the pointee type.  This produces  PTR -> TYPE_TAG 'x' -> <pointee>.
+>    *
+>    * Build:  clang -O2 -g -target bpf -c type_tag.c -o type_tag.o
+>    *         /home/yhs/work/gcc-build/opt/gcc-16.1/bin/gcc -O2 -gbtf -g -c type_tag.c -o type_tag.o
+>    * Dump:   bpftool btf dump file type_tag.o
+>    */
+>
+> #define __type_tag(x) __attribute__((btf_type_tag(x)))
+>
+> /* a single type tag on a pointer's pointee */
+> int __type_tag("user") *user_ptr_var;
+>
+> /* stacked type tags: the chain is preserved, outermost first */
+> int __type_tag("tag1") __type_tag("tag2") *stacked_var;
+>
+> /* type tags inside struct members */
+> struct bar {
+>           char __type_tag("rcu") *name;
+>           int  __type_tag("percpu") *counter;
+> };
+>
+> /* type tag on a function parameter's pointee */
+> int read_user(int __type_tag("user") *p)
+> {
+>           return *p;
+> }
+>
+> /* keep things referenced */
+> int use(struct bar *b)
+> {
+>           return read_user(user_ptr_var) + (stacked_var ? *stacked_var : 0) +
+>                  (b->counter ? *b->counter : 0);
+> }
+>
+> $ /home/yhs/work/gcc-build/opt/gcc-16.1/bin/gcc -O2 -gbtf -g -c type_tag.c -o type_tag.o
+> $ bpftool btf dump file type_tag.o
+> [1] INT 'int' size=4 bits_offset=0 nr_bits=32 encoding=SIGNED
+> [2] PTR '(anon)' type_id=15
+> [3] PTR '(anon)' type_id=17
+> [4] STRUCT 'bar' size=16 vlen=2
+>           'name' type_id=6 bits_offset=0
+>           'counter' type_id=7 bits_offset=64
+> [5] INT 'char' size=1 bits_offset=0 nr_bits=8 encoding=SIGNED
+> [6] PTR '(anon)' type_id=18
+> [7] PTR '(anon)' type_id=19
+> [8] FUNC_PROTO '(anon)' ret_type_id=1 vlen=1
+>           'b' type_id=9
+> [9] PTR '(anon)' type_id=4
+> [10] FUNC_PROTO '(anon)' ret_type_id=1 vlen=1
+>           'p' type_id=2
+> [11] VAR 'stacked_var' type_id=3, linkage=global
+> [12] VAR 'user_ptr_var' type_id=2, linkage=global
+> [13] FUNC 'use' type_id=8 linkage=global
+> [14] FUNC 'read_user' type_id=10 linkage=global
+> [15] TYPE_TAG 'user' type_id=1
+> [16] TYPE_TAG 'tag1' type_id=1
+> [17] TYPE_TAG 'tag2' type_id=16
+> [18] TYPE_TAG 'rcu' type_id=5
+> [19] TYPE_TAG 'percpu' type_id=1
+> [20] DATASEC '.bss' size=0 vlen=2
+>           type_id=11 offset=0 size=8 (VAR 'stacked_var')
+>           type_id=12 offset=0 size=8 (VAR 'user_ptr_var')
+> $
+>
+> $ clang -O2 -g -target bpf -c type_tag.c -o type_tag.o
+> $ bpftool btf dump file type_tag.o
+> [1] TYPE_TAG 'user' type_id=3
+> [2] PTR '(anon)' type_id=1
+> [3] INT 'int' size=4 bits_offset=0 nr_bits=32 encoding=SIGNED
+> [4] FUNC_PROTO '(anon)' ret_type_id=3 vlen=1
+>           'p' type_id=2
+> [5] FUNC 'read_user' type_id=4 linkage=global
+> [6] PTR '(anon)' type_id=7
+> [7] STRUCT 'bar' size=16 vlen=2
+>           'name' type_id=9 bits_offset=0
+>           'counter' type_id=12 bits_offset=64
+> [8] TYPE_TAG 'rcu' type_id=10
+> [9] PTR '(anon)' type_id=8
+> [10] INT 'char' size=1 bits_offset=0 nr_bits=8 encoding=SIGNED
+> [11] TYPE_TAG 'percpu' type_id=3
+> [12] PTR '(anon)' type_id=11
+> [13] FUNC_PROTO '(anon)' ret_type_id=3 vlen=1
+>           'b' type_id=6
+> [14] FUNC 'use' type_id=13 linkage=global
+> [15] VAR 'user_ptr_var' type_id=2, linkage=global
+> [16] TYPE_TAG 'tag1' type_id=3
+> [17] TYPE_TAG 'tag2' type_id=16
+> [18] PTR '(anon)' type_id=17
+> [19] VAR 'stacked_var' type_id=18, linkage=global
+> [20] DATASEC '.bss' size=0 vlen=2
+>           type_id=15 offset=0 size=8 (VAR 'user_ptr_var')
+>           type_id=19 offset=0 size=8 (VAR 'stacked_var')
+> $
+>
+> So type tag matches between clang and gcc.
+
+Nice, thanks for cross-checking and confirming.
+
+
+> For decl tag
+> ============
+>
+> $ cat decl_tag.c
+> /* btf_decl_tag test cases.
+>    *
+>    * btf_decl_tag can be attached to:
+>    *   - global (incl. static) variables
+>    *   - functions
+>    *   - function parameters
+>    *   - struct/union types and their members
+>    *   - typedefs
+>    *
+>    * Build:  clang -O2 -target bpf -g -c decl_tag.c -o decl_tag.o
+>    *         /home/yhs/work/gcc-build/opt/gcc-16.1/bin/gcc -O2 -gbtf -g -c decl_tag.c -o decl_tag.o
+>    * Dump:   bpftool btf dump file decl_tag.o
+>    */
+>
+> #define __tag(x) __attribute__((btf_decl_tag(x)))
+>
+> /* tag on a global variable */
+> int global_var __tag("global_var_tag");
+>
+> /* tag on a static variable */
+> static int static_var __tag("static_var_tag");
+>
+> /* multiple tags on one declaration */
+> int multi_tag_var __tag("tag_a") __tag("tag_b");
+>
+> /* tag on struct type and its members */
+> struct foo {
+>           int a __tag("member_a_tag");
+>           int b __tag("member_b_tag");
+> } __tag("struct_foo_tag");
+>
+> /* tag on a typedef */
+> typedef struct foo foo_t1 __tag("typedef_foo_tag");
+> typedef struct {int foo2;} foo_t2 __tag("typedef_foo2_tag");
+>
+> /* tag on a function and its parameters */
+> __tag("func_add_tag")
+> int add(int x __tag("param_x_tag"), int y __tag("param_y_tag"))
+> {
+>           return x + y;
+> }
+>
+> /* keep the globals/types alive so they land in BTF */
+> int use(foo_t1 *f, foo_t2 *g)
+> {
+>           return add(global_var + static_var + multi_tag_var, f->a + g->foo2);
+> }
+>
+> $ /home/yhs/work/gcc-build/opt/gcc-16.1/bin/gcc -O2 -gbtf -g -c decl_tag.c -o decl_tag.o
+> decl_tag.c:30:1: warning: ‘btf_decl_tag’ attribute does not apply to types [-Wattributes]
+>      30 | } __tag("struct_foo_tag");
+>         | ^
+>
+> $ bpftool btf dump file decl_tag.o
+> [1] INT 'int' size=4 bits_offset=0 nr_bits=32 encoding=SIGNED
+> [2] STRUCT 'foo' size=8 vlen=2
+>           'a' type_id=1 bits_offset=0
+>           'b' type_id=1 bits_offset=32
+> [3] TYPEDEF 'foo_t1' type_id=2
+> [4] STRUCT '(anon)' size=4 vlen=1
+>           'foo2' type_id=1 bits_offset=0
+> [5] TYPEDEF 'foo_t2' type_id=4
+> [6] FUNC_PROTO '(anon)' ret_type_id=1 vlen=2
+>           'f' type_id=7
+>           'g' type_id=8
+> [7] PTR '(anon)' type_id=3
+> [8] PTR '(anon)' type_id=5
+> [9] FUNC_PROTO '(anon)' ret_type_id=1 vlen=2
+>           'x' type_id=1
+>           'y' type_id=1
+> [10] VAR 'multi_tag_var' type_id=1, linkage=global
+> [11] VAR 'global_var' type_id=1, linkage=global
+> [12] FUNC 'use' type_id=6 linkage=global
+> [13] FUNC 'add' type_id=9 linkage=global
+> [14] DECL_TAG 'global_var_tag' type_id=11 component_idx=-1
+> [15] DECL_TAG 'static_var_tag' type_id=0 component_idx=-1
+> [16] DECL_TAG 'tag_b' type_id=10 component_idx=-1
+> [17] DECL_TAG 'tag_a' type_id=10 component_idx=-1
+> [18] DECL_TAG 'member_a_tag' type_id=2 component_idx=0
+> [19] DECL_TAG 'member_b_tag' type_id=2 component_idx=1
+> [20] DECL_TAG 'param_x_tag' type_id=13 component_idx=0
+> [21] DECL_TAG 'param_y_tag' type_id=13 component_idx=1
+> [22] DECL_TAG 'func_add_tag' type_id=13 component_idx=-1
+> [23] DATASEC '.bss' size=0 vlen=2
+>           type_id=10 offset=0 size=4 (VAR 'multi_tag_var')
+>           type_id=11 offset=0 size=4 (VAR 'global_var')
+> $ bpftool btf dump file decl_tag.o | grep DECL_TAG
+> [14] DECL_TAG 'global_var_tag' type_id=11 component_idx=-1
+> [15] DECL_TAG 'static_var_tag' type_id=0 component_idx=-1
+> [16] DECL_TAG 'tag_b' type_id=10 component_idx=-1
+> [17] DECL_TAG 'tag_a' type_id=10 component_idx=-1
+> [18] DECL_TAG 'member_a_tag' type_id=2 component_idx=0
+> [19] DECL_TAG 'member_b_tag' type_id=2 component_idx=1
+> [20] DECL_TAG 'param_x_tag' type_id=13 component_idx=0
+> [21] DECL_TAG 'param_y_tag' type_id=13 component_idx=1
+> [22] DECL_TAG 'func_add_tag' type_id=13 component_idx=-1
+> $
+>
+> Three decl tags (struct_foo_tag, typedef_foo_tag and typedef_foo2_tag)
+> are missing here:
+
+I'll double check, once I'm back from PTO.
+
+> struct foo {
+>           int a __tag("member_a_tag");
+>           int b __tag("member_b_tag");
+> } __tag("struct_foo_tag");
+>
+> /* tag on a typedef */
+> typedef struct foo foo_t1 __tag("typedef_foo_tag");
+> typedef struct {int foo2;} foo_t2 __tag("typedef_foo2_tag");
+>
+> $ clang -O2 -g -target bpf -c decl_tag.c -o decl_tag.o
+> $ bpftool btf dump file decl_tag.o
+> [1] INT 'int' size=4 bits_offset=0 nr_bits=32 encoding=SIGNED
+> [2] FUNC_PROTO '(anon)' ret_type_id=1 vlen=2
+>           'x' type_id=1
+>           'y' type_id=1
+> [3] FUNC 'add' type_id=2 linkage=global
+> [4] DECL_TAG 'param_x_tag' type_id=3 component_idx=0
+> [5] DECL_TAG 'param_y_tag' type_id=3 component_idx=1
+> [6] DECL_TAG 'func_add_tag' type_id=3 component_idx=-1
+> [7] PTR '(anon)' type_id=8
+> [8] TYPEDEF 'foo_t1' type_id=10
+> [9] DECL_TAG 'typedef_foo_tag' type_id=8 component_idx=-1
+> [10] STRUCT 'foo' size=8 vlen=2
+>           'a' type_id=1 bits_offset=0
+>           'b' type_id=1 bits_offset=32
+> [11] DECL_TAG 'struct_foo_tag' type_id=10 component_idx=-1
+> [12] DECL_TAG 'member_a_tag' type_id=10 component_idx=0
+> [13] DECL_TAG 'member_b_tag' type_id=10 component_idx=1
+> [14] PTR '(anon)' type_id=15
+> [15] TYPEDEF 'foo_t2' type_id=17
+> [16] DECL_TAG 'typedef_foo2_tag' type_id=15 component_idx=-1
+> [17] STRUCT '(anon)' size=4 vlen=1
+>           'foo2' type_id=1 bits_offset=0
+> [18] FUNC_PROTO '(anon)' ret_type_id=1 vlen=2
+>           'f' type_id=7
+>           'g' type_id=14
+> [19] FUNC 'use' type_id=18 linkage=global
+> [20] VAR 'global_var' type_id=1, linkage=global
+> [21] DECL_TAG 'global_var_tag' type_id=20 component_idx=-1
+> [22] VAR 'multi_tag_var' type_id=1, linkage=global
+> [23] DECL_TAG 'tag_a' type_id=22 component_idx=-1
+> [24] DECL_TAG 'tag_b' type_id=22 component_idx=-1
+> [25] DATASEC '.bss' size=0 vlen=2
+>           type_id=20 offset=0 size=4 (VAR 'global_var')
+>           type_id=22 offset=0 size=4 (VAR 'multi_tag_var')
+> $ bpftool btf dump file decl_tag.o | grep DECL_TAG
+> [4] DECL_TAG 'param_x_tag' type_id=3 component_idx=0
+> [5] DECL_TAG 'param_y_tag' type_id=3 component_idx=1
+> [6] DECL_TAG 'func_add_tag' type_id=3 component_idx=-1
+> [9] DECL_TAG 'typedef_foo_tag' type_id=8 component_idx=-1
+> [11] DECL_TAG 'struct_foo_tag' type_id=10 component_idx=-1
+> [12] DECL_TAG 'member_a_tag' type_id=10 component_idx=0
+> [13] DECL_TAG 'member_b_tag' type_id=10 component_idx=1
+> [16] DECL_TAG 'typedef_foo2_tag' type_id=15 component_idx=-1
+> [21] DECL_TAG 'global_var_tag' type_id=20 component_idx=-1
+> [23] DECL_TAG 'tag_a' type_id=22 component_idx=-1
+> [24] DECL_TAG 'tag_b' type_id=22 component_idx=-1
+>
+> DECL_TAG 'static_var_tag' type_id=0 component_idx=-1 is missing in llvm.
+> This is execpted for llvm since 'static_var' is 'inlined' since it is
+> value is 0 and the compiler optimization removed it in function use().
+> In llvm Dwarf->BTF conversion is very late and we only emit survived
+> globals.
+>
+> gcc emits 'static_var_tag' probably in frontend. Emitting
+> 'static_var_tag' is okay, just not used.
+>
+> I think gcc should support
+>    - declaration tag for typedef, and
+>    - declaration tag for the whole struct (like above 'struct_foo_tag')
+> to be compatible with llvm.
+
+OK we will look into this.
+
+Thx,
+-Vineet
 
