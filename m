@@ -1,41 +1,40 @@
-Received: from out-188.mta0.migadu.com (out-188.mta0.migadu.com [91.218.175.188])
+Received: from out-187.mta1.migadu.com (out-187.mta1.migadu.com [95.215.58.187])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B6B33911BC;
-	Wed,  3 Jun 2026 21:41:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.188
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 959B03FCB27
+	for <dwarves@vger.kernel.org>; Wed,  3 Jun 2026 21:52:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.187
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780522885; cv=none; b=uwWH7rrv3tDkhNjhfbMEj/JoCjQXvrlPYHY+2VibrsL1uXJXCD0uKVg7DRplUf5I71qYTzpXgCUxRRqzQp4gT+BgrXG7o/3+2fsfgvuupfX5L+jmXfZJjKvN4KcuOpZHX6/AdRdO20lpmYGYkoSNC9mcHKz+BOgQyNaWTsEU5mg=
+	t=1780523580; cv=none; b=c/InjMcz7XpBGgsw6DxcJCfU6nODw6SMOHUIMkajb880loGmJ+jDyZ4T2TZKhPGg5cVVp2WIhN6YPfxHsKOloECLppTvSEqQlOWFo84DsEu28gRf8tR07Wp9+SJDv8zoGVIbrrE4AQwD1Iu6yteT3IWXmdEz98CzYqlg4+mSfbo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780522885; c=relaxed/simple;
-	bh=paNw1FdSihJNknh365CgnLOARQ+FzMcLCwyPKqRPvX4=;
+	s=arc-20240116; t=1780523580; c=relaxed/simple;
+	bh=1FFA7jfzyC1KLjjPnHUe4vFQ6VOP3AZW5dyL4G/fhXA=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=D/Zao6PtwJ0LssGf03BpOBZ2ovduad43EdR/BXUT1gPrWV365xTlzCIr0RFeltjL+H8+Hmi8l8RRAZfPngIp2lWttiYl7xlJOYpwPPQncgAv2/4VRYneEm8YvrPtEAuq2n7DGv8jwavlNRoVjTlHws88tX5WjZV6Zh9sAPKpmTc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=MbfLJi5e; arc=none smtp.client-ip=91.218.175.188
+	 In-Reply-To:Content-Type; b=Pes9SBZHjIEZXzW+M2n20aFbVoUTobAo2PusgaS3T7M97Qi70SbCMJlSzVtQSL8ZrYsiuYU+N0crPoODkusnIMEvCF/i+RKWg0FX4tVvumQV2zccgCsjWPj939LmrZgWUmQwQ6qdrwkxaPr/WpoFK1QqjBTbJHz95FXMqBSJzEI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=sDvlK58n; arc=none smtp.client-ip=95.215.58.187
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="MbfLJi5e"
-Message-ID: <8ccb6133-2964-450c-9409-ac99e4d5300c@linux.dev>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="sDvlK58n"
+Message-ID: <a3d49856-4d7d-4429-a287-28e70952a56f@linux.dev>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1780522882;
+	t=1780523566;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=ipRvgil0U4e931XKU0W6qcnXGk8mgtmYBD7X+85HKOI=;
-	b=MbfLJi5eQly1O9LnikX4O7Zj7BL1XlCckcdeKsJVEfjm5QTew719SzJnGjkN/eBlSv/M1I
-	ahBKPX+GL3WFVdCmbMCzQD5U5JfP/AxnXd7REOA5oMYN9brz+1hqWLvNtq8BICIZ4ijio5
-	+5GzMG+8o2so6CUzbPFrVvi6hwYNJRw=
-Date: Wed, 3 Jun 2026 14:41:11 -0700
+	bh=XV14Oh5b22FVMwPnSaRFvnAf0VNIpY/Bg4ibaOikVjQ=;
+	b=sDvlK58nA8sYNC1xgjmVe57lds3GU35Q+DPmZWxwNUmJfRMvSWYyvBvoNY1zc8nklZ/eGx
+	ntl9DOcZ0sqSyR0aFhRFkINj6E6KrSJJ8qwGmWvNxMfw9qZgxsnh5uNEzW4I+ViV3DW1bj
+	R8fgRA7n5L4PEs6MO4ufGugzz1jcV0o=
+Date: Wed, 3 Jun 2026 14:52:26 -0700
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PAHOLE v4 2/3] dwarf_loader: Add support for
- DW_TAG_GNU_annotation
+Subject: Re: [PAHOLE v4 3/3] tests: Support GCC in pfunct-btf-decl-tags test
 Content-Language: en-GB
 To: Vineet Gupta <vineet.gupta@linux.dev>, dwarves@vger.kernel.org
 Cc: bpf@vger.kernel.org, Andrii Nakryiko <andrii@kernel.org>,
@@ -43,10 +42,10 @@ Cc: bpf@vger.kernel.org, Andrii Nakryiko <andrii@kernel.org>,
  Emil Tsalapatis <emil@etsalapatis.com>, jose.marchesi@oracle.com,
  David Faust <david.faust@oracle.com>
 References: <20260602195512.1511013-1-vineet.gupta@linux.dev>
- <20260602195512.1511013-2-vineet.gupta@linux.dev>
+ <20260602195512.1511013-3-vineet.gupta@linux.dev>
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <20260602195512.1511013-2-vineet.gupta@linux.dev>
+In-Reply-To: <20260602195512.1511013-3-vineet.gupta@linux.dev>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Migadu-Flow: FLOW_OUT
@@ -54,94 +53,131 @@ X-Migadu-Flow: FLOW_OUT
 
 
 On 6/2/26 12:55 PM, Vineet Gupta wrote:
-> gcc 16 was the first release to support DW_TAG_GNU_annotations and this
-> patch enables the same in pahole. Bulk of changes are dwarf_loader but
-> btf_encoder also gains support with minimal changes.
->
-> GCC encodes btf_type_tag and btf_decl_tag annotations differently from
-> LLVM. While LLVM uses DW_TAG_LLVM_annotation (0x6000) as child DIEs,
-> GCC uses DW_TAG_GNU_annotation (0x6001) as standalone sibling DIEs
-> referenced via DW_AT_GNU_annotation (0x2139) attributes, with chaining
-> through the same attribute on annotation DIEs themselves.
->
-> Handle both encoding styles:
->
-> For btf_type_tag (pointer annotations):
-> - Recognize DW_TAG_GNU_annotation alongside DW_TAG_LLVM_annotation in
->    child annotation scanning.
-> - Follow DW_AT_GNU_annotation attribute chains on pointer types for
->    GCC-style btf_type_tag resolution.
-> - Normalize DW_TAG_GNU_annotation to DW_TAG_LLVM_annotation in the
->    internal representation so downstream code works unchanged.
->
-> For btf_decl_tag (function/struct/member annotations):
-> - Add add_gnu_annotation_chain() to follow DW_AT_GNU_annotation
->    attribute chains on function, struct, and member DIEs.
-> - GCC puts DW_AT_GNU_annotation on the function/struct DIE itself
->    (not as child DIEs), referencing sibling annotation DIEs that chain
->    via the same attribute.
->
-> Also:
-> - Silently skip standalone DW_TAG_GNU_annotation DIEs at CU level.
-> - Add tag__is_annotation() helper macro for annotation tag checks.
-> - Rename add_llvm_annotation -> add_tag_annotation,
->    skip_llvm_annotations -> skip_tag_annotations since these now
->    handle both LLVM and GNU annotation formats.
+> GCC 16+ supports btf_decl_tag via DW_TAG_GNU_annotation. Update the
+> test to run with both GCC (>= 16) and clang when available, instead
+> of requiring clang only.
 >
 > Signed-off-by: Vineet Gupta <vineet.gupta@linux.dev>
 
-LGTM except a nit below.
+LGTM but missing 'pahole -J' for clang test. See below.
 
 Acked-by: Yonghong Song <yonghong.song@linux.dev>
 
-[...]
-
-> @@ -943,16 +948,40 @@ static int add_child_llvm_annotations(Dwarf_Die *die, int component_idx,
+> ---
+>   tests/pfunct-btf-decl-tags.sh | 72 +++++++++++++++++++++++++++--------
+>   1 file changed, 56 insertions(+), 16 deletions(-)
+>
+> diff --git a/tests/pfunct-btf-decl-tags.sh b/tests/pfunct-btf-decl-tags.sh
+> index 35884b4e8687..a46aa1f3df55 100755
+> --- a/tests/pfunct-btf-decl-tags.sh
+> +++ b/tests/pfunct-btf-decl-tags.sh
+> @@ -6,24 +6,36 @@
+>   source test_lib.sh
 >   
->   	die = &child;
->   	do {
-> -		if (dwarf_tag(die) == DW_TAG_LLVM_annotation) {
-> -			ret = add_llvm_annotation(die, component_idx, conf, head);
-> -			if (ret)
-> -				return ret;
-> -		}
-> +		if (!die__tag_is_annotation(die))
-> +			continue;
-> +
-> +		ret = add_tag_annotation(die, component_idx, conf, head);
-> +		if (ret)
-> +			return ret;
->   	} while (dwarf_siblingof(die, die) == 0);
+>   outdir=$(make_tmpdir)
+> -tmpobj=$(make_tmpobj)
 >   
->   	return 0;
->   }
+>   # Comment this out to save test data.
+>   trap cleanup EXIT
 >   
-> +/*
-> + * Handle gcc style btf_decl_tag annotations for functions/struct/member tags.
-
-For 'struct', gcc is not supported yet.
-
-> + * Pointers are handled separately, inline in die__create_new_pointer_tag()
-> + */
-> +static int add_gnu_annotation_chain(Dwarf_Die *die, int component_idx,
-> +				    struct conf_load *conf, struct list_head *head)
-> +{
-> +	Dwarf_Attribute attr;
-> +	Dwarf_Die annot_die;
+>   title_log "Check that pfunct can print btf_decl_tags read from BTF."
+>   
+> -# gcc now also supports decl tags as of gcc commit 43dcea48b8c,
+> -# in upstream version 16.
+> -# UPTODO: add a check here for that.
+> +# gcc 16+ supports decl tags via DW_TAG_GNU_annotation (gcc commit ac7027f180b).
+>   
+> +GCC=${GCC:-gcc}
+>   CLANG=${CLANG:-clang}
+> -if ! command -v $CLANG > /dev/null; then
+> -	error_log "Need clang for test $0"
 > +
-> +	while (dwarf_attr(die, DW_AT_GNU_annotation, &attr) != NULL &&
-> +	       dwarf_formref_die(&attr, &annot_die) != NULL &&
-> +	       dwarf_tag(&annot_die) == DW_TAG_GNU_annotation) {
-> +		int ret = add_tag_annotation(&annot_die, component_idx, conf, head);
-> +		if (ret)
-> +			return ret;
+> +use_gcc=0
+> +if command -v $GCC > /dev/null; then
+> +	gcc_ver=$($GCC -dumpversion 2>/dev/null | cut -d. -f1)
+> +	if [ "$gcc_ver" -ge 16 ] 2>/dev/null; then
+> +		use_gcc=1
+> +	fi
+> +fi
 > +
-> +		die = &annot_die;
-> +	}
+> +use_clang=0
+> +if command -v $CLANG > /dev/null; then
+> +	use_clang=1
+> +fi
 > +
-> +	return 0;
+> +if [ "$use_gcc" -eq 0 ] && [ "$use_clang" -eq 0 ]; then
+> +	error_log "Need gcc >= 16 or clang for test $0"
+>   	test_fail
+>   fi
+>   
+> -(cat <<EOF
+> +src=$(cat <<EOF
+>   #define __tag(x) __attribute__((btf_decl_tag(#x)))
+>   
+>   __tag(a) __tag(b) __tag(c) void foo(void) {}
+> @@ -31,7 +43,7 @@ __tag(a) __tag(b)          void bar(void) {}
+>   __tag(a)                   void buz(void) {}
+>   
+>   EOF
+> -) | $CLANG --target=bpf -c -g -x c -o $tmpobj -
+> +)
+>   
+>   # tags order is not guaranteed
+>   sort_tags=$(cat <<EOF
+> @@ -54,16 +66,44 @@ a void buz(void);
+>   EOF
+>   )
+>   
+> -out=$(pfunct -P -F btf $tmpobj | awk "$sort_tags" | sort)
+> -d=$(diff -u <(echo "$expected") <(echo "$out"))
+> +run_test() {
+> +	local compiler=$1
+> +	local tmpobj=$2
+> +
+> +	info_log "Testing with $compiler"
+> +	out=$(pfunct -P -F btf $tmpobj | awk "$sort_tags" | sort)
+> +	d=$(diff -u <(echo "$expected") <(echo "$out"))
+> +
+> +	if [[ "$d" == "" ]]; then
+> +		info_log "  passed"
+> +		return 0
+> +	else
+> +		error_log "pfunct output does not match expected ($compiler):"
+> +		info_log "$d"
+> +		info_log
+> +		info_log "Complete output:"
+> +		info_log "$out"
+> +		return 1
+> +	fi
 > +}
 > +
->
-[...]
+> +failed=0
+> +
+> +if [ "$use_gcc" -eq 1 ]; then
+> +	tmpobj=$(make_tmpobj)
+> +	echo "$src" | $GCC -c -g -x c -o $tmpobj - 2>/dev/null
+> +	pahole -J $tmpobj 2>/dev/null
+> +	run_test "$GCC (version $gcc_ver)" "$tmpobj" || failed=1
+> +fi
+> +
+> +if [ "$use_clang" -eq 1 ]; then
+> +	tmpobj=$(make_tmpobj)
+> +	echo "$src" | $CLANG --target=bpf -c -g -x c -o $tmpobj -
+
+missing 'pahole -J $tmpobj 2>/dev/null' here.
+
+> +	run_test "$CLANG" "$tmpobj" || failed=1
+> +fi
+>   
+> -if [[ "$d" == "" ]]; then
+> +if [ "$failed" -eq 0 ]; then
+>   	test_pass
+>   else
+> -	error_log "pfunct output does not match expected:"
+> -	info_log "$d"
+> -	info_log
+> -	info_log "Complete output:"
+> -	info_log "$out"
+>   	test_fail
+>   fi
 
