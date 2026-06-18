@@ -1,262 +1,226 @@
-Received: from out-171.mta0.migadu.com (out-171.mta0.migadu.com [91.218.175.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from 66-220-144-179.mail-mxout.facebook.com (66-220-144-179.mail-mxout.facebook.com [66.220.144.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76B2D274650
-	for <dwarves@vger.kernel.org>; Thu, 18 Jun 2026 00:58:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D914A35898
+	for <dwarves@vger.kernel.org>; Thu, 18 Jun 2026 01:14:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.144.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781744284; cv=none; b=tyMpehP60Yc8pc6rohdUAVTFlfqFEBmvK4tWXj9Qad//IO+OmvNwrfpOEkdlX0yQBhapBMa6wwVHHJZTWdYWYwjZgMD4FBIsP4gQH7W9ViRhq0BmHQhRVh+zClsysjqzkC4cqGY5N5LcwiZ0Jt2acLZYqUYHiFW0zl9w7y0zwaM=
+	t=1781745254; cv=none; b=bh9j1XSUyoOT1wnLrifdcrN5QOSxwLYJ6MxIamfAhhYDz7x4NZ0mxab6d4E0tVc3g18GU2TI04MWjcsuz5FrKButGtWNz/DvW1edIpVxASA0XywS9PEfndJZpqRTEBKphkiWrygbB5Wc0El+Efpj3CyHIour9TMilMJpHxLjjT8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781744284; c=relaxed/simple;
-	bh=r6S79Xx2Q2zh6zPvokozN+aKvdSqiLvnNLVc5eSBYTc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=lCVHSgkPpIX2OlSBp0+5phtAVpFaAO6hR4+HmgARzxobvvrPIKnnImxxmPISffW9VDM3LAYalqJM2v1i084ghjfxEAEa2onvkF8UIM/0SXHBq/Ozu+lpnEI2F6ZxGFaI4ka+7junqEycfrFIqhVNbKcuGvoNeL3n5ERuLpvUodk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=AMALGjeF; arc=none smtp.client-ip=91.218.175.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="AMALGjeF"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1781744280;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=kpmnn5gfKglbrZIZQHmES7AK+jrzS3ppac8ZXzTxEKA=;
-	b=AMALGjeFD/7BfdAhMAfU7N5kuSKpmVoCYMdiiYQCahWQuUqa0zRUEyEW26QsP6r+UN/Qs8
-	KOxFSrueFqgHtvmWGhOjCcK2nYMTDsSOCXrjYViiP5xYYVCsxN129IXPDoTHeKZIW1HmT5
-	xNha3BadqfiBGQVAKCjqrbFSOH0BVMQ=
-From: Vineet Gupta <vineet.gupta@linux.dev>
-To: dwarves@vger.kernel.org
-Cc: bpf@vger.kernel.org,
+	s=arc-20240116; t=1781745254; c=relaxed/simple;
+	bh=s/ulRbLTRRk3nN0pkadw8NppcNvGA6t+O6ONrUPxOeQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Q7YAs7OZwQBS4CJgRkPLQc0N1KnVg9rAQ2/fs8X5fi0SfPLyhlFZ4Tt5AzpI5eVzLw8TIhZ41tdSiLxrZQbQIKTsK5uVM5+81nSoJBxAhrP1VSJlwMUAELVAXI4+Ou8qfybUu1s0J8k2BueUVfHvpCdWcq6d7TU7nI5dQkMaL3I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.144.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
+Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
+	id 69C0F176E3B7A0; Wed, 17 Jun 2026 18:13:58 -0700 (PDT)
+From: Yonghong Song <yonghong.song@linux.dev>
+To: Alan Maguire <alan.maguire@oracle.com>,
+	Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
+	dwarves@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
 	Andrii Nakryiko <andrii@kernel.org>,
-	acme@kernel.org,
-	Alan Maguire <alan.maguire@oracle.com>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	jose.marchesi@oracle.com,
-	David Faust <david.faust@oracle.com>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Vineet Gupta <vineet.gupta@linux.dev>
-Subject: [PAHOLE v5 5/5] tests: Add btf_type_tag ordering test
-Date: Wed, 17 Jun 2026 17:57:31 -0700
-Message-ID: <20260618005731.273181-6-vineet.gupta@linux.dev>
-In-Reply-To: <20260618005731.273181-1-vineet.gupta@linux.dev>
-References: <20260618005731.273181-1-vineet.gupta@linux.dev>
+	bpf@vger.kernel.org,
+	kernel-team@fb.com
+Subject: [PATCH dwarves v6 0/5] pahole: Encode true signatures in kernel BTF
+Date: Wed, 17 Jun 2026 18:13:58 -0700
+Message-ID: <20260618011358.632394-1-yonghong.song@linux.dev>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Transfer-Encoding: quoted-printable
 
-From: Alan Maguire <alan.maguire@oracle.com>
+Current vmlinux BTF encoding is based on the source level signatures.
+But the compiler may do some optimization and changed the signature.
+If the user tried with source level signature, their initial implementati=
+on
+may have wrong results and then the user need to check what is the
+problem and work around it, e.g. through kprobe since kprobe does not
+need vmlinux BTF.
 
-Add a test that compiles a pointer carrying two btf_type_tags
-(__tag(outer) __tag(inner)) and checks the BTF that pahole emits to
-ensure the tag chain is PTR -> TYPE_TAG inner -> TYPE_TAG outer ->
-struct sample, i.e. the innermost tag is closest to the pointer.
+Majority of changed signatures are due to dead argument elimination.
+The following is a more complex one. The original source signature:
+  typedef struct {
+        union {
+                void            *kernel;
+                void __user     *user;
+        };
+        bool            is_kernel : 1;
+  } sockptr_t;
+  typedef sockptr_t bpfptr_t;
+  static int map_create(union bpf_attr *attr, bpfptr_t uattr) { ... }
+After compiler optimization, the signature becomes:
+  static int map_create(union bpf_attr *attr, bool uattr__is_kernel) { ..=
+. }
+In the above, uattr__is_kernel corresponds to 'is_kernel' field in sockpt=
+r_t.
+This makes it easier for developers to understand what changed.
 
-This exercises the type_tag ordering for both encodings: LLVM emits the
-annotations as child DIEs in source order (reversed when building the
-tag list), while GCC chains them via DW_AT_GNU_annotation already in BTF
-order. The test runs with gcc and clang when they support btf_type_tag,
-and is skipped when bpftool is unavailable.
+The new signature needs to properly follow ABI specification based on
+locations. Otherwise, that signature should be discarded. For example,
 
-Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
-Signed-off-by: Vineet Gupta <vineet.gupta@linux.dev>
----
- tests/btf_type_tag_order.sh | 179 ++++++++++++++++++++++++++++++++++++
- 1 file changed, 179 insertions(+)
- create mode 100755 tests/btf_type_tag_order.sh
+    0x0242f1f7:   DW_TAG_subprogram
+                    DW_AT_name      ("memblock_find_in_range")
+                    DW_AT_calling_convention        (DW_CC_nocall)
+                    DW_AT_type      (0x0242decc "phys_addr_t")
+                    ...
+    0x0242f22e:     DW_TAG_formal_parameter
+                      DW_AT_location        (indexed (0x14a) loclist =3D =
+0x005595bc:
+                         [0xffffffff87a000f9, 0xffffffff87a00178): DW_OP_=
+reg5 RDI
+                         [0xffffffff87a00178, 0xffffffff87a001be): DW_OP_=
+reg14 R14
+                         [0xffffffff87a001be, 0xffffffff87a001c7): DW_OP_=
+entry_value(DW_OP_reg5 RDI), DW_OP_stack_value
+                         [0xffffffff87a001c7, 0xffffffff87a00214): DW_OP_=
+reg14 R14)
+                      DW_AT_name    ("start")
+                      DW_AT_type    (0x0242decc "phys_addr_t")
+                      ...
+    0x0242f239:     DW_TAG_formal_parameter
+                      DW_AT_location        (indexed (0x14b) loclist =3D =
+0x005595e6:
+                         [0xffffffff87a000f9, 0xffffffff87a00175): DW_OP_=
+reg4 RSI
+                         [0xffffffff87a00175, 0xffffffff87a001b8): DW_OP_=
+reg3 RBX
+                         [0xffffffff87a001b8, 0xffffffff87a001c7): DW_OP_=
+entry_value(DW_OP_reg4 RSI), DW_OP_stack_value
+                         [0xffffffff87a001c7, 0xffffffff87a00214): DW_OP_=
+reg3 RBX)
+                      DW_AT_name    ("end")
+                      DW_AT_type    (0x0242decc "phys_addr_t")
+                      ...
+    0x0242f245:     DW_TAG_formal_parameter
+                      DW_AT_location        (indexed (0x14c) loclist =3D =
+0x00559610:
+                         [0xffffffff87a001e3, 0xffffffff87a001ef): DW_OP_=
+breg4 RSI+0)
+                      DW_AT_name    ("size")
+                      DW_AT_type    (0x0242decc "phys_addr_t")
+                      ...
+    0x0242f250:     DW_TAG_formal_parameter
+                      DW_AT_const_value     (4096)
+                      DW_AT_name    ("align")
+                      DW_AT_type    (0x0242decc "phys_addr_t")
+                      ...
 
-diff --git a/tests/btf_type_tag_order.sh b/tests/btf_type_tag_order.sh
-new file mode 100755
-index 000000000000..09d1ac346000
---- /dev/null
-+++ b/tests/btf_type_tag_order.sh
-@@ -0,0 +1,179 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0-only
-+
-+# Check that pahole preserves btf_type_tag order when emitting BTF from DWARF.
-+
-+source test_lib.sh
-+
-+outdir=$(make_tmpdir)
-+
-+# Comment this out to save test data.
-+trap cleanup EXIT
-+
-+title_log "Check BTF type tag order."
-+
-+GCC=${GCC:-gcc}
-+CLANG=${CLANG:-clang}
-+PAHOLE=${PAHOLE:-pahole}
-+BPFTOOL=${BPFTOOL:-bpftool}
-+
-+if ! command -v "$BPFTOOL" > /dev/null; then
-+	info_log "skip: bpftool not available"
-+	test_skip
-+fi
-+
-+compiler_has_btf_type_tag()
-+{
-+	local compiler=$1
-+
-+	if ! command -v "$compiler" > /dev/null; then
-+		return 1
-+	fi
-+
-+	"$compiler" -x c -E -P - <<'EOF' 2>/dev/null | grep -qx 1
-+#ifndef __has_attribute
-+#define __has_attribute(x) 0
-+#endif
-+#if __has_attribute(btf_type_tag)
-+1
-+#else
-+0
-+#endif
-+EOF
-+}
-+
-+use_gcc=0
-+if compiler_has_btf_type_tag "$GCC"; then
-+	use_gcc=1
-+fi
-+
-+use_clang=0
-+if compiler_has_btf_type_tag "$CLANG"; then
-+	use_clang=1
-+fi
-+
-+if [ "$use_gcc" -eq 0 ] && [ "$use_clang" -eq 0 ]; then
-+	error_log "Need gcc or clang with btf_type_tag support for test $0"
-+	test_fail
-+fi
-+
-+src=$(cat <<EOF
-+#define __tag(x) __attribute__((btf_type_tag(#x)))
-+
-+struct sample {
-+	int value;
-+};
-+
-+struct sample __tag(outer) __tag(inner) *global_ptr;
-+
-+EOF
-+)
-+
-+check_type_tag_order()
-+{
-+	local btf=$1
-+	local dump
-+
-+	if ! dump=$("$BPFTOOL" btf dump file "$btf"); then
-+		return 1
-+	fi
-+
-+	printf '%s\n' "$dump" | awk '
-+	function parse_id(line, m) {
-+		if (match(line, /^\[([0-9]+)\]/, m))
-+			return m[1]
-+		return 0
-+	}
-+	function parse_name(line, m) {
-+		if (match(line, /\047([^\047]*)\047/, m))
-+			return m[1]
-+		return ""
-+	}
-+	function parse_type(line, m) {
-+		if (match(line, /type_id=([0-9]+)/, m))
-+			return m[1]
-+		return 0
-+	}
-+	function check_ptr(ptr, id, tags, seen) {
-+		id = type[ptr]
-+		while (id != 0 && !seen[id]) {
-+			seen[id] = 1
-+			if (kind[id] == "TYPE_TAG") {
-+				tags = tags (tags == "" ? "" : " -> ") name[id]
-+				id = type[id]
-+				continue
-+			}
-+			if (kind[id] == "STRUCT" && name[id] == "sample") {
-+				if (tags == "inner -> outer")
-+					exit 0
-+				candidates = candidates (candidates == "" ? "" : ", ") tags
-+			}
-+			return
-+		}
-+	}
-+	/^\[[0-9]+\]/ {
-+		id = parse_id($0)
-+		kind[id] = $2
-+		name[id] = parse_name($0)
-+		type[id] = parse_type($0)
-+		if (kind[id] == "PTR")
-+			ptrs[++nr_ptrs] = id
-+	}
-+	END {
-+		for (i = 1; i <= nr_ptrs; i++)
-+			check_ptr(ptrs[i])
-+		if (candidates != "") {
-+			print "type tag order mismatch; expected inner -> outer, found " candidates > "/dev/stderr"
-+			exit 1
-+		}
-+		print "could not find tagged pointer to struct sample" > "/dev/stderr"
-+		exit 1
-+	}'
-+}
-+
-+run_test()
-+{
-+	local compiler=$1
-+	local tmpobj=$2
-+	local btf=$3
-+
-+	info_log "Testing with $compiler"
-+
-+	if ! echo "$src" | "$compiler" -g -c -x c -o "$tmpobj" - 2>/dev/null; then
-+		error_log "Could not compile type tag order test with $compiler"
-+		return 1
-+	fi
-+
-+	if ! "$PAHOLE" --btf_features=+type_tag --btf_encode_detached="$btf" "$tmpobj" 2>/dev/null; then
-+		error_log "Could not encode BTF for $tmpobj"
-+		return 1
-+	fi
-+
-+	if check_type_tag_order "$btf"; then
-+		info_log "  passed"
-+		return 0
-+	fi
-+
-+	error_log "BTF type tag order does not match expected order ($compiler)"
-+	return 1
-+}
-+
-+failed=0
-+
-+if [ "$use_gcc" -eq 1 ]; then
-+	tmpobj=$(make_tmpobj)
-+	btf=${tmpobj%.o}.btf
-+	run_test "$GCC" "$tmpobj" "$btf" || failed=1
-+fi
-+
-+if [ "$use_clang" -eq 1 ]; then
-+	tmpobj=$(make_tmpobj)
-+	btf=${tmpobj%.o}.btf
-+	run_test "$CLANG" "$tmpobj" "$btf" || failed=1
-+fi
-+
-+if [ "$failed" -eq 0 ]; then
-+	test_pass
-+else
-+	test_fail
-+fi
--- 
-2.54.0
+The third argument should correspond to RDX for x86_64. But the location =
+suggests that
+the parameter value is stored in the address with 'RSI + 0'. It is not cl=
+ear whether
+the parameter value is stored in RDX or not. So we have to discard this f=
+unciton in
+vmlinux BTF to avoid incorrect true signatures.
+
+For llvm, any function having
+  DW_AT_calling_convention        (DW_CC_nocall)
+in dwarf DW_TAG_subprogram will indicate that this function has signature=
+ changed.
+I did experiment with latest bpf-next. For x86_64, there are 69103 kernel=
+ functions
+and 875 kernel functions having signature changed. A series of patches ar=
+e intended
+to ensure true signatures are properly represented. Eventually, only 20 f=
+unctions
+cannot have true signatures due to locations.
+
+For arm64, there are 863 kernel functions having signature changed, and
+108 functions cannot have true signatures due to locations. I checked tho=
+se
+functions and look like llvm arm64 backend more relaxed to compute parame=
+ter
+values.
+
+For full testing, I enabled true signature support in kernel scripts/Make=
+file.btf like below:
+  -pahole-flags-$(call test-ge, $(pahole-ver), 131) +=3D --btf_features=3D=
+attributes
+  +pahole-flags-$(call test-ge, $(pahole-ver), 131) +=3D --btf_features=3D=
+attributes --btf_features=3D+true_signature
+
+See individual patches for details.
+
+Changelog:
+  v5 -> v6:
+    - v5: https://lore.kernel.org/bpf/20260523165712.1225231-1-yonghong.s=
+ong@linux.dev/
+    - The previous change relies on parameter__new() to collect and analy=
+ze each
+      parameter to decide true signatures. The new one separates collecti=
+ng and
+      analyzing phase from Alan. This two-phase makes logic easy to under=
+stand.
+    - In btf_encoder.c, remove usage of skip_idx to simplify the code.
+  v4 -> v5:
+    - v4: https://lore.kernel.org/bpf/20260326013144.2901265-1-yonghong.s=
+ong@linux.dev/
+    - Check info.signature_changed only under clang.
+    - Fix an uninitialized varable issue (var reg_dix) for gcc.
+  v3 -> v4:
+    - v3: https://lore.kernel.org/bpf/20260320190917.1970524-1-yonghong.s=
+ong@linux.dev/
+    - Add simple prescan of parameter registers in order to get true sign=
+atures
+      for those functions where optimization could happen but compiler di=
+dn't do it.
+    - Do not create a new name (e.g. "uattr__is_kernel") with malloc at p=
+arameter_reg()
+      stage. Instead remember both "uattr" and "is_kernel" and later gene=
+rate the
+      name "uattr_is_kernel" in btf encoder.
+    - Add comments to explain how to handle parameters which may take two=
+ registers.
+    - Fix some test failures on aarch64.
+  v2 -> v3:
+    - v2: https://lore.kernel.org/bpf/20260309153215.1917033-1-yonghong.s=
+ong@linux.dev/
+    - Change tests by using newly added test_lib.sh.
+    - Simplify to get bool variable producer_clang.
+    - Try to avoid producer_clang appearance in dwarf_loader.c in order t=
+o avoid
+      clear separation between clang and gcc.
+  v1 -> v2:
+    - v1: https://lore.kernel.org/bpf/20260305225455.1151066-1-yonghong.s=
+ong@linux.dev/
+    - Added producer_clang guarding in btf_encoder. Otherwise, gcc kernel=
+ build
+      will crash pahole.
+    - Fix an early return in parameter__reg() which didn't do pthread_mut=
+ex_unlock()
+      which caused the deadlock for arm64.
+    - Add a few more places to guard with producer_clang and conf->true_s=
+ignature
+      to maintain the previous behavior if not clang or conf->true_signat=
+ure is false.
+
+Yonghong Song (5):
+  dwarf_loader: Detect aggregate ABI register usage and signature
+    changes
+  dwarf_loader: Collect per-parameter information
+  dwarf_loader: Analyze per-parameter information for true signatures
+  btf_encoder: Emit true function signatures
+  tests: add BTF true_signature encoding tests
+
+ btf_encoder.c                       |  24 +-
+ dwarf_loader.c                      | 548 ++++++++++++++++++++++++----
+ dwarves.h                           |  14 +
+ tests/clang_parm_aggregate.sh       |  85 +++++
+ tests/clang_parm_memory.sh          |  77 ++++
+ tests/clang_parm_optimized.sh       |  63 ++++
+ tests/clang_parm_optimized_stack.sh |  63 ++++
+ 7 files changed, 812 insertions(+), 62 deletions(-)
+ create mode 100755 tests/clang_parm_aggregate.sh
+ create mode 100755 tests/clang_parm_memory.sh
+ create mode 100755 tests/clang_parm_optimized.sh
+ create mode 100755 tests/clang_parm_optimized_stack.sh
+
+--=20
+2.53.0-Meta
 
