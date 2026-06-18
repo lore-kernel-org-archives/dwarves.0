@@ -1,40 +1,40 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E611B2C21D0
-	for <dwarves@vger.kernel.org>; Thu, 18 Jun 2026 17:33:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D678347521
+	for <dwarves@vger.kernel.org>; Thu, 18 Jun 2026 17:33:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781804014; cv=none; b=BU0NssB8PCfQ5+JW5g3NdqbzyTe790IIFmzWvnapWAAWOytd/RowePW/HD/NiJjlGcwirDpRRmwCHspdSa8GFf9qONPeiEdfeBBUP2pGfGNAxPMSU36kotqyz/NDYSlVvMluPqcnMf1KtNJaAcM5wG4Wd/FqOHugkmp3Fdb1Gic=
+	t=1781804017; cv=none; b=Jv1YiME0LrlSg25aQjj7627Rh6C36KHdeYI05q++qIhthII6zv2l5s7P7OmEnzA2vtqgkhBTof2dj3uMnrcfb1CAadgnKdn7ogHVBrcs63r/pFvY23x/7ylvbIooFppUOopltyjt1esIK2ZYkVrCqNHWxvoyWNIc7bedMcoAjAw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781804014; c=relaxed/simple;
-	bh=bTzEo2L9A8MjRx3VdeLSJ4Y9XQxxLKUNttSDG4sq8Ps=;
+	s=arc-20240116; t=1781804017; c=relaxed/simple;
+	bh=B5J9hoqkQWwUaCr/NhIP66CwxI6sG8w0BrzxtoKi++k=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=UuTrc4kx8v2a2w3ntyaHICaqnqsZBlyZdKmuKspn7OZlUxC6OQlRfI7a8/f4/15EsHLvEznGOVnTcVMgpFWjhfdmGLkkwaYtXxchIC6M983yoMFNtRPzhdl3BA7zu/rJuSELDr5BtSoJ6pLwIg4oT0ZnKgZXBP4JLDel1fS7SFI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EMYaxi79; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version:Content-Type; b=Wi7HIehOq/4Fw48p16368tERCdPI8q1aGpnp9LE8Ue0TR3/lPtYeJVFxGTd4CWd5+FCPKp93/2JChyNfNloqeIF15dOBsBZ3dOzeKaNe+I+Y0j6zhHObRLKZsQmSWoWNoyR97YYj53fD9JXCNSWtTpwy51KNKNEkLLDs1gTPevk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=d6lTV6Ov; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EMYaxi79"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13F0B1F000E9;
-	Thu, 18 Jun 2026 17:33:31 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="d6lTV6Ov"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1DD861F00A3A;
+	Thu, 18 Jun 2026 17:33:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781804013;
-	bh=Q+QcMJXwpptHRS1Oa8BswUBGRa4pACaKeZN1LqXhd6E=;
+	s=k20260515; t=1781804015;
+	bh=6OYGwKPi9e0F5A4HgCgYGwneO4l/HQKMv0UgxtkABl0=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=EMYaxi798uKbmWFmgihLhOhgOnL00EcxJ1JfG4Obnqi3boNTA9mvv99aL92M2J1gV
-	 Trf1s2F8TCObNsU5NdMbYkXbOQGyP/ojM4R9FHiudlTOLU0vvTxgKefkSpjUAtmE4K
-	 sOgOR0W/G+iRwhF/FhDYKYw+1PoVUUf8pU0LnAOc4XQrSyWjx8Cgs41RubW+J1FWxO
-	 hgRxbcAIqsB8y340ukXrkx57UEHs3hr/ElhtQE0K6/uelUVej+DfbfHYxjIZd7/aKl
-	 wg25dVh7xawK9li2QrEh6cif58rYMpYFywMkneMrEkKSuxzk/E4JpqUoJ0mwOh/hfx
-	 ov6TCvVT7eb5Q==
+	b=d6lTV6Ov5aV3EgJxz1wLfb5lnZ69va9PygAvlwVIyZdTGynJpEA5dRdI4V5Wuw+fB
+	 yCMEmhny9dQjmlZHOtX2nvltYyk2YyEz0V9myo/5vu45e43bCxD5fikbxiBHkfAo3Z
+	 1zUWLu7DFi0GXDHBu/ZjpgJ9tw0UJo7ywJvMjzAweOHeU97OTk2hT25BBYupKhyAx3
+	 CgXhD+FPvKHkKhCZJLRblssj6pvRaerg/qqcdjY7x8wXUWGq631qANup9WXoGcXIwd
+	 1PYTbWlKJulZpjeqUKCHInLiPSrY10HehHZUiHRsHJiHZpPcWyL5nYwrWP5bnlfloN
+	 xcWFozfcQkSKg==
 From: Arnaldo Carvalho de Melo <acme@kernel.org>
 To: Alan Maguire <alan.maguire@oracle.com>
 Cc: Jiri Olsa <jolsa@kernel.org>,
 	Clark Williams <williams@redhat.com>,
 	dwarves@vger.kernel.org,
 	Arnaldo Carvalho de Melo <acme@redhat.com>
-Subject: [PATCH 6/7] dwarves: Use tag__delete for enumeration children
-Date: Thu, 18 Jun 2026 14:33:15 -0300
-Message-ID: <20260618173316.83598-7-acme@kernel.org>
+Subject: [PATCH 7/7] btf_encoder: Remove unused variables
+Date: Thu, 18 Jun 2026 14:33:16 -0300
+Message-ID: <20260618173316.83598-8-acme@kernel.org>
 X-Mailer: git-send-email 2.54.0
 In-Reply-To: <20260618173316.83598-1-acme@kernel.org>
 References: <20260618173316.83598-1-acme@kernel.org>
@@ -44,46 +44,48 @@ List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
 From: Arnaldo Carvalho de Melo <acme@redhat.com>
 
-Now that enumeration children can be other tag types like
-DW_TAG_subprogram, use the generic tag__delete() which handles all tag
-types, removing the enumerator-specific wrapper.
+Detected with gcc on fedora44:
 
-Fixes: a1b3ec41fcc2433d ("dwarf_loader: Initial support for DW_TAG_subprogram in DW_TAG_enumeration")
-Assisted-by: Claude:claude-opus-4-6-1m
+  /home/acme/git/pahole/btf_encoder.c: In function ‘types__match’:
+  /home/acme/git/pahole/btf_encoder.c:1123:49: warning: variable ‘p2’ set but not used [-Wunused-but-set-variable=]
+   1123 |                         const struct btf_param *p2 = btf_params(t2);
+        |                                                 ^~
+  /home/acme/git/pahole/btf_encoder.c:1122:49: warning: variable ‘p1’ set but not used [-Wunused-but-set-variable=]
+   1122 |                         const struct btf_param *p1 = btf_params(t1);
+        |                                                 ^~
+
 Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
 ---
- dwarves.c | 7 +------
- 1 file changed, 1 insertion(+), 6 deletions(-)
+ btf_encoder.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/dwarves.c b/dwarves.c
-index 2af10588ff2f20c5..90e244afb017d7d2 100644
---- a/dwarves.c
-+++ b/dwarves.c
-@@ -1333,11 +1333,6 @@ void type__delete(struct type *type, struct cu *cu)
- 	cu__tag_free(cu, type__tag(type));
- }
+diff --git a/btf_encoder.c b/btf_encoder.c
+index 12c22b003b7990bf..4467710e4e03c32f 100644
+--- a/btf_encoder.c
++++ b/btf_encoder.c
+@@ -1119,8 +1119,6 @@ static bool types__match(struct btf_encoder *encoder,
+ 			break;
+ 		}
+ 		case BTF_KIND_FUNC_PROTO: {
+-			const struct btf_param *p1 = btf_params(t1);
+-			const struct btf_param *p2 = btf_params(t2);
+ 			int i, vlen = btf_vlen(t1);
  
--static void enumerator__delete(struct enumerator *enumerator, struct cu *cu)
--{
--	cu__tag_free(cu, &enumerator->tag);
--}
--
- void enumeration__delete(struct type *type, struct cu *cu)
- {
- 	struct enumerator *pos, *n;
-@@ -1347,7 +1342,7 @@ void enumeration__delete(struct type *type, struct cu *cu)
- 
- 	type__for_each_enumerator_safe_reverse(type, pos, n) {
- 		list_del_init(&pos->tag.node);
--		enumerator__delete(pos, cu);
-+		tag__delete(&pos->tag, cu);
- 	}
- 
- 	if (type->suffix_disambiguation)
+ 			if (vlen != btf_vlen(t2))
+@@ -1128,7 +1126,7 @@ static bool types__match(struct btf_encoder *encoder,
+ 			if (!types__match(encoder, btf1, t1->type,
+ 					  btf2, t2->type))
+ 				return false;
+-			for (i = 0; i < vlen; i++, p1++, p2++) {
++			for (i = 0; i < vlen; i++) {
+ 				if (!types__match(encoder, btf1, t1->type,
+ 						  btf2, t2->type))
+ 					return false;
 -- 
 2.54.0
 
