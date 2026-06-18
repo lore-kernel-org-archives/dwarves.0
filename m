@@ -1,40 +1,40 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C33F62C21D0
-	for <dwarves@vger.kernel.org>; Thu, 18 Jun 2026 17:33:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBA522C21D0
+	for <dwarves@vger.kernel.org>; Thu, 18 Jun 2026 17:33:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781804004; cv=none; b=SwL02oHdzeC6j9f8rWXV1I/zzQRsqyfRD+qz+fWfa2tjFeybDH+JVtYw+EXEDdZmP/+Xlhv1w3FHdJAyCN4jhOfzyyi+mV0wVTRzZoQAmD7EZRsCjIwwRmi+UF2anh2ptT1VtjnOwf7HwUKmoO7iB6hYJm1dIbFSraI6nQbW+Kc=
+	t=1781804007; cv=none; b=S4535LYhE7UDslwf0IvN+LBrbIVUGJIuFEMpvPaanCOdC4PrSspE5fFAn/FoKrYAvDtDHAWnm5XG0hJqtExPuFDCsjQQOL02pqTqbE3jTUFs3vDk0fdDLLAAQddOMXfdYq0qR+US5MH8XCrDPUfU3vXfhGBzfgEvU/euXv1/RnI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781804004; c=relaxed/simple;
-	bh=UwpGc8on0rEKqLi/gp95VcaN88Rd0zYdeGkzflKPiyk=;
+	s=arc-20240116; t=1781804007; c=relaxed/simple;
+	bh=X8CGiYJnNWiXAD2rdjPt1ZMT2w3gnVkdfxrK3xH5pm8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=TY6n4Ke1rl2zYEjsIWqgjRgq2H/8ExRTEP3oeYRjDOZS1DUTAFcJXcELhDH2Ll/ZXoKcfFye4+pKNn1es4n65PjazVGWjTM3GeqLQ6BTpXM+nzw+9kcvQi1nCpjrpdMfj3fM3aghlGp+rreoF705wDo9njuXMwAIF2OEWEjp8uI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KLulsRl/; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version:Content-Type; b=K86FZUN3A0lOAN9SLHDMeR/WcnpKaG77y67JXJVHMhvewGx+0bAk6ZXB1wbgr0Fu/gVPB1rEuth7k+6+4tUugfmXld8XHXaESAjzCweyL6UkFWdDeKu/+c/thMEc7n1x4nBYhdV3t21IZCE1ZPF07fKR1qxWAsldGeayYA8b0OU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=c8BbWbSG; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KLulsRl/"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D51A81F00A3A;
-	Thu, 18 Jun 2026 17:33:21 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="c8BbWbSG"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF4091F000E9;
+	Thu, 18 Jun 2026 17:33:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781804003;
-	bh=lnkFRM8D9ypBmHBgqsF+Iuf6T68nWJudVH/L7zvEN8E=;
+	s=k20260515; t=1781804005;
+	bh=767V0DRP0lJ65KEigHvP/xCXUmyudxdchsstnmXOqEk=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=KLulsRl/H9a/WzaHJBY92Qa7goVSfdXiQFFVlUJ29puA+cosIvg6krHPEuBi5p0WA
-	 GF6cUlUxP55ckdy0O0RIkfH4HAPir1Z1y40GbM8IcNovGQp+5Rjwd+qkK35y6+UbXA
-	 V5P0dbfxdRTKOLy096btFbeTwVdLt1wHg/VKO2XCGU/gonUNasQgSO7NtZ6VW/YbQX
-	 pXu5boc57va2b8Sc0NQDE6vlz5n3PIbSgkNkrWAoTa8AxbeiJfKOn5C2SC/Absq+4V
-	 cfEvvVTF4f3/TCFStYJZKEm1gbNf9fCBE/gEcx6OTTibNoMoSaOZlJSZhBazj9kraE
-	 LMEoXVUt+OfOw==
+	b=c8BbWbSGboSq9yrCiTw4s5at3+hnW7yEzZnk5LVd42VH7l3qENPZKHwYS0pmUGHxH
+	 T8mXimTAOEwy7ZzcS9I9RvvRy7kbNMD5eOfT0jTsfTFEnw2ymzEHkoQrzqyfvVGgNy
+	 cSmeZlQbWf4JjGA4CYEqYWErz3M+EDEhbpbkW7HoVMfuLzx4Jszzu1btQL8gxdHAI1
+	 z7Ap1TO3HQzZHNLXso0FBwXJBhkAd48Y6Q/CsviHllZcZr4ItezNCuHAqi0Y0jRR3b
+	 +STsUsj77ix6mohQbA7BTEF/Hw5/m8FNM+tEb26fo/mIVqnRI0PyCAf+s3TdQlfLJb
+	 9UYjZks/rJp7A==
 From: Arnaldo Carvalho de Melo <acme@kernel.org>
 To: Alan Maguire <alan.maguire@oracle.com>
 Cc: Jiri Olsa <jolsa@kernel.org>,
 	Clark Williams <williams@redhat.com>,
 	dwarves@vger.kernel.org,
 	Arnaldo Carvalho de Melo <acme@redhat.com>
-Subject: [PATCH 1/7] dwarf_loader: Initial support for DW_TAG_variant_part
-Date: Thu, 18 Jun 2026 14:33:10 -0300
-Message-ID: <20260618173316.83598-2-acme@kernel.org>
+Subject: [PATCH 2/7] dwarf_loader: Allow forcing the merge of CUs for solving inter CU tag references
+Date: Thu, 18 Jun 2026 14:33:11 -0300
+Message-ID: <20260618173316.83598-3-acme@kernel.org>
 X-Mailer: git-send-email 2.54.0
 In-Reply-To: <20260618173316.83598-1-acme@kernel.org>
 References: <20260618173316.83598-1-acme@kernel.org>
@@ -49,189 +49,205 @@ Content-Transfer-Encoding: 8bit
 
 From: Arnaldo Carvalho de Melo <acme@redhat.com>
 
-Still doesn't handle its sub hierarchy, i.e. the DW_TAG_variant entries
-and its underlying DW_TAG_member entries.
+The Linux perf tool now includes some Rust code that then gets linked
+into perf and comes with its DWARF that has tags referencing tags in
+different CUs, and as the current DWARF loading algorithm uses
+parallelization and recodes the big DWARF types (DWARF_off, usually
+64-bit) into smaller ones as a step into converting to CTF (initially)
+and later BTF, the resolution fails.
 
-This was noticed when running the regression test that uses a debug
-build of perf to process a perf.data file and test pahole's pretty
-printing features, as now perf has a synthetic workload that is written
-in rust:
+There is a case where this inter CU happens, LTO builds, and so there is
+an alternative algorithm for that case, that serializes DWARF CU loading
+and merges all the CUs into just one meta/mega-CU, which then has all
+the types and thus doesn't have a problem with inter CU references, as
+the recoding into smaller ids is done only after all CUs are loaded.
 
- <0><20c95a>: Abbrev Number: 1 (DW_TAG_compile_unit)
-    <20c95b>   DW_AT_producer    : (indirect string, offset: 0x4ee5a): clang LLVM (rustc version 1.93.1 (01f6ddf75 2026-02-11) (Fedora 1.93.1-1.fc43))
-    <20c95f>   DW_AT_language    : 28	(Rust)
-    <20c961>   DW_AT_name        : (indirect string, offset: 0x4eeaa): tests/workloads/code_with_type.rs/@/code_with_type.d6e680867bfb8b27-cgu.0
-    <20c965>   DW_AT_stmt_list   : 0x5e1ed
-    <20c969>   DW_AT_comp_dir    : (indirect string, offset: 0x487f1): /home/acme/git/perf-tools/tools/perf
-    <20c96d>   DW_AT_low_pc      : 0
-    <20c975>   DW_AT_ranges      : 0x2d0
-⬢ [acme@toolbx pahole]$
+So while we don't refactor the loading in a way that allows for inter CU
+while allowing parallelization, maybe by doing the recoding just at the
+end of parallel loading, add minimal code to force this CU merging for
+experimentation in such cases, getting back the regression test
+prettify_perf.data.sh to work, making it force CU merging.
 
-So lets add some scaffolding for the Rust DWARF constructs involved for
-us to be able to continue using perf with DWARF to test the pretty
-printing features.
+  $ pahole ~/bin/perf > unmerged.txt
+  <Suppress lots of warnings when recoding DWARF types.>
+  $ pahole --features=force_cu_merging ~/bin/perf > merged.txt
+  $
+
+With the current set of Rust types that are representable with the
+pahole data structures and then pretty printed as if they were C we see
+12 differences:
+
+  $ diff -u unmerged.txt merged.txt | grep ^@@ | wc -l
+  12
+  $ diff -u unmerged.txt merged.txt | wc -l
+  198
+
+Of this kind, due to some types not being resolved as tags are
+referencing tags in other CUs.
+
+  $ diff -u unmerged.txt merged.txt | head
+  --- unmerged.txt	2026-03-23 17:56:54.971785023 -0300
+  +++ merged.txt	2026-03-23 17:56:59.826872178 -0300
+  @@ -9643,10 +9643,11 @@
+   	u64                        __0 __attribute__((__aligned__(8))); /*     0     8 */
+   	struct Abbreviation        __1 __attribute__((__aligned__(8))); /*     8   112 */
+
+  -	/* XXX last struct has 5 bytes of padding */
+  +	/* XXX last struct has 16 bytes of padding, 1 hole */
+
+   	/* size: 120, cachelines: 2, members: 2 */
+  $
+
+Now the pretty printing perf.data test case passes:
+
+  ⬢ [acme@toolbx tests]$ ./prettify_perf.data.sh
+  Pretty printing of files using DWARF type information.
+  Test ./prettify_perf.data.sh passed
+  ⬢ [acme@toolbx tests]$
+
+This was implemented reusing the --btf_features mechanism that now can
+be accessed as well via --features, as this is not strictly a BTF
+feature but, as Alan Maguire suggested, it is desirable to ask for that
+feature to be enabled when we know it is needed bug can't guarantee that
+the available pahole version has the feature and not have it fail
+because it doesn't implement --force_cu_merging, which the
+--btf_features=force_cu_merging, now also avaialbe as
+--features=force_cu_merging, allows as it ignores unknown features.
 
 Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
 ---
- dwarf_loader.c | 26 +++++++++++++++++++++++++-
- dwarves.c      | 25 +++++++++++++++++++++++++
- dwarves.h      | 16 ++++++++++++++++
- 3 files changed, 66 insertions(+), 1 deletion(-)
+ dwarf_loader.c              |  2 +-
+ dwarves.h                   |  1 +
+ man-pages/pahole.1          | 17 +++++++++++++++--
+ pahole.c                    | 11 ++++++++++-
+ tests/prettify_perf.data.sh |  4 ++--
+ 5 files changed, 29 insertions(+), 6 deletions(-)
 
 diff --git a/dwarf_loader.c b/dwarf_loader.c
-index 16fb7becffee56f6..f0833e8c44a944a8 100644
+index f0833e8c44a944a8..54cc66748ef685fc 100644
 --- a/dwarf_loader.c
 +++ b/dwarf_loader.c
-@@ -508,6 +508,8 @@ static void tag__init(struct tag *tag, struct cu *cu, Dwarf_Die *die)
- 
- 	if (tag->tag == DW_TAG_imported_module || tag->tag == DW_TAG_imported_declaration)
- 		dwarf_tag__set_attr_type(dtag, type, die, DW_AT_import);
-+	else if (tag->tag == DW_TAG_variant_part)
-+		dwarf_tag__set_attr_type(dtag, type, die, DW_AT_discr);
- 	else
- 		dwarf_tag__set_attr_type(dtag, type, die, DW_AT_type);
- 
-@@ -1170,6 +1172,18 @@ static struct template_parameter_pack *template_parameter_pack__new(Dwarf_Die *d
- 	return pack;
- }
- 
-+static struct variant_part *variant_part__new(Dwarf_Die *die, struct cu *cu, struct conf_load *conf)
-+{
-+	struct variant_part *vpart = tag__alloc(cu, sizeof(*vpart));
-+
-+	if (vpart != NULL) {
-+		tag__init(&vpart->tag, cu, die);
-+		INIT_LIST_HEAD(&vpart->variants);
-+	}
-+
-+	return vpart;
-+}
-+
- /* Returns number of locations found or negative value for errors. */
- static ptrdiff_t __dwarf_getlocations(Dwarf_Attribute *attr,
- 				      ptrdiff_t offset, Dwarf_Addr *basep,
-@@ -1990,9 +2004,19 @@ static int die__process_class(Dwarf_Die *die, struct type *class,
- 		case DW_TAG_GNU_template_template_param:
- #endif
- 		case DW_TAG_subrange_type: // XXX: ADA stuff, its a type tho, will have other entries referencing it...
--		case DW_TAG_variant_part: // XXX: Rust stuff
- 			tag__print_not_supported(die);
- 			continue;
-+		case DW_TAG_variant_part: {
-+			struct variant_part *vpart = variant_part__new(die, cu, conf);
-+
-+			if (vpart == NULL)
-+				return -ENOMEM;
-+
-+			// For rust it seems we have just one, but DWARF, according to Gemini, support having
-+			// more than one DW_TAG_variant_part for a given DW_TAG_structure_type, so future proof it
-+			type__add_variant_part(class, vpart);
-+			continue;
-+		}
- 		case DW_TAG_template_type_parameter: {
- 			struct template_type_param *ttparm = template_type_param__new(die, cu, conf);
- 
-diff --git a/dwarves.c b/dwarves.c
-index ef93239d26827711..37f769ee65caad72 100644
---- a/dwarves.c
-+++ b/dwarves.c
-@@ -428,6 +428,7 @@ void __type__init(struct type *type)
- 	INIT_LIST_HEAD(&type->type_enum);
- 	INIT_LIST_HEAD(&type->template_type_params);
- 	INIT_LIST_HEAD(&type->template_value_params);
-+	INIT_LIST_HEAD(&type->variant_parts);
- 	type->template_parameter_pack = NULL;
- 	type->sizeof_member = NULL;
- 	type->member_prefix = NULL;
-@@ -1288,6 +1289,24 @@ static void type__delete_class_members(struct type *type, struct cu *cu)
+@@ -3945,7 +3945,7 @@ static int cus__load_module(struct cus *cus, struct conf_load *conf,
+ 		}
  	}
- }
  
-+static void variant_part__delete(struct variant_part *vpart, struct cu *cu)
-+{
-+	if (vpart == NULL)
-+		return;
-+
-+	cu__tag_free(cu, &vpart->tag);
-+}
-+
-+static void type__delete_variant_parts(struct type *type, struct cu *cu)
-+{
-+	struct variant_part *pos, *next;
-+
-+	type__for_each_variant_part_safe_reverse(type, pos, next) {
-+		list_del_init(&pos->tag.node);
-+		variant_part__delete(pos, cu);
-+	}
-+}
-+
- void class__delete(struct class *class, struct cu *cu)
- {
- 	if (class == NULL)
-@@ -1303,6 +1322,7 @@ void type__delete(struct type *type, struct cu *cu)
- 		return;
- 
- 	type__delete_class_members(type, cu);
-+	type__delete_variant_parts(type, cu);
- 
- 	if (type->suffix_disambiguation)
- 		zfree(&type->namespace.name);
-@@ -1366,6 +1386,11 @@ void type__add_template_value_param(struct type *type, struct template_value_par
- 	list_add_tail(&tvparam->tag.node, &type->template_value_params);
- }
- 
-+void type__add_variant_part(struct type *type, struct variant_part *vpart)
-+{
-+	list_add_tail(&vpart->tag.node, &type->variant_parts);
-+}
-+
- struct class_member *type__last_member(struct type *type)
- {
- 	struct class_member *pos;
+-	if (cus__merging_cu(dw, elf)) {
++	if (conf->force_cu_merging || cus__merging_cu(dw, elf)) {
+ 		res = cus__merge_and_process_cu(cus, conf, mod, dw, elf, filename,
+ 						build_id, build_id_len,
+ 						type_cu ? &type_dcu : NULL);
 diff --git a/dwarves.h b/dwarves.h
-index 5ec16e750e8359e3..4f3eac047f41edac 100644
+index 4f3eac047f41edac..6595c16434966f09 100644
 --- a/dwarves.h
 +++ b/dwarves.h
-@@ -1015,6 +1015,11 @@ static inline struct formal_parameter_pack *tag__formal_parameter_pack(const str
+@@ -106,6 +106,7 @@ struct conf_load {
+ 	bool			btf_gen_distilled_base;
+ 	bool			btf_attributes;
+ 	bool			true_signature;
++	bool			force_cu_merging;
+ 	uint8_t			hashtable_bits;
+ 	uint8_t			max_hashtable_bits;
+ 	uint16_t		kabi_prefix_len;
+diff --git a/man-pages/pahole.1 b/man-pages/pahole.1
+index b1be472de2b1e0c8..2fa82111c0f6305f 100644
+--- a/man-pages/pahole.1
++++ b/man-pages/pahole.1
+@@ -303,8 +303,9 @@ Generate BTF for functions with optimization-related suffixes (.isra, .constprop
+ Allow using all the BTF features supported by pahole.
  
- void formal_parameter_pack__add(struct formal_parameter_pack *pack, struct parameter *param);
+ .TP
+-.B \-\-btf_features=FEATURE_LIST
+-Encode BTF using the specified feature list, or specify 'default' for all standard features supported.  This option can be used as an alternative to using multiple BTF-related options, and 'default' represents the standard set of BTF features that are in use for kernel BTF generation, so is useful as a shortcut for testing the latest set of standard features.  However kernel builds will call out specific features rather than using 'default' to ensure that the desired features are enabled regardless of pahole version and associated 'default' set.  Supported standard features are
++.B \-\-features=FEATURE_LIST
++This is also available as \-\-btf_features=FEATURE_LIST, unknown features, like those added in newer versions of pahole, are ignored.
++BTF encoding configuration is the major user. Using 'default' will enable all standard features supported.  This option can be used as an alternative to using multiple BTF-related options, and 'default' represents the standard set of BTF features that are in use for kernel BTF generation, so is useful as a shortcut for testing the latest set of standard features.  However kernel builds will call out specific features rather than using 'default' to ensure that the desired features are enabled regardless of pahole version and associated 'default' set.  Supported standard features are
  
-+struct variant_part {
-+	struct tag	 tag;
-+	struct list_head variants;
-+};
+ .nf
+ 	encode_force       Ignore invalid symbols when encoding BTF; for example
+@@ -344,6 +345,18 @@ Supported non-standard features (not enabled for 'default')
+ 	layout             Encode information about BTF kinds available at encoding     
+ 	                   time in layout section in BTF.
+ 
++Non-standard, non-BTF related features:
 +
- /*
-  * tag.tag can be DW_TAG_subprogram_type or DW_TAG_subroutine_type.
-  */
-@@ -1285,6 +1290,7 @@ struct type {
- 	uint8_t		 is_signed_enum:1;
- 	struct list_head template_type_params;
- 	struct list_head template_value_params;
-+	struct list_head variant_parts;
- 	struct template_parameter_pack *template_parameter_pack;
++	force_cu_merging   Force merging all CUs into one. Use when there are
++	                   references across CUs. This happens in some LTO cases
++	                   and was observed with Rust CUs, where types tags
++	                   (function parameters, abstract origins for inlines, etc)
++	                   reference types in another CU.
++	                   For LTO this is being autodetected and the merging of
++	                   cus is done automatically, but for the Rust case, and
++	                   maybe others this is needed with the current DWARF
++	                   loading algorithm.
++
+ .fi
+ 
+ So for example, specifying \-\-btf_encode=var,enum64 will result in a BTF encoding that (as well as encoding basic BTF information) will contain variables and enum64 values.
+diff --git a/pahole.c b/pahole.c
+index 033baedcc602cc75..28d8f8832773520b 100644
+--- a/pahole.c
++++ b/pahole.c
+@@ -1153,6 +1153,7 @@ ARGP_PROGRAM_VERSION_HOOK_DEF = dwarves_print_version;
+ #define ARG_padding		   348
+ #define ARGP_with_embedded_flexible_array 349
+ #define ARGP_btf_attributes	   350
++#define ARGP_features		   351
+ 
+ /* --btf_features=feature1[,feature2,..] allows us to specify
+  * a list of requested BTF features or "default" to enable all default
+@@ -1240,7 +1241,8 @@ struct btf_feature {
+ 	BTF_NON_DEFAULT_FEATURE_CHECK(attributes, btf_attributes, false,
+ 				      attributes_check),
+ 	BTF_NON_DEFAULT_FEATURE(true_signature, true_signature, false),
+-	BTF_NON_DEFAULT_FEATURE_CHECK(layout, btf_gen_layout, false, layout_check)
++	BTF_NON_DEFAULT_FEATURE_CHECK(layout, btf_gen_layout, false, layout_check),
++	BTF_NON_DEFAULT_FEATURE(force_cu_merging, force_cu_merging, false),
  };
  
-@@ -1402,9 +1408,19 @@ static inline struct class_member *class_member__next(struct class_member *membe
- #define type__for_each_tag_safe_reverse(type, pos, n) \
- 	list_for_each_entry_safe_reverse(pos, n, &(type)->namespace.tags, tag.node)
+ #define BTF_MAX_FEATURE_STR	1024
+@@ -1798,6 +1800,12 @@ static const struct argp_option pahole__options[] = {
+ 		.arg = "FEATURE_LIST",
+ 		.doc = "Specify supported BTF features in FEATURE_LIST or 'default' for default set of supported features. See the pahole manual page for the list of supported, default features."
+ 	},
++	{
++		.name = "features",
++		.key = ARGP_features,
++		.arg = "FEATURE_LIST",
++		.doc = "Specify supported features in FEATURE_LIST or 'default' for default set of supported features. See the pahole manual page for the list of supported, default features."
++	},
+ 	{
+ 		.name = "supported_btf_features",
+ 		.key = ARGP_supported_btf_features,
+@@ -2012,6 +2020,7 @@ static error_t pahole__options_parser(int key, char *arg,
+ 		conf_load.reproducible_build = true;	break;
+ 	case ARGP_running_kernel_vmlinux:
+ 		show_running_kernel_vmlinux = true;	break;
++	case ARGP_features:
+ 	case ARGP_btf_features:
+ 		parse_btf_features(arg, false);		break;
+ 	case ARGP_supported_btf_features:
+diff --git a/tests/prettify_perf.data.sh b/tests/prettify_perf.data.sh
+index 1fae95154d710aae..384c250ff4e01a4c 100755
+--- a/tests/prettify_perf.data.sh
++++ b/tests/prettify_perf.data.sh
+@@ -25,7 +25,7 @@ fi
+ perf_lacks_type_info() {
+ 	local type_keyword=$1
+ 	local type_name=$2
+-	if ! pahole -C $type_name $perf | grep -q "^$type_keyword $type_name {"; then
++	if ! pahole --features=force_cu_merging -C $type_name $perf | grep -q "^$type_keyword $type_name {"; then
+ 		info_log "skip: $perf doesn't have '$type_keyword $type_name' type info"
+ 		test_skip
+ 	fi
+@@ -41,7 +41,7 @@ $perf record --quiet -o $perf_data sleep 0.00001
  
-+/**
-+ * type__for_each_variant_part_safe_reverse - safely iterate thru all variant_parts in a type, in reverse order
-+ * @type: struct type instance to iterate
-+ * @pos: struct variant_part iterator
-+ * @n: struct variant_part temp iterator
-+ */
-+#define type__for_each_variant_part_safe_reverse(type, pos, n) \
-+	list_for_each_entry_safe_reverse(pos, n, &(type)->variant_parts, tag.node)
-+
- void type__add_member(struct type *type, struct class_member *member);
- void type__add_template_type_param(struct type *type, struct template_type_param *ttparm);
- void type__add_template_value_param(struct type *type, struct template_value_param *tvparam);
-+void type__add_variant_part(struct type *type, struct variant_part *vpart);
+ number_of_filtered_perf_record_metadata() {
+ 	local metadata_record=$1
+-	local count=$(pahole -F dwarf -V $perf --header=perf_file_header --seek_bytes '$header.data.offset' --size_bytes='$header.data.size' -C "perf_event_header(sizeof,type,type_enum=perf_event_type+perf_user_event_type,filter=type==PERF_RECORD_$metadata_record)" --prettify $perf_data | grep ".type = PERF_RECORD_$metadata_record," | wc -l)
++	local count=$(pahole --features=force_cu_merging -F dwarf -V $perf --header=perf_file_header --seek_bytes '$header.data.offset' --size_bytes='$header.data.size' -C "perf_event_header(sizeof,type,type_enum=perf_event_type+perf_user_event_type,filter=type==PERF_RECORD_$metadata_record)" --prettify $perf_data | grep ".type = PERF_RECORD_$metadata_record," | wc -l)
+ 	echo "$count"
+ }
  
- struct class_member *
- 	type__find_first_biggest_size_base_type_member(struct type *type,
 -- 
 2.54.0
 
