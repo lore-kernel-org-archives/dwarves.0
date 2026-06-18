@@ -1,21 +1,21 @@
 Received: from 66-220-155-178.mail-mxout.facebook.com (66-220-155-178.mail-mxout.facebook.com [66.220.155.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03DA9211A28
-	for <dwarves@vger.kernel.org>; Thu, 18 Jun 2026 01:14:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 348D1274FD0
+	for <dwarves@vger.kernel.org>; Thu, 18 Jun 2026 01:14:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.155.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781745269; cv=none; b=JAS9DdeL9IcfKQHYi5UnBxD8SxSNL0jWH3HWbpqrvYcRI/SIFZZw5fkH9IdwT5YwhHEgUmJsxx8x/vVW95kIG7Yoc7c7CjbgSfvxXnguwgA2Hgp7pHpgqkVJ6Jkk5em60GJzLg4nA4vj2UB8yfEg/HwxLfwkNSa2mCxeeyRsMKs=
+	t=1781745272; cv=none; b=dr6mF0hk51D5n9DY9SLu0n/44CbGHLzXM4uq9rg/8Krwr7UTIiZqgXQtHDUMZg0KRyW3gQsYrn/fWDO7xFYa8AWrND0aPrVZyXiBwYwDWlRg0leOHl9wQGaVdVsSKQxPQPqPo1CuEvKFMGeuVHhIS56xzscNIGXmCSWjAV6tLUM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781745269; c=relaxed/simple;
-	bh=/8xtnccFgfTw/xHQuE4+S4tODqI8gMUWaQyVo8OL6u0=;
+	s=arc-20240116; t=1781745272; c=relaxed/simple;
+	bh=urrMvEu9GAKMViLn8HSKJt2ahkiorkrFJRLiN2TOf+s=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Lo4qRCHhy+QX2ek1ocYObXQj5jLB0/6VGkLX+ouXBiZ4RHmkVY6x1YuPl9sAZc+efTCi/UhynZSOjMjUpkBtBN7wax48hQUZly/nNcWaIYJs7LgSdwE4Fajxzj2g/P/r9b72ZIolN2Kps0QX7H5lMQatl3dYMctiqNhWM8v4iPY=
+	 MIME-Version; b=pIBp3jJiUjU3hJOcqkA8NIR2l+FKymXfUwwfdsHq/rnlRtteMBkw4+gCCDjBmbV/UyjwCsRtQUE8AQTyh34Mnkwc85ziHcq7FiXvNhEl9ozrx6rYNNjtH+UISqJVZ3NNL+KlHUd2xWcrvLV4+SspAo7gAvpdJovb7XKceEdGga4=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.155.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id CD560176E3B93F; Wed, 17 Jun 2026 18:14:14 -0700 (PDT)
+	id ECF32176E3B9C4; Wed, 17 Jun 2026 18:14:19 -0700 (PDT)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: Alan Maguire <alan.maguire@oracle.com>,
 	Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
@@ -24,9 +24,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Andrii Nakryiko <andrii@kernel.org>,
 	bpf@vger.kernel.org,
 	kernel-team@fb.com
-Subject: [PATCH dwarves v6 3/5] dwarf_loader: Analyze per-parameter information for true signatures
-Date: Wed, 17 Jun 2026 18:14:14 -0700
-Message-ID: <20260618011414.638700-1-yonghong.song@linux.dev>
+Subject: [PATCH dwarves v6 4/5] btf_encoder: Emit true function signatures
+Date: Wed, 17 Jun 2026 18:14:19 -0700
+Message-ID: <20260618011419.640165-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260618011358.632394-1-yonghong.song@linux.dev>
 References: <20260618011358.632394-1-yonghong.song@linux.dev>
@@ -38,251 +38,69 @@ List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-Add a function-level pass, function__analyze_parameter_locations(), run
-from cu__resolve_func_ret_types_optimized() which walks a function's
-parameters in ABI argument-register order and consumes the location state
-decoded by parameter__decode_location() in the previous commit. Each
-parameter advances the expected-register index by the number of argument
-registers it occupies (parameter__abi_slots(), e.g. a two-eightbyte
-aggregate consumes two registers).
-
-For every producer it keeps the existing bookkeeping, now driven by the
-decoded fields:
- - a parameter with no location, a constant value, or (for non-clang) no
-   register found is marked optimized out
- - a parameter found in a register other than the expected one is marked
-   unexpected_reg
-
-When true_signature is enabled for a signature-changed function it
-reconstructs the real register-level signature:
- - parameters that were optimized out are dropped from the signature
- - a parameter whose location cannot be tied to its expected register,
-   wrong register, no register found, or a non-aggregate sitting on the
-   stack - marks the function unexpected_reg so no untrustworthy signatur=
-e
-   is emitted;
- - an aggregate genuinely passed on the stack (passed_in_memory) is kept;
- - an aggregate split across registers via DW_OP_piece is kept whole when
-   it is fully used or the next parameter still lands on its expected
-   register, otherwise it is rewritten to the single member actually pass=
-ed
-   in a register (true_sig_*).
-
-Together with the decoding commit this replaces the previous inline,
-per-parameter register check in parameter__new().
+When true_signature is enabled, consume the per-parameter analysis the
+DWARF loader recorded while saving a function's BTF:
+ - Drop parameters that were optimized out of a signature-changed functio=
+n
+   (ftype->signature_changed && param->optimized), adjusting the saved
+   parameter count accordingly.
+ - When a parameter was reduced to a single aggregate member
+   (param->true_sig_member_name is set), emit it under the synthesized na=
+me
+   "<parameter>__<member>" so the BTF reflects the value actually passed =
+in
+   the register.
 
 Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 ---
- dwarf_loader.c | 151 ++++++++++++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 148 insertions(+), 3 deletions(-)
+ btf_encoder.c | 24 +++++++++++++++++++++++-
+ 1 file changed, 23 insertions(+), 1 deletion(-)
 
-diff --git a/dwarf_loader.c b/dwarf_loader.c
-index ae4ac2f..31498e5 100644
---- a/dwarf_loader.c
-+++ b/dwarf_loader.c
-@@ -2931,6 +2931,149 @@ static void ftype__recode_dwarf_types(struct tag =
-*tag, struct cu *cu)
- 	}
- }
+diff --git a/btf_encoder.c b/btf_encoder.c
+index 633bc61..c8e8437 100644
+--- a/btf_encoder.c
++++ b/btf_encoder.c
+@@ -1297,14 +1297,36 @@ static int32_t btf_encoder__save_func(struct btf_=
+encoder *encoder, struct functi
+ 	state->reordered_parm =3D ftype->reordered_parm;
+ 	ftype__for_each_parameter(ftype, param) {
+ 		const char *name;
++		char *final_name =3D NULL;
 =20
-+static struct parameter *ftype__next_parameter(struct ftype *ftype, stru=
-ct parameter *parm)
-+{
-+	if (parm->tag.node.next =3D=3D &ftype->parms)
-+		return NULL;
-+	return list_entry(parm->tag.node.next, struct parameter, tag.node);
-+}
-+
-+static int parameter__abi_slots(const struct parameter *parm, const stru=
-ct cu *cu)
-+{
-+	int slots;
-+
-+	if (!cu->agg_use_two_regs || parm->type_byte_size <=3D cu->addr_size)
-+		return 1;
-+
-+	slots =3D (parm->type_byte_size + cu->addr_size - 1) / cu->addr_size;
-+	return slots > 0 ? slots : 1;
-+}
-+
-+static bool parameter__has_piece_info(const struct parameter *parm)
-+{
-+	return parm->first_reg_fields || parm->second_reg_fields;
-+}
-+
-+static bool parameter__uses_full_aggregate(const struct parameter *parm)
-+{
-+	return parm->first_reg_fields && parm->second_reg_fields;
-+}
-+
-+static bool ftype__next_parameter_preserves_slots(struct ftype *ftype, s=
-truct parameter *parm,
-+						  int reg_idx, int slots, struct cu *cu)
-+{
-+	struct parameter *next =3D ftype__next_parameter(ftype, parm);
-+	int next_reg_idx;
-+
-+	if (!next || next->loc_reg =3D=3D PARAMETER_UNKNOWN_REG)
-+		return false;
-+
-+	next_reg_idx =3D reg_idx + slots;
-+	return next_reg_idx < cu->nr_register_params &&
-+	       next->loc_reg =3D=3D cu->register_params[next_reg_idx];
-+}
-+
-+static bool parameter__apply_true_sig_member(struct parameter *parm, str=
-uct cu *cu)
-+{
-+	struct dwarf_tag tmp =3D {};
-+	struct dwarf_tag *dtype;
-+
-+	if (!parm->true_sig_member_name || parm->true_sig_type =3D=3D 0)
-+		return false;
-+
-+	tmp.type =3D parm->true_sig_type;
-+	tmp.from_types_section.type =3D parm->true_sig_type_from_types;
-+	dtype =3D __dwarf_cu__find_type_by_ref(cu->priv, tmp.type, tmp.from_typ=
-es_section.type);
-+	if (!dtype)
-+		return false;
-+
-+	parm->tag.type =3D dtype->small_id;
-+	return true;
-+}
-+
-+static void function__analyze_parameter_locations(struct function *fn, s=
-truct cu *cu,
-+						  struct conf_load *conf)
-+{
-+	struct ftype *ftype =3D &fn->proto;
-+	struct parameter *pos;
-+	bool true_sig_enabled =3D conf->true_signature && ftype->signature_chan=
-ged;
-+	bool check_registers =3D !cu->producer_clang || true_sig_enabled;
-+	int reg_idx =3D 0;
-+
-+	if (!check_registers)
-+		return;
-+
-+	ftype__for_each_parameter(ftype, pos) {
-+		bool consumes_register =3D true;
-+		bool regs_available =3D reg_idx < cu->nr_register_params;
-+		int slots =3D parameter__abi_slots(pos, cu);
-+		int expected_reg =3D regs_available ? cu->register_params[reg_idx] : -=
-1;
-+		int reg_slots =3D pos->passed_in_memory ? 1 : slots;
-+
-+		if (pos->has_loc) {
-+			if (true_sig_enabled && pos->loc_const_value) {
-+				pos->optimized =3D 1;
-+				consumes_register =3D false;
-+				goto next;
-+			}
-+
-+			if (!regs_available) {
-+				consumes_register =3D false;
-+				goto next;
-+			}
-+
-+			if (true_sig_enabled && pos->loc_stack) {
-+				if (pos->passed_in_memory)
-+					consumes_register =3D false;
-+				else
-+					pos->unexpected_reg =3D 1;
-+				goto next;
-+			}
-+
-+			if (pos->loc_reg =3D=3D PARAMETER_UNKNOWN_REG) {
-+				if (true_sig_enabled)
-+					pos->unexpected_reg =3D 1;
-+				else
-+					pos->optimized =3D 1;
-+				goto next;
-+			}
-+
-+			if (expected_reg >=3D 0 && expected_reg !=3D pos->loc_reg) {
-+				pos->unexpected_reg =3D 1;
-+				goto next;
-+			}
-+
-+			if (true_sig_enabled && parameter__has_piece_info(pos)) {
-+				if (parameter__uses_full_aggregate(pos) ||
-+				    ftype__next_parameter_preserves_slots(ftype, pos, reg_idx, slots=
-, cu)) {
-+					reg_idx +=3D slots;
-+					continue;
-+				}
-+
-+				if (parameter__apply_true_sig_member(pos, cu)) {
-+					reg_idx++;
-+					continue;
-+				}
-+			}
-+		} else if (pos->has_const_value && !cu->producer_clang) {
-+			pos->optimized =3D 1;
-+		} else if (true_sig_enabled) {
-+			if (regs_available &&
-+			    ftype__next_parameter_preserves_slots(ftype, pos, reg_idx, slots,=
- cu)) {
-+				reg_idx +=3D slots;
-+				continue;
-+			}
-+
-+			pos->optimized =3D 1;
-+			consumes_register =3D false;
+ 		/* No location info/optimized + reordered means optimized out. */
+ 		if (ftype->reordered_parm && (!param->has_loc || param->optimized)) {
+ 			state->nr_parms--;
+ 			continue;
+ 		}
+-		name =3D parameter__name(param) ?: "";
++		if (encoder->true_signature && ftype->signature_changed && param->opti=
+mized) {
++			state->nr_parms--;
++			continue;
 +		}
 +
-+next:
-+		if (consumes_register)
-+			reg_idx +=3D reg_slots;
-+	}
-+}
++		name =3D parameter__name(param);
++		if (!name) {
++			name =3D "";
++		} else if (param->true_sig_member_name) {
++			/* Non-null param->true_sig_member_name indicates that the parameter
++			 * name is <parameter_name>__<field_name>.
++			 */
++			if (asprintf(&final_name, "%s__%s", name, param->true_sig_member_name=
+) =3D=3D -1) {
++				err =3D -ENOMEM;
++				goto out;
++			}
++			name =3D final_name;
++		}
 +
- static void lexblock__recode_dwarf_types(struct lexblock *tag, struct cu=
- *cu)
- {
- 	struct tag *pos;
-@@ -3206,7 +3349,7 @@ static bool param__is_struct(struct cu *cu, struct =
-tag *tag)
- 	}
- }
-=20
--static int cu__resolve_func_ret_types_optimized(struct cu *cu)
-+static int cu__resolve_func_ret_types_optimized(struct cu *cu, struct co=
-nf_load *conf)
- {
- 	struct ptr_table *pt =3D &cu->functions_table;
- 	uint32_t i;
-@@ -3217,6 +3360,8 @@ static int cu__resolve_func_ret_types_optimized(str=
-uct cu *cu)
- 		struct function *fn =3D tag__function(tag);
- 		bool has_unexpected_reg =3D false, has_struct_param =3D false;
-=20
-+		function__analyze_parameter_locations(fn, cu, conf);
+ 		str_off =3D btf__add_str(btf, name);
++		if (final_name)
++			free(final_name);
 +
- 		/* mark function as optimized if parameter is, or
- 		 * if parameter does not have a location; at this
- 		 * point location presence has been marked in
-@@ -3395,7 +3540,7 @@ static int die__process_and_recode(Dwarf_Die *die, =
-struct cu *cu, struct conf_lo
- 	if (ret !=3D 0)
- 		return ret;
-=20
--	return cu__resolve_func_ret_types_optimized(cu);
-+	return cu__resolve_func_ret_types_optimized(cu, conf);
- }
-=20
- static int class_member__cache_byte_size(struct tag *tag, struct cu *cu,
-@@ -4158,7 +4303,7 @@ static int cus__merge_and_process_cu(struct cus *cu=
-s, struct conf_load *conf,
- 	 * encoded in another subprogram through abstract_origin
- 	 * tag. Let us visit all subprograms again to resolve this.
- 	 */
--	if (cu__resolve_func_ret_types_optimized(cu) !=3D LSK__KEEPIT)
-+	if (cu__resolve_func_ret_types_optimized(cu, conf) !=3D LSK__KEEPIT)
- 		goto out_abort;
-=20
- 	cu__finalize(cu, cus, conf);
+ 		if (str_off < 0) {
+ 			err =3D str_off;
+ 			goto out;
 --=20
 2.53.0-Meta
 
