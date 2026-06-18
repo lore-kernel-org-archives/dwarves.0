@@ -1,32 +1,32 @@
-Received: from out-184.mta0.migadu.com (out-184.mta0.migadu.com [91.218.175.184])
+Received: from out-183.mta0.migadu.com (out-183.mta0.migadu.com [91.218.175.183])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59610271471
-	for <dwarves@vger.kernel.org>; Thu, 18 Jun 2026 00:57:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.184
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D0C4274FD0
+	for <dwarves@vger.kernel.org>; Thu, 18 Jun 2026 00:57:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.183
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781744274; cv=none; b=OIuhK9j2tjztjelFpeDaid+lDtHnDQYcKGd0s6A0UPa/w7A3BF9sj65ohQkDCnD1sgKtz2QXdUZaQuzQohhT10/F8b5bxwWJzyKE0MeqBrBBTD56pDpjHOJR98C66bJVzVNOQgT3lBDGhXy108W0UlDyLfblkBx8MFTYJAqjDHQ=
+	t=1781744276; cv=none; b=ZB1lp1NrvlKhtaSic/AOTFBaKUHoT6R9I1cdrmGD3ZGT+y7j6zmfllv+muTgwYRwh6MKgRQ1d0Vge5kDMHqxkQkSkvn/Rld3qep2XB9+Uk5i+DLaNhJ099+55xzRfngsRyJZg1Fqm/rFnzE1lPAtOJg2RFGn5EGclSBv+U/GTSg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781744274; c=relaxed/simple;
-	bh=oUb2U+0e9zRN7tE3DBcervMz6r1inJ9SiIutqAB+Ri8=;
+	s=arc-20240116; t=1781744276; c=relaxed/simple;
+	bh=AzjY8+QzCdHnH3/Em3y1xcbFlKkWlZlJO5H2gQAiQNk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=WPHSijNd29n2kBBOVFoyT9fBlWu08I9TTaIbd9latSWDqBWwYSRcivGc/eBg8GY7q4KpoTSxA73dPnrlh9cHbbcuwY5yH1bfq8VX6l1Y1newHnp+O1ck9iyalA7Ftl4zONFp4tWFl3o3gDnKqUVXB+AtTvARJVawCKxPA0i2Duw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=n6PnIhAi; arc=none smtp.client-ip=91.218.175.184
+	 MIME-Version; b=dXyAhCG6mXtjHK6FB+UwYkDrD8QsJHsE2YpURJ102GkqAuUlGrF7SnpySPOGcP5sTWnKyHuS5nj0D0+K3zXMI4yfJaonRo2H6Bocaq+AUAyZRB2cwaRvU+WOE1z2sVa6R/+UHNZePmvz1ngQRnGYkSVydYnvAo5AfWq1xUnK7X0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=sNf+3DN3; arc=none smtp.client-ip=91.218.175.183
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="n6PnIhAi"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="sNf+3DN3"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1781744270;
+	t=1781744272;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=ju20PdvmPPWk7xRQWacfdjDMX/VH6mE03pnZdAjRFjY=;
-	b=n6PnIhAizjCjUl4qzwMYHpUF3LqINwQ3j4MAfRse3oOOINimBxJKwjVhslkn+2knaqp5zY
-	Rnfg8n8f53VRRW8Ytd72We5U1DOj7OAmnv5xKlWChe+qcJCxsflEa621+lJNXFOy3oLe2o
-	FZBNctCJDeKhaRbLT3T6DdfHmSsYtP8=
+	bh=BUakG8fjik13xPEz2DRSf5509YfWCpLcC7n1Ahdqzm4=;
+	b=sNf+3DN3Tkzo12GER08FhTqpRCtxZyReCWGYk8eG9sQOI3RNKqZkcH/21AfSad8pm0mdOI
+	a/EmxosViS5W3kr2KrjTDTxV4rYvbiFw/8O/hG59NYa1EKFwPzWoQPqqd5hG1T5d6ffz3J
+	Txe5iK133KZrgbOcAUdYqX+U9QJl29o=
 From: Vineet Gupta <vineet.gupta@linux.dev>
 To: dwarves@vger.kernel.org
 Cc: bpf@vger.kernel.org,
@@ -38,9 +38,9 @@ Cc: bpf@vger.kernel.org,
 	David Faust <david.faust@oracle.com>,
 	Yonghong Song <yonghong.song@linux.dev>,
 	Vineet Gupta <vineet.gupta@linux.dev>
-Subject: [PAHOLE v5 1/5] btf_loader: Handle decl tag component_idx for parameters
-Date: Wed, 17 Jun 2026 17:57:27 -0700
-Message-ID: <20260618005731.273181-2-vineet.gupta@linux.dev>
+Subject: [PAHOLE v5 2/5] dwarf_loader: Extract die__add_btf_type_tag() helper [NFC]
+Date: Wed, 17 Jun 2026 17:57:28 -0700
+Message-ID: <20260618005731.273181-3-vineet.gupta@linux.dev>
 In-Reply-To: <20260618005731.273181-1-vineet.gupta@linux.dev>
 References: <20260618005731.273181-1-vineet.gupta@linux.dev>
 Precedence: bulk
@@ -52,149 +52,117 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-From: Alan Maguire <alan.maguire@oracle.com>
+NFC change preparing for DW_TAG_GNU_annotation support.
+Extract the btf_type_tag annotation creation logic into helper
+die__add_btf_type_tag().
 
-A BTF_KIND_DECL_TAG with a non-negative component_idx applies to a
-specific function parameter (or struct/union member), not to the
-function itself. btf_loader.c however attached every decl tag to the
-type named by btf_type->type, so parameter decl tags were recorded on
-the function rather than on the parameter, and pfunct never printed
-them with the parameter.
-
-Resolve a non-negative component_idx to the corresponding parameter via
-new helpers ftype__parameter()/function__parameter(), and attach the
-tag there. Teach the pretty printer to emit a parameter's attributes by
-factoring the function-level attribute loop into tag__attributes_fprintf()
-and calling it from ftype__fprintf_parms() for each parameter.
-
-Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
 Signed-off-by: Vineet Gupta <vineet.gupta@linux.dev>
+Acked-by: Yonghong Song <yonghong.song@linux.dev>
+Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
 ---
- btf_loader.c      | 46 +++++++++++++++++++++++++++++++++++++++++++++-
- dwarves_fprintf.c | 20 ++++++++++++++++----
- 2 files changed, 61 insertions(+), 5 deletions(-)
+Changes since v [4]
+ - Collected the review tags [Emil, Yonghong]
 
-diff --git a/btf_loader.c b/btf_loader.c
-index b591219a245d..9bb52c3c5801 100644
---- a/btf_loader.c
-+++ b/btf_loader.c
-@@ -477,12 +477,56 @@ static struct attributes *attributes__realloc(struct attributes *attributes, con
- 	return result;
+Changes since v3 [3]
+ - Fix comment to kernel style [Arnaldo]
+
+Changes since v2 [2]
+ - die__add_btf_type_tag() returns pointer not error code [Alan]
+
+Changes since v1 [1]
+ - NFC reinstate some original comments
+
+[4] https://lore.kernel.org/bpf/20260602195512.1511013-1-vineet.gupta@linux.dev/
+[3] https://lore.kernel.org/bpf/20260601183511.594100-1-vineet.gupta@linux.dev/
+[2] https://lore.kernel.org/bpf/20260528223616.2035618-1-vineet.gupta@linux.dev/
+[1] https://lore.kernel.org/bpf/20260526181818.4159927-1-vineet.gupta@linux.dev/
+---
+ dwarf_loader.c | 58 +++++++++++++++++++++++++++++---------------------
+ 1 file changed, 34 insertions(+), 24 deletions(-)
+
+diff --git a/dwarf_loader.c b/dwarf_loader.c
+index 16fb7becffee..42a0f3f74ce3 100644
+--- a/dwarf_loader.c
++++ b/dwarf_loader.c
+@@ -1600,14 +1600,44 @@ static struct btf_type_tag_type *die__create_new_btf_type_tag_type(Dwarf_Die *di
+ 	return tag;
  }
  
-+static struct tag *ftype__parameter(const struct ftype *ftype, int component_idx)
++static struct btf_type_tag_ptr_type *die__add_btf_type_tag(struct btf_type_tag_ptr_type *tag,
++							    Dwarf_Die *die, Dwarf_Die *adie,
++							    struct cu *cu, struct conf_load *conf)
 +{
-+	struct parameter *pos;
-+	int idx = 0;
++	struct btf_type_tag_type *annot;
++	uint32_t id;
 +
-+	ftype__for_each_parameter(ftype, pos) {
-+		if (idx == component_idx)
-+			return &pos->tag;
-+		++idx;
++	if (tag == NULL) {
++		tag = die__create_new_btf_type_tag_ptr_type(die, cu);
++		if (!tag)
++			return NULL;
 +	}
 +
-+	return NULL;
-+}
-+
-+static struct tag *function__parameter(const struct function *func, struct cu *cu,
-+				       int component_idx)
-+{
-+	struct tag *tag;
-+
-+	if (component_idx < 0)
++	annot = die__create_new_btf_type_tag_type(adie, cu, conf);
++	if (annot == NULL)
 +		return NULL;
 +
-+	tag = cu__type(cu, func->proto.tag.type);
-+	if (tag == NULL)
++	if (cu__table_add_tag(cu, &annot->tag, &id) < 0)
 +		return NULL;
 +
-+	return ftype__parameter(tag__ftype(tag), component_idx);
++	struct dwarf_tag *dtag = tag__dwarf(&annot->tag);
++	dtag->small_id = id;
++	cu__hash(cu, &annot->tag);
++
++	/*
++	 * Prepends: for annotations tag1 -> tag2 -> tag3,
++	 * the tag->tags list ends up as tag3 -> tag2 -> tag1.
++	 */
++	list_add(&annot->node, &tag->tags);
++	return tag;
 +}
 +
- static int process_decl_tag(struct cu *cu, const struct btf_type *tp)
+ static struct tag *die__create_new_pointer_tag(Dwarf_Die *die, struct cu *cu,
+ 					       struct conf_load *conf)
  {
-+	int component_idx = btf_decl_tag(tp)->component_idx;
- 	struct tag *tag = cu__type(cu, tp->type);
- 	struct attributes *tmp;
+ 	struct btf_type_tag_ptr_type *tag = NULL;
+-	struct btf_type_tag_type *annot;
+ 	Dwarf_Die *cdie, child;
+ 	const char *name;
+-	uint32_t id;
  
--	if (tag == NULL)
-+	if (component_idx >= 0) {
-+		struct tag *func_tag = cu__function(cu, tp->type);
-+
-+		if (func_tag != NULL) {
-+			tag = function__parameter(tag__function(func_tag), cu,
-+						  component_idx);
-+			if (tag == NULL) {
-+				fprintf(stderr, "WARNING: BTF_KIND_DECL_TAG for unknown parameter %d in BTF id %d\n",
-+					component_idx, tp->type);
-+				return 0;
-+			}
-+		}
-+	}
-+
-+	if (tag == NULL && component_idx < 0)
- 		tag = cu__function(cu, tp->type);
- 
- 	if (tag == NULL)
-diff --git a/dwarves_fprintf.c b/dwarves_fprintf.c
-index 1ec478c2a027..54f483244bd2 100644
---- a/dwarves_fprintf.c
-+++ b/dwarves_fprintf.c
-@@ -1199,6 +1199,18 @@ const char *function__prototype(const struct function *func,
- 					bf, len);
- }
- 
-+static size_t tag__attributes_fprintf(const struct tag *tag, FILE *fp)
-+{
-+	size_t printed = 0;
-+	int i;
-+
-+	if (tag->attributes)
-+		for (i = 0; i < tag->attributes->cnt; ++i)
-+			printed += fprintf(fp, "%s ", tag->attributes->values[i]);
-+
-+	return printed;
-+}
-+
- size_t ftype__fprintf_parms(const struct ftype *ftype,
- 			    const struct cu *cu, int indent,
- 			    const struct conf_fprintf *conf, FILE *fp)
-@@ -1240,6 +1252,7 @@ size_t ftype__fprintf_parms(const struct ftype *ftype,
- 				if (n)
- 					return printed + n;
- 				if (ptype->tag == DW_TAG_subroutine_type) {
-+					printed += tag__attributes_fprintf(&pos->tag, fp);
- 					printed +=
- 					     ftype__fprintf(tag__ftype(ptype),
- 							    cu, name, 0, 1, 0,
-@@ -1248,12 +1261,14 @@ size_t ftype__fprintf_parms(const struct ftype *ftype,
- 				}
- 			}
- 		} else if (type->tag == DW_TAG_subroutine_type) {
-+			printed += tag__attributes_fprintf(&pos->tag, fp);
- 			printed += ftype__fprintf(tag__ftype(type), cu, name,
- 						  true, 0, 0, 0, conf, fp);
+ 	/* If no child tags or skipping btf_type_tag encoding, just create a new tag
+ 	 * and return
+@@ -1627,29 +1657,9 @@ static struct tag *die__create_new_pointer_tag(Dwarf_Die *die, struct cu *cu,
+ 		if (strcmp(name, "btf_type_tag") != 0)
  			continue;
- 		}
- 		stype = tag__name(type, cu, sbf, sizeof(sbf), conf);
- print_it:
-+		printed += tag__attributes_fprintf(&pos->tag, fp);
- 		printed += fprintf(fp, "%s%s%s", stype, name ? " " : "",
- 				   name ?: "");
- 	}
-@@ -1405,11 +1420,8 @@ static size_t function__fprintf(const struct tag *tag, const struct cu *cu,
- 	struct ftype *ftype = func->btf ? tag__ftype(cu__type(cu, func->proto.tag.type)) : &func->proto;
- 	size_t printed = 0;
- 	bool inlined = !conf->strip_inline && function__declared_inline(func);
--	int i;
  
--	if (tag->attributes)
--		for (i = 0; i < tag->attributes->cnt; ++i)
--			printed += fprintf(fp, "%s ", tag->attributes->values[i]);
-+	printed += tag__attributes_fprintf(tag, fp);
+-		if (tag == NULL) {
+-			/* Create a btf_type_tag_ptr type. */
+-			tag = die__create_new_btf_type_tag_ptr_type(die, cu);
+-			if (!tag)
+-				return NULL;
+-		}
+-
+-		/* Create a btf_type_tag type for this annotation. */
+-		annot = die__create_new_btf_type_tag_type(cdie, cu, conf);
+-		if (annot == NULL)
+-			return NULL;
+-
+-		if (cu__table_add_tag(cu, &annot->tag, &id) < 0)
++		tag = die__add_btf_type_tag(tag, die, cdie, cu, conf);
++		if (tag == NULL)
+ 			return NULL;
+-
+-		struct dwarf_tag *dtag = tag__dwarf(&annot->tag);
+-		dtag->small_id = id;
+-		cu__hash(cu, &annot->tag);
+-
+-		/* For a list of DW_TAG_LLVM_annotation like tag1 -> tag2 -> tag3,
+-		 * the tag->tags contains tag3 -> tag2 -> tag1.
+-		 */
+-		list_add(&annot->node, &tag->tags);
+ 	} while (dwarf_siblingof(cdie, cdie) == 0);
  
- 	if (func->virtuality == DW_VIRTUALITY_virtual ||
- 	    func->virtuality == DW_VIRTUALITY_pure_virtual)
+ 	return tag ? &tag->tag : tag__new(die, cu);
 -- 
 2.54.0
 
