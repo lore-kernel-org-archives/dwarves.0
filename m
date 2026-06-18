@@ -1,127 +1,89 @@
-Received: from out-179.mta0.migadu.com (out-179.mta0.migadu.com [91.218.175.179])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54220346FAD
-	for <dwarves@vger.kernel.org>; Thu, 18 Jun 2026 17:18:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B39112F7EFE
+	for <dwarves@vger.kernel.org>; Thu, 18 Jun 2026 17:33:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781803124; cv=none; b=lporUYtKucJV3n6yJeQNC5MAMuvxKwCauBVbXDl5yb4lEJAHOaO6rnaieJ0oO0WWh3UuAi7nYBP6kS50AnQpWeSU1i4iFrbUy/DUegTBweceP7L9T+1BJZYtOr/gaUHue9cK8gthW5nGJf2qucP/WGPCu+xOOcNIBKRiY7IVvdk=
+	t=1781804002; cv=none; b=Ip5u7ZLug4MjIvvYaagtEMhBXgMd8ETG0dB+XRZrRLfJZobpQxGfCImDoa9h+BWO4CO4IWoE2G0bcPhP6J/wO/Yvbc0TUq3YjEX/FVoKqaZPUc1uuKXEoJiTKUzYjBwqu+A/DNNiBN8RBT8dppNoEsWAX/YN6FTnqGB3mEvXjgk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781803124; c=relaxed/simple;
-	bh=Jz0A5qydOVFbTKVNouEcyrwig+LXMvAFbkgXcxps4R4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=WzjZjhH0LyEyplHEC5iKexhpcgpgxCbc/Tmv+O0pTmzLgM8PpRmqREMpMCePDhbsf0ouKGGWKNndAaHc2xUN0YVAgsTr4G1YKJpKXofdSHapqetti5ZopQGdmExfskAftJ3euy2sBHiED14ibY3GlYaHdQ+72CyEyY0X+BuwNNs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=SU8840Rz; arc=none smtp.client-ip=91.218.175.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1781804002; c=relaxed/simple;
+	bh=IrCS2sSd0R1ptfyCeGwzg8DRKid+bIPGzk+KoNj+rzg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=craFmWQ9ju5+V8AXDS2DqIWjPeEGp7rvXLa6zmCvRK3psJfQSyegaRD7BM6XBTAO88uTc4j6cxy0zzbEfBc9KmHp9T9WToD2MYEr7KvqTBrV5MdISGJrgTlI5bNzJyMP0SfzvojNmafFpgj1EJ4blKfBcV8gZkftqVdznaX9nHI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ADxomlWx; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="SU8840Rz"
-Message-ID: <a753dae1-6a4f-404c-aef5-e28cfc708f31@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1781803110;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=bWkfRD+XeftsrUohEka8Qfm4BXzhYJhM5vZADskByts=;
-	b=SU8840RzLeBS8Q/DBx3KukJBcT/5HoeBh3fF/BD6ewucdApKigWQQDKZLN+b1ylXxDehzn
-	35VCPs1o+vsD0XIRla3T4xB9aUBX5V9HDkcR4oaP6z2i07mYebTc81QV6JpQPloS1UYhCM
-	eydaZUF1jeekuY20E9RcNqyXb5OfPq0=
-Date: Thu, 18 Jun 2026 10:18:21 -0700
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ADxomlWx"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 021741F000E9;
+	Thu, 18 Jun 2026 17:33:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1781804001;
+	bh=DEFwPUvFqKF2ohGb0uznsGxfIL1WZfZlvmQJO1knrJc=;
+	h=From:To:Cc:Subject:Date;
+	b=ADxomlWx0lzmqVOv0Gs7Mg13rJR03mH7ptmn7SK3CrpDScSvqM/2sA7iSit56ZxeJ
+	 IC6GVVgNZ4uceJBni7cGDYQYePO8NMQe2dDZMF32mBzW5wAzxuRraW8EpAZwPd+3Xi
+	 oFvVDKn+rkEzTK0af+F1/JDWRqkcLDGNARYVQK0XykgCMQCc5SFTk4ynya3mhi4UAx
+	 twU/T+ewG9JPcJ/0jQTyKDYjp0O1WUj8lhF6KAiJl3uoCflKQQ0WQcQi1JtKMWTI+B
+	 HW/jAshZyJh+kK+vDWQ22xHtYiMOjzwKbH9te2QeKQ1xu3fYX/bHnyOO2Y2kwvuJpD
+	 IutVojeIxSDuA==
+From: Arnaldo Carvalho de Melo <acme@kernel.org>
+To: Alan Maguire <alan.maguire@oracle.com>
+Cc: Jiri Olsa <jolsa@kernel.org>,
+	Clark Williams <williams@redhat.com>,
+	dwarves@vger.kernel.org,
+	Arnaldo Carvalho de Melo <acme@kernel.org>
+Subject: [PATCHES v2 0/7] Initial support for some Rust tags + way to ask for CU merging at load time
+Date: Thu, 18 Jun 2026 14:33:09 -0300
+Message-ID: <20260618173316.83598-1-acme@kernel.org>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PAHOLE v5 1/5] btf_loader: Handle decl tag component_idx for
- parameters
-To: Alan Maguire <alan.maguire@oracle.com>,
- Emil Tsalapatis <emil@etsalapatis.com>, dwarves@vger.kernel.org
-Cc: bpf@vger.kernel.org, Andrii Nakryiko <andrii@kernel.org>,
- acme@kernel.org, jose.marchesi@oracle.com,
- David Faust <david.faust@oracle.com>, Yonghong Song <yonghong.song@linux.dev>
-References: <20260618005731.273181-1-vineet.gupta@linux.dev>
- <20260618005731.273181-2-vineet.gupta@linux.dev>
- <DJBWI249TH74.C8BAB4SRRTXB@etsalapatis.com>
- <92447e74-7578-47cb-a08e-f6ca8a9e9274@oracle.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Vineet Gupta <vineet.gupta@linux.dev>
-Content-Language: en-US
-In-Reply-To: <92447e74-7578-47cb-a08e-f6ca8a9e9274@oracle.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On 6/18/26 7:38 AM, Alan Maguire wrote:
-> On 18/06/2026 05:46, Emil Tsalapatis wrote:
->> On Wed Jun 17, 2026 at 8:57 PM EDT, Vineet Gupta wrote:
->>> From: Alan Maguire <alan.maguire@oracle.com>
->>>
->>> A BTF_KIND_DECL_TAG with a non-negative component_idx applies to a
->>> specific function parameter (or struct/union member), not to the
->>> function itself. btf_loader.c however attached every decl tag to the
->>> type named by btf_type->type, so parameter decl tags were recorded on
->>> the function rather than on the parameter, and pfunct never printed
->>> them with the parameter.
->>>
->>> Resolve a non-negative component_idx to the corresponding parameter via
->>> new helpers ftype__parameter()/function__parameter(), and attach the
->>> tag there. Teach the pretty printer to emit a parameter's attributes by
->>> factoring the function-level attribute loop into tag__attributes_fprintf()
->>> and calling it from ftype__fprintf_parms() for each parameter.
->>>
->>> Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
->>> Signed-off-by: Vineet Gupta <vineet.gupta@linux.dev>
->> With one nit:
->>
->> Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
->>
->> (Also feel free to keep the tags for the other 3 patches since the
->> changes are minimal).
->>
->> </SNIP>
->>
->>> +	if (component_idx >= 0) {
->>> +		struct tag *func_tag = cu__function(cu, tp->type);
->>> +
->>> +		if (func_tag != NULL) {
->>> +			tag = function__parameter(tag__function(func_tag), cu,
->>> +						  component_idx);
->>> +			if (tag == NULL) {
->>> +				fprintf(stderr, "WARNING: BTF_KIND_DECL_TAG for unknown parameter %d in BTF id %d\n",
->>> +					component_idx, tp->type);
->>> +				return 0;
->>> +			}
->>> +		}
->>> +	}
->>> +
->>> +	if (tag == NULL && component_idx < 0)
->>>   		tag = cu__function(cu, tp->type);
->> Nit, I think this can be simplified as follows:
->>
->> tag = cu__function(cu, tp->type);
->> if (component_idx >= 0 && tag != NULL) {
->> 	tag = function__parameter(tag__function(tag), cu, component_idx);
->> 	if (tag == NULL) {
->> 		fprintf(stderr, "WARNING: BTF_KIND_DECL_TAG for unknown parameter %d in BTF id %d\n",
->> 			component_idx, tp->type);
->> 		return 0;
->> 	}
->> }
->>
->> <SNIP>
-> yep, that looks good to me. if there are no other issues arising from this
-> round and Vineet is happy with that change I can roll it in when landing this
-> to save having to roll a v6.
+Hi,
 
-Cool, works for me and and indeed it will be nice to avoid a v6 :-)
+        Here is a series with some initial support for some Rust DWARF
+tags and a way to ask for CUs to be merged just like we do for LTO to
+cope with inter CU tag references.
 
-Thx,
--Vineet
+        This makes one of the regression tests to pass again as perf now
+has some rust source files and thus Rust CUs in a perf binary built with
+DWARF, which is used to test pahole's pretty printing features, where it
+uses the DWARF in a perf binary to decode perf.data records.
 
->
-> One other issue; we need to install bpftool for CI. I'm working on a change to
-> support this (installing the version from the kernel tree), I'll try and get
-> this in place ASAP. Thanks!
+	Now this is implemented as --features=force_cu_merging,
+following a suggestion from Alan, so that we can ask for this, that
+albeit not optimal is a way to handle Rust and other cases that may need
+this CU merging approach while we don't have something that works in
+parallel as without this option.
+
+- Arnaldo
+
+Arnaldo Carvalho de Melo (7):
+  dwarf_loader: Initial support for DW_TAG_variant_part
+  dwarf_loader: Allow forcing the merge of CUs for solving inter CU tag references
+  dwarf_loader: Initial support for DW_TAG_subprogram in DW_TAG_enumeration
+  encoders: Fix diagnostic messages for unexpected tags in enumerations
+  dwarves_fprintf: Accumulate function__fprintf return value in enumeration printing
+  dwarves: Use tag__delete for enumeration children
+  btf_encoder: Remove unused variables
+
+ btf_encoder.c               | 17 ++++++----
+ ctf_encoder.c               | 16 ++++++---
+ dwarf_loader.c              | 67 +++++++++++++++++++++++++++++++------
+ dwarves.c                   | 35 +++++++++++++++----
+ dwarves.h                   | 19 ++++++++++-
+ dwarves_emit.c              | 10 +++---
+ dwarves_fprintf.c           | 44 +++++++++++++++++-------
+ man-pages/pahole.1          | 17 ++++++++--
+ pahole.c                    | 20 ++++++++---
+ tests/prettify_perf.data.sh |  4 +--
+ 10 files changed, 195 insertions(+), 54 deletions(-)
+
+-- 
+2.54.0
 
