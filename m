@@ -1,58 +1,62 @@
 Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E33A33B19AC
-	for <dwarves@vger.kernel.org>; Fri, 19 Jun 2026 15:21:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEC2F368D6E
+	for <dwarves@vger.kernel.org>; Fri, 19 Jun 2026 15:21:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781882473; cv=none; b=lFzyHiylUerJkhSc3PtlOsI+1CxqJK8bN0eyYE+Z+1QQimk3jLAVCq2zbmWrpwpi0BZrEfTctWO6rKqr75jmFWMf2EwZ+UbTxBE1wg7/CKKIpxlgtskux7yerl2E9QiCHE3IzY3wliOZtlluPZMvV0MDyTPy+pUTk4o7J8TMBjQ=
+	t=1781882475; cv=none; b=vFj79vHcH2weXCLDsVrNfVajDI4OkPHAyXITBYNzYD5UNkZ/SEM4l1TEgYSJys6Egcd5v03ftciyw9DGFeEpe7R43htDmlcC8wMoLhsloFdTrhbhsqDaPvJQKgqs9TPF9O7wE12MX7211DIb5f8aAPDsSwqlKlDkEz2mafhcDIU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781882473; c=relaxed/simple;
-	bh=IYSRHWdYRz7CMXDI166l+QddMimDsd8iK3xW1ioXWAY=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=V5u8uxjla0bnvKbFTRM+SWhKYF2IF/fVV1huz2HDO2QnREZpDt/vR2vDd9mGJNidi8h5MDC4gv6jy7Z9nZZaXW5hJOfr4HpLyuY5beEftdHFtfUWoMuFsNoca/URWUaH5HoUtBlf5ja+GoUDSagZ4Aw6CizqOGUsMLHWs8DpNxo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=Rrci4Wcm; arc=none smtp.client-ip=205.220.177.32
+	s=arc-20240116; t=1781882475; c=relaxed/simple;
+	bh=3MkeRRkq1PELQVJPF/V7xFvhWbt7nMgBfzVLkl/d1+s=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=ooUhD/uCAZf32+RVu6dPtGyH1YXGN/zTqRK+ODe1zi+a4otQulYaAMl9ebDD3Tr2CSMOezG6ef/2wsQl64Nv59dWi+abfPWmTFrDHzqu1kES7Jol0q4/JKQhVehY+qo4hDkb2lyYDbFA28teAdid6EadnjEdm2wP01Lmse+Wh2Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=LSzXy6nJ; arc=none smtp.client-ip=205.220.177.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="Rrci4Wcm"
-Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 65J3pvCq2014503;
-	Fri, 19 Jun 2026 15:21:08 GMT
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="LSzXy6nJ"
+Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 65ILV6041335242;
+	Fri, 19 Jun 2026 15:21:11 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-transfer-encoding:date:from:message-id:mime-version
-	:subject:to; s=corp-2025-04-25; bh=EZscl8saoEGl0fvL/ra8R2EO6T9vl
-	cvhsobpKK3jBW0=; b=Rrci4WcmLKJGnlLC6s88aGmKIFqOMk7S2Zj7D5g4MUQaD
-	UVuu1BxYiVMahUHXcorY7pwgfVlWlDkXieTouz6Gw5lg9bPG/lJirUKEVyIgrTPw
-	FD3SWJqLtsRuxe/spI4wjEhpl5/RuQnmiETNBPL3HGn3C8rkQWBELTTPUELCVKm8
-	wP2ZfkRmpvUiSUuDH6cGMwaP7pziTev/RLp5+9eCrm497wBg2U2kdXI29xmSkegM
-	NmOOIW1AcQdmw2ieoH/8DBnIWGIaoi++sckSgP0QdvKx9p/zXn38/xqoOEpWwB54
-	g6Y9UkY1h5Zd6ryNl5fbCMIBr683MZzdmUpGc8H/Q==
+	:content-transfer-encoding:date:from:in-reply-to:message-id
+	:mime-version:references:subject:to; s=corp-2025-04-25; bh=iPDcL
+	tp0svxMqnxvYWQx6+TlTyviPrYmumt0S4DXbW8=; b=LSzXy6nJ+Ks/HLNY9bUbz
+	/vlxN3pKj9zEOqNPylUGuS2u5+oViPgZFWuZCvPwrV1PWTspFqmfFPtAa9yMD14h
+	8QTnjkHLid7Q7xxdhsC6NPfv1BrGL66Rhk9hFBZYXFU9SBRGqyvBciiQv/bUDY1h
+	WMrgemghS8HGzJE9dXyQZBLxv1wWLJagIA0Kl04LGIt+dkrmRbzVTCv+UdWv4OGy
+	XskTxkSqTzGggn83j+v8BIGjpH2yEpUiCQXiB0jLF35fwnyySMITMt5/pqrv5qkM
+	kHi0v0Dp6s87W4MQBgx0IEM9u8n/ADoQPrSKXLXeSWKmxNPLweWGCk6vlwgg09VD
+	w==
 Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4euefy47q6-1
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4euefum7u8-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 19 Jun 2026 15:21:08 +0000 (GMT)
+	Fri, 19 Jun 2026 15:21:10 +0000 (GMT)
 Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.7/8.18.1.7) with ESMTP id 65JF37Ni038847;
-	Fri, 19 Jun 2026 15:21:07 GMT
+	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.7/8.18.1.7) with ESMTP id 65JF36jx038814;
+	Fri, 19 Jun 2026 15:21:09 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 4ev14g7y36-1
+	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 4ev14g7y4k-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 19 Jun 2026 15:21:07 +0000 (GMT)
+	Fri, 19 Jun 2026 15:21:09 +0000 (GMT)
 Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.18.1.12/8.18.1.12) with ESMTP id 65JFL6VQ012172;
-	Fri, 19 Jun 2026 15:21:06 GMT
+	by pps.reinject (8.18.1.12/8.18.1.12) with ESMTP id 65JFL6VS012172;
+	Fri, 19 Jun 2026 15:21:09 GMT
 Received: from bpf.uk.oracle.com (dhcp-10-154-57-173.vpn.oracle.com [10.154.57.173])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 4ev14g7y1b-1;
-	Fri, 19 Jun 2026 15:21:06 +0000 (GMT)
+	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 4ev14g7y1b-2;
+	Fri, 19 Jun 2026 15:21:09 +0000 (GMT)
 From: Alan Maguire <alan.maguire@oracle.com>
 To: dwarves@vger.kernel.org
 Cc: vineet.gupta@linux.dev, yonghong.song@linux.dev, emil@etsalapatis.com,
         jose.marchesi@oracle.com, david.faust@oracle.com,
         Alan Maguire <alan.maguire@oracle.com>
-Subject: [PATCH dwarves 1/2] btf_loader: Attach decl tags to struct and union members
-Date: Fri, 19 Jun 2026 16:21:02 +0100
-Message-ID: <20260619152103.1956732-1-alan.maguire@oracle.com>
+Subject: [PATCH dwarves 2/2] tests: add decl tag struct member test
+Date: Fri, 19 Jun 2026 16:21:03 +0100
+Message-ID: <20260619152103.1956732-2-alan.maguire@oracle.com>
 X-Mailer: git-send-email 2.43.5
+In-Reply-To: <20260619152103.1956732-1-alan.maguire@oracle.com>
+References: <20260619152103.1956732-1-alan.maguire@oracle.com>
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
@@ -67,116 +71,96 @@ X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0
  mlxlogscore=999 lowpriorityscore=0 adultscore=0 bulkscore=0 spamscore=0
  suspectscore=0 malwarescore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx
  scancount=1 engine=8.19.0-2606160000 definitions=main-2606190143
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNjE5MDE0NSBTYWx0ZWRfXxevjbRHvdZfT
- mwM04NbBgSmLDJJTeKYHEeKLTBW1POwfeqJzikFS4fR0ktTSml1VQ+N38huUxs1OtrWz5HU03ic
- RDUyKb4CvbifOk0SZFxaNs/mKHrVuNOD5Fd7vK8LwxUir1Ar/xuyF0RyPbJeF0rHuYLLuUq9X01
- LKKTdxf0TL1Pj0dCPKjtyNwSIGErW1mRwCp/U0gTylQksRQLF54lucVrKhBPCKbPdRvNYqLN3Em
- pluHvXiZUuA8eywoCogrkAP0dE/yWwkK3pvqkm/e4mTzdXF4/f7zYSvCKZVz0dL/ghbH3+dpc/Q
- MeNbhpga7MtaPx6kR2Lh500qxAlK/qywtUQPy7Ebf72IxyMBwa4ICkN6md7kDwAVtEK+RD3mdqj
- pqS4a8c5pE6yNO/IF8gmDsjWCAuwqhUphKP0r8nY9vm/jHDJupfngc5jA0orBUETyFWewpIONAp
- Bd2Lc89SjnNynNNbSmQ==
-X-Authority-Analysis: v=2.4 cv=Xt7K/1F9 c=1 sm=1 tr=0 ts=6a355e64 cx=c_pps
+X-Authority-Analysis: v=2.4 cv=S4XpBosP c=1 sm=1 tr=0 ts=6a355e66 cx=c_pps
  a=XiAAW1AwiKB2Y8Wsi+sD2Q==:117 a=XiAAW1AwiKB2Y8Wsi+sD2Q==:17
  a=FelO9ux0wxsA:10 a=VkNPw1HP01LnGYTKEx00:22 a=jiCTI4zE5U7BLdzWsZGv:22
- a=3I1J8UUJPc9JN9BFgKH3:22 a=yPCof4ZbAAAA:8 a=5Vtxk2qCIq0aV6RMEb8A:9
- a=O8hF6Hzn-FEA:10
-X-Proofpoint-Spam-Info: AW1haW4tMjYwNjE5MDE0NSBTYWx0ZWRfX0TOcUcoZmmUa
- jvOU1ff+hI5NnaRFmr/fKdMu+AsQGuIaAfLpSrmlzTga+Jgg6rnRyFcXGZnMn5er+TAYXBmj6NH
- R4WR4YFuoJU5Xhif/cd9WC8ppPPC9gzJEAJyezCxIDyOjvZ657ln
-X-Proofpoint-GUID: ls8jaBzCzs63Z4Fmgdf6YkRtBYNLZVCP
-X-Proofpoint-ORIG-GUID: ls8jaBzCzs63Z4Fmgdf6YkRtBYNLZVCP
+ a=x4eqshVgHu-cdnggieHk:22 a=yPCof4ZbAAAA:8 a=vkzzdnK_i78tParV0psA:9
+X-Proofpoint-Spam-Info: AW1haW4tMjYwNjE5MDE0NSBTYWx0ZWRfXweGq5zqor1wY
+ q0RXOWZcVwwo/77AcujrZXZi975h64SrCOjY1ppdv2JwnwZtgT9z4L1ReD/eHkOYqgi3Rq/EStj
+ aD3Nci9QFUPh85NXxwMxWRpHeSjulVqKyr1CaZpNZaFb6Dnkp2H1
+X-Proofpoint-ORIG-GUID: Vt-nEjZ5Qceq0J0QHXw9uXXgr12Fcnku
+X-Proofpoint-GUID: Vt-nEjZ5Qceq0J0QHXw9uXXgr12Fcnku
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNjE5MDE0NSBTYWx0ZWRfXyYsKncRij0XV
+ biK0yKP/RfSX+XMrjkxbYVdSuBzOFD+aCc7KSzZqn2WFcS6M0/R9YKjYrtus3nS37u5XP0lWX6K
+ sa48GTBkaqgpwOSYrj8Qrdit4b+IqfEp2kjxMq1Iiq7rWWnM0vsY+TdhiUISNqUwkRy8M1k8TQo
+ Jb5Jd8T7wRj3b8X9cw4phq58Ro4HZFiR5d3+lmQarLj5G3FKvtGOL9Be2GgfNhTQeIydyKqJ90V
+ +EO63xnUjd/FJ23XzHJ5sw8O5zJ+FH8Z5/K289hQGm8BkK0qoe/3J6UIT6sbrPMXW2WVDGxFUyN
+ Gp7tCB4C11AKbk+4PKTXlQdvyIzRKkMHdUCK222E68nZfJvkPj4t0bp3Ciy+On+V1caw4psBASf
+ REnDKL+jh48vRwS4tmDvYTDB0B3x6smIwqlG6J9mS8S4cDIuEMJ6HoH9857xNjvj1fJI45Cxd9f
+ thszrCESvagGDT+vzIg==
 
-BTF_KIND_DECL_TAG with a non-negative component_idx can target either a
-function parameter or a struct/union member. The BTF loader only resolved
-the function-parameter case, so member decl tags were left attached to the
-aggregate type and were not shown by pahole.
-
-Add member lookup by component_idx for struct/union types and print stored
-attributes from class_member__fprintf().
+Extend the decl-tag selftest with a tagged member and verify
+it is displayed.
 
 Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
 ---
- btf_loader.c      | 35 +++++++++++++++++++++++++++++++++--
- dwarves_fprintf.c |  3 +++
- 2 files changed, 36 insertions(+), 2 deletions(-)
+ tests/pfunct-btf-decl-tags.sh | 31 +++++++++++++++++++++++++++----
+ 1 file changed, 27 insertions(+), 4 deletions(-)
 
-diff --git a/btf_loader.c b/btf_loader.c
-index 92d4832..406ee28 100644
---- a/btf_loader.c
-+++ b/btf_loader.c
-@@ -506,10 +506,24 @@ static struct tag *function__parameter(const struct function *func, struct cu *c
- 	return ftype__parameter(tag__ftype(tag), component_idx);
+diff --git a/tests/pfunct-btf-decl-tags.sh b/tests/pfunct-btf-decl-tags.sh
+index 520148b..89050d1 100755
+--- a/tests/pfunct-btf-decl-tags.sh
++++ b/tests/pfunct-btf-decl-tags.sh
+@@ -43,6 +43,12 @@ __tag(a) __tag(b)          void bar(void) {}
+ __tag(a)                   void buz(void) {}
+ void qux(int __tag(param_a) arg) {}
+ 
++struct tagged {
++	int __tag(member_tag) member;
++};
++
++struct tagged tagged_global;
++
+ EOF
+ )
+ 
+@@ -72,18 +78,18 @@ void qux(param_a int arg);
+ EOF
+ )
+ 
++expected_member="member_tag int member;"
++
+ run_test() {
+ 	local compiler=$1
+ 	local tmpobj=$2
++	local member_out
+ 
+ 	info_log "Testing with $compiler"
+ 	out=$(pfunct -P -F btf $tmpobj | awk "$sort_tags" | sort)
+ 	d=$(diff -u <(echo "$expected") <(echo "$out"))
+ 
+-	if [[ "$d" == "" ]]; then
+-		info_log "  passed"
+-		return 0
+-	else
++	if [[ "$d" != "" ]]; then
+ 		error_log "pfunct output does not match expected ($compiler):"
+ 		info_log "$d"
+ 		info_log
+@@ -91,6 +97,23 @@ run_test() {
+ 		info_log "$out"
+ 		return 1
+ 	fi
++
++	member_out=$(pahole -F btf $tmpobj | awk '
++		/member_tag/ {
++			sub(/;.*/, ";");
++			gsub(/[[:space:]]+/, " ");
++			sub(/^ /, "");
++			print;
++		}')
++	if [[ "$member_out" != "$expected_member" ]]; then
++		error_log "pahole member decl tag output does not match expected ($compiler):"
++		info_log "expected: $expected_member"
++		info_log "got:      $member_out"
++		return 1
++	fi
++
++	info_log "  passed"
++	return 0
  }
  
-+static struct tag *type__member(struct type *type, int component_idx)
-+{
-+	struct class_member *member;
-+	int idx = 0;
-+
-+	type__for_each_data_member(type, member) {
-+		if (idx == component_idx)
-+			return &member->tag;
-+		++idx;
-+	}
-+
-+	return NULL;
-+}
-+
- static int process_decl_tag(struct cu *cu, const struct btf_type *tp)
- {
- 	int component_idx = btf_decl_tag(tp)->component_idx;
--	struct tag *tag = cu__type(cu, tp->type);
-+	struct tag *tag;
- 	struct attributes *tmp;
- 
- 	tag = cu__function(cu, tp->type);
-@@ -522,7 +536,24 @@ static int process_decl_tag(struct cu *cu, const struct btf_type *tp)
- 		}
- 	}
- 
--	if (tag == NULL)
-+	if (tag == NULL) {
-+		tag = cu__type(cu, tp->type);
-+
-+		if (component_idx >= 0 && tag != NULL) {
-+			if (tag != NULL && (tag__is_struct(tag) || tag__is_union(tag))) {
-+				tag = type__member(tag__type(tag), component_idx);
-+				if (tag == NULL) {
-+					fprintf(stderr, "WARNING: BTF_KIND_DECL_TAG for unknown member %d in BTF id %d\n",
-+						component_idx, tp->type);
-+					return 0;
-+				}
-+			} else {
-+				tag = NULL;
-+			}
-+		}
-+	}
-+
-+	if (tag == NULL && component_idx < 0)
- 		tag = cu__tag(cu, tp->type);
- 
- 	if (tag == NULL) {
-diff --git a/dwarves_fprintf.c b/dwarves_fprintf.c
-index ab1c381..04f6569 100644
---- a/dwarves_fprintf.c
-+++ b/dwarves_fprintf.c
-@@ -963,6 +963,7 @@ out_type_not_found:
- static size_t class__fprintf_cacheline_boundary(struct conf_fprintf *conf,
- 						uint32_t offset,
- 						FILE *fp);
-+static size_t tag__attributes_fprintf(const struct tag *tag, FILE *fp);
- 
- static size_t class_member__fprintf(struct class_member *member, bool union_member,
- 				     struct tag *type, const struct cu *cu,
-@@ -996,6 +997,8 @@ static size_t class_member__fprintf(struct class_member *member, bool union_memb
- 	if (member->is_static)
- 		printed += fprintf(fp, "static ");
- 
-+	printed += tag__attributes_fprintf(&member->tag, fp);
-+
- 	/* For struct-like constructs, the name of the member cannot be
- 	 * conflated with the name of its type, otherwise __attribute__ are
- 	 * printed in the wrong order.
+ failed=0
 -- 
 2.43.5
 
