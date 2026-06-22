@@ -1,40 +1,40 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BB1B34D3B2
-	for <dwarves@vger.kernel.org>; Mon, 22 Jun 2026 20:25:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF28F34D4F9
+	for <dwarves@vger.kernel.org>; Mon, 22 Jun 2026 20:25:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782159919; cv=none; b=dL+z1qgJodc76GF5gcChkGrzpr3vlsGpqnocZJcGzJTGr8X7/0hkS0Pgo6YRa6FyRxJNRmQhIZ2ExpuQG0JgaUB9INJ6jqiCh1kwexd17xMIu0x+CoYMIUFmw2u6AxrJGFj4VCqO1ejy++SsDHOvULha4TINA9RA+UyxlHfHMYY=
+	t=1782159921; cv=none; b=Axn4UPhNEJmCCQHJ9s5klUfQbGUGxsb1+SGM0oEwEJFvU6VOHmip/rqBYSPsVWl/JWEG3RWdNJGUJXBWrGMW7VUb0sO5OVfqLBIKDQ1FAwUpZ2euQn04dY1kDRiT3njCvg+maMeu0PI6iTYfcU5MLLgJrfuDReWqYTLJQ64niVo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782159919; c=relaxed/simple;
-	bh=wTodIEvl9omlqnNMDeTKrxpcN0fylKgsiW5kBSeG/Ig=;
+	s=arc-20240116; t=1782159921; c=relaxed/simple;
+	bh=YcGuWCIkQwYygIr8VX51cTUe0NmuFtohGlTfpu76TQ0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=C/gDT2AD6Kixgcdt+iiCY9hsNYY0R9waqFKCb1wwBRjOmNtmlzaq+F0iSZ+qajq1ccXowoo8klRkHdpEurN4PyDSKf7KU+W88P4FQMHLADySvx3epnfa7JGbumEA2Lq7OyEEBgMrHma0aZ6+qjIwF/3ecOIYOhWQ6uvI70sSZ8g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CUH9yq0W; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version:Content-Type; b=Rbzykx/z3BPFXPqg8y4frKCI7awI0B57MW66v6gh9d0wquFzd1POSQUxZ9TtQnz8WvqelX8yy9yfXCm/NIJ+P9BnNNTJJXbKFzlGGKxEkmy6jBwISo4Hi+tU5Af2qgb0/C/YTTN6i9bhiZ744pTJBTwZ9AkdpOsPuDmuDQPm8nE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=D8wloIKj; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CUH9yq0W"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22C021F00A3E;
-	Mon, 22 Jun 2026 20:25:15 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="D8wloIKj"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A9E41F000E9;
+	Mon, 22 Jun 2026 20:25:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782159918;
-	bh=k7kII5GO3oTpFhw4wWyKGc8UGbK/hwvW484kdYfuTsk=;
+	s=k20260515; t=1782159920;
+	bh=DWd9wJT9tg0bhnZK6NAynJi5KNBjhSw2Tzfr0Abb59c=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=CUH9yq0WB6aVACnq770RgNBoITws/EnTnHm22gHGM0/Lza+45F0VS53lBH8lK/pW+
-	 mJLKCFzr3HMEs99/thiKxqy6q3910EbjO4Ku54gIBOg5zKbA7AlJrW/uSZKcyKN396
-	 +fMYpALKWjr3DSsvt5CGSyZfntajmI2gObkmvgPWyAWfWR+AQGMN+1Qz1X1JdFJ6//
-	 GLSDBo/kC2JH8VMebY0S6zLYEKWOCtPQuWHNoikbhgIk3Z9MwVg4bZr1ZLlWkdPp2M
-	 lKWINSfh83pFxfxSEzDMHbmJvJmkfLka1DnlUB8ZHzxBJobiafySTC4P4Yr8vl+T23
-	 xoT11yzwtIa7g==
+	b=D8wloIKjn1vUGcuPcMaFCwLLdPG/upyRjo92K2+6ysTmKzwxJskkP3lVi243H+d4a
+	 YZzfrw0SqdFCuAjoLXhwEoNRLKKWQP7+e4BOHb7IfRPtBqUjMmdauIv5e8lEop+OOn
+	 yGTkIoHwUMSmR9VzSvmoNAxKTPfDhxdueCxxQUrXulf+wc+IqBDMD/eurIAAjtoj7K
+	 ZsBSKX1qg97p2JEOCB8+WlNkcd2iy4FYdN+UgwPm4ZyOIdnwMMB/kQm155czn9W4CH
+	 Kt91eN959ozzu7gIaAt11+U3CNetkJcAWvYqbnHQPhBJ9Slln/zZZKA6njFKiyWqtX
+	 sAzcBiO6IXemQ==
 From: Arnaldo Carvalho de Melo <acme@kernel.org>
 To: Alan Maguire <alan.maguire@oracle.com>
 Cc: Jiri Olsa <jolsa@kernel.org>,
 	Clark Williams <williams@redhat.com>,
 	dwarves@vger.kernel.org,
 	Arnaldo Carvalho de Melo <acme@redhat.com>
-Subject: [PATCH 13/16] dwarf_loader: Fix cus__merging_cu failing to detect DW_FORM_ref_addr
-Date: Mon, 22 Jun 2026 17:24:36 -0300
-Message-ID: <20260622202441.14799-14-acme@kernel.org>
+Subject: [PATCH 14/16] tests: Add inter-CU type reference comparison test
+Date: Mon, 22 Jun 2026 17:24:37 -0300
+Message-ID: <20260622202441.14799-15-acme@kernel.org>
 X-Mailer: git-send-email 2.54.0
 In-Reply-To: <20260622202441.14799-1-acme@kernel.org>
 References: <20260622202441.14799-1-acme@kernel.org>
@@ -49,78 +49,105 @@ Content-Transfer-Encoding: 8bit
 
 From: Arnaldo Carvalho de Melo <acme@redhat.com>
 
-cus__merging_cu() scans abbreviation tables looking for DW_FORM_ref_addr
-to detect binaries with inter-CU type references (like Rust CUs in
-perf). When found, it triggers the merged CU loading path that can
-resolve cross-CU references.
+When the perf binary includes Rust CUs, some DWARF types reference types
+in other CUs via DW_FORM_ref_addr. The parallel loading path processes
+each CU independently, so cross-CU references fail during
+cu__recode_dwarf_types() and the types become unresolved (void).
 
-However, dwarf_getabbrevattr() can fail on certain attributes, notably
-when DW_FORM_implicit_const is used (DWARF5). The function was treating
-this failure as terminal, returning false immediately without scanning
-the remaining abbreviations. This prevented detection of
-DW_FORM_ref_addr in later CUs, causing the parallel path to be taken
-instead — which cannot resolve cross-CU references.
+The force_cu_merging feature worked around this by serializing loading
+into a mega-CU, but disables parallel DIE processing. This test
+compares both outputs to validate that cross-CU references are
+correctly resolved without needing force_cu_merging.
 
-For example, with the perf binary containing 507 CUs where 7 Rust CUs
-(CU 209-215) use DW_FORM_ref_addr, the function was failing at CU 0
-abbreviation 20 attribute 8 and returning false, never reaching the
-Rust CUs.
+Before the preceding fix, 314 cross-CU references failed, producing 70
+lines of output difference across 12 diff hunks:
 
-Before:
-
-  $ pahole -F dwarf ~/bin/perf 2>&1 | grep "couldn't find" | wc -l
-  314
-  $ diff <(pahole -F dwarf ~/bin/perf 2>/dev/null) \
-         <(pahole --features=force_cu_merging -F dwarf ~/bin/perf 2>/dev/null) \
-    | grep '^[<>]' | wc -l
+  $ pahole -F dwarf ~/bin/perf 2>/dev/null > parallel.txt
+  $ pahole --features=force_cu_merging -F dwarf ~/bin/perf 2>/dev/null > merged.txt
+  $ diff parallel.txt merged.txt | grep '^[<>]' | wc -l
   70
+  $ diff -u parallel.txt merged.txt | head -20
+  --- parallel.txt
+  +++ merged.txt
+  @@ -10821,7 +10821,11 @@
+   	usize                      __0 __attribute__((__aligned__(8)));
+   	struct ThreadInfo          __1 __attribute__((__aligned__(8)));
 
-After:
+  +	/* XXX last struct has 8 bytes of padding, 1 hole */
+  +
+   	/* size: 48, cachelines: 1, members: 2 */
+  +	/* member types with holes: 1, total: 1 */
+  +	/* paddings: 1, sum paddings: 8 */
+   	/* forced alignments: 2 */
+   	/* last cacheline: 48 bytes */
+   } __attribute__((__aligned__(8)));
 
-  $ pahole -F dwarf ~/bin/perf 2>&1 | grep "couldn't find" | wc -l
-  0
-  $ diff <(pahole -F dwarf ~/bin/perf 2>/dev/null) \
-         <(pahole --features=force_cu_merging -F dwarf ~/bin/perf 2>/dev/null) \
-    | wc -l
-  0
-
-The fix changes dwarf_getattrcnt() failure to skip the current
-abbreviation (goto next_abbrev) and dwarf_getabbrevattr() failure to
-skip to the next attribute (continue), both continuing to scan for
-DW_FORM_ref_addr instead of aborting the entire detection.
+The preceding commit fixed the detection of DW_FORM_ref_addr in
+cus__merging_cu(), making this test pass.
 
 Assisted-by: Claude:claude-opus-4-6
 Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
 ---
- dwarf_loader.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ tests/inter_cu_refs.sh | 50 ++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 50 insertions(+)
+ create mode 100755 tests/inter_cu_refs.sh
 
-diff --git a/dwarf_loader.c b/dwarf_loader.c
-index 7091655588cd8b4d..1ab680a4c30634c8 100644
---- a/dwarf_loader.c
-+++ b/dwarf_loader.c
-@@ -3761,7 +3761,7 @@ static bool cus__merging_cu(Dwarf *dw, Elf *elf)
- 
- 			size_t attrcnt;
- 			if (dwarf_getattrcnt (abbrev, &attrcnt) != 0)
--				return false;
-+				goto next_abbrev;
- 
- 			unsigned int attr_num, attr_form;
- 			Dwarf_Off aboffset;
-@@ -3769,10 +3769,11 @@ static bool cus__merging_cu(Dwarf *dw, Elf *elf)
- 			for (j = 0; j < attrcnt; ++j) {
- 				if (dwarf_getabbrevattr (abbrev, j, &attr_num, &attr_form,
- 							 &aboffset))
--					return false;
-+					continue;
- 				if (attr_form == DW_FORM_ref_addr)
- 					return true;
- 			}
-+next_abbrev:
- 
- 			offset += length;
- 		}
+diff --git a/tests/inter_cu_refs.sh b/tests/inter_cu_refs.sh
+new file mode 100755
+index 0000000000000000..6827bf83931eb3ed
+--- /dev/null
++++ b/tests/inter_cu_refs.sh
+@@ -0,0 +1,50 @@
++#!/bin/sh
++# SPDX-License-Identifier: GPL-2.0-only
++# Copyright © 2026 Red Hat Inc, Arnaldo Carvalho de Melo <acme@redhat.com>
++#
++# Compare default CU loading with explicit force_cu_merging for binaries
++# with inter-CU type references (e.g. Rust CUs in perf).
++#
++# When cus__merging_cu() correctly detects DW_FORM_ref_addr usage, it
++# automatically falls back to the merged CU path.  This test verifies
++# that the automatic detection produces the same output as explicitly
++# forcing CU merging.
++
++. ./test_lib.sh
++
++outdir=$(make_tmpdir)
++trap cleanup EXIT
++
++title_log "Compare parallel vs merged CU loading for inter-CU type references."
++
++perf=$(which perf 2>/dev/null)
++if [ -z "$perf" ] ; then
++	info_log "skip: No 'perf' binary available"
++	test_skip
++fi
++
++if ! pahole --features=force_cu_merging -F dwarf -C perf_event_header "$perf" 2>/dev/null | grep -q "^struct perf_event_header {" ; then
++	info_log "skip: $perf doesn't have 'struct perf_event_header' type info"
++	test_skip
++fi
++
++parallel_out=$outdir/parallel.txt
++merged_out=$outdir/merged.txt
++
++if ! pahole -F dwarf "$perf" > "$parallel_out" 2>/dev/null ; then
++	error_log "FAIL: pahole failed processing $perf (parallel mode)"
++	test_fail
++fi
++
++if ! pahole --features=force_cu_merging -F dwarf "$perf" > "$merged_out" 2>/dev/null ; then
++	error_log "FAIL: pahole failed processing $perf (merged mode)"
++	test_fail
++fi
++
++if diff -u "$parallel_out" "$merged_out" > /dev/null 2>&1 ; then
++	test_pass
++else
++	nr_diff=$(diff "$parallel_out" "$merged_out" | grep '^[<>]' | wc -l)
++	error_log "FAIL: $nr_diff lines differ between parallel and merged CU loading"
++	test_fail
++fi
 -- 
 2.54.0
 
