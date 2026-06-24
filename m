@@ -1,41 +1,40 @@
-Received: from out-178.mta1.migadu.com (out-178.mta1.migadu.com [95.215.58.178])
+Received: from out-170.mta1.migadu.com (out-170.mta1.migadu.com [95.215.58.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2968C155C82
-	for <dwarves@vger.kernel.org>; Wed, 24 Jun 2026 01:21:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6711C19D8A8
+	for <dwarves@vger.kernel.org>; Wed, 24 Jun 2026 01:45:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782264101; cv=none; b=RUc0Zl2s3S1L3e2yGwZ4okEb8j3GD+Oz5nslENmE6f47OdpQRs3HbqCf+ezmLpc3n7qgImvq5dOKgonCne8wkL2vMHLNmdja9AbsZglaj9sTvgMiFKaxeMDe9f/WX2d94AwEHQEU+bqHTZF3fi5nQN9JT7zKrSa+5v2MUdrg2k4=
+	t=1782265542; cv=none; b=cjQ4hlMnRsxYSAdox9ccFBo3aIrUnjinZSLy5vTXJaRKt0gZiHdcklA4Cv5bupMhfQ/j4DDcSZi83bPaQhU1LGsGSDls7Pr3FwuEdSD8Vf/amfVL9fcmwgCwPXvnpGmcOXmyJRiQDZlXBXoe16MwWMqjPT0C68dwIJM8Zn6cDTE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782264101; c=relaxed/simple;
-	bh=OE3fSHufB/LuEgmF/EsVYwiZMhTsMj64DJi1OHdsRis=;
+	s=arc-20240116; t=1782265542; c=relaxed/simple;
+	bh=CngTVle8YDcuOTJdYITzR0b8sLOqOysx2B7lKtSiKkg=;
 	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=XLaa3hfJ6luIbb02a4Bm0Jg21g1ixrPdrNC7LHvMuSBonbGZP/8kEHxQSrrlYOnDwcpjlg1+3x0WgbWbJ0WOZoaZOaJU2rdEG+SrezZF6m7SL1RY7xTqLOzwn70+vRjDEcnoESF54WPDvL9bTIXA+DckL0QmKOd8i4X/p3GWqKk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=DIrh1rnV; arc=none smtp.client-ip=95.215.58.178
+	 In-Reply-To:Content-Type; b=RMwOQqdJ0LMPYbkkNXKeYnaQdbVvwmZ96/ehFl0QzqA7O/ymibYHZBYk8612efGmgFNE9cnqmeSWfTWjqg4xZr/jDDGbq5x1y1VF6ZOoBAvT5fqm+xsdgJudwWxUwtKRp8UB2psqhrdeOi60wcJ2DLW5RXBsShd84/lAy96Oby8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=FsJjBbmp; arc=none smtp.client-ip=95.215.58.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="DIrh1rnV"
-Message-ID: <7e2960f3-cad7-46a5-a691-29228fb696c6@linux.dev>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="FsJjBbmp"
+Message-ID: <5d332838-8f41-43f7-9509-ec97dcbb0578@linux.dev>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1782264096;
+	t=1782265529;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=f/QG5bAo3i7DHmVc1k0D7c5ENPcyHrpmZqoruK2f0jA=;
-	b=DIrh1rnVmXjCLJRMlXl4ZBHifdfRPyYo6n3aBipvJTixr/cm/bCeAzTAGC5qVGGqD2gKcg
-	DGtl3J4EEerJh5RvP7ucE+Mk2hpI1hqeY+OkX0d7JPHQsKALed7C8wtbVG3zMoGPTV5m6S
-	OeExji84K8N1I+XRgAUSw+X5YMWF/uk=
-Date: Tue, 23 Jun 2026 18:21:16 -0700
+	bh=7quBymQv6qig28yFts2+yXJkHxS0N3Z7ODbIG7Vxt8Y=;
+	b=FsJjBbmpxqDSJl59dI8pzd4XeKDt9Dbva3CIHnOy8e4tJihSRaQOVd+XlbK/umYfsBCGvk
+	DWBybJPRyTla+vOmtqGe2Wm+j1w5aVvKr4pdZemokvQpx7DZyVJkwkHgwmMOk4VmP5Hyf3
+	1MgqY6YC1x6w7lO8zN6GGVoB8X+v2Os=
+Date: Tue, 23 Jun 2026 18:45:17 -0700
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH dwarves v8 3/5] dwarf_loader: Analyze per-parameter
- information for true signatures
+Subject: Re: [PATCH dwarves v8 4/5] btf_encoder: Emit true function signatures
 Content-Language: en-GB
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 From: Yonghong Song <yonghong.song@linux.dev>
@@ -44,8 +43,8 @@ To: Alan Maguire <alan.maguire@oracle.com>,
 Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
  bpf@vger.kernel.org, kernel-team@fb.com
 References: <20260623222850.3290612-1-yonghong.song@linux.dev>
- <20260623222906.3293063-1-yonghong.song@linux.dev>
-In-Reply-To: <20260623222906.3293063-1-yonghong.song@linux.dev>
+ <20260623222911.3294083-1-yonghong.song@linux.dev>
+In-Reply-To: <20260623222911.3294083-1-yonghong.song@linux.dev>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
@@ -53,247 +52,148 @@ X-Migadu-Flow: FLOW_OUT
 
 
 On 6/23/26 3:29 PM, Yonghong Song wrote:
-> Add a function-level pass, function__analyze_parameter_locations(), run
-> from cu__resolve_func_ret_types_optimized() which walks a function's
-> parameters in ABI argument-register order and consumes the location state
-> decoded by parameter__decode_location() in the previous commit. Each
-> parameter advances the expected-register index by the number of argument
-> registers it occupies (parameter__abi_slots(), e.g. a two-eightbyte
-> aggregate consumes two registers).
->
-> For every producer it keeps the existing bookkeeping, now driven by the
-> decoded fields:
->   - a parameter with no location, a constant value, or (for non-clang) no
->     register found is marked optimized out
->   - a parameter found in a register other than the expected one is marked
->     unexpected_reg
->
-> When true_signature is enabled it reconstructs the real register-level
-> signature:
->   - parameters that were optimized out are dropped from the signature
->   - a parameter whose location cannot be tied to its expected register,
->     wrong register, no register found, or a non-aggregate sitting on the
->     stack - marks the function unexpected_reg so no untrustworthy signature
->     is emitted;
->   - an aggregate genuinely passed on the stack (passed_in_memory) is kept;
->   - an aggregate split across registers via DW_OP_piece is kept whole when
->     it is fully used or the next parameter still lands on its expected
->     register, otherwise it is rewritten to the single member actually passed
->     in a register (true_sig_*).
->
-> Together with the decoding commit this replaces the previous inline,
-> per-parameter register check in parameter__new().
+> When true_signature is enabled, consume the per-parameter analysis the
+> DWARF loader recorded while saving a function's BTF:
+>   - Drop parameters that were optimized out of a signature-changed function
+>     (cu->producer_clang && param->optimized), adjusting the saved
+>     parameter count accordingly.
+>   - When a parameter was reduced to a single aggregate member
+>     (param->true_sig_member_name is set), emit it under the synthesized name
+>     "<parameter>__<member>" so the BTF reflects the value actually passed in
+>     the register.
 >
 > Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 > ---
->   dwarf_loader.c | 152 ++++++++++++++++++++++++++++++++++++++++++++++++-
->   1 file changed, 149 insertions(+), 3 deletions(-)
+>   btf_encoder.c | 26 +++++++++++++++++++++++++-
+>   1 file changed, 25 insertions(+), 1 deletion(-)
 >
-> diff --git a/dwarf_loader.c b/dwarf_loader.c
-> index 01954c6..7ccad93 100644
-> --- a/dwarf_loader.c
-> +++ b/dwarf_loader.c
-> @@ -3013,6 +3013,150 @@ static void ftype__recode_dwarf_types(struct tag *tag, struct cu *cu)
->   	}
->   }
+> diff --git a/btf_encoder.c b/btf_encoder.c
+> index d5af706..eb6ccaa 100644
+> --- a/btf_encoder.c
+> +++ b/btf_encoder.c
+> @@ -1297,14 +1297,38 @@ static int32_t btf_encoder__save_func(struct btf_encoder *encoder, struct functi
+>   	state->reordered_parm = ftype->reordered_parm;
+>   	ftype__for_each_parameter(ftype, param) {
+>   		const char *name;
+> +		char *final_name = NULL;
 >   
-> +static struct parameter *ftype__next_parameter(struct ftype *ftype, struct parameter *parm)
-> +{
-> +	if (parm->tag.node.next == &ftype->parms)
-> +		return NULL;
-> +	return list_entry(parm->tag.node.next, struct parameter, tag.node);
-> +}
-> +
-> +static int parameter__abi_slots(const struct parameter *parm, const struct cu *cu)
-> +{
-> +	int slots;
-> +
-> +	if (!cu->agg_use_two_regs || parm->type_byte_size <= cu->addr_size)
-> +		return 1;
-> +
-> +	slots = (parm->type_byte_size + cu->addr_size - 1) / cu->addr_size;
-> +	return slots > 0 ? slots : 1;
-> +}
-> +
-> +static bool parameter__has_piece_info(const struct parameter *parm)
-> +{
-> +	return parm->first_reg_fields || parm->second_reg_fields;
-> +}
-> +
-> +static bool parameter__uses_full_aggregate(const struct parameter *parm)
-> +{
-> +	return parm->first_reg_fields && parm->second_reg_fields;
-> +}
-> +
-> +static bool ftype__next_parameter_preserves_slots(struct ftype *ftype, struct parameter *parm,
-> +						  int reg_idx, int slots, struct cu *cu)
-> +{
-> +	struct parameter *next = ftype__next_parameter(ftype, parm);
-> +	int next_reg_idx;
-> +
-> +	if (!next || next->loc_reg == PARAMETER_UNKNOWN_REG)
-> +		return false;
-> +
-> +	next_reg_idx = reg_idx + slots;
-> +	return next_reg_idx < cu->nr_register_params &&
-> +	       next->loc_reg == cu->register_params[next_reg_idx];
-> +}
-> +
-> +static bool parameter__apply_true_sig_member(struct parameter *parm, struct cu *cu)
-> +{
-> +	struct dwarf_tag tmp = {};
-> +	struct dwarf_tag *dtype;
-> +
-> +	if (!parm->true_sig_member_name || parm->true_sig_type == 0)
-> +		return false;
-> +
-> +	tmp.type = parm->true_sig_type;
-> +	tmp.from_types_section.type = parm->true_sig_type_from_types;
-> +	dtype = __dwarf_cu__find_type_by_ref(cu->priv, tmp.type, tmp.from_types_section.type);
-> +	if (!dtype)
-> +		return false;
-> +
-> +	parm->tag.type = dtype->small_id;
-> +	return true;
-> +}
-> +
-> +static void function__analyze_parameter_locations(struct function *fn, struct cu *cu,
-> +						  struct conf_load *conf)
-> +{
-> +	struct ftype *ftype = &fn->proto;
-> +	struct parameter *pos;
-> +	bool true_sig_enabled = conf->true_signature;
-> +	int reg_idx = 0;
-> +
-> +	ftype__for_each_parameter(ftype, pos) {
-> +		bool consumes_register = true;
-> +		bool regs_available = reg_idx < cu->nr_register_params;
-> +		int slots = parameter__abi_slots(pos, cu);
-> +		int expected_reg = regs_available ? cu->register_params[reg_idx] : -1;
-> +		int reg_slots = pos->passed_in_memory ? 1 : slots;
-> +
-> +		if (pos->has_loc) {
-> +			if (true_sig_enabled && pos->loc_const_value) {
-> +				pos->optimized = 1;
-> +				consumes_register = false;
-> +				goto next;
-> +			}
-> +
-> +			if (!regs_available) {
-> +				consumes_register = false;
-> +				goto next;
-> +			}
-> +
-> +			if (true_sig_enabled && pos->loc_stack) {
-> +				if (pos->passed_in_memory)
-> +					consumes_register = false;
-> +				else
-> +					pos->unexpected_reg = 1;
-> +				goto next;
-> +			}
-> +
-> +			if (pos->loc_reg == PARAMETER_UNKNOWN_REG) {
-> +				if (true_sig_enabled)
-> +					pos->unexpected_reg = 1;
-> +				else
-> +					pos->optimized = 1;
-> +				goto next;
-> +			}
-> +
-> +			if (expected_reg >= 0 && expected_reg != pos->loc_reg) {
-> +				pos->unexpected_reg = 1;
-> +				goto next;
-> +			}
-> +
-> +			if (true_sig_enabled && parameter__has_piece_info(pos)) {
-> +				if (parameter__uses_full_aggregate(pos)) {
-> +					reg_idx += slots;
-> +					continue;
-> +				}
-> +
-> +				if (ftype__next_parameter_preserves_slots(ftype, pos, reg_idx, slots, cu)) {
-> +					pos->true_sig_member_name = 0;
-> +					reg_idx += slots;
-> +					continue;
-> +				}
-> +
-> +				if (parameter__apply_true_sig_member(pos, cu)) {
-> +					reg_idx++;
-> +					continue;
-> +				}
-> +			}
-> +		} else if (pos->has_const_value && !cu->producer_clang) {
-> +			pos->optimized = 1;
-> +		} else if (true_sig_enabled) {
-> +			if (regs_available &&
-> +			    ftype__next_parameter_preserves_slots(ftype, pos, reg_idx, slots, cu)) {
-> +				reg_idx += slots;
-> +				continue;
-> +			}
-> +
-> +			pos->optimized = 1;
-> +			consumes_register = false;
+>   		/* No location info/optimized + reordered means optimized out. */
+>   		if (ftype->reordered_parm && (!param->has_loc || param->optimized)) {
+>   			state->nr_parms--;
+>   			continue;
+>   		}
+> -		name = parameter__name(param) ?: "";
+> +		if (encoder->true_signature && encoder->cu->producer_clang && param->optimized) {
+> +			state->nr_parms--;
+> +			continue;
 > +		}
 > +
-> +next:
-> +		if (consumes_register)
-> +			reg_idx += reg_slots;
-> +	}
-> +}
+> +		name = parameter__name(param);
+> +		if (!name) {
+> +			name = "";
+> +		} else if (encoder->true_signature &&
+> +			   encoder->cu->producer_clang &&
+> +			   param->true_sig_member_name) {
+> +			/* Non-null param->true_sig_member_name indicates that the parameter
+> +			 * name is <parameter_name>__<field_name>.
+> +			 */
+> +			if (asprintf(&final_name, "%s__%s", name, param->true_sig_member_name) == -1) {
+> +				err = -ENOMEM;
+> +				goto out;
+> +			}
+> +			name = final_name;
+> +		}
 > +
->   static void lexblock__recode_dwarf_types(struct lexblock *tag, struct cu *cu)
->   {
->   	struct tag *pos;
-> @@ -3288,7 +3432,7 @@ static bool param__is_struct(struct cu *cu, struct tag *tag)
->   	}
->   }
->   
-> -static int cu__resolve_func_ret_types_optimized(struct cu *cu)
-> +static int cu__resolve_func_ret_types_optimized(struct cu *cu, struct conf_load *conf)
->   {
->   	struct ptr_table *pt = &cu->functions_table;
->   	uint32_t i;
-> @@ -3299,6 +3443,8 @@ static int cu__resolve_func_ret_types_optimized(struct cu *cu)
->   		struct function *fn = tag__function(tag);
->   		bool has_unexpected_reg = false, has_struct_param = false;
->   
-> +		function__analyze_parameter_locations(fn, cu, conf);
+>   		str_off = btf__add_str(btf, name);
+> +		if (final_name)
+> +			free(final_name);
 > +
->   		/* mark function as optimized if parameter is, or
->   		 * if parameter does not have a location; at this
->   		 * point location presence has been marked in
-> @@ -3477,7 +3623,7 @@ static int die__process_and_recode(Dwarf_Die *die, struct cu *cu, struct conf_lo
->   	if (ret != 0)
->   		return ret;
->   
-> -	return cu__resolve_func_ret_types_optimized(cu);
-> +	return cu__resolve_func_ret_types_optimized(cu, conf);
->   }
->   
->   static int class_member__cache_byte_size(struct tag *tag, struct cu *cu,
-> @@ -4240,7 +4386,7 @@ static int cus__merge_and_process_cu(struct cus *cus, struct conf_load *conf,
->   	 * encoded in another subprogram through abstract_origin
->   	 * tag. Let us visit all subprograms again to resolve this.
->   	 */
-> -	if (cu__resolve_func_ret_types_optimized(cu) != LSK__KEEPIT)
-> +	if (cu__resolve_func_ret_types_optimized(cu, conf) != LSK__KEEPIT)
->   		goto out_abort;
->   
->   	cu__finalize(cu, cus, conf);
+>   		if (str_off < 0) {
+>   			err = str_off;
+>   			goto out;
 
-Okay, I think there exists a problem here.
-For example, if there is function without nocall:
-      foo(a, b, c, d)
-where a: RDI, b/c: no locations, d: RCX
+Find another issue in this file, not related to the above.
+Just give a simple example for
 
-of another function with nocall:
-      bar(a, b, c, d)
-where a: RDI, b/c: no locations, d: RSI
+static inline void io_file_bitmap_set(struct io_file_table *table, int bit)
+{
+         WARN_ON_ONCE(test_bit(bit, table->bitmap));
+         __set_bit(bit, table->bitmap);
+         table->alloc_hint = bit + 1;
+}
 
-Without nocall, we expect the next argument e.g. 'b' will stay.
-Here, no-nocall means source signatures are not changed (although locations may differ from ABI).
+It is in a header file io_uring/filetable.h.
 
-With nocall, we expect the next argument e.g., 'b' will be optimized.
+We have inlined subprogram:
 
-I will fix it in the next revision.
+0x04fb6857:   DW_TAG_subprogram
+                 DW_AT_name      ("io_file_bitmap_set")
+                 DW_AT_decl_file ("/home/yhs/work/bpf-next/io_uring/filetable.h")
+                 DW_AT_decl_line (29)
+                 DW_AT_prototyped        (true)
+                 DW_AT_inline    (DW_INL_inlined)
+                       
+0x04fb685c:     DW_TAG_formal_parameter
+                   DW_AT_name    ("table")
+                   DW_AT_decl_file       ("/home/yhs/work/bpf-next/io_uring/filetable.h")
+                   DW_AT_decl_line       (29)
+                   DW_AT_type    (0x04fb6885 "io_file_table *")
+                            
+0x04fb6865:     DW_TAG_formal_parameter
+                   DW_AT_name    ("bit")
+                   DW_AT_decl_file       ("/home/yhs/work/bpf-next/io_uring/filetable.h")
+                   DW_AT_decl_line       (29)
+                   DW_AT_type    (0x04fa5103 "int")
+
+and
+
+0x04fb77d8:   DW_TAG_subprogram
+                 DW_AT_low_pc    (0xffffffff8273d430)
+                 DW_AT_high_pc   (0xffffffff8273d50c)
+                 DW_AT_frame_base        (DW_OP_reg7 RSP)
+                 DW_AT_call_all_calls    (true)
+                 DW_AT_abstract_origin   (0x04fb6857 "io_file_bitmap_set")
+                   
+0x04fb77e5:     DW_TAG_formal_parameter
+                   DW_AT_location        (indexed (0x11f) loclist = 0x00d4bcf7:
+                      [0xffffffff8273d430, 0xffffffff8273d45c): DW_OP_reg5 RDI
+                      [0xffffffff8273d45c, 0xffffffff8273d4c3): DW_OP_reg3 RBX
+                      [0xffffffff8273d4c3, 0xffffffff8273d4e6): DW_OP_entry_value(DW_OP_reg5 RDI), DW_OP_stack_value
+                      [0xffffffff8273d4e6, 0xffffffff8273d4f6): DW_OP_reg3 RBX
+                      [0xffffffff8273d4f6, 0xffffffff8273d50c): DW_OP_entry_value(DW_OP_reg5 RDI), DW_OP_stack_value)
+                   DW_AT_abstract_origin (0x04fb685c "table")
+                   
+0x04fb77ec:     DW_TAG_formal_parameter
+                   DW_AT_location        (indexed (0x120) loclist = 0x00d4bd23:
+                      [0xffffffff8273d430, 0xffffffff8273d464): DW_OP_reg4 RSI
+                      [0xffffffff8273d464, 0xffffffff8273d50c): DW_OP_entry_value(DW_OP_reg4 RSI), DW_OP_stack_value)
+                   DW_AT_abstract_origin (0x04fb6865 "bit")
+
+0x04ff5f5e:   DW_TAG_subprogram
+                 DW_AT_name      ("io_file_bitmap_set")
+                 DW_AT_decl_file ("/home/yhs/work/bpf-next/io_uring/filetable.h")
+                 DW_AT_decl_line (29)
+                 DW_AT_prototyped        (true)
+                 DW_AT_inline    (DW_INL_inlined)
+                      
+0x04ff5f63:     DW_TAG_formal_parameter
+                   DW_AT_name    ("table")
+                   DW_AT_decl_file       ("/home/yhs/work/bpf-next/io_uring/filetable.h")
+                   DW_AT_decl_line       (29)
+                   DW_AT_type    (0x04ff5f59 "io_file_table *")
+
+0x04ff5f6c:     DW_TAG_formal_parameter
+                   DW_AT_name    ("bit")
+                   DW_AT_decl_file       ("/home/yhs/work/bpf-next/io_uring/filetable.h")
+                   DW_AT_decl_line       (29)
+                   DW_AT_type    (0x04fe77c6 "int")
+
+I get the following error:
+
++io_file_bitmap_set : skipping BTF encoding of function due to param count mismatch; 2 params != 0 params
++io_file_bitmap_set : skipping BTF encoding of function due to inconsistet prototype
+
+How do we resolve the issue like this?
+
+If this is hard, we can try to resolve as a follow-up.
 
