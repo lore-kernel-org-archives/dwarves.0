@@ -1,21 +1,21 @@
 Received: from 66-220-155-178.mail-mxout.facebook.com (66-220-155-178.mail-mxout.facebook.com [66.220.155.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D20F13A7F60
-	for <dwarves@vger.kernel.org>; Thu, 25 Jun 2026 02:02:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 484723A7F60
+	for <dwarves@vger.kernel.org>; Thu, 25 Jun 2026 02:02:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.155.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782352932; cv=none; b=bcVy6DoU8kVmFHOAaAvCxK/EIymvJ8zqIR5O+2+wSyg8/zefIbDr3jSZuEaKROo0rrbZeyZPNFSuVMHkYFoaJ/1Efnzd2ngwgr5uk06NVogJYhUsT0iCgacVoO2p9W7O0ZoK+n71JFSkBHkpjCKdFX9KVcJcMzDxlZe3P7O4P4M=
+	t=1782352938; cv=none; b=SrHbByDLaTgFDY3I+cz+3XqbgXQzZnC3XNpupj9ta4gBEF9AgLklYWfFY4uyU8zPT/ymrGf2/eQ7neQymxlDysrr2qGe0adHC6xBhDwvCUQYVJ0Y45McVTwOXPDOT7kOK7PHaZoSZeGaTJSDlAb5BcLKr7G8CzGRjYS0Sxu1hUE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782352932; c=relaxed/simple;
-	bh=sMCNKTZT/w2/Fmd5dVQk0CXrIoX9v/WWU6PwD9UvA84=;
+	s=arc-20240116; t=1782352938; c=relaxed/simple;
+	bh=KXgrphPWdsRRfKI9UWbDj2XOkBpXm/URk1BC/TefltM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=fpMGDQa5P00eHussJ3E4B6LMRr5VdrE4cwM9KQgB1DtmX51vlxjDLHjnbT3AWMXd53FvcWs8Ycb7QEpOlAn7kccCDrMNiYAEDzG8Zsy+t2jAhO4gyLahqp/V1pGs+OlMwQ5HUAxrjBCUixQrIL9JAxaF0kc7eS+YD8y4w8+vFbk=
+	 MIME-Version; b=dXuk1ttcnQ9ucv0q16zE3NYfaf2fTlEVlRU3BIjSIh6eLJyeMCXsdBMxg0iEFn3XTaQcTN6+eLfwhBfQAgC6Ka7Lseqy9Spyj9ZSmbZza3evb8dM1MfQ5xZYPHMsQOWeq23CdKqi2FOIPL1XnCgAowQcRTNYoj7KWIa+qw82Gdk=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.155.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id 7651119D954C56; Wed, 24 Jun 2026 19:01:58 -0700 (PDT)
+	id 97D8319D9590CA; Wed, 24 Jun 2026 19:02:03 -0700 (PDT)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: Alan Maguire <alan.maguire@oracle.com>,
 	Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
@@ -24,9 +24,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Andrii Nakryiko <andrii@kernel.org>,
 	bpf@vger.kernel.org,
 	kernel-team@fb.com
-Subject: [PATCH dwarves v10 2/5] dwarf_loader: Collect per-parameter information
-Date: Wed, 24 Jun 2026 19:01:58 -0700
-Message-ID: <20260625020158.1884362-1-yonghong.song@linux.dev>
+Subject: [PATCH dwarves v10 3/5] dwarf_loader: Analyze per-parameter information for true signatures
+Date: Wed, 24 Jun 2026 19:02:03 -0700
+Message-ID: <20260625020203.1885281-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260625020148.1883082-1-yonghong.song@linux.dev>
 References: <20260625020148.1883082-1-yonghong.song@linux.dev>
@@ -38,528 +38,300 @@ List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-Scan all parameters and save necessary information in struct
-parameter and such information will be used in the next patch
-for analysis.
+Add a function-level pass, function__analyze_parameter_locations(), run
+from cu__resolve_func_ret_types_optimized() which walks a function's
+parameters in ABI argument-register order and consumes the location state
+decoded by parameter__decode_location() in the previous commit. Each
+parameter advances the expected-register index by the number of argument
+registers it occupies (parameter__abi_slots(), e.g. a two-eightbyte
+aggregate consumes two registers).
 
-The collected per-parameter information includes
-  - whether the parameter is const value or not
-  - whether the parameter is a DW_OP_fbreg (location stack) or not
-  - the location register for this parameter
-  - the type byte size for this parameter (from parameter type)
-  - whether the parameter is passed in memory
-  - whether the parameter needs to two registers
-  - If the source parameter needs 2 registers but the actual
-    parameter (after optimization) only needs 1 register and only
-    one field is used, record true_sig_member name and type.
+For every producer it keeps the existing bookkeeping, now driven by the
+decoded fields:
+ - a parameter with no location, a constant value, or (for non-clang) no
+   register found is marked optimized out
+ - a parameter found in a register other than the expected one is marked
+   unexpected_reg
 
-Such information is also propagated to abstract-origin parameters in
-ftype__recode_dwarf_types().
+When true_signature is enabled for a signature-changed function it
+reconstructs the real register-level signature:
+ - parameters that were optimized out are dropped from the signature
+ - a parameter whose location cannot be tied to its expected register,
+   wrong register, no register found, or a non-aggregate sitting on the
+   stack - marks the function unexpected_reg so no untrustworthy signatur=
+e
+   is emitted;
+ - an aggregate genuinely passed on the stack (passed_in_memory) is kept;
+ - an aggregate split across registers via DW_OP_piece is kept whole when
+   it is fully used or the next parameter still lands on its expected
+   register, otherwise it is rewritten to the single member actually pass=
+ed
+   in a register (true_sig_*).
 
-parameter__new() now only decodes this location state; the optimized and
-unexpected_reg decisions that parameter__reg() used to drive are made by
-the function-level analysis pass added in the next commit, which consumes
-the decoded fields.
+Together with the decoding commit this replaces the previous inline,
+per-parameter register check in parameter__new().
 
 Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 ---
- dwarf_loader.c | 344 +++++++++++++++++++++++++++++++++++++++++--------
- dwarves.h      |  11 ++
- 2 files changed, 298 insertions(+), 57 deletions(-)
+ dwarf_loader.c | 197 ++++++++++++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 194 insertions(+), 3 deletions(-)
 
 diff --git a/dwarf_loader.c b/dwarf_loader.c
-index b967d31..dd94176 100644
+index dd94176..a4cd911 100644
 --- a/dwarf_loader.c
 +++ b/dwarf_loader.c
-@@ -1237,14 +1237,231 @@ static ptrdiff_t __dwarf_getlocations(Dwarf_Attr=
-ibute *attr,
- 	return ret;
+@@ -3043,6 +3043,195 @@ static void ftype__recode_dwarf_types(struct tag =
+*tag, struct cu *cu)
+ 	}
  }
 =20
--/* For DW_AT_location 'attr':
-- * - if first location is DW_OP_regXX with expected number, return the r=
-egister;
-- *   otherwise save the register for later return
-- * - if location DW_OP_entry_value(DW_OP_regXX) with expected number is =
-in the
-- *   list, return the register; otherwise save register for later return
-- * - otherwise if no register was found for locations, return -1.
-+#define PARAMETER_UNKNOWN_REG -1
-+
-+static int __get_type_byte_size(Dwarf_Die *die, struct cu *cu)
++static struct parameter *ftype__next_parameter(struct ftype *ftype, stru=
+ct parameter *parm)
 +{
-+	Dwarf_Attribute attr;
-+	if (dwarf_attr(die, DW_AT_type, &attr) =3D=3D NULL)
-+		return 0;
-+
-+	Dwarf_Die type_die;
-+	if (dwarf_formref_die(&attr, &type_die) =3D=3D NULL)
-+		return 0;
-+
-+	/* A type does not have byte_size.
-+	 * 0x000dac83: DW_TAG_formal_parameter
-+			 DW_AT_location        (indexed (0x385) loclist =3D 0x00016175:
-+			   [0xffff800080098cb0, 0xffff800080098cb4): DW_OP_breg8 W8+0
-+			   [0xffff800080098cb4, 0xffff800080098ff4): DW_OP_breg31 WSP+16, DW_=
-OP_deref
-+			   [0xffff800080099054, 0xffff80008009908c): DW_OP_breg31 WSP+16, DW_=
-OP_deref)
-+			 DW_AT_name    ("ubuf")
-+			 DW_AT_decl_file       ("/home/yhs/work/bpf-next/arch/arm64/kernel/pt=
-race.c")
-+			 DW_AT_decl_line       (886)
-+			 DW_AT_type    (0x000d467e "const void *")
-+
-+	  * 0x000d467e: DW_TAG_pointer_type
-+			  DW_AT_type      (0x000c4320 "const void")
-+
-+	  * 0x000c4320: DW_TAG_const_type
-+	  */
-+	if (dwarf_tag(&type_die) =3D=3D DW_TAG_pointer_type)
-+		return cu->addr_size;
-+
-+	uint64_t bsize =3D attr_numeric(&type_die, DW_AT_byte_size);
-+	if (bsize =3D=3D 0)
-+		return __get_type_byte_size(&type_die, cu);
-+
-+	return bsize;
++	if (parm->tag.node.next =3D=3D &ftype->parms)
++		return NULL;
++	return list_entry(parm->tag.node.next, struct parameter, tag.node);
 +}
 +
-+static int get_type_byte_size(Dwarf_Die *die, struct cu *cu)
++static int parameter__abi_slots(const struct parameter *parm, const stru=
+ct cu *cu)
 +{
-+	int byte_size =3D 0;
++	int slots;
 +
-+	Dwarf_Attribute attr;
-+	if (dwarf_attr(die, DW_AT_abstract_origin, &attr)) {
-+		Dwarf_Die origin;
-+		if (dwarf_formref_die(&attr, &origin))
-+			byte_size =3D __get_type_byte_size(&origin, cu);
-+	} else {
-+		byte_size =3D __get_type_byte_size(die, cu);
-+	}
-+	return byte_size;
++	if (!cu->agg_use_two_regs || parm->type_byte_size <=3D cu->addr_size)
++		return 1;
++
++	slots =3D (parm->type_byte_size + cu->addr_size - 1) / cu->addr_size;
++	return slots > 0 ? slots : 1;
 +}
 +
-+/* Traverse the parameter type until finding the member type which has e=
-xpected
-+ * struct type offset.
-  */
--static int parameter__reg(Dwarf_Attribute *attr, int expected_reg)
-+static Dwarf_Die *get_member_with_offset(Dwarf_Die *die, int offset, Dwa=
-rf_Die *member_die)
++static bool parameter__has_piece_info(const struct parameter *parm)
 +{
-+	Dwarf_Attribute attr;
-+	if (dwarf_attr(die, DW_AT_type, &attr) =3D=3D NULL)
-+		return NULL;
-+
-+	Dwarf_Die type_die;
-+	if (dwarf_formref_die(&attr, &type_die) =3D=3D NULL)
-+		return NULL;
-+
-+	uint64_t bsize =3D attr_numeric(&type_die, DW_AT_byte_size);
-+	if (bsize =3D=3D 0)
-+		return get_member_with_offset(&type_die, offset, member_die);
-+
-+	if (dwarf_tag(&type_die) !=3D DW_TAG_structure_type)
-+		return NULL;
-+
-+	if (!dwarf_haschildren(&type_die) || dwarf_child(&type_die, member_die)=
- !=3D 0)
-+		return NULL;
-+	do {
-+		if (dwarf_tag(member_die) !=3D DW_TAG_member)
-+			continue;
-+
-+		Dwarf_Attribute attr;
-+		Dwarf_Off bit_offset;
-+
-+		if (dwarf_attr(member_die, DW_AT_data_bit_offset, &attr) !=3D NULL)
-+			bit_offset =3D __attr_offset(&attr);
-+		else if (dwarf_attr(member_die, DW_AT_data_member_location, &attr) !=3D=
- NULL)
-+			bit_offset =3D __attr_offset(&attr) * 8;
-+		else
-+			continue;
-+
-+		if (bit_offset =3D=3D offset * 8)
-+			return member_die;
-+	} while (dwarf_siblingof(member_die, member_die) =3D=3D 0);
-+
-+	return NULL;
++	return parm->first_reg_fields || parm->second_reg_fields;
 +}
 +
-+static bool dwarf_op__is_reg(unsigned int atom)
++static bool parameter__uses_full_aggregate(const struct parameter *parm)
 +{
-+	return atom >=3D DW_OP_reg0 && atom <=3D DW_OP_reg31;
++	return parm->first_reg_fields && parm->second_reg_fields;
 +}
 +
-+static bool dwarf_expr__has_stack_value(Dwarf_Op *expr, size_t exprlen)
++static bool ftype__next_parameter_preserves_slots(struct ftype *ftype, s=
+truct parameter *parm,
++						  int reg_idx, int slots, struct cu *cu)
 +{
-+	for (size_t i =3D 1; i < exprlen; i++) {
-+		if (expr[i].atom =3D=3D DW_OP_stack_value)
++	struct parameter *next =3D ftype__next_parameter(ftype, parm);
++	int next_reg_idx;
++
++	if (!next || next->loc_reg =3D=3D PARAMETER_UNKNOWN_REG)
++		return false;
++
++	next_reg_idx =3D reg_idx + slots;
++	return next_reg_idx < cu->nr_register_params &&
++	       next->loc_reg =3D=3D cu->register_params[next_reg_idx];
++}
++
++static bool parameter__apply_true_sig_member(struct parameter *parm, str=
+uct cu *cu)
++{
++	struct dwarf_tag tmp =3D {};
++	struct dwarf_tag *dtype;
++
++	if (!parm->true_sig_member_name || parm->true_sig_type =3D=3D 0)
++		return false;
++
++	tmp.type =3D parm->true_sig_type;
++	tmp.from_types_section.type =3D parm->true_sig_type_from_types;
++	dtype =3D __dwarf_cu__find_type_by_ref(cu->priv, tmp.type, tmp.from_typ=
+es_section.type);
++	if (!dtype)
++		return false;
++
++	parm->tag.type =3D dtype->small_id;
++	return true;
++}
++
++static bool parameter__reg_in_expected_window(const struct parameter *pa=
+rm, int reg_idx,
++					      int slots, const struct cu *cu)
++{
++	for (int i =3D 0; i < slots; i++) {
++		int idx =3D reg_idx + i;
++
++		if (idx >=3D cu->nr_register_params)
++			break;
++		if (parm->loc_reg =3D=3D cu->register_params[idx])
 +			return true;
 +	}
 +	return false;
 +}
 +
-+static void parameter__set_loc_reg(struct parameter *parm, int reg)
++static void function__match_clang_parameter_locations(struct ftype *ftyp=
+e, struct cu *cu)
 +{
-+	if (parm->loc_reg =3D=3D PARAMETER_UNKNOWN_REG)
-+		parm->loc_reg =3D reg;
++	struct parameter *pos;
++	int reg_idx =3D 0;
++
++	ftype__for_each_parameter(ftype, pos) {
++		int slots =3D parameter__abi_slots(pos, cu);
++
++		if (pos->passed_in_memory)
++			continue;
++
++		if (reg_idx >=3D cu->nr_register_params)
++			break;
++
++		if (pos->loc_reg !=3D PARAMETER_UNKNOWN_REG &&
++		    !parameter__reg_in_expected_window(pos, reg_idx, slots, cu))
++			pos->unexpected_reg =3D 1;
++
++		reg_idx +=3D slots;
++	}
 +}
 +
-+static void parameter__set_field_bit(unsigned long *fields, int byte_off=
-set)
++static void function__analyze_parameter_locations(struct function *fn, s=
+truct cu *cu,
++						  struct conf_load *conf)
 +{
-+	if (byte_offset >=3D 0 && byte_offset < (int)(sizeof(*fields) * 8))
-+		*fields |=3D 1UL << byte_offset;
-+}
++	struct ftype *ftype =3D &fn->proto;
++	struct parameter *pos;
++	bool true_sig_enabled =3D conf->true_signature && ftype->signature_chan=
+ged;
++	bool check_locations =3D !cu->producer_clang || ftype->signature_change=
+d;
++	int reg_idx =3D 0;
 +
-+static void parameter__record_true_sig_member(struct parameter *parm, Dw=
-arf_Die *die,
-+					      int field_offset, struct conf_load *conf)
-+{
-+	Dwarf_Die member_die;
-+
-+	if (parm->true_sig_member_name)
-+		return;
-+	if (!parm->name)
-+		return;
-+	if (!get_member_with_offset(die, field_offset, &member_die))
-+		return;
-+
-+	parm->true_sig_member_name =3D attr_string(&member_die, DW_AT_name, con=
-f);
-+	if (!parm->true_sig_member_name)
-+		return;
-+
-+	parm->true_sig_type_from_types =3D attr_type(&member_die, DW_AT_type, &=
-parm->true_sig_type);
-+	if (parm->true_sig_type =3D=3D 0)
-+		parm->true_sig_member_name =3D NULL;
-+}
-+
-+static void parameter__finish_piece_decode(struct parameter *parm, Dwarf=
-_Die *die,
-+					   struct conf_load *conf, struct cu *cu)
-+{
-+	unsigned long first =3D parm->first_reg_fields;
-+	unsigned long second =3D parm->second_reg_fields;
-+	int field_offset;
-+
-+	if (!first && !second)
-+		return;
-+	if (first && second)
-+		return;
-+	if (__builtin_popcountl(first) >=3D 2 || __builtin_popcountl(second) >=3D=
- 2)
-+		return;
-+
-+	if (__builtin_popcountl(first) =3D=3D 1)
-+		field_offset =3D __builtin_ctzl(first);
-+	else
-+		field_offset =3D cu->addr_size + __builtin_ctzl(second);
-+
-+	parameter__record_true_sig_member(parm, die, field_offset, conf);
-+}
-+
-+/* For aggregate parameters represented by pieces, first_reg_fields and
-+ * second_reg_fields record the byte offsets materialized in each ABI re=
-gister.
-+ * The later function-level pass decides whether the source aggregate is=
- still
-+ * ABI-preserved or should be replaced by the single used member candida=
-te.
-+ */
-+static void parameter__multi_exprs(Dwarf_Op *expr, int loc_num, struct c=
-u *cu,
-+				   size_t exprlen, struct parameter *parm)
-+{
-+	switch (expr[0].atom) {
-+	case DW_OP_lit0 ... DW_OP_lit31:
-+	case DW_OP_constu:
-+	case DW_OP_consts:
-+		if (loc_num =3D=3D 0)
-+			parm->loc_const_value =3D 1;
++	if (!check_locations) {
++		/* Producer is clang and the signature was not changed: match
++		 * each parameter against its expected ABI argument register.
++		 */
++		function__match_clang_parameter_locations(ftype, cu);
 +		return;
 +	}
 +
-+	if (parm->type_byte_size <=3D cu->addr_size || !cu->agg_use_two_regs) {
-+		switch (expr[0].atom) {
-+		case DW_OP_reg0 ... DW_OP_reg31:
-+			if (loc_num =3D=3D 0)
-+				parameter__set_loc_reg(parm, expr[0].atom);
-+			return;
-+		case DW_OP_breg0 ... DW_OP_breg31:
-+			if (loc_num =3D=3D 0 && dwarf_expr__has_stack_value(expr, exprlen))
-+				parameter__set_loc_reg(parm, expr[0].atom - DW_OP_breg0 + DW_OP_reg0=
-);
-+			return;
-+		default:
-+			return;
-+		}
-+	}
++	ftype__for_each_parameter(ftype, pos) {
++		bool consumes_register =3D true;
++		bool regs_available =3D reg_idx < cu->nr_register_params;
++		int slots =3D parameter__abi_slots(pos, cu);
++		int expected_reg =3D regs_available ? cu->register_params[reg_idx] : -=
+1;
++		int reg_slots =3D pos->passed_in_memory ? 1 : slots;
 +
-+	int off =3D 0;
-+	for (size_t i =3D 0; i < exprlen; i++) {
-+		if (expr[i].atom =3D=3D DW_OP_piece) {
-+			int num =3D expr[i].number;
++		if (pos->has_loc) {
++			if (true_sig_enabled && pos->loc_const_value) {
++				pos->optimized =3D 1;
++				consumes_register =3D false;
++				goto next;
++			}
 +
-+			if (i =3D=3D 0) {
-+				off =3D num;
++			if (!regs_available) {
++				consumes_register =3D false;
++				goto next;
++			}
++
++			if (true_sig_enabled && pos->loc_stack) {
++				if (pos->passed_in_memory)
++					consumes_register =3D false;
++				else
++					pos->unexpected_reg =3D 1;
++				goto next;
++			}
++
++			if (pos->loc_reg =3D=3D PARAMETER_UNKNOWN_REG) {
++				if (true_sig_enabled)
++					pos->unexpected_reg =3D 1;
++				else
++					pos->optimized =3D 1;
++				goto next;
++			}
++
++			if (expected_reg >=3D 0 && expected_reg !=3D pos->loc_reg) {
++				pos->unexpected_reg =3D 1;
++				goto next;
++			}
++
++			if (true_sig_enabled && parameter__has_piece_info(pos)) {
++				if (parameter__uses_full_aggregate(pos)) {
++					reg_idx +=3D slots;
++					continue;
++				}
++
++				if (ftype__next_parameter_preserves_slots(ftype, pos, reg_idx, slots=
+, cu)) {
++					pos->true_sig_member_name =3D 0;
++					reg_idx +=3D slots;
++					continue;
++				}
++
++				if (parameter__apply_true_sig_member(pos, cu)) {
++					reg_idx++;
++					continue;
++				}
++			}
++		} else if (pos->has_const_value && !cu->producer_clang) {
++			pos->optimized =3D 1;
++		} else if (true_sig_enabled) {
++			if (regs_available &&
++			    ftype__next_parameter_preserves_slots(ftype, pos, reg_idx, slots,=
+ cu)) {
++				reg_idx +=3D slots;
 +				continue;
 +			}
 +
-+			if (off < cu->addr_size)
-+				parameter__set_field_bit(&parm->first_reg_fields, off);
-+			else
-+				parameter__set_field_bit(&parm->second_reg_fields, off - cu->addr_si=
-ze);
-+			off +=3D num;
-+		} else if (dwarf_op__is_reg(expr[i].atom)) {
-+			if (off < cu->addr_size || parm->loc_reg =3D=3D PARAMETER_UNKNOWN_REG=
-)
-+				parameter__set_loc_reg(parm, expr[i].atom);
++			pos->optimized =3D 1;
++			consumes_register =3D false;
 +		}
-+		/* FIXME: not handling DW_OP_bregX pieces yet since we do not
-+		 * have a use case for it yet in the Linux kernel.
-+		 */
++
++next:
++		if (consumes_register)
++			reg_idx +=3D reg_slots;
 +	}
 +}
 +
-+static void parameter__decode_location(Dwarf_Attribute *attr, struct con=
-f_load *conf,
-+				       struct cu *cu, Dwarf_Die *die,
-+				       struct parameter *parm)
+ static void lexblock__recode_dwarf_types(struct lexblock *tag, struct cu=
+ *cu)
  {
- 	Dwarf_Addr base, start, end;
- 	Dwarf_Op *expr, *entry_ops;
-@@ -1252,66 +1469,76 @@ static int parameter__reg(Dwarf_Attribute *attr, =
-int expected_reg)
- 	size_t exprlen, entry_len;
- 	ptrdiff_t offset =3D 0;
- 	int loc_num =3D -1;
--	int ret =3D -1;
-=20
--	/* use libdw__lock as dwarf_getlocation(s) has concurrency issues
--	 * when libdw is not compiled with experimental --enable-thread-safety
--	 */
- 	pthread_mutex_lock(&libdw__lock);
- 	while ((offset =3D __dwarf_getlocations(attr, offset, &base, &start, &e=
-nd, &expr, &exprlen)) > 0) {
-+		bool had_stack_value;
-+
- 		loc_num++;
-+		if (exprlen =3D=3D 0)
-+			continue;
-=20
--		/* Convert expression list (XX DW_OP_stack_value) -> (XX).
--		 * DW_OP_stack_value instructs interpreter to pop current value from
--		 * DWARF expression evaluation stack, and thus is not important here.
--		 */
--		if (exprlen > 1 && expr[exprlen - 1].atom =3D=3D DW_OP_stack_value)
-+		had_stack_value =3D expr[exprlen - 1].atom =3D=3D DW_OP_stack_value;
-+		if (exprlen =3D=3D 2 && had_stack_value)
- 			exprlen--;
-=20
--		if (exprlen !=3D 1)
-+		if (exprlen !=3D 1) {
-+			parameter__multi_exprs(expr, loc_num, cu, exprlen, parm);
- 			continue;
-+		}
-=20
- 		switch (expr->atom) {
--		/* match DW_OP_regXX at first location */
- 		case DW_OP_reg0 ... DW_OP_reg31:
--			if (loc_num !=3D 0)
--				break;
--			ret =3D expr->atom;
--			if (ret =3D=3D expected_reg)
--				goto out;
-+			if (loc_num =3D=3D 0)
-+				parameter__set_loc_reg(parm, expr->atom);
-+			break;
-+		case DW_OP_breg0 ... DW_OP_breg31:
-+			if (loc_num =3D=3D 0 && had_stack_value)
-+				parameter__set_loc_reg(parm, expr->atom - DW_OP_breg0 + DW_OP_reg0);
-+			break;
-+		case DW_OP_fbreg:
-+			if (loc_num =3D=3D 0)
-+				parm->loc_stack =3D 1;
-+			break;
-+		case DW_OP_lit0 ... DW_OP_lit31:
-+		case DW_OP_constu:
-+		case DW_OP_consts:
-+			if (loc_num =3D=3D 0)
-+				parm->loc_const_value =3D 1;
- 			break;
--		/* match DW_OP_entry_value(DW_OP_regXX) at any location */
- 		case DW_OP_entry_value:
- 		case DW_OP_GNU_entry_value:
- 			if (dwarf_getlocation_attr(attr, expr, &entry_attr) =3D=3D 0 &&
- 			    dwarf_getlocation(&entry_attr, &entry_ops, &entry_len) =3D=3D 0 &=
-&
--			    entry_len =3D=3D 1) {
--				ret =3D entry_ops->atom;
--				if (ret =3D=3D expected_reg)
--					goto out;
--			}
-+			    entry_len =3D=3D 1 && dwarf_op__is_reg(entry_ops->atom))
-+				parameter__set_loc_reg(parm, entry_ops->atom);
- 			break;
- 		}
+ 	struct tag *pos;
+@@ -3318,7 +3507,7 @@ static bool param__is_struct(struct cu *cu, struct =
+tag *tag)
  	}
--out:
- 	pthread_mutex_unlock(&libdw__lock);
--	return ret;
-+
-+	parameter__finish_piece_decode(parm, die, conf, cu);
  }
 =20
--static struct parameter *parameter__new(Dwarf_Die *die, struct cu *cu,
--					struct conf_load *conf, int param_idx)
-+static struct parameter *parameter__new(Dwarf_Die *die, struct cu *cu, s=
-truct conf_load *conf,
-+					struct ftype *ftype, int param_idx)
+-static int cu__resolve_func_ret_types_optimized(struct cu *cu)
++static int cu__resolve_func_ret_types_optimized(struct cu *cu, struct co=
+nf_load *conf)
  {
- 	struct parameter *parm =3D tag__alloc(cu, sizeof(*parm));
+ 	struct ptr_table *pt =3D &cu->functions_table;
+ 	uint32_t i;
+@@ -3329,6 +3518,8 @@ static int cu__resolve_func_ret_types_optimized(str=
+uct cu *cu)
+ 		struct function *fn =3D tag__function(tag);
+ 		bool has_unexpected_reg =3D false, has_struct_param =3D false;
 =20
- 	if (parm !=3D NULL) {
--		bool has_const_value;
- 		Dwarf_Attribute attr;
-=20
- 		tag__init(&parm->tag, cu, die);
- 		parm->name =3D attr_string(die, DW_AT_name, conf);
- 		parm->idx =3D param_idx;
--		if (param_idx >=3D cu->nr_register_params || param_idx < 0)
-+		parm->loc_reg =3D PARAMETER_UNKNOWN_REG;
-+		if (!ftype)
- 			return parm;
++		function__analyze_parameter_locations(fn, cu, conf);
 +
-+		parm->type_byte_size =3D get_type_byte_size(die, cu);
-+		parm->passed_in_memory =3D parm->type_byte_size >
-+			(cu->agg_use_two_regs ? 2 * cu->addr_size : cu->addr_size);
-+
- 		/* Parameters which use DW_AT_abstract_origin to point at
- 		 * the original parameter definition (with no name in the DIE)
- 		 * are the result of later DWARF generation during compilation
-@@ -1345,26 +1572,10 @@ static struct parameter *parameter__new(Dwarf_Die=
- *die, struct cu *cu,
- 		 * between these parameter representations.  See
- 		 * ftype__recode_dwarf_types() below for how this is handled.
- 		 */
--		has_const_value =3D dwarf_attr(die, DW_AT_const_value, &attr) !=3D NUL=
-L;
-+		parm->has_const_value =3D dwarf_attr(die, DW_AT_const_value, &attr) !=3D=
- NULL;
- 		parm->has_loc =3D dwarf_attr(die, DW_AT_location, &attr) !=3D NULL;
--
--		if (parm->has_loc) {
--			int expected_reg =3D cu->register_params[param_idx];
--			int actual_reg =3D parameter__reg(&attr, expected_reg);
--
--			if (actual_reg < 0)
--				parm->optimized =3D 1;
--			else if (expected_reg >=3D 0 && expected_reg !=3D actual_reg)
--				/* mark parameters that use an unexpected
--				 * register to hold a parameter; these will
--				 * be problematic for users of BTF as they
--				 * violate expectations about register
--				 * contents.
--				 */
--				parm->unexpected_reg =3D 1;
--		} else if (has_const_value) {
--			parm->optimized =3D 1;
--		}
-+		if (parm->has_loc)
-+			parameter__decode_location(&attr, conf, cu, die, parm);
- 	}
+ 		/* mark function as optimized if parameter is, or
+ 		 * if parameter does not have a location; at this
+ 		 * point location presence has been marked in
+@@ -3507,7 +3698,7 @@ static int die__process_and_recode(Dwarf_Die *die, =
+struct cu *cu, struct conf_lo
+ 	if (ret !=3D 0)
+ 		return ret;
 =20
- 	return parm;
-@@ -1384,7 +1595,7 @@ static int formal_parameter_pack__load_params(struc=
-t formal_parameter_pack *pack
- 			continue;
- 		}
-=20
--		struct parameter *param =3D parameter__new(die, cu, conf, -1);
-+		struct parameter *param =3D parameter__new(die, cu, conf, NULL, -1);
-=20
- 		if (param =3D=3D NULL)
- 			return -1;
-@@ -1928,7 +2139,7 @@ static struct tag *die__create_new_parameter(Dwarf_=
-Die *die,
- 					     struct cu *cu, struct conf_load *conf,
- 					     int param_idx)
- {
--	struct parameter *parm =3D parameter__new(die, cu, conf, param_idx);
-+	struct parameter *parm =3D parameter__new(die, cu, conf, ftype, param_i=
-dx);
-=20
- 	if (parm =3D=3D NULL)
- 		return NULL;
-@@ -2249,7 +2460,7 @@ out_enomem:
+-	return cu__resolve_func_ret_types_optimized(cu);
++	return cu__resolve_func_ret_types_optimized(cu, conf);
  }
 =20
- static int die__process_function(Dwarf_Die *die, struct ftype *ftype,
--				  struct lexblock *lexblock, struct cu *cu, struct conf_load *conf);
-+				 struct lexblock *lexblock, struct cu *cu, struct conf_load *conf);
+ static int class_member__cache_byte_size(struct tag *tag, struct cu *cu,
+@@ -4270,7 +4461,7 @@ static int cus__merge_and_process_cu(struct cus *cu=
+s, struct conf_load *conf,
+ 	 * encoded in another subprogram through abstract_origin
+ 	 * tag. Let us visit all subprograms again to resolve this.
+ 	 */
+-	if (cu__resolve_func_ret_types_optimized(cu) !=3D LSK__KEEPIT)
++	if (cu__resolve_func_ret_types_optimized(cu, conf) !=3D LSK__KEEPIT)
+ 		goto out_abort;
 =20
- static int die__create_new_lexblock(Dwarf_Die *die,
- 				    struct cu *cu, struct lexblock *father, struct conf_load *conf)
-@@ -2796,6 +3007,25 @@ static void ftype__recode_dwarf_types(struct tag *=
-tag, struct cu *cu)
- 			 */
- 			if (pos->has_loc)
- 				opos->has_loc =3D pos->has_loc;
-+			if (pos->has_const_value)
-+				opos->has_const_value =3D pos->has_const_value;
-+			if (pos->loc_const_value)
-+				opos->loc_const_value =3D pos->loc_const_value;
-+			if (pos->loc_stack)
-+				opos->loc_stack =3D pos->loc_stack;
-+			if (pos->loc_reg !=3D PARAMETER_UNKNOWN_REG)
-+				opos->loc_reg =3D pos->loc_reg;
-+			if (pos->type_byte_size !=3D 0)
-+				opos->type_byte_size =3D pos->type_byte_size;
-+			if (pos->passed_in_memory)
-+				opos->passed_in_memory =3D pos->passed_in_memory;
-+			opos->first_reg_fields |=3D pos->first_reg_fields;
-+			opos->second_reg_fields |=3D pos->second_reg_fields;
-+			if (pos->true_sig_member_name && !opos->true_sig_member_name) {
-+				opos->true_sig_member_name =3D pos->true_sig_member_name;
-+				opos->true_sig_type =3D pos->true_sig_type;
-+				opos->true_sig_type_from_types =3D pos->true_sig_type_from_types;
-+			}
-=20
- 			if (pos->optimized)
- 				opos->optimized =3D pos->optimized;
-diff --git a/dwarves.h b/dwarves.h
-index ac559c3..8f1640e 100644
---- a/dwarves.h
-+++ b/dwarves.h
-@@ -948,9 +948,20 @@ size_t lexblock__fprintf(const struct lexblock *lexb=
-lock, const struct cu *cu,
- struct parameter {
- 	struct tag tag;
- 	const char *name;
-+	const char *true_sig_member_name;
-+	Dwarf_Off true_sig_type;
-+	unsigned long first_reg_fields;
-+	unsigned long second_reg_fields;
-+	int loc_reg;
-+	uint16_t type_byte_size;
-+	uint8_t true_sig_type_from_types:1;
-+	uint8_t has_const_value:1;
-+	uint8_t loc_const_value:1;
-+	uint8_t loc_stack:1;
- 	uint8_t optimized:1;
- 	uint8_t unexpected_reg:1;
- 	uint8_t has_loc:1;
-+	uint8_t passed_in_memory:1;	/* too large for the ABI argument registers=
- */
- 	uint8_t idx;
- };
-=20
+ 	cu__finalize(cu, cus, conf);
 --=20
 2.53.0-Meta
 
