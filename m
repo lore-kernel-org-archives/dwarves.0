@@ -1,33 +1,33 @@
-Received: from out-189.mta0.migadu.com (out-189.mta0.migadu.com [91.218.175.189])
+Received: from out-186.mta0.migadu.com (out-186.mta0.migadu.com [91.218.175.186])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0DA53E7164
-	for <dwarves@vger.kernel.org>; Thu, 25 Jun 2026 17:00:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.189
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65D9723BD1B
+	for <dwarves@vger.kernel.org>; Thu, 25 Jun 2026 17:59:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.186
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782406803; cv=none; b=AOQQ+xAcrNnTTSFB0aL1o6smmbJmalsAvWniyW4RAuoVfcsVpxSwvWPyD8msAbxM49ZXViASjmtexsaL3TS+DRycAxzrCSdbkkutrtAM8N9kTaS1j/byIC0z4OgYkhqrO46nLNZ3brzOrXq2V/2XhcfioqX4h1O4gMfPnfVJi50=
+	t=1782410393; cv=none; b=fIaBy+Vx+J+GPG58Vqy5Xle9OAYVFUbQxOmPiYrm6WazeLlrnqziZUbafCiz0bRZXG1jgcH9d2vsCy26FPMvk1LoOwaf1jq2ACjYqO20ddDblvCW9W3yIAidk5tY7DDR2UKv7BETs2LEeW1Pw0dXQs9HoTk/ltauuWlJIVQSx6c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782406803; c=relaxed/simple;
-	bh=hI6afDcN3uImdVb7J+at1rYPtofw2XIek++OLKQGlgI=;
+	s=arc-20240116; t=1782410393; c=relaxed/simple;
+	bh=9ieAEmsE4F+TTxRX3UXBvd11KxPm9KeJLSxiuMEzLl4=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=PfNbeVEmGC6HHqND/2y2LpJuFiTJpyo4ZdaUnouoU0nd24xhObli1VIWXycpYYngXJEtt2fNv/bU3M+PGM85u0m4uhgAp83aDUcwUeV/yiuYw1p6n2M/mx5WBE/3FFXF9r4z39K2/bGdpRPBkOK2lmVBoMInbqo9eWZrBal94c0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=LebcXyiT; arc=none smtp.client-ip=91.218.175.189
+	 In-Reply-To:Content-Type; b=QOLVS2PXF97r47D8TJz2yM6y5vEvg8UB2DiAZMY9WJRS+yxh776AlSCUetHRQ8UBW6u1FbcAq/lruAhsi0Iq2CunudBHD6DMhLm4ll76zNStEkUdzWwI0lIiSTNwLVBmLAJlID7sQBQlatcGUsqKFu0c+ab3olF7oX/MqUxsFBk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=sTBmefPi; arc=none smtp.client-ip=91.218.175.186
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="LebcXyiT"
-Message-ID: <fd9ebc32-1d31-4f85-9c39-c1e4100d985a@linux.dev>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="sTBmefPi"
+Message-ID: <dd556546-23f4-43c0-b502-ec818afc7b3b@linux.dev>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1782406789;
+	t=1782410388;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=LlTeYZ/7wBvBIqprf7XZ3sj7cme/8ojhsxcxkhsBq90=;
-	b=LebcXyiT0BkVl8rNTR3idFuAOMXy9lnE58+IcJZgfZ++csoHzBtr1HRWzIPmnDQ3BbAIlj
-	7XMhkGBVTbn2SRAOl8175m5wzZBIMy7yQrpQTsaFdHRxVTufRvhrBAyWucs0AETmrv7nqK
-	MjOyYltyntVDD4SFpUi6qVb0NQpfyNc=
-Date: Thu, 25 Jun 2026 09:59:42 -0700
+	bh=slb7AKQlNLrcLwwsv70TJ8r+7Ia0z99x6w95rtvJbXo=;
+	b=sTBmefPiOAN+QkasoKBLnLRI0wSjp76O5Jfd3k+DMi4aIVnRsHn9skq1bg8EV2XxKX9EWe
+	aUbS3bIR35auSRYv0ogmzQHRWeEsYhoVWtOT/Hpmdvb0Pz2GAWZFlLVIitPn2vp/ud7BK1
+	muhWGxIUQYMmhty3pPKlyF1N7ija2wg=
+Date: Thu, 25 Jun 2026 10:59:41 -0700
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
@@ -203,6 +203,10 @@ On 6/25/26 9:17 AM, Alan Maguire wrote:
 > I tried pushing just the btf_encoder__add_saved_funcs() hunk from Jiri's diff to CI [1];
 > it looks like we end up omitting a lot more functions than before for aarch64 (including
 > some kfuncs) for both gcc and clang kernel builds, and we see an x86_64 test failure:
+
+For clang, aarch64 has more werid locaitons compared to x86.
+Not sure whether this could be part of readon which will cause more failures.
+
 >
 > 5: clang_parm_memory.sh
 > Validation of BTF encoding of true_signatures.
@@ -210,11 +214,256 @@ On 6/25/26 9:17 AM, Alan Maguire wrote:
 > Test ./clang_parm_memory.sh failed
 > Test data is in /tmp/clang_parm_memory.sh.DV7PyO
 
-I actually tried clang_parm_memory.sh with clang22 and clang23. Both of them
-passed in my local run. Not exactly sure what is the issue. Let me debug this.
+The above claims the BTF encoding is missing even with true signature.
 
-Could you share how to test with pahole CI? So I can resolve all issues in CI
-before submit another revision if needed.
+The following is what I have in my local run with llvm22:
+
+$ cat t.c
+union big { long a; char buf[24]; };
+__attribute__((noinline)) static long foo(union big u, int dead, int x)
+{
+         return u.a + x;
+}
+
+union big g;
+int dead, x;
+int main()
+{
+         return (int)foo(g, dead, x);
+}
+
+$ /bin/clang --version
+clang version 22.1.3 (CentOS 22.1.3-1.el9)
+Target: x86_64-redhat-linux-gnu
+Thread model: posix
+InstalledDir: /usr/bin
+Configuration file: /etc/clang/x86_64-redhat-linux-gnu-clang.cfg
+
+$ /bin/clang -O2 -g -c t.c
+
+$ /bin/llvm-dwarfdump t.o
+t.o:    file format elf64-x86-64
+                                                                                                                                  
+.debug_info contents:
+0x00000000: Compile Unit: length = 0x00000117, format = DWARF32, version = 0x0004, abbr_offset = 0x0000, addr_size = 0x08 (next u
+nit at 0x0000011b)
+                                                                                                                                  
+0x0000000b: DW_TAG_compile_unit
+               DW_AT_producer    ("clang version 22.1.3 (CentOS 22.1.3-1.el9)")
+               DW_AT_language    (DW_LANG_C11)
+               DW_AT_name        ("t.c")
+               DW_AT_stmt_list   (0x00000000)
+               DW_AT_comp_dir    ("/home/yhs/tmp")
+               DW_AT_low_pc      (0x0000000000000000)
+               DW_AT_high_pc     (0x0000000000000039)
+                                                                                                                                  
+0x0000002a:   DW_TAG_variable
+                 DW_AT_name      ("g")
+                 DW_AT_type      (0x0000003f "big")
+                 DW_AT_external  (true)
+                 DW_AT_decl_file ("/home/yhs/tmp/t.c")
+                 DW_AT_decl_line (7)
+                 DW_AT_location  (DW_OP_addr 0x0)
+                                                                                                                                  
+0x0000003f:   DW_TAG_union_type
+                 DW_AT_name      ("big")
+                 DW_AT_byte_size (0x18)
+                 DW_AT_decl_file ("/home/yhs/tmp/t.c")
+                 DW_AT_decl_line (1)
+                                                                                                                                  
+0x00000047:     DW_TAG_member
+                   DW_AT_name    ("a")
+                   DW_AT_type    (0x00000060 "long")
+                   DW_AT_decl_file       ("/home/yhs/tmp/t.c")
+                   DW_AT_decl_line       (1)
+                   DW_AT_data_member_location    (0x00)
+                                                                                                                                  
+0x00000053:     DW_TAG_member
+                   DW_AT_name    ("buf")
+                   DW_AT_type    (0x00000067 "char[24]")
+                   DW_AT_decl_file       ("/home/yhs/tmp/t.c")
+                   DW_AT_decl_line       (1)
+                   DW_AT_data_member_location    (0x00)
+
+0x0000005f:     NULL
+
+0x00000060:   DW_TAG_base_type
+                 DW_AT_name      ("long")
+                 DW_AT_encoding  (DW_ATE_signed)
+                 DW_AT_byte_size (0x08)
+
+0x00000067:   DW_TAG_array_type
+                 DW_AT_type      (0x00000073 "char")
+
+0x0000006c:     DW_TAG_subrange_type
+                   DW_AT_type    (0x0000007a "__ARRAY_SIZE_TYPE__")
+                   DW_AT_count   (0x18)
+
+0x00000072:     NULL
+
+0x00000073:   DW_TAG_base_type
+                 DW_AT_name      ("char")
+                 DW_AT_encoding  (DW_ATE_signed_char)
+                 DW_AT_byte_size (0x01)
+
+0x0000007a:   DW_TAG_base_type
+                 DW_AT_name      ("__ARRAY_SIZE_TYPE__")
+                 DW_AT_byte_size (0x08)
+                 DW_AT_encoding  (DW_ATE_unsigned)
+
+0x00000081:   DW_TAG_variable
+                 DW_AT_name      ("dead")
+                 DW_AT_type      (0x00000096 "int")
+                 DW_AT_external  (true)
+                 DW_AT_decl_file ("/home/yhs/tmp/t.c")
+                 DW_AT_decl_line (8)
+                 DW_AT_location  (DW_OP_addr 0x0)
+
+0x00000096:   DW_TAG_base_type
+                 DW_AT_name      ("int")
+                 DW_AT_encoding  (DW_ATE_signed)
+                 DW_AT_byte_size (0x04)
+
+0x0000009d:   DW_TAG_variable
+                 DW_AT_name      ("x")
+                 DW_AT_type      (0x00000096 "int")
+                 DW_AT_external  (true)
+                 DW_AT_decl_file ("/home/yhs/tmp/t.c")
+                 DW_AT_decl_line (8)
+                 DW_AT_location  (DW_OP_addr 0x0)
+
+0x000000b2:   DW_TAG_subprogram
+                 DW_AT_low_pc    (0x0000000000000000)
+                 DW_AT_high_pc   (0x000000000000002b)
+                 DW_AT_frame_base        (DW_OP_reg7 RSP)
+                 DW_AT_GNU_all_call_sites        (true)
+                 DW_AT_name      ("main")
+                 DW_AT_decl_file ("/home/yhs/tmp/t.c")
+                 DW_AT_decl_line (9)
+                 DW_AT_type      (0x00000096 "int")
+                 DW_AT_external  (true)
+
+0x000000cb:     DW_TAG_GNU_call_site
+                   DW_AT_abstract_origin (0x000000d9 "foo")
+                   DW_AT_low_pc  (0x0000000000000026)
+
+0x000000d8:     NULL
+
+0x000000d9:   DW_TAG_subprogram
+                 DW_AT_low_pc    (0x0000000000000030)
+                 DW_AT_high_pc   (0x0000000000000039)
+                 DW_AT_frame_base        (DW_OP_reg7 RSP)
+                 DW_AT_GNU_all_call_sites        (true)
+                 DW_AT_name      ("foo")
+                 DW_AT_decl_file ("/home/yhs/tmp/t.c")
+                 DW_AT_decl_line (2)
+                 DW_AT_prototyped        (true)
+                 DW_AT_calling_convention        (DW_CC_nocall)
+                 DW_AT_type      (0x00000060 "long")
+
+0x000000f3:     DW_TAG_formal_parameter
+                   DW_AT_location        (DW_OP_fbreg +8)
+                   DW_AT_name    ("u")
+                   DW_AT_decl_file       ("/home/yhs/tmp/t.c")
+                   DW_AT_decl_line       (2)
+                   DW_AT_type    (0x0000003f "big")
+
+0x00000101:     DW_TAG_formal_parameter
+                   DW_AT_name    ("dead")
+                   DW_AT_decl_file       ("/home/yhs/tmp/t.c")
+                   DW_AT_decl_line       (2)
+                   DW_AT_type    (0x00000096 "int")
+
+0x0000010c:     DW_TAG_formal_parameter
+                   DW_AT_location        (DW_OP_reg5 RDI)
+                   DW_AT_name    ("x")
+                   DW_AT_decl_file       ("/home/yhs/tmp/t.c")
+                   DW_AT_decl_line       (2)
+                   DW_AT_type    (0x00000096 "int")
+
+0x00000119:     NULL
+
+0x0000011a:   NULL
+
+The following is the critical dwarf:
+
+0x000000d9:   DW_TAG_subprogram
+                 DW_AT_low_pc    (0x0000000000000030)
+                 DW_AT_high_pc   (0x0000000000000039)
+                 DW_AT_frame_base        (DW_OP_reg7 RSP)
+                 DW_AT_GNU_all_call_sites        (true)
+                 DW_AT_name      ("foo")
+                 DW_AT_decl_file ("/home/yhs/tmp/t.c")
+                 DW_AT_decl_line (2)
+                 DW_AT_prototyped        (true)
+                 DW_AT_calling_convention        (DW_CC_nocall)
+                 DW_AT_type      (0x00000060 "long")
+
+0x000000f3:     DW_TAG_formal_parameter
+                   DW_AT_location        (DW_OP_fbreg +8)
+                   DW_AT_name    ("u")
+                   DW_AT_decl_file       ("/home/yhs/tmp/t.c")
+                   DW_AT_decl_line       (2)
+                   DW_AT_type    (0x0000003f "big")
+
+0x00000101:     DW_TAG_formal_parameter
+                   DW_AT_name    ("dead")
+                   DW_AT_decl_file       ("/home/yhs/tmp/t.c")
+                   DW_AT_decl_line       (2)
+                   DW_AT_type    (0x00000096 "int")
+
+0x0000010c:     DW_TAG_formal_parameter
+                   DW_AT_location        (DW_OP_reg5 RDI)
+                   DW_AT_name    ("x")
+                   DW_AT_decl_file       ("/home/yhs/tmp/t.c")
+                   DW_AT_decl_line       (2)
+                   DW_AT_type    (0x00000096 "int")
+
+0x00000119:     NULL
+
+With true_signature:
+
+$ pahole -JV --btf_features=+true_signature t.o
+btf_encoder__new: 't.o' doesn't have '.data..percpu' section
+File t.o:
+[1] UNION big size=24
+         a type_id=2 bits_offset=0
+         buf type_id=3 bits_offset=0
+[2] INT long size=8 nr_bits=64 encoding=SIGNED
+[3] ARRAY (anon) type_id=4 index_type_id=6 nr_elems=24
+[4] INT char size=1 nr_bits=8 encoding=SIGNED
+[5] INT __ARRAY_SIZE_TYPE__ size=8 nr_bits=64 encoding=(none)
+[6] INT int size=4 nr_bits=32 encoding=SIGNED
+search cu 't.c' for percpu global variables.
+[7] FUNC_PROTO (anon) return=2 args=(1 u, 6 x)
+[8] FUNC foo type_id=7
+[9] FUNC_PROTO (anon) return=6 args=(void)
+[10] FUNC main type_id=9
+
+It succeeded with proper true signature.
+
+Without true_signature:
+
+$ pahole -JV t.o
+btf_encoder__new: 't.o' doesn't have '.data..percpu' section
+File t.o:
+[1] UNION big size=24
+         a type_id=2 bits_offset=0
+         buf type_id=3 bits_offset=0
+[2] INT long size=8 nr_bits=64 encoding=SIGNED
+[3] ARRAY (anon) type_id=4 index_type_id=6 nr_elems=24
+[4] INT char size=1 nr_bits=8 encoding=SIGNED
+[5] INT __ARRAY_SIZE_TYPE__ size=8 nr_bits=64 encoding=(none)
+[6] INT int size=4 nr_bits=32 encoding=SIGNED
+search cu 't.c' for percpu global variables.
+foo : skipping BTF encoding of function due to unexpected register usage for parameter
+[7] FUNC_PROTO (anon) return=6 args=(void)
+[8] FUNC main type_id=7
+
+The 'foo' will be missed due to mismatch between arg's and locations.
+
+Not exactly sure what CI has an issue for the test.
+
 
 >
 > The optimized_parms flag is a bit too broad I think; it is set whenever we are
