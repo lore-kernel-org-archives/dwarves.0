@@ -1,230 +1,2951 @@
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D91693BB9E0;
-	Tue, 21 Jul 2026 10:25:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.177.32
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784629508; cv=fail; b=TFn5VUmHFubigPQt74YnPIthryDvAvd4I2QL4n8I39fswk9ZmriK+epordBWHqZ2xFgULKDtJJcyqW/nj1jhQfWSKUFQoJ69M5ZbjV1J/Dh0e48WX7oHEPvUhi3i/wD1RuE7nQDjFCwg9lnr5nI7F+H47/nZYNIhgTEOaC32lAQ=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784629508; c=relaxed/simple;
-	bh=9JIgWi0/2dHk/iDSbXR2mHRa8ou8w6l75msZMFUweYw=;
-	h=Message-ID:Date:Subject:From:To:Cc:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=BylgiUDUqarhePwXgcrKdv+DaxC9NXya8pYtubEbFzGwHDcbrzs5l7N+cLfny33MXU/QiW0i8hhiZS5QjGnG1secC84jNc1gzFlTaastgBdNnqGk16scW8xs/ha4yK8+7rSsRQpu/aiwQPjvtU+IVdCSTk/IOE68lYHJ3TW0Dos=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=AvVZkglK; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=ruEUrbKZ; arc=fail smtp.client-ip=205.220.177.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 873AE36C598
+	for <dwarves@vger.kernel.org>; Tue, 21 Jul 2026 13:39:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1784641194; cv=none; b=nMBQx1smC+kIy+Tm2RxXJTAdg/0v6Iffhv9Vkm731iPW8YqVfOAO2BEVS7nI97JHUX3IcXSrbwgTG4yfPFRlyRmtMy8lN5Ft0kyIcOnMxXPuSIrU3FMggIMAtXFYONpitHc2vPlMfm4wZOSvKA1ix+3wgE+y+ioFAJQUu9Uthrw=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1784641194; c=relaxed/simple;
+	bh=Rrw5l0Lv/EOu4PbCtrkKH6tfSJnMrTTyEV3ko+inwEo=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ItCO/VBqSukd807v25fvAB/zxEfQUDQLu3ODtUT1hzw64ILU6nz8eSgNUSat+IaTpH91TYLHCPVQvGbMn3R7bXJNLYsktCwgtQ8GbTbC7vPQCXPG8P0r+JbC/Z6H1bGXmOxfgWH1JDuotzAzMAmk/cpvJ9/qoThQbQH1mJ27FhY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IgAJc4P4; arc=none smtp.client-ip=209.85.221.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="AvVZkglK";
-	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="ruEUrbKZ"
-Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 66L0g0B13101436;
-	Tue, 21 Jul 2026 10:25:03 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=
-	corp-2025-04-25; bh=DCL1/hYxuB04+7CZ01pe6CM8DdcO9OxtCEYzCumvKb4=; b=
-	AvVZkglK1YfQkOTf2ywoM7uzwkMq3tDUyOZ1z+5/WqyFgqtZFu5dFW/bhEHcgfkd
-	4sIC8kng1vgVxj5sSelRigUnLr26rnnJ6AMQAyaqenMGYcbsk0sFQAyQO2L0U1+O
-	CNZZbH8p3YrJJ41OvUd9R/HABX4VbG0K5fX5y+9StoqmNU24YHYfNWhIziVFLGao
-	Wz1otAuYiev4bVt/8Va3xhxfUOTBLlNdqDdlaTmfyCHCcAn0/WT3Te3POTQUiahy
-	UAJR/shaURqOzOs0FM+XUUrlfcOOhQMf3SYSRvIwojOKb3RaGrgkFZs3+Cdhj4rH
-	6QiW3Tb72i28QDy2iwPaHA==
-Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4fg1mv37gx-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 21 Jul 2026 10:25:03 +0000 (GMT)
-Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.7/8.18.1.7) with ESMTP id 66LANUKD010653;
-	Tue, 21 Jul 2026 10:25:02 GMT
-Received: from sn4pr0501cu005.outbound.protection.outlook.com (mail-southcentralusazon11011059.outbound.protection.outlook.com [40.93.194.59])
-	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 4ffyxpjq78-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Tue, 21 Jul 2026 10:25:02 +0000 (GMT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=rAocpxIHKLhdjcapFSqLg+4bQ8in5UB27w8de8tuxoZxnGpRG8pfZb7QZoVraElZKdO5YflTAjJmU8p1Ih3zqXr+Ktqxh/+OpyKV/LDDJNw+CEdyMSVMUigc97+CTV4763VfBEf1VhDtTLvtrcVsA2hJwNLiSqRUkEvfl/z9/wqPYiGFPTJt9/CZKWQnZ/E40QOBQJ7PcBvCxTcdV19yPQaAU+Rq0z144HQKuAStTjeH0es86s3+5Oo0n7P264xREIDdzjvYKfAu4AUUTNJlvvt9JXsyvfkM4fid/sbZzIFRQWA4O0q+ncWcohEjNHSyG0J8HWlm3Co4S0z8jlXVSw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=DCL1/hYxuB04+7CZ01pe6CM8DdcO9OxtCEYzCumvKb4=;
- b=hYIaebx6AApqfPUh9KSnQQ25wbSHxVZ2ESJvyzoFjqK/wTL6/WtRpgjm69FfzRUUILD9ZssIZoYsaEErxmxO/tZm8qIn+84/3/T75APphMBg3059ero+zry7N0bUbWWxo+r1il6Vw15hOO4auLytRi4oXNaRlm0w97qf89LmcNkN1e3/nkgXTfzanjKnRqt9JCYWQKTNa3eWFAspCJGHkTg6wjooW71nkGWFMr2eCwQ2X9NtcWRMmisZrU4BXWM4YfuqRcy9IzNLocOeUTKbJu7EZWMH4AcLOmFJ+xvf7at8bhBqd8ntHu7N8F8Az7RH/LVQHxfvpyrqGv466RpF4w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IgAJc4P4"
+Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-47362928f65so10291332f8f.2
+        for <dwarves@vger.kernel.org>; Tue, 21 Jul 2026 06:39:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=DCL1/hYxuB04+7CZ01pe6CM8DdcO9OxtCEYzCumvKb4=;
- b=ruEUrbKZcziXmEDpEM6+X1cPsz5yQmWwvoKMV/VKZa26uejjrE+JGyrJ3a/suon3PVBy8JIbQZ2UBro3dFi69J+CnyKpCVpWbvdvhWpeSyXmBwlHLsZelrx2uNA2n7U+sU3KgLbP8vxKu32NPJx1MWtxkNbshd8XeEKLacAYqqA=
-Received: from BN0PR10MB4901.namprd10.prod.outlook.com (2603:10b6:408:126::19)
- by SAWPR10MB997789.namprd10.prod.outlook.com (2603:10b6:806:4e4::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.223.18; Tue, 21 Jul
- 2026 10:24:58 +0000
-Received: from BN0PR10MB4901.namprd10.prod.outlook.com
- ([fe80::19a8:41b4:f519:1b79]) by BN0PR10MB4901.namprd10.prod.outlook.com
- ([fe80::19a8:41b4:f519:1b79%5]) with mapi id 15.21.0245.009; Tue, 21 Jul 2026
- 10:24:58 +0000
-Message-ID: <d69247cc-3c90-490d-8479-ce07fba58fd9@oracle.com>
-Date: Tue, 21 Jul 2026 11:24:51 +0100
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH dwarves 0/2] clang true signature follow-on
-From: Alan Maguire <alan.maguire@oracle.com>
-To: yonghong.song@linux.dev, olsajiri@gmail.com
-Cc: arnaldo.melo@gmail.com, bpf@vger.kernel.org, dwarves@vger.kernel.org
+        d=gmail.com; s=20251104; t=1784641189; x=1785245989; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:date:from:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=NOwUd+mWhvohCElMtTpeZCxHcUjVrskr5JlvQkMhRR0=;
+        b=IgAJc4P4rte7DuO6ZRU1//SBfHyPPByvqzAmLeMXu9WQFFeZEU0usWHVztqk/oyv0p
+         fgkR9mEoRktdljM96aY+tgswFlVYhkrqAuKjUgbC2nvbRP0WygcZRrhbfW3lcsAjDdWq
+         9A9hAv86TUZElpchNJdbPc3VWLerPj/5ElMw4YjGztwIB5CaQloDQ4w6L+hqtgOMSx2u
+         IcElztnHVWSONIsznRH6L2Lg0dNX8xPCyiw1LZBBOWcYb7kKBcUg5MHn2hTiHlrizO4Y
+         z4UneoClJfXsrIgXajmgDTsHUo0yF/B5SJ1Ng9iyjoYoGajaKOnQhl00HhA/bZvcxtMe
+         ywFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1784641189; x=1785245989;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:date:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=NOwUd+mWhvohCElMtTpeZCxHcUjVrskr5JlvQkMhRR0=;
+        b=XHN1cLo9mzFHVBh5Kf8t47zAjA60ihOFY+OP8GZwmjKnyEhqtDygqR5orqaHwK0MHb
+         YFrih8zCLlof0iH72mTXcuSuKzMOrN3yaDnwRyylwq512f2D/o5v4+IPp7MNy9dg0+4/
+         R+qIjkx6AnjpH/R6FDEG9kcrk3pcIapqqxnc8MHkbmsWuh0wgvpQFiualQhcB0lzHH3R
+         OqPfFwEl7TzJ1IuWHzXxlsf5QkZ+Xm195h4T5Co8ObLYYcEliePl+gZStfs+Z0oS8EDA
+         JqUd5N7rxafE9EW8E/5Ifwhw2yFCviDd1vFi8ae43wRskPR0V/aQBUwJHLeyJ8WiXsTH
+         IoNA==
+X-Forwarded-Encrypted: i=1; AHgh+RojpzSaDcgUKqGQMGfEGulB4C+XNrVZ7bZ2yAok5TM50HLxi0Vv428ZRIabTihkPdHATnPZNQ6i@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw3Hf3JpJjLaDiXeUESlSjXWSMXQZeRjLlRos5Et9fLbcRllDh2
+	ZaRWswt9PggvndAvSk8i6v7qyVYY3CgxVDd7hVtYSNeJs3e7FzV1RC7/
+X-Gm-Gg: AR+sD11WQNgxWKYPl5KiA869lgb1SdcJFNgD9wWcpRmMakAhdlfcI1FyGZs1rM8Ux8V
+	NhitVkhyXVxq6WuikUotLEbn3feZccpRgvyE3OFm++jXB1xOFZGeKkm2sc+snMK8i72t0OwTnpL
+	3Ti6LAZaAaTF9UWmHYWXQyyugrTPmG/LaX6QvpXaUxBwpGC6Cii8NkpIPpdkHLkhgsvq4w4VgW4
+	exAwfwLEr6u0kQaTaUsgNKCFaHPOpEpau1vRBW+pfV+niRdudyIMOaiwJwOziHLDy5SQt7w1EF4
+	rg/uBH53MtxVyPD09mH//JzIAgO7V5V/9QwdT7YK2K1R0m7P3V8IpyInV8Nn+2BW95tSCuQR81o
+	QrA0a43USJLs9m6eVw39jHu3IUTqP49tyyJ5ETK84YQtT/KBmyVnKm5tDO8hc6bCAFw==
+X-Received: by 2002:a05:6000:2312:b0:47f:6f96:7f9c with SMTP id ffacd0b85a97d-47f6f9680bbmr15549047f8f.24.1784641187887;
+        Tue, 21 Jul 2026 06:39:47 -0700 (PDT)
+Received: from krava ([176.74.159.170])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47f63e496ffsm38371001f8f.3.2026.07.21.06.39.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Jul 2026 06:39:46 -0700 (PDT)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Tue, 21 Jul 2026 15:39:44 +0200
+To: Alan Maguire <alan.maguire@oracle.com>
+Cc: yonghong.song@linux.dev, olsajiri@gmail.com, arnaldo.melo@gmail.com,
+	bpf@vger.kernel.org, dwarves@vger.kernel.org
+Subject: Re: [PATCH dwarves 1/2] btf_encoder: Only skip optimized parms when
+ ABI changed
+Message-ID: <al92oCDv0htfTJmd@krava>
 References: <20260714135035.814273-1-alan.maguire@oracle.com>
-Content-Language: en-GB
-In-Reply-To: <20260714135035.814273-1-alan.maguire@oracle.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR0P281CA0156.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:b3::10) To BN0PR10MB4901.namprd10.prod.outlook.com
- (2603:10b6:408:126::19)
+ <20260714135035.814273-2-alan.maguire@oracle.com>
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN0PR10MB4901:EE_|SAWPR10MB997789:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0dc5fc95-183d-4eed-8794-08dee71250da
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|23010399003|376014|366016|1800799024|6133799003|56012099006|10067099003|22082099003|18002099003|3023799007;
-X-Microsoft-Antispam-Message-Info:
-	YItQEwrAg0/QKMq6CaveDG0uaQ0eWo6mOOrupMMLlm1a0iOXuRYHE5icDRk7XwZ538gOylX4+HpLWNvB6Hi+uqiEJ+dyD3LARh+4/f0CfDpP24q5U9CpQfonodkrMTQYGH4CNyuNX8mTQkFW6Dai9pmrKVG9PwhGsuPyrDNxlQwfpVSdcsonr98ZFHtxtmq+oh46dsGioDXYgwHbAoqm3mFlMYMf9DWA5UoXHkX1bPRhgjR80G+ODXr2jUEUl8DJg6T9ctXIywVNTw2WyjwEpS4yhiNeL0mTE2ogbD/NVBM5HKchHMWV/+nHfOUNO4NkMmamTjOy7NwgJS33md/enp+47jS5UQ2ERNFj6va94jm10twIrw50wy6LEBEZT52ONSRleTNgt4LHYO/cFmvROb7CKo1CBSMZa1gmAw4RQfpqFpdUCwgZ3BrVsPF8W96bhXgE97cSy7nOSLBhxPol/u870XsrfziwszZmRTe34IF892ZUu3/8yb749BxW17eKcTgugwRU0xEgBmlU+fSd3sale9HNMn3oLZqnSdQ7CleDe3Y5z9fv4HplD0MKzTfFYU0ZHYOzFNyDJYgFuUC5kNC7T8F568uGwNYorBfscnJo0efs0kVDhixqzHHLHtetK3cgB14kGHBemUYjUC1ZN6/b70tD30N++pNSaB6m98A=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN0PR10MB4901.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(23010399003)(376014)(366016)(1800799024)(6133799003)(56012099006)(10067099003)(22082099003)(18002099003)(3023799007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?cHo0VXVBZ0dXd1hjS1M4c3dvUXo5aG1hS0xJS0N1cjJ3R1JxbVpKZVl0SVZv?=
- =?utf-8?B?R01DaDNhajV0S0NmRzdjbmdSckZGZ0ZtQTJCK2VENm1rSy94dWtKRVZKdXh2?=
- =?utf-8?B?bElXci8yRFBYMTY3c3k2SUJCK1VEcllaSWhSNzJ4MVZjRUw4S2htYncrK2x3?=
- =?utf-8?B?N2dkdXNzdVprWmdscDYwRkp6ajhDaVczU3B2U2NWK095L0Y5NWxLSFAyS0FD?=
- =?utf-8?B?cDIvQVErV21pdGNUWlI1RXpqOXM0MWtuOVBhaldOVWNsQzRMTktqck5FWUpt?=
- =?utf-8?B?K0FrMEdrdWxrSzY3ZnN1SHpUbFFheEpnbjJZd1hhbExkc296blI1dm96bE5w?=
- =?utf-8?B?dTE3SG9SQmx3OE9EVlpFTXpBYmlNTnhaR1g5SExFVnlDSE9Nd2p3TmxBYmJ3?=
- =?utf-8?B?S3NzZmdNZG5IZDlTOFF3bnhLVDJ5WDcxMFJOQ3l5R3UxNTRWTFo2OGp5aG5q?=
- =?utf-8?B?NUNKUHRFZ2pJVTk5RitSM0IxZUJsT3d6YmZUTFVTSWVvdk9ncDBLcHhnd3Vx?=
- =?utf-8?B?UG5QOVdsNWVYajZvcDNaMWJwVXpNa2w0OGF6NEROUm5PZDNualptMGx5amxt?=
- =?utf-8?B?UWFXNU1uUlBtN0Y0TDd2MEFhYWZ2ejM1UmNhTUZIWFlsTTAvTmhzRUQwQ3R3?=
- =?utf-8?B?eUJGTWNzVnBuZlR3R0l0OTlCV3VDU2ZaMzlCN2xpSVo2aU1LUmV5RVYwSnpI?=
- =?utf-8?B?cVoraUZpcWZwWEZDU0ZSZDl4VEJJNXF0dkZxYTc3WkNzMkhlOEdva2hTR2Uv?=
- =?utf-8?B?S2d0SWxETHYrSnlYNEUvMDNPZUNQMldOVmVWb1ZzcVFnVVQ3OFdOUWtZWGNp?=
- =?utf-8?B?RUN0c1RYa2NRd3JBUnN2YUlQZUtIcmVGdkJ0bXNpZVd5WGozM3JVVFpXMnkz?=
- =?utf-8?B?UFRxMFM5TW1kTUNiWURxWlpNd0t1eWNZVFM0T2ErVndocGZiQzcvSVA5ajV4?=
- =?utf-8?B?RGJJbUdUM2xmZkFPMmtuTExoeVgzNVZrTUxVRDduOGFvQW1yaGM2MjFLdktJ?=
- =?utf-8?B?UEFzaXZENFU1ZldqQ0Fna05aT0RiaXNTVlRhNVMyaTFqcnJYcGk3K0JGdVhh?=
- =?utf-8?B?VDU4Rk1BQ2JXeU5JNXZYdlFCY2hyU0tmZTlBZHN0dlJaMWIvUGZmTHlueDRj?=
- =?utf-8?B?VkY0UXJNK2pvZUNJcXRMYUhvOFVFK0JZQlE3UjhFRUx2d2xJYUJqL09PeGE3?=
- =?utf-8?B?eG9EakhmeU1XUGU4NTJydis1NWk2RDBMUXFwWWl4cDV6UEdoQTNYL2RvYTd0?=
- =?utf-8?B?Mk85ZzZYZ3I4R1NiNWJCaFVweUc3c2ZLcnpQdkNnV0JwWjVzQXNzQWlrK3JO?=
- =?utf-8?B?ZG9wZzlHL3dYRE9nR2hXYkdzR1BJYmo2WnVzS202OG9QUkNoTHRBZUd4Vzgy?=
- =?utf-8?B?elJIOWc4aW5pdjJhWk0ycXZkbDVUcVBqWEJEdlpvK1ZIeDBGMXUwdU1uSG1u?=
- =?utf-8?B?SjRrU2ZRekxTNG1UaWtaR1BOWFNNTWRWZ25QRU83SlJhV0hieGR3M0N4OTRy?=
- =?utf-8?B?Q0xxS3Jqd21sU3RsTHRReElrWGcrNGRKa25ZQ2xIdlRkaDBzaVh2L29tcHZn?=
- =?utf-8?B?ZkVCVWgrdk03QlZEeUIrVXkwOTU1eGgzTWRsQlZPY1YwV1ZuTWZXMVpDUjhW?=
- =?utf-8?B?a05BTzdaSGYxd3hzM1dGTFBVdzI2MFJtZUJCUXlmNlF3cmVtZ1hZY2ZLTTZ1?=
- =?utf-8?B?YnBPYXBKQ0xranQxem50d1lUZnhpc2N6RW5XTmtocWQ3L0FnVkUwYkNjN0NI?=
- =?utf-8?B?Y3BMNi9ETkZncUp6K1NWMmpiL0Q3Qnhpc3J6dlhKN0lnTEg3SENzSGw2bjd6?=
- =?utf-8?B?NHBxVEplWWoyV2pQZnpNNFNhYkFKYlpSWTlVank3cEVkZGVDblYwYnJzUVA4?=
- =?utf-8?B?K1Z2RnpDcUd0c1pIQnB4Nkw4YSthMlBveWpndTJBdTJiQ3NNMi9Eb1RnVVhM?=
- =?utf-8?B?VDhHbnVDcGtBb2x6VjZCdExOYUgvUDZCNTRzVFhvbEhvVjBWZ21NS1RMZnpz?=
- =?utf-8?B?eWxrdUlzYzUwaXBzWU5WL0I2eDRQN1R2blZ2aVJ1ZzNCOGdnV3k4aDBmVFF3?=
- =?utf-8?B?RXFvdUs0bFpLM2hUaWUxcmw4WHZBNlhJdUlQVlRtWE5EMTVqbEdSVE5tTUF0?=
- =?utf-8?B?WjArOWlPbUF4QmpXcWlYZUdyejZxSko0T25KWUo1V1gvZzNKWWM0WVAzcHFD?=
- =?utf-8?B?MFFxMmhoUnBzTExxZzFUMzRzNDdBL2VLUmFIRjVSRWNKSXphRGlOTEVSR2Fr?=
- =?utf-8?B?d2ZVeXZoTzZJOHFCYUMzaHMzakQxOHJ5SWd5WXNRZTZOLzNCSHNyWUxWd2hh?=
- =?utf-8?B?SDA3bTJXbVo1L2FBaUtKTEo3R3lubE94VUpHVWZZT21lUUNOa2FiUT09?=
-X-Exchange-RoutingPolicyChecked:
-	Y1bEe5C9d6bnGs6b+qbco6FOGTHlq/miLwA2e5igk4kYPcAefV41VqzZBfzuYTdsfbCv3ZCVnk++gbeFsJJBbUJqHKdoKdjEH8n3PeIJl2ruQMdw0PQYEwCTSv3sjumccbEqrssvtR+3UJKu9LKY6zmLFxNMdNBsdLU6WeicMO3HAot0ghcyy6MXmCe1FWyATZINGtzDC8jFh4eNywICosuQ2122yCaf2zRzB6DXJQMZP1BwdGC5i4WpTXRRtba8azwzyo/H/jmU9nCongnfar5hUKIda+/SvbUBn0X1dAXRF5pQJVDkDp7mVjE2PKX9sblBRi2ypzBpUiRACdhGWg==
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
-	u09FHdyHb3fn1zqV6VV6r6qoBjQFdheSzE6kp9eBWIYUTryxPaRlClmpc97LwQf/UuRhUmUGNhk/+aF5HXulauFrxlta8mWoZ1/QQcuTphry+ebQ14MUjDwIZRZgdtwzumISuJOWzG9LD+CuezsH5m7t94zPNabERX5BTUi4iRn8IlfbZRCkE1Ax1KSUwmMCRG9+41KTL8DNKG/bp+PAwEDzRo+0GZ9jfe3B+oCWYFdfyHgI/J6CqpO3cd3/6r5P3aD5at4+uP57fbXfj+xrJIlS00R/0Lqhw1s03XVx2iHRKpUX+Z0kYx4dFBcl4/WCELDQIINLMtxeiuMINqQ25YJdXfZ7R/1yKzwDcFZ0AladYbGkqRaXxui41qqC04SD647+pp/2qhEVHYNupyOp5YY/obXjA2MhB7b0hcJBOpb4CTWioS6HSQtTQcfBrj/JatZDnraA0vCJydLKic3UdnmT8oUblf9KONwv5njn/f6VjjxB9Vgd5LeV9YtgQLk8eNmEdkzPkMBJKZGMCP6Ik1zsmTOyFT5IZW535O9Q2hM0pSZY2Kz/UqjHMm0fCAIZ9O/PiIWdKRGoUGO8vQdi2n4Hl5dDOPhWQ7qvePjITVw=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0dc5fc95-183d-4eed-8794-08dee71250da
-X-MS-Exchange-CrossTenant-AuthSource: BN0PR10MB4901.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Jul 2026 10:24:58.7481
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: oUO0u8rfMoOSCciKER+6T2I4DWrROPiYTDjJyQK4BEPyChHSwaTfzmYtGx0xLZss0oxTaREfX17Z6Qhuo9cQnQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SAWPR10MB997789
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.134,FMLib:17.12.100.49
- definitions=2026-07-20_06,2026-07-20_03,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0
- lowpriorityscore=0 spamscore=0 suspectscore=0 mlxscore=0 malwarescore=0
- adultscore=0 bulkscore=0 mlxlogscore=999 phishscore=0 classifier=spam
- adjust=0 reason=mlx scancount=1 engine=8.19.0-2606160000
- definitions=main-2607210110
-X-Proofpoint-GUID: 5HcFwhjYVYve0N132SYqSEFmsq8-CUF1
-X-Proofpoint-ORIG-GUID: 5HcFwhjYVYve0N132SYqSEFmsq8-CUF1
-X-Authority-Analysis: v=2.4 cv=IsYutr/g c=1 sm=1 tr=0 ts=6a5f48ff b=1 cx=c_pps
- a=zPCbziy225d3KhSqZt3L1A==:117 a=zPCbziy225d3KhSqZt3L1A==:17
- a=6eWqkTHjU83fiwn7nKZWdM+Sl24=:19 a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19
- a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
- a=RAioF0-LDSMA:10 a=GoEa3M9JfhUA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=jiCTI4zE5U7BLdzWsZGv:22 a=3I1J8UUJPc9JN9BFgKH3:22 a=VwQbUJbxAAAA:8
- a=NEAV23lmAAAA:8 a=EHR8qhrlT3MozxiZAfwA:9 a=QEXdDO2ut3YA:10
- a=5yU3S35YU4bGjq-dph-N:22 a=Bho9c0fBagfJEIQBS7DQ:22 cc=ntf awl=host:12218
-X-Proofpoint-Spam-Info: AW1haW4tMjYwNzIxMDExMCBTYWx0ZWRfX7mZVysaMyoL3
- lke82mzdQoQ1Up+R8WWwVD6CP7/rbc0OuunzsknB7mHJ9LQuQt4K1AYVjMwsEuhcgWXUMF+SkMI
- ftYL//hcR/ITzTWRvNEToNGNV4JqANg4swGS0p//FkWbMrZ/CQu4
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNzIxMDExMCBTYWx0ZWRfXz3KPlQEKN4pj
- 9gt+4f+jxE3PfkoUenUyrGVEac1LLr9GPBi36UcJDpZa5OgwZo8e8GNB2E2il5stGrTIrhvsunM
- q7+nk39S6jZ8GSIVh1ETnhoDlI4nX8bdIFsaCbqr1pLsRYsNoGWha62JQ3Uq7nEaujRWhrkzZKk
- JQ31pv1g8AAOuCurZqXdtClCvSKMeq0BatjN2WyMBwunAfGz6TSh1SOuipILZXVaXR2W3BlAL4A
- mfUzGywicB80XVUBwwWBOnBCUJYmdF+PJvmM6H7TKLtJ7cAFPx7qVxA8mvFZG7/uW5AhV1EZMn1
- csHzW63sSdJD641ovT2ihJMbLHVsGf/Xb2iWwJPts0mVzR1Byaiw+jRuXWcXLvsjMJF30OMGAKz
- OdXV+X1fSZZqzLTIEBmrGVgbYrheb+N9Bg0u5GAKWsZ/BfB6x7UqAUHnBfaK9Z2waGsUZmdIVH4
- lkhtfC8smJFRuvzw3pFD/Ny3ltj3PoX+DrpVR2Ms=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260714135035.814273-2-alan.maguire@oracle.com>
 
-On 14/07/2026 14:50, Alan Maguire wrote:
-> Though the true signature series [1] has not landed yet, this
-> is intended as a follow-on series to resolve an issue it raises;
-> by sharing the optimization detection code it can result in
-> the non true signature case being overly aggressive in omitting
-> functions from BTF that have optimized parameters.
+On Tue, Jul 14, 2026 at 02:50:34PM +0100, Alan Maguire wrote:
+> The true-signature series made optimized-parameter state more visible to
+> the BTF encoder.  Skipping every function with optimized parameters is too
+> broad, though: an unused parameter can still be part of the real calling
+> ABI, so default BTF should continue to encode that function.
 > 
-> See patch 1 for the details; patch 2 tests the change for gcc.
+> Limit the optimized-parameter skip to cases where default BTF cannot
+> represent the concrete ABI safely:
+>  - clang functions marked as signature-changed via DW_CC_nocall
+>  - GCC optimized clones with ELF suffixes such as .isra or .constprop
 > 
-> This series applies on top of [1]; the danger is we do not
-> want to land the true signature series without resolving this
-> issue first so hopefully folks can test with this series on top to
-> see if issues are resolved.  CI passed with this series on top
-> of the true signature series at [2].
+> When multiple saved states share the same base ELF function, prefer a
+> canonical state that does not require this optimized-parameter skip, so a
+> usable concrete instance is not dropped just because another optimized clone
+> exists.
 > 
+> Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+> ---
+>  btf_encoder.c | 97 ++++++++++++++++++++++++++++++++++++++-------------
+>  1 file changed, 73 insertions(+), 24 deletions(-)
+> 
+> diff --git a/btf_encoder.c b/btf_encoder.c
+> index 38455a4..2e6eab0 100644
+> --- a/btf_encoder.c
+> +++ b/btf_encoder.c
+> @@ -95,6 +95,8 @@ struct btf_encoder_func_state {
+>  	uint8_t inconsistent_proto:1;
+>  	uint8_t uncertain_parm_loc:1;
+>  	uint8_t reordered_parm:1;
+> +	uint8_t signature_changed:1;
+> +	uint8_t optimized_symbol:1;
+>  	uint8_t ambiguous_addr:1;
+>  	int ret_type_id;
+>  	struct btf_encoder_func_parm *parms;
+> @@ -1209,27 +1211,44 @@ static struct btf_encoder_func_state *btf_encoder__alloc_func_state(struct btf_e
+>  	return state;
+>  }
+>  
+> -/* some "." suffixes do not correspond to real functions;
+> - * - .part for partial inline
+> - * - .cold for rarely-used codepath extracted for better code locality
+> - */
+> -static bool str_contains_non_fn_suffix(const char *str) {
+> -	static const char *skip[] = {
+> -		".cold",
+> -		".part"
+> -	};
+> +static bool str_contains_suffix(const char *str, const char * const *suffixes, int nr_suffixes)
+> +{
+>  	const char *suffix = strchr(str, '.');
+>  	int i;
+>  
+>  	if (!suffix)
+>  		return false;
+> -	for (i = 0; i < ARRAY_SIZE(skip); i++) {
+> -		if (strstr(suffix, skip[i]))
+> +	for (i = 0; i < nr_suffixes; i++) {
+> +		if (strstr(suffix, suffixes[i]))
+>  			return true;
+>  	}
+>  	return false;
+>  }
+>  
+> +/* some "." suffixes do not correspond to real functions;
+> + * - .part for partial inline
+> + * - .cold for rarely-used codepath extracted for better code locality
+> + */
+> +static bool str_contains_non_fn_suffix(const char *str)
+> +{
+> +	static const char * const skip[] = {
+> +		".cold",
+> +		".part"
+> +	};
+> +
+> +	return str_contains_suffix(str, skip, ARRAY_SIZE(skip));
+> +}
+> +
+> +static bool str_contains_optimized_fn_suffix(const char *str)
+> +{
+> +	static const char * const suffixes[] = {
+> +		".constprop",
+> +		".isra",
+> +	};
+> +
+> +	return str_contains_suffix(str, suffixes, ARRAY_SIZE(suffixes));
+> +}
+> +
+>  static bool elf_function__has_ambiguous_address(struct elf_function *func)
+>  {
+>  	struct elf_function_sym *sym;
+> @@ -1295,6 +1314,17 @@ static int32_t btf_encoder__save_func(struct btf_encoder *encoder, struct functi
+>  	state->optimized_parms = ftype->optimized_parms;
+>  	state->uncertain_parm_loc = ftype->uncertain_parm_loc;
+>  	state->reordered_parm = ftype->reordered_parm;
+> +	state->signature_changed = ftype->signature_changed;
+> +	if (state->addr) {
+> +		for (int i = 0; i < func->sym_cnt; i++) {
+> +			if (state->addr != func->syms[i].addr)
+> +				continue;
+> +			if (str_contains_optimized_fn_suffix(func->syms[i].name)) {
+> +				state->optimized_symbol = 1;
+> +				break;
+> +			}
+> +		}
+> +	}
+>  	ftype__for_each_parameter(ftype, param) {
+>  		const char *name;
+>  		char *final_name = NULL;
+> @@ -1497,19 +1527,17 @@ static int saved_functions_combine(struct btf_encoder *encoder,
+>  				   struct btf_encoder_func_state *a,
+>  				   struct btf_encoder_func_state *b)
+>  {
+> -	uint8_t optimized, unexpected, inconsistent, uncertain_parm_loc, reordered_parm;
+> +	uint8_t unexpected, inconsistent, uncertain_parm_loc, reordered_parm;
+>  
+>  	if (a->elf != b->elf)
+>  		return 1;
+>  
+> -	optimized = a->optimized_parms | b->optimized_parms;
+>  	unexpected = a->unexpected_reg | b->unexpected_reg;
+>  	inconsistent = a->inconsistent_proto | b->inconsistent_proto;
+>  	uncertain_parm_loc = a->uncertain_parm_loc | b->uncertain_parm_loc;
+>  	reordered_parm = a->reordered_parm | b->reordered_parm;
+>  	if (!unexpected && !inconsistent && !reordered_parm && !funcs__match(encoder, a, b))
+>  		inconsistent = 1;
+> -	a->optimized_parms = b->optimized_parms = optimized;
+>  	a->unexpected_reg = b->unexpected_reg = unexpected;
+>  	a->inconsistent_proto = b->inconsistent_proto = inconsistent;
+>  	a->uncertain_parm_loc = b->uncertain_parm_loc = uncertain_parm_loc;
+> @@ -1574,7 +1602,16 @@ static int btf_encoder__add_true_signature(struct btf_encoder *encoder,
+>  	return 0;
+>  }
+>  
+> -static struct btf_encoder_func_state *btf_encoder__select_canonical_state(struct btf_encoder_func_state *combined_states,
+> +static bool btf_encoder_func_state__skip_optimized_parms(struct btf_encoder *encoder,
+> +							 struct btf_encoder_func_state *state)
+> +{
+> +	return !encoder->true_signature &&
+> +	       state->optimized_parms &&
+> +	       (state->signature_changed || state->optimized_symbol);
+> +}
 
-Last call on this before I land Yonghong's series with these
-patches on top; in my own testing it looks like it resolves
-issues Jiri ran into (with functions with optimized params
-making it into BTF when true signature was disabled), so unless
-anyone spots any additional issues I think Yonghong's series
-and this one are safe to land. CI looks good with the combination.
+so this take effect only when true_signatues are disabled?
 
-Thanks!
+---
 
-Alan
+hi,
+sorry for delay, I checked this patchset on top of your pahole branch: 
+  alan-maguire/dwarves-inline-on-true-sig-v10
 
-> [1] https://lore.kernel.org/dwarves/20260625020148.1883082-1-yonghong.song@linux.dev/
-> [2] https://github.com/alan-maguire/dwarves/actions/runs/29270441984
-> 
-> Alan Maguire (2):
->   btf_encoder: Only skip optimized parms when ABI changed
->   tests: Add GCC default-BTF optimized parameter coverage
-> 
->  btf_encoder.c                  | 97 +++++++++++++++++++++++++---------
->  tests/gcc_optimized_default.sh | 69 ++++++++++++++++++++++++
->  2 files changed, 142 insertions(+), 24 deletions(-)
->  create mode 100755 tests/gcc_optimized_default.sh
-> 
-> -- 
-> 2.43.5
-> 
-> 
+true signatues in that branch gives me different stats (than before)
+in generated functions:
 
+   279 added, 94 removed (diff attached below)
+
+compared to pahole without true signatures change
+
+I checked few functions and they seem correct, so the branch lgtm ;-)
+
+this patchset on top of that branch does not change the stats for me
+
+thanks,
+jirka
+
+
+---
+--- list.base.funcs	2026-07-21 13:44:44.483063426 +0200
++++ list.true.funcs	2026-07-21 13:45:27.224089687 +0200
+@@ -72,6 +72,7 @@
+ '__aafs_profile_rmdir'
+ 'aafs_remove'
+ '__aa_fs_remove_rawdata'
++'__aafs_setup_d_inode'
+ 'aafs_show_path'
+ 'aa_get_buffer'
+ 'aa_get_ns'
+@@ -1094,7 +1095,6 @@
+ 'acpi_irq_nobalance_set'
+ 'acpi_irq_pci'
+ 'acpi_irq_penalty_init'
+-'acpi_irq_penalty_update'
+ 'acpi_irq_stats_init'
+ 'acpi_isa_irq_available'
+ 'acpi_isa_irq_to_gsi'
+@@ -1109,7 +1109,6 @@
+ 'acpi_leave_sleep_state_prep'
+ 'acpi_lid_input_open'
+ 'acpi_lid_notify'
+-'acpi_lid_notify_state'
+ 'acpi_lid_open'
+ 'acpi_lid_remove_fs'
+ 'acpi_lid_save'
+@@ -1296,6 +1295,7 @@
+ 'acpi_old_suspend_ordering'
+ 'acpi_os_acquire_lock'
+ 'acpi_osc_error_check'
++'acpi_osc_handshake'
+ 'acpi_os_create_cache'
+ 'acpi_os_create_semaphore'
+ 'acpi_os_delete_cache'
+@@ -1311,6 +1311,7 @@
+ 'acpi_os_get_timer'
+ 'acpi_osi_dmi_blacklisted'
+ 'acpi_osi_dmi_darwin'
++'acpi_osi_dmi_linux'
+ 'acpi_osi_handler'
+ 'acpi_osi_init'
+ 'acpi_osi_is_win8'
+@@ -2021,7 +2022,6 @@
+ 'ad_actor_oper_port_state_show'
+ 'ad_aggregator_id_show'
+ 'ad_agg_selection_logic'
+-'add_acpi_hid_device'
+ 'add_addr'
+ 'add_addr_generate_hmac'
+ 'add_addr_hmac_valid'
+@@ -2172,7 +2172,6 @@
+ 'add_scc_backedge'
+ 'add_sect_attrs'
+ 'add_softcursor'
+-'add_special_device'
+ '__add_stripe_bio'
+ 'add_subprog'
+ 'add_subprog_and_kfunc'
+@@ -2196,6 +2195,7 @@
+ 'add_to_page_cache_lru'
+ 'add_to_pipe'
+ 'add_to_platform_keyring'
++'add_to_rb'
+ 'add_to_secondary_keyring'
+ 'add_tracer'
+ 'add_tracer_options'
+@@ -2421,7 +2421,6 @@
+ 'ahash_def_finup_done2'
+ 'ahash_do_req_chain'
+ 'ahash_finup_done'
+-'ahash_finup_finish'
+ 'ahash_free_singlespawn_instance'
+ 'ahash_nosetkey'
+ 'ahash_prepare_alg'
+@@ -2447,6 +2446,7 @@
+ 'ahci_enable_fbs'
+ 'ahci_error_handler'
+ 'ahci_error_intr'
++'ahci_exec_polled_cmd'
+ 'ahci_fill_cmd_slot'
+ 'ahci_freeze'
+ 'ahci_get_irq_vector'
+@@ -2696,6 +2696,7 @@
+ 'alloc_irq_index'
+ 'alloc_irq_lookup_table'
+ 'alloc_irq_table'
++'alloc_isa_irq_from_domain'
+ 'alloc_large_system_hash'
+ 'alloc_lookup_fw_priv'
+ 'alloc_low_pages'
+@@ -2704,7 +2705,6 @@
+ 'alloc_migration_target_by_mpol'
+ 'alloc_misplaced_dst_folio'
+ 'alloc_mnt_idmap'
+-'alloc_mnt_ns'
+ 'alloc_multiple_bios'
+ 'alloc_netdev_dummy'
+ 'alloc_netdev_mqs'
+@@ -2760,6 +2760,7 @@
+ 'alloc_sleep_millisecs_show'
+ 'alloc_sleep_millisecs_store'
+ 'alloc_stable_node_chain'
++'alloc_stripe'
+ 'alloc_surplus_hugetlb_folio'
+ 'alloc_swapdev_block'
+ 'alloc_swap_scan_cluster'
+@@ -2767,7 +2768,6 @@
+ 'alloc_task_exec_state'
+ 'alloc_test_extent_buffer'
+ 'alloc_tio'
+-'alloc_trace_fprobe'
+ 'alloc_trace_kprobe'
+ 'alloc_trace_uprobe'
+ 'alloc_tree'
+@@ -2966,7 +2966,6 @@
+ 'amd_iommu_restart_log'
+ 'amd_iommu_restart_ppr_log'
+ 'amd_iommu_resume'
+-'amd_iommu_set_dirty_tracking'
+ 'amd_iommu_set_dte_v1'
+ 'amd_iommu_set_gcr3'
+ 'amd_iommu_set_rlookup_table'
+@@ -3107,6 +3106,7 @@
+ 'amdv1_map_range'
+ 'amdv1_unmap_range'
+ 'amiga_partition'
++'analyse_superblocks'
+ 'analyze_sbs'
+ 'analyze_subprog'
+ 'announce_device'
+@@ -3323,6 +3323,7 @@
+ 'append_elf_note'
+ 'append_filter_err'
+ 'append_kcore_note'
++'append_mas_cp'
+ 'append_wr_mas_cp'
+ 'apple_airport_reset'
+ 'apply_alternatives'
+@@ -3663,6 +3664,7 @@
+ 'array_state_store'
+ 'ars_complete'
+ 'asn1_ber_decoder'
++'aspm_attr_store_common'
+ 'aspm_ctrl_attrs_are_visible'
+ 'aspm_l1_acceptable_latency'
+ 'assert_bandwidth_index'
+@@ -4362,6 +4364,7 @@
+ 'audit_seccomp'
+ 'audit_seccomp_actions_logged'
+ 'audit_send_list_thread'
++'audit_send_reply'
+ 'audit_send_reply_thread'
+ 'audit_serial'
+ 'audit_set_backlog_limit'
+@@ -4698,6 +4701,7 @@
+ 'basic_get'
+ 'basic_init'
+ 'basic_walk'
++'batcher_init'
+ 'battery_ac_is_broken_quirk'
+ 'battery_bix_broken_package_quirk'
+ 'battery_hook_exit'
+@@ -5209,7 +5213,6 @@
+ 'bh_pool_kick_highpri'
+ 'bh_pool_kick_normal'
+ '__bh_read'
+-'bh_read'
+ '__bh_read_batch'
+ '__bh_submit'
+ 'bh_submit'
+@@ -5223,7 +5226,6 @@
+ 'bin_attr_nvmem_read'
+ 'bin_attr_nvmem_write'
+ 'binder_add_device'
+-'binder_add_freeze_work'
+ 'binder_alloc_copy_from_buffer'
+ 'binder_alloc_copy_to_buffer'
+ 'binder_alloc_copy_user_to_buffer'
+@@ -5287,6 +5289,7 @@
+ 'binder_get_thread'
+ 'binder_get_txn_from_and_acq_inner'
+ 'binder_has_work'
++'binder_inc_node'
+ 'binder_inc_node_nilocked'
+ 'binder_inc_ref_for_node'
+ 'binder_init'
+@@ -5328,6 +5331,7 @@
+ 'binder_transaction_buffer_release'
+ 'binder_translate_binder'
+ 'binder_translate_fd'
++'binder_translate_fd_array'
+ 'binder_translate_handle'
+ 'binder_txn_latency_free'
+ 'binder_update_ref_for_handle'
+@@ -6400,6 +6404,7 @@
+ 'bond_xmit_alb_slave_get'
+ 'bond_xmit_broadcast'
+ 'bond_xmit_get_slave'
++'__bond_xmit_hash'
+ 'bond_xmit_hash'
+ 'bond_xmit_roundrobin_slave_get'
+ 'bond_xmit_tlb_slave_get'
+@@ -6541,6 +6546,7 @@
+ 'bpf_core_calc_field_relo'
+ 'bpf_core_calc_relo'
+ 'bpf_core_calc_relo_insn'
++'bpf_core_composites_match'
+ 'bpf_core_essential_name_len'
+ 'bpf_core_find_cands'
+ 'bpf_core_format_spec'
+@@ -7130,7 +7136,6 @@
+ 'bpf_lookup_user_key'
+ 'bpf_loop'
+ 'bpf_lru_destroy'
+-'bpf_lru_init'
+ '__bpf_lru_list_rotate'
+ '__bpf_lru_list_shrink'
+ 'bpf_lru_pop_free'
+@@ -7855,7 +7860,6 @@
+ 'bpf_rhash_map_seq_show'
+ 'bpf_rhash_map_seq_start'
+ 'bpf_rhash_map_seq_stop'
+-'bpf_ringbuf_alloc'
+ 'bpf_ringbuf_discard'
+ 'bpf_ringbuf_discard_dynptr'
+ 'bpf_ringbuf_notify'
+@@ -7938,6 +7942,7 @@
+ 'bpf_skb_get_tunnel_opt'
+ 'bpf_skb_get_xfrm_info'
+ 'bpf_skb_get_xfrm_state'
++'bpf_skb_is_valid_access'
+ '__bpf_skb_load_bytes'
+ 'bpf_skb_load_bytes'
+ 'bpf_skb_load_bytes_relative'
+@@ -9883,6 +9888,7 @@
+ 'br_multicast_toggle_vlan_snooping'
+ 'br_multicast_toin'
+ 'br_multicast_uninit_stats'
++'br_multicast_update_querier'
+ 'br_multicast_update_vlan_mcast_ctx'
+ 'br_nd_send'
+ 'br_net_exit_rtnl'
+@@ -10178,6 +10184,7 @@
+ 'btf_parse_hdr'
+ 'btf_parse_layout_sec'
+ 'btf_parse_str_sec'
++'btf_parse_struct_metas'
+ 'btf_parse_type_sec'
+ 'btf_parse_vmlinux'
+ 'btf_prepare_func_args'
+@@ -10215,6 +10222,7 @@
+ 'btf_struct_ids_match'
+ 'btf_struct_log'
+ 'btf_struct_resolve'
++'__btf_struct_show'
+ 'btf_struct_show'
+ 'btf_struct_walk'
+ 'btf_sysfs_vmlinux_mmap'
+@@ -10270,6 +10278,7 @@
+ 'btree_invalidate_folio'
+ 'btree_lock_cmp_fn'
+ 'btree_lock_print_fn'
++'btree_lookup_raw'
+ 'btree_mergesort'
+ 'btree_migrate_folio'
+ 'btree_node_free'
+@@ -11389,7 +11398,6 @@
+ 'btrfs_set_inode_index_count'
+ 'btrfs_set_inode_last_trans'
+ 'btrfs_set_item_key_safe'
+-'btrfs_set_periodic_reclaim_ready'
+ 'btrfs_set_prop'
+ 'btrfs_set_record_extent_bits'
+ 'btrfs_set_root_node'
+@@ -11618,7 +11626,6 @@
+ 'btrfs_zone_finish_one_bg'
+ 'bts_buffer_free_aux'
+ 'bts_buffer_reset'
+-'bts_buffer_setup_aux'
+ 'bts_event_add'
+ 'bts_event_del'
+ 'bts_event_destroy'
+@@ -11719,6 +11726,7 @@
+ 'bus_uevent_store'
+ 'bus_unregister'
+ 'bus_unregister_notifier'
++'busy_poll_stop'
+ 'bvec_npages'
+ 'bvec_try_merge_hw_page'
+ 'bvec_try_merge_page'
+@@ -11935,6 +11943,7 @@
+ 'call_proc_get_link'
+ 'call_rcu'
+ 'call_rcu_hurry'
++'call_rcu_nocb'
+ '__call_rcu_nocb_wake'
+ 'call_rcu_tasks'
+ 'call_rcu_tasks_generic'
+@@ -11974,6 +11983,7 @@
+ 'can_cow_file_range_inline'
+ 'can_demote'
+ 'can_do_mlock'
++'can_finish_ordered_extent'
+ 'can_follow_write_common'
+ 'can_free_region'
+ 'can_map_frag'
+@@ -12230,7 +12240,6 @@
+ 'cgroup_finalize_control'
+ 'cgroup_fork'
+ 'cgroup_free_root'
+-'cgroup_freeze'
+ 'cgroup_freezer_migrate_task'
+ 'cgroup_freeze_show'
+ 'cgroup_freeze_write'
+@@ -12435,7 +12444,6 @@
+ 'check_attach_modify_return'
+ 'check_bpf_snprintf_call'
+ '__check_buffer_access'
+-'check_buffer_access'
+ 'check_buffer_tree_ref'
+ 'check_can_switch'
+ 'check_cgroupfs_options'
+@@ -12531,6 +12539,7 @@
+ 'check_packet_access'
+ 'check_panic_on_warn'
+ '__checkparam_dl'
++'check_path'
+ 'check_pcc_chan'
+ 'check_perm_in'
+ 'check_perm_out'
+@@ -12609,7 +12618,6 @@
+ 'check_xattrs'
+ 'check_xstate_against_struct'
+ 'check_xtile_data_against_struct'
+-'check_zeroed_sockptr'
+ 'check_zeroed_user'
+ 'check_zero_holes'
+ 'child_notify'
+@@ -12682,6 +12690,7 @@
+ 'cipso_v4_doi_remove'
+ 'cipso_v4_doi_walk'
+ 'cipso_v4_error'
++'cipso_v4_genopt'
+ 'cipso_v4_getattr'
+ 'cipso_v4_init'
+ 'cipso_v4_map_cache_hash'
+@@ -12789,7 +12798,6 @@
+ 'clear_nlink'
+ 'clear_node_memory_type'
+ 'clear_or_poison_free_pages'
+-'clear_page'
+ 'clear_page_dirty_for_io'
+ '__clear_page_guard'
+ 'ClearPageHWPoisonTakenOff'
+@@ -13475,7 +13483,6 @@
+ 'compaction_unregister_node'
+ 'compaction_zonelist_suitable'
+ 'compact_lock_irqsave'
+-'compact_node'
+ 'compact_store'
+ 'compact_zone'
+ 'companion_show'
+@@ -13952,7 +13959,6 @@
+ 'copy_templates'
+ 'copy_thread'
+ 'copy_time_ns'
+-'copy_to_bpfptr_offset'
+ '_copy_to_iter'
+ 'copy_to_kernel_nofault'
+ 'copy_to_sk'
+@@ -13968,6 +13974,7 @@
+ 'copy_uabi_to_xstate'
+ 'copy_urb_data_to_user'
+ 'copy_user_flushcache'
++'copy_user_gigantic_page'
+ 'copy_user_large_folio'
+ 'copy_user_state_offload'
+ 'copy_user_syms'
+@@ -15579,6 +15586,7 @@
+ 'cypress_init'
+ 'cypress_process_packet'
+ 'cypress_protocol_handler'
++'cypress_ps2_ext_cmd'
+ 'cypress_reconnect'
+ 'cypress_reset'
+ 'cypress_send_ext_cmd'
+@@ -15726,10 +15734,12 @@
+ 'dbg_io_get_char'
+ 'dbg_late_init'
+ 'dbg_notify_reboot'
++'dbgp_control_msg'
+ '_dbgp_external_startup'
+ 'dbgp_external_startup'
+ 'dbg_pnp_show_option'
+ 'dbg_pnp_show_resources'
++'dbg_port_buf'
+ 'dbgp_reset_prep'
+ 'dbgp_wait_until_done'
+ 'dbg_release_bp_slot'
+@@ -15788,8 +15798,10 @@
+ 'dcbnl_init'
+ 'dcbnl_netdevice_event'
+ 'dcbnl_notify'
++'__dcbnl_pg_getcfg'
+ 'dcbnl_pgrx_getcfg'
+ 'dcbnl_pgrx_setcfg'
++'__dcbnl_pg_setcfg'
+ 'dcbnl_pgtx_getcfg'
+ 'dcbnl_pgtx_setcfg'
+ 'dcbnl_setall'
+@@ -16038,7 +16050,6 @@
+ 'dec_dl_tasks_cs'
+ 'dec_index'
+ 'dec_in_flight'
+-'dec_mm_counter'
+ '__dec_node_page_state'
+ 'dec_node_page_state'
+ '__dec_node_state'
+@@ -16052,7 +16063,6 @@
+ 'decode_register'
+ '__decode_register_operand'
+ 'decode_rs8'
+-'decode_tail'
+ 'decompress_method'
+ 'decompress_single'
+ 'decompress_threadfn'
+@@ -16484,7 +16494,6 @@
+ 'device_add_of_node'
+ 'device_add_software_node'
+ 'device_area_is_invalid'
+-'__device_attach'
+ 'device_attach'
+ '__device_attach_async_helper'
+ '__device_attach_driver'
+@@ -16708,7 +16717,6 @@
+ 'devl_assert_locked'
+ 'devl_dpipe_headers_register'
+ 'devl_dpipe_headers_unregister'
+-'devl_dpipe_table_register'
+ 'devl_dpipe_table_resource_set'
+ 'devl_dpipe_table_unregister'
+ 'devl_health_reporter_create'
+@@ -16814,6 +16822,7 @@
+ 'devlink_nl_health_reporter_recover_doit'
+ 'devlink_nl_health_reporter_set_doit'
+ 'devlink_nl_health_reporter_test_doit'
++'devlink_nl_info_fill'
+ 'devlink_nl_info_get_doit'
+ 'devlink_nl_info_get_dumpit'
+ 'devlink_nl_info_get_dump_one'
+@@ -16826,6 +16835,7 @@
+ 'devlink_nl_nested_fill'
+ 'devlink_nl_notify_filter'
+ 'devlink_nl_notify_filter_set_doit'
++'devlink_nl_param_fill'
+ 'devlink_nl_param_get_doit'
+ 'devlink_nl_param_get_dumpit'
+ 'devlink_nl_param_get_dump_one'
+@@ -16864,6 +16874,7 @@
+ 'devlink_nl_rate_set'
+ 'devlink_nl_rate_set_doit'
+ 'devlink_nl_region_del_doit'
++'devlink_nl_region_fill'
+ 'devlink_nl_region_get_doit'
+ 'devlink_nl_region_get_dumpit'
+ 'devlink_nl_region_get_dump_one'
+@@ -16872,16 +16883,20 @@
+ 'devlink_nl_region_notify_build'
+ 'devlink_nl_region_read_dumpit'
+ 'devlink_nl_region_read_fill'
++'devlink_nl_region_snapshots_id_put'
++'devlink_nl_reload_actions_performed_snd'
+ 'devlink_nl_reload_doit'
+ 'devlink_nl_resource_dump_doit'
+ 'devlink_nl_resource_dump_dumpit'
+ 'devlink_nl_resource_dump_one'
+ 'devlink_nl_resource_set_doit'
++'devlink_nl_sb_fill'
+ 'devlink_nl_sb_get_doit'
+ 'devlink_nl_sb_get_dumpit'
+ 'devlink_nl_sb_get_dump_one'
+ 'devlink_nl_sb_occ_max_clear_doit'
+ 'devlink_nl_sb_occ_snapshot_doit'
++'devlink_nl_sb_pool_fill'
+ 'devlink_nl_sb_pool_get_doit'
+ 'devlink_nl_sb_pool_get_dumpit'
+ 'devlink_nl_sb_pool_get_dump_one'
+@@ -16921,6 +16936,7 @@
+ 'devlink_notify'
+ 'devlink_notify_register'
+ 'devlink_notify_unregister'
++'devlink_param_notify'
+ 'devlink_params_driverinit_load_new'
+ 'devlink_params_notify_register'
+ 'devlink_params_notify_unregister'
+@@ -16993,12 +17009,14 @@
+ 'devlink_remove_symlinks'
+ 'devlink_resource_dump_fill_one'
+ '__devlink_resource_find'
++'devlink_resource_put'
+ 'devlink_resource_size_params_put'
+ 'devlink_resources_unregister'
+ 'devlink_resources_validate'
+ 'devlink_resource_unregister'
+ 'devlink_sb_register'
+ 'devlink_sb_unregister'
++'devlink_selftest_result_put'
+ 'devlink_shd_get'
+ 'devlink_shd_get_priv'
+ 'devlink_shd_put'
+@@ -17621,6 +17639,7 @@
+ 'dev_pm_skip_resume'
+ 'dev_pm_skip_suspend'
+ 'dev_port_show'
++'dev_prep_valid_name'
+ '__dev_printk'
+ '_dev_printk'
+ 'dev_printk_emit'
+@@ -19459,6 +19478,7 @@
+ 'do_setattr'
+ 'do_set_cpus_allowed'
+ 'do_setitimer'
++'do_setlink'
+ 'do_set_master'
+ 'do_set_mempolicy'
+ 'do_set_msr'
+@@ -19469,7 +19489,6 @@
+ 'do_shm_rmid'
+ 'do_shrink_slab'
+ 'do_sigaction'
+-'do_sigaltstack'
+ 'do_sigbus'
+ 'do_signalfd4'
+ 'do_signal_stop'
+@@ -19763,6 +19782,7 @@
+ 'drop_caches_sysctl_handler'
+ 'drop_collected_paths'
+ 'drop_current_rng'
++'drop_delayed_ref'
+ 'drop_inode_items'
+ 'drop_links'
+ 'drop_mm_ref_this_cpu'
+@@ -20138,6 +20158,7 @@
+ 'early_check_pages'
+ 'early_cma'
+ 'early_coherent_pool'
++'earlycon_init'
+ 'earlycon_print_info'
+ 'early_console_register'
+ 'early_cpu_init'
+@@ -20150,6 +20171,7 @@
+ 'early_ehci_bios_handoff'
+ 'early_enable_events'
+ 'early_enable_iommu'
++'early_event_add_tracer'
+ 'early_fixup_exception'
+ 'early_hostname'
+ 'early_identify_cpu'
+@@ -20438,6 +20460,7 @@
+ 'efi_esrt_init'
+ 'efifb_add_links'
+ 'efifb_check_and_swap_width_height'
++'efifb_set_system'
+ 'efifb_set_system_callback'
+ 'efifb_setup_from_dmi'
+ 'efifb_swap_width_height'
+@@ -20482,6 +20505,7 @@
+ 'efi_mokvar_table_init'
+ 'efi_native_runtime_setup'
+ 'efi_partition'
++'efi_pa_va_lookup'
+ 'efipostcore_init'
+ 'efi_power_off'
+ 'efi_poweroff_required'
+@@ -20723,9 +20747,11 @@
+ 'emit_bpf_dispatcher'
+ 'emit_fiemap_extent'
+ 'emit_ldx'
++'emit_ldx_index'
+ 'emit_mov_imm64'
+ 'emit_spectre_bhb_barrier'
+ 'emit_stx'
++'emit_stx_index'
+ 'em_jcxz'
+ 'em_jmp_abs'
+ 'em_jmp_far'
+@@ -21055,6 +21081,7 @@
+ 'ept_sync_spte'
+ 'ept_update_accessed_dirty_bits'
+ 'ept_walk_addr_generic'
++'ep_unregister_pollwait'
+ 'eq_show'
+ 'era_ctr'
+ 'era_destroy'
+@@ -21076,6 +21103,7 @@
+ 'error_retry_list_with_code'
+ 'errors_show'
+ 'errors_store'
++'error_tg_ok'
+ 'err_pos'
+ 'err_ptr'
+ 'errseq_check'
+@@ -21352,9 +21380,11 @@
+ 'ethtool_get_regs'
+ 'ethtool_get_ringparam'
+ 'ethtool_get_rxfh'
++'ethtool_get_rxfh_fields'
+ 'ethtool_get_rxfh_indir'
+ 'ethtool_get_rxnfc'
+ 'ethtool_get_rx_ring_count'
++'ethtool_get_rxrings'
+ 'ethtool_get_settings'
+ 'ethtool_get_sset_info'
+ 'ethtool_get_stats'
+@@ -21414,6 +21444,7 @@
+ 'ethtool_set_per_queue_coalesce'
+ 'ethtool_set_ringparam'
+ 'ethtool_set_rxfh'
++'ethtool_set_rxfh_fields'
+ 'ethtool_set_rxfh_indir'
+ 'ethtool_set_rxnfc'
+ 'ethtool_set_settings'
+@@ -21593,7 +21624,6 @@
+ 'evtchn_fifo_setup'
+ 'evtchn_fifo_unmask'
+ 'evtchn_get'
+-'evtchn_make_refcounted'
+ 'evtchn_put'
+ 'evtsel_ext_is_visible'
+ 'exact_lock'
+@@ -22144,6 +22174,7 @@
+ '__ext4_journalled_invalidate_folio'
+ 'ext4_journalled_invalidate_folio'
+ 'ext4_journalled_write_end'
++'ext4_journalled_zero_new_buffers'
+ '__ext4_journal_start_reserved'
+ '__ext4_journal_start_sb'
+ '__ext4_journal_stop'
+@@ -23171,6 +23202,7 @@
+ 'filesystems_thaw_callback'
+ 'file_thp_enabled'
+ 'file_to_blk_mode'
++'file_tty_write'
+ 'file_update_time'
+ 'file_update_time_flags'
+ 'file_write_and_wait_range'
+@@ -23262,6 +23294,7 @@
+ '__find_child'
+ 'find_cma_memrange'
+ 'find_css_set'
++'_find_current_opp'
+ '__find_dbgp'
+ 'find_dbgp'
+ 'find_deepest_state'
+@@ -23640,6 +23673,8 @@
+ 'flow_offload_ipv6_mangle'
+ 'flow_offload_lookup'
+ 'flow_offload_netdev_event'
++'flow_offload_port_dnat'
++'flow_offload_port_snat'
+ 'flow_offload_redirect'
+ 'flow_offload_refresh'
+ 'flow_offload_route_init'
+@@ -23754,6 +23789,7 @@
+ 'flush_workqueue_prep_pwqs'
+ '__flush_write_list'
+ 'fl_walk'
++'fmt_reg_mask'
+ 'fmt_spis_mask'
+ 'fn_bare_num'
+ 'fn_boot_it'
+@@ -24428,6 +24464,7 @@
+ 'free_rs'
+ 'free_rt_sched_group'
+ 'free_sched_domains'
++'free_scratch_buffer'
+ 'free_shared_cgroup_storage_rcu'
+ '__free_shrinker_info'
+ 'free_shrinker_info'
+@@ -24831,7 +24868,6 @@
+ 'fsp_disconnect'
+ 'fsp_get_sn'
+ 'fsp_init'
+-'fsp_onpad_hscr'
+ 'fsp_opc_tag_enable'
+ 'fsp_page_reg_write'
+ 'fsp_process_byte'
+@@ -24965,6 +25001,7 @@
+ 'ftrace_graph_init_idle_task'
+ 'ftrace_graph_init_task'
+ 'ftrace_graph_notrace_open'
++'__ftrace_graph_open'
+ 'ftrace_graph_open'
+ 'ftrace_graph_probe_sched_switch'
+ 'ftrace_graph_release'
+@@ -25449,6 +25486,7 @@
+ 'fuse_uring_remove_pending_req'
+ 'fuse_uring_req_end'
+ 'fuse_uring_request_expired'
++'fuse_uring_send'
+ 'fuse_uring_send_in_task'
+ 'fuse_uring_stop_list_entries'
+ 'fuse_uring_stop_queues'
+@@ -25528,7 +25566,6 @@
+ 'fw_core_add_address_handler'
+ 'fw_core_add_descriptor'
+ 'fw_core_cleanup'
+-'fw_core_handle_bus_reset'
+ 'fw_core_handle_request'
+ 'fw_core_handle_response'
+ 'fw_core_init'
+@@ -25678,7 +25715,6 @@
+ 'fw_resource_version_show'
+ 'fw_run_transaction'
+ 'fw_schedule_bm_work'
+-'fw_schedule_bus_reset'
+ 'fw_send_phy_config'
+ '__fw_send_request'
+ 'fw_send_response'
+@@ -25815,7 +25851,6 @@
+ 'generic_key_instantiate'
+ 'generic_listxattr'
+ 'generic_llseek_cookie'
+-'generic_lr_enable_disable'
+ 'generic_map_delete_batch'
+ 'generic_map_lookup_batch'
+ 'generic_map_update_batch'
+@@ -25882,6 +25917,7 @@
+ 'geneve_lookup'
+ 'geneve_netdevice_event'
+ 'geneve_newlink'
++'geneve_nl2info'
+ 'geneve_offload_rx_ports'
+ 'geneve_open'
+ 'geneve_setup'
+@@ -25904,6 +25940,7 @@
+ 'genl_ctrl_event'
+ 'genl_done'
+ 'genl_dumpit'
++'genl_family_rcv_msg_attrs_parse'
+ 'genl_family_rcv_msg_doit'
+ 'genl_family_rcv_msg_dumpit'
+ 'genl_get_cmd'
+@@ -26186,6 +26223,7 @@
+ 'get_kvmclock'
+ 'get_kvmclock_ns'
+ 'get_l4proto'
++'get_last_crashkernel'
+ 'get_last_extent'
+ 'get_linear_data'
+ 'get_links'
+@@ -26230,7 +26268,6 @@
+ 'get_net_ns_by_fd'
+ 'get_net_ns_by_id'
+ 'get_net_ns_by_pid'
+-'get_net_track'
+ 'get_next_block'
+ 'get_next_ino'
+ 'get_next_modinfo'
+@@ -26693,6 +26730,8 @@
+ 'gpio_set_open_drain_value_commit'
+ 'gpio_set_open_source_value_commit'
+ 'gpio_to_desc'
++'gp_try_fixup_and_notify'
++'gp_user_force_sig_segv'
+ 'grab_mapping_entry'
+ 'grab_requested_mnt_ns'
+ 'grab_requested_root'
+@@ -26834,6 +26873,7 @@
+ 'haltpoll_reflect'
+ 'haltpoll_select'
+ 'haltpoll_uninit'
++'handle_active_stripes'
+ 'handle_bad_irq'
+ 'handle_bad_prq_event'
+ 'handle_bug'
+@@ -27187,6 +27227,7 @@
+ 'hid_device_release'
+ 'hid_device_remove'
+ 'hiddev_ioctl'
++'hiddev_ioctl_string'
+ 'hiddev_ioctl_usage'
+ 'hiddev_lookup_report'
+ 'hiddev_open'
+@@ -27285,6 +27326,8 @@
+ 'hidraw_read'
+ 'hidraw_release'
+ 'hidraw_report_event'
++'hidraw_ro_variable_size_ioctl'
++'hidraw_rw_variable_size_ioctl'
+ 'hidraw_send_report'
+ 'hidraw_write'
+ '__hid_register_driver'
+@@ -27793,6 +27836,7 @@
+ '__hugetlb_cgroup_uncharge_folio'
+ 'hugetlb_cgroup_uncharge_folio'
+ 'hugetlb_cgroup_uncharge_folio_rsvd'
++'hugetlb_cgroup_write'
+ 'hugetlb_cgroup_write_dfl'
+ 'hugetlb_cgroup_write_legacy'
+ 'hugetlb_change_protection'
+@@ -27958,7 +28002,6 @@
+ 'hv_tlb_flush_enqueue'
+ 'hw_access_break'
+ '__hw_addr_add_ex'
+-'__hw_addr_create'
+ '__hw_addr_flush'
+ '__hw_addr_init'
+ '__hw_addr_insert'
+@@ -28888,6 +28931,7 @@
+ 'icl_update_topdown_event'
+ 'icmp6_checkentry'
+ 'icmp6_dst_alloc'
++'icmp6_ext_append'
+ 'icmp6_ext_objs_append'
+ 'icmp6_match'
+ 'icmp6_send'
+@@ -28934,6 +28978,8 @@
+ 'icmpv6_push_pending_frames'
+ 'icmpv6_rcv'
+ 'icmpv6_route_lookup'
++'icmpv6_rt_has_prefsrc'
++'icmpv6_xrlim_allow'
+ 'ida_alloc_range'
+ 'ida_destroy'
+ 'ida_find_first_range'
+@@ -29006,6 +29052,7 @@
+ 'idt_setup_early_handler'
+ 'idt_setup_early_pf'
+ 'idt_setup_early_traps'
++'idt_setup_from_table'
+ 'idt_setup_traps'
+ 'idVendor_show'
+ 'if6_proc_exit'
+@@ -29212,6 +29259,7 @@
+ 'ima_match_policy'
+ 'ima_measure_critical_data'
+ 'ima_measurements_next'
++'_ima_measurements_open'
+ 'ima_measurements_open'
+ 'ima_measurements_release'
+ 'ima_measurements_show'
+@@ -29331,6 +29379,7 @@
+ 'inet6_add_offload'
+ 'inet6_add_protocol'
+ 'inet6_addr_add'
++'inet6_addr_del'
+ 'inet6_addr_modify'
+ 'inet6addr_notifier_call_chain'
+ 'inet6addr_validator_notifier_call_chain'
+@@ -29600,6 +29649,8 @@
+ 'ingress_walk'
+ 'in_group_or_capable'
+ 'in_group_p'
++'inherit_event'
++'inherit_task_group'
+ 'inhibited_show'
+ 'inhibited_store'
+ 'init_8259A'
+@@ -29655,6 +29706,7 @@
+ 'init_cma_pageblock'
+ 'init_cma_reserved_pageblock'
+ 'init_compat_elf_binfmt'
++'init_conntrack'
+ 'init_control_block'
+ 'init_counter_refs'
+ 'init_cp_src'
+@@ -29911,7 +29963,6 @@
+ '__init_srcu_struct'
+ '__init_srcu_struct_fast'
+ '__init_srcu_struct_fast_updown'
+-'init_srcu_struct_fields'
+ 'init_srcu_struct_nodes'
+ 'init_stat'
+ '__init_swait_queue_head'
+@@ -29965,6 +30016,7 @@
+ 'init_xfs_fs'
+ 'init_xstate_size'
+ 'init_zhaoxin'
++'__init_zone_device_page'
+ 'inject_emulated_exception'
+ 'in_lock_functions'
+ '__inode_add_bytes'
+@@ -30201,6 +30253,7 @@
+ '__insert_inode_hash'
+ 'insert_inode_locked'
+ 'insert_inode_locked4'
++'insert_new_ablock'
+ 'insert_new_root'
+ 'insert_one_name'
+ 'insert_page'
+@@ -30750,6 +30803,8 @@
+ 'invent_group_ids'
+ 'inverse_translate'
+ 'invert_screen'
++'invoke_bpf'
++'invoke_bpf_prog'
+ 'invoke_need_callbacks'
+ 'invoke_rcu_core'
+ 'ioa_add_path'
+@@ -30913,6 +30968,7 @@
+ 'ioctl_getflags'
+ 'ioctl_get_info'
+ 'ioctl_get_speed'
++'ioctl_has_perm'
+ 'io_ctl_init'
+ 'ioctl_initiate_bus_reset'
+ 'ioctl_internal_command'
+@@ -31304,7 +31360,6 @@
+ 'iommu_put_msi_cookie'
+ 'iommu_put_pages_list'
+ 'iommu_put_resv_regions'
+-'__iommu_queue_command_sync'
+ 'iommu_replace_device_pasid'
+ 'iommu_replace_group_handle'
+ 'iommu_report_device_fault'
+@@ -31339,6 +31394,7 @@
+ 'iommu_unmap'
+ 'iommu_unmap_fast'
+ 'iommu_unmap_mmio_space'
++'io_msg_copy_hdr'
+ 'io_msg_ring'
+ 'io_msg_ring_cleanup'
+ '__io_msg_ring_data'
+@@ -31425,6 +31481,7 @@
+ 'io_prep_writev'
+ 'io_prep_writev_fixed'
+ 'ioprio_check_cap'
++'io_probe'
+ 'io_provide_buffers_prep'
+ 'io_put_bpf_filters'
+ '__io_put_kbufs'
+@@ -31720,8 +31777,12 @@
+ 'iov_iter_bvec'
+ 'iov_iter_bvec_advance'
+ 'iov_iter_discard'
++'iov_iter_extract_bvec_pages'
+ 'iov_iter_extract_bvecs'
++'iov_iter_extract_folioq_pages'
++'iov_iter_extract_kvec_pages'
+ 'iov_iter_extract_pages'
++'iov_iter_extract_xarray_pages'
+ 'iov_iter_folioq_advance'
+ 'iov_iter_folio_queue'
+ 'iov_iter_gap_alignment'
+@@ -31873,9 +31934,7 @@
+ 'ip6_dst_lookup'
+ 'ip6_dst_lookup_flow'
+ 'ip6_dst_lookup_tail'
+-'ip6_dst_mtu_maybe_forward'
+ 'ip6_dst_neigh_lookup'
+-'ip6_dst_store'
+ 'IP6_ECN_decapsulate'
+ 'ip6_err_gen_icmpv6_unreach'
+ 'ip6erspan_changelink'
+@@ -31912,6 +31971,7 @@
+ 'ip6_frag_next'
+ 'ip6_frag_reasm'
+ 'ip6gre_changelink'
++'ip6gre_changelink_common'
+ 'ip6gre_dellink'
+ 'ip6gre_dev_free'
+ 'ip6gre_err'
+@@ -32038,6 +32098,7 @@
+ 'ip6_ra_control'
+ 'ip6_rcv_core'
+ 'ip6_rcv_finish'
++'ip6_rcv_finish_core'
+ 'ip6_redirect'
+ 'ip6_redirect_no_header'
+ 'ip6_route_add'
+@@ -32083,6 +32144,7 @@
+ 'ip6_tnl_encap_add_ops'
+ 'ip6_tnl_encap_del_ops'
+ 'ip6_tnl_encap_setup'
++'ip6_tnl_err'
+ 'ip6_tnl_exit_rtnl_net'
+ 'ip6_tnl_fill_forward_path'
+ 'ip6_tnl_fill_info'
+@@ -32161,7 +32223,6 @@
+ 'ip_do_fragment'
+ '__ip_do_redirect'
+ 'ip_do_redirect'
+-'ip_dst_mtu_maybe_forward'
+ 'ip_encap_hlen'
+ 'ip_error'
+ 'ip_exceeds_mtu'
+@@ -32199,6 +32260,7 @@
+ 'ipgre_init_net'
+ 'ipgre_link_update'
+ 'ipgre_mpls_encap_hlen'
++'ipgre_netlink_parms'
+ 'ipgre_newlink'
+ 'ipgre_open'
+ '__ipgre_rcv'
+@@ -32405,7 +32467,6 @@
+ '__ip_rt_update_pmtu'
+ 'ip_rt_update_pmtu'
+ '__ip_select_ident'
+-'ip_select_ident'
+ 'ip_select_ttl'
+ 'ip_send_check'
+ 'ip_send_skb'
+@@ -32427,6 +32488,7 @@
+ 'ip_tun_destroy_state'
+ 'ip_tun_encap_nlsize'
+ 'ip_tun_fill_encap_info'
++'ip_tun_fill_encap_opts'
+ 'ip_tunnel_bind_dev'
+ 'ip_tunnel_changelink'
+ '__ip_tunnel_change_mtu'
+@@ -34312,6 +34374,7 @@
+ 'kmalloc_pfmemalloc'
+ 'kmalloc_reserve'
+ 'kmalloc_size_roundup'
++'kmap_get_pte'
+ 'kmap_local_fork'
+ '__kmap_local_page_prot'
+ '__kmap_local_pfn_prot'
+@@ -34325,7 +34388,6 @@
+ 'kmem_cache_alloc_node_noprof'
+ 'kmem_cache_alloc_noprof'
+ 'kmem_cache_charge'
+-'__kmem_cache_create'
+ '__kmem_cache_create_args'
+ 'kmem_cache_destroy'
+ '__kmem_cache_do_shrink'
+@@ -34463,6 +34525,7 @@
+ 'kpagecgroup_read'
+ 'kpagecount_read'
+ 'kpageflags_read'
++'kpage_read'
+ 'k_po_show'
+ 'k_po_store'
+ 'kpp_register_instance'
+@@ -34518,7 +34581,6 @@
+ 'k_pu_show'
+ 'k_pu_store'
+ 'krealloc_node_align_noprof'
+-'kref_put'
+ 'kretprobe_dispatcher'
+ 'kretprobe_event_define_fields'
+ 'kretprobe_perf_func'
+@@ -34720,7 +34782,6 @@
+ 'ktime_us_delta'
+ 'kt_serial_in'
+ 'kt_serial_setup'
+-'__kunmap_atomic'
+ 'kunmap_local_indexed'
+ 'kvasprintf'
+ 'kvasprintf_const'
+@@ -34863,7 +34924,6 @@
+ 'kvm_check_async_pf_completion'
+ 'kvm_check_memslot_overlap'
+ 'kvm_check_nested_events'
+-'kvm_clear_apicv_inhibit'
+ 'kvm_clear_async_pf_completion_queue'
+ 'kvm_clear_guest'
+ 'kvmclock_cpu_down_prep'
+@@ -35259,7 +35319,6 @@
+ 'kvm_msr_write'
+ 'kvm_mtrr_get_msr'
+ 'kvm_mtrr_set_msr'
+-'kvm_multiple_exception'
+ 'kvm_need_perf_global_ctrl_intercept'
+ 'kvm_need_rdpmc_intercept'
+ 'kvm_notify_acked_gsi'
+@@ -35346,6 +35405,7 @@
+ 'kvm_reset_dirty_gfn'
+ 'kvm_restore_sched_clock_state'
+ 'kvm_rip_read'
++'kvm_rmap_age_gfn_range'
+ 'kvm_rmap_lock'
+ '__kvm_rmap_zap_gfn_range'
+ 'kvm_rtc_eoi_tracking_restore_all'
+@@ -35376,7 +35436,6 @@
+ 'kvm_set_memory_region'
+ 'kvm_set_memslot'
+ 'kvm_set_msi'
+-'__kvm_set_msr'
+ 'kvm_set_msr_common'
+ 'kvm_set_msr_ignored_check'
+ 'kvm_set_one_msr'
+@@ -35464,6 +35523,7 @@
+ 'kvm_vcpu_apicv_activated'
+ 'kvm_vcpu_block'
+ 'kvm_vcpu_check_block'
++'kvm_vcpu_check_hw_bp'
+ 'kvm_vcpu_compat_ioctl'
+ 'kvm_vcpu_deliver_sipi_vector'
+ 'kvm_vcpu_exit_request'
+@@ -35497,7 +35557,6 @@
+ 'kvm_vcpu_is_reset_bsp'
+ 'kvm_vcpu_is_visible_gfn'
+ '__kvm_vcpu_kick'
+-'__kvm_vcpu_map'
+ 'kvm_vcpu_mark_page_dirty'
+ 'kvm_vcpu_mmap'
+ 'kvm_vcpu_on_spin'
+@@ -35636,7 +35695,6 @@
+ 'kye_driver_init'
+ 'kye_probe'
+ 'kye_report_fixup'
+-'_kzalloc_noprof'
+ 'l0s_aspm_show'
+ 'l0s_aspm_store'
+ 'l1_1_aspm_show'
+@@ -35992,6 +36050,7 @@
+ 'llc_exit'
+ 'llc_init'
+ 'llc_mac_hdr_init'
++'llc_populate_cpu_shard_id'
+ 'llc_rcv'
+ 'llc_remove_pack'
+ 'llc_sap_close'
+@@ -36010,7 +36069,6 @@
+ 'loadavg_proc_show'
+ '__load_bitset_in_core'
+ 'load_builtin_intel_microcode'
+-'load_cr3'
+ 'load_current_idt'
+ 'load_direct_gdt'
+ 'load_discard'
+@@ -36022,6 +36080,7 @@
+ 'load_image'
+ 'load_image_and_restore'
+ 'load_metalist'
++'_load_microcode_amd'
+ 'load_misc_binary'
+ 'load_mm_ldt'
+ 'load_module_cert'
+@@ -36377,6 +36436,7 @@
+ 'lru_cache_disable'
+ 'lru_deactivate'
+ 'lru_deactivate_file'
++'lru_evict'
+ 'lru_lazyfree'
+ 'lru_move_tail'
+ 'lru_note_cost_refault'
+@@ -36477,6 +36537,7 @@
+ 'lzma_main'
+ 'lzo1x_1_compress'
+ 'lzo1x_1_compress_safe'
++'lzo1x_1_do_compress'
+ 'lzo1x_1_do_compress_safe'
+ 'lzo1x_decompress_safe'
+ 'lzo_alloc_ctx'
+@@ -36744,6 +36805,7 @@
+ 'map_vsyscall'
+ 'map_write'
+ 'mark_all_dquot_dirty'
++'mark_all_scalars_imprecise'
+ 'mark_btf_func_reg_size'
+ 'mark_btf_ld_reg'
+ 'mark_buffer_dirty'
+@@ -36768,6 +36830,7 @@
+ 'mark_page_dirty'
+ 'mark_page_dirty_in_slot'
+ 'mark_ptr_not_null_reg'
++'mark_ptr_or_null_reg'
+ 'mark_ptr_or_null_regs'
+ '__mark_reg_const_zero'
+ 'mark_reg_graph_node'
+@@ -37345,6 +37408,7 @@
+ 'md_write_inc'
+ 'md_write_metadata'
+ 'md_write_start'
++'measure_residency_fn'
+ 'mediated_pmu_account_event'
+ 'me_huge_page'
+ 'me_kernel'
+@@ -37597,6 +37661,7 @@
+ 'memory_low_write'
+ 'memory_lseek'
+ 'memory_map_bottom_up'
++'memory_map_top_down'
+ 'memory_max_show'
+ 'memory_max_write'
+ 'memory_min_show'
+@@ -38379,6 +38444,7 @@
+ 'mon_text_exit'
+ 'mon_text_init'
+ 'mon_text_open'
++'mon_text_read_data'
+ 'mon_text_read_t'
+ 'mon_text_read_u'
+ 'mon_text_read_wait'
+@@ -38540,6 +38606,7 @@
+ 'mpls_build_state'
+ 'mpls_cleanup_module'
+ 'mpls_conf_proc'
++'mpls_count_nexthops'
+ 'mpls_dev_destroy_rcu'
+ 'mpls_dev_get'
+ 'mpls_dev_mtu'
+@@ -38669,7 +38736,7 @@
+ 'mptcp_disconnect'
+ 'mptcp_do_fastclose'
+ 'mptcp_drop'
+-'mptcp_early_fallback'
++'mptcp_dss_corruption'
+ 'mptcp_enter_memory_pressure'
+ '__mptcp_error_report'
+ 'mptcp_established_options'
+@@ -38842,6 +38909,7 @@
+ 'mptcp_set_rcvlowat'
+ 'mptcp_setsockopt'
+ 'mptcp_setsockopt_all_sf'
++'__mptcp_setsockopt_set_val'
+ '__mptcp_setsockopt_sol_tcp_cork'
+ '__mptcp_setsockopt_sol_tcp_nodelay'
+ 'mptcp_set_state'
+@@ -39021,6 +39089,7 @@
+ 'ms_ff_worker'
+ 'msg_add_dict_text'
+ 'msgctl_down'
++'msgctl_info'
+ 'msgctl_stat'
+ 'msg_exit_ns'
+ 'msg_get'
+@@ -39167,6 +39236,7 @@
+ 'mtrr_attrib_to_str'
+ 'mtrr_bp_init'
+ 'mtrr_build_map'
++'mtrr_calc_range_state'
+ 'mtrr_cleanup'
+ 'mtrr_close'
+ 'mtrr_copy_map'
+@@ -39581,6 +39651,7 @@
+ 'nd_async_device_unregister'
+ '__nd_attach_ndns'
+ 'nd_btt_arena_is_valid'
++'__nd_btt_create'
+ 'nd_btt_create'
+ 'nd_btt_probe'
+ 'nd_btt_release'
+@@ -39791,6 +39862,7 @@
+ '__neigh_update'
+ 'neigh_update'
+ 'neigh_xmit'
++'nested_table_alloc'
+ 'nested_table_free'
+ 'net_ctl_header_lookup'
+ 'net_ctl_permissions'
+@@ -39802,6 +39874,7 @@
+ 'netdev_adjacent_change_commit'
+ 'netdev_adjacent_change_prepare'
+ '__netdev_adjacent_dev_insert'
++'__netdev_adjacent_dev_remove'
+ '__netdev_adjacent_dev_unlink_neighbour'
+ 'netdev_adjacent_get_private'
+ 'netdev_adjacent_rename_links'
+@@ -39906,7 +39979,6 @@
+ 'netdev_nl_qstats_get_dump_one'
+ 'netdev_nl_queue_create_doit'
+ 'netdev_nl_queue_dump_one'
+-'netdev_nl_queue_fill_lease'
+ 'netdev_nl_queue_fill_mp'
+ 'netdev_nl_queue_fill_one'
+ 'netdev_nl_queue_get_doit'
+@@ -39965,6 +40037,7 @@
+ 'netdev_set_num_tc'
+ 'netdev_set_sb_channel'
+ 'netdev_set_tc_queue'
++'netdev_show'
+ 'netdev_sk_get_lowest_dev'
+ 'netdev_state_change'
+ 'netdev_stat_put'
+@@ -40552,6 +40625,7 @@
+ 'net_shaper_validate_nesting'
+ 'netstamp_clear'
+ 'netstat_seq_show'
++'netstat_show'
+ 'net_support_hwtstamp_qualifier'
+ 'net_sysctl_init'
+ 'net_test_get_skb'
+@@ -40600,7 +40674,6 @@
+ 'nexthop_has_v4'
+ 'nexthop_init'
+ 'nexthop_is_fdb'
+-'nexthop_mpath_fill_node'
+ 'nexthop_net_exit'
+ 'nexthop_net_exit_rtnl'
+ 'nexthop_net_init'
+@@ -40805,6 +40878,7 @@
+ 'nf_flow_offload_stats'
+ 'nf_flow_offload_work_gc'
+ 'nf_flow_offload_xdp_setup'
++'nf_flow_queue_xmit'
+ 'nf_flow_register_bpf'
+ 'nf_flow_rule_route_common'
+ 'nf_flow_rule_route_inet'
+@@ -41206,6 +41280,8 @@
+ 'nft_do_chain_ipv4'
+ 'nft_do_chain_ipv6'
+ 'nft_do_chain_netdev'
++'nft_dump_basechain_hook'
++'nft_dump_basechain_hook_list'
+ 'nft_dump_basechain_trans_hook_list'
+ 'nft_dump_register'
+ 'nft_dump_stats'
+@@ -41343,6 +41419,7 @@
+ 'nft_nh_write_ok_ip4'
+ 'nft_nla_put_hook_dev'
+ 'nft_obj_del'
++'nft_object_dump'
+ 'nft_obj_init'
+ 'nft_obj_lookup'
+ 'nft_objname_hash'
+@@ -41501,6 +41578,7 @@
+ 'nft_stats_alloc'
+ 'nft_table_lookup'
+ 'nft_table_validate'
++'nft_tcp_header_pointer'
+ 'nft_trace_init'
+ 'nft_trace_notify'
+ '__nft_trace_packet'
+@@ -41546,8 +41624,10 @@
+ 'nf_unregister_queue_handler'
+ 'nf_unregister_sockopt'
+ 'nf_xfrm_me_harder'
++'nh_check_attr_group'
+ 'nh_dump_filtered'
+ 'nh_fill_node'
++'nh_fill_res_bucket'
+ 'nh_grp_hw_stats_report_delta'
+ 'nhm_limit_period'
+ 'nh_netdev_event'
+@@ -41568,7 +41648,6 @@
+ 'nla_get_via'
+ 'nla_memcmp'
+ 'nla_memcpy'
+-'nla_memdup_noprof'
+ '__nla_parse'
+ 'nla_policy_len'
+ '__nla_put'
+@@ -41598,7 +41677,6 @@
+ 'nl_fib_input'
+ 'nlmsg_cancel'
+ 'nlmsg_notify'
+-'nlmsg_populate_fdb_fill'
+ '__nlmsg_put'
+ 'nmi_cpu_backtrace'
+ 'nmi_cpu_backtrace_handler'
+@@ -41643,6 +41721,7 @@
+ 'node_read_meminfo'
+ 'node_read_numastat'
+ 'node_read_vmstat'
++'__node_reclaim'
+ 'node_reclaim'
+ 'node_shift'
+ 'node_store'
+@@ -41771,6 +41850,7 @@
+ 'nr_hugepages_mempolicy_show'
+ 'nr_hugepages_mempolicy_store'
+ 'nr_hugepages_show'
++'nr_hugepages_show_common'
+ 'nr_hugepages_store'
+ '__nr_hugepages_store_common'
+ 'nr_hugepages_store_common'
+@@ -42111,6 +42191,7 @@
+ 'numa_init_sysfs'
+ 'numa_memblks_init'
+ 'numa_migrate_check'
++'numa_move_tail_memblk'
+ 'numa_nearest_node'
+ 'numa_node_dist'
+ 'numa_node_store'
+@@ -42296,6 +42377,7 @@
+ 'object_cpu_offline'
+ 'object_size_show'
+ 'objects_partial_show'
++'obj_exts_in_slab'
+ 'obj_malloc'
+ 'objpool_drop'
+ 'objpool_fini'
+@@ -42350,6 +42432,7 @@
+ 'ohci_bus_suspend'
+ 'ohci_dump'
+ 'ohci_dump_intr_mask'
++'ohci_dump_roothub'
+ 'ohci_dump_status'
+ 'ohci_endpoint_disable'
+ 'ohci_get_frame'
+@@ -42430,6 +42513,7 @@
+ 'opal_generic_read_write_table'
+ 'opal_get_discv'
+ 'opal_get_geometry'
++'opal_get_key'
+ 'opal_get_status'
+ 'opal_get_sum_ranges'
+ 'opal_locking_range_status'
+@@ -42482,6 +42566,7 @@
+ '_opp_remove_all'
+ '_opp_remove_all_static'
+ '_opp_set_availability'
++'_opp_set_required_dev'
+ '_opp_table_find_key'
+ 'ops_complete_biofill'
+ 'ops_complete_check'
+@@ -42655,6 +42740,7 @@
+ 'ovl_dir_read_merged'
+ 'ovl_dir_real_file'
+ 'ovl_dir_release'
++'ovl_do_create'
+ 'ovl_do_mkdir'
+ 'ovl_do_parse_layer'
+ 'ovl_do_remove'
+@@ -42866,6 +42952,7 @@
+ 'p4d_clear_huge'
+ 'p4d_clear_tests'
+ '___p4d_free_tlb'
++'p4d_populate_init'
+ 'p4d_populate_tests'
+ 'p4d_set_huge'
+ 'p4_hw_config'
+@@ -43136,7 +43223,6 @@
+ 'page_pool_ethtool_stats_get'
+ 'page_pool_ethtool_stats_get_count'
+ 'page_pool_ethtool_stats_get_strings'
+-'page_pool_free_va'
+ 'page_pool_get_stats'
+ 'page_pool_inflight'
+ 'page_pool_list'
+@@ -43144,7 +43230,6 @@
+ 'page_pool_nl_fill'
+ 'page_pool_nl_stats_fill'
+ 'page_pool_put_netmem_bulk'
+-'page_pool_put_page'
+ 'page_pool_put_unrefed_netmem'
+ 'page_pool_put_unrefed_page'
+ 'page_pool_refill_alloc_cache'
+@@ -43201,12 +43286,14 @@
+ 'paging32_gva_to_gpa'
+ 'paging32_page_fault'
+ 'paging32_sync_spte'
++'paging32_update_accessed_dirty_bits'
+ 'paging32_walk_addr_generic'
+ 'paging64_fetch'
+ 'paging64_gpte_changed'
+ 'paging64_gva_to_gpa'
+ 'paging64_page_fault'
+ 'paging64_sync_spte'
++'paging64_update_accessed_dirty_bits'
+ 'paging64_walk_addr_generic'
+ 'paging_domain_alloc'
+ 'paging_domain_compatible'
+@@ -43367,7 +43454,6 @@
+ 'parse_legacy'
+ 'parse_linerange'
+ 'parse_max_pools'
+-'parse_memmap_one'
+ 'parse_memmap_opt'
+ 'parse_memopt'
+ 'parse_minix'
+@@ -43403,6 +43489,7 @@
+ 'parse_pmtmr'
+ 'parse_policy'
+ 'parse_power'
++'parse_probe_arg'
+ 'parse_raid_params'
+ 'parse_ras_param'
+ 'parse_rcu_nocb_poll'
+@@ -43682,7 +43769,6 @@
+ 'pci_bus_resource_n'
+ 'pci_bus_restore_locked'
+ 'pci_bus_save_and_disable_locked'
+-'__pci_bus_set_current_state'
+ 'pci_bus_set_current_state'
+ 'pci_bus_set_ops'
+ '__pci_bus_size_bridges'
+@@ -43978,7 +44064,6 @@
+ 'pcie_ptm_create_debugfs'
+ 'pcie_ptm_destroy_debugfs'
+ 'pcie_ptm_enabled'
+-'pcie_read_tlp_log'
+ 'pcie_relaxed_ordering_enabled'
+ 'pcie_report_downtraining'
+ 'pcie_reset_flr'
+@@ -44243,7 +44328,6 @@
+ 'pci_p2pmem_alloc_sgl'
+ 'pci_p2pmem_find_many'
+ 'pci_p2pmem_free_sgl'
+-'pci_p2pmem_publish'
+ 'pci_p2pmem_virt_to_bus'
+ 'pci_parse_mcfg'
+ 'pci_pasid_features'
+@@ -44397,6 +44481,7 @@
+ 'pci_resize_resource_set_size'
+ 'pci_resource_alignment'
+ 'pci_resource_alignment_sysfs_init'
++'pci_resource_io'
+ 'pci_resource_is_optional'
+ 'pci_resource_name'
+ 'pci_resource_to_user'
+@@ -44714,6 +44799,7 @@
+ 'pdu_read'
+ 'peak_open'
+ 'peak_release'
++'peak_write'
+ 'pebs_update_state'
+ 'pec_show'
+ 'pec_store'
+@@ -44802,6 +44888,7 @@
+ 'perf_callchain_store'
+ 'perf_callchain_user'
+ 'perf_cgroup_attach'
++'perf_cgroup_connect'
+ 'perf_cgroup_css_alloc'
+ 'perf_cgroup_css_free'
+ 'perf_cgroup_css_online'
+@@ -44851,6 +44938,7 @@
+ 'perf_event_exec'
+ '__perf_event_exit_context'
+ 'perf_event_exit_cpu'
++'perf_event_exit_event'
+ 'perf_event_exit_task'
+ 'perf_event_exit_task_context'
+ 'perf_event_fd_array_get_ptr'
+@@ -44901,7 +44989,6 @@
+ 'perf_event_print_debug'
+ 'perf_event_query_prog_array'
+ '__perf_event_read'
+-'perf_event_read'
+ '__perf_event_read_cpu'
+ 'perf_event_read_local'
+ '__perf_event_read_value'
+@@ -45027,6 +45114,7 @@
+ 'perf_pmu_nop_void'
+ '__perf_pmu_output_stop'
+ 'perf_pmu_register'
++'__perf_pmu_remove'
+ 'perf_pmu_resched'
+ 'perf_pmu_sched_task'
+ 'perf_pmu_start_txn'
+@@ -46301,6 +46389,7 @@
+ 'perm_group_watchdog'
+ 'perm_hwaddr_show'
+ 'permission_fault'
++'perm_read'
+ 'perm_write'
+ 'persist_enabled_on_companion'
+ 'persistence_domain_show'
+@@ -46538,7 +46627,6 @@
+ 'phy_resume'
+ '__phys_addr'
+ 'phys_addr_show'
+-'__phys_addr_symbol'
+ 'phy_save_page'
+ 'phy_scan_fixups'
+ 'phys_device_show'
+@@ -46918,6 +47006,7 @@
+ 'pirq_sis497_set'
+ 'pirq_sis503_get'
+ 'pirq_sis503_set'
++'pirq_try_router'
+ 'pirq_via586_get'
+ 'pirq_via586_set'
+ 'pirq_via_get'
+@@ -47225,7 +47314,6 @@
+ 'pm_runtime_forbid'
+ 'pm_runtime_force_resume'
+ 'pm_runtime_force_suspend'
+-'pm_runtime_get_active'
+ 'pm_runtime_get_if_active'
+ 'pm_runtime_get_if_in_use'
+ 'pm_runtime_get_suppliers'
+@@ -47286,7 +47374,6 @@
+ 'pmu_mode_show'
+ 'pmu_mode_store'
+ 'pmu_msr_chk_emulated'
+-'pm_vt_switch_required'
+ 'pm_vt_switch_unregister'
+ 'pm_wakeup_clear'
+ 'pm_wakeup_dev_event'
+@@ -47305,6 +47392,7 @@
+ 'pneigh_delete'
+ 'pneigh_destroy'
+ 'pneigh_enqueue'
++'pneigh_fill_info'
+ 'pneigh_get_first'
+ 'pneigh_get_next'
+ 'pneigh_lookup'
+@@ -47789,8 +47877,10 @@
+ 'preinit_net'
+ 'prelim_ref_insert'
+ 'preload'
++'preload_this_cpu_lock'
+ 'prep_and_add_allocated_folios'
+ 'prep_and_add_bootmem_folios'
++'prepare_alloc_pages'
+ 'prepare_coming_module'
+ 'prepare_creds'
+ 'prepare_elf64_ram_headers_callback'
+@@ -50384,6 +50474,7 @@
+ '__process_bio_read_only'
+ 'process_bio_read_only'
+ 'process_bio_success'
++'process_bit0'
+ 'process_bit1'
+ 'process_bpf_exit_full'
+ 'process_buffer_measurement'
+@@ -51034,7 +51125,6 @@
+ 'ptdump_walk_pgd'
+ 'ptdump_walk_pgd_level'
+ 'ptdump_walk_pgd_level_checkwx'
+-'ptdump_walk_pgd_level_core'
+ 'ptdump_walk_pgd_level_debugfs'
+ 'ptdump_walk_user_pgd_level_checkwx'
+ 'pte_advanced_tests'
+@@ -51188,7 +51278,6 @@
+ 'pt_regs_offset'
+ 'pt_regs_to_gdb_regs'
+ 'pt_regs_val'
+-'ptr_ring_cleanup'
+ 'ptr_to_hashval'
+ 'pt_show'
+ 'pts_unix98_lookup'
+@@ -51248,7 +51337,6 @@
+ 'pull_rt_task'
+ 'punt_bios_to_rescuer'
+ 'purge_fragmented_block'
+-'__purge_vmap_area_lazy'
+ 'purge_vmap_node'
+ 'push_callback_call'
+ 'push_cpu_stop'
+@@ -51613,6 +51701,8 @@
+ 'qtree_write_dquot'
+ 'qtype_enforce_flag'
+ 'query_asymmetric_key'
++'query_data'
++'query_label'
+ 'query_matching_vma'
+ 'query_vma_teardown'
+ 'queue_add_random_show'
+@@ -51722,6 +51812,7 @@
+ 'queue_stack_map_update_elem'
+ 'queue_state_show'
+ 'queue_state_write'
++'queue_stop_cpus_work'
+ 'queue_task_work'
+ 'queue_trb'
+ 'queue_virt_boundary_mask_show'
+@@ -52451,6 +52542,7 @@
+ 'rbtree_open'
+ 'rbtree_show'
+ 'rb_update_pages'
++'__rb_validate_buffer'
+ 'rb_wait_once'
+ 'rb_wake_up_waiters'
+ 'rb_watermark_hit'
+@@ -52505,6 +52597,7 @@
+ 'rcu_check_boost_fail'
+ 'rcu_check_gp_kthread_expired_fqs_timer'
+ 'rcu_check_gp_kthread_starvation'
++'rcu_check_gp_start_stall'
+ 'rcu_cleanup_dead_rnp'
+ 'rcu_core'
+ 'rcu_core_si'
+@@ -52906,6 +52999,7 @@
+ 'read_superblock_fields'
+ 'read_super_common'
+ 'read_swap_cache_async'
++'read_swap_header'
+ 'read_symlink'
+ 'read_table_data'
+ 'read_table_data_cont'
+@@ -53064,8 +53158,6 @@
+ 'reg_bounds_sanity_check'
+ 'reg_bounds_sync'
+ 'reg_btf_record'
+-'regcache_cache_bypass'
+-'regcache_cache_only'
+ 'regcache_count_cacheable_registers'
+ 'regcache_default_cmp'
+ 'regcache_defaults_cmp'
+@@ -53765,7 +53857,6 @@
+ 'remove_free_mem_region'
+ 'remove_from_bitmap'
+ '_remove_hidden_choices'
+-'__remove_hrtimer'
+ 'remove_hrtimer'
+ 'remove_hugetlb_folio'
+ 'remove_id_show'
+@@ -53789,6 +53880,7 @@
+ '__remove_nexthop'
+ 'remove_nexthop'
+ 'remove_node_from_stable_tree'
++'remove_nodes'
+ 'remove_notification'
+ '__remove_pages'
+ 'remove_pagetable'
+@@ -53922,6 +54014,7 @@
+ 'requeue_bios'
+ 'requeue_delayed_entity'
+ 'requeue_pi_wake_futex'
++'requeue_task_rt'
+ '_required_opps_available'
+ 'rescan_store'
+ 'resched_cpu'
+@@ -54424,6 +54517,7 @@
+ 'rlock_ABBA3'
+ 'rlock_chaincache_ABBA1'
+ '__rmap_add'
++'__rmap_clear_dirty'
+ 'rmap_walk'
+ 'rmap_walk_anon'
+ '__rmap_walk_file'
+@@ -54644,6 +54738,7 @@
+ 'rss_prepare_data'
+ 'rss_reply_size'
+ 'rss_set_ctx_update'
++'rss_set_prep_hkey'
+ 'rss_set_prep_indir'
+ 'r_start'
+ 'r_stop'
+@@ -54887,6 +54982,7 @@
+ 'rt_mutex_futex_trylock'
+ '__rt_mutex_futex_unlock'
+ 'rt_mutex_futex_unlock'
++'rt_mutex_handle_deadlock'
+ '__rt_mutex_init'
+ 'rt_mutex_init_proxy_locked'
+ 'rt_mutex_lock_interruptible'
+@@ -54899,6 +54995,8 @@
+ 'rt_mutex_proxy_unlock'
+ 'rt_mutex_schedule'
+ 'rt_mutex_setprio'
++'rt_mutex_slowlock'
++'rt_mutex_slowlock_block'
+ '__rt_mutex_start_proxy_lock'
+ 'rt_mutex_start_proxy_lock'
+ 'rt_mutex_top_waiter'
+@@ -54944,6 +55042,7 @@
+ 'rtnl_fill_link_netnsid'
+ 'rtnl_fill_proto_down'
+ 'rtnl_fill_stats'
++'rtnl_fill_statsinfo'
+ 'rtnl_fill_vf'
+ 'rtnl_fill_vfinfo'
+ 'rtnl_get_link'
+@@ -55521,6 +55620,7 @@
+ 'scrub_find_fill_first_stripe'
+ 'scrub_free_ctx'
+ 'scrub_pause_off'
++'scrub_print_common_warning'
+ 'scrub_print_warning_inode'
+ 'scrub_put_ctx'
+ 'scrub_raid56_cached_parity'
+@@ -56188,6 +56288,7 @@
+ 'seccomp_actions_logged_handler'
+ 'seccomp_assign_mode'
+ 'seccomp_attach_filter'
++'seccomp_cache_prepare_bitmap'
+ 'seccomp_check_filter'
+ '__seccomp_filter'
+ '__seccomp_filter_release'
+@@ -56195,6 +56296,7 @@
+ 'seccomp_get_filter'
+ 'seccomp_get_metadata'
+ 'seccomp_log'
++'seccomp_names_from_actions_logged'
+ 'seccomp_notify_detach'
+ 'seccomp_notify_ioctl'
+ 'seccomp_notify_poll'
+@@ -56992,6 +57094,7 @@
+ 'sel_write_user'
+ 'sel_write_validatetrans'
+ 'semctl_down'
++'semctl_info'
+ 'semctl_main'
+ 'semctl_setval'
+ 'semctl_stat'
+@@ -57501,11 +57604,13 @@
+ '__se_sys_pkey_free'
+ '__se_sys_ppoll'
+ '__se_sys_prctl'
++'__se_sys_preadv2'
+ '__se_sys_prlimit64'
+ '__se_sys_process_madvise'
+ '__se_sys_process_mrelease'
+ '__se_sys_pselect6'
+ '__se_sys_ptrace'
++'__se_sys_pwritev2'
+ '__se_sys_quotactl'
+ '__se_sys_quotactl_fd'
+ '__se_sys_reboot'
+@@ -57690,7 +57795,6 @@
+ 'set_hash_max'
+ 'set_hello_time'
+ 'set_huge_pmd'
+-'set_huge_pte_at'
+ 'set_huge_zero_folio'
+ 'set_ignore_ce'
+ 'set_ignore_seg'
+@@ -57721,7 +57825,6 @@
+ 'set_max_cstate'
+ 'set_max_threads'
+ 'set_max_user_events_sysctl'
+-'set_mba_sc'
+ 'set_mbr_done'
+ 'set_mbr_enable_disable'
+ 'set_mcast_msfilter'
+@@ -57846,6 +57949,7 @@
+ 'set_posix_acl'
+ 'set_power_ctl_ee_state'
+ 'set_precision'
++'set_preempt_buddy'
+ 'set_primary_fwnode'
+ '__set_print_fmt'
+ '__set_printk_clr_event'
+@@ -57932,7 +58036,6 @@
+ 'set_trigger'
+ 'set_trigger_filter'
+ 'set_tsc_mode'
+-'set_tsk_thread_flag'
+ 'set_tun_src'
+ 'set_uhash_entries'
+ 'setup_acpi_rsdp'
+@@ -58104,6 +58207,7 @@
+ 'setxattr_copy'
+ 'set_xfrm_gro_udp_encap_rcv'
+ 'set_zone_contiguous'
++'SetZsPageMovable'
+ 'severities_coverage_open'
+ 'severities_coverage_write'
+ 'severities_debugfs_init'
+@@ -58140,6 +58244,7 @@
+ 'sfb_module_exit'
+ 'sfb_module_init'
+ 'sfb_peek'
++'sfb_rate_limit'
+ 'sfb_reset'
+ 'sfb_swap_slot'
+ 'sfb_tcf_block'
+@@ -58213,6 +58318,7 @@
+ 'sg_nents_for_dma'
+ 'sg_nents_for_len'
+ 'sg_new_read'
++'sg_new_write'
+ 'sg_open'
+ '__sg_page_iter_dma_next'
+ '__sg_page_iter_next'
+@@ -58594,6 +58700,7 @@
+ 'show_kprobe_addr'
+ 'show_ldttss'
+ 'show_learning'
++'show_list'
+ 'show_local_boost'
+ 'show_log_height'
+ 'show_log_width'
+@@ -58829,6 +58936,7 @@
+ 'shutdown_event'
+ 'shutdown_handler'
+ 'shutdown_pirq'
++'shutdown_scheduler_queue'
+ 'shutdown_security_notify'
+ 'shutdown_unit'
+ 'sibling_imbalance'
+@@ -58990,6 +59098,7 @@
+ 'sis_tlbflush'
+ 'si_swapinfo'
+ 'sit_cleanup'
++'sitd_slot_ok'
+ 'sit_exit_rtnl_net'
+ 'sit_gro_complete'
+ 'sit_gso_segment'
+@@ -59096,8 +59205,6 @@
+ 'skb_get_poff'
+ 'skb_get_tx_timestamp'
+ '__skb_gro_checksum_complete'
+-'__skb_gro_checksum_validate_complete'
+-'__skb_gro_checksum_validate_needed'
+ 'skb_gro_incr_csum_unnecessary'
+ 'skb_gro_receive'
+ 'skb_gro_receive_list'
+@@ -59183,8 +59290,8 @@
+ 'skb_set_owner_r'
+ 'skb_set_owner_w'
+ 'skb_setup_tx_timestamp'
+-'skb_share_check'
+ 'skb_shift'
++'__skb_splice_bits'
+ 'skb_splice_bits'
+ 'skb_splice_from_iter'
+ 'skb_split'
+@@ -60210,7 +60317,6 @@
+ 'srcu_notifier_chain_register'
+ 'srcu_notifier_chain_unregister'
+ '__srcu_read_lock'
+-'srcu_read_lock_held'
+ '__srcu_read_unlock'
+ 'srcu_reschedule'
+ 'srcutorture_get_gp_data'
+@@ -60504,7 +60610,6 @@
+ 'store_amd_pstate_floor_freq'
+ '_store_and_notify'
+ 'store_backref_cache'
+-'store_backref_shared_cache'
+ 'store_backup_port'
+ 'store_bind'
+ 'store_blank'
+@@ -60739,6 +60844,8 @@
+ 'subtree_equal'
+ 'subtree_inc'
+ 'success_show'
++'suffix_kstrtoint'
++'suffix_kstrtoull'
+ 'sugov_effective_cpu_perf'
+ 'sugov_exit'
+ 'sugov_init'
+@@ -60775,7 +60882,6 @@
+ 'super_s_dev_test'
+ 'super_setup_bdi'
+ 'super_setup_bdi_name'
+-'super_set_uuid'
+ 'super_sync'
+ 'super_trylock_shared'
+ 'super_validate'
+@@ -60867,6 +60973,7 @@
+ 'swap_entry_swapped'
+ 'swap_events_show'
+ 'swap_ex'
++'swap_extend_table_alloc'
+ 'swap_extend_table_try_free'
+ 'swapfile_init'
+ 'swap_folio_sector'
+@@ -60919,6 +61026,7 @@
+ 'swiotlb_dev_init'
+ 'swiotlb_exit'
+ 'swiotlb_init'
++'swiotlb_init_io_tlb_pool'
+ 'swiotlb_init_late'
+ 'swiotlb_init_remap'
+ 'swiotlb_map'
+@@ -61033,7 +61141,6 @@
+ 'synaptics_disconnect'
+ 'synaptics_init'
+ 'synaptics_init_absolute'
+-'synaptics_init_ps2'
+ 'synaptics_init_relative'
+ 'synaptics_init_smbus'
+ 'synaptics_module_init'
+@@ -61144,6 +61251,7 @@
+ 'synproxy_tg4_destroy'
+ 'synproxy_tg4_exit'
+ 'synproxy_tg4_init'
++'synproxy_tstamp_adjust'
+ 'synthesize_relcall'
+ 'synthesize_reljump'
+ '__sys_accept4'
+@@ -61161,6 +61269,7 @@
+ 'syscall_init'
+ 'syscall_prog_func_proto'
+ 'syscall_prog_is_valid_access'
++'syscall_put_data'
+ 'syscall_regfunc'
+ 'syscall_unregfunc'
+ 'syscall_user_dispatch'
+@@ -61211,6 +61320,7 @@
+ 'sysctl_vm_numa_stat_handler'
+ 'sys_dmi_field_show'
+ 'sys_dmi_modalias_show'
++'sys_enter_openat_print_fmt'
+ 'sysfb_apply_efi_quirks'
+ 'sysfb_disable'
+ 'sysfb_handles_screen_info'
+@@ -61492,6 +61602,7 @@
+ 'target_unblock'
+ 'task_active_pid_ns'
+ 'task_avdcache_reset'
++'task_blocks_on_rt_mutex'
+ 'task_bp_pinned'
+ 'task_cache_work'
+ 'task_call_func'
+@@ -61531,7 +61642,6 @@
+ 'task_fork_dl'
+ 'task_fork_fair'
+ 'task_get_cgroup1'
+-'task_get_css'
+ 'task_group_account_field'
+ 'task_gtime'
+ 'task_hot'
+@@ -61697,7 +61807,6 @@
+ 'tcf_block_netif_keep_dst'
+ 'tcf_block_offload_cmd'
+ 'tcf_block_offload_unbind'
+-'tcf_block_playback_offloads'
+ '__tcf_block_put'
+ 'tcf_block_put'
+ 'tcf_block_put_ext'
+@@ -62046,6 +62155,7 @@
+ 'tcp_gso_segment'
+ 'tcp_gso_tstamp'
+ 'tcp_inbound_hash'
++'tcp_inbound_md5_hash'
+ 'tcp_init'
+ 'tcp_init_congestion_control'
+ 'tcp_init_cwnd'
+@@ -62099,6 +62209,7 @@
+ 'tcp_openreq_init_rwin'
+ 'tcp_options'
+ 'tcp_options_fit_accecn'
++'tcp_options_write'
+ 'tcp_orphan_count_sum'
+ 'tcp_orphan_update'
+ 'tcp_out_of_resources'
+@@ -62162,6 +62273,7 @@
+ 'tcp_retransmit_timer'
+ 'tcp_retrans_try_collapse'
+ 'tcp_rto_min_us'
++'tcp_rtx_probe0_timed_out'
+ 'tcp_rtx_synack'
+ 'tcp_sack_compress_send_ack'
+ 'tcp_sacktag_one'
+@@ -62459,6 +62571,7 @@
+ 'test_therm_status'
+ 'test_wakealarm'
+ 'test_write_file'
++'textify_hooks'
+ '__text_poke'
+ 'text_poke'
+ 'text_poke_apply_relocation'
+@@ -62661,7 +62774,6 @@
+ 'therm_throt_device_show_package_throttle_count'
+ 'therm_throt_device_show_package_throttle_max_time_ms'
+ 'therm_throt_device_show_package_throttle_total_time_ms'
+-'therm_throt_process'
+ 'thin_ctr'
+ 'thin_defer_cell'
+ 'thin_dtr'
+@@ -62839,11 +62951,14 @@
+ 'time_in_state_ms_show'
+ 'timekeeper_lock_irqsave'
+ 'timekeeper_unlock_irqrestore'
++'__timekeeping_advance'
+ 'timekeeping_clocksource_has_base'
+ 'timekeeping_forward_now'
+ 'timekeeping_get_mg_floor_swaps'
+ 'timekeeping_init'
+ 'timekeeping_init_ops'
++'__timekeeping_inject_offset'
++'__timekeeping_inject_sleeptime'
+ 'timekeeping_inject_sleeptime64'
+ 'timekeeping_max_deferment'
+ 'timekeeping_notify'
+@@ -62853,6 +62968,7 @@
+ 'timekeeping_suspend'
+ 'timekeeping_syscore_resume'
+ 'timekeeping_syscore_suspend'
++'timekeeping_update_from_shadow'
+ 'timekeeping_valid_for_hres'
+ 'timekeeping_warp_clock'
+ 'timeleft_show'
+@@ -62965,6 +63081,7 @@
+ 'tk_debug_sleep_time_init'
+ 'tk_debug_sleep_time_open'
+ 'tk_debug_sleep_time_show'
++'tk_setup_internals'
+ 'tk_set_wall_to_mono'
+ 'tlb_choose_channel'
+ 'tlb_finish_mmu'
+@@ -63029,6 +63146,7 @@
+ 'tls_rx_msg_size'
+ 'tls_rx_one_record'
+ 'tls_rx_reader_acquire'
++'tls_rx_reader_release'
+ 'tls_rx_rec_wait'
+ 'tls_server_hello_psk'
+ 'tls_server_hello_x509'
+@@ -63080,6 +63198,7 @@
+ 'tlv_put'
+ 'tlv_put_btrfs_timespec'
+ 'tlv_put_string'
++'tmigr_active_up'
+ 'tmigr_clear_cpu_available'
+ '__tmigr_cpu_activate'
+ 'tmigr_cpu_activate'
+@@ -63143,6 +63262,7 @@
+ 'to_current_namespace_index'
+ 'toggle_bp_slot'
+ 'token_create'
++'token_get_info_by_fd'
+ 'to_nd_btt'
+ 'to_ndd'
+ 'to_nd_dax'
+@@ -63239,6 +63359,7 @@
+ 'tpm2_calc_event_log_size'
+ 'tpm2_calc_ordinal_duration'
+ 'tpm2_commit_space'
++'tpm2_create_primary'
+ 'tpm2_del_space'
+ 'tpm2_do_selftest'
+ 'tpm2_end_auth_session'
+@@ -63479,6 +63600,7 @@
+ 'trace_call_bpf_faultable'
+ 'trace_cgroup_mkdir'
+ 'trace_cgroup_mkdir_enabled'
++'trace_cgroup_notify_frozen'
+ 'trace_cgroup_rename'
+ 'trace_cgroup_setup_root'
+ 'trace_clk_disable'
+@@ -63523,6 +63645,7 @@
+ 'trace_device_pm_callback_end'
+ 'trace_device_pm_callback_start'
+ 'trace_die_panic_handler'
++'trace_dma_alloc'
+ 'trace_dma_alloc_pages'
+ 'trace_dql_stall_detected'
+ 'trace_dump_stack'
+@@ -63550,6 +63673,7 @@
+ 'trace_event_get_offsets_br_fdb_update'
+ 'trace_event_get_offsets_cache_tag_flush'
+ 'trace_event_get_offsets_cache_tag_log'
++'trace_event_get_offsets_cgroup_migrate'
+ 'trace_event_get_offsets_clk_parent'
+ 'trace_event_get_offsets_clk_rate_request'
+ 'trace_event_get_offsets_device_pm_callback_end'
+@@ -63557,10 +63681,17 @@
+ 'trace_event_get_offsets_devlink_health_recover_aborted'
+ 'trace_event_get_offsets_devlink_health_report'
+ 'trace_event_get_offsets_devlink_health_reporter_state_update'
++'trace_event_get_offsets_devlink_hwerr'
++'trace_event_get_offsets_devlink_hwmsg'
++'trace_event_get_offsets_devlink_trap_report'
++'trace_event_get_offsets_devres'
++'trace_event_get_offsets_dma_buf_attach_dev'
+ 'trace_event_get_offsets_dma_fence'
+ 'trace_event_get_offsets_dma_fence_ops'
+ 'trace_event_get_offsets_fdb_delete'
++'trace_event_get_offsets_hwmon_attr_show_string'
+ 'trace_event_get_offsets_iommu_error'
++'trace_event_get_offsets_mc_event'
+ 'trace_event_get_offsets_mm_setup_per_zone_lowmem_reserve'
+ 'trace_event_get_offsets_net_dev_xmit_timeout'
+ 'trace_event_get_offsets_pcie_ltssm_state_transition'
+@@ -63572,6 +63703,7 @@
+ 'trace_event_get_offsets_regcache_sync'
+ 'trace_event_get_offsets_sched_prepare_exec'
+ 'trace_event_get_offsets_sched_process_fork'
++'trace_event_get_offsets_selinux_audited'
+ 'trace_event_ignore_this_pid'
+ 'trace_event_init'
+ 'trace_event_printf'
+@@ -64797,6 +64929,7 @@
+ 'trace_ext4_get_implied_cluster_alloc_exit'
+ 'trace_ext4_load_inode'
+ 'trace_ext4_load_inode_bitmap'
++'trace_ext4_mballoc_discard'
+ 'trace_ext4_read_block_bitmap_load'
+ 'trace_ext4_update_sb'
+ 'trace_ext4_writepages'
+@@ -64915,6 +65048,7 @@
+ 'trace_intel_irq_entry'
+ 'trace_intel_irq_exit'
+ 'trace_iomap_dio_rw_queued'
++'trace_io_uring_complete'
+ 'trace_io_uring_create'
+ 'trace_io_uring_link'
+ 'trace_irq_disable'
+@@ -68517,11 +68651,13 @@
+ 'trace_rcu_exp_grace_period'
+ 'trace_rcu_fqs'
+ 'trace_rcu_grace_period'
++'trace_rcu_invoke_kvfree_callback'
+ 'trace_rcu_nocb_wake'
+ 'trace_rcu_quiescent_state_report'
+ 'trace_rcu_segcb_stats'
+ 'trace_rcu_sr_normal'
+ 'trace_rcu_stall_warning'
++'trace_rcu_this_gp'
+ 'trace_rcu_unlock_preempted_task'
+ 'trace_rcu_utilization'
+ 'trace_rcu_watching'
+@@ -68654,6 +68790,7 @@
+ 'trace_xchk_scrubv_barrier_fail'
+ 'trace_xchk_scrubv_start'
+ 'trace_xdp_cpumap_enqueue'
++'trace_xdp_redirect'
+ 'trace_xdp_redirect_err'
+ 'trace_xen_cpu_write_gdt_entry'
+ 'trace_xen_mc_extend_args'
+@@ -69021,6 +69158,7 @@
+ 'try_rfc1123'
+ 'try_rfc959'
+ 'try_split_folio'
++'try_stop_module'
+ 'try_then_request_governor'
+ 'try_to_bring_up_aggregate_device'
+ 'try_to_claim_block'
+@@ -69051,6 +69189,7 @@
+ 'try_to_unuse'
+ 'try_to_wake_up'
+ 'try_to_writeback_inodes_sb'
++'try_unregister_trigger'
+ 'try_wait_for_completion'
+ 'tsa_apply_mitigation'
+ 'tsa_parse_cmdline'
+@@ -69386,6 +69525,7 @@
+ 'tun_setup'
+ 'tun_sock_write_space'
+ 'tun_validate'
++'tun_vnet_hdr_tnl_to_skb'
+ 'tun_vnet_ioctl'
+ 'tun_wake_queue'
+ 'tun_xdp'
+@@ -69467,6 +69607,7 @@
+ 'uart_get_info'
+ 'uart_get_info_user'
+ 'uart_get_iso7816_config'
++'uart_get_lsr_info'
+ 'uart_get_rs485_config'
+ 'uart_get_rs485_mode'
+ 'uart_handle_break'
+@@ -69696,7 +69837,6 @@
+ '__udpv4_gso_segment_csum'
+ 'udpv4_offload_init'
+ 'udp_v4_rehash'
+-'udp_v6_check'
+ 'udpv6_connect'
+ 'udpv6_destroy_sock'
+ 'udpv6_destruct_sock'
+@@ -69750,6 +69890,7 @@
+ 'uhci_debug_read'
+ 'uhci_debug_release'
+ 'uhci_finish_suspend'
++'uhci_fixup_toggles'
+ 'uhci_free_qh'
+ 'uhci_free_td'
+ 'uhci_free_urb_priv'
+@@ -69779,6 +69920,7 @@
+ 'uhci_rh_suspend'
+ 'uhci_scan_schedule'
+ 'uhci_show_qh'
++'uhci_show_td'
+ 'uhci_shutdown'
+ 'uhci_sprint_schedule'
+ 'uhci_start'
+@@ -71120,6 +71262,7 @@
+ 'v9fs_xattr_handler_get'
+ 'v9fs_xattr_handler_set'
+ 'v9fs_xattr_set'
++'va_alloc'
+ 'validate_change'
+ 'validate_clock_permissions'
+ 'validate_convert_profile'
+@@ -71147,6 +71290,7 @@
+ 'valid_phys_addr_range'
+ 'valid_zones_show'
+ 'val_is_negative'
++'val_to_string'
+ '__var_waitqueue'
+ 'var_wake_function'
+ 'vbin_printf'
+@@ -71356,6 +71500,7 @@
+ 'veth_xdp'
+ 'veth_xdp_flush_bq'
+ 'veth_xdp_get'
++'veth_xdp_rcv_bulk_skb'
+ 'veth_xdp_rx_hash'
+ 'veth_xdp_rx_timestamp'
+ 'veth_xdp_rx_vlan_tag'
+@@ -71492,6 +71637,7 @@
+ 'vgacon_switch'
+ 'vga_default_device'
+ 'vga_get'
++'vga_pci_str_to_vars'
+ '__vga_put'
+ 'vga_put'
+ 'vga_remove_vgacon'
+@@ -71567,7 +71713,9 @@
+ 'virtblk_get_cache_mode'
+ 'virtblk_getgeo'
+ 'virtblk_map_queues'
++'virtblk_name_format'
+ 'virtblk_poll'
++'virtblk_prep_rq'
+ 'virtblk_probe'
+ 'virtblk_remove'
+ 'virtblk_report_zones'
+@@ -71672,8 +71820,6 @@
+ 'virtio_max_dma_size'
+ 'virtio_net_driver_exit'
+ 'virtio_net_driver_init'
+-'virtio_net_hdr_from_skb'
+-'virtio_net_hdr_to_skb'
+ 'virtio_no_restricted_mem_acc'
+ 'virtio_pci_admin_dev_parts_get'
+ 'virtio_pci_admin_dev_parts_metadata_get'
+@@ -71815,6 +71961,7 @@
+ 'virtnet_remove'
+ 'virtnet_restore'
+ 'virtnet_rq_bind_xsk_pool'
++'virtnet_rq_free_buf'
+ 'virtnet_rq_submit'
+ 'virtnet_rq_unmap_free_buf'
+ 'virtnet_rx_dim_work'
+@@ -71908,6 +72055,7 @@
+ 'virtual_device_parent'
+ 'virtual_start_show'
+ 'visit_func_call_insn'
++'visit_groups_merge'
+ 'visit_node_for_delete'
+ 'visual_init'
+ 'vivaldi_function_row_physmap_show'
+@@ -72099,7 +72247,6 @@
+ '__vma_start_exclude_readers'
+ 'vma_start_read'
+ 'vma_start_read_locked'
+-'vma_start_read_locked_nested'
+ '__vma_start_write'
+ 'vma_start_write'
+ 'vma_state_init'
+@@ -72363,7 +72510,6 @@
+ 'vring_interrupt'
+ 'vring_map_one_sg'
+ 'vring_mapping_error'
+-'vring_map_single'
+ 'vring_new_virtqueue'
+ '__vring_new_virtqueue_packed'
+ '__vring_new_virtqueue_split'
+@@ -72404,12 +72550,14 @@
+ 'vsock_core_get_transport'
+ 'vsock_core_register'
+ 'vsock_core_unregister'
++'__vsock_create'
+ 'vsock_create'
+ 'vsock_create_connected'
+ 'vsock_data_ready'
+ '__vsock_deliver_tap'
+ 'vsock_deliver_tap'
+ 'vsock_dev_compat_ioctl'
++'vsock_dev_do_ioctl'
+ 'vsock_dev_ioctl'
+ 'vsock_dgram_connect'
+ '__vsock_dgram_recvmsg'
+@@ -72557,6 +72705,7 @@
+ 'vxlan_fdb_append'
+ 'vxlan_fdb_clear_offload'
+ 'vxlan_fdb_create'
++'__vxlan_fdb_delete'
+ 'vxlan_fdb_delete'
+ 'vxlan_fdb_delete_bulk'
+ 'vxlan_fdb_destroy'
+@@ -72616,6 +72765,7 @@
+ 'vxlan_mdb_is_valid_source'
+ 'vxlan_mdb_nlmsg_remote_size'
+ 'vxlan_mdb_rdst_free'
++'vxlan_mdb_remote_fini'
+ 'vxlan_mdb_remote_lookup'
+ 'vxlan_mdb_remote_notify'
+ 'vxlan_mdb_remote_src_del'
+@@ -72660,6 +72810,7 @@
+ 'vxlan_vni_in_use'
+ 'vxlan_vnilist_update_group'
+ 'vxlan_vni_node_rcu_free'
++'vxlan_vni_update_group'
+ 'vxlan_vs_add_vnigrp'
+ 'vxlan_vs_del_vnigrp'
+ 'vxlan_xmit'
+@@ -72737,7 +72888,6 @@
+ 'wait_next_period'
+ 'wait_nvdimm_bus_probe_idle'
+ '__wait_on_bit'
+-'wait_on_bit_io'
+ '__wait_on_bit_lock'
+ '__wait_on_buffer'
+ 'wait_on_buffer'
+@@ -72883,6 +73033,7 @@
+ 'walk_up_proc'
+ 'walk_up_reloc_tree'
+ 'walk_up_tree'
++'walk_zones_in_node'
+ 'want_pages_array'
+ 'want_pmd_share'
+ 'want_replace'
+@@ -73170,6 +73321,7 @@
+ '__write_dirty_buffers_async'
+ 'write_dirty_finish'
+ 'write_enabled_file_bool'
++'write_end_fn'
+ 'write_endio'
+ '__write_extent_buffer'
+ 'write_extent_buffer'
+@@ -73187,6 +73339,7 @@
+ 'write_marker_to_buffer'
+ 'write_mem'
+ 'write_mem_msg'
++'write_metadata'
+ 'write_mmp_block'
+ 'write_mmp_block_thawed'
+ 'write_moving'
+@@ -73210,10 +73363,9 @@
+ 'write_profile'
+ 'write_raw_marker_to_buffer'
+ 'write_regs'
++'write_relocate_add'
+ 'write_sb_page'
+ 'write_segment_descriptor'
+-'write_seqlock_bh'
+-'write_sequnlock_bh'
+ 'write_shadow_mbr'
+ '__write_super'
+ 'write_super_endio'
+@@ -73233,6 +73385,7 @@
+ 'ws_inc'
+ '__ww_mutex_check_waiters'
+ '__ww_mutex_die'
++'__ww_mutex_lock'
+ 'ww_mutex_lock'
+ 'ww_mutex_lock_interruptible'
+ 'ww_mutex_trylock'
+@@ -73298,6 +73451,7 @@
+ 'x509_decode_time'
+ 'x509_extract_key_data'
+ 'x509_extract_name_segment'
++'x509_fabricate_name'
+ 'x509_free_certificate'
+ 'x509_get_sig_params'
+ 'x509_key_exit'
+@@ -73878,6 +74032,7 @@
+ 'x86_schedule_events'
+ '__x86_set_memory_region'
+ 'x86_setup_perfctr'
++'x86_setup_var_mtrrs'
+ 'x86_spec_ctrl_setup_ap'
+ 'x86_stepping'
+ 'x86_thermal_enabled'
+@@ -73903,7 +74058,6 @@
+ 'x86_wallclock_init'
+ '__xa_alloc'
+ '__xa_alloc_cyclic'
+-'xa_alloc_cyclic'
+ 'xacct_add_tsk'
+ '__xa_clear_mark'
+ 'xa_clear_mark'
+@@ -74059,6 +74213,9 @@
+ 'xchk_bmap_dirattr_extent'
+ 'xchk_bmap_get_rmap'
+ 'xchk_bmap_iextent'
++'xchk_bmap_iextent_delalloc'
++'xchk_bmap_iextent_xref'
++'xchk_bmap_rt_iextent_xref'
+ 'xchk_bmap_xref_rmap'
+ 'xchk_bmap_xref_rmap_cow'
+ 'xchk_btree'
+@@ -74100,6 +74257,7 @@
+ 'xchk_dinode'
+ 'xchk_dir_actor'
+ 'xchk_dir_check_ftype'
++'xchk_dir_check_pptr_fast'
+ 'xchk_directory'
+ 'xchk_directory_blocks'
+ 'xchk_directory_check_free_entry'
+@@ -74108,6 +74266,7 @@
+ 'xchk_directory_free_bestfree'
+ 'xchk_directory_leaf1_bestfree'
+ 'xchk_dir_finish_slow_dirents'
++'xchk_dir_lock_child'
+ 'xchk_dir_looks_zapped'
+ 'xchk_dir_lookup'
+ 'xchk_dir_parent_pointer'
+@@ -74150,7 +74309,9 @@
+ 'xchk_fblock_xref_set_corrupt'
+ 'xchk_file_looks_zapped'
+ 'xchk_finobt_chunk_xref_inobt'
++'xchk_finobt_xref_inobt'
+ 'xchk_fscount_aggregate_agcounts'
++'xchk_fscount_count_frextents'
+ 'xchk_fscounters'
+ 'xchk_fscounters_cleanup'
+ 'xchk_fscounters_freeze'
+@@ -74182,6 +74343,7 @@
+ 'xchk_inode_count_blocks'
+ 'xchk_inode_cowextsize'
+ 'xchk_inode_extsize'
++'xchk_inode_flags'
+ 'xchk_inode_flags2'
+ 'xchk_inode_is_allocated'
+ 'xchk_inode_is_dirtree_root'
+@@ -74249,6 +74411,7 @@
+ 'xchk_parent_finish_slow_pptrs'
+ 'xchk_parent_iget'
+ 'xchk_parent_ilock_dir'
++'xchk_parent_lock_dir'
+ 'xchk_parent_pptr'
+ 'xchk_parent_pptr_and_dotdot'
+ 'xchk_parent_revalidate_pptr'
+@@ -75278,6 +75441,7 @@
+ 'xfrm_policy_addr_delta'
+ 'xfrm_policy_alloc'
+ 'xfrm_policy_byid'
++'__xfrm_policy_bysel_ctx'
+ 'xfrm_policy_bysel_ctx'
+ '__xfrm_policy_check'
+ 'xfrm_policy_construct'
+@@ -75623,6 +75787,7 @@
+ 'xfs_attr_list'
+ 'xfs_attrlist_by_handle'
+ 'xfs_attr_list_ilocked'
++'xfs_attr_log_item'
+ 'xfs_attr_match'
+ 'xfs_attrmulti_by_handle'
+ 'xfs_attr_namecheck'
+@@ -75630,6 +75795,7 @@
+ 'xfs_attr_node_get'
+ 'xfs_attr_node_list'
+ 'xfs_attr_node_list_lookup'
++'xfs_attr_node_lookup'
+ 'xfs_attr_node_remove_attr'
+ 'xfs_attr_recover_work'
+ 'xfs_attr_relog_intent'
+@@ -75751,6 +75917,7 @@
+ 'xfs_bmap_update_create_intent'
+ 'xfs_bmap_update_diff_items'
+ 'xfs_bmap_update_finish_item'
++'xfs_bmap_update_log_item'
+ 'xfs_bmap_validate_extent'
+ 'xfs_bmap_validate_extent_raw'
+ 'xfs_bmap_validate_ret'
+@@ -75793,6 +75960,7 @@
+ 'xfs_bmbt_write_verify'
+ 'xfs_bmdr_maxrecs'
+ 'xfs_bmdr_to_bmbt'
++'xfs_bmse_can_merge'
+ 'xfs_bmse_merge'
+ 'xfs_bnobt_cmp_key_with_cur'
+ 'xfs_bnobt_cmp_two_keys'
+@@ -75966,6 +76134,7 @@
+ 'xfs_buffered_write_delalloc_punch'
+ 'xfs_buffered_write_iomap_begin'
+ 'xfs_buffered_write_iomap_end'
++'xfs_buf_find_insert'
+ 'xfs_buf_find_lock'
+ 'xfs_buf_free'
+ 'xfs_buf_free_callback'
+@@ -75995,6 +76164,7 @@
+ 'xfs_buf_item_release'
+ 'xfs_buf_item_relse'
+ 'xfs_buf_item_size'
++'xfs_buf_item_size_segment'
+ 'xfs_buf_item_unpin'
+ 'xfs_buf_kill'
+ 'xfs_buf_lock'
+@@ -76054,6 +76224,7 @@
+ 'xfs_calc_clear_agi_bucket_reservation'
+ 'xfs_calc_create_resv_modify'
+ 'xfs_calc_create_tmpfile_reservation'
++'xfs_calc_default_atomic_ioend_reservation'
+ 'xfs_calc_dquots_per_chunk'
+ 'xfs_calc_finish_bui_reservation'
+ 'xfs_calc_finish_cui_reservation'
+@@ -76484,6 +76655,7 @@
+ 'xfs_eof_alignment'
+ 'xfs_error_get_cfg'
+ 'xfs_error_report'
++'xfs_error_sysfs_init_class'
+ 'xfs_errortag_add'
+ 'xfs_errortag_add_name'
+ 'xfs_errortag_attr_show'
+@@ -76550,6 +76722,7 @@
+ 'xfs_extent_free_defer_add'
+ 'xfs_extent_free_diff_items'
+ 'xfs_extent_free_finish_item'
++'xfs_extent_free_log_item'
+ 'xfs_extent_free_recover_work'
+ 'xfs_extent_free_relog_intent'
+ 'xfs_extfree_intent_destroy_cache'
+@@ -76590,6 +76763,7 @@
+ 'xfs_file_write_checks'
+ 'xfs_file_write_iter'
+ 'xfs_fill_fsxattr'
++'xfs_fill_statvfs_from_dquot'
+ 'xfs_find_handle'
+ 'xfs_find_trim_cow_extent'
+ 'xfs_finish_flags'
+@@ -76739,6 +76913,7 @@
+ 'xfs_healthmon_attach'
+ 'xfs_healthmon_copybuf'
+ 'xfs_healthmon_detach'
++'xfs_healthmon_file_on_monitored_fs'
+ 'xfs_healthmon_format_v0'
+ 'xfs_healthmon_fs_mask'
+ 'xfs_healthmon_get'
+@@ -76752,6 +76927,7 @@
+ 'xfs_healthmon_push'
+ 'xfs_healthmon_put'
+ 'xfs_healthmon_read_iter'
++'xfs_healthmon_reconfigure'
+ 'xfs_healthmon_release'
+ 'xfs_healthmon_report_file_ioerror'
+ 'xfs_healthmon_report_fs'
+@@ -76815,7 +76991,6 @@
+ 'xfs_iext_set'
+ 'xfs_iext_state_to_fork'
+ 'xfs_iext_update_extent'
+-'xfs_iflags_test_and_set'
+ 'xfs_iflush_abort'
+ 'xfs_iflush_cluster'
+ 'xfs_iflush_fork'
+@@ -76976,6 +77151,7 @@
+ 'xfs_ioc_attr_list'
+ 'xfs_ioc_attrmulti_one'
+ 'xfs_ioc_attr_put_listent'
++'xfs_ioc_bulkstat'
+ 'xfs_ioc_commit_range'
+ 'xfs_ioc_exchange_range'
+ 'xfs_ioc_fsbulkstat'
+@@ -76987,6 +77163,7 @@
+ 'xfs_ioc_getparents'
+ 'xfs_ioc_getparents_by_handle'
+ 'xfs_ioc_health_monitor'
++'xfs_ioc_inumbers'
+ 'xfs_ioc_rtgroup_geometry'
+ 'xfs_ioc_scrub_metadata'
+ 'xfs_ioc_scrubv_metadata'
+@@ -77002,6 +77179,7 @@
+ 'xfs_iomap_end_fsb'
+ 'xfs_iomap_eof_align_last_fsb'
+ 'xfs_iomap_inode_sequence'
++'xfs_iomap_prealloc_size'
+ 'xfs_iomap_valid'
+ 'xfs_iomap_write_direct'
+ 'xfs_iomap_write_unwritten'
+@@ -77203,6 +77381,7 @@
+ 'xfs_qm_reset_dqcounts_buf'
+ 'xfs_qm_resume_quotaon'
+ 'xfs_qm_scall_getquota'
++'xfs_qm_scall_getquota_fill_qc'
+ 'xfs_qm_scall_getquota_next'
+ 'xfs_qm_scall_quotaoff'
+ 'xfs_qm_scall_quotaon'
+@@ -77316,6 +77495,8 @@
+ 'xfs_refcount_update_create_intent'
+ 'xfs_refcount_update_diff_items'
+ 'xfs_refcount_update_finish_item'
++'xfs_refcount_update_log_item'
++'xfs_reflink_ag_has_free_space'
+ 'xfs_reflink_allocate_cow'
+ 'xfs_reflink_cancel_cow_blocks'
+ 'xfs_reflink_cancel_cow_range'
+@@ -77435,6 +77616,7 @@
+ 'xfs_rmap_update_create_intent'
+ 'xfs_rmap_update_diff_items'
+ 'xfs_rmap_update_finish_item'
++'xfs_rmap_update_log_item'
+ 'xfs_rtgroup_geom_health'
+ 'xfs_rtrefcountbt_broot_realloc'
+ 'xfs_rtrefcountbt_calc_reserves'
+@@ -77955,6 +78137,7 @@
+ 'xhci_set_interrupter_moderation'
+ 'xhci_set_link_state'
+ 'xhci_set_port_power'
++'xhci_set_remote_wake_mask'
+ 'xhci_setup_addressable_virt_dev'
+ 'xhci_setup_device'
+ 'xhci_setup_no_streams_ep_input_ctx'
+@@ -78321,11 +78504,9 @@
+ 'xt_dnat_target_v1'
+ 'xt_dnat_target_v2'
+ 'xt_find_jump_offset'
+-'xt_find_match'
+ 'xt_find_revision'
+ 'xt_find_table'
+ 'xt_find_table_lock'
+-'xt_find_target'
+ 'xt_fini'
+ 'xt_free_table_info'
+ 'xt_hook_ops_alloc'
+@@ -78334,6 +78515,7 @@
+ 'xt_match_seq_show'
+ 'xt_match_seq_start'
+ 'xt_match_to_user'
++'xt_mttg_seq_next'
+ 'xt_mttg_seq_stop'
+ 'xt_nat_checkentry'
+ 'xt_nat_checkentry_v0'
+@@ -78458,7 +78640,10 @@
+ '__zap_vma_range'
+ 'zap_vma_range'
+ 'zap_vma_range_batched'
++'zcrx_arm_notif'
+ 'zcrx_box_release'
++'zcrx_export'
++'zcrx_flush_rq'
+ 'zcrx_notif_tw'
+ 'zcrx_register_netdev'
+ 'zcrx_send_notif'
+@@ -78472,6 +78657,7 @@
+ '__zerocopy_sg_from_iter'
+ 'zerocopy_sg_from_iter'
+ 'zero_ctr'
++'zero_exception'
+ 'zero_fill_bio'
+ 'zeroing_mode_show'
+ 'zeroing_mode_store'
+@@ -78591,7 +78777,6 @@
+ 'ZSTD_buildFSETable'
+ 'ZSTD_buildFSETable_body_bmi2'
+ 'ZSTD_buildSeqStore'
+-'ZSTD_buildSeqTable'
+ 'ZSTD_CCtx_getParameter'
+ 'zstd_cctx_init'
+ 'ZSTD_CCtx_init_compressStream2'
