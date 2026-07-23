@@ -1,85 +1,84 @@
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F00F4B8DE2
-	for <dwarves@vger.kernel.org>; Thu, 23 Jul 2026 17:04:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.177.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1F1B36B919
+	for <dwarves@vger.kernel.org>; Thu, 23 Jul 2026 17:13:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.165.32
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784826258; cv=fail; b=tR9M+NhTjzKagNON0TEglHNU91UUItu3ofEt+oWE8bTIc8/JRkvBUFCwobp/FITxsYw7ozfV08j5PgyuhNVQEsaiwPC5wYwC3I51QZQc/HjcqF6iIiA8M6XudbWnipUSAqhm8tgAXpdw+QfxB6vGUzbd6j7Y9d3IHKBebRf80NA=
+	t=1784826844; cv=fail; b=kHN7W1exfAutcL9muUrSEflW99SlUuM2vbbTebYQPmBpVEkEgThYRiJe5hG1NFf0eIlLjjzSQwBb68TjquW17WLs0oGqAIghx4Tz95R9DmFV70UNflsPSbyQNMZ2d+EcEmnQ9+fR2kPDejXAcyFrvT1TVNHLP2dAb9OAf3Tlt78=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784826258; c=relaxed/simple;
-	bh=sXWLizEBy09zgoocB9ffXXTdwmOmQl5qZjEXHRmZqlg=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=pxCmsXacZVFnplbwJjKgFr7dgg0Cu6EHuT0/ECUIdfiFLznRrpVtLsdpv3RGUw2ZzjDuTRZSjQjQJkvhmK7PpHNn/6VfclIjKy1TYsI3fZTOK3J3autIXl6F6hxtMChPKAyXg4Swx0Dz6exAhptnA8fGcy5bvZxsEcTw93CQthQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=GEtgNLW/; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=VGTH75/8; arc=fail smtp.client-ip=205.220.177.32
+	s=arc-20240116; t=1784826844; c=relaxed/simple;
+	bh=Bg7w0ydFNaN1+7U46lutaCMu8g3v2/u5Q3RWac09Sx4=;
+	h=Message-ID:Date:Subject:To:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=GvpurVjfuETRjr+mVbSpPiwUrKquw/xIkjTa6EJLCmaHJTBuzRS7QANKlZKNLTc0dKZUuC7YqRSgxGat74bCJWVcl1kfUV+GlOg50RVU3xXzMHtL9A8RTtJwnVV+3PL/N1Oow0KHEJCZGxxpql6HeI0Dy2VDR7dMxjcn0N/Abiw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=qBw2cTR2; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=j4/SpG9i; arc=fail smtp.client-ip=205.220.165.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="GEtgNLW/";
-	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="VGTH75/8"
-Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 66NFvO941253785;
-	Thu, 23 Jul 2026 17:04:01 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="qBw2cTR2";
+	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="j4/SpG9i"
+Received: from pps.filterd (m0333521.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 66NFvQMK1441115;
+	Thu, 23 Jul 2026 17:13:49 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=
+	content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=
-	corp-2025-04-25; bh=hBGrmP0Aq0008qJNyCD7O620rOQRC3h3rTKZLtUOXRU=; b=
-	GEtgNLW/5T0puiBQbhGmLWNFuYn/NrU+rpx5oTbwHrCnadukqhORBlxl4Mtowmwp
-	qkqBkIuUYSd/fH9nUnDsMcHQ3sprJ6hL+veCGZmMMUAgbgsMEtM224LOb0Y6jJIu
-	z6RCw1+zaSRn6/HAPV/7qO3OocaeK+fACR7I6JaqwhNzket6Dh3pLZMHtmnxS0Qh
-	5uGXtxzI4fufJna1jscBuahOlDsrl34iwxEsm2/gfq77xNZwSDJXFyHSnMPDiPbA
-	baQ/D1sgDGe1aQJ0hyMzV920oeYuky5SKHpoqIkOzab55YC633q3Mbov0bOAab8r
-	Z2HV3X72ROQ6+h87kZzMfQ==
-Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4fg1n3q99p-1
+	corp-2025-04-25; bh=tQ2TreCszqveEily2iEGs8jfMi7bkPbmZQDOWaBuFmY=; b=
+	qBw2cTR2mYEyXP8WdtGaH2NK7BDCyfLFFi4IS32R4TEwgR7mfFKujbBqB67fm4Ls
+	ch69VHOu1R0H2AVoWETJGWOcWrRnKtepfO9Fg5SoZioWQ8vnXrrohysDDOEVWVjf
+	xPHpkrScJXPJwyWOL5t6xY9Ch8T3beQEOUWdndzs+Q3PZZx/Xls56JmumN9N5p/q
+	tqpHKBYleMH+IJcBkEJGV0SPPawuKIR1hwJp3t9Z0OqO2qn3AIGz9c9fl627c+Dl
+	9bimRAAXkx22+jRoCfDOhWkeZV3NLlIYs7nAuP5jMK2OKM3v6tBxyKqWqrZoATNC
+	1vE/Z7Mq6VSjNZ0K+cvT+A==
+Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4fg1sqqe5a-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 23 Jul 2026 17:04:01 +0000 (GMT)
-Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.7/8.18.1.7) with ESMTP id 66NH3Er7009366;
-	Thu, 23 Jul 2026 17:04:00 GMT
-Received: from sj2pr03cu001.outbound.protection.outlook.com (mail-westusazon11012054.outbound.protection.outlook.com [52.101.43.54])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 4fgts1cpn6-1
+	Thu, 23 Jul 2026 17:13:48 +0000 (GMT)
+Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.7/8.18.1.7) with ESMTP id 66NHDaTE017663;
+	Thu, 23 Jul 2026 17:13:47 GMT
+Received: from cy7pr03cu001.outbound.protection.outlook.com (mail-westcentralusazon11010014.outbound.protection.outlook.com [40.93.198.14])
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 4ffyxsubq3-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Thu, 23 Jul 2026 17:04:00 +0000 (GMT)
+	Thu, 23 Jul 2026 17:13:47 +0000 (GMT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=wtP+ahC2pUXrn5MYkQewqmwyMTJwdWzql0kjmrp6moi4x/TV1a3TIXu79LdnFCsUqUP99qwQXEdbUtQUcmxZkLMtYunhqJ+0YYEcan4fD6Ly9y0ZYwsiIkXurST+ZvAi1K300hCrG7c+flcpPtCDI4SjSGp0XhodZ9YmpQ475Jx5zh4AJjFUltzU2WwZEViE4AMxL4wat+n2ltE8nqbYSs0zOSQkM+hDzW4CVxiFhfnxtfyh7MwfQxorg6MEUlgQ9//Nnt62rOvSEkmjpKgMQ0h8xPjfhVM8CnvTn6TOrbV2GgZP1laPSX0xyF54uO5INeCSn3pW/tk4Du0PJgfztQ==
+ b=bkknAUC38K6dL6w0kSHJ6LoPqrxPl1ERQby9MqoTLYKZFrZDbDBIQzbF+KZOpOPp84vWacx1nF1MRFGRc8JgTiC9EtmApGrPCJ833vooeSRah4gCJIxa1Dw1cLck4mkz/Rj35HZVqBdL74iDhO7prIBnt8q98BmQxlPBiSapNgEY7FJo8QyHB/WMcMQ8A6oJ83r5QZkk2VAQDMjYReVZWVHLP2LKE4vEeYYhS4ZzqEPmsYyflrud0JIk6Ew+uzxrkh/eWiV4X2ZtXmCWrUGjS5nUY8EzbYtO2evkaNimY7+BWMaSykGlclMP1vNuk/3xsX8WmQzd2EHA0UviV7O1dg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=hBGrmP0Aq0008qJNyCD7O620rOQRC3h3rTKZLtUOXRU=;
- b=DiVuDm1Uu5Oh5u3V8eF7ymzE9iD8F1F6i8tyIZoRe91p6bYhRbosCK7WAHPc0MNZaBtJCyi3uyyrEL9xlGiX6/Kk7xX/CxfzIeDTZsGoV7ik7fPrp8wYKTtpXTuycJr0jDJK4FQC1QgiEsuJwNA772fNi8Pq2nwrGJuttuysA3ZrBTJDdWMRM2Mw+20pQFNYeiwgB+U4NDP0AbH64ZpVBoiCb4DApgbqcbD0meOuuv+Fo2eWTrr3b00UvtsgbDiDhTxeUYPy/qz76vUfxkjXjoUJFXxiEPcWW6+1DlV0NeUAOXZn0SFshJr/y0VQJqoVlCBIb7YV+CdW6ROD/GVdGQ==
+ bh=tQ2TreCszqveEily2iEGs8jfMi7bkPbmZQDOWaBuFmY=;
+ b=BHVPfw/PzIHTxHizbVyS63DUbu7S10EPZXWPYwRwxZ/bxLibyuekwVuLhvKia9R7z+oFklUP1B6c0ERlj/jomI/ayp1cDUTdOtK0erHa5FqUAEtGC74F5UowoWxBc9vUf7/7NA+uOxR1aCHgLzZgD3lGeeeea9GDlHBkh00I7mNP1vLTth3aEPw1qE/Tr9+43WBHfLx537u5iztwQbSFD8iO2w5hX6M2QElPXiNljIN73025EOwO++faVcxPTqZnLql4UAtL33dqE0nn6hhBHGhIUZq/skZSqsdtKI+63YrMHsbnXFHGaI/OfVjU1bWU2BG2OJ01M8czgQaohW1x8A==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
  dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=hBGrmP0Aq0008qJNyCD7O620rOQRC3h3rTKZLtUOXRU=;
- b=VGTH75/8AKDio3SK8wqh58Qf7K2wap5KqRAnjftqdzfUY2tNcwK1/lG7JZCcziLeptmqLBY70FqMdN/hI/HeHooDx1y92lPaoJSB2Nf4NEjc04ZFW+c5pWxtVw2xrNmjaWZ8LCjlKYzgR1coCbXrOka4NUeIfxqQ0qM19HJ4iqE=
+ bh=tQ2TreCszqveEily2iEGs8jfMi7bkPbmZQDOWaBuFmY=;
+ b=j4/SpG9iLq7dWlVUlpnNGa39zIkr89VS7M6KlPdOsAEmPUKEVKBOOVVbEwGg+VgSL3THI3hd3tw+saF1+Tii5/+uS+qqln+44m9P6FeQcaTPPice5u7nhYRrKfjmXh57EHkRguXif1W6gL2vlEEaU4vUz0EAFVzTK9VtbsxNd+I=
 Received: from BN0PR10MB4901.namprd10.prod.outlook.com (2603:10b6:408:126::19)
- by SJ2PR10MB7825.namprd10.prod.outlook.com (2603:10b6:a03:56e::8) with
+ by PH0PR10MB4693.namprd10.prod.outlook.com (2603:10b6:510:3c::12) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.245.10; Thu, 23 Jul
- 2026 17:03:56 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.245.11; Thu, 23 Jul
+ 2026 17:13:16 +0000
 Received: from BN0PR10MB4901.namprd10.prod.outlook.com
  ([fe80::19a8:41b4:f519:1b79]) by BN0PR10MB4901.namprd10.prod.outlook.com
  ([fe80::19a8:41b4:f519:1b79%5]) with mapi id 15.21.0245.010; Thu, 23 Jul 2026
- 17:03:56 +0000
-Message-ID: <f3967b5b-1a15-46f9-af02-7af2b5eb5014@oracle.com>
-Date: Thu, 23 Jul 2026 18:03:51 +0100
+ 17:13:15 +0000
+Message-ID: <97b948d8-e208-4c5c-bcee-0ab7b9e32f51@oracle.com>
+Date: Thu, 23 Jul 2026 18:13:10 +0100
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] btf_encoder: Add O_TRUNC to btf_encoder__write_raw_file()
-To: Namhyung Kim <namhyung@gmail.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc: dwarves@vger.kernel.org
-References: <20260717180105.136705-1-namhyung@gmail.com>
+Subject: Re: [PATCH] man-pages: improve language and formatting
+To: =?UTF-8?B?xaB0xJtww6FuIE7Em21lYw==?= <stepnem@smrk.net>,
+        dwarves@vger.kernel.org
+References: <20260713221504.393412-1-stepnem@smrk.net>
 Content-Language: en-GB
 From: Alan Maguire <alan.maguire@oracle.com>
-In-Reply-To: <20260717180105.136705-1-namhyung@gmail.com>
+In-Reply-To: <20260713221504.393412-1-stepnem@smrk.net>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: LO6P265CA0014.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:339::12) To BN0PR10MB4901.namprd10.prod.outlook.com
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: LO4P265CA0190.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:311::18) To BN0PR10MB4901.namprd10.prod.outlook.com
  (2603:10b6:408:126::19)
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
@@ -88,131 +87,478 @@ List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN0PR10MB4901:EE_|SJ2PR10MB7825:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1580d259-6dca-4aa0-aa75-08dee8dc6194
+X-MS-TrafficTypeDiagnostic: BN0PR10MB4901:EE_|PH0PR10MB4693:EE_
+X-MS-Office365-Filtering-Correlation-Id: ff911a50-f45f-4166-5495-08dee8ddaf0d
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|376014|1800799024|23010399003|56012099006|10067099003|22082099003|18002099003;
+	BCL:0;ARA:13230040|23010399003|376014|366016|1800799024|10067099003|3023799007|6133799003|18002099003|22082099003|56012099006;
 X-Microsoft-Antispam-Message-Info:
-	mARhgpajRKEsBvW4I6Px4XBo4EpnG0D4ZAUX+8nUhOp8M1PPrkcAkgK1dpKAWBu+vJwUzZVfURbMLecNbca0GuyCmfoLhkJMa4GRnICd9OZatt8TaISiqLP4Rw63TSnN1q8NyOR/yNFlMTyYLjKBmHlDH4X1K76IiSvTTBkIp0kzb9y0kPTM4rXOliVEIEmkON+/ATf5IK7F+wb6V0BofGdMa9mOFOzfqQcD6OqhdfGjV5Gu3v43NC3lZgWnBEQfrBHVJ0g3bJRHUKpIuvzNzhOdgwc0CEbfqM9IOtUzeDktOz0FLIsaJmbUfq8eK3AUgqpP4vZmCyKD2uAICmtUnZ7Z0Q8lCFKNDaXwHiIhDeCbZwSZehWBhotryIXQLJj5oFhPZ+3T5fVuQ4tXJiCFpKx8mkiyHA+SFQsCsdRuIKLdbMpRjnD3CguO5L1S/FuizQTOVWZ+xY4jCBU5+kOvctVqttP7OZGypATjVRxp4bfNIQKDj+yfotBj3kg/o77Z5DXzJy+EGPinS6FF1+2KKuCDk+uZBjBuc8tHbfK4zqGMX+nH/K4AF6TpZYwA45QsIanY4v9oo7cuonlxWkdy2k7t5RL1zD4GAZBasROcOduZwOi8nc6177ZzNCPcd5bHmRR1j5Efk0YmH4U+k2gdY8NWz7EDkBz/CoJzKrtrDmY=
+	6Zg5PHNuBL08EJxDlnt1Per9A9MuBLxwoRHoY2lj91DurRm3NjVZcAYoOo7OQAi9ohHhf6evXt5dDG0FOSUyGMOiywE8MFlZBc/NGsTSqcW0vlHkboDzEsgQDSwz12MaGV5jOqsB8/f9D6jTCkjFz3FWYM95tGTMCTC/QAar7rm1Z8fFFFbkdM8r02n4tj/sOUBQjynKEQ05adPa8wi5L7fZBECcZNJ669dzoUwgGuRT0ov8SQ5uHarrZdIz4MsD8f6DA6cRM4yhU+33DbcH8GoT6ZxBuYoxifvsCVKMW0vWjlBc0wFmQNfduAcoqNriao10nWuhzSq5BXXzdE00j3Zz4QMKdkkpIXKqJRSxQBZVfDBMJo9ccTtvXoAkd7BglE+SeUKX2JDUl0ozR7DqLUy8e8vr7rxpLfRxNDdPXwZE/ZXG8KRasUqtjrasREnhaNfb0gh3N9dyhSO+8q0tL5jZkmopQy2WASKY4a4bIyzwgn8Lkif1smtvwVHBa80sD7WLNDYO/S+KeXfRcvSiuI95qrEmDOmR1jk/c1I4jWnTEvVIDVW0dWMssXhYqp2bGCyC4QoNCoQY1h6TjbEGLkU6H5jplXqfKhkJVyvz+pBs15OBCjXXVn4wXtt0ylhW
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN0PR10MB4901.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(1800799024)(23010399003)(56012099006)(10067099003)(22082099003)(18002099003);DIR:OUT;SFP:1101;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN0PR10MB4901.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(23010399003)(376014)(366016)(1800799024)(10067099003)(3023799007)(6133799003)(18002099003)(22082099003)(56012099006);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?SHhoc3h3dGZMRTBaYmpJUXk2WkJ2LzY1Q0RzMUZxVWgxKzVjZDZuSUNPMC9J?=
- =?utf-8?B?cTJFOGFrZ004a3IvaTZvVW0yMk9KNEs3b0NwTEUwSmxvN3pTN2RJQUdDOFM0?=
- =?utf-8?B?QUY2NHFuSHZLbVRJbVNRK05PakJWMXZFbFZITWttQUYvelJZSEx5Q1hCcnhi?=
- =?utf-8?B?MWVWWXJ6aU11c2lRaHl5TmdUU0dhL2N1TVZDTDQzb0FWVEZYbnhHaXY3MGIr?=
- =?utf-8?B?Qkk0R29uYmpHTzN5Y2pQcHFNVXp3TmxvblZ5Z0x5d1NaNFE3VWlJZzU5ZGc0?=
- =?utf-8?B?VXJmYldrQU1xZkRzbThObjR3cllQT1lyVzdjSE12ZnM2S2kwYm1qVy9ONUhQ?=
- =?utf-8?B?UW9MeHU1aWllRmpWQzAxdVNpeWdHSzJyUy9MV203WW9TcWE0OFlmbmVaQmcy?=
- =?utf-8?B?ZDVHcks5bzdEbFhDeWxLK3ZoS2FTd3VPN0JrTUVMdFpvcW1PcHRKZEl6Nmpo?=
- =?utf-8?B?NlFoTHloekhLd0RYM0FpRjFOdk5Rckl2U051aE5kVUM5SktHMjZscEFHM2Nl?=
- =?utf-8?B?M3Z0cHpqZjVhRXk4WldRY1E3TXc5VXE5RHVWWnlIVHRZWUhaVjFsUnkrN0RM?=
- =?utf-8?B?RE9yU2s0L3R5Uk02OWViNjZ3eWxqdTVBODVGc0VIL3lVTlVsRUNUSEZkZWdD?=
- =?utf-8?B?L3VFT0RnUGxlWjd6YjZxTEpaVGxBYkJGb0JXYUdCZVZ4QnVsdmpMNGpjdEpu?=
- =?utf-8?B?SmFRb3dodGhtZFZPM2RJa1Jjczd4N0JvdGdoWkgwUnFpT2lCODI3WlRHa1gw?=
- =?utf-8?B?d2IycklWaTRVZkhETDJDNiswTmVDZm5LVjF6Y3ppSlJ6NlVWQ0RuTkZMb2hZ?=
- =?utf-8?B?VW1DS1VnUmRMRGdHakViZHJaQytlVlBtLzg3YnN6Z21LSDdCRHpqZWRUMEMx?=
- =?utf-8?B?bjRlUEU3bXRiQ2U5bXVISlpUT01CT3haU2NzU0wwZlJwZjBITTNzSld5WlNo?=
- =?utf-8?B?MFJsaW5hUXNHeTJPc0pMa1ZSd2hjSllzTVJ6d0JHUmJzRlBodkV2L2NsRGEz?=
- =?utf-8?B?Z1lhVWZlZ3JsWnJRSDJuUlR6TVF3ZEVhUzJHTFNXL1c1MXkxU3N3bU5RTTM4?=
- =?utf-8?B?UGFrdWdnTnM1QmhRZVVYUjVObEhNZWJiWWtlelBoQkd2eGtVazZRRDh4bmc1?=
- =?utf-8?B?ZWVsSllvVElwZjhsRXowblVDdzhFSGRCREVDM1o0cENsSXFhWTVBblB4RE9l?=
- =?utf-8?B?ck1uc1JBbFVoWU5uM0JPSmRZZGlMMGF3amlpbVI0Z3lkS0ZmNTZFYkZFRXFj?=
- =?utf-8?B?U3A2V1EvRGFhb3lGZ2FaRFo0dGdqUjZzcU80ME5Kd1N2NXhFWlFvWkk5dmJa?=
- =?utf-8?B?WmttRHo0R3lmdEh4T1VPQU1vSlNrSElYbnFXRXhRdThpemU5NDNHM0ZubVhK?=
- =?utf-8?B?QjlVM2hibnl4SWpUN0U4K2FyN1F1dzRaWGcwdkVTNnNNNnRPaGVwSDgvaVlh?=
- =?utf-8?B?WnVqaXV6VXVzcE9MeFBaa1RwaGg0aFNFK3B3S3pLdUNFdDBaTlI5NnUzRnhi?=
- =?utf-8?B?aTZmMzcwK0hRcGRUTXJSb1hiVWtGYWNSRHJvYWkyR3ZmRE1zb0ttZDgzNml3?=
- =?utf-8?B?aE9qb1d2ZVNYM0d0bWNnNVcwYUx2Mzd1WUdmNWZQWXpLblJMN01SaHFjWEtk?=
- =?utf-8?B?ZGtzMFYyUUZwdHFpemlHTy81M0hIS3VpTXVRRE81Z1JoN2xsQm9oTVNlRllK?=
- =?utf-8?B?b0RMdDJBZ1FFUGpRYy8wbThRWVZDNHBtWVgrQ1d5Y0lnWWVQbm9KeDU1djc0?=
- =?utf-8?B?U2Jxclo1c2diMzdGd0dMdTB2VmoyaWgyMjlncTFWMmp5RFFiMzUxSU01SFUx?=
- =?utf-8?B?YmpVNDRQeHl6MzJPM2NpZCtGTFROR29DZC8zSUNyaVJlOFNGZkJzMHhubzZN?=
- =?utf-8?B?UHpHVGV2TnMxWVhSdWw3U0NwbUJ6NWlMNmxIK3I2WVlWYTMvbjBvWVlpWEc1?=
- =?utf-8?B?cGVFbCtIVmc3NVlPVVZIMnpVZEJSSkRhdUsvZFF3TTlvVzB0RG5SUElmWHhZ?=
- =?utf-8?B?MVY2MnJvYm8zbHU1d1ZJUTNwbTlSRkNLU1RDVElZOEhSb3BoVUVQcHh4cWRp?=
- =?utf-8?B?K0JHbUwxZDZxc3Y3MVltOXgvNVJ5Z0ZNTWdxTGk3bXRYbW5Cano3RVdtNTRV?=
- =?utf-8?B?T2RTYVdpbmhkOVUrOGRCNTdVRXIrN2ROaVZ4TVA5MFh6ajE5S29FeGU4cUt6?=
- =?utf-8?B?ei9lOHFCR1NkUGlVajhnajdpN0xNL2VOeDNienlRb0tZNHZYeUJ5dE00TFFX?=
- =?utf-8?B?N1J0OXFjTVpZK0d4NC8rY2ZJdG1FVzZqbjI3RG50YmRtOWlmNW1DR2xXQVZN?=
- =?utf-8?B?Q2RmR0Z1MlF2alQ0VVpENFZJc0pqN3FLaXc0QjhMRkRYNGFPVCtQZz09?=
+	=?utf-8?B?bjY5U1pSckdNNURnWjV6d3RPZVlleTlHZThXakk3dXRVK1NFTWo3bHJSdVpV?=
+ =?utf-8?B?QjZKbEs5RktiTzFuWXJyQkR5c3FNSDkrQmNoYkJQQVVZcEZuYlZaSVRWWUFC?=
+ =?utf-8?B?VU1BOStFaDgra251TnlIUXp3QkJaK0FYcld2QW5RODdjNmJYMkJydU1LR0lw?=
+ =?utf-8?B?S2tIZnZLckxZY2pJSCtQNFdLYnIyR0VZdGRrb3dWeFhhdCtKOFlTcVRkZzJN?=
+ =?utf-8?B?VGozSmJDWG5ScUQ0dW1BMkxjWG9uV1lGUmdQZFNmMDRSNnYyVzhFYVpMTVEy?=
+ =?utf-8?B?N2NlZm1pTVBkbmdtcnF1bHRYSHBocytpd1VRVkREc3FwMmwyRGZSY29oNlk2?=
+ =?utf-8?B?QzZqMmxsTGZrVU1CdThsbTJZVEFuRFZ6TmlFTnc2TUlqdlliRjRla3FPY3M4?=
+ =?utf-8?B?TzJ0elF6WGp2aWZaTE1xYXVROHcvYStjaWpjUGJYcDNLOHFvckJKamxWdDlh?=
+ =?utf-8?B?aGdMcG5xVURDT2doT3djQU9YNld3UzE1ZFFqQmtISFB1UlFqSHc4amhDc2h2?=
+ =?utf-8?B?UEZoOXF3RjdhQVg2OTV2TjJNZnJBQTZCK2p5dnlTTXdrWUtkWDJPOEY5MDFD?=
+ =?utf-8?B?bGl0TGVQM2dYMmNPYnc1Zzd4MVZBa2E0SXdCOWRwcE9uNWFWQmQzWU1PRzE4?=
+ =?utf-8?B?aVViY2dwam5rdGNGYXNGWFo2RHpKSGlvdnd5aGh0U0p3bzBGY3RkRit6REpI?=
+ =?utf-8?B?ME1kZHZiUS8rR0MvS3FJclpHRXNhYVdxM0E1dWV4YnpSbUZJeis4N0JsY1JR?=
+ =?utf-8?B?NTROVGN6WFN4MGpFd2ZhVjdLWGV4dmo0VkxUc0FPd1U1Y29aWVZqNGNta2Z6?=
+ =?utf-8?B?dFlRTlF6WGJnajlNN1Jsd1MrYXNFb0IyTmFEQStvam1aU0xEamo4SmJNYkxQ?=
+ =?utf-8?B?aXV2TEpCQkhWQ1h6aWxjTXJaZytBMDBrbTg3WGEySlJVdzBmZDJvalVieStv?=
+ =?utf-8?B?M3NzMGJaZGp3U1g4c0g3LzFPdUhtTHVqbHVjOFl4djNNeUtwYnhTMGlrV1Fv?=
+ =?utf-8?B?cHZJdXJoWk5UUGFPSk91RzduV1UyMUhDSktZQzBwemFwY2Mya1A1a3VSNm81?=
+ =?utf-8?B?anhJZWFjOUVvY28rRGpFaWp2bU55c3hHcWJ2dlFBeUZYV1p5dFV4Rk9rYzlD?=
+ =?utf-8?B?WkZqYnArQzZXRm9MWEQzdzdyOEZIRjF1S1hYVENCVnRoYldSYUlsTE93M01p?=
+ =?utf-8?B?aUt1T3NHNVhjS0tCMnV6dndVZnpKM3dwaHozOTZ5aWdHdGhudGtSMGdsV1B5?=
+ =?utf-8?B?aG9WZ3dDQ1d3WTAyYlZHRHdCU2ZoenVIRXJYVVBWUlpmNHZ5Y3YxSkI2Qkda?=
+ =?utf-8?B?Y3NTNGdRMHNNTGg2L011akFwcFM5K1lJVzhDN3dhSEE3eTZ3R1JuWTZHYkg2?=
+ =?utf-8?B?RkdGYUlzS05kdFVGSGgxRmZ2NW9CTlJBYi9zTmhGSzlBRCthbkJJVkl0cGRP?=
+ =?utf-8?B?NlJzK1dRVjh1VXByelpzeXkvdERNMUdacDBJcEphRFFtdWZkQzQzSWcxMmhj?=
+ =?utf-8?B?ODJqWnlZTktpaHFadi92WElxRHpqenlaNjdOVWlkSnFMYU5jSFhDVXBMdGxv?=
+ =?utf-8?B?ZFRhdEVGSWR4RWVpS0dUN1dKYUxlOEdjQ01RUWNnbFgzWEd1VEl3YUNTc25w?=
+ =?utf-8?B?bHY3dDkrUjlBbDNhbHNObDVFTE84NGdGWktrWHI5ZHBjOVVteDlUYTltaTJw?=
+ =?utf-8?B?YkJ0ZTdnN3U5SVYxaHVoVXBKMHJhMzIvOEY1ZXgwV09mVElSVXVkbVMvNEJw?=
+ =?utf-8?B?Q1dsTkpOeEQ3Rm56aWtYZnM4R3VUWmVLUGg4dzhKTldtdDgzTzZ2SWhIdU5w?=
+ =?utf-8?B?WDJUaGhiUDdobGpQS3ZpZUJlUWxhR3ZNdnpEc0Y1bDZ5Z2IxMVNtelM4SHh4?=
+ =?utf-8?B?VDlKeUsrdUw2bW1CTHlKY1ZmSm50NENFWStkM082U1luUktmM3pEeUhXeFBt?=
+ =?utf-8?B?S2NMdFlvc0daWjFwZi9INnZwR0xGNHlUNmJXRzhZSjhLdkZlMnNsc1ZpM0tm?=
+ =?utf-8?B?T0pROVpXSU9oZTEwMXIwY0I0YU10MGNnRGlKWVRhWFIzb282bEtaQTlpT0Jt?=
+ =?utf-8?B?NzNEcm5KVERNeTB1Z0dGalgxK2RNc0R3U0xrWWF4dklnTys4Wmo0aXlHSkFU?=
+ =?utf-8?B?ZEcxRXhrWTNKNjdQbjVVUlhaUFMxODRaaUFxYlZnMTB1MFJESWtZYXo4Q283?=
+ =?utf-8?B?azlWN0oxY0NCTmxxaUVFdWxJdUIzWW1YTVpvNHJLR1l1bEJxTGlzQ3A0ZUor?=
+ =?utf-8?B?aFluV1NJaElVY0tib3R6ZmVma3pTRlNrbUtWNm9MNFRFV0dOc0cxZERvT0RH?=
+ =?utf-8?B?SHJUSFo1YkJVNmkwOWE3ZzIrV2QxS2RMZFBMUWJxVTRsWXpyOWNidz09?=
 X-Exchange-RoutingPolicyChecked:
-	DDlHHOElxN4Wac9K1CeTvpe2NfeKmF708CkeLPAdtIzmFaCrfZYhj/3sDeEN8mclrsVmEO1i1iVwF7Cnh8ZVkM6GBTfXgBIUuqEmlk8n9ZcSOq+cS+jEgI4+Iq/qCeUOfO7nfCwcosyG1pRnHMIz3ge0JoKp7/3O+s9kVBED4c27O508lxgmXr8Sln90DyZa3nhdkB/Dddf/nam6vM9HGiBRjkR+RSzxWJq+BLQfA6O+aMwH39kD4E2ghmIq2Re9M1tTaxy4ofQyZSq4hpeUCjN7EiXNr6poTdpvErLOpAhFQLoaZsv6Sg+kEgwPR1grhPwJiM834cx48D5a5LBlAw==
+	fEVq/xOAJaRhf5+eGCAJfbNPCip7Tj6IfZ9aTFfvPmff/gPAW4Pj2BVHmCWoFFLzjkgpZ7TSYlKiEbStQJcT611ZJrtFkIUwwC20v7qKehuMoj5eokn+zjgmVZjwFzMtSAmKWcZlXC+/+yZ1bkSYMT7gWzBKkXHdh17KbxDw4ee4DFBPSlLuxuVKPXbNllcmTVD8JK+h5A2QO/7kGGjOx08zUjefwoI1xFhZVopRJPnNAyCXG1sK/w+BHa6lDUotZKqqsJXk2VcMW+fuxaOfVGEqSIRns5Cu9yANGTyshu75TNUYyQexVz1Pa0JptIK0ljyNPBjhfPAqjG+/o2c+wA==
 X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
-	vViXGJO8gFNuPUfk2QgF3NCt+BGm/+joCl9xEEXPJeqk8b96vlU5KIS+KDDIsZzGqodT8uFlovk3Ty11XE7KwAmW7GhCNsliTdlEvbvwvKc3yK+OnkZHoweknOCjQQmWmrY5V0cFBo48kGpw/cD5d757fHPI2UaqH4mt4oBQ8My2i9aJkVV4AaUJJclw4W7QCbhoIHHApa7yteFIGhawacVJ6YhFCERkMx4xkSv3gJ07Dy9PdSi2Ham/naj+Nr1A0pXo57xnBnd5un9ZvDpNNX/xhhpTE6HYxM8TLxGOSwff3X0+Csdls21DdDo/Hf1XcV1lKLvIZH3QWM9HxyWOXdX4/lmUvVpIuI+L6bm3cmmiyt905uvzXQqOocf1b+4hNYEvFzy6Foa69rI439tU/5f+TNapxXKx+NOI9SmwR3Y+fyxoOY9VTE7VyNPmpTqKCtb25FBTvsvSPvXMJH3vWSS+JdIQH7iDd6+UvXjk8v5NO06Gp+wnuwC6QWEh6TuiFSXRMAYdIe/EuPWqbR3blcT357ab5pwHVwCrpPlT4hRN+UA+apgVPZPdSM2zKTCkhPzH7zkFpGZU+jI+1Bpehw/jY9OvlmtbcPvfMmFMNCY=
+	vlQf1OIsZbLm5CGC0f0JoxHBSzvvQnKVpwAFFl6uy5ZC4vGSNGdyQ6Nvg/jMaQKwaq2bS+0zTdU+Rr+/KmZcBOKd+S+BvePYsWKT8F2B0uWBk5BVArJZIOmzD2yUkn3Knt0CxM9+qTAvtbmQfJl7fpUDXCEsI/LsQQu6yIRo7ZtYuChNRTSMeN5oPhbFP47v58Ns6ZMoxIMQenp5EbyUtCex9RA2fT9ffYscI33xfxD7ern7euT/h0DaERMkQXYQIAkq8AQM/l/989qr21hTy26kv15SDFFkJfhP+GEXginITj5AgEYpsiwnZV3O3ntI42SUT1fkh26h5LOIyadczL9hkFhltqRUHHsDPxqFueKELohtH0jyKJfmVVBjAMeQaFZVCiIwFFeYf/WKsuTjFMo0e3+WrN2jmCMMQUJ+6xvNsigjYBE2RULer2C27BTUEcKXTuxLPAl1vk57eJiTxkkrZglw09HjjdzdDECeXQlEgU6w0axMNmuLJ5gVSFIdm6tOjOoZC5mPdNlMVDAR+o+5kM0TjREKeJrP21ovaGMRvEhQ9o8AbPTgpKWUuoDD0/FZko7f5ehgFG7g7vqy1uTTm0aE5QoE+GWCrFoRD1g=
 X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1580d259-6dca-4aa0-aa75-08dee8dc6194
+X-MS-Exchange-CrossTenant-Network-Message-Id: ff911a50-f45f-4166-5495-08dee8ddaf0d
 X-MS-Exchange-CrossTenant-AuthSource: BN0PR10MB4901.namprd10.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Jul 2026 17:03:56.3024
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Jul 2026 17:13:15.9452
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: UQ0Kf0LJDyvYxosUPJ6sumJok2k+9M0/ACqgDOZ0kHfZ1tgZY4AyQxbTRrhKMhq9evFAxiVcBwsqy++1igmoEw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR10MB7825
+X-MS-Exchange-CrossTenant-UserPrincipalName: JGaTADPLIsHjyxlNpTpY/+EPjWgO/2Q405F04UUgZzKRTRdLlK9LHxpGn0K9y2g1t/IVvnOoZG1H5+y73mOINw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR10MB4693
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.134,FMLib:17.12.100.49
  definitions=2026-07-23_04,2026-07-22_02,2025-10-01_01
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0
- mlxlogscore=999 spamscore=0 malwarescore=0 lowpriorityscore=0 adultscore=0
- suspectscore=0 phishscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.19.0-2606160000 definitions=main-2607230167
-X-Proofpoint-GUID: HFH5LDnXvio6U2-U7Y_HZ1lb1_drQ3zf
-X-Proofpoint-Spam-Info: AW1haW4tMjYwNzIzMDE2NyBTYWx0ZWRfX1ooQmGrHCd7l
- v+I2AnaHsuT6EJFH/o3bO/sfkUr/ozoR0VnUfAmnKaOI61i+tztYm4dnb3UHJDTxorxQmuLZ2Om
- RsWiRr54qyQd7nJbMhQMb4LCjP9BTyA74GiAA+sjzKoLQJZ1iz7M
-X-Proofpoint-ORIG-GUID: HFH5LDnXvio6U2-U7Y_HZ1lb1_drQ3zf
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNzIzMDE2NyBTYWx0ZWRfX3rTLLUM70jSr
- ZxmS82I/n/rSoUhrO9OOW99q2mPdr9FVR2SsSki7IcR8ikvn2CKA2U+V+F828V5NEM6eF9VsTFN
- insDmO6z06sSVTIhIbCmPBN0RYrqej8kOX2q2Qr4NGn0e/VrcJRgvjz0j8Gu+4THLSmfxsXzil3
- Z7JCnlzKbi751oT6soSwKfYGtASRvMxkFkiwUM773yBfVIvy2v8gTYia+g/xUv8XB/n9LLGfkBP
- +sgLtGnhmzlzkTkejYv9D0TvXmKeqY+wHWuGK3ifaoggeMOZCC6bQaEmwpMGpMErbu0kPyRF6ne
- aSolBAUJTU9ritcv4NTQ4LCqgSU+DTTVC9e47UNMrJQFkgb4AXsGelgJj62UfkyF4OrbJJgTCqy
- +tucVxjqjOm7/dY54CL48Yi5W2IAan6iLeDYZ2ZKr5s1qX31oLVvEi/nhnCozH1EvF315B3yIxa
- BDFQ2dPT2NadGwIXeCA==
-X-Authority-Analysis: v=2.4 cv=PryjqQM3 c=1 sm=1 tr=0 ts=6a624981 cx=c_pps
- a=OOZaFjgC48PWsiFpTAqLcw==:117 a=OOZaFjgC48PWsiFpTAqLcw==:17
+ mlxscore=0 adultscore=0 suspectscore=0 lowpriorityscore=0 malwarescore=0
+ mlxlogscore=999 spamscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.19.0-2606160000 definitions=main-2607230169
+X-Proofpoint-ORIG-GUID: A0tsHsh-UtAtLmGXnsTIiuubh5eVyr4O
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNzIzMDE2OCBTYWx0ZWRfX/kuH53Pn5vUA
+ aGxQrl+KJdT6uF0QF9Qbq/ZL4wLBkUYySVO+aHGSAdGN3bZDTDP26/UxD10+F3qxh6xHfNOolW2
+ YfYaegAtWYnyIjVdLxvmcY/92zHebDSij2Uc5v5C3M4wqnnpriFHeiwt3j/PyW3upsHqoy29gUW
+ v6xKmPXnCbUU4uJk1YLiDCAcTpcFCkKdwGPQecHXaqtQzXkEV3KizrzoeJwRfpZDzL5qoZ69sGP
+ WwW9OEfNa3uWujtgo70CgztukSQFd9wZfzEOCbdlF3SaR/eBlRli9lWrPfswbX/LFUbeYLt8F8M
+ gnNbjHDvOSnhjad2NqSR84RMxrbAQUGCqmhO+1Uj3K7QIRrKPcZ+a59/GznZioFM84rfj0MJuaJ
+ pXN0a9iWZMB+CXvQi+/qGiaTKkD/062Gzt9x6jGpsDx5I+/P9yV+JYK3U2yvXZw91OhHVS+DfDX
+ HGl7WjZZ1tyZloIJejoOtErNt+Z6IqD0rMrUTT+A=
+X-Authority-Analysis: v=2.4 cv=auyCzyZV c=1 sm=1 tr=0 ts=6a624bcc b=1 cx=c_pps
+ a=qoll8+KPOyaMroiJ2sR5sw==:117 a=qoll8+KPOyaMroiJ2sR5sw==:17
  a=6eWqkTHjU83fiwn7nKZWdM+Sl24=:19 a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19
  a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
  a=RAioF0-LDSMA:10 a=GoEa3M9JfhUA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=jiCTI4zE5U7BLdzWsZGv:22 a=o5oIOnhZENCTenyL_yNV:22 a=pGLkceISAAAA:8
- a=Z6qUqDySk5cqzGNx75AA:9 a=QEXdDO2ut3YA:10 a=zZCYzV9kfG8A:10
+ a=jiCTI4zE5U7BLdzWsZGv:22 a=x0eKOSpe3m1H3M0S9YoZ:22 a=aU6gODHfAAAA:8
+ a=dnyXhxrFAAAA:8 a=dcdjaeNq78UnM9ohXHoA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+ a=LGewCO6yFNkZ8-qGBFHK:22 a=Jg-N2dyUoHYgGiKYQkJY:22 a=5yU3S35YU4bGjq-dph-N:22
+ a=Bho9c0fBagfJEIQBS7DQ:22 cc=ntf awl=host:12115
+X-Proofpoint-GUID: A0tsHsh-UtAtLmGXnsTIiuubh5eVyr4O
+X-Proofpoint-Spam-Info: AW1haW4tMjYwNzIzMDE2OCBTYWx0ZWRfX4lRej75mWv/k
+ 20zUCKErMFn+yGM0pxAg8XqyQK5KnELTusW0up/Z5V+hOewsCOKIurTY6mBFr3YxURpfIdyTdmm
+ ggDlaswET8l8KC+3To8If/pum/2YeZYbIGspOySUf2zRXFAHvgVs
 
-On 17/07/2026 19:01, Namhyung Kim wrote:
+On 13/07/2026 23:15, Štěpán Němec wrote:
+> - fix some typos, grammar and wording issues
 > 
-> When it creates a raw file, it should truncate the content in case there
-> is an old file with the same name.  Otherwise it may have some garbage
-> at the end of the file and it could make the kernel fail to verify BTF.
+> - use conventional formatting (imperative, no capital or
+>   period) for .SH NAME summary
 > 
-> Signed-off-by: Namhyung Kim <namhyung@gmail.com>
+> - start sentences on a new line, resulting in consistent
+>   sentence spacing in formatted output
+> 
+> Signed-off-by: Štěpán Němec <stepnem@smrk.net>
 
-Applied, thank you!
+Applied, thank you.
 
 Alan
 
 > ---
->  btf_encoder.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  man-pages/pahole.1 | 154 ++++++++++++++++++++++++++++-----------------
+>  1 file changed, 95 insertions(+), 59 deletions(-)
 > 
-> diff --git a/btf_encoder.c b/btf_encoder.c
-> index d36984a..b810dd5 100644
-> --- a/btf_encoder.c
-> +++ b/btf_encoder.c
-> @@ -1878,7 +1878,7 @@ static int btf_encoder__write_raw_file(struct btf_encoder *encoder)
->  		return -1;
->  	}
+> diff --git a/man-pages/pahole.1 b/man-pages/pahole.1
+> index b1be472de2b1..21378a224847 100644
+> --- a/man-pages/pahole.1
+> +++ b/man-pages/pahole.1
+> @@ -4,20 +4,20 @@
+>  .TH pahole 1 "January 16, 2020" "dwarves" "dwarves"
+>  .\"
+>  .SH NAME
+> -pahole \- Shows, manipulates data structure layout and pretty prints raw data.
+> +pahole \- show or manipulate data structure layout and pretty print raw data
+>  .SH SYNOPSIS
+>  \fBpahole\fR [\fIoptions\fR] \fIfiles\fR
+>  .SH DESCRIPTION
+>  .B pahole
+> -shows data structure layouts encoded in debugging information formats,
+> -DWARF, CTF and BTF being supported.
+> +shows data structure layouts encoded in debugging information formats.
+> +DWARF, CTF and BTF are supported.
 >  
-> -	fd = open(filename, O_WRONLY | O_CREAT, 0640);
-> +	fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0640);
->  	if (fd < 0) {
->  		fprintf(stderr, "%s: Couldn't open %s for writing the raw BTF info: %s\n", __func__, filename, strerror(errno));
->  		return -1;
-> -- 
-> 2.55.0.229.g6434b31f56-goog
+>  This is useful for, among other things: optimizing important data structures by
+> -reducing its size, figuring out what is the field sitting at an offset from the
+> +reducing their size, identifying the field sitting at an offset from the
+>  start of a data structure, investigating ABI changes and more generally
+>  understanding a new codebase you have to work with.
+>  
+> -It also uses these structure layouts to pretty print data feed to its standard
+> +It also uses these structure layouts to pretty print data fed to its standard
+>  input, e.g.:
+>  .PP
+>  .nf
+> @@ -43,14 +43,17 @@ .SH DESCRIPTION
+>  
+>  See the PRETTY PRINTING section for further examples and documentation.
+>  
+> -The files must have associated debugging information.  This information may be
+> -inside the file itself, in ELF sections, or in another file.
+> +The files must have associated debugging information.
+> +This information may be inside the file itself, in ELF sections,
+> +or in another file.
+>  
+>  One way to have this information is to specify the \fB\-g\fR option to the
+> -compiler when building it. When this is done the information will be stored in
+> -an ELF section. For the DWARF debugging information format this, adds, among
+> -others, the \fB.debug_info\fR ELF section. For CTF it is found in just one ELF
+> -section, \fB.SUNW_ctf\fR. BTF comes in at least the \fB.BTF\fR ELF section, and
+> +compiler when building it.
+> +When this is done, the information will be stored in an ELF section.
+> +For the DWARF debugging information format this adds, among
+> +others, the \fB.debug_info\fR ELF section.
+> +For CTF it is found in just one ELF section, \fB.SUNW_ctf\fR.
+> +BTF comes with at least the \fB.BTF\fR ELF section, and
+>  may come also with the \fB.BTF.ext\fR ELF section.
+>  
+>  The \fBdebuginfo\fR packages available in most Linux distributions are also
+> @@ -60,9 +63,9 @@ .SH DESCRIPTION
+>  By default, \fBpahole\fR shows the layout of all named structs in the files
+>  specified.
+>  
+> -If no files are specified, then it will look if the /sys/kernel/btf/vmlinux
+> -is present, using the BTF information present in it about the running kernel,
+> -i.e. this works:
+> +If no files are specified, then it will look if /sys/kernel/btf/vmlinux
+> +is present, using the BTF information contained in it about the running kernel,
+> +i.e., this works:
+>  .PP
+>  .nf
+>  $ pahole list_head
+> @@ -75,10 +78,12 @@ .SH DESCRIPTION
+>  };
+>  $
+>  .fi
+> +
+>  It is possible to override the /sys/kernel/btf/vmlinux file location by setting
+> -the PAHOLE_VMLINUX_BTF_FILENAME environment variable. This may be useful for
+> -testing, scripting when using a different BTF for vmlinux. Used in the pahole
+> -regression tests.
+> +the PAHOLE_VMLINUX_BTF_FILENAME environment variable.
+> +This may be useful for testing or scripting when using a different BTF for
+> +vmlinux.
+> +Used in the pahole regression tests.
+>  
+>  If BTF is not present and no file is passed, then a vmlinux that matches the
+>  build-id for the running kernel will be looked up in the usual places,
+> @@ -88,16 +93,16 @@ .SH DESCRIPTION
+>  See the EXAMPLES section for more usage suggestions.
+>  
+>  It also pretty prints whatever is fed to its standard input, according to the
+> -type specified, see the EXAMPLE session.
+> +type specified, see the EXAMPLES session.
+>  
+>  Use --count to state how many records should be pretty printed.
+>  
+>  .SH OPTIONS
+> -pahole supports the following options.
+>  
+>  .TP
+>  .B \-C, \-\-class_name=CLASS_NAMES
+> -Show just these classes. This can be a comma separated list of class names
+> +Show just these classes.
+> +This can be a comma separated list of class names
+>  or file URLs (e.g.: file://class_list.txt)
+>  
+>  .TP
+> @@ -121,14 +126,15 @@ .SH OPTIONS
+>  $ pahole --compile > vmlinux.h
+>  .fi
+>  
+> -Produces a header that can be included in a C source file and built. In
+> -the example provided it will use the BTF info if available, otherwise will
+> +Produces a header that can be included in a C source file and built.
+> +In the example provided it will use the BTF info if available, otherwise will
+>  look for a DWARF file matching the running kernel build-id.
+>  
+>  .TP
+>  .B \-\-skip_emitting_atomic_typedefs
+>  Do not emit 'typedef _Atomic int atomic_int' & friends when used with options
+> -like --compile. Use it if the compiler provides these already, as of circa
+> +like --compile.
+> +Use it if the compiler provides these already, as of circa
+>  2022 with gcc 12.2.1 those are not encoded in DWARF so to generate compilable
+>  code we need emit those typedefs for the atomic types used in the data structures
+>  being emitted from debugging information.
+> @@ -143,21 +149,23 @@ .SH OPTIONS
+>  
+>  .TP
+>  .B \-E, \-\-expand_types
+> -Expand class members. Useful to find in what member of inner structs where an
+> +Expand class members.
+> +Useful to find in what member of inner structs where an
+>  offset from the beginning of a struct is.
+>  
+>  .TP
+>  .B \-F, \-\-format_path
+> -Allows specifying a list of debugging formats to try, in order. Right now this
+> -includes "btf", "ctf" and "dwarf". The default format path used is equivalent to
+> -"-F dwarf,btf,ctf".
+> +Allows specifying a list of debugging formats to try, in order.
+> +Right now this includes "btf", "ctf" and "dwarf".
+> +The default format path used is equivalent to "-F dwarf,btf,ctf".
+>  
+>  .TP
+>  .B \-\-hashbits=BITS
+>  Allows specifying the number of bits for the debugging format loader to use.
+>  The only one affected so far is the "dwarf" one, its default now is 15, the
+> -maximum for it is now 21 bits. Tweak it to see if it improves performance as
+> -the kernel evolves and more types and functions have to be loaded.
+> +maximum for it is now 21 bits.
+> +Tweak it to see if it improves performance as the kernel evolves and more
+> +types and functions have to be loaded.
+>  
+>  .TP
+>  .B \-\-hex
+> @@ -242,9 +250,9 @@ .SH OPTIONS
+>  
+>  .TP
+>  .B \-\-skip_encoding_btf_vars
+> -By default, VARs are encoded only for percpu variables. When specified, this
+> -option prevents encoding any VARs. Note that this option can be overridden
+> -by the feature "global_var".
+> +By default, VARs are encoded only for percpu variables.
+> +When specified, this option prevents encoding any VARs.
+> +Note that this option can be overridden by the feature "global_var".
+>  
+>  .TP
+>  .B \-\-skip_encoding_btf_decl_tag
+> @@ -260,18 +268,21 @@ .SH OPTIONS
+>  
+>  .TP
+>  .B \-\-skip_encoding_btf_inconsistent_proto
+> -Do not encode functions with multiple inconsistent prototypes or unexpected register use for their parameters, where the registers used do not match calling conventions.
+> +Do not encode functions with multiple inconsistent prototypes or unexpected
+> +register use for their parameters, where the registers used do not match
+> +calling conventions.
+>  
+>  .TP
+>  .B \-j, \-\-jobs=N
+> -Run N jobs in parallel. Defaults to number of online processors + 10% (like
+> +Run N jobs in parallel.
+> +Defaults to number of online processors + 10% (like
+>  the 'ninja' build system) if no argument is specified.
+>  
+>  .TP
+>  .B \-J, \-\-btf_encode
+>  Encode BTF information from DWARF, used in the Linux kernel build process when
+> -CONFIG_DEBUG_INFO_BTF=y is present, introduced in Linux v5.2. Used to implement
+> -features such as BPF CO-RE (Compile Once - Run Everywhere).
+> +CONFIG_DEBUG_INFO_BTF=y is present, introduced in Linux v5.2.
+> +Used to implement features such as BPF CO-RE (Compile Once - Run Everywhere).
+>  
+>  See \fIhttps://nakryiko.com/posts/bpf-portability-and-co-re/\fR.
+>  
+> @@ -304,7 +315,16 @@ .SH OPTIONS
+>  
+>  .TP
+>  .B \-\-btf_features=FEATURE_LIST
+> -Encode BTF using the specified feature list, or specify 'default' for all standard features supported.  This option can be used as an alternative to using multiple BTF-related options, and 'default' represents the standard set of BTF features that are in use for kernel BTF generation, so is useful as a shortcut for testing the latest set of standard features.  However kernel builds will call out specific features rather than using 'default' to ensure that the desired features are enabled regardless of pahole version and associated 'default' set.  Supported standard features are
+> +Encode BTF using the specified feature list, or specify 'default' for all
+> +standard features supported.
+> +This option can be used as an alternative to using multiple BTF-related options,
+> +and 'default' represents the standard set of BTF features that are in use for
+> +kernel BTF generation, so is useful as a shortcut for testing the latest set of
+> +standard features.
+> +However, kernel builds will call out specific features rather than using
+> +\&'default' to ensure that the desired features are enabled regardless of pahole
+> +version and associated 'default' set.
+> +Supported standard features are
+>  
+>  .nf
+>  	encode_force       Ignore invalid symbols when encoding BTF; for example
+> @@ -340,31 +360,38 @@ .SH OPTIONS
+>  	true_signature     Encode functions ensuring that binary-level
+>  	                   (rather than source-level) signatures are used;
+>                             for gcc these are ".isra.0" and ".costprop.0"
+> -                           optimized functions
+> +                           optimized functions.
+>  	layout             Encode information about BTF kinds available at encoding     
+>  	                   time in layout section in BTF.
+>  
+>  .fi
+>  
+> -So for example, specifying \-\-btf_encode=var,enum64 will result in a BTF encoding that (as well as encoding basic BTF information) will contain variables and enum64 values.
+> +So for example, specifying \-\-btf_encode=var,enum64 will result in a BTF
+> +encoding that (as well as encoding basic BTF information) will contain
+> +variables and enum64 values.
+>  
+>  .fi
+>  
+> -If one wants to add an extra feature to the set of standard ones, the '+' prefix can be used, i.e.:
+> -\-\-btf_features=+reproducible_build will add all default features plus the 'reproducible_build' extra
+> -feature.
+> +If one wants to add an extra feature to the set of standard ones,
+> +the '+' prefix can be used, e.g.:
+> +\-\-btf_features=+reproducible_build will add all default features
+> +plus the 'reproducible_build' extra feature.
+>  
+>  .TP
+>  .B \-\-btf_features_strict
+> -Identical to \-\-btf_features above, but pahole will exit if it encounters an unrecognized feature.
+> +Identical to \-\-btf_features above, but pahole will exit if it encounters
+> +an unrecognized feature.
+>  
+>  .TP
+>  .B \-\-supported_btf_features
+> -Show set of BTF features supported by \-\-btf_features option and exit.  Useful for checking which features are supported since \-\-btf_features will not emit an error if an unrecognized feature is specified.
+> +Show set of BTF features supported by \-\-btf_features option and exit.
+> +Useful for checking which features are supported since \-\-btf_features will
+> +not emit an error if an unrecognized feature is specified.
+>  
+>  .TP
+>  .B \-\-running_kernel_vmlinux,
+> -Search for, possibly getting from a debuginfo server, a vmlinux matching the running kernel build-id (from /sys/kernel/notes).
+> +Search for, possibly getting from a debuginfo server, a vmlinux matching the
+> +running kernel build-id (from /sys/kernel/notes).
+>  
+>  .TP
+>  .B \-l, \-\-show_first_biggest_size_base_type_member
+> @@ -372,8 +399,8 @@ .SH OPTIONS
+>  
+>  .TP
+>  .B \-m, \-\-nr_methods
+> -Show number of methods of all classes, i.e. the number of functions have arguments that
+> -are pointers to a given class.
+> +Show number of methods of all classes, i.e., the number of functions have
+> +arguments that are pointers to a given class.
+>  
+>  To get the number of methods for an specific class, please use:
+>  
+> @@ -411,7 +438,8 @@ .SH OPTIONS
+>  
+>  .TP
+>  .B     \-\-with_embedded_flexible_array
+> -Show only structs that have an embedded flexible array, i.e. a contained struct that has flexible arrays, a flexible array "in the middle".
+> +Show only structs that have an embedded flexible array, i.e., a contained struct
+> +that has flexible array(s) "in the middle".
+>  
+>  .TP
+>  .B \-q, \-\-quiet
+> @@ -558,9 +586,10 @@ .SH NOTES
+>  To enable the generation of debugging information in the Linux kernel build
+>  process select CONFIG_DEBUG_INFO. This can be done using make menuconfig by
+>  this path: "Kernel Hacking" -> "Compile-time checks and compiler options" ->
+> -"Compile the kernel with debug info". Consider as well enabling
+> -CONFIG_DEBUG_INFO_BTF by going thru the aforementioned menuconfig path and then
+> -selecting "Generate BTF typeinfo". Most modern distributions with eBPF support
+> +"Compile the kernel with debug info".
+> +Consider as well enabling CONFIG_DEBUG_INFO_BTF by going thru the aforementioned
+> +menuconfig path and then selecting "Generate BTF typeinfo".
+> +Most modern distributions with eBPF support
+>  should come with that in all its kernels, greatly facilitating the use of
+>  pahole.
+>  
+> @@ -678,7 +707,8 @@ .SH EXAMPLES
+>  
+>  .P
+>  OK, I know the offset that causes its a 'struct thread_struct' and that the offset is 0x178,
+> -so must be in that 'fpu' struct... No problem, expand 'struct thread_struct' and combine with \fBgrep\fR:
+> +so must be in that 'fpu' struct...
+> +No problem, expand 'struct thread_struct' and combine with \fBgrep\fR:
+>  .PP
+>  .nf
+>  $ pahole --hex -E thread_struct | egrep '(0x178|struct fpu)' -B4 -A4
+> @@ -835,8 +865,8 @@ .SH PRETTY PRINTING
+>  (variable sized records), that the 'enum perf_event_type' should be used to pretty print the
+>  numeric value in perf_event_header->type and furthermore that it should be used to heuristically
+>  look for structs with the same name (lowercase) of the enum entry that is converted from the
+> -type field, using it to pretty print instead of the base 'perf_event_header' type. See the
+> -PRETTY PRINTING EXAMPLES section below.
+> +type field, using it to pretty print instead of the base 'perf_event_header' type.
+> +See the PRETTY PRINTING EXAMPLES section below.
+>  .P
+>  
+>  Furthermore the 'filter=' part can be used, so far with only the '==' operator to filter based
+> @@ -845,7 +875,7 @@ .SH PRETTY PRINTING
+>  .P
+>  
+>  The 'sizeof' arg defaults to the 'size' member name, if the name is different, one can use
+> - 'sizeof=sz' form, ditto for 'type=other_member_name' field, that defaults to 'type'.
+> +\&'sizeof=sz' form, ditto for 'type=other_member_name' field, that defaults to 'type'.
+>  
+>  .SH PRETTY PRINTING EXAMPLES
+>  
+> @@ -975,7 +1005,8 @@ .SH PRETTY PRINTING EXAMPLES
+>  .P
+>  This uses ~/bin/perf to get the type definitions, the defines 'struct perf_file_header' as the header,
+>  then seeks '$header.data.offset' bytes from the start of the file, and considers '$header.data.size' bytes
+> -worth of such records. The filter expression may omit a common prefix, in this case it could additionally be
+> +worth of such records.
+> +The filter expression may omit a common prefix, in this case it could additionally be
+>  equivalently written as both 'filter=type==CGROUP' or the 'filter=' can also be omitted, getting as compact
+>  as 'type==CGROUP':
+>  .P
+> @@ -1073,7 +1104,12 @@ .SH PRETTY PRINTING EXAMPLES
+>  $
+>  .fi
+>  .P
+> -Some of the records are not found in 'type_enum=perf_event_type' so some of the records don't get converted to a type that fully shows its contents. For perf we know that those are in another enumeration, 'enum perf_user_event_type', so, for these cases, we can create a 'virtual enum', i.e. the sum of two enums and then get all those entries decoded and properly casted, first few records with just 'enum perf_event_type':
+> +Some of the records are not found in 'type_enum=perf_event_type' so some of the
+> +records don't get converted to a type that fully shows its contents.
+> +For perf we know that those are in another enumeration,
+> +\&'enum perf_user_event_type', so, for these cases, we can create
+> +a 'virtual enum', i.e. the sum of two enums and then get all those entries
+> +decoded and properly casted, first few records with just 'enum perf_event_type':
+>  .PP
+>  .nf
+>  $ pahole ~/bin/perf --header=perf_file_header --seek_bytes '$header.data.offset' --size_bytes='$header.data.size' -C 'perf_event_header(sizeof,type,type_enum=perf_event_type)' --count 4 --prettify perf.data
+> @@ -1179,8 +1215,8 @@ .SH AUTHOR
+>  Thanks to Andrii Nakryiko and Martin KaFai Lau for providing the BTF encoder
+>  and improving the codebase while making sure the BTF encoder works as needed
+>  to be used in encoding the Linux kernel .BTF section from the DWARF info
+> -generated by gcc. For that Andrii wrote a BTF deduplicator in libbpf that is
+> -used by \fBpahole\fR.
+> +generated by gcc.
+> +For that Andrii wrote a BTF deduplicator in libbpf that is used by \fBpahole\fR.
+>  .P
+>  Also thanks to Conectiva, Mandriva and Red Hat for allowing me to work on these tools.
+>  .P
 > 
+> base-commit: b9fa3ae313589f017f6fad8aaac414f29ce879c5
 
