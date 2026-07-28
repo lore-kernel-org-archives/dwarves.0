@@ -1,235 +1,235 @@
-Received: from 66-220-144-178.mail-mxout.facebook.com (66-220-144-178.mail-mxout.facebook.com [66.220.144.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-171.mta0.migadu.com (out-171.mta0.migadu.com [91.218.175.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0159314BF92
-	for <dwarves@vger.kernel.org>; Tue, 28 Jul 2026 02:37:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.144.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3F0D13790B
+	for <dwarves@vger.kernel.org>; Tue, 28 Jul 2026 03:01:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785206256; cv=none; b=SQ6TQZt86vHDaq6unF4v3cTjiBBa9bNu3/EhPETT5DMaOwokCVsi6McP7CQNQl9ObaD121TdJpi3RGPCJeE/rP15kIVAZF83DScajQj6uNMhy/bUDmS/PPs28Xil9zRLf+7Ci1EDRPCEmXfXH3uzH8E5jDZMJq07DHMawpq0RAc=
+	t=1785207711; cv=none; b=nsVOgu2kFi+sob07Y4C6clWTGDBfBwgQ74UCTVkremJ1hg7uQetyLUJrllke0xWymyUKqEYJVmMViti1WbkDdEcBkN9QEjfHMa8qyqT/4m6AWuZaFm6Ay5Fs4uLe+ycTfJJwRElGITg0nZEqNi3xMal/0Na4rI12WGwv7wUNEF8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785206256; c=relaxed/simple;
-	bh=/n+zXG3/H2tPR/U4JMam8SFc7YhOaJWkwmOiRXV+yQ4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=FedbMY5VSYPzZlh0tMGcJ8w7rheENSBQCS1fL7ziHrDMMZXx5t+2DgnEJJJ5VZybTq1iMCshwRufmcIHkBciCTJ6+A1NDXHk6r0+oV9pxtyq6Wg1+7BZh+GdgrgB3x06M7QMi990TvurEcAP7kxXmsh/1WLTHaRQQMc4gm7TE04=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.144.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
-Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id C238820673397C; Mon, 27 Jul 2026 19:37:22 -0700 (PDT)
-From: Yonghong Song <yonghong.song@linux.dev>
-To: Alan Maguire <alan.maguire@oracle.com>,
-	Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
-	dwarves@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	bpf@vger.kernel.org,
-	kernel-team@fb.com
-Subject: [PATCH dwarves] btf_encoder: Ensure the first same-name function has a non-zero address
-Date: Mon, 27 Jul 2026 19:37:22 -0700
-Message-ID: <20260728023722.1978868-1-yonghong.song@linux.dev>
-X-Mailer: git-send-email 2.53.0
+	s=arc-20240116; t=1785207711; c=relaxed/simple;
+	bh=SWF3Xg76/jG3GjuNhXbOTWuiv/NKpcBduP7nweZEe68=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=BpRPjzNtYU2ynSHd+udx4pxoR2ASgu/TlhQz316DOREI81EDULoFfkIZMkcQq+ngvGqXPdKLc3qPNPWeyvvi8MOGizX1VOq7uK4otlQlGUhqaShHyi+PiPdsD8fK3L9UPqzLIWzJmTxRm52ixGHMGzSkHK5XshPumTMnBIgtDq8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=RIzzWfqq; arc=none smtp.client-ip=91.218.175.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="RIzzWfqq"
+Message-ID: <42f7a2d9-8ffd-4066-bb02-9392ad21a416@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1785207697;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=O7ecUA3pSVzIK+RUU1iD1tJsj3Wcw4Lt1xAhQZIlqnc=;
+	b=RIzzWfqqQgjfptayX7ADbBpNVJeNSSZZKnoi15XIhK0sBgM2inw55OkeQtYS8u1c6aS3aS
+	qVRpCDgCGz+qoEFunFWShZ2CcSiPYuLpGn6pCwMUkJpk97H5Bk+tuVOngx+udpxRscaLyj
+	as0YyoyrZ6CSS45OQ0f/vgeHx89DRGs=
+Date: Mon, 27 Jul 2026 20:01:20 -0700
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PAHOLE v4 2/3] dwarf_loader: Add support for
+ DW_TAG_GNU_annotation
+Content-Language: en-GB
+To: David Faust <david.faust@oracle.com>,
+ Vineet Gupta <vineet.gupta@linux.dev>, dwarves@vger.kernel.org
+Cc: bpf@vger.kernel.org, Andrii Nakryiko <andrii@kernel.org>,
+ acme@kernel.org, Alan Maguire <alan.maguire@oracle.com>,
+ Emil Tsalapatis <emil@etsalapatis.com>, jose.marchesi@oracle.com
+References: <20260602195512.1511013-1-vineet.gupta@linux.dev>
+ <20260602195512.1511013-2-vineet.gupta@linux.dev>
+ <9152fde6-d35c-4688-9ff1-c7fe152c9b2a@linux.dev>
+ <4e425892-2aec-4fee-a199-7fe9c615d982@linux.dev>
+ <252c53f3-3f06-40f4-9cd3-795eb298687c@linux.dev>
+ <c9beceb9-946d-47ce-9311-4b9559f21613@linux.dev>
+ <a0bc5009-0c11-4909-9ae1-7dc873a78ff9@oracle.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <a0bc5009-0c11-4909-9ae1-7dc873a78ff9@oracle.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-When true_signature is enabled, the same function can appear as two kinds
-of saved states: an inlined (abstract) instance that carries the original
-source signature with no address, and an out-of-line instance that carrie=
-s
-the reconstructed true signature. saved_functions_combine() compares ever=
-y
-same-name state in a group against the first (anchor) one and, when their
-prototypes differ, marks the function as having an inconsistent prototype=
-.
 
-Without this patch, the first same-name function may be an inlined instan=
-ce
-whose prototype is the original source signature and thus differs from th=
-e
-true signature. The two prototypes are then flagged as inconsistent and,
-because --btf_features=3D+true_signature also enables the default
-consistent_func feature (skip_encoding_btf_inconsistent_proto), which dro=
-ps
-functions flagged with an inconsistent prototype, the whole function is
-dropped from BTF. This primarily affects clang: its signature-changed
-functions keep their original name (no "." suffix), so state->sym is neve=
-r
-set and they bypass btf_encoder__add_true_signature(), falling through to
-this canonical-state path.
 
-With this patch, same-name functions are sorted so that, if any instance
-has a non-zero address, such an instance becomes the first (anchor). That
-addressed out-of-line instance is the one whose signature represents the
-true signature, so the consistency check compares real instances against
-each other and the function is retained in BTF with its true signature.
+On 7/16/26 9:12 AM, David Faust wrote:
+>
+> On 7/1/26 10:14, Yonghong Song wrote:
+>>
+>> On 6/30/26 1:02 PM, Vineet Gupta wrote:
+>>> On 6/17/26 11:18 AM, Vineet Gupta wrote:
+>>>> On 6/3/26 1:08 PM, Yonghong Song wrote:
+>>>>> For decl tag
+>>>>> ============
+>>>>>
+>>>>> $ cat decl_tag.c
+>>>>> /* btf_decl_tag test cases.
+>>>>>      *
+>>>>>      * btf_decl_tag can be attached to:
+>>>>>      *   - global (incl. static) variables
+>>>>>      *   - functions
+>>>>>      *   - function parameters
+>>>>>      *   - struct/union types and their members
+>>>>>      *   - typedefs
+>>>>>      *
+>>>>>      * Build:  clang -O2 -target bpf -g -c decl_tag.c -o decl_tag.o
+>>>>>      *         /home/yhs/work/gcc-build/opt/gcc-16.1/bin/gcc -O2
+>>>>> -gbtf -g -c decl_tag.c -o decl_tag.o
+>>>>>      * Dump:   bpftool btf dump file decl_tag.o
+>>>>>      */
+>>>>>
+>>>>> #define __tag(x) __attribute__((btf_decl_tag(x)))
+>>>>>
+>>>>> /* tag on a global variable */
+>>>>> int global_var __tag("global_var_tag");
+>>>>>
+>>>>> /* tag on a static variable */
+>>>>> static int static_var __tag("static_var_tag");
+>>>>>
+>>>>> /* multiple tags on one declaration */
+>>>>> int multi_tag_var __tag("tag_a") __tag("tag_b");
+>>>>>
+>>>>> /* tag on struct type and its members */
+>>>>> struct foo {
+>>>>>             int a __tag("member_a_tag");
+>>>>>             int b __tag("member_b_tag");
+>>>>> } __tag("struct_foo_tag");
+>>>>>
+>>>>> /* tag on a typedef */
+>>>>> typedef struct foo foo_t1 __tag("typedef_foo_tag");
+>>>>> typedef struct {int foo2;} foo_t2 __tag("typedef_foo2_tag");
+>>>>>
+>>>>> /* tag on a function and its parameters */
+>>>>> __tag("func_add_tag")
+>>>>> int add(int x __tag("param_x_tag"), int y __tag("param_y_tag"))
+>>>>> {
+>>>>>             return x + y;
+>>>>> }
+>>>>>
+>>>>> /* keep the globals/types alive so they land in BTF */
+>>>>> int use(foo_t1 *f, foo_t2 *g)
+>>>>> {
+>>>>>             return add(global_var + static_var + multi_tag_var, f->a
+>>>>> + g->foo2);
+>>>>> }
+>>>>>
+>>>>> $ /home/yhs/work/gcc-build/opt/gcc-16.1/bin/gcc -O2 -gbtf -g -c
+>>>>> decl_tag.c -o decl_tag.o
+>>>>> decl_tag.c:30:1: warning: ‘btf_decl_tag’ attribute does not apply to
+>>>>> types [-Wattributes]
+>>>>>        30 | } __tag("struct_foo_tag");
+>>>>>           | ^
+>>>>>
+>>>> [snip]
+>>>>
+>>>>> Three decl tags (struct_foo_tag, typedef_foo_tag and typedef_foo2_tag)
+>>>>> are missing here:
+>>>>>
+>>>>> struct foo {
+>>>>>             int a __tag("member_a_tag");
+>>>>>             int b __tag("member_b_tag");
+>>>>> } __tag("struct_foo_tag");
+>>>>>
+>>>>> /* tag on a typedef */
+>>>>> typedef struct foo foo_t1 __tag("typedef_foo_tag");
+>>>>> typedef struct {int foo2;} foo_t2 __tag("typedef_foo2_tag");
+>>>> Semantically what does this mean ? Will the decl tag will be "applied"
+>>>> where ever the type is instantiated ?
+>>> So these are dec tags (not type tags) on typedefs.
+>>> Are these still relevant after the change below for supporting type
+>>> tags on typedefs (and gcc has in flight patches to do the same).
+>>>
+>>>     commit 5754a48780f516cbc06eeb2a31b1e445ddd9c935
+>>>     Author: yonghong-song <yhs@fb.com>
+>>>     Date:   Mon Jun 15 10:51:02 2026 -0700
+>>>          [Clang][BPF] Support btf_type_tag on typedef underlying types
+>>> (#203089)
+>>>          Emil Tsalapatis suggested to add type tag for typedef like below:
+>>>          ```
+>>>            $ cat tag.c
+>>>            #define __type_tag(x) __attribute__((btf_type_tag(x)))
+>>>            struct bar { int c; int d; };
+>>>            typedef struct bar __type_tag("a") bar_t;
+>>>            int use(bar_t *v)
+>>>            {
+>>>              return v->c + v->d;
+>>>            }
+>>>          ```
+>>>          This makes the code simpler -- using `bar_t *v` instead of the
+>>> longer
+>>>          form `struct bar __type_tag("a") *v`.
+>>>          So the goal is to allow type tag for typedef underlying types.
+>>> The
+>>>          following describes the main changes:
+>>>
+>>>
+>>> And if so, how are they semantically different and what's the use case
+>>> fot decl tags on typedefs.
+>> Decl tags and type tags are different in the above. Decl tags will be something like
+>>
+>>       decl_tag -> typedef -> ...
+>>
+>> Type tags will be something like\
+>>
+>>       typedef -> type_tag -> ...
+>>
+>> You can do both decl tag and type dag for the same typedef
+>>
+>>       decl_tag -> typedef -> type_tag -> ...
+>>
+>> There is a selftest (progs/test_btf_decl_tag.c) which has an example with decl_tag
+>> for typedef.
+> Curious about the above commit, in particular "on typedef underlying types".
+>
+> What is the motivation to only support type_tag specifically on the underlying
+> type of a typedef but not elsewhere? Similar to only specifically supporting
+> it in pointers but not elsewhere.
+>
+> I find it exceedingly strange that in this design, iiuc, one could do e.g.:
+>
+>    typedef int __typetag("foo") my_int;
+>    my_int x;
+>
+>    var("x") -> typedef -> type_tag ("foo") -> int;
+>
+> but NOT
+>
+>    int __typetag("foo") x;
+>
+>    var("x") -> type_tag ("foo") -> int;
+>
+>
+>
+> I mean, why not just support type_tag on any type? Like cv-quals.
 
-It is hard to create a test case where one function is inlined in one
-place and not inlined in another place. So I built the latest bpf-next
-kernel with
-  make LLVM=3D1 -j
-and then did
-  with master branch:
-    pahole -JV --btf_features=3D+true_signature vmlinux >& log.pahole.old
-  with this patch on top of master branch:
-    pahole -JV --btf_features=3D+true_signature vmlinux >& log.pahole.new
-and then get warning messages:
-  grep "skipping BTF encoding of function" log.pahole.old > log.old
-  grep "skipping BTF encoding of function" log.pahole.new > log.new
-and compare log.old and log.new
-  diff log.old log.new > log.diff
+The original design is for potential use cases. And we don't think
+kernel bpf will handle things like 'var("x") -> type_tag ("foo") -> int;'.
+So we didn't allow arbitrary type_tag and only for cases where kernel bpf
+may use.
 
-The following are some results:
-  --- log.old     2026-07-27 19:06:20.223881463 -0700
-  +++ log.new     2026-07-27 19:06:28.874109831 -0700
-  @@ -15,45 +15,28 @@
-   ZSTD_getCParams_internal : skipping BTF encoding of function due to un=
-expected register usage for parameter
-   ZSTD_getParams : skipping BTF encoding of function due to unexpected r=
-egister usage for parameter
-   __ata_sff_port_intr : skipping BTF encoding of function due to unexpec=
-ted register usage for parameter
-  -__build_flow_key : skipping BTF encoding of function due to param coun=
-t mismatch; 9 params !=3D 8 params
-  -__build_flow_key : skipping BTF encoding of function due to inconsiste=
-t prototype
-   __collect_tables : skipping BTF encoding of function due to ambiguous =
-address
-   __fl_lookup : skipping BTF encoding of function due to return type mis=
-match
-   __fl_lookup : skipping BTF encoding of function due to ambiguous addre=
-ss
-   __in6_dev_get : skipping BTF encoding of function due to ambiguous add=
-ress
-   __in_dev_get_rcu : skipping BTF encoding of function due to ambiguous =
-address
-  -__instance_destroy : skipping BTF encoding of function due to param ty=
-pe mismatch for param#1 inst !=3D inst
-  -__instance_destroy : skipping BTF encoding of function due to inconsis=
-tet prototype
-   __ioremap_caller : skipping BTF encoding of function due to unexpected=
- register usage for parameter
-  -__ipmr_get_table : skipping BTF encoding of function due to param coun=
-t mismatch; 2 params !=3D 1 params
-  -__ipmr_get_table : skipping BTF encoding of function due to inconsiste=
-t prototype
-   __ipv6_neigh_lookup_noref : skipping BTF encoding of function due to a=
-mbiguous address
-   __key_get : skipping BTF encoding of function due to ambiguous address
-  -__kmem_cache_create : skipping BTF encoding of function due to param c=
-ount mismatch; 5 params !=3D 2 params
-  -__kmem_cache_create : skipping BTF encoding of function due to inconsi=
-stet prototype
-  -__kunmap_atomic : skipping BTF encoding of function due to param count=
- mismatch; 1 params !=3D 0 params
-  -__kunmap_atomic : skipping BTF encoding of function due to inconsistet=
- prototype
-   __map_range : skipping BTF encoding of function due to ambiguous addre=
-ss
-   __map_range_leaf : skipping BTF encoding of function due to ambiguous =
-address
-  -__map_single_page3 : skipping BTF encoding of function due to param co=
-unt mismatch; 3 params !=3D 4 params
-  -__map_single_page3 : skipping BTF encoding of function due to inconsis=
-tet prototype
-   __migrate_disable : skipping BTF encoding of function due to ambiguous=
- address
-   __migrate_enable : skipping BTF encoding of function due to ambiguous =
-address
-   __mod_tree_insert : skipping BTF encoding of function due to unexpecte=
-d register usage for parameter
-   __mptcp_pm_send_ack : skipping BTF encoding of function due to unexpec=
-ted register usage for parameter
-  +__neigh_lookup : skipping BTF encoding of function due to param count =
-mismatch; 3 params !=3D 2 params
-   __neigh_lookup : skipping BTF encoding of function due to ambiguous ad=
-dress
-  -__netdev_walk_all_lower_dev : skipping BTF encoding of function due to=
- param count mismatch; 1 params !=3D 3 params
-  -__netdev_walk_all_lower_dev : skipping BTF encoding of function due to=
- inconsistet prototype
-   __pci_bus_set_current_state : skipping BTF encoding of function due to=
- unexpected register usage for parameter
-   __pskb_trim : skipping BTF encoding of function due to ambiguous addre=
-ss
-   __release_region : skipping BTF encoding of function due to unexpected=
- register usage for parameter
-   __remove_hrtimer : skipping BTF encoding of function due to unexpected=
- register usage for parameter
-   __sk_dst_get : skipping BTF encoding of function due to ambiguous addr=
-ess
-   __skb_complete_tx_timestamp : skipping BTF encoding of function due to=
- unexpected register usage for parameter
-  -__skb_gro_checksum_validate_complete : skipping BTF encoding of functi=
-on due to param count mismatch; 2 params !=3D 1 params
-  -__skb_gro_checksum_validate_complete : skipping BTF encoding of functi=
-on due to inconsistet prototype
-  -__skb_gro_checksum_validate_needed : skipping BTF encoding of function=
- due to param count mismatch; 3 params !=3D 1 params
-  -__skb_gro_checksum_validate_needed : skipping BTF encoding of function=
- due to inconsistet prototype
-   __task_rq_unlock : skipping BTF encoding of function due to unexpected=
- register usage for parameter
-   __tracing_open : skipping BTF encoding of function due to unexpected r=
-egister usage for parameter
-   __tty_buffer_request_room : skipping BTF encoding of function due to u=
-nexpected register usage for parameter
-  @@ -63,44 +46,28 @@
-  ...
-
-With true signature enabled, this patch allows more BTF functions.
-
-Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
----
- btf_encoder.c | 20 +++++++++++++++++---
- 1 file changed, 17 insertions(+), 3 deletions(-)
-
-diff --git a/btf_encoder.c b/btf_encoder.c
-index 993a61c..fb2b5b0 100644
---- a/btf_encoder.c
-+++ b/btf_encoder.c
-@@ -1519,8 +1519,20 @@ static int saved_functions_cmp(const void *_a, con=
-st void *_b)
- {
- 	const struct btf_encoder_func_state *a =3D _a;
- 	const struct btf_encoder_func_state *b =3D _b;
--
--	return elf_function__name_cmp(a->elf, b->elf);
-+	int ret;
-+
-+	ret =3D elf_function__name_cmp(a->elf, b->elf);
-+	if (ret)
-+		return ret;
-+
-+	/* For the same function, sort the out-of-line (real) instances, which
-+	 * have a function address, before the inlined (abstract) ones, which d=
-o
-+	 * not. saved_functions_combine() compares every state in a group again=
-st
-+	 * the first (anchor) one, so keeping a real instance as the anchor
-+	 * ensures real instances are still compared against each other for
-+	 * prototype consistency.
-+	 */
-+	return (a->addr =3D=3D 0) - (b->addr =3D=3D 0);
- }
-=20
- static int saved_functions_combine(struct btf_encoder *encoder,
-@@ -1536,7 +1548,9 @@ static int saved_functions_combine(struct btf_encod=
-er *encoder,
- 	inconsistent =3D a->inconsistent_proto | b->inconsistent_proto;
- 	uncertain_parm_loc =3D a->uncertain_parm_loc | b->uncertain_parm_loc;
- 	reordered_parm =3D a->reordered_parm | b->reordered_parm;
--	if (!unexpected && !inconsistent && !reordered_parm && !funcs__match(en=
-coder, a, b))
-+
-+	if ((!encoder->true_signature || !!a->addr =3D=3D !!b->addr) &&
-+	    !unexpected && !inconsistent && !reordered_parm && !funcs__match(en=
-coder, a, b))
- 		inconsistent =3D 1;
- 	a->unexpected_reg =3D b->unexpected_reg =3D unexpected;
- 	a->inconsistent_proto =3D b->inconsistent_proto =3D inconsistent;
---=20
-2.53.0-Meta
+>
+>
+>> About the question what is the use case for decl tags for typedef.
+>> The initial llvm implementation is to have more coverage so we do not need
+>> to add them later on. I didn't monitor this and not sure whether anybody
+>> uses it or not.
+>>
+>> But I think gcc should implement
+>>       typedef -> type_tag -> ...
+>> if this is the case, I assume it should be easier for gcc to implement
+>>       decl_tag -> typedef -> ...
+>>
+>>>> OK, opened PR/125862 [1]  for future improvement.
+>>>>
+>>>> [1] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=125862
+>>> If not, we can close this gcc PR as won't fix / not needed.
+>>>
+>>> Thx,
+>>> -Vineet
 
