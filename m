@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE15B456284;
-	Wed, 29 Jul 2026 19:08:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18211463B98;
+	Wed, 29 Jul 2026 19:08:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785352089; cv=none; b=egz8bzyukfLZBvH4UGcR5H9s8NLilZ4qc608co1Yc2Rs8xSS6hkFoSJ7Avex/CVDJ8cPGjNwWxyIAuGIHMardBJpNvWe+sh9Q53h+xRkRkbayXZOUWfq/Kz81vkZ3T+bwaDVPmEzwuHXiEIMHRp8rUcitNZUIBFVwpmqbru0FAM=
+	t=1785352093; cv=none; b=WPrWUaSl8oYBIh6fDHH9YBI0+6+eXqR7AJHQnfNP+8fI9vuB7DpK1IsuFahgYr9uSp2A8TCoOE9GmZ3Nkqb6FXbTNH6Gr1eDR90WGHUkgWan1gRPqPlzt6PNotSRBdFby7viae4LRl8MEFipCRVavz7iTNTlAJPwTN0BVfJn5Ms=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785352089; c=relaxed/simple;
-	bh=3Lt9VSJ59lloJBAqpUJMgbJ6gL5EC5YW+eqG95emNMs=;
+	s=arc-20240116; t=1785352093; c=relaxed/simple;
+	bh=ijMrEc3jRxdopD0BUV4yGbwZ7Fas7euazSWquoEYYBo=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=VKx+mPje7RfJifoIfuFVbyD/X3nRTF6KHGmLZlaQuiPPxHa1GtrtmO+rM74n1EakinRzimya6P1LShJ40eqbGo3T4kHlUo6fRfqRgJMDVVMQ4psjqyZAFiY/Ntr6NIUkA9iJ2RaWLjanCUlhyHq0BNjzd7m1gVadvNU8W4FfTe0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EQajnxgn; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version; b=GZn3pMAOktvX5KrP/qck0FqhHab3WlmB2nL0jmi3h/3BEGOs832Q2YSo8TvMDIffk1HFYNgxLfSqpBUmlAImkEmRCF1qTOCC6u+Eb5XLE7r1Ym8/uWq0WrGlJhQt/JdalmY/OIsO9iPgaGzRlMZhcHTtkTH8icfO467BWZvJ1JA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bVO8Bu1g; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EQajnxgn"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A48B1F000E9;
-	Wed, 29 Jul 2026 19:08:06 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bVO8Bu1g"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB5D91F00A3A;
+	Wed, 29 Jul 2026 19:08:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785352088;
-	bh=tGxF0XzXe8E9bj6vRovZ29tdqRuFMVR57NMMuYepgB4=;
+	s=k20260515; t=1785352090;
+	bh=WTqiZLN2d5Dd/OcK7PWCaNfUPPAI/D6p0LCSnV4KmVk=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=EQajnxgniboQ0J3vILZ7v6Bw0rcJYjkqcc7JWmJ1UlWmZSMwlZA6+UDYJ36akDB0E
-	 1lHQd8ub7pgS4gabu4qso0e/tK94H3+0rCnrLno3s0/UeuJElK1hVqPQxaOy5+bNci
-	 y50JY5l7F/WUhArCcJFxy2mIzAEz7Y6C0FrWvlCP7X34a/Eapn2oGsmHUWLyruahR+
-	 tUL5gggKyaa3aq8kwKCzFOzsf3uDQI9KAS5t1TYNovMIHzqPnH3dvLmS20Qi7qQtqv
-	 uDBhnpVXrNNcVntrhA0Eku9Xd0sOOQtBRTsRF5++0DLUV8ZCbMcKqVlmJ85/B9MEAh
-	 JnX8rzs6ye+Mw==
+	b=bVO8Bu1gN0ioKvvEKffgsAsF+Qltrp1B3DqBN4FCCGkPF0IlmSVSXP66mdNGm7Bc8
+	 OiTjkSM+sN4Q0alxbKklxck1sH8YSqNJBir/WMsqLUNeL/nG9dnU5Jy9D6RqeLDOUH
+	 3qxn4cKAghBRIQf81ReJeOQcggNSrtRqvYwKCxX6vG8x2832zeq3+qyLJ66Dw65OYO
+	 BbP53dzJ4KWdfDCL8kwPaIck1XQ7Z/5/E5WVQTLd8kLUweWVzgY2QOsRJdkw+d++Q/
+	 8lqQPRVTstSQO2bQYtrazxa+A8bunJU5zff7u26jkG/52tjRMJo4oeKyBC1/mJEdye
+	 F9TR5JO7Fdh4A==
 From: Arnaldo Carvalho de Melo <acme@kernel.org>
 To: Alan Maguire <alan.maguire@oracle.com>
 Cc: Jiri Olsa <jolsa@kernel.org>,
@@ -35,9 +35,9 @@ Cc: Jiri Olsa <jolsa@kernel.org>,
 	Andrii Nakryiko <andrii@kernel.org>,
 	Yonghong Song <yonghong.song@linux.dev>,
 	Arnaldo Carvalho de Melo <acme@redhat.com>
-Subject: [PATCH 13/31] btf_encoder: Fix early cleanup crashes in btf_encoder__new/delete
-Date: Wed, 29 Jul 2026 16:07:13 -0300
-Message-ID: <20260729190733.72876-14-acme@kernel.org>
+Subject: [PATCH 14/31] btf_encoder, libctf: Add elf_strptr NULL checks and fix kfunc bounds
+Date: Wed, 29 Jul 2026 16:07:14 -0300
+Message-ID: <20260729190733.72876-15-acme@kernel.org>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20260729190733.72876-1-acme@kernel.org>
 References: <20260729190733.72876-1-acme@kernel.org>
@@ -47,81 +47,154 @@ List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
 From: Arnaldo Carvalho de Melo <acme@redhat.com>
 
-Fix three issues in btf_encoder initialization and cleanup:
+Several elf_strptr() calls in btf_encoder and libctf lacked NULL checks,
+which would cause segfaults on malformed ELF files:
 
-1. INIT_LIST_HEAD(&encoder->elf_functions_list) was done after two
-   goto out_delete paths (strdup and btf__new failures).  Since the
-   encoder is zalloc'd, elf_functions_list.next is NULL, so
-   btf_encoder__delete() → elf_functions_list__clear() → list_for_each_safe
-   dereferences NULL.  Move the INIT_LIST_HEAD to the start.
+1. btf_encoder__new(): strcmp(secname, PERCPU_SECTION) crashes if
+   elf_section_by_idx() returns a valid section but elf_strptr() fails
+   internally.
 
-2. btf_encoder__delete() iterates secinfo[] unconditionally, but if
-   the calloc for secinfo fails, the pointer is NULL while seccnt is
-   already set, causing a NULL dereference.  Add a NULL guard.
+2. btf_encoder__collect_kfuncs(): two elf_strptr() calls for symbol
+   names passed to strstarts()/get_func_name() without NULL guards.
 
-3. Add NULL check for elf_strptr() return value before strcmp() in
-   btf_encoder__write_elf(), preventing a crash on malformed ELF files.
+3. libctf.c ctf__encode(): strcmp(secname, ".SUNW_ctf") without
+   NULL check.
 
-Before: NULL deref on strdup failure + secinfo alloc failure + bad ELF
-After:  clean error paths in all cases
+Also fix is_sym_kfunc_set() bounds check: the original `off >= d_size`
+only verified the start offset, but accessing set->flags could read
+past the buffer.  Changed to `off + sizeof(*set) > d_size` and added
+an `off < 0` guard to prevent signed-to-unsigned wraparound when the
+symbol address is below the section base.
 
-Fixes: 99e78ff34f8171f9 ("btf_encoder: Introduce elf_functions_list")
+Before: malformed ELF with invalid string table causes SIGSEGV
+After: gracefully skips bad entries
+
+Fixes: 72e88f29c6f7e142 ("pahole: Inject kfunc decl tags into BTF")
+Fixes: ff34e733a0c23bf4 ("btf_encoder: Allow encoding VARs from many sections")
+Fixes: dcef613288086156 ("libctf: give up "for now" on using libelf to add a section to an existing file")
 Reported-by: Sashiko:gemini-3-1-pro-preview
 Assisted-by: Claude:claude-sonnet-4-5
 Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
 ---
- btf_encoder.c | 12 +++++++-----
- 1 file changed, 7 insertions(+), 5 deletions(-)
+ btf_encoder.c | 10 ++++++----
+ libctf.c      |  2 +-
+ pahole.c      | 14 +++++++++++---
+ 3 files changed, 18 insertions(+), 8 deletions(-)
 
 diff --git a/btf_encoder.c b/btf_encoder.c
-index 0fbd7e3420b0457f..5c12e79f5ef648ba 100644
+index 5c12e79f5ef648ba..c7b71b5b741bfa6f 100644
 --- a/btf_encoder.c
 +++ b/btf_encoder.c
-@@ -2029,7 +2029,7 @@ static int btf_encoder__write_elf(struct btf_encoder *encoder, const struct btf
+@@ -2099,14 +2099,14 @@ static int is_sym_kfunc_set(GElf_Sym *sym, const char *name, Elf_Data *idlist, s
+ {
+ 	void *ptr = idlist->d_buf;
+ 	struct btf_id_set8 *set;
+-	size_t off;
++	ptrdiff_t off;
+ 
+ 	/* kfuncs are only found in BTF_SET8's */
+ 	if (!strstarts(name, BTF_ID_SET8_PFX))
+ 		return false;
+ 
+ 	off = sym->st_value - idlist_addr;
+-	if (off >= idlist->d_size) {
++	if (off < 0 || (size_t)off + sizeof(*set) > idlist->d_size) {
+ 		fprintf(stderr, "%s: symbol '%s' out of bounds\n", __func__, name);
+ 		return false;
+ 	}
+@@ -2276,7 +2276,7 @@ static int btf_encoder__collect_kfuncs(struct btf_encoder *encoder)
+ 			continue;
+ 
+ 		name = elf_strptr(elf, strtabidx, sym.st_name);
+-		if (!is_sym_kfunc_set(&sym, name, idlist, idlist_addr))
++		if (name == NULL || !is_sym_kfunc_set(&sym, name, idlist, idlist_addr))
+ 			continue;
+ 
+ 		range.start = sym.st_value;
+@@ -2305,6 +2305,8 @@ static int btf_encoder__collect_kfuncs(struct btf_encoder *encoder)
+ 			continue;
+ 
+ 		name = elf_strptr(elf, strtabidx, sym.st_name);
++		if (name == NULL)
++			continue;
+ 		func = get_func_name(name);
+ 		if (!func)
+ 			continue;
+@@ -2879,7 +2881,7 @@ struct btf_encoder *btf_encoder__new(struct cu *cu, const char *detached_filenam
+ 			if (encoder->encode_vars & BTF_VAR_GLOBAL)
+ 				encoder->secinfo[shndx].include = true;
+ 
+-			if (strcmp(secname, PERCPU_SECTION) == 0) {
++			if (secname != NULL && strcmp(secname, PERCPU_SECTION) == 0) {
+ 				found_percpu = true;
+ 				if (encoder->encode_vars & BTF_VAR_PERCPU)
+ 					encoder->secinfo[shndx].include = true;
+diff --git a/libctf.c b/libctf.c
+index 8e31e3d550ebd51a..72f9949a2d25b3d9 100644
+--- a/libctf.c
++++ b/libctf.c
+@@ -674,7 +674,7 @@ int ctf__encode(struct ctf *ctf, uint8_t flags)
  		if (shdr == NULL)
  			continue;
  		char *secname = elf_strptr(elf, strndx, shdr->sh_name);
--		if (strcmp(secname, btf_secname) == 0) {
-+		if (secname != NULL && strcmp(secname, btf_secname) == 0) {
- 			btf_data = elf_getdata(scn, btf_data);
- 			break;
+-		if (strcmp(secname, ".SUNW_ctf") == 0) {
++		if (secname != NULL && strcmp(secname, ".SUNW_ctf") == 0) {
+ 			data = elf_getdata(scn, data);
+ 			goto out_update;
  		}
-@@ -2780,6 +2780,7 @@ struct btf_encoder *btf_encoder__new(struct cu *cu, const char *detached_filenam
- 	struct elf_functions *funcs = NULL;
+diff --git a/pahole.c b/pahole.c
+index 6ba3f578c28570a1..0e2acc35d6d679f0 100644
+--- a/pahole.c
++++ b/pahole.c
+@@ -2361,6 +2361,11 @@ static int pipe_seek(FILE *fp, off_t offset)
+ 			chunk = offset;
+ 	}
  
- 	if (encoder) {
-+		INIT_LIST_HEAD(&encoder->elf_functions_list);
- 		encoder->cu = cu;
- 		encoder->raw_output = detached_filename != NULL;
- 		encoder->source_filename = strdup(cu->filename);
-@@ -2818,7 +2819,6 @@ struct btf_encoder *btf_encoder__new(struct cu *cu, const char *detached_filenam
- 		if (conf_load->encode_btf_global_vars)
- 			encoder->encode_vars |= BTF_VAR_GLOBAL;
++	/* On EOF (not I/O error), clear errno so callers don't
++	 * pick up a stale value from an earlier successful fread. */
++	if (!ferror(fp))
++		errno = 0;
++
+ 	return offset == 0 ? 0 : -1;
+ }
  
--		INIT_LIST_HEAD(&encoder->elf_functions_list);
- 		funcs = btf_encoder__elf_functions(encoder);
- 		if (!funcs)
- 			goto out_delete;
-@@ -2912,9 +2912,11 @@ void btf_encoder__delete(struct btf_encoder *encoder)
- 	if (encoder == NULL)
- 		return;
+@@ -2583,8 +2588,9 @@ static int prototype__stdio_fprintf_value(struct prototype *prototype, struct ty
+ 	if (instance == NULL)
+ 		return -ENOMEM;
  
--	for (shndx = 0; shndx < encoder->seccnt; shndx++)
--		__gobuffer__delete(&encoder->secinfo[shndx].secinfo);
--	free(encoder->secinfo);
-+	if (encoder->secinfo) {
-+		for (shndx = 0; shndx < encoder->seccnt; shndx++)
-+			__gobuffer__delete(&encoder->secinfo[shndx].secinfo);
-+		free(encoder->secinfo);
-+	}
- 	zfree(&encoder->filename);
- 	zfree(&encoder->source_filename);
- 	btf__free(encoder->btf);
++	errno = 0;
+ 	if (type__instance_read_once(header, input) < 0) {
+-		printed = -errno;
++		printed = errno ? -errno : -EIO;
+ 		fprintf(stderr, "pahole: --header (%s) type couldn't be read\n", conf.header_type);
+ 		goto out;
+ 	}
+@@ -2666,8 +2672,9 @@ static int prototype__stdio_fprintf_value(struct prototype *prototype, struct ty
+ 
+ 		free(member_name);
+ 
++		errno = 0;
+ 		if (pipe_seek(input, seek_bytes) < 0) {
+-			printed = -errno;
++			printed = errno ? -errno : -EIO;
+ 			fprintf(stderr, "Couldn't --seek_bytes %s (%" PRIu64 "\n", conf.seek_bytes, seek_bytes);
+ 			goto out;
+ 		}
+@@ -2717,8 +2724,9 @@ static int prototype__stdio_fprintf_value(struct prototype *prototype, struct ty
+ 			seek_bytes -= ftell(input);
+ 		}
+ 
++		errno = 0;
+ 		if (pipe_seek(input, seek_bytes) < 0) {
+-			printed = -errno;
++			printed = errno ? -errno : -EIO;
+ 			fprintf(stderr, "Couldn't --seek_bytes %s (%" PRIu64 "\n", conf.seek_bytes, seek_bytes);
+ 			goto out;
+ 		}
 -- 
 2.55.0
 
