@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B27FE463B74;
-	Wed, 29 Jul 2026 19:07:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E39B9463B74;
+	Wed, 29 Jul 2026 19:08:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785352080; cv=none; b=miApFH1arLH0BvOMEVYtMac6Qdc4FsdZAvxoCAS1LeBTr0riaD5tDOTJ12ticftnoFYyNFvdTZGnETmu6szKFN3IsG7mJ3QmdicT63LhJ9ZFLLBTjtotGO/7ERLbiVp/ny/JyGuwU/Ss0slXbj9/lg0lsiFUeE4hC7xXYWe21Zc=
+	t=1785352083; cv=none; b=uyvj3DCNZ2RK/wdv3PphdpYaEqgnUILJteUK3KW8sUkophg/5bFr8154PB7b8ROYbiLr3dTFaB1ikjG+sMPkiuc9OWJhKp7hcBBwQ0mKBIuaF4XTvOKkYAldP4bAoAaX5JdgudBfwikKRD1XfmwLN2ziCqwm5fEsgEKHmLk1nPg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785352080; c=relaxed/simple;
-	bh=QQyWxrJAbupgBaoxZsBGxvzWj6INlcEOie3mc4/oNEQ=;
+	s=arc-20240116; t=1785352083; c=relaxed/simple;
+	bh=Vg+pzAFjE7sAyVpJe5q1hXbdUuIUBkAFIW4zuqia7PU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=N0S2R/b/5L6acwQ2r+hp4cID8rn6bzT6ZbWOsCtr8Od16p2IluGLNeFOoF/2HFHUFkCcp04jWD2LNJj0FtJIi6gAeuk7jaMzBv5lHk+TB2TPlFAsQmQ5E7jL/CcdBECMA9jbam4LjyB/XiODXfqMrtkN2ltEkvwRU00btiinq9c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mBv996k7; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version:Content-Type; b=KftO4VSiswfJk6oKKKRWrxWONzD0EWS5ePmDGnVvXb3djIDTn58HRRDz39a4tED0bMaIrWRgHr4hYUCPg1Hkqn/1q3eZHC7cKOeSueVZxpML9FonF/h5u3X4/LI6IrKl8MT1WgNT84GxZgdQWlnLejAXurkD/estEMi3yIP1OLo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BPjI7AFn; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mBv996k7"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 765D91F000E9;
-	Wed, 29 Jul 2026 19:07:57 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BPjI7AFn"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B740B1F00A3A;
+	Wed, 29 Jul 2026 19:07:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785352079;
-	bh=+QHOXulET+zapoHrT4rAZJ7/ESQwApgk9y18fw4zJMU=;
+	s=k20260515; t=1785352081;
+	bh=swCaH9sjSXzPmLbQh3qoDpDZuPRDns4kGNGVhhVv1mM=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=mBv996k7Tm4FOQpmGDoUGX3HBqcdTfHIqzUcjhhThdAgpZJMdvnI5N+W7sKtW3ia0
-	 e81hLK8tbfvPew0JxOiE1t7vCDpsNmHRIu4E4dAASO7qew7WSXfS7MoFft/9alnK1s
-	 r2Bh1SzghAgCFALqd3gr+1A24jwjoJY94v8DZnxZo94KCCQgQlscYKAHhmVtvbziIy
-	 MRTRg2zIckSImEj0MDNflhrA6eGQ2mRdEGAsY1NW6p+Dlqy0DequdGPO65CU7Oquji
-	 69zmskVfivO6oD2tSTTO9jLa3c2Qz1cC47kvYi7/ybmpJdwIo/iNacfpoOs/pEp33p
-	 bePn/Dj4br1Xw==
+	b=BPjI7AFn2FdT+GZf4VLp+GZvNb0yeDh4gPYq4T0jXtHD18YggJaSIaxMTzSzS701R
+	 E97AcnO17KUHLKwo87TcnHigkUzPD3juLkGrwB7rEl0k+rbgEsDpYOt0+Fwlr/vSM/
+	 Sbf2rOJTSdRdJElibBf9achIXOwcaiYBSaRJk6XixhBN/KVbdwFCSueveJAi9g7J4r
+	 hJt+Bm1jrLfUjkOEtowbfOoCDCoU4jXkKDJvU5cj/ZiI+kMwM2mfbV+GejNI2fK+UD
+	 sWtbaTDvf4eCZdAyT0FJe+qoNy/Lq7MXedX+FQR1wLXihmjmxHkc0LMHlfZtWwB3qA
+	 o0liC2kw7lfjw==
 From: Arnaldo Carvalho de Melo <acme@kernel.org>
 To: Alan Maguire <alan.maguire@oracle.com>
 Cc: Jiri Olsa <jolsa@kernel.org>,
@@ -35,9 +35,9 @@ Cc: Jiri Olsa <jolsa@kernel.org>,
 	Andrii Nakryiko <andrii@kernel.org>,
 	Yonghong Song <yonghong.song@linux.dev>,
 	Arnaldo Carvalho de Melo <acme@redhat.com>
-Subject: [PATCH 09/31] dwarf_loader: Fix annotation failure leaks in variable and typedef creation
-Date: Wed, 29 Jul 2026 16:07:09 -0300
-Message-ID: <20260729190733.72876-10-acme@kernel.org>
+Subject: [PATCH 10/31] btf_encoder: Use btf_encoder__tag_type() for all type ID computations
+Date: Wed, 29 Jul 2026 16:07:10 -0300
+Message-ID: <20260729190733.72876-11-acme@kernel.org>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20260729190733.72876-1-acme@kernel.org>
 References: <20260729190733.72876-1-acme@kernel.org>
@@ -47,57 +47,102 @@ List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
 From: Arnaldo Carvalho de Melo <acme@redhat.com>
 
-die__create_new_variable() and die__create_new_typedef() leak their
-allocated objects when add_child_llvm_annotations() fails: the
-allocation succeeds but the error path returns NULL without freeing it.
+Replace inline "encoder->type_id_off + tag_type" patterns with
+btf_encoder__tag_type(), which already encapsulates both the zero-check
+and the offset addition.  Some call sites had ternary guards
+(tag_type == 0 ? 0 : ...) that are now handled inside the function.
 
-Split the compound NULL-or-annotation-failure check in
-die__create_new_variable() into separate checks, and add explicit
-cleanup (tag__delete / type__delete) before returning NULL on
-annotation failure in both functions.
+Two sites that use nr_entries or core_id as table indices rather than
+type references are left unchanged — they receive different treatment
+in a subsequent commit.
 
-Fixes: aa8c494e65a77fa5 ("dwarf_loader: Parse DWARF tag DW_TAG_LLVM_annotation")
+No functional change.
+
 Assisted-by: Claude:claude-sonnet-4-5
 Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
 ---
- dwarf_loader.c | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+ btf_encoder.c | 17 +++++++++--------
+ 1 file changed, 9 insertions(+), 8 deletions(-)
 
-diff --git a/dwarf_loader.c b/dwarf_loader.c
-index b87519fa73405ff7..ddf7cdcfd467beb4 100644
---- a/dwarf_loader.c
-+++ b/dwarf_loader.c
-@@ -2078,8 +2078,10 @@ static struct tag *die__create_new_typedef(Dwarf_Die *die, struct cu *cu, struct
- 	if (tdef == NULL)
- 		return NULL;
+diff --git a/btf_encoder.c b/btf_encoder.c
+index 5d0901da73b618d7..0fbd7e3420b0457f 100644
+--- a/btf_encoder.c
++++ b/btf_encoder.c
+@@ -865,7 +865,7 @@ static int32_t btf_encoder__add_func_proto_for_ftype(struct btf_encoder *encoder
  
--	if (add_child_llvm_annotations(die, -1, conf, &tdef->namespace.annots))
-+	if (add_child_llvm_annotations(die, -1, conf, &tdef->namespace.annots)) {
-+		type__delete(tdef, cu);
- 		return NULL;
-+	}
+ 	ftype__for_each_parameter(ftype, param) {
+ 		name = parameter__name(param);
+-		type_id = param->tag.type == 0 ? 0 : encoder->type_id_off + param->tag.type;
++		type_id = btf_encoder__tag_type(encoder, param->tag.type);
+ 		++param_idx;
+ 		if (btf_encoder__add_func_param(encoder, name, type_id, param_idx == nr_params))
+ 			return -1;
+@@ -1284,7 +1284,7 @@ static int32_t btf_encoder__save_func(struct btf_encoder *encoder, struct functi
+ 	state->addr = function__addr(fn);
+ 	state->elf = func;
+ 	state->nr_parms = ftype->nr_parms + (ftype->unspec_parms ? 1 : 0);
+-	state->ret_type_id = ftype->tag.type == 0 ? 0 : encoder->type_id_off + ftype->tag.type;
++	state->ret_type_id = btf_encoder__tag_type(encoder, ftype->tag.type);
+ 	if (state->nr_parms > 0) {
+ 		state->parms = zalloc(state->nr_parms * sizeof(*state->parms));
+ 		if (!state->parms) {
+@@ -1363,8 +1363,7 @@ static int32_t btf_encoder__save_func(struct btf_encoder *encoder, struct functi
+ 			goto out;
+ 		}
+ 		state->parms[param_idx].name_off = str_off;
+-		state->parms[param_idx].type_id = param->tag.type == 0 ? 0 :
+-						  encoder->type_id_off + param->tag.type;
++		state->parms[param_idx].type_id = btf_encoder__tag_type(encoder, param->tag.type);
+ 		param_idx++;
+ 	}
+ 	if (ftype->unspec_parms)
+@@ -1849,11 +1848,13 @@ static int32_t btf_encoder__add_struct_type(struct btf_encoder *encoder, struct
+ 		 * is required.
+ 		 */
+ 		name = class_member__name(pos);
+-		if (btf_encoder__add_field(encoder, name, encoder->type_id_off + pos->tag.type,
++		if (btf_encoder__add_field(encoder, name, btf_encoder__tag_type(encoder, pos->tag.type),
+ 					   pos->bitfield_size, pos->bit_offset))
+ 			return -1;
+ 	}
  
- 	return &tdef->namespace.tag;
- }
-@@ -2190,8 +2192,13 @@ static struct tag *die__create_new_variable(Dwarf_Die *die, struct cu *cu, struc
- {
- 	struct variable *var = variable__new(die, cu, conf, top_level);
- 
--	if (var == NULL || add_child_llvm_annotations(die, -1, conf, &var->annots))
-+	if (var == NULL)
-+		return NULL;
 +
-+	if (add_child_llvm_annotations(die, -1, conf, &var->annots)) {
-+		tag__delete(&var->ip.tag, cu);
- 		return NULL;
-+	}
- 
- 	return &var->ip.tag;
++
+ 	return type_id;
  }
+ 
+@@ -1894,7 +1895,7 @@ static int btf_encoder__encode_tag(struct btf_encoder *encoder, struct tag *tag,
+ 				   struct conf_load *conf_load)
+ {
+ 	/* single out type 0 as it represents special type "void" */
+-	uint32_t ref_type_id = tag->type == 0 ? 0 : encoder->type_id_off + tag->type;
++	uint32_t ref_type_id = btf_encoder__tag_type(encoder, tag->type);
+ 	struct base_type *bt;
+ 	const char *name;
+ 
+@@ -2720,7 +2721,7 @@ static int btf_encoder__encode_cu_variables(struct btf_encoder *encoder)
+ 			continue;
+ 		}
+ 
+-		type = var->ip.tag.type + encoder->type_id_off;
++		type = btf_encoder__tag_type(encoder, var->ip.tag.type);
+ 		linkage = var->external ? BTF_VAR_GLOBAL_ALLOCATED : BTF_VAR_STATIC;
+ 
+ 		if (encoder->verbose) {
+@@ -2983,7 +2984,7 @@ int btf_encoder__encode_cu(struct btf_encoder *encoder, struct cu *cu, struct co
+ 		type_id_t id;
+ 		if (cu__find_base_type_by_name(cu, "int", &id)) {
+ 			encoder->has_index_type = true;
+-			encoder->array_index_id = encoder->type_id_off + id;
++			encoder->array_index_id = btf_encoder__tag_type(encoder, id);
+ 		} else {
+ 			encoder->has_index_type = false;
+ 			encoder->array_index_id = encoder->type_id_off + cu->types_table.nr_entries;
 -- 
 2.55.0
 
