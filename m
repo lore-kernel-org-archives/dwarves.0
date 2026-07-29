@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 188D6463B60;
-	Wed, 29 Jul 2026 19:07:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22E52463B60;
+	Wed, 29 Jul 2026 19:07:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785352067; cv=none; b=A1iH9X+emGmwYoi6+cMAgncbdfBFpbrx1Ps9cWKd3mJBfN/trh7lIn87y/IN4ylh2JPulvUPPKhlkkXO0hI49uSa/eZY16wA/GKRQleDt89ItjZkZLQy3YBSW04ne0/yZvBazE2if+BaMkdXcwuTENYmEKnlYhf8RoPI5u3oJSs=
+	t=1785352069; cv=none; b=RsLjmAxHjbJrHB/c+EvMw/XftqyNodfyaMuXjKfsnGg1r8569qRlPJm7/8/XmRpkM5jTf3A3tD/ySOJgPQmEkKjc0A8Djr4XXlCdCiIWySVpvXnc+Hc23KTfOj7IHZmBfKN8c1Qqcdxn9ZDzd13MEmlKV3jtqQnymBeOQYLvJgg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785352067; c=relaxed/simple;
-	bh=mFKPapB6t7Y7d57cONkvRxPg+Aarp/yP6KThmYtK/fw=;
+	s=arc-20240116; t=1785352069; c=relaxed/simple;
+	bh=1H3A7eegRMwMnf8lgX1GTYnSbTt5jxRMLrgotfVDKhY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=gAVWv7XTIi99ir42MKb+BxAga1OEYrfSK484qEzfrMv5PLD6Y2sPAOqC+IL35DudmQHmapKdjBkaWqUdIkqWlKI2ZegApAjCRh/rNwSNbrSa74vWjiHTntWQ81BcxKOhTQem3b/UnV7VE62FceNG2RK/Rqa0EEs/ibS3KC/BV2k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JnT22TAi; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version; b=gdcyb5ZfGNOpGqONJubv3R4MPsQvg2hZNsUFbBbpp55q5kmWIvs8O2v8ZEBFYu5KA//YXoDUG8PnI9Fqh4pvmPmE43S2oNsVwGlm0To3B6dRyy34hvScq5NNjqwL9G0OQUptv5RCi4LvXqoSNuol02x3eCbS/gRMh/kH1TOOVZE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=W+cDlFjb; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JnT22TAi"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D66F71F000E9;
-	Wed, 29 Jul 2026 19:07:43 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="W+cDlFjb"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24FA11F00A3A;
+	Wed, 29 Jul 2026 19:07:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785352065;
-	bh=e9c/b6aAT1ldyKzVX6fYq0LE4n8hJoKL/lDwtiJ7hd4=;
+	s=k20260515; t=1785352068;
+	bh=ElMAWH6aOQQxySU3fjpAhXlvNVUR8iyUDbk3h4SVsqo=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=JnT22TAi08HdUA/Uzla5nt1Mx7uBOlCc98X5Qh2kLop1LO26pduaivcnnT1tsPoWR
-	 uFchMbXyD23MFL+NNJAINyopaEmwSuvVVRDvhnhtLB3jR0Id8iDLF0EWiWO7rzifiK
-	 MktY6X10Y5v0EGuk5pQtt6OJentgJKOAyJDDF1A6p3i1wR6AIrTsgwSreIRusRuFH8
-	 +qm6VXETftKoFvlhHYMIfB+0TgqqqAML62Ropb05ziEmtlODFjcf6s+jbJcce2gn4M
-	 Nf11Lde/7XSLpfitNGcybiay6K3rW2c84Z0LbZ1+ZdS7TqERel22ZBvoXSU6kEMF5R
-	 ebJ4A4620dzSA==
+	b=W+cDlFjbfDn/ZtcdUTexndMGU83mVWFySupiWKifps3tYgyBKYtGPk2g+BpauNrE5
+	 G8qK4PsbJUqqsZERQs6p2LUNchIvHGdLujaLyGStLjhRZtDCGRMY35p+x/kaKwQ567
+	 C+5zF35GcuiRN2jUUCFn4nPJIAunrL1bxXmEZaCAWdtZ5BxFnidYIDBXWeNImZ2avN
+	 ZisAz7clwH59IeHZUwsIZzAc3MDblx3NzNRRfMH5U1KabEHD5yfZQUuZuaE6S/+msG
+	 giuB9kwd1pUPPFYtUffFWEaOZq3ZmkY0N11yVCrdjKlYHAyytDgvTZw8wiDDLJWKYQ
+	 VCFZYG4Ctdxuw==
 From: Arnaldo Carvalho de Melo <acme@kernel.org>
 To: Alan Maguire <alan.maguire@oracle.com>
 Cc: Jiri Olsa <jolsa@kernel.org>,
@@ -35,9 +35,9 @@ Cc: Jiri Olsa <jolsa@kernel.org>,
 	Andrii Nakryiko <andrii@kernel.org>,
 	Yonghong Song <yonghong.song@linux.dev>,
 	Arnaldo Carvalho de Melo <acme@redhat.com>
-Subject: [PATCH 03/31] btf_encoder: Fix interior pointer free and missing NULL check
-Date: Wed, 29 Jul 2026 16:07:03 -0300
-Message-ID: <20260729190733.72876-4-acme@kernel.org>
+Subject: [PATCH 04/31] dwarves: Fix missing list head initialization in type__clone_members
+Date: Wed, 29 Jul 2026 16:07:04 -0300
+Message-ID: <20260729190733.72876-5-acme@kernel.org>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20260729190733.72876-1-acme@kernel.org>
 References: <20260729190733.72876-1-acme@kernel.org>
@@ -51,69 +51,52 @@ Content-Transfer-Encoding: 8bit
 
 From: Arnaldo Carvalho de Melo <acme@redhat.com>
 
-Two bugs in btf_encoder:
+After class__clone() does memcpy(class, from, sizeof(*class)), the
+clone's list_head fields still point into the source type's linked
+list chains.  type__clone_members() reinitializes namespace.tags and
+variant_parts, but misses type_enum, template_type_params, and
+template_value_params.
 
-1. btf_encoder__save_func() called free(state) on error, but state is
-   an interior pointer into func_states.array (returned by
-   btf_encoder__alloc_func_state as &array[cnt++]), not a standalone
-   malloc'd block.  Calling free() on it is undefined behavior that
-   corrupts the heap allocator's metadata.
+If the source type has non-empty lists for any of these, subsequent
+list operations on the clone (e.g. during --reorganize) corrupt both
+the clone's and the source's lists, leading to crashes or infinite
+loops.
 
-   Fix: clear the slot with memset and decrement func_states.cnt to
-   release it back.  This is safe because no further func_state
-   allocations happen between the alloc at the top of save_func and
-   the error path, so state is always the last element.
+Add the three missing INIT_LIST_HEAD calls, matching the initialization
+done in __type__init().
 
-2. btf_encoder__new() allocated func_states.array with zalloc() but
-   did not check for NULL.  A failed allocation would cause a NULL
-   pointer dereference in btf_encoder__alloc_func_state().
-
-   Fix: add NULL check, goto out_delete on failure.
-
-Fixes: 4bff1141bb48ae58 ("btf_encoder: Record BTF-centric function state instead of DWARF-centric")
+Fixes: 8a1e0238ee4005a6 ("dwarf_loader: Initial support for DW_TAG_template_type_param tag")
 Reported-by: Sashiko:gemini-3-1-pro-preview # Running on a local machine
 Assisted-by: Claude:claude-sonnet-4-5
 Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
 ---
- btf_encoder.c | 16 +++++++++++++++-
- 1 file changed, 15 insertions(+), 1 deletion(-)
+ dwarves.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/btf_encoder.c b/btf_encoder.c
-index 9f8cd279fa92af1c..5d0901da73b618d7 100644
---- a/btf_encoder.c
-+++ b/btf_encoder.c
-@@ -1393,9 +1393,21 @@ static int32_t btf_encoder__save_func(struct btf_encoder *encoder, struct functi
- 	}
- 	return 0;
- out:
-+	/*
-+	 * state is an interior pointer into func_states.array (returned by
-+	 * btf_encoder__alloc_func_state), not a standalone allocation.
-+	 * Calling free(state) here was heap corruption.
-+	 *
-+	 * Since no further func_state allocations happen between the alloc
-+	 * at the top of this function and this error path, state is always
-+	 * the last element (index cnt-1), so decrementing cnt releases it.
-+	 * If this invariant ever changes (e.g. nested alloc calls are added),
-+	 * this cleanup must be revised.
-+	 */
- 	zfree(&state->annots);
- 	zfree(&state->parms);
--	free(state);
-+	memset(state, 0, sizeof(*state));
-+	encoder->func_states.cnt--;
- 	return err;
- }
+diff --git a/dwarves.c b/dwarves.c
+index f05c4d3b4b669335..95a8dcd66f861be9 100644
+--- a/dwarves.c
++++ b/dwarves.c
+@@ -1382,6 +1382,10 @@ static int type__clone_members(struct type *type, const struct type *from, struc
  
-@@ -2814,6 +2826,8 @@ struct btf_encoder *btf_encoder__new(struct cu *cu, const char *detached_filenam
+ 	type->nr_members = type->nr_static_members = 0;
+ 	INIT_LIST_HEAD(&type->namespace.tags);
++	INIT_LIST_HEAD(&type->namespace.annots);
++	INIT_LIST_HEAD(&type->type_enum);
++	INIT_LIST_HEAD(&type->template_type_params);
++	INIT_LIST_HEAD(&type->template_value_params);
  
- 		/* Start with funcs->cnt. The array may grow in btf_encoder__alloc_func_state() */
- 		encoder->func_states.array = zalloc(sizeof(*encoder->func_states.array) * funcs->cnt);
-+		if (encoder->func_states.array == NULL && funcs->cnt > 0)
-+			goto out_delete;
- 		encoder->func_states.cap = funcs->cnt;
- 		encoder->func_states.cnt = 0;
+ 	type__for_each_member(from, pos) {
+ 		struct class_member *clone = class_member__clone(pos, cu);
+@@ -1400,6 +1404,8 @@ struct class *class__clone(const struct class *from, const char *new_class_name,
  
+ 	 if (class != NULL) {
+ 		memcpy(class, from, sizeof(*class));
++		INIT_LIST_HEAD(&class->vtable);
++		class->nr_vtable_entries = 0;
+ 		if (new_class_name != NULL) {
+ 			class->type.namespace.name = strdup(new_class_name);
+ 			if (class->type.namespace.name == NULL) {
 -- 
 2.55.0
 
