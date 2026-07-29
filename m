@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58C6B463B73;
-	Wed, 29 Jul 2026 19:08:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98434463B84;
+	Wed, 29 Jul 2026 19:08:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785352099; cv=none; b=VHa46FH1SN3m4LzMu0M9k/deX6LsZjJooVhNqcNFpTUNAttDrNElWOAFklGPTXvKPmS6DJUcGrZI4qEerduNj8CFJGlSmtG9BR7kfflUBS/0XSDeSc3U6Q9Hy5Syu9tRrLImfchm/z/6DHln2/MgDexJe/UgDFm8RqPj+vQYA0A=
+	t=1785352101; cv=none; b=DEUCYSe3dSL8+3O618MFNU/3qlPFmXH5DRV2sC7Vm0bx7i6cPfETa5484n2CVRRvmfJ2PnE0io2d9pXfi4rlqfAoGlgnqzYbWU7Q7zevQz0PBEbIR0+0WqEvd6dZN11yd7oaWvOslcK1X7byyY46LdpisEltd9+hC4dz0D8wc2A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785352099; c=relaxed/simple;
-	bh=aPsoKTk0LaoOgfkbi56C/QNNET84ZedLHP+me5A0Dx8=;
+	s=arc-20240116; t=1785352101; c=relaxed/simple;
+	bh=NX8HdB0gVhwKot6+y/ANuo3tn8CDCbdlAJusDJ0lEfg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=aI9EINKtiH1iNRFiGTLRRpcpYdsTBIQkaL+F2NAbfR/O+dkGZYJADbq7ziWLpeG41XM8Dy0DXgquQ/Ll5sYL0vm2BU0eoE6tPuFO+5JWfNZCL3AXnlFMQMkPkgAkGTHm2dJPvAOalCvPoFZMif7wBRf5BLulmG+9r2Q7aBEVw4I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Xps6mn3K; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version:Content-Type; b=YLPKno8bL9E0/4tshZkRXXgg2dOihaASTvG9YVMrPYv6aSEIO3ZusaSe/Xx3LnvpN0lE2GEYm7blts6xJuPfSmpuFJ1pr2TrjAov9uvfj9Y0rH+4LwETfe2YPtS+a3Iv9f6nzwfxoouwEqPV9GCGEESr/MzaHxYdKDwK2EWSS2I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YmbHSKS7; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Xps6mn3K"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19EC31F000E9;
-	Wed, 29 Jul 2026 19:08:15 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YmbHSKS7"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B1BD1F00A3A;
+	Wed, 29 Jul 2026 19:08:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785352098;
-	bh=ys3YbXkqer9cffxUblDPaevUrQE1sb/ceACWCMc2R9s=;
+	s=k20260515; t=1785352100;
+	bh=fBtwyyC7imY4FG/oiDVOkUIOh6KBURCfVAwIZG/SOIw=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=Xps6mn3KOklHxm5VgaZxZY6omPNG0VQ/Pq2TeLoXOlcegDZLdxKkDVndIbiZadmYV
-	 nvtjGOyhCQ4geXFPLfjH8pxAjZ43prYwD+aOkpvDRs3NdYPADTRNIitpXhrB/Aa2vz
-	 th+EjC+h5ieGdoNwyEoY1Bmev575g+5CmW6HYSru1sLXZ4l8QKBMkJjjMLsYOLNysX
-	 YagvRuNYyq6AycawTUDrGQ2b8gr7YT6ori6m5pc9rlcRuD3rJe7M8MVnXAcH9OWfTY
-	 ZPgxmhUY7PGe4lBetRUVMaiftKUu3mtah43MYrAd/WnoL9HHjcPfbte8Zw7pR5jn72
-	 XhXYZWCtHANpQ==
+	b=YmbHSKS7tbgqgtVhEFF5P2C/t0jbyNjg3H1vAMtxd6j00XMg3TcfkBJqXS8Ho2I2F
+	 5r2NWdpZgmVYCp1yAgkUQ/nIJqcMTeJxtPU4zU2Jh38GuazN4awg5G5QZWhUgOrDw1
+	 CqrwfZp7r0q6wj9eh/0w3Dl1C64fCQwCayFIAJZn2OVstX9k2OIy/V3/rrISgoP/Fw
+	 V3Qb9USBMScKNNqXGd4mrovAxIldeSZvDfmo0PUEhQijHeUAPwLVtOqIH21dF+a2bC
+	 GzaQa6OfHHcuvYzLO/lZLph2rvsnD/4bb/DHMjeTgAdEDcYF/3S3Mlt/dTnS6oJ0/5
+	 IfHNiBIziFn5w==
 From: Arnaldo Carvalho de Melo <acme@kernel.org>
 To: Alan Maguire <alan.maguire@oracle.com>
 Cc: Jiri Olsa <jolsa@kernel.org>,
@@ -35,9 +35,9 @@ Cc: Jiri Olsa <jolsa@kernel.org>,
 	Andrii Nakryiko <andrii@kernel.org>,
 	Yonghong Song <yonghong.song@linux.dev>,
 	Arnaldo Carvalho de Melo <acme@redhat.com>
-Subject: [PATCH 17/31] dwarf_loader: Fix data race in tag__init() decl_file string cache
-Date: Wed, 29 Jul 2026 16:07:17 -0300
-Message-ID: <20260729190733.72876-18-acme@kernel.org>
+Subject: [PATCH 18/31] pahole: Fix parse_btf_features("all") being a silent no-op
+Date: Wed, 29 Jul 2026 16:07:18 -0300
+Message-ID: <20260729190733.72876-19-acme@kernel.org>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20260729190733.72876-1-acme@kernel.org>
 References: <20260729190733.72876-1-acme@kernel.org>
@@ -52,51 +52,72 @@ Content-Transfer-Encoding: 8bit
 
 From: Arnaldo Carvalho de Melo <acme@redhat.com>
 
-The static variables last_decl_file and last_decl_file_ptr cache the
-most recent dwarf_decl_file() result to avoid redundant strdup() calls
-when consecutive DIEs share the same declaration file.
+"all" was not recognized as a feature name, so
+parse_btf_features("all") silently did nothing — no features were
+enabled and no error was reported.
 
-However, multiple worker threads call tag__init() concurrently, and
-this cache is a pahole-internal optimization unrelated to libdw thread
-safety. When _ELFUTILS_THREAD_SAFE makes libdw__lock a no-op, threads
-race on these statics — one thread can see another's stale pointer,
-skipping the strdup and assigning an incorrect (or freed) filename.
+Add btf_features__enable_all() that enables every feature in the
+btf_features[] table, and wire it into parse_btf_features() both as
+a standalone value and as a token in comma-separated lists.
 
-Make them __thread so each worker gets its own cache. The caching
-still works well since DWARF CUs are processed per-thread and DIEs
-within a CU tend to share the same source file:
+Before: --btf_features=all silently enabled nothing.
+After:  --btf_features=all enables all features in the table.
 
-  Before (__thread): j=1: 6.63s, j=4: 2.32s, j=32: 2.13s
-  After  (__thread): same — no measurable overhead from TLS access
-
-Fixes: a93160df5335ed2e ("dwarf_loader: Make dwarf_tag->decl_file a real string")
-Reported-by: Sashiko:gemini-3-1-pro-preview
+Fixes: 7bc9b9975545ab53 ("pahole: Add --btf_features support")
 Assisted-by: Claude:claude-sonnet-4-5
 Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
 ---
- dwarf_loader.c | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ pahole.c | 23 +++++++++++++++++++++++
+ 1 file changed, 23 insertions(+)
 
-diff --git a/dwarf_loader.c b/dwarf_loader.c
-index 759883cad3fce693..04dffae3504efa06 100644
---- a/dwarf_loader.c
-+++ b/dwarf_loader.c
-@@ -534,7 +534,14 @@ static void tag__init(struct tag *tag, struct cu *cu, Dwarf_Die *die)
+diff --git a/pahole.c b/pahole.c
+index 0e2acc35d6d679f0..a6012e6a157293e9 100644
+--- a/pahole.c
++++ b/pahole.c
+@@ -1299,6 +1299,22 @@ static void btf_features__enable_default(void)
+ 	}
+ }
  
- 		int32_t decl_line;
- 		const char *decl_file = dwarf_decl_file(die);
--		static const char *last_decl_file, *last_decl_file_ptr;
-+		/*
-+		 * Per-thread string dedup cache: avoids strdup() when
-+		 * consecutive DIEs share the same decl_file pointer.
-+		 * Must be __thread, not plain static, because multiple
-+		 * worker threads call tag__init() concurrently and a
-+		 * shared cache would race regardless of libdw locking.
-+		 */
-+		static __thread const char *last_decl_file, *last_decl_file_ptr;
++static void btf_features__enable_all(void)
++{
++	for (size_t i = 0; i < ARRAY_SIZE(btf_features); i++) {
++		/* distilled_base requires a --btf_base argument to
++		 * provide the base BTF that btf__distill_base() will
++		 * split against.  Enabling it unconditionally causes
++		 * btf_encoder__encode() to call btf__distill_base()
++		 * on standalone objects like vmlinux, which returns
++		 * -EINVAL and makes pahole fail fatally.  Users who
++		 * want distilled_base must request it explicitly. */
++		if (btf_features[i].conf_value == &conf_load.btf_gen_distilled_base)
++			continue;
++		enable_btf_feature(&btf_features[i]);
++	}
++}
++
+ /* Translate --btf_features=feature1[,feature2] into conf_load values.
+  * Explicitly ignores unrecognized features to allow future specification
+  * of new opt-in features.
+@@ -1315,6 +1331,11 @@ static void parse_btf_features(const char *features, bool strict)
+ 		return;
+ 	}
  
- 		if (decl_file != last_decl_file_ptr) {
- 			last_decl_file = decl_file ? strdup(decl_file) : NULL;
++	if (strcmp(features, "all") == 0) {
++		btf_features__enable_all();
++		return;
++	}
++
+ 	// Adding extra features to the set of standard features.
+ 	if (strstarts(features, "+")) {
+ 		btf_features__enable_default();
+@@ -1332,6 +1353,8 @@ static void parse_btf_features(const char *features, bool strict)
+ 			 */
+ 			if (strcmp(feature_name, "default") == 0) {
+ 				btf_features__enable_default();
++			} else if (strcmp(feature_name, "all") == 0) {
++				btf_features__enable_all();
+ 			} else if (strict) {
+ 				fprintf(stderr, "Feature '%s' in '%s' is not supported.  Supported BTF features are:\n",
+ 					feature_name, features);
 -- 
 2.55.0
 
