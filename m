@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FD1F48662D;
-	Wed, 29 Jul 2026 19:08:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58C6B463B73;
+	Wed, 29 Jul 2026 19:08:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785352097; cv=none; b=ZdcGWgeMA1udfZ5rIXsWfkC4e2rb9IBcGKPl+v8UHJnYDfSm19fUBwZU3FvyVQxi619uDKDleTnhabZYqJ7rUUFUWA9vtARJjbRDOsyVJN+3+x+xR0XoIfS/D8s8thZNsQ3agpwfQy3vTWxathycKFXaNguXTTfQNcemb1/ESt4=
+	t=1785352099; cv=none; b=VHa46FH1SN3m4LzMu0M9k/deX6LsZjJooVhNqcNFpTUNAttDrNElWOAFklGPTXvKPmS6DJUcGrZI4qEerduNj8CFJGlSmtG9BR7kfflUBS/0XSDeSc3U6Q9Hy5Syu9tRrLImfchm/z/6DHln2/MgDexJe/UgDFm8RqPj+vQYA0A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785352097; c=relaxed/simple;
-	bh=VFv1u3keSboumjxS7gktPabvQOLMOcIyGDDGRMZpDHg=;
+	s=arc-20240116; t=1785352099; c=relaxed/simple;
+	bh=aPsoKTk0LaoOgfkbi56C/QNNET84ZedLHP+me5A0Dx8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Qc2L5IriaQeoFawq6iLD3mahz6378FZoDVfFfm6RRKC98VfckLjfLDcFqmqM5tkpnO5bOENKkK2H4t6oVfB2r6UuYk0B1AQeFkjpWk1rH+hzH4xAcr6uRz+sOvq03hKrZ2iTvADRe+bqSNIyheMZweern9IMMLkrDdwTHhQH3yc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hsHZiVMB; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version:Content-Type; b=aI9EINKtiH1iNRFiGTLRRpcpYdsTBIQkaL+F2NAbfR/O+dkGZYJADbq7ziWLpeG41XM8Dy0DXgquQ/Ll5sYL0vm2BU0eoE6tPuFO+5JWfNZCL3AXnlFMQMkPkgAkGTHm2dJPvAOalCvPoFZMif7wBRf5BLulmG+9r2Q7aBEVw4I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Xps6mn3K; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hsHZiVMB"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 806651F00A3D;
-	Wed, 29 Jul 2026 19:08:13 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Xps6mn3K"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19EC31F000E9;
+	Wed, 29 Jul 2026 19:08:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785352095;
-	bh=6XYtWMKFjZguAWHBnpy8AI+KEhl7SYuqNBkcHccipNA=;
+	s=k20260515; t=1785352098;
+	bh=ys3YbXkqer9cffxUblDPaevUrQE1sb/ceACWCMc2R9s=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=hsHZiVMBPuYjneROEEkCHGt4PwlHvfDHWcqMp0zBM0eH4O5+zTQjA8inBeRxWK2I8
-	 PXrMEz1TJff+c8PxCy4TFR5lnAXNMfxCDavhuAQxcRiWjwXcmd0ILvRQnqfdBASKvA
-	 80Rxaz47R5JIx7NbPiZ3vYi9fengbDodEfzsIguWbYZeMacDbddgfzR12D6A4BycWq
-	 exqM0OARNtnYBEuMDH4NC8Uqo5ar1aTsaGNHLlceHYcIlafWDS9Y0Z4GVZkCWXNqvL
-	 YIrk2Meer5boFxCcYTyNk2xnw4ocUbSqj9LYOwMuneEpWzQqZG321WdQXg3FunXoLy
-	 b3CpY9hrzJPJA==
+	b=Xps6mn3KOklHxm5VgaZxZY6omPNG0VQ/Pq2TeLoXOlcegDZLdxKkDVndIbiZadmYV
+	 nvtjGOyhCQ4geXFPLfjH8pxAjZ43prYwD+aOkpvDRs3NdYPADTRNIitpXhrB/Aa2vz
+	 th+EjC+h5ieGdoNwyEoY1Bmev575g+5CmW6HYSru1sLXZ4l8QKBMkJjjMLsYOLNysX
+	 YagvRuNYyq6AycawTUDrGQ2b8gr7YT6ori6m5pc9rlcRuD3rJe7M8MVnXAcH9OWfTY
+	 ZPgxmhUY7PGe4lBetRUVMaiftKUu3mtah43MYrAd/WnoL9HHjcPfbte8Zw7pR5jn72
+	 XhXYZWCtHANpQ==
 From: Arnaldo Carvalho de Melo <acme@kernel.org>
 To: Alan Maguire <alan.maguire@oracle.com>
 Cc: Jiri Olsa <jolsa@kernel.org>,
@@ -34,12 +34,10 @@ Cc: Jiri Olsa <jolsa@kernel.org>,
 	bpf@vger.kernel.org,
 	Andrii Nakryiko <andrii@kernel.org>,
 	Yonghong Song <yonghong.song@linux.dev>,
-	Arnaldo Carvalho de Melo <acme@redhat.com>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Aaron Merey <amerey@redhat.com>
-Subject: [PATCH 16/31] dwarf_loader: Skip libdw__lock when elfutils is built thread-safe
-Date: Wed, 29 Jul 2026 16:07:16 -0300
-Message-ID: <20260729190733.72876-17-acme@kernel.org>
+	Arnaldo Carvalho de Melo <acme@redhat.com>
+Subject: [PATCH 17/31] dwarf_loader: Fix data race in tag__init() decl_file string cache
+Date: Wed, 29 Jul 2026 16:07:17 -0300
+Message-ID: <20260729190733.72876-18-acme@kernel.org>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20260729190733.72876-1-acme@kernel.org>
 References: <20260729190733.72876-1-acme@kernel.org>
@@ -49,138 +47,56 @@ List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
 From: Arnaldo Carvalho de Melo <acme@redhat.com>
 
-pahole serializes dwarf_getlocation(), dwarf_decl_file(), and
-__dwarf_getlocations() calls behind libdw__lock because libdw's
-internal caches (tsearch trees) are not thread-safe by default.
+The static variables last_decl_file and last_decl_file_ptr cache the
+most recent dwarf_decl_file() result to avoid redundant strdup() calls
+when consecutive DIEs share the same declaration file.
 
-This mutex was added in commits 1caed1c443d4 ("Add a lock around
-dwarf_decl_file() and dwarf_decl_line() calls") and 65b7fd68ccbb
-("Use libdw__lock for dwarf_getlocation(s)") to work around
-concurrency bugs in libdw.
+However, multiple worker threads call tag__init() concurrently, and
+this cache is a pahole-internal optimization unrelated to libdw thread
+safety. When _ELFUTILS_THREAD_SAFE makes libdw__lock a no-op, threads
+race on these statics — one thread can see another's stale pointer,
+skipping the strdup and assigning an incorrect (or freed) filename.
 
-Since then, elfutils has fixed the underlying issues:
-  - 0.194: eu_tsearch with proper locking (ec21fbb47)
-  - 0.194: rwlock replaced with __atomic builtins (680eb3021)
-  - 0.195: additional last_abbrev_offset protection (8fa2cd1d3)
+Make them __thread so each worker gets its own cache. The caching
+still works well since DWARF CUs are processed per-thread and DIEs
+within a CU tend to share the same source file:
 
-When elfutils is compiled with --enable-thread-safety it defines
-_ELFUTILS_THREAD_SAFE in <elfutils/version.h>.  Use this to skip
-the pahole-side mutex entirely, eliminating the serialization
-overhead.
+  Before (__thread): j=1: 6.63s, j=4: 2.32s, j=32: 2.13s
+  After  (__thread): same — no measurable overhead from TLS access
 
-Profiling shows pthread_rwlock_tryrdlock + unlock from libdw's
-internal locking accounts for ~15.6% of serial encoding time.
-That overhead also disappears when elfutils is built thread-safe
-(rwlock replaced with lock-free atomics in 0.194).
-
-Before (serial, elfutils without --enable-thread-safety):
-  15.6% in pthread_rwlock_{tryrdlock,unlock} (libdw internal)
-  Plus serialization from pahole's libdw__lock mutex
-
-After (serial, elfutils with --enable-thread-safety):
-  Both overheads eliminated
-
-Cc: Alan Maguire <alan.maguire@oracle.com>
-Cc: Eduard Zingerman <eddyz87@gmail.com>
-Cc: Aaron Merey <amerey@redhat.com>
+Fixes: a93160df5335ed2e ("dwarf_loader: Make dwarf_tag->decl_file a real string")
+Reported-by: Sashiko:gemini-3-1-pro-preview
 Assisted-by: Claude:claude-sonnet-4-5
 Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
 ---
- dwarf_loader.c | 34 ++++++++++++++++++++++++----------
- 1 file changed, 24 insertions(+), 10 deletions(-)
+ dwarf_loader.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
 diff --git a/dwarf_loader.c b/dwarf_loader.c
-index ce0bead0e76e1876..759883cad3fce693 100644
+index 759883cad3fce693..04dffae3504efa06 100644
 --- a/dwarf_loader.c
 +++ b/dwarf_loader.c
-@@ -57,7 +57,25 @@
- #define EM_RISCV	243
- #endif
- 
-+/*
-+ * libdw internal caches (tsearch trees for locations, decl file/line, etc.)
-+ * are not thread-safe unless elfutils was compiled with --enable-thread-safety.
-+ * When that option is active, elfutils >= 0.194 uses eu_tsearch with proper
-+ * locking and >= 0.194 also replaces the abbrev rwlock with __atomic builtins,
-+ * eliminating the overhead that rwlock_tryrdlock imposed even in serial mode.
-+ *
-+ * _ELFUTILS_THREAD_SAFE is defined in <elfutils/version.h> when the library
-+ * was built thread-safe.  When present we skip our own mutex; when absent we
-+ * serialize the racy calls ourselves.
-+ */
-+#ifdef _ELFUTILS_THREAD_SAFE
-+static inline void libdw__lock_lock(void)   { }
-+static inline void libdw__lock_unlock(void) { }
-+#else
- static pthread_mutex_t libdw__lock = PTHREAD_MUTEX_INITIALIZER;
-+static inline void libdw__lock_lock(void)   { pthread_mutex_lock(&libdw__lock); }
-+static inline void libdw__lock_unlock(void) { pthread_mutex_unlock(&libdw__lock); }
-+#endif
- 
- static uint32_t hashtags__bits = 12;
- static uint32_t max_hashtags__bits = 21;
-@@ -453,11 +471,7 @@ static int attr_location(Dwarf_Die *die, Dwarf_Op **expr, size_t *exprlen)
- 	int ret = 1;
- 
- 	if (dwarf_attr(die, DW_AT_location, &attr) != NULL) {
--		/* use libdw__lock as dwarf_getlocation(s) has concurrency
--		 * issues when libdw is not compiled with experimental
--		 * --enable-thread-safety
--		 */
--		pthread_mutex_lock(&libdw__lock);
-+		libdw__lock_lock();
- 		if (dwarf_getlocation(&attr, expr, exprlen) == 0) {
- 			/* DW_OP_addrx needs additional lookup for real addr. */
- 			if (*exprlen != 0 && expr[0]->atom == DW_OP_addrx) {
-@@ -471,7 +485,7 @@ static int attr_location(Dwarf_Die *die, Dwarf_Op **expr, size_t *exprlen)
- 			}
- 			ret = 0;
- 		}
--		pthread_mutex_unlock(&libdw__lock);
-+		libdw__lock_unlock();
- 	}
- 
- 	return ret;
-@@ -516,7 +530,7 @@ static void tag__init(struct tag *tag, struct cu *cu, Dwarf_Die *die)
- 	tag->attributes = NULL;
- 
- 	if (cu->extra_dbg_info) {
--		pthread_mutex_lock(&libdw__lock);
-+		libdw__lock_lock();
+@@ -534,7 +534,14 @@ static void tag__init(struct tag *tag, struct cu *cu, Dwarf_Die *die)
  
  		int32_t decl_line;
  		const char *decl_file = dwarf_decl_file(die);
-@@ -531,7 +545,7 @@ static void tag__init(struct tag *tag, struct cu *cu, Dwarf_Die *die)
- 		dwarf_decl_line(die, &decl_line);
- 		dtag->decl_line = decl_line;
+-		static const char *last_decl_file, *last_decl_file_ptr;
++		/*
++		 * Per-thread string dedup cache: avoids strdup() when
++		 * consecutive DIEs share the same decl_file pointer.
++		 * Must be __thread, not plain static, because multiple
++		 * worker threads call tag__init() concurrently and a
++		 * shared cache would race regardless of libdw locking.
++		 */
++		static __thread const char *last_decl_file, *last_decl_file_ptr;
  
--		pthread_mutex_unlock(&libdw__lock);
-+		libdw__lock_unlock();
- 	}
- 
- 	INIT_LIST_HEAD(&tag->node);
-@@ -1470,7 +1484,7 @@ static void parameter__decode_location(Dwarf_Attribute *attr, struct conf_load *
- 	ptrdiff_t offset = 0;
- 	int loc_num = -1;
- 
--	pthread_mutex_lock(&libdw__lock);
-+	libdw__lock_lock();
- 	while ((offset = __dwarf_getlocations(attr, offset, &base, &start, &end, &expr, &exprlen)) > 0) {
- 		bool had_stack_value;
- 
-@@ -1515,7 +1529,7 @@ static void parameter__decode_location(Dwarf_Attribute *attr, struct conf_load *
- 			break;
- 		}
- 	}
--	pthread_mutex_unlock(&libdw__lock);
-+	libdw__lock_unlock();
- 
- 	parameter__finish_piece_decode(parm, die, conf, cu);
- }
+ 		if (decl_file != last_decl_file_ptr) {
+ 			last_decl_file = decl_file ? strdup(decl_file) : NULL;
 -- 
 2.55.0
 
