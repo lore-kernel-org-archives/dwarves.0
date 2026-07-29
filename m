@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E39B9463B74;
-	Wed, 29 Jul 2026 19:08:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EC92456284;
+	Wed, 29 Jul 2026 19:08:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785352083; cv=none; b=uyvj3DCNZ2RK/wdv3PphdpYaEqgnUILJteUK3KW8sUkophg/5bFr8154PB7b8ROYbiLr3dTFaB1ikjG+sMPkiuc9OWJhKp7hcBBwQ0mKBIuaF4XTvOKkYAldP4bAoAaX5JdgudBfwikKRD1XfmwLN2ziCqwm5fEsgEKHmLk1nPg=
+	t=1785352085; cv=none; b=l/JrGZuBDquVYRutqdyDEAE/SyjAgxFR5f48pyXIBppOe832vCZ5Qxt4yQSncXV7awNCq81Nhjry1ZvvmJZVdIyjWqE6tA5rFoMvg+qM1OCbf8mhvmec9EpsKr8s79ozCRX3j9Y7qXZPrZJiemsLAyDuVqnPeyuUqIlZXvWnr+k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785352083; c=relaxed/simple;
-	bh=Vg+pzAFjE7sAyVpJe5q1hXbdUuIUBkAFIW4zuqia7PU=;
+	s=arc-20240116; t=1785352085; c=relaxed/simple;
+	bh=NeseW9+iYQ1qc4tyH4LpcYdd/H/ZqeXVWOS4+y6qZkk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=KftO4VSiswfJk6oKKKRWrxWONzD0EWS5ePmDGnVvXb3djIDTn58HRRDz39a4tED0bMaIrWRgHr4hYUCPg1Hkqn/1q3eZHC7cKOeSueVZxpML9FonF/h5u3X4/LI6IrKl8MT1WgNT84GxZgdQWlnLejAXurkD/estEMi3yIP1OLo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BPjI7AFn; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version; b=GAnc9s4hZsVn1oJ9+xcmYuqCPqKxuCkKAcKoj5/8kUyvyTI6rQHu5iiSeH89aWEcsESIOaIzzRX+mZnGw85uE9YlGXNiLYuJd5wYbSs9zgni5h+bfJ4OmFwqAwe0JIDKi95PPgax6EkfU0wqBSCzGnoNKMFTDXF6D8R2nC1wRIM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kRLjnyx5; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BPjI7AFn"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B740B1F00A3A;
-	Wed, 29 Jul 2026 19:07:59 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kRLjnyx5"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05E4B1F000E9;
+	Wed, 29 Jul 2026 19:08:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785352081;
-	bh=swCaH9sjSXzPmLbQh3qoDpDZuPRDns4kGNGVhhVv1mM=;
+	s=k20260515; t=1785352083;
+	bh=FoP8BvGos+CTA80tDMaRk8hhibpC7d91ukHEbVb1/rc=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=BPjI7AFn2FdT+GZf4VLp+GZvNb0yeDh4gPYq4T0jXtHD18YggJaSIaxMTzSzS701R
-	 E97AcnO17KUHLKwo87TcnHigkUzPD3juLkGrwB7rEl0k+rbgEsDpYOt0+Fwlr/vSM/
-	 Sbf2rOJTSdRdJElibBf9achIXOwcaiYBSaRJk6XixhBN/KVbdwFCSueveJAi9g7J4r
-	 hJt+Bm1jrLfUjkOEtowbfOoCDCoU4jXkKDJvU5cj/ZiI+kMwM2mfbV+GejNI2fK+UD
-	 sWtbaTDvf4eCZdAyT0FJe+qoNy/Lq7MXedX+FQR1wLXihmjmxHkc0LMHlfZtWwB3qA
-	 o0liC2kw7lfjw==
+	b=kRLjnyx5/dvcrlzHgmXFfCB5l6C3yM2xUJ1aT+MMUDsgGFrDO0lm7PP5/rjMKDHi4
+	 MDZBMfqmua8ujjd2oh0LsY5niEcv55U72RpQIT4aFrJB1l+g6OMIjOUXwDPaeWymqB
+	 Qv1f/5KjWSSZxos+HEopnmMV0TOtZ9c38IubmQSc9bLoRkszeVeTeeknDKx7h7YU5Q
+	 mIhfTfCZRVE3JIQ/r7rDrItJQNUEBWrbvjMJywBp3xqPmzdBZ8tLFqDUe7rXbug+zP
+	 uoc/Bh8aZv+yPn4lKiN5mjABjkROzgAZfyNyVyJa4J2Tz/97QTmJ/Vq1T9vCtz990+
+	 1JTks0imVxR8Q==
 From: Arnaldo Carvalho de Melo <acme@kernel.org>
 To: Alan Maguire <alan.maguire@oracle.com>
 Cc: Jiri Olsa <jolsa@kernel.org>,
@@ -35,9 +35,9 @@ Cc: Jiri Olsa <jolsa@kernel.org>,
 	Andrii Nakryiko <andrii@kernel.org>,
 	Yonghong Song <yonghong.song@linux.dev>,
 	Arnaldo Carvalho de Melo <acme@redhat.com>
-Subject: [PATCH 10/31] btf_encoder: Use btf_encoder__tag_type() for all type ID computations
-Date: Wed, 29 Jul 2026 16:07:10 -0300
-Message-ID: <20260729190733.72876-11-acme@kernel.org>
+Subject: [PATCH 11/31] pahole: Fix --errno typo that decrements instead of negating
+Date: Wed, 29 Jul 2026 16:07:11 -0300
+Message-ID: <20260729190733.72876-12-acme@kernel.org>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20260729190733.72876-1-acme@kernel.org>
 References: <20260729190733.72876-1-acme@kernel.org>
@@ -47,102 +47,57 @@ List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
 From: Arnaldo Carvalho de Melo <acme@redhat.com>
 
-Replace inline "encoder->type_id_off + tag_type" patterns with
-btf_encoder__tag_type(), which already encapsulates both the zero-check
-and the offset addition.  Some call sites had ternary guards
-(tag_type == 0 ? 0 : ...) that are now handled inside the function.
+prototype__stdio_fprintf_value() uses --errno in three error paths,
+which decrements the global errno value instead of negating it with
+-errno.  This causes the function to return a wrong (often positive)
+value on error, making callers think the operation succeeded.
 
-Two sites that use nr_entries or core_id as table indices rather than
-type references are left unchanged — they receive different treatment
-in a subsequent commit.
+Before: --errno with errno=5 returns 4 (positive, looks like success)
+After:  -errno with errno=5 returns -5 (negative, correctly signals error)
 
-No functional change.
-
+Fixes: 9310b04854a8b709 ("pahole: Add support for referencing header variables when pretty printing")
+Reported-by: Sashiko:gemini-3-1-pro-preview
 Assisted-by: Claude:claude-sonnet-4-5
 Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
 ---
- btf_encoder.c | 17 +++++++++--------
- 1 file changed, 9 insertions(+), 8 deletions(-)
+ pahole.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/btf_encoder.c b/btf_encoder.c
-index 5d0901da73b618d7..0fbd7e3420b0457f 100644
---- a/btf_encoder.c
-+++ b/btf_encoder.c
-@@ -865,7 +865,7 @@ static int32_t btf_encoder__add_func_proto_for_ftype(struct btf_encoder *encoder
+diff --git a/pahole.c b/pahole.c
+index 0096dfa34e5047c8..6ba3f578c28570a1 100644
+--- a/pahole.c
++++ b/pahole.c
+@@ -2584,7 +2584,7 @@ static int prototype__stdio_fprintf_value(struct prototype *prototype, struct ty
+ 		return -ENOMEM;
  
- 	ftype__for_each_parameter(ftype, param) {
- 		name = parameter__name(param);
--		type_id = param->tag.type == 0 ? 0 : encoder->type_id_off + param->tag.type;
-+		type_id = btf_encoder__tag_type(encoder, param->tag.type);
- 		++param_idx;
- 		if (btf_encoder__add_func_param(encoder, name, type_id, param_idx == nr_params))
- 			return -1;
-@@ -1284,7 +1284,7 @@ static int32_t btf_encoder__save_func(struct btf_encoder *encoder, struct functi
- 	state->addr = function__addr(fn);
- 	state->elf = func;
- 	state->nr_parms = ftype->nr_parms + (ftype->unspec_parms ? 1 : 0);
--	state->ret_type_id = ftype->tag.type == 0 ? 0 : encoder->type_id_off + ftype->tag.type;
-+	state->ret_type_id = btf_encoder__tag_type(encoder, ftype->tag.type);
- 	if (state->nr_parms > 0) {
- 		state->parms = zalloc(state->nr_parms * sizeof(*state->parms));
- 		if (!state->parms) {
-@@ -1363,8 +1363,7 @@ static int32_t btf_encoder__save_func(struct btf_encoder *encoder, struct functi
+ 	if (type__instance_read_once(header, input) < 0) {
+-		printed = --errno;
++		printed = -errno;
+ 		fprintf(stderr, "pahole: --header (%s) type couldn't be read\n", conf.header_type);
+ 		goto out;
+ 	}
+@@ -2667,7 +2667,7 @@ static int prototype__stdio_fprintf_value(struct prototype *prototype, struct ty
+ 		free(member_name);
+ 
+ 		if (pipe_seek(input, seek_bytes) < 0) {
+-			printed = --errno;
++			printed = -errno;
+ 			fprintf(stderr, "Couldn't --seek_bytes %s (%" PRIu64 "\n", conf.seek_bytes, seek_bytes);
  			goto out;
  		}
- 		state->parms[param_idx].name_off = str_off;
--		state->parms[param_idx].type_id = param->tag.type == 0 ? 0 :
--						  encoder->type_id_off + param->tag.type;
-+		state->parms[param_idx].type_id = btf_encoder__tag_type(encoder, param->tag.type);
- 		param_idx++;
- 	}
- 	if (ftype->unspec_parms)
-@@ -1849,11 +1848,13 @@ static int32_t btf_encoder__add_struct_type(struct btf_encoder *encoder, struct
- 		 * is required.
- 		 */
- 		name = class_member__name(pos);
--		if (btf_encoder__add_field(encoder, name, encoder->type_id_off + pos->tag.type,
-+		if (btf_encoder__add_field(encoder, name, btf_encoder__tag_type(encoder, pos->tag.type),
- 					   pos->bitfield_size, pos->bit_offset))
- 			return -1;
- 	}
- 
-+
-+
- 	return type_id;
- }
- 
-@@ -1894,7 +1895,7 @@ static int btf_encoder__encode_tag(struct btf_encoder *encoder, struct tag *tag,
- 				   struct conf_load *conf_load)
- {
- 	/* single out type 0 as it represents special type "void" */
--	uint32_t ref_type_id = tag->type == 0 ? 0 : encoder->type_id_off + tag->type;
-+	uint32_t ref_type_id = btf_encoder__tag_type(encoder, tag->type);
- 	struct base_type *bt;
- 	const char *name;
- 
-@@ -2720,7 +2721,7 @@ static int btf_encoder__encode_cu_variables(struct btf_encoder *encoder)
- 			continue;
+@@ -2718,7 +2718,7 @@ static int prototype__stdio_fprintf_value(struct prototype *prototype, struct ty
  		}
  
--		type = var->ip.tag.type + encoder->type_id_off;
-+		type = btf_encoder__tag_type(encoder, var->ip.tag.type);
- 		linkage = var->external ? BTF_VAR_GLOBAL_ALLOCATED : BTF_VAR_STATIC;
- 
- 		if (encoder->verbose) {
-@@ -2983,7 +2984,7 @@ int btf_encoder__encode_cu(struct btf_encoder *encoder, struct cu *cu, struct co
- 		type_id_t id;
- 		if (cu__find_base_type_by_name(cu, "int", &id)) {
- 			encoder->has_index_type = true;
--			encoder->array_index_id = encoder->type_id_off + id;
-+			encoder->array_index_id = btf_encoder__tag_type(encoder, id);
- 		} else {
- 			encoder->has_index_type = false;
- 			encoder->array_index_id = encoder->type_id_off + cu->types_table.nr_entries;
+ 		if (pipe_seek(input, seek_bytes) < 0) {
+-			printed = --errno;
++			printed = -errno;
+ 			fprintf(stderr, "Couldn't --seek_bytes %s (%" PRIu64 "\n", conf.seek_bytes, seek_bytes);
+ 			goto out;
+ 		}
 -- 
 2.55.0
 
