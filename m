@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD876488DAF;
-	Wed, 29 Jul 2026 19:08:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1E2F488DAF;
+	Wed, 29 Jul 2026 19:08:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785352119; cv=none; b=WTxmibfP/aVzti39gKe3Obk9MD2VKt/VzcfzP/6K/GgLcVQUGBM/g+1EWfDWEGlyHXwWdfGj2cht5jELjpHWntpB/Wp+fFpNV05vcQ0nqF9NZ20gfD/Uq73ymFq0dLnxMEeYKdWuC4VFeV4CrzNqh+vP8prcvRbr3+rXCsw5T80=
+	t=1785352122; cv=none; b=uJSGjwy502ZTqWvPifM2P+TEDq/vrsGbLJSDLViVR03Ix6jt4Qw0NnJ2dybm90FokSSCJthHKU3Q4tyQfeQqFuYcGdtxXaAXpKWgQ8VH2tTL0gNntUMfxhHXeuAZrMFmuThD+XzRcDzfyvQ4tA3lx4qFrlIfF1WHFDmggk2E0Dw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785352119; c=relaxed/simple;
-	bh=P2/Gkyh4c9u93itUHKsMciJ1W8HUPKmyrB0iu5evFFM=;
+	s=arc-20240116; t=1785352122; c=relaxed/simple;
+	bh=EcHZ2nPwNPHE32gifLEPKSM77FtJ+PfuuGyN/hWIStk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=I00087kzSSND4gursiX9vswPRxZF7Yh6PkFaVKqjU4I2J8M8lP3L5dyIX0BC4S9jM9pXvq9EW/fUKcOygKmiNlKWiFa68hPkjZaSbYenIuUUV94qyr3klsksVKWAm4dh3rcSpKSuaiCxINQb53pvxdV1WYJtzGPcdlG6mVpFFPg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ng2v0o4P; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version:Content-Type; b=Od69tyoF0/hGb8j/bmi6ovMxHacrUGiqUMuflra6qMEMRaffb3Y9nlxPcM92dp2Q2zNxr1y/urJIYLzzUTmKgA338fFfH9gniIPX6UuJnfOqwdqssZ/cZacvkIKwubnoM1sVhKNuwMlPmhMrFZ2qpMtFrlPMyNFAleGYEW4ejUk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G3AoEG0T; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ng2v0o4P"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7AAB91F00A3A;
-	Wed, 29 Jul 2026 19:08:36 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G3AoEG0T"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC0031F000E9;
+	Wed, 29 Jul 2026 19:08:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785352118;
-	bh=TKfO1/FyZbUIoRqBnWqLwdx1/LBpNyG4EgL+SPzea5A=;
+	s=k20260515; t=1785352120;
+	bh=2nssT5UC4BX2zX12A49TS6EGK61ZHeSgO/HB8LiqMuU=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=ng2v0o4PZ1qJpaNglUIKATW2sL0LkNoOpFFc2PgBB/kwXuZjM1Ee4m0myQDEB6Mdn
-	 mOLOPPImZWtBEPqAjXBD0H+s/1Bfj6kErXOLkO4dOl6mUHLjCKUuDAi7d/1qZG9yZZ
-	 Z9m28XedSodFOcoODeyEGolhvARAEfNw8UxMdKTMTCa0hrGwPvf7hxGqFlNzMKeiZx
-	 4U925C9C4BjBt4uLznqn6iyRa0WbFR1oT19pP8QBr4d785FqQ3mAWDV6yyd/TQ34we
-	 ri6hsqw7b041MX5BRtdWBLRvd99hDp4LceBGqd94oFtK2LqlNakd2zefr/Glv1nheh
-	 8ZyaTBeLDHiHw==
+	b=G3AoEG0TDuhxaJMiys4FE+gKr6JrufVBnoJEKeAR4A2m/pWzS8xM9K7KrhHKal9f4
+	 qzmvnbqrE+cbw6zuzyp4FqUDidEjWOamgNUblqHHxXGaOAN7wEfjJlnGDuMh3L8geO
+	 QKZtbIxG3qpF9Ow6eBUMteSH/jK8FY3r3SDZjuT2eiCHjrjpqkLEhkZg1p2zh9VcvZ
+	 5WoOrfRusOj6terfGiSxBahNH+o0vzIsiKbSjYiRrQLwYggy8u350lDvNm1y0WKsAe
+	 LcZYIcWEjgBMfEv5inM7zyAr07bAurbyVEhwrcKfXne2PJWo12znR4aikDn5W2fxjn
+	 NkWCLVbtmfzxw==
 From: Arnaldo Carvalho de Melo <acme@kernel.org>
 To: Alan Maguire <alan.maguire@oracle.com>
 Cc: Jiri Olsa <jolsa@kernel.org>,
@@ -35,9 +35,9 @@ Cc: Jiri Olsa <jolsa@kernel.org>,
 	Andrii Nakryiko <andrii@kernel.org>,
 	Yonghong Song <yonghong.song@linux.dev>,
 	Arnaldo Carvalho de Melo <acme@redhat.com>
-Subject: [PATCH 26/31] gobuffer: Remove 5 dead functions found via coverage analysis
-Date: Wed, 29 Jul 2026 16:07:26 -0300
-Message-ID: <20260729190733.72876-27-acme@kernel.org>
+Subject: [PATCH 27/31] dwarves: Remove 6 dead functions found via coverage analysis
+Date: Wed, 29 Jul 2026 16:07:27 -0300
+Message-ID: <20260729190733.72876-28-acme@kernel.org>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20260729190733.72876-1-acme@kernel.org>
 References: <20260729190733.72876-1-acme@kernel.org>
@@ -47,167 +47,242 @@ List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
 From: Arnaldo Carvalho de Melo <acme@redhat.com>
 
-Coverage analysis showed that 5 of 10 gobuffer functions have zero
-callers anywhere in the codebase:
+Coverage analysis showed that 6 non-static functions in dwarves.c have
+zero callers anywhere in the codebase:
 
-  gobuffer__new:      never called, dead since creation in be30be91
-                      ("gobuffer: Move the non string specific bits",
-                      2008)
-  gobuffer__init:     only caller was gobuffer__new
-  gobuffer__delete:   never called (only __gobuffer__delete is used)
-  gobuffer__compress: last caller removed in 29fce8dc ("strings: use
-                      BTF's string APIs for strings management", 2020)
-  gobuffer__sort:     added in 2046cc50 for kfunc sorting (2024),
-                      caller removed in c5677178 ("btf_encoder:
-                      Refactor btf_encoder__tag_kfuncs()", 2025)
+  base_type__language_defined: introduced in 51643cb290f9 ("core:
+      Introduce base_type__language_defined()", 2023) for use in
+      dwarves_emit.c, but that code path was superseded before
+      reaching the main branch — never called on this lineage.
 
-Removing them also drops the stdio.h and zlib.h includes and the
-GOBUFFER__ZCHUNK constant that only gobuffer__compress used.
+  cus__find_type_by_name: introduced in 7c12b234ee30 ("dwarves:
+      Introduce cus__find_type_by_name()", 2020), last callers
+      removed in 22f93766cf02 ("pahole: Support multiple types
+      for pretty printing", 2020).
 
-Before: 10 functions, 152 lines, 29% line coverage.
-After: 5 functions, 77 lines, 55% line coverage.
+  cu__find_struct_or_union_by_name: introduced in da632a36862c
+      ("dwarves: Introduce {cu,cus}__find_struct_or_union_by_name()
+      methods", 2018), last caller removed in 3c1a9a3329d9
+      ("pahole: Make --contains look for more than just unions,
+      structs", 2020). The struct-only variant cu__find_struct_by_name
+      is used instead.
+
+  cus__find_struct_or_union_by_name: multi-CU wrapper introduced
+      alongside cu__find_struct_or_union_by_name in da632a36862c
+      (2018), never had any callers.
+
+  cus__find_cu_by_name: locking wrapper introduced in 874e750fb8bd
+      ("core: Move cus__find_pair() from codiff to the core", 2021).
+      The static __cus__find_cu_by_name it wraps is still used by
+      cus__find_pair, but the public wrapper was never called.
+
+  class__find_bit_hole: introduced in 82892cd9dd97 ("[CLASSES]:
+      First stab at implementing class__find_bit_hole", 2006), last
+      caller removed in 57fce1596b9c ("[PAHOLE]: Use class__reorganize
+      in class__packable", 2007).
+
+Removes the functions from dwarves.c and their declarations from
+dwarves.h.
+
+Before: 174 functions, 2027 lines, 63.6% line coverage.
+After: 168 functions, 1975 lines, 65.3% line coverage.
 
 Assisted-by: Claude:claude-sonnet-4-5
 Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
 ---
- gobuffer.c | 74 ------------------------------------------------------
- gobuffer.h |  8 ------
- 2 files changed, 82 deletions(-)
+ dwarves.c | 87 +------------------------------------------------------
+ dwarves.h | 13 ---------
+ 2 files changed, 1 insertion(+), 99 deletions(-)
 
-diff --git a/gobuffer.c b/gobuffer.c
-index c439c48bb775593f..beeb677cfc3d7617 100644
---- a/gobuffer.c
-+++ b/gobuffer.c
-@@ -11,33 +11,12 @@
- #include <search.h>
- #include <stdint.h>
- #include <stdlib.h>
--#include <stdio.h>
- #include <string.h>
--#include <zlib.h>
- #include <errno.h>
- 
- #include "dutil.h"
- 
- #define GOBUFFER__BCHUNK (8 * 1024)
--#define GOBUFFER__ZCHUNK (8 * 1024)
--
--void gobuffer__init(struct gobuffer *gb)
--{
--	gb->entries = NULL;
--	gb->nr_entries = gb->allocated_size = 0;
--	/* 0 == NULL */
--	gb->index = 1;
--}
--
--struct gobuffer *gobuffer__new(void)
--{
--	struct gobuffer *gb = malloc(sizeof(*gb));
--
--	if (gb != NULL)
--		gobuffer__init(gb);
--
--	return gb;
--}
- 
- void __gobuffer__delete(struct gobuffer *gb)
- {
-@@ -47,12 +26,6 @@ void __gobuffer__delete(struct gobuffer *gb)
- 	zfree(&gb->entries);
- }
- 
--void gobuffer__delete(struct gobuffer *gb)
--{
--	__gobuffer__delete(gb);
--	free(gb);
--}
--
- void *gobuffer__ptr(const struct gobuffer *gb, unsigned int s)
- {
- 	return s ? gb->entries + s : NULL;
-@@ -102,50 +75,3 @@ void gobuffer__copy(const struct gobuffer *gb, void *dest)
- 	}
- }
- 
--void gobuffer__sort(struct gobuffer *gb, unsigned int size, int (*compar)(const void *, const void *))
--{
--	qsort(gb->entries, gb->nr_entries, size, compar);
--}
--
--const void *gobuffer__compress(struct gobuffer *gb, unsigned int *size)
--{
--	z_stream z = {
--		.zalloc	  = Z_NULL,
--		.zfree	  = Z_NULL,
--		.opaque	  = Z_NULL,
--		.avail_in = gobuffer__size(gb),
--		.next_in  = (Bytef *)(gobuffer__entries(gb) ? : ""),
--	};
--	void *bf = NULL;
--	unsigned int bf_size = 0;
--
--	if (deflateInit(&z, Z_BEST_COMPRESSION) != Z_OK)
--		goto out_free;
--
--	do {
--		const unsigned int new_bf_size = bf_size + GOBUFFER__ZCHUNK;
--		void *nbf = realloc(bf, new_bf_size);
--
--		if (nbf == NULL)
--			goto out_close_and_free;
--
--		bf = nbf;
--		z.avail_out = GOBUFFER__ZCHUNK;
--		z.next_out  = (Bytef *)bf + bf_size;
--		bf_size	    = new_bf_size;
--		if (deflate(&z, Z_FINISH) == Z_STREAM_ERROR)
--			goto out_close_and_free;
--	} while (z.avail_out == 0);
--
--	deflateEnd(&z);
--	*size = bf_size - z.avail_out;
--out:
--	return bf;
--
--out_close_and_free:
--	deflateEnd(&z);
--out_free:
--	free(bf);
--	bf = NULL;
--	goto out;
--}
-diff --git a/gobuffer.h b/gobuffer.h
-index cd218b629898307f..f9c461fec87c172f 100644
---- a/gobuffer.h
-+++ b/gobuffer.h
-@@ -13,16 +13,10 @@ struct gobuffer {
- 	unsigned int	allocated_size;
+diff --git a/dwarves.c b/dwarves.c
+index 94bab301d598695d..1748889bc051fcb4 100644
+--- a/dwarves.c
++++ b/dwarves.c
+@@ -311,29 +311,6 @@ static struct ase_type_name_to_size {
+ 	{ .name = NULL },
  };
  
--struct gobuffer *gobuffer__new(void);
+-bool base_type__language_defined(struct base_type *bt)
+-{
+-	int i = 0;
+-	char bf[64];
+-	const char *name;
 -
--void gobuffer__init(struct gobuffer *gb);
--void gobuffer__delete(struct gobuffer *gb);
- void __gobuffer__delete(struct gobuffer *gb);
- 
- void gobuffer__copy(const struct gobuffer *gb, void *dest);
- 
--void gobuffer__sort(struct gobuffer *gb, unsigned int size, int (*compar)(const void *, const void *));
+-	if (bt->name_has_encoding)
+-		name = bt->name;
+-	else
+-		name = base_type__name(bt, bf, sizeof(bf));
 -
- int gobuffer__add(struct gobuffer *gb, const void *s, unsigned int len);
- int gobuffer__allocate(struct gobuffer *gb, unsigned int len);
- 
-@@ -43,6 +37,4 @@ static inline unsigned int gobuffer__size(const struct gobuffer *gb)
- 
- void *gobuffer__ptr(const struct gobuffer *gb, unsigned int s);
- 
--const void *gobuffer__compress(struct gobuffer *gb, unsigned int *size);
+-	while (base_type_name_to_size_table[i].name != NULL) {
+-		if (bt->name_has_encoding) {
+-			if (strcmp(base_type_name_to_size_table[i].name, bt->name) == 0)
+-				return true;
+-		} else if (strcmp(base_type_name_to_size_table[i].name, name) == 0)
+-			return true;
+-		++i;
+-	}
 -
- #endif /* _GOBUFFER_H_ */
+-	return false;
+-}
+-
+ size_t base_type__name_to_size(struct base_type *bt, struct cu *cu)
+ {
+ 	int i = 0;
+@@ -974,27 +951,7 @@ found:
+ 	return pos;
+ }
+ 
+-struct tag *cus__find_type_by_name(struct cus *cus, struct cu **cu, const char *name,
+-				   const int include_decls, type_id_t *id)
+-{
+-	struct cu *pos;
+-	struct tag *tag = NULL;
+-
+-	cus__lock(cus);
+-
+-	list_for_each_entry(pos, &cus->cus, node) {
+-		tag = cu__find_type_by_name(pos, name, include_decls, id);
+-		if (tag != NULL) {
+-			if (cu != NULL)
+-				*cu = pos;
+-			break;
+-		}
+-	}
+-
+-	cus__unlock(cus);
+-
+-	return tag;
+-}
++/* cus__find_type_by_name removed: dead code, no callers */
+ 
+ static struct tag *__cu__find_struct_by_name(const struct cu *cu, const char *name,
+ 					     const int include_decls, bool unions, type_id_t *idp)
+@@ -1034,12 +991,6 @@ struct tag *cu__find_struct_by_name(const struct cu *cu, const char *name,
+ 	return __cu__find_struct_by_name(cu, name, include_decls, false, idp);
+ }
+ 
+-struct tag *cu__find_struct_or_union_by_name(const struct cu *cu, const char *name,
+-						    const int include_decls, type_id_t *idp)
+-{
+-	return __cu__find_struct_by_name(cu, name, include_decls, true, idp);
+-}
+-
+ static struct tag *__cus__find_struct_by_name(struct cus *cus, struct cu **cu, const char *name,
+ 					      const int include_decls, bool unions, type_id_t *id)
+ {
+@@ -1069,12 +1020,6 @@ struct tag *cus__find_struct_by_name(struct cus *cus, struct cu **cu, const char
+ 	return __cus__find_struct_by_name(cus, cu, name, include_decls, false, idp);
+ }
+ 
+-struct tag *cus__find_struct_or_union_by_name(struct cus *cus, struct cu **cu, const char *name,
+-					      const int include_decls, type_id_t *idp)
+-{
+-	return __cus__find_struct_by_name(cus, cu, name, include_decls, true, idp);
+-}
+-
+ struct function *cu__find_function_at_addr(const struct cu *cu,
+ 					   uint64_t addr)
+ {
+@@ -1135,19 +1080,6 @@ out:
+ 	return pos;
+ }
+ 
+-struct cu *cus__find_cu_by_name(struct cus *cus, const char *name)
+-{
+-	struct cu *pos;
+-
+-	cus__lock(cus);
+-
+-	pos = __cus__find_cu_by_name(cus, name);
+-
+-	cus__unlock(cus);
+-
+-	return pos;
+-}
+-
+ struct cu *cus__find_pair(struct cus *cus, const char *name)
+ {
+ 	struct cu *cu;
+@@ -1568,23 +1500,6 @@ bool class__has_flexible_array(struct class *class, const struct cu *cu)
+ 	return class->has_flexible_array;
+ }
+ 
+-const struct class_member *class__find_bit_hole(const struct class *class,
+-					    const struct class_member *trailer,
+-						const uint16_t bit_hole_size)
+-{
+-	struct class_member *pos;
+-	const uint16_t byte_hole_size = bit_hole_size / 8;
+-
+-	type__for_each_data_member(&class->type, pos)
+-		if (pos == trailer)
+-			break;
+-		else if (pos->hole >= byte_hole_size ||
+-			 pos->bit_hole >= bit_hole_size)
+-			return pos;
+-
+-	return NULL;
+-}
+-
+ void class__find_holes(struct class *class)
+ {
+ 	const struct type *ctype = &class->type;
+diff --git a/dwarves.h b/dwarves.h
+index 8f1640e4247d5115..99e9d183c853ea8b 100644
+--- a/dwarves.h
++++ b/dwarves.h
+@@ -196,17 +196,12 @@ void cus__remove(struct cus *cus, struct cu *cu);
+ void cus__print_error_msg(const char *progname, const struct cus *cus,
+ 			  const char *filename, const int err);
+ struct cu *cus__find_pair(struct cus *cus, const char *name);
+-struct cu *cus__find_cu_by_name(struct cus *cus, const char *name);
+ struct tag *cus__find_struct_by_name(struct cus *cus, struct cu **cu,
+ 				     const char *name, const int include_decls,
+ 				     type_id_t *id);
+-struct tag *cus__find_struct_or_union_by_name(struct cus *cus, struct cu **cu,
+-					      const char *name, const int include_decls, type_id_t *id);
+ void *cu__tag_alloc(struct cu *cu, size_t size);
+ void cu__tag_free(struct cu *cu, struct tag *tag);
+ struct tag *cu__find_type_by_name(const struct cu *cu, const char *name, const int include_decls, type_id_t *idp);
+-struct tag *cus__find_type_by_name(struct cus *cus, struct cu **cu, const char *name,
+-				   const int include_decls, type_id_t *id);
+ struct function *cus__find_function_at_addr(struct cus *cus, uint64_t addr, struct cu **cu);
+ void cus__for_each_cu(struct cus *cus, int (*iterator)(struct cu *cu, void *cookie),
+ 		      void *cookie,
+@@ -510,8 +505,6 @@ struct tag *cu__tag(const struct cu *cu, const uint32_t id);
+ struct tag *cu__type(const struct cu *cu, const type_id_t id);
+ struct tag *cu__find_struct_by_name(const struct cu *cu, const char *name,
+ 				    const int include_decls, type_id_t *id);
+-struct tag *cu__find_struct_or_union_by_name(const struct cu *cu, const char *name,
+-					     const int include_decls, type_id_t *id);
+ bool cu__same_build_id(const struct cu *cu, const struct cu *other);
+ void cu__account_inline_expansions(struct cu *cu);
+ int cu__for_all_tags(struct cu *cu,
+@@ -1530,10 +1523,6 @@ static inline int class__is_declaration(const struct class *cls)
+ 	return cls->type.declaration;
+ }
+ 
+-const struct class_member *class__find_bit_hole(const struct class *cls,
+-					   const struct class_member *trailer,
+-						const uint16_t bit_hole_size);
+-
+ #define class__for_each_member_from(cls, from, pos)			\
+ 	pos = list_prepare_entry(from, class__tags(cls), tag.node);	\
+ 	list_for_each_entry_from(pos, class__tags(cls), tag.node)	\
+@@ -1605,8 +1594,6 @@ const char *base_type__name(const struct base_type *btype, char *bf, size_t len)
+ 
+ size_t base_type__name_to_size(struct base_type *btype, struct cu *cu);
+ 
+-bool base_type__language_defined(struct base_type *bt);
+-
+ struct array_type {
+ 	struct tag	tag;
+ 	uint32_t	*nr_entries;
 -- 
 2.55.0
 
