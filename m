@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30C03463B82;
-	Wed, 29 Jul 2026 19:07:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B68B463B6C;
+	Wed, 29 Jul 2026 19:07:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785352076; cv=none; b=GIlk7k7a2Se12stVT2/e2s8yd34YBPTmirOPN9poVZnTcLPHJ+z9U6iAHlqJLNpW7DnnqLyVPYvo54K6G8bL7jZWouFwlWHm1TsIP2YVpQFY8G87QvceLThrTJWHPSRctYBl5WcSIuBD7qxX35V4+k2V3iWF3Sil48QJAz+a8kM=
+	t=1785352079; cv=none; b=d27xmHpzJUwNENq50osw6lyFC41lmGG8XTIqzz058Hd3MvDhj1KiXseXJ+cvkjTRXh5F0GZYrg37O8BkYVnl8/CAvzdByO8wasR/fY8UP8OqG7tA5h5zHHZhhBM65v7OfaPLihJiax1TEOn7V4LkMBki87+SfoCiIwCgyjWfd5w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785352076; c=relaxed/simple;
-	bh=5uxvzmM6Slou7eFhc0207KSAd05TIguNFK6GMWfHrPs=;
+	s=arc-20240116; t=1785352079; c=relaxed/simple;
+	bh=4xaGBmI2s6txN4WNlc8mY1taLA9SAPyIzmsSR6ym9Xk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=qY4PBs7MGQ/e6BcjKU0DdPFlwor+ZfmKivLYHnIOKcarO6A8SqzE+MRhxA2mOmkR1jv2zVbU4/R7LmTaw+svoeH1atp3Pmagr/fy8+cq5akmqvqWxpNvG0d2889ASNq57oJfjfHkAEi+hyXk2gWKhSvcFNx9YiGInc+Qaqybx3Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AZfqJGuN; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version:Content-Type; b=j1lHcEn8kIztPLWEbeJvBCuUwFNJ6Xj+0qxN44fFKy5Qr21l/drQ/7yGcB+ic5EvgtT2bOlmZxyBKM7NwAxd+IdjP7KUFAVzAcaU/B+cH3EeKOUoYzWEG2+xEREKwU+5ucimzIoloPLIMUZqolrMHDFCZNI1aNya/4AOAzzd4P4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MhqcWpc8; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AZfqJGuN"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E74421F000E9;
-	Wed, 29 Jul 2026 19:07:52 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MhqcWpc8"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 352C71F00A3A;
+	Wed, 29 Jul 2026 19:07:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785352074;
-	bh=tV+pS6tmGuAwsE636hIpf5Xg38IBOKHJHNr7gU+tLw4=;
+	s=k20260515; t=1785352077;
+	bh=1A3bIfssB7WAn3TNln8+Px3u3vzHXPdnrDMkW4c8gn0=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=AZfqJGuNYSIL2k3Zvgwqn4RLffbnUF1WH8MxfoFH12mS22AX+qNEhIzRRJ9YL0WB4
-	 Sa+/h02AdhWYRwNXFJ9tinP81xcfZY+wxb701gdEO5mux9f8b4sNpJYMOr4nLkZgx+
-	 T5rKtLLOgO2vFUYeraxohue3WUSIA/W0VuQVxOBcLlP/jAJ++QevYikaZTYSXUl4nF
-	 MDoQ0SLqBCAKAhrPbE0zaaKlf/FXomqogbFOvJ3hJwBcGPNC+i/0ITb+xWmRzutPro
-	 RapM/vKtundBhVlGityURVcWHnB6Nw9WJBdOdH/T/0tieVJFu+DfYZCG7YQy5o/Y2E
-	 +5recaI/s1fCw==
+	b=MhqcWpc8JHd2lYTsB0W8rduyz2aaRqnHpIhA/AU4o2QhpS5Y9ehjvZAHiSrYR3Q97
+	 U8wZcagnhwZEuoZm4oMBQxM3bI5i7JAsYDS811PPQX6nbEEwpivqSbtSHUeRb9fvxx
+	 5aa+U2LhPrvEYtYq1d+ArjMMHnvUw3HJD6WwpCwMsoRIKQf/97FKw3tHKYna1nYw9l
+	 6j226Bo3HBv4PswuuqS2Pt3KQsTjP8R8kfeK0oMH1SSYw+xeodjlD3g+IM3bMcR9Oe
+	 z1FZ1Iw8LSJgeMA+2bh4b33DBInFWu9LcmAplLPMtf2V3TluXScJZclKQimsdH8eLt
+	 vyKbPahIsc97g==
 From: Arnaldo Carvalho de Melo <acme@kernel.org>
 To: Alan Maguire <alan.maguire@oracle.com>
 Cc: Jiri Olsa <jolsa@kernel.org>,
@@ -35,9 +35,9 @@ Cc: Jiri Olsa <jolsa@kernel.org>,
 	Andrii Nakryiko <andrii@kernel.org>,
 	Yonghong Song <yonghong.song@linux.dev>,
 	Arnaldo Carvalho de Melo <acme@redhat.com>
-Subject: [PATCH 07/31] dwarves: Don't search for holes before member byte sizes are cached
-Date: Wed, 29 Jul 2026 16:07:07 -0300
-Message-ID: <20260729190733.72876-8-acme@kernel.org>
+Subject: [PATCH 08/31] dwarf_loader: Allocate type_dcu via dwarf_cu__new to fix dangling stack pointer
+Date: Wed, 29 Jul 2026 16:07:08 -0300
+Message-ID: <20260729190733.72876-9-acme@kernel.org>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20260729190733.72876-1-acme@kernel.org>
 References: <20260729190733.72876-1-acme@kernel.org>
@@ -47,99 +47,149 @@ List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
 From: Arnaldo Carvalho de Melo <acme@redhat.com>
 
-cus__add() called cu__find_class_holes() which ran class__find_holes()
-on all structs before cu__finalize() had cached member byte_sizes via
-class_member__cache_byte_size(). In the merge path, cus__add() is
-called during the CU-processing loop, but cu__finalize() runs after
-the loop completes. With uncached byte_sizes (still 0), every member
-appeared zero-sized, producing phantom holes between contiguous members.
-The holes_searched flag then prevented re-computation when
-class__find_holes() was called again during printing.
+In cus__load_module(), type_dcu was declared on the stack and passed
+to __cus__load_debug_types(), which stores the pointer in type_cu->priv.
+After cus__load_module() returns, type_cu->priv points to a dead stack
+frame.  When dwarf_cu__delete() later calls cu__free(cu, cu->priv), it
+passes an invalid stack address to free(), causing heap corruption or a
+crash.
 
-This caused 36 false "BRAIN FART ALERT!" warnings and phantom "XXX 8
-bytes hole, try to pack" messages when processing Firefox debug info,
-all on Rust vtable/trait types where members are contiguous at 8-byte
-intervals.
+Move the allocation into __cus__load_debug_types() using dwarf_cu__new(),
+which allocates through cu__zalloc() — respecting the CU's obstack
+setting so that the type_dcu lifetime is tied to the type_cu that owns
+it and cleanup goes through the normal dwarf_cu__delete() path.
 
-Before (Firefox, 152.0-1.fc44.x86_64):
-
-  $ pahole -F dwarf firefox-*.debug 2>&1 | grep -c "BRAIN FART"
-  36
-
-After:
-
-  $ pahole -F dwarf firefox-*.debug 2>&1 | grep -c "BRAIN FART"
-  0
-
-All consumers already call class__find_holes() lazily, guarded by the
-holes_searched flag, so the eager call in cus__add() was redundant.
-
+Fixes: 2938a70e1e2a73ff ("Add support for .debug_types sections.")
+Reported-by: Sashiko:gemini-3-1-pro-preview # Running on a local machine
+Assisted-by: Claude:claude-sonnet-4-5
 Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
 ---
- codiff.c  |  3 +++
- ctracer.c |  1 +
- dwarves.c | 11 -----------
- 3 files changed, 4 insertions(+), 11 deletions(-)
+ dwarf_loader.c | 41 +++++++++++++++++++++++++----------------
+ 1 file changed, 25 insertions(+), 16 deletions(-)
 
-diff --git a/codiff.c b/codiff.c
-index 9e5c56546c314231..72a2c4d720f7ac78 100644
---- a/codiff.c
-+++ b/codiff.c
-@@ -286,6 +286,9 @@ static void diff_struct(const struct cu *new_cu, struct class *structure,
+diff --git a/dwarf_loader.c b/dwarf_loader.c
+index 14c90080f538e10d..b87519fa73405ff7 100644
+--- a/dwarf_loader.c
++++ b/dwarf_loader.c
+@@ -3889,7 +3889,7 @@ static int cu__set_common(struct cu *cu, struct conf_load *conf,
  
- 	assert(class__is_struct(new_structure));
+ static int __cus__load_debug_types(struct cus *cus, struct conf_load *conf, Dwfl_Module *mod, Dwarf *dw, Elf *elf,
+ 				   const char *filename, const unsigned char *build_id,
+-				   int build_id_len, struct cu **cup, struct dwarf_cu *dcup)
++				   int build_id_len, struct cu **cup, struct dwarf_cu **dcup)
+ {
+ 	Dwarf_Off off = 0, noff, type_off;
+ 	size_t cuhl;
+@@ -3897,6 +3897,7 @@ static int __cus__load_debug_types(struct cus *cus, struct conf_load *conf, Dwfl
+ 	uint64_t signature;
  
-+	class__find_holes(structure);
-+	class__find_holes(new_structure);
+ 	*cup = NULL;
++	*dcup = NULL;
+ 
+ 	while (dwarf_next_unit(dw, off, &noff, &cuhl, NULL, NULL, &pointer_size,
+ 			       &offset_size, &signature, &type_off)
+@@ -3904,6 +3905,7 @@ static int __cus__load_debug_types(struct cus *cus, struct conf_load *conf, Dwfl
+ 
+ 		if (*cup == NULL) {
+ 			struct cu *cu;
++			struct dwarf_cu *dcu;
+ 
+ 			cu = cu__new("", pointer_size, build_id,
+ 				     build_id_len, filename, conf->use_obstack);
+@@ -3913,17 +3915,18 @@ static int __cus__load_debug_types(struct cus *cus, struct conf_load *conf, Dwfl
+ 				return DWARF_CB_ABORT;
+ 			}
+ 
+-			if (dwarf_cu__init(dcup, cu) != 0) {
++			dcu = dwarf_cu__new(cu);
++			if (dcu == NULL) {
+ 				cu__delete(cu);
+ 				return DWARF_CB_ABORT;
+ 			}
+-			dcup->cu = cu;
+ 			/* Funny hack.  */
+-			dcup->type_unit = dcup;
+-			cu->priv = dcup;
++			dcu->type_unit = dcu;
++			cu->priv = dcu;
+ 			cu->dfops = &dwarf__ops;
+ 
+ 			*cup = cu;
++			*dcup = dcu;
+ 			cus__add(cus, cu);
+ 		}
+ 
+@@ -4488,27 +4491,30 @@ static int cus__load_module(struct cus *cus, struct conf_load *conf,
+ 	int build_id_len = 0;
+ #endif
+ 	struct cu *type_cu;
+-	struct dwarf_cu type_dcu;
++	struct dwarf_cu *type_dcu;
+ 	int type_lsk = LSK__KEEPIT;
+ 	int lsk_worker_status = LSK__ABORT;
+ 
+ 	int res = __cus__load_debug_types(cus, conf, mod, dw, elf, filename, build_id, build_id_len, &type_cu, &type_dcu);
+-	if (res != 0) {
++	if (res != 0)
+ 		return res;
+-	}
+ 
+ 	if (type_cu != NULL) {
+ 		cu__finalize(type_cu, cus, conf);
+-		type_lsk = cus__steal_now(cus, type_cu, conf);
+-		if (type_lsk == LSK__DELETE) {
++		if (conf && conf->steal)
++			type_lsk = conf->steal(type_cu, conf);
++		/* Defer cu__delete() for LSK__DELETE until after main
++		 * CUs are processed — they need type_dcu alive for
++		 * DW_FORM_ref_sig8 resolution.  Remove from the list
++		 * now so the consumer doesn't see it twice. */
++		if (type_lsk == LSK__DELETE)
+ 			cus__remove(cus, type_cu);
+-		}
+ 	}
+ 
+ 	if (cus__merging_cu(dw, elf)) {
+ 		res = cus__merge_and_process_cu(cus, conf, mod, dw, elf, filename,
+ 						build_id, build_id_len,
+-						type_cu ? &type_dcu : NULL);
++						type_cu ? type_dcu : NULL);
+ 	} else {
+ 		struct dwarf_cus dcus = {
+ 			.off      = 0,
+@@ -4518,7 +4524,7 @@ static int cus__load_module(struct cus *cus, struct conf_load *conf,
+ 			.dw       = dw,
+ 			.elf      = elf,
+ 			.filename = filename,
+-			.type_dcu = type_cu ? &type_dcu : NULL,
++			.type_dcu = type_cu ? type_dcu : NULL,
+ 			.build_id = build_id,
+ 			.build_id_len = build_id_len,
+ 			.nr_cus_created = 0,
+@@ -4527,12 +4533,15 @@ static int cus__load_module(struct cus *cus, struct conf_load *conf,
+ 		lsk_worker_status = dcus.lsk_status;
+ 	}
+ 
++	/* Deferred type CU cleanup: now that main CUs have finished
++	 * resolving DW_FORM_ref_sig8 refs through type_dcu, it is
++	 * safe to free the type CU. */
++	if (type_cu != NULL && type_lsk == LSK__DELETE)
++		cu__delete(type_cu);
 +
- 	diff = class__size(structure) != class__size(new_structure) ||
- 	       class__nr_members(structure) != class__nr_members(new_structure) ||
- 	       check_print_members_changes(structure, cu,
-diff --git a/ctracer.c b/ctracer.c
-index 6894766abc236b45..f3f7f937bb981a58 100644
---- a/ctracer.c
-+++ b/ctracer.c
-@@ -354,6 +354,7 @@ static struct class *class__clone_base_types(const struct tag *tag,
- 	if (clone == NULL)
- 		return NULL;
+ 	if (res && lsk_worker_status == LSK__ABORT)
+ 		return res;
  
-+	class__find_holes(clone);
- 	type__for_each_data_member_safe(&clone->type, pos, next) {
- 		struct tag *member_type = cu__type(cu, pos->tag.type);
- 
-diff --git a/dwarves.c b/dwarves.c
-index 95a8dcd66f861be9..57a4bd063cc9413d 100644
---- a/dwarves.c
-+++ b/dwarves.c
-@@ -506,15 +506,6 @@ reevaluate:
- 	return result;
+-	if (type_lsk == LSK__DELETE)
+-		cu__delete(type_cu);
+-
+ 	return DWARF_CB_OK;
  }
  
--static void cu__find_class_holes(struct cu *cu)
--{
--	uint32_t id;
--	struct class *pos;
--
--	cu__for_each_struct(cu, id, pos)
--		class__find_holes(pos);
--}
--
- struct cus {
- 	uint32_t	 nr_entries;
- 	struct list_head cus;
-@@ -567,8 +558,6 @@ void cus__add(struct cus *cus, struct cu *cu)
- 	cus__lock(cus);
- 	__cus__add(cus, cu);
- 	cus__unlock(cus);
--
--	cu__find_class_holes(cu);
- }
- 
- static void ptr_table__init(struct ptr_table *pt)
 -- 
 2.55.0
 
