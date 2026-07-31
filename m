@@ -1,88 +1,87 @@
 Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26C333BE652;
-	Fri, 31 Jul 2026 10:11:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A3403AD529;
+	Fri, 31 Jul 2026 12:52:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.165.32
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785492682; cv=fail; b=WPOvu2rA3M54jGOsCHp4r78rMjcwkfgYGKZw9+J/595GQqYFhaAQrf9oxU6glGJkGo0Uy0KEarihhs8RH0aoUgZzM8n7Oj686qG7MkmcLXHV9ZU9rVAELEP0fpY/WFvM3Rd6D1hLZ6MIehsHDI7BtefoXlV4B0gTjFoGZrn2Z18=
+	t=1785502377; cv=fail; b=deP/u/7b2pQ5pL9cmvlIjD/udqx1lQdBVnmV8SD2U001IaK4MBwc8bn2jufELNyk7nR+WT/jjor5zByjgdO0naX3ZV+v2ZW/89EpA/TkraJWIfN21MkfK8TiWxrgedifwLLQIqyIACWiG7zp2nRcVxTu1p8jZPSzPKJWYaAWhBU=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785492682; c=relaxed/simple;
-	bh=E48NLNuC8YhEcaIFLENKQGNjv3Ux32ZVWT7/8pI0b0s=;
+	s=arc-20240116; t=1785502377; c=relaxed/simple;
+	bh=3T5+KCl+ybeUAIbNgya9KJE8opQc/qIrLb33s4+7kHo=;
 	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=Dc01Mbpv6ZDEpAKl8uDraYY+j9hhP8THuDNSnyRqX/WQ/nuBdPJOBRm8GhhAAgTTLWHufvCM8i6jRwj9TIwLuNN9MgBtSphr6LsIE5ifblxcmhMORdaBOMWS+sfap8frDoSy4MBbJjZJlefAmW+EA4SWxd+QBfNGHVTVaR8ij3Q=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=bCu+Z3Yy; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=ZrkyB8z9; arc=fail smtp.client-ip=205.220.165.32
+	 Content-Type:MIME-Version; b=a6UAsaJE8ATT8vxpnQGbgRR0Dt0PAXId+BJUA27qa2J796SPchyFwdC7KvTAlRMsjLt90GR+jtEz0gZV4+SamPl+Mm4LfSxFbi94c621XsDixmR6kC6yrtlcNLAs+4gGxWoJVdc/nKbpzakuPjbPJIeeYDPerVs7XjUoZF34gxI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=Ns+HCkOr; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=FPeo20BY; arc=fail smtp.client-ip=205.220.165.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="bCu+Z3Yy";
-	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="ZrkyB8z9"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="Ns+HCkOr";
+	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="FPeo20BY"
 Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 66V1UlMP2516422;
-	Fri, 31 Jul 2026 10:10:58 GMT
+	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 66VBRoJF1417159;
+	Fri, 31 Jul 2026 12:52:49 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
 	:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=
-	corp-2025-04-25; bh=KL35WgBmGXn/0wZtVpKGuDLNomkYug934gPQq2ufGIY=; b=
-	bCu+Z3YyPKgIHNa8jDa1oOtDiUAyEeTNCqW/fNl6ZbOGrPqFYu5CnJ2xBgqp6JPM
-	ST28X3ATgDxo9Ngq0Y8OUzdh+Zvxk1MB+dHOMBSkP6kLxkYQFC4lPDpnrfljsXWx
-	oDPfIK+Uqd2tKyl7qevMn8/tMghI7rm8jF0A7ohZ8t8S8DHPcT+IXywjKgTn4v9S
-	LLK++yl1UrFojq2WVyLftJFJxGdZhCv6aagQuDaJEiBHCvCNIts/jA5aZ3Ye57q0
-	gwGlPsIpPi94SNnuJxYrgc7i3DtpMFNjzOODRar0bV9iBattKLLF+89xlmlOfZ4Q
-	uJ2OgsX1E9EeIO7i3HTMcA==
-Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4fmr1dhej5-1
+	corp-2025-04-25; bh=/VJKp/6DliHsaZHW6CePj9LbqH7kwBVWAJ0bz+SP9AE=; b=
+	Ns+HCkOrPtih64HT8q8N4cwVj/Bedde/ahsGpofqNV/CR7ir+nsEJH1KeBrTnY5j
+	m3jrpFe/hFQFZ/X2mW86YUGrb8Y4qHZKqDr+57u1CeEfdIgsW5/EGjxSZP3JvQyE
+	DDPmsUpjnNIxYmHheHcho7l6kvLIn1lXU/8n8ErIWnNt6UdDK7fklRE12rNGz5Us
+	Mr9YbxNp7Q25HHKlVqLHBdIeAopU2WFoQFP55WCfr2t7rsuPUqfs0rRc/irHRby1
+	KnKZsvwXDP2N6mq0WcON5vp8cKi3HMhFWzVnYwUSrJgS4HjnC/aEo7Z9SVfhBbFO
+	OYWkv7xA82CKwr8Izw87qg==
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4fmr1dj2qp-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 31 Jul 2026 10:10:57 +0000 (GMT)
-Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.7/8.18.1.7) with ESMTP id 66VAA575034542;
-	Fri, 31 Jul 2026 10:10:57 GMT
-Received: from bl0pr03cu003.outbound.protection.outlook.com (mail-eastusazon11012021.outbound.protection.outlook.com [52.101.53.21])
-	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 4fqjww7ff0-1
+	Fri, 31 Jul 2026 12:52:48 +0000 (GMT)
+Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.7/8.18.1.7) with ESMTP id 66VCo6Lc022369;
+	Fri, 31 Jul 2026 12:52:48 GMT
+Received: from ph7pr06cu001.outbound.protection.outlook.com (mail-westus3azon11010019.outbound.protection.outlook.com [52.101.201.19])
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 4frtugbchk-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Fri, 31 Jul 2026 10:10:57 +0000 (GMT)
+	Fri, 31 Jul 2026 12:52:47 +0000 (GMT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=cjCwAFnyN3UcLa7IHn6TqoWtYSkb2Ne6ciQyiZqOA2Bx6NUB9ZglgGkGwMTGg3te7QxtCCFFKNq9qmRkestBY2Z1kq3YQhmmkFWVcMthvJgYdeDvxmANj9Ti+F+KaxWZc3phRLtpBR9VlYKtOC6SXmnRP5A3IVXAh+V+sY7iXiMiFSmaGzbZePrv4/DhneI1EzXOkSlYXy8DMU1qmiAbijciyBYwpN0zjNMItts7mm28mDtVKZNqxELLhX4TaSB+w5BerByDXF5NV977uvVVMxxp2DhcCz4sEiE3WaOHYGCbZqhzCwJVOqPN73e3dEAV/8vVEGVP15afpg5JjnHXtA==
+ b=pzIM4Wztj+2jhcq54uuyFiJzoO3k87VMkBEJPEpHHhPccuNowGubcGqDKRbdSTRqqC3RDgTL80xPthOrChCPPhvKlMDAO+9IhqU6nPx460+WDHkVdrGJUT8598W+UuRkYhil1UwGQYwcKvqdF7IyCEY+0CLLGJOCQuYsSI6YLIlSDg9XxWY+XuBzqKiGdRE70mZpuaH4ThAoHxJSv9b7plsLayZ4OzxY2ia9qMqGXioacWawdN1peytePfz7s4bQZUeUisXfX4aIKUAU3IHAWd9wjdwUDrmgf1QL+hXKspCxMC25BTgyiant4947LIFoWCXJRL3XBRk6GuOVXRovWQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=KL35WgBmGXn/0wZtVpKGuDLNomkYug934gPQq2ufGIY=;
- b=JzG57w2ekpMqQmfePtPiOGEnNwlzuNJpOiWxYXokqpAJ2AB75udKejulJeboVxov8GRa7gYy8aDOAhyWV5lptBDNUVYS2nFpq5yixR41mvwCdKHMYjBwH7lZHScPWkNgUcoLYVYphnR609IUwvwjuzHCp8C+feDp16HWqnVnRR2Uo+vU78pzzyh7ssADbpt9VEOMT86FwLM8ASNN9E/ZBFmlTIhxPxTmbHI6ubUabF4Y5vGWxqdy42ZSoDtSnyNCh5oD6zNxmS2NgU0naA/m2m+epT2DMnvd9Cyltxq3i/l6wCGitN/KmCta3OkPIkJxW0EzWwOi7GDerYaUbDpDFA==
+ bh=/VJKp/6DliHsaZHW6CePj9LbqH7kwBVWAJ0bz+SP9AE=;
+ b=CeFvakB0S1gbgn3Jl5B9OG2F1rKrOGL66r2/XWBGkYPBESgmtoXaE2+gudixae4TtBDmvtb6jaQ7izgXkjGlVjSGgW5feY6Br8DtyTrJt6Gs+4Za8a4g+PiA7HDsPMKZzI6408Ym/43uy3kB6uqFDmCbss+51sGVeIpjbw33osVKNaRMdvee2x55hsHjnYtm0SYovt95TDAAF+w4RyKU4SvrxGVshOR26faCGd8IZqvldfcthQOCN2XbBEoE1ZZ9pjmBBV2cE0IjA881k+2tomEwyoAzamsn8eUJAXKQbPE2zAZP1w8xOygnRKnRRCfn/R3Tbokuiy5Zvi4kiP6IRw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
  dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=KL35WgBmGXn/0wZtVpKGuDLNomkYug934gPQq2ufGIY=;
- b=ZrkyB8z9NAE4AYAPyG5Ox6FvBudME8O4bIfluWkegHozU+WQpflKAnxkWbJ/TG+SBiCjJc0mRh5gXsWijqa/Lhert7LJ4aVaCNca6JrNFDBb6JBh7XWnE4re1cB5c02lO1gT13s0SF9v5nwvxCOX4IBbhiTh/eZ9dV+GMWJjdHY=
-Received: from BN0PR10MB4901.namprd10.prod.outlook.com (2603:10b6:408:126::19)
- by MN7PR10MB969465.namprd10.prod.outlook.com (2603:10b6:208:5f1::20) with
+ bh=/VJKp/6DliHsaZHW6CePj9LbqH7kwBVWAJ0bz+SP9AE=;
+ b=FPeo20BYyXESrsI5OwqZnHAIuXlus7+KZxrPS7vRexJpohjhYQZBOcUmKVjZeqvX3u4CThlR3D0ISaqsRGgHIt7GqiBspIvRrIcmUV3webrOKr0dExDWfCFpUrtnlluswvpSpr1g4GBprmqqW+AUUgf2yU01eALOoQ4OfBpME6U=
+Received: from DS7PR10MB4909.namprd10.prod.outlook.com (2603:10b6:5:3b0::11)
+ by EAYPR10MB997951.namprd10.prod.outlook.com (2603:10b6:303:2da::17) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.270.15; Fri, 31 Jul
- 2026 10:10:54 +0000
-Received: from BN0PR10MB4901.namprd10.prod.outlook.com
- ([fe80::19a8:41b4:f519:1b79]) by BN0PR10MB4901.namprd10.prod.outlook.com
- ([fe80::19a8:41b4:f519:1b79%5]) with mapi id 15.21.0270.012; Fri, 31 Jul 2026
- 10:10:54 +0000
-Message-ID: <96d51330-0abf-4533-9731-5334b4018845@oracle.com>
-Date: Fri, 31 Jul 2026 11:10:50 +0100
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.270.16; Fri, 31 Jul
+ 2026 12:52:46 +0000
+Received: from DS7PR10MB4909.namprd10.prod.outlook.com
+ ([fe80::3f78:c489:86a0:3622]) by DS7PR10MB4909.namprd10.prod.outlook.com
+ ([fe80::3f78:c489:86a0:3622%4]) with mapi id 15.21.0270.015; Fri, 31 Jul 2026
+ 12:52:46 +0000
+Message-ID: <e4926c40-9788-4f3f-991f-6833ade41000@oracle.com>
+Date: Fri, 31 Jul 2026 13:52:40 +0100
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH dwarves] btf_encoder: Ensure the first same-name function
- has a non-zero address
-To: Yonghong Song <yonghong.song@linux.dev>,
-        Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
-        dwarves@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
-        bpf@vger.kernel.org, kernel-team@fb.com
-References: <20260728023722.1978868-1-yonghong.song@linux.dev>
+Subject: Re: [PATCHES 00/31] pahole: Bug fixes and small improvements
+To: Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc: Jiri Olsa <jolsa@kernel.org>, Clark Williams <williams@redhat.com>,
+        dwarves@vger.kernel.org, bpf@vger.kernel.org,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Yonghong Song <yonghong.song@linux.dev>
+References: <20260729190733.72876-1-acme@kernel.org>
 Content-Language: en-GB
 From: Alan Maguire <alan.maguire@oracle.com>
-In-Reply-To: <20260728023722.1978868-1-yonghong.song@linux.dev>
+In-Reply-To: <20260729190733.72876-1-acme@kernel.org>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR4P281CA0284.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:e6::8) To BN0PR10MB4901.namprd10.prod.outlook.com
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: FR4P281CA0197.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:e5::7) To BN0PR10MB4901.namprd10.prod.outlook.com
  (2603:10b6:408:126::19)
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
@@ -91,199 +90,287 @@ List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN0PR10MB4901:EE_|MN7PR10MB969465:EE_
-X-MS-Office365-Filtering-Correlation-Id: 9a3960d5-589c-48c4-40aa-08deeeec01d4
+X-MS-TrafficTypeDiagnostic: DS7PR10MB4909:EE_|EAYPR10MB997951:EE_
+X-MS-Office365-Filtering-Correlation-Id: 513699e5-208c-46b7-f073-08deef029dd2
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|23010399003|1800799024|376014|56012099006|10067099003|18002099003|22082099003|6133799003;
+	BCL:0;ARA:13230040|23010399003|376014|1800799024|366016|6133799003|56012099006|10067099003|22082099003|18002099003|3023799007;
 X-Microsoft-Antispam-Message-Info:
-	L0muvFc/3EMeNiWF53MYj1ljwQYvXIbHWviAl5Qw36Aj3Km/D7s1dgz34FYZbQHZfyJp0nmi44a99CHT7wfMVC1Gf/XXZwe8qQyMHJP0e4ODZEQJHegCZseDJGjN+OHerClIyvphBOQhFp/dHhVR+ZLjmU33E7cn1pA/wdZAk0lloiku9wNLUaItdE7YyjQ8H/PvNbkSjPXSkCBAViRpWMHmRD8J+5CCujohVpJnRcsR/Zo2qCglExY/ywdUP2BFyUqk1Rnzz6twkKGwb6n5h8EnCvj8oK9KWlPst36pjPm3lep9WFsaJ+qJCyiwqSqKi0wz/2WgenS9uvxDg3giBSE41rHdp7WMWd+NAs+mCF5gG/lL/9iz5J8ByIzFnPZTtzLZMn0sWwKy6XD4JeYBJG/w4w96ORnWem9Kb5MlWFGftTSdpxZzXLs/TbB1fjQYTkCXJxwN7mg95evwg2ICDBlzUvKk9udGILcd/uTCNxW29PHHdfaHYTQx8Q+yIcIINEVduo7mDTkjPg1siTAi8GTo00OTsg31SsuCSeN549SVPlMMmnwjK8tXOw7D6/sFjHJ/OPhfCKtZm2vTST3BKLFUKxVtd83zJzevIA5DPkJXk+9H+9KF1eQvQyWN82DIrz/XrBY0RKJtctAv7RKhUC3c6C+uem2PmyAtSfK271Q=
+	dYNpuFhd+ZUMjXNbNBPykw3fINKAdrUh6fgMVvUEd+6HmUS6FPxRPT9dYuOrUl0gLA+AaJp7OqseERlG5DGdtc6J8tXt8Di9MW9jlcEhGq+UH/exL+KtcZYQCozXNvN/dxwkDpuWKUFNs7COjoOBtO98YSFAVNkj8uQtpaP7ZNvoZ3KYxyEGvM4hZ1v8o4/mzhnzevkKxpd8QkPyNVuYMLrrQXlRiaPawxxtKNBtor199QGIsanINXtCWm95hncd2Hduy2mPDlLiqtDgf1FT0rvFmOxsWaDMlYkU47CH/OCDHuY6/3ghADjaKDtbP00d0M0+4ydiBLGiLlQ4Sxobi5uRbHJgmEFZ5qa1HdyzhzdADiN+/ZiHxUhUwBfSvmenmPh1Fml2WMEMTGF3uPHmkg3nGa7HuWinMl9T4wnjhT0vjYPIDThnk19D6RReWT+MwMIKx8J+Wkb2PU1JLlRgJhux7rg8/V992hLKiAYfy+MaUmX0ZBU7WxtbaF8wbAF3RVtvktTwEGrz36Y5EKS2gVebVia6Q842hzXX5wYyAZtzrlmdDYDNZ0SUEpnQoucfHaFRQOltvRZiIOkp3b3b4tLpwdaejjM2uhY6xFUSX9nIfGVO9Dvonf5sx9hMWROcWnTp3Km70PhnIE4WeBOt2ezo2ksqXhYK97UT61Kf3H0=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN0PR10MB4901.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(23010399003)(1800799024)(376014)(56012099006)(10067099003)(18002099003)(22082099003)(6133799003);DIR:OUT;SFP:1101;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR10MB4909.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(23010399003)(376014)(1800799024)(366016)(6133799003)(56012099006)(10067099003)(22082099003)(18002099003)(3023799007);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?RU5DQWQyZzczOHcrSTFia08yN3pGWjNwT3QxeExEUGpodmVuSjQyN2hLM2Js?=
- =?utf-8?B?Z2RESHVqOVBvVG9jbCsrZjM3Q29Ca3RDc1JpcU9VNytzVGVjUVVHN1I5TE5a?=
- =?utf-8?B?bVZ5TjdtRG00ZVU3OFllaXFYMXdVbGtsS1MxQ2hQY1RneWN3TkVhb1lwUHU4?=
- =?utf-8?B?ZWpzMmRSbUl0eVJKNi9qTUgzQ29kcHlKTHp0NlRHdUtoM1NZRjJ0dFJrWnZR?=
- =?utf-8?B?NUhxY29zMmk2THVDQ0N2Ri8wa1RTTTE5d0Y3bVQ1VFNEWDBtN1ZHUEVhYkpm?=
- =?utf-8?B?Qk5oM1ZtUzF5MkVndVI1bVlOUVo0ZEsycHQ5alh3VnIwTWNoZmlCemVsZ3g1?=
- =?utf-8?B?b3cxZmMxbzFTakVuRE1TVTdOdStUSnYraFN1aU0wa1NXWithNGVEMVhCbDVM?=
- =?utf-8?B?UlhtcmZFUEpTSXRzSHVySytXVW9BQ21OYVVKc0U5TmNXQXd1QWZRb0xMbG5v?=
- =?utf-8?B?Ukk1eUZJNVVPUXVVVXhJS2hhNGdMMWlHa1dRdVVYYTBIZlVRWFhWMWo0alFq?=
- =?utf-8?B?NytadW1TL1N1Sk1jck8yaURWcUo0NUFUKzFIaXNEZEJ6TTlDNS9uSHhTWFhY?=
- =?utf-8?B?dkhuUFhSV2NXZEozeGdTdEorVEdLK2lZdm9NT0s2dHJGOFZOMTFEMDVGS1RH?=
- =?utf-8?B?THVqbzZkTDNNRCtNYXlsWmdyZ1pvb0tWcWNxa2J5eFVLa1Y3NmRpRHpodEpk?=
- =?utf-8?B?WjRiV2Ezam5iTkNKa1RWc0RoOU5yRkY4cDl4ZmRmTi9yNEd5b1M0KzQwTitv?=
- =?utf-8?B?RytnV0VVMEQ3VW9WbklJOStpT0F3bVh1NGkxVkhtTUhmVUZGRGFNeTJkazhp?=
- =?utf-8?B?Q3dPaEMrZi8xTUt1R1dvOThGOXF1bzdkalJFWjkxWFlKaE5sWllOVG85RHpz?=
- =?utf-8?B?TjRUWXpOTmtxZHVWUEFrU0VpWjlxVlVlZVphanpnb056TnFaTER0cDRsUXZH?=
- =?utf-8?B?TGR4c1dJYkpPM2ZTUWZKWUhqclR0eTdjWkx4T1lEdUFlcVozWDdxbmhRTXR4?=
- =?utf-8?B?cDh3MG9Bais3ZW5vdldCYVpCeHozblNSaWVGZWhiR0tSR3FVQWdsMEF6Qlds?=
- =?utf-8?B?Q0l0cHR6Z09zL1M1UkpaNTlETFB0bjd4MkJaU05HSUF3Yk5oSUMxeVVIY3Vl?=
- =?utf-8?B?Qm5WblVCNkN2YktYRnNzYkhraTRLd05hTktkWGExeC8yQkVyNzFaOVNyZmRB?=
- =?utf-8?B?TzdDVXRlenVLQ3ROMkd0elhpZW5JNmE1T2ErelB0Y2tuSlM2VVVvQm9yVVMx?=
- =?utf-8?B?TlRITFNDbmpNV2tTbzRBMnZheDZEZHBMbWJaTk1qLzFkT2YwaVhuSHhJSms0?=
- =?utf-8?B?aHRnNzhFay9hRkxORWtka2tjaEtRcllYdUJ4L2RqdWxwR1YzZDVNVGNKckV3?=
- =?utf-8?B?c05qUTVoTWJmd00walVHa2RJd0F4SVNvbFo1QnlaRzNydTllRkI5OVkrZEpY?=
- =?utf-8?B?bk50NXhIb2Y3bjJCNERKN3o0Q2NQdmdaMGhsY3NOSy9WcTZ3dWhrcWcxT2VW?=
- =?utf-8?B?QW9URTYyY0dadjFpRW5GMEM1U2dqQ0JveERxdVo5ZEtlc1cwaGI4NDdQR2Jo?=
- =?utf-8?B?eXM5VXlodHRybFpSRmlYSVpPVEJjZjVMblFmdTBVQUF6WEZwWWhUWjE0Vjcw?=
- =?utf-8?B?ZUtnZVNjUVE5dVZjYlJEZEI0bnh6YTRlS3lOZG9hUHZBZTFON3FwMnFrMzc3?=
- =?utf-8?B?aHNRN2wzMzdGMGltNEFsM0c0dUpTaWdIMXgydEcxMDErYldlREV1T091NVBG?=
- =?utf-8?B?VDlPdk5SbXlKRU10eFdjT3RoMHJCZ24vUERuVDg0UXpKMG9zUi9rSjFSUitT?=
- =?utf-8?B?UUdaZUdJSlh5Y3pJNEc0UmNTQllIbGFtYVVDY2dFSWM2QzB0TXQrWllPOGR5?=
- =?utf-8?B?Ti9hMEFZM29pdlNRRjVqLytwakVERU01RE1DUms1bTNUS0YyNFF3WVk5VmRS?=
- =?utf-8?B?V2NVbHV0K1NIa2ozaXBiNzVoRjVDaTcxZU1vRlVqM0phOUV1WTlGSzlNb2pk?=
- =?utf-8?B?VllrcUo3Y0JEdFhVcEJiTWoxNnVYM045a21CUkdpT1hVZzJJbTkwTndORmJ6?=
- =?utf-8?B?WWwvVWRzcDNKUWNlZU1BZUFrQzJDMG1PRk9FZmtXUGEyOFIydHpsWi9NVklh?=
- =?utf-8?B?Ym1lMzJ2dU5rYmREM21VNVAvbWpzTTQ3ZHFaYm5GQjltMlNLN2x6TlE0Vytx?=
- =?utf-8?B?ZlVyQnJkQ2VvSlYyN2ExNXdXejU1dnBKVkZCYW5OdzE2L2Z5Vlo5b1pLU3Bw?=
- =?utf-8?B?QjNGbE9NM2hPbjBPeWlIa2t3b1dreitvQkZtYS92VEdJdVlNejhWWWpHQmJ5?=
- =?utf-8?B?aE90QjcyR2RVZkEzeDdZUzkySVNMSmZEWmthU2h6VjVRZVRSVUVhdz09?=
+	=?utf-8?B?eHp1ZTY0U0ZhTG5RcXp0OXZMeUh5NmJYOGMvMHhqOEJvb1hndUJYbWlrNktj?=
+ =?utf-8?B?cnVXZWVuTVlmL295MXB2enRuUFltVDVhVzVHcE5ZNVlCN0xDSWRDU0IxTDBI?=
+ =?utf-8?B?azlFMkZqemNPbXV3QlBsYlR2Z2RzYkxTU0hRSS9zeWdEbmU4UXo0KzJlZ3M4?=
+ =?utf-8?B?TTZUQ3FzNlFNK05WMmFlUXpsQURwQU9XaTNZdHBrNW8wL0lZY2dGQ0dWTFZZ?=
+ =?utf-8?B?Q1pSL1orb0VvWlQrV1V0UDJnR0syUzlpSG9PSWpHQ092SjZsaHZzSEtxVnQ0?=
+ =?utf-8?B?RFdodTVqcUxyQ0lGYk1nb0pCUlZtK3N3em1ZZ0dhUDVtTDZMSE5kLzFWSXhP?=
+ =?utf-8?B?YnFEQ0ZiSFVwenpRTUxYQW1adkNOQ2lXMm1wZkpvbEtYMlJVL1MxdzRRdUNx?=
+ =?utf-8?B?dndreCtWRTFMcWtCUVYrbnNkcG9BbDFmYzJxT1lqOHl0SEJkend6SlgyT3pl?=
+ =?utf-8?B?dUY3UEV5ZWZRN0l4K1hxYkVXS1NQb1dPU2dYRE0wT0ZIOVNIUDBZRXpONnlk?=
+ =?utf-8?B?c1dKeFM4ZEd2N2VXTmRrN1Fzc2RpcmdraFlhNk9keHRFSzhoVGNDdUY3aHl3?=
+ =?utf-8?B?T0JQektrdmZGc3pDWFNSYllmbE5JOCsyV3UzMGVjK3JHSWkzMllaOGtaU1Y1?=
+ =?utf-8?B?TEUyU3Z1dzYrOXAxZ1VuQUFCSEkxSTdUWCtleDgvZ0pUWkJBQURQWGdnUVFZ?=
+ =?utf-8?B?ZG9ZYXJVK0x5bXJUYjlBTWVBNDJ6eExQRzJxRnR1a0U5enZtQ09JV2NFOXhI?=
+ =?utf-8?B?dnBnanIzU3oxQ2llSFFha2RCM2pwWm8zVzJuV2ZkZ1FCVVMzNHB6bXJuT2ow?=
+ =?utf-8?B?WG8rNUhOZjhUMTFnN1AzcGlNWkdWcXI1dHBRZFU3Wmt0U0ladTdMSFQ5cjhy?=
+ =?utf-8?B?TWdRSE9Qa2w3dFhMc0Nra3VvdXRlb0R6bHVXOVRtajl4Mk0rSU4ySk5qU2Yw?=
+ =?utf-8?B?U2J6YzN5YzBUMHZHTndVN0RodnNJajNralV3U2NxZEZVUUJWcnExdjROS0dh?=
+ =?utf-8?B?SlRoNENuVDhJcHo4c29qcTVzQnh0SkR3Rkk5cTQ5NnZ4c083NWVpQjkvZ0No?=
+ =?utf-8?B?Tnc4UVlCQTFBK0ttbW52T1RETDI1MUZFdkxaMVliUy8yakk5dTQxNkFGUUsz?=
+ =?utf-8?B?MC9JWUQzZ05odTVYakVZbTVjRDdBSkF0bmIyTWZINjlVZTdmalJCbld6WFU0?=
+ =?utf-8?B?RXRXSlVadW5XV1VOWmk1dVp6MWJsYWVmS2k4UkJDNHo3eENnOEVaZkRLMDR3?=
+ =?utf-8?B?WXFma3pmdjNzck0zTkllVEJWZXEwaTZnMGJhVVlXTHo4ckorakRwbGJtSDBI?=
+ =?utf-8?B?SkpFdGp6YkJDdnBmV1hGc1JXdGdtTFpiRU04Qjhrc3loVXo1bHgwWGp4VllE?=
+ =?utf-8?B?dk5ZY3pIcG0zMEZCRE1URXNKWjl1bTVKbVcxVjdzN2IyVHRhbUoycTFGamE4?=
+ =?utf-8?B?dm5nWTU2RGFhS1gyMHVUY3RYbkZ3MXZCbDJXeVNRVU9aamJxOWFRNjhoWms3?=
+ =?utf-8?B?QjlJZEhLRlFiS2RXMkV4eWlhcVdjZmhYTUZuUjJMTlgyYVE0VUVhckxOSlc5?=
+ =?utf-8?B?dTYyNnRodEtWNFFuU213dDh0VUxZSmlGNGpDK0dVdjVqODZ6YXpZZm9pK0h1?=
+ =?utf-8?B?NVpTZzNSclhMNjVnVHduYU5FNFdYVzNkZFd5bzMvNmo0bUg2NHZNK1pKemE1?=
+ =?utf-8?B?RVB0eW5sLzZCSXRNTnhMcG5sWmZSVElpVWZJUCtpdjNvSXR3WW1oRkE1RWhL?=
+ =?utf-8?B?NWM3S3E2QVdDWUhkaWhxVWJkemFPdjNKWmRQcnBQaHJvVnB0YXg3VFJkRm9H?=
+ =?utf-8?B?TTVUUTMzYXNzSWNKUWJ0RHNqQlQwREY1bTRKOGJ3Uy80dHJXdVB2aWtXNlRy?=
+ =?utf-8?B?K0lpME8yRmZwWGtTa2VGa3dCbTMxVkxNN1p4ekptUHNnemxXWk1GV3pSMHJ1?=
+ =?utf-8?B?ZmYyS1BNN2VzOHRleFlMbEttcFVMeUdpRzNPSFBxL1graXNqeW0vcUFiQ0lF?=
+ =?utf-8?B?QSsvWDRhWnNpOVJwdjl4OFBCRDdRUlRKRjNjMm5USXRnd1h6NUxRdHVTNy9i?=
+ =?utf-8?B?Y1d3Z2tyWi84ZmV1cU5obG92ZVRUV3N5alJ0MVNER1JTSGlyeUlISHJDUmJu?=
+ =?utf-8?B?WkprdGRRcjBWMnJXN1VvUExGZUZobmwrQmt4OHVmTWw3WVVtVnQwN0NjWXJX?=
+ =?utf-8?B?YnBFM0dhUGhBU25QVGkvTWxLMGFBNDVjRERMdCtNTTcrbTUvWnRvcFloQWl0?=
+ =?utf-8?B?VmZxYTg4T1p2WDJzSzN1aHpVOS9YdkZmc1ZhSUhDVDY1Zk9qV01XeXlPSTVm?=
+ =?utf-8?B?YTk2K21mdXVLcnpONlAra1doWU9JNmVUODVMN0FvdUtFRU1aY3N5QT09?=
 X-Exchange-RoutingPolicyChecked:
-	aPxKmszxX19tS65HqBGHPD4DYDUfy1SW+e2HoAoFO1uPq8CIbQellCNsDWkH0lhX1rtKWFCtVXIs0HdsMv2zkBCccQSg0CW81uqPsxiywyHLStuuG7EOGNHs7NTYvJqtuxJkPtx2A98ha+GUm+rYR2BFrWHkDZHA7vbRxy2n4fiw7VskjoU/d+FFM44NHR2MbMMd//oMNP5YaoH5eYrxVlcxJWjPSvmj8wcho2eAJIabvmEtTbcpyn7n7l2vxOLgbF5Ktmw72wxDiVutVNhzugJItrCO95vroQXsAJL9V+UiawApnz2R8GHa5ZMWVANEcsVBf+yL2rYggWQ1otNZ+w==
+	Fgob1cGOFWtNglDAo4vWab2bqiPNbNJqt/mKBgWHFlX5N78DF90HozWpqu1Hsry+6M4whhcbD4NZX1zwXPOKXFfuupRCHCa4VNGCElbspHW5YJLlM3ku+s0J0i93BHvkg6wyY6o22ltKAFfio9Cvu78ODRD8pKSri3NLP63nfOTDy+R9C5vZAeepuN7UogT/UrNzAKy7DGJ+UPyxdkWhZwy6yERVYESNHPFQCZjLEsdYIUePPisvzQSrpw7zKLAND2DJ1cREwksSgMXJoZFB5Hu5bNo4OcRJc0AFVN/5hfOiD14qUwGy5mdXm84f+ZDE8bayMntfXyxZm/ELGuWWYQ==
 X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
-	tWolasPclgGh6POvAnM3ePjLw+TLYcokT0xK6qdUz2uBes/GLuG4Pm9dlqUi6kxyLQpgGTegomjCEWM4KE8EkEltkUuRvA4fiB7Dzb8Jp8HoPncN3vcLD9y8Jdchm5aLu3mwTuExV9w7DJfKwcTxJsTjEuJTezNPs7Alj58vbNM9o5Iec5ev+GIcahprYR1qipZDVQ/J7cYFFLpT+g+S6q2kbVPU1UK4MIFnLWcD4md7Yok4jHahzKp3m/+Wsopg7C2UdiKBc2gYHISutdmJbY2vVPUgY59S+N0zlEQcHNdrS4BMTKhU24tSNo9byHGHQAqDMrUFXNRUWizQpS1gwRx9p36Pgy8yUmLOgQuu6/MWvAiEIhE8YTi2SAuqJ0WGvmvxA7HqFclBK9dLyHrWngyLyh3gFNWSIwly66AcGEL2Z0vr2JRkZaZy+1T8njjhVaog+wLAIU4SNDKsmWuukHpsdPkjNQWONaDNDO2c+B5+/tit848qs4H7bqhe82U+glJJLO8XpBlYNWnRR+lTHix6RlnWdavJ45nAKeZJNTtRWaJ9kCWVVYEXr1TI8YCSQsTBp0AjGBmS6D4PkyqFv6WPGIogwOivr/GeXoZS7sY=
+	d0pWFjx2VVOTXH3FPsgoLmA9jf/q4Bo53eqazQVrUpBe8EwRjA9VoKAtw/pbY9zbX1wh399Rc2KZGrxefV5bQrECZTylFPp2StPo7qo79GrFdZk3ll4+D/x1CFzh8b2Wtq1Zb5e89+b2jIYbXi6a6O5hJzkPUlOtGv3Vhpv0MCgxsxP/YUVK8cnq2DCJHKWTrJwRZF+ZXiKA0ka3o8Hzde/rE7VZ786wIp8VUmRpmsAJdj4Sw0UG9ZY2PZ2xrJ5jKjoj2lkIfjyhyG4h45ObINBxUeb1nWSk/HYCfPo4HB07D0A313PMOK5h9Fh53jBveg8nHrbBWGvuVTb3E4he/rOHZmQ0zGZ7wi3VC+z8dDlk1F+2nDVzvkX+0aXVC1r2RKvD79V6gU4lZMpi9qsti7JbGVdL+ss6H9NJKFSPRd7JWCqPeEHwcHGVklNTikAgN770iKFodwUkGIyQqj7NpffUBYCxUkSwh3bXA1m/sOvhx5bbH6ETZdCVfaH5jFP1J8zN4jE/9+o90X7mhBACuIMOZjq+zkF1IcGuGdulFOD0qAGq9CyoYBVcU9TBAWfH/TKB6YhSmwntF3hiG0DAUuLLZuhYhFcqnQX/vGHUNt0=
 X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9a3960d5-589c-48c4-40aa-08deeeec01d4
+X-MS-Exchange-CrossTenant-Network-Message-Id: 513699e5-208c-46b7-f073-08deef029dd2
 X-MS-Exchange-CrossTenant-AuthSource: BN0PR10MB4901.namprd10.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Jul 2026 10:10:54.6532
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Jul 2026 12:52:45.9226
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: mxpHuIo0aVARmj2aDXvAxWUHCFTJzFv7Fd1IGRI/5ELiG4BbN2iHBhJplxhtIFPEklxoZ/xbSMnOnc8A14mL9Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN7PR10MB969465
+X-MS-Exchange-CrossTenant-UserPrincipalName: PDCSg7Znkr+8rtfeYp1ggihjWsX+piNDiY/Y9PHh4Br7MNsMZfgqW5x6IPyeZ8uieM7PcdtPNV6qllWRXWBM0w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: EAYPR10MB997951
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.134,FMLib:17.12.100.49
- definitions=2026-07-31_03,2026-07-30_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0
- mlxlogscore=999 spamscore=0 adultscore=0 malwarescore=0 lowpriorityscore=0
- phishscore=0 suspectscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.19.0-2606160000 definitions=main-2607310076
-X-Proofpoint-GUID: qazKgqUbm7SqaoM4qp_EZgP1cCLfH2Zk
-X-Authority-Analysis: v=2.4 cv=Y8fIdBeN c=1 sm=1 tr=0 ts=6a6c74b1 b=1 cx=c_pps
- a=WeWmnZmh0fydH62SvGsd2A==:117 a=WeWmnZmh0fydH62SvGsd2A==:17
+ definitions=2026-07-31_04,2026-07-30_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0
+ phishscore=0 adultscore=0 suspectscore=0 lowpriorityscore=0 mlxlogscore=999
+ spamscore=0 bulkscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.19.0-2606160000 definitions=main-2607310097
+X-Proofpoint-GUID: 352luTfHyW0CeSkVYWM3Rvcf9M7jsixf
+X-Authority-Analysis: v=2.4 cv=Y8fIdBeN c=1 sm=1 tr=0 ts=6a6c9aa0 cx=c_pps
+ a=OOZaFjgC48PWsiFpTAqLcw==:117 a=OOZaFjgC48PWsiFpTAqLcw==:17
  a=6eWqkTHjU83fiwn7nKZWdM+Sl24=:19 a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19
  a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
  a=RAioF0-LDSMA:10 a=GoEa3M9JfhUA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=jiCTI4zE5U7BLdzWsZGv:22 a=7Gl3-_t3PgB9XO-mQDs3:22 a=HZpgTNFFu0RSMucs_CsA:9
- a=QEXdDO2ut3YA:10 a=WmVTiCyuxqgg3mnwYu6p:22
-X-Proofpoint-Spam-Info: AW1haW4tMjYwNzMxMDA3NiBTYWx0ZWRfX9/AcER68Nj8g
- hqmdoucFnJrVL1ALjvOwk8jSVtjSFXbuBk9jvaJnma8iTxv51VR7ZrHtLYlp0GoAkVpGtWMFfcb
- wcBf2XNrRSccP1rew++xRpiXS74X3Zcwskm6Jt+iFSuZiPM6xaPZ
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNzMxMDA3NiBTYWx0ZWRfX2of4HcOp1M/0
- 57s7bvTo+lftl5GAiA8nWyOBCOEECcMQR6ZC4gLVzuYmvd4Tki6m/XPkxD4KuoQt4Pd0M2PC+Mp
- i9bTpZlWbrxGD2lcmhqiFRpDKMLjV0PK7P1RfIjZ/EvinKQFkLKqkkWVjlzbu6TAizNH+EUPiN3
- /XUWL9WPPgL4OlMlJPobBR8LCMY4hYcsIKWn8DLOFiJSs/aVtxCQLGNGNRgdXpYqIrxAQ4xZ3cO
- +Czw8Oab+ER+0c4gHeCVW4emdMdB25h+J49tl0keDixdOrVOspK3nKOfsKjhi5i6AgaX/0hnAWu
- 8tEFmgzcLbR0MZYUlLm/UQhymFZ5LMMHxLzsIK5tDy78aedGEhNDoGiGxCfOfjM6feJXV7gxegd
- SvegMB1XXg3R9lMl1CLSRJDSnh1qDtt4Q+/QrbyNpnJaTK0Oe6wKEE7WqQV+1NtspJGWWt+X/hN
- gKR06bb9i0dV8qxlgiA==
-X-Proofpoint-ORIG-GUID: qazKgqUbm7SqaoM4qp_EZgP1cCLfH2Zk
+ a=jiCTI4zE5U7BLdzWsZGv:22 a=7Gl3-_t3PgB9XO-mQDs3:22 a=l4zvCnRYZ4CIvERGq2UA:9
+ a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+X-Proofpoint-Spam-Info: AW1haW4tMjYwNzMxMDA5NyBTYWx0ZWRfX8smcV9tmWRbo
+ cZiTJii56UXw/7hCmQtrRlVRNM2eKRHJr2jzxGpmyDlVp7+2SziK8Svx5hI10Yp1RBCleh7NqMC
+ gJA45Y83+NSsv0HegRcQ9KYXbp7L0z7Au7TWjVJ8ILOf4TK1MKOx
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNzMxMDA5NyBTYWx0ZWRfX05fX/MLgKEd9
+ EICFixKsuREsuZfEEfLSUeNleZstP6iYZqjC2zXS4Li+eZ5bOO9CGnSFQtGLK4ewS8QlVIvgVnC
+ ftWL+x2n6RSgQl30fH8KNBwkslAn/dNB3c+5Ndbl9xCLKFzu87r+lmuen75fJa37OTsQwhso+SK
+ say6HE5yeEB6+x5Avjc1utsObkRtdOj4wmhRKykimh8PdJ6It4Y8ciZdlCv038shXlvbvQ2reWQ
+ vcgbsAKywW5N2S2ehM6khNo+GfWGAvvnNz7CCR1nFT+8akONdTISpqcVMlAThVYmVRCzzpy8Uul
+ EnwkS2QAj1bPp+sujIDpk/fRK86b4q1W+tLslUF3U3yMNrj1le99OwPE3F/3MDm3E1wCVQih/C2
+ wRhrm61gRGjkmaW/guXyk1HxdcMCFbVMNAWYjq7N7QoJYCWswAblt1pwYoCvSADtoffQbZm6/ta
+ 0s5gkkUCuVdC9X5figQ==
+X-Proofpoint-ORIG-GUID: 352luTfHyW0CeSkVYWM3Rvcf9M7jsixf
 
-On 28/07/2026 03:37, Yonghong Song wrote:
+On 29/07/2026 20:07, Arnaldo Carvalho de Melo wrote:
+> Hi,
 > 
-> When true_signature is enabled, the same function can appear as two kinds
-> of saved states: an inlined (abstract) instance that carries the original
-> source signature with no address, and an out-of-line instance that carries
-> the reconstructed true signature. saved_functions_combine() compares every
-> same-name state in a group against the first (anchor) one and, when their
-> prototypes differ, marks the function as having an inconsistent prototype.
+> 	Here are 31 patches fixing pre-existing bugs found via coverage
+> analysis, AI-assisted review (sashiko), and manual testing. No new
+> features.
 > 
-> Without this patch, the first same-name function may be an inlined instance
-> whose prototype is the original source signature and thus differs from the
-> true signature. The two prototypes are then flagged as inconsistent and,
-> because --btf_features=+true_signature also enables the default
-> consistent_func feature (skip_encoding_btf_inconsistent_proto), which drops
-> functions flagged with an inconsistent prototype, the whole function is
-> dropped from BTF. This primarily affects clang: its signature-changed
-> functions keep their original name (no "." suffix), so state->sym is never
-> set and they bypass btf_encoder__add_true_signature(), falling through to
-> this canonical-state path.
+> Critical kernel build path fix:
+>   Multi-dimensional arrays (e.g. int[2][3]) were incorrectly collapsed
+>   into flat arrays (int[6]) in BTF encoding. The encoder wrote only
+>   the total element count; the loader read only the first dimension.
+>   Both now preserve the full dimension chain using chained
+>   BTF_KIND_ARRAY nodes, matching bpftool and kernel verifier format.
 > 
-> With this patch, same-name functions are sorted so that, if any instance
-> has a non-zero address, such an instance becomes the first (anchor). That
-> addressed out-of-line instance is the one whose signature represents the
-> true signature, so the consistency check compares real instances against
-> each other and the function is retained in BTF with its true signature.
+>   Before: pahole -F btf showed int a[3][4] as int a[12]
+>   After:  int a[2][3][4] encodes as three chained BTF_KIND_ARRAY nodes
+>           and round-trips correctly
 > 
-> It is hard to create a test case where one function is inlined in one
-> place and not inlined in another place. So I built the latest bpf-next
-> kernel with
->   make LLVM=1 -j
-> and then did
->   with master branch:
->     pahole -JV --btf_features=+true_signature vmlinux >& log.pahole.old
->   with this patch on top of master branch:
->     pahole -JV --btf_features=+true_signature vmlinux >& log.pahole.new
-> and then get warning messages:
->   grep "skipping BTF encoding of function" log.pahole.old > log.old
->   grep "skipping BTF encoding of function" log.pahole.new > log.new
-> and compare log.old and log.new
->   diff log.old log.new > log.diff
+> Bug fixes found via coverage analysis:
+>   - Fix interior pointer free and missing NULL check in btf_encoder
+>   - Fix missing list head initialization in type__clone_members
+>   - Fix instance memory leak on 14 early returns in
+>     prototype__stdio_fprintf_value
+>   - Fix error path resource leaks in ctf_loader and libctf
+>   - Fix early cleanup crashes in btf_encoder__new/delete
+>   - Fix dangling stack pointer: allocate type_dcu via dwarf_cu__new
+>   - Fix annotation failure leaks in variable and typedef creation
+>   - Fix --errno typo that decrements instead of negating
+>   - Fix heap buffer overflow in languages__parse realloc
+>   - Fix parse_btf_features("all") being a silent no-op
+>   - Fix --fixup_silly_bitfields condition check
+>   - Fix data race in tag__init() decl_file string cache
+>   - Fix variable shadowing in __cus__find_struct_by_name
+>   - Fix phantom holes when class__find_holes ran before byte sizes
+>     were cached (eliminates 36 false "BRAIN FART ALERT" on Firefox)
+>   - Add elf_strptr NULL checks and fix kfunc bounds in btf_encoder
+>   - Use btf_encoder__tag_type() for all type ID computations
 > 
-> The following are some results:
->   --- log.old     2026-07-27 19:06:20.223881463 -0700
->   +++ log.new     2026-07-27 19:06:28.874109831 -0700
->   @@ -15,45 +15,28 @@
->    ZSTD_getCParams_internal : skipping BTF encoding of function due to unexpected register usage for parameter
->    ZSTD_getParams : skipping BTF encoding of function due to unexpected register usage for parameter
->    __ata_sff_port_intr : skipping BTF encoding of function due to unexpected register usage for parameter
->   -__build_flow_key : skipping BTF encoding of function due to param count mismatch; 9 params != 8 params
->   -__build_flow_key : skipping BTF encoding of function due to inconsistet prototype
->    __collect_tables : skipping BTF encoding of function due to ambiguous address
->    __fl_lookup : skipping BTF encoding of function due to return type mismatch
->    __fl_lookup : skipping BTF encoding of function due to ambiguous address
->    __in6_dev_get : skipping BTF encoding of function due to ambiguous address
->    __in_dev_get_rcu : skipping BTF encoding of function due to ambiguous address
->   -__instance_destroy : skipping BTF encoding of function due to param type mismatch for param#1 inst != inst
->   -__instance_destroy : skipping BTF encoding of function due to inconsistet prototype
->    __ioremap_caller : skipping BTF encoding of function due to unexpected register usage for parameter
->   -__ipmr_get_table : skipping BTF encoding of function due to param count mismatch; 2 params != 1 params
->   -__ipmr_get_table : skipping BTF encoding of function due to inconsistet prototype
->    __ipv6_neigh_lookup_noref : skipping BTF encoding of function due to ambiguous address
->    __key_get : skipping BTF encoding of function due to ambiguous address
->   -__kmem_cache_create : skipping BTF encoding of function due to param count mismatch; 5 params != 2 params
->   -__kmem_cache_create : skipping BTF encoding of function due to inconsistet prototype
->   -__kunmap_atomic : skipping BTF encoding of function due to param count mismatch; 1 params != 0 params
->   -__kunmap_atomic : skipping BTF encoding of function due to inconsistet prototype
->    __map_range : skipping BTF encoding of function due to ambiguous address
->    __map_range_leaf : skipping BTF encoding of function due to ambiguous address
->   -__map_single_page3 : skipping BTF encoding of function due to param count mismatch; 3 params != 4 params
->   -__map_single_page3 : skipping BTF encoding of function due to inconsistet prototype
->    __migrate_disable : skipping BTF encoding of function due to ambiguous address
->    __migrate_enable : skipping BTF encoding of function due to ambiguous address
->    __mod_tree_insert : skipping BTF encoding of function due to unexpected register usage for parameter
->    __mptcp_pm_send_ack : skipping BTF encoding of function due to unexpected register usage for parameter
->   +__neigh_lookup : skipping BTF encoding of function due to param count mismatch; 3 params != 2 params
->    __neigh_lookup : skipping BTF encoding of function due to ambiguous address
->   -__netdev_walk_all_lower_dev : skipping BTF encoding of function due to param count mismatch; 1 params != 3 params
->   -__netdev_walk_all_lower_dev : skipping BTF encoding of function due to inconsistet prototype
->    __pci_bus_set_current_state : skipping BTF encoding of function due to unexpected register usage for parameter
->    __pskb_trim : skipping BTF encoding of function due to ambiguous address
->    __release_region : skipping BTF encoding of function due to unexpected register usage for parameter
->    __remove_hrtimer : skipping BTF encoding of function due to unexpected register usage for parameter
->    __sk_dst_get : skipping BTF encoding of function due to ambiguous address
->    __skb_complete_tx_timestamp : skipping BTF encoding of function due to unexpected register usage for parameter
->   -__skb_gro_checksum_validate_complete : skipping BTF encoding of function due to param count mismatch; 2 params != 1 params
->   -__skb_gro_checksum_validate_complete : skipping BTF encoding of function due to inconsistet prototype
->   -__skb_gro_checksum_validate_needed : skipping BTF encoding of function due to param count mismatch; 3 params != 1 params
->   -__skb_gro_checksum_validate_needed : skipping BTF encoding of function due to inconsistet prototype
->    __task_rq_unlock : skipping BTF encoding of function due to unexpected register usage for parameter
->    __tracing_open : skipping BTF encoding of function due to unexpected register usage for parameter
->    __tty_buffer_request_room : skipping BTF encoding of function due to unexpected register usage for parameter
->   @@ -63,44 +46,28 @@
->   ...
+> Other improvements:
+>   - Fix -Wsign-compare warnings across the codebase
+>   - cmake: Update minimum required version from 3.5 to 3.10
+>   - Skip inline expansions during BTF encoding (performance)
+>   - Use fseek for seekable files in --prettify and --seek_bytes
+>   - Guard pipe_seek() against negative offsets
+>   - Fall back to GNU objcopy when llvm-objcopy is not available
+>   - Add exec_objcopy() shell-injection-safe helper
+>   - Skip libdw__lock when elfutils >= 0.194 is built thread-safe
+>   - Replace stale FIXME/XXX comments with explanations
+>   - Remove 11 dead functions found via coverage analysis
+>   - Mark file-local functions as static
 > 
-> With true signature enabled, this patch allows more BTF functions.
+> There are several other series that will result in way more coverage
+> and regression tests and will add support for more rust DWARF tags,
+> DWARF partial units that will allow us to build the kernel with most
+> of the CONFIG_DEBUG_ DWARF options (DWARF5, etc), only split DWARF
+> (skeletons) is left for after these series are applied.
 > 
-> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
+> The end result for tests/tests is this, that runs in parallel and mimics
+> the 'perf test' output:
+> 
+> ⬢ [acme@toolbx pahole]$ ./build-and-test-cmd.sh
+> <SNIP>
+> Testing pahole version:
+>   v1.31-215-gcd4504f549af6fe7
+> 
+> Verbose mode enabled - showing diagnostic information:
+>   Architecture: x86_64
+>   CPUs: 32
+>   Memory: 60.4 GB
+>   Swap: 8.0 GB
+>   Parallelism: unlimited (all tests run in parallel)
+>     Tip: On low-memory systems, use -j to limit parallelism (e.g., -j 4 or -j 1)
+>   Test artifacts: /tmp/pahole-tests/
+>   Compiler: gcc (GCC) 16.1.1 20260515 (Red Hat 16.1.1-2)
+>   libc: ldd (GNU libc) 2.43
+>   bpftool: bpftool v7.6.0
+>   VMLINUX: not set
+>   PERF_BIN: not set
+>   PERF_SRC_DIR: not set
+> 
+>   1: dwarves_emit.c: _Atomic type compile emission.                     : Ok
+>   2: _Atomic type display and --skip_emitting_atomic_typedefs.          : Ok
+>   3: Auxiliary tools: pglobal, prefcnt, dtagnames.                      : Ok
+>   4: Bitfield layout and data member filtering.                         : Ok
+>   5: dwarf_loader coverage: bitfields, templates, enums, inlines.       : Ok
+>   6: Bitfield typedef recoding (tag__recode_dwarf_bitfield).            : Ok
+>   7: DW_FORM_block byte order conversion.                               : Skip
+>   8: BTF arena type tag encoding for kfuncs.                            : Ok
+>   9: BTF multi-dimensional array encoding and round-trip.               : Ok
+>  10: BTF bitfield encoding and loading round-trip.                      : Ok
+>  11: BTF VAR and DATASEC encoding for global variables.                 : Ok
+>  12: BTF deduplication of array types across CUs.                       : Ok
+>  13: Distilled base BTF generation.                                     : Skip
+>  14: BTF encoding options.                                              : Ok
+>  15: BTF encoder coverage.                                              : Ok
+>  16: BTF encoder comprehensive feature coverage.                        : Ok
+>  17: BTF_KIND_FWD encoding and loading round-trip.                      : Ok
+>  18: BTF encoding with invalid symbol names.                            : Ok
+>  21: BTF FLOAT and ENUM64 type encoding.                                : Ok
+>  22: Check BTF type tag order.                                          : Ok
+>  23: BTF encoder verbose logging coverage.                              : Ok
+>  24: BTF encoding into ELF via pahole -J (btf_encoder__write_elf).      : Ok
+>  25: BTF true_signature: clang optimized aggregate parameters (2 structs: Ok
+>  26: BTF true_signature: clang optimized aggregate parameters (2 structs: Ok
+>  27: BTF true_signature: clang optimized with large union parameter     : Ok
+>  28: BTF true_signature: clang optimized parameters (scalar)            : Ok
+>  29: BTF true_signature: clang optimized with stack parameters (9 params: Ok
+>  30: BTF true_signature: clang optimized with stack parameters (non-stat: Ok
+>  31: Class name list from file.                                         : Ok
+>  32: CLI display and filtering options.                                 : Ok
+>  33: codiff struct comparison.                                          : Ok
+>  34: codiff coverage: terse, functions, verbose, multi-CU.              : Ok
+>  35: codiff member change coverage.                                     : Ok
+>  36: codiff multi-CU: __cus__find_cu_by_name coverage.                  : Ok
+>  37: codiff --terse (-t) type change reporting.                         : Ok
+>  38: Compile emission pipeline.                                         : Ok
+>  39: Compilable output and type filtering.                              : Ok
+>  40: Recursive container search and verbose counts.                     : Ok
+>  41: Type containment and pointer search.                               : Ok
+>  42: C++ advanced DWARF tag coverage.                                   : Ok
+>  43: C++ cleanup: delete_tags coverage for lexblock, parameter packs.   : Ok
+>  44: C++ inheritance and namespace printing.                            : Ok
+>  45: C++ value parameter pack and shadow definition disambiguation.     : Ok
+>  46: C++ namespace and using-declaration display.                       : Ok
+>  47: C++ variadic template parameter pack handling.                     : Ok
+>  48: C++ template pretty printing round-trip.                           : Ok
+>  49: C++ template template parameter pretty printing round-trip.        : Ok
+>  51: Class name filtering.                                              : Ok
+>  52: Default BTF on a system without BTF.                               : Ok
+>  53: Display format options.                                            : Ok
+>  54: dwarf_loader.c edge cases: bitfield recode, inlining, call sites.  : Ok
+>  55: dwarves.c core API coverage.                                       : Ok
+>  56: DWZ alternate debug file type resolution.                          : Ok
+>  57: Legacy atomic_ base type emission via --compile (hand-crafted DWARF: Ok
+>  58: Atomic typedef emission.                                           : Ok
+>  59: dwarves_emit.c / dwarves_reorganize.c coverage.                    : Ok
+>  60: DW_TAG_atomic_type member handling via --compile.                  : Ok
+>  61: Type emission (--compile) and atomic typedefs.                     : Ok
+>  62: Enumerator search.                                                 : Ok
+>  63: Expand pointers option.                                            : Ok
+>  64: Type expansion and anonymous struct options.                       : Ok
+>  65: Flexible arrays accounting.                                        : Ok
+>  66: dwarves_fprintf.c coverage: fn-ptr members, labels, C++ types.     : Ok
+>  67: Validation of GCC optimized parameters in default BTF.             : Ok
+>  68: Validation of BTF encoding of true_signatures.                     : Skip (no optimizations applied.)
+>  69: Compare parallel vs merged CU loading for inter-CU type references.: Ok
+>  70: Multi-file loading (cus__load_files).                              : Ok
+>  71: Version output.                                                    : Ok
+>  72: Struct packing and reorganization.                                 : Ok
+>  73: pahole coverage: sort, word_size unions, prettify bitfields.       : Ok
+>  74: Format coverage: count, skip, structs, hex, contains, first_obj_onl: Ok
+>  75: Header, range and seek_bytes prettify paths.                       : Ok
+>  76: pahole.c scattered option paths.                                   : Ok
+>  77: pdwtags DWARF tag display.                                         : Ok
+>  78: Check that pfunct can print btf_decl_tags read from BTF.           : Ok
+>  79: pfunct --class and --expand_types.                                 : Ok
+>  80: pfunct coverage: symtab, class, expand_types, compile.             : Ok
+>  81: pfunct function statistics.                                        : Ok
+>  82: pglobal basic: variables, functions, static exclusion.             : Ok
+>  83: prefcnt.c: reference counting coverage.                            : Ok
+>  84: prettify_bitfield                                                  : Ok
+>  85: Pretty printing of files using DWARF type information.             : Ok
+>  86: Prototype expression parsing and prettify.                         : Ok
+>  87: Cacheline boundary display with large structs.                     : Ok
+>  88: Sizes and holes display.                                           : Ok
+>  89: Small files coverage: elf_symtab, gobuffer, dutil, pglobal.        : Ok
+>  90: Sort with multi-CU deduplication.                                  : Ok
+>  91: Sort output and separator.                                         : Ok
+>  92: Statistics and filtering options.                                  : Ok
+>  93: Typedef chain display.                                             : Ok
+>  94: Word size LP resizing.                                             : Ok
+>  95: Union word_size resize and packable hex.                           : Ok
+>  96: Validation of BTF encoding of functions.                           : Ok
+>  50: ctracer: struct method tracing generation.                         : Ok
+>  20: Split BTF encoding (vmlinux base + kernel module).                 : Ok
+>  19: BTF encoding with kernel vmlinux.                                  : Ok
+>  98: Parallel reproducible DWARF Loading/Serial BTF encoding.           : Ok
+>  97: BTF encoding on vmlinux.                                           : Ok
+> Saved timing data to .test-times (98 tests)
+> 
+> ⬢ [acme@toolbx pahole]$
+> 
+> Cheers,
+> 
+> - Arnaldo
 
-Applied, thanks.
+Series applied, thanks!
 
 Alan
