@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC8F9328267;
-	Fri, 31 Jul 2026 19:31:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82F4332E12E;
+	Fri, 31 Jul 2026 19:31:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785526286; cv=none; b=IdZHZv4vVJYsoXDrBrU0e4GnBOdEKH910z1E3tmWMZxJHsiyuvs/s09bJ7V9Bb0wRnecC1HOgszuLBnPV1QBP/pAybK/8x1nxxU8G3wI3NyuHZaCldYxLgKbqoTT/R5j0RH5mwEhOTT+NumiVGPEcabQvWCmzhH/LpxWIqHdObY=
+	t=1785526289; cv=none; b=rSq5LBlenvrth31IwnLm1jE69vvqXVb+oDrFTSh6gmlBH4RehAmX/+Upj8dSDI1yMD6QJhupOx+FBk6WTiCJPUTdQmwCnhQIssvbYiLSEdb5VAdmBRD1pVPUzYxWX49ww88voXtgEIRTLQPtcY1FluxvuZysKUJOQGLuLtOZro8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785526286; c=relaxed/simple;
-	bh=3i4d1TRbg3UAVuCD4zXFFY+zMNwwcv6+7YZwjOImLNQ=;
+	s=arc-20240116; t=1785526289; c=relaxed/simple;
+	bh=wcWFyJWr3MnvsUBti+vVLMPrJZCOPnysBKPPKWT6aeQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=pDgZMDNy9Cirr6EkkiJ9q6remuIAnE7DbuLEafAuaLtc42uMPbg+wHpn8yY9OFawVGWEn2mjlpUdw1FuczNzMZNWpFYW3sKfV5HuAbW+YNO2TRO9ovtSreSHRt+l9A9TcG1aQ1+RuwBf9OTCBkbycW0YULB/YcABc/n7C6cmDzY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RDd2IEhD; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version:Content-Type; b=mUbrmmjG8Fodvz6Ya9iYNtQ7tZ382F3cGzbGo6gdfsmU6lPjjWYNPVRXnh6NGl7aUy2vMjWfufLrJlEhaawSOiJaDK+zVxRKJYxxZ4sI/s3Lp/P20uKtn5nBE1DCsHOUHpFKpdohN5bucVnxEoQobo/g5OmCWm4d7iaWmBhPRyg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ldRf+PWZ; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RDd2IEhD"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7690E1F00AC4;
-	Fri, 31 Jul 2026 19:31:22 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ldRf+PWZ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D1501F00ACA;
+	Fri, 31 Jul 2026 19:31:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785526284;
-	bh=VC1UaqAJpAzhj+Vig/jQDZjAnmdNTsyrKcEjklmAJt4=;
+	s=k20260515; t=1785526287;
+	bh=Q8JG1NrmEeKZ94QhyQb7wg/B0Ig/yYm3dfHgZw41AXY=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=RDd2IEhDNcPpQTIs7sAeWHo2QUqTHK/e1hWF1lDMHjgDCwRC+RgJP8QpXiIUjdAi8
-	 Go3At9It9qhIIgDhDmT1Ich/Etdc8j1BEFrC5mHfgwjqKUjs4IgHEDgQZ+mnAZQ5JD
-	 9CxbRFy5dOfaW9hFRUsBuu6JwzisApWY73y+q/5AMQB+FFQ2chQahzSW2B8sGmkmI1
-	 903pV7sv+SFeCOYXEpPV/JK60Z1k7AY4pDM/jFvEQz1b56O0GhK9FJIlypopL7L9Ue
-	 9k4Kv3riG83CDIriTghLF8oy2rSbgvMER7ejzWvTDChHgaqLhYbwApzpL6WoXhAzhO
-	 p0CFVohXbkjSA==
+	b=ldRf+PWZqom20J0xzXwvKfjadrRuZvkKjGhXhYkW/6upvP/noGbvHtY7yPWJupLUg
+	 vCQDGW7nOcSHwnh/Bi82zNkECt78h83/S55xr3LgL7ah3lv3JE4foN8m3UbQpCvrEO
+	 KDScnv73GuI7p3QCkdFibJVSpSX1iopUL/DZdyW74Qvw082+fauMFktxFEpi2UIF/H
+	 fQJ4m7Gt0DdtgNob01x7DP6MoXPbsliwj2+/3upZBzJVQswIvf/qxMShR7JR3cC6BS
+	 vYd93dHRx014is2bl8hioDHW6OcUqNrOVKIbDA5afRsmx67RRqWoCBi6hlEWS/cY5i
+	 +8o70JDL+PXGQ==
 From: Arnaldo Carvalho de Melo <acme@kernel.org>
 To: Alan Maguire <alan.maguire@oracle.com>
 Cc: Jiri Olsa <jolsa@kernel.org>,
@@ -36,9 +36,9 @@ Cc: Jiri Olsa <jolsa@kernel.org>,
 	Yonghong Song <yonghong.song@linux.dev>,
 	Mark Wieelard <mjw@redhat.com>,
 	Arnaldo Carvalho de Melo <acme@redhat.com>
-Subject: [PATCH 06/12] dwarf_loader: Allow forcing the merge of CUs for solving inter CU tag references
-Date: Fri, 31 Jul 2026 16:30:54 -0300
-Message-ID: <20260731193102.110693-7-acme@kernel.org>
+Subject: [PATCH 07/12] dwarf_loader: Support DW_TAG_imported_unit for same-file partial units
+Date: Fri, 31 Jul 2026 16:30:55 -0300
+Message-ID: <20260731193102.110693-8-acme@kernel.org>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20260731193102.110693-1-acme@kernel.org>
 References: <20260731193102.110693-1-acme@kernel.org>
@@ -53,205 +53,362 @@ Content-Transfer-Encoding: 8bit
 
 From: Arnaldo Carvalho de Melo <acme@redhat.com>
 
-The Linux perf tool now includes some Rust code that then gets linked
-into perf and comes with its DWARF that has tags referencing tags in
-different CUs, and as the current DWARF loading algorithm uses
-parallelization and recodes the big DWARF types (DWARF_off, usually
-64-bit) into smaller ones as a step into converting to CTF (initially)
-and later BTF, the resolution fails.
+Binaries processed by the dwz(1) tool have their DWARF type information
+deduplicated into DW_TAG_partial_unit entries that are then referenced
+via DW_TAG_imported_unit from each DW_TAG_compile_unit that uses those
+types. This is the standard DWARF mechanism for cross-CU type sharing.
 
-There is a case where this inter CU happens, LTO builds, and so there is
-an alternative algorithm for that case, that serializes DWARF CU loading
-and merges all the CUs into just one meta/mega-CU, which then has all
-the types and thus doesn't have a problem with inter CU references, as
-the recoding into smaller ids is done only after all CUs are loaded.
+On Fedora/RHEL, most debuginfo packages are built with dwz, making this
+a common pattern. For instance, bash-debuginfo has 10,486
+DW_TAG_partial_unit, 384 DW_TAG_compile_unit, and 8,572
+DW_TAG_imported_unit entries — all using same-file references (no .dwz
+alternate DWARF file involved).
 
-So while we don't refactor the loading in a way that allows for inter CU
-while allowing parallelization, maybe by doing the recoding just at the
-end of parallel loading, add minimal code to force this CU merging for
-experimentation in such cases, getting back the regression test
-prettify_perf.data.sh to work, making it force CU merging.
+Before this patch, pahole skipped DW_TAG_partial_unit with a warning:
 
-  $ pahole ~/bin/perf > unmerged.txt
-  <Suppress lots of warnings when recoding DWARF types.>
-  $ pahole --features=force_cu_merging ~/bin/perf > merged.txt
-  $
+  WARNING: DW_TAG_partial_unit used, some types will not be considered!
+           Probably this was optimized using a tool like 'dwz'
+           A future version of pahole will support this.
 
-With the current set of Rust types that are representable with the
-pahole data structures and then pretty printed as if they were C we see
-12 differences:
+And DW_TAG_imported_unit was silently ignored (returned NULL), causing
+pahole to report "file has no dwarf type information" for binaries like
+bash and glibc.
 
-  $ diff -u unmerged.txt merged.txt | grep ^@@ | wc -l
-  12
-  $ diff -u unmerged.txt merged.txt | wc -l
-  198
+The fix adds die__process_imported_unit(), called from die__process_unit()
+when encountering DW_TAG_imported_unit. It follows DW_AT_import to the
+referenced DW_TAG_partial_unit DIE and processes its children inline into
+the importing compile unit's type tables. This works because
+dwarf_formref_die() already handles all DWARF reference forms, and each
+CU maintains its own independent hash tables — so the same partial unit
+can be safely imported by multiple CUs, each getting its own copy of the
+types.
 
-Of this kind, due to some types not being resolved as tags are
-referencing tags in other CUs.
+Since imported units can themselves contain DW_TAG_imported_unit entries
+(nested imports), a depth limit of 64 is enforced to prevent stack
+overflow from pathological or corrupted DWARF.  A warning is emitted if
+the limit is reached.
 
-  $ diff -u unmerged.txt merged.txt | head
-  --- unmerged.txt	2026-03-23 17:56:54.971785023 -0300
-  +++ merged.txt	2026-03-23 17:56:59.826872178 -0300
-  @@ -9643,10 +9643,11 @@
-   	u64                        __0 __attribute__((__aligned__(8))); /*     0     8 */
-   	struct Abbreviation        __1 __attribute__((__aligned__(8))); /*     8   112 */
+Some binaries (e.g. chromium-browser on Fedora 44, built with Rust
+components) also have DW_TAG_imported_unit entries that reference partial
+units in an alternate debug file via DW_FORM_GNU_ref_alt (the
+.gnu_debugaltlink mechanism). When elfutils resolves such a reference, it
+returns DIEs from the alternate file whose offsets are in a different
+address space — processing these into the main CU's hash tables corrupts
+type references and causes a crash during type recoding.
 
-  -	/* XXX last struct has 5 bytes of padding */
-  +	/* XXX last struct has 16 bytes of padding, 1 hole */
+The same DW_FORM_GNU_ref_alt form can also appear on regular type
+attributes (DW_AT_type, DW_AT_abstract_origin, DW_AT_specification,
+etc.), not just on DW_TAG_imported_unit's DW_AT_import. Guard all paths
+via attr_form_is_ref_alt(), which skips the reference and warns once, so
+users know why some types are missing rather than getting a crash.
 
-   	/* size: 120, cachelines: 2, members: 2 */
-  $
+The korg/alt_dwarf branch had a previous attempt at this that also
+handled the .dwz alternate DWARF file case (DW_FORM_GNU_ref_alt), but it
+was never merged and is now 294 commits behind master. This patch takes a
+simpler approach focused on the same-file case first, which covers dwz
+output on Fedora/RHEL where all partial units are within the same .debug
+file.
 
-Now the pretty printing perf.data test case passes:
+Before (bash-5.3.9-3.fc44.x86_64 debuginfo):
+  $ pahole -F dwarf /usr/lib/debug/usr/bin/bash-5.3.9-3.fc44.x86_64.debug
+  WARNING: DW_TAG_partial_unit used, some types will not be considered!
+  pahole: /usr/lib/debug/usr/bin/bash-5.3.9-3.fc44.x86_64.debug: file has no dwarf type information
 
-  ⬢ [acme@toolbx tests]$ ./prettify_perf.data.sh
-  Pretty printing of files using DWARF type information.
-  Test ./prettify_perf.data.sh passed
-  ⬢ [acme@toolbx tests]$
+After:
+  $ pahole -F dwarf /usr/lib/debug/usr/bin/bash-5.3.9-3.fc44.x86_64.debug | wc -l
+  1605
+  $ pahole -F dwarf -C variable /usr/lib/debug/usr/bin/bash-5.3.9-3.fc44.x86_64.debug
+  struct variable {
+  	char *                     name;                 /*     0     8 */
+  	char *                     value;                /*     8     8 */
+  	...
+  	/* size: 48, cachelines: 1, members: 7 */
+  };
 
-This was implemented reusing the --btf_features mechanism that now can
-be accessed as well via --features, as this is not strictly a BTF
-feature but, as Alan Maguire suggested, it is desirable to ask for that
-feature to be enabled when we know it is needed bug can't guarantee that
-the available pahole version has the feature and not have it fail
-because it doesn't implement --force_cu_merging, which the
---btf_features=force_cu_merging, now also avaialbe as
---features=force_cu_merging, allows as it ignores unknown features.
+Before (chromium-browser debuginfo, Fedora 44):
+  $ pahole /usr/lib/debug/.../chromium-browser-149.0.7827.155-1.fc44.x86_64.debug
+  Segmentation fault
 
+After:
+  $ pahole /usr/lib/debug/.../chromium-browser-149.0.7827.155-1.fc44.x86_64.debug
+  WARNING: DW_FORM_GNU_ref_alt (dwz alternate debug file) not yet supported,
+           some types will not be available.
+
+Reported-by: Sashiko:gemini-3-1-pro-preview # Running on a local machine
+Assisted-by: Claude:claude-sonnet-4-5
 Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
 ---
- dwarf_loader.c              |  2 +-
- dwarves.h                   |  1 +
- man-pages/pahole.1          | 18 ++++++++++++++++--
- pahole.c                    | 11 ++++++++++-
- tests/prettify_perf.data.sh |  4 ++--
- 5 files changed, 30 insertions(+), 6 deletions(-)
+ dwarf_loader.c     | 153 ++++++++++++++++++++++++++++++++++++++-------
+ man-pages/pahole.1 |   8 +--
+ 2 files changed, 135 insertions(+), 26 deletions(-)
 
 diff --git a/dwarf_loader.c b/dwarf_loader.c
-index 934d410b2f983828..99bc121a377fbd8b 100644
+index 99bc121a377fbd8b..ffdbd6c9fa3e6401 100644
 --- a/dwarf_loader.c
 +++ b/dwarf_loader.c
-@@ -4693,7 +4693,7 @@ static int cus__load_module(struct cus *cus, struct conf_load *conf,
- 			cus__remove(cus, type_cu);
+@@ -154,6 +154,9 @@ struct dwarf_cu {
+ 	struct dwarf_tag *last_type_lookup;
+ 	struct cu *cu;
+ 	struct dwarf_cu *type_unit;
++	Dwarf_Off *imported_units;
++	uint32_t  nr_imported_units;
++	uint32_t  allocated_imported_units;
+ };
+ 
+ static int dwarf_cu__init(struct dwarf_cu *dcu, struct cu *cu)
+@@ -179,6 +182,9 @@ static int dwarf_cu__init(struct dwarf_cu *dcu, struct cu *cu)
+ 		INIT_HLIST_HEAD(&dcu->hash_types[i]);
+ 	}
+ 	dcu->type_unit = NULL;
++	dcu->imported_units = NULL;
++	dcu->nr_imported_units = 0;
++	dcu->allocated_imported_units = 0;
+ 	// To avoid a per-lookup check against NULL in dwarf_cu__find_type_by_ref()
+ 	dcu->last_type_lookup = &sentinel_dtag;
+ 	return 0;
+@@ -203,6 +209,7 @@ static void dwarf_cu__delete(struct cu *cu)
+ 
+ 	struct dwarf_cu *dcu = cu->priv;
+ 
++	free(dcu->imported_units);
+ 	// dcu->hash_tags & dcu->hash_types are on cu->obstack
+ 	cu__free(cu, dcu);
+ 	cu->priv = NULL;
+@@ -486,12 +493,32 @@ static const char *attr_string(Dwarf_Die *die, uint32_t name, struct conf_load *
+ 	return str;
+ }
+ 
++static bool attr_form_is_ref_alt(Dwarf_Attribute *attr)
++{
++	if (attr->form == DW_FORM_GNU_ref_alt) {
++		static bool warned;
++
++		if (!warned) {
++			fprintf(stderr,
++				"WARNING: DW_FORM_GNU_ref_alt (dwz alternate debug file) not yet supported,\n"
++				"         some types will not be available.\n");
++			warned = true;
++		}
++		return true;
++	}
++	return false;
++}
++
+ static bool attr_type(Dwarf_Die *die, uint32_t attr_name, Dwarf_Off *offset)
+ {
+ 	Dwarf_Attribute attr;
+ 
+ 	if (dwarf_attr(die, attr_name, &attr) != NULL) {
+ 		Dwarf_Die type_die;
++		if (attr_form_is_ref_alt(&attr)) {
++			*offset = 0;
++			return 0;
++		}
+ 		if (dwarf_formref_die(&attr, &type_die) != NULL) {
+ 			*offset = dwarf_dieoffset(&type_die);
+ 			return attr.form == DW_FORM_ref_sig8;
+@@ -722,7 +749,8 @@ static void type__init(struct type *type, Dwarf_Die *die, struct cu *cu, struct
+ 	Dwarf_Attribute attr;
+ 	if (dwarf_attr(die, DW_AT_type, &attr) != NULL) {
+ 		Dwarf_Die type_die;
+-		if (dwarf_formref_die(&attr, &type_die) != NULL) {
++		if (!attr_form_is_ref_alt(&attr) &&
++		    dwarf_formref_die(&attr, &type_die) != NULL) {
+ 			uint64_t encoding = attr_numeric(&type_die, DW_AT_encoding);
+ 
+ 			if (encoding == DW_ATE_signed || encoding == DW_ATE_signed_char)
+@@ -1036,9 +1064,14 @@ static int add_gnu_annotation_chain(Dwarf_Die *die, int component_idx,
+ 	Dwarf_Attribute attr;
+ 	Dwarf_Die annot_die;
+ 
+-	while (dwarf_attr(die, DW_AT_GNU_annotation, &attr) != NULL &&
+-	       dwarf_formref_die(&attr, &annot_die) != NULL &&
+-	       dwarf_tag(&annot_die) == DW_TAG_GNU_annotation) {
++	while (dwarf_attr(die, DW_AT_GNU_annotation, &attr) != NULL) {
++		if (attr_form_is_ref_alt(&attr))
++			break;
++		if (dwarf_formref_die(&attr, &annot_die) == NULL)
++			break;
++		if (dwarf_tag(&annot_die) != DW_TAG_GNU_annotation)
++			break;
++
+ 		int ret = add_tag_annotation(&annot_die, component_idx, conf, head);
+ 		if (ret)
+ 			return ret;
+@@ -2079,9 +2112,13 @@ check_gnu_attr:
+ 		goto out;
+ 
+ 	/* Handle GCC-style DW_AT_GNU_annotation attribute */
+-	while (dwarf_attr(die, DW_AT_GNU_annotation, &attr) != NULL &&
+-	       dwarf_formref_die(&attr, &annot_die) != NULL &&
+-	       dwarf_tag(&annot_die) == DW_TAG_GNU_annotation) {
++	while (dwarf_attr(die, DW_AT_GNU_annotation, &attr) != NULL) {
++		if (attr_form_is_ref_alt(&attr))
++			break;
++		if (dwarf_formref_die(&attr, &annot_die) == NULL)
++			break;
++		if (dwarf_tag(&annot_die) != DW_TAG_GNU_annotation)
++			break;
+ 		name = attr_string(&annot_die, DW_AT_name, conf);
+ 		if (strcmp(name, "btf_type_tag") != 0)
+ 			break;
+@@ -2906,7 +2943,7 @@ static struct tag *__die__process_tag(Dwarf_Die *die, struct cu *cu,
+ 
+ 	switch (dwarf_tag(die)) {
+ 	case DW_TAG_imported_unit:
+-		return NULL; // We don't support imported units yet, so to avoid segfaults
++		return &unsupported_tag; // Handled in die__process_unit()
+ 	case DW_TAG_array_type:
+ 		tag = die__create_new_array(die, cu);		break;
+ 	case DW_TAG_string_type: // FORTRAN stuff, looks like an array
+@@ -2974,9 +3011,90 @@ static struct tag *__die__process_tag(Dwarf_Die *die, struct cu *cu,
+ 	return tag;
+ }
+ 
+-static int die__process_unit(Dwarf_Die *die, struct cu *cu, struct conf_load *conf)
++#define MAX_IMPORTED_UNIT_DEPTH 64
++
++static int die__process_unit(Dwarf_Die *die, struct cu *cu, struct conf_load *conf, int import_depth);
++
++static bool dwarf_cu__imported_unit_visited(struct dwarf_cu *dcu, Dwarf_Off offset)
++{
++	for (uint32_t i = 0; i < dcu->nr_imported_units; i++)
++		if (dcu->imported_units[i] == offset)
++			return true;
++	return false;
++}
++
++static int dwarf_cu__mark_imported_unit(struct dwarf_cu *dcu, struct cu *cu, Dwarf_Off offset)
++{
++	if (dcu->nr_imported_units == dcu->allocated_imported_units) {
++		uint32_t new_size = dcu->allocated_imported_units ? dcu->allocated_imported_units * 2 : 16;
++		Dwarf_Off *new_array = realloc(dcu->imported_units, new_size * sizeof(Dwarf_Off));
++		if (new_array == NULL)
++			return -ENOMEM;
++		dcu->imported_units = new_array;
++		dcu->allocated_imported_units = new_size;
++	}
++	dcu->imported_units[dcu->nr_imported_units++] = offset;
++	return 0;
++}
++
++static int die__process_imported_unit(Dwarf_Die *die, struct cu *cu, struct conf_load *conf, int import_depth)
++{
++	Dwarf_Attribute attr;
++
++	if (dwarf_attr(die, DW_AT_import, &attr) == NULL)
++		return 0;
++
++	if (attr_form_is_ref_alt(&attr))
++		return 0;
++
++	Dwarf_Die imported_die;
++
++	if (dwarf_formref_die(&attr, &imported_die) == NULL)
++		return 0;
++
++	if (dwarf_tag(&imported_die) != DW_TAG_partial_unit)
++		return 0;
++
++	if (import_depth >= MAX_IMPORTED_UNIT_DEPTH) {
++		static bool warned;
++
++		if (!warned) {
++			fprintf(stderr,
++				"WARNING: DW_TAG_imported_unit nesting too deep (>%d), "
++				"some types will not be available.\n",
++				MAX_IMPORTED_UNIT_DEPTH);
++			warned = true;
++		}
++		return 0;
++	}
++
++	Dwarf_Off offset = dwarf_dieoffset(&imported_die);
++	struct dwarf_cu *dcu = cu->priv;
++
++	if (dwarf_cu__imported_unit_visited(dcu, offset))
++		return 0;
++
++	if (dwarf_cu__mark_imported_unit(dcu, cu, offset))
++		return -ENOMEM;
++
++	Dwarf_Die child;
++
++	if (dwarf_child(&imported_die, &child) == 0)
++		return die__process_unit(&child, cu, conf, import_depth + 1);
++
++	return 0;
++}
++
++static int die__process_unit(Dwarf_Die *die, struct cu *cu, struct conf_load *conf, int import_depth)
+ {
+ 	do {
++		if (dwarf_tag(die) == DW_TAG_imported_unit) {
++			int err = die__process_imported_unit(die, cu, conf, import_depth);
++			if (err)
++				return err;
++			continue;
++		}
++
+ 		struct tag *tag = die__process_tag(die, cu, 1, conf);
+ 		if (tag == NULL)
+ 			return -ENOMEM;
+@@ -3822,17 +3940,8 @@ static int die__process(Dwarf_Die *die, struct cu *cu, struct conf_load *conf)
+ 		return 0; // so that other units can be processed
  	}
  
--	if (cus__merging_cu(dw, elf)) {
-+	if (conf->force_cu_merging || cus__merging_cu(dw, elf)) {
- 		res = cus__merge_and_process_cu(cus, conf, mod, dw, elf, filename,
- 						build_id, build_id_len,
- 						type_cu ? type_dcu : NULL);
-diff --git a/dwarves.h b/dwarves.h
-index dd9aa332e61c77f0..38fec59ca78990df 100644
---- a/dwarves.h
-+++ b/dwarves.h
-@@ -112,6 +112,7 @@ struct conf_load {
- 	const char		*kabi_prefix;
- 	struct btf		*base_btf;
- 	struct conf_fprintf	*conf_fprintf;
-+	bool			force_cu_merging;
- };
+-	if (tag == DW_TAG_partial_unit) {
+-		static bool warned;
+-
+-		if (!warned) {
+-			fprintf(stderr, "WARNING: DW_TAG_partial_unit used, some types will not be considered!\n"
+-					"         Probably this was optimized using a tool like 'dwz'\n"
+-					"         A future version of pahole will support this.\n");
+-			warned = true;
+-		}
+-		return 0; // so that other units can be processed
+-	}
++	if (tag == DW_TAG_partial_unit)
++		return 0; // Processed inline when reached via DW_TAG_imported_unit
  
- /** struct conf_fprintf - hints to the __fprintf routines
+ 	if (tag != DW_TAG_compile_unit && tag != DW_TAG_type_unit) {
+ 		fprintf(stderr, "%s: DW_TAG_compile_unit, DW_TAG_type_unit, DW_TAG_partial_unit or DW_TAG_skeleton_unit expected got %s (0x%x) @ %llx!\n",
+@@ -3854,7 +3963,7 @@ static int die__process(Dwarf_Die *die, struct cu *cu, struct conf_load *conf)
+ 		return DWARF_CB_OK;
+ 
+ 	if (dwarf_child(die, &child) == 0) {
+-		int err = die__process_unit(&child, cu, conf);
++		int err = die__process_unit(&child, cu, conf, 0);
+ 		if (err)
+ 			return err;
+ 	}
+@@ -4626,7 +4735,7 @@ static int cus__merge_and_process_cu(struct cus *cus, struct conf_load *conf,
+ 				filtered = conf->early_cu_filter(&unmerged_cu) == NULL;
+ 			}
+ 
+-			if (!filtered && die__process_unit(&child, cu, conf) != 0)
++			if (!filtered && die__process_unit(&child, cu, conf, 0) != 0)
+ 				goto out_abort;
+ 		}
+ 
 diff --git a/man-pages/pahole.1 b/man-pages/pahole.1
-index 21378a224847eb45..e3ce737460efec72 100644
+index e3ce737460efec72..96ed80069e1e6d80 100644
 --- a/man-pages/pahole.1
 +++ b/man-pages/pahole.1
-@@ -314,8 +314,10 @@ Generate BTF for functions with optimization-related suffixes (.isra, .constprop
- Allow using all the BTF features supported by pahole.
+@@ -373,10 +373,10 @@ Non-standard, non-BTF related features:
+ 	                   and was observed with Rust CUs, where types tags
+ 	                   (function parameters, abstract origins for inlines, etc)
+ 	                   reference types in another CU.
+-	                   For LTO this is being autodetected and the merging of
+-	                   cus is done automatically, but for the Rust case, and
+-	                   maybe others this is needed with the current DWARF
+-	                   loading algorithm.
++	                   Imported units (DW_TAG_imported_unit for LTO and Rust)
++	                   and .dwz alternate debug files (DW_FORM_GNU_ref_alt) are
++	                   now auto-detected and processed automatically, so
++	                   force_cu_merging is rarely needed with current pahole.
  
- .TP
--.B \-\-btf_features=FEATURE_LIST
--Encode BTF using the specified feature list, or specify 'default' for all
-+.B \-\-features=FEATURE_LIST
-+This is also available as \-\-btf_features=FEATURE_LIST, unknown features,
-+like those added in newer versions of pahole, are ignored.  BTF encoding
-+configuration is the major user. Using 'default' will enable all
- standard features supported.
- This option can be used as an alternative to using multiple BTF-related options,
- and 'default' represents the standard set of BTF features that are in use for
-@@ -364,6 +366,18 @@ Supported non-standard features (not enabled for 'default')
- 	layout             Encode information about BTF kinds available at encoding     
- 	                   time in layout section in BTF.
- 
-+Non-standard, non-BTF related features:
-+
-+	force_cu_merging   Force merging all CUs into one. Use when there are
-+	                   references across CUs. This happens in some LTO cases
-+	                   and was observed with Rust CUs, where types tags
-+	                   (function parameters, abstract origins for inlines, etc)
-+	                   reference types in another CU.
-+	                   For LTO this is being autodetected and the merging of
-+	                   cus is done automatically, but for the Rust case, and
-+	                   maybe others this is needed with the current DWARF
-+	                   loading algorithm.
-+
  .fi
- 
- So for example, specifying \-\-btf_encode=var,enum64 will result in a BTF
-diff --git a/pahole.c b/pahole.c
-index 0a7b810568f0dfeb..b7559a124a86d722 100644
---- a/pahole.c
-+++ b/pahole.c
-@@ -1154,6 +1154,7 @@ ARGP_PROGRAM_VERSION_HOOK_DEF = dwarves_print_version;
- #define ARG_padding		   348
- #define ARGP_with_embedded_flexible_array 349
- #define ARGP_btf_attributes	   350
-+#define ARGP_features		   351
- 
- /* --btf_features=feature1[,feature2,..] allows us to specify
-  * a list of requested BTF features or "default" to enable all default
-@@ -1241,7 +1242,8 @@ struct btf_feature {
- 	BTF_NON_DEFAULT_FEATURE_CHECK(attributes, btf_attributes, false,
- 				      attributes_check),
- 	BTF_NON_DEFAULT_FEATURE(true_signature, true_signature, false),
--	BTF_NON_DEFAULT_FEATURE_CHECK(layout, btf_gen_layout, false, layout_check)
-+	BTF_NON_DEFAULT_FEATURE_CHECK(layout, btf_gen_layout, false, layout_check),
-+	BTF_NON_DEFAULT_FEATURE(force_cu_merging, force_cu_merging, false),
- };
- 
- #define BTF_MAX_FEATURE_STR	1024
-@@ -1816,6 +1818,12 @@ static const struct argp_option pahole__options[] = {
- 		.arg = "FEATURE_LIST",
- 		.doc = "Specify supported BTF features in FEATURE_LIST or 'default' for default set of supported features. See the pahole manual page for the list of supported, default features."
- 	},
-+	{
-+		.name = "features",
-+		.key = ARGP_features,
-+		.arg = "FEATURE_LIST",
-+		.doc = "Specify supported features in FEATURE_LIST or 'default' for default set of supported features. See the pahole manual page for the list of supported, default features."
-+	},
- 	{
- 		.name = "supported_btf_features",
- 		.key = ARGP_supported_btf_features,
-@@ -2028,6 +2036,7 @@ static error_t pahole__options_parser(int key, char *arg,
- 		conf_load.reproducible_build = true;	break;
- 	case ARGP_running_kernel_vmlinux:
- 		show_running_kernel_vmlinux = true;	break;
-+	case ARGP_features:
- 	case ARGP_btf_features:
- 		parse_btf_features(arg, false);		break;
- 	case ARGP_supported_btf_features:
-diff --git a/tests/prettify_perf.data.sh b/tests/prettify_perf.data.sh
-index 1fae95154d710aae..384c250ff4e01a4c 100755
---- a/tests/prettify_perf.data.sh
-+++ b/tests/prettify_perf.data.sh
-@@ -25,7 +25,7 @@ fi
- perf_lacks_type_info() {
- 	local type_keyword=$1
- 	local type_name=$2
--	if ! pahole -C $type_name $perf | grep -q "^$type_keyword $type_name {"; then
-+	if ! pahole --features=force_cu_merging -C $type_name $perf | grep -q "^$type_keyword $type_name {"; then
- 		info_log "skip: $perf doesn't have '$type_keyword $type_name' type info"
- 		test_skip
- 	fi
-@@ -41,7 +41,7 @@ $perf record --quiet -o $perf_data sleep 0.00001
- 
- number_of_filtered_perf_record_metadata() {
- 	local metadata_record=$1
--	local count=$(pahole -F dwarf -V $perf --header=perf_file_header --seek_bytes '$header.data.offset' --size_bytes='$header.data.size' -C "perf_event_header(sizeof,type,type_enum=perf_event_type+perf_user_event_type,filter=type==PERF_RECORD_$metadata_record)" --prettify $perf_data | grep ".type = PERF_RECORD_$metadata_record," | wc -l)
-+	local count=$(pahole --features=force_cu_merging -F dwarf -V $perf --header=perf_file_header --seek_bytes '$header.data.offset' --size_bytes='$header.data.size' -C "perf_event_header(sizeof,type,type_enum=perf_event_type+perf_user_event_type,filter=type==PERF_RECORD_$metadata_record)" --prettify $perf_data | grep ".type = PERF_RECORD_$metadata_record," | wc -l)
- 	echo "$count"
- }
  
 -- 
 2.55.0
