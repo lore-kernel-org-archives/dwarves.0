@@ -1,30 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AC2E30E828;
-	Fri, 31 Jul 2026 19:31:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB3A830E83A;
+	Fri, 31 Jul 2026 19:31:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785526270; cv=none; b=HKVm5LkRWBbVFF2kDNRIQNMnNCYA7yphu/lB807ZGyHCWdXHVa3cRWyJUcHW8QPEEaMjWc1MGiIHynmFILFwRg2fz1sAJ2NWskAbMwZ35JfOslVVwMQ5nGNvkKOn2y3vRFrUaR9zzXC+lhdO2DDXzAp/VluK8cumndPel0oRWVs=
+	t=1785526273; cv=none; b=Zz7tC4/LXqr43bKmwn/4VOaOJSv/gSR6kaKPMzUv12EYGGtBbwmLq4pvpAcHwVca4LH/B3HLrQiDnPV3zKFeXnaPYuU6qQ3AIxWFHrVYYGEozrDIJdSp7UdYwCvjaWLksY2meRLGLyebEaN1n2viY0PUCkWRpvyDmBmCn3SiXzo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785526270; c=relaxed/simple;
-	bh=Dc7jPJAk64RxNM/7y+bu/S155812HcJ3njKa5UlP0Pg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=RJPGr5raiKVnD97njcoB+EAV8SgdcETls7ROhogQoTQ/g9JycpgNCnRyFODRbEKWcqJQtLZRp6e9C/nlOEuH79WxdLt23y/VNtM7MFWZ7qhr1RLfbUXuak8kRl0stInxksCeZe28OGiGCa9eZfz0QDiBTlmQ74FxDoDF3CiBAS4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F54A4otb; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1785526273; c=relaxed/simple;
+	bh=c+OJuqoy2UeKubFBCrlhvZaQ6pj8LgE7784BGOuj10U=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=BZ3U7C55tT7cPm/190405m4u7C33sxizGuWQWC3NSqyN92oQTjCJs8Q7xbiiiWbXDX9WSKPs+CkR9Gu3rWDv9huXtNgxdkzEl5ReeX1p6VCXJLO5R2dmKQXD7OUy91BkmC2QOHMP1Q4/lwBiNK8l+ys1j9NTpJ6Bvt6tFWnRxKs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ngl2i2UA; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F54A4otb"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7070A1F00ACA;
-	Fri, 31 Jul 2026 19:31:06 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ngl2i2UA"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F10F41F00AC4;
+	Fri, 31 Jul 2026 19:31:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785526268;
-	bh=hOWWK484LjgnipuNokg+evFEZ4SCjh/DsjNI6Uzrl/k=;
-	h=From:To:Cc:Subject:Date;
-	b=F54A4otb/m/U+KO4fBucJwty06n5jBCbEjHXgcDAnVLsq6tPcXvBb9ELro4JuaU1n
-	 4ftAv2HMOb5hNzxoPEelAntaGnpOXYIJVhz/QAyKEW/oamQBH/feaxSAnggb/dnVZW
-	 eWKaVYhkYEIO1LqermMIZV3uC1uol/DqGllrH1McM2nGmkSED8abyjyAy/4Qop/WMI
-	 PE7WihRzF3TPWXaSOr+GjOW6zB1bogkH1uW5xsuEFD/qFuWgoB2zTc9EpFFhu2DK9k
-	 JqzDtxX7JbcEkGEOl3zA/7rFj+yNF+5rTyvwpsDjqiIQos1OcWwEbq0MoXH93ApXC1
-	 eDgtziNGBA7hg==
+	s=k20260515; t=1785526271;
+	bh=F/J2CnB+AwxaWJGumA7VYlpg3X2pgIoqwqmmZWHlCXI=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=ngl2i2UA/IGqskTvOCO01CHvQQZBV8dVA49xX07LJDEJ1jBlkObMVO5UPHPEe6sbF
+	 ++aT2z1sMx7c9PjYaoyVjMzgJmoPt19l1y3uVX2efuQ4wqo/ZEJAHSIaYFOY7fqv3a
+	 DNSWFt/9gaIUbxr2gHdt48S8LOs7HSaCPMHls3i1Mwsg74kE3k/oP5YDraI/Qed7aS
+	 FxED2PtAQIrHxG8MpVIC2fFenX0+5a61OMPsyQaTnR54w9lRT5b5zelzknIJj2y1Zb
+	 ywx49e/0Fgwe9MkRaGdNPqnjJ6WCWv04V7APBsouEniXg8vYqOR+KtHeBUxksDuMPG
+	 jF+RKco1O2V8Q==
 From: Arnaldo Carvalho de Melo <acme@kernel.org>
 To: Alan Maguire <alan.maguire@oracle.com>
 Cc: Jiri Olsa <jolsa@kernel.org>,
@@ -34,11 +35,13 @@ Cc: Jiri Olsa <jolsa@kernel.org>,
 	Andrii Nakryiko <andrii@kernel.org>,
 	Yonghong Song <yonghong.song@linux.dev>,
 	Mark Wieelard <mjw@redhat.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>
-Subject: [PATCHES 00/12] pahole: Support more rust tags and references to dwz alternate debug files
-Date: Fri, 31 Jul 2026 16:30:48 -0300
-Message-ID: <20260731193102.110693-1-acme@kernel.org>
+	Arnaldo Carvalho de Melo <acme@redhat.com>
+Subject: [PATCH 01/12] dwarf_loader: Initial support for DW_TAG_variant_part
+Date: Fri, 31 Jul 2026 16:30:49 -0300
+Message-ID: <20260731193102.110693-2-acme@kernel.org>
 X-Mailer: git-send-email 2.55.0
+In-Reply-To: <20260731193102.110693-1-acme@kernel.org>
+References: <20260731193102.110693-1-acme@kernel.org>
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
@@ -48,136 +51,206 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Hi,
+From: Arnaldo Carvalho de Melo <acme@redhat.com>
 
-Add support for Rust discriminated unions (enums with explicit
-discriminants).
+Still doesn't handle its sub hierarchy, i.e. the DW_TAG_variant entries
+and its underlying DW_TAG_member entries.
 
-Rust enums like Option<u32> and Result<i32,u8> are represented in DWARF
-as DW_TAG_variant_part containing DW_TAG_variant children with
-discriminant values. These patches:
+This was noticed when running the regression test that uses a debug
+build of perf to process a perf.data file and test pahole's pretty
+printing features, as now perf has a synthetic workload that is written
+in rust:
 
-  - Load DW_TAG_variant_part containers with discriminant tracking
-  - Populate DW_TAG_variant children with discriminant values
-  - Handle DW_FORM_block encoding for discriminant values
-  - Handle DW_TAG_subprogram inside DW_TAG_enumeration (Rust methods)
-  - Encode variant parts as BTF_KIND_UNION members
+ <0><20c95a>: Abbrev Number: 1 (DW_TAG_compile_unit)
+    <20c95b>   DW_AT_producer    : (indirect string, offset: 0x4ee5a): clang LLVM (rustc version 1.93.1 (01f6ddf75 2026-02-11) (Fedora 1.93.1-1.fc43))
+    <20c95f>   DW_AT_language    : 28	(Rust)
+    <20c961>   DW_AT_name        : (indirect string, offset: 0x4eeaa): tests/workloads/code_with_type.rs/@/code_with_type.d6e680867bfb8b27-cgu.0
+    <20c965>   DW_AT_stmt_list   : 0x5e1ed
+    <20c969>   DW_AT_comp_dir    : (indirect string, offset: 0x487f1): /home/acme/git/perf-tools/tools/perf
+    <20c96d>   DW_AT_low_pc      : 0
+    <20c975>   DW_AT_ranges      : 0x2d0
+⬢ [acme@toolbx pahole]$
 
-Before: Rust Option<u32> showed as empty struct (0 members)
+So lets add some scaffolding for the Rust DWARF constructs involved for
+us to be able to continue using perf with DWARF to test the pretty
+printing features.
 
-After:  Shows None and Some variants with correct layout
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+---
+ dwarf_loader.c | 26 +++++++++++++++++++++++++-
+ dwarves.c      | 27 +++++++++++++++++++++++++++
+ dwarves.h      | 16 ++++++++++++++++
+ 3 files changed, 68 insertions(+), 1 deletion(-)
 
-  === pahole --expand_types output ===
-  struct Option<u32> {
-      struct None {
-      } __attribute__((__aligned__(4)));
-      struct Some {
-          /* XXX 4 bytes hole, try to pack */
-          u32  __0 __attribute__((__aligned__(4)));  /*  4  4 */
-      } __attribute__((__aligned__(4)));
-  } __attribute__((__aligned__(4)));
-
-BTF has no discriminated-union kind, so variant parts are tentatively
-encoded as BTF_KIND_UNION with overlapping members at offset 0. Further
-discussion is needed to see if we can keep that.
-
-DW_FORM_block byte order fix: uses CU-recorded endianness instead of
-assuming little-endian when decoding DW_AT_const_value and
-DW_AT_default_value. Fixes cross-endian DWARF processing (e.g.  reading
-big-endian s390x debug info on x86).
-
-Also add support for cross-CU type references and dwz alternate debug
-files.
-
-This is needed to improve the support for, among other things, Rust, as
-noticed in the pretty printing or a perf binary that has rust objects
-linked, built by clang/llvm that use cross-CU references.
-
-DW_TAG_imported_unit support:
-
-  Handle same-file partial units where types are shared across CUs
-  via DW_TAG_imported_unit. Force-merge CUs that contain inter-CU
-  references (DW_FORM_ref_addr) so type lookups resolve correctly.
-
-  Fix cus__merging_cu failing to detect DW_FORM_ref_addr when
-  DW_FORM_implicit_const causes dwarf_getabbrevattr() to fail.
-
-dwz alternate debug file support:
-
-  Handle DW_FORM_GNU_ref_alt references to dwz-compressed alternate
-  debug files (.dwz). Pre-processes all alternate partial units with
-  separate hash tables and dedup tracking.
-
-  Before (Firefox): 1774 "has no entry in cu" errors
-  After:  processes cleanly with 0 errors
-
-  Firefox uses dwz compression which moves common types into a
-  separate .dwz file and replaces duplicates with DW_FORM_GNU_ref_alt
-  references. pahole now pre-loads the alternate file's partial units,
-  resolves all cross-file references, and processes Firefox DWARF
-  cleanly.
-
-Includes inter-CU type reference comparison test and
-vmlinux_comparison.py for DWARF/BTF analysis across kernel configs.
-
-Known limitations:
-  - Pruning of unreferenced alt PUs is conservatively over-approximated
-  - Merged-CU path is single-threaded by design
-
-This makes pahole to be able to support more of the CONFIG_DEBUG_ DWARF
-options, including DWARF5 and compression, see the latest patch in the
-series for more details about how this table is produced:
-
-  ┌───────────────────────────┬─────────┬─────┬───────────────────────────────────┬─────────┬───────┬──────────┬────────┬──────────┬─────────┐
-  │ File                      │  Size   │ Ver │ Producer                          │  DWARF  │  BTF  │ DW-Hash  │ DW-Out │ BTF-Hash │ BTF-Out │
-  ├───────────────────────────┼─────────┼─────┼───────────────────────────────────┼─────────┼───────┼──────────┼────────┼──────────┼─────────┤
-  │ vmlinux.dwarf4            │ 835.7MB │   4 │ GNU C11 16.1.1 -gdwarf-4          │ 599.2MB │ 7.3MB │ 86e1b611 │  7.6MB │ 52123c24 │   7.4MB │
-  │ vmlinux.dwarf5            │ 736.3MB │   5 │ GNU C11 16.1.1 -gdwarf-5          │ 499.7MB │ 7.3MB │ 86e1b611 │  7.6MB │ 52123c24 │   7.4MB │
-  │ vmlinux.dwarf5.zlib       │ 497.8MB │   5 │ GNU C11 16.1.1 -gdwarf-5 -gz=zlib │ 261.2MB │ 7.3MB │ 86e1b611 │  7.6MB │ 52123c24 │   7.4MB │
-  │ vmlinux.dwarf5.zstd       │ 454.7MB │   5 │ GNU C11 16.1.1 -gdwarf-5 -gz=zstd │ 218.1MB │ 7.3MB │ 86e1b611 │  7.6MB │ 52123c24 │   7.4MB │
-  │ vmlinux.toolchain_default │ 736.3MB │   5 │ GNU C11 16.1.1                    │ 499.7MB │ 7.3MB │ 86e1b611 │  7.6MB │ 52123c24 │   7.4MB │
-  └───────────────────────────┴─────────┴─────┴───────────────────────────────────┴─────────┴───────┴──────────┴────────┴──────────┴─────────┘
-
-Split DWARF support (skeleton CUs) will be supported in upcoming work,
-so as to cover all the possibilities the kernel build system offers
-for generating DWARF.
-
-- Arnaldo
-
-Arnaldo Carvalho de Melo (12):
-  dwarf_loader: Initial support for DW_TAG_variant_part
-  dwarf_loader: Initial support for DW_TAG_subprogram in DW_TAG_enumeration
-  dwarf_loader: Populate DW_TAG_variant children in DW_TAG_variant_part
-  btf_encoder: Encode variant parts as union members in BTF
-  dwarf_loader: Handle DW_FORM_block in attr_numeric for Rust discriminant values
-  dwarf_loader: Allow forcing the merge of CUs for solving inter CU tag references
-  dwarf_loader: Support DW_TAG_imported_unit for same-file partial units
-  dwarf_loader: Fix cus__merging_cu failing to detect DW_FORM_ref_addr
-  dwarf_loader: Add cu parameter to tag__set_spec() and dwarf_tag__set_attr_type()
-  dwarf_loader: Support DW_FORM_GNU_ref_alt references to dwz alternate debug files
-  tests: Add inter-CU type reference comparison test
-  scripts: Add vmlinux_comparison.py for DWARF/BTF analysis
-
- btf_encoder.c                 |  66 ++-
- ctf_encoder.c                 |  34 +-
- dwarf_loader.c                | 873 ++++++++++++++++++++++++++++++----
- dwarves.c                     |  77 ++-
- dwarves.h                     |  63 ++-
- dwarves_emit.c                |  10 +-
- dwarves_fprintf.c             |  54 ++-
- man-pages/pahole.1            |  18 +-
- pahole.c                      |  20 +-
- scripts/vmlinux_comparison.py | 367 ++++++++++++++
- tests/block_endian.sh         | 146 ++++++
- tests/dwz_alt_file.sh         | 204 ++++++++
- tests/inter_cu_refs.sh        |  50 ++
- tests/prettify_perf.data.sh   |   4 +-
- 14 files changed, 1854 insertions(+), 132 deletions(-)
- create mode 100755 scripts/vmlinux_comparison.py
- create mode 100755 tests/block_endian.sh
- create mode 100755 tests/dwz_alt_file.sh
- create mode 100755 tests/inter_cu_refs.sh
-
+diff --git a/dwarf_loader.c b/dwarf_loader.c
+index 61d55bd70d643731..af166ec9064e82c6 100644
+--- a/dwarf_loader.c
++++ b/dwarf_loader.c
+@@ -522,6 +522,8 @@ static void tag__init(struct tag *tag, struct cu *cu, Dwarf_Die *die)
+ 
+ 	if (tag->tag == DW_TAG_imported_module || tag->tag == DW_TAG_imported_declaration)
+ 		dwarf_tag__set_attr_type(dtag, type, die, DW_AT_import);
++	else if (tag->tag == DW_TAG_variant_part)
++		dwarf_tag__set_attr_type(dtag, type, die, DW_AT_discr);
+ 	else
+ 		dwarf_tag__set_attr_type(dtag, type, die, DW_AT_type);
+ 
+@@ -1238,6 +1240,18 @@ static struct template_parameter_pack *template_parameter_pack__new(Dwarf_Die *d
+ 	return pack;
+ }
+ 
++static struct variant_part *variant_part__new(Dwarf_Die *die, struct cu *cu, struct conf_load *conf)
++{
++	struct variant_part *vpart = tag__alloc(cu, sizeof(*vpart));
++
++	if (vpart != NULL) {
++		tag__init(&vpart->tag, cu, die);
++		INIT_LIST_HEAD(&vpart->variants);
++	}
++
++	return vpart;
++}
++
+ /* Returns number of locations found or negative value for errors. */
+ static ptrdiff_t __dwarf_getlocations(Dwarf_Attribute *attr,
+ 				      ptrdiff_t offset, Dwarf_Addr *basep,
+@@ -2357,9 +2371,19 @@ static int die__process_class(Dwarf_Die *die, struct type *class,
+ 		case DW_TAG_GNU_template_template_param:
+ #endif
+ 		case DW_TAG_subrange_type: // XXX: ADA stuff, its a type tho, will have other entries referencing it...
+-		case DW_TAG_variant_part: // XXX: Rust stuff
+ 			tag__print_not_supported(die);
+ 			continue;
++		case DW_TAG_variant_part: {
++			struct variant_part *vpart = variant_part__new(die, cu, conf);
++
++			if (vpart == NULL)
++				return -ENOMEM;
++
++			// For rust it seems we have just one, but DWARF, according to Gemini, support having
++			// more than one DW_TAG_variant_part for a given DW_TAG_structure_type, so future proof it
++			type__add_variant_part(class, vpart);
++			continue;
++		}
+ 		case DW_TAG_template_type_parameter: {
+ 			struct template_type_param *ttparm = template_type_param__new(die, cu, conf);
+ 
+diff --git a/dwarves.c b/dwarves.c
+index 1748889bc051fcb4..b48d9a3b9c43eebc 100644
+--- a/dwarves.c
++++ b/dwarves.c
+@@ -405,6 +405,7 @@ void __type__init(struct type *type)
+ 	INIT_LIST_HEAD(&type->type_enum);
+ 	INIT_LIST_HEAD(&type->template_type_params);
+ 	INIT_LIST_HEAD(&type->template_value_params);
++	INIT_LIST_HEAD(&type->variant_parts);
+ 	type->template_parameter_pack = NULL;
+ 	type->sizeof_member = NULL;
+ 	type->member_prefix = NULL;
+@@ -1210,12 +1211,31 @@ static void type__delete_class_members(struct type *type, struct cu *cu)
+ 	}
+ }
+ 
++static void variant_part__delete(struct variant_part *vpart, struct cu *cu)
++{
++	if (vpart == NULL)
++		return;
++
++	cu__tag_free(cu, &vpart->tag);
++}
++
++static void type__delete_variant_parts(struct type *type, struct cu *cu)
++{
++	struct variant_part *pos, *next;
++
++	type__for_each_variant_part_safe_reverse(type, pos, next) {
++		list_del_init(&pos->tag.node);
++		variant_part__delete(pos, cu);
++	}
++}
++
+ void class__delete(struct class *class, struct cu *cu)
+ {
+ 	if (class == NULL)
+ 		return;
+ 
+ 	type__delete_class_members(&class->type, cu);
++	type__delete_variant_parts(&class->type, cu);
+ 	cu__tag_free(cu, class__tag(class));
+ }
+ 
+@@ -1225,6 +1245,7 @@ void type__delete(struct type *type, struct cu *cu)
+ 		return;
+ 
+ 	type__delete_class_members(type, cu);
++	type__delete_variant_parts(type, cu);
+ 
+ 	if (type->suffix_disambiguation)
+ 		zfree(&type->namespace.name);
+@@ -1288,6 +1309,11 @@ void type__add_template_value_param(struct type *type, struct template_value_par
+ 	list_add_tail(&tvparam->tag.node, &type->template_value_params);
+ }
+ 
++void type__add_variant_part(struct type *type, struct variant_part *vpart)
++{
++	list_add_tail(&vpart->tag.node, &type->variant_parts);
++}
++
+ struct class_member *type__last_member(struct type *type)
+ {
+ 	struct class_member *pos;
+@@ -1308,6 +1334,7 @@ static int type__clone_members(struct type *type, const struct type *from, struc
+ 	INIT_LIST_HEAD(&type->type_enum);
+ 	INIT_LIST_HEAD(&type->template_type_params);
+ 	INIT_LIST_HEAD(&type->template_value_params);
++	INIT_LIST_HEAD(&type->variant_parts);
+ 
+ 	type__for_each_member(from, pos) {
+ 		struct class_member *clone = class_member__clone(pos, cu);
+diff --git a/dwarves.h b/dwarves.h
+index 99e9d183c853ea8b..0fc57ed0c7576c01 100644
+--- a/dwarves.h
++++ b/dwarves.h
+@@ -1021,6 +1021,11 @@ static inline struct formal_parameter_pack *tag__formal_parameter_pack(const str
+ 
+ void formal_parameter_pack__add(struct formal_parameter_pack *pack, struct parameter *param);
+ 
++struct variant_part {
++	struct tag	 tag;
++	struct list_head variants;
++};
++
+ /*
+  * tag.tag can be DW_TAG_subprogram_type or DW_TAG_subroutine_type.
+  */
+@@ -1292,6 +1297,7 @@ struct type {
+ 	uint8_t		 is_signed_enum:1;
+ 	struct list_head template_type_params;
+ 	struct list_head template_value_params;
++	struct list_head variant_parts;
+ 	struct template_parameter_pack *template_parameter_pack;
+ };
+ 
+@@ -1409,9 +1415,19 @@ static inline struct class_member *class_member__next(struct class_member *membe
+ #define type__for_each_tag_safe_reverse(type, pos, n) \
+ 	list_for_each_entry_safe_reverse(pos, n, &(type)->namespace.tags, tag.node)
+ 
++/**
++ * type__for_each_variant_part_safe_reverse - safely iterate thru all variant_parts in a type, in reverse order
++ * @type: struct type instance to iterate
++ * @pos: struct variant_part iterator
++ * @n: struct variant_part temp iterator
++ */
++#define type__for_each_variant_part_safe_reverse(type, pos, n) \
++	list_for_each_entry_safe_reverse(pos, n, &(type)->variant_parts, tag.node)
++
+ void type__add_member(struct type *type, struct class_member *member);
+ void type__add_template_type_param(struct type *type, struct template_type_param *ttparm);
+ void type__add_template_value_param(struct type *type, struct template_value_param *tvparam);
++void type__add_variant_part(struct type *type, struct variant_part *vpart);
+ 
+ struct class_member *
+ 	type__find_first_biggest_size_base_type_member(struct type *type,
 -- 
 2.55.0
 
