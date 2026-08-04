@@ -1,220 +1,215 @@
-Received: from out-184.mta0.migadu.com (out-184.mta0.migadu.com [91.218.175.184])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm2-f4.google.com (mail-wm2-f4.google.com [74.125.225.132])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8B2541686B
-	for <dwarves@vger.kernel.org>; Tue,  4 Aug 2026 18:43:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.184
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C35F245C70C
+	for <dwarves@vger.kernel.org>; Tue,  4 Aug 2026 19:27:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.132
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785869025; cv=none; b=AULkxQNq9MDoi+yW09yejApR63zmwmUmGMA/iqHqWRxrreEjPSPdACTkFfNJkRLukwmnw4tzdKP1yaB3NwvFvGG1IaXpOpn1BXjROR08KVNr2xDG1CvU1+rm2mIrqEqTMT0Q8tFlLFGRUpkb9+y4YjqAeLiY0sTvNpijNMeKoRs=
+	t=1785871657; cv=none; b=CdbFOmI7EGQ7j6d1p7fb4QiQQXGusPj/HaOtINujJvPGBTVyQShcQmo7AcpmHPxsN+fZ6lVg7SEElM8hU/+U5PO85sq5FO2eMnKR5FTzUmjRI3ocN/4ddhDCNqvNZSj+a7AXR5848svC8GLFHlIIj7TKtEcVmBENiNqKgQuG7cs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785869025; c=relaxed/simple;
-	bh=w3I849tp4nn7jUF+RIYsuF4W8RVAT1SMTjKYT+wKvFo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=IDN9kDdzT596FzdISmGW6w9/3mo6AV/kgCZo75S7mmibwf8KgmbP/TN4dmnNfrgk5WQ06Te2zpCdBHYZmFKqy8ynHubicGCVxhqwqvSuFg2+lHXeoxPkj980obyiCtwIP7kVPMB4OoVmw/tMcC1nKDNg3uufwDfdtDX/oJ2IkrQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=rx2jhkuZ; arc=none smtp.client-ip=91.218.175.184
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1785871657; c=relaxed/simple;
+	bh=kP/NFjKV8Cd5NAae9bJMec0CGdAf8nbPHae8ZnR+AjI=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=JW8LUatrxjj6CkLCKFHL1aZwT9+Yj6qFiBv1klAo4S0Zvn+c71Hz5Pl4C5mXhLv3QgyI7Jh4FD14CINpWVnn6ZCvcaerQzPYjWxFgHiU1uv3N+jvCwAJ567fZSR+Vx3HIoplM9V2PKcCjqQbwfpOiPK1EaOsoGnd2DWqf359B44=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mQG0gRPl; arc=none smtp.client-ip=74.125.225.132
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="rx2jhkuZ"
-Message-ID: <4cb8bb30-1f01-4b78-a6b1-4ade3b965039@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1785869020;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=l0pbxGg6HuESpwSDv777qFnuhhGQm6TbzwVowqQZwbI=;
-	b=rx2jhkuZc6EF6xG8xH5TTs6NhghiM82974ZC8Kd9+1ctYFMnNyoOHYdjMjuYmenG+YfOSr
-	ob9etDfxidInpvEjD5v7fBEQuMBvf8lvywPiJ3ULJ1JfyaowSea+SILy5UyDPxUoqAhKWD
-	WPCALsZfY+6juCyMcu6Ein5YeqYfUY4=
-Date: Tue, 4 Aug 2026 11:43:34 -0700
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mQG0gRPl"
+Received: by mail-wm2-f4.google.com with SMTP id 5b1f17b1804b1-4955f00e593so456855e9.0
+        for <dwarves@vger.kernel.org>; Tue, 04 Aug 2026 12:27:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1785871652; x=1786476452; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=zdgRwhw64WkzElAtZDWQ5xZZ48P/57q3QV1Kmcq/TBw=;
+        b=mQG0gRPlf+bIzg5EbPoZTD6KcegY17nJky3lNLIN8yF+fbPvLQ3OEB6mdA+S8P0H31
+         dyReyS8Ndpd3iEU1xQX/Bwdu7b6lpZBDYRkDryyQWq/pZcHq1QoVuk8WuixkKDMchFyE
+         seJ6D5leqeRbnTkIapEhxwrQ7X0r2xuETNozJvPKgh4lTFuLL0k7JaFUrVpeccmPgTCB
+         E6sFVYy8jbR/VDLA2el72ebFwYlTCBrn8zCRaXnbORyyGDg937pmIQzDIu/s0xPr+aKq
+         9wiNc4liADyG4sbRzsK3K+rQ1cUlB5Hr2N2F9P9YwoUUnh/tPxaQ6XOc+ih8OFZiJ3+Z
+         /v3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785871652; x=1786476452;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=zdgRwhw64WkzElAtZDWQ5xZZ48P/57q3QV1Kmcq/TBw=;
+        b=jBG4sKYIzhotWfoRod75IgjqkM+xqJPaYImI6s8V2S9COqneEWEoZLlaUhwM98pjZx
+         cEQTDEsmkEXcGPEEOYbpD28tqMBZ+UP/cW/hAwmLv2/bERMJCyoL2x6HNfbWt1ohWej5
+         KB8xHEeTyNLlf9LZSKVeeij0YruXvFzvLBP1YwpxQW/TLC7aRalGCQuYpCPRwBwwvrOc
+         yGManB4Z3/m77xjtNAxcIU8fDIgjHwAzmGvl0mUKmWBNiloqjggGsndZk8HmRE18lfqR
+         xKifGDXykBYbCGbOIA6WU8CMU/+8Bh9PVD9UmNnTLESz3SdJHvNS5ATzPpiMlgM0mddv
+         kFcQ==
+X-Forwarded-Encrypted: i=1; AHgh+RovNvT6nnUVaFnHVBqYr7moyipvL01lPQ5yYL4E+j9b1pVAPdvEv7v+0AGA8JEREdZH0S7wAfuK@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw6TyKXnStsoPdYsAuqJbWxRLOM/OYT5DhxB3y0+VFI15nKDAPf
+	WrIogS4EzqoH3Z/OdtaDZCegLCvabIDdBZhaFojZcvQSNaZJd+2M8GU3
+X-Gm-Gg: AR+sD10T7xeOyTCeitYWX8a8yoI4KG2PalkttxCoHRcsWcBD3j8sAQKywAEzxYeMjY3
+	fSm0rp0DimJVBtFn9GkkdbuemAuo3asJJvDnyrRCIBpT+7xElpH8FPoRrA4hca3yyA2+1LQnGZ/
+	xIV8CWftjNbMBARk3iat5Sfp3t6+ba5zlAu64x82CnMAX+UoU763ygOTlaV+QFFrUnmHGipXYr/
+	9UkrNKNUwzMLQOT+q/2hNfqlWSGyNWRyIa2ZW62Slm5b0EZt/4sUl0uz1AXP6Sudfc0giN7f9DG
+	oOwgXm7NPdB/YH6XZimbTkwK8rygolHRMVyxvwpPUhEWU/Vd7IAPharnVCSw4kVgg5Z6++PIzPj
+	sWai4uo/xUdZweKg0+g+cBfJiut+jbTI5mYpVvgIIv+KI6CLkFcG3iLVfncyj2cZkTnPtrII0DP
+	YcKQAFvqn4oH+By64dmv6BNgD+8VHaxSeh/Frn8AT+7XyOpr3dPS8GxYpJxmHm8EHrOJJ9Gnt8f
+	1DbFZ/HtjdzGe05Mm6JrN+AswuNSsLs0Tv9/MQPETzrATLlhWDH1rkb3PiMSRxiUqWsYGoYpu94
+	6PS7+GTKjp3ph2FoDzVMCjmP0bo=
+X-Received: by 2002:a05:600c:3ba6:b0:499:48be:3189 with SMTP id 5b1f17b1804b1-4994e6c065fmr9279825e9.0.1785871652324;
+        Tue, 04 Aug 2026 12:27:32 -0700 (PDT)
+Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49949fcb46esm133637285e9.5.2026.08.04.12.27.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Aug 2026 12:27:31 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Tue, 04 Aug 2026 21:27:31 +0200
+Message-Id: <DKGENYO9FITK.1M51V4BULBSYT@gmail.com>
+Cc: <bpf@vger.kernel.org>, "Andrii Nakryiko" <andrii@kernel.org>, "Alexei
+ Starovoitov" <ast@kernel.org>, "Eduard Zingerman" <eddyz87@gmail.com>,
+ "Tejun Heo" <tj@kernel.org>, "Emil Tsalapatis" <emil@etsalapatis.com>
 Subject: Re: [PATCH dwarves] btf_encoder: Infer arena kfunc arguments from
  suffixes
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Alan Maguire <alan.maguire@oracle.com>,
- Arnaldo Carvalho de Melo <acme@kernel.org>, dwarves@vger.kernel.org
-Cc: bpf@vger.kernel.org, Andrii Nakryiko <andrii@kernel.org>,
- Alexei Starovoitov <ast@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Tejun Heo <tj@kernel.org>, Emil Tsalapatis <emil@etsalapatis.com>
+From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
+To: "Ihor Solodrai" <ihor.solodrai@linux.dev>, "Alan Maguire"
+ <alan.maguire@oracle.com>, "Arnaldo Carvalho de Melo" <acme@kernel.org>,
+ <dwarves@vger.kernel.org>
+X-Mailer: aerc 0.21.0
 References: <20260803125518.2279340-1-memxor@gmail.com>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
-In-Reply-To: <20260803125518.2279340-1-memxor@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+ <4cb8bb30-1f01-4b78-a6b1-4ade3b965039@linux.dev>
+In-Reply-To: <4cb8bb30-1f01-4b78-a6b1-4ade3b965039@linux.dev>
 
-On 8/3/26 5:55 AM, Kumar Kartikeya Dwivedi wrote:
-> The kernel verifier recognizes __arena and __arena_nullable parameter
-> suffixes for registered kfuncs. These arguments need the matching
-> address_space(1) BTF type attribute so bpftool emits usable declarations.
+On Tue Aug 4, 2026 at 8:43 PM CEST, Ihor Solodrai wrote:
+> On 8/3/26 5:55 AM, Kumar Kartikeya Dwivedi wrote:
+>> The kernel verifier recognizes __arena and __arena_nullable parameter
+>> suffixes for registered kfuncs. These arguments need the matching
+>> address_space(1) BTF type attribute so bpftool emits usable declarations=
+.
+>
+> Hi Kartikeya,
+>
+> +cc: Emil, Tejun
+>
+> This patch is certainly a no-go, because of the ongoing effort to move
+> decl/type tag BTF generation from pahole to resolve_btfids [1][2]. I'm
+> going to send the last unlanded bits of that soon.
+>
+> *If* we decide to make this change, it shouldn't be done in pahole.
+>
 
-Hi Kartikeya,
+Ah, I was unaware. Once you share those changes I'd be happy to rework this
+support for resolve_btfids instead (i.e., tack it wherever we do
+KF_ARENA_ARGS<N> handling right now).
 
-+cc: Emil, Tejun
+> But even setting that aside:
+>
+>> The kernel verifier recognizes __arena and __arena_nullable
+>> parameter suffixes for registered kfuncs.
+>
+> This is not true. The only way the kernel can recognize an arena
+> argument is via one of the three kfunc flags: KF_ARENA_RET,
+> KF_ARENA_ARG1 and KF_ARENA_ARG2. No __arena suffix support exist:
+>
+>   $ git log --oneline -n1
+>   7f333f85f83d (HEAD -> bpf-next, origin/for-next, origin/bpf-next, bpf-n=
+ext/master, bpf-next/for-next, bpf-next/HEAD) Merge branch 'bpf-invalidate-=
+rcu-pointers-after-final-spin-unlock'
+>   $ grep -r --include=3D"*.[ch]" __arena  kernel/bpf/
+>     # ...nothing
+>
 
-This patch is certainly a no-go, because of the ongoing effort to move
-decl/type tag BTF generation from pahole to resolve_btfids [1][2]. I'm
-going to send the last unlanded bits of that soon.
+Yeah, I worded it poorly, I meant it was supposed to gain support for those
+soon^TM, by way of the series here:
+https://lore.kernel.org/bpf/20260803125115.2264733-1-memxor@gmail.com
 
-*If* we decide to make this change, it shouldn't be done in pahole.
+> __arena symbol is only used in sched_ext, libarena and selftests code
+> as an alias to __atrribute__((address_space(1))) or a type tag:
+>
+>   $ grep -r --include=3D"*.[ch]" 'define __arena '
+>   tools/sched_ext/include/scx/bpf_arena_common.bpf.h:#define __arena __at=
+tribute__((address_space(1)))
+>   tools/testing/selftests/bpf/libarena/include/bpf_arena_common.h:#define=
+ __arena __attribute__((address_space(1))) __attribute__((btf_type_tag("are=
+na")))
+>   tools/testing/selftests/bpf/libarena/include/bpf_arena_common.h:#define=
+ __arena __attribute__((btf_type_tag("arena")))
+>
+> AFAIR prior discussions that led to KF_ARENA_* flags implementation,
+> we decided to *not* add an __arena arg suffix support. We were talking
+> about getting rid of this suffix-annotation mechanism completely.
+>
+> What we want long term is proper decl/type tags support from
+> compilers, so that in the kernel we could have and use:
+>
+>   #define __arena __attribute__((btf_type_tag("arena")))
+>
+> At the time KF_ARENA_* flags were introduced, this wasn't feasible
+> because GCC compiler didn't support the tags. I think it does since
+> recently, but even so we'll have to support older compiler builds for
+> quite a while.
 
-But even setting that aside:
+I wasn't involved in the discussion for choosing the flag, so I do not reme=
+mber
+the nuance involved in making the choices back then. But please correct me =
+or
+provide context in case I do not capture something accurately below.
 
-> The kernel verifier recognizes __arena and __arena_nullable
-> parameter suffixes for registered kfuncs.
+>
+> So while I understand the reluctance to add KF_ARENA_ARG3..N, I don't
+> think we want to introduce and support yet another mechanism for arena
+> argument annotations. If we do, we'll be stuck with a mess of
+> supporting two/three ways of doing the same thing for the foreseeable fut=
+ure.
 
-This is not true. The only way the kernel can recognize an arena
-argument is via one of the three kfunc flags: KF_ARENA_RET,
-KF_ARENA_ARG1 and KF_ARENA_ARG2. No __arena suffix support exist:
+I think one major difference is that KF_ARENA_ARG* things were mostly for
+annotating the vmlinux.h with the right address space label before, but did=
+n't
+carry any semantic meaning for the kfunc's type checks.
 
-  $ git log --oneline -n1
-  7f333f85f83d (HEAD -> bpf-next, origin/for-next, origin/bpf-next, bpf-next/master, bpf-next/for-next, bpf-next/HEAD) Merge branch 'bpf-invalidate-rcu-pointers-after-final-spin-unlock'
-  $ grep -r --include="*.[ch]" __arena  kernel/bpf/
-    # ...nothing
+That changes with these suffixes though. The pointer will be translated whe=
+n
+passed into the kfunc. IMO it would be odd to diverge for this particular c=
+ase,
+since we use suffixes for every other case where we constrain the input typ=
+e of
+the kfunc argument or give it special meaning.
 
-__arena symbol is only used in sched_ext, libarena and selftests code
-as an alias to __atrribute__((address_space(1))) or a type tag:
+We also want to have similar annotation on struct_ops callbacks, where we a=
+lso
+use suffixes, so it seemed better to keep it consistent.
 
-  $ grep -r --include="*.[ch]" 'define __arena '
-  tools/sched_ext/include/scx/bpf_arena_common.bpf.h:#define __arena __attribute__((address_space(1)))
-  tools/testing/selftests/bpf/libarena/include/bpf_arena_common.h:#define __arena __attribute__((address_space(1))) __attribute__((btf_type_tag("arena")))
-  tools/testing/selftests/bpf/libarena/include/bpf_arena_common.h:#define __arena __attribute__((btf_type_tag("arena")))
+I agree that all of these should be using type tags, but we're not there ye=
+t.
 
-AFAIR prior discussions that led to KF_ARENA_* flags implementation,
-we decided to *not* add an __arena arg suffix support. We were talking
-about getting rid of this suffix-annotation mechanism completely.
+It is on my list of things to explore whether we can convert existing users=
+ of
+KF_ARENA_ARG<N> flags (bpf_arena_alloc_pages(), etc.). We will have to modi=
+fy
+the implementation, and ensure we don't break compatibility by moving from
+ignoring the type of input register to something we constrain to PTR_TO_ARE=
+NA
+and SCALAR.
 
-What we want long term is proper decl/type tags support from
-compilers, so that in the kernel we could have and use:
+At that point, it should be possible to drop the kfunc flags, esp. if we ar=
+e
+worried about fragmenting ways of achieving the same thing (annotation of
+vmlinux.h prototypes).
 
-  #define __arena __attribute__((btf_type_tag("arena")))
+In functional terms, the only change on resolve_btfids side should be to us=
+e the
+BTF parameter's emitted name for deciding whether it should trigger behavio=
+r
+equivalent to the current KF_ARENA_ARG flags.
 
-At the time KF_ARENA_* flags were introduced, this wasn't feasible
-because GCC compiler didn't support the tags. I think it does since
-recently, but even so we'll have to support older compiler builds for
-quite a while.
+For better or worse, we need to be in this state of supporting suffixes unt=
+il we
+can declare bankruptcy of supporting GCC versions without type tags support=
+.
 
-So while I understand the reluctance to add KF_ARENA_ARG3..N, I don't
-think we want to introduce and support yet another mechanism for arena
-argument annotations. If we do, we'll be stuck with a mess of
-supporting two/three ways of doing the same thing for the foreseeable future.
-
-Maybe adding support for proper type-tagging is worthwhile long-term,
-but not the name suffix.
-
-[1] https://lore.kernel.org/bpf/20260601221805.821394-1-ihor.solodrai@linux.dev/
-[2] https://lore.kernel.org/bpf/20260722233518.778854-1-ihor.solodrai@linux.dev/
-
-
-> 
-> Extend the existing KF_ARENA_ARG1/2 handling to select arguments by either
-> the legacy flag or either suffix. Iterate over all parameters, allowing the
-> suffix convention at any argument position and avoiding duplicate tags when
-> a flag and suffix select the same argument.
-> 
-> Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-> ---
->  btf_encoder.c | 38 ++++++++++++++++++++++++++++----------
->  dutil.h       | 13 +++++++++++++
->  2 files changed, 41 insertions(+), 10 deletions(-)
-> 
-> diff --git a/btf_encoder.c b/btf_encoder.c
-> index 4b422e09800f..07ca4f41ac32 100644
-> --- a/btf_encoder.c
-> +++ b/btf_encoder.c
-> @@ -42,6 +42,8 @@
->  #define BTF_KFUNC_TYPE_TAG	"bpf_kfunc"
->  #define BTF_FASTCALL_TAG       "bpf_fastcall"
->  #define BPF_ARENA_ATTR         "address_space(1)"
-> +#define BPF_ARENA_SUFFIX       "__arena"
-> +#define BPF_ARENA_NULLABLE_SUFFIX "__arena_nullable"
->  
->  /* kfunc flags, see include/linux/btf.h in the kernel source */
->  #define KF_FASTCALL   (1 << 12)
-> @@ -808,12 +810,32 @@ static int btf__tag_bpf_arena_arg(struct btf *btf, struct btf_encoder_func_state
->  	return id;
->  }
->  
-> -/* Modifies state->ret_type_id and state->parms[i].type_id for flagged kfuncs */
-> +static bool btf__is_bpf_arena_arg(const struct btf *btf,
-> +				  const struct btf_encoder_func_state *state, int idx)
-> +{
-> +	uint32_t flags = state->elf->kfunc_flags;
-> +	const char *name;
-> +	size_t name_len;
-> +
-> +	if ((idx == 0 && (flags & KF_ARENA_ARG1)) ||
-> +	    (idx == 1 && (flags & KF_ARENA_ARG2)))
-> +		return true;
-> +
-> +	name = btf__name_by_offset(btf, state->parms[idx].name_off);
-> +	if (!name)
-> +		return false;
-> +	name_len = strlen(name);
-> +	return (name_len > sizeof(BPF_ARENA_SUFFIX) - 1 && strends(name, BPF_ARENA_SUFFIX)) ||
-> +	       (name_len > sizeof(BPF_ARENA_NULLABLE_SUFFIX) - 1 &&
-> +		strends(name, BPF_ARENA_NULLABLE_SUFFIX));
-> +}
-> +
-> +/* Modifies state->ret_type_id and state->parms[i].type_id for arena kfuncs */
->  static int btf__add_bpf_arena_type_tags(struct btf *btf, struct btf_encoder_func_state *state)
->  {
->  	uint32_t flags = state->elf->kfunc_flags;
->  	int ret_type_id;
-> -	int err;
-> +	int err, i;
->  
->  	if (!btf__add_type_attr) {
->  		fprintf(stderr, "btf__add_type_attr is not available, is libbpf < 1.6?\n");
-> @@ -830,14 +852,10 @@ static int btf__add_bpf_arena_type_tags(struct btf *btf, struct btf_encoder_func
->  		state->ret_type_id = ret_type_id;
->  	}
->  
-> -	if (KF_ARENA_ARG1 & flags) {
-> -		err = btf__tag_bpf_arena_arg(btf, state, 0);
-> -		if (err < 0)
-> -			return err;
-> -	}
-> -
-> -	if (KF_ARENA_ARG2 & flags) {
-> -		err = btf__tag_bpf_arena_arg(btf, state, 1);
-> +	for (i = 0; i < state->nr_parms; i++) {
-> +		if (!btf__is_bpf_arena_arg(btf, state, i))
-> +			continue;
-> +		err = btf__tag_bpf_arena_arg(btf, state, i);
->  		if (err < 0)
->  			return err;
->  	}
-> diff --git a/dutil.h b/dutil.h
-> index 603556fa0308..d55d01abc842 100644
-> --- a/dutil.h
-> +++ b/dutil.h
-> @@ -335,6 +335,19 @@ static inline bool strstarts(const char *str, const char *prefix)
->  	return strncmp(str, prefix, strlen(prefix)) == 0;
->  }
->  
-> +/**
-> + * strends - does @str end with @suffix?
-> + * @str: string to examine
-> + * @suffix: suffix to look for.
-> + */
-> +static inline bool strends(const char *str, const char *suffix)
-> +{
-> +	size_t str_len = strlen(str);
-> +	size_t suffix_len = strlen(suffix);
-> +
-> +	return suffix_len <= str_len && strcmp(str + str_len - suffix_len, suffix) == 0;
-> +}
-> +
->  void *zalloc(const size_t size);
->  
->  Elf_Scn *elf_section_by_name(Elf *elf, GElf_Shdr *shp, const char *name, size_t *index);
-
+> [...]
