@@ -1,171 +1,341 @@
-Received: from mail-wm2-f9.google.com (mail-wm2-f9.google.com [74.125.225.137])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8576235675A
-	for <dwarves@vger.kernel.org>; Tue,  4 Aug 2026 23:17:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.137
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785885454; cv=none; b=qyGNvrXYelSBUz5FZr4Qr/Be7JOA8K/A79B5RxlKm0vqSGIqVEr+HdlkVoHUUkRXmkWbkFA8TcD7rWI8OeMD7CdpK57W+u4/GrKXCNVRvEyodX1qur7cBV0zD4tV1R+mKAZJGeOrIHQapI7DNmJNyGulQQ8FAB04nMM7fxeM0xI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785885454; c=relaxed/simple;
-	bh=BDETBFOwIwsh+byhbzblZyCYRy+jFPPsjNH0XT4A/NI=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=a5+SehMa0ywVAafSEqNOZ1L0kDCkTeOvB9VG97VIg0P0DDp8uYKR+LJby6B0I7ekDOobLiI16+3oFrUT5magkQfjkDwvpgWm3lrdlEuK9qCGZ94DGnVgOFKfInIA7KJLMnV1W5IOWTAdtS99aCjNdqsMB6bptSuCW0SgfTXUa0I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TKrNiXNA; arc=none smtp.client-ip=74.125.225.137
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A31C46D093;
+	Fri,  7 Aug 2026 08:09:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.165.32
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1786090182; cv=fail; b=QS1a2cAnktvmHmhvRWkXPcmt+s4MvwP6i9+Tr1GHLzghnz1LoRs4CijhKDSQZovxgdzuY/KYBwZBAnpcoaXOPQZz4lZpaEcl9kQs8jZvGC35a86CBlc3e9R/kcWUiYs6SYhAk8ctxhzSK4U00A0klMmBUwY8Xwk8mSYelDYguOY=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1786090182; c=relaxed/simple;
+	bh=m93VZIfEPE5GAAdpfWsxAt6CfPi7p6GzFnJlMLDImtQ=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=abvgCMHtwIfMifrQwYRap2O715O4pbpRiPD2IYtRfNXRhHR9NetVg20qlnBxiXII4VJKn1tkDqWdUi2NpmgRM9nk9JVqHHkzVDWN3LXa+Q2bNHgAGaVod1MhVI3mpzqxJe7/uYwy+0usW0l64e7YUPZk2qWZe+7u0VqDg+FuLXM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=dIlYXta2; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=ImF4rXz/; arc=fail smtp.client-ip=205.220.165.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TKrNiXNA"
-Received: by mail-wm2-f9.google.com with SMTP id 5b1f17b1804b1-49553da76dcso991255e9.1
-        for <dwarves@vger.kernel.org>; Tue, 04 Aug 2026 16:17:32 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="dIlYXta2";
+	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="ImF4rXz/"
+Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6776kkTn3081949;
+	Fri, 7 Aug 2026 08:09:27 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=
+	corp-2025-04-25; bh=Z/HxpMu37/J2Als9jBQCxt+k34EmZwObLQC0NfRNiNs=; b=
+	dIlYXta2/vofnpiC5+mWcLMjljOm0m39Twdn7T69tQAqHbfl1LU0HN1B87izPeio
+	6tJCEU8vlV7c/J4Q8Z7iS6ht7WxgkCPgpKJA3JDMTFSD6CXkbD64VU9tjG+i9GVy
+	00HUvVEIu0DEbfY5PDwmM0f+aDnyFTLWMmHlTVEX4rq6+SvMQIZTEH4kq5vkp8er
+	KbQql8wO/SiEc1oIRm3x2aMBRx00a8EDRhpsZa3g8tsswJ9n/wFKy5qDGHgrBwFz
+	fRBBnCjrrnyAQYea4JR/iPxsQYrfP6lxZe48tL269s/hsMwey9rEfVgss2iD4pfC
+	33iq/jf+Vr/eSWwFtBYpRg==
+Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4fs7cyfjbt-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 07 Aug 2026 08:09:26 +0000 (GMT)
+Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.7/8.18.1.7) with ESMTP id 67780jEX000567;
+	Fri, 7 Aug 2026 08:09:25 GMT
+Received: from dm1pr04cu001.outbound.protection.outlook.com (mail-centralusazon11010007.outbound.protection.outlook.com [52.101.61.7])
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 4fs78wnw6x-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Fri, 07 Aug 2026 08:09:25 +0000 (GMT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=V6dnRrk5A3ziBdkEVnJuUshfWVQJR70oWuRMFWNITMFHkty/1q3peIVJF3AQ6NWTDKSjR6WJKXSi7ntbw4HjW0oJ1l2hk6bJYI4SPXiX8IweAAnDi/aYQxT2QMmO6/lb7Br//HgDeb9XVOy+I2ffPwB3mQpaUjtjBM/Y6Kvj9eN2Vdqpl++87Znw42HJKWmuG8d1yXKDqRjA/CLD0TbaMBM7pmlWSo4sceGFC9hzo96Gmr4GjhLNrYJRV9NlOcMVRzTyulsJvpHtUxL+fIZih4Cu++aVQ6XpJTqbkPc1r6RM9T2IR348QkxbpuWUIogJV48hjH/ErkLVDrvUtidJbQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Z/HxpMu37/J2Als9jBQCxt+k34EmZwObLQC0NfRNiNs=;
+ b=oqvhGWhzwj/LTpPdeVRfj7uaoICNERvwa0xrmh5MO3JL2HyrxbB8oOUydxNIFlVltk9vnpqZPjDgulhPjxI9nQAxyjiiy3z3g0VDQ/kCOuMbB6XUELlcEV1qj2xMsvkFGZA/Qgai1+AwW+Za79gwbZ9DfmsxpW66urGC08sx7BfiuhM3hNB11z8ebGvE3s6MbeV8upgdVlVd+T8TBXhFOlKjCBwJQx0QhL73gMzKzFN3V6aRAsXrXGumba+/R+4M6ztI2TK0wvDzULc/AIsQvMBy139Kug2ROek8YCNPz9U1JGFeZS9GL9iCuTjZuPEk4a8WX08yyt96CSMN2nkJPg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785885451; x=1786490251; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=BDETBFOwIwsh+byhbzblZyCYRy+jFPPsjNH0XT4A/NI=;
-        b=TKrNiXNAJH975eZTaTA3iNvrY2MijfL08mYMXChemlQAbvcZXAg+s412L6cL2b3353
-         vjxSx4gLagFC69i6oT9+YX3bse8EqmJTDHKH1WENfzVFjK/z/+3sS91UQkvY4aik/kIJ
-         FQazGLQOXCVA56R1cl0DWHnACzdAS5ksgHDhFYpYixjj8ysvPmcsfANDiNKEu9Wz8EV6
-         Ybq5Migw5gBB7MNv52Ub7q1ux+Lqe5NGMKenKCJ1T5tHEDQR+pKETYraSIJ25LSQJuC9
-         7NcYD7Xe/bc4k3V4+71ldPq/7hpNTszeu/Sa5GE0c8euP2zMme0TgqhPsCVEoSKAwfgS
-         qA4Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785885451; x=1786490251;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=BDETBFOwIwsh+byhbzblZyCYRy+jFPPsjNH0XT4A/NI=;
-        b=lX9OHqd5SH/Jj3tIDHbnvZ7E+VyxbwVlkzezbdTFM5pQ8yy63DbpOcbiun3w7PH3dD
-         XCuB0nvjrU6rGCjhk/AGv7JG45fk9Pzdn9FhKOfrOjGLxDNZmqUA8fxRf+7WngL64zQK
-         nK04kPneZEaLHcWwRbiVTI/Uu2cznYOW0MtIqmUK2GDb/hniuI+C11wzvbu6mQ9pydBk
-         2M+yVoGSdWPitz1G3ZdjD0shdKdqTMlXgK4WlkCeYohKCIUVQoQWVst6Lq1onGExpX3I
-         RtPqT7m3RbhuFQUJAIROXT5SUa1PX+/BvkMRey3j4ymsGU07dC8G2Z6A/KSL7ZY/NkFd
-         35Ag==
-X-Forwarded-Encrypted: i=1; AHgh+RohFnjVs1M2+5KqAqTHkVxf3bAzJkdDJwx9hkAnpw05CeTh4kt5BbCSIM3X0fgxUrwsjHWvtNUA@vger.kernel.org
-X-Gm-Message-State: AOJu0YziWWAnrW9Tjx5fzXXTuApV+DGVWZEv1q/UBayTNXmuNXmE/4M+
-	C0IKRv1186uhFYTzMBUd6x7IIs4d2H5oAVLY+1UmC8aHYOza+0Gu2xly
-X-Gm-Gg: AR+sD10bRG20i8CWRiKOR+tuPRc9GmWi+ImNpdFm/oiACsTxZD0RdCGawHF9XgboUH1
-	srw3cr53IG7CxX18sq5hXUIOkxJj7ziwL1HG1YkdBh/tAqSVGPfHY6TriN7g7TnWrhwsbQhcRnT
-	i+xRe8ohrXUoGIEAzXrDm4Ry6mzsxrZicBFaYhsv2PYPKzbeYMdTY70FLztDzqj3cJRXNA+fGMz
-	oqPoV23ec+r+DC9GrbgE2zZchRtsRkPjo9BcBQ5ru1ahn0+GERlnOnzbY/mRniMgPT8H16awDEG
-	YgjnTidziDq7wgAgAuOkywlM5I+uT4Ngn2mRcQ1fk5AlK3Qoe3PABTcmC5EVYNjqFobeHZtYmkd
-	o33gTYvAVKtiOtJNfYQVB0ANlemXUAfaifcVDOkUqD7nlG1eGwlxgDtHzpmTnjuI4KazywUp0rt
-	OGRXqUGF/JwVHfh2lZqxVrhk7bnK92TjChQJX8msxbcmBB4ZDeqrd+oqhVfeMjAFNIGJmP8Y3F8
-	xdy7dYKS/3BTIAJ5qCuKYfZJ2MAbmi6jjLPpAm/2R8LJdDrO7ay+xG8iGaEvPTRIKuEs/NsJvfP
-	qHMQ4RAWXauLC7qLUbFCLcfxxts70/Dy2QRPvA==
-X-Received: by 2002:a05:600c:5791:b0:498:11b5:3ff7 with SMTP id 5b1f17b1804b1-4994e7d8a85mr15226145e9.18.1785885450678;
-        Tue, 04 Aug 2026 16:17:30 -0700 (PDT)
-Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4994e5192c5sm22320335e9.1.2026.08.04.16.17.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Aug 2026 16:17:29 -0700 (PDT)
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Z/HxpMu37/J2Als9jBQCxt+k34EmZwObLQC0NfRNiNs=;
+ b=ImF4rXz/pZyjFw4SgRTSI5kPVkARYkX7aK79q+4cKAKEtY6JdWXPfY7YHFe8nagAiVNbNsSr3GdYb7dxcunxPy3gNF5osBXeG7vQ3MBNk16aBe7hvEUIBA+GW8RA1FYRT77AJK4Z5yfhFRtEC+mDIo+gd66OgUe5l/4aQzE5SNw=
+Received: from BN0PR10MB4901.namprd10.prod.outlook.com (2603:10b6:408:126::19)
+ by PH0PR10MB997568.namprd10.prod.outlook.com (2603:10b6:510:37e::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.292.19; Fri, 7 Aug
+ 2026 08:09:23 +0000
+Received: from BN0PR10MB4901.namprd10.prod.outlook.com
+ ([fe80::19a8:41b4:f519:1b79]) by BN0PR10MB4901.namprd10.prod.outlook.com
+ ([fe80::19a8:41b4:f519:1b79%5]) with mapi id 15.21.0270.016; Fri, 7 Aug 2026
+ 08:09:22 +0000
+Message-ID: <18b557a8-e1ca-46cf-b03f-5e68490c9229@oracle.com>
+Date: Fri, 7 Aug 2026 09:09:16 +0100
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCHES 00/12] pahole: Support more rust tags and references to
+ dwz alternate debug files
+To: Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc: Jiri Olsa <jolsa@kernel.org>, Clark Williams <williams@redhat.com>,
+        dwarves@vger.kernel.org, bpf@vger.kernel.org,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Yonghong Song
+ <yonghong.song@linux.dev>,
+        Mark Wieelard <mjw@redhat.com>
+References: <20260731193102.110693-1-acme@kernel.org>
+Content-Language: en-GB
+From: Alan Maguire <alan.maguire@oracle.com>
+In-Reply-To: <20260731193102.110693-1-acme@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: FR0P281CA0047.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:48::18) To BN0PR10MB4901.namprd10.prod.outlook.com
+ (2603:10b6:408:126::19)
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Wed, 05 Aug 2026 01:17:29 +0200
-Message-Id: <DKGJK1DE7NME.2666KVAI27JXJ@gmail.com>
-Cc: <bpf@vger.kernel.org>, "Andrii Nakryiko" <andrii@kernel.org>, "Alexei
- Starovoitov" <ast@kernel.org>, "Tejun Heo" <tj@kernel.org>, "Emil
- Tsalapatis" <emil@etsalapatis.com>
-Subject: Re: [PATCH dwarves] btf_encoder: Infer arena kfunc arguments from
- suffixes
-From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
-To: "Ihor Solodrai" <ihor.solodrai@linux.dev>, "Eduard Zingerman"
- <eddyz87@gmail.com>, "Alan Maguire" <alan.maguire@oracle.com>, "Arnaldo
- Carvalho de Melo" <acme@kernel.org>, <dwarves@vger.kernel.org>
-X-Mailer: aerc 0.21.0
-References: <20260803125518.2279340-1-memxor@gmail.com>
- <4cb8bb30-1f01-4b78-a6b1-4ade3b965039@linux.dev>
- <DKGENYO9FITK.1M51V4BULBSYT@gmail.com>
- <8dc173dc3d051d338916c72cae070238718fd196.camel@gmail.com>
- <6c9500d4-7401-44f0-93a6-88a827026ae0@linux.dev>
- <4d20aecf677f4aec3e8e70106d4bdbcb01902e69.camel@gmail.com>
- <DKGHMNV38DFI.1RZJ281XECD14@gmail.com>
- <56590122d4901653aa2827088b9a83447ee745e0.camel@gmail.com>
- <7c5a6e06-87e3-4025-8243-b8d08d785ce6@linux.dev>
-In-Reply-To: <7c5a6e06-87e3-4025-8243-b8d08d785ce6@linux.dev>
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN0PR10MB4901:EE_|PH0PR10MB997568:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4405f875-a855-4120-0550-08def45b3084
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|366016|1800799024|23010399003|56012099006|10067099003|6133799003|22082099003|3023799007|18002099003;
+X-Microsoft-Antispam-Message-Info:
+	uHqVfeuK/3wq5Bz/ExcBSyWoVKPW8wN1SX5nJU/K1qFIL7UGfW4Bks+EGJpe6SHHaUtDpZsOrWh1aGw9iK058rQ2gl9SqZB2Un69JYjOFffo/ftkch2Rk/CqyeCqUjg1DltOGb6J8xd70Lu+1MkNI4VUtbff44mRtfShvfzpHmWctMEzEZWJt+N659XTaxblNNN5wE1Zy4OYqp8Gml/ljsyg/IGv1etuiJV+FnlRAQ/JORELFWB1IHFp6LdfuC/bIHn79PWO8SJarut23UXkjN/GopkQz3Zjy/IFt8+TIsevoYnnTJYyMhFT3P0URmlW5RGAgWnIrqdIWkQzVfJsr1X8GUSmx/tsm9NjCJPqDICmYLrPxtvcoF8KSVKTFtqLpvmMALDTjnkMYEyIS6qOS+EC0plD7T7WJFyyB10DrQ9TEeslUimqCCDJOW81UUFK5o9AuDl1G/VIR4PlN4QbC0FNFZzaTUersETueBp2Muq/UO+fBJNiZHkkt8xWsloTHnV/bjlnKAq3IIGWbdi+vvMynA/SoaQJDO3nRfs3Yp5qtsZGH3G8OIgJxBLmJy196yBgWSm1u3UUBRERKHaKWEYXa5VsenQu/UmEd6Rop5JPj/1/zSIcrlwS7olQJCQf+/OsUWzzs01oeRjCozXx0c2b4ltONk5CGMw1A6mfwCE=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN0PR10MB4901.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(366016)(1800799024)(23010399003)(56012099006)(10067099003)(6133799003)(22082099003)(3023799007)(18002099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?ZFRVWVJaWkFGaGJQbHk1U0dIc2k5UHF5VjhGZXpBLy9rNXhESncycW56czMv?=
+ =?utf-8?B?T3dhWHJLT2UzNnVDd2krMC8vUHRBb1dxK3hya0NvR3dsRkR6RTcxSkdKMEh3?=
+ =?utf-8?B?RU53NVVVWW80ZGh3Yjl3Y3htKzAxUzMxWHF1c2RoTDBIcmRkcnJJdmhvUU1T?=
+ =?utf-8?B?eG9nQ0NVaHNnYjBPNk4xU0EvNmRub0pVWFUzSWw1NTh2bjBYbVdiNjdqc01D?=
+ =?utf-8?B?SUZBaUdTd3pVRXBZT3RCSENLUjZLRVlUNXJ5OGlMZ1lYdStUTk00NnFGQzQ0?=
+ =?utf-8?B?UU90ak5sM2NkaFp2NkN4VytCQy9sL1NXaGl6VXlDL2Z2aVN1WExuUlJyMU5u?=
+ =?utf-8?B?WUdlek9FZHFQYlZjeUx1Z1dqZkx1U2ZWdDhxMHlQd1hNaUxEWTgvV3pSalZR?=
+ =?utf-8?B?Mys3bjlmYitBMlZCZFlBM1FSclhXUmF1QTNXMWxRSEhId0UxS1ZSWGIzcU1P?=
+ =?utf-8?B?aE1iazdLc3YvYWFnZ3NPd3lyRXFMcVpzbldsWGtXbzVvNUxsNEljMTFZOTE5?=
+ =?utf-8?B?Q3RmT2JVK1BmMmh1Rjdua05SQUU2N1JKSHhKSUZNMEhhclNGVzlDTGJ5NGVK?=
+ =?utf-8?B?VW9JYnRlQXBhbXlxV2g2bjN2ZmlMQ1V0WStUTmg2TXhwRUZIVkVvQjFaWTBI?=
+ =?utf-8?B?UU1RanZ3Z3FLUWlMNmpuaEVzdGtURlVzQ0I4Q3lFT0VkbVlRWVJ4U1RNZW9F?=
+ =?utf-8?B?c1ptemMrUkR2djZ4bHA5WjR2SVFvd1ZxVWE2L3duWllwMnBSSGhzNkx2ejlp?=
+ =?utf-8?B?cWdxZWUrMGNuMnJucEhhUGE5bU03eG9aTUFnVUt2TnZDOEhMZkNCeFM2ZmVI?=
+ =?utf-8?B?MzJ1Y05OSkdsS2dCSFRkMURhRHc0K2FYSmEycUNyMnY4QURkVXZyTUZFSnRa?=
+ =?utf-8?B?Q29nalBYenhLNGppblA0YmJmZW04QmtPQ1hucU9td2lKRHdFcjU4QXI0TzRQ?=
+ =?utf-8?B?SDE1OXBtMEF1d1Q4eTZuMWZtd3dLZWRoRllwY2xwcWVwZHpGM2l6SkYxQnR6?=
+ =?utf-8?B?eVB1VkZTcGZHeVdWM1NzcTBqVnNUOEwxanlhdDlDdFp4WEdadVREckZmQUxk?=
+ =?utf-8?B?SDc1ZGdaUlBmVjh3eFB4UmZ6Q0RoZkpoQmx0WjFrV3F0a3gyaDE0YVp6V2pp?=
+ =?utf-8?B?OW9Mb0RUTHM2UHpwejRLM2hyVjFabm05S3V1ZmFkYUsycEVxOU1jbDU5aWFB?=
+ =?utf-8?B?eTdpMmNMbk9xQzFaUnRlVUhrUkw4NXNzdFJ5Y1FxRWJwamNIaGxGdFJaZmhL?=
+ =?utf-8?B?YkNTeUtuWkcvSFpYZFRnNEFNdllVdllQbjJ3VlE3RjNEVXlGSzNNVERQSzk2?=
+ =?utf-8?B?TkRNWGFlNTZGODEzLzcxYVNYbklRZExEN29vdnFkWnMrWnoyRk44K2x1cXRL?=
+ =?utf-8?B?ai9OQVRkYWdTcmlzdzJ6TzRnZDFKdDI2dUtLSzQ0Z1ZtYTVKU0NIcklCbkFz?=
+ =?utf-8?B?SEQvb0JHQmROSlFvakJwWlJtak0zcUhNRW5LRENJdHVvMHpaOXIvdEZrYkhj?=
+ =?utf-8?B?V1RyQnZrRHRySitwV0JJLzcrU3FVWENYZ2gvekFZUUZoem9XYTBKdkozaFhX?=
+ =?utf-8?B?b243cklkWkorakIxQVZXSktuVUdjdGthYTg2Q21TNFpJUDBTcXNKL1JZRXZv?=
+ =?utf-8?B?OXBHNTlnTzcreDdRQWRIY0Y0d2FuNEVqZGhtWncvUUNVUS8waTVMOXp2TnBn?=
+ =?utf-8?B?OGhhNS9mZHZBbXJ3TTN1c2dtMEh3OGk4TlBYS1ZqNkx5cmhTVUNiQXFFQlRS?=
+ =?utf-8?B?Q3ZUb3Zpck5iQzdxRUl2SDZyK0RrQ09pN2Z2Z0FQWnRRUjVRNnVFbFE2NU5m?=
+ =?utf-8?B?WXgycU9FZC9EWXMremdYazNQSVpaeFJncFUrenVDVStkZGh2dWptL3V0VXpr?=
+ =?utf-8?B?UXdEeVZ3OGRYM2VxVnJWckR5Q2d6ZFU2dE9TanAyaWV2a2xoQ3BVMGpLSk4z?=
+ =?utf-8?B?d1B6YjV4amRVS20wMFJhQTVnR2tqTFRFdVp3MUorM3pOMDJSVEZoNXRXZ282?=
+ =?utf-8?B?ZCt1dWxKNXBaWVVkQ2drVEd2ZW14TXZHd1BLZFVmSWtKZFdtcmVwbFArb2VB?=
+ =?utf-8?B?blRzYlBnZzJDZlE5Tzk0cmxwMEVIK2t4eFhtZ29mMjcvQ25zeWlkT2NhU1hm?=
+ =?utf-8?B?aVQrVzgxK2RPc0lKcmg0Tk1DbFh2WlJOZVRZbnFPVzRjTXU4ZnRNTE00UzJ2?=
+ =?utf-8?B?dWxORzByWnlkSmlQSWlod05Pd2Q0cTBoVUFUOXhWVW9FVUQ3eGwzWDZCUFF1?=
+ =?utf-8?B?YjlLR3JxNHR6d01WNUEwd1VIdDRjOEk3ZWtacFZrUzE5LzZaUDdRQzMrWlBs?=
+ =?utf-8?B?OHQvRVBlSzljNDMxTU5aQmsyK3I4TnZld3ZsbENWdit0YTNNWXhxUT09?=
+X-Exchange-RoutingPolicyChecked:
+	Xdleb4ld47c36u0ZyX63CsTRWaJqzrtrW2K/pfJo5y3B4GpVcJxnSsQ25+SsT0Wh+cXRLTz624ZfJGMDcb4tvyhPy4c3XDZe8cFFf4jsDKhdSt2LkYs/cuBaKhnUUq3hHlr5W0e+uTa6CERWbtAbOsoqxhsge3OHengEhPLIoEhmY7V9VlW0v9rpGkU6XVEzfy8XO51YaGfDkCf8a1yNPWPydxtNOMhWgzqVIJkftA8nKtuS6GDHkDXbLAjcy6YfIJLDlDNKJ7Eh7+Fv2tbkG3FHQx7bs3cmeEI9RkAmbwnX2+mGZhp5o5+VYDHSSy+gK+e2/wlCF2R1Q5dFeOYf9A==
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
+	/TpqW2nje75iWDfyawuEyGZlDpeGLEjT6M7OxlsdfSU3ldnz/7GCPXnygFiY7hHBmUBpGXphTMiTIEHoayvwyMKTjUTT5agPt3Hi69NsEBPNuWcJyk2DiK68Dn5NLJ/Rb8Br9Xy9Fteue/GPVRtDIOYiIHNau2/kxJGrFxkbbSMEpf01YHAWDTRZbBKKTGzg5dlvtVCG0IFSUB2Kd9nqJOa+K8CJkaTSUTWQm39tvm9LFMWeFAEe5l9JBQm+OY9OW0489NVq7OX8ZQiv+/wXRlRbjGWn9PX3Tru4tL5nZF+QqwHPeCEFh2cVGz/zMJpnhYGUE9hXMGkAIj5FQx7vGVG4kSJyI9A92U3s6S1aslRCl19d7XnOAQ24OQmPvdd89Pl+j+9cJDS9fhKb3aMfxmIcyxSZx2UfDRaZLNEiNPKxN4vXhw7EVwutkVMHGBX9rkHGazVtVdt0QLVUc49RLRLe6v8096Z1+4VPE6McP7ITRK/S0Lu5g7aj/KLiHH6xznFZVBwf7iYOiUqoabJsxjUZqZmE5/84mRNKCdbVr0xNCxHHyuJFZlwcKI7FGHyZVfShbIeAlsc/f6lLxyS2YepohEpgrEXMGOLyDTAJrds=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4405f875-a855-4120-0550-08def45b3084
+X-MS-Exchange-CrossTenant-AuthSource: BN0PR10MB4901.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Aug 2026 08:09:22.8490
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: xgGkioSi9bjV7pgUz4w88VZ8HFR2QSKsBJNjVuK2yPUbFqASLBpcAMIAl8Wg+h0jutbtHNkJ4xvTSZ6Z9kKZ1w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR10MB997568
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
+ definitions=2026-08-07_01,2026-08-06_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0
+ spamscore=0 bulkscore=0 lowpriorityscore=0 suspectscore=0 mlxlogscore=999
+ mlxscore=0 phishscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.19.0-2606160000 definitions=main-2608070059
+X-Proofpoint-Spam-Info: AW1haW4tMjYwODA3MDA2MCBTYWx0ZWRfXzW7U9iMKO7T5
+ v2fLW7oqmgdlRJNiwD4hLqZhbWpjXYcRCcxRfmejgMvU7i92BUS3hGZzzpeTVCFUEgvPuCz83fQ
+ axf0OEGwFARA2t1sFRg+qWvZP3WdDEhhr/crF1ftDcZXUEodxu0O
+X-Proofpoint-ORIG-GUID: HIxTe5J8SMRbePTzV-w4J7roztwr8Gls
+X-Proofpoint-GUID: HIxTe5J8SMRbePTzV-w4J7roztwr8Gls
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwODA3MDA2MCBTYWx0ZWRfX/Bp6WaUNIl+3
+ Twa0rX5yht4CvpToR4KioAXLZ5nuhqP1M6eePzVL11UJlZ/U5sRB6P9vCjGj9Ctpo2axK0jbhjw
+ Wh+6rwh+mVeeBmAeZc50j31m7JKXO4ucIKIdmPJ0QzCVEWSlEj4oqzWUxHwsW2fQWkYcVocT4D/
+ PhWtgtNl1EwFxqs8JayTC+FkbhdzGVgSoC/njJJD+cGI85W3HxQ/bB9uM8ztaeVqF4Zyr+X2LCY
+ VLTczvF8pjkGWHFHqDKXuy45TDP9Zuq7Mxxi+v2Jt86w42OJkmkHpC++EYGeDo6edclbiHd+lPo
+ MP8tRGuIXhWKbn3/H/jzVE9BxPV3TAAnP9hZ5wigdCsNYA5S1Ky2/RuUTAXWPxg/9DVO+Nk0gjP
+ 5Qy8tV+cwscavx+E7Ve/0g7qFuFZ9fyB5zy1vMkM6t2C865T/A5bubReV2wHI7DDSjfuqbgMP6E
+ 5emrlMGD5DrHKQ0SGEnWL/ysFWEa162iChP/+/1I=
+X-Authority-Analysis: v=2.4 cv=TsPWQjXh c=1 sm=1 tr=0 ts=6a7592b6 b=1 cx=c_pps
+ a=qoll8+KPOyaMroiJ2sR5sw==:117 a=qoll8+KPOyaMroiJ2sR5sw==:17
+ a=6eWqkTHjU83fiwn7nKZWdM+Sl24=:19 a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19
+ a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
+ a=Sv0fKeRqtYgA:10 a=GoEa3M9JfhUA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=jiCTI4zE5U7BLdzWsZGv:22 a=RD47p0oAkeU5bO7t-o6f:22 a=BiLkx8lxpuncJLzAAUwA:9
+ a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10 a=5yU3S35YU4bGjq-dph-N:22
+ a=Bho9c0fBagfJEIQBS7DQ:22 cc=ntf awl=host:12101
 
-On Wed Aug 5, 2026 at 12:57 AM CEST, Ihor Solodrai wrote:
-> On 8/4/26 2:51 PM, Eduard Zingerman wrote:
->> On Tue, 2026-08-04 at 23:46 +0200, Kumar Kartikeya Dwivedi wrote:
->>> On Tue Aug 4, 2026 at 11:34 PM CEST, Eduard Zingerman wrote:
->>>> On Tue, 2026-08-04 at 14:19 -0700, Ihor Solodrai wrote:
->>>>> On 8/4/26 1:22 PM, Eduard Zingerman wrote:
->>>>> [...]
->>>>> What am I missing?
->>>>
->>>> At the moment we have two consumers:
->>>> - Planned sched_ext related kfuncs that need kernel space pointers.
->>>> - Existing kfuncs with KF_ARENA_ARG:
->>>> =C2=A0 - bpf_arena_alloc_pages
->>>> =C2=A0 - bpf_arena_free_pages
->>>> =C2=A0 - bpf_arena_reserve_pages
->>>> =C2=A0 They, take a user space address. Looking at the code is appears=
- that
->>>> =C2=A0 all three can be changed to handle kernel space address.
->>>> =C2=A0 On the other hand, neither of these *needs* the passed pointer =
-to be
->>>> =C2=A0 converted to a kernel side arena pointer. So that would be just=
- some
->>>> =C2=A0 useless work.
->>>
->>> I don't think it's useless work, they translate manually because the ac=
-tual page
->>> table operations happen using the kernel address anyway. IMO they proba=
-bly need
->>> access to both, and having one gives other, but kaddr is more important=
- for them
->>> to actually carry out the page table manipulation.
->>
->> From what I see these function compute the page number by subtracting
->> user vm start from the pointer. So, if switched to a kernel pointer
->> that would uaddr -> kaddr -> (kaddr - start) / page_size.
->> Compared to current (uaddr - ustart) / page_size.
->> But we can live with that.
->>
->> What's an overall conclusion? A single __arena suffix and modified
->> existing consumers? What would be the semantics for __nullable?
->
-> Apparently, we also have btf_decl_tag("arg:arena") and a type tag.
->
-> So that's three different arena annotations already:
-> - decl tag for PTR_TO_ARENA for global funcs [1]
-> - type tags for BPF declarations [2]
+On 31/07/2026 20:30, Arnaldo Carvalho de Melo wrote:
+> Hi,
+> 
+> Add support for Rust discriminated unions (enums with explicit
+> discriminants).
+> 
+> Rust enums like Option<u32> and Result<i32,u8> are represented in DWARF
+> as DW_TAG_variant_part containing DW_TAG_variant children with
+> discriminant values. These patches:
+> 
+>   - Load DW_TAG_variant_part containers with discriminant tracking
+>   - Populate DW_TAG_variant children with discriminant values
+>   - Handle DW_FORM_block encoding for discriminant values
+>   - Handle DW_TAG_subprogram inside DW_TAG_enumeration (Rust methods)
+>   - Encode variant parts as BTF_KIND_UNION members
+> 
+> Before: Rust Option<u32> showed as empty struct (0 members)
+> 
+> After:  Shows None and Some variants with correct layout
+> 
+>   === pahole --expand_types output ===
+>   struct Option<u32> {
+>       struct None {
+>       } __attribute__((__aligned__(4)));
+>       struct Some {
+>           /* XXX 4 bytes hole, try to pack */
+>           u32  __0 __attribute__((__aligned__(4)));  /*  4  4 */
+>       } __attribute__((__aligned__(4)));
+>   } __attribute__((__aligned__(4)));
+> 
+> BTF has no discriminated-union kind, so variant parts are tentatively
+> encoded as BTF_KIND_UNION with overlapping members at offset 0. Further
+> discussion is needed to see if we can keep that.
+> 
 
-I think both serve different purposes. It makes sense for it to be type tag=
-,
-e.g. for it to be able to go into typedefs, etc. All suffixes we have on ke=
-rnel
-side will probably otherwise be declaration tags excluding other similar ca=
-ses
-to arena (like __rcu).
+It seems like these variants mostly have a leading discriminating
+value (telling us which variant is selected), and it looks like it is
+possible to infer its presence by determining by its members if it has 
+that discriminant (do any members have niche layout? if not it is there)
+and its size (depends on the number of variants). Given that, would
+it make sense to have a discriminant too? It seems that the above
+example Option<u32> has one, so we'd have
 
-> - KF_ARENA_* flags to pass through the address_space(1)
->
-> and now we are adding __arena suffix for auto-rebasing
+struct Option<u32> {
+    uint8_t tag;          // 1 byte: Explicit discriminant
+    uint8_t pad[3];
+    struct Some {
+...
 
-This would be a type tag if we could do it that way, unfortunately since it=
- gets
-applied on the kernel side, we have to use a suffix. __arena tag used in pr=
-ogram
-BTF for kfunc or struct_ops is not authoritative, it needs to come from the
-kernel.
-
->
-> It's a mess, gentlemen.
->
-> Since the verifier already recognizes the type tags, shouldn't we
-> be using them?..
->
-> [1] https://lore.kernel.org/bpf/20240209040608.98927-11-alexei.starovoito=
-v@gmail.com/
-> [2] https://lore.kernel.org/bpf/20260602004120.17087-1-emil@etsalapatis.c=
-om/
+This would give us a better match for the in-memory representation.
+What do you think, is it doable?
+ 
+> DW_FORM_block byte order fix: uses CU-recorded endianness instead of
+> assuming little-endian when decoding DW_AT_const_value and
+> DW_AT_default_value. Fixes cross-endian DWARF processing (e.g.  reading
+> big-endian s390x debug info on x86).
+> 
+> Also add support for cross-CU type references and dwz alternate debug
+> files.
+> 
+> This is needed to improve the support for, among other things, Rust, as
+> noticed in the pretty printing or a perf binary that has rust objects
+> linked, built by clang/llvm that use cross-CU references.
+> 
+> DW_TAG_imported_unit support:
+> 
+>   Handle same-file partial units where types are shared across CUs
+>   via DW_TAG_imported_unit. Force-merge CUs that contain inter-CU
+>   references (DW_FORM_ref_addr) so type lookups resolve correctly.
+> 
+>   Fix cus__merging_cu failing to detect DW_FORM_ref_addr when
+>   DW_FORM_implicit_const causes dwarf_getabbrevattr() to fail.
+> 
+> dwz alternate debug file support:
+> 
+>   Handle DW_FORM_GNU_ref_alt references to dwz-compressed alternate
+>   debug files (.dwz). Pre-processes all alternate partial units with
+>   separate hash tables and dedup tracking.
+> 
+>   Before (Firefox): 1774 "has no entry in cu" errors
+>   After:  processes cleanly with 0 errors
+> 
+>   Firefox uses dwz compression which moves common types into a
+>   separate .dwz file and replaces duplicates with DW_FORM_GNU_ref_alt
+>   references. pahole now pre-loads the alternate file's partial units,
+>   resolves all cross-file references, and processes Firefox DWARF
+>   cleanly.
+> 
+> Includes inter-CU type reference comparison test and
+> vmlinux_comparison.py for DWARF/BTF analysis across kernel configs.
+> 
+> Known limitations:
+>   - Pruning of unreferenced alt PUs is conservatively over-approximated
+>   - Merged-CU path is single-threaded by design
+> 
+> This makes pahole to be able to support more of the CONFIG_DEBUG_ DWARF
+> options, including DWARF5 and compression, see the latest patch in the
+> series for more details about how this table is produced:
+> 
+>   ┌───────────────────────────┬─────────┬─────┬───────────────────────────────────┬─────────┬───────┬──────────┬────────┬──────────┬─────────┐
+>   │ File                      │  Size   │ Ver │ Producer                          │  DWARF  │  BTF  │ DW-Hash  │ DW-Out │ BTF-Hash │ BTF-Out │
+>   ├───────────────────────────┼─────────┼─────┼───────────────────────────────────┼─────────┼───────┼──────────┼────────┼──────────┼─────────┤
+>   │ vmlinux.dwarf4            │ 835.7MB │   4 │ GNU C11 16.1.1 -gdwarf-4          │ 599.2MB │ 7.3MB │ 86e1b611 │  7.6MB │ 52123c24 │   7.4MB │
+>   │ vmlinux.dwarf5            │ 736.3MB │   5 │ GNU C11 16.1.1 -gdwarf-5          │ 499.7MB │ 7.3MB │ 86e1b611 │  7.6MB │ 52123c24 │   7.4MB │
+>   │ vmlinux.dwarf5.zlib       │ 497.8MB │   5 │ GNU C11 16.1.1 -gdwarf-5 -gz=zlib │ 261.2MB │ 7.3MB │ 86e1b611 │  7.6MB │ 52123c24 │   7.4MB │
+>   │ vmlinux.dwarf5.zstd       │ 454.7MB │   5 │ GNU C11 16.1.1 -gdwarf-5 -gz=zstd │ 218.1MB │ 7.3MB │ 86e1b611 │  7.6MB │ 52123c24 │   7.4MB │
+>   │ vmlinux.toolchain_default │ 736.3MB │   5 │ GNU C11 16.1.1                    │ 499.7MB │ 7.3MB │ 86e1b611 │  7.6MB │ 52123c24 │   7.4MB │
+>   └───────────────────────────┴─────────┴─────┴───────────────────────────────────┴─────────┴───────┴──────────┴────────┴──────────┴─────────┘
+> 
+> Split DWARF support (skeleton CUs) will be supported in upcoming work,
+> so as to cover all the possibilities the kernel build system offers
+> for generating DWARF.
+> 
+> - Arnaldo
+> 
+> Arnaldo Carvalho de Melo (12):
+>   dwarf_loader: Initial support for DW_TAG_variant_part
+>   dwarf_loader: Initial support for DW_TAG_subprogram in DW_TAG_enumeration
+>   dwarf_loader: Populate DW_TAG_variant children in DW_TAG_variant_part
+>   btf_encoder: Encode variant parts as union members in BTF
+>   dwarf_loader: Handle DW_FORM_block in attr_numeric for Rust discriminant values
+>   dwarf_loader: Allow forcing the merge of CUs for solving inter CU tag references
+>   dwarf_loader: Support DW_TAG_imported_unit for same-file partial units
+>   dwarf_loader: Fix cus__merging_cu failing to detect DW_FORM_ref_addr
+>   dwarf_loader: Add cu parameter to tag__set_spec() and dwarf_tag__set_attr_type()
+>   dwarf_loader: Support DW_FORM_GNU_ref_alt references to dwz alternate debug files
+>   tests: Add inter-CU type reference comparison test
+>   scripts: Add vmlinux_comparison.py for DWARF/BTF analysis
+> 
+>  btf_encoder.c                 |  66 ++-
+>  ctf_encoder.c                 |  34 +-
+>  dwarf_loader.c                | 873 ++++++++++++++++++++++++++++++----
+>  dwarves.c                     |  77 ++-
+>  dwarves.h                     |  63 ++-
+>  dwarves_emit.c                |  10 +-
+>  dwarves_fprintf.c             |  54 ++-
+>  man-pages/pahole.1            |  18 +-
+>  pahole.c                      |  20 +-
+>  scripts/vmlinux_comparison.py | 367 ++++++++++++++
+>  tests/block_endian.sh         | 146 ++++++
+>  tests/dwz_alt_file.sh         | 204 ++++++++
+>  tests/inter_cu_refs.sh        |  50 ++
+>  tests/prettify_perf.data.sh   |   4 +-
+>  14 files changed, 1854 insertions(+), 132 deletions(-)
+>  create mode 100755 scripts/vmlinux_comparison.py
+>  create mode 100755 tests/block_endian.sh
+>  create mode 100755 tests/dwz_alt_file.sh
+>  create mode 100755 tests/inter_cu_refs.sh
+> 
 
