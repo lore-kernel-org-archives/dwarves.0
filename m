@@ -1,280 +1,218 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from out-184.mta0.migadu.com (out-184.mta0.migadu.com [91.218.175.184])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7B7A395AD4;
-	Fri,  7 Aug 2026 20:30:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23E2223909F
+	for <dwarves@vger.kernel.org>; Tue, 11 Aug 2026 00:30:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.184
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786134660; cv=none; b=ThKMrwxVGrjV81UhqZal93yNf687FSDlMa5nM2Zk26dKjKjgQlPtldtuSYGQzszGSagfOGU1m1vvZj1DCk8NZVu/yB2eNLq5S94Je9WYVhcYphdUWMrSu5Dz7nGWUAzTWREP+5d951hNz2yzEqbHfmQWdkztv3iA6A4UEw1aVwc=
+	t=1786408222; cv=none; b=H4kEKoT5Bv2Mi/1iZgTLoI5HRYxB+4gGYnLiV+r7sX7BKoqAlAm2yYLWhwdQ92dZ6apUqzypm3pnHtLCVbbOHH3crUDoRFzWa06wKEVV3OCbiwEfwHw81B7LjSkyyDYDXY99oz8/EhxN+TM1/yxxyEvh9yVkmOjWUZoNfTBWT44=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786134660; c=relaxed/simple;
-	bh=2RhuFsKN6eClD1RC3T8UCpobkmhVAFvGB9mXP6BU+tc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XwHKRoUpBE/M8sqBoX7MksCmGyF/hEJFtSO+sbC/nNEwbaoYqCkAxI4WBvvILOBpndRkNHJhlGz4aqS+soaYKXNkBLIzenGErEvX913oWa0AcLB0cMuAb99wPVs0JLyO/c98hy0Z6/Iyu6atZybm0oQQF/lnzG/Py2c6/cGzWpk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Z3bVECdw; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786408222; c=relaxed/simple;
+	bh=LUBBKVRGeqFCJm7q74GJ4j9xUn3yL6l3DKhAQ+kucFQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=A+u4RtYb0b4lY7RQLbc6ukMI6km2oPZ/HpE/oQ8K3R6/+2o5gDXjspzdxTiU7s/H8RPUo2G8dtSzoDwb1sT8ZZddzKJcfGtMN/jJlrnd03J5ry7Ji+QIFM9zeM6oO8NItzeUqHfL4gRhhWN2BXs+OwfwcF6eGs1dhRwjyRe9vGs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=abK8saoX; arc=none smtp.client-ip=91.218.175.184
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Z3bVECdw"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E2951F000E9;
-	Fri,  7 Aug 2026 20:30:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786134657;
-	bh=gpq8pVcKoYWI6ShJ4Tw663ZVtPNrDJrx2olDMJJFU+s=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=Z3bVECdwExlUJG4FrdRif9eDCRvs1Gue/J2+8PLKNUzWwdLmzSJp7xAXyvF8m1tFw
-	 364rjH51xfiOjfmBnoEGYgM7pCS0rq2BXoTbOIfL8jOIldpBUntPw4qUX51DdHOoZ0
-	 noCPpmnytuIEPDxPY5OotO57hLfGoqqksmuojSUkUtJFn2rj51/N0AZ2mlxxgnuLh4
-	 OLq3ixnA4ruA/UB1NFjFI1BniDX7ivGvInPGrfmxaMaM4mWCcnYfMFW5N3POIBsYuU
-	 N2wSTMIyXvmksU7SPHEv283XIMOOOW2B0dOGmCmYHEenawvOlazuOR4Y936VzW9tYA
-	 WXAdW0MkgZcXw==
-Date: Fri, 7 Aug 2026 17:30:53 -0300
-From: Arnaldo Carvalho de Melo <acme@kernel.org>
-To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc: Alan Maguire <alan.maguire@oracle.com>, Jiri Olsa <jolsa@kernel.org>,
-	Clark Williams <williams@redhat.com>, dwarves@vger.kernel.org,
-	bpf@vger.kernel.org, Andrii Nakryiko <andrii@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Mark Wieelard <mjw@redhat.com>,
-	rust-for-linux <rust-for-linux@vger.kernel.org>,
-	Gary Guo <gary@garyguo.net>
-Subject: Re: [PATCHES 00/12] pahole: Support more rust tags and references to
- dwz alternate debug files
-Message-ID: <anZAfc7sikAx8ikS@x1>
-References: <20260731193102.110693-1-acme@kernel.org>
- <18b557a8-e1ca-46cf-b03f-5e68490c9229@oracle.com>
- <anXTAComw6XAvnXU@x1>
- <CANiq72nHWY638h4mxJCfh_HFtzhwFEPyo6a-7k_3CxZsRV+Jiw@mail.gmail.com>
- <anYpwcDBtkzE3WIt@x1>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="abK8saoX"
+Message-ID: <76eba899-aad9-40ba-969f-bfec28031e12@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1786408218;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=LSZlM8NCTNyE7SxPKVsihSoaRmvKqZHwLV8kGj4B6Ds=;
+	b=abK8saoXSk9XuunmytzpgkCxPn+0LfpK4Ug5hVATjzsKTTbCaKYXLMF076XaHcgbCIvYdW
+	0m3s64KLkuQ9WASSbJ+UacCuutYOAQY0d+lVYkKLUm+m9EpVm0BpCbqVkI2iXrOoSowENW
+	nyReXFd5vDsrJlFdX7+tATGtcXosUko=
+Date: Mon, 10 Aug 2026 17:29:56 -0700
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Subject: Re: [PATCH 04/12] btf_encoder: Encode variant parts as union members
+ in BTF
+Content-Language: en-GB
+To: Arnaldo Carvalho de Melo <acme@kernel.org>,
+ Alan Maguire <alan.maguire@oracle.com>
+Cc: Jiri Olsa <jolsa@kernel.org>, Clark Williams <williams@redhat.com>,
+ dwarves@vger.kernel.org, bpf@vger.kernel.org,
+ Andrii Nakryiko <andrii@kernel.org>, Mark Wieelard <mjw@redhat.com>,
+ Arnaldo Carvalho de Melo <acme@redhat.com>
+References: <20260731193102.110693-1-acme@kernel.org>
+ <20260731193102.110693-5-acme@kernel.org>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <20260731193102.110693-5-acme@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <anYpwcDBtkzE3WIt@x1>
-
-On Fri, Aug 07, 2026 at 03:53:53PM -0300, Arnaldo Carvalho de Melo wrote:
-> On Fri, Aug 07, 2026 at 07:34:10PM +0200, Miguel Ojeda wrote:
-> > On Fri, Aug 7, 2026 at 2:43 PM Arnaldo Carvalho de Melo <acme@kernel.org> wrote:
-> > > Adding Miguel to the CC list, Miguel we're trying to improve BTF support
-> > > for Rust, this series handles multiple enabling fixes/improvements that
-> > > gets us to the next level, i.e. we can load everything from DWARF, now
-
-> > Thanks for the Cc! Cc'ing rust-for-linux and Gary.
-
-> > > its time to try to map it to existing BTF kinds and propose BTF
-> > > extensions when we can't use existing encodings.
-
-> > Sounds cool :)
-
-> > > Inferring from "does any member have a niche layout" means
-> > > reverse-engineering rustc's layout algorithm, which is explicitly
-> > > unstable and unspecified. It'd break silently on a compiler bump, with
-> > > no way to tell from the DWARF that you got it wrong.
-
-> > Yeah, the LLM is correct here: the Rust compiler gives very few
-> > guarantees for the default `repr`, i.e. in common cases it has the
-> > freedom to use whatever layout it wants (i.e. even for essentially
-> > equivalent types in the same compilation unit) -- the official docs
-> > are at:
-
-> >   https://doc.rust-lang.org/reference/type-layout.html
-
-> > >     u8                  __discriminant;      /*  0  1 */
-
-> > For the niche cases like `Option<NonZero<u32>>`, what would be printed?
- 
-> Can you think about one such niche case that is present in the kernel
-> rust .o files right now? I tried finding the `Option<NonZero<u32>>` to
-> look at its DWARF but couldn't find one.
-
-Good, so I went ahead and built the exact case, together with the
-explicit `Option<u32>` one, so we can compare them.  The source,
-containing the struct I dump below:
-
-  use std::num::NonZeroU32;
-
-  #[no_mangle]
-  pub struct Container {
-  	pub a: Option<NonZeroU32>,  // niche: 4 bytes, tag == payload
-  	pub b: Option<u32>,        // explicit: tag at 0, payload at 4
-  	pub c: Option<i32>,
-  }
-
-  #[no_mangle]
-  pub fn consume(c: Container) -> u32 {
-  	c.a.map(|x| x.get()).unwrap_or(0) + c.b.unwrap_or(0)
-  }
-
-  fn main() {
-  	let c = Container { a: None, b: Some(3), c: Some(-1) };
-  	let _ = consume(c);
-  }
-
-Compile (rustc 1.93.x here, don't link, just get an object file,
-otherwise you'll debug 1M+ lines of std DWARF and the type will be
-there but buried):
-
-  acme@number:~/git/pahole$ rustc --edition 2021 --emit=obj -C debuginfo=2 \
-  				  option_non_zero.rs -o option_non_zero.o
-
-then dump the DWARF, note that the DW_AT_name has the expanded generic,
-i.e. 'Option<core::num::nonzero::NonZero<u32>>', the NonZeroU32 alias
-seems to be expanded at compile time and, thus, doesn't appear in DWARF:
-
-  acme@number:~/git/pahole$ readelf --debug-dump=info option_non_zero.o \
-  				  | grep -n 'nonzero::NonZero<u32>'
-				  acme@number:~$ readelf --debug-dump=info option_non_zero.o | grep -n 'nonzero::NonZero<u32>'
-  295: <2ca>   DW_AT_name  : (indirect string, offset: 0x213): Option<core::num::nonzero::NonZero<u32>>
-  348: <32e>   DW_AT_name  : (indirect string, offset: 0x2ef): map<core::num::nonzero::NonZero<u32>, u32, option_non_zero::consume::{closure_env#0}>
-  acme@number:~$
-
-and you can see the niche case layout, size 4, the discriminant member
-is the payload itself, same offset, same size, and the Some variant
-doesn't even get a DW_AT_discr_value, it is just the default, so the
-answer: nothing separate to print, the tag IS the payload.
-
-Here is the full DIE for the niche case:
-
-acme@number:~$ readelf --debug-dump=info option_non_zero.o | grep -B1 -A25 'Option<core::num::nonzero::NonZero<u32>>'
- <3><2c9>: Abbrev Number: 19 (DW_TAG_structure_type)
-    <2ca>   DW_AT_name        : (indirect string, offset: 0x213): Option<core::num::nonzero::NonZero<u32>>
-    <2ce>   DW_AT_byte_size   : 4
-    <2cf>   DW_AT_accessibility: 1	(public)
-    <2d0>   DW_AT_alignment   : 4
- <4><2d1>: Abbrev Number: 26 (DW_TAG_variant_part)
-    <2d2>   DW_AT_discr       : <0x2d6>
- <5><2d6>: Abbrev Number: 27 (DW_TAG_member)
-    <2d7>   DW_AT_type        : <0x5b2>
-    <2db>   DW_AT_alignment   : 4
-    <2dc>   DW_AT_data_member_location: 0
-    <2dd>   DW_AT_artificial  : 1
- <5><2dd>: Abbrev Number: 28 (DW_TAG_variant)
-    <2de>   DW_AT_discr_value : 0
- <6><2df>: Abbrev Number: 4 (DW_TAG_member)
-    <2e0>   DW_AT_name        : (indirect string, offset: 0x1ce): None
-    <2e4>   DW_AT_type        : <0x2f9>
-    <2e8>   DW_AT_alignment   : 4
-    <2e9>   DW_AT_data_member_location: 0
- <6><2ea>: Abbrev Number: 0
- <5><2eb>: Abbrev Number: 29 (DW_TAG_variant)
- <6><2ec>: Abbrev Number: 4 (DW_TAG_member)
-    <2ed>   DW_AT_name        : (indirect string, offset: 0x20e): Some
-    <2f1>   DW_AT_type        : <0x30b>
-    <2f5>   DW_AT_alignment   : 4
-    <2f6>   DW_AT_data_member_location: 0
- <6><2f7>: Abbrev Number: 0
-acme@number:~$
-
-On the explicit `Option<u32>` case the picture is different, the tag is
-a real member at offset 0 with 4 bytes and Some.__0 moved to offset 4:
-
-acme@number:~$ readelf --debug-dump=info option_non_zero.o | grep -B1 -A25 'Option<u32>'
- <3><360>: Abbrev Number: 19 (DW_TAG_structure_type)
-    <361>   DW_AT_name        : (indirect string, offset: 0x345): Option<u32>
-    <365>   DW_AT_byte_size   : 8
-    <366>   DW_AT_accessibility: 1	(public)
-    <367>   DW_AT_alignment   : 4
- <4><368>: Abbrev Number: 26 (DW_TAG_variant_part)
-    <369>   DW_AT_discr       : <0x36d>
- <5><36d>: Abbrev Number: 27 (DW_TAG_member)
-    <36e>   DW_AT_type        : <0x5b2>
-    <372>   DW_AT_alignment   : 4
-    <373>   DW_AT_data_member_location: 0
-    <374>   DW_AT_artificial  : 1
- <5><374>: Abbrev Number: 28 (DW_TAG_variant)
-    <375>   DW_AT_discr_value : 0
- <6><376>: Abbrev Number: 4 (DW_TAG_member)
-    <377>   DW_AT_name        : (indirect string, offset: 0x1ce): None
-    <37b>   DW_AT_type        : <0x391>
-    <37f>   DW_AT_alignment   : 4
-    <380>   DW_AT_data_member_location: 0
- <6><381>: Abbrev Number: 0
- <5><382>: Abbrev Number: 28 (DW_TAG_variant)
-    <383>   DW_AT_discr_value : 1
- <6><384>: Abbrev Number: 4 (DW_TAG_member)
-    <385>   DW_AT_name        : (indirect string, offset: 0x20e): Some
-    <389>   DW_AT_type        : <0x3a3>
-    <38d>   DW_AT_alignment   : 4
-    <38e>   DW_AT_data_member_location: 0
-acme@number:~$
-
-So this is the one where we want a synthetic __discriminant member.
-
-And what we do today for the niche one, with current pahole (built from
-this series):
-
-acme@number:~$ pahole -C 'Option<core::num::nonzero::NonZero<u32>>' option_non_zero.o
-struct Option<core::num::nonzero::NonZero<u32>> {
-	struct None {
-
-		/* size: 4, cachelines: 1, members: 0 */
-		/* padding: 4 */
-		/* last cacheline: 4 bytes */
-	} __attribute__((__aligned__(4)));
-
-	struct Some {
-	public:
-
-		struct NonZero<u32>        __0 __attribute__((__aligned__(4))); /*     0     4 */
-
-		/* size: 4, cachelines: 1, members: 1 */
-		/* forced alignments: 1 */
-		/* last cacheline: 4 bytes */
-	} __attribute__((__aligned__(4)));
-
-	struct Option<u32> map<core::num::nonzero::NonZero<u32>, u32, option_non_zero::consume::{closure_env#0}>(struct Option<core::num::nonzero::NonZero<u32>>, struct {closure_env#0});
+X-Migadu-Flow: FLOW_OUT
 
 
-	/* size: 4, cachelines: 1, members: 0 */
-	/* padding: 4 */
-	/* last cacheline: 4 bytes */
-} __attribute__((__aligned__(4)));
 
-acme@number:~$
+On 7/31/26 12:30 PM, Arnaldo Carvalho de Melo wrote:
+> From: Arnaldo Carvalho de Melo <acme@redhat.com>
+>
+> With the DWARF loader now populating DW_TAG_variant children (previous
+> commit), wire them into BTF encoding so Rust discriminated unions
+> (Option<T>, Result<T,E>, etc.) are no longer emitted as empty structs.
+>
+> Two changes:
+>
+> 1. Struct-to-union promotion: when a DW_TAG_structure_type has
+>     variant_parts but no regular data members, encode it as BTF_KIND_UNION
+>     instead of BTF_KIND_STRUCT, since the variants overlap at offset 0.
+>
+> 2. Variant member encoding: after encoding regular data members, iterate
+>     the variant_parts and emit each variant as a BTF union field with the
+>     variant's name and resolved type reference.
+>
+> Testing with the sashiko-cli Rust binary (a real-world async HTTP client
+> using tokio, hyper, serde, etc.):
+>
+> Before:
+>
+>    $ bpftool btf dump file sashiko-cli | grep -c UNION
+>    2073
+>    $ bpftool btf dump file sashiko-cli | grep 'STRUCT.*vlen=0' | grep -vc 'size=0'
+>    24335
+>
+> After:
+>
+>    $ bpftool btf dump file sashiko-cli | grep -c UNION
+>    25750
+>    $ bpftool btf dump file sashiko-cli | grep 'STRUCT.*vlen=0' | grep -vc 'size=0'
+>    2236
+>
+> 22,099 types that were previously encoded as empty structs are now
+> properly represented as unions with their variant members:
+>
+> Before:
+>
+>    $ bpftool btf dump file code_with_type.o | grep -A1 'Option<u32>'
+>    [11] STRUCT 'Option<u32>' size=8 vlen=0
+>
+> After:
+>
+>    $ bpftool btf dump file code_with_type.o | grep -A3 'Option<u32>'
+>    [11] UNION 'Option<u32>' size=8 vlen=2
+>            'None' type_id=9 bits_offset=0
+>            'Some' type_id=10 bits_offset=0
 
-and on the BTF side, also with this series:
+FYI, the below is for llvm bpf backend to handle DW_TAG_variant_part
+to generate BTF.
+   link: https://github.com/llvm/llvm-project/pull/155783
+   
+For a rust code like:
 
-acme@number:~$ pahole --btf_encode option_non_zero.o
-acme@number:~$ pahole -F btf -C 'Option<core::num::nonzero::NonZero<u32>>' option_non_zero.o
-union Option<core::num::nonzero::NonZero<u32>> {
-	struct None                None;               /*     0     4 */
-	struct Some                Some;               /*     0     4 */
-};
+; Source:
+;   #![no_std]
+;   #![no_main]
+;
+;   pub enum MyEnum {
+;       First { a: u32, b: i32 },
+;       Second(u32),
+;   }
+;
+;   #[unsafe(no_mangle)]
+;   pub static X: MyEnum = MyEnum::First { a: 54, b: -23 };
+;
+;   #[cfg(not(test))]
+;   #[panic_handler]
+;   fn panic(_info: &core::panic::PanicInfo) -> ! {
+;       loop {}
+;   }
 
-acme@number:~$ pahole --expand_types -F btf -C 'Option<core::num::nonzero::NonZero<u32>>' option_non_zero.o
-union Option<core::num::nonzero::NonZero<u32>> {
-	struct None {
-	} __attribute__((__aligned__(8))) None;                           /*     0     4 */
-	struct Some {
-		struct NonZero<u32> {
-			struct NonZeroU32Inner {
-				u32 __0;                                                 /*     0     4 */
-			} __0; /*     0     4 */
-		} __0; /*     0     4 */
-	} Some; /*     0     4 */
-};
+The BTF encoding:
 
-acme@number:~$
+; CHECK-BTF:      [1] STRUCT 'MyEnum' size=12 vlen=1
+; CHECK-BTF-NEXT:         '(anon)' type_id=3 bits_offset=0
+; CHECK-BTF-NEXT: [2] INT 'u32' size=4 bits_offset=0 nr_bits=32 encoding=(none)
+; CHECK-BTF-NEXT: [3] UNION '(anon)' size=12 vlen=3
+; CHECK-BTF-NEXT:         '(anon)' type_id=2 bits_offset=0
+; CHECK-BTF-NEXT:         'First' type_id=4 bits_offset=0
+; CHECK-BTF-NEXT:         'Second' type_id=6 bits_offset=0
+; CHECK-BTF-NEXT: [4] STRUCT 'First' size=12 vlen=2
+; CHECK-BTF-NEXT:         'a' type_id=2 bits_offset=32
+; CHECK-BTF-NEXT:         'b' type_id=5 bits_offset=64
+; CHECK-BTF-NEXT: [5] INT 'i32' size=4 bits_offset=0 nr_bits=32 encoding=SIGNED
+; CHECK-BTF-NEXT: [6] STRUCT 'Second' size=12 vlen=1
+; CHECK-BTF-NEXT:         '__0' type_id=2 bits_offset=32
+; CHECK-BTF-NEXT: [7] VAR 'X' type_id=1, linkage=global
+; CHECK-BTF-NEXT: [8] DATASEC '.rodata' size=0 vlen=1
+; CHECK-BTF-NEXT:         type_id=7 offset=0 size=12
 
-matches the real in-memory layout, size 4, no extra member.
+>
+> Assisted-by: Claude:claude-sonnet-4-5
+> Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+> ---
+>   btf_encoder.c | 37 +++++++++++++++++++++++++++++++++++--
+>   1 file changed, 35 insertions(+), 2 deletions(-)
+>
+> diff --git a/btf_encoder.c b/btf_encoder.c
+> index 83ce21186ea7da36..acf0a5ade5e29014 100644
+> --- a/btf_encoder.c
+> +++ b/btf_encoder.c
+> @@ -1855,6 +1855,12 @@ static void dump_invalid_symbol(const char *msg, const char *sym,
+>   	fprintf(stderr, "PAHOLE: Error: Use '--btf_encode_force' to ignore such symbols and force emit the btf.\n");
+>   }
+>   
+> +static bool type__has_variant_parts(const struct type *type)
+> +{
+> +	return !list_empty(&type->variant_parts);
+> +}
+> +
+> +
+>   static int32_t btf_encoder__add_struct_type(struct btf_encoder *encoder, struct tag *tag)
+>   {
+>   	struct type *type = tag__type(tag);
+> @@ -1863,8 +1869,18 @@ static int32_t btf_encoder__add_struct_type(struct btf_encoder *encoder, struct
+>   	int32_t type_id;
+>   	uint8_t kind;
+>   
+> -	kind = (tag->tag == DW_TAG_union_type) ?
+> -		BTF_KIND_UNION : BTF_KIND_STRUCT;
+> +	/*
+> +	 * Rust discriminated unions (enums) are represented in DWARF as
+> +	 * DW_TAG_structure_type with DW_TAG_variant_part children.
+> +	 * If the struct has only variant parts and no regular data members,
+> +	 * encode it as a BTF union since the variants overlap at offset 0.
+> +	 */
+> +	if (tag->tag == DW_TAG_union_type)
+> +		kind = BTF_KIND_UNION;
+> +	else if (type__has_variant_parts(type) && type->nr_members == 0)
+> +		kind = BTF_KIND_UNION;
+> +	else
+> +		kind = BTF_KIND_STRUCT;
+>   
+>   	type_id = btf_encoder__add_struct(encoder, kind, name, type->size);
+>   	if (type_id < 0)
+> @@ -1882,6 +1898,23 @@ static int32_t btf_encoder__add_struct_type(struct btf_encoder *encoder, struct
+>   			return -1;
+>   	}
+>   
+> +	if (type__has_variant_parts(type) && kind == BTF_KIND_UNION) {
+> +		struct variant_part *vpart;
+> +
+> +		type__for_each_variant_part(type, vpart) {
+> +			struct variant *variant;
+> +
+> +			variant_part__for_each_variant(vpart, variant) {
+> +				if (variant->tag.type == 0)
+> +					continue;
+> +
+> +				uint32_t ref_type_id = btf_encoder__tag_type(encoder, variant->tag.type);
+> +
+> +				if (btf_encoder__add_field(encoder, variant->name, ref_type_id, 0, 0))
+> +					return -1;
+> +			}
+> +		}
+> +	}
+>   
+>   
+>   	return type_id;
 
-So for the future __discriminant work the rule should be: only emit it
-when its location doesn't overlap with the payload, i.e. on the explicit
-form; on the niche that field is the data itself, adding one would mean
-two members covering the same bytes, and we'd be lying about the layout.
-
-I'll add a test with both forms, pinning this behavior, so we don't
-regress it, and then, when we improve support for the synthetic
-discriminants, we can update it.
-
-And yes, I used OpenCode + DeepSeek to iterate multiple times and
-manually checked everything before hitting send, it helps me a lot and I
-hope that if I missed something, you will correct me so that we can make
-progress.
-
-Regards,
-
-- Arnaldo
