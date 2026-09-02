@@ -1,51 +1,51 @@
 Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E636472790;
-	Wed,  2 Sep 2026 11:39:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D8EB47605E;
+	Wed,  2 Sep 2026 11:39:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788349148; cv=none; b=hv8d9us5/FhDvAoOmrsBNHwbtG8Z2IM5jL9DAJK2md0k3HDrwXUDJp6aF0YsRUWQBZr6ld5PD4pV3L1wbY2QMfJROPatfRWJJlyT7zuTa5GEzLfXyd3YRHu7qj7OCWTqiIwzkB6uu2K4DipHX+5PSBJDjhEFwHNqJXGxTUm0qVo=
+	t=1788349149; cv=none; b=tO1N5l6fztHiFxjD9UCuKa1nFSv8+5EWituNwuV8bP3XlTlxOHSWheYqUndABouExWkMQzavgRRYyTjWo6lM/hrM6uTs1itCyZTXcHFx76LmXj7IMS84sJ1dmtc6NJnm4qqToEZVEouWns75X2cpdwz3UeMPdoFaHDDFDvkt2Qc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788349148; c=relaxed/simple;
-	bh=AQbHYU7IgKSctc8iN9VDpd5AgefTGxx2el3BwsHEip0=;
+	s=arc-20240116; t=1788349149; c=relaxed/simple;
+	bh=qKdQtP6+pbCdf3GvqN0uNaZwhi2O68TRRMi/VhzOoxY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=uzC1b2ixxYHY8cY+vLj2tzLsIlnqU3dC9qIbaX/D+qpM5Ja6g9Fm791a+eBbtHfwt3kF4NY58AV1C5KV6QhB37lCOTo6Av8mIiuemDwkRL3QUGg6EG+330RUsICzISj81xcIC3Nbs4AhHIBs58daIMpUrtJARtD69Aojm5Kk3G0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=QxDRh5C4; arc=none smtp.client-ip=205.220.165.32
+	 MIME-Version:Content-Type; b=Z3UEwao0O/fWx0MpKqLyLxeaXUPH1IgPWzcppNHqQ51Xeju/+9NKMVqLrGLe6Sb6D+5VEPUdAYLg5Iuc35ulf8hL2T6LcWuZCPOoY/GYKQagaUsrpPOEfSAri5RmLem3iZ+nxAedsTBUNPd8FJqRkkCHOw1WmH7IOqL54JwYXRQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=Z85IAMpC; arc=none smtp.client-ip=205.220.165.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="QxDRh5C4"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="Z85IAMpC"
 Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6820UqbK882985;
-	Wed, 2 Sep 2026 11:38:43 GMT
+	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 681KlpDm4036321;
+	Wed, 2 Sep 2026 11:38:38 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=corp-2025-04-25; bh=WKqNr
-	IRc4/EkgPFc9gAHTgS2mLlP9KlxtBq3bZAChJg=; b=QxDRh5C4A5ywUIOSsjWOA
-	8WrkDZjAL+DzVbvRj5oEAFDmYtVkV+2qufg9e3icgjJiL95ZrNVDaXNZCsH4qvnp
-	yz9l3+gJCTkzu8WxWiKffOzp7VSYM/cZc5jUtx6c/XWAvNOqQt8/IEn2vvb8u1uz
-	u8HAqVv0o60RmdnilVaiqj6XeJPOypbeVIIWDC7UYW6hR/29VkaoRFLp5Z/P5OKH
-	4zv+KOKpzq1wPlt/H76EmiwEpfEbWuDcS8ewC1GyO3sz6TkUSFRfVKqpWsm+5Oo0
-	S0bAQs1nC9d3tGn6G34u1N5UjmYS6j+j4KLi1n9GW2xCXCWeLIJFfJnex6exWMOL
-	g==
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=
+	corp-2025-04-25; bh=yPWl+nw4pZ+CLYz7pZudnsTWSJFXBG2j11k0TDz6LYw=; b=
+	Z85IAMpCDji67pa2ti8SY15d+UUn/OP8T0tugJxmd46q0MMBbn2ISIkC5vgkWMAD
+	GVTuQRt5O62Mk44/tMaNtVsnzdBFouMyGwuqsIZQYCH78iyfNsOG5w1T2dj+HlMX
+	QZaTa0vOzYjWod74hsz5TVMvRwBxyLlrRlXHOBIehmYuQHcvNEOIs+6lf9nctMLb
+	XktygDBurN5y5x0ABbtPEc7KBXtAxXMPXUY18Cjl0Fbulrpopp3XmI6FaJu/NOL8
+	stnopiJRFjRlYfjoMGj6rgd9uhIPSh8ZTW+a9jsFDNxrWyv3dLIiBHoTxfpW9257
+	7Ic68yIY+vDmp1zG5t7RBA==
 Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4gbp0xxmrv-1
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4gbp0xxmrr-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 02 Sep 2026 11:38:43 +0000 (GMT)
+	Wed, 02 Sep 2026 11:38:38 +0000 (GMT)
 Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.7/8.18.1.7) with ESMTP id 682BaYX1029501;
-	Wed, 2 Sep 2026 11:38:41 GMT
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.7/8.18.1.7) with ESMTP id 682BaXCs029328;
+	Wed, 2 Sep 2026 11:38:37 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 4gbnvrnt6s-1
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 4gbnvrnt59-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 02 Sep 2026 11:38:41 +0000 (GMT)
+	Wed, 02 Sep 2026 11:38:37 +0000 (GMT)
 Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.18.1.12/8.18.1.12) with ESMTP id 682BcYme038508;
-	Wed, 2 Sep 2026 11:38:41 GMT
+	by pps.reinject (8.18.1.12/8.18.1.12) with ESMTP id 682BcYma038508;
+	Wed, 2 Sep 2026 11:38:36 GMT
 Received: from bpf.uk.oracle.com (dhcp-10-154-52-253.vpn.oracle.com [10.154.52.253])
-	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 4gbnvrnt37-4;
-	Wed, 02 Sep 2026 11:38:40 +0000 (GMT)
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 4gbnvrnt37-2;
+	Wed, 02 Sep 2026 11:38:36 +0000 (GMT)
 From: Alan Maguire <alan.maguire@oracle.com>
 To: acme@kernel.org, ast@kernel.org, andrii@kernel.org
 Cc: daniel@iogearbox.net, eddyz87@gmail.com, jolsa@kernel.org,
@@ -53,9 +53,9 @@ Cc: daniel@iogearbox.net, eddyz87@gmail.com, jolsa@kernel.org,
         qmo@kernel.org, martin.lau@linux.dev, memxor@gmail.com,
         emil@etsalapatis.com, bpf@vger.kernel.org, dwarves@vger.kernel.org,
         Alan Maguire <alan.maguire@oracle.com>
-Subject: [PATCH v2 dwarves 3/6] dwarf_loader: Collect inline expansion location data
-Date: Wed,  2 Sep 2026 12:38:23 +0100
-Message-ID: <20260902113829.1285407-4-alan.maguire@oracle.com>
+Subject: [PATCH v2 dwarves 1/6] dwarf_loader: Add parameter list to inlined expansions
+Date: Wed,  2 Sep 2026 12:38:21 +0100
+Message-ID: <20260902113829.1285407-2-alan.maguire@oracle.com>
 X-Mailer: git-send-email 2.43.5
 In-Reply-To: <20260902113829.1285407-1-alan.maguire@oracle.com>
 References: <20260902113829.1285407-1-alan.maguire@oracle.com>
@@ -65,6 +65,7 @@ List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
@@ -73,565 +74,460 @@ X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0
  malwarescore=0 mlxlogscore=999 mlxscore=0 spamscore=0 adultscore=0
  lowpriorityscore=0 phishscore=0 bulkscore=0 classifier=spam adjust=0
  reason=mlx scancount=1 engine=8.19.0-2606160000 definitions=main-2609020103
-X-Proofpoint-ORIG-GUID: pyI-U75EGpz-m0oDzg3SN_XFbUtbD8ma
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwOTAyMDEwMyBTYWx0ZWRfX3oTlAHl9pafn
- yieFlbKvZyiupA5W647vP6IjUegzPIGt0JMzEleDMIvaqJC8qqFgGnFwM4uc86zAdUGFrc2/9uF
- pm2VQktjIeRKm1Qyi+UcC716l2UB3r5fCj5rv/EhW1buFdE6/Qmav1m5Otxk2x00rvhqE5U8js8
- AzoBmxUTPeNtfl5Sx0b2DbFg93Gy1o1Yw7dFTqdFb5GOx2k7a61POK0Ex24sqksjwle/d0Spwgo
- GpueaBH2fa8sT/AghpHsUpKJhKZmtr/lhRiOPDYwZpgQVaqN5Ye25YPYDXVtUJlT2+5QvUXDsY7
- H5OG2ZEZYEYDvO8Y8wrePtrM2JDc0SogNsGIo2jVkxemqLZutLgIDSaIxz5vlIQ6leTUXSjngDr
- BC9WMnVPlSUuC3xAoaCXs2Ome59snZtuRxtO+F8v/xEkJCUc4Zf2cCOqlAh4xLb8HCF876OILPe
- +a0uRfrmQrMj0R52Iwjo56JJcsRXFbR+/o1F7pXk=
-X-Authority-Analysis: v=2.4 cv=Ebb4hvmC c=1 sm=1 tr=0 ts=6a980ac3 b=1 cx=c_pps
+X-Proofpoint-ORIG-GUID: 4Y_XcDLTE-3Z0u1XmFGyay-Eq8fGWjJY
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwOTAyMDEwMyBTYWx0ZWRfXwf8thbe2g5DQ
+ XSiq+Gtk6wzABvPuhi55ZeoP/LuKMcCe7TbP4+ScAAA4xWuBUCzVZlUNpNeTgcaXALZEIwzX7eV
+ BaOlGi2I3b7oIPic51uPrYwrYh1L1ZHYkpm/AXf2HbtieS88ibWf9hiMfQw0mNVM33XYr4Y5lwk
+ LlhoiFHPxSkBhSKRt6C3MlX3Nu7hUWCGYeKaBMp0YJBkMbmyLNHRDne7BwXDJbgQpPIo2vIogmv
+ xLGcPAOCjhoH+tWQj5OfNc5NtZalJ6iJf20w/cyzZkQg8QPE1xTfv8sXjth6sj4+kdoi/vndK8R
+ WoClgayccq1xNWnbK+LhUEPDwlVVMgvwMgIsXgGi0dfEZPu36agjB1ejMuma+OTpmIrOnLiHP3t
+ eaSYoEpYbzdqtFKNPMvfnKOquJRKd7TYRlEFr0qeIxXavtifHl3KVQBcdgERuXjhkE3Fb5qyXea
+ RIDdvR96LNpsljmcllPiRbT4MeeHVu+kmwcczF/k=
+X-Authority-Analysis: v=2.4 cv=Ebb4hvmC c=1 sm=1 tr=0 ts=6a980abe b=1 cx=c_pps
  a=qoll8+KPOyaMroiJ2sR5sw==:117 a=qoll8+KPOyaMroiJ2sR5sw==:17
- a=VdqzKS8jKosA:10 a=VkNPw1HP01LnGYTKEx00:22 a=jiCTI4zE5U7BLdzWsZGv:22
- a=RD47p0oAkeU5bO7t-o6f:22 a=yPCof4ZbAAAA:8 a=8P4Kqil4gH6C7O7KJd0A:9
- a=O8hF6Hzn-FEA:10 a=5yU3S35YU4bGjq-dph-N:22 a=Bho9c0fBagfJEIQBS7DQ:22 cc=ntf
- awl=host:12102
-X-Proofpoint-GUID: pyI-U75EGpz-m0oDzg3SN_XFbUtbD8ma
-X-Proofpoint-Spam-Info: AW1haW4tMjYwOTAyMDEwMyBTYWx0ZWRfX4O5krPlkIySH
- 3Uh5+Sv3l8EVhE9nN0qqN6MkIDt5hKm8Z0gZRLWk4uBeGeqfNJaIs5F20mvS3Ie8yEfR/D8xxFN
- wj5orMvDCqnvceq8RyP1o2HOlKxZRa1cG4Cwb8+9wRss62YpRAgx
+ a=IkcTkHD0fZMA:10 a=VdqzKS8jKosA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=jiCTI4zE5U7BLdzWsZGv:22 a=RD47p0oAkeU5bO7t-o6f:22 a=VabnemYjAAAA:8
+ a=yPCof4ZbAAAA:8 a=bYZpwwQ-aSMTa5BTlKQA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+ a=O8hF6Hzn-FEA:10 a=gKebqoRLp9LExxC7YDUY:22 a=5yU3S35YU4bGjq-dph-N:22
+ a=Bho9c0fBagfJEIQBS7DQ:22 cc=ntf awl=host:12102
+X-Proofpoint-GUID: 4Y_XcDLTE-3Z0u1XmFGyay-Eq8fGWjJY
+X-Proofpoint-Spam-Info: AW1haW4tMjYwOTAyMDEwMyBTYWx0ZWRfX2PXXhg6upby4
+ mUbcxNLndE3UNy3W3EOFsuPzZJ5jBJxBDM+pb7e1v34cRqY8MOYFD+fmr94BzJJj86rzJrqglVK
+ cBO6Z9DHKT/wp3t03G7HOJzM/QdZKH3W0dezwcaiOO8A0pvvTwP6
 
-Prepare inline expansion BTF encoding by keeping the resolved origin
-function on each inline expansion and by exposing inline expansions and
-their parameters.
+DW_TAG_formal_parameter children of DW_TAG_inlined_subroutine are
+currently skipped, so callers cannot iterate parameters that belong to a
+specific inline expansion. Store those parameters directly on struct
+inline_expansion instead of leaving them in the surrounding lexical block.
 
-Reuse the existing true-signature parameter location decoding instead of
-adding a separate per-site location model. Store the small amount of
-extra location state needed by BTF inline location encoding directly on
-struct parameter: constant/address values, offsets, size, signedness and
-dereference flags. This lets the encoder derive LOC_PARAM data from the
-same representation used for optimized-function signature analysis.
+Add an inline_expansion parameter list, populate it while processing
+inline-subroutine children, and include it in tag cleanup and
+cu__for_all_tags() traversal. Recode inline-expansion parameter types via
+the same parameter recoding path used for function prototypes.
 
-Also fix inline expansion high_pc collection to use dwarf_highpc(), and
-avoid running concrete ABI register diagnostics on abstract inline
-subprograms while still allowing their type recoding to proceed.
-
+Signed-off-by: Thierry Treyer <ttreyer@meta.com>
 Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
 ---
- dwarf_loader.c | 265 +++++++++++++++++++++++++++++++++++++++----------
- dwarves.h      |  37 ++++++-
- 2 files changed, 248 insertions(+), 54 deletions(-)
+ dwarf_loader.c | 210 ++++++++++++++++++++++++++-----------------------
+ dwarves.c      |  34 ++++++++
+ dwarves.h      |   6 ++
+ 3 files changed, 152 insertions(+), 98 deletions(-)
 
 diff --git a/dwarf_loader.c b/dwarf_loader.c
-index 8bc5f64..d586b80 100644
+index 61ef52f..6805305 100644
 --- a/dwarf_loader.c
 +++ b/dwarf_loader.c
-@@ -1713,12 +1713,123 @@ static bool dwarf_expr__has_stack_value(Dwarf_Op *expr, size_t exprlen)
- 	return false;
- }
- 
-+static uint8_t parameter__loc_size(const struct parameter *parm, const struct cu *cu)
-+{
-+	uint16_t size = parm->type_byte_size ?: cu->addr_size;
-+
-+	if (size == 0 || size > sizeof(uint64_t))
-+		size = sizeof(uint64_t);
-+	return size;
-+}
-+
-+static uint8_t dwarf_op__const_size(unsigned int atom)
-+{
-+	switch (atom) {
-+	case DW_OP_lit0 ... DW_OP_lit31:
-+	case DW_OP_const1u:
-+	case DW_OP_const1s:
-+		return 1;
-+	case DW_OP_const2u:
-+	case DW_OP_const2s:
-+		return 2;
-+	case DW_OP_const4u:
-+	case DW_OP_const4s:
-+		return 4;
-+	case DW_OP_const8u:
-+	case DW_OP_const8s:
-+	case DW_OP_constu:
-+	case DW_OP_consts:
-+		return 8;
-+	default:
-+		return 0;
-+	}
-+}
-+
-+static bool dwarf_op__const_signed(unsigned int atom)
-+{
-+	switch (atom) {
-+	case DW_OP_const1s:
-+	case DW_OP_const2s:
-+	case DW_OP_const4s:
-+	case DW_OP_const8s:
-+	case DW_OP_consts:
-+		return true;
-+	default:
-+		return false;
-+	}
-+}
-+
-+static int64_t dwarf_op__snumber(const Dwarf_Op *op)
-+{
-+	return (int64_t)(Dwarf_Sword)op->number;
-+}
-+
-+static uint64_t dwarf_op__const_value(const Dwarf_Op *op)
-+{
-+	if (dwarf_op__const_signed(op->atom))
-+		return (uint64_t)dwarf_op__snumber(op);
-+	return op->number;
-+}
-+
- static void parameter__set_loc_reg(struct parameter *parm, int reg)
- {
- 	if (parm->loc_reg == PARAMETER_UNKNOWN_REG)
- 		parm->loc_reg = reg;
- }
- 
-+static void parameter__record_loc_reg(struct parameter *parm, int reg,
-+				      int64_t offset, bool is_deref,
-+				      uint8_t size)
-+{
-+	parameter__set_loc_reg(parm, reg);
-+
-+	if (parm->loc_reg != reg)
-+		return;
-+	if (offset < INT32_MIN || offset > INT32_MAX)
-+		return;
-+
-+	parm->loc_offset = offset;
-+	parm->loc_deref = is_deref;
-+	parm->loc_size = size;
-+}
-+
-+static void parameter__record_loc_const(struct parameter *parm, uint64_t value,
-+					uint8_t size, bool is_signed,
-+					bool is_addr)
-+{
-+	parm->loc_const_value = 1;
-+	parm->loc_value = value;
-+	parm->loc_size = size;
-+	parm->loc_signed = is_signed;
-+	parm->loc_addr = is_addr;
-+}
-+
-+static bool parameter__record_attr_const_value(Dwarf_Attribute *attr,
-+					       struct cu *cu,
-+					       struct parameter *parm)
-+{
-+	Dwarf_Sword svalue;
-+	Dwarf_Word uvalue;
-+
-+	if (dwarf_formudata(attr, &uvalue) == 0) {
-+		parm->loc_value = uvalue;
-+		parm->loc_size = parameter__loc_size(parm, cu);
-+		parm->loc_signed = 0;
-+		parm->loc_addr = 0;
-+		return true;
-+	}
-+
-+	if (dwarf_formsdata(attr, &svalue) == 0) {
-+		parm->loc_value = (uint64_t)svalue;
-+		parm->loc_size = parameter__loc_size(parm, cu);
-+		parm->loc_signed = 1;
-+		parm->loc_addr = 0;
-+		return true;
-+	}
-+
-+	return false;
-+}
-+
- static void parameter__set_field_bit(unsigned long *fields, int byte_offset)
- {
- 	if (byte_offset >= 0 && byte_offset < (int)(sizeof(*fields) * 8))
-@@ -1782,20 +1893,33 @@ static void parameter__multi_exprs(Dwarf_Op *expr, int loc_num, struct cu *cu,
- 	case DW_OP_lit0 ... DW_OP_lit31:
- 	case DW_OP_constu:
- 	case DW_OP_consts:
--		if (loc_num == 0)
--			parm->loc_const_value = 1;
-+		if (loc_num == 0) {
-+			uint64_t value = expr[0].atom;
-+
-+			if (expr[0].atom >= DW_OP_lit0 && expr[0].atom <= DW_OP_lit31)
-+				value -= DW_OP_lit0;
-+			else
-+				value = dwarf_op__const_value(&expr[0]);
-+			parameter__record_loc_const(parm, value,
-+						    dwarf_op__const_size(expr[0].atom),
-+						    dwarf_op__const_signed(expr[0].atom), false);
-+		}
- 		return;
- 	}
- 
- 	if (parm->type_byte_size <= cu->addr_size || !cu->agg_use_two_regs) {
-+		bool had_stack_value = dwarf_expr__has_stack_value(expr, exprlen);
-+		uint8_t size = parameter__loc_size(parm, cu);
-+
- 		switch (expr[0].atom) {
- 		case DW_OP_reg0 ... DW_OP_reg31:
- 			if (loc_num == 0)
--				parameter__set_loc_reg(parm, expr[0].atom);
-+				parameter__record_loc_reg(parm, expr[0].atom, 0, false, size);
- 			return;
- 		case DW_OP_breg0 ... DW_OP_breg31:
--			if (loc_num == 0 && dwarf_expr__has_stack_value(expr, exprlen))
--				parameter__set_loc_reg(parm, expr[0].atom - DW_OP_breg0 + DW_OP_reg0);
-+			if (loc_num == 0 && had_stack_value)
-+				parameter__record_loc_reg(parm, expr[0].atom - DW_OP_breg0 + DW_OP_reg0,
-+							  dwarf_op__snumber(&expr[0]), false, size);
- 			return;
- 		default:
- 			return;
-@@ -1818,12 +1942,12 @@ static void parameter__multi_exprs(Dwarf_Op *expr, int loc_num, struct cu *cu,
- 				parameter__set_field_bit(&parm->second_reg_fields, off - cu->addr_size);
- 			off += num;
- 		} else if (dwarf_op__is_reg(expr[i].atom)) {
--			if (off < cu->addr_size || parm->loc_reg == PARAMETER_UNKNOWN_REG)
--				parameter__set_loc_reg(parm, expr[i].atom);
-+			if (off < cu->addr_size || parm->loc_reg == PARAMETER_UNKNOWN_REG) {
-+				uint8_t size = parameter__loc_size(parm, cu);
-+
-+				parameter__record_loc_reg(parm, expr[i].atom, 0, false, size);
-+			}
- 		}
--		/* FIXME: not handling DW_OP_bregX pieces yet since we do not
--		 * have a use case for it yet in the Linux kernel.
--		 */
- 	}
- }
- 
-@@ -1841,6 +1965,7 @@ static void parameter__decode_location(Dwarf_Attribute *attr, struct conf_load *
- 	libdw__lock_lock();
- 	while ((offset = __dwarf_getlocations(attr, offset, &base, &start, &end, &expr, &exprlen)) > 0) {
- 		bool had_stack_value;
-+		uint8_t size;
- 
- 		loc_num++;
- 		if (exprlen == 0)
-@@ -1855,31 +1980,49 @@ static void parameter__decode_location(Dwarf_Attribute *attr, struct conf_load *
- 			continue;
- 		}
- 
-+		size = parameter__loc_size(parm, cu);
- 		switch (expr->atom) {
- 		case DW_OP_reg0 ... DW_OP_reg31:
- 			if (loc_num == 0)
--				parameter__set_loc_reg(parm, expr->atom);
-+				parameter__record_loc_reg(parm, expr->atom, 0, false, size);
- 			break;
- 		case DW_OP_breg0 ... DW_OP_breg31:
- 			if (loc_num == 0 && had_stack_value)
--				parameter__set_loc_reg(parm, expr->atom - DW_OP_breg0 + DW_OP_reg0);
-+				parameter__record_loc_reg(parm, expr->atom - DW_OP_breg0 + DW_OP_reg0,
-+							  dwarf_op__snumber(expr), false, size);
- 			break;
- 		case DW_OP_fbreg:
--			if (loc_num == 0)
-+			if (loc_num == 0) {
-+				int64_t loc_offset = dwarf_op__snumber(expr);
-+
- 				parm->loc_stack = 1;
-+				if (loc_offset >= INT32_MIN && loc_offset <= INT32_MAX)
-+					parm->loc_offset = (int32_t)loc_offset;
-+				parm->loc_size = size;
-+				parm->loc_deref = 1;
-+			}
- 			break;
- 		case DW_OP_lit0 ... DW_OP_lit31:
--		case DW_OP_constu:
--		case DW_OP_consts:
- 			if (loc_num == 0)
--				parm->loc_const_value = 1;
-+				parameter__record_loc_const(parm, expr->atom - DW_OP_lit0,
-+							    dwarf_op__const_size(expr->atom), false, false);
-+			break;
-+		case DW_OP_const1u ... DW_OP_consts:
-+			if (loc_num == 0)
-+				parameter__record_loc_const(parm, dwarf_op__const_value(expr),
-+							    dwarf_op__const_size(expr->atom),
-+							    dwarf_op__const_signed(expr->atom), false);
-+			break;
-+		case DW_OP_addr:
-+			if (loc_num == 0)
-+				parameter__record_loc_const(parm, expr->number, cu->addr_size, false, true);
- 			break;
- 		case DW_OP_entry_value:
- 		case DW_OP_GNU_entry_value:
- 			if (dwarf_getlocation_attr(attr, expr, &entry_attr) == 0 &&
- 			    dwarf_getlocation(&entry_attr, &entry_ops, &entry_len) == 0 &&
- 			    entry_len == 1 && dwarf_op__is_reg(entry_ops->atom))
--				parameter__set_loc_reg(parm, entry_ops->atom);
-+				parameter__record_loc_reg(parm, entry_ops->atom, 0, false, size);
- 			break;
- 		}
- 	}
-@@ -1889,7 +2032,8 @@ static void parameter__decode_location(Dwarf_Attribute *attr, struct conf_load *
- }
- 
- static struct parameter *parameter__new(Dwarf_Die *die, struct cu *cu, struct conf_load *conf,
--					struct ftype *ftype, int param_idx)
-+					struct ftype *ftype, int param_idx,
-+					bool decode_location)
- {
- 	struct parameter *parm = tag__alloc(cu, sizeof(*parm));
- 
-@@ -1900,7 +2044,7 @@ static struct parameter *parameter__new(Dwarf_Die *die, struct cu *cu, struct co
- 		parm->name = attr_string(die, DW_AT_name, conf);
- 		parm->idx = param_idx;
- 		parm->loc_reg = PARAMETER_UNKNOWN_REG;
--		if (!ftype)
-+		if (!decode_location)
- 			return parm;
- 
- 		parm->type_byte_size = get_type_byte_size(die, cu);
-@@ -1941,6 +2085,8 @@ static struct parameter *parameter__new(Dwarf_Die *die, struct cu *cu, struct co
- 		 * ftype__recode_dwarf_types() below for how this is handled.
- 		 */
- 		parm->has_const_value = dwarf_attr(die, DW_AT_const_value, &attr) != NULL;
-+		if (parm->has_const_value)
-+			parameter__record_attr_const_value(&attr, cu, parm);
- 		parm->has_loc = dwarf_attr(die, DW_AT_location, &attr) != NULL;
- 		if (parm->has_loc)
- 			parameter__decode_location(&attr, conf, cu, die, parm);
-@@ -1963,7 +2109,7 @@ static int formal_parameter_pack__load_params(struct formal_parameter_pack *pack
- 			continue;
- 		}
- 
--		struct parameter *param = parameter__new(die, cu, conf, NULL, -1);
-+		struct parameter *param = parameter__new(die, cu, conf, NULL, -1, false);
- 
- 		if (param == NULL)
- 			return -1;
-@@ -2005,9 +2151,11 @@ static struct inline_expansion *inline_expansion__new(Dwarf_Die *die, struct cu
+@@ -2005,6 +2005,8 @@ static struct inline_expansion *inline_expansion__new(Dwarf_Die *die, struct cu
  		dwarf_tag__set_attr_type(dtag, DWARF_TAG__REF_TYPE, die, DW_AT_abstract_origin, cu);
+ 		exp->ip.addr = 0;
+ 		exp->high_pc = 0;
++		exp->nr_parms = 0;
++		INIT_LIST_HEAD(&exp->parms);
  
- 		Dwarf_Attribute attr_orig;
-+		exp->name = NULL;
- 		if (dwarf_attr(die, DW_AT_abstract_origin, &attr_orig)) {
- 			Dwarf_Die die_orig;
--			if (dwarf_formref_die(&attr_orig, &die_orig))
-+			if (dwarf_formref_die(&attr_orig, &die_orig) &&
-+			    dwarf_tag(&die_orig) == DW_TAG_subprogram)
- 				exp->name = attr_string(&die_orig, DW_AT_name, conf);
- 		}
- 
-@@ -2021,7 +2169,7 @@ static struct inline_expansion *inline_expansion__new(Dwarf_Die *die, struct cu
- 
- 		if (dwarf_lowpc(die, &exp->ip.addr))
- 			exp->ip.addr = 0;
--		if (dwarf_lowpc(die, &exp->high_pc))
-+		if (dwarf_highpc(die, &exp->high_pc))
- 			exp->high_pc = 0;
- 
- 		exp->size = exp->high_pc - exp->ip.addr;
-@@ -2556,7 +2704,8 @@ static struct tag *die__create_new_parameter(Dwarf_Die *die,
+ 		if (!cu->has_addr_info)
+ 			goto out;
+@@ -2542,6 +2544,7 @@ static struct tag *die__create_new_string_type(Dwarf_Die *die, struct cu *cu)
+ static struct tag *die__create_new_parameter(Dwarf_Die *die,
+ 					     struct ftype *ftype,
+ 					     struct lexblock *lexblock,
++					     struct inline_expansion *exp,
  					     struct cu *cu, struct conf_load *conf,
  					     int param_idx)
  {
--	struct parameter *parm = parameter__new(die, cu, conf, ftype, param_idx);
-+	struct parameter *parm = parameter__new(die, cu, conf, ftype, param_idx,
-+					       ftype != NULL || exp != NULL);
+@@ -2558,7 +2561,7 @@ static struct tag *die__create_new_parameter(Dwarf_Die *die,
+ 			if (add_gnu_annotation_chain(die, param_idx, conf, &(tag__function(&ftype->tag)->annots)))
+ 				return NULL;
+ 		}
+-	} else {
++	} else if (exp == NULL) {
+ 		/*
+ 		 * DW_TAG_formal_parameters on a non DW_TAG_subprogram nor
+ 		 * DW_TAG_subroutine_type tag happens sometimes, likely due to
+@@ -2570,6 +2573,7 @@ static struct tag *die__create_new_parameter(Dwarf_Die *die,
+ 		*/
+ 		lexblock__add_tag(lexblock, &parm->tag);
+ 	}
++	/* Inline-expansion parameters are linked after CU-table registration. */
  
- 	if (parm == NULL)
+ 	return &parm->tag;
+ }
+@@ -2639,7 +2643,7 @@ static struct tag *die__create_new_subroutine_type(Dwarf_Die *die,
+ 			tag__print_not_supported(die);
+ 			continue;
+ 		case DW_TAG_formal_parameter:
+-			tag = die__create_new_parameter(die, ftype, NULL, cu, conf, -1);
++			tag = die__create_new_parameter(die, ftype, NULL, NULL, cu, conf, -1);
+ 			break;
+ 		case DW_TAG_unspecified_parameters:
+ 			ftype->unspec_parms = 1;
+@@ -2929,10 +2933,14 @@ static struct tag *die__create_new_inline_expansion(Dwarf_Die *die,
+ 						    struct lexblock *lexblock,
+ 						    struct cu *cu, struct conf_load *conf);
+ 
+-static int die__process_inline_expansion(Dwarf_Die *die, struct lexblock *lexblock, struct cu *cu, struct conf_load *conf)
++static int die__process_inline_expansion(Dwarf_Die *die,
++					 struct inline_expansion *exp,
++					 struct lexblock *lexblock,
++					 struct cu *cu, struct conf_load *conf)
+ {
+ 	Dwarf_Die child;
+ 	struct tag *tag;
++	int parm_idx = 0;
+ 
+ 	if (!dwarf_haschildren(die) || dwarf_child(die, &child) != 0)
+ 		return 0;
+@@ -2940,6 +2948,7 @@ static int die__process_inline_expansion(Dwarf_Die *die, struct lexblock *lexblo
+ 	die = &child;
+ 	do {
+ 		uint32_t id;
++		bool add_to_inline_expansion = false;
+ 
+ 		switch (dwarf_tag(die)) {
+ 		case DW_TAG_call_site:
+@@ -2958,13 +2967,10 @@ static int die__process_inline_expansion(Dwarf_Die *die, struct lexblock *lexblo
+ 				goto out_enomem;
+ 			continue;
+ 		case DW_TAG_formal_parameter:
+-			/*
+-			 * Inline expansions can have their own formal
+-			 * parameter children duplicating the abstract
+-			 * origin's parameters.  These are not needed
+-			 * for type reconstruction — skip them.
+-			 */
+-			continue;
++			tag = die__create_new_parameter(die, NULL, lexblock, exp,
++							cu, conf, parm_idx++);
++			add_to_inline_expansion = true;
++			break;
+ 		case DW_TAG_inlined_subroutine:
+ 			tag = die__create_new_inline_expansion(die, lexblock, cu, conf);
+ 			break;
+@@ -2993,6 +2999,8 @@ static int die__process_inline_expansion(Dwarf_Die *die, struct lexblock *lexblo
+ 
+ 		if (cu__table_add_tag(cu, tag, &id) < 0)
+ 			goto out_delete_tag;
++		if (add_to_inline_expansion)
++			inline_expansion__add_parameter(exp, tag__parameter(tag));
+ hash:
+ 		cu__hash(cu, tag);
+ 		struct dwarf_tag *dtag = tag__dwarf(tag);
+@@ -3015,8 +3023,8 @@ static struct tag *die__create_new_inline_expansion(Dwarf_Die *die,
+ 	if (exp == NULL)
  		return NULL;
-@@ -3601,6 +3750,15 @@ static void parameter__share_state_with_abstract_origin(struct parameter *parm,
- 		oparm->loc_stack = parm->loc_stack;
- 	if (parm->loc_reg != PARAMETER_UNKNOWN_REG)
- 		oparm->loc_reg = parm->loc_reg;
-+	if (parm->has_const_value || parm->loc_const_value || parm->loc_stack ||
-+	    parm->loc_reg != PARAMETER_UNKNOWN_REG) {
-+		oparm->loc_offset = parm->loc_offset;
-+		oparm->loc_value = parm->loc_value;
-+		oparm->loc_size = parm->loc_size;
-+		oparm->loc_deref = parm->loc_deref;
-+		oparm->loc_addr = parm->loc_addr;
-+		oparm->loc_signed = parm->loc_signed;
-+	}
- 	if (parm->type_byte_size != 0)
- 		oparm->type_byte_size = parm->type_byte_size;
- 	if (parm->passed_in_memory)
-@@ -3673,22 +3831,28 @@ static void inline_expansion__recode_dwarf_types(struct tag *tag, struct cu *cu)
- 	struct dwarf_tag *dtype;
- 	struct tag *origin;
- 	struct tag *pos;
-+	struct inline_expansion *exp = tag__inline_expansion(tag);
-+
-+	exp->function = NULL;
  
- 	/* The inline expansion's abstract origin is stored as its type ref. */
- 	dtype = dwarf_cu__find_tag_by_ref(dcu, dtag, type);
- 	if (dtype == NULL) {
- 		tag__print_type_not_found(tag);
- 		tag__check_pruned_alt_ref(dcu, dtag->type, dtag->from_alt.type);
-+		exp->name = NULL;
- 		return;
+-	if (die__process_inline_expansion(die, lexblock, cu, conf) != 0) {
+-		tag__free(&exp->ip.tag, cu);
++	if (die__process_inline_expansion(die, exp, lexblock, cu, conf) != 0) {
++		tag__delete(&exp->ip.tag, cu);
+ 		return NULL;
  	}
  
- 	origin = dtag__tag(dtype);
- 	if (tag__is_function(origin)) {
- 		function__recode_dwarf_name(origin, cu);
--		tag__inline_expansion(tag)->name = function__name(tag__function(origin));
--	}
-+		exp->function = tag__function(origin);
-+		exp->name = function__name(exp->function);
-+	} else
-+		exp->name = NULL;
- 	ftype__recode_dwarf_types(origin, cu);
--	list_for_each_entry(pos, &tag__inline_expansion(tag)->parms, node)
-+	list_for_each_entry(pos, &exp->parms, node)
- 		parameter__recode_dwarf_type(tag__parameter(pos), cu, NULL);
- 	tag->type = dtype->small_id;
- }
-@@ -4149,37 +4313,32 @@ static int cu__resolve_func_ret_types_optimized(struct cu *cu, struct conf_load
+@@ -3098,7 +3106,7 @@ static int die__process_function(Dwarf_Die *die, struct ftype *ftype,
  			continue;
- 
- 		fn = tag__function(tag);
--		function__analyze_parameter_locations(fn, cu, conf);
--
--		/* mark function as optimized if parameter is, or
--		 * if parameter does not have a location; at this
--		 * point location presence has been marked in
--		 * abstract origins for cases where a parameter
--		 * location is not stored in the original function
--		 * parameter tag.
--		 *
--		 * Also mark functions which, due to optimization,
--		 * use an unexpected register for a parameter.
--		 * Exception is functions which have a struct
--		 * as a parameter, as multiple registers may
--		 * be used to represent it, throwing off register
--		 * to parameter mapping.
-+		/* Abstract inline subprograms describe source signatures; their
-+		 * concrete locations belong to DW_TAG_inlined_subroutine children.
- 		 */
--		ftype__for_each_parameter(&fn->proto, pos) {
--			if (pos->optimized || !pos->has_loc)
--				fn->proto.optimized_parms = 1;
-+		if (!function__inlined(fn)) {
-+			function__analyze_parameter_locations(fn, cu, conf);
- 
--			if (pos->unexpected_reg)
--				has_unexpected_reg = true;
--		}
--		if (has_unexpected_reg) {
-+			/* Mark functions with optimized or location-less parameters, and
-+			 * flag unexpected registers unless a struct parameter explains
-+			 * the multi-register ABI representation.
-+			 */
- 			ftype__for_each_parameter(&fn->proto, pos) {
--				has_struct_param = param__is_struct(cu, &pos->tag);
--				if (has_struct_param)
--					break;
-+				if (pos->optimized || !pos->has_loc)
-+					fn->proto.optimized_parms = 1;
-+
-+				if (pos->unexpected_reg)
-+					has_unexpected_reg = true;
-+			}
-+			if (has_unexpected_reg) {
-+				ftype__for_each_parameter(&fn->proto, pos) {
-+					has_struct_param = param__is_struct(cu, &pos->tag);
-+					if (has_struct_param)
-+						break;
-+				}
-+				if (!has_struct_param)
-+					fn->proto.unexpected_reg = 1;
- 			}
--			if (!has_struct_param)
--				fn->proto.unexpected_reg = 1;
  		}
+ 		case DW_TAG_formal_parameter:
+-			tag = die__create_new_parameter(die, ftype, lexblock, cu, conf, param_idx++);
++			tag = die__create_new_parameter(die, ftype, lexblock, NULL, cu, conf, param_idx++);
+ 			break;
+ 		case DW_TAG_variable:
+ 			tag = die__create_new_variable(die, cu, conf, 0);
+@@ -3545,75 +3553,103 @@ static void __tag__print_abstract_origin_not_found(struct tag *tag,
+ #define tag__print_abstract_origin_not_found(tag) \
+ 	__tag__print_abstract_origin_not_found(tag, __func__, __LINE__)
  
- 		if (tag == NULL || tag->type != 0)
-diff --git a/dwarves.h b/dwarves.h
-index 781f9a0..1fc594f 100644
---- a/dwarves.h
-+++ b/dwarves.h
-@@ -471,6 +471,19 @@ bool languages__cu_filtered(struct languages *languages, struct cu *cu, bool ver
- 			continue;			\
- 		else
- 
-+/**
-+ * cu__for_each_inline_expansion - iterate thru all inline expansions
-+ * @cu: struct cu instance to iterate
-+ * @id: uint32_t tag id
-+ * @pos: struct inline_expansion iterator
-+ */
-+#define cu__for_each_inline_expansion(cu, id, pos)	\
-+	for (id = 0; id < cu->tags_table.nr_entries; ++id) \
-+		if (!tag__is_inline_expansion(cu->tags_table.entries[id]) || \
-+		    !(pos = tag__inline_expansion(cu->tags_table.entries[id]))) \
-+			continue;			\
-+		else
-+
- /**
-  * cu__for_each_namespace - iterate thru all the global namespace tags
-  * @cu: struct cu instance to iterate
-@@ -601,6 +614,11 @@ static inline bool tag__is_constant(const struct tag *tag)
- 	return tag->tag == DW_TAG_constant;
- }
- 
-+static inline bool tag__is_inline_expansion(const struct tag *tag)
+-static void ftype__recode_dwarf_types(struct tag *tag, struct cu *cu)
++static void parameter__share_state_with_abstract_origin(struct parameter *parm,
++							struct parameter *oparm)
 +{
-+	return tag && tag->tag == DW_TAG_inlined_subroutine;
++	if (parm->has_loc)
++		oparm->has_loc = parm->has_loc;
++	if (parm->has_const_value)
++		oparm->has_const_value = parm->has_const_value;
++	if (parm->loc_const_value)
++		oparm->loc_const_value = parm->loc_const_value;
++	if (parm->loc_stack)
++		oparm->loc_stack = parm->loc_stack;
++	if (parm->loc_reg != PARAMETER_UNKNOWN_REG)
++		oparm->loc_reg = parm->loc_reg;
++	if (parm->type_byte_size != 0)
++		oparm->type_byte_size = parm->type_byte_size;
++	if (parm->passed_in_memory)
++		oparm->passed_in_memory = parm->passed_in_memory;
++	oparm->first_reg_fields |= parm->first_reg_fields;
++	oparm->second_reg_fields |= parm->second_reg_fields;
++	if (parm->true_sig_member_name && !oparm->true_sig_member_name) {
++		oparm->true_sig_member_name = parm->true_sig_member_name;
++		oparm->true_sig_type = parm->true_sig_type;
++		oparm->true_sig_type_from_types = parm->true_sig_type_from_types;
++	}
++	if (parm->optimized)
++		oparm->optimized = parm->optimized;
++	if (parm->unexpected_reg)
++		oparm->unexpected_reg = parm->unexpected_reg;
 +}
 +
- static inline bool tag__is_volatile(const struct tag *tag)
++static void parameter__recode_dwarf_type(struct parameter *parm, struct cu *cu,
++						 struct ftype *ftype)
  {
- 	return tag->tag == DW_TAG_volatile_type;
-@@ -820,12 +838,16 @@ struct ip_tag {
- 	uint64_t   addr;
- };
+-	struct parameter *pos;
+ 	struct dwarf_cu *dcu = cu->priv;
+-	struct ftype *type = tag__ftype(tag);
+-
+-	ftype__for_each_parameter(type, pos) {
+-		struct dwarf_tag *dpos = tag__dwarf(&pos->tag);
+-		struct parameter *opos;
+-		struct dwarf_tag *dtype;
++	struct dwarf_tag *dparm = tag__dwarf(&parm->tag);
++	struct dwarf_tag *dtype;
  
-+struct function;
-+struct parameter;
+-		if (dpos->type == 0) {
+-			if (dpos->abstract_origin == 0) {
+-				/* Function without parameters */
+-				pos->tag.type = 0;
+-				continue;
+-			}
+-			dtype = dwarf_cu__find_tag_by_ref(dcu, dpos, abstract_origin);
+-			if (dtype == NULL) {
+-				tag__print_abstract_origin_not_found(&pos->tag);
+-				continue;
+-			}
+-			opos = tag__parameter(dtag__tag(dtype));
+-			pos->name = opos->name;
+-			if (pos->idx != opos->idx)
+-				type->reordered_parm = 1;
+-			pos->tag.type = dtag__tag(dtype)->type;
+-			/* share location information between parameter and
+-			 * abstract origin; if neither have location, we will
+-			 * mark the parameter as optimized out.  Also share
+-			 * info regarding unexpected register use for
+-			 * parameters.
+-			 */
+-			if (pos->has_loc)
+-				opos->has_loc = pos->has_loc;
+-			if (pos->has_const_value)
+-				opos->has_const_value = pos->has_const_value;
+-			if (pos->loc_const_value)
+-				opos->loc_const_value = pos->loc_const_value;
+-			if (pos->loc_stack)
+-				opos->loc_stack = pos->loc_stack;
+-			if (pos->loc_reg != PARAMETER_UNKNOWN_REG)
+-				opos->loc_reg = pos->loc_reg;
+-			if (pos->type_byte_size != 0)
+-				opos->type_byte_size = pos->type_byte_size;
+-			if (pos->passed_in_memory)
+-				opos->passed_in_memory = pos->passed_in_memory;
+-			opos->first_reg_fields |= pos->first_reg_fields;
+-			opos->second_reg_fields |= pos->second_reg_fields;
+-			if (pos->true_sig_member_name && !opos->true_sig_member_name) {
+-				opos->true_sig_member_name = pos->true_sig_member_name;
+-				opos->true_sig_type = pos->true_sig_type;
+-				opos->true_sig_type_from_types = pos->true_sig_type_from_types;
+-			}
++	if (dparm->type == 0) {
++		struct parameter *oparm;
+ 
+-			if (pos->optimized)
+-				opos->optimized = pos->optimized;
+-			if (pos->unexpected_reg)
+-				opos->unexpected_reg = pos->unexpected_reg;
+-			continue;
++		if (dparm->abstract_origin == 0) {
++			parm->tag.type = 0;
++			return;
+ 		}
+ 
+-		dtype = dwarf_cu__find_type_by_ref(dcu, dpos, type);
++		dtype = dwarf_cu__find_tag_by_ref(dcu, dparm, abstract_origin);
+ 		if (dtype == NULL) {
+-			tag__print_type_not_found(&pos->tag);
+-			continue;
++			tag__print_abstract_origin_not_found(&parm->tag);
++			return;
+ 		}
+-		pos->tag.type = dtype->small_id;
 +
- struct inline_expansion {
++		oparm = tag__parameter(dtag__tag(dtype));
++		parm->name = oparm->name;
++		if (ftype != NULL && parm->idx != oparm->idx)
++			ftype->reordered_parm = 1;
++		parm->tag.type = dtag__tag(dtype)->type;
++		if (ftype != NULL)
++			parameter__share_state_with_abstract_origin(parm, oparm);
++		return;
++	}
++
++	dtype = dwarf_cu__find_type_by_ref(dcu, dparm, type);
++	if (dtype == NULL) {
++		tag__print_type_not_found(&parm->tag);
++		return;
++	}
++	parm->tag.type = dtype->small_id;
++}
++
++static void ftype__recode_dwarf_types(struct tag *tag, struct cu *cu)
++{
++	struct ftype *type = tag__ftype(tag);
++	struct parameter *pos;
++
++	ftype__for_each_parameter(type, pos)
++		parameter__recode_dwarf_type(pos, cu, type);
++}
++
++static void inline_expansion__recode_dwarf_types(struct tag *tag, struct cu *cu)
++{
++	struct dwarf_cu *dcu = cu->priv;
++	struct dwarf_tag *dtag = tag__dwarf(tag);
++	struct dwarf_tag *dtype;
++	struct tag *pos;
++
++	/* The inline expansion's abstract origin is stored as its type ref. */
++	dtype = dwarf_cu__find_tag_by_ref(dcu, dtag, type);
++	if (dtype == NULL) {
++		tag__print_type_not_found(tag);
++		tag__check_pruned_alt_ref(dcu, dtag->type, dtag->from_alt.type);
++		return;
+ 	}
++
++	ftype__recode_dwarf_types(dtag__tag(dtype), cu);
++	list_for_each_entry(pos, &tag__inline_expansion(tag)->parms, node)
++		parameter__recode_dwarf_type(tag__parameter(pos), cu, NULL);
++	tag->type = dtype->small_id;
+ }
+ 
+ static struct parameter *ftype__next_parameter(struct ftype *ftype, struct parameter *parm)
+@@ -3820,23 +3856,7 @@ static void lexblock__recode_dwarf_types(struct lexblock *tag, struct cu *cu)
+ 			lexblock__recode_dwarf_types(tag__lexblock(pos), cu);
+ 			continue;
+ 		case DW_TAG_inlined_subroutine:
+-			if (dpos->type != 0)
+-				dtype = dwarf_cu__find_tag_by_ref(dcu, dpos, type);
+-			else
+-				dtype = dwarf_cu__find_tag_by_ref(dcu, dpos, abstract_origin);
+-			if (dtype == NULL) {
+-				if (dpos->type != 0) {
+-					tag__print_type_not_found(pos);
+-					tag__check_pruned_alt_ref(dcu, dpos->type,
+-								  dpos->from_alt.type);
+-				} else {
+-					tag__print_abstract_origin_not_found(pos);
+-					tag__check_pruned_alt_ref(dcu, dpos->abstract_origin,
+-								  dpos->from_alt.abstract_origin);
+-				}
+-				continue;
+-			}
+-			ftype__recode_dwarf_types(dtag__tag(dtype), cu);
++			inline_expansion__recode_dwarf_types(pos, cu);
+ 			continue;
+ 
+ 		case DW_TAG_formal_parameter:
+@@ -4016,15 +4036,9 @@ static int tag__recode_dwarf_type(struct tag *tag, struct cu *cu)
+ 
+ 	case DW_TAG_namespace:
+ 		return namespace__recode_dwarf_types(tag, cu);
+-	/*
+-	 * DW_TAG_inlined_subroutine uses DW_AT_abstract_origin to
+-	 * reference the out-of-line subprogram.  inline_expansion__new()
+-	 * stores this in dtag->type (not dtag->abstract_origin) via
+-	 * dwarf_tag__set_attr_type() with DW_AT_abstract_origin.
+-	 * For dwz binaries, the target subprogram lives in the alt file,
+-	 * so dtag->from_alt.type drives the lookup to dcu->alt->hash_tags.
+-	 */
+ 	case DW_TAG_inlined_subroutine:
++		inline_expansion__recode_dwarf_types(tag, cu);
++		return 0;
+ 	case DW_TAG_imported_module:
+ 		dtype = dwarf_cu__find_tag_by_ref(cu->priv, dtag, type);
+ 		goto check_type;
+diff --git a/dwarves.c b/dwarves.c
+index 2164030..2bb5c18 100644
+--- a/dwarves.c
++++ b/dwarves.c
+@@ -203,6 +203,27 @@ void formal_parameter_pack__delete(struct formal_parameter_pack *pack, struct cu
+ 	cu__tag_free(cu, &pack->tag);
+ }
+ 
++static void inline_expansion__delete_tags(struct inline_expansion *exp,
++					  struct cu *cu)
++{
++	struct tag *pos, *n;
++
++	list_for_each_entry_safe_reverse(pos, n, &exp->parms, node) {
++		list_del_init(&pos->node);
++		tag__delete(pos, cu);
++	}
++}
++
++static void inline_expansion__delete(struct inline_expansion *exp,
++				     struct cu *cu)
++{
++	if (exp == NULL)
++		return;
++
++	inline_expansion__delete_tags(exp, cu);
++	cu__tag_free(cu, &exp->ip.tag);
++}
++
+ void tag__delete(struct tag *tag, struct cu *cu)
+ {
+ 	if (tag == NULL)
+@@ -225,6 +246,8 @@ void tag__delete(struct tag *tag, struct cu *cu)
+ 		ftype__delete(tag__ftype(tag), cu);		break;
+ 	case DW_TAG_subprogram:
+ 		function__delete(tag__function(tag), cu); break;
++	case DW_TAG_inlined_subroutine:
++		inline_expansion__delete(tag__inline_expansion(tag), cu); break;
+ 	case DW_TAG_lexical_block:
+ 		lexblock__delete(tag__lexblock(tag), cu); break;
+ 	case DW_TAG_GNU_template_parameter_pack:
+@@ -1476,6 +1499,13 @@ void lexblock__add_tag(struct lexblock *block, struct tag *tag)
+ 	list_add_tail(&tag->node, &block->tags);
+ }
+ 
++void inline_expansion__add_parameter(struct inline_expansion *exp,
++				     struct parameter *parm)
++{
++	++exp->nr_parms;
++	list_add_tail(&parm->tag.node, &exp->parms);
++}
++
+ void lexblock__add_inline_expansion(struct lexblock *block,
+ 				    struct inline_expansion *exp)
+ {
+@@ -2059,6 +2089,10 @@ static int list__for_all_tags(struct list_head *list, struct cu *cu,
+ 			if (list__for_all_tags(&tag__lexblock(pos)->tags,
+ 					       cu, iterator, cookie))
+ 				return 1;
++		} else if (pos->tag == DW_TAG_inlined_subroutine) {
++			if (list__for_all_tags(&tag__inline_expansion(pos)->parms,
++					       cu, iterator, cookie))
++				return 1;
+ 		}
+ 
+ 		if (iterator(pos, cu, cookie))
+diff --git a/dwarves.h b/dwarves.h
+index df77f1e..b25ec76 100644
+--- a/dwarves.h
++++ b/dwarves.h
+@@ -824,6 +824,8 @@ struct inline_expansion {
  	struct ip_tag	 ip;
- 	const char	 *name;
  	size_t		 size;
  	uint64_t	 high_pc;
- 	struct list_head parms;
-+	struct function	 *function;
- 	uint16_t	 nr_parms;
++	struct list_head parms;
++	uint16_t	 nr_parms;
  };
  
-@@ -835,10 +857,17 @@ static inline struct inline_expansion *
+ static inline struct inline_expansion *
+@@ -832,6 +834,10 @@ static inline struct inline_expansion *
  	return (struct inline_expansion *)tag;
  }
  
--struct parameter;
- void inline_expansion__add_parameter(struct inline_expansion *exp,
- 				     struct parameter *parm);
- 
-+/**
-+ * inline_expansion__for_each_parameter - iterate thru all the parameters
-+ * @ie: struct inline_expansion instance to iterate
-+ * @pos: struct parameter iterator
-+ */
-+#define inline_expansion__for_each_parameter(ie, pos) \
-+	list_for_each_entry(pos, &(ie)->parms, tag.node)
++struct parameter;
++void inline_expansion__add_parameter(struct inline_expansion *exp,
++				     struct parameter *parm);
 +
  struct label {
  	struct ip_tag	 ip;
  	const char	 *name;
-@@ -954,12 +983,18 @@ struct parameter {
- 	unsigned long first_reg_fields;
- 	unsigned long second_reg_fields;
- 	int loc_reg;
-+	int32_t loc_offset;
-+	uint64_t loc_value;
- 	uint16_t type_byte_size;
-+	uint8_t loc_size;
- 	uint8_t true_sig_type_from_types:1;
- 	uint8_t true_sig_type_from_alt:1;
- 	uint8_t has_const_value:1;
- 	uint8_t loc_const_value:1;
- 	uint8_t loc_stack:1;
-+	uint8_t loc_deref:1;
-+	uint8_t loc_addr:1;
-+	uint8_t loc_signed:1;
- 	uint8_t optimized:1;
- 	uint8_t unexpected_reg:1;
- 	uint8_t has_loc:1;
 -- 
 2.43.5
 
