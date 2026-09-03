@@ -1,71 +1,75 @@
-Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
+Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEBDA50C2BC
-	for <dwarves@vger.kernel.org>; Thu,  3 Sep 2026 20:57:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C522A43C045
+	for <dwarves@vger.kernel.org>; Thu,  3 Sep 2026 20:58:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788469071; cv=none; b=Hl6vlVmbB8eRhIGNMxRocqgwwRu9z7I1P2HwRFDD28bvlBO4Bdt9OptqVhqzvzBTTA0dJ/WwoNpMKbm3WDwcFzeHW0UK8JgL0dA7OxL8mJcCZKTKs+SuzD6cq3dwIfvZ9rYtPbrVPJpiyaG4KlmkiitO04Sxu9ICCyiwEvC54Ac=
+	t=1788469102; cv=none; b=ZLkhBMolS6Rz4Sc+t+tQZmL0TZKVZ7+B3i8PSkPLBNTjVwtdNxSVB6y4hBEaCP9MQK7NGdKW+QTluZ4/b/lRVlUSuT99888TlSBlYDiC02QoK6rhvhMimSqLEMsGmjrMI3D+Ye8jx+xWJd7V1X7qPSoRUdP7scF3DWNFqgmDsRk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788469071; c=relaxed/simple;
-	bh=wIT3ce8XVMOwsR2tTNRA2aNpDszPKstYyE/2+d/Nljg=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=EpxHMMn91eJ4chk7n9aq3MGulBgn4aDVkd77EUZRyULAvayY7XJM1UHBoNcue3+APTD9F3hjOGWE4VA9qo/7qNH7xk+rDuqCH5JcJCnX7nHxODmQpFLkM6FrC/mJjyq7/DBTumf9bmaTGU25WBZMQ13GBVLHM7y2eCxY2mYc9jU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BJeqhh7z; arc=none smtp.client-ip=209.85.215.177
+	s=arc-20240116; t=1788469102; c=relaxed/simple;
+	bh=6af2QYHekk1eXi+1jcY6pOCuVb5uhiITXQfyNMcUyUE=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=DH+W620BmwiEAOrTNXRaY68QI9PkoCq3joKD/l/3mrtSovzemSO07+mD/NEFIVm+F2Ib+kUDi10REN2VSO9U/m5yCy/fBByjyzpdOmxUTbfN/J7lIZMM+qeQJUTmQHJGFtlC2AsVLKcyxiXkIvmjxbn7lhxFSNlTgMmOREnKLAY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=U6T0N6wA; arc=none smtp.client-ip=209.85.216.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BJeqhh7z"
-Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-cc1c9879395so346398a12.1
-        for <dwarves@vger.kernel.org>; Thu, 03 Sep 2026 13:57:44 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="U6T0N6wA"
+Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-3969e82ff8fso326273a91.0
+        for <dwarves@vger.kernel.org>; Thu, 03 Sep 2026 13:57:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788469063; x=1789073863; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=ROBhFbx9oy5g8gcSMzygHSPcRfMebznh7UGYcW16als=;
-        b=BJeqhh7zt4jrLfnT2hIhH1U5LrLqjap41wbQjUg/vBf5/SXpwCRr79NrfY1vvIcwWg
-         qJiVum9ZNPv52I6Js6nY2waJ3gJxJkoOrvrAewW1mBVhp836E9QW47eeVyWrr8NZgtxy
-         rRu8o6zEFLft+0nbdYiLemD2CiqWxK6H7th0XCmg7PIx9xYUlqqlOHtEJz/m30Vpvy4e
-         7ZSr+wxjKYkDY3HJgb3QwLNtZuBtvykbQn0SG2zr0UU8c+LnOwxSAxDLarO1zEIpHE2e
-         qdRmYmLgM7FpgAOJqD/trRGUcSjqmrTqjeZaZXLAbUJCN3iHlEq/QRDLcjzA7EuKc34X
-         DVdg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788469063; x=1789073863;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1788469077; x=1789073877; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=ROBhFbx9oy5g8gcSMzygHSPcRfMebznh7UGYcW16als=;
-        b=AYXCz/hWvU8mHjZbQdK33QF9gEhfiv7N9cpee8VKU/XTMAhCliIzJ49WEYIkf4ZgKN
-         E7+HRwXFbEyA8U7VKvDk+lc65OQPj4tfrtUGSY6NwFgZuJEyKmqrXz1MvLCULijqDauw
-         /zDep+lu/1vMmHKlLN5ZzarfSeoAtjsHpkmGB3rS0p4SjuhjAIf1oeAcHGkYvvUcgeBL
-         bq3bkNeJ13GvKujqdwQCNz2QK8Ec7yAf+uoYJOjiSCUTXauHr8vlr/MFvc44WBe5Yug/
-         UdDVCk7W0WetxBBtw+OfblFrxUdjq1rTODgbTSGfhuYCCwP1uMjLEzLvpcVMlq0sY+pi
-         yaeg==
-X-Forwarded-Encrypted: i=1; AKwUvBzIyqDZHzTBxIZx9cbh1r9gj4DSD6qxSpD9H4w8yNC6Yf8Kd0NCFjrclwZVUzeLGkVtvk0wVVhx@vger.kernel.org
-X-Gm-Message-State: AFuF++mECyBeaCoh7iYiV+aM083g1O+oXMH2YiMn/bAxzpVvyiu3rEzN
-	gpqNM4FLNi/dgVQnJMLS0HQNj7oASVLOI+WeLlKhonRO/9heDE8Kp9v1rYiKQ0HK
-X-Gm-Gg: AYBFou1ep83yqvJPId36KJ/5tktKQE/Bz5tPMqrS3JArG7YAjWuX3bgywJKq9oDbEmF
-	GVtkan/ymt+T9zDwDW/9WWxZUIZgXFlrPSXMxwYtwedXbsnH3buV3FqzXvPB/E8beNbME6LEjUL
-	3f4zuv/fbuViN0S/FasKFOKSwlpuMqT3t+rub1qTozHkS91tP+x+Yt2AKcD0T4ohrkdCSoFwOTx
-	hhYM+ffPWRvtwugQs0j0Fk/3G872yRmCGmGnCAcC/IjflIyYSYjxip8sDEQX96BO/gM7Ah/XbBm
-	Xkwm+3DoThIC4krSdBZ3Blk6Vz9GahDejPoDbpwRz4/pztCsq7uM467yEMw6+0tKA3s44PPQerd
-	CmjyNnBGG7Meu8qTkHAR3XHuK6PmXolOeNCUm8w22wHHs1r6oirQlNu6bRHYyMMeXp9USuvsvyI
-	NXVRkQDli4pcaV1e0hlaYTj3QV25Wp5jUfCaJqVIwlWYAJ/aCgHYnqCjIfp7d6j3G+1UswxB9Up
-	sXtETopZW4GFotWRRU4mxuLj8ueVw6O
-X-Received: by 2002:a17:90b:3b52:b0:38f:18f9:785 with SMTP id 98e67ed59e1d1-39b26101d25mr1658699a91.8.1788469062576;
-        Thu, 03 Sep 2026 13:57:42 -0700 (PDT)
+        bh=rIHTL3Id3rn/gxF+dJN8upkPqgpCVh+Snl9sn1Kib7g=;
+        b=U6T0N6wA67ZerWCSBRtQk8VB9ZM3qWPNM1gvMcOOARJ7nhLxnfvyB07rlzPznz1/xZ
+         9ulUkZt6KWXfgQnc4hnL+l7nHdW/QjsHxsBqee0U7HnNTS7mEwn6kvaeGTBEzJyu80v2
+         XIzP/PwB+Lm2h3jiusDBrV+kp7u1h00NCU2dy4UIbznwGr1AY4MYl1ywHSxQY170Xj2a
+         XHUyUhm7hzpSDHGM2PSO3UL1shgLdW4rbdVDILdM/XXr5RSj2Q/2YvyVYXl0ua5Ke3Wh
+         h1UV3/5cons1mzVMO9hEM5jZkI+mkI/MwDjES69QmEPSheACceytvZKuv39NbiSHQ243
+         KtGA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788469077; x=1789073877;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=rIHTL3Id3rn/gxF+dJN8upkPqgpCVh+Snl9sn1Kib7g=;
+        b=S7c/aEIXFfw23jmPQqZ5Mw5lxYOlTontbllVLUhfF8ehANw++YhSU153vz5sQn4mZR
+         VIFWHBXAwY7DayJvq4JEv/c19ez3dzZdHRQ7CumC21tFL+EHJO+wNGsi8iEJCPXO855S
+         uBtqKfvVYO3Uefr8yD0K+w+r8FKrWv5SiZNmxJ9qgKd0suTQ2G2OVhOMqYELMkRG9KxQ
+         UI/bn720K0lY4Qs4V9MPyFP+4XKXDz/+2YPQ8WUUa3vF8w7fHXmO/I0OKlQnw8tOJ5OF
+         +bEqjZRU7J6ZUlxFJ5LVyG6D9nojrEkWvqomMCO5bv68q/+wAu3Dz0CWNU3dq3MP34fm
+         IliQ==
+X-Forwarded-Encrypted: i=1; AKwUvBwo33cXXB6Ex6bHyUfqixj0TsgSaG3ZRfH+vxM/5V+jCrInFzfTHSBhd60TZptfRwuEqZtCR69n@vger.kernel.org
+X-Gm-Message-State: AFuF++lbfr3Oi3gNP2p1g8BJvtB8O0GBFP78DfYilRp3uwIxdA4UsEbX
+	pI+5VjBPP28ohyhAFWoXpj35fecxpXk3td4QW809PEUHh3+klFzBY3Bq
+X-Gm-Gg: AYBFou1dfmdpLYMOecyo+NDtM895nilMoql3trFnR3AEKMxtcGCIxuxcM+L+F/yoJ5g
+	7lCV+OCeRS2dbCL/1ICdcHz+gtSj4O1PiYdH6Wt93+hDaz21VvF9cHmfy9r9TKuNGVGCYNeijaJ
+	6OtxMbJto0pm1xnuFIrczVy/qFtGuC+0l8bmuXbUIW0vb32uk1/b0y8/3eMxoTxYfadxCF6eKd0
+	pEje1PD6mNbFQQk2Tph65Jah/JjdAnth1kkvZdN680IkFoq2KiURzzYWXa7yUfS7Lnk9jl80UiN
+	eExR4E3V7wj/53I75qY6HjDbu+oMF54XXHs1VUKcXKPF3qtbyWukC1SoYvHZJdM64N7Pnub/M3G
+	Fd9iybeyOIO/kkKVjoh5ntLze7O0AEQHrcEZekQCGgTvgnu8uj8oGwD+NcKNZtv5nTiZEAc7ocz
+	AJYUDD9mA9EqIJAzMCN7dKBic5/s/U8kP0lRLKRkElKxluxKY9LoUq06b3XVtFnoBiwaZadH59P
+	KztEm3JCNnxzYgHFmim
+X-Received: by 2002:a17:90b:5790:b0:398:9bd5:4910 with SMTP id 98e67ed59e1d1-39b2624f0ffmr2083798a91.23.1788469076685;
+        Thu, 03 Sep 2026 13:57:56 -0700 (PDT)
 Received: from pop-os.. ([106.219.234.147])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39b260cd15asm753185a91.4.2026.09.03.13.57.40
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39b260cd15asm753185a91.4.2026.09.03.13.57.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Sep 2026 13:57:42 -0700 (PDT)
+        Thu, 03 Sep 2026 13:57:56 -0700 (PDT)
 From: Aditya Dutt <duttaditya18@gmail.com>
 To: Arnaldo Carvalho de Melo <acme@kernel.org>
 Cc: Aditya Dutt <duttaditya18@gmail.com>,
 	dwarves@vger.kernel.org,
 	Alan Maguire <alan.maguire@oracle.com>
-Subject: [PATCH dwarves 0/2] pahole: Fix -C -T segfault
-Date: Fri,  4 Sep 2026 02:26:57 +0530
-Message-Id: <20260903205659.1543175-1-duttaditya18@gmail.com>
+Subject: [PATCH dwarves 2/2] pahole: Fix -C -T segfault
+Date: Fri,  4 Sep 2026 02:26:59 +0530
+Message-Id: <20260903205659.1543175-3-duttaditya18@gmail.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20260903205659.1543175-1-duttaditya18@gmail.com>
+References: <20260903205659.1543175-1-duttaditya18@gmail.com>
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
@@ -74,29 +78,64 @@ List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-'formatter' is NULL when -T is given and the -C path calls it, which
-segfaults.
-Patch 2 rejects that, like '-m -C' already does.
-Patch 1 fixes the '-m -C' error, which names '--class' incorrectly.
+-T/--nr_definitions sets stats_formatter and sets formatter to NULL.
+print_classes() checks for that before calling it.
+The -C code path does not which results in a segfault.
 
--T has set 'formatter' to NULL since commit 286c7740fd98c4df but -C did
-not call formatter until f5857bd34b220a64 (used to call tag__fprintf
-before), so added Fixes tag referencing it. 
+Before:
+  $ cat m.c
+  struct named { int a; char b; };
+  union u_named { int a; long b; };
+  struct holey { char a; int b; };
+  struct named s; union u_named u; struct holey h;
 
-I think support for the combinations '-T -C' and '-m -C' could be added
-in the future.
+  $ pahole -C named -T m.o
+  Segmentation fault (core dumped)
 
-Problem with doing that right now is that the counting logic lives in
-the 'class_name == NULL' block that -C skips. And -C stops loading CUs
-once all classes are found.
+Reject the combination, similar to '-m -C'.
 
-Aditya Dutt (2):
-  pahole: Fix option name in the -m/-C error message
-  pahole: Fix -C -T segfault
+After:
+  $ pahole -C named -T m.o
+  pahole: -T/nr_definitions doesn't work with --class_name/-C, it shows all classes and the number of times they are defined
+  $ echo $?
+  1
 
- pahole.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+  $ pahole -T m.o # unchanged
+  named   1
+  u_named 1
+  holey   1
 
+Fixes: f5857bd34b220a64 ("pahole: Honour --compile when -C is used")
+Signed-off-by: Aditya Dutt <duttaditya18@gmail.com>
+---
+ pahole.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/pahole.c b/pahole.c
+index aa04d98..b2047c1 100644
+--- a/pahole.c
++++ b/pahole.c
+@@ -3461,7 +3461,7 @@ static enum load_steal_kind pahole_stealer(struct cu *cu, struct conf_load *conf
+ 			print_containers(cu, class_id, 0);
+ 		else if (find_pointers_in_structs)
+ 			print_structs_with_pointer_to(cu, class_id);
+-		else if (class) {
++		else if (class && formatter != NULL) {
+ 			/*
+ 			 * We don't need to print it for every compile unit
+ 			 * but the previous options need
+@@ -3666,6 +3666,11 @@ int main(int argc, char *argv[])
+ 		return rc;
+ 	}
+ 
++	if (class_name != NULL && stats_formatter == nr_definitions_formatter) {
++		fputs("pahole: -T/nr_definitions doesn't work with --class_name/-C, it shows all classes and the number of times they are defined\n", stderr);
++		return rc;
++	}
++
+ 	if (print_numeric_version) {
+ 		dwarves_print_numeric_version(stdout);
+ 		return 0;
 -- 
 2.34.1
 
