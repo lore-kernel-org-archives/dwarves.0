@@ -1,20 +1,21 @@
-Received: from 66-220-155-178.mail-mxout.facebook.com (66-220-155-178.mail-mxout.facebook.com [66.220.155.178])
+Received: from 66-220-155-179.mail-mxout.facebook.com (66-220-155-179.mail-mxout.facebook.com [66.220.155.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AD7D39AD49
-	for <dwarves@vger.kernel.org>; Fri, 11 Sep 2026 04:10:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.155.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7888D49E133
+	for <dwarves@vger.kernel.org>; Fri, 11 Sep 2026 04:10:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.155.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789099809; cv=none; b=IDoncEZiU3+TaYKAtx98vk06hwtTL4I7LyhBEzrqFoLIucj4NuZzW7e+ChQLhW4BJG41MSWMVlQaILGnp19YjOZayhSiFijpxF8hPb8VMAUXcr3bJlPB489b9WhZWcYiCxzN2q3Y/y21Rc70ltHk3yy7GvT2nI8+mPs/3TkCfZ4=
+	t=1789099815; cv=none; b=anSmJWB9MHxHDvpQLUAlPzpXdNsuVPFQqMfM+TBNtBVnFPsSwbUDBkK+6K6+uBLSQjWP1wSG8cljZdTHD2ptQfm3gAM/p49ZmW4S2aQKEG4R5jcG7zRv0WYtB9Kz6TrPvFs/uDgDUMeS/OrXS5+DpRE8tXZpFleg8JM5tNBkZuE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789099809; c=relaxed/simple;
-	bh=8OdVyEiEpqfcHPHMr01UY010bwuHudvQme8bbid58K4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=dkhwXBPiuHsFyc93ygzBSoUOOxXHJ4FMmALNdXpTB1f5h/KaDFG14DEKjNHAN7ajjgMXZBGEdkcGLr77tQRaeB9lw/bNVYt0BSkxxXmfs70nyyv56Q9irPkxcuP3hoKSKuipmxAiWuOEBt5PurnUYdAWV9GhisgcrmrQT5R7Lv4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.155.178
+	s=arc-20240116; t=1789099815; c=relaxed/simple;
+	bh=97a7RdYdiN707NQHEf1vAgoKhgDkIk+l/W4WLUeCG/o=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=WauEHfAQu12656mKztL+jIE/arz5xx8M3xZ9Wcl1U0IMV+PPLBq7w7T7Yvr2rbuQvLxn3Abv8Yfju3kUcRRnkJ/85odj8HJJ7x789ZEnRz8EgShRip+hrctglf2f+ZxpYYxEH5hDv6apz3sIkCjIIcPFIZkl+cs0OtGKXD1OIOY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.155.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id AFDD629FDA2C36; Thu, 10 Sep 2026 21:09:55 -0700 (PDT)
+	id CB83A29FDA2C50; Thu, 10 Sep 2026 21:10:00 -0700 (PDT)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: Alan Maguire <alan.maguire@oracle.com>,
 	Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
@@ -23,10 +24,12 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Andrii Nakryiko <andrii@kernel.org>,
 	bpf@vger.kernel.org,
 	kernel-team@fb.com
-Subject: [PATCH dwarves 1/2] dwarf_loader: Skip the argument register the arm64 ABI leaves as a hole
-Date: Thu, 10 Sep 2026 21:09:55 -0700
-Message-ID: <20260911040955.339939-1-yonghong.song@linux.dev>
+Subject: [PATCH dwarves 2/2] tests: tests: Add test for 16-byte aligned arguments on arm64
+Date: Thu, 10 Sep 2026 21:10:00 -0700
+Message-ID: <20260911041000.340219-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20260911040955.339939-1-yonghong.song@linux.dev>
+References: <20260911040955.339939-1-yonghong.song@linux.dev>
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
@@ -35,148 +38,136 @@ List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-arm64 requires an argument whose alignment is twice the register size to
-start on an even-numbered argument register, so such an argument arriving
-when the next free register is an odd one leaves that register unused:
+Cover the arm64 even-register rule for 16-byte aligned arguments:
+f_even() and f_stack() where the rule does not bite, f_odd() and
+f_odd_tail() where it leaves a register hole, and f_box() where the
+alignment comes from a struct member rather than from the parameter
+type itself.
 
-  u64 f_odd(u64 a, __int128 v, u64 b);
-
-passes a in x0, v in x2:x3 -- skipping x1 -- and b in x4.  The x86-64 ABI
-has no such rule and packs v into rsi:rdx instead.
+The test results on arm64:
+  $ VERBOSE=3D1 ./clang_parm_align16.sh
+  Validation of BTF encoding of over-aligned arguments.
+     BTF: u64 f_even(u64 a, u64 b, __int128 v);
+     BTF: u64 f_odd(u64 a, __int128 v, u64 b);
+     BTF: u64 f_odd_tail(u64 a, __int128 v, u64 b, u64 c, u64 d);
+     BTF: u64 f_stack(u64 a, u64 b, u64 c, u64 d, u64 e, u64 f, u64 g, __=
+int128 v);
+     BTF: u64 f_box(u64 a, struct box s, u64 b);
+  Test ./clang_parm_align16.sh passed
 
 Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 ---
- dwarf_loader.c | 53 +++++++++++++++++++++++++++++++++++++++++++++++---
- dwarves.h      |  1 +
- 2 files changed, 51 insertions(+), 3 deletions(-)
+ tests/clang_parm_align16.sh | 77 +++++++++++++++++++++++++++++++++++++
+ tests/test_lib.sh           |  3 +-
+ 2 files changed, 78 insertions(+), 2 deletions(-)
+ create mode 100755 tests/clang_parm_align16.sh
 
-diff --git a/dwarf_loader.c b/dwarf_loader.c
-index 61ef52f..81c2076 100644
---- a/dwarf_loader.c
-+++ b/dwarf_loader.c
-@@ -1501,6 +1501,23 @@ static bool arch__agg_use_two_regs(const GElf_Ehdr=
- *ehdr)
- 	}
- }
-=20
-+/*
-+ * Some ABIs require an argument whose alignment is twice the register s=
-ize to
-+ * start on an even-numbered argument register, leaving a hole when the =
-next
-+ * free register is an odd one. For example, on arm64,
-+ *	u64 f(u64 a, __int128 v, u64 b)
-+ * passes a in x0, v in x2:x3 -- skipping x1 -- and b in x4.
-+ */
-+static bool arch__arg_align_two_regs(const GElf_Ehdr *ehdr)
-+{
-+	switch (ehdr->e_machine) {
-+	case EM_AARCH64:
-+		return true;
-+	default:
-+		return false;
-+	}
-+}
+diff --git a/tests/clang_parm_align16.sh b/tests/clang_parm_align16.sh
+new file mode 100755
+index 0000000..484aeb6
+--- /dev/null
++++ b/tests/clang_parm_align16.sh
+@@ -0,0 +1,77 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0-only
 +
- static struct template_type_param *template_type_param__new(Dwarf_Die *d=
-ie, struct cu *cu, struct conf_load *conf)
++source test_lib.sh
++
++outdir=3D$(make_tmpdir)
++
++# Comment this out to save test data.
++trap cleanup EXIT
++
++title_log "Validation of BTF encoding of over-aligned arguments."
++
++align16=3D"${outdir}/align16"
++CC=3D$(which clang 2>/dev/null)
++
++if [[ -z "$CC" ]]; then
++	info_log "skip: clang not available"
++	test_skip
++fi
++
++arch=3D$(uname -m)
++if [[ "$arch" !=3D "aarch64" ]]; then
++	info_log "skip: test is arm64 only, running on $arch"
++	test_skip
++fi
++
++# arm64 makes an argument whose alignment is 16 start on an even-numbere=
+d
++# argument register, so f_odd() passes a in x0, v in x2:x3 -- leaving x1=
+ as a
++# hole -- and b in x4.  pahole has to account for that hole, otherwise e=
+very
++# parameter after v looks like it is in an unexpected register and the w=
+hole
++# function is dropped from BTF.
++cat > ${align16}.c << EOF
++typedef unsigned long long u64;
++struct box { __int128 v; };
++
++__attribute__((noinline)) u64 f_even(u64 a, u64 b, __int128 v)
++{ return a + b + (u64)v; }
++
++__attribute__((noinline)) u64 f_odd(u64 a, __int128 v, u64 b)
++{ return a + b + (u64)v; }
++
++__attribute__((noinline)) u64 f_odd_tail(u64 a, __int128 v, u64 b, u64 c=
+, u64 d)
++{ return a + b + c + d + (u64)v; }
++
++__attribute__((noinline)) u64 f_stack(u64 a, u64 b, u64 c, u64 d, u64 e,=
+ u64 f,
++				      u64 g, __int128 v)
++{ return a + b + c + d + e + f + g + (u64)v; }
++
++__attribute__((noinline)) u64 f_box(u64 a, struct box s, u64 b)
++{ return a + b + (u64)s.v; }
++
++u64 (*keep[])() =3D { (u64(*)())f_even, (u64(*)())f_odd, (u64(*)())f_odd=
+_tail,
++		    (u64(*)())f_stack, (u64(*)())f_box };
++EOF
++
++${CC} -g -O2 -c -o ${align16}.o ${align16}.c 2>/dev/null
++if [[ $? -ne 0 ]]; then
++	info_log "skip: clang could not compile ${align16}.c"
++	test_skip
++fi
++
++LLVM_OBJCOPY=3Dobjcopy pahole -J --btf_features=3Dconsistent_func ${alig=
+n16}.o
++if [[ $? -ne 0 ]]; then
++	error_log "Could not encode BTF for ${align16}.o"
++	test_fail
++fi
++
++for fn in f_even f_odd f_odd_tail f_stack f_box; do
++	encoded=3D$(pfunct --all --format_path=3Dbtf ${align16}.o | grep " ${fn=
+}(")
++	verbose_log "BTF: $encoded"
++	if [[ -z "$encoded" ]]; then
++		error_log "${fn}() is missing from BTF"
++		test_fail
++	fi
++done
++
++test_pass
+diff --git a/tests/test_lib.sh b/tests/test_lib.sh
+index e2a7218..e2d0b0c 100755
+--- a/tests/test_lib.sh
++++ b/tests/test_lib.sh
+@@ -661,8 +661,7 @@ check_bpftool_btf_support()
+ cleanup()
  {
- 	struct template_type_param *ttparm =3D tag__alloc(cu, sizeof(*ttparm));
-@@ -3634,6 +3651,28 @@ static int parameter__abi_slots(const struct param=
-eter *parm, const struct cu *c
- 	return slots > 0 ? slots : 1;
+ 	if [ -n "$outdir" ] && [ -d "$outdir" ]; then
+-		rm ${outdir}/*
+-		rmdir $outdir
++		rm -rf "$outdir"
+ 	fi
+ 	return 0
  }
-=20
-+static int parameter__abi_reg_align(const struct parameter *parm, const =
-struct cu *cu)
-+{
-+	struct tag *type;
-+
-+	if (!cu->arg_align_two_regs || parm->type_byte_size <=3D cu->addr_size)
-+		return 1;
-+
-+	type =3D tag__strip_typedefs_and_modifiers(&parm->tag, cu);
-+	if (type =3D=3D NULL)
-+		return 1;
-+
-+	return tag__natural_alignment(type, cu) > cu->addr_size ? 2 : 1;
-+}
-+
-+static int parameter__align_reg_idx(const struct parameter *parm, int re=
-g_idx,
-+				    const struct cu *cu)
-+{
-+	int align =3D parameter__abi_reg_align(parm, cu);
-+
-+	return (reg_idx + align - 1) & ~(align - 1);
-+}
-+
- static bool parameter__has_piece_info(const struct parameter *parm)
- {
- 	return parm->first_reg_fields || parm->second_reg_fields;
-@@ -3653,7 +3692,7 @@ static bool ftype__next_parameter_preserves_slots(s=
-truct ftype *ftype, struct pa
- 	if (!next || next->loc_reg =3D=3D PARAMETER_UNKNOWN_REG)
- 		return false;
-=20
--	next_reg_idx =3D reg_idx + slots;
-+	next_reg_idx =3D parameter__align_reg_idx(next, reg_idx + slots, cu);
- 	return next_reg_idx < cu->nr_register_params &&
- 	       next->loc_reg =3D=3D cu->register_params[next_reg_idx];
- }
-@@ -3702,6 +3741,7 @@ static void function__match_clang_parameter_locatio=
-ns(struct ftype *ftype, struc
- 		if (pos->passed_in_memory)
- 			continue;
-=20
-+		reg_idx =3D parameter__align_reg_idx(pos, reg_idx, cu);
- 		if (reg_idx >=3D cu->nr_register_params)
- 			break;
-=20
-@@ -3732,11 +3772,17 @@ static void function__analyze_parameter_locations=
-(struct function *fn, struct cu
-=20
- 	ftype__for_each_parameter(ftype, pos) {
- 		bool consumes_register =3D true;
--		bool regs_available =3D reg_idx < cu->nr_register_params;
-+		bool regs_available;
- 		int slots =3D parameter__abi_slots(pos, cu);
--		int expected_reg =3D regs_available ? cu->register_params[reg_idx] : -=
-1;
-+		int expected_reg;
- 		int reg_slots =3D pos->passed_in_memory ? 1 : slots;
-=20
-+		if (!pos->passed_in_memory)
-+			reg_idx =3D parameter__align_reg_idx(pos, reg_idx, cu);
-+
-+		regs_available =3D reg_idx < cu->nr_register_params;
-+		expected_reg =3D regs_available ? cu->register_params[reg_idx] : -1;
-+
- 		if (pos->has_loc) {
- 			if (true_sig_enabled && pos->loc_const_value) {
- 				pos->optimized =3D 1;
-@@ -4467,6 +4513,7 @@ static int cu__set_common(struct cu *cu, struct con=
-f_load *conf,
- 	cu->little_endian =3D ehdr.e_ident[EI_DATA] =3D=3D ELFDATA2LSB;
- 	cu->nr_register_params =3D arch__nr_register_params(&ehdr);
- 	cu->agg_use_two_regs =3D arch__agg_use_two_regs(&ehdr);
-+	cu->arg_align_two_regs =3D arch__arg_align_two_regs(&ehdr);
- 	arch__set_register_params(&ehdr, cu);
- 	return 0;
- }
-diff --git a/dwarves.h b/dwarves.h
-index df77f1e..70adbbf 100644
---- a/dwarves.h
-+++ b/dwarves.h
-@@ -304,6 +304,7 @@ struct cu {
- 	uint8_t		 little_endian:1;
- 	uint8_t		 producer_clang:1;
- 	uint8_t		 agg_use_two_regs:1;	/* An aggregate like {long a; long b;} */
-+	uint8_t		 arg_align_two_regs:1;	/* An over-aligned arg starts on an eve=
-n register */
- 	uint8_t		 nr_register_params;
- 	int		 register_params[ARCH_MAX_REGISTER_PARAMS];
- 	int		 functions_saved;
 --=20
 2.53.0-Meta
 
