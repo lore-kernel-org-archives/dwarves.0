@@ -1,20 +1,21 @@
-Received: from 66-220-144-179.mail-mxout.facebook.com (66-220-144-179.mail-mxout.facebook.com [66.220.144.179])
+Received: from 69-171-232-180.mail-mxout.facebook.com (69-171-232-180.mail-mxout.facebook.com [69.171.232.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10F5544C4F0
-	for <dwarves@vger.kernel.org>; Fri, 25 Sep 2026 21:36:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.144.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E5FC4F649D
+	for <dwarves@vger.kernel.org>; Fri, 25 Sep 2026 21:36:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=69.171.232.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790372195; cv=none; b=Z3sYMK21RedvStEv/hndY36VbF8fYQrypWraalGs9kszOfZbdn0d92Zb/hQnosGc5qSAYbM35+DThlo2VU8VwVhtZRGLTA34Y1duLd7ZawYqKBywSMukwnqfvJeMMw28IfsPvvpsSPkrAoTHy7nMWC5VzuURP8J3S3Vrofpdcqc=
+	t=1790372198; cv=none; b=AzaWBvgACjnE3vrE+lNNFxi+GwgtsnLfTxpY1IqUk4bok+QMS6ta7qKlWl4A1Ql50X1Eap+ZlrFrNp1i5iYkPqpPmOTBNkn1sb1iuPAuYehwAEAHk0hSRywa8y83dVEtgEYa+wes0RO+mDJWNzQUEXGPKIXGkAfQoX0/K52YWh8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790372195; c=relaxed/simple;
-	bh=JZwiaVgiIJbH8gFfFR2g3WyYsOdDfVPB1yeqcE/omyA=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=gVHpE3OVCWS2W3bbtB9UMrCdEHb8SLTFJgGYmsV4QqlbBfuaWKHFC+m5cfuL+qGlTpjbKnFKpcShcDgArP11b8JVxSgUH6lIxdYLOKgWGdsZmeCaflgSJHKcZSPodn2/OLY2HO+VPKTsCCyE89ULV03Cxcz8wCZKCElTLXEeNec=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.144.179
+	s=arc-20240116; t=1790372198; c=relaxed/simple;
+	bh=SCHOqjMPnEQpw5YUJPao6DKOVM3KDmOkhVE0UgSRiyM=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=gM2+SQYXq9bCYyOdNd0EUsx5tmFNdTTWG0RRhup6nd61WDgygbHDpRvkCD6IE8e/4hEeQ40x87GCflOI5jqCvCi51HPw04QMGJV6cNxaIBPiZHRo7tZGbToUA0JK1fQPInEe66uV5hPJs/TQtEuLwN1oH7knJjJnxlKhAbC6/Vk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=69.171.232.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id 9C88F2D343D4DC; Fri, 25 Sep 2026 14:36:19 -0700 (PDT)
+	id B92212D343D56B; Fri, 25 Sep 2026 14:36:24 -0700 (PDT)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: Alan Maguire <alan.maguire@oracle.com>,
 	Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
@@ -22,12 +23,13 @@ To: Alan Maguire <alan.maguire@oracle.com>,
 Cc: Alexei Starovoitov <ast@kernel.org>,
 	Andrii Nakryiko <andrii@kernel.org>,
 	bpf@vger.kernel.org,
-	kernel-team@fb.com,
-	Tejun Heo <tj@kernel.org>
-Subject: [PATCH dwarves 1/2] dwarf_loader: Trust the entry value register over the first location entry
-Date: Fri, 25 Sep 2026 14:36:19 -0700
-Message-ID: <20260925213619.2187751-1-yonghong.song@linux.dev>
+	kernel-team@fb.com
+Subject: [PATCH dwarves 2/2] tests: Add test for parameters described by entry values
+Date: Fri, 25 Sep 2026 14:36:24 -0700
+Message-ID: <20260925213624.2188373-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20260925213619.2187751-1-yonghong.song@linux.dev>
+References: <20260925213619.2187751-1-yonghong.song@linux.dev>
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
@@ -36,159 +38,129 @@ List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-A parameter's location list describes where the parameter lives from each
-entry's start address on, and a producer may leave the entry PC out of th=
-e
-list entirely, as clang does when the parameter is moved into a
-callee-saved register during the prologue.  Here is @lazy, the second
-parameter of a kfunc in a clang 21.1.8 x86-64 vmlinux:
+Cover the case where clang leaves the entry PC out of a parameter's
+location list because the parameter is moved into a callee-saved register
+during the prologue.  f_lazy() reproduces the shape found in the kernel:
+@lazy arrives in RSI, the first location list entry starts past the
+function entry and names the callee-saved register, and only the
+DW_OP_entry_value entries name RSI.
 
-  0x00dcf39e: DW_TAG_subprogram
-                DW_AT_low_pc    (0xffffffff81553d70)
-                DW_AT_high_pc   (0xffffffff81553ee3)
-                ...
-                DW_AT_name      ("scx_bpf_task_set_lazy_resched")
-                DW_AT_decl_file ("kernel/sched/ext/ext.c")
-                ...
+Without the entry value being preferred, @lazy looks like it is in an
+unexpected register and f_lazy() is dropped from BTF altogether.
 
-  0x00dcf3c3:   DW_TAG_formal_parameter
-                  DW_AT_location        (indexed (0x1491) loclist =3D 0x0=
-01e825f:
-                     [0xffffffff81553d8b, 0xffffffff81553e5f): DW_OP_reg6=
- RBP
-                     [0xffffffff81553e5f, 0xffffffff81553ec8): DW_OP_entr=
-y_value(DW_OP_reg4 RSI), DW_OP_stack_value
-                     [0xffffffff81553ec8, 0xffffffff81553eca): DW_OP_reg6=
- RBP
-                     [0xffffffff81553eca, 0xffffffff81553ecc): DW_OP_entr=
-y_value(DW_OP_reg4 RSI), DW_OP_stack_value
-                     [0xffffffff81553ecc, 0xffffffff81553ee3): DW_OP_reg6=
- RBP)
-                  DW_AT_name    ("lazy")
-                  DW_AT_decl_file       ("kernel/sched/ext/ext.c")
-                  DW_AT_decl_line       (9747)
-                  DW_AT_type    (0x00d59515 "bool")
+The test results on x86_64:
+  $ VERBOSE=3D1 ./clang_parm_entry_value.sh
+  Validation of BTF encoding of parameters described by entry values.
+     BTF: bool f_lazy(struct task * p, bool lazy, const struct aux  * aux=
+);
+  Test ./clang_parm_entry_value.sh passed
 
-@lazy arrives in RSI, but the function starts at 0xffffffff81553d70 while
-the list starts at 0xffffffff81553d8b: the range covering the function
-entry is missing and the first entry present names RBP, the register @laz=
-y
-was moved to.  parameter__decode_location() took the register from that
-first entry and only consulted DW_OP_entry_value when no register had bee=
-n
-found yet, so loc_reg ended up as RBP, the parameter looked like it was i=
-n
-an unexpected register and the whole function was dropped from BTF:
-
-  scx_bpf_task_set_lazy_resched : skipping BTF encoding of function due t=
-o
-  unexpected register usage for parameter
-
-which in turn breaks the kernel build for a kfunc, the failure Tejun Heo
-reported:
-
-  WARN: resolve_btfids: no BTF func for kfunc scx_bpf_task_set_lazy_resch=
-ed in scx_kfunc_ids_any
-  WARN: resolve_btfids: unresolved symbol scx_bpf_task_set_lazy_resched
-
-DW_OP_entry_value(DW_OP_regN) says the parameter still holds the value re=
-gN
-had on entry to the function, so regN is by definition the register the
-parameter was passed in.  That is better evidence than the first location
-list entry, so prefer it.  Parameters described by DW_OP_piece keep the
-registers the pieces name, since a single entry value register cannot
-describe a multi-register aggregate.
-
-On the vmlinux above this encodes 34 more functions, among them the kfunc=
-,
-and drops none.
-
-Reported-by: Tejun Heo <tj@kernel.org>
 Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 ---
- dwarf_loader.c | 34 +++++++++++++++++++++++++++-------
- 1 file changed, 27 insertions(+), 7 deletions(-)
+ tests/clang_parm_entry_value.sh | 84 +++++++++++++++++++++++++++++++++
+ 1 file changed, 84 insertions(+)
+ create mode 100755 tests/clang_parm_entry_value.sh
 
-diff --git a/dwarf_loader.c b/dwarf_loader.c
-index 1e5363a..2c6850e 100644
---- a/dwarf_loader.c
-+++ b/dwarf_loader.c
-@@ -1736,6 +1736,11 @@ static void parameter__set_loc_reg(struct paramete=
-r *parm, int reg)
- 		parm->loc_reg =3D reg;
- }
-=20
-+static bool parameter__has_piece_info(const struct parameter *parm)
+diff --git a/tests/clang_parm_entry_value.sh b/tests/clang_parm_entry_val=
+ue.sh
+new file mode 100755
+index 0000000..9fe81a7
+--- /dev/null
++++ b/tests/clang_parm_entry_value.sh
+@@ -0,0 +1,84 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0-only
++
++source "$(dirname "$0")/test_lib.sh"
++
++outdir=3D$(make_tmpdir)
++
++# Comment this out to save test data.
++trap cleanup EXIT
++
++title_log "Validation of BTF encoding of parameters described by entry v=
+alues."
++
++entry_value=3D"${outdir}/entry_value"
++CC=3D$(which clang 2>/dev/null)
++
++if [[ -z "$CC" ]]; then
++	info_log "skip: clang not available"
++	test_skip
++fi
++
++arch=3D$(uname -m)
++if [[ "$arch" !=3D "x86_64" ]]; then
++	info_log "skip: test is x86_64 only, running on $arch"
++	test_skip
++fi
++
++# clang can leave the entry PC out of a parameter's location list when t=
+he
++# parameter is moved into a callee-saved register during the prologue.  =
+The
++# first location list entry then names that callee-saved register rather=
+ than
++# the ABI argument register, and only the DW_OP_entry_value entries tell=
+ which
++# argument register the parameter really arrived in.  pahole has to use =
+the
++# entry value, otherwise the parameter looks like it is in an unexpected
++# register and the whole function is dropped from BTF.
++cat > ${entry_value}.c << EOF
++typedef _Bool bool;
++struct sched;
++struct aux;
++struct task { long a; bool lazy; };
++
++extern struct sched *get_sched(const struct aux *aux);
++extern void rcu_lock(void);
++extern void rcu_unlock(void);
++extern int on_sched(struct sched *s, struct task *p);
++
++__attribute__((noinline)) bool f_lazy(struct task *p, bool lazy, const s=
+truct aux *aux)
 +{
-+	return parm->first_reg_fields || parm->second_reg_fields;
++	struct sched *sch;
++
++	rcu_lock();
++	sch =3D get_sched(aux);
++	if (__builtin_expect(!(sch && on_sched(sch, p)), 0)) {
++		rcu_unlock();
++		return 0;
++	}
++	__atomic_store_n(&p->lazy, lazy, __ATOMIC_RELAXED);
++	rcu_unlock();
++	return 1;
 +}
 +
- static void parameter__set_field_bit(unsigned long *fields, int byte_off=
-set)
- {
- 	if (byte_offset >=3D 0 && byte_offset < (int)(sizeof(*fields) * 8))
-@@ -1848,6 +1853,7 @@ static void parameter__decode_location(Dwarf_Attrib=
-ute *attr, struct conf_load *
- 				       struct cu *cu, Dwarf_Die *die,
- 				       struct parameter *parm)
- {
-+	int entry_value_reg =3D PARAMETER_UNKNOWN_REG;
- 	Dwarf_Addr base, start, end;
- 	Dwarf_Op *expr, *entry_ops;
- 	Dwarf_Attribute entry_attr;
-@@ -1893,15 +1899,34 @@ static void parameter__decode_location(Dwarf_Attr=
-ibute *attr, struct conf_load *
- 			break;
- 		case DW_OP_entry_value:
- 		case DW_OP_GNU_entry_value:
--			if (dwarf_getlocation_attr(attr, expr, &entry_attr) =3D=3D 0 &&
-+			if (entry_value_reg =3D=3D PARAMETER_UNKNOWN_REG &&
-+			    dwarf_getlocation_attr(attr, expr, &entry_attr) =3D=3D 0 &&
- 			    dwarf_getlocation(&entry_attr, &entry_ops, &entry_len) =3D=3D 0 &=
-&
- 			    entry_len =3D=3D 1 && dwarf_op__is_reg(entry_ops->atom))
--				parameter__set_loc_reg(parm, entry_ops->atom);
-+				entry_value_reg =3D entry_ops->atom;
- 			break;
- 		}
- 	}
- 	libdw__lock_unlock();
-=20
-+	/*
-+	 * DW_OP_entry_value(DW_OP_regN) says the parameter still holds the
-+	 * value regN had on entry to the function, so regN is the register the
-+	 * parameter was passed in.  Prefer it over the register named by the
-+	 * first location list entry: that entry only describes where the
-+	 * parameter lives from its own start address on, and producers do omit
-+	 * the entry PC from the list, as clang does when the parameter is
-+	 * moved into a callee-saved register during the prologue: the first
-+	 * entry then names that register instead of the argument register,
-+	 * making the whole function look like it uses unexpected registers.
-+	 *
-+	 * Parameters described by pieces keep the register(s) the pieces name;
-+	 * a single entry value register cannot describe a multi-register
-+	 * aggregate.
-+	 */
-+	if (entry_value_reg !=3D PARAMETER_UNKNOWN_REG && !parameter__has_piece=
-_info(parm))
-+		parm->loc_reg =3D entry_value_reg;
++bool (*keep[])() =3D { (bool(*)())f_lazy };
++EOF
 +
- 	parameter__finish_piece_decode(parm, die, conf, cu);
- }
-=20
-@@ -3692,11 +3717,6 @@ static int parameter__align_reg_idx(const struct p=
-arameter *parm, int reg_idx,
- 	return (reg_idx + align - 1) & ~(align - 1);
- }
-=20
--static bool parameter__has_piece_info(const struct parameter *parm)
--{
--	return parm->first_reg_fields || parm->second_reg_fields;
--}
--
- static bool parameter__uses_full_aggregate(const struct parameter *parm)
- {
- 	return parm->first_reg_fields && parm->second_reg_fields;
++${CC} -g -O2 -c -o ${entry_value}.o ${entry_value}.c 2>/dev/null
++if [[ $? -ne 0 ]]; then
++	info_log "skip: clang could not compile ${entry_value}.c"
++	test_skip
++fi
++
++LLVM_OBJCOPY=3Dobjcopy pahole -J --btf_features=3Dconsistent_func ${entr=
+y_value}.o
++if [[ $? -ne 0 ]]; then
++	error_log "Could not encode BTF for ${entry_value}.o"
++	test_fail
++fi
++
++encoded=3D$(pfunct --all --format_path=3Dbtf ${entry_value}.o | grep " f=
+_lazy(")
++if [[ -n "$VERBOSE" ]]; then
++	printf "   BTF: %s\n" "$encoded"
++fi
++if [[ -z "$encoded" ]]; then
++	error_log "f_lazy() is missing from BTF"
++	test_fail
++fi
++
++test_pass
 --=20
 2.53.0-Meta
 
