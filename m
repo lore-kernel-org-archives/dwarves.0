@@ -1,51 +1,51 @@
 Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB79E43F4B4;
-	Fri, 25 Sep 2026 18:53:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22578470433;
+	Fri, 25 Sep 2026 18:53:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790362391; cv=none; b=jDH1Q7B/owBuePq23ry+VzXDSXmlxKFyIeOr1dbCaYKNdevuZ8VpHD89xB1igsufiO+6jlK8rpLnTKFEuvc5+cNEm6Nxp+O8ZwUZu3Vv9D/Wx+lcsSgdyecU/gJZAZv5OPzQQGa72+70m6rpSNbvXhPB84uSNFZFcp8TP9c/5fQ=
+	t=1790362394; cv=none; b=GzjRRF+ed6tjUzKncdRFx/iZaDlXTwW98JbUq2WzbJjcJ/sqtPGUWcblNcCO6s9h8Menl4nSq8BfDpKRxGo8Zu1yrWaex6AR7o8S23MvCra1wMPNWcdBL2IzSUzt5HaxG3y6SCTnn898bUgcLEEyMPAoImp7a/Ki3/oAcjHxjqM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790362391; c=relaxed/simple;
-	bh=xVqt/rSU7GHiQjKEovU8o6c6mSOoAfa9lj7sduzQK0Q=;
+	s=arc-20240116; t=1790362394; c=relaxed/simple;
+	bh=7Ndh1TZQXuxmEJjoaPLeHc+0g4qmcMTopHXfac0CwFA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=R4EsjByIWQBidlYGhZXCMQKp5aJt0bhXRfXx3gkmOIV25J5Knjm+Wh8UHDzb5Cgh/QCL3+jvcHaMuacKs02DMM0R53zEJXsvHH/VwF6GpmmlhexPscGqJqoFSHLLTxt1jffVSe4ABhCpHSGZZCByGwlYb+opS0uH9K4qkdyuXKs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=f/v1OrUs; arc=none smtp.client-ip=205.220.165.32
+	 MIME-Version; b=XRTbpcnx9qQUl7/YAJRYb2jAyJhj2h/2qE/Opcr14EUtWIUIJ5f9xYW/iq/7+xTH4o52sxCFPN2w0xVPRJnbNqRLAa7el1anmnvn1z+YAupG7jWtwy8pheIrovF7GuEtPZMxpBDRNRqfovTX0pKm+fdSSMYt5zCgUq+YwWC//Lg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=pi98pQCe; arc=none smtp.client-ip=205.220.165.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="f/v1OrUs"
-Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 68PEC6WS1328725;
-	Fri, 25 Sep 2026 18:52:47 GMT
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="pi98pQCe"
+Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 68PEBqst3193022;
+	Fri, 25 Sep 2026 18:52:52 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
 	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=corp-2025-04-25; bh=YLdeL
-	C7SGZFz3Pkgph5usikI5apZG0RSfsoILi8oqR4=; b=f/v1OrUsBYjKpgrkH3nxL
-	NygxeQCbrdyVqlbHFDKuwUdanXdXIPj9tz60S+8i1Q8eISfMmwGDFIFEoTc2HaT5
-	baHXiudIrms0rSEUEezLNQ5ox8Hwu7JredtIZMAWXccDoPnxTJ9jEOJ3QmNIjgxb
-	ACNxzDn2NK8EDpJRczs0wJjg+2Whh3T9+kFbdNacJOBP/OIbP33l2eXYh3hzue2z
-	Gvuba3L8UXY/XkSK8ZWkMeRPDtFxVMryFWPMoCE78VDdCn0ETEoQ3AF4u0rEPYgi
-	axcnaYHD6liTDYMzs/OtKeA3f7D5bQjGbxYoxvlYFwaQKZOicoJDbsSgdrU6SVrC
+	:mime-version:references:subject:to; s=corp-2025-04-25; bh=R0y0i
+	mXfppW1pMr3m+j42hT1SZr+eo6Q82RNxm6vvYw=; b=pi98pQCe68qPEPw+w+Fmq
+	mGZQ+95q5phLvJluvh5KGi2v1Z1NhXaFWOkR8I7kwSnxghmVNUpE52tOkrW4MYwN
+	EmbpuzV0apgR9d72IeWmTr+p27AzjnoWIEhJTpcSksYhr4CGH1aiwBibLjBqUNEp
+	QJAz8pLuZIah7sVtfHO25Ih/2Bz1qJKimrCHTIH5uMOwZ3LfEg64mn8+cJ+8voRr
+	e66Q4guPbnYE9Fte6U6d+FNmkhBNRGab10td6b5aAp/IkV9ynY7fPEQsOf9m7LpM
+	9R1ySZEkKOD9xNYVLYAPacsru/6ZHQ08FasKavAuXOtztz1LLJvWI4nPIERjthSY
 	g==
 Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4gsjxb9xqj-1
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4gsk2d9u72-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 25 Sep 2026 18:52:46 +0000 (GMT)
+	Fri, 25 Sep 2026 18:52:52 +0000 (GMT)
 Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.7/8.18.1.7) with ESMTP id 68PIqFlg038761;
-	Fri, 25 Sep 2026 18:52:45 GMT
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.7/8.18.1.7) with ESMTP id 68PIqER0038654;
+	Fri, 25 Sep 2026 18:52:51 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 4gtepthtdu-1
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 4gtepthtfw-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 25 Sep 2026 18:52:45 +0000 (GMT)
+	Fri, 25 Sep 2026 18:52:51 +0000 (GMT)
 Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.18.1.12/8.18.1.12) with ESMTP id 68PIqQoq040536;
-	Fri, 25 Sep 2026 18:52:45 GMT
+	by pps.reinject (8.18.1.12/8.18.1.12) with ESMTP id 68PIqQou040536;
+	Fri, 25 Sep 2026 18:52:50 GMT
 Received: from bpf.uk.oracle.com (dhcp-10-154-81-122.vpn.oracle.com [10.154.81.122])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 4gtepthsyc-7;
-	Fri, 25 Sep 2026 18:52:44 +0000 (GMT)
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 4gtepthsyc-9;
+	Fri, 25 Sep 2026 18:52:50 +0000 (GMT)
 From: Alan Maguire <alan.maguire@oracle.com>
 To: acme@kernel.org, ast@kernel.org, andrii@kernel.org, eddyz87@gmail.com,
         qmo@kernel.org
@@ -54,9 +54,9 @@ Cc: dwarves@vger.kernel.org, jolsa@kernel.org, daniel@iogearbox.net,
         martin.lau@linux.dev, memxor@gmail.com, emil@etsalapatis.com,
         bpf@vger.kernel.org, nsc@kernel.org, puranjay@kernel.org,
         yatsenko@meta.com, Alan Maguire <alan.maguire@oracle.com>
-Subject: [PATCH v3 dwarves 6/9] btf_loader: Record inline sites in CU for BTF
-Date: Fri, 25 Sep 2026 19:51:55 +0100
-Message-ID: <20260925185200.1318067-7-alan.maguire@oracle.com>
+Subject: [PATCH v3 dwarves 8/9] tests: Validate inline BTF encoding
+Date: Fri, 25 Sep 2026 19:51:57 +0100
+Message-ID: <20260925185200.1318067-9-alan.maguire@oracle.com>
 X-Mailer: git-send-email 2.43.5
 In-Reply-To: <20260925185200.1318067-1-alan.maguire@oracle.com>
 References: <20260925185200.1318067-1-alan.maguire@oracle.com>
@@ -74,173 +74,203 @@ X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0
  suspectscore=0 malwarescore=0 adultscore=0 bulkscore=0 mlxlogscore=999
  lowpriorityscore=0 spamscore=0 phishscore=0 classifier=spam adjust=0
  reason=mlx scancount=1 engine=8.19.0-2609040000 definitions=main-2609250075
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwOTI1MDA3NSBTYWx0ZWRfX/7ZcUKUnCyPu
- s2hVwRsT67Rz2xYAaLDT55oYUgEaI2IKFruJd4y9xt5/luangVUAqcUU7hUg0qMLfGVarEAxH/z
- AcjYbvaA+SsuKWAYj6JQMdwAACK1Xy1pEoKrL0hcC94E1f+hi/2tBvkWqF/2e5LG8V9QrP2v6vc
- WQnQdMidnwYgDkUNTPJRM8wij6ga94WOsB+QaECT1b5yy55PwGrHXkxdPzfEafWyHafq7grplk0
- 8dEP2AvnFfXVOliLPSvsmHLIEbDUmOJfrCwLvODumNLQ+7syqMarjuBI4hXSxLGJDlKMZo1TPH8
- nTRr5eUY4kv4jDUfa81Ig7YVrice5NWIxIaTJ53I0M9zaF4D+Dlh2cs7sYUM/WhXpgmrxsJVCeG
- MJIUrxPJSkzDgURhzsVSap1tCYpli6mKsyGfI8dn+ONCFsCZUeyZPhDF2eZJiwjpaT3jmQ6Z0Oc
- aVnyxT/IxqNboZs477XkGZ6s2+32MAr5WRT3QLlA=
-X-Proofpoint-ORIG-GUID: jGOdVkOZpvNZpH776L33KTSQgm5HQ8Jn
-X-Authority-Analysis: v=2.4 cv=UINIjyfy c=1 sm=1 tr=0 ts=6ab6c2ff b=1 cx=c_pps
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwOTI1MDA3NSBTYWx0ZWRfXx0QvT1rbKrQP
+ aGVUbtSoa4nxRv2XUitvO4LGJTx/+1DNOqB4fL28NBiaj8IIWcLYkFmmxl3MJ4qDt2GaifVxaXm
+ f9fmlJ33OSZu0IeP1p6l2rVLs5izgfwbVAnaGKQO1XXXVM6AW67RZhJpxYdKdI1MA4x5Dp4vfsT
+ hEegjwUkZLfmWWpD6fcfqn9cC7W5kaRYonbGGpsF1txonuuo67aietamzI6lrldigz8i+RuKFbi
+ bnOEwCouy44Zu8rfwCnlhgNSMawhcfkT2spO3/zD7D9Eap19OjES6Oav1/zh3U8diDbBMVmB1g0
+ yVOUOC5/zqDrZyQcNNGkmBa5dJMuHkF24uQXC9iNAPTcdOCVxLc+8AF0b0wl/dD2Ii5ReJ/g55h
+ ayJD1UTbSn5m/Tvv2dKJ2uWE8SxRMO1pPhgH2lUrpWFx+fi2j2HTYzJavMvhCUZbnWU3vy0FU7b
+ o7Kv6nra/OQhq5DR91woV77u7tGhPZDXxnFmxM1E=
+X-Proofpoint-Spam-Info: AW1haW4tMjYwOTI1MDA3NSBTYWx0ZWRfXygoAyUhhu2Pn
+ sQlH/OOrsgTBA4hJHTWP+UcTjHzcF7s3/ChlseFEpHL9wi8cMlMGouyOJ9wvpUqLrbiagBPEp7F
+ SxVYpUw3UfzX2usMFOqxayT57cyVRUQotwr7M4Ek1XlFhCy8fEuD
+X-Proofpoint-ORIG-GUID: 1R85n11DvyAyk9TcaBACgYwzkcIR5hDd
+X-Authority-Analysis: v=2.4 cv=f+Ddl+yM c=1 sm=1 tr=0 ts=6ab6c304 b=1 cx=c_pps
  a=e1sVV491RgrpLwSTMOnk8w==:117 a=e1sVV491RgrpLwSTMOnk8w==:17
  a=VdqzKS8jKosA:10 a=VkNPw1HP01LnGYTKEx00:22 a=jiCTI4zE5U7BLdzWsZGv:22
- a=RD47p0oAkeU5bO7t-o6f:22 a=yPCof4ZbAAAA:8 a=zBj7asqCIPECPjkPQzcA:9
- a=O8hF6Hzn-FEA:10 a=5yU3S35YU4bGjq-dph-N:22 a=Bho9c0fBagfJEIQBS7DQ:22 cc=ntf
- awl=host:13532
-X-Proofpoint-GUID: jGOdVkOZpvNZpH776L33KTSQgm5HQ8Jn
-X-Proofpoint-Spam-Info: AW1haW4tMjYwOTI1MDA3NSBTYWx0ZWRfX1uC/8sFgpt/l
- HaWvl6ZSIszM9Rzfh9fbGDQOlGwNLTi8DmdLtAQ5J0uqUMbw4WYU5AqnltW+voRyssORD696/pH
- MFxoljVpu28U8An0X4N35rRgld8ypDMgfir4kjxpzpZn+7OuLM+t
+ a=EIcjfB9IiI4px24ztqRk:22 a=yPCof4ZbAAAA:8 a=okCq5JjSQUMii4kNj_8A:9
+ a=5yU3S35YU4bGjq-dph-N:22 a=Bho9c0fBagfJEIQBS7DQ:22 cc=ntf awl=host:13532
+X-Proofpoint-GUID: 1R85n11DvyAyk9TcaBACgYwzkcIR5hDd
 
-Add BTF inline sites to the CU representation.
+Exercise nested inline calls, constant arguments, no-argument inline
+functions, and repeated inline call sites. Verify that ordinary wrapper
+function BTF remains present, inline functions are annotated by pfunct,
+and when bpftool is available, LOCSEC contains multiple inline sites.
+
+Also verify that pfunct:
+
+ - lists the ordinary and inline BTF functions;
+ - prints inline-site parameter locations from detached raw BTF using
+   the regN fallback;
+ - uses an explicitly supplied ELF file to resolve register names and
+   containing functions; and
+ - automatically uses ELF information when BTF is embedded in the ELF.
+
+Use a single-register inline parameter rather than asserting ABI-specific
+register numbers or aggregate calling conventions, allowing the test to
+run across supported architectures.
 
 Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+Assisted-by: Codex (GPT-5.6)
 ---
- btf_loader.c | 47 +++++++++++++++++++++++++++++++++++++++++++----
- dwarves.c    |  1 +
- dwarves.h    | 11 +++++++++++
- 3 files changed, 55 insertions(+), 4 deletions(-)
+ tests/btf_inline.sh | 147 ++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 147 insertions(+)
+ create mode 100755 tests/btf_inline.sh
 
-diff --git a/btf_loader.c b/btf_loader.c
-index 4dea882..821a6d8 100644
---- a/btf_loader.c
-+++ b/btf_loader.c
-@@ -25,8 +25,6 @@
- #include <bpf/libbpf.h>
- #include <zlib.h>
- 
--#include <gelf.h>
--
- #include "dutil.h"
- #include "dwarves.h"
- 
-@@ -36,6 +34,28 @@ struct btf_locsec_entry {
- 	uint32_t offset;
- };
- 
-+static void btf__add_inline_site(struct cu *cu, const char *section_name,
-+				 const struct btf_locsec_entry *entry)
-+{
-+	struct tag *tag = cu__function(cu, entry->func);
-+	struct btf_inline_site *site;
+diff --git a/tests/btf_inline.sh b/tests/btf_inline.sh
+new file mode 100755
+index 0000000..a782a65
+--- /dev/null
++++ b/tests/btf_inline.sh
+@@ -0,0 +1,147 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0-only
 +
-+	if (!tag || !section_name)
-+		return;
-+	site = zalloc(sizeof(*site));
-+	if (!site)
-+		return;
-+	site->section_name = strdup(section_name);
-+	if (!site->section_name) {
-+		free(site);
-+		return;
-+	}
-+	site->function = tag__function(tag);
-+	site->section_offset = entry->offset;
-+	site->loc_proto = entry->loc_proto;
-+	list_add_tail(&site->node, &cu->btf_inline_sites);
++script_dir=$(dirname "$0")
++source "$script_dir/test_lib.sh"
++
++outdir=$(make_tmpdir)
++trap cleanup EXIT
++
++title_log "Validation of additive inline BTF encoding."
++
++CC=${CC:-gcc}
++if ! command -v "$CC" >/dev/null 2>&1; then
++	info_log "skip: gcc not available"
++	test_skip
++fi
++
++if ! pahole --supported_btf_features | tr ',' '\n' | grep -Fxq inline; then
++	info_log "skip: pahole was built without BTF location support"
++	test_skip
++fi
++
++src=${outdir}/btf_inline.c
++obj=${outdir}/btf_inline
++btf=${outdir}/btf_inline.btf
++
++cat > "$src" <<'EOF'
++/* Keep the inline functions small enough to guarantee inlining at -O2. */
++static inline int scale(int value, int factor)
++{
++	return value * factor;
 +}
 +
- static const char *cu__btf_str(struct cu *cu, uint32_t offset)
- {
- 	return offset ? btf__str_by_offset(cu->priv, offset) : NULL;
-@@ -647,6 +667,12 @@ static int btf__load_types(struct btf *btf, struct cu *cu)
- 			 * loaded.
- 			 */
- 			break;
-+		case BTF_KIND_LOC_PARAM:
-+		case BTF_KIND_LOC_PROTO:
-+		case BTF_KIND_LOCSEC:
-+			/* LOCSEC is decoded after the ordinary BTF types are loaded. */
-+			err = 0;
-+			break;
- 		default:
- 			fprintf(stderr, "BTF: idx: %d, Unknown kind %d\n", type_index, type);
- 			fflush(stderr);
-@@ -694,7 +720,7 @@ static void btf__mark_inline_functions(struct btf *btf, struct cu *cu)
- 	for (type_index = 1; type_index < btf__type_cnt(btf); type_index++) {
- 		const struct btf_locsec_entry *entries;
- 		const char *name;
--		uint16_t i;
-+		uint32_t i, nr_entries;
- 
- 		type_ptr = btf__type_by_id(btf, type_index);
- 		type = btf_kind(type_ptr);
-@@ -706,12 +732,18 @@ static void btf__mark_inline_functions(struct btf *btf, struct cu *cu)
- 		if (!name || !strstarts(name, "inline"))
- 			continue;
- 
-+		/* LOCSEC uses the extended 24-bit vlen introduced with the
-+		 * location BTF kinds.  Older libbpf headers still expose the
-+		 * original 16-bit btf_vlen() helper.
-+		 */
-+		nr_entries = type_ptr->info & 0x00ffffff;
- 		entries = (const struct btf_locsec_entry *)(type_ptr + 1);
--		for (i = 0; i < btf_vlen(type_ptr); i++) {
-+		for (i = 0; i < nr_entries; i++) {
- 			struct tag *tag = cu__function(cu, entries[i].func);
- 
- 			if (tag)
- 				tag__function(tag)->inlined = DW_INL_declared_inlined;
-+			btf__add_inline_site(cu, name + strlen("inline"), &entries[i]);
- 		}
- 	}
- }
-@@ -851,6 +883,13 @@ static int cu__fixup_btf_bitfields(const struct conf_load *conf, struct cu *cu)
- 
- static void btf__cu_delete(struct cu *cu)
- {
-+	struct btf_inline_site *site, *n;
++static inline int add_bias(int value, int bias)
++{
++	return scale(value, 2) + bias;
++}
 +
-+	list_for_each_entry_safe(site, n, &cu->btf_inline_sites, node) {
-+		list_del(&site->node);
-+		free(site->section_name);
-+		free(site);
-+	}
- 	btf__free(cu->priv);
- 	cu->priv = NULL;
- }
-diff --git a/dwarves.c b/dwarves.c
-index 2bb5c18..fe4f5e4 100644
---- a/dwarves.c
-+++ b/dwarves.c
-@@ -756,6 +756,7 @@ struct cu *cu__new(const char *name, uint8_t addr_size,
- 		cu->dfops	= NULL;
- 		INIT_LIST_HEAD(&cu->tags);
- 		INIT_LIST_HEAD(&cu->tool_list);
-+		INIT_LIST_HEAD(&cu->btf_inline_sites);
- 		INIT_LIST_HEAD(&cu->node);
- 
- 		cu->addr_size = addr_size;
-diff --git a/dwarves.h b/dwarves.h
-index 746f94e..ba7dd77 100644
---- a/dwarves.h
-+++ b/dwarves.h
-@@ -292,12 +292,23 @@ struct debug_fmt_ops {
- 	bool		   has_alignment_info;
- };
- 
-+/* A BTF LOCSEC record describing one inline expansion. */
-+struct function;
-+struct btf_inline_site {
-+	struct list_head node;
-+	struct function *function;
-+	char		 *section_name;
-+	uint32_t	 section_offset;
-+	uint32_t	 loc_proto;
-+};
++static volatile int inline_bias;
 +
- #define ARCH_MAX_REGISTER_PARAMS	8
- 
- struct cu {
- 	struct list_head node;
- 	struct list_head tags;
- 	struct list_head tool_list;	/* To be used by tools such as ctracer */
-+	struct list_head btf_inline_sites;
- 	struct ptr_table types_table;
- 	struct ptr_table functions_table;
- 	struct ptr_table tags_table;
++static inline int add_global(void)
++{
++	return inline_bias;
++}
++
++static inline int combine(int value, int bias)
++{
++	return add_bias(value, bias) + add_global();
++}
++
++__attribute__((noinline)) int wrapper_once(int value, int bias)
++{
++	return combine(value, bias);
++}
++
++__attribute__((noinline)) int wrapper_twice(int value, int bias)
++{
++	return combine(value, bias) + combine(bias, value);
++}
++
++int main(void)
++{
++	return wrapper_once(1, 3) + wrapper_twice(2, 4);
++}
++EOF
++
++"$CC" -g -O2 -o "$obj" "$src"
++if [[ $? -ne 0 ]]; then
++	error_log "Could not compile $src"
++	test_fail
++fi
++
++if ! pahole --btf_features=default,inline --btf_encode_detached="$btf" "$obj"; then
++	error_log "Could not encode inline BTF for $obj"
++	test_fail
++fi
++
++# Inline location BTF augments the ordinary BTF_KIND_FUNC records for the
++# non-inline wrappers. It must cover nested calls, a constant parameter, a
++# no-argument inline function, and multiple call sites of the same inline.
++if ! pfunct --all --format_path=btf "$btf" 2>/dev/null | grep -Fq "int wrapper_once(int value, int bias);"; then
++	error_log "wrapper_once() is missing from inline BTF"
++	test_fail
++fi
++
++if ! pfunct --all --format_path=btf "$btf" 2>/dev/null | grep -Fq "int wrapper_twice(int value, int bias);"; then
++	error_log "wrapper_twice() is missing from inline BTF"
++	test_fail
++fi
++
++if ! pfunct --all --format_path=btf "$btf" 2>/dev/null | grep -Fq "inline int scale(int value, int factor);"; then
++	error_log "scale() inline location is missing from BTF"
++	test_fail
++fi
++
++if ! pfunct --all --format_path=btf "$btf" 2>/dev/null | grep -Fq "inline int add_bias(int value, int bias);"; then
++	error_log "add_bias() inline location is missing from BTF"
++	test_fail
++fi
++
++if ! pfunct --all --format_path=btf "$btf" 2>/dev/null | grep -Fq "inline int add_global(void);"; then
++	error_log "add_global() inline location is missing from BTF"
++	test_fail
++fi
++
++if ! pfunct --all --format_path=btf "$btf" 2>/dev/null | grep -Fq "inline int combine(int value, int bias);"; then
++	error_log "combine() inline location is missing from BTF"
++	test_fail
++fi
++
++if ! inline_sites=$(pfunct --inline_sites "$btf" 2>/dev/null) ||
++	   ! grep -Eq 'scale\(int value \[reg[0-9]+\], int factor \[const 0x2\]\)' <<<"$inline_sites"; then
++	error_log "pfunct did not render a fallback register name for an inline parameter"
++	test_fail
++fi
++
++if ! inline_sites=$(pfunct --inline_sites --elf "$obj" "$btf" 2>/dev/null) ||
++	   ! grep -Eq 'scale\(int value \[[^][,[:space:]]+\], int factor \[const 0x2\]\)' <<<"$inline_sites" ||
++	   grep -Eq 'scale\(int value \[reg[0-9]+\], int factor \[const 0x2\]\)' <<<"$inline_sites" ||
++	   ! grep -Eq '\[wrapper_once\+0x[0-9a-f]+, ' <<<"$inline_sites"; then
++	error_log "pfunct did not resolve inline-site registers and containing functions through ELF"
++	test_fail
++fi
++
++if command -v bpftool >/dev/null 2>&1; then
++	locsec_vlen=$(bpftool btf dump file "$btf" format raw 2>/dev/null |
++		     sed -n 's/.*LOCSEC .*vlen=\([0-9][0-9]*\).*/\1/p')
++	if [[ -z "$locsec_vlen" || "$locsec_vlen" -lt 2 ]]; then
++		error_log "multiple inline call sites are missing from LOCSEC"
++		test_fail
++	fi
++fi
++
++if ! pahole -J --btf_features=default,inline "$obj"; then
++	error_log "Could not encode embedded inline BTF for $obj"
++	test_fail
++fi
++
++if ! inline_sites=$(pfunct --inline_sites "$obj" 2>/dev/null) ||
++	   ! grep -Eq 'scale\(int value \[[^][,[:space:]]+\], int factor \[const 0x2\]\)' <<<"$inline_sites" ||
++	   grep -Eq 'scale\(int value \[reg[0-9]+\], int factor \[const 0x2\]\)' <<<"$inline_sites" ||
++	   ! grep -Eq '\[wrapper_once\+0x[0-9a-f]+, ' <<<"$inline_sites"; then
++	error_log "pfunct did not resolve inline-site registers and containing functions from embedded ELF BTF"
++	test_fail
++fi
++
++test_pass
 -- 
 2.43.5
 
