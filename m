@@ -1,52 +1,99 @@
-Received: from smtp02.hmg9.webhuset.no (smtp02.hmg9.webhuset.no [46.226.9.162])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej2-f42.google.com (mail-ej2-f42.google.com [74.125.228.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EA0B38D006
-	for <dwarves@vger.kernel.org>; Mon, 28 Sep 2026 18:32:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.226.9.162
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D27A3A6B77
+	for <dwarves@vger.kernel.org>; Mon, 28 Sep 2026 18:46:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790620323; cv=none; b=swhCjDLdB8zCSmXlcnLLL75lIQ02KFKnxWQbK/HOC6GhFrC3fM0JyyiF84YlrId6kRR1YIiX5m8zYkCH4PJV/KRpbf4TDCT08g49pSa8OUEh54AHfMhHDUGfQi0RpLydsubul/aY692vxN1GPMrOMCkWfvuRqTQanW955uZ5qmw=
+	t=1790621212; cv=none; b=T7ixo5P6NYKIGSEocPJlHitlnxDeNbkYSVMTomBEvt7eE79BldJzwY731txyw0HiaPQGubBEbZdnKkbgXcO0QISw6y9A+C8oc9ebP4RYTkCz7t3dkQwB6H4rO+NB5f3GBuuCpLJPNUqnvZ/6Y8i7SqryRj0NVSbu6r63wDTv5v8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790620323; c=relaxed/simple;
-	bh=cySYqooicHTh0RyQEUB7cwLQNHv3SgnevPWBhA6tucQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Ag1hMLOb5GpM+lfWJo4Y5r+J5bjC++B6tCq/5bx0XfOVirGBqQuQFySHwWcyQZIXcenIbjxfcjVPjSAoJR5NwV4cvhXsovLpF3CASTUB+5cNq9YhWRRRNnrJZ4XqElGN6RRz6U5n3Flbw54qq6q0/zonDcPX4GdIvJk0rfebCi4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pfft.no; spf=pass smtp.mailfrom=pfft.no; arc=none smtp.client-ip=46.226.9.162
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pfft.no
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pfft.no
-Received: from mail.pfft.no (unknown [109.247.74.5])
-	by smtp02.hmg9.webhuset.no (Postfix) with ESMTPA id 60BED8008E
-	for <dwarves@vger.kernel.org>; Mon, 28 Sep 2026 20:22:57 +0200 (CEST)
-From: =?UTF-8?q?H=C3=A5vard=20F=2E=20Aasen?= <havard.f.aasen@pfft.no>
-To: dwarves@vger.kernel.org
-Cc: =?UTF-8?q?H=C3=A5vard=20F=2E=20Aasen?= <havard.f.aasen@pfft.no>
-Subject: [PATCH 0/1] prefcnt: guard against NULL function parameters
-Date: Mon, 28 Sep 2026 20:21:45 +0200
-Message-ID: <20260928182217.301003-1-havard.f.aasen@pfft.no>
+	s=arc-20240116; t=1790621212; c=relaxed/simple;
+	bh=4X1/12IcGUKpHwOnsE//Ikkb3wvoB6CMiu8hCswgRXo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=KVRSGftbx5t4gXYPuzXMJz0wJt11sRfikO+SW9RY5wqcyRge0vz+dz+zsmKLlAc1f61YgQ+SckdYETq2SRdGwdULxqOV3oB+aIgJINg+arwZ8DfjIKImCpBhGWdBoo62hELe0WtY/o5TR3f/nMKeGasbP6zAbZ5TnlHN7nbxdeQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=URhlNmIQ; arc=none smtp.client-ip=74.125.228.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="URhlNmIQ"
+Received: by mail-ej2-f42.google.com with SMTP id a640c23a62f3a-c2bf3cc16baso306287066b.0
+        for <dwarves@vger.kernel.org>; Mon, 28 Sep 2026 11:46:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1790621209; x=1791226009; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=e0XLtg/YAbFQrTSiCQ8vkBvWvCJVdJvEd7VkNiwi3wg=;
+        b=URhlNmIQpwiBqZxXLdIZQ8Utrk71LquVXtQjx1BR4bsV7N90C2+Va73JHFbKdO9OJa
+         YmQH9QMXoVyALCfvbGRA9ympXUVVikGJ0wA4wBIjf/OOCGWc8ylKKiPgOKARg+n2Ujhm
+         mopU5dv5D+KbuvaiNqbgZr+dOzvEL1RlYRddO45+hec2myUaFeBWdoqmnKzQZFe1Hx8C
+         W+YWgQTFpKgEaUhBknfy/UhCfzYsZT03pDCpKZT7M2sEYUEpQZhQ17IYvcc6EceugTGz
+         DtZXE5mVxtthHrjsy/TiI1YE55bw2A0fUjTIQkOJFFx1T9bJphk55cGSGgcp7XyxQomK
+         pjAg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790621209; x=1791226009;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=e0XLtg/YAbFQrTSiCQ8vkBvWvCJVdJvEd7VkNiwi3wg=;
+        b=B3lpEgEWcz4JcyG4tYnV8hZPx8Yf9lsIOCRxY5MncxROA8aW5Lj95KKpXGGeDMLdfz
+         vYE/fwwtE7tFQRDRdH6Ab39iEdBYWLAvmJ+fNUni+WO4E/p2TjYo3vCNPVlf81wJfCrA
+         dMpmjLwH1Wl3lPiFG052N/TDuSZXBBnrQyTlJ1hZxi1ZdIxLObjMdBExQUl710ADDVlh
+         q8Ivm3oIoLQj0KiPakAibbI1XzEceGFA4JlRDWW3B9TyKZDeMqdq1KyTc4s0SMOsVuiU
+         tmVIzHT2TzEupTkbjfN5/luw74oUT/0fSPec/GqMgmv1FGYo3eKkDM4+ePHXB+HcPgls
+         6QwQ==
+X-Gm-Message-State: AFuF++k7VjyPSWrmw/mlRy8l8sPfy3NvBgFnZAsvyyBx1cKQf/I+LA8B
+	mfi/8CcP03e+29OfOccDaqRSkDVmhL4IKkmZKgCePa18qawczhIr16sF
+X-Gm-Gg: AYBFou2zjNeBkLiI2/6ffJKgQKhdSSDB0XJp4x+PoqgmGyCtLeysR256aGZXaiGA5yL
+	bMItYZRm1mvUjTJJ6qDDFk7qjNaV7niIssHsmMx7EbCAH9hBWRFDgiZ+pGsXa43wsj5TgDeijOR
+	5IMJYNEfk7yF6aK5zlWOoMJOX0SD1s+0WB9yx6fd0sgCEitJ+gZayahtyNrGX6ZUr65ltC5B6XL
+	QKcWmrNyUdJhogtpLpWrKtzgqB7w67Mbtn9ztDcz0ouD+uVixzAwYY6ZKXxbzwM5FUCrGNMi/xT
+	Sw7WAU2GmtVSywc4IOHUoBM0Uah5MHzi2hECFHskYhAr2bDK9XVexZh6QYTy5j/bTI79L0qIvaK
+	vGvkF2vsm6y9gTv2F/TB+EEyxzplTRUrNRH+Hr2VJYgnJECt1+oRQDfJsNsPptsD5hlXahDFR5U
+	fUDy9RkVM5qjriYkIztMizdBmzOnmu472/xI/VL3w6WAuznkoZiSfeUNB1l53Erz/bIEUBcYR8B
+	65Q1ylrMSeeG3cFGffGLEOMzrNHe7Apete0diSn00V3lI3Vv8Kxgy2PY3H0MjfC
+X-Received: by 2002:a17:907:86a2:b0:c29:f0a4:a4f8 with SMTP id a640c23a62f3a-c2ac50972c2mr1139895566b.0.1790621209414;
+        Mon, 28 Sep 2026 11:46:49 -0700 (PDT)
+Received: from KURWA.angora-ide.ts.net (mm-12-36-126-178.vitebsk.dynamic.pppoe.byfly.by. [178.126.36.12])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c2dc3e12208sm301760966b.42.2026.09.28.11.46.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Sep 2026 11:46:49 -0700 (PDT)
+From: ElXreno <elxreno@gmail.com>
+To: Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Alan Maguire <alan.maguire@oracle.com>
+Cc: dwarves@vger.kernel.org,
+	Yonghong Song <yonghong.song@linux.dev>,
+	ElXreno <elxreno@gmail.com>
+Subject: [PATCH dwarves 0/2] dwarf_loader: Merged CU hash table fix and sizing
+Date: Mon, 28 Sep 2026 21:45:49 +0300
+Message-ID: <20260928184551.1311109-1-elxreno@gmail.com>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-When prefcnt is invoked without an argument, it attempts to process the
-debugging information for the running kernel. Depending on the
-available BTF/ELF data, the function-parameter list may contain a NULL
-entry.
+Patch 1 fixes an out-of-bounds read when a merged CU looks up
+.debug_types, and stops the merged table size from leaking into the
+CUs loaded after it. Patch 2 sizes the merged CU tables from
+.debug_info, which makes BTF encoding of a ThinLTO vmlinux 17% faster.
 
-I'm not convinced that the proposed patch is the only, or best way to
-fix this issue. Both cus__load_running_kernel() and the total expansion
-of list_for_each_entry() macro might be candidates for a more elegant
-solution.
+tests/ gives the same per-test results with and without the series
+here (75 tests: 52 ok, 16 failed, 7 skipped); the failures happen on
+master as well. inter_cu_refs.sh and dwz_alt_file.sh, which skip here
+for lack of a perf with DWARF and of dwz, pass when run with both.
 
-Håvard F. Aasen (1):
-  prefcnt: guard against NULL function parameters
+ElXreno (2):
+  dwarf_loader: Keep the hash table size in struct dwarf_cu
+  dwarf_loader: Size merged CU hash tables from the amount of DWARF
 
- prefcnt.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ dwarf_loader.c     | 70 +++++++++++++++++++++++++++++-----------------
+ man-pages/pahole.1 |  4 +--
+ 2 files changed, 47 insertions(+), 27 deletions(-)
 
+
+base-commit: c23e8b30c6dee2f7fd8aa07e9c49e8e4f31bc16c
 -- 
-2.53.0
+2.55.0
 
