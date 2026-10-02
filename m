@@ -1,51 +1,51 @@
 Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FC574BB282;
-	Fri,  2 Oct 2026 17:41:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 400024FDE62;
+	Fri,  2 Oct 2026 17:41:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790962899; cv=none; b=Id0uqoTRoil7cWm5ZI8Z6XH3y+m5rdve3RfGcYDnnx5rGo3NyeUNZ1AoNV2RygX/LkjNGARGZHeEOyA3GVbZg2fxX/hP4WiFY1eOX/n14j2kDvx/vEYjftLfpWOG5+Vu3HUugvAHoMAz2FvvjyBDjOlJLFLZJQ+bNerXRNeStZc=
+	t=1790962897; cv=none; b=W0u7fSqT3nhkSm2U4i9RSwfsEgeQN9LBfrtIsU1XGu/JxdM7CqVijFK9fETDUT0jmmZJL1Xhpv9jVugDyseULherSc/VdrezcKCvGdFMMLm5PGxZ+4pBzZgN9ksM0NQ8mSu78VCCEYFqHSRjw6vn15bMNHtW/EXmX/b6s+YpN8k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790962899; c=relaxed/simple;
-	bh=OScoHv97GBoLB4xxSovY93Q542O4xSpeFsVQK4Z6FNQ=;
+	s=arc-20240116; t=1790962897; c=relaxed/simple;
+	bh=nXprZKdPxr+kU+8S4vxgez+OLM/h53qIPAy9CWYKoM8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=lYXkesknjV8XDhEeSKi6g3Aj+u+1VlsFxYzADQV86K7ZNwceLHRreI6npQfkW4AM/jUcVF4NbrVVcaNgB5Xxcmmp0x8O0Lxj9+SWh/DcD36kMmblmDfvc9X+UF1hUbb/nRKMJdHpjqOxSYCjyj7Xz1ekC+Ff+2zYte6+i6mCxe0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=mWr4vgyf; arc=none smtp.client-ip=205.220.177.32
+	 MIME-Version; b=AHYxqvp/QdKLoMaGw8vXAn4W8CYC3R4zPlMVhNFsm/zdKB2EJalglDw55QOhulPvJhd3uJfyjWqQbz3WcEDP4Mbo7aS5wWKCMe8z0JqKkC2hTTgVebzr1hEmO/mGAeA+SgI/+YANa1fk8I0rsGCTARwIwcmdPhLKZh8knDmtmkA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=jLKoO664; arc=none smtp.client-ip=205.220.177.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="mWr4vgyf"
-Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 692Ebf0B3287852;
-	Fri, 2 Oct 2026 17:40:56 GMT
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="jLKoO664"
+Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 692EbxT43204655;
+	Fri, 2 Oct 2026 17:41:05 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
 	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=corp-2025-04-25; bh=Monae
-	kfXG6OR4ME5IKM8eRAWr334sz1+3DvvkmerkYY=; b=mWr4vgyffK+FKwbdEWHXh
-	3XXEHlQ5S9hhucHBb7YHJy1rDCp/AD/XluZM+rX5qNc4Dg6KBfzFJdZpV1z86qgv
-	FHXl4XrqKVf/cM+4oQRV1BYWad1mf1PgYxL3YMBzNnsp5823uK32s9TdIWHxAwQ5
-	GW5vG68kPh8DtJJGTLLAl+5JNRr3QAxlb8UWPui2f3NakS6odd+qhrKhrLDhoojG
-	MNjwMwwhLRmhPGMEP2+Li/6rkY1YfFKUB6yQ64L+MVq3xaBY2lTIxyv1Fdsy1oT5
-	zn3TCpzAUw2D7YX/TYTt9cjaimMFgkrBB1dVW5N7w1nTr69rrWiOG5CjRoDnVFSC
-	w==
+	:mime-version:references:subject:to; s=corp-2025-04-25; bh=OW1cM
+	NpBaXSe0s+AXgpTBqTwMXXd2uHXkK+TRtfBXZQ=; b=jLKoO664OYZBLwvb0tOMH
+	rsmS3u8owQaNZtCnWHs7LLA9SLFs6RHf4f8XGYuA0Tti3UopYFdbf96492VROGDm
+	WwuomOFKBDdD6g7uS2OE5iZ5r5v//RYCiARhiGbYEYnd6z45NvGD3wuH4nKU4GbI
+	UrtgfGWvfPZGPw/lqR4A61hgxKBC1vZrO3W/x0GOhn4YcCY3T8Gvyc/Zg3i75SRA
+	lRvfK+sukum4b4CRp/cER881VtgAxtRw+wjA7S8g1yI/iKQVGRsz+Gkhgn9pUHhV
+	6mctaGxMOA//sDvAv+Bw/eIYgZFhpjPRJyqFg67RRsxSnVhj+RhXC7IkDUNllO6D
+	g==
 Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4gx5ns4bxd-1
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4gx4fbmatu-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 02 Oct 2026 17:40:56 +0000 (GMT)
+	Fri, 02 Oct 2026 17:41:04 +0000 (GMT)
 Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.7/8.18.1.7) with ESMTP id 692HZUGu014582;
-	Fri, 2 Oct 2026 17:40:55 GMT
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.7/8.18.1.7) with ESMTP id 692HZTmY014420;
+	Fri, 2 Oct 2026 17:41:04 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 4gx4gtqtsq-1
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 4gx4gtqu05-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 02 Oct 2026 17:40:55 +0000 (GMT)
+	Fri, 02 Oct 2026 17:41:04 +0000 (GMT)
 Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.18.1.12/8.18.1.12) with ESMTP id 692HekeT030471;
-	Fri, 2 Oct 2026 17:40:55 GMT
+	by pps.reinject (8.18.1.12/8.18.1.12) with ESMTP id 692HekeZ030471;
+	Fri, 2 Oct 2026 17:41:03 GMT
 Received: from bpf.uk.oracle.com (dhcp-10-154-83-232.vpn.oracle.com [10.154.83.232])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 4gx4gtqtes-4;
-	Fri, 02 Oct 2026 17:40:54 +0000 (GMT)
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 4gx4gtqtes-7;
+	Fri, 02 Oct 2026 17:41:03 +0000 (GMT)
 From: Alan Maguire <alan.maguire@oracle.com>
 To: acme@kernel.org, ast@kernel.org, andrii@kernel.org, eddyz87@gmail.com,
         jolsa@kernel.org, qmo@kernel.org
@@ -54,9 +54,9 @@ Cc: dwarves@vger.kernel.org, daniel@iogearbox.net, ihor.solodrai@linux.dev,
         memxor@gmail.com, emil@etsalapatis.com, bpf@vger.kernel.org,
         nsc@kernel.org, puranjay@kernel.org, yatsenko@meta.com,
         Alan Maguire <alan.maguire@oracle.com>
-Subject: [PATCH v5 dwarves 03/10] dwarf_loader: Resolve inline expansion names during recoding
-Date: Fri,  2 Oct 2026 18:40:31 +0100
-Message-ID: <20261002174043.3823987-4-alan.maguire@oracle.com>
+Subject: [PATCH v5 dwarves 06/10] btf_loader: Add "inline" annotation for inlined functions
+Date: Fri,  2 Oct 2026 18:40:34 +0100
+Message-ID: <20261002174043.3823987-7-alan.maguire@oracle.com>
 X-Mailer: git-send-email 2.43.5
 In-Reply-To: <20261002174043.3823987-1-alan.maguire@oracle.com>
 References: <20261002174043.3823987-1-alan.maguire@oracle.com>
@@ -74,155 +74,108 @@ X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0
  bulkscore=0 spamscore=0 malwarescore=0 mlxlogscore=999 phishscore=0
  suspectscore=0 mlxscore=0 lowpriorityscore=0 classifier=spam adjust=0
  reason=mlx scancount=1 engine=8.19.0-2609040000 definitions=main-2610020070
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMDAyMDA3MCBTYWx0ZWRfX8D85ftJg8UGS
- QJo9rRhKRcn4cdEYhq/4Ul3OGeY+d8G0hsFLI6WQ+1GW8EPkg4RDpqiYjIx4i2UoMt9RJYb9evX
- i1ZMhIn6o9aC4m9K39L0kiTSxjsTT2X+7tAjCtZ0pLiROt/GafRYMhkpYDMH+3qACDUgI0wU/G0
- OOGRB7WXIEZg8XFu9fKvq6B0rBt4BDLaTN6LMQml8S2yAW3qdCHMYPT23LOjiu5f6c7o3nOHBPH
- ivLf/gOIbGkTDSTGroOZdymyBtFv9GLrWINcgEmslNWtS2tK/zThSw7PV9kw/kaFX7EG85xcRW5
- fx3/ZVdt8nqWIBWS/JEHtPBvfTFCTtPUgqUFB73ZLxfxKwbIX2AcxDX/fikMF7tZQZ/lzn5rmaK
- wUt65cvll150DulT5n0HONjoWqZ0ugGLxcSNTzi0xpGMBrsTry4D3KN/elx8R8VeIjtqs/OcG6d
- euGlW5XXnllQkI1SnOy2OU2azvvgbC0XPInRD7K0=
-X-Proofpoint-GUID: cz0_hgf5sGAUJSP-qR8yvkY6-chM5s50
-X-Authority-Analysis: v=2.4 cv=T8QZ3PKQ c=1 sm=1 tr=0 ts=6abfeca8 b=1 cx=c_pps
+X-Proofpoint-ORIG-GUID: obqEUIg65JaMqwAohkwElscH5vAIQ0Dr
+X-Proofpoint-GUID: obqEUIg65JaMqwAohkwElscH5vAIQ0Dr
+X-Authority-Analysis: v=2.4 cv=eJCGH3p1 c=1 sm=1 tr=0 ts=6abfecb0 b=1 cx=c_pps
  a=e1sVV491RgrpLwSTMOnk8w==:117 a=e1sVV491RgrpLwSTMOnk8w==:17
  a=660iZSQnnn4A:10 a=VkNPw1HP01LnGYTKEx00:22 a=jiCTI4zE5U7BLdzWsZGv:22
- a=3I1J8UUJPc9JN9BFgKH3:22 a=VabnemYjAAAA:8 a=yPCof4ZbAAAA:8
- a=8NPk0I0YJxjnKrMsTPwA:9 a=O8hF6Hzn-FEA:10 a=gKebqoRLp9LExxC7YDUY:22
- a=5yU3S35YU4bGjq-dph-N:22 a=Bho9c0fBagfJEIQBS7DQ:22 cc=ntf awl=host:13537
-X-Proofpoint-Spam-Info: AW1haW4tMjYxMDAyMDA3MCBTYWx0ZWRfX6p41Df3/dxte
- EXNWl8Ukn6gcbztxSuoFqSEqCU0kiAJPZMjiQP+0oVs947KAUxeDJ3RZxblfU6QFm7V6p/ykfm1
- 96Sczhv8efAQZYcUtimY7bJHS89xUSBOqXgMkd+fXR6DUFrdAijf
-X-Proofpoint-ORIG-GUID: cz0_hgf5sGAUJSP-qR8yvkY6-chM5s50
+ a=x4eqshVgHu-cdnggieHk:22 a=yPCof4ZbAAAA:8 a=Yshe4ZZT8TUiTL5K-4gA:9
+ a=O8hF6Hzn-FEA:10 a=5yU3S35YU4bGjq-dph-N:22 a=Bho9c0fBagfJEIQBS7DQ:22 cc=ntf
+ awl=host:13537
+X-Proofpoint-Spam-Info: AW1haW4tMjYxMDAyMDA3MCBTYWx0ZWRfX2NTQfKglcxFJ
+ nWblIgxHUUfjrJCWUPt+7+DRc6Dk7teVLwjfa63yv31Y5rn/ABmDKyTl6i+L9Brv4RFvHHChorT
+ 8lawctw3oxG9AKqoG+JoGpS8u8jjaw7+DNMtVkE4p4OHHw2oWCAw
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMDAyMDA3MCBTYWx0ZWRfXxFtZipAAFI9j
+ ZbB9dFdLaxrcTFAJ7U7n0hP5P1NFgAsWdt9xIVVJAljkyemSFRJ/ykdgEpy5BI1/KfAmDHoLui+
+ SCBJZVbYN/tvvY1Y6g5vb3W8/ZLmQ+ROOVhFCOMWeaN1NAlB7wL8/QNBA9YfNoOc/2tqI2ucige
+ ic1uYnj08U1Dmw2MUOhQAszITojW3eFwrREKkwhQo3Krie+MHQiUEQk8gh8tCRK7o3Ta1cCwzny
+ Be8SsJBE2YaBdL4a9+A2zqy7P0U6orBFVQ4TSGeRIIAaAtBRbnxrQdsfi9c9GdELPiLGa+bf0xT
+ lqWewqEnBKV5F97xpvvwE2k0aGjhtIkoNqun9X4gW4Ln5ER8IBfphgD0Q9FzX1gLLzXSrEd31ET
+ KfYHO5J1lqP0CHolMrspVHKe/tZAPIjo2oxlV/PWqXHElJoon09OmQl3xDe9Ftal2Xu8zRzeD3v
+ 3kM00L2i/g7w4UBjkY2antU7/KIVDYcYcdUyuOT4=
 
-Add a name field to inline expansions and populate it from the resolved
-origin function while recoding DWARF tags.
+For a function that is inlined in BTF (signified by a LOCSEC entry
+pointing at its FUNC) mark it "inline".  This is already done for
+DWARF.
 
-The origin DIE may not carry a direct DW_AT_name; normal function
-recoding already handles names recovered through DW_AT_specification or
-DW_AT_abstract_origin. Factor that lookup into a helper and use it for
-inline expansions too, so expansion names stay consistent with the
-resolved function name instead of remaining NULL in those cases.
-
-Signed-off-by: Thierry Treyer <ttreyer@meta.com>
 Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
 ---
- dwarf_loader.c | 57 +++++++++++++++++++++++++++++++++++++-------------
- dwarves.h      |  1 +
- 2 files changed, 43 insertions(+), 15 deletions(-)
+ btf_loader.c | 53 +++++++++++++++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 52 insertions(+), 1 deletion(-)
 
-diff --git a/dwarf_loader.c b/dwarf_loader.c
-index 0e74d2b..6883cf0 100644
---- a/dwarf_loader.c
-+++ b/dwarf_loader.c
-@@ -2015,11 +2015,19 @@ static struct inline_expansion *inline_expansion__new(Dwarf_Die *die, struct cu
+diff --git a/btf_loader.c b/btf_loader.c
+index 66ffd1a..4dea882 100644
+--- a/btf_loader.c
++++ b/btf_loader.c
+@@ -30,6 +30,12 @@
+ #include "dutil.h"
+ #include "dwarves.h"
  
- 	if (exp != NULL) {
- 		struct dwarf_tag *dtag = tag__dwarf(&exp->ip.tag);
-+		Dwarf_Attribute attr_orig;
- 
- 		tag__init(&exp->ip.tag, cu, die);
- 		dtag->decl_file = attr_string(die, DW_AT_call_file, conf);
- 		dtag->decl_line = attr_numeric(die, DW_AT_call_line);
- 		dwarf_tag__set_attr_type(dtag, DWARF_TAG__REF_TYPE, die, DW_AT_abstract_origin, cu);
-+		if (dwarf_attr(die, DW_AT_abstract_origin, &attr_orig)) {
-+			Dwarf_Die die_orig;
++struct btf_locsec_entry {
++	uint32_t func;
++	uint32_t loc_proto;
++	uint32_t offset;
++};
 +
-+			if (dwarf_formref_die(&attr_orig, &die_orig))
-+				exp->name = attr_string(&die_orig, DW_AT_name, conf);
-+		}
-+
- 		exp->ip.addr = 0;
- 		exp->high_pc = 0;
- 		exp->nr_parms = 0;
-@@ -3568,6 +3576,32 @@ static void __tag__print_abstract_origin_not_found(struct tag *tag,
- #define tag__print_abstract_origin_not_found(tag) \
- 	__tag__print_abstract_origin_not_found(tag, __func__, __LINE__)
+ static const char *cu__btf_str(struct cu *cu, uint32_t offset)
+ {
+ 	return offset ? btf__str_by_offset(cu->priv, offset) : NULL;
+@@ -670,9 +676,54 @@ static int btf__load_types(struct btf *btf, struct cu *cu)
+ 	return 0;
+ }
  
-+static void function__recode_dwarf_name(struct tag *tag, struct cu *cu)
++static bool btf__has_location_support(void)
 +{
-+	struct function *fn = tag__function(tag);
-+	struct dwarf_tag *dtag = tag__dwarf(tag);
-+	struct dwarf_tag *dtype;
++	return btf__add_loc_param && btf__add_loc_param_value &&
++		btf__add_loc_proto && btf__add_loc_proto_param &&
++		btf__add_locsec && btf__add_locsec_loc;
++}
 +
-+	if (fn->name != 0)
-+		return;
-+	if (dtag->abstract_origin == 0 && dtag->specification == 0)
++static void btf__mark_inline_functions(struct btf *btf, struct cu *cu)
++{
++	const struct btf_type *type_ptr;
++	uint32_t type_index, type;
++
++	if (!btf__has_location_support())
 +		return;
 +
-+	dtype = dwarf_cu__find_tag_by_ref(cu->priv, dtag, abstract_origin);
-+	if (dtype == NULL)
-+		dtype = dwarf_cu__find_tag_by_ref(cu->priv, dtag, specification);
-+	if (dtype != NULL)
-+		fn->name = tag__function(dtag__tag(dtype))->name;
-+	else {
-+		fprintf(stderr,
-+			"%s: couldn't find name for function %#llx, abstract_origin=%#llx, specification=%#llx\n",
-+			__func__,
-+			(unsigned long long)dtag->id,
-+			(unsigned long long)dtag->abstract_origin,
-+			(unsigned long long)dtag->specification);
++	for (type_index = 1; type_index < btf__type_cnt(btf); type_index++) {
++		const struct btf_locsec_entry *entries;
++		const char *name;
++		uint16_t i;
++
++		type_ptr = btf__type_by_id(btf, type_index);
++		type = btf_kind(type_ptr);
++		if (type != BTF_KIND_LOCSEC)
++			continue;
++
++		name = cu__btf_str(cu, type_ptr->name_off);
++		/* LOCSECs are named "inline<section>", e.g. "inline.text". */
++		if (!name || !strstarts(name, "inline"))
++			continue;
++
++		entries = (const struct btf_locsec_entry *)(type_ptr + 1);
++		for (i = 0; i < btf_vlen(type_ptr); i++) {
++			struct tag *tag = cu__function(cu, entries[i].func);
++
++			if (tag)
++				tag__function(tag)->inlined = DW_INL_declared_inlined;
++		}
 +	}
 +}
 +
- static void parameter__share_state_with_abstract_origin(struct parameter *parm,
- 							struct parameter *oparm)
+ static int btf__load_sections(struct btf *btf, struct cu *cu)
  {
-@@ -3655,6 +3689,7 @@ static void inline_expansion__recode_dwarf_types(struct tag *tag, struct cu *cu)
- 	struct dwarf_cu *dcu = cu->priv;
- 	struct dwarf_tag *dtag = tag__dwarf(tag);
- 	struct dwarf_tag *dtype;
-+	struct tag *origin;
- 	struct tag *pos;
+-	return btf__load_types(btf, cu);
++	int err = btf__load_types(btf, cu);
++
++	if (!err)
++		btf__mark_inline_functions(btf, cu);
++
++	return err;
+ }
  
- 	/* The inline expansion's abstract origin is stored as its type ref. */
-@@ -3665,7 +3700,12 @@ static void inline_expansion__recode_dwarf_types(struct tag *tag, struct cu *cu)
- 		return;
- 	}
- 
--	ftype__recode_dwarf_types(dtag__tag(dtype), cu);
-+	origin = dtag__tag(dtype);
-+	if (tag__is_function(origin)) {
-+		function__recode_dwarf_name(origin, cu);
-+		tag__inline_expansion(tag)->name = function__name(tag__function(origin));
-+	}
-+	ftype__recode_dwarf_types(origin, cu);
- 	list_for_each_entry(pos, &tag__inline_expansion(tag)->parms, node)
- 		parameter__recode_dwarf_type(tag__parameter(pos), cu, NULL);
- 	tag->type = dtype->small_id;
-@@ -4057,20 +4097,7 @@ static int tag__recode_dwarf_type(struct tag *tag, struct cu *cu)
- 				 */
- 				return 0;
- 			}
--			dtype = dwarf_cu__find_tag_by_ref(cu->priv, dtag, abstract_origin);
--			if (dtype == NULL)
--				dtype = dwarf_cu__find_tag_by_ref(cu->priv, dtag, specification);
--			if (dtype != NULL)
--				fn->name = tag__function(dtag__tag(dtype))->name;
--			else {
--				fprintf(stderr,
--					"%s: couldn't find name for "
--					"function %#llx, abstract_origin=%#llx,"
--					" specification=%#llx\n", __func__,
--					(unsigned long long)dtag->id,
--					(unsigned long long)dtag->abstract_origin,
--					(unsigned long long)dtag->specification);
--			}
-+			function__recode_dwarf_name(tag, cu);
- 		}
- 		lexblock__recode_dwarf_types(&fn->lexblock, cu);
- 	}
-diff --git a/dwarves.h b/dwarves.h
-index f620db8..ddd4fd5 100644
---- a/dwarves.h
-+++ b/dwarves.h
-@@ -823,6 +823,7 @@ struct ip_tag {
- 
- struct inline_expansion {
- 	struct ip_tag	 ip;
-+	const char	 *name;
- 	size_t		 size;
- 	uint64_t	 high_pc;
- 	struct list_head parms;
+ static uint32_t class__infer_alignment(const struct conf_load *conf,
 -- 
 2.43.5
 
