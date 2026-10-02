@@ -1,51 +1,51 @@
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C73F049AA24;
-	Fri,  2 Oct 2026 17:41:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97BA84B8277;
+	Fri,  2 Oct 2026 17:41:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790962904; cv=none; b=jnNt2chW1LZhnVtGJ13gHCAPJKHY7HGyhX1x5tTvRjfqKHv+urH4EtUFKS7e6T8B88LcbyNnFxUmhQd6Dh/zzx3745qWAqUuz0VNcEsgZy0oKJLF9LR0yYBMzINXruuWncytK/OGYnM7cmbfWdDiU43gh5Yt9d54z99PQgjcIR8=
+	t=1790962904; cv=none; b=PbgtiavBQOHu8Tf+s9mmjIAlZWJ+0vdv+MtxexMUDzXrrSFyZ3+viout40SbmmRcn6FvoG676z1485JtYUC4MlWelnGg+FhS+YgpOrhtlHDfoTZ3njkH1oxfkPQABw7YIdHqCpDIvbcyiaGEuKpKCpZ978oeZSeXInzTEKgXotY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1790962904; c=relaxed/simple;
-	bh=gislmCUAdqMprkrwAswoACTj4wr4MtHzSCHs8oQf3dE=;
+	bh=uyjtYb63Fd/CfBwYRY2F19/6hTV1uU2pSH/NPf5eYT8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=tTqxWzHu30METvTylvA4MbHCSjRXqUSbk0twrS8n7+51QcIvWUvbc9W2qhUcPQx4afp7XcrnIIgsjwcmD3FEREVnCnuTomlu/mPHf7FssGRF++WXGHKN+89YOmxtZDOLMoMm89/NgCu3A0bNI2df12G3K8NNMzcwLhGvloKA+wg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=ZYWJkavW; arc=none smtp.client-ip=205.220.165.32
+	 MIME-Version; b=uxTUFntW6UV0u7LE1xaJDzVLVVV0w77Qb/tvhGGpyGf+02nbvpl6J+peoasSYWE94MgS4+x2iXqLBzb8C5hU4hiOKPgnO6/SwyIrQWhOh0H9oFVsX/siTlbsBuudJ/qij8iqZpFv6M5bk3BuHuB0DacYa0RNhU1E/uU8B0cK6vk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=cK66zsRD; arc=none smtp.client-ip=205.220.177.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="ZYWJkavW"
-Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 692EbeDB1541590;
-	Fri, 2 Oct 2026 17:41:12 GMT
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="cK66zsRD"
+Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 692Ebl9n3287871;
+	Fri, 2 Oct 2026 17:41:02 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
 	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=corp-2025-04-25; bh=rSG8/
-	Wxg5KOp6RfQgBIELvwIfgRuT/6JLzz3sBUt/IU=; b=ZYWJkavWCysRA55lcGfjC
-	Nc9reOUmBrPUZySmLs7dunrDyNmn7b0TRWuiYtShpJWqZc0Z7JG5e2kfXYTFmbOx
-	qJAvlykovY4DK9jUqmT2IzbeVCIzwvZ0G6IIaQbPCGvdqY3bRG6KqJe632ZW4GGb
-	I3foq4Pj7IIag0upD7B5G4KIjmIxc4cm/TfpMpjBh8B0iBQTK5h4LVptU99gFWIG
-	4jZiqrrbhOTLqLI55CpTFHU0roEFAvNvJ+kFTz3Ze4ZPVISonJgod9UuDzD8Gijg
-	d1IREYCduQWc0MQS6GXpxwuoXQbV3RzTXu9AQxFSGG6Tnz3O6wnW8MVrzjrlzN7f
-	g==
+	:mime-version:references:subject:to; s=corp-2025-04-25; bh=R4HeI
+	+GEx26V3I9iX/YRDrqq3Zlcywxz9EC8A96PHRo=; b=cK66zsRDCsoEGmttx9JrB
+	u86j/32BIG2IQG/LlIxdFt5StF788u1SaX/VFzvr3vzuyswyquqQJkPljCvkXjyq
+	WhODp3Ivc+gNmtVjCXOR+JUEtSyGCMJ/DuDj5mHM4RxbiYyMufnppF7hhs3a30XE
+	3zHeVDndPQuuvlpHUGx46xxuW2O9g46g0l7kHnK0oKhyHOTqWsvYlo0e+pB/yAlx
+	J66O6HU5lDg3vTbgslTHzspEQ75KfMF9QQk0rE9cVyVyJvbgzYATN37cVD/ypJ+9
+	CZ3Mvm79fNHoSqGbIeFbGwYPYS/n0rqj3PkA2jnam8xOGzJCYOVCSUxNP4M5JQ5k
+	w==
 Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4gx4mymmvq-1
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4gx5ns4bxj-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 02 Oct 2026 17:41:11 +0000 (GMT)
+	Fri, 02 Oct 2026 17:41:02 +0000 (GMT)
 Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.7/8.18.1.7) with ESMTP id 692HZToF014465;
-	Fri, 2 Oct 2026 17:41:10 GMT
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.7/8.18.1.7) with ESMTP id 692HZRT7014309;
+	Fri, 2 Oct 2026 17:41:01 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 4gx4gtqu55-1
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 4gx4gtqtwk-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 02 Oct 2026 17:41:10 +0000 (GMT)
+	Fri, 02 Oct 2026 17:41:01 +0000 (GMT)
 Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.18.1.12/8.18.1.12) with ESMTP id 692Heked030471;
-	Fri, 2 Oct 2026 17:41:09 GMT
+	by pps.reinject (8.18.1.12/8.18.1.12) with ESMTP id 692HekeX030471;
+	Fri, 2 Oct 2026 17:41:00 GMT
 Received: from bpf.uk.oracle.com (dhcp-10-154-83-232.vpn.oracle.com [10.154.83.232])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 4gx4gtqtes-9;
-	Fri, 02 Oct 2026 17:41:09 +0000 (GMT)
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 4gx4gtqtes-6;
+	Fri, 02 Oct 2026 17:41:00 +0000 (GMT)
 From: Alan Maguire <alan.maguire@oracle.com>
 To: acme@kernel.org, ast@kernel.org, andrii@kernel.org, eddyz87@gmail.com,
         jolsa@kernel.org, qmo@kernel.org
@@ -54,9 +54,9 @@ Cc: dwarves@vger.kernel.org, daniel@iogearbox.net, ihor.solodrai@linux.dev,
         memxor@gmail.com, emil@etsalapatis.com, bpf@vger.kernel.org,
         nsc@kernel.org, puranjay@kernel.org, yatsenko@meta.com,
         Alan Maguire <alan.maguire@oracle.com>
-Subject: [PATCH v5 dwarves 08/10] pfunct: Print inline site information
-Date: Fri,  2 Oct 2026 18:40:36 +0100
-Message-ID: <20261002174043.3823987-9-alan.maguire@oracle.com>
+Subject: [PATCH v5 dwarves 05/10] pahole: Support inline BTF location encoding
+Date: Fri,  2 Oct 2026 18:40:33 +0100
+Message-ID: <20261002174043.3823987-6-alan.maguire@oracle.com>
 X-Mailer: git-send-email 2.43.5
 In-Reply-To: <20261002174043.3823987-1-alan.maguire@oracle.com>
 References: <20261002174043.3823987-1-alan.maguire@oracle.com>
@@ -74,97 +74,63 @@ X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0
  bulkscore=0 spamscore=0 malwarescore=0 mlxlogscore=999 phishscore=0
  suspectscore=0 mlxscore=0 lowpriorityscore=0 classifier=spam adjust=0
  reason=mlx scancount=1 engine=8.19.0-2609040000 definitions=main-2610020070
-X-Proofpoint-Spam-Info: AW1haW4tMjYxMDAyMDA3MCBTYWx0ZWRfX7LT8swhfGe02
- 9YMzs+nJWnHYWHpfGdrqs8NNdaVnrqwy72qudu1lZ6KHYeC48EHTkgO3Xwpa2B9xPAVzd2yUcFg
- fdEtutYxWU66rwz80Daub3zPAQaQgqdhOeGIQnTPhQuUK7LoSnnW
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMDAyMDA3MCBTYWx0ZWRfXwtGRKwX/487Q
- dehpxkCoSoFqsyCt3kXmdRfl8jloDUE82Wdz6rmRTwPsTGW4kgtO8hR9UKF0ayCBHv+/zczX2Kq
- e6JwqgdzaV8nvRAofmTFXxpBXdJooqr3DE7ERrxBGfIzmd4YNsN9IYpvMJh7mOlWZ/1VmPeKj8g
- LNJVmKURanUlSEZkI9ppmMlmnII4qYBCYY0Az2j/I4BmQ7tFj/KujEt29B04BjQtL54h27r0tcz
- MZIt97jjzf8Pu1p21ijOc4jJWZcgG2jMc7fj09C0GxLd7MOrtORFmyWxQCVTlGOSXXLcykVHmIS
- NtQjb99cxJ2C+uJtL9aXtrh3hFDj1Kj0UtJ0jVUy/HpPqrpl8hTVFcIvZrdwS/vN2d186bmuELF
- 50SCPathZbSXPYLuYL+Pakm3/TaVs5kiaDOEjYvfr+MxM17YEgyyDDZxHpVELrcxvdxg1DyKka7
- iXoG3sh4j/aci1/cNB0Hm/lTRrbyzu/7c4elQhW4=
-X-Proofpoint-GUID: cG-Ku_KsaCo79JuXvknP_1OMruzvNp3E
-X-Authority-Analysis: v=2.4 cv=DZmCOftW c=1 sm=1 tr=0 ts=6abfecb7 b=1 cx=c_pps
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMDAyMDA3MCBTYWx0ZWRfX6B7oyDArq3bX
+ Wkkr5Okbov4JYjjA4p9Kakgwgu79Oecje8CZOQlpBW+/KpQQQ01jY4Og8JLZiraFejX5zkjgSoo
+ LoQJ1A8ui3oDHVmDLKBDl/SR28gUbzMJKmctJC6CoKUfn7BP0EdegrvfvTWHXi8B033tusbBPPv
+ D0o1/JAaIQyYKmBF0fJCOJtHsvfF1+KlqZZkKxngmrs+Hyw4lesmRYyNbZ7CBaYMqRg6z7zESvm
+ x5M9toapf8gNMLVLqUEMDnQwYUfpbWbuFnxp2sGCZkWXDTy+BYOcyZ8wT8W/vFGXR+n7+CKoxqM
+ G8kLSdpTGCvOtyNNViY7rIFd5psPxofes31BC6ntIibElbxsEusKXE3pk7HH1xEu3vyumT8xLSe
+ 76Sa12gO16h96mwFDN4GVrgAV4sVXfsOcXsrcbri2PbyCD1o4OUlywcJV8Wgdd9hJiwrJ2QSGZ0
+ OWzpSONaaK71/c1r7EofWSl2CGG30gTm/L36SxAE=
+X-Proofpoint-GUID: q8p_mftex8db4lR4SwtT1XIAB44Ettiq
+X-Authority-Analysis: v=2.4 cv=T8QZ3PKQ c=1 sm=1 tr=0 ts=6abfecae b=1 cx=c_pps
  a=e1sVV491RgrpLwSTMOnk8w==:117 a=e1sVV491RgrpLwSTMOnk8w==:17
  a=660iZSQnnn4A:10 a=VkNPw1HP01LnGYTKEx00:22 a=jiCTI4zE5U7BLdzWsZGv:22
- a=RD47p0oAkeU5bO7t-o6f:22 a=yPCof4ZbAAAA:8 a=WOXjmAGuJwSPRfIxSJAA:9
+ a=3I1J8UUJPc9JN9BFgKH3:22 a=yPCof4ZbAAAA:8 a=lbm59Wxqvufxk8b5meAA:9
  a=5yU3S35YU4bGjq-dph-N:22 a=Bho9c0fBagfJEIQBS7DQ:22 cc=ntf awl=host:13537
-X-Proofpoint-ORIG-GUID: cG-Ku_KsaCo79JuXvknP_1OMruzvNp3E
+X-Proofpoint-Spam-Info: AW1haW4tMjYxMDAyMDA3MCBTYWx0ZWRfX2onmG9IVa3Sd
+ thFz/WpsYNt8PwQKKivBilqNnX0WPzkY2gPdSgXX6nkahqAVw+iOj807ThUFy5OLi9P72tOFwMk
+ wz0CnTUT4VNDp1wp7j1uVfm0Fe9+m39MMC/WcQi9ndrvZq3HgO01
+X-Proofpoint-ORIG-GUID: q8p_mftex8db4lR4SwtT1XIAB44Ettiq
 
-Print information about inline sites using the --inline_sites
-option, BTF only for now.  Dumps list of form
+Add support for emitting BTF location information for inline
+expansions when --btf_features=inline is enabled.
 
-0x392c50 [.text +0x392c50] cpumask_test_cpu(int cpu [*(fbreg-40)], const struct cpumask  * cpumask [unavailable])
+Encode inline parameters as BTF_KIND_LOC_PARAM records, collect them
+in BTF_KIND_LOC_PROTO records, and associate those with inline
+functions through BTF_KIND_LOCSEC records named "inline<section>".
 
-The address is either absolute (where address info is available
-and we can compute it) or relative via BTF location info.
-Following is the annotated function signature (excluding return
-value since these are inline entry points).  Unavailable parameters
-are marked as such.
+Support constant, register, frame-base-register, dereferenced
+base-register, and two-register aggregate parameter locations.
+Offsets are marked signed, and the frame-base register uses the
+BTF_LOC_PARAM_FBREG sentinel value. LOC_PARAMs that specify an address
+have that address normalized to the base address of the object (kernel
+or module).
 
-Where ELF info is available, arch-specific registers are used, otherwise
-we fall back to register numbers (reg0, reg1, ...).
+Use DWFL to resolve an inline expansion address to its executable ELF
+section and section-relative offset for ET_REL and ET_EXEC inputs.
+ET_DYN DWARF PCs are link-time addresses, while DWFL expects runtime
+addresses, so resolve PIE and shared-object PCs against executable ELF
+sections instead.
 
-Supports specifying a function name via -f, i.e.
-
-$ pfunct --inline_sites -f ip_send_skb /sys/kernel/btf/vmlinux.inline
-0x11a86bc [.text +0x11a86bc] ip_send_skb(struct net * net [reg3], struct sk_buff * skb [reg0])
-
-If ELF info is available, it is used to show containing function;
-it can also be supplied by --elf path2elf if BTF is raw as in
-/sys/kernel/btf . If available, relative addresses are converted
-to absolute from section base, registers are ABI-specific and containing
-function displayed:
-
-$ pfunct --inline_sites -f ip_send_skb --elf vmlinux /sys/kernel/btf/vmlinux.inline
-0xffffffff821a86bc [ip_push_pending_frames+0x2c, .text +0x11a86bc] ip_send_skb(struct net * net [%rbx], struct sk_buff * skb [%rax])
-
-We can also use the running kernel to derive current base/section addresses;
-using --running [optional_module_name].  However, it is necessary
-to run via sudo if kptr_restrict is set if absolute addresses and
-containing functions are needed, otherwise addresses in /proc/kallsyms
-are zeroed and not available:
-
-$ pfunct --inline_sites -f ip_send_skb --running /sys/kernel/btf/vmlinux.inline
-0x11a86bc [.text +0x11a86bc] ip_send_skb(struct net * net [%rbx], struct sk_buff * skb [%rax])
-$ sudo pfunct --inline_sites -f ip_send_skb --running /sys/kernel/btf/vmlinux.inline
-0xffffffffa9da86bc [ip_push_pending_frames+0x2c, .text +0x11a86bc] ip_send_skb(struct net * net [%rbx], struct sk_buff * skb [%rax])
-
-The --running representation will account for kASLR, where the base
-address is shifted with respect to the ELF-reported address; contrast
-the --running reported address above and that reported with the --elf
-option.
+Expose inline encoding as a non-default BTF feature and enable inline
+DIE loading when it is selected. Omit the feature support when the
+linked libbpf does not provide the required location APIs.
 
 Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
-Assisted-by: Codex (GPT 5.6)
 ---
- pfunct.c | 718 ++++++++++++++++++++++++++++++++++++++++++++++++++++---
- 1 file changed, 689 insertions(+), 29 deletions(-)
+ btf_encoder.c | 427 ++++++++++++++++++++++++++++++++++++++++++++------
+ dwarves.h     |  15 ++
+ pahole.c      |  12 ++
+ 3 files changed, 402 insertions(+), 52 deletions(-)
 
-diff --git a/pfunct.c b/pfunct.c
-index 1dc88a5..b86fa97 100644
---- a/pfunct.c
-+++ b/pfunct.c
-@@ -7,6 +7,8 @@
- */
- 
- #include <argp.h>
-+#include <dirent.h>
-+#include <limits.h>
- #include <stdarg.h>
- #include <stdio.h>
- #include <stdlib.h>
-@@ -39,15 +41,446 @@ static uint64_t addr;
- static char *class_name;
- static char *function_name;
- static const char *base_btf_file;
-+static const char *elf_filename;
-+static const char *running_object;
-+static bool show_inline_sites;
- 
- static struct conf_fprintf conf;
+diff --git a/btf_encoder.c b/btf_encoder.c
+index d6b9be6..08ab9fb 100644
+--- a/btf_encoder.c
++++ b/btf_encoder.c
+@@ -43,6 +43,13 @@
+ #define BTF_FASTCALL_TAG       "bpf_fastcall"
+ #define BPF_ARENA_ATTR         "address_space(1)"
  
 +#define BTF_LOC_PARAM_SIGNED	0x1
 +#define BTF_LOC_PARAM_CONST	0x2
@@ -172,832 +138,735 @@ index 1dc88a5..b86fa97 100644
 +#define BTF_LOC_PARAM_REG	0x8
 +#define BTF_LOC_PARAM_DEREF	0x10
 +#define BTF_LOC_PARAM_OFFSET	0x20
-+#define BTF_LOC_PARAM_FBREG	0xffffffffU
 +
- static struct conf_load conf_load = {
- 	.conf_fprintf = &conf,
+ /* kfunc flags, see include/linux/btf.h in the kernel source */
+ #define KF_FASTCALL   (1 << 12)
+ #define KF_ARENA_RET  (1 << 13)
+@@ -77,6 +84,23 @@ struct btf_encoder_func_annot {
+ 	int16_t component_idx;
  };
  
- static struct languages languages;
++struct loc_param {
++	uint32_t flags;
++	uint32_t values[2];
++	uint8_t nvalues;
++	uint8_t size;
++};
++
++struct loc {
++	char *name;
++	struct loc_param *params;
++	uint16_t nparams;
++	int func_id;
++	int loc_proto_id;
++	uint32_t section_idx;
++	uint32_t section_offset;
++};
++
+ struct elf_function_sym {
+ 	const char *name;
+ 	uint64_t addr;
+@@ -86,6 +110,7 @@ struct elf_function_sym {
+ struct btf_encoder_func_state {
+ 	struct elf_function *elf;
+ 	struct elf_function_sym *sym;
++	struct loc *loc;
+ 	uint64_t addr;
+ 	uint32_t type_id_off;
+ 	uint16_t nr_parms;
+@@ -103,6 +128,12 @@ struct btf_encoder_func_state {
+ 	struct btf_encoder_func_annot *annots;
+ };
  
-+struct elf_register_names {
-+	Dwfl			 *dwfl;
-+	Dwfl_Module		 *dwfl_module;
-+	char			 *names[32];
++struct btf_encoder_func_states {
++	struct btf_encoder_func_state *array;
++	int cnt;
++	int cap;
 +};
 +
-+struct elf_symtab_ctx {
-+	int			 fd;
-+	Elf			 *elf;
-+	struct elf_symtab	 *symtab;
-+	struct elf_register_names regs;
-+};
+ struct elf_function {
+ 	char		*name;
+ 	struct elf_function_sym *syms;
+@@ -116,6 +147,7 @@ struct elf_secinfo {
+ 	uint64_t    addr;
+ 	const char *name;
+ 	uint64_t    sz;
++	uint64_t    flags;
+ 	uint32_t    type;
+ 	bool        include;
+ 	struct gobuffer secinfo;
+@@ -175,12 +207,10 @@ struct btf_encoder {
+ 	uint32_t	  btf_id_skipped;
+ 	struct elf_secinfo *secinfo;
+ 	size_t             seccnt;
++	uint64_t           addr_base;
+ 	int                encode_vars;
+-	struct {
+-		struct btf_encoder_func_state *array;
+-		int cnt;
+-		int cap;
+-	} func_states;
++	struct btf_encoder_func_states func_states;
++	struct btf_encoder_func_states loc_states;
+ 	/* This is a list of elf_functions tables, one per ELF.
+ 	 * Multiple ELF modules can be processed in one pahole run,
+ 	 * so we have to store elf_functions tables per ELF.
+@@ -188,6 +218,8 @@ struct btf_encoder {
+ 	struct list_head elf_functions_list;
+ };
+ 
++static int btf_encoder__add_locsec(struct btf_encoder *encoder);
 +
-+struct elf_function {
-+	const char	*name;
-+	uint64_t	 addr;
-+	uint64_t	 size;
-+};
-+
-+struct elf_functions {
-+	struct elf_function	*entries;
-+	uint32_t		 nr_entries;
-+	bool			 owns_names;
-+};
-+
-+struct running_section {
-+	char		*name;
-+	uint64_t	 addr;
-+};
-+
-+struct running_object_ctx {
-+	bool			vmlinux;
-+	uint64_t		addr_base;
-+	struct running_section	*sections;
-+	uint32_t		nr_sections;
-+	struct elf_functions	functions;
-+	struct elf_register_names regs;
-+};
-+
-+static int elf_register_names__cache_name(void *arg, int regno,
-+					 const char *setname __maybe_unused,
-+					 const char *prefix,
-+					 const char *regname,
-+					 int bits __maybe_unused,
-+					 int type __maybe_unused)
-+{
-+	struct elf_register_names *regs = arg;
-+
-+	if (regno < 0 || regno >= (int)ARRAY_SIZE(regs->names) || !regname)
-+		return DWARF_CB_OK;
-+	if (asprintf(&regs->names[regno], "%s%s", prefix ?: "", regname) < 0)
-+		return DWARF_CB_ABORT;
-+	return DWARF_CB_OK;
-+}
-+
-+static void elf_register_names__init(struct elf_register_names *regs,
-+					     const char *filename)
-+{
-+	static const Dwfl_Callbacks callbacks = {
-+		.section_address = dwfl_offline_section_address,
-+	};
-+	int fd;
-+
-+	regs->dwfl = dwfl_begin(&callbacks);
-+	if (!regs->dwfl)
-+		return;
-+	fd = open(filename, O_RDONLY);
-+	if (fd < 0)
-+		goto out_dwfl_end;
-+	regs->dwfl_module = dwfl_report_offline(regs->dwfl, filename, filename, fd);
-+	if (!regs->dwfl_module)
-+		goto out_dwfl_end;
-+	if (dwfl_report_end(regs->dwfl, NULL, NULL))
-+		goto out_dwfl_end;
-+	dwfl_module_register_names(regs->dwfl_module, elf_register_names__cache_name, regs);
-+	return;
-+
-+out_dwfl_end:
-+	dwfl_end(regs->dwfl);
-+	regs->dwfl = NULL;
-+	regs->dwfl_module = NULL;
-+}
-+
-+static void elf_register_names__exit(struct elf_register_names *regs)
-+{
-+	for (size_t i = 0; i < ARRAY_SIZE(regs->names); i++)
-+		free(regs->names[i]);
-+	if (regs->dwfl)
-+		dwfl_end(regs->dwfl);
-+}
-+
-+static uint64_t elf__addr_base(Elf *elf)
-+{
-+	Elf_Scn *scn = NULL;
-+	GElf_Shdr shdr;
-+	uint64_t addr_base = UINT64_MAX;
-+
-+	while ((scn = elf_nextscn(elf, scn)) != NULL) {
-+		if (!gelf_getshdr(scn, &shdr))
-+			continue;
-+		if ((shdr.sh_flags & SHF_ALLOC) && shdr.sh_addr < addr_base)
-+			addr_base = shdr.sh_addr;
-+	}
-+
-+	return addr_base;
-+}
-+
-+static int elf_symtab__init(struct elf_symtab_ctx *ctx, const char *filename)
-+{
-+	memset(ctx, 0, sizeof(*ctx));
-+	ctx->fd = -1;
-+	ctx->elf = NULL;
-+	ctx->symtab = NULL;
-+	ctx->fd = open(filename, O_RDONLY);
-+	if (ctx->fd < 0)
-+		return -1;
-+	if (elf_version(EV_CURRENT) == EV_NONE) {
-+		fprintf(stderr, "%s: cannot set libelf version.\n", __func__);
-+		goto out_close;
-+	}
-+	ctx->elf = elf_begin(ctx->fd, ELF_C_READ_MMAP, NULL);
-+	if (!ctx->elf) {
-+		fprintf(stderr, "%s: cannot read %s ELF file.\n", __func__, filename);
-+		goto out_close;
-+	}
-+	ctx->symtab = elf_symtab__new(symtab_name, ctx->elf);
-+	elf_register_names__init(&ctx->regs, filename);
-+	return 0;
-+
-+	elf_end(ctx->elf);
-+	ctx->elf = NULL;
-+out_close:
-+	close(ctx->fd);
-+	ctx->fd = -1;
-+	return -1;
-+}
-+
-+static void elf_symtab__exit(struct elf_symtab_ctx *ctx)
-+{
-+	elf_register_names__exit(&ctx->regs);
-+	elf_symtab__delete(ctx->symtab);
-+	if (ctx->elf)
-+		elf_end(ctx->elf);
-+	if (ctx->fd >= 0)
-+		close(ctx->fd);
-+}
-+
-+static int elf_function__cmp(const void *a, const void *b)
-+{
-+	const struct elf_function *fa = a, *fb = b;
-+
-+	if (fa->addr != fb->addr)
-+		return fa->addr < fb->addr ? -1 : 1;
-+	if (fa->size != fb->size)
-+		return fa->size < fb->size ? -1 : 1;
-+	return strcmp(fa->name, fb->name);
-+}
-+
-+static int elf_functions__collect(struct elf_functions *functions,
-+				  const struct elf_symtab *symtab)
-+{
-+	uint32_t index;
-+	GElf_Sym sym;
-+
-+	functions->entries = calloc(elf_symtab__nr_symbols(symtab),
-+				   sizeof(*functions->entries));
-+	if (!functions->entries && elf_symtab__nr_symbols(symtab))
-+		return -1;
-+	elf_symtab__for_each_symbol(symtab, index, sym) {
-+		struct elf_function *function;
-+
-+		if (elf_sym__type(&sym) != STT_FUNC || !elf_sym__size(&sym) ||
-+		    elf_sym__section(&sym) == SHN_UNDEF || !*elf_sym__name(&sym, symtab))
-+			continue;
-+		function = &functions->entries[functions->nr_entries++];
-+		function->name = elf_sym__name(&sym, symtab);
-+		function->addr = elf_sym__value(&sym);
-+		function->size = elf_sym__size(&sym);
-+	}
-+	qsort(functions->entries, functions->nr_entries,
-+	      sizeof(*functions->entries), elf_function__cmp);
-+	return 0;
-+}
-+
-+static void elf_functions__exit(struct elf_functions *functions)
-+{
-+	if (functions->owns_names)
-+		for (uint32_t i = 0; i < functions->nr_entries; i++)
-+			free((char *)functions->entries[i].name);
-+	free(functions->entries);
-+}
-+
-+static const struct elf_function *
-+elf_functions__find(const struct elf_functions *functions, uint64_t addr)
-+{
-+	const struct elf_function *best = NULL;
-+	uint64_t start_addr;
-+	uint32_t left = 0, right = functions->nr_entries;
-+
-+	while (left < right) {
-+		uint32_t mid = left + (right - left) / 2;
-+
-+		if (functions->entries[mid].addr <= addr)
-+			left = mid + 1;
-+		else
-+			right = mid;
-+	}
-+	if (left == 0)
-+		return NULL;
-+	--left;
-+	while (left > 0 && functions->entries[left - 1].addr == functions->entries[left].addr)
-+		--left;
-+	start_addr = functions->entries[left].addr;
-+	for (; left < functions->nr_entries &&
-+	       functions->entries[left].addr == start_addr; left++) {
-+		const struct elf_function *function = &functions->entries[left];
-+
-+		if (addr - function->addr < function->size &&
-+		    (!best || function->size < best->size))
-+			best = function;
-+		if (left + 1 == functions->nr_entries || functions->entries[left + 1].addr > addr)
-+			break;
-+	}
-+	return best;
-+}
-+
-+static int running_object__collect_functions(struct running_object_ctx *ctx,
-+					     const char *module)
-+{
-+	struct elf_functions *functions = &ctx->functions;
-+	FILE *fp;
-+	char line[512], name[256], module_name[256], type;
-+	unsigned long long addr;
-+
-+	fp = fopen("/proc/kallsyms", "r");
-+	if (!fp)
-+		return -1;
-+	while (fgets(line, sizeof(line), fp)) {
-+		struct elf_function *function;
-+		int fields;
-+
-+		module_name[0] = '\0';
-+		fields = sscanf(line, "%llx %c %255s %255s", &addr, &type, name,
-+				module_name);
-+		if (fields < 3 || !addr || !strchr("TtWw", type))
-+			continue;
-+		if (module) {
-+			size_t len = strlen(module_name);
-+
-+			if (fields != 4 || len < 3 || module_name[0] != '[' ||
-+			    module_name[len - 1] != ']' ||
-+			    strncmp(module_name + 1, module, len - 2) != 0 ||
-+			    module[len - 2] != '\0')
-+				continue;
-+		} else if (fields == 4) {
-+			continue;
-+		}
-+		function = realloc(functions->entries,
-+				   (functions->nr_entries + 1) * sizeof(*functions->entries));
-+		if (!function)
-+			goto out_err;
-+		functions->entries = function;
-+		function = &functions->entries[functions->nr_entries];
-+		function->name = strdup(name);
-+		if (!function->name)
-+			goto out_err;
-+		function->addr = addr;
-+		function->size = 0;
-+		functions->nr_entries++;
-+	}
-+	fclose(fp);
-+	functions->owns_names = true;
-+	qsort(functions->entries, functions->nr_entries,
-+	      sizeof(*functions->entries), elf_function__cmp);
-+	for (uint32_t i = 0; i < functions->nr_entries;) {
-+		uint32_t next = i + 1;
-+
-+		while (next < functions->nr_entries &&
-+		       functions->entries[next].addr == functions->entries[i].addr)
-+			next++;
-+		if (next < functions->nr_entries)
-+			for (uint32_t j = i; j < next; j++)
-+				functions->entries[j].size =
-+					functions->entries[next].addr - functions->entries[j].addr;
-+		i = next;
-+	}
-+	return 0;
-+
-+out_err:
-+	fclose(fp);
-+	functions->owns_names = true;
-+	elf_functions__exit(functions);
-+	return -1;
-+}
-+
-+static void running_object__exit(struct running_object_ctx *ctx)
-+{
-+	elf_functions__exit(&ctx->functions);
-+	elf_register_names__exit(&ctx->regs);
-+	for (uint32_t i = 0; i < ctx->nr_sections; i++)
-+		free(ctx->sections[i].name);
-+	free(ctx->sections);
-+}
-+
-+static uint64_t running_object__section_addr(const struct running_object_ctx *ctx,
-+					      const char *name)
-+{
-+	if (ctx->vmlinux)
-+		return strcmp(name, ".text") == 0 ? ctx->addr_base : 0;
-+	for (uint32_t i = 0; i < ctx->nr_sections; i++)
-+		if (strcmp(ctx->sections[i].name, name) == 0)
-+			return ctx->sections[i].addr;
-+	return 0;
-+}
-+
-+static int running_object__init_vmlinux(struct running_object_ctx *ctx)
-+{
-+	FILE *fp;
-+	char line[512], name[256], type;
-+	unsigned long long addr;
-+
-+	fp = fopen("/proc/kallsyms", "r");
-+	if (!fp)
-+		return -1;
-+	while (fgets(line, sizeof(line), fp)) {
-+		if (sscanf(line, "%llx %c %255s", &addr, &type, name) != 3)
-+			continue;
-+		if (strcmp(name, "_stext") == 0) {
-+			ctx->vmlinux = true;
-+			ctx->addr_base = addr;
-+			fclose(fp);
-+			/* kptr_restrict may be active */
-+			if (addr == 0)
-+				return 0;
-+			return running_object__collect_functions(ctx, NULL);
-+		}
-+	}
-+	fclose(fp);
-+	return -1;
-+}
-+
-+static int running_object__init_module(struct running_object_ctx *ctx, const char *module)
-+{
-+	char path[PATH_MAX];
-+	struct dirent *entry;
-+	DIR *dir;
-+
-+	if (strchr(module, '/'))
-+		return -1;
-+	if (snprintf(path, sizeof(path), "/sys/module/%s/sections",
-+		     module) >= (int)sizeof(path))
-+		return -1;
-+	dir = opendir(path);
-+	if (!dir)
-+		return -1;
-+	while ((entry = readdir(dir)) != NULL) {
-+		struct running_section *section;
-+		FILE *fp;
-+		unsigned long long addr;
-+
-+		if (strcmp(entry->d_name, ".") == 0 ||
-+		    strcmp(entry->d_name, "..") == 0)
-+			continue;
-+		if (snprintf(path, sizeof(path), "/sys/module/%s/sections/%s", module,
-+				     entry->d_name) >= (int)sizeof(path))
-+			continue;
-+		fp = fopen(path, "r");
-+		if (!fp)
-+			continue;
-+		if (fscanf(fp, "%llx", &addr) != 1) {
-+			fclose(fp);
-+			continue;
-+		}
-+		fclose(fp);
-+		/* kptr_restrict */
-+		if (addr == 0) {
-+			closedir(dir);
-+			return 0;
-+		}
-+		section = realloc(ctx->sections,
-+				  (ctx->nr_sections + 1) * sizeof(*ctx->sections));
-+		if (!section)
-+			goto out_err;
-+		ctx->sections = section;
-+		section = &ctx->sections[ctx->nr_sections];
-+		section->name = strdup(entry->d_name);
-+		if (!section->name)
-+			goto out_err;
-+		section->addr = addr;
-+		if (!ctx->addr_base || addr < ctx->addr_base)
-+			ctx->addr_base = addr;
-+		ctx->nr_sections++;
-+	}
-+	closedir(dir);
-+	if (!ctx->nr_sections)
-+		return -1;
-+	return running_object__collect_functions(ctx, module);
-+
-+out_err:
-+	closedir(dir);
-+	running_object__exit(ctx);
-+	return -1;
-+}
-+
-+static int running_object__init(struct running_object_ctx *ctx, const char *object)
-+{
-+	int err;
-+
-+	memset(ctx, 0, sizeof(*ctx));
-+	if (strcmp(object, "vmlinux") == 0)
-+		err = running_object__init_vmlinux(ctx);
-+	else
-+		err = running_object__init_module(ctx, object);
-+	if (!err) {
-+		/* For --running, we can use pfunct ELF itself. */
-+		elf_register_names__init(&ctx->regs, "/proc/self/exe");
-+	}
-+	return err;
-+}
-+
- struct fn_stats {
- 	struct list_head node;
- 	struct tag	 *tag;
-@@ -429,33 +862,186 @@ static int cu_function_iterator(struct cu *cu, void *cookie __maybe_unused)
- 	return 0;
+ /* Half open interval representing range of addresses containing kfuncs */
+ struct btf_kfunc_set_range {
+ 	uint64_t start;
+@@ -324,6 +356,9 @@ static const char * const btf_kind_str[] = {
+ 	[BTF_KIND_DECL_TAG]     = "DECL_TAG",
+ 	[BTF_KIND_TYPE_TAG]     = "TYPE_TAG",
+ 	[BTF_KIND_ENUM64]	= "ENUM64",
++	[BTF_KIND_LOC_PARAM]	= "LOC_PARAM",
++	[BTF_KIND_LOC_PROTO]	= "LOC_PROTO",
++	[BTF_KIND_LOCSEC]	= "LOCSEC",
+ };
+ 
+ static const char *btf__printable_name(const struct btf *btf, uint32_t offset)
+@@ -938,8 +973,10 @@ static int32_t btf_encoder__add_func_proto_for_state(struct btf_encoder *encoder
+ 		 * name string memory, so make a temporary copy.
+ 		 */
+ 		strncpy(tmp_name, name, sizeof(tmp_name) - 1);
++		tmp_name[sizeof(tmp_name) - 1] = '\0';
+ 
+-		if (btf_encoder__add_func_param(encoder, tmp_name, p->type_id, is_last))
++		type_id = p->type_id;
++		if (btf_encoder__add_func_param(encoder, tmp_name, type_id, is_last))
+ 			return -1;
+ 	}
+ 
+@@ -1216,31 +1253,57 @@ static bool funcs__match(struct btf_encoder *encoder,
+ 	return true;
  }
  
--static int elf_symtab__show(char *filename)
-+static const char *btf_reg_name(uint32_t reg, const struct elf_register_names *regs,
-+				char *buf, size_t len)
+-static struct btf_encoder_func_state *btf_encoder__alloc_func_state(struct btf_encoder *encoder)
++static struct btf_encoder_func_state *
++btf_encoder__alloc_func_state(struct btf_encoder_func_states *func_states)
  {
--	int fd = open(filename, O_RDONLY), err = -1;
--	if (fd < 0)
--		return -1;
-+	if (reg == BTF_LOC_PARAM_FBREG)
-+		return "fbreg";
-+	if (regs && reg < ARRAY_SIZE(regs->names) && regs->names[reg])
-+		return regs->names[reg];
-+	snprintf(buf, len, "reg%u", reg);
-+	return buf;
-+}
+ 	struct btf_encoder_func_state *state, *tmp;
  
--	if (elf_version(EV_CURRENT) == EV_NONE) {
--		fprintf(stderr, "%s: cannot set libelf version.\n", __func__);
--		goto out_close;
-+static bool btf_inline_site__fprintf_loc(const struct btf_type *type,
-+					 const struct btf_inline_site *site,
-+					 uint64_t object_addr_base,
-+					 const struct elf_register_names *regs, FILE *fp)
-+{
-+	const uint32_t *values = (const uint32_t *)(type + 1);
-+	uint32_t flags = *values++;
-+	uint64_t value;
-+	char regbuf[16];
-+	char regbuf2[16];
-+	const char *reg;
-+
-+	if (flags & BTF_LOC_PARAM_CONST) {
-+		value = values[0];
-+		if (type->size > sizeof(values[0]))
-+			value |= (uint64_t)values[1] << 32;
-+		if (flags & BTF_LOC_PARAM_ADDR) {
-+			fputs("addr ", fp);
-+			if (object_addr_base != UINT64_MAX)
-+				fprintf(fp, "%#llx",
-+					(unsigned long long)(object_addr_base + value));
-+			else
-+				fprintf(fp, "%s+%#llx", site->section_name,
-+					(unsigned long long)value);
-+			return true;
-+		}
-+		fputs("const ", fp);
-+		if (flags & BTF_LOC_PARAM_SIGNED) {
-+			if (type->size && type->size < sizeof(value)) {
-+				unsigned int bits = type->size * 8;
-+
-+				if (value & (1ULL << (bits - 1)))
-+					value |= ~0ULL << bits;
-+			}
-+			fprintf(fp, "%lld", (long long)value);
-+		} else
-+			fprintf(fp, "%#llx", (unsigned long long)value);
-+		return true;
+-	if (encoder->func_states.cnt >= encoder->func_states.cap) {
++	if (func_states->cnt >= func_states->cap) {
+ 
+ 		/* We only need to grow to accommodate duplicate
+ 		 * function declarations across different CUs, so the
+ 		 * rate of the array growth shouldn't be high.
+ 		 */
+-		encoder->func_states.cap += 64;
++		func_states->cap += 64;
+ 
+-		tmp = realloc(encoder->func_states.array, sizeof(*tmp) * encoder->func_states.cap);
++		tmp = realloc(func_states->array, sizeof(*tmp) * func_states->cap);
+ 		if (!tmp)
+ 			return NULL;
+ 
+-		encoder->func_states.array = tmp;
++		func_states->array = tmp;
  	}
-+	if (!(flags & BTF_LOC_PARAM_REG))
-+		return false;
-+	reg = btf_reg_name(values[0], regs, regbuf, sizeof(regbuf));
-+	if (flags & BTF_LOC_PARAM_DEREF)
-+		fprintf(fp, "*(%s", reg);
-+	else
-+		fputs(reg, fp);
-+	if (flags & BTF_LOC_PARAM_OFFSET)
-+		fprintf(fp, "%+d", (int32_t)values[1]);
-+	else if (flags == BTF_LOC_PARAM_REG && btf_vlen(type) == 2)
-+		fprintf(fp, ", %s", btf_reg_name(values[1], regs, regbuf2, sizeof(regbuf2)));
-+	if (flags & BTF_LOC_PARAM_DEREF)
-+		fputc(')', fp);
-+	return true;
-+}
  
--	Elf *elf = elf_begin(fd, ELF_C_READ_MMAP, NULL);
--	if (elf == NULL) {
--		fprintf(stderr, "%s: cannot read %s ELF file.\n",
--			__func__, filename);
--		goto out_close;
-+static void btf_inline_site__fprintf(const struct btf_inline_site *site,
-+				     const struct cu *cu,
-+				     const struct elf_symtab_ctx *elf_symtab,
-+				     const struct elf_register_names *regs,
-+				     const struct elf_functions *elf_functions,
-+				     const struct running_object_ctx *running, FILE *fp)
+-	state = &encoder->func_states.array[encoder->func_states.cnt++];
++	state = &func_states->array[func_states->cnt++];
+ 	memset(state, 0, sizeof(*state));
+ 
+ 	return state;
+ }
+ 
++static void loc__delete(struct loc *loc)
 +{
-+	const struct btf_type *proto;
-+	const uint32_t *param_ids;
-+	struct ftype *ftype;
-+	struct parameter *param;
-+	uint16_t i = 0;
-+	uint64_t section_addr = 0;
-+	uint64_t object_addr_base = UINT64_MAX;
-+	const struct elf_function *containing_function = NULL;
-+
-+	if (!site->function)
++	if (!loc)
 +		return;
-+	proto = btf__type_by_id(cu->priv, site->loc_proto);
-+	ftype = tag__ftype(cu__type(cu, site->function->proto.tag.type));
-+	if (!proto || btf_kind(proto) != BTF_KIND_LOC_PROTO || !ftype)
-+		return;
-+	param_ids = (const uint32_t *)(proto + 1);
-+	if (running) {
-+		section_addr = running_object__section_addr(running, site->section_name);
-+		if (section_addr)
-+			object_addr_base = running->addr_base;
- 	}
-+	if (elf_symtab) {
-+		GElf_Shdr shdr;
-+		size_t index;
- 
--	GElf_Ehdr ehdr;
--	if (gelf_getehdr(elf, &ehdr) == NULL) {
--		fprintf(stderr, "%s: cannot get elf header.\n", __func__);
--		goto out_elf_end;
-+		if (elf_section_by_name(elf_symtab->elf, &shdr, site->section_name, &index))
-+			section_addr = shdr.sh_addr;
-+		object_addr_base = elf__addr_base(elf_symtab->elf);
-+	}
-+	if (elf_functions && section_addr)
-+		containing_function = elf_functions__find(elf_functions,
-+							  section_addr + site->section_offset);
-+	/* Raw or detached BTF has no ELF section VMA; its LOCSEC offset is
-+	 * still useful and is the best address available in that case.
-+	 */
-+	fprintf(fp, "%#llx [",
-+		(unsigned long long)(section_addr ?
-+			 section_addr + site->section_offset : site->section_offset));
-+	if (containing_function)
-+		fprintf(fp, "%s+0x%llx, ", containing_function->name,
-+			(unsigned long long)(section_addr + site->section_offset -
-+					     containing_function->addr));
-+	fprintf(fp, "%s +%#x] %s(", site->section_name, site->section_offset,
-+		function__name(site->function));
-+	ftype__for_each_parameter(ftype, param) {
-+		struct tag *type = cu__type(cu, param->tag.type);
-+		const struct btf_type *location = NULL;
-+		char typebuf[128];
-+
-+		if (i)
-+			fputs(", ", fp);
-+		fputs(tag__name(type, cu, typebuf, sizeof(typebuf), &conf), fp);
-+		if (!conf.no_parm_names && parameter__name(param))
-+			fprintf(fp, " %s", parameter__name(param));
-+		if (i < btf_vlen(proto))
-+			location = btf__type_by_id(cu->priv, param_ids[i]);
-+		fputs(" [", fp);
-+		if (!location || btf_kind(location) != BTF_KIND_LOC_PARAM ||
-+		    !btf_inline_site__fprintf_loc(location, site, object_addr_base,
-+						 regs, fp))
-+			fputs("unavailable", fp);
-+		fputc(']', fp);
-+		++i;
- 	}
-+	if (ftype->unspec_parms) {
-+		if (i)
-+			fputs(", ", fp);
-+		fputs("...", fp);
-+	} else if (i == 0) {
-+		fputs("void", fp);
-+	}
-+	fputs(")\n", fp);
++	free(loc->name);
++	free(loc->params);
++	free(loc);
 +}
 +
-+struct btf_inline_sites {
-+	const struct elf_symtab_ctx *elf_symtab;
-+	const struct elf_register_names *regs;
-+	const struct elf_functions  *elf_functions;
-+	const struct running_object_ctx *running;
-+};
-+
-+static int cu_btf_inline_sites_iterator(struct cu *cu, void *cookie)
++static void btf_encoder_func_state__clear(struct btf_encoder_func_state *state)
 +{
-+	struct btf_inline_site *site;
-+	const struct btf_inline_sites *inline_sites = cookie;
-+
-+	list_for_each_entry(site, &cu->btf_inline_sites, node)
-+		if (!function_name ||
-+		    strcmp(function__name(site->function), function_name) == 0)
-+			btf_inline_site__fprintf(site, cu, inline_sites->elf_symtab,
-+						 inline_sites->regs,
-+						 inline_sites->elf_functions, inline_sites->running,
-+						 stdout);
-+	return 0;
++	free(state->parms);
++	free(state->annots);
++	loc__delete(state->loc);
++	memset(state, 0, sizeof(*state));
 +}
 +
-+static int elf_symtab__show(char *filename)
++static void btf_encoder__drop_func_state(struct btf_encoder_func_states *func_states,
++					 struct btf_encoder_func_state *state)
 +{
-+	struct elf_symtab_ctx ctx;
-+	struct elf_symtab *symtab;
-+	int err = -1;
++	btf_encoder_func_state__clear(state);
++	if (func_states->cnt > 0 && state == &func_states->array[func_states->cnt - 1])
++		func_states->cnt--;
++}
++
+ static bool str_contains_suffix(const char *str, const char * const *suffixes, size_t nr_suffixes)
+ {
+ 	const char *suffix = strchr(str, '.');
+@@ -1298,9 +1361,12 @@ static bool elf_function__has_ambiguous_address(struct elf_function *func)
+ 	return false;
+ }
  
--	struct elf_symtab *symtab = elf_symtab__new(symtab_name, elf);
--	if (symtab == NULL)
--		goto out_elf_end;
-+	if (elf_symtab__init(&ctx, filename) || !ctx.symtab) {
-+		elf_symtab__exit(&ctx);
-+		return -1;
-+	}
-+	symtab = ctx.symtab;
+-static int32_t btf_encoder__save_func(struct btf_encoder *encoder, struct function *fn, struct elf_function *func)
++static int32_t btf_encoder__save_func(struct btf_encoder *encoder, struct function *fn,
++				      struct elf_function *func, struct loc *loc)
+ {
+-	struct btf_encoder_func_state *state = btf_encoder__alloc_func_state(encoder);
++	struct btf_encoder_func_states *func_states = loc ? &encoder->loc_states :
++							    &encoder->func_states;
++	struct btf_encoder_func_state *state = btf_encoder__alloc_func_state(func_states);
+ 	struct ftype *ftype = &fn->proto;
+ 	struct btf *btf = encoder->btf;
+ 	struct llvm_annotation *annot;
+@@ -1313,6 +1379,7 @@ static int32_t btf_encoder__save_func(struct btf_encoder *encoder, struct functi
  
- 	GElf_Sym sym;
- 	uint32_t index;
-@@ -488,12 +1074,8 @@ static int elf_symtab__show(char *filename)
- 		       elf_sym__size(&sym));
+ 	state->addr = function__addr(fn);
+ 	state->elf = func;
++	state->loc = loc;
+ 	state->nr_parms = ftype->nr_parms + (ftype->unspec_parms ? 1 : 0);
+ 	state->ret_type_id = btf_encoder__tag_type(encoder, ftype->tag.type);
+ 	if (state->nr_parms > 0) {
+@@ -1322,7 +1389,7 @@ static int32_t btf_encoder__save_func(struct btf_encoder *encoder, struct functi
+ 			goto out;
+ 		}
  	}
+-	if (encoder->true_signature && state->addr) {
++	if (encoder->true_signature && state->addr && func) {
+ 		int i;
  
--	elf_symtab__delete(symtab);
- 	err = 0;
--out_elf_end:
--	elf_end(elf);
--out_close:
--	close(fd);
-+	elf_symtab__exit(&ctx);
+ 		for (i = 0; i < func->sym_cnt; i++) {
+@@ -1344,7 +1411,7 @@ static int32_t btf_encoder__save_func(struct btf_encoder *encoder, struct functi
+ 	state->uncertain_parm_loc = ftype->uncertain_parm_loc;
+ 	state->reordered_parm = ftype->reordered_parm;
+ 	state->signature_changed = ftype->signature_changed;
+-	if (state->addr) {
++	if (state->addr && func) {
+ 		for (int i = 0; i < func->sym_cnt; i++) {
+ 			if (state->addr != func->syms[i].addr)
+ 				continue;
+@@ -1359,11 +1426,12 @@ static int32_t btf_encoder__save_func(struct btf_encoder *encoder, struct functi
+ 		char *final_name = NULL;
+ 
+ 		/* No location info/optimized + reordered means optimized out. */
+-		if (ftype->reordered_parm && (!param->has_loc || param->optimized)) {
++		if (!loc && ftype->reordered_parm && (!param->has_loc || param->optimized)) {
+ 			state->nr_parms--;
+ 			continue;
+ 		}
+-		if (encoder->true_signature && ftype->signature_changed && param->optimized) {
++		if (!loc && encoder->true_signature && ftype->signature_changed &&
++		    param->optimized) {
+ 			state->nr_parms--;
+ 			continue;
+ 		}
+@@ -1399,6 +1467,9 @@ static int32_t btf_encoder__save_func(struct btf_encoder *encoder, struct functi
+ 	if (ftype->unspec_parms)
+ 		state->parms[param_idx].type_id = 0;
+ 
++	if (loc)
++		return 0;
++
+ 	list_for_each_entry(annot, &fn->annots, node)
+ 		state->nr_annots++;
+ 	if (state->nr_annots) {
+@@ -1422,21 +1493,7 @@ static int32_t btf_encoder__save_func(struct btf_encoder *encoder, struct functi
+ 	}
+ 	return 0;
+ out:
+-	/*
+-	 * state is an interior pointer into func_states.array (returned by
+-	 * btf_encoder__alloc_func_state), not a standalone allocation.
+-	 * Calling free(state) here was heap corruption.
+-	 *
+-	 * Since no further func_state allocations happen between the alloc
+-	 * at the top of this function and this error path, state is always
+-	 * the last element (index cnt-1), so decrementing cnt releases it.
+-	 * If this invariant ever changes (e.g. nested alloc calls are added),
+-	 * this cleanup must be revised.
+-	 */
+-	zfree(&state->annots);
+-	zfree(&state->parms);
+-	memset(state, 0, sizeof(*state));
+-	encoder->func_states.cnt--;
++	btf_encoder__drop_func_state(func_states, state);
  	return err;
  }
  
-@@ -548,6 +1130,8 @@ ARGP_PROGRAM_VERSION_HOOK_DEF = dwarves_print_version;
- #define ARGP_compile		302
- #define ARGP_devel_version	303
- #define ARGP_btf_base		304
-+#define ARGP_elf		305
-+#define ARGP_running		306
+@@ -1600,21 +1657,14 @@ static int saved_functions_combine(struct btf_encoder *encoder,
+ 	return 0;
+ }
  
- static const struct argp_option pfunct__options[] = {
- 	{
-@@ -595,6 +1179,19 @@ static const struct argp_option pfunct__options[] = {
- 		.arg  = "PATH",
- 		.doc  = "Path to the base BTF file for split BTF input",
- 	},
-+	{
-+		.name = "elf",
-+		.key  = ARGP_elf,
-+		.arg  = "PATH",
-+		.doc  = "ELF file used to resolve BTF inline-site addresses and containers",
-+	},
-+	{
-+		.name  = "running",
-+		.key   = ARGP_running,
-+		.arg   = "OBJECT",
-+		.flags = OPTION_ARG_OPTIONAL,
-+		.doc   = "Resolve inline sites against running vmlinux or module OBJECT (Default vmlinux)",
-+	},
- 	{
- 		.key  = 'g',
- 		.name = "goto_labels",
-@@ -615,6 +1212,11 @@ static const struct argp_option pfunct__options[] = {
- 		.name = "inline_expansions",
- 		.doc  = "show inline expansions",
- 	},
-+	{
-+		.key  = 'j',
-+		.name = "inline_sites",
-+		.doc  = "show BTF inline sites and parameter locations",
-+	},
- 	{
- 		.key  = 'I',
- 		.name = "inline_expansions_stats",
-@@ -725,6 +1327,10 @@ static error_t pfunct__options_parser(int key, char *arg,
- 	case 'i': show_inline_expansions = verbose = 1;
- 		  conf_load.extra_dbg_info = true;
- 		  conf_load.get_addr_info = true;	 break;
-+	case 'j': show_inline_sites = true;
-+		  if (conf_load.format_path == NULL)
-+			  conf_load.format_path = "btf";
-+		  break;
- 	case 'I': formatter = fn_stats_inline_exps_fmtr;
- 		  conf_load.get_addr_info = true;	 break;
- 	case 'l': conf.show_decl_info = 1;
-@@ -738,6 +1344,8 @@ static error_t pfunct__options_parser(int key, char *arg,
- 		  conf_load.get_addr_info = true;	 break;
- 	case ARGP_symtab: symtab_name = arg ?: ".symtab";  break;
- 	case ARGP_btf_base: base_btf_file = arg;             break;
-+	case ARGP_elf: elf_filename = arg;                   break;
-+	case ARGP_running: running_object = arg ?: "vmlinux"; break;
- 	case ARGP_no_parm_names: conf.no_parm_names = 1; break;
- 	case ARGP_compile:
- 		  expand_types = true;
-@@ -768,6 +1376,12 @@ static struct argp pfunct__argp = {
- int main(int argc, char *argv[])
+-static void btf_encoder__delete_saved_funcs(struct btf_encoder *encoder)
++static void btf_encoder__delete_func_states(struct btf_encoder_func_states *func_states)
  {
- 	int err, remaining, rc = EXIT_FAILURE;
-+	struct elf_symtab_ctx elf_symtab;
-+	struct elf_functions elf_functions = {};
-+	struct btf_inline_sites inline_sites = {};
-+	struct running_object_ctx running = {};
-+	bool have_inline_elf = false;
-+	bool have_running = false;
+-	struct btf_encoder_func_state *state;
+-
+-	for (int i = 0; i < encoder->func_states.cnt; i++) {
+-		state = &encoder->func_states.array[i];
+-		free(state->parms);
+-		free(state->annots);
+-	}
+-
+-	free(encoder->func_states.array);
+-
+-	encoder->func_states.array = NULL;
+-	encoder->func_states.cnt = 0;
+-	encoder->func_states.cap = 0;
++	for (int i = 0; i < func_states->cnt; i++)
++		btf_encoder_func_state__clear(&func_states->array[i]);
++	free(func_states->array);
++	func_states->array = NULL;
++	func_states->cnt = 0;
++	func_states->cap = 0;
+ }
  
- 	if (argp_parse(&pfunct__argp, argc, argv, 0, &remaining, NULL) ||
- 	    (remaining == argc && class_name == NULL && function_name == NULL)) {
-@@ -788,6 +1402,11 @@ int main(int argc, char *argv[])
- 		fputs("pfunct: insufficient memory\n", stderr);
- 		goto out;
+ /*
+@@ -1784,7 +1834,7 @@ static int btf_encoder__add_saved_funcs(struct btf_encoder *encoder, bool skip_e
  	}
-+	if (running_object && (elf_filename || !show_inline_sites)) {
-+		fputs("pfunct: --running is only supported with --inline_sites and without --elf\n",
-+		      stderr);
-+		goto out_dwarves_exit;
+ 
+ out:
+-	btf_encoder__delete_saved_funcs(encoder);
++	btf_encoder__delete_func_states(&encoder->func_states);
+ 
+ 	return err;
+ }
+@@ -2466,6 +2516,11 @@ int btf_encoder__encode(struct btf_encoder *encoder, struct conf_load *conf)
+ 	err = btf_encoder__add_saved_funcs(encoder, conf->skip_encoding_btf_inconsistent_proto);
+ 	if (err < 0)
+ 		return err;
++	if (encoder->loc_states.cnt) {
++		err = btf_encoder__add_locsec(encoder);
++		if (err)
++			return err;
 +	}
  
- 	dwarves__resolve_cacheline_size(&conf_load, 0);
+ 	for (shndx = 1; shndx < encoder->seccnt; shndx++)
+ 		if (gobuffer__size(&encoder->secinfo[shndx].secinfo))
+@@ -2675,7 +2730,7 @@ static size_t get_elf_section(struct btf_encoder *encoder, uint64_t addr)
+  * values. Prefixes should be added sparingly, and it should be objectively
+  * obvious that they are not useful.
+  */
+-static bool filter_variable_name(const char *name)
++static bool filter_name(const char *name)
+ {
+ 	static const struct { char *s; size_t len; } skip[] = {
+ 		#define X(str) {str, sizeof(str) - 1}
+@@ -2783,7 +2838,7 @@ static int btf_encoder__encode_cu_variables(struct btf_encoder *encoder)
+ 		if (!name)
+ 			continue;
  
-@@ -795,9 +1414,8 @@ int main(int argc, char *argv[])
- 	if (base_btf_file == NULL) {
- 		const char *filename = argv[remaining];
+-		if (filter_variable_name(name))
++		if (filter_name(name))
+ 			continue;
  
--		if (filename &&
--		    strstarts(filename, "/sys/kernel/btf/") &&
--		    strstr(filename, "/vmlinux") == NULL)
-+		if (filename && strstarts(filename, "/sys/kernel/btf/") &&
-+		    strcmp(filename, vmlinux_path__btf_filename()) != 0)
- 			base_btf_file = vmlinux_path__btf_filename();
- 	}
- 
-@@ -820,7 +1438,8 @@ int main(int argc, char *argv[])
- 		goto out_dwarves_exit;
- 	}
- 
--	if (function_name || (!function_name && show_all_matches) || class_name)
-+	if ((function_name && !show_inline_sites) ||
-+	    (!function_name && show_all_matches) || class_name)
- 		conf_load.steal = pfunct_stealer;
- 
- try_sole_arg_as_function_name:
-@@ -844,6 +1463,38 @@ try_sole_arg_as_function_name:
- 
- 	bool is_btf = conf_load.format_path && strcasecmp(conf_load.format_path, "btf") == 0;
- 	cus__for_each_cu(cus, cu_unique_iterator, is_btf ? (void *)1 : NULL, NULL);
-+	if (running_object) {
-+		if (running_object__init(&running, running_object)) {
-+			fprintf(stderr, "pfunct: cannot resolve running object '%s'\n",
-+				running_object);
-+			goto out_elf_symtab_exit;
-+		}
-+		have_running = true;
-+		inline_sites.running = &running;
-+		inline_sites.regs = &running.regs;
-+		inline_sites.elf_functions = &running.functions;
-+	} else if (show_inline_sites && (elf_filename || argv[remaining])) {
-+		const char *inline_elf_filename = elf_filename ?: argv[remaining];
-+
-+		if (elf_symtab__init(&elf_symtab, inline_elf_filename)) {
-+			if (!elf_filename)
-+				goto no_inline_elf;
-+			elf_functions__exit(&elf_functions);
-+			elf_symtab__exit(&elf_symtab);
-+			goto out_cus_delete;
-+		}
-+		have_inline_elf = true;
-+		if (elf_symtab.symtab &&
-+		    elf_functions__collect(&elf_functions, elf_symtab.symtab)) {
-+			elf_functions__exit(&elf_functions);
-+			elf_symtab__exit(&elf_symtab);
-+			goto out_cus_delete;
-+		}
-+		inline_sites.elf_symtab = &elf_symtab;
-+		inline_sites.regs = &elf_symtab.regs;
-+		inline_sites.elf_functions = &elf_functions;
-+	}
-+no_inline_elf:
- 
- 	if (addr) {
- 		struct cu *cu;
-@@ -852,17 +1503,26 @@ try_sole_arg_as_function_name:
- 		if (f == NULL) {
- 			fprintf(stderr, "pfunct: No function found at %#llx!\n",
- 				(unsigned long long)addr);
--			goto out_cus_delete;
-+			goto out_elf_symtab_exit;
+ 		/* A 0 address may be in a "discard" section; DWARF provides
+@@ -2972,6 +3027,7 @@ struct btf_encoder *btf_encoder__new(struct cu *cu, const char *detached_filenam
  		}
- 		function__show(f, cu);
- 	} else if (show_total_inline_expansion_stats)
- 		print_total_inline_stats();
-+	else if (show_inline_sites)
-+		cus__for_each_cu(cus, cu_btf_inline_sites_iterator, &inline_sites, NULL);
- 	else if (expand_types)
- 		cus__for_each_cu(cus, cu_function_iterator, NULL, NULL);
- 	else if (function_name == NULL)
- 		print_fn_stats(formatter);
  
- 	rc = EXIT_SUCCESS;
-+out_elf_symtab_exit:
-+	if (have_running)
-+		running_object__exit(&running);
-+	if (have_inline_elf) {
-+		elf_functions__exit(&elf_functions);
-+		elf_symtab__exit(&elf_symtab);
+ 		bool found_percpu = false;
++		uint64_t addr_base = UINT64_MAX;
+ 		for (shndx = 0; shndx < encoder->seccnt; shndx++) {
+ 			const char *secname = NULL;
+ 			Elf_Scn *sec = elf_section_by_idx(cu->elf, &shdr, shndx, &secname);
+@@ -2979,8 +3035,11 @@ struct btf_encoder *btf_encoder__new(struct cu *cu, const char *detached_filenam
+ 				goto out_delete;
+ 			encoder->secinfo[shndx].addr = shdr.sh_addr;
+ 			encoder->secinfo[shndx].sz = shdr.sh_size;
++			encoder->secinfo[shndx].flags = shdr.sh_flags;
+ 			encoder->secinfo[shndx].name = secname;
+ 			encoder->secinfo[shndx].type = shdr.sh_type;
++			if ((shdr.sh_flags & SHF_ALLOC) && shdr.sh_addr < addr_base)
++				addr_base = shdr.sh_addr;
+ 
+ 			if (encoder->encode_vars & BTF_VAR_GLOBAL)
+ 				encoder->secinfo[shndx].include = true;
+@@ -2992,6 +3051,8 @@ struct btf_encoder *btf_encoder__new(struct cu *cu, const char *detached_filenam
+ 			}
+ 		}
+ 
++		encoder->addr_base = addr_base == UINT64_MAX ? 0 : addr_base;
++
+ 		if (!found_percpu && encoder->verbose)
+ 			printf("%s: '%s' doesn't have '%s' section\n", __func__, cu->filename, PERCPU_SECTION);
+ 
+@@ -3030,7 +3091,8 @@ void btf_encoder__delete(struct btf_encoder *encoder)
+ 
+ 	elf_functions_list__clear(&encoder->elf_functions_list);
+ 
+-	btf_encoder__delete_saved_funcs(encoder);
++	btf_encoder__delete_func_states(&encoder->func_states);
++	btf_encoder__delete_func_states(&encoder->loc_states);
+ 
+ 	free(encoder);
+ }
+@@ -3067,6 +3129,256 @@ static bool ftype__has_uncertain_arg_loc(struct cu *cu, struct ftype *ftype)
+ 	return false;
+ }
+ 
++#define BTF_LOC_PARAM_FBREG	0xffffffff
++
++static int btf_encoder__add_loc_param(struct parameter *param, uint64_t base,
++				      struct loc_param *lp)
++{
++	uint8_t size = param->loc_size ?: sizeof(uint64_t);
++	uint64_t value;
++
++	memset(lp, 0, sizeof(*lp));
++	if ((param->loc_const_value || param->has_const_value) && param->loc_size) {
++		/* The loader currently retains at most one 64-bit constant value. */
++		if (size > sizeof(value))
++			return 0;
++		value = param->loc_value;
++		lp->size = size;
++		lp->flags = BTF_LOC_PARAM_CONST;
++		if (param->loc_addr) {
++			lp->flags |= BTF_LOC_PARAM_ADDR;
++			if (value >= base)
++				value -= base;
++		}
++		if (param->loc_signed)
++			lp->flags |= BTF_LOC_PARAM_SIGNED;
++		lp->values[lp->nvalues++] = value;
++		if (lp->size > sizeof(uint32_t))
++			lp->values[lp->nvalues++] = value >> 32;
++		return 1;
 +	}
- out_cus_delete:
- 	cus__delete(cus);
- 	fn_stats__delete_list();
++	if (param->loc_reg >= DW_OP_reg0 && param->loc_reg2 >= DW_OP_reg0) {
++		lp->size = size;
++		lp->flags = BTF_LOC_PARAM_REG;
++		lp->values[lp->nvalues++] = param->loc_reg - DW_OP_reg0;
++		lp->values[lp->nvalues++] = param->loc_reg2 - DW_OP_reg0;
++		return 1;
++	}
++	if (param->loc_reg >= DW_OP_reg0) {
++		lp->size = size;
++		lp->flags = BTF_LOC_PARAM_REG;
++		if (param->loc_deref)
++			lp->flags |= BTF_LOC_PARAM_DEREF;
++		lp->values[lp->nvalues++] = param->loc_reg - DW_OP_reg0;
++		if (param->loc_offset) {
++			lp->flags |= BTF_LOC_PARAM_OFFSET | BTF_LOC_PARAM_SIGNED;
++			lp->values[lp->nvalues++] = param->loc_offset;
++		}
++		return 1;
++	}
++	if (param->loc_stack) {
++		lp->size = size;
++		lp->flags = BTF_LOC_PARAM_REG;
++		if (param->loc_deref)
++			lp->flags |= BTF_LOC_PARAM_DEREF;
++		lp->values[lp->nvalues++] = BTF_LOC_PARAM_FBREG;
++		if (param->loc_offset) {
++			lp->flags |= BTF_LOC_PARAM_OFFSET | BTF_LOC_PARAM_SIGNED;
++			lp->values[lp->nvalues++] = param->loc_offset;
++		}
++		return 1;
++	}
++	return 0;
++}
++
++static bool btf_encoder__inline_addr_to_section(struct btf_encoder *encoder,
++						Dwarf_Addr addr,
++						uint32_t *section_idx,
++						uint32_t *section_offset)
++{
++	Dwarf_Addr offset, bias;
++	Elf_Scn *section;
++	GElf_Ehdr ehdr;
++	size_t idx;
++
++	/*
++	 * DWFL accounts for ET_REL relocations and identifies the actual
++	 * executable section for ET_EXEC inputs.
++	 */
++	offset = addr;
++	section = dwfl_module_address_section(encoder->cu->dwfl, &offset, &bias);
++	idx = section ? elf_ndxscn(section) : 0;
++	if (idx && idx < encoder->seccnt &&
++	    (encoder->secinfo[idx].flags & SHF_EXECINSTR) &&
++	    offset <= UINT32_MAX)
++		goto found;
++
++	/*
++	 * DWARF PCs in ET_DYN files are link-time addresses, whereas DWFL
++	 * expects runtime addresses. Match PIE and shared-object addresses
++	 * directly against their executable ELF sections instead.
++	 */
++	if (gelf_getehdr(encoder->cu->elf, &ehdr) == NULL ||
++	    ehdr.e_type != ET_DYN)
++		return false;
++
++	idx = get_elf_section(encoder, addr);
++	if (!idx || !(encoder->secinfo[idx].flags & SHF_EXECINSTR))
++		return false;
++
++	offset = addr - encoder->secinfo[idx].addr;
++	if (offset > UINT32_MAX)
++		return false;
++found:
++	*section_idx = idx;
++	*section_offset = offset;
++	return true;
++}
++
++static int btf_encoder__add_inline_expansion(struct btf_encoder *encoder,
++					     struct inline_expansion *ie)
++{
++	struct ftype *ftype;
++	struct loc *loc;
++	struct parameter *param;
++	uint32_t section_idx, section_offset;
++	int err;
++
++	if (!ie->function || !ie->name ||
++	    !btf_encoder__inline_addr_to_section(encoder, ie->ip.addr,
++						 &section_idx, &section_offset))
++		return 0;
++	ftype = &ie->function->proto;
++	loc = calloc(1, sizeof(*loc));
++	if (!loc)
++		return -ENOMEM;
++	loc->name = strdup(ie->name);
++	if (!loc->name) {
++		err = -ENOMEM;
++		goto out;
++	}
++	loc->section_idx = section_idx;
++	loc->section_offset = section_offset;
++	loc->nparams = ftype->nr_parms + (ftype->unspec_parms ? 1 : 0);
++	loc->params = calloc(loc->nparams ? loc->nparams : 1, sizeof(*loc->params));
++	if (!loc->params) {
++		err = -ENOMEM;
++		goto out;
++	}
++	inline_expansion__for_each_parameter(ie, param) {
++		if (param->idx < loc->nparams)
++			btf_encoder__add_loc_param(param, encoder->addr_base,
++						   &loc->params[param->idx]);
++	}
++	err = btf_encoder__save_func(encoder, ie->function, NULL, loc);
++	loc = NULL; /* save_func owns loc after this point, including on error */
++	if (!err)
++		return 0;
++out:
++	loc__delete(loc);
++	return err;
++}
++
++static int btf_encoder__loc_state_cmp(const void *a, const void *b)
++{
++	const struct btf_encoder_func_state *sa = a;
++	const struct btf_encoder_func_state *sb = b;
++	const struct loc *la = sa->loc;
++	const struct loc *lb = sb->loc;
++
++	if (la->section_idx != lb->section_idx)
++		return la->section_idx < lb->section_idx ? -1 : 1;
++	if (la->section_offset != lb->section_offset)
++		return la->section_offset < lb->section_offset ? -1 : 1;
++	return 0;
++}
++
++static int btf_encoder__add_locsec(struct btf_encoder *encoder)
++{
++	struct btf_encoder_func_state *states = encoder->loc_states.array;
++	uint32_t section_idx = UINT32_MAX;
++	int err, id;
++
++	if (!encoder->loc_states.cnt)
++		return 0;
++	if (!btf__add_loc_param || !btf__add_loc_param_value || !btf__add_loc_proto ||
++	    !btf__add_loc_proto_param || !btf__add_locsec || !btf__add_locsec_loc)
++		return -ENOTSUP;
++	qsort(states, encoder->loc_states.cnt, sizeof(*states), btf_encoder__loc_state_cmp);
++	for (int i = 0; i < encoder->loc_states.cnt; i++) {
++		struct loc *loc = states[i].loc;
++		int *param_ids = calloc(loc->nparams ? loc->nparams : 1, sizeof(*param_ids));
++		int proto;
++
++		if (!param_ids)
++			return -ENOMEM;
++		proto = btf_encoder__add_func_proto_for_state(encoder, &states[i]);
++		if (proto < 0) {
++			free(param_ids);
++			return proto;
++		}
++		loc->func_id = btf__add_func(encoder->btf, loc->name, BTF_FUNC_STATIC, proto);
++		if (loc->func_id < 0) {
++			free(param_ids);
++			return loc->func_id;
++		}
++		for (uint16_t j = 0; j < loc->nparams; j++) {
++			struct loc_param *p = &loc->params[j];
++
++			/* A zero id in LOC_PROTO represents unavailable location data. */
++			if (!p->size)
++				continue;
++			param_ids[j] = btf__add_loc_param(encoder->btf, p->size, p->flags);
++			if (param_ids[j] < 0) {
++				err = param_ids[j];
++				free(param_ids);
++				return err;
++			}
++			for (uint8_t k = 0; k < p->nvalues; k++) {
++				err = btf__add_loc_param_value(encoder->btf, p->values[k]);
++				if (err < 0) {
++					free(param_ids);
++					return err;
++				}
++			}
++		}
++		loc->loc_proto_id = btf__add_loc_proto(encoder->btf);
++		if (loc->loc_proto_id < 0) {
++			free(param_ids);
++			return loc->loc_proto_id;
++		}
++		for (uint16_t j = 0; j < loc->nparams; j++) {
++			err = btf__add_loc_proto_param(encoder->btf, param_ids[j]);
++			if (err < 0) {
++				free(param_ids);
++				return err;
++			}
++		}
++		free(param_ids);
++	}
++	for (int i = 0; i < encoder->loc_states.cnt; i++) {
++		struct loc *loc = states[i].loc;
++
++		if (loc->section_idx != section_idx) {
++			char *name;
++
++			section_idx = loc->section_idx;
++			if (asprintf(&name, "inline%s", encoder->secinfo[section_idx].name) < 0)
++				return -ENOMEM;
++			id = btf__add_locsec(encoder->btf, name);
++			free(name);
++			if (id < 0)
++				return id;
++		}
++		err = btf__add_locsec_loc(encoder->btf, loc->func_id,
++					  loc->loc_proto_id, loc->section_offset);
++		if (err < 0)
++			return err;
++	}
++	btf_encoder__delete_func_states(&encoder->loc_states);
++	return 0;
++}
++
+ /*
+  * Pre-compute the actual BTF type id for every DWARF core_id.
+  *
+@@ -3144,6 +3456,7 @@ int btf_encoder__encode_cu(struct btf_encoder *encoder, struct cu *cu, struct co
+ 	struct elf_functions *funcs;
+ 	uint32_t core_id;
+ 	struct function *fn;
++	struct inline_expansion *ie;
+ 	struct tag *pos;
+ 	int err = 0;
+ 
+@@ -3349,11 +3662,21 @@ int btf_encoder__encode_cu(struct btf_encoder *encoder, struct cu *cu, struct co
+ 		if (ftype__has_uncertain_arg_loc(cu, &fn->proto))
+ 			fn->proto.uncertain_parm_loc = 1;
+ 
+-		err = btf_encoder__save_func(encoder, fn, func);
++		err = btf_encoder__save_func(encoder, fn, func, NULL);
+ 		if (err)
+ 			goto out;
+ 	}
+ 
++	if (conf_load->btf_gen_inlines) {
++		cu__for_each_inline_expansion(cu, core_id, ie) {
++			if (!ie->name || !ie->function || filter_name(ie->name))
++				continue;
++			err = btf_encoder__add_inline_expansion(encoder, ie);
++			if (err)
++				goto out;
++		}
++	}
++
+ 	if (encoder->encode_vars)
+ 		err = btf_encoder__encode_cu_variables(encoder);
+ 
+diff --git a/dwarves.h b/dwarves.h
+index b6ddb50..746f94e 100644
+--- a/dwarves.h
++++ b/dwarves.h
+@@ -46,6 +46,13 @@ enum load_steal_kind {
+ 	LSK__ABORT,
+ };
+ 
++/* For older libbpf may need to define BTF location data kinds. */
++#ifndef BTF_KIND_LOC_PARAM
++#define BTF_KIND_LOC_PARAM	20
++#define BTF_KIND_LOC_PROTO	21
++#define BTF_KIND_LOCSEC		22
++#endif
++
+ struct btf_new_opts;
+ 
+ /*
+@@ -58,6 +65,13 @@ __weak extern int btf__add_enum64_value(struct btf *btf, const char *name, __u64
+ __weak extern int btf__add_type_attr(struct btf *btf, const char *value, int ref_type_id);
+ __weak extern int btf__distill_base(const struct btf *src_btf, struct btf **new_base_btf, struct btf **new_split_btf);
+ __weak extern struct btf *btf__new_empty_opts(struct btf_new_opts *opts);
++__weak extern int btf__add_loc_param(struct btf *btf, __u32 size, __u32 flags);
++__weak extern int btf__add_loc_param_value(struct btf *btf, __u32 value);
++__weak extern int btf__add_loc_proto(struct btf *btf);
++__weak extern int btf__add_loc_proto_param(struct btf *btf, __u32 id);
++__weak extern int btf__add_locsec(struct btf *btf, const char *name);
++__weak extern int btf__add_locsec_loc(struct btf *btf, __u32 func,
++				      __u32 loc_proto, __u32 offset);
+ 
+ /*
+  * BTF combines all the types into one big CU using btf_dedup(), so for something
+@@ -104,6 +118,7 @@ struct conf_load {
+ 	bool			reproducible_build;
+ 	bool			btf_decl_tag_kfuncs;
+ 	bool			btf_gen_distilled_base;
++	bool			btf_gen_inlines;
+ 	bool			btf_attributes;
+ 	bool			true_signature;
+ 	uint8_t			hashtable_bits;
+diff --git a/pahole.c b/pahole.c
+index b2047c1..5c05b97 100644
+--- a/pahole.c
++++ b/pahole.c
+@@ -1217,6 +1217,13 @@ static bool layout_check(void)
+ 	return btf__new_empty_opts != NULL;
+ }
+ 
++static bool location_check(void)
++{
++	return btf__add_loc_param && btf__add_loc_param_value &&
++		btf__add_loc_proto && btf__add_loc_proto_param &&
++		btf__add_locsec && btf__add_locsec_loc;
++}
++
+ struct btf_feature {
+ 	const char      *name;
+ 	const char      *option_alias;
+@@ -1244,6 +1251,7 @@ struct btf_feature {
+ 				      attributes_check),
+ 	BTF_NON_DEFAULT_FEATURE(true_signature, true_signature, false),
+ 	BTF_NON_DEFAULT_FEATURE_CHECK(layout, btf_gen_layout, false, layout_check),
++	BTF_NON_DEFAULT_FEATURE_CHECK(inline, btf_gen_inlines, false, location_check),
+ 	BTF_NON_DEFAULT_FEATURE(force_cu_merging, force_cu_merging, false),
+ };
+ 
+@@ -3754,6 +3762,10 @@ try_sole_arg_as_class_names:
+ 		}
+ 	}
+ 
++	if (conf_load.btf_gen_inlines) {
++		/* BTF encoding normally omits inline DIEs; inline BTF needs them. */
++		conf_load.ignore_inline_expansions = false;
++	}
+ 	err = cus__load_files(cus, &conf_load, argv + remaining);
+ 	if (err != 0) {
+ 		if (class_name == NULL && !btf_encode && !ctf_encode) {
 -- 
 2.43.5
 
