@@ -1,77 +1,78 @@
 Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F86D3FD957;
-	Sat,  3 Oct 2026 10:14:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0E0A3B14C7;
+	Sun,  4 Oct 2026 06:50:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.177.32
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791022448; cv=fail; b=r1jz4GsN2su8C+gIDOEFXlusVXdQrbOM1Kt+CDeZcqPn6Xts3avGH2u0wx4BGDZKcL+il6Rg8fT6naBTyDKN+oPgIbLHd45qgeZbzWGoETlibS1M5LqEaUpPEhDyr1MDdrDNSZyHUwRqMIR3vmro4rdE/yrIpqMoSVHRukz+c4g=
+	t=1791096634; cv=fail; b=t9N0cyM0cAuDK1IZhjBiavGNtAyCS6JbwIIrpAfJZBKIkIxrzYEEC+hW5KRRiYdR3ftsN2KozOVuYmfX7I5M0dats2YBAGaAkw+hEIIbm2JQ6QH3AX2xuHtofecPvVOyN8JG/cOhZlaW3Vb18hKe4Wnvqwz1T/dvtE9j86auZek=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791022448; c=relaxed/simple;
-	bh=NetZqI1+Z/XTdsBxLeto7TBJcvcL8LSiVWXk3WAamyE=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=n7P4/hwPyrbvf5KzAh9U+VyfRiNxih2vkXTMAHiysiJq0Xg6rU3JVU0GoL83vg2M8rDjyBgiPlpOYPqTh6P9cKmkQZjq7Gai2S9Kb+9Wah01pa4JZZe5bHWxpZXbFX6YOdR4FvPALk0kMUC7hQvlWYFNdiijjpdsZZhliSBlIlE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=Ep7yKmM/; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=lJ+3EQWz; arc=fail smtp.client-ip=205.220.177.32
+	s=arc-20240116; t=1791096634; c=relaxed/simple;
+	bh=GAipY+u8EvPsND0EOgJVv7dKvRbMFib/bJdj+RVY1r0=;
+	h=Message-ID:Date:Subject:From:To:Cc:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=ZoXCcsLYxCmHx1Kd92LS8wt9jNd1bCWCqcWjYYgz8mWUSYIvKQt5mMjWMFtVNi1v218OPAK5iSOs8IhEdyulDhN5XAjfB50tmyIg/1LU8OHAlgtmk4bvDGTv8UmzTzVlBrlgADvjIKJQxyCG/+NDGCvAW5Q4pc0B2ne5oW4IBMY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=d0ukenRZ; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=f2IYBn5Y; arc=fail smtp.client-ip=205.220.177.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="Ep7yKmM/";
-	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="lJ+3EQWz"
-Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6939KbJ5850506;
-	Sat, 3 Oct 2026 10:13:54 GMT
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="d0ukenRZ";
+	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="f2IYBn5Y"
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6946Z1NC2983954;
+	Sun, 4 Oct 2026 06:50:22 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
 	:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=
-	corp-2025-04-25; bh=hAEeMuG5/fU6liTLKPqrqxahR+zlitnQW8vL0t7OYv4=; b=
-	Ep7yKmM/B4sabOkIcTlQ1NuOxlCju/iLf6r2SD11W0WEY/BlrY7Qkv2PuVtF1+tH
-	ID4m3BzxGoLLk1PYstZeURFBhXyFwuoPALzB6VKpIabT4ThNty601USRAV9oAiwG
-	SgMGvdsGCj0ysvj0JAQmoTN8D1YUffjxR3jmZlSJvHRwa9Bt2Pbz3vRBiTmvN7SU
-	CWSt79ylo9q9XvqMKTm/2QnHoKr7Vl4iyH/4poWo49Op4/bMlgoAnpB03wEnfXq3
-	WmRoZM3icAuCNrXZPew+DGd9mLwQSX3VeWOIW3gx6wDxARSHMzMAVjM7YA7+qyMN
-	QEDeeqNgF18femtH8vH6Nw==
-Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4h2r4b86eu-1
+	corp-2025-04-25; bh=KivGWJ4AySdXwlMtx3wjFYeqkDfFx6Wucf+3h6RkEAI=; b=
+	d0ukenRZ4Dyc7UurLHCeAlu3mfMoReCnQE14MXe8NUp2J+b4nfEShyQRbUPwjG4Q
+	pW8xVBdWRWabmO3xAZNFwxw1bXBHPtD1MLhOG2FOuJP3STc9z1WWWu5gg3pxnDtv
+	1Mr8JomcOTDrPRBZTxYmDgtMDQ64UuyEdRjTMCWc4wVGqf7v8eYa5uagGDrSVym0
+	ypSGrDscc5JylgMSU8p1VvxigoUP4K/+G46ajfJWq/9MgzSNGMuBIUTJ6aHAHxBh
+	J6IUQTIUGwacDNK1/PHJ8nGmoA7PsyYIrsX4JiA+hxVvSLfQR8/ghjnu65PW+Fry
+	ipuG4711CkzfU1/xtkgl7g==
+Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4h2rg1rnhh-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Sat, 03 Oct 2026 10:13:54 +0000 (GMT)
-Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.7/8.18.1.7) with ESMTP id 693A5NF9029166;
-	Sat, 3 Oct 2026 10:13:53 GMT
-Received: from byapr05cu005.outbound.protection.outlook.com (mail-westusazon11010012.outbound.protection.outlook.com [52.101.85.12])
-	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 4h2r5m7tea-1
+	Sun, 04 Oct 2026 06:50:22 +0000 (GMT)
+Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.7/8.18.1.7) with ESMTP id 6946oKDs023451;
+	Sun, 4 Oct 2026 06:50:22 GMT
+Received: from dm1pr04cu001.outbound.protection.outlook.com (mail-centralusazon11010007.outbound.protection.outlook.com [52.101.61.7])
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 4h2r5krgm9-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Sat, 03 Oct 2026 10:13:53 +0000 (GMT)
+	Sun, 04 Oct 2026 06:50:21 +0000 (GMT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=WNEr1XLiMrmu9R/dVxwMyUtXU2adUCPYnh9VqXdvxwZdYkrdh4Hga8wkda4K9AGS1tMJ3WHFxGXoi8Cp6gjvZNr+/Rgl71rjv0gnn+ETNuKKtuL7JERSduTUpRZUOJxqf8/5aRwCkFNIwtiveaE7S8aFge437a8t+x7RMPHfVvA5vL+NjhhEWTYKs76k2+YE+xjtCuROf/XY6BIkY41htN9Irlfqh6B4q1TBGfhx8BFye6sxSWaNPLbL04ysVy0ZLykrye2XmYdBGi5sHdj6AdG/cAMzhjYfQPwElwtgtRC9xOv9bXyW21wUvpKwpmomvkeNztAfkI61QhDNIUby8w==
+ b=Shi5Curt3tlbe8xWd9Y7DnlTB1nDAQuZz+NnZb2zJHMHB0RwHhqbjDahIkm9N8/jmVVF5jVFC9FUMdFVc7VXpYfEGmRfBvIJ0vFgXIemsxC/9wlq8F/0UN8odGdvsVpyn4+H42cPKoejGRgR2btotgbqubsYCwSTc5JxlDQx54Rq0AWPRTKtPdWO5G7U5jwMGRVq2n/Typn8rQCE2mC4alcaw2Y4VR2ZII7baKSvCQSdlFmKWz4xdvCo0W+X/2LUaFOUjb0NLn02FOn6yHsWnSWj5rb2NmezSAbGVpP+i2Q21aAKVaGSDYZcr5uEIx5N55gr0rQ/rdXuHVR2Oin2Xg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=hAEeMuG5/fU6liTLKPqrqxahR+zlitnQW8vL0t7OYv4=;
- b=xdQ1JswsShOIY5AYLKvLRwAM4PSpGDupXHPHdc67WjpqAVJXxNwy1ZIWqiwajAfW66vUmo9YL0Iul0TzPpegaLCFeKlxqy68z2ycCa+Gpxh7I3WRRVDBUUqDXTWrl9bF6XFJ/fcRhLwpydOWk8ZJmgN4HRWs+DtAehI/MDABKbSaCxJxYZ2QgvKFAJ8gGuwoGbUZmrmY4n6sgzdw9h7hsrmWu/ox0TcpltA1RvcXMYyfbFHfydkXD3HH6DKmr3+YoxuqYdOHngr3DuoYkfdYQtjxz/Nb5UG/OYxaoYHJNNYwnGGIy/0okftAx04SoWE61iZsv8AmV2WMhErY0PB3Cg==
+ bh=KivGWJ4AySdXwlMtx3wjFYeqkDfFx6Wucf+3h6RkEAI=;
+ b=yBnccdpX376HNxEUPWePygOF5Z9naQ9wI9vhD4E4YUhoxZplldUE+BjObi/n4F//LGlVMN17s4JWkxYHlkB7G5NfzMiuCfvqu4tnVQM3gRGy2aoQqQ4dFVbOrnoKaj2ZLaDnW/v270Tw1+0aQDutpHTPteSohcsdPqkMYDb8CwHYt5KxwNdUi4SOL3n75H8ELR/4ypMFvrbMkgdyK1ffQpJ7voW2YQK2ZEaIPQwDTReui5qaakwZ+p+CeEt8JuoBJrGlCJA0ShRE08M93YvWCnZz7AVi84exruVtyl3MZpCAHiJIakF7eUCeUgy2YEyy5EmyWsPMKMmPL3BI5yrZiQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
  dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=hAEeMuG5/fU6liTLKPqrqxahR+zlitnQW8vL0t7OYv4=;
- b=lJ+3EQWzyWgalrAjudUmbMFGYAvtihpAL7aEgfLQ3HCxCuG1Y4/0jb2xBZvpz0/LeShMYCyeQKt1neWR8Db5ptV91zj7spe5ipK1mQwgOWCV1tp4M3P19E/oA64OKJ3Yh+e0/ANSOPonm6JuYHWqi8DJWm8IGMbKLRCdOFrXBNk=
+ bh=KivGWJ4AySdXwlMtx3wjFYeqkDfFx6Wucf+3h6RkEAI=;
+ b=f2IYBn5YAjtAxQhv+kOqT2aQAVhHZfGQ/pz2XyA7REV9KkQzIvKYd3f5a8i5EGTr2hp2HttDGoTm7aZ3Yeamm7KvLuQT9XwfxZX0NkH2Sky9X25loyZCuuLuigOtwFMx658RcdwWhRklW0ykUR7QvZfhhAzFClawaElaMvZJy6g=
 Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=oracle.com;
 Received: from BN0PR10MB4901.namprd10.prod.outlook.com (2603:10b6:408:126::19)
- by SA1PR10MB997628.namprd10.prod.outlook.com (2603:10b6:806:4b6::23) with
+ by CH3PR10MB7258.namprd10.prod.outlook.com (2603:10b6:610:124::10) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.472.14; Sat, 3 Oct
- 2026 10:13:51 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.496.14; Sun, 4 Oct
+ 2026 06:50:09 +0000
 Received: from BN0PR10MB4901.namprd10.prod.outlook.com
  ([fe80::19a8:41b4:f519:1b79]) by BN0PR10MB4901.namprd10.prod.outlook.com
- ([fe80::19a8:41b4:f519:1b79%5]) with mapi id 15.21.0496.008; Sat, 3 Oct 2026
- 10:13:51 +0000
-Message-ID: <b845d224-fc7e-4789-b7cb-8decb3c9520d@oracle.com>
-Date: Sat, 3 Oct 2026 11:13:46 +0100
+ ([fe80::19a8:41b4:f519:1b79%5]) with mapi id 15.21.0496.008; Sun, 4 Oct 2026
+ 06:50:08 +0000
+Message-ID: <84593b64-4002-4557-9d4d-e9f7d44acdd5@oracle.com>
+Date: Sun, 4 Oct 2026 07:50:00 +0100
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH dwarves] dwarf_loader: Limit parameter location analysis
  to x86_64 and arm64
+From: Alan Maguire <alan.maguire@oracle.com>
 To: Yonghong Song <yonghong.song@linux.dev>,
         Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
         dwarves@vger.kernel.org
@@ -79,13 +80,13 @@ Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
         bpf@vger.kernel.org, kernel-team@fb.com,
         Nathan Chancellor <nathan@kernel.org>
 References: <20261003084357.4185491-1-yonghong.song@linux.dev>
+ <b845d224-fc7e-4789-b7cb-8decb3c9520d@oracle.com>
 Content-Language: en-GB
-From: Alan Maguire <alan.maguire@oracle.com>
-In-Reply-To: <20261003084357.4185491-1-yonghong.song@linux.dev>
+In-Reply-To: <b845d224-fc7e-4789-b7cb-8decb3c9520d@oracle.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR0P281CA0162.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:b3::9) To BN0PR10MB4901.namprd10.prod.outlook.com
+X-ClientProxiedBy: LO4P123CA0669.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:600:316::19) To BN0PR10MB4901.namprd10.prod.outlook.com
  (2603:10b6:408:126::19)
 Precedence: bulk
 X-Mailing-List: dwarves@vger.kernel.org
@@ -94,228 +95,145 @@ List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN0PR10MB4901:EE_|SA1PR10MB997628:EE_
-X-MS-Office365-Filtering-Correlation-Id: 502f2cda-a927-46f2-a50e-08df2137059a
+X-MS-TrafficTypeDiagnostic: BN0PR10MB4901:EE_|CH3PR10MB7258:EE_
+X-MS-Office365-Filtering-Correlation-Id: c76cda3e-b642-471a-dc79-08df21e3bad5
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|23010399003|1800799024|376014|6133799003|22082099003|18002099003|56012099006|3023799007|10067099003;
+	BCL:0;ARA:13230040|376014|23010399003|366016|1800799024|56012099006|4143699003|10067099003|18002099003|22082099003|6133799003|3023799007;
 X-Microsoft-Antispam-Message-Info:
-	NMO/k03CxNCLuX1vk/mGho8lKPh/VXmpg+04XZ0RYhnE33U3P+s/VFtBmpRX8tOS68KPvNulAPtP8i7brXKp4CrVouxYRWGixXj1/SOZ0ilhg2fOXUDV3xRYZonfRUzdiEmPD26RdiS42kM/tjDHkBVcwtd46k2hiqhzxiHpocziUHUF4o+v44y3Z3QybtS7SW0De1R9QcUMpzZq+qv8Fj4+AManStnZkPez+3SSbxdl2zEP01UAFPzxROtmvkjzZVZNxOxgwGRwHFApzChI8Q8OYctR4UjHl+muNtfSvcERTSqcY1XvyDRu1IO7G8G/eMuP2uDWYagv5ba8CP11HT0H45I+t2Xz16ps1OP3BkoFDXaXiar/uWnWZBwAsvz18iK992Jm0v4mPmyIMExRvvF1qJfwnbWc+wfamIMtEjy6ajiN878YCHuymR3YuEJrRTjhVK/0oMAAtLCbSwDi2yO88JR93L7JhVQm6O5eHzWiUpsLzWDEQ1FVfA/GdnS+TvzID+gg+jUwD9MYOCUW1MhHR3yMUgk4Gz9T9iiLOXr+gt21dUS5XMULTXSEdjvOwqywPxMnsitlqki6rZXnhAB01FoOJL31Sdnw3QWBjMTOvfk2xI5usMkuRQm/WEjU9UdoBUsdNkxGUB4/wtGpkrdlwUS6CLaqQ9ksKxfsd6Y=
+	IlfrSFaO6PJv7otr43Km1CTGNIPS0bS/9/drfxkVF2adgh5wgFunQ07VsoIxss4/BEZdZraisLEO7uZfwIHlgIXHT5N8TRBjfTrKQzxWFApL6GxZyRdY7u9W2IbbK+9BpxdVX8FG2T3NNhQkN1XogMBJ2wyRl2UMWlu4FYzrSPFNawiJfDoPCPxr0RoiI+iagujxSrnE/pquGTsu3Zo7OAYJzzvNQYOAm052ZMJJ7WBiCDek1nWXFaBQ0c360usNWetufX1HZVUhblwiQ3v0UeMNzZskB+i24WFO/Mh4JUoD4/qzrWXuhL12NlEh2VTmqbWoZAOdlLEJ2EVu8dthNYCJZc3CWHANHvhCoULzqXx2NxCCmbMPJ1jxYPuxPLlFPTmXJ/B3tSvVrlXdrR/L90c4v4Yb105LJu1aLOEs7dUp0trNmr53xvb64dUOkQ0IBLXVMBexMx2Ff6tVRWbe0KCpaFbU+E8kzKi7EcnDHdOLodTM/Sk5QrDDI3angR/Pirfm1lsPqNhs2yOfqPZfj8Zz9P428qXi+ZA6jgBJ+FdHeiotWh/dWqAJoRpVhBEKVdDu8jy1hC01ddefS5osJlzOnZnS+YaTPXyjem06VkacoYfl9Z4RMDdpeW4oMjexvlcVJ1lhGepjmRMIKtWNr0nefQJaGBLqKyvZYZtjbqw=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN0PR10MB4901.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(23010399003)(1800799024)(376014)(6133799003)(22082099003)(18002099003)(56012099006)(3023799007)(10067099003);DIR:OUT;SFP:1101;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN0PR10MB4901.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(23010399003)(366016)(1800799024)(56012099006)(4143699003)(10067099003)(18002099003)(22082099003)(6133799003)(3023799007);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?anFRazlPN1ZWNlhqNnZjV29DYXVUM0pZSHdnemNReUFxcjhDNXJzZHVsL2lZ?=
- =?utf-8?B?MUpLK3NneFVJTnBmbitLbHBBOW02eEJIYWtWM2ZTeVdFUE5XZWF3Nmt0b3FL?=
- =?utf-8?B?anVrTWZvcjVLMjRUNEZEYTlDVFRORTh1cDdUZUVtdjFlZGE3S2pBTHBpMlZX?=
- =?utf-8?B?a3Vub0hmOG9Zbk93UWpLOVhsZGQ5YU5wL0Y5TmNtc25kTExuNjVMeDQyWHR4?=
- =?utf-8?B?TkVob0pJSm5YMTRIVFNCUzB2ZFlCaTR3dVFaaUFWT0JnRG9IZEw0SmdMdTdw?=
- =?utf-8?B?akJ2bVI0TUU5QzBOeFB2QS9kSzV6Rm11YUxBU1B4c2pTOVlWZ2FqNVdDYVNn?=
- =?utf-8?B?L01HbkFGc3JLUGxQWWFvaEZydFhKRDg1VG9aVEUxQkR6T25RUGhUaldtWS9a?=
- =?utf-8?B?R0RibGF4dTNMYVVSbmppUS9IQ1hyQjNyMlBtM2o3MUtNam1tNFhsQWNlSHUr?=
- =?utf-8?B?bjhwZFVLQlM5Mm1ROFRvRFU3QldRUHlvZzNORzI2ZEF0UFBKMTFiL25Fejdw?=
- =?utf-8?B?Y3BpUHVkdS9UQlJJUjd2ZTVxdkp2djFxTlhMVVBJa25jTldwdWo0UXc1ZXVp?=
- =?utf-8?B?b1hMTjhXVkZrUisrTW0veWRnOHl6T1BKQy9naUtmMnpZcWx4d2U3elQ0KzNw?=
- =?utf-8?B?SjUxUXNraDlBQ2JQTTdQYVFreXZOYzdpb1MxNWpPQnc3ZU5SQ2ZGM0V4bmNw?=
- =?utf-8?B?NW5adlhHa3dYdHZJU1U4VXE2Tk56WUxZOW1pREYrODlzTlBqMVVXQU9sN1d6?=
- =?utf-8?B?R3NOOXdhcGZpRUJBWmF2cWJrRi85Y3NJcUNpVDNTdlVPYWxBQXp2Zm1FTHJ0?=
- =?utf-8?B?TlBZdXpJM3Y0WUVlQVgvQUxLNzBRQXoySEFkbmxha3Z2ZGY2U2RESHBFaDNi?=
- =?utf-8?B?ampKTkg0ODRnL0RHNlhnS2VERTk5K3R3VHY3S3FMTGE0OFlyczZVWDgzSU5E?=
- =?utf-8?B?MzQ3WHl4TjArZVZrL1VvTVVvM2FOT05pRWRMdWFNMUVWZkxnd0pZb05weXR5?=
- =?utf-8?B?VXJKS3dCS3grMm9EK0pwRVZ6OHNnZUJHbWt6WWdqZHEyNXcwVE12TUZ6ZzRx?=
- =?utf-8?B?dFhmeVcyelFKTWNKbHJ4WnhSMEpXanZMNTVsQVdFR3o2ZStjOHlSRUhhZmRy?=
- =?utf-8?B?TStTQ3dtUno0U1JiMXNBWFE2bkh2eDRqV2RhdTJlRGVtK3p3NENramdpcm9B?=
- =?utf-8?B?eWRqMjFyTXBIVEJ6QVhPaEl5NVhGb2p4cXhSc2lLaG9RVzBmaHVXOFRWMjhX?=
- =?utf-8?B?aWFVL0h1RjBlV0ZSZ3J5WFJ2aEJnYmMrenQwakxUUTVxYXc2MnkyNi9XbDVK?=
- =?utf-8?B?V2QzVGo0ZXF6aXZQbS9Mb2lMbVpnQTZBRnQxc1NyYWFxUy9zc1YxZjVzckJR?=
- =?utf-8?B?NnJJanJqVHJkZzQzVFR2YVB5NXA3RHNDaU05SFBwOUU3enNxbStGcGRMcitv?=
- =?utf-8?B?UFJBTk56TnFNbzZIeWlJUW9oVFZJRk4yUDZBM3JaaW8wNVdYWk1HMEF3SEhr?=
- =?utf-8?B?MmFGNVkxY0E0VS9sTEZkWjlpdXRiNzJRbjRqWW9INC9mYjQrVkUxTnR3UnVY?=
- =?utf-8?B?UmtDUjFXYVk5eVluUzAzWUgrMEJHYlk3NXdDRC85YjVKUXdjNkxXSklYRG1v?=
- =?utf-8?B?VjRWcjNmZUZDMStKQkp2VnlGdDdZdUgyeDY0eEo5TXJEaHgrZUVvMFBGaXZJ?=
- =?utf-8?B?OE1lc3hST2w2eXVzRGx5N1dPWHFvTmRPZThmTDRmTkZBSG9CRFp1a3VCOW40?=
- =?utf-8?B?NmNPWUpSd1gwQkZ0VzdZRzZNU29xcDRjQnczT2I1Q1orak9oTkdaTEhXTVBF?=
- =?utf-8?B?TVVPOVlhZHFtVzkwOUNPRVJKZFJSWm1SUmx4UElQL2lKZVVKaWZTNGNjL00z?=
- =?utf-8?B?VS9pTW9vc3NwSFJUblZ6NzN5dzBBRVQvamlaejdqVTdiOTBaT2VPREJQNk5l?=
- =?utf-8?B?aEJEMWlkcURNNGZxMkRUQXRrelFIekZDZmNtMmZzSDdZUlpudkdNL0toT1Q5?=
- =?utf-8?B?UDE2akFpUHgvVUZ5NHdXS2cyNUNTR1pQeXhDSHlSSjM4bXYxWU1IaVA1eXZ1?=
- =?utf-8?B?MkR3aWwzckVQQTE5aWFSQWFKcms2VTFUNXYwMDdxWWQza1NIOW05QkcyN3ZH?=
- =?utf-8?B?TWVXMmR2T1NtY0h0b3VaSnZ5MmtWc3R4VHA0R0pUZXVGQjdsOURJOWlXaGNZ?=
- =?utf-8?B?ekJmOTAzS2VqRWhGZktMNXJqMGpyVCtZd2RXOEhlL21sbG44K0hlSnlrQW1S?=
- =?utf-8?B?d0FpcDl6YWJERUtCaTAram1xTkR2N3RuYk5HN25rRFJTZ1ZwY2pJcUE2N0pW?=
- =?utf-8?B?QUR5cTQ2bVJ3ZndvanZ5ZDdIYnpRRUxDWkdJQmVqbEU3K0hZaGlsdz09?=
+	=?utf-8?B?b1pJbnczYitEZU1FSTRqTzgreXpmeUNqdWZrY08vVEVKZVpwczN6VDFLR1dx?=
+ =?utf-8?B?cU1vaDIvQS90MWZBMlZ3cWdoTEpKWnMwTjlIRkZPMEFqL2NHMTF2MjNaSnhS?=
+ =?utf-8?B?OGNuSENUNlZDcElWRVZvbjY1NWZRVHlmTVVXVElHSUNaSlVpMFZLa0NZQ0dh?=
+ =?utf-8?B?dHMybWRTdTRWaTZyTW5nbmJPTFdYbzNwNFpJWTNSVWt2MjlhdVUzUHh5OEtk?=
+ =?utf-8?B?bUZOb2wwNjNDeUpKYnNxSnVVaUpMLzkyUzZlYXp4NGdYV3lrT0M2ZWtoNTJK?=
+ =?utf-8?B?Wjh6Nk5VWFJmY2hUSDVUQWRYN2ZYbUlJT1BTWlI3ak1CMkVvVjFUMGNBUDQr?=
+ =?utf-8?B?WUhKTlpjNWNaVTUzQklCQjQrVjVkYzhUZUdvY01SQXhPdzBzOVcvdEtlUGo0?=
+ =?utf-8?B?R2FKYmR1djBOd1M4RE92ZHNCbnpxa3dlK2I0UHRhbnovcGpZMFo3RDd3anU2?=
+ =?utf-8?B?VWJIb1FPcGxRcmdPVFlXV05jYjRuOHJQM3htdWducS9ZelB6bEpVZndHcy9V?=
+ =?utf-8?B?ME9BenhUOXNKOVFwRDJZbGRwVURUZ1dEUno5S1ZKWDFZWGhjVC9LOEsxR0sx?=
+ =?utf-8?B?UjQvb2Z3aTZTVnpiOTluZ2dnek5oVll5UUg1QXgrMUpzZjFGSjBWV2lmWmM2?=
+ =?utf-8?B?WTVNRmFLbDZhYUZ6WjNxWm84ZmNrQ3dhWW1JNWpVaWYyZ0s1M3RacjhzNDZX?=
+ =?utf-8?B?cFNVaTM4NWdQTGcxTTFteVVWeVIrdnVMcVdERFE5YVVrS0RrTE9RclBvbTZq?=
+ =?utf-8?B?OTcyYUM2MXp6S3MveThEQjZuRFd0TFo2ZE9mZ3MxMitnNExjb1phWnFTblZi?=
+ =?utf-8?B?aHBYd25jT1FIZHFoeTRYRTRxZUNPL0JoL2d1UWZiSW9kV3ZHRjBPVm5lL1Jw?=
+ =?utf-8?B?M1dHWFJqbzVOem5yczdzTVVwSWExWW94NUhXYmI1OVdNdWFUS3QvMHI4d2R6?=
+ =?utf-8?B?U2lPOUhvRHVMMjA3S2tJU3RzQWs3SEYxcXRLSHdnZUxSSHprL3FyL1V0ZG9z?=
+ =?utf-8?B?blptQlVDL212djZOYVNwNFZzWGN0YWFpMUFCR0VYUmFhR0VjcXdhZHU0bGNK?=
+ =?utf-8?B?SzYxUDVCazdJTU1vMEpPdU9sb2lBajB2d2dwRVNiRkg3L0ZUUGV1KzRTTXRw?=
+ =?utf-8?B?bEZNUzZzcXVUOUg5SkRsZ0YvYjE2a3Z5ai8rLzZ5eW54VnQ2Q2Y5akJqdERj?=
+ =?utf-8?B?Qi9GYjFFSWRBUFZkTkxOWUp6dUVkS0cyY2lzQlFqS1d5L002NDZwZGtxQTVE?=
+ =?utf-8?B?QUViZ0FYVEp0MkZ3R1ZPY1RQL2dnemZSaXpXaFZRTyt0ZXVRT2VMOFdMdHEr?=
+ =?utf-8?B?MStaaVN2bVF6T3I4SWJzZ2R5YXZTdnlQTGlCeGtJQTBJanB0cDVSWEcrdDFT?=
+ =?utf-8?B?NjBGVFJzdEVLSnp5MDQ4cEsxZHNjWUFKZDkrYVZsREV1OTk4cGx6Qm51cmVO?=
+ =?utf-8?B?QWR1dUlNNFU2cXBDOE1KTFdNdlJ1VW5XZWNuaG9zUTAxVG8zTFF4ZzFZVVcz?=
+ =?utf-8?B?OW96Z3N5TVFYNmFYRjBMeFhXNW9WSW5rOE1WcXNUdmw4cHFLa3g3ekVPbG1k?=
+ =?utf-8?B?c2NvaUJQYnNwZ042cHd4NVBLaGg0dGtVdmtIZ0FiRUNuVFFoM05kc1pHZDdw?=
+ =?utf-8?B?amNpc3ROcWU1Y0E5VjFQWWZ2OTRWWVdOMHN0UXF2emNxNnYvMTJENXF1WDZU?=
+ =?utf-8?B?amZ5MVA0WTRiVFVpSmc1Z2lmN0ZhYnhRaWh1cnNRa3JES3V0Q1dMOVNJcGdq?=
+ =?utf-8?B?VFNHVlBNeU96TUtnaEd6NlEzVUdnNlBsSmczbVRrWGpKYlczcWtHdTdrMis2?=
+ =?utf-8?B?SFNTVUhVS09OMk5ldTZvbStQQnBDT1ByVUZtQkIzaDVjZDg3OC9QVHQvajNJ?=
+ =?utf-8?B?ZEozQUpHbndNN0xRL0Q4WVdIKzh2TTZSMkRvU2tVUkdVU0hZR21GelRLQWYx?=
+ =?utf-8?B?Q2lIdG1Ed3drNWQxN1ozK1FKRHUzMCtWQUpJK053STZKSDJrL25YMjBNQVZF?=
+ =?utf-8?B?Y25SN1JjT2lrQytENHpTVkx0ZHk0WnJ0Tms2eVZhTTRxYlRIZkV3dXVxeVBV?=
+ =?utf-8?B?V25qdkZXZjErNHMwc3UwZXpBdlFyQXVlNVZwbXB3cnQ2RHBkSDl1UktlMXAz?=
+ =?utf-8?B?MnRtZzUwcDIzSVMvQmFJVGpyRitvb2Y5MzIrbTFvdWVBRzhWbWdDdkZmMk84?=
+ =?utf-8?B?a1pzZXZxOWRHQUUzWFFYenZGMDBDeEVQcVhrcWYrTUxUclpNR3p6SXVtd2ln?=
+ =?utf-8?B?S2lqcVNWSUxkdE5QMmt3bGo4V0JER244VCtVR3FuWStRRXdraDhZdjQ4VW9Y?=
+ =?utf-8?B?cFQ1dmxRZTZmbmxodlpoRzNZelNwQXRzVEJmckFBSklPYmhoNkE1dz09?=
 X-Exchange-RoutingPolicyChecked:
-	LwdPYeYuFdg84U8jsEtR1zrzIU5aRatqJV8pA1hxGw8dDFEP9vC779DS4XcDC/Zzz0GeA5z8J2I5XN5t5KumXKhntUL/UwEA58RpdVEW3K4g9V+qCzFDMqQEL7rSfnottjjIpY2sfEFQsqknMCrF0Wo2y4S+ULeKpw5NM5P/EScjSy5i8gBoSS8cEI7VJDPf8UfILRjjHTQgpO4yNeyL0mlNAeW0vPqRIid1INYczCRQXrwLZr81JAueFNjZ2ndJf9NK+qwuvau4t5nVhmj2kGxfcChz4CVQFH0AHMBDH/9PoI0WO4k8CotaM96kRhVMdtujWT9aZf8Wc2eIW9O8IA==
+	UV31pVbe4Gw+vIz68OBIMU2lxON/CdLlJFZrkFWKP9rW5SK6MxTuFG39+0OT9+uWqO4oXUHNjer1hC8IdDHDaJKRYvVcM0Wa2fS1/o9wSZ/MCrQ8CXz7Q6BopTpoaFJtQFZxMPITR6ORf918iC37Ej7ZnFqC8VS5Z9xPkCK3GIidtqi7LbtQ9OE4LGcGeXqi2lf//B0yNtnrwe+I+VEmHnpy4tyH3UVS6kj5W3434QldpDaJjcKDwvklHCrx898212yr2GRg6IoSXGS+9/u/323Ookig9rHGlNw1ZVuKfsGuk/hD58qEhbUvFufU5xb58HqKMIlbDUPdG6shyDZxSA==
 X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
-	i5FwaSbS6aB+S8QhXYQBpqyqEWPSNik5besvizXhpHEyErWzY2fAp5sLSnXy+37GhGBJQjDRuQLdeaflyT4Sk8VtIJcNzbTNCT4ifvD+WTq3WP1lexM05xvDkdmfwlcP4B4EUTu6F7ZCOuCOhHHMCwUz2GNgiQ2+eYLOm6b5dtp57KwkG1gYF73VvwlSEqhJFOd9xnwQbfsCyCSIv+DVYd3Qcu54WdjpcN2gmQkqInhqLykE/8oHyucQ11s8xOX3R1tIK4/d2e3ADXLxG0OyQ8NFwxzRKDezFEl1JawlqcE0xff4fLJo1PX82UMHBAPfTbQj+R3wOImIrKY4TFFFYBk0hbGFgJm000XA3CCP/7Tg47lN8dOm7mnM1OTo0YHAkROyxtbSLGyJCFg/7hvRmJS61qKRHPyQ4T/yjLfy0Hc0NMIWWdLcGtpF9tH8nbywHIrxcaHDqloFlFld6n29mp6rcSAa/7I5JERg3hCEE/eEtgeLEmCV248zdE21z3og6aaK+0fULvN7OXo8h9Lrd6QDE4jyGlJ0SOECWytUy5F1mVSfeBOSJzpATmm9vCh/spNfn24EjUNI6dr/5r71WN9k2Ttl7GXsppkh2haUI40=
+	2qRiI6guYnRsdEU4FCMiS1Vo/XAtot8NW7pMhD2KCF5G+P44dPhUQ7RwbU1/n0Zr6uULNXrHBr5YC4HAir66RYMlht5YM2nzPXrzlLylv7gNUU4KuwRVx3qha/BDyv5IyQKsxQemi7AhtNeOELgV8ZjSJCqJAVuhwkWUQJraY2X3D/E9WnOWO0UWIq/V/ojwKKJmiixLHtk7SuReQv9dFNF5YLN7U4RjtfoDdHdYKpWqYB/fa2wlwt+DUhywLs38UAfvDmt4qhcuDjdQB86rmZDjamNF/Pru2OdT2j+eEFYwSh0kZntqIbyxVFYYw+3r/awEGXqT1G78eG6ZWVz+FqQmjJO8wePHfxhdVTXhkkibMtDM/ncXQc8wSUrHd6IdfyOagQl2z180IxwZe4pTXp0bdvhKGXJ7sOkDV7e6cxZ/MF+UpOmT42j6uw4h49R8ZudMGkXnfEo278YQWV5Tx56elg/6MCSnL4L6HVWl0r+9aNQW6+KnleYld0je9bXrI1R88ONAiCOgRUdvGCY6QfwvgmIZArvIiPgK0rbyaFmugu6xuhM8BSe76ugPuAWWja/FWS5dqFmdpxBJN3d2fEWD1V/tLBuZ04V6pk0kq1Y=
 X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 502f2cda-a927-46f2-a50e-08df2137059a
+X-MS-Exchange-CrossTenant-Network-Message-Id: c76cda3e-b642-471a-dc79-08df21e3bad5
 X-MS-Exchange-CrossTenant-AuthSource: BN0PR10MB4901.namprd10.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Oct 2026 10:13:51.2219
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Oct 2026 06:50:08.8050
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: FyFJVMdRPj1VD87YPet2iiGTT7mpG3ce9z8o2IU3nMwuvLCcSF4g5QypHOzqhaM41XTYKf7b7E/q79eTyJtrkg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR10MB997628
+X-MS-Exchange-CrossTenant-UserPrincipalName: pzWrVm3TTpa01lbcABJXpZwocDAW54H2kxc4bWhAPv5wt3IQPJlS//wkW7vRkv9BXYFeGTaWbeFHDo/xKF7Wuw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR10MB7258
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
- definitions=2026-10-02_07,2026-10-02_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0
- phishscore=0 adultscore=0 malwarescore=0 suspectscore=0 lowpriorityscore=0
- mlxscore=0 bulkscore=0 mlxlogscore=999 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.19.0-2609040000 definitions=main-2610030040
-X-Proofpoint-GUID: aKVhNDllb-Wr1I53QQCKMDh5PrKa1IDd
-X-Proofpoint-ORIG-GUID: aKVhNDllb-Wr1I53QQCKMDh5PrKa1IDd
-X-Authority-Analysis: v=2.4 cv=BIQmP1QG c=1 sm=1 tr=0 ts=6ac0d562 b=1 cx=c_pps
- a=zPCbziy225d3KhSqZt3L1A==:117 a=zPCbziy225d3KhSqZt3L1A==:17
+ definitions=2026-10-04_01,2026-10-02_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0
+ bulkscore=0 mlxscore=0 lowpriorityscore=0 spamscore=0 mlxlogscore=999
+ suspectscore=0 malwarescore=0 phishscore=0 classifier=spam adjust=0
+ reason=mlx scancount=1 engine=8.19.0-2609040000 definitions=main-2610040027
+X-Authority-Analysis: v=2.4 cv=afj0Dhot c=1 sm=1 tr=0 ts=6ac1f72e b=1 cx=c_pps
+ a=e1sVV491RgrpLwSTMOnk8w==:117 a=e1sVV491RgrpLwSTMOnk8w==:17
  a=6eWqkTHjU83fiwn7nKZWdM+Sl24=:19 a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19
  a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
  a=660iZSQnnn4A:10 a=GoEa3M9JfhUA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=jiCTI4zE5U7BLdzWsZGv:22 a=x4eqshVgHu-cdnggieHk:22 a=VwQbUJbxAAAA:8
- a=SGzt5zz6rJIIrbZQKIYA:9 a=QEXdDO2ut3YA:10 a=5yU3S35YU4bGjq-dph-N:22
- a=Bho9c0fBagfJEIQBS7DQ:22 cc=ntf awl=host:12107
-X-Proofpoint-Spam-Info: AW1haW4tMjYxMDAzMDA0MCBTYWx0ZWRfX/8xhTyp9oZCR
- pFUfPMYtpEZw+tF0mDCBfnd2IItn1i35gq6Tcfscd5Ytkshp3EsXgOY3T8rRG0+Koc2PZgps2rc
- rjJnlJ5ZZ1e9Jg2Jq/GUcFFn4jJ++UVWdD86uhZsTgvKCxq/dEF+
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMDAzMDA0MCBTYWx0ZWRfX8bb7EGnshPM5
- YxAoY2x+rosePYw6+361L/C9tdCZwIN6zh0RQ4jkyeFrSsj3gPmaownlgfgFB/lTwlpQCEo8G+7
- YJN5g4vkduF6b4yMJxN/BTw7Uk3LfCcOYEvM1HU7RsPVvSQoG1B22RCCjgOI1BZ4peOUSNx7jE/
- fEBaFWd16Re2Cu1DtBKBhkBq+72Whx0TRqOuaiGcZnSoporyDziBa8vxY9A94/LljHaC3ksiaOV
- KzRVgWxg8mJHU4mryJbh/kmkV+Gbbm1u+U6ZjyOkPSAoElA09XX9vYnN3ueBkubHx147mOkm0hD
- kjJZ8bFgLf5XrMeqL9/QQ428zUnEpstIn8ta+6qGZj0iJ0BvrCTD/Dr4mCXaeq1AKlqnQ/QqWU5
- 9eCRNZdbQncr9nVxdbcXU5VhlNA/FAFjNirdjTDsRmJBZNKKLL/4PczTYC29UesZ0NOazUULXBC
- TtHKwq1XbuT7D9Z0LJwl8+6AgSttxv+t/pt6udb4=
+ a=jiCTI4zE5U7BLdzWsZGv:22 a=o5oIOnhZENCTenyL_yNV:22 a=VwQbUJbxAAAA:8
+ a=A68iVgu3ph3kzwdLPyYA:9 a=QEXdDO2ut3YA:10 a=5yU3S35YU4bGjq-dph-N:22
+ a=Bho9c0fBagfJEIQBS7DQ:22 cc=ntf awl=host:13537
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMDA0MDAyNiBTYWx0ZWRfX0q9euKhIxssm
+ qO6Pqy+JMy5/o9Yez4NDLwGGkdpm5+yRcuD54N8OYo+6INOaCF/TLcYm0iEtGSH+ZAWZF1sLop4
+ ETfITK3rhHeQeHgERLSHfiUykBvars61EcQ7mmj04TTA9BQewDCvbTxfxjA+jitoas/uIQfep/F
+ OfcWtsBzTta9Gv1k8EGPlJ3P0610+8Yx6t7lAY2+Gu1lx2eVYg1QPZNUjA0o3AxwncnTP0VnJ1i
+ /+za43n1yOdCzqEHIp7rysapk/Mt19zmxnOgeCh5AA1rTzwxwLpgraAqfuockWF4XWwn4A7APhl
+ gq1V5vaQZRpAc3VQSfeSdMiM+gpisK7TgnY8BZMH9ASbbhsHogX3hJDLSzBMYSjUvOPysBl2qJR
+ 5o4Wfu/GrLStKUBGm//11aIfa0FJin3Ao4AIArgnwyoUq+pzetCy7iQLzyND/IdbMFCIrRdD9Yg
+ a3nfVOXeiSrfciAORvJamCFpw3Q7e1w5tuDTqSq0=
+X-Proofpoint-Spam-Info: AW1haW4tMjYxMDA0MDAyNiBTYWx0ZWRfXwguV/7QaxpBv
+ D5SkU7IF82oFmMru9TveXqJ6y7eQisQfmHM5WWssbX7bGVb9f6J5FUNX2FTcZWqlJqvEEWjhjkK
+ HKB/96HxVsE739IH2/XBtdob85AfYHiwof9Kqp2pxJAsKHbPaXDB
+X-Proofpoint-GUID: ZWZ3Yxn66zSYmgZH9zX0_-KbmbPqIAcH
+X-Proofpoint-ORIG-GUID: ZWZ3Yxn66zSYmgZH9zX0_-KbmbPqIAcH
 
-On 03/10/2026 09:43, Yonghong Song wrote:
-> Since commit e96290426e18 ("dwarf_loader: Analyze per-parameter
-> information for true signatures"), clang-built kernels on arm, powerpc
-> and riscv lose most of their functions from BTF, and resolve_btfids
-> emits thousands of warnings like:
+On 03/10/2026 11:13, Alan Maguire wrote:
+> On 03/10/2026 09:43, Yonghong Song wrote:
+>> Since commit e96290426e18 ("dwarf_loader: Analyze per-parameter
+>> information for true signatures"), clang-built kernels on arm, powerpc
+>> and riscv lose most of their functions from BTF, and resolve_btfids
+>> emits thousands of warnings like:
+>>
+>>   WARN: resolve_btfids: no BTF func for kfunc bpf_xdp_get_xfrm_state in xfrm_state_kfunc_set
+>>   WARN: resolve_btfids: unresolved symbol bpf_xdp_get_xfrm_state
+>>
+>> For clang functions whose signature did not change, the new
+>> function__match_clang_parameter_locations() checks that each parameter
+>> lives in its expected ABI argument register. arch__nr_register_params()
+>> returns a non-zero count for powerpc, riscv, mips, arc and sparc, but
+>> arch__set_register_params() only fills in the register map for s390,
+>> x86_64, arm and arm64, leaving the other entries at -1. Every parameter
+>> held in a register then fails the match, the function is marked
+>> unexpected_reg and is skipped. The previous per-parameter check in
+>> parameter__new() ignored unknown expected registers, so this is a
+>> regression. 32-bit arm has a register map, but it does not match
+>> AAPCS32 (only r0-r3 carry arguments, and 64-bit arguments need an
+>> even/odd register pair).
+>>
+>> The parameter location matching and true signature reconstruction have
+>> only been validated on x86_64 and arm64. Add cu->param_loc_supported and
+>> set it only for those two architectures. On other architectures, skip
+>> the clang register matching and do not do true signature analysis in
+>> the DWARF loader or the BTF encoder, keeping the basic optimized-out
+>> parameter detection that existed before.
+>>
+>> With a riscv64 or powerpc64le object built by clang 22, functions such
+>> as int f(int a, int b) are now encoded again instead of being skipped
+>> with "unexpected register usage for parameter". x86_64 and arm64 output
+>> is unchanged, with and without true_signature.
+>>
+>> Fixes: e96290426e180703 ("dwarf_loader: Analyze per-parameter information for true signatures")
+>> Reported-by: Nathan Chancellor <nathan@kernel.org>
+>> Tested-by: Nathan Chancellor <nathan@kernel.org> # build
+>> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 > 
->   WARN: resolve_btfids: no BTF func for kfunc bpf_xdp_get_xfrm_state in xfrm_state_kfunc_set
->   WARN: resolve_btfids: unresolved symbol bpf_xdp_get_xfrm_state
-> 
-> For clang functions whose signature did not change, the new
-> function__match_clang_parameter_locations() checks that each parameter
-> lives in its expected ABI argument register. arch__nr_register_params()
-> returns a non-zero count for powerpc, riscv, mips, arc and sparc, but
-> arch__set_register_params() only fills in the register map for s390,
-> x86_64, arm and arm64, leaving the other entries at -1. Every parameter
-> held in a register then fails the match, the function is marked
-> unexpected_reg and is skipped. The previous per-parameter check in
-> parameter__new() ignored unknown expected registers, so this is a
-> regression. 32-bit arm has a register map, but it does not match
-> AAPCS32 (only r0-r3 carry arguments, and 64-bit arguments need an
-> even/odd register pair).
-> 
-> The parameter location matching and true signature reconstruction have
-> only been validated on x86_64 and arm64. Add cu->param_loc_supported and
-> set it only for those two architectures. On other architectures, skip
-> the clang register matching and do not do true signature analysis in
-> the DWARF loader or the BTF encoder, keeping the basic optimized-out
-> parameter detection that existed before.
-> 
-> With a riscv64 or powerpc64le object built by clang 22, functions such
-> as int f(int a, int b) are now encoded again instead of being skipped
-> with "unexpected register usage for parameter". x86_64 and arm64 output
-> is unchanged, with and without true_signature.
-> 
-> Fixes: e96290426e180703 ("dwarf_loader: Analyze per-parameter information for true signatures")
-> Reported-by: Nathan Chancellor <nathan@kernel.org>
-> Tested-by: Nathan Chancellor <nathan@kernel.org> # build
-> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
+> Thanks; fix looks low-risk, high-value to me so I will apply shortly unless
+> anyone objects..
+>
 
-Thanks; fix looks low-risk, high-value to me so I will apply shortly unless
-anyone objects..
-
-> ---
->  btf_encoder.c  |  2 +-
->  dwarf_loader.c | 23 +++++++++++++++++++++--
->  dwarves.h      |  1 +
->  3 files changed, 23 insertions(+), 3 deletions(-)
-> 
-> diff --git a/btf_encoder.c b/btf_encoder.c
-> index d6b9be6..2f137ee 100644
-> --- a/btf_encoder.c
-> +++ b/btf_encoder.c
-> @@ -2913,7 +2913,7 @@ struct btf_encoder *btf_encoder__new(struct cu *cu, const char *detached_filenam
->  		encoder->tag_kfuncs	 = conf_load->btf_decl_tag_kfuncs;
->  		encoder->gen_distilled_base = conf_load->btf_gen_distilled_base;
->  		encoder->encode_attributes = conf_load->btf_attributes;
-> -		encoder->true_signature = conf_load->true_signature;
-> +		encoder->true_signature = conf_load->true_signature && cu->param_loc_supported;
->  		encoder->verbose	 = verbose;
->  		encoder->has_index_type  = false;
->  		encoder->need_index_type = false;
-> diff --git a/dwarf_loader.c b/dwarf_loader.c
-> index 1e5363a..9f9b9c9 100644
-> --- a/dwarf_loader.c
-> +++ b/dwarf_loader.c
-> @@ -1518,6 +1518,22 @@ static bool arch__arg_align_two_regs(const GElf_Ehdr *ehdr)
->  	}
->  }
->  
-> +/*
-> + * Architectures whose argument register mapping has been validated for
-> + * matching clang parameter locations and reconstructing true signatures.
-> + * Other architectures keep only the basic optimized-out detection.
-> + */
-> +static bool arch__param_loc_supported(const GElf_Ehdr *ehdr)
-> +{
-> +	switch (ehdr->e_machine) {
-> +	case EM_X86_64:
-> +	case EM_AARCH64:
-> +		return true;
-> +	default:
-> +		return false;
-> +	}
-> +}
-> +
->  static struct template_type_param *template_type_param__new(Dwarf_Die *die, struct cu *cu, struct conf_load *conf)
->  {
->  	struct template_type_param *ttparm = tag__alloc(cu, sizeof(*ttparm));
-> @@ -3777,7 +3793,8 @@ static void function__analyze_parameter_locations(struct function *fn, struct cu
->  {
->  	struct ftype *ftype = &fn->proto;
->  	struct parameter *pos;
-> -	bool true_sig_enabled = conf->true_signature && ftype->signature_changed;
-> +	bool true_sig_enabled = cu->param_loc_supported && conf->true_signature &&
-> +				ftype->signature_changed;
->  	bool check_locations = !cu->producer_clang || ftype->signature_changed;
->  	int reg_idx = 0;
->  
-> @@ -3785,7 +3802,8 @@ static void function__analyze_parameter_locations(struct function *fn, struct cu
->  		/* Producer is clang and the signature was not changed: match
->  		 * each parameter against its expected ABI argument register.
->  		 */
-> -		function__match_clang_parameter_locations(ftype, cu);
-> +		if (cu->param_loc_supported)
-> +			function__match_clang_parameter_locations(ftype, cu);
->  		return;
->  	}
->  
-> @@ -4533,6 +4551,7 @@ static int cu__set_common(struct cu *cu, struct conf_load *conf,
->  	cu->nr_register_params = arch__nr_register_params(&ehdr);
->  	cu->agg_use_two_regs = arch__agg_use_two_regs(&ehdr);
->  	cu->arg_align_two_regs = arch__arg_align_two_regs(&ehdr);
-> +	cu->param_loc_supported = arch__param_loc_supported(&ehdr);
->  	arch__set_register_params(&ehdr, cu);
->  	return 0;
->  }
-> diff --git a/dwarves.h b/dwarves.h
-> index f3453ed..6b75ece 100644
-> --- a/dwarves.h
-> +++ b/dwarves.h
-> @@ -305,6 +305,7 @@ struct cu {
->  	uint8_t		 producer_clang:1;
->  	uint8_t		 agg_use_two_regs:1;	/* An aggregate like {long a; long b;} */
->  	uint8_t		 arg_align_two_regs:1;	/* An over-aligned arg starts on an even register */
-> +	uint8_t		 param_loc_supported:1;	/* Parameter location analysis is validated for this arch */
->  	uint8_t		 nr_register_params;
->  	int		 register_params[ARCH_MAX_REGISTER_PARAMS];
->  	int		 functions_saved;
+applied, thanks.
 
