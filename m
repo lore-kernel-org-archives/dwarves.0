@@ -1,47 +1,47 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794673526;
-	b=M4+05tnxN60mc6qaUrzEztIOh8ccBOLM+bBa7zldJ6wCt0IFrNszB+Z31S0aVyo/rYkQ
-	 B4/ZYtlsTDw4oi+dl6GcXNz72hRuG3mCzYyYKKzrU1RbrouQYu7qQM0mbxNAcUj2ojQdr
-	 wqZvQbWEOPd4usYv08YjInPkMx9LRav0JrP0X+kJA4askV9k1U5mhbSS2lW4UUD/gNTLa
-	 wDpexeOMM4V6LuTxihmB0otYBPtmp7rz/Gz9uLpKY0XDxiEcNnaAnJiNvn8/olOYG2rQD
-	 KBGuVXOVz6ARoKysc8k2tFBN90hrzOpEO8xKEqGV3FB2eyngg8mvdjUdhTzNNyS3SHg==
+	t=1794673664;
+	b=Zaw7q8SbFD5XEdEcO5lOvXXsXC4t2M2NQR1hk2TTbngWMv+9X/azKV/6FleuMdnb6WEW
+	 HFj9lQd9VEoc0ZgwqL0YegR+GiTI26n2bFzLsJmqpk0ObmyvzuTJy9tF3Nb1Xzeyay6/Z
+	 N1x16/qyGil3LMwz72akMHA8IGXztnWRsHuEnSuvZrGQzXq6tGXTY+okHOUmw37zFtQMF
+	 n6oI4bFKxwKIzda/d3fTBhG65kE+TlfaAaxVR1jDCxxSvBBDh4fWXOo2GRFEx9Nx+iWqv
+	 qAlolB1QupICG5b1DHx7s4nmxfSBIScOhOwaBu6WQQYvBH0rNNiiAYkTSxndGhXGvWg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794673526;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794673664;
 	h=Received:DKIM-Signature:Message-ID:Date:MIME-Version:User-Agent:
 	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
 	 Content-Type:Content-Transfer-Encoding;
-	bh=SqQMxeEG/rV3oOFhBA4WNyw3pi2YPDOttfW60TkJK8g=;
-	b=SBERa0YtmK3oxk59hW/xab7xIEPM2ELHbZK1O6M7LF9loC7hwl3BuMWRRurebAEVa8vo
-	 6CXBhTwiBqBqpFBwEftW+WFkLNiUqhUUVrmGd8V5U/lVWrTLf4w4lbo3llyKbXj5+d97L
-	 FC5OnrPVkJ9dDLeI9DNFH9Yb+o08fhx4X7NHZb3YbduvE9jbMOEYCt3HerzTn64YZgxsr
-	 cloc9ssGNcr0iWUr9wtlMNbPhPhK44GJ00xK8XazuuNfVowePZjNNAnrfakJ1k4HyXsWV
-	 NrRSY+rrHNIzEoiA/U5OnnS+JrDSkJlsHwY7bd0AOeJT3SwDQg/Mmgy2lWcJLy7af0A==
+	bh=cKsXMJm7qHtIeItOHanqHmAChvQOpfvaDdCmiUL5Dq4=;
+	b=H+eAlqmCQb7rYHlgMMPLQvGsyK9jPsBGdlqWoADJ+CFtV3BYmWL1Qt7fhuBsPtTM3OZO
+	 RBmuoj0LnxPXLNTs3armEivWkzXTRmre9j65v6RtlYjIrhThPqwrRUakxcb++oB5Beees
+	 /YebkfcTtG3u3eUxJem3EiT7LGyJ/iM49ZkHwy+2r09/+ynOyjOLPHAX3RTQ9l8hgo+sv
+	 PBvahcRdnoAa569pN28urC6mWcQexUgAQuPq8oCkjM/xWTrJAsr8Or9jT7ojMpl2f02lb
+	 HVRaJoQxvCkR7kkb9E3OEY4WEWjBPMT1ANBuKtNMt7m0bV3CYmTwBL70mibotLKwiPw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=IKzVTdBA;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=EkLeA9CX;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47362606A323;
-	Sat, 14 Nov 2026 16:25:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 889CF606A32E;
+	Sat, 14 Nov 2026 16:27:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=IKzVTdBA
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A2FE1F000C8;
-	Sat, 14 Nov 2026 16:25:23 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=EkLeA9CX
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08F7A1F000C4;
+	Sat, 14 Nov 2026 16:27:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794673525;
-	bh=SqQMxeEG/rV3oOFhBA4WNyw3pi2YPDOttfW60TkJK8g=;
+	s=k20260515; t=1794673664;
+	bh=cKsXMJm7qHtIeItOHanqHmAChvQOpfvaDdCmiUL5Dq4=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=IKzVTdBA5GhsDqOGj5/JgPLtTAeeQAoS1iNi5qTYlFaymdTUg4EoBmT8bk5L/7ly8
-	 PpTU7PlC94F5dtD6fR9DuYigP+UtWRkspm+m4dpgz41gs0gd0ei61FRmed8SuaNmAx
-	 +o7HpgmRX2gEmGNAxA9q5UOz7Kx9jwch1837JE3i8r7kc7jRQwu4wq0gADyS8dPi3K
-	 Juqt6AQIaqx5wkDTJke6yvHUv1xYNE2kjJSMc4mRV9OQTYlq5fClD7nzEXJN2GBf3z
-	 iBxbFO2WxB5wCRfIwBbk/P4xqI1y025wvR75KrdKp43Rhw0QEBE7Nl5pwlws6QFrkm
-	 HmCHVqZWc1XCQ==
-Message-ID: <31d0e915-8a6c-475f-9208-5622cf0a81d7@kernel.org>
-Date: Sat, 14 Nov 2026 16:25:22 +0000
+	b=EkLeA9CX02WM39SMgF/N3Oz2x4QDhvIf/Xh8J5fgM+MViwUbmldevE7jXqe0i91Kl
+	 WpQtdQE5/wH3ANkfWDd4j/ybNMP6Rh8cXxxk18FGJBjnQoeJ7qfJ7iWiDegIV9+jox
+	 5g07Itqy86vPq38ln/rwd6P2XwSHa7C4d9cyRmVZur12AofoTLSXRSvIzzdnSwWhHg
+	 ysj1PT380/TDbcvefZOpQJbXFv2A21u73yUpDV+JUXEU7Ma8XjjtcTi1DPOWAGVkpF
+	 Pch/VQTyiGA5CR4g4I3zPRQPdF1yHeNLL//+q/2xmHAxXQEzyrYjVefDfw4jVqkoU/
+	 BPS6NMjJR4HXQ==
+Message-ID: <4a5157e7-2261-49cd-80ef-38dcc2699741@kernel.org>
+Date: Sat, 14 Nov 2026 16:27:41 +0000
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Post: <mailto:dwarves@vger.kernel.org>
@@ -52,173 +52,69 @@ List-Owner: <mailto:dwarves+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH dwarves v2] btf_encoder: Keep the source prototype of
- kfuncs
-To: Yonghong Song <yonghong.song@linux.dev>,
- Alan Maguire <alan.maguire@oracle.com>,
- Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>, dwarves@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- bpf@vger.kernel.org, kernel-team@fb.com, Breno Leitao <leitao@debian.org>
-References: <20261112161129.1903805-1-yonghong.song@linux.dev>
+Subject: Re: [PATCH dwarves v2 0/2] dwarf_loader: Fix --lang_exclude on merged
+ CUs
+To: Alan Derk <linux@alanderk.com>
+Cc: Arnaldo Carvalho de Melo <acme@kernel.org>,
+ Alan Maguire <alan.maguire@oracle.com>, bpf@vger.kernel.org,
+ dwarves@vger.kernel.org, rust-for-linux@vger.kernel.org
+References: <20261010005227.976-1-linux@alanderk.com>
+ <87dfc1f8-6ef4-424c-a48d-62e935eeeb28@kernel.org>
+ <CAPLSpGbV5RTSuMZPX=UgzniPtoT7jup7pCGw_Rt2tqiejKXmng@mail.gmail.com>
 Content-Language: en-GB
 From: Alan Maguire <almagui@kernel.org>
-In-Reply-To: <20261112161129.1903805-1-yonghong.song@linux.dev>
+In-Reply-To: <CAPLSpGbV5RTSuMZPX=UgzniPtoT7jup7pCGw_Rt2tqiejKXmng@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 11/12/26 4:11 PM, Yonghong Song wrote:
-> The location based checks can drop kfuncs from BTF even though their ABI
-> did not change. With the arm64 KCSAN setup in the report, resolve_btfids
-> fails with:
+On 11/5/26 4:48 PM, Alan Derk wrote:
+> On Wed, Nov 4, 2026 at 7:38 AM Alan Maguire wrote:
+>> Thanks for doing this work! Sorry for the delay in getting to it, I'm
+>> looking at the patches now.
 > 
->   WARN: resolve_btfids: no BTF func for kfunc bpf_tcp_ops_set_rcvlowat in bpf_tcp_ops_set_rcvlowat_kfunc_set
->   WARN: resolve_btfids: unresolved symbol bpf_tcp_ops_set_rcvlowat
-> 
-> The location list of 'rcvlowat' starts after the function entry, in a
-> callee-saved register, so the function is marked unexpected_reg and
-> skipped. scx_bpf_tid_to_task() hits the same skip through a
-> different DWARF pattern.
-> 
-> Kfuncs are defined with __bpf_kfunc ("__used __retain __noclone
-> noinline"), so the compiler keeps the calling convention of the C
-> prototype. Odd parameter locations of a kfunc are debug info artifacts,
-> not ABI changes.
-> 
-> For kfuncs, do not set the flags when saving the state,
-> keep all source parameters, and skip the location based checks, also in
-> btf_encoder__add_saved_funcs() where saved_functions_combine() can merge
-> the flags back in. The inconsistent prototype and ambiguous address
-> checks still apply.
-> 
-> Kfuncs were only collected with decl_tag_kfuncs, which the kernel no
-> longer passes since commit 692393104909 ("resolve_btfids: Emit bpf_kfunc
-> and bpf_fastcall decl tags"). Collect them whenever BTF is encoded; the
-> decl tags are still only emitted with decl_tag_kfuncs.
-> 
-> With this change, bpf_tcp_ops_set_rcvlowat() and scx_bpf_tid_to_task()
-> are encoded again, and no other function in vmlinux BTF changes.
-> 
-> Reported-by: Breno Leitao <leitao@debian.org>
-> Closes: https://lore.kernel.org/all/au27Y9m78_3EH2v1@gmail.com/
-> Tested-by: Breno Leitao <leitao@debian.org>
-> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
+> Of course. Please take your time on the review. And thanks for the
+> background on the Rust BTF work.
+>
 
-Applied, thanks all!
+Changes are applied, thanks for fixing these issues! I'm thinking we should
+probably add a CI job that builds an LTO vmlinux; I'll look at doing that
+shortly.
+ 
+>> We've been working on a solution; essentially, the idea is to detect
+>> such cases and fix up the type graph in pahole using a new
+>> "rust_bindgen_replace" feature so that the final BTF does not have to
+>> carry such duplicates. It will only run for Rust CUs, [...]
+> 
+> Patches 1-2 are general --lang_exclude fixes (both reproducers are
+> C++/C). The Kconfig follow-up keeps --lang_exclude=rust, so it is a
+> stopgap: Rust stays out of BTF, as it does without LTO, until
+> rust_bindgen_replace brings Rust types in. I realize it may not be
+> worth it, though it would -- if I understand correctly -- unblock RUST with
+> LTO and BTF in the meantime.
+> 
+> To check how this series of patches fits with your branch, I applied it on
+> top of pahole-next-btf-rust (b5e46f8; it applies cleanly) and tried both on
+> the 7.2.9 kernels I tested the series on (x86_64 ThinLTO, full LTO
+> and distributed ThinLTO, arm64 ThinLTO) and a non-LTO x86_64 build,
+> booting each in qemu and loading rust_minimal, rust_print and
+> kobject-example:
+> 
+> - With kbuild's flags (--lang_exclude=rust), the branch alone fails to
+>   build the Rust sample modules on the LTO kernels, as patch 1
+>   describes. With the series on top, all five kernels build, boot and
+>   load the three modules with BTF.
+> - With rust_bindgen_replace and nothing excluded, the series changes
+>   nothing: vmlinux and module BTF are byte-identical with and without
+>   it.
+> 
+> One thing I noticed along the way, since it's the merged-CU language
+> that patch 1 deals with: under LTO the merged CU has one language,
+> taken from its first CU (a C or asm file for vmlinux), so
+> cu__is_rust() is false and rust_bindgen_replace doesn't run on
+> vmlinux. Without LTO it replaced 564 types as expected.
+> 
+
+Ah, that's a great point. May have to rethink that part. Thanks again
+for giving the changes a try!
 
 Alan
-
-> ---
->  btf_encoder.c | 71 +++++++++++++++++++++++++++++++--------------------
->  1 file changed, 44 insertions(+), 27 deletions(-)
-> 
-> diff --git a/btf_encoder.c b/btf_encoder.c
-> index 05ffe82..8537628 100644
-> --- a/btf_encoder.c
-> +++ b/btf_encoder.c
-> @@ -1405,32 +1405,42 @@ static int32_t btf_encoder__save_func(struct btf_encoder *encoder, struct functi
->  			break;
->  		}
->  	}
-> -	state->inconsistent_proto = ftype->inconsistent_proto;
-> -	state->unexpected_reg = ftype->unexpected_reg;
-> -	state->optimized_parms = ftype->optimized_parms;
-> -	state->uncertain_parm_loc = ftype->uncertain_parm_loc;
-> -	state->reordered_parm = ftype->reordered_parm;
-> -	state->signature_changed = ftype->signature_changed;
-> -	if (state->addr && func) {
-> -		for (int i = 0; i < func->sym_cnt; i++) {
-> -			if (state->addr != func->syms[i].addr)
-> -				continue;
-> -			if (str_contains_optimized_fn_suffix(func->syms[i].name)) {
-> -				state->optimized_symbol = 1;
-> -				break;
-> +	/*
-> +	 * A kfunc keeps the ABI of its C prototype, so avoid setting
-> +	 * state flags, otherwise the kfunc may be treated as
-> +	 * optimized and skipped, or lose parameters in BTF.  For other
-> +	 * cases, ensure the optimizations/uncertainties are reflected
-> +	 * in state flags.
-> +	 */
-> +	if (loc || !is_kfunc_state(state)) {
-> +		state->inconsistent_proto = ftype->inconsistent_proto;
-> +		state->unexpected_reg = ftype->unexpected_reg;
-> +		state->optimized_parms = ftype->optimized_parms;
-> +		state->uncertain_parm_loc = ftype->uncertain_parm_loc;
-> +		state->reordered_parm = ftype->reordered_parm;
-> +		state->signature_changed = ftype->signature_changed;
-> +		if (state->addr && func) {
-> +			for (int i = 0; i < func->sym_cnt; i++) {
-> +				if (state->addr != func->syms[i].addr)
-> +					continue;
-> +				if (str_contains_optimized_fn_suffix(func->syms[i].name)) {
-> +					state->optimized_symbol = 1;
-> +					break;
-> +				}
->  			}
->  		}
->  	}
-> +
->  	ftype__for_each_parameter(ftype, param) {
->  		const char *name;
->  		char *final_name = NULL;
->  
->  		/* No location info/optimized + reordered means optimized out. */
-> -		if (!loc && ftype->reordered_parm && (!param->has_loc || param->optimized)) {
-> +		if (!loc && state->reordered_parm && (!param->has_loc || param->optimized)) {
->  			state->nr_parms--;
->  			continue;
->  		}
-> -		if (!loc && encoder->true_signature && ftype->signature_changed &&
-> +		if (!loc && encoder->true_signature && state->signature_changed &&
->  		    param->optimized) {
->  			state->nr_parms--;
->  			continue;
-> @@ -1797,17 +1807,20 @@ static int btf_encoder__add_saved_funcs(struct btf_encoder *encoder, bool skip_e
->  		 * signature; true_signature can rewrite those signatures.
->  		 * Also exclude functions with unexpected register use, multiple
->  		 * inconsistent prototypes or uncertain parameter locations.
-> +		 * The location based checks do not apply to kfuncs.
->  		 */
-> -		if (state->unexpected_reg)
-> -			skip_reason = "unexpected register usage for parameter\n";
-> +		if (!is_kfunc_state(state)) {
-> +			if (state->unexpected_reg)
-> +				skip_reason = "unexpected register usage for parameter\n";
-> +			if (state->uncertain_parm_loc)
-> +				skip_reason = "uncertain parameter location\n";
-> +			if (state->reordered_parm)
-> +				skip_reason = "reordered parameters\n";
-> +			if (btf_encoder_func_state__skip_optimized_parms(encoder, canonical_state))
-> +				skip_reason = "optimized parameters\n";
-> +		}
->  		if (skip_encoding_inconsistent_proto && state->inconsistent_proto)
->  			skip_reason = "inconsistet prototype\n";
-> -		if (state->uncertain_parm_loc)
-> -			skip_reason = "uncertain parameter location\n";
-> -		if (state->reordered_parm)
-> -			skip_reason = "reordered parameters\n";
-> -		if (btf_encoder_func_state__skip_optimized_parms(encoder, canonical_state))
-> -			skip_reason = "optimized parameters\n";
->  		if (state->elf->ambiguous_addr)
->  			skip_reason = "ambiguous address\n";
->  
-> @@ -3056,10 +3069,14 @@ struct btf_encoder *btf_encoder__new(struct cu *cu, const char *detached_filenam
->  		if (!found_percpu && encoder->verbose)
->  			printf("%s: '%s' doesn't have '%s' section\n", __func__, cu->filename, PERCPU_SECTION);
->  
-> -		if (encoder->tag_kfuncs) {
-> -			if (btf_encoder__collect_kfuncs(encoder))
-> -				goto out_delete;
-> -		}
-> +		/*
-> +		 * Mark kfuncs before any function state is saved, so
-> +		 * btf_encoder__save_func() keeps their source prototypes.
-> +		 * Needed even without decl_tag_kfuncs, which only controls
-> +		 * the decl tags.
-> +		 */
-> +		if (btf_encoder__collect_kfuncs(encoder))
-> +			goto out_delete;
->  
->  		if (encoder->verbose)
->  			printf("File %s:\n", cu->filename);
-
