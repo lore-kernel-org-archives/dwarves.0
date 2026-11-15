@@ -1,47 +1,75 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=62.210.214.84
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794673664;
-	b=Zaw7q8SbFD5XEdEcO5lOvXXsXC4t2M2NQR1hk2TTbngWMv+9X/azKV/6FleuMdnb6WEW
-	 HFj9lQd9VEoc0ZgwqL0YegR+GiTI26n2bFzLsJmqpk0ObmyvzuTJy9tF3Nb1Xzeyay6/Z
-	 N1x16/qyGil3LMwz72akMHA8IGXztnWRsHuEnSuvZrGQzXq6tGXTY+okHOUmw37zFtQMF
-	 n6oI4bFKxwKIzda/d3fTBhG65kE+TlfaAaxVR1jDCxxSvBBDh4fWXOo2GRFEx9Nx+iWqv
-	 qAlolB1QupICG5b1DHx7s4nmxfSBIScOhOwaBu6WQQYvBH0rNNiiAYkTSxndGhXGvWg==
+	t=1794773220;
+	b=W1mW+y796hZ2P7O6v+xdKXeHSKjuipqdWbShADPolk9iue7jJoUZUu+yPp5GorBP90k8
+	 paVwMILEeXCcumnChO5dVZQMDxiPV5yCW3DPf/06Zv2rgv8vl1wEXHb2zLnud0HSpg0ZE
+	 nHXDnCuhQi/EEGbTCFiXiyJnJLBib7DwN/VIWErtrMbsgTlk/CgHNvKxdVpzOPAAquu0j
+	 lsq7uZEZ8LNlsXysIIL9jiGK0bv17eXvpFtRF9rVZ52BEEqOuNO1W+0ae46B3jhH3IfaO
+	 LeAFaZktPHMQ+qn01PFtrJMOxSypl2wXm9pfaI5jYmYf0or7Xo9cxgUCbezio7ZemvQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794673664;
-	h=Received:DKIM-Signature:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=cKsXMJm7qHtIeItOHanqHmAChvQOpfvaDdCmiUL5Dq4=;
-	b=H+eAlqmCQb7rYHlgMMPLQvGsyK9jPsBGdlqWoADJ+CFtV3BYmWL1Qt7fhuBsPtTM3OZO
-	 RBmuoj0LnxPXLNTs3armEivWkzXTRmre9j65v6RtlYjIrhThPqwrRUakxcb++oB5Beees
-	 /YebkfcTtG3u3eUxJem3EiT7LGyJ/iM49ZkHwy+2r09/+ynOyjOLPHAX3RTQ9l8hgo+sv
-	 PBvahcRdnoAa569pN28urC6mWcQexUgAQuPq8oCkjM/xWTrJAsr8Or9jT7ojMpl2f02lb
-	 HVRaJoQxvCkR7kkb9E3OEY4WEWjBPMT1ANBuKtNMt7m0bV3CYmTwBL70mibotLKwiPw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794773220;
+	h=DMARC-Filter:Received:DKIM-Signature:Received:From:To:Cc:Subject:
+	 Date:Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding;
+	bh=dncwCu8rZrSPdbDpAn+uA+POilsNf3H5kpWC2RULAUc=;
+	b=l3ib7JCGyk/pSvQlrQM5IaIIcgfr2MT+vuPab28lduj1tWLI4cTwOTDMPojueaVfIlYO
+	 2QI4mwLVdo72e1+lub2qlFOQRVRQPWEXzUHHjy4iqm+IQLRLUJvHcn953tuD6atp1D4gQ
+	 RvRBF8Nqp5xFETaVooEFT6TViF3sz099xsss74kZuID+bFPcnM1464zxvZ8aYyeWjHM0w
+	 LuxxxoW2FbK4t1vcrrmGzocWH+Z+G1K4PhUSgM+WsB9nViMziWSKwQBXV1KFOhTSuSYoP
+	 SYqZVy/9Wy031FQLpTQl/OYMNgmvWKH8CghHy+IQSqzYX8X2bpydcjvakK82dsQy7Bw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=EkLeA9CX;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=pass header.from=codewreck.org;
+	spf=pass smtp.mailfrom=codewreck.org;
+	dkim=pass header.d=codewreck.org header.i=@codewreck.org header.a=rsa-sha256 header.s=2 header.b=kyHzkVsh;
+	arc=none smtp.remote-ip=62.210.214.84
+Received: from submarine.notk.org (submarine.notk.org [62.210.214.84])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 889CF606A32E;
-	Sat, 14 Nov 2026 16:27:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 033A4606A323;
+	Sun, 15 Nov 2026 20:06:57 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 033A4606A323
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codewreck.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=codewreck.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=EkLeA9CX
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08F7A1F000C4;
-	Sat, 14 Nov 2026 16:27:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794673664;
-	bh=cKsXMJm7qHtIeItOHanqHmAChvQOpfvaDdCmiUL5Dq4=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=EkLeA9CX02WM39SMgF/N3Oz2x4QDhvIf/Xh8J5fgM+MViwUbmldevE7jXqe0i91Kl
-	 WpQtdQE5/wH3ANkfWDd4j/ybNMP6Rh8cXxxk18FGJBjnQoeJ7qfJ7iWiDegIV9+jox
-	 5g07Itqy86vPq38ln/rwd6P2XwSHa7C4d9cyRmVZur12AofoTLSXRSvIzzdnSwWhHg
-	 ysj1PT380/TDbcvefZOpQJbXFv2A21u73yUpDV+JUXEU7Ma8XjjtcTi1DPOWAGVkpF
-	 Pch/VQTyiGA5CR4g4I3zPRQPdF1yHeNLL//+q/2xmHAxXQEzyrYjVefDfw4jVqkoU/
-	 BPS6NMjJR4HXQ==
-Message-ID: <4a5157e7-2261-49cd-80ef-38dcc2699741@kernel.org>
-Date: Sat, 14 Nov 2026 16:27:41 +0000
+	dkim=pass (2048-bit key, unprotected) header.d=codewreck.org header.i=@codewreck.org header.a=rsa-sha256 header.s=2 header.b=kyHzkVsh
+Received: from gaia.codewreck.org (localhost [127.0.0.1])
+	by submarine.notk.org (Postfix) with ESMTPS id 7FAF814C2DE;
+	Sun, 15 Nov 2026 21:06:44 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org;
+	s=2; t=1794773209;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=dncwCu8rZrSPdbDpAn+uA+POilsNf3H5kpWC2RULAUc=;
+	b=kyHzkVsh6I6BVaVM2zft+j2swrKVLAd0i/Zy3mu0LdasWpdRqlQ95WAyqEXs2BmtraRiiL
+	zfLAZDIHkt947jEl/XG/llycIOYakucVLImZT/MjTnStW2018PKaM9kJNb/OKudZncNLdV
+	Veo+YWLfpT14Q2PZMTtEMMXYsqbqpFvxyKdhKcstIdk9rjSrmeCSkMf7GUCU+3SDwEpRqZ
+	BEVrF0ha00qRUZ2Myvva2W+a6YRqoeKnUasFMiRajBT/b90Ict0DDfgxXCRHWzeNVbTHdG
+	APaxcTuxDF2JjnbpCCAGzDMxqdSmtE8uk2gwSrMnyuK/1sIXETt3DIVrwB9GwA==
+Received: from gaia.codewreck.org (localhost.lan [::1])
+	by gaia.codewreck.org (OpenSMTPD) with ESMTP id aa031c75;
+	Sun, 15 Nov 2026 20:06:42 +0000 (UTC)
+From: Dominique Martinet <asmadeus@codewreck.org>
+To: stable@vger.kernel.org,
+	Alan Maguire <alan.maguire@oracle.com>,
+	andrii@kernel.org,
+	eddyz87@gmail.com
+Cc: ast@kernel.org,
+	ihor.solodrai@linux.dev,
+	daniel@iogearbox.net,
+	memxor@gmail.com,
+	martin.lau@linux.dev,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	emil@etsalapatis.com,
+	dwarves@vger.kernel.org,
+	bpf@vger.kernel.org,
+	Dominique Martinet <asmadeus@codewreck.org>
+Subject: [PATCH 5.10-6.18] libbpf: fix cross-endian build with newer libbpf
+Date: Mon, 16 Nov 2026 05:05:06 +0900
+Message-ID: <20261115200505.1494710-2-asmadeus@codewreck.org>
+X-Mailer: git-send-email 2.54.0
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Post: <mailto:dwarves@vger.kernel.org>
@@ -51,70 +79,60 @@ List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:dwarves+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH dwarves v2 0/2] dwarf_loader: Fix --lang_exclude on merged
- CUs
-To: Alan Derk <linux@alanderk.com>
-Cc: Arnaldo Carvalho de Melo <acme@kernel.org>,
- Alan Maguire <alan.maguire@oracle.com>, bpf@vger.kernel.org,
- dwarves@vger.kernel.org, rust-for-linux@vger.kernel.org
-References: <20261010005227.976-1-linux@alanderk.com>
- <87dfc1f8-6ef4-424c-a48d-62e935eeeb28@kernel.org>
- <CAPLSpGbV5RTSuMZPX=UgzniPtoT7jup7pCGw_Rt2tqiejKXmng@mail.gmail.com>
-Content-Language: en-GB
-From: Alan Maguire <almagui@kernel.org>
-In-Reply-To: <CAPLSpGbV5RTSuMZPX=UgzniPtoT7jup7pCGw_Rt2tqiejKXmng@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 11/5/26 4:48 PM, Alan Derk wrote:
-> On Wed, Nov 4, 2026 at 7:38 AM Alan Maguire wrote:
->> Thanks for doing this work! Sorry for the delay in getting to it, I'm
->> looking at the patches now.
-> 
-> Of course. Please take your time on the review. And thanks for the
-> background on the Rust BTF work.
->
+commit 087f3964f4b3 ("libbpf: Support layout section handling in BTF")
+added extra data to the BTF header.
 
-Changes are applied, thanks for fixing these issues! I'm thinking we should
-probably add a CI job that builds an LTO vmlinux; I'll look at doing that
-shortly.
+This extra data is ignored in the native case, but when building with
+different endianness the bswap code in old libbpf would check for strict
+size equality, leading to build failures such as this when BTF data is
+generated with a newer version of libbpf (through pahole)
+    BTFIDS  vmlinux.unstripped
+  libbpf: Can't load BTF with non-native endianness due to unsupported header length 32
+  FAILED: load BTF from vmlinux.unstripped: Operation not supported
+  make[2]: *** [../scripts/Makefile.vmlinux:72: vmlinux.unstripped] Error 255
+
+Newer libbpf versions also properly ignore trailing data in the bswap
+case, but the patch is too intrusive to backport, just fix the header
+length comparison.
+
+Link: https://github.com/NixOS/nixpkgs/pull/570639
+Signed-off-by: Dominique Martinet <asmadeus@codewreck.org>
+---
+Hey,
+
+we've got a cross build failure report for ppc64 in nixpkgs (link in
+commit message), that turned out as described above.
+(build broke for all kernels before 7.1)
+
+In this case I believe it's easier to just fix the check than backport
+the full layout section handling support, is that ok?
+I've confirmed the build succeeds with this, I assume the reporter will
+eventually also boot check but from my understanding of the code this
+should be fine.
+
+Feel free to throw this away if there's a better way, just let me know
+if I can help.
+
+Thanks
+
+ tools/lib/bpf/btf.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
+index 9f141395c074..ae344cf58e85 100644
+--- a/tools/lib/bpf/btf.c
++++ b/tools/lib/bpf/btf.c
+@@ -236,7 +236,7 @@ static int btf_parse_hdr(struct btf *btf)
  
->> We've been working on a solution; essentially, the idea is to detect
->> such cases and fix up the type graph in pahole using a new
->> "rust_bindgen_replace" feature so that the final BTF does not have to
->> carry such duplicates. It will only run for Rust CUs, [...]
-> 
-> Patches 1-2 are general --lang_exclude fixes (both reproducers are
-> C++/C). The Kconfig follow-up keeps --lang_exclude=rust, so it is a
-> stopgap: Rust stays out of BTF, as it does without LTO, until
-> rust_bindgen_replace brings Rust types in. I realize it may not be
-> worth it, though it would -- if I understand correctly -- unblock RUST with
-> LTO and BTF in the meantime.
-> 
-> To check how this series of patches fits with your branch, I applied it on
-> top of pahole-next-btf-rust (b5e46f8; it applies cleanly) and tried both on
-> the 7.2.9 kernels I tested the series on (x86_64 ThinLTO, full LTO
-> and distributed ThinLTO, arm64 ThinLTO) and a non-LTO x86_64 build,
-> booting each in qemu and loading rust_minimal, rust_print and
-> kobject-example:
-> 
-> - With kbuild's flags (--lang_exclude=rust), the branch alone fails to
->   build the Rust sample modules on the LTO kernels, as patch 1
->   describes. With the series on top, all five kernels build, boot and
->   load the three modules with BTF.
-> - With rust_bindgen_replace and nothing excluded, the series changes
->   nothing: vmlinux and module BTF are byte-identical with and without
->   it.
-> 
-> One thing I noticed along the way, since it's the merged-CU language
-> that patch 1 deals with: under LTO the merged CU has one language,
-> taken from its first CU (a C or asm file for vmlinux), so
-> cu__is_rust() is false and rust_bindgen_replace doesn't run on
-> vmlinux. Without LTO it replaced 564 types as expected.
-> 
+ 	if (hdr->magic == bswap_16(BTF_MAGIC)) {
+ 		btf->swapped_endian = true;
+-		if (bswap_32(hdr->hdr_len) != sizeof(struct btf_header)) {
++		if (bswap_32(hdr->hdr_len) < sizeof(struct btf_header)) {
+ 			pr_warn("Can't load BTF with non-native endianness due to unsupported header length %u\n",
+ 				bswap_32(hdr->hdr_len));
+ 			return -ENOTSUP;
+-- 
+2.56.1
 
-Ah, that's a great point. May have to rethink that part. Thanks again
-for giving the changes a try!
-
-Alan
