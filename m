@@ -1,50 +1,50 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794828048;
-	b=DMsFybs08Iw6OB8mvtPw5ZYVejlginqp33+I6ugkwmiynxn048pV3ntUF2kZ1uHfuwrQ
-	 p+OWS3uOMsoSB/jlRHPUJqg9iKMMeXB8tCgURFzeRLMjoY3T+b9jU94ki7h8FLtmx9Lp0
-	 9zygQz4MPZqLqQSGTwG7JEI7hlrGNkOR/nr4P+eI8DbRzZZhdU6ALXZrSgMXt3BNGiLnG
-	 +sWkxbs6tiaU1uDuX/B8pNH8W85FxbX8YzxKmwkmXn1J03XjxIrRm6vr79zINZ130Xica
-	 zNfGO/j8MVIb0JFDnw4eJDu0evJMGeWbrrmRgJ1fNGnvozh/iPHFliar1qphW+0rPGw==
+	t=1794828049;
+	b=nvVdh6oBwRd9kvr0MpLijJAykQ9W7rBbJgnW9mGQId0fzyZ04Ew1/J9uiYR2koNVLRfy
+	 dZhZEbqhk7IFZsEuFPRDUUGzdGIXxot47Gq11C4J1oRQGKhys/LgWTugslOet/7v3g4GG
+	 T/Qf+/Ws7L459HwJLYVos/C7QP/zJ2PTQEJVN9GT2td8iaiWmK43wJiOy4kFBlbCMpiYz
+	 moYwKG6NzQtyj3sDDyd2u2wmkFk3lIE35lN+HF3RduXurYJlI21hLaSkpRCHwV31lJWBK
+	 3MIkonV4U0qqJDEQf/fQWmBcrEtZvdVseftpTHR2Bt8I4msoK/7h4gJnOVoGT+Uvurg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794828048;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794828049;
 	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
 	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
-	bh=S9k/F8CcYPJtQHjFanoh8czitovaeGZPHvmh58Hifp0=;
-	b=aOFHA9XPVLD7Rj3Jh+I5/xhfjYh0j+48N8BgVorWYuOJAUBieBKTFdfd7c0qqOcKjJGT
-	 Y3qeWMpvEedvxKh4lXhxHxrdNLV30TgQvhYu9y9BVeqlvNGnfCIV4ds3y3j1LNkDdDDTU
-	 cm0xIiWffQi3HFfBabrdrdRV+HwS5Hldg53Tg4Ni3CyVjjNjZNKFfZdfo9VPFuP9Ax3mW
-	 jnF7U5S3b7GGo0+TDJw4a7KJ4pX15ReWpvFF3HmBT0G4nq8MhoYD64S1EhgEcBa39QoWb
-	 jAFR1ZjgS+xAVRheXpLv61je9FMPY4+Y3W3PV/E/hCQXXKMGvqX+W17j0EkGPPwtmLw==
+	bh=Az2ViXJ04sdZmBQmCGTzpnmVFiwuagigpsEFhitrevM=;
+	b=b8v8AemftQ8GzhQPRaOG/2DSWfLJerOyAAXo3XoUXNyQWHSHPJ2IDHDQI0oIkpFjsBVG
+	 aK5FuSaUFcHB8XsQB4NhBkiZX4fZqoMPWtLeA8K4Am/M/fONIszZ2avEzWqVlhGbNggu0
+	 hZoujmEUIODhi8F2O5ljMl6WQERafy0SdJr1UdE4OOjC1AqsUEAjO0DSUmhIht5Ijk07t
+	 K4gSLk4z1R/EUogWiKRBbp7Qx8T/VlcInfNjFAj2QYtU+PMHRhtwRGFDGWATonmDhrzaa
+	 duZfcwwKSL5Q4dHyMzoHPj5L8i8Wo97OS6xzKczrix1H6RqrQjNr+oycCG0gJV54kJQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=XYHyzjx3;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=busEHSli;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23A0C607180E
-	for <dwarves@vger.kernel.org>; Mon, 16 Nov 2026 11:20:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F4006071817
+	for <dwarves@vger.kernel.org>; Mon, 16 Nov 2026 11:20:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=XYHyzjx3
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1FFF11F000C4;
-	Mon, 16 Nov 2026 11:20:46 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=busEHSli
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48CFA1F000C4;
+	Mon, 16 Nov 2026 11:20:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794828047;
-	bh=S9k/F8CcYPJtQHjFanoh8czitovaeGZPHvmh58Hifp0=;
+	s=k20260515; t=1794828048;
+	bh=Az2ViXJ04sdZmBQmCGTzpnmVFiwuagigpsEFhitrevM=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=XYHyzjx30YWHLcZGoLxEm6gIlXs4lo2+0ulqWg7nX5PQh16Et49kxbiNNmlPE7AtP
-	 T719RG+p4qDVR5JXPAFeXGBLRjF5+0K7IFL95RYuPmOOmo+w4IoKGNENQZMDgtKg0B
-	 4JEOPHhtnIe78EQY/dvg7lMP8MigpIBzqkjLJgMQPfWC/4EyF0oAa99dTPhBsb50gd
-	 nMfOFbgDQPe+vTtXC8SnVeTduSX6sgUEqs8K/iXLsKP4BaIVzfFUkBhSUb1cTCE4Uf
-	 OPJCudLBBLAWbTTB2LamZO6k8GGN0Uqo4wRT4FGavh4y2M+3buWvy2mXQqWfUvvDlJ
-	 De3hw1jOJOzeg==
+	b=busEHSliS9uDdmmjI98rDsaU0yprKChh/9T0Eeu67Ccq5qwia/GTYnvN+ipYQtFbn
+	 yQGONIL9+ao979nlAQTeNNVY47EctpjBli8rPEdyn9itbVR72kxe0uDXwZpiBxeVls
+	 Yl8ctuh2/nBxRSb1zokCpmufIo68o0PyKgJgSDUvgcU7EVoOuEWO+SwcLFDUuZ3ADH
+	 ihVerEy5eFNKL9EL4JGrYaRw1jh1lZSHLc5vhoJ63JDeydVFNxB75RWxJLJSUa5MQX
+	 nJJwY/GEOqlZgxgXflA7UuTmZj/G1dm3ygVWEx+wCUNL0DawCoylbgyFtcvlCDIBNW
+	 SssewqAyeeCMA==
 From: Alan Maguire <almagui@kernel.org>
 To: dwarves@vger.kernel.org
 Cc: Alan Maguire <almagui@kernel.org>
-Subject: [PATCH dwarves 1/6] CI: Make kernel source fetch tolerant of git host failures
-Date: Mon, 16 Nov 2026 11:20:38 +0000
-Message-ID: <20261116112043.3831978-2-almagui@kernel.org>
+Subject: [PATCH dwarves 2/6] tests: Match BTF and DWARF functions with set operations in btf_functions.sh
+Date: Mon, 16 Nov 2026 11:20:39 +0000
+Message-ID: <20261116112043.3831978-3-almagui@kernel.org>
 X-Mailer: git-send-email 2.56.0
 In-Reply-To: <20261116112043.3831978-1-almagui@kernel.org>
 References: <20261116112043.3831978-1-almagui@kernel.org>
@@ -59,121 +59,119 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-CI jobs have been failing with timeouts fetching bpf-next from
-git.kernel.org.  Replace the libbpf/ci/get-linux-source action with
-a script that does a shallow fetch, retrying across mirrors:
+btf_functions.sh validates each BTF function prototype by running
+grep -F over the full list of DWARF prototypes, once per BTF function.
+That is O(BTF * DWARF) with a fork per function (~50k on a typical
+kernel), and on a clang ThinLTO kernel the test no longer completes in
+a reasonable time in CI.
 
-1. git.kernel.org bpf-next master
-2. github.com/kernel-patches/bpf bpf-next_base (github-to-github;
-   bpf-next plus BPF CI commits)
-3. kernel.googlesource.com bpf-next master
+Replace the loop with sorted set operations: comm for exact and
+"inline" matches, and comm/join on const-stripped prototypes for the
+const-insensitive case, keeping the original BTF prototype so
+mismatches are reported as before.  Run them under LC_ALL=C so sort,
+comm and join agree on collation.
 
-with up to 3 rounds and backoff between them.  Each fetch attempt is
-bounded by a timeout, and git's low-speed limits abort stalled
-transfers so we move on to the next mirror rather than hanging until
-the job times out.  The commit fetched is logged.
+Matching is now on whole lines rather than substrings.  Previously
+grep -F could return several DWARF lines (e.g. "int foo(void)" also
+matches "unsigned int foo(void)", or const and non-const instances of
+the same function), so such functions failed the exact comparison and
+were only accepted via the const-insensitive fallback.  They are now
+counted as exact matches; the total number of matched functions is
+unchanged.
 
-Since the source is now a detached shallow checkout, build-kernel.sh
-no longer checks out REPO_BRANCH; its fallback clone (for local use)
-is now a shallow clone of that branch.
+On a local x86_64 vmlinux the test drops from 2m44s to 34s with
+identical results otherwise.
 
 Assisted-by: Claude:claude-opus-5-5
 Signed-off-by: Alan Maguire <almagui@kernel.org>
 ---
- .github/scripts/build-kernel.sh      |  4 +--
- .github/scripts/get-kernel-source.sh | 46 ++++++++++++++++++++++++++++
- .github/workflows/vmtest.yml         |  7 ++---
- 3 files changed, 51 insertions(+), 6 deletions(-)
- create mode 100755 .github/scripts/get-kernel-source.sh
+ tests/btf_functions.sh | 71 ++++++++++++++++++++++++++----------------
+ 1 file changed, 44 insertions(+), 27 deletions(-)
 
-diff --git a/.github/scripts/build-kernel.sh b/.github/scripts/build-kernel.sh
-index 63806f2..8326e1d 100755
---- a/.github/scripts/build-kernel.sh
-+++ b/.github/scripts/build-kernel.sh
-@@ -18,11 +18,11 @@ export PAHOLE=${GITHUB_WORKSPACE}/install/usr/local/bin/pahole
- which pahole
- $PAHOLE --version
+diff --git a/tests/btf_functions.sh b/tests/btf_functions.sh
+index 436ebeb..778f9fa 100755
+--- a/tests/btf_functions.sh
++++ b/tests/btf_functions.sh
+@@ -55,35 +55,52 @@ pfunct --all --no_parm_names --format_path=dwarf $vmlinux | \
+ pfunct --all --no_parm_names --format_path=btf $outdir/vmlinux.btf 2>/dev/null|\
+ 	awk '{ gsub("^(bpf_kfunc |bpf_fastcall )+",""); print $0}'|sort|uniq > $outdir/btf.funcs
  
-+# In CI, get-kernel-source.sh has already fetched the source.
- if [[ ! -d $REPO_TARGET ]]; then
--	git clone $REPO $REPO_TARGET
-+	git clone --depth=1 --branch $REPO_BRANCH $REPO $REPO_TARGET
- fi
- cd $REPO_TARGET
--git checkout $REPO_BRANCH
- 
- buildopts=
- if [[ "$CC" = "clang" ]]; then
-diff --git a/.github/scripts/get-kernel-source.sh b/.github/scripts/get-kernel-source.sh
-new file mode 100755
-index 0000000..2d28215
---- /dev/null
-+++ b/.github/scripts/get-kernel-source.sh
-@@ -0,0 +1,46 @@
-+#!/usr/bin/bash
-+# SPDX-License-Identifier: GPL-2.0-only
-+#
-+# Fetch bpf-next kernel source, tolerating failures/stalls of any
-+# single git host by retrying across mirrors.
-+#
+-exact=0
+-inline=0
+-const_insensitive=0
++# Match BTF prototypes against DWARF prototypes with sorted set operations
++# (comm/join) rather than one grep of dwarf.funcs per BTF function; the
++# latter is O(BTF * DWARF) and becomes very slow on large (e.g. LTO) kernels.
++# Matching is on whole lines.  Use the C locale so sort, comm and join
++# agree on collation order.
++(
++export LC_ALL=C
++cd $outdir
 +
-+GITHUB_WORKSPACE=${GITHUB_WORKSPACE:-$(dirname $0)/../..}
-+DEST=${GITHUB_WORKSPACE}/.kernel
-+FETCH_TIMEOUT=${FETCH_TIMEOUT:-15m}
-+ATTEMPTS=${ATTEMPTS:-3}
++sort -u btf.funcs > btf.sorted
++sort -u dwarf.funcs > dwarf.sorted
 +
-+# "URL REF" pairs, tried in order.  kernel-patches/bpf bpf-next_base tracks
-+# bpf-next master plus BPF CI commits, and is github-to-github so is the
-+# first fallback.
-+MIRRORS=(
-+	"https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master"
-+	"https://github.com/kernel-patches/bpf.git bpf-next_base"
-+	"https://kernel.googlesource.com/pub/scm/linux/kernel/git/bpf/bpf-next.git master"
++# 1. exact matches
++comm -12 btf.sorted dwarf.sorted > match.exact
++comm -23 btf.sorted dwarf.sorted > nomatch.exact
++
++# 2. function might be declared inline in DWARF.
++sed 's/^/inline /' nomatch.exact | sort > nomatch.exact.inline
++comm -12 nomatch.exact.inline dwarf.sorted > match.inline
++comm -23 nomatch.exact.inline dwarf.sorted | sed 's/^inline //' > nomatch.inline
++
++# 3. some functions have multiple instances in DWARF where one has
++# const param(s) and another does not (see errpos()).  We do not
++# mark these functions inconsistent as though they technically
++# have different prototypes, the data itself is not different.
++# Compare with "const " (and any DWARF "inline " prefix) removed;
++# keep "<noconst>\t<original>" pairs so mismatches are reported
++# with the original BTF prototype.
++sed -e 's/const //g' -e 's/^inline //' dwarf.sorted | sort -u > dwarf.noconst
++sed 's/const //g' nomatch.inline | paste - nomatch.inline | \
++	sort -t $'\t' -k1,1 > nomatch.inline.keyed
++cut -f1 nomatch.inline.keyed | sort -u | comm -23 - dwarf.noconst > nomatch.noconst
++join -t $'\t' nomatch.noconst nomatch.inline.keyed | cut -f2 > mismatches
 +)
 +
-+git init -q "$DEST" && cd "$DEST" || exit 1
-+# Abort stalled transfers (< 1KB/s for 60s) rather than hanging until
-+# the job times out, so we move on to the next mirror.
-+git config http.lowSpeedLimit 1000
-+git config http.lowSpeedTime 60
-+
-+for attempt in $(seq 1 $ATTEMPTS); do
-+	for mirror in "${MIRRORS[@]}"; do
-+		read -r url ref <<< "$mirror"
-+		echo "Fetching $ref from $url (attempt $attempt/$ATTEMPTS)"
-+		if timeout $FETCH_TIMEOUT git fetch --depth=1 "$url" "$ref"; then
-+			git checkout -q FETCH_HEAD
-+			echo "Fetched kernel source from $url $ref:"
-+			git log -1 --oneline
-+			exit 0
-+		fi
-+		echo "Fetch from $url failed"
-+	done
-+	if [[ $attempt -lt $ATTEMPTS ]]; then
-+		sleep $((attempt * 30))
-+	fi
-+done
-+
-+echo "Failed to fetch kernel source from all mirrors" >&2
-+exit 1
-diff --git a/.github/workflows/vmtest.yml b/.github/workflows/vmtest.yml
-index d6f9f79..1e876a0 100644
---- a/.github/workflows/vmtest.yml
-+++ b/.github/workflows/vmtest.yml
-@@ -55,10 +55,9 @@ jobs:
-         run: .github/scripts/build-pahole.sh
++exact=$(wc -l < $outdir/match.exact)
++inline=$(wc -l < $outdir/match.inline)
++const_insensitive=$(( $(wc -l < $outdir/nomatch.inline) - $(wc -l < $outdir/mismatches) ))
  
-       - name: Get kernel source
--        uses: libbpf/ci/get-linux-source@v3
--        with:
--          repo: 'https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git'
--          dest: '${{ github.workspace }}/.kernel'
-+        shell: bash
-+        timeout-minutes: 60
-+        run: .github/scripts/get-kernel-source.sh
+ while IFS= read -r btf ; do
+-	# look for non-inline match first
+-	dwarf=$(grep -F "$btf" $outdir/dwarf.funcs)
+-	if [[ "$btf" != "$dwarf" ]]; then
+-		# function might be declared inline in DWARF.
+-		if [[ "inline $btf" != "$dwarf" ]]; then
+-			# some functions have multiple instances in DWARF where one has
+-			# const param(s) and another does not (see errpos()).  We do not
+-			# mark these functions inconsistent as though they technically
+-			# have different prototypes, the data itself is not different.
+-			btf_noconst=$(echo $btf | awk '{gsub("const ",""); print $0 }')
+-			dwarf_noconst=$(echo $dwarf | awk '{gsub("const ",""); print $0 }')
+-			if [[ "$dwarf_noconst" =~ "$btf_noconst" ]]; then
+-				const_insensitive=$((const_insensitive+1))
+-			else
+-				error_log "ERROR: mismatch : BTF '$btf' not found; DWARF '$dwarf'"
+-				test_fail
+-			fi
+-		else
+-			inline=$((inline+1))
+-		fi
+-	else
+-		exact=$((exact+1))
+-	fi
+-done < $outdir/btf.funcs
++	# show DWARF prototypes for the same function name to aid debugging.
++	fn=$(echo "$btf" | sed -e 's/(.*//' -e 's/.*[ *]//')
++	dwarf=$(grep -F " $fn(" $outdir/dwarf.funcs; grep -F "*$fn(" $outdir/dwarf.funcs)
++	error_log "ERROR: mismatch : BTF '$btf' not found; DWARF '$dwarf'"
++	test_fail
++done < $outdir/mismatches
  
-       - name: Configure, build kernel with current pahole
-         shell: bash
+ verbose_log "Matched $exact functions exactly."
+ verbose_log "Matched $inline functions with inlines."
 -- 
 2.56.0
 
