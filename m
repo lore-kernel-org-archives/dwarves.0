@@ -1,51 +1,50 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794961205;
-	b=XhHMhxMIwMX5+cPYawGgXbu770lnwyMMqcihD7sNNoLvr80DojnOPmMhGETyp6XSee3E
-	 +Ua/Yedn9aDzEQmIfJ8JvmQmcf4uUp6SzCF61rN+vX9fsxK+RRSyjpbqoCoT+JX2esJxG
-	 NZ5WGpaZNFveWpn0MC7EZ9LP8FYIsREqnGZ0G7XZWbYi4X/XmE0NQeb0x1YNBt9DNcpJK
-	 ARP8YlALtxROBat392pH3/NAk5l0uxfRconfQc0oAFOeeo7uNL5wgRPxmA1sdEyv8XBZA
-	 hm80Sl9Wowa6Gx76SKW2ODfzxpoLoL3pQnJDwJ3HhRjTE00Ei5uXrJXbn3T//YO4oZA==
+	t=1794961368;
+	b=hZlMQCfitsITjcgJ+PASGHd/y/g36iJU0TdWcxao2iUYTBa6bzP0eTqP8Iy7nGim0Gw8
+	 xTxvTO/+RjJ4ClpAZC3saOwmJNbolumioeq3p4dfNFAteTs+oL6FqmkOWRsdrLZGui8ET
+	 odqKOxGRT8RHsGAd5SN/N2MF7a4loyjScAhhCYq1fOfwdMj6XmaaAifbsxuHw0Zqf0pFi
+	 QL1sK7cUVNgXliRKuDQAaHyXo9v8Z9CD2t75gdUHrXaX72eieDM0+4Hzlw0bvAdrkbOQz
+	 w/t8w33np5OZjPZhYqfrNxvME2gr0flwh/L0UWrrXNEx705XSbbCXsdoMu0LNzxBBEQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794961205;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794961368;
 	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
 	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
 	bh=tDw64PTidKW4tbRkOeBVG+vbMqrqY/9S/VViLcg6PMM=;
-	b=Wpd780M+EFz94ZmXDjUcSO6FrDYxPTeS/1GNPyBdF+cpl6kZyYxY9q/azGvGpK7ZaH8y
-	 VjzHRWLwtqSGyKNK9UtHFVdN6l072vcyXb5zMUa3sbXlPU8ddqjhELMTYYSHkDxXrge3S
-	 A1rEKZFYc0ERZ6Yw2ggFk8rUBquHVsgX1DI9Glha5hT2KK8ylzF4LTQqIQ03BqU2wj7DK
-	 X1NzFFUohSrVxhRwAC8949vvIigTueHeLOJx9tvhhGXuh/j3ejaxufpg2vEWgG4Svgqc+
-	 78jbBlHk+GaJs2ADnJG2mbB46pubSe5xn0oX94Uq4w8QkoF2vJP360WJp+r93k7rE+w==
+	b=t0uJBw+ThDgDh3CDbOR0pGT/pZ3aF079JjA2csSRdvACGfwQyFzIsmJi+aRdoucgEQ4/
+	 wGDIVRKvSdj3nhgm2bTskfEtXOe/VGX9ZXFp17VZnaHspopjziITmWc5I+9sa//WItHQ2
+	 MJcWMdmich4awadqlz1s/ORjDk8gMwaommTihE2ZwV4/2qxaU7UapusRVBPP2yXOU0dyz
+	 ApyiwOvV6HRR+UoNn+T40Qz974TjG5SQ8pqnaoPE0si8qVyuil3vp1Shg/r9OjHSP6ixo
+	 gQ+3WlcX8GjxUXADkwHi1JNDsVexw7DBHI0wR+eO7veUscm4d26yR6s6LDL1wCGa+eQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=H9sd6MYK;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=N0GAUhSE;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5F55606A31C;
-	Wed, 18 Nov 2026 00:20:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88874606A32A;
+	Wed, 18 Nov 2026 00:22:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=H9sd6MYK
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72F931F000C4;
-	Wed, 18 Nov 2026 00:20:03 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=N0GAUhSE
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 943811F000C4;
+	Wed, 18 Nov 2026 00:22:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794961205;
+	s=k20260515; t=1794961368;
 	bh=tDw64PTidKW4tbRkOeBVG+vbMqrqY/9S/VViLcg6PMM=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=H9sd6MYKKOBvdy4eUUtoUgKvM6bcT+c63xz82w76UMm7Kj83ltNnU2tbzPEALkpJW
-	 aevWAN97OciRDl4bnibjY+8vrF7DHw5QfQ2zNXdzDyKi7CZuvqcLu8K4sRP6jPU2bH
-	 VKOWlmxWfQDjbrbas/+c0UTWlX2wr35s1/81Po6oNz8u/Hkfzwx2u+15sD8YHJ6RcK
-	 1eC5Mb3MUVvbhwRuwqSdXK26FahWZ5F+7Epl1fA70SElg8/7GvSIM0kJl58wkSa0uN
-	 0hN0DiEoSrCLIK7dHO4S/sXhkeKRry42rVx77TB8Y3KVyTBofvcDwttiKAPwWcH0Xn
-	 OQxDAFavDoN6g==
+	b=N0GAUhSEdI2xuc28STR+/Da083rcuE4Y9BI1AQVJ/EOvn4MDOhHyFLvHt7ETfHRqf
+	 VDwnmHHwLEvqjV2RlkAkMecsp4lf5zpfOhJqppfZ1hhvVmTITph1zeMo4I1q4aKMgy
+	 RRqRFDxaBnL6Lmrfdr3eFFh1KhKi3wL/eTADd608v2YNo2ooKVzABT0xkraAj1k0kD
+	 IzhZVN8cBhmSmvg8VC4xtMs819PDA4vCu+d97NjrqwfOxJ6JPTCSVfqaFd1S7StV6R
+	 akEfMZkysjNB/iDeMCQAACO/40b4IHtKE7oOOr6BiP1nH9cPRRheOtSqhlQJRVuAS5
+	 BOwso0ArGq2BQ==
 From: Sasha Levin <sashal@kernel.org>
 To: stable@vger.kernel.org,
 	Alan Maguire <alan.maguire@oracle.com>,
 	andrii@kernel.org,
 	eddyz87@gmail.com
-Cc: Sasha Levin <sashal@kernel.org>,
-	ast@kernel.org,
+Cc: ast@kernel.org,
 	ihor.solodrai@linux.dev,
 	daniel@iogearbox.net,
 	memxor@gmail.com,
@@ -59,7 +58,7 @@ Cc: Sasha Levin <sashal@kernel.org>,
 	Dominique Martinet <asmadeus@codewreck.org>,
 	Alan Maguire <almagui@kernel.org>
 Subject: Re: [PATCH 5.10-6.18 v2] libbpf: fix cross-endian build with newer libbpf
-Date: Tue, 17 Nov 2026 19:19:52 -0500
+Date: Tue, 17 Nov 2026 19:22:45 -0500
 Message-ID: <2026-11-17-1-daily-reply-0001@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20261116233301.1531563-1-asmadeus@codewreck.org>
@@ -74,6 +73,7 @@ List-Owner: <mailto:dwarves+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Message-ID: <20261118002245.zx5_b5yPdHt-10wuyst7c39O4DXkdDuID7G3GifLKgw@z>
 
 > Newer libbpf versions also properly ignore trailing data in the bswap
 > case, but the patch is too intrusive to backport, so take the header
