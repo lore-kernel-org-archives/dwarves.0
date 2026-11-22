@@ -1,89 +1,87 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=148.163.158.5
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795381621;
-	b=Ygf7fsz7qy3Fkp/8BXQ+7r4DvLyBMhWl+8duKkancOCk3Ut0HCO6qV9nNzVDZOv4X2UC
-	 rjcf0rysMnt2yqWB6cgo/lHMvtm1c1Kv2/bm+9aQXe6/e4z6o44W3OASPa1fsDaCD8+v2
-	 xXHCYh3QqxEKr8CCCrUIiQDszcqzbFTpEwuW2eFLXM+EXGUnlg/U0dHKkIYtSLf5Oih4q
-	 5Li/l7/PbKeWDjLRPqu3TxdKPusxMXMmbSRdqy9YrdtAdiBIeu5E6WxkllrKBcFYeay76
-	 bC5c656zaAvsAIWZ/QkguClEILuFpsSH2EhbKtF2U/APOqIMdAKw2UdEdI7Kpve/D9w==
+	t=1795381624;
+	b=rEEyLQ2a811TwFOpTtsKk8nW87oMsZ44wjbLFQ9JE1VLk6b2UNb1beYsgWDcX235+vP5
+	 SYDZ6IvnsaZivrI1ZrkVsS+f19mifPMLvJrh/CqPUO6aFK6Rw7oGibgl+QX/SmVXcDSkp
+	 f7MRovP85rqFBW29IBFJj1ZIutOCZqZl7HTyljggrUVa0yzLkb7M8uUskrGfobMwY5wTU
+	 CeRMqJll/yFncTzbpKfoK4e2v3xjqWV8hExQmch1rpHLHkEHeZHNlgoxz55S6fAbYG2hI
+	 2qRf9oH9ifhPsWgkVMGoG91bx2MswoftfdD00vzSo3RlGcV28BK7kfr3vQHV9+IFqCQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795381621;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795381624;
 	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:Received:
 	 Received:Received:Received:Received:From:To:Cc:Subject:Date:
-	 Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding:X-TM-AS-GCONF:X-Proofpoint-Spam-Details-Enc:
-	 X-Proofpoint-ORIG-GUID:X-Authority-Analysis:X-Proofpoint-GUID:
-	 X-Proofpoint-Spam-Info:X-Proofpoint-Virus-Version:
+	 Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding:
+	 X-TM-AS-GCONF:X-Authority-Analysis:X-Proofpoint-Spam-Info:
+	 X-Proofpoint-Spam-Details-Enc:X-Proofpoint-ORIG-GUID:
+	 X-Proofpoint-GUID:X-Proofpoint-Virus-Version:
 	 X-Proofpoint-Spam-Details;
-	bh=AWSCdKMiTxnFdt6qynxMon0yHgRe4HTGIt0dVhiBkvM=;
-	b=Wz9gxpd/b/C8P6GDj1Dk7X+tB3SaJPwqu+4TXu/iX5rGPq1j4dAC10GBxwu7ffeZ//wd
-	 wgrpsk916pOt7PGJ9m3zvtEljeOuhBQ+CLdVH4DAZNtPMACbbg7nj7lvCRo+twNHhIl5o
-	 +K3xh7huj6zIMgk6FojZA5aNeJvlHMX3b28q+mZvjfNYwBdNGZOIFyT1cwuEhA4cd+1Sv
-	 2PP7eMvFrelJacqpey2axb+jBHpKE+gfOFcoug+FzmzNkBTIWhLwch5TM81YBuIPvXdpD
-	 LoUWtZLt6v0DayCbPsH2AqlNjT1hnrDIIWgLKIKzhutN1LzJn903jyAatXOZjLdxh3A==
+	bh=cDNSMIAGGrIyWYfZGmuyvN/hS0mdCJmGKMSgafgjFrI=;
+	b=fjaf7x8WcNTwMvjUt+cT3Z29+xycJ6hWRQCnycMuLC1G5+qP4V0XsQ6RDp4gIcNM2+/p
+	 oVhmHToTS4MwGiA4ntEN8A+Nszmq94JwIA6yZ8Qso4AHz0b9XvAkk4FDwaxNZrkArGG+n
+	 VhHlfpVAD7JkjFgEcThMz5sI9GEGQwRAWg7vKvLh/RKcmZbe3pvJsHLUtkKFhOPLo8TCi
+	 6cq3WOtWXMHKXm3qfbq8y8szeivMg/rN4E2nFH1CmZdl7+u8x+59POh2Y47GOah5qkUpP
+	 Vaumt1Ct89vQU7ofYw4ze7SNom5cmClfZBB+liDH/dHP3B5eNhl8MEO21ei/fZCtoHg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=linux.ibm.com;
 	spf=pass smtp.mailfrom=linux.ibm.com;
-	dkim=pass header.d=ibm.com header.i=@ibm.com header.a=rsa-sha256 header.s=pp1 header.b=RYTQCH2p;
-	arc=none smtp.remote-ip=148.163.156.1
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+	dkim=pass header.d=ibm.com header.i=@ibm.com header.a=rsa-sha256 header.s=pp1 header.b=mGKex5XL;
+	arc=none smtp.remote-ip=148.163.158.5
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA6F0606A31A;
-	Sun, 22 Nov 2026 21:07:00 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org EA6F0606A31A
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9ABB606A31D;
+	Sun, 22 Nov 2026 21:07:03 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D9ABB606A31D
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=ibm.com header.i=@ibm.com header.a=rsa-sha256 header.s=pp1 header.b=RYTQCH2p
-Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6AMKYS3E1705378;
-	Sun, 22 Nov 2026 21:06:42 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=pp1; bh=AWSCdKMiTxnFdt6qy
-	nxMon0yHgRe4HTGIt0dVhiBkvM=; b=RYTQCH2p7fJH/fLCs14hdiRVLAkjWhK+V
-	WT3R/i6wKdMlXs/DkgYm3zPLj2rt7nWZOqjDkinsiNOrn8s2+9fCQWVw5sAHNS34
-	Q/+TkoQ/h5xMOw2Pg1M+IGLjBj9X9JVYTIv9ET1PKmASyN0npFa92roUg3RyhTWA
-	GWLADPCXvfXIw4fs0NWniuBDmuDh8Xa1tRJ81mqrHdhVqmH3iXaPF1c7NituS82f
-	YSvzPBETOTAfLvrOEitLwYMF4DC43H3uvjqPnvE1PQN7suSU3oTgRmf96eQe970U
-	5T8C8do4gD3hTEmKoFvP3loW3FSxwJ5Yqf0sLWL02/gL1eIhCguPA==
-Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4j34fa0c9x-1
-	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-	Sun, 22 Nov 2026 21:06:41 +0000 (GMT)
-Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma13.dal12v.mail.ibm.com (8.18.1.11/8.18.1.11) with ESMTP id 6AMKK2p93890151;
-	Sun, 22 Nov 2026 21:06:41 GMT
-Received: from smtprelay02.dal12v.mail.ibm.com ([172.16.1.4])
-	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 4j3qufkwtf-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sun, 22 Nov 2026 21:06:41 +0000 (GMT)
-Received: from smtpav04.dal12v.mail.ibm.com (smtpav04.dal12v.mail.ibm.com [10.241.53.103])
-	by smtprelay02.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 6AML6eqR30409298
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.a=rsa-sha256 header.s=pp1 header.b=mGKex5XL
+Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6AMKZ3YK1515474;
 	Sun, 22 Nov 2026 21:06:40 GMT
-Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id AFD6458052;
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=pp1; bh=cDNSMIAGGrIyWYfZGmuyvN/hS0mdCJmGKMSgafgjF
+	rI=; b=mGKex5XLkkeaauZqeBAHiyGMWRDAWe4lWcdB7recPJ27WgxgMlgU6GWvG
+	GUPJOCEbTFZBVU1CudTEqrILpKKfi7RW4JDBW32PcZUK08vbJf5UB+YkfvxusYqB
+	zp0WQZOuJ/8KjZcfSF1LRVrYvyOqSaK3tgs1P7Snp4vvsJXW3tvjL44sqpxv/c0R
+	cG0yfUNbcjyi3G0KrQbSzKeHhbptiO7YS0XB9K0PmRayAH8CMcfav5rxYLkZDM4i
+	2ixg6m12skvNJ/rng/34YH5jbYgHbHLmGfZaL4LXHiW+uMK9VxoHyAXCfdpWNdO0
+	Sg5NlZgIOa/6mGhWH9qvZr74XWTJg==
+Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4j34gv043a-1
+	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
 	Sun, 22 Nov 2026 21:06:40 +0000 (GMT)
-Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 6AE3A58056;
+Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma23.wdc07v.mail.ibm.com (8.18.1.11/8.18.1.11) with ESMTP id 6AMKJJlV1924101;
+	Sun, 22 Nov 2026 21:06:39 GMT
+Received: from smtprelay03.dal12v.mail.ibm.com ([172.16.1.5])
+	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4j3q4h41g6-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
 	Sun, 22 Nov 2026 21:06:39 +0000 (GMT)
+Received: from smtpav04.dal12v.mail.ibm.com (smtpav04.dal12v.mail.ibm.com [10.241.53.103])
+	by smtprelay03.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 6AML6dIr22348456
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Sun, 22 Nov 2026 21:06:39 GMT
+Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 0A48258062;
+	Sun, 22 Nov 2026 21:06:39 +0000 (GMT)
+Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 140B25805A;
+	Sun, 22 Nov 2026 21:06:37 +0000 (GMT)
 Received: from thinkpad-p1.fritz.box (unknown [9.111.52.78])
 	by smtpav04.dal12v.mail.ibm.com (Postfix) with ESMTP;
-	Sun, 22 Nov 2026 21:06:39 +0000 (GMT)
+	Sun, 22 Nov 2026 21:06:36 +0000 (GMT)
 From: Maxim Khmelevskii <max@linux.ibm.com>
 To: Arnaldo Carvalho de Melo <acme@kernel.org>
 Cc: dwarves@vger.kernel.org, linux-debuggers@vger.kernel.org,
         Alan Maguire <alan.maguire@oracle.com>,
         Ilya Leoshkevich <iii@linux.ibm.com>
-Subject: [PATCH dwarves v1 1/2] dwarf_loader: Support in-memory return values for s390
-Date: Sun, 22 Nov 2026 22:06:19 +0100
-Message-ID: <20261122210636.2896891-5-max@linux.ibm.com>
+Subject: [PATCH dwarves v1 0/2] Support in-memory return values for s390
+Date: Sun, 22 Nov 2026 22:06:18 +0100
+Message-ID: <20261122210636.2896891-4-max@linux.ibm.com>
 X-Mailer: git-send-email 2.56.0
-In-Reply-To: <20261122210636.2896891-4-max@linux.ibm.com>
-References: <20261122210636.2896891-4-max@linux.ibm.com>
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Post: <mailto:dwarves@vger.kernel.org>
@@ -95,31 +93,30 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMTIyMDA4NCBTYWx0ZWRfX+txkYzbOicKE
- /FBZCc5X8K376vRj1yEoPjCL7sLNmxSMmSAbGnkzzhsE+S6TVd5bKd1Dz1GPcC0lC9tOcVXN6VQ
- xtRfQTk4sY+l7t16WKpw/pKy52O5Y8WqCbIXVQzjNAM1OP5kSkNE3TGIuUICdGWt16mGbzhlSRk
- 7oTcs8+h3mHkbvXQxhRTGzs2yxQP3TDoSoPDTz2XnhKfJBuMbyT3ScSTrf4SJOtzPLeU5NCpw77
- aKZFiwgYlP4YnwobyZAyds5CJfJTH5f+rNxMfB2cykWQHhz2VA7clBDcv8bHXATj6bJj49aiPTu
- 1lkw8G4zAJRCJUTDksxRDvt1y4BTY0FiA9VCFS7H8lpOg0krsqijjKQelA10CEG0ytEuA4bfi/H
- zzewDbYEqR/WTck3t1ToBH5eLsBkEK8fV7RKC9KCUFveO1Woyq9UtVnn/lwnKLSUEblTjbmMNy6
- RufdS3sscFrtHin7CEg==
-X-Proofpoint-ORIG-GUID: xwHs46zJeeTeY2Iw69jGb3NfLkFV409F
-X-Authority-Analysis: v=2.4 cv=U6QHnuru c=1 sm=1 tr=0 ts=6b035961 cx=c_pps
- a=AfN7/Ok6k8XGzOShvHwTGQ==:117 a=AfN7/Ok6k8XGzOShvHwTGQ==:17
+X-Authority-Analysis: v=2.4 cv=CYCdd7rl c=1 sm=1 tr=0 ts=6b035960 cx=c_pps
+ a=3Bg1Hr4SwmMryq2xdFQyZA==:117 a=3Bg1Hr4SwmMryq2xdFQyZA==:17
  a=zJRp6_cAMcgA:10 a=VkNPw1HP01LnGYTKEx00:22 a=RnoormkPH1_aCDwRdu11:22
- a=iQ6ETzBq9ecOQQE5vZCe:22 a=VnNF1IyMAAAA:8 a=I1klMSMIwWXoFng0-R0A:9
- a=O8hF6Hzn-FEA:10
-X-Proofpoint-GUID: xwHs46zJeeTeY2Iw69jGb3NfLkFV409F
-X-Proofpoint-Spam-Info: AW1haW4tMjYxMTIyMDA4NCBTYWx0ZWRfX4nYZYZJRxkKL
- xVyLyRZbQuEoyIWdOvqjT2lNS22po2z44W+oLZ/cqiw8fDMU4zIytlwtb0aKisQvTDwWPldj7C6
- LZWDeQkgt2qgAYxid86gSQWoanUMm20=
+ a=Y2IxJ9c9Rs8Kov3niI8_:22 a=Ld0tnAMJVGhTLNDUD6kA:9
+X-Proofpoint-Spam-Info: AW1haW4tMjYxMTIyMDA4NCBTYWx0ZWRfX2w7wR9jmQHeX
+ LqUh6hID4HkUSmkccgb/U+xoG+kWz/sr8A4Ax+ACwcRQ7PTTFyXemQ3owM4LyoonPOg3H6Rw/xw
+ F+lRprUxM2xzE7w+uKHIgDLPFFhun88=
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMTIyMDA4NCBTYWx0ZWRfX4uUJS1DAWR9y
+ S+2JF38affWKLv+vIAPS1O/wZNXZemR9ki0WkYHz76WojhRBID2uJQN+i/+de5LchP4AfKPnF5L
+ uuTgInOl9YIcPWym874osNE1mSwDhH1+Wjbe2LRrPaiIuVSbtmkM72aD6PDZNYSkf/cGffOCl/T
+ QXJcEVu5+fLkYNGWKmG6x5QwKk8qqzOyMKMuelHqzt3oUydXoxqk56WgArpYPKi64Z9XOH3XjMz
+ HZu3ZmCO12w5/4xfWpY98LDC1IxXWEhdBi1PgT76J08orI+uVlUJ8xL28b27mDLOTVqpOU0rnMU
+ jyFor9IBqBr8lJa5LiAbSF1lufePAfvDZOk1+uNacK6UG65QAwOTHxE4B9Q6NQ128LuI0uoXGgb
+ sIx0UnhMGwf8rNK7rxTCf32sXxSyyQcVJdq4HnntFgdIGcJI5QfiMgS/8dUUWDtQ3n5ib7I8Uvp
+ 5ThqhPhQNC9jCwBZBCA==
+X-Proofpoint-ORIG-GUID: _C7eP2tGnYjF92f9QUGR1W7l39fEqARd
+X-Proofpoint-GUID: _C7eP2tGnYjF92f9QUGR1W7l39fEqARd
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.138,FMLib:17.12.100.49
  definitions=2026-11-22_05,2026-11-22_01,2025-10-01_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- priorityscore=1501 lowpriorityscore=0 spamscore=0 impostorscore=0
- clxscore=1015 bulkscore=0 suspectscore=0 adultscore=0 phishscore=0
- malwarescore=0 classifier=typeunknown authscore=0 authtc= authcc=
+ phishscore=0 malwarescore=0 priorityscore=1501 lowpriorityscore=0
+ clxscore=1011 spamscore=0 bulkscore=0 impostorscore=0 adultscore=0
+ suspectscore=0 classifier=typeunknown authscore=0 authtc= authcc=
  route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2611040001
  definitions=main-2611220084
 
@@ -141,158 +138,20 @@ Although param_loc_supported is not set for s390, calculate
 the reg_idx in function__match_clang_parameter_locations in case
 the flag is enabled in the future.
 
+Add test for in-memory return values.
+
 The change affects only s390.
 
-Signed-off-by: Maxim Khmelevskii <max@linux.ibm.com>
-Reviewed-by: Ilya Leoshkevich <iii@linux.ibm.com> 
----
- dwarf_loader.c | 84 +++++++++++++++++++++++++++++++++++++++-----------
- dwarves.h      |  1 +
- 2 files changed, 67 insertions(+), 18 deletions(-)
+Maxim Khmelevskii (2):
+  dwarf_loader: Support in-memory return values for s390
+  tests: Add test for in-memory return values
 
-diff --git a/dwarf_loader.c b/dwarf_loader.c
-index 01049e9..e6cc4e3 100644
---- a/dwarf_loader.c
-+++ b/dwarf_loader.c
-@@ -4044,6 +4044,51 @@ static bool parameter__apply_true_sig_member(struct parameter *parm, struct cu *
- 	return true;
- }
- 
-+static bool tag__is_aggregate(const struct tag *type)
-+{
-+	switch (type->tag) {
-+	case DW_TAG_structure_type:
-+	case DW_TAG_class_type:
-+	case DW_TAG_union_type:
-+	case DW_TAG_array_type:
-+		return true;
-+	default:
-+		return false;
-+	}
-+}
-+
-+static bool s390x__ret_in_memory(const struct tag *type, const struct cu *cu)
-+{
-+	if (tag__is_aggregate(type))
-+		return true;
-+
-+	return tag__size(type, cu) > 8;
-+}
-+
-+static bool ftype__ret_in_memory(const struct ftype *ftype, const struct cu *cu)
-+{
-+	switch (cu->e_machine) {
-+	case EM_S390: {
-+		struct tag *type;
-+
-+		if (ftype->tag.type == 0)
-+			return false;
-+
-+		type = tag__strip_typedefs_and_modifiers(&ftype->tag, cu);
-+		if (type == NULL)
-+			return false;
-+		return s390x__ret_in_memory(type, cu);
-+	} break;
-+	default:
-+		return false;
-+	}
-+}
-+
-+static int ftype__first_param_reg_idx(const struct ftype *ftype, const struct cu *cu)
-+{
-+	return ftype__ret_in_memory(ftype, cu) ? 1 : 0;
-+}
-+
- static bool parameter__reg_in_expected_window(const struct parameter *parm, int reg_idx,
- 					      int slots, const struct cu *cu)
- {
-@@ -4060,8 +4105,8 @@ static bool parameter__reg_in_expected_window(const struct parameter *parm, int
- 
- static void function__match_clang_parameter_locations(struct ftype *ftype, struct cu *cu)
- {
-+	int reg_idx = ftype__first_param_reg_idx(ftype, cu);
- 	struct parameter *pos;
--	int reg_idx = 0;
- 
- 	ftype__for_each_parameter(ftype, pos) {
- 		int slots = parameter__abi_slots(pos, cu);
-@@ -4089,7 +4134,7 @@ static void function__analyze_parameter_locations(struct function *fn, struct cu
- 	bool true_sig_enabled = cu->param_loc_supported && conf->true_signature &&
- 				ftype->signature_changed;
- 	bool check_locations = !cu->producer_clang || ftype->signature_changed;
--	int reg_idx = 0;
-+	int reg_idx = ftype__first_param_reg_idx(ftype, cu);
- 
- 	if (!check_locations) {
- 		/* Producer is clang and the signature was not changed: match
-@@ -4448,6 +4493,24 @@ static int cu__resolve_func_ret_types_optimized(struct cu *cu, struct conf_load
- 			continue;
- 
- 		fn = tag__function(tag);
-+
-+		/* Set the function return type, it affects the register index associated
-+		 * with the first parameter of the function. If the return value is passed
-+		 * in memory the index is shifted.
-+		 */
-+		if (tag->type == 0 && fn->abstract_origin) {
-+			struct dwarf_tag *dtag = tag__dwarf(tag);
-+			struct dwarf_tag *dfunc;
-+
-+			dfunc = dwarf_cu__find_tag_by_ref(cu->priv, dtag, abstract_origin);
-+			if (dfunc == NULL) {
-+				tag__print_abstract_origin_not_found(tag);
-+				return -1;
-+			}
-+
-+			tag->type = dtag__tag(dfunc)->type;
-+		}
-+
- 		/* Abstract inline subprograms describe source signatures; their
- 		 * concrete locations belong to DW_TAG_inlined_subroutine children.
- 		 */
-@@ -4475,22 +4538,6 @@ static int cu__resolve_func_ret_types_optimized(struct cu *cu, struct conf_load
- 					fn->proto.unexpected_reg = 1;
- 			}
- 		}
--
--		if (tag == NULL || tag->type != 0)
--			continue;
--
--		if (!fn->abstract_origin)
--			continue;
--
--		struct dwarf_tag *dtag = tag__dwarf(tag);
--		struct dwarf_tag *dfunc;
--		dfunc = dwarf_cu__find_tag_by_ref(cu->priv, dtag, abstract_origin);
--		if (dfunc == NULL) {
--			tag__print_abstract_origin_not_found(tag);
--			return -1;
--		}
--
--		tag->type = dtag__tag(dfunc)->type;
- 	}
- 	return 0;
- }
-@@ -4805,6 +4852,7 @@ static int cu__set_common(struct cu *cu, struct conf_load *conf,
- 	cu->agg_use_two_regs = arch__agg_use_two_regs(&ehdr);
- 	cu->arg_align_two_regs = arch__arg_align_two_regs(&ehdr);
- 	cu->param_loc_supported = arch__param_loc_supported(&ehdr);
-+	cu->e_machine = ehdr.e_machine;
- 	arch__set_register_params(&ehdr, cu);
- 	return 0;
- }
-diff --git a/dwarves.h b/dwarves.h
-index 07d85e6..c7b254d 100644
---- a/dwarves.h
-+++ b/dwarves.h
-@@ -333,6 +333,7 @@ struct cu {
- 	uint8_t		 arg_align_two_regs:1;	/* An over-aligned arg starts on an even register */
- 	uint8_t		 param_loc_supported:1;	/* Parameter location analysis is validated for this arch */
- 	uint8_t		 nr_register_params;
-+	uint16_t	 e_machine;
- 	int		 register_params[ARCH_MAX_REGISTER_PARAMS];
- 	int		 functions_saved;
- 	uint16_t	 language;
+ dwarf_loader.c         |  84 +++++++++++++++++++++++-------
+ dwarves.h              |   1 +
+ tests/ret_in_memory.sh | 113 +++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 180 insertions(+), 18 deletions(-)
+ create mode 100755 tests/ret_in_memory.sh
+
 -- 
 2.56.0
 
