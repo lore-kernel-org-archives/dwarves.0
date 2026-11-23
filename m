@@ -1,112 +1,58 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=103.168.172.137
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=62.210.214.84
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795417298;
-	b=cMsH5Y+l2KMlaIwtZUIsW74OB05mdoa/1z1vKdnjDCosBI5JS1bVTwV/m/DPVATg0ODe
-	 KeG8dyg6xN2yyEnVND8PamuSJ0JW8iinccLjNJXlu7LAlse7IAuHjC0+FXVjDGKqY8xLi
-	 KzYJRhYSLSQGzpj/ONbyWwO9n65StrOfAWUuSdGL5iALACrkgZSHKELH+RZ4+TVC/HmAb
-	 h+LTc3ceD88ICXy6Mg4LFYQaZbZyVAtf7WjxtJRHIjfjXkvvNmvpVPOM5qaXP4Od368/6
-	 jIl5jylm3FTR2QPAFzTC9nhTjCcSNyjNzJxvi1aktmCag1R8g60s64jyEgkDrcPI+sQ==
+	t=1795425454;
+	b=zUHibClwj9KmSTJCwrWRVgaLXqAxBkL2uOzbEARAf3AJVSMoCI1LwJT7pjfbjXFBKuxI
+	 oa3Tk8Pcrh4H04CBXylpg2JKYfXfm7RUQTZh74WrRbvmKL1MP08bkhz8VQcZ2KvxGXMDE
+	 evKnxrUAmNgHcaVlc8wvUEZOw8lWOMMuYB+CAkVbIdr7aLm3u95saHz0qX3sqKNR59Mk4
+	 0m4crbkdubBRybPmfpv/u3s4ZT2PNeaO5BNuMY5ixQ+Yyoi5w41rIIqsdvvuwCH+gpyBq
+	 xVBKxJEG0clJL3/NkZ5t+RUlnuVeyPJWTCpBV7p8rVq1jhk1kLnDcJ7ZIKJZfYo8mbw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795417298;
-	h=DMARC-Filter:Received:Received:DKIM-Signature:DKIM-Signature:
-	 X-DKIM2-Info:DKIM2-Signature:X-DKIM2-Info:Message-Instance:
-	 X-ME-Sender:X-ME-Received:X-ME-Proxy-Cause:X-ME-Proxy:Feedback-ID:
-	 Received:Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To;
-	bh=PQaIU9jrGjv/IX920EaZ+vwMDt6FU3NtgK/Ci8DsQtE=;
-	b=Ay082go9Cm1k/NMWCDfRGoX0558M+wNkZEdBetOrbd1QHCwy0BoENHuDDOSqxOPXIHl1
-	 7/UK+8frcNRBJFmKP0vcUdmHvNmLZoAhxT+acjOHXsDCi/FVe6u2O6lf1N680haYSMHpn
-	 i8tpYi7DxJG8J0+Fc7Wi11W5/yOrJhCTZTvVUpN5R3u9mHsgMM4W5o1oydjWHZF0RdT+S
-	 CX8L5x2ZWBJGHlqj5QUozBijkxGS0DIgo/RuXQIRDo4mApBLVLy86Z0nrO2PxwQcRTdr9
-	 IdxWDmG91jnHX0RgXIV/wrP3jJqw+KDzAjOsCLTw6ZhuzcahPB4fEOSP45S8feOFJjg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795425454;
+	h=DMARC-Filter:Received:DKIM-Signature:Received:Date:From:To:Cc:
+	 Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To;
+	bh=ElwxQXV69V07ZeUKRJboa14Xz3/tNiSouYX2pJvwG1o=;
+	b=mEb+gPmrQRQcf91qATTr0oxnn1EXJCeIdAcbwGBJPJN8iM4TChFcAR+nHdqN2UW590v6
+	 QfnIJoeaFcZZgO47Q7v+GPD/lBx3wLj3sZOCZ4hu6EDFA6dHbDkC3nUzWZFoDkHVsN7r3
+	 AhRGH9ySUEwxpG9OffQH/zaqHRYkYrQrpRgkpXxTVX1QZD6JneB9vx2V9qDSxqDlgw1IO
+	 0lDXBvWBrROH4pFW4esuO4YFqhAb74i0xg/8fJnLLrfAaI08TO5VboyUGm5g8iiWRUkUP
+	 11ui9HHoS67FJNwoywxCGhLVMrYb9qFq+xNEkIjipjNjWehXrBw9ung4uihyxY6BtdA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=kroah.com;
-	spf=pass smtp.mailfrom=kroah.com;
-	dkim=pass header.d=kroah.com header.i=@kroah.com header.a=rsa-sha256 header.s=fm3 header.b=PZGvQW09;
-	dkim=pass header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm3 header.b="Sc/41PEo";
-	arc=none smtp.remote-ip=103.168.172.137
-Received: from flow-a2-smtp.messagingengine.com (flow-a2-smtp.messagingengine.com [103.168.172.137])
+	dmarc=pass header.from=codewreck.org;
+	spf=pass smtp.mailfrom=codewreck.org;
+	dkim=pass header.d=codewreck.org header.i=@codewreck.org header.a=rsa-sha256 header.s=2 header.b=ACN0oEy6;
+	arc=none smtp.remote-ip=62.210.214.84
+Received: from submarine.notk.org (submarine.notk.org [62.210.214.84])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FA80606A32A
-	for <dwarves@vger.kernel.org>; Mon, 23 Nov 2026 07:01:37 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7FA80606A32A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kroah.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kroah.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 043B6606A683;
+	Mon, 23 Nov 2026 09:17:32 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 043B6606A683
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codewreck.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=codewreck.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kroah.com header.i=@kroah.com header.a=rsa-sha256 header.s=fm3 header.b=PZGvQW09;
-	dkim=pass (2048-bit key, unprotected) header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm3 header.b=Sc/41PEo
-Received: from phl-compute-02.internal (phl-compute-02.internal [10.202.2.42])
-	by mailflow.phl.internal (Postfix) with ESMTP id D2D7A1380367
-	for <dwarves@vger.kernel.org>; Mon, 23 Nov 2026 02:01:36 -0500 (EST)
-Received: from phl-frontend-04 ([10.202.2.163])
-  by phl-compute-02.internal (MEProxy); Mon, 23 Nov 2026 02:01:36 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm3; t=1795417296; x=1795424496; bh=PQaIU9jrGj
-	v/IX920EaZ+vwMDt6FU3NtgK/Ci8DsQtE=; b=PZGvQW0962OyMG5BJwRrDEtmu9
-	DxzJInKMx6H3ZTUoF3vb5HOh9hIvMIHbTKvgTX674ldd5vJHhF2oG9fAf52k7FDS
-	3O2fA5bY4TsmpfRnthlqubgu2BbE5xwdtA346Euao9f8ChmUKq1f41aLhdFQ+wCG
-	s4XxirvJ6fi4+ozKk9tD/S1nVBIogBNAND09ynrBhNuEB6llbh5IHhfpmLpct+ay
-	ULyywCbgywV/CRE6wLxLptIChSIWFQlcq6eMd/nsv4d/ZR1prY+uGM94ndkR76fB
-	gue0avqsxE+BR1dLNdeji1Ww8av6nfyzhPmIetMP1gMB7LBRZVU34b35XXfA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
-	1795417296; x=1795424496; bh=PQaIU9jrGjv/IX920EaZ+vwMDt6FU3NtgK/
-	Ci8DsQtE=; b=Sc/41PEoRKOWhtuAgJA3fFw2JJQWUOcWIWAKrXolQyRXiGkUvuh
-	WccGRA4zqLkKbp83RobU5Ap1oMLk7HTIQhYGeOUR7Xm07v0fzaLd0cu/joOytQ/E
-	kMr1kij/3feor6jjIltXNomRMg8BhYB+DDAfnVYy4y0OM1kgS9gI4Xo0c9UYg//v
-	XBrVt+ib0i6J0gXHDmxvONBo6pDTSQ4xlfGOH/xdzHX2foOr5FSNLxAJX9XexMaO
-	vaOutHhxqPagY9cYuVQUbK6FFsWnarIeQR6zR0f0leGDZ5FbywDWo3o5DsIBntau
-	TWPLWn0xU9fZpZSDF51Q4JMAgGrhklt63lQ==
-X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-09;
-	repo=github.com/dkim2wg/interop; date=2026-11-03; sw=lmtpprox;
-	action=sign d=kroah.com a=rsa-sha256;
-DKIM2-Signature: i=1; m=1; t=1795417296; d=kroah.com;
-	mf=PGdyZWdAa3JvYWguY29tPg==;
-	rt=PGR3YXJ2ZXNAdmdlci5rZXJuZWwub3JnPg==;
-	s=fm3:rsa-sha256:fWcg7Flnf7PJ2eOf1W18F63r0qARoI0vlD8k1emtlh3k11/
-	NKd7tArparR2W19ZEMlSRvhaXkM2MDzddRLI5SbMCjLYSdVWucUplvaNForlSdYQ
-	Nns2QlggMkM1BHckEypg8Zq0X3VHIX3VWXUDQTed2FwSjt22k+h5JW6IStp5BigL
-	rb4cJPS/3yTZasHNN9ePpHd7Z2CV17h+aiyc7EmFTfzhZobTC1labEZhQw4aYYs3
-	2WXfZuevDBNnqmOPTaPMumAAJqzjsTvlzYXDR7vdkLKcu8GduJiJefyo3N3LwIYp
-	tHQPKbIyFWNTwHM5+aI3jAwZLu5jWeFh/T6RFzA==;
-X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-09;
-	repo=github.com/dkim2wg/interop; date=2026-11-03; sw=lmtpprox;
-	action=mi-m=1; hc=12;
-	hn=cc,content-disposition,content-type,date,feedback-id,from,
-	in-reply-to,message-id,mime-version,references,subject,to;
-Message-Instance: m=1; h=sha256:VAdcf7p/xf9lxpcqIoRZEf2GByXwU0QzE50CpNp2b3o=:KP8em782QFBhNPcrfc4hjVjWWapiSXNBTFzw3UUOr9c=;
-X-ME-Sender: <xms:z-QDa0z_PHMAW-heXRGqUy2KGJ1y2Imkn6RRuWfmo8bq5EjnwRpBPw>
-    <xme:z-QDa4cXvN0O0Rg2ObS5CW25jCKyexGaDeXGIpXV4DkpFUPZzoHETLYcDQ-T2ftkA
-    AGeAsMNsih9QEEEOV_34-WbkBGLDnnCMncnH_JnuEPCCSrdrc0>
-X-ME-Received: <xmr:z-QDa4-zkHx7Evo-YD2Z0gUazpnTPmlc4N_1yqRdZeqysauTw0pqybVOjfFuv8LeVzSLXpcWw-dZkHE8zETsb7gFtv4MJe5Mefv9UOEh8Uw>
-X-ME-Proxy-Cause: dmFkZTFyV2tzmNnMG6GVBnClF3a5MYEONstRqY1OpQbaDJwJqBfAWH//7vc37ygX/vlCeR
-    aMDvp4KuBt/yGakYvtjFbCPhvferKFkBz2KEKfRa9mw335MuvaNEliE3r+H9UOHwi0fCT5
-    Iid9UUTXzJNvTw3SFuLP8qFdvif5sEvxb50PKBkU9sqwVCegl2jj8LLSORfmBpC6+xOI2y
-    +5fvP5RqM1OffM14pPDyADlYjVrW++Jay9M6fHOYD6aa5C82lpJ4okll5eX83J0MjgGVNs
-    2DC69Xz1O72y8L+b8KA7YrG4xRJANCqBqkk/mzZmEFMpgtcryaKJMVTs6neV35rB70lYCK
-    EB0Usa8u9qnybAreq0+5RWnGq/isjiXmBOJCli6iBZTIdiYVANM6dC64lEPGav9988wmsZ
-    IDRR5o7xGg7LBp4munwoRu71Ie7uqGnQytHkJdcRWxZ+QIX0HBUfrFrDGpv4jmTzLFMCMf
-    +uQ9dvVGjDyT2JMUzBMmxFaeDRcpi19y6O6an1GgOvR9/hEA3VoTR1+piCEqCJLZbr1r0d
-    Cp2V4Fd8xSYRC97CMEXcz3Lpp3bA9GtDCpaQbztP7im2m7Bz3ITns7DAbVBQ5tpzfjOSa1
-    HnLfQnpwPUXmNM0DLwmsI1dS289VnP3gy8/9V4ibav/SlLUuXup2X7bSt7UA
-X-ME-Proxy: <xmx:z-QDa-HkQuveQbNZhAt2uXLqoK8x7OE21fLMZ81Cv_z2lTZeSKt0Dw>
-    <xmx:z-QDa6COazf6ibVpdhfCQCD3j6iRpKlf-q6vziLcr56TD9ZnGA5tyQ>
-    <xmx:z-QDa8L8ORgVroRLQzv-WgpCwh3KiBBixwllPrhcZhVSAQ4FNV4WAQ>
-    <xmx:z-QDa4w2O-WvaOoPFaBoaUFX5j3dXyv3FkmUgD_I-azye3sVz_SdjQ>
-    <xmx:0OQDawV5JUDOdAoWXTCYKTbUk033HLb4cAH78l6C0kVWheUieZZ_kNBk>
-Feedback-ID: i787e41f1:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 23 Nov 2026 02:01:34 -0500 (EST)
-Date: Mon, 23 Nov 2026 08:01:33 +0100
-From: Greg KH <greg@kroah.com>
-To: Dominique Martinet <asmadeus@codewreck.org>
+	dkim=pass (2048-bit key, unprotected) header.d=codewreck.org header.i=@codewreck.org header.a=rsa-sha256 header.s=2 header.b=ACN0oEy6
+Received: from gaia.codewreck.org (localhost [127.0.0.1])
+	by submarine.notk.org (Postfix) with ESMTPS id 5428414C2D6;
+	Mon, 23 Nov 2026 10:17:25 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org;
+	s=2; t=1795425450;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ElwxQXV69V07ZeUKRJboa14Xz3/tNiSouYX2pJvwG1o=;
+	b=ACN0oEy6kHGPAYj2kayjdpp8gj2GkTrOA2AQUxOKeYmnUDHRWs3uwXKy66n0kBBJefQyQp
+	9R7DKC6G7wIoRmoIeJFDyge8zKBeMK720UAllN5+OkdOxSBpIQnKXRLgGbgUSuZ/Du/amo
+	soMoHx8vWj/hewpIjtJaaptWHP+jhFq+28hQp3AuCecA+qqhgmlcZhF+RKQl8fcCu8ILEX
+	EdBxAb3tGw6FeVU4hfhSHVIiwj1ypB4tDIkxszYYYquBvo+ozhn6RqJ3fJe4QMNpdoLmwM
+	5kCmeRdg7U78F8t4S+22AOqx9iy3BG1FL7QFq6wWLKackQ41xeevc3HtYD6Smg==
+Received: from localhost (gaia.codewreck.org [local])
+	by gaia.codewreck.org (OpenSMTPD) with ESMTPA id 5b02b061;
+	Mon, 23 Nov 2026 09:17:23 +0000 (UTC)
+Date: Mon, 23 Nov 2026 18:17:08 +0900
+From: Dominique Martinet <asmadeus@codewreck.org>
+To: Greg KH <greg@kroah.com>
 Cc: stable@vger.kernel.org, Alan Maguire <alan.maguire@oracle.com>,
 	andrii@kernel.org, eddyz87@gmail.com, ast@kernel.org,
 	ihor.solodrai@linux.dev, daniel@iogearbox.net, memxor@gmail.com,
@@ -115,8 +61,9 @@ Cc: stable@vger.kernel.org, Alan Maguire <alan.maguire@oracle.com>,
 	bpf@vger.kernel.org, Alan Maguire <almagui@kernel.org>
 Subject: Re: [PATCH 5.10-6.18 v2] libbpf: fix cross-endian build with newer
  libbpf
-Message-ID: <2026112357-corncob-exclude-7266@gregkh>
+Message-ID: <awQElOwB_C7UzMXF@codewreck.org>
 References: <20261116233301.1531563-1-asmadeus@codewreck.org>
+ <2026112357-corncob-exclude-7266@gregkh>
 X-Mailing-List: dwarves@vger.kernel.org
 List-Id: <dwarves.vger.kernel.org>
 List-Post: <mailto:dwarves@vger.kernel.org>
@@ -126,32 +73,68 @@ List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:dwarves+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20261116233301.1531563-1-asmadeus@codewreck.org>
+In-Reply-To: <2026112357-corncob-exclude-7266@gregkh>
 
-On Tue, Nov 17, 2026 at 08:33:01AM +0900, Dominique Martinet wrote:
-> commit 087f3964f4b3 ("libbpf: Support layout section handling in BTF")
-> added extra data to the BTF header.
+Greg KH wrote on Mon, Nov 23, 2026 at 08:01:33AM +0100:
+> On Tue, Nov 17, 2026 at 08:33:01AM +0900, Dominique Martinet wrote:
+> > commit 087f3964f4b3 ("libbpf: Support layout section handling in BTF")
+> > added extra data to the BTF header.
+> > 
+> > This extra data is ignored in the native case, but when building with
+> > different endianness the bswap code in old libbpf would check for strict
+> > size equality, leading to build failures such as this when BTF data is
+> > generated with a newer version of libbpf (through pahole)
+> >     BTFIDS  vmlinux.unstripped
+> >   libbpf: Can't load BTF with non-native endianness due to unsupported header length 32
+> >   FAILED: load BTF from vmlinux.unstripped: Operation not supported
+> >   make[2]: *** [../scripts/Makefile.vmlinux:72: vmlinux.unstripped] Error 255
+> > 
+> > Newer libbpf versions also properly ignore trailing data in the bswap
+> > case, but the patch is too intrusive to backport, so take the header 
+> > length comparison fix from it instead.
 > 
-> This extra data is ignored in the native case, but when building with
-> different endianness the bswap code in old libbpf would check for strict
-> size equality, leading to build failures such as this when BTF data is
-> generated with a newer version of libbpf (through pahole)
->     BTFIDS  vmlinux.unstripped
->   libbpf: Can't load BTF with non-native endianness due to unsupported header length 32
->   FAILED: load BTF from vmlinux.unstripped: Operation not supported
->   make[2]: *** [../scripts/Makefile.vmlinux:72: vmlinux.unstripped] Error 255
-> 
-> Newer libbpf versions also properly ignore trailing data in the bswap
-> case, but the patch is too intrusive to backport, so take the header 
-> length comparison fix from it instead.
+> Why not always just use the libbpf version from newer kernels?
 
-Why not always just use the libbpf version from newer kernels?
+I'm a simple user as far as this part of the tree goes, but the build
+system uses two libbpf versions:
+- indirectly, whatever was used to build pahole to generate BTF
+debuginfos
+- directly, what is in the build tree to generate BTFIDs from the above
+BTF debuginfos (tools/bpf/resolve_btfids)
 
-And why not backport the full series, one-off are almost always more
-work over time.
+This build failure happens if pahole uses a newer libbpf version, that
+the libbpf version in the kernel isn't able to parse because of a too
+strict check in the cross-endian case.
 
-thanks,
+Technically resolve_btfids could probably be built with the system
+libbpf instead of the one in the kernel tree but then we'd need to
+backport potential build failures instead if the libbpf API changes, I'm
+not sure it'd be less work in the long run.
 
-greg k-h
+
+> And why not backport the full series, one-off are almost always more
+> work over time.
+
+Happy to send a revert of the above patch + full series backport if
+that's what you/libbpf maintainers prefer...
+In this case the current code already supports newer libbpf versions and
+the bug was only in a corner case with cross-endian handling (e.g. I'm
+not expecting further fixes to be needed in that area), so it seemed
+simpler to just backport that part of the patch instead of backporting a
+"feature patch", but I'm not fussy.
+
+I'd argue that the cross-endian fix should have been a separate commit
+instead of being part of a new feature commit in the first place, but
+hindsight 20/20 and it probably wasn't obvious that it'd cause build
+failures at the time...
+
+Anyway, I stand by my opinion that minimal patch sounds better to me,
+but just say the word and I can look at backporting the full layout
+section handling code instead. Not sure I'd be able to get prereqs right
+for very old kernels but 5.10/5.15 are gone next month anyway...
+
+Thanks,
+-- 
+Dominique
